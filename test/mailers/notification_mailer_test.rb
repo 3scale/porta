@@ -3,7 +3,6 @@ require 'test_helper'
 class NotificationMailerTest < ActionMailer::TestCase
   FakeContract = Struct.new(:old_plan, :plan, :provider_account, :service, :account, :issuer)
 
-  include ActionDispatch::Assertions::SelectorAssertions
   include CinstancesHelper
 
   def test_event_to_header
