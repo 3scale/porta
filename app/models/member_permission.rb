@@ -1,4 +1,5 @@
 class MemberPermission < ApplicationRecord
+  extend Symbolize
   belongs_to :user, touch: true
   validates :admin_section, inclusion: { :in => ->(_record) { AdminSection.sections } }
   validates :admin_section , uniqueness: { :scope => :user_id, if: Proc.new { |mp| mp.user_id } }

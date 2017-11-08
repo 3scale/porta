@@ -2,6 +2,7 @@ module User::Roles
   extend ActiveSupport::Concern
 
   included do
+    extend Symbolize
     DEFAULT_ROLES = [:admin, :member]
     MORE_ROLES = [:contributor]
     ROLES = DEFAULT_ROLES + MORE_ROLES

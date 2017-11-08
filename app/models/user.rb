@@ -1,6 +1,7 @@
 require 'digest/sha1'
 
 class User < ApplicationRecord
+  extend Symbolize
 
   def self.columns
     super.reject { |c| c.name == "janrain_identifier" }
@@ -64,7 +65,6 @@ class User < ApplicationRecord
 
   has_many :access_tokens, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
 
-  symbolize :role
   symbolize :signup_type
 
   validates :username, length: { :within => 3..40, :allow_blank => false }

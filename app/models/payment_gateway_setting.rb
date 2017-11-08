@@ -2,6 +2,7 @@
 # Option is meant for optional things
 # Setting is for setting things up. In our case it is setting up the payment gateway
 class PaymentGatewaySetting < ApplicationRecord
+  extend Symbolize
   belongs_to :account, inverse_of: :payment_gateway_setting
   serialize :gateway_settings
   symbolize :gateway_type

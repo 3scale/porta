@@ -2,6 +2,7 @@
 class Plan < ApplicationRecord
   include ThreeScale::Search::Scopes
   class PeriodRangeCalculationError < StandardError; end
+  extend Symbolize
 
   self.allowed_sort_columns = %w[position name state contracts_count]
   self.default_sort_column = :position

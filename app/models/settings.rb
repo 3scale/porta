@@ -1,6 +1,7 @@
 require 'simple_layout'
 
 class Settings < ApplicationRecord
+  extend Symbolize
   belongs_to :account, inverse_of: :settings
 
   audited allow_mass_assignment: true

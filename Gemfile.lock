@@ -750,10 +750,6 @@ GEM
       json (~> 1.8.1)
       mime-types (>= 1.25, < 3.0)
       rest-client (~> 1.4)
-    symbolize (4.5.2)
-      activemodel (>= 3.2, < 5)
-      activesupport (>= 3.2, < 5)
-      i18n
     temple (0.7.6)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
@@ -976,7 +972,6 @@ DEPENDENCIES
   stripe
   swagger-ui_rails!
   swagger-ui_rails2!
-  symbolize (~> 4.5)
   thin
   thinking-sphinx (~> 3.2.0)
   timecop (~> 0.8)

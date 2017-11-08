@@ -58,9 +58,6 @@ gem 'money', '6.7.1' # Lock to this version we use in production
 gem 'stripe' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 gem 'audited-activerecord'
 
-# Rails 4.1: this should not be needed, maybe replace it with enum -- http://edgeapi.rubyonrails.org/classes/ActiveRecord/Enum.html
-# TODO: replace with enum because it is not compatible with rails 5.x and not maintained
-gem 'symbolize', '~> 4.5'
 gem 'acts_as_list', '~> 0.7.6'
 gem 'braintree', '~> 2.89'
 gem 'cancancan', '~> 1.7.1'
