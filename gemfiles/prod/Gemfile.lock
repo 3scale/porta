@@ -188,11 +188,8 @@ GEM
     ansi (1.5.0)
     arel (6.0.4)
     ast (2.4.0)
-    audited (4.2.0)
-      rails-observers (~> 0.1.2)
-    audited-activerecord (4.2.0)
-      activerecord (~> 4.0)
-      audited (= 4.2.0)
+    audited (4.5.0)
+      activerecord (>= 4.0, < 5.2)
     autoparse (0.3.3)
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
@@ -249,13 +246,13 @@ GEM
     codemirror-rails (5.6)
       railties (>= 3.0, < 5)
     coderay (1.1.1)
-    coffee-rails (4.1.0)
+    coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
+      railties (>= 4.0.0)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
-    coffee-script-source (1.9.1.1)
+    coffee-script-source (1.12.2)
     colorize (0.7.7)
     compass (1.0.3)
       chunky_png (~> 1.2)
@@ -561,8 +558,8 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
+    rails-observers (0.1.5)
+      activemodel (>= 4.0)
     rails_event_store (0.9.0)
       activemodel (>= 3.0)
       activesupport (>= 3.0)
@@ -844,7 +841,7 @@ DEPENDENCIES
   after_commit_queue (~> 1.1.0)
   airbrake (~> 4.3.3)
   analytics-ruby
-  audited-activerecord
+  audited
   aws-sdk (~> 2)
   aws-sdk-rails (~> 1.0)
   baby_squeel (~> 1.2.0)
@@ -861,7 +858,7 @@ DEPENDENCIES
   ci_reporter_shell!
   codecov (~> 0.1.10)
   codemirror-rails (~> 5.6)
-  coffee-rails (~> 4.1)
+  coffee-rails (~> 4.2)
   colorize
   compass-rails (~> 2.0.4)
   config_for (~> 0.3.0)
@@ -976,7 +973,7 @@ DEPENDENCIES
   spring-commands-rspec
   spring-commands-rubocop
   spring-commands-testunit
-  sprockets-rails (~> 2.3.2)
+  sprockets-rails
   state_machines (= 0.4.0)
   state_machines-activerecord (= 0.4.0)
   statsd-ruby
