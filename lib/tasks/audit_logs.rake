@@ -31,7 +31,7 @@ namespace :audit_logs do
     File.open(file_path, File::WRONLY | File::APPEND | File::CREAT) do |f|
       f.puts audit_attributes.join(SEPARATOR)
 
-      Audited::Adapters::ActiveRecord::Audit.where(
+      Audited.audit_class.where(
         created_at: start_date..end_date,
         provider_id: service.account_id,
         #auditable_type: "User",

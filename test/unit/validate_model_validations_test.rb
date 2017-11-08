@@ -71,7 +71,7 @@ class ValidateModelValidationsTest < ActiveSupport::TestCase
   end
 
   THIRD_PARTY_CLASSES = [ActiveRecord::SchemaMigration, ActsAsTaggableOn::Tagging,
-    Audited::Adapters::ActiveRecord::Audit, RailsEventStoreActiveRecord::Event]
+    Audited.audit_class, RailsEventStoreActiveRecord::Event]
 
   Rails.application.eager_load!
 
