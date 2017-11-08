@@ -1,4 +1,5 @@
 class CMS::Template < ApplicationRecord
+  include Symbolize
 
   include CMS::Filtering
 
