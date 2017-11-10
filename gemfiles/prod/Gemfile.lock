@@ -736,13 +736,13 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    state_machines (0.4.0)
-    state_machines-activemodel (0.4.0)
-      activemodel (>= 4.1, < 5.1)
-      state_machines (>= 0.4.0)
-    state_machines-activerecord (0.4.0)
-      activerecord (>= 4.1, < 5.1)
-      state_machines-activemodel (>= 0.3.0)
+    state_machines (0.5.0)
+    state_machines-activemodel (0.5.0)
+      activemodel (>= 4.1, < 5.2)
+      state_machines (>= 0.5.0)
+    state_machines-activerecord (0.5.0)
+      activerecord (>= 4.1, < 5.2)
+      state_machines-activemodel (>= 0.5.0)
     statsd-ruby (1.4.0)
     stripe (1.16.0)
       json (~> 1.8.1)
@@ -969,8 +969,8 @@ DEPENDENCIES
   spring-commands-rubocop
   spring-commands-testunit
   sprockets-rails
-  state_machines (= 0.4.0)
-  state_machines-activerecord (= 0.4.0)
+  state_machines (~> 0.5.0)
+  state_machines-activerecord (~> 0.5.0)
   statsd-ruby
   stripe
   swagger-ui_rails!
