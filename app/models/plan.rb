@@ -23,7 +23,7 @@ class Plan < ApplicationRecord
   #  - `#audit_destroy` triggered by audit_destroy
   # I think those gems are fine with their behaviour.
   # The problem is on our side with so many inter-dependent relationships
-  skip_callback :destroy, :before, :lock!, if: -> { !self.class.exists?(id) || destroyed_by_association }
+  # skip_callback :destroy, :before, :lock!, if: -> { !self.class.exists?(id) || destroyed_by_association }
   skip_callback :destroy, :before, :audit_destroy, if: -> { !self.class.exists?(id) }
 
   validates :state, inclusion: { in: %w(hidden published) }
