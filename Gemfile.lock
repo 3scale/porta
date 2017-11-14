@@ -518,8 +518,6 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     public_suffix (3.0.3)
-    quiet_assets (1.1.0)
-      railties (>= 3.1, < 5.0)
     rack (1.6.11)
     rack-no_animations (1.0.3)
     rack-openid (1.4.2)
@@ -915,7 +913,6 @@ DEPENDENCIES
   pry-doc (>= 0.8)
   pry-rails
   pry-stack_explorer
-  quiet_assets
   rack-no_animations (~> 1.0.3)
   rack-utf8_sanitizer
   rack-x_served_by (~> 0.1.1)

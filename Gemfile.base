@@ -185,9 +185,6 @@ group :development do
 
   gem 'letter_opener', require: false if ENV.fetch('LETTER_OPENER', '1') == '0'
 
-  # Rails 4.2 have it built in
-  gem 'quiet_assets'
-
   gem 'yard', require: false
 
   # Install rubocop only when using RubyMine (for the rubocop plugin)
