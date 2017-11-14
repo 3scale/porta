@@ -268,8 +268,6 @@ GEM
       sass-rails (< 5.1)
       sprockets (< 4.0)
     concurrent-ruby (1.1.4)
-    config_for (0.3.0)
-      activesupport (>= 3.0)
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -848,7 +846,6 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   colorize
   compass-rails (~> 3.0.2)
-  config_for (~> 0.3.0)
   cucumber (~> 2.0)
   cucumber-rails
   dalli (~> 2.7)
