@@ -1,34 +1,54 @@
-System::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
-
-  # Disable css/jquery animations in tests, makes percy much happier
-  config.middleware.use Rack::NoAnimations
-
-  config.allow_concurrency = false
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's
-  # test suite.  You never need to work with it otherwise.  Remember that
+  # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
-  # and recreated between test runs.  Don't rely on the data there!
+  # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
 
-  # Show full error reports and disable caching
+  # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false # true if you use a tool to preload your test environment
+
+  # Configure public file server for tests with Cache-Control for performance.
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = {
+    'Cache-Control' => 'public, max-age=3600'
+  }
+
+  # Show full error reports and disable caching.
+  # config.consider_all_requests_local       = true
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = false
 
-  config.action_view.raise_on_missing_translations = true
-
-  # Raise exceptions instead of rendering exception templates
+  # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
-  # Disable request forgery protection in test environment
-  config.action_controller.allow_forgery_protection    = false
+  # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+  config.action_mailer.perform_caching = false
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  # Print deprecation notices to the stderr.
+  config.active_support.deprecation = :stderr
+
+  # Raises error for missing translations
+  config.action_view.raise_on_missing_translations = true
+
+  config.active_support.test_order = :sorted # who has the balls can set it to :random
+
+  config.three_scale.payments.enabled = true
+  config.three_scale.active_merchant_mode = :test
+  config.three_scale.active_merchant_logging = false
+
+  config.three_scale.rolling_updates.raise_error_unknown_features = true
+  config.three_scale.rolling_updates.enabled = false
   config.representer.default_url_options = { host: 'example.org' }
   config.action_mailer.default_url_options = { host: 'example.org' }
 
@@ -37,19 +57,15 @@ System::Application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
+
+  # Disable css/jquery animations in tests, makes percy much happier
+  config.middleware.use Rack::NoAnimations
+
+  config.allow_concurrency = false
+
   config.assets.compile = ENV.fetch('SKIP_ASSETS', '0') == '0'
   # NEEDS TESTING if it right value or not
   config.serve_static_files = true
-
-  # Print deprecation notices to the stderr
-
-  config.active_support.deprecation = :stderr
-  config.active_support.test_order = :sorted # who feels brave can set it to :random
-
-  config.three_scale.payments.enabled = true
-
-  config.three_scale.rolling_updates.raise_error_unknown_features = true
-  config.three_scale.rolling_updates.enabled = false
 
   config.after_initialize do
     ::GATEWAY = ActiveMerchant::Billing::BogusGateway.new

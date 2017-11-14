@@ -11,7 +11,7 @@ class CdnAssets
   end
 end
 
-System::Application.routes.draw do
+Rails.application.routes.draw do
 
   constraints MasterDomainConstraint do
     prometheus = Rack::Builder.app do
