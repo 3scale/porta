@@ -34,16 +34,22 @@ module System
   mattr_accessor :redis
 
   class Application < Rails::Application
+    # The old config_for gem returns HashWithIndifferentAccess
+    # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
+    def config_for(*args)
+      config = super
+      config.is_a?(Hash) ? config.with_indifferent_access : config
+    end
 
     def simple_try_config_for(*args)
       config_for(*args)
-    rescue ConfigFor::ReadError, ConfigFor::MissingEnvironmentError => error
+    rescue => error # rubocop:disable Style/RescueStandardError
       warn "[Warning][ConfigFor] Failed to load config with: #{error}" if $VERBOSE
       nil
     end
 
     def try_config_for(*args)
-      simple_try_config_for(*args).try(:symbolize_keys)
+      simple_try_config_for(*args)&.symbolize_keys
     end
 
     config.before_eager_load do
