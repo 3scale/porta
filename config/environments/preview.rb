@@ -22,7 +22,7 @@ System::Application.configure do
 
   config.asset_host = proc { |_source, request = nil| request && request.headers["X-Forwarded-For-Domain"] }
 
-  config.serve_static_files = true
+  config.public_file_server.enableds = true
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.log_tags = [ :uuid, :host, :remote_ip ]

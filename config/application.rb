@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'boot'
 
 require 'rails/all'
@@ -134,7 +135,7 @@ module System
     config.assets.version = '1437647386' # unix timestamp
 
 
-    config.serve_static_files = false
+    config.public_file_server.enabled = false
 
     # We don't want Rack::Cache to be used
     config.action_dispatch.rack_cache = false
