@@ -8,13 +8,11 @@ class Backend::RandomDataGeneratorTest < ActiveSupport::TestCase
     cinstance = provider.bought_cinstances.first
     stats = Stats::Client.new(cinstance)
 
-    silence_stream($stdout) do
-      Backend::RandomDataGenerator.generate(cinstance_id: cinstance.id,
-                                            since: 1.minute.ago,
-                                            until: Time.zone.now,
-                                            min: 1,
-                                            frequency: 0.01)
-    end
+    Backend::RandomDataGenerator.generate(cinstance_id: cinstance.id,
+                                          since: 1.minute.ago,
+                                          until: Time.zone.now,
+                                          min: 1,
+                                          frequency: 0.01)
 
     total_hits = stats.total_hits(period: :eternity)
     assert_operator total_hits, :>, 0
