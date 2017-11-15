@@ -52,8 +52,6 @@ class SystemOperation < ApplicationRecord
       end
     end
 
-    private
-
     def create_defaults!
       Rails.logger.warn 'Creating SystemOperation defaults'
       create(DEFAULTS.map{|ref, name| {:ref => ref, :name => name }})
