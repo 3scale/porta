@@ -120,13 +120,11 @@ module Fields::Fields
       # maybe because of factories, maybe because of sun eruptions
       if fields_definitions_source_root
         extra_field_names = defined_extra_fields.map(&:name)
-        new_attributes = attributes.slice!(*extra_field_names)
-        self.extra_fields = attributes
-      else
-        new_attributes = attributes
+        fields_attributes = attributes.extract!(*extra_field_names)
+        self.extra_fields = fields_attributes
       end
 
-      super(new_attributes, options)
+      super(attributes, options)
     end
 
     alias attributes= assign_attributes
