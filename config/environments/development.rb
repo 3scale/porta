@@ -24,10 +24,9 @@ Rails.application.configure do
     request.headers['host']
   }
 
-  config.serve_static_files = true
-
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
+  config.public_file_server.enabled = true
 
   # Enable/disable caching. By default caching is disabled.
   if Rails.root.join('tmp/caching-dev.txt').exist?
