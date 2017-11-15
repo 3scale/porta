@@ -65,8 +65,6 @@ Rails.application.configure do
   config.allow_concurrency = false
 
   config.assets.compile = ENV.fetch('SKIP_ASSETS', '0') == '0'
-  # NEEDS TESTING if it right value or not
-  config.serve_static_files = true
 
   config.after_initialize do
     ::GATEWAY = ActiveMerchant::Billing::BogusGateway.new
