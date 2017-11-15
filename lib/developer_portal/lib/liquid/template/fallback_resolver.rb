@@ -6,7 +6,7 @@ module Liquid
         super
       end
 
-      def find_templates(name, prefix, partial, details, outside_app_allowed)
+      def find_templates(name, prefix, partial, details, outside_app_allowed = false)
         path = build_path(name, prefix, partial)
 
         # force just liquid format
@@ -31,7 +31,7 @@ module Liquid
         super
       end
 
-      def find_templates(name, prefix, partial, details, outside_app_allowed)
+      def find_templates(name, prefix, partial, details, outside_app_allowed = false)
         path = build_path(name, prefix = nil, partial)
 
         # force just liquid format
