@@ -26,6 +26,10 @@ class AfterCommitSubscriber
     end
 
     delegate :logger, to: :Rails
+
+    def before_committed!(*)
+      # noop
+    end
   end
 
   # @param [AfterCommitEvent] event
@@ -44,6 +48,8 @@ class AfterCommitSubscriber
 
   def after_rollback(event)
   end
+
+
 
   delegate :connection, to: 'ActiveRecord::Base'
 

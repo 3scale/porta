@@ -56,6 +56,10 @@ class WebHook
       enqueue_now
     end
 
+    def before_committed!(*)
+      # noop
+    end
+
     def rolledback!(*)
       logger.info "Rolledback WebHook::Event(#{id}) #{event} for #{model}##{resource.id}"
     end
