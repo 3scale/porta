@@ -92,18 +92,15 @@ class Account::StatesTest < ActiveSupport::TestCase
 
   test 'sends notification email when account is made pending' do
     account = FactoryBot.create(:buyer_account_with_provider)
+    AccountMailer.any_instance.expects(:confirmed)
     account.make_pending!
 
-    AccountMailer.any_instance.expects(:confirmed)
-    account.send(:_run_after_commit_queue)
   end
 
   test 'sends notification email when account is rejected' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    account.reject!
-
     AccountMailer.any_instance.expects(:rejected)
-    account.send(:_run_after_commit_queue)
+    account.reject!
   end
 
   test 'sends notification email when buyer account is approved' do
@@ -112,10 +109,10 @@ class Account::StatesTest < ActiveSupport::TestCase
     account.update_attribute(:state, 'pending')
     account.buy! FactoryBot.create(:account_plan, :approval_required => true)
     account.reload
-    account.approve!
 
     AccountMailer.any_instance.expects(:approved)
-    account.send(:_run_after_commit_queue)
+    account.approve!
+
   end
 
   test 'does not send notification email when non buyer account is approved' do
@@ -123,8 +120,6 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     account = FactoryBot.create(:pending_account)
     account.approve!
-
-    account.send(:_run_after_commit_queue)
   end
 
 
