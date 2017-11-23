@@ -76,7 +76,7 @@ class WebHook
 
     # this could be activemodel validation
     def valid?
-       enabled? && push_event?  && push_user? && provider.web_hooks_allowed?
+      enabled? && push_event?  && push_user? && provider.web_hooks_allowed?
     end
 
     # use i18n to figure this out
