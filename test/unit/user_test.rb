@@ -18,6 +18,15 @@ class UserTest < ActiveSupport::TestCase
 
   setup do
     ActionMailer::Base.deliveries = []
+    # This is needed, database will not save fractions of seconds
+    # so something like:
+    # Time.now.to_f #=> 1512012308.293877
+    # will be saved in DB as 1512012308
+    Timecop.freeze(Time.parse('2017-11-23 03:25:08 UTC +00:00'))
+  end
+
+  def teardown
+    Timecop.return
   end
 
   test 'archive_as_deleted' do
@@ -357,7 +366,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should 'remember_me_for one week' do
-      before = 1.week.from_now.utc
+      before = 1.week.from_now
       @user.remember_me_for 1.week
       after = 1.week.from_now.utc
       assert_not_nil @user.remember_token
