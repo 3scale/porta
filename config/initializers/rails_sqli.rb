@@ -8,24 +8,21 @@
 module RailsSQLiFix
 
   def sanitize_actioncontroller_parameters(attributes)
-    # TODO: replace this with Hash#transform_values on Rails 4.2
-    attrs = attributes.class.new
-
-    attributes.each do |k,v|
-      attrs[k] = case v
-                 when ActionController::Parameters then v.to_s
-                 else v
-                 end
+    attributes.transform_values do |value|
+      case value
+        when ActionController::Parameters
+          value.to_s
+        else
+          value
+      end
     end
-
-    attrs
   end
 
   def sanitize_forbidden_attributes(attributes)
     case attributes
-    when Hash
-      sanitize_actioncontroller_parameters(attributes)
-    else super
+      when ActionController::Parameters
+        super sanitize_actioncontroller_parameters(attributes)
+      else super
     end
   end
 end
