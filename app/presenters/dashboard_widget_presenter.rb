@@ -8,7 +8,7 @@ class DashboardWidgetPresenter
 
   def initialize(name, params = {})
     @name = name
-    @params = params.freeze
+    @params = params.respond_to?(:permit!) ? params.dup.permit!.freeze : params.freeze
     @data = nil
     @value = spinner
     @previous_value = nil
