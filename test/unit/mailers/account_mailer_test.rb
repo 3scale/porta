@@ -7,10 +7,11 @@ class AccountMailerTest < ActionMailer::TestCase
   end
 
   test 'send mails' do
-    AccountMailer.confirmed(@account).deliver_now!
-    AccountMailer.approved(@account).deliver_now!
-    AccountMailer.rejected(@account).deliver_now!
-    assert_equal 3, ActionMailer::Base.deliveries.count
+    assert_difference -> {ActionMailer::Base.deliveries.count}, 3 do
+      AccountMailer.confirmed(@account).deliver_now!
+      AccountMailer.approved(@account).deliver_now!
+      AccountMailer.rejected(@account).deliver_now!
+    end
   end
 
   class SupportEntitlements < ActionMailer::TestCase
