@@ -62,8 +62,6 @@ Rails.application.configure do
   # Disable css/jquery animations in tests, makes percy much happier
   config.middleware.use Rack::NoAnimations
 
-  config.allow_concurrency = false
-
   config.assets.compile = ENV.fetch('SKIP_ASSETS', '0') == '0'
 
   config.after_initialize do
