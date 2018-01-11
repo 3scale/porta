@@ -26,7 +26,7 @@ class InvoiceMessengerTest < ActiveSupport::TestCase
   end
 
   test 'url for provider invoices is on their own domain' do
-    master_invoice = FactoryBot.create(:invoice, buyer_account: @provider, provider_account: Account.master)
+    master_invoice = FactoryBot.create(:invoice, buyer_account: @provider, provider_account: master_account)
 
     InvoiceMessenger.upcoming_charge_notification(master_invoice).deliver
 
@@ -59,8 +59,8 @@ MSG
   end
 
   test 'send invoice to providers from master' do
-    Account.master.update_attribute(:payment_gateway_type, 'braintree_blue')
-    invoice  = FactoryBot.create :invoice, provider_account: Account.master, buyer_account: @provider
+    master_account.payment_gateway_setting.update_attribute(:gateway_type, 'braintree_blue')
+    invoice  = FactoryBot.create :invoice, provider_account: master_account, buyer_account: @provider
     InvoiceMessenger.unsuccessfully_charged_for_buyer(invoice).deliver
 
     message = Message.last
