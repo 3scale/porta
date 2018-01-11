@@ -1,13 +1,14 @@
 require 'test_helper'
 
-class Provider::Admin::Dashboard::Service::HitsControllerTest < ActionController::TestCase
+class Provider::Admin::Dashboard::Service::HitsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @provider = FactoryBot.create(:provider_account)
-    login_provider(@provider)
+    login! @provider
   end
 
   test "should get show" do
-    xhr :get, :show, service_id: FactoryBot.create(:simple_service, account: @provider)
+    service = FactoryGirl.create(:simple_service, account: @provider)
+    get provider_admin_dashboard_service_hits_path(service_id: service.id), xhr: true
     assert_response :success
   end
 end
