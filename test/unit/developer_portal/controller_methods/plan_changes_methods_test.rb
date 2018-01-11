@@ -9,7 +9,7 @@ module DeveloperPortal::ControllerMethods
 
     def setup
       @controller         = DummieController.new
-      @controller.request = ActionController::TestRequest.new
+      @controller.request = ActionController::TestRequest.create
 
       @store = @controller.send(:plan_changes_store)
     end
