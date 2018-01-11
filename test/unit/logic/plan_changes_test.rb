@@ -72,7 +72,8 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @app.buyer_changes_plan!(@new_plan)
 
     assert_equal 'Better plan', @app.plan.name
-    assert_empty ActionMailer::Base.deliveries
+    mail = ActionMailer::Base.deliveries.first
+    assert_equal 'API System: Application plan change', mail.subject
   end
 
   test '#buyer_changes_plan! - :request_credit_card (present)' do
@@ -82,7 +83,8 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @app.buyer_changes_plan!(@new_plan)
 
     assert_equal 'Better plan', @app.plan.name
-    assert_empty ActionMailer::Base.deliveries
+    mail = ActionMailer::Base.deliveries.first
+    assert_equal 'API System: Application plan change', mail.subject
   end
 
   test '#buyer_changes_plan! - :request_credit_card (missing) - plan.paid' do
@@ -104,7 +106,8 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     assert_equal "Plan change was successful.", msg
     assert_equal 'Better plan', @app.plan.name
-    assert_empty ActionMailer::Base.deliveries
+    mail = ActionMailer::Base.deliveries.first
+    assert_equal 'API System: Application plan change', mail.subject
   end
 
   def test_request_plan_change_actions
