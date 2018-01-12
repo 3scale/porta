@@ -47,8 +47,8 @@ class Finance::ChargingInvoiceStatesTest < ActionDispatch::IntegrationTest
 
       @invoice.buyer_account.bought_plan.update_attributes!(name: 'Paid', cost_per_month: 100)
 
-      ThreeScale::Analytics.expects(:track).with(instance_of(User), 'Charged Invoice',
-                                                 {:plan => 'Paid', :period => 'January  1, 1984 - January 31, 1984', :revenue => 100.0})
+      ThreeScale::Analytics.expects(:track).with(@provider.first_admin, 'Charged Invoice',
+                                                 {:plan => 'Paid', :period => 'January 01, 1984 - January 31, 1984', :revenue => 100.0})
 
       @invoice.charge!
       assert @invoice.paid?, 'Should be paid after successful charge'
