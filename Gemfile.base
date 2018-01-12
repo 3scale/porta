@@ -10,6 +10,11 @@ gem 'aws-sdk', '~> 2'
 gem 'aws-sdk-rails', '~> 1.0'
 
 gem 'dotenv-rails', '~> 2.7'
+
+# Needed for XML serialization of ActiveRecord::Base
+gem 'activemodel-serializers-xml'
+
+gem 'protected_attributes_continued', '~> 1.3.0'
 gem 'rails', '4.2.11.1'
 #gem 'rails', '5.0.6'
 #gem 'activesupport', '4.2.9' # somehow paperclip needs to explicitly lock the version to not use 5.0

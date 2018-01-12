@@ -803,6 +803,7 @@ DEPENDENCIES
   active-docs!
   active_merchant-adyen12!
   activemerchant (~> 1.77.0)
+  activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 1.6.0)
   acts-as-taggable-on (~> 4.0)
   acts_as_list (~> 0.9.17)
