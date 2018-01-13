@@ -41,7 +41,7 @@ class DashboardWidgetPresenter
   end
 
   def id
-    "dashboard-widget-#{params.to_a.join('-')}#{name}"
+    "dashboard-widget-#{params.to_h.to_a.join('-')}#{name}"
   end
 
   def template_name
