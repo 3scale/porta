@@ -18,7 +18,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
   def update
     @page = templates.find(params[:id])
 
-    if @page.update_attributes(params[:cms_template])
+    if @page.update_attributes(cms_templates_params)
       flash[:info] = 'Email Template updated.'
       redirect_to action: :index
     else
@@ -27,7 +27,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
   end
 
   def create
-    @page ||= templates.build(params[:cms_template])
+    @page ||= templates.build(cms_templates_params)
 
     if @page.save
       flash[:info] = 'Email Template overrided.'
@@ -41,6 +41,10 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
 
   def templates
     current_account.email_templates
+  end
+
+  def cms_templates_params
+    params.permit(:cms_template)
   end
 
 end
