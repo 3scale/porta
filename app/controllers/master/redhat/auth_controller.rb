@@ -21,7 +21,7 @@ class Master::Redhat::AuthController < Master::BaseController
   protected
 
   def self_domain_url(self_domain)
-    options = params.except(:self_domain, :scope).merge(host: self_domain, controller: 'provider/admin/redhat/auth')
+    options = params.except(:self_domain, :scope).merge(host: self_domain, controller: 'provider/admin/redhat/auth').permit!
     url_for(options)
   end
 end
