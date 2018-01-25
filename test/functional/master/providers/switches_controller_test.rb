@@ -1,16 +1,14 @@
 require 'test_helper'
 
-class Master::Providers::SwitchesControllerTest < ActionController::TestCase
+class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     master = Account.master rescue FactoryBot.create(:simple_master)
-    login_as FactoryBot.create(:simple_user, account: master)
-
-    host! master.domain
+    provider_login FactoryBot.create(:simple_user, account: master, state: 'active')
   end
 
   test 'should return 404 in case of wrong switch' do
-    put :update, provider_id: provider.id, id: 'unknown'
+    put master_provider_switch_path(provider.id, 'unknown')
     assert_response :not_found
   end
 
@@ -18,7 +16,7 @@ class Master::Providers::SwitchesControllerTest < ActionController::TestCase
     switch = settings.switches.fetch(:web_hooks)
     assert switch.denied?
 
-    put :update, provider_id: provider.id, id: 'web_hooks'
+    put master_provider_switch_path(provider.id, 'web_hooks')
     assert_response :found
 
     assert switch.reload.allowed?
@@ -28,7 +26,7 @@ class Master::Providers::SwitchesControllerTest < ActionController::TestCase
     switch = settings.switches.fetch(:finance)
     assert switch.allow
 
-    delete :destroy, provider_id: provider.id, id: switch.name
+    delete master_provider_switch_path(provider.id, switch.name)
     assert_response :found
 
     assert switch.reload.denied?
@@ -38,21 +36,21 @@ class Master::Providers::SwitchesControllerTest < ActionController::TestCase
     rolling_updates_off
     provider.settings.allow_multiple_users!
 
-    delete :destroy, provider_id: provider.id, id: :multiple_users
+    delete master_provider_switch_path(provider.id, 'multiple_users')
     assert_response :found
   end
 
   test 'should not change when the same' do
     switch = allowed_switch(:end_users)
-    put :update, provider_id: provider.id, id: switch.name
+    put master_provider_switch_path(provider.id, switch.name)
     assert_response :not_modified
   end
 
   test 'should require current user' do
-    login_as nil
+    logout!
     switch = settings.switches.fetch(:end_users)
 
-    delete :update, provider_id: provider.id, id: switch.name
+    delete master_provider_switch_path(provider.id, switch.name)
     assert_response :forbidden
   end
 
