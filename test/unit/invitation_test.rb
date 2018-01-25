@@ -51,7 +51,11 @@ class InvitationTest < ActiveSupport::TestCase
   end
 
   test 'sets sent_at field when created' do
-    Timecop.freeze(Time.zone.now) do
+    # This is needed, database will not save fractions of seconds
+    # so something like:
+    # Time.now.to_f #=> 1512012308.293877
+    # will be saved in DB as 1512012308
+    Timecop.freeze(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00')) do
       invitation = @provider.invitations.create!(:email => 'buddy@example.net')
       assert_equal Time.zone.now, invitation.sent_at
     end

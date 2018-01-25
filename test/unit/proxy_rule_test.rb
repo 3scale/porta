@@ -136,10 +136,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   test 'save' do
     proxy_rule = FactoryBot.build(:proxy_rule, redirect_url: nil)
     # should accept string up to 10000 characters
-    proxy_rule.redirect_url = "https://example.com/#{'1' * 9980}"
-    assert_valid proxy_rule
-
-    proxy_rule.save!
+    assert FactoryGirl.create(:proxy_rule, redirect_url: "https://example.com/#{'1' * 9980}")
   end
 
   test 'fill owner' do

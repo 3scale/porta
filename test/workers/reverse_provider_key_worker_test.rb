@@ -13,6 +13,7 @@ class ReverseProviderKeyWorkerTest < ActiveSupport::TestCase
 
     app.save!
 
+    provider.reload
     assert_equal 'foobar', provider.provider_key
     assert @worker.perform(provider.id)
 
