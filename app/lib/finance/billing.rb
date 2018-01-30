@@ -14,6 +14,10 @@ module Finance
       li = LineItem.new(params, {without_protection: true})
       li.errors.add(:base, :invalid_invoice_state)
       li
+    rescue ActiveRecord::SubclassNotFound
+      li = LineItem.new(params.except(:type), {without_protection: true})
+      li.errors.add(:base, :invalid_invoice_state)
+      li
     end
 
     def create_line_item!(params)
