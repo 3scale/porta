@@ -59,6 +59,10 @@ class ApplicationKeysTest < ActiveSupport::TestCase
   end
 
   test 'remove! key if needed' do
+    # Adding this to test the correct scope
+    cinstance = FactoryGirl.create(:cinstance)
+    cinstance.application_keys.add 'hello'
+
     key = @application_keys.add('whatever')
 
     # this prevents deleting last key
