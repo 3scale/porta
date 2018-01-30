@@ -217,6 +217,7 @@ class Service < ApplicationRecord
   def using_proxy_pro?
     provider_can_use?(:proxy_pro) && proxy.self_managed?
   end
+  delegate :service_preffix, to: :provider, allow_nil: true
 
   def publish_events
     OIDC::ServiceChangedEvent.create_and_publish!(self)
