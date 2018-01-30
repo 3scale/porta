@@ -30,6 +30,8 @@ class ApplicationKey < ApplicationRecord
 
   extend BackendClient::ToggleBackend
 
+  scope :without, -> (value) { where(['value <> ?', value])}
+
   module AssociationExtension
     include ReferrerFilter::AssociationExtension
     include System::AssociationExtension
@@ -58,8 +60,9 @@ class ApplicationKey < ApplicationRecord
       size < keys_limit
     end
 
+    # Need to use scoping because without is a method defined in Enumerable now and thus overriding the scope
     def can_remove?(value)
-      not proxy_association.owner.service.mandatory_app_key && without(value).empty?
+      !(proxy_association.owner.service.mandatory_app_key && scoping { ApplicationKey.without(value).empty?})
     end
 
     # Only oauth applicatinons can regenerate keys
@@ -161,9 +164,5 @@ class ApplicationKey < ApplicationRecord
   # same as in backend
   def self.generate
     SecureRandom.hex(16)
-  end
-
-  def self.without(value)
-    where(["#{table_name}.value <> ?", value])
   end
 end
