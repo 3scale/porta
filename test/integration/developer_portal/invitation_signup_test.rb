@@ -115,9 +115,10 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     user_data = ThreeScale::OAuth2::UserData.new(uid: 'alaska')
     client.stubs(authenticate!: user_data)
     ThreeScale::OAuth2::Client.expects(:build).with(@auth_provider).returns(client)
+    @invitation.update_column(:accepted_at, nil)
     get "/auth/invitations/#{@invitation.token}/#{@auth_provider.system_name}/callback"
 
-    assert_difference '@buyer.users.count' do
+    assert_difference '@buyer.users.count', +1 do
       post invitee_signup_path(invitation_token: @invitation.token, user: user_valid_params)
       assert_response :redirect
       assert_not_empty authorizations = @buyer.users(true).order(:id).last.sso_authorizations
