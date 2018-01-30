@@ -168,7 +168,7 @@ class InvoiceTest < ActiveSupport::TestCase
     Timecop.freeze(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
 
     assert_equal @now.utc.to_date, @invoice.issued_on
-    assert_equal @now.round, @invoice.paid_at.round
+    assert_in_delta @now, @invoice.paid_at, 1.second
     assert_equal 'paid', @invoice.state
   end
 
