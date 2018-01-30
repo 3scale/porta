@@ -936,6 +936,7 @@ en:
           attributes:
             base:
               invalid_invoice_state: "Invalid invoice state"
+              invalid_line_item_type: "Invalid Line item type"
 
         web_hook:
           attributes:
