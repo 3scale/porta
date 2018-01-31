@@ -183,7 +183,8 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
       assert messenger.deliver
       assert provider.received_messages.empty?
 
-      message = master.received_messages.last!
+      # Using first! as they are ordered by created_at desc
+      message = master.received_messages.first!
       assert_match 'master template', message.body
     end
 
