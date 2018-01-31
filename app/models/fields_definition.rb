@@ -147,8 +147,9 @@ class FieldsDefinition < ApplicationRecord
     return unless target_class.builtin_fields.include?(name) # It's allowed by 3scale and in DB
 
     column_name_attribute = target_class.columns_hash[name]
-    return if column_name_attribute&.text?  # It's not a text attribute.
+    return if %i[string text].include?(column_name_attribute&.type)
 
+    # It's not a text attribute.
     errors.add(:choices,  "are not allowed for #{column_name_attribute&.type.presence || 'this type of'} fields")
   end
 
