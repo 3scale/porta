@@ -3,7 +3,7 @@ require 'test_helper'
 class EventStore::EventTest < ActiveSupport::TestCase
 
   def test_serialization_event_error
-    ActiveJob::Arguments.expects(:serialize).raises(URI::InvalidURIError).twice
+    ActiveJob::Arguments.expects(:serialize).raises(URI::InvalidURIError)
 
     event = EventStore::Event.new(
       stream:     'dummie',
@@ -14,6 +14,7 @@ class EventStore::EventTest < ActiveSupport::TestCase
 
     assert_raise(EventStore::Event::WithGlobalId::SerializationEventError) do
       event.data = { key: 'value' }
+      event.save
     end
   end
 

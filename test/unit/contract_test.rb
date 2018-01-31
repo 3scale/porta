@@ -117,7 +117,8 @@ class ContractTest < ActiveSupport::TestCase
 
     contract.bill_for(month, invoice)
 
-    assert_equal month.end.to_time.end_of_day, contract.paid_until
+    # Because DB value do not have fraction of seconds but Time.zone.now does
+    assert_in_delta month.end.to_time.end_of_day, contract.paid_until, 1.second
   end
 
   def test_billable
