@@ -470,6 +470,7 @@ class InvoiceTest < ActiveSupport::TestCase
     @provider.stubs(:payment_gateway_configured?).returns(true)
     @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
     @invoice.update_attribute(:state, 'pending')
+    @invoice.expects(:notify_buyer_about_payment)
 
     assert @invoice.charge!, 'Invoice should charge!'
   end

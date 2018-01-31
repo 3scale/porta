@@ -16,6 +16,7 @@ class CMSResetServiceTest < ActiveSupport::TestCase
     page = provider.pages.first!
 
     assert @cms_reset.call(provider)
+    provider.reload
 
     refute_equal page, provider.pages.first!
   end

@@ -67,7 +67,7 @@ class ApplicationKey < ApplicationRecord
     # Only oauth applicatinons can regenerate keys
     def regenerate(value)
       succeeded = false
-      renegerate_transaction = transaction do
+      regenerate_transaction = transaction do
         remove!(value)
         succeeded = add()
         proxy_association.owner.touch if succeeded
@@ -75,7 +75,7 @@ class ApplicationKey < ApplicationRecord
       end
 
       push_webhook_key_updated() if succeeded
-      renegerate_transaction
+      regenerate_transaction
     end
 
     private
