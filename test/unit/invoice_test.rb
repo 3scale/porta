@@ -69,7 +69,10 @@ class InvoiceTest < ActiveSupport::TestCase
     time = Time.zone.now
     Timecop.freeze(time) { @invoice.finalize! }
 
-    assert_equal time.round, @invoice.finalized_at.round
+    # assert_in_delta because the time stored in database do not have usec
+    # But end of day has .999999
+    # Solution is to move from Mysql or migrate to 5.6.24+ and use precision (limit: 6) on datetime
+    assert_in_delta time, @invoice.finalized_at, 1.second
     assert @invoice.finalized?
   end
 
