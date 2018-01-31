@@ -1,34 +1,37 @@
 require 'test_helper'
 
-class Master::Events::ImportsControllerTest < ActionController::TestCase
+class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
 
-  should route(:post, "http://#{master_account.domain}/master/events/import").to :action => :create, :format => :xml
-
-  def host!(domain)
-    @request.host = domain
+  def test_route
+    MasterDomainConstraint.stubs(matches?: true)
+    assert_generates "/master/events/import", action: :create, format: :xml, controller: 'master/events/imports'
+    assert_recognizes({action: 'create', format: 'xml', controller: 'master/events/imports'}, {path: master_events_import_path, method: :post})
   end
 
   def setup
     host! master_account.domain
+    ::Events.stubs(shared_secret: 'SECRET')
   end
 
   test 'is not accessible on other domains' do
     host! 'foo.example.com'
-    post :create, :secret => Events.shared_secret
-    assert_response 403
+    assert_raise ActionController::RoutingError do
+      post master_events_import_path secret: Events.shared_secret
+      assert_response :not_found
+    end
   end
 
   test 'check shared secret' do
-    post :create, :secret => 'fail'
+    post master_events_import_path secret: 'fail'
     assert_response 403
 
-    post :create, :secret => Events.shared_secret
+    post master_events_import_path secret: Events.shared_secret
     assert_response :ok
   end
 
   test 'import asynchronously' do
     Events.expects(:async_fetch_backend_events!)
 
-    post :create, :secret => Events.shared_secret, :host => master_account.domain
+    post master_events_import_path secret: Events.shared_secret, :host => master_account.domain
   end
 end
