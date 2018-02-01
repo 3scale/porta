@@ -134,7 +134,10 @@ module Liquid
         protected
 
         def make_url(options = {})
-          @url_builder.url_for(@url_builder.params.merge(options))
+          params = @url_builder.params
+          unsafe_params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params.to_h
+
+          @url_builder.url_for(unsafe_params.merge(options))
         end
 
         def make_part(title, link = nil, rel = nil)
