@@ -180,7 +180,7 @@ class Configuration
   end
 
   class Value < ApplicationRecord
-    extend Symbolize
+    include Symbolize
     self.table_name = 'configuration_values'
 
     # TODO: test!

@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 class User < ApplicationRecord
-  extend Symbolize
+  include Symbolize
 
   def self.columns
     super.reject { |c| c.name == "janrain_identifier" }

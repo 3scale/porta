@@ -5,7 +5,7 @@ class ::ActiveMerchant::Billing::AuthorizeNetGateway
 end
 
 class PaymentTransaction < ApplicationRecord
-  extend Symbolize
+  include Symbolize
   belongs_to :account
   belongs_to :invoice, inverse_of: :payment_transactions
 
