@@ -775,7 +775,7 @@ GEM
     webrobots (0.1.1)
     whenever (0.9.7)
       chronic (>= 0.6.3)
-    will_paginate (3.1.0)
+    will_paginate (3.1.6)
     with_env (1.1.0)
     xml-simple (1.1.5)
     xpath (2.1.0)
@@ -953,7 +953,7 @@ DEPENDENCIES
   webmock (~> 2.3.2)
   webpacker (~> 4.x)
   whenever (~> 0.9.7)
-  will_paginate (~> 3.1.0)
+  will_paginate (~> 3.1.6)
   xpath (~> 2.1)
   yabeda-prometheus
   yabeda-sidekiq
