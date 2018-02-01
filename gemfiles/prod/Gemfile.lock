@@ -975,7 +975,7 @@ DEPENDENCIES
   webmock (~> 2.3.2)
   webpacker (~> 4.x)
   whenever (~> 0.9.7)
-  will_paginate (~> 3.1.0)
+  will_paginate (~> 3.1.6)
   xpath (~> 2.1)
   yabeda-prometheus
   yabeda-sidekiq
