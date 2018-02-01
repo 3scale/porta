@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Provider::Admin::Account::UsersControllerTest < ActionController::TestCase
+class Provider::Admin::Account::UsersControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider    = FactoryBot.create :provider_account
@@ -13,7 +13,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionController::TestCase
   def test_update_blank_member_permission_ids
     assert_equal @default_ids, @user.admin_sections.to_a
 
-    put :update, id: @user.id, user: { member_permission_ids: [] }
+    put provider_admin_account_user_path(@user.id), params: {user: { member_permission_ids: [] }}
 
     @user.reload
 
@@ -23,7 +23,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionController::TestCase
   def test_update_no_member_permission_ids
     assert_equal @default_ids, @user.admin_sections.to_a
 
-    put :update, id: @user.id, user: { }
+    put provider_admin_account_user_path(@user.id), params: {user: {}}
 
     @user.reload
 
