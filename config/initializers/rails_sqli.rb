@@ -7,10 +7,12 @@
 
 module RailsSQLiFix
 
+  # It comes from a controller so we should escape all nested hashes
   def sanitize_actioncontroller_parameters(attributes)
-    attributes.transform_values do |value|
+    result = attributes.respond_to?(:to_unsafe_h) ? attributes.to_unsafe_h : attributes
+    result.transform_values do |value|
       case value
-        when ActionController::Parameters
+        when ActionController::Parameters, Hash
           value.to_s
         else
           value
@@ -19,11 +21,14 @@ module RailsSQLiFix
   end
 
   def sanitize_forbidden_attributes(attributes)
-    case attributes
-      when ActionController::Parameters
-        super sanitize_actioncontroller_parameters(attributes)
-      else super
-    end
+    return super unless action_controller_parameters_in?(attributes)
+    super sanitize_actioncontroller_parameters(attributes)
+  end
+
+  # This checks only if the `attributes` or any of its value is an ActionCotroller::Parameters
+  def action_controller_parameters_in?(attributes)
+    return false unless [Hash, ActionController::Parameters].include?(attributes.class)
+    ActionController::Parameters === attributes || attributes.any?{|_k,v| ActionController::Parameters === v }
   end
 end
 
