@@ -115,6 +115,7 @@ module DeveloperPortal
       # :plans is kept for legacy reasons - can be removed one made sure
       # that noone is using it
       plan_ids = Array(params[:plan_ids].presence || params[:plans])
+      plan_ids.reject!(&:blank?)
 
       @plans = @provider.provided_plans.published.find(plan_ids)
     end
