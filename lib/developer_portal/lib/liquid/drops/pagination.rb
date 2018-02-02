@@ -134,7 +134,9 @@ module Liquid
         protected
 
         def make_url(options = {})
-          @url_builder.url_for(@url_builder.params.to_unsafe_h.merge(options))
+          safe_params = @url_builder.params
+          safe_params = safe_params.to_unsafe_h if ActionController::Parameters === safe_params
+          @url_builder.url_for(safe_params.merge(options))
         end
 
         def make_part(title, link = nil, rel = nil)
