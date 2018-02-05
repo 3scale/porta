@@ -1,6 +1,5 @@
 class Sites::DocumentationsController < Sites::BaseController
   # see ForumsController
-  skip_before_action :activate_menu_site_or_settings
   activate_menu :serviceadmin
 
   before_action :authorize_connect
