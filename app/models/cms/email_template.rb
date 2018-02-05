@@ -80,7 +80,7 @@ class CMS::EmailTemplate < CMS::Template
 
   def headers= val
     @headers = nil
-    self[:options] = val
+    self[:options] = val.respond_to?(:to_unsafe_h) ? val.to_unsafe_h : val
   end
 
   def reload(*)

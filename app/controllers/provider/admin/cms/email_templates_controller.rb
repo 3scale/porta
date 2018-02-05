@@ -44,7 +44,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
   end
 
   def cms_templates_params
-    params.permit(:cms_template)
+    params.require(:cms_template).permit(:system_name, :draft, headers: %i[subject bcc cc reply_to from])
   end
 
 end
