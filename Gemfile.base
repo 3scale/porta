@@ -159,7 +159,6 @@ gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.5.0'
 gem 'after_commit_queue', '~> 1.1.0'
 
-
 # for liquid docs on-fly generation
 gem 'html-pipeline', github: 'ceritium/html-pipeline', branch: 'master'
 gem 'github-markdown'
@@ -227,7 +226,7 @@ group :test do
   gem 'shoulda-context', '~> 1.2.2'
   gem 'timecop', '~> 0.9'
 
-  gem 'minitest'
+  gem 'minitest', '5.10.3'
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
