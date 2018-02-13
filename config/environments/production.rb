@@ -115,7 +115,6 @@ Rails.application.configure do
   config.log_tags = [ :uuid, :host, :remote_ip ]
 
   config.static_cache_control = "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}"
-  config.serve_static_files = true
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.liquid.resolver_caching = true
