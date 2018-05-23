@@ -269,7 +269,7 @@ gem 'developer_portal', path: 'lib/developer_portal'
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 oracle = lambda { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 1.6.0', install_if: oracle
+gem 'activerecord-oracle_enhanced-adapter', '~> 1.7.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
 
 gem 'kubeclient'
