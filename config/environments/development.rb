@@ -60,7 +60,6 @@ Rails.application.configure do
   # See emails in browser
   config.action_mailer.delivery_method = defined?(LetterOpener) ? :letter_opener : :test
 
-  config.resque.log_level = :debug
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
