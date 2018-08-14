@@ -54,7 +54,7 @@ class DeveloperPortal::CMS::NewContentController < DeveloperPortal::BaseControll
 
       # CMS::Page#mime_type is parsed and valid Mime::Type
       # in case it can't be parsed (nil, something invalid) returns 'text/html'
-      render :layout => false, :content_type => page.mime_type, :text => renderer.content
+      render :layout => false, :content_type => page.mime_type, :plain => renderer.content
     end
   end
 
