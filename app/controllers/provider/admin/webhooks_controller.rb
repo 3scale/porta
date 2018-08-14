@@ -24,7 +24,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
         if @webhook
           @ping_response = @webhook.ping
         else
-          render :status => :forbidden, :text => 'Nowhere to ping'
+          render :status => :forbidden, :plain => 'Nowhere to ping'
         end
       end
     end
