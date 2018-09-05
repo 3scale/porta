@@ -21,22 +21,7 @@ task :integrate, :log do |_, args|
 
   test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - skip_directories_requiring_to_run_in_different_job_or_without_tests
 
-  # parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy" in 307.7s
-  # parallel_rspec --verbose spec in 97.0s
 
-  # parallel_test --verbose test/functional in 98.6s
-  # parallel_test --verbose test/mailers test/models test/unit test/controllers test/workers test/cve test/decorators test/helpers test/proxy_helpers test/subscribers test/support test/events in 311.7s
-
-  # parallel_test --verbose test/integration in 158.8s
-  # rake doc:swagger:validate:all in 6.3s
-  # rake ci:lint --trace in 7.4s
-  # rake ci:jspm --trace in 15.2s
-  # yarn test -- --reporters dots,junit --browsers Firefox in 10.7s
-  # rake db:setup in 10.3s
-
-  # parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=~@backend --tags=~@emails --tags=~@stats --tags=~@search --tags=~@no-txn" in 428.6s
-
-  # parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=@backend,@emails,@stats,@search,@no-txn" in 410.2s
 
   kind = {
     '1' => [
