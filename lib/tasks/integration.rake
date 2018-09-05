@@ -26,6 +26,14 @@ def check_that_junit_reports_folder_is_empty
   end
 end
 
+def resolve_test_directories
+
+  skip_directories_requiring_to_run_in_different_job_or_without_tests = %w{test_helpers fixtures shoulda_macros factories remote performance}.map {|x| "test/#{x}"}
+
+  test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - skip_directories_requiring_to_run_in_different_job_or_without_tests
+
+end
+
 desc 'Run continuous integration'
 task :integrate, :log do |_, args|
   if ENV['CI']
@@ -45,10 +53,7 @@ task :integrate, :log do |_, args|
     @no-txn
   }
 
-  skip_directories_requiring_to_run_in_different_job_or_without_tests = %w{test_helpers fixtures shoulda_macros factories remote performance}.map{|x| "test/#{x}"}
-
-  test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - skip_directories_requiring_to_run_in_different_job_or_without_tests
-
+  test_dirs = resolve_test_directories
 
 
   kind = {
