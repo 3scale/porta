@@ -1,5 +1,20 @@
 require 'color'
 
+
+
+
+def print_banner_around
+  banner = ->(line) do
+    puts
+    puts "=" * 40
+    puts "== #{Color::BOLD}#{line}#{Color::CLEAR}"
+    puts "=" * 40
+    puts
+
+    line
+  end
+end
+
 desc 'Run continuous integration'
 task :integrate, :log do |_, args|
   if ENV['CI']
@@ -64,15 +79,7 @@ task :integrate, :log do |_, args|
 
   summary = []
 
-  banner = ->(line) do
-    puts
-    puts "=" * 40
-    puts "== #{Color::BOLD}#{line}#{Color::CLEAR}"
-    puts "=" * 40
-    puts
-
-    line
-  end
+  banner = print_banner_around
 
   require 'ci_reporter_shell'
 
