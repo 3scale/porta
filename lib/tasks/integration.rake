@@ -17,13 +17,9 @@ task :integrate, :log do |_, args|
     @no-txn
   }
 
-  skip_directories = %w{test_helpers fixtures shoulda_macros factories}.map{|x| "test/#{x}"}
+  skip_directories_requiring_to_run_in_different_job_or_without_tests = %w{test_helpers fixtures shoulda_macros factories remote performance}.map{|x| "test/#{x}"}
 
-  test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - skip_directories
-
-  # Must be run in different job
-  test_dirs.delete('test/remote')
-  test_dirs.delete('test/performance')
+  test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - skip_directories_requiring_to_run_in_different_job_or_without_tests
 
   # parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy" in 307.7s
   # parallel_rspec --verbose spec in 97.0s
