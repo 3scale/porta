@@ -657,6 +657,13 @@ without fake Core server your after commit callbacks will crash and you might ge
         resource :failures, controller: 'web_hooks_failures', only: [:show, :destroy]
       end
       resource :settings, only: [:show, :update]
+
+      namespace :service_discovery do
+        resources :namespaces, only: [:index], controller: 'cluster_namespaces' do
+          resources :services, only: [:index, :show], controller: 'cluster_services'
+        end
+        resources :projects, only: [:index], controller: 'cluster_projects'
+      end
     end
   end
 

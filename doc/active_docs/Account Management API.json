@@ -4604,6 +4604,115 @@
       ]
     },
     {
+      "path": "/admin/api/service_discovery/namespaces.xml",
+      "responseClass": "List[cluster_namespaces]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Service Discovery: Cluster Namespaces List",
+          "description": "Returns the list of all namespaces within the underlying Kubernetes/Openshift cluster. It requires cluster-level permission to view the namespaces",
+          "group": "service_discovery",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/service_discovery/projects.xml",
+      "responseClass": "List[cluster_projects]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Service Discovery: Cluster Projects List",
+          "description": "Returns the list of all projects with discoverable services within the underlying Openshift cluster.",
+          "group": "service_discovery",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/service_discovery/namespaces/{namespace}/services.xml",
+      "responseClass": "List[cluster_services]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Service Discovery: Cluster Services List",
+          "description": "Returns the list of all discoverable services for a given namespace within the underlying Kubernetes/Openshift cluster.",
+          "group": "service_discovery",
+          "parameters": [
+            {
+              "dataType": "string",
+              "required": true,
+              "paramType": "path",
+              "name": "namespace",
+              "description": "Namespace of the service"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/service_discovery/namespaces/{namespace}/services/{service_name}.xml",
+      "responseClass": "cluster_service",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Service Discovery: Cluster Service Read",
+          "description": "Returns the details of a discoverable service of a given namespace within the underlying Kubernetes/Openshift cluster.",
+          "group": "service_discovery",
+          "parameters": [
+            {
+              "dataType": "string",
+              "required": true,
+              "paramType": "path",
+              "name": "namespace",
+              "description": "Namespace of the service"
+            },
+            {
+              "dataType": "string",
+              "required": true,
+              "paramType": "path",
+              "name": "service_name",
+              "description": "Name of the service"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/services/{service_id}/features.xml",
       "responseClass": "List[feature]",
       "operations": [
