@@ -2,6 +2,7 @@ h2 Create New Service
 
 
 = semantic_form_for @service, :url => admin_services_path do |form|
+  = render :partial => 'api/services/forms/service_discovery', :locals => { :form => form }
   = render :partial => 'api/services/forms/naming', :locals => { :form => form }
   = form.buttons do
     = form.commit_button

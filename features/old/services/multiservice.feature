@@ -17,9 +17,11 @@ Feature: Multiservice feature
      And I should see "ID for API calls is"
      And I should see "system name is"
 
+  @javascript
   Scenario: Create new service
     Given I am logged in as provider "foo.example.com"
       And provider "foo.example.com" has "multiple_services" switch allowed
+      And service discovery is not enabled
     When I am on the services dashboard page
      And I follow "Create Service"
      And I fill in "Name" with "Less fancy API"
