@@ -358,6 +358,13 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :invoices, :only => [:show, :index]
       end
+
+      namespace :service_discovery do
+        resources :namespaces, only: [], controller: 'cluster_namespaces' do
+          resources :services, only: [:index, :show], controller: 'cluster_services'
+        end
+        resources :projects, only: [:index], controller: 'cluster_projects'
+      end
     end
   end
 

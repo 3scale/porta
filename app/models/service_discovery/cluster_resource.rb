@@ -48,6 +48,10 @@ module ServiceDiscovery
       @annotations ||= metadata[:annotations].to_h
     end
 
+    def to_json
+      resource.to_h.except(:kind, :apiVersion)
+    end
+
     def to_xml(options = {})
       properties = resource.to_h.except(:kind, :apiVersion)
       root = self.class.name.gsub(/ServiceDiscovery::Cluster/, '').downcase
