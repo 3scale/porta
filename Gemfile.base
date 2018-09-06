@@ -262,3 +262,5 @@ oracle = lambda do
 end
 gem 'activerecord-oracle_enhanced-adapter', '~> 1.6.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
+
+gem 'kubeclient'

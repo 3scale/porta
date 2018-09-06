@@ -1,0 +1,21 @@
+default: &base
+  enabled: true
+  server_scheme: 'https'
+  server_host: 'kubernetes.default.svc.cluster.local'
+  server_port: 443
+
+development:
+  <<: *base
+  bearer_token:
+
+test:
+  <<: *base
+  bearer_token:
+
+production:
+  <<: *base
+  bearer_token:
+
+preview:
+  <<: *base
+  bearer_token:
