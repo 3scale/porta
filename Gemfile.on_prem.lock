@@ -367,8 +367,15 @@ GEM
     hike (1.2.3)
     hiredis (0.6.0)
     htmlentities (4.3.4)
+    http (2.2.2)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 1.0.1)
+      http_parser.rb (~> 0.6.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    http-form_data (1.0.3)
+    http_parser.rb (0.6.0)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
@@ -390,6 +397,10 @@ GEM
       addressable (~> 2.3)
     jwt (1.5.2)
     kgio (2.10.0)
+    kubeclient (2.5.2)
+      http (>= 0.98, < 3)
+      recursive-open-struct (~> 1.0.0)
+      rest-client
     launchy (2.4.3)
       addressable (~> 2.3)
     license_finder (2.1.2)
@@ -563,6 +574,7 @@ GEM
       ffi (>= 0.5.0)
     recaptcha (4.1.0)
       json
+    recursive-open-struct (1.0.5)
     redcarpet (3.4.0)
     redis (3.3.5)
     redis-namespace (1.5.2)
@@ -865,6 +877,7 @@ DEPENDENCIES
   json (~> 1.8.1)
   json-schema
   jwt (~> 1.5.2)
+  kubeclient
   launchy
   license_finder (~> 2.1.2)
   license_finder_xml_reporter!
@@ -960,4 +973,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   1.16.2
+   1.16.4

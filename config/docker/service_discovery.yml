@@ -1,0 +1,24 @@
+default: &base
+  enabled: true
+  server_scheme: 'https'
+  server_port: 8443
+
+development:
+  <<: *base
+  server_host:
+  bearer_token:
+
+test:
+  <<: *base
+  server_host:
+  bearer_token:
+
+production:
+  <<: *base
+  server_host:
+  bearer_token:
+
+preview:
+  <<: *base
+  server_host:
+  bearer_token:
