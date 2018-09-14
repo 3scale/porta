@@ -38,9 +38,12 @@ class Api::ServicesController < Api::BaseController
     @service.attributes = params[:service]
     @service.system_name = params[:service][:system_name]
 
-    if can_create? && @service.save
-      @service.import_cluster_definitions(params[:namespace]) if ThreeScale.config.service_discovery.enabled && params[:source] == 'discover'
+    if params[:source] == 'discover'
+      @service.discovered = true
+      @service.cluster_namespace = params[:namespace].presence
+    end
 
+    if can_create? && @service.save
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
       redirect_to admin_services_path(anchor: "service_#{@service.id}")
