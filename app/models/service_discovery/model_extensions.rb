@@ -5,39 +5,23 @@ module ServiceDiscovery
     module Service
       def self.included(base)
         base.class_eval do
-          attr_accessor :namespace
+          attr_accessor :discovered
+          attr_accessor :cluster_namespace
+
+          after_commit :import_cluster_definitions, on: :create
         end
       end
 
-      def import_cluster_definitions(namespace)
-        return unless ThreeScale.config.service_discovery.enabled
-
-        # TODO: Perform async
-
-        self.namespace = namespace
-
-        import_cluster_service_endpoint
-        import_cluster_active_docs
-      rescue ServiceDiscovery::ClusterClient::ResourceNotFound
+      def import_cluster_definitions
+        return unless discovered
+        ImportClusterServiceDefinitionsWorker.perform_async(self.id, cluster_namespace)
       end
 
-      protected
-
-      def cluster
-        @cluster ||= ServiceDiscovery::ClusterClient.new
-      end
-
-      def cluster_service
-        @cluster_service ||= cluster.find_discoverable_service_by(namespace: namespace, name: name)
-      end
-
-      private
-
-      def import_cluster_service_endpoint
+      def import_cluster_service_endpoint(cluster_service)
         proxy.save_and_deploy(api_backend: cluster_service.endpoint)
       end
 
-      def import_cluster_active_docs
+      def import_cluster_active_docs(cluster_service)
         return unless cluster_service.oas?
 
         spec_content = cluster_service.specification
