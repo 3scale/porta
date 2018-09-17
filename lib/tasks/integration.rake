@@ -77,7 +77,7 @@ task :integrate, :log do |_, args|
     :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
   }
 
-  kind = {
+  workload = {
     '1' => [
       test_commands[:cucumber_javascript],
       test_commands[:rspec],
@@ -112,7 +112,7 @@ task :integrate, :log do |_, args|
       ]
   }
 
-  tasks = ENV['MULTIJOB_KIND'].present? ? kind.fetch(ENV['MULTIJOB_KIND']) : kind.values.flatten
+  jobs = ENV['MULTIJOB_KIND'].present? ? workload.fetch(ENV['MULTIJOB_KIND']) : workload.values.flatten
 
   success, failure = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}", "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
 
@@ -126,7 +126,7 @@ task :integrate, :log do |_, args|
 
   total_time = 0
 
-  results = tasks.map do |task|
+  results = jobs.map do |task|
 
     command = nil
     result = report.execute(task, env: {RAILS_ENV: Rails.env}) do |cmd|
@@ -149,7 +149,7 @@ task :integrate, :log do |_, args|
                  Rails.root.join('tmp', 'codeclimate').tap(&:mkpath))
 
     system('codeclimate-batch',
-           '--groups', (kind.keys.size - 1).to_s,
+           '--groups', (workload.keys.size - 1).to_s,
            '--host', 'https://cc-3scale-amend.herokuapp.com',
            '--key', ENV.fetch('BUILD_TAG'))
   end
