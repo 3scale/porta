@@ -29,7 +29,9 @@ class Proxy < ApplicationRecord
 
   HTTP_HEADER =  /\A[{}\[\]\d,.;@#~%&()?\w_"= \/\\:-]+\Z/
 
-  validates :api_backend,      format: { with: URI_OPTIONAL_PORT,  allow_nil: true }
+  validates :api_backend, uri: { path: true },
+                          non_localhost: { message: :protected_domain }
+
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
   validates :endpoint,         format: { with: URI_OPTIONAL_PORT,  allow_nil: true, allow_blank: true }
   validates :sandbox_endpoint, format: { with: URI_OPTIONAL_PORT , allow_nil: true, allow_blank: true }
@@ -61,7 +63,6 @@ class Proxy < ApplicationRecord
             :error_headers_no_match, :secret_token, :hostname_rewrite, :sandbox_endpoint,
             length: { maximum: 255 }
 
-  validate :api_backend_not_localhost
   validate :policies_config_structure
 
   accepts_nested_attributes_for :proxy_rules, allow_destroy: true
@@ -521,31 +522,6 @@ class Proxy < ApplicationRecord
   def create_default_secret_token
     unless secret_token
       self.secret_token = "Shared_secret_sent_from_proxy_to_API_backend_#{SecureRandom.hex(8)}"
-    end
-  end
-
-  def api_backend_not_localhost
-    return unless errors.blank?
-    return if Rails.env.test?
-
-    return if self.api_backend.blank?
-
-    begin
-      uri = URI.parse(self.api_backend)
-
-    rescue URI::InvalidURIError => e
-      errors.add(:api_backend, "Invalid domain")
-      return
-    end
-
-    if uri.host.blank?
-      errors.add(:api_backend, "incorrect domain")
-      return
-    end
-
-    if uri.host =~ /\A(localhost|127\.0\.0\.1)\Z/
-      errors.add(:api_backend, "Sorry, this domain is protected.")
-      return
     end
   end
 
