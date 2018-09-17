@@ -62,9 +62,11 @@ task :integrate, :log do |_, args|
 
     :rspec => 'parallel_rspec --verbose spec',
     :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
-    :frontend => [
+    :swagger => [
       'rake doc:swagger:validate:all',
       'rake doc:swagger:generate:all',
+    ],
+    :frontend => [
       'rake ci:jspm --trace',
       'yarn test -- --reporters dots,junit --browsers Firefox',
       'yarn jest',
@@ -83,7 +85,7 @@ task :integrate, :log do |_, args|
     '2' => [
       test_commands[:integration],
     ],
-    '3' => test_commands[:frontend],
+    '3' => test_commands[:swagger] + test_commands[:frontend],
     '4' => [
       test_commands[:functional],
       test_commands[:main_suite],
@@ -102,6 +104,7 @@ task :integrate, :log do |_, args|
       test_commands[:license_checks],
     ],
     'commit_phase' =>
+      test_commands[:swagger] +
       test_commands[:frontend] +
       [
         test_commands[:rspec],
