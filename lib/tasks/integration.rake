@@ -34,17 +34,7 @@ def resolve_test_directories
 
 end
 
-desc 'Run continuous integration'
-task :integrate, :log do |_, args|
-  if ENV['CI']
-    ENV['COVERAGE'] = '1'
-    ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
-  end
-
-  check_that_junit_reports_folder_is_empty
-
-  abort 'failed to run integrate:prepare' unless system('rake integrate:prepare --trace')
-
+def calculate_tests_to_run
   tags_for_test_categories = %w{
     @backend
     @emails
@@ -106,16 +96,29 @@ task :integrate, :log do |_, args|
   }
 
   jobs = ENV['MULTIJOB_KIND'].present? ? workload.fetch(ENV['MULTIJOB_KIND']) : workload.values.flatten
+  return jobs, workload
+end
 
+
+def send_test_coverage_to_codeclimate(workload)
+  if ENV['COVERAGE']
+    FileUtils.cp(Dir["#{Dir.tmpdir}/codeclimate-test-coverage-*"],
+                 Rails.root.join('tmp', 'codeclimate').tap(&:mkpath))
+
+    system('codeclimate-batch',
+           '--groups', (workload.keys.size - 1).to_s,
+           '--host', 'https://cc-3scale-amend.herokuapp.com',
+           '--key', ENV.fetch('BUILD_TAG'))
+  end
+end
+
+def run_tests_and_handle_reports(jobs, workload)
   success, failure = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}", "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
-
   summary = []
-
   banner = print_banner_around
 
   require 'ci_reporter_shell'
   report = CiReporterShell.report('tmp/junit')
-
 
   total_time = 0
 
@@ -137,15 +140,24 @@ task :integrate, :log do |_, args|
 
   abort "some tasks failed, exitting" unless results.all?
 
-  if ENV['COVERAGE']
-    FileUtils.cp(Dir["#{Dir.tmpdir}/codeclimate-test-coverage-*"],
-                 Rails.root.join('tmp', 'codeclimate').tap(&:mkpath))
+  send_test_coverage_to_codeclimate(workload)
+end
 
-    system('codeclimate-batch',
-           '--groups', (workload.keys.size - 1).to_s,
-           '--host', 'https://cc-3scale-amend.herokuapp.com',
-           '--key', ENV.fetch('BUILD_TAG'))
+
+desc 'Run continuous integration'
+task :integrate, :log do |_, args|
+  if ENV['CI']
+    ENV['COVERAGE'] = '1'
+    ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
   end
+
+  check_that_junit_reports_folder_is_empty
+
+  abort 'failed to run integrate:prepare' unless system('rake integrate:prepare --trace')
+
+  jobs, workload = calculate_tests_to_run
+
+  run_tests_and_handle_reports(jobs, workload)
 end
 
 namespace :integrate do
