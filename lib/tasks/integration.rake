@@ -55,55 +55,57 @@ task :integrate, :log do |_, args|
 
   test_dirs = resolve_test_directories
 
-  cucumber_tests_javascript = 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"'
-  cucumber_tests_non_tagged = %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %Q|--tags=~#{t}|}.join(' ')}"}
-  cucumber_tests_for_categories = %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"}
+  test_commands = {
+    :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
+    :cucumber_non_tagged => %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %Q|--tags=~#{t}|}.join(' ')}"},
+    :cucumber_for_categories => %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"},
 
-  rspec_tests = 'parallel_rspec --verbose spec'
-  integration_tests = "parallel_test --verbose #{test_dirs.delete('test/integration')}"
-  frontend_tests = [
-    'rake doc:swagger:validate:all',
-    'rake doc:swagger:generate:all',
-    'rake ci:jspm --trace',
-    'yarn test -- --reporters dots,junit --browsers Firefox',
-    'yarn jest',
-    'rake db:purge db:setup',
-  ]
-  functional_tests = "parallel_test --verbose #{test_dirs.delete('test/functional')}"
-  license_checks = "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run"
-  main_tests_suite = "parallel_test --verbose #{test_dirs.join(' ')}"
+    :rspec => 'parallel_rspec --verbose spec',
+    :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
+    :frontend => [
+      'rake doc:swagger:validate:all',
+      'rake doc:swagger:generate:all',
+      'rake ci:jspm --trace',
+      'yarn test -- --reporters dots,junit --browsers Firefox',
+      'yarn jest',
+      'rake db:purge db:setup',
+    ],
+    :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
+    :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
+    :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
+  }
 
   kind = {
     '1' => [
-      cucumber_tests_javascript,
-      rspec_tests,
+      test_commands[:cucumber_javascript],
+      test_commands[:rspec],
     ],
     '2' => [
-      integration_tests,
+      test_commands[:integration],
     ],
-    '3' => frontend_tests,
+    '3' => test_commands[:frontend],
     '4' => [
-      functional_tests,
-      main_tests_suite,
+      test_commands[:functional],
+      test_commands[:main_suite],
     ],
     '5' => [
-      cucumber_tests_non_tagged,
+      test_commands[:cucumber_non_tagged],
     ],
     '6' => [
-      cucumber_tests_for_categories,
+      test_commands[:cucumber_for_categories],
     ],
 
     'percy' => [
       'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features'
     ],
     'licenses' => [
-      license_checks
+      test_commands[:license_checks],
     ],
     'commit_phase' =>
-      frontend_tests +
+      test_commands[:frontend] +
       [
-        rspec_tests,
-        license_checks,
+        test_commands[:rspec],
+        test_commands[:license_checks],
       ]
   }
 
