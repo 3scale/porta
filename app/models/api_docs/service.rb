@@ -29,7 +29,8 @@ class ApiDocs::Service < ApplicationRecord
   after_commit :notify_new_base_path, if: :should_notify?
 
   validates_with ThreeScale::Swagger::Validator
-  validates_with ThreeScale::LocalhostValidator, attributes: :base_path
+
+  validates :base_path, non_localhost: true
 
   def self.with_system_names(system_names)
     unless system_names.empty?
