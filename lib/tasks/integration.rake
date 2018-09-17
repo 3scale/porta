@@ -28,9 +28,9 @@ end
 
 def resolve_test_directories
 
-  skip_directories_requiring_to_run_in_different_job_or_without_tests = %w{test_helpers fixtures shoulda_macros factories remote performance}.map {|x| "test/#{x}"}
+  directories_requiring_to_run_in_different_job_or_without_tests = %w{test_helpers fixtures shoulda_macros factories remote performance}.map {|x| "test/#{x}"}
 
-  test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - skip_directories_requiring_to_run_in_different_job_or_without_tests
+  test_dirs = Pathname.new("test").children.select(&:directory?).map(&:to_s) - directories_requiring_to_run_in_different_job_or_without_tests
 
 end
 
@@ -45,7 +45,7 @@ task :integrate, :log do |_, args|
 
   abort 'failed to run integrate:prepare' unless system('rake integrate:prepare --trace')
 
-  tags = %w{
+  tags_for_test_categories = %w{
     @backend
     @emails
     @stats
@@ -55,7 +55,10 @@ task :integrate, :log do |_, args|
 
   test_dirs = resolve_test_directories
 
-  cucumber_javascript_tests = 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"'
+  cucumber_tests_javascript = 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"'
+  cucumber_tests_non_tagged = %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %Q|--tags=~#{t}|}.join(' ')}"}
+  cucumber_tests_for_categories = %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"}
+
   rspec_tests = 'parallel_rspec --verbose spec'
   integration_tests = "parallel_test --verbose #{test_dirs.delete('test/integration')}"
   frontend_tests = [
@@ -66,12 +69,13 @@ task :integrate, :log do |_, args|
     'yarn jest',
     'rake db:purge db:setup',
   ]
-
   functional_tests = "parallel_test --verbose #{test_dirs.delete('test/functional')}"
   license_checks = "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run"
+  main_tests_suite = "parallel_test --verbose #{test_dirs.join(' ')}"
+
   kind = {
     '1' => [
-      cucumber_javascript_tests,
+      cucumber_tests_javascript,
       rspec_tests,
     ],
     '2' => [
@@ -80,13 +84,13 @@ task :integrate, :log do |_, args|
     '3' => frontend_tests,
     '4' => [
       functional_tests,
-      "parallel_test --verbose #{test_dirs.join(' ')}",
+      main_tests_suite,
     ],
     '5' => [
-      %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags.map{|t| %Q|--tags=~#{t}| }.join(' ')}"},
+      cucumber_tests_non_tagged,
     ],
     '6' => [
-      %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags.join(',')}"},
+      cucumber_tests_for_categories,
     ],
 
     'percy' => [
