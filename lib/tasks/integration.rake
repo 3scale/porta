@@ -55,25 +55,31 @@ task :integrate, :log do |_, args|
 
   test_dirs = resolve_test_directories
 
+  cucumber_javascript_tests = 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"'
+  rspec_tests = 'parallel_rspec --verbose spec'
+  integration_tests = "parallel_test --verbose #{test_dirs.delete('test/integration')}"
+  frontend_tests = [
+    'rake doc:swagger:validate:all',
+    'rake doc:swagger:generate:all',
+    'rake ci:jspm --trace',
+    'yarn test -- --reporters dots,junit --browsers Firefox',
+    'yarn jest',
+    'rake db:purge db:setup',
+  ]
 
+  functional_tests = "parallel_test --verbose #{test_dirs.delete('test/functional')}"
+  license_checks = "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run"
   kind = {
     '1' => [
-      'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
-      'parallel_rspec --verbose spec',
+      cucumber_javascript_tests,
+      rspec_tests,
     ],
     '2' => [
-      "parallel_test --verbose #{test_dirs.delete('test/integration')}",
+      integration_tests,
     ],
-    '3' => [
-      'rake doc:swagger:validate:all',
-      'rake doc:swagger:generate:all',
-      'rake ci:jspm --trace',
-      'yarn test -- --reporters dots,junit --browsers Firefox',
-      'yarn jest',
-      'rake db:purge db:setup',
-    ],
+    '3' => frontend_tests,
     '4' => [
-      "parallel_test --verbose #{test_dirs.delete('test/functional')}",
+      functional_tests,
       "parallel_test --verbose #{test_dirs.join(' ')}",
     ],
     '5' => [
@@ -87,8 +93,14 @@ task :integrate, :log do |_, args|
       'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features'
     ],
     'licenses' => [
-      "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run"
-    ]
+      license_checks
+    ],
+    'commit_phase' =>
+      frontend_tests +
+      [
+        rspec_tests,
+        license_checks,
+      ]
   }
 
   tasks = ENV['MULTIJOB_KIND'].present? ? kind.fetch(ENV['MULTIJOB_KIND']) : kind.values.flatten
