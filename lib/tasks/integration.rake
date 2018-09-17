@@ -102,14 +102,7 @@ task :integrate, :log do |_, args|
     ],
     'licenses' => [
       test_commands[:license_checks],
-    ],
-    'commit_phase' =>
-      test_commands[:swagger] +
-      test_commands[:frontend] +
-      [
-        test_commands[:rspec],
-        test_commands[:license_checks],
-      ]
+    ]
   }
 
   jobs = ENV['MULTIJOB_KIND'].present? ? workload.fetch(ENV['MULTIJOB_KIND']) : workload.values.flatten
