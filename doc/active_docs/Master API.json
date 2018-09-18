@@ -1,0 +1,277 @@
+{
+  "basePath": "",
+  "swaggerVersion": "0.1a",
+  "apiVersion": "1.0",
+  "apis": [
+    {
+      "path": "/master/api/providers/{provider_id}/accounts/{account_id}/billing_jobs.xml",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Trigger Billing by Account",
+          "description": "Triggers billing process for a specific developer account.",
+          "nickname": "trigger_developer_billing",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "provider_id",
+              "description": "ID of the tenant account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            },
+            {
+              "name": "account_id",
+              "description": "ID of the developer account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "date",
+              "description": "Base date for the billing process. Format YYYY-MM-DD (UTC).",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/master/api/providers/{provider_id}/billing_jobs.xml",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Trigger Billing",
+          "description": "Triggers billing process for all developer accounts.",
+          "nickname": "trigger_tenant_billing",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "provider_id",
+              "description": "ID of the tenant account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            },
+            {
+              "name": "date",
+              "description": "Base date for the billing process. Format YYYY-MM-DD (UTC).",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/master/api/providers.xml",
+      "responseClass": "signup",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Tenant Create",
+          "description": "This request allows you to reproduce a sign-up from a tenant in a single API call. It will create an Account, an Admin User for the account, and optionally an Application with its keys. If the plan_id is not passed, the default plan will be used instead. You can add additional custom parameters in Fields Definition on your Admin Portal.",
+          "group": "signup",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "org_name",
+              "description": "Organization Name of the tenant account.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "username",
+              "description": "Username of the admin user (on the new tenant account).",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "email",
+              "description": "Email of the admin user.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "password",
+              "description": "Password of the admin user.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "additional_fields",
+              "dataType": "custom",
+              "paramType": "query",
+              "allowMultiple": true,
+              "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/master/api/providers/{id}.xml",
+      "responseClass": "provider",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Tenant Update",
+          "description": "Updates email addresses used to deliver email notifications to customers.",
+          "group": "account",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            },
+            {
+              "name": "from_email",
+              "description": "New outgoing email.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "support_email",
+              "description": "New support email.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "finance_support_email",
+              "description": "New finance support email.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "site_access_code",
+              "description": "Developer Portal Access Code.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "state_event",
+              "description": "Change the state of the tenant. It can be either 'make_pending', 'approve', 'reject', 'suspend', or 'resume' depending on the current state",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "additional_fields",
+              "dataType": "custom",
+              "paramType": "query",
+              "allowMultiple": true,
+              "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/master/api/providers/{id}.xml",
+      "responseClass": "provider",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Tenant Delete",
+          "description": "Schedules a tenant account to be permanently deleted in 15 days. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. When a tenant account is scheduled for deletion it can no longer be edited (except except its state) and its admin portal and developer portal cannot be accessible. Update with 'resume' state event to unschedule a tenant for deletion.",
+          "group": "account",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/master/api/providers/{id}.xml",
+      "responseClass": "provider",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Tenant Show",
+          "description": "Show a tenant account.",
+          "group": "account",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

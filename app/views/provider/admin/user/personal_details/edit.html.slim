@@ -1,0 +1,21 @@
+h2 Edit your personal details
+
+= semantic_form_for current_user,
+  builder: Fields::FormBuilder,
+  url: provider_admin_user_personal_details_path do |form|
+
+  = hidden_field_tag :origin, params[:origin]
+  = form.inputs name: 'User Information' do
+    = form.user_defined_form
+    - if current_user.using_password?
+      = form.input :password, label: "New Password", required: current_user.password_required?, input_html: { value: "" }
+
+  - if current_user.using_password?
+    = form.inputs name: "Provide your current password and update your personal details" do
+      = form.input :current_password, required: true
+  = form.buttons do
+    = form.commit_button 'Update Details'
+
+- if current_user.can_set_password? && !current_account.settings.enforce_sso?
+  p You have no password set. If you'd like to set one use the
+    #{link_to 'password reset form', new_provider_password_path}.

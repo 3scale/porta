@@ -1,0 +1,29 @@
+<table class="usage_table">
+  <thead>
+    <tr class="table_title">
+      <th colspan='4'>Pricing Rules
+      <%= help_bubble do %>
+        <h3>Pricing rules</h3>
+        <p>Pricing rules define the cost of each operation performed on an
+        API. Multiple pricing rules on the same metric divide up the ranges
+        of when a pricing rule applies.</p>
+      <% end %>
+      </th>
+      <th class="operations">
+        <%= link_to 'new pricing rule',
+          new_admin_application_plan_metric_pricing_rule_path(@plan, @metric),
+          :class => 'fancybox action add', 'data-autodimensions' => 'true' %>
+        <%= link_to 'Close', '', :class => 'metric_slot_close_button action close' %>
+      </th>
+    </tr>
+    <tr>
+      <th>From</th>
+      <th>To</th>
+      <th>Price per unit</th>
+      <th class="mini"></th>
+    </tr>
+  </thead>
+  <tbody id="pricing_rules_table_body">
+    <%= render :partial => 'pricing_rule', :collection => @pricing_rules %>
+  </tbody>
+</table>

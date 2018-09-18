@@ -1,0 +1,678 @@
+// library
+@import "provider/typography";
+@import "compass";
+@import "compass/reset";
+@import "font-awesome";
+@import "provider/logo";
+@import "compass/css3/box-sizing";
+
+
+
+// typography
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+//sizes
+$font-size-x-small: 12px;
+$font-size-small: 14px;
+$font-size: 16px;
+$font-size-large: 18px;
+$font-size-x-large: 24px;
+$font-size-xx-large: 32px;
+$font-size-xxx-large: 48px;
+
+// line height
+$line-height: $font-size * 1.5;
+
+//weights
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 600;
+
+//families
+$font-family-text: $font-family-base;
+$font-family-code: $font-family-monospace;
+
+// colors
+$color-grey-1: $font-color;
+$color-grey-2: $label-color;
+$color-grey-3: $disabled-color;
+$color-grey-4: $border-color;
+$color-success: $success-color;
+$success-color: $color-success;
+$color-failure: $error-color;
+$error-color: $color-failure;
+$color-disabled: $color-grey-3;
+
+//
+$color-text-primary: $color-grey-1;
+$color-text-secondary: $color-grey-2;
+$color-text-tertiary: $color-grey-3;
+
+$color-border: $color-grey-4;
+$color-brand-primary: $brand-orange;
+$color-brand-secondary: $highlight-color; // blue
+$color-link: $color-brand-secondary;
+$color-link-hover: $color-text-primary;
+
+// vertical rythm
+$base-font-size: $font-size;
+$base-line-height: $line-height;
+$default-rhythm-border-width: 2px;
+$rhythm-unit: "rem";
+$rem-with-px-fallback: true;
+
+@import "provider/flash";
+
+#flashWrapper {
+  @include leader(1);
+}
+
+// elements
+
+html {
+  @include box-sizing(border-box);
+  font-family: $font-family-text;
+  font-size: adjust-font-size-to($font-size);
+  line-height: $line-height;
+  color: $color-text-primary;
+  @include establish-baseline;
+  //@include debug-vertical-alignment;
+}
+
+body {
+  text-align: center;
+}
+
+hr {
+  @include box-sizing(border-box);
+  height: 24px;
+  margin: 0 0 0 0;
+  border: none;
+  border-bottom: 1px solid $color-border;
+}
+
+strong {
+  font-weight: $font-weight-bold;
+}
+
+header, main {
+  margin: 0 auto;
+  text-align: left;
+  max-width: 50em;
+  min-width: 20em;
+  position: relative;
+}
+
+a, .link {
+  color: $color-link;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-link-hover;
+  }
+}
+header {
+  @include leader(1);
+  @include trailer(2);
+}
+
+code {
+  font-family: $font-family-code;
+}
+
+h1 {
+  @include adjust-font-size-to($font-size-x-large);
+  font-weight: $font-weight-normal;
+  @include trailer(1);
+}
+
+p {
+  @include leader(0);
+  @include trailer(1);
+}
+
+h1 + p {
+  @include leader(-1);
+}
+
+.wizard-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 30;
+  @include adjust-font-size-to($font-size-xx-large);
+  line-height: 0;
+  color: $color-border;
+}
+
+.success {
+  color: $color-success;
+}
+
+.failure {
+  color: $color-failure
+}
+
+// button
+$button-color-border: $color-brand-secondary;
+$button-color: $button-color-border;
+$button-color-hover: white;
+
+.button {
+  @include box-sizing(border-box);
+  @include leader(1);
+  @include trailer(1);
+  text-decoration: none;
+  color: $button-color;
+  line-height: 0;
+  @include border-radius(6px);
+  float: right;
+  background-color: white;
+  cursor: pointer;
+  font-size: $font-size;
+  @include rhythm-borders;
+  border-color: $button-color-border;
+
+  &:hover {
+    background-color: $button-color-border;
+    color: $button-color-hover;
+  }
+}
+
+.button--next:after {
+  content: " ›";
+}
+
+.button[disabled] {
+  color: $color-disabled;
+  border-color: $color-disabled;
+
+  &:after {
+    content: normal;
+  }
+
+  &:hover {
+    background-color: $button-color-hover;
+  }
+}
+
+// button nudge animation
+@include keyframes(button-nudge) {
+  0%, 100% {
+    background-color: $button-color-hover;
+    color: $button-color;
+  }
+
+  50% {
+    background-color: $button-color-border;
+    color: $button-color-hover;
+  }
+}
+
+
+input {
+  outline: none;
+}
+
+input[type="text"] {
+  @include input-placeholder {
+    color: $color-text-tertiary;
+    font-style: italic;
+    height: 1.5rem;
+
+    &:before {
+      content: 'e.g. '
+    }
+  }
+}
+
+
+
+input[type="text"] {
+  @include box-sizing(border-box);
+  text-decoration: none;
+  color: $button-color;
+  //line-height: 24px;
+  height: 3.125rem;
+  //@include border-radius(6px);
+  float: right;
+  background-color: white;
+  font-size: $font-size;
+  border: none;
+  @include padding-leader;
+  @include trailing-border;
+  padding: 0 0 0 0;
+  border-color: $color-border;
+  width: 60%;
+
+  &:hover {
+    border-color: $color-text-tertiary;
+  }
+
+  &:focus {
+    border-color: $color-brand-secondary;
+  }
+
+  //border-color: $button-color-border;
+
+}
+
+.error input {
+  border-color: $color-failure;
+}
+
+.inline-errors {
+  float: right;
+  width: 60%;
+  color: $color-failure;
+  font-style: italic;
+}
+
+form li {
+  display: block;
+  width: 100%;
+  float: left;
+  clear: both;
+  @include trailer(1);
+
+
+  &.slim {
+    display: inline;
+    @include trailer(-0.5);
+    max-width: 80%;
+
+    label {
+      text-align: left;
+      width: auto;
+      padding-left: 0;
+    }
+
+    input {
+      float: left;
+    }
+  }
+
+
+  &.hidden { display: none; }
+
+}
+
+fieldset {
+  border: none;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}
+
+label {
+  @include box-sizing(border-box);
+  display: block;
+  width: 40%;
+  float: left;
+  text-align: right;
+  line-height: 0;
+  height: $line-height;
+  @include rhythm-borders;
+  border-color: transparent;
+}
+
+
+.fa-ul {
+  margin-left: 0;
+}
+
+// logo
+.logo-3scale {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  float: none;
+}
+
+.logo-3scale--svg {
+  height: $line-height * 1.5;
+}
+
+.explain {
+  @include leader;
+
+  .text {
+    @include padding-leader(0.5);
+  }
+
+
+  .text--down {
+    @include padding-leader(1);
+  }
+
+  .text--up {
+    @include padding-leader(0);
+  }
+
+  .is-transparent {
+    @include opacity(0);
+  }
+
+  .explain__step--1 {
+    @include animation( focus 1s ease-out 1s forwards,
+                        focus_border 1s ease-out 1s forwards,
+                        unfocus 1s ease-out 5s forwards,
+                        unfocus_border 1s ease-out 5s forwards,
+                        success 1s ease-out 15s forwards,
+                        success_border 1s ease-out 15s forwards );
+
+    .icon {
+      @include animation( focus 1s ease-out 1s forwards,
+                          unfocus 1s ease-out 5s forwards,
+                          success 1s ease-out 15s forwards );
+    }
+
+    .text {
+      @include animation( reveal 1s ease-out 1s forwards );
+    }
+
+    .code-example {
+      @include animation( reveal 1s ease-out 1s forwards );
+
+      * {
+        @include animation( unfocus 1s ease-out 5s forwards );
+      }
+
+      &:hover {
+        * {
+          @include animation( clean 0.2s ease-out 0 forwards );
+        }
+      }
+    }
+  }
+
+  .explain__step--2 {
+    @include animation( focus 1s ease-out 5s forwards,
+                        focus_border 1s ease-out 5s forwards,
+                        unfocus 1s ease-out 10s forwards,
+                        unfocus_border 1s ease-out 10s forwards,
+                        success 1s ease-out 15s forwards,
+                        success_border 1s ease-out 15s forwards );
+
+    .icon {
+      @include animation( focus 1s ease-out 5s forwards,
+                          unfocus 1s ease-out 10s forwards,
+                          success 1s ease-out 15s forwards );
+    }
+
+    .text {
+      @include animation( reveal 1s ease-out 5s forwards );
+    }
+
+    .code-example {
+      @include animation( reveal 1s ease-out 5s forwards );
+
+      * {
+        @include animation( unfocus 1s ease-out 10s forwards );
+      }
+
+      &:hover {
+        * {
+          @include animation( clean 0.2s ease-out 0 forwards );
+        }
+      }
+    }
+  }
+
+  .explain__step--3 {
+    @include animation( focus 1s ease-out 10s forwards,
+                        unfocus 1s ease-out 15s forwards,
+                        success 1s ease-out 15s forwards );
+
+    .icon {
+      @include animation( focus 1s ease-out 10s forwards,
+                          unfocus 1s ease-out 15s forwards,
+                          success 1s ease-out 15s forwards );
+    }
+
+    .text {
+      @include animation( reveal 1s ease-out 10s forwards );
+    }
+  }
+}
+
+
+
+// Block: code example
+
+// colors
+$code-color-base: $color-success;
+$code-color-path: $color-brand-secondary;
+$code-color-params: $color-brand-primary;
+
+.code-example {
+  display: block;
+  @include adjust-font-size-to(14px);
+  color: $color-text-secondary;
+
+  .code-example__base {
+    color: $code-color-base;
+  }
+
+  .code-example__path {
+    color: $code-color-path;
+  }
+
+  .code-example__params {
+    color: $code-color-params;
+
+    &:before {
+      content: '?';
+      color: $color-text-secondary;
+    }
+  }
+
+  .code-example--slash:after {
+    content: '/';
+    color: $color-text-secondary;
+  }
+  .code-example--optional {
+
+    &:before {
+      content: '(';
+      color: $color-text-secondary;
+    }
+
+    &:after {
+      content: ')';
+      color: $color-text-secondary;
+    }
+  }
+
+  .code-example__params.code-example--optional {
+    &:before {
+      content: '(?';
+    }
+  }
+}
+
+
+$feedback-color-active: $color-brand-secondary;
+$feedback-color-success: $color-success;
+$feedback-color-failure: $color-failure;
+$feedback-color-inactive: $color-text-secondary;
+
+
+.feedback {
+  border-left: 5px solid transparent;
+  padding-left: 72px;
+  margin-left: 24px;
+  border-color: transparent;
+  //position: relative;
+  @include padding-trailer(3);
+  min-height: $line-height * 2;
+  @include adjust-font-size-to($font-size-large);
+
+  .code-example {
+    //position: absolute;
+    //top: $line-height * 3;
+    //@include padding-leader(6);
+    //margin-left: $line-height * -2;
+    //@extend %vertical-align;
+
+    position: relative;
+    top: $line-height * 2;
+    left: $line-height * -2;
+  }
+
+  &.feedback--sec {
+    @include padding-trailer(0);
+    min-height: auto;
+  }
+
+  &.feedback--success {
+    border-color: $feedback-color-success
+  }
+
+  &.feedback--failure {
+    border-color: $feedback-color-failure;
+  }
+
+  &.feedback--active {
+    border-color: $feedback-color-active;
+  }
+
+  &.feedback--inactive {
+    border-color: $feedback-color-inactive;
+  }
+
+
+  .icon {
+    color: $color-text-secondary;
+  }
+
+  .icon--sec {
+    color: $color-text-primary;
+  }
+  .icon--focus {
+    color: $feedback-color-active;
+    //margin-top: 0 !important;
+  }
+
+  .icon--success {
+    color: $feedback-color-success;
+  }
+
+  .icon--failure {
+    color: $feedback-color-failure;
+  }
+
+  &>[class*="fa-li"] {
+    font-size: 40px;
+    background-color: white;
+
+    //margin-left: -60px;
+
+    margin-left: 59px;
+    padding: 4px 0 4px 0;
+    /* margin-right: 10px; */
+    margin-top: -6px;
+    width: 48px;
+  }
+
+  .fa-mobile {
+    font-size: 64px;
+    margin-left: 111px;
+    margin-top: -9px;
+    //margin-left: -57px;
+  }
+
+  .fa-hdd-o {
+  }
+
+  .fa-puzzle-piece {
+    text-indent: 10px;
+  }
+
+
+}
+
+
+// reveal animation
+@include keyframes(reveal) {
+  0%, 100% {
+    visibility: visible;
+    @include opacity(1);
+  }
+}
+
+// focus animation
+@include keyframes(focus) {
+  0%, 100% {
+    color: $color-brand-secondary;
+  }
+}
+
+// unfocus animation
+@include keyframes(unfocus) {
+  0%, 100% {
+    color: $color-text-secondary;
+  }
+}
+
+// focus border animation
+@include keyframes(focus_border) {
+  0%, 100% {
+    border-color: $color-brand-secondary;
+  }
+}
+
+// unfocus border animation
+@include keyframes(unfocus_border) {
+  0%, 100% {
+    border-color: $color-text-secondary;
+  }
+}
+
+// success animation
+@include keyframes(success) {
+  0%, 100% {
+    color: $color-success;
+  }
+}
+
+// success border animation
+@include keyframes(success_border) {
+  0%, 100% {
+    border-color: $color-success;
+  }
+}
+
+// clean animation
+@include keyframes(clean) {
+  0%, 100% {
+    color: auto;
+  }
+}
+
+//icons grey
+//blue icon + text: step-1
+//blue to grey: step-1
+//blue icon + text: step-2
+//blue to grey: step-2
+//blue icon + text: step-3
+//all to green
+
+
+.response {
+  overflow-y: auto;
+  max-height: $base-line-height * 20;
+  display: block;
+}
+
+.is-hidden {
+  display: none;
+}

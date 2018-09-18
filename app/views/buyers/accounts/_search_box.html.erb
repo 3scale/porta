@@ -1,0 +1,7 @@
+<%= form_tag admin_buyers_accounts_path, :method => 'get', :id => 'buyer_accounts_search_form', :class => 'search' do %>
+  <p>
+    <%= text_field_tag :query, params[:query], :size => 30 %>
+    <%= select_tag :state, account_states_options_for_select(params[:state]) %>
+    <%= submit_tag 'Search', :name => nil %>
+  </p>
+<% end %>

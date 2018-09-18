@@ -1,0 +1,7 @@
+h1
+  ' Edit
+  ==> icon(@authentication_provider.kind)
+  => @authentication_provider.name
+  | Integration
+.content
+  = render partial: 'provider/admin/account/authentication_providers/form/form', locals: {authentication_provider: @authentication_provider}

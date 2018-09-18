@@ -1,0 +1,12 @@
+<% unless  metrics.empty? %>
+<td class="heading">
+    Limits
+</td>
+<td colspan='<%= plans.size %>'>
+</td>
+<% else %>
+<td class="heading none_set" colspan='<%= plans.size %>'>
+    No Metrics Set
+</td>
+<% end %>
+ 

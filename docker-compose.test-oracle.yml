@@ -1,0 +1,42 @@
+version: '2.1'
+services:
+  database:
+    image: ${ORACLE_DB_IMAGE:-quay.io/3scale/oracle:12.2.0.1-ee}
+    privileged: true
+    container_name: ${PROJECT:-system}-database
+    network_mode: bridge
+    volumes:
+      - "${PWD}/script/oracle:/opt/oracle/scripts/setup"
+    environment:
+      ORACLE_CHARACTERSET: 'AL32UTF8'
+      ORACLE_SID: 'threescale'
+      ORACLE_PDB: 'systempdb'
+      ORACLE_PWD: 'threescalepass'
+  cache:
+    build: .
+    network_mode: none
+    container_name: ${PROJECT:-system}-cache
+    command: sleep infinity
+  build:
+    build:
+      context: .
+      args:
+        - DB=oracle
+    image: ${PROJECT:-system}-oracle_build
+    dns: 127.0.0.1
+    container_name: ${PROJECT:-system}-build
+    network_mode: bridge
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      DB_HOST: ${PROJECT:-system}-database
+      DISABLE_SPRING: "true"
+      ORACLE_SYSTEM_PASSWORD: threescalepass
+      NLS_LANG: AMERICAN_AMERICA.UTF8
+      TZ: UTC
+    volumes_from:
+      - cache
+    depends_on:
+      - database
+    links:
+      - database

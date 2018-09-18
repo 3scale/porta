@@ -1,0 +1,49 @@
+<div id="cms-template-editor">
+  <ul id="cms-template-editor-tabs">
+    <li>
+      <a href="#cms-template-draft">Draft</a>
+    </li>
+    <li>
+      <a href="#cms-template-live">Published</a>
+    </li>
+  </ul>
+
+  <ul class='links'>
+   <li>
+
+     <%= link_to icon('time','Versions'), provider_admin_cms_template_versions_path(@page),
+                 :title => "Versions of this #{@page.class.model_name.human.downcase}",
+                 :target => '_parent' %>
+   </li>
+  </ul>
+
+  <div id="cms-template-draft" class="cms-template-content-tab" >
+    <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+  </div>
+
+  <div id="cms-template-live" class="cms-template-content-tab">
+    <%= f.input :published, :as => :codemirror, :options => {:readOnly => true} %>
+  </div>
+</div>
+
+<div class='button-bar'>
+  <%= f.buttons :style => 'position:absolute' do %>
+    <% if f.object.respond_to?(:destroy) %>
+      <%= can_be_destroyed?(f.object) ? f.delete_button : f.disabled_delete_button %>
+    <% end %>
+
+    <li>
+      <a class="less-important-button destructive"
+         href="#cms-template-revert"
+         title="Reverts draft to a currently published version.">
+        <i class="fa fa-undo"></i>
+        Revert
+      </a>
+    </li>
+  <% end %>
+
+  <%= f.buttons :style => 'position:absolute' do %>
+    <%= render '/provider/admin/cms/preview_buttons', :f =>f %>
+    <%= render '/provider/admin/cms/save_buttons', :f => f %>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | The subscription of #{@account_name} to plan #{@plan_name} on
+    your service #{@service_name} has been cancelled.
+
+p= link_to 'Developers', admin_buyers_accounts_url

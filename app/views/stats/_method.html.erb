@@ -1,0 +1,20 @@
+<%
+   # TODO: the method information should be better structured
+   info = method.first
+   hits = method[1]
+%>
+
+<%# require 'ap'; ap hits %>
+
+<li data-metric="<%= info[:id] %>" id="method-<%= info[:id] %>" title="Method <%= info[:friendly_name] %>" >
+  <%= truncate info[:friendly_name], :length => 33 %>
+  <span>
+    <small>
+      <%= number_with_delimiter(hits[:total]) %> hits
+    </small>
+  </span>
+  <%# TODO: remove this hackish style - retrieve method data on demand %>
+  <%= javascript_tag do %>
+     jQuery('#method-<%= info[:id] %>')[0].methods_data = <%= hits.to_json %>
+  <% end %>
+</li>

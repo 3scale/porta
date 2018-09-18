@@ -1,0 +1,7 @@
+assets/jspm_packages
+assets/jspm.*.js
+assets/system.js
+assets/jspm.js
+vendor
+public
+assets/bundles

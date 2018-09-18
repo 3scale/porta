@@ -1,0 +1,19 @@
+<%= form.inputs '' do %>
+  <%= form.input :name, :required => true %>
+  <%= form.system_name %>
+
+
+  <%= form.input :approval_required,
+                 :label => 'Applications require approval?',
+                 :hint => 'Set whether or not applications can be created on demand <br />
+                  or if approval is required from you before they are activated.' %>
+
+
+  <% if (@service.end_users_allowed? && can?(:see,:end_users)) %>
+    <%= form.input :end_user_required,
+                   :label => 'End user required?',
+                   :hint => "Application created with this plan will require end users to be sent to 3scale's backend (user_id parameter)." %>
+  <% end %>
+
+  <%= render :partial => 'api/plans/forms/billing_strategy', :locals => { :form => form } %>
+<% end %>

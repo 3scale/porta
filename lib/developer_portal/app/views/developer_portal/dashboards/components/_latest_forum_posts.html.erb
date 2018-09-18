@@ -1,0 +1,16 @@
+<% if site_account.forum && site_account.forum.posts.size > 0 %>
+  <div class="dashboard_bubble round">
+    <h3>Latest Forum Activity</h3>
+
+    <ul class="latest-forum-posts">
+      <%- site_account.forum.posts.order(created_at: :desc).limit(5).each do |post| -%>
+        <li>
+          New
+          <%= link_to 'post',
+            Rails.application.routes.url_helpers.forum_topic_path(post.topic, :anchor => "post_#{post.id}") %>
+          on topic <%= link_to post.topic.title, Rails.application.routes.url_helpers.forum_topic_path(post.topic) %>
+        </li>
+      <%- end -%>
+    </ul>
+  </div>
+<%- end -%>

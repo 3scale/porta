@@ -1,0 +1,20 @@
+= form.inputs name: '', for: @user do |user|
+  - if fields.include?("first_name")
+    = user.input :first_name, input_html: { placeholder: 'First Name',
+                                            title: 'First Name',
+                                            autocomplete: 'given-name'}
+  - if fields.include?("last_name")
+    = user.input :last_name, input_html: { placeholder: 'Last Name',
+                                           title: 'Last Name',
+                                           autocomplete: 'family-name' }
+  = user.input :email, input_html: { placeholder: 'Email',
+                                     title: 'Email',
+                                     autocomplete: 'work email' }
+  = user.input :password, required: true,
+                          input_html: { value: @user.password,
+                            placeholder: 'Password',
+                            title: 'Password',
+                            autocomplete: 'new-password'}
+
+  - fields.extra_fields.each do |field|
+    = form.field(field.name, wrapper_html: {class: 'field'})

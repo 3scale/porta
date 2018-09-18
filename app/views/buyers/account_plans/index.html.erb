@@ -1,0 +1,14 @@
+<h1>Account plans</h1>
+
+<p class="description">
+  Account plans create "tiers" of usage within the developer portal,
+  allowing you to distinguish between grades of support, content and
+  other services partners at different levels receive.
+</p>
+
+<% if @plans.default.nil? and @plans.published.empty?  %>
+  <p class='notice'><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</p>
+<% end %>
+
+<%= render :partial => 'api/plans/listing' %>
+

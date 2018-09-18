@@ -1,0 +1,41 @@
+<div id="invoice_header">
+  <%= render '/finance/provider/shared/invoice_title', invoice: @invoice %>
+
+  <table class="invoice">
+    <caption>
+      Details
+      <%= link_to 'Edit', polymorphic_path([:edit, :admin, *edit_link_scope, @invoice]), :class => 'action edit next' if @invoice.editable? && can?(:update, @invoice)  %>
+    </caption>
+    <%= invoice_field(:friendly_id, "#{@invoice.friendly_id} #{' (This invoice id is already in use and should probably be changed)' if @invoice.friendly_id_already_used? && @invoice.editable? }") %>
+    <%= invoice_field(:state, @invoice.state.to_s.capitalize) %>
+    <%= invoice_field(:period, "#{invoice_date_format(@invoice.period.begin)} - #{invoice_date_format(@invoice.period.end)}") %>
+    <%= invoice_field(:finalized_on, invoice_date_format(@invoice.finalized_at))  %>
+    <%= invoice_field(:issued_on, invoice_date_format(@invoice.issued_on))  %>
+    <%= invoice_field(:due_on, invoice_date_format(@invoice.due_on)) %>
+    <%= invoice_field(:paid_on, invoice_date_format(@invoice.paid_at))  %>
+    <%= invoice_field('PDF', invoice_pdf_link(@invoice)) %>
+
+  </table>
+
+  <table id="provider_details" class="invoice">
+    <caption>
+      Issued by
+    </caption>
+    <tr>
+      <th>Organization name</th>
+      <td><%= @invoice.from.name %></td>
+    </tr>
+    <%= render :partial => '/finance/provider/shared/invoice_address', :locals => { :address => @invoice.from } %>
+  </table>
+
+  <table id="buyer_details" class="invoice">
+    <caption>
+      Issued to
+    </caption>
+    <tr>
+      <th>Organization name</th>
+      <td><%= @invoice.buyer ? link_to(@invoice.to.name, admin_buyers_account_path(@invoice.buyer)) : @invoice.to.name %></td>
+    </tr>
+    <%= render :partial => '/finance/provider/shared/invoice_address', :locals => { :address => @invoice.to } %>
+  </table>
+</div>

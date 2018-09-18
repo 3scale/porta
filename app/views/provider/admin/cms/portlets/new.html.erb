@@ -1,0 +1,10 @@
+<h1>New <%= @page.class.model_name.human %> Portlet</h1>
+
+<%= cms_new_button_dropdown(CMS::Portlet) %>
+
+<%= cms_form_for(@page) do |f| %>
+  <%= render 'form', :f => f %>
+
+  <%= f.input :draft, :as => :codemirror, :value => f.object.draft %>
+  <%= f.buttons :commit %>
+<% end %>

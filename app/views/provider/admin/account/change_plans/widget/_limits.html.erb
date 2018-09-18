@@ -1,0 +1,29 @@
+<% unless plan.usage_limits.visible.empty? %>
+  <div class='limits plan-review-section'>
+    <h3>Limits</h3>
+    <dl class="u-dl">
+      <% plan.usage_limits_for_widget.each do |metric, usage_limits| %>
+        <% if metric.visible_in_plan?(plan) -%>
+          <dt class="u-dl-term"> <%= display_metric_name(metric) %> </dt>
+          <dd class="u-dl-definition"> <%= display_usage_limit(usage_limits.first) %> </dd>
+
+          <% unless usage_limits.first.value.zero? -%>
+            <% usage_limits[1..-1].each do |usage_limit| %>
+              <dt class="u-dl-term"> <%= display_metric_name(metric) %> </dt>
+              <dd class="u-dl-definition"> <%= display_usage_limit(usage_limit) %> </dd>
+            <% end %>
+          <% end # unless usage_limits.first.value.zero? %>
+        <% end # if metric visible %>
+      <% end %>
+
+      <% unless plan.metrics_without_limits.empty? %>
+        <% plan.metrics_without_limits.each do |metric| %>
+          <% if metric.visible_in_plan?(plan) %>
+            <dt class="u-dl-term"> <%= display_metric_name(metric) %> </dt>
+            <dd class="u-dl-definition"><i class="included fa fa-check-circle-o"></i></dd>
+          <% end %>
+        <% end %>
+      <% end %>
+    </dl>
+  </div>
+<% end %>

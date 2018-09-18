@@ -1,0 +1,18 @@
+ul#subsubmenu
+  li.SubSubMenuItem.SubSubMenuItem--trunk
+    = link_to_unless_current_styled "Applications",
+      admin_buyers_applications_path,
+      class: "SubSubMenuItem-link"
+
+  - if @cinstance && !@cinstance.new_record?
+    li.SubSubMenuItem.SubSubMenuItem--branch
+      = link_to_unless_current_styled "Application '#{@cinstance.name}'",
+        admin_buyers_application_path(@cinstance),
+        title: "application",
+        class: "SubSubMenuItem-link"
+
+  li.SubSubMenuItem.SubSubMenuItem--leaf
+    = link_to_unless_current_styled "Analytics",
+      admin_buyers_stats_application_path(@cinstance),
+      title: "analytics",
+      class: "SubSubMenuItem-link"

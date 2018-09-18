@@ -1,0 +1,285 @@
+{
+  "apis": [
+    {
+      "path": "/ping",
+      "description": "Check the status to see if it's up and running",
+      "operations": [
+        {
+          "parameters":[
+          {
+              "description": "Metric",
+              "name": "metric",
+              "dataType": "custom",
+              "defaultValue": "",
+              "required": true,
+              "allowMultiple": false,
+              "paramType": "query",
+              "threescale_name":"metric"
+            },
+            {
+              "name":"api_key",
+              "threescale_name":"api_key",
+              "description":"Required for authentication",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"path"
+            }
+          ],
+          "httpMethod":"GET",
+          "tags":["test"],
+          "nickname":"ping",
+          "deprecated":true,
+          "summary":"This operation is DEPRECATED. It returns the string \"that's getting old... pong \" if the API is up and running"
+        }
+      ],
+      "errorResponses":[
+        {
+          "reason":"API down",
+          "code":500
+        }
+      ]
+    },
+    {
+      "path":"/word/{word}",
+      "description":"Access to the sentiment of a given word",
+      "operations": [
+        {
+          "parameters":[
+            {
+              "name":"word",
+              "description":"The word whose sentiment is returned",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"path"
+            },
+            {
+              "name":"app_id",
+              "threescale_name":"app_ids",
+              "description":"Your access application id",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"query"
+            },
+            {
+              "name":"app_key",
+              "threescale_name":"app_keys",
+              "description":"Your access application key",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":false,
+              "paramType":"query"
+            },
+            {"name":"Booo", "dataType":"custom", "required":true, "paramType":"query", "allowMultiple":true, "description":"dadsdfsdf"}
+          ],
+          "httpMethod":"GET",
+          "responseClass":"word",
+          "tags":["production"],
+          "nickname":"get_word",
+          "deprecated":false,
+          "summary":"Returns the sentiment values of a given word"
+        }
+      ],
+
+      "errorResponses":[
+        {
+          "reason":"failure to sanitize: \"input\"",
+          "code":422
+        },
+        {
+          "reason":"failure to sanitize: \"input\", returns empty set",
+          "code":422
+        },
+        {
+          "reason":"access denied, either your access credentials are incorrect or you are about the limits of your quota",
+          "code":403
+        },
+        {
+          "reason":"API down",
+          "code":500
+        }
+      ]
+    },
+    {
+      "path":"/word/{word}/{value}",
+      "description":"Set the sentiment of a given word",
+      "operations": [
+        {
+          "parameters":[
+            {
+              "name":"word",
+              "description":"The word whose sentiment is to be set",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"path"
+            },
+            {
+              "name":"value",
+              "description":"The sentiment value, -5 to -1 for negative connotations, 0 neutral, +1 to +5 for positive connotations",
+              "dataType":"int",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"path"
+            },
+            {
+              "name":"app_id",
+              "threescale_name":"app_id",
+              "description":"Your access application id",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"path"
+            },
+            {
+              "name":"app_key",
+              "threescale_name":"app_key",
+              "description":"Your access application key",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":false,
+              "paramType":"path"
+            }
+          ],
+          "httpMethod":"POST",
+          "responseClass":"word",
+          "tags":["production"],
+          "nickname":"get_word",
+          "deprecated":false,
+          "summary":"Returns the sentiment values of a given word"
+        }
+      ],
+      "errorResponses":[
+        {
+          "reason":"\"word\" is not a single word",
+          "code":422
+        },
+        {
+          "reason":"incorrect \"value\", must be -5 to -1 for negative or to +1 to +5 for positive connotations",
+          "code":422
+        },
+        {
+          "reason":"failure to sanitize: \"input\"",
+          "code":422
+        },
+        {
+          "reason":"failure to sanitize: \"input\", returns empty set",
+          "code":422
+        },
+        {
+          "reason":"access denied, either your access credentials are incorrect or you are about the limits of your quota",
+          "code":403
+        },
+        {
+          "reason":"API down",
+          "code":500
+        }
+      ]
+    },
+    {
+      "path":"/sentence/{value}",
+      "description":"Returns the aggregated sentiment of a sentence",
+      "operations": [
+        {
+          "parameters":[
+            {
+              "name":"value",
+              "description":"The sentence to be analyzed",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"path"
+            },
+            {
+              "name":"app_id",
+              "threescale_name":"app_id",
+              "description":"Your access application id",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":true,
+              "paramType":"query"
+            },
+            {
+              "name":"app_key",
+              "description":"Your access application key",
+              "dataType":"string",
+              "allowMultiple":false,
+              "required":false,
+              "paramType":"query",
+              "threescale_name":"app_key"
+            }
+          ],
+          "httpMethod":"GET",
+          "responseClass":"sentence",
+          "tags":["production"],
+          "nickname":"get_sentence",
+          "deprecated":false,
+          "summary":"Returns the aggregated sentiment of a sentence"
+        }
+      ],
+      "errorResponses":[
+        {
+          "reason":"sentence is too long",
+          "code":422
+        },
+        {
+          "reason":"failure to sanitize: \"input\"",
+          "code":422
+        },
+        {
+          "reason":"failure to sanitize: \"input\", returns empty set",
+          "code":422
+        },
+        {
+          "reason":"access denied, either your access credentials are incorrect or you are about the limits of your quota",
+          "code":403
+        },
+        {
+          "reason":"API down",
+          "code":500
+        }
+      ]
+    }
+  ],
+  "models": {
+    "word": {
+      "properties": {
+        "word" : {
+          "type": "string",
+          "description" : "The word passed as parameter"
+        },
+        "sentiment" : {
+          "type": "int",
+          "description" : "The sentiment value of the value, from -5 to 5, 0 for neutral"
+        }
+      },
+      "id":"word"
+    },
+    "sentence": {
+      "properties": {
+        "sentence" : {
+          "type": "string",
+          "description" : "The sentence passed as parameter"
+        },
+        "sentiment" : {
+          "type": "int",
+          "description" : "The sentiment value of the sentence, from -5 to 5, 0 for neutral"
+        },
+        "count" : {
+          "type": "int",
+          "description" : "The number of words in the sentence"
+        },
+        "certainty" : {
+          "type": "string",
+          "description" : "The certainty of the sentiment value calculated, between 0 and 1"
+        }
+      },
+      "id":"sentence"
+    }
+  },
+  "basePath":"http://provider.example.com",
+  "swagrVersion":"0.1a",
+  "apiVersion":"1.0"
+}

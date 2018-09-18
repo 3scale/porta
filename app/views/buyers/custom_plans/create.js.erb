@@ -1,0 +1,3 @@
+$.colorbox.close();
+$('#plan-widget-with-actions').replaceWith(<%= json render('buyers/accounts/account_plan', :contract => @contract, :plan => @plan) %>);
+$.flash.notice('Plan customized.');

@@ -1,0 +1,27 @@
+= form.inputs :name => '' do
+  = form.input :org_name, input_html: { placeholder: 'Company / Project name',
+                                        title: 'Company / Project name',
+                                        autocomplete: 'organization' }
+  = form.input :subdomain, as: :domain, class: :domain,
+                           input_html: { placeholder: 'developer-portal',
+                                         title: 'Domain' },
+                           hint: "This is the domain of the Developer Portal of your API. Partners, developers and other buyers of your API will signup, login and manage their relationship with your API through this portal."
+
+  = form.semantic_errors :domain
+
+  = form.input :self_subdomain, as: :domain,
+                                input_html: { placeholder: 'api-admin-portal',
+                                              readonly: true,
+                                              title: 'Admin Domain' },
+                                :hint => "This is the domain of your Admin Portal, you will be able to manage and monitor your API through it. Please, bookmark your Admin Portal domain since login will take place on the Admin Portal rather than in 3scale."
+
+  - fields.extra_fields.each do |field|
+    = form.field(field.name, wrapper_html: { class: 'field' })
+
+  = hidden_field_tag 'account[extra_fields][Signup_origin]', @signup_origin
+
+  = form.commit_button 'Sign up',
+                         button_html: { 'data-disable-with' => 'Signing up…' }
+  
+  .form-hints
+    p No credit card required

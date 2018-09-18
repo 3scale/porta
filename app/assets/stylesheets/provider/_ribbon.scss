@@ -1,0 +1,19 @@
+#ribbon-container {
+  z-index: -1;
+  position: absolute;
+  top: line-height-times(2);
+  left: 0;
+  overflow: hidden;
+  height: line-height-times(1);
+  width: 100vw;
+  background-color: $brand-orange;
+
+  h2 {
+    font-size: $font-size-sm;
+    padding: line-height-times(0.1) 0 0 0; // Overpass font has line height issues :-(
+    margin: 0;
+    text-decoration: none;
+    font-weight: $font-weight-normal;
+    font-family: $font-family-monospace;
+  }
+}

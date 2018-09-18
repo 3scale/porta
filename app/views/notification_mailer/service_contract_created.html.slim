@@ -1,0 +1,18 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | #{@account.name} has been subscribed to plan #{@plan.name} on your service #{@service.name}.
+
+p= @account.extra_fields_plain_text
+
+- if @plan.approval_required?
+  p
+    | This subscription requires your approval before the user can create applications.
+      You can approve / reject the application from your 3scale Admin Portal.
+
+  p= link_to 'Approve/ Reject subscription', admin_buyers_account_url(@account)
+
+- else
+
+  p= link_to 'View account', admin_buyers_account_url(@account)

@@ -1,0 +1,230 @@
+<header class="jumbotron page-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Echo API</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% if current_user %}
+  <section class="start">
+  <div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Your API Key</h1>
+      <br>
+      <p class="lead">
+       This is your API key that should be kept secret. Use it to authenticate and report the calls you make to the Echo API.
+      </p>
+    </div>
+    <div class="col-md-6" style="padding-top:2em;">
+      <div class="panel panel-default" id="access-details">
+        <div class="panel-heading">
+          <i class="fa fa-key"></i>
+          Credentials
+          {% if current_account.applications.size > 0 %}
+            <a class="pull-right" href="{{ urls.applications }}" title="Applications">
+              <i class="fa fa-chevron-right"></i>
+            </a>
+          {% endif %}
+        </div>
+        <div class="panel-body panel-footer">
+          {% if current_account.applications.size == 0 %}
+            <a href="{{ urls.new_application }}" class="btn btn-primary">Create Application</a>
+          {% elsif current_account.applications.size == 1 %}
+            {% assign app = current_account.applications.first %}
+
+            {% if app.user_key_mode? %}
+              <dl class="dl-horizontal">
+                <dt>App name</dt>
+                <dd><a href="{{ app.url }}">{{ app.name }}</a></dd>
+                <dt>Key</dt>
+                <dd>
+                  <code>{{ app.user_key }}</code>
+                  <p>Add this as a <code>user_key</code> parameter to your API calls to authenticate.</p>
+                </dd>
+              </dl>
+
+            {% elsif app.app_id_mode? %}
+              <dl class="dl-horizontal">
+                <dt>App name</dt>
+                <dd><a href="{{ app.url }}">{{ app.name }}</a></dd>
+                <dt>App ID</dt>
+                <dd><code>{{ app.application_id }}</code></dd>
+                <dt>Key</dt>
+                <dd><code>{{ app.keys.first }}</code></dd>
+              </dl>
+
+            {% elsif app.oauth_mode? %}
+              <dl class="dl-horizontal">
+                <dt>App name</dt>
+                <dd><a href="{{ app.url }}">{{ app.name }}</a></dd>
+                <dt>Client ID</dt>
+                <dd><code>{{ app.application_id }}</code></dd>
+                <dt>Client Secret</dt>
+                <dd><code>{{ app.keys.first }}</code></dd>
+              </dl>
+            {% endif %}
+
+            {% if app.trial? %}
+              <div class="alert alert-warning">
+                <h3>Trial period</h3>
+                <p>{{ app.remaining_trial_period_days }} days remaining.</p>
+              </div>
+            {% endif %}
+
+          {% elsif current_account.applications.size > 1 %}
+            <a href="{{ urls.applications }}" class="btn btn-primary">See your Applications & their credentials</a>
+          {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </section>
+
+{% else %}
+
+  <section class="sell">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h3>Register</h3>
+          <p>
+          <i class="fa fa-sign-in fa-3x pull-left"></i>
+          Register to the developer portal to use the Echo API
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h3>Get your API key</h3>
+          <p>
+          <i class="fa fa-key fa-3x pull-left"></i>
+          Use your API key to authenticate and report the calls you make
+          </p>
+        </div>
+       <div class="col-md-4">
+        <h3>Create your app</h3>
+         <p>
+         <i class="fa fa-code fa-3x pull-left"></i>
+         Start coding and create awesome applications with the Echo API
+         </p>
+        </div>
+       </div>
+      </div>
+  </section>
+
+  <section class="plans" id="plans">
+    <div class="container">
+      <h1>Pick your plan</h1>
+      <br/>
+      <div class="row">
+        {% for plan in provider.services.api.application_plans %}
+          <div class="col-md-6">
+            <article class="panel panel-default">
+              <div class="panel-heading">
+                <strong>{{ plan.name }}</strong>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+
+                  {% if plan.features == present %}
+                    <div class="col-md-6">
+                      <h5>Features</h5>
+                      <ul class="features list-unstyled">
+                        {% for feature in plan.features %}
+                          <li>
+                            <i class="fa fa-check"></i>
+                            {{ feature.name }}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+
+                  <div class="col-md-6">
+                    <h5>Limits</h5>
+                    <ul class="limits list-unstyled">
+                      {% if plan.usage_limits == present %}
+                        {% for limit in plan.usage_limits %}
+                          <li>
+                            <i class="fa fa-signal"></i>
+                            {{ limit.metric.name }} &ndash; {{ limit.value }} {{ limit.metric.unit }}s per {{ limit.period }}
+                          </li>
+                        {% endfor %}
+                      {% else %}
+                        <li>
+                          <i class="fa fa-signal"></i>
+                          No limits
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+                <div class="panel-footer">
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <a class="btn btn-success pull-right" href="{{ urls.signup }}?{{ plan | to_param }}">Signup to plan {{ plan.name }}</a>
+                  </div>
+                </div>
+
+              </div>
+            </article>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<section class="invert">
+  <div class="container">
+    <h1>Run your requests</h1>
+    <div class="row">
+
+      <div class="col-md-12">
+        <h3><code style="display:block">$ curl -v https://echo-api.3scale.net</code></h3>
+        <br/>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                Request
+              </div>
+              <div class="panel-body panel-footer">
+                <pre>
+&gt; GET / HTTP/1.1
+&gt; User-Agent: curl/7.27.0
+&gt; Host: https://echo-api.3scale.net/echo
+&gt; Accept: */*
+&gt;
+                </pre>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                Response
+              </div>
+              <div class="panel-body panel-footer">
+                <pre>
+&lt; HTTP/1.1 200 OK
+&lt; Content-Type: text/plain; charset=utf-8
+&lt; Connection: close
+echo
+
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

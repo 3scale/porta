@@ -1,0 +1,7 @@
+$('#<%= dom_id(@line_item) %>').remove();
+
+$('#invoice_cost').html('<%= price_tag(@invoice.cost) %>');
+$('#invoice_cost_without_vat').html('<%= price_tag(@invoice.cost(vat_included: false)) %>');
+
+// FIXME: add highlight effect
+// page.visual_effect :highlight, 'invoice_cost'

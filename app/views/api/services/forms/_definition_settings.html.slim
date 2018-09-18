@@ -1,0 +1,34 @@
+javascript:
+  $(document).ready(function(){
+
+    var scrolledToSubmit = false;
+
+    var toggleState = function (elem, one, two) {
+      var elem = $(elem);
+      elem.attr('data-state', elem.attr('data-state') === one ? two : one);
+    };
+
+    var toggleText = function (elem, one, two) {
+      $(elem).text($(elem).text() == one ? two : one);
+    };
+
+    $('.SettingsBox-toggle').on( "click", function(e) {
+      toggleState('.SettingsBox-summary', 'open', 'closed');
+      toggleState('.SettingsBox-form', 'closed', 'open');
+      toggleState('.u-toggleableBySettingsBox', 'open', 'closed');
+      toggleText('.SettingsBox-toggle', 'edit', 'cancel');
+      e.preventDefault();
+
+      // toggling the form visibility is like a new visit
+      scrolledToSubmit = false;
+    });
+  });
+
+
+#integration-settings
+  = render partial: 'api/services/forms/naming', locals: { form: form }
+
+= form.buttons do
+  = form.commit_button
+
+= render partial: 'api/services/delete', locals: { service: @service }

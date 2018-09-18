@@ -1,0 +1,7 @@
+Dear <%= @receiver.informal_name %>,
+<% if @user.present? && @account.present? %>
+<%= @user.informal_name %> from <%= @account.name %> has posted a new message in your forum.
+<% else %>
+Anonymous user has posted a new message in your forum
+<% end %>
+To view new forum post, follow this link <%= forum_topic_url(@post.topic, host: @provider_account.domain) %>

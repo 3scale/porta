@@ -1,0 +1,91 @@
+h1 Account Overview
+div id="key-overview"
+  h2 Provider API key
+  p class="info"
+    ' Use this key when calling 3scale's API to
+    ' authenticate yourself. This key should be kept secret between you and
+    ' 3scale and never passed to other people.
+
+  div class="InfoBox InfoBox--notice"
+    ' We strongly suggest using
+    => link_to 'service tokens',
+               provider_admin_user_access_tokens_path(anchor: 'service-tokens')
+    ' to authenticate against the Service Management API and
+    => link_to 'access tokens',
+               provider_admin_user_access_tokens_path(anchor: 'access-tokens')
+    ' to authenticate against the Account Management API,
+    ' the Analytics API and the Billing API. Their custom/limited access scopes
+    ' make them inherently more secure than using this provider API key.
+
+    p class="key"
+      = current_account.api_key
+
+div id="account-column-wrapper"
+  div class="overview-box" id="account-overview"
+    h2
+      ' Account Details
+      - if @presenter.show_edit_account_link?
+        span class="operations"
+          = link_to 'Edit', edit_provider_admin_account_path, class: 'action edit'
+
+    table class="list"
+      tbody
+        - @presenter.visible_extra_fields.each do |field|
+          tr
+            th = @presenter.field_label(field.name)
+            td = @presenter.field_value(field.name)
+        tr
+          th Time Zone
+          td = @presenter.timezone
+
+    - if @presenter.redhat_customer_verification_enabled?
+      div id="account-redhat-connect"
+        h2 Red Hat Account Connect Status
+        - if @presenter.red_hat_verified?
+          p
+            i> class="included check fa fa-check-circle-o"
+            ' Red Hat account
+            => @presenter.red_hat_account_number
+            | is connected to this 3scale account.
+        - else
+          p
+            ' in order to be able to open a support case, please
+            => link_to 'connect your Red Hat Account',
+                      @redhat_customer_portal_verification_presenter.authorize_url
+            | to this 3scale account.
+
+    - if @presenter.show_cancellation_section?
+      div id="account-cancellation"
+        h2 Account Cancellation
+        p
+          - if @presenter.heroku?
+            | You can cancel your account from the Heroku dashboard.
+          - else
+            ' Please
+            => link_to 'open a Support Case', 'https://access.redhat.com/support/'
+            | if you would like to cancel your account.
+
+  - if @presenter.show_plan_section?
+    div class="overview-box features" id="plan-overview"
+      h2
+        => @presenter.plan_name
+        ' plan
+        - if @presenter.show_upgrade_section?
+          span.operations data-object="plan" data-id=@presenter.plan_id
+            = link_to 'Upgrade', '#', id: 'change-plan', class: 'action activate'
+
+          = render 'change_plan'
+
+      table class="data"
+        tbody
+          - @presenter.plan_features.each do |feature|
+            tr
+              th = feature.name
+              td
+                i class="included fa fa-check-circle-o"
+
+          - @presenter.absent_visible_features.each do |feature|
+            tr
+              th = feature.name
+              td
+                i class="excluded fa fa-times-circle-o"

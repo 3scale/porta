@@ -1,0 +1,32 @@
+<table class='plan-edit-popup'>
+  <tr class='field'>
+    <td><%= form.label :min, 'From:' %></td>
+    <td>
+      <%= form.text_field :min, :class => 'short text' %> <%= @pricing_rule.metric.unit %>
+      <p style="display:none;" id="minValueError"></p>
+    </td>
+  </tr>
+  <tr class="field">
+    <td>
+      <%= form.label :max, 'To: <abbr title="Infinity" class="infinity">&infin;</abbr>'.html_safe %>
+    </td>
+    <td>
+      <%= form.text_field :max, :class => 'short watch_infinity text' %>
+      <%= @pricing_rule.metric.unit %>
+      <p style="display:none;" id="maxValueError"></p>
+    </td>
+  </tr>
+  <tr class="field">
+    <td><%= form.label :cost_per_unit, 'Cost per Unit:' %></td>
+    <td><%= form.text_field :cost_per_unit, :class => 'short text' %>
+    <p style="display:none;" id="costPerUnitError"></p></td>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <div class="errors"></div>
+      <%= form.submit "#{@pricing_rule.new_record? ? 'Create pricing rule' : 'Update pricing rule'}" %>
+      <%= link_to 'Cancel', '', :class => 'fancybox-close' %>
+    </td>
+  </tr>
+</table>

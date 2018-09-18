@@ -1,0 +1,98 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="fa fa-user"></i>
+        Sign up
+      </div>
+      <div class="panel-body panel-footer">
+
+        {% if plans.size > 0 %}
+        <div class="well well-sm">
+          {% if plans.size > 1 %}
+            You are signing up with plans {{ plans | map: 'name' | join:  ', ' }}.
+          {% else %}
+            You are signing up to plan {{ plans.first.name }}.
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {% include 'signup/cas' with cas %}
+        {% include 'login/sso' %}
+        {% form 'signup', account, class: "form-horizontal" %}
+
+          <fieldset>
+            {% if account.errors.plans == present %}
+              <div class="alert alert-danger">{{ account.errors.plans | inline_errors: 'inline-errors' }}</div>
+            {% endif %}
+
+            {% for field in account.fields %}
+              {% include 'field' with field %}
+            {% endfor %}
+          </fieldset>
+
+          <fieldset>
+            {% for field in user.fields %}
+              {% include 'field' with field %}
+            {% endfor %}
+          </fieldset>
+
+          {% if user.password_required? %}
+            <fieldset>
+              <div class="form-group {{ user.errors.password | error_class: 'has-error' }}">
+                <label for="account_user_password" class="control-label col-md-4">
+                  Password
+                  <abbr class="required" title="required">*</abbr>
+                </label>
+                <div class="col-md-6">
+                  <input id="account_user_password"
+                         name="account[user][password]" type="password"
+                         class="form-control">
+                  {{ user.errors.password | inline_errors: 'inline-errors' }}
+                </div>
+              </div>
+
+              <div class="form-group {{ user.errors.password_confirmation | error_class: 'has-error' }}">
+                <label for="account_user_password_confirmation" class="control-label col-md-4">
+                  Password confirmation
+                  <abbr class="required" title="required">*</abbr>
+                </label>
+                <div class="col-md-6">
+                  <input id="account_user_password_confirmation"
+                         name="account[user][password_confirmation]"
+                         type="password"
+                         class="form-control" >
+                  {{ user.errors.password_confirmation | inline_errors: 'inline-errors' }}
+                </div>
+              </div>
+            </fieldset>
+          {% endif %}
+
+
+          {% comment %}
+            The 'signup_licence' partial is usually a place where a legal text
+            binding the developer on signup sits. It it does not exist
+            [default], the include is gracefully ignored.
+          {% endcomment %}
+
+
+          {% include 'signup_licence' %}
+
+          <div class="form-group">
+            <div class="col-md-10">
+              <fieldset>
+                <input name="commit" type="submit" class="btn btn-success btn-lg pull-right" value="Sign up"/>
+              </fieldset>
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('form:first *:input[type!=hidden]:first').focus();
+  });
+</script>

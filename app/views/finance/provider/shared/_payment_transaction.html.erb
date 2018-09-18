@@ -1,0 +1,15 @@
+<%= content_tag_for(:tr, payment_transaction) do  %>
+  <td>
+    <%= boolean_status_img(payment_transaction.success?) %>
+  </td>
+  <td>
+    <%= payment_transaction.success? ? 'Success' : 'Failure' %>
+  </td>
+  <td><%= payment_transaction.created_at %></td>
+  <td><%= payment_transaction.reference %></td>
+  <td><%= payment_transaction.message %></td>
+  <td>
+    <%= payment_transaction.amount %>
+    <%= payment_transaction.currency %>
+  </td>
+<% end %>

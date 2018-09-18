@@ -1,0 +1,13 @@
+<p>You can use Liquid tags to set the email headers or disable sending.
+Read more in the <%= link_to 'liquid documentation', provider_admin_liquid_docs_path(anchor: 'tag-email') %>.</p>
+
+<%= f.semantic_fields_for :headers, f.object.headers do |h| %>
+  <%= h.inputs do %>
+    <%= f.error_messages %>
+    <%= h.input :subject, :input_html => { :placeholder => "use 3scale default" } %>
+    <%= h.input :bcc %>
+    <%= h.input :cc %>
+    <%= h.input :reply_to %>
+    <%= h.input :from, :input_html => { :placeholder => "use 3scale default" } %>
+  <% end %>
+<% end %>

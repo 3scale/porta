@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        {% if current_account.can.be_updated? %}
+          <a href="{{ current_account.edit_url }}" class="pull-right">
+            <i class="fa fa-pencil"></i>
+            Edit Account
+          </a>
+          <div class="clearfix"></div>
+        {% endif %}
+      </div>
+      <div class="panel-body panel-footer">
+        <dl class="dl-horizontal wide">
+          {% for field in current_account.fields %}
+            {% if field.value != "" and field.visible? %}
+              <dt>{{ field.label }}</dt>
+              <dd>{{ field }}</dd>
+            {% endif %}
+          {% endfor %}
+          <!-- add one field bound to 'user' -->
+          <dt>{{ current_account.admin.fields.email.label }}</dt>
+          <dd>{{ current_account.admin.email }}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <p><em>Please email to {{ provider.support_email | mail_to }} if
+    you have any problems with your account {% if current_account.can.be_deleted? %}
+    or you would like to cancel it. {% else %}. {% endif %}</em></p>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+h1.success Congratulations, you are running on 3scale :-)
+
+ol.explain.fa-ul
+  li.feedback.feedback--success
+    i.icon.fa-li.fa.fa-mobile.icon--success
+    .text.text--down
+      strong> Your customer
+      ' made a successful
+      => link_to "request", new_provider_admin_onboarding_wizard_request_path
+      | to the API gateway.
+    code.code-example
+      span.code-example__base.code-example--slash = @request.proxy_base_url
+      span.code-example__path = @request.path_without_slash
+      span.code-example__key.code-example__params = @request.proxy_auth_params
+  li.feedback.feedback--success
+    i.icon.fa-li.fa.fa-hdd-o.icon--success
+    .text
+      strong> 3scale
+      ' handled authentication and passed the request on to your API.
+    code.code-example
+      span.code-example__base.code-example--slash = @request.api_base_url
+      span.code-example__path = @request.path_without_slash
+    code#response.response.code-example.is-hidden
+      = @response
+  li.feedback.feedback--sec
+    i.icon.fa-li.fa.fa-puzzle-piece.icon--success
+    .text
+      strong> = link_to @request.api_name, edit_provider_admin_onboarding_wizard_api_path
+      ' returned <a class="toggle" href="#response">a response</a> to the customer through the gateway.
+
+= link_to "Cool, what's next?", provider_admin_onboarding_wizard_outro_path, class: "button"
+
+coffee:
+  $(".toggle").live "click", ->
+    target = $(this).attr("href")
+    $(target).toggleClass("is-hidden");
+

@@ -1,0 +1,14 @@
+<h2>Set Custom User Key</h2>
+
+<p id="invalid-key-warning" style="display:none;">&nbsp;</p>
+
+<%= semantic_form_for @cinstance, :url => provider_admin_application_key_path(@cinstance, @cinstance.user_key), remote: true do |form| %>
+  <%= form.inputs do %>
+    <%= form.input :user_key, :label => 'Custom User Key', :input_html => {:size => 100, :value => ''} %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= link_to 'Cancel', "#", :class => 'fancybox-close less-important-button' %>
+    <%= form.commit_button 'Set Custom Key' %>
+  <% end %>
+<% end %>

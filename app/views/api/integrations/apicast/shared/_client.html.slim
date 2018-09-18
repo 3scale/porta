@@ -1,0 +1,10 @@
+.feedback.client
+  i.fa.fa-mobile-phone
+  = f.inputs "Client" do
+    = help_bubble( 'client_bubble', t('api.integrations.proxy.client_help_html'))
+    - if @service.using_proxy_pro?
+      p#client-request.curl style=("display: none")
+    - else
+      = render 'api/integrations/apicast/shared/curl', f: f
+    br/
+    br/

@@ -1,0 +1,53 @@
+section.Configuration.Configuration--is-promoted class="Configuration--#{@show_presenter.test_state_modifier}"
+
+  = link_to 'edit APIcast configuration', edit_admin_service_integration_path(@service), class: 'SettingsBox-toggle'
+
+  article.Configuration-summary data-state="open" class="Environment--#{@show_presenter.test_state_modifier}"
+    h3.Configuration-title APIcast Configuration
+
+    dl.u-dl
+      dt.u-dl-term Private Base URL
+      dd.u-dl-definition = @proxy.api_backend
+      dt.u-dl-term Mapping rules
+      dd.u-dl-definition
+        - if (last_rule = @proxy.proxy_rules.last)
+          code
+            ' #{last_rule.pattern} => #{last_rule.metric.name}
+        - if (rules_size = @proxy.proxy_rules.size) > 1
+          | and #{rules_size - 1} more.
+      dt.u-dl-term Credential Location
+      dd.u-dl-definition = @proxy.credentials_location
+      dt.u-dl-term Secret Token
+      dd.u-dl-definition = @proxy.secret_token
+
+section style="margin-top: 48px;"
+  h2 Environments
+
+  .SettingsBox.Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?) class="Environment--#{@show_presenter.test_state_modifier}"
+    = link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'staging'), class: 'SettingsBox-toggle'
+    article.Environment-summary data-state="open" class="Environment--#{@show_presenter.test_state_modifier}"
+      h3.Environment-title Staging Environment
+      - if @show_presenter.any_sandbox_configs?
+        = @show_presenter.staging_proxy_endpoint
+        .ConfigurationVersion
+          ' v.
+          = @show_presenter.last_sandbox_config.version
+      - unless @show_presenter.environments_have_same_config?
+        = semantic_form_for @proxy, url: promote_to_production_admin_service_integration_path(@service, anchor: 'production'), html: { class: 'PromoteForm' } do |f|
+          = f.buttons class: "buttons buttons-inline" do
+            = f.button "Promote v. #{@show_presenter.last_sandbox_config.version} to Production",
+              button_html: {class: 'important-button PromoteButton', data: { disable_with: 'promoting…' }}
+
+  .SettingsBox.Environment
+    - if @show_presenter.any_production_configs?
+      = link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'production'), class: 'SettingsBox-toggle'
+    article.Environment-summary class=("Environment--#{@show_presenter.test_state_modifier}" if @show_presenter.environments_have_same_config?) data-state="open" style="margin-top: 24px;"
+      h3.Environment-title Production Environment
+      - if @show_presenter.any_production_configs?
+        = @show_presenter.production_proxy_endpoint
+      - else
+        | no configuration has been saved for the production environment yet
+      .ConfigurationVersion
+        - if @show_presenter.any_production_configs?
+          ' v.
+          = @show_presenter.last_production_config.version

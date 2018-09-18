@@ -1,0 +1,12 @@
+<li>
+  <label>Selected Accounts</label>
+  <ul class="bulk_operation_items">
+    <% @accounts.each do |account| %>
+      <%= content_tag :li, :title => "#{account.org_name} - #{account.admins.first.try(:display_name)}" do %>
+        <span class="name"><%= account.org_name %></span>
+        (<%= h account.admins.first.try(:display_name) %>)
+        <%= hidden_field_tag 'selected[]', account.id %>
+      <%end%>
+    <%-end-%>
+  </ul>
+</li>

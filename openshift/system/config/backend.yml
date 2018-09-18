@@ -1,0 +1,13 @@
+base: &default
+  host: backend-listener:3000
+  public_url: <%= ENV.fetch("BACKEND_ROUTE") { "https://backend-#{ENV['TENANT_NAME']}.#{ENV['THREESCALE_SUPERDOMAIN']}" } %>
+
+production:
+  <<: *default
+  secure: false
+  persistent: true
+
+preview:
+  <<: *default
+  secure: false
+  persistent: true

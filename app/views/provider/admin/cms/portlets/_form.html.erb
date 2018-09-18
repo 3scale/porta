@@ -1,0 +1,10 @@
+<%= f.inputs do %>
+  <%= f.input :title %>
+  <%= f.input :system_name %>
+  <%= f.input :portlet_type, :as => :hidden %>
+
+  <% f.object.inputs.each do |name, options| %>
+    <%= f.input name, options %>
+  <% end %>
+
+<% end %>

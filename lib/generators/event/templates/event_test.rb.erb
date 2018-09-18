@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+
+class <%= class_name %>EventTest < ActiveSupport::TestCase
+
+  def setup
+    EventStore::Repository.stubs(raise_errors: true)
+    @event_store = Rails.application.config.event_store
+  end
+
+  attr_reader :event_store
+
+  def test_create
+    assert event = <%= class_name %>Event.create(<%= attributes_names.join(', ') %>)
+
+    assert_equal :ok, event_store.publish_event(event)
+  end
+end

@@ -1,0 +1,102 @@
+@import 'provider/typography'; // needed for legacy dev portals that include this stylesheet directly
+
+// StatsSelector component
+
+$body-color: $font-color;
+$dropdown-bg: $content-background !default;
+$dropdown-border-color: $border-color !default;
+$dropdown-border-width: $border-width !default;
+$dropdown-divider-bg: $border-color !default;
+$dropdown-link-color: $font-color;
+$caret-width: line-height-times(1/3) !default;
+$caret-width-lg: $caret-width !default;
+$zindex-dropdown: 1000 !default;
+
+.StatsSelector {
+  display: inline-block;
+  margin-bottom: line-height-times(1);
+  position: relative;
+  font-size: $font-size-base;
+
+  &-item {
+    background: none;
+    clear: both;
+    color: $dropdown-link-color;
+    cursor: pointer;
+    display: block;
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-base;
+    padding: line-height-times(1/8) line-height-times(1);
+    text-align: inherit;
+    white-space: nowrap;
+    width: 100%;
+    border-radius: $border-radius;
+
+    &:hover {
+      color: $menu-hover-color;
+    }
+
+    &.is-children {
+      font-style: italic;
+      padding-left: line-height-times(1);
+    }
+
+    &.is-children::before {
+      content: '- ';
+    }
+
+    &.is-selected {
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &-toggle {
+    border: $border-width solid $border-color;
+    font-size: $font-size-base;
+    padding: line-height-times(1/2);
+    width: auto;
+    color: $menu-active-color;
+    height: auto;
+
+    &::after {
+      border-left: $caret-width solid transparent;
+      border-right: $caret-width solid transparent;
+      border-top: $caret-width solid;
+      content: '';
+      display: inline-block;
+      height: 0;
+      margin-left: line-height-times(1/4);
+      margin-right: line-height-times(1/4);
+      vertical-align: middle;
+      width: 0;
+    }
+  }
+
+  &-menu {
+    background-clip: padding-box;
+    background-color: $dropdown-bg;
+    border: $border-width solid $border-color;
+    color: $body-color;
+    display: none;
+    float: left;
+    font-size: $font-size-base;
+    left: 0;
+    line-height: $line-height-base;
+    list-style: none;
+    margin: line-height-times(1/8) 0 0;
+    min-width: line-height-times(6);
+    padding: line-height-times(1/4) 0;
+    position: absolute;
+    text-align: left;
+    top: 100%;
+    z-index: $zindex-dropdown;
+    border-radius: $border-radius;
+  }
+
+  &.is-open {
+    > .StatsSelector-menu {
+      display: block;
+    }
+  }
+}

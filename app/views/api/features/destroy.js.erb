@@ -1,0 +1,7 @@
+jQuery("#<%= dom_id(@feature) %>").remove();
+
+<% if @plan.issuer.features.empty? %>
+  jQuery("table#features tr.notice:first").show();
+<% end %>
+
+jQuery.flash.notice('Feature has been deleted.');

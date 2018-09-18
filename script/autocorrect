@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+file = File.expand_path(ARGV.fetch(0, '.rubocop.yml'))
+
+puts "using config: #{file}"
+
+yml = File.read(file)
+
+parts = yml.scan(/\#.+?\b\w+\/\w+:.+?\n\n/m) # http://rubular.com/r/JqsQoMRBnu
+
+dir = File.dirname(file)
+
+parts.each do |part|
+  cop, props = YAML.load(part).first
+
+  files = props['Exclude'] || []
+
+  puts "running: rubocop --auto-correct --only #{cop} #{files.join(' ')}"
+
+  system('rubocop', '--auto-correct', '--only', cop, *files)
+
+  puts "running: git commit --all --message '[rubocop] auto correct #{cop}' #{dir}"
+  system("git commit --all --verbose --message '[rubocop] auto correct #{cop}'", in: '/dev/null') or 'raise failed to commit to git'
+end
+
+

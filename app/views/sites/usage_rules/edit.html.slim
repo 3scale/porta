@@ -1,0 +1,59 @@
+h2 General
+#usage-rules
+  = semantic_form_for @settings, url: admin_site_usage_rules_path do |form|
+
+    = form.inputs 'User Account Management Zone' do
+      = form.input :useraccountarea_enabled
+
+    - if current_account.master? && !ThreeScale.config.onpremises
+      = form.inputs 'Hide services' do
+        = form.input :hide_service
+
+    = form.inputs 'Signup' do
+      = form.input :signups_enabled
+      - if @settings.authentication_strategy.cas?
+        = form.input :cas_server_url
+
+      - sso_hint = current_account.authentication_providers.any? ? ' ' + t('.sso_integrations_info_html', link: provider_admin_authentication_providers_path) : ''
+      - if @settings.approval_required_editable?
+        = form.input :account_approval_required,
+                     as: :boolean,
+                     hint: t("formtastic.hints.settings.account_approval_required") + sso_hint
+      - elsif @settings.approval_required_disabled?
+        = form.input :account_approval_required,
+                     as: :boolean,
+                     :input_html => { :disabled => true },
+                     hint: t("formtastic.hints.settings.approval_required_referer",
+                             link: link_to("Account Plans", admin_buyers_account_plans_path) ) + sso_hint
+
+    = form.inputs 'Users' do
+      = form.input :strong_passwords_enabled, hint: t("formtastic.hints.settings.strong_passwords_enabled", strong_password_definition: strong_password_definition)
+
+    = form.inputs "Search" do
+      = form.input :public_search
+
+    - if can?(:see, :account_plans) || can?(:see, :service_plans)
+      = form.inputs 'Advanced Plans'
+        - if can? :see, :account_plans
+          = form.input :account_plans_ui_visible, input_html: { class: 'toggle-plan', data: { targets: 'use-account-plans'}}
+
+          = form.inputs "Account Plans Changing", class: "use-account-plans #{hide_class_unless_account_plans_visible(@settings)}" do
+            = render 'shared/plan_change_settings',  form: form, permission: :change_account_plan_permission, label: ""
+
+        - if can? :see, :service_plans
+          = form.input :service_plans_ui_visible, input_html: { class: 'toggle-plan', data: { targets: 'use-service-plans'}}
+
+          = form.inputs "Service Plan Changing", class: "use-service-plans #{hide_class_unless_service_plans_visible(@settings)}" do
+            = render 'shared/plan_change_settings', form: form, permission: :change_service_plan_permission, label: ''
+
+        - if can? :see, :end_users
+          = form.input :end_user_plans_ui_visible
+
+    = form.buttons do
+      = form.commit_button
+
+= javascript_include_tag 'sites/general_settings.js'
+javascript:
+  $('.toggle-plan').click(function(e) {
+    GeneralSettings.usePlan(e);
+  });

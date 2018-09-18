@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'messages/menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        {{ message.subject }} <span class="pull-right">by {{ message.sender }} at {{ message.created_at | date: i18n.long_date }}</span>
+      </div>
+      <div class="panel-body panel-footer">
+        <pre class="message">{{ message.body }}</pre>
+      </div>
+    </div>
+  </div>
+</div>

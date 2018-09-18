@@ -1,0 +1,8 @@
+- if current_account.go_live_state.recent == 'heroku_proxy_deployed'
+  |
+    $('#heroku_proxy_deployed').addClass('done');
+    $('#heroku_proxy_deployed i').toggleClass('icon-circle-blank, icon-circle');
+    $('#rinse-repeat').removeClass('hide');
+- else
+  |
+    setTimeout(updateWidget, 10000);

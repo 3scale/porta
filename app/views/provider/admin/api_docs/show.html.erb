@@ -1,0 +1,19 @@
+<%= stylesheet_link_tag 'active-docs/application.css' %>
+<%= javascript_include_tag 'active-docs/application.js' %>
+
+<% content_for :title do %>
+  3scale API Documentation
+<% end %>
+
+<% if current_user.access_tokens.empty? %>
+  <p class="InfoBox InfoBox--notice"><%= link_to 'Create an access token', provider_admin_user_access_tokens_path %> to authenticate against the Account Management API, the Analytics API and the Billing API.</p>
+<% end %>
+
+<div class='api-docs-wrap'></div>
+<script>
+$(function(){
+   ThreeScale.APIDocs.account_type = 'provider';
+   ThreeScale.APIDocs.host = "<%=j base_url.gsub(%r{/$}, '') %>";
+   ThreeScale.APIDocs.init([]);
+});
+</script>

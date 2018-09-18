@@ -1,0 +1,44 @@
+version: '2.1'
+services:
+  keycloak:
+    image: jboss/keycloak:3.0.0.Final
+    environment:
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: development
+      KEYCLOAK_LOGLEVEL: DEBUG
+    ports:
+      - "8080"
+      - "9990"
+  backend:
+    image: quay.io/3scale/amp:backend-2.1.0-ER1
+    environment:
+      RACK_ENV: preview
+      CONFIG_REDIS_PROXY: redis:6379
+      CONFIG_QUEUES_MASTER_NAME: redis:6379
+      CONFIG_WORKERS_LOG_FILE: /dev/stdout
+  backend-listener:
+    extends: backend
+    command: rackup --host 0.0.0.0 --port 3000
+    container_name: backend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - redis
+      - backend-worker
+  backend-worker:
+    extends: backend
+    command: 3scale_backend_worker run
+    depends_on:
+      - redis
+  redis:
+    image: redis:3.2.5-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+  apicast:
+    image: quay.io/3scale/apicast:3.3-stable
+    env_file: .env.apicast
+    depends_on:
+      - backend-listener
+    ports:
+      - "8091:8080"

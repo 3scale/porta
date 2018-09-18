@@ -1,0 +1,1 @@
+require 'cancan_hacks'

@@ -1,0 +1,10 @@
+= f.input :api_test_path, hint: @proxy.api_test_path.blank? ? t('formtastic.hints.proxy.api_test_path_blank') : t('formtastic.hints.proxy.api_test_path')
+
+p#client-request.curl style=("display: none" if @proxy.api_test_path.blank?)
+  - unless @service.cinstances.any?
+    em.error
+      => t('api.integrations.proxy.curl.no_application') unless @service.cinstances.any?
+      = link_to t('api.integrations.proxy.curl.no_application_plan'), admin_service_application_plans_path(@service) unless @service.application_plans.any?
+      br
+      br
+  = api_test_curl(@proxy)

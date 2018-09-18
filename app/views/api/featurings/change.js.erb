@@ -1,0 +1,4 @@
+
+jQuery("#<%= dom_id(@feature) %>").replaceWith(<%= render_to_js_string('api/features/feature', :feature => @feature) %>);
+
+jQuery.flash.notice("<%= escape_javascript(@notice) %>");

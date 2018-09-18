@@ -1,0 +1,10 @@
+es:
+  name: Spain
+  code: ES
+  currency: EUR
+  tax_rate: 16.0
+
+us:
+  name: United States of America
+  code: US
+  currency: USD

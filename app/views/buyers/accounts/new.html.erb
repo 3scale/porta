@@ -1,0 +1,24 @@
+<h2>Create new Account</h2>
+
+<%= semantic_form_for @buyer,
+                     :builder => Fields::FormBuilder,
+                     :url => admin_buyers_accounts_path do |form| %>
+  <% @plans.each do |plan| %>
+    <%= hidden_field_tag('plan_ids[]', plan.id) if plan.published? %>
+  <% end %>
+
+  <%= form.semantic_errors :plans %>
+
+  <%= form.inputs :name => 'User Information', :for => [:user, @user ] do |user| %>
+    <%= user.user_defined_form %>
+    <%= user.input :password, :required => true %>
+  <% end %>
+
+  <%= form.inputs :name => 'Organization Information' do %>
+    <%= form.user_defined_form %>
+  <% end -%>
+
+  <%= form.buttons do %>
+    <%= form.commit_button 'Create', :button_html => { :class => 'important-button' } %>
+  <% end %>
+<% end %>

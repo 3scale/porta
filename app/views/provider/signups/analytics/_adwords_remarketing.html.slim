@@ -1,0 +1,19 @@
+- conversion_id = (analytics_credentials.adwords || {}).fetch(:id, nil)
+
+script type="text/javascript" src="//www.googleadservices.com/pagead/conversion_async.js"
+
+javascript:
+  (function () {
+    "use strict";
+
+    if (typeof(window.google_trackConversion) === 'function') {
+      window.google_trackConversion({
+        google_conversion_id: #{json conversion_id},
+        google_custom_params: window.google_tag_params,
+        google_remarketing_only: true
+      });
+    }
+  }());
+
+noscript
+  img height="1" width="1" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/#{conversion_id}/?value=0&amp;guid=ON&amp;script=0"

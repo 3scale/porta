@@ -1,0 +1,17 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | #{@user.informal_name} from #{@account.name} has requested to change the plan for one
+  |  of their applications.
+
+p
+  b Details:
+
+ul
+  li Application: #{@application.name}
+  li Service: #{@service.name}
+  li Current plan: #{@current_plan.name}
+  li Requested plan: #{@requested_plan.name}
+
+p= link_to 'Change Plan', admin_buyers_application_url(@application)

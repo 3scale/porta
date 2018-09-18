@@ -1,0 +1,25 @@
+<h2>Deleted <%= @kind.human.pluralize -%></h2>
+
+<table class="data" id="trash">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Deleted On</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @destroys.each do | audit | %>
+      <tr id="<%= dom_id(audit) %>">
+        <td><%= audit.id -%></td>
+        <td><%= audit.created_at -%></td>
+        <td class="audited-object">
+          <code><%= audit.audited_changes_for_destroy_list.to_json -%></code>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @destroys -%>

@@ -1,0 +1,62 @@
+.fa-auth0:before {
+  @extend .fa-star;
+}
+
+.fa-keycloak:before {
+  content: '❮❯';
+  white-space: nowrap;
+}
+
+//oauth flow
+.authorizeLink {
+  border: $link-color $border-width solid;
+  border-radius: $border-radius;
+  display: block;
+  width: 50%;
+  min-width: line-height-times(24);
+  max-width: 100%;
+  padding: line-height-times(1) 0;
+  text-align: center;
+
+  + .authorizeLink {
+    margin-top: line-height-times(1);
+  }
+
+  + .authorizeLink-alt {
+    margin-top: line-height-times(2);
+  }
+
+  &:hover {
+    border-color: $font-color;
+    cursor: pointer;
+  }
+
+  &-alt {
+    border: 0;
+    border-radius: 0;
+    border-top: $border-width solid $border-color;
+    font-style: italic;
+    padding: line-height-times(1) 0 line-height-times(2);
+
+    &:hover {
+      border-color: $border-color;
+    }
+  }
+
+}
+
+.EnforceSSOButton {
+  float: right;
+  margin-top: -line-height-times(1/3);
+}
+
+.AllowPasswordButton {
+  float: right;
+  margin-top: 0;
+}
+
+// toggle submit button when checkbox is checked/unchecked
+#settings_enforce_sso:checked + label + .EnforceSSOButton,
+#settings_enforce_sso:not(:checked) + label + .AllowPasswordButton {
+  display: block !important;
+}

@@ -1,0 +1,13 @@
+<h2>Update the Redirect URL</h2>
+
+<%= semantic_form_for @cinstance, :url => admin_buyers_application_path(@cinstance) do |form| %>
+  <%= form.inputs do %>
+    <%= form.input :redirect_url, :label => 'Redirect URL', :as => :string,
+                   :input_html => {:size => 100} %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button 'Update' %>
+    &nbsp; &nbsp;<%= link_to 'Cancel', "#", :class => 'fancybox-close' %>
+  <% end %>
+<% end %>

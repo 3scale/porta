@@ -1,0 +1,26 @@
+<h2>Email Notifications</h2>
+
+<div>
+  These settings determine which events generate email notifications to API administrators. Email notifications are sent to
+  <% if current_account.email_all_users? -%>
+    all users (both admins and members)
+  <% else %>
+    admin users only.
+  <% end %>
+</div>
+<br>
+
+<% if @system_operations.empty? -%>
+<p>Currently there are no emails.</p>
+<% end -%>
+
+<%- for operation in @system_operations -%>
+  <%- rule = current_account.fetch_dispatch_rule(operation) %>
+  <%= form_for rule, :url => provider_admin_account_notification_path(rule), :remote => true, :html =>{ :class => "autosubmit" } do |form| %>
+    <% id = "rule_#{operation.ref}" %>
+    <p>
+      <%= form.check_box :dispatch, :id => id %>
+      <%= form.label :dispatch, operation.name, :for => id %>
+    </p>
+  <% end %>
+<% end %>

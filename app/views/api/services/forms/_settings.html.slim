@@ -1,0 +1,29 @@
+= form.inputs current_account.multiple_applications_allowed? ? 'Application Requirements' : 'Signup & Use' do
+
+  - unless current_account.multiple_applications_allowed?
+    // TODO remove this and make it an extra_field? Or how about just remove it?
+    = form.input :intentions_required
+
+  = form.input :buyers_manage_apps
+
+  - if @service.app_keys_allowed?
+    = form.input :buyers_manage_keys
+
+  = form.input :referrer_filters_required, as: :boolean
+
+  = form.input :custom_keys_enabled
+
+  - if @service.backend_version == "2"
+    = form.input :buyer_key_regenerate_enabled
+    = form.input :mandatory_app_key
+
+- if can?(:see, :end_users) and @service.end_users_allowed?
+  = form.inputs 'End Users Requirements' do
+    = form.input :end_user_registration_required, input_html: { :disabled => @service.end_user_plans.default.nil? }
+
+= form.inputs "Application Plans" do
+  = form.input  :buyer_can_select_plan
+
+  = form.inputs "Application Plan Changing" do
+
+    = render 'shared/plan_change_settings', form: form, permission: :buyer_plan_change_permission, label: ''

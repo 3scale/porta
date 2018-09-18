@@ -1,0 +1,14 @@
+<h2>Copy Plan</h2>
+
+<%= semantic_form_for plan,
+                     :url => admin_plan_copies_path(:plan_id => @original.id),
+                     :html => {:class => 'remote'} do |form| %>
+  <%= form.inputs do %>
+    <%= form.input :name, :required => true %>
+    <%= form.system_name %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button %>
+  <% end %>
+<% end %>

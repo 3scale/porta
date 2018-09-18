@@ -1,0 +1,27 @@
+<div>
+  <h2 id="header_table">Features</h2>
+  <table id="features" class='contract_table'>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th class="operations">Enabled?</th>
+        <th class="operations">
+          <%= link_to 'New feature', new_admin_plan_feature_path(@plan),
+                      :class => 'fancybox action add', 'data-autodimensions' => 'true' -%>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr class="notice" <%= "style=display:none;" unless @plan.features.of_service.empty? -%>>
+        <td colspan="4">
+          <span>This plan has no features yet.</span>
+        </td>
+      </tr>
+
+      <%= render :partial => 'api/features/feature', :collection => @plan.features.of_service %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,31 @@
+base: &default
+  test_api_hosts: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_TEST_API_HOSTS', '').split(',') %>
+  ignore_test_failures: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_IGNORE_TEST_FAILURES', '').split(',') %>
+  hosts: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_HOSTS', '').split(',') %>
+  backend_host: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_BACKEND_HOST', '') %>
+  backend_scheme: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_BACKEND_SCHEME', 'https') %>
+  shared_secret: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_SHARED_SECRET', '') %>
+  nginx_port:  <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_NGINX_PORT', 8081).to_i %>
+  verify_mode: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_OPENSSL_VERIFY_MODE', OpenSSL::SSL::VERIFY_NONE).to_i %>
+  override: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_OVERRIDE', nil) %>
+  debug: <%= ENV.fetch('THREESCALE_SANDBOX_PROXY_DEBUG', '0') == '1' %>
+  sandbox_endpoint: 'https://%{system_name}-%{account_id}-<%= ENV.fetch('TENANT_NAME', 'provider') %>-staging.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  hosted_proxy_endpoint: 'https://%{system_name}-%{account_id}-<%= ENV.fetch('TENANT_NAME', 'provider') %>.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  apicast_staging_endpoint: 'https://%{system_name}-%{account_id}-<%= ENV.fetch('TENANT_NAME', 'provider') %>-staging.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  apicast_production_endpoint: 'https://%{system_name}-%{account_id}-<%= ENV.fetch('TENANT_NAME', 'provider') %>.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  verify_mode: <%= OpenSSL::SSL.const_get(ENV.fetch('THREESCALE_SANDBOX_PROXY_OPENSSL_VERIFY_MODE', 'VERIFY_NONE')) %>
+  skip_deploy: true
+  apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://apicast-staging:8090/policies') %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+preview:
+  <<: *default
+
+
+production:
+  <<: *default

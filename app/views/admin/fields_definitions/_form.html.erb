@@ -1,0 +1,13 @@
+<%= f.input :target, :as => :hidden %>
+<%= f.input :name , :hint => true, :html =>  {:id => "fields_definition_name" } %>
+<%= f.input :label , :hint => true %>
+<% unless @fields_definition.required_field_on_target? -%>
+  <%= f.input :required, :hint => true   %>
+  <%= f.input :hidden, :hint => true %>
+  <%= f.input :read_only, :hint => true %>
+  <%= f.input :choices_for_views,
+                  :label => 'Choices',
+                  :as => :text,
+                  :hint => "Separate the predefined options for this field by commas or enter each option on a new line.",
+                  :input_html => {:rows => 2} %>
+<% end -%>

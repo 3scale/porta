@@ -1,0 +1,42 @@
+<h2>Install</h2>
+<% auth = @service.plugin_authentication_params -%>
+
+<p>Download the source code and place it
+ somewhere accessible from your project.
+ <%= render 'api/integrations/plugin/download_links', :language => 'php' %>
+</p>
+
+<h2>Report</h2>
+
+<p>Run this code to authorize and report a hit:</p>
+
+<%= highlighted_code 'php' do %>
+require_once('lib/ThreeScaleClient.php');
+
+// initialize
+$client = new ThreeScaleClient();
+
+// the service token
+$service_token = "<%= @service.service_token %>"
+
+// the service_id
+$service_id = "<%= @service.id %>"
+
+// you will usually obtain app_id and app_key from the request params
+<% if auth.key?(:user_key) %>
+$user_key = "<%= auth[:user_key] %>"
+
+$response = $client->authrep_with_user_key($user_key, new ThreeScaleClientCredentials($service_id, $service_token), array('hits' => 1));
+<% else %>
+$app_id = "<%= auth[:app_id] %>"
+$app_key = "<%= auth[:app_key] %>"
+
+$response = $client->authrep($app_id, $app_key, new ThreeScaleClientCredentials($service_id, $service_token), array('hits' => 1));
+<% end %>
+
+if ($response->isSuccess()) {
+  // All fine, proceeed.
+} else {
+  // Something's wrong with this app.
+}
+<% end %>

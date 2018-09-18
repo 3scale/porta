@@ -1,0 +1,250 @@
+// WARNING: this is just a magic value, I do not know why it works
+$table-columns-width: line-height-times(11);
+$search-header-width: line-height-times(4);
+
+table {
+  width: 100%;
+
+  .search th {
+    height: line-height-times(3);
+    vertical-align: middle;
+  }
+
+  td,
+  th {
+    height: line-height-times(2);
+    vertical-align: top;
+    padding: line-height-times(1/2, true) line-height-times(1/2) line-height-times(1/2) 0;
+
+    &.u-underline {
+      border-bottom: $border-width solid $border-color;
+    }
+  }
+
+
+  .title {
+    max-width: line-height-times(5);
+  }
+
+  .operations,
+  td.action {
+    text-align: right;
+    padding-right: 0;
+  }
+}
+
+th.header {
+  border-bottom: solid 1px $border-color;
+  color: $label-color;
+  padding-top: line-height-times(1.3/1.5);
+
+  padding-top: line-height-times(2);
+  font-variant: small-caps;
+}
+
+table.data {
+  margin-bottom: line-height-times(1);
+  margin-top: line-height-times(1/2);
+  width: 100%;
+
+  a.is-inline {
+    display: inline;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  a {
+    display: block;
+    margin: line-height-times(-1/4) 0;
+    padding: line-height-times(1/4, true) 0;
+  }
+
+  thead {
+    vertical-align: middle;
+
+    th {
+      border-bottom: $border-width solid $border-color;
+      font-weight: $font-weight-bold;
+
+      &.actions,
+      &.right {
+        text-align: right;
+      }
+
+      a.down {
+        background: url('../images/arrow_down.gif')  no-repeat 100% 55%;
+        padding-right: line-height-times(1/2);
+      }
+
+      a.up {
+        background: url('../images/arrow_up.gif') no-repeat 100% 55%;
+        padding-right: line-height-times(1/2);
+      }
+
+      a {
+        &.up,
+        &.down {
+          background: none;
+          padding-right: 0;
+        }
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+
+  tbody {
+    td.actions {
+      text-align: right;
+    }
+  }
+}
+
+.u-fiveEqualColumns {
+  td,
+  th {
+    width: 20%;
+  }
+}
+
+.u-sixEqualColumns {
+  td,
+  th {
+    width: 16.67%;
+  }
+}
+
+table.data,
+table.list {
+  td,
+  th {
+    word-wrap: break-word;
+    border-bottom: $border-width solid $border-color;
+    font-weight: $font-weight-normal;
+  }
+}
+
+table.list {
+
+  .feature {
+    td,
+    th {
+      width: 60%;
+
+      &:last-child {
+        width: 40%;
+        text-align: right;
+        padding-right: 0;
+      }
+    }
+  }
+
+  td,
+  th {
+    width: 40%;
+
+    &:last-child {
+      width: 60%;
+    }
+  }
+
+
+  .action:last-child,
+  input[type='submit']:last-child {
+    float: right;
+    margin: 0 line-height-times(-1/2) 0 0;
+    height: auto;
+    clear: both;
+    line-height: $line-height-base;
+  }
+}
+
+
+
+table.mini td {
+  padding-right: line-height-times(1);
+}
+
+table.mini, table#configs {
+  width: auto;
+}
+
+// --- components/tables.css ---
+
+table.list, table.data {
+  border-collapse: collapse;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+td.right {
+  text-align: right;
+}
+
+table.payment_breakdown tr.total_cost th,
+table.payment_breakdown tr.total_cost td {
+  border-bottom: $border-width-lg solid $border-color;
+  border-top: $border-width-lg solid $border-color;
+  padding-bottom: line-height-times(1/4);
+  padding-top: line-height-times(1/4);
+}
+
+table.payment_breakdown tr th {
+  border-color: $border-color;
+  border-width: $border-width;
+}
+
+table .select {
+  min-width: line-height-times(1);
+}
+
+table.data td, table.horizontal th {
+  border-bottom: $border-width solid $border-color;
+}
+
+table.list th {
+  text-align: left;
+  padding-right: line-height-times(1/2);
+  border-bottom: $border-width solid $border-color;
+}
+
+table.inverted th {
+  font-weight: $font-weight-normal;
+}
+
+table.inverted td {
+  font-weight: $font-weight-bold;
+}
+
+table#contracts_table {
+  position: relative;
+}
+
+table#contracts_table ul.usage_limits {
+  list-style: none;
+  padding: 0;
+}
+
+table#contracts_table tr td.thhead {
+  border-top-right-radius: line-height-times(1);
+  margin: line-height-times(1/4);
+  padding-right: 0;
+  padding-top: 0;
+}
+
+td.thhead h3 {
+  margin-top: 0;
+  padding-right: line-height-times(2/3);
+  padding-top: line-height-times(1);
+}
+
+.u-amount {
+  text-align: right;
+}
+
+.u-tabular-number {
+  font-family: $font-family-monospace;
+}

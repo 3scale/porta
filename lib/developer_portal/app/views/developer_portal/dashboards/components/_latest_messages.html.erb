@@ -1,0 +1,8 @@
+<%- if @messages.empty? -%>
+  <p>No new messages</p>
+<%- else -%>
+  <ul class="latest-messages">
+  <%- @messages.each do |message| -%>
+    <li><%= link_to message_subject(message), admin_messages_inbox_path(message) %></li>
+  <%- end -%>
+<%- end -%>

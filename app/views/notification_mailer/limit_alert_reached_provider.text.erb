@@ -1,0 +1,4 @@
+Dear <%= @receiver.informal_name %>,
+Application <%= @cinstance.name %> of your client <%= @cinstance.user_account.name %>
+is above <%= @alert.level %>% limit utilization of <%= @alert.message %>.
+To view application usage, follow this link: <%= admin_buyers_account_application_url(@account, @cinstance) %>

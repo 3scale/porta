@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-md-9">
+    <table class="table panel panel-default" id="applications">
+      <thead class="panel-heading">
+        <tr>
+          <th>Name</th>
+          {% if provider.services.size > 1 %}
+            <th>Service</th>
+          {% endif %}
+          <th>Credentials</th>
+          <th>State</th>
+          <th>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="panel-body">
+        {% for application in applications %}
+          <tr class="{% cycle 'applications': 'odd', 'even' %}" id="application_{{ application.id }}">
+            <td>
+              {{ application.name | link_to: application.url }}
+            </td>
+            {% if provider.services.size > 1 %}
+              <td>{{ application.service.name }}</td>
+            {% endif %}
+            <td>{{ application.key }}</td>
+            <td>{{ application.state }}</td>
+            <td>
+              {% if application.can.be_updated? %}
+                <a href="{{ application.edit_url }}">
+                  <i class="fa fa-pencil"></i>
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot class="panel-footer">
+      <tr>
+        <td colspan="{% if provider.services.size > 1 %}4{% else %}3{% endif %}">
+        </td>
+        <td>
+          {% if current_user.can.create_application? %}
+            <a href="{{ urls.new_application }}" title="Create new application" class="btn btn-primary">Create new application</a>
+          {% endif %}
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+
+    {% include 'shared/pagination' with pagination %}
+
+  </div>
+</div>

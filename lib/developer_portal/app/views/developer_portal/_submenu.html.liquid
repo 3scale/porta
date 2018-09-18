@@ -1,0 +1,78 @@
+<div id="navbar-1" class="navbar-collapse collapse">
+
+  {% if current_user %}
+    {% unless current_account.requires_credit_card_now? %}
+      <ul class="nav navbar-nav">
+
+        {% if provider.multiple_applications_allowed? %}
+          <li class="{% if urls.applications.active? %}active{% endif %}">
+            <a href="{{ urls.applications }}">{{ urls.applications.title }}</a>
+          </li>
+          {% elsif current_account.applications.first == present%}
+          {% assign app = current_account.applications.first %}
+          <li class="{% if app.url.active? %}active{% endif %}">
+            <a href="{{ app.url }}">API Credentials</a>
+          </li>
+          {% elsif current_user.can.create_application? %}
+          <li class="{% if url.new_application.active? %}active{% endif %}">
+            <a href="{{ urls.new_application }}">Get API Credentials</a>
+          </li>
+        {% else %}
+          <!-- You don't have any application neither can create one. Bad luck. -->
+        {% endif %}
+
+        {% assign live_apps_present = current_account.applications | map: 'state' | any: 'live' %}
+        {% if live_apps_present %}
+          <li class="{% if urls.stats.active? %}active{% endif %}">
+            <a href="{{ urls.stats }}">Statistics</a>
+          </li>
+        {% endif %}
+
+        {% if provider.multiple_services_allowed? %}
+          <li class="{% if urls.services.active? %}active{% endif %}">
+            <a href="{{ urls.services }}">{{ urls.services.title }}</a>
+          </li>
+        {% endif %}
+
+        <li><a class="{% if urls.docs.active? %}active{% endif %}" href="/docs">Documentation</a></li>
+
+      </ul>
+    {% endunless %}
+    <ul id="user_widget" class="nav navbar-nav navbar-right">
+      {% unless current_account.requires_credit_card_now? %}
+        <li class="{% if urls.messages_inbox.active? %}active{% endif %}">
+          <a href="{{ urls.messages_inbox }}">
+            Messages
+            {% if current_account.unread_messages.size > 0 %}
+              <span class="badge">{{ current_account.unread_messages.size }}</span>
+            {% endif %}
+          </a>
+        </li>
+        <li class="{% if urls.account_overview.active? %}active{% endif %}">
+          <a href="{{ urls.account_overview }}">
+            <i class="fa fa-cogs"></i>
+            Settings
+          </a>
+        </li>
+      {% endunless %}
+      <li>
+        <a id="sign-out-button" class="pull-right sign-out" title="Logout {{ current_user.username }}" href="{{ urls.logout }}">
+          <i class="fa fa-sign-out"></i>
+        </a>
+      </li>
+    </ul>
+
+  {% else %}
+    <ul class="nav navbar-nav">
+      <li><a href="/docs">Documentation</a></li>
+      <li><a href="/#plans">Plans</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <a href="{{ urls.login }}" title="Login">
+          Sign in
+        </a>
+      </li>
+    </ul>
+  {% endif %}
+</div>

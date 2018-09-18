@@ -1,0 +1,5 @@
+The components are rendered by legacy tags. Remove them when they are no longer referred in the code.
+
+{% latest_messages %}
+{% trial %}
+{% latest_forum_posts %}

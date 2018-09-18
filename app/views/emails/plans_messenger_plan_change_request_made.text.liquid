@@ -1,0 +1,12 @@
+Dear {{ user.display_name }},
+
+{{ provider.name }} has received your request to have your plan changed to {{ plan.name }} for application {{ application.name }}.
+
+{% if plan.paid? and provider.requires_credit_card? %}
+  {% unless account.credit_card_stored? %}
+You have requested to change to a paid plan. Please enter your payment details at: {{ credit_card_url }}
+  {% endunless %}
+{% endif %}
+
+Sincerely,
+The {{ provider.name }} API Team

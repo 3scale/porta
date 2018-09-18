@@ -1,0 +1,16 @@
+fieldset[data-behavior~=toggle-inputs] {
+  border: 1px dashed $border-color;
+ background-color: rgba(0,0,0,0.05);
+
+    &.packed {
+      border: none;
+      background-color: transparent;
+    }
+
+    legend {
+      cursor: pointer;
+      margin-top: 15px;
+      margin-bottom: 0;
+      width: auto;
+    }
+}

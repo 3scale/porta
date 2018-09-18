@@ -1,0 +1,30 @@
+<h1>Upgrade '<%= @provider.name %>'</h1>
+
+<p style="text-align: left">
+You are changing the plan from <b><%= @current_plan.name %></b> to
+<b><%= @new_plan.name %></b>. You can check what switches will be enabled
+in the table below. <b>You cannot downgrade</b> reliably via this widget because
+the plan will change but the switches will remain the same.
+</p>
+
+<table class="data">
+  <tr>
+    <th></th>
+    <th>Current Settings</th>
+    <th>On <%= @new_plan.name %></th>
+  </tr>
+
+  <% @provider.available_plans.values.flatten.uniq.each do |switch_name| %>
+    <% next if switch_name == :branding %>
+    <tr>
+      <td><b><%= t("switches.#{switch_name}.name") %></b></td>
+      <td><%= @provider.settings.send(switch_name).status.capitalize %></td>
+      <td><%= @new_switches.include?(switch_name) ? 'Allowed' : 'Denied' %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= form_tag master_provider_plan_path(@provider), :method => :put, :remote => true do %>
+  <%= hidden_field_tag :plan_id, @new_plan.id %>
+  <%= submit_tag "Yes, change the plan to #{@new_plan.name}", :class => 'important-button' %>
+<% end %>

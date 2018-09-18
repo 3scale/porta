@@ -1,0 +1,32 @@
+<%= javascript_include_tag "swagger-ui" -%>
+<%= javascript_include_tag "swagger-ui/threescale" -%>
+<%= javascript_include_tag "swagger-ui/extensions" -%>
+<%= stylesheet_link_tag    "swagger-ui/screen.css" -%>
+<%= stylesheet_link_tag    "swagger-ui/threescale" -%>
+
+<div class="swagger-section">
+  <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+  <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</div>
+
+<div class='apidocs-param-tips apidocs-signin-message' style='display:none;'>
+  <p><a href='#'>Sign in</a> to your account for quick access to useful values.</p>
+</div>
+
+<script type="text/javascript">
+  $(function () {
+    var url = "<%= services.empty? ? swagger_spec_index_url(format: :json) : swagger_spec_index_url(format: :json, services: services.join(',')) %>";
+    window.swaggerUi = new SwaggerUi({
+      url: url,
+      dom_id: "swagger-ui-container",
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      onComplete: function(swaggerApi, swaggerUi) {
+        $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+      },
+      onFailure: function(data) {
+        log("Unable to Load SwaggerUI");
+      },
+      docExpansion: "list"
+    });
+  });
+</script>

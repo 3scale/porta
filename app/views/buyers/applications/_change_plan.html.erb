@@ -1,0 +1,32 @@
+<div class="dashboard_bubble round">
+  <h3><label for="cinstance_plan_id">Change Plan</label></h3>
+  <%- confirm_message = if @cinstance.plan.customized?
+                          'This will delete all customizations. Are you sure?'
+                        else
+                          'Are you sure you want to change the application plan?'
+                        end -%>
+
+  <%= form_for @cinstance, :url => change_plan_admin_buyers_application_path(@cinstance),
+                          :html => {:method => :put, class: "formtastic"}, :'data-confirm' => confirm_message do |form| %>
+
+      <fieldset class="inputs">
+        <ol>
+          <li>
+            <%= form.collection_select :plan_id, @cinstance.available_application_plans, :id, :name, {:include_blank => true}, { :required => true } %>
+          </li>
+        </ol>
+      </fieldset>
+      <fieldset class="buttons">
+        <ol>
+          <li class="commit">
+            <%= form.submit 'Change Plan', class: 'important-button' %>
+          </li>
+        </ol>
+      </fieldset>
+
+  <% end %>
+
+  <% if @cinstance.credit_card_missing? %>
+    <p>Buyer does not have any payment details on record.</p>
+  <% end %>
+</div>

@@ -1,0 +1,28 @@
+<%= javascript_include_tag 'plans_widget.js' %>
+<%= stylesheet_link_tag 'plans_widget.css' %>
+
+<% id = id || "choose-plan-#{contract.id}" %>
+<% wizard = wizard || false %>
+
+<%= javascript_tag do %>
+  $(document).ready(function(){
+
+    function updateForm(name, planID){
+      // we cannot depend just on html tag strong as the page is liquied (can be changed)
+      $('#selected-plan strong').text(name);
+      $('#selected-plan-name').text(name);
+      $('input#cinstance_plan_id').val(planID);
+    }
+
+    $("#<%= id %>").click(function(){
+      <%- if contract.new_record? %>
+        var planID = $('input#cinstance_plan_id').val();
+        PlanWidget.loadPreview(planID, updateForm, '<%= admin_service_plans_widget_path(@service) %>');
+      <%- else -%>
+        var planID = '<%= contract.plan.id %>';
+        PlanWidget.loadPreview(planID, updateForm, '<%= admin_service_plans_widget_path(contract.service, wizard: wizard) %>', '<%= contract.id %>' );
+       <%-end-%>
+      return false;
+    });
+  });
+<% end %>

@@ -1,0 +1,4 @@
+$("#oauth_secret, #application_keys .key code").html(<%= @new_key.to_json.html_safe %>);
+<%# replace url of form, so second regenerate works %>
+$('form[action=<%= regenerate_admin_application_key_path(@cinstance, @key).to_json.html_safe %>]').
+  attr('action', <%=regenerate_admin_application_key_path(@cinstance, @new_key).to_json.html_safe %>);

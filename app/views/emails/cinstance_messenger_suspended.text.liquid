@@ -1,0 +1,9 @@
+Dear {{account.name}},
+
+{%if provider.multiple_applications_allowed?%}
+{{provider.name}} has suspended your application for the API.
+{%else%}
+{{provider.name}} has suspended your application for service {{service.name}} ({{plan.name}}).
+{%endif%}
+
+The API Team

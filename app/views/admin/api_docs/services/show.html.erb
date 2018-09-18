@@ -1,0 +1,32 @@
+<h2>Service: <%= @api_docs_service.name %></h2>
+
+<h3>Base Path</h3>
+<p><%= @api_docs_service.host %></p>
+
+<h3>Description</h3>
+<%= raw textilize(@api_docs_service.description) %>
+
+<h3>Resources</h3>
+<% if @api_docs_service.resources.any? %>
+<table class='data'>
+  <% @api_docs_service.resources.each do |resource| %>
+  <tr>
+    <td><strong><%= resource.name %></strong></td>
+
+    <td><%= link_to 'Edit', edit_admin_api_docs_service_resource_path(@api_docs_service, resource) %></td>
+  </tr>
+  <% end %>
+</table>
+<% else %>
+  <p class='note'>There are no resources defined for this service. <%= link_to 'Create one now', [:new, :admin,  @api_docs_service, :resource] %>.</p>
+<% end %>
+
+<p>
+  <%= link_to 'Add a New Resource', [:new, :admin, @api_docs_service, :resource]  %>
+</p>
+
+<p>
+  <%= link_to 'Edit Service', [:edit, :admin, @api_docs_service] %> |
+  <%= link_to 'Create New Service', new_admin_api_docs_service_path %> |
+  <%= link_to 'View All Services', admin_api_docs_services_path %>
+</p>

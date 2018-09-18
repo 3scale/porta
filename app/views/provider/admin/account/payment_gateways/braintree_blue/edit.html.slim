@@ -1,0 +1,49 @@
+h2
+  = site_account.org_name
+  |  Payment Details
+
+p
+  ' Update your credit card details here to set up monthly billing for your
+  => current_account.provider_account.org_name
+  ' service. You'll be charged monthly around the 7th of the following month and
+  | receive email notification about a successful payment along with the invoice.
+
+- if @errors
+  .InfoBox.InfoBox--notice
+    h2 Your payment details could not be saved
+    p There were problems with the following fields:
+    ul.no_style
+      - @errors.each do |error|
+        li = error
+
+= semantic_form_for current_account.customer, as: :customer, url: @form_url do |form|
+  = hidden_field_tag 'tr_data', ERB::Util.html_escape(@tr_data)
+  = hidden_field_tag 'customer[credit_card][billing_address][options][update_existing]', true
+  = form.inputs "Personal Details" do
+    = form.input :first_name, required: true
+    = form.input :last_name, required: true
+    = form.input :phone , label: "Phone", required: true
+
+  = form.inputs "Credit Card Details" do
+    = form.semantic_fields_for :credit_card do |cc|
+      = cc.input :number, required: true
+      = cc.input :expiration_date, required: true, label: 'Expiration Date (MM/YY)'
+      = cc.input :cvv, required: true, label: 'Cvv'
+
+  = form.inputs "Billing Address" do
+    = form.semantic_fields_for :credit_card do |cc|
+      = cc.semantic_fields_for :billing_address, current_account.billing_address_data do |billing_address|
+        = billing_address.input :company, required: true
+        = billing_address.input :street_address, required: true
+        = billing_address.input :extended_address, required: true
+        = billing_address.input :postal_code, label: "ZIP / Postal Code" , required: true
+        = billing_address.input :locality, label: "City", required: true
+        = billing_address.input :region, label: "State/Region" , required: true
+        = billing_address.input :country_name, label: "Country", as: :select,
+          collection: merchant_countries, required: true,
+          allow_blank: false, prompt: 'Select your country'
+
+  = render partial: '/shared/legal_terms_for_cc_details'
+  = form.buttons do
+    li.commit
+      = form.submit 'Save credit card', class: 'important-button'

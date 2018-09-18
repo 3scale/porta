@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-md-9">
+    {% if plan_changes.size > 0 %}
+      {% for change in plan_changes %}
+        <div class="row">
+          <div class="col-md-9">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <a href="{{ change.contract.url }}">
+                  <i class="fa fa-chevron-left"></i>
+                  {{ change.contract.name }}
+                </a>
+                {{ 'Cancel' | link_to: change.cancel_path, class: 'pull-right', method: 'delete' }}
+              </div>
+
+              <div class="panel-body panel-footer">
+                <dl class="dl-horizontal">
+                  <dt>Current Plan</dt>
+                  <dd>{{ change.previous_plan.name }}</dd>
+                  <dt>New Plan</dt>
+                  <dd>{{ change.plan.name }}</dd>
+                </dl>
+                <hr>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    {{ 'Confirm' | update_button: change.confirm_path, class: 'btn btn-primary pull-right' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {%  endfor %}
+    {% else %}
+      <div class="row">
+        <div class="col-md-9">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              PLAN CHANGE CONFIRMATION
+            </div>
+            <div class="panel-body panel-footer">
+              <p>
+                You have no changes in your application plans.
+                {{ 'Go back to applications' | link_to: urls.applications }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

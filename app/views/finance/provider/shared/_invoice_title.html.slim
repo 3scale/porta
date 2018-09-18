@@ -1,0 +1,1 @@
+h1 = "Invoice for #{ invoice.period ? l(invoice.period, format: :month) : 'undefined period' } (#{ t(invoice.creation_type, scope: 'invoices.creation_type') })"

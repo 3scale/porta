@@ -1,0 +1,15 @@
+<%= semantic_form_for :create_trash, url: provider_admin_messages_bulk_trash_path, html: { data: { remote: true }} do |form| %>
+  <%= form.inputs do %>
+    <p class='inline-hint'>It will move all your selected messages to the trash.</p>
+    <%= hidden_field_tag 'scope', params[:scope] %>
+    <% if params[:selected_total_entries].present? %>
+      <%= hidden_field_tag 'selected_total_entries', params[:selected_total_entries] %>
+    <% end %>
+    <% params[:selected].each do |selected_id| %>
+      <%= hidden_field_tag 'selected[]', selected_id %>
+    <% end %>
+    <%= form.buttons do %>
+      <%= form.commit_button 'Delete', button_html: { data: { 'disable-with' => 'Running bulk action...' }} %>
+    <% end %>
+  <% end %>
+<% end %>

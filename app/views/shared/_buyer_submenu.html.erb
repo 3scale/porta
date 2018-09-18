@@ -1,0 +1,75 @@
+<% case active_menu
+   when :dashboard %>
+
+  <ul id="submenu">
+    <li class="sidebar_header">Dashboard</li>
+
+    <%= submenu_item 'Overview', admin_dashboard_path %>
+
+    <% if site_account.multiple_applications_allowed? %>
+      <%= submenu_item 'Applications', admin_applications_path %>
+    <% else %>
+      <%= submenu_item 'API Access Details', admin_applications_access_details_path %>
+
+      <% if current_account.has_bought_cinstance? and cinstance = current_account.bought_cinstance %>
+        <li><%= review_change_plan_link(cinstance, 'Change Plan', "menu-choose-plan-#{cinstance.id}" ) %></li>
+        <%= render :partial => 'applications/applications/plan_widget', :locals => { :contract => cinstance, :id => "menu-choose-plan-#{cinstance.id}" } %>
+      <% end %>
+    <% end %>
+
+    <% if current_account.multiservice? && can?(:manage, :service_contracts) -%>
+      <%= submenu_item 'Services', admin_buyer_services_path %>
+    <% end %>
+
+    <%= submenu_item 'Messages', admin_messages_root_path %>
+
+    <% if current_account.bought_cinstances.live.present? %>
+      <%= submenu_item 'Analytics', buyer_stats_path %>
+    <% end %>
+  </ul>
+
+<%# TODO: remove :credit_card_details from here when payment_gateway_controller is splitted for buyer and provider side %>
+<% when :account, :credit_card_details %>
+
+  <ul class="tabs" id="submenu">
+    <li class="sidebar_header">Account</li>
+
+    <%= submenu_item 'Overview',  admin_account_path %>
+
+    <% if can?(:manage, User) %>
+      <%= submenu_item 'Users', admin_account_users_path %>
+    <% end %>
+
+    <% if can?(:see, :account_plans) -%>
+      <%= submenu_item 'Plans', admin_account_account_plans_path %>
+    <% end -%>
+
+    <% if can?(:manage, :finance) and current_account.is_billed? %>
+      <%= submenu_item 'Invoices', admin_account_invoices_path %>
+
+      <% if current_account.credit_card_editable? %>
+        <%= submenu_item 'Credit Card Details', payment_details_path %>
+      <% end %>
+    <% end %>
+
+    <% if can? :update, current_user %>
+      <%= submenu_item 'Personal Details', admin_account_personal_details_path %>
+    <% end %>
+  </ul>
+
+<% when :terms %>
+
+  <ul class="tabs" id="submenu">
+    <% if @service.has_terms? %>
+      <%= submenu_item 'Terms & Conditions', settings_terms_path %>
+    <% end %>
+
+    <% if site_account.settings.has_privacy_policy? %>
+      <%= submenu_item 'Privacy Policy', settings_privacy_path %>
+    <% end %>
+
+    <% if site_account.settings.has_refund_policy? %>
+      <%= submenu_item 'Refund Policy', settings_refunds_path %>
+    <% end %>
+  </ul>
+<% end %>

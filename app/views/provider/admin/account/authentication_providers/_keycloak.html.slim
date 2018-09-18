@@ -1,0 +1,9 @@
+dt.u-dl-term
+  | Realm
+dd.u-dl-definition
+  = @presenter.authentication_provider.realm
+dt.u-dl-term
+  | Skip SSL Certificate Verification
+dd.u-dl-definition
+  => check_box_tag 'check', 'yes', @presenter.authentication_provider.skip_ssl_certificate_verification, disabled: true
+

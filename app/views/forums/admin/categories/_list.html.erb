@@ -1,0 +1,29 @@
+<div id="categories" class="right">
+  <h2>Categories</h2>
+  <% if @forum.categories.exists? %>
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th colspan="2">
+            <%= link_to 'New category', new_admin_forum_category_path, :class => 'action add' %>
+          </th>
+      </thead>
+      <tbody>
+        <% @forum.categories.each do |category| %>
+          <tr id="<%= dom_id(category) %>">
+            <td><%= h category.name %></td>
+            <td class="operations">
+              <%= delete_button_for admin_forum_category_path(category) %>
+            </td>
+            <td class="operations">
+              <%= link_to 'Edit', edit_admin_forum_category_path(category), :class => 'action edit' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>There are no categories.</p>
+  <% end %>
+</div>

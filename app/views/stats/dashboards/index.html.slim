@@ -1,0 +1,16 @@
+- title 'Monitoring'
+
+- @services.each do |service|
+  div class="stats-widget" id="service_#{service.id}"
+    h2 class="title"
+      = link_to service.name, admin_service_stats_usage_path(service), title: 'Show more stats for this service'
+    div class="inline_stats"
+      ul class="listing"
+        li = link_to 'Usage', admin_service_stats_usage_path(service)
+        li = link_to 'Daily Averages', admin_service_stats_days_path(service)
+        li = link_to 'Top Applications', admin_service_stats_top_applications_path(service)
+        li = link_to 'Hourly Averages', admin_service_stats_hours_path(service)
+
+      = render 'stats/sparklines', metrics: service.metrics.top_level.first(3)
+
+= render 'shared/service_access'

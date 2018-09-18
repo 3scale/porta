@@ -1,0 +1,10 @@
+Dear <%= h @subscriber.display_name %>,
+
+A new post has been posted in the thread <%= h @post.topic.title %>
+
+Post:
+<%= truncate h(@post.body), :length => 300 %>
+
+Read more: <%= forum_topic_url(:id => @post.topic, :host => @domain) -%>
+
+The 3SCALE Developer Team

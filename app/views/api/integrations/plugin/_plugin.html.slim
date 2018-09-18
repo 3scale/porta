@@ -1,0 +1,11 @@
+- if @service.deployment_option.include?('plugin_')
+  #plugin
+    div data-lang=(plugin_language_name)
+      - begin
+        = render "api/integrations/plugin/plugins/#{plugin_language_name}"
+      - rescue ActionView::MissingTemplate
+        = render 'api/integrations/plugin/plugins/generic'
+    p Once you are done you can check the #{link_to 'analytics',admin_stats_root_path} for hits or watch the #{link_to 'live traffic log', admin_transactions_path} to see the requests flowing.Or just click the button and watch the hits growing.
+    #traffic-check-widget
+      = render 'stats/sparklines', metrics: @service.metrics.hits
+      = link_to [ 'Are we there yet?', 'Is it working yet?', 'Success?', 'HTTP 200 OK?' ].sample, '#traffic-check-trigger', class: 'important-button'

@@ -1,0 +1,48 @@
+<!-- search box -->
+<div class="admin search" style="padding:10px 0px;">
+  <form action="<%= search_url %>" method="get" id="form">
+    <span style="font-weight:bold">Search:</span>
+
+    <select name="kind" id="kind-box"></select>
+
+    <select id="search-scope">
+      <%= options_for_select(search_objects, search_scope) %>
+    </select>
+
+    <input type="text" name="q" value="<%= search_query -%>" />
+    <input type="submit" value="go" />
+  </form>
+</div>
+
+<script type="text/javascript">
+  var all_types = '<option name="all">all</option>';
+  var account_types = all_types + '<%= options_for_select_without_line_ending(account_search_states) %>';
+  var user_types = all_types + '<%= options_for_select_without_line_ending(user_search_states) %>';
+
+  $(document).ready(function(){
+      if($('#search-scope').val() == "accounts") {
+        $('#kind-box').html(account_types).val('<%= search_kind %>');
+      } else if ($('#search-scope').val() == "users") {
+        $('#kind-box').html(user_types).val('<%= search_kind %>');
+      }
+      else {
+        $('#kind-box').html(all_types).val('<%= search_kind %>');
+      }
+
+      $('#search-scope').change(function(){
+        var types = '';
+        if($(this).val() == "users") {
+          types = user_types;
+          $('#form').attr("action", "/buyer/search/users");
+        } else if ($(this).val() == "accounts") {
+          types = account_types;
+          $('#form').attr("action", "/buyer/search/accounts");
+        }
+	else if ($(this).val() == "tokens") {
+          types = all_types;
+          $('#form').attr("action", "/buyer/search/tokens");
+        }
+        $('#kind-box').html(types);
+      });
+  });
+</script>

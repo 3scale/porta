@@ -1,0 +1,16 @@
+<ul id="side-tabs">
+  <%= sidebar_link 'Domains & Access', admin_site_dns_path %>
+  <%= sidebar_link 'Spam Protection', edit_admin_site_spam_protection_path %>
+  <% if current_account.show_xss_protection_options? %>
+    <%= sidebar_link 'XSS Protection', edit_admin_site_developer_portal_path %>
+  <% end %>
+
+  <% if can?(:manage, :forum) %>
+      <%= sidebar_link 'Forum', edit_admin_site_forum_path %>
+  <% end %>
+  <%= sidebar_link 'SSO Integrations', provider_admin_authentication_providers_path, title: "oauth2" %>
+</ul>
+
+<div id="tab-content">
+  <%= yield  %>
+</div>

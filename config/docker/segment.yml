@@ -1,0 +1,18 @@
+base: &default
+  enabled: <%= ENV.fetch('SEGMENT_COM_ENABLED', '1') == '1' %>
+  stub: false
+  write_key: <%= ENV.fetch('SEGMENT_COM_KEY', "'null'") %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  enabled: false
+  stub: true
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

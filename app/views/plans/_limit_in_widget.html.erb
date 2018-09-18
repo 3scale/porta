@@ -1,0 +1,12 @@
+<td colspan="2">
+<% if metric.limits_only_text_in_plan?(plan) -%>
+  <%= display_usage_limit(usage_limit) %>
+<% else -%>
+  <% if usage_limit.value.zero? -%>
+    <%= image_tag 'cross.png' %>
+  <% else -%>
+    <%= image_tag 'tick.png' %>&nbsp;
+    <%= display_usage_limit(usage_limit) %>
+  <% end -%>
+<% end -%>
+</td>

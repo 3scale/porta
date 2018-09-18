@@ -1,0 +1,16 @@
+<h2>Cancel the account</h2>
+
+<div class="warning">
+  <p>Are you sure you want to cancel your account?</p>
+  <p>Please note that if you proceed, your access tokens, service tokens and API key will be immediately disabled and you won't be able to log into the management interface anymore.</p>
+
+  <% unless current_account.invoices.unpaid.empty? %>
+    <p>Also note that you have pending invoices. You will receive an email with the exact amount you will be charged on the end of the month.</p>
+  <% end %>
+
+  <div class="operation">
+    <%= button_to 'Cancel account', buyer_account_path, :method => :delete %> |
+    <%= link_to 'Go back', buyer_account_path %>
+  </div>
+</div>
+

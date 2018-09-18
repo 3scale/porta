@@ -1,0 +1,35 @@
+
+<p id="warning" style="display:none;color: red">There are problems with your data.
+Please check that system name is unique and try submitting again.</p>
+
+<table class='plan-edit-popup'>
+<tr>
+  <td><%= form.label :name %></td>
+  <td><%= form.text_field :name, :class => 'text' %></td>
+</tr>
+<tr>
+  <td><%= form.label :system_name, 'System name *' %></td>
+  <td>
+    <%= form.text_field :system_name, :class => 'text' %>
+    <p class="inline-hints">Must be unique for this <%= @feature.featurable.class %>.</p>
+  </td>
+</tr>
+<tr>
+  <td><%= form.label :description %></td>
+  <td><%= form.text_area :description, rows: 4 %></td>
+</tr>
+<% if current_account.master? %>
+<tr>
+  <td><%= form.label :visible %></td>
+  <td><%= form.check_box :visible, :class => 'text' %></td>
+</tr>
+<% end %>
+<tr>
+  <td></td>
+  <td>
+    <%= link_to 'Cancel', '', :class => 'fancybox-close' %>
+    &nbsp;&nbsp;
+    <%= form.submit 'Save', :class => 'important-button' %>
+  </td>
+</tr>
+</table>

@@ -1,0 +1,12 @@
+<%= @account.domain %> completed the 3 step wizard and deployed to heroku.
+
+Details:
+
+Id: <%= @account.id %>
+Domain: <%= @account.domain %>
+
+<% if @account.site_access_code.blank? %>
+Public portal: http://<%= @account.self_domain %>/.
+<% else %>
+There is no publicly accessible portal (yet).
+<% end %>

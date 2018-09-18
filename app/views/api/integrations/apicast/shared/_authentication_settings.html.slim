@@ -1,0 +1,32 @@
+= f.toggled_inputs 'Authentication Settings' do
+  - if @service.oidc?
+    = f.input :oidc_issuer_endpoint, hint: true, input_html: { placeholder: "https://sso.example.com/auth/realms/gateway" }
+  - elsif @service.oauth?
+    = f.input :oauth_login_url, label: "OAuth Authorization Endpoint", input_html: { placeholder: "https://#{parameterized_org_name_of_the_current_account}.com/authorize" },  hint: t("formtastic.hints.proxy.#{oauth_hint}")
+
+  = f.input :hostname_rewrite, label: "Host Header"
+  = f.input :secret_token, label: "Secret Token"
+
+  = f.input :credentials_location, as: :radio,
+    collection: Proxy.credentials_collection
+
+  - case @service.backend_version
+  - when '1'
+    = f.input :auth_user_key
+  - when '2'
+    = f.input :auth_app_id
+    = f.input :auth_app_key
+
+  legend Errors  
+  = f.inputs "Authentication Failed Error" do
+    = f.input :error_status_auth_failed, label: :status
+    = f.input :error_headers_auth_failed, label: :headers
+    = f.input :error_auth_failed, label: :message
+  = f.inputs "Authentication Missing Error" do
+    = f.input :error_status_auth_missing, label: :status
+    = f.input :error_headers_auth_missing, label: :headers
+    = f.input :error_auth_missing, label: :message
+  = f.inputs "No Match Error" do
+    = f.input :error_status_no_match, label: :status
+    = f.input :error_headers_no_match, label: :headers
+    = f.input :error_no_match, label: :message

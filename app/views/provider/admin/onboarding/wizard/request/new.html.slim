@@ -1,0 +1,45 @@
+h1
+  span.success> Good.
+  | Next, make a test GET request
+
+p
+  ' Let's pretend to be your customer and make a GET request to
+  => @request.api_name
+  | through the 3scale API Gateway.
+
+
+= semantic_form_for [:provider, :admin, :onboarding, :wizard, @request] do |f|
+  ol.explain.fa-ul
+    li.feedback.feedback--inactive
+      i.icon.fa-li.fa.fa-mobile
+      .text
+        = f.inputs do
+          = f.input :path, label: '<strong>a GET method</strong> of your API',
+                    input_html: { placeholder: '/objects/list', autofocus: true },
+                    wrapper_html: { class: 'slim' }
+      code.code-example
+        span.code-example__base.code-example--slash = @request.proxy_base_url
+        span.code-example__path = @request.path_without_slash
+        span.code-example__key.code-example__params = @request.proxy_auth_params
+    li.feedback.feedback--inactive
+      i.icon.fa-li.fa.fa-hdd-o.icon
+      .text
+        strong> 3scale
+        ' will handle authentication and pass the request on to your API:
+      code.code-example
+        span.code-example__base.code-example--slash = @request.api_base_url
+        span.code-example__path = @request.path_without_slash
+
+    li.feedback.feedback--sec
+      i.icon.fa-li.fa.fa-puzzle-piece.icon
+      .text
+        strong> = link_to @request.api_name, edit_provider_admin_onboarding_wizard_api_path
+        ' will return a response to the customer through the gateway.
+
+  = button_tag 'Send request', type: :submit, class: 'button button--next', data: { disable_with: 'Sending request…' }
+
+coffee:
+  $ ->
+    $("#request_path").on "change, keyup", ->
+      path = $(this).val().replace(/^\//, '')
+      $(".code-example__path").html(path)

@@ -1,0 +1,8 @@
+<% #TODO move all these condition inside the each_pair iterator -%>
+<% if record.defined_fields.present? %>
+  <% record.defined_fields.each do |field| %>
+    <% if record.field(field.name).present? && field.visible_for?(current_user) -%>
+      <%= show_if_present(field.name, record)%>
+    <% end %>
+  <% end %>
+<% end %>

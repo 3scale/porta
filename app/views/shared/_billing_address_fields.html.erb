@@ -1,0 +1,12 @@
+<%= form.fields_for :billing_address do |billing_address_fields| %>
+  <%= billing_address_fields.inputs :name => 'Billing Address', :class => 'inputs' do %>
+      <%= billing_address_fields.input :name, :label => "Contact / Company Name" , :required => true %>
+      <%= billing_address_fields.input :address1, :label => "Address", :required => true %>
+      <%= billing_address_fields.input :address2, :label => "Address (line 2)" %>
+      <%= billing_address_fields.input :city, :required => true%>
+      <%= billing_address_fields.input :country, :as => :select, :collection => Country.all.map{|c| [c.name, c.code]}, :required => true %>
+      <%= billing_address_fields.input :state, :label => "State" %>
+      <%= billing_address_fields.input :zip, :label => "ZIP / Postal Code" %>
+      <%= billing_address_fields.input :phone %>
+  <% end %>
+<% end %>

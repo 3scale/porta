@@ -1,0 +1,7 @@
+<h2>New Usage limit</h2>
+
+<%= semantic_form_for @usage_limit,
+                      :url => polymorphic_path([:admin, @plan, @metric, :usage_limits]),
+                      :html => {:class => 'remote'} do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>

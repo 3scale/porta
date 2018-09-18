@@ -1,0 +1,4 @@
+<%- @applications.each do |application| %>
+  $("#<%=dom_id(application)%>").fadeOut(function(){$(this).remove()});
+<%-end-%>
+$("#bulk-operations").trigger("bulk:success");

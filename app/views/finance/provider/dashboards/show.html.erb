@@ -1,0 +1,49 @@
+<% title 'Earnings by month' %>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th class="u-amount">Total
+        <%= help_bubble 'all' do %>
+          All invoices excluding cancelled
+        <% end %>
+      </th>
+      <th class="u-amount">In process
+        <%= help_bubble 'in_process' do %>
+          Open, Finalized and Pending invoices
+        <% end %>
+      </th>
+      <th class="u-amount">Overdue
+        <%= help_bubble 'overdue' do %>
+           Failed and Unpaid invoices
+        <% end %>
+      </th>
+      <th class="u-amount">Paid
+        <%= help_bubble 'paid' do %>
+          Paid invoices
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @months.each do |row| %>
+      <tr>
+        <td><%= row.link_to_invoices %></td>
+        <td class="u-amount u-tabular-number">
+          <%= row.total_revenue %>
+        </td>
+        <td class="u-amount u-tabular-number">
+          <%= row.in_process_revenue %>
+        </td>
+        <td class="u-amount u-tabular-number">
+          <%= row.overdue_revenue %>
+        </td>
+        <td class="u-amount u-tabular-number">
+          <%= row.paid_revenue %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,21 @@
+table.invoice tr th {
+    width: 50%;
+}
+
+#buyer_details, #provider_details {
+    display: float;
+    width: 48%;
+}
+
+#buyer_details {  float: right; }
+#provider_details {  float: left; }
+
+#actions {
+    text-align: center;
+    margin-bottom: line-height-times(1);
+    list-style: none;
+}
+
+#actions li {
+    display: inline;
+}

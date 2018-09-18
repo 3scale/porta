@@ -1,0 +1,8 @@
+<%= f.inputs do %>
+  <%= f.input :name %>
+  <%= f.input :section_ids,
+      :label => 'Allowed Sections',
+      :hint => ' (only private sections are listed)',
+      :as => :check_boxes,
+      :collection => @available_sections.select{|a| !a.public? } %>
+<% end %>

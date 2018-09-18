@@ -1,0 +1,11 @@
+{% unless user.oauth2? %}
+  <ul class="list-auth-provider row list-unstyled">
+    {% for auth_provider in site.authentication_providers %}
+        <li class="col-md-offset-4 col-md-6">
+      <a class="btn btn-default auth-provider auth-provider-{{auth_provider.kind}}" href="{{auth_provider.authorize_url}}">
+            <i class="fa fa-{{auth_provider.kind}}"></i> Authenticate with {{ auth_provider.name }}
+          </a>
+        </li>
+    {% endfor %}
+  </ul>
+{% endunless %}

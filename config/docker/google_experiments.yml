@@ -1,0 +1,22 @@
+base: &default
+  enabled: <%= ENV.fetch('GOOGLE_EXPERIMENTS_ENABLED', '1') == '1' %>
+  private_key: <%= ENV.fetch('GOOGLE_EXPERIMENTS_PRIVATE_KEY', '') %>
+  issuer: <%= ENV.fetch('GOOGLE_EXPERIMENTS_ISSUER', nil) %>
+  person: <%= ENV.fetch('GOOGLE_EXPERIMENTS_PERSON', nil) %>
+  web_property_id: <%= ENV.fetch('GOOGLE_EXPERIMENTS_WEB_PROPERTY_ID', nil) %>
+  profile_id: <%= ENV.fetch('GOOGLE_EXPERIMENTS_PROFILE_ID', nil) %>
+  'Signup A/A': <%= ENV.fetch('GOOGLE_EXPERIMENTS_SIGNUP_A', nil) %>
+  'Signup A/B': <%= ENV.fetch('GOOGLE_EXPERIMENTS_SIGNUP_B', nil) %>
+  'Signup Form - less fields': <%= ENV.fetch('GOOGLE_EXPERIMENTS_SIGNUP_FROM', nil) %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

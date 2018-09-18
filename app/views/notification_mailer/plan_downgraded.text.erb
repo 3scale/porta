@@ -1,0 +1,4 @@
+Dear <%= @receiver.informal_name %>,
+<%= @account.name %> has downgraded to <%= @new_plan.name %> plan (from <%= @old_plan.name %>).
+For more details, view the account in your Admin Portal.
+To view account, follow this link: <%= admin_buyers_account_url(@account) %>

@@ -1,0 +1,11 @@
+<h1>New section</h1>
+
+<%= cms_new_button_dropdown(CMS::Section) %>
+
+<%= cms_form_for(@section) do |f| %>
+  <p>
+    <%= render 'form', :f => f %>
+
+    <%= f.buttons %>
+  </p>
+<% end %>

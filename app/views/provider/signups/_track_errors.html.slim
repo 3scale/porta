@@ -1,0 +1,36 @@
+- content_for :javascript do
+  - user_errors = @user.errors.to_hash
+  - provider_errors = @provider.errors.to_hash.except(:users)
+  - errors = { account: provider_errors }.merge(user: user_errors)
+
+  javascript:
+    (function(){
+      gaReady(
+        function trackErrors() {
+          var total_errors = 0;
+          var errors = #{json errors};
+
+          $.each(errors, function (model, errors) {
+            $.each(errors, function (attribute, error) {
+              var errors = typeof(error) == 'string' ? [error] : error;
+              var key = model + '[' + attribute + ']';
+
+              if (errors.length > 0) {
+                ga('send', 'event', 'signup', 'validation error', key, errors.length);
+              }
+
+              $.each(errors, function (_index, error) {
+                total_errors += 1;
+                ga('send', 'event', 'signup', 'validation error', [key, error].join(' '));
+              });
+
+            });
+          });
+
+          if (total_errors > 0) {
+            ga('send', 'event', 'signup', 'error', 'validation', total_errors);
+            analytics.track('Signup Validation Error', errors);
+          }
+        }
+      );
+    }());

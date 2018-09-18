@@ -1,0 +1,24 @@
+common: &default_settings
+  license_key: <%= ENV['NEWRELIC_LICENSE_KEY'] %>
+  monitor_mode: true
+  developer_mode: false
+  log_level: info
+  ssl: true
+  capture_params: true
+  error_collector:
+    enabled: true
+    capture_source: true
+    ignore_errors: ActionController::RoutingError
+
+production:
+  <<: *default_settings
+  app_name: <%= (ENV['NEWRELIC_APPS'] || 'Multitenant').split(,) %>
+
+preview:
+  <<: *default_settings
+  app_name: <%= (ENV['NEWRELIC_APPS'] || 'Multitenant').split(,) %>
+
+development:
+  <<: *default_settings
+  monitor_mode: false
+  developer_mode: true

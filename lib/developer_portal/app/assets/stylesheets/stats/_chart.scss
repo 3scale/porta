@@ -1,0 +1,96 @@
+/* Stats Chart Component */
+$stats-chart-border-color: #dfdfdf;
+$stats-chart-tooltip-shadow: rgba(68, 68, 68, .1);
+$stats-chart-tooltip-bg-color: #fff;
+$stats-chart-tooltip-color: #444;
+
+.StatsChartContainer {
+  &.is-loading {
+    opacity: .5;
+
+    &::before {
+      background-image: image-url('spinner.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+      bottom: 50%;
+      content: '';
+      height: 42px;
+      left: 50%;
+      position: absolute;
+      width: 42px;
+    }
+  }
+
+  /* c3.js customizations */
+  .c3 svg {
+    font: 10px 'Lucida Grande', verdana, sans-serif;
+  }
+
+  .c3-line {
+    stroke-width: 2px;
+  }
+
+  .c3-grid line.c3-ygrid,
+  .c3-axis-y .tick line {
+    stroke: $stats-chart-border-color;
+  }
+
+  .c3-ygrid {
+    stroke-dasharray: 0;
+  }
+
+  .c3-axis-y .domain {
+    display: none;
+  }
+
+  .c3-tooltip-container {
+    border: 1px solid $stats-chart-border-color;
+    border-radius: 6px;
+    -moz-box-shadow: 0 0 6px $stats-chart-tooltip-shadow;
+    -webkit-box-shadow: 0 0 6px $stats-chart-tooltip-shadow;
+    box-shadow: 0 0 6px $stats-chart-tooltip-shadow;
+    opacity: .98;
+  }
+
+  .c3-tooltip {
+    border: 0;
+    border-radius: 6px;
+    -moz-box-shadow: 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 transparent;
+    box-shadow: 0 0 0 transparent;
+    opacity: 1;
+  }
+
+  .c3-tooltip th {
+    background-color: $stats-chart-tooltip-bg-color;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: $stats-chart-tooltip-color;
+    padding: 2px 10px;
+  }
+
+  .c3-tooltip tr {
+    border: 0;
+    border-bottom: 1px solid $stats-chart-border-color;
+
+    &:last-child {
+      border-bottom: 0;
+
+      td {
+
+        &:first-child {
+          border-bottom-left-radius: 6px;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: 6px;
+        }
+      }
+    }
+  }
+
+  .c3-tooltip td {
+    border-left: none;
+    padding: 0 10px;
+  }
+}

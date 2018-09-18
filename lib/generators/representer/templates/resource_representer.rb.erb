@@ -1,0 +1,12 @@
+module <%= singular %>Representer < ThreeScale::Representer
+  wraps_resource
+
+  property :id
+
+  property :created_at
+  property :updated_at
+
+  class JSON < <%= singular %>Representer
+    include Roar::JSON
+  end
+end

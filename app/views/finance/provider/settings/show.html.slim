@@ -1,0 +1,122 @@
+h1 Billing Settings
+= form_for @billing_strategy, url: admin_finance_billing_strategy_path,
+           method: :put, html: { class: 'formtastic' } do |f|
+  fieldset class="inputs"
+    ol
+      li
+        label Mode:
+        input type='text' value=(@billing_strategy.name.capitalize) disabled='disabled'
+        p class="inline-hints"
+          = @billing_strategy.description
+
+      li
+        - new_mode = @billing_strategy.is_a?(Finance::PostpaidBillingStrategy) ? 'prepaid' : 'postpaid'
+        = submit_tag "Switch to #{new_mode.upcase}",
+                     onclick: "return confirm('Are you sure you want to switch to #{new_mode} mode?');",
+                     class: "dangerous-button button next"
+        = hidden_field_tag 'type', new_mode
+
+= semantic_form_for @billing_strategy.becomes(Finance::BillingStrategy),
+                    url: admin_finance_settings_path do |f|
+  = f.inputs do
+    = f.input :charging_enabled,
+              hint: "Enables credit card transactions. When this setting is on,
+                    all due invoices will be charged using the selected payment \
+                    gateway. If you leave this setting off, billing will take \
+                    place and invoices will issued, but no real transaction will \
+                    take place."
+
+    = f.input :currency,
+              as: :select,
+              collection: Finance::BillingStrategy::CURRENCIES,
+              hint: "Please make sure that the selected currency is supported by \
+                    your payment gateway. If you are missing currency options,
+                    don't hesitate to contact us."
+
+
+    = f.semantic_fields_for :account do |account|
+      = account.input :invoice_footnote, input_html: {rows: 2}
+      = account.input :vat_zero_text,
+                      label: 'Text to show if VAT/Sales Tax is 0%',
+                      input_html: {rows: 2}
+
+    = f.input :numbering_period,
+              label: 'Billing periods for invoice ids',
+              collection: ['monthly', 'yearly'],
+              include_blank: false
+
+    = f.buttons do
+      = f.commit_button 'Save'
+
+- if can?(:manage, :finance)
+  - if @account.billing_strategy.try(:needs_credit_card?)
+    = semantic_form_for @account, url: admin_account_payment_gateway_path,
+                        html: { id: 'payment-gateway-form' } do |form|
+      h2 Credit card gateway
+      p Select your credit card gateway and configure it with the details of your merchant account.
+
+      = form.inputs "Basics" do
+        li class="select"
+          = form.label :payment_gateway_type, 'Gateway'
+          = form.collection_select :payment_gateway_type, @payment_gateways,
+                                   :type, :display_name, include_blank: "Choose one"
+          - if @current_gateway&.deprecated?
+            p class="InfoBox InfoBox--notice"
+              ' The
+              => @account.payment_gateway_type.capitalize
+              | gateway has been deprecated. It can still be used but you won't be able to switch back to it once you confirmed the switch to another gateway.
+
+      = form.fields_for :payment_gateway_options do |fields|
+        - @payment_gateways.each do |payment_gateway|
+          - enabled = payment_gateway.type == @account.payment_gateway_type
+          div class="payment_gateway_options" id="payment_gateway_#{payment_gateway.type}" style="display: #{enabled ? 'block' : 'none'}"
+
+            - if payment_gateway.fields.present?
+              = form.inputs "#{link_to payment_gateway.display_name, payment_gateway.homepage_url} Options" do
+                - payment_gateway.fields.each do |name, label|
+                  li class="string"
+                    = fields.label name, label
+                    - if enabled
+                      = fields.text_field name,
+                                          value: @account.payment_gateway_options[name]
+                    - else
+                      = fields.text_field name,
+                                          value: '', disabled: true
+
+      = form.buttons do
+        = form.commit_button 'Save changes'
+
+  javascript:
+    $(function() {
+      var form = $("#payment-gateway-form");
+      var gateway = $("#account_payment_gateway_type");
+      var old_val = gateway.val();
+      var new_val, old_val;
+
+      gateway.change(function() {
+        $('.payment_gateway_options:visible').hide(function() {
+          $(this).find('input').attr('disabled', true);
+        });
+
+        $('#payment_gateway_' + $(this).val()).show(function() {
+          $(this).find('input').removeAttr('disabled');
+        });
+      });
+
+      form.submit(function() {
+        var new_val = $("#account_payment_gateway_type").val();
+
+        if(new_val == old_val) { return; }
+
+        var first_question = "Changing your payment gateway will make all your buyers' credit card details invalid, "+
+        "so they will have to enter the credit card information again to be billed next month.\n\n"+
+        "Are you sure you want to change your payment gateway?";
+
+        var second_question = "Are you sure? If you click OK, all credit card details from all your customers will be erased and won't be recoverable.\n"+
+        "You'll need to ask your customers to enter their credit card details again to be able to bill them.\n\n" +
+        "Do you want to remove all credit card details from your customers?";
+
+
+        return confirm(first_question) && confirm(second_question);
+      });
+    });

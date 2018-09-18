@@ -1,0 +1,12 @@
+<ul id="base_details">
+  <li><strong>Service:</strong> <%= @service.name %></li>
+	<% unless @contract.new_record? %>
+  <li><strong>Contract:</strong> <%= @contract.name %>
+       <%= "| #{link_to 'new contract', begin_admin_contracts_path()}" unless (@service.deprecated? || @service.pending?) %>
+  </li>
+	<li><strong>Status:</strong> <%= @contract.state %></li>
+<%- else -%>
+    <li><strong>Status:</strong> DRAFT</li>
+  <%- end %>
+</ul>
+

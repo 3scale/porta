@@ -1,0 +1,8 @@
+<li>
+  <% if @page.is_a?(CMS::BasePage) -%>
+    <%= dropdown_button('Preview', cms_draft_url(@page), :target => "_blank",  :id => 'cms-preview-button', 'data-preview' => :draft) do  %>
+      <%= dropdown_link 'Preview draft', cms_draft_url(@page), :target => "_blank", 'data-preview' => :draft %>
+      <%= dropdown_link 'Preview published', cms_published_url(@page), :target => "_blank", 'data-preview' => :published %>
+    <% end %>
+  <% end %>
+</li>

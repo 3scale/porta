@@ -1,0 +1,13 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | This is to notify you that the credit card from #{@account.name} is about to expire.
+
+p
+  | The user has been notified and  asked to update their payment details.
+
+p
+  | We will notify you when successful payment has been completed on the next billing due date.
+
+p= link_to 'View account', admin_buyers_account_url(@account)

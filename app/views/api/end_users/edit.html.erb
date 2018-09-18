@@ -1,0 +1,13 @@
+<h2>Change plan of end user '<%= @end_user.username %>'</h2>
+<%= semantic_form_for @end_user, :url => admin_service_end_user_path(@service, @end_user) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :plan_id, :as => :select, :include_blank => false,
+                          :collection => @plans, :selected => @end_user.plan_id,
+                          :label => 'Plan'  %>
+
+    <%= f.buttons do %>
+      <%= f.commit_button 'Change plan' %>
+    <% end %>
+  <% end %>
+<% end %>
+

@@ -1,0 +1,6 @@
+jQuery.colorbox.close();
+var html = "<%= escape_javascript(render(:partial => 'pricing_rule', :locals => {:pricing_rule => @pricing_rule})) %>",
+    id   = "#<%= dom_id(@pricing_rule) %>";
+
+jQuery(id).replaceWith(html);
+jQuery.flash.notice('Pricing rule has been edited.');

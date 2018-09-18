@@ -1,0 +1,30 @@
+['<%= service.id %>'] = {
+  <%- # single quotes are important. we only allow double quotes inside the string %>
+  error_auth_failed = '<%= service.error_auth_failed.html_safe %>',
+  error_auth_missing = '<%= service.error_auth_missing.html_safe %>',
+  auth_failed_headers = '<%= service.error_headers_auth_failed.html_safe %>',
+  auth_missing_headers = '<%= service.error_headers_auth_missing.html_safe %>',
+  error_no_match = '<%= service.error_no_match.html_safe %>',
+  no_match_headers = '<%= service.error_headers_no_match.html_safe %>',
+  no_match_status = <%= service.error_status_no_match %>,
+  auth_failed_status = <%= service.error_status_auth_failed %>,
+  auth_missing_status = <%= service.error_status_auth_missing %>,
+  secret_token = '<%= service.secret_token %>',
+  get_credentials = function(service, params)
+    return (
+      <%- case service.backend_version -%>
+      <%- when '1'.freeze -%>
+        params.user_key
+      <%- when '2'.freeze -%>
+        (params.app_id and params.app_key)
+      <%- when 'oauth'.freeze -%>
+        (params.access_token or params.authorization)
+      <%- else raise "Unknown backend version #{service.backend_version}" -%>
+      <%- end -%>
+    ) or error_no_credentials(service)
+  end,
+  extract_usage = <%= render(partial: 'lua/extract_usage', locals: { service_id: service.id }).indent(2).strip.html_safe %>,
+  rules = {
+    <%= render(collection: service.proxy_rules, partial: 'lua/proxy_rule').to_s.indent(4).html_safe %>
+  }
+},

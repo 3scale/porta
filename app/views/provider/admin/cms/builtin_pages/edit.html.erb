@@ -1,0 +1,12 @@
+<h1>Built-in page '<%= @page.title %>'</h1>
+
+<%= cms_new_button_dropdown(CMS::Page) %>
+
+<p><%= @page.description.html_safe %></p>
+
+<%= cms_form_for(@page, :remote => true) do |f| %>
+  <div id="cms-template-fields-wrapper">
+    <%= render( 'form', :f => f) %>
+  </div>
+  <%= render '/provider/admin/cms/content_tabs', :f => f %>
+<% end %>

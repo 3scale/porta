@@ -1,0 +1,13 @@
+filesystem: &filesystem
+  storage: 'filesystem'
+  path: ':storage_root/:url'
+  url: '/:class/:attachment/:id_partition/:style/:filename'
+
+s3: &s3
+  storage: 's3'
+
+development:
+  <<: *<%= ENV['PAPERCLIP_STORAGE'] || 'filesystem' %>
+
+test:
+  <<: *<%= ENV['PAPERCLIP_STORAGE'] || 'filesystem' %>

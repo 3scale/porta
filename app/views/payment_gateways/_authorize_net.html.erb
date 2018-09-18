@@ -1,0 +1,12 @@
+<form class="form-horizontal" method="post" action="<%= @form_url %>" id="formAuthorizeNetPage">
+  <input type="hidden" name="Token" value="<%= @token %>" />
+  <input type="hidden" name="PaymentProfileId" value="<%= @payment_profile_id %>"  />
+
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-10 operations">
+        <input class="btn btn-primary pull-right" type="submit" onclick="document.getElementById('formAuthorizeNetPage').submit();" value="<%= text -%>" />
+      </div>
+    </div>
+  </fieldset>
+</form>

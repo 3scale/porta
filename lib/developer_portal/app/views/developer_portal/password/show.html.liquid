@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-coffee"></i>
+        Change password
+      </div>
+      <div class="panel-body">
+        {% form 'password_change', password_reset_token, { class: 'form-horizontal' } %}
+          <fieldset>
+            <div class="form-group">
+              <label for="user_password" class="control-label col-md-4">Password</label>
+              <div class="col-md-6">
+                <input id="user_password" name="user[password]" type="password" class="form-control" autofocus="autofocus">
+                 {{ user.errors.password | inline_errors }}
+              </div>
+
+            </div>
+            <div class="form-group">
+              <label for="user_password_confirmation" class="control-label col-md-4">Password confirmation</label>
+              <div class="col-md-6">
+                <input id="user_password_confirmation" name="user[password_confirmation]" type="password" class="form-control">
+                 {{ user.errors.password_confirmation | inline_errors }}
+              </div>
+            </div>
+
+          </fieldset>
+          <fieldset>
+            <div class="col-md-10">
+              <input name="commit" type="submit" class="btn btn-success btn-lg pull-right" value="Change Password">
+            </div>
+          </fieldset>
+        {% endform %}
+      </div>
+      <div class="panel-footer">
+        <a href="{{ urls.login }}" class="link">
+          <i class="icon-chevron-left"></i>
+          Sign in
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

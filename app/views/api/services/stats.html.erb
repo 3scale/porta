@@ -1,0 +1,55 @@
+<div id="configBox">
+  <%= render :partial => 'service_menu', :locals => {:service => @service} %>
+  <h2>Service: <%=@service.name %></h2>
+  <h3>Statistics Overview</h3>
+
+  <% if @service.cinstances.empty? %>
+    <p>This section shows statistics on contracts, but you have no contracts yet...</p>
+  <% else %>
+
+    <h2 class="sub">Last Month's Signup Overview (showing <%= @service.cinstances.size %> contracts)</h2>
+
+    <p>
+      <%= render_graph(
+        :title => 'Contracts in the Last Month',
+        :data => @cinstance_counts_statistics, :interval => @period) %>
+    </p>
+
+    <h2 class="sub">Total Number of Signups</h2>
+    <table class="data">
+      <thead>
+        <th>Name</th>
+        <th>Count</th>
+      </thead>
+      <tbody>
+        <% @service.contracts.each do |contract| %>
+          <tr>
+            <td><%= contract.name %></td>
+            <td><%= contract.cinstances.count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h2 class="sub">Last Month's Usage Data Overview</h2>
+
+    <table class="data">
+      <thead>
+        <th>Metric</th>
+        <th>Qty</th>
+      </thead>
+      <tbody>
+        <% @service.metrics.each do |metric| %>
+          <tr>
+            <td><%= metric.name.humanize %></td>
+            <td><%= @service.value_for_metric_and_period(metric, @period) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% @usage_statistics.each do |metric, data| %>
+      <%= render_graph(:title => metric.name.humanize, :data => data, :interval => @period) %>
+    <% end %>
+  <%end%>
+</div>

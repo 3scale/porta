@@ -1,0 +1,12 @@
+- content_for :javascripts, javascript_include_tag('provider/admin/webhooks')
+
+h2 Webhooks
+
+p.help
+  | Webhooks let you define a URL to be called with a notification when events in the 3scale management system happen.
+
+= semantic_form_for @webhook, url: provider_admin_webhooks_path do |f|
+  = render 'form', form: f
+
+  = f.buttons do
+    = f.commit_button label: 'Update webhooks settings'

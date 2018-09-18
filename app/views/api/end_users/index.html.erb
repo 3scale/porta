@@ -1,0 +1,59 @@
+<% content_for :sublayout_title, 'Search End Users' %>
+
+<p class="description">
+  End users cannot be listed,
+  but you can retrieve any particular end user by username
+  (user_id parameter on the 3scale's backend integration).
+</p>
+
+<%= form_tag admin_service_end_users_path(@service), :method => :get, :class => :formtastic do %>
+  <%= field_set_tag nil, :class => :inputs do %>
+    <ol>
+      <li class="string optional">
+        <%= label_tag :id, 'End User Name'%>
+        <%= text_field_tag :id, params[:id] %>
+        <%= submit_tag 'Search', :name => nil %>
+      </li>
+    </ol>
+  <% end %>
+<% end %>
+
+<table class="data">
+
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Service</th>
+      <th colspan="2" >Plan</th>
+      <th><%= action_link_to 'New End User', new_admin_service_end_user_path(@service), :title => 'New End User', :class => 'new'  %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%- if @end_user %>
+      <tr>
+        <td><%= @end_user.username %></td>
+        <td><%= @end_user.service.name %></td>
+        <td><%= @end_user.plan.name %></td>
+        <td>
+
+          <%= fancy_link_to 'change plan', edit_admin_service_end_user_path(@service, @end_user) %>
+        </td>
+        <td><%= delete_link_for admin_service_end_user_path(@service, @end_user), data: { confirm: "Are you sure to delete '#{@end_user.username}'?" } %></td>
+      </tr>
+
+    <%- else %>
+
+      <tr class="no_results">
+        <td colspan="5">
+          <%- if params[:id] %>
+            No end user with name '<%= params[:id] %>' found.
+          <%- else %>
+            Use field above to search end users by name.
+          <%- end %>
+        </td>
+      </tr>
+    <%- end %>
+
+   </tbody>
+</table>

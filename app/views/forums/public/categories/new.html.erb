@@ -1,0 +1,7 @@
+<h2>New Category</h2>
+
+<%= render 'forums/public/menu' %>
+
+<%= semantic_form_for @category, :url => forum_categories_path do |form| -%>
+  <%= render 'forums/public/categories/form', :form => form %>
+<% end -%>

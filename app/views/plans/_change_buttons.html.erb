@@ -1,0 +1,39 @@
+<style type="text/css" media="screen">
+  #plan-selector-links a {
+  	padding: 5px;
+  	border: 1px solid #ddd;
+  	border-radius: 5px;
+  }
+
+  .plan-preview {
+  	width: 290px;
+  }
+
+  .payment-details {
+  	border: 1px solid #ddd;
+  	margin-top: 10px;
+  }
+
+  .plan-change-button {
+  	margin-top: 10px;
+  }
+</style>
+
+<% for plan in site_account.service.published_application_plans %>
+	<% if @cinstance.plan.id != plan.id %>
+		<div class='plan-preview' data-plan-free='<%= plan.free? %>' data-plan-id='<%= plan.id %>' style="">
+			<% if plan.paid? %>
+				<div class='payment-details'>
+					<p>This is a paid plan. You can update your payment details <%= link_to "here", payment_details_path %>.</p>
+				</div>
+			<% end %>
+
+		<% if @cinstance.service.buyer_permitted_to_directly_change_plan?  %>
+		<p></p>
+		<%= button_to "Change Plan", change_plan_path(plan, :application_id => @cinstance.id), :class => 'plan-change-button' %>
+		<% elsif @cinstance.service.buyer_permitted_to_request_plan_change? %>
+		<%= button_to "Request Plan Change", request_change_plan_path(plan, :application_id => @cinstance.id), :class => 'plan-change-button' %>
+		<% end %>
+		</div>
+	<% end %>
+<% end %>

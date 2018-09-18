@@ -1,0 +1,57 @@
+<table class="data threads">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th class="posts">Posts</th>
+      <th class="views">Views</th>
+      <th>Last Post</th>
+      <th class="operations">
+        <% if can? :reply, @topic %>
+          <%= link_to 'New Thread',
+            new_forum_topic_path(:category => @category), :class => 'action add' %>
+        <% end %>
+      </th>
+    </tr>
+
+    <tr class="search">
+      <%= form_tag forum_path, :method => :get, :class => 'inline search formtastic' do %>
+        <th>
+          <%= text_field_tag :query, params[:query], placeholder: "Search forum" %>
+        </th>
+        <th colspan="3">
+        </th>
+        <th>
+          <%= submit_tag 'Search', class: 'button important-button' %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if topics.any? %>
+      <% for topic in topics %>
+        <tr class="topic <%= cycle('odd', 'even', name: 'forum-topics') %>" id="<%= dom_id(topic) %>">
+          <td class="title"><%= link_to topic.title, forum_topic_path(topic) %></td>
+          <td class="posts"><%= topic.posts.count %></td>
+          <td class="views"><%= number_with_delimiter(topic.hits) %></td>
+          <td colspan="2">
+            <%= topic.last_updated_at.to_date.to_s(:long) %>
+
+            <% if topic.last_user -%>
+              by <%= display_author_name(topic.recent_post) %>
+            <% else %>
+              by Anonymous User
+            <% end -%>
+          </td>
+        </tr>
+      <% end %>
+    <%- else -%>
+      <% if @my %>
+        <p>There are no threads containing your posts.</p>
+      <% else %>
+        <p>There are currently no threads.</p>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate topics %>

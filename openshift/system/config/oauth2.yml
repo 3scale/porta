@@ -1,0 +1,9 @@
+base: &default
+  github:
+    enabled: false
+
+production:
+  <<: *default
+
+preview:
+  <<: *default

@@ -1,0 +1,16 @@
+(function($) {
+  var container  = $("#transaction_errors_container_<%= @service.id %>");
+  var oldContent = container.children();
+
+  var newContent = $("<%= escape_javascript(render(:partial => 'no_errors')) %>");
+  newContent.hide();
+
+  oldContent.fadeOut(function() {
+    oldContent.remove();
+
+    container.append(newContent);
+    newContent.fadeIn();
+
+    // TODO: flash message
+  });
+})(jQuery);

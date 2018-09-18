@@ -1,0 +1,15 @@
+<h2>Spam Protection</h2>
+
+<%= semantic_form_for @settings, :url => admin_site_spam_protection_path, :html => {:id => 'spam-protection-settings' } do |form| %>
+  <%= form.inputs 'Spam protection against users that are not signed in' do %>
+    <%= form.input  :spam_protection_level,
+                :label => false,
+                :hint => "When 'Suspicious only' is selected then CAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', CAPTCHA will always appear when a form is presented to a user who is not logged in.",
+                :as => :radio,
+                :collection => ThreeScale::SpamProtection::Configuration::LEVELS  %>
+    <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button  %>
+  <% end %>
+<% end %>

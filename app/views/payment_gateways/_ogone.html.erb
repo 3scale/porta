@@ -1,0 +1,12 @@
+<form class="form-horizontal" method="post" action="<%= @ogone_url -%>" id="form1" name="form1">
+  <%- @fields.each do |k, v| -%>
+    <input type="hidden" name="<%= k -%>" value="<%= v -%>">
+  <%- end -%>
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-10 operations">
+        <input class="btn btn-primary pull-right" type="submit" value="<%= text -%>" id="submit2" name="submit2">
+      </div>
+    </div>
+  </fieldset>
+</form>

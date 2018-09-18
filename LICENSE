@@ -1,0 +1,18 @@
+The following copyright and license notice apply to individual files and any files under the directories provided at the end of this notice.
+
+Copyright 2017 Red Hat, Inc. and/or its affiliates. All rights reserved. 
+For terms of use, please refer to your End User License Agreement and/or other agreements that may have been provided to you governing the use of this software.   
+
+/app
+/assets
+/bin
+/config
+/db
+/doc
+/features
+/lib
+/openshift
+/public
+/script
+/spec
+/test

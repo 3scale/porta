@@ -1,0 +1,14 @@
+<% content_for :sublayout_title, "Application Plan #{h @plan.name}" %>
+
+<% if @plan.customized? %>
+  <%= render :partial => 'api/plans/menu' %>
+<% end %>
+
+<div>
+  <%= semantic_form_for @plan, :url => admin_application_plan_path(@plan) do |form| %>
+    <%= render :partial => 'form', :object => form %>
+    <%= form.buttons :commit %>
+  <%- end %>
+  <%= render 'api/plans/metrics' -%>
+  <%= render 'api/plans/features' if can? :manage, :plans -%>
+</div>

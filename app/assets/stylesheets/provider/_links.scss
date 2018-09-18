@@ -1,0 +1,141 @@
+p a {
+  text-decoration: underline;
+  color: $font-color;
+
+  &:hover {
+    color: $link-color;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: $link-color;
+
+  &:hover {
+    color: $link-hover-color;
+  }
+}
+
+table a.action,
+table button.action {
+  margin: line-height-times(-1/4) 0 line-height-times(-1/4) line-height-times(1/4);
+  white-space: nowrap;
+  display: inline-block;
+}
+
+@mixin iconic($content) {
+  font-family: FontAwesome;
+  font-weight: $font-weight-normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  display: inline-block;
+  text-decoration: none;
+  content: $content;
+}
+
+a.action, button.action, input[type='submit'].action {
+    white-space: nowrap;
+    border-radius: $border-radius-sm;
+    padding: 0 line-height-times(1/8);
+    cursor: pointer;
+    border-bottom: 0;
+    border: none;
+    color: $success-color;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+    // https://github.com/bokmann/font-awesome-rails/blob/master/vendor/assets/stylesheets/font-awesome.css.erb
+    // http://fortawesome.github.com/Font-Awesome/
+    &.undo:before, &.revert:before { @include iconic("\f0e2\0000a0"); }
+    &.add:before, &.new:before  { @include iconic("\f055\0000a0"); }  // plus-sign
+    &.delete:before   { @include iconic("\f014\0000a0"); }  // trash
+    &.refresh:before   { @include iconic("\f021\0000a0"); } // resend
+    &.edit:before     { @include iconic("\f040\0000a0"); }  // pencil
+    &.bolt:before     { @include iconic("\f0e7\0000a0"); }  // bolt
+    &.fire:before   { @include iconic("\f06d\0000a0"); }    // fire
+    &.off:before, &.disable:before, &.suspend:before { @include iconic("\f28b\0000a0"); }     // off
+    &.activate:before, &.enable:before, &.resume:before { @include iconic("\f144\0000a0"); }  // unlock
+    &.message:before { @include iconic("\f003\0000a0"); }   // unlock
+    &.open:before { @include iconic("\f07b\0000a0"); }      // folder
+    &.close:before   { @include iconic("\f057\0000a0"); }   // remove-sign
+    &.approve:before,
+      &.ok:before { @include iconic("\f00c\0000a0"); } // ok
+    &.reject:before   { @include iconic("\f00d\0000a0"); }  // remove
+
+    &.eye:before { @include iconic("\f06e\0000a0"); }
+
+    &.eye-slash:before { @include iconic("\f070\0000a0"); }
+
+    &.add, &.new, &.approve, &.activate, &.ok, &.enable, &.resume {
+      color: $create-color;
+
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
+
+    &.bolt, &.fire, &.off, &.eye, &.revert {
+      color: $warning-color;
+
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
+
+    &.delete, &.reject, &.eye-slash, &.suspend, &.disable {
+      color: $delete-color;
+
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
+
+    &.view    { background-image: image-url('xmag_16.png'); }
+
+    &.more { background-image: image-url('dashboard_arrow.gif'); }
+}
+
+button.edit        { @include iconic("\f040\0000a0"); } // background-image: image-url('pencil.png');
+button.suspend     { background-image: image-url('cross.png'); }
+button.unsuspend   { background-image: image-url('tick.png'); }
+button.resume      { background-image: image-url('tick.png'); }
+
+button.publish, button.hide {
+    padding-left: line-height-times(1/4);
+}
+
+button.up          { background-image: image-url('up_green.png'); }
+button.down        { background-image: image-url('down_green.png'); }
+button.reset       { background-image: image-url('clear-left.png'); }
+
+button.create_key {
+  background-image: image-url('key.png');
+  padding-left: line-height-times(1);
+}
+
+:target {
+    -webkit-animation: target-fade 3s 1;
+    -moz-animation: target-fade 3s 1;
+}
+
+@-webkit-keyframes target-fade {
+    0% { background-color: $focus-color; }
+    100% { background-color: rgba(0,0,0,0); }
+}
+@-moz-keyframes target-fade {
+    0% { background-color: $focus-color; }
+    100% { background-color: rgba(0,0,0,0); }
+}
+
+.link--icon-last {
+  direction: rtl;
+}
+
+.ExportLink {
+  float: right;
+  margin-top: line-height-times(1);
+}

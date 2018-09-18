@@ -1,0 +1,11 @@
+{
+  "env": {
+    "jasmine": true,
+    "jquery": true,
+    "es6": true
+  },
+  "globals": {
+    "fixture": true,
+    "sandbox": true,
+  }
+}

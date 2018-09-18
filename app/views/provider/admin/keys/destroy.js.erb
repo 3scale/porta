@@ -1,0 +1,28 @@
+(function($) {
+  var container = $("#application_keys");
+
+  <%- if  @remove -%>
+    container.find("#application_key_<%= escape_javascript(@key) %>").fadeOut(function() {
+      $(this).remove();
+    });
+  <%- else -%>
+    //alert('Mandatory at least one application key.')
+    $.flash.error('<%= escape_javascript(flash.now[:error]) %>');
+  <%- end -%>
+
+  <%- if @cinstance.application_keys.can_add? -%>
+    $('#app-keys-limit-warning').hide();     // provider side
+    $('#app-keys-operations').show();
+
+    container.find('.operations').enableSwitch(); // buyer side
+
+  <%- else -%> // hide operations and show warning
+    $('#app-keys-limit-warning').show(); // provider side
+    $('#app-keys-operations').hide();
+
+    container.find('.operations').disableSwitch(); // buyer side
+  <%- end -%>
+
+  container.find('.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();
+
+})(jQuery);

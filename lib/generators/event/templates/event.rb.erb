@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+class <%= class_name %>Event < BaseEventStoreEvent
+
+  # Create <%= class_name %> Event
+<%- attributes.each do |attr| %>
+  # @param [<%= attr.type.to_s.camelcase %>] <%= attr.name %>
+<%- end %>
+  def self.create(<%= attributes_names.join(', ') %>)
+    new(<%= attributes.map{|attr| "#{attr.name}: #{attr.name}"}.join(', ') %>)
+  end
+end

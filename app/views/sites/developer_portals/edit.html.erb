@@ -1,0 +1,12 @@
+<h2>Cross-Site Scripting Protection</h2>
+
+<%= semantic_form_for @settings, :url => admin_site_developer_portal_path, html: {id: 'liquid-settings' } do |form| %>
+  <%= form.inputs '' do %>
+    <%= form.inputs :cms_escape_draft_html, :cms_escape_published_html %>
+    <%= form.buttons do %>
+      <%= form.commit_button :commit %>
+    <% end %>
+
+  <% end %>
+<% end %>
+<% content_for :javascripts, javascript_include_tag('provider/admin/xss_protection') %>

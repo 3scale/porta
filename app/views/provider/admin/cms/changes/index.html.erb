@@ -1,0 +1,44 @@
+<h1>Changes</h1>
+
+<table class="data" id="cms-changes">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Path</th>
+      <th class="actions" colspan="2">
+        <% if @changed.size > 1 %>
+          <%= link_to 'Publish All', publish_all_provider_admin_cms_changes_path,
+                       :class => 'action', :"data-method" => :put,
+                       :"data-confirm" => 'Do you really want to publish all pending changes?',
+                       :"data-remote" => true,
+                       :"data-method" => 'put'
+          %>
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @changed.each do |changed_model| %>
+      <tr id="<%= dom_id(changed_model) + '_change' %>" >
+        <td><%= changed_model.class.model_name.human %></td>
+        <td><%= link_to changed_model.name, polymorphic_path([ :edit, :provider, :admin, changed_model ] )  %></td>
+        <td>
+          <% if changed_model.is_a?(CMS::BasePage) %>
+            <%=  link_to(changed_model.path || '(builtin path)', cms_draft_url(changed_model), :target => '_blank') %>
+          <% end %>
+        </td>
+        <td class="actions">
+          <%= link_to 'Revert', revert_provider_admin_cms_change_path(changed_model),
+          :class => 'action', :"data-method" => :put, :"data-remote" => true %>
+        </td>
+        <td class="actions">
+          <%= link_to 'Publish', publish_provider_admin_cms_change_path(changed_model),
+                       :class => 'action', :"data-method" => :put, :"data-remote" => true  %>
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>

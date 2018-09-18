@@ -1,0 +1,28 @@
+<h2>Data Exporter</h2>
+<%= form_tag provider_admin_account_data_exports_path, :method => :post do %>
+  <div class="wide_dashboard_bubble round left">
+    <table width="100%">
+      <tbody>
+	<tr>
+	  <th>Data:</th>
+	  <td><%= select_tag(:data, options_for_select(@targets)) %></td>
+	</tr>
+	<tr>
+	  <th>Period:</th>
+	  <td><%= select_tag(:period, options_for_select(@periods)) %></td>
+	</tr>
+	<tr><td colspan="2"><hr/></td></tr>
+	<tr>
+	  <td>
+	  </td>
+	  <td width="80%">
+	    <%= submit_tag 'Export CSV', {:onClick => "javascript:jQuery('#progress_notice').fadeIn(); setTimeout(function() {$('#progress_notice').hide();}, 10000);"} %>
+	    <span id="progress_notice" style="font-size:10px;margin:5px;display:none;">
+	      Exporting may take a few minutes, please be patient...
+	    </span>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>

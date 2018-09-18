@@ -1,0 +1,112 @@
+.api-docs-wrap li.operation  {
+  span.http_method {
+    margin: 0;
+    padding: 0;
+    @include border_radius(3px);
+    box-shadow: inset rgba(0,0,0,0.4) 0 0 7px;
+    a {
+      text-transform: uppercase;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      padding: 5px;
+      font-size: 13px;
+      text-align: center;
+    }
+  }
+
+  @include no_float;
+  margin: 0 0 10px 0;
+  padding: 0 0 0 0px;
+  div.apidocs-heading {
+    @include no_float;
+    margin: 0 0 0 0;
+    padding: 0;
+    border: 1px solid black;
+    div.apidocs-bubble {
+      @include float_left;
+      width: auto;
+      margin: 0;
+      padding: 0;
+      line-height: 1.1em;
+      @include border_radius(3px);
+      a {
+        text-decoration: none;
+        font-size: 16px;
+        font-family: helvetica;
+        font-weight: bold;
+        padding: 4px;
+        text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
+        color: #333;
+        &:hover { color: #333 }
+      }
+      div.action {
+      }
+      span.switch {
+        display: block;
+        float: left;
+        width: 10px;
+        height:10px;
+        background: red;
+      }
+    }
+
+  }
+
+  div.content {
+    border-top: none;
+    margin: 0 0 20px 0;
+    h4 {
+      font-size: 1.1em;
+      margin: 0;
+      padding: 15px 0 5px 0px; }
+    form {
+      input[type='text'] {
+        &.error {
+          outline: 2px solid black;
+          outline-color: $error_color;
+        }
+      }
+    }
+
+    div.submit-bar {
+      border-top: 1px solid #ddd;
+      padding: 5px 0;
+    }
+
+    div.response {
+      div.block {
+        background-color: $code_bg_color;
+        border: 1px solid black;
+        border-color: $code_border_color;
+        pre {
+          @include code_font;
+          padding: 10px;
+          font-size: 0.9em;
+          max-height: 400px;
+          overflow-y: auto;
+        }
+      }
+    }
+  }
+}
+
+
+li.operation {
+  &.get .http_method {
+    background: $http_get_color;
+  }
+  &.post .http_method {
+    background: $http_post_color;
+  }
+  &.put .http_method {
+    background: $http_put_color;
+  }
+  &.delete .http_method {
+    background: $http_delete_color;
+  }
+}
+
+.api-docs-wrap .operation-heading ul.options {
+  display:none !important;
+}

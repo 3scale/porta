@@ -1,0 +1,12 @@
+p.feedback-summary
+  - if @api_test_form_error
+    span.error= t('api.integrations.proxy.feedback.api_test_form_error')
+  - elsif @proxy.api_test_path.blank?
+    = t('api.integrations.proxy.feedback.api_test_path_blank')
+  - elsif @proxy.api_test_success.nil?
+    = t('api.integrations.proxy.feedback.api_test_success_nil')
+  - elsif @proxy.api_test_success
+    span.success= t('api.integrations.proxy.feedback.api_test_success_true_html',
+      url: admin_stats_root_path)
+  - else
+    span.error= t('api.integrations.proxy.feedback.api_test_success_false')

@@ -1,0 +1,26 @@
+<h2>New Field definition for <%= @fields_definition.target.constantize.model_name.human %></h2>
+
+<p>
+Add a field to store information about your developers on signup or at any other time. Make the fields Hidden, Read Only, Required.
+The label is the text developers will see when viewing or entering their data.
+</p>
+
+<div id="usage-rules">
+<%= semantic_form_for(@fields_definition, :url => admin_fields_definitions_path) do |f| %>
+  <%= f.error_messages %>
+  <%= f.inputs 'Field from scratch or based on existing field' do %>
+    <li>
+      <%= select_tag :fields_definition_fieldname, options_for_select(@optional_fields.map{|opt| [opt,opt]})%>
+    </li>
+  <% end %>
+  <%= f.inputs 'Field details'  do %>
+    <%= render :partial => 'form', :locals => { :f=> f } %>
+  <% end %>
+
+  <%= f.buttons do %>
+    <%= f.commit_button 'Create' %>
+  <% end %>
+<% end %>
+</div>
+
+ <input name="hidden_field" id="required_fields" type="hidden" value="<%=(@required_fields.join(','))%>" />

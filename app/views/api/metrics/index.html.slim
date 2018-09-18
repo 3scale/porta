@@ -1,0 +1,125 @@
+- content_for :sublayout_title, 'Definition'
+
+= javascript_include_tag 'vendor/jquery/extensions/jquery.cookie.js'
+
+- content_for :javascripts do
+  = render_js_module_loader
+
+section.Section
+  .SettingsBox
+    = link_to 'edit', edit_admin_service_path(@service), class: "SettingsBox-toggle"
+    dl.SettingsBox-summary.u-dl data-state="open"
+      dt.u-dl-term Name
+      dd.u-dl-definition = @service.name
+      dt.u-dl-term System Name
+      dd.u-dl-definition = @service.system_name
+      - if @service.description.present?
+        dt.u-dl-term Description
+        dd.u-dl-definition = @service.description
+
+    = semantic_form_for @service, url: admin_service_path(@service), html: { class: "SettingsBox-form", data: { state: "closed" } } do |form|
+      = render 'api/services/forms/definition_settings', form: form
+
+section.Section.u-toggleableBySettingsBox data-state="open"
+  h2 Methods
+  p
+    ' Add the methods of this API to get data on their individual usage. Method calls trigger the built-in Hits-metric. Usage limits and pricing rules for individual methods are defined from within each
+    = link_to 'Application Plan', admin_service_application_plans_path(@service)
+    ' .
+    - if show_mappings?
+      ' A method needs to be mapped to one or more URL patterns in the
+      => link_to 'Mapping Rules', edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules' }
+      ' section of the integration page so specific calls to your API up the count of specific methods.
+    - else
+      ' Make sure to call these methods from your code base so specific usage of your API up the count of specific methods.
+
+  - cache ['v1', 'methods', @service] do
+    table#metrics.data class=(show_mappings? ? 'u-sixEqualColumns' : 'u-fiveEqualColumns')
+      thead
+        tr
+          th Method
+          th System Name
+          th Unit
+          th Description
+          - if show_mappings?
+            th Mapped
+          th.actions
+            = link_to 'New method',
+                      new_admin_service_metric_child_path(@service, @hits_metric),
+                      class:'action add' if @hits_metric
+
+      tbody
+        - if @methods.any?
+          - @methods.each do |method|
+            tr
+              td
+                = link_to method.friendly_name,
+                  edit_admin_service_metric_path(@service, method)
+              td = method.system_name
+              td = method.unit
+              td = method.description
+              - if show_mappings?
+                td
+                  = render 'link_to_mapping_rules', metric: method
+              td.actions
+
+          javascript:
+            System.import('onboarding/bubbles').then(function (m) {
+              m.show(#{json bubbles.take(1).as_json})
+            });
+
+            $(document).on('click', 'a[data-behavior~=open-mapping-rules]', function(event){
+              // Unfold the mapping section of the integration page by
+              // setting the cookie value that controls it
+              $.cookie( 'mapping-rules', true, {expires: 30, path: '/'});
+            });
+
+        - else
+          tr
+            td colspan=(show_mappings? ? '6' : '5')
+              = t('provider.admin.messages.no_methods')
+
+section.Section.u-toggleableBySettingsBox data-state="open"
+  h2 Metrics
+  p
+    ' Hits are the built-in top-level metric and the parent metric of the methods. Other top level metrics can be added here if needed.
+    - if show_mappings?
+      ' A metric needs to be mapped to one or more URL patterns in the
+      => link_to 'Mapping Rules', edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules' }
+      ' section of the integration page so specific calls to your API up the count of specific metrics.
+    - else
+      ' Make sure to call these metrics from your code base so specific calls to your API up the count of specific metrics.
+
+  - cache ['v1', 'metrics', @service] do
+    table#metrics.data class=(show_mappings? ? 'u-sixEqualColumns' : 'u-fiveEqualColumns')
+      thead
+        tr
+          th Metric
+          th System Name
+          th Unit
+          th Description
+          - if show_mappings?
+            th Mapped
+          th.actions
+            = link_to 'New metric',
+                      new_admin_service_metric_path(@service),
+                      class:'action add'
+
+      tbody
+        - if @metrics.any?
+          - @metrics.each do |metric|
+            tr
+              td
+                = link_to metric.friendly_name, edit_admin_service_metric_path(@service, metric)
+              td = metric.system_name
+              td = metric.unit
+              td = metric.description
+              - if show_mappings?
+                td
+                  = render 'link_to_mapping_rules', metric: metric
+              td.actions
+
+        - else
+          tr
+            td colspan=(show_mappings? ? '6' : '5')
+              = t('provider.admin.messages.no_metrics')

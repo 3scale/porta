@@ -1,0 +1,37 @@
+h1.title
+  i.fa> class=("fa-#{@authentication_provider.kind}")
+  = @authentication_provider.human_kind
+
+.SettingsBox
+
+  = switch_link 'Edit', edit_provider_admin_authentication_provider_path(@authentication_provider), switch: @authentication_provider.authorization_scope, upgrade_notice: true, class: 'SettingsBox-toggle edit'
+
+  dl.SettingsBox-summary.u-dl
+    dt.u-dl-term
+      label for="authentication_provider_published" Published
+    dd.u-dl-definition
+      => form_for @authentication_provider,
+                 url: publish_or_hide_provider_admin_authentication_provider_path(@authentication_provider),
+                 as: :authentication_provider,
+                 html: { class: 'autosubmit' } do |f|
+        ul
+          = f.check_box :published,
+            disabled: !@authentication_provider.can_be_published?
+    - if @authentication_provider.in_social_scope? && branding_relevant?
+      dt.u-dl-term
+        | Branding
+      dd.u-dl-definition
+        - if @authentication_provider.can_switch_at_will?
+          = render 'branding_select'
+        - else
+          = @authentication_provider.human_state_name
+
+    - if @authentication_provider.callback_account == current_account
+      dt.u-dl-term
+        | Callback URL
+      dd.u-dl-definition
+        = @oauth_presenter.sso_integration_callback_url
+    dt.u-dl-term
+      | Authentication
+    dd.u-dl-definition
+      = link_to "Test authentication flow", @oauth_presenter.authorize_url, target: '_blank'

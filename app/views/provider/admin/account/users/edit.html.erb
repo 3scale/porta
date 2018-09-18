@@ -1,0 +1,8 @@
+<h2>Edit User</h2>
+
+<%= semantic_form_for @user,
+                     :url => provider_admin_account_user_path(@user),
+                     :html => {:class => 'edit-user-form'},
+                     :builder => Fields::FormBuilder do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>

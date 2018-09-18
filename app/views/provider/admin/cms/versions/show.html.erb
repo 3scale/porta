@@ -1,0 +1,11 @@
+<h1>Version of <%= @page.class.model_name.human %> <%= @page.title %></h1>
+
+<p>Showing <%= @version.state %> version from <%= l @version.updated_at %>.</p>
+
+<%= text_area_tag "cms_template_version", @version.current %>
+
+<%= render '/provider/admin/cms/codemirror',
+           :html_id => :cms_template_version,
+           :content_type => @page.content_type,
+           :liquid_enabled => @page.liquid_enabled,
+           :options => {:readOnly => true} %>

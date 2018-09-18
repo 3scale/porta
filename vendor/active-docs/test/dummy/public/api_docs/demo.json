@@ -1,0 +1,45 @@
+{
+    "basePath": "http://localhost:3000/api_docs",
+    "swagrVersion": "0.1a",
+    "apiVersion": "1.0",
+    "apis": [
+        {
+        "path": "/demo-response.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "GET",
+            "summary": "Authorize (App Id authentication pattern)",
+            "description": "",
+            "group": "authorize",
+            "parameters": [
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "service_name",
+                "dataType": "string",
+                "paramType": "query",
+                "description": "Service Name."
+            },
+            {
+              "paramType": "header",
+              "name": "Accept",
+              "description": "accept header",
+              "allowableValues": {
+                "valueType": "LIST",
+                "values": [
+                  "application/json;v=1",
+                  "application/xml;v=1"
+                ]
+              },
+              "dataType": "string",
+              "required": true
+            }
+        ]
+    }]
+  }]
+}

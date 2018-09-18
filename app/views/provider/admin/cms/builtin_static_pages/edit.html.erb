@@ -1,0 +1,8 @@
+<h1>Built-in page '<%= @page.title %>'</h1>
+
+<%= cms_new_button_dropdown(CMS::Layout) %>
+
+<%= cms_form_for(@page) do |f| %>
+  <%= render 'form', :f => f %>
+  <%= f.buttons :commit, :button_html => { :class => 'important-button', :title => 'Save' } %>
+<% end %>

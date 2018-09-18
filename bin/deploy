@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+
+root = Pathname.pwd
+
+project = root.basename
+deploy_repo = root.join('.deploy')
+
+branch = `git rev-parse --abbrev-ref HEAD`.strip
+
+unless $?.success?
+  warn "Could not get current branch"
+  exit 1
+end
+
+unless deploy_repo.exist?
+  warn "Please, symlink '.deploy' in working directory to your 3scale deploy repo"
+  exit 1
+end
+
+
+deploy_project = deploy_repo.join(project)
+
+unless deploy_project.exist?
+  warn "Deploy repository #{deploy_repo} does not contain #{project}"
+  exit 1
+end
+
+unless stage = ARGV.shift
+  puts "usage: bin/deploy STAGE [branch=name]"
+  exit 1
+end
+
+scruffy = deploy_repo.join('bin', 'scruffy').relative_path_from(deploy_repo)
+
+Dir.chdir(deploy_repo) do
+  deploy = "#{scruffy} #{project} #{stage} branch=#{branch} #{ARGV.join(' ')}"
+  puts deploy
+  exec(deploy)
+end
+

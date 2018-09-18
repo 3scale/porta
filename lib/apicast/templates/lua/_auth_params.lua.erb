@@ -1,0 +1,25 @@
+if ngx.var.service_id == '<%= auth_params.service_id %>' then
+  local parameters = get_auth_params("<%= auth_params.params_location %>", string.split(ngx.var.request, " ")[1] )
+  service = _M.services['<%= auth_params.service_id %>'] --
+  ngx.var.secret_token = service.secret_token
+  <%- case auth_params.backend_version %>
+  <%- when '2'.freeze %>
+  params.app_id = parameters["<%= auth_params.params_location == 'headers' ?  auth_params.proxy_auth_app_id.downcase  : auth_params.proxy_auth_app_id %>"]
+  params.app_key = parameters["<%= auth_params.params_location == 'headers' ?  auth_params.proxy_auth_app_key.downcase  : auth_params.proxy_auth_app_key %>"]  -- or ""  -- Uncoment the first part if you want to allow not passing app_key
+  service.get_credentials(service, params)
+  ngx.var.cached_key = "<%= auth_params.service_id %>" .. ":" .. params.app_id ..":".. params.app_key
+  <%- when '1'.freeze %>
+  params.user_key = parameters["<%= auth_params.params_location == 'headers' ?  auth_params.proxy_auth_user_key.downcase  : auth_params.proxy_auth_user_key %>"]
+  service.get_credentials(service , params)
+  ngx.var.cached_key = "<%= auth_params.service_id %>" .. ":" .. params.user_key
+  <% else %>
+  ngx.var.access_token = parameters.access_token
+  params.access_token = parameters.access_token
+  service.get_credentials(service , params)
+  ngx.var.cached_key = "<%= auth_params.service_id %>" .. ":" .. params.access_token
+  <% end %>
+  auth_strat = "<%= auth_params.backend_version %>"
+  ngx.var.service_id = "<%= auth_params.service_id %>"
+  ngx.var.proxy_pass = "<%= auth_params.proxy_backend_scheme %>://backend_<%= auth_params.service_id %>"
+  usage, matched_patterns = service:extract_usage(ngx.var.request)
+end

@@ -1,0 +1,358 @@
+(function(global, $){
+  var $form;
+
+  function deliver(form){
+    $form = form;
+
+    setCustomFields();
+
+    $form.find('input[data-encode=true]').each(function(){
+      var encodedValue = escape($(this).val());
+      $(this).val(encodedValue);
+    });
+
+    $form.find('input,select').each(function(){
+      generateFieldName($(this));
+    });
+
+    validate();
+  }
+
+  /**
+  * Compiles field name attribute, and update attribute with compiled name.
+  * Operation spec can have nested parameters, so this needs to be reflected in the
+  * field name.
+  *
+  * @param {jQuery wrapped DOM Element} $field
+  */
+
+  function generateFieldName($field){
+    var currentName = $field.attr('data-original-name'), _name = '',
+        $parents = $($field.parents('tr[data-parent="true"]').get().reverse()), $parent,
+        type, parentName;
+
+    $parents.each(function(i, parent) {
+      $parent    = $(parent);
+      type       = $parent.attr('data-data-type');
+      parentName = $parent.attr('data-name');
+
+      if ((type) == 'hash') {
+        if ($parents.length > 1) { // is the hash nested?
+          _name += '[' + parentName + ']';
+        } else {
+          _name +=       parentName;
+        }
+      }
+      if ((type) == 'array') {
+        _name += parentName +  '[' + $parent.attr('data-count') + ']';
+      }
+    });
+    if ($parents.length > 0) { // is the param nested?
+      _name += '[' + currentName + ']';
+    }
+    else {
+      _name +=       currentName;
+    }
+    $field.attr('name', _name);
+  }
+
+  /**
+  * A custom field consists of two input fields, allowing the user
+  * to define a key/value pair.
+  *
+  * Selects form's custom fields and updates hidden fields with
+  * custom names and values.
+  */
+
+  function setCustomFields(){
+    var $fields = $form.find('input.custom.name'), name, value, $hidden;
+    if($fields.length > 0){
+      $fields.each(function(i, field){
+        var $liveField = $(field).siblings('input.custom-hidden');
+        name = $(field).val();
+        value = $(field).next('input').val();
+        $liveField.attr('name', name).attr('value', value).attr('data-original-name', name);
+      });
+    }
+  }
+
+  /**
+  * Check submitted form validates.
+  *
+  */
+
+  function validate(){
+    var error_free = true,
+
+    handler = function(){
+      var $field = $(this);
+
+      $field.removeClass('error');
+      if ($field.val() === '') {
+        $field.addClass('error')
+          .wiggle();
+
+        error_free = false;
+      }
+    };
+
+    $form.find("input.required").each(handler);
+
+    if(error_free) dispatch();
+  }
+
+  function isXml(xhr){
+    return (xhr.getResponseHeader('Content-Type').search(/xml/) > -1) ? true : false;
+  }
+
+  function dispatch(){
+    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
+      dispatchDirect();
+    <% else %>
+      if((getHost()) === window.location.origin) { dispatchDirect(); }
+      else { dispatchProxy(); }
+    <% end %>
+  }
+
+  /**
+  * Returns default options for AJAX request
+  *
+  */
+
+  function ajaxOptions(){
+    var $button = $form.find('button'),
+        $hideResponse = $form.find('a.hide-response');
+
+    return {
+      error: function(xhr,b,c) {
+        showResponse(xhr);
+        $hideResponse.show();
+      },
+      beforeSend: function(){
+        $button.attr('disabled', true).text("Sending...");
+      },
+      complete: function(){
+        $button.attr('disabled', false).html("<span>Send Request</span>");
+      },
+      success: function(data, e, xhr){
+        showResponse(xhr);
+        $hideResponse.show();
+      },
+      cache: false
+    };
+  }
+
+  function dispatchDirect(){
+    var options = {
+      url: getHost() + getPath(),
+      type: getMethod(),
+      data: getData(),
+      headers: getHeaders()
+    };
+
+    $.ajax($.extend(ajaxOptions(), options));
+  }
+
+  function dispatchProxy(){
+    var method = getMethod();
+    var data   = getData();
+
+    var headers = $.extend({"X-Apidocs-Method": method,
+        "X-Apidocs-Path": getPath(), "X-Apidocs-Url": getHost(), "Cache-Control": "no-cache" },
+      getHeaders());
+
+    var options = {
+      url: '/api_docs/proxy',
+      cache: false,
+      headers: headers,
+      type: getMethod()
+    };
+
+    if(method == 'GET') {
+      options.headers['X-Apidocs-Query'] = data;
+    }
+    else {
+      options.data = data;
+    }
+
+    $.ajax($.extend(ajaxOptions(), options));
+  }
+
+  function parseContent(content){
+    try {
+      content = JSON.parse(content);
+
+      // Format JSON for display with browser's native `stringy` method.
+      return JSON.stringify(content, null, " ");
+
+    } catch(err) {
+      // Make sure XML response is correctly nested
+      // See vendor/prettify-xml.js
+      content = (new pp()).xml(content);
+
+      // Encode XML tags and return.
+      // See vendor/html_entities.js
+      return htmlentities.encode(content);
+    }
+  }
+
+  function parseCode(code){
+    code = parseInt(code, 10);
+    if(code > 299 || code < 200){
+      // TODO: move to stylesheet
+      return "<span style='color:red;'>" + code + "</span>";
+    } else {
+      return code;
+    }
+  }
+
+  function showResponse(xhr) {
+    var $div = $form.next('div.response'),
+        content = parseContent(xhr.responseText);
+
+    $div.find('.response_body pre').html(content);
+    $div.find('.response_headers pre').html(xhr.getAllResponseHeaders());
+    $div.find('.response_code pre').html(parseCode(xhr.status));
+    $div.find('.request_url pre').text(requestAsCurl());
+
+    /**
+    * Uncomment `prettyPrint` for code pettification -
+    * See http://google-code-prettify.googlecode.com/svn/trunk/README.html
+    * Note, there is a penalty hit for very large repsonses.
+    */
+
+    // prettyPrint();
+
+    $div.slideDown();
+  }
+
+  /**
+  * Concatenates and returns request as a curl statement
+  */
+  function requestAsCurl(){
+    var s =  "curl -v ",
+        method = getMethod(),
+        headers = getHeadersForCurl();
+
+    s += headers + " -X " + method;
+
+    var url = getHost() + getPath();
+
+    if(method === "GET"){
+      var get_query = getQuery();
+      if (get_query) {
+        url += "?" + get_query;
+      }
+      s += ' "' + url + '"';
+    }else{
+      s += ' "' + url + '"';
+      s +=  " -d '" + getData() + "'";
+    }
+
+    return s;
+  }
+
+  function getHeaders() {
+    var $fields = $form.find('[data-param-type=header]'), headers = {};
+
+    $fields.each(function() {
+      if($(this).val().trim() !== "")
+        headers[$(this).attr('name')]= $(this).val().trim();
+    });
+
+    return headers;
+  }
+
+  function getBody() {
+    var field = $form.find('textarea[data-param-type=body]')[0];
+    // check if field is undefined and return false if so. returns the value otherwise
+    return (field === void 0)? false : $(field).val();
+  }
+
+  /**
+  * Compiles and returns a list of headers suitable for cURL command
+  * -H "HEADER1: VALUE1" -H "HEADER2: VALUE2"
+  */
+  function getHeadersForCurl() {
+    var fields = [];
+
+    $.each(getHeaders(), function(key, value) {
+      fields.push("-H \"" + key + ":" + value + "\"");
+    });
+
+    return fields.join(" ");
+  }
+
+  /**
+  * Compiles and returns a query string by iterating over input fields
+  *
+  */
+  function getQuery(){
+    var $fields = $form.find('[data-param-type=query]'), fields = [], string;
+    $fields.each(function() {
+      if($(this).val().trim() !== "") fields.push(this);
+    });
+
+    string = $(fields).serialize();
+
+    return string;
+  }
+
+  function getData() {
+    return getBody() || getQuery();
+  }
+
+  /**
+  * Compiles the path for the request query.
+  * `params` is an object of form fields to be inserted into the path.
+  *
+  */
+  function getPath(){
+    var params = $form.find('[data-param-type=path]').serializeObject(),
+        template_text = $form.attr('data-path').split("{").join("${"),
+        urlTemplate = $.template(null, template_text),
+        root = pathname(),
+        path = $.tmpl(urlTemplate, params)[0].data;
+
+    //  last char of root and first char of path are a slash
+    if( root.charAt(root.length - 1) === '/' && path.charAt(0) === '/') {
+      // strip first char (slash) from the path
+      path = path.substr(1);
+    }
+
+    return encodeURI(root + path);
+  }
+
+  function getMethod() {
+    return $form.attr('data-method');
+  }
+
+  function getHost() {
+    var base = basePathComponents();
+    // This is to make IE happy.
+    // https://connect.microsoft.com/IE/feedback/details/817343/ie11-scripting-value-of-htmlanchorelement-host-differs-between-script-created-link-and-link-from-document
+    var portPart = ((base.port == "") || (base.port == "443" && base.protocol == "https:"))? "" : base.port;
+    uri = base.protocol + "//" + base.hostname
+    if (portPart.length > 0){
+      uri += ":" + portPart
+    }
+    return  uri;
+  }
+
+  function basePathComponents(){
+    var a = document.createElement('a');
+    a.href = $form.attr('data-host');
+    return a;
+  }
+
+  function pathname(){
+    var name = basePathComponents();
+    var path = name.pathname === '/' ? '' : name.pathname;
+    if(path.charAt(0) !== "/") { path = "/" + path ;}
+    return path;
+   }
+
+  // Expose `deliver` to the parent scope.
+  window.FormHandler = { deliver: deliver };
+
+})(window, ThreeScale.APIDocs.jQuery);

@@ -1,0 +1,14 @@
+<% if @metric.child? %>
+  <% content_for :sublayout_title, "New Method" %>
+<% else %>
+  <% content_for :sublayout_title, "New Metric" %>
+<% end %>
+<%= semantic_form_for @metric,
+  :url => if @metric.child?
+            admin_service_metric_children_path(@service, @metric.parent)
+          else
+            admin_service_metrics_path(@service)
+          end do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>
+

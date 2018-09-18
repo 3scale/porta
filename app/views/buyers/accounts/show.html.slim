@@ -1,0 +1,111 @@
+= render 'menu'
+h1 data-hook="account-show"
+  ' Account: #{@account.org_name}
+  - if can? :update, @account
+    = link_to 'Edit',
+              edit_admin_buyers_account_path(@account),
+              class: 'action edit'
+#twoCol.equal-width
+  .left
+    .wide_dashboard_bubble.round
+      table.list
+        tr
+          th = @account.field_label("org_name")
+          td
+            = @account.field_value("org_name")
+            - if can? :impersonate, @account
+              => link_to 'Impersonate',
+                         admin_buyers_account_impersonation_path(@account),
+                         class: 'action bolt', method: 'post', target: '_blank'
+            => link_to 'Send message',
+                       new_provider_admin_messages_outbox_path(to: @account),
+                       class: 'action message fancybox'
+        - if current_account.master? && @account.provider?
+          tr
+            th Public domain
+            td = link_to @account.domain, public_domain(@account), target: "_blank"
+          tr
+            th Admin domain
+            td = link_to @account.self_domain,
+                         provider_admin_dashboard_url(host: @account.self_domain),
+                         target: "_blank"
+        - if @account.admins.present?
+          tr
+            th Administrator
+            td
+              - @account.admins.first.tap do |admin|
+                => admin.display_name
+                - if admin.email.present?
+                  | (#{mail_to admin.email})
+        tr
+          th Signed up on
+          td = @account.created_at.to_s(:long)
+        = fields_definitions_rows @account,
+                                  %w{org_name org_legaladdress org_legaladdress_cont city state_region}
+        - unless @account.org_legaladdress.blank? \
+                 && @account.org_legaladdress_cont.blank? \
+                 && @account.city.blank? && @account.state_region.blank? \
+                 && @account.country.try(:name).blank?
+          tr
+            th Address
+            td = account_address(@account)
+        tr
+          th Status
+          td
+            => account_states_info(@account)
+            - if @account.pending?
+              => fancy_button_to 'Approve',
+                                 approve_admin_buyers_account_path(@account),
+                                 method: :post,
+                                 class: 'approve action'
+              => fancy_button_to 'Reject',
+                                 reject_admin_buyers_account_path(@account),
+                                 method: :post,
+                                 class: 'reject action'
+            - if can? :suspend, @account
+              = action_link_to 'Suspend',
+                               suspend_admin_buyers_account_path(@account),
+                               method: :post,
+                               data: { confirm: 'Are you sure?', disable_with: 'suspending…' },
+                               class: 'action suspend'
+            - if can? :resume, @account
+              = action_link_to 'Resume',
+                               resume_admin_buyers_account_path(@account),
+                               method: :post,
+                               data: { confirm: 'Are you sure?', disable_with: 'resuming…' },
+                               class: 'action resume'
+    - if can?(:update, :provider_plans)
+      = render 'master/providers/plans/widget', provider: @account
+    - if can?(:manage, :finance)
+      .dashboard_bubble.round
+        = render 'monthly_charging', account: @account
+
+  .right_narrow
+    - if can?(:manage, :account_plans)
+      = render partial: 'account_plan',
+               locals: { \
+                 plan: @account.bought_account_plan,
+                 contract:  @account.bought_account_contract \
+               }
+
+      - if can?(:manage, :plans) \
+           && @account.provider_account.account_plans.stock.published.size > 1
+        .dashboard_bubble.round
+          h3
+            label for="cinstance_plan_id" Change Plan
+
+          = form_for @account.bought_account_contract,
+                    url: admin_buyers_account_contract_path(@account),
+                    html: { method: :put, class: "formtastic" } do |form|
+            = form.collection_select :plan_id,
+                                     @available_account_plans,
+                                     :id,
+                                     :name
+            fieldset.buttons
+              ol
+                li.commit
+                  = form.submit 'Change',
+                                data: { confirm: plan_confirm_message(@account.bought_account_plan) },
+                                class: "important-button"
+
+    = render 'buyers/applications/widget', account: @account

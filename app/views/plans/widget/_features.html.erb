@@ -1,0 +1,9 @@
+<div class='features plan-review-section'>
+  <h3>Features</h3>
+  <ul>
+  <% plan.issuer.features.visible.each do |feature| %>
+    <% klass = plan.features.include?(feature) ? "present" : "absent" %>
+    <%= content_tag :li, h(feature.name), :class => klass  %>
+  <% end %>
+  </ul>            
+</div>

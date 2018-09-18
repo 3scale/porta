@@ -1,0 +1,27 @@
+article.DashboardWidget id = widget.id
+  h1.DashboardWidget-title Potential Upgrades
+  span.DashboardWidget-intro Accounts that hit their Usage Limits in the last 30 days
+  - if widget.loaded?
+      - if widget.items.present?
+        ol.DashboardWidgetList
+          - widget.items.each do |item|
+            li.DashboardWidgetList-item
+              = link_to admin_alerts_path(search: {level: 100, timestamp: [current_range.begin,current_range.end], account_id: item.account}), class: "DashboardWidgetList-link" do
+                => item.account_name
+                ' has
+                = pluralize(item.alerts_count, "Usage Limit alert")
+      - elsif !widget.value && current_account.accessible_services.any?
+        - service = current_account.accessible_services.first
+        p
+          ' In order to show Potential Upgrades, add 1 or more usage limits to your
+          = link_to 'Application Plans', admin_service_application_plans_path(service)
+          ' .
+        p
+          ' Furthermore,
+          => link_to "Web Alerts for Admins of this Account of 100% (and up)", notifications_admin_service_path(service, anchor: "web_provider")
+          | should be enabled for service(s) with usage limits.
+      - else
+        p No Potential Upgrades. Yet…
+  - else
+    = widget.spinner
+

@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <div class="panel panel-default">
+      {% unless current_account.requires_credit_card_now? %}
+      <div class="panel-heading important">
+        <a href="{{ urls.payment_details }}">
+          <i class="fa fa-chevron-left"></i>
+          Cancel
+        </a>
+      </div>
+      {%  endunless %}
+      <div class="panel-body">
+
+        {% if current_account.requires_credit_card_now? %}
+          <div class="wide_dashboard_box round">
+            <p class="alert-warning">
+              You have subscribed to a paid plan. To complete your signup, please fill in your credit card details.
+            </p>
+          </div>
+        {% endif %}
+
+        {% if provider.payment_gateway.braintree_blue? %}
+
+          <div class="wide_dashboard_box round">
+            <h3>Payment Details</h3>
+
+            <p>Update your credit card details here to set up monthly billing for your {{ provider.name }} service. You'll be charged monthly on 7th of the following month and receive email notification about a successful payment along with the invoice.</p>
+
+            {% braintree_customer_form %}
+
+          </div>
+
+        {% else %}
+
+          {% form 'account.billing_address', current_account.billing_address, class: "form-horizontal" %}
+
+            <fieldset class="inputs" name="Billing Address">
+              <legend><span>Billing Address</span></legend>
+              {% for field in current_account.billing_address.fields %}
+                {% include 'field' with field %}
+              {% endfor %}
+            </fieldset>
+
+            <fieldset>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <input class="btn btn-primary pull-right" name="commit" type="submit" value="Save" />
+                </div>
+              </div>
+            </fieldset>
+
+          {% endform %}
+
+        {% endif %}
+
+      </div>
+      <div class="panel-footer">
+        <p>By <strong>Entering Credit Card details</strong> you agree to the <a href="{{ urls.credit_card_terms }}" id="terms-link">Terms of Service</a>, <a href="{{ urls.credit_card_privacy }}" id="privacy-link">Privacy</a> and <a href="{{ urls.credit_card_refunds }}" id="refunds-link">Refund</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>

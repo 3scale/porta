@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default" id="access-details">
+      <div class="panel-heading">
+        <i class="fa fa-key"></i>
+        Credentials
+        {% if current_account.applications.size > 0 %}
+          <a class="pull-right" href="{{ urls.applications }}" title="inbox">
+            <i class="fa fa-chevron-right"></i>
+          </a>
+        {% endif %}
+      </div>
+      <div class="panel-body panel-footer">
+        {% if current_account.applications.size == 0 %}
+          <a href="{{ urls.new_application }}" class="btn btn-primary">Create Application</a>
+        {% elsif current_account.applications.size >= 1 %}
+          {% assign app = current_account.applications.first %}
+
+          {% if app.user_key_mode? %}
+            <dl class="dl-horizontal">
+              <dt>App name</dt>
+              <dd><a href="{{ app.url }}">{{ app.name }}</a></dd>
+              <dt>Key</dt>
+              <dd>
+                <code>{{ app.user_key }}</code>
+                <p>Add this as a <code>user_key</code> parameter to your API calls to authenticate.</p>
+              </dd>
+            </dl>
+
+          {% elsif app.app_id_mode? %}
+            <dl class="dl-horizontal">
+              <dt>App name</dt>
+              <dd><a href="{{ app.url }}">{{ app.name }}</a></dd>
+              <dt>App ID</dt>
+              <dd><code>{{ app.application_id }}</code></dd>
+              <dt>Key</dt>
+              <dd><code>{{ app.keys.first }}</code></dd>
+            </dl>
+
+          {% elsif app.oauth_mode? %}
+            <dl class="dl-horizontal">
+              <dt>App name</dt>
+              <dd><a href="{{ app.url }}">{{ app.name }}</a></dd>
+              <dt>Client ID</dt>
+              <dd><code>{{ app.application_id }}</code></dd>
+              <dt>Client Secret</dt>
+              <dd><code>{{ app.keys.first }}</code></dd>
+            </dl>
+          {% endif %}
+
+          {% if app.trial? %}
+            <div class="alert alert-warning">
+              <h3>Trial period</h3>
+              <p>{{ app.remaining_trial_period_days }} days remaining.</p>
+            </div>
+          {% endif %}
+
+        {% else  %}
+          <a href="{{ urls.applications }}" class="btn btn-primary">List My Application</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="fa fa-inbox"></i>
+        Latest Messages
+        <a class="pull-right" href="{{ urls.messages_inbox }}" title="inbox">
+          <i class="fa fa-chevron-right"></i>
+        </a>
+
+      </div>
+      <div class="panel-body panel-footer">
+        <ul class="list-unstyled">
+          {% if current_account.latest_messages.size > 0 %}
+            {% for message in current_account.latest_messages %}
+              <li>{{ message.subject | link_to: message.url }}</li>
+            {% endfor %}
+          {% else %}
+            <li>No messages at this moment…</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>

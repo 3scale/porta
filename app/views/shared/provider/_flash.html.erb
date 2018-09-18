@@ -1,0 +1,13 @@
+<div id="flashWrapper" style="<%= flash.empty? ? "display:none;" : "" %>">
+  <div class="ajaxNoticeValid">
+    <% flash.each do |type, value| %>
+      <p class="flash-message flash-message--<%= type %>"><%= value %></p>
+      <% flash.discard(type) %>
+    <%- end -%>
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        if($.flash !== undefined) { setTimeout($.flash.hide, $.flash.timeout) }
+      });
+    </script>
+  </div>
+</div>

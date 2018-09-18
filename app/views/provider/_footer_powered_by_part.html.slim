@@ -1,0 +1,8 @@
+li.powered-by-3scale.last
+  - if (version = System::Deploy.info.release)
+    span
+      ' Version #{version} -
+
+  a.link--subtle href='http://www.3scale.net' target='_blank'
+    ' Powered by
+    span class='logo-3scale logo-3scale--svg logo-3scale--powered' 3scale

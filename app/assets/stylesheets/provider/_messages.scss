@@ -1,0 +1,13 @@
+/* Messages */
+
+table#messages, table#latest-messages {
+
+  tr.unread td *, table#messages tr.unread td  {
+    font-weight: $font-weight-bold;
+  }
+
+  tr.unread td button {
+    font-weight: $font-weight-normal;
+  }
+
+}

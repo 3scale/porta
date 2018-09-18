@@ -1,0 +1,50 @@
+<div id="application-utilization">
+
+<% if utilization.error? %>
+  <p>There was a problem getting utilization data. Please try later.</p>
+<% elsif utilization.nil? || utilization.size==0 %>
+  <p><b>This is an unmetered application, there are no limits defined</b>
+<% else %>
+
+  <p>Overview of the current state of this application's limits
+
+  <p>
+  <table class="data">
+    <tbody>
+        <tr>
+          <td><b>Metric Name</b></td>
+          <td><b>Period</b></td>
+          <td><b>Values</b></td>
+          <td><b>%</b></td>
+
+        <tr/>
+      <% utilization.each do |item| %>
+        <tr>
+          <td><b><%=item.friendly_name %></b>&nbsp;(<%=item.system_name%>)</td>
+          <td>per <b><%=item.period%></b></td>
+          <% 
+
+              utilization = "#{item.current_value}/#{item.max_value}"
+
+              if item.max_value.to_i > 0 || (item.max_value.to_i == 0 && item.current_value.to_i == 0)
+                percentage = item.percentage.to_f
+                utilization_type = "above-0"
+                utilization_type = "above-80" if percentage > 80.0
+                utilization_type = "above-100" if percentage > 100.0
+              else
+                utilization_type = "infinity"
+                percentage = "Inf"
+              end
+
+          %>
+          <td class="<%=utilization_type%>"><%=utilization%></td>
+          <td class="<%=utilization_type%>"><%=percentage%></td>
+        <tr/>
+      <% end %>
+    </tbody>
+  </table>
+
+<%end%>
+
+</div>
+

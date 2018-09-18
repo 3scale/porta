@@ -1,0 +1,8 @@
+<h2>Edit Account Details</h2>
+
+<%= semantic_form_for @account,
+                     :builder => Fields::FormBuilder,
+                     :url => provider_admin_account_path(next_step: params[:next_step]),
+                     :html => {:id => ''} do |form| %>
+  <%= render 'form', :form => form, :cancel_path => provider_admin_account_path -%>
+<% end %>

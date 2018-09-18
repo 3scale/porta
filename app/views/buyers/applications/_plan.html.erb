@@ -1,0 +1,22 @@
+<div class="dashboard_bubble round" id="plan-widget-with-actions">
+  <h3><%= plan_header contract.plan %></h3>
+
+  <% if can? :manage, :plans -%>
+    <div class="operations">
+      <% if contract.plan.customized? %>
+        <%= link_to 'Edit', edit_admin_application_plan_path(contract.plan),
+                            :class => 'action edit' %>
+
+        <%= delete_button_for admin_buyers_contract_custom_application_plan_path(contract, contract.plan),
+                              :label => 'Remove customization' %>
+      <% else %>
+        <%= fancy_link_to 'Convert to a Custom Plan',
+                           admin_buyers_contract_custom_application_plans_path(contract),
+                           :method => :post,
+                           :class => 'new',
+                           :remote => true %>
+      <% end %>
+    </div>
+  <% end -%>
+  <%= render :partial => 'plans/widget', :locals => {:plan => contract.plan} %>
+</div>

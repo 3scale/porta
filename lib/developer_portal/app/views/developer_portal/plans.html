@@ -1,0 +1,15 @@
+<table class="table table-condensed">
+  {% for plan in provider.services.api.application_plans %}
+    <tr>
+      <td><h2>{{ plan.name }}</h2></td>
+      <td>
+      {% for i in (1..forloop.index) %}
+        <span class="glyphicon glyphicon-star"></span>
+      {% endfor %}
+      </td>
+      <td>
+        <a class="btn btn-primary btn-lg" href="{{ urls.signup }}?{{ plan | to_param }}">Signup &raquo;</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>

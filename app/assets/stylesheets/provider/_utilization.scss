@@ -1,0 +1,12 @@
+.above-0, .above-50, .above-80, .above-90, .above-100, .above-120, .above-150, .above-200, .above-300, .infinity {
+  font-weight: $font-weight-bold;
+}
+.above-0, .above-50 {
+  color: green;
+}
+.above-80, .above-90 {
+  color: $warning-color;
+}
+.above-100, .above-120, .above-150, .above-200, .above-300, .infinity {
+  color: $error-color;
+}

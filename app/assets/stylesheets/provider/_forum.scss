@@ -1,0 +1,23 @@
+#forum {
+  .topic-link {
+    display: inline;
+  }
+
+  .post {
+    margin-top: line-height-times(2);
+  }
+
+  .post-details {
+    font-style: italic;
+  }
+
+  .avatar {
+    float: left;
+    margin: line-height-times(2/3) line-height-times(1/2) 0 0;
+  }
+
+  .post-body {
+    clear: left;
+    border-top: $border-width solid $border-color;
+  }
+}

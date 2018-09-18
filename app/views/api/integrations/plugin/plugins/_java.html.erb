@@ -1,0 +1,104 @@
+<h2>Install</h2>
+
+<p>
+  Download the library and add it into your project
+  <%= render 'api/integrations/plugin/download_links', :language => 'java' %>
+</p>
+
+<h2>Report</h2>
+
+<p>And run this code to authorize and report a hit:</p>
+
+<% auth = @service.plugin_authentication_params %>
+<% backend = @service.backend_version %>
+
+<%= highlighted_code 'java' do %>
+  import threescale.v3.api.*;
+  import threescale.v3.api.impl.*;
+
+  //  ... somewhere inside your code
+  // Create the API object
+  <% if custom_backend? %>
+  ServiceApi serviceApi = ServiceApiDriver.createApi("backend.example.com", 80, true)
+  <% else %>
+  ServiceApi serviceApi = ServiceApiDriver.createApi();
+  <% end %>
+
+  ParameterMap params = new ParameterMap();      // the parameters of your call
+
+  String serviceToken = "<%= @service.service_token %>";
+  String serviceId = "<%= @service.id %>";
+
+<% if backend == "1"  -%>
+  String user_key = "<%= auth[:user_key] %>";
+<% elsif backend == "2" -%>
+  String app_id = "<%= auth[:app_id] %>";
+  <% if auth[:app_key] %>
+  String app_key = "<%= auth[:app_key] %>";
+  <% end %>
+<% elsif backend == "oauth" -%>
+  String app_id = "<%= auth[:app_id] %>";
+<% end %>
+
+  ParameterMap usage = new ParameterMap(); // Add a metric to the call
+  usage.add("hits", "1");
+  params.add("usage", usage);              // metrics belong inside the usage parameter
+
+<% if backend == "oauth" -%>
+  // for OAuth only the '2 steps way' (authorize + report) is available
+  try {
+    AuthorizeResponse response = serviceApi.oauth_authorize(serviceToken, serviceId, params);         // Perform OAuth authorize
+    System.out.println("Authorize on OAuth Success: " + response.success());
+    if (response.success() == true) {
+
+      // your api access got authorized
+
+      // you check the client's secret returned by the backend
+      System.out.println("OAuth Client Secret: " + response.getClientSecret());
+
+      // let's do a report
+      ParameterMap transaction = new ParameterMap();
+      transaction.add("app_id", "<%= auth[:app_id] %>");
+
+      ParameterMap transaction_usage = new ParameterMap();
+      transaction_usage.add("hits", "1");
+      transaction.add("usage", transaction_usage);
+
+      try {
+        final ReportResponse report_response = serviceApi.report(serviceId, transaction);
+
+        if (report_response.success()) {
+          System.out.println("Report on OAuth was successful");
+        } else {
+          System.out.println("Report on OAuth failed");
+        }
+      } catch (ServerError serverError) {
+        serverError.printStackTrace();
+      }
+    } else {
+      // your api access did not got authorized, check why
+      System.out.println("Error: " + response.getErrorCode());
+      System.out.println("Reason: " + response.getReason());
+    }
+  } catch (ServerError serverError) {
+    serverError.printStackTrace();
+  }
+<% else %>
+  AuthorizeResponse response = null;
+  // the 'preferred way' of calling the backend: authrep
+  try {
+    response =  serviceApi.authrep(serviceToken, serviceId, params);
+    System.out.println("AuthRep on User Key Success: " + response.success());
+    if (response.success() == true) {
+      // your api access got authorized and the  traffic added to 3scale backend
+      System.out.println("Plan: " + response.getPlan());
+    } else {
+      // your api access did not authorized, check why
+      System.out.println("Error: " + response.getErrorCode());
+      System.out.println("Reason: " + response.getReason());
+    }
+  } catch (ServerError serverError) {
+    serverError.printStackTrace();
+  }
+<% end %>
+<% end %>

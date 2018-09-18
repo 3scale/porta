@@ -1,0 +1,18 @@
+<div id="domain_recovery">
+  <%= form_tag recover_provider_domains_path, :method => :post, :class => 'formtastic', :id => 'domain-recovery' do %>
+    <fieldset class="inputs">
+      <ol>
+        <li class="string">
+          <%= label_tag :email, "Email address" %>
+          <%= text_field_tag :email, params[:email], :class => :text, :placeholder => 'Your Email Address' %>
+          <%= submit_tag "Recover domain", :class => 'recovery' %>
+
+          <p class="inline-hints">
+            Please enter the email address you used to sign up to this site.
+            We'll email your login urls.
+          </p>
+        </li>
+      </ol>
+    </fieldset>
+  <% end %>
+</div>

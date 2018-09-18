@@ -1,0 +1,7 @@
+<% if @plan.is_a?(ApplicationPlan) && (app = @plan.cinstances.first)-%>
+  <p>This custom plan belongs to the application <%= link_to "#{app.name}", admin_buyers_application_path(app) %></p>
+<% end -%>
+
+<% if @plan.is_a?(AccountPlan) && (contract = @plan.contracts.first)-%>
+  <p>This custom plan belongs to the account <%= link_to "#{contract.user_account.org_name}", admin_buyers_account_path(contract.user_account) %></p>
+<% end -%>

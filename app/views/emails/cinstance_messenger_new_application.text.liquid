@@ -1,0 +1,43 @@
+Dear API Administrator,
+
+{% if provider.multiple_applications_allowed? %}
+The user {{account.name}} has submitted a new application for your API.
+
+The user's details are:
+
+* Name: {{user.name}}
+* Email address: {{user.email}}
+* Organization: {{account.name}}
+* Telephone: {{account.telephone_number}}
+
+{{account.extra_fields_plain_text}}
+
+The application's details are:
+
+* Application title: {{application.name}}
+* Application description:
+
+{{application.description}}
+
+{%if plan.approval_required?%}
+This application requires your approval before keys can be used. You can approve / reject the application from your user control panel:
+{{ url }}
+{%endif%}
+
+{%else%}
+
+A new user {{user.username}} has signed up for your service {{service.name}} on plan {{plan.name}}. The user's details are:
+
+* Name: {{user.name}}
+* Email: {{user.email}}
+* Organization: {{account.name}}
+* Telephone: {{account.telephone_number}}
+
+{%if plan.approval_required? %}
+This service requires you to approve this application before it can be used.
+{%endif%}
+
+You can check current user signups on your API Dashboard at {{ url }}.
+{%endif%}
+
+The API Team

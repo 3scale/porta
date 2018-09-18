@@ -1,0 +1,77 @@
+# Helper functions for setting up Docker tailored to this project
+
+# lower lever functions
+launch_redis()
+{
+    redis-server /etc/redis/redis.conf
+}
+
+launch_memcached()
+{
+    memcached -u `whoami` &
+}
+
+launch_squid()
+{
+  squid3
+}
+
+launch_dnsmasq()
+{
+    local SUDO=$(which sudo 2> /dev/null)
+    ${SUDO} dnsmasq --no-resolv --listen-address=127.0.0.1 \
+                    --address=/${DNSMASQ="#"}/127.0.0.1 \
+                    --server=/raw.githubusercontent.com/8.8.8.8 \
+                    --server=/cc-3scale-amend.herokuapp.com/8.8.8.8 \
+                    --server=/percy.io/8.8.8.8 \
+                    --user=$(whoami)
+}
+
+mysql_config()
+{
+    cp "$1/config/examples/database.yml" "$1/config"
+}
+
+backend_config()
+{
+    cp "$1/config/examples/backend.yml" "$1/config"
+    cp "$1/config/examples/backend_redis.yml" "$1/config"
+}
+
+redis_config()
+{
+    cp "$1/config/examples/redis.yml" "$1/config"
+}
+
+s3_config()
+{
+    cp "$1/config/examples/amazon_s3.yml" "$1/config"
+}
+
+
+# higher level functions
+docker_config()
+{
+    mysql_config "$1"
+    backend_config "$1"
+    s3_config "$1"
+    redis_config "$1"
+}
+
+docker_launch_servers()
+{
+    launch_redis
+    launch_memcached
+    launch_dnsmasq
+    launch_squid
+}
+
+docker_bundler()
+{
+    bundler --jobs `grep -c processor /proc/cpuinfo`
+}
+
+docker_db_prepare()
+{
+    rake db:create db:schema:load db:test:prepare
+}

@@ -1,0 +1,12 @@
+<h2>Documentation Settings</h2>
+
+<%= semantic_form_for @settings, :url => admin_site_documentation_path, :html => {:id => 'documentation-settings' } do |form| %>
+  <%= form.inputs 'App Gallery' do %>
+    <%= form.input :app_gallery_enabled %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button %>
+    <%= form.cancel_link admin_site_settings_url %>
+  <% end %>
+<% end %>

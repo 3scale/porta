@@ -1,0 +1,82 @@
+.PopNavigation {
+  color: $content-background;
+
+  &--docs {
+    float: left;
+
+    .PopNavigation-list {
+      left: line-height-times(1);
+    }
+  }
+
+  &--account {
+    float: right;
+
+    .PopNavigation-list {
+      right: line-height-times(1);
+    }
+  }
+
+  &-list {
+    @include box-shadow(0 0 line-height-times(1/2) $box-shadow-color);
+    background: rgba($content-background, .99);
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+    display: none;
+    margin: line-height-times(1/2, true) 0 0 0;
+    max-width: line-height-times(10);
+    min-width: line-height-times(4);
+    overflow: hidden;
+    position: absolute;
+    text-align: left;
+    width: 20%;
+    z-index: 1000;
+
+    &.is-toggled,
+    &:target {
+      display: block;
+    }
+  }
+
+  &-listItem {
+    border-top: $border-width solid $border-color;
+    margin-top: -$border-width;
+
+    &:first-child {
+      border-top: 0;
+      margin-top: 0
+    }
+  }
+
+  &-info {
+    color: $light-color;
+    display: block;
+    font-size: $caption-font-size;
+    font-style: italic;
+    margin: 0;
+    padding: line-height-times(1/2) line-height-times(1/2) 0;
+  }
+
+  &-link {
+    color: $font-color;
+    display: block;
+    padding: line-height-times(1/2);
+
+    &:hover {
+      color: $link-color;
+    }
+  }
+
+  &-trigger {
+    color: $border-color;
+    cursor: pointer;
+    display: block;
+    padding: line-height-times(1/2) line-height-times(1);
+
+    &:hover,
+    &.is-toggled,
+    &.is-current {
+      color: $link-color;
+    }
+  }
+}

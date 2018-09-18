@@ -1,0 +1,16 @@
+h1 New #{@authentication_provider.human_kind} Authentication Provider
+
+= semantic_form_for @authentication_provider,
+        url: provider_admin_authentication_providers_path,
+        as: :authentication_provider do |f|
+  = f.inputs do
+    = f.input :kind, as: :hidden
+    = f.input :client_id, required: f.object.oauth_config_required?
+    = f.input :client_secret, required: f.object.oauth_config_required?
+
+    = render partial: @authentication_provider.kind,
+            locals: { f: f, authentication_provider: @authentication_provider }
+
+    = f.input :published, hint: 'Display on Developer Portal'
+  = f.buttons do
+    = f.commit_button

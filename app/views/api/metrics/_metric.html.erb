@@ -1,0 +1,67 @@
+<%= content_tag('tr', :id => dom_id(metric), :class => metric.child? ? 'child' : 'root') do %>
+  <td class="title"><%= h metric.friendly_name %></td>
+    <% if @plan.pricing_enabled? %>
+    <td class="metrics-subtable-toggle pricing">
+      <%= link_to polymorphic_path([:admin, @plan, metric, :pricing_rules]), :class => 'remote' do %>
+        <%= icon('money')  %>
+        Pricing (<span id="pricing_rules_counter_<%= metric.id %>"><%= @plan.pricing_rules.of_metric(metric).size %></span>)
+      <% end %>
+    </td>
+    <% end %>
+
+  <td class="metrics-subtable-toggle limits">
+    <%= link_to polymorphic_path([:admin, @plan, metric, :usage_limits]), :class => 'remote', title: "Edit limits of #{metric.friendly_name}" do %>
+      <%= icon('signal')  %>
+      Limits (<span id="limits_counter_<%= metric.id %>"><%= @plan.usage_limits.of_metric(metric).size %></span>)
+    <% end %>
+  </td>
+
+  <td></td>
+
+<td class="operations">
+  <span id="<%= dom_id(metric) %>_status" class="<%= @plan.metric_enabled?(metric) ? 'enabled' : 'disabled' %>">
+    <%= link_to polymorphic_path([:toggle_enabled, :admin, @plan, metric]),
+                :method => :put,
+                :remote => true,
+                title: "#{@plan.metric_enabled?(metric) ? 'Disable' : 'Enable'} metric #{metric.friendly_name}",
+                class: 'action' do -%>
+      <% if @plan.metric_enabled?(metric) %>
+        <i class="included fa fa-check-circle-o" title="Metric is enabled for this plan"></i>
+      <% else %>
+        <i class="excluded fa fa-times-circle-o" title="Metric is disabled for this plan"></i>
+      <% end %>
+    <% end %>
+  </span>
+</td>
+<td class="operations">
+  <span id="<%= dom_id(metric) %>_visible" class="<%= @plan.metric_visible?(metric) ? 'visible' : 'hidden' %>">
+    <%= link_to polymorphic_path([:toggle_visible, :admin, @plan, metric]),
+                      :method => :put,
+                      :remote => true,
+                      title: "Make metric #{metric.friendly_name} #{@plan.metric_visible?(metric) ? 'invisible' : 'visible'}",
+                      class: 'action' do -%>
+      <% if @plan.metric_visible?(metric) %>
+        <i class="included fa fa-check-circle-o" title="Metric is visible for this plan"></i>
+      <% else %>
+        <i class="excluded fa fa-times-circle-o" title="Metric is hidden for this plan"></i>
+      <% end %>
+    <% end %>
+  </span>
+</td>
+<td class="operations">
+  <span id="<%= dom_id(metric) %>_icons" class="<%= @plan.limits_only_text?(metric) ? 'text' : 'icon' %>">
+    <%= link_to polymorphic_path([:toggle_limits_only_text, :admin, @plan, metric]),
+                      :method => :put,
+                      :remote => true,
+                      class: 'action' do -%>
+      <% if @plan.limits_only_text?(metric) %>
+        <i class="included fa fa-check-circle-o" title="Metric limits are shown with icons and text for this plan"></i>
+      <% else %>
+        <i class="excluded fa fa-times-circle-o" title="Metri limits are text-only for this plan"></i>
+      <% end %>
+    <% end %>
+  </span>
+</td>
+<td class="operations" <%= @plan.pricing_enabled? ? "" : "colspan='2'"  %>
+</td>
+<% end %>

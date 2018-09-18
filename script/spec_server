@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+puts "Loading Rails environment"
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path(File.dirname(__FILE__) + "/../config/environment") unless defined?(RAILS_ROOT)
+
+require 'optparse'
+require 'spec/rails/spec_server'

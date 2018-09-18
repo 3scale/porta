@@ -1,0 +1,26 @@
+<h2>Schedule service for deletion</h2>
+
+<p class="note">Are you sure? 
+	This action will remove the service from public view and mark it for permanent deletion. 
+	This action is NOT REVERSIBLE. If you want to temporarily remove a service from view use 
+	'take offline' instead. For more information on deletion see the 3scale FAQ.</p>
+	
+
+<%= form_for Deletion.new(), :url => config_deletion_path, :html => {:class => :standard} do |f| %>
+<fieldset>
+  <legend>Deletion Details</legend>
+	<p>
+		<%= f.label :reason, 'Reason for deletion to be amended to notification sent to service subscribers.' %>
+	</p>
+
+	<%= f.text_area :reason,  :rows => 5 %>
+	<%= hidden_field_tag :service_id, @service.id %>
+
+  <p>
+	To be deleted in <%= f.select 'scheduled_at', [1,2,3,4] %> weeks time.</p>
+  </p>
+	<p><%= f.submit 'send', :condirm => 'Are you sure?' %></p>
+</fieldset>
+
+<% end %>
+

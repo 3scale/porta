@@ -1,0 +1,25 @@
+<p>
+  <b>Provider:</b>
+  <%=h @fields_definition.account_id %>
+</p>
+<p>
+  <b>name:</b>
+  <%=h @fields_definition.name%>
+</p>
+<p>
+  <b>label:</b>
+  <%=h @fields_definition.label %>
+</p>
+<p>
+  <b>Hidden:</b>
+  <%=h @fields_definition.hidden %>
+</p>
+<p>
+  <b>Required:</b>
+  <%=h @fields_definition.required %>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_fields_definition_path(@fields_definition) %> |
+<%= link_to 'Back', admin_fields_definitions_path %>
+

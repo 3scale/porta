@@ -1,0 +1,9 @@
+<%= form.inputs '' do %>
+  <%= form.input :name, :required => true %>
+  <%= form.system_name %>
+
+  <%= form.input :approval_required, :label => 'Service subscriptions require approval?',
+                 hint: 'Set whether or not service subscriptions can be created on demand or if approval is required from you before they are activated.' %>
+
+  <%= render :partial => 'api/plans/forms/billing_strategy', :locals => { :form => form } %>
+<% end %>

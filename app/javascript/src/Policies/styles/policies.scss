@@ -1,0 +1,331 @@
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+.PoliciesWidget {
+  @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+}
+
+$color: #464646;
+$goColor: #4a90e2;
+$doColor: #54b45d;
+$dontColor: #ca4a4b;
+$subtleColor: #ddd;
+
+.PoliciesWidget {
+  position: relative;
+  width: 510px;
+  margin: 0 auto;
+  line-height: 1.5;
+  padding-bottom: 2rem;
+
+
+  .PolicyChain {
+    $PolicyChain-color: #464646;
+    $PolicyChain-goColor: #4a90e2;
+    $PolicyChain-doColor: #54b45d;
+    $PolicyChain-dontColor: #ca4a4b;
+    $PolicyChain-subtleColor: #ddd;
+
+    display: flex;
+    flex-flow: column nowrap;
+
+    &-header {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: baseline;
+      justify-content: flex-start;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid $PolicyChain-subtleColor;
+    }
+
+    &-title {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    &-addPolicy {
+      @extend .u-do;
+      margin-left: auto;
+
+      &--cancel {
+        @extend .u-do;
+        margin-left: auto;
+      }
+    }
+
+    &.is-hidden {
+      display: none;
+    }
+
+    .list-group {
+      margin-bottom: 0;
+    }
+  }
+
+  .PolicyConfiguration {
+    $PolicyConfiguration-color: #464646;
+    $PolicyConfiguration-goColor: #4a90e2;
+    $PolicyConfiguration-doColor: #54b45d;
+    $PolicyConfiguration-dontColor: #ca4a4b;
+    $PolicyConfiguration-subtleColor: #ddd;
+
+    &-header {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: baseline;
+      justify-content: flex-start;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid $PolicyConfiguration-subtleColor;
+    }
+
+    &-title {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    &-name {
+      margin: 0 0 0 0;
+      padding: 0.5rem 0 0 0;
+      font-size: 1rem;
+      line-height: 1.5;
+      font-weight: normal;
+    }
+
+    &-cancel {
+      @extend .u-do;
+      margin-left: auto;
+    }
+
+    &-version-and-summary {
+      width: 100%;
+    }
+
+    &-remove {
+      background-color: white;
+      color: $PolicyConfiguration-dontColor;
+      border-color: $PolicyConfiguration-dontColor;
+    }
+
+    &-description {
+      margin: 1rem 0 2rem;
+    }
+
+    .btn-info {
+      background-color: $PolicyConfiguration-doColor;
+      border-color: $PolicyConfiguration-doColor;
+      width: 33.33%;
+      float: right;
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+
+    .btn-group > button.btn-danger:first-child {
+      flex: 0.23 1 0% !important;
+    }
+
+    .array-item {
+      clear: both;
+      float: left;
+      border-bottom: 1px dashed $PolicyConfiguration-subtleColor;
+      display: block;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    &-form {
+      clear: both;
+
+      &> .form-group {
+        padding-bottom: 2rem;
+        border-bottom: 1px dashed $PolicyConfiguration-subtleColor;
+      }
+    }
+
+    .btn-group {
+      justify-content: flex-end !important;
+    }
+
+    button[type=submit] {
+      background-color: $PolicyConfiguration-goColor;
+      border-color: $PolicyConfiguration-goColor;
+      margin-bottom: 2rem;
+    }
+
+    .error-detail {
+      list-style-type: none !important;
+      padding-left: 0;
+    }
+
+    legend {
+      font-variant: small-caps;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    #root__title {
+      display: none;
+    }
+
+    &.is-hidden {
+      display: none;
+    }
+  }
+
+  .PolicyRegistryList {
+
+    &-header {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: baseline;
+      justify-content: flex-start;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid $subtleColor;
+    }
+
+    &-title {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    &.is-hidden {
+      display: none;
+    }
+  }
+}
+
+.PoliciesWidget .Policy,
+.Policy {
+  $Policy-color: #464646;
+  $Policy-disabledColor: #8b8d8f;
+  $Policy-goColor: #4a90e2;
+  $Policy-doColor: #54b45d;
+  $Policy-dontColor: #ca4a4b;
+  $Policy-subtleColor: #ddd;
+
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid $Policy-subtleColor;
+  padding: 0.5rem 0;
+  user-select: none;
+  text-align: left;
+
+  &.Policy--disabled {
+
+    .Policy-name,
+    .Policy-summary,
+    .Policy-version {
+      color: $Policy-disabledColor;
+      text-decoration: line-through;
+    }
+  }
+
+  &-sortHandle {
+    order: 4;
+    cursor: move;
+    color: $Policy-subtleColor;
+    padding: 1rem;
+    margin: -1rem -1rem 0 0;
+
+    &:hover {
+      color: $Policy-doColor;
+    }
+  }
+
+  &-article {
+    order: 1;
+    flex: 5;
+    @extend .u-link;
+    min-width: 0; // needed for the overflow ellipsis to work.
+
+    &:hover * {
+      color: $color;
+    }
+  }
+
+  &-version-and-summary {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 0 0 0;
+  }
+
+  &-name {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: normal;
+    margin-bottom: 0;
+
+    &--add {
+      @extend .u-do;
+    }
+  }
+
+  &-summary {
+    line-height: 1.5;
+    color: $Policy-color;
+  }
+
+  &-version {
+    line-height: 1.5;
+    color: $Policy-color;
+  }
+
+  &:hover {
+    .Policy-remove {
+      display: block;
+    }
+
+    .Policy-sortHandle {
+      display: block;
+    }
+  }
+
+  &:only-child .Policy-sortHandle {
+    display: none;
+  }
+
+  &-remove {
+    order: 3;
+    line-height: 1.5;
+    border: none;
+    background-color: transparent;
+    font-weight: normal;
+    color: $Policy-dontColor;
+    opacity: 0.3;
+    display: none;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .is-hidden {
+    display: none;
+  }
+
+  &-status {
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+    border-bottom: 1px solid $Policy-subtleColor;
+    border-top: 1px solid $Policy-subtleColor;
+  }
+}
+
+.u-link {
+  cursor: pointer;
+  color: $goColor;
+
+  &:hover,
+  &:hover * {
+    color: $color;
+  }
+}
+
+.u-do {
+  @extend .u-link;
+  color: $doColor;
+}

@@ -1,0 +1,16 @@
+Dear {{ user.display_name }},
+
+Thank you for signing up for access to the {{ provider.name }} API, your account has been created.
+
+  Your username is: {{ user.username }}
+{% if url %}
+
+  To activate your account, please visit:
+
+  {{ url }}
+
+If you have problems activating your account, please contact support at {{ provider.support_email }}.
+
+{% endif %}
+The API Teams at {{ provider.name }} and 3scale
+

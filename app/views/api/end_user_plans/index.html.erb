@@ -1,0 +1,40 @@
+<% content_for :sublayout_title, 'End User Plans' %>
+
+<p class="description">
+  End user plans define the access policies for users who are sharing one or more Applications.
+  Typically this covers the case of Mobile Apps, where there can be many end users that share that same credentials, embedded on the Mobile App.
+  end user plans allows you to set limits so that no end user exhaust the quota of the Application, hence ensuring a fair usage of the Mobile App.
+</p>
+
+<%- if @plans.size > 0 -%>
+  <div class="default_plan">
+    <%= form_tag masterize_admin_service_end_user_plans_path(@service), :method => :post, :class => 'default_plan autosubmit', :remote => true do -%>
+      <h3><label for="default_plan">Select the default plan</label>
+        <%= select_tag :id, options_from_collection_for_select(@plans, "id", "name", lambda { |p| p.default? }), :include_blank => @service.end_user_registration_required? , :id => "default_plan" -%>
+      </h3>
+    <%- end -%>
+
+    <p class="description">Leave blank if you do not want your users to contract a default plan on signup.</p>
+</div>
+<%- end -%>
+
+<table class="data" id="plans">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="actions operations right">
+        <%= link_to "New", new_admin_service_end_user_plan_path, :title => 'Create a new end user plan', :class => 'action add' -%>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @plans.each do |plan| %>
+      <tr id="<%= dom_id(plan) %>">
+        <td><%= plan.name %></td>
+        <td class="right operations">
+          <%= link_to 'Edit', edit_admin_end_user_plan_path(plan), :class => 'action edit' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

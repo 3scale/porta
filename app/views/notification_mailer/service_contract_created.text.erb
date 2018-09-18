@@ -1,0 +1,11 @@
+Dear <%= @receiver.informal_name %>,
+<%= @account.name %> has been subscribed to plan <%= @plan.name %> on your service <%= @service.name %>.
+
+<% if @plan.approval_required? %>
+This subscription requires your approval before the user can create applications.
+You can approve / reject the application from your 3scale Admin Portal.
+
+To approve/reject subscription, follow this link: <%= admin_buyers_account_url(@account) %>
+<% else %>
+To view account, follow this link: <%= admin_buyers_account_url(@account) %>
+<% end %>

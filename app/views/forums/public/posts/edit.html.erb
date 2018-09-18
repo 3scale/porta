@@ -1,0 +1,13 @@
+<p>Thread <%= link_to h(@post.topic.title), forum_topic_path(@post.topic) %></p>
+
+<h2>Edit Post</h2>
+
+<%= semantic_form_for @post, :url => forum_post_path(@post) do |form| -%>
+  <%= form.inputs do %>
+    <%= render 'forums/public/posts/fields', :form => form %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button %>
+  <% end %>
+<% end %>

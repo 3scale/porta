@@ -1,0 +1,17 @@
+= render 'menu'
+
+h2
+  ' Edit application:
+  = @cinstance.name
+
+= semantic_form_for @cinstance,
+                    url: path_for_applications_put(current_account,@cinstance),
+                    builder: Fields::FormBuilder do |form|
+
+  = form.inputs do
+    = form.user_defined_form
+
+  = form.buttons do
+    = form.commit_button
+    li
+      = delete_application_link(@cinstance)

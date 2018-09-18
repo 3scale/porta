@@ -1,0 +1,70 @@
+<h1>Upgrade</h1>
+<div class="plans-menu">
+  <h2>Plans</h2>
+  <ul class="u-hr">
+    <% @plans.each do |plan| %>
+      <%= content_tag :li,  link_to(h(plan.name), '#', "data-plan-id" => plan.id) %>
+    <% end %>
+  </ul>
+  <p class="u-divider">
+    <%= credit_card_stored_status(current_account, true).html_safe %>
+  </p>
+</div>
+
+<div id="plans-content">
+
+<% @plans.each do |plan| %>
+  <div class='plan-preview' data-plan-id='<%= plan.id %>' style='display:none;'>
+    <h2>
+      <%= plan.name %>
+    </h2>
+
+    <div class='plan-overview'>
+      <% unless plan.free? %>
+        <%= render :partial => 'provider/admin/account/change_plans/widget/pricing',
+                   :locals => {:plan => plan} %>
+      <% end %>
+
+      <% unless plan.usage_limits.visible.empty? %>
+        <%= render :partial => 'provider/admin/account/change_plans/widget/limits',
+                   :locals => {:plan => plan} %>
+      <% end %>
+
+      <% unless plan.issuer.features.visible.empty? %>
+        <%= render :partial => 'provider/admin/account/change_plans/widget/features',
+                   :locals => {:plan => plan} %>
+      <% end %>
+    </div>
+
+    <% if current_account.can_upgrade_by_email?(plan) %>
+      <p class='contact-by-email-notice'>
+        Upgrading to enterprise plan cannot be done automatically. Please, contact
+        <%= mail_to Rails.configuration.three_scale.sales_email %> to upgrade.
+      </p>
+    <% elsif current_account.can_upgrade_to?(plan) %>
+      <% if current_account.credit_card_stored? %>
+      <a href="#" class="select-plan-button plan-selector important-button"
+         data-plan-name='<%= plan.name %>'
+         data-plan-id='<%= plan.id %>'
+         data-can-upgrade='true'>
+        Upgrade to '<%= plan.name %>'
+      </a>
+      <% else %>
+        <p id="credit-card-status">
+          <%= link_to('Add your billing details & upgrade', edit_provider_admin_account_braintree_blue_path, class: "important-button") %>
+        </p>
+      <% end %>
+    <% end %>
+
+    <div class="current-plan-notice" style='display:none;'>
+      <p>Your current plan</p>
+    </div>
+  </div>
+<% end %>
+</div>
+
+<%= javascript_tag do %>
+  $(function(){
+    PlanWidget.bind_events("plan-preview-box-new");
+  });
+<% end %>

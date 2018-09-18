@@ -1,0 +1,11 @@
+h2 Create new Tenant Account
+= semantic_form_for @provider, builder: Fields::FormBuilder, url: provider_admin_accounts_path do |form|
+
+  = form.inputs name: 'User Information', for: [:user, @user] do |user|
+    = user.user_defined_form
+    = user.input :password, required: true
+    = user.input :password_confirmation, required: true
+  = form.inputs name: 'Organization Information' do
+    = form.user_defined_form
+  = form.buttons do
+    = form.commit_button 'Create', button_html: { class: 'important-button' }

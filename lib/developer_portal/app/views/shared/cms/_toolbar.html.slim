@@ -1,0 +1,123 @@
+div id="cms-toolbar"
+
+  // font-awesome blows QT browser in test mode
+  = stylesheet_link_tag "font-awesome" unless Rails.env.test?
+  = stylesheet_link_tag 'cms_toolbar.css'
+  = javascript_include_tag 'provider/cms_toolbar'
+
+  form id="cms-toolbar-mode"
+    ul id="cms-toolbar-menu-middle" class="horizontal"
+      - if @page.respond_to?(:draft)
+
+        li class=('active' if cms_mode.draft?)
+          = radio_button_tag 'cms-mode', url_for(request.query_parameters.merge(cms: :draft)), cms_mode.draft?, class: 'mode-toggle'
+          span title="Only administrators can see the draft version." Draft
+
+        li class=('active' if cms_mode.published?)
+          span.slash
+            ' |
+          //  We use request.query_parameters instead of params because
+          //  only want the GET params. When for example fails a
+          //  validation on create or update something, this try to
+          //  "render" also this stuff.
+
+          //  Sometimes this can break the CGI.escape
+          //  http://pjkh.com/articles/cgi-escape-undefined-method-bytesize-for-nil-class/
+          //  We can fix this with a monkey patch, but I didn't believe
+          //  necessary if just we use the GET params.
+
+          = radio_button_tag 'cms-mode', url_for(request.query_parameters.merge(cms: :published)), !cms_mode.draft?, class: 'mode-toggle'
+          span title="Version visible to all users of the Developer Portal." Published
+
+
+
+      - else
+        li Static Built-in Page
+
+
+  ul id="cms-toolbar-menu-right" class="horizontal"
+    li
+      - if cms_mode.draft?
+        = link_to icon('caret-square-o-right'), '#', title: 'Hide the CMS toolbar', id: 'hide-side-bar'
+      - else
+        = link_to icon('times-circle'), url_for(request.query_parameters.merge(cms_token: "")), title: 'Close the CMS toolbar'
+
+  div id="help"
+    h2 Templates used on this page
+    ul id="templates-list"
+      - @templates.each do |template|
+        li
+          = link_to( template_url(template), target: '_blank') do
+            | #{template.class.model_name.human} #{template.name} #{icon('external-link')}
+
+      - if site_account.john_doe_still_here?
+        h2 Sign In
+
+        p Testdrive a developer account with:
+        dl
+          dt Username:
+          dd john
+          dt Password:
+          dd 123456
+
+      - if site_account.cms_toolbar_intro_visible?
+        div id="theme-picker-wrap"
+          h2 Color Theme
+
+          = select_tag "theme-picker", theme_options
+
+          div id="theme-snippet" style="display:none"
+            textarea
+
+= content_tag(:iframe,
+              id: 'developer-portal',
+              srcdoc: original_page_source,
+              seamless: true,
+              frameborder: 0,
+              style: "border: 0; height: 100%; border-collapse: collapse") do
+                Your browser does not support iframes which is needed to use the 3scale CMS toolbar.
+
+
+= javascript_include_tag 'srcdoc-polyfill.min.js'
+
+- if site_account.cms_toolbar_intro_visible?
+  javascript:
+    (function(){
+      var added_style = $();
+
+      var add_style_to_iframe = function () {
+        var style = $(this).find('option:selected').data('snippet');
+        var frame = frames['developer-portal'];
+        var doc;
+
+        if (frame.document == undefined)
+          doc = (frame.contentWindow || frame.contentDocument);
+        else
+          doc = frame;
+
+        added_style.remove();
+
+        if(!style) return;
+
+        added_style = $('<style>' + style + '</style>');
+
+        $('body', doc.document || doc).append(added_style);
+      };
+
+      $('iframe#developer-portal').load(add_style_to_iframe);
+      $('#theme-picker')
+              .change(add_style_to_iframe)
+              .change(function () {
+                var picker = $(this);
+
+                var snippet = picker.find('option:selected').data('snippet');
+                var style = "<style>" + snippet + '\n' + "</style>";
+                var explain = '<!-- Copy & paste this snippet into your template called main layout to make this change permanent -->';
+                var text = snippet ? explain + '\n\n' + style : '';
+
+                $('#theme-snippet')
+                        .toggle(text.length > 0)
+                        .find('textarea').val(text);
+
+              });
+    }());

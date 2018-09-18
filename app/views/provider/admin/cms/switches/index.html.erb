@@ -1,0 +1,57 @@
+<h2>Feature Visibility</h2>
+
+<p>Some <b>advanced features</b> of the 3scale platform are by default not
+  visible for your developers. In other words, HTML fragments of its controls
+  are not rendered on your developers portal so that your styling
+  remains intact when upgrading. For example, the developers won't
+  see a 'Create User' button on their portal if the 'Multiple Users'
+  feature is <b>hidden</b>.</p>
+
+<table id="switches" class="data" >
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Description</th>
+      <th colspan="2">State</th>
+    </tr>
+  </thead>
+
+<% @allowed.each do |name, switch| %>
+ <tr class="Switch Switch--<%= switch.hidden? ? 'inactive' : 'active' %>">
+   <th><%= t("switches.#{name}.name") %></th>
+   <td>
+     <%= t("switches.#{name}.description_html") %>
+     <%= t("switches.#{name}.visibility_details_html", default: '') %>
+   </td>
+   <td>
+     <%= render 'switch_state', switch: switch %>
+   <td class="actions">
+     <%= render 'switch_toggle', switch: switch %>
+   </td>
+ </tr>
+<% end %>
+</table>
+
+<br/>
+<br/>
+
+<% if @denied.present? %>
+  <h2>Is there something more?</h2>
+
+  <p>Yes, there are features that are currently disabled for your
+  account but you can enable them by upgrading.</p>
+
+  <table id="switches" class="data" >
+  <% @denied.each do |name, switch| %>
+   <tr>
+     <th><%= t("switches.#{name}.name") %></th>
+     <td><%= t("switches.#{name}.description_html") %></td>
+     <td class="actions">
+       <% if new_plan = current_account.first_plan_with_switch(switch.name) %>
+         <%= render '/admin/upgrade_notices/provider_upgrade_button', plan: new_plan %>
+       <% end %>
+     </td>
+   </tr>
+  <% end %>
+  </table>
+<% end %>

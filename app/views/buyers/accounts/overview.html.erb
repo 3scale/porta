@@ -1,0 +1,24 @@
+<h2>Accounts</h2>
+
+<% if current_account.buyer_accounts.empty? %>
+  <p>There are no users signed up yet.</p>
+<% else %>
+
+  <div class="left stats_main">	
+    <p>Users subscribe to one of the public plans made available 
+		under the <%= link_to 'plans tab', admin_account_plans_path(current_account) %>.</p>
+    <%= render :partial => 'counts' %>
+	  <br/>
+  </div>
+
+  <br class="clear" />
+  <div class="left stats_main">
+    <%= render  :partial => 'latest_accounts', 
+                :locals  => {:latest_accounts => @latest_accounts} %>  
+  </div>
+  <div class="right stats_side">
+    <% if @service.plans.count > 1 %>
+      <div id="pie" style="width: 275px; height: 185px"></div>  
+    <% end %>  
+  </div>
+<% end %>

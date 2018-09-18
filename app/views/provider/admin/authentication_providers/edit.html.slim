@@ -1,0 +1,7 @@
+h1.title
+  ' Customize
+  = link_to "#{icon(@authentication_provider.kind)} #{@authentication_provider.human_kind}".html_safe,
+      provider_admin_authentication_provider_path(@authentication_provider)
+
+.content
+  = render partial: 'form', locals: {authentication_provider: @authentication_provider}

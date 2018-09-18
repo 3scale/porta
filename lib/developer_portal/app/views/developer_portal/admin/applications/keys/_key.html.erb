@@ -1,0 +1,6 @@
+<%= content_tag(:tr, :id => "application_key_#{key.to_param}", 'data-key' => key.to_param) do %>
+  <td class="key"><%= key %></td>
+  <%= content_tag(:td, :class => 'delete_key', :style => !cinstance.can_delete_key? && "display:none;") do %>
+    <%= delete_button_for admin_application_key_path(cinstance, key), :remote => true %>
+  <% end %>
+<% end %>

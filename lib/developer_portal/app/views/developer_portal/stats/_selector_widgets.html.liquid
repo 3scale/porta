@@ -1,0 +1,54 @@
+{% content_for javascripts %}
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+{% endcontent_for %}
+{% content_for stylesheets %}
+  <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" media="screen" rel="stylesheet" type="text/css" />
+{% endcontent_for %}
+
+<div id='selector-widgets' class='clearfix'>
+
+  <div data-selector='metric' id='metric-selector' class='detail-selector'>
+    <div class="chart-control-buttons" id='metric-type-buttons'>
+      <span data-metric-type="metric" class='current metric-type-button'>Metrics</span>
+      <span class="metric-type-button" data-metric-type="method">Methods</span>
+    </div>
+
+    {% if metrics == present %}
+      {% assign metric = metrics.hits %}
+      <div data-metric-unit="{{ metric.unit }}" data-metric='{{ metric.system_name }}' id='current-metric' class="selector current-item">
+        <span id='metric-name' class='item-name'>{{ metric.name }}</span>
+      </div>
+    {% endif %}
+
+    <ul style="display:none;" data-type="method" class='metric-list toggle' id="methods-ul">
+      {% include 'stats/methods_list' %}
+    </ul>
+
+    <ul style="display:none;" data-type='metric' class='metric-list toggle' id="metrics-ul">
+      {% include 'stats/metrics_list' %}
+    </ul>
+  </div>
+
+  <div class="detail-selector">
+    <div class="chart-control-buttons" id='period-buttons'>
+      <span class='period' data-value='year'>Year</span>
+      <span class='period current' data-value='month'>Month</span>
+      <span class='period' data-value='week'>Week</span>
+      <span class='period' data-value='day'>Day</span>
+      <span id="submit-stats-search" style='display:none;'>Apply</span>
+    </div>
+
+    {% assign since = today.beginning_of_month %}
+    <div data-date="{{ since | date: '%Y-%m-%d' }}" id='current-date' class="selector current-item">
+      <span id='date-name' class='item-name'>{{ since | date: "%e %b" }}
+      </span>
+    </div>
+    <div id="datepicker-box" style="display:none;" class='toggle'>
+      <div id="datepicker"></div>
+    </div>
+  </div>
+
+  <input type='hidden' id="current-timezone" data-timezone='{{ current_account.timezone }}' />
+
+  <h3 id='total-and-period'></h3>
+</div>

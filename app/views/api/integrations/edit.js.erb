@@ -1,0 +1,8 @@
+<%- if @deploy_id -%>
+  jQuery('#proxy').one('ajax:complete.rails', function(event){
+    $.flash.hide();
+    return false; // do not enable the button until the proxy is deployed
+  })
+<%- else -%>
+  jQuery('#proxy').html("<%= escape_javascript(render partial: 'proxy') %>")
+<%- end -%>

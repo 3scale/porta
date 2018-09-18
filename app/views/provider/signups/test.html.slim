@@ -1,0 +1,22 @@
+= javascript_include_tag 'provider/signup_v2'
+
+#signup-container
+
+javascript:
+  var signup = new ThreeScale.Signup({
+    signup_origin: 'marketo',
+    server: window.location.origin
+  });
+
+  // signup.on('load', function(){ debugger; });
+  signup.on('show', function(event, iframe){
+    $(iframe)
+            .width('100%')
+            .height('500px')
+            .css({border: '0'})
+        .parent().height('100%');
+  });
+  // signup.on('render', function (){ debugger; });
+  // signup.on('ready', function (){ debugger; });
+
+  signup.renderTo('#signup-container');

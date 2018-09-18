@@ -1,0 +1,11 @@
+<% unless request.host == site_account.admin_domain %>
+  <%= main_menu_item(:root, 'Home', root_path) %>
+<% end %>
+
+<% if site_account.settings.forum_enabled? %>
+  <%= main_menu_item(:forum, 'Forum', forum_path) %>
+<% end %>
+
+<% if logged_in? %>
+  <%= main_menu_item(:dashboard, 'Dashboard', admin_dashboard_path) if current_account != site_account %>
+<% end %>

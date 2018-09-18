@@ -1,0 +1,37 @@
+<%= render 'buyers/accounts/menu' %>
+
+<h2>Users of <%= h @account.org_name %></h2>
+
+<table class="data" id="buyer_users">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Created on</th>
+      <th>Role</th>
+      <th colspan="3">State</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr id="<%= dom_id(user) %>">
+        <td class="<%= user.state %>">
+          <%= link_to h(user.display_name), resource_path(user) %>
+        </td>
+        <td><%= h user.email %></td>
+        <td><%= user.created_at.to_date.to_s(:long) %></td>
+        <td><%=h user.role.to_s %></td>
+        <td><%=h user.state %></td>
+        <td class="operations">
+          <%= link_to 'Edit', edit_resource_path(user), :class => 'action edit' %>
+        </td>
+        <td class="operations">
+          <%= button_activate_or_suspend(user) %>
+      	</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @users %>

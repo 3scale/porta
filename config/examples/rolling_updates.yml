@@ -1,0 +1,33 @@
+base: &default
+  new_provider_documentation: false
+  proxy_pro: false
+  instant_bill_plan_change: false
+  service_permissions: true
+  async_apicast_deploy: false
+  duplicate_application_id: true
+  duplicate_user_key: true
+  plan_changes_wizard: false
+  require_cc_on_signup: false
+  apicast_per_service: true
+  new_notification_system: true
+  cms_api: false
+  forum: true
+  policies: true
+
+development:
+  <<: *default
+
+test:
+  new_provider_documentation: false
+  proxy_pro: false
+  instant_bill_plan_change: false
+  async_apicast_deploy: false
+  duplicate_application_id: true
+  plan_changes_wizard: false
+  require_cc_on_signup: false
+  apicast_per_service: true
+  new_notification_system: true
+
+preview:
+
+production:

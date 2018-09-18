@@ -1,0 +1,14 @@
+<%= render 'includes' %>
+
+<h1>Override email "<%= @page.name %>"</h1>
+
+<%= cms_form_for(@page) do |f| %>
+  <%= render 'form', :f => f %>
+  <%= f.inputs do %>
+    <%= f.input :system_name, :as => :hidden %>
+  <% end %>
+
+  <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+
+  <%= render 'buttons', f: f %>
+<% end %>

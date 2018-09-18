@@ -1,0 +1,526 @@
+form.formtastic ol, form.formtastic ul {
+  list-style: none;
+}
+
+input[type='text'],
+input[type='search'],
+textarea,
+select,
+button,
+form.formtastic fieldset.inputs input[type='text'],
+form.formtastic fieldset.inputs input[type='tel'],
+form.formtastic fieldset.inputs input[type='email'],
+form.formtastic fieldset.inputs input[type='url'],
+form.formtastic fieldset.inputs input[type='password'] {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: $font-size-base;
+  border: $border-width solid $border-color;
+  color: $font-color;
+  background-color: $background-color-base;
+  width: 100%;
+  padding: line-height-times(1/4);
+  height: line-height-times(3/2);
+  border-radius: $border-radius;
+  line-height: $line-height-base;
+
+  &:focus {
+    outline: none !important;
+    border-color: $highlight-color;
+    box-shadow: 0;
+    color: $highlight-color;
+  }
+}
+
+.error input[type='text'],
+.error textarea,
+.error select,
+form.formtastic fieldset.inputs .error input[type='text'],
+form.formtastic fieldset.inputs .error input[type='tel'],
+form.formtastic fieldset.inputs .error input[type='email'],
+form.formtastic fieldset.inputs .error input[type='url'],
+form.formtastic fieldset.inputs .error input[type='password'] {
+  border-color: $error-color;
+}
+
+textarea {
+  height: line-height-times(4.5);
+}
+
+button {
+  min-width: line-height-times(2);
+  width: auto;
+}
+
+form + hr {
+  margin: line-height-times(1) 0;
+}
+
+td.delta {
+  //td.delta input[type='text'] {
+  max-width: line-height-times(2);
+}
+
+td.delta input[type='text'] {
+  //width: line-height-times(1) !important;
+  min-width: 0;
+}
+
+th input[type='text'],
+th select,
+td input[type='text'],
+td select {
+  //max-width: calc(100% - #{line-height-times(2)});
+  min-width: line-height-times(4);
+
+  &#search_month_number,
+  &#search_year {
+    width: calc(50% - #{line-height-times(2)});
+  }
+}
+
+th input[type='submit'] {
+  width: auto;
+}
+
+fieldset ol li input[type='text'] + a {
+  float: right;
+  margin-top: line-height-times(-3/2, true);
+  position: relative;
+  z-index: 1000;
+  padding: line-height-times(1/4);
+}
+
+select {
+  max-width: calc(100% - #{$border-width}) !important;
+  margin: 0 line-height-times(1/4) 0 0;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-size: line-height-times(1/3) auto;
+  background-position: right line-height-times(1/3) center;
+  padding-right: line-height-times(1/2);
+  background-image: url("data:image/svg+xml;charset=utf-8, \
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
+        <polygon points='0,0 60,0 30,40' style='fill:#{$border-color};'/> \
+      </svg>");
+
+  &::-ms-expand {
+    border: 0;
+    background-color: transparent;
+    color: $border-color;
+  }
+
+  &:hover,
+  &:focus {
+    background-image: url("data:image/svg+xml;charset=utf-8, \
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
+        <polygon points='0,0 60,0 30,40' style='fill:#{$link-color};'/> \
+      </svg>");
+
+    &::-ms-expand {
+      color: $link-color;
+    }
+  }
+}
+
+.commit {
+  float: right;
+}
+
+input[type='checkbox'], input[type='checkbox']:active,
+form.formtastic fieldset > ol > li.boolean label input,
+form.formtastic fieldset > ol > li.radio fieldset ol li label input[type='radio'],
+form.formtastic fieldset.inputs input[type='checkbox'],
+form.formtastic fieldset.inputs input[type='checkbox']:active,
+form.formtastic fieldset.inputs > ol > li.select select {
+  position: relative;
+  top: -$border-width; // to make it more or less ok in chrome, firefox and safari
+  margin: 0 line-height-times(1/4) 0 $border-width;
+  vertical-align: baseline;
+  border-radius: $border-radius;
+}
+
+form.formtastic fieldset.inputs > ol > li.select select {
+
+}
+
+form.formtastic fieldset.buttons {
+  border-top: $border-width solid $border-color;
+  margin: line-height-times(2) 0;
+  padding: line-height-times(1/2) 0 0 0;
+  text-align: right;
+
+  li {
+    max-width: 100%;
+  }
+
+  &-inline {
+    border-top: 0;
+    margin: line-height-times(1/2) 0;
+  }
+}
+
+.button-bar fieldset.buttons {
+  border-top: 0 !important;
+
+  .delete {
+    margin-top: 0 !important;
+    float: none !important;
+  }
+}
+
+form.formtastic fieldset.buttons ol {
+
+  li {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+
+    &.commit {
+      text-align: right;
+    }
+  }
+
+  .delete {
+    margin-top: line-height-times(1/4);
+    float: left;
+  }
+}
+
+form + form .action.delete {
+  display: inline-block;
+  position: relative;
+  top: line-height-times(-7/2);
+  z-index: 1000;
+}
+
+form.formtastic ol > li#api_docs_service_body_input {
+    max-width: 100%;
+}
+
+form.formtastic ol > li {
+  padding: 0 0 0 0;
+  margin: 0 0 line-height-times(1) 0;
+  max-width: line-height-times(32);
+  position: relative;
+
+  &.full-width {
+    max-width: 100%;
+  }
+
+  &.hidden {
+    margin: 0;
+  }
+}
+
+form.formtastic .button-bar fieldset > ol > li {
+  min-width: 0;
+}
+
+form.formtastic table fieldset > ol > li {
+  margin: 0 0 line-height-times(1/2) 0;
+  min-width: 0;
+}
+
+form.formtastic fieldset > ol > li.radio fieldset ol li {
+  margin: 0 0 line-height-times(1/4) 0;
+}
+
+/* -------------------------------------------------------------------------------------------------
+Load this stylesheet after formtastic.css in your layouts to override the CSS to suit your needs.
+--------------------------------------------------------------------------------------------------*/
+
+form.formtastic {
+  text-align: left; /* overriding legacy_theme text-align: center*/
+  min-width: line-height-times(20);
+  width: 100%;
+
+  fieldset.inputs[data-behavior~=toggle-inputs] {
+    border: $border-width $border-color solid;
+    border-radius: $border-radius;
+    margin-left: 0;
+    padding-left: line-height-times(1);
+
+    .fa-caret-right,
+    .fa-caret-down {
+      font-size: $font-size-lg;
+    }
+
+    .fa-caret-down {
+      margin: 0 line-height-times(1/4) 0 line-height-times(-1/4);
+    }
+
+    &.packed {
+      background-color: transparent;
+      border-color: $background-color-base;
+      border-top-color: $border-color;
+    }
+
+    &> legend {
+      background-color: $background-color-base;
+      color: $highlight-color;
+      cursor: pointer;
+      margin-left: line-height-times(-1, true);
+      padding-left: 1px;
+
+      &:hover {
+        color: $font-color;
+      }
+    }
+  }
+
+  p.instruction { margin: 10px 0;  }
+
+  fieldset > ol > li label {
+    width: auto !important;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    display: block;
+  }
+
+  legend {
+
+    i.fa {
+      display: inline-block;
+
+      &.fa-caret-right {
+        width: line-height-times(1/4);
+        top: line-height-times(1/24);
+        position: relative;
+      }
+      &.fa-caret-down {
+        width: line-height-times(1/4);
+      }
+    }
+  }
+
+  label abbr {
+    display: none;
+  }
+
+  fieldset.inputs,
+  fieldset {
+    border: 0;
+    position: relative;
+    padding: line-height-times(1) 0 0 0;
+    border-top: $border-width solid $border-color;
+    margin-bottom: line-height-times(1.5);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    fieldset {
+      margin-left: line-height-times(1);
+      min-width: 0;
+
+      fieldset {
+        margin-left: 0;
+        min-width: 0;
+      }
+    }
+  }
+
+  fieldset {
+    border: 0;
+  }
+
+  legend:not(.label) {
+    padding: 0 line-height-times(1/2) 0 0;
+    font-size: $font-size-base;
+    text-transform: uppercase;
+    color: $label-color;
+    position: relative;
+    white-space: nowrap;
+  }
+}
+
+form.web_hook fieldset > ol > li.boolean label {
+  font-weight: $font-weight-normal;
+}
+
+form.web_hook table > tbody > tr > td > fieldset > ol > li.boolean label {
+  font-size: $font-size-sm;
+}
+
+form.formtastic fieldset > ol > li.boolean label {
+  padding: 0 0 0 0;
+}
+
+form#new_post.formtastic fieldset > ol > li.boolean label {
+  padding: 0 0 0 0;
+}
+
+form.formtastic fieldset > ol > li.text textarea {
+  border: $border-width solid $border-color;
+  color: $font-color;
+
+  &:focus {
+    outline: none !important;
+    border-color: $highlight-color;
+    box-shadow: 0;
+    color: $highlight-color;
+  }
+}
+
+select:disabled,
+form.formtastic fieldset.inputs input:disabled,
+form.formtastic fieldset.inputs input[readonly="readonly"] {
+  outline: none !important;
+  background: $disabled-background-color;
+  color: $disabled-color;
+  border: $border-width solid $border-color;
+  -webkit-text-fill-color: $disabled-color;
+}
+
+form.formtastic fieldset.inputs input[readonly="readonly"] {
+  color: $disabled-color;
+}
+
+form.formtastic fieldset.inputs input[type="submit"] {
+  width: auto;
+}
+
+form.formtastic fieldset > ol > li.password input {
+  max-width: none;
+}
+
+form.formtastic fieldset > ol > li.price   input,
+form.formtastic fieldset > ol > li.numeric input {
+  max-width: 25%;
+}
+
+form.formtastic fieldset fieldset fieldset {
+  margin: line-height-times(1) 0 line-height-times(1) line-height-times(1);
+  padding: 0 0 0 0;
+}
+
+form.formtastic table fieldset {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+
+form.formtastic .radio fieldset {
+  margin: 0 0 line-height-times(1/4) 0;
+}
+
+.dashboard_bubble form.formtastic fieldset > ol > li.boolean label {
+  padding-left:0;
+}
+
+.Hint {
+  color: $hint-color;
+  margin: line-height-times(1/4) 0 0;
+}
+
+.Label {
+  font-weight: $font-weight-bold;
+}
+
+form.formtastic fieldset > ol > li p.inline-hints,
+form.formtastic fieldset > ol > li p.inline-errors {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  color: $hint-color;
+  font-size: $font-size-sm;
+  max-width: line-height-times(36);
+  display: inline-block;
+}
+
+form.formtastic fieldset + p.inline-hints,
+form.formtastic fieldset > ol > li.inline-hints > p.inline-hints {
+  margin-left: line-height-times(1) !important;
+}
+
+form.formtastic fieldset > ol > li.inline-hints {
+  margin: 0;
+}
+
+form.formtastic fieldset > ol > li p.inline-errors {
+  color: $error-color;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
+}
+
+/*** FancyBox Adjustmets  ***/
+/****************************/
+
+#fancybox-inner form.formtastic fieldset > ol > li label {
+  float: none;
+  text-align: left;
+}
+
+#fancybox-inner form.formtastic fieldset > ol > li p.inline-hints {
+ margin: 0;
+}
+
+#fancybox-inner form.formtastic fieldset.buttons {
+  padding: 0;
+}
+
+
+form.formtastic fieldset > ol li.text > textarea.source_code {
+  width: 80em;
+}
+
+form.formtastic strong small {
+  font-size: $font-size-sm;
+}
+
+.ui-widget a {
+  outline: none;
+}
+
+form.formtastic .radio.required abbr {
+  display: none;
+}
+
+@mixin placeholder {
+  color: $placeholder-color;
+  font-style: italic;
+  opacity: 1;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  @include placeholder;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+  @include placeholder;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  @include placeholder;
+}
+
+form.button-to, form.button-to div, form.inline, form.inline div {
+  display: inline;
+}
+
+form.formtastic fieldset > ol > li fieldset legend {
+  padding: 0;
+  position: static;
+  width: 100%;
+}
+
+form.formtastic fieldset > ol > li fieldset legend.label label {
+  position: static;
+}
+
+.errorExplanation {
+  border: $border-width $error-color solid;
+  border-radius: $border-radius;
+  padding: line-height-times(1/2);
+  margin-bottom: line-height-times(1);
+  background-color:
+
+  h2 {
+    color: $error-color;
+  }
+}
+
+li.hidden {
+  display: none;
+}

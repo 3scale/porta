@@ -1,0 +1,107 @@
+// compass css basics
+@import "compass/utilities/general/clearfix";
+@import "compass/typography/lists/inline-block-list";
+@import "compass/css3";
+@import "compass/reset/utilities";
+@import "compass/typography/text/ellipsis";
+@include reset-html5;
+
+@import 'provider/typography';
+
+// vendored styles
+@import 'vendor/jquery.ui';
+@import 'vendor/jquery.tipsy';
+@import 'font-awesome';
+
+@import 'highlight/styles/github';
+@import 'provider/inline_helper';
+
+// TODO: remove this crap
+// but be aware that you have to remove all div.right and similar shit
+@import 'provider/legacy_theme';
+
+// modules and constants
+@import "provider/commons";
+@import 'provider/buttons';
+@import 'provider/dropdowns';
+@import 'provider/menu';
+@import 'provider/flash';
+@import 'provider/user_widget';
+@import 'provider/pop_navigation';
+
+@import 'provider/cms';
+
+@import 'provider/layouts/commons';
+@import 'provider/layouts/main';
+@import 'provider/layouts/login';
+
+
+@import 'provider/links';
+@import 'provider/footer';
+@import 'provider/forum';
+@import "provider/ribbon";
+@import 'provider/messages';
+@import 'provider/settings';
+@import 'provider/sidetabs';
+@import 'provider/charts';
+@import 'provider/services';
+@import 'provider/plans';
+@import 'provider/search';
+@import 'provider/bulk_operations';
+
+@import 'provider/fields_definitions';
+@import 'provider/alerts';
+@import 'provider/tables';
+@import 'provider/utilization';
+@import 'provider/forms';
+@import 'provider/upgrade_notice';
+@import 'provider/admin/account';
+@import 'provider/service_access';
+@import 'provider/plans_widget';
+@import 'provider/stats';
+@import 'vendor/c3';
+@import 'provider/stats/base';
+@import 'provider/stats/selector';
+@import 'provider/sample_data';
+@import 'provider/invoices';
+@import 'provider/finance';
+@import 'provider/groups';
+@import 'provider/webhooks';
+@import 'provider/metrics';
+@import 'provider/log_entries';
+@import 'provider/authentication_providers';
+@import 'provider/section';
+
+@import 'provider/liquid_docs';
+@import 'provider/docs_widget';
+@import 'provider/create_application';
+@import 'provider/logo';
+@import 'provider/info_box';
+@import 'provider/swagger_upgrade_box';
+@import 'provider/call_to_action';
+
+// view specific stylesheets placed in the controller paths
+@import 'provider/admin/cms/templates';
+@import 'provider/admin/cms/cms_intro';
+@import 'provider/admin/cms/files';
+@import 'provider/admin/cms/sections';
+@import 'provider/admin/cms/templates/versions';
+@import 'provider/admin/cms/switches';
+@import 'provider/admin/cms/sidebar';
+
+@import 'provider/admin/buyers/plans/listing';
+@import 'provider/admin/dashboard';
+@import 'provider/settings_box';
+@import 'provider/admin/apiconfig/services/proxies';
+@import 'provider/admin/apiconfig/services/hosted_proxy';
+@import 'provider/admin/apiconfig/services/promote_form';
+@import 'provider/admin/apiconfig/services/promote_button';
+@import 'provider/admin/apiconfig/services/configuration_version';
+
+@import 'provider/colorbox';
+
+@import 'provider/onboarding';
+@import 'provider/pagination';
+
+@import 'provider/access_tokens';
+@import 'provider/print';

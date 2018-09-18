@@ -1,0 +1,22 @@
+- content_for :head do
+  = javascript_include_tag 'provider/signup_v2'
+
+#signup-container
+
+- content_for :javascript do
+  javascript:
+    var signup = new ThreeScale.Signup({
+      signup_origin: 'marketo',
+      server: window.location.origin
+    });
+
+    ThreeScale.Signup.$(document).ready(function(event){
+      var signup_body = ThreeScale.Signup.$(this).find('#signup-container');
+      signup.renderTo(signup_body);
+
+      signup.$iframe.width(600);
+
+      signup.on('ready', function(){
+        signup_body.find('.signup-loading').remove();
+      });
+    });

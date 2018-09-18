@@ -1,0 +1,8 @@
+<% content_for :sublayout_title, "Edit Service Plan #{h @plan.name}"  %>
+<div>
+  <%= semantic_form_for @plan, :url => admin_service_plan_path(@plan) do |form| %>
+    <%= render :partial => 'form', :object => form %>
+    <%= form.buttons :commit %>
+  <%- end %>
+  <%= render 'api/plans/features' -%>
+</div>

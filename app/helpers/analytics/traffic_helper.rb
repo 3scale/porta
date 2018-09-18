@@ -1,0 +1,2 @@
+module Analytics::TrafficHelper
+end

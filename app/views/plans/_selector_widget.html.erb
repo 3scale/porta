@@ -1,0 +1,51 @@
+<style type="text/css" media="screen">
+  .plan-selector-links a {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .plan-preview {
+    width: 290px;
+  }
+
+  .payment-details {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+  }
+
+  .plan-change-button {
+    margin-top: 10px;
+  }
+</style>
+
+<div class="plans-selector" data-plan-id='<%= @cinstance.plan.id %>'></div>
+
+<div class='plan-preview current' data-plan-id='<%= @cinstance.plan.id %>'>
+  <%= render :partial => 'plans/widget', :locals => {:plan => @cinstance.plan} %>
+</div>
+
+
+<% for plan in plan.issuer.published_application_plans %>
+  <% if application.plan.id != plan.id %>
+    <div class='plan-preview' data-plan-free='<%= plan.free? %>' data-plan-id='<%= plan.id %>' style="display:none;">
+      <%= render :partial => 'plans/widget', :locals => {:plan => plan} %>
+      <% if plan.paid? %>
+        <div class='payment-details'>
+          <p>This is a paid plan. You can update your payment details
+          <%= link_to "here", payment_details_path %>.</p>
+        </div>
+      <% end %>
+
+    <% if application.service.buyer_permitted_to_directly_change_plan?  %>
+      <%= button_to "Change Plan", change_plan_path(plan, :application_id => application.id),
+                  :class => 'plan-change-button' %>
+
+    <% elsif @cinstance.service.buyer_permitted_to_request_plan_change? %>
+      <%= button_to "Request Plan Change",
+                    request_change_plan_path(plan, :application_id => application.id),
+                    :class => 'plan-change-button' %>
+    <% end %>
+    </div>
+  <% end %>
+<% end %>

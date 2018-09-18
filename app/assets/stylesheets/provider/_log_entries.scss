@@ -1,0 +1,12 @@
+#log-entries {
+  tr.error {
+    background-color: $log-entries-error-bg-color;
+    td.description { font-weight: $font-weight-bold; }
+  }
+
+  tr.warning { background-color: $log-entries-warning-bg-color; }
+
+  td.created_at { width: 15em; }
+  td.level { width: 7em; }
+  td.description { width: auto; }
+}

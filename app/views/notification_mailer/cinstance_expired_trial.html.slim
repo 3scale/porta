@@ -1,0 +1,10 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p 
+  | #{@account.name}'s trial of the #{application_friendly_name(@application)} on the #{@plan.name} has expired.
+
+p
+  | #{@account.name} admin users have been notified and will receive an appropriately adjusted invoice for the next billing cycle.
+
+p= link_to 'View application', admin_buyers_application_url(@account)

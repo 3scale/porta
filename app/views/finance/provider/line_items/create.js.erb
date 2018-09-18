@@ -1,0 +1,13 @@
+<%
+  html = render(:partial => '/finance/provider/shared/line_item',
+                :object => @line_item,
+                :locals => { :editable => true })
+%>
+
+$('#line_items tbody').append('<%= escape_javascript(html) %>');
+$('#invoice_cost_without_vat').html('<%= price_tag(@invoice.cost(:vat_included => false)) %>');
+$('#invoice_cost_vat_amount').html('<%= price_tag(@invoice.vat_amount) %>');
+$('#invoice_cost').html('<%= price_tag(@invoice.cost) %>');
+
+$.flash.notice('Line item added.');
+$.colorbox.close();

@@ -1,0 +1,15 @@
+Dear {{account.name}},
+
+{%if provider.multiple_applications_allowed?%}
+{{provider.name}} has rejected your application submission for the API.
+{%else%}
+{{provider.name}} has rejected your application for service {{service.name}} ({{plan.name}}).
+{%endif%}
+
+{%unless application.rejection_reason == ''%}
+** Additional Information from Provider **
+{{application.rejection_reason}}
+******************************************
+{%endunless%}
+
+The API Team

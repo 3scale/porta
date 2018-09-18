@@ -1,0 +1,116 @@
+@import 'provider/typography'; // needed for legacy dev portals that include this stylesheet directly
+
+// tooltip styling
+.jqstooltip {
+  background-color: transparent !important;
+  color: $color-base !important;
+  border: 0 !important;
+}
+
+.jqsfield {
+  background-color: transparent !important;
+  font-size: $font-size-sm !important;
+  color: $color-base !important;
+}
+
+#mini-charts .metric-name {
+  color: $label-color;
+  float: right;
+  margin-top: line-height-times(1/2);
+  margin: line-height-times(1/4) line-height-times(1/2) 0 0;
+  position: relative;
+  z-index: 1000;
+  width: calc(20% - #{line-height-times(1/2)});
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+#mini-charts .charts {
+  position: relative;
+  border-radius: $border-radius;
+  background: $content-background;
+  border: $border-width solid $border-color;
+  min-width: 0;
+  height: line-height-times(3);
+  margin-top: line-height-times(1);
+}
+
+#mini-charts .spark {
+  display: block;
+  height: 100%;
+  width: 80%;
+}
+
+#mini-charts .total {
+  position: absolute;
+  bottom: line-height-times(1/2);
+  right: line-height-times(1/2);
+  z-index: 0;
+  color: $label-color;
+  font-size: $font-size-sm;
+  font-style: italic;
+}
+
+#mini-charts .total span {
+  color: $font-color;
+  padding-top: line-height-times(1);
+}
+
+.chart-wrap .loading, #mini-charts .loading, #methods-wrap .loading {
+  position: absolute;
+  background: white;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  color: $font-color;
+  z-index: 1000;
+  text-align: center;
+  padding-top: line-height-times(1)
+}
+
+// override stats stylesheets
+#side-tabs .stats-support {
+    max-width: 20%;
+    width: auto;
+    position: static;
+
+    #methods {
+      width: auto;
+      height: auto;
+      max-height: line-height-times(12);
+
+      &.data-sup ul {
+        width: auto;
+        max-width: 100%;
+
+        li {
+          padding-right: line-height-times(1/2);
+        }
+        span small {
+          width: 95%;
+          margin-right: line-height-times(1/2);
+        }
+      }
+    }
+  }
+
+@mixin fluid-charts {
+
+  .charts {
+    width: auto;
+    max-width: 100%;
+    margin-bottom: line-height-times(1/2);
+    margin-top: line-height-times(1/2);
+
+    .spark {
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+  }
+}

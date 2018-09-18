@@ -1,0 +1,15 @@
+var id    = "#<%= dom_id(@pricing_rule) %>",
+    count = "<%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>",
+    counter_id = "#pricing_rules_counter_<%= @pricing_rule.metric.id %>";
+
+jQuery(id).remove();
+
+jQuery(counter_id).html(count);
+
+jQuery.flash.notice('Pricing rule has been deleted.');
+
+<% # TODO: this should happend when number of metrics falls below 2, not pricing_rules.
+# if @plan.pricing_rules.count < 2
+#   page.hide('total_cost')
+# end
+ %>

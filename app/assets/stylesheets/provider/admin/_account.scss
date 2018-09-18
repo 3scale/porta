@@ -1,0 +1,50 @@
+#account-column-wrapper {
+  @include clearfix;
+  margin-bottom: line-height-times(2);
+
+  #account-overview,
+  #plan-overview {
+    @extend div.left;
+
+    table tr {
+      border-bottom: $border-width solid $border-color;
+    }
+  }
+
+  #plan-overview {
+    @extend div.right;
+  }
+}
+
+#key-overview {
+  margin-bottom: line-height-times(2);
+
+  .key {
+      background-repeat: no-repeat;
+      background-position: 10px 20px;
+      background-image: image-url('provider/key-background.png');
+
+      text-align: center;
+      vertical-align: middle;
+
+
+      padding: 40px 5px 15px 45px;
+      font-family: $font-family-monospace;
+      font-size: 26px;
+  }
+}
+
+
+#account-redhat-connect,
+#account-cancellation,
+#account-upgrade {
+  margin-top: 5em;
+}
+
+.included {
+  color: $success-color;
+}
+
+.excluded {
+  color: $error-color;
+}

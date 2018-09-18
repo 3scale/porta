@@ -1,0 +1,12 @@
+<% plan.pricing_rules.group_by(&:metric).each do |metric, pricing_rules| %>
+  <% next unless metric # TODO: this is temporary HACK, need to make sure there are no pricing_rules without metric %>
+
+  <p><%= "+ " if @flat_cost %> <strong><%= h metric.name.capitalize %>:</strong>
+    <% pricing_rules.each do |pricing_rule| %>
+      <em><%= price_tag(pricing_rule.cost_per_unit_as_money, :precision => 4) %></em>
+      per <%= metric.unit %>
+      (<%= pricing_rule.min %> -
+      <%= pricing_rule.max.nil? ? '&#8734;' : pricing_rule.max %> <%= metric.unit %>(s)).
+    <% end %>
+  </p>
+<% end %>

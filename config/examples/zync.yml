@@ -1,0 +1,17 @@
+default: &base
+  endpoint: <%= ENV['ZYNC_ENDPOINT'] %>
+  message_bus: true
+  authentication:
+    token: <%= ENV['ZYNC_AUTHENTICATION_TOKEN'] %>
+  connect_timeout: 2
+  send_timeout: 2
+  receive_timeout: 10
+
+development:
+  <<: *base
+
+test:
+  <<: *base
+
+production:
+  <<: *base

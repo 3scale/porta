@@ -1,0 +1,5 @@
+(function($) {
+  <%= render :partial => '/shared/flash_message' %>
+  $("#cinstance_state").html(<%= render_to_js_string('state') %>);
+ // TODO: highlight effect
+})(jQuery);

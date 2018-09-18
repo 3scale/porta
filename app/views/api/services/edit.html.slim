@@ -1,0 +1,8 @@
+- content_for :sublayout_title, 'Naming'
+
+= semantic_form_for @service, url: admin_service_path(@service) do |form|
+  = render partial: 'api/services/forms/naming', locals: { form: form }
+  = form.buttons do
+    = form.commit_button
+
+= render partial: 'api/services/delete', locals: { service: @service }

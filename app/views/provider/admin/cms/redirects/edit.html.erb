@@ -1,0 +1,5 @@
+<h1>Edit Redirect</h1>
+
+<%= semantic_form_for @redirect, :url => provider_admin_cms_redirect_path(@redirect) do |f| %>
+  <%= render :partial => 'form', :object => f %>
+<% end %>

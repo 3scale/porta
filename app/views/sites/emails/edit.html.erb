@@ -1,0 +1,29 @@
+<h2 >Inbound Email Addresses</h2>
+
+<%= semantic_form_for @account, :url => admin_site_emails_url do |form| %>
+  <%= form.inputs 'General Support Emails' do %>
+    <%= form.input :support_email, :input_html => { :value => @account.support_email }, :hint => 'General support email address. Liquid usage: {{ provider.support_email }}.' %>
+    <%= form.input :finance_support_email, :input_html => { :value => @account.finance_support_email }, :hint => 'Finance support email address. Liquid usage: {{ provider.finance_support_email }}.' unless current_account.settings.finance.denied? %>
+  <% end %>
+
+    <%= form.inputs 'Support emails per Service' do %>
+      <p class="hint">Liquid usage: {{ service.support_email }}.</p>
+      <br/>
+
+      <% @services.each do |service| %>
+        <%= form.semantic_fields_for service do |sf| %>
+          <%= sf.input :support_email, :label => "Service #{service.name}", :input_html => { :value => service.support_email, :id => "service_#{service.id}_support_email", :name => "service_#{service.id}_support_email" } %>
+       <% end
+        end
+      end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button 'Save' %>
+  <% end %>
+<% end %>
+
+<% if readonly_dns_domains? %>
+  <h2>Outbound Email Addresses</h2>
+  <% docs_email_configuration_url = I18n.t('docs.developer_portal.email_configuration', docs_base_url: docs_base_url, docs_anchor: docs_anchor) %>
+  <p><%= t('.outbound_emails_html', docs_email_configuration_url: docs_email_configuration_url) %></p>
+<% end %>

@@ -1,0 +1,94 @@
+// StatsSelector component
+
+$body-color: #333;
+$border-width: 1px !default;
+$border-color: #eee;
+$dropdown-bg: #fff !default;
+$dropdown-border-color: rgba(0, 0, 0, .15) !default;
+$dropdown-border-width: $border-width !default;
+$dropdown-divider-bg: #e5e5e5 !default;
+$dropdown-link-color: #333;
+$font-size: 12px;
+$shadow-color: rgba(0, 0, 0, .175);
+$dropdown-box-shadow: 0 6px 12px $shadow-color !default;
+$caret-width: .5em !default;
+$caret-width-lg: $caret-width !default;
+$zindex-dropdown: 1000 !default;
+
+.StatsSelector {
+  display: inline-block;
+  margin-bottom: 24px;
+  position: relative;
+
+  &-item {
+    background: none;
+    clear: both;
+    color: $dropdown-link-color;
+    cursor: pointer;
+    display: block;
+    font-weight: normal;
+    padding: 3px 20px;
+    text-align: inherit;
+    text-decoration: none !important;
+    white-space: nowrap;
+    width: 100%;
+
+    &.is-children {
+      font-style: italic;
+      padding-left: 30px;
+    }
+
+    &.is-children::before {
+      content: '- ';
+    }
+
+    &.is-selected {
+      font-weight: bold;
+    }
+  }
+
+  &-toggle {
+    border: $border-width solid $border-color;
+    font-size: 12px;
+    padding: 16px;
+    width: auto;
+
+    &::after {
+      border-left: $caret-width solid transparent;
+      border-right: $caret-width solid transparent;
+      border-top: $caret-width solid;
+      content: '';
+      display: inline-block;
+      height: 0;
+      margin-left: 4px;
+      margin-right: 4px;
+      vertical-align: middle;
+      width: 0;
+    }
+  }
+
+  &-menu {
+    background-clip: padding-box;
+    background-color: $dropdown-bg;
+    border: $border-width solid $border-color;
+    color: $body-color;
+    display: none;
+    float: left;
+    font-size: $font-size;
+    left: 0;
+    list-style: none;
+    margin: 2px 0 0;
+    min-width: 160px;
+    padding: 5px 0;
+    position: absolute;
+    text-align: left;
+    top: 100%;
+    z-index: $zindex-dropdown;
+  }
+
+  &.is-open {
+    > .StatsSelector-menu {
+      display: block;
+    }
+  }
+}

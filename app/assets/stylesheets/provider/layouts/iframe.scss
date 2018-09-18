@@ -1,0 +1,244 @@
+@import "compass/css3";
+@import "compass/typography";
+@import "vendor/jquery.tipsy";
+@import "provider/typography";
+@import "provider/buttons";
+
+$website-background-color: #f4f4f4;
+
+html, body, #content {
+  height: 100%;
+  line-height: 1.5;
+}
+
+body, input, textarea {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: $font-color;
+}
+
+body {
+  background-color: white;
+  margin: 0;
+  color: $font-color;
+}
+
+@mixin expand-margin {
+  // this is hack to expand margin of elements inside content
+  padding-top: 1px;
+  margin-top: -1px;
+}
+
+#content {
+  margin: 0 auto;
+  background-color: $website-background-color;
+  p {
+    font: 15px;
+    white-space: nowrap;
+    float: left;
+  }
+}
+
+#{headings()} {
+  margin-top: 0;
+  color: inherit;
+}
+
+.formtastic .inputs .field > label {
+  margin-top: -8px !important;
+  display: initial !important;
+  width: auto !important;
+  font-size: 13px;
+}
+
+.big-button {
+  width: 100% !important;
+  font-size: 16px;
+}
+
+form.formtastic {
+  #signup-text-column {
+    display: inline-block;
+    padding-top: 12px;
+    width: 280px;
+    vertical-align: top;
+    border: none;
+    margin-left: 40px;
+    h2 {
+      color: black;
+    }
+    p {
+      margin-top: 20px;
+      text-align: left;
+      &.footnote {
+        font-size: smaller;
+      }
+      &.highlight {
+        font-weight: $font-weight-bold;
+      }
+      a {
+        color: #999999;
+      }
+    }
+  }
+  fieldset {
+    display: inline-block;
+    vertical-align: top;
+    border: none;
+    p.inline-hints {
+      margin-left: 0.5em !important;
+    }
+    ul.errors {
+      margin: -26px 0 0 0;
+      padding: 5px 0 5px 0.5em;
+    }
+    ol {
+      height: 100%;
+      padding: 0px 10px 10px 10px;
+      list-style: none;
+
+      li {
+        overflow: visible;
+        position: relative;
+        margin-bottom: 21px;
+        &.error input, &.error.string input, &.error.password input, &.error.email input, &.phone input {
+          border: 1px solid $error-color;
+        }
+        input.create {
+          @extend .big-button;
+        }
+        &.commit {
+          // align submit to bottom
+          margin-top: 20px;
+          margin-bottom: 0;
+          float: left;
+          input {
+            width: 216px !important;
+          }
+        }
+        label {
+          display: none;
+        }
+        input, &.string input, &.password input, &.email input,  &.phone input {
+          // copypasta from wp theme
+          font-size: 13px;
+          color: #888888;
+          padding: 9px 7px 7px;
+          width: 200px;
+          border: 1px solid #dddddd;
+          @include border-radius(3px);
+          @include box-shadow(inset 0 0 3px rgba(0, 0, 0, 0.1));
+          &:focus {
+            outline: 0;
+            border-color: #aaaaaa;
+            color: #555555;
+            @include transition(border-color 0.1s linear);
+          }
+          &.recovery {
+            @extend .big-button;
+            margin-top: 1px;
+            padding-left: 1em;
+            padding-right: 1em;
+            width: auto;
+          }
+        }
+        &.domain input {
+          width: 164px;
+        }
+      }
+    }
+  }
+  p.inline-hints {
+    display: none;
+  }
+}
+
+.signup_form, #signup-success {
+  color: #555555;
+  h2 {
+    margin-top: 6px;
+    font-size: 20px;
+    font-weight: $font-weight-normal;
+  }
+}
+
+.signup_form {
+  fieldset {
+    width: 280px;
+  }
+  p.inline-errors {
+    position: absolute;
+    left: -60px;
+    top: 33px;
+    font-style: italic;
+  }
+}
+
+.signup_form p {
+  font-size: 13px;
+}
+
+.label-like {
+  margin-top: -7px !important; //need to override formtastic stylesheet
+}
+
+.signup_form, #domain-recovery {
+  height: 100%;
+  fieldset, ol {
+    padding: 0;
+  }
+  li:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#domain-recovery {
+  input[type=text] {
+    width: 200px;
+    float: left;
+    margin-right: 5px;
+  }
+}
+
+#signup-success {
+  line-height: 2;
+  strong {
+    color: $highlight-color;
+  }
+  a {
+    color: $link-color;
+
+    &.tone-down {
+      color: #555555;
+    }
+  }
+  a:hover {
+    color: $link-hover-color;
+  }
+  .twitter-share-button {
+    margin-bottom: -5px;
+  }
+}
+
+ul.social {
+  @include inline-list;
+}
+
+select {
+  width: 216px;
+  margin-left: 1px !important;
+  background-color: white;
+}
+
+div.form-hints {
+  width: 216px;
+  margin-left: 5px !important;
+  p {
+    text-align: center;
+    font-style: italic;
+  }
+}
+
+// make sure measurement stuff doesn't mess up the rendering
+iframe[name="google_conversion_frame"], img[height="1"][width="1"] {
+  display: none;
+}

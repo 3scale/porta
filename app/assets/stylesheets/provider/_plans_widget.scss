@@ -1,0 +1,100 @@
+$upgrade-button-top: line-height-times(20);
+$upgrade-button-left: line-height-times(1);
+$upgrade-button-width: line-height-times(10);
+
+.plan-preview-box {
+  background: rgba($content-background, .99);
+  border: $border-width solid $border-color;
+  border-radius: $border-radius;
+  box-shadow: 0 0 line-height-times(1 / 2) $box-shadow-color;
+  left: 50%;
+  margin-left: line-height-times(-25);
+  min-height: line-height-times(40);
+  overflow: hidden;
+  padding: line-height-times(1);
+  position: absolute;
+  text-align: left;
+  top: line-height-times(5 / 2);
+  width: line-height-times(50);
+  z-index: 9999;
+
+  .plans-menu {
+    float: left;
+    font-size: $font-size-sm;
+    width: 40%;
+
+    a {
+      color: $menu-color;
+      height: line-height-times(2);
+
+      &:hover {
+        color: $menu-hover-color;
+      }
+
+      &.current {
+        color: $menu-active-color;
+      }
+    }
+
+    ul {
+      font-size: $font-size-base;
+      list-style: none inside;
+    }
+  }
+
+  #plans-content {
+    border-left: $border-width solid $border-color;
+    float: left;
+    padding-left: line-height-times(1);
+    width: 60%;
+  }
+
+  .plan-review-section {
+    margin-top: line-height-times(2);
+  }
+
+  // HACK HACK HACK - as there is 1 button per plan we have to move it to the left like this
+  .select-plan-button,
+  .current-plan-notice,
+  .contact-by-email-notice {
+    left: $upgrade-button-left;
+    position: absolute;
+    top: $upgrade-button-top;
+  }
+
+  #credit-card-status {
+    left: $upgrade-button-left;
+    position: absolute;
+    top: $upgrade-button-top + line-height-times(3);
+    width: $upgrade-button-width;
+  }
+
+  .contact-by-email-notice {
+    width: $upgrade-button-width;
+  }
+
+  // MEGA HACK HACK HACK
+  .select-plan-button[data-can-upgrade=false] {
+    display: none;
+  }
+
+  .close-box {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    height: line-height-times(2);
+    position: absolute;
+    right: line-height-times(1);
+    text-align: right;
+    top: line-height-times(2 / 3);
+    width: line-height-times(1);
+
+    &::after {
+      @include iconic('\f057\0000a0');
+    }
+  }
+
+  .loading h3 {
+    text-align: center;
+  }
+}

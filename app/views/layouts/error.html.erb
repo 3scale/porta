@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title><%= yield(:title).try(:strip).try(:presence) || 'We are sorry, but something went wrong' %></title>
+    <%- admin_domain = Account.is_admin_domain?(request.host) -%>
+    <%- master_domain = Account.is_master_domain?(request.host) -%>
+    <%- site_account ||= Account.master -%>
+    <%= stylesheet_link_tag 'error' -%>
+    <%= render 'provider/analytics' if admin_domain %>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div id="content">
+        <% if admin_domain || master_domain %>
+          <%= render partial: 'provider/logo' %>
+        <% else %>
+          <%= render partial: 'shared/logo', locals: { site_account: site_account } %>
+        <% end %>
+
+        <%= yield %>
+      </div>
+
+      <!-- AIRBRAKE ERROR -->
+
+      <% if admin_domain || master_domain %>
+        <div id='footer'>
+          <ul>
+            <%= render 'provider/footer_powered_by_part' %>
+          </ul>
+        </div>
+      <% else %>
+        <%= render partial: 'shared/footer', locals: { site_account: site_account } %>
+      <% end %>
+    </div>
+
+  </body>
+</html>

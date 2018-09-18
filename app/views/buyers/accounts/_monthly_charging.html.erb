@@ -1,0 +1,50 @@
+<h3>Billing Status</h3>
+<table class='list' id='finance-status'>
+
+  <tr>
+    <%
+     action = account.billing_monthly? ? 'Disable' : 'Enable'
+     status = account.billing_monthly? ? 'enabled' : 'disabled'
+    %>
+    <td>
+      <%= boolean_status_img(account.billing_monthly?) %>
+      Monthly billing is <%= status %>.
+    </td>
+    <td>
+      <%= fancy_button_to action,
+                          toggle_monthly_billing_admin_buyers_account_path(account),
+                          :method => :put,
+                          id: "#{action.downcase}-monthly-billing",
+                          class: "action #{action.downcase}",
+                          title: "#{action} billing",
+                          data: {confirm: "Are you sure you want to #{action.downcase} billing for #{@account.name}"} %>
+
+    </td>
+  </tr>
+
+  <% if can?(:manage, :charging) -%>
+   <tr>
+      <td colspan="2"><%= credit_card_stored_status(account)%> </td>
+    </tr>
+
+    <%
+     action = account.paying_monthly? ? 'Disable' : 'Enable'
+     status = account.paying_monthly? ? 'enabled' : 'disabled'
+    %>
+    <tr>
+      <td>
+        <%= boolean_status_img(account.paying_monthly?) %>
+        Monthly charging is <%= status %>.
+      </td>
+      <td>
+          <%= fancy_button_to action, toggle_monthly_charging_admin_buyers_account_path(account),
+                         :method => :put,
+                         :id => "#{action.downcase}-monthly-charging",
+                         :class => "action #{action.downcase}",
+                         :title => "#{action} charging",
+                         data: {confirm: "Are you sure you want to #{action.downcase} charging for #{@account.name}"} %>
+      </td>
+    </tr>
+  <% end %>
+
+</table>

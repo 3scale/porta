@@ -1,0 +1,5 @@
+<% if @ping_response.respond_to?(:status) %>
+  $.flash.notice("'<%= j(@webhook.url) %>' responded with " + '<%= j(@ping_response.status.to_s) %>');
+<% else %>
+  $.flash.error('Ping failed: ' + <%= @ping_response.message.to_json.html_safe %>);
+<% end %>

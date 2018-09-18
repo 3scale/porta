@@ -1,0 +1,8 @@
+<%= form.inputs :for => :profile do |fields| %>
+
+  <%= fields.input :products_delivered, :as => :select, :collection => Profile::ProductsDelivered, :label => "How many products do you expect to ship?" %>
+
+  <%= fields.input :company_size, :as => :select, :required => true,
+                    :collection => Profile::CompanySizes,
+                    :label => 'How many employees are in your company?' %>
+<% end %>

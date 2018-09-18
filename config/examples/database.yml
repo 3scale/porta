@@ -1,0 +1,39 @@
+<% if ENV['DB'] == 'oracle' %>
+default: &DEFAULT
+  adapter: oracle_enhanced
+  username: rails
+  password: railspass
+  database: systempdb<%= ENV['TEST_ENV_NUMBER'] %>
+  host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
+  time_zone: 'UTC'
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
+
+production:
+  <<: *DEFAULT
+
+development:
+  <<: *DEFAULT
+
+test:
+  <<: *DEFAULT
+<% else %>
+default: &DEFAULT
+  adapter: mysql2
+  username: root
+  password:
+  encoding: utf8
+  collation: utf8_bin
+  host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
+
+production:
+  <<: *DEFAULT
+  database: 3scale_system_production
+
+development:
+  <<: *DEFAULT
+  database: 3scale_system_production
+
+test:
+  <<: *DEFAULT
+  database: 3scale_system_test<%= ENV['TEST_ENV_NUMBER'] %>
+<% end %>

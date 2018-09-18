@@ -1,0 +1,18 @@
+<%= csrf_meta_tag %>
+
+<%= javascript_include_tag "vendor/jquery-#{defined?(jquery) ? jquery : '2.1.4'}.min.js" %>
+
+<%= javascript_include_tag 'vendor/jquery-migrate-1.2.1.min.js' %>
+
+<!--[if IE]>
+  <%= javascript_include_tag 'vendor/excanvas.compiled.js' %>
+<![endif]-->
+
+<%= javascript_include_tag 'vendor/colorbox/jquery.colorbox-min.js' %>
+<%= stylesheet_link_tag 'colorbox/colorbox.css' %>
+
+<%= javascript_include_tag 'highlight/highlight.pack.js' %>
+<%= javascript_include_tag 'help', 'flash', 'remote', 'switch', 'ajax_upload', 'extra_fields' %>
+<%= javascript_include_tag 'application' %>
+
+<%= yield :javascripts %>

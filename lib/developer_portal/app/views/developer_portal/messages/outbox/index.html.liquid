@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'messages/menu'%}
+    <table class="table panel panel-default" id="messages">
+      <thead class="panel-heading">
+        <tr>
+          <th>Subject</th>
+          <th>To</th>
+          <th colspan="2">Date sent</th>
+        </tr>
+      </thead>
+      <tbody class="panel-body panel-footer">
+        {% if messages.size > 0 %}
+          {% for message in messages %}
+            <tr class="{{ message.state }}">
+              <td><a href="{{ message.url }}">{{ message.subject }}</a></td>
+              <td>{{ message.recipients }}</td>
+              <td>{{ message.created_at }}</td>
+              <td>{{ '<i class="fa fa-trash"></i>' | html_safe | link_to: message.url, title: 'Delete message', method: 'delete' }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4">Your outbox is empty.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include 'shared/pagination' with pagination %}

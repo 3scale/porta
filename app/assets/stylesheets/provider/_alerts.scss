@@ -1,0 +1,9 @@
+.data .events .alert {
+  &.unread, &[data-state='unread'] {
+    font-weight: $font-weight-bold;
+
+    .action {
+      font-weight: $font-weight-normal;
+    }
+  }
+}

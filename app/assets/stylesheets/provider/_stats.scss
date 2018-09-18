@@ -1,0 +1,37 @@
+.stats-widget {
+  @extend .overview-widget;
+
+  ul.listing {
+    width: 20%;
+    float: left;
+    margin-top: line-height-times(1/2);
+    margin-right: line-height-times(1);
+
+    li {
+      max-width: auto;
+      & + li:before {
+        $item-border-color: $overview-widget-border;
+      }
+    }
+  }
+}
+
+.inline_stats {
+  $border-color: $border-color;
+
+  #mini-charts {
+    @include fluid-charts;
+
+    .charts {
+      float: left;
+      margin-right: line-height-times(1);
+      min-width: line-height-times(12);
+      min-height: line-height-times(6);
+      border-color: $border-color;
+      .metric-name {
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+  @include clearfix;
+}

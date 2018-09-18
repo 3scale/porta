@@ -1,0 +1,13 @@
+Dear {{account.name}},
+
+{{provider.name}} has rejected your subscription of service {{service.name}} ({{plan.name}}).
+
+{%unless subscription.rejection_reason == ''%}
+** Additional Information from Provider **
+{{subscription.rejection_reason}}
+******************************************
+{%endunless%}
+
+If you have questions please contact us at {{ service.support_email }}.
+
+The API Team

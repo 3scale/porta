@@ -1,0 +1,14 @@
+<h2>Customize Application Plan</h2>
+
+<% semantic_form_for plan,
+                     :url => admin_buyers_contract_custom_application_plans_path(contract),
+                     :html => {:class => 'remote'} do |form| %>
+  <%= form.inputs do %>
+    <%= form.input :name, :required => true %>
+    <%= form.system_name %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button %>
+  <% end %>
+<% end %>

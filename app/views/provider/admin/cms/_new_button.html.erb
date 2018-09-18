@@ -1,0 +1,8 @@
+<%= dropdown_button("New #{name}", new_button_path, :id => 'cms-new-content-button', :important => true) do  %>
+  <%= dropdown_link 'New Page', new_provider_admin_cms_page_path %>
+  <%= dropdown_link 'New Layout', new_provider_admin_cms_layout_path %>
+  <%= dropdown_link 'New Partial', new_provider_admin_cms_partial_path %>
+  <%= dropdown_link 'New Section', new_provider_admin_cms_section_path %>
+  <%= dropdown_link 'New File', new_provider_admin_cms_file_path %>
+  <%= dropdown_link 'New Portlet', pick_provider_admin_cms_portlets_path %>
+<% end %>

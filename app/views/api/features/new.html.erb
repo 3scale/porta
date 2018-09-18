@@ -1,0 +1,5 @@
+<h2>New Feature</h2>
+
+<%= semantic_form_for @feature, :url => admin_plan_features_path(@plan), :html => {:class => 'remote'} do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>

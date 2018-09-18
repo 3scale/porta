@@ -1,0 +1,13 @@
+<div class="bulk_operation errors">
+  <h1>There were some errors:</h1>
+  <%- @errors.each do |application| -%>
+    <h2 class="contracts"><strong><%= contract.name %></strong> (<%= contract.account.org_name %>)</h2>
+    <ul class="errors">
+      <%- contract.errors.full_messages.each do |message| -%>
+        <li class="error"><%= h message %></li>
+      <%- end -%>
+    </ul>
+  <%- end -%>
+
+  <p>All other changes have been completed successfully.</p>
+</div>

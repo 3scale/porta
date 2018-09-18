@@ -1,0 +1,245 @@
+@import 'provider/typography'; // needed for dev portals that include this stylesheet directly
+
+.StatsMenu-container,
+.StatsMenuContainer,
+.StatsSelector-container,
+.StatsSelectorContainer {
+  display: inline-block;
+}
+
+/* Stats Menu Component */
+
+$stats-menu-border-color: $border-color;
+$stats-menu-text-color: $font-color;
+$stats-menu-link-color: $font-color;
+$stats-menu-link-color-selected: $highlight-color;
+$stats-menu-help-color: $label-color;
+
+.StatsMenu {
+  border: $border-width solid $stats-menu-border-color;
+  border-radius: $border-radius;
+  color: $stats-menu-text-color;
+  display: inline-block;
+  margin: 0 line-height-times(1/2) line-height-times(1) 0;
+  padding: line-height-times(1/2);
+  height: auto;
+
+  &-period {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-periodItem {
+    display: inline-block;
+    margin: 0 line-height-times(1/4);
+  }
+
+  &-custom {
+    border-left: $border-width solid $stats-menu-border-color;
+    display: inline-block;
+    font-style: italic;
+    padding-left: line-height-times(1/4);
+
+    select {
+      width: auto;
+      margin: line-height-times(-1/4) 0;
+    }
+  }
+
+  &-link,
+  &-Link {
+    color: $stats-menu-link-color;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover,
+    &.is-selected {
+      color: $stats-menu-link-color-selected;
+    }
+  }
+
+  &-periodLink,
+  &-customLink {
+    &.is-selected {
+      font-weight: $font-weight-bold;
+      text-decoration: none;
+    }
+  }
+
+  &-customInput {
+    display: none;
+  }
+}
+
+.Stats-message--notice {
+  color: $stats-menu-help-color;
+  font-style: italic;
+  margin: 0;
+
+  &.is-hidden {
+    display: none;
+  }
+}
+
+/* Stats Logs Component */
+.StatsLogs,
+.StatsLogs-loading {
+  &.is-hidden {
+    display: none;
+  }
+}
+
+/* StatsLogs Pagination */
+.StatsLogs-pagination-item {
+  display: inline-block;
+  padding: 0 line-height-times(1/8);
+}
+
+.StatsLogs-pagination-link {
+  cursor: pointer;
+}
+
+/* StatsMessages Components */
+.StatsMessages-list {
+  margin-bottom: line-height-times(1/2);
+  padding-left: line-height-times(1);
+}
+
+.StatsMessages-title {
+  margin-bottom: line-height-times(1/2);
+}
+
+/* StatsCVSLink */
+.StatsCSVLink {
+  display: inline-block;
+  float: right;
+}
+
+/* Stats Chart Component */
+$stats-chart-border-color: $border-color;
+$stats-chart-tooltip-shadow: $box-shadow-color;
+$stats-chart-tooltip-bg-color: $content-background;
+$stats-chart-tooltip-color: $label-color;
+
+.StatsChart-container {
+  &.is-loading {
+    opacity: .5;
+
+    &::before {
+      background-image: image-url('spinner.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+      bottom: 50%;
+      content: '';
+      height: line-height-times(2);
+      left: 50%;
+      position: absolute;
+      width: line-height-times(2);
+    }
+  }
+
+  .c3 svg {
+    font: $font-size-sm 'Lucida Grande', verdana, sans-serif;
+  }
+
+  .c3-line {
+    stroke-width: $border-width-lg;
+  }
+
+  .c3-grid line.c3-ygrid,
+  .c3-axis-y .tick line {
+    stroke: $stats-chart-border-color;
+  }
+
+  .c3-ygrid {
+    stroke-dasharray: 0;
+  }
+
+  .c3-axis-y .domain {
+    display: none;
+  }
+
+  .c3-tooltip-container {
+    border: $border-width solid $stats-chart-border-color;
+    border-radius: $border-radius;
+    box-shadow: 0 0 line-height-times(1/2) $stats-chart-tooltip-shadow;
+    background: rgba($content-background, .99);
+    //opacity: .98;
+  }
+
+  .c3-tooltip {
+    border: 0;
+    border-radius: $border-radius;
+    -moz-box-shadow: 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 transparent;
+    box-shadow: 0 0 0 transparent;
+    opacity: 1;
+  }
+
+  .c3-tooltip th {
+    background-color: $stats-chart-tooltip-bg-color;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    color: $stats-chart-tooltip-color;
+    padding: line-height-times(1/8) line-height-times(1/2);
+  }
+
+  .c3-tooltip tr {
+    border: 0;
+    border-bottom: $border-width solid $stats-chart-border-color;
+
+    &:last-child {
+      border-bottom: 0;
+
+      td {
+
+        &:first-child {
+          border-bottom-left-radius: $border-radius;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: $border-radius;
+        }
+      }
+    }
+  }
+
+  .c3-tooltip td {
+    border-left: none;
+    padding: 0 line-height-times(1/2);
+  }
+}
+
+.StatsChart,
+.StatsChart-noDataMessageContainer {
+  &.is-hidden {
+    display: none;
+  }
+}
+
+// StatsMethodsTable
+
+.StatsMethodsTable-name.is-children {
+  background-image: image-url('child_metric_background.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: line-height-times(1);
+}
+
+.StatsMethodsTable {
+  //line-height: 2.6;
+  margin-bottom: line-height-times(1);
+  margin-top: line-height-times(1/2);
+  width: 100%;
+
+  td,
+  th {
+    border-bottom: $border-width solid $stats-menu-border-color;
+  }
+}
+
+.ui-datepicker {
+  z-index: 10 !important;
+}

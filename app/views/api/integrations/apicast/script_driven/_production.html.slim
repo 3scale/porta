@@ -1,0 +1,82 @@
+section#production.production
+  - if @proxy.self_managed?
+    h1
+      ' Production:
+      small
+        = t("api.integrations.proxy.production.#{@service.deployment_option}.title")
+
+    section.proxy-on-premise
+      p = t('api.integrations.proxy.production.self_managed.description_html')
+
+    = semantic_form_for @proxy, url: update_onpremises_production_admin_service_integration_path(@service, anchor: 'production'), html: { class: "production-settings" } do |f|
+      div class="feedback api never-test"
+        i.fa.fa-puzzle-piece
+        = f.inputs "API" do
+          = f.input :api_backend, input_html: { readonly: true }, required: false
+      div class="feedback api never-test"
+        i.fa.fa-hdd-o
+        = f.inputs "API gateway" do
+          = f.input :endpoint, input_html: { placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" }
+      = f.buttons do
+        = f.button "Update Production Configuration",
+          button_html: {class: 'important-button', data: { disable_with: "updating…" }}
+      = link_to icon('cloud-download','Download the NGINX Config files'),admin_service_integration_path(@service, format: :zip), class: 'nginx-config-files next', data: { confirm: 'This version of APIcast has been deprecated. Find more info about the new APIcast at the top of this page.' }
+
+  - elsif !@service.backend_version.oauth?
+    h1
+      ' Production:
+      small
+        = t("api.integrations.proxy.production.#{@service.deployment_option}.title")
+
+      - if !@service.backend_version.oauth? && deployed?(@proxy) && !currently_deploying?(@proxy)
+        span.status
+          .deployed
+            => t('api.integrations.proxy.production.hosted.title')
+            | deployed
+
+    section.proxy-hosted-3scale
+      p = t('api.integrations.proxy.production.hosted.description')
+
+      = semantic_form_for @proxy, url: update_production_admin_service_integration_path(@service) do |f|
+        div class=("feedback api #{'success' if deployed?(@proxy)} #{'no-test' if currently_deploying?(@proxy) || !deployed?(@proxy) }")
+          i.fa.fa-puzzle-piece
+          = f.inputs "API" do
+            = f.input :api_backend, input_html: { readonly: true }, required: false
+        div class=("feedback api #{'success' if deployed?(@proxy)} #{'no-test' if currently_deploying?(@proxy) || !deployed?(@proxy) }")
+          i.fa.fa-hdd-o
+          = f.inputs "API gateway" do
+            = f.input :production_endpoint, input_html: { readonly: true }, required: false
+        .feedback.client
+          i.fa.fa-mobile-phone
+          = f.inputs "Client" do
+            - if currently_deploying?(@proxy) # currently deploying
+              .message.notice Deploying doesn't cause any downtime but can take up to 5 minutes to complete. Feel free to navigate away from this page. Reload this page to get the current deploy status.
+              = f.buttons do
+                = f.button "Deploying…",
+                  button_html: {class: 'update button disabled-button', name: 'deploy_production', value: '1',
+                  id: 'proxy-button-save-and-deploy-production', disabled: true}
+            - elsif @proxy.ready_to_deploy? && !deployed?(@proxy) # first time deploy
+              = f.buttons do
+                = f.button "Deploy",
+                  button_html: {class: 'important-button update', name: 'deploy_production', value: '1',
+                  id: 'proxy-button-save-and-deploy-production', data: { disable_with: "Deploying…" }}
+            - elsif @proxy.ready_to_deploy? && deployed?(@proxy)
+              li
+                = f.label :api_test_path
+                p#api-production-curl.curl
+                  = api_test_curl(@proxy, true)
+              = f.buttons do
+                = f.button "Deploy",
+                  button_html: {class: 'important-button update', name: 'deploy_production', value: '1',
+                  id: 'proxy-button-save-and-deploy-production', data: { disable_with: "Deploying…" }}
+            - else # not ready to deploy
+              - if deployed?(@proxy)
+                li
+                  = f.label :api_test_path
+                  p#api-production-curl.curl
+                    = api_test_curl(@proxy, true)
+              .message.error The API gateway in the staging environment needs to be green in order to deploy it in the production environment
+              = f.buttons do
+                = f.button "Deploy",
+                button_html: {class: 'update disabled-button', name: 'deploy_production', value: '1',
+                id: 'proxy-button-save-and-deploy-production', disabled: true}

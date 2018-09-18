@@ -1,0 +1,36 @@
+<%= javascript_include_tag 'provider/plans_widget.js' %>
+
+<%= javascript_tag do %>
+  $(function() {
+    var plan = $("[data-object='plan']");
+    var url = "<%= j widget_provider_admin_account_change_plan_path %>";
+
+    var update = function(name, id) {
+      //plan.find("[data-attribute='name']").text(name);
+      //plan.attr('data-id', id);
+
+    var upgrade_warning = "Automatic downgrades are not possible, are you sure you want to upgrade?  (if need a trial please contact <%= ThreeScale.config.sales_email %>)"
+
+    if(confirm(upgrade_warning)){
+        $.ajax({
+          type: 'PUT',
+          url: "<%= j provider_admin_account_change_plan_path %>",
+          data: {change_plan: {plan_id: id}}
+        });
+      }
+    }
+
+    plan.find("#change-plan").click(function(){
+      var id = plan.data('id');
+      var upgrade_to = plan.data('upgrade-to-plan-id');
+
+      PlanWidget.loadPreview(id, update, url, null, upgrade_to);
+    });
+
+
+  <% if params[:next_step] == 'upgrade_plan' %>
+    $('#change-plan').click();
+  <% end %>
+  })
+
+<% end %>

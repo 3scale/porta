@@ -1,0 +1,42 @@
+<h2>Subscribe to Service</h2>
+
+{% form 'subscription.create' %}
+  <p>Please choose a service and plan you which to subscribe to.</p>
+
+  <fieldset class="inputs" name="">
+    <ol>
+      <li class="plan_selector required" id="service_contract_plan_input">
+        <label for="service_contract_plan_id">Plan<abbr title="required">*</abbr></label>
+        <select id="service_contract_plan_id" name="service_contract[plan_id]">
+            {% if subscription.service %}
+               <optgroup label="{{ subscription.service.name }}">
+                 {% for plan in subscription.service.service_plans %}
+                   <option value="{{ plan.id }}">{{ plan.name }}</option>
+                 {% endfor %}
+               </optgroup>
+            {% else %}
+              {% for service in provider.services %}
+                <optgroup label="{{ service.name }}">
+                  {% for plan in service.service_plans %}
+                    <option value="{{ plan.id }}">{{ plan.name }}</option>
+                  {% endfor %}
+                </optgroup>
+              {% endfor %}
+            {% endif %}
+        </select>
+        <p class="inline-hints">Choose a plan you want to subscribe to.</p>
+      </li>
+    </ol>
+  </fieldset>
+
+  {% include 'service_subscription_licence' %}
+
+  <fieldset class="buttons">
+    <ol>
+      <li class="commit">
+        <input class="important-button create" name="commit" type="submit" value="Subscribe">
+      </li>
+    </ol>
+  </fieldset>
+
+{% endform %}

@@ -1,0 +1,13 @@
+tr
+  td.provider
+    = link_to "#{icon(authentication_provider.kind, fixed_width: true)} #{authentication_provider.human_kind}".html_safe, provider_admin_account_authentication_provider_path(authentication_provider)
+  td
+    = authentication_provider.created_at.to_date.to_s(:long)
+  td
+    = authentication_provider.sso_authorizations.count
+  td
+    => authentication_provider.published ? 'Visible' : 'Hidden'
+    | (
+    = Provider::Admin::Account::AuthenticationProvidersShowPresenter.new(authentication_provider).test_text_short
+    |)
+  td

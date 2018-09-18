@@ -1,0 +1,89 @@
+#header_table {
+  margin-top: line-height-times(2);
+}
+
+table.contract_table {
+	width: 100%;
+	margin-bottom: line-height-times(1/2);
+	border-collapse: collapse;
+	border-spacing: 0;
+
+  tr {
+    border-bottom: $border-width solid $border-color;
+  }
+
+  th {
+    padding-top: line-height-times(1/4);
+    padding-bottom: line-height-times(1/4);
+  }
+
+  td.selected strong {
+    background: $light-background-color;
+    padding: line-height-times(1/8);
+  }
+
+
+  table.usage_table {
+    th, td {
+      background-color: transparent;
+    }
+
+    td {
+      border: $border-width solid $border-color;
+    }
+  }
+
+  table#metrics tr.child td.title {
+    background-image: image-url('child_metric_background.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    color: $font-color;
+    padding-left: line-height-times(1);
+  }
+
+  td.metrics-subtable-toggle {
+    text-align: center;
+
+    &.selected {
+      color: $font-color;
+      font-weight: $font-weight-bold;
+      border-bottom: $border-width solid $background-color-base;
+      border-left: $border-width solid $border-color;
+      border-right: $border-width solid $border-color;
+    }
+  }
+
+  td.metric_slot {
+    padding: line-height-times(1);
+    border-left: $border-width solid $border-color;
+    border-right: $border-width solid $border-color;
+
+    table {
+      thead {
+        border-bottom: $border-width solid $border-color;
+      }
+
+      tr {
+        border: none;
+
+        td {
+          border: none;
+          border-bottom: $border-width solid $border-color;
+        }
+      }
+    }
+
+  }
+
+  .usage_limits {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  .usageHidden {
+    position: absolute;
+    background: $font-color;
+  }
+}

@@ -1,0 +1,29 @@
+base: &default
+  enabled: true
+  client_id:
+  client_secret:
+  realm:
+  flow:
+  entitlements_notifications_enabled: true
+  assign_entitlements_email: <%= ENV.fetch('RH_ASSIGN_ENTITLEMENTS_EMAIL', 'assign.entitlements@example.com') %>
+  revoke_entitlements_email: <%= ENV.fetch('RH_ASSIGN_ENTITLEMENTS_EMAIL', 'revoke.entitlements@example.com') %>
+
+development:
+  <<: *default
+  client_id: 3scale
+  client_secret: replace-with-rhsso-client-secret-if-not-public
+  realm: http://localhost:8080/auth/realms/rh-customer-portal
+  flow: implicit
+
+test:
+  <<: *default
+  client_id: fake_id
+  client_secret: fake_secret
+  realm: http://my-keycloak-server/auth/realms/rh-customer-portal
+  flow: auth_code
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

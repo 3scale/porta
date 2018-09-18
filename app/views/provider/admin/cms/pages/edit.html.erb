@@ -1,0 +1,10 @@
+<h1>Page '<%= @page.title %>'</h1>
+
+<%= cms_new_button_dropdown(CMS::Page) %>
+
+<%= cms_form_for(@page, :remote => true) do |f| %>
+  <div id="cms-template-fields-wrapper">
+    <%= render( 'form', :f => f) %>
+  </div>
+  <%= render '/provider/admin/cms/content_tabs', :f => f %>
+<% end %>

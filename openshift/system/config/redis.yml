@@ -1,0 +1,13 @@
+base: &default
+  url: <%= ENV.fetch('REDIS_URL', 'redis://system-redis/1') %>
+  pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  pool_timeout: 5
+
+production:
+  <<: *default
+
+preview:
+  <<: *default
+
+development:
+  <<: *default

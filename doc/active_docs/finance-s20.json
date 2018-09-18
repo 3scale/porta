@@ -1,0 +1,312 @@
+
+{
+  "host": "example.com",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "title": "Billing API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/accounts/{account_id}/invoices.xml": {
+      "get": {
+        "operationId": "invoice_list_by_account",
+        "summary": "Invoice List by Account",
+        "description": "Returns the list of all invoices by account. Note that results can be paginated. You can apply filters by month and by state of the invoices.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the account.",
+            "name": "account_id",
+            "required": true,
+            "x-data-threescale-name": "account_ids",
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "description": "Filter the invoice by state. 'open': line items can be added (only via web interface). 'pending': the invoice has been issued, no items can be added, the PDF has been generated and the invoice is waiting to be charged for. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the invoice was explicitely cancelled and is out of normal life-cycle.",
+            "name": "state",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Filter the invoice by month. Format YYYY-MM, e.g. '2012-03' for march 2012",
+            "name": "month",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Page in the paginated list. Defaults to 1.",
+            "name": "page",
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Default and max is 20.",
+            "name": "per_page",
+            "type": "integer",
+            "format": "int32",
+            "default": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/api/accounts/{account_id}/invoices/{id}.xml": {
+      "get": {
+        "operationId": "invoice_by_account",
+        "summary": "Invoice by Account",
+        "description": "Returns an invoice by id.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the account.",
+            "name": "account_id",
+            "required": true,
+            "x-data-threescale-name": "account_ids",
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "path",
+            "description": "id of the invoice.",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/api/invoices.xml": {
+      "get": {
+        "operationId": "invoice_list",
+        "summary": "Invoice List",
+        "description": "Returns the list of all invoices. Note that results can be paginated. You can apply filters by month and by state of the invoices.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Filter the invoice by state. 'open': line items can be added (only via web interface). 'pending': the invoice has been issued, no items can be added, the PDF has been generated and the invoice is waiting to be charged for. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the invoice was explicitely cancelled and is out of normal life-cycle.",
+            "name": "state",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Filter the invoice by month. Format YYYY-MM, e.g. '2012-03' for march 2012",
+            "name": "month",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Page in the paginated list. Defaults to 1.",
+            "name": "page",
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Default and max is 20.",
+            "name": "per_page",
+            "type": "integer",
+            "format": "int32",
+            "default": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}.xml": {
+      "get": {
+        "operationId": "invoice_show",
+        "summary": "Invoice",
+        "description": "Returns an invoice by id.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the invoice.",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/state.xml": {
+      "put": {
+        "operationId": "invoice_state",
+        "summary": "Invoice",
+        "description": "Modifies the state of the invoice.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the invoice.",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "description": "State of the invoice to set. Only 'cancel' value is allowed",
+            "name": "state",
+            "required": true,
+            "x-data-threescale-name": "state",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/api/invoices/{invoice_id}/line_items.xml": {
+      "get": {
+        "operationId": "invoice_line_items_list",
+        "summary": "Invoice Line Items List",
+        "description": "Returns the list of all line items of an invoice.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the invoice.",
+            "name": "invoice_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/api/invoices/{invoice_id}/payment_transactions.xml": {
+      "get": {
+        "operationId": "invoice_payment_transactions_list",
+        "summary": "Invoice Payment Transactions List",
+        "description": "Returns the list of all payment transactions of an invoice.",
+        "tags": [
+          "Finances"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the invoice.",
+            "name": "invoice_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    }
+  }
+}

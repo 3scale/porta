@@ -1,0 +1,21 @@
+// StatsTable
+
+.StatsTable {
+  line-height: 2.6;
+  margin-bottom: 24px;
+  margin-top: 12px;
+  width: 100%;
+
+  td,
+  th {
+    border-bottom: 1px solid $stats-menu-border-color;
+  }
+}
+
+.u-amount {
+  text-align: right;
+}
+
+.u-tabular-number {
+  font-family: 'Source Code Pro', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Monaco', Courier, monospace;
+}

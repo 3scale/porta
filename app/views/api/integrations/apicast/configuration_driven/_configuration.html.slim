@@ -1,0 +1,59 @@
+= semantic_form_for @proxy,
+        url: admin_service_integration_path(@service, anchor: 'proxy'),
+        remote: current_account.provider_can_use?(:async_apicast_deploy),
+        html: { \
+          data: { gid: @proxy.to_gid_param, version: @proxy.lock_version },
+          class: css_class('staging-settings proxy-settings',
+                  oauth: @service.backend_version.oauth?,
+                  oidc: current_account.provider_can_use?(:apicast_oidc)) \
+        } do |f|
+
+  = f.hidden_field :lock_version
+
+  section#staging.staging
+    h1
+      small
+        - if @proxy.service.oauth? || @proxy.saas_configuration_driven_apicast_self_managed?
+          | Configure the staging environment
+        - else
+          | Configure & test immediately in the staging environment
+
+      =< link_to t('api.integrations.proxy.visit_documentation'), t("api.integrations.proxy.documentation_apicast_url", docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'documentation-link', target: '_blank'
+
+    div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
+      i.fa.fa-puzzle-piece
+      = f.inputs "API" do
+        = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend }, autofocus: (@proxy.api_backend == @proxy.default_api_backend) }, hint: is_https?(@proxy.api_backend) ? t('formtastic.hints.proxy.api_backend_https') : t('formtastic.hints.proxy.api_backend_http')
+        = help_bubble( 'api_endpoint_bubble', t('api.integrations.proxy.api_endpoint_help_html'))
+
+    div class=("feedback proxy #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
+      i.fa.fa-hdd-o
+      = f.inputs "API gateway" do
+        = f.input :sandbox_endpoint, label: "Staging Public Base URL",
+                  input_html: { data: { default: (@proxy.default_staging_endpoint unless @proxy.self_managed?) },
+                                readonly: !apicast_custom_urls?,
+                                placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
+                  hint: apicast_endpoint_input_hint(@service, environment: 'staging')
+
+        = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
+        = f.input :endpoint, label: "Production Public Base URL",
+                  input_html: { data: { default: (@proxy.default_production_endpoint unless @proxy.self_managed?) },
+                                readonly: !apicast_custom_urls?,
+                                placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
+                  hint: apicast_endpoint_input_hint(@service, environment: 'production')
+        = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
+        div.help-button-constrainer
+          = render 'api/integrations/apicast/shared/mapping_rules', f: f
+        div.help-button-constrainer
+          = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
+        - if current_account.provider_can_use?(:policies)
+          div.help-button-constrainer
+            = render 'api/integrations/apicast/shared/policies', f: f
+
+    = render 'api/integrations/apicast/shared/client', f: f unless @proxy.service.oauth?
+
+    = f.buttons do
+      = render 'api/integrations/apicast/shared/client_feedback' unless @proxy.skip_test_request?
+      = f.button I18n.t( 'formtastic.actions.proxy.update', action: @proxy.skip_test_request? ? 'Update the' : 'Update & test in' ), button_html: {class: 'important-button update', name:'deploy', value: '1',
+        id: 'proxy-button-save-and-deploy', title: 'Update & Test' }
+      = fixed_width_icon_link_to("Back to Integration & Configuration", "arrow-left", admin_service_integration_path(@service), class: 'next')

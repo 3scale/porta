@@ -1,0 +1,15 @@
+hr#allowed-switches-delimiter {
+  color: $border-color;
+}
+
+table#switches {
+  p {
+    margin: 0;
+  }
+}
+
+.Switch {
+  &--inactive {
+    color: $disabled-color;
+  }
+}

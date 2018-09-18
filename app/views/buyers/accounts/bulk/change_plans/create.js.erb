@@ -1,0 +1,4 @@
+<%- @accounts.each do |account| %>
+  $("#<%=dom_id(account)%>").find(".plan").text("<%= escape_javascript account.bought_account_plan.name %>");
+<%-end-%>
+$("#bulk-operations").trigger("bulk:success");

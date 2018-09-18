@@ -1,0 +1,629 @@
+html {
+  height: 100%;
+  background: radial-gradient(#fff 3px, transparent 5px, #fff 7px, transparent 9px, #fff 11px, transparent 13px, #fff 15px, transparent 17px, #fff 19px, transparent 21px, #fff 23px, transparent 25px, #fff 27px, transparent 29px, #fff 31px, transparent 33px);
+  background-color: #111;
+  color: white;
+  background-size: 30px 30px;
+}
+
+body {
+  background-color: #077FCC; /* fallback */
+  background-color: rgba(34, 129, 204, 0.98);
+  color: #333; /* fallback */
+  color: rgba(0, 0, 0, 0.6);
+  min-height: 100%;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+}
+
+/* Home page */
+.page-header {
+  display: block;
+  background-position: center center;
+  background-image: url('/images/desk.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  border-bottom: none;
+}
+
+/* .jumbotron */
+.jumbotron.page-header {
+  background-color: transparent; /* fallback */
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  min-height: 0;
+}
+
+.page-header + section {
+  background-color: transparent;
+  color: white;
+}
+
+.page-header + section .panel {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: Georgia;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  font-weight: normal;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-weight: normal;
+}
+
+.jumbotron.page-header h1 {
+  font-size: 120px;
+  margin-left: -5px;
+  color: white;
+}
+
+section h6 {
+  color: white;
+}
+
+h2 i {
+  padding-right: 0.3em;
+}
+
+/* sectioning elements */
+section, .section, .full {
+  background-color: #ededed; /* fallback */
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+article.panel {
+  padding-bottom: 0;
+}
+
+/* footer */
+footer {
+  padding-bottom: 2em;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: normal;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+}
+
+footer .list-inline > li {
+  padding-left: 0;
+  padding-right: 0;
+  display: block;
+  float: left;
+}
+
+footer .powered-by {
+  text-indent: -119988px;
+  overflow: hidden;
+  background-image: url('/images/powered-by-3scale-light.png');
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  width: 109px;
+  height: 19px;
+  display: block;
+  text-decoration: none;
+  line-height: 19px;
+  margin-top: -3px
+}
+
+footer .container {
+  background-color: transparent; /* fallback */
+  background-color: rgba(255, 255, 255, 0.05);
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+/* containers */
+.page-header .container {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+#main-content > .full > .container {
+  min-height: 600px;
+}
+
+.container {
+  padding-bottom: 4em;
+  padding-top: 2em;
+  padding-left: 30px;
+  padding-right: 30px;
+  background-color: #f1f1f1; /* fallback */
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.invert .container {
+  background-color: #5B5B5B; /* fallback */
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.page-header + section .container, header .container {
+  background-color: transparent; /* fallback */
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+
+/* buttons */
+.btn {
+  font-style: italic;
+}
+
+.panel-body .button a, .button a, .panel-body a.btn, a.btn {
+  text-decoration: none;
+}
+
+.button-icon {
+  background-color: transparent;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* forms */
+form abbr.required {
+  display: none;
+}
+
+.btn {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+label {
+  text-transform: uppercase;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 11px;
+}
+
+.form-horizontal .control-label, .form-horizontal .radio, .form-horizontal .checkbox, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline {
+  padding-top: 10px;
+}
+
+fieldset {
+  padding-bottom: 2em;
+}
+
+fieldset:first-of-type {
+  padding-top: 2em;
+}
+
+/* tables & table panels */
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+  border-top: none;
+  border-bottom: none;
+}
+
+.table thead {
+  text-transform: uppercase;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 11px;
+}
+
+.panel.table thead > tr > th, .panel.table tbody > tr > th, .panel.table tfoot > tr > th, .panel.table thead > tr > td, .panel.table tbody > tr > td, .panel.table tfoot > tr > td {
+  padding: 10px 15px 5px 15px;
+  margin: 0;
+  background-color: transparent;
+  border-collapse: separate !important;
+}
+
+.panel.table thead > tr > th, .panel.table thead > tr > td {
+  padding-top: 45px;
+}
+
+/* some extra padding at the bottom of a panel table */
+.panel.table tbody.panel-body > tr:first-child > th,
+.panel.table tbody.panel-body > tr:first-child > td {
+  padding-top: 15px;
+}
+
+/* some extra padding at the bottom of a panel table */
+.panel.table tbody.panel-body.panel-footer > tr:last-child > th,
+.panel.table tbody.panel-body.panel-footer > tr:last-child > td,
+.panel.table tfoot > tr:last-child > th,
+.panel.table tfoot > tr:last-child > td {
+  padding-bottom: 25px;
+}
+
+/* rounded corners for panels that are tables */
+.panel.table thead > tr:first-child > th:first-child,
+.panel.table thead > tr:first-child > td:first-child {
+  border-top-left-radius: 3px;
+}
+
+.panel.table thead > tr:last-child > th:last-child,
+.panel.table thead > tr:last-child > td:last-child {
+  border-top-right-radius: 3px;
+}
+
+.panel.table tbody.panel-body.panel-footer > tr:last-child > th:first-child,
+.panel.table tbody.panel-body.panel-footer > tr:last-child > td:first-child,
+.panel.table tfoot > tr:last-child > th:first-child,
+.panel.table tfoot > tr:last-child > td:first-child {
+  border-bottom-left-radius: 3px;
+}
+
+.panel.table tbody.panel-body.panel-footer > tr:last-child > th:last-child,
+.panel.table tbody.panel-body.panel-footer > tr:last-child > td:last-child,
+.panel.table tfoot > tr:last-child > th:last-child,
+.panel.table tfoot > tr:last-child > td:last-child {
+  border-bottom-right-radius: 3px;
+}
+
+.panel.table tbody > tr > th.empty, .panel.table tbody > tr > td.empty {
+  padding-bottom: 90px;
+}
+
+/* panels */
+.panel {
+  border: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none
+}
+
+.panel-default {
+  background-color: transparent;
+}
+
+.panel-default > .panel-heading {
+  color: #939393; /* fallback */
+  color: rgba(0, 0, 0, 0.4);
+  background-color: #F6F6F6; /* fallback */
+  background-color: rgba(255, 255, 255, 0.6);
+  border-bottom: none;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: normal;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+}
+
+.panel-default > .panel-heading strong {
+  font-size: 14px;
+  color: #666; /* fallback */
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: bold;
+}
+
+
+.panel-default > .panel-heading a {
+  text-transform: none;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.panel-heading a:hover {
+  text-decoration: none;
+}
+
+.panel-default > .panel-heading.important {
+  font-weight: bold;
+  padding-top: 45px;
+}
+
+.panel-default > .panel-heading i {
+  font-variant: normal;
+}
+
+.panel-default > .panel-body, .panel-default > .panel-body.panel-footer {
+  background-color: #FCFCFC; /* fallback */
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.panel-body a, p a, table a,
+.panel-body a:hover, p a:hover, table a:hover {
+  text-decoration: underline;
+}
+
+.panel-body .nav a, .nav a, .panel-body a.navbar-brand, a.navbar-brand {
+  text-decoration: none;
+}
+
+.panel-body > h5 {
+  margin-top: 0;
+}
+
+.panel-body > h2 {
+  margin-top: 0;
+}
+
+.panel.form-panel {
+  margin-top: 2em;
+}
+
+.panel-body, .panel-body.panel-footer {
+  padding: 15px 15px;
+}
+
+.panel-default > .panel-footer.important {
+  padding-top: 45px;
+}
+
+.panel-default > .panel-footer {
+  background-color: #F6F6F6; /* fallback */
+  background-color: rgba(255, 255, 255, 0.6);
+  border-top: none;
+}
+
+/* Inverted sections */
+section.invert {
+  background-color: #515151; /* fallback */
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.invert * {
+  color: white !important;
+}
+
+.invert .panel {
+  background-color: transparent;
+}
+
+.invert .panel-heading {
+  background-color: #898989; /* fallback */
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.invert .panel-body, .invert .panel-body.panel-footer {
+  background-color: #9B9B9B; /* fallback */
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.invert .panel-footer {
+  background-color: #ABABAB; /* fallback */
+  background-color: rgba(255, 255, 255, 0.5);
+  border-top: none;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+/* tabs */
+.nav-tabs {
+  border-color: transparent;
+  font-variant: small-caps;
+  text-transform: lowercase;
+  font-size: 16px;
+}
+
+.nav-tabs a [class^="fa-"],  .nav-tabs a [class*=" fa-"] {
+  font-variant: normal;
+  font-size: 11px;
+}
+
+.nav-tabs > li > a, .nav-tabs > li > a:focus {
+  color: #929292; /* fallback */
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: bold;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  background-color: #F6F6F6; /* fallback */
+  background-color: rgba(255, 255, 255, 0.6);
+  border-color: transparent;
+  color: #646464; /* fallback */
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+  background-color: #EFEFEF; /* fallback */
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: transparent;
+}
+
+.container.tabbed {
+  position: relative;
+  top: 5px;
+  margin-top: -5px
+}
+
+/* navigation */
+.navbar, .navbar-inverse {
+  border: none;
+  position: static;
+  background-color: transparent !important;
+  color: white;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.navbar-nav > li > a {
+  padding-top: 18px !important;
+  padding-bottom: 12px !important;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+  background-color: transparent; /* fallback */
+  background-color: rgba(0, 0, 0, 0.05);
+  color: white;
+}
+
+.navbar-default .navbar-nav li a, .navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-brand{
+  color: white; /* fallback */
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+}
+
+ul.navbar-inverse {
+  background-color: transparent;
+}
+
+.navbar.alert-info {
+  background-color: #B9B9B9; /* fallback */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: none;
+  background-image: none;
+}
+
+.navbar.alert-danger {
+  background-color: red !important;
+  border-bottom: none;
+  background-image: none;
+}
+
+ul.navbar-inverse li.active a {
+  background-color: transparent !important;
+}
+
+ul.navbar-default li a {
+  background-color: #ddd
+}
+
+.sign-out {
+  font-size: 16px;
+}
+
+.fa-chevron-left {
+  margin-right: 5px;
+}
+
+.navbar-collapse {
+  padding-right: 0;
+}
+
+.navbar-form {
+  padding-right: 0
+}
+
+#flash-messages {
+  top: 50px;
+}
+
+/* badges */
+.badge {
+  background-color: #BBBBBB; /* fallback */
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* elements */
+pre {
+  border: none;
+  background-color: transparent;
+  padding: 0 0 0 0;
+}
+
+code {
+  background-color: transparent;
+}
+
+dd {
+  margin-bottom: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: #333; /* fallback */
+  color: rgba(0, 0, 0, 0.6);
+}
+
+article.jumbotron {
+  margin-bottom: 2em;
+}
+
+main {
+  display: block;
+}
+
+
+/* messages */
+.read * {
+  color: #555;
+  color: rgba(0,0,0, 0.4);
+}
+
+pre.message {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  border: none;
+  word-break: normal;
+  background-color: transparent;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+
+
+#keys.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+  padding: 0 0 10px 0;
+}
+
+/* definition lists */
+@media (min-width: 768px) {
+  .dl-horizontal dt {
+    width: 22.5%;
+  }
+
+  .dl-horizontal dd {
+    margin-left: 26%;
+  }
+
+  .wide.dl-horizontal dt {
+    width: 30.5%;
+  }
+
+  .wide.dl-horizontal dd {
+    margin-left: 34.5%;
+  }
+}
+
+dl + dl {
+  margin-top: 60px;
+}
+
+/* SSO */
+ul.list-auth-provider {
+  padding: 1em 0 1em 0;
+  border-bottom: 1px solid #eee;
+}
+
+.list-auth-provider .auth-provider {
+  display: block;
+  text-decoration: none;
+  margin-bottom: 12px;
+}
+
+.list-auth-provider .auth-provider:hover {
+  text-decoration: none;
+}
+
+.fa-auth0:before {
+  content: "\f005";
+}
+
+.fa-keycloak:before {
+  content: '‹›';
+  font-size: 18px;
+  line-height: 0;
+  top: 1px;
+}
+
+/* place holders */
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  font-style: italic;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  font-style: italic;
+}
+
+:-ms-input-placeholder {
+  font-style: italic;
+}

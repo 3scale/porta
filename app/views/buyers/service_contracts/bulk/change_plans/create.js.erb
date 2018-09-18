@@ -1,0 +1,6 @@
+<%- @service_contracts.each do |contract| %>
+  $("#<%=dom_id(contract)%>").
+    find(".plan").html("<%= escape_javascript link_to_plan_edit(contract.plan) %>").end().
+    find(".free_or_paid").html("<%= escape_javascript plan_free_or_paid(contract.plan) %>");
+<%-end-%>
+$("#bulk-operations").trigger("bulk:success");

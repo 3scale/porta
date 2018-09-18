@@ -1,0 +1,18 @@
+<h2>Sign Up to <%= @invitation.account.name %></h2>
+
+<%= semantic_form_for @user, :url => provider_invitee_signup_path(@invitation.token),
+                            :builder => Fields::FormBuilder,
+                            :html => {:id => 'signup_form'} do |form| %>
+  <%= form.inputs do -%>
+    <%= form.user_defined_form %>
+    <%= form.input :password, :required => true %>
+    <%= form.input :password_confirmation, :required => true %>
+  <% end %>
+
+  <%= render '/application/signup_licence' %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button 'Sign up', :button_html => {:class => 'user-signup important-button'} %>
+  <% end %>
+
+<% end %>

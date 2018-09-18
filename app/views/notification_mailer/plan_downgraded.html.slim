@@ -1,0 +1,11 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p 
+  | #{@account.name} has downgraded to #{@new_plan.name} plan (from #{@old_plan.name}).
+
+p
+  | For more details, view the account in your Admin Portal.
+
+
+p= link_to 'View account', admin_buyers_account_url(@account)

@@ -1,0 +1,14 @@
+development:
+  - :dalli_store
+  - localhost:11211
+
+test:
+  - :null_store
+
+preview:
+  - :dalli_store
+  - localhost:11211
+
+production:
+  - :dalli_store
+  - localhost:11211

@@ -1,0 +1,30 @@
+- content_for :sublayout_title, "Usage"
+
+- content_for :stylesheets do
+  = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'
+
+  - content_for :javascripts do
+    = render_js_module_loader
+
+.Stats
+  .StatsMenu-container
+  .StatsSelector-container
+  .StatsChart-container#chart
+  .StatsCSVLink-container
+  .StatsMethodsTable-container
+
+p.Stats-message--notice
+  = timezone_information
+
+javascript:
+  System.import('stats/provider/stats_usage').then(function (module) {
+    module.statsUsage(#{json @service.id},
+            {
+              chartContainer: '#chart',
+              menuContainer: '.StatsMenu-container',
+              selectorContainer: '.StatsSelector-container',
+              methodsTableContainer: '.StatsMethodsTable-container',
+              csvLinkContainer: '.StatsCSVLink-container'
+            }
+    );
+  });

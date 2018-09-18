@@ -1,0 +1,11 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | #{@user.informal_name} from #{@account.name} has requested to change
+    their account plan from #{@current_plan.name} to #{@requested_plan.name}.
+
+p
+  | You can change their account plan from their account page on the Admin Portal
+
+p= link_to 'View account', admin_buyers_account_url(@account)

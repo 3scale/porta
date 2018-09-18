@@ -1,0 +1,25 @@
+<a title="Switch to/from local URL"
+   href="javascript:
+if (document.URL.match(/.net.dev:[0-9]+/)) {
+  window.location.href = document.URL.replace(/.net.dev:[0-9]+\//, '.net/' ).replace(/http:/, 'https:');
+} else {
+  window.location.href = document.URL.replace(/.net\//, '.net.dev:3000/' ).replace(/https:/, 'http:');
+}
+
+">.dev</a>
+
+
+<a title="Switch CodeMirror ON/OFF"
+   href="javascript:
+if (document.URL.match(/cm=0/)) {
+  window.location.href = document.URL.replace(/.cm=0/,'');
+} else {
+  window.location.href = document.URL + '?cm=0';
+}
+
+">CodeMirror</a>
+
+<a title="Report bug to liquid"
+   href="javascript:window.open('https://github.com/3scale/system/issues/new?body='+ document.URL+'&milestone=18')"
+
+">Liquid Bug!</a>

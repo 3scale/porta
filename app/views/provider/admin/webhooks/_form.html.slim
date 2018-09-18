@@ -1,0 +1,48 @@
+= form.inputs name: 'Behaviour' do
+  = form.input :active, label: 'Webhooks enabled',
+               hint:  "On/off switch for triggering webhooks"
+  = form.input :provider_actions,
+               label: "Actions in the admin portal also trigger webhooks",
+               hint:  "If unchecked, only actions in the developer portal trigger webhooks."
+
+= form.inputs name: 'Webhooks endpoint', class: 'inputs' do
+  = form.input :url, required: true
+  - if @webhook.persisted? && @webhook.url.present?
+    = form.button 'Ping!',
+                  button_html: { class: 'less-important-button button next',
+                                 type: 'button',
+                                 value: 'ping',
+                                 'data-ping-url': provider_admin_webhooks_path(format: :js) }
+
+= form.inputs name: 'Events that trigger webhooks', class: 'inputs' do
+  li.full-width
+    table
+      tr
+        td
+          = form.inputs name: 'Accounts' do
+            = form.input :account_created_on, label: "Account created"
+            = form.input :account_updated_on, label: "Account updated"
+            - unless master_on_premises?
+              = form.input :account_plan_changed_on, label: "Account Plan changed"
+            = form.input :account_deleted_on, label: "Account deleted"
+        td
+          = form.inputs name: 'Users' do
+            = form.input :user_created_on, label: "User created"
+            = form.input :user_updated_on, label: "User updated"
+            = form.input :user_deleted_on, label: "User deleted"
+        td
+          = form.inputs name: 'Applications' do
+            = form.input :application_created_on, label: "Application created"
+            = form.input :application_updated_on, label: "Application updated"
+            = form.input :application_suspended_on, label: "Application suspended"
+            - unless master_on_premises?
+              = form.input :application_plan_changed_on, label: "Application Plan changed"
+
+            = form.input :application_user_key_updated_on, label: "API Key changed"
+            = form.input :application_deleted_on, label: "Application deleted"
+
+        td
+          = form.inputs name: 'Keys' do
+            = form.input :application_key_created_on, label: "Application Key created"
+            = form.input :application_key_deleted_on, label: "Application Key deleted"
+            = form.input :application_key_updated_on, label: "Application Key updated"

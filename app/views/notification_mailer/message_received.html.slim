@@ -1,0 +1,7 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | You have a new message from #{@sender.name}.
+
+p= link_to 'View new message', provider_admin_messages_inbox_url(@recipient)

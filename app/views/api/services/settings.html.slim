@@ -1,0 +1,21 @@
+- content_for :sublayout_title, 'Settings'
+
+- if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
+  = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), :method => :post, :class => 'service autosubmit formtastic', :remote => true do
+    fieldset.inputs
+      legend Default Service Plan
+      ol
+        li.string.optional
+          label for="default_plan"  Default plan
+          - service_plans_exists = @service.service_plans.exists?
+          = select_tag :id, options_from_collection_for_select(@service.service_plans.not_custom, "id", "name", lambda { |p| p.master? }),
+            :include_blank => true, :id => "default_plan", disabled: !service_plans_exists
+          - if service_plans_exists
+            p.inline-hints= @service.service_plans.first.class.human_attribute_name 'default_plan_hint'
+          - else
+            p.inline-hints Please create a service plan first.
+
+= semantic_form_for @service, :url => admin_service_path(@service) do |form|
+  = render :partial => 'api/services/forms/settings', :locals => { :form => form }
+  = form.buttons do
+    = form.commit_button

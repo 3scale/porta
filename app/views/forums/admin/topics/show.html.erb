@@ -1,0 +1,80 @@
+<div id="forum">
+  <%= render 'forums/admin/menu' %>
+  <h2>
+    <%= h @topic.title %>
+  </h2>
+
+  <span class="operations">
+    <% if can? :update, @topic -%>
+      <%= link_to 'Edit topic', edit_forum_topic_path(@topic), :class => 'action edit' %>
+    <% end %>
+
+    <% if can? :destroy, @topic %>
+      <%= delete_button_for forum_topic_path(@topic), :class => 'action delete' %>
+    <% end -%>
+  </span>
+
+  <dl class="u-dl">
+    <% if @topic.category %>
+      <dt class="u-dl-term">Category</dt>
+      <dd class="u-dl-description"><%= link_to h(@topic.category.name), forum_category_path(@topic.category) %></dd>
+    <% end %>
+
+    <dt class="u-dl-term">Posts</dt>
+    <dd class="u-dl-description"><%= pluralize(number_with_delimiter(@topic.posts.count), 'post') %></dd>
+    <% if logged_in? %>
+      <dt class="u-dl-term">Subscription</dt>
+      <dd class="u-dl-description"><%= render 'forums/admin/topics/subscription' %></dd>
+    <% end %>
+  </dl>
+
+  <% for post in @posts do -%>
+    <article class="post" id="<%= dom_id(post) %>">
+      <div class='post-body'>
+        <%= content_tag(:span, avatar_for(post.user), :class => 'avatar') unless post.user.nil? %>
+        <% if post.has_user? %>
+          <%= sanitize(RedCloth.new(post.body, [:filter_html, :filter_styles]).to_html) %>
+        <% else %>
+          <p>(This post has been removed)</p>
+        <% end %>
+      </div>
+      <footer class="post-footer">
+        <span class="post-details">
+          Posted at
+          <time class="detail">
+            <%= post.created_at.to_time.to_s(:long) %>
+          </time>
+          by
+          <%= display_author_name(post) %>
+          <% if post.user %>
+            <span class="posts"><%- pluralize(number_with_delimiter(post.user.posts.size), 'post') -%></span>
+          <% end %>
+        </span>
+        <% if can? :update, post %>
+          <%= link_to 'Edit', edit_forum_post_path(post), :class => 'action edit' %>
+        <% end %>
+        <% if can? :destroy, post %>
+          <%= delete_button_for forum_post_path(post) %>
+        <% end %>
+      </footer>
+    </article>
+  <%- end -%>
+
+  <%= will_paginate @posts %>
+
+  <% if @topic.locked? -%>
+    <p>This thread is no longer open to replies.</p>
+  <% else -%>
+    <%= semantic_form_for @post, :url => forum_topic_posts_path(@topic) do |form| %>
+
+      <%= form.inputs 'Reply to thread' do %>
+        <%= render 'forums/admin/posts/fields', :form => form %>
+        <%= render 'forums/admin/posts/anonymous', :form => form, :post => @post %>
+      <% end %>
+
+      <%= form.buttons do %>
+        <%= form.commit_button 'Post reply' %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

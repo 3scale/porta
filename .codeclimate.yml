@@ -1,0 +1,93 @@
+# This is a sample .codeclimate.yml configured for Engine analysis on Code
+# Climate Platform. For an overview of the Code Climate Platform, see here:
+# http://docs.codeclimate.com/article/300-the-codeclimate-platform
+
+# Under the engines key, you can configure which engines will analyze your repo.
+# Each key is an engine name. For each value, you need to specify enabled: true
+# to enable the engine as well as any other engines-specific configuration.
+
+# For more details, see here:
+# http://docs.codeclimate.com/article/289-configuring-your-repository-via-codeclimate-yml#platform
+
+# For a list of all available engines, see here:
+# http://docs.codeclimate.com/article/296-engines-available-engines
+
+engines:
+  shellcheck:
+    enabled: true
+  brakeman:
+    enabled: true
+  rubocop:
+    enabled: true
+  reek:
+    enabled: true
+  eslint:
+    enabled: false
+    config:
+      extensions:
+      - .es6
+      - .js
+      - .jsx
+  csslint:
+    enabled: false
+  coffeelint:
+    enabled: true
+    checks:
+      max_line_length:
+        enabled: false
+  bundler-audit:
+    enabled: true
+  scss-lint:
+    enabled: true
+  duplication:
+    enabled: true
+    exclude_paths:
+      - db/
+    config:
+      languages:
+        - ruby
+        - javascript
+
+# Engines can analyze files and report issues on them, but you can separately
+# decide which files will receive ratings based on those issues. This is
+# specified by path patterns under the ratings key.
+
+# For more details see here:
+# http://docs.codeclimate.com/article/289-configuring-your-repository-via-codeclimate-yml#platform
+
+# Note: If the ratings key is not specified, this will result in a 0.0 GPA on your dashboard.
+
+ratings:
+  paths:
+    - "Gemfile.lock"
+    - "assets/**/*.es6"
+    - "app/**/*.{rb,js,es6,coffee,scss,css}"
+    - "lib/**/*.{rb,js,es6,coffee}"
+    - "test/**/*.rb"
+
+# You can globally exclude files from being analyzed by any engine using the
+# exclude_paths key.
+
+exclude_paths:
+  - "app/assets/javascripts/plans_widget.js"
+  - "app/assets/javascripts/provider/plans_widget.js"
+  - "app/assets/javascripts/help.js"
+  - "tmp/**/*"
+  - "**/vendor/*"
+  - "app/assets/images/**/*"
+  - "public/images/**/*"
+  - "public/themes/**/*"
+  - "public/javascripts/vendor/*"
+  - "public/fancybox/*"
+  - 'lib/action_dispatch/rails5_ssl.rb'
+  - "lib/developer_portal/app/views/developer_portal/javascripts/*"
+  - "lib/developer_portal/app/views/developer_portal/css/*"
+  - "assets/bundles/*.js"
+  - "assets/jspm_packages/*"
+  - "assets/jspm.*.js"
+  - "spec/**/*"
+  - "spec/**/**/*"
+  - "test/**/*"
+  - "cdn/*"
+  - "app/javascript/src/*/*/*.spec.*"
+  - "bin/webpack*"

@@ -1,0 +1,136 @@
+#cms-sidebar {
+  font-size: $caption-font-size;
+  float: left;
+  //overflow-x: hidden;
+  //width: 16%;
+  width: 20%;
+
+  .collapse-button {
+    margin-left: -3px;
+  }
+
+  ul.packed {
+    display: none;
+  }
+
+  li {
+    white-space: nowrap;
+  }
+
+  & + #tab-content {
+    @include border-bottom-left-radius(0);
+    &.sticked {
+      overflow-y: auto;
+      top: 24px !important;
+    }
+  }
+}
+
+.cms-sidebar-listing {
+  border-bottom: $border-width solid $border-color;
+  border-right: $border-width solid $border-color;
+
+  h3 {
+    margin: 0;
+    padding-top: 36px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li.no-results {
+    display: none;
+  }
+
+  &.empty {
+    li.no-results {
+      display: list-item;
+    }
+  }
+
+  .fa-folder-open-o:hover:before {
+    content: '\f07c';
+  }
+
+  .fa-folder-o:hover:before {
+    content: '\f07b';
+  }
+
+  .fa {
+    cursor: pointer;
+    margin-left: -line-height-times(1/2);
+    padding: line-height-times(1/2) 0 line-height-times(1/2) 0;
+    position: relative;
+    z-index: 100;
+
+    &:hover {
+      color: $link-color;
+    }
+  }
+
+  .fa-folder-o,
+  .fa-folder-open-o {
+    color: $brand-blue;
+
+
+    &:hover {
+      color: $brand-blue;
+    }
+
+    &+ a {
+      //text-indent: line-height-times(1);
+      //vertical-align: top;
+    }
+  }
+
+  a {
+    @include ellipsis;
+    color: $font-color;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+
+    &:hover,  &.current {
+      color: $link-color;
+    }
+  }
+
+  li {
+    border-top: $border-width solid $border-color;
+
+    ul {
+      margin-left: line-height-times(1/2);
+    }
+
+    &.empty {
+      margin-left: line-height-times(1/2);
+    }
+
+    &.dragged {
+      list-style: none;
+      z-index: 9999;
+    }
+
+    &.dirty a {
+      font-style: italic;
+    }
+
+    &.cms-section {
+      position: relative;
+
+      &:after {
+        background-image: image-url('/assets/tree-line.png');
+        background-position: 0;
+        background-repeat: repeat-y;
+        bottom: $border-width;
+        content: '';
+        position: absolute;
+        top: line-height-times(1);
+        width: line-height-times(1);
+      }
+    }
+  }
+}
+
+@import 'provider/admin/cms/sidebar/filter';

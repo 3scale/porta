@@ -1,0 +1,26 @@
+// TODO: move to /provider/plans/listing.scss
+#plans {
+  td.actions {  width: 65px; }
+
+  td.publish {
+    width: 75px;
+    text-align: left;
+  }
+}
+
+.Actions-item {
+  display: inline-block;
+
+  &::before {
+    content: '\00a0|\00a0'; /* \00a0 is nbsp */
+    display: inline;
+  }
+
+  &:first-child::before {
+    display: none;
+  }
+}
+
+.Actions .Actions-item  a {
+  display: inline;
+}

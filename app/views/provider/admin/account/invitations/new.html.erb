@@ -1,0 +1,6 @@
+<h2>Invite a New Team Member</h2>
+
+<%= semantic_form_for @invitation, :url => provider_admin_account_invitations_path, :html => {:class => 'invitation-form'} do |form| %>
+  <%= render 'form', :form => form, :cancel_path => provider_admin_account_invitations_path,
+                     :hint => 'Email address of a colleague or friend you want to invite to this account' %>
+<% end %>

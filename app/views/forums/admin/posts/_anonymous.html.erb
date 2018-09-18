@@ -1,0 +1,7 @@
+<% if @forum.anonymous_posts_enabled? %>
+  <% if logged_in? %>
+    <%= form.input :anonymous_user, :as => :boolean, :label => 'Post anonymously?' %>
+  <% else %>
+    <%= form.input :anonymous_user, :as => :hidden, :value => true %>
+  <% end %>
+<% end %>

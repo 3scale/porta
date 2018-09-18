@@ -1,0 +1,32 @@
+<%= render 'provider/admin/cms/includes' %>
+
+<div id="cms-sidebar">
+  <ul id="cms-sidebar-filter-origin">
+    <li data-filter-origin="all"><%= icon('globe') %> All</li>
+    <li data-filter-origin="own"><%= icon('user') %> My</li>
+    <li data-filter-origin="builtin"><%= icon('cog') %> 3scale</li>
+  </ul>
+
+  <ul id="cms-sidebar-filter-type">
+    <li data-filter-type="all" title="Show All">All</li>
+    <li data-filter-type="page" title="Pages"><%= icon('file') %></li>
+    <li data-filter-type="file" title="Files"><%= icon('paperclip') %></li>
+    <li data-filter-type="partial" title="Partials"><%= icon('puzzle-piece') %></li>
+    <li data-filter-type="layout" title="Layouts"><%= icon('code') %></li>
+    <li data-filter-type="section" title="Sections"><%= icon('folder-o') %></li>
+    <li data-filter-type="portlet" title="Portlets"><%= icon('rocket') %></li>
+  </ul>
+
+  <div id="cms-filter">
+    <%= tag :input, :type => :search, :placeholder => 'Filter&hellip;'.html_safe %>
+  </div>
+
+  <div id="cms-sidebar-content" class="cms-sidebar-listing"></div>
+  <div id="cms-sidebar-layouts" class="cms-sidebar-listing"></div>
+  <div id="cms-sidebar-partials" class="cms-sidebar-listing"></div>
+  <div id="cms-sidebar-portlets" class="cms-sidebar-listing"></div>
+</div>
+
+<div id="tab-content">
+  <%= yield  %>
+</div>

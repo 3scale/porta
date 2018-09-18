@@ -1,0 +1,21 @@
+<div class="dashboard_bubble round">
+  <h3>Sample Data</h3>
+
+  <p>
+    Sample data are set of plans and accounts that help you understand 3scale infrastructure
+    and setup your API. Feel free to edit, reuse or delete them
+    in any way you like.
+  </p>
+
+  <p>
+    <%= fancy_link_to 'Create Sample Data', provider_admin_sample_data_path,
+                       :method => :post, :class => 'sample-data' %>
+    <% help_bubble 'sample-data' do %>
+      We will create 2 sample accounts, plans and applications for you.
+      You can use them as testing data and delete them when you no longer need them.
+      They are in no way special or necessary once you have your own settings in place.
+    <% end %>
+  </p>
+
+  </p>
+</div>

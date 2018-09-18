@@ -1,0 +1,21 @@
+= form.input permission,
+             label: label,
+             hint: '',
+             as: :radio,
+             collection: Logic::PlanChanges::PERMISSIONS[0..1]
+
+- if can?(:see, :finance)
+  li.inline-hints
+    p.inline-hints Change plan directly if developer has credit card, otherwise:
+
+  = form.input  permission,
+                label: '',
+                hint: '',
+                as: :radio,
+                collection: Logic::PlanChanges::PERMISSIONS[2..3]
+
+  = form.input  permission,
+                label: '',
+                hint: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute it in administration interface.",
+                as: :radio,
+                collection: Logic::PlanChanges::PERMISSIONS[-1..-1]

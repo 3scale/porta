@@ -1,0 +1,5 @@
+= link_to edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules', bubble: 'mapping' } do
+  - if metric.proxy_rules.any?
+    i.fa.fa-check
+  - else
+    | Add a mapping rule

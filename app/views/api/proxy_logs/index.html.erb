@@ -1,0 +1,27 @@
+<h2>Sandbox proxy deployment history</h2>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Configuration File</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @proxy_logs.each do |proxy_log| %>
+      <tr>
+        <td><%= proxy_log.created_at %></td>
+        <td><%= proxy_log.status %></td>
+	<td>
+          <%= link_to 'Download', admin_service_proxy_log_path(current_account.accessible_services.first, proxy_log) %>
+	</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate(@proxy_logs) %>
+
+
+<%= link_to 'Back', edit_admin_service_integration_path(:anchor => 'proxy') %>

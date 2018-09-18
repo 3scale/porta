@@ -1,0 +1,685 @@
+{
+  "apis": [
+    {
+      "path": "/admin/api/cms/files.xml",
+      "responseClass": "List[short-file]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "List all files",
+          "description": "List all files",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "page",
+              "description": "Current page of the list",
+              "dataType": "int",
+              "default": 1
+            },
+            {
+              "paramType": "path",
+              "name": "per_page",
+              "description": "Total number of records per one page (maximum 100)",
+              "dataType": "int",
+              "default": 20
+            },
+            {
+              "paramType": "path",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            }
+          ]
+        },
+        {
+          "httpMethod": "POST",
+          "summary": "Create file",
+          "description": "Create file",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "query",
+              "name": "path",
+              "description": "URI of the file"
+            },
+            {
+              "paramType": "query",
+              "name": "section_id",
+              "description": "ID of a section (valid only for pages)",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "tag_list",
+              "description": "List of tags"
+            },
+            {
+              "paramType": "query",
+              "name": "attachment"
+            },
+            {
+              "paramType": "query",
+              "name": "downloadable",
+              "description": "Checked sets the content-disposition to attachment",
+              "default": "false",
+              "type": "boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/cms/files/{id}.xml",
+      "responseClass": "file",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "View file",
+          "description": "View file",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the file",
+              "required": true,
+              "dataType": "int"
+            }
+          ]
+        },
+        {
+          "httpMethod": "PUT",
+          "summary": "Update file",
+          "description": "Update file",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the file",
+              "required": true,
+              "dataType": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "path",
+              "description": "URI of the file"
+            },
+            {
+              "paramType": "query",
+              "name": "section_id",
+              "description": "ID of a section (valid only for pages)",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "tag_list",
+              "description": "List of tags"
+            },
+            {
+              "paramType": "query",
+              "name": "attachment"
+            },
+            {
+              "paramType": "query",
+              "name": "downloadable",
+              "description": "Checked sets the content-disposition to attachment",
+              "default": "false",
+              "type": "boolean"
+            }
+          ]
+        },
+        {
+          "httpMethod": "DELETE",
+          "summary": "Delete file",
+          "description": "Delete file",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the file",
+              "required": true,
+              "dataType": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "path",
+              "description": "URI of the file"
+            },
+            {
+              "paramType": "query",
+              "name": "section_id",
+              "description": "ID of a section (valid only for pages)",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "tag_list",
+              "description": "List of tags"
+            },
+            {
+              "paramType": "query",
+              "name": "attachment"
+            },
+            {
+              "paramType": "query",
+              "name": "downloadable",
+              "description": "Checked sets the content-disposition to attachment",
+              "default": "false",
+              "type": "boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/cms/sections.xml",
+      "responseClass": "List[short-section",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "List all sections",
+          "description": "List all sections",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "page",
+              "description": "Current page of the list",
+              "dataType": "int",
+              "default": 1
+            },
+            {
+              "paramType": "path",
+              "name": "per_page",
+              "description": "Total number of records per one page (maximum 100)",
+              "dataType": "int",
+              "default": 20
+            },
+            {
+              "paramType": "path",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            }
+          ]
+        },
+        {
+          "httpMethod": "POST",
+          "summary": "Create section",
+          "description": "Create section",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "query",
+              "name": "system_name",
+              "description": "Human readable and unique identifier"
+            },
+            {
+              "paramType": "query",
+              "name": "title",
+              "description": "Title of the section"
+            },
+            {
+              "paramType": "query",
+              "name": "public",
+              "description": "Public or not",
+              "default": "true",
+              "type": "boolean"
+            },
+            {
+              "paramType": "query",
+              "name": "parent_id",
+              "description": "ID of a parent section",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "partial_path",
+              "description": "Path of the section"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/cms/sections/{id}.xml",
+      "responseClass": "template",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "View section",
+          "description": "View section",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the section",
+              "required": true,
+              "dataType": "int"
+            }
+          ]
+        },
+        {
+          "httpMethod": "PUT",
+          "summary": "Update section",
+          "description": "Update section",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the section",
+              "required": true,
+              "dataType": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "system_name",
+              "description": "Human readable and unique identifier"
+            },
+            {
+              "paramType": "query",
+              "name": "title",
+              "description": "Title of the section"
+            },
+            {
+              "paramType": "query",
+              "name": "public",
+              "description": "Public or not",
+              "default": "true",
+              "type": "boolean"
+            },
+            {
+              "paramType": "query",
+              "name": "parent_id",
+              "description": "ID of a parent section",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "partial_path",
+              "description": "Path of the section"
+            }
+          ]
+        },
+        {
+          "httpMethod": "DELETE",
+          "summary": "Destroy section",
+          "description": "Destroy section",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the section",
+              "required": true,
+              "dataType": "int"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/cms/templates.xml",
+      "responseClass": "List[short-template]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "List all templates",
+          "description": "List all templates",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "page",
+              "description": "Current page of the list",
+              "dataType": "int",
+              "default": 1
+            },
+            {
+              "paramType": "path",
+              "name": "per_page",
+              "description": "Total number of records per one page (maximum 100)",
+              "dataType": "int",
+              "default": 20
+            },
+            {
+              "paramType": "path",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            }
+          ]
+        },
+        {
+          "httpMethod": "POST",
+          "summary": "Create a template",
+          "description": "Create partial, layout or page",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "query",
+              "name": "type",
+              "required": true,
+              "allowableValues": {
+                "valueType": "LIST",
+                "values": [
+                  "page",
+                  "layout",
+                  "partial"
+                ]
+              }
+            },
+            {
+              "paramType": "query",
+              "name": "system_name",
+              "description": "Human readable and unique identifier"
+            },
+            {
+              "paramType": "query",
+              "name": "title",
+              "description": "Title of the template"
+            },
+            {
+              "paramType": "query",
+              "name": "path",
+              "description": "URI of the page"
+            },
+            {
+              "paramType": "query",
+              "name": "draft",
+              "description": "Text content of the template (you have to publish the template)"
+            },
+            {
+              "paramType": "query",
+              "name": "section_name",
+              "description": "system name of a section",
+              "type": "string"
+            },
+            {
+              "paramType": "query",
+              "name": "section_id",
+              "description": "ID of a section (valid only for pages)",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "layout_name",
+              "description": "system name of a layout (valid only for pages)",
+              "type": "string"
+            },
+            {
+              "paramType": "query",
+              "name": "layout_id",
+              "description": "ID of a layout - overrides layout_name",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "liquid_enabled",
+              "description": "liquid processing of the template content on/off",
+              "type": "boolean"
+            },
+            {
+              "paramType": "query",
+              "name": "handler",
+              "description": "text will be processed by the handler before rendering",
+              "required": false,
+              "allowableValues": {
+                "valueType": "LIST",
+                "values": [
+                  "textile",
+                  "markdown"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/cms/templates/{id}.xml",
+      "responseClass": "template",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "View template",
+          "description": "View template",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the template",
+              "required": true,
+              "dataType": "int"
+            }
+          ]
+        },
+        {
+          "httpMethod": "PUT",
+          "summary": "Update template",
+          "description": "Update [builtin] page, partial or layout and draft content.",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the template",
+              "required": true,
+              "dataType": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "system_name",
+              "description": "Human readable and unique identifier"
+            },
+            {
+              "paramType": "query",
+              "name": "title",
+              "description": "Title of the template"
+            },
+            {
+              "paramType": "query",
+              "name": "path",
+              "description": "URI of the page"
+            },
+            {
+              "paramType": "query",
+              "name": "draft",
+              "description": "Text content of the template (you have to publish the template)"
+            },
+            {
+              "paramType": "query",
+              "name": "section_name",
+              "description": "system name of a section",
+              "type": "string"
+            },
+            {
+              "paramType": "query",
+              "name": "section_id",
+              "description": "ID of a section (valid only for pages)",
+              "default": "root section id",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "layout_name",
+              "description": "system name of a layout (valid only for pages)",
+              "type": "string"
+            },
+            {
+              "paramType": "query",
+              "name": "layout_id",
+              "description": "ID of a layout - overrides layout_name",
+              "type": "int"
+            },
+            {
+              "paramType": "query",
+              "name": "liquid_enabled",
+              "description": "liquid processing of the template content on/off",
+              "type": "boolean"
+            },
+            {
+              "paramType": "query",
+              "name": "handler",
+              "description": "text will be processed by the handler before rendering",
+              "required": false,
+              "allowableValues": {
+                "valueType": "LIST",
+                "values": [
+                  "textile",
+                  "markdown"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "httpMethod": "DELETE",
+          "summary": "Delete template",
+          "description": "Delete page, partial or layout.",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the template",
+              "required": true,
+              "dataType": "int"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/cms/templates/{id}/publish.xml",
+      "responseClass": "template",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Publish template",
+          "description": "The current draft will be published and visible by all users.",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "access_token",
+              "description": "Your access token",
+              "dataType": "string",
+              "required": true,
+              "allowMultiple": false
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "ID of the template",
+              "required": true,
+              "dataType": "int"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "namespace": "CMS API",
+  "resourcePath": "/admin/api/cms/templates",
+  "swagrVersion": "1.1",
+  "apiVersion": "1.0"
+}

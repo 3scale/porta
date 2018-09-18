@@ -1,0 +1,78 @@
+<%= form.inputs :name => 'User Information' do %>
+  <%= form.user_defined_form %>
+<% end %>
+
+<%= form.inputs :name => "Change Password" do %>
+  <%= form.input :password, :required => true %>
+  <%= form.input :password_confirmation, :required => true %>
+<% end -%>
+
+<% if can? :update_role, @user %>
+  <div id="user-permissions-widget">
+<%= form.inputs :name => 'Administrative' do %>
+  <%= form.input :role, :as => :radio, :collection => roles_collection_for_form_helpers(@user), :input_html => { :class => 'roles_ids' } %>
+
+  <% if can?(:manage, :groups) -%>
+    <li id="user_member_permissions_input"
+        class="radio optional <%= 'u-servicePermissionsDisabled' unless current_account.provider_can_use?(:service_permissions) %>">
+      <fieldset>
+        <legend class="label">
+          <label>This user can access</label>
+        </legend>
+        <ol class="FeatureAccessList">
+          <% AdminSection.permissions.each do |role| %>
+            <li class="FeatureAccessList-item">
+              <label for="user_member_permission_ids_<%= role %>">
+                <input class="user_member_permission_ids"
+                       id="user_member_permission_ids_<%= role %>"
+                       name="user[member_permission_ids][]"
+                       type="checkbox"
+                       value="<%= role %>"
+                      <%= "checked" if @user.admin_sections.include?(role) %>  >
+                <%= AdminSection.labels(role) %>
+              </label>
+          <% end -%>
+        </ol>
+        <input name="user[member_permission_ids][]" type="hidden" value="" />
+      </fieldset>
+    </li>
+
+    <script type="text/javascript">
+      jQuery(function(){
+        function handleGroups() {
+          if($("input[name='user[role]']:checked").val() == 'member') {
+            $('#user_member_permissions_input').show();
+          } else {
+            $('#user_member_permissions_input').hide();
+          }
+        }
+        $('.roles_ids').click(handleGroups)
+        handleGroups()
+      })
+    </script>
+    <%- if current_account.provider_can_use?(:service_permissions) %>
+        <% content_for :javascripts do %>
+            <%= render_js_module_loader %>
+        <% end %>
+        <script>
+          System.import('users/permissions.es6').then(function(m){
+            m.render({
+              el: document.getElementById('user-permissions-widget'),
+              state: <%= json @user.as_json(root: false, only: [:role], methods: [:admin_sections, :member_permission_service_ids]) %>,
+              services: <%= json @services.as_json(root: false, only: [:id, :name, :description]) %>,
+              features: <%= json AdminSection.permissions %>
+            })
+          })
+        </script>
+    <%- end -%>
+  <% end %>
+<% end %>
+
+  </div>
+<% end %>
+
+<%= form.buttons do %>
+  <%= form.commit_button %>
+<% end %>
+
+<%= javascript_include_tag 'custom_profiles_input_texts' %>

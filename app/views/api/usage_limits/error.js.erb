@@ -1,0 +1,8 @@
+<% @usage_limit.errors.full_messages.each do |error| %>
+  $('.errors').append('<p><%= escape_javascript( error ) %></p>');
+  $.colorbox.resize();
+<% end %>
+
+$( "form.usage_limit" ).submit(function( event ) {
+  $('.errors').empty();
+});

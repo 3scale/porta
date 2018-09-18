@@ -1,0 +1,18 @@
+base: &default
+  enabled: true
+  stub: false
+  write_key: 'null'
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  enabled: false
+  stub: true
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

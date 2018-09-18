@@ -1,0 +1,41 @@
+article.DashboardWidget id=widget.id
+  = widget.render_chart
+
+  header.DashboardWidget-badge
+
+    - if widget.value == 0 && widget.current == 0 && !widget.has_history
+
+      h1.DashboardWidget-title Signups
+
+      p
+        ' Make it easy for developers to sign up using your
+        = link_to 'Developer Portal', provider_admin_cms_root_path
+        | .
+      - if current_account.site_access_code.present?
+        p
+          ' When you're ready to open to the world, remember to
+          = link_to 'remove the Access Code', admin_site_dns_path
+          | .
+
+    - else
+
+      h1.DashboardWidget-title
+
+        = link_to admin_buyers_accounts_path(search: { created_within: [current_range.first, current_range.last] }), class: 'DashboardWidget-link'
+            strong data-title-count='true' => number_to_human(widget.value)
+            | Signups
+
+      .DashboardWidget-percentageInfo data-toggle-visibility='true'
+        - if widget.has_history
+          = link_to admin_buyers_accounts_path(search: { created_within: [previous_range.first, previous_range.last] }), class: "DashboardWidget-link #{sign_class(widget)}"
+            = number_to_percentage(number_to_human(widget.percentual_change), precision: 0)
+        - else
+          = link_to admin_buyers_accounts_path(search: { created_within: [current_range.last, current_range.last] }), class: 'DashboardWidget-link DashboardWidget-link--today'
+            = number_to_human(widget.current)
+
+      - if widget.loaded?
+        span.DashboardWidget-intro.DashboardWidget-intro--primary data-title-intro='true'
+          | last 30 days
+
+        span.DashboardWidget-intro.DashboardWidget-intro--secondary data-toggle-visibility='true'
+          = widget.has_history ? 'vs. previous 30 days' : 'today'

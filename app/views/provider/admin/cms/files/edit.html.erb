@@ -1,0 +1,25 @@
+<h1>File <%= @file.path %></h1>
+
+<%= cms_new_button_dropdown(CMS::File) %>
+
+<%= cms_form_for(@file, :html => { :multipart => true }) do |f| %>
+  <%= render 'form', :f => f %>
+
+  <div class='button-bar'>
+    <%= f.buttons :style => 'position:absolute' do %>
+      <%= f.delete_button %>
+    <% end %>
+    <%= f.buttons :style => 'position:absolute' do %>
+      <li>
+        <%= link_to "Download", @file.url.to_s, :class => 'less-important-button'  %>
+      </li>
+      <%= f.commit_button %>
+    <% end %>
+  </div>
+
+  <% if @file.is_image? %>
+    <div class='image-preview'>
+      <%= link_to image_tag(@file.url.to_s, :class => 'preview', :title => 'Preview'), @file.url.to_s %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,4 @@
+<%- @accounts.each do |account| %>
+  $("#<%=dom_id(account)%>").fadeOut(function(){$(this).remove()});
+<%-end-%>
+$("#bulk-operations").trigger("bulk:success");

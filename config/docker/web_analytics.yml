@@ -1,0 +1,22 @@
+base: &default
+  google_async_tag: <%= ENV['GOOGLE_ASYNC_TAG'] %>
+  twitter_remarketing: <%= ENV['TWITTER_REMARKETING_TAG'] %>
+  twitter_conversion: <%= ENV['TWITTER_CONVERSION_TAG'] %>
+  adwords:
+    id: <%= ENV['ADWORDS_ID'] %>
+    label: <%= ENV['ADWORDS_LABEL'] %>
+  prog_web:
+    id: <%= ENV['PROG_WEB_ID'] %>
+    label: <%= ENV['PROG_WEB_LABEL'] %>
+  munchkin: <%= ENV['MUNCHKIN_TAG'] %>
+
+test: {}
+
+development:
+  <<: *default
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

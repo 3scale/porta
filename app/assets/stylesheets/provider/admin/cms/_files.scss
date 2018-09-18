@@ -1,0 +1,8 @@
+.image-preview {
+  margin: 2em auto 0 auto;
+
+  img {
+    max-width: 100%;
+    border: 5px $border-color outset;
+  }
+}

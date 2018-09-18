@@ -1,0 +1,52 @@
+#flashWrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: right;
+  @include animation(fadeInLeft 0.5s ease-in-out);
+}
+
+.flash-message {
+  color: $success-color;
+  font-style: italic;
+}
+
+.flash-message--warning,
+.flash-message--token {
+  display: none;
+}
+
+.flash-message--error,
+.flash-message--alert {
+  color: $error-color;
+  @include animation(shake 0.5s ease-in-out 0.7s);
+}
+
+// shake animation
+@include keyframes(shake) {
+  0%, 100% {
+    @include transform(translate3d(0, 0, 0));
+  }
+
+  20%, 60% {
+    @include transform(translate3d(-10px, 0, 0));
+  }
+
+  40%, 80% {
+    @include transform(translate3d(10px, 0, 0));
+  }
+}
+
+
+// fade in from left animation
+@include keyframes(fadeInLeft) {
+  0% {
+    @include opacity(0);
+    @include transform(translate3d(-100%, 0, 0));
+  }
+
+  100% {
+    @include opacity(1);
+    @include transform(none);
+  }
+}

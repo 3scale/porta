@@ -1,0 +1,13 @@
+<h2>Edit Account Plan '<%= h @plan.name %>'</h2>
+
+<% if @plan.customized? %>
+  <%= render :partial => 'api/plans/menu' %>
+<% end %>
+
+<%= semantic_form_for @plan, :url => admin_account_plan_path(@plan) do |form| %>
+  <%= render :partial => 'form', :object => form %>
+  <%= form.buttons :commit %>
+<%- end %>
+
+<%= render 'api/plans/features' -%>
+

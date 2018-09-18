@@ -1,0 +1,10 @@
+<%= link_to provider_admin_cms_switch_path(switch.name),
+           id: "switch-#{switch.name}-toggle",
+           data: { method: (switch.hidden? ? "put" : "delete"), remote: true, value: false },
+           rel: "nofollow" do %>
+     <% if switch.hidden? %>
+       <button class="important-button button next">Show</button>
+     <% else %>
+      <button class="less-important-button button next">Hide</button>
+     <% end %>
+<% end %>

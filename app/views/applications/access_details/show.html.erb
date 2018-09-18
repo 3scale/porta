@@ -1,0 +1,34 @@
+<h2>API Access Details</h2>
+
+<% unless @cinstance.pending? %>
+  <% if @cinstance.service.backend_version == "2" %>
+    <%= render 'applications/applications/api_credentials', :cinstance => @cinstance %>
+
+    <% if @cinstance.service.referrer_filters_required? %>
+      <%= render 'applications/referrer_filters/widget', :cinstance => @cinstance %>
+    <% end %>
+  <% elsif @cinstance.service.backend_version == 'oauth' %>
+    <%= render 'applications/oauth/api_credentials', :cinstance => @cinstance %>
+  <% else %>
+    <p>In order to use the API, use the user keys below in the user_key parameter of each API
+    call that you make. The provider key is optionally returned by us to validate the origin of the
+    result. Ensure that you keep your User Key <strong>safe</strong> at all times. If you believe
+    that it may have been compromised, immediately refresh the key and adjust the code which calls
+    the API.</p>
+
+    <%= render 'applications/access_details/user_key' %>
+
+    <% if can? :regenerate_user_key, @cinstance %>
+      <div align="right">
+        <%= button_to 'Regenerate Key', admin_applications_access_details_regenerate_user_key_path, :method => :post, data: {:confirm => "Are you sure?"}  %>
+      </div>
+    <% end %>
+
+    <% if @cinstance.credit_card_missing? %>
+        <%= render :partial => 'shared/credit_card_missing' %>
+    <% end %>
+  <% end %>
+<% else %>
+  <p>Your request is being reviewed by the administrators. Please stay tuned. You will receive an
+  email shortly.</p>
+<% end %>

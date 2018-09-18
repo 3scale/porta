@@ -1,0 +1,15 @@
+/* Stats Logs Component */
+.StatsLogs {
+  &.is-hidden {
+    display: none;
+  }
+
+  &-pagination-item {
+    display: inline-block;
+    padding: 0 2px;
+  }
+
+  &-pagination-link {
+    cursor: pointer;
+  }
+}

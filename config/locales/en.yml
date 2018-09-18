@@ -1,0 +1,1247 @@
+en:
+  docs:
+    base_url:
+      saas: 'https://support.3scale.net%{custom_path}'
+      onprem: 'https://access.redhat.com/documentation/en-us/red_hat_3scale/%{major_and_minor_version}/html-single'
+    hero_api_portal: '%{docs_base_url}/product/%{docs_anchor}hero-api-portal'
+    developer_portal:
+      email_configuration: '%{docs_base_url}/developer-portal/%{docs_anchor}email-configuration'
+      liquid_reference: '%{docs_base_url}/developer-portal/%{docs_anchor}liquid-reference'
+    terminology: '%{docs_base_url}/terminology/%{docs_anchor}service'
+  api_integrations_controller:
+    promote_to_production_success: 'Staging configuration promoted to production'
+    promote_to_production_error: "Couldn't promote Staging configuration to production"
+    update_onpremises_production_success: 'Production configuration saved.'
+    update_production_success: 'Proxy settings deployed'
+    update_error: "Couldn't update the Staging Configuration"
+    update_success: 'Staging Configuration Updated'
+    async_update_success: 'Staging Configuration Updated'
+    async_update_error: "Couldn't update the Staging Configuration"
+    proxy_pro_update_sucess: 'Proxy settings saved.'
+    stale_object: 'Someone else edited the Staging Configuration'
+    apicast_version_reverted: 'The APIcast version for this service was successfully reverted to the old APIcast.'
+    apicast_version_upgraded: 'The APIcast version for this service was successfully upgraded to the new APIcast.'
+    apicast_version_not_reverted: 'The APIcast version for this service could not be reverted'
+    apicast_version_not_upgraded: 'The APIcast version for this service could not be upgraded'
+    oidc_not_available_on_old_apicast: 'OpenID Connect is not supported for the old APIcast. Pick a different authentication option before reverting back.'
+
+  access_token_options:
+    finance: 'Billing API'
+    stats: 'Analytics API'
+    account_management: 'Account Management API'
+    cms: 'Developer Portal API'
+    ro: 'Read Only'
+    rw: 'Read & Write'
+  notification_category_titles:
+    account: 'Accounts'
+    application: 'Applications'
+    service: 'Services'
+    alert: 'Usage Alerts'
+    billing: 'Billing'
+    report: 'Reports'
+  notification_preference_titles:
+    application_created: 'New application created'
+    account_created: 'New account created'
+    limit_violation_reached_provider: 'Alert: usage violation'
+    limit_alert_reached_provider: 'Alert: usage warning'
+    unsuccessfully_charged_invoice_provider: 'Payment error (retry)'
+    account_plan_change_requested: 'Account plan change request'
+    invoices_to_review: 'Action required: review invoices'
+    expired_credit_card_provider: 'Expiring credit card'
+    cinstance_cancellation: 'Application deleted'
+    service_contract_cancellation: 'Service subscription cancelled'
+    service_contract_created: 'New service subscription'
+    service_plan_change_requested: 'Service plan change request'
+    service_contract_plan_changed: 'Service subscription changed'
+
+    cinstance_expired_trial: 'Application trial expired'
+    plan_downgraded: 'Customer downgraded'
+    unsuccessfully_charged_invoice_final_provider: 'Payment error (final)'
+    account_deleted: 'Account deleted'
+    cinstance_plan_changed: 'Application plan change'
+    application_plan_change_requested: 'Application plan change request'
+    message_received: 'New messages'
+    post_created: 'New forum post'
+    csv_data_export: 'CSV data export'
+    daily_report: 'Daily report'
+    weekly_report: 'Weekly report'
+    service_deleted: 'Service deleted'
+  notification_preference_hints:
+    application_created: 'Sent when a new application is created.'
+    account_created: 'Sent when a developer account is created.'
+    limit_violation_reached_provider: 'Sent when an application triggers a usage alert for usage levels of 100% and above.'
+    limit_alert_reached_provider: 'Sent when an application triggers a usage alert for usage levels below 100%.'
+    unsuccessfully_charged_invoice_provider: 'Sent when payment fails, resulting in an unpaid invoice and a retry.'
+    account_plan_change_requested: 'Sent when a developer requests to change to a different account plan.'
+    invoices_to_review: 'Sent a few days before end of billing cycle so you can review invoices before they are being sent to customers.'
+    expired_credit_card_provider: 'Sent when a customer’s credit card is about to expire.'
+    cinstance_cancellation: 'Sent when an application is deleted.'
+    service_contract_cancellation: 'Sent when an existing service subscription is cancelled.'
+    service_contract_created: 'Sent when a new service subscription is started.'
+    service_plan_change_requested: 'Sent when a developer requests to change to a different service plan.'
+    service_contract_plan_changed: 'Sent when an existing service subscription is changed.'
+    cinstance_expired_trial: 'Sent when an application trial period expires.'
+    plan_downgraded: 'Sent when a customer changes to a plan with a lower monthly fixed price.'
+    unsuccessfully_charged_invoice_final_provider: 'Sent when the final retry of a payment fails, resulting in a failed invoice.'
+    account_deleted: 'Sent when an account is deleted.'
+    cinstance_plan_changed: 'Sent when an application is changed to a different plan.'
+    application_plan_change_requested: 'Sent when a request for application plan change is made.'
+    message_received: 'Sent when a developer sends you a new message.'
+    post_created: 'Sent when a developer posts a new message in your forum.'
+    csv_data_export: 'Sent when a member of your team generates a report with data about messages/ developer accounts/ applications.'
+    daily_report: 'Contains information about your API(s) performance in the last 24 hours.'
+    weekly_report: 'Contains information about your API(s) performance in the last 7 days.'
+    service_deleted: 'Sent when a service is deleted.'
+  mailers:
+    notification_mailer:
+      subject:
+        limit_alert_reached_provider: 'Application %{name} limit alert - usage of %{message} is above %{level}%'
+        limit_violation_reached_provider: 'Application %{name} limit violation - usage of %{message} is above %{level}%'
+        weekly_report: '%{name} weekly report'
+        daily_report: '%{name} daily report'
+
+  controller:
+    title:
+      provider:
+        admin:
+          authentication_providers: SSO Integrations
+
+  admin:
+    api_docs:
+      services:
+        names:
+          service_management_api: 'Service Management API'
+          account_management_api: 'Account Management API'
+          analytics_api: 'Analytics API'
+          billing_api: 'Billing API'
+          master_api: 'Master API'
+        index:
+          update_link_text: "Learn how to upgrade to Swagger 2"
+          update_link: "%{docs_base_url}/api-documentation/%{docs_anchor}activedocs-migrate"
+
+  admin_sections:
+    partners: Developer Accounts -- Applications
+    monitoring: Analytics
+    portal: Developer Portal
+    finance: Billing
+    settings: Settings
+    services: Selected APIs
+    plans: Integration & Application Plans
+
+  go_live_states:
+    api_sandbox_traffic: "Done: Add your API endpoint and hit save & test"
+    verify_api_sandbox_traffic: "Done: Verify the test call was recorded"
+    apicast_gateway_deployed: "Done: Deploy your API Gateway to production on APIcast"
+
+  service_contracts:
+    unsubscribe_forbidden:
+      one: 'There is 1 unsuspended application subscribed to the service'
+      other: 'There are %{count} unsuspended applications subscribed to the service'
+    unsubscribe_confirmation: 'Successfully unsubscribed from the service'
+    unsubscribe_failure: 'Cannot unsubscribe from the service'
+
+  forbidden_on_premises: 'You are not allowed to perform this action'
+  account_messenger_expired_credit_card_notification_for_buyer: "Expired Credit Card"
+  account_messenger_expired_credit_card_notification_for_provider: "Expired Credit Card"
+  cinstance_messenger_accept: "Application Accepted"
+  cinstance_messenger_contract_cancellation: "Contract Cancelation"
+  cinstance_messenger_expired_trial_period_notification: "Trial Period Expired"
+  cinstance_messenger_new_application: "New Application"
+  cinstance_messenger_plan_change: "Plan Change"
+  cinstance_messenger_reject: "Application Rejected"
+  invoice_messenger_successfully_charged: "Successfully Charged"
+  invoice_messenger_unsuccessfully_charged_for_buyer: "Unsuccessfully Charged"
+  invoice_messenger_unsuccessfully_charged_for_buyer_final: "Unsuccessfully Charged: Final notice"
+  invoice_messenger_unsuccessfully_charged_for_provider: "Unsuccessfully Charged"
+  invoice_messenger_unsuccessfully_charged_for_provider_final: "Unsuccessfully Charged: Final notice"
+  invoice_messenger_upcoming_charge_notification: "Upcoming Charge"
+  lost_password_email: "Lost Password"
+  signup_notification_email: "Signup Notification"
+
+  builtin_legal_terms:
+    new_application_licence:
+      title: New Application
+      menu_title: Application
+      description: When creating a new application, your developers have to accept these terms.
+    service_subscription_licence:
+      title: Service Subscription
+      menu_title: Subscription
+      description: When subscribing to a service, your developers have to accept these terms.
+    signup_licence:
+      title: Signup
+      menu_title: Signup
+      description: When signing up, your developers have to accept these terms.
+
+  authentication_provider:
+    state:
+      threescale_branded: 3scale branded
+      custom_branded: custom branded
+    kind:
+      github: GitHub
+      auth0: Auth0
+      keycloak: Red Hat Single Sign-On
+    test_link:
+      untested: 'Test authentication flow now'
+      outdated: '(outdated) Test authentication flow again'
+      expired: '(expired) Test authentication flow again'
+      tested: 'Test authentication flow again'
+
+  builtin_pages:
+    description:
+      messages/outbox/index: "List of the sent messages."
+      messages/outbox/show: "Show a sent message."
+      messages/outbox/new: "Compose a new message."
+      messages/inbox/index: "List of the received messages."
+      messages/inbox/show: "Show a received message."
+      messages/trash/index: "List of the trashed messages."
+      messages/trash/show: "Show a trashed message."
+      applications/index: "List of all the applications of the developer account."
+      applications/show: "Detailed view of one application."
+      applications/new: "A form to create a new application."
+      applications/edit: "A form to edit an existing application."
+      applications/choose_service: "Page to choose the service of the application to be created."
+      applications/alerts/index: "Lists all the alerts of a given application"
+      invoices/index: 'List of all invoices.'
+      invoices/show: 'Detailed view of an invoice.'
+      stats/index: 'Show API usage stats.'
+      account_plans/index: 'Show details of the current account plan.'
+      accounts/plan_changes/index: 'Show the changes of plan for application plan'
+      dashboards/show: "This is a landing page for the logged in users."
+      accounts/users/index: 'List of the users.'
+      accounts/users/edit: 'A form to edit a user.'
+      account/show: 'Account details.'
+      account/edit: 'A form to edit account details.'
+      invitations/index: 'A list of sent invitations.'
+      invitations/new: 'Create new invitations.'
+      accounts/payment_gateways/edit: 'Edit the billing address'
+      accounts/payment_gateways/show: "Show user's payment details"
+      user/show: 'A form to edit personal details.'
+      login/new: "A login to the developer's portal."
+      password/new: 'Recover password.'
+      password/show: 'Change password.'
+      signup/success: "This page is displayed on a successful sign up."
+      services/new: "A form to create a new service subscription."
+      services/index: "List of all the service subscriptions"
+      search/index: "Search form and results list"
+      accounts/invitee_signups/show: 'A form to create a new user from an invitation.'
+
+      signup/show: |
+        Sign up form. Variables available are `account`,`user` and `plans`.
+        If you have CAS authentication integrated with 3scale, the
+        variable `cas` will exist in the page context.
+
+      errors/not_found: |
+        This page is displayed when your developer portal returns a 404 Not Found
+        HTTP status. For example, it may happen if there is an outdated link
+        leading to your site or somebody inputs a hand-crafted URL to their browser.
+
+      errors/internal_server_error: |
+        This page is displayed when your developer portal returns a 500 Internal Server Error
+         HTTP status. In general, this would signal a bug on the 3scale platform that would be
+         fixed ASAP.
+
+      errors/forbidden: |
+        This page is displayed when your developer portal returns a 403 Forbidden HTTP status.
+        That may happen when, for example, a not logged-in user is accessing a protected page.
+
+  switches:
+    require_cc_on_signup:
+      name: Credit Card on Signup
+      description_html: |
+        <p>
+        When developers sign up for a paid plan, they will be required to fill in their credit card information before getting access to their API Key.
+        </p>
+
+
+    iam_tools:
+      name: IAM Tools
+      description_html: |
+        <p>
+        Using your Identity and Access Management (IAM) tool along with 3scale allows you to securely manage, from one single place, the access to all your resources.
+        </p>
+
+
+    branding:
+      name: Branding
+      description_html: |
+        <p>Having your own <b>branding</b> allows you to control the DNS and outgoing
+        emails of your developer portal. With <b>branding</b> enabled, you can customize</p>
+
+        <ul>
+          <li>developer portal domain - i.e. http://developer.example.com</li>
+          <li>outgoing email address - i.e. api@example.com</li>
+        </ul>
+      internal: Not automatic. Support interaction required.
+
+    skip_email_engagement_footer:
+      name: Disable email footer
+      description_html: |
+        <p><b>Disable email footer</b> added to the outgoing emails</p>
+
+    account_plans:
+      name: Account Plans
+      description_html: |
+        <p><b>Account plans</b> allow you to create different classes of developer
+        accounts with differing monthly usage fees and features
+        accessible.</p>
+
+      visibility_details_html: |
+        <p>For legacy reasons you need to have at least 2 published account plans for
+        your developers to see the account plan controls in their menu.</p>
+
+
+    service_plans:
+      name: Service Plans
+      description_html: |
+        <p><b>Service plans</b> allow the developers to explicitely subscribe
+        to a given service with some plan, enabling you to distinguish monthly
+        fee and other features more coarsely than with (normal) application plans.</p>
+
+    finance:
+      name: Finance
+      description_html: |
+        <p><b>The billing</b> module allows you to charge for access to your API
+        with multiple tiered pricing plans, fixed and variable billing
+        and automated invoicing.</p>
+
+    end_users:
+      name: User Plans
+      description_html: |
+        <p>The <b>user plans</b> module allows you to rate limit individual end
+        user use of your API independently of the applications they are
+        using. This feature is particularly useful for mobile applications. </p>
+
+    groups:
+      name: Groups
+      description_html: |
+        <p><b>Groups</b> allow you to create private areas of your API
+        Portal and share them only with users that you choose.</p>
+
+    multiple_applications:
+      name: Multiple Applications
+      description_html: |
+        <p>Having <b>multiple applications</b> allows your developers to add more
+        than one independent application using your API. Each application
+        has its own API credentials, stats and lifecycle. </p>
+
+    multiple_services:
+      name: Multiple Services
+      description_html: |
+        <p><b>The multiple services</b> feature allows you to manage multiple
+          APIs with your management system.</p>
+
+    multiple_users:
+      name: Multiple Users
+      description_html: |
+        <p>Having <b>multiple users</b> allows developers using your API to have company or
+        group accounts for which they can invite their colleagues with
+        multiple logins. Developers on the same account can see the same
+        applications, keys and statistics - and can be managed by you as
+        a group.</p>
+    web_hooks:
+      name: Webhooks
+      description_html: |
+        <p>Ability to trigger webhooks when certain events happen.</p>
+
+  provider:
+    passwords:
+      new:
+        has_password: 'User already has a password. Use it to change the password.'
+
+    admin:
+      authentication_providers:
+        form:
+          automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
+      messages:
+        no_metrics: "You have no metrics"
+        no_methods: "You have no methods"
+        no_received_messages: "You have no messages."
+        no_messages: "You have sent no messages."
+      cms:
+        builtin_legal_terms:
+          info:
+            lt_usage_details_html: |
+              <p>Use any combination of custom HTML, Javascript and CSS to craft your legal terms.
+              You can also insert the most common one-line warning with Show/Hide toggle
+              using the button below.</p>
+              <p><b>Expert Note</b>: Legal terms are just partials
+              included by default next to the submit button of the form.
+              You can edit them
+              <a href="%{url}">using the CMS</a> too. If you remove
+              the <code>include</code> statement from the pages that use those snippets,
+              these settings will no longer have any effect.
+              </p>
+      user:
+        notification_preferences:
+          show:
+            no_notification_preferences_html: |
+              You don't have access to any notifications on the %{account_name} account.
+              Please contact <a href="mailto:%{email}">%{username}</a> to request access.
+
+      dashboards:
+        show:
+          today: "Today"
+          older: "Before Today"
+          no_messages_1: "Nothing much really"
+          no_messages_2: "Running on empty."
+          no_messages_3: "No news, good news."
+          no_messages_4: "Blue skies ahead…"
+          no_messages_5: "Inbox Zero"
+          no_messages_6: "The sound of silence"
+
+  buyers:
+
+    applications:
+      edit:
+        delete_confirmation: Are you sure you want to delete this application?
+
+    accounts:
+      edit: &account_delete_msg
+        schedule_for_deletion_confirmation: "Scheduling a tenant account for deletion means it will be permanently deleted in %{deletion_time_left}. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. Are you sure you want to schedule the account '%{name}' for deletion on %{deletion_date}?"
+        delete_confirmation: "Are you sure you want to delete '%{name}'?"
+        delete:
+          admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
+      search_results: *account_delete_msg
+      change_state:
+        notice: "%{account_type} account was %{state_event_past}."
+        error: "Cannot %{state_event} %{account_type} account."
+      state_event_past:
+        approve: 'approved'
+        reject: 'rejected'
+        suspend: 'suspended'
+        resume: 'resumed'
+
+  sites:
+    usage_rules:
+      edit:
+        sso_integrations_info_html: |
+          This setting can be overridden for <a href='%{link}'>each individual SSO integration</a>
+          so sign ups through trusted SSO integrations will always be approved.
+    emails:
+      edit:
+        outbound_emails_html: |
+          If you are on a 3scale Plus plan or higher, you may define a
+          custom outbound email address to send messages to your
+          developer community. Please follow the
+          <a href="%{docs_email_configuration_url}" target="_blank">
+          How-To guide</a> instructions to configure your DNS settings, etc.
+
+    dns:
+      show:
+        editable_domain_hints_html: |
+          You can change the domain of your Developer Portal to your own domain,
+          for instance https://developer.example.com.
+          To do so, <a href="https://docs.openshift.com/enterprise/latest/dev_guide/routes.html" target="_blank">add a route on OpenShift</a> and then indicate the new domain here.
+
+  invoices:
+    creation_type:
+      manual: 'manually created'
+      background: 'automatically created'
+
+  api:
+    services:
+      forms:
+        definition_settings:
+          delete_confirmation: "Are you sure you want to delete the service '%{name}'?"
+    integrations:
+      edit:
+        proxy_or_plugin: |
+          Integrate your API through a code plugin or an API gateway.
+          Use the staging environment to test your configuration.
+        hosted_proxy_not_for_oauth_html: |
+          At this moment the cloud API gateway cannot be used in
+          the OAuth authentication mode. You can change the authentication mode
+          in the %{link_to_settings_tab}.
+      proxy:
+        production:
+          title: "Production:"
+          self_managed:
+            title: "Self-managed Gateway"
+            description_html: |
+              To deploy an on-premises API gateway, add the Public Base URL
+              of your API, download the Nginx Config files and install them on your servers.
+          hosted:
+            title: "APIcast Cloud Gateway"
+            description: |
+              The APIcast production environment has the same configuration as the staging environment.
+              The public endpoint is different and it runs in a production environment
+          apicast:
+            title: "APIcast"
+            description_html: |
+              The APIcast production environment has the same configuration as the staging environment.
+              The public endpoint is different.
+        feedback:
+          api_test_path_blank: "The API test GET request has been left blank. You should set it before checking the connections between client, gateway & API."
+          api_test_success_nil: "Hit the test button to check the connections between client, gateway & API."
+          api_test_success_true_html: 'Connection between client, gateway & API is working correctly as <a href="%{url}">reflected in the analytics section</a>.'
+          api_test_success_false: "Something is not quite ok. Is your private API host reachable from the API gateway?"
+          api_test_form_error: "There seems to be an error in your Staging Configuration. Please review, fix and re-submit."
+
+        howto_hosted_html: |
+          Configure your API gateway in the staging environment. Once
+          your staging environment is green you can deploy the gateway
+          to the 3scale production environment.
+
+        howto_self_managed_html: |
+          Configure your API gateway in the staging environment. At any moment,
+          you can download the nginx config files to deploy your on-premises
+          API gateway to a suitable production environment.
+
+        howto_oauth_html: |
+          Configure your API gateway and run it on-premises. Please note that this is currently only possible for the Authorization Code flow.
+          For other flows, checkout our repository of nginx config file templates in <a href='https://github.com/3scale/nginx-oauth-templates'>github</a>. <b>Our staging environment currently doesn't support oauth.</b>
+
+        api_endpoint_help_html: |
+          <h4>Private Base URL</h4> <p>When you use the API gateway solution
+          your API Base URL becomes private and should only be called by the
+          gateway and not by developers directly.</p>
+
+        proxy_endpoint_help_html: |
+          <h4>Public Base URL</h4> <p>The Public Base URL is the url through which
+          developers connect to your API. Use this staging environment for testing
+          purposes only.</p>
+
+        client_help_html: |
+          <h4>Client request</h4><p>Use this field to run a request
+          through the API gateway. Of course, you can run exactly the same curl request
+          from a terminal.</p>
+
+        enabled_html: "Deployed at %{at}. <a href='%{list}'>See the history.</a>"
+        disabled_html: "Not deployed. <a href='%{list}'>See the history.</a>"
+
+        visit_documentation: 'documentation'
+        documentation_hosted_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-hosted'
+        documentation_apicast_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-overview'
+        documentation_self_managed_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-self-managed-nginx-config-files'
+        documentation_oauth_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-oauth-before-may-2017'
+        documentation_response_codes_tracking_url: '%{docs_base_url}/analytics/%{docs_anchor}response-codes-tracking'
+        documentation_create_active_doc_spec: "%{docs_base_url}/api-documentation/%{docs_anchor}create-activedocs-spec"
+
+        proxy_rule_help_html: |
+          <h4>Mapping Rules Syntax</h4>
+
+          <p>
+            A Mapping Rule has to start with '/'. This looks for matches
+            from the beginning of the string, ignoring the rest if the
+            first characters match. The pattern can only contain valid URL
+            characters and 'wildcards' - words inside curly brackets
+            ('{}') that match any string up to the following slash,
+            ampersand or question mark.
+          </p>
+
+            <h5>Examples</h5>
+            <table>
+              <tr><td>/v1/word/{whateverword}.json </td></td><td></td></tr>
+              <tr><td>/{version}/word/{foo}.json </td></td><td></td></tr>
+              <tr><td>/{version}/word/{bar}.json?action=create </td></td><td></td></tr>
+              <tr><td>/{version}/word/{baz}.json?action={my_action} </td></td><td></td></tr>
+            </table>
+
+          <p>
+           More than one Mapping Rule can match the request path but if <b>none
+           matches, the request is discarded (404)</b>.
+          </p>
+
+          <p>Add a dollar sign ($) to the end of a pattern to apply stricter matching.
+          For example, /foo/bar$ will only match /foo/bar requests and won't match
+          /foo/bar/baz requests.</p>
+        curl:
+          no_application_plan:
+            Start with creating an application plan.
+          no_application:
+            In order to send a valid test request, please create an application that subscribes to an application plan of this service.
+
+  deployment_options:
+    missing: |
+      Please take a moment to update your integration settings and tell us which deployment option you are using. If you're using multiple integration options, pick the one that's most important to your business. This setting has no functional consequences, it adjusts the user interface to better suit your use case.
+    phrased:
+      self_managed: Self-managed Gateway
+      hosted: APIcast
+      on_heroku: Heroku Cloud Gateway
+      on_amazon: Amazon Cloud Gateway
+      plugin_ruby: Ruby Plugin
+      plugin_java: Java Plugin
+      plugin_python: Python Plugin
+      plugin_nodejs: Node.js Plugin
+      plugin_php: PHP Plugin
+      plugin_rest: REST requests
+      plugin_csharp: .NET Plugin
+
+    self_managed: APIcast self-managed<span>Manage your own NGINX based API gateway for ultimate flexibility and customization.</span>
+    hosted: APIcast<span>a 3scale managed NGINX based API gateway for quick and reliable integrations</span>
+    apicast: APIcast<span>Nginx reverse proxy server.</span>
+
+    on_heroku: Heroku
+    on_amazon: Amazon
+    plugin_ruby: |
+      Ruby Plugin
+      <span>Download from Github or you can install this directly using:
+        <code>gem install 3scale_client</code>.
+        <a class="github" target="_blank" href="https://github.com/3scale/3scale_ws_api_for_ruby/tree/master">Download at Github</a>
+      </span>
+    plugin_java: |
+      Java Plugin
+      <span>Download the JAR bundle from Github. Unpack it into a directory and then run the ant build.
+        <a class="github" target="_blank" href="https://github.com/3scale/3scale_ws_api_for_java/tree/master">Download at Github</a>
+      </span>
+    plugin_python: |
+      Python Plugin
+      <span>Download from Github. Standard distutils installation: unpack the file and from the new directory run
+        <code>sudo python setup.py install</code>.
+        <a class="github" target="_blank" href="https://github.com/3scale/3scale_ws_api_for_python/tree/master">Download at Github</a>
+      </span>
+    plugin_nodejs: |
+      Node.js Plugin
+      <span>The module is delivered through the package manager npm, so that the installation should be easy as:
+        <code>npm install 3scale</code>.
+        <a class="github" target="_blank" href="https://github.com/3scale/3scale_ws_api_for_nodejs">Download at Github</a>
+      </span>
+    plugin_php: |
+      PHP Plugin
+      <span>
+        Download the source code from Github and place it somewhere accessible from your project.
+        <a class="github" target="_blank" href="https://github.com/3scale/3scale_ws_api_for_php/tree/master">Download at Github</a>
+      </span>
+    plugin_rest: REST
+      <span>Query the 3scale API directly. Check out <a href="/p/admin/api_docs">the 3scale API Documentation</a>.</span>
+
+    plugin_csharp: |
+      .NET Plugin
+      <span>
+        Obtain the library:
+        <code>CS_threescale.dll</code>
+        (Windows version). Rebuild the dll from source using Mono or Microsoft VS.
+        <a class="github" target="_blank" href="https://github.com/3scale/3scale_ws_api_for_dotnet/tree/master">Download at Github</a>
+      </span>
+
+  authentication_options:
+    api_key: "API Key (user_key) <span>The application is identified & authenticated via a single string.</span>"
+    key_pair: "App_ID and App_Key Pair <span>The application is identified via the App_ID and authenticated via the App_Key.</span>"
+    oauth: "OAuth 2.0 <span>The application is identified via the client_id and authenticated via an access token.</span>"
+    oidc: "OpenID Connect <span>Use OpenID Connect for any OAuth 2.0 flow.</span>"
+  plugins:
+    java: Java
+    csharp: C#
+    nodejs: NodeJS
+    php: PHP
+    ruby: Ruby
+    python: Python
+    rest: REST
+
+  time:
+    formats:
+      default: "%d %b %Y %H:%M:%S %Z"
+  date:
+    formats:
+      month: '%B %Y'
+
+  number:
+    human:
+      decimal_units:
+        format: "%n%u"
+        units:
+          unit: ""
+          thousand: K
+          million: M
+          billion: B
+          trillion: T
+          quadrillion: Q
+  cms:
+    portlet:
+      external_rss_feed_portlet:
+        name: External RSS Feed
+        description: Imports Atom feed to page.
+      table_of_contents_portlet:
+        name: Table of Contents
+        description: Creates HTML TOC from your section.
+      latest_forum_posts_portlet:
+        name: Latest Forum Posts
+        description: Shows you number of latest forum posts.
+
+    email_template:
+      account_approved: 'Buyer Account approved'
+      account_confirmed: 'Buyer Account confirmed'
+      account_messenger_expired_credit_card_notification_for_buyer: 'Credit card expired notification for buyer'
+      account_messenger_expired_credit_card_notification_for_provider: 'Credit card expired notification for provider'
+      account_messenger_invoices_to_review: "Review invoices prior to charging provider"
+      account_messenger_new_signup: 'Sign up notification for provider'
+      account_messenger_plan_change_request: 'Plan change request for provider'
+      account_rejected: 'Buyer account rejected'
+      alert_messenger_limit_alert_for_buyer: 'Alert notification for buyer (< 100%)'
+      alert_messenger_limit_alert_for_provider: 'Alert notification for provider (< 100%)'
+      alert_messenger_limit_violation_for_buyer: 'Alert notification for buyer (>= 100%)'
+      alert_messenger_limit_violation_for_provider: 'Alert notification for provider (>= 100%)'
+      cinstance_messenger_accept: 'Application accepted for buyer'
+      cinstance_messenger_contract_cancellation: 'Application deleted for provider'
+      cinstance_messenger_expired_trial_period_notification: 'Application trial period expired for buyer'
+      cinstance_messenger_key_created: 'Application key created for buyer'
+      cinstance_messenger_key_deleted: 'Application key deleted for buyer'
+      cinstance_messenger_new_application: 'Application created for provider'
+      cinstance_messenger_plan_change: 'Application plan changed for provider'
+      cinstance_messenger_plan_change_for_buyer: 'Application plan changed for buyer'
+      cinstance_messenger_reject: 'Application rejected for buyer'
+      cinstance_messenger_suspended: 'Application suspended for buyer'
+      invitation_mailer_invite: 'Invitation to join Account'
+      invoice_messenger_successfully_charged: 'Invoice charged successfully for buyer'
+      invoice_messenger_unsuccessfully_charged_for_buyer: 'Invoice charge failure for buyer with retry'
+      invoice_messenger_unsuccessfully_charged_for_buyer_final: 'Invoice charge failure for buyer without retry'
+      invoice_messenger_unsuccessfully_charged_for_provider: 'Invoice charge failure for provider with retry'
+      invoice_messenger_unsuccessfully_charged_for_provider_final: 'Invoice charge failure for provider without retry'
+      invoice_messenger_upcoming_charge_notification: 'Upcoming invoice charge for buyer'
+      lost_password_email: 'Password recovery for buyer'
+      plans_messenger_plan_change_request_made: "Plan change request for buyer"
+      service_contract_messenger_accept: 'Service accepted for buyer'
+      service_contract_messenger_contract_cancellation: 'Service contract cancelled for provider'
+      service_contract_messenger_expired_trial_period_notification: 'Service trial period expired for buyer'
+      service_contract_messenger_new_contract: 'Service created for provider'
+      service_contract_messenger_plan_change: 'Service plan changed for provider'
+      service_contract_messenger_reject: 'Service rejected for buyer'
+      service_contract_messenger_suspended: 'Service contract suspended for buyer'
+      signup_notification_email: 'Sign up notification for buyer'
+
+    email_template_description:
+      account_approved: 'After provider approves sign up, notification for buyer'
+      account_confirmed: 'Buyer Account confirmed'
+      account_messenger_expired_credit_card_notification_for_buyer: 'Credit card expired notification for buyer'
+      account_messenger_expired_credit_card_notification_for_provider: 'Credit card expired notification for provider'
+      account_messenger_invoices_to_review: "After end of monthly billing cycle, and once preliminary invoices have been calculated, notification for provider to review"
+      account_messenger_new_signup: 'New sign up notification for provider'
+      account_messenger_plan_change_request: 'Plan change request for provider'
+      account_rejected: 'Buyer account rejected'
+      alert_messenger_limit_alert_for_buyer: 'Alert notification for buyer when near 100% threshold'
+      alert_messenger_limit_alert_for_provider: 'Alert notification for provider when near 100% threshold'
+      alert_messenger_limit_violation_for_buyer: 'Alert notification for buyer when over 100% threshold'
+      alert_messenger_limit_violation_for_provider: 'Alert notification for provider when over 100% threshold'
+      cinstance_messenger_accept: 'After provider approves application, notification for buyer'
+      cinstance_messenger_contract_cancellation: 'Application deleted for provider'
+      cinstance_messenger_expired_trial_period_notification: 'Application trial period expired for buyer'
+      cinstance_messenger_key_created: 'Application key created for buyer'
+      cinstance_messenger_key_deleted: 'Application key deleted for buyer'
+      cinstance_messenger_new_application: 'After buyer creates a new application, notification for provider'
+      cinstance_messenger_plan_change: 'After buyer requests/changes application plan, notification for provider'
+      cinstance_messenger_plan_change_for_buyer: 'After provider changes application plan, notification for buyer'
+      cinstance_messenger_reject: 'After provider rejects application, notification for buyer'
+      cinstance_messenger_suspended: 'When provider suspends application, notification for buyer'
+      invitation_mailer_invite: 'Invitation to join Account'
+      invoice_messenger_successfully_charged: 'Invoice charged successfully for buyer'
+      invoice_messenger_unsuccessfully_charged_for_buyer: 'Invoice charge failure for buyer with retry'
+      invoice_messenger_unsuccessfully_charged_for_buyer_final: 'Invoice charge failure for buyer without retry'
+      invoice_messenger_unsuccessfully_charged_for_provider: 'Invoice charge failure for provider with retry'
+      invoice_messenger_unsuccessfully_charged_for_provider_final: 'Invoice charge failure for provider without retry'
+      invoice_messenger_upcoming_charge_notification: 'Upcoming invoice charge for buyer'
+      lost_password_email: 'When buyer requests password recovery, message containing password reset link'
+      plans_messenger_plan_change_request_made: "After buyer requests application plan change, notification for buyer"
+      service_contract_messenger_accept: 'After provider approves service, notification for buyer'
+      service_contract_messenger_contract_cancellation: 'Service contract cancelled for provider'
+      service_contract_messenger_expired_trial_period_notification: 'Service trial period expired for buyer'
+      service_contract_messenger_new_contract: 'After buyer creates a new service, notification for provider'
+      service_contract_messenger_plan_change: 'After buyer requests/changes service plan, notification for provider'
+      service_contract_messenger_reject: 'After provider rejects service, notification for buyer'
+      service_contract_messenger_suspended: 'After provider suspends service contract, notification for buyer'
+      signup_notification_email: 'After buyer sign up, message containing activation link for account'
+
+  errors:
+    messages:
+      duplicated_user_provider_side: "Duplicate user registration. Delete one of the duplicates in order to continue."
+      duplicated_user_buyer_side: "For activating your account please contact support."
+      activation_complete: "Signup complete. You can now sign in."
+      activation_approval_required: "You will receive a message once your account is approved."
+      invitation_not_found: "Invitation token did not exist."
+      invitation_already_accepted: "Invitation token has already been accepted."
+      oauth:
+        code_incorrect_or_expired: "The code is incorrect or expired."
+        token_incorrect_or_expired: "The token is incorrect or expired."
+        invalid_certificate: "Authentication error: the OAuth provider does not have a valid SSL certificate."
+        connection_failed: "Connection failed: make sure the authentication server is accessible"
+        client_error: "Authentication error: An error occurred attempting to contact the OAuth provider. Details: %{message}"
+
+  activemodel:
+    attributes:
+      customer:
+        first_name: First Name
+        last_name: Last Name
+      billing_address:
+        street_address: Street Address
+    models:
+      end_user: 'EndUser'
+    errors:
+      models:
+        sso_token:
+          cannot_be_generated: SSO Token cannot be generated
+          one_of_user_id_or_username_is_required: One of user_id or username is required
+        three_scale/swagger/specification:
+          invalid_json_body_and_query_paramtypes: "JSON Spec can not have paramType='body' and paramType='query' on the same method."
+          invalid_swagger: "JSON Spec is invalid"
+          invalid_json: "Invalid JSON"
+
+  activerecord:
+    errors:
+      messages:
+        localhost: "can't be localhost"
+        invalid_url: "Invalid URL format"
+        invalid: 'invalid'
+        invalid_event: 'cannot transition when %{state}'
+        invalid_transition: 'cannot transition via "%{event}"'
+      models:
+        authentication/by_access_token/access_token:
+          attributes:
+            scopes:
+              too_short: "Select at least %{count} scope"
+        authentication_provider:
+          attributes:
+            site:
+              invalid: "Please, remove any white space."
+            realm:
+              invalid: "Please, remove any white space."
+            kind:
+              not_found: "unavailable for this account type"
+
+        metric:
+          attributes:
+            base:
+              all_periods_used: "Metric cannot be disabled. Please contact support."
+        proxy_rule:
+          attributes:
+            pattern:
+              blank: |
+                a Mapping Rule can't be empty, has to start with '/' and can only contain valid URL characters and
+                'wildcards' - words inside curly brackets ('{}')
+              invalid: |
+                a Mapping Rule has to start with '/' and can only contain valid URL characters and
+                'wildcards' - words inside curly brackets ('{}')
+        proxy:
+          attributes:
+            api_backend:
+              invalid: "the accepted format is 'protocol://address(:port)'"
+            api_test_path:
+              invalid: "only URI characters allowed"
+            endpoint:
+              invalid: "the accepted format is 'protocol://address(:port)'"
+            sandbox_endpoint:
+              invalid: "the accepted format is 'protocol://address(:port)'"
+            oauth_login_url:
+              invalid: "invalid auth login url. (hint: make sure it uses https scheme)"
+        proxy_config:
+          attributes:
+            service_token:
+              missing: 'is not created yet'
+        account_plan:
+          has_contracts: 'This account plan cannot be deleted! At least one account depends on it.'
+          customizations_has_contracts: 'This account plan cannot be deleted!  At least one customized version of this account plan exists.'
+        application_plan:
+          has_contracts: 'This application plan cannot be deleted! At least one application depends on it.'
+          customizations_has_contracts: 'This application plan cannot be deleted!  At least one customized version of this application plan exists.'
+        service_plan:
+          has_contracts: 'This service plan cannot be deleted! At least one contract depends on it.'
+
+        application_key:
+          attributes:
+            base:
+              limit_reached: 'Limit reached'
+        referrer_filter:
+          attributes:
+            base:
+              limit_reached: 'Limit reached'
+        user:
+          attributes:
+            email:
+              blank: "can't be blank"
+            password:
+              blank: "can't be blank"
+          last_admin: "Can't delete last admin"
+
+        account:
+          unresolved_invoices: "need to be settled before the account deletion."
+
+          attributes:
+            org_name:
+              blank: "can't be blank"
+              taken: "already taken"
+            subdomain:
+              blank: "can't be blank"
+              same: "can't be the same"
+              domain: 'must be a valid domain name'
+              taken: "already taken"
+
+            self_subdomain:
+              same: "can't be the same"
+              taken: "already taken"
+
+        line_item:
+          attributes:
+            base:
+              invalid_invoice_state: "Invalid invoice state"
+
+        web_hook:
+          attributes:
+            url:
+              invalid: Must be a valid URL such as http://example.com
+
+        cms/partial:
+          attributes:
+            system_name:
+              reserved: "reserved for internal use"
+              not_reserved: "not reserved for internal use"
+              cannot_be_changed: "cannot be changed"
+
+        cms/page:
+          attributes:
+            path:
+              slash: "needs to start with a slash ( / )"
+              invalid_uri: "was invalid. Please verify it and save again"
+
+        cms/layout:
+          missing_content: "must contain '{&#37; content &#37;}' tag"
+
+        cms/email_template:
+          invalid_email: "is an invalid email address"
+          wrong_domain: "does not match the domain of your outbound email"
+
+        cms/template:
+          liquid_syntax: 'does not contain valid liquid syntax or is using unknown tags'
+
+        cms/builtin:
+          static_builtin_page:
+            is_present: 'cannot be present'
+
+        cms/section:
+          attributes:
+            partial_path:
+              invalid_uri: 'is not a valid URI'
+
+        cms/file:
+          attributes:
+            path:
+              invalid_uri: 'is not a valid URI'
+
+        service_contract:
+          attributes:
+            base:
+              applications_not_deleted: 'Some applications cannot be deleted'
+              unsuspended_applications:
+                one: 'There is 1 unsuspended application subscribed to the service'
+                other: 'There are %{count} unsuspended applications subscribed to the service'
+        invoice:
+          attributes:
+            state:
+              not_in_chargeable_state: "Invoice %{id} is not in chargeable state!"
+            base:
+              charging_failed: 'Failed to charge the credit card.'
+
+    models:
+      topic_category: category
+      cinstance: Application
+      service_contract: Service contract
+      account_contract: Account contract
+      topic: thread
+      profile: Account profile
+      application_plan: Application plan
+      service_plan: Service plan
+      account_plan: Account plan
+      end_user_plan: EndUser plan
+
+      cms/builtin:
+      cms/builtin/page: Built-in page
+      cms/builtin/static_page: Built-in page
+      cms/page: Page
+      cms/layout: Layout
+      cms/partial: Partial
+      cms/redirect: Redirect
+      cms/group: Group
+      cms/portlet: Portlet
+      cms/file: File
+      cms/builtin_page: Builtin Page
+      cms/email_template: Email Template
+      cms/legal_term: Legal Term
+      cms/section: Section
+
+      authentication_provider/github: GitHub
+      authentication_provider/auth0: Auth0
+      authentication_provider/custom: OAuth2
+      authentication_provider/keycloak: 'Red Hat Single Sign-On'
+
+    attributes:
+      # Account attributes
+      account:
+        country_id: Country of Residence
+        country: Country of Residence
+        org_name: Organization/Group Name
+        org_legaladdress: Legal Address
+        org_legaladdress_cont: Legal Address (cont)
+        subdomain: Developer Portal
+        self_subdomain: Admin Portal
+        state_region: State / Region
+        self_domain: Admin domain
+        vat_code: VAT Code
+        po_number: PO Number
+        telephone_number: Telephone Number
+        zip: ZIP Code
+        billing_address:
+          phone: Phone
+          name: Contact / Company Name
+          address1: Address
+          address2: Address (line 2)
+          city: City
+          country: Country
+          state: State
+          zip: ZIP / Postal Code
+
+      account_plan:
+        default_plan_hint: "Default account plan (if any) is contracted automatically on sign up."
+        contracts: Accounts
+
+      service_plan:
+        default_plan_hint: "Default service plan (if any) is contracted automatically on sign up."
+        contracts: Subscriptions
+
+      application_plan:
+        default_plan_hint: "Default application plan (if any) is selected automatically upon service subscription."
+        contracts: Applications
+
+      referrer_filter:
+        value: referrer filter
+
+      web_hook:
+        url: URL
+        active: Webhooks are
+
+      # Metric attributes
+      metric:
+        name: System name
+
+      # Service attributes
+      service:
+        admin_support_email: Administrative support email address
+        credit_card_support_email: "Who should be emailed, to change credit card details?"
+        friendly_id: URL
+        tech_support_email: Technical support email address
+        txt_support: Contact and Support Information
+
+      proxy:
+        credentials_location: Credentials location
+        sandbox_endpoint: "Public Base URL"
+        staging_endpoint: "Public Base URL"
+        endpoint: "Public Base URL"
+        api_backend: "Private Base URL"
+        api_test_path: "API test GET request"
+        auth_app_id: "App ID parameter"
+        auth_app_key: "App Key parameter"
+        oauth_login_url: "OAuth login URL"
+        hosted_proxy_endpoint: "Public Base URL"
+        production_endpoint: "Public Base URL"
+        oidc_issuer_endpoint: "OpenID Connect Issuer"
+      profile:
+        company_url: URL
+
+      usage_limit:
+        value: Max. value
+
+      cms/legal_term:
+        published: Text
+
+      cms/email_template/headers:
+        reply_to: Reply-To
+        bcc: Bcc
+        cc: Cc
+        subject: Subject
+        from: From
+
+      invoice:
+        friendly_id: 'ID'
+        period: 'Billing Period'
+        finalized_on: 'Finalized On'
+        issued_on: 'Issued On'
+        due_on: 'Due On'
+        paid_on: 'Paid On'
+
+  config:
+    advanced_cms: Advanced CMS
+
+    enums:
+      billing_mode:
+        none: disabled
+
+  flash:
+    actions:
+      destroy:
+        notice: "%{resource_name} was successfully deleted"
+
+    signups:
+      create:
+        notice: "Thanks for signing up! You can now sign in."
+
+  proxy:
+    credentials_location:
+      headers: "As HTTP Headers"
+      query: "As query parameters (GET) or body parameters (POST/PUT/DELETE)"
+
+  formtastic:
+    hints:
+      user:
+        current_password: |
+          Any other active session(s) for this user account will be terminated when you update your personal details
+          to be sure it's you and not somebody else trying to lock you out of your account.
+      deployment_option_gateway: |
+        A gateway is the most maintainable and scalable way to integrate your API with 3scale as you won't have to touch your API at all;
+        a gateway sits in front of your API as a completely separate entity. Developers will make requests on the gateway,
+        the gateway will communicate (asynchronously) with 3scale for Access Control & Traffic Reporting and forward the original requests to your API.
+      deployment_option_plugin: |
+        Plugins provide a wrapper for the 3scale API that enables API Access Control and API Traffic Reporting without having to run another server.
+        A plugin lives inside the code that powers your API. The plugin calls the 3scale API for Access Control & Traffic Reporting.
+      subdomain: "The domain name is the initial temporary domain name for your developer portal - you can change this to your own domain name later."
+      handler: "Do you use any markup language?"
+      liquid_enabled: "Process Liquid tags and drops?"
+
+      api_docs/service:
+        body: 'Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#52-api-declaration">1.2</a> or <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a>.'
+        system_name: "Only ASCII letters, numbers, dashes and underscores are allowed.<br/><span style='font-size:90%;color:red'>Warning: With ActiveDocs 1.2 the API will be described in your developer portal as <i>System name: Description</i></span>"
+
+      settings:
+        account_plans_ui_visible: "Only consider using Account Plans if Application Plans don't suit your use case - for example if you offer additional non-API services."
+        service_plans_ui_visible: "Only consider using Service Plans for non-API features like additional support per Service instead of for the whole Account."
+        end_user_plans_ui_visible: "End User Plans make it possible to divide the rate limits of an Application Plan per end user. This way each end user of an application gets his/her fair share of the application rate limit."
+        approval_required_referer: "Set per account plan from %{link}."
+        account_approval_required: "Approval is required by you before developer accounts are activated."
+        change_account_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
+        change_service_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
+        useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
+        strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
+        public_search: >
+          Allow anyone to search on your Developer Portal.
+          If you have Restricted Pages your Developer Portal we advise you not to change this setting.
+          The page will never be accessible but some information may still leak from the search results snippets.
+          Please be sure you do not have restricted pages in your portal if you use this option.
+        cms_escape_draft_html: >
+          Enabling automatic settings will automatically escape any HTML characters from the liquid drops as if they
+          were filtered by <code>escape</code></a>
+          like <code>{{ account.name | escape }}</code>.
+          &mdash;
+          Imagine an account called <code>"Awesome &amp;&lt;script src="//evil.js/exploit.js"&gt;&lt;/script&gt; Co."</code>.
+          Then having <code>{{ account.name }}</code> in your template would execute the malicious script on the browser
+          without escaping.
+          &mdash;
+          When escaping is enabled by default, you can still disable the escaping ad-hoc using the <code>html_safe</code> filter.
+        cms_escape_published_html: >
+          Same as above, except it is enabled for published pages (your buyers).
+
+      fields_definition:
+        name: "The low level system name."
+        label: "The field title your developers will see."
+        required: "Makes the field required for developers."
+        read_only: "Developers won't be able to change this field."
+        hidden: "Developers won't be able to see this field."
+
+      web_hook:
+        url: URL that will be notified about all the events selected below.
+
+      cinstance:
+        intentions: "Please describe briefly your intentions of use of this service"
+        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 256 characters at most."
+
+      cms:
+        page:
+          system_name: "Can be used to access page by API or in liquid"
+
+      proxy:
+        auth_app_id: "Name of the parameter that acts of behalf of app id"
+        auth_app_key: "Name of the parameter that acts of behalf of app key"
+        sandbox_endpoint: "Public address of your API gateway in the staging environment. You can use this address to call the API for testing purposes."
+        endpoint: "Public address of your API gateway in the production environment. This field customizes the server_name directive in the NGINX Config file and defaults to $hostname if left blank."
+        endpoint_apicast_2_openshift_html:
+          Public address of your API gateway in the %{environment_name} environment.
+          <span>Make sure to <a href="https://docs.openshift.com/container-platform/latest/dev_guide/routes.html#creating-routes">add the correct route</a></span>
+        endpoint_apicast_2_html: >
+          Public address of your API gateway in the %{environment_name} environment.
+        api_backend_https: "Private address of your API that will be called by the API gateway."
+        api_backend_http: |
+          Private address of your API that will be called by the API gateway.
+          <span class="warn">For end-to-end encryption your private base URL scheme should be https</span>.
+        oauth_login_url: |
+           Since the service has OAuth authentication enabled you have
+           to provide a URL where the <em>consumers</em> login and
+           authenticate. Read more about
+           <a href="https://support.3scale.net/docs/deployment-options/apicast-oauth">
+           API gateway and OAuth setup</a> on our support page.
+        apicast_oauth: |
+           Since the service has OAuth authentication enabled you have
+           to provide a URL where the <em>consumers</em> login and
+           authenticate. Read more about
+           <a href="https://support.3scale.net/docs/deployment-options/apicast-oauth">
+           API gateway and OAuth setup</a> on our support page.
+        oidc_issuer_endpoint: |
+          Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be "https://&lt;CLIENT_ID&gt;:&lt;CLIENT_SECRET&gt;@&lt;HOST&gt;:&lt;PORT&gt;/auth/realms/&lt;REALM_NAME&gt;".
+        api_test_path: "Optional GET request to a API gateway endpoint. We will use this call to validate your API gateway setup using credentials of the first live application. You can try it yourself by copying the following command into your shell:"
+        api_test_path_blank: "Optional GET request to a API gateway endpoint. This call has been left blank and therefore it will not be possible to test if the connection between client, API gateway & API is working correctly."
+        hostname_rewrite: |
+          Lets you define a custom <code>Host</code> request header. This is needed if your API backend only accepts traffic from a specific host.
+        secret_token: |
+          Enables you to block any direct developer requests to your API backend; each 3scale API gateway call to your API backend contains a request header called <code>X-3scale-proxy-secret-token</code>.
+          The value of this header can be set by you here. It's up to you ensure your backend only allows calls with this secret header.
+
+
+      service:
+        intentions_required: "Developers requesting access to your API will be asked about the purpose of their API."
+        buyers_manage_apps: "Developers with access to your API will be able to manage applications and their access keys."
+        buyers_manage_keys: "Makes applications Keys visible on the developer dashboard. This setting makes sense only when former one is checked."
+        referrer_filters_required: "Developers with access to your API must indicate allowed domain / IP referrers."
+        custom_keys_enabled: "Allows you to create custom keys for developers"
+        end_user_registration_required: "Requires End Users to be registered beforehand versus being created automatically"
+        buyer_can_select_plan: "If left unchecked, the plan marked as 'default' will be selected."
+        deployment_option: "At this moment the APIcast deployment option & OAuth authentication scheme are mutually exclusive."
+    actions:
+      cms:
+        page:
+          # we can override text of create or save buttons here
+          # but no need to do it, cms form builder does it for us
+
+      proxy:
+        update: "%{action} Staging Environment"
+    labels:
+      service:
+        intentions_required: "Signup requires a description of intended use"
+        buyers_manage_apps: "Developers can manage applications"
+        buyers_manage_keys: "Developers can manage Keys"
+        referrer_filters_required: "Require referrer filtering"
+        custom_keys_enabled: "Enable custom keys"
+        buyer_key_regenerate_enabled: "Allow developers to regenerate access keys"
+        mandatory_app_key: "Require at least 1 application key"
+        end_user_registration_required: "Manual End User registration"
+        buyer_can_select_plan: "Developers can select a plan when creating a new application"
+        backend_version: "Authentication: Parameters developers must send to the API in order to identify themselves:"
+
+      authentication_provider: &authentication_provider
+        client_id: Client ID
+        client_secret: Client Secret
+        automatically_approve_accounts: 'Always approve accounts that sign up through this SSO Integration'
+        published_admin_portal: Display this SSO Integration on the sign-in page of the admin portal.
+      authentication_provider/github:
+        <<: *authentication_provider
+      authentication_provider/auth0:
+        <<: *authentication_provider
+      authentication_provider/keycloak:
+        <<: *authentication_provider
+        skip_ssl_certificate_verification: Do not verify SSL certificate
+
+      settings:
+        account_plans_ui_visible: "Account Plans"
+        service_plans_ui_visible: "Service Plans"
+        end_user_plans_ui_visible: "End User Plans"
+        change_account_plan_permission: "For their account, a user can:"
+        change_service_plan_permission: "For a service, a subscribed user can:"
+        useraccountarea_enabled: 'Allow the user to edit their submitted details, change passwords, etc.'
+        hide_service: 'Used a default service plan'
+        signups_enabled: 'Developers are allowed sign up themselves'
+        cas_server_url: 'CAS Server URL'
+        strong_passwords_enabled: 'Strong passwords'
+        public_search: 'Enable public search on Developer Portal'
+        cms_escape_draft_html: 'Use Automatic Escaping for draft content'
+        cms_escape_published_html: 'Use Automatic Escaping for published content'
+
+      proxy:
+        status: 'Response Code'
+        headers: 'Content-type'
+        message: 'Response Body'
+
+  action_controller:
+    errors:
+      unknown_format: 'The server does not understand "%{request_format}" request.'

@@ -1,0 +1,115 @@
+$glow-color: $highlight-color;
+
+@mixin cms-intro-coloring($name, $color2) {
+  $color: $color2;
+
+  ul > li[aria-controls="#{$name}"] {
+    a:hover {
+      border-bottom: line-height-times(1/4) $color solid;
+      color: $color;
+    }
+
+    &.ui-tabs-active a {
+      border-bottom: line-height-times(1/4) $color solid;
+      color: $color;
+    }
+  }
+
+  & > div[id="#{$name}"] {
+    i.fa { color: $color; }
+    h1 { color: $color }
+  }
+}
+
+
+#cms-intro-tabs {
+  $icon-height: $line-height-base;
+
+  @include cms-intro-coloring('getting-started', $link-color);
+  @include cms-intro-coloring('tips-and-tricks', $link-color);
+  @include cms-intro-coloring('quick-links', $link-color);
+
+  .links {
+    margin-bottom: line-height-times(2);
+  }
+
+  // tabs selector
+  & > ul {
+    @include horizontal-list;
+    margin-bottom: line-height-times(1);
+    width: 100%;
+
+    li a {
+      min-width: line-height-times(4);
+      padding: line-height-times(1/2);
+      margin-right: line-height-times(1);
+      padding-left: 0;
+      border-bottom: line-height-times(1/4) $border-color solid;
+      display: block;
+    }
+  }
+
+  & > div {
+    position: relative;
+    top: line-height-times(1);
+
+    ul {
+      list-style: none outside;
+
+      li {
+        margin-left: 0;
+     }
+    }
+
+    p {
+
+     em[id] {
+       cursor: help;
+       border-bottom: $border-width dashed $border-color;
+       font-weight: $font-weight-bold;
+       font-type: normal;
+     }
+
+     a {
+       text-decoration: underline;
+     }
+    }
+  }
+}
+
+
+#cms-sidebar {
+  li.glowing.active, li.glowing {
+    color: $glow-color !important;
+  }
+
+  input.glowing {
+    color: $glow-color !important;
+
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      color: $glow-color !important;
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+      color: $glow-color !important;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+      color: $glow-color !important;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      color: $glow-color !important;
+    }
+  }
+}
+
+#recent-templates{
+  @extend div.left;
+
+  a {
+    max-width: 96%;
+    display: inline-block;
+    @include ellipsis();
+    padding-right: 4%;
+
+
+  }
+}

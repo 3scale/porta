@@ -1,0 +1,143 @@
+- if @account
+  = render 'buyers/accounts/menu'
+  h2
+    ' Service subscriptions of
+    = @account.org_name
+- else
+  h2
+    | Service Subscriptions
+
+div id="bulk-operations" style="display: none;"
+  h3 Bulk operations
+  p
+    ' You have selected
+    span.count>
+    | service subscriptions and you can make following operations with them:
+
+  dl
+    = bulk_action 'Send email',
+                  new_admin_buyers_service_contracts_bulk_send_email_path,
+                  'Send email to selected subscribers'
+    = bulk_action 'Change service plan',
+                  new_admin_buyers_service_contracts_bulk_change_plan_path,
+                  'Transfer these subscriptions to different service plan'
+    = bulk_action 'Change state',
+                  new_admin_buyers_service_contracts_bulk_change_state_path,
+                  'Accept, suspend or resume selected subscriptions'
+    //= bulk_action 'Delete',
+                    new_admin_buyers_service_contracts_bulk_delete_path,
+                    'Delete selected applications'
+
+  - content_for :javascripts do
+    = javascript_include_tag 'bulk_operations.js'
+    = javascript_include_tag 'vendor/jquery.tipsy.js'
+
+table.data
+  thead
+    tr
+      th.select
+        = bulk_select_all
+      - unless @account
+        th
+          = sortable('accounts.org_name', 'Account')
+      - if current_account.multiservice?
+        th
+          label for="search_service_id"
+            | Service
+      th
+        = sortable('plans.name', 'Plan')
+      th
+        = sortable('cinstances.state', 'State')
+      th
+        | Paid?
+        = help_bubble 'free_or_paid' do
+          | 'Free' subscriptions are those, whose service plan has no billing rules associated. 'Paid' are all the others.
+      th colspan="3"
+        = sortable('cinstances.created_at', 'Created On')
+
+    - unless @account
+      tr class="search"
+        = form_for @search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
+          th
+          th
+            = s.text_field :account_query, size: 15, value: @account.try(:org_name)
+
+          - if current_account.multiservice?
+            th
+              = s.collection_select :service_id, @services, :id, :name,
+                                        { include_blank: true },
+                                        { disabled: @service }
+          th
+            = s.grouped_collection_select :plan_id, @services,
+                                              :service_plans, :name, :id, :name,
+                                              { include_blank: true },
+                                              { disabled: @plan }
+          th
+            = s.select :state, @states, include_blank: true, selected: @search.state
+          th
+            = s.select :plan_type, [ ['free'], ['paid'] ],
+                           { include_blank: true},
+                           { disabled: @plan }
+          th colspan="3"
+            = s.submit 'Search', name: nil
+
+  tbody
+    - @service_contracts.each do |contract|
+      tr id=dom_id(contract)
+        td.select
+          = bulk_select_one contract
+        - unless @account
+          td
+            = link_to_buyer_or_deleted contract.account
+        - if current_account.multiservice?
+          td
+            = link_to contract.service.name, admin_services_path(anchor: dom_id(contract.service))
+        td.plan
+          = link_to contract.plan.name, edit_polymorphic_path([:admin, contract.plan]),
+            :title => "Edit #{contract.plan.class.model_name.human} '#{contract.plan.name}'"
+        td.state
+          = contract.state
+        td.paid_or_free
+          = plan_free_or_paid contract.plan
+        td
+          = time_tag_with_title contract.created_at
+        td.action
+          - if contract
+            - if contract.pending?
+              = action_link_to 'approve', approve_admin_buyers_account_service_contract_path(contract.account, contract), method: :post
+            - else
+              = action_link_to :delete, admin_buyers_account_service_contract_path(contract.account, contract),
+                               'data-confirm': "Are you sure? Unsubscribing will delete all this account's applications that subscribe to this service (applications need to be suspended beforehand)", 'data-method': :delete,
+                               label: 'Unsubscribe'
+          -else
+            = admin_subscribe_service_link contract.account, contract.service, contract
+        td.action
+          = admin_change_service_plan_link contract.account, contract.service, contract if contract
+    - if @service_contracts.empty?
+      - if @account
+        tr.no_results
+          td colspan="6"
+            | No Service Subscriptions
+      - else
+        = no_search_results(current_account.multiservice? ? 7 : 6)
+
+= will_paginate @service_contracts
+
+br
+br
+
+- if @account && current_account.services_without_contracts(@account).any?
+  h2
+    | Available service subscriptions
+  table.data
+    thead
+      tr
+        th colspan="2"
+          | Service
+    tbody
+      - current_account.services_without_contracts(@account).each do |service|
+        tr id=dom_id(service)
+          td
+            = h service.name
+          td.action
+            = admin_subscribe_service_link @account, service

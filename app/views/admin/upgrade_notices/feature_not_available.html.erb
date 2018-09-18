@@ -1,0 +1,39 @@
+<div id="upgrade-notice-column">
+  <%= t("switches.#{@switch}.description_html") %>
+</div>
+
+
+<% if @new_plan.present? %>
+  <div id="upgrade-action-column">
+    <p>
+      This feature is not available on plan
+      <b><%= current_account.bought_plan.name %></b>
+      which you are currently on but you can upgrade to plan
+      <b><%= @new_plan.name %></b> and enable it.
+    </p>
+  </div>
+
+  <% if current_account.heroku? %>
+  <div>
+    <center>
+      Upgrade your plan from the Heroku dashboard or through the command line with:
+      </br>
+      heroku addons:upgrade <%= Heroku.addon_name %>:<%= @new_plan.name.downcase %>
+    </center>
+  </div>
+  <% else %>
+    <div id="upgrade-image">
+      <center>
+        <%= render 'provider_upgrade_button', plan: @new_plan %>
+        <br/>
+        <%= link_to '‹ No, thanks.', :back %>
+      </center>
+    </div>
+  <% end %>
+<% else %>
+   <div id="upgrade-action-column">
+    <p>
+      This feature is not available in your plan. Please open a <%= link_to 'Support Case', 'https://access.redhat.com/support/' %> to discuss your needs.
+    </p>
+  </div>
+<% end %>

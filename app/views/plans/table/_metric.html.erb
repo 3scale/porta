@@ -1,0 +1,19 @@
+<tr>
+  <td class="rightAlign" width="<%= width_me(@plans.size) %>">
+    <span class="tooltip" id="<%= "metric_#{metric.id}" %>"><%= metric.friendly_name %></span>
+  </td>
+  
+  <% @plans.each do |plan| %>
+    <td class='spec'>
+      <ul class="usage_limits">
+        <% metric.usage_limits.find_all_by_plan_id(plan.id).each do |limit| %>
+          <li><%= "#{limit.value} #{metric.unit}(s) per #{limit.period}" %></li>
+        <% end %>
+
+        <% if metric.usage_limits.scoped_by_plan_id(plan.id).empty? %>
+          <li>unlimited</li>
+        <% end %>
+      </ul>
+    </td>
+  <% end %>
+</tr>

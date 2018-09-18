@@ -1,0 +1,18 @@
+<% if errors = @pricing_rule.errors[:min].presence %>
+  var error = "<%= escape_javascript(errors.to_sentence) %>";
+  jQuery('#minValueError').html(error);
+  jQuery('#minValueError').show();
+<% end %>
+
+<% if errors = @pricing_rule.errors[:max].presence %>
+  var error = "<%= escape_javascript(errors.to_sentence) %>";
+  jQuery('#maxValueError').html(error);
+  jQuery('#maxValueError').show();
+<% end %>
+
+<% if errors = @pricing_rule.errors[:cost_per_unit].presence %>
+  var error = "<%= escape_javascript(errors.to_sentence) %>";
+  jQuery('#costPerUnitError').html(error);
+  jQuery('#costPerUnitError').show();
+<% end %>
+$.colorbox.resize();

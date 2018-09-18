@@ -1,0 +1,59 @@
+= semantic_form_for @proxy,
+        url: admin_service_integration_path(@service, anchor: 'proxy'),
+        remote: current_account.provider_can_use?(:async_apicast_deploy),
+        html: { class: "staging-settings proxy-settings #{'oauth' if @service.backend_version.oauth?}" } do |f|
+
+  p= t("api.integrations.proxy.howto_#{@service.mode_type}_html")
+  section#staging.staging
+    h1
+      ' Staging:
+      small
+        | configure & test your integration
+
+      =< link_to t('api.integrations.proxy.visit_documentation'), t("api.integrations.proxy.documentation_#{@service.mode_type}_url", docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'documentation-link', target: '_blank'
+
+      .status
+        - if @proxy.sandbox_deployed?
+          span.deployed
+            ' deployed
+          ' |
+        - if current_account.proxy_logs.exists?
+          = link_to "deployment history", admin_service_proxy_logs_path(@service), class: "sandbox-proxy-history"
+
+    div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
+      i.fa.fa-puzzle-piece
+      = f.inputs "API" do
+        = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend } }, hint: is_https?(@proxy.api_backend) ? t('formtastic.hints.proxy.api_backend_https') : t('formtastic.hints.proxy.api_backend_http')
+        = help_bubble( 'api_endpoint_bubble', t('api.integrations.proxy.api_endpoint_help_html'))
+
+    div class=("feedback proxy #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
+      i.fa.fa-hdd-o
+      = f.inputs "API gateway" do
+        - if @service.using_proxy_pro?
+          = f.input :endpoint
+        - else
+          = f.input :sandbox_endpoint, input_html: { data: { default: @proxy.sandbox_endpoint}, readonly: true }
+        = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
+        div.help-button-constrainer
+          = render 'api/integrations/apicast/shared/mapping_rules', f: f
+        div.help-button-constrainer
+          = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'oauth_login_url'
+    - if @service.oauth?
+      fieldset.buttons
+        ol
+          li.commit
+            button#proxy-button-save-and-deploy.important-button.update name="deploy" value="1"
+              | Update Staging Configuration
+    - else
+      = render 'api/integrations/apicast/shared/client', f: f
+      fieldset.buttons
+        ol
+          li.commit
+            - unless @service.using_proxy_pro?
+              = render 'api/integrations/apicast/shared/client_feedback'
+
+            - button_text = 'Update & Test Staging Configuration'
+            - button_text = 'Save' if @service.using_proxy_pro?
+            - deploy =  @service.using_proxy_pro? ? '0' : '1'
+            button#proxy-button-save-and-deploy.important-button.update name="deploy" value="deploy" title="Save and deploy proxy" data-disable-with="updating…"
+              = button_text
