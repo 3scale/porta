@@ -1,0 +1,24 @@
+<%= render :partial => 'buyers/accounts/menu' %>
+
+<h1>Groups of '<%= @account.org_name -%>'</h1>
+
+<div id="groups">
+
+  <%= semantic_form_for @account,
+                      :url => admin_buyers_account_groups_path(@account),
+                      :html => {:method => :put, :style=> "padding:5px;" } do | f | -%>
+
+    <%= f.inputs do %>
+      <%= f.input :groups,
+          :as => :check_boxes,
+          :collection => @account.provider_account.provided_groups,
+          :label_method => :label
+       %>
+    <% end -%>
+
+    <%= f.buttons do %>
+      <%= f.commit_button 'Save' %>
+    <% end %>
+  <% end -%>
+
+</div>

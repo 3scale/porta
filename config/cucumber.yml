@@ -1,0 +1,8 @@
+<% std_opts = "--format #{ENV['CUCUMBER_FORMAT'] || 'pretty'} --strict --tags ~@wip #{ENV['CUCUMBER_OPTIONS']} -r features" %>
+default: <%= std_opts %> features
+non_js: <%= std_opts %> --tags ~@javascript --tags ~@no-txn features
+js: <%= std_opts %> --tags @javascript,@no-txn --tags ~@fakeweb features
+fakeweb: <%= std_opts %> --tags @javascript,@no-txn --tags @fakeweb features
+rerun: <%= std_opts %> --format rerun --out rerun.txt
+wip: --tags @wip:3 --wip features
+parallel: --backtrace --format junit --out tmp/junit/cucumber-<%= [ENV['MULTIJOB_KIND'], Process.pid].compact.join('-') %>  --format ParallelTests::Cucumber::FailuresLogger --out tmp/junit/cucumber_<%= ENV['MULTIJOB_KIND'] %>_failures.log --strict --tags ~@wip -r features --format progress

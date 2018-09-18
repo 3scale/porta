@@ -1,0 +1,375 @@
+.Dashboard {
+  clear: both;
+}
+
+.DashboardSection {
+  float: left;
+  width: 100%;
+  clear: both;
+  margin: line-height-times(1) 0 line-height-times(1);
+
+  &--audience + .DashboardSection--service,
+  &--audience + .DashboardSection--service.is-closed {
+    margin-top: line-height-times(1);
+  }
+
+  &-title {
+    text-transform: uppercase;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $light-color;
+    float: left;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+  }
+
+  &-toggle {
+    cursor: pointer;
+    &:before {
+      font-size: $caption-font-size;
+      content: '▼ ';
+    }
+  }
+
+  &.is-closed {
+    border-bottom: $border-width solid $border-color;
+    height: auto;
+
+    .DashboardWidget,
+    .DashboardNavigation-list-item {
+      display: none;
+    }
+
+    .DashboardNavigation-list-item.u-notice {
+      display: list-item;
+    }
+
+    .DashboardSection-toggle:before {
+      content: '► ';
+    }
+  }
+}
+
+// DashboardWidget
+// this should be encapsulated within individual widget.
+.DashboardSection--wide .DashboardWidget {
+  width: 100%;
+}
+
+.DashboardWidget {
+  width: 50%;
+  float: left;
+  position: relative;
+  height: line-height-times(10);
+  overflow: hidden;
+  border: $border-width solid $border-color;
+  padding: line-height-times(1/2);
+
+  .Dashboard-chart {
+    position: absolute !important;
+    z-index: 1;
+    padding: 0;
+    max-height: none !important;
+    left: 8px;
+    right: 9px;
+    top: calc(#{line-height-times(3)} - 4px);
+    bottom: 5px;
+
+    // testing purposes
+    // .c3-event-rect {
+    //   fill: $brand-blue !important;
+    //   fill-opacity: 1 !important;
+    //   stroke: $brand-blue !important;
+    // }
+
+    .c3-bar._expanded_,
+    .c3-bar._expanded_:last-child {
+      fill: $brand-blue !important;
+      fill-opacity: 1;
+      stroke: $brand-blue !important;
+    }
+
+    .c3-bar:last-child {
+      fill: transparent !important;
+      shape-rendering: geometricPrecision;
+      stroke: $border-color !important;
+      stroke-width: $border-width;
+    }
+  }
+
+  i {
+    font-size: $font-size-base;
+    color: $light-color;
+    float: right;
+  }
+
+  &-spinner {
+    position: absolute;
+    top: calc(50% - #{line-height-times(1/2)});
+    left: calc(50% - #{line-height-times(1/2)});
+  }
+
+  &-title {
+    font-weight: $font-weight-light;
+    margin-bottom: 0;
+    padding-top: 0;
+    float: left;
+    font-size: $secondary-title-font-size;
+    line-height: $line-height-sm;
+
+    strong {
+      font-weight: $font-weight-light;
+    }
+  }
+
+  &-percentageInfo {
+    float: right;
+    text-align: right;
+    font-size: $secondary-title-font-size;
+    width: 50%;
+    margin-bottom: 0;
+    line-height: $line-height-sm;
+
+    a {
+      color: $brand-blue;
+    }
+  }
+
+  &-intro {
+    @include ellipsis;
+    display: block;
+    font-size: $font-size-sm;
+    font-style: italic;
+    color: $light-color;
+    margin-bottom: line-height-times(1/2);
+    clear: both;
+
+    &--primary {
+      float: left;
+    }
+
+    &--secondary {
+      float: right;
+      clear: none;
+      overflow: visible;
+    }
+  }
+
+  &+ script + .DashboardWidget {
+    border-left: 0;
+  }
+
+  &-badge {
+    width: 100%;
+    top: 1em;
+    left: 0;
+    z-index: 2;
+    background-color: rgba(white, 0.5);
+  }
+
+  .Dashboard-chart:hover + &-badge {
+    background-color: rgba(white, 0);
+    z-index: 0;
+
+    .DashboardWidget-values {
+      opacity: 0;
+    }
+  }
+
+  &-values{
+    @include transition-property(opacity);
+    @include transition-duration(0.5s);
+    opacity: 1;
+    float: left;
+
+    &:nth-of-type(2) {
+      text-align: right;
+      margin-left: 3em;
+    }
+  }
+
+  &-label {
+    color: $light-color;
+    font-style: italic;
+    white-space: nowrap;
+  }
+
+  &-value {
+    font-size: 48px;
+    min-height: 48px;
+
+    strong {
+      color: $brand-blue;
+    }
+
+    i {
+      font-size: $font-size-base;
+      color: $light-color;
+    }
+  }
+
+  &-link {
+    color: $brand-blue;
+
+    &--infoOnly {
+      color: $font-color;
+    }
+  }
+
+  &-link:hover,
+  &-link:hover strong {
+    color: $link-color;
+  }
+}
+
+.DashboardWidgetList {
+  list-style: none inside;
+  margin: 0 0 0 0;
+  font-size: $font-size-sm;
+
+  &-position {
+    display: inline-block;
+    width: 20%;
+  }
+
+  &-item:nth-of-type(5) .DashboardWidgetList-link {
+    border-bottom: 0;
+  }
+
+  &-link {
+    @include ellipsis;
+    display: block;
+    color: $font-color;
+    padding: line-height-times(1/4, true) 0 line-height-times(1/4) 0;
+    border-bottom: $border-width solid $border-color;
+
+    &:hover,
+    &:hover .DashboardWidgetList-change {
+      color: $link-color;
+    }
+  }
+
+  &-change {
+    color: $light-color;
+    display: inline-block;
+    text-align: right;
+    width: 30%;
+  }
+
+  // tmp hide out list
+  &-item--left {
+    display: none;
+  }
+}
+
+
+// Layout of widgets and stream
+.Dashboard-widgets {
+  width: 80%;
+  padding-right: line-height-times(2);
+  float: left;
+}
+
+// DashboardStream
+.DashboardStream {
+  width: 20%;
+  float: right;
+  margin: line-height-times(1) 0 line-height-times(1);
+
+  &-title {
+    text-transform: uppercase;
+    color: $light-color;
+    font-weight: $font-weight-normal;
+    font-size: $font-size-base;
+    margin-bottom: 0;
+    padding-top: 0;
+  }
+
+  &-list {
+    list-style: none outside;
+    color: $light-color;
+
+    &+ .DashboardStream-title {
+      margin-top: line-height-times(1);
+    }
+  }
+
+  &-listItem {
+    border-top: $border-width solid $border-color;
+    padding: line-height-times(1/4, true) 0 line-height-times(1/4) 0;
+    font-size: $font-size-sm;
+
+    &--empty {
+      font-style: italic;
+      padding: 0 0;
+    }
+  }
+
+  &-link {
+    @include ellipsis;
+    display: block;
+    color: $light-color;
+
+    &--unread {
+      color: $font-color;
+    }
+
+    &:hover {
+      color: $link-color;
+    }
+  }
+
+  &-notification {
+    color: $font-color;
+  }
+}
+
+.DashboardSection-header {
+  float: left;
+  width: 100%;
+}
+
+.DashboardNavigation {
+  float: right;
+
+  &-list {
+    @include horizontal-list();
+
+    li {
+      padding: 0;
+    }
+  }
+
+  &-list-item {
+    @include ellipsis;
+    border-left: line-height-times(2) solid transparent;
+    color: $light-color;
+  }
+
+  &-link {
+    text-transform: uppercase;
+    font-style: normal;
+    color: $light-color;
+
+    &:hover {
+      color: $link-color;
+    }
+
+    &--alert {
+      color: $error-color;
+    }
+  }
+}
+
+// utility classes
+.u-plus:before {
+  content: '+';
+}
+
+.u-notice {
+  color: $font-color;
+}
+
+a:hover .u-notice {
+  color: $link-color;
+}

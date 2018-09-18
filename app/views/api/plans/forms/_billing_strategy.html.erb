@@ -1,0 +1,5 @@
+  <% if @plan.pricing_enabled? %>
+    <%= form.input :trial_period_days, :label => 'Trial Period (days)' %>
+    <%= form.input :setup_fee, :as => :price %>
+    <%= form.input :cost_per_month, :as => :price %>
+  <%- end -%>

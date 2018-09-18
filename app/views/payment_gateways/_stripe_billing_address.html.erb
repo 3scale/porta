@@ -1,0 +1,6 @@
+<%= hidden_field_tag '', stripe_billing_address.address1, data: {stripe: :address_line1 } %>
+<%= hidden_field_tag '', stripe_billing_address.address2, data: {stripe: :address_line2 } %>
+<%= hidden_field_tag '', stripe_billing_address.city, data: {stripe: :address_city } %>
+<%= hidden_field_tag '', stripe_billing_address.state, data: {stripe: :address_state } %>
+<%= hidden_field_tag '', stripe_billing_address.zip, data: {stripe: :address_zip } %>
+<%= hidden_field_tag '', stripe_billing_address.country, data: {stripe: :address_country } %>

@@ -1,0 +1,27 @@
+<%= f.inputs do %>
+
+  <%= f.error_messages %>
+  <%= f.input :title %>
+  <%= f.input :public %>
+  <%= f.input :parent, :as => :section, :include_blank => false , input_html: {class: 'cms-section-picker'}, paths: true %>
+  <%= f.input :partial_path , input_html: {class: 'cms-path-autocomplete'} %>
+
+  <table id="subsection-container">
+  </table>
+<% end %>
+
+<h3>Contents</h3>
+
+<table id="subsections-container">
+  <thead>
+    <tr>
+      <td colspan="3">Drag &amp; drop <b>pages</b>, <b>sections</b> and <b>files</b> here</td>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: 'child', collection: @attached_pages %>
+    <%= render partial: 'child', collection: @attached_builtins %>
+    <%= render partial: 'child', collection: @attached_files %>
+    <%= render partial: 'child', collection: @attached_sections %>
+  </tbody>
+</table>

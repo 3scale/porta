@@ -1,0 +1,5 @@
+h1 id="logo"
+  - logo_account = current_account && current_account.provider? ? current_account : site_account
+
+  - if logo = logo_account.try(:profile).try(:logo)
+    = link_to image_tag(logo.url(:large), width: '100%'), '/'

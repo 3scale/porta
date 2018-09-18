@@ -1,0 +1,56 @@
+<div>
+  <h2 id="header_table">
+    <% if @plan.pricing_enabled? %>
+      Metrics, Methods, Limits & Pricing Rules
+    <% else %>
+      Metrics, Methods & Limits
+    <% end %>
+  </h2>
+  <table id="metrics" class="contract_table">
+    <thead>
+      <tr>
+        <th colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
+          Metric or Method
+          (<%= link_to 'Define', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service' %>)
+        </th>
+        <th class="operations">
+          Enabled
+          <%= help_bubble do %>
+            <h3>Enabled</h3>
+            <p>Sets whether the metric or method is enabled or disabled for the plan.</p>
+          <% end %>
+        </th>
+        <th class="operations">
+          Visible
+          <%= help_bubble do %>
+            <h3>Visible</h3>
+            <p>Sets whether the metric or method will be displayed in the plan's widget.</p>
+          <% end %>
+        </th>
+        <th class="operations">
+          Text only
+          <%= help_bubble do %>
+            <h3>Text only</h3>
+            <p>Sets whether limits are shown in plan's widget
+            using text only (default) or using icons and text. Disabled methods will
+            show only icons and not text.</p>
+          <% end %>
+        </th>
+        <th class="operations">
+        </th>
+      </tr>
+    </thead>
+
+    <tbody id="metrics_container">
+      <% if @service.metrics.empty? -%>
+        <tr class="notice" style="display:none">
+          <td colspan="<%= @plan.pricing_enabled? ? 5 : 4 %>">
+            This plan has no metrics yet.
+          </td>
+        </tr>
+      <% else -%>
+        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.top_level_metrics %>
+      <% end -%>
+    </tbody>
+  </table>
+</div>

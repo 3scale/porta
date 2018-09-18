@@ -1,0 +1,65 @@
+<% if @cinstance.pending? %>
+  <p class="warning">Your application is awaiting approval. This can take a little time - you will be notified by email.</p>
+<% end %>
+<h2>Application: <%= h @cinstance.display_name %></h2>
+
+<div class='data-container'>
+  <%= simple_format h(@cinstance.description) %>
+</div>
+
+<div class='left sixty'>
+  <% if @cinstance.service.backend_version == 'oauth' %>
+    <%= render :partial => 'applications/applications/oauth_credentials', :locals => {:cinstance => @cinstance} %>
+  <% elsif @cinstance.service.backend_version == "1" %>
+    <%= render :partial => 'applications/applications/user_key_credentials', :locals => {:cinstance => @cinstance} %>
+  <% else %>
+    <%= render :partial => 'applications/applications/api_credentials', :locals => {:cinstance => @cinstance} %>
+  <% end %>
+
+  <% if @cinstance.service.referrer_filters_required? %>
+    <%= render :partial => 'applications/referrer_filters/widget',
+      :locals => {:cinstance => @cinstance} %>
+  <% end %>
+
+  <div class='data-container'>
+    <h3>Properties</h3>
+    <table>
+      <tr>
+        <th>State</th>
+        <td><%= @cinstance.state %></td>
+      </tr>
+
+      <%= fields_definitions_rows(@cinstance) %>
+    </table>
+
+  <% if can? :update, @cinstance %>
+    <p>
+      <%= link_to 'Edit', edit_admin_application_path(@cinstance), :class => 'action edit' %>
+    </p>
+  <% end %>
+  </div>
+
+  <div class="right">
+    <h3>
+      Plan: <%= @cinstance.plan.name %>
+      <span>
+        (<%= review_change_plan_link(@cinstance) %>)
+        <%= render :partial => 'applications/applications/plan_widget', :locals => { :contract => @cinstance } %>
+      </span>
+    </h3>
+
+    <p>To extend your limits please <%= link_to 'contact us', new_admin_messages_outbox_path  %>.</p>
+  </div>
+
+  <% if @cinstance.buyer_alerts_enabled? %>
+    <div class="right">
+      <h3>
+        API Alerts
+        <span>
+          (<%= link_to 'Show', admin_application_alerts_path(@cinstance), :class => 'action edit' %>)
+        </span>
+      </h3>
+    </div>
+  <% end %>
+
+</div>

@@ -1,0 +1,27 @@
+= content_for :head do
+  = javascript_include_tag 'provider/signup_v2'
+
+  javascript:
+    ThreeScale.Signup.loaded(#{json document_origin});
+
+- content_for :javascript do
+  = javascript_include_tag 'provider/signup_form'
+
+- content_for :after_load do
+  = render 'provider/signups/analytics/google_async'
+  = render 'provider/signups/analytics/perfect_audience'
+  = render 'provider/signups/analytics/twitter_remarketing', txn_id: analytics_credentials.twitter_remarketing
+  = render 'provider/signups/analytics/adwords_remarketing'
+  = render 'provider/signups/analytics/munchkin'
+
+  javascript:
+    $(document).on('submit', '.signup_form', function(){
+      gaReady(function(){
+        ga("marketing.send", "event", "signup", "click submit", "submit form");
+        ga("send", "event", "signup", "submit", "form");
+      });
+    });
+
+= render partial: 'track_errors'
+
+= render partial: 'form'

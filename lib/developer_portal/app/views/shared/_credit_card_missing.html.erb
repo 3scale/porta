@@ -1,0 +1,6 @@
+<div class="warning">
+  <h3>Payment details required</h3>
+
+  <p>You are signed up for a paid plan, but your credit card details are not up to
+	date. Your <%= link_to_unless_current 'API key', admin_applications_access_details_path %> may be de-activated unless you enter valid <%= link_to 'credit card details', payment_details_path %>.</p>
+</div>

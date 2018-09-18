@@ -1,0 +1,56 @@
+/* Stats Menu Component */
+
+$stats-menu-border-color: #eee;
+$stats-menu-text-color: #333;
+$stats-menu-link-color: #333;
+$stats-menu-link-color-selected: #666;
+$stats-menu-help-color: #9b9b9b;
+
+.StatsMenu {
+  border: 1px solid $stats-menu-border-color;
+  color: $stats-menu-text-color;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 16px 24px 0;
+  padding: 16px;
+
+  &-period {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-periodItem {
+    display: inline-block;
+    margin: 0 4px;
+  }
+
+  &-custom {
+    border-left: 1px solid $stats-menu-border-color;
+    display: inline-block;
+    font-size: 10px;
+    font-style: italic;
+    margin-left: 4px;
+    padding-left: 4px;
+  }
+
+  &-link,
+  &-Link {
+    color: $stats-menu-link-color;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  &-periodLink,
+  &-customLink {
+    &.is-selected {
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+
+  &-customInput {
+    display: none;
+  }
+}

@@ -1,0 +1,40 @@
+.fields-definitions-list {
+  position: relative;
+  margin-bottom: line-height-times(2);
+  list-style: none inside;
+
+  li {
+    background: $background-color-base no-repeat line-height-times(1/2) center image-url("drag-icon.png");
+    border: $border-width solid $border-color;
+    margin-bottom: line-height-times(1/2);
+    padding: line-height-times(1/2) 0 line-height-times(1/2) line-height-times(1);
+    border-radius: $border-radius;
+    overflow: visible !important;
+
+    &.ui-sortable-helper {
+      @include box-shadow(0 0 line-height-times(1/2) $box-shadow-color);
+    }
+
+    .name {
+      font-weight: $font-weight-bold;
+      @include inline-block;
+      min-width: 10em;
+    }
+
+    .properties {
+      margin-right: line-height-times(1/2);
+      font-style: italic;
+    }
+
+    @include clearfix;
+
+    .action-set {
+      float: right;
+      margin-right: line-height-times(1/2);
+    }
+  }
+}
+  a.new-field-definition.add {
+    float: right;
+    margin-top: line-height-times(-1);
+}

@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <table class="table panel panel-default" id="invitations">
+      <thead class="panel-heading">
+        <tr>
+          <th>Recipient</th>
+          <th>Sent</th>
+          <th>Accepted?</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody class="panel-body">
+        {% if invitations.size > 0 %}
+          {% for invitation in invitations %}
+            <tr id="invitation_{{ invitation.id }}">
+              <td>{{ invitation.email }}</td>
+              <td>
+                {{ invitation.sent_at | date: i18n.short_date }}
+              </td>
+              <td>
+                {% if invitation.accepted? %}
+                  yes, on {{invitation.accepted_at | format: i18n.short_date }}
+                {% else %}
+                  no
+                {% endif %}
+              </td>
+              <td>
+                  {% unless invitation.accepted? %}
+                    {{ "Resend" | update_button: invitation.resend_url, class: 'btn btn-link pull-right' }}
+                  {% endunless %}
+
+              </td>
+              <td>
+                  {% if current_user.can.invite_users? %}
+                      {{ '<i class="fa fa-trash pull-right"></i>' | html_safe | link_to: invitation.url, class: 'pull-right btn btn-link', method: 'delete' }}
+                  {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5">No invitations</td>
+          </tr>
+        {% endif %}
+      </tbody>
+      <tfoot class="panel-footer">
+        <tr>
+          <th colspan="5">
+            {% if current_user.can.invite_users? %}
+              {{ 'Invite new user' | link_to: urls.new_invitation, class: 'btn btn-primary pull-right' }}
+            {% endif %}
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+    {% include 'shared/pagination' with pagination %}
+  </div>
+</div>

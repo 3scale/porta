@@ -1,0 +1,13 @@
+<li>
+  <label>Selected Service Subscriptions</label>
+  <ul class="bulk_operation_items">
+    <% @service_contracts.each do |contract| %>
+      <%= content_tag :li,
+          :title => "#{contract.account.org_name} - #{contract.account.admins.first.try(:display_name)}" do %>
+        <span class="account"><%= contract.account.org_name %></span>
+        <span class="plan"><%= contract.plan.name %></span>
+        <%= hidden_field_tag 'selected[]', contract.id %>
+      <% end %>
+    <% end %>
+  </ul>
+</li>

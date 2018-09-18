@@ -1,0 +1,39 @@
+<%- cinstances = @account.bought_cinstances -%>
+<%- cinstance = cinstances.first! if cinstances.count == 1 -%>
+
+<%- if cinstance && can?(:read, cinstance) -%>
+  <div class="dashboard_bubble round">
+    <div id="applications_widget">
+      <h2>Application</h2>
+      <table class="list">
+        <tr>
+          <th>Name</th>
+          <td>
+            <%= link_to cinstance.name, admin_buyers_application_path(cinstance) %>
+          </td>
+        </tr>
+
+        <%- unless master_on_premises? -%>
+        <tr>
+          <th>Service</th>
+          <td><%= h cinstance.service.name %></td>
+        </tr>
+
+          <tr>
+            <th>Plan</th>
+            <td><%= h cinstance.plan.name %></td>
+          </tr>
+        <% end %>
+
+        <tr>
+          <th>State</th>
+          <td><%= h cinstance.state.to_s.humanize %></td>
+        </tr>
+      </table>
+
+      <%- cache [ 'v1', 'cinstance', 'sparklines', cinstance.service, cinstance ] do %>
+        <%= render 'stats/sparklines', :cinstance => cinstance, :metrics => cinstance.service.top_level_metrics %>
+      <%- end %>
+    </div>
+  </div>
+<% end %>

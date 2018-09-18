@@ -1,0 +1,7 @@
+<h2>New pricing rule</h2>
+
+<%= semantic_form_for @pricing_rule,
+                      :url => polymorphic_path([:admin, @plan, @metric, :pricing_rules]),
+                      :html => {:class => 'remote'} do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>

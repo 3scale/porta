@@ -1,0 +1,6 @@
+javascript:
+  analytics.ready(function () {
+    ga('create', #{json analytics_credentials.google_async_tag}, '3scale.net', {'name': 'marketing'});
+    ga('marketing.require', 'displayfeatures');
+    ga('marketing.send', 'pageview');
+  });

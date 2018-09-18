@@ -1,0 +1,19 @@
+(function($) {
+  $("[id=referrer_filter_<%= @referrer_filter.id -%>]").fadeOut(function() {
+    $(this).remove();
+
+    var container = $("#referrer_filters");
+    var table = container.find("table");
+
+    // Fix row highlighting.
+    table.find("tr").each(function(index) {
+      $(this).removeClass("even odd");
+      $(this).addClass((index + 1) % 2 ? "odd" : "even");
+    });
+
+    // Show form again, if it was hidden because of reached limit.
+    if (table.find("tr").size() < <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
+      container.enableSwitch();
+    }
+  });
+})(jQuery);

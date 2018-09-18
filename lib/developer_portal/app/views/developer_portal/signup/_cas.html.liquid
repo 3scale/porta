@@ -1,0 +1,12 @@
+{% if cas %}
+  {% if cas.user_identified? %}
+    <div class="sso-signup auth">
+      <p>Please continue the signup process below.</p>
+    </div>
+  {% else %}
+    <div class="sso-signup not-auth">
+      <p>You can use your CAS account to login before signing up.</p>
+      {{ "Login with CAS" | link_to: cas.login_url }}
+    </div>
+  {% endif %}
+{% endif %}

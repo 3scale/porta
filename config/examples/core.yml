@@ -1,0 +1,17 @@
+base: &default
+  url: <%= ENV.fetch('THREESCALE_CORE_INTERNAL_API', 'http://localhost:3001/internal/') %>
+  fake_server: 'http://localhost:3000/internal/'
+  username: <%= ENV.fetch('CONFIG_INTERNAL_API_USER', nil) %>
+  password: <%= ENV.fetch('CONFIG_INTERNAL_API_PASSWORD', nil) %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

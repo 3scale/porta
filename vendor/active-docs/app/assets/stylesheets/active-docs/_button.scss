@@ -1,0 +1,25 @@
+.api-docs-wrap a.big-button {
+  padding: 0;
+  margin: 0;
+  padding: 3px;
+  cursor: pointer;
+  color: #fff;
+  display: inline-block;
+  text-transform: uppercase;
+  line-height: 13px;
+  font-size: 13px;
+  font-weight: bold;
+  text-shadow: 0 -1px 0 #e45500;
+  box-shadow: 0 3px 1px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.3);
+  border-radius: 5px;
+  border: 1px solid #ff6912;
+  background-color: #ffa139;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffa139), to(#ff6912));
+  background: -moz-gradient(linear, left top, left bottom, from(#ffa139), to(#ff6912));
+  small {
+   font-size: 11px;
+  }
+  &:hover{
+    background: #ff6912;
+  }
+}

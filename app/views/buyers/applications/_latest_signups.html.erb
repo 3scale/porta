@@ -1,0 +1,27 @@
+<h3>Latest Signups</h3>
+
+<table id="latest_signups" class="data">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Group/Org.</th>
+      <th>Plan</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% cinstances.each do |cinstance| %>
+      <tr>
+        <td>
+          <%= link_to h(cinstance.display_name), admin_buyers_application_path(cinstance) %>
+        </td>
+        <td>
+          <%= link_to h(cinstance.user_account.org_name), admin_buyers_account_path(cinstance.user_account) %>
+        </td>
+        <td><%= cinstance.plan.name %></td>
+        <td><%= cinstance.state.titleize %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

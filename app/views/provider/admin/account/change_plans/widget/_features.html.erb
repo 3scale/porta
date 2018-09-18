@@ -1,0 +1,15 @@
+<div class='features plan-review-section'>
+  <h3>Features</h3>
+  <dl class="u-dl">
+    <% plan.features.each do |feature| %>
+      <dt class="u-dl-term u-dl-term--check" ><i class="included fa fa-check-circle-o"></i></dt>
+      <dd class="u-dl-definition u-dl-definition--check"><%= h(feature.name) %></dd>
+    <% end %>
+
+    <%  plan.issuer.features.visible.each do |feature| %>
+    <% next if plan.feature_enabled?(feature.system_name) %>
+      <dt class="u-dl-term u-dl-term--check" ><i class="excluded fa fa-times-circle-o"></i></dt>
+      <dd class="u-dl-definition u-dl-definition--check"><%= h(feature.name) %></dd>
+    <% end %>
+  </dl>
+</div>

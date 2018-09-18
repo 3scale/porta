@@ -1,0 +1,4 @@
+jQuery('.metric_slot').remove();
+var id = "#<%= escape_javascript(dom_id(@metric)).html_safe %>"
+var html = "<tr><td colspan='8' class='metric_slot' id='<%= escape_javascript(dom_id(@metric)).html_safe %>_slot'></td></tr>"
+jQuery(id).after(html);

@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+       {% if search.query %}
+          Search '{{ search.query }}'
+        {% else %}
+          Search
+        {% endif %}
+      </div>
+      <div class="panel-body panel-footer">
+        {% form 'search', search, { class: 'form-horizontal' } %}
+          <fieldset>
+            <div class="form-group">
+              <div class="col-md-4 col-md-push-3">
+                <input name="q" type="text" id="searchAgainBox" title="Search"
+                     class="form-control" tabindex='1' value="{{ search.query }}"
+                     autofocus="autofocus" />
+                <!--
+                <div class="checkbox">
+
+                  <label>
+                    <input type="checkbox" name="star" title="Wildcard search" tabindex='2' value="1"/> use wildcards?
+                  </label>
+                </div>
+                -->
+              </div>
+              <div class="col-md-2 col-md-push-3">
+                <button type="submit" class="btn btn-success" tabindex='3'>Search</button>
+              </div>
+            </div>
+
+          </fieldset>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style scoped>
+  .searchResultsList .match {
+    font-weight: bold;
+  }
+  .searchResultsList .kind {
+    display: inline-block;
+    min-width: 5em;
+    font-weight: bold;
+    padding-right: 0.5em;
+  }
+</style>
+
+{% if search.results %}
+  <div class="row">
+    <div class="col-md-9">
+
+      <dl class="searchResultsList">
+        {% if search.query == present %}
+          <h4 class="help-block">{{ search.total_found }} documents matched '{{ search.query }}'.</h4>
+        {% endif %}
+
+       {% for result in search.results %}
+        <dt>
+          <span class="kind"> [ {{ result.kind | capitalize}} ] </span>
+          {{ result.title | link_to: result.url }}
+        </dt>
+        <dd>
+          {{ result.description }}
+        </dd>
+       {% endfor %}
+      </dl>
+      {% include 'shared/pagination' with pagination %}
+    </div>
+  </div>
+{% endif %}

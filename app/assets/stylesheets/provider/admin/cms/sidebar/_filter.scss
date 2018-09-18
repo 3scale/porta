@@ -1,0 +1,87 @@
+%toolbar {
+  @include horizontal-list;
+  //line-height: 2em;
+
+  li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow: hidden;
+    border-right: inherit;
+
+    &:last-child {
+      border-right: none;
+      margin-left: 0;
+    }
+
+    i.fa {
+      i.fa { color: $link-color; }
+    }
+
+    &.active, &:hover {
+      color: $menu-active-color;
+
+      i.fa {
+        color: $menu-active-color;
+      }
+    }
+  }
+
+  [data-filter-type], [data-filter-origin] {
+    cursor: pointer;
+  }
+}
+
+*:focus {
+    outline: none;
+}
+
+@mixin cms-sidebar-toolbar {
+  @extend %toolbar;
+}
+
+#cms-filter {
+  margin-bottom: -$border-width;
+
+  input {
+    width: 100%;
+    -webkit-appearance: textfield; // makes it not round
+    border: 0;
+    border-top: $border-width solid $border-color;
+    border-left: $border-width solid $border-color;
+    font-size: $font-size-sm;
+  }
+}
+
+#cms-sidebar-filter-origin {
+  @include cms-sidebar-toolbar;
+  border-top: $border-width solid $border-color;
+  border-bottom: $border-width solid $border-color;
+
+  li {
+   box-sizing: border-box;
+   height: line-height-times(2);
+   vertical-align: middle;
+   padding-top: line-height-times(1/2);
+   $items: 3;
+   width: 100% / $items;
+   border-left: $border-width solid $border-color;
+
+   &.active {
+    font-weight: $font-weight-bold;
+   }
+  }
+}
+
+
+#cms-sidebar-filter-type {
+  @include cms-sidebar-toolbar;
+  margin-bottom: -$border-width;
+
+  li {
+    box-sizing: border-box;
+    $items: 7;
+    width: 100% / $items;
+    border-left: $border-width solid $border-color;
+  }
+}

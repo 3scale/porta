@@ -1,0 +1,13 @@
+<div class="row">
+  {% if provider.multiple_applications_allowed? %}
+    {% if applications == present %}
+      <div id="client-name" data-client="{{ applications.first.id }}" style="display:none"></div>
+      {% include 'stats/chart' %}
+    {% else %}
+      <p>You do not currently have any live applications.</p>
+    {% endif %}
+  {% else %}
+    <div id="client-name" data-client="{{ applications.first.id }}" style="display:none"></div>
+    {% include 'stats/chart' %}
+  {% endif %}
+</div>

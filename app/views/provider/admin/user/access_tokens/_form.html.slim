@@ -1,0 +1,17 @@
+= semantic_form_for access_token, url: [:provider, :admin, :user, access_token] do |f|
+
+  = f.inputs do
+    = f.input :name, input_html: { autofocus: true }
+    = f.input :scopes,
+              as: :check_boxes,
+              collection: access_token.available_scopes.to_a
+
+    = f.input :permission, as: :select, collection: access_token.available_permissions, include_blank: false
+
+
+  = f.buttons
+    = f.commit_button
+    - unless access_token.new_record?
+      = link_to 'Delete', provider_admin_user_access_token_path(@access_token),
+                data: {confirm: 'Are you sure?'}, method: :delete,
+                title: 'Delete Access Token', class: 'action delete'

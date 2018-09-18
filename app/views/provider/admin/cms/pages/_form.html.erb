@@ -1,0 +1,28 @@
+<%= f.inputs do %>
+
+  <%= f.error_messages %>
+
+  <%= f.input :title, :autofocus => true %>
+
+  <%= f.input :section, :as => :section, :default => current_account.sections.root, :paths => true, input_html: {class: 'cms-section-picker'} %>
+  <%= f.input :path, :hint => 'Does not depend on a selected section.', input_html: {class: 'cms-path-autocomplete'} %>
+  <%= f.input :layout, :as => :select,
+                     :collection => current_account.layouts,
+                     :default => current_account.layouts.default %>
+<% end %>
+
+<%= f.toggled_inputs "Advanced options",
+                    :cookie_name => 'cms-advanced-options',
+                    :cookie_path => '/p/admin/cms' do %>
+  <%= f.input :system_name, :hint => true %>
+  <%= f.input :content_type, :hint => "Can be #{link_to('HTML', '#cms-set-content-type-html', 'data-mime-type' => 'text/html')},
+                        #{link_to('CSS', '#cms-set-content-type-css', 'data-mime-type' => 'text/css')},
+                        #{link_to('Javascript', '#cms-set-content-type-js', 'data-mime-type' => 'text/javascript')}
+                        or an arbitrary MIME type."
+  %>
+
+  <%= f.input :liquid_enabled, :hint => true %>
+  <%= f.input :handler, :as => :handler, :hint => true %>
+
+  <%= f.input :tag_list %>
+<% end %>

@@ -1,0 +1,13 @@
+development:
+  github:
+    enabled: true
+    client_id: client_id
+    client_secret: client_secret
+
+test:
+  github:
+    enabled: true
+    client_id: fake_id
+    client_secret: fake_secret
+
+production:

@@ -1,0 +1,34 @@
+$subsection-bg-color: rgba(0,0,0,0.05);
+
+#subsections-container {
+  @include border-radius(3px);
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+  min-height: 40px;
+  background-color: transparent;
+  border: 3px dashed transparent;
+
+  &.subsection-hover {
+     border-color: $border-color;
+  }
+
+  thead {
+    background-color: transparent;
+    color: opacify($subsection-bg-color, 0.5);
+    font-size: 18px;
+    td { text-align: center; }
+  }
+
+  @extend table.data;
+
+  tbody {
+   tr:nth-child(2n-1) {
+     background-color: rgb(243, 243, 243);
+   }
+  }
+
+
+}

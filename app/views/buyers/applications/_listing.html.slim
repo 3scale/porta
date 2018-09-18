@@ -1,0 +1,115 @@
+div id="bulk-operations" style="display: none;"
+  h3 Bulk operations
+  p
+    ' You have selected
+    span class="count"
+    | applications and you can make following operations with them:
+  dl
+    = bulk_action 'Send email', new_admin_buyers_applications_bulk_send_email_path,
+                    'Send email to owners of selected applications'
+    = bulk_action 'Change application plan', new_admin_buyers_applications_bulk_change_plan_path,
+                    'Transfer these applications to different application plan'
+    = bulk_action 'Change state', new_admin_buyers_applications_bulk_change_state_path,
+                    'Accept, suspend or resume selected applications'
+    -# = bulk_action 'Delete', new_admin_buyers_applications_bulk_delete_path,'Delete selected applications'
+
+
+  = content_for :javascripts do
+    = javascript_include_tag 'bulk_operations.js'
+    = javascript_include_tag 'vendor/jquery.tipsy.js'
+
+- show_application_plans = @stock_and_custom_application_plans > 1 && !master_on_premises?
+
+table class="data"
+  thead
+    tr
+      th class="select" = bulk_select_all
+      th = sortable('cinstances.name', 'Name')
+      th = sortable('cinstances.state', 'State')
+      - unless @account
+        th = sortable('accounts.org_name', 'Account')
+      - if current_account.multiservice?
+        th Service
+      - if show_application_plans
+        th = sortable('plans.name', 'Plan')
+      - if current_account.settings.finance.allowed?
+        th
+          ' Paid?
+          = help_bubble 'free_or_paid' do
+            | 'Free' applications are those, whose plan has no billing rules associated. 'Paid' are all the others.
+
+      th = sortable('cinstances.created_at', 'Created At')
+      th = sortable('cinstances.first_daily_traffic_at', 'Traffic On')
+      th.actions
+        - if @account
+          - cinstances = @account.bought_cinstances
+          - if cinstances.size.zero?
+            = link_to 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add'
+          - else
+            = switch_link 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add',
+          :upgrade_notice => true, :switch => :multiple_applications
+
+    - if @cinstances.present? || @account.nil?
+      tr class="search"
+        th class="select"
+        = form_for @search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
+          th
+            = s.text_field :name, size: 15
+
+          th
+            = s.select :state, @states,
+                         include_blank: 'All', selected: @search.state
+
+          - unless @account
+            th class="small"
+              = s.text_field :account_query, size: 7, disabled: @account.present?, value: @account.try(:org_name)
+
+          - if current_account.multiservice?
+            th
+              = s.collection_select :service_id, @services, :id, :name,
+                                      { include_blank: true },
+                                      { disabled: @service }
+
+          - if show_application_plans
+            th = s.grouped_collection_select :plan_id, @services,
+                                            :application_plans, :name, :id, :name,
+                                            { include_blank: true },
+                                            { disabled: @plan }
+
+          - if current_account.settings.finance.allowed?
+            th = s.select :plan_type, [ ['free'], ['paid'] ], {include_blank: true}, { disabled: @plan }
+
+          th
+          th
+          th
+            = s.submit 'Search', name: nil
+
+  tbody class="cinstances"
+    - @cinstances.each do |cinstance|
+      tr id=dom_id(cinstance)
+        td class="select" = bulk_select_one cinstance
+        td = link_to cinstance.display_name, admin_buyers_application_path(cinstance)
+        td class="state"
+          => cinstance.state
+          - if cinstance.trial?
+            = remaining_trial_days(cinstance)
+        - unless @account
+          td = link_to_buyer_or_deleted cinstance.user_account, :admin_buyers_account_path
+        - if current_account.multiservice?
+          td = link_to_service_edit cinstance.service
+        - if show_application_plans
+          td class="plan" = link_to_plan_edit cinstance.plan
+        - if current_account.settings.finance.allowed?
+          td class="free_or_paid" = plan_free_or_paid cinstance.plan
+        td = time_tag_with_title cinstance.created_at
+        td = last_traffic(cinstance)
+        td
+    - if @cinstances.empty?
+      tr class="no_results"
+        td colspan=(current_account.multiservice? ? 10 : 9)
+          | No applications
+
+= will_paginate @cinstances
+
+- unless @account
+  = link_to_export_widget_for('Applications')

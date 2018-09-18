@@ -1,0 +1,31 @@
+Operating Unit:
+
+Account Data
+-----------------------------------
+RHLogin: <%= @account.field_value('red_hat_account_number').presence %>
+Invoice ID: <%= @invoice_id || 'n/a' %>
+
+Sku: Terminate current SKU
+
+Qty: 0
+Effective: <%= invoice_date_format(@effective_since) %>
+
+End User Contact
+-----------------------------------
+First name: <%= @account.billing_address_first_name %>
+Last name: <%= @account.billing_address_last_name %>
+User name: <%= @account.admin_user.username %>
+Email address: <%= @account.finance_support_email %>
+Organization Name: <%= @account.org_name %>
+Address1: <%= @account.billing_address_address1 %>
+Address2: <%= @account.billing_address_address2 %>
+Address3:
+City: <%= @account.billing_address_city %>
+Region: <%= @account.billing_address_state %>
+Postal Code: <%= @account.billing_address_zip %>
+Country: <%= @account.billing_address_country %>
+Phone: <%= @account.billing_address_phone %>
+
+Billing Data
+-----------------------------------
+Company Name: Braintree

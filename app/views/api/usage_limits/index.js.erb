@@ -1,0 +1,10 @@
+<%= render 'api/metrics/prepare_slot' %>
+
+var html = <%= render_to_js_string('usage_limits').html_safe %>;
+var id   = "#" + "<%= dom_id(@metric) %>" + "_slot";
+var toggle_id = '#<%= dom_id(@metric) %> td.metrics-subtable-toggle.limits';
+
+$('td.metrics-subtable-toggle').removeClass('selected');
+$(toggle_id).addClass('selected');
+
+jQuery(id).html(html);

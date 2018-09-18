@@ -1,0 +1,8 @@
+var id = "#" + "<%= dom_id(@usage_limit) %>",
+    limit_counter_id = "#limits_counter_" + "<%= @usage_limit.metric.id %>";
+jQuery(id).remove();
+
+var count = "<%= @usage_limit.metric.usage_limits.where(plan_id: @usage_limit.plan.id).size %>";
+
+jQuery(limit_counter_id).html(count);
+jQuery.flash.notice('Limit has been deleted.');

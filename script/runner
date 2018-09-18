@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+RAILS=$(which rails) || {
+  echo "Can't find rails executable!" && exit 1
+}
+exec ${RAILS} runner $(readlink -f $(dirname $0))/3scale $*

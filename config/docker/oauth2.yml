@@ -1,0 +1,14 @@
+default: &DEFAULT
+  github:
+    enabled: true
+    client_id:     <%= ENV['GITHUB_CLIENT_ID'] %>
+    client_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+
+production:
+  <<: *DEFAULT
+
+preview:
+  <<: *DEFAULT
+
+development:
+  <<: *DEFAULT

@@ -1,0 +1,53 @@
+h1.failure
+  ' Oops,
+  = @error || 'There was a problem'
+
+p Make sure the base URL of your API is correct & public and the method we're sending is a valid GET method of your API.
+
+= semantic_form_for [:provider, :admin, :onboarding, :wizard, @request] do |f|
+
+  ol.explain.fa-ul
+    li.feedback.feedback--success
+      i.icon.fa-li.fa.fa-mobile.icon--success
+      .text
+        = f.inputs do
+          = f.input :path, label: 'The <strong>a GET request</strong>',
+                    input_html: { placeholder: '/objects/list', autofocus: true },
+                    wrapper_html: { class: 'slim' }
+
+      code.code-example
+        span.code-example__base.code-example--slash = @request.proxy_base_url
+        span.code-example__path = @request.path_without_slash
+        span.code-example__key.code-example__params = @request.proxy_auth_params
+    li.feedback.feedback--failure
+      i.icon.fa-li.fa.fa-hdd-o.icon--success
+      .text
+        ' was authenticated by
+        strong> 3scale
+        ' and passed on to your API:
+      code.code-example
+        span#request_api_base_url--feedback.api.code-example__base.code-example--slash = @request.api_base_url
+        span.code-example__path = @request.path_without_slash
+
+      code#response.response.code-example
+        = @message
+    li.feedback.feedback--sec
+      i.icon.fa-li.fa.fa-puzzle-piece.icon--failure
+      .text.text--up
+        = f.inputs do
+          = f.input :api_base_url, label: 'Base URL',
+                    input_html: { placeholder: 'https://api.example.com' },
+                    wrapper_html: { class: 'slim' }
+
+  = f.buttons do
+    = f.submit "Try again!", class: "button button--next"
+
+coffee:
+  $ ->
+    $("#request_path").on "change, keyup", ->
+      path = $(this).val().replace(/^\//, '')
+      $(".code-example__path").html(path)
+
+    $("#request_api_base_url").on "change, keyup", ->
+      url = $(this).val().replace(/^\//, '')
+      $("#request_api_base_url--feedback").html(url)

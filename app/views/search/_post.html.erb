@@ -1,0 +1,4 @@
+<dt>
+  <span class="kind">[ Post ]</span>
+  <%= link_to @presenter.highlight(post.topic).title, forum_topic_path(post.topic) %></dt>
+<dd><%= @presenter.highlight(post).body %></dd>

@@ -1,0 +1,136 @@
+<% unless @errors.blank? %>
+    <div class="errorExplanation" id="errorExplanation">
+      <h2><%= pluralize(@errors.size, 'error') %> prohibited this form from being saved</h2>
+      <p>There were problems with the following fields:</p>
+      <ul>
+        <% @errors.each do |error| %>
+            <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<%= semantic_form_for :customer,
+  :url => @form_url,
+  html: { class: "form-horizontal" } do |form|
+%>
+
+    <%= hidden_field_tag 'tr_data', ERB::Util.html_escape(@tr_data) %>
+    <%= hidden_field_tag 'customer[credit_card][billing_address][options][update_existing]', true %>
+
+  <fieldset>
+      <ol class="list-unstyled">
+        <%= form.input :first_name,
+          input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+          wrapper_html: {class: "form-group"},
+          label_html: {class: "col-md-4 control-label" },
+          required: false
+        %>
+
+        <%= form.input :last_name,
+          input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+          wrapper_html: {class: "form-group"},
+          label_html: {class: "col-md-4 control-label" },
+          required: false
+        %>
+
+        <%= form.input :phone ,
+          input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+          wrapper_html: {class: "form-group"},
+          label_html: {class: "col-md-4 control-label" },
+          required: false
+        %>
+
+        <%= form.semantic_fields_for :credit_card do |cc|%>
+          <fieldset>
+            <legend>Credit Card</legend>
+            <ol class="list-unstyled">
+              <%= cc.input :number ,
+                input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                wrapper_html: {class: "form-group"},
+                label_html: {class: "col-md-4 control-label" },
+                required: false
+              %>
+
+              <%= cc.input :cvv ,
+                input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                wrapper_html: {class: "form-group"},
+                label: 'CVV',
+                label_html: {class: "col-md-4 control-label" },
+                required: false
+              %>
+
+              <%= cc.input :expiration_date ,
+                input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                wrapper_html: {class: "form-group"},
+                label: 'Expiration Date (MM/YY)',
+                label_html: {class: "col-md-4 control-label" },
+                required: false
+              %>
+            </ol>
+          </fieldset>
+
+            <%= cc.semantic_fields_for :billing_address do |billing_address| %>
+              <fieldset>
+                <legend>Billing address</legend>
+                <ol class="list-unstyled">
+                  <%= billing_address.input :company,
+                    input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                    wrapper_html: {class: "form-group"},
+                    label_html: {class: "col-md-4 control-label" }
+                  %>
+
+                  <%= billing_address.input :street_address,
+                    input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                    wrapper_html: {class: "form-group"},
+                    label_html: {class: "col-md-4 control-label" }
+                  %>
+
+                  <%= billing_address.input :postal_code,
+                    input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                    wrapper_html: {class: "form-group"},
+                    label: "ZIP / Postal Code",
+                    label_html: {class: "col-md-4 control-label" },
+                    allow_blank: false
+                  %>
+
+                  <%= billing_address.input :locality ,
+                    input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                    wrapper_html: {class: "form-group"},
+                    label: "City",
+                    label_html: {class: "col-md-4 control-label" }
+                  %>
+
+                  <%= billing_address.input :region,
+                    input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                    wrapper_html: {class: "form-group"},
+                    label: "State/Region",
+                    label_html: {class: "col-md-4 control-label" },
+                    allow_blank: false
+                  %>
+
+                  <%= billing_address.input :country_name,
+                    as: :select,
+                    collection:  options_for_select(merchant_countries),
+                    input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
+                    wrapper_html: {class: "form-group"},
+                    label:  "Country",
+                    label_html: {class: "col-md-4 control-label" },
+                    allow_blank: false
+                  %>
+                </ol>
+              </fieldset>
+            <% end %>
+
+        <% end %>
+      </ol>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-10 operations">
+          <%= form.submit 'Save details', class: "btn btn-primary pull-right"%>
+        </div>
+      </div>
+    </fieldset>
+<% end %>

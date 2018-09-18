@@ -1,0 +1,28 @@
+## NEED CHANGE (defines the user of the nginx workers)
+# user user group;
+
+## THIS PARAMETERS BE SAFELY OVER RIDDEN BY YOUR DEFAULT NGINX CONF
+worker_processes  2;
+env THREESCALE_DEPLOYMENT_ENV;
+# error_log stderr notice;
+# daemon off;
+<% if Rails.env.test? %>
+error_log /dev/stdout info;
+<% else %>
+# error_log logs/error.log warn;
+<% end %>
+
+events {
+    worker_connections 256;
+}
+
+http {
+  lua_shared_dict api_keys 10m;
+  server_names_hash_bucket_size 128;
+  lua_package_path ";;$prefix/?.lua;$prefix/conf/?.lua";
+  init_by_lua 'math.randomseed(ngx.time()) ; cjson = require("cjson")';
+
+  resolver 8.8.8.8 8.8.4.4;
+
+  <%= render collection: services, partial: 'nginx/service' %>
+}

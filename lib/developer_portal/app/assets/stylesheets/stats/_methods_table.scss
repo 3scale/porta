@@ -1,0 +1,20 @@
+// StatsMethodsTable
+
+.StatsMethodsTable {
+  line-height: 2.6;
+  margin-bottom: 24px;
+  margin-top: 12px;
+  width: 100%;
+
+  td,
+  th {
+    border-bottom: 1px solid $stats-menu-border-color;
+  }
+
+  &-name.is-children {
+    background-image: image-url('child_metric_background.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 24px;
+  }
+}

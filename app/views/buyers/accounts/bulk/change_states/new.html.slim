@@ -1,0 +1,12 @@
+= semantic_form_for :change_states,
+                    url: admin_buyers_accounts_bulk_change_state_path,
+                    html: { class: 'bulk_operation',
+                            data: { remote: true,
+                                    confirm: "Are you sure to change state of these #{@accounts.count} accounts?" },
+                          } do |form|
+  = form.inputs do
+    = render 'buyers/accounts/bulk/selected_accounts'
+    = form.input :action, as: :select, collection: @actions
+    p.notice Changing the state of a developer account doesn't change the state of its applications.
+    = form.buttons do
+      = form.commit_button 'Change state', button_html: {:'data-disable-with' => 'Running bulk action...' }

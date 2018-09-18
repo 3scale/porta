@@ -1,0 +1,101 @@
+<table class="plan_widget list list-checkmarks">
+
+  <% if plan.is_a?(AccountPlan) && plan.description.present? -%>
+    <tr><th class="header" colspan="3">Description</th></tr>
+    <tr>
+      <td colspan="3"><%= mark_up plan.description %></td>
+    <tr>
+  <% end -%>
+
+  <% if features = plan.issuer.features.visible.presence %>
+    <tr><th class="header" colspan="3">Features</th></tr>
+
+    <% features.each do |feature|
+       enabled = plan.includes_feature?(feature)
+     %>
+      <tr class="feature <%= enabled ? 'enabled' : 'disabled' %>">
+        <th colspan="2"><%= h feature.name %></th>
+        <td>
+          <% if enabled %>
+            <i class="included fa fa-check-circle-o" title="Feature is enabled for this plan"></i>
+          <% else %>
+            <i class="excluded fa fa-times-circle-o" title="Feature is disabled for this plan"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <% if plan.usage_limits.visible.exists? %>
+    <tr><th class="header" colspan="3">Limits</th></tr>
+
+    <% plan.usage_limits_for_widget.each do |metric, usage_limits| %>
+      <% if metric.visible_in_plan?(plan) -%>
+        <tr class="usage_limit" id="<%= dom_id(metric) %>_limits">
+          <th rowspan="<%= usage_limits.first.value.zero? ? 1 : usage_limits.size %>">
+            <%= display_metric_name(metric) %>
+          </th>
+	        <%= render 'plans/limit_in_widget', :plan => plan, :metric => metric, :usage_limit => usage_limits.first %>
+        </tr>
+
+        <% unless usage_limits.first.value.zero? -%>
+          <% usage_limits[1..-1].each do |usage_limit| %>
+            <tr class="usage_limit">
+              <%= render 'plans/limit_in_widget', :plan => plan, :metric => metric, :usage_limit => usage_limit %>
+            </tr>
+          <% end %>
+        <% else -%>
+          <tr class="usage_limit">&nbsp;</tr>
+        <% end %>
+
+      <% end # if metric visible-%>
+    <% end %>
+
+    <% if plan.metrics_without_limits.present? %>
+      <tr><th class="header" colspan="3">Metrics</th></tr>
+      <% plan.metrics_without_limits.each do |metric| %>
+      	<% if metric.visible_in_plan?(plan) %>
+          <tr class="feature unlimited_metric" id="<%= dom_id(metric) %>_unlimited">
+            <th rowspan="1"> <%= display_metric_name(metric) %></th>
+            <td colspan="2"><i class="included fa fa-check-circle-o"></i></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if plan.paid? %>
+    <tr><th class="header" colspan="3">Cost</th></tr>
+
+    <% unless plan.setup_fee.zero? %>
+      <tr>
+        <th>Setup Fee</th>
+        <td colspan="2"><%=  format_cost(plan.setup_fee)%></td>
+      </tr>
+    <%- end -%>
+
+    <% unless plan.cost_per_month.zero? %>
+      <tr>
+        <th>Monthly fee</th>
+        <td colspan="2"><%= format_cost(plan.cost_per_month) %></td>
+      </tr>
+    <% end %>
+
+    <% unless plan.pricing_rules.empty? %>
+      <% plan.pricing_rules_for_widget.each do |metric, pricing_rules| %>
+        <tr class="pricing_rule">
+          <th class="title" rowspan="<%= pricing_rules.size %>"><%= h metric.friendly_name.capitalize %></th>
+          <td><%= display_pricing_rule_range(pricing_rules.first) %></td>
+          <td><%= format_cost(pricing_rules.first.cost_per_unit_as_money) %></td>
+        </tr>
+
+        <% pricing_rules[1..-1].each do |pricing_rule| %>
+          <tr class="pricing_rule">
+            <td><%= display_pricing_rule_range(pricing_rule) %></td>
+            <td><%= format_cost(pricing_rule.cost_per_unit_as_money) %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</table>

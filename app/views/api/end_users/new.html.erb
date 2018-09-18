@@ -1,0 +1,13 @@
+<h2>Create new end user</h2>
+<%= semantic_form_for @end_user, :url => admin_service_end_users_path(@service) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :username %>
+    <%= f.input :plan_id, :as => :select, :include_blank => false,
+                          :collection => @plans, :selected => @end_user.plan_id,
+                          :label => 'End User Plan' %>
+    <%= f.buttons do %>
+      <%= f.commit_button :label => 'Create End User' %>
+    <% end %>
+  <% end %>
+<% end %>
+

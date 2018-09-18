@@ -1,0 +1,34 @@
+= f.toggled_inputs 'mapping_rules', cookie_name: 'mapping-rules' , legend: "Mapping Rules", id: "mapping-rules" do
+
+    = help_bubble( 'proxy_rule_bubble', t('api.integrations.proxy.proxy_rule_help_html'))
+    table#proxy-rules
+      thead
+        tr
+          th Verb
+          th Pattern
+          - if @service.using_proxy_pro?
+            th Redirect
+          th title="increment" +
+          th colspan="2"
+            ' Metric or Method
+            | (
+            = link_to 'Define', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service'
+            | )
+
+      tbody
+        - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
+
+        - @proxy.proxy_rules.each do |rule|
+          tr
+            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics
+        tr#new-proxy-rule-template style="display:none;"
+          = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
+      tfoot
+        tr
+          th colspan=(@service.using_proxy_pro? ? '6' : '5')
+            = link_to "Add Mapping Rule", '#add-proxy-rule', class: 'action add', id: 'add-proxy-rule'
+
+javascript:
+  jQuery('#proxy-rules .metric select[data-selected]').each(function(){
+    jQuery(this).val(jQuery(this).data('selected'))
+  })

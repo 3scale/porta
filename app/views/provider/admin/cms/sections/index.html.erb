@@ -1,0 +1,20 @@
+<h1>Sections</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th></th>
+  </tr>
+
+<% @sections.each do |section| %>
+  <%= content_tag_for :tr, section do %>
+    <td><%= section.title %></td>
+    <td><%= link_to 'Edit', edit_provider_admin_cms_section_path(section) %></td>
+    <td><%= link_to 'Destroy', provider_admin_cms_section_path(section), data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
+  <% end %>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New section', new_provider_admin_cms_section_path %>

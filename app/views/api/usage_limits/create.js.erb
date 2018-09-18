@@ -1,0 +1,10 @@
+jQuery.colorbox.close();
+var html  = "<%= escape_javascript(render :partial => 'usage_limit', :locals => {:usage_limit => @usage_limit}).html_safe %>",
+    count = "<%= @usage_limit.metric.usage_limits.where(plan_id: @plan.id).count %>",
+    id    = "#limits_counter_" + "<%= @usage_limit.metric.to_param  %>";
+
+jQuery('#usage_limits_table_body').append(html);
+jQuery(id).html(count);
+<% if flash[:notice].present? %>
+  jQuery.flash.notice('<%= flash[:notice].html_safe %>');
+<% end %>

@@ -1,0 +1,549 @@
+{
+  "basePath": "",
+  "swaggerVersion": "0.1a",
+  "apiVersion": "1.0",
+  "apis": [
+    {
+      "path": "/api/accounts/{account_id}/invoices.xml",
+      "responseClass": "List[invoice]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Invoice List by Account",
+          "description": "Returns the list of all Invoices by account. Note that results can be paginated and you can apply filters by month and state.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "account_id",
+              "description": "ID of the account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            },
+            {
+              "name": "state",
+              "description": "Filter Invoices by state. 'open': line items can be added (via web interface). 'pending': the Invoice has been issued, no items can be added, the PDF has been generated and the Invoice is waiting to be charged. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the Invoice was explicitly cancelled and is out of the normal life-cycle.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false,
+              "defaultValue": "",
+              "allowableValues": {
+                "values": [
+                  "open",
+                  "pending",
+                  "paid",
+                  "unpaid",
+                  "cancelled"
+                ],
+                "valueType": "LIST"
+              }
+            },
+            {
+              "name": "month",
+              "description": "Filter Invoices by month. Format YYYY-MM, e.g. '2012-03'.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 20.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/accounts/{account_id}/invoices/{id}.xml",
+      "responseClass": "invoice",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Invoice by Account",
+          "description": "Returns an Invoice by id.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "account_id",
+              "description": "ID of the account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "account_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Invoice.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/billing_jobs.xml",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Trigger Billing",
+          "description": "Triggers billing process for all buyers of the account. (Only available for providers that opt-in for the feature.)",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "date",
+              "description": "Base date for the billing process. It tricks the process to run as this was the actual current system date, affecting period definition, selection of expiring contracts and whether some specific tasks of the process should be triggered or not such as billing of fixed and variable costs and notifications that only happen on day 1 of the month. Format YYYY-MM-DD. Default: current date.",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices.xml",
+      "responseClass": "List[invoice]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Invoice List",
+          "description": "Returns the list of all Invoices. Note that results can be paginated and you can apply filters by month and state.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "state",
+              "description": "Filter Invoices by state. 'open': line items can be added (via web interface). 'pending': the Invoice has been issued, no items can be added, the PDF has been generated and the Invoice is waiting to be charged. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the Invoice was explicitly cancelled and is out of the normal life-cycle.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false,
+              "defaultValue": "",
+              "allowableValues": {
+                "values": [
+                  "open",
+                  "pending",
+                  "paid",
+                  "unpaid",
+                  "cancelled"
+                ],
+                "valueType": "LIST"
+              }
+            },
+            {
+              "name": "month",
+              "description": "Filter Invoices by month. Format YYYY-MM, e.g. '2012-03'.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 20.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{id}.xml",
+      "responseClass": "Invoice",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Invoice Read",
+          "description": "Returns an Invoice by ID.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Invoice.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{id}/state.xml",
+      "responseClass": "invoice",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Invoice Update state",
+          "description": "Modifies the state of the Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Invoice.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "state",
+              "description": "State of the Invoice to set. Values allowed (depend on the previous state): cancelled, failed, paid, unpaid, pending, finalized",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "state"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{id}/charge.xml",
+      "responseClass": "invoice",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Invoice Charge",
+          "description": "Charge an Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Invoice.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{id}.xml",
+      "responseClass": "invoice",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Invoice Update",
+          "description": "Updates an Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Invoice.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "period",
+              "description": "Billing period of the Invoice. The format should be YYYY-MM.",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "friendly_id",
+              "description": "Friendly ID of the Invoice. The format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX.",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices.xml",
+      "responseClass": "invoice",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Invoice Create",
+          "description": "Creates a new Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "account_id",
+              "description": "ID of the account.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "account_ids"
+            },
+            {
+              "name": "period",
+              "description": "Billing period of the Invoice. The format should be YYYY-MM.",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{invoice_id}/line_items.xml",
+      "responseClass": "List[line_items]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Invoice Line Items List",
+          "description": "Returns the list of all Line Items of an Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "invoice_id",
+              "description": "ID of the invoice.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{invoice_id}/line_items.xml",
+      "responseClass": "line_item",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Create Line Item for an Invoice",
+          "description": "Creates a new Line Item for an Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "invoice_id",
+              "description": "ID of the invoice.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "name",
+              "description": "Name of the Line Item",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the Line Item",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "quantity",
+              "description": "Quantity of the Line Item",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "cost",
+              "description": "Total cost/price of the Line Item considering the quantity",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "metric_id",
+              "description": "Metric that have generated this Line Item",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "contract_id",
+              "description": "Contract that have generated this Line Item",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "type",
+              "description": "Type of cost. Can be [LineItem::PlanCost, LineItem::VariableCost]",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "plan_id",
+              "description": "The ID of the plan.",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{invoice_id}/line_items/{id}.xml",
+      "responseClass": "line_item",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Delete Line Item of an Invoice",
+          "description": "Deletes a Line Item of an Invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "invoice_id",
+              "description": "ID of the invoice.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Line Item.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/api/invoices/{invoice_id}/payment_transactions.xml",
+      "responseClass": "List[payment_transactions]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Invoice Payment Transactions List",
+          "description": "Returns the list of all payment transactions of an invoice.",
+          "group": "finance",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "invoice_id",
+              "description": "ID of the invoice.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+article.DashboardWidget id = widget.id
+  = widget.render_chart
+
+  header.DashboardWidget-badge
+
+    - if widget.value == 0 && widget.current == 0 && !widget.has_history
+
+      h1.DashboardWidget-title Hits
+
+      p
+        ' In order to show Hits for the #{friendly_service_name(service)} you need to have at least one application sending traffic to it.
+      p
+        ' Consider
+        => link_to 'making some test calls', edit_admin_service_integration_path(widget.params['service_id'], :anchor => 'staging')
+        | from the Integration page to get a feel for what you'd see here.
+
+    - else
+
+    h1.DashboardWidget-title
+
+      = link_to admin_service_stats_usage_path(widget.params.merge(since: current_range.first)), class: 'DashboardWidget-link'
+          strong data-title-count='true' => number_to_human(widget.value)
+          | Hits
+
+    .DashboardWidget-percentageInfo data-toggle-visibility='true'
+      - if widget.has_history
+        = link_to admin_service_stats_usage_path(widget.params.merge(since: previous_range.first)), class: "DashboardWidget-link #{sign_class(widget)}" 
+          = number_to_percentage(number_to_human(widget.percentual_change), precision: 0)
+      - else
+        = link_to admin_service_stats_usage_path(widget.params.merge(since: current_range.last, until: current_range.last, period: 'day')), class: 'DashboardWidget-link'
+          = number_to_human(widget.current)
+
+    - if widget.loaded?
+      span.DashboardWidget-intro.DashboardWidget-intro--primary data-title-intro='true'
+        | last 30 days
+
+      span.DashboardWidget-intro.DashboardWidget-intro--secondary data-toggle-visibility='true'
+        = widget.has_history ? 'vs. previous 30 days' : 'today'

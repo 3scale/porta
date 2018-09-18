@@ -1,0 +1,32 @@
+<h2>
+  <%= h @forum.name %>
+
+  <% if @category %>
+    <%= h @category.name %>
+  <% end %>
+</h2>
+
+<%= render 'forums/public/menu' %>
+
+<div class="sub-detail">
+  <div class="operations">
+    <%= form_tag forum_path, :method => :get, :class => 'inline search' do %>
+      <%= text_field_tag :query, params[:query] %>
+      <%= submit_tag 'Search' %>
+    <% end %>
+
+    <!-- Order threads by <%# select_tag 's', options_for_select(Topic::ORDER_BY, :selected => (params[:s] || '')) %> -->
+  </div>
+
+  <% if @topics.present? %>
+    <p><%= raw page_entries_info(@topics, :model => 'threads') %></p>
+  <% end %>
+</div>
+
+<% if @forum.moderators.exists? -%>
+  <ul class="flat">
+    <% @forum.moderators.each do |user| -%>
+      <li><%= user.username %></li>
+    <% end -%>
+  </ul>
+<% end -%>

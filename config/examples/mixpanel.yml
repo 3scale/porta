@@ -1,0 +1,14 @@
+base: &default
+  token: YOUR_MIXPANEL_TOKEN
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

@@ -1,0 +1,11 @@
+Dear <%= @receiver.informal_name %>
+Application <%= @cinstance.name %> has changed to plan <%= @new_plan.name %>.
+
+Details:
+Application: <%= @cinstance.name %>
+Developer: <%= @account.name %>
+Service: <%= @service.name %>
+Previous plan: <%= @old_plan.name %>
+Current plan: <%= @new_plan.name %>
+To view application, follow this link: <%= admin_buyers_account_application_url(@account, @cinstance) %>
+

@@ -1,0 +1,19 @@
+Dear API Administrator,
+
+The user {{account.name}} has subscribed to your service {{service.name}} on plan {{plan.name}}.
+
+The user's details are:
+
+* Name: {{user.name}}
+* Email: {{user.email}}
+* Organization: {{account.name}}
+* Telephone: {{account.telephone_number}}
+
+{{account.extra_fields_plain_text}}
+
+{%if plan.approval_required?%}
+This subscription requires your approval before the user can create applications. You can approve / reject the application from your user control panel:
+{{ url }}
+{%endif%}
+
+The API Team

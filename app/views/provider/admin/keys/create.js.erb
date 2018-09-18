@@ -1,0 +1,22 @@
+(function($) {
+  var container = $("#application_keys");
+
+  <% if @key.persisted? -%>
+    $.colorbox.close();
+    var keys = container.find("table#keys tbody");
+    var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
+    $(key).hide().appendTo(keys.<%= @cinstance.backend_version.oauth? ? 'empty' : 'slice' %>()).fadeIn();
+
+  <% else -%>
+    $("#invalid-key-warning").text('<%= flash[:error] %>');
+    $("#invalid-key-warning").show();
+    $.colorbox.resize();
+  <% end -%>
+
+  <% unless @cinstance.application_keys.can_add? %>
+    $('#app-keys-limit-warning').show(); // provider side
+    $('#app-keys-operations').hide();
+  <% end -%>
+
+  container.find('.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();
+})(jQuery);

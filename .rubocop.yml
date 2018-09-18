@@ -1,0 +1,249 @@
+Rails:
+  Enabled: true
+
+Lint:
+  Enabled: true
+
+Performance:
+  Enabled: true
+
+Metrics:
+  Enabled: true
+
+Lint/AssignmentInCondition:
+  AllowSafeAssignment: true
+
+Style/SymbolProc:
+  AutoCorrect: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/LeadingCommentSpace:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
+    '%i': '[]'
+    '%I': '[]'
+    '%r': '{}'
+    '%w': '[]'
+    '%W': '[]'
+
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 99
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/ClassLength:
+  Max: 200
+
+AllCops:
+  TargetRubyVersion: 2.3
+  UseCache: true
+  Exclude:
+    - 'db/**/*'
+    - 'public/**/*'
+
+Lint/DefEndAlignment:
+  AutoCorrect: true
+
+# Offense count: 40
+# Cop supports --auto-correct.
+# Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
+# SupportedStyles: keyword, variable, start_of_line
+Lint/EndAlignment:
+  Enabled: false
+
+# Offense count: 110
+# Cop supports --auto-correct.
+# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+# Offense count: 87
+# Cop supports --auto-correct.
+# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+# Offense count: 3
+# Cop supports --auto-correct.
+# Configuration parameters: Include.
+# Include: app/models/**/*.rb
+Rails/FindEach:
+  Exclude:
+    - 'app/models/web_hook_failures.rb'
+
+# Offense count: 5038
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
+# SupportedStyles: single_quotes, double_quotes
+Style/StringLiterals:
+  Enabled: false
+
+# Offense count: 1316
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
+# SupportedStyles: space, no_space, compact
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+# Offense count: 514
+# Cop supports --auto-correct.
+Style/SpaceInsideBrackets:
+  Enabled: false
+
+# Offense count: 240
+# Cop supports --auto-correct.
+Style/SpaceInsideParens:
+  Enabled: false
+
+# Offense count: 366
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
+# SupportedStyles: space, no_space
+Style/SpaceInsideBlockBraces:
+  Enabled: false
+
+# Offense count: 753
+# Cop supports --auto-correct.
+# Configuration parameters: AllowForAlignment.
+Style/SpaceAroundOperators:
+  Enabled: false
+
+# Offense count: 139
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyleInsidePipes, SupportedStyles.
+# SupportedStyles: space, no_space
+Style/SpaceAroundBlockParameters:
+  Enabled: false
+
+# Offense count: 353
+# Cop supports --auto-correct.
+Style/SpaceAfterComma:
+  Enabled: false
+
+# Offense count: 149
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: aligned, indented, indented_relative_to_receiver
+Style/MultilineMethodCallIndentation:
+  Enabled: false
+
+# Offense count: 48
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: symmetrical, new_line, same_line
+Style/MultilineHashBraceLayout:
+  Enabled: false
+
+# Offense count: 65
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: symmetrical, new_line, same_line
+Style/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+# Offense count: 7988
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
+# SupportedStyles: ruby19, ruby19_no_mixed_keys, hash_rockets
+Style/HashSyntax:
+  Enabled: false
+
+# Offense count: 324
+# Cop supports --auto-correct.
+# Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
+Style/ExtraSpacing:
+  Enabled: false
+
+# Offense count: 673
+# Cop supports --auto-correct.
+Style/EmptyLines:
+  Enabled: false
+
+# Offense count: 35
+# Cop supports --auto-correct.
+Style/EmptyLinesAroundAccessModifier:
+  Enabled: false
+
+# Offense count: 404
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: empty_lines, no_empty_lines
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+# Offense count: 1179
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: empty_lines, no_empty_lines
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+# Offense count: 76
+# Cop supports --auto-correct.
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+# Offense count: 357
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: empty_lines, no_empty_lines
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+# Offense count: 288
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: braces, no_braces, context_dependent
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+# Offense count: 519
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle, SupportedLastArgumentHashStyles.
+# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
+Style/AlignHash:
+  Enabled: false
+
+# Offense count: 307
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: with_first_parameter, with_fixed_indentation
+Style/AlignParameters:
+  Enabled: false
+
+# Offense count: 1140
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+# Offense count: 3
+# Cop supports --auto-correct.
+Lint/Debugger:
+  Exclude:
+    - 'features/step_definitions/debugger_steps.rb'
+    - 'features/step_definitions/percy_steps.rb'
+    - 'features/step_definitions/web_steps.rb'

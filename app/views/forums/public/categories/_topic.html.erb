@@ -1,0 +1,13 @@
+<tr class="topic" id="<%= dom_id(topic) %>">
+  <td class="title"><%= link_to h(topic.title), forum_topic_path(topic) %></td>
+  <td class="posts" title="Number of posts"><%= number_with_delimiter(topic.posts.size) %></td>
+  <td class="views" title="Number of views"><%= number_with_delimiter(topic.hits) %></td>
+  <td>
+    <%= topic.last_updated_at.to_s(:long) %>
+
+    <% if topic.last_user -%>
+      by <%= display_author_name(topic.recent_post)     %>
+    <% end -%>
+    <%= link_to 'view', forum_topic_last_page_path(topic) %>
+  </td>
+</tr>

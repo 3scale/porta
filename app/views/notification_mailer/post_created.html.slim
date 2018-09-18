@@ -1,0 +1,11 @@
+p
+  | Dear #{@receiver.informal_name},
+
+- if @user.present? && @account.present?
+  p
+    | #{@user.informal_name} from #{@account.name} has posted a new message in your forum.
+- else
+  p
+    | Anonymous user has posted a new message in your forum
+
+p= link_to 'View new forum post', forum_topic_url(@post.topic, host: @provider_account.domain)

@@ -1,0 +1,10 @@
+{
+  method = '<%= proxy_rule.http_method %>',
+  pattern = '<%= proxy_rule.pattern %>',
+  parameters = { <%= proxy_rule.parameters.map { |p| "'#{p}'" }.join(', ').html_safe %> },
+  querystring_params = function(args)
+    return <%= check_querystring_params(proxy_rule.querystring_parameters).presence || 'true' %>
+  end,
+  system_name = '<%= proxy_rule.metric_system_name %>',
+  delta = <%= proxy_rule.delta %>
+},

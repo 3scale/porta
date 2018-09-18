@@ -1,0 +1,2 @@
+page.replace "contract_#{@contract.id}", :partial => 'contracts/provider_item', :locals => {:contract => @contract}
+page.visual_effect(:highlight, "contract_#{@contract.id}", :duration => 0.8)

@@ -1,0 +1,8 @@
+footer#footer
+  ul
+    - if ThreeScale.tenant_mode.multitenant?
+      li= link_to 'Privacy', '//www.redhat.com/en/about/privacy-policy', target: '_blank'
+      li= link_to 'Refunds', '//www.3scale.net/refunds', target: '_blank'
+    li= link_to 'Support', "//access.redhat.com/products/red-hat-3scale#support", target: '_blank'
+
+    = render 'provider/footer_powered_by_part'

@@ -1,0 +1,14 @@
+<% page_size = 5 %>
+<% page_count = (@methods.size / page_size).ceil  %>
+
+<%= render_methods_pages(@methods, page_size) %>
+
+<% if page_count > 1 %>
+<div class="paginate">
+  Page:
+  <% 1.upto(page_count) do |i| %>
+   <%= link_to i, '#', :class => ((i == 1) ? 'active' : '') %>
+  <% end %>
+</div>
+<% end %>
+

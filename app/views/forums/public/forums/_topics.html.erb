@@ -1,0 +1,38 @@
+<% if topics.any? %>
+  <table class="data threads">
+    <thead>
+      <tr>
+        <th>Threads</th>
+        <th class="posts">Posts</th>
+        <th class="views">Views</th>
+        <th>Last Post</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% for topic in topics %>
+        <tr class="topic <%= cycle('odd', 'even', name: 'forum-topics') %>" id="<%= dom_id(topic) %>">
+          <td class="title"><%= link_to topic.title, forum_topic_path(topic) %></td>
+          <td class="posts"><%= topic.posts.count %></td>
+          <td class="views"><%= number_with_delimiter(topic.hits) %></td>
+          <td>
+            <%= topic.last_updated_at.to_date.to_s(:long) %>
+
+            <% if topic.last_user -%>
+              by <%= display_author_name(topic.recent_post) %>
+            <% else %>
+              by Anonymous User
+            <% end -%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate topics %>
+<%- else -%>
+  <% if @my %>
+    <p>You currently have no threads.</p>
+  <% else %>
+    <p>There are currently no threads.</p>
+  <% end %>
+<%- end -%>

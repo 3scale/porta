@@ -1,0 +1,3 @@
+$.colorbox.close();
+$.flash.notice('Plan copied.');
+$('#table-body-plans').replaceWith(<%= json render(partial: 'api/plans/table_body', locals: {plans: @plans}) %>);

@@ -1,0 +1,20 @@
+html = "<%=  escape_javascript(render(:partial => 'metric', :locals => {:metric => @metric})) %>";
+jQuery('#metric_<%= "#{@metric.id}" %>').replaceWith(html);
+
+id_slot   = "#" + "<%= dom_id(@metric) %>" + "_slot";
+if (jQuery(id_slot).length != 0){
+  <%= render 'api/metrics/prepare_slot' %>
+  html = <%= render_to_js_string 'api/usage_limits/usage_limits' %>;
+  jQuery(id_slot).html(html);
+}
+
+<% if @metric.errors.present? %>
+
+  jQuery.flash.error("<%= j @metric.errors.full_messages.to_sentence %>");
+
+<% else %>
+  metric        = "<%= @metric.is_a_method? ? 'Method' : 'Metric' %>";
+  metric_option = "<%= escape_javascript (@metric.enabled_for_plan?(@plan) ? 'enabled' : 'disabled') %>";
+
+  jQuery.flash.notice(metric + " has been "+ metric_option + ".");
+<% end %>

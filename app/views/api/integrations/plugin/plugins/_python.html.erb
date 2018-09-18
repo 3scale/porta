@@ -1,0 +1,47 @@
+<h2>Install</h2>
+
+<p>Download the latest version of the plugin and install it using setuptools:
+  <%= render 'api/integrations/plugin/download_links', :language => 'python' %>
+</p>
+
+<%= highlighted_code 'python' do %>
+ python setup.py install
+<% end %>
+<p>
+or alternatively, you can install it using pip:
+</p>
+<%= highlighted_code 'python' do %>
+ pip install ThreeScalePY
+<% end %>
+
+<h2>Authorize & Report</h2>
+<% auth = @service.plugin_authentication_params -%>
+
+<p>Run this code to authorize and report a hit:</p>
+
+<%= highlighted_code 'python' do %>
+import ThreeScalePY
+import sys
+
+service_id = '<%= @service.id %>'
+service_token = '<%= @service.service_token %>'
+
+<% if auth.key?(:user_key) %>
+user_key = '<%= auth[:user_key] %>'
+
+authrep = ThreeScalePY.ThreeScaleAuthRepUserKey(user_key = user_key,
+                          service_id = service_id, service_token = service_token<%= ", backend_uri = 'http://backend.example.com:80'" if custom_backend? %>)
+
+<% else %>
+app_id = '<%= auth[:app_id] %>'
+app_key = '<%= auth[:app_key] %>'
+
+authrep = ThreeScalePY.ThreeScaleAuthRep(app_id = app_id, app_key = app_key,
+                          service_id = service_id, service_token = service_token<%= ", backend_uri = 'http://backend.example.com:80'" if custom_backend? %>)
+
+<% end %>
+if authrep.authrep():
+    # all was ok, proceed normally
+else: # something was wrong
+    sys.stdout.write(" reason = %s \n" % authrep.build_response().get_reason())
+<% end %>

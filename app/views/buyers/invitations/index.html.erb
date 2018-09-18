@@ -1,0 +1,41 @@
+<%= render 'buyers/accounts/menu' %>
+
+<h2>Sent invitations for <%= @account.org_name %></h2>
+
+<table class="data" id="invitations">
+  <thead>
+    <tr>
+      <th>Recipient</th>
+      <th>Sent</th>
+      <th>Accepted?</th>
+      <th colspan="2" class="operations">
+        <% if can? :create, Invitation %>
+          <%= link_to_unless_current 'Invite user', new_admin_buyers_account_invitation_path(@account), :class => 'action add' %>
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @invitations.each do |invitation| %>
+      <tr id="<%= dom_id(invitation) %>">
+        <td><%= h invitation.email %></td>
+        <td><%= invitation_sent_date(invitation) %></td>
+        <td><%= invitation_status(invitation) %></td>
+        <td>
+          <% if can? :manage, invitation %>
+            <% unless invitation.accepted? -%>
+               <%= fancy_link_to('Resend', resend_admin_buyers_account_invitation_path(invitation.account,invitation), { :class => "refresh", :id => "resend-invitation-#{invitation.id}", :method => :put }) %>
+            <% end -%>
+          <% end %>
+        <td>
+          <% if can? :manage, invitation %>
+            <%= delete_link_for admin_buyers_account_invitation_path(invitation.account, invitation), data: { disable_with: 'Deleting…', confirm: 'Are you sure you want to delete this invitation?' } %>
+          <% end %>
+      	</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @invitations %>

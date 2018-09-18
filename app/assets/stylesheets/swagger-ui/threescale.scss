@@ -1,0 +1,55 @@
+@import 'provider/colors';
+
+.swagger-section .swagger-ui-wrap {
+  max-width:100%;
+}
+
+.apidocs-tip-description {
+  text-align: left;
+  font-style: italic;
+  color: $label-color;
+  padding: 0;
+  margin: 0;
+  background: $content-background;
+  padding: 2px;
+}
+
+.apidocs-param-tips li:hover {
+  background: white;
+  cursor:pointer;
+  color: $link-color;
+}
+
+.apidocs-param-tips ul {
+  padding: 0px;
+  text-align: left;
+}
+
+.apidocs-param-tips li {
+  padding: 5px;
+  border-top: 1px solid $border-color;
+  list-style: none;
+}
+
+.apidocs-param-tips {
+  position: absolute;
+  padding: 10px;
+  top: 0px;
+  left: 0px;
+  box-shadow: 0 0 6px $box-shadow-color;
+  font-size: 12px;
+  color: $font-color;
+  background: rgba($content-background, .99);
+  border: 1px solid $border-color;
+  border-radius: 6px;
+}
+
+div.swagger-notifications {
+  text-align: left;
+}
+
+.swagger-ui-wrap {
+  ul {
+    padding-left: 0px;
+  }
+}

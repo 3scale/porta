@@ -1,0 +1,13 @@
+<li>
+  <label>Selected Applications</label>
+  <ul class="bulk_operation_items">
+    <% @applications.each do |cinstance| %>
+      <%= content_tag :li,
+          :title => "#{cinstance.user_account.org_name} - #{cinstance.user_account.admins.first.try(:display_name)}" do %>
+        <span class="name"><%= h cinstance.name %></span>
+        (<span class="account"><%= h cinstance.user_account.org_name %></span>)
+        <%= hidden_field_tag 'selected[]', cinstance.id %>
+      <% end %>
+    <% end %>
+  </ul>
+</li>

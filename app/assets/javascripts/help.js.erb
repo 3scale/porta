@@ -1,0 +1,39 @@
+
+
+if(typeof Help == 'undefined'){
+  var Help = {};
+}
+
+(function($){
+  Help = {
+    toggleHelp: function(image, flip) {
+      var $helperLayer = $('#help_layer_' + image.id),
+          $image       = $(image);
+
+      if($helperLayer.is(':visible')){
+        $helperLayer.hide();
+        $image.removeClass('active');
+        image.src = '<%= asset_path('provider/icons/questionPassive.png') %>';
+        image.style.zIndex = 10;
+      } else {
+        $image.addClass('active');
+        var layerTopPos  = 10,
+            layerLeftPos = 10;
+
+
+        var offset = (function(i, l){
+            var top  = i.offset().top - (i.offset().top - i.position().top) + i.height() - 1,
+                left = i.offset().left - (i.offset().left - i.position().left);
+
+            return {top:top, left:left};
+        })($image, $helperLayer);
+
+  			$helperLayer.css({zIndex:99999});
+        $helperLayer.show();
+        $helperLayer.css({top: offset.top + 'px', left:offset.left + "px" });
+        image.src = '<%= asset_path('provider/icons/questionClose.png') %>';
+        image.style.zIndex = 100000;
+      }
+    }
+  };
+})(jQuery);

@@ -1,0 +1,6 @@
+(function($) {
+  var form  = $("#referrer_filters").find('form').first();
+  var error = $("<label class=\"error\"><%= escape_javascript(@error) %></label>");
+
+  form.find('.error').remove().end().append(error);
+})(jQuery);

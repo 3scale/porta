@@ -1,0 +1,9 @@
+<% if can? :upgrade, current_account %>
+ <p data-object="plan"
+    data-id="<%= current_account.bought_cinstance.plan.id %>"
+    data-upgrade-to-plan-id="<%= plan.id %>" >
+    <%= link_to "Upgrade to '#{plan.name}' ›", '#',
+        :id => 'change-plan', :class => 'important-button' %>
+ </p>
+ <%= render '/provider/admin/accounts/change_plan' %>
+<% end %>

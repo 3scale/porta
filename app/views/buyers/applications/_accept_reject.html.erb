@@ -1,0 +1,26 @@
+<%= javascript_tag do %>
+  // TODO: non-intrusive Javascript
+  function toggle_accept_reject() {
+    $('#rejectBox').toggle(); $('#acceptBox').toggle();
+  }
+<% end %>
+
+<span id="acceptBox">
+  <%= form_for @cinstance, :url => accept_admin_buyers_application_path(@cinstance), :html => {:class => :action, :method => :put} do |f| %>
+    <%= f.submit 'Accept', class: 'outline-button-thin--positive' %>
+    or
+    <%= link_to 'Reject', '#rejectBox', onclick: 'toggle_accept_reject()', class: 'outline-button-thin--negative' %>
+  <% end %>
+</span>
+
+<div id="rejectBox" style="display: none;">
+  <hr />
+  <%= form_for @cinstance, :url => reject_admin_buyers_application_path(@cinstance), :html => {:method => :delete} do |f| %>
+    <label>Reason for rejection? (to be appended to message dispatched to user)</label>
+    <%= text_area_tag :reason, nil, :class => :short, :cols => 30, :rows => 5 %>
+
+      <%= link_to 'Accept', '#', onclick: 'toggle_accept_reject()', class: 'outline-button-thin--positive' %>
+      or
+      <%= f.submit 'Reject', class: 'outline-button-thin--negative' %>
+  <% end %>
+</div>

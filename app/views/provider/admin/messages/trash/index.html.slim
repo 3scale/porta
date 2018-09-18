@@ -1,0 +1,29 @@
+= render 'provider/admin/messages/menu'
+
+h2 Trash
+
+- if @messages.blank?
+  p The trash is empty.
+
+- else
+  // temporarily hidden Empty the trash action
+  // the whole explanation: https://github.com/3scale/system/issues/6275
+  //.operations
+  //  = fancy_button_to 'Empty the trash', empty_provider_admin_messages_trash_index_path, method: :delete, class: 'empty_trash'
+  table#messages.data
+    thead
+      tr
+        th Subject
+        th From
+        th Date sent
+        th
+
+    tbody
+      - @messages.each do |message|
+        tr class=cycle('odd', 'even', name: 'messages')
+          td = link_to message.subject, provider_admin_messages_trash_path(message)
+          td = link_to message_sender(message), provider_admin_messages_trash_path(message)
+          td = message.created_at.to_s(:long)
+          td.operations = fancy_button_to 'Restore', provider_admin_messages_trash_path(message), :method => :delete, :class => 'undelete action'
+
+  = will_paginate(@messages)

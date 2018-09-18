@@ -1,0 +1,2 @@
+$('#switch-<%= @switch.name %>-toggle').replaceWith(<%= json render('switch_toggle', switch: @switch) %>);
+$('#switch-<%= @switch.name %>-state').replaceWith(<%= json render('switch_state', switch: @switch) %>);

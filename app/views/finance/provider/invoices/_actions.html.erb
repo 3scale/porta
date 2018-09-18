@@ -1,0 +1,17 @@
+<%= javascript_tag do %>
+  $('#actions button.action').live('click', function () {
+    return confirm('Are you sure?');
+  });
+<% end %>
+
+
+<%# TODO: move this to CanCan %>
+<% if @invoice.buyer %>
+<ul id="actions">
+  <%= content_tag(:li, invoice_action_button(@invoice.pdf.file? ? 'Regenerate PDF' : 'Generate PDF', :generate_pdf))  %>
+  <%= content_tag(:li, invoice_action_button('Issue invoice', :issue)) if @invoice.state_events.include?(:issue) %>
+  <%= content_tag(:li, invoice_action_button('Charge', :charge)) if @invoice.state_events.include?(:pay) %>
+  <%= content_tag(:li, invoice_action_button('Mark as paid', :pay)) if @invoice.state_events.include?(:pay) %>
+  <%= content_tag(:li, invoice_action_button('Cancel invoice', :cancel)) if @invoice.state_events.include?(:cancel) %>
+</ul>
+<% end %>

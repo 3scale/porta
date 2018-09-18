@@ -1,0 +1,51 @@
+monthly_jobs:
+  cron: '0 0 1 * *'
+  class: CronJob::Enqueuer
+  args: ['MONTH']
+  queue: critical
+  status: disabled
+
+weekly_jobs:
+  cron: '0 0 * * 0'
+  class: CronJob::Enqueuer
+  args: ['WEEK']
+  description: "Pdf::Dispatch, JanitorWorker"
+  queue: critical
+  status: enabled
+
+hourly_jobs:
+  cron: '0 * * * *'
+  class: CronJob::Enqueuer
+  args: ['HOUR']
+  queue: critical
+  status: disabled
+
+daily_jobs:
+  cron: '0 8 * * *'
+  class: CronJob::Enqueuer
+  args: ['DAILY']
+  description: "Delete old audits and log entries, Notify about expiring credit cards, Pdf::Dispatch"
+  queue: critical
+  status: enabled
+
+billing_jobs:
+  cron: '0 8 * * *'
+  class: CronJob::Enqueuer
+  args: ['BILLING']
+  description: "Billing canaries and the rest"
+  queue: critical
+  status: enabled
+
+sphinx_index:
+  cron: '0 6 * * *'
+  class: CronJob::Enqueuer
+  args: ['SPHINX_INDEX']
+  queue: critical
+  status: enabled
+
+sphinx_delta:
+  cron: '42 * * * *'
+  class: CronJob::Enqueuer
+  args: ['SPHINX_DELTA']
+  queue: critical
+  status: enabled

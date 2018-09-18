@@ -1,0 +1,36 @@
+<% if current_user.subscribed?(@topic) -%>
+
+  <% if current_user.email_unverified? %>
+    <p>Your subscription to this thread is disabled. <%= link_to 'Validate your email address', account_personal_details_path %></p>
+  <% else -%>
+    <p>You're subscribed for email updates to this thread. <%= button_to 'Unsubscribe', forum_subscription_path(@topic.id), :method => :delete %></p>
+  <% end -%>
+
+<% else -%>
+
+  <% if current_user.email_unverified? %>
+    <p>
+      Want email updates on this thread?
+      <%= link_to 'Validate your email address', path_to_personal_details %> so you can subscribe.
+    </p>
+  <% else -%>
+
+    <div class='sub-details'>
+      <%= form_for UserTopic.new, :url => forum_subscriptions_path do |f| -%>
+      <%= f.hidden_field :topic_id, :value => @topic.id %>
+      <p class='new-topic-button'>
+        Want email updates on this thread?
+        <a id='subscribe' href='#'>Subscribe to thread</a>
+      </p>
+      <% end -%>
+    </div>
+    <%= javascript_tag do %>
+      $(document).ready(function(){
+        $('#subscribe').click(function(){
+          $('#new_user_topic').submit();
+          return false;
+        })
+      });
+    <% end %>
+  <% end -%>
+<% end -%>

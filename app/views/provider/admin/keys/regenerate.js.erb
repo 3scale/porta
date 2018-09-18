@@ -1,0 +1,3 @@
+$("#oauth_secret").html(<%= @new_key.to_json.html_safe %>);
+<%# replace url of form, so second regenerate works %>
+$('#regenerate-oauth-key').attr('href', <%=regenerate_provider_admin_application_key_path(@cinstance, @new_key).to_json.html_safe %>);

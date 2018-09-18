@@ -1,0 +1,15 @@
+- if @account
+  = render '/buyers/accounts/menu'
+- else
+  h2
+    ' Applications
+    - if @plan
+      ' on plan
+      = @plan.name
+    - elsif @service
+      ' on service
+      = @service.name
+
+= render 'listing'
+= render 'shared/service_access'
+

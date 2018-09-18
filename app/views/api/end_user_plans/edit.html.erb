@@ -1,0 +1,6 @@
+<% content_for :sublayout_title, "End-user Plan #{h @plan.name}" %>
+
+<%= semantic_form_for @plan, :url => admin_end_user_plan_path(@plan) do |form| %>
+  <%= render :partial => 'form', :object => form %>
+<%- end %>
+<%= render 'api/plans/metrics' -%>

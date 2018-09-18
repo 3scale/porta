@@ -1,0 +1,11 @@
+<tr>
+    <td class="rightAlign">
+        <span class="tooltip" id='<%= "feature_#{feature.id}" %>'><%= feature.name %></span>
+    </td>
+    <% @plans.each do |contract| %>
+    <td class="spec">
+      <%= contract.features.include?(feature) ? 
+        image_tag('tick.png') : image_tag('cross.png') %>
+    </td>
+    <% end %>
+</tr>

@@ -1,0 +1,16 @@
+---
+id: threescale
+api:
+  config_vars:
+  - THREESCALE_PROVIDER_KEY
+  regions:
+  - us
+  - eu
+  password: a-32-char-hex-password
+  sso_salt: a-32-char-hex-salt
+  production:
+    base_url: https://master.example.com/heroku/resources
+    sso_url: https://master.example.com/heroku/sso
+  test:
+    base_url: http://master.example.com.dev:3000/heroku/resources
+    sso_url: http://master.example.com.dev:3000/heroku/sso

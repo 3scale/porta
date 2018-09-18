@@ -1,0 +1,7 @@
+<p><%= link_to 'Back to forum thread', forum_topic_path(@topic), :class => 'back' %></p>
+
+<h1>Edit topic</h1>
+
+<%= semantic_form_for @topic, :url => forum_topic_path(@topic) do |form| %>
+  <%= render 'forums/public/topics/form', :form => form %>
+<% end -%>

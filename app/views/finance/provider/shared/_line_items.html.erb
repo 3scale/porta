@@ -1,0 +1,67 @@
+<table id="line_items" class="invoice">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Charged</th>
+    <th>
+      <% if @invoice.editable? && editable %>
+        <%= link_to 'Add',new_admin_finance_account_invoice_line_item_path(@invoice.buyer_account, @invoice),
+                    :title => 'Add Custom Charge',
+                    :class => 'action add fancybox',
+                    :'data-autodimensions' => 'true'
+        %>
+      <% end %>
+    </th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <%= render :partial => '/finance/provider/shared/line_item', :collection => @invoice.line_items, :locals => { :editable => editable } %>
+  </tbody>
+
+  <tfoot>
+  <% if @invoice.vat_rate.nil? %>
+    <tr>
+      <th>Total cost</th>
+      <td></td>
+      <td></td>
+      <td><%= line_item_price_tag(@invoice.exact_cost_without_vat) %></td>
+      <td id="invoice_cost"><%= rounded_price_tag(@invoice.charge_cost)%></td>
+      <td></td>
+    </tr>
+  <% else %>
+    <tr>
+      <th>Total cost (without <%= @invoice.buyer_field_label('vat_rate') %>)</th>
+      <td></td>
+      <td></td>
+      <td id="invoice_cost_without_vat"><%= line_item_price_tag(@invoice.exact_cost_without_vat) %></td>
+      <td><%= rounded_price_tag(@invoice.charge_cost_without_vat)%></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th><%= @invoice.buyer_field_label('vat_rate') %> Amount</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td id="invoice_cost_vat_amount"><%= rounded_price_tag(@invoice.vat_amount) %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Total cost (<%= @invoice.buyer_field_label('vat_rate') %> <%= @invoice.vat_rate %>% included)</th>
+      <td></td>
+      <td></td>
+      <td id="invoice_cost"><%= rounded_price_tag(@invoice.charge_cost)%> </td>
+      <td></td>
+    </tr>
+  <% end %>
+  </tfoot>
+</table>
+
+<% if @invoice.vat_rate == 0 %>
+  <p id="vat-zero-text">
+    <%= @invoice.provider_account.vat_zero_text %>
+  </p>
+<% end %>

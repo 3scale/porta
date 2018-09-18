@@ -1,0 +1,58 @@
+#integration-tabs {
+  .staging, .production {
+    //margin: 0 -25px 0 -25px;
+    //padding: 25px 25px 0 25px;
+
+    h1 {
+      margin-bottom: 2em;
+    }
+
+    .documentation-link {
+      font-weight: $font-weight-normal;
+      font-size: 60%;
+    }
+  }
+
+  .production {
+
+    .message {
+      margin: 0 0 1em 50%;
+      text-align: right;
+    }
+
+    .notice {
+      color: $success-color;
+    }
+
+    .error {
+      color: $error-color;
+    }
+
+    .nginx-config-files {
+      text-decoration: underline;
+      color: $link-color;
+    }
+
+    .curl {
+      margin-top: 0;
+      margin-bottom: 2em;
+    }
+  }
+
+
+  .proxy-on-premise, .proxy-hosted-3scale {
+    margin: 25px 0 0 0;
+    border-top: 1px solid $border-color;
+    padding: 0;
+  }
+
+  .status {
+    font-size: 13px;
+    float: right;
+
+    .deployed {
+      color: $success-color;
+    }
+  }
+
+}

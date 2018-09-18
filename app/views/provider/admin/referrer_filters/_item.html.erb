@@ -1,0 +1,7 @@
+<tr class="<%= cycle('odd', 'even', name: 'application-referrer-filters') %>" id="referrer_filter_<%= referrer_filter.id %>"
+  style="display:table-row;">
+  <td><%= h referrer_filter.value %></td>
+  <td>
+    <%= delete_button_for provider_admin_application_referrer_filter_path(cinstance, referrer_filter), :remote => true %>
+  </td>
+</tr>

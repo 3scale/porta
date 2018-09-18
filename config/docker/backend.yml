@@ -1,0 +1,19 @@
+default: &DEFAULT
+  host: <%= ENV['BACKEND_HOST'] || 'backend-listener' %>
+  url: 'backend.<%= ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net') %>'
+
+production:
+  <<: *DEFAULT
+  secure: false
+  persistent: false
+
+preview:
+  <<: *DEFAULT
+  secure: false
+  persistent: false
+
+development:
+  <<: *DEFAULT
+  max_tries: 1
+  timeout: 1
+  open_timeout: 1

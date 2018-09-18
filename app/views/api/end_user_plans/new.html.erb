@@ -1,0 +1,7 @@
+<% content_for :sublayout_title, 'Create End User Plan' %>
+
+<%= semantic_form_for @plan, :url => admin_service_end_user_plans_path(@service), :html => {
+    :'data-confirm' => "Are you sure?\nOnce created plan cannot be deleted!"
+  } do |form| %>
+  <%= render :partial => 'form', :object => form %>
+<%- end %>

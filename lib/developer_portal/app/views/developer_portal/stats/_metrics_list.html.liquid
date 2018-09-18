@@ -1,0 +1,7 @@
+{% for metric in metrics %}
+<li  data-metric="{{ metric.system_name }}"
+     data-metric-unit="{{ metric.unit }}"
+     data-hits="{{ metric.has_parent }}">
+    {{ metric.name }}
+</li>
+{% endfor %}

@@ -1,0 +1,22 @@
+base: &default
+  enabled: false
+  private_key:
+  issuer:
+  person:
+  web_property_id:
+  profile_id:
+  'Signup A/A':
+  'Signup A/B':
+  'Signup Form - less fields':
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

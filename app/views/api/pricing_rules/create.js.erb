@@ -1,0 +1,16 @@
+var html  = "<%= escape_javascript(render(:partial => 'pricing_rule', :locals => {:pricing_rule => @pricing_rule})).html_safe %>",
+    count = "<%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>",
+    counter_id = "#pricing_rules_counter_<%= @pricing_rule.metric.id %>";
+
+jQuery('#pricing_rules_table_body').append(html);
+
+jQuery(counter_id).html(count);
+
+<% if @plan.pricing_rules.count > 1 %>
+<%# TODO: shouldn't this be shown when there are more than 1 metrics instead of
+  # more than 1 pricing rules?
+  # page.show('total_cost')%>
+<% end %>
+
+jQuery.flash.notice('Pricing rule has been created.');
+jQuery.colorbox.close();

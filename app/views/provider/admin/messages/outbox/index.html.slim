@@ -1,0 +1,29 @@
+= render 'provider/admin/messages/menu'
+h2 Sent Messages
+
+
+- if @messages.blank?
+  p= t('provider.admin.messages.no_messages')
+
+- else
+  = render 'provider/admin/messages/bulk_operations', scope: :messages, messages: @messages
+
+  table.data#messages
+    thead
+      tr
+        th.select= bulk_select_all
+        th Subject
+        th To
+        th Date Sent
+        th.operations
+          = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
+    tbody
+      - @messages.each do |message|
+        tr id="message_#{message.id}"
+          td.select= bulk_select_one message
+          td = link_to message.subject, provider_admin_messages_outbox_path(message)
+          td = message_receiver(message)
+          td = message.created_at.to_s(:long)
+          td.operations = delete_button_for provider_admin_messages_outbox_path(message), class: 'action'
+
+  = will_paginate(@messages)

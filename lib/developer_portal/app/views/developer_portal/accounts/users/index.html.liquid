@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <table class="table panel panel-default" id="users">
+      <thead class="panel-heading">
+        <tr>
+          <th>Name</th>
+          <th>Username</th>
+          <th>
+            {{ current_user.fields.email.label }}
+          </th>
+          <th>Role</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="panel-body">
+        {% for user in users %}
+          <tr>
+            <td>
+              {% if user == current_user %}
+                <span class="label label-primary">YOU</span>
+              {% endif %}
+              {{ user.display_name }}
+            </td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              {% if user.can.be_managed? %}
+                {% if current_user == user %}
+                  <a href="{{ urls.personal_details }}" title="Edit user">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                {% else %}
+                  <a href="{{ user.edit_url }}" title="Edit user">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                {% endif %}
+              {% endif %}
+
+
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot class="panel-footer">
+        <tr>
+          <td colspan="4">
+          </td>
+          <td>
+            {% if current_user.can.invite_users? %}
+              <span>{{ 'Invite new user' | link_to: urls.new_invitation, class: 'btn btn-primary' }}</span>
+            {% endif %}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    {% include 'shared/pagination' with pagination %}
+  </div>
+</div>

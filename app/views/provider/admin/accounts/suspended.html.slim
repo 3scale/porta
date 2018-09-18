@@ -1,0 +1,23 @@
+h1 Hello #{current_user.display_name},
+p
+  | Your 3scale trial has expired and the account is de-activated.
+    To continue using the service, you’ll need to move onto a paid plan.
+
+p
+  | Please contact
+  =>< mail_to ThreeScale.config.sales_email, nil, subject: %q{I'd like to continue using 3scale}, id: 'continue-using-3scale'
+  | to enable your upgrade or if you have questions.
+
+p = mail_to ThreeScale.config.sales_email, 'Purchase paid plan',
+        subject: %q{I'd like to purchase a paid plan}, class: 'button', id: 'purchase-paid-plan'
+
+javascript:
+  analytics.trackLink(document.getElementById('continue-using-3scale'), 'Suspended account page', {
+    step: 'click help suspended account',
+    path: window.location.pathname
+  })
+  analytics.trackLink(document.getElementById('purchase-paid-plan'), 'Suspended account page', {
+    step: 'click upgrade suspended account',
+    path: window.location.pathname
+  })
+

@@ -1,0 +1,22 @@
+<h1>Groups</h1>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Allowed Sections</th>
+      <th class="actions"><%= link_to 'Create Group', new_provider_admin_cms_group_path, :class => 'add action' %></th>
+    </tr>
+  </thead>
+
+  <% @groups.each do |group| %>
+    <%= content_tag_for :tr, group do %>
+      <td><%= link_to h(group.name), edit_provider_admin_cms_group_path(group) %></td>
+      <td><%= group.sections.map(&:title).join(", ") %></td>
+      <td class="actions">
+        <%= fancy_link_to 'Delete', provider_admin_cms_group_path(group), data: {:confirm => 'Are you sure?' } , :method => :delete %>
+      </td>
+    <% end %>
+  <% end %>
+</table>
+<br />

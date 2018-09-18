@@ -1,0 +1,5 @@
+jQuery.colorbox.close();
+var html = "<%= escape_javascript(render :partial => 'feature', :locals => {:feature => @feature}) %>",
+    id   = "#<%= dom_id(@feature) %>";
+jQuery(id).replaceWith(html);
+jQuery.flash.notice('Feature has been updated.');

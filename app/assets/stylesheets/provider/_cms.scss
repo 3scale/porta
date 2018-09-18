@@ -1,0 +1,69 @@
+@import 'codemirror';
+@import 'codemirror/liquid';
+@import 'codemirror/themes/neat';
+
+/* adjusted copy of the 'neat' theme which we are using */
+.CodeMirror-scroll {
+  min-height: line-height-times(13);
+  border: line-height-times(1/4) solid $codemirror-border;
+}
+
+.CodeMirror-gutters {
+  border-right: none;
+}
+
+.CodeMirror{
+  font-family: $font-family-monospace;
+  border: $border-width solid $border-color;
+  height: auto;
+  border-radius: $border-radius;
+}
+
+.cm-s-neat {
+  background-color: $codemirror-bg;
+  color: $codemirror-color;
+  padding: line-height-times(1) 0;
+}
+
+.CodeMirror-focused .CodeMirror-selected {
+  background: $codemirror-selected-bg;
+}
+
+.CodeMirror-line::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line > span > span::selection {
+  background: $codemirror-selected-bg;
+}
+
+.CodeMirror-line::-moz-selection,
+.CodeMirror-line > span::-moz-selection,
+.CodeMirror-line > span > span::-moz-selection {
+  background: $codemirror-selected-bg;
+}
+
+.cm-s-neat .CodeMirror-linenumber { color: $codemirror-gutter-color; }
+
+.cm-s-neat .CodeMirror-gutter { background: $codemirror-gutter-background-color; border-right: 0;}
+.cm-s-neat .CodeMirror-gutter-text { color: $codemirror-gutter-color; }
+.cm-s-neat .CodeMirror-cursor { border-left: $border-width-lg solid $codemirror-cursor-color !important;}
+
+.cm-s-neat span.cm-number, .cm-s-neat span.cm-atom { color: $codemirror-number-color; }
+.cm-s-neat span.cm-meta {color: $codemirror-meta-color; }
+.cm-s-neat span.cm-link { color: $link-color; }
+
+.cm-s-neat span.cm-comment { color: $codemirror-comment-color; }
+.cm-s-neat span.cm-keyword { line-height: 1em; font-weight: $font-weight-bold; color: $codemirror-keyword-color }
+.cm-s-neat span.cm-string { color: $success-color; }
+.cm-s-neat span.cm-builtin { line-height: 1em; font-weight: $font-weight-bold; color: $codemirror-builtin-color; }
+.cm-s-neat span.cm-special { line-height: 1em; font-weight: $font-weight-bold; color: $warning-color; }
+
+.cm-s-neat span.cm-property, .cm-s-neat span.cm-attribute {color: $codemirror-attr-color; }
+.cm-s-neat span.cm-variable { color: $codemirror-vars-color; }
+.cm-s-neat span.cm-variable-2 {color: $codemirror-vars2-color;}
+.cm-s-neat span.cm-def {color: $codemirror-color-def; }
+.cm-s-neat span.cm-tag {color: $codemirror-color-tag; }
+
+.cm-s-neat .CodeMirror-matchingbracket {
+  text-decoration: underline;
+  color: $error-color !important;
+}

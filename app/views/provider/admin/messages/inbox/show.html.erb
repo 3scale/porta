@@ -1,0 +1,22 @@
+<%= render :partial => 'provider/admin/messages/menu' %>
+<h2>Message</h2>
+
+<%= render 'provider/admin/messages/message', :message => @message %>
+
+<% if @reply %>
+  <%= semantic_form_for @reply, :url => reply_provider_admin_messages_inbox_path(@message), :html => {:class => 'formtastic message reply', :id => "message-form"} do |form| %>
+    <%= form.inputs 'Reply' do %>
+      <%= form.input :subject, :as => :string %>
+      <%= form.input :body, :input_html => {:rows => 10} %>
+    <% end %>
+
+    <%= form.buttons do %>
+      <%= form.commit_button 'Send reply' %>
+    <% end %>
+  <% end %>
+<% else %>
+  <!-- TODO: replace center tag with some smart CSS work -->
+  <center>
+    <%= link_to 'Back to Inbox', provider_admin_messages_root_path %>
+  </center>
+<% end %>

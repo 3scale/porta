@@ -1,0 +1,21 @@
+$main_color_light: #89bf04;
+$main_color_dark: #547f00;
+$http_get_color: #0f6ab4;
+$http_post_color: #10a54a;
+$http_put_color: #c5862b;
+$http_delete_color: #a41e22;
+$code_bg_color: #fcf6db;
+$code_border_color: #e5e0c6;
+$form_color: #0f6ab4;
+$error_color: #cc0000;
+$notice_color: #007f00;
+
+$body_width: 960px;
+$main_column_width: 630px;
+$main_column_margin_right: 30px;
+$color: $http_get_color;
+
+
+@mixin border_radius($width) {
+  border-radius: $width;
+}

@@ -1,0 +1,62 @@
+h1.title
+  i.fa> class=("fa-#{@presenter.authentication_provider.kind}")
+  = @presenter.authentication_provider.human_kind
+
+.SettingsBox
+
+  = link_to "edit", edit_provider_admin_account_authentication_provider_path(@presenter.authentication_provider), class: 'SettingsBox-toggle edit' unless @presenter.cannot_edit?
+
+  dl.SettingsBox-summary.u-dl
+    dt.u-dl-term
+      | Client ID
+    dd.u-dl-definition
+      = @presenter.authentication_provider.client_id
+    dt.u-dl-term
+      | Client Secret
+    dd.u-dl-definition
+      = @presenter.authentication_provider.client_secret
+    = render partial: @presenter.authentication_provider.kind,
+           locals: { authentication_provider: @presenter.authentication_provider }
+  dl.SettingsBox-summary.u-dl
+    dt.u-dl-term
+      | Callback URL
+    dd.u-dl-definition
+      = @oauth_presenter.callback_url(query: false)
+
+    dt.u-dl-term
+      | Callback URL for OAuth flow test
+    dd.u-dl-definition
+      = @oauth_presenter.test_flow_callback_url
+
+    dt.u-dl-term
+      | OAuth flow tested
+    dd.u-dl-definition
+      => check_box_tag 'check', 'yes', @presenter.publishing_service.authentication_provider_fully_tested?, disabled: true
+      => @presenter.oauth_flow_tested_at_formatted
+      = link_to @presenter.test_link_text, flow_testing_show_provider_admin_account_authentication_provider_path(@presenter.authentication_provider)
+
+    dt.u-dl-term
+      | State
+    dd.u-dl-definition
+      => @presenter.authentication_provider_hidden_or_visible
+      - unless @presenter.publishing_service.valid?
+        ' -
+        em = @presenter.publishing_service.error_message
+
+  = form_for @presenter.authentication_provider,
+               url: provider_admin_account_authentication_provider_publishing_path(@presenter.authentication_provider),
+               method: @presenter.publishing_method,
+               html: { class: '' } do |f|
+    = f.hidden_field :id, value: @presenter.authentication_provider.id
+    = f.hidden_field :published, value: @presenter.authentication_provider.published ? false : true
+
+    - if @presenter.authentication_provider.published?
+      - if @presenter.publishing_service.valid?
+        = f.submit 'Unpublish', class: 'important-button button next update'
+      - else
+        = f.submit 'Unpublish', class: 'important-button button next update disabled-button', disabled: true
+    - else
+      - if @presenter.publishing_service.valid?
+        = f.submit 'Publish', class: 'important-button button next update'
+      - else
+        = f.submit 'Publish', class: 'important-button button next update disabled-button', disabled: true

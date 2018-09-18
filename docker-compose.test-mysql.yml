@@ -1,0 +1,28 @@
+version: '2.1'
+services:
+  database:
+    image: quay.io/3scale/mysql:tmpfs-5.6
+    privileged: true
+    container_name: ${PROJECT:-system}-database
+    network_mode: bridge
+  cache:
+    build: .
+    network_mode: none
+    container_name: ${PROJECT:-system}-cache
+    command: sleep infinity 
+  build:
+    build: .
+    dns: 127.0.0.1
+    container_name: ${PROJECT:-system}-build
+    network_mode: bridge
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      DB_HOST: ${PROJECT:-system}-database
+      DISABLE_SPRING: "true"
+    volumes_from:
+      - cache
+    depends_on:
+      - database
+    links:
+      - database

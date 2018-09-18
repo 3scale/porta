@@ -1,0 +1,11 @@
+<% if @metric.child? %>
+  <% content_for :sublayout_title, "Edit Method" %>
+<% else %>
+  <% content_for :sublayout_title, "Edit Metric" %>
+<% end %>
+<%= semantic_form_for @metric, :url => admin_service_metric_path(@service, @metric) do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>
+<% unless @metric.default?(:hits) %>
+  <%= delete_button_for admin_service_metric_path(@service, @metric), data: {:confirm => "Removing this metric will affect all plans that contain this metric. Are you sure? "} %>
+<% end %>

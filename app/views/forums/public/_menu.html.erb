@@ -1,0 +1,18 @@
+<ul id="subsubmenu">
+  <li><%= link_to_unless_current_styled 'View by threads', forum_path  %></li>
+  <% if @forum.categories.exists? %>
+    <li><%= link_to_unless_current_styled 'View by category', forum_categories_path  %></li>
+  <% end %>
+
+  <% if logged_in? -%>
+    <li><%= link_to_view_my_posts %></li>
+  <% end -%>
+
+  <% if user_has_subscriptions? -%>
+    <li><%= link_to_unless_current_styled 'My subscriptions', forum_subscriptions_path %></li>
+  <% end -%>
+
+  <% if can? :reply, @topic %>
+    <li><%= link_to_unless_current_styled "Start new thread", new_forum_topic_path(:category => @category) %></li>
+  <% end %>
+</ul>

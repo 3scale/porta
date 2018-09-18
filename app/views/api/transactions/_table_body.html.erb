@@ -1,0 +1,24 @@
+<% @transactions.each do |transaction| %>
+  <% usage    = transaction.usage.to_a %>
+  <% rowspan  = usage.size > 1 ? %Q( rowspan="#{usage.size}") : '' %>
+
+  <tr>
+    <td<%= rowspan %> class="first"><%= transaction.timestamp.blank? ? '' : transaction.timestamp.to_s(:full) %></td>
+    <td<%= rowspan %>><%= account_name(transaction.cinstance.try(:user_account)) %></td>
+
+    <% unless usage.empty? %>
+      <td class="metric"><%= metric_name(usage.first[0]) %></td>
+      <td class="value"><%= h usage.first[1] %></td>
+    <% else %>
+      <td colspan="2"><span class="missing">missing</span></td>
+    <% end %>
+  </tr>
+
+  <% (usage[1..-1] || []).each do |metric, value| %>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+      <td class="metric"><%= metric_name(metric) %></td>
+      <td class="value"><%= h value %></td>
+    </tr>
+  <% end %>
+<% end %>

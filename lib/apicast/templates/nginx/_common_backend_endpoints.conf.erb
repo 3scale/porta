@@ -1,0 +1,17 @@
+location = /threescale_authrep {
+  internal;
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+
+  proxy_pass $threescale_backend/transactions/authrep.xml?<%= server.backend_authentication_type %>=$<%= server.backend_authentication_type %>&service_id=$service_id&$usage&$credentials&log%5Bcode%5D=$arg_code&log%5Brequest%5D=$arg_req&log%5Bresponse%5D=$arg_resp;
+  proxy_set_header  Host  "<%= System::Application.config.backend_client[:host] %>";
+  proxy_set_header  X-3scale-User-Agent "nginx$deployment";
+  proxy_set_header  X-3scale-Version "<%= @timestamp %>";
+}
+
+location = /out_of_band_authrep_action {
+  internal;
+  proxy_pass_request_headers off;
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+
+  content_by_lua "require('<%= server.lua_file %>').post_action_content()";
+}

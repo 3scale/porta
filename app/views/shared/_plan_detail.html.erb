@@ -1,0 +1,52 @@
+<ul class="standard">
+  <li><span class='title'>Features</span>
+    <ul>
+  <%- for feature in plan.features.visible do -%>
+    <li><%= feature.name %></li>
+  <%- end -%>
+    </ul>
+  </li>
+  <li><span class='title'>Limits</span>
+    <ul>
+    <%- for metric in plan.metrics.top_level.order_by_unit do -%>
+      <%- for limit in metric.usage_limits.find_all_by_plan_id(plan.id) do -%>
+        <li><%= "#{limit.value} #{metric.unit}(s) per #{limit.period}" %></li>        
+      <%- end -%>      
+      <% if metric.usage_limits.scoped_by_plan_id(plan.id).empty? %>
+        <li><%= "#{metric.friendly_name.capitalize}: unlimited" %></li>
+      <% end %>      
+    <%- end -%>
+    </ul>
+  </li>
+  <li><span class='title'>Price</span>
+      <ul>
+        <% if plan.free? %>
+            <%= '<li class="free">FREE</li>' %>
+        <% else %>
+
+        <% @flat_cost = if plan.cost_per_month > 0 %>
+          <li class="flat_cost">
+            <%= price_tag(plan.cost_per_month) %> per month
+          </li>
+      <% end %>
+      <% unless plan.pricing_rules.empty?  %>
+
+      <% plan.pricing_rules.group_by(&:metric).each do |metric, pricing_rules| %>
+        <% next unless metric # TODO: this is temporary HACK, need to make sure there are no pricing_rules without metric %>
+
+        <li><%= "+ " if @flat_cost %> <strong><%= h metric.name.capitalize %>:</strong>
+          <ul>
+          <% pricing_rules.each do |pricing_rule| %>
+            <li><em><%= price_tag(pricing_rule.cost_per_unit_as_money, :precision => 4) %></em>
+            per <%= metric.unit %>
+            (<%= pricing_rule.min %> -
+            <%= pricing_rule.max.nil? ? '&#8734;' : pricing_rule.max %> <%= metric.unit %>(s)).
+            </li>
+          <% end %>
+          </ul>
+          <% end %>
+        <%- end -%>
+      <%- end -%>
+      </ul>
+  </li>
+</ul>

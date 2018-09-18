@@ -1,0 +1,18 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | A new application subscribed to the #{@application.plan.name} plan on the #{@service.name} service of the #{@account.name} account.
+
+p
+  b Application details:
+
+ul
+  - @application.defined_fields.each do |field|
+    - next if field.hidden?
+    li
+      b #{@application.field_label(field.name)}:
+      |  #{@application.field_value(field.name).presence || 'not provided by user'}
+
+p = link_to 'View new application in your 3scale Admin Portal',
+              admin_buyers_account_application_url(@account, @application)

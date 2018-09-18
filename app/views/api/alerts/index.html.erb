@@ -1,0 +1,75 @@
+<% content_for :javascripts do %>
+ <%= javascript_include_tag 'vendor/jquery.tipsy.js' %>
+<% end %>
+
+
+<h2>
+  <% if @service %>
+    <% content_for :sublayout_title, "Alerts" %>
+  <% else %>
+    Alerts for all services
+  <% end %>
+</h2>
+
+<div id="limit_alerts_container">
+    <table class="data" id="limit_alerts">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Application</th>
+          <th>Message</th>
+          <th><%= sortable 'level', 'Level'%></th>
+          <th><%= sortable 'timestamp', 'Time (UTC)'%></th>
+          <th>
+            <%= action_link_to 'Delete all', polymorphic_path([:purge, :admin, @service, :alerts]), :method => :delete, data: {confirm: "Do you really want to delete all alerts and violations?"} %>
+          </th>
+          <th>
+            <%= action_link_to 'Mark all as read', polymorphic_path([:all_read, :admin, @service, :alerts]), :method => :put %>
+          </th>
+        </tr>
+        <tr class="search">
+            <%= search_form do |s| %>
+              <th colspan="2">
+                <%= s.fields_for :account do |account_search| %>
+                  <%= account_search.text_field :query, class: :query, placeholder: 'search for accounts and applications' %>
+                <% end %>
+              </th>
+              <th colspan=4>
+              </th>
+              <th>
+                <%= s.submit 'Search', :name => nil %>
+              </th>
+            <% end %>
+        </tr>
+      </thead>
+      <tbody class="alerts events">
+        <%- @alerts.each do |alert| -%>
+          <%= content_tag :tr, :id => dom_id(alert), :'data-state' => alert.state, :class => :alert do %>
+            <td>
+              <%- if account = alert.cinstance.try(:user_account) -%>
+                <%= link_to account.org_name, admin_buyers_account_path(account) -%>
+              <%- else -%>
+                <%= account_name(account) -%>
+              <% end-%>
+            </td>
+            <td><%= link_to alert.cinstance.name, admin_buyers_account_application_path(account, alert.cinstance) if account.present? %></td>
+            <td><%= h alert.message %></td>
+            <td><%= colorize_utilization(alert.level) %></td>
+            <td><%= l alert.timestamp %></td>
+            <td>
+              <%= delete_button_for polymorphic_path([:admin, @service, alert]), :remote => true, :method => :delete, data: {:confirm => "Do you really want to delete this alert?"} %>
+            </td>
+            <td>
+              <%= action_link_to :read, polymorphic_path([:read, :admin, @service, alert]), :remote => true, :method => :put, :class => 'mark-as-read', data: {disable_with: "Marking..."}, :title => 'Mark as read' if alert.unread? %>
+            </td>
+          <%- end -%>
+        <%- end -%>
+        <%- if @alerts.empty? -%>
+          <tr class="no_results">
+            <td colspan="6">There are no recent alerts or violations.</td>
+          </tr>
+        <%- end -%>
+      </tbody>
+    </table>
+    <%= will_paginate @alerts %>
+</div>

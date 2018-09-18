@@ -1,0 +1,81 @@
+$brand-blue: $highlight-color;
+$brand-orange: $brand-orange;
+$bubble-background-color: rgba($content-background, 0.5);
+$bubble-background-color-active: rgba($bubble-background-color, 0.9);
+
+$bubble-border-color: $brand-blue;
+
+$bubble-size: 1em;
+// this should be the trigger and resize itself to it's contents so hover area grows when hovering
+.Onboarding-bubble {
+  color: $bubble-border-color;
+  position: absolute;
+  border: 3px solid $brand-blue;
+  background-color: $bubble-background-color;
+  padding: 12px !important; //important because overruled by generic table link rules on element
+  width: auto !important; //important because overruled by generic table link rules on element
+  z-index: 10001;
+  @include border-radius(50%);
+  font-size: 14px;
+  @include animation(pulse 1.5s both infinite);
+
+  &:hover {
+    @include border-radius(12px);
+    padding: 24px;
+    background: $bubble-background-color-active;
+    @include animation(paused);
+
+    .Onboarding-bubble-description {
+      display: inline-block;
+      font-size: 18px;
+
+      &:before {
+        display: inline-block;
+        font: normal normal normal 18px/1 FontAwesome;
+        content: "\f144\00a0";
+      }
+    }
+  }
+}
+
+@include keyframes(pulse) {
+  0% {
+    @include transform(scale(0.5));
+    @include opacity(0);
+  }
+  50% {
+    @include opacity(1)
+  }
+  100% {
+    @include transform(scale(1.5));
+    @include opacity(0);
+  }
+}
+
+.Onboarding-bubble-description {
+  display: none;
+  color: $brand-blue;
+
+  em {
+    text-decoration: underline;
+  }
+}
+
+#onboarding-bubble-api, #onboarding-bubble-deployment, #onboarding-bubble-metric, #onboarding-bubble-mapping {
+  margin-top: -24px;
+  margin-left: -120px;
+
+  &:hover {
+    padding: 24px;
+    width: 56%;
+  }
+}
+
+#onboarding-bubble-mapping {
+  margin-top: -24px;
+  margin-left: -40px;
+
+  &:hover {
+    width: 32%;
+  }
+}

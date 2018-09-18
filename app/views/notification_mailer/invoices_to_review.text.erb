@@ -1,0 +1,5 @@
+Dear <%= @receiver.informal_name %>,
+You have final invoices for review.
+This is your opportunity to check or edit them before they are issued and sent to customers.
+Please note: once the invoices are issued (which will happen automatically in a few days) it will no longer be possible to change them (only cancellation is allowed after issuance).
+To review invoices, follow this link: <%= admin_finance_invoices_url(@provider_account) %>

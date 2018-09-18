@@ -1,0 +1,45 @@
+<h2>Install</h2>
+
+<p>Install the latest plugin version from Rubygems:
+  <%= render 'api/integrations/plugin/download_links', :language => 'ruby' %>
+</p>
+
+<%= highlighted_code 'bash' do %>
+gem install 3scale_client
+<% end %>
+
+
+<h2>Authorize & Report</h2>
+<% auth = @service.plugin_authentication_params -%>
+
+<p>And run this code to authorize and report a hit:</p>
+
+<%= highlighted_code 'ruby' do %>
+require 'rubygems'
+require '3scale_client'
+
+client = ThreeScale::Client.new(<%= "host: 'http://backend.example.com:80'," if custom_backend? %> service_tokens: true)
+
+<% if auth.key?(:user_key) %>
+# you will usually obtain the user_key from request params
+# keep your service token secret!
+response = client.authrep( service_token: '<%= @service.service_token %>',
+                           service_id: '<%= @service.id %>',
+                           user_key: '<%= auth[:user_key] %>',
+                           usage: { :hits => 1 })
+<% else %>
+# you will usually obtain the app_id and the app_key from request params
+# keep your service token secret!
+response = client.authrep( service_token: '<%= @service.service_token %>',
+                           service_id: '<%= @service.id %>',
+                           app_id: '<%= auth[:app_id] %>' ,
+                           app_key: '<%= auth[:app_key] %>',
+                           usage: { :hits => 1 })
+<% end %>
+
+if response.success?
+  puts "Application authorized and hit reported!"
+else
+  puts "Error: #{response.error_message}"
+end
+<% end %>

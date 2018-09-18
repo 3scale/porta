@@ -1,0 +1,58 @@
+ul#subsubmenu
+  li.SubSubMenuItem.SubSubMenuItem--trunk
+    = link_to_unless_current_styled "Accounts",
+      admin_buyers_accounts_path,
+      class: "SubSubMenuItem-link"
+
+  - if @account && !@account.new_record?
+    li.SubSubMenuItem.SubSubMenuItem--branch
+      = link_to_unless_current_styled "Account '#{@account.name}'",
+        admin_buyers_account_path(@account),
+        title: "account",
+        class: "SubSubMenuItem-link"
+
+  li.SubSubMenuItem.SubSubMenuItem--branch
+    = link_to_unless_current_styled pluralize(number_to_human(@account.bought_cinstances.count), 'Application'),
+      admin_buyers_account_applications_path(@account),
+      title: "applications",
+      class: "SubSubMenuItem-link"
+
+  li.SubSubMenuItem.SubSubMenuItem--leaf
+    = link_to_unless_current_styled pluralize(number_to_human(@account.users.count), 'User'),
+      admin_buyers_account_users_path(@account),
+      title: "users",
+      class: "SubSubMenuItem-link"
+
+  - if can?(:manage, Invitation)
+    li.SubSubMenuItem.SubSubMenuItem--leaf
+      - if can?(:manage, :multiple_users)
+        = link_to_unless_current_styled pluralize(number_to_human(@account.invitations.count), 'Invitation'),
+          admin_buyers_account_invitations_path(@account),
+          title: "invitations",
+          class: "SubSubMenuItem-link"
+      - else
+        = switch_link pluralize(number_to_human(@account.invitations.count), 'Invitation'),
+          admin_buyers_account_invitations_path(@account),
+          switch: :multiple_users, upgrade_notice: true,
+          title: "invitations",
+          class: "SubSubMenuItem-link"
+
+  - if can?(:update, @account) and can?(:manage, :groups)
+    li.SubSubMenuItem.SubSubMenuItem--leaf
+      = link_to_unless_current_styled pluralize(number_to_human(@account.groups.count), 'Group Membership'),
+        admin_buyers_account_groups_path(@account),
+        title: "group memberships",
+        class: "SubSubMenuItem-link"
+
+  - if @account.provider_account.settings.finance.allowed?
+    li.SubSubMenuItem.SubSubMenuItem--leaf
+      = link_to_unless_current_styled pluralize(number_to_human(@account.invoices.count), 'Invoice'),
+        admin_buyers_account_invoices_path(@account),
+        title: "invoices",
+        class: "SubSubMenuItem-link"
+
+  - if can?(:manage, :service_contracts) && !master_on_premises?
+    li.SubSubMenuItem.SubSubMenuItem--leaf
+      = link_to_unless_current_styled pluralize(number_to_human(@account.bought_service_contracts.count), 'Service Subscription'), admin_buyers_account_service_contracts_path(@account),
+        title: "service subscriptions",
+        class: "SubSubMenuItem-link"

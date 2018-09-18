@@ -1,0 +1,11 @@
+<!-- TODO: generalize for all types of contracts -->
+<% if @cinstance %>
+  <% if @cinstance.trial? %>
+    <div class="dashboard_bubble round">
+       <div class="info">
+	 <h3>Trial period</h3>
+	 <p><%= current_account.bought_cinstance.remaining_trial_period_days %> days remaining.</p>
+       </div>
+    </div>
+  <% end %>
+<% end %>

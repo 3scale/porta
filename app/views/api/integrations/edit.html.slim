@@ -1,0 +1,25 @@
+= stylesheet_link_tag 'highlight/styles/rainbow.css'
+= javascript_include_tag 'vendor/jquery.tipsy.js'
+= javascript_include_tag 'jqueryui/jquery-ui-1.9.2.custom.min.js'
+javascript:
+  var initialTab = ' (@service.backend_version == "oauth") ? "ruby" : "proxy" ';
+  var MessageBusState = { lastId: #{ json @last_message_bus_id } }
+= javascript_include_tag 'provider/admin/apiconfig/services/integration'
+= javascript_include_tag 'provider/toggled_inputs'
+= javascript_include_tag 'highlight/highlight.pack.js'
+- content_for :sublayout_title, 'Integration'
+
+#integration-tabs
+
+  = render 'api/integrations/apicast/shared/deployment_options' unless apicast_configuration_driven?
+
+  .integration data-state="open"
+    - if @service.deployment_option.include?('plugin_')
+      = render 'api/integrations/plugin/plugin'
+    - else
+      #proxy
+        - if apicast_configuration_driven?
+          = render 'api/integrations/apicast/configuration_driven/configuration'
+        - else
+          = render 'api/integrations/apicast/script_driven/staging'
+          = render 'api/integrations/apicast/script_driven/production' unless @service.using_proxy_pro?

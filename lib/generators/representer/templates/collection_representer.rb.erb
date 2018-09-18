@@ -1,0 +1,8 @@
+module <%= plural %>Representer < ThreeScale::CollectionRepresenter
+  wraps_collection :<%= plural.underscore %>
+
+  class JSON < <%= plural %>Representer
+    include Roar::JSON
+    items extend: <%= singular %>Representer::JSON, class: <%= singular %>
+  end
+end

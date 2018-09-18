@@ -1,0 +1,30 @@
+<div class="swagger-section">
+    <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+    <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</div>
+
+<div class='apidocs-param-tips apidocs-signin-message' style='display:none;'>
+    <p><a href='#'>Sign in</a> to your account for quick access to useful values.</p>
+</div>
+
+<script type="text/javascript">
+  (function () {
+    var url = "{{provider.api_specs.first.url}}";
+
+    window.swaggerUi = new SwaggerUi({
+      url: url,
+      dom_id: 'swagger-ui-container',
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      apisSorter: 'alpha', // can also be a function
+      operationsSorter: 'method', // can also be 'alpha' or a function
+      onComplete: function(swaggerApi, swaggerUi) {
+        $(document.getElementById(swaggerUi.dom_id)).find('pre code').each(function(i, e) {hljs.highlightBlock(e)})
+      },
+      docExpansion: 'list',
+      transport: function (httpClient, obj) {
+        obj.url = obj.url.replace(/^http:\/\//i, 'https://')
+        return httpClient.execute(obj)
+      }
+    });
+  }());
+</script>

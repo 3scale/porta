@@ -1,0 +1,235 @@
+
+          <ul id="table-of-contents">
+            <a name="#%7Btoc.html_id%7D"></a>
+            <li>
+<a href="#formhelpers-filters">FormHelpers filters</a>
+          <ul id="toc-h2-formhelpers-filters" class="">
+            <li><a href="#error_class-filter">error_class filter</a></li>
+<li><a href="#inline_errors-filter">inline_errors filter</a></li>
+          </ul>
+        </li>
+<li>
+<a href="#paramfilter-filters">ParamFilter filters</a>
+          <ul id="toc-h2-paramfilter-filters" class="">
+            <li><a href="#to_param-filter">to_param filter</a></li>
+          </ul>
+        </li>
+<li>
+<a href="#common-filters">Common filters</a>
+          <ul id="toc-h2-common-filters" class="">
+            <li><a href="#group_by-filter">group_by filter</a></li>
+<li><a href="#any-filter">any filter</a></li>
+<li><a href="#stylesheet_link_tag-filter">stylesheet_link_tag filter</a></li>
+<li><a href="#javascript_include_tag-filter">javascript_include_tag filter</a></li>
+<li><a href="#image_tag-filter">image_tag filter</a></li>
+<li><a href="#mail_to-filter">mail_to filter</a></li>
+<li><a href="#html_safe-filter">html_safe filter</a></li>
+<li><a href="#pluralize-filter">pluralize filter</a></li>
+<li><a href="#delete_button-filter">delete_button filter</a></li>
+<li><a href="#delete_button_ajax-filter">delete_button_ajax filter</a></li>
+<li><a href="#update_button-filter">update_button filter</a></li>
+<li><a href="#update_button_ajax-filter">update_button_ajax filter</a></li>
+<li><a href="#create_button-filter">create_button filter</a></li>
+<li><a href="#create_button_ajax-filter">create_button_ajax filter</a></li>
+<li><a href="#regenerate_oauth_secret_button-filter">regenerate_oauth_secret_button filter</a></li>
+<li><a href="#link_to-filter">link_to filter</a></li>
+<li><a href="#dom_id-filter">dom_id filter</a></li>
+          </ul>
+        </li>
+          </ul>
+          <h1>
+<a name="formhelpers-filters" class="anchor" href="#formhelpers-filters"><span class="mini-icon mini-icon-link"></span></a>FormHelpers filters</h1>
+
+<h2>
+<a name="error_class-filter" class="anchor" href="#error_class-filter"><span class="mini-icon mini-icon-link"></span></a>error_class filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Outputs error class if argument is not empty.
+<strong>Example:</strong> Using error_class to show output an error class.</p>
+
+<pre lang="liquid"><code>&lt;input class="{{ form.errors.description | error_class }}" /&gt;
+</code></pre>
+
+<h2>
+<a name="inline_errors-filter" class="anchor" href="#inline_errors-filter"><span class="mini-icon mini-icon-link"></span></a>inline_errors filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Outputs error fields inline in paragraph.
+<strong>Example:</strong> Using inline_errors to show errors inline.</p>
+
+<pre lang="liquid"><code>{{ form.errors.description | inline_errors }}
+</code></pre>
+
+<hr>
+
+<h1>
+<a name="paramfilter-filters" class="anchor" href="#paramfilter-filters"><span class="mini-icon mini-icon-link"></span></a>ParamFilter filters</h1>
+
+<h2>
+<a name="to_param-filter" class="anchor" href="#to_param-filter"><span class="mini-icon mini-icon-link"></span></a>to_param filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Converts a supplied drop to URL parameter if possible.
+<strong>Example:</strong> Using to_param filter in liquid.</p>
+
+<pre lang="liquid"><code>&lt;h1&gt;Signup to a service&lt;/h1&gt;
+&lt;a href="{{ urls.signup }}?{{ service | to_param }}"&gt;Signup to {{ service.name }}&lt;/a&gt;
+</code></pre>
+
+<hr>
+
+<h1>
+<a name="common-filters" class="anchor" href="#common-filters"><span class="mini-icon mini-icon-link"></span></a>Common filters</h1>
+
+<h2>
+<a name="group_by-filter" class="anchor" href="#group_by-filter"><span class="mini-icon mini-icon-link"></span></a>group_by filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Group collection by some key.
+<strong>Example:</strong> Group applications by service.</p>
+
+<pre lang="liquid"><code>{% assign grouped = applications | group_by: 'service' %}
+{% for group in grouped %}
+  Service: {{ group[0 }}
+  {% for app in group[1] %}
+    Application: {{ app.name }}
+  {% endfor %}
+{% endfor %}
+</code></pre>
+
+<h2>
+<a name="any-filter" class="anchor" href="#any-filter"><span class="mini-icon mini-icon-link"></span></a>any filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>True if any string in the collection equals to the parameter.
+<strong>Example:</strong> Are there any pending apps of the current account?</p>
+
+<pre lang="liquid"><code>{% assign has_pending_apps = current_account.applications | map: 'state' | any: 'live' %}
+</code></pre>
+
+<h2>
+<a name="stylesheet_link_tag-filter" class="anchor" href="#stylesheet_link_tag-filter"><span class="mini-icon mini-icon-link"></span></a>stylesheet_link_tag filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Stylesheet link</p>
+
+<h2>
+<a name="javascript_include_tag-filter" class="anchor" href="#javascript_include_tag-filter"><span class="mini-icon mini-icon-link"></span></a>javascript_include_tag filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Javascript includes tag.</p>
+
+<h2>
+<a name="image_tag-filter" class="anchor" href="#image_tag-filter"><span class="mini-icon mini-icon-link"></span></a>image_tag filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Outputs an <img> tag using the parameters as its <code>src</code> attribute.</p>
+
+<pre lang="liquid"><code>{{ 'http://example.com/cool.gif' | image_tag }}
+# =&gt; &lt;img src="http://example.com/cool.gif" &gt;
+</code></pre>
+
+<h2>
+<a name="mail_to-filter" class="anchor" href="#mail_to-filter"><span class="mini-icon mini-icon-link"></span></a>mail_to filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Converts email address to a 'mailto' link.</p>
+
+<pre lang="liquid"><code>{{ 'me@there.is' | mail_to }}
+# =&gt; &lt;a href="mailto:me@there.is"&gt;me@there.is&lt;/a&gt;
+</code></pre>
+
+<h2>
+<a name="html_safe-filter" class="anchor" href="#html_safe-filter"><span class="mini-icon mini-icon-link"></span></a>html_safe filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Marks content as HTML safe so that it is not escaped.</p>
+
+<h2>
+<a name="pluralize-filter" class="anchor" href="#pluralize-filter"><span class="mini-icon mini-icon-link"></span></a>pluralize filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Converts word to plural form.</p>
+
+<h2>
+<a name="delete_button-filter" class="anchor" href="#delete_button-filter"><span class="mini-icon mini-icon-link"></span></a>delete_button filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Generates a button to delete a resource present on the URL.
+First parameter is a URL, second is a title. You can also add more
+HTML tag attributes as a third parameter.</p>
+
+<p>To add a confirmation dialog, add a confirm attribute with a
+confirmation text</p>
+
+<pre lang="liquid"><code>{{ 'Delete Message' | delete_button: message.url, class: 'my-button',
+  confirm: 'are you sure?' }}
+</code></pre>
+
+<h2>
+<a name="delete_button_ajax-filter" class="anchor" href="#delete_button_ajax-filter"><span class="mini-icon mini-icon-link"></span></a>delete_button_ajax filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Generates a button to delete a resource present on the URL using AJAX.
+First parameter is a URL, second is a title.</p>
+
+<p>To add a confirmation dialog, add a confirm attribute with a
+confirmation text.</p>
+
+<pre lang="liquid"><code>{{ 'Delete Message' | delete_button_ajax: message.url, confirm: 'are you sure?' }}
+</code></pre>
+
+<h2>
+<a name="update_button-filter" class="anchor" href="#update_button-filter"><span class="mini-icon mini-icon-link"></span></a>update_button filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Generates a button to 'update' (HTTP PUT request) a resource present on the URL.
+First parameter is a URL, second is a title. You can also add more
+HTML tag attributes as a third parameter.</p>
+
+<p>To change the text of the submit button on submit, add a disable_with attribute with a
+the new button text.</p>
+
+<pre lang="liquid"><code>{{ 'Resend' | update_button: message.url, class: 'my-button', disable_with: 'Resending…' }}
+</code></pre>
+
+<h2>
+<a name="update_button_ajax-filter" class="anchor" href="#update_button_ajax-filter"><span class="mini-icon mini-icon-link"></span></a>update_button_ajax filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Generates a button to 'update' (HTTP PUT request) a resource present on
+the URL using AJAX. First parameter is a URL, second is a title. You can
+also add more HTML tag attributes as a third parameter.</p>
+
+<p>To change the button text on submit, add a disable_with attribute with a
+the new button text.</p>
+
+<pre lang="liquid"><code>{{ 'Resend' | update_button: message.url, class: 'my-button', disable_with: 'Resending…' }}
+</code></pre>
+
+<h2>
+<a name="create_button-filter" class="anchor" href="#create_button-filter"><span class="mini-icon mini-icon-link"></span></a>create_button filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Generates a button to create a resource present on the URL.
+First parameter is a URL, second is a title. You can
+also add more HTML tag attributes as a third parameter.</p>
+
+<p>To change the button text on submit, add a disable_with attribute with a
+the new button text.</p>
+
+<pre lang="liquid"><code>{{ 'Create Message' | create_button: message.url, disable_with: 'Creating message…' }}
+</code></pre>
+
+<h2>
+<a name="create_button_ajax-filter" class="anchor" href="#create_button_ajax-filter"><span class="mini-icon mini-icon-link"></span></a>create_button_ajax filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Generates a button to create a resource present on the URL using AJAX.
+First parameter is a URL, second is a title. You can
+also add more HTML tag attributes as a third parameter.</p>
+
+<p>To change the button text on submit, add a disable_with attribute with a
+the new button text.</p>
+
+<pre lang="liquid"><code>{{ 'Create Message' | create_button: message.url, disable_with: 'Creating message…' }}
+</code></pre>
+
+<h2>
+<a name="regenerate_oauth_secret_button-filter" class="anchor" href="#regenerate_oauth_secret_button-filter"><span class="mini-icon mini-icon-link"></span></a>regenerate_oauth_secret_button filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<h2>
+<a name="link_to-filter" class="anchor" href="#link_to-filter"><span class="mini-icon mini-icon-link"></span></a>link_to filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<p>Create link from given text</p>
+
+<pre lang="liquid"><code>{{ "See your App keys" | link_to:'/my-app-keys' }}
+</code></pre>
+
+<h2>
+<a name="dom_id-filter" class="anchor" href="#dom_id-filter"><span class="mini-icon mini-icon-link"></span></a>dom_id filter</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<hr>

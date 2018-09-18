@@ -1,0 +1,13 @@
+<h3>Files
+  <%= link_to 'Add a file', new_provider_admin_cms_file_path %>
+</h3>
+
+<%= cms_new_button_dropdown(CMS::File) %>
+
+<table>
+  <% @files.each do |file| %>
+    <tr>
+      <td><%= link_to file.path, edit_provider_admin_cms_file_path(file) %><td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,257 @@
+
+{
+  "host": "example.com",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "title": "Analytics API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/stats/applications/{application_id}/usage": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "operationId": "application_usage_by_metric",
+        "summary": "Application Usage by Metric",
+        "description": "Returns the usage data for a given metric (or method) of an application.",
+        "tags": [
+          "Application Stats"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the application.",
+            "name": "application_id",
+            "required": true,
+            "x-data-threescale-name": "application_ids",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "description": "System name of metric for which to get data.",
+            "name": "metric_name",
+            "required": true,
+            "x-data-threescale-name": "metric_names",
+            "type": "string",
+            "default": "hits"
+          },
+          {
+            "in": "query",
+            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, examples: '2012-02-22', '2012-02-22 23:49:00'",
+            "name": "since",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Period, combined with since give the stats for the time range [since .. since + period]. It is required if until is not passed.",
+            "name": "period",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "name": "until",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Granularity of the results. Each period has an associated granularity.",
+            "name": "granularity",
+            "required": true,
+            "type": "string",
+            "default": "month"
+          },
+          {
+            "in": "query",
+            "description": "Timezone to do the calculations in.",
+            "name": "timezone",
+            "required": false,
+            "type": "string",
+            "default": "UTC"
+          },
+          {
+            "in": "query",
+            "description": "Skip period over period calculations (defaults to true).",
+            "name": "skip_change",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/stats/services/{service_id}/usage": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "operationId": "application_usage_by_metric",
+        "summary": "Service Usage by Metric",
+        "description": "Returns the usage data of a given metric (or method) of a service.",
+        "tags": [
+          "Service Stats"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the service.",
+            "name": "service_id",
+            "required": true,
+            "x-data-threescale-name": "service_ids",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "description": "System name of metric for which to get data.",
+            "name": "metric_name",
+            "required": true,
+            "x-data-threescale-name": "metric_names",
+            "type": "string",
+            "default": "hits"
+          },
+          {
+            "in": "query",
+            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, examples: '2012-02-22', '2012-02-22 23:49:00'",
+            "name": "since",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Period, combined with since give the stats for the time range [since .. since + period]. It is required if until is not passed.",
+            "name": "period",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "name": "until",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Granularity of the results. Each period has an associated granularity.",
+            "name": "granularity",
+            "required": true,
+            "type": "string",
+            "default": "month"
+          },
+          {
+            "in": "query",
+            "description": "Timezone to do the calculations in.",
+            "name": "timezone",
+            "required": false,
+            "type": "string",
+            "default": "UTC"
+          },
+          {
+            "in": "query",
+            "description": "Skip period over period calculations (defaults to true).",
+            "name": "skip_change",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    },
+    "/stats/services/{service_id}/top_applications": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "operationId": "service_top_applications",
+        "summary": "Service Top Applications",
+        "description": "Returns usage and application data for the top 10 most active applications of a service.",
+        "tags": [
+          "Service Stats"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Your api key with 3scale",
+            "name": "provider_key",
+            "required": true,
+            "x-data-threescale-name": "api_keys",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "description": "id of the service.",
+            "name": "service_id",
+            "required": true,
+            "x-data-threescale-name": "service_ids",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, examples: '2012-02-22', '2012-02-22 23:49:00'",
+            "name": "since",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "Period, combined with since give the stats for the time range [since .. since + period]. It is required if until is not passed.",
+            "name": "period",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "description": "System name of metric for which to get data.",
+            "name": "metric_name",
+            "required": true,
+            "x-data-threescale-name": "metric_names",
+            "type": "string",
+            "default": "hits"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          }
+        }
+      }
+    }
+  }
+}

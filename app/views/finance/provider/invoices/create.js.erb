@@ -1,0 +1,5 @@
+var td = $('#account_<%= @buyer.to_param %> td.current_invoice')
+td.html('<%= escape_javascript(current_invoice_link(@buyer)) %>');
+
+<%= render 'shared/flash_message' %>
+

@@ -1,0 +1,21 @@
+- content_for :sublayout_title, 'Hourly Averages'
+
+- content_for :javascripts do
+  = render_js_module_loader
+
+.Stats
+  .StatsSelector-container
+  .StatsChart-container#chart
+  .StatsCSVLink-container
+
+p.Stats-message--notice Average usage by hour in the past 30 days
+
+p.Stats-message--notice
+  = timezone_information
+
+javascript:
+  System.import('stats/provider/stats_hours_of_day').then(function(module){
+    module.statsHoursOfDay(#{json @service.id}, {
+      csvLinkContainer: '.StatsCSVLink-container'
+    });
+  });

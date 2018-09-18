@@ -1,0 +1,47 @@
+{ "apis": [    
+        {
+        "path": "/search.json",        
+        "formats": ["json"],
+        "description": "Returns tweets that match a specified query. To best learn how to use Twitter Search effectively, consult our guide to Using the Twitter Search API",
+        "operations": [{
+          "parameters": [
+          {
+              "description": "Query",
+              "name": "q",
+              "dataType": "string",
+              "defaultValue": "from:twitter",
+              "required": true,
+              "allowMultiple": false,
+              "paramType": "query"
+          }
+        ],
+        "httpMethod": "GET",
+        "notes": "This can only be done by the logged in user.",
+        "responseClass": "",
+        "summary": "Get application usage data.",
+        "description": "Returns tweets that match a specified query. To best learn how to use Twitter Search effectively, consult our guide to Using the Twitter Search API"
+        
+      },
+      {
+        "parameters": [
+        {
+            "description": "Query",
+            "name": "q",
+            "dataType": "string",
+            "defaultValue": "from:twitter",
+            "required": true,
+            "allowMultiple": false,
+            "paramType": "query"
+        }
+      ],
+      "httpMethod": "POST",
+      "notes": "This can only be done by the logged in user.",
+      "responseClass": "",
+      "summary": "Post application usage data.",
+      "description": "Returns tweets that match a specified query. To best learn how to use Twitter Search effectively, consult our guide to Using the Twitter Search API"
+      
+    }      ]
+    }        
+  ],
+  "basePath":"http://search.twitter.com"
+}

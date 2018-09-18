@@ -1,0 +1,11 @@
+h1 Single Sign On Integrations
+
+table.data
+  thead
+    tr
+      th Integration
+      - if branding_relevant?
+        th Branding
+      th State
+  tbody
+    = render partial: 'authentication_provider', collection: @authentication_providers

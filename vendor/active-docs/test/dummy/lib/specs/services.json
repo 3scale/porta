@@ -1,0 +1,9 @@
+{
+    "apis": [
+    {
+      "path": "/api_docs/service.json",
+      "name": "Statistics",
+      "system_name": "stats"
+    }
+  ]
+}

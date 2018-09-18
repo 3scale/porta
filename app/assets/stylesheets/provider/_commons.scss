@@ -1,0 +1,196 @@
+html {
+  @include typography-base();
+}
+
+body {
+  text-align: center;
+  height: auto;
+  //@include debug-vertical-rhythm;
+}
+
+main > h1,
+main >  h2,
+#tab-content > h1,
+#tab-content > h2 {
+  font-weight: $font-weight-light;
+}
+
+
+h1 {
+  font-size: $main-title-font-size;
+  font-weight: $font-weight-light;
+  padding-top: line-height-times(1/3);
+  margin-bottom: line-height-times(2/3);
+
+  a {
+    text-decoration: none;
+  }
+}
+
+h2, h3 {
+  margin-bottom: line-height-times(1/2);
+}
+
+#tab-content > h2:first-child,
+#content > h2:first-child,
+#subsubmenu + h2 {
+  font-size: $main-title-font-size;
+  padding-top: line-height-times(1/3);
+  margin-bottom: line-height-times(2/3);
+}
+
+h2 {
+  font-weight: $font-weight-bold;
+  font-size: $secondary-title-font-size;
+}
+
+h3 {
+  font-size: $sub-title-font-size;
+  margin-bottom: 0;
+
+  em {
+    font-style: italic;
+  }
+}
+
+p {
+  margin: line-height-times(1/2) 0 line-height-times(1) 0;
+  max-width: line-height-times(36);
+}
+
+dd p {
+  margin: 0;
+}
+
+pre  {
+  margin: line-height-times(1/2) 0;
+}
+
+* {
+  margin: 0;
+}
+
+ul, p, ol, dl {
+  padding: 0;
+}
+
+%dl {
+  padding: 0;
+  margin-top: line-height-times(1/2);
+  margin-bottom: line-height-times(1/2);
+  display: block;
+}
+
+%dt {
+  //color: $label-color;
+  float: left;
+  margin: 0;
+  //text-align: right;
+  width: 40%;;
+  clear: left;
+  padding-top: line-height-times(1/2);
+
+  &::after {
+    //content: ':';
+  }
+}
+
+%dd {
+  min-height: line-height-times(1);
+  padding: line-height-times(1/2) 0 line-height-times(1/2) 40%;
+  border-bottom: $border-width solid $border-color;
+}
+
+.u-dl {
+  @extend %dl;
+
+  &--skinny {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.u-dl-term {
+  @extend %dt;
+
+  &--check {
+    width: line-height-times(2);
+  }
+}
+
+.u-dl-definition,
+.u-dl-description {
+  @extend %dd;
+
+  .action {
+    float: right;
+  }
+
+  &--check {
+    padding-left: line-height-times(2);
+  }
+}
+
+a img {
+  border: none;
+}
+
+.round, #page_templates, .alwaysontop {
+  @include border-radius($border-radius);
+}
+
+pre code {
+  border-radius: $border-radius;
+  margin: line-height-times(1/2) 0 line-height-times(1);
+  overflow: hidden;
+  padding: line-height-times(1/2);
+  background-color: $light-background-color;
+  border: $border-width solid $border-color;
+
+
+  &:hover {
+    overflow: auto;
+  }
+}
+
+.u-code {
+  white-space: nowrap;
+}
+
+.u-unselectable {
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  -webkit-user-select: none;  /* Chrome & Safari */
+}
+
+.u-inline {
+  display: inline !important;
+  margin: 0 0 0 0 !important;
+}
+
+.u-divider {
+  height: line-height-times(1);
+  margin: line-height-times(1/2) 0;
+}
+
+.u-subtle {
+  color: $label-color;
+}
+
+.u-right {
+  text-align: right;
+}
+
+.u-hr,
+hr, {
+  border: 0;
+  border-bottom: $border-width solid $border-color;
+}
+
+::selection {
+  background: $select-color;
+}
+
+::-moz-selection {
+  background: $select-color;
+}

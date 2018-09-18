@@ -1,0 +1,14 @@
+base: &default
+  token: <%= ENV.fetch('MIXPANEL_TOKEN', nil) %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

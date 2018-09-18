@@ -1,0 +1,81 @@
+<% auth = @service.plugin_authentication_params %>
+
+<h2>Install</h2>
+
+<p>Download the library.
+
+<%= render 'api/integrations/plugin/download_links', :language => 'dotnet' %>
+
+<h2>Import</h2>
+
+<p>It is suggested to rebuild the DLL from source using Mono or
+Microsoft Visual Studio. After rebuilding you must add the
+library <em>CS_threescale.dll</em> to your project.</p>
+
+<p>You must import the library like this:</p>
+
+<%= highlighted_code 'cs' do %>
+using CS_threescale;
+<% end %>
+
+<p>The 3scale's C# library depends on:</p>
+
+<%= highlighted_code 'cs' do %>
+using System;
+using System.Collections.Generic;
+using CS_threescale;
+using System.Text;
+using System.Net
+<% end %>
+
+<h2>Authorize & Report</h2>
+
+<p>This code snippet would do an authrep call, to authorize and report a hit.</p>
+
+<%= highlighted_code 'cs' do %>
+IApi _3ScaleAPI = new Api();
+
+<% if custom_backend? %>
+_3ScaleAPI.HostURI = "http://backend.example.com:80";
+<% end %>
+
+// create a parameters hash
+parameters = new System.Collections.Hashtable();
+
+// add the service_id:
+string service_id = "<%= @service.id %>";
+parameters.Add("service_id",service_id);
+
+// add the service_token
+string service_token = "<%= @service.service_token %>"
+parameters.Add ("service_token", service_token);
+
+<% if auth.key?(:user_key) %>
+// add the user_key
+parameters.Add("user_key", "<%= auth[:user_key] %>");
+
+<% else %>
+// add the app_id
+parameters.Add("app_id", "<%= auth[:app_id] %>");
+  <% if auth[:app_key].present? %>
+// add the app_key
+parameters.Add("app_key", "<%= auth[:app_key] %>");
+  <% end %>
+<% end %>
+
+// Add a metric to the call
+Hashtable usage = new Hashtable();
+usage.Add("hits", "1");
+parameters.Add("usage", usage);
+
+try
+{
+    // The preferred way of calling the backend: authrep
+    // The response will be the object AuthorizeResponse or an exception
+    AuthorizeResponse resp = _3ScaleAPI.authrep(parameters);
+}
+catch (ApiException e)
+{
+    Console.WriteLine("Exception: " + e.ToString());
+}
+<% end %>

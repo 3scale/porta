@@ -1,0 +1,64 @@
+# See https://docs.adyen.com/developers/api-manual#authorisationrefusalreasons
+
+"3d-secure: Authentication failed": "3D Secure authentication was not executed or it did not execute successfully."
+"Acquirer Fraud": "Possible fraud."
+"Blocked Card": "The card used for the transaction is blocked, therefore unusable."
+"Cancelled": "The transaction was cancelled."
+
+# "CVC Declined": |
+#   The specified card security code is invalid.
+#   For example, this refusal reason maps, among others, Visa "N7: Decline for CVV2 failure" response.
+"CVC Declined": "The specified card security code is invalid."
+
+"Refused": "The transaction was refused."
+
+# "Declined Non Generic": |
+#   This response maps all those response codes that cannot be reliably mapped.
+#   This makes it easier to tell generic declines (for example, MasterCard "05: Do not honor" response) from more specific ones.
+"Declined Non Generic": "The transaction has been declined."
+
+"Acquirer Error": "The transaction did not go through due to an error that occurred on the acquirer's end."
+"Expired Card": "The card used for the transaction has expired, therefore it is unusable."
+"FRAUD": "Possible fraud."
+"FRAUD-CANCELLED": "The risk check flagged the transaction as fraudolent (risk score >= 100); therefore, the operation is cancelled."
+"Invalid Amount": "An amount mismatch occurred during the transaction process."
+"Invalid Card Number": "The specified card number is incorrect or invalid."
+"Invalid Pin": "The specified PIN number is incorrect or invalid."
+"Issuer Unavailable": "It is not possible to contact the shopper’s bank to authorise the transaction."
+"Not enough balance": "The card does not have enough money to cover the payable amount."
+"Not Submitted": "The transaction was not submitted correctly for processing."
+"Not supported": "The shopper's bank does not support or does not allow this type of transaction."
+"Pending": "The transaction is in between states, and it is waiting for its current state to be replaced with the new, pending one."
+"Pin tries exceeded": "The shopper specified an incorrect PIN number more that three times in a row."
+"Pin validation not possible": "It is not possible to validate the specified PIN number."
+"Referral": "Referrals."
+
+# "Restricted Card": |
+#   Decline codes such as
+#   - "62: Restricted Card", and
+#   - "62: Invalid card in this country" are mapped to this refusal reason response value.
+"Restricted Card": "The usage of this card is restricted, for example it may be invalid in this country."
+
+# "Revocation Of Auth": |
+#    Decline codes such as
+#    - "R1: Revocation of Authorization Order”,
+#    - "R3: Revocation of All Authorizations Order", and
+#    - "R0: Stop Payment Order"
+#    are mapped to this refusal reason response value.
+#    It indicates that the shopper requested to stop a subscription.
+"Revocation Of Auth": "The shopper requested to stop a subscription."
+
+"Shopper Cancelled": "The shopper cancelled the transaction before completing it."
+"Withdrawal count exceeded": "The number of withdrawals permitted for the shopper's card have exceeded."
+"Withdrawal amount exceeded": "The withdrawal amount permitted for the shopper's card has exceeded."
+
+# "Transaction Not Permitted": |
+#   Declined codes such as:
+#   - "57: Transaction not permitted to issuer/cardholder",
+#   - "57: Transaction not allowed for this merchant", and
+#   - "58: Transaction not permitted to acquirer/terminal"
+#   are mapped to this refusal reason response value.
+
+"Transaction Not Permitted": "The transaction is not permitted."
+
+"Unknown": "It is not possible to clearly assess the root cause of the issue."

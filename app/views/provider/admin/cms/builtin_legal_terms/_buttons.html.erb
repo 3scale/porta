@@ -1,0 +1,8 @@
+<div class='button-bar'>
+  <%= f.buttons :style => 'position:absolute' do %>
+    <li><%= insert_legal_terms_snippet_button %>   </li>
+  <% end %>
+  <%= f.buttons :style => 'position:absolute' do %>
+    <%= f.commit_button label: 'Update', button_html: { title: "Update legal terms for #{@page.title}" } %>
+  <% end %>
+</div>

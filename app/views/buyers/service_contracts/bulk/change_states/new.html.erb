@@ -1,0 +1,14 @@
+<%= semantic_form_for :change_states, :url => admin_buyers_service_contracts_bulk_change_state_path,
+  :html => {
+    :'data-remote' => true,
+    :'data-confirm' => "Are you sure to change state of these #{@service_contracts.count} service subscriptions?"
+  } do |form| %>
+  <%= form.inputs do %>
+    <%= render 'buyers/service_contracts/bulk/selected_contracts' %>
+    <%= form.input :action, :as => :select, :collection => @actions %>
+    <p class="inline-hint">Remember that when you suspend service subsription which is on paid plan, it will be invoiced and/or charged accordingly.</p>
+    <%= form.buttons do %>
+      <%= form.commit_button 'Change state', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
+    <% end %>
+  <% end %>
+<% end %>

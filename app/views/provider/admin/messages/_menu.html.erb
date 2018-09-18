@@ -1,0 +1,5 @@
+<ul id="subsubmenu">
+  <li class="SubSubMenuItem SubSubMenuItem--trunk"><%= link_to_unless_current 'Inbox', provider_admin_messages_root_path %></li>
+  <li class="SubSubMenuItem SubSubMenuItem--leaf"><%= link_to_unless_current 'Sent messages', provider_admin_messages_outbox_index_path %></li>
+  <li class="SubSubMenuItem SubSubMenuItem--leaf"><%= link_to_unless_current 'Trash', provider_admin_messages_trash_index_path %></li>
+</ul>

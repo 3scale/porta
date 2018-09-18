@@ -1,0 +1,26 @@
+<h1>Redirects</h1>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>From</th>
+      <th>To</th>
+      <th class="actions">
+        <%= link_to 'Create Redirect', new_provider_admin_cms_redirect_path, :class => 'add action' %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @redirects.each do |redirect| %>
+      <tr>
+        <td><%= link_to h(redirect.source), edit_provider_admin_cms_redirect_path(redirect) %></td>
+        <td><%= redirect.target %></td>
+      <td class="actions">
+        <%= fancy_link_to 'Delete', provider_admin_cms_redirect_path(redirect), :confirm => 'Are you sure?', :method => :delete %>
+      </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>

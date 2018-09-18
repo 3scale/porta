@@ -1,0 +1,10 @@
+<tr id="<%= dom_id(usage_limit) %>">
+  <td>1 <%= usage_limit.period %></td>
+  <td><%= usage_limit.value %></td>
+  <td class="operations">
+    <%= link_to 'Edit',
+      edit_polymorphic_path([:admin, @plan, usage_limit]),
+      :class => 'fancybox action edit'%>
+      <%= delete_button_for polymorphic_path([:admin, @plan, usage_limit]), :remote => true %>
+  </td>
+</tr>

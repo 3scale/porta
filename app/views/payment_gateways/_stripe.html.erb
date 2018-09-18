@@ -1,0 +1,114 @@
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<div class="well">
+
+    <a id="toggle-stripe-form" class="<%= current_account.credit_card_stored? ? 'card-on-file' : 'hidden' %> pull-right" href="#">
+      <i class="fa fa-pencil"></i>
+      <span>Edit Credit Card Details</span>
+    </a>
+    <br/>
+
+
+
+<%= semantic_form_for 'stripe',
+    url: hosted_success_admin_account_stripe_path,
+    method: 'POST',
+    html: { id: 'stripe-form',
+            class: "#{current_account.credit_card_stored? ? 'hidden' : 'card-missing'} form-horizontal",
+            data: {stripe_publishable_key: @stripe_publishable_key}
+          } do |form| %>
+  <span class="payment-errors"></span>
+
+  <fieldset>
+    <legend>Credit card details </legend>
+    <ol class="list-unstyled">
+
+      <%= form.input :card_number,
+        input_html: {name: '', required: 'required', maxlength: 20, data: {stripe: 'number'},
+                     class: "form-control col-md-6", style: "width:50%;"},
+        wrapper_html: {class: "form-group"},
+        label_html: {class: "col-md-4 control-label" },
+        required: false
+      %>
+
+      <li class="string required form-group" id="stripe_expiration">
+        <label class="col-md-4 control-label">Expiration (MM/YYYY)</label>
+        <ol class="list-unstyled form-inline">
+          <%= form.input :expires_on_month,
+            input_html: {required: 'required', maxlength: 2, class: "form-control", data: {stripe: 'exp-month'}, style: "width: 3.5em", pattern: "[0-9]{2}", placeholder: Date.today.strftime("%m")},
+            wrapper_html: {style: 'display: inline'},
+            label: false,
+            required: false
+          %>
+          <span> / </span>
+          <%= form.input :expires_on_year,
+            input_html: {required: 'required', maxlength: 4, class: "form-control", data: {stripe: 'exp-year'}, style: "width: 5em", pattern: "[0-9]{4}", placeholder: Date.today.strftime("%Y")},
+            wrapper_html: {style: 'display: inline'},
+            label: false,
+            required: false
+          %>
+        </ol>
+      </li>
+
+      <%= form.input :cvc,
+        input_html: {name: '', required: 'required', maxlength: 4, data: {stripe: 'cvc'}, style: "width: 4em",
+                     class: "form-control col-md-6", style: "width:50%;", pattern: "^[0-9]{3,4}", placeholder: '123'},
+        wrapper_html: {class: "form-group"},
+        label_html: {class: "col-md-4 control-label" },
+        label: "CVC",
+        required: false
+      %>
+
+    </ol>
+    <%= render partial: 'payment_gateways/stripe_billing_address', object: current_account.billing_address %>
+  </fieldset>
+
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-10 operations">
+        <%= form.submit 'Save details', class: "btn btn-primary pull-right"%>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
+</div>
+
+<%= javascript_tag do -%>
+  jQuery(function($) {
+    stripeForm = $( "#stripe-form" )
+    $("#toggle-stripe-form").click(function() {
+      stripeForm.toggleClass('hidden');
+      var linkText = stripeForm.is(':visible') ? 'cancel' : 'Edit Credit Card Details';
+      $(this).find('span').text(linkText);
+      return false;
+    });
+
+    stripeForm.submit(function(event) {
+      var $form = $(this);
+      $form.find('input[type="submit"]').attr('disabled', 'disabled');
+
+      Stripe.setPublishableKey($form.attr('data-stripe-publishable-key'));
+      Stripe.card.createToken($form, function(status, response) {
+        if (response.error) {
+
+          $form.find('.payment-errors').text(response.error.message);
+          $form.find('input[type="submit"]').removeAttr('disabled');
+
+        } else {
+
+          var token = response.id;
+          $form.append($('<input type="hidden" name="stripe[token]" />').val(token));
+
+          var card_number    = $form.find('#stripe_card_number').val();
+          var partial_number = card_number.substr(card_number.length - 4);
+          $form.append($('<input type="hidden" name="stripe[partial_number]" />').val(partial_number));
+
+          $form.get(0).submit();
+        }
+      });
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+  });
+<% end -%>

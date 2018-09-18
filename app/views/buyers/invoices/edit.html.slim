@@ -1,0 +1,19 @@
+= render 'buyers/accounts/menu'
+
+= render '/finance/provider/shared/invoice_title', invoice: @invoice
+
+table class="invoice"
+  caption
+    ' Edit Details
+    = link_to 'cancel', :back, class: "next"
+
+div class="wide"
+  = semantic_form_for @invoice,
+    url: admin_buyers_account_invoice_path(@account, @invoice.id) do |invoice|
+
+    = invoice.inputs name: 'Invoice Details', class: 'inputs' do
+      = invoice.input :friendly_id, label: 'ID*'
+      = invoice.input :period, input_html: { value: @invoice.period.to_param }, as: :string, label: "Billing Period"
+
+    = invoice.buttons do
+      = invoice.commit_button 'Update Invoice'

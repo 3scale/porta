@@ -1,0 +1,11 @@
+<h2>Select service</h2>
+<p>In order to create an application, select one of the services you are subscribed to.</p>
+
+<dl class="select-service-list">
+  {% for service in services %}
+    <dt class="service">
+      <a href="{{ urls.new_application }}?service_id={{ service.system_name }}" class="">{{ service.name }}</a>
+    </dt>
+    <dd>{{ service.description }}</dd>
+  {% endfor %}
+</dl>

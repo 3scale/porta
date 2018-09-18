@@ -1,0 +1,12 @@
+Dear <%= @receiver.informal_name %>,
+
+A new application subscribed to the <%= @application.plan.name %> plan on the <%= @service.name %> service of the <%= @account.name %> account.
+
+Application details:
+
+<% @application.defined_fields.each do |field| %>
+  <%- next if field.hidden? -%>
+  <%= @application.field_label(field.name) %>: <%= @application.field_value(field.name).presence || 'not provided by user' %>
+<% end %>
+
+To view application, follow this link: <%= admin_buyers_account_application_url(@account, @application) %>

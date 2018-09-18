@@ -1,0 +1,62 @@
+<%= javascript_tag do %>
+  $(document).ready(function() {
+    var content_type = <%= json(content_type).html_safe %>;
+    var liquid_enabled = <%= json(liquid_enabled).html_safe %>;
+
+    var text_area = $('#<%= html_id %>');
+    <%
+       opts = {
+         :lineNumbers => true,
+         :theme => :neat,
+         :lineWrapping => true }
+
+      opts.merge!(defined?(options) ? options : {})
+    %>
+
+    <% unless codemirror_disabled?  %>
+      var codemirror = CodeMirror.fromTextArea(text_area[0], <%= json(opts).html_safe %>);
+
+      $(codemirror).on('change', {content_type: content_type, liquid_enabled: liquid_enabled}, function(event, content_type, liquid_enabled){
+        var liquid = "application/x-liquid-template";
+
+        if($.type(content_type) === "undefined") { content_type = event.data.content_type; }
+        if($.type(liquid_enabled) === "undefined") { liquid_enabled = event.data.liquid_enabled; }
+
+        var mode = content_type;
+
+        if(liquid_enabled) {
+          if(!mode) { mode = liquid; }
+
+          if(mode !== liquid) {
+            mode += "+liquid";
+
+            CodeMirror.defineMode(mode, function(config, parserConfig) {
+              return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || content_type), CodeMirror.getMode(config, parserConfig.overlay || liquid));
+            });
+          }
+        }
+
+        codemirror.setOption("mode", mode);
+      });
+
+      $(codemirror).trigger('change', [content_type, liquid_enabled]);
+
+      var wrapper = codemirror.getWrapperElement();
+
+      if (typeof wrapper.resizable == 'function') {
+        wrapper.resizable({
+          handles: 's',
+          resize: function() {
+            codemirror.setSize($(this).width(), $(this).height());
+          }
+        });
+      }
+
+      text_area.data('codemirror', codemirror)
+               .closest('.ui-tabs-panel')
+               .on('cms.refresh', function(event){
+                 codemirror.refresh();
+               });
+    <% end %>
+  });
+<% end %>

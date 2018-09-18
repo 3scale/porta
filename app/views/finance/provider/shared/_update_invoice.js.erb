@@ -1,0 +1,5 @@
+<%= render :partial => '/shared/flash_message' %>
+
+$('#invoice_header').replaceWith(<%= json @header %>);
+$('#actions').replaceWith(<%= json(@actions) %>);
+$('.invoice#line_items').replaceWith(<%= json @line_items %>);

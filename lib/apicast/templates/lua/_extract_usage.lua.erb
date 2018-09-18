@@ -1,0 +1,15 @@
+function (service, request)
+  local method, url = unpack(string.split(request," "))
+  local path, querystring = unpack(string.split(url, "?"))
+  local usage_t =  {}
+  local matched_rules = {}
+
+  local args = get_auth_params(nil, method)
+
+  for i,r in ipairs(service.rules) do
+    check_rule({path=path, method=method, args=args}, r, usage_t, matched_rules)
+  end
+
+  -- if there was no match, usage is set to nil and it will respond a 404, this behavior can be changed
+  return usage_t, table.concat(matched_rules, ", ")
+end

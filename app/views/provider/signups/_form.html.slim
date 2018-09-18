@@ -1,0 +1,16 @@
+= semantic_form_for @provider, :url => provider_signup_path,
+                               :builder => Fields::FormBuilder,
+                               :html => { :id => 'signup_form', class: 'signup_form' } do |form|
+
+  = hidden_field_tag('plan_id', @plan.id) if @plan
+
+  / This message should never show - the only exception is during
+  / the setup process, when some plans are missing.
+  = form.semantic_errors :plans
+
+  = render partial: 'user', locals: {user: @user, form: form, fields: @fields.user_fields}
+
+  = render partial: 'account', locals: {form: form, fields: @fields.account_fields}
+
+
+  = form.spam_protection

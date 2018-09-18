@@ -1,0 +1,29 @@
+<div id="referrer_filters">
+  <h3>Referrer Filters
+    <%= help_bubble do %>
+      <%= render :partial => 'developer_portal/applications/referrer_filters/help' %>
+    <% end %>
+  </h3>
+
+  <p>Specify allowed referrer domains or IP addresses. Wildcards (*.example.org) are also accepted.</p>
+
+  <%= switch cinstance.referrer_filters.can_add? do |context| %>
+    <%= context.enabled do %>
+      <%= form_tag admin_application_referrer_filters_path(cinstance), :class => 'remote' do %>
+        <%= text_field_tag :referrer_filter %>
+        <%= submit_tag 'Add' %>
+      <% end %>
+    <% end %>
+
+    <%= context.disabled do %>
+      <p class="mini_info">At most <%= cinstance.filters_limit %> referrer
+      filters are allowed.</p>
+    <% end %>
+  <% end %>
+
+  <table class="data">
+    <% cinstance.referrer_filters.each do |filter| %>
+      <%= render 'developer_portal/applications/referrer_filters/item', :cinstance => cinstance, :referrer_filter => filter %>
+    <% end %>
+  </table>
+</div>

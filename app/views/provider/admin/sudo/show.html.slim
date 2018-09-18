@@ -1,0 +1,9 @@
+h1 Confirm your password
+
+= semantic_form_for [:provider, :admin, sudo], method: :post, remote: sudo.xhr do |f|
+  = f.inputs do
+    = f.input :current_password, hint: "You will be entering super-user mode which will allow you to execute actions that are potentially dangerous. You'll only be asked to re-authenticate after a few hours of inactivity. Remember, with great power comes great responsibility."
+    = f.input :return_path, as: :hidden
+
+  = f.buttons do
+    = f.commit_button :label => 'Confirm Password'

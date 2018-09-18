@@ -1,0 +1,5 @@
+<h2>Edit Category</h2>
+
+<%= semantic_form_for @category, :url => forum_category_path(@category) do |form| -%>
+  <%= render 'forums/public/categories/form', :form => form %>
+<% end -%>

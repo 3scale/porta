@@ -1,0 +1,26 @@
+(function($) {
+  var container = $("#application_keys");
+
+  <% if @key.persisted? -%>
+    if($.colorbox) { $.colorbox.close(); }
+
+    var keys = container.find("table#keys tbody");
+    var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
+    $(key).hide().appendTo(keys).fadeIn().css('display', '');
+
+  <% else -%>
+    $("#invalid-key-warning").text('<%= flash[:error] %>');
+    $("#invalid-key-warning").show();
+
+    if($.colorbox){ $.colorbox.resize(); }
+  <% end -%>
+
+  <% unless @cinstance.application_keys.can_add? %>
+    $('#app-keys-limit-warning').show(); // provider side
+    $('#app-keys-operations').hide();
+
+    container.find('.operations').disableSwitch(); // buyer side
+  <% end -%>
+
+  container.find('td.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();
+})(jQuery);

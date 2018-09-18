@@ -1,0 +1,20 @@
+= render '/finance/provider/shared/invoice_title', invoice: @invoice
+
+table class="invoice"
+  caption
+    ' Edit Details
+    = link_to 'cancel', :back, class: "next"
+
+div class="wide"
+  = semantic_form_for @invoice,
+    url: admin_finance_invoice_path(@invoice.id) do |invoice|
+
+    = invoice.inputs name: 'Invoice Details', class: 'inputs' do
+      / has to be explicitly required, because of:
+      / https://github.com/justinfrench/formtastic/blob/8741d76a95b7adf29d39df41f6d4f015cdd74473/lib/formtastic.rb#L611
+      / feel free to remove that when upgrading and formtastic shows proper *
+      = invoice.input :friendly_id, required: true
+      = invoice.input :period, input_html: { value: @invoice.period.to_param }, as: :string
+
+    = invoice.buttons do
+      = invoice.commit_button 'Update Invoice'

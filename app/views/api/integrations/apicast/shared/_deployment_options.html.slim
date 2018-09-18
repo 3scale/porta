@@ -1,0 +1,46 @@
+.SettingsBox
+  a href="" class="IntegrationSettingsBox-toggle" data-state="open" edit integration settings
+
+  article.IntegrationSettingsBox-summary data-state="open"
+    - if can_toggle_apicast_version?
+      // this toggle will be visible to saas customers that signed up before config-driven apicast was released. Untill all customers are migrated and we decomision script-driven APIcast
+
+      - if @proxy.apicast_configuration_driven
+        = semantic_form_for @proxy, url: toggle_apicast_version_admin_service_integration_path(@service), html: { class: "u-inline" } do |form|
+          em.u-inline.u-subtle
+            ' You are using the
+            => icon_link_to("latest APIcast","info-circle", "https://access.redhat.com/articles/3074711")
+            ' but if you feel nostalgic you can still switch back:
+          fieldset.u-inline
+            ul
+              = form.button 'Revert to the old APIcast', button_html: {class: 'outline-button-thin', data: { disable_with: 'reverting…' }}
+          hr.u-divider
+
+      - else
+        div class="InfoBox InfoBox--notice"
+          = semantic_form_for @proxy, url: toggle_apicast_version_admin_service_integration_path(@service), html: { class: "u-inline" } do |form|
+
+            h2
+              ' Introducing a brand new APIcast
+
+            p
+              ' We re-engineered the 3scale proxy from the ground up in order to improve its stability, speed and versatility.
+              => icon_link_to("Read up on the details","info-circle", "https://access.redhat.com/articles/3074711")
+              | and give it a try; your current integration will not be affected and you can always switch back.
+
+
+            fieldset.buttons
+              ol.commit
+                = form.button 'Start using the latest APIcast', button_html: {class: 'next important-button', data: { disable_with: 'updating…' }}
+
+
+    h3.Environment-title Integration settings
+    dl.u-dl
+      dt.u-dl-term Deployment Option
+      dd.u-dl-definition == t(@service.proxy.deployment_option, scope: :deployment_options)
+      dt.u-dl-term Authentication
+      dd.u-dl-definition == Logic::Backend::Service::VERSIONS.key(@service.proxy_authentication_method)
+
+
+  = semantic_form_for @service, url: admin_service_path(@service), html: { class: "IntegrationSettingsBox-form", data: { state: "closed" } } do |form|
+    = render 'api/services/forms/integration_settings', form: form

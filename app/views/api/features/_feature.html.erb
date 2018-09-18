@@ -1,0 +1,31 @@
+<% @plan.features.include?(feature).tap do |enabled| %>
+  <tr id="<%= dom_id(feature) %>" class="<%= enabled ? 'enabled' : 'disabled' %>">
+    <td class="title"><%= feature_name(feature) %></td>
+    <td><%= feature_description(feature) %></td>
+
+    <td class="operations">
+      <%- if enabled -%>
+        <%= link_to admin_plan_featuring_path(@plan, feature, :type => @plan.class.name.underscore),
+          :method => :delete,
+          remote: true,
+          :class => 'action' do -%>
+            <i class="included fa fa-check-circle-o" title="Feature is enabled for this plan"></i>
+        <% end %>
+      <% else %>
+        <%= link_to admin_plan_featurings_path(@plan, :type => @plan.class.name.underscore, id: feature.id),
+          method: :post,
+          remote: true,
+          :class => 'action' do -%>
+          <i class="excluded fa fa-times-circle-o" title="Metric is disabled for this plan"></i>
+        <% end %>
+      <% end %>
+    </td>
+
+    <td class="operations">
+      <%= link_to 'Edit', edit_admin_plan_feature_path(@plan, feature, :type => @plan.class.name.underscore),
+        :class => 'fancybox action edit', 'data-autodimensions' => 'true' %>
+
+      <%= delete_button_for admin_plan_feature_path(@plan, feature, :method => :delete, :type => @plan.class.name.underscore), :remote => true, data: {:confirm => "Are you sure?"} %>
+    </td>
+  </tr>
+<% end %>

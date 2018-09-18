@@ -1,0 +1,27 @@
+<%= form.inputs '' do %>
+
+  <li class='string' id='selected-plan' data-plan-id='<%= plan.id %>'>
+    <label>Plan</label>
+    <p>
+      <em>
+        <%= plan.name %>
+      </em>
+      <% if form.object.can_change_plan? %>
+        <%= review_change_plan_link(@cinstance) %>
+        <%= render :partial => 'plan_widget', :locals => { :contract => @cinstance } %>
+      <% end %>
+    </p>
+  </li>
+
+  <%= form.user_defined_form %>
+<% end %>
+
+<% if current_account.buyer? %>
+  <%= render :partial => 'shared/legal_terms',
+             :locals =>  { :legal_terms => current_account.provider_account.legal_term_for('Application') }
+%>
+<% end %>
+
+<%= form.buttons do %>
+  <%= form.commit_button %>
+<% end %>

@@ -1,0 +1,19 @@
+<h1>Legal Terms for <%= @page.title %></h1>
+
+<%= cms_form_for(@page) do |f| %>
+  <%= render 'form', :f => f %>
+
+  <div id="cms-template-editor">
+    <ul class="links">
+      <li id="cms-template-versions-button">
+        <%= link_to icon('time'), provider_admin_cms_template_versions_path(@page),
+            :title => "Versions of this #{@page.class.model_name.human.downcase}",
+            :target => '_parent' %>
+      </li>
+    </ul>
+
+    <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+  </div>
+
+  <%= render 'buttons', f: f %>
+<% end %>

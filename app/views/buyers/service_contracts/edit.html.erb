@@ -1,0 +1,20 @@
+<h1>Change subscribed plan</h1>
+
+<%= semantic_form_for @service_contract,
+  :url => admin_buyers_account_service_contract_path(@account, @service_contract),
+  :html => { :'data-remote' => true } do |form| %>
+
+  <%= form.inputs do %>
+    <li>
+      <label>Service</label>
+      <p><%= h @service_contract.issuer.name %></p>
+    </li>
+
+    <%= form.input :plan, :collection => @service_plans, :include_blank => false %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button 'Change subscription', :button_html => {:'data-disable-with' => 'Changing subscription...' } %>
+  <% end %>
+<% end %>
+

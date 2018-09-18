@@ -1,0 +1,55 @@
+version: '2.1'
+
+services:
+
+  mysql:
+    image: mysql:5.6
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+
+  system:
+    image: ${LOCAL_IMAGE}
+    build:
+      context: ../..
+      dockerfile: openshift/system/${DOCKERFILE:-Dockerfile}
+      args:
+        - BUNDLER_ENV
+    env_file:
+      .env
+    depends_on:
+      - mysql
+      - redis
+      - backend-listener
+      - system-redis
+      - memcached
+    ports:
+      - '3000'
+
+  backend-listener:
+    extends:
+      service: backend
+      file: ../../docker-compose.yml
+    command: rackup --host 0.0.0.0 --port 3000
+    depends_on:
+      - backend-redis
+      - backend-worker
+
+  backend-worker:
+    extends:
+      service: backend
+      file: ../../docker-compose.yml
+    command: 3scale_backend_worker run
+    depends_on:
+      - backend-redis
+
+  redis:
+    image: redis:3.2.5-alpine
+
+  backend-redis:
+    extends: redis
+
+  system-redis:
+    extends: redis
+
+  memcached:
+    image: memcached:alpine

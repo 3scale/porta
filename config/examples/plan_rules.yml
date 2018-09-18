@@ -1,0 +1,58 @@
+plan_rules: &default
+  base:
+    rank: 1
+    limits:
+      max_users: 1
+      max_services: 1
+    switches: []
+    metadata: {}
+  2015_plus_copy_14540190951550343:
+    rank: 3
+    limits:
+      max_users: 1
+      max_services: 1
+    switches: []
+    metadata:
+      trial: true
+  plus:
+    rank: 8
+    limits:
+      max_users: 1
+      max_services: 1
+    switches:
+    - finance
+    - multiple_applications
+    - branding
+    - require_cc_on_signup
+    metadata: {}
+  enterprise:
+      rank: 27
+      limits:
+        max_users:
+        max_services:
+      switches:
+      - finance
+      - multiple_applications
+      - branding
+      - require_cc_on_signup
+      - account_plans
+      - multiple_users
+      - groups
+      - end_users
+      - multiple_services
+      - service_plans
+      - skip_email_engagement_footer
+      - web_hooks
+      - iam_tools
+      metadata:
+        cannot_automatically_be_upgraded_to: true
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+
+preview:

@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <table class="panel panel-default table">
+      <thead class="panel-heading">
+        <tr>
+          <th>ID</th>
+          <th>Month</th>
+          <th>State</th>
+          <th>Amount</th>
+          <th colspan='2'></th>
+        </tr>
+      </thead>
+      <tbody class="panel-body panel-footer ">
+        {% for invoice in invoices %}
+          <tr class="invoice {% cycle 'odd', 'even' %}">
+            <td> {{ invoice.friendly_id }} </td>
+            <td> {{ invoice.name }} </td>
+            <td> {{ invoice.state }} </td>
+            <td> {{ invoice.currency }} {{ invoice.cost }} </td>
+            <td>
+              {% assign title = 'Show ' | append: invoice.friendly_id %}
+              {{ 'Show' | link_to: invoice.url, title: title, class: 'btn btn-default'  }}
+            </td>
+            <td>
+              {% if invoice.exists_pdf? %}
+                {{ 'PDF' | link_to: invoice.pdf_url, title: 'Show pdf' }}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% include 'shared/pagination' with pagination %}
+    <h3>Support</h3>
+    <p>Contact us by email: {{ provider.finance_support_email }}</p>
+  </div>
+</div>
+
+
+
+
+

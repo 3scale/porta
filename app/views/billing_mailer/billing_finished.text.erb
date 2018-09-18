@@ -1,0 +1,14 @@
+Billing and charging process finished for <%= @results.period %>
+
+Providers processed: <%= @results.providers_count %>
+Providers totally failed: <%= @results.providers_failed_count %>
+Buyers failed: <%= @results.buyers_failed_count %>
+
+
+<% if @results.successful? %>
+Congratulations!
+<% else %>
+# Evaluate this and put your debugging hat on { provider_id: { errors: [ buyer ids... ] } }
+#
+<%= @results.inspect_all_things %>
+<% end%>

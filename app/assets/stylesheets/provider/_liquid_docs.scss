@@ -1,0 +1,37 @@
+#liquid-docs {
+
+  table {
+    @extend .data;
+  }
+
+  hr {
+    margin: line-height-times(2) 0 line-height-times(1/2) 0;
+  }
+
+  ul {
+    list-style: disc inside;
+  }
+  
+  #table-of-contents {
+
+    li {
+      font-size: $font-size-lg;
+      list-style: none;
+
+      ul {
+        margin-bottom: line-height-times(1);
+
+        li {
+          font-size: $font-size-base;
+          list-style: disc inside;
+        }
+      }
+    }
+
+    margin-left: line-height-times(1);
+    float: right;
+    padding: line-height-times(1);
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+  }
+}

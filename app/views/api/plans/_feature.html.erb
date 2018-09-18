@@ -1,0 +1,30 @@
+<tr id="contract_feature_<%= feature.id %>">
+  <td class="title">
+    <%= feature.name %>
+  </td>
+  <td>
+    <%= feature.description %>
+  </td>
+  <td class="mini">
+    <%- if @contract.features.include?(feature) -%>
+      <%= form_tag :url => admin_contract_feature_path(@contract, feature),
+        :html => {:method => 'delete'}, :remote => true do %>
+        <%= image_submit_tag 'tick.png' %>
+      <% end %>
+    <%- else -%>
+      <%= form_tag :url => admin_contract_features_path(@contract), :remote => true do %>
+				<%= hidden_field_tag :id, feature.id %>
+        <%= image_submit_tag 'cross.png' %>
+      <% end %>
+    <%- end %>
+  </td>
+  <td class='mini'>
+    <%= link_to image_tag('pencil.png'), edit_admin_feature_path(feature, :contract_id => @contract, :type => @plan.class.to_s.underscore), :class => 'edit_metric_link' %>
+  </td>
+  <td class="mini">
+    <%= form_for :feature, feature, :url => admin_feature_path(feature, :type => @plan.class.to_s.underscore), :html => {:method => 'delete'}, :remote => true do %>
+      <%= hidden_field_tag :contract_id, @contract.id %>
+      <%= image_submit_tag 'bin.png' %>
+    <% end %>
+  </td>
+</tr>

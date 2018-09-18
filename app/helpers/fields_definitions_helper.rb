@@ -1,0 +1,2 @@
+module FieldsDefinitionsHelper
+end

@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="fa fa-user"></i>
+        Sign in
+      </div>
+      <div class="panel-body">
+        {% include 'login/sso' %}
+        {% form 'login', user, class: 'form-horizontal' %}
+          {% include 'login/cas' with cas %}
+
+          <fieldset>
+            <div class="form-group" id="session_username_input">
+              <label for="session_username" class="control-label col-md-4">Username or Email</label>
+              <div class="col-md-6">
+                <input id="session_username" name="username" tabindex="1" autofocus="autofocus"
+                       type="text" placeholder="Authenticate with your email"
+                       class="form-control">
+              </div>
+            </div>
+            <div class="form-group"  id="session_password_input">
+              <label for="session_password" class="control-label col-md-4">Password</label>
+              <div class="col-md-6">
+                <input id="session_password" name="password" tabindex="2"
+                       type="password" placeholder="…and password"
+                       class="form-control">
+              </div>
+            </div>
+
+            <input name="remember_me" type="hidden" value="1">
+          </fieldset>
+          <fieldset>
+            <div class="form-group">
+              <div class="col-md-10">
+                <input name="commit" type="submit" value="Sign in" class="btn btn-success btn-lg pull-right">
+              </div>
+            </div>
+          </fieldset>
+        {% endform %}
+      </div>
+      <div class="panel-footer">
+        <a href="{{ urls.forgot_password }}">Forgot password?</a>
+
+        {% if provider.signups_enabled? %}
+          |  <a href="{{ urls.signup }}" class="link">Sign up</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+

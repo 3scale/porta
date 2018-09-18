@@ -1,0 +1,82 @@
+<div id="forum">
+
+<h2><%= h @topic.title %></h2>
+<%= render 'forums/public/menu' %>
+
+<div class="operations">
+  <%= link_to 'Forum', forum_path %>
+
+  <% if @topic.category %>
+    &gt; <%= link_to "Category #{h(@topic.category.name)}", forum_category_path(@topic.category) %>
+  <% end %>
+
+  <% if can? :update, @topic -%>
+    <%= link_to 'Edit topic', edit_forum_topic_path(@topic), :class => 'action edit' %>
+  <% end %>
+
+  <% if can? :destroy, @topic %>
+    <%= delete_button_for forum_topic_path(@topic) %>
+  <% end -%>
+</div>
+
+<p>Tagged:
+<%# FIXME: something here is broken %>
+<%# for tag in @topic.tags %>
+  <%#= link_to_search_forum_by_tag(tag) %>
+<%# end %></p>
+
+<p class="postCount">Currently contains <%= pluralize(number_with_delimiter(@topic.posts.count), 'post') %></p>
+
+<%= render 'forums/public/topics/subscription' if logged_in? %>
+
+<% for post in @posts do -%>
+  <div class="post" id="<%= dom_id(post) %>">
+    <div class="topicHeader">
+      <div class="topicAuthor">
+        <%= content_tag(:p, avatar_for(post.user), :class => 'avatar') unless post.user.nil? %>
+        <p class="detail"><%= post.created_at.to_time.to_s(:long) %></p>
+        <p class="detail">
+          <%= display_author_name(post) %>
+          <% if post.user %>
+            <span class="posts"><%- pluralize(number_with_delimiter(post.user.posts.size), 'post') -%></span>
+          <% end %>
+        </p>
+      </div>
+
+      <% if can? :update, post %>
+        <%= link_to 'Edit', edit_forum_post_path(post), :class => 'action edit' %>
+      <% end %>
+
+      <% if can? :destroy, post %>
+        <%= delete_button_for forum_post_path(post) %>
+      <% end %>
+    </div>
+
+    <div class='post-body'>
+      <% if post.has_user? %>
+        <%= sanitize(RedCloth.new(post.body, [:filter_html, :filter_styles]).to_html) %>
+      <% else %>
+        <p>(This post has been removed)</p>
+      <% end %>
+    </div>
+  </div>
+<%- end -%>
+
+<%= will_paginate @posts %>
+
+<% if @topic.locked? -%>
+  <p>This thread is no longer open to replies.</p>
+<% else -%>
+  <%= semantic_form_for @post, :url => forum_topic_posts_path(@topic) do |form| %>
+
+    <%= form.inputs 'Reply to thread' do %>
+      <%= render 'forums/public/posts/fields', :form => form %>
+      <%= render 'forums/public/posts/anonymous', :form => form, :post => @post %>
+    <% end %>
+
+    <%= form.buttons do %>
+      <%= form.commit_button 'Post reply' %>
+    <% end %>
+  <% end %>
+<% end %>
+</div>

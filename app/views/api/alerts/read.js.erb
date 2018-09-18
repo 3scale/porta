@@ -1,0 +1,3 @@
+$(function(){
+  $("<%= '#' << dom_id(@alert) %>").attr('data-state','read').find('.mark-as-read').fadeOut();
+});

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+      {% if page.title %}
+        {{ page.title }}
+      {% else %}
+        {{ provider.name }}
+      {% endif %}
+    </title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% csrf %}
+    {{ '/css/bootstrap.css' | stylesheet_link_tag }}
+    {{ '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css' | stylesheet_link_tag }}
+
+    {{ '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' | javascript_include_tag }}
+    {{ '/javascripts/bootstrap.min.js' | javascript_include_tag }}
+    {{ '/javascripts/3scale.js' | javascript_include_tag }}
+    {{ '/javascripts/excanvas.compiled.js' | javascript_include_tag }}
+
+    {{ content_of.stylesheets | html_safe }}
+    {{ '/css/default.css' | stylesheet_link_tag }}
+
+    {{ content_of.javascripts | html_safe }}
+  </head>
+
+  <body>
+    <header role="banner">
+      <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container tabbed">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">{{  provider.name }}</a>
+          </div>
+          {% include 'submenu'%}
+        </div>
+      </nav>
+
+      {% comment %}
+        WARNING: Please note that if you remove the block below
+        you developer portal will stop displaying errors and
+        information messages such as 'Invalid password' on
+        login form or similar.
+      {% endcomment %}
+
+        <div id="flash-messages">
+          {% for message in flash.messages %}
+            <div class="navbar navbar-fixed-top navbar-default alert alert-{{ message.type }}" data-dismiss="alert">
+              <div class="container">
+                  <button type="button" class="close"  aria-hidden="true">&times;</button>
+                  {{ message.text }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+      {% if request.path == '/' %}
+        {% content %}
+      {% else %}
+        <div class="full">
+          <div class="container">
+            {% content %}
+          </div>
+        </div>
+      {% endif %}
+    </main>
+
+    <footer role="contentinfo">
+      <div class="container">
+        <ul class="list-inline pull-right">
+          <li>&copy; {{ today.year }} {{ provider.name }},</li>
+          <li><a class="powered-by" href="http://3scale.net/">Powered by 3scale</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <!-- JS and analytics only. -->
+    {% include 'analytics' %}
+  </body>
+</html>

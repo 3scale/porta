@@ -1,0 +1,13 @@
+<tr id="<%= dom_id(pricing_rule) %>">
+  <td><%= pricing_rule.min.to_i %></td>
+  <td><%= pricing_rule.max || '&infin;'.html_safe %></td>
+  <td><%= price_tag(pricing_rule.cost_per_unit_as_money, :precision => PricingRule::DECIMALS) %></td>
+  <td class="operations" colspan="3">
+    <%= link_to 'edit',
+      edit_admin_application_plan_pricing_rule_path(@plan, pricing_rule),
+      :class => 'fancybox action edit', 'data-autodimensions' => 'true' %>
+
+    <%= fancy_button_to 'delete', admin_application_plan_pricing_rule_path(@plan, pricing_rule),
+      :method => 'delete', :remote => true, :class => 'delete' %>
+  </td>
+</tr>

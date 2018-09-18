@@ -1,0 +1,10 @@
+{% if methods == present %}
+  {% for method in methods %}
+    <li data-metric="{{ method.system_name }}"
+        data-metric-unit="hits">
+        {{ method.name }}
+    </li>
+  {% endfor %}
+{% else %}
+  <li data-metric="{{ metrics.first.system_name }}" data-metric-unit="hits">No Methods Available</li>
+{% endif %}

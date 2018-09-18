@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'messages/menu'%}
+    <table class="table panel panel-default" id="messages">
+      <thead class="panel-heading">
+        <tr>
+          <th>Subject</th>
+          <th>From</th>
+          <th colspan="2">Date sent</th>
+        </tr>
+      </thead>
+      <tbody class="panel-body">
+        {% if messages.size > 0  %}
+          {% for message in messages %}
+            <tr class="{% cycle 'messages': 'odd', 'even' %}">
+              <td>{{ message.subject | link_to: message.url }}</td>
+              <td>{{ message.sender | link_to: message.url }}</td>
+              <td>{{ message.created_at }}</td>
+              <td>{{ 'Restore' | delete_button: message.url, class: 'btn btn-default' }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td class="empty" colspan="4">Your trash is empty.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+      <tfoot class="panel-footer">
+        <tr>
+          <td colspan="4">
+            {% if messages.size > 0  %}
+              {{ "Empty the trash" | delete_button: urls.empty_messages_trash, class: 'btn btn-danger' }}
+            {% endif %}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+{% include 'shared/pagination' with pagination %}

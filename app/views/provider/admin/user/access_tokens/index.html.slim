@@ -1,0 +1,86 @@
+- if flash[:token]
+  - token = @access_tokens.last
+  h1 Copy the new token and store it somewhere safe
+  div.AccessTokenBox.InfoBox.InfoBox--notice
+    p Make sure to copy your new personal access token now. You won't be able to see it again as it isn't stored for security reasons.
+    dl.u-dl
+      dt.u-dl-term.u-unselectable
+        | Name
+      dd.u-dl-definition.u-unselectable
+        = token.name
+      dt.u-dl-term.u-unselectable
+        | Scopes
+      dd.u-dl-definition.u-unselectable
+        = token.human_scopes.to_sentence
+      dt.u-dl-term.u-unselectable
+        | Permission
+      dd.u-dl-definition.u-unselectable
+        = token.human_permission
+      dt.u-dl-term.u-unselectable
+        strong
+          | Token
+      dd.u-dl-definition
+        code.u-code.AccessTokenBox-token
+          = token.value
+
+  = link_to 'I have copied the token' , provider_admin_user_access_tokens_path, class: 'important-button next'
+- else
+  h1 Tokens
+  section#access-tokens.Section
+    h2 Access Tokens
+    p
+      ' Access tokens are personal tokens that let you authenticate against the Account Management API, the Analytics API and the Billing API through HTTP Basic Auth. You can create multiple access tokens with custom scopes and permissions. We suggest you create tokens with the minimal scopes & permissions needed for the task at hand. Use Access Tokens from within the
+      = link_to '3scale API docs', provider_admin_api_docs_path
+      | .
+
+    table.data.access-tokens
+      - allowed_scopes = current_user.allowed_access_token_scopes
+      thead
+        tr
+          th Name
+          th Scopes
+          th Permission
+          th = fancy_link_to 'Add Access Token', new_provider_admin_user_access_token_path, class: 'new' if allowed_scopes.any?
+      tbody
+        - if @access_tokens.any? && allowed_scopes.any?
+          - @access_tokens.each do |token|
+            tr
+              td = token.name
+              td = token.human_scopes.to_sentence
+              td = token.human_permission
+              td = link_to 'Edit', edit_provider_admin_user_access_token_path(token), class: 'action edit'
+        - else
+          tr
+            td colspan='4'
+              - if allowed_scopes.any?
+                | No access tokens yet…
+              - else
+                | You can’t create access tokens because you don’t have access to the Account Management API, the Analytics API, and/or the Billing API. Please contact an administrator of this account.
+
+  section#service-tokens.Section
+    h2 Service Tokens
+    p
+      ' Service tokens let you authenticate against the Service Management API. Service tokens are auto generated, unique per service and shared between the users of this account. Use Service Tokens from within the
+      = link_to '3scale API docs', provider_admin_api_docs_path
+      | .
+
+    table.data.access-tokens
+      thead
+        tr
+          th Service name
+          th Scope
+          th Permission
+          th Token
+      tbody
+        - accessible_service_tokens = current_user.accessible_service_tokens
+        - if accessible_service_tokens.any?
+          - accessible_service_tokens.each do |service_token|
+            tr
+              td = service_token.service.name
+              td Service management API
+              td Read & Write
+              td
+                code.u-code = service_token.value
+        - else
+          tr
+            td colspan='4' You don't have access to any service. Contact an admin of this account to request access if needed.

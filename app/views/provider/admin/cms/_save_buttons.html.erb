@@ -1,0 +1,14 @@
+<li>
+  <% if @page.is_a?(CMS::BasePage) -%>
+    <%= dropdown_button(f.publish_button) do  %>
+      <%= dropdown_link(f.hide_button) %>
+      <%= dropdown_link(f.publish_button( :button_html => { :class => '' } )) %>
+    <% end %>
+  <% else %>
+    <%= f.publish_button %>
+  <% end %>
+</li>
+
+<li>
+  <%= f.buttons :commit, :save_as_version, :class => 'button-group dropdown-buttons' %>
+</li>

@@ -1,0 +1,80 @@
+{% content_for stylesheets %}
+  {{ 'stats.css' | stylesheet_link_tag }}
+  {{ '//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-lightness/jquery-ui.css' | stylesheet_link_tag }}
+{% endcontent_for %}
+
+{% content_for javascripts %}
+    {{ 'stats.js' | javascript_include_tag }}
+{% endcontent_for %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <i class="fa fa-bar-chart"></i>
+    Graphs
+  {% if provider.multiple_applications_allowed? %}
+      <div id="applications-selector-container" class="StatsApplicationsSelectorContainer">
+          <select id="application-select" name="application">
+              {% assign groups = applications | group_by: 'service' %}
+              {% for group in groups %}
+                  <optgroup label="{{group[0].name}}">
+                      {% for application in group[1] %}
+                          <option value="{{application.id}}">{{ application.name }}</option>
+                      {% endfor %}
+                  </optgroup>
+              {% endfor %}
+          </select>
+      </div>
+  {% endif %}
+  </div>
+  <div class="panel-body">
+    <div class="StatsMenuContainer" id="menu-container"></div>
+    <div class="StatsSelectorContainer" id="selector-container"></div>
+    <div class="StatsChartContainer" id="chart-container"></div>
+    <p id="timezone-info" data-timezone-identifier="{{provider.timezone.identifier}}" class="Stats-message--notice">
+        Using time zone {{ provider.timezone.full_name }}
+    </p>
+    <div class="StatsMethodsTableContainer" id="methods-table-container"></div>
+  </div>
+  <div class="panel-footer">
+    <div class="CsvLinkContainer" id="csv-link-container"></div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  (function() {
+    var applicationGroups = {};
+
+    {% if provider.multiple_applications_allowed? %}
+      /*
+        Gets the service name and application names and ids from the liquid rendered selector
+        Returns an object with the service name as a key, and an array of applications
+        I.E: {'Echo API': [{id: 42, name: 'The Answer'}]}
+       */
+      function applicationGroupsFromSelector () {
+        $('.StatsApplicationsSelectorContainer select optgroup').each(function (_i, group) {
+          let applications = applicationGroups[$(group).attr('label')] = [];
+          $(group).children().each(function (_j, application) {
+            applications.push({id: $(application).val(), name: $(application).html()})
+          })
+        })
+        return applicationGroups;
+      }
+      applicationGroups = applicationGroupsFromSelector()
+    {% endif %}
+
+    Stats.statsApplication(jQuery('#client-name').attr('data-client'),
+      {
+        menuContainer: '#menu-container',
+        selectorContainer: '#selector-container',
+        chartContainer: '#chart-container',
+        methodsTableContainer: '#methods-table-container',
+        csvLinkContainer: '#csv-link-container',
+        timezone: $('#timezone-info').data('timezone-identifier'),
+        hasApplicationsSelector: Object.keys(applicationGroups).length > 0,
+        applicationGroups: applicationGroups,
+        applicationsSelectorContainer: '#applications-selector-container'
+      }
+    );
+
+    })();
+</script>

@@ -1,0 +1,36 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | #{@user.informal_name} from #{@account.display_name} has signed-up for:
+  |  #{@account.bought_service_contracts.accessible_services.pluck(:name).to_sentence.presence || 'does not have service'}.
+
+p
+  b New user details:
+
+ul
+  - @user.defined_fields.each do |field|
+    - unless field.hidden?
+      li
+        b #{@user.field_label(field.name)}:
+        |  #{@user.field_value(field.name).presence || 'not provided by user'}
+
+p
+  b New account details:
+
+ul
+  - @account.defined_fields.each do |field|
+    - next if field.hidden?
+    li
+      b #{@account.field_label(field.name)}:
+      |  #{@account.field_value(field.name).presence || 'not provided by user'}
+
+- if @account.approval_required?
+  p
+    | The user requires your approval before keys can be used.
+      Please approve / reject the user from your 3scale Admin Portal.
+
+  p= link_to 'Approve/ Reject application', admin_buyers_account_url(@account)
+
+- else
+  p= link_to 'View new signup in your 3scale Admin Portal', admin_buyers_account_url(@account)

@@ -1,0 +1,101 @@
+location /authorize {
+  set $red_url "";
+  set $client_id "";
+  set $login_url "<%= server.login_url %>"; # CHANGE HERE: put your login url here
+  set $service_id "<%= server.service_id %>"; # CHANGE HERE: put your login url here
+  proxy_set_header  Content-Type "application/x-www-form-urlencoded";
+  content_by_lua_file authorize.lua;
+}
+
+location = /_threescale/oauth_store_token {
+  internal;
+  proxy_set_header  X-Real-IP  $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  Host "<%= System::Application.config.backend_client[:host] %>"; #needed. backend discards other hosts
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+  set $service_id <%= server.service_id %>;
+  proxy_pass $threescale_backend/services/$service_id/oauth_access_tokens.xml?<%= server.backend_authentication_type %>=$<%= server.backend_authentication_type %>;
+}
+
+location = /_threescale/redirect_uri_matches {
+  internal;
+  proxy_set_header  X-Real-IP  $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  Host "<%= System::Application.config.backend_client[:host] %>"; #needed. backend discards other hosts
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+  set $service_id <%= server.service_id %>;
+  proxy_pass $threescale_backend/transactions/oauth_authorize.xml?<%= server.backend_authentication_type %>=$<%= server.backend_authentication_type %>&service_id=$service_id&app_id=$client_id&redirect_url=$red_url;
+}
+
+location /_threescale/toauth_authorize {
+  proxy_set_header  X-Real-IP  $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  Host "<%= System::Application.config.backend_client[:host] %>" ;
+  proxy_set_header  X-3scale-User-Agent "nginx$deployment";
+
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+  set $service_id "<%= server.service_id %>";
+  proxy_ignore_client_abort on;
+  proxy_pass $threescale_backend/transactions/oauth_authorize.xml?<%= server.backend_authentication_type %>=$<%= server.backend_authentication_type %>&service_id=$service_id&access_token=$arg_access_token&$usage;
+}
+
+
+location = /threescale_oauth_authrep {
+  internal;
+  proxy_set_header  Host  "<%= System::Application.config.backend_client[:host] %>";
+  proxy_set_header  X-3scale-User-Agent "nginx$deployment";
+  proxy_set_header  X-3scale-OAuth2-Grant-Type "authorization_code";
+
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+  set $service_id <%= server.service_id %>;
+
+  proxy_pass $threescale_backend/transactions/oauth_authrep.xml?<%= server.backend_authentication_type %>=$<%= server.backend_authentication_type %>&service_id=$service_id&$usage&$credentials&log%5Bcode%5D=$arg_code&log%5Brequest%5D=$arg_req&log%5Bresponse%5D=$arg_resp;
+}
+
+location = /_threescale/client_secret_matches {
+  internal;
+  proxy_set_header  X-Real-IP  $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  Host "<%= System::Application.config.backend_client[:host] %>"; #needed. backend discards other hosts
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+  set $service_id <%= server.service_id %> ;
+  proxy_pass $threescale_backend/transactions/oauth_authorize.xml?<%= server.backend_authentication_type %>=$<%= server.backend_authentication_type %>&service_id=$service_id&app_id=$client_id;
+}
+
+location /callback {
+  set $service_id <%= server.service_id %>;
+  content_by_lua_file 'authorized_callback.lua';
+}
+
+location /oauth/token  {
+  proxy_set_header  X-Real-IP  $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  Host $http_host;
+  proxy_set_header  Content-Type "application/x-www-form-urlencoded";
+  content_by_lua_file get_token.lua ;
+}
+
+location = /out_of_band_oauth_authrep_action {
+  internal;
+  proxy_pass_request_headers off;
+  set $<%= server.backend_authentication_type %> "<%= server.backend_authentication_value %>";
+
+  content_by_lua '
+    local method, path, headers = ngx.req.get_method(), ngx.var.request_uri, ngx.req.get_headers()
+
+    local req = cjson.encode{method=method, path=path, headers=headers}
+    local resp = cjson.encode{ body = ngx.var.resp_body, headers = cjson.decode(ngx.var.resp_headers)}
+
+    local cached_key = ngx.var.cached_key
+    if cached_key ~= nil and cached_key ~= "null" then
+      local status_code = ngx.var.status
+      local res1 = ngx.location.capture("/threescale_oauth_authrep?code=".. status_code .. "&req=" .. ngx.escape_uri(req) .. "&resp=" .. ngx.escape_uri(resp), { share_all_vars = true })
+      if res1.status ~= 200 then
+        local api_keys = ngx.shared.api_keys
+        api_keys:delete(cached_key)
+      end
+    end
+
+    ngx.exit(ngx.HTTP_OK)
+  ';
+}

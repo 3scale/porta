@@ -1,0 +1,29 @@
+
+
+  <table id="keys" class="list">
+    <%= render :partial => 'buyers/applications/api_credentials',
+               :locals => {:cinstance => cinstance, :regenerate => true } %>
+  </table>
+
+  <% if cinstance.backend_version == "2" && cinstance.service.app_keys_allowed? %>
+    <table class="list">
+      <tr>
+        <td colspan="2" id="app-keys-operations" <%= "style=display:none;" unless cinstance.application_keys.can_add? %>>
+          <% if cinstance.custom_keys_enabled? %>
+            <%= link_to 'Add Custom key', new_provider_admin_application_key_path(cinstance),
+                        :class => 'fancybox action add', 'data-autodimensions' => 'true' %>
+          <% end -%>
+          <%= link_to 'Add Random key', provider_admin_application_keys_path(cinstance),
+                              :method  => :post,
+                              :remote  => true,
+                              :class   => 'create_key add action' %>
+        </td>
+
+        <% if cinstance.backend_version.app_id? %>
+          <td colspan="2" id="app-keys-limit-warning" <%= "style=display:none;" if cinstance.application_keys.can_add? %>;'>
+            Keys limit reached.
+          </td>
+        <% end %>
+      </tr>
+    </table>
+  <% end %>    

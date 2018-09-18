@@ -1,0 +1,19 @@
+base: &default
+  test_api_hosts:
+   - echo-api.3scale.net
+   - hello-world-api.3scale.net
+  ignore_test_failures: []
+  backend_endpoint: <%= ENV.fetch('APICAST_BACKEND_ROOT_ENDPOINT', 'http://backend-listener:3000') %>
+  sandbox_endpoint: 'https://%{system_name}-%{tenant_name}-apicast-staging.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  hosted_proxy_endpoint: 'https://%{system_name}-%{tenant_name}-apicast-production.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  verify_mode: <%= OpenSSL::SSL.const_get(ENV.fetch('THREESCALE_SANDBOX_PROXY_OPENSSL_VERIFY_MODE', 'VERIFY_NONE')) %>
+  apicast_staging_endpoint: 'https://%{system_name}-%{tenant_name}-apicast-staging.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  apicast_production_endpoint: 'https://%{system_name}-%{tenant_name}-apicast-production.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
+  skip_deploy: true
+  apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://apicast-staging:8090/policies') %>
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

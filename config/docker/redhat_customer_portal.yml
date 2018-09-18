@@ -1,0 +1,17 @@
+base: &default
+  enabled: <%= ENV.fetch('RH_CUSTOMER_PORTAL_ENABLED', false) %>
+  client_id: <%= ENV.fetch('RH_CUSTOMER_PORTAL_CLIENT_ID', '3scale') %>
+  client_secret: <%= ENV['RH_CUSTOMER_PORTAL_CLIENT_SECRET'] %>
+  realm:
+  flow: <%= ENV.fetch('RH_CUSTOMER_PORTAL_FLOW', 'implicit') %>
+  entitlements_notifications_enabled: <%= ENV.fetch('RH_SUPPORT_ENTITLEMENTS_NOTIFICATIONS', '1') == '1' %>
+  assign_entitlements_email: <%= ENV.fetch('RH_ASSIGN_ENTITLEMENTS_EMAIL', 'assign.entitlements@example.com') %>
+  revoke_entitlements_email: <%= ENV.fetch('RH_REVOKE_ENTITLEMENTS_EMAIL', 'revoke.entitlements@example.com') %>
+
+preview:
+  <<: *default
+  realm: <%= ENV.fetch('RH_CUSTOMER_PORTAL_REALM', 'https://sso.stage.redhat.com/auth/realms/redhat-external') %>
+
+production:
+  <<: *default
+  realm: <%= ENV.fetch('RH_CUSTOMER_PORTAL_REALM', 'https://sso.redhat.com/auth/realms/redhat-external') %>

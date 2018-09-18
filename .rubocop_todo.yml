@@ -1,0 +1,939 @@
+inherit_from: .rubocop.yml
+
+# Offense count: 1
+# Cop supports --auto-correct.
+# Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
+# SupportedStyles: start_of_line, def
+Lint/DefEndAlignment:
+  Exclude:
+    - 'test/unit/forms/notification_preferences_form_test.rb'
+
+# Offense count: 1
+# Cop supports --auto-correct.
+Style/AlignArray:
+  Exclude:
+    - 'test/unit/account_test.rb'
+
+# Offense count: 11
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: always, conditionals
+Style/AndOr:
+  Exclude:
+    - 'app/controllers/admin/account/payment_gateways_controller.rb'
+    - 'app/controllers/admin/api/base_controller.rb'
+    - 'app/controllers/api/end_users_controller.rb'
+    - 'app/controllers/buyers/accounts/bulk/send_emails_controller.rb'
+    - 'app/controllers/buyers/applications/bulk/send_emails_controller.rb'
+    - 'app/controllers/buyers/service_contracts/bulk/send_emails_controller.rb'
+    - 'app/helpers/application_helper.rb'
+    - 'app/helpers/posts_helper.rb'
+    - 'app/models/account/domains.rb'
+
+# Offense count: 16
+Style/AsciiComments:
+  Exclude:
+    - 'app/controllers/api/plans_base_controller.rb'
+    - 'app/helpers/alerts_helper.rb'
+    - 'app/models/topic_category.rb'
+    - 'app/portlets/table_of_contents_portlet.rb'
+    - 'config/initializers/constants.rb'
+    - 'features/step_definitions/personal_details_steps.rb'
+    - 'lib/developer_portal/lib/cms/handler/base.rb'
+    - 'lib/developer_portal/lib/liquid/docs/dsl.rb'
+    - 'lib/developer_portal/lib/liquid/drops/wrapper.rb'
+    - 'app/lib/three_scale/search.rb'
+    - 'app/lib/three_scale/spam_protection/configuration.rb'
+    - 'app/lib/three_scale/swagger/specification.rb'
+    - 'test/unit/cms/tags_test.rb'
+    - 'test/unit/topic_test.rb'
+
+# Offense count: 139
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: percent_q, bare_percent
+Style/BarePercentLiterals:
+  Enabled: false
+
+# Offense count: 77
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
+# SupportedStyles: line_count_based, semantic, braces_for_chaining
+# ProceduralMethods: benchmark, bm, bmbm, create, each_with_object, measure, new, realtime, tap, with_object
+# FunctionalMethods: let, let!, subject, watch
+# IgnoredMethods: lambda, proc, it
+Style/BlockDelimiters:
+  Enabled: false
+
+# Offense count: 12
+# Cop supports --auto-correct.
+Style/BlockEndNewline:
+  Exclude:
+    - 'app/controllers/buyers/invoices_controller.rb'
+    - 'app/controllers/finance/provider/invoices_controller.rb'
+    - 'app/models/cinstance.rb'
+    - 'app/models/invoice.rb'
+    - 'lib/developer_portal/app/controllers/developer_portal/admin/account/personal_details_controller.rb'
+    - 'spec/acceptance/api/api_doc_spec.rb'
+    - 'spec/acceptance/api/application_spec.rb'
+    - 'spec/acceptance/api/line_item_plan_cost_spec.rb'
+    - 'spec/acceptance/api/line_item_spec.rb'
+    - 'spec/acceptance/api/line_item_variable_cost_spec.rb'
+    - 'spec/acceptance/api/payment_transaction_spec.rb'
+
+# Offense count: 11
+Style/CaseEquality:
+  Exclude:
+    - 'app/models/invoice.rb'
+    - 'lib/developer_portal/lib/liquid/drops/model.rb'
+    - 'app/lib/logic/plan_changes.rb'
+    - 'lib/notification_center.rb'
+    - 'app/lib/stats/base.rb'
+    - 'app/lib/stats/storage.rb'
+    - 'lib/zeus_plan.rb'
+    - 'test/subscribers/publish_notification_event_subscriber_test.rb'
+
+# Offense count: 121
+# Cop supports --auto-correct.
+# Configuration parameters: IndentWhenRelativeTo, SupportedStyles, IndentOneStep, IndentationWidth.
+# SupportedStyles: case, end
+Style/CaseIndentation:
+  Enabled: false
+
+# Offense count: 29
+Style/ClassVars:
+  Exclude:
+    - 'app/models/ability.rb'
+    - 'app/models/backend/transaction.rb'
+    - 'app/models/configuration.rb'
+    - 'lib/backend/storage.rb'
+    - 'app/lib/backend_client/toggle_backend.rb'
+    - 'lib/developer_portal/lib/liquid/template/resolver.rb'
+    - 'app/lib/stats/aggregation.rb'
+    - 'app/lib/three_scale/xml/builder.rb'
+    - 'script/stress-test/signup.rb'
+    - 'test/integration/finance/api/invoices_test.rb'
+    - 'test/proxy_helpers/sentiment/sentiment_api.rb'
+    - 'test/test_helpers/time.rb'
+    - 'test/unit/permalink_fu_test.rb'
+
+# Offense count: 29
+# Cop supports --auto-correct.
+Style/ClosingParenthesisIndentation:
+  Enabled: false
+
+# Offense count: 191
+# Cop supports --auto-correct.
+# Configuration parameters: Keywords.
+# Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW
+Style/CommentAnnotation:
+  Enabled: false
+
+# Offense count: 16
+# Cop supports --auto-correct.
+Style/CommentIndentation:
+  Exclude:
+    - 'app/helpers/users_helper.rb'
+    - 'app/models/payment_transaction.rb'
+    - 'app/queries/top_traffic_query.rb'
+    - 'features/step_definitions/buyer_steps.rb'
+    - 'features/step_definitions/services/service_contract_steps.rb'
+    - 'app/lib/authentication/strategy/internal.rb'
+    - 'app/lib/stats/service.rb'
+    - 'lib/tasks/pdf.rake'
+    - 'app/lib/three_scale/middleware/multitenant.rb'
+    - 'test/factories/other.rb'
+    - 'test/unit/cinstance/trial_test.rb'
+    - 'test/unit/end_user_test.rb'
+    - 'test/unit/user_test.rb'
+
+# Offense count: 24
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly.
+# SupportedStyles: assign_to_condition, assign_inside_condition
+Style/ConditionalAssignment:
+  Enabled: false
+
+# Offense count: 1
+# Cop supports --auto-correct.
+Style/DefWithParentheses:
+  Exclude:
+    - 'app/lib/three_scale/rake/gannett_importer.rb'
+
+# Offense count: 110
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: leading, trailing
+Style/DotPosition:
+  Enabled: false
+
+# Offense count: 26
+# Cop supports --auto-correct.
+Style/EachWithObject:
+  Enabled: false
+
+# Offense count: 21
+# Cop supports --auto-correct.
+Style/ElseAlignment:
+  Enabled: false
+
+# Offense count: 21
+# Cop supports --auto-correct.
+Style/EmptyCaseCondition:
+  Enabled: false
+
+# Offense count: 20
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: empty, nil, both
+Style/EmptyElse:
+  Enabled: false
+
+# Offense count: 5
+# Cop supports --auto-correct.
+# Configuration parameters: AllowAdjacentOneLineDefs.
+Style/EmptyLineBetweenDefs:
+  Exclude:
+    - 'app/controllers/admin/api/buyers_users_controller.rb'
+    - 'app/models/account/provider_methods.rb'
+    - 'app/lib/authentication.rb'
+    - 'app/lib/authentication/by_password.rb'
+    - 'test/unit/site_account_support_test.rb'
+
+# Offense count: 14
+# Cop supports --auto-correct.
+Style/EmptyLiteral:
+  Exclude:
+    - 'app/models/cms/portlet.rb'
+    - 'app/lib/stats/key_helpers.rb'
+    - 'app/lib/three_scale/middleware/multitenant.rb'
+    - 'test/functional/developer_portal/admin/account/ogone_controller_test.rb'
+    - 'test/functional/developer_portal/admin/account/plan_changes_controller_test.rb'
+    - 'test/proxy_helpers/sentiment/analyzer.rb'
+    - 'test/unit/apicast/abstract_generator_test.rb'
+    - 'test/unit/proxy_rule_test.rb'
+    - 'test/unit/sso_token_test.rb'
+    - 'test/unit/three_scale/analytics/user_tracking_test.rb'
+    - 'test/unit/three_scale/hash_hacks_test.rb'
+
+# Offense count: 33
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: consistent, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
+Style/FirstParameterIndentation:
+  Enabled: false
+
+# Offense count: 97
+# Cop supports --auto-correct.
+# Configuration parameters: MaxLineLength.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Offense count: 30
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_brackets
+Style/IndentArray:
+  Enabled: false
+
+# Offense count: 3
+# Cop supports --auto-correct.
+# Configuration parameters: IndentationWidth.
+Style/IndentAssignment:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+    - 'app/lib/authentication/strategy/internal.rb'
+
+# Offense count: 123
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_braces
+Style/IndentHash:
+  Enabled: false
+
+# Offense count: 187
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: normal, rails
+Style/IndentationConsistency:
+  Enabled: false
+
+# Offense count: 141
+# Cop supports --auto-correct.
+# Configuration parameters: Width.
+Style/IndentationWidth:
+  Enabled: false
+
+# Offense count: 105
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: line_count_dependent, lambda, literal
+Style/Lambda:
+  Enabled: false
+
+# Offense count: 17
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: call, braces
+Style/LambdaCall:
+  Exclude:
+    - 'features/support/hooks.rb'
+    - 'lib/tasks/integration.rake'
+    - 'app/lib/three_scale/rake/gannett_importer.rb'
+
+# Offense count: 8
+# Cop supports --auto-correct.
+Style/LineEndConcatenation:
+  Exclude:
+    - 'app/models/account/gateway.rb'
+    - 'config/preinitializer.rb'
+    - 'features/support/paths.rb'
+    - 'features/support/selectors.rb'
+    - 'lib/analytics/data.rb'
+    - 'lib/tasks/db/data.rake'
+    - 'lib/tasks/db/safe.rake'
+
+# Offense count: 13
+# Cop supports --auto-correct.
+Style/MethodCallParentheses:
+  Exclude:
+    - 'app/controllers/provider/admin/go_live_states_controller.rb'
+    - 'app/models/application_key.rb'
+    - 'lib/developer_portal/lib/liquid/forms/message.rb'
+    - 'script/fake_data/fake_data.rb'
+    - 'test/unit/heroku_test.rb'
+    - 'test/unit/liquid/drops/authentication_provider_drop_test.rb'
+    - 'test/unit/liquid/drops/flash_drop_test.rb'
+    - 'test/unit/three_scale/analytics/user_tracking_test.rb'
+
+# Offense count: 93
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: require_parentheses, require_no_parentheses, require_no_parentheses_except_multiline
+Style/MethodDefParentheses:
+  Enabled: false
+
+# Offense count: 16
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: symmetrical, new_line, same_line
+Style/MultilineArrayBraceLayout:
+  Exclude:
+    - 'app/controllers/finance/provider/invoices_controller.rb'
+    - 'lib/developer_portal/lib/liquid/docs/dsl/filters.rb'
+    - 'app/lib/logic/rolling_updates.rb'
+    - 'lib/tasks/doc/liquid.rake'
+    - 'app/lib/three_scale/address.rb'
+    - 'script/fake_data/fake_data.rb'
+    - 'test/integration/utilization_test.rb'
+    - 'test/test_helpers/country.rb'
+    - 'test/unit/backend_client/connection_test.rb'
+    - 'test/unit/liquid/drops/collection_test.rb'
+    - 'test/unit/simple_layout_test.rb'
+
+# Offense count: 10
+# Cop supports --auto-correct.
+Style/MultilineBlockLayout:
+  Exclude:
+    - 'app/controllers/finance/provider/invoices_controller.rb'
+    - 'app/models/cinstance.rb'
+    - 'app/models/invoice.rb'
+    - 'app/models/topic.rb'
+    - 'spec/acceptance/api/api_doc_spec.rb'
+    - 'spec/acceptance/api/application_spec.rb'
+    - 'spec/acceptance/api/line_item_plan_cost_spec.rb'
+    - 'spec/acceptance/api/line_item_spec.rb'
+    - 'spec/acceptance/api/line_item_variable_cost_spec.rb'
+    - 'spec/acceptance/api/payment_transaction_spec.rb'
+
+# Offense count: 35
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
+# SupportedStyles: aligned, indented
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+# Offense count: 101
+# Cop supports --auto-correct.
+Style/MutableConstant:
+  Enabled: false
+
+# Offense count: 6
+# Cop supports --auto-correct.
+Style/NegatedIf:
+  Exclude:
+    - 'app/models/contract.rb'
+    - 'app/models/fields_definition.rb'
+    - 'app/models/referrer_filter.rb'
+    - 'lib/tasks/provider_stats.rb'
+    - 'script/fake_data/fake_data.rb'
+    - 'test/proxy_helpers/sentiment/analyzer.rb'
+
+# Offense count: 1
+# Cop supports --auto-correct.
+Style/NegatedWhile:
+  Exclude:
+    - 'app/models/cms/base_page.rb'
+
+# Offense count: 2
+# Cop supports --auto-correct.
+Style/NestedParenthesizedCalls:
+  Exclude:
+    - 'features/support/paths.rb'
+    - 'lib/pdf/report.rb'
+
+# Offense count: 10
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
+# SupportedStyles: skip_modifier_ifs, always
+Style/Next:
+  Exclude:
+    - 'app/models/backend/status.rb'
+    - 'features/step_definitions/buyer_steps.rb'
+    - 'features/step_definitions/metric_steps.rb'
+    - 'features/support/unused.rb'
+    - 'lib/fields/extra_fields.rb'
+    - 'lib/fields/fields.rb'
+    - 'lib/tasks/fixes.rake'
+    - 'app/lib/three_scale/swagger/specification.rb'
+    - 'script/fake_data/fake_data.rb'
+
+# Offense count: 4
+# Cop supports --auto-correct.
+Style/NilComparison:
+  Exclude:
+    - 'features/step_definitions/user_management/api_steps.rb'
+    - 'lib/tasks/fixes.rake'
+    - 'spec/api_helper.rb'
+
+# Offense count: 1
+# Cop supports --auto-correct.
+# Configuration parameters: IncludeSemanticChanges.
+Style/NonNilCheck:
+  Exclude:
+    - 'app/models/user_session.rb'
+
+# Offense count: 43
+# Cop supports --auto-correct.
+Style/Not:
+  Enabled: false
+
+# Offense count: 62
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
+# SupportedOctalStyles: zero_with_o, zero_only
+Style/NumericLiteralPrefix:
+  Exclude:
+    - 'app/models/usage_limit.rb'
+    - 'app/lib/logic/rolling_updates.rb'
+    - 'lib/payment_gateways/ogone_crypt.rb'
+    - 'lib/time_hacks.rb'
+    - 'test/functional/developer_portal/admin/account/adyen12_controller_test.rb'
+    - 'test/integration/payment_gateways/ogone_test.rb'
+    - 'test/integration/stats/services_test.rb'
+    - 'test/unit/finance/variable_cost_calculation_test.rb'
+    - 'test/unit/month_test.rb'
+    - 'test/unit/services/traffic_service_test.rb'
+    - 'test/unit/time_hacks_test.rb'
+    - 'test/unit/usage_limit_test.rb'
+
+# Offense count: 36
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+# Offense count: 31
+# Cop supports --auto-correct.
+Style/ParallelAssignment:
+  Enabled: false
+
+# Offense count: 7
+# Cop supports --auto-correct.
+# Configuration parameters: AllowSafeAssignment.
+Style/ParenthesesAroundCondition:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+    - 'app/models/invoice.rb'
+    - 'app/models/usage_limit.rb'
+    - 'features/step_definitions/finance/providers/billing_settings_step.rb'
+    - 'features/support/unused.rb'
+    - 'lib/migration/finance.rb'
+
+# Offense count: 420
+# Cop supports --auto-correct.
+# Configuration parameters: PreferredDelimiters.
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+# Offense count: 11
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: lower_case_q, upper_case_q
+Style/PercentQLiterals:
+  Exclude:
+    - 'features/step_definitions/applications/referrer_filters_steps.rb'
+    - 'features/step_definitions/buyer_steps.rb'
+    - 'features/step_definitions/finance/navigation_steps.rb'
+    - 'features/step_definitions/finance/reporting_steps.rb'
+
+# Offense count: 92
+# Cop supports --auto-correct.
+Style/PerlBackrefs:
+  Enabled: false
+
+# Offense count: 20
+# Cop supports --auto-correct.
+Style/PreferredHashMethods:
+  Enabled: false
+
+# Offense count: 9
+# Cop supports --auto-correct.
+Style/Proc:
+  Exclude:
+    - 'app/models/member_permission.rb'
+    - 'app/models/sso_token.rb'
+    - 'config/initializers/field_errors.rb'
+    - 'config/schedule.rb'
+    - 'lib/developer_portal/lib/liquid/docs/generator.rb'
+    - 'script/stress-test.rb'
+    - 'test/integration/finance/api/invoices_test.rb'
+    - 'test/unit/fields/form_builder_test.rb'
+    - 'test/unit/three_scale/api/collection_test.rb'
+
+# Offense count: 24
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: compact, exploded
+Style/RaiseArgs:
+  Enabled: false
+
+# Offense count: 7
+# Cop supports --auto-correct.
+Style/RedundantBegin:
+  Exclude:
+    - 'app/controllers/admin/api/api_docs_services_controller.rb'
+    - 'app/controllers/stats/data/applications_controller.rb'
+    - 'app/controllers/stats/data/services_controller.rb'
+    - 'app/helpers/api/integrations_helper.rb'
+    - 'app/portlets/external_rss_feed_portlet.rb'
+    - 'app/portlets/table_of_contents_portlet.rb'
+    - 'features/step_definitions/usage_limit_steps.rb'
+
+# Offense count: 2
+# Cop supports --auto-correct.
+Style/RedundantException:
+  Exclude:
+    - 'config/preinitializer.rb'
+
+# Offense count: 3
+# Cop supports --auto-correct.
+Style/RedundantFreeze:
+  Exclude:
+    - 'app/models/application_key.rb'
+    - 'app/models/cinstance.rb'
+    - 'app/lib/three_scale/analytics/user_classifier.rb'
+
+# Offense count: 7
+# Cop supports --auto-correct.
+Style/RedundantParentheses:
+  Exclude:
+    - 'app/helpers/code_helper.rb'
+    - 'app/lib/authenticated_system.rb'
+    - 'app/lib/authentication/by_cookie_token.rb'
+    - 'lib/tasks/populate_cubert.rake'
+
+# Offense count: 9
+# Cop supports --auto-correct.
+# Configuration parameters: AllowMultipleReturnValues.
+Style/RedundantReturn:
+  Exclude:
+    - 'app/helpers/forums_helper.rb'
+    - 'app/models/account/provider_methods.rb'
+    - 'app/models/cms/page.rb'
+    - 'app/models/plan.rb'
+    - 'lib/developer_portal/lib/cms/toolbar.rb'
+    - 'lib/messenger_old.rb'
+    - 'test/proxy_helpers/sentiment/analyzer.rb'
+
+# Offense count: 353
+# Cop supports --auto-correct.
+Style/RedundantSelf:
+  Enabled: false
+
+# Offense count: 77
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
+# SupportedStyles: slashes, percent_r, mixed
+Style/RegexpLiteral:
+  Enabled: false
+
+# Offense count: 2
+# Cop supports --auto-correct.
+Style/RescueEnsureAlignment:
+  Exclude:
+    - 'app/workers/process_notification_event_worker.rb'
+    - 'test/unit/logic/provider_signup_test.rb'
+
+# Offense count: 14
+# Cop supports --auto-correct.
+Style/RescueModifier:
+  Exclude:
+    - 'app/controllers/sites/usage_rules_controller.rb'
+    - 'app/models/finance/billing_strategy.rb'
+    - 'app/models/web_hook_failures.rb'
+    - 'config/initializers/ruby1.9.rb'
+    - 'features/support/transforms.rb'
+    - 'app/lib/authentication/strategy/sso.rb'
+    - 'app/lib/events/event.rb'
+    - 'lib/payment_gateways/ogone_crypt.rb'
+    - 'lib/tasks/fixes.rake'
+    - 'lib/tasks/multitenant/triggers.rake'
+    - 'script/stress-test/api_hitting.rb'
+    - 'script/stress-test/provider_clicking.rb'
+    - 'spec/spec_helper.rb'
+    - 'test/test_helpers/backend.rb'
+
+# Offense count: 6
+# Cop supports --auto-correct.
+Style/SelfAssignment:
+  Exclude:
+    - 'lib/pdf/data.rb'
+    - 'app/lib/three_scale/sso.rb'
+    - 'test/proxy_helpers/sentiment/analyzer.rb'
+    - 'test/test_helpers/fake_hits.rb'
+
+# Offense count: 18
+# Cop supports --auto-correct.
+# Configuration parameters: AllowAsExpressionSeparator.
+Style/Semicolon:
+  Exclude:
+    - 'app/helpers/admin/payment_details_helper.rb'
+    - 'app/helpers/admin/plans_helper.rb'
+    - 'app/models/application_plan.rb'
+    - 'app/models/cms/section.rb'
+    - 'lib/developer_portal/lib/liquid/tags/form.rb'
+    - 'lib/tasks/fields_definitions.rake'
+    - 'lib/tasks/multitenant.rake'
+    - 'test/factories/account.rb'
+    - 'test/proxy_helpers/sentiment/sentiment_api.rb'
+    - 'test/unit/logic/buyer_test.rb'
+    - 'test/unit/permalink_fu_test.rb'
+    - 'test/unit/service_test.rb'
+
+# Offense count: 10
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: only_raise, only_fail, semantic
+Style/SignalException:
+  Exclude:
+    - 'app/models/account.rb'
+    - 'app/models/account/buyer_methods.rb'
+    - 'app/queries/new_accounts_query.rb'
+    - 'lib/api_authentication/by_access_token.rb'
+    - 'app/lib/three_scale/spam_protection/checks/honeypot.rb'
+    - 'app/lib/three_scale/spam_protection/checks/javascript.rb'
+    - 'app/lib/three_scale/spam_protection/checks/timestamp.rb'
+
+# Offense count: 2
+# Cop supports --auto-correct.
+# Configuration parameters: AllowIfMethodIsEmpty.
+Style/SingleLineMethods:
+  Exclude:
+    - 'lib/tasks/db/safe.rake'
+    - 'test/unit/account_test.rb'
+
+# Offense count: 17
+# Cop supports --auto-correct.
+Style/SpaceAfterColon:
+  Exclude:
+    - 'lib/developer_portal/lib/liquid/filters/rails_helpers.rb'
+    - 'app/lib/three_scale/rake/gannett_importer.rb'
+    - 'test/integration/sessions_test.rb'
+    - 'test/integration/stats/clients_test.rb'
+    - 'test/integration/stats/services_test.rb'
+    - 'test/remote/payment_gateways_test.rb'
+
+# Offense count: 9
+# Cop supports --auto-correct.
+Style/SpaceAfterMethodName:
+  Exclude:
+    - 'app/models/numeric_hash.rb'
+    - 'lib/developer_portal/lib/liquid/drops/plan.rb'
+    - 'app/lib/three_scale/money.rb'
+
+# Offense count: 11
+# Cop supports --auto-correct.
+Style/SpaceAfterNot:
+  Exclude:
+    - 'app/models/cms/page.rb'
+    - 'app/services/api_classification_service.rb'
+    - 'config/application.rb'
+    - 'test/integration/provider_account_test.rb'
+    - 'test/unit/api/by_provider_key_test.rb'
+    - 'test/unit/cms/page_test.rb'
+    - 'test/unit/end_user_plan_test.rb'
+    - 'test/unit/web_hook_test.rb'
+
+# Offense count: 38
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: space, no_space
+Style/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+# Offense count: 5
+# Cop supports --auto-correct.
+Style/SpaceAroundKeyword:
+  Exclude:
+    - 'app/controllers/buyer/bulk_approvals_controller.rb'
+    - 'script/fake_data/fake_data.rb'
+    - 'test/unit/account/provider_test.rb'
+
+# Offense count: 251
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: space, no_space
+Style/SpaceBeforeBlockBraces:
+  Enabled: false
+
+# Offense count: 82
+# Cop supports --auto-correct.
+Style/SpaceBeforeComma:
+  Enabled: false
+
+# Offense count: 2
+# Cop supports --auto-correct.
+Style/SpaceBeforeComment:
+  Exclude:
+    - 'app/models/cinstance.rb'
+    - 'app/models/plan.rb'
+
+# Offense count: 46
+# Cop supports --auto-correct.
+# Configuration parameters: AllowForAlignment.
+Style/SpaceBeforeFirstArg:
+  Enabled: false
+
+# Offense count: 6
+# Cop supports --auto-correct.
+Style/SpaceBeforeSemicolon:
+  Exclude:
+    - 'app/models/account/credit_card.rb'
+    - 'app/models/invoice.rb'
+    - 'lib/payment_gateways/payment_gateway_crypt.rb'
+
+# Offense count: 75
+# Cop supports --auto-correct.
+Style/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+# Offense count: 3
+# Cop supports --auto-correct.
+Style/SpaceInsideRangeLiteral:
+  Exclude:
+    - 'script/stress-test.rb'
+    - 'test/unit/stats/client_test.rb'
+
+# Offense count: 15
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: space, no_space
+Style/SpaceInsideStringInterpolation:
+  Exclude:
+    - 'app/helpers/buyer_search_helper.rb'
+    - 'app/helpers/buyers/applications_helper.rb'
+    - 'app/helpers/provider/admin/cms/dashboard_helper.rb'
+    - 'lib/developer_portal/lib/liquid/drops/search.rb'
+    - 'lib/heroku.rb'
+    - 'lib/tasks/ci/lint.rake'
+    - 'test/test_helpers/fake_web/referrer_filters.rb'
+    - 'test/test_helpers/fake_web/utilization.rb'
+
+# Offense count: 17
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: use_perl_names, use_english_names
+Style/SpecialGlobalVars:
+  Exclude:
+    - 'app/portlets/external_rss_feed_portlet.rb'
+    - 'app/portlets/table_of_contents_portlet.rb'
+    - 'bin/deploy'
+    - 'app/lib/backend_client/application/utilization.rb'
+    - 'app/lib/backend_client/request.rb'
+    - 'app/workers/web_hook_worker.rb'
+    - 'lib/developer_portal/lib/liquid/tags/form.rb'
+    - 'lib/developer_portal/test/dummy/config/boot.rb'
+    - 'lib/tasks/airbrake_tasks.rake'
+    - 'lib/tasks/cms/cms.rake'
+    - 'script/stress-test.rb'
+    - 'test/minitest_helper.rb'
+    - 'vendor/active-docs/spec/javascripts/support/jasmine_runner.rb'
+
+# Offense count: 16
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: single_quotes, double_quotes
+Style/StringLiteralsInInterpolation:
+  Exclude:
+    - 'app/helpers/buyer_search_helper.rb'
+    - 'bin/zeus'
+    - 'config/initializers/time_with_zone.rb'
+    - 'lib/developer_portal/lib/liquid/drops/deprecated.rb'
+    - 'lib/pdf/data.rb'
+    - 'lib/tasks/db/data.rake'
+    - 'lib/tasks/fixes.rake'
+    - 'lib/tasks/sso.rake'
+    - 'app/lib/three_scale/warnings.rb'
+
+# Offense count: 63
+# Cop supports --auto-correct.
+# Configuration parameters: IgnoredMethods.
+# IgnoredMethods: respond_to, define_method
+Style/SymbolProc:
+  Enabled: false
+
+# Offense count: 8
+# Cop supports --auto-correct.
+Style/Tab:
+  Exclude:
+    - 'app/helpers/buyer/settings_helper.rb'
+    - 'app/lib/stats/storage.rb'
+    - 'app/lib/three_scale/middleware/multitenant.rb'
+    - 'script/fake_data/fake_data.rb'
+    - 'test/unit/fields_definition_test.rb'
+    - 'test/unit/pdf/finance/invoice_generator_test.rb'
+
+# Offense count: 20
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowSafeAssignment.
+# SupportedStyles: require_parentheses, require_no_parentheses
+Style/TernaryParentheses:
+  Enabled: false
+
+# Offense count: 96
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: final_newline, final_blank_line
+Style/TrailingBlankLines:
+  Enabled: false
+
+# Offense count: 7
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
+# SupportedStyles: comma, consistent_comma, no_comma
+Style/TrailingCommaInArguments:
+  Exclude:
+    - 'app/models/backend/transaction.rb'
+    - 'app/workers/report_traffic_worker.rb'
+    - 'lib/tasks/backend.rake'
+    - 'test/test_helpers/backend.rb'
+    - 'test/unit/events/importers/alert_importer_test.rb'
+
+# Offense count: 35
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
+# SupportedStyles: comma, consistent_comma, no_comma
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
+# Offense count: 2
+# Cop supports --auto-correct.
+# Configuration parameters: AllowNamedUnderscoreVariables.
+Style/TrailingUnderscoreVariable:
+  Exclude:
+    - 'app/models/plan.rb'
+    - 'test/unit/backend/model_extensions/cinstance_test.rb'
+
+# Offense count: 3
+# Cop supports --auto-correct.
+Style/TrailingWhitespace:
+  Exclude:
+    - 'app/lib/logic/rolling_updates.rb'
+    - 'test/events/services/service_deleted_event_test.rb'
+    - 'test/unit/cinstance/trial_test.rb'
+
+# Offense count: 8
+# Cop supports --auto-correct.
+# Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, IgnoreClassMethods, Whitelist.
+# Whitelist: to_ary, to_a, to_c, to_enum, to_h, to_hash, to_i, to_int, to_io, to_open, to_path, to_proc, to_r, to_regexp, to_str, to_s, to_sym
+Style/TrivialAccessors:
+  Exclude:
+    - 'app/models/settings.rb'
+    - 'app/presenters/buyer_search_presenters.rb'
+    - 'lib/developer_portal/lib/liquid/drops/field.rb'
+    - 'lib/developer_portal/lib/liquid/drops/flash.rb'
+    - 'lib/developer_portal/lib/liquid/drops/site.rb'
+    - 'lib/developer_portal/lib/liquid/drops/user.rb'
+
+# Offense count: 16
+# Cop supports --auto-correct.
+Style/UnlessElse:
+  Exclude:
+    - 'app/controllers/admin/api/credit_cards_controller.rb'
+    - 'app/controllers/frontend_controller.rb'
+    - 'app/helpers/application_helper.rb'
+    - 'app/models/api_docs/service.rb'
+    - 'app/models/message.rb'
+    - 'config/initializers/autosave_fix.rb'
+    - 'app/lib/authentication/strategy/cas.rb'
+    - 'lib/forum_support/posts.rb'
+    - 'lib/heroku.rb'
+    - 'lib/pdf/report.rb'
+    - 'app/lib/stats/views/csv/metrics.rb'
+    - 'lib/tasks/fixes.rake'
+    - 'lib/tasks/pdf.rake'
+
+# Offense count: 8
+# Cop supports --auto-correct.
+Style/UnneededCapitalW:
+  Exclude:
+    - 'app/models/cms/page.rb'
+    - 'test/unit/plan_test.rb'
+    - 'test/unit/proxy_test.rb'
+
+# Offense count: 5
+# Cop supports --auto-correct.
+Style/UnneededInterpolation:
+  Exclude:
+    - 'app/helpers/plans_helper.rb'
+    - 'app/models/account/provider_methods.rb'
+    - 'app/models/cms/builtin.rb'
+    - 'app/models/cms/partial.rb'
+    - 'test/unit/csv/applications_exporter_test.rb'
+
+# Offense count: 110
+# Cop supports --auto-correct.
+Style/UnneededPercentQ:
+  Enabled: false
+
+# Offense count: 3
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: snake_case, camelCase
+Style/VariableName:
+  Exclude:
+    - 'lib/payment_gateways/authorize_net_cim_crypt.rb'
+    - 'app/lib/three_scale/swagger/specification.rb'
+    - 'test/unit/logic/provider_upgrade_test.rb'
+
+# Offense count: 1
+# Cop supports --auto-correct.
+# Configuration parameters: MaxLineLength.
+Style/WhileUntilModifier:
+  Exclude:
+    - 'app/models/web_hook_failures.rb'
+
+# Offense count: 69
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles, MinSize, WordRegex.
+# SupportedStyles: percent, brackets
+Style/WordArray:
+  Enabled: false
+
+# Offense count: 3
+# Cop supports --auto-correct.
+Style/ZeroLengthPredicate:
+  Exclude:
+    - 'app/lib/logic/plan_changes.rb'
+    - 'test/proxy_helpers/sentiment/analyzer.rb'

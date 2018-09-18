@@ -1,0 +1,99 @@
+
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+      </div>
+      <div class="panel-body panel-footer">
+        {% assign contract = current_account.bought_account_contract %}
+        {% if contract.can_change_plan? %}
+          <p>You are currently on plan <em>{{ contract.plan.name | capitalize }}</em>.</p>
+          {% form 'plan.change' %}
+            <p>
+              <label for="plan-select" style="display:inline">View plan</label>:
+              <select id="plan-select" name="plan_id">
+                {% for account_plan in account_plans %}
+                  <option value="{{ account_plan.id }}">{{ account_plan.name }}</option>
+                {% endfor %}
+              </select>
+              <input data-confirm="{{ contract.plan_change_permission_warning }}" id="plan-change-submit" name="commit" style="display:none;" type="submit" value="{{ contract.plan_change_permission_name }}">
+              </p>
+          {% endform %}
+          {% for account_plan in account_plans %}
+            <div class="plan-preview" data-plan-id="{{account_plan.id}}" style="{% if contract.plan.id != account_plan.id %} display:none; {% endif %}">
+              <table class="plan_widget">
+                {% if account_plan.features %}
+                  <tr>
+                    <th class="header" colspan="3">Features</th>
+                  </tr>
+                  {% for feature in account_plan.features %}
+                    <tr class="feature {% if feature.enabled? %} enabled {% else %} disabled {% endif %}">
+                      <th>{{ feature.name }}</th>
+                      <td colspan="3">
+                        {% if feature.enabled? %} {{'tick.png' | image_tag }} {% else %} {{'cross.png' | image_tag }}  {% endif %}
+                      </td>
+                  </tr>
+                  {% endfor %}
+                {% endif %}
+                {% if account_plan.paid? %}
+                  <tr><th class="header" colspan="3">Cost</th></tr>
+                  {% if account_plan.setup_fee != 0 %}
+                    <tr>
+                      <th>Setup Fee</th>
+                      <td colspan="2">
+                       {{ account_plan.setup_fee }}
+                      </td>
+                    </tr>
+                  {% endif %}
+                  <tr>
+                    <th> Monthly Fee </th>
+                    <td colspan="2">
+                      {{ account_plan.flat_cost }}
+                    </td>
+                  </tr>
+                {% endif %}
+              </table>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h3>Your Plan</h3>
+          <div class="plan-preview" data-plan-id="{{contract.plan.id}}">
+            <table class="plan_widget">
+              {% if account_plan.features %}
+                <tr>
+                  <th class="header" colspan="3">Features</th>
+                </tr>
+                {% for feature in account_plan.features %}
+                  <tr class="feature {% if feature.enabled? %} enabled {% else %} disabled {% endif %}">
+                    <th>{{ feature.name }}</th>
+                    <td colspan="3">
+                      {% if feature.enabled? %} {{'tick.png' | image_tag }} {% else %} {{'cross.png' | image_tag }}  {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+              {% endif %}
+              {% if account_plan.paid? %}
+                <tr><th class="header" colspan="3">Cost</th></tr>
+                {% if account_plan.setup_fee != 0 %}
+                  <tr>
+                    <th>Setup Fee</th>
+                    <td colspan="2">
+                     {{ account_plan.setup_fee }}
+                    </td>
+                  </tr>
+                {% endif %}
+                <tr>
+                  <th> Monthly Fee </th>
+                  <td colspan="2">
+                    {{ account_plan.flat_cost }}
+                  </td>
+                </tr>
+              {% endif %}
+            </table>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

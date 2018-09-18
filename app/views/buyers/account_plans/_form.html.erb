@@ -1,0 +1,10 @@
+<%= form.inputs '' do %>
+  <%= form.input :name, :required => true %>
+  <%= form.system_name %>
+
+  <%= form.input :approval_required, :label => 'Accounts require approval?', hint: "Set whether accounts are created on demand
+    or need to be approved first." %>
+
+  <%#= form.input :description, :hint => "Provide a description of the plan for your partners to see. <br/> You can use <a href='http://en.wikipedia.org/wiki/Textile_%28markup_language%29'>Textile markup</a> or pure HTML to render your text.".html_safe %>
+  <%= render :partial => 'api/plans/forms/billing_strategy', :locals => { :form => form } %>
+<% end %>

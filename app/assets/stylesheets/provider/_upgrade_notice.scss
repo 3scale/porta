@@ -1,0 +1,34 @@
+@mixin upgrade-column {
+  width: 45%;
+  p { font-size: 15px; }
+  margin-bottom: 15px;
+}
+
+#upgrade-notice-column {
+  @include upgrade-column;
+  float: left;
+  padding-left: 30px;
+};
+
+#upgrade-action-column {
+  @include upgrade-column;
+  float: right;
+  padding-right: 20px;
+}
+
+#upgrade-image {
+  border-top: 1px solid $border-color;
+  //  @include single-box-shadow(0, 1px, 0,$color: green);
+
+  position: relative;
+  top: 20x;
+
+  padding-top: 20px;
+  clear: both;
+
+  img {
+    width: 100%;
+  }
+}
+
+

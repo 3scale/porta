@@ -1,0 +1,35 @@
+<%
+
+  disabled ||= !rule.new_record? && !@marked_for_update.try(:include?,rule.id.to_s)
+  html_options = { :disabled => disabled , :class => 'message-when-change' }
+
+ %>
+
+<%- id = rule.id || "{new_id_#{SecureRandom.hex}}" %>
+
+<%= form.fields_for "proxy_rules_attributes[#{id}]", rule do |p| %>
+    <td class="http_method">
+      <%= p.select 'http_method', ProxyRule::ALLOWED_HTTP_METHODS, {}, html_options %>
+    </td>
+    <td class="pattern">
+      <%= p.text_field_with_errors :pattern, html_options %>
+    </td>
+
+    <% if @service.using_proxy_pro? %>
+      <td class="redirect_url">
+        <%= p.text_field_with_errors :redirect_url, html_options %>
+      </td>
+    <% end %>
+    <td class="delta">
+      <%= p.text_field_with_errors :delta, html_options %>
+    </td>
+    <td class="metric">
+      <%= p.select 'metric_id', metrics, {}, html_options.deep_merge(data: { selected: rule.metric_id }) %>
+    </td>
+    <td class="actions">
+      <%= link_to '', '#edit-proxy-rule', :class => 'action edit' %>
+      <%= link_to '', '#delete-proxy-rule', :class => 'action delete' %>
+      <%= p.hidden_field :_destroy, {}.merge(:class => 'destroyer', :value => 1, :disabled => true) %>
+      <%= p.hidden_field :id, html_options.merge(:class => 'proxy_rule_id') %>
+    </td>
+<% end %>

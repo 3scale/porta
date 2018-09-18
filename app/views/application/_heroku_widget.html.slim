@@ -1,0 +1,7 @@
+- if current_account.heroku?
+  script src="https://s3.amazonaws.com/assets.heroku.com/boomerang/boomerang.js"
+  script type="text/javascript"
+    | document.addEventListener('DOMContentLoaded', function() {
+    |   Boomerang.init({app: '#{current_account.settings.heroku_name}', addon: '#{Heroku.addon_name}'});
+    | });
+

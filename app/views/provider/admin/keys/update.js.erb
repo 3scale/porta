@@ -1,0 +1,8 @@
+  <% if @cinstance.valid? -%>
+    $.colorbox.close();
+    $('#cinstance-user-key').html('<%= @cinstance.user_key %>');
+  <% else -%>
+    $("#invalid-key-warning").text('<%= flash[:error] %>');
+    $("#invalid-key-warning").show();
+    $.colorbox.resize();
+  <% end -%>

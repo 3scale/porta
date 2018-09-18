@@ -1,0 +1,5 @@
+<% if @plan.full_legal.blank? %>
+	<p></p>
+<% else %>
+	<%= RedCloth.new(@plan.full_legal).to_html %>
+<% end %>

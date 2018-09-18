@@ -1,0 +1,14 @@
+require 'test_helper'
+
+class <%= class_name %>SubscriberTest < ActiveSupport::TestCase
+
+  def setup
+    @subscriber = <%= class_name %>Subscriber.new
+  end
+
+  def test_create
+    event = Class.new(RailsEventStore::Event).new
+    
+    assert @subscriber.call(event)
+  end
+end

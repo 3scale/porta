@@ -1,0 +1,8 @@
+Description:
+    Generates representer (for json, xml, ... output)
+
+Example:
+    rails generate representer Thing
+
+    This will create:
+        app/representers/thing_representer

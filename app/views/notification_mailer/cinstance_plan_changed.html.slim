@@ -1,0 +1,17 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | Application #{@cinstance.name} has changed to plan #{@new_plan.name}.
+
+p
+  b Details:
+
+ul
+  li Application: #{@cinstance.name}
+  li Developer: #{@account.name}
+  li Service: #{@service.name}
+  li Previous plan: #{@old_plan.name}
+  li Current plan: #{@new_plan.name}
+
+p= link_to 'View application', admin_buyers_account_application_url(@account, @cinstance)

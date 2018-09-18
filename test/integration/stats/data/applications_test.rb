@@ -1,0 +1,22 @@
+require 'test_helper'
+
+class Stats::Data::ApplicationsTest < ActionDispatch::IntegrationTest
+  def setup
+    @cinstance = Factory :cinstance
+    host! @cinstance.provider_account.admin_domain
+    @admin = @cinstance.provider_account.admins.first.username
+  end
+
+  test 'usage_response_code with no data as json' do
+    provider_login_with @admin, 'supersecret'
+    get "/stats/applications/#{@cinstance.id}/usage_response_code.json",
+      period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false
+
+    assert_response :success
+    assert_content_type 'application/json'
+
+    response = ActiveSupport::JSON.decode(@response.body)
+    response["values"] == [0] * 25
+    response["change"] == 0.0
+  end
+end

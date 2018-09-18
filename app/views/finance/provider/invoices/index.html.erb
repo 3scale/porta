@@ -1,0 +1,64 @@
+<h2>Invoices
+  <%- if @buyer.present? -%>
+    for account: <%= h @buyer.org_name %>
+  <%- end -%>
+</h2>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th><%= sortable('friendly_id', 'Number', :admin_finance_invoices_path) %></th>
+      <th><%= sortable('accounts.org_name', 'Account', :admin_finance_invoices_path) %></th>
+      <th><%= sortable('period', 'Month', :admin_finance_invoices_path) %></th>
+      <th>Cost</th>
+      <th><%= sortable('state', 'State', :admin_finance_invoices_path) %></th>
+      <th>Download</th>
+    </tr>
+
+    <tr class="search">
+      <%= form_for @search, :as => :search, :url => '', :html => { :method => :get, :class => :search } do |s| -%>
+        <th><%= s.text_field :number, placeholder: "2017-06-* / 2018-*"  %>
+        </th>
+        <th>
+          <%= s.text_field :buyer_query, :size => 20, :disabled => @buyer.present? %>
+        </th>
+        <th>
+          <%= select_month @search.month_number.try(:to_i), :prefix => :search, :field_name => :month_number, :include_blank => true %>
+          <%- years = Invoice.years %>
+          <%= select_year @search.year.try(:to_i), :prefix => :search, :field_name => :year, :include_blank => true, :start_year => years.first, :end_year => years.last %>
+        <th></th>
+        <th><%= s.select :state, Invoice.state_machine.states.keys.collect(&:to_s).sort, :include_blank => true, :selected => @search.state %></th>
+        <th><%= s.submit 'Search', :name => nil %></th>
+      <%- end -%>
+    </tr>
+  </thead>
+  <tbody class="invoices">
+    <% @invoices.each do |invoice| %>
+
+      <%= content_tag_for(:tr, invoice) do %>
+        <td><%= link_to  invoice.friendly_id,
+            admin_finance_invoice_path(invoice),
+            :title => "Show #{invoice.friendly_id}" -%></td>
+        <td><%= link_to_buyer_or_deleted(invoice.buyer, :admin_buyers_account_invoices_path) %></td>
+        <td><%= h invoice.name %></td>
+        <td><%= price_tag(invoice.cost) %></td>
+        <td><%= h invoice.state %></td>
+        <td>
+          <%= invoice_pdf_link(invoice, 'PDF') %>
+        </td>
+        <% end %>
+    <% end %>
+
+    <%- if @invoices.empty? -%>
+      <tr class="no_results">
+        <td colspan="6">
+          No Invoices.
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>
+
+<%= will_paginate(@invoices) %>
+
+<%= link_to_export_widget_for('Invoices') %>

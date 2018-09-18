@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="fa fa-user"></i>
+        Invitation sign in
+      </div>
+      <div class="panel-body">
+
+        {% include 'login/sso' %}
+
+        {% form 'invitation_signup', user, { class: 'form-horizontal' } %}
+
+          <fieldset>
+
+            {% for field in user.fields %}
+              {% include 'field' with field %}
+            {% endfor %}
+
+            {% if user.password_required? %}
+              <div class="form-group {{ user.errors.password | error_class: 'has-error' }}" id="user_password_input">
+                <label for="user_password" class="control-label col-md-4">Password</label>
+                <div class="col-md-6">
+                  <input id="user_password" name="user[password]" tabindex="1"
+                         autofocus="autofocus" type="password" class="form-control">
+                  {{ user.errors.password | inline_errors: 'inline-errors' }}
+                </div>
+              </div>
+
+              <div class="form-group {{ user.errors.password_confirmation | error_class: 'has-error' }}" id="user_password_confirmation_input">
+                <label for="user_password_confirmation" class="control-label col-md-4">
+                  Password confirmation
+                </label>
+                <div class="col-md-6">
+                  <input id="user_password_confirmation" name="user[password_confirmation]" tabindex="2"
+                         type="password" class="form-control">
+                  {{ user.errors.password_confirmation | inline_errors: 'inline-errors' }}
+                </div>
+              </div>
+            {% endif %}
+
+          </fieldset>
+
+          {% include 'signup_licence' %}
+
+          <fieldset>
+            <div class="form-group">
+              <div class="col-md-10">
+                <input name="commit" type="submit" value="Sign up" class="btn btn-success btn-lg pull-right">
+              </div>
+            </div>
+          </fieldset>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

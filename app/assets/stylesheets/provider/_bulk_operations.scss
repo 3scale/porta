@@ -1,0 +1,26 @@
+#bulk-operations {
+  display: none;
+  clear: both;
+  padding: line-height-times(1) 0;
+  line-height: $line-height-lg;
+
+  button {
+    @extend .outline-button-thin;
+  }
+
+  dl {
+    @extend %dl;
+  }
+
+  .operation {
+    @extend %dt;
+  }
+
+  .description {
+    @extend %dd;
+  }
+
+  .select-total-entries {
+    display: none;
+  }
+}

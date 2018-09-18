@@ -1,0 +1,6 @@
+{% if cas %}
+  <div class="sso-signup">
+    <p>You can use your CAS account to login before signing up.</p>
+    {{ "login with CAS" | link_to: cas.login_url }}
+  </div>
+{% endif %}

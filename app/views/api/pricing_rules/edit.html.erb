@@ -1,0 +1,9 @@
+<h2>Edit Pricing rule</h2>
+
+<% @value = @pricing_rule.min %>
+
+<%= semantic_form_for @pricing_rule,
+                      :url => polymorphic_path([:admin, @plan, @pricing_rule]),
+                      :html => {:class => 'remote'} do |form| %>
+  <%= render 'form', :form => form %>
+<% end %>

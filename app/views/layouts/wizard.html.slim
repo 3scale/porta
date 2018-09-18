@@ -1,0 +1,37 @@
+doctype html
+html[lang="en"]
+  head
+    meta[charset="utf-8"]
+    title
+      = content_for?(:title) ? yield(:title) : default_title
+      |  | Red Hat 3scale API Management
+    = csrf_meta_tag
+    = stylesheet_link_tag "provider/themes/wizard.css"
+    = render 'provider/analytics'
+    = javascript_include_tag 'provider/layout/provider'
+    - if Rails.env.production? or Rails.env.preview?
+      script[src="https://support.3scale.net/api_docs/track.json?callback=$.noop" async="true"]
+    = yield :javascripts
+
+  body
+    = render 'heroku_widget'
+
+    header
+      = render partial: "/provider/logo"
+      = link_to can?(:manage, :plans) ? admin_services_path : provider_admin_dashboard_path , id: "wizard-close", class: "wizard-close", title: "close this wizard" do
+        i.fa.fa-times
+
+      end
+      = render 'shared/provider/flash', flash: flash
+
+    main
+      - if content_for :title
+        h1 = content_for :title
+
+      = yield
+
+    javascript:
+      analytics.trackLink(document.getElementById('wizard-close'), 'Wizard Step', {
+        step: 'closed',
+        path: window.location.pathname
+      })

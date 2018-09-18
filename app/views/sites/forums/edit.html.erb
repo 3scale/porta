@@ -1,0 +1,17 @@
+<h2>Forum Settings</h2>
+
+<%= semantic_form_for @settings, :url => admin_site_forum_path, :html => {:id => 'forum-settings' } do |form| %>
+  <%= form.inputs '' do %>
+    <%= form.input :forum_enabled,
+                   :hint => 'Globally turn forum on or off. If you unset this, the settings below will have no effect.' %>
+
+    <%= form.input :forum_public,
+                   :hint => 'Should the forum be accessible by any user, even without login?' %>
+
+    <%= form.input :anonymous_posts_enabled, :label => 'Allow anonymous posts?' %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button %>
+  <% end %>
+<% end %>

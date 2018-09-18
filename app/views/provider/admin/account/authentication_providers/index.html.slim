@@ -1,0 +1,27 @@
+h1 Single Sign-On Integrations
+p With Single sign-on (SSO) user authentication for the admin portal is federated to the authentication provider of your choice.
+- if @presenter.show_toggle?
+  .InfoBox
+    = form_for current_account.settings, url: provider_admin_account_enforce_sso_path, method: @presenter.method, html: { class: 'account_username_password_authentication admin-portal-sso'} do |form|
+      => form.check_box :enforce_sso, disabled:  @presenter.disable_toggle?
+      = form.label :enforce_sso, "Enforce SSO for all users of this account.", class: "Label"
+      - unless @presenter.enable_toggle?
+        p.Hint In order to be able to enforce SSO, at least 1 SSO Integration needs to be published, all published SSO Integrations need to have been tested within the last hour and you need to be signed in through SSO yourself.
+      - if @presenter.sso_enforced?
+        button.AllowPasswordButton.is-hidden.important-button type="submit" re-enable password-based sign-ins for all users including myself
+        p.Hint In order to edit active Single Sign-On integrations, first disable SSO enforcement.
+      - else
+        button.EnforceSSOButton.is-hidden.important-button.dangerous-button type="submit" yes, terminate current password-based sessions and disable password-based sign-ins for all users including myself
+table.data
+  thead
+    tr
+      th Integration
+      th Created on
+      th Number of users
+      th State
+      th class="actions"
+        = link_to 'New SSO Integration', new_provider_admin_account_authentication_provider_path,
+                            title: 'Add a new Single sign-on provider',
+                            class: 'action add'
+  tbody
+    = render partial: 'authentication_provider', collection: @presenter.authentication_providers

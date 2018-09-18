@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col-md-9">
+        {% include 'users_menu' %}
+        <div class="panel panel-default">
+            <div class="panel-heading important">
+                <a href="{{ urls.users }}">
+                    <i class="fa fa-chevron-left"></i>
+                    Cancel
+                </a>
+                {% if user.can.be_destroyed? %}
+                    <span class="pull-right">
+                        {{ '<i class="fa fa-trash"></i>' | html_safe | link_to: user.url, method: 'delete', confirm:  "Are you sure you want to delete this user?" }}
+                    </span>
+                {% endif %}
+            </div>
+            <div class="panel-body panel-footer">
+                {% form 'user.edit', user, class: "form-horizontal" %}
+                <fieldset class="inputs" name="Contact Details">
+                    {% for field in user.fields %}
+                        {% include 'field' with field %}
+                    {% endfor %}
+                </fieldset>
+
+                <fieldset name="Change Password">
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-md-4 control-label">Password</label>
+                        <div class="col-md-6">
+                            <input type="password" id="user_password" name="user[password]" class="form-control"
+                                   placeholder="Password">
+                            {{ user.errors.password | inline_errors }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-md-4 control-label">Password confirmation</label>
+                        <div class="col-md-6">
+                            <input type="password" id="user_password_confirmation" name="user[password_confirmation]"
+                                   class="form-control" placeholder="Password">
+                            {{ user.errors.password_confirmation | inline_errors }}
+                        </div>
+                    </div>
+                </fieldset>
+                {% if user.can.be_update_role? %}
+                    <fieldset name="Administrative">
+                        <legend>
+                            <span> Administrative Role </span>
+                        </legend>
+                        {% for role in user.roles_collection %}
+                            <div class="radio">
+                                <label>
+                                    <input
+                                            {% if user.role == role.name %}
+                                                checked="checked"
+                                            {% endif %}
+                                            type="radio" name="user[role]" id="user_role_{{ role.name }}"
+                                            value="{{ role.name }}" checked>
+                                    {{ role.description }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </fieldset>
+                {% endif %}
+                <div class="btn-toolbar pull-right" role="toolbar">
+                    <div class="btn-group" role="group">
+                        <input class="btn btn-primary" name="commit" type="submit" value="Update User">
+                    </div>
+                </div>
+                {% endform %}
+            </div>
+        </div>
+    </div>
+</div>

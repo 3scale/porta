@@ -1,0 +1,26 @@
+<%= render 'legal_terms_inmunity' %>
+
+<%= form.inputs :name => 'Contact Details', :class => 'inputs' do %>
+  <%= form.user_defined_form %>
+<% end %>
+
+
+<% #FIXME this kind of repeated and complex conditions and repetition of a form.fields arose from the fact of using this partial for:
+   # buyer => edits own account
+   # provider => edits own account
+   # provider => edits buyer account
+   # TOO MUCH responsability for a partial!
+ -%>
+
+<% if current_account.provider? && !@account.provider?-%>
+  <%= form.inputs :name => 'Legal terms' do %>
+    <%= form.input :signs_legal_terms, :label => "Buyer signs Legal Terms agreements?", :hint => '<br/>Leave blank for buyers signing external Legal Terms' %>
+  <% end -%>
+<% end -%>
+
+<%= form.buttons do %>
+  <%= form.commit_button %>
+  <%= form.cancel_link cancel_path %>
+<% end %>
+
+<%= javascript_include_tag 'custom_profiles_input_texts' %>

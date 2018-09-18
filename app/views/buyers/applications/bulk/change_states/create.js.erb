@@ -1,0 +1,4 @@
+<%- @applications.each do |application| %>
+  $("#<%=dom_id(application)%>").find(".state").text("<%= escape_javascript application.state %>");
+<%-end-%>
+$("#bulk-operations").trigger("bulk:success");

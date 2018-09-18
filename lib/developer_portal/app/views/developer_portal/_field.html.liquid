@@ -1,0 +1,44 @@
+{% comment %}
+  This partial is by default used throughout the whole 3scale system.
+  You can find it in almost any form such as 'applications/edit' or
+  'signup'. So be careful with any changes as it may break a lot.
+{% endcomment %}
+{% if field.read_only or field.hidden %}
+  {% continue %}
+{% endif %}
+
+{% if field.choices == present %}
+  <div class="form-group {% if field.required %} required {% else %} optional {% endif %}"
+      id="{{ field.html_id }}_input">
+      <label class="col-md-4 control-label" for="{{ field.html_id }}_id" >
+          {{ field.label }}
+          {% if field.required %} <abbr class="required" title="required">*</abbr> {% endif %}
+      </label>
+      <div class="col-md-6">
+        <select name="{{ field.input_name }}" id="{{ field.html_id }}_id"
+                class="{{ field.errors | error_class }} form-control">
+            <option/>
+            {% for choice in field.choices %}
+              <option {% if field.value == choice.id %} selected {% endif %}
+                value="{{choice.id}}">{{choice.label}}</option>
+            {% endfor %}
+        </select>
+        {{ field.errors | inline_errors }}
+      </div>
+  </div>
+{% else %}
+  <div class="form-group {{ field.errors | error_class: 'has-error' }}">
+    <label class="col-md-4 control-label" for="{{ field.html_id }}">
+      {{ field.label }}
+      {% if field.required %} <abbr class="required" title="required">*</abbr> {% endif %}
+    </label>
+    <div class="col-md-6">
+      <input type="text"
+             name="{{ field.input_name }}"
+             id="{{ field.html_id }}"
+             value="{{ field.value }}"
+             class="{{ field.errors | error_class }} form-control" />
+      {{ field.errors | inline_errors }}
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,51 @@
+base: &default
+  test_api_hosts:
+    - echo-api.3scale.net
+    - hello-world-api.3scale.net
+  ignore_test_failures: []
+  hosts:
+    - localhost:8091
+  backend_host: backend:3000
+  shared_secret: dev
+  backend_scheme: http
+  nginx_port: 8080
+  verify_mode: <%= OpenSSL::SSL::VERIFY_NONE %>
+  debug: true
+  override: 'http://localhost:8091'
+  sandbox_endpoint: 'https://%{system_name}-%{account_id}.staging.%{env}apicast.io:%{port}'
+  hosted_proxy_endpoint: 'https://%{system_name}-%{account_id}.%{env}apicast.io:%{port}'
+  apicast_staging_endpoint: 'http://%{system_name}-%{account_id}.staging.%{env}apicast.dev:8080'
+  apicast_production_endpoint: 'http://%{system_name}-%{account_id}.%{env}apicast.dev:8080'
+  skip_deploy: false
+  apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://localhost:8090/policies') %>
+
+development:
+  <<: *default
+  test_api_hosts:
+    - hello-world-api.3scale.net
+  ignore_test_failures:
+    - echo-api.3scale.net
+
+test:
+  ignore_test_failures: []
+  test_api_hosts:
+    - echo-api.3scale.net
+    - hello-world-api.3scale.net
+  hosts:
+    - 'test.proxy'
+  backend_host: '127.0.0.1:4001'
+  backend_scheme: 'http'
+  shared_secret: 'TEST'
+  nginx_port: 8080
+  sandbox_endpoint: 'https://%{system_name}-%{account_id}.staging.%{env}apicast.io:%{port}'
+  hosted_proxy_endpoint: 'https://%{system_name}-%{account_id}.%{env}apicast.io:%{port}'
+  apicast_staging_endpoint: 'http://%{system_name}-%{account_id}.staging.%{env}apicast.dev:8080'
+  apicast_production_endpoint: 'http://%{system_name}-%{account_id}.%{env}apicast.dev:8080'
+  skip_deploy: false
+  apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://localhost:8090/policies') %>
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

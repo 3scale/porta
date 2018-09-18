@@ -1,0 +1,11 @@
+<h1>Upload File</h1>
+
+<%= cms_new_button_dropdown(CMS::File) %>
+
+<%= cms_form_for(@file, :html => { :multipart => true }) do |f| %>
+  <%= render 'form', :f => f %>
+
+  <%= f.buttons do %>
+    <%= f.commit_button :button_html => {:title => 'Create File'} %>
+  <% end %>
+<% end %>

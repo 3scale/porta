@@ -1,0 +1,14 @@
+<article class="InfoBox">
+  <dl class="messageDetails u-dl">
+    <dt class="u-dl-term">Date Received</dt>
+    <dd class="u-dl-definition"><%= message.created_at.to_s(:long) %></dd>
+    <dt class="u-dl-term">From</dt>
+    <dd class="u-dl-definition"><%= message_sender(message) %></dd>
+    <dt class="u-dl-term">To</dt>
+    <dd class="u-dl-definition"><%= message_receiver(message) %></dd>
+    <dt class="u-dl-term">Subject</dt>
+    <dd class="u-dl-definition"><%= h message.subject %></dd>
+    <dt class="u-dl-term">Body</dt>
+    <dd class="u-dl-definition"><%= simple_format hyperlink_urls(message.body) %></dd>
+  </dl>
+</article>

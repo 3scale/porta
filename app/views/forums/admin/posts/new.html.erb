@@ -1,0 +1,13 @@
+<h2>Post reply</h2>
+<%= semantic_form_for @post, :url => forum_topic_posts_path(@topic) do |form| %>
+  <%= form.semantic_errors %>
+
+  <%= form.inputs 'Reply to thread' do %>
+    <%= render 'forums/admin/posts/fields', :form => form %>
+    <%= render 'forums/admin/posts/anonymous', :form => form, :post => @post %>
+  <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button 'Post reply' %>
+  <% end %>
+<% end %>

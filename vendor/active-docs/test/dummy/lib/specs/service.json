@@ -1,0 +1,719 @@
+{
+    "basePath": "http://su1.3scale.net",
+    "swagrVersion": "0.1a",
+    "apiVersion": "1.0",
+    "apis": [{
+        "path": "/transactions/authorize.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "GET",
+            "summary": "Authorize (App Id authentication pattern)",
+            "description": "<strong>Read-only</strong> operation to authorize an application in the App Id authentication pattern. It is used to check if a particular application exists, is active and is within its usage limits. It can be optionally used to authenticate a call using an application key. It's possible to pass a 'predicted usage' to the authorize call. This can serve two purposes: 1) To make sure an API call won't go over the limits before the call is made, if the usage of the call is known in advance. In this case, the estimated usage can be passed to the authorize call, and it will respond whether the actual API call is still within limit. And, 2) To limit the authorization only to a subset of metrics. If usage is passed in, only the metrics listed in it will be checked against the limits. For example: There are two metrics defined: searches and updates. updates are already over limit, but searches are not. In this case, the user should still be allowed to do a search call, but not an update one. Note: Even if the predicted usage is passed in, authorize is still a read-only operation. You have to make the report call to report the usage. The response can have an http response code: 200 OK (if authorization is granted), 409 (if it's not granted, typically application over limits or keys missing, check '<reason>'),  or 403 (for authentication errors, check '<error>') and 404 (for not founds).",
+            "group": "authorize",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key).",
+                "description_inline": true
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "app_id",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "app_ids",
+                "description": "App Id (identifier of the application if the auth. pattern is App Id)"
+            },
+            {
+                "name": "app_key",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "threescale_name": "app_keys",
+                "description": "App Key (shared secret of the application if the authentication pattern is App Id). The app key is required if the application has one or more keys defined."
+            },
+            {
+                "name": "referrer",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
+            },
+            {
+                "name": "user_id",
+                "dataType": "string",
+                "paramType": "query",
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+            },
+            {
+                "name": "usage",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
+                "parameters": [{
+                    "name": "metric",
+                    "dataType": "custom",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": true,
+                    "threescale_name": "metric_names",
+                    "description": "Metric to be reported",
+                    "description_inline": true
+                }]
+            }]
+        }]
+    },
+    {
+        "path": "/transactions/authorize.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "GET",
+            "tags": ["authorize", "user_key"],
+            "nickname": "authorize_user_key",
+            "deprecated": false,
+            "summary": "Authorize (API Key authentication pattern)",
+            "description": "Read-only operation to authorize an application in the App Key authentication pattern. It is used to check if a particular application exists, is active and is within its usage limits. It can be optionally used to authenticate a call using an application key. It's possible to pass a 'predicted usage' to the authorize call. This can serve two purposes: 1) To make sure an API call won't go over the limits before the call is made, if the usage of the call is known in advance. In this case, the estimated usage can be passed to the authorize call, and it will respond whether the actual API call is still within limit. And, 2) To limit the authorization only to a subset of metrics. If usage is passed in, only the metrics listed in it will be checked against the limits. For example: There are two metrics defined: searches and updates. updates are already over limit, but searches are not. In this case, the user should still be allowed to do a search call, but not an update one. Note: Even if the predicted usage is passed in, authorize is still a read-only operation. You have to make the report call to report the usage. The response can have an http response code: 200 OK (if authorization is granted), 409 (if it's not granted, typically application over limits or keys missing, check '<reason>'),  or 403 (for authentication errors, check '<error>') and 404 (for not founds).",
+            "group": "authorize",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key).",
+                "description_inline": true
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "user_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "theescale_name": "user_keys",
+                "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)"
+            },
+            {
+                "name": "referrer",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
+            },
+            {
+                "name": "user_id",
+                "dataType": "string",
+                "paramType": "query",
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+            },
+            {
+                "name": "usage",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
+                "parameters": [{
+                    "name": "metric",
+                    "dataType": "custom",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": true,
+                    "threescale_name": "metric_names",
+                    "description": "Metric to be reported"
+                }]
+            }]
+        }]
+    },
+    {
+        "path": "/transactions/oauth_authorize.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "GET",
+            "tags": ["authorize", "user_key"],
+            "nickname": "oauth_authorize",
+            "deprecated": false,
+            "summary": "Authorize (Oauth authentication mode pattern)",
+            "description": "Read-only operation to authorize an application in the Oauth authentication pattern. This calls returns extra data (secret and redirect_url) needed to power OAuth APIs. It's only available for users with OAuth enabled APIs. It is used to check if a particular application exists, is active and is within its usage limits. It can be optionally used to authenticate a call using an application key. It's possible to pass a 'predicted usage' to the authorize call. This can serve two purposes: 1) To make sure an API call won't go over the limits before the call is made, if the usage of the call is known in advance. In this case, the estimated usage can be passed to the authorize call, and it will respond whether the actual API call is still within limit. And, 2) To limit the authorization only to a subset of metrics. If usage is passed in, only the metrics listed in it will be checked against the limits. For example: There are two metrics defined: searches and updates. updates are already over limit, but searches are not. In this case, the user should still be allowed to do a search call, but not an update one. Note: Even if the predicted usage is passed in, authorize is still a read-only operation. You have to make the report call to report the usage. The response can have an http response code: 200 OK (if authorization is granted), 409 (if it's not granted, typically application over limits or keys missing, check '<reason>'),  or 403 (for authentication errors, check '<error>') and 404 (for not founds).",
+            "group": "authorize",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key)."
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "app_id",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "app_ids",
+                "description": "Client Id (identifier of the application if the auth. pattern is Oauth, note that client_id == app_id)"
+            },
+            {
+                "name": "referrer",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
+            },
+            {
+                "name": "user_id",
+                "dataType": "string",
+                "paramType": "query",
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+            },
+            {
+                "name": "usage",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
+                "parameters": [{
+                    "name": "metric",
+                    "dataType": "custom",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": true,
+                    "threescale_name": "metric_names",
+                    "description": "Metric to be reported"
+                }]
+            },
+            {
+                "name": "redirect_url",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "description": "Optional redirect URL for OAuth. Will be validated if sent."
+            }]
+        }]
+    },
+    {
+        "path": "/transactions/authrep.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "GET",
+            "summary": "AuthRep (Authorize + Report for the App Id authentication pattern)",
+            "description": "Authrep is a 'one-shot' operation to authorize an application and report the associated transaction at the same time. The main difference between this call and the regular authorize call is that usage will be reported if the authorization is successful. Authrep is not a read-only operation and will increment/set the values if the authorization step is a success.",
+            "group": "authrep",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key)."
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "app_id",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "app_ids",
+                "description": "App Id (identifier of the application if the auth. pattern is App Id)"
+            },
+            {
+                "name": "app_key",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "threescale_name": "app_keys",
+                "description": "App Key (shared secret of the application if the authentication pattern is App Id). The app key is required if the application has one or more keys defined."
+            },
+            {
+                "name": "referrer",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
+            },
+            {
+                "name": "user_id",
+                "dataType": "string",
+                "paramType": "query",
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+            },
+            {
+                "name": "usage",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Usage, will increment/set the metrics with the values passed.",
+                "parameters": [{
+                    "name": "metric",
+                    "dataType": "custom",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": true,
+                    "threescale_name": "metric_names",
+                    "description": "Metric to be reported"
+                }]
+            },
+            {
+                "name": "log",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+                "parameters": [{
+                    "name": "request",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description_inline": true,
+                    "description": "Body of the request to your API (needs to be URL encoded). Mandatory if log is not empty. Truncated after 1KB."
+                },
+                {
+                    "name": "response",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description_inline": true,
+                    "description": "Body of the response from your API (needs to be URL encoded). Optional. Truncated after 4KB."
+                },
+                {
+                    "name": "code",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description_inline": true,
+                    "description": "Response code of the response from your API (needs to be URL encoded). Optional. Truncated after 32bytes."
+                }]
+            }]
+        }]
+    },
+    {
+        "path": "/transactions/authrep.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "GET",
+            "summary": "AuthRep (Authorize + Report for the API Key authentication pattern)",
+            "description": "Authrep is a 'one-shot' operation to authorize an application and report the associated transaction at the same time. The main difference between this call and the regular authorize call is that usage will be reported if the authorization is successful. Authrep is not a read-only operation and will increment/set the values if the authorization step is a success.",
+            "group": "authrep",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key)."
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "user_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "theescale_name": "user_keys",
+                "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)"
+            },
+            {
+                "name": "referrer",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query",
+                "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
+            },
+            {
+                "name": "user_id",
+                "dataType": "string",
+                "paramType": "query",
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+            },
+            {
+                "name": "usage",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Usage, will increment/set the metrics with the values passed.",
+                "parameters": [{
+                    "name": "metric",
+                    "dataType": "custom",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": true,
+                    "threescale_name": "metric_names",
+                    "description": "Metric to be reported"
+                }]
+            },
+            {
+                "name": "log",
+                "dataType": "hash",
+                "required": false,
+                "paramType": "query",
+                "allowMultiple": false,
+                "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+                "parameters": [{
+                    "name": "request",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description_inline": true,
+                    "description": "Body of the request to your API (needs to be URL encoded). Mandatory if log is not empty. Truncated after 1KB."
+                },
+                {
+                    "name": "response",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description_inline": true,
+                    "description": "Body of the response from your API (needs to be URL encoded). Optional. Truncated after 4KB."
+                },
+                {
+                    "name": "code",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description_inline": true,
+                    "description": "Response code of the response from your API (needs to be URL encoded). Optional. Truncated after 32bytes."
+                }]
+            }]
+        }]
+    },
+    {
+        "path": "/transactions.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "POST",
+            "summary": "Report (App Id authentication pattern)",
+            "description": "Report the transactions to 3scale backend. This operation updates the metrics passed in the usage parameter. You can send up to 1K transactions in a single POST request. Transactions are processed asynchronously by the 3scale's backend. Note that transactions from a single batch are reported only if all of them are valid. If there is an error in processing of at least one of them, none is reported. Note that a batch can only report transactions to the same service, service_id is at the same level that provider_key. Multiple report calls will have to be issued to report transactions to different services.",
+            "group": "report",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key)."
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "transactions",
+                "dataType": "array",
+                "required": true,
+                "paramType": "body",
+                "allowMultiple": true,
+                "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
+                "parameters": [{
+                    "name": "app_id",
+                    "dataType": "string",
+                    "required": true,
+                    "paramType": "query",
+                    "threescale_name": "app_ids",
+                    "description": "App Id (identifier of the application if the auth. pattern is App Id)",
+                    "description_inline": true
+                },
+                {
+                    "name": "user_id",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
+                    "description_inline": true
+                },
+                {
+                    "name": "timestamp",
+                    "dataType": "string",
+                    "required": false,
+                    "paramType": "body",
+                    "description": "If passed, it should be the time when the transaction took place. Format: YYYY-MM-DD HH:MM:SS for UTC, add -HH:MM or +HH:MM for time offset. For instance, 2011-12-30 22:15:31 -08:00",
+                    "description_inline": false
+                },
+                {
+                    "name": "usage",
+                    "dataType": "hash",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": false,
+                    "description": "Usage, will increment/set the metrics with the values passed.",
+                    "parameters": [{
+                        "name": "metric",
+                        "dataType": "custom",
+                        "required": false,
+                        "paramType": "query",
+                        "allowMultiple": true,
+                        "threescale_name": "metric_names",
+                        "description": "Metric to be reported"
+                    }]
+                },
+                {
+                    "name": "log",
+                    "dataType": "hash",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": false,
+                    "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+                    "parameters": [{
+                        "name": "request",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Body of the request to your API (needs to be URL encoded). Mandatory if log is not empty. Truncated after 1KB."
+                    },
+                    {
+                        "name": "response",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Body of the response from your API (needs to be URL encoded). Optional. Truncated after 4KB."
+                    },
+                    {
+                        "name": "code",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Response code of the response from your API (needs to be URL encoded). Optional. Truncated after 32bytes."
+                    }]
+                }]
+            }]
+        }]
+    },
+    {
+        "path": "/transactions.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "POST",
+            "summary": "Report (API Key authentication pattern)",
+            "description": "Report the transactions to 3scale backend. This operation updates the metrics passed in the usage parameter. You can send up to 1K transactions in a single POST request. Transactions are processed asynchronously by the 3scale's backend. Note that transactions from a single batch are reported only if all of them are valid. If there is an error in processing of at least one of them, none is reported. Note that a batch can only report transactions to the same service, service_id is at the same level that provider_key. Multiple report calls will have to be issued to report transactions to different services.",
+            "group": "report",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key)."
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "transactions",
+                "dataType": "array",
+                "required": true,
+                "paramType": "body",
+                "allowMultiple": true,
+                "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
+                "parameters": [{
+                    "name": "user_key",
+                    "dataType": "string",
+                    "required": true,
+                    "paramType": "query",
+                    "theescale_name": "user_keys",
+                    "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)",
+                    "description_inline": true
+                },
+                {
+                    "name": "user_id",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
+                    "description_inline": true
+                },
+                {
+                    "name": "timestamp",
+                    "dataType": "string",
+                    "required": false,
+                    "paramType": "body",
+                    "description": "If passed, it should be the time when the transaction took place. Format: YYYY-MM-DD HH:MM:SS for UTC, add -HH:MM or +HH:MM for time offset. For instance, 2011-12-30 22:15:31 -08:00",
+                    "description_inline": true
+                },
+                {
+                    "name": "usage",
+                    "dataType": "hash",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": false,
+                    "description": "Usage, will increment/set the metrics with the values passed.",
+                    "parameters": [{
+                        "name": "metric",
+                        "dataType": "custom",
+                        "required": false,
+                        "paramType": "query",
+                        "allowMultiple": true,
+                        "threescale_name": "metric_names",
+                        "description": "Metric to be reported"
+                    }]
+                },
+                {
+                    "name": "log",
+                    "dataType": "hash",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": false,
+                    "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+                    "parameters": [{
+                        "name": "request",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Body of the request to your API (needs to be URL encoded). Mandatory if log is not empty. Truncated after 1KB."
+                    },
+                    {
+                        "name": "response",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Body of the response from your API (needs to be URL encoded). Optional. Truncated after 4KB."
+                    },
+                    {
+                        "name": "code",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Response code of the response from your API (needs to be URL encoded). Optional. Truncated after 32bytes."
+                    }]
+                }]
+            }]
+        }]
+    },
+    {
+        "path": "/transactions.xml",
+        "format": "xml",
+        "operations": [{
+            "httpMethod": "POST",
+            "summary": "Report (Oauth authentication pattern)",
+            "description": "Report the transactions to 3scale backend. This operation updates the metrics passed in the usage parameter. You can send up to 1K transactions in a single POST request. Transactions are processed asynchronously by the 3scale's backend. Note that transactions from a single batch are reported only if all of them are valid. If there is an error in processing of at least one of them, none is reported. Note that a batch can only report transactions to the same service, service_id is at the same level that provider_key. Multiple report calls will have to be issued to report transactions to different services.",
+            "group": "report",
+            "parameters": [{
+                "name": "provider_key",
+                "dataType": "string",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys",
+                "description": "Your api key with 3scale (also known as provider key)."
+            },
+            {
+                "name": "service_id",
+                "dataType": "string",
+                "paramType": "query",
+                "threescale_name": "service_ids",
+                "description": "Service id. Required only if you have more than one service."
+            },
+            {
+                "name": "transactions",
+                "dataType": "array",
+                "required": true,
+                "paramType": "body",
+                "allowMultiple": true,
+                "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
+                "parameters": [{
+                    "name": "app_id",
+                    "dataType": "string",
+                    "required": true,
+                    "paramType": "query",
+                    "threescale_name": "app_ids",
+                    "description": "Client Id (identifier of the application if the auth. pattern is Oauth, note that client_id == app_id)",
+                    "description_inline": true
+                },
+                {
+                    "name": "user_id",
+                    "dataType": "string",
+                    "paramType": "query",
+                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
+                    "description_inline": true
+                },
+                {
+                    "name": "timestamp",
+                    "dataType": "string",
+                    "required": false,
+                    "paramType": "body",
+                    "description": "If passed, it should be the time when the transaction took place. Format: YYYY-MM-DD HH:MM:SS for UTC, add -HH:MM or +HH:MM for time offset. For instance, 2011-12-30 22:15:31 -08:00",
+                    "description_inline": true
+                },
+                {
+                    "name": "usage",
+                    "dataType": "hash",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": false,
+                    "description": "Usage, will increment/set the metrics with the values passed.",
+                    "parameters": [{
+                        "name": "metric",
+                        "dataType": "custom",
+                        "required": false,
+                        "paramType": "query",
+                        "allowMultiple": true,
+                        "threescale_name": "metric_names",
+                        "description": "Metric to be reported"
+                    }]
+                },
+                {
+                    "name": "log",
+                    "dataType": "hash",
+                    "required": false,
+                    "paramType": "query",
+                    "allowMultiple": false,
+                    "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+                    "parameters": [{
+                        "name": "request",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Body of the request to your API (needs to be URL encoded). Mandatory if log is not empty. Truncated after 1KB."
+                    },
+                    {
+                        "name": "response",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Body of the response from your API (needs to be URL encoded). Optional. Truncated after 4KB."
+                    },
+                    {
+                        "name": "code",
+                        "dataType": "string",
+                        "paramType": "query",
+                        "description_inline": true,
+                        "description": "Response code of the response from your API (needs to be URL encoded). Optional. Truncated after 32bytes."
+                    }]
+                }]
+            }]
+        }]
+    }]
+}

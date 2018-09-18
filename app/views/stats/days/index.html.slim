@@ -1,0 +1,21 @@
+- content_for :sublayout_title, 'Daily Averages'
+
+- content_for :javascripts do
+  = render_js_module_loader
+
+.Stats
+  .StatsSelector-container
+  .StatsChart-container#chart
+  .StatsCSVLink-container
+
+p.Stats-message--notice Average usage by day in the past 30 days
+
+p.Stats-message--notice
+  = timezone_information
+
+javascript:
+  System.import('stats/provider/stats_days_of_week').then(function(module){
+    module.statsDaysOfWeek(#{json @service.id}, {
+      csvLinkContainer: '.StatsCSVLink-container'
+    });
+  });

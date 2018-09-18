@@ -1,0 +1,31 @@
+= semantic_form_for authentication_provider,
+        url: [:provider, :admin, :account, authentication_provider.becomes(AuthenticationProvider) ],
+        as: :authentication_provider do |f|
+
+  = f.inputs do
+    - if authentication_provider.new_record?
+      - account_type = AuthenticationProvider.account_types[:provider]
+      = f.input :kind, as: :select,
+                      collection: AuthenticationProvider.available(account_type).map {|auth| [ auth.human_kind, auth.kind ] },
+                      label: 'SSO Provider',
+                      include_blank: false
+
+  = f.inputs do
+    = f.input :client_id, required: true, label: 'Client'
+    = f.input :client_secret, required: true, label: 'Client Secret'
+
+  - if authentication_provider.new_record?
+    = f.inputs do
+      = f.input :site, required: true, label: 'Realm or Site'
+  - else
+    = f.inputs do
+      = render partial: "provider/admin/account/authentication_providers/form/#{authentication_provider.kind}",
+             locals: { f: f, authentication_provider: authentication_provider }
+
+  = f.buttons do
+    = f.commit_button
+    - unless authentication_provider.new_record?
+      = link_to 'Delete',
+                provider_admin_account_authentication_provider_path(@authentication_provider),
+                data: {confirm: 'Are you sure?'}, method: :delete,
+                title: 'Delete authentication provider', class: 'action delete'

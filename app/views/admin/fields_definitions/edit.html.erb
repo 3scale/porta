@@ -1,0 +1,26 @@
+<h2>Editing field '<%= @fields_definition.name %>' for <%= @fields_definition.target.constantize.model_name.human %></h2>
+
+<p>
+  Here you can add a field to store information about your partners and make it Hidden, Read Only, Required, or provide a different label. The label is the text your partners will see when viewing or entering their data.
+  <% if @fields_definition.required_field_on_target? -%>
+    <em>This specific field is of internal use for the app, so you can only change its Label.</em>
+  <% end -%>
+</p>
+
+<%= semantic_form_for(@fields_definition, :url => admin_fields_definition_path , :method => :put) do |f| %>
+  <%= f.inputs do %>
+    <%= f.error_messages %>
+    <%= render :partial => 'form', :locals => { :f => f } %>
+  <% end %>
+
+  <%= f.buttons do %>
+    <%= f.commit_button 'Update field' %>
+    <li>
+      <%= delete_link_for(admin_fields_definition_path(@fields_definition), :confirm => 'Are you sure?') unless @fields_definition.required_field_on_target? %>
+    </li>
+  <% end %>
+<% end %>
+
+
+ <input name="hidden_field" id="required_fields" type="hidden" value="<%=(@required_fields.join(','))%>" />
+ <input name="fields-definitions-edit-view" id="fields-definitions-edit-view" type="hidden">

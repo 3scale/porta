@@ -1,0 +1,9 @@
+{% if pagination.pages > 1 %}
+	<ul class="pagination">
+	  {% for part in pagination.parts %}
+	    <li class="{{ part.rel }} {% unless part.is_link %}disabled{% endunless %}">
+	      <a rel="{{ part.rel }}" href="{{ part.url }}">{{ part.title }}</a>
+	    </li>
+	  {% endfor %}
+	</ul>
+{% endif %}

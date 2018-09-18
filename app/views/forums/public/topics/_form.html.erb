@@ -1,0 +1,35 @@
+<style>
+  ul#subsubmenu { top: -45px; }
+</style>
+<div id="edit_new_thread">
+  <%= form.inputs do %>
+
+  <%= form.input :title %>
+
+  <% if @forum.categories.exists? %>
+    <%= form.input :category, :collection => @forum.categories, include_blank: false %>
+  <% end %>
+
+    <%#
+    <div class="field">
+      <%#= form.cms_tag_list %><%#
+    </div> %>
+
+  <% if can?(:stick, @topic) %>
+    <%= form.input :sticky %>
+  <% end %>
+
+  <% if can?(:lock, @topic) %>
+    <%= form.input :locked %>
+  <% end %>
+
+  <% if @topic.new_record? %>
+    <%= render('forums/public/posts/fields', :form => form) %>
+    <%= render 'forums/public/posts/anonymous', :form => form, :post => @topic %>
+  <% end %>
+<% end %>
+
+<%= form.buttons do %>
+  <%= form.commit_button %>
+<% end %>
+</div>

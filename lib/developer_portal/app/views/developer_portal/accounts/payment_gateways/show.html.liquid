@@ -1,0 +1,141 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        <div class="pull-right">
+          {% comment %} In this example we're only using the heading for edit links {% endcomment %}
+
+          {% comment %} Braintree combines billing address + cc details in 1 form {% endcomment %}
+          {% if provider.payment_gateway.type == "braintree_blue" %}
+            <a href="{{ current_account.edit_braintree_blue_credit_card_details_url }}">
+              {% if current_account.has_billing_address? and current_account.credit_card_stored? %}
+                <i class="fa fa-pencil"></i>
+                Edit Credit Card Details and Billing Address
+              {% endif %}
+            </a>
+          {% endif %}
+
+          {% comment %} Ogone & stripe have separate forms for billing address + cc details {% endcomment %}
+          {% if current_account.has_billing_address? %}
+            {% case provider.payment_gateway.type %}
+
+            {% when "ogone" %}
+              <a href="{{ current_account.edit_ogone_billing_address_url }}">
+                <i class="fa fa-pencil"></i>
+                Edit billing address
+              </a>
+
+            {% when "stripe" %}
+              <a href="{{ current_account.edit_stripe_billing_address_url }}">
+                <i class="fa fa-pencil"></i>
+                Edit billing address
+              </a>
+
+            {% when "adyen12" %}
+              <a href="{{ current_account.edit_adyen12_billing_address_url }}">
+                <i class="fa fa-pencil"></i>
+                Edit billing address
+              </a>
+            {% endcase %}
+          {% endif %}
+        </div>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="panel-body">
+        {% comment %} In this example we're only rendering billing address and cc card info if they exist {% endcomment %}
+        {% if current_account.has_billing_address? %}
+          <dl class="dl-horizontal" id="billing_address">
+            <dt>Address</dt>
+            <dd>{{ current_account.billing_address.address }}</dd>
+
+            <dt>Zip</dt>
+            <dd>{{ current_account.billing_address.zip }}</dd>
+
+            <dt>City</dt>
+            <dd>{{ current_account.billing_address.city }}</dd>
+
+            <dt>State</dt>
+            <dd>{{ current_account.billing_address.state }}</dd>
+
+            <dt>Country</dt>
+            <dd>{{ current_account.billing_address.country }}</dd>
+
+            <dt>Phone</dt>
+            <dd>{{ current_account.billing_address.phone }}</dd>
+
+            {% if current_account.credit_card_stored? %}
+              <dt>Credit card number</dt>
+              <dd>{{ current_account.credit_card_display_number }}</dd>
+
+              {% unless provider.payment_gateway.authorize_net? %}
+                <dt>Expiration date</dt>
+                <dd>{{ current_account.credit_card_expiration_date }}<dd>
+              {% endunless %}
+            {% endif %}
+          </dl>
+        {% endif %}
+        {% comment %} In this example we're mostly using main content area for first add links {% endcomment %}
+
+        {% case provider.payment_gateway.type %}
+
+        {% comment %} Braintree combines billing address + cc details in 1 form {% endcomment %}
+        {% when "braintree_blue" %}
+        <a href="{{ current_account.edit_braintree_blue_credit_card_details_url }}">
+          {% unless current_account.has_billing_address? and current_account.credit_card_stored? %}
+            Add Credit Card Details and Billing Address
+          {% endunless %}
+        </a>
+
+        {% comment %} Authorize.net combines billing address + cc details in 1 external form {% endcomment %}
+        {% when "authorize_net" %}
+          {% if current_account.credit_card_stored? %}
+            {% authorize_net_form "Edit Credit Card Details" %}
+          {% else %}
+            {% authorize_net_form "Add Credit Card Details" %}
+          {% endif %}
+
+        {% comment %} Ogone renders a link to the external cc form once a billing address has been added {% endcomment %}
+        {% when "ogone" %}
+          {% if current_account.has_billing_address? %}
+            {% if current_account.credit_card_stored? %}
+              {% ogone_form "Edit Credit Card Details" %}
+            {% else %}
+              {% ogone_form "Add Credit Card Details" %}
+            {% endif %}
+          {% else %}
+            <p><a href="{{ current_account.edit_ogone_billing_address_url }}">First add a billing address</a></p>
+          {% endif %}
+
+        {% comment %} Stripe renders the form in place once a billing address has been added {% endcomment %}
+        {% when "stripe" %}
+          {% if current_account.has_billing_address? %}
+            {% stripe_form %}
+          {% else %}
+            <p><a href="{{ current_account.edit_stripe_billing_address_url }}">First add a billing address</a></p>
+          {% endif %}
+
+        {% comment %} Adyen renders a link to the external cc form once a billing address has been added {% endcomment %}
+        {% when "adyen12" %}
+          {% if current_account.has_billing_address? %}
+
+            {% if current_account.credit_card_stored? %}
+              {% adyen12_form "Edit Credit Card Details" %}
+            {% else %}
+              {% adyen12_form "Add Credit Card Details" %}
+            {% endif %}
+          {% else %}
+            <p><a href="{{ current_account.edit_adyen12_billing_address_url }}">First add a billing address</a></p>
+          {% endif %}
+
+        {% endcase %}
+
+      </div>
+      <div class="panel-footer">
+        <p>By <strong>Entering Credit Card details</strong> you agree to the <a href="{{ urls.credit_card_terms }}" id="terms-link">Terms of Service</a>, <a href="{{ urls.credit_card_privacy }}" id="privacy-link">Privacy</a> and <a href="{{ urls.credit_card_refunds }}" id="refunds-link">Refund</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<h2>Add key</h2>
+
+<p id="invalid-key-warning" style="display:none;">&nbsp;</p>
+<%= form_tag admin_application_keys_path(@cinstance), :class => 'remote' do |form| %>
+  <table class='plan-edit-popup'>
+    <tr>
+      <td style="vertical-align: top">
+        <%= label_tag :key, "Key" %>
+      </td>
+      <td>
+	<%= text_field_tag :key, "", :class => 'text', :size => "40" %>
+	<p class="inline-hints">Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), <br />
+	between 5 and 256 characters long. No spaces allowed.</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td></td>
+      <td style="text-align: right;">
+        <%= link_to 'Cancel', "#", :class => 'fancybox-close' %>
+        &nbsp; &nbsp;
+        <%= submit_tag "Save" %>
+      </td>
+    </tr>
+  </table>
+<% end %>

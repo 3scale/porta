@@ -1,0 +1,40 @@
+ol.explain.fa-ul
+  li.feedback
+    i.icon.fa-li.fa.fa-puzzle-piece.icon--focus
+    .text.text--up
+      ' To integrate your API we need a name and its current public base URL. We can
+      a#use-example-api> href="#" title="Use Echo API" provide you with an&nbsp;Echo test-API
+      | if you don’t have a publicly accessible API yet.
+
+
+= semantic_form_for [:provider, :admin, :onboarding, :wizard, @api], html: { id: :api_form } do |f|
+  = f.inputs
+    = f.input :name, label: 'Name', input_html: { placeholder: 'Product Catalog', autofocus: true }
+    = f.input :backend, label: 'Base URL', input_html: { placeholder: 'https://api.example.com' }
+    = f.input :test_path, as: :hidden
+
+  button type="submit" class="button button--next"
+    = submit_text
+
+javascript:
+  (function(){
+    var example_api = #{json @api.example_backend};
+    var test_path = $('#api_test_path');
+    var name = $('#api_name');
+
+    var backend = $('#api_backend').change(function updateTestPath() {
+      test_path.val(backend.val() == example_api ? '/some-path' : null);
+    });
+
+    var example_api_link = $('#use-example-api');
+
+    example_api_link.click(function (event) {
+      if (name.val().length == 0) { name.val('Echo API'); }
+      backend.val(example_api).trigger('change');
+      event.preventDefault();
+    });
+
+    backend.trigger('change');
+
+    analytics.trackLink(example_api_link, 'Clicked Example API Link');
+  }());

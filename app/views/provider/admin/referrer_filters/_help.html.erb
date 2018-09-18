@@ -1,0 +1,15 @@
+<% if current_account.provider? %>
+  <p>You can use referrers to filter on IP addresses or domain names. For example:</p>
+
+  <ul class="standard">
+    <li>IP Address restrictions for server applications using your API: register 
+   the list of IP addresses from which an application ID/Key can be used and 
+   check this against the IP address of inbound calls to the API.</li>
+
+   <li>Referrer domain restrictions for widget based uses of the API: register 
+   domain names from from which the ID/Key can be served in browser 
+   executed widgets.</li>
+  </ul>
+<% else %>
+  <p>If you are developing a server based application you typically need to add IP addresses, if it is widget based you typically need to add domain names.</p>
+<% end %>

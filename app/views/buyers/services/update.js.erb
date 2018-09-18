@@ -1,0 +1,6 @@
+<%- unless @service_contract.changed? %>
+  $.colorbox.close();
+  window.location.reload();
+<%-else-%>
+  $.colorbox({html: "<%= escape_javascript @form %>"});
+<%-end-%>

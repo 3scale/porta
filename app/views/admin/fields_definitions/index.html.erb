@@ -1,0 +1,46 @@
+<h2>Fields Definitions</h2>
+
+<p>
+Here you can manage all the information you gather from your partners. You can add new fields and change the existing ones; making them Hidden, Read Only, or Required.  You can change the text your partners see when viewing or entering data (shown here between quotes). Drag and drop the fields to set the order in which they will be shown.
+</p>
+
+<%= javascript_include_tag 'jqueryui/jquery-ui-1.9.2.custom.min.js' %>
+
+<%= javascript_tag do %>
+  var AUTH_TOKEN ='<%= form_authenticity_token.to_s -%>';
+<% end if protect_against_forgery? -%>
+
+<% @possible_targets.each do |class_name| %>
+  <h2>
+    <%= class_name.constantize.model_name.human %>
+  </h2>
+  <%= fancy_link_to "Create", new_admin_fields_definition_path(:fields_definition => {:target => class_name}), :title => "Create new field for #{class_name.constantize.model_name.human}", :class => 'new-field-definition new action add' %>
+
+  <% if @fields_definitions.by_target(class_name).blank? %>
+    <i>No extra fields for this element.</i>
+  <% end -%>
+
+  <ol id="<%= class_name %>-list" class="fields-definitions-list ui-sortable">
+    <% @fields_definitions.by_target(class_name).sort_by(&:pos).each do |fields_definition| %>
+	<li id="<%=dom_id(fields_definition)%>">
+	<span class="name"><%=h fields_definition.name %></span>
+	<span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
+	<span class="action-set">
+	  <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
+	  <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+      </li>
+    <% end %>
+  </ol>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#<%=class_name%>-list").sortable({
+    update : function () {
+      $.post('/admin/fields_definitions/sort', $(this).sortable('serialize'));
+    }
+  });
+  $("#<%=class_name%>-list").disableSelection();
+});
+</script>
+
+<% end %>

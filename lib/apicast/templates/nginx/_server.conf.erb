@@ -1,0 +1,54 @@
+server {
+  # Enabling the Lua code cache is strongly encouraged for production use. Here it is enabled by default for testing and development purposes
+  lua_code_cache off;
+  listen <%= server.listen_port %>;
+  ## CHANGE YOUR SERVER_NAME TO YOUR CUSTOM DOMAIN OR LEAVE IT BLANK IF ONLY HAVE ONE
+  server_name <%= server.server_name %>;
+  underscores_in_headers on;
+  set_by_lua $deployment 'return os.getenv("THREESCALE_DEPLOYMENT_ENV")';
+  set $threescale_backend "<%= @backend_scheme %>://<%= @threescale_endpoint %>";
+
+  <%- case server.backend_version %>
+  <%- when 'oauth'.freeze %>
+  <%= render partial: 'nginx/oauth_backend_endpoints', locals: { server: server } %>
+  <%- else %>
+  <%= render partial: 'nginx/common_backend_endpoints', locals: { server: server } %>
+  <% end %>
+
+  location / {
+    set $<%= server.backend_authentication_type %> null;
+    set $cached_key null;
+    set $credentials null;
+    set $usage null;
+    set $service_id <%= server.service_id %>;
+    set $proxy_pass null;
+    set $secret_token null;
+    set $resp_body null;
+    set $resp_headers null;
+    <%- case server.backend_version %>
+    <%- when 'oauth'.freeze %>
+    set $access_token null;
+    <% end %>
+
+    proxy_ignore_client_abort on;
+
+    ## CHANGE THE PATH TO POINT TO THE RIGHT FILE ON YOUR FILESYSTEM IF NEEDED
+    access_by_lua "require('<%= server.lua_file %>').access()";
+
+    body_filter_by_lua  'ngx.ctx.buffered = (ngx.ctx.buffered or "") .. string.sub(ngx.arg[1], 1, 1000)
+                           if ngx.arg[2] then ngx.var.resp_body = ngx.ctx.buffered end';
+    header_filter_by_lua 'ngx.var.resp_headers = cjson.encode(ngx.resp.get_headers())';
+
+    proxy_pass $proxy_pass ;
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header Host <%= server.hostname_rewrite %>;
+    proxy_set_header X-3scale-proxy-secret-token $secret_token;
+
+    <%- case server.backend_version %>
+    <%- when 'oauth'.freeze %>
+    post_action /out_of_band_oauth_authrep_action;
+    <%- else %>
+    post_action /out_of_band_authrep_action;
+    <%- end %>
+  }
+}

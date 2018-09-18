@@ -1,0 +1,17 @@
+<h2>Change contract</h2>
+
+<h3>Change <%= @cinstance.service.name %> contract</h3>
+<h3>FROM: 	<strong><%= @cinstance.contract.name %></strong></h3>
+<h3>TO: <strong><%= @contract.name %></strong></h3>
+
+<div class='warning'>
+<p>
+	You're changing your contract. By clicking on 'Change!' you are agreeing with the new <%= link_to 'terms and conditions', terms_contract_path(@contract),  :popup => ['Terms', 'width=600,scrollbars=yes'] %>.
+</p>
+</div>
+
+
+<%= form_for change_contract_cinstance_path(@cinstance) do |f| %>
+	<%= hidden_field_tag :contract_id, @contract.id %>
+	<%= submit_tag 'Change!' %> <%= link_to 'cancel', cinstance_path(@cinstance, :anchor => 'plans')%>
+<% end %>

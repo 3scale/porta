@@ -1,0 +1,7 @@
+<p>
+<%- if  current_account.master? -%>
+  <%= link_to 'Analytics', analytics_dashboard_path(:analytics => true) %>
+<%- else -%>
+  <%= link_to 'Free', admin_dashboard_path(:analytics => false) %>
+<%- end -%>
+</p>

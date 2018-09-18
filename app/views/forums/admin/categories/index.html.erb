@@ -1,0 +1,38 @@
+<%= render 'forums/admin/menu' %>
+
+<div id="forum">
+  <h1>Categories</h1>
+
+  <table id="categories" class="data">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Latest</th>
+        <% if can? :manage, TopicCategory %>
+          <th class="operations" colspan="2">
+            <%= link_to 'New category', new_forum_category_path, :class => 'action add' %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <% @forum.categories.each do |category| %>
+      <tr class="" id="<%= dom_id(category) %>">
+        <td class="topic-category-title">
+          <%= link_to h(category.name), forum_category_path(category) %>
+        </td>
+        <td>
+          <%= render 'forums/admin/categories/latest_topics', :category => category %>
+        </td>
+        <% if can? :manage, TopicCategory %>
+          <td class="operations">
+            <%= delete_button_for forum_category_path(category) %>
+          </td>
+          <td class="operations">
+            <%= link_to 'Edit', edit_forum_category_path(category), :class => 'action edit' %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>

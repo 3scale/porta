@@ -1,0 +1,20 @@
+<h1>Pick a Portlet</h1>
+<p>Which portlet would you like to create today?</p>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Portlet</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @available_portlets.each do |portlet| %>
+      <tr>
+        <td><%= link_to portlet.human_name, :action => :new, :type => portlet %></td>
+        <td><%= portlet.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

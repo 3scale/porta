@@ -1,0 +1,14 @@
+<%= semantic_form_for :change_plans, :url => admin_buyers_applications_bulk_change_plan_path,
+  :html => {
+    :class => 'bulk_operations',
+    :'data-remote' => true,
+    :'data-confirm' => "Are you sure to change plan of these #{@applications.count} applications?"
+  } do |form| %>
+  <%= form.inputs do %>
+    <%= render 'buyers/applications/bulk/selected_applications' %>
+    <%= form.input :plan_id, :as => :select, :collection => @plans %>
+    <%= form.buttons do %>
+      <%= form.commit_button 'Change plan', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
+    <% end %>
+  <% end %>
+<% end %>

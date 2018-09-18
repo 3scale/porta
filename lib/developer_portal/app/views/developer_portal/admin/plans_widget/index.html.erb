@@ -1,0 +1,96 @@
+<div class="plans-menu">
+
+<% if @plan %>
+  <h3>Your plan</h3>
+  <ul>
+    <%= content_tag :li,  link_to(h(@plan.name) + " " + image_tag('tick.png'), '#', "data-plan-id" => @plan.id) %>
+  </ul>
+<% end %>
+
+<% if @plans.present? %>
+  <h3>Other plans</h3>
+  <ul>
+    <% @plans.each do |plan| %>
+      <%= content_tag :li,  link_to(h(plan.name), '#', "data-plan-id" => plan.id) %>
+    <% end %>
+  </ul>
+<% end %>
+</div>
+
+<div id="plans-content">
+
+<% if @plan %>
+  <div class='plan-preview' data-plan-id='<%= @plan.id %>'>
+    <h2><%= @plan.name %></h2>
+
+    <div class="current-plan-notice">
+      <p>This is your current plan.</p>
+    </div>
+
+    <div class='plan-overview'>
+      <% unless @plan.issuer.features.visible.empty? %>
+        <%= render :partial => 'plans/widget/features', :locals => {:plan => @plan} %>
+      <% end %>
+
+      <% unless @plan.usage_limits.visible.empty? %>
+        <%= render :partial => 'plans/widget/limits', :locals => {:plan => @plan} %>
+      <% end %>
+
+      <% unless @plan.free? %>
+        <%= render :partial => 'plans/widget/pricing', :locals => {:plan => @plan} %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% @plans.each do |plan| %>
+  <div class='plan-preview' data-plan-id='<%= plan.id %>' style='display:none;'>
+    <h2><%= plan.name %></h2>
+    <div class='plan-overview'>
+      <% unless plan.issuer.features.visible.empty? %>
+        <%= render :partial => 'plans/widget/features', :locals => {:plan => plan} %>
+      <% end %>
+
+      <% unless plan.usage_limits.visible.empty? %>
+        <%= render :partial => 'plans/widget/limits', :locals => {:plan => plan} %>
+      <% end %>
+
+      <% unless plan.free? %>
+        <%= render :partial => 'plans/widget/pricing', :locals => {:plan => plan} %>
+      <% end %>
+    </div>
+
+<% if @service && @service.plan_change_permission(ApplicationPlan) == :none %>
+  Plan changes are not allowed.
+<% else %>
+  <% if @application %>
+    <% if credit_card_required_to_change_plan? @application, plan %>
+      You cannot change plan until you <a id='change-plan-<%= plan.id %>' href='<%= @wizard ? new_admin_account_plan_change_path(contract_id: @application.id, plan_id: plan.id) : payment_details_path %>'>enter your Credit Card details</a>
+    <% else %>
+      <div class='plan-selector change-plan-control'>
+        <%= button_to @application.plan_change_permission_name,
+            admin_contract_path( @application.id,
+                                 :plan_id => plan.id),
+                                 :method => :put,
+                                 :class => 'plan-change-button',
+                                 :id    => "change-plan-#{ plan.id }" %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="plan-selector select-plan-button" data-plan-name='<%= plan.name %>'  data-plan-id='<%= plan.id %>'>
+      <a class='btn btn-primary' href='#'>Select this plan</a>
+    </div>
+  <% end %>
+<% end %>
+
+  </div>
+<% end %>
+</div>
+
+
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function(){
+    PlanWidget.bind_events('<%= "plan-preview-box-#{params[:application_id] ? params[:application_id] : 'new' }" %>');
+  })
+</script>

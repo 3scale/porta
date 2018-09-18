@@ -1,0 +1,28 @@
+table.invoice,
+table.finance_data {
+  width: 100%;
+  border-collapse: collapse;
+  color: $font-color;
+  margin-bottom: line-height-times(1);
+}
+
+table.invoice thead,
+table.finance_data thead {
+  border-top: $border-width solid $border-color;
+  background-color: $light-background-color;
+}
+
+table.invoice tr td,
+table.invoice tr th {
+  border-bottom: 1px solid $border-color;
+  padding: line-height-times(1/4);
+}
+
+table.invoice caption,
+table.finance_data caption {
+  background-color: $light-background-color;
+  font-weight: $font-weight-bold;
+  text-align: left;
+  padding: line-height-times(1/2);
+  border: $border-width solid $border-color;
+}

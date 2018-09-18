@@ -1,0 +1,101 @@
+<div class="well">
+  <a id="toggle-adyen12-form" class="<%= current_account.credit_card_stored? ? 'card-on-file' : 'hidden' %> pull-right" href="#">
+    <i class="fa fa-pencil"></i>
+    <span>Edit Credit Card Details</span>
+  </a>
+  <br/>
+  <%
+    form_options = {
+        url: hosted_success_admin_account_adyen12_path,
+        method: 'POST',
+        html: {
+            id: 'adyen-encrypted-form',
+            class: "#{current_account.credit_card_stored? ? 'hidden' : 'card-missing'} form-horizontal"
+        }
+    }
+  %>
+
+  <%= semantic_form_for 'adyen12', form_options do |form| %>
+      <span class="payment-errors"></span>
+
+      <fieldset>
+        <legend>Credit card details </legend>
+        <ol class="list-unstyled">
+          <%= form.input :card_number,
+                         input_html: {name: '', required: 'required', maxlength: 20, data: {'encrypted-name' => 'number'},
+                                      class: "form-control col-md-6", style: "width:50%;"},
+                         wrapper_html: {class: "form-group"},
+                         label_html: {class: "col-md-4 control-label" },
+                         required: false
+          %>
+
+          <li class="string required form-group" id="adyen_expiration">
+            <label class="col-md-4 control-label">Expiration (MM/YYYY)</label>
+            <ol class="list-unstyled">
+              <%= form.input :expiry_month,
+                             input_html: {required: 'required', maxlength: 2, data: {"encrypted-name" => 'expiryMonth'}, style: "width: 2em"},
+                             wrapper_html: {style: 'display: inline'},
+                             label: false,
+                             required: false %>
+              <li style="display: inline"><span> / </span></li>
+              <%= form.input :expiry_year,
+                             input_html: {required: 'required', maxlength: 4, data: {"encrypted-name" => 'expiryYear'}, style: "width: 4em"},
+                             wrapper_html: {style: 'display: inline'},
+                             label: false,
+                             required: false %>
+            </ol>
+          </li>
+
+          <%= form.input :cvc,
+                         input_html: {name: '', required: 'required', maxlength: 4, data: {"encrypted-name" => 'cvc'}, style: "width: 4em"},
+                         wrapper_html: {class: "form-group"},
+                         label_html: {class: "col-md-4 control-label" },
+                         label: "CVC",
+                         required: false %>
+
+          <%= form.input :card_holder_name,
+                         input_html: {name: '', required: 'required', maxlength: 20, data: {'encrypted-name' => 'holderName'},
+                                      class: "form-control col-md-6", style: "width:50%;"},
+                         wrapper_html: {class: "form-group"},
+                         label_html: {class: "col-md-4 control-label" },
+                         required: false %>
+        </ol>
+        <%= hidden_field_tag :generationtime, Time.now.utc.iso8601, name: '', data: {'encrypted-name' => 'generationtime'} %>
+      </fieldset>
+
+      <fieldset>
+        <div class="form-group">
+          <div class="col-md-10 operations">
+            <%= form.submit 'Save details', class: "btn btn-primary pull-right"%>
+          </div>
+        </div>
+      </fieldset>
+  <% end %>
+</div>
+
+<%= javascript_include_tag @gateway_options[:encryption_js_url] %>
+
+<%= javascript_tag do %>
+jQuery(function($) {
+    var adyenForm = $("#adyen-encrypted-form");
+    $("#toggle-adyen12-form").click(function() {
+    adyenForm.toggleClass('hidden');
+    var linkText = adyenForm.is(':visible') ? 'cancel' : 'Edit Credit Card Details';
+    $(this).find('span').text(linkText);
+    return false;
+    })
+});
+
+(function(){
+    // The form element to encrypt
+    var form    = document.getElementById('adyen-encrypted-form');
+
+    // The public key
+    var key     = <%= json @gateway_options[:public_key] %>;
+    // Form and encryption options. See adyen.encrypt.simple.html for details
+    var options = {};
+    // Bind encryption to the form
+    adyen.encrypt.createEncryptedForm( form, key, options);
+})()
+
+<% end %>

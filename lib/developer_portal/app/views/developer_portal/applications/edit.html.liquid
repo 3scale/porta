@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <a href="{{ application.url }}">
+          <i class="fa fa-chevron-left"></i>
+          {{ application.name }}
+        </a>
+        {% if application.can.be_destroyed? %}
+          <a href="{{ application.path }}" class="pull-right" data-method="delete" data-confirm="Are you sure you want to delete the application {{ application.name }} ?">
+            <i class="fa fa-trash-o"></i>
+            Delete {{ application.name }}
+          </a>
+        {% endif %}
+      </div>
+      <div class="panel-body panel-footer">
+        {% form 'application.update', application, class: "form-horizontal" %}
+          {% include 'applications/form' %}
+          <fieldset>
+            <div class="form-group">
+              <div class="col-md-10">
+                <input class="btn btn-primary pull-right"
+                  name="commit"
+                  type="submit"
+                  value="Update Application" />
+              </div>
+            </div>
+          </fieldset>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

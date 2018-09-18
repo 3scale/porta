@@ -1,0 +1,27 @@
+<h2>Bulk Action</h2>
+
+<% if @account_ids.blank? %>
+  <p>No Accounts were selected.</p>
+  <p><%= link_to "Go back...", buyer_accounts_path(:kind => :pending) %></p>
+<% else %>
+
+  <p>Are you sure you want to <strong><%= @state_action %></strong> the following accounts:</p>
+
+  <%= form_tag buyer_bulk_approval_path, :method => :put, :html => {:class => ''} do  -%>
+  <ul class="standard">
+    <%- @account_ids.each do |a| -%>
+    <li>
+      <%= Account.find(a).admins.first.human_or_display_name %>
+      <%= hidden_field_tag 'account_ids[]', a %>
+    </li>
+    <%- end -%>
+  </ul>
+  <br />
+  <%= hidden_field_tag :confirm, 'confirmed' %>
+
+  <p><%= submit_tag @state_action.capitalize %> or <%= link_to 'Cancel', buyer_accounts_path(:kind => :pending) %></p>
+
+  <% end %>
+
+
+<% end %>

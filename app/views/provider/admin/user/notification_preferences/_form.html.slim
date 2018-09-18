@@ -1,0 +1,16 @@
+= semantic_form_for preferences_form.model,
+        url: provider_admin_user_notification_preferences_path, method: :patch do |f|
+
+  - preferences_form.categories.each do |category|
+    fieldset.inputs
+      legend = t(category.title_key, scope: :notification_category_titles)
+
+      ol
+
+        = f.input :enabled_notifications, as: :check_boxes_with_hints, required: false,
+              collection: category.notifications,
+              label_method: ->(value) { t(value, scope: :notification_preference_titles) },
+              hint_method: ->(value) { t(value, scope: :notification_preference_hints) }
+
+  = f.buttons do
+    = f.commit_button 'Update Notification Preferences'

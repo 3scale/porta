@@ -1,0 +1,10 @@
+<h1>Partial '<%= @page.system_name %>'</h1>
+
+<%= cms_new_button_dropdown(CMS::Partial) %>
+
+<%= cms_form_for(@page, :remote => true) do |f| %>
+  <div id="cms-template-fields-wrapper">
+    <%= render( 'form', :f => f) %>
+  </div>
+  <%= render '/provider/admin/cms/content_tabs', :f => f %>
+<% end %>

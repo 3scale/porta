@@ -1,0 +1,33 @@
+<style>
+  #line-item-fancybox {
+    width: 480px;
+  }
+</style>
+
+<div id="line-item-fancybox">
+  <h2>Line Item</h2>
+  <%= semantic_form_for @line_item, :url => admin_finance_account_invoice_line_items_path(@buyer, @invoice),
+                          :html => {:class => request.xhr? ? 'remote' : nil} do |form| %>
+
+    <%= form.inputs do %>
+      <%= form.input :name  %>
+      <li id="line_item_quantity_input" class="string optional">
+        <label for="line_item_quantity">Quantity
+          <%= help_bubble("quantity_help") do -%>
+            <p>Quantity is solely an informational field. It does not affect the total cost at.</p>
+          <% end -%>
+        </label>
+        <%= form.text_field :quantity %>
+      </li>
+      <%= form.input :description %>
+      <%= form.input :cost, as: :price, currency: current_account.currency %>
+    <% end -%>
+
+    <div class="operations">
+      <%= link_to 'Cancel',
+                  admin_finance_account_invoice_path(@buyer, @invoice),
+                  :class => 'fancybox-close' %>
+      <%= form.submit 'Create Line Item', class: "button next important-button" %>
+    </div>
+  <% end %>
+</div>

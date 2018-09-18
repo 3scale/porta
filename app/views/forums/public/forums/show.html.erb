@@ -1,0 +1,11 @@
+<div id="forum">
+  <%= render 'forums/public/detail' %>
+
+  <% if can? :manage, TopicCategory %>
+    <%= render 'forums/public/categories/list' %>
+  <% end %>
+
+  <div class="left wide">
+    <%= render 'forums/public/forums/topics', :topics => @topics %>
+  </div>
+</div>

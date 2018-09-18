@@ -1,0 +1,46 @@
+<%= javascript_include_tag "swagger-ui2" -%>
+<%= javascript_include_tag "swagger-ui2/api_docs_proxy" %>
+<%= javascript_include_tag "swagger-ui2/autocomplete" %>
+<%= stylesheet_link_tag    "swagger-ui2/typography.css" %>
+<%= stylesheet_link_tag    "swagger-ui2/screen.css" -%>
+
+<%= stylesheet_link_tag    "swagger-ui/threescale" -%>
+
+
+<% content_for :title do %>
+  3scale API Documentation
+<% end %>
+
+
+<div class="swagger-section">
+  <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+  <div id="swagger-ui-accounts" class="swagger-ui-wrap"></div>
+  <div id="swagger-ui-finance" class="swagger-ui-wrap"></div>
+  <div id="swagger-ui-analytics" class="swagger-ui-wrap"></div>
+</div>
+
+
+<script>
+$(function(){
+  function showSpec(name){
+    new SwaggerUi({
+      url: '/p/admin/api_docs/specs/' + name ,
+      dom_id: 'swagger-ui-' + name,
+      validatorUrl: null,
+      apisSorter: "alpha", // can also be a function
+      operationsSorter: "alpha", // can also be 'alpha' or a function
+      onComplete: function(swaggerApi, swaggerUi) {
+        $('#swagger-ui-' + name + ' pre code').each(function(i, e) {hljs.highlightBlock(e)});
+      },
+      docExpansion: "list",
+      transport: function(httpClient, obj) {
+        return ApiDocsProxy.execute(httpClient, obj);
+      }
+    }).load('provider');
+  }
+
+  showSpec('accounts');
+  showSpec('analytics');
+  showSpec('finance');
+});
+</script>

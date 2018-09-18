@@ -1,0 +1,30 @@
+div.dashboard_bubble.round#provider-change-plan
+  - app = provider.bought_cinstance
+  - plans = app.available_application_plans
+
+  p #{provider.name} is currently on plan <b>#{ app.plan.name  }</b> with these settings:
+
+  table.list
+    - provider.available_switches.each do |switch|
+      tr
+        td
+          b => t(:name, scope: [:switches, switch.name])
+
+          - if (description = t(:internal, scope: [:switches, switch.name], default: '').presence)
+            | (#{description})
+
+        td
+          => switch.status.capitalize
+          - if switch.denied?
+            = fancy_button_to 'enable', master_provider_switch_path(provider, switch.name), method: :put, data: { confirm: 'Really?', disable_with: true }
+  br
+  = form_tag edit_master_provider_plan_path(provider), :method => :get, :remote => true, :class => 'formtastic colorbox' do
+    fieldset.inputs
+      legend Change Plan
+      ol
+        li
+          = select_tag :plan_id, options_from_collection_for_select(plans, :id, :name), required: true, include_blank: true
+    fieldset.buttons
+      ol
+        li.commit
+          = submit_tag 'Change Plan', type: "submit", class: "important-button"

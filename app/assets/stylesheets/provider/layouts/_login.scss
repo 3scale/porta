@@ -1,0 +1,16 @@
+body.login-layout {
+
+  #wrapper {
+    min-width: 0;
+  }
+
+  h1#logo {
+    margin-top: line-height-times(2);
+    margin-bottom: 0;
+  }
+
+  .box {
+    margin: line-height-times(2) 0;
+    max-width: line-height-times(24);
+  }
+}

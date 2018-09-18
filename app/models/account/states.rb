@@ -1,0 +1,170 @@
+module Account::States
+  TIME_TO_DELETE_ACCOUNT = 15.days.freeze
+  STATES = %i[created pending approved rejected suspended scheduled_for_deletion].freeze
+  extend ActiveSupport::Concern
+
+  included do
+    include AfterCommitQueue
+
+    # XXX: This state machine smells. The :created state does not feel right. I seems it would
+    # be better to start in :pending state, but then it's difficult to send the confirmed emails,
+    # because hooking them to after_created won't work since there is no user to send it to yet.
+
+    state_machine :initial => :created do
+
+      STATES.each { |state_name| state state_name }
+
+      around_transition do |account, _transition, block|
+        previous_state = account.state
+
+        block.call
+
+        account.publish_state_changed_event(previous_state) unless previous_state == account.state
+      end
+
+      before_transition :to => :pending do |account|
+        account.deliver_confirmed_notification
+      end
+
+      before_transition :to => :approved do |account|
+        account.deliver_approved_notification
+      end
+
+      before_transition :to => :rejected do |account|
+        account.deliver_rejected_notification
+      end
+
+      after_transition to: :suspended do |account|
+        account.run_after_commit(:notify_account_suspended)
+        account.bought_account_contract&.suspend if account.provider?
+      end
+
+      after_transition any - :scheduled_for_deletion => :scheduled_for_deletion do |account|
+        account.update_attributes(deleted_at: Time.zone.now.beginning_of_day)
+        account.run_after_commit(:schedule_backend_sync_worker)
+      end
+
+      after_transition :scheduled_for_deletion => any - :scheduled_for_deletion do |account, _transition|
+        account.update_attributes(deleted_at: nil)
+        account.run_after_commit(:schedule_backend_sync_worker)
+      end
+
+      after_transition to: :approved, from: :suspended do |account|
+        account.run_after_commit(:notify_account_resumed)
+        account.bought_account_contract&.resume if account.provider?
+      end
+
+      after_transition to: :approved, from: [:created, :pending] do |account|
+        account.bought_account_contract&.accept
+      end
+
+      event :make_pending do
+        transition :created => :pending
+        transition :approved => :pending
+        transition :rejected => :pending
+      end
+
+      event :approve do
+        transition :created => :approved
+        transition :pending => :approved
+        transition :rejected => :approved
+      end
+
+      event :reject do
+        transition :created => :rejected
+        transition :pending => :rejected
+        transition :approved => :rejected
+      end
+
+      event :suspend do
+        transition :approved => :suspended, if: :provider?
+      end
+
+      event :resume do
+        transition :suspended => :approved, if: :provider?
+        transition :scheduled_for_deletion => :approved
+      end
+
+      event :schedule_for_deletion do
+        transition all => :scheduled_for_deletion, unless: :master?
+      end
+    end
+
+    scope :by_state, ->(state) do
+      where(:state => state.to_s) if state.to_s != "all"
+    end
+
+    scope :deleted_time_ago, ->(value = TIME_TO_DELETE_ACCOUNT) do
+      scheduled_for_deletion.where.has { deleted_at <= value.ago }
+    end
+
+    def deletion_date
+      return nil unless deleted_at
+      (deleted_at + TIME_TO_DELETE_ACCOUNT)
+    end
+
+    def enabled?
+      !scheduled_for_deletion? && (provider_account && !provider_account.scheduled_for_deletion?)
+    end
+
+    def should_be_deleted?
+      scheduled_for_deletion? || suspended? || (buyer? && provider_account.try(:should_be_deleted?))
+    end
+  end
+
+  module ClassMethods
+    STATES.each { |state_name| define_method(state_name) { by_state(state_name) } }
+  end
+
+  def upgrade_state!
+    if buyer? && approval_required?
+      make_pending!
+    else
+      approve!
+    end
+  end
+
+  def publish_state_changed_event(previous_state)
+    Accounts::AccountStateChangedEvent.create_and_publish!(self, previous_state)
+    PublishEnabledChangedEventForProviderApplicationsWorker.perform_later(self, previous_state)
+  end
+
+  def deliver_confirmed_notification
+    if admins.present? && provider_account
+      run_after_commit do
+        AccountMessenger.new_signup(self).deliver_now
+        AccountMailer.confirmed(self).deliver_now
+      end
+    end
+  end
+
+  def deliver_approved_notification
+    if buyer? && approval_required?
+      unless admins.empty? || admins.first.created_by_provider_signup?
+        run_after_commit do
+          AccountMailer.approved(self).deliver_now
+        end
+      end
+    end
+  end
+
+  def deliver_rejected_notification
+    unless admins.empty? || self.provider_account.nil?
+      run_after_commit do
+        AccountMailer.rejected(self).deliver_now
+      end
+    end
+  end
+
+  def notify_account_suspended
+    ThreeScale::Analytics.track_account(self, 'Account Suspended')
+    ThreeScale::Analytics.group(self)
+    ReverseProviderKeyWorker.enqueue(self)
+  end
+
+  def notify_account_resumed
+    ThreeScale::Analytics.track_account(self, 'Account Resumed')
+    ThreeScale::Analytics.group(self)
+    ReverseProviderKeyWorker.enqueue(self)
+  end
+end

@@ -1,0 +1,38 @@
+
+<tbody id='table-body-plans'>
+  <% plans.each do |plan| %>
+    <tr id="<%= dom_id(plan) %>">
+      <td>
+        <%= link_to h(chop(plan.name, 50)), edit_polymorphic_path([:admin, plan]),
+          :title => "Edit #{plan.class.model_name.human} '#{plan.name}'" -%>
+      </td>
+      <td>
+        <% if plan.kind_of?(ApplicationPlan) %>
+          <%= link_to plan.contracts_count, admin_service_applications_path(plan.service, search: { plan_id: plan.id }) %>
+        <% elsif plan.kind_of?(ServicePlan) %>
+          <%= link_to plan.contracts_count, admin_buyers_service_contracts_path(search: { plan_id: plan.id }) %>        
+        <% else %>
+          <%= link_to plan.contracts_count, admin_buyers_accounts_path(search: { plan_id: plan.id }) %>
+        <% end %>
+      </td>
+      <td><%= plan.state %></td>
+      <td class="operations">
+        <% if plan.published? %>
+          <%= link_to icon('eye-close', 'Hide'), hide_admin_plan_path(plan), data: {disable_with: "Hiding..." },
+            :method => :post, :class => "action" -%>
+        <% else %>
+          <%= link_to icon('eye-open', 'Publish'), publish_admin_plan_path(plan), data: {disable_with: "Publishing..."},
+            :method => :post, :class => "action" -%>
+        <% end %>
+      </td>
+      <td class="operations">
+        <% if !plan.kind_of?(AccountPlan) ||  current_account.settings.account_plans.allowed? %>
+          <%= link_to icon('copy','Copy'), admin_plan_copies_path(:plan_id => plan.id), :class => 'action copy', :title => "Copy plan '#{plan.name}'", data: {disable_with: "Copying..." }, :method => :post, :remote => true %>
+        <% end %>
+      </td>
+      <td class="operations">
+        <%= link_to icon('delete', 'Delete'), polymorphic_path([:admin, plan]), data: {confirm: "Are you sure?", disable_with: "Deleting..."} , :method => :delete, :class => "action delete" -%>
+      </td>
+    </tr>
+  <% end %>
+</tbody>

@@ -1,0 +1,47 @@
+<h1>Archived Versions of <%= @page.class.model_name.human %> <%= @page.name %></h1>
+
+<% if @versions.blank? -%>
+  There are no archived versions for this page. Remember that a version
+  is archived only if you publish your changes, not just when you save.
+<% else -%>
+  <%= will_paginate @versions %>
+  <table class="data">
+    <thead>
+    <tr>
+      <th>Created On</th>
+      <th>Author</th>
+      <th>Type of Version</th>
+      <th>Changes</th>
+      <th/>
+    </tr>
+    </thead>
+
+    <tbody>
+      <%- @versions.each.with_index do |version, index| %>
+	<tr>
+
+          <td><%= link_to l(version.created_at),
+                  provider_admin_cms_template_version_path(@page, version),
+                  :title => "Show #{version.created_at}"  %></td>
+          <td><%= version.updated_by || '' %></td>
+          <td class="<%= version.state %>"><%= version.state %></td>
+          <td class="stats">
+            <% if next_version = @versions[index + 1] %>
+              <%= diff_widget(version.diff(next_version))  %>
+            <% end %>
+          </td>
+          <td class="actions">
+
+            <%= link_to 'Revert',
+                revert_provider_admin_cms_template_version_path(@page, version),
+                class: 'action revert',
+                :'data-method' => :post,
+                :'data-confirm' => "Do you really want to revert #{@page.name} to version from #{l version.created_at}?\nIt will remove current #{version.state} version." %>
+          </td>
+	</tr>
+      <%- end %>
+    </tbody>
+  </table>
+  <%= will_paginate @versions %>
+
+<% end -%>

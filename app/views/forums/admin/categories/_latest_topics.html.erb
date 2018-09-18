@@ -1,0 +1,5 @@
+<% if category.topics.exists? %>
+  <%== category.topics.limit(4).map{ |topic| link_to(h(topic.title), forum_topic_path(topic), class: "topic-link") }.to_sentence %>
+<% else %>
+  No threads in this category.
+<% end %>

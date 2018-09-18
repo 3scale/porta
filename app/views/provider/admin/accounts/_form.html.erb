@@ -1,0 +1,13 @@
+<%= form.inputs :name => '', :class => 'inputs' do %>
+  <%= form.user_defined_form(show_readonly_inputs: false) %>
+  <%= time_zone_select_for_account(form) -%>
+<% end %>
+
+<%= form.buttons do %>
+  <% if params[:next_step] == 'credit_card' %>
+    <%= form.commit_button 'Save and continue with payment details' %>
+  <% else %>
+    <%= form.commit_button  %>
+  <% end %>
+<% end %>
+<%= javascript_include_tag 'custom_profiles_input_texts' %>

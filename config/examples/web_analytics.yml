@@ -1,0 +1,22 @@
+base: &default
+  google_async_tag: PUT_YOUR_GOOGLE_ASYNC_TAG
+  twitter_remarketing: PUT_YOUR_TWITTER_REMARKETING_TAG
+  twitter_conversion: PUT_YOUR_TWITTER_CONVERSION_TAG
+  adwords:
+    id: PUT_YOUR_ADWORDS_ID
+    label: PUT_YOUR_ADWORDS_LABEL
+  prog_web:
+    id: PUT_YOUR_PROG_WEB_ID
+    label: PUT_YOUR_PROG_WEB_LABEL
+  munchkin: PUT_YOUR_MUNCHKIN_TAG
+
+test: {}
+
+development:
+  google_async_tag: PUT_YOUR_GOOGLE_ASYNC_TAG
+
+preview:
+  <<: *default
+
+production:
+  <<: *default

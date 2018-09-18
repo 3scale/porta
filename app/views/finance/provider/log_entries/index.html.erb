@@ -1,0 +1,56 @@
+<h1>Finance Log</h1>
+
+
+<table class='data' id='log-entries'>
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Level</th>
+      <th>Time UTC</th>
+      <th>Description</th>
+    </tr>
+    <tr class="search">
+      <%- search_form do |s| -%>
+	<th>
+	  <%= s.text_field :buyer_query, :size => 50 , :class => :query, :placeholder => 'search by account' %>
+	</th>
+	<th></th>
+	<th></th>
+	<th>
+          <%= s.submit 'Search', :name => nil %>
+	</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @log_entries.each do |entry| %>
+      <%= content_tag_for(:tr, entry, :class => entry.level) do %>
+
+	<td> <%= entry.buyer.try(:name) || '--GLOBAL--' %> </td>
+
+	<td class="level">
+	  <%= entry.level.to_s.upcase %>
+	</td>
+
+	<td class="created_at" title="<%= entry.created_at %>">
+	  <%= entry.created_at.strftime("%Y-%m-%d %H:%M") %>
+	</td>
+
+	<td>
+
+	  <%=
+             if entry.buyer
+               link_to entry.description, admin_buyers_account_invoices_path(entry.buyer)
+             else
+               entry.description
+             end
+	     %>
+	</td>
+      <% end %>
+    <% end %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>
+
+<%= will_paginate @log_entries %>

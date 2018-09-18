@@ -1,0 +1,19 @@
+h3.StatsMessages-title There are no requests in the log.
+
+h4 This could be because:
+
+ul.StatsMessages-list
+  li Your API has not had any traffic in the selected time period.
+  li You are not reporting the requests of your API traffic to 3scale.
+  li If you have previously had traffic and reported your logs with response codes you may select a different time
+    period using the selector above.
+
+h4 To learn how to send the logs of your API traffic to 3scale please consult:
+
+ul.StatsMessages-list
+  li The 3scale
+    #{link_to('API ActiveDocs documentation', provider_admin_api_docs_path(anchor: '/service_management_api'), target:'_blank')}
+    for our Service Management API methods where the logs with response codes can be sent.
+  li Our HowTo tutorial on logs and
+    #{link_to('Response Codes Tracking', I18n.t('api.integrations.proxy.documentation_response_codes_tracking_url'), target:'_blank')}
+    on the 3scale support portal

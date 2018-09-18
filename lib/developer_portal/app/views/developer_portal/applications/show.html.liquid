@@ -1,0 +1,208 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+
+        {% capture state_label %}
+          {% case application.state %}
+            {% when 'pending' %}   label-default
+            {% when 'live' %}      label-success
+            {% when 'suspended' %} label-warning
+          {% endcase %}
+        {% endcapture %}
+
+        <a href="{{ urls.applications }}">
+          <i class="fa fa-chevron-left"></i>
+          Applications
+        </a>
+
+        {% if application.can.be_updated? %}
+          <a href="{{ application.edit_url }}" class="pull-right">
+            <i class="fa fa-pencil"></i>
+            Edit {{ application.name }}
+          </a>
+        {% endif %}
+      </div>
+      <div class="panel-body body-footer">
+        <dl class="dl-horizontal">
+          <dt>Name</dt>
+          <dd>{{ application.name }}</dd>
+          <dt>Description</dt>
+          <dd>{{ application.description }}</dd>
+          <dt> Plan </dt>
+          <dd>
+            <strong>{{application.plan.name}}</strong>
+            {% if application.can_change_plan? %}
+              <span>› </span>
+              <a href="#choose-plan-{{ application.id }}" id="choose-plan-{{application.id}}">
+                Review/Change
+              </a>
+              {% plan_widget application, wizard: true %}
+              {{ '/css/plans_widget_overrides.css' | stylesheet_link_tag }}
+            {% endif %}
+          </dd>
+        </dl>
+        <hr/>
+        <dl class="dl-horizontal">
+          <dt>Status</dt>
+          <dd><span class="label {{ state_label | strip_newlines }}">&nbsp;</span> {{ application.state | capitalize}}
+            {% if application.pending? %}
+              <p class="alert alert-warning">Your application is awaiting approval. This can take a little time - you will be notified by email.</p>
+            {% endif %}
+          </dd>
+          {% if application.buyer_alerts_enabled? %}
+            <dd>
+              <a href="{{ application.alerts_url }}" class="action">{{ application.alerts.size }} usage alert(s)</a>
+            </dd>
+          {% endif %}
+        </dl>
+        <hr/>
+        <dl class="dl-horizontal">
+          {% if application.user_key_mode? %}
+            <dt>User Key</dt>
+            <dd><code id="user-key">{{ application.user_key }}</code>
+              <p class="help-block"> Add this as a <code>user_key</code>
+                parameter to your API calls to report and
+                authenticate.</p>
+                              {% if application.can.regenerate_user_key? %}
+                   {{ 'Regenerate' | update_button: application.update_user_key_url, class: 'btn btn-danger btn-xs' }}
+              {% endif %}
+            </dd>
+          {% elsif application.oauth_mode? %}
+          <div class='data-container' data-backend="oauth">
+            <dt>Client ID</dt>
+            <dd class="key">
+              <code>{{ application.application_id }}</code>
+              <p class='sub'>This is the Client ID you should send with each API request.</p>
+            </dd>
+          </div>
+          <div class="data-container" id="application_keys">
+            <dt>Client Secret</dt>
+            <dd class="key">
+              <code>{{ application.keys.first }}</code>
+              <p class='sub'>This the Client Secret used to authenticate requests.</p>
+              <p>
+                {% if application.keys.size == 0 %}
+                {{ 'Create secret' | create_button: application.oauth.create_secret_url }}
+                {% elsif application.can.regenerate_oauth_secret? %}
+                {{ 'Regenerate' | regenerate_oauth_secret_button: application.oauth.regenerate_secret_url }}
+                {% endif %}
+              </p>
+            </dd>
+          </div>
+          <div class='data-container' id="redirect_url">
+            <dt>Redirect URL</dt>
+            <dd class="key">
+              <p class='sub'>This is your Redirect URL for OAuth.</p>
+              {% form 'application.updateremote', application %}
+              <fieldset class="inputs">
+                <label for="application_redirect_url">Redirect URL</label>
+                <input type="text" id="application_redirect_url"
+                name="application[redirect_url]"
+                value="{{ application.redirect_url }}"
+                class="{{ application.errors.redirect_url | error_class }}"/>
+                {{ application.errors.redirect_url | inline_errors }}
+              </fieldset>
+
+              <fieldset class="buttons">
+                <input class="btn btn-success" name="commit" type="submit" value="Submit">
+              </fieldset>
+              {% endform %}
+            </dd>
+          </div>
+          {% else %}
+            <div class='data-container' data-backend="app_id">
+              <dt>Application ID</dt>
+              <dd class="key">
+                <code>{{ application.application_id }}</code>
+                <p class='sub'>This is the application ID, you should send with each API request.</p>
+              </dd>
+            </div>
+
+            {% if application.can.manage_keys? %}
+                <dt>Application Keys</dt>
+                <dd>
+                  <div class='data-container' id="application_keys">
+                    <table class="table" id="keys">
+                      {% for key in application.application_keys %}
+                        <tr id="application_key_{{key.value}}" data-key="{{key.value}}">
+                          <td class="key"><code>{{ key.value }}</code></td>
+                          <td class="delete_key">
+                            {% if application.can.delete_key? %}
+                              {{ 'Delete' | delete_button_ajax: key.url, class: 'btn btn-danger btn-xs' }}
+                            {% else %}
+                              &mdash;
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </table>
+                    <p class='sub'>These are application keys used to authenticate requests.</p>
+                    <div class="operations">
+                      {% if application.can.add_application_keys? %}
+                        <div class="enabled_block">
+                          {{ 'Create new key' | create_button_ajax: application.application_keys_url, class: 'btn btn-success btn-xs' }}
+                        </div>
+                      {% else %}
+                        <div class="disabled_block">
+                          <p class="mini_info">At most {{ application.keys_limit }} keys are allowed.</p>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </dd>
+              {% endif %} <!-- /if application can manage keys? -->
+            {% endif %}
+
+          {% for field in application.extra_fields %}
+            {% if field.value != "" %}
+              {% if field.visible? %}
+                <dt>{{ field.label }}</dt>
+                <dd>{{ field.value }}</dd>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </dl>
+
+        {% if application.service.referrer_filters_required? %}
+          <dl class="dl-horizontal" id="referrer_filters">
+            <dt>Referrer Filters</dt>
+            <dd>If you are developing a server based application you typically need to add IP addresses, if it is widget based you typically need to add domain names. Specify allowed referrer domains or IP addresses. Wildcards (*.example.org) are also accepted.</dd>
+            <dd>
+              <div class="enabled_block">
+                {% form 'referrer_filter.createremote', referrer_filter %}
+                  <input type="text" id="referrer_filter" name="referrer_filter" />
+                  <input type="submit" value="Add" name="commit" />
+                {% endform %}
+              </div>
+              <div class="disabled_block">At most {{ application.filters_limit }} referrer filters are allowed.</div>
+            </dd>
+            <dd>
+              <table class="table">
+                {% for filter in application.referrer_filters %}
+                  <tr class="{% cycle 'applications': 'odd', 'even' %}" id="referrer_filter_{{ filter.id }}">
+                    <td>{{ filter.value }}</td>
+                    <td>{{ "Delete" | delete_button_ajax: filter.delete_url }}</td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </dd>
+          </dl>
+          {% if application.can.add_referrer_filters? %}
+            <script type="text/javascript">
+              $(function() {
+                $("div#referrer_filters").enableSwitch();
+              });
+            </script>
+          {% else %}
+            <script type="text/javascript">
+              $(function() {
+                $("div#referrer_filters").disableSwitch();
+              });
+            </script>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

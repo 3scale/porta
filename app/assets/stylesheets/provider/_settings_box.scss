@@ -1,0 +1,113 @@
+.SettingsBox,
+.IntegrationSettingsBox {
+  background-color: $content-background;
+  position: relative;
+
+  &-toggle {
+    background-color: $content-background;
+    color: $link-color;
+    cursor: pointer;
+    display: block !important;
+    float: right;
+    font-size: $caption-font-size;
+    margin-right: line-height-times(1);
+    padding: line-height-times(1/4) line-height-times(1/4);
+    position: relative;
+    text-decoration: underline;
+    top: line-height-times(-3/4);
+    z-index: 10;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+
+    &--inline {
+      float: none;
+    }
+  }
+
+  &-summary {
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+    min-height: line-height-times(2);
+    padding: line-height-times(1);
+    position: relative;
+    top: -$border-width;
+
+    .u-dl-definition:last-child {
+      margin-bottom: line-height-times(-1);
+      border-bottom: 0;
+    }
+
+    span {
+      display: none;
+    }
+  }
+
+  & + .integration {
+    margin-top: line-height-times(1);
+  }
+
+  &-section + &-section {
+    margin-top: line-height-times(3);
+  }
+
+  &-section {
+    border-bottom: $border-width $border-color solid;
+    padding-bottom: line-height-times(1/2);
+
+    &:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+
+.Environment,
+.Configuration {
+  background-color: $body-background;
+  position: relative;
+
+  .u-dl-definition:last-child {
+    margin-bottom: line-height-times(-1);
+    border-bottom: 0;
+  }
+
+  &--is-promoted::after {
+    border-left: $border-width-lg solid $border-color;
+    bottom: -100%;
+    content: '';
+    left: 50%;
+    position: absolute;
+    top: 100%;
+    z-index: 0;
+  }
+
+  &--is-successful::after {
+    border-left-color: $success-color;
+  }
+
+  &--is-erroneous::after {
+    border-left-color: $error-color;
+  }
+
+  &-summary {
+    border: $border-width-lg solid $border-color;
+    min-height: line-height-times(2);
+    padding: line-height-times(1);
+    border-radius: $border-radius;
+    position: relative;
+  }
+
+  &-title {
+    margin: 0 !important;
+  }
+
+  &--is-successful {
+    border-color: $success-color;
+  }
+
+  &--is-erroneous {
+    border-color: $error-color;
+  }
+}

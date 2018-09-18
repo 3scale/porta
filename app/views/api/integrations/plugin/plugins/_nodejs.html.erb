@@ -1,0 +1,48 @@
+<h2>Install</h2>
+
+<p>Install the latest plugin version from npm:
+  <%= render 'api/integrations/plugin/download_links', :language => 'nodejs' %>
+</p>
+
+<%= highlighted_code 'bash' do %>
+npm install -g 3scale
+<% end %>
+
+<h2>Authorize & Report</h2>
+<p>And run this code to authorize and report a hit:</p>
+
+<%= highlighted_code 'javascript' do %>
+var Client = require('3scale').Client;
+
+<% if custom_backend? %>
+client = new Client({host: "backend.example.com", port: 80});
+<% else %>
+client = new Client();
+<% end %>
+
+<% auth = @service.plugin_authentication_params -%>
+<% if auth.key?(:user_key) %>
+// you will usually obtain user_key from request params
+client.authrep_with_user_key({ service_token: "<%= @service.service_token %>",
+                               service_id: "<%= @service.id %>",
+                               user_key: <%= auth[:user_key].to_json %> }, function(response){
+  if(response.is_success()) {
+    // continue
+  } else {
+    throw new Error("not authorized " + response.error_message);
+  }
+});
+<% else %>
+// you will usually obtain app_id and app_key from request params
+client.authrep({ service_token: "<%= @service.service_token %>",
+                 service_id: "<%= @service.id %>",
+                 app_id: <%= auth[:app_id].to_json %>,
+                 app_key: <%= auth[:app_key].to_json %> }, function(response){
+  if(response.is_success()) {
+    // continue
+  } else {
+    throw new Error("not authorized " + response.error_message);
+  }
+});
+<% end %>
+<% end %>

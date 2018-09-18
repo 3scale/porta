@@ -1,0 +1,15 @@
+<%= content_tag_for :tr, line_item, :class => "line_item" do %>
+  <th><%= h line_item.name %></th>
+  <td><%= h line_item.description %></td>
+  <td><%= h line_item.quantity %></td>
+  <td><%= line_item_price_tag(line_item.cost) %></td>
+  <td></td>
+  <td>
+    <% if line_item.invoice.editable? && editable %>
+      <%= form_tag admin_finance_account_invoice_line_item_path(line_item.invoice.buyer_account, line_item.invoice, line_item),
+        :method => 'delete', :class => 'remote' do %>
+        <button type="submit" class="action delete">Delete</button>
+      <% end %>
+    <% end %>
+  </td>
+<% end %>

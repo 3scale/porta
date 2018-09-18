@@ -1,0 +1,19 @@
+// again overiding formtastic, it's horrible.
+.PromoteForm {
+  margin-top: line-height-times(-3) !important;
+  float: right;
+  text-align: right !important;
+
+  .buttons {
+    display: inline !important;
+  }
+
+  ol {
+    float: none !important;
+
+    li {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}

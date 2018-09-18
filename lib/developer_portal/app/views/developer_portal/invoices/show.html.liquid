@@ -1,0 +1,188 @@
+<style type="text/css" media="screen">
+table#line-items {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+</style>
+
+
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        <a href="{{ urls.invoices }}">
+          <i class="fa fa-chevron-left"></i>
+          Cancel
+        </a>
+        {{ invoice.period_begin | date: '%B, %Y' }} Invoice
+      </div>
+      <div class="panel-body panel-footer">
+
+        <dl class="dl-horizontal">
+          <dt>ID</dt>
+          <dd>{{ invoice.friendly_id }}</dd>
+          <dt>State</dt>
+          <dd>{{ invoice.state | capitalize }}</dd>
+          <dt>Billing period</dt>
+          <dd>{{ invoice.period_begin | date: i18n.long_date }} - {{ invoice.period_end | date: i18n.long_date }}</dd>
+          <dt>Issued on</dt>
+          <dd>{{ invoice.issued_on | date: i18n.long_date }}</dd>
+          <dt>Due on</dt>
+          <dd>{{ invoice.due_on | date: i18n.long_date }}</dd>
+          <dt>Paid on</dt>
+          <dd>{{ invoice.paid_on | date: i18n.long_date }}</dd>
+          {% if invoice.exists_pdf? %}
+          <dt>PDF</dt>
+          <dd>{{ 'Download PDF' | link_to: invoice.pdf_url, title: 'Show pdf', class: 'link' }}</dd>
+          {% endif %}
+        </dl>
+
+
+        <div class="row">
+          <div class="col-lg-6">
+            <h3>Issued by (API provider)</h3>
+            <dl class="dl-horizontal">
+              <dt>Name</dt>
+              <dd>{{ provider.name }}</dd>
+              <dt>Country</dt>
+              <dd>{{ provider.country_name }}</dd>
+              <dt>Address</dt>
+              <dd>{{ provider.full_address }}</dd>
+            </dl>
+          </div>
+
+          {% assign developer = invoice.account %}
+          <div class="col-lg-6">
+            <h3>For (developer)</h3>
+            <dl class="dl-horizontal">
+              <dt>Name</dt>
+              <dd>{{ developer.name }}</dd>
+              <dt>Address</dt>
+              <dd>{{ developer.full_address }}</dd>
+              <dt>Country</dt>
+              <dd>{{ developer.country_name }}</dd>
+              {% if invoice.vat_code == present %}
+                <dt>VAT Code</dt>
+                <dd>{{ invoice.vat_code }}</dd>
+              {% endif %}
+              {% if invoice.fiscal_code == present %}
+                <dt>Fiscal Code</dt>
+                <dd>{{ invoice.fiscal_code }}</dd>
+              {% endif %}
+            </dl>
+          </div>
+        </div>
+
+        <table id="line_items" class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th> Name </th>
+              <th> Description </th>
+              <th> Quantity </th>
+              <th> Price </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line_item in invoice.line_items %}
+              <tr class="line_item {% cycle 'odd', 'even' %}">
+                <th>{{ line_item.name }}</th>
+                <td>{{ line_item.description }}</td>
+                <td>{{ line_item.quantity }}</td>
+                <td>{{ invoice.currency }} {{ line_item.cost }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+
+          <tfoot>
+            {% if invoice.vat_rate == nil %}
+              <tr>
+                <th> Total cost</th>
+                <td></td>
+                <td></td>
+                <td id="invoice_cost">
+                  {{ invoice.currency }} {{ invoice.cost }}
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <th> Total cost (whithout VAT) </th>
+                <td></td>
+                <td></td>
+                <td id="invoice_cost_without_vat">
+                  {{ invoice.currency }} {{ invoice.cost_without_vat }}
+                </td>
+              </tr>
+              <tr>
+                <th> VAT Amount </th>
+                <td></td>
+                <td></td>
+                <td id="invoice_cost_vat_amount">
+                 {{ invoice.currency }} {{ invoice.vat_amount }}
+                </td>
+              </tr>
+              <tr>
+                <th> Total cost (VAT {{ invoice.vat_rate }}% included) </th>
+                <td></td>
+                <td></td>
+                <td id="invoice_cost">
+                  {{ invoice.currency }} {{ invoice.cost }}
+                </td>
+              </tr>
+            {% endif %}
+          </tfoot>
+        </table>
+
+        {% if invoice.vat_rate == 0 %}
+          <p id="vat-zero-text">
+            {{ provider.vat_zero_text }}
+          </p>
+        {% endif %}
+
+        {% if invoice.payment_transactions.size > 0 %}
+          <table id="payment_transactions" class="table table-striped table-bordered" >
+            <caption>Transactions</caption>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Reference</th>
+                <th>Message</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+            {% for payment_transaction in invoice.payment_transactions %}
+              <tr class="{% if payment_transaction.success? %}success{% else %}danger{% endif %}">
+                <td>
+                  {% if payment_transaction.success? %} {{ 'tick.png' | image_tag }} {% else %} {{ 'cross.png' | image_tag }} {% endif %}
+                </td>
+                <td>
+                  {% if payment_transaction.success? %} Success {% else %} Failure {% endif %}
+                </td>
+                <td>
+                  {{ payment_transaction.created_at }}
+                </td>
+                <td>
+                  {{ payment_transaction.reference }}
+                </td>
+                <td>
+                  {{ payment_transaction.message }}
+                </td>
+                <td>
+                  {{ payment_transaction.amount }}
+                  {{ payment_transaction.currency }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="help-block">No transactions registered for this invoice.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

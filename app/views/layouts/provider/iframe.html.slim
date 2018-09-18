@@ -1,0 +1,45 @@
+doctype html
+html[lang="en"]
+  head
+    meta[charset="utf-8"]
+    title 3scale
+    base href=base_url
+    = stylesheet_link_tag "provider/layouts/iframe"
+    = csrf_meta_tag
+    = render partial: 'provider/analytics', locals: { current_user: nil }
+    = yield :head
+
+  body
+    div id="content"
+      = render "shared/provider/flash", :flash => flash
+      = yield
+    = javascript_include_tag 'provider/layout/iframe'
+    = yield :javascript
+
+    javascript:
+      (function($){
+        $(window).load(function () {
+          setTimeout(function () {
+            var content = $(#{json yield(:after_load)}).toArray();
+            var body = $(document.body);
+
+            (function nextNode(){
+              var deferred;
+              var node = content.shift();
+
+              if(!node) return;
+
+              if ($(node).is('script[src]')) {
+                deferred = $.ajax({url: $(node).attr('src'), dataType: "script", cache: true});
+              } else {
+                deferred = $.Deferred();
+                body.append(node);
+                deferred.resolve();
+              }
+
+              deferred.then(nextNode);
+            }());
+
+          }, 0);
+        });
+      }(jQuery));

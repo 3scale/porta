@@ -1,0 +1,26 @@
+$('#errorExplanation').remove();
+$('.inline-errors').remove();
+
+<% if @page.valid? %>
+  $.flash(<%= flash.now[:notice].to_json.html_safe %>);
+  $(document).trigger('sidebar:load');
+
+  // 'publish' & 'hide' may change the 'published' view
+  var codemirror = $('#cms_template_published').data('codemirror');
+
+  if (codemirror) {
+    codemirror.setValue(<%= (@page.published || '').to_json.html_safe %>);
+    codemirror.save()
+  }
+
+  // update the preview draft link after save
+  $('#cms-preview-button a').each(function () {
+    if ($(this).data('preview') === 'draft') {
+      $(this).attr('href', '<%= cms_draft_url(@page) %>');
+    }
+  });
+
+<% else %>
+  var new_form = <%= render('/provider/admin/cms/templates/update').to_json.html_safe %>;
+  $('#tab-content form #cms-template-fields-wrapper').replaceWith(new_form);
+<% end %>

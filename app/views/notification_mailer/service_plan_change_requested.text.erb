@@ -1,0 +1,6 @@
+Dear <%= @receiver.informal_name %>,
+<%= @user.informal_name %> from <%= @account.name %> has requested to change their <%= @service.name %>
+service subscription from <%= @current_plan.name %> to <%= @requested_plan.name %>.
+
+You can change their service subscription from their service subscriptions page.
+To view service subscriptions page, follow this link: <%= admin_buyers_account_service_contracts_url(@account) %>

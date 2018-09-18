@@ -1,0 +1,31 @@
+<input type="hidden" id="cinstance_plan_id" name="application[plan_id]" value="{{ application.plan.id }}" />
+
+<fieldset>
+  <div class="form-group" id="selected-plan" data-plan-id="{{ application.plan.id }}">
+    <label class="control-label col-md-4">Plan</label>
+    <div class="col-md-6">
+
+        <p class="form-control-static">
+          <strong id='selected-plan-name'>{{application.plan.name}}</strong>
+          {% if application.can_change_plan? %}
+            <span>› </span>
+            <a href="#choose-plan-{{ application.id }}" id="choose-plan-{{application.id}}">
+              Review/Change
+            </a>
+            {% plan_widget application, wizard: true %}
+            {{ '/css/plans_widget_overrides.css' | stylesheet_link_tag }}
+          {% endif %}
+        </p>
+
+    </div>
+  </div>
+</fieldset>
+
+<fieldset>
+  {% for field in application.fields %}
+    {% include 'field' with field %}
+  {% endfor %}
+</fieldset>
+
+{% include 'new_application_licence' %}
+

@@ -1,0 +1,7 @@
+<h2><%= logged_in? ? "Plans" : "Sign up" %></h2>
+
+<%= render :partial => 'plans_table' %>
+
+<%- unless logged_in? -%>
+  <p>If you already have an account, sign in <%= link_to 'here', login_path %>.</p>
+<%- end -%>

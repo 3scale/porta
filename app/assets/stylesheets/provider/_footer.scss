@@ -1,0 +1,32 @@
+#footer {
+  color: $label-color;
+  background-color: $footer-background-color;
+  float: left;
+  width: 100%;
+  white-space: nowrap;
+  margin: line-height-times(1/2) 0;
+  border: none;
+
+  ul {
+      @include horizontal-list(line-height-times(1/2));
+      width: 100%;
+      overflow: visible;
+
+      li {
+
+        a {
+          display: block;
+          color: $footer-link-color;
+          &:hover { color: $footer-link-hover-color; }
+
+        }
+
+        &.last { float: right; }
+      }
+  }
+}
+
+.powered-by-3scale {
+  text-decoration: none;
+  color: $footer-link-color;
+}

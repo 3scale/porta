@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'messages/menu'%}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+      </div>
+      <div class="panel-body panel-footer">
+        {% form 'message.create', message, { class: 'form-horizontal' } %}
+          <fieldset>
+          <div class="form-group">
+            <label class="col-md-3 control-label">To</label>
+            <div class="col-md-6">
+              <p class="form-control-static">{{ message.to }}</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="message_subject">Subject</label>
+            <div class="col-md-6">
+              <input tabindex="1"
+                  autofocus="autofocus"
+                  id="message_subject" name="message[subject]" type="text" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message_body" class="col-md-3 control-label">Body</label>
+            <div class="col-md-7">
+              <textarea id="message_body"
+                        name="message[body]"
+                        rows="10"
+                        class="form-control"
+                        tabindex="1"></textarea>
+            </div>
+          </div>
+
+         <div class="form-group">
+            <div class="col-md-10">
+              <button type="submit" class="btn btn-primary pull-right" tabindex="3">Send</button>
+            </div>
+          </div>
+        </fieldset>
+        <!--
+          <fieldset class="inputs">
+            <ol>
+              <li>
+                <label>To:</label>
+                <input id="to" name="to" readonly="readonly" type="text" value="{{ message.to }}">
+              </li>
+              <li class="string optional" id="message_subject_input">
+                <label for="message_subject">
+                  Subject
+                </label>
+               <input id="message_subject" name="message[subject]" type="text">
+              </li>
+              <li class="text optional" id="message_body_input">
+                <label for="message_body">
+                  Body
+                </label>
+                <textarea id="message_body" name="message[body]" rows="10"></textarea>
+              </li>
+              <fieldset class="buttons">
+                <ol>
+                  {% if request.xhr? %}
+                    <li class="link">
+                      {{ "Cancel" | link_to: urls.messages_inbox, class: 'fancybox-close' }}
+                    </li>
+                  {% endif %}
+                  <li class="commit">
+                    <input class="important-button create" name="commit" type="submit" value="Send">
+                  </li>
+                </ol>
+              </fieldset>
+            </ol>
+          </fieldset>
+        -->
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

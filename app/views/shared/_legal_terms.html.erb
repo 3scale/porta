@@ -1,0 +1,24 @@
+<% if legal_terms -%>
+  <p>
+    By signing up you agree to the following Legal Terms and Conditions
+    (<a id="legal-terms-trigger" href="" >show</a>)
+  </p>
+
+  <%# REFACTOR: should not be inline! %>
+  <div id="legal-terms" style="display:none; overflow-y: scroll; height: 30em;">
+    <%= legal_terms.body.html_safe %>
+  </div>
+  <%= javascript_tag do %>
+    <!-- REFACTOR: should not be inline! -->
+    $('#legal-terms-trigger').toggle(
+      function() {
+        $('#legal-terms').fadeIn();
+        $('#legal-terms-trigger').text('hide');
+      },
+      function() {
+        $('#legal-terms').fadeOut();
+        $('#legal-terms-trigger').text('show');
+      }
+     );
+  <% end %>
+<% end %>

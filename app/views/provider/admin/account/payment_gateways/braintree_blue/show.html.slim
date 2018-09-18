@@ -1,0 +1,44 @@
+h1 Payment Details
+
+- if current_account.credit_card_stored?
+  .SettingsBox
+    = link_to 'Edit', edit_provider_admin_account_braintree_blue_path, class: 'SettingsBox-toggle'
+
+    .SettingsBox-summary
+      section.SettingsBox-section
+        h3 Personal Details
+        dl.u-dl.list
+          - %w{first_name last_name phone }.each do |field|
+            = payment_details_definition_list_item(field, current_account)
+
+      section.SettingsBox-section
+        h3 Credit Card Details
+        dl.u-dl.list
+          dt.u-dl-term Credit card number
+          dd.u-dl-definition = current_account.credit_card_display_number.presence || 'not provided'
+
+          - if current_account.credit_card_expires_on
+            dt.u-dl-term Expiration date
+            dd.u-dl-definition = l(current_account.credit_card_expires_on, format: :month)
+
+      section.SettingsBox-section
+        h3 Billing Address
+        dl.u-dl.list
+          - if current_account.billing_address_name.present?
+            dt.u-dl-term Company
+            dd.u-dl-definition = current_account.billing_address_name
+          - if current_account.billing_address_address1.present?
+            dt.u-dl-term Address
+            dd.u-dl-definition
+              = current_account.billing_address_address1
+              = current_account.billing_address_address2
+          - %w{zip city state country }.each do |field|
+            = payment_details_definition_list_item(field, current_account)
+
+  = link_to "Remove Payment Details", provider_admin_account_braintree_blue_path, method: :delete, data: {confirm: "Are you sure?", disable_with: "Deleting..."}, class: "action delete"
+- else
+  .SettingsBox
+    .SettingsBox-summary
+      = render partial: '/shared/legal_terms_for_cc_details'
+      .u-right
+        = link_to 'Add Payment Details', edit_provider_admin_account_braintree_blue_path, class: 'important-button'

@@ -1,0 +1,90 @@
+<h2>Plans</h2>
+
+<% if !@plans.blank? %>
+  <table id="contracts_table">
+    <!-- row: plan names -->
+    <tr class="head">
+      <td>&nbsp;</td>
+
+      <% @plans.each_with_index do |plan, index| %>
+        <%= plan_header_cell(plan, index, @plans.size) %>
+      <% end %>
+    </tr>
+    <!-- end row: plan names -->
+
+    <!-- HEADINGS -->
+
+    <tr class="trHeading">
+      <%= render :partial => 'plans/table/headings',
+        :locals => {:plans => @plans, :metrics => @service.metrics.top_level}%>
+    </tr>
+
+    <%= render :partial => 'plans/table/metric',
+               :collection => @service.metrics.top_level %>
+
+    <% unless  @service.features.visible.empty? %>
+      <tr>
+        <td class="heading" colspan="<%=  @plans.size + 1 %>">Features</td>
+      </tr>
+      <%= render :partial => 'plans/table/feature',
+                 :collection => @service.features.visible %>
+    <% end %>
+    <tr>
+      <td class="heading" colspan='<%=  @plans.size + 1 %>'>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="heading" colspan='<%=  @plans.size + 1 %>'></td>
+    </tr>
+
+    <tr>
+      <td class="rightAlign">PRICE</td>
+
+      <% @plans.each_with_index do |plan, index| %>
+        <td class="spec">
+
+          <% if plan.free? %>
+            <span class="price">FREE</span>
+          <% else %>
+
+            <% @flat_cost = if plan.cost_per_month > 0 %>
+              <span class="price">
+                <%= price_tag(plan.cost_per_month) %>
+              </span>
+            <% end %>
+
+            <% unless plan.pricing_rules.empty?  %>
+              <div class="pricingRules">
+                <%= render :partial => 'api/plans/pricing_rules',  :locals => {:plan => plan} %>
+              </div>
+            <% end %>
+
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+	<%- if site_account.settings.setup_fee_enabled? -%>
+	<tr>
+		<td class="rightAlign">SETUP FEE</td>
+		<%- @plans.each do |contract| -%>
+		  <td class="spec"><%= price_tag contract.setup_fee %></td>
+		<%- end -%>
+	</tr>
+	<%- end -%>
+    <tr>
+      <td>&nbsp;</td>
+      <% @plans.each do |plan| %>
+        <td class="buy" id="plan_<%= plan.id %>">
+  	  <% if logged_in? %>
+            <%#- TODO: add change plan functionality %>
+          <%- else -%>
+            <%= link_to image_tag('v2/signup.png'), signup_path(:application_plan => plan), :title => "Sign Up for #{plan.name}" %>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  </table>
+<% else %>
+  <p id="contracts_table">There are no plans yet for this service.</p>
+<% end %>

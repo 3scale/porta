@@ -1,0 +1,9 @@
+{
+    "apis": [
+    {
+      "path": "/api_docs/demo.json",
+      "name": "Demo API",
+      "system_name": "demo_api"
+    }   
+  ]
+}

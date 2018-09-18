@@ -1,0 +1,11 @@
+h1 Subscribe to event-driven email notifications
+
+p
+  | Events originate from interactions with the 3scale interface & the 3scale API. They can be triggered by developers, you, your team & 3scale. You will only receive API-related notifications for those APIs that you have access to.
+
+- if @preferences_form.categories.blank?
+  p= t('.no_notification_preferences_html', account_name: current_user.account.name,
+                                            username: current_user.account.first_admin.username,
+                                            email: current_user.account.first_admin.email)
+- else
+  = render 'form', preferences_form: @preferences_form

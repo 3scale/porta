@@ -1,0 +1,40 @@
+<div id="forum">
+  <%= render 'forums/admin/menu' %>
+  <h2>Forum subscriptions</h2>
+
+  <% if current_user and current_user.email_unverified? %>
+    <p>You won't receive notifications, until you <%= link_to 'verify your email', account_personal_details_path %>.</p>
+  <% end -%>
+
+  <% if @user_topics.exists? %>
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Thread</th>
+          <th class="posts">Posts</th>
+          <th colspan="2">Subscribed since</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for user_topic in @user_topics %>
+          <tr>
+          	<td class="topic">
+          	  <%= link_to h(user_topic.topic.title), forum_topic_path(user_topic.topic) %>
+          	</td>
+          	<td class="posts"><%= user_topic.topic.posts.size %></td>
+          	<td>
+          	  <%= user_topic.topic.last_updated_at.to_date.to_s(:long) %>
+          	</td>
+
+          	<td class="operations">
+          	  <%= link_to 'Unsubscribe', forum_subscription_path(user_topic.topic.id), :method => :delete, class: "action delete" %>
+          	</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate @user_topics %>
+  <%- else -%>
+    <p>You are currently not subscribed any threads.</p>
+  <%- end -%>
+</div>

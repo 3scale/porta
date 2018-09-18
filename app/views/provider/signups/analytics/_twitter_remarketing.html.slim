@@ -1,0 +1,9 @@
+= javascript_include_tag "//platform.twitter.com/oct.js"
+javascript:
+  if(typeof twttr != "undefined") {
+    twttr.conversion.trackPid(#{json txn_id});
+  }
+
+noscript
+  img height="1" width="1" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=#{txn_id}&p_id=Twitter"
+  img height="1" width="1" alt="" src="//t.co/i/adsct?txn_id=#{txn_id}&p_id=Twitter"

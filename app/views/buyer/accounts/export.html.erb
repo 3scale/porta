@@ -1,0 +1,14 @@
+<h2>Export Partners</h2>
+
+<div class="admin new_partner">
+    <%= form_tag buyer_accounts_path(:format => :csv), :method => :get do -%>
+      <%= label_tag 'after' %>
+      <%= date_select("account", "created_at_after", :start_year => 2010,
+                      :end_year => Date.today.year, :prompt => true, :use_month_numbers => true) %>
+      <%= label_tag 'before' %>
+      <%= date_select("account", "created_at_before", :start_year => 2010,
+                      :end_year => Date.today.year, :prompt => true, :use_month_numbers => true) %>
+      <p>Leave date blank to ignore it</p>
+      <%= submit_tag 'Export CSV' %>
+    <% end -%>
+</div>

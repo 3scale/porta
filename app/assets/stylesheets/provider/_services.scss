@@ -1,0 +1,168 @@
+.button-to.action.new.service {
+  margin-bottom: line-height-times(-2);
+  font-weight: $font-weight-bold;
+  float: right;
+  padding-bottom: line-height-times(1/8);
+  position: relative;
+  z-index: 100;
+}
+
+@mixin overview-widget-accordion {
+  .title-toggle {
+    cursor: pointer;
+
+    &:before {
+      content: '▼ ';
+    }
+  }
+
+}
+
+@mixin overview-widget {
+  padding: line-height-times(1) 0;
+  @include pie-clearfix;
+  border-bottom: $border-width solid $border-color;
+  clear: both;
+
+  .title {
+    @extend h2;
+    margin-bottom: 0;
+
+    a {
+      color: $font-color;
+      text-decoration: underline;
+      margin-bottom: line-height-times(1/2);
+    }
+
+    .button-to {
+      margin-top: line-height-times(1/2);
+    }
+  }
+
+  // BUTTONS
+  .button-to {
+    font-weight: $font-weight-bold;
+
+    &.new {
+      position: relative;
+      float: right;
+      top: line-height-times(-1.25);
+    }
+  }
+
+  ul.listing {
+    clear: left;
+    list-style: none;
+    border-radius: $border-radius;
+    padding: line-height-times(1);
+    border: $border-width solid $border-color;
+    position: relative;
+
+    &[data-hint] {
+      min-height: line-height-times(2);
+    }
+
+    li {
+      position: relative;
+      margin-left: 0;
+      border-bottom: $border-width solid $border-color;
+      padding: line-height-times(1/2) 0;
+
+      .name {
+        font-weight: $font-weight-bold;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+.overview-widget {
+  @include overview-widget;
+}
+
+.service-widget {
+  @extend .overview-widget;
+  @include overview-widget-accordion;
+
+  section {
+    margin-top: line-height-times(1);
+
+    h2 {
+      margin-top: line-height-times(2);
+      font-weight: $font-weight-normal;
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      & + .button-to {
+        float: right;
+      }
+
+      a {
+        text-decoration: underline;
+        color: $link-hover-color;
+
+        &:hover {
+          color: $link-color
+        }
+      }
+    }
+
+    &[name='settings'] {
+      @extend div.left;
+    }
+
+    &[name='activity'] {
+      @extend div.right;
+
+      #mini-charts {
+        @include fluid-charts;
+      }
+    }
+  }
+
+  .latest-alerts, .latest-apps, .service-settings, .service-plans, .application-plans, #mini-charts {
+    @extend ul.listing;
+  }
+
+  p {
+    margin-top: 0;
+    min-width: 0;
+  }
+
+  .outline-button.next {
+    float: none;
+    display: inline-block;
+  }
+}
+
+table.data.notification-settings {
+  margin-bottom: line-height-times(2);
+
+  .spacer {
+    padding-top: line-height-times(1);
+    visibility: hidden;
+  }
+}
+
+.is-closed {
+  height: line-height-times(7/2);
+  overflow: hidden;
+
+  .content-service {
+    visibility: hidden;
+  }
+
+  .title-toggle:before {
+    content: '► ';
+  }
+}

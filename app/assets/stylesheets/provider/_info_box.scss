@@ -1,0 +1,24 @@
+.InfoBox {
+  border-radius: $border-radius;
+  border: $border-width solid $border-color;
+  display: block;
+  margin: line-height-times(1/2) 0;
+  padding: line-height-times(1);
+
+  &--notice {
+    background: $dirty-color;
+  }
+
+  p, form, form li, fieldset {
+    max-width: 100% !important;
+  }
+
+  fieldset {
+    margin: 0 !important;
+  }
+
+  .u-dl-definition:last-child {
+    margin-bottom: line-height-times(-1);
+    border-bottom: 0;
+  }  
+}

@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        <a href="{{ urls.invitations }}">
+          <i class="fa fa-chevron-left"></i>
+          Cancel
+        </a>
+        New invitation
+      </div>
+      <div class="panel-body panel-footer">
+        {% form 'invitation.create', invitation, class: "form-horizontal" %}
+          <fieldset>
+            <div class="form-group">
+              <label for="invitation_email" class="control-label col-md-4">
+                Send invitation to
+              </label>
+              <div class="col-md-6">
+                <input id="invitation_email" maxlength="255"
+                     name="invitation[email]"
+                     type="email"
+                     value="{{ invitation.email }}"
+                     class="{{ invitation.errors.email | error_class }} form-control"/>
+                    {{ invitation.errors.email | inline_errors }}
+                <p class="help-block">
+                  Email address of a colleague or friend you want to invite to use this account.
+                </p>
+              </div>
+            </div>
+          </fieldset>
+          <div class="form-group">
+            <div class="col-md-10">
+              <input name="commit" class="btn btn-success pull-right" type="submit" value="Invite User">
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

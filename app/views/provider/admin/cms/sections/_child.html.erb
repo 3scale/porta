@@ -1,0 +1,20 @@
+<% section = if child.respond_to?(:parent)
+               child.parent
+             else
+               child.section
+             end
+ %>
+<% name = child.class.model_name -%>
+
+<tr id="<%= dom_id(child) %>">
+  <td>
+    <%= link_to child.title, polymorphic_path([:edit, :provider, :admin, child]) %>
+  </td>
+  <td><%= name.human %></td>
+  <td>
+    <% unless section.root?  %>
+      <a href="#" class="remove-from-section">Remove</a>
+    <% end -%>
+  </td>
+  <input type="hidden" name="cms_section[<%= name.param_key %>_ids][]" value="<%= child.id %>">
+</tr>

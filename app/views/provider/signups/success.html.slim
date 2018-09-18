@@ -1,0 +1,30 @@
+#signup-success
+  h1 = phrase_first_name
+  h2 = phrase_email
+    | with an activation link.
+
+- content_for :javascript do
+  javascript:
+    analytics.page('Signup Success');
+    analytics.track('Successful Signup');
+    var gmail_inbox = document.getElementById('gmail-inbox');
+    analytics.trackLink(gmail_inbox, 'Clicked Gmail inbox', {
+      category: 'signup'
+    });
+    gaReady(function () {
+      ga("send", "event", "signup", "success");
+      ga("marketing.send", "event", "signup", "success");
+    });
+
+- content_for :after_load do
+  - if session[:success_data]
+    = render 'provider/signups/analytics/perfect_audience'
+    = render 'provider/signups/analytics/adwords_conversion', conversion: analytics_credentials.adwords
+    = render 'provider/signups/analytics/adwords_conversion', conversion: analytics_credentials.prog_web
+    = render 'provider/signups/analytics/twitter_remarketing', txn_id: analytics_credentials.twitter_remarketing
+    = render 'provider/signups/analytics/twitter_remarketing', txn_id: analytics_credentials.twitter_conversion
+
+
+- content_for :head do
+  = render 'provider/signups/analytics/google_async'
+  = render 'provider/signups/analytics/munchkin'

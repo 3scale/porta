@@ -1,0 +1,67 @@
+<div id="table-of-contents">
+            <h1>Table of Contents</h1>
+            <ul>
+<li><a href="#tag-email">Tag 'email'</a></li>
+            </ul>
+</div>
+
+<h1>
+<a name="tag-email" class="anchor" href="#tag-email"><span class="mini-icon mini-icon-link"></span></a>Tag 'email'</h1>
+
+<p>The <code>email</code> tag allows you to customize headers of your outgoing messages.<br>
+There are several convenience subtags such as <code>cc</code> or <code>subject</code> (see the table below)<br>
+that simplify the job but you can also use a <code>header</code> subtag to set an arbitrary<br>
+SMTP header for the message.</p>
+
+<table>
+<thead><tr>
+<th>Subtag</th>
+<th>Description</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>subject</td>
+<td>dynamic subject</td>
+<td>{% subject = 'Greetings from Example company!' %}</td>
+</tr>
+<tr>
+<td>cc</td>
+<td>carbon copy</td>
+<td>{% cc = '<a href="mailto:boss@example.com">boss@example.com</a>' %}</td>
+</tr>
+<tr>
+<td>bcc</td>
+<td>blind carbon copy</td>
+<td>{% bcc = '<a href="mailto:all@example.com">all@example.com</a>' %}</td>
+</tr>
+<tr>
+<td>from</td>
+<td>the actual sender</td>
+<td>{% from = '<a href="mailto:system@example.com">system@example.com</a>' %}</td>
+</tr>
+<tr>
+<td>reply-to</td>
+<td></td>
+<td>{% reply-to = '<a href="mailto:support@example.com">support@example.com</a>' %}</td>
+</tr>
+<tr>
+<td>header</td>
+<td>custom SMTP header</td>
+<td>{% header 'X-SMTP-Group' = 'Important' %}</td>
+</tr>
+</tbody>
+</table><pre><code>{% email %}
+  {% subject = 'Greetings from Example company!' %}
+  {% reply-to = 'support@example.com' %}
+{% endemail %}
+</code></pre>
+
+<p><strong>Example:</strong> Complex example</p>
+
+<pre><code>{% email %}
+  {% if plan.system_name == 'enterprise' %}
+     {% bcc 'marketing@world-domination.org' %}
+  {% endif%}
+{% endemail %}
+</code></pre>

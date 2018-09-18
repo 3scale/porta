@@ -1,0 +1,6 @@
+$("a[href='/finance/accounts/<%=@buyer.id%>/invoices/<%=@invoice.id%>/line_items/new']").hide(); // Hide the 'Add line items'
+$.flash.error("<%=j @line_item.errors.full_messages.to_sentence%>");
+$('form[action^="/finance/accounts/<%=@buyer.id%>/invoices/<%=@invoice.id%>/line_items/"]').each(function(){ // Destroy all the 'Dele line item' forms
+    this.parentElement.removeChild(this);
+});
+$.colorbox.close();

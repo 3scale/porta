@@ -1,0 +1,24 @@
+(function($) {
+  var container = $("#referrer_filters");
+  var form = container.find('form').first();
+
+  form.find('.error').fadeOut().remove();
+  form.find('input[type=text]').val('');
+
+  var table = container.find('table');
+  var rowCount = table.find("tr").size();
+
+  newRow = $(<%= render_to_js_string('provider/admin/referrer_filters/item', :cinstance => @cinstance, :referrer_filter => @referrer_filter) %>);
+
+  newRow.removeClass("odd", "even");
+  newRow.addClass(rowCount % 2 ? "even" : "odd");
+  newRow.hide();
+
+  table.append(newRow);
+  newRow.show();
+
+  // Hide form is limit reached.
+  if (table.find("tr").size() >= <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
+    container.disableSwitch();
+  }
+})(jQuery);

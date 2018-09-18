@@ -1,0 +1,5 @@
+Dear <%= @receiver.informal_name %>
+The subscription of <%= @account.name %> on your service <%= @service.name %> has been changed to plan <%= @new_plan.name %>.
+- Previous plan: <%= @old_plan.name %>
+- New plan: <%= @new_plan.name %>
+To view account, follow this link: <%= admin_buyers_account_url(@account) %>

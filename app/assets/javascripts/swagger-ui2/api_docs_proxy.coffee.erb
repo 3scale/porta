@@ -1,0 +1,78 @@
+# Inline hack to fix missing .origin from some browsers (such as IE < 11)
+unless window.location.origin
+  port_part = if window.location.port then ":" + window.location.port else ""
+  window.location.origin = window.location.protocol + "//" + window.location.hostname + port_part
+
+# Route all requests not having same origin to api docs proxy
+class ApiDocsProxy
+
+  NO_CACHE_HEADERS = { "Cache-Control": "no-cache"  }
+
+  execute: (httpClient, obj) ->
+    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
+    if @originHttps() then obj.url = @forceHttpsProtocol obj.url
+    <% end %>
+    @createLinkElement obj.url
+    obj.originalUrl = obj.url
+    # console.log "[ApiDocsProxy] incoming url #{obj.url}"
+    if not @sameOrigin()
+      if _.isUndefined obj.method
+        obj.method = obj.type || "POST" # fallback to POST
+
+      obj.url = @locationOrigin() + '/api_docs/proxy'
+      obj.url += '?_=' + (new Date).getTime() # cache buster
+
+      # console.log "[ApiDocsProxy] proxying #{obj.originalUrl}"
+      $.extend obj.headers, NO_CACHE_HEADERS, @apiDocsHeaders(obj)
+    result = httpClient.execute(obj)
+    if not @sameOrigin()
+      obj.url = obj.originalUrl
+    result
+
+  apiDocsHeaders: (obj) -> {
+    'X-Apidocs-Method': obj.method,
+    'X-Apidocs-Path'  : @apiDocsPath(),
+    'X-Apidocs-Url'   : @desiredOrigin(),
+    'X-Apidocs-Query' : @linkElement.search.replace("?", "")
+  }
+
+  originHttps: ->
+    window.top.location.protocol == 'https:'
+
+  forceHttpsProtocol: (url) ->
+    url.replace(/^http:\/\//i, 'https://')
+
+  locationOrigin: ->
+    window.top.location.origin
+
+  createLinkElement: (url) ->
+    @linkElement = window.document.createElement "a"
+    @linkElement.href = url
+    @linkElement
+
+  sameOrigin: ->
+    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
+      true
+    <% else %>
+      @desiredOrigin() == @locationOrigin()
+    <% end %>
+
+
+  apiDocsPath: ->
+    # In some browsers like IE pathname do not includes (/) slash at the
+    # begining of the string
+    pathname = @linkElement.pathname
+    if pathname.length > 0 and pathname.indexOf('/') != 0
+      pathname = '/' + pathname
+    pathname
+
+  desiredOrigin: ->
+     # This is to make IE happy.
+     # https://connect.microsoft.com/IE/feedback/details/817343/ie11-scripting-value-of-htmlanchorelement-host-differs-between-script-created-link-and-link-from-document
+    if @linkElement.port is "443" and @linkElement.protocol is "https:"
+      portPart = ""
+    else
+      portPart = if @linkElement.port is "" then "" else ":" + @linkElement.port
+    @linkElement.protocol + "//" + @linkElement.hostname + portPart
+
+window.ApiDocsProxy = new ApiDocsProxy()

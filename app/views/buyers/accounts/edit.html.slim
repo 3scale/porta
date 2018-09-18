@@ -1,0 +1,18 @@
+= render 'menu'
+
+h2
+  ' Edit account
+  => @account.org_name
+  | details
+
+div
+  = semantic_form_for @account,
+                      url: admin_buyers_account_path(@account),
+                      builder: Fields::FormBuilder  do |form|
+    = form.inputs name: 'Contact Details', class: 'inputs' do
+      = form.user_defined_form
+
+    = form.buttons do
+      = form.commit_button 'Update Account'
+      li
+        = delete_buyer_link(@account)

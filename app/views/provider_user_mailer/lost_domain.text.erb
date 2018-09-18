@@ -1,0 +1,15 @@
+Dear User,
+
+You can login to your API Admin <%= "Portal".pluralize(@domains.size) %> at the following <%= "url".pluralize(@domains.size) %>:
+
+<% @domains.each do |d| %>
+  <%= provider_login_url(:host => d, :protocol => "https") %>
+<% end %>
+
+<% if ThreeScale.config.onpremises %>
+If you continue having problems or if you have not requested this, please contact our support team and we will get back to you as soon as possible.
+<% else %>
+If you continue having problems or if you have not requested this, please open a Support Case at https://access.redhat.com/support and we will get back to you as soon as possible.
+<% end %>
+
+The <%= master_mailer_name %> team.

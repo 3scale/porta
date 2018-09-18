@@ -1,0 +1,31 @@
+<% if @usage_limits %>
+  <table id="usage_limits_table" class="usage_table">
+    <thead>
+      <tr class="table_title">
+        <th colspan='2'>Usage Limits
+          <%= help_bubble do %>
+            <h3>Limits</h3>
+            <p>Limits define the maximum value a metric can take on a contract before the user is no
+            longer authorized to use resources. Once a limit has been passed in a given
+            period, reject messages will be issued if the service is accessed under this
+            contract. See the 3scale FAQ for more.</p>
+
+            <p>Limits have no impact on billing.</p>
+          <% end %>
+        </th>
+        <th class="operations">
+          <%= link_to 'New usage limit', new_polymorphic_path([:admin, @plan, @metric, :usage_limit]), :class => 'fancybox action add', 'data-autodimensions' => 'true' %>
+          <%= link_to 'Close', '', :class => 'metric_slot_close_button action close' %>
+        </th>
+      </tr>
+      <tr>
+        <th>Period</th>
+        <th>Value</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="usage_limits_table_body">
+      <%= render :partial => 'api/usage_limits/usage_limit', :collection => @usage_limits %>
+    </tbody>
+  </table>
+<% end %>

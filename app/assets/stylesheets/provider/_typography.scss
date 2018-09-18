@@ -1,0 +1,149 @@
+@import 'provider/colors';
+@import 'provider/fonts';
+
+$minScreen: 50rem;
+$maxScreen: 100rem;
+$minFont: .65rem;
+$maxFont: 1rem;
+
+//  http://madebymike.com.au/writing/precise-control-responsive-typography/
+// https://gist.github.com/indrekpaas/7f22e44ace49b5124eec
+@mixin fluid-type($properties, $min-vw, $max-vw, $min-value, $max-value) {
+	& {
+		@each $property in $properties {
+			#{$property}: $min-value;
+		}
+
+		@media screen and (min-width: $min-vw) {
+			@each $property in $properties {
+				#{$property}: calc(#{$min-value} + #{strip-unit($max-value - $min-value)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+			}
+		}
+
+		@media screen and (min-width: $max-vw) {
+			@each $property in $properties {
+				#{$property}: $max-value;
+			}
+		}
+	}
+}
+
+@function strip-unit($value) {
+	@return $value / ($value * 0 + 1);
+}
+
+// fonts, we should be moving to Overpass but it still has issues
+$font-family-sans-serif:    'Open Sans', sans-serif; // Overpass,
+$font-family-base:          $font-family-sans-serif;
+$font-family-monospace:     'Overpass Mono', monospace;
+
+// font-sizes
+$fontSize:                   1rem;
+
+$hero-title-font-size:       3 * $fontSize;
+$main-title-font-size:       2 * $fontSize;
+$secondary-title-font-size:  (3/2) * $fontSize;
+$sub-title-font-size:        (5/4) * $fontSize;
+$caption-font-size:          (7/8) * $fontSize;
+
+$font-size-base:             1 * $fontSize;
+
+// $font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg:               ($font-size-base * 5/4);
+$font-size-sm:               ($font-size-base * 7/8);
+
+$font-size-base:             1 * $fontSize;
+$font-size-lg:               $font-size-base * (5/4);
+$font-size-sm:               $font-size-base * (7/8);
+
+// line-heights
+$lineHeight: 1.5;
+
+$line-height-sm:              2/3 * $lineHeight;
+$line-height-base:            3/3 * $lineHeight;
+$line-height-lg:              4/3 * $lineHeight;
+
+// font weights
+
+$font-weight-light:           300;
+$font-weight-normal:          400;
+$font-weight-bold:            700;
+
+$font-weight-base:            $font-weight-normal;
+
+$border-width:                 1px;
+$border-width-sm:              0.5 * $border-width;
+$border-width-base:            1.0 * $border-width;
+$border-width-lg:              2.0 * $border-width;
+
+$spacer-½lh: line-height-times(.5);
+$spacer-1lh: line-height-times(1); // 24px; // = line height
+$spacer-2lh: line-height-times(2); // 32px;
+
+@mixin font-base() {
+  font-family:                  $font-family-base;
+  line-height:                $line-height-base;
+  font-weight:                $font-weight-base;
+	@include fluid-type(font-size, $minScreen, $maxScreen, $minFont, $maxFont);
+}
+
+@mixin colors-base() {
+  background-color:           $background-color-base;
+  color:                      $color-base;
+}
+
+@mixin colors-inverted-base() {
+  background-color:           $color-base;
+  color:                      $background-color-base;
+}
+
+@mixin debug-vertical-rhythm {
+  background-image: linear-gradient(rgba(black, 0.04) 1px, transparent 1px);
+  background-size: 1px $line-height-base*1rem;
+
+  * {
+    background-color: transparent !important;
+  }
+}
+
+@mixin typography-base($inverted: false) {
+  @include font-base;
+
+  box-sizing: border-box;
+  font-smoothing: antialiased;
+  height: 100%;
+  text-rendering: optimizeLegibility;
+
+  @if $inverted == true {
+    @include colors-inverted-base;
+  }
+  @else {
+    @include colors-base;
+  }
+
+  box-sizing: border-box;
+
+  .fa {
+    box-sizing: content-box;
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+}
+
+@function line-height-times($multiplier: 1, $subtract-border: false) {
+  $spacer: $line-height-base *1rem * $multiplier;
+
+  @if $subtract-border == true {
+    @return calc(#{$spacer} - #{$border-width});
+  }
+  @else {
+    @return $spacer;
+  }
+}
+
+$border-radius:                  line-height-times(1/8);
+$border-radius-sm:               line-height-times(1/8);
+
+$layout-wrapper-min-width: line-height-times(50);

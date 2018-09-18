@@ -1,0 +1,24 @@
+<% conversion ||= {} %>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion_async.js"></script>
+<script type="text/javascript">
+  (function(){
+    "use strict";
+
+    if (typeof(window.google_trackConversion) === 'function') {
+      window.google_trackConversion({
+        google_conversion_id: <%= json conversion[:id] %>,
+        google_conversion_label: <%= json conversion[:label] %>,
+        google_conversion_language:  "en",
+        google_conversion_format:  "3",
+        google_conversion_color:  "ffffff",
+        google_remarketing_only: false
+      });
+    }
+  }());
+</script>
+<noscript>
+  <div style = "display:inline;">
+    <img height="1" width="1" style="border-style:none;" alt=""
+         src="//www.googleadservices.com/pagead/conversion/<%= conversion[:id] %>>/?label=<%= conversion[:label] %>&amp;guid=ON&amp;script=0"/>
+  </div>
+</noscript>

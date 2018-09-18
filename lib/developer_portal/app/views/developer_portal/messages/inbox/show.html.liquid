@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'messages/menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        <a href="{{ urls.messages_inbox }}">
+          <i class="fa fa-chevron-left"></i>
+          All messages
+        </a>
+        <span class="pull-right">
+          {{ '<i class="fa fa-trash"></i>' | html_safe | link_to: message.url, method: 'delete' }}
+        </span>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt>Subject</dt>
+          <dd>{{ message.subject }}</dd>
+          <dt>Received</dt>
+          <dd>from {{ message.sender }} at {{ message.created_at | date: i18n.long_date }}</dd>
+          <dt>Message</dt>
+          <dd><pre class="message">{{ message.body }}</pre></dd>
+        </dl>
+      </div>
+
+      <div class="panel-footer important">
+        {% comment %} only embed reply form if there is a sender to reply to {% endcomment %}
+        {% if reply %}
+          {% form 'message.reply', reply, { class: 'form-horizontal' } %}
+            <div class="form-group">
+              <input id="reply_to" name="reply_to" type="hidden" value="{{ message.id }}">
+              <input type="hidden" name="message_subject" value="Re: {{message.subject}}">
+              <label class="col-md-3 control-label" for="message_body">Reply</label>
+              <div class="col-md-7">
+                <textarea id="message_body"
+                          name="message[body]"
+                          rows="10"
+                          class="form-control"
+                          tabindex="1"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10">
+                <button type="submit" class="btn btn-primary pull-right" tabindex="3">Send reply</button>
+              </div>
+            </div>
+          {% endform %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

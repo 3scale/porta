@@ -1,0 +1,293 @@
+{
+    "apis": [
+        {
+        "path": "/stats/applications/{application_id}/usage.{format}",
+        "operations": [{
+            "httpMethod": "GET",
+            "group":"apps",
+            "summary": "Application Usage",
+            "description": "Returns usage data for all methods for an application.",
+            "parameters": [
+            {
+                    "name": "transactions",
+                    "dataType": "array",
+                    "required": true,
+                    "paramType": "body",
+                    "allowMultiple": true,
+                    "description": "Transactions to be reported",
+                    "parameters": [
+                    {
+                        "description": "ID of service.",
+                        "name": "service_id",
+                        "dataType": "string",
+                        "defaultValue": "",
+                        "required": false,
+                        "paramType": "query",
+                        "threescale_name":"services"
+                    },
+                    {
+                        "name": "usage",
+                        "dataType": "hash",
+                        "required": false,
+                        "paramType": "query",
+                        "description": "Usage",
+                        "parameters": [{
+                            "name": "metric",
+                            "dataType": "custom",
+                            "allowMultiple": true,
+                            "required": true,
+                            "paramType": "query",
+                            "description": "Metric to be reported",
+                            "threescale_name": "metrics_by_name"
+                        }]
+                    }]
+                },
+            {
+              "description": "Response format.",
+              "name": "format",
+              "dataType": "string",
+              "defaultValue": "json",
+              "required": true,
+              "allowMultiple": false,
+              "paramType": "path",
+              "allowableValues": {
+                  "values": ["json", "xml"],
+                  "valueType": "LIST"
+                }
+              },
+              {
+                "name":"name",
+                "dataType":"string",
+                "required":false,
+                "paramType":"query"
+              },
+            {
+              "name":"demo_param",
+              "dataType":"custom",
+              "required":false,
+              "paramType":"query",
+              "allowMultiple":true
+            }
+            ]
+      }]
+    },
+        {
+        "path": "/stats/services/{service_id}/top_applications.{format}",
+        "operations": [{
+            "httpMethod": "GET",
+            "group":"bb",
+            "summary": "Top Applications",
+            "description": "Returns usage and application data for the top 10 most active applications.",
+            "parameters": [
+            {
+                "description": "Provider's API key for authentication.",
+                "name": "provider_key",
+                "dataType": "string",
+                "defaultValue": "",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys"
+            },
+            {
+                "description": "ID of service.",
+                "name": "service_id",
+                "dataType": "string",
+                "defaultValue": "",
+                "required": true,
+                "paramType": "path",
+                "threescale_name":"services"
+            },
+            {
+              "description": "Response format.",
+              "name": "format",
+              "dataType": "string",
+              "defaultValue": "json",
+              "required": true,
+              "allowMultiple": false,
+              "paramType": "path",
+              "allowableValues": {
+                  "values": ["json", "xml"],
+                  "valueType": "LIST"
+                }
+              },
+            {
+                "description": "System name of metric for which to get data.",
+                "name": "metric_name",
+                "dataType": "string",
+                "defaultValue": "hits",
+                "required": true,
+                "allowMultiple": false,
+                "paramType": "query",
+               "threescale_name":"metrics_by_name"
+            },
+            {
+                "description": "Length of the period of data. Possible values: month, day and hour",
+                "name": "period",
+                "dataType": "string",
+                "required": true,
+                "allowMultiple": false,
+                "paramType": "query",
+                "defaultValue": "day"
+            },
+            {
+                "description": "Date from when period should start. Example dates: 2010-12-01, 2010-01-27",
+                "name": "since",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query"
+            },
+            {
+                "description": "Date from when period should end. Example dates: 2010-12-01, 2010-01-27",
+                "name": "until",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query"
+            }
+            ]
+      }]
+    },
+
+    {
+        "path": "/stats/services/{service_id}/usage.{format}",
+        "operations": [{
+            "httpMethod": "GET",
+            "summary": "Service Usage",
+            "group":"cc",
+            "description": "Returns usage data by metric for a specified period of time for a service.",
+            "parameters": [
+            {
+                "description": "Provider's API key for authentication.",
+                "name": "provider_key",
+                "dataType": "string",
+                "defaultValue": "",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys"
+            },
+            {
+                "description": "ID of service.",
+                "name": "service_id",
+                "dataType": "string",
+                "defaultValue": "",
+                "required": true,
+                "paramType": "path",
+                "threescale_name":"services"
+            },
+            {
+              "description": "Response format.",
+              "name": "format",
+              "dataType": "string",
+              "defaultValue": "json",
+              "required": true,
+              "allowMultiple": false,
+              "paramType": "path",
+              "allowableValues": {
+                  "values": ["json", "xml"],
+                  "valueType": "LIST"
+                }
+              },
+            {
+                "description": "System name of metric for which to get data.",
+                "name": "metric_name",
+                "dataType": "string",
+                "defaultValue": "hits",
+                "required": true,
+                "allowMultiple": false,
+                "paramType": "query",
+                "threescale_name":"metrics_by_name"
+            },
+            {
+                "description": "Length of the period of data. Possible values: month, day and hour",
+                "name": "period",
+                "dataType": "string",
+                "required": true,
+                "allowMultiple": false,
+                "paramType": "query",
+                "defaultValue": "day"
+            },
+            {
+                "description": "Date from when period should start. Example dates: 2010-12-01, 2010-01-27",
+                "name": "since",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query"
+            },
+            {
+                "description": "Date from when period should end. Example dates: 2010-12-01, 2010-01-27",
+                "name": "until",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query"
+            }
+            ]
+      }]
+    },
+    {
+
+        "path": "/stats/services/{service_id}/methods_usage.{format}",
+        "operations": [{
+            "httpMethod": "GET",
+            "group": "dd",
+            "summary": "Methods Usage",
+            "description": "Returns usage data for all methods belonging to a service.",
+            "parameters": [
+            {
+                "description": "Provider's API key for authentication.",
+                "name": "provider_key",
+                "dataType": "string",
+                "defaultValue": "",
+                "required": true,
+                "paramType": "query",
+                "threescale_name": "api_keys"
+            },
+            {
+                "description": "ID of service.",
+                "name": "service_id",
+                "dataType": "string",
+                "defaultValue": "",
+                "required": true,
+                "paramType": "path",
+                "threescale_name":"services"
+            },
+            {
+              "description": "Response format.",
+              "name": "format",
+              "dataType": "string",
+              "defaultValue": "json",
+              "required": true,
+              "allowMultiple": false,
+              "paramType": "path",
+              "allowableValues": {
+                  "values": ["json", "xml"],
+                  "valueType": "LIST"
+                }
+              },
+            {
+                "description": "Length of the period of data. Possible values: month, day and hour",
+                "name": "period",
+                "dataType": "string",
+                "required": true,
+                "allowMultiple": false,
+                "paramType": "query",
+                "defaultValue": "day"
+            },
+            {
+                "description": "Date from when period should start. Example dates: 2010-12-01, 2010-01-27",
+                "name": "since",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query"
+            },
+            {
+                "description": "Date from when period should end. Example dates: 2010-12-01, 2010-01-27",
+                "name": "until",
+                "dataType": "string",
+                "required": false,
+                "paramType": "query"
+            }
+            ]
+      }]
+    }
+    ],
+    "basePath": "https://provider-admin.example.com"
+}

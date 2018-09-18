@@ -1,0 +1,82 @@
+<div class="full">
+  <div class="container" >
+    <div class="row">
+      <div class="col-md-10">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:20%">Name</th>
+                  <th>Description</th>
+                  <th>Plan</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for service in provider.services %}
+                  <tr class="service">
+                    {% if service.subscribable? %}
+                      {% assign subscription = service.subscription %}
+                      <td>
+                        {{ service.name }}
+                      </td>
+                      <td>
+                        <p>
+                          {{ service.description }}
+                        </p>
+                      </td>
+
+                      <td>
+                        {% if subscription %}
+                          {{ subscription.plan.name  }}
+                          {% unless subscription.live? %}
+                            ({{ subscription.state }})
+                          {% endunless %}
+                        {% endif %}
+                      </td>
+
+                      <td>
+                        {% if subscription %}
+                            {% if subscription.can.change_plan? %}
+                               <a href="#" id="choose-plan-{{subscription.id}}" class="btn btn-default">Review/Change</a>
+
+                               {{ "plans_widget.js" | javascript_include_tag }}
+                               {{ "plans_widget.css" | stylesheet_link_tag }}
+
+                                <script type="text/javascript">
+                                  //<![CDATA[
+                                  $(document).ready(function() {
+                                    $("#choose-plan-{{ subscription.id }}").click(function(){
+                                      var planID = '{{ subscription.plan.id }}';
+                                      var contractID = '{{ subscription.id }}';
+                                      var url = '{{ subscription.change_plan_url }}';
+
+                                      function plan_chosen_callback(name, planID){
+                                      }
+
+                                      PlanWidget.loadPreview(planID, plan_chosen_callback, url, contractID );
+
+                                      return false;
+                                    });
+                                  });
+                                  //]]>
+                                </script>
+
+                            {% endif %}
+                       {% else %}
+                         {{ "Subscribe to " | append: service.name | link_to: service.subscribe_url }}
+                       {% endif %}
+                      </td>
+                      {% endif %}
+                  </tr>
+                 {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

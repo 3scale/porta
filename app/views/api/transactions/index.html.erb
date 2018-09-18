@@ -1,0 +1,27 @@
+<h2>Latest transactions</h2>
+
+<p>These are the latest transaction reported from your API.</p>
+
+<div class="operations play" id="live_feed_control" title="toggle live feed ON/OFF">
+  Live feed: OFF
+</div>
+
+<table class="data" id="latest_transactions" data-source="<%= admin_transactions_path %>">
+  <thead>
+    <tr>
+      <th>Time (UTC)</th>
+      <th>Account</th>
+      <th colspan="2">Usage</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= render 'table_body' %>
+  </tbody>
+</table>
+
+<p>Last updated: <span id="update_timestamp"><%= Time.zone.now.to_s(:full) %></span></p>
+
+<% content_for(:javascripts) do %>
+  <%= javascript_include_tag('transaction_feed') %>
+<% end %>

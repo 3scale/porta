@@ -1,0 +1,13 @@
+<dl class="key_container">
+  <dt>User Key</dt>
+  <dd>This is the key you should send with each API request.</dd>
+  <dd class="key"><%= @cinstance.user_key %></dd>
+</dl>
+
+<% if @cinstance.service.display_provider_keys %>
+<dl class="key_container">
+  <dt>Provider Verification Key</dt>
+  <dd>This is the key you should get back from the provider.</dd>
+  <dd class="key"><%= @cinstance.provider_public_key %></dd>
+</dl>
+<%- end -%>

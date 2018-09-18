@@ -1,0 +1,579 @@
+---
+- - :whitelist
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-08-15 10:59:07.210221000 Z
+- - :whitelist
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-08-15 10:59:32.297032000 Z
+- - :whitelist
+  - ruby
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-08-15 11:00:00.919892000 Z
+- - :whitelist
+  - Ruby 1.8
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-08-15 11:03:11.357434000 Z
+- - :whitelist
+  - BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-08-15 11:03:40.069678000 Z
+- - :whitelist
+  - New BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-08-15 11:03:46.628014000 Z
+- - :whitelist
+  - Simplified BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 12:29:52.630868000 Z
+- - :whitelist
+  - 2-clause BSDL
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 12:30:06.838026000 Z
+- - :whitelist
+  - LGPL
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 12:30:22.623646000 Z
+- - :whitelist
+  - LGPL-2.1+
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 12:30:35.642108000 Z
+- - :whitelist
+  - Apache
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 12:31:29.289170000 Z
+- - :approve
+  - sidekiq-pro
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 13:43:07.881188000 Z
+- - :approve
+  - 3scale_core
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-23 13:45:13.849013000 Z
+- - :approve
+  - aggregate_root
+  - &1
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-25 14:27:38.086122000 Z
+- - :approve
+  - MIT
+  - *1
+- - :approve
+  - rails_event_store
+  - &2
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-25 14:28:24.607854000 Z
+- - :approve
+  - MIT
+  - *2
+- - :approve
+  - ruby_event_store
+  - &3
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-25 14:28:38.695549000 Z
+- - :approve
+  - MIT
+  - *3
+- - :approve
+  - json
+  - &4
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-25 14:29:20.780929000 Z
+- - :approve
+  - ruby
+  - *4
+- - :approve
+  - paperclip-meta
+  - &5
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-25 14:29:35.052570000 Z
+- - :approve
+  - MIT
+  - *5
+- - :whitelist
+  - GPL-2
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-29 11:24:05.225924000 Z
+- - :whitelist
+  - ISC
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-29 11:24:15.693203000 Z
+- - :whitelist
+  - GPL-2.0+
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-29 11:24:31.743236000 Z
+- - :approve
+  - test_xml
+  - &6
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-29 11:44:47.439484000 Z
+- - :approve
+  - MIT
+  - *6
+- - :approve
+  - ntlm-http
+  - &7
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2016-11-29 14:20:40.333313000 Z
+- - :approve
+  - MIT
+  - *7
+- - :approve
+  - amdefine
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 11:40:38.307958000 Z
+- - :approve
+  - path-is-inside
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 11:41:03.632775000 Z
+- - :approve
+  - optimist
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 11:41:34.100630000 Z
+- - :approve
+  - rc
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 11:42:00.185395000 Z
+- - :approve
+  - spdx-expression-parse
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 11:43:11.310539000 Z
+- - :approve
+  - watch
+  - :who: Andrew Mackenzie
+    :why: Apache license
+    :versions: []
+    :when: 2017-01-24 15:28:10.965814000 Z
+- - :approve
+  - base64id
+  - :who: Andrew Mackenzie
+    :why: Apache license
+    :versions: []
+    :when: 2017-01-24 15:28:26.831674000 Z
+- - :approve
+  - blob
+  - :who: Andrew Mackenzie
+    :why: Apache license
+    :versions: []
+    :when: 2017-01-24 15:28:36.222666000 Z
+- - :approve
+  - component-bind
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 15:28:58.039466000 Z
+- - :approve
+  - component-inherit
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-24 15:29:14.959219000 Z
+- - :approve
+  - reduce-component
+  - :who: Andrew Mackenzie
+    :why: Apache 2.0 license
+    :versions: []
+    :when: 2017-01-24 16:58:33.106489000 Z
+- - :approve
+  - callsite
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-27 12:04:09.294922000 Z
+- - :approve
+  - indexof
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-27 12:04:25.504264000 Z
+- - :approve
+  - object-component
+  - :who: Andrew Mackenzie
+    :why: MIT license
+    :versions: []
+    :when: 2017-01-27 12:04:39.120613000 Z
+- - :whitelist
+  - Unlicense
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-01-31 15:59:29.601169000 Z
+- - :approve
+  - tweetnacl
+  - :who: Andrew Mackenzie
+    :why: Approved by Red Hat Legal
+    :versions: []
+    :when: 2017-02-01 10:55:00.587040000 Z
+- - :approve
+  - spark-md5
+  - :who: Andrew Mackenzie
+    :why: Approved by Red Hat Legal
+    :versions: []
+    :when: 2017-02-01 10:55:16.404494000 Z
+- - :approve
+  - moment-range
+  - :who: Andrew Mackenzie
+    :why: Approved by Red Hat Legal
+    :versions: []
+    :when: 2017-02-01 10:55:26.343299000 Z
+- - :approve
+  - jsonify
+  - :who: Andrew Mackenzie
+    :why: Approved by Red Hat Legal
+    :versions: []
+    :when: 2017-02-01 10:55:40.376778000 Z
+- - :approve
+  - after
+  - :who: Andrew Mackenzie
+    :why: Approved by Red Hat Legal
+    :versions: []
+    :when: 2017-02-01 10:55:48.875016000 Z
+- - :approve
+  - bundler
+  - :who: Andrew Mackenzie
+    :why: MIT License
+    :versions: []
+    :when: 2017-02-20 18:32:50.064445000 Z
+- - :unapprove
+  - newrelic-redis
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-02-27 17:39:13.158889000 Z
+- - :unapprove
+  - rpm_contrib
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-02-27 17:39:13.158889000 Z
+- - :unapprove
+  - newrelic_rpm
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-02-27 17:39:13.158889000 Z
+- - :license
+  - deadlock_retry
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/mperham/deadlock_retry/blob/v1.1.1/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:33:41.303492000 Z
+- - :license
+  - innertube
+  - Apache License 2.0
+  - :who: 
+    :why: Marked as Apache License 2.0 in https://github.com/basho/innertube/blob/v1.1.0/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:37:23.808970000 Z
+- - :license
+  - mail_view
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/basecamp/mail_view/blob/master/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:38:33.409503000 Z
+- - :license
+  - systemjs-plugin-css
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/systemjs/plugin-css/blob/0.1.35/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:55:05.517693000 Z
+- - :license
+  - test_xml
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/alovak/test_xml/blob/v0.1.8/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:55:54.487338000 Z
+- - :license
+  - unicorn-rails
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/samuelkadolph/unicorn-rails/blob/v2.2.1/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:57:05.944164000 Z
+- - :license
+  - xpath
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/teamcapybara/xpath/blob/master/LICENSE
+    :versions: []
+    :when: 2017-06-29 17:58:46.338628000 Z
+- - :license
+  - github-markdown
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://rubygems.org/gems/github-markdown
+    :versions: []
+    :when: 2017-06-29 18:03:50.819949000 Z
+- - :ignore_group
+  - development
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-06-30 10:35:05.121437000 Z
+- - :ignore_group
+  - test
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-06-30 10:35:11.531275000 Z
+- - :license
+  - jspm-nodelibs-assert
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-assert/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:21:39.629796000 Z
+- - :license
+  - jspm-nodelibs-constants
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-constants/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:22:00.652252000 Z
+- - :license
+  - jspm-nodelibs-crypto
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-crypto/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:22:19.469590000 Z
+- - :license
+  - jspm-nodelibs-events
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-events/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:26:35.396175000 Z
+- - :license
+  - jspm-nodelibs-http
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-http/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:26:53.162299000 Z
+- - :license
+  - jspm-nodelibs-https
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-https/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:27:14.843840000 Z
+- - :license
+  - jspm-nodelibs-module
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-module/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:27:40.702020000 Z
+- - :license
+  - jspm-nodelibs-net
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-net/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:28:01.478507000 Z
+- - :license
+  - jspm-nodelibs-os
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-os/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:28:21.013572000 Z
+- - :license
+  - jspm-nodelibs-path
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-path/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:28:38.322058000 Z
+- - :license
+  - jspm-nodelibs-process
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-process/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:28:55.085602000 Z
+- - :license
+  - jspm-nodelibs-stream
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-stream/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:29:12.574478000 Z
+- - :license
+  - jspm-nodelibs-tls
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-tls/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:31:23.067030000 Z
+- - :license
+  - jspm-nodelibs-tty
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-tty/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:33:02.228134000 Z
+- - :license
+  - jspm-nodelibs-url
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-url/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:33:17.803728000 Z
+- - :license
+  - jspm-nodelibs-util
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-util/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:33:33.746349000 Z
+- - :license
+  - jspm-nodelibs-vm
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-vm/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:33:48.824737000 Z
+- - :license
+  - jspm-nodelibs-zlib
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-zlib/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 13:34:04.875879000 Z
+- - :license
+  - jspm-nodelibs-string_decoder
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-07-06 14:23:49.867078000 Z
+- - :license
+  - jspm-nodelibs-child_process
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-child_process/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 15:55:11.738537000 Z
+- - :license
+  - jspm-nodelibs-buffer
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-buffer/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 15:55:44.459614000 Z
+- - :license
+  - jspm-nodelibs-fs
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/jspm/nodelibs-fs/blob/master/LICENSE
+    :versions: []
+    :when: 2017-07-06 15:56:23.754944000 Z
+- - :ignore
+  - developer_portal
+  - :who: 
+    :why: Internal code used as rails engine, not a real dependency
+    :versions: []
+    :when: 2017-07-10 14:53:19.261366000 Z
+- - :ignore
+  - active-docs
+  - :who: 
+    :why: Internal code used as rails engine, not a real dependency
+    :versions: []
+    :when: 2017-07-10 14:54:16.828385000 Z
+- - :license
+  - gemoji
+  - MIT
+  - :who: 
+    :why: Marked as MIT in https://github.com/github/gemoji/blob/master/gemoji.gemspec
+    :versions: []
+    :when: 2017-07-10 15:29:48.374694000 Z
+- - :ignore
+  - 3scale_time_range
+  - :who: 
+    :why: Private dependency, licensed under Red Hat, Inc
+    :versions: []
+    :when: 2017-07-10 15:33:22.337608000 Z
+- - :approve
+  - prawn-format
+  - :who: Andrew Mackenzie
+    :why: GPLv2
+    :versions:
+    - 0.2.1
+    :when: 2018-01-17 12:00:59.537581000 Z
+- - :approve
+  - prawn-layout
+  - :who: Andrew Mackenzie
+    :why: GPLv2
+    :versions:
+    - 0.2.1
+    :when: 2018-01-17 12:01:19.543408000 Z
+- - :approve
+  - ttfunk
+  - :who: Andrew Mackenzie
+    :why: Custom RUBY with GPLv2 or GPLv3
+    :versions:
+    - 1.5.1
+    :when: 2018-01-17 12:06:07.468492000 Z

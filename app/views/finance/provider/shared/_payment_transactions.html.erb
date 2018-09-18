@@ -1,0 +1,21 @@
+<table id="payment_transactions" class="finance_data" >
+  <caption>Transactions</caption>
+  <% unless @invoice.payment_transactions.empty? %>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Status</th>
+      <th>Created At</th>
+      <th>Reference</th>
+      <th>Message</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <%= render :partial => '/finance/provider/shared/payment_transaction', :collection => @invoice.payment_transactions %>
+  <% else %>
+  <tr>
+    <td colspan="5"><em>No transactions registered for this invoice.</em></td>
+  </tr>
+  <% end %>
+</table>
+

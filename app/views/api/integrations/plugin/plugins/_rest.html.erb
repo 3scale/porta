@@ -1,0 +1,8 @@
+<h2>Authorize & Report</h2>
+
+<p>To authorize and report in one go is easy, as long as you have 'curl' installed:</p>
+
+<% backend_host = System::Application.config.backend_client[:host].presence || 'apisonator-listener.example.com' %>
+<%= highlighted_code do %>
+  <%= "curl -v -X GET \"http://#{backend_host}/transactions/authrep.xml?service_token=#{@service.service_token}&#{@service.plugin_authentication_params.to_param}&service_id=#{@service.id}\"" %>
+<% end %>

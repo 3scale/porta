@@ -1,0 +1,18 @@
+= semantic_form_for authentication_provider,
+        url: provider_admin_authentication_provider_path(authentication_provider),
+        as: :authentication_provider do |f|
+  = f.inputs do
+    = f.input :client_id, required: f.object.oauth_config_required?
+    = f.input :client_secret, required: f.object.oauth_config_required?
+    = f.input :automatically_approve_accounts, hint: t('.automatically_approve_accounts_hint_html', link: edit_admin_site_usage_rules_path)
+
+    = render partial: authentication_provider.kind,
+             locals: { f: f, authentication_provider: authentication_provider }
+
+  = f.buttons do
+    = f.commit_button
+    -  if can? :manage, :authentication_providers
+      = link_to 'Delete',
+                provider_admin_authentication_provider_path(@authentication_provider),
+                data: {confirm: 'Are you sure?'}, method: :delete,
+                title: 'Delete authentication provider', class: 'action delete'

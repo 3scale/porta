@@ -1,0 +1,31 @@
+<%= render 'forums/public/forum/search_box' %>
+<div class="title">
+  <%= link_to 'Back to forum', path_to_forum_home, :class => 'back' %>
+  <h2>My Posts</h2>
+</div>
+
+
+<% @posts.each do |post| %>
+
+  <div class="topic" id="<%= "#post-#{post.id}" %>">
+    <div class="topicHeader">
+      <div class="topicAuthor">
+        <p class="avatar"><%= avatar_for post.user %></p>
+        <p class='detail'  id="<%= "#post-#{post.id}-publish-date" %>">
+	        <strong>Posted:</strong> <%= post.created_at.to_s(:long) %>
+	      </p>
+        <p class='detail'  id="<%= "#post-#{post.id}-publish-date" %>">
+	        <strong>Thread:</strong> <%= link_to_forum_topic(post.topic, {:anchor => "post-#{post.id}"}) %>
+	      </p>
+      </div>
+    </div>
+    <% if post.has_user? %>
+      <%= display_body_with_correct_markup post %>
+    <% end %>
+  </div>
+<% end %>
+<% if @posts.empty? %>
+<p>You have no posts.</p>
+<% end %>
+
+<%= will_paginate @posts %>

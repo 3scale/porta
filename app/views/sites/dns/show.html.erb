@@ -1,0 +1,69 @@
+<% content_for(:javascripts) do %>
+  <%= javascript_include_tag 'site_dns' %>
+<% end %>
+
+<h1>DNS Settings</h1>
+<%= semantic_form_for @account, :url => admin_site_dns_path do |form| %>
+  <%= form.semantic_errors %>
+
+    <%= form.inputs 'Access Control' do %>
+      <li class="string">
+        <%= form.label :site_access_code, 'Developer Portal Access Code' %>
+        <%= form.text_field :site_access_code, placeholder: '<no access code>' %>
+
+        <p class="inline-hints">The access code hides your site from the
+          world, but allows you to share access to a select few users during
+          setup. Add text to the field to enable the
+          screen. <strong>Delete the text to open the site to the
+          world</strong>.</p>
+      </li>
+
+    <% end %>
+
+    <%= form.inputs 'Domains' do %>
+      <li class="string">
+        <% if readonly_dns_domains? %>
+          <%= form.label :domain_type_subdomain, 'Developer Portal Site' %>
+          <%= form.text_field :subdomain, :value => current_account.domain , :disabled => 'disabled' %>
+          <%= switch_link "Change", contact_3scale_admin_site_dns_path, :switch => :branding, :upgrade_notice => true, :class => "fancybox" %>
+          <p class="inline-hints">You can change the domain of your
+  	Developer Portal to your own domain, for instance
+	https://developer.example.com. You can also change the
+  	assigned sub-domain within 3scale, for instance
+  	https://somethingelse.3scale.net. 3scale will take care of the
+  	SSL certificates.</p>
+          <% else %>
+          <%= form.label :domain, 'Developer Portal Site' %>
+          <%= form.text_field :domain %>
+          <p class="inline-hints">
+            <%= t('.editable_domain_hints_html') %>
+          </p>
+          <% end %>
+      </li>
+      <% if readonly_dns_domains? %>
+        <li class="string">
+          <%= form.label :from_email, 'Outgoing Email' %>
+          <%= form.text_field :from_email, :value => current_account.from_email, :disabled => 'disabled' %>
+          <%= switch_link "Change", contact_3scale_admin_site_dns_path, :switch => :branding, :upgrade_notice => true, :class => "fancybox", 'data-autodimensions' => 'true' %>
+
+          <p class="inline-hints"> You can change the domain of the email
+            address received by your users, for instance
+            api@example.com</p>
+        </li>
+      <% else %>
+        <li class="string">
+          <%= form.label :from_email, 'Outgoing Email' %>
+          <%= form.text_field :from_email %>
+
+          <p class="inline-hints"> You can change the domain of the email
+            address received by your users, for instance
+            api@example.com</p>
+        </li>
+      <% end %>
+    <% end %>
+
+  <%= form.buttons do %>
+    <%= form.commit_button  %>
+  <% end %>
+
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Email Templates</h1>
+
+<table class="data" id="email-templates">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @defaults.each do |template| %>
+      <tr>
+        <td><%= template.name %></td>
+        <td><%= template.description %></td>
+        <td class='actions'>
+          <% if template.new_record? %>
+            <%= link_to 'Override', new_provider_admin_cms_email_template_path(system_name: template.system_name), title: template.name, class: 'less-important-button' %>
+          <% else %>
+            <%= link_to 'Edit', edit_provider_admin_cms_email_template_path(template), title: template.name, class: 'important-button'%>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,4 @@
+<%= render :partial => '/finance/provider/shared/invoice_header', :locals => { :editable => allow_edit?, edit_link_scope: [:finance] } %>
+<%= render :partial => '/finance/provider/shared/line_items', :locals => { :editable => allow_edit? } %>
+<%= render :partial => '/finance/provider/shared/payment_transactions' %>
+<%= render :partial => '/finance/provider/invoices/actions' %>

@@ -1,0 +1,11 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | The subscription of #{@account.name} on your service #{@service.name} has been changed to plan #{@new_plan.name}.
+
+ul
+  li Previous plan: #{@old_plan.name}
+  li New plan: #{@new_plan.name}
+
+p= link_to 'View account', admin_buyers_account_url(@account)

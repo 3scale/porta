@@ -1,0 +1,21 @@
+<tr id="contract_metric_<%= metric.id %>">
+  <td colspan="2" class="title"><%= metric.name %></td>
+  <td>
+    <%= link_to 'pricing',
+		admin_contract_pricing_rules_path(@contract, :metric_id => metric) %>
+    (<span id="pricing_rules_counter_<%= metric.id %>"><%= metric.pricing_rules.find_all_by_contract_id(@contract.id).size %></span>) |
+
+    <%= link_to 'limits', admin_contract_usage_limits_path(@contract, :metric_id => metric) %>
+    (<span id="limits_counter_<%= metric.id %>"><%= metric.usage_limits.find_all_by_contract_id(@contract.id).size %></span>)
+
+  </td>
+  <td class="mini">
+    <%= link_to image_tag('pencil.png'), edit_admin_metric_path(metric, :contract_id => @contract), :class => 'edit_metric_link' %>
+  </td>
+  <td class="mini">
+    <%= form_for [:admin, metric], :remote => true, :html => {:method => 'delete'} do %>
+      <%= hidden_field_tag :contract_id, @contract.id %>
+      <%= image_submit_tag 'bin.png' %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,44 @@
+- content_for :stylesheets do
+  = stylesheet_link_tag 'vendor/c3'
+
+= content_for :javascripts do
+  = render_js_module_loader
+
+.Dashboard
+  div.Dashboard-widgets
+    // account level
+    - if can?(:manage, :partners)
+      section.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
+        header.DashboardSection-header
+          h1.DashboardSection-title Developers
+          = render 'developers_navigation', buyers: current_account.buyers,
+                                            pending_buyers: current_account.buyers.pending,
+                                            account_plans: current_account.account_plans.not_custom,
+                                            forum_topics: current_account.forum.recent_topics,
+                                            unread_messages_presenter: @unread_messages_presenter
+
+        // Account Level Widgets
+        = dashboard_widget :new_accounts
+        = dashboard_widget :potential_upgrades if can?(:manage, :plans)
+
+    // API Service Level
+    - if can?(:manage, :analytics)
+      = render collection: @services,
+               partial: 'provider/admin/dashboards/service',
+               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+               cache_options: { expires_in: 1.hour }
+
+    = render 'shared/service_access'
+
+  div.Dashboard-events
+    section.DashboardStream
+      = raw(@messages_presenter.render)
+
+javascript:
+  System.import('dashboard/toggle').then(function (m) {
+    m.default()
+  });
+
+
+
+

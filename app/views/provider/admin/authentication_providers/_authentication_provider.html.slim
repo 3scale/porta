@@ -1,0 +1,19 @@
+tr
+  td.provider
+    - link = "#{icon(authentication_provider.kind, fixed_width: true)} #{authentication_provider.human_kind}".html_safe
+    - url = authentication_provider.persisted? ? \
+       provider_admin_authentication_provider_path(authentication_provider) : \
+       new_provider_admin_authentication_provider_path(kind: authentication_provider.kind)
+    - if authentication_provider.in_iam_tools_scope?
+      = switch_link link, url,
+        switch: authentication_provider.authorization_scope, upgrade_notice: true
+    - elsif authentication_provider.in_social_scope?
+      = link_to link, url
+
+  - if branding_relevant?
+    td
+      = authentication_provider.in_social_scope? ? authentication_provider.human_state_name : '-'
+  td
+    = authentication_provider.published ? 'Published' : 'Hidden'
+
+

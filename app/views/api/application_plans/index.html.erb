@@ -1,0 +1,8 @@
+<% content_for :sublayout_title, 'Application Plans' %>
+
+<p class="description">Application Plans establish the rules (limits, pricing, features) for
+  using your API; every developer's application accessing your API will be accessing it within the
+  constraints of an Application Plan. From a business perspective, Application Plans allow you
+  to target different audiences by using multiple plans (i.e. 'basic', 'pro', 'premium') with
+  different sets of rules.</p>
+<%= render :partial => 'api/plans/listing' %>

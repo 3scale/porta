@@ -1,0 +1,14 @@
+- if @plans.not_custom.size > 0
+  = render partial: 'api/plans/default_plan'
+table#plans.data
+  thead
+    tr
+      th = sortable :name, @new_plan.human_attribute_name(:name)
+      th = sortable :contracts_count, @new_plan.human_attribute_name(:contracts)
+      th = sortable :state, @new_plan.human_attribute_name(:state)
+      th.right.operations colspan="3"
+        - if can_create_plan?(@new_plan)
+          = link_to "Create #{@new_plan.model_name.human.titleize}",
+                  new_polymorphic_path([:admin, @service, @new_plan]),
+                  title: 'Create new plan', class: 'action add'
+  = render partial: 'api/plans/table_body', locals: {plans: @plans.not_custom}

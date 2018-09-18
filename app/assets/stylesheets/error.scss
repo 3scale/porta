@@ -1,0 +1,60 @@
+@import "vendor/normalize";
+@import "provider/typography";
+@import "provider/logo";
+
+$width: line-height-times(24);
+$wrapper-padding: line-height-times(1);
+
+html {
+  @include typography-base();
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#wrapper {
+  padding: $wrapper-padding;
+  max-width: $width;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius;
+  position: relative;
+}
+
+#footer {
+  margin-top: line-height-times(2);
+  border-top: $border-width solid $border-color;
+
+  ul {
+    list-style: none;
+
+    .last {
+      float: right;
+    }
+
+    a {
+      display: block;
+    }
+  }
+}
+
+.powered-by-3scale {
+  font-size: $caption-font-size;
+  text-decoration: none;
+
+  a {
+    text-decoration: none;
+    color: $label-color;
+  }
+}
+
+.logo-3scale {
+  float: none;
+  padding: 0;
+  margin: 0 0 0 0;
+}

@@ -1,0 +1,9 @@
+<%= render 'forums/admin/menu' %>
+
+<div id="forum">
+  <h1>Edit Category</h1>
+
+  <%= semantic_form_for @category, :url => forum_category_path(@category) do |form| -%>
+    <%= render 'forums/admin/categories/form', :form => form %>
+  <% end -%>
+</div>

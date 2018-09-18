@@ -1,0 +1,15 @@
+default: &DEFAULT
+  adapter: mysql2
+  url: <%= ENV['DATABASE_URL'] %>
+  encoding: utf8
+  collation: utf8_bin
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+
+production:
+  <<: *DEFAULT
+
+preview:
+  <<: *DEFAULT
+
+development:
+  <<: *DEFAULT

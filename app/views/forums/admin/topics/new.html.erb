@@ -1,0 +1,8 @@
+<%= render 'forums/admin/menu' %>
+
+<div id="forum" class="formPage">
+  <h1>New Thread</h1>
+  <%= semantic_form_for @topic, :url => forum_topics_path do |form| -%>
+    <%= render 'forums/admin/topics/form', :form => form %>
+  <% end -%>
+</div>

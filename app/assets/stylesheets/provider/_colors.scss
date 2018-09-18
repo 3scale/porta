@@ -1,0 +1,143 @@
+@charset 'utf-8';
+
+// Descriptive color names
+// based on color names with main color attached for clarity if needed http://chir.ag/projects/name-that-color/
+
+// greys
+$white: #fff;
+$alabasterWhite: #fafafa; // pf-black-100
+$wildSandGray:   #f5f5f5; // pf-black-150
+$altoGray:       #dfdfdf; // bewteen pf-black-200 and pf-black-300
+$osloGray:       #8b8d8f; // pf-black-500
+$outerSpaceGray: #393f44; // pf-black-800
+
+// colors
+$lochMaraBlue: #0088ce;   //pf-blue-400
+$appleGreen: #3f9c35;
+$guardsmanRed: #cc0000;
+$tahitiGold: #ec7a08;
+
+// brand colors
+$brand-orange: #ff7314;
+$twitter-color: #55acee;
+$facebook-color: #3b5998;
+
+// Functional color names
+$body-background: $white;
+$content-background: $body-background;
+$background-color-base: $body-background;
+
+$font-color: $outerSpaceGray;
+$color-base: $font-color;
+
+$light-background-color: $alabasterWhite;
+$label-color: $osloGray;
+$highlight-color: $lochMaraBlue;
+$border-color: $altoGray;
+$select-color: $border-color;
+$focus-color: $alabasterWhite;
+
+$brand-blue: $lochMaraBlue;
+$light-color:  $osloGray;
+
+$form-background-color: $white;
+$hint-color: $osloGray;
+
+$link-color: $highlight-color;
+$link-hover-color: $outerSpaceGray;
+$icon-hover-color: $lochMaraBlue;
+
+$dirty-color: $alabasterWhite;
+$success-color: $appleGreen;
+$error-color: $guardsmanRed;
+$error-background-color: rgba($error-color, 0.1);
+$disabled-color: $osloGray;
+$disabled-background-color: $wildSandGray;
+$placeholder-color: $osloGray;
+
+$create-color: $success-color;
+$delete-color: $error-color;
+$delete-background-color: $error-background-color;
+
+$warning-color: $tahitiGold;
+$flash-color: $white;
+
+$table-search-background-color: $light-background-color;
+$tr-odd-color: transparent;
+$tr-even-color: transparent;
+
+$wrapper-color: none;
+
+
+$tab-menu-active-color: $lochMaraBlue;
+$tab-menu-active-background-color: $content-background;
+$tab-content-color: $content-background;
+
+// view specific colors
+$overview-widget-border: $border-color;
+$overview-widget-background: $tab-content-color;
+
+$box-shadow-color: rgba($font-color, .1);
+
+$menu-background-color: $content-background;
+$menu-color: $outerSpaceGray;
+$menu-active-color: $lochMaraBlue;
+$menu-hover-color: $lochMaraBlue;
+
+$submenu-color: $menu-color;
+$submenu-hover-color: $menu-hover-color;
+$submenu-active-color: $menu-active-color;
+$submenu-border-color: $border-color;
+
+$subsubmenu-active-color: $menu-active-color;
+$chart-background-color: $white;
+
+$log-entries-error-bg-color: $error-background-color;
+$log-entries-warning-bg-color: rgba($warning-color, 0.1);
+
+$sample-data-color: $white;
+$sample-data-bg-color: $lochMaraBlue;
+$sample-data-border-color: $lochMaraBlue;
+
+$important-button-color: $white;
+$important-button-bg-color: $lochMaraBlue;
+$important-button-border-color: $lochMaraBlue;
+
+$secondary-button-color: $white;
+$secondary-button-bg-color: $osloGray;
+$secondary-button-border-color: $osloGray;
+
+$disabled-button-color: $white;
+$disabled-button-bg-color: $altoGray;
+$disabled-button-border-color: $altoGray;
+/// --- login ---
+
+$login-content-color: $font-color;
+$codemirror-color: $label-color;
+$codemirror-border: $content-background;
+$codemirror-bg: $content-background;
+$codemirror-bg-readonly: $codemirror-bg;
+$codemirror-color-readonly: $codemirror-color;
+$codemirror-cursor-color: $highlight-color;
+$codemirror-vars-color: #00b9e4; // pf-light-blue-400
+$codemirror-vars2-color: #703fec; // pf-purple-400
+$codemirror-selected-bg: $select-color;
+$codemirror-meta-color: $tahitiGold;
+$codemirror-attr-color: $tahitiGold;
+$codemirror-number-color: $tahitiGold;
+$codemirror-comment-color: $label-color;
+$codemirror-keyword-color: $tahitiGold;
+$codemirror-builtin-color: $highlight-color;
+$codemirror-color-def: $tahitiGold;
+$codemirror-color-tag: $tahitiGold;
+$codemirror-liquid-bg-color: transparent;
+$codemirror-liquid-color: $highlight-color;
+$codemirror-liquid-tag-color: $label-color;
+$codemirror-liquid-markup-delim-color: $highlight-color;
+$codemirror-liquid-string-color: $success-color;
+$codemirror-gutter-color: $border-color;
+$codemirror-gutter-background-color: $codemirror-bg;
+
+$footer-background-color: transparent;
+$footer-link-color: $osloGray;
+$footer-link-hover-color: $link-hover-color;

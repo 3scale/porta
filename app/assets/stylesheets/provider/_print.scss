@@ -1,0 +1,33 @@
+@media print {
+  #ribbon-container,
+  #tabs,
+  #user_widget,
+  #second_nav,
+  .actions,
+  .action,
+  .ExportLink,
+  tr.search,
+  #footer {
+    display: none;
+  }
+
+  .logo-3scale {
+    &--svg {
+      background-image: none;
+      clear: both;
+      color: $font-color;
+      text-indent: 0;
+      text-transform: uppercase;
+      width: 100%;
+    }
+
+    img {
+      clear: both;
+      margin-bottom: 30pt;
+    }
+  }
+
+  a {
+    color: $font-color;
+  }
+}

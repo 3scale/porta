@@ -1,0 +1,71 @@
+base: &default
+  superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
+  dev_domain: <%= ENV['THREESCALE_DEV_DOMAIN'] == '1' %>
+  apicast_internal_host_regexp:
+  secure_cookie: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
+  force_ssl: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
+  apicast_oauth: <%= ENV.fetch('ENABLE_APICAST_OAUTH', '0') == '1' %>
+  apicast_custom_url: <%= ENV.fetch('ENABLE_APICAST_CUSTOM_URL', '0') == '1' %>
+  active_docs_url: <%= ENV.fetch('ACTIVE_DOCS_URL', "https://support-staging.#{superdomain}") %>
+  active_docs_proxy_disabled: false
+  asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
+  daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
+  readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '1') == '1' %>
+  airbrake_api_key: <%= ENV['AIRBRAKE_API_KEY'] %>
+  bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
+  events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
+  recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
+  recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
+  impersonation_admin:
+    username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
+    domain: <%= ENV.fetch('IMPERSONATION_ADMIN_DOMAIN', '3scale.net') %>
+
+  # System Emails
+  noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', 'no-reply@example.net') %>
+  support_email: <%= ENV.fetch('SUPPORT_EMAIL', '3scale Notifier <no-reply@example.com>') %>
+  sales_email: <%= ENV.fetch('SALES_EMAIL', 'sales@example.com') %>
+  notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', '3scale Notification <no-reply@example.com>') %>
+  golive_email: <%= ENV.fetch('GOLIVE_EMAIL', 'golive@example.com') %>
+  sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', 'sysadmin@example.com') %>
+
+  report_traffic: false
+  hide_basic_switches: false
+  tenant_mode: <%= ENV.fetch('TENANT_MODE', 'multitenant') %>
+  db_secret: <%= ENV.fetch('DB_SECRET', 'db_secret') %>
+  onpremises_api_docs_version: false
+  assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
+  email_sanitizer:
+    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
+    to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
+  onpremises: false
+  dev_gtld: <%= ENV.fetch('DEV_GTLD', 'lvh.me') %>
+  active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
+  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
+  billing_canaries:
+  apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
+  access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
+
+development:
+  <<: *default
+  dev_domain: true
+  secure_cookie: false
+  force_ssl: false
+  report_traffic: false
+  active_merchant_logging: true
+
+test:
+  <<: *default
+  secure_cookie: false
+  force_ssl: false
+  report_traffic: false
+
+preview:
+  <<: *default
+  dev_domain:  <%= ENV['THREESCALE_DEV_DOMAIN'] != '0' %>
+  report_traffic: false
+  access_code: <%= ENV.fetch('ACCESS_CODE', 'access_code') %>
+
+production:
+  <<: *default
+  report_traffic: true

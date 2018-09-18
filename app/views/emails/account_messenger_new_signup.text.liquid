@@ -1,0 +1,14 @@
+Dear API Administrator,
+
+A new user {{user.username}} has signed up. The user's details are:
+
+* Name: {{user.name}}
+* Email: {{user.email}}
+* Organization: {{account.name}}
+* Telephone: {{account.telephone_number}}
+
+{%if account.approval_required?%}
+The user requires your approval before keys can be used. You can approve / reject the user from your control panel.
+{%endif%}
+
+The API Team

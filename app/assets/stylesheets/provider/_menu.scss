@@ -1,0 +1,193 @@
+/* Main Menu */
+ul#tabs {
+  position: relative;
+  z-index: 10;
+  text-align: right;
+  clear: both;
+  height: line-height-times(2);
+  overflow-y: hidden;
+  cursor: default;
+
+  li {
+    margin: 0  line-height-times(1/4);
+    display: inline;
+
+    &:last-child {
+      margin-right: 0;
+
+      a {
+        padding-right: 0;
+      }
+    }
+
+    a {
+      padding: line-height-times(1/2) line-height-times(1/2) line-height-times(6/5, true) line-height-times(1/2);
+      color: $menu-color;
+      text-decoration: none;
+      border-bottom: 0;
+      font-weight: $font-weight-bold;
+
+      &.upgrade-notice {
+        color: $disabled-color;
+      }
+    }
+  }
+
+  li.active a, li#active a {
+    color: $menu-active-color;
+    position: relative;
+
+    &:before {
+      content: ' ';
+      height: 0;
+      position: absolute;
+      width: 0;
+      border: calc(#{line-height-times(1/2)} + #{2 * $border-width}) solid transparent; /* arrow size */
+      border-bottom-color: $border-color;
+      margin-left: auto;
+      margin-right: auto;
+      left: 0; //-$border-width;
+      right: 0;
+      bottom: 0;
+    }
+
+    &:after {
+      content: ' ';
+      height: 0;
+      position: absolute;
+      width: 0;
+      border: line-height-times(1/2) solid transparent; /* arrow size */
+      border-bottom-color: $menu-background-color;
+      margin-left: auto;
+      margin-right: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  li a:hover {
+    color: $menu-hover-color;
+  }
+}
+
+/* Submenu */
+ul#second_nav {
+  background-color: $menu-background-color;
+  margin: line-height-times(-1) line-height-times(-1) line-height-times(1) line-height-times(-1);
+  border-bottom: $border-width solid $border-color;
+  height: line-height-times(2);
+
+  li {
+      display: inline;
+      list-style-type: none;
+      margin: 0  line-height-times(1/4);
+
+    &:first-child {
+      margin: 0;
+
+      a {
+        padding-left: 0;
+      }
+    }
+
+    a {
+      display: inline-block;
+      padding: 0 line-height-times(1/2);
+      color: $submenu-color;
+      text-decoration: none;
+      border-bottom: 0;
+      line-height: line-height-times(2);
+      height: line-height-times(2);
+
+      &.preview {
+        border: $border-width solid $border-color;
+        padding: line-height-times(1/4) line-height-times(1/3) !important;
+        margin-top: line-height-times(1/3, true);
+        margin-left: line-height-times(1/2, true);
+        line-height: $line-height-sm;
+        height: auto;
+        color: $link-color;
+        border-radius: $border-radius-sm;
+
+        &:hover {
+          border-color: $link-color;
+        }
+      }
+
+      &:hover {
+        color: $submenu-hover-color;
+      }
+
+      &.upgrade-notice {
+        color: lighten($menu-color, 40%);
+
+        &:hover {
+          color: $link-color;
+        }
+      }
+    }
+
+    // '& a.active' present because of BCMS layouts
+    &.active a, & a.active {
+      color: $submenu-active-color;
+    }
+  }
+}
+
+#subsubmenu {
+  height: line-height-times(1);
+  margin: line-height-times(-1/2) 0 line-height-times(1) line-height-times(-1);
+  font-size: $font-size-sm;
+
+  .active {
+    color: $subsubmenu-active-color;
+  }
+
+  li {
+    list-style-type: none;
+    display: inline;
+    padding-right: line-height-times(1/2);
+
+    a {
+      color: $menu-color;
+      text-decoration: underline;
+    }
+  }
+}
+
+// important styles needed to override the id based styling above
+.SubSubMenuItem {
+  list-style-type: none;
+  display: inline-block !important;
+  white-space: nowrap;
+  margin: 0 line-height-times(1/4) line-height-times(1/2) 0;
+  padding: 0 0 0 0 !important;
+
+  &--trunk {
+    margin-left: 0;
+  }
+
+  &--branch:before {
+    content: '>';
+    margin-right: line-height-times(1/4);
+  }
+
+  &--leaf:before {
+    content: '|';
+    margin-right: line-height-times(1/4);
+  }
+
+  .is-active {
+    color: $subsubmenu-active-color;
+  }
+
+  &-link {
+    color: $menu-color;
+    text-decoration: underline;
+
+    &:hover {
+      color: $menu-hover-color;
+    }
+  }
+}

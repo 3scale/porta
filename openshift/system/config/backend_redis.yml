@@ -1,0 +1,11 @@
+bae: &default
+  timeout:  1
+  url: <%= ENV.fetch('BACKEND_REDIS_URL', 'redis://backend-redis:6379') %>
+  pool_timeout: 5
+  pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+
+production:
+  <<: *default
+
+preview:
+  <<: *default

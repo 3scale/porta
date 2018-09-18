@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-9">
+    {% include 'users_menu' %}
+    <div class="panel panel-default">
+      <div class="panel-heading important">
+        <a href="{{ urls.account_overview }}">
+          <i class="fa fa-chevron-left"></i>
+          Cancel
+        </a>
+      </div>
+      <div class="panel-body panel-footer">
+
+        {% form 'account.personal_details', current_account, class: "form-horizontal" %}
+
+          <fieldset class="inputs" name="Contact Details">
+            {% for field in current_account.fields %}
+              {% include 'field' with field %}
+            {% endfor %}
+          </fieldset>
+
+          <fieldset>
+            <div class="form-group">
+              <div class="col-md-10">
+                <input class="btn btn-primary pull-right" name="commit" type="submit" value="Update Account" />
+              </div>
+            </div>
+          </fieldset>
+
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#
+# Convenient Docker-based testing and development environment with Zeus and tmux
+# Logs go to .docker_bash_logs
+
+# time to wait for an external docker attach when docker container already exists
+
+ATTACH_TIME=2
+
+logdir()
+{
+    echo ${SCRIPT_DIR}/../.docker_bash_logs
+}
+
+if ! test -e ~/.docker_bash_configured; then
+  SCRIPT_DIR=$(dirname "$(readlink -f $0)")
+  . ${SCRIPT_DIR}/lib/docker
+
+  mkdir -p $(logdir)
+
+  echo -e "\n=== Setting up Docker environment for testing and development ==="
+
+  echo Configuring...
+  docker_config ${SCRIPT_DIR}/..
+  echo Launching servers...
+  docker_launch_servers > $(logdir)/.docker_launch_server.log 2>&1
+  echo Bundling...
+  docker_bundler > $(logdir)/.docker_bundler.log 2>&1
+  echo Preparing the database...
+  docker_db_prepare > $(logdir)/.docker_db_prepare.log 2>&1
+
+  which tmux > /dev/null 2>&1 || {
+      echo Installing missing tmux...
+      apt-get install tmux > $(logdir)/.docker_install_tmux.log 2>&1
+  }
+
+  test -r .s3cfg && echo "Found S3 config. Copying to container..." && cp .s3cfg ~/
+
+  cat << EOF > ~/.profile
+alias rt='ruby -Itest'
+alias zt='zeus test'
+alias zs='zeus start'
+alias bu='bundler --jobs `grep -c processor /proc/cpuinfo`'
+echo -e "Welcome to Docker testing and development environment\n\n" \
+  "Things you might want to do with tmux:\n" \
+  "\t* Create a new window (ctrl+b,c)\n" \
+  "\t* Switch to new window (ctrl+b,n)\n\n" \
+  "Other things you might want to do:\n" \
+  "\t* Run zeus start (or use alias zs), check it all becomes green\n" \
+  "\t* Use alias zt for testing specific files: zt test/unit/blablah\n" \
+  "\t* Use alias bu to run bundler with proper arguments\n" \
+  "\t* Run $ LOGGING=1 script/jenkins.sh to run the full test suite as Jenkins (with logs)\n" \
+  "\t* Run s3cmd --configure if you need Amazon S3 access and don't have a .s3cfg file\n" \
+  "\t* Import a database, use rake [DB_FILE_PATH=s3://..|file.sql[.gz]] db:import\n" \
+  "\t* Unlock passwords, use script/runner unlock\n" \
+  "\t* Run "rails s" to spin up your app and visit http://<your_local_domain>:3030/ on your browser\n" \
+  "\t* Perform additional tasks, use rake -T to list them\n"
+EOF
+  touch ~/.docker_bash_configured
+else
+  # wait a little bit for a docker attach to happen, otherwise not having a TTY
+  # will make the shell exit immediately
+  sleep 1
+  echo -e "\nSetting up your environment, be patient.\n"
+  sleep ${ATTACH_TIME}
+fi
+
+TMUX=$(which tmux 2> /dev/null)
+if test -n "${TMUX}"; then
+  TMUX="-c ${TMUX}"
+else
+  echo "Warning: tmux was not found, using bash instead!" >&2
+fi
+
+exec /bin/bash -i -l ${TMUX}

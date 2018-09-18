@@ -1,0 +1,10 @@
+load DATABASE  
+     from      mysql://root@localhost/system  
+     into postgresql:///system  
+ 
+ WITH include drop, create tables, no truncate,  
+      create indexes, reset sequences, foreign keys  
+ 
+ CAST type datetime to timestamptz  
+                drop default drop not null using zero-dates-to-null,  
+      type date drop not null drop default using zero-dates-to-null; 

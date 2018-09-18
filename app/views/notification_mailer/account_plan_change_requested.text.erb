@@ -1,0 +1,4 @@
+Dear <%= @receiver.informal_name %>,
+<%= @user.informal_name %> from <%= @account.name %> has requested to change their account plan from <%= @current_plan.name %> to <%= @requested_plan.name %>.
+You can change their account plan from their account page on the Admin Portal
+To view the account, follow this link: <%= admin_buyers_account_url(@account) %>

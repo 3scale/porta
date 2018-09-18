@@ -1,0 +1,107 @@
+server {
+  listen <%= @nginx_port %>;
+  server_name <%= proxy.proxy_host %>;
+  underscores_in_headers on;
+  set $threescale_backend "<%= @backend_scheme %>://<%= @backend_host %>";
+
+  error_page 502 /502.html;
+  error_page 503 /503.html;
+  error_page 500 /500.html;
+  error_page 404 /404.html;
+  error_page 403 /403.html;
+
+  location = /threescale_authrep {
+    internal;
+    set $<%= proxy.backend_authentication_type %> "<%= proxy.backend_authentication_value %>";
+    proxy_pass $threescale_backend/transactions/authrep.xml?<%= proxy.backend_authentication_type %>=$<%= proxy.backend_authentication_type %>&service_id=$service_id&$usage&$credentials&log%5Bcode%5D=$arg_code&log%5Brequest%5D=$arg_req&log%5Bresponse%5D=$arg_resp;
+    proxy_set_header Host <%= @backend_host %>;
+    proxy_set_header X-3scale-User-Agent "nginx-sandbox";
+    proxy_set_header X-3scale-Version "<%= @timestamp %>";
+  }
+
+  location = /threescale_report {
+    internal;
+    proxy_pass $threescale_backend/transactions.xml;
+    proxy_set_header X-Request-Id $pid-$msec-$remote_addr-$request_length;
+
+    proxy_set_header  Host  <%= @backend_host %>;
+  }
+
+  location = /out_of_band_authrep_action_and_report {
+    internal;
+    proxy_pass_request_headers off;
+
+    set $<%= proxy.backend_authentication_type %> "<%= proxy.backend_authentication_value %>";
+    set $master_provider_key "<%= @master_provider_key %>";
+
+    content_by_lua '
+      -- only do this when the authrep was cached
+
+      local cjson=require"cjson"
+      local method, path, params, headers = ngx.req.get_method(), ngx.var.uri, ngx.req.get_uri_args(), ngx.req.get_headers()
+
+      local req = cjson.encode{method = method, path=path, params=params, headers=headers}
+      local resp = cjson.encode{ body = ngx.var.resp_body, headers = cjson.decode(ngx.var.resp_headers)}
+
+      local cached_key = ngx.var.cached_key
+      if cached_key ~= nil and cached_key ~= "null" then
+        local status_code = ngx.var.status
+        local res1 = ngx.location.capture("/threescale_authrep?code=".. status_code .. "&req=" .. ngx.escape_uri(req) .. "&resp=" .. ngx.escape_uri(resp), {share_all_vars = true})
+        if res1.status ~= 200 then
+          local api_keys = ngx.shared.api_keys
+          api_keys:delete(cached_key)
+        end
+      end
+
+      local body_str = "provider_key="..ngx.var.master_provider_key.."&transactions[0][<%= proxy.backend_authentication_type.to_s.sub('provider', 'user') %>]="..ngx.var.<%= proxy.backend_authentication_type %>.."&transactions[0][usage][proxy_hits]=1"
+
+      local res2 = ngx.location.capture("/threescale_report",
+                                  { method = ngx.HTTP_POST, body = body_str })
+
+      if res2.status ~= 202 then
+        ngx.log(0,"Error on report_to_3scale_backend, "..res2.status)
+      end
+
+      ngx.exit(ngx.HTTP_OK)
+
+    ';
+
+  }
+
+
+  location / {
+    set $<%= proxy.backend_authentication_type %> null;
+    set $cached_key null;
+    set $credentials null;
+    set $usage null;
+    set $service_id "<%= proxy.service_id %>";
+    set $proxy_pass null;
+    set $secret_token null;
+    set $resp_body null;
+    set $resp_headers null;
+
+    proxy_ignore_client_abort on;
+
+    client_max_body_size 500k;
+    client_body_buffer_size 500k;
+
+    access_by_lua "require('lua.system_proxy.<%= @generator.lua_file %>').access()";
+
+    body_filter_by_lua  'ngx.ctx.buffered = (ngx.ctx.buffered or "") .. string.sub(ngx.arg[1], 1, 1000)
+                         if ngx.arg[2] then ngx.var.resp_body = ngx.ctx.buffered end';
+    header_filter_by_lua 'ngx.var.resp_headers = cjson.encode(ngx.resp.get_headers())';
+
+    set $api_backend_url "<%= proxy.api_host %>";
+    proxy_pass $api_backend_url;
+    add_header  X-Powered-By  "Red Hat 3scale API Management - http://www.3scale.net";
+    proxy_set_header  X-Real-IP  $remote_addr;
+    <% unless proxy.hostname_rewrite == 'none' %>
+    proxy_set_header  Host  "<%= proxy.hostname_rewrite %>";
+    <% end %>
+    proxy_set_header  X-3scale-proxy-secret-token $secret_token;
+
+    post_action /out_of_band_authrep_action_and_report;
+
+  }
+
+}

@@ -1,0 +1,16 @@
+.web_hook {
+  table td {
+    width: 25%;
+    border-right: $border-width solid $border-color;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  .Pinger li {
+    display: inline;
+    float: right;
+    margin-top: -line-height-times(2.5);
+  }
+}

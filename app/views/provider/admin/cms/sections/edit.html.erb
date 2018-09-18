@@ -1,0 +1,17 @@
+<h1>Section '<%= @section.title %>'</h1>
+
+<%= cms_new_button_dropdown(CMS::Section) %>
+
+<%= cms_form_for(@section) do |f| %>
+  <%= render 'form', :f => f %>
+
+  <div class='button-bar'>
+    <%= f.buttons :style => 'position:absolute' do %>
+      <%= f.delete_button if @section.respond_to?(:destroy) %>
+    <% end %>
+
+    <%= f.buttons :style => 'position:absolute' do %>
+      <%= f.commit_button :button_html => {:title => 'Update section', :class => 'important-button'} %>
+    <% end %>
+  </div>
+<% end %>

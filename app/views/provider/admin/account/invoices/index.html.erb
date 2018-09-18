@@ -1,0 +1,39 @@
+<h1>Invoices</h1>
+
+<% if @invoices.blank?%>
+  You have no invoices
+<% else %>
+  <table class="data">
+    <thead>
+      <tr>
+      	<th>ID</th>
+      	<th>Month</th>
+      	<th>State</th>
+      	<th>Amount</th>
+      	<th>Download</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @invoices.each do |invoice| %>
+	      <%= content_tag_for(:tr, invoice) do %>
+          <td>
+            <%= link_to invoice.friendly_id, provider_admin_account_invoice_path(invoice) , :title => "Show #{invoice.friendly_id}" %>
+          </td>
+          <td>
+            <%= invoice.name %>
+            <% if invoice.current? then %>(current)<% end %>
+          </td>
+          <td>
+            <%= h invoice.state %>
+          </td>
+          <td>
+            <%= price_tag(invoice.cost) %>
+          </td>
+          <td>
+            <%= link_to("PDF", invoice.pdf.expiring_url) if invoice.pdf.file? %>
+          </td>
+	      <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end -%>

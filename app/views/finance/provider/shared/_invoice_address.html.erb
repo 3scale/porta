@@ -1,0 +1,17 @@
+<tr>
+  <th rowspan="2">Address</th>
+  <td colspan="2" class="no_border">
+    <address>
+      <%= [address.line1, address.line2].compact.join(' ') %>
+      <br>
+      <%= [ address.city, address.state ].compact.join(', ') %> <%= address.zip %>
+    </address>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="2"><%= address.country %></td>
+</tr>
+
+<%# account_header_optional_field(:vat_code, address) %>
+<%# account_header_optional_field(:fiscal_code, address) %>

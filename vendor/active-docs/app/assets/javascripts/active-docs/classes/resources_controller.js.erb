@@ -1,0 +1,163 @@
+(function(global, $){
+
+  function ResourcesController(){
+    this.path = "/api_docs/services.json";
+    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
+      if(originHttps()) {
+        this.url = forceHttpsProtocol(global.host) + this.path
+      } else {
+        this.url = global.host + this.path;
+      }
+    <% else %>
+      this.url = global.host + this.path;
+    <% end %>
+  }
+
+  function originHttps() {
+    return (window.top.location.protocol == 'https:')
+  }
+
+  function forceHttpsProtocol(url) {
+    return url.replace(/^http:\/\//i, 'https://')
+  }
+
+  ResourcesController.prototype = {
+
+    /**
+     * Retreive the passed `apis`.
+     *
+     * @param {Array} apis
+     *
+     */
+    fetch: function(apis){
+      var that = this,
+
+      /**
+       * Handles returned JSON object of available services
+       *
+       * @param {Object} resources object outlining location of API specs
+      */
+      onSuccess = function(resources){
+
+        if(apis.length === 0) {
+          // If no service names were passed, then get all services
+          $.each(resources.apis, function(i, resource){
+            getResource(resource);
+          });
+        } else {
+          var hash = {};
+          $.each(resources.apis, function(i, resource){
+            hash[resource.system_name] = resource;
+          });
+
+          $.each(apis, function(i, api) {
+            var resource = hash[api];
+            if(resource && toLoad(resource)) {
+              getResource(resource);
+            } else {
+              throw("Load Error: Resource " + api + " does not exist.");
+            }
+          });
+        }
+      };
+
+      /**
+       * Instantiate new Resource
+       *
+       * @param {Object} resource spec
+      */
+      function getResource(resource){
+        var r = new global.Resource(resource);
+        r.toTemplate();
+      }
+
+      function toLoad(api){
+        if(apis.length === 0) return true;
+        return $.inArray(api.system_name, apis) == -1 ? false : true;
+      }
+
+      /**
+       * Passes `form` fields to `FormHandler`.
+       *
+       * @param {Object} form submitted
+      */
+      function deliver(form){
+        $('.apidocs-param-tips').hide();
+        FormHandler.deliver($(form));
+        return false;
+      }
+
+      // TODO: create root element to bind all these events
+      //
+      // Bind `deliver` to `submit` event
+      $(document).on('submit', 'form', function(){
+        deliver(this);
+      });
+
+      $(document).on('click', 'form button.submit', function(){
+        deliver($(this).closest('form'));
+      });
+
+      // Remove a form field.
+      $(document).on('click', 'a.remove', function(){
+        $(this).closest('tr').remove();
+        return false;
+      });
+
+      // Highlights the contents of the response elements to aid Ctrl + C it easily
+      $(document).on('click', 'pre.prettyprint', function(){
+        var text = $(this)[0], range;
+        if (document.body.createTextRange) {         // ie
+            range = document.body.createTextRange();
+            range.moveToElementText(text);
+            range.select();
+        } else if (window.getSelection) {            // all others
+            var selection = window.getSelection();
+            range = document.createRange();
+            range.selectNodeContents(text);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        return false;
+      });
+
+      // Duplicate a form field
+      $(document).on('click', 'a.add', function(){
+        var $this = $(this);
+        var param = ThreeScale.APIDocs.ParamStore.find($this.data('guid'));
+
+        // TODO: actually, this should be decremented on a.remove click
+        param.count++;
+
+        if(param.dataType === 'custom' || param.dataType === 'array'){
+          $clone = $this.parent().parent().clone();
+
+          $clone.find('a.add:first').removeClass('add').addClass('remove');
+          $clone.attr('data-count', param.count).attr('data-clone', true).find('[data-clone=true]').remove();
+
+          $this.parent().parent().after($clone);
+        }
+        return false;
+      });
+
+      // If we're passed a resource object, load it immediately.
+      if(typeof apis == 'object' && apis.hasOwnProperty('path') ){
+        getResource(apis);
+      } else {
+
+        // Otherwise, query server for full resources spec.
+        if(apis === null) apis = [];
+
+        var dataType = (window.location.origin == global.host) ? 'json' : 'jsonp';
+        $.ajax(this.url, {
+          dataType: dataType,
+          data: {preview:global.preview},
+          success: onSuccess
+        });
+      }
+
+    }
+  };
+
+  global.ResourcesController = ResourcesController;
+})(ThreeScale.APIDocs, ThreeScale.APIDocs.jQuery);

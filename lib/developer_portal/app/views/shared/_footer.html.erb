@@ -1,0 +1,22 @@
+<div class="round" id="footer">
+  <ul>
+    <%# FIXME: remove this and replace it with proper solution (if @service is nil) %>
+    <% if @service.try(:txt_support).present? %>
+    <li>
+      <%= link_to 'Support', '/support' %>
+    </li>
+    <% end %>
+
+    <% if site_account.settings.privacy_policy.present? %>
+      <li><%= link_to 'Privacy policy', settings_privacy_path %></li>
+    <% end %>
+
+    <% if site_account.settings.refund_policy.present? %>
+      <li><%= link_to 'Refund policy', settings_refunds_path %></li>
+    <% end %>
+
+    <li class="last">
+      <%= link_to image_tag('powered_by_logo.png'), "http://www.3scale.net", :target => '_blank' %>
+    </li>
+  </ul>
+</div>

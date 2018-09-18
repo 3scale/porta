@@ -1,0 +1,15 @@
+<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js" type="text/javascript"></script>
+
+
+<h3><%= h @metric.friendly_name %> in all <%= @day.pluralize %> in past month.</h3>
+
+<span class="stats_close_button" title="Close"></span>
+
+<% @data.each do |date, data| %>
+  <h4><%= date.to_date.to_s(:long) %></h4>
+
+  <%= area_line_chart(data, :class => 'small_chart',
+                      :line_color => '4477aa',
+                      :x_label_proc => lambda { |time| time.to_s(:time) },
+                      :x_labels_step => 2, :y_labels_count => 2) %> 
+<% end %>

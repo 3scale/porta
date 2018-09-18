@@ -1,0 +1,12 @@
+- if can?(:destroy, service)
+  hr
+  h3
+    ' Service deletion
+
+  p
+    ' Deleting this service will
+    strong> irreversibly destroy
+    ' all applications, application plans, metrics, pricing rules, features, service plans and subscriptions of this service. Therefore all authorization and reporting calls for this service will no longer be valid.
+
+  p
+    = delete_service_link(service, label: "I understand the consequences, proceed to delete '#{h(service.name)}' service")

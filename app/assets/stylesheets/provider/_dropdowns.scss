@@ -1,0 +1,106 @@
+$dropdown-bg-color: lighten(black, 85%);
+
+.dropdown {
+  position: absolute !important;
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1000;
+  border: $border-width solid $border-color;
+
+  &.expanded {
+    display: block !important;
+    @include box-shadow(0 0 6px $box-shadow-color);
+    background: rgba($content-background, .99);
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+    top: line-height-times(2);
+  }
+
+  & > li {
+    float: none !important;
+    text-align: left;
+    vertical-align: middle;
+    font-style: bold;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+
+    &:last-child {
+      & > a,
+      & > input[type=submit],
+      & > button {
+        border-bottom: 0;
+      }
+    }
+    & > a,
+    & > input[type=submit],
+    & > button {
+      display: block;
+      color: $font-color;
+      white-space: nowrap;
+      background: transparent;
+      text-shadow: none;
+      text-align: left !important;
+      margin: 0;
+      padding: line-height-times(1/2) !important;
+      font-size: $font-size-base !important;
+      width: 100% !important;
+      @include border-radius(0);
+      border: none;
+      cursor: pointer;
+      border-bottom: $border-width solid $border-color;
+      min-width: 6rem;
+      height: auto !important;
+      font-weight: $font-weight-normal !important;
+
+      &:hover {
+        color: $link-color;
+      }
+    }
+  }
+}
+
+.dropdown-buttons {
+  position: static !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+.button-group {
+  & > a, & > button, & > input[type='submit'] {
+    position: relative;
+    margin-right: 0;
+    border-radius: 0;
+    min-width: 0;
+
+    &:last-child {
+      border-top-right-radius: $border-radius-sm;
+      border-bottom-right-radius: $border-radius-sm;
+    }
+
+    &:first-child {
+      margin-right: 0;
+      border-top-left-radius: $border-radius-sm;
+      border-bottom-left-radius: $border-radius-sm;
+    }
+
+    &.dropdown-toggle {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: $border-width !important;
+      min-width: 0;
+    }
+  }
+
+  & > input[type=submit], & > button {
+    margin-right: line-height-times(1/4);
+  }
+}
+
+// select 2
+.select2-container {
+  text-align: left;
+  min-width: line-height-times(10);
+}

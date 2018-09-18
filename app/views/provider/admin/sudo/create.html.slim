@@ -1,0 +1,7 @@
+h1 Session Secured!
+p Now you can do the call.
+
+= form_tag secure_session.original_request_url, method: secure_session.request.fetch(:request_method), onload: 'this.submit()' do |f|
+  - secure_session.request.fetch(:request_parameters).each do |name, value|
+    = hidden_field_tag name, value
+  = submit_tag 'Do the original actioN!', data: { disable_with: 'doing the original action!' }

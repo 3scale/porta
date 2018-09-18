@@ -1,0 +1,28 @@
+h1 How does 3scale work?
+
+ol.explain.fa-ul
+  li.feedback.feedback--inactive.explain__step.explain__step--1
+    i.icon.fa-li.fa.fa-mobile
+    .text.is-transparent
+      strong> Your customer
+      ' makes a request to the 3scale API gateway.
+    code.code-example.is-transparent
+      span.code-example__base.code-example--slash = @proxy.default_production_endpoint
+      span.code-example__path method
+      span.code-example__key.code-example__params = @proxy.authentication_params_for_proxy.to_query
+  li.feedback.feedback--inactive.explain__step.explain__step--2
+    i.icon.fa-li.fa.fa-hdd-o
+    .text.is-transparent
+      strong> 3scale
+      ' handles authentication & rate limiting according to your rules.
+    code.code-example.is-transparent
+      span.code-example__base.code-example--slash = hypothetical_api_base_url
+      span.code-example__path method
+
+  li.feedback.explain__step.explain__step--3
+    i.icon.fa-li.fa.fa-puzzle-piece
+    .text.is-transparent
+      strong> Your API
+      ' returns the response to the customer  through the gateway.
+
+= link_to "Got it! Lets add my API", new_provider_admin_onboarding_wizard_api_path, class: "button button--next"
