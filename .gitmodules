@@ -1,4 +1,4 @@
 [submodule "vendor/docker-gateway"]
 	path = vendor/docker-gateway
-	url = https://github.com/3scale/docker-gateway.git
+	url = git@github.com:3scale/docker-gateway.git
 	branch = v2
