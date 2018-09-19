@@ -156,6 +156,16 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           assert @buyer_auth.bought_cinstance
         end
 
+        should 'creates with default service when it is multiservice but the service_id param is not sent' do
+          @provider.services.create!(name: 'second-service')
+
+          post admin_applications_path(cinstance: { plan_id: @plan.id, name: 'my app' })
+
+          assert_response :redirect
+          assert @buyer_auth.bought_cinstance
+          assert_equal @provider.services.default, @buyer_auth.bought_cinstance.service
+        end
+
         should 'enforce strong parameters on create' do
           assert_nothing_raised do
             post admin_applications_path(cinstance: { plan_id: @plan.id, name: 'my app', description: 'this is my new app', org_name: 'not allowed' })

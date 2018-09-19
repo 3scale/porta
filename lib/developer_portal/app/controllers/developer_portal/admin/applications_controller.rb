@@ -113,10 +113,10 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def service
-    @service ||= if not site_account.multiservice?
-                   site_account.services.default
-                 elsif service_id = params[:service_id]
+    @service ||= if site_account.multiservice? && (service_id = params[:service_id])
                    site_account.services.find_by_id_or_system_name(service_id)
+                 else
+                   site_account.services.default
                  end
   end
 
