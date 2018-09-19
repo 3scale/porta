@@ -5,7 +5,7 @@
 This project uses [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), so please ensure you download those too:   
 
 ```bash
-git clone --recurse-submodules git@github.com:3scale/system system-fresh
+git clone --recurse-submodules git@github.com:3scale/porta system-fresh
 ``` 
 
 ### Quick-start
