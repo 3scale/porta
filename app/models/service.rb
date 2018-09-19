@@ -28,6 +28,7 @@ class Service < ApplicationRecord
   after_commit :update_notification_settings
 
   after_save :publish_events
+  after_save :deleted_without_state_machine
 
   before_destroy :stop_destroy_if_last_or_default
   before_destroy :destroy_features
@@ -180,6 +181,7 @@ class Service < ApplicationRecord
       transition [:incomplete, :published, :offline, :hidden] => :deleted, unless: :last_accessible?
     end
 
+    before_transition to: [:deleted], do: :deleted_by_state_machine
     after_transition to: [:deleted], do: :notify_deletion
   end
 
@@ -483,6 +485,16 @@ class Service < ApplicationRecord
   end
 
   private
+
+  def deleted_by_state_machine
+    @deleted_by_state_machine = true
+  end
+
+  def deleted_without_state_machine
+    if state_changed? && deleted? && !@deleted_by_state_machine
+      System::ErrorReporting.report_error('Service has been deleted without using State Machine')
+    end
+  end
 
   def destroyable?
     return true if destroyed_by_association
