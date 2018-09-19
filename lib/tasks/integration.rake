@@ -136,13 +136,11 @@ end
 
 
 desc 'Run continuous integration'
-task :integrate, :log => 'integrate:verify_empty_reports_folder' do |_, args|
+task :integrate, :log => ['integrate:verify_empty_reports_folder', 'integrate:prepare'] do |_, args|
   if ENV['CI']
     ENV['COVERAGE'] = '1'
     ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
   end
-
-  abort 'failed to run integrate:prepare' unless system('rake integrate:prepare --trace')
 
   jobs, workload = calculate_tests_to_run
 
