@@ -1,3 +1,9 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+
+---
+
 <!-- Use this form for feature requests only please! 
 If you're looking for help on using / deploying 3Scale, please use [Stack Overflow](https://stackoverflow.com/questions/tagged/3scale).
 -->

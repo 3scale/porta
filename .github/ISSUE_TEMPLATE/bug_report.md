@@ -1,3 +1,8 @@
+---
+name: Bug report
+about: Create a report to help us improve
+
+---
 <!-- Use this form for bug reports only please! -->
 
 **What happened**:
