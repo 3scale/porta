@@ -15,8 +15,8 @@
 **Anything else we need to know?**:
 
 **Environment**:
-- 3Scale AMP version:
-- Cloud provider or hardware configuration:
+- 3scale version:
+- Ruby version: 
 - OS (e.g. from /etc/os-release):
 - Deployment method (e.g. `docker-compose`, with linked `docker-compose.yml` file, or link to gist with openshift resources/templates, or application server info + deployment for native deployments):
 - Any other useful info:
