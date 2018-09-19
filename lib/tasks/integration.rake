@@ -16,15 +16,6 @@ def print_banner_around
 end
 
 
-def check_that_junit_reports_folder_is_empty
-  junit = Dir['tmp/junit/**']
-
-  if junit.present?
-    puts 'WARNING: tmp/junit is not empty'
-    puts junit
-    abort 'Will not continue, tmp/junit is not empty'
-  end
-end
 
 def resolve_test_directories
 
@@ -145,13 +136,11 @@ end
 
 
 desc 'Run continuous integration'
-task :integrate, :log do |_, args|
+task :integrate, :log => 'integrate:verify_empty_reports_folder' do |_, args|
   if ENV['CI']
     ENV['COVERAGE'] = '1'
     ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
   end
-
-  check_that_junit_reports_folder_is_empty
 
   abort 'failed to run integrate:prepare' unless system('rake integrate:prepare --trace')
 
@@ -161,6 +150,19 @@ task :integrate, :log do |_, args|
 end
 
 namespace :integrate do
+
+  desc 'Ensures that the test reports folder is empty'
+  task :verify_empty_reports_folder do
+    junit = Dir['tmp/junit/**']
+
+    if junit.present?
+      puts 'WARNING: tmp/junit is not empty'
+      puts junit
+      abort 'Will not continue, tmp/junit is not empty'
+    end
+
+  end
+
 
   task :prepare do
     silence_stream(STDOUT) do
