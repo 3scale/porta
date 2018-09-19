@@ -69,6 +69,6 @@ class NotificationDeliveryService
   private
 
   def invalid_event?
-    event_entity.data.any? { |_key, value| value.blank? }
+    event_entity.data.any? { |_key, value| value.nil? }
   end
 end
