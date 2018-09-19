@@ -1,6 +1,5 @@
 require 'color'
-
-
+require 'benchmark'
 
 
 def print_banner_around
@@ -25,129 +24,180 @@ def resolve_test_directories
 
 end
 
-def calculate_tests_to_run
-  tags_for_test_categories = %w{
-    @backend
-    @emails
-    @stats
-    @search
-    @no-txn
-  }
+def test_commands
+    tags_for_test_categories = %w{
+      @backend
+      @emails
+      @stats
+      @search
+      @no-txn
+    }
 
-  test_dirs = resolve_test_directories
+    test_dirs = resolve_test_directories
 
-  test_commands = {
-    :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
-    :cucumber_non_tagged => %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %Q|--tags=~#{t}|}.join(' ')}"},
-    :cucumber_for_categories => %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"},
+    return {
+      :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
+      :cucumber_non_tagged => %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %Q|--tags=~#{t}|}.join(' ')}"},
+      :cucumber_for_categories => %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"},
 
-    :rspec => 'parallel_rspec --verbose spec',
-    :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
-    :swagger => [
-      'rake doc:swagger:validate:all',
-      'rake doc:swagger:generate:all',
-    ],
-    :frontend => [
-      'rake ci:jspm --trace',
-      'yarn test -- --reporters dots,junit --browsers Firefox',
-      'yarn jest',
-      'rake db:purge db:setup',
-    ],
-    :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
-    :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
-    :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
-  }
+      :rspec => 'parallel_rspec --verbose spec',
+      :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
+      :swagger => [
+        'rake doc:swagger:validate:all',
+        'rake doc:swagger:generate:all',
+      ],
+      :frontend => [
+        'rake ci:jspm --trace',
+        'yarn test -- --reporters dots,junit --browsers Firefox',
+        'yarn jest',
+        'rake db:purge db:setup',
+      ],
+      :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
+      :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
+      :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
+      :percy => 'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features',
+    }
 
-  workload = {
-    '1' => [
-      test_commands[:cucumber_javascript],
-      test_commands[:rspec],
-    ],
-    '2' => [
-      test_commands[:integration],
-    ],
-    '3' => test_commands[:swagger] + test_commands[:frontend],
-    '4' => [
-      test_commands[:functional],
-      test_commands[:main_suite],
-    ],
-    '5' => [
-      test_commands[:cucumber_non_tagged],
-    ],
-    '6' => [
-      test_commands[:cucumber_for_categories],
-    ],
-
-    'percy' => [
-      'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features'
-    ],
-    'licenses' => [
-      test_commands[:license_checks],
-    ]
-  }
-
-  jobs = ENV['MULTIJOB_KIND'].present? ? workload.fetch(ENV['MULTIJOB_KIND']) : workload.values.flatten
-  return jobs, workload
 end
 
 
-def send_test_coverage_to_codeclimate(workload)
-  if ENV['COVERAGE']
-    FileUtils.cp(Dir["#{Dir.tmpdir}/codeclimate-test-coverage-*"],
-                 Rails.root.join('tmp', 'codeclimate').tap(&:mkpath))
 
-    system('codeclimate-batch',
-           '--groups', (workload.keys.size - 1).to_s,
-           '--host', 'https://cc-3scale-amend.herokuapp.com',
-           '--key', ENV.fetch('BUILD_TAG'))
-  end
-end
 
-def run_tests_and_handle_reports(jobs, workload)
-  success, failure = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}", "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
-  summary = []
-  banner = print_banner_around
 
-  require 'ci_reporter_shell'
-  report = CiReporterShell.report('tmp/junit')
 
-  total_time = 0
 
-  results = jobs.map do |task|
+namespace :integrate do
+
+  desc 'Runs the set of tests passed as an argument, pretty formatting results, creating reports, etc.'
+  task :run_tests, [:some_tests] do |t, args|
+    success, failure = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}", "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
+    banner = print_banner_around
+
+    require 'ci_reporter_shell'
+    report = CiReporterShell.report('tmp/junit')
 
     command = nil
-    result = report.execute(task, env: {RAILS_ENV: Rails.env}) do |cmd|
+    result = report.execute(args.some_tests, env: {RAILS_ENV: Rails.env}) do |cmd|
       banner.("BEGIN: #{cmd}")
       command = cmd
     end
 
-    summary << banner.("FINISH (#{result.success? ? success : failure}): #{command} in #{'%.1fs' % result.time}")
-    total_time += result.time
+    banner.("FINISH (#{result.success? ? success : failure}): #{command} in #{'%.1fs' % result.time}")
 
-    result.success?
+    abort "#{args.some_tests} FAILED" unless result.success?
+
   end
 
-  banner.("SUMMARY: in #{'%.1fs' % total_time}\n\t#{summary.join("\n\t")}")
-
-  abort "some tasks failed, exitting" unless results.all?
-
-  send_test_coverage_to_codeclimate(workload)
-end
-
-
-desc 'Run continuous integration'
-task :integrate, :log => ['integrate:verify_empty_reports_folder', 'integrate:prepare'] do |_, args|
-  if ENV['CI']
-    ENV['COVERAGE'] = '1'
-    ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
+  task :cucumber_javascript => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:cucumber_javascript])
   end
 
-  jobs, workload = calculate_tests_to_run
+  task :rspec => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:rspec])
+  end
 
-  run_tests_and_handle_reports(jobs, workload)
-end
+  task :integration => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:integration])
+  end
 
-namespace :integrate do
+  task :swagger => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:swagger])
+  end
+
+  task :frontend => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:frontend])
+  end
+
+  task :functional => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:functional])
+  end
+
+  task :main_suite => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:main_suite])
+  end
+
+  task :cucumber_non_tagged => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:cucumber_non_tagged])
+  end
+
+  task :cucumber_for_categories => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:cucumber_for_categories])
+  end
+
+  task :license_checks => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:license_checks])
+  end
+
+  task :percy => :prepare do
+    Rake::Task['integrate:run_tests'].invoke(test_commands[:percy])
+  end
+
+
+  desc 'Runs subset of full test suite, in parallel (1/8)'
+  task :parallel_1 => [:cucumber_javascript, :rspec]
+
+  desc 'Runs subset of full test suite, in parallel (2/8)'
+  task :parallel_2 => [:integration]
+
+  desc 'Runs subset of full test suite, in parallel (3/8)'
+  task :parallel_3 => [:integration]
+
+  desc 'Runs subset of full test suite, in parallel (4/8)'
+  task :parallel_4 => [:functional, :main_suite]
+
+  desc 'Runs subset of full test suite, in parallel (5/8)'
+  task :parallel_5 => [:cucumber_non_tagged]
+
+  desc 'Runs subset of full test suite, in parallel (6/8)'
+  task :parallel_6 => [:cucumber_for_categories]
+
+
+
+  desc 'Runs the whole continuous integration test suite'
+  task :parallel, [:log] => [:verify_empty_reports_folder, :prepare] do |t, args|
+
+    if ENV['CI']
+      ENV['COVERAGE'] = '1'
+      ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
+    end
+
+    banner = print_banner_around
+
+
+    time = Benchmark.measure {
+
+
+    # Rake::Task[integrate:suite_parallel].invoke
+    Rake::Task['integrate:parallel_1'].invoke
+    Rake::Task['integrate:parallel_2'].invoke
+    Rake::Task['integrate:parallel_3'].invoke
+    Rake::Task['integrate:parallel_4'].invoke
+    Rake::Task['integrate:parallel_5'].invoke
+    Rake::Task['integrate:parallel_6'].invoke
+    Rake::Task['integrate:license_checks'].invoke
+    }
+
+    # TODO: print summary
+    banner.("Finished in #{'%.1fs' % time.real}\n\t")
+
+    Rake::Task['integrate:report_coverage_to_codeclimate'].invoke(7)
+
+
+  end
+
+  desc 'Report code coverage to CodeClimate'
+  task :report_coverage_to_codeclimate, :number_of_groups  do |t, args|
+    if ENV['COVERAGE']
+      puts 'Sending test coverage to CodeClimate'
+      FileUtils.cp(Dir["#{Dir.tmpdir}/codeclimate-test-coverage-*"],
+                   Rails.root.join('tmp', 'codeclimate').tap(&:mkpath))
+
+      system('codeclimate-batch',
+             '--groups', (args.number_of_groups).to_s,
+             '--host', 'https://cc-3scale-amend.herokuapp.com',
+             '--key', ENV.fetch('BUILD_TAG'))
+    end
+  end
 
   desc 'Ensures that the test reports folder is empty'
   task :verify_empty_reports_folder do
