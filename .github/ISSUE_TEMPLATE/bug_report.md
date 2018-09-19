@@ -3,33 +3,29 @@ name: Bug report
 about: Create a report to help us improve
 
 ---
+<!-- Use this form for bug reports only please! -->
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**What happened**:
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+> Short description of the issue you are facing, possibly including relevant log output that highlights your problem. (Please use [Gists](https://gist.github.com) for large logs).
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**What you expected to happen**:
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+> Please describe here the behaviour you were expecting.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**How to reproduce it**:
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+> Help the project maintainers reproduce your issue, as minimally and precisely as possible, so you can make it easier for them to work on it. The more accurate the steps, the higher the chance that someone will be able to assist in your request. 
 
-**Additional context**
-Add any other context about the problem here.
+**Anything else we need to know?**:
+
+**Environment**:
+- 3scale version:
+- Ruby version: 
+- OS (e.g. from /etc/os-release):
+- Deployment method (e.g. `docker-compose`, with linked `docker-compose.yml` file, or link to gist with openshift resources/templates, or application server info + deployment for native deployments):
+- Any other useful info:
+
+
+<!-- Please leave below line intact -->
+/kind bug
