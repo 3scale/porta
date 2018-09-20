@@ -2,10 +2,10 @@
   color: $content-background;
 
   &--docs {
-    float: left;
+    float: right;
 
     .PopNavigation-list {
-      left: line-height-times(1);
+      right: line-height-times(1);
     }
   }
 
@@ -71,12 +71,13 @@
     color: $border-color;
     cursor: pointer;
     display: block;
-    padding: line-height-times(1/2) line-height-times(1);
+    padding: line-height-times(2/3) line-height-times(1);
 
     &:hover,
     &.is-toggled,
     &.is-current {
       color: $link-color;
+      background-color: $header-link-background-hover-color;
     }
   }
 }
