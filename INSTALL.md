@@ -5,7 +5,7 @@
 This project uses [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), so please ensure you download those too:   
 
 ```bash
-git clone --recurse-submodules git@github.com:3scale/system system-fresh
+git clone --recurse-submodules https://github.com/3scale/porta.git system-fresh
 ``` 
 
 ### Quick-start
@@ -49,22 +49,72 @@ make test
 If you want to get rid of this environment, just run `make clean`.
 
 
-## Development Environment Setup on Mac OS X
+## Development Environment Setup on Mac OS X (10.13)
+
+### Ruby version
+
+The project supports Ruby 2.3.x
+Mac OS X 10.13 comes with 2.3.7 but you might also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
 
 ### Dependencies
 
 First you should install following things:
 
 XCode: Install it via the Apple Store application or in [Apple's developer site](https://developer.apple.com/xcode/download/)
+Install version 9.4 See https://github.com/thoughtbot/capybara-webkit/issues/1071
 
 ```shell
-brew install imagemagick@6 qt@5.5 homebrew/versions/mysql56 gs pkg-config
-brew install sphinx --with-mysql
+brew install imagemagick@6 qt@5.5 mysql@5.7 gs pkg-config openssl
 brew link qt@5.5 --force
+brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 ```
 
 Also you'll need http://xquartz.macosforge.org/landing/ to run cucumber tests.
+
+
+### Installing Sphinx Search
+
+Apply this patch to `${HOMEBREW_PREFIX:-/usr/local}/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb`
+
+```patch
+diff --git i/Formula/sphinx.rb w/Formula/sphinx.rb
+index 1c4cc0e5b..2201bc43c 100644
+--- i/Formula/sphinx.rb
++++ w/Formula/sphinx.rb
+@@ -16,11 +16,13 @@ class Sphinx < Formula
+ 
+   option "with-mysql", "Force compiling against MySQL"
+   option "with-postgresql", "Force compiling against PostgreSQL"
++  option "with-mysql@5.7", "Force compiling against MySQL 5.7"
+ 
+   deprecated_option "mysql" => "with-mysql"
+   deprecated_option "pgsql" => "with-postgresql"
+ 
+   depends_on "mysql" => :optional
++  depends_on "mysql@5.7" => :optional
+   depends_on "openssl" if build.with? "mysql"
+   depends_on "postgresql" => :optional
+ 
+@@ -47,7 +49,7 @@ class Sphinx < Formula
+       --with-libstemmer
+     ]
+ 
+-    if build.with? "mysql"
++    if build.with?("mysql") || build.with?("mysql@5.7")
+       args << "--with-mysql"
+     else
+       args << "--without-mysql"
+```
+
+You can also use `brew edit sphinx` and apply the modified lines
+
+Then install sphinx with mysql@5.7 version
+
+```shell
+brew install sphinx --with-mysql@5.7
+```
+
 
 ### Pre setup
 
@@ -79,12 +129,8 @@ bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/includ
 Copy examples config:
 
 ```shell
+cd porta
 cp config/examples/* config/
-```
-
-Execute:
-
-```shell
 bundle install
 bundle exec rake db:setup
 ```
