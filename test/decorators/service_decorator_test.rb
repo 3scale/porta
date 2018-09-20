@@ -11,7 +11,7 @@ class ServiceDecoratorTest < Draper::TestCase
     assert_equal '0 live applications', decorator.link_to_live_applications
 
     helpers.expects(:can?).with(:show, Cinstance).returns(true)
-    assert_equal '<a href="/admin/apiconfig/services/2/applications?search%5Bstate%5D=live">0 live applications</a>',
+    assert_equal "<a href=\"#{Rails.application.routes.url_helpers.admin_service_applications_path(service)}?search%5Bstate%5D=live\">0 live applications</a>",
                  decorator.link_to_live_applications
   end
 
