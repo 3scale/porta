@@ -64,6 +64,8 @@ end
 
 
 
+desc 'The default execution: the whole CI suite'
+task :integrate => 'integrate:parallel'
 
 
 namespace :integrate do
