@@ -166,15 +166,13 @@ namespace :integrate do
 
     time = Benchmark.measure {
 
-
-    # Rake::Task[integrate:suite_parallel].invoke
-    Rake::Task['integrate:parallel_1'].invoke
-    Rake::Task['integrate:parallel_2'].invoke
-    Rake::Task['integrate:parallel_3'].invoke
-    Rake::Task['integrate:parallel_4'].invoke
-    Rake::Task['integrate:parallel_5'].invoke
-    Rake::Task['integrate:parallel_6'].invoke
-    Rake::Task['integrate:license_checks'].invoke
+      Rake::Task['integrate:parallel_1'].invoke
+      Rake::Task['integrate:parallel_2'].invoke
+      Rake::Task['integrate:parallel_3'].invoke
+      Rake::Task['integrate:parallel_4'].invoke
+      Rake::Task['integrate:parallel_5'].invoke
+      Rake::Task['integrate:parallel_6'].invoke
+      Rake::Task['integrate:license_checks'].invoke
     }
 
     # TODO: print summary
