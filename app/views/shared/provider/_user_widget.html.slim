@@ -1,4 +1,30 @@
 div id="user_widget"
+  ul id="top-menu-nav"
+    li class=('active' if active_menu?(:topmenu, :dashboard) )
+      = link_to raw("<span>Red Hat <sup>©</sup></span> 3scale API Management"), provider_admin_dashboard_path
+
+  - if current_account.multiservice? && can?(:manage, :plans)
+    .PopNavigation.PopNavigation--context
+      a.PopNavigation-trigger.u-toggler href="#context-menu" title="Context Switcher"
+        - if @service && controller_name != 'dashboards'
+          ' API:
+          => @service.name.capitalize
+        - else
+          ' Jump to an API
+        = icon('chevron-down')
+      ul#context-menu.PopNavigation-list.u-toggleable
+        li.PopNavigation-listItem
+          div id="context-widget" class="nav-search-widget"
+            form class="docs-search" data-role="search"
+              a href="#" data-role="close" class="close-widget" x
+              input type="search" class="docs-search-input" name="q" results="5" placeholder= "Search Service"
+
+        li.PopNavigation-listItem
+          ul.PopNavigation-results
+            - @services.each do |service|
+              li.PopNavigation-listItem
+                = link_to service.name,  admin_service_metrics_path(service), class: 'PopNavigation-link'
+
   .PopNavigation.PopNavigation--docs
     a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
       => icon('question-circle')
@@ -41,10 +67,6 @@ div id="user_widget"
           | .
 
         = fixed_width_icon_link_to 'Sign Out', 'times', provider_logout_path, class: 'PopNavigation-link', title: "Logout #{current_user.username}"
-
-  ul id="top-menu-nav"
-    li class=('active' if active_menu?(:topmenu, :dashboard) )
-      = link_to raw("<span>Red Hat <sup>©</sup></span> 3scale API Management"), provider_admin_dashboard_path
 
   // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
   div class="username" style="display:none;"

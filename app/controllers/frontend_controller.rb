@@ -19,6 +19,7 @@ class FrontendController < ApplicationController
   activate_menu :topmenu => :dashboard
 
   before_action :login_required
+  before_action :all_services
   before_action :set_display_currency
 
   include RedhatCustomerPortalSupport::ControllerMethods::Banner
@@ -108,14 +109,16 @@ class FrontendController < ApplicationController
     end
   end
 
-  def find_service(id = params[:service_id])
-    services = if current_account.try!(:provider?)
+  def all_services
+    @services = if current_account.try!(:provider?)
       current_account.accessible_services
                else
       site_account.accessible_services
     end
+  end
 
-    @service = id.present? ? services.find(id) : services.default
+  def find_service(id = params[:service_id])
+    @service = id.present? ? all_services.find(id) : all_services.default
   end
 
   def ensure_provider
