@@ -1,24 +1,32 @@
 #user_widget {
-  background-color: $font-color;
-  height: line-height-times(2);
+  background-color: $header-background-color;
+  height: line-height-times(5/2);
+  border-top: 2px solid $header-border-color;
   padding: 0 0 0 0;
   position: relative;
   width: 100%;
 
   #top-menu-nav {
     @include inline-block-list;
-    float: right;
+    float: left;
     list-style: none;
 
     &> li > a {
-      color: $border-color;
+      letter-spacing: 1px;
+      color: $background-color-base;
+      text-transform: uppercase;
+      font-family: $font-family-brand;
       display: block;
-      padding: line-height-times(1/2) line-height-times(1);
-    }
+      padding: line-height-times(2/3) line-height-times(1);
 
-    &> li.active a,
-    &> li:hover a {
-      color: $link-color;
+      span sup {
+        font-weight: normal;
+        font-size: 40%;
+        margin-left: -2px;
+      }
+      span {
+        font-weight: 900;
+      }
     }
   }
 }
