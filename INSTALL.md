@@ -49,6 +49,42 @@ make test
 If you want to get rid of this environment, just run `make clean`.
 
 
-#### Development Environment Setup 
+## Development Environment Setup on Mac OS X
 
-//TODO: Coming soon...
+### Dependencies
+
+First you should install following things:
+
+XCode: Install it via the Apple Store application or in [Apple's developer site](https://developer.apple.com/xcode/download/)
+
+```shell
+brew install imagemagick@6 qt@5.5 homebrew/versions/mysql56 gs pkg-config
+brew install sphinx --with-mysql
+brew link qt@5.5 --force
+brew link imagemagick@6 --force
+```
+
+Also you'll need http://xquartz.macosforge.org/landing/ to run cucumber tests.
+
+### Pre setup
+
+Eventmachine should be installed with `--with-cppflags=-I/usr/local/opt/openssl/include`.
+
+```shell
+bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
+```
+
+### Setup
+
+Copy examples config:
+
+```shell
+cp config/examples/* config/
+```
+
+Execute:
+
+```shell
+bundle install
+bundle exec rake db:setup
+```
