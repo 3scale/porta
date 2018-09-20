@@ -66,4 +66,19 @@ class Buyers::ApplicationsTest < ActionDispatch::IntegrationTest
     assert page.xpath("//select[@id='cinstance_plan_id']/option").map(&:text).exclude?(@application.plan.name)
   end
 
+  test 'index shows the services column when the provider is multiservice' do
+    @provider.services.create!(name: '2nd-service')
+    assert @provider.reload.multiservice?
+    get admin_buyers_applications_path
+    page = Nokogiri::HTML::Document.parse(response.body)
+    assert page.xpath("//tr").text.match /Service/
+  end
+
+  test 'index does not show the services column when the provider is not multiservice' do
+    refute @provider.reload.multiservice?
+    get admin_buyers_applications_path
+    page = Nokogiri::HTML::Document.parse(response.body)
+    refute page.xpath("//tr").text.match /Service/
+  end
+
 end
