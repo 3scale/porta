@@ -31,7 +31,7 @@ production:
 
 development:
   <<: *DEFAULT
-  database: 3scale_system_production
+  database: 3scale_system_development
 
 test:
   <<: *DEFAULT
