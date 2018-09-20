@@ -1,3 +1,9 @@
+---
+name: Bug Report
+about: Let us know about bugs you have spotted, so we can get them fixed
+
+---
+
 <!-- Use this form for bug reports only please! -->
 
 **What happened**:
