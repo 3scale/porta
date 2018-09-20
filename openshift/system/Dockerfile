@@ -5,7 +5,7 @@ USER root
 ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
-    BUNDLE_GEMFILE=Gemfile \
+    BUNDLE_GEMFILE=Gemfile.prod \
     BUNDLE_WITHOUT=development:test
 
 WORKDIR /opt/system
@@ -30,7 +30,7 @@ RUN yum -y update \
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
 ADD vendor/codeclimate_rails/*.gemspec vendor/codeclimate_rails/
-ADD Gemfile* ./
+ADD Gemfile.prod* ./
 ADD Rakefile ./
 
 COPY openshift/system/contrib/scl_enable /opt/system/etc/
