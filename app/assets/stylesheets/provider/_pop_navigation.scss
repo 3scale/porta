@@ -1,6 +1,14 @@
 .PopNavigation {
   color: $content-background;
 
+  &--context {
+    float: left;
+
+    .PopNavigation-list {
+      left: line-height-times(15);
+    }
+  }
+
   &--docs {
     float: right;
 
@@ -36,6 +44,11 @@
     &:target {
       display: block;
     }
+  }
+
+  &-results {
+    max-height: line-height-times(10);
+    overflow-y: auto;
   }
 
   &-listItem {
