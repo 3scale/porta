@@ -72,6 +72,13 @@ brew link imagemagick@6 --force
 
 Also you'll need http://xquartz.macosforge.org/landing/ to run cucumber tests.
 
+#### Optional dependencies
+You may also want to install [Spring](https://github.com/rails/spring) to run Rails in the background.
+It is not mandatory but it is a helpful tool to not have to restart the Rails application often to run tests or migrations.
+```shell
+gem install spring -v 2.0.0
+```
+
 
 ### Installing Sphinx Search
 
