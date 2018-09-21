@@ -6,12 +6,12 @@ services:
     container_name: ${PROJECT:-system}-database
     network_mode: bridge
   cache:
-    build: .
+    image: quay.io/gsaslis/3scale-system-builder
     network_mode: none
     container_name: ${PROJECT:-system}-cache
     command: sleep infinity 
   build:
-    build: .
+    image: quay.io/gsaslis/3scale-system-builder
     dns: 127.0.0.1
     container_name: ${PROJECT:-system}-build
     network_mode: bridge
@@ -20,6 +20,8 @@ services:
     environment:
       DB_HOST: ${PROJECT:-system}-database
       DISABLE_SPRING: "true"
+    volumes:
+      - .:/opt/system/  
     volumes_from:
       - cache
     depends_on:
