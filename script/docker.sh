@@ -33,7 +33,7 @@ echo
 echo "======= NPM ======="
 echo
 yarn --version
-time bash -c "CXX=g++-4.8 ${PROXY_ENV} yarn install"
+time bash -c "CXX=g++ ${PROXY_ENV} yarn install"
 echo
 
 echo "======= JSPM ======="
