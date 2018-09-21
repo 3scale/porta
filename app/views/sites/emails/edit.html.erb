@@ -1,4 +1,6 @@
-<h2 >Inbound Email Addresses</h2>
+<% content_for(:title) do %>
+  Inbound Email Addresses
+<% end %>
 
 <%= semantic_form_for @account, :url => admin_site_emails_url do |form| %>
   <%= form.inputs 'General Support Emails' do %>

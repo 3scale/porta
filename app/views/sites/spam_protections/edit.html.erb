@@ -1,4 +1,6 @@
-<h2>Spam Protection</h2>
+<% content_for(:title) do %>
+  Spam Protection
+<% end %>
 
 <%= semantic_form_for @settings, :url => admin_site_spam_protection_path, :html => {:id => 'spam-protection-settings' } do |form| %>
   <%= form.inputs 'Spam protection against users that are not signed in' do %>
