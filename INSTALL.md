@@ -10,11 +10,7 @@ This project uses [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Subm
 git clone --recurse-submodules https://github.com/3scale/porta.git
 ``` 
 
-## Quick-start
-
-Read on to see how to get up and running quickly!
-
-### Building with Make
+## Building with Make
 
 Most 3scale projects rely on `Makefile`s for their build process. 
 In the root of this project, just run: 
@@ -26,7 +22,7 @@ make
 
 Please feel free to study the `Makefile`, as the executable documentation of how this project is built.  
 
-### Running the tests
+## Running the tests
 
 We have provided a dockerized environment that you can use to run the test suite or to run this project 
 locally on your machine, without needing to install anything on your host OS (e.g. if you are not 
@@ -51,7 +47,7 @@ make test
 If you want to get rid of this environment, just run `make clean`.
 
 
-## Development Environment Setup on Mac OS X (10.13)
+## Setting up your Development Environment on Mac OS X (10.13)
 
 ### Prerequisites
 
