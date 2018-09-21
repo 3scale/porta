@@ -165,8 +165,8 @@ Finally initialize the database with some seed data by running:
 bundle exec rake db:setup
 ```
 
-You may need to set the database up from scratch again, in that case use `db:restart` to drop it first too:
+You may need to set the database up from scratch again, in that case use `db:reset` to drop it first too:
 
 ```bash
-bundle exec rake db:restart # This will drop and setup the database
+bundle exec rake db:reset # This will drop and setup the database
 ```
