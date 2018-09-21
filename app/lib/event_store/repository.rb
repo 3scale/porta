@@ -17,7 +17,7 @@ module EventStore
     class_attribute :repository, instance_accessor: false
     class_attribute :raise_errors, instance_accessor: false
 
-    self.raise_errors = Rails.env.development?
+    self.raise_errors = Rails.env.development? || Rails.env.test?
     self.repository = RailsEventStoreActiveRecord::EventRepository.new(adapter: EventStore::Event)
 
     class << self
