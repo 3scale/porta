@@ -1,0 +1,109 @@
+version: 2.0
+
+#### YAML ANCHORS INSTEAD OF COMMANDS # while version 2.1 already supports commands, the local runner doesn't. When it does, we can upgrade.
+
+git-submodules: &git-submodules
+  run:
+    name: "Pull Submodules"
+    command: |
+      git submodule init
+      git submodule update
+
+store-junit-results: &store-junit-test-results
+  store_test_results:
+    path: tmp/junit
+
+store-test-artifacts: &store-test-artifacts
+  store_artifacts:
+    path: tmp/junit
+    destination: junit
+
+jobs:
+  test1:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 1
+          command: MULTIJOB_KIND=1 make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+  test2:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 2
+          command: MULTIJOB_KIND=2 make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+  test3:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 3
+          command: MULTIJOB_KIND=3 make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+  test4:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 4
+          command: MULTIJOB_KIND=4 make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+  test5:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 5
+          command: MULTIJOB_KIND=5 make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+  test6:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 6
+          command: MULTIJOB_KIND=6 make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+  licenses:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Run tests 7
+          command: PROXY_ENABLED=1 MULTIJOB_KIND=licenses make test
+      - *store-junit-test-results
+      - *store-test-artifacts
+
+workflows:
+  version: 2
+  parallel_build:
+    jobs:
+      - test1
+      - test2
+      - test3
+      - test4
+      - test5
+      - test6
+      - licenses
