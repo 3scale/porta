@@ -1,4 +1,6 @@
-<h2>Forum Settings</h2>
+<% content_for(:title) do %>
+  Forum Settings
+<% end %>
 
 <%= semantic_form_for @settings, :url => admin_site_forum_path, :html => {:id => 'forum-settings' } do |form| %>
   <%= form.inputs '' do %>

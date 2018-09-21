@@ -1,6 +1,6 @@
 - content_for :javascripts, javascript_include_tag('provider/admin/webhooks')
-
-h2 Webhooks
+- content_for(:title)
+  = "Webhooks"
 
 p.help
   | Webhooks let you define a URL to be called with a notification when events in the 3scale management system happen.
