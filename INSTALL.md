@@ -97,7 +97,12 @@ gem install spring -v 2.0.0
 
 #### Sphinx Search
 
-. Apply the following changes to `${HOMEBREW_PREFIX:-/usr/local}/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb` with your editor or by running `brew edit sphinx`:
+[Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7**:
+```shell
+brew install sphinx --with-mysql@5.7
+```
+
+Make sure your Sphinx configuration has the following changes applied:
 ```patch
 diff --git i/Formula/sphinx.rb w/Formula/sphinx.rb
 index 1c4cc0e5b..2201bc43c 100644
@@ -128,10 +133,7 @@ index 1c4cc0e5b..2201bc43c 100644
        args << "--without-mysql"
 ```
 
-. Then install [Sphinx](http://sphinxsearch.com/) with **mysql@5.7** version
-```shell
-brew install sphinx --with-mysql@5.7
-```
+Run `brew edit sphinx` to edit Sphinx configuration or alternatively open `${HOMEBREW_PREFIX:-/usr/local}/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb` with your favorite editor.
 
 ### Setup
 
