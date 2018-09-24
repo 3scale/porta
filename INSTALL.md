@@ -12,15 +12,15 @@ git clone --recurse-submodules https://github.com/3scale/porta.git
 
 ## Building with Make
 
-Most 3scale projects rely on `Makefile`s for their build process. 
-In the root of this project, just run: 
+Most 3scale projects rely on `Makefile`s for their build process.
+In the root of this project, just run:
 ```bash
 make
 ``` 
 
-...and you will see all the available targets, with a short description for what each target does. 
+...and you will see all the available targets, with a short description for what each target does.
 
-Please feel free to study the `Makefile`, as the executable documentation of how this project is built.  
+Please feel free to study the `Makefile`, as the executable documentation of how this project is built.
 
 ## Running the tests
 
@@ -38,11 +38,11 @@ This will download and build all the necessary containers, and open a shell scri
 where all the source and dependencies for this project are in place, allowing you to run the server, 
 or the test suite.
 
-To run the test suite, just use: 
+To run the test suite, just use:
 
 ```bash
 make test
-```  
+```
 
 If you want to get rid of this environment, just run `make clean`.
 
