@@ -5,16 +5,9 @@ module ServiceDiscovery
     module Service
       def self.included(base)
         base.class_eval do
-          attr_accessor :discovered
-          attr_accessor :cluster_namespace
-
-          after_commit :import_cluster_definitions, on: :create
+          attr_accessor :source
+          attr_accessor :namespace
         end
-      end
-
-      def import_cluster_definitions
-        return unless discovered
-        ImportClusterServiceDefinitionsWorker.perform_async(self.id, cluster_namespace)
       end
 
       def import_cluster_service_endpoint(cluster_service)
@@ -22,10 +15,18 @@ module ServiceDiscovery
       end
 
       def import_cluster_active_docs(cluster_service)
-        return unless cluster_service.oas?
+        cluster_service_id = cluster_service.self_link
+        logger = Rails.logger
 
-        spec_content = cluster_service.specification
-        return if spec_content.blank?
+        unless cluster_service.oas?
+          logger.info("API specification type for #{cluster_service_id} is not supported. Content-Type: #{cluster_service.specification_type}")
+          return
+        end
+
+        if (spec_content = cluster_service.specification).blank?
+          logger.info("OAS specification for #{cluster_service_id} is empty and cannot be imported")
+          return
+        end
 
         provider.api_docs_services.create({ name: cluster_service.name,
                                             body: spec_content,
