@@ -60,6 +60,13 @@ GIT
       rspec (>= 2.11.0, >= 2.0.0)
 
 GIT
+  remote: https://github.com/3scale/source2swagger
+  revision: 9a787007577fc58b5822b55720e977cc063057fd
+  specs:
+    source2swagger (0.0.2)
+      json
+
+GIT
   remote: https://github.com/3scale/swagger-ui_rails.git
   revision: f88bb8bed4fdb57fcf5be6425f3fc10c638788d1
   branch: dev-2.1.3
@@ -944,6 +951,7 @@ DEPENDENCIES
   simplecov (~> 0.10.0)
   sinatra
   slim-rails (~> 3.0)
+  source2swagger!
   spring (= 2.0.0)
   spring-commands-cucumber
   spring-commands-m
