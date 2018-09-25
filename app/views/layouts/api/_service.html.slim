@@ -1,5 +1,6 @@
 ul#side-tabs
   - if can?(:edit, @service)
+    = sidebar_link :applications, admin_service_applications_path(@service)
     = sidebar_link 'Definition', admin_service_metrics_path(@service)
     = sidebar_link :integration, path_to_service(@service) if can?(:manage, :plans)
     = sidebar_link 'Application Plans', admin_service_application_plans_path(@service)

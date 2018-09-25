@@ -2,6 +2,8 @@
 class Buyers::ApplicationsController < FrontendController
 
   include ThreeScale::Search::Helpers
+  include DisplayViewPortion
+  helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
   before_action :find_buyer, :only => [:new, :create]
@@ -17,6 +19,8 @@ class Buyers::ApplicationsController < FrontendController
   layout 'provider'
 
   def index
+    # TODO: Editing this action may require editing Api::ApplicationsController
+
     activate_menu :applications
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
@@ -47,6 +51,8 @@ class Buyers::ApplicationsController < FrontendController
       .scope_search(@search).order_by(params[:sort], params[:direction])
       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
       .paginate(pagination_params)
+
+    display_view_portion!(:service) if current_account.multiservice?
   end
 
   def show
