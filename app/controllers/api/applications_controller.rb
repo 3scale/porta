@@ -12,8 +12,9 @@ class Api::ApplicationsController < Api::BaseController
   sublayout 'api/service'
 
   def index
-    # TODO: This code is REAAAAAAAAAAAALLY bad but it is copied and pasted from Buyers::ApplicationsController because
-    # doing it well requires time and we don't have time right now
+    # TODO: This code is REALLY bad but it is copied and pasted from Buyers::ApplicationsController#index because
+    # doing it well requires time and we don't have time right now.
+    # Editing this action may require touching the other one
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
     @search = ThreeScale::Search.new(params[:search] || params)

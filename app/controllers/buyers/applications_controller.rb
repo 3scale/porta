@@ -19,6 +19,8 @@ class Buyers::ApplicationsController < FrontendController
   layout 'provider'
 
   def index
+    # TODO: Editing this action may require editing Api::ApplicationsController
+
     activate_menu :applications
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
