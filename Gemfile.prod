@@ -26,8 +26,6 @@ group :development, :test do
 
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
-  # for `rake doc:liquid:generate` and similar
-  gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
 
   platform :mri_20, :mri_21, :mri_22, :mri_23 do
     # we want to disable byebug for capybara because it hangs
