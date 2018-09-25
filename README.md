@@ -1,4 +1,4 @@
-# 3scale "System" Component [![Maintainability](https://api.codeclimate.com/v1/badges/77797b9934be614cfdeb/maintainability)](https://codeclimate.com/repos/5ba0f1e1fcccb702c4002089/maintainability)[![Test Coverage](https://api.codeclimate.com/v1/badges/77797b9934be614cfdeb/test_coverage)](https://codeclimate.com/repos/5ba0f1e1fcccb702c4002089/test_coverage) 
+# 3scale "System" Component [![Maintainability](https://api.codeclimate.com/v1/badges/1fe7e330e8507ea893be/maintainability)](https://codeclimate.com/github/3scale/porta/maintainability)[![Test Coverage](https://api.codeclimate.com/v1/badges/1fe7e330e8507ea893be/test_coverage)](https://codeclimate.com/github/3scale/porta/test_coverage)
 
 The 3scale `System` component is part of the 3Scale API Management solution and is responsible for serving the:
 
