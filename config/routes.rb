@@ -377,8 +377,6 @@ without fake Core server your after commit callbacks will crash and you might ge
     end
   end
 
-  get '/admin/apiconfig/services/:service_id/applications' => 'buyers/applications#index', :as => 'admin_service_applications'
-
   # These are API routes, beware
   namespace :stats do
     namespace :data, :path => '' do
@@ -757,6 +755,7 @@ without fake Core server your after commit callbacks will crash and you might ge
               put :read
             end
           end
+          resources :applications, only: :index
 
           resource :integration, :except => [ :create, :destroy ] do
             member do
