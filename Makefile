@@ -55,7 +55,7 @@ include wget.mk
 include docker-compose.mk
 include openshift.mk
 
-.PHONY: default all clean build test info jenkins-env docker test-run tmp-export run test-bash clean-cache clean-tmp compose help
+.PHONY: default all clean build test info jenkins-env docker test-run tmp-export run test-bash clean-cache clean-tmp compose help bundle-in-container apicast-dependencies-in-container jspm-install-in-container npm-install-in-container test-no-deps
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
@@ -81,7 +81,15 @@ docker: ## Prints docker version and info
 
 test: ## Runs tests inside container build environment
 test: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-test: $(DOCKER_COMPOSE) info
+test: $(DOCKER_COMPOSE) info bundle-in-container npm-install-in-container jspm-install-in-container apicast-dependencies-in-container
+	@echo
+	@echo "======= Tests ======="
+	@echo
+	$(MAKE) test-run tmp-export --keep-going
+
+test-no-deps: ## Runs only tests (without dependency installation) inside container build environment
+test-no-deps: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
+test-no-deps: $(DOCKER_COMPOSE) info
 	@echo
 	@echo "======= Tests ======="
 	@echo
@@ -112,7 +120,7 @@ run: $(DOCKER_COMPOSE)
 	@echo
 	@echo "======= Run ======="
 	@echo
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "$(CMD)"
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "script/docker.sh && source script/proxy_env.sh && $(CMD)"
 
 bash: ## Opens up shell to environment where tests can be ran
 bash: CMD = script/docker.sh && bundle exec rake db:create db:test:load && bundle exec bash
@@ -173,3 +181,5 @@ oracle-database:
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
+
+include dependencies.mk

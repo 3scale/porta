@@ -18,12 +18,71 @@ store-test-artifacts: &store-test-artifacts
     path: tmp/junit
     destination: junit
 
+restore-caches: &restore-caches
+  restore_cache:
+    keys:
+      # when lock file changes, use increasingly general patterns to restore cache
+      - 3scale-system-gems-{{ .Branch }}-{{ checksum "Gemfile" }}
+      - 3scale-system-gems-{{ .Branch }}-
+      - 3scale-system-gems-
+      - 3scale-system-npm_jspm-{{ .Branch }}-{{ checksum "package.json" }}
+      - 3scale-system-npm_jspm-{{ .Branch }}-
+      - 3scale-system-npm_jspm-
+      - 3scale-system-gateway-{{ .Branch }}
+      - 3scale-system-gateway-
+
+
+
+
+
 jobs:
+  deps_bundler:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Install gems with bundler
+          command: make bundle-in-container
+      - save_cache:
+          key: 3scale-system-gems-{{ .Branch }}-{{ checksum "Gemfile" }}
+          paths:
+            - ./vendor/bundle
+            - ./.bundle/
+  deps_npm:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Install NPM dependencies
+          command: make npm-install-in-container
+      - save_cache:
+          key: 3scale-system-npm_jspm-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ./assets/jspm_packages
+            - ./.jspm
+  deps_apicast:
+    machine: true
+    steps:
+      - checkout
+      - *git-submodules
+      - run:
+          name: Install Apicast dependencies
+          command: make apicast-dependencies-in-container
+      - save_cache:
+          key: 3scale-system-gateway-{{ .Branch }}
+          paths:
+            - ./vendor/docker-gateway/.luarocks
+
+
   test1:
     machine: true
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 1
           command: MULTIJOB_KIND=1 make test
@@ -35,9 +94,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 2
-          command: MULTIJOB_KIND=2 make test
+          command: MULTIJOB_KIND=2 make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -46,6 +106,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 3
           command: MULTIJOB_KIND=3 make test
@@ -57,6 +118,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 4
           command: MULTIJOB_KIND=4 make test
@@ -68,6 +130,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 5
           command: MULTIJOB_KIND=5 make test
@@ -79,6 +142,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 6
           command: MULTIJOB_KIND=6 make test
@@ -90,6 +154,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Run tests 7
           command: PROXY_ENABLED=1 MULTIJOB_KIND=licenses make test
@@ -100,10 +165,42 @@ workflows:
   version: 2
   parallel_build:
     jobs:
-      - test1
-      - test2
-      - test3
-      - test4
-      - test5
-      - test6
-#      - licenses
+      - deps_bundler
+      - deps_npm
+      - deps_apicast
+
+#      - test1:
+#          requires:
+#            - deps_bundler
+#            - deps_npm
+#            - deps_apicast
+      - test2:
+          requires:
+            - deps_bundler
+            - deps_npm
+            - deps_apicast
+#      - test3:
+#          requires:
+#            - deps_bundler
+#            - deps_npm
+#            - deps_apicast
+#      - test4:
+#          requires:
+#            - deps_bundler
+#            - deps_npm
+#            - deps_apicast
+#      - test5:
+#          requires:
+#            - deps_bundler
+#            - deps_npm
+#            - deps_apicast
+#      - test6:
+#          requires:
+#            - deps_bundler
+#            - deps_npm
+#            - deps_apicast
+#      - licenses:
+#            requires:
+#              - deps_bundler
+#              - deps_npm
+#              - deps_apicast
