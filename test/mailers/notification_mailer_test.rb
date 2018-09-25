@@ -289,6 +289,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Alex's trial of the LALA application on the planLALA has expired.", body.encoded
+      assert_match url_helpers.admin_buyers_application_url(cinstance, host: cinstance.service.provider.admin_domain), body.encoded
     end
   end
 
