@@ -1,3 +1,5 @@
+= javascript_pack_tag 'navigation'
+
 div id="user_widget"
   ul id="top-menu-nav"
     li class=('active' if active_menu?(:topmenu, :dashboard) )
@@ -75,22 +77,12 @@ div id="user_widget"
 
 javascript:
   $(document)
-    .on('click', '.u-toggler', function(event) {
-      $(this).toggleClass('is-toggled');
-      var toggleable = $(this).siblings('.u-toggleable')
-      toggleable.toggleClass('is-toggled');
-      toggleable.find('input').filter(':visible:first').focus();
-      return false;
+    .on('click', '.u-toggler', function (e) {
+      e.stopPropagation()
+      toggleNavigation(e.currentTarget)
+      e.preventDefault()
     })
-
-    .on('click', '#docs-widget', function(event) {
-      event.stopPropagation();
+    .on('click', 'body', function (e) {
+      hideAllToggleable()
+      e.preventDefault()
     })
-
-    .on('click', 'body', function(event){
-      var expanded = $(".PopNavigation .is-toggled");
-      if (expanded.length > 0) {
-        expanded.removeClass("is-toggled");
-        event.stopPropagation();
-      }
-    });
