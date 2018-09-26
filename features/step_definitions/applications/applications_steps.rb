@@ -152,7 +152,7 @@ When /^I request to change to plan "([^"]*)"$/ do |plan|
 end
 
 When /^I follow the link to (application "[^"]*")$/ do |app|
-  find(:xpath, "//a[@href='#{admin_buyers_application_path(app)}']").click
+  find(:xpath, "//a[@href='#{admin_service_application_path(app.service, app)}']").click
 end
 
 

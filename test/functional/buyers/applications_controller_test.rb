@@ -47,6 +47,7 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
   end
 
   test 'shows app when backend is not available' do
+    skip 'TODO - WIP - THIS TEST DOES NOT BELONG HERE ANYMORE'
     @service.update_attribute :default_application_plan, @plan
     app = Factory(:application_contract, :plan => @plan)
 
@@ -151,7 +152,7 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
 
     assert_equal app.reload.plan, new_plan
     assert mail = ActionMailer::Base.deliveries.first, 'missing email'
-    assert_match admin_buyers_application_url(:id => app.id, :host => @provider.self_domain), mail.body.to_s
+    assert_match admin_service_application_url(app.service, app, host: @provider.self_domain), mail.body.to_s
   end
 
   #regression test for https://github.com/3scale/system/issues/1889

@@ -40,4 +40,9 @@ class Api::ApplicationsController < Api::BaseController
                       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
                       .paginate(pagination_params)
   end
+
+  def show
+    @cinstance = @service.cinstances.find(params[:id])
+    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
+  end
 end

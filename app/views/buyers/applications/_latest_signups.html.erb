@@ -14,7 +14,7 @@
     <% cinstances.each do |cinstance| %>
       <tr>
         <td>
-          <%= link_to h(cinstance.display_name), admin_buyers_application_path(cinstance) %>
+          <%= link_to h(cinstance.display_name), admin_service_application_path(cinstance.service, cinstance) %>
         </td>
         <td>
           <%= link_to h(cinstance.user_account.org_name), admin_buyers_account_path(cinstance.user_account) %>

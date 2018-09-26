@@ -1,6 +1,5 @@
 Dear <%= @receiver.informal_name %>
 <%= @account.name %>'s trial of the <%= application_friendly_name(@application) %> on the <%= @plan.name %> has expired.
 <%= @account.name %> admin users have been notified and will receive an appropriately adjusted invoice for the next billing cycle.
-To view application, follow this link: <%= admin_buyers_application_url(@application) %>
 
-
+To view application, follow this link: <%= admin_service_application_url(@application.service, @application) %>

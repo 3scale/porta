@@ -55,11 +55,6 @@ class Buyers::ApplicationsController < FrontendController
     display_view_portion!(:service) if current_account.multiservice?
   end
 
-  def show
-    activate_menu :applications
-    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
-  end
-
   def new
     @cinstance = @buyer.bought_cinstances.build
     extend_cinstance_for_new_plan
@@ -82,7 +77,7 @@ class Buyers::ApplicationsController < FrontendController
 
     if @cinstance.save
       flash[:notice] = 'Application was successfully created.'
-      redirect_to(admin_buyers_application_path(@cinstance))
+      redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
       @plans = @provider.application_plans
@@ -104,7 +99,7 @@ class Buyers::ApplicationsController < FrontendController
       if @cinstance.save
         format.html do
           flash[:notice] = 'Application was successfully updated.'
-          redirect_to(admin_buyers_application_path(@cinstance))
+          redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
         end
         format.json { render :json => @cinstance.to_json(:only => [:id, :name], :methods => [:errors]), :status => :ok }
       else
@@ -138,13 +133,13 @@ class Buyers::ApplicationsController < FrontendController
     new_plan = @cinstance.service.application_plans.stock.find(params[:cinstance][:plan_id])
     @cinstance.provider_changes_plan!(new_plan)
     flash[:notice] = "Plan changed to '#{new_plan.name}'."
-    redirect_to admin_buyers_application_url(@cinstance)
+    redirect_to admin_service_application_url(@cinstance.service, @cinstance)
   end
 
   def change_user_key
     with_password_confirmation! do
       @cinstance.change_user_key!
-      redirect_to admin_buyers_application_url(@cinstance), notice: 'The key was successfully changed'
+      redirect_to admin_service_application_url(@cinstance.service, @cinstance), notice: 'The key was successfully changed'
     end
   end
 
@@ -167,7 +162,7 @@ class Buyers::ApplicationsController < FrontendController
     respond_to do |format|
       format.html do
         flash[:notice] = message
-        redirect_to admin_buyers_application_url(@cinstance)
+        redirect_to admin_service_application_url(@cinstance.service, @cinstance)
       end
 
       format.js do

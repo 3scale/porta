@@ -1,0 +1,11 @@
+ul
+  li.SubSubMenuItem.SubSubMenuItem--trunk
+    = link_to_unless_current_styled "Application '#{@cinstance.name}'",
+      admin_service_application_path(@cinstance.service, @cinstance),
+      title: "application",
+      class: "SubSubMenuItem-link"
+  li.SubSubMenuItem.SubSubMenuItem--leaf
+    = link_to_unless_current_styled "Analytics",
+      admin_buyers_stats_application_path(@cinstance),
+      title: "analytics",
+      class: "SubSubMenuItem-link"
