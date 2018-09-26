@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Api::ApplicationsController < Api::BaseController
+  before_action :authorize_partners
+
   before_action :find_service
-  before_action :activate_submenu
   before_action :find_cinstance, only: %i[show edit]
+
+  before_action :activate_submenu
 
   include ThreeScale::Search::Helpers
   include DisplayViewPortion
@@ -51,7 +54,15 @@ class Api::ApplicationsController < Api::BaseController
   private
 
   def find_cinstance
-    @cinstance = @service.cinstances.find(params[:id])
+    @cinstance = current_user.accessible_cinstances
+                   .provided_by(current_account)
+                   .includes(plan: %i[service original plan_metrics pricing_rules])
+                   .where(service: @service)
+                   .find(params[:id])
+  end
+
+  def authorize_partners
+    authorize! :manage, :partners
   end
 
 end
