@@ -1,4 +1,6 @@
-= render 'buyers/applications/menu'
+- content_for :sublayout_title, @cinstance.display_name
+
+= render 'api/applications/menu'
 
 h2 Usage statistics for #{@cinstance.display_name} /  #{@cinstance.user_account.org_name}
 
