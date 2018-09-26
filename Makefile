@@ -79,6 +79,14 @@ docker: ## Prints docker version and info
 	@docker info
 	@echo
 
+precompile-assets-info:
+	@echo
+	@echo "======= Assets Precompile ======="
+	@echo
+precompile-assets: ## Precompiles static assets
+precompile-assets: CMD = bundle config && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=production WEBPACKER_PRECOMPILE=false && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=test WEBPACKER_PRECOMPILE=false
+precompile-assets: precompile-assets-info run
+
 test: ## Runs tests inside container build environment
 test: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 test: $(DOCKER_COMPOSE) info bundle-in-container npm-install-in-container jspm-install-in-container apicast-dependencies-in-container
@@ -120,7 +128,7 @@ run: $(DOCKER_COMPOSE)
 	@echo
 	@echo "======= Run ======="
 	@echo
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "script/docker.sh && source script/proxy_env.sh && $(CMD)"
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "script/docker.sh && source script/proxy_env.sh && echo \"$(CMD)\" && $(CMD)"
 
 bash: ## Opens up shell to environment where tests can be ran
 bash: CMD = script/docker.sh && bundle exec rake db:create db:test:load && bundle exec bash

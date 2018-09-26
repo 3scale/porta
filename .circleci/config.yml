@@ -22,14 +22,10 @@ restore-caches: &restore-caches
   restore_cache:
     keys:
       # when lock file changes, use increasingly general patterns to restore cache
-      - 3scale-system-gems-{{ .Branch }}-{{ checksum "Gemfile" }}
-      - 3scale-system-gems-{{ .Branch }}-
-      - 3scale-system-gems-
+      - 3scale-system-bundler-gems-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
       - 3scale-system-npm_jspm-{{ .Branch }}-{{ checksum "package.json" }}
-      - 3scale-system-npm_jspm-{{ .Branch }}-
-      - 3scale-system-npm_jspm-
-      - 3scale-system-gateway-{{ .Branch }}
-      - 3scale-system-gateway-
+      - 3scale-system-gateway-{{ .Branch }}-{{ .Revision }}
+      - 3scale-system-assets-{{ .Branch }}-{{ .Revision }}
 
 
 
@@ -42,11 +38,12 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Install gems with bundler
           command: make bundle-in-container
       - save_cache:
-          key: 3scale-system-gems-{{ .Branch }}-{{ checksum "Gemfile" }}
+          key: 3scale-system-bundler-gems-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - ./vendor/bundle
             - ./.bundle/
@@ -56,6 +53,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Install NPM dependencies
           command: make npm-install-in-container
@@ -71,13 +69,28 @@ jobs:
     steps:
       - checkout
       - *git-submodules
+      - *restore-caches
       - run:
           name: Install Apicast dependencies
           command: make apicast-dependencies-in-container
       - save_cache:
-          key: 3scale-system-gateway-{{ .Branch }}
+          key: 3scale-system-gateway-{{ .Branch }}-{{ .Revision }}
           paths:
             - ./vendor/docker-gateway/.luarocks
+  assets_precompile:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - *git-submodules
+      - *restore-caches
+      - run:
+          name: Precompile assets
+          command: make precompile-assets
+      - save_cache:
+          key: 3scale-system-assets-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ./public/assets
 
 
   test1:
@@ -178,6 +191,11 @@ workflows:
       - deps_bundler
       - deps_npm
       - deps_apicast
+      - assets_precompile:
+          requires:
+            - deps_bundler
+            - deps_npm
+            - deps_apicast
 
 #      - test1:
 #          requires:
@@ -186,9 +204,7 @@ workflows:
 #            - deps_apicast
       - test2:
           requires:
-            - deps_bundler
-            - deps_npm
-            - deps_apicast
+            - assets_precompile
 #      - test3:
 #          requires:
 #            - deps_bundler
