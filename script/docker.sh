@@ -22,10 +22,7 @@ echo
 echo
 echo "======= Bundler ======="
 echo
-for gemfile in Gemfile
-do
-  bundle check --path=vendor/bundle --gemfile="${gemfile}" || time bash -c "${PROXY_ENV} bundle install --deployment --retry=5 --gemfile=${gemfile}"
-done
+bundle check --path=vendor/bundle --gemfile="Gemfile" || time bash -c "${PROXY_ENV} bundle install --deployment --retry=5 --gemfile=Gemfile"
 bundle config
 echo
 
