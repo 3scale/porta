@@ -8,10 +8,6 @@ SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 # lets make everything readable by everyone
 umask 0000
 
-cp config/examples/*.yml config/
-# Needed for Sphinx ODBC
-cp config/oracle/odbc*.ini /etc/
-
 boot_database()
 {
     bin/rake boot:database TEST_ENV_NUMBER=8

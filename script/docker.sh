@@ -19,7 +19,10 @@ echo
 env
 echo
 
-
-
-
+echo
+echo "======= Seeding Config files ======="
+echo
+cp config/examples/*.yml config/
+# Needed for Sphinx ODBC
+cp config/oracle/odbc*.ini /etc/
 
