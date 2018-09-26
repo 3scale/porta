@@ -6,26 +6,7 @@ div id="user_widget"
       = link_to raw("<span>Red Hat <sup>©</sup></span> 3scale API Management"), provider_admin_dashboard_path
 
   - if current_account.multiservice? && can?(:manage, :plans)
-    .PopNavigation.PopNavigation--context
-      a.PopNavigation-trigger.u-toggler href="#context-menu" title="Context Switcher"
-        - if @service && controller_name != 'dashboards'
-          ' API:
-          => @service.name.capitalize
-        - else
-          ' Jump to an API
-        = icon('chevron-down')
-      ul#context-menu.PopNavigation-list.u-toggleable
-        li.PopNavigation-listItem
-          div id="context-widget" class="nav-search-widget"
-            form class="docs-search" data-role="search"
-              a href="#" data-role="close" class="close-widget" x
-              input type="search" class="docs-search-input" name="q" results="5" placeholder= "Search Service"
-
-        li.PopNavigation-listItem
-          ul.PopNavigation-results
-            - @services.each do |service|
-              li.PopNavigation-listItem
-                = link_to service.name,  admin_service_metrics_path(service), class: 'PopNavigation-link'
+    #api_selector
 
   .PopNavigation.PopNavigation--docs
     a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
@@ -74,15 +55,17 @@ div id="user_widget"
   div class="username" style="display:none;"
     = current_user.username
 
-
 javascript:
+  document.addEventListener('DOMContentLoaded', function () {
+    ApiSelector({currentApi: #{json @service}, apis: #{json @all_services}, controllerName: #{json controller_name}}, 'api_selector')
+  })
+
   $(document)
     .on('click', '.u-toggler', function (e) {
       e.stopPropagation()
       toggleNavigation(e.currentTarget)
       e.preventDefault()
     })
-    .on('click', 'body', function (e) {
+    .on('click', 'body', function () {
       hideAllToggleable()
-      e.preventDefault()
     })
