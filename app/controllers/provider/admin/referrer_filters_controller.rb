@@ -37,11 +37,11 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
 
   private
 
-    def find_cinstance
-      @cinstance = current_account.provided_cinstances.by_service(@service).find(params[:application_id])
-    end
+  def find_cinstance
+    @cinstance = current_account.provided_cinstances.by_service(@service).find(params[:application_id])
+  end
 
-    def return_url
-      admin_service_application_path(@cinstance.service, @cinstance)
-    end
+  def return_url
+    admin_service_application_path(@cinstance.service, @cinstance)
+  end
 end
