@@ -17,7 +17,7 @@ namespace :ci do
     desc 'Generates a report with the dependencies and their licenses'
     task :report do
       STDOUT.puts 'Generating report...'
-      exec("BUNDLE_GEMFILE='Gemfile' lib/threescale_license_finder/bin/threescale_license_finder report --format=xml > #{Rails.root.join('doc/licenses/licenses.xml')}")
+      exec("BUNDLE_GEMFILE='Gemfile' lib/threescale_license_finder/bin/threescale_license_finder report --format=xml > #{Rails.root.join('doc','licenses','licenses.xml')}")
     end
   end
 end
