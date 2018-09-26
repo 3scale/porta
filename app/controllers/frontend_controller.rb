@@ -110,7 +110,7 @@ class FrontendController < ApplicationController
   end
 
   def all_services
-    @services = if current_account.try!(:provider?)
+    @all_services = if current_account.try!(:provider?)
       current_account.accessible_services
                else
       site_account.accessible_services
