@@ -125,10 +125,11 @@ class Buyers::ApplicationsController < FrontendController
 
   def change_plan
     # there is no need to query available_application_plans as we already have a validation
-    new_plan = @cinstance.service.application_plans.stock.find(params[:cinstance][:plan_id])
+    service = @cinstance.service
+    new_plan = service.application_plans.stock.find(params[:cinstance][:plan_id])
     @cinstance.provider_changes_plan!(new_plan)
     flash[:notice] = "Plan changed to '#{new_plan.name}'."
-    redirect_to admin_service_application_url(@cinstance.service, @cinstance)
+    redirect_to admin_service_application_url(service, @cinstance)
   end
 
   def change_user_key
