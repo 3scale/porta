@@ -362,7 +362,8 @@ module NavigationHelpers
       admin_service_application_path(application.service, application)
 
     when /^the provider side "([^"]*)" edit application page$/
-      edit_admin_buyers_application_path(Cinstance.find_by_name!($1))
+      application = Cinstance.find_by_name!($1)
+      edit_admin_service_application_path(application.service, application)
 
     when /^the provider side application page for "([^"]*)"$/
       application = Account.find_by_org_name!($1).bought_cinstance
@@ -373,8 +374,8 @@ module NavigationHelpers
       admin_buyers_applications_path(:per_page => $1)
 
     when /^the provider side edit page for application "([^"]*)" of buyer "([^"]*)"$/
-      edit_admin_buyers_account_application_path(Account.find_by_org_name!($2),
-                                            Cinstance.find_by_name!($1))
+      application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
+      edit_admin_service_application_path(application.service, application)
 
     #
     # Service contracts (provider side)

@@ -3,6 +3,7 @@
 class Api::ApplicationsController < Api::BaseController
   before_action :find_service
   before_action :activate_submenu
+  before_action :find_cinstance, only: %i[show edit]
 
   include ThreeScale::Search::Helpers
   include DisplayViewPortion
@@ -42,7 +43,15 @@ class Api::ApplicationsController < Api::BaseController
   end
 
   def show
-    @cinstance = @service.cinstances.find(params[:id])
     @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
   end
+
+  def edit; end
+
+  private
+
+  def find_cinstance
+    @cinstance = @service.cinstances.find(params[:id])
+  end
+
 end

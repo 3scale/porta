@@ -5,7 +5,7 @@
 h1
   => @cinstance.display_name
   = link_to 'Edit',
-            edit_admin_buyers_application_path(@cinstance),
+            edit_admin_service_application_path(@cinstance.service, @cinstance),
             class: 'action edit'
 
 div#twoCol.equal-width
