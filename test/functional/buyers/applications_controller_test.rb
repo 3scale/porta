@@ -46,17 +46,6 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test 'shows app when backend is not available' do
-    skip 'TODO - WIP - THIS TEST DOES NOT BELONG HERE ANYMORE'
-    @service.update_attribute :default_application_plan, @plan
-    app = Factory(:application_contract, :plan => @plan)
-
-    get :show, :id => app.id
-
-    assert_response :success
-    assert_match "was a problem getting utilization", @response.body
-  end
-
   # regression test for GH Bug #1933
   test 'creates app with webhook enabled' do
     Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
