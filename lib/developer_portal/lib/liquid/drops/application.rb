@@ -17,7 +17,7 @@ module Liquid
       # Filter might be better, as in Shopify: http://cheat.markdunkley.com/
       desc "Returns the admin_url of the application."
       def admin_url
-        Rails.application.routes.url_helpers.admin_buyers_application_url(:id => @contract.id, :host => @contract.provider_account.self_domain)
+        Rails.application.routes.url_helpers.admin_service_application_url(@contract.service, @contract, host: @contract.provider_account.self_domain)
       end
 
       def path

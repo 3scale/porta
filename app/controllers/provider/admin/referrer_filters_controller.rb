@@ -42,6 +42,6 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
     end
 
     def return_url
-      admin_buyers_application_path(@cinstance)
+      admin_service_application_path(@cinstance.service, @cinstance)
     end
 end

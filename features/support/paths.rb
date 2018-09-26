@@ -358,13 +358,15 @@ module NavigationHelpers
       new_admin_buyers_account_application_path(buyer)
 
     when /^the provider side "([^"]*)" application page$/
-      admin_buyers_application_path(Cinstance.find_by_name!($1))
+      application = Cinstance.find_by_name!($1)
+      admin_service_application_path(application.service, application)
 
     when /^the provider side "([^"]*)" edit application page$/
       edit_admin_buyers_application_path(Cinstance.find_by_name!($1))
 
     when /^the provider side application page for "([^"]*)"$/
-      admin_buyers_application_path(Account.find_by_org_name!($1).bought_cinstance)
+      application = Account.find_by_org_name!($1).bought_cinstance
+      admin_service_application_path(application.service, application)
 
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/

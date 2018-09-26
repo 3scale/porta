@@ -93,7 +93,7 @@ table class="data"
     - @cinstances.each do |cinstance|
       tr id=dom_id(cinstance)
         td class="select" = bulk_select_one cinstance
-        td = link_to cinstance.display_name, admin_buyers_application_path(cinstance)
+        td = link_to cinstance.display_name, admin_service_application_path(cinstance.service, cinstance)
         td class="state"
           => cinstance.state
           - if cinstance.trial?

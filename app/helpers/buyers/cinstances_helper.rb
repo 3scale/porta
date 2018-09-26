@@ -1,7 +1,7 @@
 module Buyers::CinstancesHelper
   def link_to_cinstance_or_deleted(cinstance)
     if cinstance
-      link_to(cinstance.name, admin_buyers_application_path(cinstance))
+      link_to(cinstance.name, admin_service_application_path(cinstance.service, cinstance))
     else
       content_tag(:span, '(deleted app)', :class => 'deleted')
     end
