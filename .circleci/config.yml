@@ -18,13 +18,21 @@ store-test-artifacts: &store-test-artifacts
     path: tmp/junit
     destination: junit
 
-restore-caches: &restore-caches
+restore-bundler-cache: &restore-bundler-cache
   restore_cache:
     keys:
-      # when lock file changes, use increasingly general patterns to restore cache
       - 3scale-system-bundler-gems-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+restore-npm-cache: &restore-npm-cache
+  restore_cache:
+    keys:
       - 3scale-system-npm_jspm-{{ .Branch }}-{{ checksum "package.json" }}
+restore-gateway-cache: &restore-gateway-cache
+  restore_cache:
+    keys:
       - 3scale-system-gateway-{{ .Branch }}-{{ .Revision }}
+restore-assets-cache: &restore-assets-cache
+  restore_cache:
+    keys:
       - 3scale-system-assets-{{ .Branch }}-{{ .Revision }}
 
 
@@ -38,7 +46,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
       - run:
           name: Install gems with bundler
           command: make bundle-in-container
@@ -53,7 +61,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-npm-cache
       - run:
           name: Install NPM dependencies
           command: make npm-install-in-container
@@ -69,7 +77,7 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-gateway-cache
       - run:
           name: Install Apicast dependencies
           command: make apicast-dependencies-in-container
@@ -83,7 +91,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Precompile assets
           command: make precompile-assets
@@ -99,7 +110,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 1
           command: MULTIJOB_KIND=1 make test
@@ -112,7 +126,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 2
           command: MULTIJOB_KIND=2 make test-no-deps
@@ -125,7 +142,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 3
           command: MULTIJOB_KIND=3 make test
@@ -138,7 +158,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 4
           command: MULTIJOB_KIND=4 make test
@@ -151,7 +174,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 5
           command: MULTIJOB_KIND=5 make test
@@ -164,7 +190,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 6
           command: MULTIJOB_KIND=6 make test
@@ -177,7 +206,10 @@ jobs:
     steps:
       - checkout
       - *git-submodules
-      - *restore-caches
+      - *restore-bundler-cache
+      - *restore-npm-cache
+      - *restore-gateway-cache
+      - *restore-assets-cache
       - run:
           name: Run tests 7
           command: PROXY_ENABLED=1 MULTIJOB_KIND=licenses make test
