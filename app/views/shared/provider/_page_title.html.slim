@@ -1,2 +1,2 @@
-- if content_for :title
-  h1 = content_for :title
+- if (title = content_for(:title).presence)
+  h1 = title
