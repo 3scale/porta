@@ -40,7 +40,7 @@ restore-assets-cache: &restore-assets-cache
 
 
 jobs:
-  deps_bundler:
+  dependencies_bundler:
     machine:
       docker_layer_caching: true
     steps:
@@ -55,7 +55,7 @@ jobs:
           paths:
             - ./vendor/bundle
             - ./.bundle/
-  deps_npm:
+  dependencies_npm:
     machine:
       docker_layer_caching: true
     steps:
@@ -71,7 +71,7 @@ jobs:
             - ./node_modules
             - ./assets/jspm_packages
             - ./.jspm
-  deps_apicast:
+  dependencies_apicast:
     machine:
       docker_layer_caching: true
     steps:
@@ -116,7 +116,7 @@ jobs:
       - *restore-assets-cache
       - run:
           name: Run tests 1
-          command: MULTIJOB_KIND=1 make test
+          command: MULTIJOB_KIND=1 make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -148,7 +148,7 @@ jobs:
       - *restore-assets-cache
       - run:
           name: Run tests 3
-          command: MULTIJOB_KIND=3 make test
+          command: MULTIJOB_KIND=3 make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -164,7 +164,7 @@ jobs:
       - *restore-assets-cache
       - run:
           name: Run tests 4
-          command: MULTIJOB_KIND=4 make test
+          command: MULTIJOB_KIND=4 make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -180,7 +180,7 @@ jobs:
       - *restore-assets-cache
       - run:
           name: Run tests 5
-          command: MULTIJOB_KIND=5 make test
+          command: MULTIJOB_KIND=5 make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -196,7 +196,7 @@ jobs:
       - *restore-assets-cache
       - run:
           name: Run tests 6
-          command: MULTIJOB_KIND=6 make test
+          command: MULTIJOB_KIND=6 make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -212,7 +212,7 @@ jobs:
       - *restore-assets-cache
       - run:
           name: Run tests 7
-          command: PROXY_ENABLED=1 MULTIJOB_KIND=licenses make test
+          command: PROXY_ENABLED=1 MULTIJOB_KIND=licenses make test-no-deps
       - *store-junit-test-results
       - *store-test-artifacts
 
@@ -220,45 +220,33 @@ workflows:
   version: 2
   parallel_build:
     jobs:
-      - deps_bundler
-      - deps_npm
-      - deps_apicast
+      - dependencies_bundler
+      - dependencies_npm
+      - dependencies_apicast
       - assets_precompile:
           requires:
-            - deps_bundler
-            - deps_npm
-            - deps_apicast
+            - dependencies_bundler
+            - dependencies_npm
+            - dependencies_apicast
 
-#      - test1:
-#          requires:
-#            - deps_bundler
-#            - deps_npm
-#            - deps_apicast
+      - test1:
+          requires:
+            - assets_precompile
       - test2:
           requires:
             - assets_precompile
-#      - test3:
-#          requires:
-#            - deps_bundler
-#            - deps_npm
-#            - deps_apicast
-#      - test4:
-#          requires:
-#            - deps_bundler
-#            - deps_npm
-#            - deps_apicast
-#      - test5:
-#          requires:
-#            - deps_bundler
-#            - deps_npm
-#            - deps_apicast
-#      - test6:
-#          requires:
-#            - deps_bundler
-#            - deps_npm
-#            - deps_apicast
-#      - licenses:
-#            requires:
-#              - deps_bundler
-#              - deps_npm
-#              - deps_apicast
+      - test3:
+          requires:
+            - assets_precompile
+      - test4:
+          requires:
+            - assets_precompile
+      - test5:
+          requires:
+            - assets_precompile
+      - test6:
+          requires:
+            - assets_precompile
+      - licenses:
+          requires:
+            - assets_precompile
