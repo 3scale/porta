@@ -37,7 +37,8 @@ restore-caches: &restore-caches
 
 jobs:
   deps_bundler:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -50,7 +51,8 @@ jobs:
             - ./vendor/bundle
             - ./.bundle/
   deps_npm:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -64,7 +66,8 @@ jobs:
             - ./assets/jspm_packages
             - ./.jspm
   deps_apicast:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -78,7 +81,8 @@ jobs:
 
 
   test1:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -90,7 +94,8 @@ jobs:
       - *store-test-artifacts
 
   test2:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -102,7 +107,8 @@ jobs:
       - *store-test-artifacts
 
   test3:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -114,7 +120,8 @@ jobs:
       - *store-test-artifacts
 
   test4:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -126,7 +133,8 @@ jobs:
       - *store-test-artifacts
 
   test5:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -138,7 +146,8 @@ jobs:
       - *store-test-artifacts
 
   test6:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
@@ -150,7 +159,8 @@ jobs:
       - *store-test-artifacts
 
   licenses:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
       - *git-submodules
