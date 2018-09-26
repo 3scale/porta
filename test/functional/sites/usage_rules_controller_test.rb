@@ -12,7 +12,7 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
   test 'show checkbox if 1 account plan' do
     get :edit
     assert_response :success
-    assert_select 'title', 'Usage rules - Edit | Red Hat 3scale API Management'
+    assert_select 'title', 'General | Red Hat 3scale API Management'
     assert_select 'input#settings_account_approval_required'
     assert_select 'p.inline-hints', 'Approval is required by you before developer accounts are activated.'
   end
