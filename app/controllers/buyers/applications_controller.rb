@@ -10,7 +10,7 @@ class Buyers::ApplicationsController < FrontendController
   before_action :authorize_multiple_applications, :only => [ :new, :create ]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
-  before_action :find_provider,  :only => [:edit, :new, :create, :update]
+  before_action :find_provider,  only: %i[new create update]
 
   before_action :find_application_plan,          :only => :create
 
@@ -83,11 +83,6 @@ class Buyers::ApplicationsController < FrontendController
       @plans = @provider.application_plans
       render :action => :new
     end
-  end
-
-  def edit
-    activate_menu :applications
-    @cinstance = current_account.provided_cinstances.find(params[:id])
   end
 
   def update
