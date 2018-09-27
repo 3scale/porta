@@ -122,13 +122,13 @@ button.create_key {
     -moz-animation: target-fade 3s 1;
 }
 
-@-webkit-keyframes target-fade {
-    0% { background-color: $focus-color; }
-    100% { background-color: rgba(0,0,0,0); }
+@-webkit-keyframes target-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
-@-moz-keyframes target-fade {
-    0% { background-color: $focus-color; }
-    100% { background-color: rgba(0,0,0,0); }
+@-moz-keyframes target-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .link--icon-last {
