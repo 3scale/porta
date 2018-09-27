@@ -16,9 +16,8 @@ const Suggestions = (props) => {
 }
 
 const searchBoxTitle = (api, controllerName) => {
-  return (api && controllerName !== 'dashboards')
-    ? `API: ${api.service.name.toUpperCase()}`
-    : (<span>Jump to an API <i className='fa fa-chevron-down'></i></span>)
+  const title = (api && controllerName !== 'dashboards') ? `API: ${api.service.name.toUpperCase()}` : 'Jumpt to an API'
+  return (<span> {title} <i className='fa fa-chevron-down'></i></span>)
 }
 
 class ApiSearch extends Component {
