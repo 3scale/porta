@@ -1,6 +1,6 @@
 - loaded = widget.loaded? && widget.value
 li id=(widget.id) class=("DashboardNavigation-list-item u-notice" if loaded)
   - if loaded
-    = link_to admin_errors_path(widget.params), title: 'Integration Errors', class: 'DashboardNavigation-link DashboardNavigation-link--alert' do
+    = link_to admin_service_errors_path(widget.params), title: 'Integration Errors', class: 'DashboardNavigation-link DashboardNavigation-link--alert' do
       ' Integration Errors
       i.fa.fa-exclamation-circle

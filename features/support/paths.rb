@@ -297,9 +297,6 @@ module NavigationHelpers
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
 
-    when 'the transaction errors page'
-      admin_errors_path
-
     when 'the latest transactions page'
       admin_transactions_path
 
@@ -618,8 +615,6 @@ module NavigationHelpers
     when 'the provider site page'
       admin_site_settings_path
 
-    when 'the transaction errors page'
-      admin_errors_path
     when 'the latest transactions page'
       admin_transactions_path
 
