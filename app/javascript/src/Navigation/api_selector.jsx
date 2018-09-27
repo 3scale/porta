@@ -15,7 +15,11 @@ const Suggestions = (props) => {
   return <ul className="PopNavigation-results">{options}</ul>
 }
 
-const searchBoxTitle = (api, controllerName) => (api && controllerName !== 'dashboards') ? `API: ${api.service.name.toUpperCase()}` : 'Jump to an API'
+const searchBoxTitle = (api, controllerName) => {
+  return (api && controllerName !== 'dashboards')
+    ? `API: ${api.service.name.toUpperCase()}`
+    : (<span>Jump to an API <i className='fa fa-chevron-down'></i></span>)
+}
 
 class ApiSearch extends Component {
   constructor (props) {
