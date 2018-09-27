@@ -40,7 +40,6 @@ ul#second_nav.self_clear
     = provider_submenu_link 'Analytics', admin_stats_root_path
     = provider_submenu_link 'Alerts', admin_alerts_path if current_account.multiservice?
     = provider_submenu_link 'Traffic', admin_transactions_path
-    = provider_submenu_link 'Integration errors', admin_errors_path
 
   - when :serviceadmin
       = provider_submenu_link 'Overview', admin_services_path

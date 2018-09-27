@@ -755,7 +755,14 @@ without fake Core server your after commit callbacks will crash and you might ge
               put :read
             end
           end
+
           resources :applications, only: %i[index show edit]
+
+          resources :errors, only: :index do
+            collection do
+              delete :purge, path: ''
+            end
+          end
 
           resource :integration, :except => [ :create, :destroy ] do
             member do
@@ -770,11 +777,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         resources :transactions, :only => :index
-        resources :errors, :only => :index do
-          collection do
-            delete :purge, :path => ''
-          end
-        end
 
         resources :alerts, :only => [:index, :destroy] do
           collection do
