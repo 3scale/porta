@@ -28,6 +28,17 @@ First of all, please keep in mind that multiple types of contributions are possi
 
 * Please think twice about starting to work on code before having collected positive feedback about the change. Maintainers may have already decided against accepting such contributions, so your work may not be incorporated. 
 
+#### **Is there any other requirement to open a PR?**
+
+We enforce all the commits to be signed with GPG before merging the PR to master.
+GPG is a form of encryption and it is used to verify the identity of the committer so other people can trust that the changes come from a trusted source.
+
+To do so, you only need to follow these steps:
+  1. Check if you already have existing GPG keys in your local computer following [this guide](https://help.github.com/articles/checking-for-existing-gpg-keys/).
+  2. If you don't have any, generate a new GPG key following [this guide](https://help.github.com/articles/generating-a-new-gpg-key/).
+  3. Add the GPG key to your GitHub account following [this guide](https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/).
+  4. Sign your commits with the GPG key following [this guide](https://help.github.com/articles/signing-commits/).
+
 #### **Do you have questions about the source code?**
 
 * Ask any question by raising an issue. Maintainers could always use more help, so they'll be happy to assist you along, no matter how silly you might your question sounds. 
