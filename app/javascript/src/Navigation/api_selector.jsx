@@ -51,7 +51,7 @@ class ApiSearch extends Component {
                   onChange={this.searchHandler}
                   type="search"
                   className="docs-search-input"
-                  placeholder="Search Service"
+                  placeholder="Type the API name"
                 />
               </form>
             </div>
