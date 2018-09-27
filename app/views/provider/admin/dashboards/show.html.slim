@@ -23,7 +23,7 @@
 
     // API Service Level
     - if can?(:manage, :analytics)
-      = render collection: @services,
+      = render collection: @all_services,
                partial: 'provider/admin/dashboards/service',
                cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
                cache_options: { expires_in: 1.hour }
@@ -38,7 +38,3 @@ javascript:
   System.import('dashboard/toggle').then(function (m) {
     m.default()
   });
-
-
-
-
