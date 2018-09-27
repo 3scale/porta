@@ -3,7 +3,8 @@
 div id="user_widget"
   ul id="top-menu-nav"
     li class=('active' if active_menu?(:topmenu, :dashboard) )
-      = link_to raw("<span>Red Hat <sup>©</sup></span> 3scale API Management"), provider_admin_dashboard_path
+      = link_to provider_admin_dashboard_path, class: 'header-link' do
+        .header-logo
 
   - if current_account.multiservice? && can?(:manage, :plans)
     #api_selector
