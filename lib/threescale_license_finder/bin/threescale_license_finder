@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
 require 'license_finder_xml_reporter/cli/main'
-require File.expand_path('../../threescale_package_manager.rb', __FILE__)
 
 LicenseFinder::CLI::Main.start

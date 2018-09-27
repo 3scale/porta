@@ -33,14 +33,6 @@ yarn --version
 time bash -c "CXX=g++-4.8 ${PROXY_ENV} yarn install"
 echo
 
-echo "======= JSPM ======="
-echo
-jspm -v
-jspm config registries.github.auth ${GITHUB_REPOSITORY_TOKEN}
-time bash -c "${PROXY_ENV} jspm dl-loader"
-time bash -x -c "export ${PROXY_ENV}; jspm install --lock|| jspm install --force"
-echo
-
 echo "======= APIcast ======="
 
 pushd vendor/docker-gateway
