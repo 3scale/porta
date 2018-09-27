@@ -118,8 +118,8 @@ button.create_key {
 }
 
 :target {
-    -webkit-animation: target-fade 3s 1;
-    -moz-animation: target-fade 3s 1;
+    -webkit-animation: target-fade-in 0.5s 1;
+    -moz-animation: target-fade-in 0.5s 1;
 }
 
 @-webkit-keyframes target-fade-in {
