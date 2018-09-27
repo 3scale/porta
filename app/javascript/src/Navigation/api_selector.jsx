@@ -1,5 +1,6 @@
 // TODO: @flow
 // TODO: test
+import 'babel-polyfill'
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 
@@ -24,23 +25,23 @@ class ApiSearch extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      ...props,
       displayedApis: props.apis
     }
   }
 
-  searchHandler = (event) => {
+  searchHandler (event) {
     const searchQuery = event.target.value.toLowerCase()
-    const displayedApis = this.state.apis.filter((api) => api.service.name.toLowerCase().indexOf(searchQuery) !== -1)
+    const displayedApis = this.props.apis.filter((api) => api.service.name.toLowerCase().indexOf(searchQuery) !== -1)
     this.setState({
       displayedApis
     })
   }
+
   render () {
     return (
       <div className="PopNavigation PopNavigation--context">
         <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Switcher">
-          { searchBoxTitle(this.state.currentApi, this.state.controllerName) }
+          { searchBoxTitle(this.props.currentApi, this.props.controllerName) }
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
@@ -48,7 +49,7 @@ class ApiSearch extends Component {
               <form className="docs-search" data-role="search">
                 <a href="#" data-role="close" className="close-widget">x</a>
                 <input
-                  onChange={this.searchHandler}
+                  onChange={(e) => this.searchHandler(e)}
                   type="search"
                   className="docs-search-input"
                   placeholder="Type the API name"
