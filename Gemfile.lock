@@ -136,6 +136,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    3scale_client (2.6.1)
+      nokogiri
     3scale_time_range (0.0.6)
       activesupport (>= 3.2.19)
     Ascii85 (1.0.2)
@@ -822,6 +824,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  3scale_client (~> 2.6.1)
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
