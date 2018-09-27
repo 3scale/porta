@@ -1,4 +1,7 @@
-<h2>Credit Card Policies</h2>
+<% content_for(:title) do %>
+  Credit Card Policies
+<% end %>
+
 <%= semantic_form_for @settings, :url => admin_site_settings_url do |form| %>
   <%= form.inputs 'Policy URLs for Credit Card details' do %>
     <%= form.input :cc_terms_path,   :label => 'Path to Legal Terms page' %>
