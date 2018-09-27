@@ -531,7 +531,6 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.10)
-    rack-jspm (0.1.1)
     rack-no_animations (1.0.3)
     rack-openid (1.4.2)
       rack (>= 1.1.0)
@@ -931,7 +930,6 @@ DEPENDENCIES
   pry-rails
   pry-stack_explorer
   quiet_assets
-  rack-jspm (~> 0.1.1)
   rack-no_animations (~> 1.0.3)
   rack-utf8_sanitizer
   rack-x_served_by (~> 0.1.1)
