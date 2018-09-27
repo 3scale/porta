@@ -615,8 +615,6 @@ module NavigationHelpers
     when 'the provider site page'
       admin_site_settings_path
 
-    when /^the transaction errors page for service "([^"]*)"$/
-      admin_service_errors_path(Service.find_by_name!($1))
     when 'the latest transactions page'
       admin_transactions_path
 
