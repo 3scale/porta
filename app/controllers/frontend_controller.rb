@@ -111,10 +111,10 @@ class FrontendController < ApplicationController
 
   def all_services
     @all_services = if current_account.try!(:provider?)
-      current_account.accessible_services
-               else
-      site_account.accessible_services
-    end
+                      current_account.accessible_services
+                    else
+                      site_account.accessible_services
+                    end
   end
 
   def find_service(id = params[:service_id])
