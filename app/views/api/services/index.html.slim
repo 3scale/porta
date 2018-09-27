@@ -146,7 +146,7 @@
               = list_items_or_empty service.latest_applications, 'There are no latest applications.' do |cinstance|
                 - if cinstance.user_account.present?
                   li.item
-                    => link_to cinstance.name, admin_buyers_application_path(cinstance)
+                    => link_to cinstance.name, admin_service_application_path(cinstance.service, cinstance)
                     '  from
                     = link_to cinstance.user_account.org_name, admin_buyers_account_path(cinstance.user_account)
 

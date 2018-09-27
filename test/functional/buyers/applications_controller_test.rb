@@ -46,16 +46,6 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test 'shows app when backend is not available' do
-    @service.update_attribute :default_application_plan, @plan
-    app = Factory(:application_contract, :plan => @plan)
-
-    get :show, :id => app.id
-
-    assert_response :success
-    assert_match "was a problem getting utilization", @response.body
-  end
-
   # regression test for GH Bug #1933
   test 'creates app with webhook enabled' do
     Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
@@ -151,7 +141,7 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
 
     assert_equal app.reload.plan, new_plan
     assert mail = ActionMailer::Base.deliveries.first, 'missing email'
-    assert_match admin_buyers_application_url(:id => app.id, :host => @provider.self_domain), mail.body.to_s
+    assert_match admin_service_application_url(app.service, app, host: @provider.self_domain), mail.body.to_s
   end
 
   #regression test for https://github.com/3scale/system/issues/1889

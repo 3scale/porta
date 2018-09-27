@@ -280,6 +280,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     account   = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alex')
     plan      = FactoryGirl.build_stubbed(:simple_application_plan, name: 'planLALA')
     cinstance = FactoryGirl.build_stubbed(:simple_cinstance, user_account: account, plan: plan, name: 'LALA')
+    service   = cinstance.service
     event     = Cinstances::CinstanceExpiredTrialEvent.create(cinstance)
     mail      = NotificationMailer.cinstance_expired_trial(event, receiver)
 
@@ -289,7 +290,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Alex's trial of the LALA application on the planLALA has expired.", body.encoded
-      assert_match url_helpers.admin_buyers_application_url(cinstance, host: cinstance.service.provider.admin_domain), body.encoded
+      assert_match url_helpers.admin_service_application_url(service, cinstance, host: service.provider.admin_domain), body.encoded
     end
   end
 
@@ -518,7 +519,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Application: Boo App", body.encoded
       assert_match "Current plan: #{plan.name}", body.encoded
       assert_match "Requested plan: #{plan_2.name}", body.encoded
-      assert_match url_helpers.admin_buyers_application_url(application, host: provider.admin_domain), body.encoded
+      assert_match url_helpers.admin_service_application_url(application.service, application, host: application.service.provider.admin_domain), body.encoded
     end
   end
 

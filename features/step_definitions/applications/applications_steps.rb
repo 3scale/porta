@@ -126,7 +126,7 @@ Then /^I should not see button to "(.*?)"$/ do | text |
 end
 
 Then /^I should see the app menu$/ do
-  assert has_xpath? "//ul[@id='subsubmenu']"
+  assert has_xpath?("//ul[@id='subsubmenu']") || has_xpath?("//ul[@class='subsubmenu']")
 end
 
 Then /^I should not see the applications widget$/ do
@@ -152,7 +152,7 @@ When /^I request to change to plan "([^"]*)"$/ do |plan|
 end
 
 When /^I follow the link to (application "[^"]*")$/ do |app|
-  find(:xpath, "//a[@href='#{admin_buyers_application_path(app)}']").click
+  find(:xpath, "//a[@href='#{admin_service_application_path(app.service, app)}']").click
 end
 
 

@@ -13,6 +13,8 @@ module HtmlSelectorsHelper
       '#second_nav'
     when 'the subsubmenu'
       '#subsubmenu'  # this is silly
+    when 'the application service subsubmenu'
+      '.subsubmenu'
     when 'the user widget'
       '#user_widget'
     when 'the footer'
