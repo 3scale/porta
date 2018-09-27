@@ -1,38 +1,44 @@
 /* global module */
+var webpackConfig = require('./config/webpack/test.js')
 module.exports = function (config) {
   'use strict'
 
   config.set({
+    basePath: "",
     autoWatch: true,
     singleRun: true,
 
-    frameworks: ['jspm', 'fixture', 'jasmine'],
+    frameworks: ['jquery-3.2.1', 'jasmine-jquery', 'jasmine', 'fixture'],
+
+    preprocessors: {
+      'spec/javascripts/karma/index.spec.js': [ 'webpack' ]
+    },
 
     files: [
-      'node_modules/babel-polyfill/dist/polyfill.js',
-      'spec/support/jasmine.js',
-      'spec/support/fixtures.js',
-      'spec/support/jquery.js',
-      'spec/support/jasmine-jquery.js',
+      'spec/javascripts/karma/jasmine.js',
+      'spec/javascripts/karma/fixtures.js',
+      'spec/javascripts/karma/index.spec.js'
+      //{ pattern: 'app/javascript/src/**/*.jsx', watched: false }
+
     ],
 
-    jspm: {
-      stripExtension: false,
-      browserConfig: 'assets/jspm.browser.js',
-      jspmConfig: 'assets/jspm.config.js',
-      files: [
-        'assets/**/*.es6',
-        { pattern: 'spec/javascripts/**/*.spec.js', included: true }
-      ]
+    webpack: webpackConfig,
+
+    webpackMiddleware: {
     },
+
+    plugins: [
+      'karma-jasmine',
+      'karma-jasmine-jquery',
+      'karma-jquery',
+      'karma-fixture',
+      'karma-webpack',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-junit-reporter'
+    ],
 
     browserNoActivityTimeout: 60000,
-
-    proxies: {
-      '/assets/': '/base/assets/',
-      '/assets/spec/': '/base/spec/',
-      '/jspm_packages/': '/assets/jspm_packages/'
-    },
 
     browsers: ['Chrome'],
 
