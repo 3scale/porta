@@ -29,10 +29,9 @@ html[lang="en"]
             = render partial: "/shared/provider/submenu"
           = render 'shared/provider/flash', flash: flash
           main#content.self_clear
-            - if content_for :title
-              h1 = content_for :title
             - if controller.sublayout
               = render partial: "/layouts/#{controller.sublayout.to_s}"
             - else
+              = render 'shared/provider/page_title'
               = yield
         = render partial: "/provider/footer"
