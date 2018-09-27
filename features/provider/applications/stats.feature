@@ -6,5 +6,5 @@ Feature: Application Stats
 
   Scenario: Stats access
     Given I'm on that application page
-     And I follow "Analytics" in the subsubmenu
+     And I follow "Analytics" in the application service subsubmenu
      Then I should see that application stats

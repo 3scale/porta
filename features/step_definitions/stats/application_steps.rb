@@ -21,7 +21,7 @@ When(/^the provider is logged in and visits the "(.*?)" application stats$/) do 
 
   assert_text "Application '#{developer_app_name}'"
 
-  within('ul#subsubmenu') do
+  within('ul.subsubmenu') do
     click_on 'Analytics', match: :one
   end
 

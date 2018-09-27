@@ -18,7 +18,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
   end
 
   test 'admin_url' do
-    assert_match  %r{/buyers/applications/[0-9]+\Z}, @drop.admin_url
+    assert_match Rails.application.routes.url_helpers.admin_service_application_path(@app.service, @app), @drop.admin_url
   end
 
   context "field definitions" do

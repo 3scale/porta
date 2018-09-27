@@ -8,7 +8,7 @@ article.DashboardWidget id = widget.id
       ol.DashboardWidgetList
         - widget.items.each do |item|
           li class="DashboardWidgetList-item DashboardWidgetList-item--#{item.state}"
-            = link_to item.application ? admin_buyers_application_path(item.application) : '#', class: 'DashboardWidgetList-link' do
+            = link_to (application = item.application) ? admin_service_application_path(application.service, application) : '#', class: 'DashboardWidgetList-link' do
               span.DashboardWidgetList-position
                 => item.position
                 span.DashboardWidgetList-change title=item.title

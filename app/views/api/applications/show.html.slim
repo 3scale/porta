@@ -1,9 +1,11 @@
+- content_for :sublayout_title, @cinstance.display_name
+
 = render 'menu'
 
 h1
   => @cinstance.display_name
   = link_to 'Edit',
-            edit_admin_buyers_application_path(@cinstance),
+            edit_admin_service_application_path(@cinstance.service, @cinstance),
             class: 'action edit'
 
 div#twoCol.equal-width
@@ -13,7 +15,8 @@ div#twoCol.equal-width
         tr
           th Account
           td
-            = link_to @account.name, admin_buyers_account_path(@account)
+            - account = @cinstance.buyer_account
+            = link_to account.name, admin_buyers_account_path(account)
 
         = fields_definitions_rows(@cinstance, %w{name})
         - service = @cinstance.service
@@ -22,7 +25,7 @@ div#twoCol.equal-width
             th Service
             td
               = link_to service.name, admin_services_path(anchor: dom_id(service))
-      = render 'state'
+      = render '/buyers/applications/state'
     - if can?(:see, :end_users) && @cinstance.end_users_allowed?
       div.wide_dashboard_bubble.round
         h3 EndUsers required?
@@ -30,18 +33,17 @@ div#twoCol.equal-width
           - if @cinstance.end_user_required?
             strong yes
             = action_link_to "don't require",
-                             admin_buyers_application_path(@cinstance, cinstance: { end_user_required: false }),
+                             admin_service_application_path(@cinstance.service, @cinstance, cinstance: { end_user_required: false }),
                              method: :put,
                              data: { confirm: "The application will stop rate limiting EndUsers, are you sure you want to do that?" }
           - else
             strong no
             = action_link_to :require,
-                             admin_buyers_application_path(@cinstance, cinstance: { end_user_required: true }),
+                             admin_service_application_path(@cinstance.service, @cinstance, cinstance: { end_user_required: true }),
                              method: :put,
                              data: { confirm: "Requiring EndUsers implies changes on the integration with 3scale's backend (adding the user_id parameter), are you sure you want to do it?" }
 
-
-    div.wide_dashboard_bubble.round#application_keys data-object="cinstance" data-url=(admin_buyers_application_path(@cinstance, :format => :json))
+    div.wide_dashboard_bubble.round#application_keys data-object="cinstance" data-url=(admin_service_application_path(@cinstance.service, @cinstance, format: :json))
       h3 API Credentials
       = render partial: 'provider/admin/keys/widget',
                locals: { cinstance: @cinstance }
@@ -66,8 +68,8 @@ div#twoCol.equal-width
 
   - unless master_on_premises?
     div.right_narrow
-      = render partial: 'plan', locals: { contract: @cinstance }
+      = render partial: '/buyers/applications/plan', locals: { contract: @cinstance }
 
       // HACK: this condition really hurts - more than dancing CanCan
       - if can?( :manage, :plans) && @cinstance.available_application_plans.size > 0 && !current_account.master?
-        = render 'change_plan'
+        = render '/buyers/applications/change_plan'

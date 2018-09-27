@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class Api::ApplicationsController < Api::BaseController
+  before_action :authorize_partners
+
   before_action :find_service
+  before_action :find_cinstance, only: %i[show edit]
+
   before_action :activate_submenu
 
   include ThreeScale::Search::Helpers
@@ -40,4 +44,25 @@ class Api::ApplicationsController < Api::BaseController
                       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
                       .paginate(pagination_params)
   end
+
+  def show
+    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
+  end
+
+  def edit; end
+
+  private
+
+  def find_cinstance
+    @cinstance = current_user.accessible_cinstances
+                   .provided_by(current_account)
+                   .includes(plan: %i[service original plan_metrics pricing_rules])
+                   .where(service: @service)
+                   .find(params[:id])
+  end
+
+  def authorize_partners
+    authorize! :manage, :partners
+  end
+
 end

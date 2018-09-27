@@ -20,7 +20,7 @@ class PlansMessenger < Messenger::Base
     @buyer = application.user_account
     @plan = new_plan
 
-    url = app_routes.admin_buyers_application_url(application, :host => application.account.provider_account.admin_domain)
+    url = app_routes.admin_service_application_url(application.service, application, host: application.account.provider_account.admin_domain)
     # Pending: Create a view for the body.
     body = %|#{@buyer.org_name} are requesting to have their plan changed to #{@plan.name} for application #{application.name}. You can do this from the application page: #{url}|
 

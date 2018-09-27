@@ -10,7 +10,7 @@ class Buyers::ApplicationsController < FrontendController
   before_action :authorize_multiple_applications, :only => [ :new, :create ]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
-  before_action :find_provider,  :only => [:edit, :new, :create, :update]
+  before_action :find_provider,  only: %i[new create update]
 
   before_action :find_application_plan,          :only => :create
 
@@ -55,11 +55,6 @@ class Buyers::ApplicationsController < FrontendController
     display_view_portion!(:service) if current_account.multiservice?
   end
 
-  def show
-    activate_menu :applications
-    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
-  end
-
   def new
     @cinstance = @buyer.bought_cinstances.build
     extend_cinstance_for_new_plan
@@ -82,17 +77,12 @@ class Buyers::ApplicationsController < FrontendController
 
     if @cinstance.save
       flash[:notice] = 'Application was successfully created.'
-      redirect_to(admin_buyers_application_path(@cinstance))
+      redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
       @plans = @provider.application_plans
       render :action => :new
     end
-  end
-
-  def edit
-    activate_menu :applications
-    @cinstance = current_account.provided_cinstances.find(params[:id])
   end
 
   def update
@@ -104,7 +94,7 @@ class Buyers::ApplicationsController < FrontendController
       if @cinstance.save
         format.html do
           flash[:notice] = 'Application was successfully updated.'
-          redirect_to(admin_buyers_application_path(@cinstance))
+          redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
         end
         format.json { render :json => @cinstance.to_json(:only => [:id, :name], :methods => [:errors]), :status => :ok }
       else
@@ -135,16 +125,17 @@ class Buyers::ApplicationsController < FrontendController
 
   def change_plan
     # there is no need to query available_application_plans as we already have a validation
-    new_plan = @cinstance.service.application_plans.stock.find(params[:cinstance][:plan_id])
+    service = @cinstance.service
+    new_plan = service.application_plans.stock.find(params[:cinstance][:plan_id])
     @cinstance.provider_changes_plan!(new_plan)
     flash[:notice] = "Plan changed to '#{new_plan.name}'."
-    redirect_to admin_buyers_application_url(@cinstance)
+    redirect_to admin_service_application_url(service, @cinstance)
   end
 
   def change_user_key
     with_password_confirmation! do
       @cinstance.change_user_key!
-      redirect_to admin_buyers_application_url(@cinstance), notice: 'The key was successfully changed'
+      redirect_to admin_service_application_url(@cinstance.service, @cinstance), notice: 'The key was successfully changed'
     end
   end
 
@@ -167,7 +158,7 @@ class Buyers::ApplicationsController < FrontendController
     respond_to do |format|
       format.html do
         flash[:notice] = message
-        redirect_to admin_buyers_application_url(@cinstance)
+        redirect_to admin_service_application_url(@cinstance.service, @cinstance)
       end
 
       format.js do

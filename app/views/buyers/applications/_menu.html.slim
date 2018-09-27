@@ -7,7 +7,7 @@ ul#subsubmenu
   - if @cinstance && !@cinstance.new_record?
     li.SubSubMenuItem.SubSubMenuItem--branch
       = link_to_unless_current_styled "Application '#{@cinstance.name}'",
-        admin_buyers_application_path(@cinstance),
+        admin_service_application_path(@cinstance.service, @cinstance),
         title: "application",
         class: "SubSubMenuItem-link"
 
