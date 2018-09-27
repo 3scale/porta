@@ -68,21 +68,6 @@ Feature: Menu
       | -               | -                    | Application      |
       | -               | Fields Definitions   |                  |
 
-    @fakeweb
-    Scenario: Backend dependent menu items
-      Given provider "foo.example.com" has no transaction errors
-      Given provider "foo.example.com" has no latest transactions
-      Then I should have menu
-         | Main Menu  | Submenu                 | Sidetabs    |
-         | Settings   |                         |             |
-         | -          | Legal Terms             |             |
-         | -          | -                       | Application |
-         | Analytics  |                         |             |
-         | -          | Traffic                 |             |
-         | -          | Integration errors      |             |
-        # WIP - highlighting does not work
-        # | -         | Analytics   |             |
-
 
     Scenario: With multiple applications enabled
       Given provider "foo.example.com" has multiple applications enabled
