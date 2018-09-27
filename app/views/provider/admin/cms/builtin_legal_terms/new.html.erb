@@ -5,7 +5,6 @@
 <h2>Legal Terms for <%= @page.title %></h2>
 
 <%= render 'info' %>
-xw
 <%= cms_form_for(@page) do |f| %>
   <%= render 'form', :f => f %>
   <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
