@@ -18,7 +18,6 @@ group :production, :preview, :development do
   gem 'rpm_contrib'
 end
 
-gem '3scale_client', '~> 2.6.1', require: false
 gem 'analytics-ruby', require: false
 
 group :development, :test do

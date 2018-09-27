@@ -79,6 +79,8 @@ when 'mysql'
   gem 'mysql2', '~>0.3.11'
 end
 
+gem '3scale_client', '~> 2.6.1', require: false
+
 gem 'nokogiri', '>= 1.6.8'
 gem 'dalli', '~> 2.7'
 gem 'secure_headers', '~> 2.2'
