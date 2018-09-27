@@ -1,22 +1,15 @@
-class Api::ErrorsController < FrontendController
+class Api::ErrorsController < Api::BaseController
 
-  activate_menu :monitoring, :integration_errors
+  before_action :find_service
+
+  activate_menu :monitoring, :analytics
+  sublayout 'stats'
 
   def index
-    services = if (service_id = params[:service_id])
-      current_user.accessible_services.where(id: service_id)
-               else
-      current_user.accessible_services
-               end
-
-    @service_errors = services.map do |service|
-      [service, errors_service.list(service.id, pagination_params)]
-    end
+    @errors = errors_service.list(@service.id, pagination_params)
   end
 
   def purge
-    @service = current_user.accessible_services.find(params[:service_id])
-
     authorize! :update, @service
 
     errors_service.delete_all(@service.id)
@@ -24,7 +17,7 @@ class Api::ErrorsController < FrontendController
     respond_to do |format|
       format.html do
         flash[:notice] = 'All errors were purged.'
-        redirect_to(admin_errors_url)
+        redirect_to(admin_service_errors_path(@service))
       end
 
       format.js
