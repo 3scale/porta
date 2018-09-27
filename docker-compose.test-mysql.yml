@@ -15,6 +15,8 @@ services:
     dns: 127.0.0.1
     container_name: ${PROJECT:-system}-build
     network_mode: bridge
+    ports:
+      - "3000:3000"
     cap_add:
       - SYS_PTRACE
     environment:
