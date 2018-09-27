@@ -103,7 +103,6 @@ module System
     config.assets.precompile = []
     config.assets.precompile << ->(path) do
       basename = File.basename(path)
-      next if path =~ %r{^jspm_packages/[^/]+/}
 
       extname = File.extname(basename)
 

@@ -45,10 +45,9 @@ WORKDIR /opt/system/
 VOLUME [ "/opt/system/tmp/cache/", \
          "/opt/system/vendor/bundle", \
          "/opt/system/node_modules", \
-         "/opt/system/assets/jspm_packages", \
          "/opt/system/public/assets", \
          "/opt/system/public/packs-test", \
-         "/root/.jspm", "/home/ruby/.luarocks" ]
+         "/home/ruby/.luarocks" ]
 
 ADD . ./
 ADD config/examples/*.yml config/

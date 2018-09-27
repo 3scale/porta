@@ -6,7 +6,7 @@ export PROJECT
 
 BUNDLE_GEMFILE ?= Gemfile
 
-TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log tmp/jspm
+TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log
 
 DB ?= mysql
 
