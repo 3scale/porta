@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ErrorsController < Api::BaseController
 
   before_action :find_service
