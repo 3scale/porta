@@ -15,11 +15,6 @@ class Api::ErrorsController < Api::BaseController
     errors_service.delete_all(@service.id)
 
     respond_to do |format|
-      format.html do
-        flash[:notice] = 'All errors were purged.'
-        redirect_to(admin_service_errors_path(@service))
-      end
-
       format.js
     end
   end
