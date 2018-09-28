@@ -544,7 +544,15 @@ class Invoice < ApplicationRecord
     friendly_id.sub(/(.+)-/, '')
   end
 
+  after_commit :set_friendly_id, on: :create
   after_commit :update_counter, on: :update
+
+  def set_friendly_id
+    return unless persisted?
+    InvoiceFriendlyIdWorker.perform_async(id)
+  end
+
+  private :set_friendly_id
 
   def update_counter
     return unless previous_changes.key?(:friendly_id)
