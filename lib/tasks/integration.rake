@@ -138,35 +138,29 @@ namespace :integrate do
 
 
   desc 'Runs subset of full test suite, in parallel (1/8)'
-  task :parallel_1 => %i[cucumber_javascript rspec]
+  task :parallel_1 => %i[verify_empty_reports_folder prepare cucumber_javascript rspec]
 
   desc 'Runs subset of full test suite, in parallel (2/8)'
-  task :parallel_2 => [:integration]
+  task :parallel_2 => %i[verify_empty_reports_folder prepare integration]
 
   desc 'Runs subset of full test suite, in parallel (3/8)'
-  task :parallel_3 => [:integration]
+  task :parallel_3 => %i[verify_empty_reports_folder prepare integration]
 
   desc 'Runs subset of full test suite, in parallel (4/8)'
-  task :parallel_4 => %i[functional main_suite]
+  task :parallel_4 => %i[verify_empty_reports_folder prepare functional main_suite]
 
   desc 'Runs subset of full test suite, in parallel (5/8)'
-  task :parallel_5 => [:cucumber_non_tagged]
+  task :parallel_5 => %i[verify_empty_reports_folder prepare cucumber_non_tagged]
 
   desc 'Runs subset of full test suite, in parallel (6/8)'
-  task :parallel_6 => [:cucumber_for_categories]
+  task :parallel_6 => %i[verify_empty_reports_folder prepare cucumber_for_categories]
 
 
 
   desc 'Runs the whole continuous integration test suite'
-  task :parallel, [:log] => %i[verify_empty_reports_folder prepare] do |t, args|
-
-    if ENV['CI']
-      ENV['COVERAGE'] = '1'
-      ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
-    end
+  task :parallel, [:log] do |t, args|
 
     banner = print_banner_around
-
 
     time = Benchmark.measure do
 
@@ -183,7 +177,6 @@ namespace :integrate do
     banner.call("Finished in #{format('%.1fs', time.real)}\n\t")
 
     Rake::Task['integrate:report_coverage_to_codeclimate'].invoke(7)
-
 
   end
 
@@ -213,8 +206,13 @@ namespace :integrate do
 
   end
 
-
+  desc 'Set environment variables on test coverage and percy and prepare database'
   task :prepare do
+    if ENV['CI']
+      ENV['COVERAGE'] = '1'
+      ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
+    end
+
     silence_stream(STDOUT) do
       require 'system/database'
       ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:schema:load multitenant:triggers')
