@@ -29,11 +29,12 @@
     = render 'shared/plan_change_settings', form: form, permission: :buyer_plan_change_permission, label: ''
 
 = form.inputs 'Alerts' do
-  p
-    ' Here you can set at which utilization levels you want to trigger alerts, whom you want to send these alerts to (admins and/or developers) and by which means (web and/or email).
-    em In order for an application to trigger usage alerts, usage limit(s) need to be set up in the Application Plan to which the application is subscribed.
+  li.full-width
+    p.inline-hints
+      ' Here you can set at which utilization levels you want to trigger alerts, whom you want to send these alerts to (admins and/or developers) and by which means (web and/or email).
+      em In order for an application to trigger usage alerts, usage limit(s) need to be set up in the Application Plan to which the application is subscribed.
 
-  div
+  li.full-width
     table id="notification-settings-table" class="data notification-settings"
       thead
         tr
