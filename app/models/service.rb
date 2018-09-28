@@ -34,6 +34,7 @@ class Service < ApplicationRecord
     service.has_many :service_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :end_user_plans, &DefaultPlanProxy
+    service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
   end
 
   def self.columns

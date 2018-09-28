@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180913135328) do
+ActiveRecord::Schema.define(version: 20180928114956) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -140,7 +140,10 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.string   "base_path",                limit: 255
     t.string   "swagger_version",          limit: 255
     t.boolean  "skip_swagger_validations",                    default: false
+    t.integer  "service_id",               limit: 8
   end
+
+  add_index "api_docs_services", ["service_id"], name: "fk_rails_e4d18239f1", using: :btree
 
   create_table "application_keys", force: :cascade do |t|
     t.integer  "application_id", limit: 8,   null: false
@@ -1419,6 +1422,7 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.boolean  "application_key_updated_on",                  default: false
   end
 
+  add_foreign_key "api_docs_services", "services"
   add_foreign_key "event_store_events", "accounts", column: "provider_id", on_delete: :cascade
   add_foreign_key "payment_details", "accounts", on_delete: :cascade
   add_foreign_key "proxy_configs", "proxies", on_delete: :cascade

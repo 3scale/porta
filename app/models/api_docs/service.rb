@@ -6,6 +6,7 @@ class ApiDocs::Service < ApplicationRecord
   extend System::Database::Scopes::IdOrSystemName
 
   belongs_to :account, required: true
+  belongs_to :service
 
   attr_accessible :account, :body, :name, :description, :published, :skip_swagger_validations
   attr_readonly :system_name
