@@ -18,6 +18,7 @@ class ApiDocs::Service < ApplicationRecord
   validates :name, :system_name, :base_path, :swagger_version, length: { maximum: 255 }
   validates :description, length: { maximum: 65535 }
   validates :body, length: { maximum: 4294967295, allow_blank: true }
+  validate :service_belongs_to_account, if: -> { service_id.present? && service_id_changed? }
 
   scope :published, -> { where(published: true) }
 
@@ -94,6 +95,12 @@ class ApiDocs::Service < ApplicationRecord
   end
 
   private
+
+  def service_belongs_to_account
+    return true if account.services.accessible.where(id: service_id).exists?
+    errors.add(:base, :service_account_mismatch)
+  end
+
   def should_notify?
     NotificationCenter.new(self).enabled?
   end
