@@ -8,7 +8,7 @@ class Api::ServicesController < Api::BaseController
   load_and_authorize_resource :service, through: :current_user,
     through_association: :accessible_services, except: [:create]
 
-  with_options only: [:edit, :update, :settings, :notifications] do |actions|
+  with_options only: %i[edit update settings] do |actions|
     actions.sublayout 'api/service'
 
     #actions.before_action :activate_submenu
@@ -30,11 +30,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def settings
-  end
-
-  def notifications
     @alert_limits = Alert::ALERT_LEVELS
-    activate_menu :sidebar => :alerts
   end
 
   def create
