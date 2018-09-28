@@ -118,17 +118,17 @@ button.create_key {
 }
 
 :target {
-    -webkit-animation: target-fade-in 0.5s 1;
-    -moz-animation: target-fade-in 0.5s 1;
+    -webkit-animation: target-fade 3s 1;
+    -moz-animation: target-fade 3s 1;
 }
 
-@-webkit-keyframes target-fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+@-webkit-keyframes target-fade {
+    0% { background-color: $focus-color; }
+    100% { background-color: rgba(0,0,0,0); }
 }
-@-moz-keyframes target-fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+@-moz-keyframes target-fade {
+    0% { background-color: $focus-color; }
+    100% { background-color: rgba(0,0,0,0); }
 }
 
 .link--icon-last {
