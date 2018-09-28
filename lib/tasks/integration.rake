@@ -60,7 +60,7 @@ def test_commands
   }
 
 end
-
+# rubocop:enable MethodLength
 
 
 
