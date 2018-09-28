@@ -5,7 +5,7 @@
     float: left;
 
     .PopNavigation-list {
-      left: line-height-times(15);
+      left: line-height-times(16);
     }
   }
 
@@ -13,7 +13,7 @@
     float: right;
 
     .PopNavigation-list {
-      right: line-height-times(1);
+      right: line-height-times(1 / 2);
     }
   }
 
@@ -21,7 +21,7 @@
     float: right;
 
     .PopNavigation-list {
-      right: line-height-times(1);
+      right: line-height-times(5 / 2);
     }
   }
 
