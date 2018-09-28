@@ -6,7 +6,6 @@ ul#side-tabs
     = sidebar_link 'Application Plans', admin_service_application_plans_path(@service)
 
     = sidebar_link :settings, settings_admin_service_path(@service)
-    = sidebar_link :alerts, notifications_admin_service_path(@service)
 
   - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
     = sidebar_link 'Service Plans', admin_service_service_plans_path(@service)

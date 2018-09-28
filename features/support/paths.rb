@@ -290,9 +290,6 @@ module NavigationHelpers
     when 'the service plans admin page'
       admin_service_service_plans_path provider_first_service!
 
-    when 'the alerts settings page'
-      notifications_admin_service_path provider_first_service!
-
     when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])

@@ -27,3 +27,29 @@
   = form.inputs "Application Plan Changing" do
 
     = render 'shared/plan_change_settings', form: form, permission: :buyer_plan_change_permission, label: ''
+
+= form.inputs 'Alerts' do
+  li.full-width
+    p.inline-hints
+      ' Here you can set at which utilization levels you want to trigger alerts, whom you want to send these alerts to (admins and/or developers) and by which means (web and/or email).
+      em In order for an application to trigger usage alerts, usage limit(s) need to be set up in the Application Plan to which the application is subscribed.
+
+  li.full-width
+    table id="notification-settings-table" class="data notification-settings"
+      thead
+        tr
+          th
+          - @alert_limits.each do |level|
+            th
+              = level
+              | %
+
+      tbody
+        = row_for_alert_levels 'Show Web Alerts to Admins of this Account', :web_provider
+        = row_for_alert_levels 'Send Email Alerts to Admins of this Account', :email_provider
+      thead
+        tr
+          th.spacer colspan="9"
+      tbody
+        = row_for_alert_levels 'Show Web Alerts to Admins of the Developer Account', :web_buyer
+        = row_for_alert_levels 'Send Email Alerts to Admins of the Developer Account', :email_buyer
