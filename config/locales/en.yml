@@ -794,6 +794,11 @@ en:
             kind:
               not_found: "unavailable for this account type"
 
+        api_docs/service:
+          attributes:
+            base:
+              service_account_mismatch: 'The service must belong to the same account.'
+
         metric:
           attributes:
             base:

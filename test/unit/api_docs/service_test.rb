@@ -4,7 +4,7 @@ require 'test_helper'
 class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
   setup do
-    @account = FactoryGirl.build_stubbed(:simple_provider)
+    @account = FactoryGirl.create(:simple_provider)
   end
 
   attr_reader :account
@@ -509,5 +509,29 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     assert service.valid?
 
     assert_equal "1.0", service.swagger_version
+  end
+
+  test 'It validates the Service belongs to the Account if both are set' do
+    service          = FactoryGirl.build(:service)
+    account          = service.account
+    another_account  = FactoryGirl.build(:simple_provider)
+    valid_attributes = {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
+
+    api_doc = service.api_docs_services.new(valid_attributes)
+    api_doc.account = account
+    assert api_doc.valid?
+
+    api_doc = account.api_docs_services.new(valid_attributes)
+    assert api_doc.valid?
+
+    api_doc = service.api_docs_services.new(valid_attributes)
+    api_doc.account = another_account
+    refute api_doc.valid?
+    assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
+
+    api_doc = another_account.api_docs_services.new(valid_attributes)
+    api_doc.service = service
+    refute api_doc.valid?
+    assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
   end
 end
