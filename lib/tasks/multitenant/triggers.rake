@@ -97,46 +97,35 @@ namespace :multitenant do
           :new.tenant_id := :new.provider_account_id;
         END IF;
 
-        SELECT numbering_period
-        INTO v_numbering_period
-        FROM billing_strategies
-        WHERE account_id = :new.provider_account_id
-        AND ROWNUM = 1;
+        IF :new.friendly_id IS NOT NULL AND :new.friendly_id <> 'fix' THEN
+          /* Subject to race condition, so better not to create invoices in parallel passing client-chosen friendly IDs */
+          SELECT numbering_period
+          INTO v_numbering_period
+          FROM billing_strategies
+          WHERE account_id = :new.provider_account_id
+          AND ROWNUM = 1;
 
-        IF v_numbering_period = 'monthly' THEN
-          v_invoice_prefix_format := 'YYYY-MM';
-        ELSE
-          v_invoice_prefix_format := 'YYYY';
-        END IF;
+          IF v_numbering_period = 'monthly' THEN
+            v_invoice_prefix_format := 'YYYY-MM';
+          ELSE
+            v_invoice_prefix_format := 'YYYY';
+          END IF;
 
-        v_invoice_prefix := TO_CHAR(:new.period, v_invoice_prefix_format);
+          v_invoice_prefix := TO_CHAR(:new.period, v_invoice_prefix_format);
 
-        BEGIN
-          SELECT invoice_count
-          INTO v_invoice_count
-          FROM invoice_counters
-          WHERE provider_account_id = :new.provider_account_id AND invoice_prefix = v_invoice_prefix
-          AND ROWNUM = 1
-          FOR UPDATE;
-        EXCEPTION
-          WHEN NO_DATA_FOUND THEN
-            v_invoice_count := 0;
-        END;
+          SELECT id, invoice_count
+                  INTO v_invoice_counter_id, v_invoice_count
+                  FROM invoice_counters
+                  WHERE provider_account_id = :new.provider_account_id AND invoice_prefix = v_invoice_prefix
+                  AND ROWNUM = 1
+                  FOR UPDATE;
 
-        IF :new.friendly_id IS NULL OR :new.friendly_id = 'fix' THEN /* default value set by ActiveRecord on create*/
-          UPDATE invoice_counters
-          SET invoice_count = invoice_count + 1, updated_at = :new.updated_at
-          WHERE provider_account_id = :new.provider_account_id AND invoice_prefix = v_invoice_prefix;
-
-          :new.friendly_id := CONCAT(CONCAT(v_invoice_prefix, '-'), LPAD(TO_CHAR(COALESCE(v_invoice_count, 0) + 1), 8, '0'));
-        ELSE
-          /* Else case is subject to race condition, so better not to create invoices in parallel passing client-chosen friendly IDs */
           v_chosen_sufix := COALESCE(TO_NUMBER(SUBSTR(:new.friendly_id, -8)), 0);
           v_invoice_count := GREATEST(v_invoice_count, v_chosen_sufix);
 
           UPDATE invoice_counters
           SET invoice_count = v_invoice_count, updated_at = :new.updated_at
-          WHERE provider_account_id = :new.provider_account_id AND invoice_prefix = v_invoice_prefix;
+          WHERE id = v_invoice_counter_id;
         END IF;
       SQL
 
@@ -502,40 +491,35 @@ namespace :multitenant do
           SET NEW.tenant_id = NEW.provider_account_id;
         END IF;
 
-        SET @numbering_period = (SELECT numbering_period
-                                 FROM billing_strategies
-                                 WHERE account_id = NEW.provider_account_id
-                                 LIMIT 1);
+        IF NEW.friendly_id IS NOT NULL AND NEW.friendly_id <> 'fix' THEN
+          /* Subject to race condition, so better not to create invoices in parallel passing client-chosen friendly IDs */
 
-        IF @numbering_period = 'monthly' THEN
-          SET @invoice_prefix_format = "%Y-%m";
-        ELSE
-          SET @invoice_prefix_format = "%Y";
-        END IF;
+          SET @numbering_period = (SELECT numbering_period
+                                   FROM billing_strategies
+                                   WHERE account_id = NEW.provider_account_id
+                                   LIMIT 1);
 
-        SET @invoice_prefix = DATE_FORMAT(NEW.period, @invoice_prefix_format);
+          IF @numbering_period = 'monthly' THEN
+            SET @invoice_prefix_format = "%Y-%m";
+          ELSE
+            SET @invoice_prefix_format = "%Y";
+          END IF;
 
-        SET @invoice_count = (SELECT invoice_count
-                              FROM invoice_counters
-                              WHERE provider_account_id = NEW.provider_account_id AND invoice_prefix = @invoice_prefix
-                              LIMIT 1
-                              FOR UPDATE);
+          SET @invoice_prefix = DATE_FORMAT(NEW.period, @invoice_prefix_format);
 
-        IF NEW.friendly_id IS NULL OR NEW.friendly_id = 'fix' THEN /* default value set by ActiveRecord on create*/
-          UPDATE invoice_counters
-          SET invoice_count = invoice_count + 1, updated_at = NEW.updated_at
-          WHERE provider_account_id = NEW.provider_account_id AND invoice_prefix = @invoice_prefix;
-
-          SET NEW.friendly_id = CONCAT(@invoice_prefix, '-', LPAD(COALESCE(@invoice_count, 0) + 1, 8, '0'));
-        ELSE
-          /* Else case is subject to race condition, so better not to create invoices in parallel passing client-chosen friendly IDs */
+          SELECT id, invoice_count
+                  INTO @invoice_counter_id, @invoice_count
+                  FROM invoice_counters
+                  WHERE provider_account_id = NEW.provider_account_id AND invoice_prefix = @invoice_prefix
+                  LIMIT 1
+                  FOR UPDATE;
 
           SET @chosen_sufix = COALESCE(SUBSTRING_INDEX(NEW.friendly_id, '-', -1), 0) * 1;
           SET @invoice_count = GREATEST(COALESCE(@invoice_count, 0), @chosen_sufix);
 
           UPDATE invoice_counters
           SET invoice_count = @invoice_count, updated_at = NEW.updated_at
-          WHERE provider_account_id = NEW.provider_account_id AND invoice_prefix = @invoice_prefix;
+          WHERE id = @invoice_counter_id;
         END IF;
       SQL
 
