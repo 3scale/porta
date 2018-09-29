@@ -7,6 +7,6 @@ class InvoiceFriendlyIdWorker
 
   def perform(invoice_id)
     invoice = Invoice.find invoice_id
-    ActiveRecord::Base.connection.execute("call sp_invoices_friendly_id(#{invoice.id})")
+    InvoiceFriendlyIdService.call!(invoice)
   end
 end
