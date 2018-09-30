@@ -12,6 +12,7 @@ Feature: Invoice PDFs
     And an issued invoice of buyer "bob" for August, 2011
     And current domain is the admin domain of provider "foo.example.com"
 
+  @commit-transactions
   Scenario: Provider side links on the invoice index and details
   Given current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
@@ -22,6 +23,7 @@ Feature: Invoice PDFs
     When I navigate to invoice 2011-08 issued by me for "bob"
     Then I should see secure PDF link for the shown invoice
 
+  @commit-transactions
   Scenario: Buyer side links on the invoice index and details
   Given the current domain is "foo.example.com"
     And I log in as "bob"
