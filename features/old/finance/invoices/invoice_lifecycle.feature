@@ -14,11 +14,13 @@ Feature: Invoice lifecycle
       And a buyer "alice" signed up to application plan "PaidAsInLunch"
       And I log in as "alice" on foo.example.com
 
+  @commit-transactions
   Scenario: Normal postpaid life-cycle
     When buyer "alice" has valid credit card
      And I see my invoice from "May, 2009" is "Pending" on 3rd June 2009
      And I see my invoice from "May, 2009" is "Paid" on 5th June 2009
 
+  @commit-transactions
   Scenario: All charging fails
    Given buyer "alice" has valid credit card with no money
 
