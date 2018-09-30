@@ -18,6 +18,7 @@ Feature: Provider lists all invoices
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
 
+  @commit-transactions
   Scenario: Filter invoices
       When I navigate to invoices issued by me
       Then I should see 10 invoices

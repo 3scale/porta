@@ -12,6 +12,7 @@ Feature: Change plan prepaid
       And an application plan "PaidAsInDiplomat" of provider "foo.example.com" for 3100 monthly
     Given the current domain is foo.example.com
 
+  @commit-transactions
   Scenario: Paying a fee without change plan PREPAID
     Given the time is 1st May 2009
       And provider "foo.example.com" is charging
@@ -23,6 +24,7 @@ Feature: Change plan prepaid
          | Fixed fee ('PaidAsInLunch')  | May 1, 2009 ( 0:00) - May 31, 2009 (23:59) |        1 | 31.00 |
          | Total cost                   |                                             |          | 31.00 |
 
+  @commit-transactions
   Scenario: Trial period ends and no change plan PREPAID
     Given plan "PaidAsInLunch" has trial period of 5 days
     Given the time is 1st May 2009
