@@ -515,7 +515,6 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     service          = FactoryGirl.build(:service)
     account          = service.account
     another_account  = FactoryGirl.build(:simple_provider)
-    valid_attributes = {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
 
     api_doc = service.api_docs_services.new(valid_attributes)
     api_doc.account = account
@@ -534,4 +533,11 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     refute api_doc.valid?
     assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
   end
+
+  private
+
+  def valid_attributes
+    @valid_attribures ||= {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
+  end
+
 end

@@ -78,7 +78,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "skip_swagger_validations", :description => "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec", :dataType => "boolean", :paramType => "query"
   #
   def update
-    @api_docs_service.update_attributes(api_docs_params)
+    @api_docs_service.update(api_docs_params, without_protection: true)
     respond_with(@api_docs_service)
   end
 
@@ -105,7 +105,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   protected
 
   def api_docs_params(*extra_params)
-    permit_params = %i(name body description published skip_swagger_validations) + extra_params
+    permit_params = %i[name body description published skip_swagger_validations service_id] + extra_params
     params.require(:api_docs_service).permit(*permit_params)
   end
 
