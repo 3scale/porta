@@ -246,8 +246,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-webkit (1.14.0)
-      capybara (>= 2.3.0, < 2.14.0)
+    capybara-webkit (1.15.1)
+      capybara (>= 2.3, < 4.0)
       json
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
@@ -534,7 +534,7 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
-    public_suffix (3.0.2)
+    public_suffix (3.0.3)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.10)
@@ -858,7 +858,7 @@ DEPENDENCIES
   bullet (~> 4.2)
   cancancan (~> 1.7.1)
   capybara (~> 2.13.0)!
-  capybara-webkit (~> 1.14.0)!
+  capybara-webkit (~> 1.15.1)!
   childprocess
   chronic
   ci_reporter_rspec (~> 1.0)
