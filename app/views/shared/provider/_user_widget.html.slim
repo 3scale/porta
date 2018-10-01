@@ -7,7 +7,7 @@ div id="user_widget"
         .header-logo
 
   - if current_account.multiservice? && can?(:manage, :plans)
-    #api_selector
+    = render 'shared/api_selector'
 
   .PopNavigation.PopNavigation--docs
     a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
@@ -57,10 +57,6 @@ div id="user_widget"
     = current_user.username
 
 javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    ApiSelector({currentApi: #{json @service}, apis: #{json @all_services}, controllerName: #{json controller_name}}, 'api_selector')
-  })
-
   $(document)
     .on('click', '.u-toggler', function (e) {
       e.stopPropagation()
