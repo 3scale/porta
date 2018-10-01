@@ -32,7 +32,7 @@ module ApiDocs
 
     PLAN_NAME = ->(plan) { "#{plan.name} | #{plan.service.name}" }
     def application_plan_ids
-      @account.application_plans.latest.map do |plan|
+      @account.application_plans.includes(:service).latest.map do |plan|
         { :name => PLAN_NAME.call(plan),
           :value => plan.id }
       end
