@@ -1,0 +1,10 @@
+#api_selector
+
+javascript:
+  document.addEventListener('DOMContentLoaded', function () {
+    ApiSelector({
+      currentApi: #{json @service},
+      apis: #{json @all_services},
+      controllerName: #{json controller_name}
+    }, 'api_selector')
+  })
