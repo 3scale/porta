@@ -1,5 +1,6 @@
 class Admin::ApiDocs::ServicesController < FrontendController
   before_action :find_service, :only => [:destroy, :edit, :update, :show, :preview, :toggle_visible]
+  before_action :find_service_apis_collection, only: %i[new edit update]
   before_action :deny_on_premises_for_master
 
   activate_menu :serviceadmin, :submenu => :active_docs
@@ -49,13 +50,16 @@ class Admin::ApiDocs::ServicesController < FrontendController
     @api_docs_service = current_account.api_docs_services.new
   end
 
+  def edit; end
+
   def update
     respond_to do |format|
-      if @api_docs_service.update_attributes(params[:api_docs_service])
+      if @api_docs_service.update(api_docs_params, without_protection: true)
         message = 'ActiveDocs Spec was successfully updated.'
         format.html { redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: message) }
         format.js { render :js => "jQuery.flash.notice('#{message}')" }
       else
+        flash[:error] = @api_docs_service.errors.full_messages.join(' ')
         format.html { render :edit }
         format.js {}
       end
@@ -67,15 +71,14 @@ class Admin::ApiDocs::ServicesController < FrontendController
   end
 
   def create
-    @api_docs_service = current_account.api_docs_services.new(params[:api_docs_service])
-    @api_docs_service.system_name = params[:api_docs_service][:system_name]
-
+    @api_docs_service = current_account.api_docs_services.new(api_docs_params(:system_name), without_protection: true)
     respond_to do |format|
       if @api_docs_service.save
         format.html do
           redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: 'ActiveDocs Spec was successfully saved.')
         end
       else
+        flash[:error] = @api_docs_service.errors.full_messages.join(' ')
         format.html { render :new }
       end
     end
@@ -93,28 +96,37 @@ class Admin::ApiDocs::ServicesController < FrontendController
 
   private
 
-    def find_service
-      @api_docs_service = current_account.api_docs_services.find_by_id_or_system_name!(params[:id])
-    end
+  def api_docs_params(*extra_params)
+    permit_params = %i[name body description published skip_swagger_validations service_id] + extra_params
+    params.require(:api_docs_service).permit(*permit_params)
+  end
 
-    def swagger_spec
-      if @api_docs_service.specification.swagger_2_0?
-        @api_docs_service.specification
-      else
-        resource_listing
-      end
-    end
+  def find_service_apis_collection
+    @service_apis = current_account.services.accessible
+  end
 
-    def resource_listing
-      {
-        swaggerVersion: "1.2",
-        apis: [
-          {
-            description: @api_docs_service.description.nil? ? @api_docs_service.name : @api_docs_service.description,
-            path: "#{admin_api_docs_service_path(@api_docs_service.system_name)}.{format}"
-          }
-        ],
-        basePath: "#{request.protocol}#{request_target_host}"
-      }
+  def find_service
+    @api_docs_service = current_account.api_docs_services.find_by_id_or_system_name!(params[:id])
+  end
+
+  def swagger_spec
+    if @api_docs_service.specification.swagger_2_0?
+      @api_docs_service.specification
+    else
+      resource_listing
     end
+  end
+
+  def resource_listing
+    {
+      swaggerVersion: "1.2",
+      apis: [
+        {
+          description: @api_docs_service.description.nil? ? @api_docs_service.name : @api_docs_service.description,
+          path: "#{admin_api_docs_service_path(@api_docs_service.system_name)}.{format}"
+        }
+      ],
+      basePath: "#{request.protocol}#{request_target_host}"
+    }
+  end
 end
