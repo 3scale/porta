@@ -13,5 +13,9 @@
 > Replace this comment with references to related issues. This will ensure the issue(s) are closed automatically when the PR gets merged.
 > e.g. `fixes #<issue number>(, fixes #<issue_number>, ...)`
 
+**Verification steps** 
+
+> Replace this with a list of necessary steps to verify the PR meets your expectations.
+> e.g. `1. Go to Admin Portal, make sure that ...`
 
 **Special notes for your reviewer**:
