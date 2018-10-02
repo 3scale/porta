@@ -14,11 +14,6 @@ nav.DashboardNavigation
                                                 admin_buyers_accounts_path(search: {state: 'pending'}),
                                                 'Pending'
 
-      // Account Plans
-      - if show_account_plans_on_dashboard?
-        == dashboard_secondary_collection_link 'Plan',
-                                              account_plans,
-                                              admin_buyers_account_plans_path
     // Billing
     - if can?(:manage, :finance)
       li.DashboardNavigation-list-item
