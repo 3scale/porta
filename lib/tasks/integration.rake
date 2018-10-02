@@ -127,12 +127,7 @@ namespace :integrate do
 
     time = Benchmark.measure do
 
-      Rake::Task['integrate:parallel_1'].invoke
-      Rake::Task['integrate:parallel_2'].invoke
-      Rake::Task['integrate:parallel_3'].invoke
-      Rake::Task['integrate:parallel_4'].invoke
-      Rake::Task['integrate:parallel_5'].invoke
-      Rake::Task['integrate:parallel_6'].invoke
+      Rake::Task.tasks.select { |task| task.name =~ /^integrate:parallel_/ }.map { |task| task.invoke }
       Rake::Task['integrate:license_checks'].invoke
     end
 
