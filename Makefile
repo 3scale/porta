@@ -159,7 +159,7 @@ oracle-database: ## Starts Oracle database container
 oracle-database: ORACLE_DATA_DIR ?= $(HOME)
 oracle-database:
 	[ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" = "true" ] || docker start oracle-database || docker run \
-		--shm-size=6gb \
+		--shm-size=5gb \
 		-p 1521:1521 -p 5500:5500 \
 		--name oracle-database \
 		-e ORACLE_PDB=systempdb \
