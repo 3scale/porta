@@ -93,9 +93,9 @@ task :integrate => 'integrate:parallel'
 
 namespace :integrate do
 
-  test_commands.keys.each do |command|
+  test_commands.each_key do |command|
     desc "Runs tests with #{command}"
-    task "#{command}" => :prepare do
+    task command.to_s => :prepare do
       run_tests(test_commands[command])
     end
   end
@@ -127,7 +127,7 @@ namespace :integrate do
 
     time = Benchmark.measure do
 
-      Rake::Task.tasks.select { |task| task.name =~ /^integrate:parallel_/ }.map { |task| task.invoke }
+      Rake::Task.tasks.select { |task| task.name =~ /^integrate:parallel_/ }.map(&:invoke)
       Rake::Task['integrate:license_checks'].invoke
     end
 
