@@ -44,9 +44,12 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.description = "Creates a new ActiveDocs spec"
   ##~ op.group = "active_docs"
   #
+  ##~ @parameter_service_id = {:name => "service_id", :description => "Service ID of the ActiveDocs spec", :dataType => "int", :paramType => "query", :required => false}
+  #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "name", :description => "Name of the ActiveDocs spec", :required => true, :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "system_name", :description => "System Name of the ActiveDocs spec. Only ASCII letters, numbers, dashes and underscores are allowed. If blank, 'system_name' will be generated from the 'name' parameter", :required => false, :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add @parameter_service_id
   ##~ op.parameters.add :name => "body", :description => "ActiveDocs specification in JSON format (based on Swagger)", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add :name => "description", :description => "Description of the ActiveDocs spec", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "published", :description => "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it. The default value is 'false'", :dataType => "boolean", :paramType => "query"
@@ -72,6 +75,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_active_doc_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the ActiveDocs spec", :required => false, :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add @parameter_service_id
   ##~ op.parameters.add :name => "body", :description => "ActiveDocs specification in JSON format (based on Swagger)", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "description", :description => "Description of the ActiveDocs spec", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "published", :description => "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it", :dataType => "boolean", :paramType => "query"
