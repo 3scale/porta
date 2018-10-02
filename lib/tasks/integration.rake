@@ -121,7 +121,7 @@ namespace :integrate do
 
 
   desc 'Runs the whole continuous integration test suite'
-  task :parallel, [:log] do |t, args|
+  task :parallel, [:log] do
 
     banner = print_banner_around
 
@@ -144,7 +144,7 @@ namespace :integrate do
   end
 
   desc 'Report code coverage to CodeClimate'
-  task :report_coverage_to_codeclimate, :number_of_groups  do |t, args|
+  task :report_coverage_to_codeclimate, :number_of_groups  do
     if ENV['COVERAGE']
       puts 'Sending test coverage to CodeClimate'
       FileUtils.cp(Dir["#{Dir.tmpdir}/codeclimate-test-coverage-*"],
