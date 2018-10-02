@@ -62,8 +62,24 @@ def test_commands
 end
 # rubocop:enable MethodLength
 
+def run_tests(test_command)
+  success = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}"
+  failure = "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
+  banner = print_banner_around
 
+  require 'ci_reporter_shell'
+  report = CiReporterShell.report('tmp/junit')
 
+  command = nil
+  result = report.execute(test_command, env: {RAILS_ENV: Rails.env}) do |cmd|
+    banner.call("BEGIN: #{cmd}")
+    command = cmd
+  end
+
+  banner.call("FINISH (#{result.success? ? success : failure}): #{command} in #{format('%.1fs', result.time)}")
+
+  abort "#{test_command} FAILED" unless result.success?
+end
 
 desc 'The default execution: the whole CI suite'
 task :integrate => 'integrate:parallel'
@@ -71,31 +87,10 @@ task :integrate => 'integrate:parallel'
 
 namespace :integrate do
 
-  desc 'Runs the set of tests passed as an argument, pretty formatting results, creating reports, etc.'
-  task :run_tests, [:test_command] do |t, args|
-    success = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}"
-    failure = "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
-    banner = print_banner_around
-
-    require 'ci_reporter_shell'
-    report = CiReporterShell.report('tmp/junit')
-
-    command = nil
-    result = report.execute(args.test_command, env: {RAILS_ENV: Rails.env}) do |cmd|
-      banner.call("BEGIN: #{cmd}")
-      command = cmd
-    end
-
-    banner.call("FINISH (#{result.success? ? success : failure}): #{command} in #{format('%.1fs', result.time)}")
-
-    abort "#{args.test_command} FAILED" unless result.success?
-
-  end
-
   test_commands.keys.each do |command|
     desc "Runs tests with #{command}"
     task "#{command}" => :prepare do
-      Rake::Task['integrate:run_tests'].invoke(test_commands[command])
+      run_tests(test_commands[command])
     end
   end
 
