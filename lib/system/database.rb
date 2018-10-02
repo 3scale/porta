@@ -290,6 +290,7 @@ if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::Oracle
       def create
         super
         connection.execute "GRANT create trigger TO #{username}"
+        connection.execute "GRANT create procedure TO #{username}"
       end
 
               protected
