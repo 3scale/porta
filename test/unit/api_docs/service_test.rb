@@ -512,9 +512,9 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'It validates the Service belongs to the Account if both are set' do
-    service          = FactoryGirl.build(:service)
+    service          = FactoryGirl.create(:service)
     account          = service.account
-    another_account  = FactoryGirl.build(:simple_provider)
+    another_account  = FactoryGirl.create(:simple_provider)
 
     api_doc = service.api_docs_services.new(valid_attributes)
     api_doc.account = account
@@ -532,12 +532,16 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     api_doc.service = service
     refute api_doc.valid?
     assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
+
+    api_doc = account.api_docs_services.new(valid_attributes.merge({service_id: service.id + 1000}), without_protection: true)
+    refute api_doc.valid?
+    assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
   end
 
   private
 
   def valid_attributes
-    @valid_attribures ||= {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
+    @valid_attributes ||= {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
   end
 
 end
