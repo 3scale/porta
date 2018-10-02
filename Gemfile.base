@@ -187,8 +187,8 @@ group :test do
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'simplecov', '~> 0.10.0'
 
-  gem 'capybara', '~> 2.13.0', source: 'https://rubygems.org'
-  gem 'capybara-webkit', '~> 1.14.0', source: 'https://rubygems.org'
+  gem 'capybara', '~> 2.18.0', source: 'https://rubygems.org'
+  gem 'capybara-webkit', '~> 1.15.1', source: 'https://rubygems.org'
 
   gem 'headless', '~> 2.3.1'
   gem 'selenium-webdriver', '~> 3.4', require: false

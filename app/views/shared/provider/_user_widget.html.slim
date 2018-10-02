@@ -1,8 +1,17 @@
+= javascript_pack_tag 'navigation'
+
 div id="user_widget"
+  ul id="top-menu-nav"
+    li class=('active' if active_menu?(:topmenu, :dashboard) )
+      = link_to provider_admin_dashboard_path, class: 'header-link' do
+        .header-logo
+
+  - if current_account.multiservice? && can?(:manage, :plans)
+    #api_selector
+
   .PopNavigation.PopNavigation--docs
     a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
-      => icon('info-circle')
-      | Documentation
+      => icon('question-circle')
     ul#documentation-menu.PopNavigation-list.u-toggleable
       - if saas?
         li.PopNavigation-listItem
@@ -43,33 +52,21 @@ div id="user_widget"
 
         = fixed_width_icon_link_to 'Sign Out', 'times', provider_logout_path, class: 'PopNavigation-link', title: "Logout #{current_user.username}"
 
-  ul id="top-menu-nav"
-    li class=('active' if active_menu?(:topmenu, :dashboard) )
-      = fixed_width_icon_link_to 'Dashboard', 'home', provider_admin_dashboard_path
-
   // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
   div class="username" style="display:none;"
     = current_user.username
 
-
 javascript:
+  document.addEventListener('DOMContentLoaded', function () {
+    ApiSelector({currentApi: #{json @service}, apis: #{json @all_services}, controllerName: #{json controller_name}}, 'api_selector')
+  })
+
   $(document)
-    .on('click', '.u-toggler', function(event) {
-      $(this).toggleClass('is-toggled');
-      var toggleable = $(this).siblings('.u-toggleable')
-      toggleable.toggleClass('is-toggled');
-      toggleable.find('input').filter(':visible:first').focus();
-      return false;
+    .on('click', '.u-toggler', function (e) {
+      e.stopPropagation()
+      toggleNavigation(e.currentTarget)
+      e.preventDefault()
     })
-
-    .on('click', '#docs-widget', function(event) {
-      event.stopPropagation();
+    .on('click', 'body', function () {
+      hideAllToggleable()
     })
-
-    .on('click', 'body', function(event){
-      var expanded = $(".PopNavigation .is-toggled");
-      if (expanded.length > 0) {
-        expanded.removeClass("is-toggled");
-        event.stopPropagation();
-      }
-    });
