@@ -252,7 +252,7 @@ module System
              EXECUTE IMMEDIATE 'DROP PROCEDURE #{name}';
           EXCEPTION
             WHEN OTHERS THEN
-              IF SQLCODE != -4080 THEN
+              IF SQLCODE != -4043 THEN
                 RAISE;
               END IF;
           END;
