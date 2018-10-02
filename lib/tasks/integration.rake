@@ -16,11 +16,17 @@ def print_banner_around
   end
 end
 
-def resolve_test_directories
+def get_top_level_folder_path(path)
+  path.descend.take(2).last
+end
 
-  directories_requiring_to_run_in_different_job_or_without_tests = %w[test_helpers fixtures shoulda_macros factories remote performance].map {|x| "test/#{x}"}
+def resolve_test_groups_by_path
 
-  Pathname.new("test").children.select(&:directory?).map(&:to_s) - directories_requiring_to_run_in_different_job_or_without_tests
+  obsolete_tests = %w[remote performance].map {|x| "test/#{x}"}
+
+  test_files = Pathname.glob('test/**/*_test.rb')
+  test_groups = test_files.group_by { |path| get_top_level_folder_path(path)}
+  test_groups.keys.map(&:to_s) - obsolete_tests
 
 end
 
@@ -34,7 +40,7 @@ def test_commands
     @no-txn
   ]
 
-  test_dirs = resolve_test_directories
+  test_dirs = resolve_test_groups_by_path
 
   {
     :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
