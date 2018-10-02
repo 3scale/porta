@@ -70,6 +70,11 @@ class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal old_body, api_docs_service.reload.body
     end
 
+    def test_update_unexistent_service
+      put admin_api_docs_service_path(api_docs_service), update_params(service_id: 200)
+      assert_includes flash[:error], 'The service must belong to the same account.'
+    end
+
     private
 
     attr_reader :provider, :service, :api_docs_service
