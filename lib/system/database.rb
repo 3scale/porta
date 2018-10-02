@@ -252,7 +252,7 @@ module System
              EXECUTE IMMEDIATE 'DROP PROCEDURE #{name}';
           EXCEPTION
             WHEN OTHERS THEN
-              IF SQLCODE != -4080 THEN
+              IF SQLCODE != -4043 THEN
                 RAISE;
               END IF;
           END;
@@ -290,6 +290,7 @@ if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::Oracle
       def create
         super
         connection.execute "GRANT create trigger TO #{username}"
+        connection.execute "GRANT create procedure TO #{username}"
       end
 
               protected
