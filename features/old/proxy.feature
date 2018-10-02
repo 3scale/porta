@@ -65,7 +65,7 @@ Feature: Proxy integration
     Then I should be able to switch back to using the default API Backend
 
 
-  @javascript
+  @javascript @selenium
   Scenario: Got some fancy policy chain
     And I go to the integration show page for service "one"
     And I press "Start using the latest APIcast"    

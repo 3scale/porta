@@ -16,7 +16,7 @@ Feature: API Settings
      And I press "Update Service"
     Then I should see "Service information updated"
 
-  @javascript
+  @javascript @selenium @ajax
   Scenario: Changing the backend version including OAuth and OIDC option
     Given provider "foo.example.com" uses backend v2 in his default service
     And provider "foo.example.com" has multiple applications enabled
@@ -28,7 +28,7 @@ Feature: API Settings
     And I press "Revert to the old APIcast"
     And I follow "edit integration settings"
     When I click on the label "API Key (user_key)"
-    And I press "Update Service"
+    And I press "Update Service" and I confirm dialog box
     Then I should see "Service information updated"
     And I go to the provider side "MegaWidget" application page
     Then I should see "User Key"
@@ -37,7 +37,7 @@ Feature: API Settings
     And I follow "edit integration settings"
     When I click on the label "APIcast self-managed"
     When I click on the label "The application is identified via the client_id and authenticated via an access token."
-    And I press "Update Service"
+    And I press "Update Service" and I confirm dialog box
     Then I should see "Service information updated"
     And I follow "add the base URL of your API and save the configuration."
     And I toggle "Authentication Settings"
@@ -47,7 +47,7 @@ Feature: API Settings
     And I follow "edit integration settings"
     When I click on the label "APIcast self-managed"
     When I click on the label "Use OpenID Connect for any OAuth 2.0 flow."
-    And I press "Update Service"
+    And I press "Update Service" and I confirm dialog box
     Then I should see "Service information updated"
     And I follow "add the base URL of your API and save the configuration."
     And I toggle "Authentication Settings"

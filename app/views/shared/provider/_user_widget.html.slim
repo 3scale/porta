@@ -3,7 +3,7 @@
 div id="user_widget"
   ul id="top-menu-nav"
     li class=('active' if active_menu?(:topmenu, :dashboard) )
-      = link_to provider_admin_dashboard_path, class: 'header-link' do
+      = link_to provider_admin_dashboard_path, class: 'header-link', title: 'Dashboard' do
         .header-logo
 
   - if current_account.multiservice? && can?(:manage, :plans) && @api_selector_services.size > 1
@@ -60,9 +60,11 @@ javascript:
   $(document)
     .on('click', '.u-toggler', function (e) {
       e.stopPropagation()
-      toggleNavigation(e.currentTarget)
+      window.toggleNavigation(e.currentTarget)
       e.preventDefault()
     })
-    .on('click', 'body', function () {
-      hideAllToggleable()
+    .on('click', 'body', function (e) {
+      if (e.target.type !== 'search') {
+        window.hideAllToggleable()
+      }
     })
