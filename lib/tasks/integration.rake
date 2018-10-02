@@ -92,50 +92,12 @@ namespace :integrate do
 
   end
 
-  task :cucumber_javascript => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:cucumber_javascript])
+  test_commands.keys.each do |command|
+    desc "Runs tests with #{command}"
+    task "#{command}" => :prepare do
+      Rake::Task['integrate:run_tests'].invoke(test_commands[command])
+    end
   end
-
-  task :rspec => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:rspec])
-  end
-
-  task :integration => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:integration])
-  end
-
-  task :swagger => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:swagger])
-  end
-
-  task :frontend => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:frontend])
-  end
-
-  task :functional => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:functional])
-  end
-
-  task :main_suite => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:main_suite])
-  end
-
-  task :cucumber_non_tagged => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:cucumber_non_tagged])
-  end
-
-  task :cucumber_for_categories => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:cucumber_for_categories])
-  end
-
-  task :license_checks => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:license_checks])
-  end
-
-  task :percy => :prepare do
-    Rake::Task['integrate:run_tests'].invoke(test_commands[:percy])
-  end
-
 
   desc 'Runs subset of full test suite, in parallel (1/8)'
   task :parallel_1 => %i[verify_empty_reports_folder prepare cucumber_javascript rspec]
