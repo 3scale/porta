@@ -4,126 +4,44 @@ require 'color'
 require 'benchmark'
 
 
-def print_banner_around
-  lambda do |line|
-    puts
-    puts "=" * 40
-    puts "== #{Color::BOLD}#{line}#{Color::CLEAR}"
-    puts "=" * 40
-    puts
-
-    line
-  end
-end
-
-def get_top_level_folder_path(path)
-  path.descend.take(2).last
-end
-
-def resolve_test_groups_by_path
-
-  obsolete_tests = %w[remote performance].map {|x| "test/#{x}"}
-
-  test_files = Pathname.glob('test/**/*_test.rb')
-  test_groups = test_files.group_by { |path| get_top_level_folder_path(path)}
-  test_groups.keys.map(&:to_s) - obsolete_tests
-
-end
-
-# rubocop:disable MethodLength
-def test_commands
-  tags_for_test_categories = %w[
-    @backend
-    @emails
-    @stats
-    @search
-    @no-txn
-  ]
-
-  test_dirs = resolve_test_groups_by_path
-
-  {
-    :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
-    :cucumber_non_tagged => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %(--tags=~#{t})}.join(' ')}"),
-    :cucumber_for_categories => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"),
-
-    :rspec => 'parallel_rspec --verbose spec',
-    :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
-    :swagger => [
-      'rake doc:swagger:validate:all',
-      'rake doc:swagger:generate:all',
-    ],
-    :frontend => [
-      'rake ci:jspm --trace',
-      'yarn test -- --reporters dots,junit --browsers Firefox',
-      'yarn jest',
-      'rake db:purge db:setup',
-    ],
-    :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
-    :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
-    :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
-    :percy => 'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features',
-  }
-
-end
-# rubocop:enable MethodLength
-
-def run_tests(test_command)
-  success = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}"
-  failure = "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
-  banner = print_banner_around
-
-  require 'ci_reporter_shell'
-  report = CiReporterShell.report('tmp/junit')
-
-  command = nil
-  result = report.execute(test_command, env: {RAILS_ENV: Rails.env}) do |cmd|
-    banner.call("BEGIN: #{cmd}")
-    command = cmd
-  end
-
-  banner.call("FINISH (#{result.success? ? success : failure}): #{command} in #{format('%.1fs', result.time)}")
-
-  abort "#{test_command} FAILED" unless result.success?
-end
-
 desc 'The default execution: the whole CI suite'
 task :integrate => 'integrate:parallel'
 
 
 namespace :integrate do
 
-  test_commands.each_key do |command|
+  # Dynamically generate all tasks from test_commands
+  TestOrchestrationHelpers.test_commands.each_key do |command|
     desc "Runs tests with #{command}"
     task command.to_s => :prepare do
-      run_tests(test_commands[command])
+      TestOrchestrationHelpers.run_tests(TestOrchestrationHelpers.test_commands[command])
     end
   end
 
   desc 'Runs subset of full test suite, in parallel (1/8)'
-  task :parallel_1 => %i[verify_empty_reports_folder prepare cucumber_javascript rspec]
+  task :parallel_1 => %i[prepare cucumber_javascript rspec]
 
   desc 'Runs subset of full test suite, in parallel (2/8)'
-  task :parallel_2 => %i[verify_empty_reports_folder prepare integration]
+  task :parallel_2 => %i[prepare integration]
 
   desc 'Runs subset of full test suite, in parallel (3/8)'
-  task :parallel_3 => %i[verify_empty_reports_folder prepare integration]
+  task :parallel_3 => %i[prepare integration]
 
   desc 'Runs subset of full test suite, in parallel (4/8)'
-  task :parallel_4 => %i[verify_empty_reports_folder prepare functional main_suite]
+  task :parallel_4 => %i[prepare functional main_suite]
 
   desc 'Runs subset of full test suite, in parallel (5/8)'
-  task :parallel_5 => %i[verify_empty_reports_folder prepare cucumber_non_tagged]
+  task :parallel_5 => %i[prepare cucumber_non_tagged]
 
   desc 'Runs subset of full test suite, in parallel (6/8)'
-  task :parallel_6 => %i[verify_empty_reports_folder prepare cucumber_for_categories]
+  task :parallel_6 => %i[prepare cucumber_for_categories]
 
 
 
   desc 'Runs the whole continuous integration test suite'
   task :parallel, [:log] do
 
-    banner = print_banner_around
+    banner = TestOrchestrationHelpers.print_banner_around
 
     time = Benchmark.measure do
 
@@ -138,7 +56,6 @@ namespace :integrate do
 
   end
 
-  desc 'Report code coverage to CodeClimate'
   task :report_coverage_to_codeclimate, :number_of_groups  do
     if ENV['COVERAGE']
       puts 'Sending test coverage to CodeClimate'
@@ -152,18 +69,6 @@ namespace :integrate do
     end
   end
 
-  desc 'Ensures that the test reports folder is empty'
-  task :verify_empty_reports_folder do
-    junit = Dir['tmp/junit/**']
-
-    if junit.present?
-      puts 'WARNING: tmp/junit is not empty'
-      puts junit
-      abort 'Will not continue, tmp/junit is not empty'
-    end
-
-  end
-
   desc 'Set environment variables on test coverage and percy and prepare database'
   task :prepare do
     if ENV['CI']
@@ -171,11 +76,114 @@ namespace :integrate do
       ENV['PERCY_ENABLE'] = '0' # percy will be enabled just for one task
     end
 
+    TestOrchestrationHelpers.verify_empty_reports_folder
+
     silence_stream(STDOUT) do
       require 'system/database'
       ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:schema:load multitenant:triggers')
       Rake::Task['ts:configure'].invoke
     end
   end
+
+end
+
+module TestOrchestrationHelpers
+
+  def print_banner_around
+    lambda do |line|
+      puts
+      puts "=" * 40
+      puts "== #{Color::BOLD}#{line}#{Color::CLEAR}"
+      puts "=" * 40
+      puts
+
+      line
+    end
+  end
+
+
+  def get_top_level_folder_path(path)
+    path.descend.take(2).last
+  end
+
+  def resolve_test_groups_by_path
+
+    obsolete_tests = %w[remote performance].map {|x| "test/#{x}"}
+
+    test_files = Pathname.glob('test/**/*_test.rb')
+    test_groups = test_files.group_by { |path| get_top_level_folder_path(path)}
+    test_groups.keys.map(&:to_s) - obsolete_tests
+
+  end
+
+  def verify_empty_reports_folder
+    junit = Dir['tmp/junit/**']
+
+    return unless junit.present?
+
+    puts 'WARNING: tmp/junit is not empty'
+    puts junit
+    abort 'Will not continue, tmp/junit is not empty'
+
+  end
+
+
+  # rubocop:disable MethodLength
+  def test_commands
+    tags_for_test_categories = %w[
+      @backend
+      @emails
+      @stats
+      @search
+      @no-txn
+    ]
+
+    test_dirs = resolve_test_groups_by_path
+
+    {
+      :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
+      :cucumber_non_tagged => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %(--tags=~#{t})}.join(' ')}"),
+      :cucumber_for_categories => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"),
+
+      :rspec => 'parallel_rspec --verbose spec',
+      :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
+      :swagger => [
+        'rake doc:swagger:validate:all',
+        'rake doc:swagger:generate:all',
+      ],
+      :frontend => [
+        'rake ci:jspm --trace',
+        'yarn test -- --reporters dots,junit --browsers Firefox',
+        'yarn jest',
+        'rake db:purge db:setup',
+      ],
+      :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
+      :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
+      :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
+      :percy => 'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features',
+    }
+
+  end
+  # rubocop:enable MethodLength
+
+  def run_tests(test_command)
+    success = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}"
+    failure = "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
+    banner = print_banner_around
+
+    require 'ci_reporter_shell'
+    report = CiReporterShell.report('tmp/junit')
+
+    command = nil
+    result = report.execute(test_command, env: {RAILS_ENV: Rails.env}) do |cmd|
+      banner.call("BEGIN: #{cmd}")
+      command = cmd
+    end
+
+    banner.call("FINISH (#{result.success? ? success : failure}): #{command} in #{format('%.1fs', result.time)}")
+
+    abort "#{test_command} FAILED" unless result.success?
+  end
+
 
 end
