@@ -44,11 +44,11 @@ task :integrate, :log do |_, args|
 
   kind = {
     '1' => [
-      'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
-      'parallel_rspec --verbose spec',
+      'parallel_cucumber --isolate --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
+      'parallel_rspec --isolate --verbose spec',
     ],
     '2' => [
-      "parallel_test --verbose #{test_dirs.delete('test/integration')}",
+      "parallel_test --isolate --verbose #{test_dirs.delete('test/integration')}",
     ],
     '3' => [
       'rake doc:swagger:validate:all',
@@ -59,14 +59,14 @@ task :integrate, :log do |_, args|
       'rake db:purge db:setup',
     ],
     '4' => [
-      "parallel_test --verbose #{test_dirs.delete('test/functional')}",
-      "parallel_test --verbose #{test_dirs.join(' ')}",
+      "parallel_test --isolate --verbose #{test_dirs.delete('test/functional')}",
+      "parallel_test --isolate --verbose #{test_dirs.join(' ')}",
     ],
     '5' => [
-      %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags.map{|t| %Q|--tags=~#{t}| }.join(' ')}"},
+      %Q{parallel_cucumber --isolate --verbose features -o "-b -p parallel --tags=~@javascript #{tags.map{|t| %Q|--tags=~#{t}| }.join(' ')}"},
     ],
     '6' => [
-      %Q{parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags.join(',')}"},
+      %Q{parallel_cucumber --isolate --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags.join(',')}"},
     ],
 
     'percy' => [

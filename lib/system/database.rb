@@ -246,6 +246,11 @@ module System
     private_constant :StoredProcedure
 
     class OracleStoredProcedure < StoredProcedure
+      def params_declaration
+        pairs = params.map { |name, type| "#{name} IN #{type}" }
+        "(#{pairs.join(', ')})"
+      end
+
       def drop
         <<~SQL
           BEGIN
@@ -261,7 +266,8 @@ module System
 
       def create
         <<~SQL
-          CREATE PROCEDURE #{signature} AS #{body}
+          CREATE OR REPLACE PROCEDURE #{signature} AS
+          #{body}
         SQL
       end
     end

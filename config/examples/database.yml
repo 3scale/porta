@@ -6,7 +6,8 @@ default: &DEFAULT
   database: systempdb<%= ENV['TEST_ENV_NUMBER'] %>
   host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
   time_zone: 'UTC'
-  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 250) %>
+  cursor_sharing: exact
 
 production:
   <<: *DEFAULT

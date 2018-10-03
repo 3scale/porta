@@ -1,8 +1,10 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT_PATH := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
 PROJECT = $(subst @,,$(notdir $(subst /workspace,,$(PROJECT_PATH))))
-
 export PROJECT
+
+ORACLE_SID := threescale$(shell bash -c "echo $(PROJECT) | sed 's/^[^0-9]*//g'")
+export ORACLE_SID
 
 BUNDLE_GEMFILE ?= Gemfile
 
@@ -159,7 +161,7 @@ oracle-database: ## Starts Oracle database container
 oracle-database: ORACLE_DATA_DIR ?= $(HOME)
 oracle-database:
 	[ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" = "true" ] || docker start oracle-database || docker run \
-		--shm-size=6gb \
+		--shm-size=5gb \
 		-p 1521:1521 -p 5500:5500 \
 		--name oracle-database \
 		-e ORACLE_PDB=systempdb \
@@ -168,7 +170,7 @@ oracle-database:
 		-e ORACLE_CHARACTERSET=AL32UTF8 \
 		-v $(ORACLE_DATA_DIR)/oracle-database:/opt/oracle/oradata \
 		-v $(PWD)/script/oracle:/opt/oracle/scripts/setup \
-		quay.io/3scale/oracle:12.2.0.1-ee
+		$(ORACLE_DB_IMAGE)
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help

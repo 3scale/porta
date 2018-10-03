@@ -1,6 +1,7 @@
 version: '2.1'
 services:
   database:
+    shm_size: 5gb
     image: ${ORACLE_DB_IMAGE:-quay.io/3scale/oracle:12.2.0.1-ee}
     privileged: true
     container_name: ${PROJECT:-system}-database
@@ -9,7 +10,7 @@ services:
       - "${PWD}/script/oracle:/opt/oracle/scripts/setup"
     environment:
       ORACLE_CHARACTERSET: 'AL32UTF8'
-      ORACLE_SID: 'threescale'
+      ORACLE_SID: "${ORACLE_SID:-threescale}"
       ORACLE_PDB: 'systempdb'
       ORACLE_PWD: 'threescalepass'
   cache:
