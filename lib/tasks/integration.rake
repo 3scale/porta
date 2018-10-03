@@ -101,7 +101,6 @@ module TestOrchestrationHelpers
     end
   end
 
-
   def get_top_level_folder_path(path)
     path.descend.take(2).last
   end
@@ -119,14 +118,13 @@ module TestOrchestrationHelpers
   def verify_empty_reports_folder
     junit = Dir['tmp/junit/**']
 
-    return unless junit.present?
+    return if junit.blank?
 
     puts 'WARNING: tmp/junit is not empty'
     puts junit
     abort 'Will not continue, tmp/junit is not empty'
 
   end
-
 
   # rubocop:disable MethodLength
   def test_commands
