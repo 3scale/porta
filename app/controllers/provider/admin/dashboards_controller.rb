@@ -14,6 +14,7 @@ class Provider::Admin::DashboardsController < FrontendController
     # .scoped(:include => [ :message => [ :sender ]])
     #
     # but 'Cannot eagerly load the polymorphic association :sender'
+    @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
   end

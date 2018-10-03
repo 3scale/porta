@@ -7,7 +7,7 @@ div id="user_widget"
         .header-logo
 
   - if current_account.multiservice? && can?(:manage, :plans)
-    = render 'shared/api_selector' unless controller.controller_name == 'services' && controller.action_name == 'new'
+    = render 'shared/api_selector'
 
   .PopNavigation.PopNavigation--docs
     a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
