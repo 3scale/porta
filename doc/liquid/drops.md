@@ -362,6 +362,9 @@ Returns the url of the API spec.
 ### system_name
 Returns the name of the spec.
 
+### service
+Returns the service of the spec if it has any or nil otherwise.
+
 -----------
 
 # Application drop
@@ -2330,6 +2333,13 @@ You can enable or disable account management in the [usage rules section][usage-
 
 ### api_specs
 Returns API spec collection.
+```liquid
+<ul>
+{% for api_spec in provider.api_specs %}
+  <li>{{ api_spec.system_name }}</li>
+{% endfor %}
+</ul>
+```
 
 -----------
 
@@ -2603,6 +2613,16 @@ Returns the metrics of the service.
 
 ### support_email
 Support email of the service.
+
+### api_specs
+Returns API spec collection.
+```liquid
+<ul>
+{% for api_spec in service.api_specs %}
+  <li>{{ api_spec.system_name }}</li>
+{% endfor %}
+</ul>
+```
 
 -----------
 
