@@ -846,7 +846,7 @@ this returns the errors that occurred.</p>
 <h3>
 <a name="service" class="anchor" href="#service"><span class="mini-icon mini-icon-link"></span></a>service</h3>
 
-<p>Returns the service of the spec if it has any or nil otherwise.</p>
+<p>Returns the service of the spec if it has any or <code>nil</code> otherwise.</p>
 
 <hr>
 
@@ -1295,20 +1295,6 @@ it does not affect existing contracts.</p>
 <a name="methods-8" class="anchor" href="#methods-8"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
 
 <h3>
-<a name="login_url" class="anchor" href="#login_url"><span class="mini-icon mini-icon-link"></span></a>login_url</h3>
-
-<h3>
-<a name="user_identified" class="anchor" href="#user_identified"><span class="mini-icon mini-icon-link"></span></a>user_identified?</h3>
-
-<hr>
-
-<h1>
-<a name="base-drop-1" class="anchor" href="#base-drop-1"><span class="mini-icon mini-icon-link"></span></a>Base drop</h1>
-
-<h2>
-<a name="methods-9" class="anchor" href="#methods-9"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
-
-<h3>
 <a name="errors-4" class="anchor" href="#errors-4"><span class="mini-icon mini-icon-link"></span></a>errors</h3>
 
 <p>If a form for this model is rendered after unsuccessful submission,
@@ -1339,6 +1325,20 @@ this returns the errors that occurred.</p>
 <a name="description-1" class="anchor" href="#description-1"><span class="mini-icon mini-icon-link"></span></a>description</h3>
 
 <p>Returns a descriptive string for the result.</p>
+
+<hr>
+
+<h1>
+<a name="base-drop-1" class="anchor" href="#base-drop-1"><span class="mini-icon mini-icon-link"></span></a>Base drop</h1>
+
+<h2>
+<a name="methods-9" class="anchor" href="#methods-9"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<h3>
+<a name="login_url" class="anchor" href="#login_url"><span class="mini-icon mini-icon-link"></span></a>login_url</h3>
+
+<h3>
+<a name="user_identified" class="anchor" href="#user_identified"><span class="mini-icon mini-icon-link"></span></a>user_identified?</h3>
 
 <hr>
 
@@ -1390,6 +1390,17 @@ this returns the errors that occurred.</p>
 <a name="methods-11" class="anchor" href="#methods-11"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
 
 <h3>
+<a name="change_plan" class="anchor" href="#change_plan"><span class="mini-icon mini-icon-link"></span></a>change_plan?</h3>
+
+<hr>
+
+<h1>
+<a name="can-drop-1" class="anchor" href="#can-drop-1"><span class="mini-icon mini-icon-link"></span></a>Can drop</h1>
+
+<h2>
+<a name="methods-12" class="anchor" href="#methods-12"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<h3>
 <a name="be_updated" class="anchor" href="#be_updated"><span class="mini-icon mini-icon-link"></span></a>be_updated?</h3>
 
 <h3>
@@ -1412,17 +1423,6 @@ this returns the errors that occurred.</p>
 
 <h3>
 <a name="delete_key" class="anchor" href="#delete_key"><span class="mini-icon mini-icon-link"></span></a>delete_key?</h3>
-
-<hr>
-
-<h1>
-<a name="can-drop-1" class="anchor" href="#can-drop-1"><span class="mini-icon mini-icon-link"></span></a>Can drop</h1>
-
-<h2>
-<a name="methods-12" class="anchor" href="#methods-12"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
-
-<h3>
-<a name="change_plan" class="anchor" href="#change_plan"><span class="mini-icon mini-icon-link"></span></a>change_plan?</h3>
 
 <hr>
 
@@ -2406,6 +2406,29 @@ this returns the errors that occurred.</p>
 <a name="methods-28" class="anchor" href="#methods-28"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
 
 <h3>
+<a name="type" class="anchor" href="#type"><span class="mini-icon mini-icon-link"></span></a>type</h3>
+
+<p>Possible types of the messages are:</p>
+
+<ul>
+<li>success (not used by now)</li>
+<li>info</li>
+<li>warning</li>
+<li>danger</li>
+</ul>
+
+<h3>
+<a name="text" class="anchor" href="#text"><span class="mini-icon mini-icon-link"></span></a>text</h3>
+
+<hr>
+
+<h1>
+<a name="message-drop-1" class="anchor" href="#message-drop-1"><span class="mini-icon mini-icon-link"></span></a>Message drop</h1>
+
+<h2>
+<a name="methods-29" class="anchor" href="#methods-29"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
+
+<h3>
 <a name="errors-15" class="anchor" href="#errors-15"><span class="mini-icon mini-icon-link"></span></a>errors</h3>
 
 <p>If a form for this model is rendered after unsuccessful submission,
@@ -2462,29 +2485,6 @@ this returns the errors that occurred.</p>
 
 <h3>
 <a name="recipients" class="anchor" href="#recipients"><span class="mini-icon mini-icon-link"></span></a>recipients</h3>
-
-<hr>
-
-<h1>
-<a name="message-drop-1" class="anchor" href="#message-drop-1"><span class="mini-icon mini-icon-link"></span></a>Message drop</h1>
-
-<h2>
-<a name="methods-29" class="anchor" href="#methods-29"><span class="mini-icon mini-icon-link"></span></a>Methods</h2><span class="up"> <a href="#table-of-contents">(up)</a></span>
-
-<h3>
-<a name="type" class="anchor" href="#type"><span class="mini-icon mini-icon-link"></span></a>type</h3>
-
-<p>Possible types of the messages are:</p>
-
-<ul>
-<li>success (not used by now)</li>
-<li>info</li>
-<li>warning</li>
-<li>danger</li>
-</ul>
-
-<h3>
-<a name="text" class="anchor" href="#text"><span class="mini-icon mini-icon-link"></span></a>text</h3>
 
 <hr>
 
@@ -3925,14 +3925,10 @@ this returns the errors that occurred.</p>
 <h3>
 <a name="title-5" class="anchor" href="#title-5"><span class="mini-icon mini-icon-link"></span></a>title</h3>
 
-<h3>
-<a name="kind-4" class="anchor" href="#kind-4"><span class="mini-icon mini-icon-link"></span></a>kind</h3>
+<p>Name of the topic. Submitted when first post to the thread is posted.</p>
 
 <h3>
 <a name="url-12" class="anchor" href="#url-12"><span class="mini-icon mini-icon-link"></span></a>url</h3>
-
-<h3>
-<a name="description-10" class="anchor" href="#description-10"><span class="mini-icon mini-icon-link"></span></a>description</h3>
 
 <hr>
 
@@ -3957,10 +3953,14 @@ this returns the errors that occurred.</p>
 <h3>
 <a name="title-6" class="anchor" href="#title-6"><span class="mini-icon mini-icon-link"></span></a>title</h3>
 
-<p>Name of the topic. Submitted when first post to the thread is posted.</p>
+<h3>
+<a name="kind-4" class="anchor" href="#kind-4"><span class="mini-icon mini-icon-link"></span></a>kind</h3>
 
 <h3>
 <a name="url-13" class="anchor" href="#url-13"><span class="mini-icon mini-icon-link"></span></a>url</h3>
+
+<h3>
+<a name="description-10" class="anchor" href="#description-10"><span class="mini-icon mini-icon-link"></span></a>description</h3>
 
 <hr>
 

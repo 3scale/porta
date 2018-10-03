@@ -363,7 +363,7 @@ Returns the url of the API spec.
 Returns the name of the spec.
 
 ### service
-Returns the service of the spec if it has any or nil otherwise.
+Returns the service of the spec if it has any or `nil` otherwise.
 
 -----------
 
@@ -700,6 +700,19 @@ OAuth callback url.
 
 
 ## Methods
+### login_url
+
+### user_identified?
+
+-----------
+
+# Base drop
+
+
+
+
+
+## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -722,19 +735,6 @@ Returns the resource URL of the result.
 
 ### description
 Returns a descriptive string for the result.
-
------------
-
-# Base drop
-
-
-
-
-
-## Methods
-### login_url
-
-### user_identified?
 
 -----------
 
@@ -2121,20 +2121,13 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### body
-Text of the post.
+### title
 
-### topic
-Every post belongs to a [topic](#topic-drop).
-
-### created_at
-Date when this post created.
-```liquid
-{{ post.created_at | date: i18n.short_date }}
-```
+### kind
 
 ### url
-The URL of this post within its topic.
+
+### description
 
 -----------
 
@@ -2156,13 +2149,20 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### title
+### body
+Text of the post.
 
-### kind
+### topic
+Every post belongs to a [topic](#topic-drop).
+
+### created_at
+Date when this post created.
+```liquid
+{{ post.created_at | date: i18n.short_date }}
+```
 
 ### url
-
-### description
+The URL of this post within its topic.
 
 -----------
 
@@ -2870,12 +2870,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 
@@ -2898,9 +2895,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 
