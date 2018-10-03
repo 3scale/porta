@@ -90,7 +90,7 @@ class Service < ApplicationRecord
 
   has_many :service_tokens, inverse_of: :service, dependent: :destroy
 
-  scope :accessible, -> { where.not(state: DELETE_STATE.freeze) }
+  scope :accessible, -> { where.not(state: DELETE_STATE) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
 
   validates :tech_support_email, :admin_support_email, :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
