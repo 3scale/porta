@@ -14,13 +14,13 @@ $ ->
 
   show_service_form = (source, discover_func, scratch_func)->
     if source == 'discover'
-      form_scratch.classList.add('is-hidden')
-      form_discover.classList.remove('is-hidden')
+      $(form_scratch).addClass 'is-hidden'
+      $(form_discover).removeClass 'is-hidden'
       discover_func() unless typeof discover_func == 'undefined'
     else
-      form_scratch.classList.remove('is-hidden')
-      form_discover.classList.add('is-hidden')
-      scratch_func() unless typeof scratch_func == 'undefined'
+      $(form_scratch).removeClass 'is-hidden'
+      $(form_discover).addClass 'is-hidden'
+      scratch_func?()
 
   change_service_source = (e)->
     clear_namespaces()
