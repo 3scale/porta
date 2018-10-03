@@ -22,11 +22,10 @@
         = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
     // API Service Level
-    - if can?(:manage, :analytics)
-      = render collection: @services,
-               partial: 'provider/admin/dashboards/service',
-               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
-               cache_options: { expires_in: 1.hour }
+    = render collection: @services,
+             partial: 'provider/admin/dashboards/service',
+             cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+             cache_options: { expires_in: 1.hour }
 
     = render 'shared/service_access'
 
@@ -38,7 +37,3 @@ javascript:
   System.import('dashboard/toggle').then(function (m) {
     m.default()
   });
-
-
-
-
