@@ -43,8 +43,8 @@ sqlplus / as sysdba << EOF
     BEGIN
       FOR i IN 1..8 LOOP
         sql_stmt :=  'CREATE PLUGGABLE DATABASE systempdb' || i ||
-                      q'[ ADMIN USER rails IDENTIFIED BY railspass  FILE_NAME_CONVERT=('/opt/oracle/oradata/threescale/pdbseed',]' ||
-                      q'['/opt/oracle/oradata/threescale/systempdb]' || i || q'[')]';
+                      q'[ ADMIN USER rails IDENTIFIED BY railspass  FILE_NAME_CONVERT=('/opt/oracle/oradata/${ORACLE_SID}/pdbseed',]' ||
+                      q'['/opt/oracle/oradata/${ORACLE_SID}/systempdb]' || i || q'[')]';
         EXECUTE IMMEDIATE sql_stmt;
     END LOOP;
   END;

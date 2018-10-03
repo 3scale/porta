@@ -10,7 +10,7 @@ services:
       - "${PWD}/script/oracle:/opt/oracle/scripts/setup"
     environment:
       ORACLE_CHARACTERSET: 'AL32UTF8'
-      ORACLE_SID: 'threescale'
+      ORACLE_SID: "${ORACLE_SID:-threescale}"
       ORACLE_PDB: 'systempdb'
       ORACLE_PWD: 'threescalepass'
   cache:

@@ -1,8 +1,10 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT_PATH := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
 PROJECT = $(subst @,,$(notdir $(subst /workspace,,$(PROJECT_PATH))))
-
 export PROJECT
+
+ORACLE_SID := threescale$(shell bash -c "echo $(PROJECT) | sed 's/^[^0-9]*//g'")
+export ORACLE_SID
 
 BUNDLE_GEMFILE ?= Gemfile
 
