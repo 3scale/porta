@@ -6,7 +6,7 @@ div id="user_widget"
       = link_to provider_admin_dashboard_path, class: 'header-link' do
         .header-logo
 
-  - if current_account.multiservice? && can?(:manage, :plans)
+  - if current_account.multiservice? && can?(:manage, :plans) && @api_selector_services.size > 1
     = render 'shared/api_selector'
 
   .PopNavigation.PopNavigation--docs
