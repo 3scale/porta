@@ -10,7 +10,13 @@ end
 
 Before do
   ThreeScale.config.stubs(superdomain: 'example.com')
-  FieldsDefinition.create_defaults FactoryGirl.create(:master_account)
+  master_account = begin
+    Account.master
+  rescue
+    FactoryGirl.create(:master_account)
+  end
+  
+  FieldsDefinition.create_defaults(master_account)
   ThreeScale.config.stubs(onpremises: false)
   ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'http://apicast.alaska/policies')
 end
