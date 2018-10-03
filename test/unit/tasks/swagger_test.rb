@@ -9,7 +9,7 @@ class Tasks::SwaggerTest < ActiveSupport::TestCase
   end
 
   test 'destroy_orphans' do
-    DeletePlainObjectWorker.expects(:perform_later).once.with { |swagger| swagger.account.blank? }
+    DeleteObjectHierarchyWorker.expects(:perform_later).once.with { |swagger| swagger.account.blank? }
     execute_rake_task 'swagger.rake', 'swagger:destroy_orphans'
   end
 end
