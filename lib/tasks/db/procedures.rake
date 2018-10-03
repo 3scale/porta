@@ -15,55 +15,55 @@ namespace :db do
   namespace :procedures do
     task :oracle => :environment do
       procedure_body = <<~SQL
-        DECLARE
-          _provider_account_id int;
-          _period: date;
-          _friendly_id: varchar(255);
-          _numbering_period: varchar(255);
-          _invoice_prefix_format: varchar(255);
-          _invoice_prefix: varchar(255);
-          _invoice_counter_id: int;
-          _invoice_count: int;
+          v_provider_account_id NUMBER;
+          v_period date;
+          v_friendly_id varchar(255);
+          v_numbering_period varchar(255);
+          v_invoice_prefix_format varchar(255);
+          v_invoice_prefix varchar(255);
+          v_invoice_counter_id NUMBER;
+          v_invoice_count NUMBER;
         BEGIN
           SELECT provider_account_id, period, friendly_id
-          INTO _provider_account_id, _period, _friendly_id
+          INTO v_provider_account_id, v_period, v_friendly_id
           FROM invoices
-          WHERE invoices.id = invoice_id;
+          WHERE invoices.id = invoice_id
+          AND ROWNUM = 1;
 
-          IF _friendly_id IS NULL OR _friendly_id = 'fix' THEN
+          IF v_friendly_id IS NULL OR v_friendly_id = 'fix' THEN
             SELECT numbering_period
-            INTO _numbering_period
+            INTO v_numbering_period
             FROM billing_strategies
-            WHERE account_id = _provider_account_id
+            WHERE account_id = v_provider_account_id
             AND ROWNUM = 1;
 
-            IF _numbering_period = 'monthly' THEN
-              _invoice_prefix_format := 'YYYY-MM';
+            IF v_numbering_period = 'monthly' THEN
+              v_invoice_prefix_format := 'YYYY-MM';
             ELSE
-              _invoice_prefix_format := 'YYYY';
+              v_invoice_prefix_format := 'YYYY';
             END IF;
 
-            _invoice_prefix := TO_CHAR(_period, _invoice_prefix_format);
+            v_invoice_prefix := TO_CHAR(v_period, v_invoice_prefix_format);
 
             SELECT id, invoice_count
-            INTO _invoice_counter_id, _invoice_count
+            INTO v_invoice_counter_id, v_invoice_count
             FROM invoice_counters
-            WHERE provider_account_id = _provider_account_id AND invoice_prefix = _invoice_prefix
+            WHERE provider_account_id = v_provider_account_id AND invoice_prefix = v_invoice_prefix
             AND ROWNUM = 1
             FOR UPDATE;
 
             UPDATE invoices
-            SET friendly_id = CONCAT(_invoice_prefix, '-', LPAD(COALESCE(_invoice_count, 0) + 1, 8, '0'))
+            SET friendly_id = v_invoice_prefix || '-' || LPAD(COALESCE(v_invoice_count, 0) + 1, 8, '0')
             WHERE id = invoice_id;
 
             UPDATE invoice_counters
             SET invoice_count = invoice_count + 1, updated_at = CURRENT_TIMESTAMP
-            WHERE id = _invoice_counter_id;
+            WHERE id = v_invoice_counter_id;
           END IF;
         END;
       SQL
 
-      procedures << System::Database::OracleStoredProcedure.new('sp_invoices_friendly_id', procedure_body, invoice_id: 'bigint(20)')
+      procedures << System::Database::OracleStoredProcedure.new('sp_invoices_friendly_id', procedure_body, invoice_id: 'NUMBER')
     end
 
     task :mysql => :environment do
