@@ -99,7 +99,7 @@ class ApiDocs::Service < ApplicationRecord
 
   def service_belongs_to_account
     return true if account.services.accessible.where(id: service_id).exists?
-    errors.add(:base, :service_account_mismatch)
+    errors.add(:service, :not_found)
   end
 
   def should_notify?

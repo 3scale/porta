@@ -90,7 +90,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
     def test_update_unexistent_service
       put admin_api_active_doc_path(api_docs_service, format: :json), update_params(service_id: 200)
       assert_response :unprocessable_entity
-      assert_contains JSON.parse(response.body).dig('errors', 'base'), 'The service must belong to the same account.'
+      assert_contains JSON.parse(response.body).dig('errors', 'service'), 'not found'
     end
 
     private
