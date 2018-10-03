@@ -538,6 +538,15 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
   end
 
+  test 'scope accessible' do
+    services = FactoryGirl.create_list(:service, 2, account: account)
+    account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
+    account.api_docs_services.create!(valid_attributes.merge({service: services.first, name: 'service-accessible'}), without_protection: true) # accessible with service
+    account.api_docs_services.create!(valid_attributes.merge({service: services.last, name: 'service'}), without_protection: true) # non-accessible with service
+    services.last.mark_as_deleted!
+    assert_same_elements %w[accessible service-accessible], ApiDocs::Service.accessible.pluck(:name)
+  end
+
   private
 
   def valid_attributes
