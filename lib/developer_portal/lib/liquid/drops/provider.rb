@@ -201,7 +201,7 @@ module Liquid
 
       desc 'Returns API spec collection.'
       def api_specs
-        Drops::Collection.for_drop(Drops::ApiSpec).new(@model.api_docs_services)
+        Drops::Collection.for_drop(Drops::ApiSpec).new(@model.api_docs_services.accessible)
       end
 
       private

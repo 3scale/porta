@@ -10,6 +10,7 @@ class Service < ApplicationRecord
   include Logic::RollingUpdates::Service
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
+  DELETE_STATE = 'deleted'.freeze
 
   has_system_name uniqueness_scope: :account_id
 
@@ -89,7 +90,7 @@ class Service < ApplicationRecord
 
   has_many :service_tokens, inverse_of: :service, dependent: :destroy
 
-  scope :accessible, -> { where.not(state: 'deleted'.freeze) }
+  scope :accessible, -> { where.not(state: DELETE_STATE.freeze) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
 
   validates :tech_support_email, :admin_support_email, :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
