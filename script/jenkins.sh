@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-SCRIPT_DIR=$(dirname "$(readlink -f $0)")
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 
-${SCRIPT_DIR}/docker.sh
+"${SCRIPT_DIR}/docker.sh"
 
 # lets make everything readable by everyone
 umask 0000
@@ -26,4 +26,11 @@ done
 if [ "x$PROXY_ENABLED" == "x1" ]; then
   source "${SCRIPT_DIR}/proxy_env.sh"
 fi
-exec env $PROXY_ENV bundle exec rake integrate --trace
+
+if [ "x$MULTIJOB_KIND" == "x" ]; then
+    MULTIJOB_KIND="integrate"
+fi
+
+# We do want it possible for multiple rake tasks to be passed as argument here.
+# shellcheck disable=SC2086
+exec env ${PROXY_ENV} bundle exec rake ${MULTIJOB_KIND} --trace
