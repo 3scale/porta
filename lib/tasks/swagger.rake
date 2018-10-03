@@ -8,9 +8,8 @@ namespace :swagger do
     validate!(scope)
   end
 
-  # TODO: this code is meant to be executed only 1 time :) later it can be removed
   task destroy_orphans: :environment do
-    ApiDocs::Service.joining { account.outer }.where.has { account.id == nil }.find_each(&DeletePlainObjectWorker.method(:perform_later))
+    ApiDocs::Service.joining { account.outer }.where.has { account.id == nil }.find_each(&DeleteObjectHierarchyWorker.method(:perform_later))
   end
 
   task stats_version: :environment do
