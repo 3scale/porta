@@ -42,6 +42,7 @@ ul#second_nav.self_clear
     = provider_submenu_link 'Traffic', admin_transactions_path
 
   - when :serviceadmin
+    - if can?(:manage, :plans)
       = provider_submenu_link 'Overview', admin_services_path
       = provider_submenu_link 'ActiveDocs', admin_api_docs_services_path, title: 'ActiveDocs'
 
