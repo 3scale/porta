@@ -110,7 +110,7 @@ class FrontendController < ApplicationController
   end
 
   def all_services
-    @api_selector_services = current_user.accessible_services.to_a
+    @api_selector_services = current_user.accessible_services.to_a if current_account.try!(:provider?)
   end
 
   def find_service(id = params[:service_id])
