@@ -3,18 +3,24 @@ require 'test_helper'
 
 class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
+  setup do
+    @account = FactoryGirl.build_stubbed(:simple_provider)
+  end
+
+  attr_reader :account
+
   test 'save and skip_swagger_validations' do
-    service = ApiDocs::Service.new(name: 'but I send a email making noise', body: '{}', skip_swagger_validations: '0')
+    service = account.api_docs_services.new(name: 'this is a random name', body: '{}', skip_swagger_validations: '0')
     service.specification.expects(:validate!).once
     service.save
 
-    service = ApiDocs::Service.new(name: 'instead of create an issue', body: '{}', skip_swagger_validations: '1')
+    service = account.api_docs_services.new(name: 'and another random name', body: '{}', skip_swagger_validations: '1')
     service.specification.expects(:validate!).never
     service.save
   end
 
   test 'base_path notifications' do
-    service = ApiDocs::Service.new name: 'The API'
+    service = account.api_docs_services.new name: 'The API'
 
     service.body = <<-EOJSON
       {
@@ -45,7 +51,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'body and name are required' do
-    service= ApiDocs::Service.new
+    service = account.api_docs_services.new
     refute service.valid?
 
     refute service.errors[:name].empty?
@@ -53,7 +59,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'invalid json' do
-    service = ApiDocs::Service.new name: "Crystal Clear API", body: "YOLO"
+    service = account.api_docs_services.new name: 'Crystal Clear API', body: 'YOLO'
 
     refute service.valid?
     assert service.errors[:body].presence, 'expected errors on body'
@@ -74,7 +80,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
       }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'my api', body: json
+    service = account.api_docs_services.new name: 'my api', body: json
 
     refute service.valid?
 
@@ -127,7 +133,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
       }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'my api', body: json
+    service = account.api_docs_services.new name: 'my api', body: json
 
     refute service.valid?
     refute service.errors[:body].empty?
@@ -170,14 +176,14 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
       }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'my api', body: json
+    service = account.api_docs_services.new name: 'my api', body: json
 
     assert service.valid?, service.errors.full_messages.join(", ")
     assert service.errors[:body].empty?
   end
 
   test 'base_path validation' do
-    service = ApiDocs::Service.new name: 'my api'
+    service = account.api_docs_services.new name: 'my api'
 
     ['', 'http://google', 'http://.com', 'http://ftp://ftp.google.com', 'http://ssh://google.com', 'http://example.net'].each do | valid_url |
       service.body = <<-EOJSON
@@ -203,7 +209,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'localhost validation' do
-    service = ApiDocs::Service.new name: 'my api', skip_swagger_validations: true
+    service = account.api_docs_services.new name: 'my api', skip_swagger_validations: true
 
     ['', 'http://google', 'http://.com', 'http://localhost.example.com', 'http://ftp://ftp.google.com', 'http://ssh://google.com', 'http://example.net'].each do | valid_url |
       service.body = <<-EOJSON
@@ -229,7 +235,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'ip address validation' do
-    service = ApiDocs::Service.new name: 'my api'
+    service = account.api_docs_services.new name: 'my api'
 
     ['', 'http://google', 'http://smth', 'http://ftp://ftp.google.com', 'http://ssh://google.com', 'http://174.129.235.69', 'http://174.129.235.69:8080', 'http://54.234.21.19/v1/przyslist.json?district=lsm'].each do | url |
       service.body = <<-EOJSON
@@ -251,7 +257,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
       }
     EOJSON
 
-    service = ApiDocs::Service.create(name: 'api', body: body, skip_swagger_validations: '0')
+    service = account.api_docs_services.create(name: 'api', body: body, skip_swagger_validations: '0')
 
     # there's no way to save invalid base_path through ActiveRecord by now
     ActiveRecord::Base.connection.execute("UPDATE #{ApiDocs::Service.table_name} SET base_path='http://localhost:26447' WHERE id = #{service.id}")
@@ -282,7 +288,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'UberAPI', body: json
+    service = account.api_docs_services.new name: 'MyAPI', body: json
 
     assert_equal "2.0", service.swagger_version
 
@@ -304,7 +310,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     #     info: {}
     # }.to_json
 
-    service = ApiDocs::Service.new name: 'UberAPI', body: json
+    service = account.api_docs_services.new name: 'MyAPI', body: json
 
     assert service.valid?, service.errors.full_messages.join(", ")
 
@@ -322,7 +328,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'UberAPI', body: json
+    service = account.api_docs_services.new name: 'MyAPI', body: json
 
     refute service.valid?, "expected api to be invalid"
     #refute service.errors[:base_path].empty?
@@ -355,7 +361,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'MegaAPI', body: json
+    service = account.api_docs_services.new name: 'MyAPI', body: json
 
     refute service.valid?
     assert_includes service.errors[:body], %q{The property '#/' did not contain a required property of 'paths' in schema http://swagger.io/v2/schema.json#}
@@ -405,7 +411,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'Le Tor-lling API', body: json
+    service = account.api_docs_services.new name: 'Le My-my API', body: json
 
     assert service.valid?, service.errors.full_messages.join(", ")
 
@@ -458,7 +464,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 }
     EOJSON
 
-    service = ApiDocs::Service.new name: 'torlling API', body: json
+    service = account.api_docs_services.new name: 'my API', body: json
 
     assert service.valid?, service.errors.full_messages.join(", ")
 
@@ -469,7 +475,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'invalid json body' do
-    service = ApiDocs::Service.new name: 'my api', body: 'cucu'
+    service = account.api_docs_services.new name: 'my api', body: 'cucu'
 
     refute service.valid?
     refute service.errors[:body].empty?
@@ -498,7 +504,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
     EOJSON
 
-    service = ApiDocs::Service.new name: 'my api', body: json
+    service = account.api_docs_services.new name: 'my api', body: json
 
     assert service.valid?
 
