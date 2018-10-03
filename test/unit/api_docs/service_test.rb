@@ -526,16 +526,16 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     api_doc = service.api_docs_services.new(valid_attributes)
     api_doc.account = another_account
     refute api_doc.valid?
-    assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
+    assert_includes api_doc.errors[:service], 'not found'
 
     api_doc = another_account.api_docs_services.new(valid_attributes)
     api_doc.service = service
     refute api_doc.valid?
-    assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
+    assert_includes api_doc.errors[:service], 'not found'
 
     api_doc = account.api_docs_services.new(valid_attributes.merge({service_id: service.id + 1000}), without_protection: true)
     refute api_doc.valid?
-    assert_includes api_doc.errors[:base], 'The service must belong to the same account.'
+    assert_includes api_doc.errors[:service], 'not found'
   end
 
   test 'scope accessible' do
