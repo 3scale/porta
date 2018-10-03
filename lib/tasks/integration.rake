@@ -61,7 +61,7 @@ namespace :integrate do
       test_dirs = resolve_test_groups_by_path
 
       {
-        :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy"',
+        :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy --tags=~@ignore"',
         :cucumber_non_tagged => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %(--tags=~#{t})}.join(' ')}"),
         :cucumber_for_categories => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"),
 
