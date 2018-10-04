@@ -124,6 +124,21 @@ index 1c4cc0e5b..2201bc43c 100644
 
 Run `brew edit sphinx` to edit Sphinx configuration or alternatively open `${HOMEBREW_PREFIX:-/usr/local}/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb` with your favorite editor.
 
+#### Redis
+
+[Redis](https://redis.io) has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
+
+```shell
+docker run -d -p 6379:6379 redis
+```
+
+Alternatively you can run Redis directly on your machine by using `brew`:
+
+```shell
+brew install redis
+brew services start redis
+```
+
 ### Setup
 
 #### Eventmachine
