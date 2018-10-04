@@ -20,6 +20,7 @@ class FrontendController < ApplicationController
 
   before_action :login_required
   before_action :set_display_currency
+  before_action :all_services
 
   include RedhatCustomerPortalSupport::ControllerMethods::Banner
 
@@ -106,6 +107,10 @@ class FrontendController < ApplicationController
     else
       DEFAULT_LIQUID_LAYOUT
     end
+  end
+
+  def all_services
+    @api_selector_services = current_user.accessible_services.to_a if current_account.try!(:provider?)
   end
 
   def find_service(id = params[:service_id])

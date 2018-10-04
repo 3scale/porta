@@ -55,3 +55,23 @@
        font-url('overpass-mono-v3-latin_latin-ext-regular.woff2') format('woff2'),
        font-url('overpass-mono-v3-latin_latin-ext-regular.woff') format('woff');
 }
+
+/* overpass-regular - latin */
+@font-face {
+  font-family: 'Overpass';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Overpass Regular'), local('Overpass-Regular'),
+       font-url('overpass-v3-latin_latin-ext-regular.woff2') format('woff2'),
+       font-url('overpass-v3-latin_latin-ext-regular.woff') format('woff');
+}
+
+/* overpass-bold - latin */
+@font-face {
+  font-family: 'Overpass';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Overpass Heavy'), local('Overpass-Heavy'),
+       font-url('overpass-v3-latin_latin-ext-heavy.woff2') format('woff2'),
+       font-url('overpass-v3-latin_latin-ext-heavy.woff') format('woff');
+}

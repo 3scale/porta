@@ -7,15 +7,17 @@
 $white: #fff;
 $alabasterWhite: #fafafa; // pf-black-100
 $wildSandGray:   #f5f5f5; // pf-black-150
-$altoGray:       #dfdfdf; // bewteen pf-black-200 and pf-black-300
+$altoGray:       #d1d1d1; // pf-black-300
 $osloGray:       #8b8d8f; // pf-black-500
 $outerSpaceGray: #393f44; // pf-black-800
+$black:          #030303; // pf-black
 
 // colors
-$lochMaraBlue: #0088ce;   //pf-blue-400
-$appleGreen: #3f9c35;
-$guardsmanRed: #cc0000;
-$tahitiGold: #ec7a08;
+$curiousBlue:    #39a5dc; // pf-blue-300
+$lochMaraBlue:   #0088ce; //pf-blue-400
+$appleGreen:     #3f9c35;
+$guardsmanRed:   #cc0000;
+$tahitiGold:     #ec7a08;
 
 // brand colors
 $brand-orange: #ff7314;
@@ -68,6 +70,10 @@ $tr-even-color: transparent;
 
 $wrapper-color: none;
 
+$header-background-color: $black;
+$header-border-color: $curiousBlue;
+$header-link-color: $altoGray;
+$header-link-background-hover-color: rgba($white, .14);
 
 $tab-menu-active-color: $lochMaraBlue;
 $tab-menu-active-background-color: $content-background;
