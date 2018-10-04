@@ -44,9 +44,12 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.description = "Creates a new ActiveDocs spec"
   ##~ op.group = "active_docs"
   #
+  ##~ @parameter_service_id = {:name => "service_id", :description => "Service ID of the ActiveDocs spec", :dataType => "int", :paramType => "query", :required => false}
+  #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "name", :description => "Name of the ActiveDocs spec", :required => true, :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "system_name", :description => "System Name of the ActiveDocs spec. Only ASCII letters, numbers, dashes and underscores are allowed. If blank, 'system_name' will be generated from the 'name' parameter", :required => false, :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add @parameter_service_id
   ##~ op.parameters.add :name => "body", :description => "ActiveDocs specification in JSON format (based on Swagger)", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add :name => "description", :description => "Description of the ActiveDocs spec", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "published", :description => "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it. The default value is 'false'", :dataType => "boolean", :paramType => "query"
@@ -72,13 +75,14 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_active_doc_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the ActiveDocs spec", :required => false, :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add @parameter_service_id
   ##~ op.parameters.add :name => "body", :description => "ActiveDocs specification in JSON format (based on Swagger)", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "description", :description => "Description of the ActiveDocs spec", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "published", :description => "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it", :dataType => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "skip_swagger_validations", :description => "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec", :dataType => "boolean", :paramType => "query"
   #
   def update
-    @api_docs_service.update_attributes(api_docs_params)
+    @api_docs_service.update(api_docs_params, without_protection: true)
     respond_with(@api_docs_service)
   end
 
@@ -105,7 +109,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   protected
 
   def api_docs_params(*extra_params)
-    permit_params = %i(name body description published skip_swagger_validations) + extra_params
+    permit_params = %i[name body description published skip_swagger_validations service_id] + extra_params
     params.require(:api_docs_service).permit(*permit_params)
   end
 

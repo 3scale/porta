@@ -4,7 +4,7 @@ require 'test_helper'
 class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
   setup do
-    @account = FactoryGirl.build_stubbed(:simple_provider)
+    @account = FactoryGirl.create(:simple_provider)
   end
 
   attr_reader :account
@@ -510,4 +510,47 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
     assert_equal "1.0", service.swagger_version
   end
+
+  test 'It validates the Service belongs to the Account if both are set' do
+    service          = FactoryGirl.create(:service)
+    account          = service.account
+    another_account  = FactoryGirl.create(:simple_provider)
+
+    api_doc = service.api_docs_services.new(valid_attributes)
+    api_doc.account = account
+    assert api_doc.valid?
+
+    api_doc = account.api_docs_services.new(valid_attributes)
+    assert api_doc.valid?
+
+    api_doc = service.api_docs_services.new(valid_attributes)
+    api_doc.account = another_account
+    refute api_doc.valid?
+    assert_includes api_doc.errors[:service], 'not found'
+
+    api_doc = another_account.api_docs_services.new(valid_attributes)
+    api_doc.service = service
+    refute api_doc.valid?
+    assert_includes api_doc.errors[:service], 'not found'
+
+    api_doc = account.api_docs_services.new(valid_attributes.merge({service_id: service.id + 1000}), without_protection: true)
+    refute api_doc.valid?
+    assert_includes api_doc.errors[:service], 'not found'
+  end
+
+  test 'scope accessible' do
+    services = FactoryGirl.create_list(:service, 2, account: account)
+    account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
+    account.api_docs_services.create!(valid_attributes.merge({service: services.first, name: 'service-accessible'}), without_protection: true) # accessible with service
+    account.api_docs_services.create!(valid_attributes.merge({service: services.last, name: 'service'}), without_protection: true) # non-accessible with service
+    services.last.mark_as_deleted!
+    assert_same_elements %w[accessible service-accessible], ApiDocs::Service.accessible.pluck(:name)
+  end
+
+  private
+
+  def valid_attributes
+    @valid_attributes ||= {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
+  end
+
 end

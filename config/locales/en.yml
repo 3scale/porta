@@ -794,6 +794,11 @@ en:
             kind:
               not_found: "unavailable for this account type"
 
+        api_docs/service:
+          attributes:
+            service:
+              not_found: 'not found'
+
         metric:
           attributes:
             base:

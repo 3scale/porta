@@ -10,6 +10,7 @@ module ApiDocs::ServiceRepresenter
   property :published
   property :skip_swagger_validations
   property :body
+  property :service_id
 
   property :created_at
   property :updated_at
