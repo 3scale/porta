@@ -81,7 +81,7 @@ $spacer-1lh: line-height-times(1); // 24px; // = line height
 $spacer-2lh: line-height-times(2); // 32px;
 
 @mixin font-base() {
-  font-family:                  $font-family-base;
+  font-family:                 $font-family-base;
   line-height:                $line-height-base;
   font-weight:                $font-weight-base;
 	@include fluid-type(font-size, $minScreen, $maxScreen, $minFont, $maxFont);

@@ -1,8 +1,9 @@
-#nav {
-  position: relative;
+#context-menu > li + li {
+  display: inline-block !important;
+  width: 100%;
 }
 
-#docs-widget {
+.nav-search-widget {
 
   &.active {
     .docs-search-results {
@@ -15,16 +16,17 @@
   }
 
   input.docs-search-input {
-    padding: line-height-times(1) line-height-times(1/2);
+    margin: line-height-times(1/3) 0;
+    padding: 0 line-height-times(1/2);
     border: 0;
-    border-bottom: $border-width $border-color solid;
   }
 
   a.close-widget {
-    display: none;
+    display: none !important;
     position: absolute;
-    right: line-height-times(1/2);
+    right: line-height-times(1/4);
     top: line-height-times(1/2);
+    font-size: $font-size-sm;
   }
 
   .docs-search {
