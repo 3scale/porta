@@ -37,12 +37,18 @@ $ ->
     if selected_namespace != ''
       fetch_services(selected_namespace)
 
+  addOptionToSelect = (selectElem, val)->
+    opt = document.createElement 'option'
+    opt.text = val
+    opt.value = val
+    selectElem.appendChild opt
+
   fetch_namespaces = ()->
     $.getJSON '/p/admin/service_discovery/projects.json', (data)->
       projects = data.projects
       projects.forEach (project, index, array) ->
-        namespace = project.metadata.name
-        $(form_discover.service_namespace).append("<option value=\"#{namespace}\">#{namespace}</option>")
+        addOptionToSelect(form_discover.service_namespace, project.metadata.name)
+
       if projects.length > 0
         form_discover.service_namespace.selectedIndex = 1
         change_cluster_namespace()
@@ -51,8 +57,7 @@ $ ->
     $.getJSON "/p/admin/service_discovery/namespaces/#{namespace}/services.json", (data)->
       services = data.services
       services.forEach (service, index, array) ->
-        service_name = service.metadata.name
-        $(form_discover.service_name).append("<option value=\"#{service_name}\">#{service_name}</option>")
+        addOptionToSelect(form_discover.service_name, service.metadata.name)
       if services.length > 0
         form_discover.service_name.selectedIndex = 1
 
