@@ -1,10 +1,14 @@
 $ ->
-  form_source = $('form#new_service_source')[0]
-  form_scratch = $('form#new_service,form#create_service')[0]
-  form_discover = $('form#service_discovery')[0]
+  form_source = document.getElementById 'new_service_source'
+  form_scratch = document.querySelectorAll('form#new_service,form#create_service')[0]
+  form_discover = document.getElementById 'service_discovery'
 
   clear_select_options = (select)->
-    $(select).find('option').not(':first').remove()
+    options = select.getElementsByTagName('option')
+    i = options.length - 1
+    while i > 0
+      options[i].remove()
+      --i
 
   clear_namespaces = ()->
     clear_select_options form_discover.service_namespace
@@ -14,12 +18,12 @@ $ ->
 
   show_service_form = (source, discover_func, scratch_func)->
     if source == 'discover'
-      $(form_scratch).addClass 'is-hidden'
-      $(form_discover).removeClass 'is-hidden'
-      discover_func() unless typeof discover_func == 'undefined'
+      form_scratch.classList.add('is-hidden')
+      form_discover.classList.remove('is-hidden')
+      discover_func?()
     else
-      $(form_scratch).removeClass 'is-hidden'
-      $(form_discover).addClass 'is-hidden'
+      form_scratch.classList.remove('is-hidden')
+      form_discover.classList.add('is-hidden')
       scratch_func?()
 
   change_service_source = (e)->
@@ -52,8 +56,10 @@ $ ->
       if services.length > 0
         form_discover.service_name.selectedIndex = 1
 
-  unless typeof form_source == 'undefined'
-    $(form_source.source).click change_service_source
+  if form_source != null and typeof form_source != 'undefined'
+    form_source.source.forEach (item) ->
+      item.addEventListener 'click', change_service_source
+      return
 
-  unless typeof form_discover == 'undefined'
-    $(form_discover.service_namespace).live 'change', change_cluster_namespace
+  if form_discover != null and typeof form_discover != 'undefined'
+    form_discover.service_namespace.addEventListener 'change', change_cluster_namespace
