@@ -1,0 +1,22 @@
+$font-primary: #464646;
+
+.ApiFilter {
+
+  float: left;
+  width: auto;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+
+  span {
+    margin: 0.5rem;
+    color: $font-primary
+  }
+
+  input {
+    border: none;
+    width: auto;
+    padding: 0.5rem;
+  }
+}
