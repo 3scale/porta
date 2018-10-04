@@ -23,7 +23,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     @cinstance = Factory(:cinstance, :plan => plan)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/services/#{@cinstance.service.id}/usage_response_code.json", period:'day', :response_code => 200, timezone:'Madrid', skip_change: false
+    get "/stats/services/#{@cinstance.service_id}/usage_response_code.json", period:'day', :response_code => 200, timezone:'Madrid', skip_change: false
 
     assert_response :success
     assert_content_type 'application/json'
@@ -47,7 +47,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     @cinstance = Factory(:cinstance, :plan => plan)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/services/#{@cinstance.service.id}/usage.json", period:'day', :metric_name => @metric.system_name, timezone:'Madrid', skip_change: false
+    get "/stats/services/#{@cinstance.service_id}/usage.json", period:'day', :metric_name => @metric.system_name, timezone:'Madrid', skip_change: false
 
     assert_response :success
     assert_content_type 'application/json'
@@ -81,7 +81,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
       @provider_account.update_attribute(:timezone, 'Madrid')
 
       opts = { :period => 'day', :metric_name => @metric.system_name }
-      get "/stats/services/#{@cinstance.service.id}/usage.json", opts
+      get "/stats/services/#{@cinstance.service_id}/usage.json", opts
 
       assert_response :success
       assert_content_type 'application/json'
@@ -97,7 +97,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
     should 'retrieve data with specified timezone' do
       opts = { :period => 'day', :metric_name => @metric.system_name, :timezone => 'Kamchatka' }
-      get "/stats/services/#{@cinstance.service.id}/usage.json", opts
+      get "/stats/services/#{@cinstance.service_id}/usage.json", opts
 
       assert_response :success
       assert_content_type 'application/json'
@@ -238,12 +238,14 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
         "plan"=>{"name"=>plan.name, "id"=>plan.id},
         "id"=>cinstance1.id,
         "value"=>"2",
-        "account"=>{"name"=>cinstance1.user_account.org_name, "id"=>cinstance1.user_account.id}},
+        "account"=>{"name"=>cinstance1.user_account.org_name, "id"=>cinstance1.user_account.id},
+        "service"=>{"id"=>cinstance1.service_id}},
        {"name"=>nil,
         "plan"=>{"name"=>plan.name, "id"=>plan.id},
         "id"=>cinstance2.id,
         "value"=>"1",
-        "account"=>{"name"=>cinstance2.user_account.org_name, "id"=>cinstance2.user_account.id}}],
+        "account"=>{"name"=>cinstance2.user_account.org_name, "id"=>cinstance2.user_account.id},
+        "service"=>{"id"=>cinstance2.service_id}}],
      "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
 
   end

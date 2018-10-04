@@ -3,12 +3,13 @@ export const applicationDetails = function (data) {
     return {
       id: data.id,
       name: data.name,
-      link: createLink(data.id, type)
+      link: createLink(data, type)
     }
   }
 
-  function createLink (id, type) {
-    return (type === 'account') ? `/buyers/accounts/${id}` : `/buyers/applications/${id}`
+  function createLink (data, type) {
+    const id = data.id
+    return (type === 'account') ? `/buyers/accounts/${id}` : `apiconfig/services/${data.service.id}/applications/${id}`
   }
 
   return {
