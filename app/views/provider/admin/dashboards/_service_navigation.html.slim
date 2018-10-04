@@ -1,18 +1,19 @@
 nav.DashboardNavigation
   ul.DashboardNavigation-list
     // Applications & Application Plans
-    - if can? :manage, :partners
-      li.DashboardNavigation-list-item
-        // Applications
+
+    li.DashboardNavigation-list-item
+      // Applications
+      - if can? :manage, :partners
         => dashboard_collection_link 'Application',
                                      service.cinstances,
                                      admin_service_applications_path(service)
 
-        // Application Plans
-        - if can?(:edit, service) && !master_on_premises?
-          == dashboard_secondary_collection_link 'Plan',
-                                                 service.application_plans.not_custom,
-                                                 admin_service_application_plans_path(service)
+      // Application Plans
+      - if can?(:manage, :plans) && !master_on_premises?
+        == dashboard_secondary_collection_link 'Plan',
+                                               service.application_plans.not_custom,
+                                               admin_service_application_plans_path(service)
 
     // Subscriptions & Service Plans
     - if show_subscriptions_on_dashboard?(service)
@@ -43,7 +44,7 @@ nav.DashboardNavigation
                                                  admin_service_end_user_plans_path(service)
 
     // Integration
-    - if can?(:edit, service) && !service.has_traffic?
+    - if can?(:manage, :plans) && !service.has_traffic?
       li.DashboardNavigation-list-item.u-notice
         = link_to "Integrate this API",
                   path_to_service(service),

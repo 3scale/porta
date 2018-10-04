@@ -34,6 +34,9 @@
   &.is-closed {
     border-bottom: $border-width solid $border-color;
     height: auto;
+  }
+
+  &--toggleable.is-closed {
 
     .DashboardWidget,
     .DashboardNavigation-list-item {
