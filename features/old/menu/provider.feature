@@ -49,7 +49,6 @@ Feature: Menu
       | Applications    |                      |                  |
       | API             |                      |                  |
       | -               | Overview             |                  |
-      | -               | Account Plans        |                  |
       | Developer Portal|                      |                  |
       | -               | Content              |                  |
       | -               | 0 Drafts             |                  |
@@ -67,6 +66,7 @@ Feature: Menu
       | -               | -                    | Signup           |
       | -               | -                    | Application      |
       | -               | Fields Definitions   |                  |
+      | -               | Account Plans        |                  |
 
 
     Scenario: With multiple applications enabled
