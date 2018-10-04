@@ -18,19 +18,24 @@ nav.DashboardNavigation
 
     - if can?(:manage, :monitoring) && alerts.any?
       li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Alert',
-                                    alerts,
-                                    admin_alerts_path,
-                                    'Alerts',
-                                    'exclamation-triangle'
+        = link_to 'ActiveDocs',
+                  admin_api_docs_services_path,
+                  title: 'ActiveDocs',
+                  class: "DashboardNavigation-link"
 
+      - if current_account.multiservice?
+        li.DashboardNavigation-list-item
+          = link_to 'Alerts',
+                    admin_alerts_path,
+                    title: 'Alerts',
+                    class: "DashboardNavigation-link"
 
       li.DashboardNavigation-list-item
-        = link_to admin_transactions_path, title: 'Traffic', class: "DashboardNavigation-link" do
-          i.fa.fa-play-circle>
-          | Traffic
+        = link_to 'Traffic',
+                  admin_transactions_path,
+                  title: 'Traffic',
+                  class: "DashboardNavigation-link"
 
-    - if can? :manage, :multiple_services
       li.DashboardNavigation-list-item
         = fancy_link_to 'New API',
           new_admin_service_path,

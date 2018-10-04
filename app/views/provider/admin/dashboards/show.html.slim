@@ -29,11 +29,11 @@
                                           alerts: current_account.buyer_alerts.unread
 
 
-        // API Service Level
-        = render collection: @services,
-                 partial: 'provider/admin/dashboards/service',
-                 cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
-                 cache_options: { expires_in: 1.hour }
+      // API Service Level
+      = render collection: @services,
+               partial: 'provider/admin/dashboards/service',
+               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+               cache_options: { expires_in: 1.hour }
 
       = render 'shared/service_access'
 
