@@ -24,4 +24,13 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
     ServiceContract.create! plan: plan, user_account: buyer
     assert_not_nil @drop.subscription
   end
+
+  test 'api_specs' do
+    @service.account.api_docs_services.create!({name: 'name-api-doc', system_name: 'api_doc', body: '{"apis": [{"foo": "bar"}], "basePath": "http://example.com"}', service_id: @service.id}, without_protection: true)
+    api_specs_collection_drop = @drop.api_specs
+    assert_equal 1, api_specs_collection_drop.length
+    api_spec_drop = api_specs_collection_drop.first
+    assert_instance_of Liquid::Drops::ApiSpec, api_spec_drop
+    assert_equal 'api_doc', api_spec_drop.system_name
+  end
 end
