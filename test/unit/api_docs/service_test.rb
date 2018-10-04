@@ -512,8 +512,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'It validates the Service belongs to the Account if both are set' do
-    service          = FactoryGirl.create(:service)
-    account          = service.account
+    service          = FactoryGirl.create(:simple_service, account: account)
     another_account  = FactoryGirl.create(:simple_provider)
 
     api_doc = service.api_docs_services.new(valid_attributes)
@@ -539,12 +538,13 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'scope accessible' do
-    services = FactoryGirl.create_list(:service, 2, account: account)
-    account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
-    account.api_docs_services.create!(valid_attributes.merge({service: services.first, name: 'service-accessible'}), without_protection: true) # accessible with service
-    account.api_docs_services.create!(valid_attributes.merge({service: services.last, name: 'service'}), without_protection: true) # non-accessible with service
+    services = FactoryGirl.create_list(:simple_service, 2, account: account)
+    api_docs = []
+    api_docs << account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
+    api_docs << account.api_docs_services.create!(valid_attributes.merge({service: services.first, name: 'service-accessible'}), without_protection: true) # accessible with service
+    api_docs << account.api_docs_services.create!(valid_attributes.merge({service: services.last, name: 'service'}), without_protection: true) # non-accessible with service
     services.last.mark_as_deleted!
-    assert_same_elements %w[accessible service-accessible], ApiDocs::Service.accessible.pluck(:name)
+    assert_same_elements api_docs[0..1].map(&:id), ApiDocs::Service.accessible.pluck(:id)
   end
 
   private
