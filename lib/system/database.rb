@@ -4,6 +4,7 @@ require 'active_support/string_inquirer'
 
 module System
   module Database
+    class ConnectionError < ActiveRecord::NoDatabaseError; end
     module_function
 
     def configuration_specification
@@ -33,25 +34,28 @@ module System
       self.table_name = 'accounts'
 
       class << self
-        def connection_spec
+        def connection_config
           spec = configuration_specification.config.dup
           if oracle?
-            spec['password'] = ENV.fetch('ORACLE_SYSTEM_PASSWORD'){|key| raise KeyError, "Environment #{key} is mandatory"}
-            spec['username'] = 'SYSTEM'
+            spec[:password] = ENV.fetch('ORACLE_SYSTEM_PASSWORD') {|key| raise KeyError, "Environment #{key} is mandatory"}
+            spec[:username] = 'SYSTEM'
           end
           spec
         end
 
         def ready?
-          pool = establish_connection connection_spec
-          result = connection.select_value(sql_for_readiness).tap{ pool.disconnect! }
+          pool = establish_connection connection_config
+          result = nil
+          pool.with_connection do |connection|
+            result = connection.select_value(sql_for_readiness).tap { pool.disconnect! }
+          end
           result.to_s == '1'
         end
 
         def sql_for_readiness
           case
           when oracle?
-            'SELECT 1 FROM V$INSTANCE WHERE "STATUS" = \'OPEN\''
+            "SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'"
           when mysql?
             'SELECT 1'
           else
@@ -62,10 +66,25 @@ module System
     end
 
     def ready?
-      ConnectionProbe.ready?
-    rescue => e
-      Rails.logger.debug "Database is not ready, failed with error: #{e.message}"
-      false
+      config = ConnectionProbe.connection_config
+      if ConnectionProbe.ready?
+        puts "Connected to #{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
+        return true
+      else
+        puts "Cannot connect to #{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
+        return false
+      end
+
+    rescue ActiveRecord::NoDatabaseError => error # In case of mysql
+      puts "Connected, but database does not exist: #{error}"
+      true
+    rescue StandardError => error
+      puts "Connection specification: #{config}"
+      puts "Failed to connect to database: #{error} (#{error.class})"
+
+      if (cause = error.cause)
+        puts "Caused by: #{cause} (#{cause.class})"
+      end
     end
 
     module Scopes
