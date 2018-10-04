@@ -6,6 +6,7 @@ class ApiDocs::Service < ApplicationRecord
   extend System::Database::Scopes::IdOrSystemName
 
   belongs_to :account, required: true
+  belongs_to :service, class_name: '::Service', inverse_of: :api_docs_services
 
   attr_accessible :account, :body, :name, :description, :published, :skip_swagger_validations
   attr_readonly :system_name
@@ -17,8 +18,10 @@ class ApiDocs::Service < ApplicationRecord
   validates :name, :system_name, :base_path, :swagger_version, length: { maximum: 255 }
   validates :description, length: { maximum: 65535 }
   validates :body, length: { maximum: 4294967295, allow_blank: true }
+  validate :service_belongs_to_account, if: -> { service_id.present? && service_id_changed? }
 
   scope :published, -> { where(published: true) }
+  scope :accessible, -> { joining { service.outer }.where.has { (service_id == nil) | (service.state != ::Service::DELETE_STATE) } }
 
   before_save :set_default_values
   before_save :prepare_base_path_notify
@@ -93,6 +96,12 @@ class ApiDocs::Service < ApplicationRecord
   end
 
   private
+
+  def service_belongs_to_account
+    return true if account.services.accessible.where(id: service_id).exists?
+    errors.add(:service, :not_found)
+  end
+
   def should_notify?
     NotificationCenter.new(self).enabled?
   end
