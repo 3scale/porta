@@ -417,7 +417,7 @@ without fake Core server your after commit callbacks will crash and you might ge
     end
 
     namespace :api_docs do
-      resources :services do
+      resources :services, controller: 'account_api_docs' do
         member do
           get :preview
           put :toggle_visible
@@ -763,6 +763,11 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
 
           resources :applications, only: %i[index show edit]
+          resources :api_docs, only: %i[index new edit update create], controller: '/admin/api_docs/service_api_docs' do
+            member do
+              get :preview
+            end
+          end
 
           resources :errors, only: :index do
             collection do

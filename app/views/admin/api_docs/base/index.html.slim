@@ -1,0 +1,34 @@
+- content_for :sublayout_title, 'ActiveDocs'
+h2 ActiveDocs: Service Specs
+
+- if @api_docs_services.any? { |service| service.needs_swagger_update? }
+  = link_to t("api.integrations.proxy.documentation_create_active_doc_spec", docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'SwaggerUpgradeBox' do
+    p.SwaggerUpgradeBox-message
+      span.SwaggerUpgradeBox-logo
+      | ActiveDocs now supports Swagger 2.0. Read here why it makes sense to upgrade your service specs to Swagger 2.0
+
+- if @api_docs_services.any?
+  table class="data"
+    thead
+      th Name
+      th System Name
+      th State
+      th Swagger Version
+      th class='operations' = link_to('Create a new spec', new_api_docs_service_path(@service), class: 'action add')
+    tbody
+      - for service in @api_docs_services
+        tr
+          td = link_to service.name, preview_admin_api_docs_service_path(service), title: 'Preview service spec'
+          td = service.system_name
+          td = service.published? ? 'visible' : 'hidden'
+          td
+            => service.swagger_version
+            - if service.needs_swagger_update?
+              = link_to t('.update_link_text'), t('.update_link', docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'is-inline'
+          td class='operations' = link_to 'Edit', edit_admin_api_docs_service_path(service), class: 'action edit'
+- else
+  table class="data"
+    thead
+      th colspan="5" class='operations' = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'action add')
+
+= will_paginate(@api_docs_services)

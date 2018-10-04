@@ -2,17 +2,55 @@
 
 require 'test_helper'
 
-class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
+class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     login! current_account
   end
 
-  class ProviderLoggedInTest < Admin::ApiDocs::ServicesControllerTest
+  class ProviderLoggedInTest < Admin::ApiDocs::AccountApiDocsControllerTest
     setup do
       @provider = FactoryGirl.create(:provider_account)
       @service = @provider.default_service
-      @api_docs_service = @provider.api_docs_services.create!({name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'})
+      @api_docs_service = @provider.api_docs_services.create!(api_docs_params[:api_docs_service])
+    end
+
+    test 'index gets the api_docs of an account independently of the service' do
+      another_service = FactoryGirl.create(:simple_service, account: provider)
+      provider.api_docs_services.create!(api_docs_params(service_id: service.id, name: 'first-service')[:api_docs_service], without_protection: true)
+      provider.api_docs_services.create!(api_docs_params(service_id: another_service.id, name: '2nd-S')[:api_docs_service], without_protection: true)
+
+      get admin_api_docs_services_path
+      refute_xpath '//*[@id="side-tabs"]' # The service menu
+      refute_xpath '//*[@id="tab-content"]/h2[1]', /.* > ActiveDocs/ # The service title
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      api_docs_name_list_nodes = page.xpath("//*[@id='content']/table/tbody/tr/td[1]/a") # From the resulting table, the first column of all api_docs
+      actual_api_docs_data = api_docs_name_list_nodes.map { |node| { preview_link: node['href'], api_doc_name: node.text } }
+      expected_api_docs_data = provider.api_docs_services.select(:id, :name).map do |api_doc|
+        { preview_link: preview_admin_api_docs_service_path(api_doc), api_doc_name: api_doc.name }
+      end
+      assert_same_elements expected_api_docs_data, actual_api_docs_data
+    end
+
+    test 'preview under the service scope when there is a service' do
+      get preview_admin_api_docs_service_path(api_docs_service)
+      refute_xpath '//*[@id="side-tabs"]' # The menu
+      refute_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+
+      api_docs_service.update({service_id: service.id}, without_protection: true)
+      get preview_admin_api_docs_service_path(api_docs_service)
+      assert_redirected_to preview_admin_service_api_doc_path(service, api_docs_service)
+    end
+
+    test 'edit under the service scope when there is a service' do
+      get edit_admin_api_docs_service_path(api_docs_service)
+      refute_xpath '//*[@id="side-tabs"]' # The menu
+      refute_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+
+      api_docs_service.update({service_id: service.id}, without_protection: true)
+      get edit_admin_api_docs_service_path(api_docs_service)
+      assert_redirected_to edit_admin_service_api_doc_path(service, api_docs_service)
     end
 
     test '#create sets all the attributes, including the system_name and the service_id' do
@@ -32,7 +70,7 @@ class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test '#update with the right params' do
-      put admin_api_docs_service_path(api_docs_service), update_params(service_id: service.id)
+      put admin_api_docs_service_path update_params(service_id: service.id)
       assert_response :redirect
       assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
 
@@ -47,7 +85,7 @@ class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
     def test_update_can_remove_service
       api_docs_service.update_attribute(:service_id, provider.default_service_id)
 
-      put admin_api_docs_service_path(api_docs_service), update_params(service_id: '')
+      put admin_api_docs_service_path update_params(service_id: '')
       assert_response :redirect
       assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
 
@@ -57,7 +95,7 @@ class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
     def test_system_name_is_not_updated
       old_system_name = api_docs_service.system_name
 
-      put admin_api_docs_service_path(api_docs_service), update_params(system_name: "#{old_system_name}-2")
+      put admin_api_docs_service_path update_params(system_name: "#{old_system_name}-2")
 
       assert_response :redirect
       assert_equal old_system_name, api_docs_service.reload.system_name
@@ -65,13 +103,13 @@ class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def test_update_invalid_params
       old_body = api_docs_service.body
-      put admin_api_docs_service_path(api_docs_service), update_params(body: '{apis: []}')
+      put admin_api_docs_service_path update_params(body: '{apis: []}')
       assert_includes flash[:error], 'JSON Spec is invalid'
       assert_equal old_body, api_docs_service.reload.body
     end
 
     def test_update_unexistent_service
-      put admin_api_docs_service_path(api_docs_service), update_params(service_id: 200)
+      put admin_api_docs_service_path update_params(service_id: 200)
       assert_includes flash[:error], 'Service not found'
     end
 
@@ -82,7 +120,7 @@ class Admin::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   end
 
-  class MasterLoggedInTest < Admin::ApiDocs::ServicesControllerTest
+  class MasterLoggedInTest < Admin::ApiDocs::AccountApiDocsControllerTest
 
     test 'Access allowed for master on Saas' do
       get admin_api_docs_services_path
