@@ -7,9 +7,25 @@ import 'core-js/es6/array'
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 
+import '../styles/dashboard.scss'
+
 class ApiFilter extends Component {
+  onFilterChange (event) {
+    // const filterQuery = event.target.value.toLowerCase()
+    // Hide / show apis
+  }
+
   render () {
-    return <h1 className='DashboardSection-title'>All APIs</h1>
+    return (
+      <div className="ApiFilter">
+        <input
+          onChange={(e) => this.onFilterChange(e)}
+          type="search"
+          placeholder="All API's"
+        />
+        <span className="fa fa-search" />
+      </div>
+    )
   }
 }
 
