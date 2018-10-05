@@ -1,5 +1,6 @@
 - content_for :javascripts do
-  = render_js_module_loader
+  = javascript_pack_tag 'bubbles'
+  = javascript_pack_tag 'services'
   = javascript_include_tag 'vendor/jquery.tipsy.js'
 
 h1 Overview
@@ -167,10 +168,7 @@ section class="service-widget"
 = render 'shared/service_access'
 
 javascript:
-  System.import('onboarding/bubbles').then(function (m) {
-    m.show(#{json bubbles.take(1).as_json})
-  });
-
-  System.import('services/index').then(function (m) {
-    m.default()
-  });
+  document.addEventListener('DOMContentLoaded', function () {
+    showBubble(#{json bubbles.take(1).as_json})
+    serviceInitialize()
+  })
