@@ -3,7 +3,7 @@ ruby '~> 2.3.0'
 eval_gemfile 'Gemfile.base'
 
 source 'https://gems.contribsys.com/' do
-  gem 'sidekiq-pro', '~> 3.4', require: %w(sidekiq-pro sidekiq/pro/web)
+  gem 'sidekiq-pro', '~> 3.5.3', require: %w(sidekiq-pro sidekiq/pro/web)
 end
 
 # one of the license terms does not permit modifications and presents unclear risk to redhat

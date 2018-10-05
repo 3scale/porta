@@ -87,7 +87,7 @@ gem 'faraday_middleware'
 gem 'rails_event_store', '~> 0.9.0'
 gem 'paperclip', '~> 5.3.0'
 gem 'zip-zip', require: false
-gem 'rubyzip', '~>1.1.7', require: false
+gem 'rubyzip', '~>1.2.2', require: false
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
 gem 'prawn-layout', '0.2.1'
@@ -135,7 +135,7 @@ group :assets do
   gem 'active-docs', path: 'vendor/active-docs'
 end
 
-gem 'compass-rails', '~> 2.0.4'
+gem 'compass-rails', '~> 3.0.2'
 
 gem 'state_machines', '0.4.0'
 gem 'state_machines-activerecord', '0.4.0'
@@ -167,8 +167,8 @@ group :development do
 
   # Rails 4.2 have it built in
   gem 'quiet_assets'
-
-  gem 'yard', require: false
+ 
+  gem 'yard', '~> 0.9.11', require: false
 
   # Install rubocop only when using RubyMine (for the rubocop plugin)
   gem 'rubocop', '0.52.1', install_if: ENV['TEAMCITY_RAKE_RUNNER_MODE'], require: false
@@ -205,7 +205,7 @@ group :test do
   gem 'mechanize'
   gem 'parallel_tests', '~> 2.3'
 
-  gem 'childprocess'
+  gem 'childprocess', '~> 0.9.0'
 
   gem 'equivalent-xml', require: false
 
