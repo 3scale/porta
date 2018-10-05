@@ -1,4 +1,4 @@
-import * as migrate from './migrate'
+import * as migrate from '../../../app/javascript/src/services/migrate'
 
 describe('Services migrate', () => {
   beforeEach(() => {
