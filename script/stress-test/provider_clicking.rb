@@ -81,7 +81,7 @@ class ProviderClicking
   end
 
   def applications
-    get_ids list_apps.links_with(href: %r|^/admin/buyers/applications/\d+$|)
+    get_ids list_apps.links_with(href: %r{^/admin/services/\d+/applications/\d+$})
   end
 
   def accounts
