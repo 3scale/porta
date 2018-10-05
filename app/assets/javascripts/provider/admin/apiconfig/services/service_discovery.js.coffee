@@ -61,8 +61,12 @@ $ ->
       if services.length > 0
         form_discover.service_name.selectedIndex = 1
 
-  if form_source != null and typeof form_source != 'undefined'
-    $(form_source.source).click change_service_source
+  if form_source?
+    radioGroup = form_source.source
+    i = 0
+    while i < radioGroup.length
+      radioGroup[i].addEventListener 'click', change_service_source
+      i++
 
-  if form_discover != null and typeof form_discover != 'undefined'
+  if form_discover?
     form_discover.service_namespace.addEventListener 'change', change_cluster_namespace
