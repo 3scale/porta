@@ -2,7 +2,6 @@
   = stylesheet_link_tag 'vendor/c3'
 
 = content_for :javascripts do
-  = render_js_module_loader
   = javascript_pack_tag 'dashboard'
 
 .Dashboard
@@ -46,6 +45,6 @@
       = raw(@messages_presenter.render)
 
 javascript:
-  System.import('dashboard/toggle').then(function (m) {
-    m.default()
-  });
+  document.addEventListener('DOMContentLoaded', function () {
+    toggleWidget()
+  })
