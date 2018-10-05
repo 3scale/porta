@@ -1,5 +1,5 @@
-import { ApiFilter } from '../src/Dashboard/components/ApiFilter'
+import { ApiFilterWrapper } from '../src/Dashboard/components/ApiFilter'
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.ApiFilter = ApiFilter
+  window.ApiFilter = ApiFilterWrapper
 })
