@@ -2,5 +2,17 @@
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
-    window.ApiFilter({}, 'api_filter')
+    var onApisFiltered = function(allApis, filteredApis) {
+      for (api = 0; api < allApis.length; api++) {
+        document.getElementById("service_" + allApis[api].service.id).style.display = "none"
+      }
+      for (api = 0; api < filteredApis.length; api++) {
+        document.getElementById("service_" + filteredApis[api].service.id).style.display = "inline"
+      }
+    }
+
+    window.ApiFilter({
+      apis: #{json @services},
+      onApisFiltered: onApisFiltered
+    }, 'api_filter')
   })
