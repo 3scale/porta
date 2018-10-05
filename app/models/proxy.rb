@@ -29,7 +29,7 @@ class Proxy < ApplicationRecord
 
   HTTP_HEADER =  /\A[{}\[\]\d,.;@#~%&()?\w_"= \/\\:-]+\Z/
 
-  validates :api_backend, uri: { path: true },
+  validates :api_backend, uri: { path: proc { provider_can_use?(:proxy_private_base_path) } },
                           non_localhost: { message: :protected_domain }
 
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
