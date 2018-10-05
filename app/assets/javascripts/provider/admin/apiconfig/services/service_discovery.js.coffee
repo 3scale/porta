@@ -62,9 +62,7 @@ $ ->
         form_discover.service_name.selectedIndex = 1
 
   if form_source != null and typeof form_source != 'undefined'
-    form_source.source.forEach (item) ->
-      item.addEventListener 'click', change_service_source
-      return
+    $(form_source.source).click change_service_source
 
   if form_discover != null and typeof form_discover != 'undefined'
     form_discover.service_namespace.addEventListener 'change', change_cluster_namespace
