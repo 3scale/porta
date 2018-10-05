@@ -1,4 +1,4 @@
-import * as index from './index'
+import * as index from '../../../app/javascript/src/services/index'
 
 describe('Services index', () => {
   beforeEach(() => {
