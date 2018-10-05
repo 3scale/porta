@@ -8,7 +8,7 @@ class UriValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     valid = begin
               uri = URI.parse(value)
-              valid_scheme?(uri.scheme) && uri.host.present? && !forbidden_part?(uri)
+              valid_scheme?(uri.scheme) && uri.host.present? && !forbidden_part?(record, uri)
             rescue URI::InvalidURIError
               false
             end
@@ -26,9 +26,19 @@ class UriValidator < ActiveModel::EachValidator
     end
   end
 
-  def forbidden_part?(uri)
-    forbidden_parts = DEFAULT_FORBIDDEN_PARTS.reject { |part| options[part].presence }
-    forbidden_parts += DEFAULT_OPTIONAL_PARTS.select { |part| options.key?(part) && !options[part] }
+  def forbidden_part?(record, uri)
+    forbidden_parts = DEFAULT_FORBIDDEN_PARTS.reject { |part| truthy?(record, options[part]) }
+    forbidden_parts += DEFAULT_OPTIONAL_PARTS.select { |part| options.key?(part) && falsy?(record, options[part]) }
     forbidden_parts.any? { |forbidden_attr| uri.public_send(forbidden_attr).present? }
+  end
+
+  protected
+
+  def truthy?(record, part)
+    !!(part.respond_to?(:call) ? record.instance_eval(&part) : part.present?)
+  end
+
+  def falsy?(record, part)
+    !truthy?(record, part)
   end
 end

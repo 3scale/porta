@@ -191,10 +191,24 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'proxy api backend formats ok' do
-    %w[http://example.org:9 https://example.org:3 https://example.org:3/path].each do |endpoint|
+    %w[http://example.org:9 https://example.org:3].each do |endpoint|
       @proxy.api_backend = endpoint
       assert @proxy.valid?, @proxy.errors.full_messages.to_sentence
     end
+  end
+
+  test 'proxy api backend with base path' do
+    @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
+    @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
+
+    @account.expects(:provider_can_use?).with(:proxy_private_base_path).returns(false)
+    @proxy.api_backend = 'https://example.org:3/path'
+    refute @proxy.valid?
+    assert_equal [@proxy.errors.generate_message(:api_backend, :invalid)], @proxy.errors.messages[:api_backend]
+
+    @account.expects(:provider_can_use?).with(:proxy_private_base_path).returns(true)
+    @proxy.api_backend = 'https://example.org:3/path'
+    assert @proxy.valid?
   end
 
   test 'hostname_rewrite_for_sandbox' do
