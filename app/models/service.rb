@@ -63,6 +63,7 @@ class Service < ApplicationRecord
   alias provided_plans issued_plans
 
   has_many :cinstances, inverse_of: :service
+  has_many :alerts, through: :cinstances
   has_many :service_contracts, through: :service_plans #, :readonly => true
 
   has_many :contracts, through: :issued_plans do #, :readonly => true
