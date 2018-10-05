@@ -2,7 +2,9 @@
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
-    var onApisFiltered = function(allApis, filteredApis) {
+    var allApis = #{json @services}
+
+    var displayApis = function(filteredApis) {
       for (api = 0; api < allApis.length; api++) {
         document.getElementById("service_" + allApis[api].service.id).style.display = "none"
       }
@@ -12,7 +14,7 @@ javascript:
     }
 
     window.ApiFilter({
-      apis: #{json @services},
-      onApisFiltered: onApisFiltered
+      apis: allApis,
+      displayApis: displayApis
     }, 'api_filter')
   })
