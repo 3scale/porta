@@ -27,6 +27,9 @@ module Stats
             :plan => {
               :id      => cinstance.plan.id,
               :name    => cinstance.plan.name
+            },
+            service: {
+              id: cinstance.service_id
             }
           }
         # Usage data per app cinstance should not be here.
