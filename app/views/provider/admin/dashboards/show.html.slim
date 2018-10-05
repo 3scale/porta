@@ -3,6 +3,7 @@
 
 = content_for :javascripts do
   = render_js_module_loader
+  = javascript_pack_tag 'dashboard'
 
 .Dashboard
   div.Dashboard-widgets
@@ -23,7 +24,7 @@
     section.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
       - if current_user.accessible_services.size > 1
         header.DashboardSection-header.DashboardSection-header--extended
-          h1.DashboardSection-title All API's
+          = render 'services_filter'
           = render 'services_navigation', api_docs: current_account.api_docs_services,
                                           applications: current_account.provided_cinstances,
                                           alerts: current_account.buyer_alerts.unread
