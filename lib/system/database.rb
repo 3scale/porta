@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'active_support/string_inquirer'
-
+require 'system/database/triggers'
+require 'system/database/procedures'
 module System
   module Database
     class ConnectionError < ActiveRecord::NoDatabaseError; end
@@ -53,10 +54,9 @@ module System
         end
 
         def sql_for_readiness
-          case
-          when oracle?
+          if oracle?
             "SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'"
-          when mysql?
+          elsif mysql?
             'SELECT 1'
           else
             'SELECT 1'
@@ -67,14 +67,14 @@ module System
 
     def ready?
       config = ConnectionProbe.connection_config
+      connection_string = "#{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
       if ConnectionProbe.ready?
-        puts "Connected to #{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
+        puts "Connected to #{connection_string}"
         return true
       else
-        puts "Cannot connect to #{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
+        puts "Cannot connect to #{connection_string}"
         return false
       end
-
     rescue ActiveRecord::NoDatabaseError => error # In case of mysql
       puts "Connected, but database does not exist: #{error}"
       true
@@ -85,6 +85,7 @@ module System
       if (cause = error.cause)
         puts "Caused by: #{cause} (#{cause.class})"
       end
+      false
     end
 
     module Scopes
@@ -114,199 +115,8 @@ module System
       end
     end
 
-    class Trigger
-      def initialize(table, trigger)
-        @table = table
-        @name = "#{table}_tenant_id"
-        @trigger = trigger
-      end
-
-      def drop
-        raise NotImplementedError
-      end
-
-      def create
-        <<~SQL
-          CREATE TRIGGER #{name} BEFORE INSERT ON #{table} FOR EACH ROW #{body}
-        SQL
-      end
-
-      def recreate
-        [drop, create]
-      end
-
-      protected
-
-      attr_reader :trigger, :name, :table
-
-      def body
-        raise NotImplementedError
-      end
-    end
-    private_constant :Trigger
-
-    class OracleTrigger < Trigger
-      def drop
-        <<~SQL
-          BEGIN
-             EXECUTE IMMEDIATE 'DROP TRIGGER #{name}';
-          EXCEPTION
-            WHEN OTHERS THEN
-              IF SQLCODE != -4080 THEN
-                RAISE;
-              END IF;
-          END;
-        SQL
-      end
-
-      def body
-        <<~SQL
-          DECLARE
-            master_id numeric;
-          BEGIN
-            #{master_id}
-
-            IF :new.tenant_id IS NULL THEN
-              #{trigger}
-            END IF;
-
-            #{exception_handler}
-          END;
-        SQL
-      end
-
-      protected
-
-      def master_id
-        "master_id := #{Account.master.id}"
-      rescue ActiveRecord::RecordNotFound
-        <<~SQL
-          BEGIN
-            SELECT id INTO master_id FROM accounts WHERE master = 1;
-          EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-              master_id := NULL;
-          END;
-        SQL
-      end
-
-      def exception_handler
-        <<~SQL
-          EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-              DBMS_OUTPUT.PUT_LINE('Could not find tenant_id in #{name}');
-        SQL
-      end
-    end
-
-    class MySQLTrigger < Trigger
-
-      def drop
-        <<~SQL
-          DROP TRIGGER IF EXISTS #{name}
-        SQL
-      end
-
-      def body
-        master_id = begin
-          Account.master.id
-        rescue ActiveRecord::RecordNotFound
-          <<~SQL
-            (SELECT id FROM accounts WHERE master)
-          SQL
-        end
-
-        <<~SQL
-          BEGIN
-            DECLARE master_id numeric;
-            IF @disable_triggers IS NULL THEN
-              IF NEW.tenant_id IS NULL THEN
-                SET master_id = #{master_id};
-                #{trigger}
-              END IF;
-            END IF;
-          END;
-        SQL
-      end
-    end
-
-    class StoredProcedure
-      def initialize(name, body, params = {})
-        @name = name
-        @body = body
-        @params = params
-      end
-
-      def drop
-        raise NotImplementedError
-      end
-
-      def create
-        raise NotImplementedError
-      end
-
-      def recreate
-        [drop, create]
-      end
-
-      protected
-
-      attr_reader :name, :body, :params
-
-      def params_declaration
-        pairs = params.map { |name, type| "#{name} #{type}" }
-        "(#{pairs.join(', ')})"
-      end
-
-      def signature
-        [name, params_declaration].join
-      end
-    end
-    private_constant :StoredProcedure
-
-    class OracleStoredProcedure < StoredProcedure
-      def params_declaration
-        pairs = params.map { |name, type| "#{name} #{type}" }
-        "(#{pairs.join(', ')})"
-      end
-
-      def drop
-        <<~SQL
-          BEGIN
-             EXECUTE IMMEDIATE 'DROP PROCEDURE #{name}';
-          EXCEPTION
-            WHEN OTHERS THEN
-              IF SQLCODE != -4043 THEN
-                RAISE;
-              END IF;
-          END;
-        SQL
-      end
-
-      def create
-        <<~SQL
-          CREATE OR REPLACE PROCEDURE #{signature} AS
-          #{body}
-        SQL
-      end
-    end
-
-    class MySQLStoredProcedure < StoredProcedure
-      def drop
-        <<~SQL
-          DROP PROCEDURE IF EXISTS #{name}
-        SQL
-      end
-
-      def create
-        <<~SQL
-          CREATE PROCEDURE #{signature} #{body}
-        SQL
-      end
-    end
   end
 end
-
 
 if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
