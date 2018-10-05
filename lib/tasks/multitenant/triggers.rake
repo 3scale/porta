@@ -92,18 +92,18 @@ namespace :multitenant do
         SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;
       SQL
 
-      invoices_trigger = <<~SQL
-        IF :new.provider_account_id <> master_id THEN
-          :new.tenant_id := :new.provider_account_id;
+      invoices_trigger = <<-SQL
+        IF :NEW.provider_account_id <> master_id THEN
+          :NEW.tenant_id := :NEW.provider_account_id;
         END IF;
 
-        IF :new.friendly_id IS NOT NULL AND :new.friendly_id <> 'fix' THEN
+        IF :NEW.friendly_id IS NOT NULL AND :NEW.friendly_id <> 'fix' THEN
           /* Subject to race condition, so better not to create invoices in parallel passing client-chosen friendly IDs */
-          SELECT numbering_period
-          INTO v_numbering_period
-          FROM billing_strategies
-          WHERE account_id = :new.provider_account_id
-          AND ROWNUM = 1;
+
+          SELECT numbering_period INTO v_numbering_period
+                                   FROM billing_strategies
+                                   WHERE account_id = :NEW.provider_account_id
+                                   AND ROWNUM = 1;
 
           IF v_numbering_period = 'monthly' THEN
             v_invoice_prefix_format := 'YYYY-MM';
@@ -111,20 +111,20 @@ namespace :multitenant do
             v_invoice_prefix_format := 'YYYY';
           END IF;
 
-          v_invoice_prefix := TO_CHAR(:new.period, v_invoice_prefix_format);
+          v_invoice_prefix := TO_CHAR(:NEW.period, v_invoice_prefix_format);
 
           SELECT id, invoice_count
                   INTO v_invoice_counter_id, v_invoice_count
                   FROM invoice_counters
-                  WHERE provider_account_id = :new.provider_account_id AND invoice_prefix = v_invoice_prefix
+                  WHERE provider_account_id = :NEW.provider_account_id AND invoice_prefix = v_invoice_prefix
                   AND ROWNUM = 1
                   FOR UPDATE;
 
-          v_chosen_sufix := COALESCE(TO_NUMBER(SUBSTR(:new.friendly_id, -8)), 0);
-          v_invoice_count := GREATEST(v_invoice_count, v_chosen_sufix);
+          v_chosen_sufix := COALESCE(TO_NUMBER(SUBSTR(:NEW.friendly_id, -8)), 0);
+          v_invoice_count := GREATEST(COALESCE(v_invoice_count, 0), v_chosen_sufix);
 
           UPDATE invoice_counters
-          SET invoice_count = v_invoice_count, updated_at = :new.updated_at
+          SET invoice_count = v_invoice_count, updated_at = :NEW.updated_at
           WHERE id = v_invoice_counter_id;
         END IF;
       SQL
@@ -133,8 +133,9 @@ namespace :multitenant do
         v_numbering_period varchar(255);
         v_invoice_prefix_format varchar(255);
         v_invoice_prefix varchar(255);
-        v_invoice_count int;
-        v_chosen_sufix int;
+        v_invoice_count NUMBER;
+        v_chosen_sufix NUMBER;
+        v_invoice_counter_id NUMBER;
       SQL
 
       triggers << System::Database::OracleTrigger.new('line_items', <<~SQL)

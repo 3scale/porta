@@ -23,11 +23,17 @@ until boot_database; do
   sleep 1
 done
 
+if [ "x$DB" = "xoracle" ]; then
+  echo "Waiting for 60 seconds for the DB to be ready"
+  sleep 60
+fi
+
 if [ "x$PROXY_ENABLED" == "x1" ]; then
   source "${SCRIPT_DIR}/proxy_env.sh"
 fi
 
 if [ "x$MULTIJOB_KIND" == "x" ]; then
+
     MULTIJOB_KIND="integrate"
 fi
 
