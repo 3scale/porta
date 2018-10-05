@@ -19,19 +19,21 @@ nav.DashboardNavigation
     // Billing
     - if can?(:manage, :finance)
       li.DashboardNavigation-list-item
-        => link_to 'Billing',
-                   admin_finance_root_path,
-                   class: "DashboardNavigation-link"
+        = link_to admin_finance_root_path, class: "DashboardNavigation-link" do
+          i.fa.fa-credit-card>
+          | Billing
+
+
 
     // Dev Portal
     - if can?(:manage, :portal)
       li.DashboardNavigation-list-item
-        => link_to 'Portal',
-                   provider_admin_cms_root_path,
-                   class: "DashboardNavigation-link"
+        = link_to provider_admin_cms_root_path, class: "DashboardNavigation-link"
+          i.fa.fa-sitemap>
+          | Portal
 
-
-        == dashboard_secondary_collection_link 'Draft',
+        - if current_account.templates.with_draft
+          == dashboard_secondary_collection_link 'Draft',
                                                  current_account.templates.with_draft,
                                                  provider_admin_cms_changes_path
 

@@ -135,6 +135,9 @@ class Account < ApplicationRecord
   has_many :sso_authorizations, through: :users
   has_many :user_sessions, through: :users
 
+  has_many :services
+  has_many :cinstances, through: :services
+
   alias_attribute :name, :org_name
 
   has_one :onboarding
