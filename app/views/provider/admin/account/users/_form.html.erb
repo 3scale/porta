@@ -52,11 +52,11 @@
     </script>
     <%- if current_account.provider_can_use?(:service_permissions) %>
         <% content_for :javascripts do %>
-            <%= render_js_module_loader %>
+            <% javascript_pack_tag 'permissions' %>
         <% end %>
         <script>
-          System.import('users/permissions.es6').then(function(m){
-            m.render({
+          document.addEventListener('DOMContentLoaded', function () {
+            renderPermissionsWidget({
               el: document.getElementById('user-permissions-widget'),
               state: <%= json @user.as_json(root: false, only: [:role], methods: [:admin_sections, :member_permission_service_ids]) %>,
               services: <%= json @services.as_json(root: false, only: [:id, :name, :description]) %>,
