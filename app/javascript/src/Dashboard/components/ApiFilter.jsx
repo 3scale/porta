@@ -34,4 +34,4 @@ const ApiFilterWrapper = (props, element) => render(
   document.getElementById(element)
 )
 
-export { ApiFilterWrapper as ApiFilter }
+export { ApiFilter, ApiFilterWrapper }
