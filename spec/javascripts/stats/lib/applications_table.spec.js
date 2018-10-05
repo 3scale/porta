@@ -13,12 +13,12 @@ describe('StatsApplicationsTable', () => {
         account: {
           id: '7',
           name: 'Chino',
-          link: '/buyer/account/7'
+          link: '/buyers/account/7'
         },
         application: {
           id: '13',
           name: 'Xiam',
-          link: '/buyer/application/13'
+          link: '/apiconfig/services/5/application/13'
         },
         total: 42
       }
@@ -30,9 +30,9 @@ describe('StatsApplicationsTable', () => {
     let $account = $table.find('.StatsApplicationsTable-account').first()
     let $total = $table.find('.StatsApplicationsTable-total').first()
 
-    expect($application).toHaveProp('href', `${window.location.origin}/buyer/application/13`)
+    expect($application).toHaveProp('href', `${window.location.origin}/apiconfig/services/5/application/13`)
     expect($application).toContainText('Xiam')
-    expect($account).toHaveProp('href', `${window.location.origin}/buyer/account/7`)
+    expect($account).toHaveProp('href', `${window.location.origin}/buyers/account/7`)
     expect($account).toContainText('Chino')
     expect($total).toContainText('42')
   })
