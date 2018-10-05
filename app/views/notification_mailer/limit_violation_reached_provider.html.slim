@@ -5,4 +5,4 @@ p
   | Application #{@cinstance.name} of your client #{@cinstance.user_account.name}
     is above #{@alert.level}% limit utilization of #{@alert.message}.
 
-= link_to 'View application usage here', admin_buyers_account_application_url(@account, @cinstance)
+= link_to 'View application usage here', admin_service_application_url(@cinstance.service, @cinstance)
