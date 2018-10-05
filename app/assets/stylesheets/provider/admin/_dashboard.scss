@@ -340,6 +340,10 @@
 .DashboardNavigation {
   float: right;
 
+  &--services {
+    margin-top: line-height-times(1/2);
+  }
+
   &-list {
     @include horizontal-list();
 
