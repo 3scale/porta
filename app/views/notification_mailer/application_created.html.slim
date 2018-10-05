@@ -14,5 +14,4 @@ ul
       b #{@application.field_label(field.name)}:
       |  #{@application.field_value(field.name).presence || 'not provided by user'}
 
-p = link_to 'View new application in your 3scale Admin Portal',
-              admin_buyers_account_application_url(@account, @application)
+p = link_to 'View new application in your 3scale Admin Portal', admin_service_application_url(@service, @application)
