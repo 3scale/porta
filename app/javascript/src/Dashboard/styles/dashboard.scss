@@ -1,0 +1,30 @@
+// TODO: Sort out styles libs after migration (webpack)
+// Copied from colors and typography for now
+$altoGray:       #d1d1d1; // pf-black-300
+$outerSpaceGray: #393f44; // pf-black-800
+
+$border-color: $altoGray;
+$border-width: 1px;
+$border-radius: 4px;
+$font-color: $outerSpaceGray;
+
+.ApiFilter {
+
+  float: left;
+  width: auto;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+
+  span {
+    margin: 0.5rem;
+    color: $font-color
+  }
+
+  input {
+    border: none;
+    width: auto;
+    padding: 0.5rem;
+  }
+}
