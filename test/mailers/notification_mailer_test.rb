@@ -383,6 +383,9 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Previous plan: #{old_plan.name}", body.encoded
       assert_match "Current plan: #{cinstance.plan.name}", body.encoded
       assert_match "Application #{cinstance.name} has changed to plan #{cinstance.plan.name}.", body.encoded
+      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(cinstance.service, cinstance,
+                                                                                         host: cinstance.service.account.admin_domain)
+      assert_match cinstance_url, body.encoded
     end
   end
 

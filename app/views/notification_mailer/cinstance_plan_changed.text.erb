@@ -7,5 +7,5 @@ Developer: <%= @account.name %>
 Service: <%= @service.name %>
 Previous plan: <%= @old_plan.name %>
 Current plan: <%= @new_plan.name %>
-To view application, follow this link: <%= admin_buyers_account_application_url(@account, @cinstance) %>
+To view application, follow this link: <%= admin_service_application_url(@cinstance.service, @cinstance) %>
 
