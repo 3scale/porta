@@ -1,0 +1,20 @@
+#api_filter
+
+javascript:
+  document.addEventListener('DOMContentLoaded', function () {
+    var allApis = #{json @services}
+
+    var displayApis = function(filteredApis) {
+      for (api = 0; api < allApis.length; api++) {
+        document.getElementById("service_" + allApis[api].service.id).style.display = "none"
+      }
+      for (api = 0; api < filteredApis.length; api++) {
+        document.getElementById("service_" + filteredApis[api].service.id).style.display = "inline"
+      }
+    }
+
+    window.ApiFilter({
+      apis: allApis,
+      displayApis: displayApis
+    }, 'api_filter')
+  })

@@ -182,6 +182,10 @@ class User < ApplicationRecord
     end
   end
 
+  def accessible_services?
+    accessible_services.exists?
+  end
+
   def allowed_access_token_scopes
     AccessToken.scopes.allowed_for(self)
   end
