@@ -52,7 +52,8 @@
                 <%= account_name(account) -%>
               <% end-%>
             </td>
-            <td><%= link_to alert.cinstance.name, admin_buyers_account_application_path(account, alert.cinstance) if account.present? %></td>
+            <%- cinstance = alert.cinstance %>
+            <td><%= link_to cinstance.name, admin_service_application_path(cinstance.service, cinstance) %></td>
             <td><%= h alert.message %></td>
             <td><%= colorize_utilization(alert.level) %></td>
             <td><%= l alert.timestamp %></td>
