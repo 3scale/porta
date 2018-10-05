@@ -5,7 +5,9 @@ nav.DashboardNavigation
       // Accounts
       => dashboard_collection_link 'Account',
                                    buyers,
-                                   admin_buyers_accounts_path
+                                   admin_buyers_accounts_path,
+                                   'Accounts',
+                                   'users'
 
       // Pending Accounts
       - if show_pending_accounts_on_dashboard?
@@ -17,33 +19,40 @@ nav.DashboardNavigation
     // Billing
     - if can?(:manage, :finance)
       li.DashboardNavigation-list-item
-        => link_to 'Billing',
-                   admin_finance_root_path,
-                   class: "DashboardNavigation-link"
+        = link_to admin_finance_root_path, class: "DashboardNavigation-link" do
+          i.fa.fa-credit-card>
+          | Billing
+
+
 
     // Dev Portal
     - if can?(:manage, :portal)
       li.DashboardNavigation-list-item
-        => link_to 'Portal',
-                   provider_admin_cms_root_path,
-                   class: "DashboardNavigation-link"
+        = link_to provider_admin_cms_root_path, class: "DashboardNavigation-link"
+          i.fa.fa-sitemap>
+          | Portal
 
-
-        == dashboard_secondary_collection_link 'Draft',
+        - if current_account.templates.with_draft
+          == dashboard_secondary_collection_link 'Draft',
                                                  current_account.templates.with_draft,
                                                  provider_admin_cms_changes_path
 
     // Forum
-    - if show_forum_on_dashboard?
+    - if show_forum_on_dashboard? && forum_topics.any?
       li.DashboardNavigation-list-item
-        = dashboard_collection_link('Forum Topic',
+        = dashboard_collection_link 'Forum Topic',
                                     forum_topics,
-                                    admin_forum_path)
+                                    admin_forum_path,
+                                    'Forum Topics',
+                                    'comments'
 
     // Messages
     li.DashboardNavigation-list-item
-      = link_to provider_admin_messages_root_path, class: 'DashboardNavigation-link' do
-        | Messages
+      = dashboard_collection_link 'Message',
+                                  current_account.messages.where(sender: !current_account),
+                                  provider_admin_messages_root_path,
+                                  'Messages',
+                                  'envelope'
 
         - if unread_messages_presenter.show_counter?
           '

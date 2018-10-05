@@ -330,6 +330,11 @@
 .DashboardSection-header {
   float: left;
   width: 100%;
+
+  &--extended {
+    border-bottom: $border-width solid $border-color;
+    margin-bottom: line-height-times(1);
+  }
 }
 
 .DashboardNavigation {
@@ -353,6 +358,13 @@
     text-transform: uppercase;
     font-style: normal;
     color: $light-color;
+
+    .fa {
+      font-size: $font-size-sm;
+      position: relative;
+      top: -$border-width;
+      //display: none;
+    }
 
     &:hover {
       color: $link-color;
