@@ -9,7 +9,7 @@ export const applicationDetails = function (data) {
 
   function createLink (data, type) {
     const id = data.id
-    return (type === 'account') ? `/buyers/accounts/${id}` : `apiconfig/services/${data.service.id}/applications/${id}`
+    return (type === 'account') ? `/buyers/accounts/${id}` : `/apiconfig/services/${data.service.id}/applications/${id}`
   }
 
   return {
