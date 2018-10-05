@@ -10,16 +10,20 @@ import { render } from 'react-dom'
 import '../styles/dashboard.scss'
 
 class ApiFilter extends Component {
-  onFilterChange (event) {
-    // const filterQuery = event.target.value.toLowerCase()
-    // Hide / show apis
+  onInputChange (event) {
+    const { apis, onApisFiltered } = this.props
+    const filterQuery = event.target.value.toLowerCase()
+    const displayedApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
+
+    console.log(displayedApis)
+    onApisFiltered(apis, displayedApis)
   }
 
   render () {
     return (
       <div className="ApiFilter">
         <input
-          onChange={(e) => this.onFilterChange(e)}
+          onChange={e => this.onInputChange(e)}
           type="search"
           placeholder="All API's"
         />
