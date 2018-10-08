@@ -49,6 +49,8 @@ class ProxyExampleTest < ActiveSupport::TestCase
 
     assert_valid @proxy = @service.proxy
     @metric = @hits = @service.metrics.find_by!(system_name: 'hits')
+
+    NonLocalhostValidator.any_instance.stubs(validate_each: true)
   end
 
   def teardown
