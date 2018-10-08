@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180928114956) do
+ActiveRecord::Schema.define(version: 20181008065816) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -1140,6 +1140,7 @@ ActiveRecord::Schema.define(version: 20180928114956) do
     t.string   "support_email",                  limit: 255
     t.boolean  "referrer_filters_required",                    default: false
     t.string   "deployment_option",              limit: 255,   default: "hosted"
+    t.string   "kubernetes_service_link",        limit: 255
   end
 
   add_index "services", ["account_id"], name: "idx_account_id", using: :btree
