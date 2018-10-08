@@ -407,6 +407,10 @@ en:
         resume: 'resumed'
 
   sites:
+    spam_protections: 
+      edit:
+        captcha_hint_false: 'reCAPTCHA has not been configured correctly, Spam Protection cannot be enabled.'
+        captcha_hint_true: "When 'Suspicious only' is selected then reCAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', reCAPTCHA will always appear when a form is presented to a user who is not logged in."
     usage_rules:
       edit:
         sso_integrations_info_html: |
