@@ -1,18 +1,17 @@
+# frozen_string_literal: true
+
 class Api::EndUsersController < Api::BaseController
   before_action :authorize_end_users!
 
   before_action :find_service
-  before_action :find_end_user, :only => [:show, :edit, :update, :destroy]
-  before_action :find_plans, :only => [:new, :edit, :create, :update]
-  before_action :activate_submenu
+  before_action :find_end_user, only: %i[show edit update destroy]
+  before_action :find_plans, only: %i[new edit create update]
 
   sublayout 'api/service'
   activate_menu :serviceadmin, :sidebar => :end_users
 
   def index
-    if params[:id] && find_end_user
-      redirect_to admin_service_end_user_path(@service, @end_user)
-    end
+    redirect_to admin_service_end_user_path(@service, @end_user) if params[:id] && find_end_user
   end
 
   def show
@@ -23,8 +22,7 @@ class Api::EndUsersController < Api::BaseController
     @end_user = EndUser.new @service, params[:end_user]
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @end_user = EndUser.new @service, params[:end_user]

@@ -2,7 +2,6 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :activate_submenu
 
   activate_menu :main_menu => :serviceadmin, :sidebar => :integration
   sublayout 'api/service'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ServicesController < Api::BaseController
   activate_menu :serviceadmin, :overview
 
@@ -8,18 +10,13 @@ class Api::ServicesController < Api::BaseController
   load_and_authorize_resource :service, through: :current_user,
     through_association: :accessible_services, except: [:create]
 
-  with_options only: %i[edit update settings] do |actions|
-    actions.sublayout 'api/service'
-
-    #actions.before_action :activate_submenu
-  end
+  sublayout 'api/service', only: %i[edit update settings]
 
   def index
     @services = ::ServiceDecorator.decorate_collection(@services)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @service = collection.build params[:service]

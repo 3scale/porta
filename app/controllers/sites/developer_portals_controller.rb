@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class Sites::DeveloperPortalsController < Sites::BaseController
   sublayout 'sites/developer_portals'
-  activate_submenu :portal
 
   def edit
     @settings = settings

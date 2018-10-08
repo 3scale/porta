@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 class Sites::ForumsController < Sites::BaseController
   sublayout 'sites/developer_portals'
-  activate_submenu :portal
 
   before_action :authorize_forum_feature, :find_settings
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @settings.update_attributes(params[:settings])

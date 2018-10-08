@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 class Sites::DnsController < Sites::BaseController
   sublayout 'sites/developer_portals'
-  activate_submenu :portal
 
   before_action :find_account
 
-  def show
-  end
+  def show; end
 
   def update
     if @account.update_attributes(site_params, without_protection: true)
@@ -35,7 +35,7 @@ class Sites::DnsController < Sites::BaseController
 
   def site_params
     permitted_keys = [:site_access_code]
-    permitted_keys.concat [:domain, :from_email] unless view_context.readonly_dns_domains?
+    permitted_keys.concat %i[domain from_email] unless view_context.readonly_dns_domains?
     params.require(:account).permit(permitted_keys)
   end
 

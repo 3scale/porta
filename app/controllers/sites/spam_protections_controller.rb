@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 class Sites::SpamProtectionsController < Sites::BaseController
   sublayout 'sites/developer_portals'
-  activate_submenu :portal
 
   before_action :find_settings
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @settings.update_attributes(params[:settings])

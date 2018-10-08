@@ -1,13 +1,12 @@
+# frozen_string_literal: true
+
 class Api::ApplicationPlansController < Api::PlansBaseController
 
   before_action :authorize_manage_plans, only: %i[new create destroy]
   before_action :activate_sidebar_menu
   prepend_before_action :authorize_manage_plans, only: %i[new create destroy]
 
-  with_options :only => [:index, :new, :edit, :create, :update, :destroy, :masterize] do |options|
-    options.before_action :find_service
-    options.before_action :activate_submenu
-  end
+  before_action :find_service, only: %i[index new edit create update destroy masterize]
 
   sublayout 'api/service'
 
@@ -47,9 +46,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   def collection
     scope = current_account
 
-    if params[:service_id].present?
-      scope = scope.accessible_services.find(params[:service_id])
-    end
+    scope = scope.accessible_services.find(params[:service_id]) if params[:service_id].present?
 
     scope.application_plans.includes(:issuer)
   end

@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 class Provider::Admin::WebhooksController < Sites::BaseController
 
   before_action :find_webhook
   before_action :authorize_web_hooks
-
-  activate_submenu :web_hooks
 
   def new
     if @webhook

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 class Stats::ApplicationsController < Stats::BaseController
   before_action :find_cinstance
   before_action :find_service
   before_action :find_buyer_account
-  before_action :activate_submenu
 
   activate_menu :main_menu => :serviceadmin, sidebar: :applications
   sublayout 'api/service'
@@ -35,9 +36,5 @@ class Stats::ApplicationsController < Stats::BaseController
 
   def metrics_with_methods
     {metrics: @metrics, methods: @methods}
-  end
-
-  def activate_submenu
-    activate_menu submenu: current_account.multiservice? ? :services : @service.name
   end
 end

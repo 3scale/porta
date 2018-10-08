@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::EndUserPlansController < Api::PlansBaseController
   before_action :authorize_end_users!
 
@@ -6,10 +8,7 @@ class Api::EndUserPlansController < Api::PlansBaseController
   # before_action :find_plan, :only => [:edit, :update, :destroy, :masterize]
   # before_action :find_plans, :only => [:index]
 
-  with_options  :only => [:index, :new, :edit, :create, :update, :destroy, :masterize] do |options|
-    options.before_action :find_service
-    options.before_action :activate_submenu
-  end
+  before_action :find_service, only: %i[index new edit create update destroy masterize]
 
   sublayout 'api/service'
 
@@ -21,8 +20,7 @@ class Api::EndUserPlansController < Api::PlansBaseController
     @plan = collection.build params[:end_user_plan]
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @plan = collection.build params[:end_user_plan]
