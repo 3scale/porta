@@ -10,6 +10,8 @@ class Service < ApplicationRecord
   include Logic::RollingUpdates::Service
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
+  include ServiceDiscovery::ModelExtensions::Service
+
   DELETE_STATE = 'deleted'.freeze
 
   has_system_name uniqueness_scope: :account_id
