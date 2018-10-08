@@ -50,23 +50,47 @@ document.addEventListener("DOMContentLoaded", (e) => {
     return selectElem.appendChild(opt);
   };
 
+  const isFetchSupported = () => {
+    return 'fetch' in window;
+  }
+
+  const populateNamespaces = data => {
+    const projects = data.projects;
+    projects.forEach((project, index, array) => addOptionToSelect(form_discover.service_namespace, project.metadata.name));
+    return projects.length > 0 ? (
+      form_discover.service_namespace.selectedIndex = 1,
+      change_cluster_namespace()
+    ) : undefined;
+  }
+
   const fetch_namespaces = () => {
-    return $.getJSON('/p/admin/service_discovery/projects.json', (data) => {
-      const projects = data.projects;
-      projects.forEach((project, index, array) => addOptionToSelect(form_discover.service_namespace, project.metadata.name));
-      return projects.length > 0 ? (
-        form_discover.service_namespace.selectedIndex = 1,
-        change_cluster_namespace()
-      ) : undefined;
-    });
-  };
+    if (isFetchSupported()) {
+      fetch('/p/admin/service_discovery/projects.json')
+        .then(response => response.json())
+        .then(data => populateNamespaces (data));
+    } else {
+      $.getJSON('/p/admin/service_discovery/projects.json', (data) => {
+        populateNamespaces (data)
+      });
+    }
+  }
+
+  const populateServices = data => {
+    const services = data.services;
+    services.forEach((service, index, array) => addOptionToSelect(form_discover.service_name, service.metadata.name));
+    return services.length > 0 ? form_discover.service_name.selectedIndex = 1 : undefined;
+  }
 
   const fetch_services = namespace => {
-    return $.getJSON(`/p/admin/service_discovery/namespaces/${namespace}/services.json`, (data) => {
-      const services = data.services;
-      services.forEach((service, index, array) => addOptionToSelect(form_discover.service_name, service.metadata.name));
-      return services.length > 0 ? form_discover.service_name.selectedIndex = 1 : undefined;
-    });
+    if (isFetchSupported()) {
+      fetch(`/p/admin/service_discovery/namespaces/${namespace}/services.json`)
+        .then(response => response.json())
+        .then(data => populateServices (data));
+    } else{
+      $.getJSON(`/p/admin/service_discovery/namespaces/${namespace}/services.json`, (data) => {
+        populateServices(data);
+      });
+    }
   };
 
   if (form_source !== null) {
