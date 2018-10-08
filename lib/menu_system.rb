@@ -63,11 +63,6 @@ module MenuSystem
     end
   end
 
-  # Activate named submenu.
-  def activate_submenu(name)
-    activate_menu :submenu => name
-  end
-
   def active_menu
     active_menus[:main_menu]
   end
@@ -122,18 +117,5 @@ module MenuSystem
         controller.send(:activate_menu, *args)
       end
     end
-
-
-    # DEPRECATED:
-    #
-    # use 'activate_menu( :main_item, :submenu_item, ...)'
-    #
-    def activate_submenu(name, params = {})
-      prepend_before_action(params) do |controller|
-        controller.send(:activate_submenu, name)
-      end
-    end
-
-
   end
 end
