@@ -4,18 +4,10 @@ default: &base
   server_host: 'kubernetes.default.svc.cluster.local'
   server_port: 443
 
-development:
-  <<: *base
-  bearer_token:
-
-test:
-  <<: *base
-  bearer_token:
-
 production:
   <<: *base
-  bearer_token:
+  bearer_token: "<%= ENV['KUBERNETES_BEARER_TOKEN'] %>"
 
 preview:
   <<: *base
-  bearer_token:
+  bearer_token: "<%= ENV['KUBERNETES_BEARER_TOKEN'] %>"
