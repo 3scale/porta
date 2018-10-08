@@ -1,21 +1,12 @@
 default: &base
-  enabled: true
+  enabled: <%= cluster_token_file_exists = File.exists?(cluster_token_file_path = 'var/run/secrets/kubernetes.io/serviceaccount/token') %>
   server_scheme: 'https'
   server_host: 'kubernetes.default.svc.cluster.local'
   server_port: 443
-
-development:
-  <<: *base
-  bearer_token:
-
-test:
-  <<: *base
-  bearer_token:
+  bearer_token: "<%= File.read(cluster_token_file_path) if cluster_token_file_exists %>"
 
 production:
   <<: *base
-  bearer_token:
 
 preview:
   <<: *base
-  bearer_token:

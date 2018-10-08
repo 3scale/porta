@@ -11,7 +11,7 @@ namespace :boot do
   task :database do
     begin
       require 'system/database'
-      exit System::Database.ready?
+      exit false unless System::Database.ready?
     end
   end
 
