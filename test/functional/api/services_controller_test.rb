@@ -97,7 +97,7 @@ class Api::ServicesControllerTest < ActionController::TestCase
     @controller.stubs(:authorize_plans)
     @controller.stubs(:can_create?).returns(true)
 
-    Service.any_instance.stubs(save: true)
+    Service.any_instance.stubs(save: true, persisted?: true)
 
     post :create, service: { system_name: 'Test bubbles' }
 
