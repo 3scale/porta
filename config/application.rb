@@ -179,7 +179,7 @@ module System
 
     config.three_scale.service_discovery = ActiveSupport::OrderedOptions.new
     config.three_scale.service_discovery.enabled = false
-    config.three_scale.service_discovery.merge!(try_config_for(:service_discovery))
+    config.three_scale.service_discovery.merge!(try_config_for(:service_discovery) || {})
 
     config.three_scale.plan_rules = ActiveSupport::OrderedOptions.new
     config.three_scale.plan_rules.merge!(try_config_for(:plan_rules) || {})
