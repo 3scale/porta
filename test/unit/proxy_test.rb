@@ -193,10 +193,22 @@ class ProxyTest < ActiveSupport::TestCase
   test 'proxy api backend formats ok' do
     %w[http://example.org:9 https://example.org:3].each do |endpoint|
       @proxy.api_backend = endpoint
-      @proxy.endpoint = endpoint
-      @proxy.secret_token = '123'
       assert @proxy.valid?, @proxy.errors.full_messages.to_sentence
     end
+  end
+
+  test 'proxy api backend with base path' do
+    @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
+    @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
+
+    @account.expects(:provider_can_use?).with(:proxy_private_base_path).returns(false)
+    @proxy.api_backend = 'https://example.org:3/path'
+    refute @proxy.valid?
+    assert_equal [@proxy.errors.generate_message(:api_backend, :invalid)], @proxy.errors.messages[:api_backend]
+
+    @account.expects(:provider_can_use?).with(:proxy_private_base_path).returns(true)
+    @proxy.api_backend = 'https://example.org:3/path'
+    assert @proxy.valid?
   end
 
   test 'hostname_rewrite_for_sandbox' do
@@ -248,22 +260,17 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
-
   test 'proxy api backend formats invalid' do
-    %w[example.org:9 fdsfas ssh://example.org:39 http://example.org:32/fdsa http://example.org:32/fdsa].each do |endpoint|
-
+    %w[example.org:9 fdsfas ssh://example.org:39 http://example.org:32/fdsa?a=1].each do |endpoint|
       @proxy.api_backend = endpoint
-      @proxy.update_attributes endpoint: endpoint
-      @proxy.secret_token = '123'
-      @proxy.valid?
+      refute @proxy.valid?
+      assert_equal [@proxy.errors.generate_message(:api_backend, :invalid)], @proxy.errors.messages[:api_backend]
+    end
 
-      # Endpoints are rewritten before validation now to do the
-      # migration from old sandbox proxies to new ones
-
-
-      # @assert @proxy.errors[:endpoint], "no endpoint errors found on - #{endpoint}".presence
-
-      assert @proxy.errors[:api_backend], "no api_backend errors found on - #{endpoint}".presence
+    %w[http://localhost/ https://127.0.0.1 http://127.10.0.50].each do |endpoint|
+      @proxy.api_backend = endpoint
+      refute @proxy.valid?
+      assert_equal [@proxy.errors.generate_message(:api_backend, :protected_domain)], @proxy.errors.messages[:api_backend]
     end
   end
 

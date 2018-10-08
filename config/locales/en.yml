@@ -746,6 +746,7 @@ en:
       activation_approval_required: "You will receive a message once your account is approved."
       invitation_not_found: "Invitation token did not exist."
       invitation_already_accepted: "Invitation token has already been accepted."
+      protected_domain: "Sorry, this domain is protected"
       oauth:
         code_incorrect_or_expired: "The code is incorrect or expired."
         token_incorrect_or_expired: "The token is incorrect or expired."
@@ -815,7 +816,7 @@ en:
         proxy:
           attributes:
             api_backend:
-              invalid: "the accepted format is 'protocol://address(:port)'"
+              invalid: "the accepted format is 'http(s)://address(:port)(/path)'"
             api_test_path:
               invalid: "only URI characters allowed"
             endpoint:

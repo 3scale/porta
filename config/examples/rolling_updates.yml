@@ -13,6 +13,7 @@ base: &default
   cms_api: false
   forum: true
   policies: true
+  proxy_private_base_path: true
 
 development:
   <<: *default
