@@ -3,7 +3,7 @@ class Admin::ApiDocs::ServicesController < FrontendController
   before_action :find_service_apis_collection, only: %i[new edit update]
   before_action :deny_on_premises_for_master
 
-  activate_menu :serviceadmin, :submenu => :active_docs
+  activate_menu :active_docs, :submenu => :active_docs
 
   def preview
     if @api_docs_service.specification.swagger?

@@ -2,7 +2,7 @@ class Sites::EmailsController < Sites::BaseController
 
   provider_required
 
-  activate_menu :settings, :site
+  activate_menu :settings, :email
   sublayout 'emails'
 
   before_action :find_account

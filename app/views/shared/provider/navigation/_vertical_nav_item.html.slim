@@ -1,0 +1,8 @@
+- title = title
+- path ||= '#'
+
+li.list-group-item class=( active_menu?(:submenu, title) || current_page?(path) ? 'active' : '')
+  = link_to path do
+    span.fa.fa-shield data-toggle="tooltip" title="" data-original-title=title
+    span.list-group-item-value
+      = title
