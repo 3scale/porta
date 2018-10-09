@@ -6,7 +6,7 @@ monthly_jobs:
   status: disabled
 
 weekly_jobs:
-  cron: '0 0 * * 0'
+  cron: '0 0 1,8,15,22 * *'
   class: CronJob::Enqueuer
   args: ['WEEK']
   description: "Pdf::Dispatch, JanitorWorker"
