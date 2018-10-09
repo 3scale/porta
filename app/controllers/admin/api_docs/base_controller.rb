@@ -5,6 +5,8 @@ class Admin::ApiDocs::BaseController < FrontendController
   before_action :find_service_apis_collection, only: %i[new edit update create]
   before_action :deny_on_premises_for_master
 
+
+
   def preview
     if api_docs_service.specification.swagger?
       respond_to do |format|
