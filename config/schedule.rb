@@ -25,7 +25,8 @@ every :month, roles: [:cron] do
   ThreeScale::Jobs::MONTH.each { |task| instance_exec(task, &job_proc) }
 end
 
-every :week, roles: [:cron] do
+# every week on Monday
+every '0 0 * * 1', roles: [:cron] do
   ThreeScale::Jobs::WEEK.each { |task| instance_exec(task, &job_proc) }
 end
 
