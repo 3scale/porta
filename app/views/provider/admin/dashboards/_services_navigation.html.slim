@@ -25,7 +25,7 @@ nav.DashboardNavigation.DashboardNavigation--services
                                     'Alerts',
                                     'exclamation-triangle'
 
-
+    - if can?(:manage, :monitoring)
       li.DashboardNavigation-list-item
         = link_to admin_transactions_path, title: 'Traffic', class: "DashboardNavigation-link" do
           i.fa.fa-play-circle>

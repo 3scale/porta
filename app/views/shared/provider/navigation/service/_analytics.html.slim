@@ -1,0 +1,43 @@
+- title = 'Analytics'
+- path = '#'
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :email) ? 'active' : '')
+  = link_to '#' do
+    span.fa.fa-shield data-toggle="tooltip" title="" data-original-title=title
+    span.list-group-item-value
+      = title
+
+    div id="-secondary" class="nav-pf-secondary-nav"
+      div class="nav-item-pf-header"
+        a href="#0" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"
+        span = title
+
+      ul class="list-group"
+        = render vertical_nav_item,
+               title: 'Usage',
+               path: admin_service_stats_usage_path(@service)
+
+        = render vertical_nav_item,
+              title: 'Daily Averages',
+              path:   admin_service_stats_days_path(@service)
+
+        = render vertical_nav_item,
+              title: 'Hourly Averages',
+              path: admin_service_stats_hours_path(@service)
+
+        = render vertical_nav_item,
+               title: 'Top Applications',
+               path: admin_service_stats_top_applications_path(@service)
+
+        = render vertical_nav_item,
+              title: 'Response Codes',
+              path:   admin_service_stats_response_codes_path(@service)
+
+        = render vertical_nav_item,
+              title: 'Alerts',
+              path: admin_service_alerts_path(@service)
+
+        = render vertical_nav_item,
+              title: 'Integration Errors',
+              path: admin_service_errors_path(@service)

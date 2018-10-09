@@ -1,9 +1,2 @@
-<ul id="side-tabs">
-  <%= sidebar_link 'Support Emails', edit_admin_site_emails_path unless master_on_premises? %>
-  <%= sidebar_link 'Templates', provider_admin_cms_email_templates_path %>
-</ul>
-
-<div id="tab-content">
-  <%= render 'shared/provider/page_title' %>
-  <%= yield  %>
-</div>
+<%= render 'shared/provider/page_title' %>
+<%= yield  %>
