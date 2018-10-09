@@ -11,9 +11,12 @@ module ServiceDiscovery
       service_system_name = [cluster_namespace, service_name].join('-')
 
       cluster = ServiceDiscovery::ClusterClient.new
-      cluster_service = cluster.find_discoverable_service_by(name: service_name, namespace: cluster_namespace)
+      cluster_service = cluster.find_discoverable_service_by(name: service_name,
+                                                             namespace: cluster_namespace)
 
-      service_creation = ServiceCreationService.call(account, name: service_name, system_name: service_system_name)
+      service_creation = ServiceCreationService.call(account, name: service_name,
+                                                              system_name: service_system_name,
+                                                              kubernetes_service_link: cluster_service.self_link)
       new_api = service_creation.service
 
       return unless service_creation.success? && new_api.persisted?
