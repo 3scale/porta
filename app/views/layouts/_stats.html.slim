@@ -1,20 +1,2 @@
-ul id="side-tabs"
-  = sidebar_link 'Usage', admin_service_stats_usage_path(@service)
-  = sidebar_link 'Daily Averages', admin_service_stats_days_path(@service)
-  = sidebar_link 'Hourly Averages', admin_service_stats_hours_path(@service)
-  = sidebar_link 'Top Applications', admin_service_stats_top_applications_path(@service)
-  = sidebar_link 'Response Codes', admin_service_stats_response_codes_path(@service)
-  = sidebar_link 'Alerts', admin_service_alerts_path(@service)
-  = sidebar_link 'Integration Errors', admin_service_errors_path(@service)
-
-
-div id="tab-content"
-  - if current_account.accessible_services.exists?
-    h2
-      => link_to @service.name, admin_stats_root_path(anchor: "service_#{@service.id}")
-      ' >
-      = yield :sublayout_title
-  - else
-    h2 = yield :sublayout_title
-
-  = yield
+h1 = yield :sublayout_title
+= yield

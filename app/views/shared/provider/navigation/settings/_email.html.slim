@@ -1,0 +1,23 @@
+- title = 'Email'
+- path = '#'
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :email) ? 'active' : '')
+  = link_to '#' do
+    span.fa.fa-shield data-toggle="tooltip" title="" data-original-title=title
+    span.list-group-item-value
+      = title
+
+    div id="-secondary" class="nav-pf-secondary-nav"
+      div class="nav-item-pf-header"
+        a href="#0" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"
+        span = title
+
+      ul class="list-group"
+        = render vertical_nav_item,
+              title: 'Support Emails',
+              path:   edit_admin_site_emails_path
+
+        = render vertical_nav_item,
+              title: 'Templates',
+              path:   provider_admin_cms_email_templates_path
