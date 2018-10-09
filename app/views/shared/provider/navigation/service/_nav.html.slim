@@ -16,6 +16,11 @@
            icon: 'list-ul'
 
   = render vertical_nav_item,
+       title: 'ActiveDocs',
+       path: admin_service_api_docs_path(@service),
+       icon: 'file-text'
+
+  = render vertical_nav_item,
         title: 'Integration',
         path: path_to_service(@service),
         icon: 'hdd-o'
