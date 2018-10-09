@@ -33,10 +33,10 @@ module ServiceDiscovery
           return
         end
 
-        api_docs_service = provider.api_docs_services.build(name: cluster_service.name,
-                                                            body: spec_content,
-                                                            published: true,
-                                                            skip_swagger_validations: true)
+        api_docs_service = api_docs_services.build(name: cluster_service.name,
+                                                   body: spec_content,
+                                                   published: true,
+                                                   skip_swagger_validations: true)
 
         unless api_docs_service.save
           log_cluster_service_import_event(cluster_service, message: 'Could not create ActiveDocs',
