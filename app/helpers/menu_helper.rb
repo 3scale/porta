@@ -83,4 +83,8 @@ module MenuHelper
     account = current_account.provider? ? current_account : current_account.provider_account
     account.settings.public_send(switch).is_a?(Settings::SwitchDenied)
   end
+
+  def api_selector_services
+    @api_selector_services ||= site_account.provider? && logged_in? ? current_user.accessible_services.includes(:account) : Service.none
+  end
 end
