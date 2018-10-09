@@ -19,7 +19,7 @@ class ServiceCreationService
   end
 
   def create_service
-    service = build_service service_attributes.slice(:name, :system_name, :description)
+    service = build_service service_attributes.slice(:name, :system_name, :description, :kubernetes_service_link)
     @success = service.save
     service
   end
