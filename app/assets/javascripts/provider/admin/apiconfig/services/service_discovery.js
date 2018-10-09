@@ -1,25 +1,25 @@
-document.addEventListener("DOMContentLoaded", (e) => {
+document.addEventListener("DOMContentLoaded", function(e) {
 
   const formSource = document.getElementById('new_service_source');
   const formScratch = document.querySelectorAll('form#new_service, form#create_service')[0];
   const formDiscover = document.getElementById('service_discovery');
 
-  const clearSelectOptions = select => {
+  function clearSelectOptions(select) {
     const options = select.getElementsByTagName('option');
     for (let i = options.length -1; i > 0; i--) {
-      options[i].remove()
+      options[i].remove();
     }
   };
 
-  const clearNamespaces = () => {
+  function clearNamespaces() {
     return clearSelectOptions(formDiscover.service_namespace);
   };
 
-  const clearServiceNames = () => {
+  function clearServiceNames() {
     return clearSelectOptions(formDiscover.service_name);
   };
 
-  const showServiceForm = (source, discoverFunc, scratchFunc) => {
+  function showServiceForm(source, discoverFunc, scratchFunc) {
     if (source === 'discover') {
       formScratch.classList.add('is-hidden');
       formDiscover.classList.remove('is-hidden');
@@ -31,73 +31,85 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
   };
 
-  const changeServiceSource = () => {
+  function changeServiceSource() {
     clearNamespaces();
     clearServiceNames();
     return showServiceForm(formSource.source.value, fetchNamespaces);
   };
 
-  const changeClusterNamespace = () => {
+  function changeClusterNamespace() {
     clearServiceNames();
-    const selectedNamespace = formDiscover.service_namespace.value
+    const selectedNamespace = formDiscover.service_namespace.value;
     return selectedNamespace !== '' ? fetchServices(selectedNamespace) : undefined;
   };
 
-  const addOptionToSelect = (selectElem, val) => {
+  function addOptionToSelect(selectElem, val) {
     let opt = document.createElement('option');
     opt.text = val;
     opt.value = val;
     return selectElem.appendChild(opt);
   };
 
-  const isFetchSupported = () => {
+  function isFetchSupported() {
     return 'fetch' in window;
   }
 
-  const populateNamespaces = data => {
+  function populateNamespaces(data) {
     const projects = data.projects;
-    projects.forEach((project, index, array) => addOptionToSelect(formDiscover.service_namespace, project.metadata.name));
+    projects.forEach(function(project, index, array){
+      addOptionToSelect(formDiscover.service_namespace, project.metadata.name);
+    });
     return projects.length > 0 ? (
       formDiscover.service_namespace.selectedIndex = 1,
       changeClusterNamespace()
     ) : undefined;
   }
 
-  const fetchNamespaces = () => {
+  function fetchNamespaces() {
     if (isFetchSupported()) {
       fetch('/p/admin/service_discovery/projects.json')
-        .then(response => response.json())
-        .then(data => populateNamespaces (data));
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data){
+          return populateNamespaces(data);
+        });
     } else {
-      $.getJSON('/p/admin/service_discovery/projects.json', (data) => {
-        populateNamespaces (data)
+      $.getJSON('/p/admin/service_discovery/projects.json', function(data) {
+        return populateNamespaces(data);
       });
     }
   }
 
-  const populateServices = data => {
+  function populateServices(data) {
     const services = data.services;
-    services.forEach((service, index, array) => addOptionToSelect(formDiscover.service_name, service.metadata.name));
+    services.forEach(function(service, index, array) {
+      addOptionToSelect(formDiscover.service_name, service.metadata.name);
+    });
     return services.length > 0 ? formDiscover.service_name.selectedIndex = 1 : undefined;
   }
 
-  const fetchServices = namespace => {
+  function fetchServices(namespace) {
     if (isFetchSupported()) {
       fetch(`/p/admin/service_discovery/namespaces/${namespace}/services.json`)
-        .then(response => response.json())
-        .then(data => populateServices (data));
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          return populateServices(data);
+        });
     } else{
-      $.getJSON(`/p/admin/service_discovery/namespaces/${namespace}/services.json`, (data) => {
-        populateServices(data);
+      $.getJSON(`/p/admin/service_discovery/namespaces/${namespace}/services.json`, function(data) {
+        return populateServices(data);
       });
     }
   };
 
   if (formSource !== null) {
     const radioGroup = formSource.source;
-    for(let item of radioGroup){
+    radioGroup.forEach(function(item) {
       item.addEventListener('click', changeServiceSource);
-    }
+    });
   }
 
   if (formDiscover !== null) {
