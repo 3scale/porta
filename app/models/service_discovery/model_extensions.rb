@@ -3,6 +3,8 @@
 module ServiceDiscovery
   module ModelExtensions
     module Service
+      class ImportClusterDefinitionsError < StandardError; end
+
       def self.included(base)
         base.class_eval do
           attr_accessor :source
@@ -14,13 +16,15 @@ module ServiceDiscovery
         api_backend_url = cluster_service.endpoint
 
         unless proxy.save_and_deploy(api_backend: api_backend_url)
-          log_cluster_service_import_event(cluster_service, message: "Could not save API backend URL #{api_backend_url}")
+          log_cluster_service_import_event(cluster_service, message: 'Could not save API backend URL',
+                                                            details: { api_backend_url:  api_backend_url })
         end
       end
 
       def import_cluster_active_docs(cluster_service)
         unless cluster_service.oas?
-          log_cluster_service_import_event(cluster_service, message: "API specification type not supported (Content-Type: #{cluster_service.specification_type})")
+          log_cluster_service_import_event(cluster_service, message: 'API specification type not supported',
+                                                            details: { api_spec_content_type: cluster_service.specification_type })
           return
         end
 
@@ -35,14 +39,17 @@ module ServiceDiscovery
                                                             skip_swagger_validations: true)
 
         unless api_docs_service.save
-          log_cluster_service_import_event(cluster_service, message: "Could not create ActiveDocs - #{api_docs_service.errors.full_messages}")
+          log_cluster_service_import_event(cluster_service, message: 'Could not create ActiveDocs',
+                                                            details: { errors: api_docs_service.errors.full_messages })
         end
       end
 
       protected
 
-      def log_cluster_service_import_event(cluster_service, message:)
-        Rails.logger.info("[ServiceDiscovery] #{cluster_service.self_link}: #{message}")
+      def log_cluster_service_import_event(cluster_service, message:, details: {})
+        exception = ImportClusterDefinitionsError.new(message)
+        exception_details = { service_id: id, cluster_service: { self_link: cluster_service.self_link } }.merge(details)
+        System::ErrorReporting.report_error(exception, exception_details)
       end
     end
   end
