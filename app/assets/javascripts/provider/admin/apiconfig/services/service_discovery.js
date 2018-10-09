@@ -53,8 +53,20 @@ document.addEventListener("DOMContentLoaded", function(e) {
     return selectElem.appendChild(opt);
   };
 
-  function isFetchSupported() {
-    return 'fetch' in window;
+  function fetchData(url, type) {
+    if ('fetch' in window) {
+      fetch(url)
+      .then(function(response) {
+          return response.json();
+      })
+      .then(function(data){
+          return type === 'namespaces' ? populateNamespaces(data) : populateServices(data);
+      });
+    } else {
+      return $.getJSON(url, function(data) {
+        return type === 'namespaces' ? populateNamespaces(data) : populateServices(data);
+      });
+    }
   }
 
   function populateNamespaces(data) {
@@ -70,19 +82,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
   function fetchNamespaces() {
     const URLNamespaces = '/p/admin/service_discovery/projects.json';
-    if (isFetchSupported()) {
-      fetch(URLNamespaces)
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data){
-          return populateNamespaces(data);
-        });
-    } else {
-      $.getJSON(URLNamespaces, function(data) {
-        return populateNamespaces(data);
-      });
-    }
+    fetchData(URLNamespaces, 'namespaces');
   }
 
   function populateServices(data) {
@@ -95,19 +95,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
   function fetchServices(namespace) {
     const URLServices = '/p/admin/service_discovery/namespaces/' + namespace + '/services.json';
-    if (isFetchSupported()) {
-      fetch(URLServices)
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data) {
-          return populateServices(data);
-        });
-    } else{
-      $.getJSON(URLServices, function(data) {
-        return populateServices(data);
-      });
-    }
+    fetchData(URLServices, 'services');
   };
 
   if (formSource !== null) {
