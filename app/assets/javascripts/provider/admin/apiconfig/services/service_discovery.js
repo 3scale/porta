@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
   function clearSelectOptions(select) {
     const options = select.getElementsByTagName('option');
-    for (let i = options.length -1; i > 0; i--) {
+    for (var i = options.length -1; i > 0; i--) {
       options[i].remove();
     }
   };
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
   };
 
   function addOptionToSelect(selectElem, val) {
-    let opt = document.createElement('option');
+    var opt = document.createElement('option');
     opt.text = val;
     opt.value = val;
     return selectElem.appendChild(opt);
@@ -69,8 +69,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
   }
 
   function fetchNamespaces() {
+    const URLNamespaces = '/p/admin/service_discovery/projects.json';
     if (isFetchSupported()) {
-      fetch('/p/admin/service_discovery/projects.json')
+      fetch(URLNamespaces)
         .then(function(response) {
           return response.json();
         })
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
           return populateNamespaces(data);
         });
     } else {
-      $.getJSON('/p/admin/service_discovery/projects.json', function(data) {
+      $.getJSON(URLNamespaces, function(data) {
         return populateNamespaces(data);
       });
     }
@@ -93,8 +94,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
   }
 
   function fetchServices(namespace) {
+    const URLServices = '/p/admin/service_discovery/namespaces/' + namespace + '/services.json';
     if (isFetchSupported()) {
-      fetch(`/p/admin/service_discovery/namespaces/${namespace}/services.json`)
+      fetch(URLServices)
         .then(function(response) {
           return response.json();
         })
@@ -102,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
           return populateServices(data);
         });
     } else{
-      $.getJSON(`/p/admin/service_discovery/namespaces/${namespace}/services.json`, function(data) {
+      $.getJSON(URLServices, function(data) {
         return populateServices(data);
       });
     }
@@ -110,9 +112,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
   if (formSource !== null) {
     const radioGroup = formSource.source;
-    radioGroup.forEach(function(item) {
-      item.addEventListener('click', changeServiceSource);
-    });
+    for (var i = 0; i < radioGroup.length; i++) {
+      radioGroup[i].addEventListener('click', changeServiceSource);
+    }
   }
 
   if (formDiscover !== null) {
