@@ -19,14 +19,17 @@ document.addEventListener("DOMContentLoaded", function(e) {
     return clearSelectOptions(formDiscover.service_name);
   };
 
+  function showAndHideForms(showForm, hideForm) {
+    showForm.classList.remove('is-hidden');
+    hideForm.classList.add('is-hidden');
+  }
+
   function showServiceForm(source, discoverFunc, scratchFunc) {
     if (source === 'discover') {
-      formScratch.classList.add('is-hidden');
-      formDiscover.classList.remove('is-hidden');
+      showAndHideForms(formDiscover, formScratch);
       return typeof discoverFunc === "function" ? discoverFunc() : undefined;
     } else {
-      formScratch.classList.remove('is-hidden');
-      formDiscover.classList.add('is-hidden');
+      showAndHideForms(formScratch, formDiscover);
       return typeof scratchFunc === "function" ? scratchFunc() : undefined;
     }
   };
