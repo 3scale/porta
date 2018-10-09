@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function(e) {
   function addOptionToSelect(selectElem, val) {
     var opt = document.createElement('option');
     opt.text = val;
-    opt.value = val;
     return selectElem.appendChild(opt);
   };
 
