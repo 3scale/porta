@@ -38,7 +38,7 @@ module ServiceDiscovery
                                specification: '{ "swagger" : "fake-swagger" }',
                                specification_type: 'application/swagger+json')
 
-        assert_difference @provider.api_docs_services do
+        assert_difference @service.api_docs_services.method(:count) do
           @service.import_cluster_active_docs(@cluster_service)
         end
       end

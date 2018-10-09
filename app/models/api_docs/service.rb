@@ -20,6 +20,8 @@ class ApiDocs::Service < ApplicationRecord
   validates :body, length: { maximum: 4294967295, allow_blank: true }
   validate :service_belongs_to_account, if: -> { service_id.present? && service_id_changed? }
 
+  before_validation(on: :create) { self.account ||= service&.account }
+
   scope :published, -> { where(published: true) }
   scope :accessible, -> { joining { service.outer }.where.has { (service_id == nil) | (service.state != ::Service::DELETE_STATE) } }
 
