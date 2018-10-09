@@ -3,8 +3,10 @@
   border-top: line-height-times(1 / 10) solid $header-border-color;
   height: line-height-times(5 / 2);
   padding: 0 0 0 0;
-  position: relative;
+  position: fixed;
   width: 100%;
+  z-index: 10;
+  top: 0;
 
   .header-link {
     display: block;
