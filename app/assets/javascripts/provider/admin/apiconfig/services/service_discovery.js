@@ -59,12 +59,23 @@ document.addEventListener("DOMContentLoaded", function(e) {
           return response.json();
       })
       .then(function(data){
-          return type === 'namespaces' ? populateNamespaces(data) : populateServices(data);
+        populateNamespacesOrServices(data, type);
       });
     } else {
       return $.getJSON(url, function(data) {
-        return type === 'namespaces' ? populateNamespaces(data) : populateServices(data);
+        populateNamespacesOrServices(data, type);
       });
+    }
+  }
+
+  function populateNamespacesOrServices(data, type) {
+    switch (type) {
+      case 'namespaces':
+        populateNamespaces(data);
+        break;
+      case 'services':
+        populateServices(data);
+        break;
     }
   }
 
