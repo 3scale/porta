@@ -217,4 +217,4 @@ nav.vertical-nav
 
     var store = window.localStorage
     nav.classList
-      .toggle('collapsed', JSON.parse(store.isVerticalNavCollapsed))
+      .toggle('collapsed', JSON.parse(store.isVerticalNavCollapsed || false))
