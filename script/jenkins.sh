@@ -12,7 +12,7 @@ echo "======= Assets Precompile ======="
 set -x
 
 time bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=production WEBPACKER_PRECOMPILE=false
-time bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=test
+time bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=test WEBPACKER_PRECOMPILE=false
 
 boot_database()
 {
