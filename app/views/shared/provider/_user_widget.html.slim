@@ -1,6 +1,9 @@
 = javascript_pack_tag 'navigation'
 
 div id="user_widget"
+  - unless active_menu?(:main_menu, :dashboard)
+    a.PopNavigation-trigger.u-toggler.vert-nav-toggle
+      => icon('bars')
   ul id="top-menu-nav"
     li class=('active' if active_menu?(:topmenu, :dashboard) )
       = link_to provider_admin_dashboard_path, class: 'header-link', title: 'Dashboard' do
@@ -72,4 +75,13 @@ javascript:
       if (e.target.type !== 'search') {
         window.hideAllToggleable()
       }
+    })
+    .on('click', '.vert-nav-toggle', function (e) {
+      var shouldVertNavCollapse = !JSON.parse(store.isVerticalNavCollapsed)
+
+      document.querySelector('.nav-pf-vertical')
+        .classList
+        .toggle('collapsed', shouldVertNavCollapse)
+
+      store.isVerticalNavCollapsed = shouldVertNavCollapse
     })
