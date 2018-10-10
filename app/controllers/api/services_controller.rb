@@ -52,7 +52,11 @@ class Api::ServicesController < Api::BaseController
   end
 
   def update
-    if @service.update_attributes(params[:service])
+    if params[:refresh].presence && @service.discovered?
+      ServiceDiscovery::ImportClusterDefinitionsService.refresh_service(@service)
+      flash[:notice] =  'Service information will be updated shortly.'
+      redirect_back_or_to :action => :settings
+    elsif @service.update_attributes(params[:service])
       flash[:notice] =  'Service information updated.'
       onboarding.bubble_update('api') if service_name_changed?
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?

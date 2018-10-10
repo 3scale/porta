@@ -12,8 +12,18 @@ module ServiceDiscovery
         end
       end
 
+      def discovered?
+        kubernetes_service_link.present?
+      end
+
+      def import_cluster_definitions(cluster_service)
+        import_cluster_service_endpoint(cluster_service)
+        import_cluster_active_docs(cluster_service)
+      end
+
       def import_cluster_service_endpoint(cluster_service)
         api_backend_url = cluster_service.endpoint
+        return if proxy.api_backend == api_backend_url
 
         unless proxy.save_and_deploy(api_backend: api_backend_url)
           log_cluster_service_import_event(cluster_service, message: 'Could not save API backend URL',

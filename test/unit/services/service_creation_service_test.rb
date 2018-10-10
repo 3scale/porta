@@ -21,7 +21,7 @@ class ServiceCreationServiceTest < ActiveSupport::TestCase
   test 'async' do
     service_attributes = { name: 'my-api', namespace: 'my-project' }
     assert_no_difference '@provider.services.count' do
-      ServiceDiscovery::ImportClusterServiceDefinitionsWorker.expects(:perform_async).with(@provider.id, *service_attributes.values_at(:namespace, :name))
+      ServiceDiscovery::CreateServiceWorker.expects(:perform_async).with(@provider.id, *service_attributes.values_at(:namespace, :name))
       ServiceCreationService.call(@provider, service_attributes.merge(source: 'discover'))
     end
   end
@@ -64,11 +64,11 @@ class ServiceCreationServiceTest < ActiveSupport::TestCase
     refute service_creation.success?
 
     service_creation_async = ServiceCreationService.new(@provider, name: 'my-api', namespace: 'my-project', source: 'discover')
-    ServiceDiscovery::ImportClusterServiceDefinitionsWorker.expects(:perform_async).returns(true)
+    ServiceDiscovery::CreateServiceWorker.expects(:perform_async).returns(true)
     service_creation_async.create_service_async
     assert service_creation_async.success?
 
-    ServiceDiscovery::ImportClusterServiceDefinitionsWorker.expects(:perform_async).returns(false)
+    ServiceDiscovery::CreateServiceWorker.expects(:perform_async).returns(false)
     service_creation_async.create_service_async
     assert service_creation_async.success?
   end
