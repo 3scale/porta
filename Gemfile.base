@@ -266,8 +266,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc', '>= 0.8', require: false
 
-  gem 'license_finder', '~> 2.1.2'
-  gem 'license_finder_xml_reporter', git: 'https://github.com/3scale/license_finder_xml_reporter.git', tag: '1.0.0'
+  gem 'license_finder', '~> 5.5.2'
 
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
