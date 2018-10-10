@@ -5,6 +5,11 @@ module User::Permissions
 
   included do
     has_many :member_permissions, dependent: :destroy
+
+    attr_accessible :member_permission_service_ids, :member_permission_ids, :allowed_sections, :allowed_service_ids
+
+    alias_attribute :allowed_sections, :member_permission_ids
+    alias_attribute :allowed_service_ids, :member_permission_service_ids
   end
 
   #TODO: this is repeated from bcms_hacks plugins because of some loading problem
@@ -23,10 +28,6 @@ module User::Permissions
     @_admin_sections ||= Set.new(member_permissions.map(&:admin_section)).freeze
   end
 
-  def member_permission_ids=(roles)
-    self.admin_sections = Array(roles).reject(&:blank?)
-  end
-
   def admin_sections=(sections)
     existing_permissions = member_permissions.index_by(&:section_name)
 
@@ -39,27 +40,52 @@ module User::Permissions
     keep_permissions = existing_permissions.values_at(*keep)
     new_permissions = create.map { |section| member_permissions.build(admin_section: section) }
 
-    self.member_permissions = keep_permissions + new_permissions
+    all_permissions = keep_permissions + new_permissions
+    # keep service permissions as they were
+    all_permissions << services_member_permission if services_member_permission
+
+    self.member_permissions = all_permissions
   ensure
     @_admin_sections = nil
   end
 
-  def member_permission_service_ids=(service_ids)
-    services_section = [:services]
+  # returns all permissions (:portal, :finance, :settings, :partners, :monitoring, :plans) for admins
+  # and the allowed ones for member users
+  def member_permission_ids
+    admin? ? AdminSection.permissions : admin_sections - [:services]
+  end
 
+  def member_permission_ids=(roles)
+    self.admin_sections = Array(roles).reject(&:blank?)
+  end
+
+  def member_permission_service_ids=(service_ids)
     if service_ids.present?
-      self.admin_sections = admin_sections | services_section
-      services_member_permission.service_ids = service_ids
-    else
-      self.admin_sections = admin_sections - services_section
+      if services_member_permission
+        services_member_permission.service_ids = service_ids
+        services_member_permission.save
+      else
+        new_services_member_permissions = member_permissions.build( admin_section: :services,
+                                                                      service_ids: service_ids)
+        member_permissions << new_services_member_permissions
+      end
+    elsif services_member_permission
+      self.member_permissions = member_permissions - [services_member_permission]
     end
+  ensure
+    @_admin_sections = nil
+  end
+
+  def existing_service_ids
+    account.try(:service_ids) || []
   end
 
   # TODO: this is suboptimal to do on 'read', it should be done on write
   # but then it is much harder to test MemberPermission#service_ids=
+  # returns [] if no services are enabled, and nil if all (current and future) services are enabled
   def member_permission_service_ids
+    return nil if admin? || !services_member_permission
     permitted_service_ids = services_member_permission.try(:service_ids) || []
-    existing_service_ids = account.try(:service_ids) || []
     permitted_service_ids & existing_service_ids
   end
 

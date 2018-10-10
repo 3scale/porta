@@ -184,10 +184,10 @@ export const ServiceAccess = { // eslint-disable-line no-unused-vars
   render ({props, context, dispatch}) {
     let { id, name } = props.service || {}
     let all = !(new Set(context.admin_sections)).has('services')
-    let ids = context.member_permission_service_ids
+    let ids = context.member_permission_service_ids || []
 
-    let checked = all || !ids || ids.includes(id)
-    let disabled = !ids || all
+    let checked = all || ids.includes(id)
+    let disabled = all
 
     let toggle = () => {
       let services = new Set(ids)
