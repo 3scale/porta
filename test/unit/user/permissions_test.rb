@@ -12,7 +12,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert user.has_permission?(:plans)
   end
 
-  test 'admin_sections=' do
+  test 'admin_sections= with a section name' do
     user = FactoryGirl.create(:simple_user)
     permissions_count = MemberPermission.method(:count)
 
@@ -20,13 +20,34 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert_equal 0, permissions_count.call
 
     assert_no_difference permissions_count do
-      user.admin_sections = [:services]
+      user.admin_sections = [:settings]
     end
 
     assert_difference permissions_count do
       user.save!
     end
 
+    assert_difference permissions_count, -1 do
+      user.admin_sections = []
+    end
+  end
+
+  test 'admin_sections= for "service" section' do
+    user = FactoryGirl.create(:simple_user)
+    permissions_count = MemberPermission.method(:count)
+
+    assert user.admin_sections.empty?
+    assert_equal 0, permissions_count.call
+
+    assert_no_difference permissions_count do
+      user.admin_sections = [:services, :settings]
+    end
+
+    assert_difference permissions_count, 2 do
+      user.save!
+    end
+
+    # when sections are removed, the enabled services remain the same, and are not deleted
     assert_difference permissions_count, -1 do
       user.admin_sections = []
     end
@@ -90,8 +111,9 @@ class User::PermissionsTest < ActiveSupport::TestCase
     user.admin_sections = [:services]
     refute user.has_access_to_all_services?
 
+    # updating admin section doesn't remove service permissions
     user.admin_sections = [:plans]
-    assert user.has_access_to_all_services?
+    refute user.has_access_to_all_services?
 
     user.admin_sections = []
     user.stubs(:admin?).returns(true)

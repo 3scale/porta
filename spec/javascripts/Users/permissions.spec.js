@@ -13,7 +13,7 @@ import {
   AdminSection,
   ServiceAccess,
   Form
-} from 'Users/permissions'
+} from '../../../app/javascript/src/Users/permissions'
 
 function render (el, context = {}, dispatch) {
   let doc = document.createDocumentFragment()
@@ -281,11 +281,14 @@ describe('ServiceAccess', function () {
     let state = {}
     let node = () => render(<ServiceAccess/>, state)
 
+    // all services are enabled, so individual checkboxes are disabled
     expect(node()).toContainElement(disabled)
 
+    // only some (or none) services are enabled, so nothing is disabled
     state.admin_sections = ['services']
-    expect(node()).toContainElement(disabled)
+    expect(node()).not.toContainElement(disabled)
 
+    // no services are enabled
     state.member_permission_service_ids = []
     expect(node()).not.toContainElement(disabled)
 
@@ -298,19 +301,19 @@ describe('ServiceAccess', function () {
     let state = {}
     let node = () => render(<ServiceAccess service={service}/>, state)
 
-    expect(node()).toContainElement(checked)
+    // all services are enabled
+    expect(node()).toContainElement(checked, 'all services enabled - element checked')
 
+    // prerequisite for the following two tests
     state.admin_sections = ['services']
-    expect(node()).toContainElement(checked)
 
+    // no services are enabled
     state.member_permission_service_ids = []
-    expect(node()).not.toContainElement(checked)
+    expect(node()).not.toContainElement(checked, 'no services are enabled - element not checked')
 
+    // only specific services are enabled
     state.member_permission_service_ids.push(service.id)
-    expect(node()).toContainElement(checked)
-
-    state.admin_sections = []
-    expect(node()).toContainElement(checked)
+    expect(node()).toContainElement(checked, 'current service is enabled - element checked')
   })
 
   it('adds services', function () {
