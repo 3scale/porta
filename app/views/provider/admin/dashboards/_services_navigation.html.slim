@@ -2,12 +2,13 @@ nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
     - if can? :manage, :partners
 
-      li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Application',
-                                applications,
-                                admin_buyers_applications_path,
-                                'Applications',
-                                'cubes'
+      - if current_user.accessible_services.size > 1
+        li.DashboardNavigation-list-item
+          = dashboard_collection_link 'Application',
+                                  applications,
+                                  admin_buyers_applications_path,
+                                  'Applications',
+                                  'cubes'
 
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'ActiveDoc',
