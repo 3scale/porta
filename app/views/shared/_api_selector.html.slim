@@ -4,7 +4,7 @@ javascript:
   document.addEventListener('DOMContentLoaded', function () {
     window.ApiSelector({
       currentApi: #{json @service},
-      apis: #{json @api_selector_services},
+      apis: #{json api_selector_services},
       controllerName: #{json controller_name}
     }, 'api_selector')
   })
