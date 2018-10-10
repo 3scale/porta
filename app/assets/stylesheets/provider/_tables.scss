@@ -100,6 +100,11 @@ table.data {
       text-align: right;
     }
   }
+
+  &.u-sixEqualColumns tr td {
+    word-break: break-word;
+  }
+
 }
 
 .u-fiveEqualColumns {
@@ -233,6 +238,14 @@ table#contracts_table tr td.thhead {
   margin: line-height-times(1/4);
   padding-right: 0;
   padding-top: 0;
+}
+
+table#metrics {
+  tr td.title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 td.thhead h3 {
