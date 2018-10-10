@@ -1,4 +1,4 @@
-section.DashboardSection.DashboardSection--service.is-closed class=('DashboardSection--toggleable is-closed u-legacy-cookie' if current_account.multiservice? && can?(:manage, :analytics)) id=(dom_id service)
+section.DashboardSection.DashboardSection--service class=('DashboardSection--toggleable is-closed u-legacy-cookie' if current_account.multiservice? && can?(:manage, :analytics)) id=(dom_id service)
   header.DashboardSection-header
     h1.DashboardSection-title class=('DashboardSection-toggle' if current_account.multiservice? && can?(:manage, :analytics))
       = friendly_service_name(service)
