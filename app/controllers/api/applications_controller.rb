@@ -6,13 +6,11 @@ class Api::ApplicationsController < Api::BaseController
   before_action :find_service
   before_action :find_cinstance, only: %i[show edit]
 
-  before_action :activate_submenu
-
   include ThreeScale::Search::Helpers
   include DisplayViewPortion
   helper DisplayViewPortion::Helper
 
-  activate_menu :main_menu => :serviceadmin, sidebar: :applications
+  activate_menu :serviceadmin, :applications
   sublayout 'api/service'
 
   def index

@@ -2,9 +2,8 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :activate_submenu
 
-  activate_menu :main_menu => :serviceadmin, :sidebar => :integration
+  activate_menu :serviceadmin, :integration
   sublayout 'api/service'
 
   PLUGIN_LANGUAGES = %w(ruby java python nodejs php rest csharp).freeze
