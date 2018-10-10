@@ -2,12 +2,13 @@ nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
     - if can? :manage, :partners
 
-      li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Application',
-                                applications,
-                                admin_buyers_applications_path,
-                                'Applications',
-                                'cubes'
+      - if current_user.accessible_services.size > 1
+        li.DashboardNavigation-list-item
+          = dashboard_collection_link 'Application',
+                                  applications,
+                                  admin_buyers_applications_path,
+                                  'Applications',
+                                  'cubes'
 
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'ActiveDoc',
@@ -30,10 +31,10 @@ nav.DashboardNavigation.DashboardNavigation--services
           i.fa.fa-play-circle>
           | Traffic
 
-    - if can? :manage, :multiple_services
-      li.DashboardNavigation-list-item
-        = fancy_link_to 'New API',
-          new_admin_service_path,
-          :class => 'new DashboardNavigation-link',
-          :switch => :multiple_services,
-          :upgrade_notice => true
+
+    li.DashboardNavigation-list-item
+      = fancy_link_to 'New API',
+        new_admin_service_path,
+        :class => 'new DashboardNavigation-link',
+        :switch => :multiple_services,
+        :upgrade_notice => true
