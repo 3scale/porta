@@ -2,9 +2,8 @@ class Stats::ApplicationsController < Stats::BaseController
   before_action :find_cinstance
   before_action :find_service
   before_action :find_buyer_account
-  before_action :activate_submenu
 
-  activate_menu :main_menu => :serviceadmin, sidebar: :applications
+  activate_menu :serviceadmin, :applications
   sublayout 'api/service'
 
   def show
