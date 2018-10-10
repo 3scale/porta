@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'license_finder_xml_reporter/cli/main'
-
-LicenseFinder::CLI::Main.start

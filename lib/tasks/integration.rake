@@ -77,7 +77,7 @@ namespace :integrate do
           'rake db:purge db:setup',
         ],
         :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
-        :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
+        :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']} BUNDLE_GEMFILE='Gemfile.on_prem'; rake ci:license_finder:run",
         :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
         :percy => 'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features',
       }
