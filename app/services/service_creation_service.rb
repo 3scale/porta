@@ -25,7 +25,7 @@ class ServiceCreationService
   end
 
   def create_service_async
-    ServiceDiscovery::ImportClusterServiceDefinitionsWorker.perform_async(provider_account.id, *service_attributes.values_at(:namespace, :name))
+    ServiceDiscovery::CreateServiceWorker.perform_async(provider_account.id, *service_attributes.values_at(:namespace, :name))
     @success = true
     build_service service_attributes.slice(:name)
   end

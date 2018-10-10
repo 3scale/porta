@@ -26,11 +26,31 @@ module ServiceDiscovery
         @cluster_service = ServiceDiscovery::ClusterService.new cluster_service(metadata: cluster_service_metadata)
       end
 
+      test 'discovered?' do
+        refute @service.discovered?
+        @service.update_attribute(:kubernetes_service_link, '/api/v1/namespaces/fake-project/services/fake-api')
+        assert @service.reload.discovered?
+      end
+
+      test 'import cluster definitions' do
+        @service.expects(:import_cluster_service_endpoint).with(@cluster_service)
+        @service.expects(:import_cluster_active_docs).with(@cluster_service)
+        @service.import_cluster_definitions(@cluster_service)
+      end
+
       test 'import cluster service endpoint' do
         assert_equal 'http://api.example.net:80', @service.proxy.api_backend
         @service.import_cluster_service_endpoint(@cluster_service)
         assert @service.proxy.valid?
         assert_equal 'https://fake-api.fake-project.svc.cluster.local:8443/api', @service.proxy.api_backend
+      end
+
+      test 'only import endpoint when it changes' do
+        @service.proxy.expects(:save_and_deploy).never
+        @service.import_cluster_service_endpoint(mock(endpoint: 'http://api.example.net:80'))
+
+        @service.proxy.expects(:save_and_deploy).with(api_backend: 'http://my-new-endpoint').returns(true)
+        @service.import_cluster_service_endpoint(mock(endpoint: 'http://my-new-endpoint'))
       end
 
       test 'import api_doc' do
