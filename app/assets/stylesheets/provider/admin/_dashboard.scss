@@ -340,7 +340,7 @@
 .DashboardNavigation {
   float: right;
 
-  &--services {
+  #api_filter + &--services {
     margin-top: line-height-times(1/2);
   }
 
