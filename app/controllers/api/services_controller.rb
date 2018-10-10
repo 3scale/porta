@@ -22,6 +22,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def new
+    activate_menu :dashboard
     @service = collection.build params[:service]
   end
 

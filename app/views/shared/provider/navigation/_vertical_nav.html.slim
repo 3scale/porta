@@ -1,0 +1,216 @@
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+nav.vertical-nav
+  div.nav-pf-vertical.nav-pf-vertical-with-sub-menus
+    ul.list-group
+      - case active_menu
+
+      - when :personal
+
+        - if can? :manage, current_user
+          = render vertical_nav_item,
+                   title: 'Personal Details',
+                   path:  edit_provider_admin_user_personal_details_path
+
+        = render vertical_nav_item,
+                 title: 'Tokens',
+                 path:  provider_admin_user_access_tokens_path
+
+        - if can? :show, current_user.notification_preferences
+          = render vertical_nav_item,
+                   title: 'Notification Preferences',
+                   path:  provider_admin_user_notification_preferences_path
+
+
+      - when :account
+
+        = render vertical_nav_item,
+                 title: 'Overview',
+                 path:  provider_admin_account_path
+
+        - if can? :export, :data
+          = render vertical_nav_item,
+                 title: 'Export',
+                 path:  new_provider_admin_account_data_exports_path
+
+        - if (can? :update, :logo)
+          = render vertical_nav_item,
+                 title: 'Logo',
+                 path:  edit_provider_admin_account_logo_path
+
+        - unless current_account.provider_can_use?(:new_notification_system)
+          = render vertical_nav_item,
+                 title: 'Notifications',
+                 path:  provider_admin_account_notifications_path
+
+        - if can?(:read, Invoice) && !ThreeScale.config.onpremises
+          = render vertical_nav_item,
+                 title: '3scale Invoices',
+                 path:  provider_admin_account_invoices_path
+
+        - if can?(:manage, :credit_card) && !ThreeScale.config.onpremises
+          = render vertical_nav_item,
+                 title: 'Payment Details',
+                 path:  provider_admin_account_braintree_blue_path
+
+        - if can?(:manage, User)
+          = render vertical_nav_item,
+                 title: 'Users',
+                 path:  provider_admin_account_users_path
+          - if can?(:manage, :multiple_users) && !current_account.settings.enforce_sso?
+            = render vertical_nav_item,
+                   title: 'Invitations',
+                   path:  provider_admin_account_invitations_path
+
+          - if current_account.provider_can_use?(:provider_sso)
+            = render vertical_nav_item,
+                   title: 'SSO Integrations',
+                   path:  provider_admin_account_authentication_providers_path
+
+      - when :buyers, :finance, :cms, :site
+
+        - if can? :manage, :partners
+          = render vertical_nav_item,
+                 title: 'Accounts',
+                 path:  admin_buyers_accounts_path
+
+        - if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
+          = render vertical_nav_item,
+               title: 'Subscriptions',
+               path: admin_buyers_service_contracts_path
+
+        - if can?(:manage, :finance)
+          = render vertical_nav_item,
+             title: 'Billing',
+             path: admin_finance_root_path
+             //main_menu_item :finance, 'Billing', admin_finance_root_path, :switch => :finance, :upgrade_notice => !master_on_premises?
+
+        - if can?(:manage, :portal)
+          = render 'shared/provider/navigation/portal_nav_items'
+
+
+        = render vertical_nav_item,
+                 title: 'Messages',
+                 path: provider_admin_messages_root_path
+
+        - if current_account.forum_enabled?
+          = render vertical_nav_item,
+               title: 'Forum',
+               path:  admin_forum_path
+
+      - when :settings
+
+        = render vertical_nav_item,
+           title: 'General',
+           path:  edit_admin_site_usage_rules_path
+
+
+        = render 'shared/provider/navigation/settings/developer_portal'
+
+        = render 'shared/provider/navigation/settings/legal_terms'
+
+        - if can?(:manage, :finance)
+          = render vertical_nav_item,
+                  title: 'Billing',
+                  path:  admin_finance_settings_path
+
+          = render vertical_nav_item,
+                  title: 'Policies',
+                  path:  edit_admin_site_settings_path
+
+        = render vertical_nav_item,
+                title: 'Fields Definitions',
+                path:   admin_fields_definitions_path
+
+        - if can?(:manage, :web_hooks)
+          = render vertical_nav_item,
+                title: 'Webhooks',
+                path:   edit_provider_admin_webhooks_path
+
+        - unless master_on_premises?
+          = render 'shared/provider/navigation/settings/email'
+
+        - if current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
+          = render vertical_nav_item,
+                title: 'Account Plans',
+                path:   admin_buyers_account_plans_path
+
+      - when :applications, :active_docs
+
+        - if can? :manage, :partners
+
+          = render vertical_nav_item,
+                   title: 'Applications',
+                   path:  admin_buyers_applications_path
+
+          = render vertical_nav_item,
+                  title: 'ActiveDocs',
+                  path:  admin_api_docs_services_path,
+                  icon: 'file-text'
+
+        - if can?(:manage, :monitoring) && current_account.buyer_alerts.unread.any?
+          = render vertical_nav_item,
+                   title: 'Alerts',
+                   path:  admin_alerts_path,
+                   icon:  'exclamation-triangle'
+
+        - if can?(:manage, :monitoring)
+          = render vertical_nav_item,
+                  title: 'Traffic',
+                  path:  admin_transactions_path,
+                  icon:  'play-circle'
+
+      - when :serviceadmin, :monitoring
+        - if can?(:manage, :monitoring)
+          = render 'shared/provider/navigation/service/analytics'
+
+        - if can?(:manage, :partners)
+          = render vertical_nav_item,
+                   title: 'Applications',
+                   path: admin_service_applications_path(@service)
+
+        - if can?(:manage, :plans)
+          = render vertical_nav_item,
+                   title: 'Definition',
+                   path: admin_service_metrics_path(@service)
+
+          = render vertical_nav_item,
+                title: 'Integration',
+                path: path_to_service(@service)
+
+          = render vertical_nav_item,
+                title: 'Application Plans',
+                path: admin_service_application_plans_path(@service)
+
+          = render vertical_nav_item,
+                title: 'Settings',
+                path: settings_admin_service_path(@service)
+
+          - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
+            = render vertical_nav_item,
+                  title: 'Service Plans',
+                  path: admin_service_service_plans_path(@service)
+
+          - if current_account.settings.end_user_plans_ui_visible?
+            = render vertical_nav_item,
+                  title: 'End User Plans',
+                  path: admin_service_end_user_plans_path(@service)
+
+          - if @service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
+            = render vertical_nav_item,
+                  title: 'End-users',
+                  path: admin_service_end_users_path(@service)
+
+  javascript:
+    var nav = document.querySelector('.nav-pf-vertical'),
+    navItem = document.querySelectorAll('.secondary-nav-item-pf');
+    for (var i = 0; i < navItem.length; i++) {
+      navItem[i].addEventListener('mouseover', function() {
+        this.classList.add('is-hover');
+        nav.classList.add('hover-secondary-nav-pf');
+      });
+      navItem[i].addEventListener('mouseout', function() {
+        this.classList.remove('is-hover');
+        nav.classList.remove('hover-secondary-nav-pf');
+      });
+    }

@@ -1,23 +1,30 @@
 .wrapper, #layout-header, #wrapper {
+  height: 100%;
   margin: 0 auto;
   min-width: $layout-wrapper-min-width;
-  //max-width:  $layout-wrapper-max-width;
-  height: 100%;
-  padding-left: line-height-times(1);
   padding-right: line-height-times(1);
 }
 
 #border {
-  position: relative;
-  margin-top: -$border-width;
-  border-top: $border-width solid $border-color;
-  border-bottom: $border-width solid $border-color;
-  padding: line-height-times(1) line-height-times(1) line-height-times(2) line-height-times(1);
-  text-align: left;
-  min-height: line-height-times(21, true);
+  margin-top: line-height-times(2.5);
   min-height: 80vh;
+  padding: line-height-times(1) line-height-times(1) 0 line-height-times(1);
+  position: relative;
+  text-align: left;
+  z-index: 1;
 }
 
 #nav {
   height: auto;
+}
+
+.vertical-nav {
+  height: 100%;
+  position: fixed;
+  text-align: left;
+  z-index: 1000;
+}
+
+nav + #border {
+  margin-left: line-height-times(10);
 }
