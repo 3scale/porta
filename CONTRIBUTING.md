@@ -10,7 +10,7 @@ First of all, please keep in mind that multiple types of contributions are possi
 
 #### **Did you find a bug?**
 
-* **Do not open up a GitHub issue if the bug is a security vulnerability**. Please contact us privately instead.
+* **Do not open up a GitHub issue if the bug is a security vulnerability**. Please [contact us privately](https://access.redhat.com/security/team/contact) instead.
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/3scale/system/issues).
 
