@@ -77,7 +77,7 @@ javascript:
       }
     })
     .on('click', '.vert-nav-toggle', function (e) {
-      var shouldVertNavCollapse = !JSON.parse(store.isVerticalNavCollapsed)
+      var shouldVertNavCollapse = !JSON.parse(store.isVerticalNavCollapsed || false)
 
       document.querySelector('.nav-pf-vertical')
         .classList
