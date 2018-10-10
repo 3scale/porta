@@ -214,3 +214,7 @@ nav.vertical-nav
         nav.classList.remove('hover-secondary-nav-pf');
       });
     }
+
+    var store = window.localStorage
+    nav.classList
+      .toggle('collapsed', JSON.parse(store.isVerticalNavCollapsed))
