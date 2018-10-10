@@ -10,8 +10,6 @@ class Api::ServicesController < Api::BaseController
 
   with_options only: %i[edit update settings] do |actions|
     actions.sublayout 'api/service'
-
-    #actions.before_action :activate_submenu
   end
 
   def index

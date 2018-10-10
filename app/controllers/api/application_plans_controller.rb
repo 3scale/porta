@@ -6,9 +6,9 @@ class Api::ApplicationPlansController < Api::PlansBaseController
 
   with_options :only => [:index, :new, :edit, :create, :update, :destroy, :masterize] do |options|
     options.before_action :find_service
-    options.before_action :activate_submenu
   end
 
+  activate_menu :serviceadmin, :application_plans
   sublayout 'api/service'
 
   def index

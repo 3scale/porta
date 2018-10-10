@@ -1,16 +1,14 @@
 class Api::EndUserPlansController < Api::PlansBaseController
   before_action :authorize_end_users!
 
-  before_action :activate_sidebar_menu
-
   # before_action :find_plan, :only => [:edit, :update, :destroy, :masterize]
   # before_action :find_plans, :only => [:index]
 
   with_options  :only => [:index, :new, :edit, :create, :update, :destroy, :masterize] do |options|
     options.before_action :find_service
-    options.before_action :activate_submenu
   end
 
+  activate_menu :serviceadmin, :end_user_plans
   sublayout 'api/service'
 
   def index
@@ -62,10 +60,6 @@ class Api::EndUserPlansController < Api::PlansBaseController
 
   def authorize_end_users!
     authorize! :manage, :end_users
-  end
-
-  def activate_sidebar_menu
-    activate_menu :sidebar => :end_user_plans
   end
 
   def collection(service_id = params[:service_id].presence)
