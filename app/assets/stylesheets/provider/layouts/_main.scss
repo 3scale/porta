@@ -3,6 +3,7 @@
   margin: 0 auto;
   min-width: $layout-wrapper-min-width;
   padding-right: line-height-times(1);
+  position: relative;
 }
 
 #border {
@@ -20,11 +21,14 @@
 
 .vertical-nav {
   height: 100%;
-  position: fixed;
   text-align: left;
   z-index: 1000;
 }
 
-nav + #border {
+.vertical-nav + #border {
   margin-left: line-height-times(10);
+}
+
+.vertical-nav.collapsed + #border {
+  margin-left: line-height-times(3.5);
 }
