@@ -5,8 +5,10 @@ module ServiceDiscovery
     module Service
       class ImportClusterDefinitionsError < StandardError; end
 
-      def self.included(base)
-        base.class_eval do
+      extend ActiveSupport::Concern
+
+      included do
+        class_eval do
           attr_accessor :source
           attr_accessor :namespace
         end
@@ -32,20 +34,11 @@ module ServiceDiscovery
       end
 
       def import_cluster_active_docs(cluster_service)
-        unless cluster_service.oas?
-          log_cluster_service_import_event(cluster_service, message: 'API specification type not supported',
-                                                            details: { api_spec_content_type: cluster_service.specification_type })
-          return
-        end
-
-        if (spec_content = cluster_service.specification).blank?
-          log_cluster_service_import_event(cluster_service, message: 'OAS specification is empty and cannot be imported')
-          return
-        end
+        return unless valid_cluster_service_spec?(cluster_service)
 
         api_docs_service = discovered_api_docs_service || build_api_doc_service(cluster_service)
         api_docs_service.skip_swagger_validations = true
-        api_docs_service.body = spec_content
+        api_docs_service.body = cluster_service.specification_body
 
         unless api_docs_service.save
           log_cluster_service_import_event(cluster_service, message: 'Could not create ActiveDocs',
@@ -63,6 +56,23 @@ module ServiceDiscovery
         api_docs_services.build({ name: cluster_service.name, published: true, discovered: true }, without_protection: true)
       end
 
+      def valid_cluster_service_spec?(cluster_service)
+        cluster_service_spec_oas?(cluster_service) && cluster_service_spec_present?(cluster_service)
+      end
+
+      def cluster_service_spec_oas?(cluster_service)
+        return true if cluster_service.specification_oas?
+        log_cluster_service_import_event(cluster_service, message: 'API specification type not supported',
+                                                          details: { api_spec_content_type: cluster_service.specification_type })
+        false
+      end
+
+      def cluster_service_spec_present?(cluster_service)
+        return true if cluster_service.specification_body.present?
+        log_cluster_service_import_event(cluster_service, message: 'OAS specification is empty and cannot be imported')
+        false
+      end
+
       def log_cluster_service_import_event(cluster_service, message:, details: {})
         exception = ImportClusterDefinitionsError.new(message)
         exception_details = { service_id: id, cluster_service: { self_link: cluster_service.self_link } }.merge(details)
@@ -72,8 +82,10 @@ module ServiceDiscovery
 
     module ApiDocs
       module Service
-        def self.included(base)
-          base.class_eval do
+        extend ActiveSupport::Concern
+
+        included do
+          class_eval do
             attr_readonly :discovered
             scope :discovered, -> { where(discovered: true) }
             validate :unique_discovered_by_service

@@ -54,9 +54,7 @@ module ServiceDiscovery
       end
 
       test 'import api_doc' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/swagger+json')
+        stub_cluster_service_spec(@cluster_service)
 
         assert_difference @service.api_docs_services.method(:count) do
           @service.import_cluster_active_docs(@cluster_service)
@@ -75,9 +73,7 @@ module ServiceDiscovery
       end
 
       test 'non-oas spec' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/json')
+        stub_cluster_service_spec(@cluster_service, type: 'application/json')
 
         assert_no_difference @provider.api_docs_services.method(:count) do
           System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'API specification type not supported'), any_parameters)
@@ -86,9 +82,7 @@ module ServiceDiscovery
       end
 
       test 'blank oas spec' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '',
-                               specification_type: 'application/swagger+json')
+        stub_cluster_service_spec(@cluster_service, body: '')
 
         assert_no_difference @provider.api_docs_services.method(:count) do
           System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'OAS specification is empty and cannot be imported'), any_parameters)
@@ -97,9 +91,7 @@ module ServiceDiscovery
       end
 
       test 'invalid api_doc record' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/swagger+json')
+        stub_cluster_service_spec(@cluster_service)
 
         assert_no_difference @provider.api_docs_services.method(:count) do
           ::ApiDocs::Service.any_instance.stubs(valid?: false)
@@ -109,9 +101,7 @@ module ServiceDiscovery
       end
 
       test 'discovered api_docs_service' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/swagger+json')
+        stub_cluster_service_spec(@cluster_service)
 
         assert_difference @service.api_docs_services.method(:count) do
           @service.import_cluster_active_docs(@cluster_service)
@@ -123,9 +113,7 @@ module ServiceDiscovery
       end
 
       test 'refreshes discovered api_docs_service' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/swagger+json')
+        stub_cluster_service_spec(@cluster_service)
 
         discovered_api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: @service, discovered: true)
 
@@ -135,6 +123,14 @@ module ServiceDiscovery
           discovered_api_docs_service = @service.discovered_api_docs_service
           assert_equal '{ "swagger" : "fake-swagger" }', discovered_api_docs_service.body
         end
+      end
+
+      private
+
+      def stub_cluster_service_spec(cluster_service, options = {})
+        spec = ClusterServiceSpecification.new(cluster_service.specification_url)
+        spec.stubs({ fetch: true, body: '{ "swagger" : "fake-swagger" }', type: 'application/swagger+json' }.merge(options))
+        cluster_service.stubs(specification: spec)
       end
     end
 
