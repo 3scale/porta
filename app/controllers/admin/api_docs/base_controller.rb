@@ -62,7 +62,7 @@ class Admin::ApiDocs::BaseController < FrontendController
   end
 
   def index
-    @api_docs_services = current_scope.api_docs_services.page(params[:page])
+    @api_docs_services = current_scope.api_docs_services.page(params[:page]).includes(:service)
   end
 
   def create

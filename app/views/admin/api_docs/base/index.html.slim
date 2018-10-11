@@ -13,19 +13,23 @@ h2 ActiveDocs: Service Specs
       th Name
       th System Name
       th State
+      - if @service.blank?
+        th API
       th Swagger Version
       th class='operations' = link_to('Create a new spec', new_api_docs_service_path(@service), class: 'action add')
     tbody
-      - for service in @api_docs_services
+      - for api_docs in @api_docs_services
         tr
-          td = link_to service.name, preview_admin_api_docs_service_path(service), title: 'Preview service spec'
-          td = service.system_name
-          td = service.published? ? 'visible' : 'hidden'
+          td = link_to api_docs.name, preview_admin_api_docs_service_path(api_docs), title: 'Preview service spec'
+          td = api_docs.system_name
+          td = api_docs.published? ? 'visible' : 'hidden'
+          - if @service.blank?
+            td = api_docs.service&.name
           td
-            => service.swagger_version
-            - if service.needs_swagger_update?
+            => api_docs.swagger_version
+            - if api_docs.needs_swagger_update?
               = link_to t('.update_link_text'), t('.update_link', docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'is-inline'
-          td class='operations' = link_to 'Edit', edit_admin_api_docs_service_path(service), class: 'action edit'
+          td class='operations' = link_to 'Edit', edit_admin_api_docs_service_path(api_docs), class: 'action edit'
 - else
   table class="data"
     thead

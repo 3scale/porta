@@ -33,6 +33,20 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       assert_same_elements expected_api_docs_data, actual_api_docs_data
     end
 
+    test 'index has the API column' do
+      service_2 = FactoryGirl.create(:simple_service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
+      get admin_api_docs_services_path
+
+      assert_xpath "//*[@id='content']/table/thead/th[4]", 'API' # Name of the column
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      actual_api_docs_data = page.xpath("//*[@id='content']/table/tbody/tr/td[4]").map(&:text)
+      expected_api_docs_data = provider.api_docs_services.includes(:service).pluck(:'services.name').map(&:to_s)
+      assert_same_elements expected_api_docs_data, actual_api_docs_data
+    end
+
     test 'new renders without the selector of a service' do
       get new_admin_api_docs_service_path
       assert_xpath '//*[@id="api_docs_service_service_id"]' # The selection of service_id in the form

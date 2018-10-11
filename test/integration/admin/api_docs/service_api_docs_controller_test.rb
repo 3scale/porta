@@ -25,6 +25,12 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     assert_xpath "//a[contains(@href, '#{new_admin_service_api_doc_path(service)}')]", 'Create a new spec'
   end
 
+  test 'index doesn\'t have the API column' do
+    get admin_service_api_docs_path(service)
+    refute_xpath "//*[@id='content']/table/thead/th[4]" # Name of the column
+    refute_xpath("//*[@id='content']/table/tbody/tr/td[4]")
+  end
+
   test 'new renders with the service in sublayout title and in without service in the form' do
     get new_admin_service_api_doc_path(service)
 
