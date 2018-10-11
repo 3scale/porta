@@ -1,40 +1,4 @@
 .vertical-nav {
-    /*! CSS Used from: https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css */
-  .fa {
-    display: inline-block;
-    font: normal normal normal line-height-times(0.583)/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  .fa-dashboard:before {
-    content: "\f0e4";
-  }
-  .fa-gamepad:before {
-    content: "\f11b";
-  }
-  .fa-shield:before {
-    content: "\f132";
-  }
-  .fa-space-shuttle:before {
-    content: "\f197";
-  }
-  .fa-graduation-cap:before {
-    content: "\f19d";
-  }
-  .fa-paper-plane:before {
-    content: "\f1d8";
-  }
-
-  /*! CSS Used from: _base.css */
-
-  /* former <body> styles */
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  font-size: line-height-times(0.5);
-  line-height: 1.66666667;
-  color: #363636;
-  background-color: #fff;
 
   a {
     background-color: transparent;
@@ -43,33 +7,7 @@
   a:hover {
     outline: 0;
   }
-  @media print {
-    *,
-    :after,
-    :before {
-      background: 0 0 !important;
-      color: #000 !important;
-      box-shadow: none !important;
-      text-shadow: none !important;
-    }
-    a,
-    a:visited {
-      text-decoration: underline;
-    }
-    a[href]:after {
-      content: " (" attr(href) ")";
-    }
-    a[href^="#"]:after {
-      content: "";
-    }
-  }
-  * {
-    box-sizing: border-box;
-  }
-  :after,
-  :before {
-    box-sizing: border-box;
-  }
+
   a {
     color: #0088ce;
     text-decoration: none;
@@ -130,6 +68,30 @@
     }
   }
   /*! CSS Used from: _vertical-nav.css */
+  &.collapsed .nav-pf-vertical {
+    width: line-height-times(5 / 2);
+
+    .list-group-item > a {
+      width: line-height-times(5 / 2);
+    }
+
+    .nav-pf-secondary-nav .list-group-item>a {
+      width: line-height-times(9);
+    }
+
+    .list-group-item>a>.list-group-item-value {
+      display: none;
+    }
+
+    .nav-pf-secondary-nav .list-group-item>a>.list-group-item-value {
+      display: inline-block;
+    }
+
+    .nav-pf-secondary-nav {
+      left: line-height-times(5 / 2, true);
+    }
+  }
+
   .nav-pf-vertical {
     background: #292e34;
     border-right: 1px solid #292e34;
@@ -138,14 +100,11 @@
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
-    top: 60px;
-    width: line-height-times(8.3333333333);
+    top: line-height-times(2.5);
+    width: line-height-times(9);
     z-index: 1030;
-
-    &.collapsed {
-      width: line-height-times(3);
-    }
   }
+
   .nav-pf-vertical .list-group {
     border-top: 0;
     margin-bottom: 0;
@@ -160,29 +119,26 @@
     color: #d1d1d1;
     cursor: pointer;
     display: block;
-    font-size: line-height-times(0.58);
+    //font-size: line-height-times(0.58);
     font-weight: 400;
-    height: line-height-times(2.625);
-    line-height: line-height-times(1.0833333333);
-    padding: line-height-times(0.7083333333) line-height-times(0.8333333333) line-height-times(0.7083333333) line-height-times(1.0416666667);
+    height: line-height-times(5 / 2, true);
+    //line-height: line-height-times(1.0833333333);
+    //padding: line-height-times(1) line-height-times(1) line-height-times(1) line-height-times(1);
+    padding: line-height-times(3 / 4) line-height-times(3 / 4);
     position: relative;
     white-space: nowrap;
-    width: line-height-times(8.3333333333);
-  }
-
-  .nav-pf-vertical.collapsed .list-group-item > a {
-    width: line-height-times(3);
+    //width: line-height-times(9);
   }
 
   .nav-pf-vertical .list-group-item > a .fa,
   .nav-pf-vertical .list-group-item > a .pficon {
     color: #72767b;
     float: left;
-    font-size: line-height-times(0.83);
+    //font-size: line-height-times(0.83);
     line-height: line-height-times(1.1);
-    margin-right: line-height-times(0.42);
-    text-align: center;
-    width: line-height-times(1);
+    margin-right: line-height-times(0.5);
+    //text-align: center;
+    //width: line-height-times(1);
   }
   .nav-pf-vertical .list-group-item > a:focus,
   .nav-pf-vertical .list-group-item > a:hover {
@@ -223,13 +179,10 @@
     text-overflow: ellipsis;
   }
 
-  .nav-pf-vertical.collapsed .list-group-item .list-group-item-value {
-    display: none;
-  }
-
-  .hover-secondary-nav-pf {
+  &.hover-secondary-nav-pf {
     width: line-height-times(16.67);
   }
+
   .secondary-nav-item-pf > a {
     cursor: default;
   }
@@ -238,25 +191,25 @@
     content: "\f105";
     display: block;
     font-family: FontAwesome;
-    font-size: line-height-times(1);
+    //font-size: line-height-times(1);
     line-height: line-height-times(1.25);
     padding: line-height-times(0.58) 0;
     position: absolute;
-    right: line-height-times(0.83);
+    right: line-height-times(0.5);
     top: 0;
   }
   .secondary-nav-item-pf.active > a,
   .secondary-nav-item-pf:hover > a {
-    width: line-height-times(8.375);
+    width: line-height-times(9);
     z-index: 1031;
   }
   .secondary-nav-item-pf.active > a:after,
   .secondary-nav-item-pf:hover > a:after {
-    right: line-height-times(0.875);
+    right: line-height-times(0.5);
   }
   .nav-item-pf-header {
     color: #fff;
-    font-size: line-height-times(0.67);
+    //font-size: line-height-times(0.67);
     margin: line-height-times(0.75) line-height-times(0.83) line-height-times(0.42) line-height-times(0.83);
   }
   .nav-item-pf-header > a {
@@ -275,29 +228,30 @@
     border-top: none;
     bottom: 0;
     display: block;
-    left: line-height-times(8.3333333333);
+    left: line-height-times(9, true);
     opacity: 0;
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
-    top: 60px;
+    top: line-height-times(2.5);
     visibility: hidden;
-    width: line-height-times(8.3333333333);
+    width: line-height-times(9);
     z-index: 1030;
   }
-  .hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav {
+
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav {
     opacity: 1;
     visibility: visible;
   }
   .nav-pf-secondary-nav .list-group-item {
     border: none;
     padding: 0 0 line-height-times(0.21) 0;
-    width: line-height-times(8.3333333333);
+    width: line-height-times(9);
   }
   .nav-pf-secondary-nav .list-group-item > a {
     background-color: #393f44;
     color: #d1d1d1;
-    font-size: line-height-times(0.5);
+    font-size: $font-size-sm;
     font-weight: inherit;
     height: inherit;
     padding: line-height-times(0.167) 0 line-height-times(0.083) 0;

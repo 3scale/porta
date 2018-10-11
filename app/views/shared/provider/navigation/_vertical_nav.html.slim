@@ -161,48 +161,11 @@ nav.vertical-nav
                   icon:  'play-circle'
 
       - when :serviceadmin, :monitoring
-        - if can?(:manage, :monitoring)
-          = render 'shared/provider/navigation/service/analytics'
+        = render 'shared/provider/navigation/service/nav'
 
-        - if can?(:manage, :partners)
-          = render vertical_nav_item,
-                   title: 'Applications',
-                   path: admin_service_applications_path(@service)
-
-        - if can?(:manage, :plans)
-          = render vertical_nav_item,
-                   title: 'Definition',
-                   path: admin_service_metrics_path(@service)
-
-          = render vertical_nav_item,
-                title: 'Integration',
-                path: path_to_service(@service)
-
-          = render vertical_nav_item,
-                title: 'Application Plans',
-                path: admin_service_application_plans_path(@service)
-
-          = render vertical_nav_item,
-                title: 'Settings',
-                path: settings_admin_service_path(@service)
-
-          - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
-            = render vertical_nav_item,
-                  title: 'Service Plans',
-                  path: admin_service_service_plans_path(@service)
-
-          - if current_account.settings.end_user_plans_ui_visible?
-            = render vertical_nav_item,
-                  title: 'End User Plans',
-                  path: admin_service_end_user_plans_path(@service)
-
-          - if @service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
-            = render vertical_nav_item,
-                  title: 'End-users',
-                  path: admin_service_end_users_path(@service)
 
   javascript:
-    var nav = document.querySelector('.nav-pf-vertical'),
+    var nav = document.querySelector('.vertical-nav'),
     navItem = document.querySelectorAll('.secondary-nav-item-pf');
     for (var i = 0; i < navItem.length; i++) {
       navItem[i].addEventListener('mouseover', function() {
@@ -217,4 +180,4 @@ nav.vertical-nav
 
     var store = window.localStorage
     nav.classList
-      .toggle('collapsed', JSON.parse(store.isVerticalNavCollapsed || false))
+      .toggle('collapsed', JSON.parse(store.isVerticalNavCollapsed))
