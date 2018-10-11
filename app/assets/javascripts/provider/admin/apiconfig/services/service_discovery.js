@@ -59,16 +59,16 @@ document.addEventListener("DOMContentLoaded", function(e) {
           return response.json();
       })
       .then(function(data){
-        populateNamespacesOrServices(data, type);
+        populateOptions(type, data);
       });
     } else {
       return $.getJSON(url, function(data) {
-        populateNamespacesOrServices(data, type);
+        populateOptions(type, data);
       });
     }
   }
 
-  function populateNamespacesOrServices(data, type) {
+  function populateOptions(type, data) {
     switch (type) {
       case 'namespaces':
         populateNamespaces(data);
