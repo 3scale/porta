@@ -10,7 +10,7 @@ First of all, please keep in mind that multiple types of contributions are possi
 
 #### **Did you find a bug?**
 
-* **Do not open up a GitHub issue if the bug is a security vulnerability**. Please contact us privately instead.
+* **Do not open up a GitHub issue if the bug is a security vulnerability**. Please [contact us privately](https://access.redhat.com/security/team/contact) instead.
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/3scale/system/issues).
 
@@ -37,7 +37,8 @@ To do so, you only need to follow these steps:
   1. Check if you already have existing GPG keys in your local computer following [this guide](https://help.github.com/articles/checking-for-existing-gpg-keys/).
   2. If you don't have any, generate a new GPG key following [this guide](https://help.github.com/articles/generating-a-new-gpg-key/).
   3. Add the GPG key to your GitHub account following [this guide](https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/).
-  4. Sign your commits with the GPG key following [this guide](https://help.github.com/articles/signing-commits/).
+  4. Tell Git about your signing key following [this guide](https://help.github.com/articles/telling-git-about-your-signing-key/).
+  5. Sign your commits with the GPG key following [this guide](https://help.github.com/articles/signing-commits/).
 
 #### **Do you have questions about the source code?**
 
