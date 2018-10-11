@@ -174,6 +174,15 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
     end
   end
 
+  test '#create_active_docs_service!' do
+    default_signup_provider
+    @provider.create_sample_data!
+    active_docs = @provider.default_service.api_docs_services.first!
+    assert active_docs.published
+    assert_equal 'Echo', active_docs.name
+    assert_equal Logic::ProviderSignup::SampleData::ECHO_SERVICE, active_docs.body
+  end
+
   private
 
   def default_signup_provider(options = {})
