@@ -2,7 +2,7 @@
 
 class Admin::ApiDocs::BaseController < FrontendController
   before_action :find_api_docs, only: %i[destroy edit update show preview toggle_visible]
-  before_action :find_service_apis_collection, only: %i[new edit]
+  before_action :find_service_apis_collection, only: %i[new edit update create]
   before_action :deny_on_premises_for_master
 
   def preview
@@ -55,7 +55,6 @@ class Admin::ApiDocs::BaseController < FrontendController
         format.html { redirect_to(preview_admin_api_docs_service_path(api_docs_service), notice: message) }
         format.js { render js: "jQuery.flash.notice('#{message}')" }
       else
-        flash[:error] = api_docs_service.errors.full_messages.join(' ')
         format.html { render :edit }
         format.js {}
       end
@@ -71,7 +70,6 @@ class Admin::ApiDocs::BaseController < FrontendController
     if @api_docs_service.save
       redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: 'ActiveDocs Spec was successfully saved.')
     else
-      flash[:error] = @api_docs_service.errors.full_messages.join(' ')
       render :new
     end
   end
