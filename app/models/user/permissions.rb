@@ -78,6 +78,10 @@ module User::Permissions
     !admin_sections.include?(:services) || admin?
   end
 
+  def forbidden_some_services?
+    !has_access_to_all_services? && account.provider_can_use?(:service_permissions)
+  end
+
   def reload(*)
     @_admin_sections = nil
     super

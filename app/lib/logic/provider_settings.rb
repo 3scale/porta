@@ -29,11 +29,12 @@ module Logic
     end
 
     def multiservice?
-      if self.buyer?
-        self.provider_account.multiservice?
-      else
-        (@_services_size ||= self.services.size) > 1
-      end
+      account = buyer? ? provider_account : self
+      account.multiple_accessible_services?
+    end
+
+    def multiple_accessible_services?(scope = nil)
+      accessible_services.merge(scope).size > 1
     end
 
     def reload(*)
