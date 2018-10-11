@@ -12,13 +12,13 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
     setup do
       @provider = FactoryGirl.create(:provider_account)
       @service = @provider.default_service
-      @api_docs_service = @provider.api_docs_services.create!(api_docs_params[:api_docs_service])
+      @api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: nil)
     end
 
     test 'index gets the api_docs of an account independently of the service' do
-      service.api_docs_services.create!(api_docs_params(name: 'first-service')[:api_docs_service])
-      another_service = FactoryGirl.create(:simple_service, account: provider)
-      another_service.api_docs_services.create!(api_docs_params(name: '2nd-S')[:api_docs_service])
+      service_2 = FactoryGirl.create(:simple_service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
 
       get admin_api_docs_services_path
       refute_xpath '//*[@id="side-tabs"]' # The service menu

@@ -4,7 +4,7 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @service = Factory(:service)
+    @service = FactoryGirl.create(:service)
     @drop = Drops::Service.new(@service)
   end
 
@@ -26,13 +26,11 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   end
 
   test 'api_specs' do
-    @service.api_docs_services.create!({ name: 'name-api-doc', system_name: 'api_doc',
-                                         body: '{"apis": [{"foo": "bar"}], "basePath": "http://example.com"}'
-                                       }, without_protection: true)
+    api_spec = FactoryGirl.create(:api_docs_service, service: @service, account: @service.account)
     api_specs_collection_drop = @drop.api_specs
     assert_equal 1, api_specs_collection_drop.length
     api_spec_drop = api_specs_collection_drop.first
     assert_instance_of Liquid::Drops::ApiSpec, api_spec_drop
-    assert_equal 'api_doc', api_spec_drop.system_name
+    assert_equal api_spec.system_name, api_spec_drop.system_name
   end
 end

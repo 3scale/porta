@@ -6,7 +6,7 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
   setup do
     @provider = FactoryGirl.create(:provider_account)
     @service = @provider.default_service
-    @api_docs_service = @provider.api_docs_services.create!(api_docs_params, without_protection: true)
+    @api_docs_service = FactoryGirl.create(:api_docs_service, service: @service, account: @service.account)
     login! @provider
   end
 
@@ -44,11 +44,5 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     assert_xpath '//*[@id="side-tabs"]' # The menu
     assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
     refute_xpath('//*[@id="api_docs_service_service_id"]') # No selection of service_id in the form
-  end
-
-  private
-
-  def api_docs_params
-    {name: 'foo', body: '{"basePath": "http://foo.example.com", "apis":[{"foo": "bar"}]}', service: service}
   end
 end
