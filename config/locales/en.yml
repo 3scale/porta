@@ -115,6 +115,7 @@ en:
           analytics_api: 'Analytics API'
           billing_api: 'Billing API'
           master_api: 'Master API'
+      base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
           update_link: "%{docs_base_url}/api-documentation/%{docs_anchor}activedocs-migrate"

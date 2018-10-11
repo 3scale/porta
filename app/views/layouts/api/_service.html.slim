@@ -4,6 +4,7 @@ ul#side-tabs
 
   - if can?(:manage, :plans)
     = sidebar_link 'Definition', admin_service_metrics_path(@service)
+    = sidebar_link 'ActiveDocs', admin_service_api_docs_path(@service)
     = sidebar_link :integration, path_to_service(@service) if can?(:manage, :plans)
     = sidebar_link 'Application Plans', admin_service_application_plans_path(@service)
     = sidebar_link :settings, settings_admin_service_path(@service)
