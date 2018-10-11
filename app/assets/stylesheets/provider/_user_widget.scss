@@ -8,6 +8,24 @@
   z-index: 10;
   top: 0;
 
+  &--master {
+    //top: line-height-times(1 / 2);
+    height: line-height-times(7 / 2);
+    border-top: line-height-times(1) solid $header-border-color;
+
+    &:before {
+      content: 'master';
+      position: absolute;
+      top: line-height-times(-1);
+      font-family: $font-family-monospace;
+    }
+
+    & + #wrapper .vertical-nav .nav-pf-vertical,
+    & + #wrapper .vertical-nav .nav-pf-secondary-nav {
+      top: line-height-times(7 / 2);
+    }
+  }
+
   .header-link {
     display: block;
     padding: line-height-times(19 / 20) line-height-times(1);
