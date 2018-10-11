@@ -101,18 +101,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       assert_equal old_system_name, api_docs_service.reload.system_name
     end
 
-    def test_update_invalid_params
-      old_body = api_docs_service.body
-      put admin_api_docs_service_path update_params(body: '{apis: []}')
-      assert_includes flash[:error], 'JSON Spec is invalid'
-      assert_equal old_body, api_docs_service.reload.body
-    end
-
-    def test_update_unexistent_service
-      put admin_api_docs_service_path update_params(service_id: 200)
-      assert_includes flash[:error], 'Service not found'
-    end
-
     private
 
     attr_reader :provider, :service, :api_docs_service
