@@ -33,6 +33,11 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       assert_same_elements expected_api_docs_data, actual_api_docs_data
     end
 
+    test 'new renders without the selector of a service' do
+      get new_admin_api_docs_service_path
+      assert_xpath '//*[@id="api_docs_service_service_id"]' # The selection of service_id in the form
+    end
+
     test 'preview under the service scope when there is a service' do
       get preview_admin_api_docs_service_path(api_docs_service)
       refute_xpath '//*[@id="side-tabs"]' # The menu
@@ -47,6 +52,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       get edit_admin_api_docs_service_path(api_docs_service)
       refute_xpath '//*[@id="side-tabs"]' # The menu
       refute_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+      assert_xpath '//*[@id="api_docs_service_service_id"]' # The selection of service_id in the form
 
       api_docs_service.update({service_id: service.id}, without_protection: true)
       get edit_admin_api_docs_service_path(api_docs_service)

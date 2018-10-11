@@ -25,17 +25,12 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     assert_xpath "//a[contains(@href, '#{new_admin_service_api_doc_path(service)}')]", 'Create a new spec'
   end
 
-  test 'new renders with the service in sublayout title and in selected service' do
+  test 'new renders with the service in sublayout title and in without service in the form' do
     get new_admin_service_api_doc_path(service)
 
-    assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs"
+    assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
     assert_xpath '//*[@id="side-tabs"]' # The menu
-
-    page = Nokogiri::HTML::Document.parse(response.body)
-    page_option = page.xpath('//*[@id="api_docs_service_service_id"]/option[2]')[0] # The option[1] is the empty service
-    assert_equal service.name, page_option.text
-    assert_equal service.id.to_s, page_option['value']
-    assert_equal 'selected', page_option['selected']
+    refute_xpath('//*[@id="api_docs_service_service_id"]') # No selection of service_id in the form
   end
 
   test 'preview works under the service scope' do
@@ -48,6 +43,7 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     get edit_admin_service_api_doc_path(service, api_docs_service)
     assert_xpath '//*[@id="side-tabs"]' # The menu
     assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+    refute_xpath('//*[@id="api_docs_service_service_id"]') # No selection of service_id in the form
   end
 
   private
