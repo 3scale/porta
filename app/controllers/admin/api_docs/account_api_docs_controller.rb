@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::ApiDocs::AccountApiDocsController < Admin::ApiDocs::BaseController
-  class NotImplementedServiceScopeError < NotImplementedError; end
+  class NotImplementedServiceScopeError < RuntimeError; end
   rescue_from(NotImplementedServiceScopeError) do |exception|
     System::ErrorReporting.report_error(exception)
     handle_not_found
