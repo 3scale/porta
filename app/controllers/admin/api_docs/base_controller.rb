@@ -90,7 +90,7 @@ class Admin::ApiDocs::BaseController < FrontendController
   end
 
   def current_scope
-    raise NotImplementedError, "#{__method__} not implemented in #{self.class}"
+    raise NoMethodError, "#{__method__} not implemented in #{self.class}"
   end
 
   def api_docs_params(*extra_params)
