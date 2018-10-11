@@ -1,8 +1,10 @@
 - title = title
 - path ||= '#'
+- icon ||= nil
 
 li.list-group-item class=( active_menu?(:submenu, title) || current_page?(path) ? 'active' : '')
   = link_to path do
-    span.fa.fa-shield data-toggle="tooltip" title="" data-original-title=title
+    - if icon
+      span.fa.fa-fw class="fa-#{icon}"
     span.list-group-item-value
       = title

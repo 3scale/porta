@@ -14,7 +14,6 @@ html[lang="en"]
     = yield :javascripts
 
   body
-    = render partial: '/shared/provider/call_to_action' if call_to_action?
     = render partial: '/shared/provider/header'
     #wrapper
       = render partial: 'shared/provider/navigation/vertical_nav' unless active_menu == :dashboard
@@ -28,3 +27,4 @@ html[lang="en"]
             = render 'shared/provider/page_title'
             = yield
         = render partial: "/provider/footer"
+    = render partial: '/shared/provider/call_to_action' if call_to_action?

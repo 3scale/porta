@@ -84,7 +84,8 @@
     color: $border-color;
     cursor: pointer;
     display: block;
-    padding: line-height-times(3 / 4) line-height-times(1);
+    padding: line-height-times(3 / 4);
+    min-width: line-height-times(5 / 2, true);
 
     &:hover,
     &.is-toggled,
