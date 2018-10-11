@@ -49,6 +49,11 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     get edit_admin_service_api_doc_path(service, api_docs_service)
     assert_xpath '//*[@id="side-tabs"]' # The menu
     assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
-    refute_xpath('//*[@id="api_docs_service_service_id"]') # No selection of service_id in the form
+    assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+  end
+
+  test 'update keeps having service_id selection after failing' do
+    put admin_service_api_doc_path service, api_docs_service, {api_docs_service: {body: 'invalid'}}
+    assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
   end
 end
