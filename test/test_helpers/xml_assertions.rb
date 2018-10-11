@@ -20,6 +20,8 @@ module TestHelpers
 
           when Regexp
             refute_match match, nodes.text
+          when NilClass
+            assert nodes.blank?
           else
             raise 'Not Implemented'
         end
