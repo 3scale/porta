@@ -331,8 +331,7 @@ module Logic
       end
 
       def create_active_docs_service!
-        echo = api_docs_services.find_by_name('Echo')
-        echo || api_docs_services.create!(name: 'Echo', body: ECHO_SERVICE, published: true)
+        default_service.api_docs_services.where(name: 'Echo').first_or_create!(body: ECHO_SERVICE, published: true)
       end
     end
 
