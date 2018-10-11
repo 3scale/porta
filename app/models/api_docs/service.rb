@@ -14,6 +14,8 @@ class ApiDocs::Service < ApplicationRecord
   self.table_name = "api_docs_services"
   has_system_name uniqueness_scope: :account_id
 
+  include ServiceDiscovery::ModelExtensions::ApiDocs::Service
+
   validates :name, :body, presence: true
   validates :name, :system_name, :base_path, :swagger_version, length: { maximum: 255 }
   validates :description, length: { maximum: 65535 }

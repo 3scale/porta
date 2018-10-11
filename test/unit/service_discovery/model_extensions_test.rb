@@ -79,7 +79,7 @@ module ServiceDiscovery
                                specification: '{ "swagger" : "fake-swagger" }',
                                specification_type: 'application/json')
 
-        assert_no_difference @provider.api_docs_services do
+        assert_no_difference @provider.api_docs_services.method(:count) do
           System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'API specification type not supported'), any_parameters)
           @service.import_cluster_active_docs(@cluster_service)
         end
@@ -90,7 +90,7 @@ module ServiceDiscovery
                                specification: '',
                                specification_type: 'application/swagger+json')
 
-        assert_no_difference @provider.api_docs_services do
+        assert_no_difference @provider.api_docs_services.method(:count) do
           System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'OAS specification is empty and cannot be imported'), any_parameters)
           @service.import_cluster_active_docs(@cluster_service)
         end
@@ -101,11 +101,74 @@ module ServiceDiscovery
                                specification: '{ "swagger" : "fake-swagger" }',
                                specification_type: 'application/swagger+json')
 
-        assert_no_difference @provider.api_docs_services do
-          ApiDocs::Service.any_instance.stubs(valid?: false)
+        assert_no_difference @provider.api_docs_services.method(:count) do
+          ::ApiDocs::Service.any_instance.stubs(valid?: false)
           System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'Could not create ActiveDocs'), any_parameters)
           @service.import_cluster_active_docs(@cluster_service)
         end
+      end
+
+      test 'discovered api_docs_service' do
+        @cluster_service.stubs(fetch_specification: true,
+                               specification: '{ "swagger" : "fake-swagger" }',
+                               specification_type: 'application/swagger+json')
+
+        assert_difference @service.api_docs_services.method(:count) do
+          @service.import_cluster_active_docs(@cluster_service)
+
+          discovered_api_docs_service = @service.discovered_api_docs_service
+          assert discovered_api_docs_service.discovered
+          assert_equal '{ "swagger" : "fake-swagger" }', discovered_api_docs_service.body
+        end
+      end
+
+      test 'refreshes discovered api_docs_service' do
+        @cluster_service.stubs(fetch_specification: true,
+                               specification: '{ "swagger" : "fake-swagger" }',
+                               specification_type: 'application/swagger+json')
+
+        discovered_api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: @service, discovered: true)
+
+        assert_no_difference @service.api_docs_services.method(:count) do
+          @service.import_cluster_active_docs(@cluster_service)
+
+          discovered_api_docs_service = @service.discovered_api_docs_service
+          assert_equal '{ "swagger" : "fake-swagger" }', discovered_api_docs_service.body
+        end
+      end
+    end
+
+    class ApiDocs::ServiceTest < ActiveSupport::TestCase
+      test 'discovered is readonly' do
+        api_doc = FactoryGirl.create(:api_docs_service, discovered: true)
+
+        api_doc.update! discovered: false
+        assert api_doc.reload.discovered
+      end
+
+      test 'discovered scope' do
+        api_docs =  FactoryGirl.create_list(:api_docs_service, 2, discovered: true)
+        api_docs += FactoryGirl.create_list(:api_docs_service, 3, discovered: false)
+
+        assert_same_elements api_docs[0..1].map(&:id), ::ApiDocs::Service.discovered.pluck(:id)
+      end
+
+      test 'only one discovered by service' do
+        service = FactoryGirl.create(:simple_service)
+
+        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account)
+        assert api_doc.valid?
+
+        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account, discovered: true)
+        assert api_doc.valid?
+
+        FactoryGirl.create(:api_docs_service, service: service, account: service.account, discovered: true)
+        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account, discovered: true)
+        refute api_doc.valid?
+        assert api_doc.errors[:discovered].present?
+
+        api_doc.discovered = false
+        assert api_doc.valid?
       end
     end
   end
