@@ -14,7 +14,6 @@ html[lang="en"]
     = yield :javascripts
 
   body
-    = render partial: 'application/heroku_widget'
     = render partial: '/shared/provider/call_to_action' if call_to_action?
     = render partial: "/shared/ribbons"
     = render partial: "/shared/provider/user_widget"
