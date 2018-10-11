@@ -66,7 +66,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       get edit_admin_api_docs_service_path(api_docs_service)
       refute_xpath '//*[@id="side-tabs"]' # The menu
       refute_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
-      assert_xpath '//*[@id="api_docs_service_service_id"]' # The selection of service_id in the form
 
       api_docs_service.update({service_id: service.id}, without_protection: true)
       get edit_admin_api_docs_service_path(api_docs_service)
@@ -110,6 +109,22 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
 
       assert_nil api_docs_service.reload.service_id
+    end
+
+    def test_new_edit_has_service_selection
+      get new_admin_api_docs_service_path
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+
+      get edit_admin_api_docs_service_path(api_docs_service)
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+    end
+
+    def test_update_create_invalid_params_keeps_having_service_selection
+      put admin_api_docs_service_path update_params(body: 'invalid')
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+
+      post admin_api_docs_services_path create_params(body: 'invalid')
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
     end
 
     def test_system_name_is_not_updated
