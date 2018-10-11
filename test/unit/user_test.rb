@@ -108,6 +108,21 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 0, member.accessible_services.count
   end
 
+  test '#multiple_accessible_services?' do
+    provider = FactoryGirl.create(:simple_provider)
+    user = FactoryGirl.create(:user, account: provider)
+    FactoryGirl.create_list(:simple_service, 2, account: provider)
+
+    Service.stubs(permitted_for_user: [provider.services.last!.id])
+    refute user.multiple_accessible_services?
+
+    Service.stubs(permitted_for_user: Service.all)
+    assert user.multiple_accessible_services?
+
+    provider.services.first!.mark_as_deleted!
+    refute user.multiple_accessible_services?
+  end
+
   test 'validate emails of providers users' do
     provider = Factory(:simple_provider)
     other_provider = Factory(:simple_provider)
