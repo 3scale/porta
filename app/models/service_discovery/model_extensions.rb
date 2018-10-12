@@ -7,6 +7,7 @@ module ServiceDiscovery
 
       extend ActiveSupport::Concern
 
+      # TODO: Remove and fix the creation form so it does not depend on these fake attributes os service
       included do
         class_eval do
           attr_accessor :source
