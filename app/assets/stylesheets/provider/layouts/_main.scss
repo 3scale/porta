@@ -32,3 +32,11 @@
 .vertical-nav.collapsed + #border {
   margin-left: line-height-times(3.5);
 }
+
+.Main {
+  min-height: calc(100vh - #{line-height-times(10)});
+
+  &--callToAction {
+    min-height: calc(100vh - #{line-height-times(12)});
+  }
+}
