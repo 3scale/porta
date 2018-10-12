@@ -2,6 +2,15 @@
 
 module ServiceDiscovery
   class ImportClusterDefinitionsService
+    def self.build_service(account, attributes = {})
+      account.services.build(attributes)
+    end
+
+    def self.create_service(account, cluster_namespace:, cluster_service_name:)
+      CreateServiceWorker.perform_async(account.id, cluster_namespace, cluster_service_name)
+      build_service(account, name: cluster_service_name)
+    end
+
     def self.refresh_service(service)
       return unless service.discovered?
       RefreshServiceWorker.perform_async(service.id)
@@ -20,10 +29,9 @@ module ServiceDiscovery
         system_name: [cluster_namespace, cluster_service_name].join('-'),
         kubernetes_service_link: cluster_service.self_link
       }
-      creation_service = ServiceCreationService.call(account, new_api_attributes)
-      new_api = creation_service.service
+      new_api = self.class.build_service(account, new_api_attributes)
 
-      return unless creation_service.success? && new_api.persisted?
+      return unless new_api.save
 
       new_api.import_cluster_definitions(cluster_service)
     end

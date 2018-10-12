@@ -25,14 +25,12 @@ module ServiceDiscovery
       @import_service = ImportClusterDefinitionsService.new
     end
 
-    test 'refresh service async' do
-      service = FactoryGirl.create(:service, account: @account,
-                                             name: 'fake-api',
-                                             system_name: 'fake-project-fake-api')
-
-      service.stubs(discovered?: true)
-      RefreshServiceWorker.expects(:perform_async).with(service.id)
-      ImportClusterDefinitionsService.refresh_service(service)
+    test 'create service async' do
+      CreateServiceWorker.expects(:perform_async).with(@account.id, 'fake-project', 'fake-api')
+      new_service = ImportClusterDefinitionsService.create_service(@account, cluster_namespace: 'fake-project',
+                                                                             cluster_service_name: 'fake-api')
+      refute new_service.persisted?
+      assert_equal 'fake-api', new_service.name
     end
 
     test 'create service' do
@@ -42,6 +40,16 @@ module ServiceDiscovery
         Service.any_instance.expects(:import_cluster_definitions).with(@fake_cluster_service)
         @import_service.create_service(@account, cluster_namespace: 'fake-project', cluster_service_name: 'fake-api')
       end
+    end
+
+    test 'refresh service async' do
+      service = FactoryGirl.create(:service, account: @account,
+                                             name: 'fake-api',
+                                             system_name: 'fake-project-fake-api')
+
+      service.stubs(discovered?: true)
+      RefreshServiceWorker.expects(:perform_async).with(service.id)
+      ImportClusterDefinitionsService.refresh_service(service)
     end
 
     test 'refresh service' do
