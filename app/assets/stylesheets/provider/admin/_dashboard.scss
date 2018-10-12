@@ -17,7 +17,7 @@
     text-transform: uppercase;
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
-    color: $light-color;
+    color: $font-color;
     float: left;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -361,7 +361,7 @@
   &-link {
     text-transform: uppercase;
     font-style: normal;
-    color: $light-color;
+    color: $link-color;
 
     .fa {
       font-size: $font-size-sm;
@@ -371,7 +371,7 @@
     }
 
     &:hover {
-      color: $link-color;
+      color: $link-hover-color;
     }
 
     &--alert {
