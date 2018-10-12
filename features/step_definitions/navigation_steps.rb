@@ -5,12 +5,12 @@ When /^I navigate to the sent invitations page$/ do
 end
 
 When /^I navigate to the page of the partner "([^\"]*)"$/ do |partner|
-  click_link(:text => /\ADevelopers|Tenants\z/)
+  click_link "Accounts"
   click_link partner
 end
 
 When 'I navigate to the accounts page' do
-  click_link(:text => /\ADevelopers|Tenants\z/)
+  click_link "Accounts"
 end
 
 When /^I navigate to a topic in (the forum of "[^\"]*")$/ do |forum|
