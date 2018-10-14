@@ -1,4 +1,5 @@
-h1
-  = yield :sublayout_title
+- if (title = content_for(:sublayout_title).presence)
+  h1
+    = yield :sublayout_title
 
 = yield
