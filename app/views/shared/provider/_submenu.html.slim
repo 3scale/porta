@@ -22,6 +22,8 @@ ul#second_nav.self_clear
     - unless current_account.provider_can_use?(:new_notification_system)
       = provider_submenu_link "Notifications", provider_admin_account_notifications_path
 
+    = provider_submenu_link 'Alerts', admin_alerts_path if current_account.multiservice? && can?(:manage, :analytics)
+
     - if can?(:read, Invoice) && !ThreeScale.config.onpremises
       = provider_submenu_link '3scale Invoices', provider_admin_account_invoices_path, title: 'invoices'
 
@@ -38,7 +40,6 @@ ul#second_nav.self_clear
 
   - when :monitoring
     = provider_submenu_link 'Analytics', admin_stats_root_path
-    = provider_submenu_link 'Alerts', admin_alerts_path if current_account.multiservice?
     = provider_submenu_link 'Traffic', admin_transactions_path
 
   - when :serviceadmin

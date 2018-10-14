@@ -1,10 +1,11 @@
 class Api::AlertsController < FrontendController
-  activate_menu :monitoring, :analytics
+  activate_menu :account, :alerts
 
   include SearchSupport
   include ThreeScale::Search::Helpers
 
   before_action :find_service
+  before_action :authorize_analytics
 
   def index
     @search = ThreeScale::Search.new(search_params)
@@ -69,6 +70,10 @@ class Api::AlertsController < FrontendController
   end
 
   private
+
+  def authorize_analytics
+    authorize!(:manage, :analytics)
+  end
 
   def search_params
     # default to account_id and cinstance_id params if no search hash is passed
