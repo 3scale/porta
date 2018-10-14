@@ -1,0 +1,155 @@
+- content_for :javascripts do
+  = render_js_module_loader
+  = javascript_include_tag 'vendor/jquery.tipsy.js'
+
+h1 Overview
+
+- service =  @service
+
+section class="service-widget"
+  div.content-service
+    section[name="settings"]
+
+      h2
+        = link_to 'Definition', admin_service_metrics_path(service),  data: { bubble: 'metric' }
+        ' ,
+        => link_to 'Integration', path_to_service(service), :title => 'Change integration settings for this service', data: { bubble: 'integration' }
+        '  and
+        =< link_to 'Settings', settings_admin_service_path(service), :title => "Edit service settings"
+
+      ul.service-settings[data-hint="basics"]
+        - if service.deployment_option.present?
+          - deployment_option_phrased = t(service.proxy.deployment_option, scope: "deployment_options.phrased")
+        - unless service.has_traffic?
+          li.item.integration
+            - case service.proxy.deployment_option.presence
+            - when 'hosted'
+              p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, hit <strong>Deploy</strong> in the production box and you have completed a basic integration.
+              = important_icon_link "Configure #{deployment_option_phrased}",
+                'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
+            - when 'self_managed'
+              p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, proceed to download the NGINX config files for your On-premises NGINX reverse proxy server. Once you've added these config files to your Nginx server you have completed a basic integration.
+              = important_icon_link "Configure #{deployment_option_phrased}",
+                'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
+            - when 'plugin_rest'
+              p Follow the instructions on the #{link_to('Integration page', path_to_service(service))} to integrate your API using #{deployment_option_phrased} the against 3scale Service Management API endpoints.
+              = important_icon_link "Get started with #{deployment_option_phrased}",
+                'hdd-o', path_to_service(service), :class => "outline-button next"
+            - when nil
+              p = t("deployment_options.missing")
+              = important_icon_link 'Pick a deployment option now',
+                'hdd-o', path_to_service(service), :class => "outline-button next"
+            - else
+              p Follow the instructions on the #{link_to( 'Integration page', path_to_service(service) )} to download and install the #{deployment_option_phrased} into your codebase.
+              = important_icon_link "Get started with the #{deployment_option_phrased}",
+                'hdd-o',path_to_service(service), :class => "outline-button next"
+
+        - if service.deployment_option.present? && service.has_traffic?
+          li.item
+            ' Integrated through
+            strong => deployment_option_phrased
+
+        li.item
+          ' Authenticated by
+          strong
+            => human_backend service.proxy_authentication_method
+        li.item
+          ' ID for API calls is
+          strong
+            => service.id
+          ' and system name is
+          strong
+            = service.system_name
+
+
+        - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
+          li.item
+            = setting
+
+
+      - if can? :admin, :plans
+        h2
+          '  Published
+          => link_to 'Application Plans', admin_service_application_plans_path(service), data: { bubble: 'limit' }
+          = help_bubble "application_plans-#{service.id}" do
+            |  Application plans define access policies for your API itself. This allows you to differentiate between restricted / limited usage (e.g. a testing sandbox) and production or premium usage.
+        = action_link_to :new, new_admin_service_application_plan_path(service), label: 'Create Application Plan'
+
+        ul.application-plans[data-hint="published"]
+          = list_items_or_empty service.published_application_plans, 'There are no published application plans. Create one!' do |plan|
+            li.plan.item
+              => plan.link_to_edit(class: :name)
+              ' -
+              = plan.link_to_applications
+        p
+          '  You have
+          = service.link_to_application_plans
+          '  with a total of
+          = service.link_to_live_applications
+          | .
+
+        - if (can? :manage, :service_plans) && (current_account.settings.service_plans_ui_visible?)
+          h2
+            '  Published
+            => link_to 'Service plans', admin_service_service_plans_path(service)
+            = help_bubble "service_plans#{service.id}" do
+              |  Service plans allow you to define grades of service for each of the services (APIs) available through your developer portal. The plans allow you to define pricing per service and features available.
+          = action_link_to :new,  new_admin_service_service_plan_path(service),
+          :label => 'Create Service Plan'
+
+          ul.service-plans[data-hint="published"]
+            = list_items_or_empty service.service_plans.published, 'There are no published service plans. Create one!' do |plan|
+              li.plan.item
+                => link_to plan.name, edit_admin_service_plan_path(plan), :class => :name
+                ' -
+                = pluralize plan.contracts.size, 'contract'
+          p
+            '  You have
+            = link_to pluralize(service.service_plans.size, 'service plan'),admin_service_service_plans_path(service)
+            |  (
+            = service.service_plans.published.size
+            '  published) with a total of
+            = pluralize service.contracts.service.size, 'contract'
+            | .
+
+    section[name="activity"]
+
+      - if can? :manage, :monitoring
+        h2 = link_to 'Analytics', admin_service_stats_usage_path(service), :title => 'Show more stats for this service'
+        - cache [ 'v1', 'service', 'sparklines', service ] do
+          = render 'stats/sparklines', :metrics => service.metrics.top_level
+
+      - if can? :manage, :partners
+        h2 = link_to 'Latest alerts', admin_service_alerts_path(service), :title => 'Show all limit alerts for this service'
+        ol.latest-alerts
+          = list_items_or_empty current_account.alerts.by_service(service).latest, 'There are no alerts.' do |alert|
+            li.item
+              = link_to_cinstance_or_deleted(alert.cinstance)
+              |  at
+              = l alert.timestamp
+              |  (
+              = colorize_utilization(alert.level)
+              | )
+              br
+              span.name
+                = alert.message
+        - if can?(:show, Cinstance)
+          h2 = link_to 'Latest Apps', admin_service_applications_path(service), :title => 'Show all applications for this service'
+          ol.latest-apps
+            = list_items_or_empty service.latest_applications, 'There are no latest applications.' do |cinstance|
+              - if cinstance.user_account.present?
+                li.item
+                  => link_to cinstance.name, admin_service_application_path(cinstance.service, cinstance)
+                  '  from
+                  = link_to cinstance.user_account.org_name, admin_buyers_account_path(cinstance.user_account)
+
+= render 'shared/service_access'
+
+javascript:
+  System.import('onboarding/bubbles').then(function (m) {
+    m.show(#{json bubbles.take(1).as_json})
+  });
+
+  System.import('services/index').then(function (m) {
+    m.default()
+  });
