@@ -17,6 +17,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def show
+    @service = @service.decorate
   end
 
   def new
