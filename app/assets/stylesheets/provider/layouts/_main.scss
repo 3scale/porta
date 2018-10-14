@@ -2,6 +2,7 @@
   height: 100%;
   margin: 0 auto;
   min-width: $layout-wrapper-min-width;
+  padding-left: line-height-times(1);
   padding-right: line-height-times(1);
   position: relative;
 }
@@ -9,7 +10,7 @@
 #border {
   margin-top: line-height-times(2.5);
   min-height: 80vh;
-  padding: line-height-times(1) line-height-times(1) 0 line-height-times(1);
+  padding: line-height-times(1) 0 0 0;
   position: relative;
   text-align: left;
   z-index: 1;
@@ -26,11 +27,11 @@
 }
 
 .vertical-nav + #border {
-  margin-left: line-height-times(10);
+  margin-left: line-height-times(9);
 }
 
 .vertical-nav.collapsed + #border {
-  margin-left: line-height-times(3.5);
+  margin-left: line-height-times(2.5);
 }
 
 .Main {

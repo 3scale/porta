@@ -1,11 +1,6 @@
 ul#subsubmenu
-  li.SubSubMenuItem.SubSubMenuItem--trunk
-    = link_to_unless_current_styled "Applications",
-      admin_buyers_applications_path,
-      class: "SubSubMenuItem-link"
-
   - if @cinstance && !@cinstance.new_record?
-    li.SubSubMenuItem.SubSubMenuItem--branch
+    li.SubSubMenuItem.SubSubMenuItem--trunk
       = link_to_unless_current_styled "Application '#{@cinstance.name}'",
         admin_service_application_path(@cinstance.service, @cinstance),
         title: "application",
