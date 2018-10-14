@@ -1,5 +1,11 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
+- if can?(:manage, :plans)
+  = render vertical_nav_item,
+           title: 'Overview',
+           path: admin_service_path(@service),
+           icon: 'map'
+
 - if can?(:manage, :monitoring)
   = render 'shared/provider/navigation/service/analytics'
 
