@@ -34,20 +34,17 @@ class Api::ServicesController < Api::BaseController
   end
 
   def create
-    @service, success = create_or_build_service
+    @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
+    @service.attributes = params[:service]
+    @service.system_name = params[:service][:system_name]
 
-    unless success
-      flash.now[:error] = "Couldn't create service. Check your Plan limits"
-      return render :new
-    end
-
-    if @service.persisted?
+    if can_create? && @service.save
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
       redirect_to admin_services_path(anchor: "service_#{@service.id}")
     else
-      flash[:notice] =  "The service will be imported shortly. You will receive a notification when it is done."
-      redirect_to admin_services_path
+      flash.now[:error] = "Couldn't create service. Check your Plan limits"
+      render :new
     end
   end
 
@@ -96,19 +93,5 @@ class Api::ServicesController < Api::BaseController
 
   def authorize_admin_plans
     authorize! :admin, :plans
-  end
-
-  def create_service_params
-    params.require(:service).permit(:source, :name, :system_name, :description, :namespace)
-  end
-
-  def create_or_build_service
-    creation_service = ServiceCreationService.new(current_account, create_service_params)
-
-    if can_create?
-      [creation_service.call, creation_service.success?]
-    else
-      [creation_service.build_service, false]
-    end
   end
 end
