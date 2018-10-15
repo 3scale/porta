@@ -222,8 +222,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-webkit (1.14.0)
-      capybara (>= 2.3.0, < 2.14.0)
+    capybara-webkit (1.15.1)
+      capybara (>= 2.3, < 4.0)
       json
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
@@ -272,7 +272,7 @@ GEM
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.3)
+    crass (1.0.4)
     cucumber (2.99.0)
       builder (>= 2.1.2)
       cucumber-core (~> 1.5.0)
@@ -459,7 +459,7 @@ GEM
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.11.0)
-    nokogiri (1.8.2)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     non-stupid-digest-assets (1.0.5)
     ntlm-http (0.1.1)
@@ -515,7 +515,7 @@ GEM
     public_suffix (3.0.2)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (1.6.9)
+    rack (1.6.10)
     rack-jspm (0.1.1)
     rack-no_animations (1.0.3)
     rack-openid (1.4.2)
@@ -648,9 +648,9 @@ GEM
     safe_yaml (1.0.4)
     sanitize (2.1.0)
       nokogiri (>= 1.4.4)
-    sass (3.4.19)
-    sass-rails (5.0.4)
-      railties (>= 4.0.0, < 5.0)
+    sass (3.4.25)
+    sass-rails (5.0.7)
+      railties (>= 4.0.0, < 6)
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
@@ -718,7 +718,7 @@ GEM
       spring (>= 1.0, < 3.0)
     spring-commands-testunit (1.0.1)
       spring (>= 0.9.1)
-    sprockets (2.12.4)
+    sprockets (2.12.5)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
@@ -831,7 +831,7 @@ DEPENDENCIES
   bullet (~> 4.2)
   cancancan (~> 1.7.1)
   capybara (~> 2.13.0)!
-  capybara-webkit (~> 1.14.0)!
+  capybara-webkit (~> 1.15.0)!
   childprocess
   chronic
   ci_reporter_rspec (~> 1.0)
@@ -973,4 +973,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   1.16.4
+   1.16.6
