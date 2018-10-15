@@ -6,7 +6,7 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
   setup do
     @provider = FactoryGirl.create(:provider_account)
     @service = @provider.default_service
-    @api_docs_service = @provider.api_docs_services.create!(api_docs_params, without_protection: true)
+    @api_docs_service = FactoryGirl.create(:api_docs_service, service: @service, account: @service.account)
     login! @provider
   end
 
@@ -25,17 +25,18 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     assert_xpath "//a[contains(@href, '#{new_admin_service_api_doc_path(service)}')]", 'Create a new spec'
   end
 
-  test 'new renders with the service in sublayout title and in selected service' do
+  test 'index doesn\'t have the API column' do
+    get admin_service_api_docs_path(service)
+    refute_xpath "//*[@id='content']/table/thead/th[4]" # Name of the column
+    refute_xpath("//*[@id='content']/table/tbody/tr/td[4]")
+  end
+
+  test 'new renders with the service in sublayout title and in without service in the form' do
     get new_admin_service_api_doc_path(service)
 
-    assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs"
+    assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
     assert_xpath '//*[@id="side-tabs"]' # The menu
-
-    page = Nokogiri::HTML::Document.parse(response.body)
-    page_option = page.xpath('//*[@id="api_docs_service_service_id"]/option[2]')[0] # The option[1] is the empty service
-    assert_equal service.name, page_option.text
-    assert_equal service.id.to_s, page_option['value']
-    assert_equal 'selected', page_option['selected']
+    refute_xpath('//*[@id="api_docs_service_service_id"]') # No selection of service_id in the form
   end
 
   test 'preview works under the service scope' do
@@ -48,11 +49,11 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     get edit_admin_service_api_doc_path(service, api_docs_service)
     assert_xpath '//*[@id="side-tabs"]' # The menu
     assert_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+    assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
   end
 
-  private
-
-  def api_docs_params
-    {name: 'foo', body: '{"basePath": "http://foo.example.com", "apis":[{"foo": "bar"}]}', service: service}
+  test 'update keeps having service_id selection after failing' do
+    put admin_service_api_doc_path service, api_docs_service, {api_docs_service: {body: 'invalid'}}
+    assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
   end
 end

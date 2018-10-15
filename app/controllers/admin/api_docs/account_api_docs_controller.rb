@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::ApiDocs::AccountApiDocsController < Admin::ApiDocs::BaseController
+  activate_menu :serviceadmin, :activedocs
+
   class NotImplementedServiceScopeError < RuntimeError; end
   rescue_from(NotImplementedServiceScopeError) do |exception|
     System::ErrorReporting.report_error(exception)
