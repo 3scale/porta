@@ -19,7 +19,7 @@ end
 
 namespace :test do
   test_groups = {
-    integration: FileList["test/{integration,controllers}/**/*_test.rb"],
+    integration: FileList["test/{integration}/**/*_test.rb"],
     functional: FileList["test/{functional}/**/*_test.rb"],
   }
 
