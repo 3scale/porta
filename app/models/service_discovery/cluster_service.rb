@@ -37,7 +37,7 @@ module ServiceDiscovery
     end
 
     def specification_url
-      description_path.starts_with?('http') ? description_path : [root, description_path.to_s.sub(/^\//, '').presence].compact.join('/')
+      description_path.to_s.starts_with?('http') ? description_path : [root, description_path.to_s.sub(/^\//, '').presence].compact.join('/')
     end
 
     def specification
