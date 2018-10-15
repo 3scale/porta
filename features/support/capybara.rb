@@ -1,3 +1,4 @@
+require 'capybara/webkit'
 require 'capybara/minitest'
 include Capybara::Minitest::Assertions
 
