@@ -27,7 +27,7 @@
   = render vertical_nav_item,
         title: 'Application Plans',
         path: admin_service_application_plans_path(@service),
-        icon: 'paperclip'
+        icon: 'check-circle'
 
   = render vertical_nav_item,
         title: 'Settings',
@@ -38,16 +38,16 @@
     = render vertical_nav_item,
           title: 'Service Plans',
           path: admin_service_service_plans_path(@service),
-          icon: 'paperclip'
+          icon: 'check-circle'
 
   - if current_account.settings.end_user_plans_ui_visible?
     = render vertical_nav_item,
           title: 'End User Plans',
           path: admin_service_end_user_plans_path(@service),
-          icon: 'paperclip'
+          icon: 'check-circle'
 
   - if @service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
     = render vertical_nav_item,
           title: 'End-users',
           path: admin_service_end_users_path(@service),
-          icon: 'user'
+          icon: 'users'

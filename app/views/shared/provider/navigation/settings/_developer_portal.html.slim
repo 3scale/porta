@@ -2,9 +2,9 @@
 - path = '#'
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :email) ? 'active' : '')
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :portal) ? 'active' : '')
   = link_to '#' do
-    span.fa.fa-shield data-toggle="tooltip" title="" data-original-title=title
+    span.fa.fa-desktop data-toggle="tooltip" title="" data-original-title=title
     span.list-group-item-value
       = title
 

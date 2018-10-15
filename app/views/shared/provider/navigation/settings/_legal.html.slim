@@ -1,10 +1,10 @@
-- title = 'Legal Terms'
+- title = 'Legal'
 - path = '#'
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :legal_terms) ? 'active' : '')
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :legal) ? 'active' : '')
   = link_to '#' do
-    span.fa.fa-shield data-toggle="tooltip" title="" data-original-title=title
+    span.fa.fa-gavel data-toggle="tooltip" title="" data-original-title=title
     span.list-group-item-value
       = title
 
@@ -25,3 +25,7 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :legal_t
         = render vertical_nav_item,
               title: 'New Application',
               path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
+
+        = render vertical_nav_item,
+                title: 'Policies',
+                path:  edit_admin_site_settings_path
