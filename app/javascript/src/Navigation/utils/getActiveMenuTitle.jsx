@@ -27,6 +27,6 @@ export default function getActiveMenuTitle (activeMenu, currentApi) {
       return `API: ${currentApi.service.name}`
 
     default:
-      break
+      return 'Choose an API'
   }
 }
