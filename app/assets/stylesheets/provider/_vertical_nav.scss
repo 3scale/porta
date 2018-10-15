@@ -88,7 +88,7 @@
     }
 
     .nav-pf-secondary-nav {
-      left: line-height-times(5 / 2, true);
+      left: calc(#{line-height-times(5 / 2, true)} - 1px);
     }
   }
 
@@ -228,7 +228,7 @@
     border-top: none;
     bottom: 0;
     display: block;
-    left: line-height-times(9, true);
+    left: calc(#{line-height-times(9, true)} - 1px);
     opacity: 0;
     overflow-x: hidden;
     overflow-y: auto;
