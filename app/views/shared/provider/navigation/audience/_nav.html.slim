@@ -1,0 +1,27 @@
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+- if can? :manage, :partners
+  = render vertical_nav_item,
+         title: 'Accounts',
+         path:  admin_buyers_accounts_path,
+         icon: 'briefcase'
+
+/- if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
+  //- if current_account.service_plans.pending.exists?
+  = render vertical_nav_item,
+       title: 'Subscriptions',
+       path: admin_buyers_service_contracts_path(search: {state: 'pending'}),
+       icon: 'paperclip'
+       //admin_buyers_accounts_path(search: {state: 'pending'}),
+
+- if can?(:manage, :finance)
+  = render 'shared/provider/navigation/audience/billing'
+  //main_menu_item :finance, 'Billing', admin_finance_root_path, :switch => :finance, :upgrade_notice => !master_on_premises?
+
+- if can?(:manage, :portal)
+  = render 'shared/provider/navigation/audience/portal'
+
+= render 'shared/provider/navigation/audience/messages'
+
+- if current_account.forum_enabled?
+  = render 'shared/provider/navigation/audience/forum'
