@@ -64,4 +64,5 @@ end
 
 Rake::Task['db:test:load'].enhance do
   Rake::Task['multitenant:test:triggers'].invoke
+  Rake::Task['db:test:procedures'].invoke
 end
