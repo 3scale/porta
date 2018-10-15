@@ -3,7 +3,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_proxy
   before_action :authorize
 
-  activate_menu :serviceadmin, :integration
+  activate_menu :serviceadmin, :integration, :integration
   sublayout 'api/service'
 
   PLUGIN_LANGUAGES = %w(ruby java python nodejs php rest csharp).freeze
