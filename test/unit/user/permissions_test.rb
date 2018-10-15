@@ -98,4 +98,24 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert user.has_access_to_all_services?
   end
 
+  test '#forbidden_some_services?' do
+    user = FactoryGirl.build(:simple_user)
+
+    user.stubs(has_access_to_all_services?: true)
+    user.account.stubs(provider_can_use?: true)
+    refute user.forbidden_some_services?
+
+    user.stubs(has_access_to_all_services?: true)
+    user.account.stubs(provider_can_use?: false)
+    refute user.forbidden_some_services?
+
+    user.stubs(has_access_to_all_services?: false)
+    user.account.stubs(provider_can_use?: false)
+    refute user.forbidden_some_services?
+
+    user.stubs(has_access_to_all_services?: false)
+    user.account.stubs(provider_can_use?: true)
+    assert user.forbidden_some_services?
+  end
+
 end
