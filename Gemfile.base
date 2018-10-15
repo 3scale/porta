@@ -223,8 +223,8 @@ group :test do
   gem 'minitest'
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
-  gem 'ci_reporter_rspec', '~> 1.0', require: false
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
+  gem 'rspec_junit_formatter'
 
   # IMPORTANT: Load 'mocha' after 'shoulda'.
   gem 'mocha', '~> 1.1.0', require: 'mocha/setup'
