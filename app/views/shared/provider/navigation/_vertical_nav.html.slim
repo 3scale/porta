@@ -28,6 +28,7 @@ nav.vertical-nav
                  title: 'Overview',
                  path:  provider_admin_account_path
 
+
         - if can? :export, :data
           = render vertical_nav_item,
                  title: 'Export',
@@ -68,35 +69,7 @@ nav.vertical-nav
                    path:  provider_admin_account_authentication_providers_path
 
       - when :buyers, :finance, :cms, :site
-
-        - if can? :manage, :partners
-          = render vertical_nav_item,
-                 title: 'Accounts',
-                 path:  admin_buyers_accounts_path
-
-        - if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
-          = render vertical_nav_item,
-               title: 'Subscriptions',
-               path: admin_buyers_service_contracts_path
-
-        - if can?(:manage, :finance)
-          = render vertical_nav_item,
-             title: 'Billing',
-             path: admin_finance_root_path
-             //main_menu_item :finance, 'Billing', admin_finance_root_path, :switch => :finance, :upgrade_notice => !master_on_premises?
-
-        - if can?(:manage, :portal)
-          = render 'shared/provider/navigation/portal_nav_items'
-
-
-        = render vertical_nav_item,
-                 title: 'Messages',
-                 path: provider_admin_messages_root_path
-
-        - if current_account.forum_enabled?
-          = render vertical_nav_item,
-               title: 'Forum',
-               path:  admin_forum_path
+        = render 'shared/provider/navigation/audience/nav'
 
       - when :settings
 
