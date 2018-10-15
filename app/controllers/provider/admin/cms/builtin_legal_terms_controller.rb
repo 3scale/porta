@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
 
-  activate_menu :site, :legal_terms
+  activate_menu :site, :legal, :terms
   sublayout 'sites/legal_terms'
 
   before_action :find_legal_term

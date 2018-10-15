@@ -5,7 +5,7 @@ class Sites::SettingsController < Sites::BaseController
   before_action :find_service, :only => [:edit, :policies, :accessrules]
 
   layout 'provider'
-  activate_menu :settings, :policies
+  activate_menu :settings, :legal, :policies
 
   def show
     redirect_to :action => :edit
