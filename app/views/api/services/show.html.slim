@@ -21,9 +21,6 @@ section.Section
           'OpenShift
           = refresh_service_link(@service, label: 'refresh')
 
-    = semantic_form_for @service, url: admin_service_path(@service), html: { class: "SettingsBox-form", data: { state: "closed" } } do |form|
-      = render 'api/services/forms/definition_settings', form: form
-
 
 - service =  @service
 

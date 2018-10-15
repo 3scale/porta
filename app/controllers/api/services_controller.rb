@@ -26,7 +26,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def edit
-    activate_menu :serviceadmin, :api, :definition
+    activate_menu :serviceadmin, :overview
   end
 
   def settings
