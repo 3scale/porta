@@ -9,6 +9,10 @@ module TestHelpers
       self.teardown do
         DatabaseCleaner.clean_with :deletion
       end
+
+      self.setup do
+        DatabaseCleaner.clean_with :deletion
+      end
     end
   end
 end
