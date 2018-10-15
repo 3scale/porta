@@ -22,7 +22,7 @@ gem '3scale_client', '~> 2.6.1', require: false
 gem 'analytics-ruby', require: false
 
 group :development, :test do
-  gem 'bootsnap'
+  gem 'bootsnap', '~> 1.3'
 
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
