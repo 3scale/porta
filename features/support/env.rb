@@ -16,33 +16,29 @@ Cucumber::Configuration.default.constantize('ParallelTests::Cucumber::FailuresLo
   end
 end
 
-TRANSACTIONAL = %w{
+require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
+
+non_transactional = %w{
   @backend
   @emails
-  @javascript
   @stats
   @search
   @audit
   @commit-transactions
 }.freeze
 
-Before TRANSACTIONAL.join(',') do
-  DatabaseCleaner.strategy = :deletion
+transactional = non_transactional.map{|t| "~#{t}" }
+
+Before transactional.join(' or ') do
+  Cucumber::Rails::Database.before_js if Cucumber::Rails::Database.autorun_database_cleaner
 end
 
-Before *TRANSACTIONAL.map{|t| "~#{t}" } do
-  DatabaseCleaner.strategy = :transaction
+Before non_transactional.join(' or ') do
+  Cucumber::Rails::Database.before_non_js if Cucumber::Rails::Database.autorun_database_cleaner
 end
 
 require 'cucumber/rails'
-
-require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
 require 'cucumber/rails/rspec'
-# require 'cucumber/web/tableish'
-
-require 'capybara/rails'
-require 'capybara/cucumber'
-require 'capybara/session'
 
 require 'factory_girl/step_definitions'
 
@@ -71,39 +67,12 @@ Capybara.default_selector = :css
 #
 ActionController::Base.allow_rescue = false
 
-# Remove/comment out the lines below if your app doesn't have a database.
-# For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
-begin
-  DatabaseCleaner.strategy = if ENV["CUCUMBER_MODE"] == 'non_js'
-    :transaction
-                             else
-    :deletion
-                             end
-rescue NameError
-  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
-end
-
-# You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
-# See the DatabaseCleaner documentation for details. Example:
-#
-#   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
-#     # { :except => [:widgets] } may not do what you expect here
-#     # as tCucumber::Rails::Database.javascript_strategy overrides
-#     # this setting.
-#     DatabaseCleaner.strategy = :truncation
-#   end
-#
-#   Before('~@no-txn', '~@selenium', '~@culerity', '~@celerity', '~@javascript') do
-#     DatabaseCleaner.strategy = :transaction
-#   end
-#
-
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
-DatabaseCleaner.clean_with(:deletion)
+DatabaseCleaner.clean_with(:truncation)
 
 # lets load webmock as soon as possible,
 # because we load all test helpers (yikes) in support/test_helpers.rb
