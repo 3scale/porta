@@ -14,7 +14,7 @@ form class="formtastic" id="new_service_source"
                 = radio_button_tag :source, 'discover'
                 = "Discover"
 
-= semantic_form_for service, url: admin_services_path, html: { id: 'service_discovery', class: 'is-hidden' }  do |form|
+= semantic_form_for service, url: provider_admin_service_discovery_services_path, html: { id: 'service_discovery', class: 'is-hidden' }  do |form|
   = form.hidden_field :source, value: 'discover'
   = form.inputs "Service" do
     li
