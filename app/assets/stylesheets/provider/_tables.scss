@@ -261,3 +261,7 @@ td.thhead h3 {
 .u-tabular-number {
   font-family: $font-family-monospace;
 }
+
+table.list.list-checkmarks tr th {
+  word-break: break-word;
+}
