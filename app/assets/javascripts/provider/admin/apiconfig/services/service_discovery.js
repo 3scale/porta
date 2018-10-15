@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(e) {
 
+  const BASE_URL = '/p/admin/service_discovery/';
   const formSource = document.getElementById('new_service_source');
   const formScratch = document.querySelectorAll('form#new_service, form#create_service')[0];
   const formDiscover = document.getElementById('service_discovery');
@@ -27,10 +28,16 @@ document.addEventListener("DOMContentLoaded", function(e) {
   function showServiceForm(source, discoverFunc, scratchFunc) {
     if (source === 'discover') {
       showAndHideForms(formDiscover, formScratch);
-      return typeof discoverFunc === "function" ? discoverFunc() : undefined;
+
+      if (typeof discoverFunc === "function") {
+        discoverFunc();
+      }
     } else {
       showAndHideForms(formScratch, formDiscover);
-      return typeof scratchFunc === "function" ? scratchFunc() : undefined;
+      
+      if (typeof scratchFunc === "function") {
+        scratchFunc();
+      }
     }
   };
 
@@ -43,7 +50,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
   function changeClusterNamespace() {
     clearServiceNames();
     const selectedNamespace = formDiscover.service_namespace.value;
-    return selectedNamespace !== '' ? fetchServices(selectedNamespace) : undefined;
+    if (selectedNamespace !== '') {
+      fetchServices(selectedNamespace);
+    }
   };
 
   function addOptionToSelect(selectElem, val) {
@@ -84,15 +93,14 @@ document.addEventListener("DOMContentLoaded", function(e) {
     projects.forEach(function(project, index, array){
       addOptionToSelect(formDiscover.service_namespace, project.metadata.name);
     });
-    return projects.length > 0 ? (
-      formDiscover.service_namespace.selectedIndex = 1,
-      changeClusterNamespace()
-    ) : undefined;
+    if (projects.length > 0) {
+      formDiscover.service_namespace.selectedIndex = 1;
+      changeClusterNamespace();
+    }
   }
 
   function fetchNamespaces() {
-    const URLNamespaces = '/p/admin/service_discovery/projects.json';
-    fetchData(URLNamespaces, 'namespaces');
+    fetchData(BASE_URL + '/projects.json', 'namespaces');
   }
 
   function populateServices(data) {
@@ -100,11 +108,13 @@ document.addEventListener("DOMContentLoaded", function(e) {
     services.forEach(function(service, index, array) {
       addOptionToSelect(formDiscover.service_name, service.metadata.name);
     });
-    return services.length > 0 ? formDiscover.service_name.selectedIndex = 1 : undefined;
+    if (services.length > 0) {
+      formDiscover.service_name.selectedIndex = 1
+    }
   }
 
   function fetchServices(namespace) {
-    const URLServices = '/p/admin/service_discovery/namespaces/' + namespace + '/services.json';
+    const URLServices = BASE_URL + '/namespaces/' + namespace + '/services.json';
     fetchData(URLServices, 'services');
   };
 
