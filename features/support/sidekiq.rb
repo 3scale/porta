@@ -13,16 +13,7 @@ module Sidekiq
           batch = Sidekiq::Batch.new(batch_id)
           status = Sidekiq::Batch::Status.new(batch_id)
 
-          if batch.respond_to?(:callbacks) # sidekiq-pro
-            batch.callbacks.fetch('complete', []).each do |complete_callback|
-              complete_callback.each do |type, options|
-                type.constantize.new.on_complete(status, options)
-              end
-            end
-          else # sidekiq-batch
-            Sidekiq::Batch.enqueue_callbacks(:complete, batch_id)
-            Sidekiq::Batch.enqueue_callbacks(:success, batch_id)
-          end
+          handle_callbacks(batch, batch_id, status)
         end
       end
 
@@ -42,9 +33,23 @@ module Sidekiq
         end.flatten
       end
 
-
       def batch_count
         redis.zcount 'batches', '-inf', '+inf'
+      end
+
+      private
+
+      def handle_callbacks(batch, batch_id, status)
+        if batch.respond_to?(:callbacks) # sidekiq-pro
+          batch.callbacks.fetch('complete', []).each do |complete_callback|
+            complete_callback.each do |type, options|
+              type.constantize.new.on_complete(status, options)
+            end
+          end
+        else # sidekiq-batch
+          Sidekiq::Batch.enqueue_callbacks(:complete, batch_id)
+          Sidekiq::Batch.enqueue_callbacks(:success, batch_id)
+        end
       end
     end
 
