@@ -1,0 +1,29 @@
+- title = 'Billing'
+- path = '#'
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :finance) ? 'active' : '')
+  = link_to '#' do
+    span.fa.fa-credit-card data-toggle="tooltip" title="" data-original-title=title
+    span.list-group-item-value
+      = title
+
+    div id="-secondary" class="nav-pf-secondary-nav"
+      div class="nav-item-pf-header"
+        a href="#0" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"
+        span = title
+
+      ul class="list-group"
+
+        = render vertical_nav_item,
+           title: 'Earnings by Month',
+           path: admin_finance_root_path
+
+        = render vertical_nav_item,
+          title: 'Invoices',
+          path: admin_finance_invoices_path
+
+        - if current_user.username == ThreeScale.config.impersonation_admin['username']
+          = render vertical_nav_item,
+            title: 'Finance Log',
+            path: admin_finance_log_entries_path
