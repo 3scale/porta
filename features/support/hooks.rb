@@ -70,27 +70,6 @@ Before '@recaptcha' do
   skip_recaptcha(false)
 end
 
-# So this mess up of grand canyon proportions deserves a description.
-# Imagine there is a page, that has several AJAX requests on it.
-# What happens when the scenario finishes before they are completed?
-# Yes. They will be executed in different test's scope.
-# Capybara.reset_sessions! is supposed to solve that, but doesn't (2.5.0).
-# The requests are indeed cancelled in the browser, but Rack is still processing them.
-# And it will for undefined amount of time (until it realizes client has disconnected).
-# We could patch Capybara Server to have a mutex and wait until all requests are completed.
-# Actually, someone did: https://github.com/jnicklas/capybara/commit/6f4c8ffc37487e472ed5241d9864f0ae6c7c3975
-# But that is in unreleased capybara. So we handle it differently. Lets just ask for 'check.txt'.
-# Becase our rails stack can process just request at the time, it will wait for the others to complete.
-# Would be cooler to do it via Server#responsive? but that does not have mutex around (like Rack::Lock).
-# Also, note, that capybara adds this hook also. So our one request is actually reset again.
-# And that is good. And it won't leak, because it has no content.
-
-After do
-  Capybara.reset_sessions!.values
-    .each { |session| session.visit('/check.txt') } # to flush all cancelled requests
-    .each { |session| session.server.try!(:reset_error!) }
-end
-
 AfterStep do
   page.raise_server_error!
 end
