@@ -4,6 +4,27 @@
 
 h1 Overview
 
+section.Section
+  .SettingsBox
+    = link_to 'edit', edit_admin_service_path(@service), class: "SettingsBox-toggle"
+    dl.SettingsBox-summary.u-dl data-state="open"
+      dt.u-dl-term Name
+      dd.u-dl-definition = @service.name
+      dt.u-dl-term System Name
+      dd.u-dl-definition = @service.system_name
+      - if @service.description.present?
+        dt.u-dl-term Description
+        dd.u-dl-definition = @service.description
+      - if ThreeScale.config.service_discovery.enabled && @service.discovered?
+        dt.u-dl-term Source
+        dd.u-dl-definition
+          'OpenShift
+          = refresh_service_link(@service, label: 'refresh')
+
+    = semantic_form_for @service, url: admin_service_path(@service), html: { class: "SettingsBox-form", data: { state: "closed" } } do |form|
+      = render 'api/services/forms/definition_settings', form: form
+
+
 - service =  @service
 
 section class="service-widget"
