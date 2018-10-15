@@ -20,6 +20,10 @@
       font-family: $font-family-monospace;
     }
 
+    & + #wrapper {
+      padding-top: line-height-times(1);
+    }
+
     & + #wrapper .vertical-nav .nav-pf-vertical,
     & + #wrapper .vertical-nav .nav-pf-secondary-nav {
       top: line-height-times(7 / 2);
