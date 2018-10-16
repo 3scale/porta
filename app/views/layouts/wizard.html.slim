@@ -14,8 +14,6 @@ html[lang="en"]
     = yield :javascripts
 
   body
-    = render 'heroku_widget'
-
     header
       = render partial: "/provider/logo"
       = link_to can?(:manage, :plans) ? admin_services_path : provider_admin_dashboard_path , id: "wizard-close", class: "wizard-close", title: "close this wizard" do
