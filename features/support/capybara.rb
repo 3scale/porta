@@ -51,7 +51,6 @@ Capybara::Webkit.configure do |config|
   config.raise_javascript_errors = true # we would like this to be true, but need to fix our failing tests
 end
 
-
 # monkeypatch to fix
 # not opened for reading (IOError)
 # /cucumber-1.3.20/lib/cucumber/formatter/interceptor.rb:33:in `each'

@@ -102,14 +102,6 @@ module ServiceDiscovery
       assert_equal 'https://example.com/api-doc.json', cluster_service.specification_url
     end
 
-    test 'oas?' do
-      @cluster_service.expects(:specification_type).returns('application/vnd.oai.openapi+json')
-      assert @cluster_service.oas?
-
-      @cluster_service.expects(:specification_type).returns('application/xml')
-      refute @cluster_service.oas?
-    end
-
     private
 
     def multiple_ports

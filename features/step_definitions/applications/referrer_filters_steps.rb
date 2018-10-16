@@ -28,14 +28,25 @@ Given /^the referrer filter limit for (application "[^"]*") is reached$/ do |app
   fake_application_referrer_filters(application, filters)
 end
 
+
+# need to touch the session, so it can be reset later
+def touch_session
+  page.execute_script('')
+rescue Capybara::NotSupportedByDriverError
+  false
+end
+
+def rack_test_http_request(method, path, args = nil)
+  touch_session
+  page.driver.browser.process_and_follow_redirects(method, path, args)
+end
+
 When /^I do POST to the referrer filters url for (application "[^"]*")$/ do |application|
-  page.driver.browser.process_and_follow_redirects :post,
-                                                   admin_application_referrer_filters_path(application)
+  rack_test_http_request :post, admin_application_referrer_filters_path(application)
 end
 
 When /^I do DELETE to the "([^"]*)" referrer filter url for (application "[^"]*")$/ do |filter, application|
-  page.driver.browser.process_and_follow_redirects :delete,
-                                                   admin_application_referrer_filter_path(application, ReferrerFilter.find_by_value(filter).id)
+  rack_test_http_request :delete, admin_application_referrer_filter_path(application, ReferrerFilter.find_by_value(filter).id)
 end
 
 # single-app
@@ -61,8 +72,7 @@ Given /^the backend will delete referrer filter "([^"]*)" for the application of
 end
 
 When /^I do POST to the referrer filters url for the application of (buyer "[^"]*")$/ do |buyer|
-  page.driver.browser.process_and_follow_redirects :post,
-                                                   application_referrer_filters_path(buyer.bought_cinstance)
+  rack_test_http_request :post, application_referrer_filters_path(buyer.bought_cinstance)
 end
 
 

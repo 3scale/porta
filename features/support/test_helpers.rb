@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(Rails.root)
   Dir[Rails.root.join('test', 'test_helpers', '**', '*.rb')].each(&method(:require))
 
@@ -6,4 +8,3 @@ if defined?(Rails.root)
   World(TestHelpers::Country)
   World(TestHelpers::Backend)
 end
-

@@ -408,7 +408,7 @@ en:
         resume: 'resumed'
 
   sites:
-    spam_protections: 
+    spam_protections:
       edit:
         captcha_hint_false: 'reCAPTCHA has not been configured correctly, Spam Protection cannot be enabled.'
         captcha_hint_true: "When 'Suspicious only' is selected then reCAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', reCAPTCHA will always appear when a form is presented to a user who is not logged in."
@@ -446,6 +446,7 @@ en:
       forms:
         definition_settings:
           delete_confirmation: "Are you sure you want to delete the service '%{name}'?"
+          refresh_confirmation: "This action will overwrite the API's Private URL and automatically created ActiveDocs. Are you sure you want to proceed?"
     integrations:
       edit:
         proxy_or_plugin: |

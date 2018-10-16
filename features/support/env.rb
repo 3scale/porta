@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 SimpleCov.start
 
@@ -23,16 +25,16 @@ end
 
 require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
 
-non_transactional = %w{
+non_transactional = %w[
   @backend
   @emails
   @stats
   @search
   @audit
   @commit-transactions
-}.freeze
+].freeze
 
-transactional = non_transactional.map{|t| "~#{t}" }
+transactional = non_transactional.map {|t| "~#{t}" }
 
 Before transactional.join(' or ') do
   Cucumber::Rails::Database.before_js if Cucumber::Rails::Database.autorun_database_cleaner

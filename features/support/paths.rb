@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 World(Module.new do
   break unless defined?(DeveloperPortal)
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'percy/capybara'
 
 ENV['PERCY_PARALLEL_TOTAL'] = ENV['PARALLEL_TEST_GROUPS']
