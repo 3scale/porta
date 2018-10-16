@@ -18,6 +18,11 @@ store-test-artifacts: &store-test-artifacts
     path: tmp/junit
     destination: junit
 
+store-capybara-artifacts: &store-capybara-artifacts
+  store_artifacts:
+    path: tmp/capybara
+    destination: capybara
+
 store-log-artifacts: &store-log-artifacts
   store_artifacts:
     path: log/test.log
@@ -346,9 +351,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
+      - *store-capybara-artifacts
 
   cucumber-txn:
     parallelism: 12
@@ -389,9 +392,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
+      - *store-capybara-artifacts
 
   cucumber-javascript:
     parallelism: 2
@@ -432,9 +433,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
+      - *store-capybara-artifacts
 
 workflows:
   version: 2
