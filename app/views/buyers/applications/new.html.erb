@@ -20,10 +20,7 @@
                           :default_plan => @plans.respond_to?(:default) ? @plans.default : @plans.first %>
 
     <% if current_account.settings.service_plans.allowed? %>
-      <%= form.input :service_plan_id, as: :select, collection: [], label: ServicePlan.model_name.human,
-        hint: link_to('Create a service plan', admin_services_path, id: 'link-help-new-application-service') %>
-    <% else %>
-
+      <%= form.input :service_plan_id, as: :select, collection: [], label: ServicePlan.model_name.human %>
     <% end %>
 
     <%= form.user_defined_form %>

@@ -22,10 +22,6 @@
     <%= main_menu_item :monitoring, 'Analytics', admin_stats_root_path %>
   <% end %>
 
-  <% if can?(:manage, :plans) %>
-    <%= main_menu_item :serviceadmin, current_account.multiservice? ? 'APIs' : 'API', admin_services_path %>
-  <% end -%>
-
   <% if can?(:manage, :portal) %>
     <%= main_menu_item :cms, 'Developer Portal', provider_admin_cms_root_path %>
   <% end -%>

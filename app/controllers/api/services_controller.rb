@@ -12,10 +12,6 @@ class Api::ServicesController < Api::BaseController
     actions.sublayout 'api/service'
   end
 
-  def index
-    @services = ::ServiceDecorator.decorate_collection(@services)
-  end
-
   def show
     @service = @service.decorate
   end
@@ -62,7 +58,7 @@ class Api::ServicesController < Api::BaseController
   def destroy
     @service.mark_as_deleted!
     flash[:notice] = "Service '#{@service.name}' will be deleted shortly. You will receive a notification when it is done"
-    redirect_to admin_services_path
+    redirect_to provider_admin_dashboard_path
   end
 
   protected
