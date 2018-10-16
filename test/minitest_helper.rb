@@ -5,8 +5,13 @@ $: << File.expand_path('../lib', File.dirname(__FILE__))
 
 require 'config/boot'
 
-require 'codeclimate_rails'
-CodeclimateRails.start
+require 'simplecov'
+SimpleCov.start
+
+if ENV['CI']
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
 
 require 'minitest/autorun'
 if defined?(::Mocha)
