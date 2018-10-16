@@ -9,6 +9,11 @@ git-submodules: &git-submodules
       git submodule init
       git submodule update
 
+upload-coverage: &upload-coverage
+  run:
+    name: Upload test coverage to Codecov
+    command: bash <(curl -s https://codecov.io/bash)
+
 store-junit-results: &store-junit-test-results
   store_test_results:
     path: tmp/junit
@@ -193,6 +198,7 @@ jobs:
       - store_artifacts:
           path: doc/active_docs
           destination: active_docs
+      - *upload-coverage
 
   unit:
     parallelism: 8
@@ -223,6 +229,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
+      - *upload-coverage
   functional:
     parallelism: 2
     resource_class: small
@@ -254,6 +261,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
+      - *upload-coverage
   integration:
     parallelism: 8
     resource_class: small
@@ -283,6 +291,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
+      - *upload-coverage
   rspec:
     parallelism: 3
     resource_class: small
@@ -311,6 +320,7 @@ jobs:
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
+      - *upload-coverage
 
   cucumber-no-txn:
     parallelism: 2
@@ -352,6 +362,7 @@ jobs:
       - *store-test-artifacts
       - *store-log-artifacts
       - *store-capybara-artifacts
+      - *upload-coverage
 
   cucumber-txn:
     parallelism: 12
@@ -393,6 +404,7 @@ jobs:
       - *store-test-artifacts
       - *store-log-artifacts
       - *store-capybara-artifacts
+      - *upload-coverage
 
   cucumber-javascript:
     parallelism: 2
@@ -434,6 +446,7 @@ jobs:
       - *store-test-artifacts
       - *store-log-artifacts
       - *store-capybara-artifacts
+      - *upload-coverage
 
 workflows:
   version: 2
