@@ -1,9 +1,9 @@
 module.exports = {
   // automock: false,
-  roots: ['<rootDir>/spec/javascript'],
+  roots: ['<rootDir>/spec/javascripts'],
   moduleNameMapper: {
-    '\\.(css|less|sass|scss)$': '<rootDir>/spec/javascript/__mocks__/styleMock.js',
-    '\\.(gif|ttf|eot|svg)$': '<rootDir>/spec/javascript/__mocks__/fileMock.js'
+    '\\.(css|less|sass|scss)$': '<rootDir>/spec/javascripts/__mocks__/styleMock.js',
+    '\\.(gif|ttf|eot|svg)$': '<rootDir>/spec/javascripts/__mocks__/fileMock.js'
   },
   moduleFileExtensions: [
     'jsx',
@@ -17,6 +17,6 @@ module.exports = {
     '^.+\\.jsx?$': './node_modules/babel-jest'
   },
   testURL: 'http://localhost',
-  testRegex: '.*.spec.js',
+  testRegex: '.*.spec.jsx',
   verbose: true
 }
