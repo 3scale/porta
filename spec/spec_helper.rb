@@ -80,9 +80,8 @@ RSpec.configure do |config|
   end
 
   if ENV['CI']
-    FileUtils.mkdir_p(ENV['CI_REPORTS'] ||= "tmp/junit/spec-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}")
-    require 'ci/reporter/rake/rspec_loader'
-    config.add_formatter CI::Reporter::RSpecFormatter
+    junit = "tmp/junit/spec-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}/spec.xml"
+    config.add_formatter RspecJunitFormatter, junit
   end
 end
 

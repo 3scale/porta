@@ -187,8 +187,9 @@ group :test do
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'simplecov', '~> 0.10.0'
 
-  gem 'capybara', '~> 2.13.0', source: 'https://rubygems.org'
-  gem 'capybara-webkit', '~> 1.14.0', source: 'https://rubygems.org'
+  gem 'capybara', '~> 2.18', source: 'https://rubygems.org'
+  gem 'capybara-webkit', '~> 1.15', source: 'https://rubygems.org'
+  gem 'xpath', '~>2.1'
 
   gem 'headless', '~> 2.3.1'
   gem 'selenium-webdriver', '~> 3.4', require: false
@@ -223,8 +224,8 @@ group :test do
   gem 'minitest'
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
-  gem 'ci_reporter_rspec', '~> 1.0', require: false
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
+  gem 'rspec_junit_formatter'
 
   # IMPORTANT: Load 'mocha' after 'shoulda'.
   gem 'mocha', '~> 1.1.0', require: 'mocha/setup'
