@@ -5,13 +5,19 @@ services:
     privileged: true
     container_name: ${PROJECT:-system}-database
     network_mode: bridge
+  redis:
+    image: redis:4.0-alpine
+    network_mode: bridge
+  memcached:
+    image: memcached:1.5-alpine
+    network_mode: bridge
   cache:
-    build: .
+    image: quay.io/gsaslis/3scale-system-builder
     network_mode: none
     container_name: ${PROJECT:-system}-cache
     command: sleep infinity 
   build:
-    build: .
+    image: quay.io/gsaslis/3scale-system-builder
     dns: 127.0.0.1
     container_name: ${PROJECT:-system}-build
     network_mode: bridge
@@ -20,9 +26,21 @@ services:
     environment:
       DB_HOST: ${PROJECT:-system}-database
       DISABLE_SPRING: "true"
+    volumes:
+      - .:/opt/system/
+      - ./tmp/cache:/opt/system/tmp/cache/
+      - ./node_modules:/opt/system/node_modules
+      - ./assets/jspm_packages:/opt/system/assets/jspm_packages
+      - ./public/assets:/opt/system/public/assets
+      - ./.jspm:/root/.jspm
+      - ./vendor/bundle:/opt/system/vendor/bundle
+      - ./.bundle:/opt/system/.bundle
+      - ./vendor/docker-gateway/.luarocks:/home/ruby/.luarocks
     volumes_from:
       - cache
     depends_on:
       - database
     links:
       - database
+      - redis
+      - memcached
