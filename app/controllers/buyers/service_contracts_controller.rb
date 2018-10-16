@@ -16,8 +16,8 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     @search = ThreeScale::Search.new(params[:search] || params)
     @plans = current_account.service_plans
 
-    if params[:service_id]
-      @service = @services.find params[:service_id]
+    if (service_id = params[:service_id] || @search.service_id)
+      @service = @services.find service_id
       @search.service_id = @service.id
     end
 
@@ -38,6 +38,8 @@ class Buyers::ServiceContractsController < Buyers::BaseController
               .paginate(pagination_params)
 
     @service_contracts = scope
+
+    activate_menu :serviceadmin, :service_plans if @service
   end
 
   def new
