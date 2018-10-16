@@ -41,9 +41,9 @@ class Api::ServicesController < Api::BaseController
     if can_create? && @service.save
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
-      redirect_to admin_services_path(anchor: "service_#{@service.id}")
+      redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = "Couldn't create service. Check your Plan limits"
+      flash.now[:error] = 'Couldn\'t create service. Check your Plan limits' # TODO: this is not always true... there are other reasons of failure
       render :new
     end
   end
