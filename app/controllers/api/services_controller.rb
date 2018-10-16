@@ -44,6 +44,7 @@ class Api::ServicesController < Api::BaseController
       redirect_to admin_service_path(@service)
     else
       flash.now[:error] = 'Couldn\'t create service. Check your Plan limits' # TODO: this is not always true... there are other reasons of failure
+      activate_menu :dashboard
       render :new
     end
   end
