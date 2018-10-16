@@ -22,7 +22,7 @@ div#twoCol.equal-width
           tr
             th Service
             td
-              = link_to service.name, admin_services_path(anchor: dom_id(service))
+              = link_to service.name, admin_service_path(service)
       = render '/buyers/applications/state'
     - if can?(:see, :end_users) && @cinstance.end_users_allowed?
       div.wide_dashboard_bubble.round
