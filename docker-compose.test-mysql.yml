@@ -1,25 +1,47 @@
 version: '3.2'
 services:
   database:
-    image: quay.io/3scale/mysql:tmpfs-5.6
-    privileged: true
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_DATABASE: 'circleci'
     container_name: ${PROJECT:-system}-database
     network_mode: bridge
   redis:
     image: redis:4.0-alpine
+    container_name: ${PROJECT:-system}-redis
     network_mode: bridge
   memcached:
     image: memcached:1.5-alpine
+    container_name: ${PROJECT:-system}-memcached
     network_mode: bridge
+  dnsmasq:
+    image: quay.io/mikz/dnsmasq
+    container_name: ${PROJECT:-system}-dnsmasq
+    network_mode: bridge
+    ports:
+      - "53"
+    command: [
+      "--no-poll",
+      "--address=/#/127.0.0.1",
+#      "--server=/raw.githubusercontent.com/8.8.8.8",
+#      "--server=/rubygems.org/8.8.8.8",
+#      "--server=/github.com/8.8.8.8",
+#      "--server=/registry.yarnpkg.com/8.8.8.8",
+#      "--server=/registry.npmjs.org/8.8.8.8",
+#      "--server=/nodejs.org/8.8.8.8",
+#      "--server=/luarocks.org/8.8.8.8",
+#      "--server=/stevedonovan.github.io/8.8.8.8",
+#      "--server=/codecov.io/8.8.8.8",
+#      "--server=/percy.io/8.8.8.8",
+    ]
   build:
     image: quay.io/gsaslis/3scale-system-builder
-    dns: 127.0.0.1
     container_name: ${PROJECT:-system}-build
     network_mode: bridge
-    cap_add:
-      - SYS_PTRACE
     environment:
-      DB_HOST: ${PROJECT:-system}-database
+      DB_HOST: database
       DISABLE_SPRING: "true"
     volumes:
       # `delegated` and `cached` is important below. https://docs.docker.com/docker-for-mac/osxfs-caching/#tuning-with-consistent-cached-and-delegated-configurations
@@ -36,10 +58,15 @@ services:
 #      - ./vendor/docker-gateway/.luarocks:/home/ruby/.luarocks:cached # cached is important
     depends_on:
       - database
+      - redis
+      - memcached
+      - dnsmasq
     links:
       - database
       - redis
       - memcached
+      - dnsmasq
+
 volumes:
   app_source:
     driver: local

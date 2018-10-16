@@ -57,12 +57,14 @@ build: $(DOCKER_COMPOSE)
 	$(DOCKER_COMPOSE) build
 
 clean: ## Cleaning docker-compose services
+clean: SERVICES ?= database build redis memcached dnsmasq
 clean: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 clean: $(DOCKER_COMPOSE)
 	- $(DOCKER_COMPOSE) stop $(SERVICES)
 	- $(DOCKER_COMPOSE) rm --force -v $(SERVICES)
 	- docker rm --force --volumes $(PROJECT)-build $(PROJECT)-build-run 2> /dev/null
 	- $(foreach service,$(SERVICES),docker rm --force --volumes $(PROJECT)-$(service) 2> /dev/null;)
+	- rm precompile-assets provision || true
 
 
 docker: ## Prints docker version and info
@@ -103,7 +105,7 @@ run: $(DOCKER_COMPOSE)
 	@echo
 	@echo "======= Run ======="
 	@echo
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "script/docker.sh && source script/proxy_env.sh && echo \"$(CMD)\" && $(CMD)"
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "cp config/examples/*.yml config/ && echo \"$(CMD)\" && $(CMD)"
 
 schema: ## Runs db schema migrations. Run this when you have changes to your database schema that you have added as new migrations.
 schema: CMD = bundle exec rake db:migrate db:schema:dump && MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DISABLE_SPRING=true DB=oracle bundle exec rake db:migrate db:schema:dump
@@ -113,7 +115,7 @@ schema: run
 test-run: # Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 test-run: $(DOCKER_COMPOSE) clean-tmp
-	$(DOCKER_COMPOSE) run --name $(PROJECT)-build $(DOCKER_ENV) build $(CMD)
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build $(DOCKER_ENV) build $(CMD)
 
 test-with-info: $(DOCKER_COMPOSE) info
 	@echo

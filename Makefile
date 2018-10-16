@@ -58,9 +58,7 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 
 
 SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=production WEBPACKER_PRECOMPILE=false && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=test WEBPACKER_PRECOMPILE=false
-SCRIPT_ALL_DEPS = $(SCRIPT_BUNDLER) && $(SCRIPT_NPM) && $(SCRIPT_APICAST_DEPENDENCIES) && $(SCRIPT_PRECOMPILE_ASSETS)
-SCRIPT_BASH = $(SCRIPT_ALL_DEPS) && bundle exec rake db:create db:test:load && bundle exec bash
-SCRIPT_TEST = $(SCRIPT_ALL_DEPS) && script/jenkins.sh
+SCRIPT_TEST = make dnsmasq_set && script/jenkins.sh || make dnsmasq_unset
 
 default: all
 
@@ -85,11 +83,7 @@ include dependencies.mk
 
 test: ## Runs tests inside container build environment
 test: CMD = $(SCRIPT_TEST)
-test: test-with-info
-
-test-no-deps: ## Runs only tests (without dependency installation) inside container build environment
-test-no-deps: CMD = script/jenkins.sh
-test-no-deps: test-with-info
+test: provision precompile-assets test-with-info
 
 jenkins-env: # Prints env vars
 	@echo
@@ -98,20 +92,38 @@ jenkins-env: # Prints env vars
 	@env
 	@echo
 
-precompile-assets-info:
+precompile-assets: ## Precompiles static assets
+precompile-assets: CMD = $(SCRIPT_PRECOMPILE_ASSETS)
+precompile-assets:
 	@echo
 	@echo "======= Assets Precompile ======="
 	@echo
-precompile-assets: ## Precompiles static assets
-precompile-assets: CMD = $(SCRIPT_PRECOMPILE_ASSETS)
-precompile-assets: precompile-assets-info run
+	$(MAKE) run CMD="${CMD}"
+	touch precompile-assets
 
 clean-tmp: ## Removes temporary files
 	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
 
 bash: ## Opens up shell to environment where tests can be ran
-bash: CMD = $(SCRIPT_BASH)
-bash: run
+bash: CMD = bundle exec bash
+bash: provision
+	$(MAKE) run CMD="${CMD}"
+
+boot_database:
+	until bin/rake boot:database TEST_ENV_NUMBER=8 ; do \
+		sleep 1 ; \
+		echo -n "." ; \
+	done
+	if [ "x$$DB" = "xoracle" ]; then \
+		echo "Waiting for 60 seconds for the DB to be ready" ; \
+		sleep 60 ; \
+	fi
+
+dnsmasq_set:
+	echo "nameserver $$DNSMASQ_PORT_53_TCP_ADDR" > resolv.conf.dnsmasq && sudo cp /etc/resolv.conf /etc/resolv.conf.dist && sudo cp resolv.conf.dnsmasq /etc/resolv.conf
+
+dnsmasq_unset:
+	sudo cp /etc/resolv.conf.dist /etc/resolv.conf
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help
