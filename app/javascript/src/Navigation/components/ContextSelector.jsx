@@ -18,7 +18,6 @@ class ContextSelector extends React.Component {
 
   constructor (props) {
     super(props)
-    console.log(props)
     this.state = {
       filterQuery: ''
     }
@@ -48,13 +47,12 @@ class ContextSelector extends React.Component {
     )
   }
 
-  getClassNamesForItem (item) {
+  getClassNamesFor ({ menu, api }) {
     const { activeMenu, currentApi } = this.props
 
-    if (item === 'dashboard' && activeMenu === 'dashboard' ||
-      item === 'audience' && ['buyers', 'finance', 'cms', 'site'].includes(activeMenu) ||
-      item !== 'dashboard' && ['serviceadmin', 'monitoring'].includes(activeMenu) && item.id === currentApi.service.id
-    ) {
+    if (menu === 'dashboard' && activeMenu === 'dashboard' ||
+      menu === 'audience' && ['buyers', 'finance', 'cms', 'site'].includes(activeMenu) ||
+      api && ['serviceadmin', 'monitoring'].includes(activeMenu) && api === currentApi.service.id) {
       return 'PopNavigation-link current-context'
     }
 
@@ -68,7 +66,8 @@ class ContextSelector extends React.Component {
 
     return displayedApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesForItem(service)} href={apiPathRoot(service.id)}>{service.name}</a>
+        <a
+          className={this.getClassNamesFor({ api: service.id })} href={apiPathRoot(service.id)}>{service.name}</a>
       </li>
     ))
   }
@@ -83,10 +82,10 @@ class ContextSelector extends React.Component {
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesForItem('dashboard')} href={DASHBOARD_PATH}>Dashboard</a>
+            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>Dashboard</a>
           </li>
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesForItem('audience')} href={AUDIENCE_PATH}>Audience</a>
+            <a className={this.getClassNamesFor({ menu: 'audience' })} href={AUDIENCE_PATH}>Audience</a>
           </li>
           {this.renderInput()}
           {this.renderOptions()}
