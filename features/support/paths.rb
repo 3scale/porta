@@ -222,17 +222,11 @@ module NavigationHelpers
       active_doc = ApiDocs::Service.find_by_system_name $1
       admin_api_docs_service_path active_doc.system_name, format: :json
 
-    when 'the services dashboard page'
-      admin_services_path
-
     when 'the API dashboard'
       admin_apiconfig_root_path
 
     when 'the API dashboard page'
       admin_apiconfig_root_path
-
-    when 'the API services page'
-      admin_services_path
 
     when 'the API alerts page'
       admin_alerts_path
