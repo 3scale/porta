@@ -56,17 +56,7 @@ build: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 build: $(DOCKER_COMPOSE)
 	$(DOCKER_COMPOSE) build
 
-cache: ## Starts only cache service from docker-compose file
-cache: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-cache: $(DOCKER_COMPOSE)
-	$(DOCKER_COMPOSE) up --remove-orphans -d cache || $(MAKE) clean-cache $@
-
-
 clean: ## Cleaning docker-compose services
-clean: SERVICES ?= database build
-ifeq ($(CACHE),false)
-clean: clean-cache
-endif
 clean: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 clean: $(DOCKER_COMPOSE)
 	- $(DOCKER_COMPOSE) stop $(SERVICES)
@@ -74,11 +64,6 @@ clean: $(DOCKER_COMPOSE)
 	- docker rm --force --volumes $(PROJECT)-build $(PROJECT)-build-run 2> /dev/null
 	- $(foreach service,$(SERVICES),docker rm --force --volumes $(PROJECT)-$(service) 2> /dev/null;)
 
-clean-cache: ## Only clean up the cache container
-clean-cache: export SERVICES = cache
-clean-cache: export CACHE = true
-clean-cache:
-	$(MAKE) clean
 
 docker: ## Prints docker version and info
 	@echo
@@ -125,9 +110,9 @@ schema: CMD = bundle exec rake db:migrate db:schema:dump && MASTER_PASSWORD=p US
 schema: run
 
 
-test-run: ## Runs test inside container
+test-run: # Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-test-run: $(DOCKER_COMPOSE) clean-tmp cache
+test-run: $(DOCKER_COMPOSE) clean-tmp
 	$(DOCKER_COMPOSE) run --name $(PROJECT)-build $(DOCKER_ENV) build $(CMD)
 
 test-with-info: $(DOCKER_COMPOSE) info
@@ -136,7 +121,7 @@ test-with-info: $(DOCKER_COMPOSE) info
 	@echo
 	$(MAKE) test-run tmp-export --keep-going
 
-tmp-export: ## Copies files from inside docker container to local tmp folder.
+tmp-export: # Copies files from inside docker container to local tmp folder.
 tmp-export: IMAGE ?= $(PROJECT)-build
 tmp-export: clean-tmp
 	-@ $(foreach dir,$(TMP),docker cp $(IMAGE):/opt/system/$(dir) $(dir) 2>/dev/null;)

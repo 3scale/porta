@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3.2'
 services:
   database:
     image: quay.io/3scale/mysql:tmpfs-5.6
@@ -11,11 +11,6 @@ services:
   memcached:
     image: memcached:1.5-alpine
     network_mode: bridge
-  cache:
-    image: quay.io/gsaslis/3scale-system-builder
-    network_mode: none
-    container_name: ${PROJECT:-system}-cache
-    command: sleep infinity 
   build:
     image: quay.io/gsaslis/3scale-system-builder
     dns: 127.0.0.1
@@ -27,20 +22,70 @@ services:
       DB_HOST: ${PROJECT:-system}-database
       DISABLE_SPRING: "true"
     volumes:
-      - .:/opt/system/
-      - ./tmp/cache:/opt/system/tmp/cache/
-      - ./node_modules:/opt/system/node_modules
-      - ./assets/jspm_packages:/opt/system/assets/jspm_packages
-      - ./public/assets:/opt/system/public/assets
-      - ./.jspm:/root/.jspm
-      - ./vendor/bundle:/opt/system/vendor/bundle
-      - ./.bundle:/opt/system/.bundle
-      - ./vendor/docker-gateway/.luarocks:/home/ruby/.luarocks
-    volumes_from:
-      - cache
+      # `delegated` and `cached` is important below. https://docs.docker.com/docker-for-mac/osxfs-caching/#tuning-with-consistent-cached-and-delegated-configurations
+      # tl;dr expect `bundle exec rake` to be **minutes** slower on your mac.
+      - app_source:/opt/system/:delegated
+      - temp_cache:/opt/system/tmp/cache/:cached
+      - node_modules:/opt/system/node_modules:cached
+      - jspm_assets:/opt/system/assets/jspm_packages:cached
+      - public_assets:/opt/system/public/assets:cached
+      - jspm:/root/.jspm:cached
+      - vendor_bundle:/opt/system/vendor/bundle:cached
+      - bundle_config:/opt/system/.bundle:cached
+
+#      - ./vendor/docker-gateway/.luarocks:/home/ruby/.luarocks:cached # cached is important
     depends_on:
       - database
     links:
       - database
       - redis
       - memcached
+volumes:
+  app_source:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}
+  temp_cache:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/tmp/cache
+  node_modules:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/node_modules
+  jspm_assets:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device:  ${PWD}/assets/jspm_packages
+  public_assets:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/public/assets
+  jspm:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/.jspm
+  vendor_bundle:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/vendor/bundle
+  bundle_config:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/.bundle
