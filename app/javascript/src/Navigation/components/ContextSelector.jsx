@@ -8,6 +8,7 @@ import { render } from 'react-dom'
 import { ApiSearch } from './ApiSearch'
 import getActiveMenuTitle from '../utils/getActiveMenuTitle'
 
+const DASHBOARD_PATH = '/p/admin/dashboard'
 const AUDIENCE_PATH = '/buyers/accounts'
 
 const ContextSelector = ({ apis, currentApi, activeMenu }) => (
@@ -16,6 +17,9 @@ const ContextSelector = ({ apis, currentApi, activeMenu }) => (
       <span> {getActiveMenuTitle(activeMenu, currentApi)} <i className='fa fa-chevron-down' /></span>
     </a>
     <ul id="context-menu" className="PopNavigation-list u-toggleable">
+      <li className="PopNavigation-listItem">
+        <a className="PopNavigation-link" href={DASHBOARD_PATH}>Dashboard</a>
+      </li>
       <li className="PopNavigation-listItem">
         <a className="PopNavigation-link" href={AUDIENCE_PATH}>Audience</a>
       </li>
