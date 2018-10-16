@@ -10,7 +10,7 @@ header.Header id="user_widget" class=('Header--master' if current_account.master
       .Header-logo class=('Header-logo--withIcon' if active_menu?(:main_menu, :dashboard))
         | Red Hat 3scale API Management
 
-  - if current_account.multiservice? && can?(:manage, :plans) && api_selector_services.size > 1
+  - if can?(:manage, :plans)
     = render 'shared/api_selector'
 
 
