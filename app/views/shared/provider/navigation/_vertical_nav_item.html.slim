@@ -2,7 +2,7 @@
 - path ||= '#'
 - icon ||= nil
 
-li.list-group-item class=( active_menu?(:submenu, title) || current_page?(path) ? 'active' : '')
+li.list-group-item class=( active_menu?(:submenu, title) || active_menu?(:main_menu, title) || current_page?(path) ? 'active' : '')
   = link_to path do
     - if icon
       span.fa.fa-fw class="fa-#{icon}"
