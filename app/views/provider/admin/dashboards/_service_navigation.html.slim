@@ -2,14 +2,21 @@ nav.DashboardNavigation
   ul.DashboardNavigation-list
     // Applications & Application Plans
 
+    li.DashboardNavigation-list-item
+      // Overview (not countable)
+      = link_to admin_service_path(service),
+                class: "DashboardNavigation-link" do
+        i.fa.fa-map>
+        | Overview
+
     - if service.cinstances.any?
       li.DashboardNavigation-list-item
         // Applications
         - if can? :manage, :partners
-          => dashboard_collection_link 'Application',
+          => dashboard_collection_link 'App',
                                        service.cinstances,
                                        admin_service_applications_path(service),
-                                       'Applications',
+                                       'Apps',
                                        'cubes'
 
         // Application Plans
