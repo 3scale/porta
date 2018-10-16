@@ -4,9 +4,13 @@ ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 
-require 'codeclimate_rails'
-CodeclimateRails.start
+require 'simplecov'
+SimpleCov.start
 
+if ENV['CI']
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
 
 require 'minitest/unit'
 
