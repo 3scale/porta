@@ -1,7 +1,7 @@
 import 'core-js/es6/array'
 import React, { Component } from 'react'
 
-const apiPathRoot = apiId => `/apiconfig/services/${apiId}/metrics`
+const apiPathRoot = apiId => `/apiconfig/services/${apiId}`
 
 class ApiSearch extends Component {
 
