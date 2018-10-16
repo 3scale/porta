@@ -5,8 +5,8 @@ import { ContextSelector } from './ContextSelector'
 
 Enzyme.configure({ adapter: new Adapter() })
 
-function getWrapper (apis = [], currentApi, controllerName) {
-  return mount(<ContextSelector apis={apis} currentApi={currentApi} controllerName={controllerName} />)
+function getWrapper (apis = []) {
+  return mount(<ContextSelector apis={apis} />)
 }
 
 let contextSelector
@@ -41,6 +41,36 @@ it('should have a Audience option after Dashboard', () => {
   expect(audience.exists()).toEqual(true)
   expect(audience.text()).toEqual('Audience')
   expect(audience.find('a').props().href).not.toBeUndefined()
+})
+
+it('should highlight the selected context', () => {
+  contextSelector.setProps({ activeMenu: 'buyers', currentApi: null })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+  expect(contextSelector.find('.current-context').text()).toEqual('Audience')
+
+  contextSelector.setProps({ activeMenu: 'finance', currentApi: null })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+  expect(contextSelector.find('.current-context').text()).toEqual('Audience')
+
+  contextSelector.setProps({ activeMenu: 'cms', currentApi: null })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+  expect(contextSelector.find('.current-context').text()).toEqual('Audience')
+
+  contextSelector.setProps({ activeMenu: 'site', currentApi: null })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+
+  contextSelector.setProps({ activeMenu: 'dashboard', currentApi: apis[0] })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+  expect(contextSelector.find('.current-context').text()).toEqual('Dashboard')
+
+  // For the particular APIs
+  contextSelector.setProps({ activeMenu: 'serviceadmin', currentApi: apis[1] })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+  expect(contextSelector.find('.current-context').text()).toEqual('api 1')
+
+  contextSelector.setProps({ activeMenu: 'monitoring', currentApi: apis[2] })
+  expect(contextSelector.find('.current-context')).toHaveLength(1)
+  expect(contextSelector.find('.current-context').text()).toEqual('api 2')
 })
 
 describe('When there is only 1 service', () => {
