@@ -29,8 +29,15 @@ it('should render itself', () => {
   expect(contextSelector.find(ContextSelector).exists()).toEqual(true)
 })
 
-it('should have a Audience option on top', () => {
-  const audience = contextSelector.find('#context-menu').childAt(0)
+it('should have a Dashboard option on top', () => {
+  const dashboard = contextSelector.find('#context-menu').childAt(0)
+  expect(dashboard.exists()).toEqual(true)
+  expect(dashboard.text()).toEqual('Dashboard')
+  expect(dashboard.find('a').props().href).not.toBeUndefined()
+})
+
+it('should have a Audience option after Dashboard', () => {
+  const audience = contextSelector.find('#context-menu').childAt(1)
   expect(audience.exists()).toEqual(true)
   expect(audience.text()).toEqual('Audience')
   expect(audience.find('a').props().href).not.toBeUndefined()
