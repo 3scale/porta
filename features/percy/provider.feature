@@ -11,11 +11,6 @@ Feature: Visual Regressions
   Scenario: Provider Dashboard
     Then I take a screenshot of "the provider dashboard"
 
-  Scenario: Services Dashboard
-    When I go to the services dashboard page
-    Then I should see "0 hits"
-     And I take a screenshot of the current page and name it "the services dashboard page"
-
   Scenario: Integration Page
     When the proxy has simple secret token
      And all the apps have simple user keys

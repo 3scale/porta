@@ -716,7 +716,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :pricing_rules, :only => [:edit, :update, :destroy]
         end
 
-        resources :services do
+        resources :services, except: :index do
           member do
             get :settings
           end
