@@ -1,13 +1,13 @@
 nav.DashboardNavigation
   ul.DashboardNavigation-list
-    // Applications & Application Plans
 
-    li.DashboardNavigation-list-item
-      // Overview (not countable)
-      = link_to admin_service_path(service),
-                class: "DashboardNavigation-link" do
-        i.fa.fa-map>
-        | Overview
+    - if can?(:manage, :plans)
+      li.DashboardNavigation-list-item
+        // Overview (not countable)
+        = link_to admin_service_path(service),
+                  class: "DashboardNavigation-link" do
+          i.fa.fa-map>
+          | Overview
 
     - if can?(:manage, :monitoring)
       li.DashboardNavigation-list-item
