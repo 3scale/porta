@@ -980,7 +980,7 @@ DEPENDENCIES
   shoulda (~> 3.5.0)
   shoulda-context (~> 1.2.1)
   shoulda-matchers (~> 2.8.0)
-  sidekiq (< 5)
+  sidekiq (< 6)
   sidekiq-cron
   sidekiq-lock
   sidekiq-pro (~> 3.4)!
@@ -1021,4 +1021,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.16.2
+   1.16.6
