@@ -26,15 +26,16 @@ Feature: Multiservice feature
      And I press "Create"
     Then I should see "Less fancy API"
 
+  @javascript
   Scenario: Edit service
     Given I am logged in as provider "foo.example.com"
       And I am on the edit page for service "Fancy API" of provider "foo.example.com"
     When I fill in "Name" with "Less fancy API"
      And I press "Update Service"
-     And I follow "Preferences" within the main menu
+     And I follow "Integration" within the main menu
+     And I follow "Preferences" within the submenu
      And I uncheck "Developers can manage applications"
      And I press "Update Service"
-     And I follow "Overview" in the main menu
     Then I should see "Less fancy API"
 
   @javascript
