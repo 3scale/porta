@@ -26,3 +26,16 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :message
         = render vertical_nav_item,
           title: 'Trash',
           path: provider_admin_messages_trash_index_path
+
+        - if can?(:manage, :settings)
+          li.list-group-item
+            span.list-group-item-value.label Settings
+
+          - unless master_on_premises?
+            = render vertical_nav_item,
+                 title: 'Support Emails',
+                 path:   edit_admin_site_emails_path
+
+            = render vertical_nav_item,
+                 title: 'Email Templates',
+                 path:   provider_admin_cms_email_templates_path

@@ -2,7 +2,7 @@
 - path = '#'
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :cms) ? 'active' : '')
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :cms) || active_menu?(:submenu, :portal)  ? 'active' : '')
   = link_to '#' do
     span.fa.fa-sitemap data-toggle="tooltip" title="" data-original-title=title
     span.list-group-item-value Portal
@@ -30,15 +30,56 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :cms) 
               path: provider_admin_cms_groups_path
               // switch: :groups, upgrade_notice: true
 
-        = render vertical_nav_item,
-              title: 'Feature Visibility',
-              path: provider_admin_cms_switches_path
-
         - unless current_account.master?
+          li.list-group-item
+            span.list-group-item-value.label
+
           = render vertical_nav_item,
-                   title: 'Visit Developer Portal',
+                   title: 'Visit Portal',
                    path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
-                   access_code: current_account.site_access_code).html_safe
+                   access_code: current_account.site_access_code).html_safe,
+                   icon: 'external-link'
+
+
+        li.list-group-item
+         span.list-group-item-value.label Legal
+
+        = render vertical_nav_item,
+            title: 'Sign-up',
+            path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
+
+        = render vertical_nav_item,
+            title: 'Service Subscription',
+            path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)
+
+        = render vertical_nav_item,
+            title: 'New Application',
+            path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
+
+        - if can?(:manage, :settings)
+          li.list-group-item
+           span.list-group-item-value.label Settings
+
+          = render vertical_nav_item,
+               title: 'Feature Visibility',
+               path: provider_admin_cms_switches_path
+
+          = render vertical_nav_item,
+               title: 'Domains & Access',
+               path:   admin_site_dns_path
+
+          = render vertical_nav_item,
+               title: 'Spam Protection',
+               path:   edit_admin_site_spam_protection_path
+
+          - if current_account.show_xss_protection_options?
+           = render vertical_nav_item,
+                 title: 'XSS Protection',
+                 path: edit_admin_site_developer_portal_path
+
+          = render vertical_nav_item,
+               title: 'SSO Integrations',
+               path:   provider_admin_authentication_providers_path
 
           //= important_icon_link 'Visit Developer Portal',
                                         'external-link',

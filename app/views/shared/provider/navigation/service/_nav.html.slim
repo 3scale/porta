@@ -10,44 +10,18 @@
   = render 'shared/provider/navigation/service/analytics'
 
 - if can?(:manage, :partners)
-  = render vertical_nav_item,
-           title: 'Applications',
-           path: admin_service_applications_path(@service),
-           icon: 'cubes'
+  = render 'shared/provider/navigation/service/applications'
+
+- if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
+  = render 'shared/provider/navigation/service/subscriptions'
+
+- if current_account.settings.end_user_plans_ui_visible?
+  = render 'shared/provider/navigation/service/end_users.html.slim'
 
 - if can?(:manage, :plans)
-
   = render vertical_nav_item,
        title: 'ActiveDocs',
        path: admin_service_api_docs_path(@service),
        icon: 'file-text'
 
   = render 'shared/provider/navigation/service/integration'
-
-  = render vertical_nav_item,
-        title: 'Application Plans',
-        path: admin_service_application_plans_path(@service),
-        icon: 'check-circle'
-
-  = render vertical_nav_item,
-        title: 'Settings',
-        path: settings_admin_service_path(@service),
-        icon: 'cog'
-
-  - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
-    = render vertical_nav_item,
-          title: 'Service Plans',
-          path: admin_service_service_plans_path(@service),
-          icon: 'check-circle'
-
-  - if current_account.settings.end_user_plans_ui_visible?
-    = render vertical_nav_item,
-          title: 'End User Plans',
-          path: admin_service_end_user_plans_path(@service),
-          icon: 'check-circle'
-
-  - if @service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
-    = render vertical_nav_item,
-          title: 'End-users',
-          path: admin_service_end_users_path(@service),
-          icon: 'users'

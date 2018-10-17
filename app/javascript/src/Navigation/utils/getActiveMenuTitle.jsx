@@ -13,10 +13,8 @@ export default function getActiveMenuTitle (activeMenu, currentApi) {
     case 'finance':
     case 'cms':
     case 'site':
-      return 'Audience'
-
     case 'settings':
-      return 'Preferences'
+      return 'Audience'
 
     case 'applications':
     case 'active_docs':

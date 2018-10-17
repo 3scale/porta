@@ -1,10 +1,7 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
 - if can? :manage, :partners
-  = render vertical_nav_item,
-         title: 'Accounts',
-         path:  admin_buyers_accounts_path,
-         icon: 'briefcase'
+  = render 'shared/provider/navigation/audience/accounts'
 
 /- if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
   //- if current_account.service_plans.pending.exists?

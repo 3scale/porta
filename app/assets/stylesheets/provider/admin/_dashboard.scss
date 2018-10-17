@@ -13,6 +13,12 @@
     margin-top: line-height-times(1);
   }
 
+  &--audience {
+    .DashboardNavigation-link + .DashboardNavigation-link {
+      color: $warning-color;
+    }
+  }
+
   &-title {
     text-transform: uppercase;
     font-size: $font-size-base;
@@ -361,7 +367,7 @@
   &-link {
     text-transform: uppercase;
     font-style: normal;
-    color: $link-color;
+    color: $menu-color;
 
     .fa {
       font-size: $font-size-sm;
@@ -371,7 +377,7 @@
     }
 
     &:hover {
-      color: $link-hover-color;
+      color: $menu-hover-color;
     }
 
     &--alert {
@@ -386,7 +392,7 @@
 }
 
 .u-notice {
-  color: $font-color;
+  color: $warning-color;
 }
 
 a:hover .u-notice {
