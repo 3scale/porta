@@ -57,11 +57,9 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_MAX=72226778
 RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 
 
-SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=production WEBPACKER_PRECOMPILE=false && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=test WEBPACKER_PRECOMPILE=false
-#SCRIPT_TEST = script/jenkins.sh
-SCRIPT_TEST = echo 'export TESTS=\\\"' > test_files && bundle exec rake test:files:unit >> test_files && echo '\\\"' >> test_files && source test_files && cat test_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
-SCRIPT_TEST = bundle exec rake test:run TESTS=\$(bundle exec rake test:files:unit) TESTOPTS=--verbose --verbose --trace
-#SCRIPT_TEST = bundle exec rake test:files:unit && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
+SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_ENV=test && bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
+# FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
+SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake test:files:$$JOB >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
 
 default: all
 
@@ -83,10 +81,45 @@ include dependencies.mk
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
+test-prep: init_db precompile-assets test-with-info
 
 test: ## Runs tests inside container build environment
 test: CMD = $(SCRIPT_TEST)
-test: init_db precompile-assets test-with-info
+test: test-prep
+
+test-unit: JOB = unit
+test-unit:
+	$(MAKE) test JOB="${JOB}"
+
+test-functional: JOB = functional
+test-functional:
+	$(MAKE) test JOB="${JOB}"
+
+test-integration: JOB = integration
+test-integration:
+	$(MAKE) test JOB="${JOB}"
+
+test-rspec: CMD = bundle exec rspec --format progress $(shopt -s globstar && ls -l spec/**/*_spec.rb)
+test-rspec: test-prep
+
+test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default) && bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
+test-cucumber: test-prep
+
+test-licenses: CMD = bundle exec rake ci:license_finder:run
+test-licenses: test-prep
+
+test-swaggerdocs: CMD = bundle exec rake doc:swagger:validate:all && bundle exec rake doc:swagger:generate:all
+test-swaggerdocs: test-prep
+
+test-jspm: CMD = bundle exec rake ci:jspm --trace
+test-jspm: test-prep
+
+test-yarn: CMD = yarn test -- --reporters dots,junit --browsers Firefox && yarn jest
+test-yarn: test-prep
+
+test-lint: test-licenses test-swaggerdocs test-jspm test-yarn
+
+test-suite: bundle npm-install test-lint test-unit test-functional test-integration test-rspec test-cucumber
 
 jenkins-env: # Prints env vars
 	@echo

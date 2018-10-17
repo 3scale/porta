@@ -63,11 +63,7 @@ jobs:
       - *restore-bundler-cache
       - run:
           name: Install gems with bundler
-          command: |
-            bundle check || bundle install --deployment
-            bundle clean
-            # remove capybara-webkit source, save more than 400 MB
-            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
+          command: make bundle
           environment:
             BUNDLE_RETRY: 3
             BUNDLE_JOBS: 3
@@ -90,13 +86,7 @@ jobs:
       - *restore-npm-cache
       - run:
           name: Install NPM dependencies
-          command: |
-            yarn --version
-            yarn global dir
-            yarn install --frozen-lockfile --link-duplicates
-            jspm -v
-            jspm dl-loader
-            jspm install --lock || jspm install --force
+          command: make npm-install
       - save_cache:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
@@ -133,10 +123,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Precompile assets
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake assets:precompile RAILS_ENV=test 
-            bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
+          command: make precompile-assets
           environment:
             RAILS_GROUPS: assets 
       - persist_to_workspace:
@@ -165,25 +152,16 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Licences check
-          command: bundle exec rake ci:license_finder:run
+          command: make test-licenses
       - run:
           name: Swagger validation
-          command: |
-            bundle exec rake doc:swagger:validate:all
-            bundle exec rake doc:swagger:generate:all
+          command: make test-swaggerdocs
       - run:
           name: JSPM
-          command: |
-            bundle exec rake ci:jspm --trace
+          command: make test-jspm
       - run:
           name: Yarn test
-          command: |
-            yarn test -- --reporters dots,junit --browsers Firefox
-            yarn jest
-      - run:
-          name: Database setup
-          command: |
-            bundle exec rake db:create db:purge db:setup
+          command: make test-yarn
       - *store-junit-test-results
       - *store-test-artifacts
       - store_artifacts:
@@ -195,8 +173,8 @@ jobs:
       - *upload-coverage
 
   unit:
-    parallelism: 8
-    resource_class: small
+    parallelism: 1
+    resource_class: xlarge
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -211,22 +189,45 @@ jobs:
       - *git-submodules
       - *attach-to-workspace
       - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - run:
           name: Rails tests
-          command: |
-            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+          command: make test-unit
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
       - *upload-coverage
+#  unit:
+#    parallelism: 8
+#    resource_class: small
+#    docker:
+#      - *system-builder
+#      - image: circleci/mysql:5.7-ram
+#        environment:
+#          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#          MYSQL_ROOT_PASSWORD: ''
+#          MYSQL_DATABASE: circleci
+#      - image: memcached:1.5-alpine
+#      - image: redis:4.0-alpine
+#    steps:
+#      - checkout
+#      - *git-submodules
+#      - *attach-to-workspace
+#      - run:
+#          name: Prepare database & config files
+#          command: |
+#            cp config/examples/*.yml config/
+#            bundle exec rake db:create db:test:prepare
+#      - run:
+#          name: Rails tests
+#          command: |
+#            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
+#            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+#      - *store-junit-test-results
+#      - *store-test-artifacts
+#      - *store-log-artifacts
+#      - *upload-coverage
   functional:
-    parallelism: 2
-    resource_class: small
+    parallelism: 1
+    resource_class: xlarge
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -241,24 +242,49 @@ jobs:
       - *git-submodules
       - *attach-to-workspace
       - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - run:
           name: Rails tests
-          command: |
-            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+          command: make test-functional
           environment:
             LC_ALL: en_US.UTF-8
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
       - *upload-coverage
+#  functional:
+#    parallelism: 2
+#    resource_class: small
+#    docker:
+#      - *system-builder
+#      - image: circleci/mysql:5.7-ram
+#        environment:
+#          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#          MYSQL_ROOT_PASSWORD: ''
+#          MYSQL_DATABASE: circleci
+#      - image: memcached:1.5-alpine
+#      - image: redis:4.0-alpine
+#    steps:
+#      - checkout
+#      - *git-submodules
+#      - *attach-to-workspace
+#      - run:
+#          name: Prepare database & config files
+#          command: |
+#            cp config/examples/*.yml config/
+#            bundle exec rake db:create db:test:prepare
+#      - run:
+#          name: Rails tests
+#          command: |
+#            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
+#            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+#          environment:
+#            LC_ALL: en_US.UTF-8
+#      - *store-junit-test-results
+#      - *store-test-artifacts
+#      - *store-log-artifacts
+#      - *upload-coverage
   integration:
-    parallelism: 8
-    resource_class: small
+    parallelism: 1
+    resource_class: xlarge
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -273,22 +299,45 @@ jobs:
       - *git-submodules
       - *attach-to-workspace
       - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - run:
           name: Rails tests
-          command: |
-            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+          command: make test-integration
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
       - *upload-coverage
+#  integration:
+#    parallelism: 8
+#    resource_class: small
+#    docker:
+#      - *system-builder
+#      - image: circleci/mysql:5.7-ram
+#        environment:
+#          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#          MYSQL_ROOT_PASSWORD: ''
+#          MYSQL_DATABASE: circleci
+#      - image: memcached:1.5-alpine
+#      - image: redis:4.0-alpine
+#    steps:
+#      - checkout
+#      - *git-submodules
+#      - *attach-to-workspace
+#      - run:
+#          name: Prepare database & config files
+#          command: |
+#            cp config/examples/*.yml config/
+#            bundle exec rake db:create db:test:prepare
+#      - run:
+#          name: Rails tests
+#          command: |
+#            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
+#            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+#      - *store-junit-test-results
+#      - *store-test-artifacts
+#      - *store-log-artifacts
+#      - *upload-coverage
   rspec:
-    parallelism: 3
-    resource_class: small
+    parallelism: 1
+    resource_class: xlarge
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -303,22 +352,16 @@ jobs:
       - *git-submodules
       - *attach-to-workspace
       - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - run:
           name: Rspec tests
-          command: |
-            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+          command: make test-rspec
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
       - *upload-coverage
 
   cucumber:
-    parallelism: 20
-    resource_class: small
+    parallelism: 1
+    resource_class: xlarge
     docker:
       - *system-builder
       - image: quay.io/mikz/dnsmasq
@@ -337,21 +380,8 @@ jobs:
       - *git-submodules
       - *attach-to-workspace
       - run:
-          name: Prepare database
-          command: |
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
-      - run:
           name: Run cucumber tests
-          command: |
-            TESTS=$(bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings)
-            bundle exec cucumber --profile ci ${TESTS}
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
+          command: make test-cucumber
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
