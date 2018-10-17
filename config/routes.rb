@@ -674,12 +674,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
     match '/api_docs/proxy' => 'api_docs/proxy#show', via: [:get, :post]
 
-    scope :path => 'admin', :as => 'admin' do
-      namespace :stats do
-        root :to => 'dashboards#index'
-      end
-    end
-
     admin_module = -> do
       scope :path => 'apiconfig', :module => 'api' do
         get '/' => 'services#index', :as => :apiconfig_root, :namespace => 'api/', :path_prefix => 'admin/apiconfig'
@@ -803,7 +797,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       resources :services, :only => [] do
         namespace :stats do
-          root :to => 'dashboards#show'
           get '/signups' => 'dashboards#signups', :as => :signups
           get 'usage' => 'usage#index', :as => :usage
           get 'usage/data/:metric_id' => 'usage#index_data', :as => :usage_data
