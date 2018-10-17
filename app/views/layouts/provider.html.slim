@@ -21,7 +21,6 @@ html[lang="en"]
       #border.self_clear
         = render 'shared/provider/flash', flash: flash
         main.Main#content class=('Main--callToAction' if call_to_action?)
-          = active_menu
           - if controller.sublayout
             = render partial: "/layouts/#{controller.sublayout.to_s}"
           - else
