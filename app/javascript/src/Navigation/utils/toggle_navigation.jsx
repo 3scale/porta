@@ -11,7 +11,9 @@ function hideAllToggleable (selector = allToggleableElements) {
 }
 
 function toggleElements ($elements, klass = toggleEnabledClass, state) {
-  $elements.forEach($element => $element.toggleClass(klass, state))
+  for (let i = 0; i < $elements.length; i++) {
+    $elements[i].toggleClass(klass, state)
+  }
 }
 
 function focusSearchInput ($element) {
