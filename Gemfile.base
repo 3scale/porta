@@ -47,7 +47,7 @@ gem 'statsd-ruby', require: false
 gem 'sinatra', require: false # for sidekiq web
 
 # Sidekiq
-gem 'sidekiq', '< 5', require: %w(sidekiq sidekiq/web)
+gem 'sidekiq', '< 6', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-cron', require: %w(sidekiq/cron sidekiq/cron/web)
 gem 'sidekiq-lock'
 
@@ -77,6 +77,24 @@ when 'postgresql'
   gem 'pg'
 when 'mysql'
   gem 'mysql2', '~>0.3.11'
+end
+
+gem '3scale_client', '~> 2.6.1', require: false
+gem 'analytics-ruby', require: false
+
+group :development, :test do
+  gem 'bootsnap', '~> 1.3'
+
+  platform :mri_20, :mri_21, :mri_22, :mri_23 do
+    # we want to disable byebug for capybara because it hangs
+    # see: https://github.com/deivid-rodriguez/byebug/issues/115
+    # the issue is tracked as https://github.com/deivid-rodriguez/pry-byebug/issues/69
+    # there is a possiblity to disable it by ENV variable & .pryrc
+    # but first https://github.com/deivid-rodriguez/pry-byebug/pull/98
+    # has to be merged
+    # gem 'pry-byebug', require: false, install_if: ENV.fetch('DISABLE_PRY_BYEBUG', '0') == '0'
+    gem 'pry-stack_explorer', require: false
+  end
 end
 
 gem 'nokogiri', '>= 1.6.8'
@@ -251,6 +269,12 @@ group :development, :test do
 
   gem 'license_finder', '~> 2.1.2'
   gem 'license_finder_xml_reporter', git: 'https://github.com/3scale/license_finder_xml_reporter.git', tag: '1.0.0'
+
+  # to generate the swagger JSONs
+  gem 'sour', github: 'HakubJozak/sour', require: false
+
+  # for `rake doc:liquid:generate` and similar
+  gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
 end
 
 gem 'webpacker', '~> 3.3'

@@ -1,3 +1,4 @@
+@emails
 Feature: Billing Reporting Without Charging
   In order to pay by cash
   As a buyer of a provider that is billing but not charging
