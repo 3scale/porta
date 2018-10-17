@@ -1,7 +1,13 @@
 .vertical-nav {
   overflow-x: hidden;
   overflow-y: auto;
-  
+
+  .label {
+    color: $light-color;
+    margin: line-height-times(1) 0 0 line-height-times(1);
+    font-variant: small-caps;
+  }
+
   a {
     background-color: transparent;
   }
@@ -135,7 +141,7 @@
     color: #72767b;
     float: left;
     //font-size: line-height-times(0.83);
-    line-height: line-height-times(1.1);
+    line-height: line-height-times(1);
     margin-right: line-height-times(0.5);
     //text-align: center;
     //width: line-height-times(1);
@@ -173,7 +179,7 @@
   }
   .nav-pf-vertical .list-group-item .list-group-item-value {
     display: block;
-    line-height: line-height-times(1.0416666667);
+    line-height: line-height-times(1);
     max-width: line-height-times(5);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -208,9 +214,9 @@
     right: line-height-times(0.5);
   }
   .nav-item-pf-header {
-    color: #fff;
-    //font-size: line-height-times(0.67);
-    margin: line-height-times(0.75) line-height-times(0.83) line-height-times(0.42) line-height-times(0.83);
+    color: $light-color;
+    margin: line-height-times(0.75) line-height-times(1) line-height-times(0.5) line-height-times(0.85);
+    font-variant: small-caps;
   }
   .nav-item-pf-header > a {
     cursor: pointer;
@@ -254,8 +260,8 @@
     font-size: $font-size-sm;
     font-weight: inherit;
     height: inherit;
-    padding: line-height-times(0.167) 0 line-height-times(0.083) 0;
-    margin-left: line-height-times(0.83);
+    padding: line-height-times(0.2) 0 line-height-times(0.1) 0;
+    margin-left: line-height-times(1);
     width: line-height-times(7.5);
   }
   .nav-pf-secondary-nav .list-group-item.active > a:before {
@@ -292,21 +298,21 @@
       -ms-flex: 1;
       flex: 1;
       max-width: none;
-      padding-right: line-height-times(0.625);
+      padding-right: line-height-times(0.5);
     }
     .nav-pf-vertical .badge-container-pf {
       padding-left: 0;
-      padding-right: line-height-times(0.625);
+      padding-right: line-height-times(0.5);
       position: relative;
       right: 0;
       margin-top: -line-height-times(0.125);
-      top: line-height-times(0.21);
+      top: line-height-times(0.25);
     }
     .secondary-nav-item-pf > a .list-group-item-value {
-      padding-right: line-height-times(1.458);
+      padding-right: line-height-times(1.5);
     }
     .nav-pf-secondary-nav .list-group-item.tertiary-nav-item-pf > a .list-group-item-value {
-      padding-right: line-height-times(1.458);
+      padding-right: line-height-times(1.5);
     }
   }
 }

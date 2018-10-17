@@ -1,0 +1,35 @@
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+- if can?(:manage, current_account)
+  = render vertical_nav_item,
+           title: 'Overview',
+           path:  provider_admin_account_path,
+           icon: 'map'
+
+- if can?(:manage, current_user)
+  = render 'shared/provider/navigation/account/personal'
+
+/- if (can? :update, :logo)
+  = render vertical_nav_item,
+         title: 'Logo',
+         path:  edit_provider_admin_account_logo_path,
+         icon: 'picture-o'
+
+- if can?(:manage, current_account)
+  - unless current_account.provider_can_use?(:new_notification_system)
+    = render vertical_nav_item,
+           title: 'Notifications',
+           path:  provider_admin_account_notifications_path,
+           icon: 'bullhorn'
+
+  = render 'shared/provider/navigation/account/users'
+
+  = render 'shared/provider/navigation/account/billing'
+
+= render 'shared/provider/navigation/account/integrate'
+
+- if can? :export, :data
+  = render vertical_nav_item,
+         title: 'Export',
+         path:  new_provider_admin_account_data_exports_path,
+         icon: 'download'

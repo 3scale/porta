@@ -8,7 +8,7 @@
 .Dashboard
   div.Dashboard-widgets
     // account level
-    - if can?(:manage, :partners)
+    - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :settings)
       section.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
         header.DashboardSection-header
           h1.DashboardSection-title Audience
@@ -18,9 +18,11 @@
                                             forum_topics: current_account.forum.recent_topics,
                                             unread_messages_presenter: @unread_messages_presenter
 
+
         // Account Level Widgets
-        = dashboard_widget :new_accounts
+        = dashboard_widget :new_accounts if can?(:manage, :partners)
         = dashboard_widget :potential_upgrades if can?(:manage, :plans)
+
     section.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
       - if current_user.accessible_services?
         header.DashboardSection-header.DashboardSection-header--extended

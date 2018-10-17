@@ -1,20 +1,21 @@
 nav.DashboardNavigation
   ul.DashboardNavigation-list
     // Acounts, Pending Accounts & Account Plans
-    li.DashboardNavigation-list-item
-      // Accounts
-      => dashboard_collection_link 'Account',
-                                   buyers,
-                                   admin_buyers_accounts_path,
-                                   'Accounts',
-                                   'briefcase'
+    - if can?(:manage, :partners)
+      li.DashboardNavigation-list-item
+        // Accounts
+        => dashboard_collection_link 'Account',
+                                     buyers,
+                                     admin_buyers_accounts_path,
+                                     'Accounts',
+                                     'briefcase'
 
-      // Pending Accounts
-      - if show_pending_accounts_on_dashboard?
-        == dashboard_secondary_collection_link 'Pending',
-                                                pending_buyers,
-                                                admin_buyers_accounts_path(search: {state: 'pending'}),
-                                                'Pending'
+        // Pending Accounts
+        - if show_pending_accounts_on_dashboard?
+          == dashboard_secondary_collection_link 'Pending',
+                                                  pending_buyers,
+                                                  admin_buyers_accounts_path(search: {state: 'pending'}),
+                                                  'Pending'
 
     // Billing
     - if can?(:manage, :finance)

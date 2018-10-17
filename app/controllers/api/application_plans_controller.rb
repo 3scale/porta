@@ -8,7 +8,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
     options.before_action :find_service
   end
 
-  activate_menu :serviceadmin, :application_plans
+  activate_menu :serviceadmin, :integration, :application_plans
   sublayout 'api/service'
 
   def index
