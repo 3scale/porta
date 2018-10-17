@@ -5,7 +5,7 @@ USER root
 ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
-    BUNDLE_GEMFILE=Gemfile.on_prem \
+    BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test
 
 WORKDIR /opt/system
