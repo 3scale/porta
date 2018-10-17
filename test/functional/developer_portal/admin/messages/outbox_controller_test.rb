@@ -9,15 +9,32 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     test.should route(:delete, '/admin/messages/sent/42').to :action => 'destroy', :id => '42'
   end
 
-  test "creates messages with origin == 'web'" do
-    @provider = Factory :provider_account
-    @buyer = Factory :buyer_account, :provider_account => @provider
-    @request.host = @provider.domain
-    login_as(@provider.admins.first)
+  def setup
+    provider = FactoryGirl.create(:provider_account)
+    @user    = FactoryGirl.create(:user, account: provider)
 
-    post :create, :message => { :subject => "message via web", :body => "message via web" }, :to => @buyer.id
+    host! provider.domain
+
+    login_as @user
+  end
+
+  test "creates messages with origin == 'web'" do
+    buyer = Factory :buyer_account, :provider_account => @provider
+
+    post :create, :message => { :subject => "message via web", :body => "message via web" }, :to => buyer.id
+
     MessageWorker.drain
     assert msg = Message.last
     assert_equal "web", msg.origin
+  end
+
+  def test_index
+    get :index
+
+    assigned_drop_variables = assigns(:_assigned_drops).keys
+
+    assert :success
+    assert assigned_drop_variables.include?('messages')
+    assert assigned_drop_variables.include?('pagination')
   end
 end

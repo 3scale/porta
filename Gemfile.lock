@@ -135,7 +135,6 @@ PATH
 
 GEM
   remote: https://rubygems.org/
-  remote: https://gems.contribsys.com/
   specs:
     3scale_client (2.6.1)
       nokogiri
@@ -195,9 +194,6 @@ GEM
       rails (>= 3.0)
     aggregate_root (0.3.6)
       activesupport (>= 3.0)
-    airbrake (4.3.8)
-      builder
-      multi_json
     analytics-ruby (2.0.13)
     ansi (1.5.0)
     arel (6.0.4)
@@ -228,7 +224,7 @@ GEM
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.1.0)
+    bootsnap (1.3.2)
       msgpack (~> 1.0)
     braintree (2.89.0)
       builder (>= 2.0.0)
@@ -239,15 +235,15 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
     cancancan (1.7.1)
-    capybara (2.13.0)
+    capybara (2.18.0)
       addressable
-      mime-types (>= 1.16)
+      mini_mime (>= 0.1.3)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
-      xpath (~> 2.0)
-    capybara-webkit (1.14.0)
-      capybara (>= 2.3.0, < 2.14.0)
+      xpath (>= 2.0, < 4.0)
+    capybara-webkit (1.15.1)
+      capybara (>= 2.3, < 4.0)
       json
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
@@ -255,9 +251,6 @@ GEM
     chunky_png (1.3.4)
     ci_reporter (2.0.0)
       builder (>= 2.1.2)
-    ci_reporter_rspec (1.0.0)
-      ci_reporter (~> 2.0)
-      rspec (>= 2.14, < 4)
     climate_control (0.2.0)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
@@ -475,7 +468,7 @@ GEM
     money (6.7.1)
       i18n (>= 0.6.4, <= 0.7.0)
       sixarm_ruby_unaccent (>= 1.1.1, < 2)
-    msgpack (1.1.0)
+    msgpack (1.2.4)
     multi_json (1.13.1)
     multi_test (0.1.2)
     multi_xml (0.5.5)
@@ -485,11 +478,7 @@ GEM
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.11.0)
-    newrelic-redis (2.0.2)
-      newrelic_rpm (~> 3.11)
-      redis (< 4.0)
-    newrelic_rpm (3.17.1.326)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     non-stupid-digest-assets (1.0.5)
     ntlm-http (0.1.1)
@@ -545,7 +534,7 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
-    public_suffix (3.0.2)
+    public_suffix (3.0.3)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.10)
@@ -638,8 +627,6 @@ GEM
       roar (>= 1.0.0, <= 1.1.0)
       test_xml (>= 0.1.6)
       uber (>= 0.0.5)
-    rpm_contrib (2.2.0)
-      newrelic_rpm (>= 3.1.1)
     rspec (2.99.0)
       rspec-core (~> 2.99.0)
       rspec-expectations (~> 2.99.0)
@@ -665,6 +652,8 @@ GEM
       json (>= 1.4.6)
       mustache (>= 0.99.4)
       rspec (>= 2.14.0)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (0.52.1)
       parallel (~> 1.10)
       parser (>= 2.4.0.2, < 3.0)
@@ -707,6 +696,8 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.2, >= 3.2.1)
+    sidekiq-batch (0.1.5)
+      sidekiq (>= 3)
     sidekiq-cron (0.4.5)
       redis-namespace (>= 1.5.2)
       rufus-scheduler (>= 2.0.24)
@@ -714,8 +705,6 @@ GEM
     sidekiq-lock (0.3.1)
       redis (>= 3.0.5)
       sidekiq (>= 2.14.0)
-    sidekiq-pro (3.4.5)
-      sidekiq (>= 4.1.5)
     signet (0.5.1)
       addressable (>= 2.2.3)
       faraday (>= 0.9.0.rc5)
@@ -857,23 +846,21 @@ DEPENDENCIES
   acts_as_tree
   addressable
   after_commit_queue (~> 1.1.0)
-  airbrake (~> 4.3.3)
   analytics-ruby
   audited-activerecord
   aws-sdk (~> 2)
   aws-sdk-rails (~> 1.0)
   baby_squeel (~> 1.2.0)
   bcrypt (~> 3.1.7)
-  bootsnap
+  bootsnap (~> 1.3)
   braintree (~> 2.89)
   bugsnag (~> 6.0)
   bullet (~> 4.2)
   cancancan (~> 1.7.1)
-  capybara (~> 2.13.0)!
-  capybara-webkit (~> 1.14.0)!
+  capybara (~> 2.18)!
+  capybara-webkit (~> 1.15)!
   childprocess
   chronic
-  ci_reporter_rspec (~> 1.0)
   ci_reporter_shell!
   codeclimate_rails!
   codemirror-rails (~> 5.6)
@@ -932,8 +919,6 @@ DEPENDENCIES
   money (= 6.7.1)
   multi_fetch_fragments!
   mysql2 (~> 0.3.11)
-  newrelic-redis
-  newrelic_rpm (~> 3.5)
   nokogiri (>= 1.6.8)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (= 1.0.0)
@@ -965,10 +950,10 @@ DEPENDENCIES
   rest-client (~> 1.6)
   rmagick (~> 2.15.3)
   roar-rails
-  rpm_contrib
   rspec-html-matchers!
   rspec-rails
   rspec_api_documentation
+  rspec_junit_formatter
   rubocop (= 0.52.1)
   ruby-oci8
   ruby-openid
@@ -980,10 +965,10 @@ DEPENDENCIES
   shoulda (~> 3.5.0)
   shoulda-context (~> 1.2.1)
   shoulda-matchers (~> 2.8.0)
-  sidekiq (< 5)
+  sidekiq (< 6)
+  sidekiq-batch (~> 0.1.1)
   sidekiq-cron
   sidekiq-lock
-  sidekiq-pro (~> 3.4)!
   simplecov (~> 0.10.0)
   sinatra
   slim-rails (~> 3.0)
@@ -1014,11 +999,9 @@ DEPENDENCIES
   webpacker (~> 3.3)
   whenever (~> 0.9.4)
   will_paginate (~> 3.1.0)
+  xpath (~> 2.1)
   yard
   zip-zip
 
-RUBY VERSION
-   ruby 2.3.1p112
-
 BUNDLED WITH
-   1.16.2
+   1.16.6
