@@ -10,7 +10,6 @@ module ServiceDiscovery
       setup do
         @provider = FactoryGirl.create(:simple_provider)
         @service = FactoryGirl.create(:service, account: @provider)
-        FactoryGirl.create(:proxy, service: @service, api_backend: 'http://api.example.net:80')
 
         cluster_service_metadata = {
           name: 'fake-api',
@@ -26,66 +25,44 @@ module ServiceDiscovery
         @cluster_service = ServiceDiscovery::ClusterService.new cluster_service(metadata: cluster_service_metadata)
       end
 
-      test 'import cluster service endpoint' do
-        assert_equal 'http://api.example.net:80', @service.proxy.api_backend
-        @service.import_cluster_service_endpoint(@cluster_service)
-        assert @service.proxy.valid?
-        assert_equal 'https://fake-api.fake-project.svc.cluster.local:8443/api', @service.proxy.api_backend
+      test 'discovered?' do
+        refute @service.discovered?
+        @service.update_attribute(:kubernetes_service_link, '/api/v1/namespaces/fake-project/services/fake-api')
+        assert @service.reload.discovered?
+      end
+    end
+
+    class ApiDocs::ServiceTest < ActiveSupport::TestCase
+      test 'discovered is readonly' do
+        api_doc = FactoryGirl.create(:api_docs_service, discovered: true)
+
+        api_doc.update! discovered: false
+        assert api_doc.reload.discovered
       end
 
-      test 'import api_doc' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/swagger+json')
+      test 'discovered scope' do
+        api_docs =  FactoryGirl.create_list(:api_docs_service, 2, discovered: true)
+        api_docs += FactoryGirl.create_list(:api_docs_service, 3, discovered: false)
 
-        assert_difference @service.api_docs_services.method(:count) do
-          @service.import_cluster_active_docs(@cluster_service)
-        end
+        assert_same_elements api_docs[0..1].map(&:id), ::ApiDocs::Service.discovered.pluck(:id)
       end
 
-      test 'unsupported backend base path' do
-        @provider.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
-        @provider.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
-        @provider.stubs(:provider_can_use?).with(:proxy_private_base_path).returns(false)
+      test 'only one discovered by service' do
+        service = FactoryGirl.create(:simple_service)
 
-        System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'Could not save API backend URL'), any_parameters)
-        @service.import_cluster_service_endpoint(@cluster_service)
-        refute @service.proxy.valid?
-        assert_equal 'http://api.example.net:80', @service.proxy.reload.api_backend
-      end
+        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account)
+        assert api_doc.valid?
 
-      test 'non-oas spec' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/json')
+        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account, discovered: true)
+        assert api_doc.valid?
 
-        assert_no_difference @provider.api_docs_services do
-          System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'API specification type not supported'), any_parameters)
-          @service.import_cluster_active_docs(@cluster_service)
-        end
-      end
+        FactoryGirl.create(:api_docs_service, service: service, account: service.account, discovered: true)
+        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account, discovered: true)
+        refute api_doc.valid?
+        assert api_doc.errors[:discovered].present?
 
-      test 'blank oas spec' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '',
-                               specification_type: 'application/swagger+json')
-
-        assert_no_difference @provider.api_docs_services do
-          System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'OAS specification is empty and cannot be imported'), any_parameters)
-          @service.import_cluster_active_docs(@cluster_service)
-        end
-      end
-
-      test 'invalid api_doc record' do
-        @cluster_service.stubs(fetch_specification: true,
-                               specification: '{ "swagger" : "fake-swagger" }',
-                               specification_type: 'application/swagger+json')
-
-        assert_no_difference @provider.api_docs_services do
-          ApiDocs::Service.any_instance.stubs(valid?: false)
-          System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'Could not create ActiveDocs'), any_parameters)
-          @service.import_cluster_active_docs(@cluster_service)
-        end
+        api_doc.discovered = false
+        assert api_doc.valid?
       end
     end
   end

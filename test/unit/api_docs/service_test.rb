@@ -541,8 +541,8 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     services = FactoryGirl.create_list(:simple_service, 2, account: account)
     api_docs = []
     api_docs << account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
-    api_docs << account.api_docs_services.create!(valid_attributes.merge({service: services.first, name: 'service-accessible'}), without_protection: true) # accessible with service
-    api_docs << account.api_docs_services.create!(valid_attributes.merge({service: services.last, name: 'service'}), without_protection: true) # non-accessible with service
+    api_docs << services.first.api_docs_services.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
+    api_docs << services.last.api_docs_services.create!(valid_attributes.merge({name: 'service-deleted'})) # non-accessible wit service
     services.last.mark_as_deleted!
     assert_same_elements api_docs[0..1].map(&:id), ApiDocs::Service.accessible.pluck(:id)
   end

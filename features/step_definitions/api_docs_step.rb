@@ -11,6 +11,7 @@ Then /^provider "([^"]*)" should have access to useful account data$/ do |name|
   service_plans = account.service_plans.latest
 
   service.update_attributes!(:backend_version => 1)
+  token = service.service_tokens.create!(value: 'foobar')
   visit  provider_admin_api_docs_account_data_path(:format => :json)
 
   expected_json = {
@@ -31,7 +32,7 @@ Then /^provider "([^"]*)" should have access to useful account data$/ do |name|
       account_plan_ids: [{name: account_plans[0].name, value: account_plans[0].id}],
       application_plan_ids: [{name: "#{application_plans[0].name} | #{application_plans[0].service.name}", value: application_plans[0].id}],
       access_token: [{ name: 'First create an access token in the Personal Settings section.', value: ''}],
-      service_tokens: [{ name: service.name, value: service.service_token }]
+      service_tokens: [{ name: service.name, value: token.value }]
     },
     status: 200
   }.to_json
