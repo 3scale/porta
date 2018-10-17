@@ -36,10 +36,6 @@ restore-npm-cache: &restore-npm-cache
   restore_cache:
     keys:
       - v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
-#restore-gateway-cache: &restore-gateway-cache
-#  restore_cache:
-#    keys:
-#      - v1-gateway-{{ arch }}-{{ .Branch }}-{{ .Revision }}
 
 rails-tests: &rails-tests
   run:
@@ -117,20 +113,6 @@ jobs:
             - ./assets/jspm_packages
             - ./.jspm
 
-  #  dependencies_apicast:
-#    docker:
-#      - image: quay.io/gsaslis/3scale-system-builder
-#    steps:
-#      - checkout
-#      - *git-submodules
-#      - *restore-gateway-cache
-#      - run:
-#          name: Install Apicast dependencies
-#          command: make apicast-dependencies
-#      - save_cache:
-#          key: v1-gateway-{{ arch }}-{{ .Branch }}-{{ .Revision }}
-#          paths:
-#            - ./vendor/docker-gateway/.luarocks
   assets_precompile:
     docker:
       - *system-builder
@@ -359,12 +341,10 @@ workflows:
     jobs:
       - dependencies_bundler
       - dependencies_npm
-#      - dependencies_apicast
       - assets_precompile:
           requires:
             - dependencies_bundler
             - dependencies_npm
-#            - dependencies_apicast
 
       - lint:
           requires:
