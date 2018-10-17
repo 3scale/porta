@@ -31,7 +31,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
     setup do
       @provider = FactoryGirl.create(:provider_account)
       @service = @provider.default_service
-      @api_docs_service = @provider.api_docs_services.create!({name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'})
+      @api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: nil)
     end
 
     attr_reader :provider, :service, :api_docs_service

@@ -1,4 +1,7 @@
-module NavigationHelpers
+# frozen_string_literal: true
+
+World(Module.new do
+  break unless defined?(DeveloperPortal)
 
   include DeveloperPortal::Engine.routes.url_helpers
 
@@ -662,6 +665,4 @@ module NavigationHelpers
         "Now, go and add a mapping in #{__FILE__}"
     end
   end
-end
-
-World(NavigationHelpers)
+end)

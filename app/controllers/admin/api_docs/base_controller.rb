@@ -2,7 +2,6 @@
 
 class Admin::ApiDocs::BaseController < FrontendController
   before_action :find_api_docs, only: %i[destroy edit update show preview toggle_visible]
-  before_action :find_service_apis_collection, only: %i[new edit update create]
   before_action :deny_on_premises_for_master
 
   def preview
@@ -62,7 +61,7 @@ class Admin::ApiDocs::BaseController < FrontendController
   end
 
   def index
-    @api_docs_services = current_scope.api_docs_services.page(params[:page])
+    @api_docs_services = current_scope.api_docs_services.page(params[:page]).includes(:service)
   end
 
   def create
@@ -82,10 +81,6 @@ class Admin::ApiDocs::BaseController < FrontendController
   private
 
   attr_reader :api_docs_service
-
-  def find_service_apis_collection
-    @service_apis = current_account.services.accessible
-  end
 
   def current_scope
     raise NoMethodError, "#{__method__} not implemented in #{self.class}"

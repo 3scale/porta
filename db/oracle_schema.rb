@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181008065816) do
+ActiveRecord::Schema.define(version: 20181011104937) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 20181008065816) do
     t.string   "swagger_version"
     t.boolean  "skip_swagger_validations", limit: nil,                default: false
     t.integer  "service_id",                           precision: 38
+    t.boolean  "discovered"
   end
 
   add_index "api_docs_services", ["service_id"], name: "index_api_docs_services_on_service_id"

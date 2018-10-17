@@ -12,13 +12,13 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
     setup do
       @provider = FactoryGirl.create(:provider_account)
       @service = @provider.default_service
-      @api_docs_service = @provider.api_docs_services.create!(api_docs_params[:api_docs_service])
+      @api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: nil)
     end
 
     test 'index gets the api_docs of an account independently of the service' do
-      another_service = FactoryGirl.create(:simple_service, account: provider)
-      provider.api_docs_services.create!(api_docs_params(service_id: service.id, name: 'first-service')[:api_docs_service], without_protection: true)
-      provider.api_docs_services.create!(api_docs_params(service_id: another_service.id, name: '2nd-S')[:api_docs_service], without_protection: true)
+      service_2 = FactoryGirl.create(:simple_service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
 
       get admin_api_docs_services_path
       refute_xpath '//*[@id="side-tabs"]' # The service menu
@@ -31,6 +31,25 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
         { preview_link: preview_admin_api_docs_service_path(api_doc), api_doc_name: api_doc.name }
       end
       assert_same_elements expected_api_docs_data, actual_api_docs_data
+    end
+
+    test 'index has the API column' do
+      service_2 = FactoryGirl.create(:simple_service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service, account: provider)
+      FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
+      get admin_api_docs_services_path
+
+      assert_xpath "//*[@id='content']/table/thead/th[4]", 'API' # Name of the column
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      actual_api_docs_data = page.xpath("//*[@id='content']/table/tbody/tr/td[4]").map(&:text)
+      expected_api_docs_data = provider.api_docs_services.includes(:service).pluck(:'services.name').map(&:to_s)
+      assert_same_elements expected_api_docs_data, actual_api_docs_data
+    end
+
+    test 'new renders without the selector of a service' do
+      get new_admin_api_docs_service_path
+      assert_xpath '//*[@id="api_docs_service_service_id"]' # The selection of service_id in the form
     end
 
     test 'preview under the service scope when there is a service' do
@@ -90,6 +109,22 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
 
       assert_nil api_docs_service.reload.service_id
+    end
+
+    def test_new_edit_has_service_selection
+      get new_admin_api_docs_service_path
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+
+      get edit_admin_api_docs_service_path(api_docs_service)
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+    end
+
+    def test_update_create_invalid_params_keeps_having_service_selection
+      put admin_api_docs_service_path update_params(body: 'invalid')
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
+
+      post admin_api_docs_services_path create_params(body: 'invalid')
+      assert_xpath '//*[@id="api_docs_service_service_id"]/option[2]', service.name
     end
 
     def test_system_name_is_not_updated
