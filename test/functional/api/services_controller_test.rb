@@ -97,9 +97,7 @@ class Api::ServicesControllerTest < ActionController::TestCase
     @controller.stubs(:authorize_plans)
     @controller.stubs(:can_create?).returns(true)
 
-    Service.any_instance.stubs(save: true, persisted?: true)
-
-    post :create, service: { system_name: 'Test bubbles' }
+    post :create, service: { name: 'Test bubbles' }
 
     assert_response 302
     assert_equal 'api_done', @provider.reload.onboarding.bubble_api_state
