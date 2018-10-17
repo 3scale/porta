@@ -1,4 +1,7 @@
 class Stats::DaysController < Stats::ServiceBaseController
+
+  activate_menu :serviceadmin, :monitoring, :days
+
   def index
     @data = ::Stats::Deprecated.average_usage_by_weekdays_for_all_metrics(@service)
     render :index
