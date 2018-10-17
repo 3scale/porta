@@ -3,7 +3,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   before_action :find_webhook
   before_action :authorize_web_hooks
 
-  activate_menu :audience, :settings, :web_hooks
+  activate_menu! :account, :integrate, :web_hooks
 
   def new
     if @webhook

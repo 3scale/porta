@@ -1,8 +1,7 @@
 class Provider::Admin::LiquidDocsController < Provider::Admin::BaseController
   include ApplicationHelper
 
-  activate_menu! :topmenu => :help
-  activate_menu :account, :liquid_reference
+  activate_menu :audience, :portal, :liquid_reference
   layout 'provider'
 
   def show

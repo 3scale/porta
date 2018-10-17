@@ -40,6 +40,13 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :cms) 
                    access_code: current_account.site_access_code).html_safe,
                    icon: 'external-link'
 
+        li.list-group-item
+        span.list-group-item-value.label
+
+        = render vertical_nav_item,
+           title: 'Liquid Reference',
+           path: provider_admin_liquid_docs_path,
+           icon: 'file-text'
 
         li.list-group-item
          span.list-group-item-value.label Legal
