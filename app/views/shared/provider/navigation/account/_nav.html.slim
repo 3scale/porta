@@ -1,5 +1,3 @@
-- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
-
 - if can?(:manage, current_account)
   = render vertical_nav_item,
            title: 'Overview',
@@ -7,7 +5,12 @@
            icon: 'map'
 
 - if can?(:manage, current_user)
-  = render 'shared/provider/navigation/account/personal'
+  = render partial: 'shared/provider/navigation/account/personal',
+           layout: layout_secondary_nav,
+           locals: { title: 'Personal',
+                     icon: 'id-card',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :personal }
 
 /- if (can? :update, :logo)
   = render vertical_nav_item,
@@ -22,11 +25,26 @@
            path:  provider_admin_account_notifications_path,
            icon: 'bullhorn'
 
-  = render 'shared/provider/navigation/account/users'
+  = render partial: 'shared/provider/navigation/account/users',
+           layout: layout_secondary_nav,
+           locals: { title: 'Users',
+                     icon: 'users',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :users }
 
-  = render 'shared/provider/navigation/account/billing'
+  = render partial: 'shared/provider/navigation/account/billing',
+           layout: layout_secondary_nav,
+           locals: { title: 'Billing',
+                     icon: 'credit-card',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :billing }
 
-= render 'shared/provider/navigation/account/integrate'
+= render partial: 'shared/provider/navigation/account/integrate',
+         layout: layout_secondary_nav,
+         locals: { title: 'Integrate',
+                   icon: 'cogs',
+                   vertical_nav_item: vertical_nav_item,
+                   submenu: :integrate }
 
 - if can? :export, :data
   = render vertical_nav_item,

@@ -1,96 +1,79 @@
-- title = 'Portal'
-- path = '#'
-- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+= render vertical_nav_item,
+       title: 'Content',
+       path: provider_admin_cms_templates_path
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :cms) || active_menu?(:submenu, :portal)  ? 'active' : '')
-  = link_to '#' do
-    span.fa.fa-sitemap data-toggle="tooltip" title="" data-original-title=title
-    span.list-group-item-value Portal
+= render vertical_nav_item,
+      title: pluralize(number_to_human(current_account.templates.with_draft.size), 'Draft'),
+      path: provider_admin_cms_changes_path
 
-    div id="-secondary" class="nav-pf-secondary-nav"
-      div class="nav-item-pf-header"
-        a href="#0" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"
-        span Portal
+= render vertical_nav_item,
+      title: 'Redirects',
+      path: provider_admin_cms_redirects_path
 
-      ul class="list-group"
-        = render vertical_nav_item,
-               title: 'Content',
-               path: provider_admin_cms_templates_path
+= render vertical_nav_item,
+      title: 'Groups',
+      path: provider_admin_cms_groups_path
+      // switch: :groups, upgrade_notice: true
 
-        = render vertical_nav_item,
-              title: pluralize(number_to_human(current_account.templates.with_draft.size), 'Draft'),
-              path: provider_admin_cms_changes_path
+- unless current_account.master?
+  li.list-group-item
+    span.list-group-item-value.label
 
-        = render vertical_nav_item,
-              title: 'Redirects',
-              path: provider_admin_cms_redirects_path
+  = render vertical_nav_item,
+           title: 'Visit Portal',
+           path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
+           access_code: current_account.site_access_code).html_safe
 
-        = render vertical_nav_item,
-              title: 'Groups',
-              path: provider_admin_cms_groups_path
-              // switch: :groups, upgrade_notice: true
+li.list-group-item
+span.list-group-item-value.label
 
-        - unless current_account.master?
-          li.list-group-item
-            span.list-group-item-value.label
+= render vertical_nav_item,
+   title: 'Liquid Reference',
+   path: provider_admin_liquid_docs_path
 
-          = render vertical_nav_item,
-                   title: 'Visit Portal',
-                   path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
-                   access_code: current_account.site_access_code).html_safe,
-                   icon: 'external-link'
+li.list-group-item
+ span.list-group-item-value.label Legal
 
-        li.list-group-item
-        span.list-group-item-value.label
+= render vertical_nav_item,
+    title: 'Sign-up',
+    path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
 
-        = render vertical_nav_item,
-           title: 'Liquid Reference',
-           path: provider_admin_liquid_docs_path,
-           icon: 'file-text'
+= render vertical_nav_item,
+    title: 'Service Subscription',
+    path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)
 
-        li.list-group-item
-         span.list-group-item-value.label Legal
+= render vertical_nav_item,
+    title: 'New Application',
+    path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
 
-        = render vertical_nav_item,
-            title: 'Sign-up',
-            path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
+- if can?(:manage, :settings)
+  li.list-group-item
+   span.list-group-item-value.label Settings
 
-        = render vertical_nav_item,
-            title: 'Service Subscription',
-            path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)
+  = render vertical_nav_item,
+       title: 'Feature Visibility',
+       path: provider_admin_cms_switches_path
 
-        = render vertical_nav_item,
-            title: 'New Application',
-            path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
+  = render vertical_nav_item,
+       title: 'Domains & Access',
+       path:   admin_site_dns_path
 
-        - if can?(:manage, :settings)
-          li.list-group-item
-           span.list-group-item-value.label Settings
+  = render vertical_nav_item,
+       title: 'Spam Protection',
+       path:   edit_admin_site_spam_protection_path
 
-          = render vertical_nav_item,
-               title: 'Feature Visibility',
-               path: provider_admin_cms_switches_path
+  - if current_account.show_xss_protection_options?
+   = render vertical_nav_item,
+         title: 'XSS Protection',
+         path: edit_admin_site_developer_portal_path
 
-          = render vertical_nav_item,
-               title: 'Domains & Access',
-               path:   admin_site_dns_path
+  = render vertical_nav_item,
+       title: 'SSO Integrations',
+       path:   provider_admin_authentication_providers_path
 
-          = render vertical_nav_item,
-               title: 'Spam Protection',
-               path:   edit_admin_site_spam_protection_path
-
-          - if current_account.show_xss_protection_options?
-           = render vertical_nav_item,
-                 title: 'XSS Protection',
-                 path: edit_admin_site_developer_portal_path
-
-          = render vertical_nav_item,
-               title: 'SSO Integrations',
-               path:   provider_admin_authentication_providers_path
-
-          //= important_icon_link 'Visit Developer Portal',
-                                        'external-link',
-                                        access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
-                                        access_code: current_account.site_access_code).html_safe,
-                                        target: "_blank",
-                                        class: "preview link--icon-last"
+  //= important_icon_link 'Visit Developer Portal',
+                                'external-link',
+                                access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
+                                access_code: current_account.site_access_code).html_safe,
+                                target: "_blank",
+                                class: "preview link--icon-last"

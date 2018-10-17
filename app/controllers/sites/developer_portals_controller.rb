@@ -1,6 +1,6 @@
 class Sites::DeveloperPortalsController < Sites::BaseController
   sublayout 'sites/developer_portals'
-  activate_menu :settings, :portal
+  activate_menu :audience, :cms
 
   def edit
     @settings = settings

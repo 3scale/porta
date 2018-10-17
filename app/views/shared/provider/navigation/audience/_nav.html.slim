@@ -1,7 +1,13 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
 - if can? :manage, :partners
-  = render 'shared/provider/navigation/audience/accounts'
+  = render partial: 'shared/provider/navigation/audience/accounts',
+           layout: layout_secondary_nav,
+           locals: { title: 'Accounts',
+                     icon: 'briefcase',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :accounts }
+
 
 /- if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
   //- if current_account.service_plans.pending.exists?
@@ -12,13 +18,33 @@
        //admin_buyers_accounts_path(search: {state: 'pending'}),
 
 - if can?(:manage, :finance)
-  = render 'shared/provider/navigation/audience/billing'
+  = render partial: 'shared/provider/navigation/audience/billing',
+           layout: layout_secondary_nav,
+           locals: { title: 'Billing',
+                     icon: 'credit-card',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :finance }
   //main_menu_item :finance, 'Billing', admin_finance_root_path, :switch => :finance, :upgrade_notice => !master_on_premises?
 
 - if can?(:manage, :portal)
-  = render 'shared/provider/navigation/audience/portal'
+  = render partial: 'shared/provider/navigation/audience/portal',
+           layout: layout_secondary_nav,
+           locals: { title: 'Portal',
+                     icon: 'sitemap',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :cms }
 
-= render 'shared/provider/navigation/audience/messages'
+= render partial: 'shared/provider/navigation/audience/messages',
+         layout: layout_secondary_nav,
+         locals: { title: 'Messages',
+                   icon: 'envelope',
+                   vertical_nav_item: vertical_nav_item,
+                   submenu: :messages }
 
 - if current_account.forum_enabled?
-  = render 'shared/provider/navigation/audience/forum'
+  = render partial: 'shared/provider/navigation/audience/forum',
+           layout: layout_secondary_nav,
+           locals: { title: 'Forum',
+                     icon: 'comments',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :forum }

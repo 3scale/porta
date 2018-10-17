@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Provider::Admin::AuthenticationProvidersController < FrontendController
-  activate_menu :settings, :portal, :oauth2
+  activate_menu :audience, :cms, :oauth2
   sublayout 'sites/developer_portals'
 
   before_action :find_authentication_provider, only: %i[show edit update publish_or_hide destroy]

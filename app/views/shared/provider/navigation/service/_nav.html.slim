@@ -1,5 +1,3 @@
-- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
-
 - if can?(:manage, :plans)
   = render vertical_nav_item,
            title: 'Overview',
@@ -7,16 +5,36 @@
            icon: 'map'
 
 - if can?(:manage, :monitoring)
-  = render 'shared/provider/navigation/service/analytics'
+  = render partial: 'shared/provider/navigation/service/analytics',
+           layout: layout_secondary_nav,
+           locals: { title: 'Analytics',
+                     icon: 'bar-chart',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :monitoring }
 
 - if can?(:manage, :partners)
-  = render 'shared/provider/navigation/service/applications'
+  = render partial: 'shared/provider/navigation/service/applications',
+           layout: layout_secondary_nav,
+           locals: { title: 'Applications',
+                     icon: 'cubes',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :applications }
 
 - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
-  = render 'shared/provider/navigation/service/subscriptions'
+  = render partial: 'shared/provider/navigation/service/subscriptions',
+            layout: layout_secondary_nav,
+            locals: { title: 'Subscriptions',
+                      icon: 'cubes',
+                      vertical_nav_item: vertical_nav_item,
+                      submenu: :subscriptions }
 
 - if current_account.settings.end_user_plans_ui_visible?
-  = render 'shared/provider/navigation/service/end_users.html.slim'
+  = render partial: 'shared/provider/navigation/service/end_users.html.slim',
+           layout: layout_secondary_nav,
+           locals: { title: 'End-users',
+                     icon: 'cubes',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :end_users }
 
 - if can?(:manage, :plans)
   = render vertical_nav_item,
@@ -24,4 +42,9 @@
        path: admin_service_api_docs_path(@service),
        icon: 'file-text'
 
-  = render 'shared/provider/navigation/service/integration'
+  = render partial: 'shared/provider/navigation/service/integration',
+           layout: layout_secondary_nav,
+           locals: { title: 'Integration',
+                     icon: 'wrench',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :integration }
