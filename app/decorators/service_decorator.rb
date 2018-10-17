@@ -1,5 +1,4 @@
-class ServiceDecorator < Draper::Decorator
-  delegate_all
+class ServiceDecorator < ApplicationDecorator
 
   def link_to_application_plans
     stock_application_plans = application_plans.stock
