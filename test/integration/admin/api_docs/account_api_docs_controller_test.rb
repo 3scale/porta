@@ -21,8 +21,8 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
 
       get admin_api_docs_services_path
-      refute_xpath '//*[@id="side-tabs"]' # The service menu
-      refute_xpath '//*[@id="tab-content"]/h2[1]', /.* > ActiveDocs/ # The service title
+      refute_xpath "//nav[@class='vertical-nav']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
+      refute_xpath '//*[@id="content"]/h1', 'ActiveDocs' # The service title
 
       page = Nokogiri::HTML::Document.parse(response.body)
       api_docs_name_list_nodes = page.xpath("//*[@id='content']/table/tbody/tr/td[1]/a") # From the resulting table, the first column of all api_docs
@@ -39,7 +39,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
       get admin_api_docs_services_path
 
-      assert_xpath "//*[@id='content']/table/thead/th[4]", 'API' # Name of the column
+      assert_xpath("//*[@id='content']/table/thead/th[4]", 'API') # Name of the column
 
       page = Nokogiri::HTML::Document.parse(response.body)
       actual_api_docs_data = page.xpath("//*[@id='content']/table/tbody/tr/td[4]").map(&:text)
@@ -54,8 +54,8 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
     test 'preview under the service scope when there is a service' do
       get preview_admin_api_docs_service_path(api_docs_service)
-      refute_xpath '//*[@id="side-tabs"]' # The menu
-      refute_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+      refute_xpath "//nav[@class='vertical-nav']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
+      refute_xpath '//*[@id="content"]/h1', 'ActiveDocs' # The service title
 
       api_docs_service.update({service_id: service.id}, without_protection: true)
       get preview_admin_api_docs_service_path(api_docs_service)
@@ -64,8 +64,8 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
     test 'edit under the service scope when there is a service' do
       get edit_admin_api_docs_service_path(api_docs_service)
-      refute_xpath '//*[@id="side-tabs"]' # The menu
-      refute_xpath '//*[@id="tab-content"]/h2[1]', "#{service.name} > ActiveDocs" # The title
+      refute_xpath "//nav[@class='vertical-nav']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
+      refute_xpath '//*[@id="content"]/h1', 'ActiveDocs' # The service title
 
       api_docs_service.update({service_id: service.id}, without_protection: true)
       get edit_admin_api_docs_service_path(api_docs_service)
