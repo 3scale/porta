@@ -10,6 +10,11 @@ module ServiceRepresenter
   property :system_name
   property :end_user_registration_required
   property :backend_version
+  property :deployment_option
+  property :support_email
+  property :tech_support_email
+  property :admin_support_email
+  property :description
 
   property :created_at
   property :updated_at

@@ -1,3 +1,4 @@
+require 'thinking_sphinx'
 require 'thinking_sphinx/test'
 
 Before('@search') do

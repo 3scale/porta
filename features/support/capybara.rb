@@ -1,3 +1,4 @@
+require 'capybara/webkit'
 require 'capybara/minitest'
 include Capybara::Minitest::Assertions
 
@@ -49,7 +50,6 @@ Capybara::Webkit.configure do |config|
   config.block_unknown_urls
   config.raise_javascript_errors = true # we would like this to be true, but need to fix our failing tests
 end
-
 
 # monkeypatch to fix
 # not opened for reading (IOError)
