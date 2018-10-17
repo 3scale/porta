@@ -1,7 +1,6 @@
 class Provider::Admin::ApiDocsController < Provider::Admin::BaseController
-  activate_menu! :topmenu => :help
-  activate_menu :account, :apidocs
-  
+  activate_menu :account, :integrate, :apidocs
+
   layout 'provider'
 
   def show
