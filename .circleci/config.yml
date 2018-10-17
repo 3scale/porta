@@ -97,21 +97,14 @@ jobs:
             yarn --version
             yarn global dir
             yarn install --frozen-lockfile --link-duplicates
-            jspm -v
-            jspm dl-loader
-            jspm install --lock || jspm install --force
       - save_cache:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-            - ./assets/jspm_packages
-            - ./.jspm
       - persist_to_workspace:
           root: .
           paths:
             - ./node_modules
-            - ./assets/jspm_packages
-            - ./.jspm
 
   assets_precompile:
     docker:
@@ -160,10 +153,6 @@ jobs:
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
-      - run:
-          name: JSPM
-          command: |
-            bundle exec rake ci:jspm --trace
       - run:
           name: Yarn test
           command: |
