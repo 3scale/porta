@@ -21,7 +21,7 @@ class BillingWorker
       billing_summary.unstore
 
       batch_status = Sidekiq::Batch::Status.new(batch_id)
-      batch_status.delete
+      batch_status.try(:delete)
     end
   end
 
