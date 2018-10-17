@@ -8,7 +8,7 @@ module HtmlSelectorsHelper
     when 'page content'
       '#content'
     when 'the main menu', :main_menu
-       '#tabs'
+       '#mainmenu'
     when 'the submenu', :submenu
       '#second_nav'
     when 'the subsubmenu'
@@ -23,8 +23,6 @@ module HtmlSelectorsHelper
       '#account_details'
     when 'the buyers submenu'
       '#submenu'
-    when 'the sidetabs', 'the side tabs'
-      '#side-tabs'
 
     when 'notification settings'
       'table.notification-settings tbody'
