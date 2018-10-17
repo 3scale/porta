@@ -54,7 +54,6 @@ ADD . ./
 ADD config/examples/*.yml config/
 # Needed for Sphinx ODBC
 ADD config/oracle/odbc*.ini /etc/
-COPY config/webpacker.ci.yml config/webpacker.yml
 
 ENTRYPOINT ["xvfb-run", "--server-args", "-screen 0 1280x1024x24"]
 CMD ["script/jenkins.sh"]
