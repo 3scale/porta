@@ -1,7 +1,7 @@
 class Api::TransactionsController < FrontendController
 
   before_action :ensure_provider_domain
-  activate_menu :monitoring, :traffic
+  activate_menu :applications, :traffic
   before_action :find_service
 
   skip_after_action :update_current_user_after_login
