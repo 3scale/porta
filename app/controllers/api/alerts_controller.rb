@@ -1,5 +1,5 @@
 class Api::AlertsController < FrontendController
-  activate_menu :monitoring, :analytics
+  activate_menu :serviceadmin, :monitoring, :alerts
 
   include SearchSupport
   include ThreeScale::Search::Helpers
