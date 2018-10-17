@@ -7,11 +7,7 @@ COMPOSE_PROJECT_NAME := $(PROJECT)
 COMPOSE_FILE := docker-compose.yml
 COMPOSE_TEST_FILE := docker-compose.test-$(DB).yml
 
-ifeq ($(CI),true)
 DOCKER_ENV = CI=true
-else
-DOCKER_ENV = CI=jenkins
-endif
 
 DOCKER_ENV += $(foreach env,$(JENKINS_ENV),$(env)=$(value $(env)))
 DOCKER_ENV += GIT_TIMESTAMP=$(shell git log -1 --pretty=format:%ct)

@@ -71,10 +71,10 @@ default: all
 ORACLE_DB_IMAGE := quay.io/3scale/oracle:12.2.0.1-ee
 
 include wget.mk
-ifndef CIRCLECI
-include docker-compose.mk
-else
+ifdef CI
 	include container.mk
+else
+	include docker-compose.mk
 endif
 include openshift.mk
 include dependencies.mk
