@@ -12,20 +12,18 @@ Feature: Multiservice feature
   Scenario: Can create new service setting
     Given I am logged in as provider "foo.example.com"
      And provider "foo.example.com" has "can create service" set to "true"
-    When I am on the provider dashboard page
-    Then I should see "Create Service"
-     And I should see "ID for API calls is"
-     And I should see "system name is"
+    When I am on the provider dashboard
+    Then I should see "New API"
 
   @javascript
   Scenario: Create new service
     Given I am logged in as provider "foo.example.com"
       And provider "foo.example.com" has "multiple_services" switch allowed
       And service discovery is not enabled
-    When I am on the provider dashboard page
-     And I follow "Create Service"
+    When I am on the provider dashboard
+     And I follow "New API"
      And I fill in "Name" with "Less fancy API"
-     And I press "Create Service"
+     And I press "Create"
     Then I should see "Less fancy API"
 
   Scenario: Edit service
@@ -33,10 +31,10 @@ Feature: Multiservice feature
       And I am on the edit page for service "Fancy API" of provider "foo.example.com"
     When I fill in "Name" with "Less fancy API"
      And I press "Update Service"
-     And I follow "Settings" within the side tabs
+     And I follow "Preferences" within the main menu
      And I uncheck "Developers can manage applications"
      And I press "Update Service"
-     And I follow "Less fancy API"
+     And I follow "Overview" in the main menu
     Then I should see "Less fancy API"
 
   @javascript
