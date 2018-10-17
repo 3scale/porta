@@ -4,8 +4,6 @@ export default function getActiveMenuTitle (activeMenu, currentApi) {
       return 'Dashboard'
 
     case 'personal':
-      return 'Personal Settings'
-
     case 'account':
       return 'Account'
 
@@ -14,6 +12,7 @@ export default function getActiveMenuTitle (activeMenu, currentApi) {
     case 'cms':
     case 'site':
     case 'settings':
+    case 'audience':
       return 'Audience'
 
     case 'applications':
