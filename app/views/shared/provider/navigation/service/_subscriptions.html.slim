@@ -1,24 +1,7 @@
-- title = 'Subscriptions'
-- path = '#'
-- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+= render vertical_nav_item,
+     title: 'Service Subscriptions',
+     path: admin_buyers_service_contracts_path(search: {service_id: @service.id})
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :subscriptions) ? 'active' : '')
-  = link_to '#' do
-    span.fa.fa-cubes
-    span.list-group-item-value
-      = title
-
-    div id="-secondary" class="nav-pf-secondary-nav"
-      div class="nav-item-pf-header"
-        a href="#0" class="secondary-collapse-toggle-pf"
-        span = title
-
-      ul class="list-group"
-
-        = render vertical_nav_item,
-             title: 'Service Subscriptions',
-             path: admin_buyers_service_contracts_path(search: {service_id: @service.id})
-
-        = render vertical_nav_item,
-             title: 'Service Plans',
-             path: admin_service_service_plans_path(@service)
+= render vertical_nav_item,
+     title: 'Service Plans',
+     path: admin_service_service_plans_path(@service)

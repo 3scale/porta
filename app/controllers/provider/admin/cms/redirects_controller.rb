@@ -1,7 +1,7 @@
 class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseController
 
   sublayout nil
-  activate_menu :cms, :redirects
+  activate_menu :audience, :cms, :redirects
 
   def index
     @redirects = redirects

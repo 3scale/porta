@@ -1,28 +1,11 @@
-- title = 'Integration'
-- path = '#'
-- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+= render vertical_nav_item,
+      title: 'Configuration',
+      path: path_to_service(@service)
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, title)  ? 'active' : '')
-  = link_to '#' do
-    span.fa.fa-wrench
-    span.list-group-item-value
-      = title
+= render vertical_nav_item,
+         title: 'Methods and Metrics',
+         path: admin_service_metrics_path(@service)
 
-    div id="-secondary" class="nav-pf-secondary-nav"
-      div class="nav-item-pf-header"
-        a href="#0" class="secondary-collapse-toggle-pf"
-        span = title
-
-      ul class="list-group"
-
-        = render vertical_nav_item,
-              title: 'Configuration',
-              path: path_to_service(@service)
-
-        = render vertical_nav_item,
-                 title: 'Methods and Metrics',
-                 path: admin_service_metrics_path(@service)
-
-        = render vertical_nav_item,
-             title: 'Preferences',
-             path: settings_admin_service_path(@service)
+= render vertical_nav_item,
+     title: 'Preferences',
+     path: settings_admin_service_path(@service)

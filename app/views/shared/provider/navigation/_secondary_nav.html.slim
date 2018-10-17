@@ -1,0 +1,13 @@
+li.list-group-item.secondary-nav-item-pf class=( active_submenu == submenu ? 'active' : '')
+  = link_to '#' do
+    span.fa.fa-fw class="fa-#{icon}"
+    span.list-group-item-value
+      = title
+    div id="-secondary" class="nav-pf-secondary-nav"
+      div class="nav-item-pf-header"
+        a href="#0" class="secondary-collapse-toggle-pf"
+        span
+          = title
+
+      ul class="list-group"
+        = yield

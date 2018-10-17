@@ -1,4 +1,5 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+- layout_secondary_nav = 'shared/provider/navigation/secondary_nav'
 
 nav.vertical-nav
   div.nav-pf-vertical.nav-pf-vertical-with-sub-menus
@@ -6,10 +7,14 @@ nav.vertical-nav
       - case active_menu
 
       - when :personal, :account
-        = render 'shared/provider/navigation/account/nav'
+        = render 'shared/provider/navigation/account/nav',
+                 vertical_nav_item: vertical_nav_item,
+                 layout_secondary_nav: layout_secondary_nav
 
       - when :buyers, :finance, :cms, :site, :settings, :audience
-        = render 'shared/provider/navigation/audience/nav'
+        = render 'shared/provider/navigation/audience/nav',
+                 vertical_nav_item: vertical_nav_item,
+                 layout_secondary_nav: layout_secondary_nav
 
       - when :applications, :active_docs
 
@@ -38,7 +43,9 @@ nav.vertical-nav
                   icon:  'play-circle'
 
       - when :serviceadmin, :monitoring
-        = render 'shared/provider/navigation/service/nav'
+        = render 'shared/provider/navigation/service/nav',
+                 vertical_nav_item: vertical_nav_item,
+                 layout_secondary_nav: layout_secondary_nav
 
 
   javascript:
