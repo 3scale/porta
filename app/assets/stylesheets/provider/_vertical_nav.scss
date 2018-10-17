@@ -96,7 +96,7 @@
     }
 
     .nav-pf-secondary-nav {
-      left: calc(#{line-height-times(5 / 2, true)} - 1px);
+      left: line-height-times(5 / 2, true);
     }
   }
 
@@ -130,7 +130,7 @@
     height: line-height-times(5 / 2, true);
     //line-height: line-height-times(1.0833333333);
     //padding: line-height-times(1) line-height-times(1) line-height-times(1) line-height-times(1);
-    padding: line-height-times(3 / 4) line-height-times(3 / 4);
+    padding: line-height-times(3 / 4) line-height-times(9 / 10);
     position: relative;
     white-space: nowrap;
     //width: line-height-times(9);
@@ -142,7 +142,7 @@
     float: left;
     //font-size: line-height-times(0.83);
     line-height: line-height-times(1);
-    margin-right: line-height-times(0.5);
+    margin-right: line-height-times(0.9);
     //text-align: center;
     //width: line-height-times(1);
   }
@@ -155,7 +155,7 @@
   .nav-pf-vertical .list-group-item > a:focus {
     background-color: #393f44;
     color: #fff;
-    font-weight: 600;
+    font-weight: 400;
   }
   .nav-pf-vertical .list-group-item.active > a .fa,
   .nav-pf-vertical .list-group-item:hover > a .fa,
@@ -186,12 +186,17 @@
   }
 
   &.hover-secondary-nav-pf {
-    width: line-height-times(16.67);
+    //width: line-height-times(17);
   }
 
   .secondary-nav-item-pf > a {
     cursor: default;
   }
+
+  &.collapsed .secondary-nav-item-pf > a:after {
+    display: none;
+  }
+
   .secondary-nav-item-pf > a:after {
     color: #72767b;
     content: "\f105";
@@ -199,7 +204,7 @@
     font-family: FontAwesome;
     //font-size: line-height-times(1);
     line-height: line-height-times(1.25);
-    padding: line-height-times(0.58) 0;
+    padding: line-height-times(0.5) 0;
     position: absolute;
     right: line-height-times(0.5);
     top: 0;
@@ -262,7 +267,6 @@
     height: inherit;
     padding: line-height-times(0.2) 0 line-height-times(0.1) 0;
     margin-left: line-height-times(1);
-    width: line-height-times(7.5);
   }
   .nav-pf-secondary-nav .list-group-item.active > a:before {
     display: none;
