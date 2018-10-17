@@ -111,7 +111,7 @@ schema: run
 test-run: # Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 test-run: $(DOCKER_COMPOSE) clean-tmp
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build $(DOCKER_ENV) build bash -c "$(CMD)"
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build $(DOCKER_ENV) build bash -c "cp config/examples/*.yml config/ && $(CMD)"
 
 test-with-info: $(DOCKER_COMPOSE) info
 	@echo
