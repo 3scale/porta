@@ -11,14 +11,14 @@ Feature: Services switch
     When I log in as provider "foo.example.com"
 
   Scenario: In denied state, I should see link to upgrade warning
-    Given I am on the provider dashboard page
-      And I follow "Create Service"
+    Given I am on the provider dashboard
+      And I follow "New API"
     Then I should be on the upgrade notice page for "multiple_services"
 
   Scenario: In allowed state (hidden and visible), I should have the functionality enabled
     Given provider "foo.example.com" has "multiple_services" switch allowed
-      And I am on the provider dashboard page
-      And I follow "Create Service"
+      And I am on the provider dashboard
+      And I follow "New API"
     Then I should be on the new service page
 
   Scenario: In allowed state (hidden and visible), I should be able to access the page by url
