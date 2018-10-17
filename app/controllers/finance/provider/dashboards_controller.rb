@@ -1,5 +1,5 @@
 class Finance::Provider::DashboardsController < Finance::Provider::BaseController
-  activate_menu :finance, :earnings
+  activate_menu :audience, :finance, :earnings
 
   def show
     rows = MonthlyRevenueQuery.new(current_account).with_states

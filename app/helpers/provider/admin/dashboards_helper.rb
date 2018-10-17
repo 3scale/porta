@@ -46,7 +46,7 @@ module Provider::Admin::DashboardsHelper
   end
 
   def show_forum_on_dashboard?
-    current_account.forum_enabled? && current_account.forum.topics.any?
+    current_account.forum_enabled? && current_account.forum.recent_topics.any?
   end
 
   def show_subscriptions_on_dashboard?(service)

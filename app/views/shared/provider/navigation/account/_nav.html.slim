@@ -1,0 +1,16 @@
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+
+= render 'shared/provider/navigation/account/personal'
+
+= render 'shared/provider/navigation/account/account'
+
+= render vertical_nav_item,
+     title: '3scale API Docs',
+     path: provider_admin_api_docs_path,
+     icon: 'file-text'
+
+= render vertical_nav_item,
+    title: 'Liquid Reference',
+    path: provider_admin_liquid_docs_path,
+    icon: 'file-text'
