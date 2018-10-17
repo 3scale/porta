@@ -31,7 +31,7 @@ header.Header id="user_widget" class=('Header--master' if current_account.master
           = fixed_width_icon_link_to "What's new?", 'leaf', '//access.redhat.com/articles/3107441#newfeaturesenhancements', class: 'PopNavigation-link', target: '_blank'
 
   .PopNavigation.PopNavigation--account
-    a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :account) || active_menu?(:main_menu, :settings)) href="#settings-menu"  title="Account and Personal Settings"
+    a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :account)) href="#settings-menu"  title="Account and Personal Settings"
       => icon('cog')
       => icon('bolt') if impersonating?
 
@@ -42,10 +42,6 @@ header.Header id="user_widget" class=('Header--master' if current_account.master
       - if can?(:manage, current_account)
         li.PopNavigation-listItem
           = fixed_width_icon_link_to 'Account', 'cogs', provider_admin_account_path, class: 'PopNavigation-link'
-      - if can? :manage, :settings
-        li.PopNavigation-listItem
-          = fixed_width_icon_link_to 'Preferences', 'sliders', edit_admin_site_usage_rules_path, class: 'PopNavigation-link'
-
 
       li.PopNavigation-listItem
         p.PopNavigation-info

@@ -26,6 +26,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def settings
+    activate_menu :serviceadmin, :integration, :settings
     @alert_limits = Alert::ALERT_LEVELS
   end
 

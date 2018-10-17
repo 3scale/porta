@@ -5,85 +5,11 @@ nav.vertical-nav
     ul.list-group
       - case active_menu
 
-      - when :personal
+      - when :personal, :account
+        = render 'shared/provider/navigation/account/nav'
 
-        - if can? :manage, current_user
-          = render vertical_nav_item,
-                   title: 'Personal Details',
-                   path:  edit_provider_admin_user_personal_details_path,
-                   icon: 'id-card'
-
-        = render vertical_nav_item,
-                 title: 'Tokens',
-                 path:  provider_admin_user_access_tokens_path,
-                 icon: 'key'
-
-        - if can? :show, current_user.notification_preferences
-          = render vertical_nav_item,
-                   title: 'Notification Preferences',
-                   path:  provider_admin_user_notification_preferences_path,
-                   icon: 'bullhorn'
-
-      - when :account
-
-        = render vertical_nav_item,
-                 title: 'Overview',
-                 path:  provider_admin_account_path,
-                 icon: 'plug'
-
-        - if can? :export, :data
-          = render vertical_nav_item,
-                 title: 'Export',
-                 path:  new_provider_admin_account_data_exports_path,
-                 icon: 'download'
-
-        - if (can? :update, :logo)
-          = render vertical_nav_item,
-                 title: 'Logo',
-                 path:  edit_provider_admin_account_logo_path,
-                 icon: 'picture-o'
-
-        - unless current_account.provider_can_use?(:new_notification_system)
-          = render vertical_nav_item,
-                 title: 'Notifications',
-                 path:  provider_admin_account_notifications_path,
-                 icon: 'bullhorn'
-
-        - if can?(:read, Invoice) && !ThreeScale.config.onpremises
-          = render vertical_nav_item,
-                 title: '3scale Invoices',
-                 path:  provider_admin_account_invoices_path,
-                 icon: 'list-alt'
-
-        - if can?(:manage, :credit_card) && !ThreeScale.config.onpremises
-          = render vertical_nav_item,
-                 title: 'Payment Details',
-                 path:  provider_admin_account_braintree_blue_path,
-                 icon: 'credit-card'
-
-        - if can?(:manage, User)
-          = render vertical_nav_item,
-                 title: 'Users',
-                 path:  provider_admin_account_users_path,
-                 icon: 'users'
-
-          - if can?(:manage, :multiple_users) && !current_account.settings.enforce_sso?
-            = render vertical_nav_item,
-                   title: 'Invitations',
-                   path:  provider_admin_account_invitations_path,
-                   icon: 'user-plus'
-
-          - if current_account.provider_can_use?(:provider_sso)
-            = render vertical_nav_item,
-                   title: 'SSO Integrations',
-                   path:  provider_admin_account_authentication_providers_path,
-                   icon: 'sign-in'
-
-      - when :buyers, :finance, :cms, :site
+      - when :buyers, :finance, :cms, :site, :settings, :audience
         = render 'shared/provider/navigation/audience/nav'
-
-      - when :settings
-        = render 'shared/provider/navigation/settings/nav'
 
       - when :applications, :active_docs
 

@@ -1,0 +1,23 @@
+- title = 'Applications'
+- path = '#'
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :applications) ? 'active' : '')
+  = link_to '#' do
+    span.fa.fa-cubes
+    span.list-group-item-value
+      = title
+
+    div id="-secondary" class="nav-pf-secondary-nav"
+      div class="nav-item-pf-header"
+        a href="#0" class="secondary-collapse-toggle-pf"
+        span = title
+
+      ul class="list-group"
+        = render vertical_nav_item,
+               title: 'Listing',
+               path: admin_service_applications_path(@service)
+
+        = render vertical_nav_item,
+            title: 'Application Plans',
+            path: admin_service_application_plans_path(@service)

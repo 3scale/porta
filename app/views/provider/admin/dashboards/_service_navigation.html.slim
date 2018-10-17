@@ -9,6 +9,12 @@ nav.DashboardNavigation
         i.fa.fa-map>
         | Overview
 
+    - if can?(:manage, :monitoring)
+      li.DashboardNavigation-list-item
+        = link_to admin_service_stats_usage_path(service), title: 'Analytics', class: "DashboardNavigation-link" do
+          i.fa.fa-bar-chart>
+          | Analytics
+
     - if service.cinstances.any?
       li.DashboardNavigation-list-item
         // Applications

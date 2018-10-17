@@ -4,7 +4,7 @@
 
 li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, title)  ? 'active' : '')
   = link_to '#' do
-    span.fa.fa-bar-chart
+    span.fa.fa-wrench
     span.list-group-item-value
       = title
 
@@ -17,10 +17,12 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, title)  
 
         = render vertical_nav_item,
               title: 'Configuration',
-              path: path_to_service(@service),
-              icon: 'hdd-o'
+              path: path_to_service(@service)
 
         = render vertical_nav_item,
-                 title: 'Methods & Metrics',
-                 path: admin_service_metrics_path(@service),
-                 icon: 'list-ul'
+                 title: 'Methods and Metrics',
+                 path: admin_service_metrics_path(@service)
+
+        = render vertical_nav_item,
+             title: 'Preferences',
+             path: settings_admin_service_path(@service)

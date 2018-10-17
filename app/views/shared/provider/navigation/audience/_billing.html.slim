@@ -2,7 +2,7 @@
 - path = '#'
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
-li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :finance) ? 'active' : '')
+li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :finance) ? 'active' : '')
   = link_to '#' do
     span.fa.fa-credit-card data-toggle="tooltip" title="" data-original-title=title
     span.list-group-item-value
@@ -27,3 +27,15 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:main_menu, :finan
           = render vertical_nav_item,
             title: 'Finance Log',
             path: admin_finance_log_entries_path
+
+        - if can?(:manage, :settings)
+          li.list-group-item
+            span.list-group-item-value.label Settings
+
+          = render vertical_nav_item,
+                  title: 'Charging & Gateway',
+                  path:  admin_finance_settings_path
+
+          = render vertical_nav_item,
+                  title: 'Credit Card Policies',
+                  path:  edit_admin_site_settings_path

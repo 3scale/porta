@@ -23,7 +23,7 @@ class Buyers::InvoicesController < Buyers::BaseController
       format.js   { flash.now[:notice] = 'Invoice successfully created.' }
       format.html do
         flash[:notice] = 'Invoice successfully created.'
-        redirect_to admin_buyers_account_invoices_path(@account) 
+        redirect_to admin_buyers_account_invoices_path(@account)
       end
     end
   end

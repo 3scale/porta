@@ -5,7 +5,7 @@ class Api::EndUsersController < Api::BaseController
   before_action :find_end_user, :only => [:show, :edit, :update, :destroy]
   before_action :find_plans, :only => [:new, :edit, :create, :update]
 
-  activate_menu :serviceadmin, :end_users
+  activate_menu :serviceadmin, :end_users, :search
   sublayout 'api/service'
 
   def index

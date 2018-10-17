@@ -39,7 +39,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
     @service_contracts = scope
 
-    activate_menu :serviceadmin, :service_plans if @service
+    activate_menu :serviceadmin, :subscriptions if @service
   end
 
   def new

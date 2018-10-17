@@ -1,6 +1,6 @@
 class Admin::FieldsDefinitionsController < Sites::BaseController
   respond_to :html
-  activate_menu :settings, :fields_definitions
+  activate_menu :audience, :accounts, :fields_definitions
 
   def index
     @possible_targets = FieldsDefinition.targets

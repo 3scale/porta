@@ -32,3 +32,11 @@ li.list-group-item.secondary-nav-item-pf class=( active_menu?(:submenu, :forum) 
           = render vertical_nav_item,
             title: 'My subscriptions',
             path:   forum_subscriptions_path
+
+        - if can?(:manage, :settings)
+          li.list-group-item
+            span.list-group-item-value.label
+
+          = render vertical_nav_item,
+               title: 'Preferences',
+               path: edit_admin_site_forum_path
