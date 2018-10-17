@@ -10,7 +10,7 @@ module HtmlSelectorsHelper
     when 'the main menu', :main_menu
        '#mainmenu'
     when 'the submenu', :submenu
-      '#second_nav'
+      '.secondary-nav-item-pf.is-hover'
     when 'the subsubmenu'
       '#subsubmenu'  # this is silly
     when 'the application service subsubmenu'
