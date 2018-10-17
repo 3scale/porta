@@ -41,7 +41,14 @@ restore-npm-cache: &restore-npm-cache
 #    keys:
 #      - v1-gateway-{{ arch }}-{{ .Branch }}-{{ .Revision }}
 
-
+rails-tests: &rails-tests
+  run:
+    name: Rails tests
+    command: |
+      TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
+      bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+    environment:
+      LC_ALL: en_US.UTF-8
 
 attach-to-workspace: &attach-to-workspace
   attach_workspace:
@@ -215,11 +222,7 @@ jobs:
           command: |
             cp config/examples/*.yml config/
             bundle exec rake db:create db:test:prepare
-      - run:
-          name: Rails tests
-          command: |
-            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+      - *rails-tests
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -245,13 +248,7 @@ jobs:
           command: |
             cp config/examples/*.yml config/
             bundle exec rake db:create db:test:prepare
-      - run:
-          name: Rails tests
-          command: |
-            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
-          environment:
-            LC_ALL: en_US.UTF-8
+      - *rails-tests
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -277,11 +274,7 @@ jobs:
           command: |
             cp config/examples/*.yml config/
             bundle exec rake db:create db:test:prepare
-      - run:
-          name: Rails tests
-          command: |
-            TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+      - *rails-tests
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
