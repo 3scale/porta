@@ -575,4 +575,17 @@ class ServiceTest < ActiveSupport::TestCase
 
     assert service.persisted?
   end
+
+  test '.permitted_for_user' do
+    FactoryGirl.create_list(:simple_service, 2)
+    user = User.new
+    member_permission_service_ids = [Service.last.id]
+    user.stubs(member_permission_service_ids: member_permission_service_ids)
+
+    user.stubs(forbidden_some_services?: false)
+    assert_same_elements Service.pluck(:id), Service.permitted_for_user(user).pluck(:id)
+
+    user.stubs(forbidden_some_services?: true)
+    assert_same_elements member_permission_service_ids, Service.permitted_for_user(user).pluck(:id)
+  end
 end
