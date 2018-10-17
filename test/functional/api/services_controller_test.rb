@@ -21,13 +21,6 @@ class Api::ServicesControllerTest < ActionController::TestCase
     assert_response 404
   end
 
-  def test_index
-    get :index
-
-    assert_equal 2, assigns(:services).count
-    assert_response 200
-  end
-
   def test_show
     get :show, id: @service.id
 
