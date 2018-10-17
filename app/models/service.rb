@@ -354,6 +354,12 @@ class Service < ApplicationRecord
       xml.state state
       xml.system_name system_name
       xml.backend_version proxy&.authentication_method
+      xml.description description
+
+      xml.deployment_option deployment_option
+      xml.support_email support_email
+      xml.tech_support_email tech_support_email
+      xml.admin_support_email admin_support_email
 
       xml.end_user_registration_required end_user_registration_required
 
