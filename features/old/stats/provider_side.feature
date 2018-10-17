@@ -16,12 +16,6 @@ Feature: Provider stats
     And I follow "Analytics"
     Then I should be on the provider stats usage page
 
-  Scenario: Stats access for multiservices
-    Given a service "Another one" of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
-    And I follow "Analytics"
-    Then I should be on the provider stats overview
-
   Scenario: Usage stats
     When I log in as provider "foo.example.com"
     And I follow "Analytics"
