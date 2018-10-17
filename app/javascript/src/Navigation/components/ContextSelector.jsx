@@ -62,14 +62,20 @@ class ContextSelector extends React.Component {
   renderOptions () {
     const { apis } = this.props
     const { filterQuery } = this.state
-    const displayedApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
-
-    return displayedApis.map(({ service }) => (
+    const filteredApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
+    const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a
-          className={this.getClassNamesFor({ api: service.id })} href={apiPathRoot(service.id)}>{service.name}</a>
+        <a className={this.getClassNamesFor({ api: service.id })} href={apiPathRoot(service.id)}>{service.name}</a>
       </li>
     ))
+
+    return (
+      <li className="PopNavigation-listItem">
+        <ul className="PopNavigation-results">
+          {displayedApis}
+        </ul>
+      </li>
+    )
   }
 
   render () {
