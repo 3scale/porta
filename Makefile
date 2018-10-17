@@ -58,7 +58,10 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 
 
 SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=production WEBPACKER_PRECOMPILE=false && bundle exec rake assets:precompile RAILS_GROUPS=assets RAILS_ENV=test WEBPACKER_PRECOMPILE=false
-SCRIPT_TEST = make dnsmasq_set && script/jenkins.sh || make dnsmasq_unset
+#SCRIPT_TEST = script/jenkins.sh
+SCRIPT_TEST = echo 'export TESTS=\\\"' > test_files && bundle exec rake test:files:unit >> test_files && echo '\\\"' >> test_files && source test_files && cat test_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
+SCRIPT_TEST = bundle exec rake test:run TESTS=\$(bundle exec rake test:files:unit) TESTOPTS=--verbose --verbose --trace
+#SCRIPT_TEST = bundle exec rake test:files:unit && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
 
 default: all
 
@@ -83,7 +86,7 @@ include dependencies.mk
 
 test: ## Runs tests inside container build environment
 test: CMD = $(SCRIPT_TEST)
-test: provision precompile-assets test-with-info
+test: init_db precompile-assets test-with-info
 
 jenkins-env: # Prints env vars
 	@echo
@@ -106,7 +109,7 @@ clean-tmp: ## Removes temporary files
 
 bash: ## Opens up shell to environment where tests can be ran
 bash: CMD = bundle exec bash
-bash: provision
+bash: init_db
 	$(MAKE) run CMD="${CMD}"
 
 boot_database:

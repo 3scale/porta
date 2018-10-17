@@ -64,7 +64,7 @@ clean: $(DOCKER_COMPOSE)
 	- $(DOCKER_COMPOSE) rm --force -v $(SERVICES)
 	- docker rm --force --volumes $(PROJECT)-build $(PROJECT)-build-run 2> /dev/null
 	- $(foreach service,$(SERVICES),docker rm --force --volumes $(PROJECT)-$(service) 2> /dev/null;)
-	- rm precompile-assets provision || true
+	- rm precompile-assets init_db || true
 
 
 docker: ## Prints docker version and info
@@ -115,13 +115,13 @@ schema: run
 test-run: # Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 test-run: $(DOCKER_COMPOSE) clean-tmp
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build $(DOCKER_ENV) build $(CMD)
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build $(DOCKER_ENV) build bash -c "$(CMD)"
 
 test-with-info: $(DOCKER_COMPOSE) info
 	@echo
 	@echo "======= Tests ======="
 	@echo
-	$(MAKE) test-run tmp-export --keep-going
+	$(MAKE) test-run tmp-export --keep-going CMD="${CMD}"
 
 tmp-export: # Copies files from inside docker container to local tmp folder.
 tmp-export: IMAGE ?= $(PROJECT)-build

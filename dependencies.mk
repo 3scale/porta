@@ -1,7 +1,7 @@
 SCRIPT_BUNDLER = bundle check --path=vendor/bundle || bundle install
 SCRIPT_NPM = yarn --version && yarn install --frozen-lockfile --link-duplicates && jspm -v && jspm install --quick || (jspm dl-loader && ${PROXY_ENV} jspm install --lock || ${PROXY_ENV} jspm install --force)
 SCRIPT_APICAST_DEPENDENCIES = cd vendor/docker-gateway && ls -al && make dependencies && cd ../../
-SCRIPT_PROVISION_DB = time bundle exec rake db:create db:test:load --verbose --trace
+SCRIPT_INIT_DB = time bundle exec rake db:create db:create db:test:prepare --verbose --trace
 
 bundle-info:
 
@@ -29,8 +29,8 @@ npm-install: package.json
 	@echo
 	$(MAKE) run CMD="${CMD}"
 
-provision: CMD = $(SCRIPT_PROVISION_DB)
-provision:
+init_db: CMD = $(SCRIPT_INIT_DB)
+init_db:
 	$(MAKE) bundle npm-install
 	$(MAKE) run CMD="${CMD}"
-	touch provision
+	touch init_db
