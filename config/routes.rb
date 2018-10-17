@@ -797,7 +797,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       resources :services, :only => [] do
         namespace :stats do
-          root :to => 'dashboards#show'
           get '/signups' => 'dashboards#signups', :as => :signups
           get 'usage' => 'usage#index', :as => :usage
           get 'usage/data/:metric_id' => 'usage#index_data', :as => :usage_data
