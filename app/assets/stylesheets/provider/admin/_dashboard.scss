@@ -19,6 +19,10 @@
     }
   }
 
+  &--services {
+    margin-top: line-height-times(1.4);
+  }
+
   &-title {
     text-transform: uppercase;
     font-size: $font-size-base;
@@ -347,7 +351,7 @@
   float: right;
 
   #api_filter + &--services {
-    margin-top: line-height-times(1/2);
+    margin-top: line-height-times(2/3);
   }
 
   &-list {
