@@ -483,8 +483,6 @@ module NavigationHelpers
     # Stats
     #
     # FIXME: this feels really wrong, passing default service
-    when 'the provider stats overview'
-      admin_stats_root_path
     when 'the provider stats usage page'
       admin_service_stats_usage_path provider_first_service!
     when 'the provider stats apps page'
