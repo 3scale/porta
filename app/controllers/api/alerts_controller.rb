@@ -7,6 +7,7 @@ class Api::AlertsController < FrontendController
   before_action :find_service
 
   def index
+    activate_menu :dashboard
     @search = ThreeScale::Search.new(search_params)
     @account_search = ThreeScale::Search.new(@search.account)
 
