@@ -74,17 +74,17 @@ it('should highlight the selected context', () => {
 })
 
 describe('When there is only 1 service', () => {
-  it('should not have a search field', () => {
+  beforeEach(() => {
     contextSelector = getWrapper(apis.slice(0, 1))
-    expect(contextSelector.props().apis).toHaveLength(1)
+    expect(contextSelector.props().apis.length).toEqual(1)
+  })
 
+  it('should not have a search field', () => {
+    expect(contextSelector.props().apis).toHaveLength(1)
     expect(contextSelector.find('input').exists()).toEqual(false)
   })
 
   it('should have the only api after Audience', () => {
-    contextSelector = getWrapper(apis.slice(0, 1))
-    expect(contextSelector.props().apis).toHaveLength(1)
-
     const api = contextSelector.find('#context-menu').childAt(2)
     expect(api.exists()).toEqual(true)
     expect(api.text()).toEqual('api 0')
@@ -92,6 +92,10 @@ describe('When there is only 1 service', () => {
 })
 
 describe('When there are many services', () => {
+  beforeEach(() => {
+    expect(contextSelector.props().apis.length).toBeGreaterThan(0)
+  })
+
   it('should have a search field after audience', () => {
     const searchField = contextSelector.find('#context-menu').childAt(2)
 
@@ -101,33 +105,31 @@ describe('When there are many services', () => {
   })
 
   it('should have a list of apis after the search field', () => {
-    expect(contextSelector.props().apis).toHaveLength(apis.length)
+    expect(contextSelector.find('#context-menu').childAt(3).find('.PopNavigation-results').exists())
+      .toEqual(true)
+  })
 
-    const apiList = contextSelector.find('#context-menu').children().slice(3)
+  it('should render all APIs when input is empty', () => {
+    const input = contextSelector.find('input')
+    expect(input.props().value).toBeUndefined
+
+    const apiList = contextSelector.find('.PopNavigation-results').children()
     expect(apiList).toHaveLength(apis.length)
     expect(apiList.containsAllMatchingElements(
       apis.map(api => <li><a>{api.service.name}</a></li>)
     )).toEqual(true)
   })
 
-  it('should render all APIs when input is empty', () => {
-    const input = contextSelector.find('input')
-    const apiList = contextSelector.find('#context-menu').children().slice(3)
-
-    expect(input.props().value).toBeUndefined
-    expect(apiList).toHaveLength(apis.length)
-  })
-
   it('should filter APIs by name', () => {
     const input = contextSelector.find('input')
 
     input.simulate('change', { target: { value: 'api' } })
-    expect(contextSelector.find('#context-menu').children().slice(3)).toHaveLength(3)
+    expect(contextSelector.find('.PopNavigation-results').children()).toHaveLength(3)
 
     input.simulate('change', { target: { value: 'api 1' } })
-    expect(contextSelector.find('#context-menu').children().slice(3)).toHaveLength(1)
+    expect(contextSelector.find('.PopNavigation-results').children()).toHaveLength(1)
 
     input.simulate('change', { target: { value: 'wubba lubba dub dub' } })
-    expect(contextSelector.find('#context-menu').children().slice(3)).toHaveLength(0)
+    expect(contextSelector.find('.PopNavigation-results').children()).toHaveLength(0)
   })
 })
