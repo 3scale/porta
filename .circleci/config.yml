@@ -173,8 +173,8 @@ jobs:
       - *upload-coverage
 
   unit:
-    parallelism: 1
-    resource_class: xlarge
+    parallelism: 8
+    resource_class: small
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -226,8 +226,8 @@ jobs:
 #      - *store-log-artifacts
 #      - *upload-coverage
   functional:
-    parallelism: 1
-    resource_class: xlarge
+    parallelism: 2
+    resource_class: small
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -283,8 +283,8 @@ jobs:
 #      - *store-log-artifacts
 #      - *upload-coverage
   integration:
-    parallelism: 1
-    resource_class: xlarge
+    parallelism: 8
+    resource_class: small
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -336,8 +336,8 @@ jobs:
 #      - *store-log-artifacts
 #      - *upload-coverage
   rspec:
-    parallelism: 1
-    resource_class: xlarge
+    parallelism: 3
+    resource_class: small
     docker:
       - *system-builder
       - image: circleci/mysql:5.7-ram
@@ -358,10 +358,38 @@ jobs:
       - *store-test-artifacts
       - *store-log-artifacts
       - *upload-coverage
-
+#  rspec:
+#    parallelism: 3
+#    resource_class: small
+#    docker:
+#      - *system-builder
+#      - image: circleci/mysql:5.7-ram
+#        environment:
+#          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#          MYSQL_ROOT_PASSWORD: ''
+#          MYSQL_DATABASE: circleci
+#      - image: memcached:1.5-alpine
+#      - image: redis:4.0-alpine
+#    steps:
+#      - checkout
+#      - *git-submodules
+#      - *attach-to-workspace
+#      - run:
+#          name: Prepare database & config files
+#          command: |
+#            cp config/examples/*.yml config/
+#            bundle exec rake db:create db:test:prepare
+#      - run:
+#          name: Rspec tests
+#          command: |
+#            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+#      - *store-junit-test-results
+#      - *store-test-artifacts
+#      - *store-log-artifacts
+#      - *upload-coverage
   cucumber:
-    parallelism: 1
-    resource_class: xlarge
+    parallelism: 20
+    resource_class: small
     docker:
       - *system-builder
       - image: quay.io/mikz/dnsmasq
@@ -389,7 +417,46 @@ jobs:
           path: tmp/capybara
           destination: capybara
       - *upload-coverage
-
+#  cucumber:
+#     parallelism: 20
+#     resource_class: small
+#     docker:
+#       - *system-builder
+#       - image: quay.io/mikz/dnsmasq
+#         command:
+#         - --no-poll
+#         - --address=/#/127.0.0.1
+#       - image: circleci/mysql:5.7-ram
+#         environment:
+#           MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#           MYSQL_ROOT_PASSWORD: ''
+#           MYSQL_DATABASE: circleci
+#       - image: memcached:1.5-alpine
+#       - image: redis:4.0-alpine
+#     steps:
+#       - checkout
+#       - *git-submodules
+#       - *attach-to-workspace
+#       - run:
+#           name: Prepare database
+#           command: |
+#             bundle exec rake db:create db:test:prepare
+#       - run:
+#           name: Disable internet access
+#           command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+#       - run:
+#           name: Run cucumber tests
+#           command: |
+#             TESTS=$(bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings)
+#             bundle exec cucumber --profile ci ${TESTS}
+#       - run:
+#           name: Enabled internet access
+#           command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+#           when: always
+#       - *store-junit-test-results
+#       - *store-test-artifacts
+#       - *store-log-artifacts
+#       - store_artifacts:
 workflows:
   version: 2
   parallel_build:
