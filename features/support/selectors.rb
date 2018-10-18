@@ -12,9 +12,7 @@ module HtmlSelectorsHelper
     when 'the submenu', :submenu
       '.secondary-nav-item-pf.is-hover'
     when 'the subsubmenu'
-      '#subsubmenu'  # this is silly
-    when 'the application service subsubmenu'
-      '.subsubmenu'
+      '.secondary-nav-item-pf.active'
     when 'the user widget'
       '#user_widget'
     when 'the footer'
