@@ -1,5 +1,5 @@
-import PolicyConfigReducer from '../reducers/PolicyConfig'
-import { initialState } from './initialState'
+import PolicyConfigReducer from 'Policies/reducers/PolicyConfig'
+import { initialState } from 'Policies/reducers/initialState'
 
 const schema = {
   properties: {

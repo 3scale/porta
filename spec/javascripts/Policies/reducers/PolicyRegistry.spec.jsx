@@ -1,4 +1,4 @@
-import RegistryReducer from '../reducers/PolicyRegistry'
+import RegistryReducer from 'Policies/reducers/PolicyRegistry'
 
 const rawRegistry = {
   cors: [{
