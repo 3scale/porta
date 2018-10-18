@@ -467,6 +467,15 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
+    when 'the spam protection page'
+      edit_admin_site_spam_protection_path
+
+    when 'the xss protection page'
+      edit_admin_site_developer_portal_path
+
+    when 'the feature visibility page'
+      provider_admin_cms_switches_path
+
     when 'the fields definitions index page'
       admin_fields_definitions_path
 

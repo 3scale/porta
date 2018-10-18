@@ -1,19 +1,20 @@
-= render vertical_nav_item,
-       title: 'Content',
-       path: provider_admin_cms_templates_path
+- if can?(:manage, :portal)
+  = render vertical_nav_item,
+         title: 'Content',
+         path: provider_admin_cms_templates_path
 
-= render vertical_nav_item,
-      title: pluralize(number_to_human(current_account.templates.with_draft.size), 'Draft'),
-      path: provider_admin_cms_changes_path
+  = render vertical_nav_item,
+        title: pluralize(number_to_human(current_account.templates.with_draft.size), 'Draft'),
+        path: provider_admin_cms_changes_path
 
-= render vertical_nav_item,
-      title: 'Redirects',
-      path: provider_admin_cms_redirects_path
+  = render vertical_nav_item,
+        title: 'Redirects',
+        path: provider_admin_cms_redirects_path
 
-= render vertical_nav_item,
-      title: 'Groups',
-      path: provider_admin_cms_groups_path
-      // switch: :groups, upgrade_notice: true
+  = render vertical_nav_item,
+        title: 'Groups',
+        path: provider_admin_cms_groups_path
+        // switch: :groups, upgrade_notice: true
 
 - unless current_account.master?
   li.list-group-item
@@ -31,28 +32,29 @@ span.list-group-item-value.label
    title: 'Liquid Reference',
    path: provider_admin_liquid_docs_path
 
-li.list-group-item
- span.list-group-item-value.label Legal
-
-= render vertical_nav_item,
-    title: 'Sign-up',
-    path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
-
-= render vertical_nav_item,
-    title: 'Service Subscription',
-    path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)
-
-= render vertical_nav_item,
-    title: 'New Application',
-    path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
-
-- if can?(:manage, :settings)
+- if can?(:manage, :portal)
   li.list-group-item
-   span.list-group-item-value.label Settings
+   span.list-group-item-value.label Legal
+
+  = render vertical_nav_item,
+      title: 'Sign-up',
+      path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
+
+  = render vertical_nav_item,
+      title: 'Service Subscription',
+      path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)
+
+  = render vertical_nav_item,
+      title: 'New Application',
+      path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
 
   = render vertical_nav_item,
        title: 'Feature Visibility',
        path: provider_admin_cms_switches_path
+       
+- if can?(:manage, :settings)
+  li.list-group-item
+   span.list-group-item-value.label Settings
 
   = render vertical_nav_item,
        title: 'Domains & Access',

@@ -1,15 +1,16 @@
-= render vertical_nav_item,
-   title: 'Earnings by Month',
-   path: admin_finance_root_path
-
-= render vertical_nav_item,
-  title: 'Invoices',
-  path: admin_finance_invoices_path
-
-- if current_user.username == ThreeScale.config.impersonation_admin['username']
+- if can?(:manage, :finance)
   = render vertical_nav_item,
-    title: 'Finance Log',
-    path: admin_finance_log_entries_path
+     title: 'Earnings by Month',
+     path: admin_finance_root_path
+
+  = render vertical_nav_item,
+    title: 'Invoices',
+    path: admin_finance_invoices_path
+
+  - if current_user.username == ThreeScale.config.impersonation_admin['username']
+    = render vertical_nav_item,
+      title: 'Finance Log',
+      path: admin_finance_log_entries_path
 
 - if can?(:manage, :settings)
   li.list-group-item
