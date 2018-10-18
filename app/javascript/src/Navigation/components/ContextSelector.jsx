@@ -10,7 +10,6 @@ import getActiveMenuTitle from '../utils/getActiveMenuTitle'
 import '../styles/ContextSelector.scss'
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
-const AUDIENCE_PATH = '/buyers/accounts'
 
 const apiPathRoot = apiId => `/apiconfig/services/${apiId}`
 
@@ -84,7 +83,7 @@ class ContextSelector extends React.Component {
   }
 
   render () {
-    const { currentApi, activeMenu } = this.props
+    const { currentApi, activeMenu, audiencePath } = this.props
 
     return (
       <div className="PopNavigation PopNavigation--context">
@@ -96,7 +95,7 @@ class ContextSelector extends React.Component {
             <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>Dashboard</a>
           </li>
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'audience' })} href={AUDIENCE_PATH}>Audience</a>
+            <a className={this.getClassNamesFor({ menu: 'audience' })} href={audiencePath}>Audience</a>
           </li>
           {this.renderInput()}
           {this.renderOptions()}
