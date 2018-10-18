@@ -14,7 +14,7 @@ Feature: Provider settings authorization
 
     When I go to the provider dashboard
 
-    Then I should see the link "<link>"
+    Then I should see the link "<link>" in the audience dashboard widget
     And I follow "<link>"
     When I go to the <page> page
     Then I should be on the <page> page
