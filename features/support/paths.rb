@@ -225,11 +225,8 @@ World(Module.new do
       active_doc = ApiDocs::Service.find_by_system_name $1
       admin_api_docs_service_path active_doc.system_name, format: :json
 
-    when 'the API dashboard'
-      admin_apiconfig_root_path
-
-    when 'the API dashboard page'
-      admin_apiconfig_root_path
+    when /(the )?API dashboard( page)?/
+      admin_service_path provider_first_service!
 
     when 'the API alerts page'
       admin_alerts_path
