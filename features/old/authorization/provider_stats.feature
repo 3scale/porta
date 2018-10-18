@@ -15,7 +15,7 @@ Feature: Provider stats section authorization
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
     When I go to the provider dashboard
-    Then I should see the link "Analytics"
+    Then I should see the link "Analytics" in the apis dashboard widget
     When I follow "Analytics"
     Then I should see the link "Analytics" in the main menu
 
@@ -35,7 +35,7 @@ Feature: Provider stats section authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-    Then I should not see the link "Analytics"
+    Then I should not see the link "Analytics" in the apis dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
   Examples:
@@ -52,7 +52,7 @@ Feature: Provider stats section authorization
      And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "member"
      And I go to the provider dashboard
-    Then I should see "Analytics"
+    Then I should see "Analytics" in the apis dashboard widget
     When I follow "Analytics"
     Then I should see the link "Analytics" in the main menu
 
