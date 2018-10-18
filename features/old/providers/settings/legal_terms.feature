@@ -11,12 +11,13 @@ Feature: Legal terms settings
 
   Scenario: Signup Licence
     When I go to the legal terms settings page
-     And I choose "Signup" in the sidebar
+     And I follow "Portal" in the main menu
+     And I follow "Sign-up" in the subsubmenu
      And I fill in draft with:
         """
         <b>Ich war hier, Fantomas.</b>
         """
-    And I press "Update legal terms for Signup"
+    And I press "Update"
     When the current domain is "foo.example.com"
      And I go to the signup page
      Then I should see "Ich war hier, Fantomas."
@@ -25,7 +26,8 @@ Feature: Legal terms settings
   Scenario Outline: Legal Terms settings
    Given provider "foo.example.com" has "multiple_services" switch allowed
      And I go to the legal terms settings page
-     And I choose "<legal_term>" in the sidebar
+     And I follow "Portal" in the main menu
+     And I choose "<legal_term>" in the subsubmenu
      And I fill in draft with:
         """
         <b>Ich war hier, Fantomas.</b>
