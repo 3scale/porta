@@ -5,7 +5,7 @@ When /^I navigate to the sent invitations page$/ do
 end
 
 When /^I navigate to the page of the partner "([^\"]*)"$/ do |partner|
-  click_link(text: /\A\d Accounts?\z/)
+  step 'I navigate to the accounts page'
   click_link partner
 end
 
