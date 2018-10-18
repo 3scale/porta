@@ -19,8 +19,8 @@ When /^I navigate to a topic in (the forum of "[^\"]*")$/ do |forum|
 end
 
 When /^I navigate to the forum admin page$/ do
-  click_link(:text => /\ADevelopers|Tenants\z/)
-  click_link 'Forum'
+  click_link 'Messages'
+  click_link 'Threads'
 end
 
 When /^I navigate to the forum categories admin page$/ do

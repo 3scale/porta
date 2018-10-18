@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Provider::Admin::AuthenticationProvidersController < FrontendController
+  before_action :authorize_settings
+
   activate_menu :audience, :cms, :oauth2
   sublayout 'sites/developer_portals'
 
@@ -102,5 +104,11 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   def create_params
     permitted_params = UPDATE_PARAMS + %i[name system_name kind published]
     params.require(:authentication_provider).permit(permitted_params)
+  end
+
+  protected
+
+  def authorize_settings
+    authorize! :manage, :settings
   end
 end
