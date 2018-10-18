@@ -50,16 +50,46 @@ nav.vertical-nav#mainmenu
 
   javascript:
     var nav = document.querySelector('.vertical-nav'),
-    navItem = document.querySelectorAll('.secondary-nav-item-pf');
-    for (var i = 0; i < navItem.length; i++) {
-      navItem[i].addEventListener('mouseover', function() {
-        this.classList.add('is-hover');
-        nav.classList.add('hover-secondary-nav-pf');
-      });
-      navItem[i].addEventListener('mouseout', function() {
-        this.classList.remove('is-hover');
-        nav.classList.remove('hover-secondary-nav-pf');
-      });
+    navItems = document.querySelectorAll('.secondary-nav-item-pf');
+    var itemFlaggedToShow = null
+    var itemFlaggedToHide = null
+
+    for (var i = 0; i < navItems.length; i++) {
+      var navItem = navItems[i]
+
+      var makeFlagItemToShow = function(me) {
+        return function() {
+          itemFlaggedToShow = me
+          setTimeout(function() {
+            if (itemFlaggedToShow === me) {
+              navItems[me].classList.add('is-hover');
+              nav.classList.add('hover-secondary-nav-pf');
+              itemFlaggedToShow = null
+
+              if (itemFlaggedToHide !== me && itemFlaggedToHide !== null) {
+                navItems[itemFlaggedToHide].classList.remove('is-hover');
+                itemFlaggedToHide = null
+              }
+            }
+          }, 250)
+        }
+      }
+
+      var makeFlagItemToHide = function(me) {
+        return function() {
+          itemFlaggedToHide = me
+          setTimeout(function() {
+            if (itemFlaggedToShow === null) {
+              navItems[me].classList.remove('is-hover');
+              nav.classList.remove('hover-secondary-nav-pf');
+              itemFlaggedToHide = null
+            }
+          }, 250)
+        }
+      }
+
+      navItem.addEventListener('mouseenter', makeFlagItemToShow(i));
+      navItem.addEventListener('mouseleave', makeFlagItemToHide(i));
     }
 
     var store = window.localStorage
