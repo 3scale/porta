@@ -51,37 +51,45 @@ nav.vertical-nav#mainmenu
   javascript:
     var nav = document.querySelector('.vertical-nav'),
     navItems = document.querySelectorAll('.secondary-nav-item-pf');
-    var navItemHover = null
+    var itemFlaggedToShow = null
+    var itemFlaggedToHide = null
 
     for (var i = 0; i < navItems.length; i++) {
       var navItem = navItems[i]
 
-      var makeDelayedShowOnHover = function(item, index) {
+      var makeFlagItemToShow = function(me) {
         return function() {
-          navItemHover = index
+          itemFlaggedToShow = me
           setTimeout(function() {
-            if (index === navItemHover) {
-              item.classList.add('is-hover');
+            if (itemFlaggedToShow === me) {
+              navItems[me].classList.add('is-hover');
               nav.classList.add('hover-secondary-nav-pf');
+              itemFlaggedToShow = null
+
+              if (itemFlaggedToHide !== me && itemFlaggedToHide !== null) {
+                navItems[itemFlaggedToHide].classList.remove('is-hover');
+                itemFlaggedToHide = null
+              }
             }
           }, 250)
         }
       }
 
-      var makeDelayedHideOnHover = function(item, index) {
+      var makeFlagItemToHide = function(me) {
         return function() {
-          navItemHover = null
+          itemFlaggedToHide = me
           setTimeout(function() {
-            if (index !== navItemHover) {
-              item.classList.remove('is-hover');
+            if (itemFlaggedToShow === null) {
+              navItems[me].classList.remove('is-hover');
               nav.classList.remove('hover-secondary-nav-pf');
+              itemFlaggedToHide = null
             }
           }, 250)
         }
       }
 
-      navItem.addEventListener('mouseenter', makeDelayedShowOnHover(navItem, i));
-      navItem.addEventListener('mouseleave', makeDelayedHideOnHover(navItem, i));
+      navItem.addEventListener('mouseenter', makeFlagItemToShow(i));
+      navItem.addEventListener('mouseleave', makeFlagItemToHide(i));
     }
 
     var store = window.localStorage
