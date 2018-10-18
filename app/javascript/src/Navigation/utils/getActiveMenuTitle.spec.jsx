@@ -1,16 +1,17 @@
 import getActiveMenuTitle from './getActiveMenuTitle'
 
 it('should return the proper title depending on the current menu', () => {
-  expect(getActiveMenuTitle('personal')).toEqual('Personal Settings')
+  expect(getActiveMenuTitle('dashboard')).toEqual('Dashboard')
 
+  expect(getActiveMenuTitle('personal')).toEqual('Account')
   expect(getActiveMenuTitle('account')).toEqual('Account')
 
   expect(getActiveMenuTitle('buyers')).toEqual('Audience')
   expect(getActiveMenuTitle('finance')).toEqual('Audience')
   expect(getActiveMenuTitle('cms')).toEqual('Audience')
   expect(getActiveMenuTitle('site')).toEqual('Audience')
-
-  expect(getActiveMenuTitle('settings')).toEqual('Preferences')
+  expect(getActiveMenuTitle('settings')).toEqual('Audience')
+  expect(getActiveMenuTitle('audience')).toEqual('Audience')
 
   expect(getActiveMenuTitle('applications')).toEqual('All APIs')
   expect(getActiveMenuTitle('active_docs')).toEqual('All APIs')
