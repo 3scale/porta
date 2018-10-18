@@ -234,8 +234,7 @@ end
 [ 'the audience dashboard widget', 'the apis dashboard widget',
   'the main menu', 'the submenu',
   'the subsubmenu','the user widget',
-  'the footer', 'the account details box',
-  'the buyers submenu' ].each do |scope|
+  'the footer', 'the account details box' ].each do |scope|
   When /^(.*) in (#{scope})$/ do |lstep, scope|
     within(*selector_for(scope)) do
       step lstep
