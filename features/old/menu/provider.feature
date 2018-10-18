@@ -201,5 +201,5 @@ Feature: Menu
      When I follow "Accounts"
       And I follow "bob"
       And I follow "More details" in the applications widget
-      And I follow "Stats" in the subsubmenu
+      And I follow "Stats"
      Then I should see "Usage"
