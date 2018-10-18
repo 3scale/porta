@@ -23,8 +23,6 @@ module HtmlSelectorsHelper
       '#footer'
     when 'the account details box'
       '#account_details'
-    when 'the buyers submenu'
-      '#submenu'
 
     when 'notification settings'
       'table.notification-settings tbody'
