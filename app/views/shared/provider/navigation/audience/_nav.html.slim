@@ -1,6 +1,6 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
-- if can? :manage, :partners
+- if can? :manage, :partners || can?(:manage, :settings)
   = render partial: 'shared/provider/navigation/audience/accounts',
            layout: layout_secondary_nav,
            locals: { title: 'Accounts',
@@ -17,7 +17,7 @@
        icon: 'paperclip'
        //admin_buyers_accounts_path(search: {state: 'pending'}),
 
-- if can?(:manage, :finance)
+- if can?(:manage, :finance) || can?(:manage, :settings)
   = render partial: 'shared/provider/navigation/audience/billing',
            layout: layout_secondary_nav,
            locals: { title: 'Billing',
@@ -26,7 +26,7 @@
                      submenu: :finance }
   //main_menu_item :finance, 'Billing', admin_finance_root_path, :switch => :finance, :upgrade_notice => !master_on_premises?
 
-- if can?(:manage, :portal)
+- if can?(:manage, :portal) || can?(:manage, :settings)
   = render partial: 'shared/provider/navigation/audience/portal',
            layout: layout_secondary_nav,
            locals: { title: 'Portal',
