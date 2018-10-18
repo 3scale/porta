@@ -1,5 +1,5 @@
-import { policyChainMiddleware } from './PolicyChain'
-import { loadChainError, updatePolicyChain } from '../actions/PolicyChain'
+import { policyChainMiddleware } from 'Policies/middleware/PolicyChain'
+import { loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
 
 const create = () => {
   const registry = [

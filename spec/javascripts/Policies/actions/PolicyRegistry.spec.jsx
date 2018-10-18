@@ -1,4 +1,4 @@
-import { fetchRegistry } from './PolicyRegistry'
+import { fetchRegistry } from 'Policies/actions/PolicyRegistry'
 
 describe('Policy Registry Actions', () => {
   it('should create an action to use the redux api middleware', () => {

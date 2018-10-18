@@ -1,4 +1,4 @@
-import { fetchChain } from './PolicyChain'
+import { fetchChain } from 'Policies/actions/PolicyChain'
 
 describe('Policy Chain Actions', () => {
   it('should create an action to use the redux api middleware', () => {
