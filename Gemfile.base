@@ -201,7 +201,7 @@ gem 'mail_view', '~> 2.0.4'
 gem 'dynamic_form'
 
 group :test do
-  gem 'codeclimate_rails', path: 'vendor/codeclimate_rails'
+  gem 'codecov', '~> 0.1.10', :require => false
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'simplecov', '~> 0.10.0'
 
