@@ -45,10 +45,6 @@ def default_plan
   find(:css, "select#default_plan")
 end
 
-def main_menu
-  find(:css, '#tabs')
-end
-
 def new_application_plan_form
   find(:css, '#new_application_plan')
 end
@@ -56,10 +52,7 @@ end
 When(/^the provider creates a plan$/) do
   name = SecureRandom.hex(10)
 
-  within main_menu do
-    page.click_on 'API'
-  end
-
+  page.click_on 'Application Plans'
   page.click_on 'Create Application Plan'
 
   within new_application_plan_form do
