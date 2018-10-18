@@ -7,7 +7,10 @@ section.Configuration.Configuration--is-promoted class="Configuration--#{@show_p
 
     dl.u-dl
       dt.u-dl-term Private Base URL
-      dd.u-dl-definition = @proxy.api_backend
+      dd.u-dl-definition
+        = @proxy.api_backend
+        - if ThreeScale.config.service_discovery.enabled && @service.discovered?
+          = refresh_service_link(@service, label: 'refresh')
       dt.u-dl-term Mapping rules
       dd.u-dl-definition
         - if (last_rule = @proxy.proxy_rules.last)
