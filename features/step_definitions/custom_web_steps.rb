@@ -231,7 +231,8 @@ When /^(.*) within ([^:"]+)$/ do |lstep, scope|
   end
 end
 
-[ 'the main menu', 'the submenu',
+[ 'the audience dashboard widget', 'the apis dashboard widget',
+  'the main menu', 'the submenu',
   'the subsubmenu','the user widget',
   'the footer', 'the account details box',
   'the buyers submenu' ].each do |scope|

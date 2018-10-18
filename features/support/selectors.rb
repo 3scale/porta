@@ -9,6 +9,10 @@ module HtmlSelectorsHelper
       '#content'
     when 'the main menu', :main_menu
        '#mainmenu'
+    when 'the audience dashboard widget'
+      '#audience'
+    when 'the apis dashboard widget'
+      '#apis'
     when 'the submenu', :submenu
       '.secondary-nav-item-pf.is-hover'
     when 'the subsubmenu'
