@@ -18,7 +18,7 @@ Feature: Applications management
   Scenario: No applications
     Given buyer "bob" has no applications
     And I go to the buyer account page for "bob"
-    Then I should see "0 Applications" in the subsubmenu
+    Then I should see "0 Applications"
 
   Scenario: Application details
     Given buyer "bob" has application "FunkyWidget" with description "Widget for some funky stuff"
@@ -28,7 +28,6 @@ Feature: Applications management
     And I should see "FunkyWidget" in a header
     And I should see "Widget for some funky stuff"
 
-  @javascript
   Scenario: Delete application
     Given buyer "bob" has application "FunkyWidget" with description "Widget for some funky stuff"
     And there are no events
@@ -41,20 +40,18 @@ Feature: Applications management
     And I should not see "FunkyWidget"
     And there should be 1 valid cinstance cancellation event
 
-  @search
   Scenario: List all applications of buyer
     Given buyer "bob" has application "SimpleApp"
     Given buyer "bob" has application "ComplicatedApp"
      And I go to the buyer account page for "bob"
-    Then I should see "2 Applications" in the subsubmenu
-    When I follow "Applications" in the subsubmenu
+    Then I should see "2 Applications"
+    When I follow "Applications"
     And I follow "Name"
     Then I should see following table:
       | Name ▲         | State |
       | ComplicatedApp | live  |
       | SimpleApp      | live  |
 
-  @javascript
   Scenario: Suspend an application
     Given buyer "bob" has application "MegaWidget"
     And I go to the provider side "MegaWidget" application page
@@ -63,7 +60,6 @@ Feature: Applications management
     Then I should see that application "MegaWidget" is suspended
     And application "MegaWidget" should be suspended
 
-  @javascript
   Scenario: Resume an application
     Given buyer "bob" has application "MegaWidget"
     And application "MegaWidget" is suspended
