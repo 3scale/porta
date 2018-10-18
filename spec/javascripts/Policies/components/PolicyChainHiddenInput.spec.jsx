@@ -1,7 +1,7 @@
 import React from 'react'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { PolicyChainHiddenInput } from './PolicyChainHiddenInput'
+import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
 
 Enzyme.configure({ adapter: new Adapter() })
 

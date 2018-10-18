@@ -1,5 +1,5 @@
-import UISettingsReducer from '../reducers/UISettings'
-import { initialState } from './initialState'
+import UISettingsReducer from 'Policies/reducers/UISettings'
+import { initialState } from 'Policies/reducers/initialState'
 
 describe('UISettingsReducer', () => {
   it('should return the initial state', () => {
