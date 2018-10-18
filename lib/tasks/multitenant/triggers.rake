@@ -408,6 +408,12 @@ namespace :multitenant do
       triggers << System::Database::OracleTrigger.new('sso_authorizations', <<-SQL)
         SELECT tenant_id INTO :new.tenant_id FROM users WHERE id = :new.user_id AND tenant_id <> master_id;
       SQL
+
+      triggers << System::Database::OracleTrigger.new('provided_access_tokens', <<~SQL)
+        IF :new.account_id <> master_id THEN
+          :new.tenant_id := :new.account_id;
+        END IF;
+      SQL
     end
 
     task :mysql do
@@ -785,6 +791,12 @@ namespace :multitenant do
       triggers << System::Database::MySQLTrigger.new('sso_authorizations', <<-SQL)
         SET NEW.tenant_id = (SELECT tenant_id FROM users WHERE id = NEW.user_id AND tenant_id <> master_id);
       SQL
+
+      triggers << System::Database::MySQLTrigger.new('provided_access_tokens', <<-SQL)
+        IF NEW.account_id <> master_id THEN
+          SET NEW.tenant_id = NEW.account_id;
+        END IF;
+      SQL
     end
 
     task :load_triggers do
@@ -889,7 +901,7 @@ namespace :multitenant do
     PaymentGatewaySetting.update_all "tenant_id = account_id WHERE account_id <> #{MASTER_ID}"
     ServiceToken.update_all "tenant_id = (SELECT tenant_id FROM services WHERE id = service_id AND tenant_id <> #{MASTER_ID})"
     SSOAuthorization.update_all "tenant_id = (SELECT tenant_id FROM users WHERE id = user_id AND tenant_id <> #{MASTER_ID})"
-
+    ProvidedAccessToken.update_all "tenant_id = account_id WHERE account_id <> #{MASTER_ID}"
   end
 end
 
