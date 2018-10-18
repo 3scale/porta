@@ -11,8 +11,6 @@ import '../styles/ContextSelector.scss'
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const apiPathRoot = apiId => `/apiconfig/services/${apiId}`
-
 class ContextSelector extends React.Component {
 
   constructor (props) {
@@ -59,7 +57,7 @@ class ContextSelector extends React.Component {
   }
 
   renderOptions () {
-    const { apis } = this.props
+    const { apis, apisLink } = this.props
     const { filterQuery } = this.state
     const filteredApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
 
@@ -69,7 +67,12 @@ class ContextSelector extends React.Component {
 
     const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesFor({ api: service.id })} href={apiPathRoot(service.id)}>{service.name}</a>
+        <a
+          className={this.getClassNamesFor({ api: service.id })}
+          href={apisLink.replace('1', service.id)}
+        >
+          {service.name}
+        </a>
       </li>
     ))
 
