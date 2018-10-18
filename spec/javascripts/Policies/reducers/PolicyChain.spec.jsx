@@ -1,4 +1,4 @@
-import ChainReducer from '../reducers/PolicyChain'
+import ChainReducer from 'Policies/reducers/PolicyChain'
 
 const headersChainPolicy = {humanName: 'Headers', name: 'headers', description: 'Headers', version: '1.0.0', configuration: {}, enabled: true, id: '666'}
 const corsChainPolicy = {humanName: 'CORS', name: 'cors', description: 'CORS', version: '1.0.0', configuration: {}, enabled: true, id: '007'}
