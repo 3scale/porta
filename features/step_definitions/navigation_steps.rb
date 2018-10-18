@@ -10,7 +10,7 @@ When /^I navigate to the page of the partner "([^\"]*)"$/ do |partner|
 end
 
 When 'I navigate to the accounts page' do
-  click_link "Accounts"
+  click_link(text: /\A\d Accounts?\z/)
 end
 
 When /^I navigate to a topic in (the forum of "[^\"]*")$/ do |forum|
