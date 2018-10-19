@@ -8,15 +8,6 @@
                      vertical_nav_item: vertical_nav_item,
                      submenu: :accounts }
 
-
-/- if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
-  //- if current_account.service_plans.pending.exists?
-  = render vertical_nav_item,
-       title: 'Subscriptions',
-       path: admin_buyers_service_contracts_path(search: {state: 'pending'}),
-       icon: 'paperclip'
-       //admin_buyers_accounts_path(search: {state: 'pending'}),
-
 - if can?(:manage, :finance) || can?(:manage, :settings)
   = render partial: 'shared/provider/navigation/audience/billing',
            layout: layout_secondary_nav,
