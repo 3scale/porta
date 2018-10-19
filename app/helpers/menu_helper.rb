@@ -97,6 +97,8 @@ module MenuHelper
       provider_admin_cms_templates_path
     elsif can?(:manage, :settings)
       edit_admin_site_usage_rules_path
+    else
+      '#'
     end
   end
 
