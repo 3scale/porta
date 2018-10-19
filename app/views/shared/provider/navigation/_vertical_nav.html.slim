@@ -51,45 +51,54 @@ nav.vertical-nav#mainmenu
   javascript:
     var nav = document.querySelector('.vertical-nav'),
     navItems = document.querySelectorAll('.secondary-nav-item-pf');
-    var itemFlaggedToShow = null
-    var itemFlaggedToHide = null
+
+    var itemVisible = null
+    var showDelay = null
+    var hideAllDelay = null
 
     for (var i = 0; i < navItems.length; i++) {
       var navItem = navItems[i]
 
       var makeFlagItemToShow = function(me) {
         return function() {
-          itemFlaggedToShow = me
-          setTimeout(function() {
-            if (itemFlaggedToShow === me) {
-              navItems[me].classList.add('is-hover');
-              nav.classList.add('hover-secondary-nav-pf');
-              itemFlaggedToShow = null
+          clearTimeout(hideAllDelay)
 
-              if (itemFlaggedToHide !== me && itemFlaggedToHide !== null) {
-                navItems[itemFlaggedToHide].classList.remove('is-hover');
-                itemFlaggedToHide = null
-              }
+          if (itemVisible === me) {
+            return
+          }
+
+          showDelay = setTimeout(function() {
+            nav.classList.add('hover-secondary-nav-pf');
+            navItems[me].classList.add('is-hover');
+
+            if (itemVisible) {
+              navItems[itemVisible].classList.remove('is-hover');
             }
+            
+            itemVisible = me
           }, 250)
         }
       }
 
-      var makeFlagItemToHide = function(me) {
+      var makeFlagToHideAll = function(me) {
         return function() {
-          itemFlaggedToHide = me
-          setTimeout(function() {
-            if (itemFlaggedToShow === null) {
-              navItems[me].classList.remove('is-hover');
-              nav.classList.remove('hover-secondary-nav-pf');
-              itemFlaggedToHide = null
-            }
+          clearTimeout(showDelay)
+
+          if (itemVisible !== me) {
+            return
+          }
+
+          hideAllDelay = setTimeout(function() {
+            navItems[me].classList.remove('is-hover');
+            nav.classList.remove('hover-secondary-nav-pf');
+
+            itemVisible = null
           }, 250)
         }
       }
 
       navItem.addEventListener('mouseenter', makeFlagItemToShow(i));
-      navItem.addEventListener('mouseleave', makeFlagItemToHide(i));
+      navItem.addEventListener('mouseleave', makeFlagToHideAll(i));
     }
 
     var store = window.localStorage
