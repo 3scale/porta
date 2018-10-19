@@ -12,10 +12,9 @@ Feature: Groups switch
   Scenario: Groups tab invites to upgrade
     Given provider "foo.example.com" has "groups" switch denied
     When I log in as provider "foo.example.com"
-    # centralize upgrade messages tests
-    And I follow "Developer Portal"
+    And I follow "Portal"
     And I follow "Groups"
-   Then I should see the invitation to upgrade my plan
+   Then I should see "Access denied"
 
   Scenario: Groups tab works if enabled
     Given provider "foo.example.com" has "groups" switch allowed
