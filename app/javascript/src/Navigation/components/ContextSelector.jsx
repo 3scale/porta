@@ -10,9 +10,6 @@ import getActiveMenuTitle from '../utils/getActiveMenuTitle'
 import '../styles/ContextSelector.scss'
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
-const AUDIENCE_PATH = '/buyers/accounts'
-
-const apiPathRoot = apiId => `/apiconfig/services/${apiId}`
 
 class ContextSelector extends React.Component {
 
@@ -70,7 +67,7 @@ class ContextSelector extends React.Component {
 
     const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesFor({ api: service.id })} href={apiPathRoot(service.id)}>{service.name}</a>
+        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>{service.name}</a>
       </li>
     ))
 
@@ -84,7 +81,7 @@ class ContextSelector extends React.Component {
   }
 
   render () {
-    const { currentApi, activeMenu } = this.props
+    const { currentApi, activeMenu, audienceLink } = this.props
 
     return (
       <div className="PopNavigation PopNavigation--context">
@@ -95,9 +92,11 @@ class ContextSelector extends React.Component {
           <li className="PopNavigation-listItem">
             <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>Dashboard</a>
           </li>
-          <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'audience' })} href={AUDIENCE_PATH}>Audience</a>
-          </li>
+          {audienceLink ? (
+            <li className="PopNavigation-listItem">
+              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>Audience</a>
+            </li>
+          ) : null}
           {this.renderInput()}
           {this.renderOptions()}
         </ul>
