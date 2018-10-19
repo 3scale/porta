@@ -85,17 +85,7 @@ module MenuHelper
   end
 
   def api_selector_services
-    @api_selector_services ||= site_account.provider? && logged_in? ? current_user.accessible_services.includes(:account) : Service.none
-  end
-
-  def api_selector_services_link
-    if can?(:manage, :plans)
-      admin_service_path(@service)
-    elsif can?(:manage, :monitoring)
-      admin_service_stats_usage_path(@service)
-    elsif can?(:manage, :partners)
-      admin_service_applications_path(@service)
-    end
+    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services.includes(:account) : Service.none).decorate
   end
 
   def audience_link
