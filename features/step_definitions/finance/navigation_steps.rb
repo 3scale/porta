@@ -25,8 +25,7 @@ When /^I navigate to invoices issued by me$/ do
 end
 
 When /^I navigate to my (?:earnings|revenue)$/ do
-  step %(I follow "Billing")
-  step %(I follow "Earnings by month")
+  step %(I go to the invoices by months page)
 end
 
 When /^I navigate to invoices issued by me for "([^"]*)"$/ do |buyer_name|
