@@ -37,11 +37,17 @@ it('should have a Dashboard option on top', () => {
   expect(dashboard.find('a').props().href).not.toBeUndefined()
 })
 
-it('should have a Audience option after Dashboard', () => {
+it('should have a Audience option after Dashboard, only if audience link is defined', () => {
   const audience = contextSelector.find('#context-menu').childAt(1)
   expect(audience.exists()).toEqual(true)
   expect(audience.text()).toEqual('Audience')
   expect(audience.find('a').props().href).toEqual(audienceLink)
+})
+
+it('should not have a Audience option when audience link is undefined', () => {
+  contextSelector = getWrapper(apis, undefined)
+  let audience = contextSelector.find('a').filterWhere(a => a.text() === 'Audience')
+  expect(audience.exists()).toEqual(false)
 })
 
 it('should highlight the selected context', () => {
@@ -76,7 +82,7 @@ it('should highlight the selected context', () => {
 
 describe('When there is only 1 service', () => {
   beforeEach(() => {
-    contextSelector = getWrapper(apis.slice(0, 1))
+    contextSelector = getWrapper(apis.slice(0, 1), audienceLink)
     expect(contextSelector.props().apis.length).toEqual(1)
   })
 
