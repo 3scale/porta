@@ -52,8 +52,8 @@ end
 When(/^the provider creates a plan$/) do
   name = SecureRandom.hex(10)
 
-  page.click_on 'Application Plans'
-  page.click_on 'Create Application Plan'
+  step 'I go to the application plans admin page'
+  click_on 'Create Application Plan'
 
   within new_application_plan_form do
     fill_in 'Name', with: name
