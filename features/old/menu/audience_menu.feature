@@ -70,6 +70,17 @@ Feature: Audience menu
     | Account Plans              |
 
   @javascript
+  Scenario: Accounts sub menu structure with service plans enabled
+    When provider "foo.example.com" has "service_plans" visible
+    And I go to the accounts admin page
+    When I follow "Accounts" within the main menu
+    Then I should see menu items
+    | Listing                   |
+    | Subscriptions             |
+    | Usage Rules               |
+    | Fields Definitions        |
+    
+  @javascript
   Scenario: Portal sub menu structure with groups enabled
     When provider "foo.example.com" has "groups" switch allowed
     And I go to the provider dashboard
