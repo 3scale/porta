@@ -72,12 +72,8 @@ end
 
 When /^I navigate to the application "([^"]*)" of the provider "([^"]*)"$/ do |app, partner|
   step %(I navigate to the page of the partner "#{partner}")
-  step 'I navigate to the buyers applications page'
+  step 'I go to the applications admin page'
   step %(I follow the link to application "#{app}")
-end
-
-When /^I navigate to the buyers applications page$/ do
-  click_link 'Applications'
 end
 
 When /^I navigate to the buyers service contracts page$/ do
