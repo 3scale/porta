@@ -70,7 +70,7 @@ Feature: Invitations
     Then I should see "gentoo@foo.example.com"
     And I should not see "ubuntu@foo.example.com"
     Then I press "Delete" for user "gentoo@foo.example.com" and I confirm dialog box
-    And I follow "Invitations"
+    And I go to the provider sent invitations page
     Then I should not see "ubuntu@foo.example.com"
 
   Scenario: Accepting an invitation
