@@ -9,12 +9,11 @@ Feature: Groups switch
     Given provider "foo.example.com" has Browser CMS activated
       And current domain is the admin domain of provider "foo.example.com"
 
-  Scenario: Groups tab invites to upgrade
+  Scenario: Groups not accessible if not enabled
     Given provider "foo.example.com" has "groups" switch denied
     When I log in as provider "foo.example.com"
-    And I follow "Portal"
-    And I follow "Groups"
-   Then I should see "Access denied"
+   When I want to go to the groups page
+   Then I should get access denied
 
   Scenario: Groups tab works if enabled
     Given provider "foo.example.com" has "groups" switch allowed
