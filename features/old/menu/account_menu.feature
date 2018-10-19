@@ -18,17 +18,6 @@ Feature: Menu of the Account screen
     | Payment Details       |
     | Users                     |
 
-  Scenario: Account menu structure
-    Given the provider has "branding" switch allowed
-    When I go to the provider account page
-    Then I should see menu items
-    | Overview                  |
-    | Export                    |
-    | Logo                      |
-    | 3scale Invoices           |
-    | Payment Details       |
-    | Users                     |
-
   Scenario: Account menu structure with multiple users enabled
     Given the provider has "branding" switch allowed
     Given the provider has "multiple_users" switch allowed
@@ -36,19 +25,24 @@ Feature: Menu of the Account screen
     Then I should see menu items
     | Overview                  |
     | Export                    |
-    | Logo                      |
     | 3scale Invoices           |
-    | Payment Details       |
+    | Payment Details           |
     | Users                     |
-    | Invitations               |
     | SSO Integrations          |
 
+    Scenario: finance disabled should not disable 3scale invoices
+      Given provider "foo.example.com" has "finance" switch denied
+      When I go to the provider dashboard
+       And I follow "Account"
+      Then I should see "3scale Invoices"
+       And I follow "3scale Invoices"
+      Then I should be on my invoices from 3scale page
+
   Scenario: Account menu structure with sso enforced
-    Given the provider has "branding" switch allowed
     Given the provider has "multiple_users" switch allowed
     Given provider "foo.example.com" has "enforce_sso" set to "true"
     When I go to the provider account page
-    Then I should not see link "Invitations"
+    Then I should not see "Invitations"
 
   Scenario: Personal menu structure
     When I go to the provider personal page

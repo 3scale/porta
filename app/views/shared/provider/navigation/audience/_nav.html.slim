@@ -1,6 +1,6 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 
-- if can? :manage, :partners || can?(:manage, :settings)
+- if can?(:manage, :partners) || can?(:manage, :settings)
   = render partial: 'shared/provider/navigation/audience/accounts',
            layout: layout_secondary_nav,
            locals: { title: 'Accounts',

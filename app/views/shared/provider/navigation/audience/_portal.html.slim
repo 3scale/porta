@@ -11,10 +11,14 @@
         title: 'Redirects',
         path: provider_admin_cms_redirects_path
 
+  - if can?(:see, :groups)
+    = render vertical_nav_item,
+          title: 'Groups',
+          path: provider_admin_cms_groups_path
+
   = render vertical_nav_item,
-        title: 'Groups',
-        path: provider_admin_cms_groups_path
-        // switch: :groups, upgrade_notice: true
+       title: 'Feature Visibility',
+       path: provider_admin_cms_switches_path
 
 - unless current_account.master?
   li.list-group-item
@@ -48,10 +52,6 @@ span.list-group-item-value.label
       title: 'New Application',
       path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
 
-  = render vertical_nav_item,
-       title: 'Feature Visibility',
-       path: provider_admin_cms_switches_path
-       
 - if can?(:manage, :settings)
   li.list-group-item
    span.list-group-item-value.label Settings
