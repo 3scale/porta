@@ -28,7 +28,7 @@
                       vertical_nav_item: vertical_nav_item,
                       submenu: :subscriptions }
 
-- if can?(:manage, :end_users) && @service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
+- if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible?
   = render partial: 'shared/provider/navigation/service/end_users.html.slim',
            layout: layout_secondary_nav,
            locals: { title: 'End-users',
