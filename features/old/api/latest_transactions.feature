@@ -19,7 +19,6 @@ Feature: Latest transactions
   Scenario: Navigation
     Given provider "foo.example.com" has no latest transactions
     When I go to the provider dashboard
-    And I follow "Analytics"
     And I follow "Traffic"
     Then I should be on the latest transactions page
 
