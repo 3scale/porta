@@ -35,8 +35,7 @@ Feature: Top applications stats
 
     When current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
-    And I follow "Analytics"
-    And I follow "Top Applications"
+    And I go to the provider stats apps page
 
     Then I should see a list of metrics:
     | Buyer                |
