@@ -78,7 +78,7 @@ Feature: Latest transactions
   Scenario: Latest transactions are only available on the v2 backend
     Given provider "foo.example.com" uses backend v1 in his default service
     When I go to the provider dashboard
-    And I follow "API" within the main menu
+    And I follow "Overview"
     Then I should not see link "Traffic"
 
   # TODO: Multiple invalid metric ids
