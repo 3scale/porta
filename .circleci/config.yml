@@ -321,7 +321,7 @@ jobs:
       - run:
           name: Run cucumber tests
           command: |
-            TESTS=$(bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings)
+            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
             bundle exec cucumber --profile ci ${TESTS}
       - run:
           name: Enabled internet access
