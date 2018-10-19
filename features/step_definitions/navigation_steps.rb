@@ -81,6 +81,6 @@ When /^I navigate to the buyers applications page$/ do
 end
 
 When /^I navigate to the buyers service contracts page$/ do
-  click_link(:text => /\ADevelopers|Tenants\z/)
+  step 'I navigate to the accounts page'
   click_link 'Subscriptions'
 end
