@@ -337,7 +337,6 @@ without fake Core server your after commit callbacks will crash and you might ge
           match 'hosted_success', via: [:get, :post], on: :member
         end
         resource :data_exports, :only => [:new, :create]
-        resource :logo, :only => [:edit, :update, :destroy]
 
         resources :invitations, :only => [:index, :new, :create, :destroy] do
           member do

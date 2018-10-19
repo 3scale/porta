@@ -211,8 +211,6 @@ World(Module.new do
       new_provider_admin_account_invitation_path
     when 'the provider sent invitations page'
       provider_admin_account_invitations_path
-    when 'the edit provider logo page'
-      edit_provider_admin_account_logo_path
 
     #
     # API Management
