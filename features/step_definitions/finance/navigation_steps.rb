@@ -29,8 +29,7 @@ When /^I navigate to my (?:earnings|revenue)$/ do
 end
 
 When /^I navigate to invoices issued by me for "([^"]*)"$/ do |buyer_name|
-  step %(I navigate to the page of the partner "#{buyer_name}")
-  click_on('invoices', match: :one)
+  step %(I go to the invoices of account "#{buyer_name}" page)
 end
 
 When /^I navigate to invoice (.*) issued by me for "([^"]*)"$/ do |invoice_number, buyer_name|
