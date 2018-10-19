@@ -21,7 +21,7 @@ Feature: Show invoices from account's page (#16015909)
 
     When I follow "Show"
     Then I should see "Invoice for January 2011"
-      And I should still be in the "Developers" in the main menu
+      And I should still be in the "Accounts" in the main menu
 
   Scenario: Don't show invoices when billing is not enabled
     Given a provider "xyz.example.com" with billing disabled
@@ -49,6 +49,3 @@ Feature: Show invoices from account's page (#16015909)
       # TODO: Properly check if order is opened
 
       Then I should see "Add"
-
-
-
