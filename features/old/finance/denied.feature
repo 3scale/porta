@@ -1,13 +1,15 @@
 Feature: Provider has finance denied
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has "finance" switch denied
+    Given a provider is logged in
       And an application plan "plus" of provider "master"
 
-  Scenario: Display upgrade notice when finance switch is denied
-     Given current domain is the admin domain of provider "foo.example.com"
-      When I log in as provider "foo.example.com"
-      When I follow "Billing" within the main menu
-      Then I should see upgrade notice for "finance"
-      And I should see the provider menu
+  Scenario: Hide Billing in menu when finance switch is denied
+    Given provider "foo.example.com" has "finance" switch denied
+    When I go to the provider dashboard
+    Then I should not see "Billing"
+
+  Scenario: Display Billing in menu when finance switch is allowed
+    Given provider "foo.example.com" has "finance" switch allowed
+    When I go to the provider dashboard
+    Then I should see "Billing"
