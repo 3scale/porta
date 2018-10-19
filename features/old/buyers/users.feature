@@ -15,7 +15,7 @@ Feature: Buyer users management
     And I am logged in as provider "foo.example.com"
 
  Scenario: Navigating to page of users of a buyer
-   When I follow "Developers"
+   When I navigate to the accounts page
      And I follow "SpaceWidgets"
      And I follow "Users"
    Then I should see "Users of SpaceWidgets"
