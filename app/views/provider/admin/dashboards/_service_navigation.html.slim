@@ -41,7 +41,7 @@ nav.DashboardNavigation
                                     'exclamation-triangle'
 
     // Subscriptions & Service Plans
-    - if show_subscriptions_on_dashboard?(service) && service.service_contracts.any?
+    - if show_subscriptions_on_dashboard?(service)
       li.DashboardNavigation-list-item
         // Subscriptions (would be nice to have API specific links)
         => dashboard_collection_link 'Subscription',
@@ -63,11 +63,19 @@ nav.DashboardNavigation
                   class: "DashboardNavigation-link"
 
         // End-user Plans
-        - if service.end_user_plans.size > 1
+        - if service.end_user_plans.any?
           == dashboard_secondary_collection_link 'Plan',
                                                  service.end_user_plans,
                                                  admin_service_end_user_plans_path(service)
 
+    // Active docs
+    - if can?(:manage, :plans)
+      li.DashboardNavigation-list-item
+       = dashboard_collection_link 'ActiveDoc',
+                                 service.api_docs_services,
+                                 admin_service_api_docs_path(service),
+                                 'ActiveDocs',
+                                 'file-text'
     // Integration
     - if can?(:manage, :plans) && !service.has_traffic?
       li.DashboardNavigation-list-item.u-notice

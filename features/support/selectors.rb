@@ -9,10 +9,12 @@ module HtmlSelectorsHelper
       '#content'
     when 'the main menu', :main_menu
        '#mainmenu'
-    when 'the audience dashboard widget'
+    when 'the audience dashboard widget', :audience_dashboard_widget
       '#audience'
-    when 'the apis dashboard widget'
+    when 'the apis dashboard widget', :apis_dashboard_widget
       '#apis'
+    when 'the first api dashboard widget'
+      "#service_#{provider_first_service!.id}"
     when 'the submenu', :submenu
       '.secondary-nav-item-pf.is-hover'
     when 'the subsubmenu'
@@ -23,10 +25,8 @@ module HtmlSelectorsHelper
       '#footer'
     when 'the account details box'
       '#account_details'
-
     when 'notification settings'
       'table.notification-settings tbody'
-
     when 'service widget'
       '.service-widget'
 
