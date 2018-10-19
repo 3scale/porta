@@ -114,7 +114,7 @@ end
 def visit_edit_plan(plan)
   plan.should be
 
-  click_on 'Application Plans'
+  step 'I go to the application plans admin page'
 
   within plans do
     click_on "Edit Application plan '#{plan.name}'"
