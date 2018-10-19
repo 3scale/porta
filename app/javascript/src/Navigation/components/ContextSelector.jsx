@@ -81,7 +81,7 @@ class ContextSelector extends React.Component {
   }
 
   render () {
-    const { currentApi, activeMenu, audiencePath } = this.props
+    const { currentApi, activeMenu, audienceLink } = this.props
 
     return (
       <div className="PopNavigation PopNavigation--context">
@@ -93,7 +93,7 @@ class ContextSelector extends React.Component {
             <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>Dashboard</a>
           </li>
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'audience' })} href={audiencePath}>Audience</a>
+            <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>Audience</a>
           </li>
           {this.renderInput()}
           {this.renderOptions()}

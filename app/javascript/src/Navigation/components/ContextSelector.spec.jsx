@@ -5,8 +5,8 @@ import { ContextSelector } from './ContextSelector'
 
 Enzyme.configure({ adapter: new Adapter() })
 
-function getWrapper (apis = [], audiencePath) {
-  return mount(<ContextSelector apis={apis} audiencePath={audiencePath} />)
+function getWrapper (apis = [], audienceLink) {
+  return mount(<ContextSelector apis={apis} audienceLink={audienceLink} />)
 }
 
 let contextSelector
@@ -16,10 +16,10 @@ const apis = [
   { service: { name: 'api 1', id: 1 } },
   { service: { name: 'api 2', id: 2 } }
 ]
-const audiencePath = 'foo.bar'
+const audienceLink = 'foo.bar'
 
 beforeEach(() => {
-  contextSelector = getWrapper(apis, audiencePath)
+  contextSelector = getWrapper(apis, audienceLink)
 })
 
 afterEach(() => {
@@ -41,7 +41,7 @@ it('should have a Audience option after Dashboard', () => {
   const audience = contextSelector.find('#context-menu').childAt(1)
   expect(audience.exists()).toEqual(true)
   expect(audience.text()).toEqual('Audience')
-  expect(audience.find('a').props().href).toEqual(audiencePath)
+  expect(audience.find('a').props().href).toEqual(audienceLink)
 })
 
 it('should highlight the selected context', () => {
