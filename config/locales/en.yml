@@ -619,8 +619,8 @@ en:
       </span>
 
   authentication_options:
-    api_key: "API Key (user_key) <span>The application is identified & authenticated via a single string.</span>"
-    key_pair: "App_ID and App_Key Pair <span>The application is identified via the App_ID and authenticated via the App_Key.</span>"
+    v1: "API Key (user_key) <span>The application is identified & authenticated via a single string.</span>"
+    v2: "App_ID and App_Key Pair <span>The application is identified via the App_ID and authenticated via the App_Key.</span>"
     oauth: "OAuth 2.0 <span>The application is identified via the client_id and authenticated via an access token.</span>"
     oidc: "OpenID Connect <span>Use OpenID Connect for any OAuth 2.0 flow.</span>"
   plugins:
