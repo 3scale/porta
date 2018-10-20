@@ -208,6 +208,7 @@ group :test do
   gem 'capybara', '~> 2.18', source: 'https://rubygems.org'
   gem 'capybara-webkit', '~> 1.15', source: 'https://rubygems.org'
   gem 'xpath', '~>2.1'
+  gem 'capybara-slow_finder_errors'
 
   gem 'headless', '~> 2.3.1'
   gem 'selenium-webdriver', '~> 3.4', require: false

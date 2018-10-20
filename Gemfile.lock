@@ -235,6 +235,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    capybara-slow_finder_errors (0.1.4)
+      capybara (~> 2.5)
     capybara-webkit (1.15.1)
       capybara (>= 2.3, < 4.0)
       json
@@ -852,6 +854,7 @@ DEPENDENCIES
   bullet (~> 4.2)
   cancancan (~> 1.7.1)
   capybara (~> 2.18)!
+  capybara-slow_finder_errors
   capybara-webkit (~> 1.15)!
   childprocess
   chronic
