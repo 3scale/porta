@@ -14,7 +14,7 @@ Feature: Password change
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
 
-    When I follow "Logout"
+    When I follow "Sign Out"
     And current domain is the admin domain of provider "foo.example.com"
     And I go to the provider login page
     And I fill in "Email or Username" with "foo.example.com"

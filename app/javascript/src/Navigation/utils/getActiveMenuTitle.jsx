@@ -5,7 +5,7 @@ export default function getActiveMenuTitle (activeMenu, currentApi) {
 
     case 'personal':
     case 'account':
-      return 'Account'
+      return 'Account Settings'
 
     case 'buyers':
     case 'finance':
