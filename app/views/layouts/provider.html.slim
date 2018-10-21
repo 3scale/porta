@@ -19,7 +19,35 @@ html[lang="en"]
       = render partial: 'shared/provider/navigation/vertical_nav' unless active_menu == :dashboard
 
       #border.self_clear
+        scss:
+          .Breadcrumbs {
+            $font-size-sm: (1rem * 7/8);
+            font-size: $font-size-sm;
+
+
+            &-item {
+              display: inline;
+            }
+
+            &-item + &-item:before {
+              color: #9c9c9c;
+              content: "\F105";
+              font-family: "FontAwesome";
+              padding: 0 9px 0 7px;
+            }
+          }
+
+
+        ol.Breadcrumbs  role="navigation" aria-label="breadcrumbs"
+          li.Breadcrumbs-item = active_menu
+          li.Breadcrumbs-item = active_submenu
+          /= active_menu?(:sidebar, 'usage')
+          /- if active_sidebar
+            /li.Breadcrumbs-item = active_sidebar
+          - if action_name == 'edit' || action_name == 'new'
+            li.Breadcrumbs-item = action_name
         = render 'shared/provider/flash', flash: flash
+
         main.Main#content class=('Main--callToAction' if call_to_action?)
           - if controller.sublayout
             = render partial: "/layouts/#{controller.sublayout.to_s}"
