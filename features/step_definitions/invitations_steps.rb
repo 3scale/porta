@@ -91,7 +91,7 @@ end
 
 When(/^I send a provider invitation to "([^\"]*)"$/) do |address|
   click_link 'Account'
-  click_link 'Users'
+  click_link 'Listing'
   click_link 'Invite a New User'
   fill_in 'Send invitation to', with: address
   click_button 'Send'
