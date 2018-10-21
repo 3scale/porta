@@ -4,7 +4,7 @@
          path: provider_admin_cms_templates_path
 
   = render vertical_nav_item,
-        title: pluralize(number_to_human(current_account.templates.with_draft.size), 'Draft'),
+        title: 'Drafts',
         path: provider_admin_cms_changes_path
 
   = render vertical_nav_item,
@@ -24,24 +24,20 @@
   li.list-group-item
     span.list-group-item-value.label
 
-  = render vertical_nav_item,
-           title: 'Visit Portal',
-           path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
-           access_code: current_account.site_access_code).html_safe
-
-li.list-group-item
-span.list-group-item-value.label
-
-= render vertical_nav_item,
-   title: 'Liquid Reference',
-   path: provider_admin_liquid_docs_path
+  li.list-group-item
+    = link_to access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
+              access_code: current_account.site_access_code).html_safe,
+              target: "_blank" do
+      span.fa.fa-external-link style="margin: 0 .3rem;"
+      span.list-group-item-value
+        | Visit Portal
 
 - if can?(:manage, :portal)
   li.list-group-item
-   span.list-group-item-value.label Legal
+   span.list-group-item-value.label Legal Terms
 
   = render vertical_nav_item,
-      title: 'Sign-up',
+      title: 'Signup',
       path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
 
   = render vertical_nav_item,
@@ -72,6 +68,13 @@ span.list-group-item-value.label
   = render vertical_nav_item,
        title: 'SSO Integrations',
        path:   provider_admin_authentication_providers_path
+
+li.list-group-item
+  span.list-group-item-value.label Docs
+
+= render vertical_nav_item,
+    title: 'Liquid Reference',
+    path: provider_admin_liquid_docs_path
 
   //= important_icon_link 'Visit Developer Portal',
                                 'external-link',
