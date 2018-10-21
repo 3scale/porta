@@ -28,62 +28,32 @@ section class="service-widget"
   div.content-service
     section[name="settings"]
 
-      h2
-        = link_to 'Definition', admin_service_metrics_path(service),  data: { bubble: 'metric' }
-        ' ,
-        => link_to 'Integration', path_to_service(service), :title => 'Change integration settings for this service', data: { bubble: 'integration' }
-        '  and
-        =< link_to 'Settings', settings_admin_service_path(service), :title => "Edit service settings"
+      - if can? :manage, :partners
 
-      ul.service-settings[data-hint="basics"]
-        - if service.deployment_option.present?
-          - deployment_option_phrased = t(service.proxy.deployment_option, scope: "deployment_options.phrased")
-        - unless service.has_traffic?
-          li.item.integration
-            - case service.proxy.deployment_option.presence
-            - when 'hosted'
-              p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, hit <strong>Deploy</strong> in the production box and you have completed a basic integration.
-              = important_icon_link "Configure #{deployment_option_phrased}",
-                'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
-            - when 'self_managed'
-              p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, proceed to download the NGINX config files for your On-premises NGINX reverse proxy server. Once you've added these config files to your Nginx server you have completed a basic integration.
-              = important_icon_link "Configure #{deployment_option_phrased}",
-                'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
-            - when 'plugin_rest'
-              p Follow the instructions on the #{link_to('Integration page', path_to_service(service))} to integrate your API using #{deployment_option_phrased} the against 3scale Service Management API endpoints.
-              = important_icon_link "Get started with #{deployment_option_phrased}",
-                'hdd-o', path_to_service(service), :class => "outline-button next"
-            - when nil
-              p = t("deployment_options.missing")
-              = important_icon_link 'Pick a deployment option now',
-                'hdd-o', path_to_service(service), :class => "outline-button next"
-            - else
-              p Follow the instructions on the #{link_to( 'Integration page', path_to_service(service) )} to download and install the #{deployment_option_phrased} into your codebase.
-              = important_icon_link "Get started with the #{deployment_option_phrased}",
-                'hdd-o',path_to_service(service), :class => "outline-button next"
-
-        - if service.deployment_option.present? && service.has_traffic?
-          li.item
-            ' Integrated through
-            strong => deployment_option_phrased
-
-        li.item
-          ' Authenticated by
-          strong
-            => human_backend service.proxy_authentication_method
-        li.item
-          ' ID for API calls is
-          strong
-            => service.id
-          ' and system name is
-          strong
-            = service.system_name
+        - if can?(:show, Cinstance)
+          h2 = link_to 'Latest Apps', admin_service_applications_path(service), :title => 'Show all applications for this service'
+          ol.latest-apps
+            = list_items_or_empty service.latest_applications, 'There are no latest applications.' do |cinstance|
+              - if cinstance.user_account.present?
+                li.item
+                  => link_to cinstance.name, admin_service_application_path(cinstance.service, cinstance)
+                  '  from
+                  = link_to cinstance.user_account.org_name, admin_buyers_account_path(cinstance.user_account)
 
 
-        - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
-          li.item
-            = setting
-
+        h2 = link_to 'Latest alerts', admin_service_alerts_path(service), :title => 'Show all limit alerts for this service'
+        ol.latest-alerts
+          = list_items_or_empty current_account.alerts.by_service(service).latest, 'There are no alerts.' do |alert|
+            li.item
+              = link_to_cinstance_or_deleted(alert.cinstance)
+              |  at
+              = l alert.timestamp
+              |  (
+              = colorize_utilization(alert.level)
+              | )
+              br
+              span.name
+                = alert.message
 
       - if can? :admin, :plans
         h2
@@ -138,28 +108,56 @@ section class="service-widget"
           = render 'stats/sparklines', :metrics => service.metrics.top_level
 
       - if can? :manage, :partners
-        h2 = link_to 'Latest alerts', admin_service_alerts_path(service), :title => 'Show all limit alerts for this service'
-        ol.latest-alerts
-          = list_items_or_empty current_account.alerts.by_service(service).latest, 'There are no alerts.' do |alert|
+        h2
+          = link_to 'Configuration', path_to_service(service), :title => 'Change integration settings for this service', data: { bubble: 'integration' }
+        ul.service-settings[data-hint="basics"]
+          - if service.deployment_option.present?
+            - deployment_option_phrased = t(service.proxy.deployment_option, scope: "deployment_options.phrased")
+          - unless service.has_traffic?
+            li.item.integration
+              - case service.proxy.deployment_option.presence
+              - when 'hosted'
+                p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, hit <strong>Deploy</strong> in the production box and you have completed a basic integration.
+                = important_icon_link "Configure #{deployment_option_phrased}",
+                  'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
+              - when 'self_managed'
+                p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, proceed to download the NGINX config files for your On-premises NGINX reverse proxy server. Once you've added these config files to your Nginx server you have completed a basic integration.
+                = important_icon_link "Configure #{deployment_option_phrased}",
+                  'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
+              - when 'plugin_rest'
+                p Follow the instructions on the #{link_to('Integration page', path_to_service(service))} to integrate your API using #{deployment_option_phrased} the against 3scale Service Management API endpoints.
+                = important_icon_link "Get started with #{deployment_option_phrased}",
+                  'hdd-o', path_to_service(service), :class => "outline-button next"
+              - when nil
+                p = t("deployment_options.missing")
+                = important_icon_link 'Pick a deployment option now',
+                  'hdd-o', path_to_service(service), :class => "outline-button next"
+              - else
+                p Follow the instructions on the #{link_to( 'Integration page', path_to_service(service) )} to download and install the #{deployment_option_phrased} into your codebase.
+                = important_icon_link "Get started with the #{deployment_option_phrased}",
+                  'hdd-o',path_to_service(service), :class => "outline-button next"
+
+          - if service.deployment_option.present? && service.has_traffic?
             li.item
-              = link_to_cinstance_or_deleted(alert.cinstance)
-              |  at
-              = l alert.timestamp
-              |  (
-              = colorize_utilization(alert.level)
-              | )
-              br
-              span.name
-                = alert.message
-        - if can?(:show, Cinstance)
-          h2 = link_to 'Latest Apps', admin_service_applications_path(service), :title => 'Show all applications for this service'
-          ol.latest-apps
-            = list_items_or_empty service.latest_applications, 'There are no latest applications.' do |cinstance|
-              - if cinstance.user_account.present?
-                li.item
-                  => link_to cinstance.name, admin_service_application_path(cinstance.service, cinstance)
-                  '  from
-                  = link_to cinstance.user_account.org_name, admin_buyers_account_path(cinstance.user_account)
+              ' Integrated through
+              strong => deployment_option_phrased
+
+          li.item
+            ' Authenticated by
+            strong
+              => human_backend service.proxy_authentication_method
+          li.item
+            ' ID for API calls is
+            strong
+              => service.id
+            ' and system name is
+            strong
+              = service.system_name
+
+
+          - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
+            li.item
+              = setting
 
 = render 'shared/service_access'
 
