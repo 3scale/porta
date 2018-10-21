@@ -2,6 +2,7 @@
 
 class Admin::ApiDocs::AccountApiDocsController < Admin::ApiDocs::BaseController
   activate_menu :active_docs
+  sublayout 'api/service'
 
   class NotImplementedServiceScopeError < RuntimeError; end
   rescue_from(NotImplementedServiceScopeError) do |exception|
