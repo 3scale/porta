@@ -98,6 +98,11 @@
     .nav-pf-secondary-nav {
       left: line-height-times(5 / 2, true);
     }
+
+    .secondary-nav-item-pf.active > a:after,
+    .secondary-nav-item-pf:hover > a:after {
+      right: line-height-times(0.5);
+    }
   }
 
   .nav-pf-vertical {
@@ -125,26 +130,19 @@
     color: #d1d1d1;
     cursor: pointer;
     display: block;
-    //font-size: line-height-times(0.58);
     font-weight: 400;
     height: line-height-times(5 / 2, true);
-    //line-height: line-height-times(1.0833333333);
-    //padding: line-height-times(1) line-height-times(1) line-height-times(1) line-height-times(1);
-    padding: line-height-times(3 / 4) line-height-times(9 / 10);
+    padding: line-height-times(3 / 4) line-height-times(8 / 10);
     position: relative;
     white-space: nowrap;
-    //width: line-height-times(9);
   }
 
   .nav-pf-vertical .list-group-item > a .fa,
   .nav-pf-vertical .list-group-item > a .pficon {
     color: #72767b;
     float: left;
-    //font-size: line-height-times(0.83);
     line-height: line-height-times(1);
-    margin-right: line-height-times(0.9);
-    //text-align: center;
-    //width: line-height-times(1);
+    margin-right: line-height-times(0.75);
   }
   .nav-pf-vertical .list-group-item > a:focus,
   .nav-pf-vertical .list-group-item > a:hover {
@@ -185,16 +183,8 @@
     text-overflow: ellipsis;
   }
 
-  &.hover-secondary-nav-pf {
-    //width: line-height-times(17);
-  }
-
   .secondary-nav-item-pf > a {
     cursor: default;
-  }
-
-  &.collapsed .secondary-nav-item-pf > a:after {
-    display: none;
   }
 
   .secondary-nav-item-pf > a:after {
@@ -202,8 +192,7 @@
     content: "\f105";
     display: block;
     font-family: FontAwesome;
-    //font-size: line-height-times(1);
-    line-height: line-height-times(1.25);
+    line-height: line-height-times(1.5);
     padding: line-height-times(0.5) 0;
     position: absolute;
     right: line-height-times(0.5);
@@ -214,10 +203,12 @@
     width: line-height-times(9);
     z-index: 1031;
   }
+
   .secondary-nav-item-pf.active > a:after,
   .secondary-nav-item-pf:hover > a:after {
-    right: line-height-times(0.5);
+    right: line-height-times(0.55);
   }
+
   .nav-item-pf-header {
     color: $light-color;
     margin: line-height-times(0.75) line-height-times(1) line-height-times(0.5) line-height-times(0.85);
