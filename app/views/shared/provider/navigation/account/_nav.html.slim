@@ -26,7 +26,7 @@
                      vertical_nav_item: vertical_nav_item,
                      submenu: :users }
 
-  - if !ThreeScale.config.onpremises
+  - if !ThreeScale.config.onpremises && !current_account.master?
     = render partial: 'shared/provider/navigation/account/billing',
            layout: layout_secondary_nav,
            locals: { title: 'Billing',
