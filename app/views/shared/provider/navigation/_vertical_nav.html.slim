@@ -16,7 +16,7 @@ nav.vertical-nav#mainmenu
                  vertical_nav_item: vertical_nav_item,
                  layout_secondary_nav: layout_secondary_nav
 
-      - when :applications, :active_docs
+      - when :apis, :applications, :active_docs
 
         - if can? :manage, :partners
 
@@ -30,13 +30,12 @@ nav.vertical-nav#mainmenu
                   path:  admin_api_docs_services_path,
                   icon: 'file-text'
 
-        - if can?(:manage, :monitoring) && current_account.buyer_alerts.unread.any?
+        - if can?(:manage, :monitoring)
           = render vertical_nav_item,
                    title: 'Alerts',
                    path:  admin_alerts_path,
                    icon:  'exclamation-triangle'
 
-        - if can?(:manage, :monitoring)
           = render vertical_nav_item,
                   title: 'Traffic',
                   path:  admin_transactions_path,
@@ -74,7 +73,7 @@ nav.vertical-nav#mainmenu
             if (itemVisible) {
               navItems[itemVisible].classList.remove('is-hover');
             }
-            
+
             itemVisible = me
           }, 250)
         }

@@ -1,14 +1,14 @@
-- if current_account.provider_can_use?(:provider_sso)
-  = render vertical_nav_item,
-         title: 'SSO Integrations',
-         path:  provider_admin_account_authentication_providers_path
-
 - if can?(:manage, User)
   = render vertical_nav_item,
-         title: 'Users',
+         title: 'Listing',
          path:  provider_admin_account_users_path
 
   - if can?(:manage, :multiple_users) && !current_account.settings.enforce_sso?
     = render vertical_nav_item,
            title: 'Invitations',
            path:  provider_admin_account_invitations_path
+
+- if current_account.provider_can_use?(:provider_sso)
+ = render vertical_nav_item,
+        title: 'SSO Integrations',
+        path:  provider_admin_account_authentication_providers_path
