@@ -38,10 +38,10 @@ span.list-group-item-value.label
 
 - if can?(:manage, :portal)
   li.list-group-item
-   span.list-group-item-value.label Legal
+   span.list-group-item-value.label Legal Terms
 
   = render vertical_nav_item,
-      title: 'Sign-up',
+      title: 'Signup',
       path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
 
   = render vertical_nav_item,

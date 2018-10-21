@@ -33,7 +33,7 @@ Feature: Multiservice feature
     When I fill in "Name" with "Less fancy API"
      And I press "Update Service"
      And I follow "Integration" within the main menu
-     And I follow "Preferences" within the submenu
+     And I follow "Settings" within the submenu
      And I uncheck "Developers can manage applications"
      And I press "Update Service"
     Then I should see "Less fancy API"

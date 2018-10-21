@@ -35,7 +35,7 @@ Feature: Audience menu
     | Feature Visibility        |
     | Visit Portal              |
     | Liquid Reference          |
-    | Sign-up                   |
+    | Signup                    |
     | Service Subscription      |
     | New Application           |
     | Domains & Access          |
@@ -79,7 +79,7 @@ Feature: Audience menu
     | Subscriptions             |
     | Usage Rules               |
     | Fields Definitions        |
-    
+
   @javascript
   Scenario: Portal sub menu structure with groups enabled
     When provider "foo.example.com" has "groups" switch allowed
