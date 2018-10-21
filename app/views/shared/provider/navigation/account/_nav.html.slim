@@ -26,7 +26,8 @@
                      vertical_nav_item: vertical_nav_item,
                      submenu: :users }
 
-  = render partial: 'shared/provider/navigation/account/billing',
+  - if !ThreeScale.config.onpremises
+    = render partial: 'shared/provider/navigation/account/billing',
            layout: layout_secondary_nav,
            locals: { title: 'Billing',
                      icon: 'credit-card',
