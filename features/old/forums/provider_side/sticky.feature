@@ -85,4 +85,3 @@ Feature: Sticky Topics
 
     When I do a HTTP request to create a sticky topic "In your face!"
     Then the forum of "foo.example.com" should have non-sticky topic "In your face!"
-

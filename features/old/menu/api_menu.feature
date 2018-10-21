@@ -42,8 +42,8 @@ Feature: API menu
     When I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
-    | Methods and Metrics       |
-    | Preferences               |
+    | Methods & Metrics         |
+    | Settings                  |
 
   Scenario: API menu structure with service plans enabled
     When provider "foo.example.com" has "service_plans" switch allowed

@@ -3,7 +3,7 @@
 - icon ||= nil
 
 li.list-group-item class=( active_menu?(:sidebar, title) || active_menu?(:submenu, title) || active_menu?(:main_menu, title) || current_page?(path) ? 'active' : '')
-  = link_to path do
+  = link_to path, class: "list-group-item-link-#{title.parameterize}" do
     - if icon
       span.fa.fa-fw class="fa-#{icon}"
     span.list-group-item-value

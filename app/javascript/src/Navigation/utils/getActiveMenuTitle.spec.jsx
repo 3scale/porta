@@ -3,8 +3,8 @@ import getActiveMenuTitle from './getActiveMenuTitle'
 it('should return the proper title depending on the current menu', () => {
   expect(getActiveMenuTitle('dashboard')).toEqual('Dashboard')
 
-  expect(getActiveMenuTitle('personal')).toEqual('Account')
-  expect(getActiveMenuTitle('account')).toEqual('Account')
+  expect(getActiveMenuTitle('personal')).toEqual('Account Settings')
+  expect(getActiveMenuTitle('account')).toEqual('Account Settings')
 
   expect(getActiveMenuTitle('buyers')).toEqual('Audience')
   expect(getActiveMenuTitle('finance')).toEqual('Audience')
