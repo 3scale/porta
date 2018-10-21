@@ -114,6 +114,7 @@
     top: line-height-times(2.5);
     width: line-height-times(9);
     z-index: 1030;
+    overflow-y: auto;
   }
 
   .nav-pf-vertical .list-group {
@@ -132,7 +133,7 @@
     display: block;
     font-weight: 400;
     height: line-height-times(5 / 2, true);
-    padding: line-height-times(3 / 4) line-height-times(8 / 10);
+    padding: line-height-times(3 / 4) line-height-times(0.7);
     position: relative;
     white-space: nowrap;
   }
@@ -162,6 +163,16 @@
   .nav-pf-vertical .list-group-item > a:focus .pficon {
     color: #39a5dc;
   }
+
+  .nav-pf-vertical .list-group-item.secondary-nav-item-pf.active > a:before {
+    width: 0;
+  }
+
+  .nav-pf-vertical .list-group-item.secondary-nav-item-pf.active .nav-pf-secondary-nav .list-group-item.active > a {
+    border-left: line-height-times(0.15) solid #39a5dc;
+    padding-left: line-height-times(1.85);
+  }
+
   .nav-pf-vertical .list-group-item.active > a:before {
     background: #39a5dc;
     content: " ";
@@ -169,7 +180,7 @@
     left: 0;
     position: absolute;
     top: 0;
-    width: 3px;
+    width: line-height-times(0.15);
   }
   .nav-pf-vertical .list-group-item.active:hover {
     background-color: transparent;
@@ -198,6 +209,7 @@
     right: line-height-times(0.5);
     top: 0;
   }
+
   .secondary-nav-item-pf.active > a,
   .secondary-nav-item-pf:hover > a {
     width: line-height-times(9);
@@ -205,8 +217,9 @@
   }
 
   .secondary-nav-item-pf.active > a:after,
-  .secondary-nav-item-pf:hover > a:after {
+  .secondary-nav-item-pf.is-hover > a:after {
     right: line-height-times(0.55);
+    content: "\f107";
   }
 
   .nav-item-pf-header {
@@ -234,20 +247,28 @@
     opacity: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    position: fixed;
+    //position: fixed;
     top: line-height-times(2.5);
     visibility: hidden;
     width: line-height-times(9);
     z-index: 1030;
+    display: none;
   }
 
-  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav {
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav,
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav .list-group-item > a {
+    background: #292E34;
+  }
+
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav,
+  .secondary-nav-item-pf.active .nav-pf-secondary-nav {
     opacity: 1;
     visibility: visible;
+    display: block;
   }
   .nav-pf-secondary-nav .list-group-item {
     border: none;
-    padding: 0 0 line-height-times(0.21) 0;
+    padding: 0 0 line-height-times(0.1) 0;
     width: line-height-times(9);
   }
   .nav-pf-secondary-nav .list-group-item > a {
@@ -256,8 +277,8 @@
     font-size: $font-size-sm;
     font-weight: inherit;
     height: inherit;
-    padding: line-height-times(0.2) 0 line-height-times(0.1) 0;
-    margin-left: line-height-times(1);
+    padding: line-height-times(0.1) 0 line-height-times(0.1) line-height-times(2);
+    //margin-left: line-height-times(1);
   }
   .nav-pf-secondary-nav .list-group-item.active > a:before {
     display: none;
