@@ -16,9 +16,11 @@
   li.list-group-item
     span.list-group-item-value.label Settings
 
-  = render vertical_nav_item,
-          title: 'Charging & Gateway',
-          path:  admin_finance_settings_path
+  // this setting needs more than just editingng auth, as such it's not a setting
+  - if can?(:manage, :finance)
+    = render vertical_nav_item,
+            title: 'Charging & Gateway',
+            path:  admin_finance_settings_path
 
   = render vertical_nav_item,
           title: 'Credit Card Policies',
