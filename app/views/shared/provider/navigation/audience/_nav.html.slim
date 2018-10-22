@@ -8,14 +8,14 @@
                      vertical_nav_item: vertical_nav_item,
                      submenu: :accounts }
 
-- if can?(:manage, :finance) || can?(:manage, :settings)
-  = render partial: 'shared/provider/navigation/audience/billing',
-           layout: layout_secondary_nav,
-           locals: { title: 'Billing',
-                     icon: 'credit-card',
-                     vertical_nav_item: vertical_nav_item,
-                     submenu: :finance }
-  //main_menu_item :finance, 'Billing', admin_finance_root_path, :switch => :finance, :upgrade_notice => !master_on_premises?
+- if can?(:see, :finance)
+  - if can?(:manage, :finance) || can?(:manage, :settings)
+    = render partial: 'shared/provider/navigation/audience/billing',
+             layout: layout_secondary_nav,
+             locals: { title: 'Billing',
+                       icon: 'credit-card',
+                       vertical_nav_item: vertical_nav_item,
+                       submenu: :finance }
 
 - if can?(:manage, :portal) || can?(:manage, :settings)
   = render partial: 'shared/provider/navigation/audience/portal',
