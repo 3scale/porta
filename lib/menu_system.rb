@@ -39,7 +39,7 @@ module MenuSystem
   protected
 
   def self.included(base)
-    base.helper_method(:active_menu, :active_submenu, :active_menu?)
+    base.helper_method(:active_menu, :active_submenu, :active_sidebar, :active_menu?)
     base.extend(ClassMethods)
   end
 

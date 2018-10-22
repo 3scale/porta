@@ -38,14 +38,7 @@ html[lang="en"]
           }
 
 
-        ol.Breadcrumbs  role="navigation" aria-label="breadcrumbs"
-          li.Breadcrumbs-item = active_menu
-          li.Breadcrumbs-item = active_submenu
-          /= active_menu?(:sidebar, 'usage')
-          /- if active_sidebar
-            /li.Breadcrumbs-item = active_sidebar
-          - if action_name == 'edit' || action_name == 'new'
-            li.Breadcrumbs-item = action_name
+        = render 'shared/provider/navigation/breadcrumbs'
         = render 'shared/provider/flash', flash: flash
 
         main.Main#content class=('Main--callToAction' if call_to_action?)

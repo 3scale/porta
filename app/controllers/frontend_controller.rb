@@ -3,6 +3,7 @@ class FrontendController < ApplicationController
   include AccessCodeProtection
 
   include MenuSystem
+  helper BreadcrumbsHelper
   include ThreeScale::Api::Controller
   extend ::Filters::ProviderRequired
 
