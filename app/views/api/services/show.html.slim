@@ -110,6 +110,11 @@ section class="service-widget"
       - if can? :manage, :partners
         h2
           = link_to 'Configuration', path_to_service(service), :title => 'Change integration settings for this service', data: { bubble: 'integration' }
+          ' ,
+          => link_to 'Methods', admin_service_metrics_path(service),  data: { bubble: 'metric' }
+          '  and
+          =< link_to 'Settings', settings_admin_service_path(service), :title => "Edit service settings"
+
         ul.service-settings[data-hint="basics"]
           - if service.deployment_option.present?
             - deployment_option_phrased = t(service.proxy.deployment_option, scope: "deployment_options.phrased")
