@@ -51,6 +51,7 @@ nav.vertical-nav#mainmenu
     var nav = document.querySelector('.vertical-nav'),
     navItems = document.querySelectorAll('.secondary-nav-item-pf');
 
+    // TODO: refactor hover logic into a module, too much code here.
     var itemVisible = null
     var showDelay = null
     var hideAllDelay = null
@@ -70,7 +71,7 @@ nav.vertical-nav#mainmenu
             nav.classList.add('hover-secondary-nav-pf');
             navItems[me].classList.add('is-hover');
 
-            if (itemVisible !== null) {
+            if (itemVisible >= 0) {
               navItems[itemVisible].classList.remove('is-hover');
             }
 
