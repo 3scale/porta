@@ -27,6 +27,8 @@ module BreadcrumbsHelper
 
   def index_link(text)
     link_to text, url_for(action: :index)
+  rescue ActionController::UrlGenerationError
+    return text
   end
 
   def breadcrumb_unlinkable?(key)
