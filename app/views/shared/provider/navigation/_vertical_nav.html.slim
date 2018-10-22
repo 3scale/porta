@@ -83,10 +83,6 @@ nav.vertical-nav#mainmenu
         return function() {
           clearTimeout(showDelay)
 
-          if (itemVisible !== me) {
-            return
-          }
-
           hideAllDelay = setTimeout(function() {
             navItems[me].classList.remove('is-hover');
             nav.classList.remove('hover-secondary-nav-pf');
