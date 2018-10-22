@@ -3,5 +3,7 @@ ol.Breadcrumbs role="navigation" aria-label="breadcrumbs"
   li.Breadcrumbs-item = display_active_submenu
   - if active_sidebar
     li.Breadcrumbs-item = display_active_sidebar
+  - if %w[edit preview].include?(action_name) && show_element = breadcrumb_show_element
+    li.Breadcrumbs-item = show_element
   - if %w[edit new].include?(action_name)
     li.Breadcrumbs-item = action_name.humanize

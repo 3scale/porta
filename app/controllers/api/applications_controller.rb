@@ -13,6 +13,10 @@ class Api::ApplicationsController < Api::BaseController
   activate_menu :serviceadmin, :applications
   sublayout 'api/service'
 
+  def breadcrumb_object
+    @cinstance
+  end
+
   def index
     # TODO: This code is REALLY bad but it is copied and pasted from Buyers::ApplicationsController#index because
     # doing it well requires time and we don't have time right now.

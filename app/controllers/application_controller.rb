@@ -88,6 +88,16 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # TODO -> move it to a concern/module
+  def breadcrumb_object
+  end
+  helper_method :breadcrumb_object
+
+  def breadcrumb_show_object_action
+    :show
+  end
+  helper_method :breadcrumb_show_object_action
+
   def cors
     headers['Access-Control-Allow-Origin'.freeze] =
         request.headers['3scale-Origin'] || request.headers['origin'] || ''

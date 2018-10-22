@@ -4,7 +4,13 @@ class Admin::ApiDocs::BaseController < FrontendController
   before_action :find_api_docs, only: %i[destroy edit update show preview toggle_visible]
   before_action :deny_on_premises_for_master
 
+  def breadcrumb_object
+    @api_docs_service
+  end
 
+  def breadcrumb_show_object_action
+    :preview
+  end
 
   def preview
     if api_docs_service.specification.swagger?

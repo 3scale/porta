@@ -15,6 +15,14 @@ module BreadcrumbsHelper
     breadcrumb_unlinkable?(active_sidebar) ? text : index_link(text)
   end
 
+  def breadcrumb_show_element
+    variable_name = controller_name.singularize
+    current_object = instance_variable_get("@#{variable_name}") || breadcrumb_object
+
+    return unless current_object
+    link_to(current_object.name.titleize, url_for(action: breadcrumb_show_object_action))
+  end
+
   private
 
   def index_link(text)
