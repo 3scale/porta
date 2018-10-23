@@ -54,7 +54,10 @@ nav.vertical-nav.hover-secondary-nav-pf#mainmenu
     for (var i = 0; i < navItems.length; i++) {
       navItems[i].querySelector('a')
         .addEventListener('click', function() {
-          this.parentElement.classList.toggle('is-hover')
+          var classList = this.parentElement.classList
+          if (!classList.contains('active')) {
+            classList.toggle('is-hover')
+          }
         })
     }
 
