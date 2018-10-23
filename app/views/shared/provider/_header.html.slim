@@ -2,10 +2,6 @@
 
 header.Header id="user_widget" class=('Header--master' if current_account.master?)
 
-  - unless active_menu?(:main_menu, :dashboard)
-    a.PopNavigation-trigger.vert-nav-toggle
-      => fixed_width_icon('bars')
-
   = link_to provider_admin_dashboard_path, class: 'Header-link', title: 'Dashboard' do
       .Header-logo class=('Header-logo--withIcon' if active_menu?(:main_menu, :dashboard))
         | Red Hat 3scale API Management

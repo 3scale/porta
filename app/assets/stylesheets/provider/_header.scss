@@ -47,6 +47,9 @@
     height: line-height-times(4.5 / 4);
     width: line-height-times(18);
     margin-top: line-height-times(-1/4);
+    background-position: 0 0;
+    margin-left: line-height-times(0.6);
+    margin-right: line-height-times(-3);
 
     &--withIcon {
       background-position: 0 0;
