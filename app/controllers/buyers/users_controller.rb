@@ -1,5 +1,5 @@
 class Buyers::UsersController < Buyers::BaseController
-  activate_menu :submenu => :accounts
+  activate_menu :audience, :accounts, :listing
 
   inherit_resources
   actions :index, :show, :edit, :update, :destroy
