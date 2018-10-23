@@ -31,10 +31,11 @@ nav.vertical-nav.hover-secondary-nav-pf#mainmenu
                   icon: 'file-text'
 
         - if can?(:manage, :monitoring)
-          = render vertical_nav_item,
-                   title: 'Alerts',
-                   path:  admin_alerts_path,
-                   icon:  'exclamation-triangle'
+          - if current_user.multiple_accessible_services?
+            = render vertical_nav_item,
+                     title: 'Alerts',
+                     path:  admin_alerts_path,
+                     icon:  'exclamation-triangle'
 
           = render vertical_nav_item,
                   title: 'Traffic',

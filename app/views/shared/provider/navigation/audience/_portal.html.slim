@@ -20,17 +20,17 @@
        title: 'Feature Visibility',
        path: provider_admin_cms_switches_path
 
-- unless current_account.master?
-  li.list-group-item
-    span.list-group-item-value.label
 
-  li.list-group-item
-    = link_to access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
-              access_code: current_account.site_access_code).html_safe,
-              target: "_blank" do
-      span.fa.fa-external-link style="margin: 0 .3rem;"
-      span.list-group-item-value
-        | Visit Portal
+li.list-group-item
+  span.list-group-item-value.label
+
+li.list-group-item
+  = link_to access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
+            access_code: current_account.site_access_code).html_safe,
+            target: "_blank" do
+    span.fa.fa-external-link style="margin: 0 .3rem;"
+    span.list-group-item-value
+      | Visit Portal
 
 - if can?(:manage, :portal)
   li.list-group-item
