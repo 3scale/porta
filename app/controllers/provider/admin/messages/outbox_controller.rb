@@ -1,8 +1,9 @@
 class Provider::Admin::Messages::OutboxController < FrontendController
   before_action :build_message, :only => [:new, :create]
-  activate_menu :buyers, :messages, :inbox
+  activate_menu :buyers, :messages, :sent_messages
 
   def new
+    activate_menu :buyers, :messages, :inbox
     @message.to recipients
   end
 
