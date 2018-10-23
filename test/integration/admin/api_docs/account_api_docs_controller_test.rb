@@ -21,7 +21,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
 
       get admin_api_docs_services_path
-      refute_xpath "//nav[@class='vertical-nav']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
+      refute_xpath "//*[@id='mainmenu']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
       assert_xpath '//*[@id="content"]/h1', 'ActiveDocs' # The service title
 
       page = Nokogiri::HTML::Document.parse(response.body)
@@ -54,7 +54,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
     test 'preview under the service scope when there is a service' do
       get preview_admin_api_docs_service_path(api_docs_service)
-      refute_xpath "//nav[@class='vertical-nav']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
+      refute_xpath "//*[@id='mainmenu']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
       assert_xpath '//*[@id="content"]/h1', 'ActiveDocs' # The service title
 
       api_docs_service.update({service_id: service.id}, without_protection: true)
@@ -64,7 +64,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
     test 'edit under the service scope when there is a service' do
       get edit_admin_api_docs_service_path(api_docs_service)
-      refute_xpath "//nav[@class='vertical-nav']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
+      refute_xpath "//*[@id='mainmenu']//li[contains(@class, 'active')]/a[contains(@href, '#{admin_service_api_docs_path(service)}')]/span", 'ActiveDocs' # The service menu
       assert_xpath '//*[@id="content"]/h1', 'ActiveDocs' # The service title
 
       api_docs_service.update({service_id: service.id}, without_protection: true)
