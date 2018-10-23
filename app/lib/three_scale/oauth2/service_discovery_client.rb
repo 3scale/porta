@@ -26,11 +26,60 @@ module ThreeScale
 
       def authenticate_options(request)
         {
-            # TODO: see service_discovery_helper.rb
-            # I need to construct this dynamically through a request
-            redirect_uri: 'http://master-account-admin.example.com.lvh.me:3000/auth/service-discovery/callback?self_domain=provider-admin.example.com.lvh.me'
+            redirect_uri: RedirectUri.call(self, request)
         }
       end
+    end
+
+    # TODO: Refactor! It is the same as ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
+    #
+    class RedirectUri < ThreeScale::OAuth2::ClientBase::CallbackUrl
+
+      PARAMS_NOT_ALLOWED = %i[code action controller].freeze
+
+      def self.call(client, request)
+        new(client, request).call
+      end
+
+      def initialize(client, request)
+        @client = client
+        @request = request
+      end
+
+      def base_url
+        @base_url ||= ThreeScale::Domain.callback_endpoint(request, callback_account, host)
+      end
+
+      def sso_name
+        @sso_name ||= client.authentication.system_name
+      end
+
+      def query_options
+        @query_options ||= begin
+          opts = { self_domain: self_domain }
+
+          state = client.state
+          opts[:state] = request.session[:state] = state if state
+
+          request.params.symbolize_keys.except(*PARAMS_NOT_ALLOWED).merge(opts)
+        end
+      end
+
+      private
+
+      def self_domain
+        request.try(:real_host).presence || request.host
+      end
+
+      def callback_account
+        client.authentication.account
+      end
+
+      def host
+        Account.master.self_domain
+      end
+
+      attr_reader :client, :request
     end
   end
 end

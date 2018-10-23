@@ -8,7 +8,7 @@ class AuthenticationProvider::ServiceDiscoveryProvider < AuthenticationProvider
 
     new do |provider|
       provider.assign_attributes kind: 'service_discovery',
-        system_name: Account::ServiceDiscoverySupport::SERVICE_DISCOVERY_SYSTEM_NAME,
+        system_name: ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME,
         client_id: ServiceDiscovery::OAuthConfiguration.instance.client_id,
         client_secret: ServiceDiscovery::OAuthConfiguration.instance.client_secret,
         token_url: ServiceDiscovery::OAuthConfiguration.instance.token_endpoint,

@@ -15,9 +15,14 @@ module ServiceDiscovery
       ActiveSupport::StringInquirer.new(config.authentication_method.presence || 'service_account')
     end
 
+    def available?
+      ServiceDiscovery::OAuthConfiguration.instance.available? && access_token.present?
+    end
+
+    # TODO: handle expired / non existent token
     def access_token
       if authentication_method.oauth?
-        @user.provided_access_tokens.valid.first
+        @user.provided_access_tokens.valid.first.value
       else
         config.bearer_token
       end
