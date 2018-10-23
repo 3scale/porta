@@ -65,6 +65,14 @@ module ServiceDiscovery
       end
     end
 
+    def client_secret
+      config.client_secret
+    end
+
+    def client_id
+      config.client_id
+    end
+
     def timeout
       config.timeout || 1
     end
