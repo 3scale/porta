@@ -23,7 +23,7 @@ class AuthenticationProvider < ApplicationRecord
 
   validates :system_name, exclusion: [
       RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME,
-      Account::ServiceDiscoverySupport::SERVICE_DISCOVERY_SYSTEM_NAME
+      ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME
   ]
 
   before_validation :set_defaults, on: :create
