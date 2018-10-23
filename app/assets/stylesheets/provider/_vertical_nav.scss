@@ -76,35 +76,6 @@
       display: block !important;
     }
   }
-  /*! CSS Used from: _vertical-nav.css */
-  &.collapsed .nav-pf-vertical {
-    width: line-height-times(5 / 2);
-
-    .list-group-item > a {
-      width: line-height-times(5 / 2);
-    }
-
-    .nav-pf-secondary-nav .list-group-item>a {
-      width: line-height-times(9);
-    }
-
-    .list-group-item>a>.list-group-item-value {
-      display: none;
-    }
-
-    .nav-pf-secondary-nav .list-group-item>a>.list-group-item-value {
-      display: inline-block;
-    }
-
-    .nav-pf-secondary-nav {
-      left: line-height-times(5 / 2, true);
-    }
-
-    .secondary-nav-item-pf.active > a:after,
-    .secondary-nav-item-pf:hover > a:after {
-      right: line-height-times(0.5);
-    }
-  }
 
   .nav-pf-vertical {
     background: #292e34;
