@@ -82,11 +82,11 @@
     border-right: 1px solid #292e34;
     bottom: 0;
     left: 0;
+    overflow-y: auto;
     position: fixed;
     top: line-height-times(2.5);
     width: line-height-times(9);
     z-index: 1030;
-    overflow-y: auto;
   }
 
   .nav-pf-vertical .list-group {
@@ -179,16 +179,15 @@
     content: "\f105";
     display: block;
     font-family: FontAwesome;
-    line-height: line-height-times(1.5);
-    padding: line-height-times(0.5) 0;
+    //line-height: line-height-times(1.5);
+    //padding: line-height-times(0.5) 0;
     position: absolute;
     right: line-height-times(0.5);
-    top: 0;
+    top: line-height-times(0.75);
   }
 
   .secondary-nav-item-pf.active > a,
   .secondary-nav-item-pf:hover > a {
-    width: line-height-times(9);
     z-index: 1031;
   }
 
@@ -221,11 +220,7 @@
     display: block;
     left: calc(#{line-height-times(9, true)} - 1px);
     opacity: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
     top: line-height-times(2.5);
-    visibility: hidden;
-    width: line-height-times(9);
     z-index: 1030;
     display: none;
   }
@@ -242,14 +237,12 @@
   &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav,
   .secondary-nav-item-pf.active .nav-pf-secondary-nav {
     opacity: 1;
-    visibility: visible;
     display: block;
     padding-bottom: line-height-times(1/2);
   }
   .nav-pf-secondary-nav .list-group-item {
     border: none;
     padding: 0 0 line-height-times(0.1) 0;
-    width: line-height-times(9);
   }
 
   // temp hack that needs to be fixed in sub layout
