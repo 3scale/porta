@@ -29,7 +29,6 @@ RUN yum -y update \
 # copying only the gemspec files and copying all the other files after the build
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
-ADD vendor/codeclimate_rails/*.gemspec vendor/codeclimate_rails/
 ADD Gemfile.prod* ./
 ADD Rakefile ./
 
