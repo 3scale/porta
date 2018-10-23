@@ -2,6 +2,7 @@ default: &base
   enabled: false
   server_scheme: 'https'
   server_port: 8443
+  authentication_method: service_account
 
 development:
   <<: *base
