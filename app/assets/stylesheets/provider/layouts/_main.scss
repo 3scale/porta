@@ -30,10 +30,6 @@
   margin-left: line-height-times(9);
 }
 
-.vertical-nav.collapsed + #border {
-  margin-left: line-height-times(2.5);
-}
-
 .Main {
   min-height: calc(100vh - #{line-height-times(10)});
 
