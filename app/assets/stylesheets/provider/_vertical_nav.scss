@@ -4,8 +4,9 @@
 
   .label {
     color: $light-color;
-    margin: line-height-times(1) 0 0 line-height-times(1);
+    margin: line-height-times(1) 0 0 line-height-times(2);
     font-variant: small-caps;
+    font-size: $font-size-sm;
   }
 
   a {
@@ -150,12 +151,16 @@
     text-decoration: none;
   }
   .nav-pf-vertical .list-group-item.active > a,
-  .nav-pf-vertical .list-group-item:hover > a,
-  .nav-pf-vertical .list-group-item > a:focus {
+  .nav-pf-vertical .list-group-item:hover > a {
     background-color: #393f44;
     color: #fff;
     font-weight: 400;
   }
+
+  .nav-pf-vertical  .is-hover.list-group-item:hover > a {
+    background-color: #292E34;
+  }
+
   .nav-pf-vertical .list-group-item.active > a .fa,
   .nav-pf-vertical .list-group-item:hover > a .fa,
   .nav-pf-vertical .list-group-item:hover > a .pficon,
@@ -247,7 +252,6 @@
     opacity: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    //position: fixed;
     top: line-height-times(2.5);
     visibility: hidden;
     width: line-height-times(9);
@@ -260,17 +264,28 @@
     background: #292E34;
   }
 
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav .list-group-item > a:hover {
+    background: #393F43;
+  }
+
   &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav,
   .secondary-nav-item-pf.active .nav-pf-secondary-nav {
     opacity: 1;
     visibility: visible;
     display: block;
+    padding-bottom: line-height-times(1/2);
   }
   .nav-pf-secondary-nav .list-group-item {
     border: none;
     padding: 0 0 line-height-times(0.1) 0;
     width: line-height-times(9);
   }
+
+  // temp hack that needs to be fixed in sub layout
+  .nav-pf-secondary-nav .list-group-item:first-of-type > a:first-child {
+    display: none;
+  }
+
   .nav-pf-secondary-nav .list-group-item > a {
     background-color: #393f44;
     color: #d1d1d1;
