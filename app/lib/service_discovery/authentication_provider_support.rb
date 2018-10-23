@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Account::ServiceDiscoverySupport
-  extend ActiveSupport::Concern
+module ServiceDiscovery::AuthenticationProviderSupport
 
   SERVICE_DISCOVERY_SYSTEM_NAME = 'service-discovery'
 

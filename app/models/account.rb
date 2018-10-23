@@ -40,7 +40,7 @@ class Account < ApplicationRecord
   include Logic::ProviderSettings
   include Logic::ProviderConstraints
   include ProviderMethods
-  include Account::ServiceDiscoverySupport
+  include ServiceDiscovery::AuthenticationProviderSupport
 
   include BuyerMethods
   include Billing
