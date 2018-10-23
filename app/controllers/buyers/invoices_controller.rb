@@ -5,8 +5,7 @@ class Buyers::InvoicesController < Buyers::BaseController
   helper_method :allow_edit?
 
   before_action :find_account
-
-  activate_menu :submenu => :accounts
+  activate_menu :audience, :accounts, :listing
 
   def index
     @invoices = @account.invoices.includes(:buyer_account, :provider_account)
