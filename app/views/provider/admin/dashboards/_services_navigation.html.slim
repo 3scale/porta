@@ -17,7 +17,7 @@ nav.DashboardNavigation.DashboardNavigation--services
                                   'ActiveDocs',
                                   'file-text'
 
-    - if can?(:manage, :monitoring) && alerts.any?
+    - if can?(:manage, :monitoring) && alerts.any? && current_user.multiple_accessible_services?
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'Alert',
                                     alerts,
