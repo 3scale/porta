@@ -22,11 +22,15 @@ module ServiceDiscovery
     end
 
     def available?
-      server_error? || (config.enabled && oauth_configuration.present?)
+      server_ok? || (config.enabled && oauth_configuration.present?)
     end
 
     def server_error?
       @config_fetch_retries > max_retries
+    end
+
+    def server_ok?
+      !server_error?
     end
 
     def max_retries
