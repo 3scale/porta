@@ -21,7 +21,10 @@ class AuthenticationProvider < ApplicationRecord
             :authorize_url, :site, :username_key, :kind, :branding_state, :type,
             length: { maximum: 255 }
 
-  validates :system_name, exclusion: [RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME]
+  validates :system_name, exclusion: [
+      RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME,
+      Account::ServiceDiscoverySupport::SERVICE_DISCOVERY_SYSTEM_NAME
+  ]
 
   before_validation :set_defaults, on: :create
   before_create :set_defaults
