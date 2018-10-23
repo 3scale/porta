@@ -10,7 +10,7 @@ class Api::ApplicationsController < Api::BaseController
   include DisplayViewPortion
   helper DisplayViewPortion::Helper
 
-  activate_menu :serviceadmin, :applications
+  activate_menu :serviceadmin, :applications, :listing
   sublayout 'api/service'
 
   def index

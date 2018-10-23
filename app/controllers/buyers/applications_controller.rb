@@ -44,7 +44,7 @@ class Buyers::ApplicationsController < FrontendController
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
       @search.account = @account
-      activate_menu :buyers, :accounts
+      activate_menu :buyers, :accounts, :listing
     end
 
     @cinstances = current_user.accessible_cinstances

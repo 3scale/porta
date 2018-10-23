@@ -3,7 +3,7 @@ class Stats::ApplicationsController < Stats::BaseController
   before_action :find_service
   before_action :find_buyer_account
 
-  activate_menu :serviceadmin, :monitoring, :applications
+  activate_menu :serviceadmin, :applications, :listing
   sublayout 'api/service'
 
   def show
