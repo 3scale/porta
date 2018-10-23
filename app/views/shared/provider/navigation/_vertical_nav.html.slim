@@ -1,7 +1,7 @@
 - vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
 - layout_secondary_nav = 'shared/provider/navigation/secondary_nav'
 
-nav.vertical-nav#mainmenu
+nav.vertical-nav.hover-secondary-nav-pf#mainmenu
   div.nav-pf-vertical.nav-pf-vertical-with-sub-menus
     ul.list-group
       - case active_menu
@@ -51,50 +51,11 @@ nav.vertical-nav#mainmenu
     var nav = document.querySelector('.vertical-nav'),
     navItems = document.querySelectorAll('.secondary-nav-item-pf');
 
-    // TODO: refactor hover logic into a module, too much code here.
-    var itemVisible = null
-    var showDelay = null
-    var hideAllDelay = null
-
     for (var i = 0; i < navItems.length; i++) {
-      var navItem = navItems[i]
-
-      var makeFlagItemToShow = function(me) {
-        return function() {
-          clearTimeout(hideAllDelay)
-
-          if (itemVisible === me) {
-            return
-          }
-
-          showDelay = setTimeout(function() {
-            nav.classList.add('hover-secondary-nav-pf');
-            navItems[me].classList.add('is-hover');
-
-            if (itemVisible >= 0) {
-              navItems[itemVisible].classList.remove('is-hover');
-            }
-
-            itemVisible = me
-          }, 250)
-        }
-      }
-
-      var makeFlagToHideAll = function(me) {
-        return function() {
-          clearTimeout(showDelay)
-
-          hideAllDelay = setTimeout(function() {
-            navItems[me].classList.remove('is-hover');
-            nav.classList.remove('hover-secondary-nav-pf');
-
-            itemVisible = null
-          }, 250)
-        }
-      }
-
-      navItem.addEventListener('mouseenter', makeFlagItemToShow(i));
-      navItem.addEventListener('mouseleave', makeFlagToHideAll(i));
+      navItems[i].querySelector('a')
+        .addEventListener('click', function() {
+          this.parentElement.classList.toggle('is-hover')
+        })
     }
 
     var store = window.localStorage
