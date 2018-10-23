@@ -63,11 +63,20 @@ nav.DashboardNavigation
                                  'ActiveDocs',
                                  'file-text'
     // Integration
-    - if can?(:manage, :plans) && !service.has_traffic?
-      li.DashboardNavigation-list-item.u-notice
-        = link_to "Integrate this API",
-                  path_to_service(service),
-                  class: "DashboardNavigation-link u-notice"
+    - if can?(:manage, :plans)
+      - if !service.has_traffic?
+        li.DashboardNavigation-list-item.u-notice
+          = link_to path_to_service(service),
+                    class: "DashboardNavigation-link u-notice" do
+            i.fa.fa-gears>
+            | Integrate this API
+      - else
+        li.DashboardNavigation-list-item
+          = link_to path_to_service(service),
+                    class: "DashboardNavigation-link" do
+            i.fa.fa-gears>
+            | Integration
+
 
     // Integration Errors
     = dashboard_widget :service_integration_errors, service_id: service.to_param
