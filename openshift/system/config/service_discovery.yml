@@ -4,6 +4,7 @@ default: &base
   server_host: 'kubernetes.default.svc.cluster.local'
   server_port: 443
   bearer_token: "<%= File.read(cluster_token_file_path) if cluster_token_file_exists %>"
+  authentication_method: service_account
 
 production:
   <<: *base
