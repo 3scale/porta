@@ -33,11 +33,16 @@ module ThreeScale
       end
 
       def scopes
-        'user:full'
+        keycloak? ? '' : 'user:full'
       end
 
       def options
         super.merge(auth_scheme: :basic_auth)
+      end
+
+      # This is a hack but I did not find anything else to differentiate the builtin OAuth Server from Keycloak
+      def keycloak?
+        ServiceDiscovery::OAuthConfiguration.instance.oauth_configuration.scopes_supported.nil?
       end
 
       # TODO: Refactor! It is the similar to ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
@@ -70,6 +75,15 @@ module ThreeScale
             request.params.symbolize_keys.except(*PARAMS_NOT_ALLOWED).merge(opts)
           end
         end
+
+        def call
+          url = super
+          # OpenShift OAuth has a serious bug, it does not store correctly the redirect_uri
+          client.keycloak? ? url : URI.decode(url)
+        rescue
+          url
+        end
+
 
         private
 
