@@ -9,7 +9,7 @@ module ServiceDiscovery
     include Singleton
 
     attr_reader :config_fetch_retries
-    delegate :authorize_endpoint, :token_endpoint, to: :oauth_configuration
+    delegate :authorization_endpoint, :token_endpoint, to: :oauth_configuration
 
     def initialize
       super
@@ -59,8 +59,8 @@ module ServiceDiscovery
           #   * rescue any non 200 status
           #   * rescue JSON parse error
           if response.code == 200
-            json = JSON.parse(response.body)
-            @oauth_configuration = ActiveSupport::OrderedOptions.new.merge(json).freeze
+            json = JSON.parse(response.body).symbolize_keys
+            @oauth_configuration = ActiveSupport::OrderedOptions.new.merge!(json).freeze
           else
             increment_failures
             nil
