@@ -1,6 +1,7 @@
 class Sites::ForumsController < Sites::BaseController
   sublayout 'sites/developer_portals'
   activate_menu :audience, :forum, :settings
+  #activate_menu :audience, :portal, :forum_settings
 
   before_action :authorize_forum_feature, :find_settings
 
