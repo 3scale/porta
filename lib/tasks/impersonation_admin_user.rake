@@ -2,23 +2,23 @@
 
 namespace :impersonation_admin_user do
   task :update, %i[username domain] => :environment do |_task, args|
-    username = args[:username]
-    domain = args[:domain]
+    username = ActiveRecord::Base.connection.quote(args[:username])
+    domain = ActiveRecord::Base.connection.quote(args[:domain])
 
     complete_query = if System::Database.oracle?
                        <<~SQL
                          UPDATE users
-                          SET username =  '#{username}',
-                              email =  '#{username}' || '+' ||
+                          SET username =  #{username},
+                              email =  #{username} || '+' ||
                                       (SELECT self_domain FROM accounts WHERE accounts.id = users.account_id) ||
-                                      '@' || '#{domain}'
+                                      '@' || #{domain}
                           WHERE users.username = '3scaleadmin'
                        SQL
                      else
                        <<~SQL
                          UPDATE users
                          INNER JOIN accounts ON accounts.id = users.account_id
-                         SET username = '#{username}', email = CONCAT('#{username}', '+', accounts.self_domain, '@', '#{domain}')
+                         SET username = #{username}, email = CONCAT(#{username}, '+', accounts.self_domain, '@', #{domain})
                          WHERE users.username = '3scaleadmin'
                        SQL
                      end
