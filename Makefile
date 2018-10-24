@@ -34,10 +34,10 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_ENV=test && bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
 ifdef CIRCLECI
 # FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
-SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake test:files:$$JOB | circleci tests split --split-by=timings >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
+SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake test:files:$${JOB} | circleci tests split --split-by=timings >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
 else
 # FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
-SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake test:files:$$JOB >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
+SCRIPT_TEST = echo 'export TESTS=\\\"' > $${JOB}_files && bundle exec rake test:files:$${JOB} >> $${JOB}_files && echo '\\\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
 endif
 
 default: all
