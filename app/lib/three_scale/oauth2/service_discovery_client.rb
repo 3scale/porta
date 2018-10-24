@@ -3,6 +3,12 @@
 module ThreeScale
   module OAuth2
     class ServiceDiscoveryClient < ClientBase
+      attr_reader :state
+
+      def kind
+        'service_discovery'
+      end
+
       def username
         raw_info['username'].presence || raw_info['preferred_username']
       end
@@ -15,9 +21,6 @@ module ThreeScale
         raw_info['email_verified']
       end
 
-      def kind
-        'service_discovery'
-      end
 
       # TODO: differs on Keycloak and on Openshift OAuth server
       def uid
@@ -26,60 +29,61 @@ module ThreeScale
 
       def authenticate_options(request)
         {
-            redirect_uri: RedirectUri.call(self, request)
+          redirect_uri: RedirectUri.call(self, request)
         }
       end
-    end
 
-    # TODO: Refactor! It is the same as ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
-    #
-    class RedirectUri < ThreeScale::OAuth2::ClientBase::CallbackUrl
-
-      PARAMS_NOT_ALLOWED = %i[code action controller].freeze
-
-      def self.call(client, request)
-        new(client, request).call
+      def scopes
+        'user:info'
       end
 
-      def initialize(client, request)
-        @client = client
-        @request = request
-      end
+      # TODO: Refactor! It is the similar to ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
+      #
+      class RedirectUri < ThreeScale::OAuth2::ClientBase::CallbackUrl
 
-      def base_url
-        @base_url ||= ThreeScale::Domain.callback_endpoint(request, callback_account, host)
-      end
+        PARAMS_NOT_ALLOWED = %i[code action controller state].freeze
 
-      def sso_name
-        @sso_name ||= client.authentication.system_name
-      end
-
-      def query_options
-        @query_options ||= begin
-          opts = { self_domain: self_domain }
-
-          state = client.state
-          opts[:state] = request.session[:state] = state if state
-
-          request.params.symbolize_keys.except(*PARAMS_NOT_ALLOWED).merge(opts)
+        def self.call(client, request)
+          new(client, request).call
         end
+
+        def initialize(client, request)
+          @client = client
+          @request = request
+        end
+
+        def base_url
+          @base_url ||= ThreeScale::Domain.callback_endpoint(request, callback_account, host)
+        end
+
+        def sso_name
+          @sso_name ||= client.authentication.system_name
+        end
+
+        def query_options
+          @query_options ||= begin
+            opts = { self_domain: self_domain }
+
+            request.params.symbolize_keys.except(*PARAMS_NOT_ALLOWED).merge(opts)
+          end
+        end
+
+        private
+
+        def self_domain
+          request.try(:real_host).presence || request.host
+        end
+
+        def callback_account
+          client.authentication.account
+        end
+
+        def host
+          Account.master.self_domain
+        end
+
+        attr_reader :client, :request
       end
-
-      private
-
-      def self_domain
-        request.try(:real_host).presence || request.host
-      end
-
-      def callback_account
-        client.authentication.account
-      end
-
-      def host
-        Account.master.self_domain
-      end
-
-      attr_reader :client, :request
     end
   end
 end

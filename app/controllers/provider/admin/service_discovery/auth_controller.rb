@@ -18,7 +18,7 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
     else
       redirect_options = { error: 'We could not authenticate you against OpenShift cluster' }
     end
-    redirect_to referrer_url, redirect_options
+    redirect_to new_admin_service_path, redirect_options
   end
 
   protected
@@ -29,14 +29,5 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
 
   def authentication_provider
     @authentication_provider ||= current_account.service_discovery_authentication_provider
-  end
-
-  def referrer_url
-    url = params[:referrer]
-    if url
-      URI.decode(url)
-    else
-      new_admin_service_path
-    end
   end
 end
