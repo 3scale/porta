@@ -48,11 +48,3 @@ Feature: Dashboard
     When I go to the provider dashboard
     Then I should see the link "0 Subscriptions" in the first api dashboard widget
     Then I should see the link "2 Plans" in the first api dashboard widget
-
-  Scenario: API Widget with End-user plans enabled and at least 1 end-user plan
-    Given a service "Another one" of provider "foo.example.com"
-    And provider "foo.example.com" has "end_users" switch allowed
-    And an end user plan "first" of provider "foo.example.com"
-    When I go to the provider dashboard
-    Then I should see the link "End-users" in the first api dashboard widget
-    Then I should see the link "1 Plan" in the first api dashboard widget

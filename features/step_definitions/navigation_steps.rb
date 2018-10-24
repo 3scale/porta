@@ -30,7 +30,7 @@ end
 
 When /^I navigate to the forum my posts admin page$/ do
   step "I navigate to the forum admin page"
-  click_link "My threads"
+  click_link "My Threads"
 end
 
 When /^I navigate to my account edition page$/ do
