@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::ApiDocs::AccountApiDocsController < Admin::ApiDocs::BaseController
-  activate_menu :audience, :portal, :ActiveDocs
+  activate_menu :audience, :cms, :ActiveDocs
   sublayout 'api/service'
 
   class NotImplementedServiceScopeError < RuntimeError; end
