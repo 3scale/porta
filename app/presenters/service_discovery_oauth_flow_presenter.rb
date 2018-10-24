@@ -15,7 +15,7 @@ class ServiceDiscoveryOAuthFlowPresenter < OauthFlowPresenter
   end
 
   def authorize_url
-    client.authorize_url(redirect_uri.base_url, redirect_uri.query_options.merge(referrer: request.fullpath))
+    client.authorize_url(redirect_uri.base_url, redirect_uri.query_options)
   end
 
   private

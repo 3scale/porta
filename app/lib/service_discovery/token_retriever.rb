@@ -22,7 +22,7 @@ module ServiceDiscovery
     # TODO: handle expired / non existent token
     def access_token
       if authentication_method.oauth?
-        @user.provided_access_tokens.valid.first.value
+        @user.provided_access_tokens.valid.first&.value
       else
         config.bearer_token
       end
