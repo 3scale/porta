@@ -7,7 +7,7 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
   authorize_resource
 
-  activate_menu :account, :users
+  activate_menu :account, :users, :listing
 
   def update
     resource.validate_fields!
