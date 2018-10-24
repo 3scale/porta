@@ -4,7 +4,7 @@ class Api::ServicesController < Api::BaseController
   before_action :deny_on_premises_for_master
   before_action :authorize_manage_plans, only: %i[create destroy]
   before_action :authorize_admin_plans, except: %i[create destroy]
-  helper_method :service_discovery_available?
+  helper_method :service_discovery_available?, :service_discovery_presenter
 
   load_and_authorize_resource :service, through: :current_user,
     through_association: :accessible_services, except: [:create]
@@ -71,7 +71,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def service_discovery_presenter
-    @service_discovery_presenter ||= ServiceDiscoveryOAuthFlowPresenter.new(site_account, query)
+    @service_discovery_presenter ||= ServiceDiscoveryOAuthFlowPresenter.new(current_account, request)
   end
 
   def service_name_changed?
