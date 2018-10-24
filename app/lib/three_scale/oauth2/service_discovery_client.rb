@@ -33,7 +33,7 @@ module ThreeScale
       end
 
       def scopes
-        'user:info'
+        'user:full'
       end
 
       def options
