@@ -79,16 +79,16 @@ test-integration: precompile-assets
 	$(MAKE) test JOB="${JOB}"
 
 ifdef CIRCLECI
-test-rspec: CMD = bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+test-rspec: CMD = bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | tr '\n' ' '`
 else
 test-rspec: CMD = bundle exec rspec --format progress $(shopt -s globstar && ls -l spec/**/*_spec.rb)
 endif
 test-rspec: test-prep
 
 ifdef CIRCLECI
-test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default) && bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
+test-cucumber: CMD = make dnsmasq_set && bundle exec cucumber --profile ci `bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings | tr '\n' ' '` && make dnsmasq_unset
 else
-test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings) bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
+test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default) && bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
 endif
 test-cucumber: precompile-assets test-prep
 
