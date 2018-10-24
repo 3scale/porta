@@ -33,7 +33,10 @@ export COMPOSE_FILE
 
 all: clean clean-tmp build test ## Cleans environment, builds docker image and runs tests
 
-$(DOCKER_COMPOSE): $(DOCKER_COMPOSE_BIN)
+directories:
+	mkdir -p .jspm .bundle vendor/bundle public/assets assets/jspm_packages tmp/cache node_modules
+
+$(DOCKER_COMPOSE): directories $(DOCKER_COMPOSE_BIN)
 	@ln -sf $(realpath $(DOCKER_COMPOSE_BIN)) $(DOCKER_COMPOSE)
 
 $(DOCKER_COMPOSE_BIN): $(BIN_PATH) | wget
