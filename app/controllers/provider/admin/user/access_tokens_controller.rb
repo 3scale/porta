@@ -4,7 +4,7 @@ class Provider::Admin::User::AccessTokensController < Provider::Admin::User::Bas
   actions :index, :new, :create, :edit, :update, :destroy
 
   authorize_resource
-  activate_menu :account, :personal, :access_tokens
+  activate_menu :account, :personal, :tokens
   before_action :authorize_access_tokens
 
   def create
