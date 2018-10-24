@@ -42,11 +42,10 @@ Feature: Applications management
 
   Scenario: List all applications of buyer
     Given buyer "bob" has application "SimpleApp"
-    Given buyer "bob" has application "ComplicatedApp"
+     And buyer "bob" has application "ComplicatedApp"
      And I go to the buyer account page for "bob"
-    Then I should see "2 Applications"
-    When I follow "Applications"
-    And I follow "Name"
+    When I follow "2 Applications"
+     And I follow "Name"
     Then I should see following table:
       | Name ▲         | State |
       | ComplicatedApp | live  |
