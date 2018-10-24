@@ -14,32 +14,6 @@ JENKINS_ENV = JENKINS_URL BUILD_TAG BUILD_NUMBER BUILD_URL
 JENKINS_ENV += GIT_BRANCH GIT_COMMIT GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_EMAIL GIT_COMMITTER_NAME PERCY_ENABLE
 JENKINS_ENV += BUNDLE_GEMFILE BUNDLE_GEMS__CONTRIBSYS__COM
 JENKINS_ENV += PARALLEL_TEST_PROCESSORS
-JENKINS_ENV += CIRCLE_BUILD_NUM \
-			   CIRCLE_BUILD_URL \
-			   CIRCLE_COMPARE_URL \
-			   CIRCLE_INTERNAL_CONFIG \
-			   CIRCLE_INTERNAL_SCRATCH \
-			   CIRCLE_INTERNAL_TASK_DATA \
-			   CIRCLE_JOB \
-			   CIRCLE_JOB \
-			   CIRCLE_NODE_INDEX \
-			   CIRCLE_NODE_TOTAL \
-			   CIRCLE_PR_NUMBER \
-			   CIRCLE_PREVIOUS_BUILD_NUM \
-			   CIRCLE_PROJECT_REPONAME \
-			   CIRCLE_PROJECT_USERNAME \
-			   CIRCLE_REPOSITORY_URL \
-			   CIRCLE_SHA1 \
-			   CIRCLE_SHELL_ENV \
-			   CIRCLE_STAGE \
-			   CIRCLE_STAGE \
-			   CIRCLE_USERNAME \
-			   CIRCLE_WORKFLOW_ID \
-			   CIRCLE_WORKFLOW_JOB_ID \
-			   CIRCLE_WORKFLOW_WORKSPACE_ID \
-			   CIRCLE_WORKING_DIRECTORY \
-			   CIRCLECI \
-			   CIRCLECI_PKG_DIR
 
 JENKINS_ENV += MULTIJOB_KIND PERCY_ENABLE PERCY_TOKEN COVERAGE PROXY_ENABLED
 JENKINS_ENV += DB
@@ -58,7 +32,7 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 
 
 SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_ENV=test && bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
-ifdef CI
+ifdef CIRCLECI
 # FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
 SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake test:files:$$JOB | circleci tests split --split-by=timings >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
 else
@@ -104,14 +78,14 @@ test-integration: JOB = integration
 test-integration:
 	$(MAKE) test JOB="${JOB}"
 
-ifdef CI
+ifdef CIRCLECI
 test-rspec: CMD = bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
 else
 test-rspec: CMD = bundle exec rspec --format progress $(shopt -s globstar && ls -l spec/**/*_spec.rb)
 endif
 test-rspec: test-prep
 
-ifdef CI
+ifdef CIRCLECI
 test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default) && bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
 else
 test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings) bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
