@@ -9,12 +9,13 @@ module ServiceDiscovery
     include Singleton
 
     attr_reader :config_fetch_retries
-    delegate :authorization_endpoint, :token_endpoint, to: :oauth_configuration
+    delegate :authorization_endpoint, :token_endpoint, to: :oauth_configuration, allow_nil: true
 
     def initialize
       super
       @mutex  = Mutex.new
       @config_fetch_retries = 0
+      @well_known = WellKnownFetcher.new
     end
 
     def config
@@ -22,51 +23,23 @@ module ServiceDiscovery
     end
 
     def available?
-      server_ok? || (config.enabled && oauth_configuration.present?)
-    end
-
-    def server_error?
-      @config_fetch_retries > max_retries
-    end
-
-    def server_ok?
-      !server_error?
+      oauth_configuration.present?
     end
 
     def max_retries
       config.max_retries || 5
     end
 
-    # TODO: Retry strategy
-    #   That can be complicated as it will be per unicorn worker
-    #   and we do not want to block the server
-    #   Probably this could be required at boot time
-    #   then if cluster is is not available after X retries,
-    #   disable the service discovery.
     def oauth_configuration
+      return unless config.enabled && server_ok?
       return @oauth_configuration if @oauth_configuration
-
-      @oauth_configuration = increment_retries_on_failure do
-        request = RestClient::Request.new(
-          method: :get,
-          url: well_known_url,
-          verify_ssl: verify_ssl,
-          timeout: timeout,
-          open_timeout: open_timeout
-        )
-        request.execute do |response|
-          # TODO: rescue errors
-          #   * rescue any non 200 status
-          #   * rescue JSON parse error
-          if response.code == 200
-            json = JSON.parse(response.body).symbolize_keys
-            @oauth_configuration = ActiveSupport::OrderedOptions.new.merge!(json).freeze
-          else
-            increment_failures
-            nil
-          end
-        end
+      increment_retries_on_failure do
+        @oauth_configuration = @well_known.call
       end
+    end
+
+    def server_ok?
+      @config_fetch_retries < max_retries
     end
 
     def client_secret
@@ -77,65 +50,91 @@ module ServiceDiscovery
       config.client_id
     end
 
-    def timeout
-      config.timeout || 1
-    end
-
-    def open_timeout
-      config.open_timeout || 1
-    end
-
-    def well_known_url
-      URI.join(server_url, '.well-known/oauth-authorization-server').to_s
-    end
-
-    def server_url
-      URI::Generic.build(scheme: server_scheme, host: server_host, port: server_port).to_s
-    end
-
-    def server_host
-      config.server_host || 'openshift.default.svc'
-    end
-
-    def server_port
-      config.server_port || 8443
-    end
-
-    def server_scheme
-      config.server_scheme || 'https'
-    end
-
-    def verify_ssl
-      config.verify_ssl || OpenSSL::SSL::VERIFY_NONE
-    end
-
-    def verify_ssl?
-      verify_ssl == OpenSSL::SSL::VERIFY_NONE
-    end
-
-    # TODO: This is not discoverable from Openshift .well-known
-    # We must use `/apis/user.openshift.io/v1/users/~` See https://github.com/openshift/origin/issues/18013
-    def userinfo_endpoint
-      URI.join(server_url, '/apis/user.openshift.io/v1/users/~').to_s
-    end
-
     private
 
     def increment_retries_on_failure
       @mutex.synchronize do
-        begin
-          yield
-        rescue => e
-          # TODO: log error
-          increment_failures
-          # TODO: log error
-          nil
-        end
+        yield.tap { |result| increment_failures unless result }
       end
     end
 
     def increment_failures
       @config_fetch_retries += 1
     end
+
+    class WellKnownFetcher
+      delegate :well_known_url, :verify_ssl, :timeout, :open_timeout, to: :config
+
+      def config
+        ThreeScale.config.service_discovery
+      end
+
+      def timeout
+        config.timeout || 1
+      end
+
+      def open_timeout
+        config.open_timeout || 1
+      end
+
+      def well_known_url
+        URI.join(server_url, '.well-known/oauth-authorization-server').to_s
+      end
+
+      def server_url
+        URI::Generic.build(scheme: server_scheme, host: server_host, port: server_port).to_s
+      end
+
+      def server_host
+        config.server_host || 'openshift.default.svc'
+      end
+
+      def server_port
+        config.server_port || 8443
+      end
+
+      def server_scheme
+        config.server_scheme || 'https'
+      end
+
+      def verify_ssl
+        config.verify_ssl || OpenSSL::SSL::VERIFY_NONE
+      end
+
+      def verify_ssl?
+        verify_ssl == OpenSSL::SSL::VERIFY_NONE
+      end
+
+      # TODO: Retry strategy
+      #   That can be complicated as it will be per unicorn worker
+      #   and we do not want to block the server
+      #   Probably this could be required at boot time
+      #   then if cluster is is not available after X retries,
+      #   disable the service discovery.
+      def call
+        request = RestClient::Request.new(
+          method: :get,
+          url: well_known_url,
+          verify_ssl: verify_ssl,
+          timeout: timeout,
+          open_timeout: open_timeout
+        )
+        request.execute do |response|
+          if response.code == 200
+            json = JSON.parse(response.body)
+            # The endpoint could be better in case of Keycloak
+            json.merge!(userinfo_endpoint: URI.join(server_url, '/apis/user.openshift.io/v1/users/~').to_s)
+            ActiveSupport::OrderedOptions.new.merge!(json.symbolize_keys).freeze
+          else
+            nil
+          end
+        end
+      rescue => e
+        # TODO: Improve error logging
+        Rails.logger.debug("[Service Discovery] Cannot fetch the #{well_known_url} configuration. Exception: #{e.message}")
+        nil
+      end
+    end
+
   end
 end

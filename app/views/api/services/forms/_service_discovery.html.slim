@@ -11,7 +11,8 @@ form class="formtastic" id="new_service_source"
                 = "From Scratch"
             li
               label for="source_discover"
-                - if service_discovery_available?
+                - if service_discovery_usable?
+                  = ssss
                    = radio_button_tag :source, 'discover'
                    = "Discover"
                 - else
