@@ -21,6 +21,21 @@ nav.DashboardNavigation
           == dashboard_secondary_collection_link 'Plan',
                                                 account_plans.not_custom,
                                                 admin_buyers_account_plans_path
+
+    - if can? :manage, :partners
+      li.DashboardNavigation-list-item
+        = dashboard_collection_link 'App',
+                                applications,
+                                admin_buyers_applications_path,
+                                'Apps',
+                                'cubes'
+
+        - if can?(:manage, :monitoring) && alerts.any? 
+          == dashboard_secondary_collection_link 'Alert',
+                                      alerts,
+                                      admin_alerts_path,
+                                      'Alerts'
+
     // Billing
     - if can?(:manage, :finance)
       li.DashboardNavigation-list-item

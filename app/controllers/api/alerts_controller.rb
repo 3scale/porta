@@ -7,7 +7,7 @@ class Api::AlertsController < FrontendController
   before_action :find_service
 
   def index
-    activate_menu :apis, :alerts unless @service
+    activate_menu :audience, :applications, :alerts unless @service
     @search = ThreeScale::Search.new(search_params)
     @account_search = ThreeScale::Search.new(@search.account)
 
