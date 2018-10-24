@@ -21,7 +21,7 @@ class AuthenticationProvider::ServiceDiscoveryProvider < AuthenticationProvider
       token_url: ServiceDiscovery::OAuthConfiguration.instance.token_endpoint,
       authorize_url: ServiceDiscovery::OAuthConfiguration.instance.authorization_endpoint,
       user_info_url: ServiceDiscovery::OAuthConfiguration.instance.userinfo_endpoint,
-      skip_ssl_certificate_verification: ServiceDiscovery::OAuthConfiguration.instance.verify_ssl?
+      skip_ssl_certificate_verification: !ServiceDiscovery::OAuthConfiguration.instance.verify_ssl?
     }
   end
 end

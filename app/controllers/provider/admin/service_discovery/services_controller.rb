@@ -10,7 +10,7 @@ class Provider::Admin::ServiceDiscovery::ServicesController < Provider::Admin::B
   def create
     if can_create?
       @service = ::ServiceDiscovery::ImportClusterDefinitionsService.create_service(current_account, cluster_namespace: create_service_params[:namespace],
-                                                                                                     cluster_service_name: create_service_params[:name])
+                                                                                                     cluster_service_name: create_service_params[:name], user: current_user)
       flash[:notice] = 'The service will be imported shortly. You will receive a notification when it is done.'
       redirect_to provider_admin_dashboard_path
     else
@@ -20,7 +20,7 @@ class Provider::Admin::ServiceDiscovery::ServicesController < Provider::Admin::B
   end
 
   def update
-    if @service.discovered? && ::ServiceDiscovery::ImportClusterDefinitionsService.refresh_service(@service)
+    if @service.discovered? && ::ServiceDiscovery::ImportClusterDefinitionsService.refresh_service(@service, user: current_user)
       flash[:notice] =  'Service information will be updated shortly.'
     else
       flash[:error] =  'Cannot update service.'
