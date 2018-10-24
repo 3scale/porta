@@ -29,7 +29,6 @@ RUN yum -y update \
 # copying only the gemspec files and copying all the other files after the build
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
-ADD vendor/codeclimate_rails/*.gemspec vendor/codeclimate_rails/
 ADD Gemfile* ./
 ADD Rakefile ./
 
@@ -43,6 +42,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
 
 RUN export ${BUNDLER_ENV} \
     && source /opt/system/etc/scl_enable \
+    && gem install bundler --version 1.16.6 \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
