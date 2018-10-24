@@ -80,7 +80,8 @@ class ServiceDiscovery::OAuthConfigurationTest < ActiveSupport::TestCase
       ],
       response_types_supported: ['code', 'token'],
       grant_types_supported: ['authorization_code', 'implicit'],
-      code_challenge_methods_supported: ['plain', 'S256']
+      code_challenge_methods_supported: ['plain', 'S256'],
+      userinfo_endpoint: 'https://localhost:8443/apis/user.openshift.io/v1/users/~'
     }
   end
 end

@@ -7,6 +7,8 @@ module ServiceDiscovery
       @user = user
     end
 
+    delegate :oauth?, :service_account?, to: :authentication_method
+
     def config
       ThreeScale.config.service_discovery
     end
@@ -15,17 +17,22 @@ module ServiceDiscovery
       ActiveSupport::StringInquirer.new(config.authentication_method.presence || 'service_account')
     end
 
-    def available?
-      ServiceDiscovery::OAuthConfiguration.instance.available? && access_token.present?
+    def usable?
+      access_token.present?
     end
 
-    # TODO: handle expired / non existent token
-    def access_token
-      if authentication_method.oauth?
-        @user.provided_access_tokens.valid.first&.value
+    def accessible?
+      case
+      when oauth?, service_account?
+        ServiceDiscovery::OAuthConfiguration.instance.available?
       else
-        config.bearer_token
+        raise "Unknown authentication_method: '#{authentication_method}'"
       end
+    end
+
+    def access_token
+      return unless accessible?
+      oauth? ? @user.provided_access_tokens.valid.first&.value : config.bearer_token
     end
   end
 end

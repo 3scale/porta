@@ -1,6 +1,6 @@
 h2 Create New Service
 
-- if ThreeScale.config.service_discovery.enabled
+- if service_discovery_accessible?
   = render :partial => 'api/services/forms/service_discovery', :locals => { :service => @service }
 
 = semantic_form_for @service, :url => admin_services_path do |form|
