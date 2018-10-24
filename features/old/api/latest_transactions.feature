@@ -16,12 +16,6 @@ Feature: Latest transactions
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
 
-  Scenario: Navigation
-    Given provider "foo.example.com" has no latest transactions
-    When I go to the provider dashboard
-    And I follow "Traffic"
-    Then I should be on the latest transactions page
-
   Scenario: Latest transactions
     Given provider "foo.example.com" has the following latest transactions:
       | Buyer | Timestamp           | Usage            |
