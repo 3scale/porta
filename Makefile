@@ -60,7 +60,7 @@ include dependencies.mk
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
-test-prep: init_db precompile-assets test-with-info
+test-prep: init_db test-with-info
 
 test: ## Runs tests inside container build environment
 test: CMD = $(SCRIPT_TEST)
@@ -71,11 +71,11 @@ test-unit:
 	$(MAKE) test JOB="${JOB}"
 
 test-functional: JOB = functional
-test-functional:
+test-functional: precompile-assets
 	$(MAKE) test JOB="${JOB}"
 
 test-integration: JOB = integration
-test-integration:
+test-integration: precompile-assets
 	$(MAKE) test JOB="${JOB}"
 
 ifdef CIRCLECI
@@ -90,19 +90,19 @@ test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile 
 else
 test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings) bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
 endif
-test-cucumber: test-prep
+test-cucumber: precompile-assets test-prep
 
 test-licenses: CMD = bundle exec rake ci:license_finder:run
-test-licenses: test-prep
+test-licenses: precompile-assets test-prep
 
 test-swaggerdocs: CMD = bundle exec rake doc:swagger:validate:all && bundle exec rake doc:swagger:generate:all
-test-swaggerdocs: test-prep
+test-swaggerdocs: precompile-assets test-prep
 
 test-jspm: CMD = bundle exec rake ci:jspm --trace
-test-jspm: test-prep
+test-jspm: precompile-assets test-prep
 
 test-yarn: CMD = yarn test -- --reporters dots,junit --browsers Firefox && yarn jest
-test-yarn: test-prep
+test-yarn: precompile-assets test-prep
 
 test-lint: test-licenses test-swaggerdocs test-jspm test-yarn
 
