@@ -44,17 +44,19 @@ services:
       DB_HOST: database
       REDIS_URL: redis://redis/
       DISABLE_SPRING: "true"
+      BUNDLE_FROZEN: "true"
+      BUNDLE_PATH: 'vendor/bundle'
     volumes:
       # `delegated` and `cached` is important below. https://docs.docker.com/docker-for-mac/osxfs-caching/#tuning-with-consistent-cached-and-delegated-configurations
       # tl;dr expect `bundle exec rake` to be **minutes** slower on your mac.
-      - app_source:/opt/system/:delegated
-      - temp_cache:/opt/system/tmp/cache/:cached
-      - node_modules:/opt/system/node_modules:cached
-      - jspm_assets:/opt/system/assets/jspm_packages:cached
-      - public_assets:/opt/system/public/assets:cached
-      - jspm:/root/.jspm:cached
-      - vendor_bundle:/opt/system/vendor/bundle:cached
-      - bundle_config:/opt/system/.bundle:cached
+      - .:/opt/system:delegated
+      - ./tmp/cache:/opt/system/tmp/cache:cached
+      - ./node_modules:/opt/system/node_modules:cached
+      - ./assets/jspm_assets:/opt/system/assets/jspm_packages:cached
+      - ./public/assets:/opt/system/public/assets:cached
+      - .jspm:/root/.jspm:cached
+      - ./vendor/bundle:/opt/system/vendor/bundle:cached
+      - .bundle:/opt/system/.bundle:cached
 
 #      - ./vendor/docker-gateway/.luarocks:/home/ruby/.luarocks:cached # cached is important
     depends_on:
@@ -67,53 +69,3 @@ services:
       - redis
       - memcached
       - dnsmasq
-
-volumes:
-  app_source:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}
-  temp_cache:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}/tmp/cache
-  node_modules:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}/node_modules
-  jspm_assets:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device:  ${PWD}/assets/jspm_packages
-  public_assets:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}/public/assets
-  jspm:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}/.jspm
-  vendor_bundle:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}/vendor/bundle
-  bundle_config:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: ${PWD}/.bundle

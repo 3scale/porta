@@ -62,21 +62,20 @@ include dependencies.mk
 # From here on, only phony targets to manage docker compose
 test-prep: init_db test-with-info
 
-test: ## Runs tests inside container build environment
-test: CMD = $(SCRIPT_TEST)
-test: test-prep
+test-script: CMD = $(SCRIPT_TEST)
+test-script: test-prep
 
 test-unit: JOB = unit
 test-unit:
-	$(MAKE) test JOB="${JOB}"
+	$(MAKE) test-script JOB="${JOB}"
 
 test-functional: JOB = functional
 test-functional: precompile-assets
-	$(MAKE) test JOB="${JOB}"
+	$(MAKE) test-script JOB="${JOB}"
 
 test-integration: JOB = integration
 test-integration: precompile-assets
-	$(MAKE) test JOB="${JOB}"
+	$(MAKE) test-script JOB="${JOB}"
 
 ifdef CIRCLECI
 test-rspec: CMD = bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | tr '\n' ' '`
@@ -106,7 +105,8 @@ test-yarn: precompile-assets test-prep
 
 test-lint: test-licenses test-swaggerdocs test-jspm test-yarn
 
-test-suite: bundle npm-install test-lint test-unit test-functional test-integration test-rspec test-cucumber
+test: ## Runs tests inside container build environment
+test: bundle npm-install test-lint test-unit test-functional test-integration test-rspec test-cucumber
 
 jenkins-env: # Prints env vars
 	@echo
