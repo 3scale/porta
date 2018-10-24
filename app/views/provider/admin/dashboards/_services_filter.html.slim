@@ -6,11 +6,14 @@
         var allApis = #{json @services}
 
         var displayApis = function(filteredApis) {
-          for (api = 0; api < allApis.length; api++) {
-            document.getElementById("service_" + allApis[api].service.id).style.display = "none"
-          }
-          for (api = 0; api < filteredApis.length; api++) {
-            document.getElementById("service_" + filteredApis[api].service.id).style.display = "inline"
+          for (let i = 0; i < allApis.length; i++) {
+            var api = allApis[i];
+
+            var isFilteredApi = filteredApis.some(function(filteredApi) {
+              return filteredApi.service.id === api.service.id
+            });
+
+            document.getElementById("service_" + api.service.id).style.display = isFilteredApi ? "inline": "none";
           }
         }
 
