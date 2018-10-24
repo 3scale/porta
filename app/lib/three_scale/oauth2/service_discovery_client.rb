@@ -22,7 +22,6 @@ module ThreeScale
       end
 
 
-      # TODO: differs on Keycloak and on Openshift OAuth server
       def uid
         raw_info['sub'] || username || raw_info.dig('metadata', 'uid') # last is for OpenShift OAuth server
       end
@@ -35,6 +34,10 @@ module ThreeScale
 
       def scopes
         'user:info'
+      end
+
+      def options
+        super.merge(auth_scheme: :basic_auth)
       end
 
       # TODO: Refactor! It is the similar to ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
