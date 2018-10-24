@@ -20,7 +20,6 @@
        title: 'Feature Visibility',
        path: provider_admin_cms_switches_path
 
-
 li.list-group-item
   span.list-group-item-value.label
 
@@ -68,6 +67,11 @@ li.list-group-item
   = render vertical_nav_item,
        title: 'SSO Integrations',
        path:   provider_admin_authentication_providers_path
+
+  - unless current_account.forum_enabled?
+    = render vertical_nav_item,
+         title: 'Forum Settings',
+         path: edit_admin_site_forum_path
 
 li.list-group-item
   span.list-group-item-value.label Docs
