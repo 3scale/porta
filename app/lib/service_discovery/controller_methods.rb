@@ -15,11 +15,11 @@ module ServiceDiscovery::ControllerMethods
   end
 
   def service_discovery_usable?
-    token_retriever.usable?
+    token_retriever.service_usable?
   end
 
   def service_discovery_accessible?
-    token_retriever.accessible?
+    token_retriever.service_accessible?
   end
 
   def find_cluster

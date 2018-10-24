@@ -8,18 +8,22 @@ module ServiceDiscovery
       account.services.build(attributes)
     end
 
-    def self.create_service(account, cluster_namespace:, cluster_service_name:)
-      CreateServiceWorker.perform_async(account.id, cluster_namespace, cluster_service_name)
+    def self.create_service(account, cluster_namespace:, cluster_service_name:, user: nil)
+      CreateServiceWorker.perform_async(account.id, cluster_namespace, cluster_service_name, user&.id)
       build_service(account, name: cluster_service_name)
     end
 
-    def self.refresh_service(service)
+    def self.refresh_service(service, user: nil)
       return unless service.discovered?
-      RefreshServiceWorker.perform_async(service.id)
+      RefreshServiceWorker.perform_async(service.id, user&.id)
     end
 
-    def initialize
-      @cluster = ServiceDiscovery::ClusterClient.new
+    attr_reader :user
+
+    # @param user [User|NilClass] User to take the access_token. See []ServiceDiscovery::TokenRetriever]
+    def initialize(user)
+      token_retriever = ServiceDiscovery::TokenRetriever.new(user)
+      @cluster = ServiceDiscovery::ClusterClient.new bearer_token: token_retriever.access_token
     end
 
     attr_reader :cluster, :cluster_service
