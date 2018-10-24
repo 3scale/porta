@@ -9,7 +9,8 @@ module ServiceDiscovery
     include Singleton
 
     attr_reader :config_fetch_retries
-    delegate :authorization_endpoint, :token_endpoint, to: :oauth_configuration, allow_nil: true
+    delegate :authorization_endpoint, :userinfo_endpoint, :token_endpoint, to: :oauth_configuration, allow_nil: true
+    delegate :verify_ssl?, to: :@well_known
 
     def initialize
       super
@@ -102,7 +103,7 @@ module ServiceDiscovery
       end
 
       def verify_ssl?
-        verify_ssl == OpenSSL::SSL::VERIFY_NONE
+        verify_ssl != OpenSSL::SSL::VERIFY_NONE
       end
 
       # TODO: Retry strategy
