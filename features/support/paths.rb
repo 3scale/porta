@@ -286,10 +286,6 @@ World(Module.new do
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
 
-    when 'the latest transactions page'
-      admin_transactions_path
-
-
     #
     # Account plans (buyer side)
     #
