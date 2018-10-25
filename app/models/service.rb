@@ -5,6 +5,7 @@ class Service < ApplicationRecord
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service
   include Logic::EndUsers::Service
+  include Logic::Backend::Service
   include Logic::Authentication::Service
   include Logic::RollingUpdates::Service
   include SystemName
@@ -17,7 +18,7 @@ class Service < ApplicationRecord
 
   attr_readonly :system_name
 
-  validates :backend_version, inclusion: { in: ->(service) { BackendVersion.usable_versions(service: service) }}
+  validates :backend_version, inclusion: { in: BackendVersion::VERSIONS }
 
   include Authentication
   validates :support_email, format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
