@@ -85,7 +85,7 @@ endif
 test-rspec: test-prep
 
 ifdef CIRCLECI
-test-cucumber: CMD = make dnsmasq_set && bundle exec cucumber --profile ci `bundle exec cucumber --profile list --profile default | circleci tests split --split-by=timings | tr '\n' ' '` && make dnsmasq_unset
+test-cucumber: CMD = make dnsmasq_set && bundle exec cucumber --profile ci `circleci tests glob features/**/*.feature | circleci tests split --split-by=timings | tr '\n' ' '` && make dnsmasq_unset
 else
 test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default) && bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
 endif
