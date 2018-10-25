@@ -22,7 +22,7 @@ const ApiFilter = ({ apis, displayApis }) => {
       <input
         onChange={onInputChange}
         type="search"
-        placeholder="All API's"
+        placeholder="All APIs"
       />
       <span className="fa fa-search" />
     </div>

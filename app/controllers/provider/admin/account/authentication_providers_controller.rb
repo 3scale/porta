@@ -1,7 +1,7 @@
 class Provider::Admin::Account::AuthenticationProvidersController < Provider::Admin::Account::BaseController
   before_action :authorize_rolling_update!
   before_action :authorize_changes, only: [:edit, :update, :destroy]
-  activate_menu :account, :sso
+  activate_menu :account, :users, :sso_integrations
 
   def index
     @presenter = Provider::Admin::Account::AuthenticationProvidersIndexPresenter.new(

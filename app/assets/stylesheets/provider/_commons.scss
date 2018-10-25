@@ -35,8 +35,9 @@ h2, h3 {
 #content > h2:first-child,
 #subsubmenu + h2 {
   font-size: $main-title-font-size;
-  padding-top: line-height-times(1/3);
-  margin-bottom: line-height-times(2/3);
+  padding-top: 0;
+  margin-bottom: line-height-times(1/2);
+  line-height: 1;
 }
 
 h2 {

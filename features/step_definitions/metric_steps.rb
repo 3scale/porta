@@ -165,7 +165,7 @@ def new_metric_form
   find(:css, 'form#new_metric')
 end
 
-And(/^creates metric for that plan$/) do |invisible|
+And(/^creates metric for that plan$/) do
   visit_edit_plan(@plan)
 
   within metrics do
@@ -189,9 +189,9 @@ end
 And(/^makes hits invisible for that plan$/) do
   visit_edit_plan(@plan)
 
-  within metrics do
-    click_on 'Make metric Hits invisible'
-  end
-
-  page.should have_content 'Metric has been set to invisible'
+  # TODO: not the ideal way but it is not working othersie (although in the real browser I can make it work, but not in this one)
+  assert_equal 'visible', find(:xpath, "//span[@id='metric_2_visible']")['class']
+  find(:xpath, "//*[@id='metric_2_visible']/a").click
+  step 'I wait for 1 seconds'
+  assert_equal 'hidden', find(:xpath, "//span[@id='metric_2_visible']")['class']
 end

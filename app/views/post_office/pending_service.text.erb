@@ -5,7 +5,7 @@ A new service is pending for review on the admin page.
 Name: <%= h @service.name %>
 Account: <%= h @service.account.org_name %>
 
-<%= link_to 'View list of pending services', admin_services_path %>
+<%= link_to 'View the pending service', admin_service_path(@service) %>
 
 If you have problems logging in or believe you received this email erroneously, please open a Support Case at https://access.redhat.com/support.
 

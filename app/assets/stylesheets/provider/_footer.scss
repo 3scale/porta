@@ -4,8 +4,9 @@
   float: left;
   width: 100%;
   white-space: nowrap;
-  margin: line-height-times(1/2) 0;
-  border: none;
+  margin: line-height-times(4) 0 line-height-times(0) 0;
+  padding-top: line-height-times(1/2);
+  border-top: $border-width solid $border-color;
 
   ul {
       @include horizontal-list(line-height-times(1/2));

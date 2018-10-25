@@ -1,5 +1,5 @@
 class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseController
-  activate_menu :cms, :content
+  activate_menu :audience, :cms, :content
 
   def index
   end

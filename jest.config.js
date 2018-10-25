@@ -14,6 +14,7 @@ module.exports = {
   transform: {
     "^.+\\.jsx?$": "./node_modules/babel-jest"
   },
+  testURL: "http://localhost",
   testRegex: ".*.spec.js",
   verbose: true
 }

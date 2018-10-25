@@ -5,7 +5,7 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
 
 
   def show
-    activate_menu :settings, :billing
+    activate_menu :audience, :finance, :charging_and_gateway
     @billing_strategy.reload
     @account = current_account
     @current_gateway = ::PaymentGateway.find(@account.payment_gateway_type)

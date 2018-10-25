@@ -34,7 +34,7 @@ Feature: SkypeID
     When I successfully sign in as "foo.example.com" on the master domain using SkypeID
     Then I should be logged in as user "foo.example.com"
     And the current domain should be the master domain
-    And I should be on the provider dashboard page
+    And I should be on the provider dashboard
 
   @security
   Scenario: Sign in attempt with skype name not registered in the system on buyer domain

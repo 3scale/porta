@@ -114,15 +114,11 @@ end
 def visit_edit_plan(plan)
   plan.should be
 
-  within main_menu do
-    page.click_on 'API'
-  end
-
-  click_on 'Application Plans'
+  step 'I go to the application plans admin page'
 
   within plans do
     click_on "Edit Application plan '#{plan.name}'"
   end
 
-  page.should have_css 'h2', text: "Application Plan #{plan.name}"
+  page.should have_css 'h1', text: "Application Plan #{plan.name}"
 end

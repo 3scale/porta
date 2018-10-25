@@ -13,14 +13,14 @@ Feature: Forum administration on the provider side
   Scenario: Admin side should have admin menu
     Given I am logged in as provider "foo.example.com"
     When I navigate to the forum admin page
-    Then I should see the forum admin submenu menu
+    Then I should see "Forum" within the main menu
 
     Given the forum of "foo.example.com" has category "Random stuff"
     When I navigate to the forum categories admin page
-    Then I should see the forum admin submenu menu
+    Then I should see "Forum" within the main menu
 
     When I navigate to the forum my posts admin page
-    Then I should see the forum admin submenu menu
+    Then I should see "Forum" within the main menu
 
   Scenario: Create topic
     When I log in as provider "foo.example.com"

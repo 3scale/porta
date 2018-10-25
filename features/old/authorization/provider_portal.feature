@@ -12,7 +12,7 @@ Feature: Provider portal section authorization
     When I log in as provider "foo.example.com"
 
     When I go to the provider dashboard
-    Then I should see the link "Developer Portal" in the main menu
+    Then I should see the link "Portal" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be on the <page> page
@@ -39,7 +39,7 @@ Feature: Provider portal section authorization
 
     When I log in as provider "member"
      And I go to the provider dashboard
-    Then I should not see "CMS" in the main menu
+    Then I should not see "Portal" in the audience dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
 
@@ -62,7 +62,7 @@ Feature: Provider portal section authorization
       And user "member" has access to the admin section "portal"
      When I log in as provider "member"
       And I go to the provider dashboard
-    Then I should see "Developer Portal" in the main menu
+    Then I should see "Portal" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be on the <page> page

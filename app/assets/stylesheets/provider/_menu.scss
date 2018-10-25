@@ -74,7 +74,7 @@ ul#tabs {
 /* Submenu */
 ul#second_nav {
   background-color: $menu-background-color;
-  margin: line-height-times(-1) line-height-times(-1) line-height-times(1) line-height-times(-1);
+  margin: line-height-times(-1) 0 line-height-times(1) 0;
   border-bottom: $border-width solid $border-color;
   height: line-height-times(2);
 
@@ -137,7 +137,7 @@ ul#second_nav {
 
 #subsubmenu {
   height: line-height-times(1);
-  margin: line-height-times(-1/2) 0 line-height-times(1) line-height-times(-1);
+  padding: 0 0 line-height-times(1.5) 0;
   font-size: $font-size-sm;
 
   .active {

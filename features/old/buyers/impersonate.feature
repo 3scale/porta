@@ -10,7 +10,7 @@ Feature: Impersonate
 
   Scenario: Impersonate impersonation_admin user of the account
     When I am logged in as master admin on master domain
-    And I follow "Tenants"
+     And I navigate to the accounts page
     Then I should not see link "Act as" for provider "bar.example.com"
     When I follow "Act as" for account "foo.example.com"
     Then I should see "Signed in successfully"

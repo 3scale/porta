@@ -4,7 +4,8 @@ class Api::ErrorsController < Api::BaseController
 
   before_action :find_service
 
-  activate_menu :monitoring, :analytics
+  activate_menu :serviceadmin, :monitoring, :errors
+
   sublayout 'stats'
 
   def index

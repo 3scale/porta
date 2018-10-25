@@ -26,8 +26,9 @@
 @import 'provider/dropdowns';
 @import 'provider/menu';
 @import 'provider/flash';
-@import 'provider/user_widget';
+@import 'provider/header';
 @import 'provider/pop_navigation';
+@import 'provider/vert_nav_toggle';
 
 @import 'provider/cms';
 
@@ -39,7 +40,6 @@
 @import 'provider/links';
 @import 'provider/footer';
 @import 'provider/forum';
-@import "provider/ribbon";
 @import 'provider/messages';
 @import 'provider/settings';
 @import 'provider/sidetabs';
@@ -105,3 +105,5 @@
 
 @import 'provider/access_tokens';
 @import 'provider/print';
+
+@import 'provider/vertical_nav';

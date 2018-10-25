@@ -17,4 +17,3 @@ Feature: Application stats
       Then there should be a c3 chart with the following data:
         | name          | total  |
         | Hits          | 40   |
-
