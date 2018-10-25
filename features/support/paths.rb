@@ -221,9 +221,21 @@ World(Module.new do
       new_admin_api_docs_service_path
     when 'the provider active docs page'
       admin_api_docs_services_path
-    when /the "([^"]*)" active docs raw page/
-      active_doc = ApiDocs::Service.find_by_system_name $1
-      admin_api_docs_service_path active_doc.system_name, format: :json
+    when 'the edit active docs page'
+      edit_admin_api_docs_service_path(@provider.api_docs_services.first!)
+    when 'the preview active docs page'
+      preview_admin_api_docs_service_path(@provider.api_docs_services.first!)
+
+    when 'the service active docs page'
+      admin_service_api_docs_path(@provider.default_service)
+    when 'the new active docs page for a service'
+      new_admin_service_api_doc_path(@provider.default_service)
+    when 'the preview active docs page for a service'
+      service = @provider.default_service
+      preview_admin_service_api_doc_path(service, service.api_docs_services.first!)
+    when 'the edit active docs page for a service'
+      service = @provider.default_service
+      edit_admin_service_api_doc_path(service, service.api_docs_services.first!)
 
     when /(the )?API dashboard( page)?/
       admin_service_path provider_first_service!
