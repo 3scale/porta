@@ -16,7 +16,9 @@
                                           pending_buyers: current_account.buyers.pending,
                                           account_plans: current_account.account_plans.not_custom,
                                           forum_topics: current_account.forum.recent_topics,
-                                          unread_messages_presenter: @unread_messages_presenter
+                                          unread_messages_presenter: @unread_messages_presenter,
+                                          applications: current_account.provided_cinstances,
+                                          alerts: current_account.buyer_alerts.unread
 
 
       // Account Level Widgets
@@ -27,9 +29,8 @@
       - if current_user.accessible_services?
         header.DashboardSection-header.DashboardSection-header--extended
           = render 'services_filter'
-          = render 'services_navigation', api_docs: current_account.api_docs_services,
-                                          applications: current_account.provided_cinstances,
-                                          alerts: current_account.buyer_alerts.unread
+          = render 'services_navigation', api_docs: current_account.api_docs_services
+
 
 
         // API Service Level

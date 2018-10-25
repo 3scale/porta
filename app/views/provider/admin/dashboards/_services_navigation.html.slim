@@ -1,14 +1,6 @@
 nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
-    - if can? :manage, :partners
-
-      - if current_user.multiple_accessible_services?
-        li.DashboardNavigation-list-item
-          = dashboard_collection_link 'App',
-                                  applications,
-                                  admin_buyers_applications_path,
-                                  'Apps',
-                                  'cubes'
+    /- if can? :manage, :partners
 
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'ActiveDoc',
@@ -17,15 +9,7 @@ nav.DashboardNavigation.DashboardNavigation--services
                                   'ActiveDocs',
                                   'file-text'
 
-    - if can?(:manage, :monitoring) && alerts.any? && current_user.multiple_accessible_services?
-      li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Alert',
-                                    alerts,
-                                    admin_alerts_path,
-                                    'Alerts',
-                                    'exclamation-triangle'
-
-    - if can?(:manage, :monitoring)
+    /- if can?(:manage, :monitoring)
       li.DashboardNavigation-list-item
         = link_to admin_transactions_path, title: 'Traffic', class: "DashboardNavigation-link" do
           i.fa.fa-play-circle>
