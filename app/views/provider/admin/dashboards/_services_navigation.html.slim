@@ -1,15 +1,28 @@
 nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
     /- if can? :manage, :partners
+      - if current_user.multiple_accessible_services?
+        li.DashboardNavigation-list-item
+          = dashboard_collection_link 'Application',
+                                  applications,
+                                  admin_buyers_applications_path,
+                                  icon_name: 'cubes'
 
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'ActiveDoc',
                                   api_docs,
                                   admin_api_docs_services_path,
-                                  'ActiveDocs',
-                                  'file-text'
+                                  plural: 'ActiveDocs',
+                                  icon_name: 'file-text'
 
     /- if can?(:manage, :monitoring)
+      li.DashboardNavigation-list-item
+        = dashboard_collection_link 'Alert',
+                                    alerts,
+                                    admin_alerts_path,
+                                    icon_name: 'exclamation-triangle'
+
+
       li.DashboardNavigation-list-item
         = link_to admin_transactions_path, title: 'Traffic', class: "DashboardNavigation-link" do
           i.fa.fa-play-circle>

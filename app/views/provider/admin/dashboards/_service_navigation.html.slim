@@ -22,8 +22,7 @@ nav.DashboardNavigation
           => dashboard_collection_link 'Application',
                                        service.cinstances,
                                        admin_service_applications_path(service),
-                                       'Applications',
-                                       'cubes'
+                                       icon_name: 'cubes'
 
         // Application Plans
         - if can?(:manage, :plans) && !master_on_premises?
@@ -37,8 +36,7 @@ nav.DashboardNavigation
         = dashboard_collection_link 'Alert',
                                     unread_alerts,
                                     admin_service_alerts_path(service),
-                                    'Alerts',
-                                    'exclamation-triangle'
+                                    icon_name: 'exclamation-triangle'
 
     // Subscriptions & Service Plans
     - if show_subscriptions_on_dashboard?(service)
@@ -51,17 +49,16 @@ nav.DashboardNavigation
         // Service Plans
         - if show_service_plans_on_dashboard?(service)
           == dashboard_secondary_collection_link 'Plan',
-                                                service.service_plans.not_custom,
-                                                admin_service_service_plans_path(service)
+                                                  service.service_plans.not_custom,
+                                                  admin_service_service_plans_path(service)
 
     // Active docs
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
        = dashboard_collection_link 'ActiveDoc',
-                                 service.api_docs_services,
-                                 admin_service_api_docs_path(service),
-                                 'ActiveDocs',
-                                 'file-text'
+                                    service.api_docs_services,
+                                    admin_service_api_docs_path(service),
+                                    'file-text'
     // Integration
     - if can?(:manage, :plans)
       - if !service.has_traffic?

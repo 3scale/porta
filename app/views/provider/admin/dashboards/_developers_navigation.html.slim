@@ -7,34 +7,31 @@ nav.DashboardNavigation
         => dashboard_collection_link 'Account',
                                      buyers,
                                      admin_buyers_accounts_path,
-                                     'Accounts',
-                                     'briefcase'
+                                     icon_name: 'briefcase'
 
         // Pending Accounts
         - if show_pending_accounts_on_dashboard?
           == dashboard_secondary_collection_link 'Pending',
                                                   pending_buyers,
                                                   admin_buyers_accounts_path(search: {state: 'pending'}),
-                                                  'Pending'
+                                                  plural: 'Pending'
         // Account Plans
         - elsif show_account_plans_on_dashboard?
           == dashboard_secondary_collection_link 'Plan',
-                                                account_plans.not_custom,
-                                                admin_buyers_account_plans_path
+                                                  account_plans.not_custom,
+                                                  admin_buyers_account_plans_path
 
     - if can? :manage, :partners
       li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Application',
-                                applications,
-                                admin_buyers_applications_path,
-                                'Applications',
-                                'cubes'
+        = dashboard_collection_link 'App',
+                                    applications,
+                                    admin_buyers_applications_path,
+                                    icon_name: 'cubes'
 
         - if can?(:manage, :monitoring) && alerts.any? 
           == dashboard_secondary_collection_link 'Alert',
-                                      alerts,
-                                      admin_alerts_path,
-                                      'Alerts'
+                                                  alerts,
+                                                  admin_alerts_path
 
     // Billing
     - if can?(:manage, :finance)
@@ -63,16 +60,14 @@ nav.DashboardNavigation
         = dashboard_collection_link 'Forum Topic',
                                     forum_topics,
                                     admin_forum_path,
-                                    'Forum Topics',
-                                    'comments'
+                                    icon_name: 'comments'
 
     // Messages
     li.DashboardNavigation-list-item
       = dashboard_collection_link 'Message',
                                   current_account.messages.where(sender: !current_account),
                                   provider_admin_messages_root_path,
-                                  'Messages',
-                                  'envelope'
+                                  icon_name: 'envelope'
 
         - if unread_messages_presenter.show_counter?
           '
