@@ -19,10 +19,6 @@
 }
 
 @mixin overview-widget {
-  padding: line-height-times(1) 0;
-  @include pie-clearfix;
-  border-bottom: $border-width solid $border-color;
-  clear: both;
 
   .title {
     @extend h2;

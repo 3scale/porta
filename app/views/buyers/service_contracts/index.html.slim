@@ -83,6 +83,7 @@ table.data
 
   tbody
     - @service_contracts.each do |contract|
+      - service = contract.service
       tr id=dom_id(contract)
         td.select
           = bulk_select_one contract
@@ -91,7 +92,7 @@ table.data
             = link_to_buyer_or_deleted contract.account
         - if current_account.multiservice?
           td
-            = link_to contract.service.name, admin_services_path(anchor: dom_id(contract.service))
+            = link_to service.name, admin_service_path(service)
         td.plan
           = link_to contract.plan.name, edit_polymorphic_path([:admin, contract.plan]),
             :title => "Edit #{contract.plan.class.model_name.human} '#{contract.plan.name}'"
@@ -110,9 +111,9 @@ table.data
                                'data-confirm': "Are you sure? Unsubscribing will delete all this account's applications that subscribe to this service (applications need to be suspended beforehand)", 'data-method': :delete,
                                label: 'Unsubscribe'
           -else
-            = admin_subscribe_service_link contract.account, contract.service, contract
+            = admin_subscribe_service_link contract.account, service, contract
         td.action
-          = admin_change_service_plan_link contract.account, contract.service, contract if contract
+          = admin_change_service_plan_link contract.account, service, contract if contract
     - if @service_contracts.empty?
       - if @account
         tr.no_results

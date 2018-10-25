@@ -211,8 +211,6 @@ World(Module.new do
       new_provider_admin_account_invitation_path
     when 'the provider sent invitations page'
       provider_admin_account_invitations_path
-    when 'the edit provider logo page'
-      edit_provider_admin_account_logo_path
 
     #
     # API Management
@@ -225,17 +223,8 @@ World(Module.new do
       active_doc = ApiDocs::Service.find_by_system_name $1
       admin_api_docs_service_path active_doc.system_name, format: :json
 
-    when 'the services dashboard page'
-      admin_services_path
-
-    when 'the API dashboard'
-      admin_apiconfig_root_path
-
-    when 'the API dashboard page'
-      admin_apiconfig_root_path
-
-    when 'the API services page'
-      admin_services_path
+    when /(the )?API dashboard( page)?/
+      admin_service_path provider_first_service!
 
     when 'the API alerts page'
       admin_alerts_path
@@ -296,10 +285,6 @@ World(Module.new do
     when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
-
-    when 'the latest transactions page'
-      admin_transactions_path
-
 
     #
     # Account plans (buyer side)
@@ -473,6 +458,15 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
+    when 'the spam protection page'
+      edit_admin_site_spam_protection_path
+
+    when 'the xss protection page'
+      edit_admin_site_developer_portal_path
+
+    when 'the feature visibility page'
+      provider_admin_cms_switches_path
+
     when 'the fields definitions index page'
       admin_fields_definitions_path
 
@@ -492,8 +486,6 @@ World(Module.new do
     # Stats
     #
     # FIXME: this feels really wrong, passing default service
-    when 'the provider stats overview'
-      admin_stats_root_path
     when 'the provider stats usage page'
       admin_service_stats_usage_path provider_first_service!
     when 'the provider stats apps page'
@@ -617,6 +609,9 @@ World(Module.new do
 
     when 'the latest transactions page'
       admin_transactions_path
+
+    when 'the edit webhooks page'
+      edit_provider_admin_webhooks_path
 
     #Previous routes still used.
     when 'the provider access rules page'

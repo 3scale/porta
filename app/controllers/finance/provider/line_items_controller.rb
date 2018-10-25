@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Finance::Provider::LineItemsController < FrontendController
-  activate_menu :finance
+  activate_menu :audience, :finance, :invoices
   before_action :find_invoice
   before_action :find_line_item, :only => :destroy
   layout false

@@ -9,8 +9,8 @@ Feature: API Docs Management
     And I log in as provider "foo.example.com"
 
     When I go to the provider dashboard
-    And I follow "API" within the main menu
-    And I follow "ActiveDocs" within "#second_nav"
+    And I follow "Overview"
+    And I follow "ActiveDocs" within the main menu
 
   Scenario: CRUD a JSON description of your API service
     When I follow "Create your first spec"

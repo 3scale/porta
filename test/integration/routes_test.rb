@@ -28,7 +28,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
 
     get '/p/admin'
 
-    assert_redirected_to admin_services_path
+    assert_redirected_to provider_admin_dashboard_path
 
   end
 

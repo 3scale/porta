@@ -1,8 +1,8 @@
-import { toggleNavigation, hideAllToggleable } from '../src/Navigation/toggle_navigation'
-import { ApiSelector } from '../src/Navigation/api_selector'
+import { toggleNavigation, hideAllToggleable } from '../src/Navigation/utils/toggle_navigation'
+import { ContextSelectorWrapper } from '../src/Navigation/components/ContextSelector'
 
 document.addEventListener('DOMContentLoaded', () => {
   window.toggleNavigation = toggleNavigation
   window.hideAllToggleable = hideAllToggleable
-  window.ApiSelector = ApiSelector
+  window.ContextSelector = ContextSelectorWrapper
 })

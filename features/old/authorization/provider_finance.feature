@@ -12,7 +12,7 @@ Feature: Provider finance authorization
    Given current domain is the admin domain of provider "foo.example.com"
      And I am logged in as provider "foo.example.com"
     When I go to the provider dashboard
-    Then I should see "Billing"
+    Then I should see "Billing" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be on the <page> page
@@ -28,7 +28,7 @@ Feature: Provider finance authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-    Then I should not see "Billing"
+    Then I should not see "Billing" in the audience dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
   Examples:
@@ -43,7 +43,7 @@ Feature: Provider finance authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-     Then I should see "Billing"
+     Then I should see "Billing" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be on the <page> page

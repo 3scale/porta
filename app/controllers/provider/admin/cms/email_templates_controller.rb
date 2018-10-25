@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
 
-  activate_menu :site, :emails, :templates
+  activate_menu :audience, :messages, :templates
   sublayout 'emails'
 
   def new

@@ -13,11 +13,21 @@
     margin-top: line-height-times(1);
   }
 
+  &--audience {
+    .DashboardNavigation-link + .DashboardNavigation-link {
+      color: $warning-color;
+    }
+  }
+
+  &--services {
+    margin-top: line-height-times(1.4);
+  }
+
   &-title {
     text-transform: uppercase;
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
-    color: $light-color;
+    color: $font-color;
     float: left;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -341,7 +351,7 @@
   float: right;
 
   #api_filter + &--services {
-    margin-top: line-height-times(1/2);
+    margin-top: line-height-times(2/3);
   }
 
   &-list {
@@ -361,7 +371,7 @@
   &-link {
     text-transform: uppercase;
     font-style: normal;
-    color: $light-color;
+    color: $menu-color;
 
     .fa {
       font-size: $font-size-sm;
@@ -371,7 +381,7 @@
     }
 
     &:hover {
-      color: $link-color;
+      color: $menu-hover-color;
     }
 
     &--alert {
@@ -386,7 +396,7 @@
 }
 
 .u-notice {
-  color: $font-color;
+  color: $warning-color;
 }
 
 a:hover .u-notice {

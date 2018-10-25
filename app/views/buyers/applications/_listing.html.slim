@@ -101,7 +101,7 @@ table class="data"
         - unless @account
           td = link_to_buyer_or_deleted cinstance.user_account, :admin_buyers_account_path
         - if display_view_portion?(:service)
-          td = link_to_service_edit cinstance.service
+          td = link_to_service cinstance.service
         - if show_application_plans
           td class="plan" = link_to_plan_edit cinstance.plan
         - if current_account.settings.finance.allowed?

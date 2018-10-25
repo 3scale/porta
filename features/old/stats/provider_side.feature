@@ -16,12 +16,6 @@ Feature: Provider stats
     And I follow "Analytics"
     Then I should be on the provider stats usage page
 
-  Scenario: Stats access for multiservices
-    Given a service "Another one" of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
-    And I follow "Analytics"
-    Then I should be on the provider stats overview
-
   Scenario: Usage stats
     When I log in as provider "foo.example.com"
     And I follow "Analytics"
@@ -32,7 +26,7 @@ Feature: Provider stats
     Given a buyer "bob" signed up to provider "foo.example.com"
     When I log in as provider "foo.example.com"
     And I follow "Analytics"
-    And I follow "Top Applications"
+    And I go to the provider stats apps page
     Then I should see "Top Applications" in a header
     And I should see a chart called "chart"
 

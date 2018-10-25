@@ -9,7 +9,7 @@ class Stats::ServiceBaseController < Stats::BaseController
   before_action :authorize_monitoring
   before_action :find_service
 
-  activate_menu :monitoring, :analytics
+  activate_menu :serviceadmin, :monitoring
 
   sublayout :stats
 

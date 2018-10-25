@@ -19,7 +19,7 @@ class Provider::AdminControllerTest < ActionController::TestCase
     assert_redirected_to provider_admin_onboarding_wizard_root_path
 
     get :show # for the second time
-    assert_redirected_to admin_services_path
+    assert_redirected_to provider_admin_dashboard_path
 
     @provider.onboarding.finish_process!
 
