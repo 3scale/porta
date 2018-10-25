@@ -10,7 +10,9 @@
     // account level
     section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
       header.DashboardSection-header
-        h1.DashboardSection-title Audience
+        h1.DashboardSection-title
+          i.fa.fa-users>
+          | Audience
         - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :portal) || can?(:manage, :settings)
           = render 'developers_navigation', buyers: current_account.buyers,
                                           pending_buyers: current_account.buyers.pending,
