@@ -990,14 +990,12 @@ ActiveRecord::Schema.define(version: 20181018082620) do
   create_table "provided_access_tokens", force: :cascade do |t|
     t.text     "value",      limit: 65535
     t.integer  "user_id",    limit: 8
-    t.integer  "account_id", limit: 8
     t.integer  "tenant_id",  limit: 8
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "provided_access_tokens", ["account_id"], name: "fk_rails_4b4656c835", using: :btree
   add_index "provided_access_tokens", ["user_id"], name: "fk_rails_260e99b630", using: :btree
 
   create_table "provider_constraints", force: :cascade do |t|
@@ -1440,7 +1438,6 @@ ActiveRecord::Schema.define(version: 20181018082620) do
   add_foreign_key "api_docs_services", "services"
   add_foreign_key "event_store_events", "accounts", column: "provider_id", on_delete: :cascade
   add_foreign_key "payment_details", "accounts", on_delete: :cascade
-  add_foreign_key "provided_access_tokens", "accounts"
   add_foreign_key "provided_access_tokens", "users"
   add_foreign_key "proxy_configs", "proxies", on_delete: :cascade
   add_foreign_key "proxy_configs", "users", on_delete: :nullify
