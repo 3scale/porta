@@ -54,7 +54,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I should see "Unlimited"
 
   # --- impersonation admin user cannot log in ---
-  When I follow "Account and Personal Settings"
+  When I follow "Session"
   Then I follow "Sign Out"
    And I fill in the following:
     | Email or Username | impersonationadmin |
@@ -86,7 +86,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I should see "Signed in successfully"
   Then I should be on the homepage
   # --- Sample Users logs in ---
-  Then I follow "Logout bob"
+  Then I follow "Sign Out bob"
   Then I should see "You have been logged out"
   And I follow "Login"
   And I fill in the following:

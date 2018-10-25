@@ -74,3 +74,7 @@ Given /^(provider ".+?") doesn't have billing address$/ do |provider| #'
   end
   provider.save!
 end
+
+Given /^master is( not)? billing tenants$/ do |master_billing_disabled|
+  ThreeScale.stubs(master_billing_enabled?: !master_billing_disabled)
+end

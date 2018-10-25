@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::BaseController < FrontendController
 
-  activate_menu :cms
+  activate_menu :audience, :cms
   sublayout :cms
 
   before_action :authorize_portal

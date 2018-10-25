@@ -10,7 +10,7 @@ Feature: Plans management
       And I am logged in as provider "foo.example.com"
 
     When I follow "Dashboard"
-      And I follow "API" within the main menu
+      And I follow "Overview"
       And I follow "0 application plans"
     Then I should be on the application plans admin page
     When I follow "Service Plans"

@@ -231,10 +231,11 @@ When /^(.*) within ([^:"]+)$/ do |lstep, scope|
   end
 end
 
-[ 'the main menu', 'the submenu',
+[ 'the audience dashboard widget', 'the apis dashboard widget',
+  'the first api dashboard widget',
+  'the main menu', 'the submenu',
   'the subsubmenu','the user widget',
-  'the footer', 'the account details box',
-  'the buyers submenu', 'the application service subsubmenu' ].each do |scope|
+  'the footer', 'the account details box' ].each do |scope|
   When /^(.*) in (#{scope})$/ do |lstep, scope|
     within(*selector_for(scope)) do
       step lstep

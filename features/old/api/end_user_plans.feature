@@ -12,14 +12,13 @@ Feature: End User Plan creation
 
   Scenario: Navigate to End User Plans
     When I am on the edit page for service "API" of provider "foo.example.com"
-     And I follow "End user plans"
+     And I follow "End-user Plans"
     Then I should be on the end user plans of service "API" page of provider "foo.example.com"
 
   Scenario: Redirect to upgrade notice when end users switch is denied
     Given provider "foo.example.com" has "end_users" switch denied
     When I am on the edit page for service "API" of provider "foo.example.com"
-     And I follow "End user plans"
-    Then I should be on the upgrade notice page for "end_users"
+     And I should not see the link "End-user Plans"
 
   Scenario: Create new End User Plan
     When I am on the end user plans of service "API" page of provider "foo.example.com"

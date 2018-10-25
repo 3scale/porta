@@ -20,7 +20,7 @@ Feature: Provider plans section authorization
     Given current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "foo.example.com"
      When I go to the provider dashboard
-     Then I should see "API" in the main menu
+     Then I should see "apis" in the apis dashboard widget
 
     When I go to the <page> page
     Then I should be at url for the <page> page
@@ -41,10 +41,10 @@ Feature: Provider plans section authorization
      And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-
-    Then I should not see "API" in the main menu
+    Then I should see "apis" in the apis dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
+
   Examples:
       | page                            |
       | API dashboard                   |
@@ -64,7 +64,7 @@ Feature: Provider plans section authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-     Then I should see "API" in the main menu
+     Then I should see "apis" in the apis dashboard widget
 
     When I go to the <page> page
     Then I should be at url for the <page> page

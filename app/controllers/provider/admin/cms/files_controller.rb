@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseController
 
-  activate_menu :cms, :content
+  activate_menu :audience, :cms, :content
 
   def index
     @files = files

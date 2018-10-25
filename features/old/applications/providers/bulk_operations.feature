@@ -21,7 +21,7 @@ Feature: Bulk operations
   Scenario: Show and hide bulk operations controls
     Given I am logged in as provider "foo.example.com"
 
-    When I navigate to the buyers applications page
+    When I go to the applications admin page
     When I check select for "BobApp"
       And I wait until all animations have finished
     Then "Bulk operations" should be visible

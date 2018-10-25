@@ -1,0 +1,27 @@
+- if can?(:manage, :finance)
+  = render vertical_nav_item,
+     title: 'Earnings by Month',
+     path: admin_finance_root_path
+
+  = render vertical_nav_item,
+    title: 'Invoices',
+    path: admin_finance_invoices_path
+
+  - if current_user.username == ThreeScale.config.impersonation_admin['username']
+    = render vertical_nav_item,
+      title: 'Finance Log',
+      path: admin_finance_log_entries_path
+
+- if can?(:manage, :settings)
+  li.list-group-item
+    span.list-group-item-value.label Settings
+
+  // this setting needs more than just editingng auth, as such it's not a setting
+  - if can?(:manage, :finance)
+    = render vertical_nav_item,
+            title: 'Charging & Gateway',
+            path:  admin_finance_settings_path
+
+  = render vertical_nav_item,
+          title: 'Credit Card Policies',
+          path:  edit_admin_site_settings_path

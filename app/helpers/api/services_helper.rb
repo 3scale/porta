@@ -1,7 +1,7 @@
 module Api::ServicesHelper
 
   def link_to_service service
-    link_to service.name, admin_services_path(:anchor => dom_id(service))
+    link_to service.name, admin_service_path(service)
   end
 
   def list_items_or_empty collection, empty_message, &block

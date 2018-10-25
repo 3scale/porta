@@ -5,8 +5,7 @@ class Buyers::InvoicesController < Buyers::BaseController
   helper_method :allow_edit?
 
   before_action :find_account
-
-  activate_menu :submenu => :accounts
+  activate_menu :audience, :accounts, :listing
 
   def index
     @invoices = @account.invoices.includes(:buyer_account, :provider_account)
@@ -23,7 +22,7 @@ class Buyers::InvoicesController < Buyers::BaseController
       format.js   { flash.now[:notice] = 'Invoice successfully created.' }
       format.html do
         flash[:notice] = 'Invoice successfully created.'
-        redirect_to admin_buyers_account_invoices_path(@account) 
+        redirect_to admin_buyers_account_invoices_path(@account)
       end
     end
   end

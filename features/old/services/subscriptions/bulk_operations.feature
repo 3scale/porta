@@ -23,7 +23,7 @@ Feature: Bulk operations
 
   Scenario: Show and hide bulk operations controls
      And provider "foo.example.com" has "service_plans" visible
-    When I navigate to the buyers service contracts page
+     When I go to the subscriptions admin page
     When I check select for "bob"
       And I wait until all animations have finished
     Then "Bulk operations" should be visible
@@ -46,4 +46,3 @@ Feature: Bulk operations
       And I wait until all animations have finished
     Then none selects should be checked
       And "Bulk operations" should not be visible
-

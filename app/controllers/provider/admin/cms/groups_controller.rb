@@ -3,7 +3,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   before_action :available_sections, :only => [:edit, :new ]
   before_action :authorize_groups
 
-  activate_menu :cms, :groups
+  activate_menu :audience, :cms, :groups
 
   sublayout nil
 
