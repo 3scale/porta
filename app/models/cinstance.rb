@@ -2,6 +2,8 @@ class Cinstance < Contract
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 
+  delegate :backend_version, to: :service, allow_nil: true
+
   belongs_to :plan, class_name: 'ApplicationPlan', foreign_key: :plan_id, inverse_of: :cinstances, counter_cache: :contracts_count
   alias application_plan plan
 
@@ -301,14 +303,14 @@ class Cinstance < Contract
       xml.first_daily_traffic_at first_daily_traffic_at.try(:xmlschema)
       xml.end_user_required end_user_required
       xml.service_id service.id if service.present?
-      if service.backend_version == "1"
+      if service.backend_version.v1?
         xml.user_key( user_key )
         xml.provider_verification_key( provider_public_key )
 
       else #v2, oauth on enterprise
         xml.application_id( application_id )
 
-        if service.backend_version == "oauth"
+        if service.backend_version.oauth?
           xml.redirect_url redirect_url
         end
 
@@ -353,10 +355,6 @@ class Cinstance < Contract
 
   def backend_object
     @backend_object ||= provider_account.backend_object.application(self)
-  end
-
-  def backend_version
-    Logic::Backend::Version.new(service.try!(:backend_version))
   end
 
   def create_origin
