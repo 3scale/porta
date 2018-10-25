@@ -90,11 +90,11 @@ class ContextSelector extends React.Component {
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>Dashboard</a>
+            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}><i class='fa fa-home'></i> Dashboard</a>
           </li>
           {audienceLink ? (
             <li className="PopNavigation-listItem">
-              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>Audience</a>
+              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}><i class='fa fa-users'></i> Audience</a>
             </li>
           ) : null}
           {this.renderInput()}
