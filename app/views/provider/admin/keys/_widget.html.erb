@@ -5,7 +5,7 @@
                :locals => {:cinstance => cinstance, :regenerate => true } %>
   </table>
 
-  <% if cinstance.backend_version == "2" && cinstance.service.app_keys_allowed? %>
+  <% if cinstance.backend_version.v2? && cinstance.backend_version.app_keys_allowed? %>
     <table class="list">
       <tr>
         <td colspan="2" id="app-keys-operations" <%= "style=display:none;" unless cinstance.application_keys.can_add? %>>
@@ -19,7 +19,7 @@
                               :class   => 'create_key add action' %>
         </td>
 
-        <% if cinstance.backend_version.app_id? %>
+        <% if cinstance.backend_version.v2? %>
           <td colspan="2" id="app-keys-limit-warning" <%= "style=display:none;" if cinstance.application_keys.can_add? %>;'>
             Keys limit reached.
           </td>
