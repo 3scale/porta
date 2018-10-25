@@ -2,7 +2,7 @@
 
 module ServiceDiscovery
   class ClusterServiceSpecification
-    OAS_CONTENT_TYPES = %w[application/swagger+json application/vnd.oai.openapi+json application/json application/text].freeze
+    OAS_CONTENT_TYPES = %w[application/swagger+json application/vnd.oai.openapi+json].freeze
 
     def self.fetch(url)
       object = new(url)
