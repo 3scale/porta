@@ -24,7 +24,15 @@ class ServiceDiscovery::OAuthConfigurationTest < ActiveSupport::TestCase
     ServiceDiscovery::OAuthConfiguration.instance
   end
 
-  def test_oauth_configuration
+  test '#config' do
+    assert_equal ThreeScale.config.service_discovery, subject.config
+  end
+
+  test '#available?' do
+
+  end
+
+  test '#oauth_configuration' do
     stub_success
 
     config = subject.oauth_configuration
@@ -37,7 +45,7 @@ class ServiceDiscovery::OAuthConfigurationTest < ActiveSupport::TestCase
   end
 
 
-  def test_bad_response
+  test '#bad_response' do
     stub_request(:get, 'https://localhost:8443/.well-known/oauth-authorization-server').
       to_return(status: 500, body: '')
 
@@ -47,7 +55,7 @@ class ServiceDiscovery::OAuthConfigurationTest < ActiveSupport::TestCase
     assert_requested :get, 'https://localhost:8443/.well-known/oauth-authorization-server', times: 2
   end
 
-  def test_parse_error
+  test 'parse error' do
     stub_request(:get, 'https://localhost:8443/.well-known/oauth-authorization-server').
       to_return(status: 200, body: '{malformed json')
 
@@ -58,10 +66,12 @@ class ServiceDiscovery::OAuthConfigurationTest < ActiveSupport::TestCase
     assert_equal 2, subject.config_fetch_retries
   end
 
-  def test_authorization_endpoint
+  test '#authorization_endpoint' do
     stub_success
     assert_equal 'https://127.0.0.1.nip.io:8443/oauth/authorize', subject.authorization_endpoint
   end
+
+  private
 
   def stub_success
     stub_request(:get, 'https://localhost:8443/.well-known/oauth-authorization-server').

@@ -16,7 +16,7 @@ module ServiceDiscovery
       end
 
       test 'create service async' do
-        CreateServiceWorker.expects(:perform_async).with(@account.id, 'fake-project', 'fake-api')
+        CreateServiceWorker.expects(:perform_async).with(@account.id, 'fake-project', 'fake-api', nil)
         new_service = ImportClusterDefinitionsService.create_service(@account, cluster_namespace: 'fake-project',
                                                                                cluster_service_name: 'fake-api')
         refute new_service.persisted?
@@ -24,7 +24,7 @@ module ServiceDiscovery
       end
 
       test 'refresh service async' do
-        RefreshServiceWorker.expects(:perform_async).with(@service.id)
+        RefreshServiceWorker.expects(:perform_async).with(@service.id, nil)
         ImportClusterDefinitionsService.refresh_service(@service)
       end
     end

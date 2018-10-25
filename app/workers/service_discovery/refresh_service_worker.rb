@@ -8,12 +8,11 @@ module ServiceDiscovery
       user = User.where(id: user_id).first
       token_retriever = ServiceDiscovery::TokenRetriever.new(user)
 
-      if token_retriever.service_usable?
-        service = Service.find service_id
-        ImportClusterDefinitionsService.new(user).refresh_service(service)
-      else
-        raise [user, account, cluster_namespace, cluster_service_name].inspect
-      end
+      # TODO: add more error reporting here
+      return unless token_retriever.service_usable?
+
+      service = Service.find service_id
+      ImportClusterDefinitionsService.new(user).refresh_service(service)
     end
   end
 end

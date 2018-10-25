@@ -21,7 +21,7 @@ module ServiceDiscovery
     attr_reader :user
 
     # @param user [User|NilClass] User to take the access_token. See []ServiceDiscovery::TokenRetriever]
-    def initialize(user)
+    def initialize(user=nil)
       token_retriever = ServiceDiscovery::TokenRetriever.new(user)
       @cluster = ServiceDiscovery::ClusterClient.new bearer_token: token_retriever.access_token
     end
