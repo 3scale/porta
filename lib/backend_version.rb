@@ -1,82 +1,27 @@
 # frozen_string_literal: true
 
+# TODO: Unify this with Logic::Backend::Version in lib/logic/backend.rb
+
 class BackendVersion < ActiveSupport::StringInquirer
+  V1 = '1'
+  V2 = '2'
+  OAUTH = 'oauth'
 
-  VERSIONS = { 'v1' => '1', 'v2' => '2', 'oauth' => 'oauth', 'oidc' => 'oidc' }.freeze
-  private_constant :VERSIONS
-
-  class << self
-
-    VERSIONS.each_key do |method|
-      define_method "#{method}_usable?" do |_|
-        true
-      end
-      define_method "#{method}_visible?" do |_|
-        true
-      end
-    end
-
-    def oidc_usable?(_)
-      false
-    end
-
-    def oidc_visible?(service)
-      service.account.provider_can_use?(:apicast_oidc) &&
-        (service.proxy || service.build_proxy).apicast_configuration_driven
-    end
-
-    def oauth_visible?(service)
-      service.backend_version.oauth? && !service.oidc?
-    end
-
-    def usable_versions(service:)
-      VERSIONS.map do |method, name|
-        name if public_send("#{method}_usable?", service)
-      end.compact
-    end
-
-    def visible_versions(service:)
-      service_visible_versions = {}
-
-      VERSIONS.each do |method, name|
-        if public_send("#{method}_visible?", service)
-          service_visible_versions[locale(method)] = name
-        end
-      end
-
-      service_visible_versions
-    end
-
-    def version_definition(name)
-      locale(VERSIONS.key(name))
-    end
-
-    private
-
-    def locale(key)
-      I18n.t(key, scope: :authentication_options)
-    end
-  end
-
-  VERSIONS.each do |method, name|
-    define_method "#{method}?" do
-      self == name
-    end
-  end
-
-  def oidc?
-    raise NotImplementedError, 'oidc? method is implemented on a service object'
-  end
+  VERSIONS = [V1, V2, OAUTH]
 
   def initialize(value)
     super(value.to_s) if value
   end
 
-  def is?(*versions)
-    versions.any? { |version| self == version.to_s }
+  def v1?
+    self == V1
   end
 
-  def app_keys_allowed?
-    self >= '2'
+  def v2?
+    self == V2
+  end
+
+  def is?(*versions)
+    versions.any?{ |version| self == version.to_s }
   end
 end
