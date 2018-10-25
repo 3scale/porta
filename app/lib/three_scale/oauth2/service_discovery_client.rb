@@ -4,6 +4,7 @@ module ThreeScale
   module OAuth2
     class ServiceDiscoveryClient < ClientBase
       attr_reader :state
+      delegate :rh_sso?, :builtin?, to: 'ServiceDiscovery::OAuthConfiguration.instance'
 
       def kind
         'service_discovery'
@@ -21,9 +22,8 @@ module ThreeScale
         raw_info['email_verified']
       end
 
-
       def uid
-        raw_info['sub'] || username || raw_info.dig('metadata', 'uid') # last is for OpenShift OAuth server
+        raw_info['sub'].presence || username || raw_info.dig('metadata', 'uid') # last is for OpenShift OAuth server
       end
 
       def authenticate_options(request)
@@ -33,16 +33,11 @@ module ThreeScale
       end
 
       def scopes
-        keycloak? ? '' : 'user:full'
+        'user:full'
       end
 
       def options
         super.merge(auth_scheme: :basic_auth)
-      end
-
-      # This is a hack but I did not find anything else to differentiate the builtin OAuth Server from Keycloak
-      def keycloak?
-        ServiceDiscovery::OAuthConfiguration.instance.oauth_configuration.scopes_supported.nil?
       end
 
       # TODO: Refactor! It is the similar to ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
@@ -78,12 +73,13 @@ module ThreeScale
 
         def call
           url = super
-          # OpenShift OAuth has a serious bug, it does not store correctly the redirect_uri
-          client.keycloak? ? url : URI.decode(url)
-        rescue
+          # OpenShift builtin OAuth has a serious bug, it does not store correctly the redirect_uri
+          client.rh_sso? ? url : URI.decode(nil)
+        rescue => e
+          # Do better error management
+          Rails.logger.debug("[Openshift OAuth] Error decoding callback URL for builtin <%s>. Error: %s\n%s" % [url.inspect, e.message, e.backtrace.join("\n")])
           url
         end
-
 
         private
 

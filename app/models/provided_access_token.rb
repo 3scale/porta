@@ -2,12 +2,9 @@
 
 class ProvidedAccessToken < ApplicationRecord
   belongs_to :user, required: true
-  belongs_to :account, required: true
+  has_one :account, through: :user
 
   default_scope -> { order(expires_at: :desc)}
   scope :valid, -> { where.has { expires_at > Time.now.utc } }
 
-  before_validation on: :create do
-    self.account ||= user.account
-  end
 end
