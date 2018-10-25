@@ -100,12 +100,12 @@ module Liquid
 
       desc "Returns the application_id of an application."
       def application_id
-        @contract.application_id unless @contract.service.backend_version.v1?
+        @contract.application_id if @contract.service.backend_version != "1"
       end
 
       desc "Returns the application id or the user key."
       def key
-        if @contract.service.backend_version.app_keys_allowed?
+        if @contract.service.backend_version >= "2"
           @contract.application_id
         else
           @contract.user_key
@@ -178,11 +178,11 @@ module Liquid
       end
 
       def user_key_mode?
-        @contract.backend_version.v1?
+        @contract.backend_version.user_key?
       end
 
       def app_id_mode?
-        @contract.backend_version.v2?
+        @contract.backend_version.app_id?
       end
 
       def change_plan_url
