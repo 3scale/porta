@@ -11,6 +11,9 @@ module ServiceDiscovery
     attr_reader :config_fetch_retries
     delegate :authorization_endpoint, :userinfo_endpoint, :token_endpoint, to: :oauth_configuration, allow_nil: true
     delegate :verify_ssl?, to: :@well_known
+    delegate :bearer_token, to: :config
+    delegate :oauth?, :service_account?, to: :authentication_method
+    delegate :rh_sso?, :builtin?, to: :oauth_server_type
 
     def initialize
       super
@@ -24,13 +27,22 @@ module ServiceDiscovery
     end
 
     def available?
-      oauth_configuration.present?
+      authentication_method == 'service_account' ? true : oauth_configuration.present?
     end
 
     def max_retries
       config.max_retries || 5
     end
 
+    def authentication_method
+      ActiveSupport::StringInquirer.new(config.authentication_method.presence || 'service_account')
+    end
+
+    def oauth_server_type
+      ActiveSupport::StringInquirer.new(ThreeScale.config.service_discovery.oauth_server_type || 'builtin')
+    end
+
+    # only needed if authenti
     def oauth_configuration
       return unless config.enabled && server_ok?
       return @oauth_configuration if @oauth_configuration
@@ -118,7 +130,8 @@ module ServiceDiscovery
           url: well_known_url,
           verify_ssl: verify_ssl,
           timeout: timeout,
-          open_timeout: open_timeout
+          open_timeout: open_timeout,
+          log: Rails.logger
         )
         request.execute do |response|
           if response.code == 200
