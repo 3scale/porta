@@ -1,6 +1,7 @@
 nav.DashboardNavigation
   ul.DashboardNavigation-list
     // Acounts, Pending Accounts & Account Plans
+<<<<<<< HEAD
     - if can?(:manage, :partners)
       li.DashboardNavigation-list-item
         // Accounts
@@ -32,6 +33,21 @@ nav.DashboardNavigation
           == dashboard_secondary_collection_link 'Alert',
                                                   alerts,
                                                   admin_alerts_path
+=======
+    li.DashboardNavigation-list-item
+      // Accounts
+      => dashboard_collection_link 'Account',
+                                   buyers,
+                                   admin_buyers_accounts_path,
+                                   icon: 'users'
+
+      // Pending Accounts
+      - if show_pending_accounts_on_dashboard?
+        == dashboard_secondary_collection_link 'Pending',
+                                                pending_buyers,
+                                                admin_buyers_accounts_path(search: {state: 'pending'}),
+                                                plural: 'Pending'
+>>>>>>> removes redundant plurals
 
     // Billing
     - if can?(:manage, :finance)
