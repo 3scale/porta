@@ -3,7 +3,7 @@
 # lower lever functions
 launch_redis()
 {
-    redis-server /etc/redis/redis.conf
+    redis-server /etc/redis.conf &
 }
 
 launch_memcached()
@@ -13,7 +13,7 @@ launch_memcached()
 
 launch_squid()
 {
-  squid3
+  squid
 }
 
 launch_dnsmasq()
@@ -22,7 +22,14 @@ launch_dnsmasq()
     ${SUDO} dnsmasq --no-resolv --listen-address=127.0.0.1 \
                     --address=/${DNSMASQ="#"}/127.0.0.1 \
                     --server=/raw.githubusercontent.com/8.8.8.8 \
-                    --server=/cc-3scale-amend.herokuapp.com/8.8.8.8 \
+                    --server=/rubygems.org/8.8.8.8 \
+                    --server=/github.com/8.8.8.8 \
+                    --server=/registry.yarnpkg.com/8.8.8.8 \
+                    --server=/registry.npmjs.org/8.8.8.8 \
+                    --server=/nodejs.org/8.8.8.8 \
+                    --server=/luarocks.org/8.8.8.8 \
+                    --server=/stevedonovan.github.io/8.8.8.8 \
+                    --server=/codecov.io/8.8.8.8 \
                     --server=/percy.io/8.8.8.8 \
                     --user=$(whoami)
 }

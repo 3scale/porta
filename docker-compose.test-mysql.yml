@@ -1,28 +1,71 @@
-version: '2.1'
+version: '3.2'
 services:
   database:
-    image: quay.io/3scale/mysql:tmpfs-5.6
-    privileged: true
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_DATABASE: 'circleci'
     container_name: ${PROJECT:-system}-database
     network_mode: bridge
-  cache:
-    build: .
-    network_mode: none
-    container_name: ${PROJECT:-system}-cache
-    command: sleep infinity 
+  redis:
+    image: redis:4.0-alpine
+    container_name: ${PROJECT:-system}-redis
+    network_mode: bridge
+  memcached:
+    image: memcached:1.5-alpine
+    container_name: ${PROJECT:-system}-memcached
+    network_mode: bridge
+  dnsmasq:
+    image: quay.io/mikz/dnsmasq
+    container_name: ${PROJECT:-system}-dnsmasq
+    network_mode: bridge
+    ports:
+      - "53"
+    command: [
+      "--no-poll",
+      "--address=/#/127.0.0.1",
+#      "--server=/raw.githubusercontent.com/8.8.8.8",
+#      "--server=/rubygems.org/8.8.8.8",
+#      "--server=/github.com/8.8.8.8",
+#      "--server=/registry.yarnpkg.com/8.8.8.8",
+#      "--server=/registry.npmjs.org/8.8.8.8",
+#      "--server=/nodejs.org/8.8.8.8",
+#      "--server=/luarocks.org/8.8.8.8",
+#      "--server=/stevedonovan.github.io/8.8.8.8",
+#      "--server=/codecov.io/8.8.8.8",
+#      "--server=/percy.io/8.8.8.8",
+    ]
   build:
-    build: .
-    dns: 127.0.0.1
+    image: quay.io/gsaslis/3scale-system-builder
     container_name: ${PROJECT:-system}-build
     network_mode: bridge
-    cap_add:
-      - SYS_PTRACE
     environment:
-      DB_HOST: ${PROJECT:-system}-database
+      DB_HOST: database
+      REDIS_URL: redis://redis/
       DISABLE_SPRING: "true"
-    volumes_from:
-      - cache
+      BUNDLE_FROZEN: "true"
+      BUNDLE_PATH: 'vendor/bundle'
+    volumes:
+      # `delegated` and `cached` is important below. https://docs.docker.com/docker-for-mac/osxfs-caching/#tuning-with-consistent-cached-and-delegated-configurations
+      # tl;dr expect `bundle exec rake` to be **minutes** slower on your mac.
+      - .:/opt/system:delegated
+      - ./tmp/cache:/opt/system/tmp/cache:cached
+      - ./node_modules:/opt/system/node_modules:cached
+      - ./assets/jspm_assets:/opt/system/assets/jspm_packages:cached
+      - ./public/assets:/opt/system/public/assets:cached
+      - .jspm:/root/.jspm:cached
+      - ./vendor/bundle:/opt/system/vendor/bundle:cached
+      - .bundle:/opt/system/.bundle:cached
+
+#      - ./vendor/docker-gateway/.luarocks:/home/ruby/.luarocks:cached # cached is important
     depends_on:
       - database
+      - redis
+      - memcached
+      - dnsmasq
     links:
       - database
+      - redis
+      - memcached
+      - dnsmasq
