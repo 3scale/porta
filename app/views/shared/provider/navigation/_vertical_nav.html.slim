@@ -19,12 +19,6 @@ nav.vertical-nav.hover-secondary-nav-pf#mainmenu
       - when :apis, :applications, :active_docs
 
         - if can? :manage, :partners
-
-          = render vertical_nav_item,
-                   title: 'Applications',
-                   path:  admin_buyers_applications_path,
-                   icon: 'cubes'
-
           = render vertical_nav_item,
                   title: 'ActiveDocs',
                   path:  admin_api_docs_services_path,
