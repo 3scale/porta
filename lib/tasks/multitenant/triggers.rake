@@ -410,9 +410,7 @@ namespace :multitenant do
       SQL
 
       triggers << System::Database::OracleTrigger.new('provided_access_tokens', <<~SQL)
-        IF :new.account_id <> master_id THEN
-          :new.tenant_id := :new.account_id;
-        END IF;
+        SELECT tenant_id INTO :new.tenant_id FROM users WHERE id = :new.user_id AND tenant_id <> master_id;
       SQL
     end
 
@@ -793,9 +791,7 @@ namespace :multitenant do
       SQL
 
       triggers << System::Database::MySQLTrigger.new('provided_access_tokens', <<-SQL)
-        IF NEW.account_id <> master_id THEN
-          SET NEW.tenant_id = NEW.account_id;
-        END IF;
+        SET NEW.tenant_id = (SELECT tenant_id FROM users WHERE id = NEW.user_id AND tenant_id <> master_id);
       SQL
     end
 
