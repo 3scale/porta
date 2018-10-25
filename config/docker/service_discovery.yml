@@ -2,7 +2,15 @@ default: &base
   enabled: false
   server_scheme: 'https'
   server_port: 8443
-  authentication_method: service_account
+  server_host:
+  bearer_token:
+  client_id: 3scale
+  client_secret:
+  authentication_method: service_account # can be service_account|oauth
+  oauth_server_type: builtin # can be builtin|rh_sso
+  timeout: 1
+  open_timeout: 1
+  retries: 5
 
 development:
   <<: *base
