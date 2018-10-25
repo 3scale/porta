@@ -579,7 +579,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'create with backend_version oidc' do
     account = FactoryGirl.create(:simple_provider)
-    service_params = { backend_version: 'oidc', name: 'test', deployment_option: 'self_managed' }
+    service_params = {backend_version: 'oidc', name: 'test', deployment_option: 'self_managed'}
     service = account.create_service(service_params)
 
     assert service.persisted?
