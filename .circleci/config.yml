@@ -346,12 +346,6 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Login to Container Registry
-          command: |
-            docker login --username "${DOCKER_USERNAME}"\
-                         --password "${DOCKER_PASSWORD}"\
-                         "${DOCKER_REGISTRY}"
-      - run:
           name: Build System Container Image for OpenShift
           command: |
             cd openshift/system
