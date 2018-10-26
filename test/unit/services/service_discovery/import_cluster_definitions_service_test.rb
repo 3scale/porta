@@ -128,7 +128,7 @@ module ServiceDiscovery
     test 'non-oas spec' do
       @import_service.stubs(cluster_service: @cluster_service)
 
-      @cluster_service.stubs(specification: mock_cluster_service_spec(type: 'application/json'))
+      @cluster_service.stubs(specification: mock_cluster_service_spec(type: 'application/xml'))
 
       assert_no_difference @account.api_docs_services.method(:count) do
         System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'API specification type not supported'), any_parameters)
