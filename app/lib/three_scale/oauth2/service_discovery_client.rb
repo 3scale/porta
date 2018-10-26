@@ -74,7 +74,7 @@ module ThreeScale
         def call
           url = super
           # OpenShift builtin OAuth has a serious bug, it does not store correctly the redirect_uri
-          ServiceDiscovery::Config.rh_sso? ? url : URI.decode(nil)
+          ServiceDiscovery::Config.rh_sso? ? url : URI.decode(url)
         rescue => e
           # Do better error management
           Rails.logger.debug("[Openshift OAuth] Error decoding callback URL for builtin <%s>. Error: %s\n%s" % [url.inspect, e.message, e.backtrace.join("\n")])
