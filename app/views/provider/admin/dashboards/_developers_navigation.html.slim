@@ -24,10 +24,10 @@ nav.DashboardNavigation
 
     - if can? :manage, :partners
       li.DashboardNavigation-list-item
-        = dashboard_collection_link 'App',
+        = dashboard_collection_link 'Application',
                                 applications,
                                 admin_buyers_applications_path,
-                                'Apps',
+                                'Applications',
                                 'cubes'
 
         - if can?(:manage, :monitoring) && alerts.any? 
