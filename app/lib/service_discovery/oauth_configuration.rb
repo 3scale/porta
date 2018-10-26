@@ -7,63 +7,38 @@ module ServiceDiscovery
   # Probably could be a Singleton
   class OAuthConfiguration
     include Singleton
+    include ::ServiceDiscovery::Config
 
-    attr_reader :config_fetch_retries
+    attr_reader :retries
     delegate :authorization_endpoint, :userinfo_endpoint, :token_endpoint, to: :oauth_configuration, allow_nil: true
-    delegate :verify_ssl?, to: :@well_known
-    delegate :bearer_token, to: :config
-    delegate :oauth?, :service_account?, to: :authentication_method
-    delegate :rh_sso?, :builtin?, to: :oauth_server_type
 
     def initialize
       super
       @mutex  = Mutex.new
-      @config_fetch_retries = 0
-      @well_known = WellKnownFetcher.new
+      @retries = 0
+      @fetcher = WellKnownFetcher.new
     end
 
-    def config
-      ThreeScale.config.service_discovery
+    # Consider that when it is done via service_account, we do not need the oauth configuration
+    # We already have a bearer_token to authenticate
+    def oauth_configuration_ready?
+      service_account? || oauth_configuration.present?
     end
+    alias service_accessible? oauth_configuration_ready?
 
-    def available?
-      authentication_method == 'service_account' ? true : oauth_configuration.present?
-    end
-
-    def max_retries
-      config.max_retries || 5
-    end
-
-    def authentication_method
-      ActiveSupport::StringInquirer.new(config.authentication_method.presence || 'service_account')
-    end
-
-    def oauth_server_type
-      ActiveSupport::StringInquirer.new(ThreeScale.config.service_discovery.oauth_server_type || 'builtin')
-    end
-
-    # only needed if authenti
     def oauth_configuration
-      return unless config.enabled && server_ok?
+      return unless can_get_configuration?
       return @oauth_configuration if @oauth_configuration
       increment_retries_on_failure do
-        @oauth_configuration = @well_known.call
+        @oauth_configuration = @fetcher.call
       end
     end
 
-    def server_ok?
-      @config_fetch_retries < max_retries
-    end
-
-    def client_secret
-      config.client_secret
-    end
-
-    def client_id
-      config.client_id
-    end
-
     private
+
+    def can_get_configuration?
+      enabled && oauth? && retries < max_retry
+    end
 
     def increment_retries_on_failure
       @mutex.synchronize do
@@ -72,83 +47,7 @@ module ServiceDiscovery
     end
 
     def increment_failures
-      @config_fetch_retries += 1
+      @retries += 1
     end
-
-    class WellKnownFetcher
-      delegate :well_known_url, :verify_ssl, :timeout, :open_timeout, to: :config
-
-      def config
-        ThreeScale.config.service_discovery
-      end
-
-      def timeout
-        config.timeout || 1
-      end
-
-      def open_timeout
-        config.open_timeout || 1
-      end
-
-      def well_known_url
-        URI.join(server_url, '.well-known/oauth-authorization-server').to_s
-      end
-
-      def server_url
-        URI::Generic.build(scheme: server_scheme, host: server_host, port: server_port).to_s
-      end
-
-      def server_host
-        config.server_host || 'openshift.default.svc'
-      end
-
-      def server_port
-        config.server_port || 8443
-      end
-
-      def server_scheme
-        config.server_scheme || 'https'
-      end
-
-      def verify_ssl
-        config.verify_ssl || OpenSSL::SSL::VERIFY_NONE
-      end
-
-      def verify_ssl?
-        verify_ssl != OpenSSL::SSL::VERIFY_NONE
-      end
-
-      # TODO: Retry strategy
-      #   That can be complicated as it will be per unicorn worker
-      #   and we do not want to block the server
-      #   Probably this could be required at boot time
-      #   then if cluster is is not available after X retries,
-      #   disable the service discovery.
-      def call
-        request = RestClient::Request.new(
-          method: :get,
-          url: well_known_url,
-          verify_ssl: verify_ssl,
-          timeout: timeout,
-          open_timeout: open_timeout,
-          log: Rails.logger
-        )
-        request.execute do |response|
-          if response.code == 200
-            json = JSON.parse(response.body)
-            # The endpoint could be better in case of Keycloak
-            json.merge!(userinfo_endpoint: URI.join(server_url, '/apis/user.openshift.io/v1/users/~').to_s)
-            ActiveSupport::OrderedOptions.new.merge!(json.symbolize_keys).freeze
-          else
-            nil
-          end
-        end
-      rescue => e
-        # TODO: Improve error logging
-        Rails.logger.debug("[Service Discovery] Cannot fetch the #{well_known_url} configuration. Exception: #{e.message}")
-        nil
-      end
-    end
-
   end
 end

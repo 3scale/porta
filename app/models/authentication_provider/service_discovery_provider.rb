@@ -16,12 +16,12 @@ class AuthenticationProvider::ServiceDiscoveryProvider < AuthenticationProvider
     {
       kind: 'service_discovery',
       system_name: ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME,
-      client_id: ServiceDiscovery::OAuthConfiguration.instance.client_id,
-      client_secret: ServiceDiscovery::OAuthConfiguration.instance.client_secret,
+      client_id: ServiceDiscovery::Config.client_id,
+      client_secret: ServiceDiscovery::Config.client_secret,
       token_url: ServiceDiscovery::OAuthConfiguration.instance.token_endpoint,
       authorize_url: ServiceDiscovery::OAuthConfiguration.instance.authorization_endpoint,
       user_info_url: ServiceDiscovery::OAuthConfiguration.instance.userinfo_endpoint,
-      skip_ssl_certificate_verification: !ServiceDiscovery::OAuthConfiguration.instance.verify_ssl?
+      skip_ssl_certificate_verification: !ServiceDiscovery::Config.verify_ssl?
     }
   end
 end
