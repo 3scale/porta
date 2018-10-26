@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 module ServiceDiscovery
-  class TokenRetriever
+  class OAuthManager
     class UnknownAuthenticationMethodError < StandardError; end
 
-    delegate :available?, :oauth?, :bearer_token, :service_account?, :authentication_method, to: 'ServiceDiscovery::OAuthConfiguration.instance'
-    private :available?, :oauth?, :bearer_token, :service_account?, :authentication_method
+    include ::ServiceDiscovery::Config
+
+    delegate :service_accessible?, to: 'ServiceDiscovery::OAuthConfiguration.instance'
 
     # @param user [User|NilClass] User to fetch the access token
     #   * When the authentication method is service_account, user is not relevant.
@@ -17,16 +18,6 @@ module ServiceDiscovery
 
     def service_usable?
       access_token.present?
-    end
-
-    def service_accessible?
-      case
-      when oauth?, service_account?
-        available?
-      else
-        # raise UnknownAuthenticationMethodError, "Unknown authentication_method: '#{authentication_method}'"
-        false
-      end
     end
 
     def access_token

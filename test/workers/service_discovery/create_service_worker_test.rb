@@ -10,9 +10,9 @@ module ServiceDiscovery
     end
 
     test 'perform' do
-      token_retriever = mock(service_usable?: true)
+      oauth_manager = mock(service_usable?: true)
       account = FactoryGirl.create(:simple_provider)
-      ServiceDiscovery::TokenRetriever.expects(:new).with(@user).returns(token_retriever).at_least_once
+      ServiceDiscovery::OAuthManager.expects(:new).with(@user).returns(oauth_manager).at_least_once
       import_definition = mock
       import_definition.expects(:create_service).with(account, cluster_namespace: 'fake-project', cluster_service_name: 'fake-api')
       ImportClusterDefinitionsService.expects(:new).with(@user).returns(import_definition)

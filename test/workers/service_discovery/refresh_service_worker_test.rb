@@ -10,8 +10,8 @@ module ServiceDiscovery
     end
 
     test 'perform' do
-      token_retriever = mock(service_usable?: true)
-      ServiceDiscovery::TokenRetriever.expects(:new).with(@user).returns(token_retriever).at_least_once
+      oauth_manager = mock(service_usable?: true)
+      ServiceDiscovery::OAuthManager.expects(:new).with(@user).returns(oauth_manager).at_least_once
       service = FactoryGirl.create(:simple_service)
       import_definition = mock
       import_definition.expects(:refresh_service).with(service)

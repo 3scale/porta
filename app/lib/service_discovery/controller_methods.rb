@@ -15,18 +15,18 @@ module ServiceDiscovery::ControllerMethods
   end
 
   def service_discovery_usable?
-    token_retriever.service_usable?
+    oauth_manager.service_usable?
   end
 
   def service_discovery_accessible?
-    token_retriever.service_accessible?
+    oauth_manager.service_accessible?
   end
 
   def find_cluster
-    @cluster ||= ::ServiceDiscovery::ClusterClient.new bearer_token: token_retriever.access_token
+    @cluster ||= ::ServiceDiscovery::ClusterClient.new bearer_token: oauth_manager.access_token
   end
 
-  def token_retriever
-    @token_retriever ||= ServiceDiscovery::TokenRetriever.new(current_user)
+  def oauth_manager
+    @oauth_manager ||= ServiceDiscovery::OAuthManager.new(current_user)
   end
 end
