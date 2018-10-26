@@ -19,10 +19,10 @@ nav.DashboardNavigation
       li.DashboardNavigation-list-item
         // Applications
         - if can? :manage, :partners
-          => dashboard_collection_link 'App',
+          => dashboard_collection_link 'Application',
                                        service.cinstances,
                                        admin_service_applications_path(service),
-                                       'Apps',
+                                       'Applications',
                                        'cubes'
 
         // Application Plans
