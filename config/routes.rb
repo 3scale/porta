@@ -143,6 +143,18 @@ without fake Core server your after commit callbacks will crash and you might ge
     end
   end
 
+  if ThreeScale.config.service_discovery.enabled && ThreeScale.config.service_discovery.authentication_method == 'oauth'
+    constraints MasterDomainConstraint do
+      get "/auth/#{ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME}/callback" => 'master/service_discovery/auth#show'
+    end
+
+    namespace :provider, path: 'p', constraints: ProviderDomainConstraint do
+      namespace :admin do
+        get "/auth/#{ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME}/callback" => 'service_discovery/auth#show'
+      end
+    end
+  end
+
   get '/auth/:system_name/callback' => 'provider/sessions#create', constraints: MasterOrProviderDomainConstraint
 
   namespace :provider, :path => 'p', constraints: MasterOrProviderDomainConstraint do
