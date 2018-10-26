@@ -16,7 +16,7 @@ module ServiceDiscovery
       end
 
       test 'create service async' do
-        CreateServiceWorker.expects(:perform_async).with(@account.id, 'fake-project', 'fake-api')
+        CreateServiceWorker.expects(:perform_async).with(@account.id, 'fake-project', 'fake-api', nil)
         new_service = ImportClusterDefinitionsService.create_service(@account, cluster_namespace: 'fake-project',
                                                                                cluster_service_name: 'fake-api')
         refute new_service.persisted?
@@ -24,7 +24,7 @@ module ServiceDiscovery
       end
 
       test 'refresh service async' do
-        RefreshServiceWorker.expects(:perform_async).with(@service.id)
+        RefreshServiceWorker.expects(:perform_async).with(@service.id, nil)
         ImportClusterDefinitionsService.refresh_service(@service)
       end
     end
@@ -128,7 +128,7 @@ module ServiceDiscovery
     test 'non-oas spec' do
       @import_service.stubs(cluster_service: @cluster_service)
 
-      @cluster_service.stubs(specification: mock_cluster_service_spec(type: 'application/json'))
+      @cluster_service.stubs(specification: mock_cluster_service_spec(type: 'application/xml'))
 
       assert_no_difference @account.api_docs_services.method(:count) do
         System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'API specification type not supported'), any_parameters)

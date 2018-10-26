@@ -122,7 +122,7 @@ javascript:
       name: 'service[backend_version]',
       as: :radio,
       required: false,
-      collection: Logic::Backend::Service.available_versions_for(@service),
+      collection: BackendVersion.visible_versions(service: @service),
       label: 'Authentication',
       wrapper_html: { class: "radio--iconic" },
       value_as_class: true,
