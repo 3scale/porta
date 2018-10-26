@@ -30,10 +30,10 @@ Feature: Provider settings authorization
       | Accounts             | fields definitions index |
       | Messages             | emails settings          |
       | Messages             | email templates          |
-      | Portal               | dns settings             |
-      | Portal               | spam protection          |
-      | Portal               | xss protection           |
-      | Portal               | authentication providers |
+      | Developer Portal     | dns settings             |
+      | Developer Portal     | spam protection          |
+      | Developer Portal     | xss protection           |
+      | Developer Portal     | authentication providers |
 
 
   Scenario Outline: Members per default cannot access settings
@@ -55,11 +55,11 @@ Feature: Provider settings authorization
       | Forum                | forum settings           |
       | Messages             | emails settings          |
       | Messages             | email templates          |
-      | Portal               | site settings            |
-      | Portal               | dns settings             |
-      | Portal               | spam protection          |
-      | Portal               | xss protection           |
-      | Portal               | authentication providers |
+      | Developer Portal     | site settings            |
+      | Developer Portal     | dns settings             |
+      | Developer Portal     | spam protection          |
+      | Developer Portal     | xss protection           |
+      | Developer Portal     | authentication providers |
 
   Scenario Outline: Members of settings group can access settings
     Given an active user "member" of account "foo.example.com"
@@ -84,9 +84,9 @@ Feature: Provider settings authorization
       | Billing              | finance settings         |
       | Messages             | emails settings          |
       | Messages             | email templates          |
-      | Portal               | site settings            |
-      | Portal               | feature visibility       |
-      | Portal               | dns settings             |
-      | Portal               | spam protection          |
-      | Portal               | xss protection           |
-      | Portal               | authentication providers |
+      | Developer Portal     | site settings            |
+      | Developer Portal     | feature visibility       |
+      | Developer Portal     | dns settings             |
+      | Developer Portal     | spam protection          |
+      | Developer Portal     | xss protection           |
+      | Developer Portal     | authentication providers |
