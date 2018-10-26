@@ -11,7 +11,7 @@ default: &base
   timeout: 1
   open_timeout: 1
   max_retry: 5
-  verify_ssl: <%= OpenSSL::SSL::VERIFY_PEER %> # 0
+  verify_ssl: <%= OpenSSL::SSL::VERIFY_NONE %> # 0
 
 
 production:
