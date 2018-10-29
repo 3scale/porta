@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import {StatsCSVLink} from '../../../app/javascript/src/Stats/lib/csv_link'
+import {StatsCSVLink} from 'Stats/lib/csv_link'
 
 describe('StatsCSVLink', () => {
   let csvLink = new StatsCSVLink({container: '#csv_link'})

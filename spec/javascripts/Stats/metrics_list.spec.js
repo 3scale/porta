@@ -1,4 +1,4 @@
-import {StatsMetrics} from '../../../app/javascript/src/Stats/lib/metrics_list'
+import {StatsMetrics} from 'Stats/lib/metrics_list'
 
 describe('StatsMetrics', () => {
   beforeEach((done) => {

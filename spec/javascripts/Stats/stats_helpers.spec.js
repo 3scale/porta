@@ -1,4 +1,4 @@
-import * as helpers from '../../../app/javascript/src/Stats/lib/stats_helpers'
+import * as helpers from 'Stats/lib/stats_helpers'
 
 describe('getPeriodFromDateRange', () => {
   it('should get the right period from any date range', () => {

@@ -1,4 +1,4 @@
-import {StatsSeries} from '../../../app/javascript/src/Stats/lib/series'
+import {StatsSeries} from 'Stats/lib/series'
 
 describe('StatsSeries', () => {
   let source = {

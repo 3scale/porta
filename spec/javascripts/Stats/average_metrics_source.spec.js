@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsAverageMetricsSource} from '../../../app/javascript/src/Stats/lib/average_metrics_source'
+import {StatsAverageMetricsSource} from 'Stats/lib/average_metrics_source'
 
 describe('StatsAverageMetricsSource', () => {
   describe('StatsAverageMetricsSource Methods', () => {

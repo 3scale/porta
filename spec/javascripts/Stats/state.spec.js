@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import { StatsState, PeriodRangeDate, CustomRangeDate } from '../../../app/javascript/src/Stats/lib/state'
+import { StatsState, PeriodRangeDate, CustomRangeDate } from 'Stats/lib/state'
 
 describe('StatsState', () => {
   let fakeStore = jasmine.createSpyObj('fakeStore', ['getStateFromURL', 'save', 'triggerNavigationEvent'])

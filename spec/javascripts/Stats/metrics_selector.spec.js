@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import { StatsMetricsSelector } from '../../../app/javascript/src/Stats/lib/metrics_selector'
+import { StatsMetricsSelector } from 'Stats/lib/metrics_selector'
 
 describe('StatsMetricsSelector', () => {
   let userSelectedState = {
