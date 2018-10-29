@@ -19,17 +19,17 @@ module Provider::Admin::DashboardsHelper
     widget.percentual_change > 0 ? 'u-plus' : 'u-minus'
   end
 
-  def dashboard_collection_link(singular_name, collection, path, opts)
+  def dashboard_collection_link(singular_name, collection, path, icon_name: nil, plural: nil)
     link_to path, class: 'DashboardNavigation-link' do
-      link_text = pluralize(number_to_human(collection.size), singular_name, opts[:plural])
-      link_text = link_text.prepend "#{icon(opts[:icon_name])} " if opts[:icon_name]
+      link_text = pluralize(number_to_human(collection.size), singular_name, plural)
+      link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
       link_text.html_safe
     end
   end
 
-  def dashboard_secondary_collection_link(singular_name, collection, path, opts)
+  def dashboard_secondary_collection_link(singular_name, collection, path, icon_name: nil, plural: nil)
     link = ' ('
-    link << dashboard_collection_link(singular_name, collection, path, opts)
+    link << dashboard_collection_link(singular_name, collection, path, icon_name, plural)
     link << ')'
   end
 
