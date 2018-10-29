@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsStore} from '../../../app/javascript/src/Stats/lib/store'
+import {StatsStore} from 'Stats/lib/store'
 
 describe('StatsStore', () => {
   class FakeHistory {

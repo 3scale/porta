@@ -1,8 +1,8 @@
 import $ from 'jquery'
 
-import {StatsMenu} from '../../../app/javascript/src/Stats/lib/menu'
-import {StatsStore} from '../../../app/javascript/src/Stats/lib/store'
-import {StatsState} from '../../../app/javascript/src/Stats/lib/state'
+import {StatsMenu} from 'Stats/lib/menu'
+import {StatsStore} from 'Stats/lib/store'
+import {StatsState} from 'Stats/lib/state'
 
 describe('StatsMenu', () => {
   const PERIODS = [

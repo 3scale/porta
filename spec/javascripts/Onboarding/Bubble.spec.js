@@ -1,4 +1,4 @@
-import {Onboarding, Bubble} from '../../../app/javascript/src/Onboarding/Bubble'
+import {Onboarding, Bubble} from 'Onboarding/Bubble'
 
 describe('ApiBubble', () => {
   beforeEach(() => {

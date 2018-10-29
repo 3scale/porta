@@ -4,22 +4,20 @@ module.exports = function (config) {
   'use strict'
 
   config.set({
-    basePath: "",
+    basePath: '',
     autoWatch: true,
     singleRun: true,
 
     frameworks: ['jquery-3.2.1', 'jasmine-jquery', 'jasmine', 'fixture'],
 
     preprocessors: {
-      'spec/javascripts/karma/index.spec.js': [ 'webpack' ]
+      'spec/javascripts/karma/index.spec.js': ['webpack']
     },
 
     files: [
       'spec/javascripts/karma/jasmine.js',
       'spec/javascripts/karma/fixtures.js',
       'spec/javascripts/karma/index.spec.js'
-      //{ pattern: 'app/javascript/src/**/*.jsx', watched: false }
-
     ],
 
     webpack: webpackConfig,

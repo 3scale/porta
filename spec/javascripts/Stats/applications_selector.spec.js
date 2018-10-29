@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import { StatsApplicationsSelector } from '../../../app/javascript/src/Stats/lib/applications_selector'
+import { StatsApplicationsSelector } from 'Stats/lib/applications_selector'
 
 describe('StatsApplicationsSelector', () => {
   let userSelectedState = {

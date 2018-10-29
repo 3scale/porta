@@ -1,4 +1,4 @@
-import {StatsTopAppsSeries} from '../../../app/javascript/src/Stats/provider/stats_top_apps'
+import {StatsTopAppsSeries} from 'Stats/provider/stats_top_apps'
 
 describe('StatsTopApps', () => {
   describe('StatsTopAppsSeries', () => {
