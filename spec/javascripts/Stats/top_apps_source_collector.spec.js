@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsTopAppsSourceCollector} from '../../../app/javascript/src/Stats/lib/top_apps_source_collector'
+import {StatsTopAppsSourceCollector} from 'Stats/lib/top_apps_source_collector'
 
 describe('StatsTopAppsSourceCollector', () => {
   let options = {

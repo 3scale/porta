@@ -1,4 +1,4 @@
-import { StatsMethodsTable } from '../../../app/javascript/src/Stats/lib/methods_table'
+import { StatsMethodsTable } from 'Stats/lib/methods_table'
 
 describe('StatsMethodsTable', () => {
   let methodsTable = new StatsMethodsTable({container: '#methods_table'})

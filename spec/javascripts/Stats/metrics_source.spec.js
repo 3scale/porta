@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsMetricsSource} from '../../../app/javascript/src/Stats/lib/metrics_source'
+import {StatsMetricsSource} from 'Stats/lib/metrics_source'
 
 let source = new StatsMetricsSource({id: 42, details: {id: 8, system_name: 'slartibarfast'}})
 

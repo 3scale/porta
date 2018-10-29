@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsChart} from '../../../app/javascript/src/Stats/lib/chart'
+import {StatsChart} from 'Stats/lib/chart'
 
 describe('StatsChart', function () {
   let chart = new StatsChart({container: '#chart'})

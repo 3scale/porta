@@ -1,1 +1,3 @@
-jasmine.getEnv().afterEach(function () { fixture.cleanup() })
+jasmine.getEnv().afterEach(function () {
+  fixture.cleanup()
+})

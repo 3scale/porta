@@ -1,4 +1,4 @@
-import { StatsUsageChart } from '../../../app/javascript/src/Stats/lib/usage_chart'
+import { StatsUsageChart } from 'Stats/lib/usage_chart'
 
 describe('StatsUsageChart', () => {
   let chart = new StatsUsageChart({container: '#chart', groupedSeries: ['marvin', 'trillian', 'zaphod']})

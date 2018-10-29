@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import {StatsChartManager} from '../../../app/javascript/src/Stats/lib/chart_manager'
+import {StatsChartManager} from 'Stats/lib/chart_manager'
 
 let statsState = jasmine.createSpyObj('statsState', ['setState', 'state'])
 let sources = jasmine.createSpyObj('sources', ['getSources'])

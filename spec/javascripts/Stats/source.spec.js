@@ -1,4 +1,4 @@
-import {StatsSource} from '../../../app/javascript/src/Stats/lib/source'
+import {StatsSource} from 'Stats/lib/source'
 
 let source = new StatsSource()
 

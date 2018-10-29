@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import {StatsTopAppsHelpText} from '../../../app/javascript/src/Stats/provider/stats_top_apps'
+import {StatsTopAppsHelpText} from 'Stats/provider/stats_top_apps'
 
 describe('StatsTopAppsHelpText', () => {
   let helpText = new StatsTopAppsHelpText({container: '#container'})
