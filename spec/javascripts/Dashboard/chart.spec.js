@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import {render} from '../../../app/javascript/src/Dashboard/chart'
+import { render } from 'Dashboard/chart'
 
 describe('Chart', () => {
   let data = {

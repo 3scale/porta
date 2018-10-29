@@ -13,7 +13,7 @@ import {
   AdminSection,
   ServiceAccess,
   Form
-} from '../../../app/javascript/src/Users/permissions'
+} from 'Users/permissions'
 
 function render (el, context = {}, dispatch) {
   let doc = document.createDocumentFragment()

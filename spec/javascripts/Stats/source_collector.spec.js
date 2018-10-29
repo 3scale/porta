@@ -1,4 +1,4 @@
-import {StatsSourceCollector} from '../../../app/javascript/src/Stats/lib/source_collector'
+import {StatsSourceCollector} from 'Stats/lib/source_collector'
 
 describe('StatsSourceCollector', () => {
   let options = {

@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsResponseCodeSource, StatsResponseCodeChart} from '../../../app/javascript/src/Stats/provider/stats_response_codes'
+import {StatsResponseCodeSource, StatsResponseCodeChart} from 'Stats/provider/stats_response_codes'
 
 let metric = { system_name: '2XX' }
 let options = {
