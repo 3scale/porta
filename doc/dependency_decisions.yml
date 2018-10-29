@@ -465,90 +465,6 @@
     :why:
     :versions: []
     :when: 2018-10-08 14:43:09.580575000 Z
-- - :approve
-  - abab
-  - :who: Didier Di Cesare
-    :why: W3C 3-clause BSD License
-    :versions: []
-    :when: 2018-10-08 14:48:54.145370000 Z
-- - :approve
-  - atob
-  - :who: Didier Di Cesare
-    :why: MIT OR Apache-2.0
-    :versions: []
-    :when: 2018-10-08 14:49:24.617321000 Z
-- - :approve
-  - esutils
-  - :who: Didier Di Cesare
-    :why: BSD 2-Clause Simplified License
-    :versions: []
-    :when: 2018-10-08 14:51:56.810452000 Z
-- - :approve
-  - node-forge
-  - :who: Didier Di Cesare
-    :why: BSD-3-Clause OR GPL-2.0
-    :versions: []
-    :when: 2018-10-08 14:52:26.815935000 Z
-- - :approve
-  - pako
-  - :who: Didier Di Cesare
-    :why: MIT AND Zlib
-    :versions: []
-    :when: 2018-10-08 14:52:46.864375000 Z
-- - :approve
-  - stackframe
-  - :who: Didier Di Cesare
-    :why: MIT License
-    :versions: []
-    :when: 2018-10-08 14:53:35.926686000 Z
-- - :approve
-  - sha.js
-  - :who: Didier Di Cesare
-    :why: MIT AND BSD-3-Clause
-    :versions: []
-    :when: 2018-10-08 14:54:42.187406000 Z
-- - :approve
-  - rgb
-  - :who: Didier Di Cesare
-    :why: MIT License
-    :versions: []
-    :when: 2018-10-08 14:55:01.288430000 Z
-- - :approve
-  - buffers
-  - :who: Didier Di Cesare
-    :why: MIT/X11 License
-    :versions: []
-    :when: 2018-10-08 14:58:43.955104000 Z
-- - :approve
-  - cyclist
-  - :who: Didier Di Cesare
-    :why: MIT License
-    :versions: []
-    :when: 2018-10-08 14:59:16.150521000 Z
-- - :approve
-  - domelementtype
-  - :who: Didier Di Cesare
-    :why: BSD 2-Clause Simplified License
-    :versions: []
-    :when: 2018-10-08 15:00:45.031274000 Z
-- - :approve
-  - domutils
-  - :who: Didier Di Cesare
-    :why: BSD 2-Clause Simplified License
-    :versions: []
-    :when: 2018-10-08 15:01:15.851586000 Z
-- - :approve
-  - isnumeric
-  - :who: Didier Di Cesare
-    :why: MIT License
-    :versions: []
-    :when: 2018-10-08 15:02:28.386300000 Z
-- - :approve
-  - node-fs
-  - :who: Didier Di Cesare
-    :why: MIT License
-    :versions: []
-    :when: 2018-10-08 15:04:00.721020000 Z
 - - :whitelist
   - MIT*
   - :who:
@@ -567,27 +483,77 @@
     :why:
     :versions: []
     :when: 2018-10-15 13:27:55.011933000 Z
+- - :ignore_group
+  - devDependencies
+  - :who:
+    :why:
+    :versions: []
+    :when: 2018-10-29 13:46:19.444904000 Z
 - - :approve
-  - colors
+  - esutils
+  - :who: Didier Di Cesare
+    :why: BSD 2-Clause Simplified License
+    :versions: []
+    :when: 2018-10-08 14:51:56.810452000 Z
+- - :approve
+  - pako
+  - :who: Didier Di Cesare
+    :why: MIT AND Zlib
+    :versions: []
+    :when: 2018-10-08 14:52:46.864375000 Z
+- - :approve
+  - sha.js
+  - :who: Didier Di Cesare
+    :why: MIT AND BSD-3-Clause
+    :versions: []
+    :when: 2018-10-08 14:54:42.187406000 Z
+- - :approve
+  - rgb
   - :who: Didier Di Cesare
     :why: MIT License
     :versions: []
-    :when: 2018-10-15 13:28:48.146168000 Z
+    :when: 2018-10-08 14:55:01.288430000 Z
 - - :approve
-  - hoek
+  - cyclist
   - :who: Didier Di Cesare
-    :why: BSD License
+    :why: MIT License
     :versions: []
-    :when: 2018-10-15 13:29:37.440995000 Z
+    :when: 2018-10-08 14:59:16.150521000 Z
 - - :approve
-  - qs
+  - pleeease-filters
   - :who: Didier Di Cesare
-    :why: BSD License
+    :why: MIT License
     :versions: []
-    :when: 2018-10-15 13:30:24.378623000 Z
+    :when: 2018-10-29 14:17:58.507338000 Z
+- - :approve
+  - isnumeric
+  - :who: Didier Di Cesare
+    :why: MIT License
+    :versions: []
+    :when: 2018-10-08 15:02:28.386300000 Z
 - - :approve
   - fsevents
-  - :who: Didier Di Cesare
-    :why: MIT License
+  - &8
+    :who:
+    :why:
     :versions: []
-    :when: 2018-10-17 14:23:44.625420000 Z
+    :when: 2018-11-06 14:58:21.177952000 Z
+- - :approve
+  - WHO=Didier Di Cesare
+  - *8
+- - :approve
+  - WHY=MIT License
+  - *8
+- - :approve
+  - atob
+  - &9
+    :who:
+    :why:
+    :versions: []
+    :when: 2018-11-06 14:59:01.104111000 Z
+- - :approve
+  - WHO=Didier Di Cesare
+  - *9
+- - :approve
+  - WHY=MIT OR Apache-2.0
+  - *9
