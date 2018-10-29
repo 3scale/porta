@@ -58,7 +58,7 @@ nav.DashboardNavigation
        = dashboard_collection_link 'ActiveDoc',
                                     service.api_docs_services,
                                     admin_service_api_docs_path(service),
-                                    'file-text'
+                                    icon_name: 'file-text'
     // Integration
     - if can?(:manage, :plans)
       - if !service.has_traffic?
