@@ -33,6 +33,11 @@ class Provider::SessionsController < FrontendController
     end
   end
 
+  def bounce
+    auth = domain_account.self_authentication_providers.find_by!(system_name: params.require(:system_name))
+    redirect_to ProviderOauthFlowPresenter.new(auth, request, request.host).authorize_url
+  end
+
   def destroy
     user = current_user
     logout_killing_session!
