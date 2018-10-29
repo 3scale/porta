@@ -1,7 +1,8 @@
 
-DOCKER_COMPOSE_VERSION := 1.21.0
-DOCKER_COMPOSE := $(BIN_PATH)/docker-compose
-DOCKER_COMPOSE_BIN := $(DOCKER_COMPOSE)-$(DOCKER_COMPOSE_VERSION)
+DOCKER_COMPOSE_VERSION := 1.22.0
+DOCKER_COMPOSE_BASE := $(BIN_PATH)/docker-compose
+DOCKER_COMPOSE_BIN := $(DOCKER_COMPOSE_BASE)-$(DOCKER_COMPOSE_VERSION)
+DOCKER_COMPOSE := $(DOCKER_COMPOSE_BIN)
 
 COMPOSE_PROJECT_NAME := $(PROJECT)
 COMPOSE_FILE := docker-compose.yml
@@ -19,6 +20,9 @@ DOCKER_ENV := $(addprefix -e ,$(DOCKER_ENV))
 DOCKER_ENV += -e GIT_COMMIT_MESSAGE='$(subst ','\'',$(shell git log -1 --pretty=format:%B))'
 DOCKER_ENV += -e GIT_COMMITTED_DATE="$(shell git log -1 --pretty=format:%ai)"
 
+MKDIR_P := mkdir -p
+VOLUME_DIRS = .jspm .bundle vendor/bundle public/assets assets/jspm_packages tmp/cache node_modules
+
 ifndef COMPOSE_PROJECT_NAME
 $(error missing COMPOSE_PROJECT_NAME)
 endif
@@ -33,11 +37,13 @@ export COMPOSE_FILE
 
 all: clean clean-tmp build test ## Cleans environment, builds docker image and runs tests
 
-directories:
-	mkdir -p .jspm .bundle vendor/bundle public/assets assets/jspm_packages tmp/cache node_modules
+directories: $(VOLUME_DIRS)
+
+$(VOLUME_DIRS):
+	${MKDIR_P} $(VOLUME_DIRS)
 
 $(DOCKER_COMPOSE): directories $(DOCKER_COMPOSE_BIN)
-	@ln -sf $(realpath $(DOCKER_COMPOSE_BIN)) $(DOCKER_COMPOSE)
+#	@ln -sf $(realpath $(DOCKER_COMPOSE_BIN)) $(DOCKER_COMPOSE)
 
 $(DOCKER_COMPOSE_BIN): $(BIN_PATH) | wget
 	@wget --no-verbose https://github.com/docker/compose/releases/download/$(DOCKER_COMPOSE_VERSION)/docker-compose-`uname -s`-`uname -m` -O $(DOCKER_COMPOSE_BIN)
@@ -63,7 +69,14 @@ clean: $(DOCKER_COMPOSE)
 	- $(DOCKER_COMPOSE) rm --force -v $(SERVICES)
 	- docker rm --force --volumes $(PROJECT)-build $(PROJECT)-build-run 2> /dev/null
 	- $(foreach service,$(SERVICES),docker rm --force --volumes $(PROJECT)-$(service) 2> /dev/null;)
-	- rm precompile-assets init_db || true
+	- rm -rf precompile-assets init_db permissions $$BIN_PATH $$VOLUME_DIRS || true
+	- sudo groupadd --gid 1042 3scale-dev
+	- sudo usermod -aG 1042 $$USER
+	- sudo chown -R :1042 .
+	- sudo chmod -R 775 .
+	- sudo chmod -R ug+s .
+	- sudo chmod -R ug-s .bin
+	- umask 0000
 
 
 docker: ## Prints docker version and info

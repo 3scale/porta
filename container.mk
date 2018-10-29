@@ -1,10 +1,13 @@
 
 all: clean-tmp test ## Cleans environment, builds docker image and runs tests
 
+clean-tmp: ## Removes temporary files
+	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
+
 info: jenkins-env # Prints relevant environment info
 
 oracle-db-setup: ## Creates databases in Oracle
-oracle-db-setup: oracle-database
+oracle-db-setup:
 	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DISABLE_SPRING=true DB=oracle bundle exec rake db:drop db:create db:setup
 
 run: ## Runs command $(CMD) without starting any containers.

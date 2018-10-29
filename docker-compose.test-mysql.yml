@@ -52,7 +52,7 @@ services:
       - .:/opt/system:delegated
       - ./tmp/cache:/opt/system/tmp/cache:cached
       - ./node_modules:/opt/system/node_modules:cached
-      - ./assets/jspm_assets:/opt/system/assets/jspm_packages:cached
+      - ./assets/jspm_packages:/opt/system/assets/jspm_packages:cached
       - ./public/assets:/opt/system/public/assets:cached
       - .jspm:/root/.jspm:cached
       - ./vendor/bundle:/opt/system/vendor/bundle:cached

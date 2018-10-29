@@ -59,7 +59,7 @@ endif
 include openshift.mk
 include dependencies.mk
 
-.PHONY: default all clean build test info jenkins-env docker test-run tmp-export run test-bash clean-cache clean-tmp compose help bundle-in-container apicast-dependencies-in-container npm-install-in-container test-no-deps
+.PHONY: default all clean build test info jenkins-env docker test-run tmp-export run clean-tmp compose help bundle-in-container apicast-dependencies-in-container npm-install-in-container test-no-deps
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
