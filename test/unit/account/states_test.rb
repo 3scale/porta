@@ -148,6 +148,31 @@ class Account::StatesTest < ActiveSupport::TestCase
     assert account.approved?
   end
 
+  test '.deleted_since' do
+    accounts = FactoryGirl.create_list(:simple_account, 3)
+
+    account_deleted_recently = accounts[0]
+    account_deleted_recently.schedule_for_deletion!
+    account_deleted_recently.update_attribute(:deleted_at, (Account::States::PERIOD_BEFORE_DELETION.ago + 1.day))
+
+    account_deleted_long_ago = accounts[1]
+    account_deleted_long_ago.schedule_for_deletion!
+    account_deleted_long_ago.update_attribute(:deleted_at, Account::States::PERIOD_BEFORE_DELETION.ago)
+
+    account_not_deleted = accounts[2]
+
+    results = Account.deleted_since.pluck(:id)
+    assert_not_includes results, account_deleted_recently.id
+    assert_includes     results, account_deleted_long_ago.id
+    assert_not_includes results, account_not_deleted.id
+  end
+
+  test '.deletion_date' do
+    account = FactoryGirl.create(:simple_account)
+    account.schedule_for_deletion!
+    assert_equal Account::States::PERIOD_BEFORE_DELETION.from_now.to_date, account.deletion_date.to_date
+  end
+
   class CallbacksTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
