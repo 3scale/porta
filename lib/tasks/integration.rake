@@ -8,6 +8,7 @@ desc 'The default execution: the whole CI suite'
 task :integrate => 'integrate:parallel'
 
 
+
 namespace :integrate do
 
   test_groups = {
@@ -66,6 +67,12 @@ namespace :integrate do
 
     end
 
+    def self.test_command_with_list(test_list)
+      (ENV['CIRCLECI']) ?
+        "export TESTS=$(echo '#{test_list}' | circleci tests split --split-by=timings) && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace" :
+        "parallel_test -o '--verbose' #{test_list}"
+    end
+
     # rubocop:disable MethodLength
     def self.test_commands (test_lists)
       tags_for_test_categories = %w[
@@ -96,9 +103,9 @@ namespace :integrate do
         :rspec => (ENV['CIRCLECI']) ?
                     "bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | awk 'BEGIN {ORS=\" \"} {print}'`" :
                     "parallel_rspec --verbose #{test_lists[:rspec]}",
-        :functional => "parallel_test -o '--verbose' #{test_lists[:functional]}",
-        :integration => "parallel_test -o '--verbose' #{test_lists[:integration]}",
-        :unit => "parallel_test -o '--verbose' #{test_lists[:unit]}",
+        :functional => test_command_with_list(test_lists[:functional]),
+        :integration => test_command_with_list(test_lists[:integration]),
+        :unit => test_command_with_list(test_lists[:unit]),
 
       }
 
@@ -192,7 +199,17 @@ namespace :integrate do
 
     silence_stream(STDOUT) do
       require 'system/database'
-      ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:schema:load db:procedures multitenant:triggers')
+      if ENV['CIRCLECI']
+        Rake::Task['db:drop'].invoke
+        Rake::Task['db:create'].invoke
+        Rake::Task['db:test:prepare'].invoke
+      else
+        # ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:schema:load db:procedures multitenant:triggers')
+        ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:test:prepare --verbose --trace')
+      end
+        # Rake::Task['db:schema:load'].invoke
+      # Rake::Task['db:procedures'].invoke
+      # Rake::Task['multitenant:triggers'].invoke
       Rake::Task['ts:configure'].invoke
     end
   end

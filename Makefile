@@ -10,13 +10,15 @@ TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log tmp/j
 
 DB ?= mysql
 
-JENKINS_ENV = JENKINS_URL BUILD_TAG BUILD_NUMBER BUILD_URL
+JENKINS_ENV = DB
+ifdef JENKINS_URL # if actually running on jenkins
+JENKINS_ENV += JENKINS_URL BUILD_TAG BUILD_NUMBER BUILD_URL
+endif
 JENKINS_ENV += GIT_BRANCH GIT_COMMIT GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_EMAIL GIT_COMMITTER_NAME PERCY_ENABLE
 JENKINS_ENV += BUNDLE_GEMFILE BUNDLE_GEMS__CONTRIBSYS__COM
 JENKINS_ENV += PARALLEL_TEST_PROCESSORS
 
 JENKINS_ENV += MULTIJOB_KIND PERCY_ENABLE PERCY_TOKEN COVERAGE PROXY_ENABLED
-JENKINS_ENV += DB
 
 RUBY_ENGINE_VERSION = ruby
 RUBY_API_VERSION = 2.3.0
@@ -63,6 +65,7 @@ include dependencies.mk
 
 # From here on, only phony targets to manage docker compose
 test-prep: init_db test-with-info
+#test-prep: bundle npm-install test-with-info
 
 ifeq ($(PROXY_ENABLED),true)
 test-rake: CMD = make dnsmasq_set && bundle exec rake $${JOB} --verbose --trace && make dnsmasq_unset
