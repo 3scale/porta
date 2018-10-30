@@ -77,7 +77,7 @@ module Account::States
       end
 
       event :suspend do
-        transition :approved => :suspended, if: :provider_but_not_master?
+        transition :approved => :suspended, if: :tenant?
       end
 
       event :resume do
