@@ -380,7 +380,7 @@ class Account < ApplicationRecord
     self[:provider] || master?
   end
 
-  def provider_but_not_master?
+  def tenant?
     provider && !master?
   end
 
