@@ -68,7 +68,7 @@ class ProxyTestService
   end
 
   def disabled?
-    !proxy
+    !proxy&.deployable?
   end
 
   def credentials
