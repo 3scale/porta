@@ -6,10 +6,13 @@
   = render 'api/integrations/apicast/shared/deployment_options'
 
   .integration data-state="open"
-    - if @service.deployment_option.include?('plugin_')
+    - case @service.deployment_option
+    - when /^plugin_/
       = render 'api/integrations/plugin/plugin'
-    - elsif @show_presenter.any_sandbox_configs?
-      = render 'api/integrations/apicast/configuration_driven/apicast'
+    - when /^service_mesh/
     - else
-      ' To get started with this service on APIcast,
-      = link_to "add the base URL of your API and save the configuration.", edit_admin_service_integration_path(@service), class: "important-button"
+      - if @show_presenter.any_sandbox_configs?
+        = render 'api/integrations/apicast/configuration_driven/apicast'
+      - else
+        ' To get started with this service on APIcast,
+        = link_to "add the base URL of your API and save the configuration.", edit_admin_service_integration_path(@service), class: "important-button"

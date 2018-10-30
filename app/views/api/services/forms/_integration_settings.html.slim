@@ -115,15 +115,24 @@ javascript:
     = form.input :deployment_option,
       as: :radio,
       collection: Service.deployment_options(current_account)['Gateway'],
-      label: Service.deployment_options(current_account).keys[0],
+      label: 'Gateway',
       wrapper_html: { class: "radio--iconic gateway" },
       value_as_class: true,
       hint: t("formtastic.hints.deployment_option_gateway")
 
+    - if current_account.provider_can_use?(:service_mesh_integration)
+      = form.input :deployment_option,
+              as: :radio,
+              collection: Service.deployment_options(current_account)['Service Mesh'],
+              label: 'Service Mesh',
+              wrapper_html: {class: 'radio--iconic service_mesh'},
+              value_as_class: true,
+              hint: t('formtastic.hints.deployment_option_service_mesh')
+
     = form.input :deployment_option,
       as: :radio,
       collection: Service.deployment_options(current_account)['Plugin'],
-      label: 'Or ' + Service.deployment_options(current_account).keys[1],
+      label: 'Or Plugin',
       wrapper_html: { class: "radio--iconic plugin" },
       value_as_class: true,
       hint: t("formtastic.hints.deployment_option_plugin")
