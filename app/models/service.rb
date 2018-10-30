@@ -126,6 +126,9 @@ class Service < ApplicationRecord
     APICAST = %i(hosted self_managed).freeze
     private_constant :APICAST
 
+    SERVICE_MESH = %i[istio].freeze
+    private_constant :SERVICE_MESH
+
     def self.plugins
       PLUGINS.map { |lang| "plugin_#{lang}".freeze }
     end
@@ -134,9 +137,17 @@ class Service < ApplicationRecord
       gateways = APICAST - (ThreeScale.config.apicast_custom_url ? %i(self_managed) : [])
       gateways.map { |gateway| gateway.to_s.freeze }
     end
+
+    def self.service_mesh
+      SERVICE_MESH.map { |name| "service_mesh_#{name}".freeze }
+    end
+
+    def self.all
+      plugins + gateways + service_mesh
+    end
   end
 
-  validates :deployment_option, inclusion: { in: DeploymentOption.plugins + DeploymentOption.gateways }, presence: true
+  validates :deployment_option, inclusion: { in: DeploymentOption.all }, presence: true
   scope :deployed_with_gateway, -> { where(deployment_option: DeploymentOption.gateways) }
 
   validate :end_users_switch
@@ -460,10 +471,13 @@ class Service < ApplicationRecord
   PLUGINS = APPLY_I18N.call(DeploymentOption.plugins)
   private_constant :PLUGINS
 
-  def self.deployment_options(_)
+  SERVICE_MESH = APPLY_I18N.call(DeploymentOption.service_mesh)
+  private_constant :SERVICE_MESH
+
+  def self.deployment_options(_ = nil)
     gateway = APPLY_I18N.call(DeploymentOption.gateways)
 
-    { 'Gateway' => gateway, 'Plugin'  => PLUGINS }
+    { 'Gateway' => gateway, 'Plugin'  => PLUGINS, 'Service Mesh'  => SERVICE_MESH }
   end
 
   def deployment_option=(value)
