@@ -33,14 +33,14 @@ it('should render itself', () => {
 it('should have a Dashboard option on top', () => {
   const dashboard = contextSelector.find('#context-menu').childAt(0)
   expect(dashboard.exists()).toEqual(true)
-  expect(dashboard.text()).toEqual('Dashboard')
+  expect(dashboard.text()).toContain('Dashboard')
   expect(dashboard.find('a').props().href).not.toBeUndefined()
 })
 
 it('should have a Audience option after Dashboard, only if audience link is defined', () => {
   const audience = contextSelector.find('#context-menu').childAt(1)
   expect(audience.exists()).toEqual(true)
-  expect(audience.text()).toEqual('Audience')
+  expect(audience.text()).toContain('Audience')
   expect(audience.find('a').props().href).toEqual(audienceLink)
 })
 
@@ -53,22 +53,22 @@ it('should not have a Audience option when audience link is undefined', () => {
 it('should highlight the selected context', () => {
   contextSelector.setProps({ activeMenu: 'buyers', currentApi: null })
   expect(contextSelector.find('.current-context')).toHaveLength(1)
-  expect(contextSelector.find('.current-context').text()).toEqual('Audience')
+  expect(contextSelector.find('.current-context').text()).toContain('Audience')
 
   contextSelector.setProps({ activeMenu: 'finance', currentApi: null })
   expect(contextSelector.find('.current-context')).toHaveLength(1)
-  expect(contextSelector.find('.current-context').text()).toEqual('Audience')
+  expect(contextSelector.find('.current-context').text()).toContain('Audience')
 
   contextSelector.setProps({ activeMenu: 'cms', currentApi: null })
   expect(contextSelector.find('.current-context')).toHaveLength(1)
-  expect(contextSelector.find('.current-context').text()).toEqual('Audience')
+  expect(contextSelector.find('.current-context').text()).toContain('Audience')
 
   contextSelector.setProps({ activeMenu: 'site', currentApi: null })
   expect(contextSelector.find('.current-context')).toHaveLength(1)
 
   contextSelector.setProps({ activeMenu: 'dashboard', currentApi: apis[0] })
   expect(contextSelector.find('.current-context')).toHaveLength(1)
-  expect(contextSelector.find('.current-context').text()).toEqual('Dashboard')
+  expect(contextSelector.find('.current-context').text()).toContain('Dashboard')
 
   // For the particular APIs
   contextSelector.setProps({ activeMenu: 'serviceadmin', currentApi: apis[1] })
