@@ -457,6 +457,10 @@ class Proxy < ApplicationRecord
     self.class.config.fetch(:port) { Rails.env.test? ? '44432' : '443' }
   end
 
+  def deployable?
+    Service::DeploymentOption.gateways.include?(deployment_option)
+  end
+
   protected
 
   class PolicyConfig
@@ -540,6 +544,7 @@ class Proxy < ApplicationRecord
   end
 
   def deploy
+    return true unless deployable?
     apicast_configuration_driven ? deploy_v2 : deploy_v1
   end
 
