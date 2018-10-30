@@ -67,7 +67,9 @@ class ContextSelector extends React.Component {
 
     const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>{service.name}</a>
+        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>
+          <i className="fa fa-puzzle-piece" />{service.name}
+        </a>
       </li>
     ))
 
@@ -87,18 +89,17 @@ class ContextSelector extends React.Component {
       <div className="PopNavigation PopNavigation--context">
         <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Selector">
           <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} />
-          <i className='fa fa-chevron-down' />
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
             <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>
-              <i class='fa fa-home' /> Dashboard
+              <i className='fa fa-home' />Dashboard
             </a>
           </li>
           {audienceLink ? (
             <li className="PopNavigation-listItem">
               <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>
-                <i class='fa fa-users' /> Audience
+                <i className='fa fa-bullseye' />Audience
               </a>
             </li>
           ) : null}

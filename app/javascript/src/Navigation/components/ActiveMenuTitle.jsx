@@ -1,34 +1,48 @@
 import React from 'react'
 
+import '../styles/ActiveMenuTitle.scss'
+
 const ActiveMenuTitle = ({ activeMenu, currentApi }) => {
-  switch (activeMenu) {
-    case 'dashboard':
-      return <React.Fragment><i class="fa fa-home" /> Dashboard </React.Fragment>
+  const getIconAndText = () => {
+    switch (activeMenu) {
+      case 'dashboard':
+        return ['fa-home', 'Dashboard']
 
-    case 'personal':
-    case 'account':
-      return <React.Fragment><i className="fa fa-cog" /> Account Settings </React.Fragment>
+      case 'personal':
+      case 'account':
+        return ['fa-cog', 'Account Settings']
 
-    case 'audience':
-    case 'buyers':
-    case 'finance':
-    case 'cms':
-    case 'site':
-    case 'settings':
-      return <React.Fragment><i class="fa fa-users" /> Audience </React.Fragment>
+      case 'audience':
+      case 'buyers':
+      case 'finance':
+      case 'cms':
+      case 'site':
+      case 'settings':
+        return ['fa-bullseye', 'Audience']
 
-    case 'apis':
-    case 'applications':
-    case 'active_docs':
-      return <React.Fragment><i className="fa fa-puzzle-piece" /> All APIs </React.Fragment>
+      case 'apis':
+      case 'applications':
+      case 'active_docs':
+        return ['fa-puzzle-piece', 'All APIs']
 
-    case 'serviceadmin':
-    case 'monitoring':
-      return <React.Fragment><i className="fa fa-puzzle-piece" /> API: {currentApi.service.name} </React.Fragment>
+      case 'serviceadmin':
+      case 'monitoring':
+        return ['fa-puzzle-piece', `API: ${currentApi.service.name}`]
 
-    default:
-      return <React.Fragment><i className="fa fa-puzzle-piece" /> Choose an API </React.Fragment>
+      default:
+        return ['fa-puzzle-piece', 'Choose an API']
+    }
   }
+
+  const [icon, text] = getIconAndText()
+
+  return (
+    <span className="ActiveMenuTitle">
+      <i className={`fa ${icon}`} />
+      {text}
+      <i className='fa fa-chevron-down' />
+    </span>
+  )
 }
 
 export { ActiveMenuTitle }
