@@ -5,7 +5,7 @@ import 'core-js/modules/es6.map'
 import 'core-js/es6/array'
 import React from 'react'
 import { render } from 'react-dom'
-import getActiveMenuTitle from '../utils/getActiveMenuTitle'
+import { ActiveMenuTitle } from './ActiveMenuTitle'
 
 import '../styles/ContextSelector.scss'
 
@@ -86,15 +86,20 @@ class ContextSelector extends React.Component {
     return (
       <div className="PopNavigation PopNavigation--context">
         <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Selector">
-          <span> {getActiveMenuTitle(activeMenu, currentApi)} <i className='fa fa-chevron-down' /></span>
+          <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} />
+          <i className='fa fa-chevron-down' />
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}><i class='fa fa-home'></i> Dashboard</a>
+            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>
+              <i class='fa fa-home' /> Dashboard
+            </a>
           </li>
           {audienceLink ? (
             <li className="PopNavigation-listItem">
-              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}><i class='fa fa-users'></i> Audience</a>
+              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>
+                <i class='fa fa-users' /> Audience
+              </a>
             </li>
           ) : null}
           {this.renderInput()}
