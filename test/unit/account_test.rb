@@ -34,13 +34,13 @@ class AccountTest < ActiveSupport::TestCase
 
   def test_provider_but_not_master
     account = FactoryGirl.build_stubbed(:simple_account, provider: false, master: false)
-    refute account.provider_but_not_master?
+    refute account.tenant?
     
     account.provider = true
-    assert account.provider_but_not_master?
+    assert account.tenant?
     
     account.master = true
-    refute account.provider_but_not_master?
+    refute account.tenant?
   end
 
   def test_destroy_association
