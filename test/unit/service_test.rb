@@ -67,6 +67,14 @@ class ServiceTest < ActiveSupport::TestCase
     assert proxy.staging_endpoint
   end
 
+  def test_deployment_options
+    deployment_options = Service.deployment_options
+
+    assert_includes deployment_options, 'Gateway'
+    assert_includes deployment_options, 'Plugin'
+    assert_includes deployment_options, 'Service Mesh'
+  end
+
   # Now the last remaining service cannot be destroyed
   def test_stop_destroy_if_last
     service = FactoryGirl.create(:simple_service)
@@ -596,5 +604,40 @@ class ServiceTest < ActiveSupport::TestCase
 
     user.stubs(forbidden_some_services?: true)
     assert_same_elements member_permission_service_ids, Service.permitted_for_user(user).pluck(:id)
+  end
+
+  class DeploymentOptionTest < ActiveSupport::TestCase
+    def test_all
+      all = Service::DeploymentOption.all
+
+      assert_includes all, 'plugin_ruby'
+      assert_includes all, 'self_managed'
+      assert_includes all, 'service_mesh_istio'
+    end
+
+    def test_service_mesh
+      service_mesh = Service::DeploymentOption.service_mesh
+
+      assert_includes service_mesh, 'service_mesh_istio'
+      refute_includes service_mesh, 'plugin_ruby'
+      refute_includes service_mesh, 'hosted'
+    end
+
+    def test_gateways
+      gateways = Service::DeploymentOption.gateways
+
+      assert_includes gateways, 'self_managed'
+      assert_includes gateways, 'hosted'
+      refute_includes gateways, 'plugin_ruby'
+      refute_includes gateways, 'service_mesh_istio'
+    end
+
+    def test_plugins
+      plugins = Service::DeploymentOption.plugins
+
+      refute_includes plugins, 'self_managed'
+      refute_includes plugins, 'hosted'
+      assert_includes plugins, 'plugin_ruby'
+    end
   end
 end
