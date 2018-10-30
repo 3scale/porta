@@ -12,6 +12,8 @@ services:
     image: redis:4.0-alpine
     container_name: ${PROJECT:-system}-redis
     network_mode: bridge
+    ports:
+      - "6379"
   memcached:
     image: memcached:1.5-alpine
     container_name: ${PROJECT:-system}-memcached
