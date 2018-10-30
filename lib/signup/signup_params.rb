@@ -3,7 +3,7 @@
 class Signup::SignupParams
   def initialize(user_attributes: {}, account_attributes: {}, plans: [], defaults: {}, validate_fields: true)
     @user_attributes = user_attributes
-    @account_attributes = account_attributes
+    @account_attributes = prepare_account_attributes(account_attributes)
     @plans = plans
     @defaults = defaults
     @validate_fields = validate_fields
@@ -25,5 +25,13 @@ class Signup::SignupParams
     vat_rate = @account_attributes[:vat_rate]
     account.vat_rate = vat_rate.to_f if vat_rate
     account
+  end
+
+  private
+
+  def prepare_account_attributes(attributes)
+    attributes ||= {}
+    attributes.delete('name') if attributes['org_name'].present?
+    attributes
   end
 end
