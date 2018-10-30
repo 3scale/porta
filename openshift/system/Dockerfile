@@ -29,8 +29,7 @@ RUN yum -y update \
 # copying only the gemspec files and copying all the other files after the build
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
-ADD vendor/codeclimate_rails/*.gemspec vendor/codeclimate_rails/
-ADD Gemfile.prod* ./
+ADD Gemfile.prod* Gemfile.base ./
 ADD Rakefile ./
 
 COPY openshift/system/contrib/scl_enable /opt/system/etc/
@@ -41,7 +40,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
     RAILS_ENV=production \
     WEBPACKER_PRECOMPILE=false
 
-RUN export ${BUNDLER_ENV} \
+RUN export ${BUNDLER_ENV} >/dev/null \
     && source /opt/system/etc/scl_enable \
     && gem install bundler --version 1.16.2 \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
@@ -51,7 +50,7 @@ RUN chgrp root /opt/system/
 ADD . ./
 ADD config/docker/* ./config/
 
-RUN export ${BUNDLER_ENV} \
+RUN export ${BUNDLER_ENV} >/dev/null \
     && source /opt/system/etc/scl_enable \
     && bundle exec rake tmp:create \
     && mkdir -p public/assets db/sphinx \

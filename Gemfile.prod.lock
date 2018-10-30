@@ -126,13 +126,6 @@ PATH
     active-docs (1.0.0)
       railties (> 3.1)
 
-PATH
-  remote: vendor/codeclimate_rails
-  specs:
-    codeclimate_rails (0.1.0)
-      codeclimate-test-reporter
-      codeclimate_batch
-
 GEM
   remote: https://rubygems.org/
   remote: https://gems.contribsys.com/
@@ -256,10 +249,10 @@ GEM
     ci_reporter (2.0.0)
       builder (>= 2.1.2)
     climate_control (0.2.0)
-    codeclimate-test-reporter (0.4.7)
-      simplecov (>= 0.7.1, < 1.0.0)
-    codeclimate_batch (0.2.0)
+    codecov (0.1.13)
       json
+      simplecov
+      url
     codemirror-rails (5.6)
       railties (>= 3.0, < 5)
     coderay (1.1.1)
@@ -485,7 +478,7 @@ GEM
     newrelic-redis (2.0.2)
       newrelic_rpm (~> 3.11)
       redis (< 4.0)
-    newrelic_rpm (3.17.1.326)
+    newrelic_rpm (3.18.1.330)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     non-stupid-digest-assets (1.0.5)
@@ -713,7 +706,7 @@ GEM
     sidekiq-lock (0.3.1)
       redis (>= 3.0.5)
       sidekiq (>= 2.14.0)
-    sidekiq-pro (3.4.5)
+    sidekiq-pro (3.7.1)
       sidekiq (>= 4.1.5)
     signet (0.5.1)
       addressable (>= 2.2.3)
@@ -817,6 +810,7 @@ GEM
       rack
       unicorn
     uniform_notifier (1.9.0)
+    url (0.3.2)
     user_agent_parser (2.2.0)
     uuidtools (2.1.5)
     webmock (1.24.6)
@@ -873,7 +867,7 @@ DEPENDENCIES
   childprocess
   chronic
   ci_reporter_shell!
-  codeclimate_rails!
+  codecov (~> 0.1.10)
   codemirror-rails (~> 5.6)
   coffee-rails (~> 4.1)
   colorize

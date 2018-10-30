@@ -27,4 +27,5 @@ ThinkingSphinx::Index.define(:account,
     has 'CRC32(accounts.state)', as: :state, type: :integer
   end
 
+  where 'COALESCE(accounts.master, 0) = 0'
 end

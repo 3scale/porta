@@ -5,16 +5,17 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'jobs'))
 
 env :PATH, '/home/bender/bin:/home/bender/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games'
+bundle_gemfile_env = ENV.fetch('BUNDLE_GEMFILE', 'Gemfile')
 
 set :output, { standard: '/var/log/cron.output' }
 env :MAILTO, ENV.fetch('SYSADMIN_EMAIL', '') # TODO: I'm not entirely convinced by this
 
 bundle_path = ENV.fetch('BUNDLE_BIN_PATH') { `which bundle`.strip }
 
-set :bundle_command, "#{Gem.ruby} #{bundle_path} exec"
-set :runner_command, "#{Gem.ruby} script/rails runner"
-set :rake_command, "#{Gem.ruby} #{`which rake`.strip}"
-set :ruby_command, Gem.ruby
+set :bundle_command, "BUNDLE_GEMFILE=#{bundle_gemfile_env} #{Gem.ruby} #{bundle_path} exec"
+set :runner_command, "BUNDLE_GEMFILE=#{bundle_gemfile_env} #{Gem.ruby} script/rails runner"
+set :rake_command, "BUNDLE_GEMFILE=#{bundle_gemfile_env} #{Gem.ruby} #{`which rake`.strip}"
+set :ruby_command, "BUNDLE_GEMFILE=#{bundle_gemfile_env} #{Gem.ruby}"
 
 job_type :rake, "cd :path && :environment_variable=:environment :bundle_command :rake_command :task --silent :output"
 job_type :ruby, "cd :path && :bundle_command :ruby_command :task :output"

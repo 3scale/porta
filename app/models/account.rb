@@ -60,6 +60,7 @@ class Account < ApplicationRecord
   scope :buyers, -> { where(provider: false, buyer: true) }
 
   scope :without_deleted, ->(without = true) { where(deleted_at: nil) if without }
+  scope :not_master, -> { where(master: [0, nil]) }
 
   audited allow_mass_assignment: true
 
@@ -376,6 +377,10 @@ class Account < ApplicationRecord
 
   def provider?
     self[:provider] || master?
+  end
+
+  def provider_but_not_master?
+    provider && !master?
   end
 
   # @param [SystemOperation] operation
