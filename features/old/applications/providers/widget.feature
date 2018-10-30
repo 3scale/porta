@@ -15,7 +15,7 @@ Feature: Applications widget
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
 
-    And I follow "Developers"
+    And I navigate to the accounts page
     And I follow "bob"
     Then I should see "Application" in a header in the applications widget
     And I should see the following table in the applications widget:
@@ -39,9 +39,9 @@ Feature: Applications widget
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
 
-    And I follow "Developers"
+    And I navigate to the accounts page
     And I follow "bob"
-    Then I should see "1 Application" in the subsubmenu
+    Then I should see "1 Application"
 
     Then I should see "Application" in a header in the applications widget
     And I should see the following table in the applications widget:
@@ -65,10 +65,9 @@ Feature: Applications widget
 
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-
-    And I follow "Developers"
+    And I navigate to the accounts page
     And I follow "bob"
-    Then I should see "0 Applications" in the subsubmenu
+    Then I should see "0 Applications"
 
   Scenario: Backend v2, multiple applications allowed, one created
     Given provider "foo.example.com" uses backend v2 in his default service
@@ -83,9 +82,9 @@ Feature: Applications widget
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
 
-    And I follow "Developers"
+    And I navigate to the accounts page
     And I follow "bob"
-    Then I should see "1 Application" in the subsubmenu
+    Then I should see "1 Application"
 
     Then I should see "Application" in a header in the applications widget
     And I should see the following table in the applications widget:
@@ -112,10 +111,10 @@ Feature: Applications widget
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
 
-    And I follow "Developers"
+    And I navigate to the accounts page
     And I follow "bob"
 
-    Then I should see "2 Applications" in the subsubmenu
+    Then I should see "2 Applications"
     Then I should not see the ID of application "AppOne"
     And I should not see any key of application "AppOne"
     And I should not see link "AppOne"

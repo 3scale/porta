@@ -1,5 +1,5 @@
 class Api::AlertsController < FrontendController
-  activate_menu :monitoring, :analytics
+  activate_menu :serviceadmin, :monitoring, :alerts
 
   include SearchSupport
   include ThreeScale::Search::Helpers
@@ -7,6 +7,7 @@ class Api::AlertsController < FrontendController
   before_action :find_service
 
   def index
+    activate_menu :audience, :applications, :alerts unless @service
     @search = ThreeScale::Search.new(search_params)
     @account_search = ThreeScale::Search.new(@search.account)
 

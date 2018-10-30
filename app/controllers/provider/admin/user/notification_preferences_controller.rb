@@ -1,6 +1,5 @@
 class Provider::Admin::User::NotificationPreferencesController < Provider::Admin::User::BaseController
-  activate_menu! submenu: :notification_preferences
-
+  activate_menu :account, :personal, :notification_preferences
   respond_to :html
 
   before_action :initialize_preferences_form, only: [:show, :update]

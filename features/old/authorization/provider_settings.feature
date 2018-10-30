@@ -6,22 +6,34 @@ Feature: Provider settings authorization
   Background:
     Given a provider "foo.example.com"
       And provider "foo.example.com" has Browser CMS activated
+      And provider "foo.example.com" has billing enabled
 
   Scenario Outline: Provider admin can access settings
      And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "foo.example.com"
 
     When I go to the provider dashboard
-    Then I should see the link Settings in the main menu
 
+    Then I should see the link "<link>" in the audience dashboard widget
+    And I follow "<link>"
     When I go to the <page> page
     Then I should be on the <page> page
 
+    # not testing | Forum                | forum settings           |
+    # as it doesn't appear on dashboard if 0 threads
+
     Examples:
-      | page                 |
-      | edit site settings   |
-      | usage rules settings |
-      | dns settings         |
+      | link                 | page                     |
+      | Billing              | edit site settings       |
+      | Billing              | finance settings         |
+      | Accounts             | usage rules settings     |
+      | Accounts             | fields definitions index |
+      | Messages             | emails settings          |
+      | Messages             | email templates          |
+      | Developer Portal     | dns settings             |
+      | Developer Portal     | spam protection          |
+      | Developer Portal     | xss protection           |
+      | Developer Portal     | authentication providers |
 
 
   Scenario Outline: Members per default cannot access settings
@@ -30,17 +42,24 @@ Feature: Provider settings authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
      And I go to the provider dashboard
-    Then I should not see the link Settings in the main menu
 
+    Then I should not see the link "<link>"
     When I request the url of the '<page>' page then I should see an exception
 
     Examples:
-      | page                 |
-      | site settings        |
-      | edit site settings   |
-      | usage rules settings |
-      | dns settings         |
-
+      | link                 | page                     |
+      | Accounts             | usage rules settings     |
+      | Accounts             | fields definitions index |
+      | Billing              | edit site settings       |
+      | Billing              | finance settings         |
+      | Forum                | forum settings           |
+      | Messages             | emails settings          |
+      | Messages             | email templates          |
+      | Developer Portal     | site settings            |
+      | Developer Portal     | dns settings             |
+      | Developer Portal     | spam protection          |
+      | Developer Portal     | xss protection           |
+      | Developer Portal     | authentication providers |
 
   Scenario Outline: Members of settings group can access settings
     Given an active user "member" of account "foo.example.com"
@@ -48,13 +67,26 @@ Feature: Provider settings authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-     Then I should see the link Settings in the main menu
 
+    Then I should see the link "Messages"
+    And I follow "Messages"
     When I go to the <page> page
     Then I should be on the <page> page
 
+    # not testing | Forum                | forum settings           |
+    # as it doesn't appear on dashboard if 0 threads
+
     Examples:
-      | page                 |
-      | edit site settings   |
-      | usage rules settings |
-      | dns settings         |
+      | link                 | page                     |
+      | Accounts             | usage rules settings     |
+      | Accounts             | fields definitions index |
+      | Billing              | edit site settings       |
+      | Billing              | finance settings         |
+      | Messages             | emails settings          |
+      | Messages             | email templates          |
+      | Developer Portal     | site settings            |
+      | Developer Portal     | feature visibility       |
+      | Developer Portal     | dns settings             |
+      | Developer Portal     | spam protection          |
+      | Developer Portal     | xss protection           |
+      | Developer Portal     | authentication providers |

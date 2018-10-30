@@ -1,0 +1,48 @@
+- if can?(:manage, current_account)
+  = render vertical_nav_item,
+           title: 'Overview',
+           path:  provider_admin_account_path,
+           icon: 'map'
+
+- if can?(:manage, current_user)
+  = render partial: 'shared/provider/navigation/account/personal',
+           layout: layout_secondary_nav,
+           locals: { title: 'Personal',
+                     icon: 'id-card',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :personal }
+
+- if can?(:manage, current_account)
+  - unless current_account.provider_can_use?(:new_notification_system)
+    = render vertical_nav_item,
+           title: 'Notifications',
+           path:  provider_admin_account_notifications_path,
+           icon: 'bullhorn'
+
+  = render partial: 'shared/provider/navigation/account/users',
+           layout: layout_secondary_nav,
+           locals: { title: 'Users',
+                     icon: 'users',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :users }
+
+  - if ThreeScale.master_billing_enabled? && !current_account.master?
+    = render partial: 'shared/provider/navigation/account/billing',
+           layout: layout_secondary_nav,
+           locals: { title: 'Billing',
+                     icon: 'credit-card',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :billing }
+
+= render partial: 'shared/provider/navigation/account/integrate',
+         layout: layout_secondary_nav,
+         locals: { title: 'Integrate',
+                   icon: 'cogs',
+                   vertical_nav_item: vertical_nav_item,
+                   submenu: :integrate }
+
+- if can? :export, :data
+  = render vertical_nav_item,
+         title: 'Export',
+         path:  new_provider_admin_account_data_exports_path,
+         icon: 'download'

@@ -2,7 +2,7 @@ class Buyers::InvitationsController < Buyers::BaseController
   before_action :authorize_multiple_users
   before_action :find_account
 
-  activate_menu :submenu => :accounts
+  activate_menu :audience, :accounts, :listing
 
   #actions :index, :new, :create, :destroy, :resend
   #defaults :route_prefix => 'admin_buyers' #FIXME inherited_resource makes us repeat this

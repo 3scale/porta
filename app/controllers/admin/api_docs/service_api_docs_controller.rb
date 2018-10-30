@@ -3,7 +3,7 @@
 class Admin::ApiDocs::ServiceApiDocsController < Admin::ApiDocs::BaseController
   prepend_before_action :find_service
 
-  activate_menu main_menu: :serviceadmin, sidebar: 'ActiveDocs', submenu: :services
+  activate_menu :serviceadmin, :ActiveDocs
   sublayout 'api/service'
 
   private

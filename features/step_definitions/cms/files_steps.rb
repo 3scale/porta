@@ -19,7 +19,7 @@ Then(/^the file should be the same as uploaded$/) do
 end
 
 When(/^I access the file on developer portal$/) do
-  click_on('Visit Developer Portal')
+  click_on('Visit Portal')
   file = URI(current_url).merge('/image')
   visit file
 end

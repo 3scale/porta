@@ -1,5 +1,4 @@
-class PlanDecorator < Draper::Decorator
-  delegate_all
+class PlanDecorator < ApplicationDecorator
 
   def link_to_edit(**options)
     h.link_to(name, h.edit_admin_application_plan_path(self), options)

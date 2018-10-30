@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseController
 
-  activate_menu :cms
+  activate_menu :audience, :cms
 
   def index
     @page = page

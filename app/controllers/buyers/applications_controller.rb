@@ -21,7 +21,7 @@ class Buyers::ApplicationsController < FrontendController
   def index
     # TODO: Editing this action may require editing Api::ApplicationsController
 
-    activate_menu :applications
+    activate_menu :audience, :applications
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
     accessible_services = current_account.accessible_services
@@ -44,7 +44,7 @@ class Buyers::ApplicationsController < FrontendController
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
       @search.account = @account
-      activate_menu :buyers, :accounts
+      activate_menu :buyers, :accounts, :listing
     end
 
     @cinstances = current_user.accessible_cinstances

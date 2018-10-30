@@ -13,7 +13,7 @@ When(/^the provider is logged in and visits the "(.*?)" application stats$/) do 
     And I log in as provider "foo.example.com"
   }
 
-  click_on 'Applications', match: :one
+  click_on(text: /\d Apps?/, match: :first)
 
   within '.cinstances' do
     click_on developer_app_name, match: :one

@@ -12,7 +12,7 @@ class Provider::Admin::ServiceDiscovery::ServicesController < Provider::Admin::B
       @service = ::ServiceDiscovery::ImportClusterDefinitionsService.create_service(current_account, cluster_namespace: create_service_params[:namespace],
                                                                                                      cluster_service_name: create_service_params[:name])
       flash[:notice] = 'The service will be imported shortly. You will receive a notification when it is done.'
-      redirect_to admin_services_path
+      redirect_to provider_admin_dashboard_path
     else
       flash[:error] = 'Cannot create service.'
       redirect_to admin_new_service_path

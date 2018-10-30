@@ -1,20 +1,40 @@
 nav.DashboardNavigation
   ul.DashboardNavigation-list
     // Acounts, Pending Accounts & Account Plans
-    li.DashboardNavigation-list-item
-      // Accounts
-      => dashboard_collection_link 'Account',
-                                   buyers,
-                                   admin_buyers_accounts_path,
-                                   'Accounts',
-                                   'users'
+    - if can?(:manage, :partners)
+      li.DashboardNavigation-list-item
+        // Accounts
+        => dashboard_collection_link 'Account',
+                                     buyers,
+                                     admin_buyers_accounts_path,
+                                     'Accounts',
+                                     'briefcase'
 
-      // Pending Accounts
-      - if show_pending_accounts_on_dashboard?
-        == dashboard_secondary_collection_link 'Pending',
-                                                pending_buyers,
-                                                admin_buyers_accounts_path(search: {state: 'pending'}),
-                                                'Pending'
+        // Pending Accounts
+        - if show_pending_accounts_on_dashboard?
+          == dashboard_secondary_collection_link 'Pending',
+                                                  pending_buyers,
+                                                  admin_buyers_accounts_path(search: {state: 'pending'}),
+                                                  'Pending'
+        // Account Plans
+        - elsif show_account_plans_on_dashboard?
+          == dashboard_secondary_collection_link 'Plan',
+                                                account_plans.not_custom,
+                                                admin_buyers_account_plans_path
+
+    - if can? :manage, :partners
+      li.DashboardNavigation-list-item
+        = dashboard_collection_link 'Application',
+                                applications,
+                                admin_buyers_applications_path,
+                                'Applications',
+                                'cubes'
+
+        - if can?(:manage, :monitoring) && alerts.any? 
+          == dashboard_secondary_collection_link 'Alert',
+                                      alerts,
+                                      admin_alerts_path,
+                                      'Alerts'
 
     // Billing
     - if can?(:manage, :finance)
@@ -30,7 +50,7 @@ nav.DashboardNavigation
       li.DashboardNavigation-list-item
         = link_to provider_admin_cms_root_path, class: "DashboardNavigation-link"
           i.fa.fa-sitemap>
-          | Portal
+          | Developer Portal
 
         - if current_account.templates.with_draft
           == dashboard_secondary_collection_link 'Draft',

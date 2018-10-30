@@ -4,6 +4,8 @@ class Admin::ApiDocs::BaseController < FrontendController
   before_action :find_api_docs, only: %i[destroy edit update show preview toggle_visible]
   before_action :deny_on_premises_for_master
 
+
+
   def preview
     if api_docs_service.specification.swagger?
       respond_to do |format|

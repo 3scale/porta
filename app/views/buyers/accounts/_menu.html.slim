@@ -1,11 +1,6 @@
 ul#subsubmenu
-  li.SubSubMenuItem.SubSubMenuItem--trunk
-    = link_to_unless_current_styled "Accounts",
-      admin_buyers_accounts_path,
-      class: "SubSubMenuItem-link"
-
   - if @account && !@account.new_record?
-    li.SubSubMenuItem.SubSubMenuItem--branch
+    li.SubSubMenuItem.SubSubMenuItem--trunk
       = link_to_unless_current_styled "Account '#{@account.name}'",
         admin_buyers_account_path(@account),
         title: "account",

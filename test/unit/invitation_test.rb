@@ -24,13 +24,12 @@ class InvitationTest < ActiveSupport::TestCase
     assert invitation.errors[:email].include? 'has been taken by another user'
   end
 
-  test 'requires the email to not belong to a buyer user' do
+  test 'does not require the email to not belong to a buyer user' do
     buyer = Factory :simple_buyer, :provider_account => @provider
     buyer_user = Factory(:simple_user, :account => buyer)
     invitation = Invitation.new(:account => @provider, :email => buyer_user.email)
 
-    refute invitation.valid?
-    assert invitation.errors[:email].include? 'has been taken by another user'
+    assert invitation.valid?
   end
 
   test 'does not require globally unique email' do

@@ -167,14 +167,9 @@ And(/^has an application$/) do
 end
 
 Given(/^I'm on that application page$/) do
-  within main_menu do
-    click_on 'Applications'
-  end
+  click_on 'Dashboard'
+  click_on 'Overview'
+  click_on 'Apps'
   assert @application, '@application is missing'
   click_on @application.name
-end
-
-
-def main_menu
-  find('#tabs')
 end

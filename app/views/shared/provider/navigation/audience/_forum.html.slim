@@ -1,0 +1,25 @@
+= render vertical_nav_item,
+   title: 'Threads',
+   path: admin_forum_path
+
+= render vertical_nav_item,
+         title: 'Categories',
+         path: forum_categories_path
+
+- if logged_in?
+  = render vertical_nav_item,
+    title: 'My Threads',
+    path:   my_admin_forum_topics_path
+
+- if user_has_subscriptions?
+  = render vertical_nav_item,
+    title: 'My subscriptions',
+    path:   forum_subscriptions_path
+
+- if can?(:manage, :settings)
+  li.list-group-item
+    span.list-group-item-value.label
+
+  = render vertical_nav_item,
+       title: 'Preferences',
+       path: edit_admin_site_forum_path

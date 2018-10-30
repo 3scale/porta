@@ -1,0 +1,8 @@
+- if @service.end_users_allowed?
+  = render vertical_nav_item,
+     title: 'Search',
+     path: admin_service_end_users_path(@service)
+
+= render vertical_nav_item,
+     title: 'End-user Plans',
+     path: admin_service_end_user_plans_path(@service)

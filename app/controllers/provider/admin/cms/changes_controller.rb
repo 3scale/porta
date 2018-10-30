@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::ChangesController < Provider::Admin::CMS::BaseController
 
-  activate_menu :cms, :changes
+  activate_menu :audience, :cms, :changes
   sublayout nil
 
   def index

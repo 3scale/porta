@@ -27,5 +27,9 @@ module ThreeScale
     ThreeScale.config.onpremises && ThreeScale.tenant_mode.master?
   end
 
+  def master_billing_enabled?
+    !ThreeScale.config.onpremises
+  end
+
   extend PrivateModule
 end
