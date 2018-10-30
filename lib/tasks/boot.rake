@@ -16,8 +16,9 @@ namespace :boot do
   end
 
   desc 'Tries to connect to Redis'
-  task redis: :environment do
-    redis = System.redis
+  task :redis do
+    redis_config = Rails.application.config_for(:redis)
+    redis = Redis.new(redis_config)
     redis.ping
     puts "Connected to #{redis.id}"
   end

@@ -124,6 +124,13 @@ class Account::StatesTest < ActiveSupport::TestCase
     assert account.suspended?
   end
 
+  def test_suspend_master
+    account = FactoryGirl.build_stubbed(:simple_provider, master: true)
+    assert_raise StateMachines::InvalidTransition do
+      account.suspend!
+    end
+  end
+
   test 'resume account' do
     account = Account.new(state: 'suspended', domain: 'foo', self_domain: 'foobar', org_name: 'foo')
     account.provider_account = master_account

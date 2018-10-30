@@ -335,12 +335,31 @@ jobs:
           destination: capybara
       - *upload-coverage
 
+  docker-build:
+    resource_class: small
+    docker:
+      - image: docker:stable
+        environment:
+          DOCKER_COMPOSE: /usr/bin/docker-compose
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build System Container Image for OpenShift
+          command: |
+            cd openshift/system
+            docker build --build-arg=BUNDLER_ENV="$(env | grep -e ^BUNDLE_)" --file Dockerfile ../..
+            docker build --file Dockerfile.on_prem --pull ../..
+
 workflows:
   version: 2
   parallel_build:
     jobs:
       - dependencies_bundler
       - dependencies_npm
+      - docker-build:
+          context: org-global
       - assets_precompile:
           requires:
             - dependencies_bundler

@@ -522,7 +522,7 @@ class ServiceTest < ActiveSupport::TestCase
     test 'schedule destruction of a service' do
       service = FactoryGirl.create(:simple_service)
       service.stubs(last_accessible?: false)
-      DeleteObjectHierarchyWorker.expects(:perform_later)
+      Services::ServiceScheduledForDeletionEvent.expects(:create_and_publish!).with(service).once
       System::ErrorReporting.expects(:report_error).never
       service.mark_as_deleted!
     end
@@ -530,7 +530,7 @@ class ServiceTest < ActiveSupport::TestCase
     test 'updating state without using state machine' do
       service = FactoryGirl.create(:simple_service)
       service.stubs(last_accessible?: false)
-      DeletePlainObjectWorker.expects(:perform_later).never
+      Services::ServiceScheduledForDeletionEvent.expects(:create_and_publish!).never
       System::ErrorReporting.expects(:report_error).once
       service.update_attributes(state: 'deleted')
     end
