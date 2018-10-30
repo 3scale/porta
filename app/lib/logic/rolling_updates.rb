@@ -93,6 +93,12 @@ module Logic
         end
       end
 
+      class ServiceMeshIntegration < Base
+        def missing_config
+          false
+        end
+      end
+
       class OldCharts < Base
         def missing_config
           false
