@@ -4,10 +4,10 @@
   "assets/glyphicons-halflings-regular.ttf": "/packs/assets/glyphicons-halflings-regular.e18bbf611f2a2e43afc071aa2f4e1512.ttf",
   "assets/glyphicons-halflings-regular.woff": "/packs/assets/glyphicons-halflings-regular.fa2772327f55d8198301fdb8bcfc8158.woff",
   "assets/glyphicons-halflings-regular.woff2": "/packs/assets/glyphicons-halflings-regular.448c34a56d699c29117adc64c43affeb.woff2",
-  "dashboard.js": "/packs/dashboard-bf5a87fcb060e76c9b61.js",
-  "dashboard.js.map": "/packs/dashboard-bf5a87fcb060e76c9b61.js.map",
-  "navigation.js": "/packs/navigation-c4c6613e2ce14fb63092.js",
-  "navigation.js.map": "/packs/navigation-c4c6613e2ce14fb63092.js.map",
-  "policies.js": "/packs/policies-221156de03fef790b50b.js",
-  "policies.js.map": "/packs/policies-221156de03fef790b50b.js.map"
+  "dashboard.js": "/packs/dashboard-91b46bb72d014c8849c0.js",
+  "dashboard.js.map": "/packs/dashboard-91b46bb72d014c8849c0.js.map",
+  "navigation.js": "/packs/navigation-97f1a02667a443dc2efc.js",
+  "navigation.js.map": "/packs/navigation-97f1a02667a443dc2efc.js.map",
+  "policies.js": "/packs/policies-2d051704ab717a9e9173.js",
+  "policies.js.map": "/packs/policies-2d051704ab717a9e9173.js.map"
 }
