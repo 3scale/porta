@@ -6,7 +6,8 @@
     "test": "karma start --single-run",
     "jest": "jest app/javascript/src",
     "jest:watch": "npm run-script jest -- --watch",
-    "install": "yarn check --integrity || yarn install --pure-lockfile --frozen-lockfile --ignore-scripts --skip-integrity-check --prefer-offline --link-duplicates"
+    "install": "yarn check --integrity || yarn install --pure-lockfile --frozen-lockfile --ignore-scripts --skip-integrity-check --prefer-offline --link-duplicates",
+    "postinstall": "npm rebuild node-sass"
   },
   "jspm": {
     "directories": {
@@ -189,6 +190,7 @@
     "bootstrap-sass": "3",
     "core-js": "^2.5.7",
     "jquery": "^3.3.1",
+    "node-sass": "^4.9.4",
     "prop-types": "^15.6.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
