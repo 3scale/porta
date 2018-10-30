@@ -14,24 +14,17 @@ html[lang="en"]
     = yield :javascripts
 
   body
-    = render partial: 'application/heroku_widget'
-    = render partial: '/shared/provider/call_to_action' if call_to_action?
-    = render partial: "/shared/ribbons"
-    = render partial: "/shared/provider/user_widget"
+    = render partial: '/shared/provider/header'
     #wrapper
-      nav
-        = link_to provider_admin_dashboard_path, title: "Dashboard" do
-          = render partial: "/provider/logo"
-        = render partial: "/shared/provider/menu"
-      #inner_wrap.wrap.self_clear
-        #border.self_clear
-          - if active_submenu
-            = render partial: "/shared/provider/submenu"
-          = render 'shared/provider/flash', flash: flash
-          main#content.self_clear
-            - if controller.sublayout
-              = render partial: "/layouts/#{controller.sublayout.to_s}"
-            - else
-              = render 'shared/provider/page_title'
-              = yield
+      = render partial: 'shared/provider/navigation/vertical_nav' unless active_menu == :dashboard
+
+      #border.self_clear
+        = render 'shared/provider/flash', flash: flash
+        main.Main#content class=('Main--callToAction' if call_to_action?)
+          - if controller.sublayout
+            = render partial: "/layouts/#{controller.sublayout.to_s}"
+          - else
+            = render 'shared/provider/page_title'
+            = yield
         = render partial: "/provider/footer"
+    = render partial: '/shared/provider/call_to_action' if call_to_action?

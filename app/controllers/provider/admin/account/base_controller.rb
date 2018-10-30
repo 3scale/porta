@@ -1,5 +1,5 @@
 class Provider::Admin::Account::BaseController < Provider::Admin::BaseController
-  activate_menu! :topmenu => :account, :main_menu => :account
+  activate_menu :account
 
   before_action :authorize_resource!
 

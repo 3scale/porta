@@ -16,7 +16,10 @@ Feature: Provider accounts authorization
     When I log in as provider "foo.example.com"
 
     When I go to the provider dashboard
-    Then I should see the link "Developers" in the main menu
+    #Then show me the page
+    Then I should see the link "1 Account" in the audience dashboard widget
+    When I follow "1 Account"
+    Then I should see the link "Accounts" in the main menu
 
     When I go to the <page> page
     Then I should be at url for the <page> page
@@ -48,7 +51,7 @@ Feature: Provider accounts authorization
     When I log in as provider "member"
 
      And I go to the provider dashboard
-    Then I should not see the link "Accounts" in the main menu
+    Then I should not see the link "Accounts" in the audience dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
 
@@ -76,7 +79,7 @@ Feature: Provider accounts authorization
       And provider "foo.example.com" has "multiple_users" switch allowed
      When I log in as provider "member"
       And I go to the provider dashboard
-    Then I should see the link "Developers" in the main menu
+    Then I should see the link "1 Account" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be at url for the <page> page
@@ -105,6 +108,6 @@ Feature: Provider accounts authorization
     Given a pending buyer "pending account" signed up to provider "foo.example.com"
 
     When I log in as provider "member"
-    And I follow "Developers"
+    And I follow "2 Accounts"
     And I follow "Approve"
     Then I should see "Developer account was approved"

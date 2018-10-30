@@ -1,5 +1,5 @@
 class Finance::Provider::InvoicesController < Finance::Provider::BaseController
-  activate_menu :finance, :invoices
+  activate_menu :audience, :finance, :invoices
 
   helper Finance::InvoicesHelper
   helper ColumnSortingHelper
@@ -76,9 +76,9 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
       flash.now[:notice] = success_message
 
       respond_to do |format|
-        format.js do 
+        format.js do
           render :partial => '/finance/provider/shared/update_invoice',
-                           :locals => { :editable => allow_edit? } 
+                           :locals => { :editable => allow_edit? }
         end
       end
     else

@@ -1,13 +1,1 @@
-<ul id="side-tabs">
-  <%= edit_legal_terms_link(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME) %>
-
-  <% if can?(:manage, :multiple_services) %>
-   <%= edit_legal_terms_link(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME) %>
-  <% end %>
-
-  <%= edit_legal_terms_link(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME) %>
-</ul>
-
-<div id="tab-content">
-  <%= yield  %>
-</div>
+<%= yield  %>

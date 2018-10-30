@@ -4,10 +4,9 @@ class Api::EndUsersController < Api::BaseController
   before_action :find_service
   before_action :find_end_user, :only => [:show, :edit, :update, :destroy]
   before_action :find_plans, :only => [:new, :edit, :create, :update]
-  before_action :activate_submenu
 
+  activate_menu :serviceadmin, :end_users, :search
   sublayout 'api/service'
-  activate_menu :serviceadmin, :sidebar => :end_users
 
   def index
     if params[:id] && find_end_user

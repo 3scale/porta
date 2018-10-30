@@ -5,7 +5,15 @@
     float: left;
 
     .PopNavigation-list {
-      left: line-height-times(16);
+      left: line-height-times(33 / 2);
+    }
+  }
+
+  &--session {
+    float: right;
+
+    .PopNavigation-list {
+      right: line-height-times(1 / 2);
     }
   }
 
@@ -84,7 +92,8 @@
     color: $border-color;
     cursor: pointer;
     display: block;
-    padding: line-height-times(3 / 4) line-height-times(1);
+    padding: line-height-times(3 / 4);
+    min-width: line-height-times(5 / 2, true);
 
     &:hover,
     &.is-toggled,

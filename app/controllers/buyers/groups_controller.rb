@@ -1,7 +1,8 @@
 class Buyers::GroupsController < Buyers::BaseController
   before_action :authorize_groups
   before_action :find_account
-  activate_menu :submenu => :accounts
+  activate_menu :audience, :accounts, :listing
+
 
   def show
     @groups = @account.groups

@@ -2,7 +2,7 @@ class Stats::UsageController < Stats::ServiceBaseController
   before_action :find_service, :only => [:index_data, :top_applications, :hours, :index]
   before_action :find_metric, :only => :index_data
 
-  activate_menu :monitoring
+  activate_menu :serviceadmin, :monitoring, :usage
 
   liquify if: :buyer_domain?
 
@@ -21,6 +21,7 @@ class Stats::UsageController < Stats::ServiceBaseController
   end
 
   def top_applications
+    activate_menu :serviceadmin, :monitoring, :top_applications
     @metrics = @service.metrics.top_level
     @methods = @service.method_metrics
 
@@ -31,6 +32,7 @@ class Stats::UsageController < Stats::ServiceBaseController
   end
 
   def hours
+    activate_menu :serviceadmin, :monitoring, :hourly
     timezone = params[:timezone] || @current_user.account.timezone
     @data = ::Stats::Deprecated.average_usage_by_hours_for_all_metrics(@service, :timezone => timezone)
     render :hours

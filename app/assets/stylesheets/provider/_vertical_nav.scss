@@ -1,0 +1,313 @@
+.vertical-nav {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .label {
+    color: $light-color;
+    margin: line-height-times(1) 0 0 line-height-times(2);
+    font-variant: small-caps;
+    font-size: $font-size-sm;
+  }
+
+  a {
+    background-color: transparent;
+  }
+  a:active,
+  a:hover {
+    outline: 0;
+  }
+
+  a {
+    color: #0088ce;
+    text-decoration: none;
+  }
+  a:focus,
+  a:hover {
+    color: #00659c;
+    text-decoration: underline;
+  }
+  a:focus {
+    outline: line-height-times(0.208) auto -webkit-focus-ring-color;
+    outline-offset: -line-height-times(0.083);
+  }
+  ul {
+    margin-top: 0;
+    margin-bottom: line-height-times(0.47);
+  }
+  ul ul {
+    margin-bottom: 0;
+  }
+  .list-group {
+    margin-bottom: line-height-times(0.83);
+    padding-left: 0;
+  }
+  .list-group-item {
+    position: relative;
+    display: block;
+    padding: line-height-times(0.47) line-height-times(0.625);
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: solid #f5f5f5;
+    border-width: 1px 0;
+  }
+  .list-group-item:first-child {
+    border-top: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+  .list-group-item:last-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .list-group-item.active,
+  .list-group-item.active:focus,
+  .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #39a5dc;
+    border-color: #39a5dc;
+  }
+  .visible-xs-block {
+    display: none !important;
+  }
+  @media (max-width: line-height-times(31.958)) {
+    .visible-xs-block {
+      display: block !important;
+    }
+  }
+
+  .nav-pf-vertical {
+    background: #292e34;
+    border-right: 1px solid #292e34;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    position: fixed;
+    top: line-height-times(2.5);
+    width: line-height-times(9);
+    z-index: 1030;
+  }
+
+  .nav-pf-vertical .list-group {
+    border-top: 0;
+    margin-bottom: 0;
+  }
+  .nav-pf-vertical .list-group-item {
+    background-color: transparent;
+    border-color: #030303;
+    padding: 0;
+  }
+  .nav-pf-vertical .list-group-item > a {
+    background-color: transparent;
+    color: #d1d1d1;
+    cursor: pointer;
+    display: block;
+    font-weight: 400;
+    height: line-height-times(5 / 2, true);
+    padding: line-height-times(3 / 4) line-height-times(0.7);
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .nav-pf-vertical .list-group-item > a .fa,
+  .nav-pf-vertical .list-group-item > a .pficon {
+    color: #72767b;
+    float: left;
+    line-height: line-height-times(1);
+    margin-right: line-height-times(0.75);
+  }
+  .nav-pf-vertical .list-group-item > a:focus,
+  .nav-pf-vertical .list-group-item > a:hover {
+    text-decoration: none;
+  }
+  .nav-pf-vertical .list-group-item.active > a,
+  .nav-pf-vertical .list-group-item:hover > a {
+    background-color: #393f44;
+    color: #fff;
+    font-weight: 400;
+  }
+
+  .nav-pf-vertical  .is-hover.list-group-item:hover > a {
+    background-color: #292E34;
+  }
+
+  .nav-pf-vertical .list-group-item.active > a .fa,
+  .nav-pf-vertical .list-group-item:hover > a .fa,
+  .nav-pf-vertical .list-group-item:hover > a .pficon,
+  .nav-pf-vertical .list-group-item > a:focus .fa,
+  .nav-pf-vertical .list-group-item > a:focus .pficon {
+    color: #39a5dc;
+  }
+
+  .nav-pf-vertical .list-group-item.secondary-nav-item-pf.active > a:before {
+    width: 0;
+  }
+
+  .nav-pf-vertical .list-group-item.secondary-nav-item-pf.active .nav-pf-secondary-nav .list-group-item.active > a {
+    border-left: line-height-times(0.15) solid #39a5dc;
+    padding-left: line-height-times(1.85);
+  }
+
+  .nav-pf-vertical .list-group-item.active > a:before {
+    background: #39a5dc;
+    content: " ";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: line-height-times(0.15);
+  }
+  .nav-pf-vertical .list-group-item.active:hover {
+    background-color: transparent;
+    border-color: #030303;
+  }
+  .nav-pf-vertical .list-group-item .list-group-item-value {
+    display: block;
+    line-height: line-height-times(1);
+    max-width: line-height-times(5);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .secondary-nav-item-pf > a {
+    cursor: default;
+  }
+
+  .secondary-nav-item-pf > a:after {
+    color: #72767b;
+    content: "\f105";
+    display: block;
+    font-family: FontAwesome;
+    //line-height: line-height-times(1.5);
+    //padding: line-height-times(0.5) 0;
+    position: absolute;
+    right: line-height-times(0.5);
+    top: line-height-times(0.75);
+  }
+
+  .secondary-nav-item-pf.active > a,
+  .secondary-nav-item-pf:hover > a {
+    z-index: 1031;
+  }
+
+  .secondary-nav-item-pf.active > a:after,
+  .secondary-nav-item-pf.is-hover > a:after {
+    right: line-height-times(0.55);
+    content: "\f107";
+  }
+
+  .nav-item-pf-header {
+    color: $light-color;
+    margin: line-height-times(0.75) line-height-times(1) line-height-times(0.5) line-height-times(0.85);
+    font-variant: small-caps;
+  }
+  .nav-item-pf-header > a {
+    cursor: pointer;
+    margin-right: line-height-times(0.292);
+  }
+  .nav-item-pf-header > a:focus,
+  .nav-item-pf-header > a:hover {
+    color: #0088ce;
+    text-decoration: none;
+  }
+  .nav-pf-secondary-nav {
+    background: #393f44;
+    border: 1px solid #292e34;
+    border-bottom: none;
+    border-top: none;
+    bottom: 0;
+    display: block;
+    left: calc(#{line-height-times(9, true)} - 1px);
+    opacity: 0;
+    top: line-height-times(2.5);
+    z-index: 1030;
+    display: none;
+  }
+
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav,
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav .list-group-item > a {
+    background: #292E34;
+  }
+
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav .list-group-item > a:hover {
+    background: #393F43;
+  }
+
+  &.hover-secondary-nav-pf .secondary-nav-item-pf.is-hover .nav-pf-secondary-nav,
+  .secondary-nav-item-pf.active .nav-pf-secondary-nav {
+    opacity: 1;
+    display: block;
+    padding-bottom: line-height-times(1/2);
+  }
+  .nav-pf-secondary-nav .list-group-item {
+    border: none;
+    padding: 0 0 line-height-times(0.1) 0;
+  }
+
+  // temp hack that needs to be fixed in sub layout
+  .nav-pf-secondary-nav .list-group-item:first-of-type > a:first-child {
+    display: none;
+  }
+
+  .nav-pf-secondary-nav .list-group-item > a {
+    background-color: #393f44;
+    color: #d1d1d1;
+    font-size: $font-size-sm;
+    font-weight: inherit;
+    height: inherit;
+    padding: line-height-times(0.1) 0 line-height-times(0.1) line-height-times(2);
+    //margin-left: line-height-times(1);
+  }
+  .nav-pf-secondary-nav .list-group-item.active > a:before {
+    display: none;
+  }
+  .nav-pf-secondary-nav .list-group-item.active > a,
+  .nav-pf-secondary-nav .list-group-item:hover > a,
+  .nav-pf-secondary-nav .list-group-item > a:focus {
+    background-color: #4d5258;
+    color: #fff;
+  }
+  .nav-pf-secondary-nav .list-group-item .list-group-item-value {
+    padding-left: line-height-times(0.21);
+  }
+  .secondary-collapse-toggle-pf {
+    display: none;
+    font-family: FontAwesome;
+    font-size: inherit;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  .secondary-collapse-toggle-pf:before {
+    content: "";
+  }
+
+  @supports (display: flex) {
+    .nav-pf-vertical .list-group-item > a {
+      display: -ms-flexbox;
+      display: flex;
+      padding-right: 0;
+    }
+    .nav-pf-vertical .list-group-item .list-group-item-value {
+      -ms-flex: 1;
+      flex: 1;
+      max-width: none;
+      padding-right: line-height-times(0.5);
+    }
+    .nav-pf-vertical .badge-container-pf {
+      padding-left: 0;
+      padding-right: line-height-times(0.5);
+      position: relative;
+      right: 0;
+      margin-top: -line-height-times(0.125);
+      top: line-height-times(0.25);
+    }
+    .secondary-nav-item-pf > a .list-group-item-value {
+      padding-right: line-height-times(1.5);
+    }
+    .nav-pf-secondary-nav .list-group-item.tertiary-nav-item-pf > a .list-group-item-value {
+      padding-right: line-height-times(1.5);
+    }
+  }
+}

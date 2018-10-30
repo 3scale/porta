@@ -4,7 +4,7 @@ class Api::MetricsController < Api::BaseController
   before_action :find_metric, except: [:new, :create, :index]
   before_action :build_metric, only: [:new, :create]
 
-  activate_menu :serviceadmin, :api, :definition
+  activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
 
   def index

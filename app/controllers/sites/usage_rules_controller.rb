@@ -1,7 +1,7 @@
 class Sites::UsageRulesController < Sites::BaseController
   provider_required
   before_action :find_settings
-  activate_menu :settings, :general
+  activate_menu :audience, :accounts, :usage_rules
 
   def edit
   end
@@ -22,4 +22,3 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
 end
-

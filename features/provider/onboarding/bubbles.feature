@@ -5,7 +5,7 @@ Feature: As part of the onboarding process
 
   Background:
     Given a provider is logged in with onboarding process active
-      When visits the service page
+    When visits the default service page
 
   Scenario: Provider sees bubbles
     Then api bubble should be visible

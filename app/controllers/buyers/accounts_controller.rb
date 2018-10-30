@@ -10,7 +10,7 @@ class Buyers::AccountsController < Buyers::BaseController
   before_action :set_plans, :only => %i[new create]
   before_action :find_account, except: %i[index new create]
 
-  activate_menu :buyers, :accounts
+  activate_menu :buyers, :accounts, :listing
 
   def index
     @countries = Country.all

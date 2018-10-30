@@ -4,7 +4,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
   before_action :authorize_finance
   before_action :find_account
   prepend_before_action :deny_on_premises
-  activate_menu :account, :payment_details
+  activate_menu :account, :billing, :payment_details
 
   def show
   end

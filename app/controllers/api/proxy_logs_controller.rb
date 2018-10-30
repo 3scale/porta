@@ -2,7 +2,6 @@ class Api::ProxyLogsController < Api::BaseController
 
   before_action :find_service
   before_action :authorize
-  before_action :activate_submenu
   before_action :proxy_logs
 
   def index
