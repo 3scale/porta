@@ -6,7 +6,7 @@ export PROJECT
 
 BUNDLE_GEMFILE ?= Gemfile
 
-TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log tmp/jspm
+TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log tmp/jspm precompile-assets init_db
 
 DB ?= mysql
 
@@ -34,14 +34,13 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_MAX=72226778
 RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 
 
-SCRIPT_PRECOMPILE_ASSETS = bundle config && bundle exec rake assets:precompile RAILS_ENV=test && bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
-ifdef CIRCLECI
+#ifdef CIRCLECI
 # FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
-SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake test:files:$${JOB} | circleci tests split --split-by=timings >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
-else
+#SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake integrate:files:$${JOB} | circleci tests split --split-by=timings >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
+#else
 # FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
-SCRIPT_TEST = echo 'export TESTS=\\\"' > $${JOB}_files && bundle exec rake test:files:$${JOB} >> $${JOB}_files && echo '\\\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
-endif
+#SCRIPT_RAKE = bundle exec rake integrate:$${JOB}
+#endif
 
 default: all
 
@@ -65,48 +64,54 @@ include dependencies.mk
 # From here on, only phony targets to manage docker compose
 test-prep: init_db test-with-info
 
-test-script: CMD = $(SCRIPT_TEST)
-test-script: test-prep
+ifeq ($(PROXY_ENABLED),true)
+test-rake: CMD = make dnsmasq_set && bundle exec rake $${JOB} --verbose --trace && make dnsmasq_unset
+else
+test-rake: CMD = bundle exec rake $${JOB} --verbose --trace
+endif
+test-rake: test-prep
 
-test-unit: JOB = unit
+test-unit: JOB = integrate:unit
 test-unit:
-	$(MAKE) test-script JOB="${JOB}"
+	$(MAKE) test-rake JOB="${JOB}"
 
-test-functional: JOB = functional
-test-functional: precompile-assets
-	$(MAKE) test-script JOB="${JOB}"
+test-functional: JOB = integrate:functional
+test-functional:
+	$(MAKE) test-rake JOB="${JOB}"
 
-test-integration: JOB = integration
-test-integration: precompile-assets
-	$(MAKE) test-script JOB="${JOB}"
+test-integration: JOB = integrate:integration
+test-integration:
+	$(MAKE) test-rake JOB="${JOB}"
 
-ifdef CIRCLECI
-test-rspec: CMD = bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | tr '\n' ' '`
-else
-test-rspec: CMD = bundle exec rspec --format progress $(shopt -s globstar && ls -l spec/**/*_spec.rb)
-endif
-test-rspec: test-prep
+#ifdef CIRCLECI
+#test-rspec: CMD = bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | tr '\n' ' '`
+#else
+test-rspec: JOB = integrate:rspec
+test-rspec:
+	$(MAKE) test-rake JOB="${JOB}"
 
-ifdef CIRCLECI
-test-cucumber: CMD = make dnsmasq_set && bundle exec cucumber --profile ci `circleci tests glob features/**/*.feature | circleci tests split --split-by=timings | tr '\n' ' '` && make dnsmasq_unset
-else
-test-cucumber: CMD = make dnsmasq_set && TESTS=$(bundle exec cucumber --profile list --profile default) && bundle exec cucumber --profile ci ${TESTS} && make dnsmasq_unset
-endif
-test-cucumber: precompile-assets test-prep
+
+#ifdef CIRCLECI
+#test-cucumber: CMD = make dnsmasq_set && bundle exec rake integrate:cucumber && make dnsmasq_unset
+#else
+# FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec cucumber --profile list --profile default as the TESTS env var and wanted to get moving.
+test-cucumber: CMD = make dnsmasq_set && bundle exec rake integrate:cucumber && make dnsmasq_unset
+#endif
+test-cucumber: test-prep
 
 test-licenses: CMD = bundle exec rake ci:license_finder:run
-test-licenses: precompile-assets test-prep
+test-licenses: test-prep
 
 test-swaggerdocs: CMD = bundle exec rake doc:swagger:validate:all && bundle exec rake doc:swagger:generate:all
-test-swaggerdocs: precompile-assets test-prep
+test-swaggerdocs: test-prep
 
 test-jspm: CMD = bundle exec rake ci:jspm --trace
-test-jspm: precompile-assets test-prep
+test-jspm: test-prep
 
-test-yarn: CMD = yarn test -- --reporters dots,junit --browsers Firefox && yarn jest
-test-yarn: precompile-assets test-prep
+test-yarn: CMD = bundle exec rake integrate:frontend
+test-yarn: test-prep
 
-test-lint: test-licenses test-swaggerdocs test-jspm test-yarn
+test-lint: bundle test-licenses test-swaggerdocs test-jspm test-yarn
 
 test: ## Runs tests inside container build environment
 test: bundle npm-install test-lint test-unit test-functional test-integration test-rspec test-cucumber
@@ -119,16 +124,14 @@ jenkins-env: # Prints env vars
 	@echo
 
 precompile-assets: ## Precompiles static assets
-precompile-assets: CMD = $(SCRIPT_PRECOMPILE_ASSETS)
-precompile-assets:
+precompile-assets: CMD = bundle exec rake integrate:precompile_assets
+precompile-assets: bundle
 	@echo
 	@echo "======= Assets Precompile ======="
 	@echo
 	$(MAKE) run CMD="${CMD}"
 	touch precompile-assets
 
-clean-tmp: ## Removes temporary files
-	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
 
 bash: ## Opens up shell to environment where tests can be ran
 bash: CMD = bundle exec bash

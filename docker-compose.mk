@@ -1,8 +1,7 @@
 
 DOCKER_COMPOSE_VERSION := 1.22.0
-DOCKER_COMPOSE_BASE := $(BIN_PATH)/docker-compose
-DOCKER_COMPOSE_BIN := $(DOCKER_COMPOSE_BASE)-$(DOCKER_COMPOSE_VERSION)
-DOCKER_COMPOSE := $(DOCKER_COMPOSE_BIN)
+DOCKER_COMPOSE := $(BIN_PATH)/docker-compose
+DOCKER_COMPOSE_BIN := $(DOCKER_COMPOSE)-$(DOCKER_COMPOSE_VERSION)
 
 COMPOSE_PROJECT_NAME := $(PROJECT)
 COMPOSE_FILE := docker-compose.yml
@@ -42,8 +41,8 @@ directories: $(VOLUME_DIRS)
 $(VOLUME_DIRS):
 	${MKDIR_P} $(VOLUME_DIRS)
 
-$(DOCKER_COMPOSE): directories $(DOCKER_COMPOSE_BIN)
-#	@ln -sf $(realpath $(DOCKER_COMPOSE_BIN)) $(DOCKER_COMPOSE)
+$(DOCKER_COMPOSE): $(DOCKER_COMPOSE_BIN) directories
+	@ln -sf $(realpath $(DOCKER_COMPOSE_BIN)) $(DOCKER_COMPOSE)
 
 $(DOCKER_COMPOSE_BIN): $(BIN_PATH) | wget
 	@wget --no-verbose https://github.com/docker/compose/releases/download/$(DOCKER_COMPOSE_VERSION)/docker-compose-`uname -s`-`uname -m` -O $(DOCKER_COMPOSE_BIN)
@@ -69,14 +68,20 @@ clean: $(DOCKER_COMPOSE)
 	- $(DOCKER_COMPOSE) rm --force -v $(SERVICES)
 	- docker rm --force --volumes $(PROJECT)-build $(PROJECT)-build-run 2> /dev/null
 	- $(foreach service,$(SERVICES),docker rm --force --volumes $(PROJECT)-$(service) 2> /dev/null;)
-	- rm -rf precompile-assets init_db permissions $$BIN_PATH $$VOLUME_DIRS || true
 	- sudo groupadd --gid 1042 3scale-dev
-	- sudo usermod -aG 1042 $$USER
+#	- sudo usermod -aG 1042 $$USER
 	- sudo chown -R :1042 .
 	- sudo chmod -R 775 .
-	- sudo chmod -R ug+s .
-	- sudo chmod -R ug-s .bin
+#	- sudo chmod -R ug+s .
+#	- sudo chmod -R ug-s .bin
 	- umask 0000
+
+clean-tmp: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
+clean-tmp: $(DOCKER_COMPOSE)
+	@echo
+	@echo "======= Cleaning up ======="
+	@echo
+	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "sudo chmod g+w . && $(foreach dir,$(TMP),rm -rf $(dir) || true;)"
 
 
 docker: ## Prints docker version and info
@@ -126,7 +131,7 @@ schema: run
 
 test-run: # Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-test-run: $(DOCKER_COMPOSE) clean-tmp
+test-run: $(DOCKER_COMPOSE)
 	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build $(DOCKER_ENV) build bash -c "cp config/examples/*.yml config/ && $(CMD)"
 
 test-with-info: $(DOCKER_COMPOSE) info
@@ -137,6 +142,7 @@ test-with-info: $(DOCKER_COMPOSE) info
 
 tmp-export: # Copies files from inside docker container to local tmp folder.
 tmp-export: IMAGE ?= $(PROJECT)-build
-tmp-export: clean-tmp
+tmp-export:
+	-@ sudo chmod g+w . && $(foreach dir,$(TMP),rm -rf $(dir) || true;)
 	-@ $(foreach dir,$(TMP),docker cp $(IMAGE):/opt/system/$(dir) $(dir) 2>/dev/null;)
 

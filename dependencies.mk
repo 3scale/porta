@@ -1,4 +1,4 @@
-SCRIPT_BUNDLER = bundle check --path=vendor/bundle || bundle install && bundle clean && rm -rf "$$BUNDLE_PATH/$$RUBY_ENGINE_VERSION/$$RUBY_API_VERSION"/gems/capybara-webkit-*/src
+SCRIPT_BUNDLER = bundle check --path=vendor/bundle || bundle install && bundle clean && rm -rf "$(BUNDLE_PATH)/$(RUBY_ENGINE_VERSION)/$(RUBY_API_VERSION)"/gems/capybara-webkit-*/src
 SCRIPT_NPM = yarn --version && yarn install --frozen-lockfile --link-duplicates && jspm -v && jspm install --quick || (jspm dl-loader && jspm install --lock || jspm install --force)
 SCRIPT_APICAST_DEPENDENCIES = cd vendor/docker-gateway && ls -al && make dependencies && cd ../../
 SCRIPT_INIT_DB = time bundle exec rake db:create db:test:prepare --verbose --trace

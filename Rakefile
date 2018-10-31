@@ -18,12 +18,6 @@ rescue LoadError
 end
 
 namespace :test do
-  test_groups = {
-    integration: FileList["test/{integration}/**/*_test.rb"],
-    functional: FileList["test/{functional}/**/*_test.rb"],
-  }
-
-  test_groups[:unit] = FileList['test/**/*_test.rb'].exclude(*test_groups.values).exclude('test/{performance,remote,support}/**/*')
 
   test_task = Class.new(Rails::TestTask) do
     def file_list
@@ -52,14 +46,6 @@ namespace :test do
     t.loader = :direct
   end
 
-  namespace :files do
-    test_groups.each do |name,file_list|
-      desc "Print test files for #{name} test group"
-      task name do
-        puts file_list
-      end
-    end
-  end
 end
 
 Rake::Task['db:test:load'].enhance do

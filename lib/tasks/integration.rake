@@ -10,6 +10,24 @@ task :integrate => 'integrate:parallel'
 
 namespace :integrate do
 
+  test_groups = {
+    integration: FileList["test/{integration}/**/*_test.rb"],
+    functional: FileList["test/{functional}/**/*_test.rb"],
+    rspec: FileList["spec/**/*_spec.rb"],
+  }
+
+  test_groups[:unit] = FileList['test/**/*_test.rb'].exclude(*test_groups.values).exclude('test/{performance,remote,support}/**/*')
+
+  namespace :files do
+    test_groups.each do |name,file_list|
+      desc "Print test files for #{name} test group"
+      task name do
+        puts file_list
+      end
+    end
+  end
+
+
   orchestration_helpers = Module.new do
     def self.print_banner_around
       lambda do |line|
@@ -29,7 +47,7 @@ namespace :integrate do
 
     def self.resolve_test_groups_by_path
 
-      obsolete_tests = %w[remote performance].map {|x| "test/#{x}"}
+      obsolete_tests = %w[remote performance integration functional spec].map {|x| "test/#{x}"}
 
       test_files = Pathname.glob('test/**/*_test.rb')
       test_groups = test_files.group_by { |path| get_top_level_folder_path(path)}
@@ -49,7 +67,7 @@ namespace :integrate do
     end
 
     # rubocop:disable MethodLength
-    def self.test_commands
+    def self.test_commands (test_lists)
       tags_for_test_categories = %w[
         @backend
         @emails
@@ -58,29 +76,30 @@ namespace :integrate do
         @no-txn
       ]
 
+
       test_dirs = resolve_test_groups_by_path
 
       {
-        :cucumber_javascript => 'parallel_cucumber --verbose features -o "-b -p parallel --tags=@javascript --tags=~@fakeweb --tags=~@percy --tags=~@ignore"',
-        :cucumber_non_tagged => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript #{tags_for_test_categories.map {|t| %(--tags=~#{t})}.join(' ')}"),
-        :cucumber_for_categories => %(parallel_cucumber --verbose features -o "-b -p parallel --tags=~@javascript --tags=#{tags_for_test_categories.join(',')}"),
+        :cucumber_javascript => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile javascript)",
+        :cucumber_txn => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile txn)",
+        :cucumber_no_txn => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile no-txn)",
+        :cucumber => (ENV['CIRCLECI']) ?
+                       "bundle exec cucumber --profile list --profile default > all_tests &&  export TESTS=$(circleci tests split --split-by=timings all_tests) && bundle exec cucumber --profile ci $TESTS" :
+                       "parallel_cucumber  -o '--profile ci' -- $(cucumber --profile list --profile default)",
 
-        :rspec => 'parallel_rspec --verbose spec',
-        :integration => "parallel_test --verbose #{test_dirs.delete('test/integration')}",
-        :swagger => [
-          'rake doc:swagger:validate:all',
-          'rake doc:swagger:generate:all',
-        ],
-        :frontend => [
-          'rake ci:jspm --trace',
-          'yarn test -- --reporters dots,junit --browsers Firefox',
-          'yarn jest',
-          'rake db:purge db:setup',
-        ],
-        :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",
-        :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
+        :swagger => 'rake doc:swagger:validate:all && rake doc:swagger:generate:all',
+        :frontend => 'yarn test -- --reporters dots,junit --browsers Firefox && yarn jest',
+        # :license_checks => "export http_proxy=#{ENV['http_proxy']} https_proxy=#{ENV['https_proxy']}; rake ci:license_finder:run",
         :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
         :percy => 'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features',
+
+        :rspec => (ENV['CIRCLECI']) ?
+                    "bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | awk 'BEGIN {ORS=\" \"} {print}'`" :
+                    "parallel_rspec --verbose #{test_lists[:rspec]}",
+        :functional => "parallel_test -o '--verbose' #{test_lists[:functional]}",
+        :integration => "parallel_test -o '--verbose' #{test_lists[:integration]}",
+        :unit => "parallel_test -o '--verbose' #{test_lists[:unit]}",
+
       }
 
     end
@@ -108,32 +127,28 @@ namespace :integrate do
   end
 
   # Dynamically generate all tasks from test_commands
-  orchestration_helpers.test_commands.each_key do |command|
+  orchestration_helpers.test_commands(test_groups).each_key do |command|
     desc "Runs tests with #{command}"
     task command.to_s => :prepare do
-      orchestration_helpers.run_tests(orchestration_helpers.test_commands[command])
+      puts "Running #{command}..."
+      orchestration_helpers.run_tests(orchestration_helpers.test_commands(test_groups)[command])
     end
   end
 
-  desc 'Runs subset of full test suite, in parallel (1/8)'
-  task :parallel_1 => %i[prepare cucumber_javascript rspec]
+  task :precompile_assets do
 
-  desc 'Runs subset of full test suite, in parallel (2/8)'
-  task :parallel_2 => %i[prepare integration]
+    ENV['RAILS_ENV'] = 'test'
+    Rake::Task['assets:precompile'].invoke
 
-  desc 'Runs subset of full test suite, in parallel (3/8)'
-  task :parallel_3 => %i[prepare integration]
+    ENV['RAILS_ENV'] = 'production'
+    ENV['WEBPACKER_PRECOMPILE'] = 'false'
+    Rake::Task['assets:precompile'].invoke
 
-  desc 'Runs subset of full test suite, in parallel (4/8)'
-  task :parallel_4 => %i[prepare functional main_suite]
+  end
 
-  desc 'Runs subset of full test suite, in parallel (5/8)'
-  task :parallel_5 => %i[prepare cucumber_non_tagged]
-
-  desc 'Runs subset of full test suite, in parallel (6/8)'
-  task :parallel_6 => %i[prepare cucumber_for_categories]
-
-
+  [:integration, :functional, :cucumber, :cucumber_javascript, :cucumber_no_txn, :cucumber_txn, "ci:license_finder:run", "doc:swagger:validate:all", "doc:swagger:generate:all", "ci:jspm"].each do |depending_task|
+    task depending_task => :precompile_assets
+  end
 
   desc 'Runs the whole continuous integration test suite'
   task :parallel, [:log] do
