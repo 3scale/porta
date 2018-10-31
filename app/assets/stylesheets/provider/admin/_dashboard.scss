@@ -338,8 +338,10 @@
 }
 
 .DashboardSection-header {
-  float: left;
   width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 
   &--extended {
     border-bottom: $border-width solid $border-color;
