@@ -10,7 +10,7 @@ class Cinstance < Contract
   # TODO: verify the comment is still true and we can't use inverse_of
   belongs_to :service #, inverse_of: :cinstances # this inverse_of messes up some association autosave stuff
 
-  has_many :alerts
+  has_many :alerts, dependent: :delete_all
   has_many :line_items
 
   # this needs to be before the include Backend::ModelExtensions::Cinstance
