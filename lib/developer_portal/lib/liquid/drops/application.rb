@@ -57,8 +57,12 @@ module Liquid
         @contract.buyer_alerts_enabled?
       end
 
+      desc 'Returns a list of not-deleted alerts for this application'
       def alerts
-        @contract.alerts
+        @alerts ||= begin
+          collection = @contract.buyer_account.alerts.not_deleted.by_application(@contract).sorted
+          Liquid::Drops::Collection.for_drop(Liquid::Drops::Alert).new(collection)
+        end
       end
 
       desc "Returns the description of the application."
