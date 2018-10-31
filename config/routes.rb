@@ -156,6 +156,7 @@ without fake Core server your after commit callbacks will crash and you might ge
   end
 
   get '/auth/:system_name/callback' => 'provider/sessions#create', constraints: MasterOrProviderDomainConstraint
+  get '/auth/:system_name/bounce' => 'provider/sessions#bounce', constraints: ProviderDomainConstraint, as: :authorization_provider_bounce
 
   namespace :provider, :path => 'p', constraints: MasterOrProviderDomainConstraint do
     get 'activate/:activation_code' => 'activations#create', :as => :activate
