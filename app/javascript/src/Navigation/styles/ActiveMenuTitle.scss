@@ -1,7 +1,11 @@
+// Copied from colors.scss
+$link-color: #0088ce; // pf-blue-400
+
 .ActiveMenuTitle {
   
   & > i:first-child {
     margin-right: 0.5rem;
+    color: $link-color;
   }
 
   & > i:last-child {
