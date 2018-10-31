@@ -2,11 +2,7 @@
 
 class Signup::MasterDomainsBuilder < Signup::DomainsBuilder
   def generate
-    if current_subdomain.present?
-      Signup::Domains.new(subdomain: current_subdomain, self_subdomain: current_subdomain)
-    else
-      new_subdomain = generate_subdomain
-      Signup::Domains.new(subdomain: "#{new_subdomain}-admin", self_subdomain: "#{new_subdomain}-admin")
-    end
+    new_subdomain = current_subdomain.presence || generate_subdomain
+    Signup::Domains.new(subdomain: new_subdomain, self_subdomain: new_subdomain)
   end
 end
