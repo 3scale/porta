@@ -437,6 +437,12 @@ en:
     creation_type:
       manual: 'manually created'
       background: 'automatically created'
+    reasons_cannot_charge:
+      not_paid: 'already paid'
+      provider_present: 'missing provider'
+      provider_payment_gateway_configured: 'missing payment gateway setting'
+      positive: 'non-chargeable amount'
+      buyer_account_paying_monthly: 'buyer not paying monthly'
 
   api:
     applications:
