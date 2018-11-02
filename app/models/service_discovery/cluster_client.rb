@@ -4,7 +4,9 @@ require 'kubeclient'
 
 module ServiceDiscovery
   class ClusterClient
-    class ResourceNotFound < StandardError
+    class ClusterClientError < StandardError; end
+
+    class ResourceNotFound < ClusterClientError
       def initialize(resource_type, name, namespace, labels = {})
         resource_name = namespace.present? ? "#{namespace}/#{name}" : name
         error_message = "Resource #{resource_name} of kind #{resource_type.to_s.camelize} not found"
@@ -76,7 +78,7 @@ module ServiceDiscovery
 
     def find_discoverable_service_by(name:, namespace:)
       cluster_service = find_service_by(namespace: namespace, name: name)
-      raise ResourceNotFound.new('Service', namespace, name) unless cluster_service.discoverable?
+      raise_not_found('Service', name, namespace) unless cluster_service.discoverable?
       cluster_service
     end
 
@@ -137,11 +139,20 @@ module ServiceDiscovery
         resource_data = public_send("get_#{type.to_s.downcase}", *args)
         raise_not_found(type, name, namespace) unless resource_data
       rescue KubeException => exception
-        raise_not_found(type, name, namespace) if exception.error_code == 404
+        handle_kube_exception(exception, type, name, namespace)
       end
 
       klass = "ServiceDiscovery::Cluster#{type.to_s.camelize}".constantize
       klass.new(resource_data, self)
+    end
+
+    def handle_kube_exception(exception, *args)
+      case exception.error_code
+      when 404
+        raise_not_found(*args)
+      else
+        raise ClusterClientError, exception.to_s
+      end
     end
 
     def raise_not_found(resource_type, resource_name, namespace = nil, fields = {})
