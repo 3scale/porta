@@ -28,6 +28,7 @@
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
     color: $font-color;
+    min-width: 10%;
     float: left;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -350,7 +351,7 @@
 }
 
 .DashboardNavigation {
-  float: right;
+  flex: 1 1 0%;
 
   #api_filter + &--services {
     margin-top: line-height-times(2/3);
@@ -361,6 +362,7 @@
 
     li {
       padding: 0;
+      float: right;
     }
   }
 
