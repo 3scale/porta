@@ -4,6 +4,6 @@ class FindAndDeleteScheduledAccountsWorker
   include Sidekiq::Worker
 
   def perform
-    Account.deleted_time_ago.find_each(&DeleteAccountHierarchyWorker.method(:perform_later))
+    Account.deleted_since.find_each(&DeleteAccountHierarchyWorker.method(:perform_later))
   end
 end
