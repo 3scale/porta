@@ -823,7 +823,7 @@ GEM
       railties (>= 4.2)
     webrobots (0.1.1)
     websocket (1.2.4)
-    whenever (0.9.4)
+    whenever (0.9.7)
       chronic (>= 0.6.3)
     will_paginate (3.1.0)
     xml-simple (1.1.5)
@@ -1005,14 +1005,14 @@ DEPENDENCIES
   unicorn-rails
   webmock (~> 1.21)
   webpacker (~> 3.3)
-  whenever (~> 0.9.4)
+  whenever (~> 0.9.7)
   will_paginate (~> 3.1.0)
   xpath (~> 2.1)
   yard
   zip-zip
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.3.7p456
 
 BUNDLED WITH
    1.16.6
