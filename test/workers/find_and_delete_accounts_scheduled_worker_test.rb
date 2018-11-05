@@ -1,11 +1,12 @@
 require 'test_helper'
 class FindAndDeleteScheduledAccountsWorkerTest < ActiveSupport::TestCase
   def test_perform
+    quiet_period_time = Account::States::PERIOD_BEFORE_DELETION
     FactoryGirl.create_list(:simple_buyer, 2)
-    FactoryGirl.create_list(:simple_buyer, 3, state: 'scheduled_for_deletion', deleted_at: 15.days.ago)
-    FactoryGirl.create_list(:simple_provider, 4, state: 'scheduled_for_deletion', deleted_at: 15.days.ago)
-    FactoryGirl.create_list(:simple_provider, 1, state: 'scheduled_for_deletion', deleted_at: 14.days.ago)
-    assert_equal 7, Account.deleted_time_ago.count
+    FactoryGirl.create_list(:simple_buyer, 3, state: 'scheduled_for_deletion', deleted_at: quiet_period_time.ago)
+    FactoryGirl.create_list(:simple_provider, 4, state: 'scheduled_for_deletion', deleted_at: quiet_period_time.ago)
+    FactoryGirl.create_list(:simple_provider, 1, state: 'scheduled_for_deletion', deleted_at: quiet_period_time.ago + 1.day)
+    assert_equal 7, Account.deleted_since.count
     DeleteAccountHierarchyWorker.expects(:perform_later).times(7)
     FindAndDeleteScheduledAccountsWorker.new.perform
   end

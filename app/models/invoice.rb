@@ -425,13 +425,10 @@ class Invoice < ApplicationRecord
   # #pay! is called)
   #
   def charge!(automatic = true)
-    unless state_events.include?(:pay)
-      logger.info("Invoice(#{self.id}) was not charged because the state events don't include :pay")
-      raise InvalidInvoiceStateException.new("Invoice #{id} is not in chargeable state!")
-    end
+    ensure_payable_state!
 
-    if (paid? || provider.nil? || provider.payment_gateway_unconfigured?)
-      logger.info "Not charging invoice ID #{self.id}"
+    unless chargeable?
+      logger.info "Not charging invoice ID #{self.id} (#{reason_cannot_charge})"
       return
     end
 
@@ -484,6 +481,34 @@ class Invoice < ApplicationRecord
         Rails.application.config.event_store.publish_event(event)
       end
     end
+  end
+
+  def ensure_payable_state!
+    return if state_events.include?(:pay)
+
+    logger.info("Invoice(#{self.id}) was not charged because the state events don't include :pay")
+    raise InvalidInvoiceStateException.new("Invoice #{id} is not in chargeable state!")
+  end
+
+  delegate :positive?, :negative?, :zero?, to: :cost
+  delegate :present?, :payment_gateway_configured?, to: :provider, prefix: true
+  delegate :paying_monthly?, to: :buyer_account, prefix: true
+
+  def not_paid?
+    !paid?
+  end
+
+  CONDITIONS_TO_CHARGE = %i[not_paid provider_present provider_payment_gateway_configured positive buyer_account_paying_monthly].freeze
+
+  def reason_cannot_charge
+    CONDITIONS_TO_CHARGE.each do |condition_method|
+      return I18n.t(condition_method, scope: %i[invoices reasons_cannot_charge]) unless method("#{condition_method}?").call
+    end
+    nil
+  end
+
+  def chargeable?
+    !reason_cannot_charge
   end
 
   def self.opened_by_buyer(buyer)

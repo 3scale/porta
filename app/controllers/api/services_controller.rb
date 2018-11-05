@@ -1,4 +1,6 @@
 class Api::ServicesController < Api::BaseController
+  include ServiceDiscovery::ControllerMethods
+
   activate_menu :serviceadmin, :overview
 
   before_action :deny_on_premises_for_master
@@ -64,6 +66,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   protected
+
 
   def service_name_changed?
     @service.previous_changes['name']

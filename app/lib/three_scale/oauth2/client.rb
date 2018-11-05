@@ -27,6 +27,8 @@ module ThreeScale
           ThreeScale::OAuth2::KeycloakClient
         when 'redhat_customer_portal'
           redhat_customer_portal_client_class
+        when 'service_discovery'
+          ThreeScale::OAuth2::ServiceDiscoveryClient
         else
           ThreeScale::OAuth2::ClientBase
         end

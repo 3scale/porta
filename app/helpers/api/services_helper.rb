@@ -51,7 +51,9 @@ module Api::ServicesHelper
   end
 
   def refresh_service_link(service, options = {})
+    url = service_discovery_usable? ? provider_admin_service_discovery_service_path(service) : service_discovery_presenter.authorize_url
+
     msg = t('api.services.forms.definition_settings.refresh_confirmation', name: h(service.name))
-    action_link_to(:refresh, provider_admin_service_discovery_service_path(service), {data: { confirm: msg }, method: :put}.merge(options) )
+    action_link_to(:refresh, url, {data: { confirm: msg }, method: :put}.merge(options) )
   end
 end

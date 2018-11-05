@@ -7,6 +7,7 @@
   margin: line-height-times(4) 0 line-height-times(0) 0;
   padding-top: line-height-times(1/2);
   border-top: $border-width solid $border-color;
+  font-size: $font-size-sm;
 
   ul {
       @include horizontal-list(line-height-times(1/2));
@@ -14,9 +15,9 @@
       overflow: visible;
 
       li {
+        white-space: nowrap;
 
         a {
-          display: block;
           color: $footer-link-color;
           &:hover { color: $footer-link-hover-color; }
 

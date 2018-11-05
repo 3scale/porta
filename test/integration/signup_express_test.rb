@@ -4,11 +4,20 @@ class SignupExpressTest < ActionDispatch::IntegrationTest
 
   disable_transactional_fixtures!
 
-  test 'signup express with account plan that requires approval' do
+  def setup
     @account_plan = FactoryGirl.create(:account_plan, approval_required: true)
     @provider = @account_plan.provider
     host! @provider.admin_domain
+  end
 
+  test 'signup express with org name' do
+    post '/admin/api/signup.xml', provider_key: @provider.api_key, org_name: 'company', name: 'example', username: 'quentin', email: 'quentin@example.com', password: '12345678', account_plan_id: @account_plan.id
+    assert_response :success
+    doc = Nokogiri::XML::Document.parse(@response.body)
+    assert_equal 'company', doc.xpath('/account/org_name').text
+  end
+
+  test 'signup express with account plan that requires approval' do
     post '/admin/api/signup.xml', provider_key: @provider.api_key, org_name: 'company', username: 'quentin', email: 'quentin@example.com', password: '12345678', account_plan_id: @account_plan.id
 
     signup_result = assigns(:signup_result)
@@ -18,10 +27,8 @@ class SignupExpressTest < ActionDispatch::IntegrationTest
   end
 
   test 'signup express with account plan that do not requires approval' do
-    @account_plan = FactoryGirl.create(:account_plan, approval_required: false)
-    @provider = @account_plan.provider
-    host! @provider.admin_domain
-
+    @account_plan.approval_required = false
+    @account_plan.save!
     post '/admin/api/signup.xml', provider_key: @provider.api_key, org_name: 'company', username: 'quentin', email: 'quentin@example.com', password: '12345678', account_plan_id: @account_plan.id
 
     signup_result = assigns(:signup_result)
@@ -31,25 +38,11 @@ class SignupExpressTest < ActionDispatch::IntegrationTest
   end
 
   test 'do not raise exception when validation fails for email duplications' do
-    @account_plan = FactoryGirl.create(:account_plan, approval_required: false)
-    @provider = @account_plan.provider
-    host! @provider.admin_domain
-
     post '/admin/api/signup.xml', provider_key: @provider.api_key, org_name: 'company', username: 'quentin', email: 'quentin@example.com', password: '12345678', account_plan_id: @account_plan.id
-
-
     post '/admin/api/signup.xml', provider_key: @provider.api_key, org_name: 'company', username: 'quentin', email: 'quentin@example.com', password: '12345678', account_plan_id: @account_plan.id
-
   end
 
   test 'do not raise exception when account validations fails' do
-    @account_plan = FactoryGirl.create(:account_plan, approval_required: false)
-    @provider = @account_plan.provider
-    host! @provider.admin_domain
-
     post '/admin/api/signup.xml', provider_key: @provider.api_key, org_name: '', username: 'quentin', email: 'quentin@example.com', password: '12345678', account_plan_id: @account_plan.id
-
   end
-
-
 end

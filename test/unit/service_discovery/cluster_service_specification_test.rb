@@ -13,6 +13,9 @@ module ServiceDiscovery
       @spec.expects(:type).returns('application/vnd.oai.openapi+json')
       assert @spec.oas?
 
+      @spec.expects(:type).returns('application/json')
+      assert @spec.oas?
+
       @spec.expects(:type).returns('application/xml')
       refute @spec.oas?
     end
