@@ -136,6 +136,8 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_response 422
     assert_contains JSON.parse(response.body)['errors']['state'], invoice.errors.generate_message(:state, :not_in_chargeable_state, id: invoice.id)
 
+    invoice.line_items << LineItem.new(:cost => 100)
+
     invoice.fire_events! :issue
 
     # Heavy/ugly mocking on buyer charge!

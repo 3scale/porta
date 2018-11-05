@@ -15,7 +15,7 @@ section.Section
       - if @service.description.present?
         dt.u-dl-term Description
         dd.u-dl-definition = @service.description
-      - if ThreeScale.config.service_discovery.enabled && @service.discovered?
+      - if service_discovery_accessible? && @service.discovered?
         dt.u-dl-term Source
         dd.u-dl-definition
           'OpenShift
