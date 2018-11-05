@@ -26,6 +26,7 @@ class BackendVersion < ActiveSupport::StringInquirer
     end
 
     def oauth_visible?(service)
+      return true unless ThreeScale.config.onpremises
       service.backend_version.oauth? && !service.oidc?
     end
 
