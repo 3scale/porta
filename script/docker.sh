@@ -29,8 +29,8 @@ echo
 echo
 echo "======= NPM ======="
 echo
-yarn --version
-time bash -c "CXX=g++-4.8 ${PROXY_ENV} yarn install"
+npm --version
+time bash -c "CXX=g++-4.8 ${PROXY_ENV} npm ci"
 echo
 
 echo "======= APIcast ======="

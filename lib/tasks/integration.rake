@@ -72,8 +72,8 @@ namespace :integrate do
           'rake doc:swagger:generate:all',
         ],
         :frontend => [
-          'yarn test -- --reporters dots,junit --browsers Firefox',
-          'yarn jest',
+          'npm test -- --reporters dots,junit --browsers Firefox',
+          'npm run-script jest',
           'rake db:purge db:setup',
         ],
         :functional => "parallel_test --verbose #{test_dirs.delete('test/functional')}",

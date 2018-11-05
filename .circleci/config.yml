@@ -94,9 +94,8 @@ jobs:
       - run:
           name: Install NPM dependencies
           command: |
-            yarn --version
-            yarn global dir
-            yarn install --frozen-lockfile --link-duplicates
+            npm --version
+            npm ci
       - save_cache:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
@@ -154,10 +153,10 @@ jobs:
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
       - run:
-          name: Yarn test
+          name: NPM test
           command: |
-            yarn test -- --reporters dots,junit --browsers Firefox
-            yarn jest
+            npm test -- --reporters dots,junit --browsers Firefox
+            npm run-script jest
       - run:
           name: Database setup
           command: |
