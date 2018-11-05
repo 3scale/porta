@@ -40,12 +40,13 @@ module Account::States
       end
 
       after_transition any - :scheduled_for_deletion => :scheduled_for_deletion do |account|
-        account.update_attributes(deleted_at: Time.zone.now.beginning_of_day)
+        time_deleted_at = Time.zone.now.beginning_of_day
+        account.update_attributes(deleted_at: time_deleted_at, state_changed_at: time_deleted_at)
         account.run_after_commit(:schedule_backend_sync_worker)
       end
 
       after_transition :scheduled_for_deletion => any - :scheduled_for_deletion do |account, _transition|
-        account.update_attributes(deleted_at: nil)
+        account.update_attributes(deleted_at: nil, state_changed_at: nil)
         account.run_after_commit(:schedule_backend_sync_worker)
       end
 

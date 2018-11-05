@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105203727) do
+ActiveRecord::Schema.define(version: 20181105212016) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
