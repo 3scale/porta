@@ -125,7 +125,7 @@ gem 'thinking-sphinx', '~> 3.2.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'diff-lcs', '~> 1.2'
 gem 'acts-as-taggable-on', '~> 4.0'
-gem 'whenever', '~> 0.9.4', require: false
+gem 'whenever', '~> 0.9.7', require: false
 gem 'will_paginate', '~> 3.1.0'
 
 gem 'rack-x_served_by', '~> 0.1.1'
