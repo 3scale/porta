@@ -26,6 +26,7 @@ class BackendVersionTest < ActiveSupport::TestCase
   end
 
   def test_visible_versions_oauth
+    ThreeScale.config.stubs(onpremises: true)
     service = FactoryGirl.create(:simple_service, backend_version: 'oauth')
     versions = BackendVersion.visible_versions(service: service)
     refute service.oidc?
@@ -35,6 +36,10 @@ class BackendVersionTest < ActiveSupport::TestCase
     service.save!
     versions = BackendVersion.visible_versions(service: service)
     refute versions.values.include?('oauth')
+
+    ThreeScale.config.stubs(onpremises: false)
+    versions = BackendVersion.visible_versions(service: service)
+    assert versions.values.include?('oauth')
   end
 
   def test_usable_versions
