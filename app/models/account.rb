@@ -63,8 +63,6 @@ class Account < ApplicationRecord
   scope :without_deleted, ->(without = true) { where(deleted_at: nil) if without }
   scope :not_master, -> { where(master: [0, nil]) }
 
-  alias_attribute :state_changed_at, :deleted_at
-
   audited allow_mass_assignment: true
 
   # this is done in a callback because we want to do this AFTER the account is deleted
