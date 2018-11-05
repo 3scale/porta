@@ -5,7 +5,7 @@ import 'core-js/modules/es6.map'
 import 'core-js/es6/array'
 import React from 'react'
 import { render } from 'react-dom'
-import getActiveMenuTitle from '../utils/getActiveMenuTitle'
+import { ActiveMenuTitle } from './ActiveMenuTitle'
 
 import '../styles/ContextSelector.scss'
 
@@ -67,7 +67,9 @@ class ContextSelector extends React.Component {
 
     const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>{service.name}</a>
+        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>
+          <i className="fa fa-puzzle-piece" />{service.name}
+        </a>
       </li>
     ))
 
@@ -86,15 +88,19 @@ class ContextSelector extends React.Component {
     return (
       <div className="PopNavigation PopNavigation--context">
         <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Selector">
-          <span> {getActiveMenuTitle(activeMenu, currentApi)} <i className='fa fa-chevron-down' /></span>
+          <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} />
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>Dashboard</a>
+            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>
+              <i className='fa fa-home' />Dashboard
+            </a>
           </li>
           {audienceLink ? (
             <li className="PopNavigation-listItem">
-              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>Audience</a>
+              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>
+                <i className='fa fa-bullseye' />Audience
+              </a>
             </li>
           ) : null}
           {this.renderInput()}

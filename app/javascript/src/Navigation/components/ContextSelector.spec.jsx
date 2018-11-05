@@ -123,7 +123,7 @@ describe('When there are many services', () => {
     const apiList = contextSelector.find('.PopNavigation-results').children()
     expect(apiList).toHaveLength(apis.length)
     expect(apiList.containsAllMatchingElements(
-      apis.map(api => <li><a>{api.service.name}</a></li>)
+      apis.map(api => <li><a><i />{api.service.name}</a></li>)
     )).toEqual(true)
   })
 
