@@ -20,6 +20,7 @@ class User < ApplicationRecord
   include States
   include Invitations
   include Permissions
+  include ProvidedAccessTokens
 
   audited
 

@@ -25,7 +25,7 @@ end
 gem 'sass-rails', '~> 5.0'
 
 gem 'open_id_authentication'
-gem 'oauth2', '1.0.0'
+gem 'oauth2', '~> 1.4'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'i18n'

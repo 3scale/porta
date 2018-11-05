@@ -364,6 +364,10 @@ form.formtastic fieldset > ol > li.text textarea {
   }
 }
 
+form.formtastic fieldset.inputs label.disabled {
+  color: $disabled-color;
+}
+
 select:disabled,
 form.formtastic fieldset.inputs input:disabled,
 form.formtastic fieldset.inputs input[readonly="readonly"] {

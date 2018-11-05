@@ -1,24 +1,9 @@
 nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
-    /- if can? :manage, :partners
-
+    - if can?(:manage, :service_contracts) && !current_account.master?
       li.DashboardNavigation-list-item
-        = dashboard_collection_link 'ActiveDoc',
-                                  api_docs,
-                                  admin_api_docs_services_path,
-                                  'ActiveDocs',
-                                  'file-text'
-
-    /- if can?(:manage, :monitoring)
-      li.DashboardNavigation-list-item
-        = link_to admin_transactions_path, title: 'Traffic', class: "DashboardNavigation-link" do
-          i.fa.fa-play-circle>
-          | Traffic
-
-
-    li.DashboardNavigation-list-item
-      = fancy_link_to 'New API',
-        new_admin_service_path,
-        :class => 'new DashboardNavigation-link',
-        :switch => :multiple_services,
-        :upgrade_notice => true
+        = fancy_link_to 'New API',
+          new_admin_service_path,
+          :class => 'new DashboardNavigation-link',
+          :switch => :multiple_services,
+          :upgrade_notice => true

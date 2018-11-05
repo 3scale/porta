@@ -40,6 +40,7 @@ class Account < ApplicationRecord
   include Logic::ProviderSettings
   include Logic::ProviderConstraints
   include ProviderMethods
+  include ServiceDiscovery::AuthenticationProviderSupport
 
   include BuyerMethods
   include Billing
@@ -61,6 +62,8 @@ class Account < ApplicationRecord
 
   scope :without_deleted, ->(without = true) { where(deleted_at: nil) if without }
   scope :not_master, -> { where(master: [0, nil]) }
+
+  alias_attribute :state_changed_at, :deleted_at
 
   audited allow_mass_assignment: true
 
@@ -379,7 +382,7 @@ class Account < ApplicationRecord
     self[:provider] || master?
   end
 
-  def provider_but_not_master?
+  def tenant?
     provider && !master?
   end
 
