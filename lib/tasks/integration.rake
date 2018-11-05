@@ -167,21 +167,6 @@ namespace :integrate do
     # TODO: print summary
     banner.call("Finished in #{format('%.1fs', time.real)}\n\t")
 
-    Rake::Task['integrate:report_coverage_to_codeclimate'].invoke(7)
-
-  end
-
-  task :report_coverage_to_codeclimate, :number_of_groups  do
-    if ENV['COVERAGE']
-      puts 'Sending test coverage to CodeClimate'
-      FileUtils.cp(Dir["#{Dir.tmpdir}/codeclimate-test-coverage-*"],
-                   Rails.root.join('tmp', 'codeclimate').tap(&:mkpath))
-
-      system('codeclimate-batch',
-             '--groups', args.number_of_groups.to_s,
-             '--host', 'https://cc-3scale-amend.herokuapp.com',
-             '--key', ENV.fetch('BUILD_TAG'))
-    end
   end
 
   desc 'Set environment variables on test coverage and percy and prepare database'
