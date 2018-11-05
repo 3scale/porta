@@ -39,7 +39,7 @@ Feature: Buyer users management
   Scenario: User details
     When I go to the buyer users page for "SpaceWidgets"
     And I follow "bob"
-    Then I should see "User bob of buyer account SpaceWidgets" in a header
+    Then I should see "User bob of the account SpaceWidgets" in a header
     And I should see button to suspend buyer user "bob"
     And I should see link to the buyer user edit page for "bob"
     When I follow "Edit"
