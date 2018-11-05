@@ -57,8 +57,12 @@ module Liquid
         @contract.buyer_alerts_enabled?
       end
 
+      desc 'Returns a list of not-deleted alerts for this application'
       def alerts
-        @contract.alerts
+        @alerts ||= begin
+          collection = @contract.buyer_account.alerts.not_deleted.by_application(@contract).sorted
+          Liquid::Drops::Collection.for_drop(Liquid::Drops::Alert).new(collection)
+        end
       end
 
       desc "Returns the description of the application."
@@ -100,12 +104,12 @@ module Liquid
 
       desc "Returns the application_id of an application."
       def application_id
-        @contract.application_id if @contract.service.backend_version != "1"
+        @contract.application_id unless @contract.service.backend_version.v1?
       end
 
       desc "Returns the application id or the user key."
       def key
-        if @contract.service.backend_version >= "2"
+        if @contract.service.backend_version.app_keys_allowed?
           @contract.application_id
         else
           @contract.user_key
@@ -178,11 +182,11 @@ module Liquid
       end
 
       def user_key_mode?
-        @contract.backend_version.user_key?
+        @contract.backend_version.v1?
       end
 
       def app_id_mode?
-        @contract.backend_version.app_id?
+        @contract.backend_version.v2?
       end
 
       def change_plan_url

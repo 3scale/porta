@@ -23,7 +23,7 @@ Feature: Multiservice feature
     When I am on the provider dashboard
      And I follow "New API"
      And I fill in "Name" with "Less fancy API"
-     And I press "Create"
+     And I press "Add API"
     Then I should see "Less fancy API"
 
   @javascript

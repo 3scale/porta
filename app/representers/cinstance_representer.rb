@@ -21,12 +21,12 @@ module CinstanceRepresenter
   property :first_traffic_at, render_nil: true
   property :first_daily_traffic_at, render_nil: true
 
-  with_options(if: ->(*) { backend_version.user_key? }, render_nil: true) do |v1|
+  with_options(if: ->(*) { backend_version.v1? }, render_nil: true) do |v1|
     v1.property :user_key
     v1.property :provider_verification_key
   end
 
-  with_options(if: ->(*) { backend_version.app_id? || backend_version.oauth? }, render_nil: true) do |v2|
+  with_options(if: ->(*) { backend_version.v2? || backend_version.oauth? }, render_nil: true) do |v2|
     v2.property :application_id
   end
 

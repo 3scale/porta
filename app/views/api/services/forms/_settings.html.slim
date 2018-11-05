@@ -6,7 +6,7 @@
 
   = form.input :buyers_manage_apps
 
-  - if @service.app_keys_allowed?
+  - if @service.backend_version.app_keys_allowed?
     = form.input :buyers_manage_keys
 
   = form.input :referrer_filters_required, as: :boolean

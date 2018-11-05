@@ -40,6 +40,7 @@ class Account < ApplicationRecord
   include Logic::ProviderSettings
   include Logic::ProviderConstraints
   include ProviderMethods
+  include ServiceDiscovery::AuthenticationProviderSupport
 
   include BuyerMethods
   include Billing
@@ -379,7 +380,7 @@ class Account < ApplicationRecord
     self[:provider] || master?
   end
 
-  def provider_but_not_master?
+  def tenant?
     provider && !master?
   end
 
