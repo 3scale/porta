@@ -188,5 +188,14 @@ module ServiceDiscovery
         cluster.find_discoverable_service_by(namespace: 'my-namespace', name: 'my-api-staging').name
       end
     end
+
+    test 'raises generic client exception' do
+      exception = KubeException.new(123, 'generic error', mock)
+      cluster.expects(:get_project).with('my-namespace').raises(exception)
+
+      assert_raises(ServiceDiscovery::ClusterClient::ClusterClientError) do
+        cluster.find_project_by(name: 'my-namespace')
+      end
+    end
   end
 end
