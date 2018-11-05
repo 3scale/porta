@@ -39,7 +39,7 @@ module ApiDocs
     end
 
     def service_plan_ids
-      @account.service_plans.latest.map do |plan|
+      @account.service_plans.includes(:service).latest.map do |plan|
         { :name => PLAN_NAME.call(plan),
           :value => plan.id }
       end
@@ -60,7 +60,7 @@ module ApiDocs
     end
 
     def metrics
-      @metrics ||= @account.metrics.top_level
+      @metrics ||= @account.metrics.includes(:service).top_level
     end
 
     METRIC_NAME = ->(metric) { "#{metric.friendly_name} | #{metric.service.name}" }

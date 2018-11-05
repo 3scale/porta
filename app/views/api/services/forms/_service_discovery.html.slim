@@ -1,18 +1,21 @@
 form class="formtastic" id="new_service_source"
   fieldset class="inputs"
-    legend Source
     ol
-      li class="radio"
+      li.radio
         fieldset
           ol
             li
               label for="source_manual"
                 = radio_button_tag :source, 'manual', checked: true
-                = "From Scratch"
+                = "Define manually"
             li
-              label for="source_discover"
-                = radio_button_tag :source, 'discover'
-                = "Discover"
+              label for="source_discover" class=('disabled' unless service_discovery_usable?)
+                = radio_button_tag :source, 'discover', false, disabled: !service_discovery_usable?
+                => "Import from OpenShift"
+                - unless service_discovery_usable?
+                  | (
+                  = link_to "Authenticate to enable this option", service_discovery_presenter.authorize_url
+                  | )
 
 = semantic_form_for service, url: provider_admin_service_discovery_services_path, html: { id: 'service_discovery', class: 'is-hidden' }  do |form|
   = form.hidden_field :source, value: 'discover'

@@ -271,6 +271,49 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_equal 2, Invoice.chargeable(now).count
   end
 
+  def build_invoice(attributes = {})
+    invoice_attributes = { provider_account: @provider,
+                           buyer_account: @buyer,
+                           due_on: Time.zone.now,
+                           state: 'pending' }
+    cost = ThreeScale::Money.new(attributes.delete(:cost) || 100.0, 'EUR')
+    invoice = FactoryGirl.build(:invoice, invoice_attributes.merge(attributes))
+    invoice.stubs(cost: cost)
+    invoice
+  end
+
+  test 'chargeable?' do
+    invoice = build_invoice(state: 'paid')
+    refute invoice.chargeable?
+    assert_equal 'already paid', invoice.reason_cannot_charge
+
+    invoice = build_invoice(provider_account: nil)
+    refute invoice.chargeable?
+    assert_equal 'missing provider', invoice.reason_cannot_charge
+
+    unconfigured_provider = FactoryGirl.create(:simple_provider)
+    unconfigured_provider.stubs(payment_gateway_configured?: false)
+    invoice = build_invoice(provider_account: unconfigured_provider)
+    refute invoice.chargeable?
+    assert_equal 'missing payment gateway setting', invoice.reason_cannot_charge
+
+    invoice = build_invoice(cost: 0.0)
+    refute invoice.chargeable?
+    assert_equal 'non-chargeable amount', invoice.reason_cannot_charge
+
+    invoice = build_invoice(cost: -1.50)
+    refute invoice.chargeable?
+    assert_equal 'non-chargeable amount', invoice.reason_cannot_charge
+
+    not_paying_monthly_buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    not_paying_monthly_buyer.stubs(paying_monthly?: false)
+    invoice = build_invoice(buyer_account: not_paying_monthly_buyer)
+    refute invoice.chargeable?
+    assert_equal 'buyer not paying monthly', invoice.reason_cannot_charge
+
+    assert build_invoice.chargeable?
+  end
+
   test 'charge! should raise if cancelled or paid' do
     @invoice.cancel!
     assert_raises(Invoice::InvalidInvoiceStateException) { @invoice.charge! }
@@ -417,7 +460,8 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test '#charge! is successful' do
     @buyer.expects(:charge!).returns(true)
-    @provider.stubs(:payment_gateway_unconfigured?).returns(false)
+    @provider.stubs(:payment_gateway_configured?).returns(true)
+    @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
     @invoice.update_attribute(:state, 'pending')
 
     assert @invoice.charge!, 'Invoice should charge!'

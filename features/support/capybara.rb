@@ -44,7 +44,7 @@ Capybara::Webkit.configure do |config|
   config.allow_url('foo-admin.example.com')
   config.allow_url('foo-admin.3scale.net')
   config.allow_url('www.example.com')
-  config.allow_url('master-account-admin.example.com')
+  config.allow_url('master-account.example.com')
   config.allow_url('foo.3scale.net')
 
   config.block_unknown_urls
