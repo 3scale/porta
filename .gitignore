@@ -126,6 +126,4 @@ Gemfile.local
 /public/packs-test
 /node_modules
 
-!/public/packs
-
 /vendor/oracle/*.zip
