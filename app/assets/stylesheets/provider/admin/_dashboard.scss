@@ -28,11 +28,16 @@
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
     color: $font-color;
-    min-width: 10%;
     float: left;
-    max-width: 40%;
+    max-width: 25%;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-toggle {
     cursor: pointer;
   }
 
