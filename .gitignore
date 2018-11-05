@@ -128,5 +128,4 @@ Gemfile.local
 
 !/public/packs
 
-package-lock.json
 /vendor/oracle/*.zip
