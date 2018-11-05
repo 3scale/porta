@@ -72,16 +72,6 @@ module Account::Billing
   #
   # options has :invoice
   def charge!(amount, options = {})
-    # should not be even called for zeros...
-    if amount.zero?
-      logger.info("Buyer #{self.id} was not charged (amount == 0)")
-      return nil
-    end
-    unless paying_monthly?
-      logger.info("Buyer #{self.id} was not charged (not paying monthly)")
-      return nil
-    end
-
     unless credit_card_stored?
       logger.info("Buyer #{self.id} was not charged: credit card missing")
       raise Finance::Payment::CreditCardMissing

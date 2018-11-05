@@ -30,7 +30,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
       end
 
       should 'return false' do
-        assert_equal false, @invoice.charge!
+        refute @invoice.charge!
       end
 
       should 'not send charge notification email' do

@@ -32,19 +32,16 @@
     float: left;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
-  }
-
-  &-toggle {
     cursor: pointer;
-    &:before {
-      font-size: $caption-font-size;
-      content: '▼ ';
-    }
   }
 
   &.is-closed {
     border-bottom: $border-width solid $border-color;
     height: auto;
+
+    .DashboardSection-title {
+      color: $light-color;
+    }
   }
 
   &--toggleable.is-closed {
@@ -56,10 +53,6 @@
 
     .DashboardNavigation-list-item.u-notice {
       display: list-item;
-    }
-
-    .DashboardSection-toggle:before {
-      content: '► ';
     }
   }
 }

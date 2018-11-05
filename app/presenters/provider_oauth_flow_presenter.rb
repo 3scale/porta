@@ -1,8 +1,6 @@
 class ProviderOauthFlowPresenter < OauthFlowPresenter
   delegate :human_kind, to: :authentication_provider
 
-  public :kind
-
   include Rails.application.routes.url_helpers
 
   # @param [AuthenticationProvider] authentication_provider
