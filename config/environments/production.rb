@@ -15,6 +15,9 @@ System::Application.configure do
   # ip spoofing checks are pointless and might mess up proxies
   config.action_dispatch.ip_spoofing_check = false
 
+  # Disables Yarn check
+  config.webpacker.check_yarn_integrity = false
+
   # we precompile in production
   config.assets.compile = false
   config.assets.compress = true
