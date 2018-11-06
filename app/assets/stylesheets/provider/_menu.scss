@@ -1,3 +1,40 @@
+/* Menu - Login Page */
+ul#second_nav {
+  margin: line-height-times(-1) 0 line-height-times(1);
+  border-bottom: $border-width solid $border-color;
+  height: line-height-times(2);
+
+  li {
+    display: inline;
+    list-style-type: none;
+
+    &:first-child {
+      margin: 0;
+
+      a {
+        padding-left: 0;
+      }
+    }
+
+    a {
+      display: inline-block;
+      padding: 0 line-height-times(1/2);
+      color: $submenu-color;
+      line-height: line-height-times(2);
+      height: line-height-times(2);
+
+      &:hover {
+        color: $submenu-hover-color;
+      }
+    }
+
+    & a.active,
+    &.active a {
+      color: $submenu-active-color;
+    }
+  }
+}
+
 #subsubmenu {
   height: line-height-times(1);
   padding: 0 0 line-height-times(1.5) 0;
