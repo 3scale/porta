@@ -1,8 +1,8 @@
 /* Menu - Login Page */
-ul#second_nav {
-  margin: line-height-times(-1) 0 line-height-times(1);
+ul.login_form_links {
   border-bottom: $border-width solid $border-color;
   height: line-height-times(2);
+  margin: line-height-times(-1) 0 line-height-times(1);
 
   li {
     display: inline;
@@ -17,18 +17,18 @@ ul#second_nav {
     }
 
     a {
-      display: inline-block;
-      padding: 0 line-height-times(1/2);
       color: $submenu-color;
-      line-height: line-height-times(2);
+      display: inline-block;
       height: line-height-times(2);
+      line-height: line-height-times(2);
+      padding: 0 line-height-times(1/2);
 
       &:hover {
         color: $submenu-hover-color;
       }
     }
 
-    & a.active,
+    &.active,
     &.active a {
       color: $submenu-active-color;
     }
