@@ -55,6 +55,29 @@ ruby -v
 
 > Mac OS X 10.13 comes with 2.3.7 but you might also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
 
+#### Node version
+
+The project supports **Version: 8.X.X**.
+
+You might want to use [nvm](https://github.com/creationix/nvm/) to install and work with specific Node versions:
+
+```bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+
+Restart the terminal and install Node:
+
+```bash
+nvm install 8
+nvm use 8
+```
+
+###### As an alternative for Mac OS, and if you don't want multiple Node versions, you could use homebrew:
+
+```bash
+brew install node@8
+```
+
 #### Xcode
 
 It's required to have **Xcode 9.4** installed, newer versions are not compatible with some dependencies (read more about this [here](https://github.com/thoughtbot/capybara-webkit/issues/1071)).
