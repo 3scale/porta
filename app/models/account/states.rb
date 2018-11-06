@@ -40,7 +40,7 @@ module Account::States
       end
 
       after_transition any - :scheduled_for_deletion => :scheduled_for_deletion do |account|
-        time_deleted_at = Time.zone.now.beginning_of_day
+        time_deleted_at = Time.zone.now
         account.update_attributes(deleted_at: time_deleted_at, state_changed_at: time_deleted_at)
         account.run_after_commit(:schedule_backend_sync_worker)
       end

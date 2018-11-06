@@ -216,8 +216,8 @@ class Account::StatesTest < ActiveSupport::TestCase
       Timecop.freeze do
         account.schedule_for_deletion!
         account.reload
-        assert_equal Time.zone.now.beginning_of_day, account.deleted_at
-        assert_equal Time.zone.now.beginning_of_day, account.state_changed_at
+        assert_equal Time.zone.now.to_s, account.deleted_at.to_s
+        assert_equal Time.zone.now.to_s, account.state_changed_at.to_s
       end
     end
   end
