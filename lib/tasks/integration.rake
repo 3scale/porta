@@ -112,33 +112,29 @@ namespace :integrate do
     end
     # rubocop:enable MethodLength
 
-    def self.run_tests(test_command)
-      success = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}"
-      failure = "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
-      banner = print_banner_around
-
-      require 'ci_reporter_shell'
-      report = CiReporterShell.report('tmp/junit')
-
-      command = nil
-      result = report.execute(test_command, env: {RAILS_ENV: Rails.env}) do |cmd|
-        banner.call("BEGIN: #{cmd}")
-        command = cmd
-      end
-
-      banner.call("FINISH (#{result.success? ? success : failure}): #{command} in #{format('%.1fs', result.time)}")
-
-      abort "#{test_command} FAILED" unless result.success?
-    end
-
   end
 
   # Dynamically generate all tasks from test_commands
   orchestration_helpers.test_commands(test_groups).each_key do |command|
     desc "Runs tests with #{command}"
     task command.to_s => :prepare do
-      puts "Running #{command}..."
-      orchestration_helpers.run_tests(orchestration_helpers.test_commands(test_groups)[command])
+      success = "#{Color::GREEN}SUCCESS#{Color::CLEAR_COLOR}"
+      failure = "#{Color::RED}FAILURE#{Color::CLEAR_COLOR}"
+      banner = orchestration_helpers.print_banner_around
+
+      test_command = orchestration_helpers.test_commands(test_groups)[command]
+      banner.call("BEGIN: #{test_command}")
+      ENV['RAILS_ENV'] = 'test'
+
+      succeeded = false
+      time = ::Benchmark.realtime do
+        sh "#{test_command}" do |ok, res|
+          succeeded = ok
+        end
+      end
+      banner.call("FINISH (#{succeeded ? success : failure}): #{test_command} in #{format('%.1fs', time)}")
+      abort "#{test_command} FAILED" unless succeeded
+
     end
   end
 

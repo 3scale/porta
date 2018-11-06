@@ -6,13 +6,6 @@ GIT
       activemerchant (~> 1.77.0)
 
 GIT
-  remote: https://github.com/3scale/ci_reporter_shell.git
-  revision: 30b30d655512891f56463e5f1fa125ea1f2df886
-  specs:
-    ci_reporter_shell (0.1.0)
-      ci_reporter (~> 2.0)
-
-GIT
   remote: https://github.com/3scale/fakeweb.git
   revision: 6c9392c03879b85b06b0d8f6dbabe75e69b7abb7
   ref: 6c9392c03879b85b06b0d8f6dbabe75e69b7abb7
@@ -868,7 +861,6 @@ DEPENDENCIES
   capybara-webkit (~> 1.15)!
   childprocess
   chronic
-  ci_reporter_shell!
   codecov (~> 0.1.10)
   codemirror-rails (~> 5.6)
   coffee-rails (~> 4.1)
