@@ -28,10 +28,13 @@
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
     color: $font-color;
-    min-width: 10%;
     float: left;
+    max-width: 25%;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
   }
 
@@ -334,8 +337,6 @@
 .DashboardSection-header {
   width: 100%;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
 
   &--extended {
     border-bottom: $border-width solid $border-color;
@@ -344,7 +345,7 @@
 }
 
 .DashboardNavigation {
-  flex: 1 1 0%;
+  flex: 1 1 0%; // Need to specify flex-basis for IE11 compatibility
 
   #api_filter + &--services {
     margin-top: line-height-times(2/3);
