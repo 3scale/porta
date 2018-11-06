@@ -194,7 +194,7 @@ resource "Account" do
       end
 
       context 'if scheduled_for_deletion' do
-        let(:resource) { FactoryGirl.build(:provider_account, state: 'scheduled_for_deletion', deleted_at: Time.zone.now.beginning_of_day) }
+        let(:resource) { FactoryGirl.build(:provider_account, state: 'scheduled_for_deletion', deleted_at: Time.zone.now) }
         it { should have_tags(%w[state deletion_date]).from(resource) }
       end
 
