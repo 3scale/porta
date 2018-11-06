@@ -16,11 +16,6 @@ nav.DashboardNavigation
                                                   pending_buyers,
                                                   admin_buyers_accounts_path(search: {state: 'pending'}),
                                                   'Pending'
-        // Account Plans
-        - elsif show_account_plans_on_dashboard?
-          == dashboard_secondary_collection_link 'Plan',
-                                                account_plans.not_custom,
-                                                admin_buyers_account_plans_path
 
     - if can? :manage, :partners
       li.DashboardNavigation-list-item
@@ -30,7 +25,7 @@ nav.DashboardNavigation
                                 'Applications',
                                 'cubes'
 
-        - if can?(:manage, :monitoring) && alerts.any? 
+        - if can?(:manage, :monitoring) && alerts.any?
           == dashboard_secondary_collection_link 'Alert',
                                       alerts,
                                       admin_alerts_path,
