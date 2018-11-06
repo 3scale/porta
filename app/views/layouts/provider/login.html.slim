@@ -24,7 +24,7 @@ html lang="en"
 
       div id='border' class="self_clear"
         - if @presenter.show_username_password_related_content?
-          ul id="second_nav" class="login_form_links self_clear"
+          ul id="second_nav" class="login-form-links self_clear"
             li class=(params[:request_password_reset] ? '' : 'active')
               = link_to "Sign in", provider_admin_dashboard_path
             li
