@@ -68,21 +68,13 @@ namespace :integrate do
     end
 
     def self.test_command_with_list(test_list)
-      (ENV['CIRCLECI']) ?
-        "export TESTS=$(echo '#{test_list}' | circleci tests split --split-by=timings) && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace" :
+      ENV['CIRCLECI'] ?
+        "export TESTS=$(echo '#{test_list.join("\n")}' | circleci tests split --split-by=timings) && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace" :
         "parallel_test -o '--verbose' #{test_list}"
     end
 
     # rubocop:disable MethodLength
-    def self.test_commands (test_lists)
-      tags_for_test_categories = %w[
-        @backend
-        @emails
-        @stats
-        @search
-        @no-txn
-      ]
-
+    def self.test_commands(test_lists)
 
       test_dirs = resolve_test_groups_by_path
 
@@ -90,7 +82,7 @@ namespace :integrate do
         :cucumber_javascript => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile javascript)",
         :cucumber_txn => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile txn)",
         :cucumber_no_txn => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile no-txn)",
-        :cucumber => (ENV['CIRCLECI']) ?
+        :cucumber => ENV['CIRCLECI'] ?
                        "bundle exec cucumber --profile list --profile default > all_tests &&  export TESTS=$(circleci tests split --split-by=timings all_tests) && bundle exec cucumber --profile ci $TESTS" :
                        "parallel_cucumber  -o '--profile ci' -- $(cucumber --profile list --profile default)",
 
@@ -100,7 +92,7 @@ namespace :integrate do
         :main_suite => "parallel_test --verbose #{test_dirs.join(' ')}",
         :percy => 'PERCY_ENABLE=1 cucumber -b -p parallel --tags=@percy features',
 
-        :rspec => (ENV['CIRCLECI']) ?
+        :rspec => ENV['CIRCLECI'] ?
                     "bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | awk 'BEGIN {ORS=\" \"} {print}'`" :
                     "parallel_rspec --verbose #{test_lists[:rspec]}",
         :functional => test_command_with_list(test_lists[:functional]),
@@ -128,7 +120,7 @@ namespace :integrate do
 
       succeeded = false
       time = ::Benchmark.realtime do
-        sh "#{test_command}" do |ok, res|
+        sh test_command do |ok, res|
           succeeded = ok
         end
       end
@@ -185,12 +177,8 @@ namespace :integrate do
         Rake::Task['db:create'].invoke
         Rake::Task['db:test:prepare'].invoke
       else
-        # ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:schema:load db:procedures multitenant:triggers')
         ParallelTests::Tasks.run_in_parallel('RAILS_ENV=test rake db:drop db:create db:test:prepare --verbose --trace')
       end
-        # Rake::Task['db:schema:load'].invoke
-      # Rake::Task['db:procedures'].invoke
-      # Rake::Task['multitenant:triggers'].invoke
       Rake::Task['ts:configure'].invoke
     end
   end
