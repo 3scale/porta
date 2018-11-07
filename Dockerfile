@@ -1,4 +1,4 @@
-FROM quay.io/3scale/docker:ci-2.3.1-3
+FROM quay.io/3scale/docker:ci-2.3.4-1
 
 ARG SPHINX_VERSION=2.2.11
 ARG BUNDLER_VERSION=1.12.5
