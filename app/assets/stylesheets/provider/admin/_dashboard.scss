@@ -29,8 +29,12 @@
     font-weight: $font-weight-bold;
     color: $font-color;
     float: left;
+    max-width: 25%;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
   }
 
@@ -331,8 +335,8 @@
 }
 
 .DashboardSection-header {
-  float: left;
   width: 100%;
+  display: flex;
 
   &--extended {
     border-bottom: $border-width solid $border-color;
@@ -341,7 +345,7 @@
 }
 
 .DashboardNavigation {
-  float: right;
+  flex: 1 1 0%; // Need to specify flex-basis for IE11 compatibility
 
   #api_filter + &--services {
     margin-top: line-height-times(2/3);
@@ -351,6 +355,7 @@
     @include horizontal-list();
 
     li {
+      float: right;
       padding: 0;
     }
   }
