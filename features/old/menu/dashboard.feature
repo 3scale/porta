@@ -29,12 +29,6 @@ Feature: Dashboard
     And I should see the link "Integrate this API" in the first api dashboard widget
     And I should see the link "0 ActiveDocs" in the first api dashboard widget
 
-  Scenario: Audience widget with "account_plans" switch allowed and more than 1 account plan
-    Given provider "foo.example.com" has "account_plans" switch allowed
-    And an account plan "second" of provider "foo.example.com"
-    When I go to the provider dashboard
-    Then I should see the link "2 Plans" in the audience dashboard widget
-
   Scenario: Audience widget with Finance enabled
     Given provider "foo.example.com" is charging
     And provider "foo.example.com" has "finance" switch allowed
@@ -47,4 +41,3 @@ Feature: Dashboard
     And a service plan "second" of provider "foo.example.com"
     When I go to the provider dashboard
     Then I should see the link "0 Subscriptions" in the first api dashboard widget
-    Then I should see the link "2 Plans" in the first api dashboard widget
