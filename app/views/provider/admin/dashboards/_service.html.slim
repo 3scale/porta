@@ -4,7 +4,7 @@ section.DashboardSection.DashboardSection--service class=('DashboardSection--tog
     - title = can_toggle ? 'Toggle Dashboard view' : friendly_service_name(service)
     h1.DashboardSection-title title=title class=('DashboardSection-toggle' if can_toggle)
       i.fa.fa-puzzle-piece>
-      = title
+      = friendly_service_name(service)
     = render 'service_navigation', service: service
 
   // service level widgets
