@@ -10,7 +10,7 @@
     // account level
     section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
       header.DashboardSection-header
-        h1.DashboardSection-title
+        h1.DashboardSection-title title="Audience"
           i.fa.fa-bullseye>
           | Audience
         - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :portal) || can?(:manage, :settings)

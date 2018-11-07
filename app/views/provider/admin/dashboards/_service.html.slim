@@ -1,9 +1,10 @@
 section.DashboardSection.DashboardSection--service class=('DashboardSection--toggleable is-closed u-legacy-cookie' if current_account.multiservice? && can?(:manage, :analytics)) id=(dom_id service)
   header.DashboardSection-header
     - can_toggle = current_account.multiservice? && can?(:manage, :analytics)
-    h1.DashboardSection-title title=('Toggle Dashboard view' if can_toggle) class=('DashboardSection-toggle' if can_toggle)
+    - title = can_toggle ? 'Toggle Dashboard view' : friendly_service_name(service)
+    h1.DashboardSection-title title=title class=('DashboardSection-toggle' if can_toggle)
       i.fa.fa-puzzle-piece>
-      = friendly_service_name(service)
+      = title
     = render 'service_navigation', service: service
 
   // service level widgets
