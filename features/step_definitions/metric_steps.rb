@@ -189,9 +189,9 @@ end
 And(/^makes hits invisible for that plan$/) do
   visit_edit_plan(@plan)
 
-  # TODO: not the ideal way but it is not working othersie (although in the real browser I can make it work, but not in this one)
-  assert_equal 'visible', find(:xpath, "//span[@id='metric_2_visible']")['class']
-  find(:xpath, "//*[@id='metric_2_visible']/a").click
+  visibility_field = find(:xpath, "//*[@id='metric_2_visible']")
+  assert_equal 'visible', visibility_field['class']
+  visibility_field.click
   step 'I wait for 1 seconds'
-  assert_equal 'hidden', find(:xpath, "//span[@id='metric_2_visible']")['class']
+  assert_equal 'hidden', visibility_field['class']
 end
