@@ -25,12 +25,6 @@ nav.DashboardNavigation
                                        'Applications',
                                        'cubes'
 
-        // Application Plans
-        - if can?(:manage, :plans) && !master_on_premises?
-          == dashboard_secondary_collection_link 'Plan',
-                                                 service.application_plans.not_custom,
-                                                 admin_service_application_plans_path(service)
-
     - unread_alerts = current_account.buyer_alerts.by_service(service).unread
     - if can?(:manage, :monitoring) && unread_alerts.any?
       li.DashboardNavigation-list-item
@@ -47,12 +41,6 @@ nav.DashboardNavigation
         => dashboard_collection_link 'Subscription',
                                      service.service_contracts,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id})
-
-        // Service Plans
-        - if show_service_plans_on_dashboard?(service)
-          == dashboard_secondary_collection_link 'Plan',
-                                                service.service_plans.not_custom,
-                                                admin_service_service_plans_path(service)
 
     // Active docs
     - if can?(:manage, :plans)
