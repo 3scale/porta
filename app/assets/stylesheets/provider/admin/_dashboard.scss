@@ -345,7 +345,7 @@
 }
 
 .DashboardNavigation {
-  flex: 1 1 0%;
+  flex: 1 1 0%; // Need to specify flex-basis for IE11 compatibility
 
   #api_filter + &--services {
     margin-top: line-height-times(2/3);
