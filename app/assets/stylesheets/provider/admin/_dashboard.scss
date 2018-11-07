@@ -29,6 +29,7 @@
     font-weight: $font-weight-bold;
     color: $font-color;
     float: left;
+    min-width: 10%;
     max-width: 25%;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -351,11 +352,14 @@
     margin-top: line-height-times(2/3);
   }
 
+  &--services ul li:last-child {
+    float: right;
+  }
+
   &-list {
     @include horizontal-list();
 
     li {
-      float: right;
       padding: 0;
     }
   }
