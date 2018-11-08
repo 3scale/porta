@@ -184,6 +184,9 @@ module System
     config.three_scale.plan_rules = ActiveSupport::OrderedOptions.new
     config.three_scale.plan_rules.merge!(try_config_for(:plan_rules) || {})
 
+    config.three_scale.prometheus = ActiveSupport::OrderedOptions.new
+    config.three_scale.prometheus.merge!(try_config_for(:prometheus) || {})
+
     three_scale = config_for(:settings).symbolize_keys
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
