@@ -75,6 +75,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/smtp.yml
 /config/zync.yml
 /config/redhat_customer_portal.yml
+/config/prometheus.yml
 /db/*.sql
 /db/safe.json
 /db/*.sql*

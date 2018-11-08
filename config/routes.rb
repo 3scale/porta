@@ -11,7 +11,12 @@ class CdnAssets
   end
 end
 
+
 System::Application.routes.draw do
+  constraints MasterDomainWithAuthBasicConstraint.new(ThreeScale.config.prometheus.username, ThreeScale.config.prometheus.password) do
+    mount Sidekiq::Prometheus::Exporter.to_app, at: '/system'
+  end
+
   mount CdnAssets.new => '/_cdn_assets_' unless Rails.configuration.three_scale.assets_cdn_host
 
   resource :openid

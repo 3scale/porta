@@ -2,6 +2,7 @@
 
 require 'action_controller/metal/http_authentication.rb'
 
+# TODO: remove when migrated to rails 5.0
 ActionController::HttpAuthentication::Basic.module_eval do
   def auth_scheme(request)
     request.authorization.to_s.split(' ', 2).first
@@ -11,4 +12,3 @@ ActionController::HttpAuthentication::Basic.module_eval do
     request.authorization.to_s.split(' ', 2).second
   end
 end
-
