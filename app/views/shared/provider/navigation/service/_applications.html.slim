@@ -2,6 +2,7 @@
        title: 'Listing',
        path: admin_service_applications_path(@service)
 
-= render vertical_nav_item,
-    title: 'Application Plans',
-    path: admin_service_application_plans_path(@service)
+- if can?(:manage, :plans)
+  = render vertical_nav_item,
+      title: 'Application Plans',
+      path: admin_service_application_plans_path(@service)

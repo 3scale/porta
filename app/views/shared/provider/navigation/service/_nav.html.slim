@@ -12,7 +12,7 @@
                      vertical_nav_item: vertical_nav_item,
                      submenu: :monitoring }
 
-- if can?(:manage, :partners)
+- if can?(:manage, :applications)
   = render partial: 'shared/provider/navigation/service/applications',
            layout: layout_secondary_nav,
            locals: { title: 'Applications',
@@ -28,7 +28,7 @@
                       vertical_nav_item: vertical_nav_item,
                       submenu: :subscriptions }
 
-- if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible?
+- if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
   = render partial: 'shared/provider/navigation/service/end_users.html.slim',
            layout: layout_secondary_nav,
            locals: { title: 'End-users',
