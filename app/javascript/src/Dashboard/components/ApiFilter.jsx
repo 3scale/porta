@@ -1,7 +1,7 @@
 // TODO: @flow
 // TODO: test
-import 'core-js/modules/es6.set'
-import 'core-js/modules/es6.map'
+import 'core-js/es6/map'
+import 'core-js/es6/set'
 import 'core-js/es6/array'
 
 import React from 'react'

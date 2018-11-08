@@ -1,7 +1,7 @@
 import React from 'react'
 import Enzyme, { render } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { ActiveMenuTitle } from './ActiveMenuTitle'
+import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 
 Enzyme.configure({ adapter: new Adapter() })
 
