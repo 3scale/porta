@@ -249,7 +249,7 @@ jobs:
       - *upload-coverage
 
   cucumber:
-    parallelism: 40
+    parallelism: 30
     resource_class: small
     docker:
       - *system-builder

@@ -73,18 +73,23 @@ namespace :integrate do
         "parallel_test -o '--verbose' #{test_list}"
     end
 
+    def self.cucumber_command_with_profile(profile)
+      ENV['CIRCLECI'] ?
+        "bundle exec cucumber --profile list --profile #{profile} > all_tests &&  export TESTS=$(circleci tests split --split-by=timings all_tests) && bundle exec cucumber --profile ci $TESTS" :
+        "parallel_cucumber  -o '--profile ci' -- $(cucumber --profile list --profile #{profile})"
+    end
+
     # rubocop:disable MethodLength
     def self.test_commands(test_lists)
 
       test_dirs = resolve_test_groups_by_path
 
       {
-        :cucumber_javascript => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile javascript)",
-        :cucumber_txn => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile txn)",
-        :cucumber_no_txn => "parallel_cucumber -o '--profile ci' -- $(cucumber --profile list --profile no-txn)",
-        :cucumber => ENV['CIRCLECI'] ?
-                       "bundle exec cucumber --profile list --profile default > all_tests &&  export TESTS=$(circleci tests split --split-by=timings all_tests) && bundle exec cucumber --profile ci $TESTS" :
-                       "parallel_cucumber  -o '--profile ci' -- $(cucumber --profile list --profile default)",
+        :cucumber_javascript => cucumber_command_with_profile('javascript'),
+        :cucumber_txn => cucumber_command_with_profile('txn'),
+        :cucumber_no_txn => cucumber_command_with_profile('no-txn'),
+        :cucumber => cucumber_command_with_profile('default'),
+
 
         :swagger => 'rake doc:swagger:validate:all && rake doc:swagger:generate:all',
         :frontend => 'yarn test -- --reporters dots,junit --browsers Firefox && yarn jest',
