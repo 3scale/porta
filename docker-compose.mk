@@ -69,11 +69,8 @@ clean: $(DOCKER_COMPOSE)
 	- docker rm --force --volumes $(PROJECT)-build $(PROJECT)-build-run 2> /dev/null
 	- $(foreach service,$(SERVICES),docker rm --force --volumes $(PROJECT)-$(service) 2> /dev/null;)
 	- sudo groupadd --gid 1042 3scale-dev
-#	- sudo usermod -aG 1042 $$USER
 	- sudo chown -R :1042 .
 	- sudo chmod -R 775 .
-#	- sudo chmod -R ug+s .
-#	- sudo chmod -R ug-s .bin
 	- umask 0000
 
 clean-tmp: COMPOSE_FILE = $(COMPOSE_TEST_FILE)

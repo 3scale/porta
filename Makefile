@@ -36,14 +36,6 @@ RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_MAX=72226778
 RUBY_ENV += RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
 
 
-#ifdef CIRCLECI
-# FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
-#SCRIPT_TEST = echo 'export TESTS=\"' > $${JOB}_files && bundle exec rake integrate:files:$${JOB} | circleci tests split --split-by=timings >> $${JOB}_files && echo '\"' >> $${JOB}_files && cat $${JOB}_files && source ./$${JOB}_files && bundle exec rake test:run TESTOPTS=--verbose --verbose --trace
-#else
-# FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec rake test:files:$$JOB as the TESTS env var and wanted to get moving.
-#SCRIPT_RAKE = bundle exec rake integrate:$${JOB}
-#endif
-
 default: all
 
 
@@ -86,20 +78,12 @@ test-integration: JOB = integrate:integration
 test-integration:
 	$(MAKE) test-rake JOB="${JOB}"
 
-#ifdef CIRCLECI
-#test-rspec: CMD = bundle exec rspec --format progress `circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=timings | tr '\n' ' '`
-#else
 test-rspec: JOB = integrate:rspec
 test-rspec:
 	$(MAKE) test-rake JOB="${JOB}"
 
 
-#ifdef CIRCLECI
-#test-cucumber: CMD = make dnsmasq_set && bundle exec rake integrate:cucumber && make dnsmasq_unset
-#else
-# FIXME: the below should really be improved. I couldn't figure out a way to set the output of bundle exec cucumber --profile list --profile default as the TESTS env var and wanted to get moving.
 test-cucumber: CMD = make dnsmasq_set && bundle exec rake integrate:cucumber && make dnsmasq_unset
-#endif
 test-cucumber: test-prep
 
 test-licenses: CMD = bundle exec rake ci:license_finder:run
