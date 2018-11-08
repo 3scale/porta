@@ -12,7 +12,7 @@ function getWrapper (apis = [], audienceLink) {
 let contextSelector
 
 const apis = [
-  { service: { name: 'api 0', id: 0 } },
+  { service: { name: 'api 0', id: 0, link: 'foo.bar' } },
   { service: { name: 'api 1', id: 1 } },
   { service: { name: 'api 2', id: 2 } }
 ]
@@ -96,6 +96,14 @@ describe('When there is only 1 service', () => {
     expect(api.exists()).toEqual(true)
     expect(api.text()).toEqual('api 0')
   })
+
+  it('should mark the api as unauthorized when link is undefined', () => {
+    contextSelector = getWrapper(apis.slice(0, 1), audienceLink)
+    expect(contextSelector.find('.unauthorized')).toHaveLength(0)
+
+    contextSelector = getWrapper(apis.slice(1, 2), audienceLink)
+    expect(contextSelector.find('.unauthorized')).toHaveLength(1)
+  })
 })
 
 describe('When there are many services', () => {
@@ -138,5 +146,10 @@ describe('When there are many services', () => {
 
     input.simulate('change', { target: { value: 'wubba lubba dub dub' } })
     expect(contextSelector.find('.PopNavigation-results').children()).toHaveLength(0)
+  })
+
+  it('should mark apis as unauthorized when link is undefined', () => {
+    const apiList = contextSelector.find('.PopNavigation-results').children()
+    expect(apiList.find('.unauthorized')).toHaveLength(2)
   })
 })
