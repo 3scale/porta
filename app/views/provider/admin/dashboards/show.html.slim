@@ -14,7 +14,7 @@
           i.fa.fa-bullseye>
           | Audience
         - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :portal) || can?(:manage, :settings)
-          = render 'developers_navigation', buyers: current_account.buyers,
+          = render 'developers_navigation', buyers: current_account.buyer_accounts.not_master,
                                           pending_buyers: current_account.buyers.pending,
                                           account_plans: current_account.account_plans.not_custom,
                                           forum_topics: current_account.forum.recent_topics,
