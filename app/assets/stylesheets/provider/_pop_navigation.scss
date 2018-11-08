@@ -83,6 +83,10 @@
     display: block;
     padding: line-height-times(1 / 2);
 
+    &.unauthorized {
+      pointer-events: none
+    }
+
     &:hover {
       color: $link-color;
     }

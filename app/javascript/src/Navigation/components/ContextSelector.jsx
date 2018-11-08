@@ -44,16 +44,21 @@ class ContextSelector extends React.Component {
     )
   }
 
-  getClassNamesFor ({ menu, api }) {
+  getClassNamesFor ({ menu, service }) {
     const { activeMenu, currentApi } = this.props
+    let classNames = 'PopNavigation-link'
 
     if (menu === 'dashboard' && activeMenu === 'dashboard' ||
       menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1) ||
-      api && (['serviceadmin', 'monitoring'].indexOf(activeMenu) !== -1) && api === currentApi.service.id) {
-      return 'PopNavigation-link current-context'
+      service && (['serviceadmin', 'monitoring'].indexOf(activeMenu) !== -1) && service.id === currentApi.service.id) {
+      classNames += ' current-context'
     }
 
-    return 'PopNavigation-link'
+    if (service && !service.link) {
+      classNames += ' unauthorized'
+    }
+
+    return classNames
   }
 
   renderOptions () {
@@ -67,7 +72,7 @@ class ContextSelector extends React.Component {
 
     const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>
+        <a className={this.getClassNamesFor({ service })} href={service.link}>
           <i className="fa fa-puzzle-piece" />{service.name}
         </a>
       </li>
