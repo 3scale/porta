@@ -110,7 +110,7 @@ module Migration
       end
 
       def self.find_invoice_zombies
-        ids = Invoice.connection.execute("select invoices.id from invoices join accounts on invoices.buyer_account_id = accounts.id where invoices.state in ('finalized', 'pending', 'open', 'unpaid') and accounts.deleted_at IS NOT NULL").map(&:first)
+        ids = Invoice.connection.execute("select invoices.id from invoices join accounts on invoices.buyer_account_id = accounts.id where invoices.state in ('finalized', 'pending', 'open', 'unpaid') and accounts.state = 'scheduled_for_deletion'").map(&:first)
 
         puts "There are #{ids.count} zombies."
       end

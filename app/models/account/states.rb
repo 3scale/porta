@@ -40,13 +40,10 @@ module Account::States
       end
 
       after_transition any - :scheduled_for_deletion => :scheduled_for_deletion do |account|
-        time_deleted_at = Time.zone.now
-        account.update_attributes(deleted_at: time_deleted_at, state_changed_at: time_deleted_at)
         account.run_after_commit(:schedule_backend_sync_worker)
       end
 
       after_transition :scheduled_for_deletion => any - :scheduled_for_deletion do |account, _transition|
-        account.update_attributes(deleted_at: nil, state_changed_at: nil)
         account.run_after_commit(:schedule_backend_sync_worker)
       end
 
@@ -57,6 +54,11 @@ module Account::States
 
       after_transition to: :approved, from: [:created, :pending] do |account|
         account.bought_account_contract&.accept
+      end
+
+      after_transition any => any do |account|
+        time_state_changed_at = Time.zone.now
+        account.update_attributes(state_changed_at: time_state_changed_at, deleted_at: time_state_changed_at)
       end
 
       event :make_pending do
@@ -91,17 +93,19 @@ module Account::States
       end
     end
 
+    scope :without_deleted, ->(without = true) { where.has { state != :scheduled_for_deletion } if without }
+
     scope :by_state, ->(state) do
       where(:state => state.to_s) if state.to_s != "all"
     end
 
     scope :deleted_since, ->(value = nil) do
-      scheduled_for_deletion.where.has { deleted_at <= (value || PERIOD_BEFORE_DELETION.ago) }
+      scheduled_for_deletion.where.has { state_changed_at <= (value || PERIOD_BEFORE_DELETION.ago) }
     end
 
     def deletion_date
-      return nil unless deleted_at
-      (deleted_at + PERIOD_BEFORE_DELETION)
+      return nil if state_changed_at.blank? || !scheduled_for_deletion?
+      (state_changed_at + PERIOD_BEFORE_DELETION)
     end
 
     def enabled?
