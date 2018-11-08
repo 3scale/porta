@@ -1,6 +1,18 @@
 require 'test_helper'
 
 class Account::StatesTest < ActiveSupport::TestCase
+  test '.without_deleted' do
+    accounts = FactoryGirl.create_list(:simple_account, 2)
+    accounts.first.schedule_for_deletion!
+
+    ids_without_deleted = Account.without_deleted.pluck(:id)
+    assert_not_includes ids_without_deleted, accounts.first.id
+    assert_includes     ids_without_deleted, accounts.last.id
+
+    ids_with_deleted = Account.without_deleted(false).pluck(:id)
+    assert_includes ids_with_deleted, accounts.first.id
+    assert_includes ids_with_deleted, accounts.last.id
+  end
 
   def test_events_when_state_changed
     account = FactoryGirl.create(:simple_account)
@@ -153,11 +165,11 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     account_deleted_recently = accounts[0]
     account_deleted_recently.schedule_for_deletion!
-    account_deleted_recently.update_attribute(:deleted_at, (Account::States::PERIOD_BEFORE_DELETION.ago + 1.day))
+    account_deleted_recently.update_attribute(:state_changed_at, (Account::States::PERIOD_BEFORE_DELETION.ago + 1.day))
 
     account_deleted_long_ago = accounts[1]
     account_deleted_long_ago.schedule_for_deletion!
-    account_deleted_long_ago.update_attribute(:deleted_at, Account::States::PERIOD_BEFORE_DELETION.ago)
+    account_deleted_long_ago.update_attribute(:state_changed_at, Account::States::PERIOD_BEFORE_DELETION.ago)
 
     account_not_deleted = accounts[2]
 
@@ -202,9 +214,6 @@ class Account::StatesTest < ActiveSupport::TestCase
       BackendProviderSyncWorker.expects(:enqueue).with(account.id)
 
       account.resume!
-      account.reload
-      assert_nil account.deleted_at
-      assert_nil account.state_changed_at
     end
 
     def test_schedule_for_deletion
@@ -213,12 +222,20 @@ class Account::StatesTest < ActiveSupport::TestCase
 
       BackendProviderSyncWorker.expects(:enqueue).with(account.id)
 
-      time = Time.zone.now
-      Time.zone.stubs(now: time)
       account.schedule_for_deletion!
-      account.reload
-      assert_equal time.to_s, account.deleted_at.to_s
-      assert_equal time.to_s, account.state_changed_at.to_s
     end
+
+    def test_state_changed_at_from_any_to_any
+      account = FactoryGirl.create(:simple_provider, state: :created)
+
+      %i[make_pending! reject! approve! suspend! resume! schedule_for_deletion!].each do |transition|
+        Timecop.freeze do
+          account.public_send(transition)
+          assert_equal Time.zone.now.to_s, account.reload.state_changed_at.to_s
+          assert_equal Time.zone.now.to_s, account.reload.deleted_at.to_s
+        end
+      end
+    end
+
   end
 end
