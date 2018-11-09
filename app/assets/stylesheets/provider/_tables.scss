@@ -210,6 +210,10 @@ table.data td, table.horizontal th {
   border-bottom: $border-width solid $border-color;
 }
 
+table.data tr td b.metric-name {
+  word-break: break-word;
+}
+
 table.list th {
   text-align: left;
   padding-right: line-height-times(1/2);
