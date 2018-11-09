@@ -1,28 +1,29 @@
-FROM quay.io/3scale/docker:ci-2.3.1-3
+FROM quay.io/3scale/docker:ci-2.3.7-1
 
 ARG SPHINX_VERSION=2.2.11
 ARG BUNDLER_VERSION=1.12.5
 ARG DB=mysql
 
 # Don't use ubuntu mirrors. Rather slow download, than failing build.
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse\n\
-deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse\n\
-deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse\n\
-deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse" > /etc/apt/sources.list
+RUN echo "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse\n\
+deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse\n\
+deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse\n\
+deb http://archive.ubuntu.com/ubuntu xenial-security main restricted universe multiverse" > /etc/apt/sources.list
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 60C317803A41BA51845E371A1E9377A2BA9EF27F \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D101F7899D41F3C3 \
  && apt-get update -y && apt-get install -y apt-transport-https \
- && echo 'deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main' > /etc/apt/sources.list.d/toolchain.list \
+ && echo 'deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu xenial main' > /etc/apt/sources.list.d/toolchain.list \
  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
- && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
- && apt-install g++-4.8 nodejs squid3 yarn=1.2.1-1 libaio1 \
+ && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && apt-get install -y -f g++-4.8 nodejs squid3 yarn=1.2.1-1 libaio1 \
  && gem install bundler --version ${BUNDLER_VERSION} --no-document \
  && sed --in-place "s/databases 16/databases 32/" /etc/redis/redis.conf \
+ && mkdir /etc/squid3 \
  && echo 'dns_nameservers 8.8.8.8 8.8.4.4' >> /etc/squid3/squid.conf \
- && cd /tmp && curl -o sphinxsearch.deb -J -L -O https://github.com/sphinxsearch/sphinx/releases/download/${SPHINX_VERSION}-release/sphinxsearch_${SPHINX_VERSION}-release-1.precise_amd64.deb \
- && curl -o unixODBC.deb -J -L -O https://github.com/3scale/unixODBC/releases/download/2.3.6-ubuntu-12.04/unixODBC_2.3.6_amd64.deb \
- && apt-install libodbc1 \
+ && cd /tmp && curl -o sphinxsearch.deb -J -L -O https://github.com/sphinxsearch/sphinx/releases/download/${SPHINX_VERSION}-release/sphinxsearch_${SPHINX_VERSION}-release-1.xenial_amd64.deb \
+ && curl -o unixODBC.deb -J -L -O https://github.com/3scale/unixODBC/releases/download/2.3.6-ubuntu-16.04/unixODBC_2.3.6_amd64.deb \
+ && apt-get -y install libodbc1 \
  && dpkg --install sphinxsearch.deb \
  && dpkg --install unixODBC.deb \
  && apt-get autoremove -y \
