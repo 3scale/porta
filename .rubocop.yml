@@ -115,7 +115,7 @@ Layout/SpaceInsideHashLiteralBraces:
 
 # Offense count: 514
 # Cop supports --auto-correct.
-Style/SpaceInsideBrackets:
+Layout/SpaceInsideReferenceBrackets:
   Enabled: false
 
 # Offense count: 240
@@ -166,7 +166,7 @@ Layout/MultilineHashBraceLayout:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: symmetrical, new_line, same_line
-Style/MultilineMethodCallBraceLayout:
+Layout/MultilineMethodCallBraceLayout:
   Enabled: false
 
 # Offense count: 7988
