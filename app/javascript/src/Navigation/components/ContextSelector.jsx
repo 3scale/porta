@@ -44,16 +44,31 @@ class ContextSelector extends React.Component {
     )
   }
 
-  getClassNamesFor ({ menu, api }) {
-    const { activeMenu, currentApi } = this.props
+  getClassNamesForMenu (menu) {
+    const { activeMenu } = this.props
 
     if (menu === 'dashboard' && activeMenu === 'dashboard' ||
-      menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1) ||
-      api && (['serviceadmin', 'monitoring'].indexOf(activeMenu) !== -1) && api === currentApi.service.id) {
+      menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)) {
       return 'PopNavigation-link current-context'
     }
 
     return 'PopNavigation-link'
+  }
+
+  getClassNamesForService (service) {
+    const { activeMenu, currentApi } = this.props
+    let classNames = 'PopNavigation-link'
+
+    if (['serviceadmin', 'monitoring'].indexOf(activeMenu) !== -1 &&
+      service.id === currentApi.service.id) {
+      classNames += ' current-context'
+    }
+
+    if (!service.link) {
+      classNames += ' unauthorized'
+    }
+
+    return classNames
   }
 
   renderOptions () {
@@ -67,7 +82,7 @@ class ContextSelector extends React.Component {
 
     const displayedApis = filteredApis.map(({ service }) => (
       <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesFor({ api: service.id })} href={service.link}>
+        <a className={this.getClassNamesForService(service)} href={service.link}>
           <i className="fa fa-puzzle-piece" />{service.name}
         </a>
       </li>
@@ -92,13 +107,13 @@ class ContextSelector extends React.Component {
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesFor({ menu: 'dashboard' })} href={DASHBOARD_PATH}>
+            <a className={this.getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
               <i className='fa fa-home' />Dashboard
             </a>
           </li>
           {audienceLink ? (
             <li className="PopNavigation-listItem">
-              <a className={this.getClassNamesFor({ menu: 'audience' })} href={audienceLink}>
+              <a className={this.getClassNamesForMenu('audience')} href={audienceLink}>
                 <i className='fa fa-bullseye' />Audience
               </a>
             </li>

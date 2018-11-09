@@ -1,5 +1,6 @@
 // Copied from colors.scss
 $lochMaraBlue: #0088ce; //pf-blue-400
+$font-color: #393f44; // pf-black-800
 
 .current-context {
   color: $lochMaraBlue;
@@ -7,4 +8,12 @@ $lochMaraBlue: #0088ce; //pf-blue-400
 
 .PopNavigation-link > i {
   padding-right: 0.5rem;
+}
+
+.unauthorized {
+  cursor: not-allowed;
+
+  &:hover {
+    color: $font-color;
+  }
 }
