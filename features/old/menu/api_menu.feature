@@ -18,7 +18,6 @@ Feature: API menu
     | ActiveDocs                |
     | Integration               |
 
-  @javascript
   Scenario: Analytics sub menu structure
     When I follow "Analytics" within the main menu
     Then I should see menu items
@@ -30,14 +29,12 @@ Feature: API menu
     | Alerts                    |
     | Integration Errors        |
 
-  @javascript
   Scenario: Applications sub menu structure
     When I follow "Applications" within the main menu
     Then I should see menu items
     | Listing                   |
     | Application Plans         |
 
-  @javascript
   Scenario: Integration sub menu structure
     When I follow "Integration" within the main menu
     Then I should see menu items
@@ -56,7 +53,6 @@ Feature: API menu
     | ActiveDocs                |
     | Integration               |
 
-  @javascript
   Scenario: Subscriptions sub menu structure
     When provider "foo.example.com" has "service_plans" switch allowed
     When I go to the API dashboard page
@@ -64,7 +60,6 @@ Feature: API menu
     Then I should see menu items
     | Service Subscriptions     |
     | Service Plans             |
-
 
   Scenario: API menu structure with end user plans enabled
     When provider "foo.example.com" has "end_users" switch allowed
@@ -77,7 +72,6 @@ Feature: API menu
     | ActiveDocs                |
     | Integration               |
 
-  @javascript
   Scenario: End-users sub menu structure
     When provider "foo.example.com" has "end_users" switch allowed
     When I go to the API dashboard page

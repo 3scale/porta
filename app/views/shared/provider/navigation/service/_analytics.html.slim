@@ -22,6 +22,7 @@
       title: 'Alerts',
       path: admin_service_alerts_path(@service)
 
-= render vertical_nav_item,
-      title: 'Integration Errors',
-      path: admin_service_errors_path(@service)
+- if can?(:manage, :plans)
+  = render vertical_nav_item,
+        title: 'Integration Errors',
+        path: admin_service_errors_path(@service)
