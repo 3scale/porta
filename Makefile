@@ -82,21 +82,25 @@ test-rspec: JOB = integrate:rspec
 test-rspec:
 	$(MAKE) test-rake JOB="${JOB}"
 
+test-licenses: JOB = ci:license_finder:run
+test-licenses:
+	$(MAKE) test-rake JOB="${JOB}"
+
+test-swaggerdocs: JOB = doc:swagger:validate:all doc:swagger:generate:all
+test-swaggerdocs:
+	$(MAKE) test-rake JOB="${JOB}"
+
+test-jspm: JOB = ci:jspm
+test-jspm:
+	$(MAKE) test-rake JOB="${JOB}"
+
+test-yarn: JOB = integrate:frontend
+test-yarn:
+	$(MAKE) test-rake JOB="${JOB}"
+
 
 test-cucumber: CMD = make dnsmasq_set && bundle exec rake integrate:cucumber && make dnsmasq_unset
 test-cucumber: test-prep
-
-test-licenses: CMD = bundle exec rake ci:license_finder:run
-test-licenses: test-prep
-
-test-swaggerdocs: CMD = bundle exec rake doc:swagger:validate:all && bundle exec rake doc:swagger:generate:all
-test-swaggerdocs: test-prep
-
-test-jspm: CMD = bundle exec rake ci:jspm --trace
-test-jspm: test-prep
-
-test-yarn: CMD = bundle exec rake integrate:frontend
-test-yarn: test-prep
 
 test-lint: bundle test-licenses test-swaggerdocs test-jspm test-yarn
 
