@@ -7,6 +7,16 @@ COMPOSE_PROJECT_NAME := $(PROJECT)
 COMPOSE_FILE := docker-compose.yml
 COMPOSE_TEST_FILE := docker-compose.test-$(DB).yml
 
+JENKINS_ENV = DB
+ifdef JENKINS_URL # if actually running on jenkins
+JENKINS_ENV += JENKINS_URL BUILD_TAG BUILD_NUMBER BUILD_URL
+endif
+JENKINS_ENV += GIT_BRANCH GIT_COMMIT GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_EMAIL GIT_COMMITTER_NAME PERCY_ENABLE
+JENKINS_ENV += BUNDLE_GEMFILE
+JENKINS_ENV += PARALLEL_TEST_PROCESSORS
+
+JENKINS_ENV += MULTIJOB_KIND PERCY_ENABLE PERCY_TOKEN COVERAGE PROXY_ENABLED
+
 DOCKER_ENV = CI=true
 
 DOCKER_ENV += $(foreach env,$(JENKINS_ENV),$(env)=$(value $(env)))
@@ -91,6 +101,13 @@ docker: ## Prints docker version and info
 	@echo
 
 info: docker jenkins-env # Prints relevant environment info
+
+jenkins-env: # Prints env vars
+	@echo
+	@echo "======= Jenkins environment ======="
+	@echo
+	@env
+	@echo
 
 oracle-database: ## Starts Oracle database container
 oracle-database: ORACLE_DATA_DIR ?= $(HOME)

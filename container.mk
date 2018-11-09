@@ -1,8 +1,24 @@
 
 all: clean-tmp test ## Cleans environment, builds docker image and runs tests
 
+boot_database:
+	until bin/rake boot:database TEST_ENV_NUMBER=8 ; do \
+		sleep 1 ; \
+		echo -n "." ; \
+	done
+	if [ "x$$DB" = "xoracle" ]; then \
+		echo "Waiting for 60 seconds for the DB to be ready" ; \
+		sleep 60 ; \
+	fi
+
 clean-tmp: ## Removes temporary files
 	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
+
+dnsmasq_set:
+	echo "nameserver $$DNSMASQ_PORT_53_TCP_ADDR" > resolv.conf.dnsmasq && sudo cp /etc/resolv.conf /etc/resolv.conf.dist && sudo cp resolv.conf.dnsmasq /etc/resolv.conf
+
+dnsmasq_unset:
+	sudo cp /etc/resolv.conf.dist /etc/resolv.conf
 
 info: jenkins-env # Prints relevant environment info
 
@@ -25,6 +41,6 @@ test-run: clean-tmp
 
 test-with-info: info
 	@echo
-	@echo "======= Tests ======="
+	@echo "======= Tests: ${CMD} ======="
 	@echo
 	$(MAKE) test-run --keep-going CMD="${CMD}"

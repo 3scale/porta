@@ -133,16 +133,16 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Licences check
-          command: make test-licenses
+          command: make test-rake JOB="ci:license_finder:run"
       - run:
           name: Swagger validation
-          command: make test-swaggerdocs
+          command: make test-rake JOB="doc:swagger:validate:all doc:swagger:generate:all"
       - run:
           name: JSPM
-          command: make test-jspm
+          command: make test-rake JOB="ci:jspm"
       - run:
           name: Yarn test
-          command: make test-yarn
+          command: make test-rake JOB="integrate:frontend"
       - *store-junit-test-results
       - *store-test-artifacts
       - store_artifacts:
@@ -171,7 +171,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Rails tests
-          command: make test-unit
+          command: make test-rake JOB="integrate:unit"
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -194,7 +194,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Rails tests
-          command: make test-functional
+          command: make test-rake JOB="integrate:functional"
           environment:
             LC_ALL: en_US.UTF-8
       - *store-junit-test-results
@@ -219,7 +219,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Rails tests
-          command: make test-integration
+          command: make test-rake JOB="integrate:integration"
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -242,7 +242,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Rspec tests
-          command: make test-rspec
+          command: make test-rake JOB="integrate:rspec"
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
