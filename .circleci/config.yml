@@ -47,6 +47,12 @@ system-builder: &system-builder
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
 
+clone-oracle-libs: &clone-oracle-libs
+  run:
+    name: "Fetch oracle libraries"
+    command: |
+      git clone git@github.com:3scale/system-libraries.git
+      cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
 
 jobs:
   dependencies_bundler:
@@ -249,8 +255,8 @@ jobs:
       - *upload-coverage
 
   cucumber:
-    parallelism: 30
-    resource_class: small
+    parallelism: 40
+    resource_class: medium
     docker:
       - *system-builder
       - image: quay.io/mikz/dnsmasq
@@ -269,8 +275,13 @@ jobs:
       - *git-submodules
       - *attach-to-workspace
       - run:
-          name: Run cucumber tests
-          command: make test-cucumber
+          name: Run cucumber javascript tests
+          command: make test-rake JOB="integrate:cucumber" PROXY_ENABLED=true
+      - run:
+          name: Restore internet access
+          command: |
+            make dnsmasq_unset
+          when: always
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts

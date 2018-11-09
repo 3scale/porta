@@ -3,7 +3,7 @@
 #test-prep: bundle npm-install test-with-info
 
 ifeq ($(PROXY_ENABLED),true)
-rake_wrapper: CMD = make dnsmasq_set; bundle exec rake $${JOB} --verbose --trace; export TEST_EXIT_CODE=$$? && echo 'tests exit code: $$TEST_EXIT_CODE'; make dnsmasq_unset; exit $$TEST_EXIT_CODE
+rake_wrapper: CMD = make dnsmasq_set && bundle exec rake $${JOB} --verbose --trace && make dnsmasq_unset
 else
 rake_wrapper: CMD = bundle exec rake $${JOB} --verbose --trace
 endif
