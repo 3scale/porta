@@ -99,6 +99,9 @@ table.data {
     td.actions {
       text-align: right;
     }
+    td b.metric-name {
+      word-break: break-word;
+    }
   }
 
   &.u-sixEqualColumns tr td {
@@ -208,10 +211,6 @@ table .select {
 
 table.data td, table.horizontal th {
   border-bottom: $border-width solid $border-color;
-}
-
-table.data tr td b.metric-name {
-  word-break: break-word;
 }
 
 table.list th {
