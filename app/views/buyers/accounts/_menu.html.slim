@@ -7,7 +7,7 @@ ul#subsubmenu
         class: "SubSubMenuItem-link"
 
   li.SubSubMenuItem.SubSubMenuItem--branch
-    = link_to_unless_current_styled pluralize(number_to_human(@account.bought_cinstances.count), 'Application'),
+    = link_to_unless_current_styled pluralize(number_to_human(current_user.accessible_cinstances.count), 'Application'),
       admin_buyers_account_applications_path(@account),
       title: "applications",
       class: "SubSubMenuItem-link"
