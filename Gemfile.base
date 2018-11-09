@@ -50,6 +50,7 @@ gem 'sinatra', require: false # for sidekiq web
 gem 'sidekiq', '< 6', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-cron', require: %w(sidekiq/cron sidekiq/cron/web)
 gem 'sidekiq-lock'
+gem 'sidekiq-prometheus-exporter'
 
 gem 'activemerchant', '~> 1.77.0'
 gem 'active_merchant-adyen12', github: '3scale/active_merchant-adyen12'

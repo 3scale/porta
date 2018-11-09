@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BuyerDomainConstraint
   module_function
 
@@ -34,6 +36,7 @@ module MasterDomainConstraint
   def matches?(request)
     request.extend(ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
     return true if ThreeScale.master_on_premises?
+
     master = Account.master
     master.admin_domain == request.host or master.domain == request.host
   end
@@ -64,5 +67,26 @@ class ParameterConstraint
 
   def matches?(request)
     request.params.key?(name)
+  end
+end
+
+class HttpAuthBasicConstraint
+  def initialize(username, password)
+    @username = username
+    @password = password
+  end
+
+  def matches?(request)
+    return unless @username.present? && @password.present?
+
+    username, password = ActionController::HttpAuthentication::Basic.user_name_and_password(request)
+    ActiveSupport::SecurityUtils.variable_size_secure_compare(@username, username.to_s) &&
+      ActiveSupport::SecurityUtils.variable_size_secure_compare(@password, password.to_s)
+  end
+end
+
+class MasterDomainWithAuthBasicConstraint < HttpAuthBasicConstraint
+  def matches?(request)
+    super && MasterDomainConstraint.matches?(request)
   end
 end
