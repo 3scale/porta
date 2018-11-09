@@ -2,6 +2,12 @@
 $table-columns-width: line-height-times(11);
 $search-header-width: line-height-times(4);
 
+// Utility styles
+// TODO: Move to a separate file
+.u-break-word {
+  word-break: break-word;
+}
+
 table {
   width: 100%;
 
@@ -98,9 +104,6 @@ table.data {
   tbody {
     td.actions {
       text-align: right;
-    }
-    td b.metric-name {
-      word-break: break-word;
     }
   }
 
