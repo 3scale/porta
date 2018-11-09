@@ -5,7 +5,7 @@
   padding: 0 0 0 0;
   position: fixed;
   width: 100%;
-  z-index: 10;
+  z-index: 1052; // select2 dropdown has z-index of 1051
   top: 0;
 
   &--master {
