@@ -37,7 +37,7 @@ class Api::ApplicationsController < Api::BaseController
       activate_menu :buyers, :accounts
     end
 
-    @cinstances = current_user.accessible_cinstances
+    @cinstances = accessible_not_bought_cinstances
                       .scope_search(@search).order_by(params[:sort], params[:direction])
                       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
                       .paginate(pagination_params)
@@ -51,9 +51,12 @@ class Api::ApplicationsController < Api::BaseController
 
   private
 
+  def accessible_not_bought_cinstances
+    current_user.accessible_cinstances.not_bought_by(current_account)
+  end
+
   def find_cinstance
-    @cinstance = current_user.accessible_cinstances
-                   .provided_by(current_account)
+    @cinstance = accessible_not_bought_cinstances
                    .includes(plan: %i[service original plan_metrics pricing_rules])
                    .where(service: @service)
                    .find(params[:id])
