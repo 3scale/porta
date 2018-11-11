@@ -189,7 +189,7 @@ end
 And(/^makes hits invisible for that plan$/) do
   visit_edit_plan(@plan)
 
-  visibility_field = find(:xpath, "//*[@id='metric_2_visible']")
+  visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
   assert_equal 'visible', visibility_field['class']
   visibility_field.click
   step 'I wait for 1 seconds'
