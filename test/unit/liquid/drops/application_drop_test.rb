@@ -25,7 +25,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
     _provider_alerts = FactoryGirl.create_list(:limit_alert, 3, cinstance: @app, account: @app.provider_account)
     expected_alerts = FactoryGirl.create_list(:limit_alert, 2, cinstance: @app, account: @app.buyer_account)
     _deleted_alert = FactoryGirl.create(:limit_alert, cinstance: @app, account: @app.buyer_account, state: 'deleted')
-    assert_equal Drops::Collection.for_drop(Drops::Alert).new(expected_alerts), @drop.alerts
+    assert_same_elements Drops::Collection.for_drop(Drops::Alert).new(expected_alerts), @drop.alerts
   end
 
   context "field definitions" do
