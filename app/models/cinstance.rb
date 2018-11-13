@@ -143,6 +143,8 @@ class Cinstance < Contract
     joins(:service).references(:service).merge(Service.of_account(account)).readonly(false)
   end
 
+  scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }
+
   scope :can_be_managed, lambda {
                            includes(plan: :service)
                               .where(['services.buyers_manage_apps = ?', true])
