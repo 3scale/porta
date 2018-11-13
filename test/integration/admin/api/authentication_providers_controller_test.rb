@@ -79,11 +79,13 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
 
   test '#update saves the new attributes values' do
     authentication_provider = FactoryGirl.create(:authentication_provider, account: provider)
-    put admin_api_authentication_provider_path(authentication_provider, authentication_provider_params(different_attributes: {client_id: 'updated-cid', client_secret: 'updated_client_secret'}))
+    attributes = {client_id: 'updated-cid', client_secret: 'updated_client_secret', site: 'http://new.example.net'}
+    put admin_api_authentication_provider_path(authentication_provider, authentication_provider_params(different_attributes: attributes))
     assert_response :ok
-    attributes_params = authentication_provider_params[:authentication_provider]
-    assert_equal attributes_params[:client_id], authentication_provider.reload.client_id
-    assert_equal attributes_params[:client_secret], authentication_provider.client_secret
+    authentication_provider.reload
+    attributes.each do |attr_name, attr_value|
+      assert_equal attr_value, authentication_provider.public_send(attr_name)
+    end
   end
 
   test '#index returns all the authentication providers of the current account in json' do
