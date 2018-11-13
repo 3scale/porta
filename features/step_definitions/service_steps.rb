@@ -56,3 +56,7 @@ end
 Given /^the service of (provider "[^\"]*") has traffic$/ do |account|
   Service.any_instance.stubs(:has_traffic?).returns(true)
 end
+
+Given /^the service has been successfully tested$/ do
+  @provider.default_service.proxy.update_column(:api_test_success, true)
+end
