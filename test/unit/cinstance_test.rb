@@ -911,4 +911,11 @@ class CinstanceTest < ActiveSupport::TestCase
 
     assert_equal 1, app.keys_limit
   end
+
+  test '.not_bought_by' do
+    FactoryGirl.create(:cinstance, service: master_account.default_service)
+
+    expected_cinstance_ids = Cinstance.where.has { user_account_id != Account.master.id }.pluck(:id)
+    assert_same_elements expected_cinstance_ids, Cinstance.not_bought_by(master_account).pluck(:id)
+  end
 end
