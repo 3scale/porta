@@ -124,6 +124,14 @@ class ProxyTest < ActiveSupport::TestCase
       assert proxy.staging_endpoint
       assert proxy.production_endpoint
     end
+
+    def test_deployable
+      assert_predicate Service.new(deployment_option: 'hosted').build_proxy, :deployable?
+      assert_predicate Service.new(deployment_option: 'self_managed').build_proxy, :deployable?
+
+      refute_predicate Service.new(deployment_option: 'plugin_ruby').build_proxy, :deployable?
+      refute_predicate Service.new(deployment_option: 'plugin_perl').build_proxy, :deployable?
+    end
   end
 
   def test_apicast_configuration_driven

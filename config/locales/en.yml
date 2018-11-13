@@ -576,10 +576,15 @@ en:
       plugin_php: PHP Plugin
       plugin_rest: REST requests
       plugin_csharp: .NET Plugin
+      service_mesh_istio: Istio Service Mesh
 
     self_managed: APIcast self-managed<span>Manage your own NGINX based API gateway for ultimate flexibility and customization.</span>
     hosted: APIcast<span>a 3scale managed NGINX based API gateway for quick and reliable integrations</span>
     apicast: APIcast<span>Nginx reverse proxy server.</span>
+
+    service_mesh_istio: |
+      Istio (tech preview)
+      <span>A uniform way to secure, connect, and monitor microservices.</span>
 
     on_heroku: Heroku
     on_amazon: Amazon
@@ -1104,6 +1109,10 @@ en:
       deployment_option_plugin: |
         Plugins provide a wrapper for the 3scale API that enables API Access Control and API Traffic Reporting without having to run another server.
         A plugin lives inside the code that powers your API. The plugin calls the 3scale API for Access Control & Traffic Reporting.
+      deployment_option_service_mesh: |
+        The term service mesh is used to describe the network of microservices that make up the applications and the interactions between them.
+        As a service mesh grows in size and complexity, it can become harder to understand and manage. Its requirements can include discovery, load balancing, failure recovery, metrics, and monitoring.
+        A service mesh also often has more complex operational requirements, like A/B testing, canary releases, rate limiting, access control, and end-to-end authentication.
       subdomain: "The domain name is the initial temporary domain name for your developer portal - you can change this to your own domain name later."
       handler: "Do you use any markup language?"
       liquid_enabled: "Process Liquid tags and drops?"

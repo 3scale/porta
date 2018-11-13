@@ -14,6 +14,7 @@ base: &default
   forum: true
   policies: true
   proxy_private_base_path: true
+  service_mesh_integration: false
 
 development:
   <<: *default
