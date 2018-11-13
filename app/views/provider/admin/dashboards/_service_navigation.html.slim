@@ -39,8 +39,7 @@ nav.DashboardNavigation
         => dashboard_collection_link 'Subscription',
                                      service.service_contracts,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id}),
-                                     'Subscriptions',
-                                     'paperclip'
+                                     icon_name: 'paperclip'
 
     // Active docs
     - if can?(:manage, :plans)
