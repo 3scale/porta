@@ -14,11 +14,24 @@ export class StatsCSVLink extends StatsUI {
   }
 
   template () {
-    let csvString = this.csvString
+    const csvString = this.csvString
+
+    if (!this.csvString) {
+      return <span className="StatsCSVLink-disabled">Download CSV</span>
+    }
+
+    if (navigator.msSaveBlob) { // IE 10+
+      return <div className="StatsCSVLink" onclick={() => this.downloadCSV(csvString)}>Download CSV</div>
+    }
 
     return (
       <a className="StatsCSVLink" href={`data:attachment/csv,${csvString}`} target='_blank' download='data.csv'>Download CSV</a>
     )
+  }
+
+  downloadCSV (csvString) {
+    const blob = new Blob([csvString], { type: 'text/csv; charset=utf-8;' })
+    navigator.msSaveBlob(blob, 'data.csv')
   }
 
   update (data) {
