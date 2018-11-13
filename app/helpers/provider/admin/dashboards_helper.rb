@@ -20,8 +20,8 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_collection_link(singular_name, collection, path, icon_name: nil, plural: nil, notice: false)
-    className = 'DashboardNavigation-link' + " u-notice" if notice
-    link_to path, class: className do
+    class_name = 'DashboardNavigation-link' + ' u-notice' if notice
+    link_to path, class: class_name do
       link_text = pluralize(number_to_human(collection.size), singular_name, plural)
       link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
       link_text.html_safe
