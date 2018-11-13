@@ -162,7 +162,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
 
   def authentication_provider_update_params
     params.require(:authentication_provider).permit(
-      :client_id, :client_secret, :published,
+      :client_id, :client_secret, :published, :site,
       :skip_ssl_certificate_verification, :automatically_approve_accounts
     )
   end
