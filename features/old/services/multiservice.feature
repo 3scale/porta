@@ -15,7 +15,6 @@ Feature: Multiservice feature
     When I am on the provider dashboard
     Then I should see "New API"
 
-  @javascript
   Scenario: Create new service
     Given I am logged in as provider "foo.example.com"
       And provider "foo.example.com" has "multiple_services" switch allowed
@@ -38,7 +37,6 @@ Feature: Multiservice feature
      And I press "Update Service"
     Then I should see "Less fancy API"
 
-  @javascript
   Scenario: Delete Service
     Given I am logged in as provider "foo.example.com"
     And provider "foo.example.com" has "multiple_services" switch allowed
