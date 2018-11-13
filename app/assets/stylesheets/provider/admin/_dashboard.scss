@@ -336,9 +336,7 @@
 
 .DashboardSection-header {
   width: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
+  float: left;
 
   &--extended {
     border-bottom: $border-width solid $border-color;
@@ -347,6 +345,7 @@
 }
 
 .DashboardNavigation {
+  float: right;
 
   #api_filter + &--services {
     margin-top: line-height-times(2/3);
@@ -366,8 +365,12 @@
 
   &-list-item {
     @include ellipsis;
-    border-left: line-height-times(2) solid transparent;
+    border-left: line-height-times(1.5) solid transparent;
     color: $light-color;
+
+    &:first-child {
+      border-left: 0;
+    }
   }
 
   &-link {
