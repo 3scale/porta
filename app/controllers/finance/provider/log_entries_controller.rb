@@ -1,6 +1,7 @@
 class Finance::Provider::LogEntriesController < Finance::Provider::BaseController
 
   include ThreeScale::Search::Helpers
+  activate_menu :audience, :finance, :log_entries
 
   def index
     @search = ThreeScale::Search.new(params[:search] || params)

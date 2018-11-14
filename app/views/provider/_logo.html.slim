@@ -1,8 +1,3 @@
 h1#logo.logo-3scale
-  - if domain_account.settings.branding.allowed? && domain_account.profile.logo.url != '/assets/3scale-logo.png'
-    // only image for customized logo's
-    - logo = domain_account.profile.logo
-    = image_tag logo.url(:large), :title => domain_account.name
-  - else
-    span.logo-3scale--svg
-      | 3scale
+  span.logo-3scale--svg
+    | 3scale

@@ -9,6 +9,7 @@ development:
 
 test:
   <<: *default
+  fake_server: false
 
 preview:
   <<: *default

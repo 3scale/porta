@@ -12,6 +12,7 @@ Feature: Change plan
       And an application plan "PaidAsInDiplomat" of provider "foo.example.com" for 3100000000 monthly
     Given the current domain is foo.example.com
 
+  @commit-transactions
   Scenario: Paying a fee without change plan POSTPAID
     Given the time is 28th April 2009
       And provider "foo.example.com" is charging
@@ -23,6 +24,7 @@ Feature: Change plan
          | Fixed fee ('PaidAsInLunch')  | May 1, 2009 ( 0:00) - May 31, 2009 (23:59) |        1 | 31,000,000.00 |
          | Total cost                   |                                             |          | 31,000,000.00 |
 
+  @commit-transactions
   Scenario: Trial period ends and no change plan POSTPAID
     Given plan "PaidAsInLunch" has trial period of 5 days
     Given the time is 1st May 2009

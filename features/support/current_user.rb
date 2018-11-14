@@ -10,7 +10,7 @@ helper = Module.new do
       username = find(:css, '#user_widget .username').text(:all).strip
     rescue Capybara::ElementNotFound
       # buyer side
-      username = find('#sign-out-button')[:title].gsub('Logout','').strip
+      username = find('#sign-out-button')[:title].gsub('Sign Out','').strip
     end
 
     assert username, "could not find username in the ui"

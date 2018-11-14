@@ -5,12 +5,12 @@ When /^I navigate to the sent invitations page$/ do
 end
 
 When /^I navigate to the page of the partner "([^\"]*)"$/ do |partner|
-  click_link(:text => /\ADevelopers|Tenants\z/)
+  step 'I navigate to the accounts page'
   click_link partner
 end
 
 When 'I navigate to the accounts page' do
-  click_link(:text => /\ADevelopers|Tenants\z/)
+  click_link(text: /\A\d Accounts?\z/)
 end
 
 When /^I navigate to a topic in (the forum of "[^\"]*")$/ do |forum|
@@ -19,8 +19,8 @@ When /^I navigate to a topic in (the forum of "[^\"]*")$/ do |forum|
 end
 
 When /^I navigate to the forum admin page$/ do
-  click_link(:text => /\ADevelopers|Tenants\z/)
-  click_link 'Forum'
+  click_link 'Messages'
+  click_link 'Threads'
 end
 
 When /^I navigate to the forum categories admin page$/ do
@@ -30,7 +30,7 @@ end
 
 When /^I navigate to the forum my posts admin page$/ do
   step "I navigate to the forum admin page"
-  click_link "My threads"
+  click_link "My Threads"
 end
 
 When /^I navigate to my account edition page$/ do
@@ -72,15 +72,11 @@ end
 
 When /^I navigate to the application "([^"]*)" of the provider "([^"]*)"$/ do |app, partner|
   step %(I navigate to the page of the partner "#{partner}")
-  step 'I navigate to the buyers applications page'
+  step 'I go to the applications admin page'
   step %(I follow the link to application "#{app}")
 end
 
-When /^I navigate to the buyers applications page$/ do
-  click_link 'Applications'
-end
-
 When /^I navigate to the buyers service contracts page$/ do
-  click_link(:text => /\ADevelopers|Tenants\z/)
+  step 'I navigate to the accounts page'
   click_link 'Subscriptions'
 end

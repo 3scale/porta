@@ -5,7 +5,8 @@ class ApiDocs::Service < ApplicationRecord
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
 
-  belongs_to :account
+  belongs_to :account, required: true
+  belongs_to :service, class_name: '::Service', inverse_of: :api_docs_services
 
   attr_accessible :account, :body, :name, :description, :published, :skip_swagger_validations
   attr_readonly :system_name
@@ -13,12 +14,18 @@ class ApiDocs::Service < ApplicationRecord
   self.table_name = "api_docs_services"
   has_system_name uniqueness_scope: :account_id
 
+  include ServiceDiscovery::ModelExtensions::ApiDocs::Service
+
   validates :name, :body, presence: true
   validates :name, :system_name, :base_path, :swagger_version, length: { maximum: 255 }
   validates :description, length: { maximum: 65535 }
   validates :body, length: { maximum: 4294967295, allow_blank: true }
+  validate :service_belongs_to_account, if: -> { service_id.present? && service_id_changed? }
+
+  before_validation(on: :create) { self.account ||= service&.account }
 
   scope :published, -> { where(published: true) }
+  scope :accessible, -> { joining { service.outer }.where.has { (service_id == nil) | (service.state != ::Service::DELETE_STATE) } }
 
   before_save :set_default_values
   before_save :prepare_base_path_notify
@@ -26,7 +33,8 @@ class ApiDocs::Service < ApplicationRecord
   after_commit :notify_new_base_path, if: :should_notify?
 
   validates_with ThreeScale::Swagger::Validator
-  validates_with ThreeScale::LocalhostValidator, attributes: :base_path
+
+  validates :base_path, non_localhost: true
 
   def self.with_system_names(system_names)
     unless system_names.empty?
@@ -93,6 +101,12 @@ class ApiDocs::Service < ApplicationRecord
   end
 
   private
+
+  def service_belongs_to_account
+    return true if account.services.accessible.where(id: service_id).exists?
+    errors.add(:service, :not_found)
+  end
+
   def should_notify?
     NotificationCenter.new(self).enabled?
   end

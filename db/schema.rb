@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180913135328) do
+ActiveRecord::Schema.define(version: 20181018082620) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -140,7 +140,11 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.string   "base_path",                limit: 255
     t.string   "swagger_version",          limit: 255
     t.boolean  "skip_swagger_validations",                    default: false
+    t.integer  "service_id",               limit: 8
+    t.boolean  "discovered"
   end
+
+  add_index "api_docs_services", ["service_id"], name: "fk_rails_e4d18239f1", using: :btree
 
   create_table "application_keys", force: :cascade do |t|
     t.integer  "application_id", limit: 8,   null: false
@@ -983,6 +987,17 @@ ActiveRecord::Schema.define(version: 20180913135328) do
 
   add_index "profiles", ["account_id"], name: "fk_account_id", using: :btree
 
+  create_table "provided_access_tokens", force: :cascade do |t|
+    t.text     "value",      limit: 65535
+    t.integer  "user_id",    limit: 8
+    t.integer  "tenant_id",  limit: 8
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "provided_access_tokens", ["user_id"], name: "fk_rails_260e99b630", using: :btree
+
   create_table "provider_constraints", force: :cascade do |t|
     t.integer  "tenant_id",    limit: 8
     t.integer  "provider_id",  limit: 8
@@ -1137,6 +1152,7 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.string   "support_email",                  limit: 255
     t.boolean  "referrer_filters_required",                    default: false
     t.string   "deployment_option",              limit: 255,   default: "hosted"
+    t.string   "kubernetes_service_link",        limit: 255
   end
 
   add_index "services", ["account_id"], name: "idx_account_id", using: :btree
@@ -1419,8 +1435,10 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.boolean  "application_key_updated_on",                  default: false
   end
 
+  add_foreign_key "api_docs_services", "services"
   add_foreign_key "event_store_events", "accounts", column: "provider_id", on_delete: :cascade
   add_foreign_key "payment_details", "accounts", on_delete: :cascade
+  add_foreign_key "provided_access_tokens", "users"
   add_foreign_key "proxy_configs", "proxies", on_delete: :cascade
   add_foreign_key "proxy_configs", "users", on_delete: :nullify
   add_foreign_key "sso_authorizations", "authentication_providers"

@@ -13,27 +13,41 @@
     margin-top: line-height-times(1);
   }
 
+  &--audience {
+    .DashboardNavigation-link + .DashboardNavigation-link {
+      color: $warning-color;
+    }
+  }
+
+  &--services {
+    margin-top: line-height-times(1.4);
+  }
+
   &-title {
     text-transform: uppercase;
     font-size: $font-size-base;
     font-weight: $font-weight-bold;
-    color: $light-color;
+    color: $font-color;
     float: left;
+    max-width: line-height-times(10);
     margin: 0 0 0 0;
     padding: 0 0 0 0;
-  }
-
-  &-toggle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
-    &:before {
-      font-size: $caption-font-size;
-      content: '▼ ';
-    }
   }
 
   &.is-closed {
     border-bottom: $border-width solid $border-color;
     height: auto;
+
+    .DashboardSection-title {
+      color: $light-color;
+    }
+  }
+
+  &--toggleable.is-closed {
 
     .DashboardWidget,
     .DashboardNavigation-list-item {
@@ -42,10 +56,6 @@
 
     .DashboardNavigation-list-item.u-notice {
       display: list-item;
-    }
-
-    .DashboardSection-toggle:before {
-      content: '► ';
     }
   }
 }
@@ -325,12 +335,25 @@
 }
 
 .DashboardSection-header {
-  float: left;
   width: 100%;
+  float: left;
+
+  &--extended {
+    border-bottom: $border-width solid $border-color;
+    margin-bottom: line-height-times(1);
+  }
 }
 
 .DashboardNavigation {
   float: right;
+
+  #api_filter + &--services {
+    margin-top: line-height-times(2/3);
+  }
+
+  &--services ul li:last-child {
+    float: right;
+  }
 
   &-list {
     @include horizontal-list();
@@ -342,17 +365,28 @@
 
   &-list-item {
     @include ellipsis;
-    border-left: line-height-times(2) solid transparent;
+    border-left: line-height-times(1.5) solid transparent;
     color: $light-color;
+
+    &:first-child {
+      border-left: 0;
+    }
   }
 
   &-link {
     text-transform: uppercase;
     font-style: normal;
-    color: $light-color;
+    color: $menu-color;
+
+    .fa {
+      font-size: $font-size-sm;
+      position: relative;
+      top: -$border-width;
+      //display: none;
+    }
 
     &:hover {
-      color: $link-color;
+      color: $menu-hover-color;
     }
 
     &--alert {
@@ -367,7 +401,7 @@
 }
 
 .u-notice {
-  color: $font-color;
+  color: $warning-color;
 }
 
 a:hover .u-notice {

@@ -93,6 +93,12 @@ module Logic
         end
       end
 
+      class ServiceMeshIntegration < Base
+        def missing_config
+          false
+        end
+      end
+
       class OldCharts < Base
         def missing_config
           false
@@ -106,6 +112,12 @@ module Logic
       end
 
       class ProxyPro < Base
+        def missing_config
+          false
+        end
+      end
+
+      class ProxyPrivateBasePath < Base
         def missing_config
           false
         end

@@ -1,4 +1,4 @@
-@javascript @selenium
+@javascript @ignore
 Feature: Accounts management
   As a provider
   I want manage my accounts

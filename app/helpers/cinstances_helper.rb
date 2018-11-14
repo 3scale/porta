@@ -53,7 +53,7 @@ Are you sure?}
   end
 
   def delete_application_link(application)
-    msg = t('.delete_confirmation', :name => h(application.name))
+    msg = t('api.applications.edit.delete_confirmation', name: h(application.name))
     delete_link_for(admin_buyers_application_path(application), confirm: msg, title: 'Delete Application')
   end
 end

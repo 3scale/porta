@@ -1,5 +1,12 @@
-require 'codeclimate_rails'
-CodeclimateRails.start
+
+if ENV['CI']
+  require 'simplecov'
+  SimpleCov.start
+
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
@@ -80,9 +87,8 @@ RSpec.configure do |config|
   end
 
   if ENV['CI']
-    FileUtils.mkdir_p(ENV['CI_REPORTS'] ||= "tmp/junit/spec-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}")
-    require 'ci/reporter/rake/rspec_loader'
-    config.add_formatter CI::Reporter::RSpecFormatter
+    junit = "tmp/junit/spec-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}/spec.xml"
+    config.add_formatter RspecJunitFormatter, junit
   end
 end
 

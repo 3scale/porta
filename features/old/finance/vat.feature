@@ -7,6 +7,7 @@ Background:
     Given provider "foo.example.com" has "finance" switch visible
     And an application plan "best" of provider "foo.example.com" for 100 monthly
 
+  @commit-transactions
   Scenario: Buyer sees no VAT on an invoice by default
     Given the time is 31st December 2008
     And a buyer "tycoon" signed up to application plan "best"
@@ -19,6 +20,7 @@ Background:
     | Fixed fee ('best')           |          |  100 |
     | Total cost                   |          |  100 |
 
+  @commit-transactions
   Scenario: Buyer sees the VAT on an invoice
    Given the time is 31st December 2008
      And a buyer "tycoon" signed up to application plan "best"
@@ -33,6 +35,7 @@ Background:
         | Total VAT Amount             |          |    5 |
         | Total cost (VAT 5% included) |          |  105 |
 
+  @commit-transactions
   Scenario: Buyer sees the VAT on an invoice when it's 0
     Given the time is 31st December 2008
     And a buyer "tycoon" signed up to application plan "best"

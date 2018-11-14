@@ -8,7 +8,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   include ThreeScale::Search::Helpers
 
-  activate_menu :buyers, :subscriptions
+  activate_menu :buyers, :accounts, :subscriptions
 
   def index
     @states = ServiceContract.allowed_states.collect(&:to_s).sort
@@ -16,13 +16,13 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     @search = ThreeScale::Search.new(params[:search] || params)
     @plans = current_account.service_plans
 
-    if params[:service_id]
-      @service = @services.find params[:service_id]
+    if (service_id = params[:service_id] || @search.service_id)
+      @service = @services.find service_id
       @search.service_id = @service.id
     end
 
-    if params[:service_plan_id]
-      @plan = current_account.service_plans.find(params[:service_plan_id])
+    if (service_plan_id = params[:service_plan_id] || @search.service_plan_id)
+      @plan = current_account.service_plans.find(service_plan_id)
       @search.plan_id = @plan.id
       @service ||= @plan.service
     end
@@ -30,7 +30,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
       @search.account = @account
-      activate_menu :buyers, :accounts
+      activate_menu :audience, :accounts, :listing
     end
 
     scope = current_account.provided_service_contracts
@@ -38,6 +38,8 @@ class Buyers::ServiceContractsController < Buyers::BaseController
               .paginate(pagination_params)
 
     @service_contracts = scope
+
+    activate_menu :serviceadmin, :subscriptions if @service
   end
 
   def new

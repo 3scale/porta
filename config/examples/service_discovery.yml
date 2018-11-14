@@ -1,0 +1,34 @@
+default: &base
+  enabled: false
+  server_scheme: 'https'
+  server_host:
+  server_port: 8443
+  bearer_token:
+  authentication_method: service_account # can be service_account|oauth
+  oauth_server_type: builtin # can be builtin|rh_sso
+  client_id: 3scale
+  client_secret:
+  timeout: 1
+  open_timeout: 1
+  max_retry: 5
+  verify_ssl: <%= OpenSSL::SSL::VERIFY_NONE %> # 0
+
+development:
+  <<: *base
+  server_host:
+  bearer_token:
+
+test:
+  <<: *base
+  server_host:
+  bearer_token:
+
+production:
+  <<: *base
+  server_host:
+  bearer_token:
+
+preview:
+  <<: *base
+  server_host:
+  bearer_token:

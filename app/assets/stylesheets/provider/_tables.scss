@@ -2,6 +2,12 @@
 $table-columns-width: line-height-times(11);
 $search-header-width: line-height-times(4);
 
+// Utility styles
+// TODO: Move to a separate file
+.u-break-word {
+  word-break: break-word;
+}
+
 table {
   width: 100%;
 
@@ -100,6 +106,11 @@ table.data {
       text-align: right;
     }
   }
+
+  &.u-sixEqualColumns tr td {
+    word-break: break-word;
+  }
+
 }
 
 .u-fiveEqualColumns {
@@ -235,6 +246,14 @@ table#contracts_table tr td.thhead {
   padding-top: 0;
 }
 
+table#metrics {
+  tr td.title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 td.thhead h3 {
   margin-top: 0;
   padding-right: line-height-times(2/3);
@@ -247,4 +266,8 @@ td.thhead h3 {
 
 .u-tabular-number {
   font-family: $font-family-monospace;
+}
+
+table.list.list-checkmarks tr th {
+  word-break: break-word;
 }

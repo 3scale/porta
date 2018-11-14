@@ -166,7 +166,10 @@ class Finance::BillingStrategy < ApplicationRecord
   end
 
   def create_invoice_counter(period)
-    invoice_prefix = (billing_monthly? ? period : period.begin.year).to_param
+    #  The invoice prefix is either the 7 (0..6) or the 4 (0..3) initial characters of the period stringified,
+    #  respectively to monthly billing friendly ids (YYYY-MM-########) and to yearly billing friendly ids (YYYY-########)
+    invoice_prefix = period.to_param[0..(billing_monthly? ? 6 : 3)]
+
     InvoiceCounter.create(provider_account: account, invoice_prefix: invoice_prefix, invoice_count: 0)
   rescue ActiveRecord::RecordNotUnique
     InvoiceCounter.find_by(provider_account: account, invoice_prefix: invoice_prefix)

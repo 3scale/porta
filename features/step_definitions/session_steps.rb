@@ -135,8 +135,8 @@ Then /^I should be logged in the Development Portal$/ do
 end
 
 When /^I log ?out$/ do
-  visit '#settings-menu'
-  click_link 'Logout'
+  visit '#session-menu'
+  click_link 'Sign Out' || 'Log Out'
 end
 
 # TODO: merge those 3 assertion steps

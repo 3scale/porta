@@ -3,7 +3,8 @@ class Stats::ApplicationsController < Stats::BaseController
   before_action :find_service
   before_action :find_buyer_account
 
-  activate_menu :applications
+  activate_menu :serviceadmin, :applications, :listing
+  sublayout 'api/service'
 
   def show
     @metrics = @service.metrics.top_level
@@ -33,5 +34,9 @@ class Stats::ApplicationsController < Stats::BaseController
 
   def metrics_with_methods
     {metrics: @metrics, methods: @methods}
+  end
+
+  def activate_submenu
+    activate_menu submenu: current_account.multiservice? ? :services : @service.name
   end
 end

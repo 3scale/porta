@@ -1,0 +1,13 @@
+- if can? :manage, current_user
+  = render vertical_nav_item,
+           title: 'Personal Details',
+           path:  edit_provider_admin_user_personal_details_path
+
+= render vertical_nav_item,
+         title: 'Tokens',
+         path:  provider_admin_user_access_tokens_path
+
+- if can? :show, current_user.notification_preferences
+  = render vertical_nav_item,
+           title: 'Notification Preferences',
+           path:  provider_admin_user_notification_preferences_path

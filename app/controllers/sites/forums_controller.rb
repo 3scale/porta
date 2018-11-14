@@ -1,8 +1,9 @@
 class Sites::ForumsController < Sites::BaseController
   sublayout 'sites/developer_portals'
-  activate_submenu :portal
+  activate_menu :audience, :forum, :settings
 
   before_action :authorize_forum_feature, :find_settings
+  before_action :active_settings_menu, unless: :forum_enabled?
 
   def edit
   end
@@ -25,5 +26,13 @@ class Sites::ForumsController < Sites::BaseController
 
   def find_settings
     @settings = current_account.settings
+  end
+
+  def forum_enabled?
+    current_account.forum_enabled?
+  end
+
+  def active_settings_menu
+    activate_menu :audience, :cms, :forum_settings
   end
 end

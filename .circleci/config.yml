@@ -1,0 +1,385 @@
+version: 2.0
+
+#### YAML ANCHORS INSTEAD OF COMMANDS # while version 2.1 already supports commands, the local runner doesn't. When it does, we can upgrade.
+
+git-submodules: &git-submodules
+  run:
+    name: "Pull Submodules"
+    command: |
+      git submodule init
+      git submodule update
+
+upload-coverage: &upload-coverage
+  run:
+    name: Upload test coverage to Codecov
+    command: bash <(curl -s https://codecov.io/bash)
+
+store-junit-results: &store-junit-test-results
+  store_test_results:
+    path: tmp/junit
+
+store-test-artifacts: &store-test-artifacts
+  store_artifacts:
+    path: tmp/junit
+    destination: junit
+
+store-log-artifacts: &store-log-artifacts
+  store_artifacts:
+    path: log/test.log
+    destination: test.log
+
+restore-bundler-cache: &restore-bundler-cache
+  restore_cache:
+    keys:
+      - v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+restore-npm-cache: &restore-npm-cache
+  restore_cache:
+    keys:
+      - v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
+
+rails-tests: &rails-tests
+  run:
+    name: Rails tests
+    command: |
+      TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
+      bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+    environment:
+      LC_ALL: en_US.UTF-8
+
+attach-to-workspace: &attach-to-workspace
+  attach_workspace:
+    at: .
+
+system-builder: &system-builder
+  image: quay.io/gsaslis/3scale-system-builder:latest
+  environment:
+    BUNDLE_FROZEN: true
+    BUNDLE_PATH: 'vendor/bundle'
+
+jobs:
+  dependencies_bundler:
+    docker:
+      - *system-builder
+    steps:
+      - checkout
+      - *git-submodules
+      - *restore-bundler-cache
+      - run:
+          name: Install gems with bundler
+          command: |
+            bundle check || bundle install --deployment
+            bundle clean
+            # remove capybara-webkit source, save more than 400 MB
+            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
+          environment:
+            BUNDLE_RETRY: 3
+            BUNDLE_JOBS: 3
+      - save_cache:
+          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+            - ./.bundle/
+      - persist_to_workspace:
+          root: .
+          paths:
+          - ./vendor/bundle
+          - ./.bundle/
+  dependencies_npm:
+    docker:
+      - *system-builder
+    steps:
+      - checkout
+      - *git-submodules
+      - *restore-npm-cache
+      - run:
+          name: Install NPM dependencies
+          command: |
+            yarn --version
+            yarn global dir
+            yarn install --frozen-lockfile --link-duplicates
+            jspm -v
+            jspm dl-loader
+            jspm install --lock || jspm install --force
+      - save_cache:
+          key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ./assets/jspm_packages
+            - ./.jspm
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./node_modules
+            - ./assets/jspm_packages
+            - ./.jspm
+
+  assets_precompile:
+    docker:
+      - *system-builder
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Precompile assets
+          command: |
+            cp config/examples/*.yml config/
+            bundle exec rake assets:precompile RAILS_ENV=test 
+            bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
+          environment:
+            RAILS_GROUPS: assets 
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./public/assets
+            - ./config/*.yml
+
+  lint:
+    docker:
+      - *system-builder
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - run:
+          name: Start Xvfb
+          command: Xvfb :99 -screen 0 1280x1024x24
+          background: true
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Licences check
+          command: bundle exec rake ci:license_finder:run
+      - run:
+          name: Swagger validation
+          command: |
+            bundle exec rake doc:swagger:validate:all
+            bundle exec rake doc:swagger:generate:all
+      - run:
+          name: JSPM
+          command: |
+            bundle exec rake ci:jspm --trace
+      - run:
+          name: Yarn test
+          command: |
+            yarn test -- --reporters dots,junit --browsers Firefox
+            yarn jest
+      - run:
+          name: Database setup
+          command: |
+            bundle exec rake db:create db:purge db:setup
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - store_artifacts:
+          path: doc/licenses
+          destination: licenses
+      - store_artifacts:
+          path: doc/active_docs
+          destination: active_docs
+      - *upload-coverage
+
+  unit:
+    parallelism: 8
+    resource_class: small
+    docker:
+      - *system-builder
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Prepare database & config files
+          command: |
+            cp config/examples/*.yml config/
+            bundle exec rake db:create db:test:prepare
+      - *rails-tests
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - *upload-coverage
+  functional:
+    parallelism: 2
+    resource_class: small
+    docker:
+      - *system-builder
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Prepare database & config files
+          command: |
+            cp config/examples/*.yml config/
+            bundle exec rake db:create db:test:prepare
+      - *rails-tests
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - *upload-coverage
+  integration:
+    parallelism: 8
+    resource_class: small
+    docker:
+      - *system-builder
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Prepare database & config files
+          command: |
+            cp config/examples/*.yml config/
+            bundle exec rake db:create db:test:prepare
+      - *rails-tests
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - *upload-coverage
+  rspec:
+    parallelism: 3
+    resource_class: small
+    docker:
+      - *system-builder
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Prepare database & config files
+          command: |
+            cp config/examples/*.yml config/
+            bundle exec rake db:create db:test:prepare
+      - run:
+          name: Rspec tests
+          command: |
+            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - *upload-coverage
+
+  cucumber:
+    parallelism: 20
+    resource_class: small
+    docker:
+      - *system-builder
+      - image: quay.io/mikz/dnsmasq
+        command:
+        - --no-poll
+        - --address=/#/127.0.0.1
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Prepare database
+          command: |
+            bundle exec rake db:create db:test:prepare
+      - run:
+          name: Disable internet access
+          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+      - run:
+          name: Run cucumber tests
+          command: |
+            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            bundle exec cucumber --profile ci ${TESTS}
+      - run:
+          name: Enabled internet access
+          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+          when: always
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - store_artifacts:
+          path: tmp/capybara
+          destination: capybara
+      - *upload-coverage
+
+  docker-build:
+    resource_class: small
+    docker:
+      - image: docker:stable
+        environment:
+          DOCKER_COMPOSE: /usr/bin/docker-compose
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build System Container Image for OpenShift
+          command: |
+            cd openshift/system
+            docker build --build-arg=BUNDLER_ENV="$(env | grep -e ^BUNDLE_)" --file Dockerfile ../..
+            docker build --file Dockerfile.on_prem --pull ../..
+
+workflows:
+  version: 2
+  parallel_build:
+    jobs:
+      - dependencies_bundler
+      - dependencies_npm
+      - docker-build:
+          context: org-global
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+
+      - lint:
+          requires:
+            - assets_precompile
+      - unit:
+          requires:
+            - dependencies_bundler
+      - functional:
+          requires:
+            - assets_precompile
+      - integration:
+          requires:
+            - assets_precompile
+      - rspec:
+          requires:
+            - dependencies_bundler
+      - cucumber:
+          requires:
+            - assets_precompile

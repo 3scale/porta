@@ -15,6 +15,12 @@ module Liquid
       def system_name
         @spec.system_name
       end
+
+      desc 'Returns the service of the spec if it has any or `nil` otherwise.'
+      def service
+        return unless (service = @spec.service)
+        Drops::Service.new(service)
+      end
     end
   end
 end

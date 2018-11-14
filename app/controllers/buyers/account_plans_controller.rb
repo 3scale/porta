@@ -4,7 +4,7 @@ class Buyers::AccountPlansController < Api::PlansBaseController
   before_action :authorize_manage_account_plans!, :only => %i[new create]
   before_action :authorize_read_account_plans!
 
-  activate_menu :serviceadmin, :submenu =>  :account_plans
+  activate_menu! :audience, :accounts, :account_plans
 
   def index
     @new_plan = AccountPlan

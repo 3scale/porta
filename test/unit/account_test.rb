@@ -21,6 +21,28 @@ class AccountTest < ActiveSupport::TestCase
   should have_many :invoices
   should have_many :payment_transactions
 
+  def test_not_master
+    master = master_account
+    buyer = FactoryGirl.create(:simple_buyer, provider_account: master)
+
+    assert master.buyer_account_ids.include?(buyer.id)
+    assert master.buyer_account_ids.include?(master.id)
+
+    assert master.buyer_accounts.not_master.ids.include?(buyer.id)
+    refute master.buyer_accounts.not_master.ids.include?(master.id)
+  end
+
+  def test_provider_but_not_master
+    account = FactoryGirl.build_stubbed(:simple_account, provider: false, master: false)
+    refute account.tenant?
+    
+    account.provider = true
+    assert account.tenant?
+    
+    account.master = true
+    refute account.tenant?
+  end
+
   def test_destroy_association
     account = FactoryGirl.create(:simple_account)
     service = FactoryGirl.create(:simple_service, account: account)

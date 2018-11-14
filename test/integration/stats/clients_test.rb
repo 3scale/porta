@@ -55,7 +55,8 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
        "id"=>@cinstance.id,
        "account"=>{"name"=>@cinstance.user_account.org_name, "id"=>@cinstance.user_account.id},
        "description"=>@cinstance.description,
-       "state"=>@cinstance.state},
+       "state"=>@cinstance.state,
+       "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 21 + [2] + [0] * 7 + [1, 0],
      "change"=>200.0,
      "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
@@ -94,7 +95,8 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
        "id"=>@cinstance.id,
        "account"=>{"name"=>@cinstance.user_account.org_name, "id"=>@cinstance.user_account.id},
        "description"=>@cinstance.description,
-       "state"=>@cinstance.state},
+       "state"=>@cinstance.state,
+       "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 21 + [2] + [0] * 7 + [1, 0]
 
     get "/stats/applications/#{@cinstance.id}/usage_response_code.json", period:'month', response_code: 404
@@ -115,7 +117,8 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
        "id"=>@cinstance.id,
        "account"=>{"name"=>@cinstance.user_account.org_name, "id"=>@cinstance.user_account.id},
        "description"=>@cinstance.description,
-       "state"=>@cinstance.state},
+       "state"=>@cinstance.state,
+       "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 29 + [1, 0]
 
 

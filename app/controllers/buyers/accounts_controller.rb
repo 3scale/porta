@@ -10,13 +10,13 @@ class Buyers::AccountsController < Buyers::BaseController
   before_action :set_plans, :only => %i[new create]
   before_action :find_account, except: %i[index new create]
 
-  activate_menu :buyers, :accounts
+  activate_menu :buyers, :accounts, :listing
 
   def index
     @countries = Country.all
     @account_plans = current_account.account_plans.stock
     @search = ThreeScale::Search.new(params[:search] || params)
-    @accounts = current_account.buyer_accounts.scope_search(@search).
+    @accounts = current_account.buyer_accounts.not_master.scope_search(@search).
         # this preloading collides with joins for sorting by country and plan
         includes(:bought_account_plan, :country)
                     .order_by(params[:sort], params[:direction])
@@ -86,7 +86,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def find_account
     with_deleted = %w[show resume].include?(action_name)
-    @account = current_account.buyer_accounts.without_deleted(!with_deleted).find(params[:id])
+    @account = current_account.buyer_accounts.not_master.without_deleted(!with_deleted).find(params[:id])
   end
 
   def redirection_path

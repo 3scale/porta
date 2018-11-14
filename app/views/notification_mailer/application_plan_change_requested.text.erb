@@ -9,4 +9,4 @@ Service: <%= @service.name %>
 Current plan: <%= @current_plan.name %>
 Requested plan: <%= @requested_plan.name %>
 
-To change the plan of this application, follow this link: <%= admin_buyers_application_url(@application) %>
+To change the plan of this application, follow this link: <%= admin_service_application_url(@application.service, @application) %>

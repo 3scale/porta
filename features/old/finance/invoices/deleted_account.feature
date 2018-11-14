@@ -11,6 +11,7 @@ Feature: Invoices of deleted account
     And a buyer "bob" signed up to application plan "Plan"
   Given current domain is the admin domain of provider "xyz.example.com"
 
+ @commit-transactions
  Scenario: I cannot but view the invoices of a deleted buyer
     Given an invoice of buyer "bob" for January, 2011 with items:
       | name   | cost |

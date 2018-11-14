@@ -18,7 +18,7 @@ article.DashboardWidget id = widget.id
           ' .
         p
           ' Furthermore,
-          => link_to "Web Alerts for Admins of this Account of 100% (and up)", notifications_admin_service_path(service, anchor: "web_provider")
+          => link_to 'Web Alerts for Admins of this Account of 100% (and up)', settings_admin_service_path(service, anchor: 'web_provider')
           | should be enabled for service(s) with usage limits.
       - else
         p No Potential Upgrades. Yet…

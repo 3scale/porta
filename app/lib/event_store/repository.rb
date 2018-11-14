@@ -151,7 +151,7 @@ module EventStore
                       OIDC::ServiceChangedEvent
                      )
       subscribe_event(ServiceTokenEventSubscriber.new, ServiceTokenDeletedEvent)
-
+      subscribe_event(ServiceDeletionSubscriber.new, Services::ServiceScheduledForDeletionEvent)
       subscribe_event(ZyncSubscriber.new, ZyncEvent)
     end
 

@@ -1,7 +1,7 @@
 class Provider::Admin::Account::InvitationsController < Provider::Admin::Account::BaseController
   before_action :authorize_multiple_users
   before_action :set_resource
-  activate_menu :account, :invitations
+  activate_menu :account, :users, :invitations
 
   inherit_resources
   belongs_to :account

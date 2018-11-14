@@ -1,5 +1,4 @@
-class ServiceDecorator < Draper::Decorator
-  delegate_all
+class ServiceDecorator < ApplicationDecorator
 
   def link_to_application_plans
     stock_application_plans = application_plans.stock
@@ -31,5 +30,21 @@ class ServiceDecorator < Draper::Decorator
 
   def published_application_plans
     PlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
+  end
+
+  def api_selector_services_links
+    if h.can?(:manage, :plans)
+      h.admin_service_path(object)
+    elsif h.can?(:manage, :monitoring)
+      h.admin_service_stats_usage_path(object)
+    elsif h.can?(:manage, :partners)
+      h.admin_service_applications_path(object)
+    end
+  end
+
+  def as_json(options = {})
+    hash = super(options)
+    hash['service'][:link] = api_selector_services_links
+    hash
   end
 end

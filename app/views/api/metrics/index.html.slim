@@ -1,24 +1,9 @@
-- content_for :sublayout_title, 'Definition'
+- content_for :sublayout_title, 'Methods & Metrics'
 
 = javascript_include_tag 'vendor/jquery/extensions/jquery.cookie.js'
 
 - content_for :javascripts do
   = render_js_module_loader
-
-section.Section
-  .SettingsBox
-    = link_to 'edit', edit_admin_service_path(@service), class: "SettingsBox-toggle"
-    dl.SettingsBox-summary.u-dl data-state="open"
-      dt.u-dl-term Name
-      dd.u-dl-definition = @service.name
-      dt.u-dl-term System Name
-      dd.u-dl-definition = @service.system_name
-      - if @service.description.present?
-        dt.u-dl-term Description
-        dd.u-dl-definition = @service.description
-
-    = semantic_form_for @service, url: admin_service_path(@service), html: { class: "SettingsBox-form", data: { state: "closed" } } do |form|
-      = render 'api/services/forms/definition_settings', form: form
 
 section.Section.u-toggleableBySettingsBox data-state="open"
   h2 Methods
@@ -82,7 +67,7 @@ section.Section.u-toggleableBySettingsBox data-state="open"
 section.Section.u-toggleableBySettingsBox data-state="open"
   h2 Metrics
   p
-    ' Hits are the built-in top-level metric and the parent metric of the methods. Other top level metrics can be added here if needed.
+    ' <em>Hits</em> is the built-in metric to which all methods report. Additional top-level metrics can be added here in order to track other usage that shouldn't increase the hit count.
     - if show_mappings?
       ' A metric needs to be mapped to one or more URL patterns in the
       => link_to 'Mapping Rules', edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules' }

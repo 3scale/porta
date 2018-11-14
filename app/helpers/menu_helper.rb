@@ -83,4 +83,21 @@ module MenuHelper
     account = current_account.provider? ? current_account : current_account.provider_account
     account.settings.public_send(switch).is_a?(Settings::SwitchDenied)
   end
+
+  def api_selector_services
+    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services.includes(:account) : Service.none).decorate
+  end
+
+  def audience_link
+    if can?(:manage, :partners)
+      admin_buyers_accounts_path
+    elsif can?(:manage, :finance)
+      admin_finance_root_path
+    elsif can?(:manage, :portal)
+      provider_admin_cms_templates_path
+    elsif can?(:manage, :settings)
+      edit_admin_site_usage_rules_path
+    end
+  end
+
 end

@@ -7,7 +7,7 @@ class Provider::AdminController < FrontendController
     if start_onboarding_wizard
       redirect_to provider_admin_onboarding_wizard_root_path
     elsif has_permission? && onboarding_active?
-      redirect_to admin_services_path
+      redirect_to provider_admin_dashboard_path
     else
       redirect_back_or_default provider_admin_dashboard_path
     end

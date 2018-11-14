@@ -18,7 +18,14 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
   end
 
   test 'admin_url' do
-    assert_match  %r{/buyers/applications/[0-9]+\Z}, @drop.admin_url
+    assert_match Rails.application.routes.url_helpers.admin_service_application_path(@app.service, @app), @drop.admin_url
+  end
+
+  test 'alerts' do
+    _provider_alerts = FactoryGirl.create_list(:limit_alert, 3, cinstance: @app, account: @app.provider_account)
+    expected_alerts = FactoryGirl.create_list(:limit_alert, 2, cinstance: @app, account: @app.buyer_account)
+    _deleted_alert = FactoryGirl.create(:limit_alert, cinstance: @app, account: @app.buyer_account, state: 'deleted')
+    assert_same_elements Drops::Collection.for_drop(Drops::Alert).new(expected_alerts), @drop.alerts
   end
 
   context "field definitions" do

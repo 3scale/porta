@@ -1,10 +1,12 @@
 class Api::MetricsController < Api::BaseController
+  include ServiceDiscovery::ControllerMethods
+
   before_action :find_service, except: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
   before_action :find_plan_and_service, only: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
   before_action :find_metric, except: [:new, :create, :index]
   before_action :build_metric, only: [:new, :create]
 
-  activate_menu :serviceadmin, :api, :definition
+  activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
 
   def index

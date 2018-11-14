@@ -1,0 +1,11 @@
+#api_selector
+
+javascript:
+  document.addEventListener('DOMContentLoaded', function () {
+    window.ContextSelector({
+      currentApi: #{json @service},
+      apis: #{json api_selector_services},
+      activeMenu: #{json active_menu},
+      audienceLink: #{json audience_link}
+    }, 'api_selector')
+  })

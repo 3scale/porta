@@ -1,4 +1,4 @@
-# 3scale "System" Component [![Code Climate](https://codeclimate.com/repos/52f38ffce30ba0243a006046/badges/28ce1acdfcc4c869461e/gpa.svg)](https://codeclimate.com/repos/52f38ffce30ba0243a006046/feed) [![Test Coverage](https://codeclimate.com/repos/52f38ffce30ba0243a006046/badges/28ce1acdfcc4c869461e/coverage.svg)](https://codeclimate.com/repos/52f38ffce30ba0243a006046/coverage) 
+# 3scale "System" Component [![CircleCI](https://circleci.com/gh/3scale/porta.svg?style=svg)](https://circleci.com/gh/3scale/porta)[![Maintainability](https://api.codeclimate.com/v1/badges/1fe7e330e8507ea893be/maintainability)](https://codeclimate.com/github/3scale/porta/maintainability)[![codecov](https://codecov.io/gh/3scale/porta/branch/master/graph/badge.svg)](https://codecov.io/gh/3scale/porta)
 
 The 3scale `System` component is part of the 3Scale API Management solution and is responsible for serving the:
 

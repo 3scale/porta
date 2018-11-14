@@ -1,4 +1,7 @@
-module NavigationHelpers
+# frozen_string_literal: true
+
+World(Module.new do
+  break unless defined?(DeveloperPortal)
 
   include DeveloperPortal::Engine.routes.url_helpers
 
@@ -208,8 +211,6 @@ module NavigationHelpers
       new_provider_admin_account_invitation_path
     when 'the provider sent invitations page'
       provider_admin_account_invitations_path
-    when 'the edit provider logo page'
-      edit_provider_admin_account_logo_path
 
     #
     # API Management
@@ -222,17 +223,8 @@ module NavigationHelpers
       active_doc = ApiDocs::Service.find_by_system_name $1
       admin_api_docs_service_path active_doc.system_name, format: :json
 
-    when 'the services dashboard page'
-      admin_services_path
-
-    when 'the API dashboard'
-      admin_apiconfig_root_path
-
-    when 'the API dashboard page'
-      admin_apiconfig_root_path
-
-    when 'the API services page'
-      admin_services_path
+    when /(the )?API dashboard( page)?/
+      admin_service_path provider_first_service!
 
     when 'the API alerts page'
       admin_alerts_path
@@ -290,19 +282,9 @@ module NavigationHelpers
     when 'the service plans admin page'
       admin_service_service_plans_path provider_first_service!
 
-    when 'the alerts settings page'
-      notifications_admin_service_path provider_first_service!
-
     when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
-
-    when 'the transaction errors page'
-      admin_errors_path
-
-    when 'the latest transactions page'
-      admin_transactions_path
-
 
     #
     # Account plans (buyer side)
@@ -358,21 +340,24 @@ module NavigationHelpers
       new_admin_buyers_account_application_path(buyer)
 
     when /^the provider side "([^"]*)" application page$/
-      admin_buyers_application_path(Cinstance.find_by_name!($1))
+      application = Cinstance.find_by_name!($1)
+      admin_service_application_path(application.service, application)
 
     when /^the provider side "([^"]*)" edit application page$/
-      edit_admin_buyers_application_path(Cinstance.find_by_name!($1))
+      application = Cinstance.find_by_name!($1)
+      edit_admin_service_application_path(application.service, application)
 
     when /^the provider side application page for "([^"]*)"$/
-      admin_buyers_application_path(Account.find_by_org_name!($1).bought_cinstance)
+      application = Account.find_by_org_name!($1).bought_cinstance
+      admin_service_application_path(application.service, application)
 
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/
       admin_buyers_applications_path(:per_page => $1)
 
     when /^the provider side edit page for application "([^"]*)" of buyer "([^"]*)"$/
-      edit_admin_buyers_account_application_path(Account.find_by_org_name!($2),
-                                            Cinstance.find_by_name!($1))
+      application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
+      edit_admin_service_application_path(application.service, application)
 
     #
     # Service contracts (provider side)
@@ -473,6 +458,15 @@ module NavigationHelpers
     when 'the dns settings page'
       admin_site_dns_path
 
+    when 'the spam protection page'
+      edit_admin_site_spam_protection_path
+
+    when 'the xss protection page'
+      edit_admin_site_developer_portal_path
+
+    when 'the feature visibility page'
+      provider_admin_cms_switches_path
+
     when 'the fields definitions index page'
       admin_fields_definitions_path
 
@@ -492,8 +486,6 @@ module NavigationHelpers
     # Stats
     #
     # FIXME: this feels really wrong, passing default service
-    when 'the provider stats overview'
-      admin_stats_root_path
     when 'the provider stats usage page'
       admin_service_stats_usage_path provider_first_service!
     when 'the provider stats apps page'
@@ -615,10 +607,11 @@ module NavigationHelpers
     when 'the provider site page'
       admin_site_settings_path
 
-    when 'the transaction errors page'
-      admin_errors_path
     when 'the latest transactions page'
       admin_transactions_path
+
+    when 'the edit webhooks page'
+      edit_provider_admin_webhooks_path
 
     #Previous routes still used.
     when 'the provider access rules page'
@@ -667,6 +660,4 @@ module NavigationHelpers
         "Now, go and add a mapping in #{__FILE__}"
     end
   end
-end
-
-World(NavigationHelpers)
+end)

@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseController
 
-  activate_menu :cms, :content
+  activate_menu :audience, :cms, :content
   before_action :available_sections, :only => [:edit, :new ]
   before_action :find_section , :only => [:show, :edit, :update, :destroy ]
   before_action :find_children , :only => [:show, :edit, :update]

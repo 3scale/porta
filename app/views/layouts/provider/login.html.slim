@@ -18,19 +18,10 @@ html lang="en"
     # are split Provider/Buyer side
 
   body class="login-layout" data-barretina-id=(@provider.id rescue nil) data-barretina-redirect-url=(session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
+    div.red-hat-logo
     div id="wrapper"
-      div id="logo-wrapper"
-        = render partial: "/provider/logo"
-
+      div.login-logo
+        | Red Hat 3scale API Management
       div id='border' class="self_clear"
-        - if @presenter.show_username_password_related_content?
-          ul id="second_nav" class="self_clear"
-            li class=(params[:request_password_reset] ? '' : 'active')
-              = link_to "Sign in", provider_admin_dashboard_path
-            li
-              ' |
-            li class=(params[:request_password_reset] ? 'active' : '')
-              = link_to 'Forgot password?', provider_login_path(request_password_reset: true), class: 'toggle-panel', data: { panel:  'request_password_reset_panel' }
-
-        = render "shared/provider/flash", flash: flash
         = yield
+        = render "shared/provider/flash", flash: flash

@@ -10,7 +10,7 @@ First of all, please keep in mind that multiple types of contributions are possi
 
 #### **Did you find a bug?**
 
-* **Do not open up a GitHub issue if the bug is a security vulnerability**. Please contact us privately instead.
+* **Do not open up a GitHub issue if the bug is a security vulnerability**. Please [contact us privately](https://access.redhat.com/security/team/contact) instead.
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/3scale/porta/issues).
 
@@ -27,6 +27,18 @@ First of all, please keep in mind that multiple types of contributions are possi
 * Suggest your change by **[opening](https://github.com/3scale/porta/issues/new) a GitHub issue first**, before writing any code.
 
 * Please think twice about starting to work on code before having collected positive feedback about the change. Maintainers may have already decided against accepting such contributions, so your work may not be incorporated. 
+
+#### **Is there any other requirement to open a PR?**
+
+We enforce all the commits to be signed with GPG before merging the PR to master.
+GPG is a form of encryption and it is used to verify the identity of the committer so other people can trust that the changes come from a trusted source.
+
+To do so, you only need to follow these steps:
+  1. Check if you already have existing GPG keys in your local computer following [this guide](https://help.github.com/articles/checking-for-existing-gpg-keys/).
+  2. If you don't have any, generate a new GPG key following [this guide](https://help.github.com/articles/generating-a-new-gpg-key/).
+  3. Add the GPG key to your GitHub account following [this guide](https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/).
+  4. Tell Git about your signing key following [this guide](https://help.github.com/articles/telling-git-about-your-signing-key/).
+  5. Sign your commits with the GPG key following [this guide](https://help.github.com/articles/signing-commits/).
 
 #### **Do you have questions about the source code?**
 

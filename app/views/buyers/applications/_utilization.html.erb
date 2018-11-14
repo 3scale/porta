@@ -20,9 +20,9 @@
         <tr/>
       <% utilization.each do |item| %>
         <tr>
-          <td><b><%=item.friendly_name %></b>&nbsp;(<%=item.system_name%>)</td>
+          <td><b class="u-break-word"><%=item.friendly_name %></b>&nbsp;(<%=item.system_name%>)</td>
           <td>per <b><%=item.period%></b></td>
-          <% 
+          <%
 
               utilization = "#{item.current_value}/#{item.max_value}"
 
@@ -47,4 +47,3 @@
 <%end%>
 
 </div>
-

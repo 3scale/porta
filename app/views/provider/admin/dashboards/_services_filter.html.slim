@@ -1,0 +1,24 @@
+- if current_user.multiple_accessible_services?
+  #api_filter
+
+    javascript:
+      document.addEventListener('DOMContentLoaded', function () {
+        var allApis = #{json @services}
+
+        var displayApis = function(filteredApis) {
+          allApis.forEach(function(api) {
+            var isFilteredApi = filteredApis.some(function(filteredApi) {
+              return filteredApi.service.id === api.service.id
+            });
+
+            document.getElementById("service_" + api.service.id).style.display = isFilteredApi ? "inline": "none";
+          })
+        }
+
+        window.ApiFilter({
+          apis: allApis,
+          displayApis: displayApis
+        }, 'api_filter')
+      })
+- else
+  h1.DashboardSection-title APIs

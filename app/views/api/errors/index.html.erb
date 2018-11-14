@@ -1,3 +1,5 @@
+<% content_for :sublayout_title, 'Integration Errors' %>
+
 <p>
 Here you can see errors related to your API's integration with 3scale, in particular in calls made to methods of 3scale's Service Management API.
 </br>
@@ -6,31 +8,29 @@ Please refer to the
 documentation section on using 3scale's Service Management API.
 </p>
 
-<% @service_errors.each do |service, errors| %>
-  <h3><%= service.name %></h3>
-  <div id="transaction_errors_container_<%= service.id %>">
-    <% if errors.empty? %>
-      <%= render :partial => 'no_errors' %>
-    <% else %>
-      <div class="operations"><%= fancy_button_to 'Purge', admin_errors_path(:service_id => service.id),
-        :method => :delete, :class => 'delete', :remote => true %></div>
-     <table class="data" id="transaction_errors">
-         <thead>
-          <tr>
-            <th>Time (UTC)</th>
-            <th>Error</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% errors.each do |error| %>
-            <tr class="<%= error.code %>">
-              <td class="first"><%= error.timestamp %></td>
-              <td><%= h error.message %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <%= will_paginate(errors) %>
-    <% end %>
-  </div>
-<% end %>
+<h3><%= @service.name %></h3>
+<div id="transaction_errors_container_<%= @service.id %>">
+  <% if @errors.empty? %>
+    <%= render :partial => 'no_errors' %>
+  <% else %>
+    <div class="operations"><%= fancy_button_to 'Purge', admin_service_errors_path(@service),
+                                                :method => :delete, :class => 'delete', :remote => true %></div>
+    <table class="data" id="transaction_errors">
+      <thead>
+      <tr>
+        <th>Time (UTC)</th>
+        <th>Error</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @errors.each do |error| %>
+        <tr class="<%= error.code %>">
+          <td class="first"><%= error.timestamp %></td>
+          <td><%= h error.message %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate(@errors) %>
+  <% end %>
+</div>
