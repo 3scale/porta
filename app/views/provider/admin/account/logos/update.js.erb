@@ -1,0 +1,7 @@
+(function($) {
+    var container = $("#logo_container");
+    container.empty();
+    container.append($(<%= render_to_js_string('logo') %>));
+
+    $.flash.notice("<%= escape_javascript(@notice) %>");
+})(jQuery);

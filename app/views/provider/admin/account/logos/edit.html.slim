@@ -1,0 +1,15 @@
+h1 Logo
+p
+  ' Upload your logo for usage in the developer portal through
+  = link_to 'a Liquid drop', provider_admin_liquid_docs_path(anchor: 'logo_url')
+  | .
+
+= semantic_form_for @profile, url: provider_admin_account_logo_path, html: {multipart: true, id: 'logo_form'} do |form|
+  = form.inputs do
+    li class="file"
+      = form.file_field :logo, title: "click to select an image"
+      = submit_tag 'Upload', class: "important-button"
+
+- if @profile.logo?
+  div id="logo_container"
+    = render 'logo'
