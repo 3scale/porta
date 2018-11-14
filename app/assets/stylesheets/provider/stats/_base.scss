@@ -113,6 +113,19 @@ $stats-menu-help-color: $label-color;
 
 /* StatsCVSLink */
 .StatsCSVLink {
+  color: $link-color;
+  cursor: pointer;
+  display: inline-block;
+  float: right;
+
+  &:hover {
+    color: $font-color;
+  }
+}
+
+.StatsCSVLink-disabled {
+  color: $disabled-color;
+  cursor: not-allowed;
   display: inline-block;
   float: right;
 }
