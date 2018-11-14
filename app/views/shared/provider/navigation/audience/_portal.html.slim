@@ -16,6 +16,11 @@
           title: 'Groups',
           path: provider_admin_cms_groups_path
 
+  - if can? :update, :logo
+    = render vertical_nav_item,
+           title: 'Logo',
+           path:  edit_provider_admin_account_logo_path
+
   = render vertical_nav_item,
        title: 'Feature Visibility',
        path: provider_admin_cms_switches_path
