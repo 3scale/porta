@@ -14,7 +14,7 @@
         = auth.human_kind
     - if @presenter.show_username_password_related_content?
       div.authorizeLink.authorizeLink-alt
-        ' or sign in with your 3scale credentials
+        ' or sign in with your 3scale credentials:
   - if @presenter.show_username_password_related_content?
     div style=("display:#{params[:request_password_reset] ? 'none' : 'block'}")
       = semantic_form_for @session, html: { method: :post }, url:provider_sessions_path do |f|
