@@ -22,10 +22,10 @@ form class="formtastic" id="new_service_source"
   = form.inputs "Service" do
     li
       label for="namespace" Namespace
-      = form.select :namespace, [], include_blank: true
+      = form.select :namespace, [], {}, :required => true
     li
       label for="service_name" Name
-      = form.select :name, [], include_blank: true
+      = form.select :name, [], {}, :required => true
 
   = form.buttons do
     = form.commit_button
