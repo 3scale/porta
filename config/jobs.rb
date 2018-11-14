@@ -30,7 +30,7 @@ module ThreeScale
       Cinstance.notify_about_expired_trial_periods
       Pdf::Dispatch.daily
       FindAndDeleteScheduledAccountsWorker.perform_async
-      ProvidedAccessToken.long_expired.delete_all
+      DeleteProvidedAccessTokensWorker.perform_async
     ].freeze
 
     BILLING = %w[
