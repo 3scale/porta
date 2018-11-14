@@ -22,7 +22,7 @@ module ServiceDiscovery
     # Consider that when it is done via service_account, we do not need the oauth configuration
     # We already have a bearer_token to authenticate
     def oauth_configuration_ready?
-      service_account? || oauth_configuration.present?
+      enabled && (service_account? || oauth_configuration.present?)
     end
     alias service_accessible? oauth_configuration_ready?
 
