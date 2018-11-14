@@ -103,6 +103,11 @@ body.login-layout {
 
     &-alt {
       color: $light-color;
+      cursor: default;
+      
+      &:hover {
+        color: $light-color;
+      }
     }
   }
 
