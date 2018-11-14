@@ -1,5 +1,5 @@
 class Provider::Admin::Account::LogosController < Provider::Admin::Account::BaseController
-  # activate_menu :account, :logo
+  activate_menu! :audience, :cms, :logo
 
   def edit
     @profile = profile
