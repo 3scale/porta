@@ -67,6 +67,7 @@ jobs:
       - run:
           name: Install gems with bundler
           command: |
+            [[ -s /etc/machine-id ]] || dbus-uuidgen | sudo tee /etc/machine-id
             bundle check || bundle install --deployment
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
