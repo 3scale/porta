@@ -57,7 +57,24 @@ class ServiceDiscovery::OAuthConfigurationTest < ActiveSupport::TestCase
     assert_equal 2, subject.retries
   end
 
-  test 'service_accessible??' do
+  test 'service_accessible? when not enabled' do
+    config.stubs(enabled: false)
+    subject.stubs(oauth_configuration: nil)
+    refute subject.service_accessible?
+
+    subject.stubs(oauth_configuration: well_known_response)
+    refute subject.service_accessible?
+
+    subject.stubs(authentication_method: ActiveSupport::StringInquirer.new('service_account'))
+    refute subject.service_accessible?
+
+    subject.stubs(oauth_configuration: nil)
+    refute subject.service_accessible?
+
+  end
+
+  test 'service_accessible? when enabled' do
+    config.stubs(enabled: true)
     subject.stubs(oauth_configuration: nil)
     refute subject.service_accessible?
 
