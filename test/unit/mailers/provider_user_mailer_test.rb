@@ -144,9 +144,24 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_match %r{The #{master_account.org_name} team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
+
+      test 'lost password under https' do
+        with_default_url_options protocol: 'https' do
+          user.stubs lost_password_token: 'abc123'
+          ProviderUserMailer.lost_password(user).deliver_now
+          email = ActionMailer::Base.deliveries.last
+          assert_match "https://#{account.admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
+        end
+      end
     end
 
     private
+
+    def with_default_url_options(options)
+      ActionMailer::Base.stubs default_url_options: options
+      yield
+      ActionMailer::Base.unstub :default_url_options
+    end
 
     def user
       @user ||= create_user
