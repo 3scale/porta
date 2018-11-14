@@ -12,6 +12,12 @@
                      vertical_nav_item: vertical_nav_item,
                      submenu: :personal }
 
+/- if (can? :update, :logo)
+  = render vertical_nav_item,
+         title: 'Logo',
+         path:  edit_provider_admin_account_logo_path,
+         icon: 'picture-o'
+
 - if can?(:manage, current_account)
   - unless current_account.provider_can_use?(:new_notification_system)
     = render vertical_nav_item,
