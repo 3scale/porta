@@ -13,7 +13,7 @@ When(/^the provider is logged in and visits the "(.*?)" application stats$/) do 
     And I log in as provider "foo.example.com"
   }
 
-  click_on 'Applications', match: :one
+  click_on(text: /\d Apps?/, match: :first)
 
   within '.cinstances' do
     click_on developer_app_name, match: :one
@@ -21,7 +21,7 @@ When(/^the provider is logged in and visits the "(.*?)" application stats$/) do 
 
   assert_text "Application '#{developer_app_name}'"
 
-  within('ul#subsubmenu') do
+  within('ul.subsubmenu') do
     click_on 'Analytics', match: :one
   end
 

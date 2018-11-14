@@ -34,9 +34,10 @@ module ThreeScale::SpamProtection
 
       attr_reader :form, :protector
 
-      delegate :template, :to => :form
-      delegate :logged_in?, :to => :template, allow_nil: true
-      delegate :is_spam?, :checks, :to => :protector
+      delegate :template, to: :form
+      delegate :logged_in?, to: :template, allow_nil: true
+      delegate :is_spam?, :checks, to: :protector
+      delegate :captcha_configured?, to: Recaptcha
 
       def initialize(form, protector)
         @form = form
@@ -56,11 +57,11 @@ module ThreeScale::SpamProtection
       end
 
       def captcha_required?
-        not logged_in? and level == :captcha
+        (captcha_configured? && level == :captcha) && !logged_in?
       end
 
       def captcha_needed?
-        captcha_required? or not http_method.get? && is_spam?
+        captcha_required? || (!http_method.get? && is_spam?)
       end
 
       def enabled?

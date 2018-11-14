@@ -40,17 +40,21 @@ class NotificationMailerTest < ActionMailer::TestCase
   def test_application_created
     FieldsDefinition.create!(account: provider, name: 'LALA', target: 'Account', label: 'foo')
     application = FactoryGirl.create(:cinstance, name: 'Bob app')
+    service     = application.service
     user        = FactoryGirl.create(:simple_user, first_name: 'Some Gal')
     event       = Applications::ApplicationCreatedEvent.create(application, user)
     mail        = NotificationMailer.application_created(event, receiver)
 
-    assert_equal "Bob app created on #{application.service.name}", mail.subject
+    assert_equal "Bob app created on #{service.name}", mail.subject
     assert_equal ['admin@example.com'], mail.to
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
-      assert_match "A new application subscribed to the #{application.plan.name} plan on the #{application.service.name} service of the #{application.account.name} account.", body.encoded
+      assert_match "A new application subscribed to the #{application.plan.name} plan on the #{service.name} service of the #{application.account.name} account.", body.encoded
       assert_match 'Application details:', body.encoded
+      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(service, application,
+                                                                                         host: service.account.admin_domain)
+      assert_match cinstance_url, body.encoded
 
       assert_html_email(mail) do
         assert_select 'li', text: 'Name: Bob app'
@@ -99,9 +103,10 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_limit_violation_reached_provider
-    alert = FactoryGirl.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
-    event = Alerts::LimitViolationReachedProviderEvent.create(alert)
-    mail  = NotificationMailer.limit_violation_reached_provider(event, receiver)
+    alert   = FactoryGirl.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
+    service = application.service
+    event   = Alerts::LimitViolationReachedProviderEvent.create(alert)
+    mail    = NotificationMailer.limit_violation_reached_provider(event, receiver)
 
     assert_equal "Application #{application.name} limit violation - usage of " \
                  "#{alert.message} is above #{alert.level}%", mail.subject
@@ -112,13 +117,17 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
+      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(service, application,
+                                                                                         host: service.account.admin_domain)
+      assert_match cinstance_url, body.encoded
     end
   end
 
   def test_limit_alert_reached_provider
-    alert = FactoryGirl.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
-    event = Alerts::LimitAlertReachedProviderEvent.create(alert)
-    mail  = NotificationMailer.limit_alert_reached_provider(event, receiver)
+    alert   = FactoryGirl.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
+    service = application.service
+    event   = Alerts::LimitAlertReachedProviderEvent.create(alert)
+    mail    = NotificationMailer.limit_alert_reached_provider(event, receiver)
 
     assert_equal "Application #{application.name} limit alert - usage of " \
                  "#{alert.message} is above #{alert.level}%", mail.subject
@@ -129,6 +138,9 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
+      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(service, application,
+                                                                                         host: service.account.admin_domain)
+      assert_match cinstance_url, body.encoded
     end
   end
 
@@ -280,6 +292,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     account   = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alex')
     plan      = FactoryGirl.build_stubbed(:simple_application_plan, name: 'planLALA')
     cinstance = FactoryGirl.build_stubbed(:simple_cinstance, user_account: account, plan: plan, name: 'LALA')
+    service   = cinstance.service
     event     = Cinstances::CinstanceExpiredTrialEvent.create(cinstance)
     mail      = NotificationMailer.cinstance_expired_trial(event, receiver)
 
@@ -289,6 +302,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Alex's trial of the LALA application on the planLALA has expired.", body.encoded
+      assert_match url_helpers.admin_service_application_url(service, cinstance, host: service.provider.admin_domain), body.encoded
     end
   end
 
@@ -381,6 +395,9 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Previous plan: #{old_plan.name}", body.encoded
       assert_match "Current plan: #{cinstance.plan.name}", body.encoded
       assert_match "Application #{cinstance.name} has changed to plan #{cinstance.plan.name}.", body.encoded
+      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(cinstance.service, cinstance,
+                                                                                         host: cinstance.service.account.admin_domain)
+      assert_match cinstance_url, body.encoded
     end
   end
 
@@ -484,7 +501,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_deleted
-    service = FactoryGirl.build_stubbed(:simple_service)
+    service = FactoryGirl.build_stubbed(:simple_service, account: provider)
     event   = Services::ServiceDeletedEvent.create(service)
     mail    = NotificationMailer.service_deleted(event, receiver)
 
@@ -492,6 +509,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match "The service #{service.name} has been deleted.", body.encoded
+      assert_match url_helpers.provider_admin_dashboard_url(host: provider.admin_domain), body.encoded
     end
   end
 
@@ -517,7 +535,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Application: Boo App", body.encoded
       assert_match "Current plan: #{plan.name}", body.encoded
       assert_match "Requested plan: #{plan_2.name}", body.encoded
-      assert_match url_helpers.admin_buyers_application_url(application, host: provider.admin_domain), body.encoded
+      assert_match url_helpers.admin_service_application_url(application.service, application, host: application.service.provider.admin_domain), body.encoded
     end
   end
 

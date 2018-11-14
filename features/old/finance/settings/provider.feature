@@ -8,11 +8,6 @@ Background:
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
 
-Scenario: Finance settings do no show if finance switch is denied
-  Given provider "foo.example.com" has "finance" switch denied
-  When I go to the settings page
-  Then I should not see link to the finance settings page
-
 Scenario: Turning charging on/off
   Given provider "foo.example.com" has "finance" switch allowed
   When I go to the finance settings page

@@ -6,6 +6,10 @@ $call-to-action-background-color: $error-color;
   color: $call-to-action-color;
   padding: line-height-times(1/2);
   text-align: left;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 2000;
 
   &-link {
     border: $border-width solid $call-to-action-color;

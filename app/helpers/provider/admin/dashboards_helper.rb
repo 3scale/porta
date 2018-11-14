@@ -19,8 +19,12 @@ module Provider::Admin::DashboardsHelper
     widget.percentual_change > 0 ? 'u-plus' : 'u-minus'
   end
 
-  def dashboard_collection_link(singular_name, collection, path, plural = nil)
-    link_to pluralize(number_to_human(collection.size), singular_name, plural), path, class: 'DashboardNavigation-link'
+  def dashboard_collection_link(singular_name, collection, path, plural = nil, icon_name = nil)
+    link_to path, class: 'DashboardNavigation-link' do
+      link_text = pluralize(number_to_human(collection.size), singular_name, plural)
+      link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
+      link_text.html_safe
+    end
   end
 
   def dashboard_secondary_collection_link(singular_name, collection, path, plural = nil)
@@ -42,11 +46,11 @@ module Provider::Admin::DashboardsHelper
   end
 
   def show_forum_on_dashboard?
-    current_account.forum_enabled? && current_account.forum.topics.any?
+    current_account.forum_enabled? && current_account.forum.recent_topics.any?
   end
 
   def show_subscriptions_on_dashboard?(service)
-    can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
+    can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible? && current_account.service_plans.not_custom.size > 1
   end
 
   def show_service_plans_on_dashboard?(service)

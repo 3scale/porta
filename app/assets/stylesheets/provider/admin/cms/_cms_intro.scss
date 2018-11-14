@@ -1,5 +1,3 @@
-$glow-color: $highlight-color;
-
 @mixin cms-intro-coloring($name, $color2) {
   $color: $color2;
 
@@ -80,22 +78,27 @@ $glow-color: $highlight-color;
 
 #cms-sidebar {
   li.glowing.active, li.glowing {
-    color: $glow-color !important;
+    background-color: $glow-background-color;
   }
 
   input.glowing {
+    background-color: $glow-background-color;
     color: $glow-color !important;
 
     &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      background-color: $glow-background-color;
       color: $glow-color !important;
     }
     &::-moz-placeholder { /* Firefox 19+ */
+      background-color: $glow-background-color;
       color: $glow-color !important;
     }
     &:-ms-input-placeholder { /* IE 10+ */
+      background-color: $glow-background-color;
       color: $glow-color !important;
     }
     &:-moz-placeholder { /* Firefox 18- */
+      background-color: $glow-background-color;
       color: $glow-color !important;
     }
   }

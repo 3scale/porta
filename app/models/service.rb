@@ -5,17 +5,19 @@ class Service < ApplicationRecord
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service
   include Logic::EndUsers::Service
-  include Logic::Backend::Service
   include Logic::Authentication::Service
   include Logic::RollingUpdates::Service
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
+  include ServiceDiscovery::ModelExtensions::Service
+
+  DELETE_STATE = 'deleted'.freeze
 
   has_system_name uniqueness_scope: :account_id
 
   attr_readonly :system_name
 
-  validates :backend_version, inclusion: { in: BackendVersion::VERSIONS }
+  validates :backend_version, inclusion: { in: ->(service) { BackendVersion.usable_versions(service: service) }}
 
   include Authentication
   validates :support_email, format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
@@ -25,6 +27,7 @@ class Service < ApplicationRecord
   after_commit :update_notification_settings
 
   after_save :publish_events
+  after_save :deleted_without_state_machine
 
   before_destroy :stop_destroy_if_last_or_default
   before_destroy :destroy_features
@@ -34,6 +37,7 @@ class Service < ApplicationRecord
     service.has_many :service_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :end_user_plans, &DefaultPlanProxy
+    service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
   end
 
   def self.columns
@@ -88,8 +92,19 @@ class Service < ApplicationRecord
 
   has_many :service_tokens, inverse_of: :service, dependent: :destroy
 
-  scope :accessible, -> { where.not(state: 'deleted'.freeze) }
+  scope :accessible, -> { where.not(state: DELETE_STATE) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
+  scope(:permitted_for_user, lambda do |user|
+    # TODO: this is probably wrong...
+    # how come if it does not have access_to_all_services but it can not use service_permissions,
+    # then we allow them all?!!
+    # but this is keeping the same behaviour that it previously had
+    if user.forbidden_some_services?
+      where({id: user.member_permission_service_ids})
+    else
+      all
+    end
+  end)
 
   validates :tech_support_email, :admin_support_email, :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
 
@@ -111,6 +126,9 @@ class Service < ApplicationRecord
     APICAST = %i(hosted self_managed).freeze
     private_constant :APICAST
 
+    SERVICE_MESH = %i[istio].freeze
+    private_constant :SERVICE_MESH
+
     def self.plugins
       PLUGINS.map { |lang| "plugin_#{lang}".freeze }
     end
@@ -119,9 +137,17 @@ class Service < ApplicationRecord
       gateways = APICAST - (ThreeScale.config.apicast_custom_url ? %i(self_managed) : [])
       gateways.map { |gateway| gateway.to_s.freeze }
     end
+
+    def self.service_mesh
+      SERVICE_MESH.map { |name| "service_mesh_#{name}".freeze }
+    end
+
+    def self.all
+      plugins + gateways + service_mesh
+    end
   end
 
-  validates :deployment_option, inclusion: { in: DeploymentOption.plugins + DeploymentOption.gateways }, presence: true
+  validates :deployment_option, inclusion: { in: DeploymentOption.all }, presence: true
   scope :deployed_with_gateway, -> { where(deployment_option: DeploymentOption.gateways) }
 
   validate :end_users_switch
@@ -165,6 +191,7 @@ class Service < ApplicationRecord
       transition [:incomplete, :published, :offline, :hidden] => :deleted, unless: :last_accessible?
     end
 
+    before_transition to: [:deleted], do: :deleted_by_state_machine
     after_transition to: [:deleted], do: :notify_deletion
   end
 
@@ -339,6 +366,12 @@ class Service < ApplicationRecord
       xml.state state
       xml.system_name system_name
       xml.backend_version proxy&.authentication_method
+      xml.description description
+
+      xml.deployment_option deployment_option
+      xml.support_email support_email
+      xml.tech_support_email tech_support_email
+      xml.admin_support_email admin_support_email
 
       xml.end_user_registration_required end_user_registration_required
 
@@ -438,10 +471,13 @@ class Service < ApplicationRecord
   PLUGINS = APPLY_I18N.call(DeploymentOption.plugins)
   private_constant :PLUGINS
 
-  def self.deployment_options(_)
+  SERVICE_MESH = APPLY_I18N.call(DeploymentOption.service_mesh)
+  private_constant :SERVICE_MESH
+
+  def self.deployment_options(_ = nil)
     gateway = APPLY_I18N.call(DeploymentOption.gateways)
 
-    { 'Gateway' => gateway, 'Plugin'  => PLUGINS }
+    { 'Gateway' => gateway, 'Plugin'  => PLUGINS, 'Service Mesh'  => SERVICE_MESH }
   end
 
   def deployment_option=(value)
@@ -462,6 +498,16 @@ class Service < ApplicationRecord
   end
 
   private
+
+  def deleted_by_state_machine
+    @deleted_by_state_machine = true
+  end
+
+  def deleted_without_state_machine
+    if state_changed? && deleted? && !@deleted_by_state_machine
+      System::ErrorReporting.report_error('Service has been deleted without using State Machine')
+    end
+  end
 
   def destroyable?
     return true if destroyed_by_association

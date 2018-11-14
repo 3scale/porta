@@ -111,7 +111,7 @@ Feature: User management
     When I log in as provider "foo.example.com"
     And I go to the provider users page
     And I follow "foo.example.com"
-    Then I should see "Edit your personal details"
+    Then I should see "Personal details"
     Then I should not see "Role"
 
     When I do a HTTP request to change role of user "foo.example.com" to "member"

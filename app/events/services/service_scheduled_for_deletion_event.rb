@@ -10,8 +10,4 @@ class Services::ServiceScheduledForDeletionEvent < ServiceRelatedEvent
       }
     )
   end
-
-  def after_commit
-    DeletePlainObjectWorker.perform_later(Service.find(service_id))
-  end
 end

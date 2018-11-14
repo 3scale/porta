@@ -1,4 +1,6 @@
-h1 Billing Settings
+- content_for(:title)
+  = "Charging & Gateway"
+
 = form_for @billing_strategy, url: admin_finance_billing_strategy_path,
            method: :put, html: { class: 'formtastic' } do |f|
   fieldset class="inputs"

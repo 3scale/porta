@@ -1,0 +1,49 @@
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+
+- if can?(:manage, :partners) || can?(:manage, :settings)
+  = render partial: 'shared/provider/navigation/audience/accounts',
+           layout: layout_secondary_nav,
+           locals: { title: 'Accounts',
+                     icon: 'briefcase',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :accounts }
+
+- if can?(:manage, :applications)
+  = render partial: 'shared/provider/navigation/audience/applications',
+          layout: layout_secondary_nav,
+          locals: { title: 'Applications',
+                    icon: 'cubes',
+                    vertical_nav_item: vertical_nav_item,
+                    submenu: :applications }
+
+- if can?(:see, :finance)
+  - if can?(:manage, :finance) || can?(:manage, :settings)
+    = render partial: 'shared/provider/navigation/audience/billing',
+             layout: layout_secondary_nav,
+             locals: { title: 'Billing',
+                       icon: 'credit-card',
+                       vertical_nav_item: vertical_nav_item,
+                       submenu: :finance }
+
+- if (can?(:manage, :portal) || can?(:manage, :settings) || can?(:manage, :plans)) && !master_on_premises?
+  = render partial: 'shared/provider/navigation/audience/portal',
+           layout: layout_secondary_nav,
+           locals: { title: 'Developer Portal',
+                     icon: 'sitemap',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :cms }
+
+= render partial: 'shared/provider/navigation/audience/messages',
+         layout: layout_secondary_nav,
+         locals: { title: 'Messages',
+                   icon: 'envelope',
+                   vertical_nav_item: vertical_nav_item,
+                   submenu: :messages }
+
+- if can?(:manage, :portal) && current_account.forum_enabled?
+  = render partial: 'shared/provider/navigation/audience/forum',
+           layout: layout_secondary_nav,
+           locals: { title: 'Forum',
+                     icon: 'comments',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :forum }

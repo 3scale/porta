@@ -46,7 +46,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
       stub_backend_utilization(@data_empty)
       stub_backend_get_keys
 
-      get admin_buyers_application_path(@application1)
+      get admin_service_application_path(@application1.service, @application1)
       assert_response :success
 
       doc = Nokogiri::XML.parse(body)
@@ -59,7 +59,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
       stub_backend_utilization(@data_full)
       stub_backend_get_keys
 
-      get admin_buyers_application_path(@application1)
+      get admin_service_application_path(@application1.service, @application1)
       assert_response :success
 
       doc = Nokogiri::XML.parse(body)
@@ -77,7 +77,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
       stub_backend_utilization(@data_infinity)
       stub_backend_get_keys
 
-      get admin_buyers_application_path(@application1)
+      get admin_service_application_path(@application1.service, @application1)
       assert_response :success
 
       doc = Nokogiri::XML.parse(body)

@@ -26,7 +26,7 @@ module TimecopHelpers
       tasks.each do |task|
         Rails.logger.info "(#{Time.zone.now}) - CRON is running task '#{task}'"
         begin
-          eval(task)
+          binding.eval(task)
         rescue
           puts "Problem running: #{task}"
           raise

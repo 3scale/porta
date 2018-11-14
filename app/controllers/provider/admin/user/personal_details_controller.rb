@@ -1,6 +1,6 @@
 class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::BaseController
   before_action :current_password_verification, only: :update
-  activate_menu! submenu: :personal_details
+  activate_menu :account, :personal, :personal_details
 
   def edit; end
 

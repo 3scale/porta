@@ -329,7 +329,7 @@ end
 Then(/^new tenant should be created$/) do
   @username ||= Account.providers.last!.users.first!.username
   assert_selector('.flash-message--notice', :text => 'Tenant account was successfully created.')
-  click_link(:text => 'Tenants')
+  step 'I go to the buyer accounts page'
   assert_selector(:xpath, './/table[@id="buyer_accounts"]//tr', :text => @username, :count => 1)
 end
 

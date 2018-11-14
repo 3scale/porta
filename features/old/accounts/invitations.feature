@@ -70,7 +70,7 @@ Feature: Invitations
     Then I should see "gentoo@foo.example.com"
     And I should not see "ubuntu@foo.example.com"
     Then I press "Delete" for user "gentoo@foo.example.com" and I confirm dialog box
-    And I follow "Invitations"
+    And I go to the provider sent invitations page
     Then I should not see "ubuntu@foo.example.com"
 
   Scenario: Accepting an invitation
@@ -95,7 +95,7 @@ Feature: Invitations
     When I log in as provider "foo.example.com"
     And I go to the provider users page
     And I follow "Invitations"
-    Then I should see "Sent Invitations" in a header
+    Then I should see "Invitations" in a header
     And I should see pending invitation for "alice@foo.example.com"
     And I should see accepted invitation for "bob@foo.example.com"
 

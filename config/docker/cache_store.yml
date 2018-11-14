@@ -1,14 +1,14 @@
 development:
   - :dalli_store
-  - <%= ENV.fetch('MEMCACHED_SERVER', nil) %>
+  - <%= ENV.fetch('MEMCACHE_SERVERS', nil) %>
 
 test:
   - :null_store
 
 preview:
   - :dalli_store
-  - <%= ENV.fetch('MEMCACHED_SERVER', nil) %>
+  - <%= ENV.fetch('MEMCACHE_SERVERS', nil) %>
 
 production:
   - :dalli_store
-  - <%= ENV.fetch('MEMCACHED_SERVER', nil) %>
+  - <%= ENV.fetch('MEMCACHE_SERVERS', nil) %>

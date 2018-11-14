@@ -1,0 +1,9 @@
+- if can?(:read, Invoice) && !ThreeScale.config.onpremises
+  = render vertical_nav_item,
+         title: '3scale Invoices',
+         path:  provider_admin_account_invoices_path
+
+- if can?(:manage, :credit_card) && !ThreeScale.config.onpremises
+  = render vertical_nav_item,
+         title: 'Payment Details',
+         path:  provider_admin_account_braintree_blue_path

@@ -55,4 +55,20 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
     assert @drop.multiple_services_allowed?
   end
 
+  test 'api_specs' do
+    valid_attributes = {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
+    services = FactoryGirl.create_list(:service, 2, account: @provider)
+    @provider.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
+    services.first.api_docs_services.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
+    services.last.api_docs_services.create!(valid_attributes.merge({name: 'service-deleted'})) # non-accessible with service
+    services.last.mark_as_deleted!
+
+    api_specs_collection_drop = @drop.api_specs
+    assert_equal 2, api_specs_collection_drop.length
+    api_specs_collection_drop.each do |api_spec_drop|
+      assert_instance_of Liquid::Drops::ApiSpec, api_spec_drop
+      assert_includes %w[accessible service_accessible], api_spec_drop.system_name
+    end
+  end
+
 end

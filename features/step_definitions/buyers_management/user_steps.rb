@@ -52,7 +52,7 @@ end
 
 
 When /^I navigate to the edit page of user "([^\"]*)" of buyer "([^\"]*)"$/ do |user, buyer|
-  step %(I follow "Developers")
+  step 'I navigate to the accounts page'
   step %(I follow "#{buyer}")
   step %(I follow "Users")
   step %(I follow "Edit" within the "#{user}" row)

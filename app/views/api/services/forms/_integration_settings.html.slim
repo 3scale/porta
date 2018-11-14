@@ -2,14 +2,25 @@ javascript:
   $(document).ready(function(){
     // warning when changing auth mode
     var auth_mode_changed = false;
+    var current_auth_mode = "#{@service.proxy.authentication_method}";
 
     $("input[name='service[backend_version]']").change( function(){
       auth_mode_changed = true;
     });
 
     $("#edit_service_#{@service.id}").submit( function(){
-      if(auth_mode_changed && !confirm("It is not advisable to change the authentication mode when you are serving customers in production. If you do proceed, you will need to update your APIcast configuration to reflect this change. Do you really want to change the authentication mode?"))
-        return false;
+      var warning_message = 'It is not advisable to change the authentication mode when you are serving customers in production. If you do proceed, you will need to update your APIcast configuration to reflect this change. Do you really want to change the authentication mode?';
+      var deprecation_message = "The OAuth 2.0 authentication option has been deprecated. It can still be used but you won't be able to switch back to it once you confirmed the switch to another authentication mode.";
+
+      if(auth_mode_changed) {
+        if(current_auth_mode == 'oauth') {
+          return confirm(deprecation_message) && confirm(warning_message);
+        } else {
+          return confirm(warning_message);
+        } 
+      };
+
+      return true;
     });
 
     // scrolling
@@ -104,15 +115,24 @@ javascript:
     = form.input :deployment_option,
       as: :radio,
       collection: Service.deployment_options(current_account)['Gateway'],
-      label: Service.deployment_options(current_account).keys[0],
+      label: 'Gateway',
       wrapper_html: { class: "radio--iconic gateway" },
       value_as_class: true,
       hint: t("formtastic.hints.deployment_option_gateway")
 
+    - if current_account.provider_can_use?(:service_mesh_integration)
+      = form.input :deployment_option,
+              as: :radio,
+              collection: Service.deployment_options(current_account)['Service Mesh'],
+              label: 'Service Mesh',
+              wrapper_html: {class: 'radio--iconic service_mesh'},
+              value_as_class: true,
+              hint: t('formtastic.hints.deployment_option_service_mesh')
+
     = form.input :deployment_option,
       as: :radio,
       collection: Service.deployment_options(current_account)['Plugin'],
-      label: 'Or ' + Service.deployment_options(current_account).keys[1],
+      label: 'Or Plugin',
       wrapper_html: { class: "radio--iconic plugin" },
       value_as_class: true,
       hint: t("formtastic.hints.deployment_option_plugin")
@@ -122,7 +142,7 @@ javascript:
       name: 'service[backend_version]',
       as: :radio,
       required: false,
-      collection: Logic::Backend::Service.available_versions_for(@service),
+      collection: BackendVersion.visible_versions(service: @service),
       label: 'Authentication',
       wrapper_html: { class: "radio--iconic" },
       value_as_class: true,

@@ -1,0 +1,28 @@
+- if can? :manage, :partners
+  = render vertical_nav_item,
+         title: 'Listing',
+         path:  admin_buyers_accounts_path
+
+- if can?(:manage, :plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
+  = render vertical_nav_item,
+       title: 'Account Plans',
+       path:   admin_buyers_account_plans_path
+
+- if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
+   = render vertical_nav_item,
+        title: 'Subscriptions',
+        path: admin_buyers_service_contracts_path
+        //path: admin_buyers_service_contracts_path(search: {state: 'pending'})
+
+- if can?(:manage, :settings)
+  - if can? :manage, :partners
+    li.list-group-item
+      span.list-group-item-value.label Settings
+
+  = render vertical_nav_item,
+    title: 'Usage Rules',
+    path:  edit_admin_site_usage_rules_path
+
+  = render vertical_nav_item,
+         title: 'Fields Definitions',
+         path:   admin_fields_definitions_path

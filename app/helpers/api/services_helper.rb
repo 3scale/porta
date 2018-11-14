@@ -1,7 +1,7 @@
 module Api::ServicesHelper
 
   def link_to_service service
-    link_to service.name, admin_services_path(:anchor => dom_id(service))
+    link_to service.name, admin_service_path(service)
   end
 
   def list_items_or_empty collection, empty_message, &block
@@ -48,5 +48,12 @@ module Api::ServicesHelper
   def delete_service_link(service, options = {})
     msg = t('api.services.forms.definition_settings.delete_confirmation', name: h(service.name))
     delete_link_for(admin_service_path(service), {data: { confirm: msg }, method: :delete}.merge(options) )
+  end
+
+  def refresh_service_link(service, options = {})
+    url = service_discovery_usable? ? provider_admin_service_discovery_service_path(service) : service_discovery_presenter.authorize_url
+
+    msg = t('api.services.forms.definition_settings.refresh_confirmation', name: h(service.name))
+    action_link_to(:refresh, url, {data: { confirm: msg }, method: :put}.merge(options) )
   end
 end

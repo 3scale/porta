@@ -11,8 +11,8 @@ And(/^has onboarding process active/) do
   @provider.create_onboarding
 end
 
-When(/^visits the service page$/) do
-  visit(admin_services_path)
+When(/^visits the default service page$/) do
+  visit(admin_service_path(@provider.default_service))
 end
 
 Then(/^(.*) bubble should be visible$/) do |bubble_name|

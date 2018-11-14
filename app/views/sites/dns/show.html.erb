@@ -2,7 +2,10 @@
   <%= javascript_include_tag 'site_dns' %>
 <% end %>
 
-<h1>DNS Settings</h1>
+<% content_for(:title) do %>
+  Domains & Access
+<% end %>
+
 <%= semantic_form_for @account, :url => admin_site_dns_path do |form| %>
   <%= form.semantic_errors %>
 

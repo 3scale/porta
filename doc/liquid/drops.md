@@ -362,6 +362,9 @@ Returns the url of the API spec.
 ### system_name
 Returns the name of the spec.
 
+### service
+Returns the service of the spec if it has any or `nil` otherwise.
+
 -----------
 
 # Application drop
@@ -440,6 +443,7 @@ Returns 'true' if application state is pending.
 ### buyer_alerts_enabled?
 
 ### alerts
+Returns a list of not-deleted alerts for this application
 
 ### description
 Returns the description of the application.
@@ -1608,27 +1612,6 @@ this returns the errors that occurred.
 
 
 ## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1668,6 +1651,27 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -2118,20 +2122,13 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### body
-Text of the post.
+### title
 
-### topic
-Every post belongs to a [topic](#topic-drop).
-
-### created_at
-Date when this post created.
-```liquid
-{{ post.created_at | date: i18n.short_date }}
-```
+### kind
 
 ### url
-The URL of this post within its topic.
+
+### description
 
 -----------
 
@@ -2153,13 +2150,20 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### title
+### body
+Text of the post.
 
-### kind
+### topic
+Every post belongs to a [topic](#topic-drop).
+
+### created_at
+Date when this post created.
+```liquid
+{{ post.created_at | date: i18n.short_date }}
+```
 
 ### url
-
-### description
+The URL of this post within its topic.
 
 -----------
 
@@ -2330,6 +2334,13 @@ You can enable or disable account management in the [usage rules section][usage-
 
 ### api_specs
 Returns API spec collection.
+```liquid
+<ul>
+{% for api_spec in provider.api_specs %}
+  <li>{{ api_spec.system_name }}</li>
+{% endfor %}
+</ul>
+```
 
 -----------
 
@@ -2603,6 +2614,16 @@ Returns the metrics of the service.
 
 ### support_email
 Support email of the service.
+
+### api_specs
+Returns API spec collection.
+```liquid
+<ul>
+{% for api_spec in service.api_specs %}
+  <li>{{ api_spec.system_name }}</li>
+{% endfor %}
+</ul>
+```
 
 -----------
 

@@ -8,6 +8,18 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     login! master_account
   end
 
+  def test_show
+    get admin_api_service_path(master_account.default_service, format: :xml)
+    assert_response :ok
+    assert response.body.include?('deployment_option')
+    assert response.body.include?(master_account.default_service.deployment_option)
+
+    get admin_api_service_path(master_account.default_service, format: :json)
+    assert_response :ok
+    assert response.body.include?('deployment_option')
+    assert response.body.include?(master_account.default_service.deployment_option)
+  end
+
   test 'GET index works for Saas' do
     get admin_api_services_path
     assert_response :ok

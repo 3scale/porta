@@ -74,7 +74,7 @@ Feature: Buyer accounts management security
     And current domain is the admin domain of provider "xyz.example.com"
 
     When I log in as provider "xyz.example.com"
-    And I follow "Developers"
+    And I navigate to the accounts page
     Then I should not see "bob"
 
     When I go to the buyer account edit page for "bob"

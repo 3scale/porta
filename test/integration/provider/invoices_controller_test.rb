@@ -22,7 +22,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
       assert_response :success
       assert_template 'finance/provider/invoices/index'
       assert_not_nil assigns(:invoices)
-      assert_active_menu(:finance)
+      assert_active_menus({main_menu: :audience, submenu: :finance, sidebar: :invoices, topmenu: :dashboard})
     end
 
     should 'list invoices by month' do
@@ -43,7 +43,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
         get admin_finance_invoice_path @invoice
         assert_response :success
         assert_equal @invoice, assigns(:invoice)
-        assert_active_menu(:finance)
+        assert_active_menus({main_menu: :audience, submenu: :finance, sidebar: :invoices, topmenu: :dashboard})
       end
 
       should 'show without buyer_account' do
@@ -52,14 +52,14 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
         @invoice.buyer_account.destroy!
         get admin_finance_invoice_path @invoice
         assert_response :success
-        assert_active_menu(:finance)
+        assert_active_menus({main_menu: :audience, submenu: :finance, sidebar: :invoices, topmenu: :dashboard})
       end
 
       should 'edit' do
         get edit_admin_finance_invoice_path @invoice
         assert_response :success
         assert_equal @invoice, assigns(:invoice)
-        assert_active_menu(:finance)
+        assert_active_menus({main_menu: :audience, submenu: :finance, sidebar: :invoices, topmenu: :dashboard})
       end
 
       should 'update' do

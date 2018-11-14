@@ -24,8 +24,6 @@ Feature: API Service Plans
     And provider has "service_plans_ui_visible" hidden
     And I am on the API dashboard page
     Then there should not be any mention of service plans
-    And I am on the API services page
-    Then there should not be any mention of service plans
 
   Scenario: In allowed state, but with Service Plans hidden I should be able to see default plan in service settings
     Given provider "foo.example.com" has "service_plans" switch allowed

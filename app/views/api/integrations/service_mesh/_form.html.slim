@@ -1,0 +1,16 @@
+= semantic_form_for @proxy,
+        url: admin_service_integration_path(@service, anchor: 'proxy'),
+        html: { \
+          data: { gid: @proxy.to_gid_param, version: @proxy.lock_version },
+                class: css_class('proxy-settings',
+                        oauth: @service.backend_version.oauth?,
+                        oidc: current_account.provider_can_use?(:apicast_oidc)) \
+        } do |f|
+
+  = f.hidden_field :lock_version
+
+  = render 'api/integrations/apicast/shared/mapping_rules', f: f
+
+  = f.buttons do
+    = f.button 'Update', button_html: { class: 'important-button update' }
+    = fixed_width_icon_link_to("Back to Integration & Configuration", "arrow-left", admin_service_integration_path(@service), class: 'next')

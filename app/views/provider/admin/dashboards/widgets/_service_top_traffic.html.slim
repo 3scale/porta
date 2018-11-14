@@ -3,12 +3,16 @@ article.DashboardWidget id = widget.id
   h1.DashboardWidget-title Top Applications
   span.DashboardWidget-intro Apps with consistently high traffic in the last 30 days
 
+  - widget_service_id = widget.params['service_id']
+
   - if widget.loaded?
     - if widget.items.present?
       ol.DashboardWidgetList
         - widget.items.each do |item|
           li class="DashboardWidgetList-item DashboardWidgetList-item--#{item.state}"
-            = link_to item.application ? admin_buyers_application_path(item.application) : '#', class: 'DashboardWidgetList-link' do
+            - show_application_path_exists = ((application = item.application) && widget_service_id)
+            - link = show_application_path_exists ? admin_service_application_path(widget_service_id, application) : '#'
+            = link_to link, class: 'DashboardWidgetList-link' do
               span.DashboardWidgetList-position
                 => item.position
                 span.DashboardWidgetList-change title=item.title
@@ -21,7 +25,7 @@ article.DashboardWidget id = widget.id
         ' In order to show Top Applications you need to have at least one application sending traffic to the #{friendly_service_name(service)}.
       p
         ' Consider
-        => link_to 'making some test calls', edit_admin_service_integration_path(widget.params['service_id'], :anchor => 'staging')
+        => link_to 'making some test calls', edit_admin_service_integration_path(widget_service_id, :anchor => 'staging')
         | from the Integration page to get a feel for what you'd see here.
 
   - else

@@ -7,12 +7,12 @@ class PlansMessengerTest < ActiveSupport::TestCase
   end
 
   test '#plan_change_request' do
-
     cinstance = FactoryGirl.create(:cinstance)
     plan = FactoryGirl.create(:account_plan)
     PlansMessenger.plan_change_request(cinstance, plan).deliver
 
     email = ActionMailer::Base.deliveries.last
-    assert_match('/buyers/applications/', email.body.to_s)
+    expected_url = Rails.application.routes.url_helpers.admin_service_application_url(cinstance.service, cinstance, host: cinstance.account.provider_account.admin_domain)
+    assert_includes email.body.to_s, expected_url
   end
 end

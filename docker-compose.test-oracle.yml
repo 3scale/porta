@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   database:
-    image: ${ORACLE_DB_IMAGE:-quay.io/3scale/oracle:12.2.0.1-ee}
+    image: ${ORACLE_DB_IMAGE:-quay.io/3scale/oracle:12.2.0.1-ee-custom}
     privileged: true
     container_name: ${PROJECT:-system}-database
     network_mode: bridge

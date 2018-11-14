@@ -1,0 +1,21 @@
+default: &base
+  enabled: <%= cluster_token_file_exists = File.exists?(cluster_token_file_path = '/var/run/secrets/kubernetes.io/serviceaccount/token') %>
+  server_scheme: 'https'
+  server_host: 'kubernetes.default.svc.cluster.local'
+  server_port: 443
+  bearer_token: "<%= File.read(cluster_token_file_path) if cluster_token_file_exists %>"
+  authentication_method: service_account # can be service_account|oauth
+  oauth_server_type: builtin # can be builtin|rh_sso
+  client_id:
+  client_secret:
+  timeout: 1
+  open_timeout: 1
+  max_retry: 5
+  verify_ssl: <%= OpenSSL::SSL::VERIFY_NONE %> # 0
+
+
+production:
+  <<: *base
+
+preview:
+  <<: *base

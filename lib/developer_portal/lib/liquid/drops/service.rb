@@ -199,6 +199,18 @@ module Liquid
         @service.infobar
       end
 
+      desc 'Returns API spec collection.'
+      example %(
+        <ul>
+        {% for api_spec in service.api_specs %}
+          <li>{{ api_spec.system_name }}</li>
+        {% endfor %}
+        </ul>
+      )
+      def api_specs
+        Drops::Collection.for_drop(Drops::ApiSpec).new(@service.api_docs_services)
+      end
+
       private
 
       def current_account

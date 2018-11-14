@@ -1,5 +1,5 @@
 module Account::States
-  TIME_TO_DELETE_ACCOUNT = 15.days.freeze
+  PERIOD_BEFORE_DELETION = 15.days.freeze
   STATES = %i[created pending approved rejected suspended scheduled_for_deletion].freeze
   extend ActiveSupport::Concern
 
@@ -77,7 +77,7 @@ module Account::States
       end
 
       event :suspend do
-        transition :approved => :suspended, if: :provider?
+        transition :approved => :suspended, if: :tenant?
       end
 
       event :resume do
@@ -94,13 +94,13 @@ module Account::States
       where(:state => state.to_s) if state.to_s != "all"
     end
 
-    scope :deleted_time_ago, ->(value = TIME_TO_DELETE_ACCOUNT) do
-      scheduled_for_deletion.where.has { deleted_at <= value.ago }
+    scope :deleted_since, ->(value = nil) do
+      scheduled_for_deletion.where.has { deleted_at <= (value || PERIOD_BEFORE_DELETION.ago) }
     end
 
     def deletion_date
       return nil unless deleted_at
-      (deleted_at + TIME_TO_DELETE_ACCOUNT)
+      (deleted_at + PERIOD_BEFORE_DELETION)
     end
 
     def enabled?

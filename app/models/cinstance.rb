@@ -2,13 +2,15 @@ class Cinstance < Contract
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 
+  delegate :backend_version, to: :service, allow_nil: true
+
   belongs_to :plan, class_name: 'ApplicationPlan', foreign_key: :plan_id, inverse_of: :cinstances, counter_cache: :contracts_count
   alias application_plan plan
 
   # TODO: verify the comment is still true and we can't use inverse_of
   belongs_to :service #, inverse_of: :cinstances # this inverse_of messes up some association autosave stuff
 
-  has_many :alerts
+  has_many :alerts, dependent: :delete_all
   has_many :line_items
 
   # this needs to be before the include Backend::ModelExtensions::Cinstance
@@ -140,6 +142,8 @@ class Cinstance < Contract
   def self.provided_by(account)
     joins(:service).references(:service).merge(Service.of_account(account)).readonly(false)
   end
+
+  scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }
 
   scope :can_be_managed, lambda {
                            includes(plan: :service)
@@ -301,14 +305,14 @@ class Cinstance < Contract
       xml.first_daily_traffic_at first_daily_traffic_at.try(:xmlschema)
       xml.end_user_required end_user_required
       xml.service_id service.id if service.present?
-      if service.backend_version == "1"
+      if service.backend_version.v1?
         xml.user_key( user_key )
         xml.provider_verification_key( provider_public_key )
 
       else #v2, oauth on enterprise
         xml.application_id( application_id )
 
-        if service.backend_version == "oauth"
+        if service.backend_version.oauth?
           xml.redirect_url redirect_url
         end
 
@@ -353,10 +357,6 @@ class Cinstance < Contract
 
   def backend_object
     @backend_object ||= provider_account.backend_object.application(self)
-  end
-
-  def backend_version
-    Logic::Backend::Version.new(service.try!(:backend_version))
   end
 
   def create_origin

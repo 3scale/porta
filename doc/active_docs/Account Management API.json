@@ -991,6 +991,13 @@
               "paramType": "query"
             },
             {
+              "name": "service_id",
+              "description": "Service ID of the ActiveDocs spec",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
+            },
+            {
               "name": "body",
               "description": "ActiveDocs specification in JSON format (based on Swagger)",
               "dataType": "string",
@@ -1050,6 +1057,13 @@
               "required": false,
               "dataType": "string",
               "paramType": "query"
+            },
+            {
+              "name": "service_id",
+              "description": "Service ID of the ActiveDocs spec",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
             },
             {
               "name": "body",

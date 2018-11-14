@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'active_support/string_inquirer'
-
+require 'system/database/triggers'
+require 'system/database/procedures'
 module System
   module Database
+    class ConnectionError < ActiveRecord::NoDatabaseError; end
     module_function
 
     def configuration_specification
@@ -33,26 +35,28 @@ module System
       self.table_name = 'accounts'
 
       class << self
-        def connection_spec
+        def connection_config
           spec = configuration_specification.config.dup
           if oracle?
-            spec['password'] = ENV.fetch('ORACLE_SYSTEM_PASSWORD'){|key| raise KeyError, "Environment #{key} is mandatory"}
-            spec['username'] = 'SYSTEM'
+            spec[:password] = ENV.fetch('ORACLE_SYSTEM_PASSWORD') {|key| raise KeyError, "Environment #{key} is mandatory"}
+            spec[:username] = 'SYSTEM'
           end
           spec
         end
 
         def ready?
-          pool = establish_connection connection_spec
-          result = connection.select_value(sql_for_readiness).tap{ pool.disconnect! }
+          pool = establish_connection connection_config
+          result = nil
+          pool.with_connection do |connection|
+            result = connection.select_value(sql_for_readiness).tap { pool.disconnect! }
+          end
           result.to_s == '1'
         end
 
         def sql_for_readiness
-          case
-          when oracle?
-            'SELECT 1 FROM V$INSTANCE WHERE "STATUS" = \'OPEN\''
-          when mysql?
+          if oracle?
+            "SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'"
+          elsif mysql?
             'SELECT 1'
           else
             'SELECT 1'
@@ -62,9 +66,25 @@ module System
     end
 
     def ready?
-      ConnectionProbe.ready?
-    rescue => e
-      Rails.logger.debug "Database is not ready, failed with error: #{e.message}"
+      config = ConnectionProbe.connection_config
+      connection_string = "#{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
+      if ConnectionProbe.ready?
+        puts "Connected to #{connection_string}"
+        return true
+      else
+        puts "Cannot connect to #{connection_string}"
+        return false
+      end
+    rescue ActiveRecord::NoDatabaseError => error # In case of mysql
+      puts "Connected, but database does not exist: #{error}"
+      true
+    rescue StandardError => error
+      puts "Connection specification: #{config}"
+      puts "Failed to connect to database: #{error} (#{error.class})"
+
+      if (cause = error.cause)
+        puts "Caused by: #{cause} (#{cause.class})"
+      end
       false
     end
 
@@ -95,124 +115,8 @@ module System
       end
     end
 
-    class Trigger
-      def initialize(table, trigger)
-        @table = table
-        @name = "#{table}_tenant_id"
-        @trigger = trigger
-      end
-
-      def drop
-        raise NotImplementedError
-      end
-
-      def create
-        <<~SQL
-          CREATE TRIGGER #{name} BEFORE INSERT ON #{table} FOR EACH ROW #{body}
-        SQL
-      end
-
-      def recreate
-        [drop, create]
-      end
-
-      protected
-
-      attr_reader :trigger, :name, :table
-
-      def body
-        raise NotImplementedError
-      end
-    end
-    private_constant :Trigger
-
-    class OracleTrigger < Trigger
-      def drop
-        <<~SQL
-          BEGIN
-             EXECUTE IMMEDIATE 'DROP TRIGGER #{name}';
-          EXCEPTION
-            WHEN OTHERS THEN
-              IF SQLCODE != -4080 THEN
-                RAISE;
-              END IF;
-          END;
-        SQL
-      end
-
-      def body
-        <<~SQL
-          DECLARE
-            master_id numeric;
-          BEGIN
-            #{master_id}
-
-            IF :new.tenant_id IS NULL THEN
-              #{trigger}
-            END IF;
-
-            #{exception_handler}
-          END;
-        SQL
-      end
-
-      protected
-
-      def master_id
-        "master_id := #{Account.master.id}"
-      rescue ActiveRecord::RecordNotFound
-        <<~SQL
-          BEGIN
-            SELECT id INTO master_id FROM accounts WHERE master = 1;
-          EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-              master_id := NULL;
-          END;
-        SQL
-      end
-
-      def exception_handler
-        <<~SQL
-          EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-              DBMS_OUTPUT.PUT_LINE('Could not find tenant_id in #{name}');
-        SQL
-      end
-    end
-
-    class MySQLTrigger < Trigger
-
-      def drop
-        <<~SQL
-          DROP TRIGGER IF EXISTS #{name}
-        SQL
-      end
-
-      def body
-        master_id = begin
-          Account.master.id
-        rescue ActiveRecord::RecordNotFound
-          <<~SQL
-            (SELECT id FROM accounts WHERE master)
-          SQL
-        end
-
-        <<~SQL
-          BEGIN
-            DECLARE master_id numeric;
-            IF @disable_triggers IS NULL THEN
-              IF NEW.tenant_id IS NULL THEN
-                SET master_id = #{master_id};
-                #{trigger}
-              END IF;
-            END IF;
-          END;
-        SQL
-      end
-    end
   end
 end
-
 
 if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
@@ -221,6 +125,7 @@ if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::Oracle
       def create
         super
         connection.execute "GRANT create trigger TO #{username}"
+        connection.execute "GRANT create procedure TO #{username}"
       end
 
               protected

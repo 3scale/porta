@@ -1,24 +1,5 @@
-ul#side-tabs
-  - if can?(:edit, @service)
-    = sidebar_link 'Definition', admin_service_metrics_path(@service)
-    = sidebar_link :integration, path_to_service(@service) if can?(:manage, :plans)
-    = sidebar_link 'Application Plans', admin_service_application_plans_path(@service)
-
-    = sidebar_link :settings, settings_admin_service_path(@service)
-    = sidebar_link :alerts, notifications_admin_service_path(@service)
-
-  - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
-    = sidebar_link 'Service Plans', admin_service_service_plans_path(@service)
-
-  - if current_account.settings.end_user_plans_ui_visible?
-    = sidebar_link :end_user_plans, admin_service_end_user_plans_path(@service), switch: :end_users, upgrade_notice: true
-
-  - if @service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
-    = sidebar_link 'End-users', admin_service_end_users_path(@service), switch: :end_users, upgrade_notice: true
-
-#tab-content
-  h2
-    => link_to @service.name, admin_services_path(anchor: "service_#{@service.id}")
-    ' >
+- if (title = content_for(:sublayout_title).presence)
+  h1
     = yield :sublayout_title
-  = yield
+
+= yield

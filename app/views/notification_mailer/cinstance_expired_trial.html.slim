@@ -7,4 +7,4 @@ p
 p
   | #{@account.name} admin users have been notified and will receive an appropriately adjusted invoice for the next billing cycle.
 
-p= link_to 'View application', admin_buyers_application_url(@account)
+p= link_to 'View application', admin_service_application_url(@application.service, @application)

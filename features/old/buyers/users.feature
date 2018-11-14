@@ -15,7 +15,7 @@ Feature: Buyer users management
     And I am logged in as provider "foo.example.com"
 
  Scenario: Navigating to page of users of a buyer
-   When I follow "Developers"
+   When I navigate to the accounts page
      And I follow "SpaceWidgets"
      And I follow "Users"
    Then I should see "Users of SpaceWidgets"
@@ -39,7 +39,7 @@ Feature: Buyer users management
   Scenario: User details
     When I go to the buyer users page for "SpaceWidgets"
     And I follow "bob"
-    Then I should see "User bob of buyer account SpaceWidgets" in a header
+    Then I should see "User bob of the account SpaceWidgets" in a header
     And I should see button to suspend buyer user "bob"
     And I should see link to the buyer user edit page for "bob"
     When I follow "Edit"

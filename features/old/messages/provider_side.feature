@@ -21,7 +21,7 @@ Feature: Provider side messages
     Given account "bob" has no messages
 
     And I go to the provider dashboard
-    And I follow "Developers"
+    And I navigate to the accounts page
     And I follow "bob"
     And I follow "Send message"
     Then the "To" field should be fixed to "bob"

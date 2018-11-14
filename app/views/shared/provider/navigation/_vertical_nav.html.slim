@@ -1,0 +1,61 @@
+- vertical_nav_item = 'shared/provider/navigation/vertical_nav_item'
+- layout_secondary_nav = 'shared/provider/navigation/secondary_nav'
+
+nav.vertical-nav.hover-secondary-nav-pf#mainmenu
+  div.nav-pf-vertical.nav-pf-vertical-with-sub-menus
+    ul.list-group
+      - case active_menu
+
+      - when :personal, :account
+        = render 'shared/provider/navigation/account/nav',
+                 vertical_nav_item: vertical_nav_item,
+                 layout_secondary_nav: layout_secondary_nav
+
+      - when :buyers, :finance, :cms, :site, :settings, :audience
+        = render 'shared/provider/navigation/audience/nav',
+                 vertical_nav_item: vertical_nav_item,
+                 layout_secondary_nav: layout_secondary_nav
+
+      - when :apis, :applications, :active_docs
+
+        - if can? :manage, :partners
+          = render vertical_nav_item,
+                  title: 'ActiveDocs',
+                  path:  admin_api_docs_services_path,
+                  icon: 'file-text'
+
+        - if can?(:manage, :monitoring)
+          - if current_user.multiple_accessible_services?
+            = render vertical_nav_item,
+                     title: 'Alerts',
+                     path:  admin_alerts_path,
+                     icon:  'exclamation-triangle'
+
+          = render vertical_nav_item,
+                  title: 'Traffic',
+                  path:  admin_transactions_path,
+                  icon:  'play-circle'
+
+      - when :serviceadmin, :monitoring
+        = render 'shared/provider/navigation/service/nav',
+                 vertical_nav_item: vertical_nav_item,
+                 layout_secondary_nav: layout_secondary_nav
+
+
+  javascript:
+    var nav = document.querySelector('.vertical-nav'),
+    navItems = document.querySelectorAll('.secondary-nav-item-pf');
+
+    for (var i = 0; i < navItems.length; i++) {
+      navItems[i].querySelector('a')
+        .addEventListener('click', function() {
+          var classList = this.parentElement.classList
+          if (!classList.contains('active')) {
+            classList.toggle('is-hover')
+          }
+        })
+    }
+
+    var store = window.localStorage
+    nav.classList
+      .toggle('collapsed', JSON.parse(store.isVerticalNavCollapsed || false))

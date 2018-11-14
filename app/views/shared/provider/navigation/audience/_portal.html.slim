@@ -1,0 +1,93 @@
+- if can?(:manage, :portal)
+  = render vertical_nav_item,
+         title: 'Content',
+         path: provider_admin_cms_templates_path
+
+  = render vertical_nav_item,
+        title: 'Drafts',
+        path: provider_admin_cms_changes_path
+
+  = render vertical_nav_item,
+        title: 'Redirects',
+        path: provider_admin_cms_redirects_path
+
+  - if can?(:see, :groups)
+    = render vertical_nav_item,
+          title: 'Groups',
+          path: provider_admin_cms_groups_path
+
+  = render vertical_nav_item,
+       title: 'Feature Visibility',
+       path: provider_admin_cms_switches_path
+
+  - if can? :manage, :plans
+    = render vertical_nav_item,
+           title: 'ActiveDocs',
+           path:  admin_api_docs_services_path
+
+li.list-group-item
+  span.list-group-item-value.label
+
+li.list-group-item
+  = link_to access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
+            access_code: current_account.site_access_code).html_safe,
+            target: "_blank" do
+    span.fa.fa-external-link style="margin: 0 .3rem;"
+    span.list-group-item-value
+      | Visit Portal
+
+- if can?(:manage, :portal)
+  li.list-group-item
+   span.list-group-item-value.label Legal Terms
+
+  = render vertical_nav_item,
+      title: 'Signup',
+      path:   edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)
+
+  = render vertical_nav_item,
+      title: 'Service Subscription',
+      path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)
+
+  = render vertical_nav_item,
+      title: 'New Application',
+      path:  edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)
+
+- if can?(:manage, :settings)
+  li.list-group-item
+   span.list-group-item-value.label Settings
+
+  = render vertical_nav_item,
+       title: 'Domains & Access',
+       path:   admin_site_dns_path
+
+  = render vertical_nav_item,
+       title: 'Spam Protection',
+       path:   edit_admin_site_spam_protection_path
+
+  - if current_account.show_xss_protection_options?
+   = render vertical_nav_item,
+         title: 'XSS Protection',
+         path: edit_admin_site_developer_portal_path
+
+  = render vertical_nav_item,
+       title: 'SSO Integrations',
+       path:   provider_admin_authentication_providers_path
+
+  - if !current_account.forum_enabled? && provider_can_use?(:forum)
+    = render vertical_nav_item,
+         title: 'Forum Settings',
+         path: edit_admin_site_forum_path
+
+li.list-group-item
+  span.list-group-item-value.label Docs
+
+= render vertical_nav_item,
+    title: 'Liquid Reference',
+    path: provider_admin_liquid_docs_path
+
+  //= important_icon_link 'Visit Developer Portal',
+                                'external-link',
+                                access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
+                                access_code: current_account.site_access_code).html_safe,
+                                target: "_blank",
+                                class: "preview link--icon-last"

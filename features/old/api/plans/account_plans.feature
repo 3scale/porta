@@ -11,7 +11,7 @@ Feature: Different account plans
 
   Scenario: In allowed state, I should be able to do everything
     Given provider "foo.example.com" has "account_plans" switch allowed
-      And I am on the API dashboard page
+      And I am on the provider site page
     When I follow "Account Plans"
     Then I should see the copy button
 
@@ -23,5 +23,5 @@ Feature: Different account plans
   Scenario: In allowed state, but with Account Plans hidden I should not see Account Plans menu
     Given provider "foo.example.com" has "account_plans" switch allowed
       And provider has account plans hidden from the ui
-      And I am on the API dashboard page
+      And I am on the provider site page
       Then there should not be any mention of account plans

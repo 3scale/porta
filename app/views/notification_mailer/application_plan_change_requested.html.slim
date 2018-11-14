@@ -14,4 +14,4 @@ ul
   li Current plan: #{@current_plan.name}
   li Requested plan: #{@requested_plan.name}
 
-p= link_to 'Change Plan', admin_buyers_application_url(@application)
+p= link_to 'Change Plan', admin_service_application_url(@application.service, @application)

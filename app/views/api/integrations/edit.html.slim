@@ -14,8 +14,12 @@ javascript:
   = render 'api/integrations/apicast/shared/deployment_options' unless apicast_configuration_driven?
 
   .integration data-state="open"
-    - if @service.deployment_option.include?('plugin_')
+    - case @service.deployment_option
+    - when /^plugin_/
       = render 'api/integrations/plugin/plugin'
+    - when /^service_mesh_/
+      #proxy
+        = render 'api/integrations/service_mesh/form'
     - else
       #proxy
         - if apicast_configuration_driven?

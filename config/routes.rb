@@ -11,7 +11,12 @@ class CdnAssets
   end
 end
 
+
 System::Application.routes.draw do
+  constraints MasterDomainWithAuthBasicConstraint.new(ThreeScale.config.prometheus.username, ThreeScale.config.prometheus.password) do
+    mount Sidekiq::Prometheus::Exporter.to_app, at: '/system'
+  end
+
   mount CdnAssets.new => '/_cdn_assets_' unless Rails.configuration.three_scale.assets_cdn_host
 
   resource :openid
@@ -143,7 +148,20 @@ without fake Core server your after commit callbacks will crash and you might ge
     end
   end
 
+  if ThreeScale.config.service_discovery.enabled && ThreeScale.config.service_discovery.authentication_method == 'oauth'
+    constraints MasterDomainConstraint do
+      get "/auth/#{ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME}/callback" => 'master/service_discovery/auth#show'
+    end
+
+    namespace :provider, path: 'p', constraints: ProviderDomainConstraint do
+      namespace :admin do
+        get "/auth/#{ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME}/callback" => 'service_discovery/auth#show'
+      end
+    end
+  end
+
   get '/auth/:system_name/callback' => 'provider/sessions#create', constraints: MasterOrProviderDomainConstraint
+  get '/auth/:system_name/bounce' => 'provider/sessions#bounce', constraints: ProviderDomainConstraint, as: :authorization_provider_bounce
 
   namespace :provider, :path => 'p', constraints: MasterOrProviderDomainConstraint do
     get 'activate/:activation_code' => 'activations#create', :as => :activate
@@ -337,7 +355,6 @@ without fake Core server your after commit callbacks will crash and you might ge
           match 'hosted_success', via: [:get, :post], on: :member
         end
         resource :data_exports, :only => [:new, :create]
-        resource :logo, :only => [:edit, :update, :destroy]
 
         resources :invitations, :only => [:index, :new, :create, :destroy] do
           member do
@@ -358,6 +375,14 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :invoices, :only => [:show, :index]
       end
+
+      namespace :service_discovery do
+        resources :namespaces, only: [], controller: 'cluster_namespaces' do
+          resources :services, only: [:index, :show], controller: 'cluster_services'
+        end
+        resources :projects, only: [:index], controller: 'cluster_projects'
+        resources :services, only: [:create, :update]
+      end
     end
   end
 
@@ -376,8 +401,6 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
     end
   end
-
-  get '/admin/apiconfig/services/:service_id/applications' => 'buyers/applications#index', :as => 'admin_service_applications'
 
   # These are API routes, beware
   namespace :stats do
@@ -412,7 +435,7 @@ without fake Core server your after commit callbacks will crash and you might ge
     end
 
     namespace :api_docs do
-      resources :services do
+      resources :services, controller: 'account_api_docs' do
         member do
           get :preview
           put :toggle_visible
@@ -668,12 +691,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
     match '/api_docs/proxy' => 'api_docs/proxy#show', via: [:get, :post]
 
-    scope :path => 'admin', :as => 'admin' do
-      namespace :stats do
-        root :to => 'dashboards#index'
-      end
-    end
-
     admin_module = -> do
       scope :path => 'apiconfig', :module => 'api' do
         get '/' => 'services#index', :as => :apiconfig_root, :namespace => 'api/', :path_prefix => 'admin/apiconfig'
@@ -710,10 +727,9 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :pricing_rules, :only => [:edit, :update, :destroy]
         end
 
-        resources :services do
+        resources :services, except: :index do
           member do
             get :settings
-            get :notifications
           end
           resource :support, :only => [:edit, :update]
           resource :content, :only => [:edit, :update]
@@ -758,6 +774,19 @@ without fake Core server your after commit callbacks will crash and you might ge
             end
           end
 
+          resources :applications, only: %i[index show edit]
+          resources :api_docs, only: %i[index new edit update create], controller: '/admin/api_docs/service_api_docs' do
+            member do
+              get :preview
+            end
+          end
+
+          resources :errors, only: :index do
+            collection do
+              delete :purge, path: ''
+            end
+          end
+
           resource :integration, :except => [ :create, :destroy ] do
             member do
               patch 'update_production'
@@ -771,11 +800,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         resources :transactions, :only => :index
-        resources :errors, :only => :index do
-          collection do
-            delete :purge, :path => ''
-          end
-        end
 
         resources :alerts, :only => [:index, :destroy] do
           collection do
@@ -790,7 +814,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       resources :services, :only => [] do
         namespace :stats do
-          root :to => 'dashboards#show'
           get '/signups' => 'dashboards#signups', :as => :signups
           get 'usage' => 'usage#index', :as => :usage
           get 'usage/data/:metric_id' => 'usage#index_data', :as => :usage_data
@@ -835,7 +858,7 @@ without fake Core server your after commit callbacks will crash and you might ge
             end
           end
 
-          resources :applications
+          resources :applications, except: %i[show edit]
 
           resources :service_contracts, :except => [:show] do
             member do

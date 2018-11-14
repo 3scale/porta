@@ -43,7 +43,7 @@ Feature: ActiveDocs
 
   Scenario: CRUD -- Index / Edit / Update / Preview
     When I go to the provider active docs page
-    Then I should see "Service Specs"
+    Then I should see "ActiveDocs"
     When I follow "Edit" within the row for echo active docs
     Then I should see "Edit Service Spec"
     And I press "Update Service"

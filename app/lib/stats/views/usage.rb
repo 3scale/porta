@@ -36,6 +36,9 @@ module Stats
             :account => {
               :id    => @cinstance.user_account.id,
               :name  => @cinstance.user_account.org_name
+            },
+            service: {
+              id: @cinstance.service_id
             }
           }
         end

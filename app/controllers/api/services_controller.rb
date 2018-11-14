@@ -1,4 +1,6 @@
 class Api::ServicesController < Api::BaseController
+  include ServiceDiscovery::ControllerMethods
+
   activate_menu :serviceadmin, :overview
 
   before_action :deny_on_premises_for_master
@@ -8,33 +10,26 @@ class Api::ServicesController < Api::BaseController
   load_and_authorize_resource :service, through: :current_user,
     through_association: :accessible_services, except: [:create]
 
-  with_options only: [:edit, :update, :settings, :notifications] do |actions|
+  with_options only: %i[edit update settings] do |actions|
     actions.sublayout 'api/service'
-
-    #actions.before_action :activate_submenu
-  end
-
-  def index
-    @services = ::ServiceDecorator.decorate_collection(@services)
   end
 
   def show
+    @service = @service.decorate
   end
 
   def new
+    activate_menu :dashboard
     @service = collection.build params[:service]
   end
 
   def edit
-    activate_menu :serviceadmin, :api, :definition
+    activate_menu :serviceadmin, :overview
   end
 
   def settings
-  end
-
-  def notifications
+    activate_menu :serviceadmin, :integration, :settings
     @alert_limits = Alert::ALERT_LEVELS
-    activate_menu :sidebar => :alerts
   end
 
   def create
@@ -45,9 +40,10 @@ class Api::ServicesController < Api::BaseController
     if can_create? && @service.save
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
-      redirect_to admin_services_path(anchor: "service_#{@service.id}")
+      redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = "Couldn't create service. Check your Plan limits"
+      flash.now[:error] = 'Couldn\'t create service. Check your Plan limits' # TODO: this is not always true... there are other reasons of failure
+      activate_menu :dashboard
       render :new
     end
   end
@@ -66,10 +62,11 @@ class Api::ServicesController < Api::BaseController
   def destroy
     @service.mark_as_deleted!
     flash[:notice] = "Service '#{@service.name}' will be deleted shortly. You will receive a notification when it is done"
-    redirect_to admin_services_path
+    redirect_to provider_admin_dashboard_path
   end
 
   protected
+
 
   def service_name_changed?
     @service.previous_changes['name']

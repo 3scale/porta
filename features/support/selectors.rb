@@ -8,25 +8,25 @@ module HtmlSelectorsHelper
     when 'page content'
       '#content'
     when 'the main menu', :main_menu
-       '#tabs'
+       '#mainmenu'
+    when 'the audience dashboard widget', :audience_dashboard_widget
+      '#audience'
+    when 'the apis dashboard widget', :apis_dashboard_widget
+      '#apis'
+    when 'the first api dashboard widget'
+      "#service_#{provider_first_service!.id}"
     when 'the submenu', :submenu
-      '#second_nav'
+      '.secondary-nav-item-pf.is-hover'
     when 'the subsubmenu'
-      '#subsubmenu'  # this is silly
+      '.secondary-nav-item-pf.active'
     when 'the user widget'
       '#user_widget'
     when 'the footer'
       '#footer'
     when 'the account details box'
       '#account_details'
-    when 'the buyers submenu'
-      '#submenu'
-    when 'the sidetabs', 'the side tabs'
-      '#side-tabs'
-
     when 'notification settings'
       'table.notification-settings tbody'
-
     when 'service widget'
       '.service-widget'
 

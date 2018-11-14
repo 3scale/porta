@@ -165,7 +165,7 @@ module ThreeScale
       end
 
       def options
-        authentication.options.to_hash
+        authentication.options.to_hash.merge(auth_scheme: :request_body)
       end
 
       def access_token_error_data

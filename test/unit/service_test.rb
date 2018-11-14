@@ -67,6 +67,14 @@ class ServiceTest < ActiveSupport::TestCase
     assert proxy.staging_endpoint
   end
 
+  def test_deployment_options
+    deployment_options = Service.deployment_options
+
+    assert_includes deployment_options, 'Gateway'
+    assert_includes deployment_options, 'Plugin'
+    assert_includes deployment_options, 'Service Mesh'
+  end
+
   # Now the last remaining service cannot be destroyed
   def test_stop_destroy_if_last
     service = FactoryGirl.create(:simple_service)
@@ -522,8 +530,17 @@ class ServiceTest < ActiveSupport::TestCase
     test 'schedule destruction of a service' do
       service = FactoryGirl.create(:simple_service)
       service.stubs(last_accessible?: false)
-      DeletePlainObjectWorker.expects(:perform_later)
+      Services::ServiceScheduledForDeletionEvent.expects(:create_and_publish!).with(service).once
+      System::ErrorReporting.expects(:report_error).never
       service.mark_as_deleted!
+    end
+
+    test 'updating state without using state machine' do
+      service = FactoryGirl.create(:simple_service)
+      service.stubs(last_accessible?: false)
+      Services::ServiceScheduledForDeletionEvent.expects(:create_and_publish!).never
+      System::ErrorReporting.expects(:report_error).once
+      service.update_attributes(state: 'deleted')
     end
   end
 
@@ -570,9 +587,57 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'create with backend_version oidc' do
     account = FactoryGirl.create(:simple_provider)
-    service_params = {backend_version: 'oidc', name: 'test', deployment_option: 'self_managed'}
+    service_params = { backend_version: 'oidc', name: 'test', deployment_option: 'self_managed' }
     service = account.create_service(service_params)
 
     assert service.persisted?
+  end
+
+  test '.permitted_for_user' do
+    FactoryGirl.create_list(:simple_service, 2)
+    user = User.new
+    member_permission_service_ids = [Service.last.id]
+    user.stubs(member_permission_service_ids: member_permission_service_ids)
+
+    user.stubs(forbidden_some_services?: false)
+    assert_same_elements Service.pluck(:id), Service.permitted_for_user(user).pluck(:id)
+
+    user.stubs(forbidden_some_services?: true)
+    assert_same_elements member_permission_service_ids, Service.permitted_for_user(user).pluck(:id)
+  end
+
+  class DeploymentOptionTest < ActiveSupport::TestCase
+    def test_all
+      all = Service::DeploymentOption.all
+
+      assert_includes all, 'plugin_ruby'
+      assert_includes all, 'self_managed'
+      assert_includes all, 'service_mesh_istio'
+    end
+
+    def test_service_mesh
+      service_mesh = Service::DeploymentOption.service_mesh
+
+      assert_includes service_mesh, 'service_mesh_istio'
+      refute_includes service_mesh, 'plugin_ruby'
+      refute_includes service_mesh, 'hosted'
+    end
+
+    def test_gateways
+      gateways = Service::DeploymentOption.gateways
+
+      assert_includes gateways, 'self_managed'
+      assert_includes gateways, 'hosted'
+      refute_includes gateways, 'plugin_ruby'
+      refute_includes gateways, 'service_mesh_istio'
+    end
+
+    def test_plugins
+      plugins = Service::DeploymentOption.plugins
+
+      refute_includes plugins, 'self_managed'
+      refute_includes plugins, 'hosted'
+      assert_includes plugins, 'plugin_ruby'
+    end
   end
 end

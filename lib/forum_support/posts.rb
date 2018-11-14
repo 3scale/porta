@@ -73,35 +73,5 @@ module ForumSupport
         @forum
       end
     end
-
-
-    # def show
-    #   respond_to do |format|
-    #     #FIXME this redirection fails when used on admin, the route is built wrong
-    #     format.html { redirect_to forum_topic(@forum, @topic) }
-    #     format.xml  do
-    #       find_post
-    #       render :xml  => @post
-    #     end
-    #   end
-    # end
-
-    # def new
-    #   @post = Post.new
-    #   @quiz_id = rand(CAPTCHA_QUESTIONS.length) # create the captcha question
-    #   respond_to do |format|
-    #     format.html
-    #     format.xml { render :xml => @post }
-    #   end
-    # end
-
-
-    # def human_tested
-    #   if @user.anonymous?
-    #     verify_recaptcha(:model => @post, :message => "Oh! It's error with reCAPTCHA!")
-    #   else
-    #     true
-    #   end
-    # end
   end
 end

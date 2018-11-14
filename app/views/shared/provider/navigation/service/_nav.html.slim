@@ -1,0 +1,50 @@
+- if can?(:manage, :plans)
+  = render vertical_nav_item,
+           title: 'Overview',
+           path: admin_service_path(@service),
+           icon: 'map'
+
+- if can?(:manage, :monitoring)
+  = render partial: 'shared/provider/navigation/service/analytics',
+           layout: layout_secondary_nav,
+           locals: { title: 'Analytics',
+                     icon: 'bar-chart',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :monitoring }
+
+- if can?(:manage, :applications)
+  = render partial: 'shared/provider/navigation/service/applications',
+           layout: layout_secondary_nav,
+           locals: { title: 'Applications',
+                     icon: 'cubes',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :applications }
+
+- if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
+  = render partial: 'shared/provider/navigation/service/subscriptions',
+            layout: layout_secondary_nav,
+            locals: { title: 'Subscriptions',
+                      icon: 'paperclip',
+                      vertical_nav_item: vertical_nav_item,
+                      submenu: :subscriptions }
+
+- if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
+  = render partial: 'shared/provider/navigation/service/end_users.html.slim',
+           layout: layout_secondary_nav,
+           locals: { title: 'End-users',
+                     icon: 'cubes',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :end_users }
+
+- if can?(:manage, :plans)
+  = render vertical_nav_item,
+       title: 'ActiveDocs',
+       path: admin_service_api_docs_path(@service),
+       icon: 'file-text'
+
+  = render partial: 'shared/provider/navigation/service/integration',
+           layout: layout_secondary_nav,
+           locals: { title: 'Integration',
+                     icon: 'wrench',
+                     vertical_nav_item: vertical_nav_item,
+                     submenu: :integration }

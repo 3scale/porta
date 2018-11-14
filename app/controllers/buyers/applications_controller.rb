@@ -2,13 +2,15 @@
 class Buyers::ApplicationsController < FrontendController
 
   include ThreeScale::Search::Helpers
+  include DisplayViewPortion
+  helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
   before_action :find_buyer, :only => [:new, :create]
   before_action :authorize_multiple_applications, :only => [ :new, :create ]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
-  before_action :find_provider,  :only => [:edit, :new, :create, :update]
+  before_action :find_provider,  only: %i[new create update]
 
   before_action :find_application_plan,          :only => :create
 
@@ -17,7 +19,9 @@ class Buyers::ApplicationsController < FrontendController
   layout 'provider'
 
   def index
-    activate_menu :applications
+    # TODO: Editing this action may require editing Api::ApplicationsController
+
+    activate_menu :audience, :applications
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
     accessible_services = current_account.accessible_services
@@ -40,18 +44,15 @@ class Buyers::ApplicationsController < FrontendController
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
       @search.account = @account
-      activate_menu :buyers, :accounts
+      activate_menu :buyers, :accounts, :listing
     end
 
     @cinstances = current_user.accessible_cinstances
       .scope_search(@search).order_by(params[:sort], params[:direction])
       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
       .paginate(pagination_params)
-  end
 
-  def show
-    activate_menu :applications
-    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
+    display_view_portion!(:service) if current_account.multiservice?
   end
 
   def new
@@ -76,17 +77,12 @@ class Buyers::ApplicationsController < FrontendController
 
     if @cinstance.save
       flash[:notice] = 'Application was successfully created.'
-      redirect_to(admin_buyers_application_path(@cinstance))
+      redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
       @plans = @provider.application_plans
       render :action => :new
     end
-  end
-
-  def edit
-    activate_menu :applications
-    @cinstance = current_account.provided_cinstances.find(params[:id])
   end
 
   def update
@@ -98,7 +94,7 @@ class Buyers::ApplicationsController < FrontendController
       if @cinstance.save
         format.html do
           flash[:notice] = 'Application was successfully updated.'
-          redirect_to(admin_buyers_application_path(@cinstance))
+          redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
         end
         format.json { render :json => @cinstance.to_json(:only => [:id, :name], :methods => [:errors]), :status => :ok }
       else
@@ -129,16 +125,17 @@ class Buyers::ApplicationsController < FrontendController
 
   def change_plan
     # there is no need to query available_application_plans as we already have a validation
-    new_plan = @cinstance.service.application_plans.stock.find(params[:cinstance][:plan_id])
+    service = @cinstance.service
+    new_plan = service.application_plans.stock.find(params[:cinstance][:plan_id])
     @cinstance.provider_changes_plan!(new_plan)
     flash[:notice] = "Plan changed to '#{new_plan.name}'."
-    redirect_to admin_buyers_application_url(@cinstance)
+    redirect_to admin_service_application_url(service, @cinstance)
   end
 
   def change_user_key
     with_password_confirmation! do
       @cinstance.change_user_key!
-      redirect_to admin_buyers_application_url(@cinstance), notice: 'The key was successfully changed'
+      redirect_to admin_service_application_url(@cinstance.service, @cinstance), notice: 'The key was successfully changed'
     end
   end
 
@@ -161,7 +158,7 @@ class Buyers::ApplicationsController < FrontendController
     respond_to do |format|
       format.html do
         flash[:notice] = message
-        redirect_to admin_buyers_application_url(@cinstance)
+        redirect_to admin_service_application_url(@cinstance.service, @cinstance)
       end
 
       format.js do

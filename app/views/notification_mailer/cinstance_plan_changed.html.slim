@@ -14,4 +14,4 @@ ul
   li Previous plan: #{@old_plan.name}
   li Current plan: #{@new_plan.name}
 
-p= link_to 'View application', admin_buyers_account_application_url(@account, @cinstance)
+p= link_to 'View application', admin_service_application_url(@cinstance.service, @cinstance)

@@ -1,5 +1,7 @@
 module TestHelpers
   module RollingUpdates
+    module_function
+
     def rolling_updates_off
       ::Logic::RollingUpdates.stubs(skipped?: true)
       ::Account.any_instance.stubs(:provider_can_use?).returns(false)

@@ -47,6 +47,7 @@ VOLUME [ "/opt/system/tmp/cache/", \
          "/opt/system/node_modules", \
          "/opt/system/assets/jspm_packages", \
          "/opt/system/public/assets", \
+         "/opt/system/public/packs-test", \
          "/root/.jspm", "/home/ruby/.luarocks" ]
 
 ADD . ./

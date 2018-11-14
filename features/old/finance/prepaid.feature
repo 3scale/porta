@@ -13,6 +13,7 @@ Feature: Prepaid billing of a buyer
       | hits     |           0.1 |   1 | infinity |
 
 
+ @commit-transactions
  Scenario: Bill one month beforehand
   Given the date is 1st January 2009
    When a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
@@ -57,7 +58,7 @@ Feature: Prepaid billing of a buyer
         | Hits                   | February 5, 2009 ( 0:00) - February 28, 2009 (23:59) |       40 |   4.00 |
         | Total cost             |                                                       |          | 204.00 |
 
-
+ @commit-transactions
  Scenario: Bill and issue when the trial ends, charge when due
   Given the date is 1st January 2009
     And plan "Fixed" has trial period of 15 days
@@ -78,7 +79,7 @@ Feature: Prepaid billing of a buyer
     And I see my invoice from "January, 2009" is "Paid"
 
 
-
+ @commit-transactions
  Scenario: Prepaid with setup fee and no trial period
   Given the date is 1st January 2009
     And plan "Fixed" has trial period of 0 days

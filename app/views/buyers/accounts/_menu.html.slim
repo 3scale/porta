@@ -1,18 +1,13 @@
 ul#subsubmenu
-  li.SubSubMenuItem.SubSubMenuItem--trunk
-    = link_to_unless_current_styled "Accounts",
-      admin_buyers_accounts_path,
-      class: "SubSubMenuItem-link"
-
   - if @account && !@account.new_record?
-    li.SubSubMenuItem.SubSubMenuItem--branch
+    li.SubSubMenuItem.SubSubMenuItem--trunk
       = link_to_unless_current_styled "Account '#{@account.name}'",
         admin_buyers_account_path(@account),
         title: "account",
         class: "SubSubMenuItem-link"
 
   li.SubSubMenuItem.SubSubMenuItem--branch
-    = link_to_unless_current_styled pluralize(number_to_human(@account.bought_cinstances.count), 'Application'),
+    = link_to_unless_current_styled pluralize(number_to_human(current_user.accessible_cinstances.count), 'Application'),
       admin_buyers_account_applications_path(@account),
       title: "applications",
       class: "SubSubMenuItem-link"

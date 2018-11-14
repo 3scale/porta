@@ -1,0 +1,15 @@
+base: &base
+  username:
+  password:
+
+development:
+  <<: *base
+
+production:
+  <<: *base
+
+preview:
+  <<: *base
+
+test:
+  <<: *base

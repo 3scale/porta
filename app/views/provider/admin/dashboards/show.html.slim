@@ -3,32 +3,45 @@
 
 = content_for :javascripts do
   = render_js_module_loader
+  = javascript_pack_tag 'dashboard'
 
 .Dashboard
   div.Dashboard-widgets
     // account level
-    - if can?(:manage, :partners)
-      section.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
-        header.DashboardSection-header
-          h1.DashboardSection-title Developers
-          = render 'developers_navigation', buyers: current_account.buyers,
-                                            pending_buyers: current_account.buyers.pending,
-                                            account_plans: current_account.account_plans.not_custom,
-                                            forum_topics: current_account.forum.recent_topics,
-                                            unread_messages_presenter: @unread_messages_presenter
+    section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
+      header.DashboardSection-header
+        h1.DashboardSection-title title="Audience"
+          i.fa.fa-bullseye>
+          | Audience
+        - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :portal) || can?(:manage, :settings)
+          = render 'developers_navigation', buyers: current_account.buyer_accounts.not_master,
+                                          pending_buyers: current_account.buyers.pending,
+                                          account_plans: current_account.account_plans.not_custom,
+                                          forum_topics: current_account.forum.recent_topics,
+                                          unread_messages_presenter: @unread_messages_presenter,
+                                          applications: current_account.provided_cinstances,
+                                          alerts: current_account.buyer_alerts.unread
 
-        // Account Level Widgets
-        = dashboard_widget :new_accounts
-        = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
-    // API Service Level
-    - if can?(:manage, :analytics)
-      = render collection: @services,
-               partial: 'provider/admin/dashboards/service',
-               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
-               cache_options: { expires_in: 1.hour }
+      // Account Level Widgets
+      = dashboard_widget :new_accounts if can?(:manage, :partners)
+      = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
-    = render 'shared/service_access'
+    section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
+      - if current_user.accessible_services?
+        header.DashboardSection-header.DashboardSection-header--extended
+          = render 'services_filter'
+          = render 'services_navigation', api_docs: current_account.api_docs_services
+
+
+
+        // API Service Level
+        = render collection: @services,
+                 partial: 'provider/admin/dashboards/service',
+                 cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+                 cache_options: { expires_in: 1.hour }
+
+      = render 'shared/service_access'
 
   div.Dashboard-events
     section.DashboardStream
@@ -38,7 +51,3 @@ javascript:
   System.import('dashboard/toggle').then(function (m) {
     m.default()
   });
-
-
-
-

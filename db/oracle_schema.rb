@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180913135328) do
+ActiveRecord::Schema.define(version: 20181018082620) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -140,6 +140,8 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.string   "base_path"
     t.string   "swagger_version"
     t.boolean  "skip_swagger_validations", limit: nil,                default: false
+    t.integer  "service_id",               limit: 8,   precision: 8
+    t.boolean  "discovered",               limit: nil
   end
 
   create_table "application_keys", force: :cascade do |t|
@@ -983,6 +985,15 @@ ActiveRecord::Schema.define(version: 20180913135328) do
 
   add_index "profiles", ["account_id"], name: "fk_account_id"
 
+  create_table "provided_access_tokens", force: :cascade do |t|
+    t.text     "value"
+    t.integer  "user_id",    precision: 38
+    t.integer  "tenant_id",  precision: 38
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "provider_constraints", force: :cascade do |t|
     t.integer  "tenant_id",    precision: 38
     t.integer  "provider_id",  precision: 38
@@ -1137,6 +1148,7 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.string   "support_email"
     t.boolean  "referrer_filters_required",      limit: nil,                default: false
     t.string   "deployment_option",                                         default: "hosted"
+    t.string   "kubernetes_service_link"
   end
 
   add_index "services", ["account_id"], name: "idx_account_id"
@@ -1418,8 +1430,10 @@ ActiveRecord::Schema.define(version: 20180913135328) do
     t.boolean  "application_key_updated_on",      limit: nil,                default: false
   end
 
+  add_foreign_key "api_docs_services", "services"
   add_foreign_key "event_store_events", "accounts", column: "provider_id", on_delete: :cascade
   add_foreign_key "payment_details", "accounts", on_delete: :cascade
+  add_foreign_key "provided_access_tokens", "users"
   add_foreign_key "proxy_configs", "proxies", on_delete: :cascade
   add_foreign_key "proxy_configs", "users", on_delete: :nullify
   add_foreign_key "sso_authorizations", "authentication_providers"

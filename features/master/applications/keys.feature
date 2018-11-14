@@ -15,4 +15,4 @@ Feature: Application Keys management
     And I enter the admin password in "Current password"
     Then I should see "You are now in super-user mode! Retry the action, please."
     And I follow "Regenerate" and I confirm dialog box
-    Then I should see "The key was successfully changed"
+    And I should see "The key was successfully changed"

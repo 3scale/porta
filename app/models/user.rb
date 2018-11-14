@@ -20,6 +20,7 @@ class User < ApplicationRecord
   include States
   include Invitations
   include Permissions
+  include ProvidedAccessTokens
 
   audited
 
@@ -170,16 +171,15 @@ class User < ApplicationRecord
   end
 
   def accessible_services
-    services = account.accessible_services
+    account.accessible_services.permitted_for_user(self)
+  end
 
-    case
-    when has_access_to_all_services?
-      services
-    when account.provider_can_use?(:service_permissions)
-      services.where(id: member_permission_service_ids)
-    else
-      services
-    end
+  def multiple_accessible_services?
+    account.multiple_accessible_services?(Service.permitted_for_user(self))
+  end
+
+  def accessible_services?
+    accessible_services.exists?
   end
 
   def allowed_access_token_scopes

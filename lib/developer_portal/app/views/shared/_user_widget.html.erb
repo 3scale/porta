@@ -3,7 +3,7 @@
     <strong class="username"><%= h current_user.username %></strong>
       <%= link_to 'Dashboard', developer_portal.admin_dashboard_path %>
     | <%= link_to 'Account', developer_portal.admin_account_path %>
-    | <%= link_to 'Logout', developer_portal.logout_path %>
+    | <%= link_to 'Sign Out', developer_portal.logout_path %>
   <% else %>
     <%= link_to 'Sign in', developer_portal.login_path %>
     <%= render 'shared/signup_link' %>

@@ -148,6 +148,8 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
         end
         @form = ThreeScale::SemanticFormBuilder.new(:model, @object, @template, {})
         subject.stubs(:enabled?).returns(true)
+        http_method = Struct.new(:get?)
+        subject.stubs(:http_method).returns(http_method.new(get?: false))
       end
 
       should "not render captcha" do
@@ -157,6 +159,25 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
         assert_match %r{If you're human, leave this field empty.}, @output
         assert_match %r{type="hidden" name="model\[timestamp\]"}, @output
         assert_match %r{noscript}, @output
+      end
+
+      should 'not render captcha because of missing configuration' do
+        subject.stubs(:level).returns(:captcha)
+        subject.stubs(:captcha_configured?).returns(false)
+        @block.call(@form)
+        assert_match %r{<li .+? id="model_confirmation_input" class="boolean required"}, @output
+        assert_match %r{If you're human, leave this field empty.}, @output
+        assert_match %r{type="hidden" name="model\[timestamp\]"}, @output
+        assert_match %r{noscript}, @output
+      end
+
+      should 'render captcha - configuration has been added' do 
+        subject.stubs(:level).returns(:captcha)
+        subject.stubs(:captcha_configured?).returns(true)
+        @block.call(@form)
+        assert_match %r{src="https://www.google.com/recaptcha/api.js}, @output
+        assert_match %r{src="https://www.google.com/recaptcha/api/fallback}, @output
+        assert_match %r{name="g-recaptcha-response\"}, @output
       end
 
       should "render captcha" do

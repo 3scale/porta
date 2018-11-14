@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Account::DomainsTest < ActiveSupport::TestCase
-
   test '#domain must be downcase' do
     account_one = FactoryGirl.create(:simple_provider)
     account_one.subdomain = 'FOO'
@@ -11,6 +10,7 @@ class Account::DomainsTest < ActiveSupport::TestCase
   test '#domain must be unique' do
     account_one = FactoryGirl.create(:simple_provider)
 
+    ThreeScale.config.stubs(superdomain: 'example.com')
     account_two = Factory.build(:provider_account)
     account_two.domain = account_one.domain
 
@@ -21,6 +21,7 @@ class Account::DomainsTest < ActiveSupport::TestCase
   test '#domain uniqueness ignores deleted' do
     account_one = FactoryGirl.create(:simple_provider)
 
+    ThreeScale.config.stubs(superdomain: 'example.com')
     account_two = Factory.build(:provider_account)
     account_two.domain = account_one.domain
 
@@ -112,10 +113,10 @@ class Account::DomainsTest < ActiveSupport::TestCase
     end
     account.generate_domains
 
-    assert_equal 'new-master-account-admin',                                  account.subdomain
-    assert_equal 'new-master-account-admin',                                  account.self_subdomain
-    assert_equal "new-master-account-admin.#{ThreeScale.config.superdomain}", account.domain
-    assert_equal "new-master-account-admin.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal 'new-master-account',                                  account.subdomain
+    assert_equal 'new-master-account',                                  account.self_subdomain
+    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.domain
+    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.self_domain
   end
 
   test '#generate_domains generates correctly custom for master' do

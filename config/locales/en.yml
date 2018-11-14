@@ -115,6 +115,7 @@ en:
           analytics_api: 'Analytics API'
           billing_api: 'Billing API'
           master_api: 'Master API'
+      base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
           update_link: "%{docs_base_url}/api-documentation/%{docs_anchor}activedocs-migrate"
@@ -390,11 +391,6 @@ en:
           no_messages_6: "The sound of silence"
 
   buyers:
-
-    applications:
-      edit:
-        delete_confirmation: Are you sure you want to delete this application?
-
     accounts:
       edit: &account_delete_msg
         schedule_for_deletion_confirmation: "Scheduling a tenant account for deletion means it will be permanently deleted in %{deletion_time_left}. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. Are you sure you want to schedule the account '%{name}' for deletion on %{deletion_date}?"
@@ -412,6 +408,10 @@ en:
         resume: 'resumed'
 
   sites:
+    spam_protections:
+      edit:
+        captcha_hint_false: 'reCAPTCHA has not been configured correctly, Spam Protection cannot be enabled.'
+        captcha_hint_true: "When 'Suspicious only' is selected then reCAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', reCAPTCHA will always appear when a form is presented to a user who is not logged in."
     usage_rules:
       edit:
         sso_integrations_info_html: |
@@ -437,12 +437,22 @@ en:
     creation_type:
       manual: 'manually created'
       background: 'automatically created'
+    reasons_cannot_charge:
+      not_paid: 'already paid'
+      provider_present: 'missing provider'
+      provider_payment_gateway_configured: 'missing payment gateway setting'
+      positive: 'non-chargeable amount'
+      buyer_account_paying_monthly: 'buyer not paying monthly'
 
   api:
+    applications:
+      edit:
+        delete_confirmation: Are you sure you want to delete this application?
     services:
       forms:
         definition_settings:
           delete_confirmation: "Are you sure you want to delete the service '%{name}'?"
+          refresh_confirmation: "This action will overwrite the API's Private URL and automatically created ActiveDocs. Are you sure you want to proceed?"
     integrations:
       edit:
         proxy_or_plugin: |
@@ -566,10 +576,15 @@ en:
       plugin_php: PHP Plugin
       plugin_rest: REST requests
       plugin_csharp: .NET Plugin
+      service_mesh_istio: Istio Service Mesh
 
     self_managed: APIcast self-managed<span>Manage your own NGINX based API gateway for ultimate flexibility and customization.</span>
     hosted: APIcast<span>a 3scale managed NGINX based API gateway for quick and reliable integrations</span>
     apicast: APIcast<span>Nginx reverse proxy server.</span>
+
+    service_mesh_istio: |
+      Istio (tech preview)
+      <span>A uniform way to secure, connect, and monitor microservices.</span>
 
     on_heroku: Heroku
     on_amazon: Amazon
@@ -615,8 +630,8 @@ en:
       </span>
 
   authentication_options:
-    api_key: "API Key (user_key) <span>The application is identified & authenticated via a single string.</span>"
-    key_pair: "App_ID and App_Key Pair <span>The application is identified via the App_ID and authenticated via the App_Key.</span>"
+    v1: "API Key (user_key) <span>The application is identified & authenticated via a single string.</span>"
+    v2: "App_ID and App_Key Pair <span>The application is identified via the App_ID and authenticated via the App_Key.</span>"
     oauth: "OAuth 2.0 <span>The application is identified via the client_id and authenticated via an access token.</span>"
     oidc: "OpenID Connect <span>Use OpenID Connect for any OAuth 2.0 flow.</span>"
   plugins:
@@ -748,6 +763,7 @@ en:
       activation_approval_required: "You will receive a message once your account is approved."
       invitation_not_found: "Invitation token did not exist."
       invitation_already_accepted: "Invitation token has already been accepted."
+      protected_domain: "Sorry, this domain is protected"
       oauth:
         code_incorrect_or_expired: "The code is incorrect or expired."
         token_incorrect_or_expired: "The token is incorrect or expired."
@@ -796,6 +812,11 @@ en:
             kind:
               not_found: "unavailable for this account type"
 
+        api_docs/service:
+          attributes:
+            service:
+              not_found: 'not found'
+
         metric:
           attributes:
             base:
@@ -812,7 +833,7 @@ en:
         proxy:
           attributes:
             api_backend:
-              invalid: "the accepted format is 'protocol://address(:port)'"
+              invalid: "the accepted format is 'http(s)://address(:port)(/path)'"
             api_test_path:
               invalid: "only URI characters allowed"
             endpoint:
@@ -1088,6 +1109,10 @@ en:
       deployment_option_plugin: |
         Plugins provide a wrapper for the 3scale API that enables API Access Control and API Traffic Reporting without having to run another server.
         A plugin lives inside the code that powers your API. The plugin calls the 3scale API for Access Control & Traffic Reporting.
+      deployment_option_service_mesh: |
+        The term service mesh is used to describe the network of microservices that make up the applications and the interactions between them.
+        As a service mesh grows in size and complexity, it can become harder to understand and manage. Its requirements can include discovery, load balancing, failure recovery, metrics, and monitoring.
+        A service mesh also often has more complex operational requirements, like A/B testing, canary releases, rate limiting, access control, and end-to-end authentication.
       subdomain: "The domain name is the initial temporary domain name for your developer portal - you can change this to your own domain name later."
       handler: "Do you use any markup language?"
       liquid_enabled: "Process Liquid tags and drops?"
