@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 namespace :impersonation_admin_user do
+  desc 'Updates the username and the email of the admin user used for impersonation.'
   task :update, %i[username domain] => :environment do |_task, args|
     username = ActiveRecord::Base.connection.quote(args[:username])
     domain = ActiveRecord::Base.connection.quote(args[:domain])
