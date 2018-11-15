@@ -19,23 +19,19 @@ module Provider::Admin::DashboardsHelper
     widget.percentual_change > 0 ? 'u-plus' : 'u-minus'
   end
 
-  def dashboard_collection_link(singular_name, collection, path, icon_name: nil, plural: nil, notice: false)
-    class_name = 'DashboardNavigation-link' + ' u-notice' if notice
+  def dashboard_navigation_link(singular_name, path, collection: nil, icon_name: nil, plural: nil, notice: false)
+    class_name = "DashboardNavigation-link #{'u-notice' if notice}"
     link_to path, class: class_name do
-      link_text = pluralize(number_to_human(collection.size), singular_name, plural)
+      link_text = collection ? pluralize(number_to_human(collection.size), singular_name, plural) : singular_name
       link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
       link_text.html_safe
     end
   end
 
-  def dashboard_secondary_collection_link(singular_name, collection, path, icon_name: nil, plural: nil, notice: false)
+  def dashboard_secondary_link(singular_name, path, collection: nil, icon_name: nil, plural: nil, notice: false)
     link = ' ('
-    link << dashboard_collection_link(singular_name, collection, path, icon_name: icon_name, plural: plural, notice: notice)
+    link << dashboard_navigation_link(singular_name, path, collection: collection, icon_name: icon_name, plural: plural, notice: notice)
     link << ')'
-  end
-
-  def dashboard_counter_link(collection, path)
-    link_to collection.size, path, class: "DashboardNavigation-link u-notice"
   end
 
   def show_pending_accounts_on_dashboard?
