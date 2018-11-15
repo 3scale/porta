@@ -103,9 +103,29 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'checks if link under number of applications is correct' do
-      FactoryGirl.create_list(:application, 3, user_account: @buyer)
       @provider.settings.allow_multiple_applications!
 
+      service = FactoryGirl.create(:service, account: @provider)
+      FactoryGirl.create_list(:application, 2, user_account: @buyer, service: @provider.default_service)
+      FactoryGirl.create_list(:application, 3, service: service, user_account: @buyer)
+
+      get admin_buyers_accounts_path
+
+      assert_select %{td a[href="#{admin_buyers_account_applications_path(@buyer)}"]}, text: '5'
+    end
+
+    test 'checks if link under number of applications is correct as member' do
+      @provider.settings.allow_multiple_applications!
+      service = FactoryGirl.create(:service, account: @provider)
+
+      FactoryGirl.create_list(:application, 2, user_account: @buyer)
+      FactoryGirl.create_list(:application, 3, service: service, user_account: @buyer)
+
+      # Testing member permissions
+      member = FactoryGirl.create(:member, account: @provider)
+      member.member_permission_service_ids = [service.id]
+      member.save!
+      login! @provider, user: member
       get admin_buyers_accounts_path
 
       assert_select %{td a[href="#{admin_buyers_account_applications_path(@buyer)}"]}, text: '3'
