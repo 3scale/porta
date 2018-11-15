@@ -12,9 +12,9 @@ First of all, please keep in mind that multiple types of contributions are possi
 
 * **Do not open up a GitHub issue if the bug is a security vulnerability**. Please [contact us privately](https://access.redhat.com/security/team/contact) instead.
 
-* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/3scale/system/issues).
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/3scale/porta/issues).
 
-* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/3scale/system/issues/new), filling-in all the necessary information in the Issue template. 
+* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/3scale/porta/issues/new), filling-in all the necessary information in the Issue template. 
 
 #### **Did you write a patch that fixes a bug?**
 
@@ -24,7 +24,7 @@ First of all, please keep in mind that multiple types of contributions are possi
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-* Suggest your change by **[opening](https://github.com/3scale/system/issues/new) a GitHub issue first**, before writing any code.
+* Suggest your change by **[opening](https://github.com/3scale/porta/issues/new) a GitHub issue first**, before writing any code.
 
 * Please think twice about starting to work on code before having collected positive feedback about the change. Maintainers may have already decided against accepting such contributions, so your work may not be incorporated. 
 
