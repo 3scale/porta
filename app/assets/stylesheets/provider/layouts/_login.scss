@@ -104,7 +104,7 @@ body.login-layout {
     &-alt {
       color: $light-color;
       cursor: default;
-      
+
       &:hover {
         color: $light-color;
       }
@@ -119,5 +119,11 @@ body.login-layout {
   .box {
     margin: line-height-times(1) 0;
     max-width: line-height-times(24);
+  }
+
+  #flashWrapper {
+    left: 0;
+    right: auto;
+    bottom:line-height-times(3);
   }
 }
