@@ -17,7 +17,7 @@ class ProviderUserMailer < ActionMailer::Base
 
   def lost_password(user)
     @user = user
-    @url = Rails.application.routes.url_helpers.provider_password_url(password_reset_token: user.lost_password_token, host: domain(user.account))
+    @url = provider_password_url(password_reset_token: user.lost_password_token, host: domain(user.account))
 
     prepare_email(subject: 'Password Recovery', headers: {'X-SMTPAPI' => '{"category": "Lost password"}'}, to: user.email, template: 'provider_lost_password')
   end
