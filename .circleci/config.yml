@@ -25,8 +25,8 @@ store-test-artifacts: &store-test-artifacts
 
 store-log-artifacts: &store-log-artifacts
   store_artifacts:
-    path: log/test.log
-    destination: test.log
+    path: log
+    destination: log
 
 restore-bundler-cache: &restore-bundler-cache
   restore_cache:
