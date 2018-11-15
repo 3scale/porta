@@ -52,7 +52,7 @@ table class="data" id="buyer_accounts"
           td class="plan" = h account.bought_account_plan.try(:name)
 
         - if can? :see, :multiple_applications
-          td = link_to (account.bought_cinstances.count), admin_buyers_account_applications_path(account)
+          td = link_to (current_user.accessible_cinstances.bought_by(account).count), admin_buyers_account_applications_path(account)
 
         td class="state" = account_states_info(account)
         td class="actions operations"
