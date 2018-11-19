@@ -47,7 +47,7 @@ class Buyers::ApplicationsController < FrontendController
       activate_menu :buyers, :accounts, :listing
     end
 
-    @cinstances = current_user.accessible_cinstances
+    @cinstances = accessible_not_bought_cinstances
       .scope_search(@search).order_by(params[:sort], params[:direction])
       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
       .paginate(pagination_params)
@@ -168,9 +168,12 @@ class Buyers::ApplicationsController < FrontendController
     end
   end
 
+  def accessible_not_bought_cinstances
+    current_user.accessible_cinstances.not_bought_by(current_account)
+  end
+
   def find_cinstance
-    @cinstance = current_user.accessible_cinstances
-                  .provided_by(current_account)
+    @cinstance = accessible_not_bought_cinstances
                   .includes(plan: [:service, :original, :plan_metrics, :pricing_rules])
                   .find(params[:id])
     @account = @cinstance.account
@@ -181,7 +184,7 @@ class Buyers::ApplicationsController < FrontendController
   end
 
   def find_service(id = params[:service_id])
-    @service = current_account.accessible_services.find(id) if id
+    @service = accessible_not_bought_cinstances.find(id) if id
   end
 
   def find_provider
