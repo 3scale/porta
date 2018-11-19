@@ -4,31 +4,31 @@ nav.DashboardNavigation
     - if can?(:manage, :partners)
       li.DashboardNavigation-list-item
         // Accounts
-        => dashboard_navigation_link 'Account',
+        => dashboard_collection_link 'Account',
+                                      buyers,
                                       admin_buyers_accounts_path,
-                                      collection: buyers,
                                       icon_name: 'briefcase'
 
         // Pending Accounts
         - if show_pending_accounts_on_dashboard?
-          == dashboard_secondary_link 'Pending',
-                                      admin_buyers_accounts_path(search: {state: 'pending'}),
-                                      collection: pending_buyers,
-                                      plural: 'Pending',
-                                      notice: true
+          == dashboard_secondary_collection_link 'Pending',
+                                                  pending_buyers,
+                                                  admin_buyers_accounts_path(search: {state: 'pending'}),
+                                                  plural: 'Pending',
+                                                  notice: true
 
     - if can? :manage, :partners
       li.DashboardNavigation-list-item
-        = dashboard_navigation_link 'Application',
+        = dashboard_collection_link 'Application',
+                                    applications,
                                     admin_buyers_applications_path,
-                                    collection: applications,
                                     icon_name: 'cubes'
 
         - if can?(:manage, :monitoring) && alerts.any?
-          == dashboard_secondary_link 'Alert',
-                                      admin_alerts_path,
-                                      collection: alerts,
-                                      notice: true
+          == dashboard_secondary_collection_link 'Alert',
+                                                  alerts,
+                                                  admin_alerts_path,
+                                                  notice: true
 
     // Billing
     - if can?(:manage, :finance)
@@ -45,24 +45,24 @@ nav.DashboardNavigation
                                     icon_name: 'sitemap'
 
         - if current_account.templates.with_draft
-          == dashboard_secondary_link 'Draft',
-                                      provider_admin_cms_changes_path,
-                                      collection: current_account.templates.with_draft,
-                                      notice: true
+          == dashboard_secondary_collection_link 'Draft',
+                                                  current_account.templates.with_draft,
+                                                  provider_admin_cms_changes_path,
+                                                  notice: true
 
     // Forum
     - if show_forum_on_dashboard? && forum_topics.any?
       li.DashboardNavigation-list-item
-        = dashboard_navigation_link 'Forum Topic',
+        = dashboard_collection_link 'Forum Topic',
+                                    forum_topics,
                                     admin_forum_path,
-                                    collection: forum_topics,
                                     icon_name: 'comments'
 
     // Messages
     li.DashboardNavigation-list-item
-      = dashboard_navigation_link 'Message',
+      = dashboard_collection_link 'Message',
+                                  current_account.messages.where(sender: !current_account),
                                   provider_admin_messages_root_path,
-                                  collection: current_account.messages.where(sender: !current_account),
                                   icon_name: 'envelope'
 
         - if unread_messages_presenter.show_counter?

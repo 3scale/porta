@@ -18,17 +18,17 @@ nav.DashboardNavigation
       li.DashboardNavigation-list-item
         // Applications
         - if can? :manage, :partners
-          => dashboard_navigation_link 'Application',
+          => dashboard_collection_link 'Application',
+                                       service.cinstances,
                                        admin_service_applications_path(service),
-                                       collection: service.cinstances,
                                        icon_name: 'cubes'
 
     - unread_alerts = current_account.buyer_alerts.by_service(service).unread
     - if can?(:manage, :monitoring) && unread_alerts.any?
       li.DashboardNavigation-list-item
-        = dashboard_navigation_link 'Alert',
+        = dashboard_collection_link 'Alert',
+                                    unread_alerts,
                                     admin_service_alerts_path(service),
-                                    collection: unread_alerts,
                                     icon_name: 'exclamation-triangle',
                                     notice: true
 
@@ -36,17 +36,17 @@ nav.DashboardNavigation
     - if show_subscriptions_on_dashboard?(service)
       li.DashboardNavigation-list-item
         // Subscriptions (would be nice to have API specific links)
-        => dashboard_navigation_link 'Subscription',
+        => dashboard_collection_link 'Subscription',
+                                     service.service_contracts,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id}),
-                                     collection: service.service_contracts,
                                      icon_name: 'paperclip'
 
     // Active docs
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-       = dashboard_navigation_link 'ActiveDoc',
+       = dashboard_collection_link 'ActiveDoc',
+                                    service.api_docs_services,
                                     admin_service_api_docs_path(service),
-                                    collection: service.api_docs_services,
                                     icon_name: 'file-text'
     // Integration
     - if can?(:manage, :plans)
