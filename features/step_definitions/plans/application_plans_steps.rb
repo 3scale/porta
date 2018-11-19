@@ -113,10 +113,6 @@ Then /^I should see the details of plan "([^"]*)"$/ do |plan_name|
   assert has_css? 'h3', :text => plan_name
 end
 
-Then /^I should be in the plans page$/ do
-  assert has_xpath?("//table[@id='contracts_table']")
-end
-
 Then /^I should see I have signed up (plan "[^"]*")$/ do |plan|
   assert has_xpath?("//td[@id='plan_#{plan.id}']", :text => 'Your Plan')
 end
