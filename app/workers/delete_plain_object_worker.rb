@@ -9,8 +9,11 @@ class DeletePlainObjectWorker < ActiveJob::Base
   end
 
   rescue_from(ActiveRecord::RecordNotDestroyed, ActiveRecord::StaleObjectError) do |exception|
-    System::ErrorReporting.report_error(exception, parameters: { caller_worker_hierarchy: caller_worker_hierarchy,
-                                                                 error_messages: exception.record.errors.full_messages })
+    record = exception.record
+    if record.class.exists?(record.id)
+      System::ErrorReporting.report_error(exception, parameters: { caller_worker_hierarchy: caller_worker_hierarchy,
+                                                                   error_messages: record.errors.full_messages })
+    end
   end
 
   queue_as :default
