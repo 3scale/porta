@@ -19,28 +19,29 @@ module Provider::Admin::DashboardsHelper
     widget.percentual_change > 0 ? 'u-plus' : 'u-minus'
   end
 
-  def dashboard_navigation_link(link_text, path, icon_name: nil, notice: false)
-    class_name = "DashboardNavigation-link #{'u-notice' if notice}"
+  def dashboard_navigation_link(link_text, path, options = {})
+    class_name = "DashboardNavigation-link #{'u-notice' if option.notice}"
     link_to path, class: class_name do
+      icon_name = options.icon_name
       link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
       link_text.html_safe
     end
   end
 
-  def dashboard_secondary_link(link_text, path, icon_name: nil, notice: false)
+  def dashboard_secondary_link(link_text, path, options = {})
     link = ' ('
-    link << dashboard_navigation_link(link_text, path, icon_name, notice)
+    link << dashboard_navigation_link(link_text, path, options)
     link << ')'
   end
   
-  def dashboard_collection_link(singular_name, collection, path, icon_name: nil, notice: false, plural: nil)
-    link_text = pluralize(number_to_human(collection.size), singular_name, plural)
-    dashboard_navigation_link(link_text, path, icon_name, notice)
+  def dashboard_collection_link(singular_name, collection, path, options = {})
+    link_text = pluralize(number_to_human(collection.size), singular_name, options.plural)
+    dashboard_navigation_link(link_text, path, options)
   end
   
-  def dashboard_secondary_collection_link(singular_name, collection, path, icon_name: nil, notice: false, plural: nil)
+  def dashboard_secondary_collection_link(singular_name, collection, path, options = {})
     link = ' ('
-    link << dashboard_collection_link(singular_name, collection, path, icon_name, notice, plural)
+    link << dashboard_collection_link(singular_name, collection, path, options)
     link << ')'
   end
 
