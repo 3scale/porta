@@ -1,2 +1,0 @@
-module Analytics::UsersHelper
-end
