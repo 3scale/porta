@@ -38,7 +38,7 @@ class CMS::TemplateTest < ActiveSupport::TestCase
 
   test 'publish' do
     page = Factory(:cms_page, draft: 'something to publish')
-    assert_equal nil, page.content
+    assert_nil page.content
     page.publish!
     assert_equal page.content, 'something to publish'
     assert_equal 2, page.versions.count

@@ -6,7 +6,7 @@ class Onboarding::ApiFormTest < ActiveSupport::TestCase
     api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
                                   proxy:   FactoryGirl.build(:proxy))
 
-    assert_equal nil, api.backend
+    assert_nil api.backend
 
 
     api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
@@ -21,7 +21,7 @@ class Onboarding::ApiFormTest < ActiveSupport::TestCase
     api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
                                   proxy:   FactoryGirl.build(:proxy))
 
-    assert_equal nil, api.name
+    assert_nil api.name
 
 
     api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service,

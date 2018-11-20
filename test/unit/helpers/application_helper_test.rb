@@ -7,7 +7,7 @@ class ApplicationHelperTest < ActionView::TestCase
   def test_link_to_export_widget_for
     self.current_user = FactoryGirl.build_stubbed(:member, account: account)
     link = link_to_export_widget_for('Accounts')
-    assert_equal nil, link
+    assert_nil link
 
     self.current_user = FactoryGirl.build_stubbed(:admin, account: account)
     link = link_to_export_widget_for('Accounts')
