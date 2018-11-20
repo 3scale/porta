@@ -20,9 +20,9 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_navigation_link(link_text, path, options = {})
-    class_name = "DashboardNavigation-link #{'u-notice' if option.notice}"
+    class_name = "DashboardNavigation-link #{'u-notice' if options.fetch(:notice, false)}"
     link_to path, class: class_name do
-      icon_name = options.icon_name
+      icon_name = options.fetch(:icon_name, nil)
       link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
       link_text.html_safe
     end
@@ -35,7 +35,7 @@ module Provider::Admin::DashboardsHelper
   end
   
   def dashboard_collection_link(singular_name, collection, path, options = {})
-    link_text = pluralize(number_to_human(collection.size), singular_name, options.plural)
+    link_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
     dashboard_navigation_link(link_text, path, options)
   end
   
