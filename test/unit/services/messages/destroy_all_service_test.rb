@@ -10,7 +10,7 @@ class Messages::DestroyAllServiceTest < ActiveSupport::TestCase
 
   def test_run!
     Sidekiq::Testing.fake! do
-      assert_nil, @message.deleted_at
+      assert_nil @message.deleted_at
 
       ::Messages::DestroyAllService.run!({
         account:           @account,

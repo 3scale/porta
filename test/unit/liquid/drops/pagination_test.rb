@@ -27,7 +27,7 @@ class Liquid::Drops::PaginationDropTest < ActiveSupport::TestCase
 
   test 'head' do
     drop = Drops::Pagination.new(Invoice.paginate(page: 1, per_page: 3), @url_builder)
-    assert_nil, drop.previous
+    assert_nil drop.previous
     assert_equal 1, drop.current_page
     assert_equal 2, drop.next
   end
@@ -36,7 +36,7 @@ class Liquid::Drops::PaginationDropTest < ActiveSupport::TestCase
     drop = Drops::Pagination.new(Invoice.paginate(page: 4, per_page: 3), @url_builder)
     assert_equal 3, drop.previous
     assert_equal 4, drop.current_page
-    assert_nil, drop.next
+    assert_nil drop.next
   end
 
 

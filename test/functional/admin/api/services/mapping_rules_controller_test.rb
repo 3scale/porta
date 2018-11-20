@@ -68,7 +68,7 @@ module Admin::Api::Services
         assert_response :success
       end
 
-      assert_nil, ProxyRule.last!.redirect_url
+      assert_nil ProxyRule.last!.redirect_url
     end
 
 

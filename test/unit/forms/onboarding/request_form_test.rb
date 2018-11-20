@@ -6,7 +6,7 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
     proxy = FactoryGirl.build(:proxy)
     form = Onboarding::RequestForm.new(proxy)
 
-    assert_nil, form.path
+    assert_nil form.path
 
     assert form.validate(path: nil)
     assert form.save
