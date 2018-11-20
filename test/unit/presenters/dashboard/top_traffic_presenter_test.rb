@@ -43,7 +43,7 @@ class TopTrafficPresenterTest < ActiveSupport::TestCase
     assert_equal 'app 2', second.name
 
     assert_kind_of Dashboard::TopTraffic::LeftAppPresenter, third
-    assert_equal nil, third.position
+    assert_nil, third.position
     assert_equal 'app 3', third.name
   end
 

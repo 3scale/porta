@@ -20,7 +20,7 @@ class ThreeScale::OAuth2::KeycloakClientTest < ActiveSupport::TestCase
     @authentication.options.expects(site: nil)
 
     assert_raises ThreeScale::OAuth2::KeycloakClient::MissingRealmError do
-      assert_equal nil, @oauth2.realm
+      assert_nil, @oauth2.realm
     end
   end
 

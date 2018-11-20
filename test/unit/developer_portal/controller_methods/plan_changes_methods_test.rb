@@ -27,11 +27,11 @@ module DeveloperPortal::ControllerMethods
     end
 
     def test_store_plan_change!
-      assert_equal nil, @store[1]
+      assert_nil, @store[1]
 
       @controller.send(:store_plan_change!, 1, '')
 
-      assert_equal nil, @store[1]
+      assert_nil, @store[1]
 
       @controller.send(:store_plan_change!, 1, 2)
 
@@ -39,7 +39,7 @@ module DeveloperPortal::ControllerMethods
     end
 
     def test_unstore_plan_change!
-      assert_equal nil, @store[1]
+      assert_nil, @store[1]
 
       @controller.send(:store_plan_change!, 1, 2)
 
@@ -47,7 +47,7 @@ module DeveloperPortal::ControllerMethods
 
       @controller.send(:unstore_plan_change!, 1)
 
-      assert_equal nil, @store[1]
+      assert_nil, @store[1]
     end
 
     def test_plan_ids
@@ -67,7 +67,7 @@ module DeveloperPortal::ControllerMethods
     end
 
     def test_fetch
-      assert_equal nil, @store[1]
+      assert_nil, @store[1]
 
       @store.save(1, 2)
 
