@@ -488,11 +488,15 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'with_trial_period_expired_or_accepted' do
-    assert_equal 0, Cinstance.with_trial_period_expired_or_accepted(Date.today).count
+    FactoryGirl.create(:cinstance)
+    Cinstance.update_all(trial_period_expires_at: Date.today)
+    assert_equal Cinstance.with_trial_period_expired_or_accepted(Date.today).count, Cinstance.count
   end
 
   test 'with_trial_period_expired' do
-    assert_equal 0, Cinstance.with_trial_period_expired(Date.today).count
+    FactoryGirl.create(:cinstance)
+    Cinstance.update_all(trial_period_expires_at: Date.today)
+    assert_equal Cinstance.with_trial_period_expired(Date.today).count, Cinstance.count
   end
 
   test 'Cinstance.notify_about_expired_trial_periods does not send anything if plan is free' do
