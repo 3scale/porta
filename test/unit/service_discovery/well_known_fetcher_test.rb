@@ -47,10 +47,10 @@ class ServiceDiscovery::WellKnownFetcherTest < ActiveSupport::TestCase
 
   test 'call failed' do
     stub_request(:get, well_known_url).to_return(status: 500, body: '')
-    assert_nil, subject.call
+    assert_nil subject.call
 
     stub_request(:get, well_known_url).to_return(status: 200, body: '<xml></xml>')
-    assert_nil, subject.call
+    assert_nil subject.call
   end
 
   private

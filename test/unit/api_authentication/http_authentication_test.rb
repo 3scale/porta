@@ -10,7 +10,7 @@ class ApiAuthentication::HttpAuthenticationTest < MiniTest::Unit::TestCase
   def test_invalid_encoding
     @request = stub('request', authorization: "\x255")
 
-    assert_nil, http_authentication
+    assert_nil http_authentication
   end
 
   def test_http_user_authentication

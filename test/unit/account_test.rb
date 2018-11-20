@@ -70,7 +70,7 @@ class AccountTest < ActiveSupport::TestCase
     account.reload
 
     assert_raises(ActiveRecord::RecordNotFound) { service.reload }
-    assert_nil, account.default_service_id
+    assert_nil account.default_service_id
   end
 
   test '#trashed_messages' do
@@ -212,7 +212,7 @@ class AccountTest < ActiveSupport::TestCase
     end
 
     should 'have nil VAT rate' do
-      assert_nil, @account.vat_rate
+      assert_nil @account.vat_rate
 
       @account.update_attribute(:vat_rate, 0)
       assert_equal 0.0, @account.reload.vat_rate

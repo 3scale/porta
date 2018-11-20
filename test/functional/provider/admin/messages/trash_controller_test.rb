@@ -50,7 +50,7 @@ class Provider::Admin::Messages::TrashControllerTest < ActionController::TestCas
     @message.reload
 
     assert_response :redirect
-    assert_nil, @message.hidden_at
+    assert_nil @message.hidden_at
   end
 
   def test_empty

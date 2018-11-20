@@ -14,7 +14,7 @@ class Liquid::Filters::FormHelpersTest < ActiveSupport::TestCase
   test 'inline_errors' do
     model = Liquid::Drops::Model.new(self)
 
-    assert_nil, inline_errors(model.errors)
+    assert_nil inline_errors(model.errors)
     errors.add(:setup, 'set up')
     errors.add(:teardown, 'tore down')
 

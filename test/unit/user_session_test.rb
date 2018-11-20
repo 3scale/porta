@@ -51,7 +51,7 @@ class UserSessionTest < ActiveSupport::TestCase
     refute session.valid?
 
     session.user_agent = nil
-    assert_nil, session.user_agent
+    assert_nil session.user_agent
     refute session.valid?
 
     session.user_agent = 'a' * 253
