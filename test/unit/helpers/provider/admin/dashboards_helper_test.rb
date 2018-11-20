@@ -47,4 +47,9 @@ class Provider::Admin::DashboardsHelperTest < ActionView::TestCase
     assert_equal navigation_link, collection_link
   end
 
+  test 'make_link_secondary should wrap link in parenthesis and return a safe html' do
+    safe_link = make_link_secondary('<a href="/foo">I am safe!</a>')
+    assert_equal ' (&lt;a href=&quot;/foo&quot;&gt;I am safe!&lt;/a&gt;)', safe_link
+  end
+
 end

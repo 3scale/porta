@@ -29,9 +29,7 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_secondary_link(link_text, path, options = {})
-    link = ' ('
-    link << dashboard_navigation_link(link_text, path, options)
-    link << ')'
+    make_link_secondary(dashboard_navigation_link(link_text, path, options))
   end
   
   def dashboard_collection_link(singular_name, collection, path, options = {})
@@ -40,9 +38,11 @@ module Provider::Admin::DashboardsHelper
   end
   
   def dashboard_secondary_collection_link(singular_name, collection, path, options = {})
-    link = ' ('
-    link << dashboard_collection_link(singular_name, collection, path, options)
-    link << ')'
+    make_link_secondary(dashboard_collection_link(singular_name, collection, path, options))
+  end
+
+  def make_link_secondary(html)
+    " (#{h html})".html_safe
   end
 
   def show_pending_accounts_on_dashboard?
