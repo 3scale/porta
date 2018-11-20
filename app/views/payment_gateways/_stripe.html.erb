@@ -51,7 +51,7 @@
       </li>
 
       <%= form.input :cvc,
-        input_html: {name: '', required: 'required', maxlength: 4, data: {stripe: 'cvc'}, style: "width: 4em",
+        input_html: {name: '', required: 'required', maxlength: 4, data: {stripe: 'cvc'},
                      class: "form-control col-md-6", style: "width:50%;", pattern: "^[0-9]{3,4}", placeholder: '123'},
         wrapper_html: {class: "form-group"},
         label_html: {class: "col-md-4 control-label" },
