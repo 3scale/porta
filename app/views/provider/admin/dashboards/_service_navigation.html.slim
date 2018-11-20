@@ -20,7 +20,7 @@ nav.DashboardNavigation
         // Applications
         - if can? :manage, :partners
           => dashboard_collection_link 'Application',
-                                       service.cinstances,
+                                       service.cinstances.not_bought_by(current_account),
                                        admin_service_applications_path(service),
                                        'Applications',
                                        'cubes'
