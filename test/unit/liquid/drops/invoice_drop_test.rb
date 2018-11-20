@@ -96,7 +96,7 @@ class Liquid::Drops::InvoiceDropTest < ActiveSupport::TestCase
   end
 
   should 'returns vat_rate' do
-    assert_equal nil, @drop.vat_rate
+    assert_nil, @drop.vat_rate
   end
 
   should 'returns payment_transactions' do

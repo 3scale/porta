@@ -5,7 +5,7 @@ class BasicInfoTest < ActiveSupport::TestCase
   test 'env empty' do
     ENV['AMP_RELEASE'] = nil
     System::Deploy.load_info!
-    assert_equal nil, System::Deploy.info.release
+    assert_nil, System::Deploy.info.release
   end
 
   test 'env not empty' do

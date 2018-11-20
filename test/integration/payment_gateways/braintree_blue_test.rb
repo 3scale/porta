@@ -27,7 +27,7 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
     @provider_account.payment_gateway_options[:public_key] = "AnY-pUbLiC-kEy"
     @provider_account.payment_gateway_options[:private_key] = "a1b2c3d4e5"
       login_with @buyer_account.admins.first.username, 'supersecret'
-      assert_equal nil, @buyer_account.credit_card_partial_number
+      assert_nil, @buyer_account.credit_card_partial_number
 
   end
 

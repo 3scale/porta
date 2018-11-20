@@ -172,7 +172,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
       session.get '/login'
 
       session.assert_response :success
-      session.assert_equal nil, User.current
+      session.assert_nil, User.current
     end
   end
 
