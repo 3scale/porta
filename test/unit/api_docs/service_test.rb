@@ -551,7 +551,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     api_docs_services = FactoryGirl.create_list(:api_docs_service, 2)
     service = FactoryGirl.create(:simple_service, account: api_docs_services.first.account)
     api_docs_services.first.update_column(:service_id, service.id)
-    assert_same_elements [api_docs_services.last.id], ApiDocs::Service.without_service.pluck(:id)
+    assert_equal [api_docs_services.last.id], ApiDocs::Service.without_service.pluck(:id)
   end
 
   private
