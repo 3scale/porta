@@ -297,7 +297,7 @@ jobs:
         name: Prepare database & config files
         command: |
           cp config/examples/*.yml config/
-          DB=oracle bundle exec rake db:create db:test:prepare
+          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -346,7 +346,7 @@ jobs:
         name: Prepare database & config files
         command: |
           cp config/examples/*.yml config/
-          DB=oracle bundle exec rake db:create db:test:prepare
+          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -395,7 +395,7 @@ jobs:
         name: Prepare database & config files
         command: |
           cp config/examples/*.yml config/
-          DB=oracle bundle exec rake db:create db:test:prepare
+          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -448,7 +448,7 @@ jobs:
           name: Prepare database & config files
           command: |
             cp config/examples/*.yml config/
-            DB=oracle bundle exec rake db:create db:test:prepare
+            DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
       - run:
           name: Rspec tests
           command: |
@@ -522,7 +522,7 @@ jobs:
       - run:
           name: Prepare database
           command: |
-            DB=oracle bundle exec rake db:create db:test:prepare
+            DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
       - run:
           name: Disable internet access
           command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
