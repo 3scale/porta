@@ -51,7 +51,7 @@ rails-tests-oracle: &rails-tests-oracle
     name: Rails tests
     command: |
       TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-      bundle exec rake test:run DB=oracle TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+      DB=oracle bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
     environment:
       LC_ALL: en_US.UTF-8
 
@@ -297,7 +297,7 @@ jobs:
         name: Prepare database & config files
         command: |
           cp config/examples/*.yml config/
-          bundle exec rake db:create db:test:prepare DB=oracle
+          DB=oracle bundle exec rake db:create db:test:prepare
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -346,7 +346,7 @@ jobs:
         name: Prepare database & config files
         command: |
           cp config/examples/*.yml config/
-          bundle exec rake db:create db:test:prepare DB=oracle
+          DB=oracle bundle exec rake db:create db:test:prepare
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -395,7 +395,7 @@ jobs:
         name: Prepare database & config files
         command: |
           cp config/examples/*.yml config/
-          bundle exec rake db:create db:test:prepare DB=oracle
+          DB=oracle bundle exec rake db:create db:test:prepare
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -448,11 +448,11 @@ jobs:
           name: Prepare database & config files
           command: |
             cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare DB=oracle
+            DB=oracle bundle exec rake db:create db:test:prepare
       - run:
           name: Rspec tests
           command: |
-            bundle exec rspec DB=oracle --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            DB=oracle bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -522,7 +522,7 @@ jobs:
       - run:
           name: Prepare database
           command: |
-            bundle exec rake db:create db:test:prepare DB=oracle
+            DB=oracle bundle exec rake db:create db:test:prepare
       - run:
           name: Disable internet access
           command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
@@ -530,7 +530,7 @@ jobs:
           name: Run cucumber tests
           command: |
             TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            bundle exec cucumber DB=oracle --profile ci ${TESTS}
+            DB=oracle bundle exec cucumber --profile ci ${TESTS}
       - run:
           name: Enabled internet access
           command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
