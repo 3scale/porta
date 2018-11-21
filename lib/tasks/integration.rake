@@ -110,7 +110,10 @@ namespace :integrate do
   # Dynamically generate all tasks from test_commands
   orchestration_helpers.test_commands.each_key do |command|
     desc "Runs tests with #{command}"
-    task command.to_s => :prepare do
+    task command.to_s do
+
+      Rake::Task['integrate:prepare'].invoke unless command.to_s == 'frontend'
+
       orchestration_helpers.run_tests(orchestration_helpers.test_commands[command])
     end
   end
