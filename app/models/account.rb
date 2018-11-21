@@ -386,10 +386,6 @@ class Account < ApplicationRecord
     provider && !master?
   end
 
-  def api_docs_services_without_service
-    api_docs_services.without_service
-  end
-
   # @param [SystemOperation] operation
   def fetch_dispatch_rule(operation)
     MailDispatchRule.fetch_with_retry!(system_operation: operation, account: self) do |m|
