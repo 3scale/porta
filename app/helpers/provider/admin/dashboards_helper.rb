@@ -1,5 +1,7 @@
 module Provider::Admin::DashboardsHelper
 
+  include LinkToHelper
+
   # @param name [Symbol]
   # @param params [Hash]
   def dashboard_widget(name, params = {})
@@ -20,11 +22,13 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_navigation_link(link_text, path, options = {})
-    class_name = "DashboardNavigation-link#{' u-notice' if options.fetch(:notice, false)}"
-    link_to path, class: class_name do
-      icon_name = options.fetch(:icon_name, nil)
-      link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
-      link_text.html_safe
+    link_to path, class: class_string({
+        'DashboardNavigation-link': true,
+        'u-notice': options.fetch(:notice, false)
+      }) do
+        icon_name = options.fetch(:icon_name, nil)
+        link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
+        link_text.html_safe
     end
   end
 
