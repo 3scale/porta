@@ -835,4 +835,14 @@ class AccountTest < ActiveSupport::TestCase
     assert master_account.reload
     refute master_account.reload.scheduled_for_deletion?
   end
+
+  def test_api_docs_services_without_service
+    accounts = FactoryGirl.create_list(:simple_provider, 2)
+    service = FactoryGirl.create(:simple_service, account: accounts.first)
+    FactoryGirl.create(:api_docs_service, account: accounts.first, service: service)
+    expected_api_docs_service = FactoryGirl.create(:api_docs_service, account: accounts.last)
+
+    assert_equal [], accounts.first.api_docs_services_without_service
+    assert_equal [expected_api_docs_service.id], accounts.last.api_docs_services_without_service.pluck(:id)
+  end
 end
