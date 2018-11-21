@@ -133,6 +133,37 @@ jobs:
           paths:
           - ./vendor/bundle
           - ./.bundle/
+  deps_bundler_oracle:
+    docker:
+      - *system-builder
+    steps:
+      - checkout
+      - *git-submodules
+      - *restore-bundler-cache
+      - add_ssh_keys:
+          fingerprints:
+          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+      - *clone-oracle-libs
+      - run:
+          name: Install gems with bundler
+          command: |
+            DB=oracle bundle check || DB=oracle bundle install --deployment
+            DB=oracle bundle clean
+            # remove capybara-webkit source, save more than 400 MB
+            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
+          environment:
+            BUNDLE_RETRY: 3
+            BUNDLE_JOBS: 3
+      - save_cache:
+          key: v1-bundler-gems-oracle-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+            - ./.bundle/
+      - persist_to_workspace:
+          root: .
+          paths:
+          - ./vendor/bundle
+          - ./.bundle/
   dependencies_npm:
     docker:
       - *system-builder
@@ -566,7 +597,7 @@ workflows:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
         # On approval of the `hold` job, any successive job that requires the `hold` job will run.
-      - dependencies_bundler:
+      - deps_bundler_oracle:
           requires:
           - manual_approval
       - dependencies_npm:
@@ -578,7 +609,7 @@ workflows:
           - manual_approval
       - assets_precompile:
           requires:
-            - dependencies_bundler
+            - deps_bundler_oracle
             - dependencies_npm
 
       - lint:
@@ -586,7 +617,7 @@ workflows:
             - assets_precompile
       - unit-oracle:
           requires:
-            - dependencies_bundler
+            - deps_bundler_oracle
       - functional-oracle:
           requires:
             - assets_precompile
@@ -595,7 +626,7 @@ workflows:
             - assets_precompile
       - rspec-oracle:
           requires:
-            - dependencies_bundler
+            - deps_bundler_oracle
       - cucumber-oracle:
           requires:
             - assets_precompile
