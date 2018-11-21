@@ -8,18 +8,19 @@
 
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
-- elsif current_account.api_docs_services.without_service.any?
-  .InfoBox.InfoBox--notice
-    p
-      ' You have
-      => link_to '1 or more active docs', admin_api_docs_services_path
-      ' that are not attached to any API. You can attach them to this API by selecting
-      => @service.name
-      ' in the
-      em> Service
-      ' field in their respective
-      em> edit
-      | views.
+- else
+  -if current_account.api_docs_services.without_service.any?
+    .InfoBox.InfoBox--notice
+      p
+        ' You have
+        => link_to '1 or more active docs', admin_api_docs_services_path
+        ' that are not attached to any API. You can attach them to this API by selecting
+        => @service.name
+        ' in the
+        em> Service
+        ' field in their respective
+        em> edit
+        | views.
 
   table class="data"
     thead
