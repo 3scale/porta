@@ -6,10 +6,9 @@
       span.SwaggerUpgradeBox-logo
       | ActiveDocs now supports Swagger 2.0. Read here why it makes sense to upgrade your service specs to Swagger 2.0
 
-- @free_floating_api_docs_services = [1,2]
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
-- elsif @free_floating_api_docs_services.any?
+- elsif current_account.api_docs_services_without_service.any?
   .InfoBox.InfoBox--notice
     p
       ' You have
