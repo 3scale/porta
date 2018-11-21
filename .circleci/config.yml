@@ -50,7 +50,7 @@ rails-tests-oracle: &rails-tests-oracle
   run:
     name: Rails tests
     command: |
-      TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
+      TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
       DB=oracle bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
     environment:
       LC_ALL: en_US.UTF-8
