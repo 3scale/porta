@@ -8,7 +8,7 @@
 
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
-- elsif current_account.api_docs_services_without_service.any?
+- elsif current_account.api_docs_services.without_service.any?
   .InfoBox.InfoBox--notice
     p
       ' You have
