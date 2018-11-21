@@ -102,6 +102,9 @@ table.data {
   }
 
   tbody {
+    td:first-child {
+      word-break: break-all;
+    }
     td.actions {
       text-align: right;
     }
