@@ -9,7 +9,7 @@
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
 - else
-  -if current_account.api_docs_services.without_service.any?
+  - if current_account.api_docs_services.without_service.any? && can?(:manage, :portal)
     .InfoBox.InfoBox--notice
       p
         ' You have
