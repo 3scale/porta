@@ -26,22 +26,34 @@ class BackendVersionTest < ActiveSupport::TestCase
   end
 
   def test_visible_versions_oauth
-    service = FactoryGirl.create(:simple_service, backend_version: 'oauth')
+    service = FactoryGirl.create(:simple_service, backend_version: 'oidc')
+    versions = BackendVersion.visible_versions(service: service)
+    assert service.oidc?
+    refute versions.values.include?('oauth')
+
+    service.backend_version = 'oauth'
+    assert_raise(ActiveRecord::RecordInvalid) { service.save! }
+
+    service.backend_version = 'oauth'
+    service.save!(validate: false)
     versions = BackendVersion.visible_versions(service: service)
     refute service.oidc?
     assert versions.values.include?('oauth')
-
-    service.backend_version = 'oidc'
-    service.save!
-    versions = BackendVersion.visible_versions(service: service)
-    refute versions.values.include?('oauth')
   end
 
   def test_usable_versions
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryGirl.build_stubbed(:simple_service)
     versions = BackendVersion.usable_versions(service: service)
     assert versions.is_a?(Array)
     assert versions.exclude?('oidc')
+
+    service.backend_version = 'oidc'
+    versions = BackendVersion.usable_versions(service: service)
+    assert versions.include?('oauth')
+
+    service.backend_version = 'oauth'
+    versions = BackendVersion.usable_versions(service: service)
+    assert versions.exclude?('oauth')
   end
 
   def test_helper_methods
