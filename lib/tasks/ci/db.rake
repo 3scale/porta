@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :ci do
 
   namespace :db do
@@ -16,7 +18,7 @@ namespace :ci do
       until System::Database.ready? || timeout.negative?
         print '.'
         sleep interval
-        timeout = timeout - interval
+        timeout -= interval
       end
 
       if ENV['DB'] == 'oracle'
