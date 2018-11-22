@@ -20,6 +20,10 @@ class BackendVersion < ActiveSupport::StringInquirer
       false
     end
 
+    def oauth_usable?(service)
+      service.oidc?
+    end
+
     def oidc_visible?(service)
       service.account.provider_can_use?(:apicast_oidc) &&
         (service.proxy || service.build_proxy).apicast_configuration_driven
