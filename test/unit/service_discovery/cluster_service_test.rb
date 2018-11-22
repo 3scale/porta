@@ -104,11 +104,20 @@ module ServiceDiscovery
     end
 
     test 'specification url' do
-      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081/api/doc', @cluster_service.specification_url
-
       cluster_service_data = @cluster_service_data.deep_merge(metadata: { annotations: { :'discovery.3scale.net/description-path' => 'https://example.com/api-doc.json' } })
       cluster_service = ClusterService.new(cluster_service(cluster_service_data))
       assert_equal 'https://example.com/api-doc.json', cluster_service.specification_url
+
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081/api/doc', @cluster_service.specification_url
+
+      @cluster_service.stubs(description_path: '')
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081', @cluster_service.specification_url
+
+      @cluster_service.stubs(description_path: '/')
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081/', @cluster_service.specification_url
+
+      @cluster_service.stubs(description_path: nil)
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081', @cluster_service.specification_url
     end
 
     private
