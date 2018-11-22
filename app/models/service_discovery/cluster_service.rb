@@ -33,11 +33,11 @@ module ServiceDiscovery
     end
 
     def endpoint
-      File.join(root, path.to_s.sub(/^\//, '').presence)
+      URI.join(root, path.to_s).to_s
     end
 
     def specification_url
-      description_path.to_s.starts_with?('https') ? description_path : File.join(root, description_path.to_s.sub(/^\//, '').presence.to_s)
+      description_path.to_s.starts_with?('http') ? description_path : URI.join(root, description_path.to_s).to_s
     end
 
     def specification
