@@ -88,6 +88,15 @@ module ServiceDiscovery
 
     test 'endpoint' do
       assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081/api', @cluster_service.endpoint
+
+      @cluster_service.stubs(path: '')
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081', @cluster_service.endpoint
+
+      @cluster_service.stubs(path: '/')
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081/', @cluster_service.endpoint
+
+      @cluster_service.stubs(path: nil)
+      assert_equal 'http://fake-api.fake-project.svc.cluster.local:8081', @cluster_service.endpoint
     end
 
     test 'description path' do
