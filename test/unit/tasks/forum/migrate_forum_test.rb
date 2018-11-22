@@ -3,8 +3,7 @@ require 'test_helper'
 class Tasks::ForumTest < ActiveSupport::TestCase
 
   def test_migrate_forum
-    admin_1 = FactoryGirl.create(:simple_user, id: 1)
-    admin_2 = FactoryGirl.create(:simple_user, id: 2)
+    admin_1, admin_2 = FactoryGirl.create_list(:simple_user, 2)
     account = FactoryGirl.create(:simple_account, users: [admin_2])
     forum_1 = FactoryGirl.create(:forum)
     forum_2 = FactoryGirl.create(:forum, account: account)
