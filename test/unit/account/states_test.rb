@@ -213,12 +213,12 @@ class Account::StatesTest < ActiveSupport::TestCase
 
       BackendProviderSyncWorker.expects(:enqueue).with(account.id)
 
-      Timecop.freeze do
-        account.schedule_for_deletion!
-        account.reload
-        assert_equal Time.zone.now.to_s, account.deleted_at.to_s
-        assert_equal Time.zone.now.to_s, account.state_changed_at.to_s
-      end
+      time = Time.zone.now
+      Time.zone.stubs(now: time)
+      account.schedule_for_deletion!
+      account.reload
+      assert_equal time.to_s, account.deleted_at.to_s
+      assert_equal time.to_s, account.state_changed_at.to_s
     end
   end
 end
