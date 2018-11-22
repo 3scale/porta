@@ -33,7 +33,7 @@ module ServiceDiscovery
     end
 
     def endpoint
-      File.join(root, path.to_s.sub(/^\//, '').presence)
+      URI.join(root, path.to_s).to_s
     end
 
     def specification_url
