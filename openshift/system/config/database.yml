@@ -1,5 +1,14 @@
 base: &default
+
+<% case ENV['DB']
+   when 'oracle' %>
+  adapter: oracle_enhanced
+<% when 'postgresql' %>
+  adapter: postgresql
+<% else %>
   adapter: mysql2
+<% end %>
+
   url: <%= ENV['DATABASE_URL'] %>
   encoding: utf8
   collation: utf8_bin
