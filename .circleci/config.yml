@@ -560,6 +560,49 @@ jobs:
             cd openshift/system
             docker build --build-arg=BUNDLER_ENV="$(env | grep -e ^BUNDLE_)" --file Dockerfile ../..
             docker build --file Dockerfile.on_prem --pull ../..
+  visual:
+    parallelism: 1
+    resource_class: small
+    docker:
+      - *system-builder
+      - image: quay.io/mikz/dnsmasq
+        command:
+        - --no-poll
+        - --address=/#/127.0.0.1
+        - --server=/percy.io/8.8.8.8
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_DATABASE: circleci
+      - image: memcached:1.5-alpine
+      - image: redis:4.0-alpine
+    steps:
+      - checkout
+      - *git-submodules
+      - *attach-to-workspace
+      - run:
+          name: Prepare database
+          command: |
+            bundle exec rake db:create db:test:prepare
+      - run:
+          name: Disable internet access
+          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+      - run:
+          name: Run percy.io visual tests
+          command: |
+            PERCY_PROJECT=3scale/porta PERCY_BRANCH=$CIRCLE_BRANCH PERCY_COMMIT=$CIRCLE_SHA1 PERCY_ENABLE=1 bundle exec cucumber --profile ci --profile visual features
+      - run:
+          name: Enabled internet access
+          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+          when: always
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - store_artifacts:
+          path: tmp/capybara
+          destination: capybara
+      - *upload-coverage
 
 workflows:
   version: 2
@@ -630,3 +673,22 @@ workflows:
       - cucumber-oracle:
           requires:
             - assets_precompile
+  visual_tests:
+    jobs:
+    - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+        type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+      # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+    - dependencies_bundler:
+        requires:
+        - manual_approval
+    - dependencies_npm:
+        requires:
+        - manual_approval
+    - assets_precompile:
+        requires:
+        - dependencies_bundler
+        - dependencies_npm
+    - visual:
+        requires:
+        - assets_precompile
+
