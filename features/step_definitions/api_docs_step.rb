@@ -11,8 +11,10 @@ Then /^provider "([^"]*)" should have access to useful account data$/ do |name|
   service_plans = account.service_plans.latest
 
   service.update_attributes!(:backend_version => 1)
+  # ensure all service_tokens are cleaned up for this test
+  service.service_tokens.delete_all
   token = service.service_tokens.create!(value: 'foobar')
-  visit  provider_admin_api_docs_account_data_path(:format => :json)
+  visit provider_admin_api_docs_account_data_path(:format => :json)
 
   expected_json = {
     results: {
