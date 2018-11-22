@@ -9,6 +9,15 @@
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
 - else
+  - if current_account.api_docs_services.without_service.any? && can?(:manage, :portal)
+    .InfoBox.InfoBox--notice
+      p
+        ' You have
+        => link_to '1 or more ActiveDocs', admin_api_docs_services_path
+        ' that are not attached to any API. You can attach them to this (or any other) API in their respective
+        em> edit
+        | views.
+
   table class="data"
     thead
       th colspan="5" class='operations' = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'action add')
