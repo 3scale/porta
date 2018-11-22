@@ -20,7 +20,7 @@
         <tr/>
       <% utilization.each do |item| %>
         <tr>
-          <td><b class="u-break-word"><%=item.friendly_name %></b>&nbsp;(<%=item.system_name%>)</td>
+          <td class="u-word-break-all"><b class="u-word-break-word"><%=item.friendly_name %></b>&nbsp;(<%=item.system_name%>)</td>
           <td>per <b><%=item.period%></b></td>
           <%
 

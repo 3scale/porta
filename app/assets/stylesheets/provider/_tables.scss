@@ -4,7 +4,10 @@ $search-header-width: line-height-times(4);
 
 // Utility styles
 // TODO: Move to a separate file
-.u-break-word {
+.u-word-break-all {
+  word-break: break-all;
+}
+.u-word-break-word {
   word-break: break-word;
 }
 
