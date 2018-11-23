@@ -13,12 +13,6 @@
     margin-top: line-height-times(1);
   }
 
-  &--audience {
-    .DashboardNavigation-link + .DashboardNavigation-link {
-      color: $warning-color;
-    }
-  }
-
   &--services {
     margin-top: line-height-times(1.4);
   }
