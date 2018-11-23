@@ -3,17 +3,16 @@ nav.DashboardNavigation
 
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-        // Overview (not countable)
-        = link_to admin_service_path(service),
-                  class: "DashboardNavigation-link" do
-          i.fa.fa-map>
-          | Overview
+        // Overview
+        => dashboard_navigation_link 'Overview',
+                                     admin_service_path(service),
+                                     icon_name: 'map'
 
     - if can?(:manage, :monitoring)
       li.DashboardNavigation-list-item
-        = link_to admin_service_stats_usage_path(service), title: 'Analytics', class: "DashboardNavigation-link" do
-          i.fa.fa-bar-chart>
-          | Analytics
+        => dashboard_navigation_link 'Analytics',
+                                     admin_service_stats_usage_path(service),
+                                     icon_name: 'bar-chart'
 
     - if service.cinstances.any?
       li.DashboardNavigation-list-item
@@ -22,8 +21,7 @@ nav.DashboardNavigation
           => dashboard_collection_link 'Application',
                                        service.cinstances.not_bought_by(current_account),
                                        admin_service_applications_path(service),
-                                       'Applications',
-                                       'cubes'
+                                       icon_name: 'cubes'
 
     - unread_alerts = current_account.buyer_alerts.by_service(service).unread
     - if can?(:manage, :monitoring) && unread_alerts.any?
@@ -31,8 +29,8 @@ nav.DashboardNavigation
         = dashboard_collection_link 'Alert',
                                     unread_alerts,
                                     admin_service_alerts_path(service),
-                                    'Alerts',
-                                    'exclamation-triangle'
+                                    icon_name: 'exclamation-triangle',
+                                    notice: true
 
     // Subscriptions & Service Plans
     - if show_subscriptions_on_dashboard?(service)
@@ -41,32 +39,27 @@ nav.DashboardNavigation
         => dashboard_collection_link 'Subscription',
                                      service.service_contracts,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id}),
-                                     'Subscriptions',
-                                     'paperclip'
+                                     icon_name: 'paperclip'
 
     // Active docs
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
        = dashboard_collection_link 'ActiveDoc',
-                                 service.api_docs_services,
-                                 admin_service_api_docs_path(service),
-                                 'ActiveDocs',
-                                 'file-text'
+                                    service.api_docs_services,
+                                    admin_service_api_docs_path(service),
+                                    icon_name: 'file-text'
     // Integration
     - if can?(:manage, :plans)
-      - if !service.has_traffic?
-        li.DashboardNavigation-list-item.u-notice
-          = link_to path_to_service(service),
-                    class: "DashboardNavigation-link u-notice" do
-            i.fa.fa-gears>
-            | Integrate this API
-      - else
-        li.DashboardNavigation-list-item
-          = link_to path_to_service(service),
-                    class: "DashboardNavigation-link" do
-            i.fa.fa-wrench>
-            | Integration
+      li.DashboardNavigation-list-item
+        - if service.has_traffic?
+          = dashboard_navigation_link 'Integration',
+                                      path_to_service(service),
+                                      icon_name: 'wrench'
+        - else
+          = dashboard_navigation_link 'Integrate this API',
+                                      path_to_service(service),
+                                      icon_name: 'wrench',
+                                      notice: true
 
-
-    // Integration Errors
-    = dashboard_widget :service_integration_errors, service_id: service.to_param
+        // Integration Errors secondary link
+        = dashboard_widget :service_integration_errors, service_id: service.to_param

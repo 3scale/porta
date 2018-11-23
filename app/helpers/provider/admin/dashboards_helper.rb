@@ -1,5 +1,7 @@
 module Provider::Admin::DashboardsHelper
 
+  # include ApplicationHelper
+
   # @param name [Symbol]
   # @param params [Hash]
   def dashboard_widget(name, params = {})
@@ -19,22 +21,32 @@ module Provider::Admin::DashboardsHelper
     widget.percentual_change > 0 ? 'u-plus' : 'u-minus'
   end
 
-  def dashboard_collection_link(singular_name, collection, path, plural = nil, icon_name = nil)
-    link_to path, class: 'DashboardNavigation-link' do
-      link_text = pluralize(number_to_human(collection.size), singular_name, plural)
-      link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
-      link_text.html_safe
+  def dashboard_navigation_link(link_text, path, options = {})
+    link_to path, class: css_class({
+        'DashboardNavigation-link': true,
+        'u-notice': options.fetch(:notice, false)
+      }) do
+        icon_name = options.fetch(:icon_name, nil)
+        link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
+        link_text.html_safe
     end
   end
 
-  def dashboard_secondary_collection_link(singular_name, collection, path, plural = nil)
-    link = ' ('
-    link << dashboard_collection_link(singular_name, collection, path, plural)
-    link << ')'
+  def dashboard_secondary_link(link_text, path, options = {})
+    safe_wrap_with_parenthesis(dashboard_navigation_link(link_text, path, options))
+  end
+  
+  def dashboard_collection_link(singular_name, collection, path, options = {})
+    link_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
+    dashboard_navigation_link(link_text, path, options)
+  end
+  
+  def dashboard_secondary_collection_link(singular_name, collection, path, options = {})
+    safe_wrap_with_parenthesis(dashboard_collection_link(singular_name, collection, path, options))
   end
 
-  def dashboard_counter_link(collection, path)
-    link_to collection.size, path, class: "DashboardNavigation-link u-notice"
+  def safe_wrap_with_parenthesis(html)
+    " (#{h html})".html_safe
   end
 
   def show_pending_accounts_on_dashboard?
