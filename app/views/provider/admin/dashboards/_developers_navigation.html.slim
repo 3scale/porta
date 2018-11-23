@@ -5,52 +5,50 @@ nav.DashboardNavigation
       li.DashboardNavigation-list-item
         // Accounts
         => dashboard_collection_link 'Account',
-                                     buyers,
-                                     admin_buyers_accounts_path,
-                                     'Accounts',
-                                     'briefcase'
+                                      buyers,
+                                      admin_buyers_accounts_path,
+                                      icon_name: 'briefcase'
 
         // Pending Accounts
         - if show_pending_accounts_on_dashboard?
           == dashboard_secondary_collection_link 'Pending',
                                                   pending_buyers,
                                                   admin_buyers_accounts_path(search: {state: 'pending'}),
-                                                  'Pending'
+                                                  plural: 'Pending',
+                                                  notice: true
 
     - if can? :manage, :partners
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'Application',
-                                applications,
-                                admin_buyers_applications_path,
-                                'Applications',
-                                'cubes'
+                                    applications,
+                                    admin_buyers_applications_path,
+                                    icon_name: 'cubes'
 
         - if can?(:manage, :monitoring) && alerts.any?
           == dashboard_secondary_collection_link 'Alert',
-                                      alerts,
-                                      admin_alerts_path,
-                                      'Alerts'
+                                                  alerts,
+                                                  admin_alerts_path,
+                                                  notice: true
 
     // Billing
     - if can?(:manage, :finance)
       li.DashboardNavigation-list-item
-        = link_to admin_finance_root_path, class: "DashboardNavigation-link" do
-          i.fa.fa-credit-card>
-          | Billing
-
-
+        = dashboard_navigation_link 'Billing',
+                                    admin_finance_root_path,
+                                    icon_name: 'credit-card'
 
     // Dev Portal
     - if can?(:manage, :portal)
       li.DashboardNavigation-list-item
-        = link_to provider_admin_cms_root_path, class: "DashboardNavigation-link"
-          i.fa.fa-sitemap>
-          | Developer Portal
+        = dashboard_navigation_link 'Developer Portal',
+                                    provider_admin_cms_root_path,
+                                    icon_name: 'sitemap'
 
         - if current_account.templates.with_draft
           == dashboard_secondary_collection_link 'Draft',
-                                                 current_account.templates.with_draft,
-                                                 provider_admin_cms_changes_path
+                                                  current_account.templates.with_draft,
+                                                  provider_admin_cms_changes_path,
+                                                  notice: true
 
     // Forum
     - if show_forum_on_dashboard? && forum_topics.any?
@@ -58,16 +56,14 @@ nav.DashboardNavigation
         = dashboard_collection_link 'Forum Topic',
                                     forum_topics,
                                     admin_forum_path,
-                                    'Forum Topics',
-                                    'comments'
+                                    icon_name: 'comments'
 
     // Messages
     li.DashboardNavigation-list-item
       = dashboard_collection_link 'Message',
                                   current_account.messages.where(sender: !current_account),
                                   provider_admin_messages_root_path,
-                                  'Messages',
-                                  'envelope'
+                                  icon_name: 'envelope'
 
         - if unread_messages_presenter.show_counter?
           '
