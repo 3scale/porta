@@ -1,6 +1,6 @@
 module Provider::Admin::DashboardsHelper
 
-  # include ApplicationHelper
+  include ApplicationHelper
 
   # @param name [Symbol]
   # @param params [Hash]
