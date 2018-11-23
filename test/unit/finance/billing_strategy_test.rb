@@ -146,6 +146,14 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     assert @bs.errors.has_key?(:currency)
   end
 
+  test 'allow CHF and SAR' do
+    @bs.currency = 'CHF'
+    assert @bs.valid?
+
+    @bs.currency = 'SAR'
+    assert @bs.valid?
+  end
+
   test 'default to highest number in month + 1' do
     create_two_invoices
 
