@@ -586,9 +586,6 @@ World(Module.new do
     when 'the finance page', 'the invoices by months page'
       admin_finance_root_path
 
-    when "finance settings"
-      admin_finance_settings_path
-
     when /(the )?finance settings( page)?/
       admin_finance_settings_path
 
