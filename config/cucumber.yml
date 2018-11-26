@@ -7,3 +7,4 @@ ci: --profile default --backtrace --strict --verbose --format junit --out tmp/ju
 txn: --profile default --tags=~@javascript <%= tags.map { |tag| "--tags=~#{tag}" }.join(' ') %>
 no-txn: --profile default --tags=~@javascript --tags=<%= tags.join(',') %>
 javascript: --profile default --tags=~@ignore --tags=@javascript
+visual: -b --tags=@percy
