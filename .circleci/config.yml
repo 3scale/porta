@@ -560,6 +560,111 @@ jobs:
             cd openshift/system
             docker build --build-arg=BUNDLER_ENV="$(env | grep -e ^BUNDLE_)" --file Dockerfile ../..
             docker build --file Dockerfile.on_prem --pull ../..
+
+  notify_start:
+    docker:
+    - image: circleci/buildpack-deps
+    steps:
+    - run:
+        name: Notify Slack about tests start
+        command: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data \
+          "{ \
+            \"attachments\": [ \
+            { \
+              \"fallback\": \"Build started on master, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
+              \"color\": \"#D3D3D3\", \
+              \"pretext\": \"Build started on master: \", \
+              \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
+              \"title\": \"Job: $CIRCLE_JOB  \", \
+              \"title_link\": \"$CIRCLE_BUILD_URL\", \
+              \"text\": \"Changes: $CIRCLE_COMPARE_URL\", \
+              \"fields\": [ \
+              { \
+                \"title\": \"Commit\", \
+                \"value\": \"$CIRCLE_SHA1\", \
+                \"short\": false \
+              }, \
+              { \
+                \"title\": \"GitHub Repo\", \
+                \"value\": \"$CIRCLE_REPOSITORY_URL\", \
+                \"short\": false \
+              }, \
+              { \
+                \"title\": \"Triggered by:\", \
+                \"value\": \"$CIRCLE_USERNAME\", \
+                \"short\": false \
+              } \
+              ] \
+            } \
+            ] \
+          }" $SLACK_WEBHOOK_URL
+
+  notify_failure:
+    docker:
+    - image: circleci/buildpack-deps
+    steps:
+    - run:
+        name: Notify Slack about tests failure
+        command: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data \
+          "{ \
+            \"attachments\": [ \
+            { \
+              \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
+              \"color\": \"#CD0000\", \
+              \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
+              \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
+              \"title\": \"Job: $CIRCLE_JOB \", \
+              \"title_link\": \"$CIRCLE_BUILD_URL\", \
+              \"text\": \"$CIRCLE_BUILD_URL\", \
+              \"fields\": [ \
+              { \
+                \"title\": \"Commit\", \
+                \"value\": \"$CIRCLE_SHA1\", \
+                \"short\": false \
+              } \
+              ] \
+            } \
+            ] \
+          }" $SLACK_WEBHOOK_URL
+        when: on_fail
+
+  notify_success:
+    docker:
+    - image: circleci/buildpack-deps
+    steps:
+    - run:
+        name: Notify Slack about tests passing
+        command: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data \
+          "{ \
+            \"attachments\": [ \
+            { \
+              \"fallback\": \"All is well & green on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
+              \"color\": \"#00B700\", \
+              \"pretext\": \"All is well & green on $CIRCLE_BRANCH. Nothing to see here. \", \
+              \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
+              \"title\": \"Job: $CIRCLE_JOB \", \
+              \"title_link\": \"$CIRCLE_BUILD_URL\", \
+              \"text\": \"$CIRCLE_BUILD_URL\", \
+              \"fields\": [ \
+              { \
+                \"title\": \"Commit\", \
+                \"value\": \"$CIRCLE_SHA1\", \
+                \"short\": false \
+              } \
+              ] \
+            } \
+            ] \
+          }" $SLACK_WEBHOOK_URL
+        when: on_success
+
+
+
   visual:
     parallelism: 1
     resource_class: small
@@ -608,6 +713,7 @@ workflows:
   version: 2
   mysql_build:
     jobs:
+      - notify_start
       - dependencies_bundler
       - dependencies_npm
       - docker-build:
@@ -635,11 +741,30 @@ workflows:
       - cucumber:
           requires:
             - assets_precompile
+      - notify_success:
+          requires:
+            - rspec
+            - unit
+            - cucumber
+            - integration
+            - functional
+            - lint
+      - notify_failure:
+          requires:
+            - rspec
+            - unit
+            - cucumber
+            - integration
+            - functional
+            - lint
   oracle_build:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
         # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - notify_start:
+          requires:
+            - manual_approval
       - deps_bundler_oracle:
           requires:
           - manual_approval
@@ -673,6 +798,23 @@ workflows:
       - cucumber-oracle:
           requires:
             - assets_precompile
+      - notify_success:
+          requires:
+          - rspec-oracle
+          - unit-oracle
+          - cucumber-oracle
+          - integration-oracle
+          - functional-oracle
+          - lint
+      - notify_failure:
+          requires:
+          - rspec-oracle
+          - unit-oracle
+          - cucumber-oracle
+          - integration-oracle
+          - functional-oracle
+          - lint
+
   visual_tests:
     jobs:
     - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
