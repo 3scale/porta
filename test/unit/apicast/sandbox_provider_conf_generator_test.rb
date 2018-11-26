@@ -30,8 +30,8 @@ class Apicast::SandboxProviderConfGeneratorTest < ActiveSupport::TestCase
 
   def test_emit_oauth
     assert_equal 2, @generator.services.size
-
-    @service.update_attributes!(backend_version: 'oauth')
+    @service.backend_version = 'oauth'
+    @service.save!(validate: false)
     generator = Apicast::SandboxProviderConfGenerator.new(@provider.id)
     assert_equal 1, generator.services.size
 
