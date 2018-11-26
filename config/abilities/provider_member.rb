@@ -54,5 +54,8 @@ Ability.define do |user|
     if user.has_permission?("legal")
       can :manage, LegalTerm
     end
+
+    # Member cannot manage permissions, neither his own, nor other members'
+    cannot :update_permissions, User
   end
 end

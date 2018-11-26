@@ -14,6 +14,16 @@ Ability.define do |user|
     can :manage, Invitation
     can :manage, User, :id => user.id
 
+    # Update Permissions of a provider user:
+    # 1) nobody can change user permissions of a provider admin
+    # (admin should have full access)
+    # 2) Only admin users (not members) can update permissions - of users of the same provider account
+    # (this is also implicitly enabled by
+    # `can :manage, User, :account_id => user.account_id` in `admin.rb`)
+    can :update_permissions, User do |u|
+      (u.account == user.account) && !u.admin?
+    end
+
     if account.settings.branding.allowed?
       can :manage, :logo
     end

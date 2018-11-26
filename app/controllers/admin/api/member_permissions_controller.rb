@@ -44,16 +44,10 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "allowed_sections", :description => "The list of sections in the admin portal that the user can access, comma-separated. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans)", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def update
-    authorize! :update, user
+    authorize! :update_permissions, user
 
-    if user.admin?
-      render_error "Can't change permissions of an admin user", status: :forbidden
-    elsif current_user && current_user.member?
-      render_error "Access denied", status: :forbidden
-    else
-      user.update_attributes(permission_params)
-      respond_with user.member_permissions, user: user
-    end
+    user.update_attributes(permission_params)
+    respond_with user.member_permissions, user: user
   end
 
   protected

@@ -79,7 +79,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :forbidden
-    assert_match /Can't change permissions of an admin user/, @response.body
+    assert_equal '{"status":"Forbidden"}', @response.body
   end
 
   test "member user can't update his own permissions" do
@@ -91,7 +91,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :forbidden
-    assert_match /Access denied/, @response.body
+    assert_equal '{"status":"Forbidden"}', @response.body
   end
 
   # this is managed by CanCan abilities
