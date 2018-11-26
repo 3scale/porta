@@ -9,6 +9,10 @@ Ability.define do |user|
     end
 
     can :manage, user
+
+    # Overriding `can :manage, user` and `can :manage, User, :id => user.id`
+    cannot :update_permissions, User, &:admin?
+
     # Can't destroy or update role of himself.
     cannot [:destroy, :update_role], user
 
