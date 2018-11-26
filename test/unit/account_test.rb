@@ -199,7 +199,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'Account#admins returns users with admin role' do
-    account = FactoryGirl.build_stubbed(:account_without_users)
+    account = FactoryGirl.create(:account_without_users)
     FactoryGirl.create(:simple_user, account: account)
     admin = FactoryGirl.create(:admin, account: account)
 
