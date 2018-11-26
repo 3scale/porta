@@ -689,6 +689,7 @@ workflows:
         - dependencies_bundler
         - dependencies_npm
     - visual:
+        context: percy
         requires:
         - assets_precompile
 
