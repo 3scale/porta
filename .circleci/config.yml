@@ -713,7 +713,10 @@ workflows:
   version: 2
   mysql_build:
     jobs:
-      - notify_start
+      - notify_start:
+          filters:
+            branches:
+              only: master
       - dependencies_bundler
       - dependencies_npm
       - docker-build:
@@ -749,6 +752,9 @@ workflows:
             - integration
             - functional
             - lint
+          filters:
+            branches:
+              only: master
       - notify_failure:
           requires:
             - rspec
@@ -757,6 +763,9 @@ workflows:
             - integration
             - functional
             - lint
+          filters:
+            branches:
+              only: master
   oracle_build:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
@@ -765,6 +774,9 @@ workflows:
       - notify_start:
           requires:
             - manual_approval
+          filters:
+            branches:
+              only: master
       - deps_bundler_oracle:
           requires:
           - manual_approval
@@ -800,20 +812,27 @@ workflows:
             - assets_precompile
       - notify_success:
           requires:
-          - rspec-oracle
-          - unit-oracle
-          - cucumber-oracle
-          - integration-oracle
-          - functional-oracle
-          - lint
+            - rspec-oracle
+            - unit-oracle
+            - cucumber-oracle
+            - integration-oracle
+            - functional-oracle
+            - lint
+          filters:
+            branches:
+              only: master
+
       - notify_failure:
           requires:
-          - rspec-oracle
-          - unit-oracle
-          - cucumber-oracle
-          - integration-oracle
-          - functional-oracle
-          - lint
+            - rspec-oracle
+            - unit-oracle
+            - cucumber-oracle
+            - integration-oracle
+            - functional-oracle
+            - lint
+          filters:
+            branches:
+              only: master
 
   visual_tests:
     jobs:
