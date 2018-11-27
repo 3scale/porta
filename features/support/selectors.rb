@@ -49,8 +49,11 @@ module HtmlSelectorsHelper
     #
     # General helpers
     #
-    when 'table header'
+    when /^(the )?table header$/
       'table thead'
+
+    when /^(the )?table body$/
+      'table tbody'
 
     when 'table'
       'table'
