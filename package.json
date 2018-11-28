@@ -66,8 +66,6 @@
   },
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
-    "babel-plugin-react": "^1.0.0",
-    "babel-preset-react": "^6.24.1",
     "bootstrap-sass": "3",
     "c3": "^0.4.11",
     "classnames": "^2.2.6",
