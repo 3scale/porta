@@ -223,7 +223,12 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Licences check
-          command: bundle exec rake ci:license_finder:run
+          # `npm dedupe` fixes the errors raised by duplicated incompatible dependencies from different environments
+          # when license_finder invokes `npm list --json --long --production` prior have installed development deps
+          # needed to build webpack assets
+          command: |
+            npm dedupe
+            bundle exec rake ci:license_finder:run
       - run:
           name: Swagger validation
           command: |
