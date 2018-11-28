@@ -6168,7 +6168,7 @@
             },
             {
               "name": "backend_version",
-              "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oauth' for OAuth mode, 'oidc' for OpenID Connect",
+              "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect",
               "dataType": "string",
               "allowMultiple": false,
               "required": false,
@@ -6283,7 +6283,7 @@
             },
             {
               "name": "backend_version",
-              "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oauth' for OAuth mode, 'oidc' for OpenID Connect",
+              "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect",
               "dataType": "string",
               "allowMultiple": false,
               "required": false,

@@ -99,6 +99,12 @@ module Logic
         end
       end
 
+      class OAuthApi < Base
+        def missing_config
+          true
+        end
+      end
+
       class OldCharts < Base
         def missing_config
           false
