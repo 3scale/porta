@@ -1,6 +1,6 @@
 <div id="mini-charts">
   <% Array.wrap(metrics).each do |metric| %>
-    <div class="charts" id="chart-<%= metric.id %>" data-unit-pluralized="<%= metric.unit.pluralize %>" data-metric="<%= metric.name %>" data-source="<%= defined?(cinstance) ? usage_stats_data_applications_path(cinstance) : usage_stats_data_services_path(metric.service_id) %>">
+    <div class="charts" id="chart-<%= metric.id %>" data-unit-pluralized="<%= metric.unit.pluralize %>" data-metric="<%= metric.name %>" data-source="<%= defined?(cinstance) ? usage_stats_data_applications_path(cinstance) : admin_service_stats_usage_path(metric.service_id) %>">
       <% #TODO lenght 34 is the max that provider/dashboard and services/show charts allow w/o breaking %>
       <div title="<%= metric.friendly_name %>" class="metric-name"><%= metric.friendly_name %></div>
       <div class="spark"></div>
