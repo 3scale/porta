@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(version: 20181018082620) do
     t.string   "base_path"
     t.string   "swagger_version"
     t.boolean  "skip_swagger_validations", limit: nil,                default: false
-    t.integer  "service_id",               limit: 8,   precision: 8
+    t.integer  "service_id",                           precision: 38
     t.boolean  "discovered",               limit: nil
   end
 
