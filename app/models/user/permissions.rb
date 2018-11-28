@@ -61,8 +61,9 @@ module User::Permissions
 
   def member_permission_service_ids=(service_ids)
     if service_ids.present?
+      service_ids = Array(service_ids).reject(&:blank?).map(&:to_i)
       if services_member_permission
-        services_member_permission.service_ids = service_ids
+        services_member_permission.service_ids = service_ids & existing_service_ids
         services_member_permission.save
       else
         new_services_member_permissions = member_permissions.build( admin_section: :services,

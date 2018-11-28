@@ -117,4 +117,28 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_equal ['invalid'], response['errors']['member_permissions']
   end
 
+  test "PUT: setting services, when some are non-existent only enables existent ones" do
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [1] })
+    params = { allowed_service_ids: ['2','22'] }
+
+    put admin_api_permissions_path(id: @user.id, format: :json), params
+
+    assert_response :success
+    permissions = JSON.parse(@response.body)['permissions']
+    assert_equal ['partners'], permissions['allowed_sections']
+    assert_equal [2], permissions['allowed_service_ids']
+  end
+
+  test "PUT: setting non-existent services disables all" do
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [1] })
+    params = { allowed_service_ids: ['22'] }
+
+    put admin_api_permissions_path(id: @user.id, format: :json), params
+
+    assert_response :success
+    permissions = JSON.parse(@response.body)['permissions']
+    assert_equal ['partners'], permissions['allowed_sections']
+    assert_empty permissions['allowed_service_ids']
+  end
+  
 end

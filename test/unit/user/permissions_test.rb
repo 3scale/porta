@@ -65,9 +65,9 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert_equal Set[:portal], user.admin_sections
   end
 
-
   test 'member_permission_service_ids=' do
     user = FactoryGirl.build_stubbed(:simple_user, admin_sections: [:services])
+    user.stubs(:existing_service_ids).returns([42])
 
     refute user.has_access_to_service?(42)
     assert_equal 1, user.admin_sections.size
@@ -79,6 +79,16 @@ class User::PermissionsTest < ActiveSupport::TestCase
     user.member_permission_service_ids = nil
     assert user.has_access_to_service?(42)
     assert_equal 0, user.admin_sections.size
+  end
+
+  test 'member_permission_service_ids= filters the services list before saving' do
+    user = FactoryGirl.build_stubbed(:simple_user, admin_sections: [:services])
+
+    user.stubs(:existing_service_ids).returns([1,2])
+
+    user.member_permission_service_ids = [1,111]
+
+    assert_equal [1], user.services_member_permission.service_ids
   end
 
   test 'services_member_permission' do
@@ -97,7 +107,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
 
     user.admin_sections = [:services]
     refute user.has_access_to_service?(42)
-    user.services_member_permission.service_ids = 42
+    user.services_member_permission.service_ids = [42]
     assert user.has_access_to_service?(42)
 
     user.admin_sections = [:plans]
