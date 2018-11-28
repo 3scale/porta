@@ -26,22 +26,42 @@ class BackendVersionTest < ActiveSupport::TestCase
   end
 
   def test_visible_versions_oauth
-    service = FactoryGirl.create(:simple_service, backend_version: 'oauth')
+    service = FactoryGirl.create(:service, backend_version: 'oidc')
+    versions = BackendVersion.visible_versions(service: service)
+    assert service.oidc?
+    refute versions.values.include?('oauth')
+
+    rolling_updates_off
+    rolling_update(:oauth_api, enabled: false)
+    service.backend_version = 'oauth'
+    assert_raise(ActiveRecord::RecordInvalid) { service.save! }
+
+    service.backend_version = 'oauth'
+    service.save!(validate: false)
     versions = BackendVersion.visible_versions(service: service)
     refute service.oidc?
     assert versions.values.include?('oauth')
-
-    service.backend_version = 'oidc'
-    service.save!
-    versions = BackendVersion.visible_versions(service: service)
-    refute versions.values.include?('oauth')
   end
 
   def test_usable_versions
-    service = FactoryGirl.create(:simple_service)
+    rolling_updates_off
+    service = FactoryGirl.build_stubbed(:simple_service, backend_version: 'oauth')
     versions = BackendVersion.usable_versions(service: service)
     assert versions.is_a?(Array)
     assert versions.exclude?('oidc')
+
+    rolling_update(:oauth_api, enabled: true)
+    versions = BackendVersion.usable_versions(service: service)
+    assert versions.include?('oauth')
+
+    rolling_update(:oauth_api, enabled: false)
+    versions = BackendVersion.usable_versions(service: service)
+    refute versions.include?('oauth')
+
+    rolling_update(:apicast_oidc, enabled: true)
+    service.backend_version = 'oidc'
+    versions = BackendVersion.usable_versions(service: service)
+    assert versions.include?('oauth')
   end
 
   def test_helper_methods

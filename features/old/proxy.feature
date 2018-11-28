@@ -7,6 +7,7 @@ Feature: Proxy integration
     Given all the rolling updates features are off
     And I have apicast_v1 feature enabled
     And I have apicast_v2 feature enabled
+    And I have oauth_api feature enabled
     Given a provider "foo.example.com"
     And a default service of provider "foo.example.com" has name "one"
     And the service "one" of provider "foo.example.com" has deployment option "self_managed"
