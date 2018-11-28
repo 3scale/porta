@@ -54,6 +54,9 @@ module System
       config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
     end
 
+    # Disables Yarn check
+    config.webpacker.check_yarn_integrity = false
+
     config.active_record.whitelist_attributes = false
 
     config.boot_time = Time.now
