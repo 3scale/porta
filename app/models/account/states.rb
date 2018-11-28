@@ -1,5 +1,6 @@
 module Account::States
   PERIOD_BEFORE_DELETION = 15.days.freeze
+  MAX_PERIOD_OF_SUSPENSION = 90.days.freeze
   MAX_PERIOD_OF_INACTIVITY = 1.year.freeze
   STATES = %i[created pending approved rejected suspended scheduled_for_deletion].freeze
   extend ActiveSupport::Concern
@@ -102,6 +103,10 @@ module Account::States
 
     scope :deleted_since, ->(value = nil) do
       scheduled_for_deletion.where.has { state_changed_at <= (value || PERIOD_BEFORE_DELETION.ago) }
+    end
+
+    scope :suspended_since, ->(value = nil) do
+      suspended.where.has { state_changed_at <= (value || MAX_PERIOD_OF_SUSPENSION.ago) }
     end
 
     scope :inactive_since, ->(value = nil) do
