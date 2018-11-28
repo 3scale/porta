@@ -8,6 +8,12 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
     @context = Context.new
   end
 
+  test 'javascript_include_tag' do
+    @context.registers[:controller] = ApplicationController.new
+    Webpacker.manifest.stubs(:lookup).with('stats.js').returns('/packs/stats.js')
+    assert_equal "<script src=\"/packs/stats.js\"></script>", javascript_include_tag('stats.js')
+  end
+
   test 'mail_to' do
     assert_equal '<a href="mailto:some@address.com">some@address.com</a>', mail_to('some@address.com')
   end

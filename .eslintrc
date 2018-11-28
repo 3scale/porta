@@ -8,7 +8,8 @@
   "env": {
     "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "jasmine": true
   },
   "extends" : "standard",
   "plugins": [

@@ -4,7 +4,7 @@
   = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'
 
   - content_for :javascripts do
-    = render_js_module_loader
+    = javascript_pack_tag 'providerStats'
 
 .Stats
   .StatsMenu-container
@@ -18,15 +18,15 @@ p.Stats-message--notice
   = timezone_information
 
 javascript:
-  System.import('stats/provider/stats_top_apps').then(function(module){
-    module.statsTopApps(#{json @service.id},
-            {
-              chartContainer: '#chart',
-              menuContainer: '.StatsMenu-container',
-              selectorContainer: '.StatsSelector-container',
-              csvLinkContainer: '.StatsCSVLink-container',
-              helpTextContainer: '.StatsHelpText-container',
-              tableContainer: '.StatsApplicationsTable-container'
-            }
-    );
-  });
+  document.addEventListener('DOMContentLoaded', function () {
+    statsTopApps(#{json @service.id},
+      {
+        chartContainer: '#chart',
+        menuContainer: '.StatsMenu-container',
+        selectorContainer: '.StatsSelector-container',
+        csvLinkContainer: '.StatsCSVLink-container',
+        helpTextContainer: '.StatsHelpText-container',
+        tableContainer: '.StatsApplicationsTable-container'
+      }
+    )
+  })

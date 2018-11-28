@@ -1,7 +1,6 @@
 import * as migrate from 'services/migrate'
 
 describe('Services migrate', () => {
-
   beforeEach(() => {
     document.cookie = 'cms-toggle-ids=; path=/; expires=Thu, 21 Sep 1979 00:00:01 UTC;'
     localStorage.clear()

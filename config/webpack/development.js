@@ -1,4 +1,4 @@
-const { environment } = require('./environment')
+const environment = require('./environment')
 
 const customRules = {
   module: {
@@ -13,7 +13,7 @@ const customRules = {
         }
       },
       {
-        test: /\.jsx?$/,
+        test: /\.jsx?|.es6?|.spec.js?$/,
         exclude: /(node_modules)/,
         use: [
           {
@@ -37,4 +37,4 @@ const customRules = {
   }
 }
 
-module.exports = Object.assign({}, environment.toWebpackConfig(), customRules)
+module.exports = Object.assign({}, environment, customRules)

@@ -1,9 +1,8 @@
 import * as index from 'services/index'
 
 describe('Services index', () => {
-
   beforeEach(() => {
-    //document.cookie = 'cms-toggle-ids=; path=/; expires=Thu, 21 Sep 1979 00:00:01 UTC;'
+    // document.cookie = 'cms-toggle-ids=; path=/; expires=Thu, 21 Sep 1979 00:00:01 UTC;'
     localStorage.clear()
     let basicStructure = `
       <div id='widget_1' class='service-widget is-closed'>

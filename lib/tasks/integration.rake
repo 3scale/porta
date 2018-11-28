@@ -72,7 +72,6 @@ namespace :integrate do
           'rake doc:swagger:generate:all',
         ],
         :frontend => [
-          'rake ci:jspm --trace',
           'yarn test -- --reporters dots,junit --browsers Firefox',
           'yarn jest',
           'rake db:purge db:setup',
