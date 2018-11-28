@@ -107,4 +107,14 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_response :forbidden
   end
 
+  test "PUT: setting an invalid allowed section" do
+    params = { allowed_sections: ['invalid'], allowed_service_ids: [1] }
+
+    put admin_api_permissions_path(id: @user.id, format: :json), params
+
+    assert_response :unprocessable_entity
+    response = JSON.parse(@response.body)
+    assert_equal ['invalid'], response['errors']['member_permissions']
+  end
+
 end
