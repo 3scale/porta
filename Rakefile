@@ -66,3 +66,10 @@ Rake::Task['db:test:load'].enhance do
   Rake::Task['multitenant:test:triggers'].invoke
   Rake::Task['db:test:procedures'].invoke
 end
+
+# Replace yarn with npm
+Rake::Task['yarn:install'].clear if Rake::Task.task_defined?('yarn:install')
+Rake::Task['webpacker:yarn_install'].clear
+Rake::Task['webpacker:check_yarn'].clear
+Rake::Task.define_task('webpacker:verify_install' => ['webpacker:check_npm'])
+Rake::Task.define_task('webpacker:compile' => ['webpacker:npm_install'])
