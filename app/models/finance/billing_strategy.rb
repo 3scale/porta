@@ -23,8 +23,10 @@ class Finance::BillingStrategy < ApplicationRecord
     'CNY - Chinese Yuan Renminbi' => 'CNY',
     'CAD - Canadian Dollar' => 'CAD',
     'AUD - Australian Dollar' => 'AUD',
-    'JPY - Japanese Yen' => 'JPY'
-  }
+    'JPY - Japanese Yen' => 'JPY',
+    'CHF - Swiss Franc' => 'CHF',
+    'SAR - Saudi Riyal' => 'SAR'
+  }.freeze
 
   belongs_to :account
   alias_attribute :provider, :account
