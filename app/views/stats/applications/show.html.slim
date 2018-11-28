@@ -5,8 +5,8 @@ h2 Usage statistics for #{@cinstance.display_name} /  #{@cinstance.user_account.
 - content_for :stylesheets do
   = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'
 
-  - content_for :javascripts do
-    = render_js_module_loader
+- content_for :javascripts do
+  = javascript_pack_tag 'providerStats'
 
 .Stats
   .StatsMenu-container
@@ -19,14 +19,14 @@ p.Stats-message--notice
   = timezone_information
 
 javascript:
-  System.import('stats/provider/stats_application').then(function (module) {
-    module.statsApplication(#{json @cinstance.id},
-            {
-              chartContainer: '#chart',
-              menuContainer: '.StatsMenu-container',
-              selectorContainer: '.StatsSelector-container',
-              methodsTableContainer: '.StatsMethodsTable-container',
-              csvLinkContainer: '.StatsCSVLink-container'
-            }
-    );
-  });
+  document.addEventListener('DOMContentLoaded', function () {
+    statsApplication(#{json @cinstance.id},
+      {
+        chartContainer: '#chart',
+        menuContainer: '.StatsMenu-container',
+        selectorContainer: '.StatsSelector-container',
+        methodsTableContainer: '.StatsMethodsTable-container',
+        csvLinkContainer: '.StatsCSVLink-container'
+      }
+    )
+  })

@@ -1,6 +1,6 @@
 <% content_for :javascripts do %>
   <%= javascript_include_tag 'provider/create_application' %>
-  <%= render_js_module_loader %>
+  <%= javascript_pack_tag 'applications' %>
 <% end %>
 
 <% if @account %>
@@ -30,9 +30,8 @@
   <% end %>
 <% end %>
 
-<script type="text/javascript">
-
-  System.import('applications/new.es6').then(function (m) {
-    m.default()
-  });
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.planSelector()
+  })
 </script>

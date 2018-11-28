@@ -1,7 +1,7 @@
 - content_for :sublayout_title, 'Daily Averages'
 
 - content_for :javascripts do
-  = render_js_module_loader
+  = javascript_pack_tag 'providerStats'
 
 .Stats
   .StatsSelector-container
@@ -14,8 +14,8 @@ p.Stats-message--notice
   = timezone_information
 
 javascript:
-  System.import('stats/provider/stats_days_of_week').then(function(module){
-    module.statsDaysOfWeek(#{json @service.id}, {
+  document.addEventListener('DOMContentLoaded', function () {
+    statsDaysOfWeek(#{json @service.id}, {
       csvLinkContainer: '.StatsCSVLink-container'
-    });
-  });
+    })
+  })

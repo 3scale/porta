@@ -1,9 +1,7 @@
 <div class="Dashboard-chart" data-chart>
   <% if widget.loaded? %>
     <script>
-      System.import('dashboard/chart').then(function (m) {
-        m.render(document.getElementById(<%=json widget.id%>), <%= json widget.chart %>)
-      })
+      renderChartWidget(document.getElementById(<%=json widget.id%>), <%= json widget.chart %>)
     </script>
   <% end %>
 </div>

@@ -1,4 +1,4 @@
 javascript:
-  System.import('dashboard').then(function(m){
-    m.widget(#{json widget.path})
-  });
+  document.addEventListener('DOMContentLoaded', function () {
+    dashboardWidget(#{json widget.path})
+  })

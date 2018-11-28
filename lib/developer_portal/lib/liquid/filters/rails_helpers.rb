@@ -46,7 +46,10 @@ module Liquid
       def javascript_include_tag(name)
         js = RailsHelpers.replace_googleapis(name)
 
-        if js != name || THREESCALE_JAVASCRIPTS.include?(js)
+        case
+        when name == 'stats.js' # TODO: This is an intermediate step in order to tackle stats bundle in dev portal. Needs a final solution including updating of templates.
+          view.javascript_pack_tag(name)
+        when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           view.javascript_include_tag(js)
         else
           RailsHelpers.content_tag(:script, ''.freeze, src: get_path(name))

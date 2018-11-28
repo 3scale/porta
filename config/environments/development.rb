@@ -25,7 +25,6 @@ System::Application.configure do
   config.serve_static_files = true
 
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
-  config.middleware.insert_before ActionDispatch::Static, Rack::Jspm
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
