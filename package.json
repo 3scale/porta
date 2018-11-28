@@ -6,7 +6,6 @@
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
-    "install": "yarn check --integrity || yarn install --pure-lockfile --frozen-lockfile --ignore-scripts --skip-integrity-check --prefer-offline --link-duplicates",
     "postinstall": "npm rebuild node-sass"
   },
   "devDependencies": {
