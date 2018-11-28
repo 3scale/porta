@@ -185,6 +185,14 @@ class Account::StatesTest < ActiveSupport::TestCase
     assert_equal Account::States::PERIOD_BEFORE_DELETION.from_now.to_date, account.deletion_date.to_date
   end
 
+  test '.suspended_since' do
+    accounts = FactoryGirl.create_list(:simple_account, 2, state: 'suspended')
+    approved_account = FactoryGirl.create(:simple_account, state: 'approved')
+    account_suspended_recently = FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: (Account::States::MAX_PERIOD_OF_SUSPENSION - 1.day).ago)
+    account_suspended_antiquely = FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: Account::States::MAX_PERIOD_OF_SUSPENSION.ago)
+    assert_equal [account_suspended_antiquely.id], Account.suspended_since.pluck(:id)
+  end
+
   test '.inactive_since' do
     old_account_without_traffic = FactoryGirl.create(:simple_account)
     old_account_without_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
