@@ -131,6 +131,10 @@ class Cinstance < Contract
   # "live", in a way).
   scope :live, -> { where(:state => ['live', 'deprecated'])}
 
+  scope :active_since, ->(activity_time) {
+    where.has { first_daily_traffic_at >= activity_time }
+  }
+
   # Return only cinstances live at given time. The time can be single time or
   # period (Range object) (from..to).
   scope :live_at, lambda { |period|
