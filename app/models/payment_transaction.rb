@@ -27,21 +27,7 @@ class PaymentTransaction < ApplicationRecord
       logger.info("Processing PaymentTransaction with code #{credit_card_auth_code}, gateway #{gateway} & options #{gateway_options}")
 
       begin
-        response = case gateway
-                   when ActiveMerchant::Billing::AuthorizeNetGateway
-          logger.info("Purchasing with authorize.net")
-          purchase_with_authorize_net(credit_card_auth_code, gateway)
-                   when ActiveMerchant::Billing::StripeGateway
-          logger.info("Purchasing with stripe")
-          purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
-                   when ActiveMerchant::Billing::Adyen12Gateway
-          logger.info("Purchasing with adyen v12")
-          purchase_with_adyen12(credit_card_auth_code, gateway, gateway_options)
-                   else
-          logger.info("Purchasing with something other than authorize.net or stripe or adyen")
-          gateway.purchase(amount.cents, credit_card_auth_code, gateway_options)
-        end
-
+        response = process_purchase(credit_card_auth_code, gateway, gateway_options)
         self.success = response.success?
         self.reference = response.authorization
         self.message = response.message
@@ -174,4 +160,20 @@ class PaymentTransaction < ApplicationRecord
     gateway.submit_recurring(amount.cents, options)
   end
 
+  def process_purchase(credit_card_auth_code, gateway, gateway_options)
+    case gateway
+    when ActiveMerchant::Billing::AuthorizeNetGateway
+      logger.info("Purchasing with authorize.net")
+      purchase_with_authorize_net(credit_card_auth_code, gateway)
+    when ActiveMerchant::Billing::StripeGateway
+      logger.info("Purchasing with stripe")
+      purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
+    when ActiveMerchant::Billing::Adyen12Gateway
+      logger.info("Purchasing with adyen v12")
+      purchase_with_adyen12(credit_card_auth_code, gateway, gateway_options)
+    else
+      logger.info("Purchasing with something other than authorize.net or stripe or adyen")
+      gateway.purchase(amount.cents, credit_card_auth_code, gateway_options)
+    end
+  end
 end
