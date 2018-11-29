@@ -122,7 +122,7 @@ module Account::States
     end
 
     def deletion_date
-      return nil if state_changed_at.blank? || !scheduled_for_deletion?
+      return if state_changed_at.blank? || !scheduled_for_deletion?
       (state_changed_at + PERIOD_BEFORE_DELETION)
     end
 
