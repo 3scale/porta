@@ -8,14 +8,12 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
 
     old_tenant_with_old_traffic = FactoryGirl.create(:simple_provider)
     old_tenant_with_old_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    cinstance = FactoryGirl.create(:cinstance, user_account: old_tenant_with_old_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: old_tenant_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
     @accounts[:to_suspend] << old_tenant_with_old_traffic
 
     old_buyer_with_old_traffic = FactoryGirl.create(:simple_buyer)
     old_buyer_with_old_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    cinstance = FactoryGirl.create(:cinstance, user_account: old_buyer_with_old_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: old_buyer_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
     @accounts[:not_to_suspend] << old_buyer_with_old_traffic
 
     recent_tenant_without_traffic = FactoryGirl.create(:simple_provider)
@@ -24,8 +22,7 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
 
     recent_tenant_with_recent_traffic = FactoryGirl.create(:simple_provider)
     recent_tenant_with_recent_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    cinstance = FactoryGirl.create(:cinstance, user_account: recent_tenant_with_recent_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    FactoryGirl.create(:cinstance, user_account: recent_tenant_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
     @accounts[:not_to_suspend] << recent_tenant_with_recent_traffic
 
     old_tenant_without_traffic = FactoryGirl.create(:simple_provider)

@@ -186,9 +186,9 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test '.suspended_since' do
-    accounts = FactoryGirl.create_list(:simple_account, 2, state: 'suspended')
-    approved_account = FactoryGirl.create(:simple_account, state: 'approved')
-    account_suspended_recently = FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: (Account::States::MAX_PERIOD_OF_SUSPENSION - 1.day).ago)
+    FactoryGirl.create(:simple_account, state: 'suspended')
+    FactoryGirl.create(:simple_account, state: 'approved')
+    FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: (Account::States::MAX_PERIOD_OF_SUSPENSION - 1.day).ago)
     account_suspended_antiquely = FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: Account::States::MAX_PERIOD_OF_SUSPENSION.ago)
     assert_equal [account_suspended_antiquely.id], Account.suspended_since.pluck(:id)
   end
@@ -199,18 +199,15 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     old_account_with_old_traffic = FactoryGirl.create(:simple_account)
     old_account_with_old_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    cinstance = FactoryGirl.create(:cinstance, user_account: old_account_with_old_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
 
     recent_account_without_traffic = FactoryGirl.create(:simple_account)
     recent_account_without_traffic.update_attribute(:created_at, (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
-    cinstance = FactoryGirl.create(:cinstance, user_account: recent_account_without_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: recent_account_without_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
 
     recent_account_with_recent_traffic = FactoryGirl.create(:simple_account)
     recent_account_with_recent_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    cinstance = FactoryGirl.create(:cinstance, user_account: recent_account_with_recent_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    FactoryGirl.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
 
     results = Account.inactive_since.pluck(:id)
     assert_includes     results, old_account_without_traffic.id
@@ -223,12 +220,10 @@ class Account::StatesTest < ActiveSupport::TestCase
     account_without_traffic = FactoryGirl.create(:simple_account)
 
     account_with_old_traffic = FactoryGirl.create(:simple_account)
-    cinstance = FactoryGirl.create(:cinstance, user_account: account_with_old_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
 
     account_with_recent_traffic = FactoryGirl.create(:simple_account)
-    cinstance = FactoryGirl.create(:cinstance, user_account: account_with_recent_traffic)
-    cinstance.update_attribute(:first_daily_traffic_at, (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    FactoryGirl.create(:cinstance, user_account: account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
 
     results = Account.without_traffic_since.pluck(:id)
     assert_includes     results, account_without_traffic.id
