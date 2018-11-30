@@ -49,7 +49,7 @@ module EventStore
 
     before_validation :provider_id_from_metadata
 
-    belongs_to :account, foreign_key: :provider_id, inverse_of: :events
+    belongs_to :account, foreign_key: :provider_id, inverse_of: :events, required: false
 
     alias provider account
 
