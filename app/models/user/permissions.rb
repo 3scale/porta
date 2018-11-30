@@ -56,17 +56,12 @@ module User::Permissions
   end
 
   def member_permission_service_ids=(service_ids)
-    case true
-    when service_ids.present?
-      service_ids = Array(service_ids).reject(&:blank?).map(&:to_i)
-      if services_member_permission
-        services_member_permission.service_ids = service_ids & existing_service_ids
-      else
-        new_services_member_permissions = member_permissions.build(admin_section: :services, service_ids: service_ids)
-        member_permissions << new_services_member_permissions
-      end
-    when services_member_permission.present?
-      member_permissions = member_permissions - [services_member_permission]
+    service_ids = Array(service_ids).compact.map(&:to_i)
+    if service_ids.present?
+      member_permission = services_member_permission || member_permissions.build(admin_section: :services)
+      member_permission.service_ids = service_ids & existing_service_ids
+    else
+      self.member_permissions = member_permissions - [services_member_permission].compact
     end
   ensure
     @_admin_sections = nil
