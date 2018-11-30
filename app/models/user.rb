@@ -122,9 +122,6 @@ class User < ApplicationRecord
 
   after_save :nullify_authentication_id, if: :any_sso_authorizations?
 
-  after_destroy :update_next_account_first_admin, if: proc { account.first_admin_id == id }
-  after_create :insert_account_first_admin, if: proc { account && account.first_admin_id.nil? && admin? && !impersonation_admin? }
-
   def self.search_states
     %w(pending active)
   end
@@ -142,10 +139,6 @@ class User < ApplicationRecord
 
   scope :active, -> { where(state: 'active') }
   scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
-
-  def admin?
-    role == :admin
-  end
 
   def self.find_by_username_or_email(value)
     find_by(['users.username = ? OR users.email = ?', value, value])
@@ -476,15 +469,6 @@ class User < ApplicationRecord
   end
 
   protected
-
-  def insert_account_first_admin
-    account.update({first_admin_id: id})
-  end
-
-  def update_next_account_first_admin
-    return unless (another_admin_id = (account.admins || []).where.not(id: id).first&.id)
-    account.update_column(:first_admin_id, another_admin_id) or raise ActiveRecord::ActiveRecordError
-  end
 
   def provider_id_for_audits
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)

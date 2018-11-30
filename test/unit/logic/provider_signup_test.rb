@@ -146,6 +146,7 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
   test 'first_admin should be testaccount' do
     default_signup_provider
     assert_equal 'testaccount', @provider.first_admin.username
+    assert_equal @provider.first_admin.id, @provider.first_admin_id
   end
 
   test 'account should be classified' do
