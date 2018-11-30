@@ -57,6 +57,11 @@ class SignupResultTest < ActiveSupport::TestCase
     assert account.persisted?
   end
 
+  test '#save! saves the account first_admin_id to the user id' do
+    signup_result.save!
+    assert_equal user.id, account.first_admin_id
+  end
+
   test '#save! raises ActiveRecord::RecordInvalid when the user is invalid' do
     user.username = nil
     assert_raise ActiveRecord::RecordInvalid do
@@ -88,6 +93,11 @@ class SignupResultTest < ActiveSupport::TestCase
     signup_result.save
     assert user.persisted?
     assert account.persisted?
+  end
+
+  test '#save saves the account first_admin_id to the user id' do
+    signup_result.save
+    assert_equal user.id, account.first_admin_id
   end
 
   test '#save does not save and #errors return the error when the user is invalid' do
