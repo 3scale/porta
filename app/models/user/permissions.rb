@@ -40,11 +40,7 @@ module User::Permissions
     keep_permissions = existing_permissions.values_at(*keep)
     new_permissions = create.map { |section| member_permissions.build(admin_section: section) }
 
-    all_permissions = keep_permissions + new_permissions
-    # keep service permissions as they were
-    all_permissions << services_member_permission if services_member_permission
-
-    self.member_permissions = all_permissions
+    self.member_permissions = keep_permissions + new_permissions + [services_member_permission].compact
   ensure
     @_admin_sections = nil
   end
