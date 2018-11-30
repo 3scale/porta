@@ -48,7 +48,8 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
     include Roar::JSON
 
     link :user do |opts|
-      admin_api_account_user_url(opts[:user].account, opts[:user].id)
+      user = opts[:user]
+      admin_api_account_user_url(user.account_id, user)
     end
   end
 
