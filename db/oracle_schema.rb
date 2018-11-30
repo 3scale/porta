@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105212016) do
+ActiveRecord::Schema.define(version: 20181130072917) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -1435,7 +1435,6 @@ ActiveRecord::Schema.define(version: 20181105212016) do
   end
 
   add_foreign_key "api_docs_services", "services"
-  add_foreign_key "event_store_events", "accounts", column: "provider_id", on_delete: :cascade
   add_foreign_key "payment_details", "accounts", on_delete: :cascade
   add_foreign_key "provided_access_tokens", "users"
   add_foreign_key "proxy_configs", "proxies", on_delete: :cascade
