@@ -5,10 +5,9 @@ require 'test_helper'
 class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @provider = Factory(:provider_account, self_domain: 'example.org')
-    FactoryGirl.create(:service, :id => 1, :account => @provider)
-    FactoryGirl.create(:service, :id => 2, :account => @provider)
-    @user = Factory(:active_user, account: @provider)
+    @provider = FactoryGirl.create(:provider_account)
+    @services = FactoryGirl.create_list(:simple_service, 2, account: @provider)
+    @user = FactoryGirl.create(:active_user, account: @provider)
 
     login! @provider
   end
@@ -19,35 +18,35 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   end
 
   test "PUT: enable 'analytics' section for service 1" do
-    params = { allowed_sections: ['monitoring'], allowed_service_ids: [1] }
+    params = { allowed_sections: ['monitoring'], allowed_service_ids: [@services.first.id] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['monitoring'], permissions['allowed_sections']
-    assert_equal [1], permissions['allowed_service_ids']
+    assert_equal [@services.first.id], permissions['allowed_service_ids']
   end
 
   test "PUT: enable 'settings', but keep the same services" do
-    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [1] })
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_sections: ['settings'] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
-    assert_equal [1], permissions['allowed_service_ids']
+    assert_equal [@services.first.id], permissions['allowed_service_ids']
   end
 
   test "PUT: enable service '2', but keep the same sections" do
-    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [1] })
-    params = { allowed_service_ids: ['2'] }
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
+    params = { allowed_service_ids: [@services.last.id.to_s] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
-    assert_equal [2], permissions['allowed_service_ids']
+    assert_equal [@services.last.id], permissions['allowed_service_ids']
   end
 
   test "PUT: enable 'settings' and enable all services" do
@@ -56,7 +55,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
     assert_nil permissions['allowed_service_ids']
   end
@@ -67,19 +66,19 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
     assert_empty permissions['allowed_service_ids']
   end
 
   test "updating admin's permissions is not allowed" do
     @user.update_attribute :role, 'admin'
-    params = { allowed_sections: ['monitoring'], allowed_service_ids: [1] }
+    params = { allowed_sections: ['monitoring'], allowed_service_ids: [@services.first.id] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :forbidden
-    assert_equal '{"status":"Forbidden"}', @response.body
+    assert_equal '{"status":"Forbidden"}', response.body
   end
 
   test "member user can't update his own permissions" do
@@ -91,7 +90,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :forbidden
-    assert_equal '{"status":"Forbidden"}', @response.body
+    assert_equal '{"status":"Forbidden"}', response.body
   end
 
   # this is managed by CanCan abilities
@@ -108,35 +107,34 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   end
 
   test "PUT: setting an invalid allowed section" do
-    params = { allowed_sections: ['invalid'], allowed_service_ids: [1] }
+    params = { allowed_sections: ['invalid'], allowed_service_ids: [@services.first.id] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :unprocessable_entity
-    response = JSON.parse(@response.body)
-    assert_equal ['invalid'], response['errors']['member_permissions']
+    assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'member_permissions')
   end
 
   test "PUT: setting services, when some are non-existent only enables existent ones" do
-    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [1] })
-    params = { allowed_service_ids: ['2','22'] }
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
+    params = { allowed_service_ids: [[@services.last.id.to_s],'22'] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :success
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
-    assert_equal [2], permissions['allowed_service_ids']
+    assert_equal [@services.last.id], permissions['allowed_service_ids']
   end
 
   test "PUT: setting non-existent services disables all" do
-    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [1] })
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_service_ids: ['22'] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
     assert_response :success
-    permissions = JSON.parse(@response.body)['permissions']
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
     assert_empty permissions['allowed_service_ids']
   end
