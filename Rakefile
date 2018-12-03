@@ -22,7 +22,7 @@ namespace :test do
 
   test_groups[:unit] = FileList['test/**/*_test.rb'].exclude(*test_groups.values).exclude('test/{performance,remote,support}/**/*')
 
-  test_task = Class.new(Rails::TestTask) do
+  test_task = Class.new(Rake::TestTask) do
     def file_list
       if (tests = ENV['TESTS'])
         FileList[tests.strip.split]
