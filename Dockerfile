@@ -14,9 +14,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 60C317803A41BA51845
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D101F7899D41F3C3 \
  && apt-get update -y && apt-get install -y apt-transport-https \
  && echo 'deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main' > /etc/apt/sources.list.d/toolchain.list \
- && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
  && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
- && apt-install g++-4.8 nodejs squid3 yarn=1.2.1-1 libaio1 \
+ && apt-install g++-4.8 nodejs squid3 libaio1 \
  && gem install bundler --version ${BUNDLER_VERSION} --no-document \
  && sed --in-place "s/databases 16/databases 32/" /etc/redis/redis.conf \
  && echo 'dns_nameservers 8.8.8.8 8.8.4.4' >> /etc/squid3/squid.conf \
