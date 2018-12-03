@@ -174,9 +174,9 @@ jobs:
       - run:
           name: Install NPM dependencies
           command: |
-            yarn --version
-            yarn global dir
-            yarn install --frozen-lockfile --link-duplicates
+            npm --version
+            npm install
+            npm dedupe
       - save_cache:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
@@ -197,10 +197,10 @@ jobs:
           name: Precompile assets
           command: |
             cp config/examples/*.yml config/
-            bundle exec rake assets:precompile RAILS_ENV=test 
-            bundle exec rake assets:precompile RAILS_ENV=production WEBPACKER_PRECOMPILE=false
+            bundle exec rake assets:precompile RAILS_ENV=test
+            bundle exec rake assets:precompile RAILS_ENV=production
           environment:
-            RAILS_GROUPS: assets 
+            RAILS_GROUPS: assets
       - persist_to_workspace:
           root: .
           paths:
@@ -223,17 +223,22 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Licences check
-          command: bundle exec rake ci:license_finder:run
+          # `npm dedupe` fixes the errors raised by duplicated incompatible dependencies from different environments
+          # when license_finder invokes `npm list --json --long --production` prior have installed development deps
+          # needed to build webpack assets
+          command: |
+            npm dedupe
+            bundle exec rake ci:license_finder:run
       - run:
           name: Swagger validation
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
       - run:
-          name: Yarn test
+          name: NPM test
           command: |
-            yarn test -- --reporters dots,junit --browsers Firefox
-            yarn jest
+            npm test -- --reporters dots,junit --browsers Firefox
+            npm run-script jest
       - *store-junit-test-results
       - *store-test-artifacts
       - store_artifacts:

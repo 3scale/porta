@@ -127,7 +127,4 @@ Gemfile.local
 /public/packs-test
 /node_modules
 
-!/public/packs
-
-package-lock.json
 /vendor/oracle/*.zip
