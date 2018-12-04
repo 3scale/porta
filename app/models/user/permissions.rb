@@ -52,7 +52,7 @@ module User::Permissions
   end
 
   def member_permission_ids=(roles)
-    self.admin_sections = Array(roles).reject(&:blank?)
+    self.admin_sections = (Array(roles).reject(&:blank?) & AdminSection.permissions.map(&:to_s))
   end
 
   def member_permission_service_ids=(service_ids)
