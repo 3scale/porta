@@ -62,6 +62,9 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
   test "PUT: enable 'settings', but disable all services" do
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D=%5B%5D
+    @user.member_permission_service_ids = [@services.first.id]
+    @user.save!
+
     params = { allowed_sections: ['settings'], allowed_service_ids: ["[]"] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
@@ -69,6 +72,9 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
     assert_empty permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_empty @user.allowed_service_ids
   end
 
   test "updating admin's permissions is not allowed" do
