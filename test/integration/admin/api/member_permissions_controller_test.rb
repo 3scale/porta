@@ -74,6 +74,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_empty permissions['allowed_service_ids']
 
     @user.member_permissions.reload
+    assert_equal [:settings], @user.allowed_sections.to_a
     assert_empty @user.allowed_service_ids
   end
 
@@ -113,12 +114,27 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   end
 
   test "PUT: setting an invalid allowed section" do
-    params = { allowed_sections: ['invalid'], allowed_service_ids: [@services.first.id] }
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
+    params = { allowed_sections: ['invalid'] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
-    assert_response :unprocessable_entity
-    assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'member_permissions')
+    assert_response :success
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
+    assert_empty permissions['allowed_sections']
+    assert_equal [@services.first.id], permissions['allowed_service_ids']
+  end
+
+  test "PUT: one of the allowed section is invalid" do
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
+    params = { allowed_sections: ['invalid', 'settings'] }
+
+    put admin_api_permissions_path(id: @user.id, format: :json), params
+
+    assert_response :success
+    assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
+    assert_equal ['settings'], permissions['allowed_sections']
+    assert_equal [@services.first.id], permissions['allowed_service_ids']
   end
 
   test "PUT: setting services, when some are non-existent only enables existent ones" do
@@ -151,7 +167,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     put admin_api_permissions_path(id: @user.id, format: :json), { allowed_sections: ['[]'] }
 
     @user.member_permissions.reload
-    assert_empty @user.allowed_sections
+    assert_empty @user.allowed_sections.to_a
   end
 
 end
