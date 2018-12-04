@@ -65,7 +65,7 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   end
 
   def permission_params
-    params.require(:permissions).permit(:allowed_service_ids, allowed_service_ids: [], allowed_sections: [])
+    params.require(:permissions).permit(allowed_service_ids: [], allowed_sections: [])
   end
 
 end
