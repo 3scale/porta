@@ -4,7 +4,7 @@ module User::Permissions
   ATTRIBUTES = %I[ role member_permission_ids member_permission_service_ids ]
 
   included do
-    has_many :member_permissions, dependent: :destroy
+    has_many :member_permissions, dependent: :destroy, autosave: true
 
     attr_accessible :member_permission_service_ids, :member_permission_ids, :allowed_sections, :allowed_service_ids
 
