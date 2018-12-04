@@ -25,6 +25,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['monitoring'], permissions['allowed_sections']
     assert_equal [@services.first.id], permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:monitoring], @user.allowed_sections.to_a
+    assert_equal [@services.first.id], @user.allowed_service_ids
   end
 
   test "PUT: enable 'settings', but keep the same services" do
@@ -36,9 +40,13 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
     assert_equal [@services.first.id], permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:settings], @user.allowed_sections.to_a
+    assert_equal [@services.first.id], @user.allowed_service_ids
   end
 
-  test "PUT: enable service '2', but keep the same sections" do
+  test "PUT: enable service 2, but keep the same sections" do
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_service_ids: [@services.last.id.to_s] }
 
@@ -47,6 +55,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
     assert_equal [@services.last.id], permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:partners], @user.allowed_sections.to_a
+    assert_equal [@services.last.id], @user.allowed_service_ids
   end
 
   test "PUT: enable 'settings' and enable all services" do
@@ -58,6 +70,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
     assert_nil permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:settings], @user.allowed_sections.to_a
+    assert_nil @user.allowed_service_ids
   end
 
   test "PUT: enable 'settings', but disable all services" do
@@ -123,6 +139,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_empty permissions['allowed_sections']
     assert_equal [@services.first.id], permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_empty @user.allowed_sections.to_a
+    assert_equal [@services.first.id], @user.allowed_service_ids
   end
 
   test "PUT: one of the allowed section is invalid" do
@@ -135,6 +155,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
     assert_equal [@services.first.id], permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:settings], @user.allowed_sections.to_a
+    assert_equal [@services.first.id], @user.allowed_service_ids
   end
 
   test "PUT: setting services, when some are non-existent only enables existent ones" do
@@ -147,6 +171,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
     assert_equal [@services.last.id], permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:partners], @user.allowed_sections.to_a
+    assert_equal [@services.last.id], @user.allowed_service_ids
   end
 
   test "PUT: setting non-existent services disables all" do
@@ -159,6 +187,10 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
     assert_empty permissions['allowed_service_ids']
+
+    @user.member_permissions.reload
+    assert_equal [:partners], @user.allowed_sections.to_a
+    assert_empty @user.allowed_service_ids
   end
 
   test 'disable all allowed_sections' do
