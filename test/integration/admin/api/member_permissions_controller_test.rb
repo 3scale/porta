@@ -144,5 +144,14 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     assert_equal ['partners'], permissions['allowed_sections']
     assert_empty permissions['allowed_service_ids']
   end
-  
+
+  test 'disable all allowed_sections' do
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
+
+    put admin_api_permissions_path(id: @user.id, format: :json), { allowed_sections: ['[]'] }
+
+    @user.member_permissions.reload
+    assert_empty @user.allowed_sections
+  end
+
 end
