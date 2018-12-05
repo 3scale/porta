@@ -64,7 +64,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   test "PUT: enable 'settings' and enable all services" do
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
-    params = { allowed_sections: ['settings'], allowed_service_ids: nil }
+    params = { allowed_sections: ['settings'], allowed_service_ids: '' }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
@@ -106,8 +106,8 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   test "member user can't update his own permissions" do
     @user.update_attribute :role, 'member'
     provider_login @user
-
-    params = { allowed_sections: ['settings'], allowed_service_ids: nil }
+    # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
+    params = { allowed_sections: ['settings'], allowed_service_ids: '' }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params
 
@@ -120,8 +120,8 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     logged_in_user = @provider.admins.first
     logged_in_user.update_attribute :role, 'member'
     another_user = Factory(:user, account: @provider)
-
-    params = { allowed_sections: ['settings'], allowed_service_ids: nil }
+    # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
+    params = { allowed_sections: ['settings'], allowed_service_ids: '' }
 
     put admin_api_permissions_path(id: another_user.id, format: :json), params
 
