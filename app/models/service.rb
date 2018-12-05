@@ -188,7 +188,7 @@ class Service < ApplicationRecord
     end
 
     event :mark_as_deleted do
-      transition [:incomplete, :published, :offline, :hidden] => :deleted, unless: :last_accessible?
+      transition [:incomplete, :published, :offline, :hidden] => :deleted, unless: :default_or_last?
     end
 
     before_transition to: [:deleted], do: :deleted_by_state_machine
