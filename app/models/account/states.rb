@@ -1,5 +1,7 @@
 module Account::States
-  PERIOD_BEFORE_DELETION = 15.days.freeze
+  PERIOD_BEFORE_DELETION   = 15.days.freeze
+  MAX_PERIOD_OF_SUSPENSION = 90.days.freeze
+  MAX_PERIOD_OF_INACTIVITY =  1.year.freeze
   STATES = %i[created pending approved rejected suspended scheduled_for_deletion].freeze
   extend ActiveSupport::Concern
 
@@ -80,7 +82,7 @@ module Account::States
       end
 
       event :suspend do
-        transition :approved => :suspended, if: :tenant?
+        transition all => :suspended, if: :tenant?
       end
 
       event :resume do
@@ -99,12 +101,26 @@ module Account::States
       where(:state => state.to_s) if state.to_s != "all"
     end
 
-    scope :deleted_since, ->(value = nil) do
-      scheduled_for_deletion.where.has { state_changed_at <= (value || PERIOD_BEFORE_DELETION.ago) }
+    scope :deleted_since, ->(deletion_time = PERIOD_BEFORE_DELETION.ago) do
+      scheduled_for_deletion.where.has { state_changed_at <= deletion_time }
+    end
+
+    scope :suspended_since, ->(suspension_time = MAX_PERIOD_OF_SUSPENSION.ago) do
+      suspended.where.has { state_changed_at <= suspension_time }
+    end
+
+    scope :inactive_since, ->(inactivity_time = MAX_PERIOD_OF_INACTIVITY.ago) do
+      where.has { created_at <= inactivity_time }.without_traffic_since(inactivity_time)
+    end
+
+    scope :without_traffic_since, ->(inactivity_time = MAX_PERIOD_OF_INACTIVITY.ago) do
+      where.has do
+        not_exists Cinstance.where.has { user_account_id == BabySqueel[:accounts].id }.active_since(inactivity_time)
+      end
     end
 
     def deletion_date
-      return nil if state_changed_at.blank? || !scheduled_for_deletion?
+      return if state_changed_at.blank? || !scheduled_for_deletion?
       (state_changed_at + PERIOD_BEFORE_DELETION)
     end
 

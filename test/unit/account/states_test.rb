@@ -185,6 +185,53 @@ class Account::StatesTest < ActiveSupport::TestCase
     assert_equal Account::States::PERIOD_BEFORE_DELETION.from_now.to_date, account.deletion_date.to_date
   end
 
+  test '.suspended_since' do
+    FactoryGirl.create(:simple_account, state: 'suspended')
+    FactoryGirl.create(:simple_account, state: 'approved')
+    FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: (Account::States::MAX_PERIOD_OF_SUSPENSION - 1.day).ago)
+    account_suspended_antiquely = FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: Account::States::MAX_PERIOD_OF_SUSPENSION.ago)
+    assert_equal [account_suspended_antiquely.id], Account.suspended_since.pluck(:id)
+  end
+
+  test '.inactive_since' do
+    old_account_without_traffic = FactoryGirl.create(:simple_account)
+    old_account_without_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+
+    old_account_with_old_traffic = FactoryGirl.create(:simple_account)
+    old_account_with_old_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+
+    recent_account_without_traffic = FactoryGirl.create(:simple_account)
+    recent_account_without_traffic.update_attribute(:created_at, (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    FactoryGirl.create(:cinstance, user_account: recent_account_without_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+
+    recent_account_with_recent_traffic = FactoryGirl.create(:simple_account)
+    recent_account_with_recent_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryGirl.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+
+    results = Account.inactive_since.pluck(:id)
+    assert_includes     results, old_account_without_traffic.id
+    assert_includes     results, old_account_with_old_traffic.id
+    assert_not_includes results, recent_account_without_traffic.id
+    assert_not_includes results, recent_account_with_recent_traffic.id
+  end
+
+  test '.without_traffic_since' do
+    account_without_traffic = FactoryGirl.create(:simple_account)
+
+    account_with_old_traffic = FactoryGirl.create(:simple_account)
+    FactoryGirl.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+
+    account_with_recent_traffic = FactoryGirl.create(:simple_account)
+    FactoryGirl.create(:cinstance, user_account: account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+
+    results = Account.without_traffic_since.pluck(:id)
+    assert_includes     results, account_without_traffic.id
+    assert_includes     results, account_with_old_traffic.id
+    assert_not_includes results, account_with_recent_traffic.id
+  end
+
+
   class CallbacksTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 

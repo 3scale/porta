@@ -246,6 +246,13 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_does_not_contain Cinstance.live, cinstance
   end
 
+  test '.active_since' do
+    cinstances = FactoryGirl.create_list(:cinstance, 2)
+    cinstances.first.update_attribute(:first_daily_traffic_at, 1.year.ago)
+    cinstances.last.update_attribute(:first_daily_traffic_at, 1.day.ago)
+    assert_equal [cinstances.last.id], Cinstance.active_since(1.month.ago).pluck(:id)
+  end
+
   test 'Cinstance.all returns non destroyed cinstanced' do
     cinstance = Factory(:cinstance)
     assert_contains Cinstance.all, cinstance
