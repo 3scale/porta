@@ -22,6 +22,8 @@ module ThreeScale
     WEEK = %w[
       Pdf::Dispatch.weekly
       JanitorWorker.perform_async
+      SuspendInactiveAccountsWorker.perform_async
+      StaleAccountWorker.perform_async
     ].freeze
 
     DAILY = %w[
