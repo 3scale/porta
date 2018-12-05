@@ -8,9 +8,17 @@ class DeletePlainObjectWorker < ActiveJob::Base
     Rails.logger.info "DeletePlainObjectWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
-  rescue_from(ActiveRecord::RecordNotDestroyed, ActiveRecord::StaleObjectError) do |exception|
-    System::ErrorReporting.report_error(exception, parameters: { caller_worker_hierarchy: caller_worker_hierarchy,
-                                                                 error_messages: exception.record.errors.full_messages })
+  rescue_from(ActiveRecord::RecordNotDestroyed) do |exception|
+    if object.class.exists?(object.id)
+      # We don't want to indefinitely try again to delete an object that for any reason can not be destroyed, so we just log it instead
+      System::ErrorReporting.report_error(exception, parameters: { caller_worker_hierarchy: caller_worker_hierarchy,
+                                                                   error_messages: exception.record.errors.full_messages })
+    end
+  end
+
+  rescue_from(ActiveRecord::StaleObjectError) do |_exception|
+    Rails.logger.info "DeletePlainObjectWorker#perform raised #{exception.class} with message #{exception.message} for the hierarchy #{caller_worker_hierarchy}"
+    retry_job if object.class.exists?(object.id)
   end
 
   queue_as :default
