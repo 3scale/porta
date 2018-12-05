@@ -71,7 +71,4 @@ class CreateApplication
 
 
 $(document).ready ->
-
-  create_application = new CreateApplication()
-  $("#cinstance_plan_id").on "change", ->
-    create_application.check_selected_plan()
+  window.createApplication = new CreateApplication()
