@@ -54,4 +54,25 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
       refute object.destroyed?
     end
   end
+
+  class StaleObjectErrorTest < DeletePlainObjectWorkerTest
+    def setup
+      @service = FactoryGirl.create(:simple_service)
+      FactoryGirl.create(:simple_service, account: @service.account) # This way the previous service can be destroyed
+      @proxy = FactoryGirl.create(:proxy, service: @service)
+    end
+
+    def test_perform_on_father_after_child_destroyed
+      service1 = @service
+      @service.proxy
+
+      proxy2 = Proxy.find(@proxy.id)
+
+      DeletePlainObjectWorker.perform_now(proxy2, %w[Hierarchy-Service-ID Hierarchy-Proxy-ID])
+      DeletePlainObjectWorker.perform_now(service1, ['Hierarchy-Service-ID'])
+
+      assert_raise(ActiveRecord::RecordNotFound) { @proxy.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { @service.reload }
+    end
+  end
 end
