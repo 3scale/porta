@@ -40,7 +40,7 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_admin_id_by_id
-  ##~ op.parameters.add :name => "allowed_service_ids", :description => "IDs of the services that need to be enabled, comma-separated. To enable all services, the value should be empty. To disable all services, the value should be: '[]'.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "allowed_service_ids", :description => "IDs of the services that need to be enabled, comma-separated. To enable all services, no value should be provided. To disable all services, the value should be: '[]'.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "allowed_sections", :description => "The list of sections in the admin portal that the user can access, comma-separated. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans)", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def update
@@ -65,7 +65,10 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   end
 
   def permission_params
-    params.require(:permissions).permit(allowed_service_ids: [], allowed_sections: [])
+    # both `:allowed_service_ids` and `allowed_service_ids: []` are required for service IDs
+    # because we want to allow empty value (`allowed_service_ids%5B%5D=%5B%5D`) and
+    # 'nil' value (`allowed_service_ids%5B%5D` or just `allowed_service_ids`)
+    params.require(:permissions).permit(:allowed_service_ids, allowed_service_ids: [], allowed_sections: [])
   end
 
 end
