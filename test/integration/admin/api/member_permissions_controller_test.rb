@@ -62,6 +62,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   end
 
   test "PUT: enable 'settings' and enable all services" do
+    @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: nil }
 
@@ -77,10 +78,8 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   end
 
   test "PUT: enable 'settings', but disable all services" do
+    @user.update_attributes({ allowed_service_ids: [@services.first.id] })
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D=%5B%5D
-    @user.member_permission_service_ids = [@services.first.id]
-    @user.save!
-
     params = { allowed_sections: ['settings'], allowed_service_ids: ["[]"] }
 
     put admin_api_permissions_path(id: @user.id, format: :json), params

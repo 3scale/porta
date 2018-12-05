@@ -3979,7 +3979,7 @@
             },
             {
               "name": "allowed_service_ids",
-              "description": "IDs of the services that need to be enabled, comma-separated. To enable all services, the value should be empty. To disable all services, the value should be: '[]'.",
+              "description": "IDs of the services that need to be enabled, comma-separated. To enable all services, no value should be provided. To disable all services, the value should be: '[]'.",
               "dataType": "string",
               "allowMultiple": false,
               "required": false,
