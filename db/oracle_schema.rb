@@ -144,9 +144,11 @@ ActiveRecord::Schema.define(version: 20181105212016) do
     t.string   "base_path"
     t.string   "swagger_version"
     t.boolean  "skip_swagger_validations", limit: nil,                default: false
-    t.integer  "service_id",               limit: 8,   precision: 8
+    t.integer  "service_id",                           precision: 38
     t.boolean  "discovered",               limit: nil
   end
+
+  add_index "api_docs_services", ["service_id"], name: "index_api_docs_services_on_service_id"
 
   create_table "application_keys", force: :cascade do |t|
     t.integer  "application_id", precision: 38, null: false
