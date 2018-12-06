@@ -1,5 +1,5 @@
 import jQuery from 'jquery'
-import Select2 from 'select2'
+import 'select2'
 import 'select2/dist/css/select2.css'
 
 function modelMatcher (params, data) {
@@ -51,7 +51,11 @@ function modelMatcher (params, data) {
   // If it doesn't contain the term, don't return anything
   return null
 }
+
 export function initialize () {
   /*eslint no-new: 0*/
-  new Select2(jQuery('#cinstance_plan_id'), {matcher: modelMatcher})
+  jQuery('#cinstance_plan_id').select2({matcher: modelMatcher})
+    .on('change', function () {
+      window.createApplication.check_selected_plan()
+    })
 }
