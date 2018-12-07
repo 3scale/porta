@@ -14,7 +14,7 @@ module System
     def report_error(exception, rack_env: nil, logger: Rails.logger, **parameters)
       options = OPTIONS.call(parameters, rack_env)
 
-      logger.error('Exception') { exception }
+      logger.error('Exception') { {exception: {class: exception.class, message: exception.message, backtrace: (exception.backtrace || [])[0..3]}, parameters: parameters} }
 
       ::Airbrake.notify_or_ignore(exception, options) if defined?(Airbrake)
       ::Bugsnag.notify(exception) do |report|
