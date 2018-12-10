@@ -154,8 +154,9 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
+    # the permissions have not changed - the same as original
     assert @member.reload
-    assert_equal [ ], @member.member_permission_service_ids
+    assert_nil @member.member_permission_service_ids
     assert_equal admin_sections, @member.admin_sections
   end
 
