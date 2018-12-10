@@ -56,3 +56,20 @@ Then(/^I should see the Policy Chain$/) do
   page.should have_css(".PolicyRegistryList.is-hidden")
 
 end
+
+
+Then(%r{^The curl command uses (Basic Authentication|Query|Headers) with app_id/app_key credentials$}) do |authentication|
+  matches = {
+    'Basic Authentication' => %r{^curl "https?://APP_ID:APP_KEY@},
+    'Query' => %r{^curl "https?://.*\?app_id=APP_ID&app_key=APP_KEY"},
+    'Headers' => %r{^curl "https?://.*" -H 'app_id: APP_ID' -H 'app_key: APP_KEY'}
+  }
+  within '#api-test-curl' do
+    page.should have_content(matches[authentication])
+  end
+end
+
+Given(%r{^the service uses app_id/app_key as authentication method$}) do
+  @service ||= @provider.default_service
+  @service.update_attributes!(backend_version: '2')
+end
