@@ -20,9 +20,8 @@ class PrometheusTest < ActionDispatch::IntegrationTest
     get '/system/metrics', {}, authorization: @authorization
     assert_response :success
 
-    assert_raises ActionController::RoutingError do
-      get '/system/metrics'
-    end
+    get '/system/metrics'
+    assert_response :unauthorized
   end
 
   test 'metrics on provider admin domain' do
