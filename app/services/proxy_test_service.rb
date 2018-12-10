@@ -82,7 +82,10 @@ class ProxyTestService
       { query: credentials }
     when 'authorization'
       user, password = proxy.authorization_credentials
-      { header: { 'Authorization' => ["#{user}:#{password}"].pack('m').tr("\n", '') }}
+
+      # See: https://github.com/3scale/apicast/blob/e3130292b1b543c19a2de3c4f006da16d501964d/gateway/src/resty/http_authorization.lua#L13
+      encoded = Base64.encode64([user,password].join(':')).strip
+      { header: { 'Authorization' => "Basic #{encoded}"}}
     end
   end
 
