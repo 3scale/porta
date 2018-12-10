@@ -3922,6 +3922,82 @@
       ]
     },
     {
+      "path": "/admin/api/users/{id}/permissions.xml",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "User Permissions Read",
+          "description": "Shows the permissions of the user of the provider account.",
+          "group": "user_provider_account",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the user.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "admin_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/users/{id}/permissions.xml",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "User Permissions Update",
+          "description": "Updates the permissions of member user of the provider account.",
+          "group": "user_provider_account",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the user.",
+              "dataType": "int",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "admin_ids"
+            },
+            {
+              "name": "allowed_service_ids",
+              "description": "IDs of the services that need to be enabled, comma-separated. To enable all services, no value should be provided. To disable all services, the value should be: '[]'.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "allowed_sections",
+              "description": "The list of sections in the admin portal that the user can access, comma-separated. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans)",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/accounts/{account_id}/messages.xml",
       "operations": [
         {

@@ -589,6 +589,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           put :suspend
           put :activate
           put :unsuspend
+          resource :permissions, controller: 'member_permissions', only: [:show, :update]
         end
 
         resource :access_tokens, only: %i(create)

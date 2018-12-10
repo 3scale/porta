@@ -12,7 +12,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert user.has_permission?(:plans)
   end
 
-  test 'admin_sections=' do
+  test 'admin_sections= with a section name' do
     user = FactoryGirl.create(:simple_user)
     permissions_count = MemberPermission.method(:count)
 
@@ -20,13 +20,34 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert_equal 0, permissions_count.call
 
     assert_no_difference permissions_count do
-      user.admin_sections = [:services]
+      user.admin_sections = [:settings]
     end
 
     assert_difference permissions_count do
       user.save!
     end
 
+    assert_difference permissions_count, -1 do
+      user.admin_sections = []
+    end
+  end
+
+  test 'admin_sections= for "service" section' do
+    user = FactoryGirl.create(:simple_user)
+    permissions_count = MemberPermission.method(:count)
+
+    assert user.admin_sections.empty?
+    assert_equal 0, permissions_count.call
+
+    assert_no_difference permissions_count do
+      user.admin_sections = [:services, :settings]
+    end
+
+    assert_difference permissions_count, 2 do
+      user.save!
+    end
+
+    # when sections are removed, the enabled services remain the same, and are not deleted
     assert_difference permissions_count, -1 do
       user.admin_sections = []
     end
@@ -44,9 +65,9 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert_equal Set[:portal], user.admin_sections
   end
 
-
   test 'member_permission_service_ids=' do
     user = FactoryGirl.build_stubbed(:simple_user, admin_sections: [:services])
+    user.stubs(:existing_service_ids).returns([42])
 
     refute user.has_access_to_service?(42)
     assert_equal 1, user.admin_sections.size
@@ -58,6 +79,16 @@ class User::PermissionsTest < ActiveSupport::TestCase
     user.member_permission_service_ids = nil
     assert user.has_access_to_service?(42)
     assert_equal 0, user.admin_sections.size
+  end
+
+  test 'member_permission_service_ids= filters the services list before saving' do
+    user = FactoryGirl.build_stubbed(:simple_user, admin_sections: [:services])
+
+    user.stubs(:existing_service_ids).returns([1,2])
+
+    user.member_permission_service_ids = [1,111]
+
+    assert_equal [1], user.services_member_permission.service_ids
   end
 
   test 'services_member_permission' do
@@ -76,7 +107,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
 
     user.admin_sections = [:services]
     refute user.has_access_to_service?(42)
-    user.services_member_permission.service_ids = 42
+    user.services_member_permission.service_ids = [42]
     assert user.has_access_to_service?(42)
 
     user.admin_sections = [:plans]
@@ -90,8 +121,9 @@ class User::PermissionsTest < ActiveSupport::TestCase
     user.admin_sections = [:services]
     refute user.has_access_to_all_services?
 
+    # updating admin section doesn't remove service permissions
     user.admin_sections = [:plans]
-    assert user.has_access_to_all_services?
+    refute user.has_access_to_all_services?
 
     user.admin_sections = []
     user.stubs(:admin?).returns(true)
