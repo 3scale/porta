@@ -49,7 +49,10 @@ module EventStore
 
     before_validation :provider_id_from_metadata
 
-    belongs_to :account, foreign_key: :provider_id, inverse_of: :events
+    belongs_to :account, foreign_key: :provider_id, inverse_of: :events, required: false
+    # It is not required because when we delete a provider and all its relationships,
+    # we still want the events of the relationships to be saved in order to do the correspondent actions
+    # once the provider is deleted (whatever the subscribers tells them to do).
 
     alias provider account
 
