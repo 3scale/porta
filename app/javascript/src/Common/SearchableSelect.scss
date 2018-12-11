@@ -1,0 +1,50 @@
+// From colors.scss
+$highlight-color: #0088ce;
+$border-color: #d1d1d1;
+$font-color: #393f44;
+$item-background-color: white;
+$disabled-color: #8b8d8f;
+
+$item-height: 2.25rem; // line-height-times(10)
+
+.SearchableSelect {
+  position: relative;
+
+  .HiddenForm {
+    height: 0;
+    left: -5000em;
+    overflow: hidden;
+    position: absolute;
+  }
+
+  .OptList {
+    background-color: $item-background-color;
+    border-color: $border-color;
+    border-radius: .1875rem;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    left: 0;
+    max-height: calc(#{$item-height} * 6);
+    overflow: auto;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 1051;
+
+    li {
+      border: 0;
+      cursor: pointer;
+      height: $item-height;
+      padding: .375rem; // line-height-times(5/3)
+
+      &:hover {
+        color: $highlight-color;
+      }
+
+      &.disabled {
+        pointer-events: none;
+        color: $disabled-color;
+      }
+    }
+  }
+}
