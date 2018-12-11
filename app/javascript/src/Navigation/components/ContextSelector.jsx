@@ -6,9 +6,9 @@ import 'core-js/es6/set'
 import 'core-js/es6/array'
 import React from 'react'
 import { render } from 'react-dom'
-import { ActiveMenuTitle } from './ActiveMenuTitle'
+import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 
-import '../styles/ContextSelector.scss'
+import 'Navigation/styles/ContextSelector.scss'
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 

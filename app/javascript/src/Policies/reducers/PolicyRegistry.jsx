@@ -1,11 +1,11 @@
 // @flow
 
-import { initialState } from './initialState'
-import { createReducer, updateArray } from './util'
+import { initialState } from 'Policies/reducers/initialState'
+import { createReducer, updateArray } from 'Policies/reducers/util'
 
-import type { RegistryState } from '../types/State'
-import type { RawPolicy, RawRegistry, RegistryPolicy } from '../types/Policies'
-import type { FetchRegistrySuccessAction } from '../actions/PolicyRegistry'
+import type { RegistryState } from 'Policies/types/State'
+import type { RawPolicy, RawRegistry, RegistryPolicy } from 'Policies/types/Policies'
+import type { FetchRegistrySuccessAction } from 'Policies/actions/PolicyRegistry'
 
 function parsePolicies (registry: RawRegistry): Array<RegistryPolicy> {
   let policies: Array<RegistryPolicy> = []

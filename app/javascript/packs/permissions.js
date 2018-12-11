@@ -1,4 +1,4 @@
-import { render as renderPermissionsWidget } from '../src/Users/permissions'
+import { render as renderPermissionsWidget } from 'Users/permissions'
 
 document.addEventListener('DOMContentLoaded', () => {
   window.renderPermissionsWidget = renderPermissionsWidget

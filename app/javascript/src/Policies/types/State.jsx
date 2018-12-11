@@ -1,6 +1,6 @@
 // @flow
 
-import type { RegistryPolicy, ChainPolicy } from './Policies'
+import type { RegistryPolicy, ChainPolicy } from 'Policies/types/Policies'
 
 export type UIState = {
   +registry: boolean,

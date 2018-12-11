@@ -5,9 +5,9 @@ import pluralize from 'pluralize'
 import $ from 'jquery'
 import 'jquery-ui/ui/widgets/datepicker'
 
-import * as helpers from './stats_helpers'
-import {StatsUI} from './ui'
-import {CustomRangeDate, PeriodRangeDate} from './state'
+import * as helpers from 'Stats/lib/stats_helpers'
+import {StatsUI} from 'Stats/lib/ui'
+import {CustomRangeDate, PeriodRangeDate} from 'Stats/lib/state'
 
 class Hook {
 

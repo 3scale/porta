@@ -1,6 +1,6 @@
 import 'core-js/fn/symbol/index' // make Symbol work on IE 11
 import $ from 'jquery'
-import {StatsSeries} from './series'
+import {StatsSeries} from 'Stats/lib/series'
 
 export class StatsChartManager {
   constructor ({statsState, sources, chart, widgets = []}) {
