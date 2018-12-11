@@ -58,7 +58,10 @@ class Buyers::ApplicationsController < FrontendController
   def new
     @cinstance = @buyer.bought_cinstances.build
     extend_cinstance_for_new_plan
-    @plans = @provider.application_plans.stock
+    @app_plans = @provider.application_plans.stock
+    @service_plans = @app_plans.includes(:service).each_with_object({}) do |app_plan, service_plans|
+      service_plans[app_plan.name] = app_plan.service.service_plans.map { |service_plan| [service_plan.name, service_plan.id] }
+    end
 
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]

@@ -1,5 +1,4 @@
 <% content_for :javascripts do %>
-  <%= javascript_include_tag 'provider/create_application' %>
   <%= javascript_pack_tag 'applications' %>
 <% end %>
 
@@ -14,14 +13,17 @@
 
   <%= form.semantic_errors %>
   <%= form.inputs do %>
-    <%= form.input :plan, :as => :plan_selector,
-                          :collection => @plans, :include_blank => false,
+    <%= form.input :plan, :as => :select,
                           :label => ApplicationPlan.model_name.human,
-                          :default_plan => @plans.respond_to?(:default) ? @plans.default : @plans.first %>
+                          :collection => @app_plans,
+                          :include_blank => false,
+                          :default_plan => @app_plans.respond_to?(:default) ? @app_plans.default : @app_plans.first %>
 
     <% if current_account.settings.service_plans.allowed? %>
-      <%= form.input :service_plan_id, as: :select, collection: [], label: ServicePlan.model_name.human,
-        hint: link_to('Create a service plan', admin_services_path, id: 'link-help-new-application-service') %>
+      <%= form.input :service_plan_id, :as => :select,
+                                       :label => ServicePlan.model_name.human,
+                                       :collection => @service_plans,
+                                       :hint => link_to('Create a service plan', admin_services_path, id: 'link-help-new-application-service') %>
     <% end %>
     <%= form.user_defined_form %>
   <% end %>
