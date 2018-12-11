@@ -2,20 +2,20 @@
 
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import * as actions from '../actions/index'
-import { PolicyConfig } from './PolicyConfig'
-import { PolicyChain } from './PolicyChain'
-import { PolicyRegistry } from './PolicyRegistry'
-import { PolicyChainHiddenInput } from './PolicyChainHiddenInput'
+import * as actions from 'Policies/actions/index'
+import { PolicyConfig } from 'Policies/components/PolicyConfig'
+import { PolicyChain } from 'Policies/components/PolicyChain'
+import { PolicyRegistry } from 'Policies/components/PolicyRegistry'
+import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
 import { connect } from 'react-redux'
 
 import type {
   State
-} from '../types/State'
+} from 'Policies/types/State'
 
 import type {
   Dispatch
-} from '../types/index'
+} from 'Policies/types/index'
 
 const mapStateToProps = (state: State) => {
   return {

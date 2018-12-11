@@ -1,7 +1,7 @@
 import $ from 'jquery'
 
-import './chart'
-import toggle from './toggle'
+import 'Dashboard/chart'
+import toggle from 'Dashboard/toggle'
 
 export { toggle }
 

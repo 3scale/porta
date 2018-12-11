@@ -1,4 +1,4 @@
-import {StatsChartManager} from './chart_manager'
+import {StatsChartManager} from 'Stats/lib/chart_manager'
 
 export class StatsSourceCollectorChartManager extends StatsChartManager {
   constructor ({statsState, sources, chart, widgets = []}) {

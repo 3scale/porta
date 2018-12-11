@@ -1,15 +1,15 @@
 // @flow
 
-import { initialState } from './initialState'
-import { createReducer, generateGuid, updateArray } from './util'
-import type { ChainState } from '../types/State'
-import type { ChainPolicy, RegistryPolicy } from '../types/Policies'
+import { initialState } from 'Policies/reducers/initialState'
+import { createReducer, generateGuid, updateArray } from 'Policies/reducers/util'
+import type { ChainState } from 'Policies/types/State'
+import type { ChainPolicy, RegistryPolicy } from 'Policies/types/Policies'
 import type {
   AddPolicyToChainAction,
   FetchChainSuccessAction,
   SortPolicyChainAction,
   UpdatePolicyChainAction
-} from '../actions/PolicyChain'
+} from 'Policies/actions/PolicyChain'
 
 type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction
 

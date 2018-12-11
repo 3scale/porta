@@ -1,4 +1,4 @@
-import {StatsMetricsSource} from './metrics_source'
+import {StatsMetricsSource} from 'Stats/lib/metrics_source'
 
 export class StatsApplicationMetricsSource extends StatsMetricsSource {
   get url () {

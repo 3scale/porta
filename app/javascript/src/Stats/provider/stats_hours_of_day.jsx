@@ -1,12 +1,12 @@
 /** @jsx StatsUI.dom */
 
-import {PeriodRangeDate} from '../lib/state'
-import {StatsAverageMetricsSource} from '../lib/average_metrics_source'
-import {StatsChart} from '../lib/chart'
-import {StatsAverageChartManager} from '../lib/average_chart_manager'
-import {StatsMetrics} from '../lib/metrics_list'
-import {StatsCSVLink} from '../lib/csv_link'
-import {Stats} from '../lib/stats'
+import {PeriodRangeDate} from 'Stats/lib/state'
+import {StatsAverageMetricsSource} from 'Stats/lib/average_metrics_source'
+import {StatsChart} from 'Stats/lib/chart'
+import {StatsAverageChartManager} from 'Stats/lib/average_chart_manager'
+import {StatsMetrics} from 'Stats/lib/metrics_list'
+import {StatsCSVLink} from 'Stats/lib/csv_link'
+import {Stats} from 'Stats/lib/stats'
 
 import numeral from 'numeral'
 

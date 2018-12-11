@@ -1,4 +1,4 @@
-import { StatsApplicationsTable } from './applications_table'
+import { StatsApplicationsTable } from 'Stats/lib/applications_table'
 
 describe('StatsApplicationsTable', () => {
   let applicationsTable = new StatsApplicationsTable({container: '#applications_table'})

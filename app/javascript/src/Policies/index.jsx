@@ -7,12 +7,12 @@ import 'core-js/es7/object'
 import React from 'react'
 import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import Root from './components/Root'
-import configureStore from './store/configureStore'
-import { initialState } from './reducers/initialState'
-import * as actions from './actions/index'
+import Root from 'Policies/components/Root'
+import configureStore from 'Policies/store/configureStore'
+import { initialState } from 'Policies/reducers/initialState'
+import * as actions from 'Policies/actions/index'
 
-import './styles/policies.scss'
+import 'Policies/styles/policies.scss'
 
 const Policies = (store, element) => {
   render(

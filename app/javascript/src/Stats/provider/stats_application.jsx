@@ -1,12 +1,12 @@
 /** @jsx StatsUI.dom */
-import {StatsUsageChart} from '../lib/usage_chart'
-import {StatsUsageChartManager} from '../lib/usage_chart_manager'
-import {StatsMetrics} from '../lib/metrics_list'
-import {StatsSourceCollector} from '../lib/source_collector'
-import {StatsMethodsTable} from '../lib/methods_table'
-import {StatsApplicationMetricsSource} from '../lib/application_metrics_source'
-import {StatsCSVLink} from '../lib/csv_link'
-import {Stats} from '../lib/stats'
+import {StatsUsageChart} from 'Stats/lib/usage_chart'
+import {StatsUsageChartManager} from 'Stats/lib/usage_chart_manager'
+import {StatsMetrics} from 'Stats/lib/metrics_list'
+import {StatsSourceCollector} from 'Stats/lib/source_collector'
+import {StatsMethodsTable} from 'Stats/lib/methods_table'
+import {StatsApplicationMetricsSource} from 'Stats/lib/application_metrics_source'
+import {StatsCSVLink} from 'Stats/lib/csv_link'
+import {Stats} from 'Stats/lib/stats'
 
 export class StatsApplicationSourceCollector extends StatsSourceCollector {
   static get Source () {

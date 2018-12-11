@@ -1,5 +1,5 @@
 /** @jsx StatsUI.dom */
-import {StatsUI} from './ui'
+import {StatsUI} from 'Stats/lib/ui'
 import $ from 'jquery'
 
 export class StatsApplicationsSelector extends StatsUI {
