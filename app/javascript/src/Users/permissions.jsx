@@ -185,11 +185,11 @@ export const ServiceAccess = { // eslint-disable-line no-unused-vars
     let { id, name } = props.service || {}
 
     // if the user doesn't have a `services` admin section, it means all APIs are enabled
-    let all_services_enabled = !(new Set(context.admin_sections)).has('services')
+    let allServicesEnabled = !(new Set(context.admin_sections)).has('services')
     let ids = context.member_permission_service_ids || []
-    let checked = all_services_enabled || ids.includes(id)
+    let checked = allServicesEnabled || ids.includes(id)
     // if all services are enabled, individual checkboxes for each service should be disabled
-    let disabled = all_services_enabled
+    let disabled = allServicesEnabled
 
     let toggle = () => {
       let services = new Set(ids)
