@@ -75,6 +75,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     begin
+      User.current = nil
       ::Backend::Storage.instance.flushdb
     rescue Errno::ECONNREFUSED
       # not running
