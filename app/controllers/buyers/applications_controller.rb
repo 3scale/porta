@@ -82,7 +82,8 @@ class Buyers::ApplicationsController < FrontendController
       redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
-      @plans = @provider.application_plans
+      @app_plans = @provider.application_plans.stock
+      @service_plans = service_plans_grouped_collection_with_app_plans @app_plans
       render :action => :new
     end
   end
