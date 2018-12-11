@@ -9,8 +9,8 @@
 <h2>New Application</h2>
 
 <%= metadata_new_app(@buyer, @provider) %>
-<%= semantic_form_for @cinstance, :url =>  admin_buyers_account_applications_path(@buyer), :builder => Fields::FormBuilder do |form| %>
-
+<%= semantic_form_for @cinstance, :url =>  admin_buyers_account_applications_path(@buyer),
+                                  :builder => Fields::FormBuilder do |form| %>
   <%= form.semantic_errors %>
   <%= form.inputs do %>
     <%= form.input :plan, :as => :select,
@@ -25,10 +25,10 @@
                                        :collection => @service_plans,
                                        :hint => link_to('Create a service plan', admin_services_path, id: 'link-help-new-application-service') %>
     <% end %>
+
     <%= form.user_defined_form %>
   <% end %>
   <%= form.buttons do %>
-    <%= form.commit_button button_html: {id: 'submit-new-app' } %>
+    <%= form.commit_button button_html: { id: 'submit-new-app' } %>
   <% end %>
 <% end %>
-
