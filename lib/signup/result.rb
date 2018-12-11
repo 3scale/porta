@@ -33,7 +33,7 @@ class Signup::Result
   def save!
     raise ActiveRecord::RecordInvalid, self if @errors.present?
     ActiveRecord::Base.transaction do
-      account.save! && user.save! && account.update!({first_admin_id: user.id})
+      account.save! && user.save! && account.update_column(:first_admin_id, user.id) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
