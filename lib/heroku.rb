@@ -127,6 +127,7 @@ module Heroku
     end
 
     def signup(subdomain)
+      # TODO: this can be removed :)
       Account.master.signup_provider(selected_plan, skip_third_party_notifications: true) do |account, user|
         @account, @user = account, user
 

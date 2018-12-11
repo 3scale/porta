@@ -3,6 +3,7 @@ class Partners::ProvidersController < Partners::BaseController
   before_action :find_account, only: [:destroy, :update]
 
   def create
+    # TODO: mmm... what is this controller for?
     signup = Account.master.signup_provider(selected_plan) do |provider, user|
       @account, @user = provider, user
       provider.subdomain = "#{params[:subdomain]}-#{@partner.system_name}"

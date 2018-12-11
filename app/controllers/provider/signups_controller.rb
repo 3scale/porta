@@ -30,6 +30,7 @@ class Provider::SignupsController < Provider::BaseController
     user_params    = account_params.try!(:delete, :user)
     @plan = plan
 
+    # TODO: ouch :(
     signup = master.signup_provider(plan, signup_options) do |provider, user|
       @provider, @user = provider, user
 
