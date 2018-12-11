@@ -17,12 +17,26 @@ class Accounts::AccountDeletedEventTest < ActiveSupport::TestCase
     current_user = User.current = FactoryGirl.create(:simple_user)
 
     account = FactoryGirl.create(:provider_account)
-    user = account.users.first!
+    user = account.admins.first!
 
     event = Accounts::AccountDeletedEvent.create(account)
     account.destroy!
 
     assert_equal user.id, event.user_id
     assert_equal current_user.id, event.metadata[:user_id] # user who destroyed the account
+  end
+
+  def test_first_admin_user_already_deleted
+    provider = FactoryGirl.create(:simple_provider)
+    user = FactoryGirl.create(:admin, account: provider)
+    user_id = user.id
+    provider.update_column(:first_admin_id, user_id)
+    user.delete
+
+    event = Accounts::AccountDeletedEvent.create(provider)
+    Rails.application.config.event_store.publish_event(event)
+
+    event_stored = EventStore::Repository.find_event!(event.event_id)
+    assert_equal user_id, event_stored.user_id
   end
 end
