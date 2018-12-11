@@ -17,7 +17,7 @@ class Accounts::AccountDeletedEventTest < ActiveSupport::TestCase
     current_user = User.current = FactoryGirl.create(:simple_user)
 
     account = FactoryGirl.create(:provider_account)
-    user = account.users.first!
+    user = account.admins.first!
 
     event = Accounts::AccountDeletedEvent.create(account)
     account.destroy!
