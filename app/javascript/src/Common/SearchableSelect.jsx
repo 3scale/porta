@@ -25,7 +25,6 @@ class SearchableSelect extends React.Component {
   onFocus = () => this.setState({ showOptions: true })
 
   onBlur = () => {
-    console.log(this)
     this.setState({
       searchTerm: this.state.selectedOption.name,
       showOptions: false,
@@ -49,7 +48,7 @@ class SearchableSelect extends React.Component {
 
     const renderedOptions = options.length
       ? options.map(o => <li key={o.id} onMouseDown={() => this.onOptionSelect(o)}>{o.name}</li>)
-      : <li className='disabled'>No results found</li>
+      : <li className='Disabled'>No results found</li>
 
     return <ul className='OptList'>{renderedOptions}</ul>
   }
@@ -63,7 +62,7 @@ class SearchableSelect extends React.Component {
         <label htmlFor={formId}>{label}</label>
         <input id={formId} name={formName} className='HiddenForm' value={selectedOption.id} readOnly />
         <TextInput
-          aria-label='select one'
+          aria-label={formName}
           placeholder='Select one...'
           value={searchTerm}
           onChange={this.onTextChange}

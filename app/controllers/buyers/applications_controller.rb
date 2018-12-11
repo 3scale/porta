@@ -3,6 +3,7 @@ class Buyers::ApplicationsController < FrontendController
 
   include ThreeScale::Search::Helpers
   include DisplayViewPortion
+  include Buyers::ApplicationsHelper
   helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
@@ -59,9 +60,7 @@ class Buyers::ApplicationsController < FrontendController
     @cinstance = @buyer.bought_cinstances.build
     extend_cinstance_for_new_plan
     @app_plans = @provider.application_plans.stock
-    @service_plans = @app_plans.includes(:service).each_with_object({}) do |app_plan, service_plans|
-      service_plans[app_plan.name] = app_plan.service.service_plans.map { |service_plan| [service_plan.name, service_plan.id] }
-    end
+    @service_plans = service_plans_grouped_collection_with_app_plans @app_plans
 
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
@@ -71,9 +70,9 @@ class Buyers::ApplicationsController < FrontendController
 
   # TODO: this should be done by buy! method
   def create
-    service_plan = if service_plan_id = params[:cinstance].delete(:service_plan_id)
-                     @application_plan.service.service_plans.find(service_plan_id)
-                   end
+    if service_plan_id = params[:cinstance].delete(:service_plan_id)
+      service_plan = @application_plan.service.service_plans.find(service_plan_id)
+    end
 
     @cinstance = current_account.provider_builds_application_for(@buyer, @application_plan, params[:cinstance], service_plan)
     @cinstance.validate_human_edition!
@@ -113,7 +112,7 @@ class Buyers::ApplicationsController < FrontendController
 
   def reject
     # TODO: use change_state('reject','The application has been rejected. params[:reason])
-    @cinstance.reject!(params[:reason])
+    @cinstance.reject!([:reason])
     flash[:notice] = 'The application has been rejected.'
     redirect_to admin_buyers_account_url(@cinstance.buyer_account)
   end

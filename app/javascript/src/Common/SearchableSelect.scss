@@ -41,9 +41,9 @@ $item-height: 2.25rem; // line-height-times(10)
         color: $highlight-color;
       }
 
-      &.disabled {
-        pointer-events: none;
+      &.Disabled {
         color: $disabled-color;
+        pointer-events: none;
       }
     }
   }
