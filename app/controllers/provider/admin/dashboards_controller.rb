@@ -1,6 +1,5 @@
 class Provider::Admin::DashboardsController < FrontendController
   before_action :ensure_provider_domain
-  after_action :unset_sample_data
 
   activate_menu :dashboard
   layout 'provider'
@@ -19,16 +18,8 @@ class Provider::Admin::DashboardsController < FrontendController
     @unread_messages_presenter = unread_messages_presenter
   end
 
-  protected
-
   include DashboardTimeRange
   helper_method :current_range, :previous_range
-
-  def unset_sample_data
-    if current_account.sample_data?
-      current_account.update_attribute(:sample_data, false)
-    end
-  end
 
   private
 
