@@ -72,4 +72,21 @@ class Buyers::ApplicationsHelperTest < ActionView::TestCase
       assert_equal expected_date, remaining_trial_days(cinstance)
     end
   end
+
+  test 'service_plans_grouped_collection_with_app_plans' do
+    provider = FactoryGirl.create(:simple_provider)
+    services = FactoryGirl.create_list(:simple_service, 2, account: provider)
+    services.each do |service|
+      FactoryGirl.create_list(:application_plan, 2, service: service)
+      FactoryGirl.create_list(:service_plan, 2, service: service)
+    end
+
+    results = service_plans_grouped_collection_with_app_plans(provider.application_plans)
+    assert_equal provider.application_plans.count, results.size
+    results.each do |plan_name, service_plans|
+      assert_includes provider.application_plans.pluck(:name), plan_name
+      expected_service_plans = ApplicationPlan.find_by(name: plan_name).service.service_plans.pluck(:name, :id)
+      assert_same_elements expected_service_plans, service_plans
+    end
+  end
 end

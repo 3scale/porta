@@ -39,7 +39,7 @@ module Buyers::ApplicationsHelper
 
   def service_plans_grouped_collection_with_app_plans(app_plans)
     app_plans.includes(:service).each_with_object({}) do |app_plan, service_plans|
-      service_plans[app_plan.name] = app_plan.service.service_plans.map { |service_plan| [service_plan.name, service_plan.id] }
+      service_plans[app_plan.name] = app_plan.service.service_plans.pluck(:name, :id)
     end
   end
 
