@@ -4,6 +4,30 @@ require 'test_helper'
 
 class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
 
+  class MasterAccount < ActionDispatch::IntegrationTest
+
+    def setup
+      host! master_account.admin_domain
+    end
+
+    def test_find
+      account = FactoryGirl.create(:simple_provider, provider: master_account)
+      service = FactoryGirl.create(:simple_service, account: account)
+      service.service_tokens.create!(value: 'token')
+
+      get find_admin_api_accounts_path(format: :xml, provider_key: master_account.api_key, buyer_service_token: 'token')
+      assert_response :success
+      get find_admin_api_accounts_path(format: :xml, provider_key: master_account.api_key, buyer_service_token: '123')
+      assert_response :not_found
+
+      provider_key = master_account.buyer_accounts.first.provider_key
+      get find_admin_api_accounts_path(format: :xml, provider_key: master_account.api_key, buyer_provider_key: "#{provider_key}-123")
+      assert_response :not_found
+      get find_admin_api_accounts_path(format: :xml, provider_key: master_account.api_key, buyer_provider_key: provider_key)
+      assert_response :success
+    end
+  end
+
   disable_transactional_fixtures!
 
   def setup
@@ -14,6 +38,29 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     @account = FactoryGirl.create(:buyer_account, provider_account: @provider)
     @account.settings.update_column(:monthly_billing_enabled, false)
     Logic::RollingUpdates.stubs(:enabled?).returns(true)
+  end
+
+  def test_find
+    account = FactoryGirl.create(:simple_provider, provider: @provider)
+    service = FactoryGirl.create(:simple_service, account: account)
+    service.service_tokens.create!(value: 'token')
+
+    get find_admin_api_accounts_path(format: :xml, provider_key: @provider.api_key, buyer_service_token: 'token')
+    assert_response :not_found
+
+    provider_key = master_account.buyer_accounts.first.provider_key
+    get find_admin_api_accounts_path(format: :xml, provider_key: @provider.api_key, buyer_provider_key: provider_key)
+    assert_response :not_found
+
+    buyer_user = @provider.buyer_users.last
+    get find_admin_api_accounts_path(format: :xml, provider_key: @provider.api_key, username: buyer_user.username)
+    assert_response :success
+
+    get find_admin_api_accounts_path(format: :xml, provider_key: @provider.api_key, user_id: buyer_user.id)
+    assert_response :success
+
+    get find_admin_api_accounts_path(format: :xml, provider_key: @provider.api_key, email: buyer_user.email)
+    assert_response :success
   end
 
   def test_show
