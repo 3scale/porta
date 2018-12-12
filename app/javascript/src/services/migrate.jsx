@@ -1,7 +1,7 @@
 import 'core-js/fn/array/includes'
 import 'core-js/fn/array/find'
 
-import { setState } from '../utilities/toggle'
+import { setState } from 'utilities/toggle'
 
 const store = window.localStorage
 const key = 'cms-toggle-ids'

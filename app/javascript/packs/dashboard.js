@@ -1,7 +1,7 @@
-import { widget as dashboardWidget } from '../src/Dashboard/index'
-import { initialize as toggleWidget } from '../src/Dashboard/toggle'
-import { render as renderChartWidget } from '../src/Dashboard/chart'
-import { ApiFilterWrapper } from '../src/Dashboard/components/ApiFilter'
+import { widget as dashboardWidget } from 'Dashboard/index'
+import { initialize as toggleWidget } from 'Dashboard/toggle'
+import { render as renderChartWidget } from 'Dashboard/chart'
+import { ApiFilterWrapper } from 'Dashboard/components/ApiFilter'
 
 document.addEventListener('DOMContentLoaded', () => {
   window.dashboardWidget = dashboardWidget

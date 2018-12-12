@@ -1,10 +1,10 @@
 // @flow
 
-import type { ChainPolicy } from '../types/Policies'
-import type { UpdatePolicyConfigAction } from '../actions/PolicyConfig'
+import type { ChainPolicy } from 'Policies/types/Policies'
+import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
-import { initialState } from './initialState'
-import { updateObject, createReducer } from './util'
+import { initialState } from 'Policies/reducers/initialState'
+import { updateObject, createReducer } from 'Policies/reducers/util'
 
 function updatePolicyConfig (state: ChainPolicy, action: UpdatePolicyConfigAction): ChainPolicy {
   return updateObject(state, action.policyConfig)

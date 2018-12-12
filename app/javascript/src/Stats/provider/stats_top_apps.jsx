@@ -2,16 +2,16 @@
 import 'core-js/fn/array/find'
 import moment from 'moment'
 
-import {StatsUI} from '../lib/ui'
-import {StatsChart} from '../lib/chart'
-import {StatsTopAppsSourceCollector} from '../lib/top_apps_source_collector'
-import {StatsSourceCollectorChartManager} from '../lib/source_collector_chart_manager'
-import {StatsSeries} from '../lib/series'
-import {StatsMetrics} from '../lib/metrics_list'
-import {StatsCSVLink} from '../lib/csv_link'
-import {StatsApplicationsTable} from '../lib/applications_table'
-import {applicationDetails} from '../lib/application_details'
-import {Stats} from '../lib/stats'
+import {StatsUI} from 'Stats/lib/ui'
+import {StatsChart} from 'Stats/lib/chart'
+import {StatsTopAppsSourceCollector} from 'Stats/lib/top_apps_source_collector'
+import {StatsSourceCollectorChartManager} from 'Stats/lib/source_collector_chart_manager'
+import {StatsSeries} from 'Stats/lib/series'
+import {StatsMetrics} from 'Stats/lib/metrics_list'
+import {StatsCSVLink} from 'Stats/lib/csv_link'
+import {StatsApplicationsTable} from 'Stats/lib/applications_table'
+import {applicationDetails} from 'Stats/lib/application_details'
+import {Stats} from 'Stats/lib/stats'
 
 export class StatsTopAppsMetrics extends StatsMetrics {
   getSelectedMetrics (selectedMetricName) {

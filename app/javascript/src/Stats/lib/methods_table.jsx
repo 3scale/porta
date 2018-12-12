@@ -3,7 +3,7 @@ import numeral from 'numeral'
 import moment from 'moment'
 import 'moment-timezone'
 
-import {StatsUI} from './ui'
+import {StatsUI} from 'Stats/lib/ui'
 
 const TIMESTAMP_FORMAT = 'DD MMM YYYY HH:mm:ss zz'
 

@@ -1,16 +1,16 @@
 // @flow
 
-import type { Dispatch, ThunkAction } from '../types/index'
+import type { Dispatch, ThunkAction } from 'types/index'
 import type {
   RawRegistry,
   RegistryPolicy,
   ChainPolicy,
   StoredChainPolicy
-} from '../types/Policies'
-import type { UIComponent } from '../actions/UISettings'
+} from 'types/Policies'
+import type { UIComponent } from 'Policies/actions/UISettings'
 
-import { uiComponentTransition } from '../actions/UISettings'
-import { fetchRegistry, loadRegistrySuccess } from '../actions/PolicyRegistry'
+import { uiComponentTransition } from 'Policies/actions/UISettings'
+import { fetchRegistry, loadRegistrySuccess } from 'Policies/actions/PolicyRegistry'
 
 import {
   addPolicyToChain,
@@ -19,9 +19,9 @@ import {
   updatePolicyInChain,
   fetchChain,
   loadChain
-} from '../actions/PolicyChain'
+} from 'Policies/actions/PolicyChain'
 
-import { updatePolicyConfig } from '../actions/PolicyConfig'
+import { updatePolicyConfig } from 'Policies/actions/PolicyConfig'
 
 const chainComponent: UIComponent = 'chain'
 const registryComponent: UIComponent = 'registry'

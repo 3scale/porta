@@ -3,7 +3,7 @@ import 'core-js/modules/es6.map' // make Maps work on IE 11
 import moment from 'moment'
 import 'moment-range'
 
-import {StatsMetricsSource} from './metrics_source'
+import {StatsMetricsSource} from 'Stats/lib/metrics_source'
 
 export class StatsAverageMetricsSource extends StatsMetricsSource {
   get url () {

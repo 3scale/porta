@@ -1,13 +1,13 @@
 import 'core-js/fn/object/assign' // make Object.assign on IE 11
 import $ from 'jquery'
 
-import {StatsChart} from '../lib/chart'
-import {StatsChartManager} from '../lib/chart_manager'
-import {StatsState, PeriodRangeDate} from '../lib/state'
-import {StatsStore} from '../lib/store'
-import {StatsMetricsSource} from '../lib/metrics_source'
-import {StatsSeries} from '../lib/series'
-import {StatsMenu} from '../lib/menu'
+import {StatsChart} from 'Stats/lib/chart'
+import {StatsChartManager} from 'Stats/lib/chart_manager'
+import {StatsState, PeriodRangeDate} from 'Stats/lib/state'
+import {StatsStore} from 'Stats/lib/store'
+import {StatsMetricsSource} from 'Stats/lib/metrics_source'
+import {StatsSeries} from 'Stats/lib/series'
+import {StatsMenu} from 'Stats/lib/menu'
 
 const OPTIONS = {
   metrics: [

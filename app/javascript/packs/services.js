@@ -1,4 +1,4 @@
-import { initialize as serviceInitialize } from '../src/services/index'
+import { initialize as serviceInitialize } from 'services/index'
 
 document.addEventListener('DOMContentLoaded', () => {
   window.serviceInitialize = serviceInitialize

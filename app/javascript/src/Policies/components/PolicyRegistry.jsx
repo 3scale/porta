@@ -2,9 +2,9 @@
 
 import React from 'react'
 
-import type { RegistryPolicy } from '../types/Policies'
-import type { ThunkAction } from '../types/index'
-import { isNotApicastPolicy } from './util'
+import type { RegistryPolicy } from 'Policies/types/Policies'
+import type { ThunkAction } from 'Policies/types/index'
+import { isNotApicastPolicy } from 'Policies/components/util'
 
 type Props = {
   visible: boolean,

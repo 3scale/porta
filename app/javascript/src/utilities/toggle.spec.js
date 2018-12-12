@@ -1,4 +1,4 @@
-import { toggle, toggleState, recoverState, moveState } from './toggle'
+import { toggle, toggleState, recoverState, moveState } from 'utilities/toggle'
 
 describe('Toggle', () => {
   let icon, article
