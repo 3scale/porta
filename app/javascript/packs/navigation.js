@@ -2,7 +2,12 @@ import { toggleNavigation, hideAllToggleable } from '../src/Navigation/utils/tog
 import { ContextSelectorWrapper } from '../src/Navigation/components/ContextSelector'
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.ContextSelector = ContextSelectorWrapper
+  const apiSelector = 'api_selector'
+  const apiSelectorNode = document.getElementById(apiSelector)
+  const apiSelectorData = JSON.parse(apiSelectorNode.dataset.api)
+
+  ContextSelectorWrapper({...apiSelectorData}, apiSelector)
+
   let store = window.localStorage
   const togglers = document.getElementsByClassName('u-toggler')
   const vertNavTogglers = document.getElementsByClassName('vert-nav-toggle')
