@@ -37,8 +37,13 @@ class Metric < ApplicationRecord
   # depend on the database implementation. In order to ensure that behavior, use User.order(:id).first instead.
   #
   default_scope -> { order(:id) }
-  scope :top_level, lambda { where(parent_id: nil) }
+  scope :top_level, -> { where(parent_id: nil) }
   scope :order_by_unit, -> { order('unit') }
+  scope :visible_for_plan, lambda { |plan|
+    where.has do
+      not_exists PlanMetric.where.has { metric_id == BabySqueel[:metrics].id }.hidden.where(plan: plan)
+    end
+  }
 
   # Create one of the predefined, default metrics.
   #
@@ -147,11 +152,7 @@ class Metric < ApplicationRecord
   end
 
   def visible_in_plan?(plan)
-    if pm = find_plan_metric(plan)
-      pm.visible?
-    else # default is ...
-      true
-    end
+    PlanMetric.visible?(metric: self, plan: plan)
   end
 
   def toggle_limits_only_text_for_plan(plan)

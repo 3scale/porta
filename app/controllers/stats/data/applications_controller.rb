@@ -28,8 +28,8 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
 
 
   def summary
-    @metrics = @service.metrics.top_level
-    @methods = @service.method_metrics
+    @metrics = @service.metrics.top_level.visible_for_plan(plan)
+    @methods = @service.method_metrics.visible_for_plan(plan)
     respond_to do |format|
       format.html { render action: action }
       format.json { render json: metrics_with_methods }
@@ -37,6 +37,10 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
   end
 
   private
+
+  def plan
+    @plan ||= @cinstance.plan
+  end
 
   def find_service
     @service = @cinstance.service

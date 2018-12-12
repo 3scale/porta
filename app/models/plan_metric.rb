@@ -6,4 +6,11 @@ class PlanMetric < ApplicationRecord
 
   validates :plan, presence: true
   validates :metric, presence: true
+
+  scope :hidden, -> { where(visible: false) }
+
+  def self.visible?(metric:, plan:)
+    plan_metric = find_by(metric: metric, plan: plan) || PlanMetric.new(visible: true)
+    plan_metric.visible?
+  end
 end

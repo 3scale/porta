@@ -11,4 +11,24 @@ class PlanMetricTest < ActiveSupport::TestCase
     assert plan_metric.limits_only_text?
   end
 
+  test 'scope hidden' do
+    plan_metric_visible = FactoryGirl.create(:plan_metric, visible: true)
+    plan_metric_hidden = FactoryGirl.create(:plan_metric, visible: false)
+
+    hidden_plan_metrics = PlanMetric.hidden.pluck(:id)
+    assert_includes hidden_plan_metrics, plan_metric_hidden.id
+    assert_not_includes hidden_plan_metrics, plan_metric_visible.id
+  end
+
+  test 'visible?' do
+    plan = FactoryGirl.create(:application_plan)
+    metric_with_visible_plan_metric = FactoryGirl.create(:plan_metric, visible: true, plan: plan).metric
+    metric_with_hidden_plan_metric = FactoryGirl.create(:plan_metric, visible: false, plan: plan).metric
+    metric_without_plan_metric = FactoryGirl.create(:metric)
+
+    assert PlanMetric.visible?(plan: plan, metric: metric_with_visible_plan_metric)
+    assert PlanMetric.visible?(plan: plan, metric: metric_without_plan_metric)
+    refute PlanMetric.visible?(plan: plan, metric: metric_with_hidden_plan_metric)
+  end
+
 end

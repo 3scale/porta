@@ -13,6 +13,18 @@ class MetricTest < ActiveSupport::TestCase
   should_not allow_value('hellow world').for(:system_name)
   should_not allow_value('hello!').for(:system_name)
 
+  test 'scope visible_for_plan' do
+    plan = FactoryGirl.create(:application_plan)
+    metric_with_visible_plan_metric = FactoryGirl.create(:plan_metric, visible: true, plan: plan).metric
+    metric_with_hidden_plan_metric = FactoryGirl.create(:plan_metric, visible: false, plan: plan).metric
+    metric_without_plan_metric = FactoryGirl.create(:metric)
+
+    visible_metrics = Metric.visible_for_plan(plan).pluck(:id)
+    assert_includes visible_metrics, metric_with_visible_plan_metric.id
+    assert_includes visible_metrics, metric_without_plan_metric.id
+    assert_not_includes visible_metrics, metric_with_hidden_plan_metric.id
+  end
+
   def test_destroyable?
     service = FactoryGirl.create(:simple_service)
     metric  = service.metrics.hits
