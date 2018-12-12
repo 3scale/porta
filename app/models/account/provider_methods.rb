@@ -108,6 +108,7 @@ module Account::ProviderMethods
     end
 
     has_many :services, dependent: :destroy, extend: FindOrDefault
+    has_many :service_tokens, through: :services
     has_many :accessible_services, -> { accessible }, class_name: 'Service', extend: FindOrDefault
     has_many :accessible_proxies, through: :accessible_services, source: :proxy
     has_many :accessible_proxy_configs, through: :accessible_proxies, source: :proxy_configs

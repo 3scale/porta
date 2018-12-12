@@ -64,18 +64,9 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_id
   #
   def find
-    buyer_user = case
-                 when username = params[:username]
-                     buyer_users.find_by_username!(username)
-                 when user_id = params[:user_id]
-                     buyer_users.find_by_id!(user_id)
-                 else
-                     buyer_users.find_by_email!(params[:email])
-                 end
-
-    authorize! :read, buyer_user.account
-
-    respond_with(buyer_user.account)
+    buyer_account = find_buyer_account
+    authorize! :read, buyer_account
+    respond_with(buyer_account)
   end
 
   ##~ e = sapi.apis.add
@@ -257,5 +248,22 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
   def billing_params
     @billing_params ||= params.permit(:monthly_billing_enabled, :monthly_charging_enabled)
+  end
+
+  private
+
+  def find_buyer_account
+    case
+    when username = params[:username]
+      buyer_users.find_by!(username: username).account
+    when user_id = params[:user_id]
+      buyer_users.find(user_id).account
+    when current_account.master? && provider_key = params[:buyer_provider_key]
+      buyer_accounts.find_by_provider_key!(provider_key, error: ActiveRecord::RecordNotFound)
+    when current_account.master? && service_token = params[:buyer_service_token]
+      buyer_accounts.find_by_service_token!(service_token)
+    else
+      buyer_users.find_by!(email: params[:email]).account
+    end
   end
 end
