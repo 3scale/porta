@@ -3,7 +3,7 @@ import $ from 'jquery'
 import numeral from 'numeral'
 import 'core-js/fn/array/find'
 
-import {StatsUI} from './ui'
+import {StatsUI} from 'Stats/lib/ui'
 
 export class StatsMetricsSelector extends StatsUI {
   constructor ({statsState, metrics, container}) {

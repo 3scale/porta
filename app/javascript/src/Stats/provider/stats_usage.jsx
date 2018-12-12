@@ -1,12 +1,12 @@
 /** @jsx StatsUI.dom */
-import {StatsUsageChart} from '../lib/usage_chart'
-import {PeriodRangeDate} from '../lib/state'
-import {StatsUsageSourceCollector} from '../lib/usage_source_collector'
-import {StatsMetrics} from '../lib/metrics_list'
-import {StatsMethodsTable} from '../lib/methods_table'
-import {StatsCSVLink} from '../lib/csv_link'
-import {StatsUsageChartManager} from '../lib/usage_chart_manager'
-import {Stats} from '../lib/stats'
+import {StatsUsageChart} from 'Stats/lib/usage_chart'
+import {PeriodRangeDate} from 'Stats/lib/state'
+import {StatsUsageSourceCollector} from 'Stats/lib/usage_source_collector'
+import {StatsMetrics} from 'Stats/lib/metrics_list'
+import {StatsMethodsTable} from 'Stats/lib/methods_table'
+import {StatsCSVLink} from 'Stats/lib/csv_link'
+import {StatsUsageChartManager} from 'Stats/lib/usage_chart_manager'
+import {Stats} from 'Stats/lib/stats'
 
 const DEFAULT_METRIC = 'hits'
 

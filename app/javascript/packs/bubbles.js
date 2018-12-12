@@ -1,5 +1,5 @@
-import { show as showBubble } from '../src/Onboarding/Bubble'
-import { Bubble } from '../src/Onboarding/Bubble'
+import { show as showBubble } from 'Onboarding/Bubble'
+import { Bubble } from 'Onboarding/Bubble'
 
 document.addEventListener('DOMContentLoaded', () => {
   window.Bubble = Bubble

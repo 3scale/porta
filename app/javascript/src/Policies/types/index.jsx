@@ -1,6 +1,6 @@
 // @flow
 
-import type { State } from './State'
+import type { State } from 'Policies/types/State'
 import type {
   AddPolicyToChainAction,
   RemovePolicyFromChainAction,
@@ -11,14 +11,14 @@ import type {
   LoadChainSuccessAction,
   LoadChainErrorAction,
   UpdatePolicyChainAction
-} from '../actions/PolicyChain'
-import type { UIComponentTransitionAction } from '../actions/UISettings'
+} from 'Policies/actions/PolicyChain'
+import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 import type {
   FetchRegistrySuccessAction,
   FetchRegistryErrorAction,
   LoadRegistrySuccessAction
-} from '../actions/PolicyRegistry'
-import type { UpdatePolicyConfigAction } from '../actions/PolicyConfig'
+} from 'Policies/actions/PolicyRegistry'
+import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
 type PolicyChainAction = AddPolicyToChainAction | SortPolicyChainAction
   | LoadChainSuccessAction | LoadChainErrorAction | UpdatePolicyChainAction

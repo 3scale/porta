@@ -1,7 +1,7 @@
 // @flow
 
-import type { State, StateSlice, UIState } from '../types/State'
-import type { Action, FetchErrorAction } from '../types/index'
+import type { State, StateSlice, UIState } from 'Policies/types/State'
+import type { Action, FetchErrorAction } from 'Policies/types/index'
 
 function updateObject (oldObject: Object, newValues: Object): Object {
   return {...oldObject, ...newValues}

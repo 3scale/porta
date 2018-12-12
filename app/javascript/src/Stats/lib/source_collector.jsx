@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import 'core-js/fn/array/find'
 
-import {StatsMetrics} from './metrics_list'
+import {StatsMetrics} from 'Stats/lib/metrics_list'
 
 export class StatsSourceCollector {
   constructor ({id, metrics}) {

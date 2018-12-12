@@ -1,7 +1,7 @@
 import 'core-js/fn/object/assign' // make Object.assign on IE 11
-import * as helpers from './stats_helpers'
-import {StatsSourceCollector} from './source_collector'
-import {StatsTopApplicationMetricsSource} from './top_application_metrics_source'
+import * as helpers from 'Stats/lib/stats_helpers'
+import {StatsSourceCollector} from 'Stats/lib/source_collector'
+import {StatsTopApplicationMetricsSource} from 'Stats/lib/top_application_metrics_source'
 
 export class StatsTopAppsSourceCollector extends StatsSourceCollector {
   static get Source () {

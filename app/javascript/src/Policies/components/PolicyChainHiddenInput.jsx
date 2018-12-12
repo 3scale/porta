@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import type { ChainPolicy } from '../types/Policies'
+import type { ChainPolicy } from 'Policies/types/Policies'
 
 const filteredPolicyKeys = ['configuration', 'name', 'version', 'enabled']
 

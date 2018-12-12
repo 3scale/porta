@@ -1,5 +1,5 @@
-import toggle from '../utilities/toggle'
-import migrate from '../services/migrate'
+import toggle from 'utilities/toggle'
+import migrate from 'services/migrate'
 
 export function initialize () {
   migrate()

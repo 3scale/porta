@@ -1,10 +1,10 @@
 // @flow
 
-import type { RegistryPolicy, ChainPolicy, StoredChainPolicy } from '../types/Policies'
-import type { Dispatch, GetState, PolicyChainMiddlewareAction } from '../types/index'
+import type { RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types/Policies'
+import type { Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/types/index'
 
-import { generateGuid } from '../reducers/util'
-import { loadChainSuccess, loadChainError, updatePolicyChain } from '../actions/PolicyChain'
+import { generateGuid } from 'Policies/reducers/util'
+import { loadChainSuccess, loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
 
 function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: StoredChainPolicy): RegistryPolicy | typeof undefined {
   return registry.find(policy => (policy.name === storedPolicy.name && policy.version === storedPolicy.version))

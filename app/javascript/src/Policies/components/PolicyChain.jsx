@@ -8,9 +8,9 @@ import {
   arrayMove
 } from 'react-sortable-hoc'
 
-import type { ThunkAction } from '../types/index'
-import type { ChainPolicy } from '../types/Policies'
-import type { SortPolicyChainAction } from '../actions/PolicyChain'
+import type { ThunkAction } from 'Policies/types/index'
+import type { ChainPolicy } from 'Policies/types/Policies'
+import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
 
 type Props = {
   visible: boolean,

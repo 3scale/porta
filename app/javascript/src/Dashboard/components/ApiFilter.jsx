@@ -8,7 +8,7 @@ import 'core-js/es6/array'
 import React from 'react'
 import { render } from 'react-dom'
 
-import '../styles/dashboard.scss'
+import 'Dashboard/styles/dashboard.scss'
 
 const ApiFilter = ({ apis, displayApis }) => {
   const onInputChange = event => {

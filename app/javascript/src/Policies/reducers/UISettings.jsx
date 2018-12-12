@@ -1,10 +1,10 @@
 // @flow
 
-import { initialState } from './initialState'
-import { createReducer, updateError, updateObject } from './util'
+import { initialState } from 'Policies/reducers/initialState'
+import { createReducer, updateError, updateObject } from 'Policies/reducers/util'
 
-import type { State } from '../types/State'
-import type { UIComponentTransitionAction } from '../actions/UISettings'
+import type { State } from 'Policies/types/State'
+import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 
 function updateComponentTransition (state: State, action: UIComponentTransitionAction): State {
   return updateObject(state, {[action.hide]: false, [action.show]: true})

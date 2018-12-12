@@ -1,9 +1,9 @@
 import 'core-js/fn/object/assign' // make Object.assign on IE 11
-import {StatsStore} from './store'
-import {StatsState, PeriodRangeDate} from './state'
-import {StatsMenu} from './menu'
-import {StatsMetricsSelector} from './metrics_selector'
-import {StatsApplicationsSelector} from './applications_selector'
+import {StatsStore} from 'Stats/lib/store'
+import {StatsState, PeriodRangeDate} from 'Stats/lib/state'
+import {StatsMenu} from 'Stats/lib/menu'
+import {StatsMetricsSelector} from 'Stats/lib/metrics_selector'
+import {StatsApplicationsSelector} from 'Stats/lib/applications_selector'
 
 export const Stats = function ({ChartManager, Chart, Sources}) {
   const DEFAULT_PERIODS = [

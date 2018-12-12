@@ -3,11 +3,11 @@
 import React from 'react'
 import Form from 'react-jsonschema-form'
 
-import type { ThunkAction } from '../types/index'
-import type { ChainPolicy } from '../types/Policies'
-import type { UpdatePolicyConfigAction } from '../actions/PolicyConfig'
+import type { ThunkAction } from 'Policies/types/index'
+import type { ChainPolicy } from 'Policies/types/Policies'
+import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
-import { isNotApicastPolicy } from './util'
+import { isNotApicastPolicy } from 'Policies/components/util'
 
 type Props = {
   visible: boolean,

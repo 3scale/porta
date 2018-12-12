@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsSource} from './source'
+import {StatsSource} from 'Stats/lib/source'
 
 export class StatsMetricsSource extends StatsSource {
   constructor ({id, details = {}}) {
