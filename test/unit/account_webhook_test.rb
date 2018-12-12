@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AccountTest < ActionDispatch::IntegrationTest
+class AccountWebhookTest < ActiveSupport::TestCase
 
   test 'account is created with the default application plan instead of with the first one' do
     master_service = master_account.services.first
@@ -30,10 +30,6 @@ class AccountTest < ActionDispatch::IntegrationTest
 
       @user = @account.admins.first
 
-      User.current = nil
-    end
-
-    def teardown
       User.current = nil
     end
 
