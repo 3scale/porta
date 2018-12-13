@@ -6,7 +6,7 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
   end
 
   def test_create
-    application = FactoryGirl.build_stubbed(:simple_cinstance)
+    application = FactoryGirl.build_stubbed(:simple_cinstance, tenant_id: 1)
     event = Applications::ApplicationCreatedEvent.new(application: application)
 
     assert @subscriber.call(event)
