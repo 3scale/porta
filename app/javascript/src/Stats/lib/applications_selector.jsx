@@ -22,9 +22,9 @@ export class StatsApplicationsSelector extends StatsUI {
     let groupTemplate = this._groupTemplate(serviceNames, applicationGroups, selectedApplicationId)
 
     return (
-    <select onchange={this.selectApplication} value={selectedApplicationId} className="StatsApplicationSelector">
-      {groupTemplate}
-    </select>
+      <select onchange={this.selectApplication} value={selectedApplicationId} className="StatsApplicationSelector">
+        {groupTemplate}
+      </select>
     )
   }
 
@@ -49,7 +49,7 @@ export class StatsApplicationsSelector extends StatsUI {
             applicationGroups[serviceName].map(application =>
               [
                 <option value={application.id}
-                        selected={selectedApplicationId === application.id}
+                  selected={selectedApplicationId === application.id}
                 >{application.name}</option>
               ]
             )

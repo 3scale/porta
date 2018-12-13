@@ -50,24 +50,24 @@ const PolicyList = ({registry, chain, policyConfig, ui, boundActionCreators}) =>
   }
 
   return (
-      <div className="PoliciesWidget">
-        <PolicyChain
-          chain={chain}
-          visible={ui.chain}
-          actions={chainActions}
-          />
-        <PolicyRegistry
-          items={registry}
-          visible={ui.registry}
-          actions={policyRegistryActions}
-        />
-        <PolicyConfig
-          visible={ui.policyConfig}
-          policy={policyConfig}
-          actions={policyConfigActions}
-           />
-        <PolicyChainHiddenInput policies={chain} />
-      </div>
+    <div className="PoliciesWidget">
+      <PolicyChain
+        chain={chain}
+        visible={ui.chain}
+        actions={chainActions}
+      />
+      <PolicyRegistry
+        items={registry}
+        visible={ui.registry}
+        actions={policyRegistryActions}
+      />
+      <PolicyConfig
+        visible={ui.policyConfig}
+        policy={policyConfig}
+        actions={policyConfigActions}
+      />
+      <PolicyChainHiddenInput policies={chain} />
+    </div>
   )
 }
 

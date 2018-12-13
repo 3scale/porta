@@ -27,7 +27,6 @@ class StatsResponseCodeSeries extends StatsSeries {
   _totalValues (responses) {
     return responses.map((response) => response.total).reduce((previous, current) => previous + current, 0)
   }
-
 }
 
 class StatsResponseCodeChartManager extends StatsChartManager {
