@@ -20,34 +20,34 @@ export class StatsMethodsTable extends StatsUI {
     return (
       <table id='methods_table' className={`data StatsMethodsTable ${chartTable._tableVisibility()}`}>
         <thead>
-        <tr>
-          <th>Method</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Traffic</th>
-        </tr>
+          <tr>
+            <th>Method</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Traffic</th>
+          </tr>
         </thead>
         <tbody>
-        {
-          methodsDetails.map(methodDetails =>
-            [
-              <tr>
-                <td className={`StatsMethodsTable-name ${this._isMetricHits(methodDetails) ? '' : 'is-children'}`}>
-                  {methodDetails.name}
-                </td>
-                <td className="StatsMethodsTable-since">
-                  {moment(methodDetails.period.since).utc().tz(methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
-                </td>
-                <td className="StatsMethodsTable-until">
-                  {moment(methodDetails.period.until).utc().tz(methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
-                </td>
-                <td className="StatsMethodsTable-total u-amount u-tabular-number">
-                  {numeral(methodDetails.total).format('0,0').toUpperCase()}
-                </td>
-              </tr>
-            ]
-          )
-        }
+          {
+            methodsDetails.map(methodDetails =>
+              [
+                <tr>
+                  <td className={`StatsMethodsTable-name ${this._isMetricHits(methodDetails) ? '' : 'is-children'}`}>
+                    {methodDetails.name}
+                  </td>
+                  <td className="StatsMethodsTable-since">
+                    {moment(methodDetails.period.since).utc().tz(methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
+                  </td>
+                  <td className="StatsMethodsTable-until">
+                    {moment(methodDetails.period.until).utc().tz(methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
+                  </td>
+                  <td className="StatsMethodsTable-total u-amount u-tabular-number">
+                    {numeral(methodDetails.total).format('0,0').toUpperCase()}
+                  </td>
+                </tr>
+              ]
+            )
+          }
         </tbody>
       </table>
 

@@ -3,7 +3,6 @@ import $ from 'jquery'
 import moment from 'moment'
 
 export class StatsState {
-
   constructor (store, state) {
     this.store = store
     this.State = state
