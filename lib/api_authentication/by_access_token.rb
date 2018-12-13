@@ -167,7 +167,6 @@ module ApiAuthentication
 
         connection.transaction(requires_new: true, &Proc.new)
       rescue ActiveRecord::StatementInvalid => error
-        System::ErrorReporting.report_error(error)
         case error.message
         when /Cannot execute statement in a READ ONLY transaction/,
              %r{may not perform insert/delete/update operation inside a READ ONLY transaction},
