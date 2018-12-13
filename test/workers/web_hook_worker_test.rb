@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class WebHookWorkerTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   setup do
     User.current = nil
@@ -18,15 +17,39 @@ class WebHookWorkerTest < ActiveSupport::TestCase
     assert_same_elements [SocketError, RestClient::Exception, Errno::ECONNREFUSED, Errno::ECONNRESET],  WebHookWorker::HANDLED_ERRORS
   end
 
-  test 'webhook job performs work' do
-    webhook = Factory(:webhook, :account_created_on => true, :user_created_on => true)
-    Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
-    User.current = webhook.account.users.first
+  class TransactionalTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+    
+    setup do
+      User.current = nil
+      @worker = WebHookWorker.new
+    end
 
-    jobs = WebHookWorker.jobs
-    assert jobs.empty?
-    Factory(:buyer_account, :provider_account => webhook.account)
-    assert_equal 2, jobs.size
+    teardown do
+      User.current = nil
+    end
+
+    test 'webhook job performs work' do
+      web_hook = Factory(:webhook, :account_created_on => true, :user_created_on => true)
+      Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
+      User.current = web_hook.account.users.first
+
+      assert_difference WebHookWorker.jobs.method(:size), +2 do
+        Factory(:buyer_account, :provider_account => web_hook.account)
+      end
+    end
+  end
+
+  test 'does not enqueue if inside a transaction' do
+    web_hook = Factory(:webhook, :account_created_on => true, :user_created_on => true)
+    Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
+    User.current = web_hook.account.users.first
+
+    Account.transaction do
+      assert_no_difference WebHookWorker.jobs.method(:size) do
+        Factory(:buyer_account, :provider_account => web_hook.account)
+      end
+    end
   end
 
   test 'be retried' do

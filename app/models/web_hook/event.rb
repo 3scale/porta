@@ -44,12 +44,10 @@ class WebHook
     end
 
     def enqueue
-      if connection.try!(:transaction_open?) && !connection.current_transaction.state.finalized?
-        logger.info "Will enqueue WebHook::Event(#{id}) #{event} after commit for #{model}##{resource.id}"
-        connection.add_transaction_record(self)
-      else
-        committed!
-      end
+      logger.info "Will enqueue WebHook::Event(#{id}) #{event} after commit for #{model}##{resource.id}"
+      # Only modify the singleton_class of the instance and not the class
+      # This way we are not modifying the _commit_callbacks queue of the resource.class but only the resource Eigenclass
+      resource.singleton_class.after_commit &method(:committed!)
     end
 
     def committed!(*)
