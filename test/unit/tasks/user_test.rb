@@ -10,10 +10,12 @@ class Tasks::UserTest < ActiveSupport::TestCase
       FactoryGirl.create(:admin, username: '3scaleadmin', account: provider)
       FactoryGirl.create_list(:admin, 2, account: provider)
     end
+
+    FactoryGirl.create(:admin, account: FactoryGirl.create(:simple_buyer, provider_account: providers.first))
   end
 
   test 'update_all_first_admin_id' do
     execute_rake_task 'user.rake', 'user:update_all_first_admin_id'
-    Account.providers.each { |account| assert_equal account.first_admin&.id, account.first_admin_id }
+    Account.find_each { |account| assert_equal account.first_admin&.id, account.first_admin_id }
   end
 end
