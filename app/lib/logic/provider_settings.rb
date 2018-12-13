@@ -34,7 +34,8 @@ module Logic
     end
 
     def multiple_accessible_services?(scope = nil)
-      accessible_services.merge(scope).size > 1
+      multiple_accessible_services = scope ? accessible_services.merge(scope) : accessible_services
+      multiple_accessible_services.size > 1
     end
 
     def reload(*)
