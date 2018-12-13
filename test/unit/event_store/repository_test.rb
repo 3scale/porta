@@ -104,7 +104,7 @@ class EventStore::RepositoryTest < ActiveSupport::TestCase
     # it should notify bugsnag
     Bugsnag.expects(:notify).once
 
-    repository.publish_event(invalid_dummie_event)
+    refute repository.publish_event(invalid_dummie_event)
   end
 
   def test_handle_valid_event
@@ -116,7 +116,7 @@ class EventStore::RepositoryTest < ActiveSupport::TestCase
     # event is valid, callbacks should be called
     subscriber.expects(:call).once
 
-    repository.publish_event(dummie_event)
+    assert repository.publish_event(dummie_event)
   end
 
   private

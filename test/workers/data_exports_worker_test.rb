@@ -18,14 +18,18 @@ class DataExportsWorkerTest < ActiveSupport::TestCase
   def test_perform
     new_notification_permissions(false)
 
-    Reports::CsvDataExportEvent.expects(:create).never
-    assert @worker.perform(@provider.id, @provider.first_admin.id, 'users', 'week')
-    assert ActionMailer::Base.deliveries.last
+    assert_no_difference(EventStore::Event.where(event_type: 'Reports::CsvDataExportEvent').method(:count)) do
+      assert @worker.perform(@provider.id, @provider.first_admin.id, 'users', 'week')
+      assert ActionMailer::Base.deliveries.last
+    end
+
+
 
     new_notification_permissions(true)
 
-    Reports::CsvDataExportEvent.expects(:create).once
-    assert @worker.perform(@provider.id, @provider.first_admin.id, 'users', 'week')
+    assert_difference(EventStore::Event.where(event_type: 'Reports::CsvDataExportEvent').method(:count)) do
+      assert @worker.perform(@provider.id, @provider.first_admin.id, 'users', 'week')
+    end
   end
 
   def test_email
