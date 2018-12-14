@@ -1,7 +1,7 @@
 module MetricRepresenter
   include ThreeScale::JSONRepresenter
 
-  wraps_resource
+  wraps_resource :metric
 
   property :id
   property :name
@@ -13,6 +13,10 @@ module MetricRepresenter
 
   property :created_at
   property :updated_at
+
+  with_options(if: ->(*) { respond_to?(:visible) }) do
+    property :visible
+  end
 
   link :service do
     admin_api_service_url(service_id) if service_id

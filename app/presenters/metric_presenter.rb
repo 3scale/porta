@@ -6,7 +6,7 @@ class MetricPresenter
     @visible = visible
   end
 
-  DELEGATED_METHODS = Metric.attribute_names.map(&:to_sym) | %i[errors]
+  DELEGATED_METHODS = Metric.attribute_names.map(&:to_sym) | %i[name errors]
   delegate(*DELEGATED_METHODS, to: :metric)
 
   attr_reader :visible
