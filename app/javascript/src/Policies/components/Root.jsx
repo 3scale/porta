@@ -9,9 +9,9 @@ export default function Root (props) {
   const { store } = props
 
   return (
-      <Provider store={store}>
-        <App store={store} />
-      </Provider>
+    <Provider store={store}>
+      <App store={store} />
+    </Provider>
   )
 }
 
