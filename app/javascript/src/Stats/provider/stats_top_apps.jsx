@@ -19,7 +19,6 @@ export class StatsTopAppsMetrics extends StatsMetrics {
       return [list.metrics.find(metric => metric.systemName === selectedMetricName)]
     })
   }
-
 }
 
 export class StatsTopAppsSeries extends StatsSeries {
@@ -69,7 +68,6 @@ class StatsTopAppsHelpText extends StatsUI {
   _bindEvents () {
 
   }
-
 }
 
 class StatsTopAppsChart extends StatsChart {

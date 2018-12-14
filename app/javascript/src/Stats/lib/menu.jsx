@@ -10,7 +10,6 @@ import {StatsUI} from 'Stats/lib/ui'
 import {CustomRangeDate, PeriodRangeDate} from 'Stats/lib/state'
 
 class Hook {
-
   constructor (options) {
     this.options = options
   }
@@ -28,7 +27,6 @@ class Hook {
   open () {
     this.datepicker.datepicker('show')
   }
-
 }
 
 export class StatsMenu extends StatsUI {
@@ -75,9 +73,9 @@ export class StatsMenu extends StatsUI {
             <li className='StatsMenu-periodItem'>
               <a className={`StatsMenu-Link StatsMenu-periodLink period-${period.number}-${period.unit}
                                   ${JSON.stringify(period) === JSON.stringify(statsState.state.dateRange.period)
-                                    ? 'is-selected' : ''}`}
-                 attributes={{'data-number': period.number, 'data-unit': period.unit}}
-                 onclick={ ev => statsState.setState({dateRange: new PeriodRangeDate(period)})}>
+        ? 'is-selected' : ''}`}
+              attributes={{'data-number': period.number, 'data-unit': period.unit}}
+              onclick={ ev => statsState.setState({dateRange: new PeriodRangeDate(period)})}>
                 {`${period.number} ${pluralize.plural(period.unit)}`}
               </a>
             </li>
@@ -88,16 +86,16 @@ export class StatsMenu extends StatsUI {
             {' from '}
             <input className='StatsMenu-customInput' sinceDateHook={sinceDateHook} type='text'></input>
             <a className='StatsMenu-Link StatsMenu-customLink StatsMenu-customLink--since'
-               onclick={ev => sinceDateHook.open()}>{helpers.humanDateFormat(statsState.state.dateRange.since)}</a>
+              onclick={ev => sinceDateHook.open()}>{helpers.humanDateFormat(statsState.state.dateRange.since)}</a>
           </span>
           <span>
             {' until '}
             <input className='StatsMenu-customInput' untilDateHook={untilDateHook} type='text'></input>
             <a className='StatsMenu-Link StatsMenu-customLink StatsMenu-customLink--until'
-               onclick={ev => untilDateHook.open()}>{helpers.humanDateFormat(statsState.state.dateRange.until)}</a>
+              onclick={ev => untilDateHook.open()}>{helpers.humanDateFormat(statsState.state.dateRange.until)}</a>
           </span>
           <span>
-          {' per '}
+            {' per '}
             <a
               className='StatsMenu-Link'
               style={{display: this.show_granularity ? 'none' : 'inline-block'}}
@@ -115,7 +113,7 @@ export class StatsMenu extends StatsUI {
               }}>
               {this.graularities.map(granularity =>
                 <option value={granularity}
-                        attributes={statsState.state.dateRange.granularity === granularity ? { selected: true } : {}}>
+                  attributes={statsState.state.dateRange.granularity === granularity ? { selected: true } : {}}>
                   {granularity}
                 </option>
               )}
@@ -126,5 +124,4 @@ export class StatsMenu extends StatsUI {
       </div>
     )
   }
-
 }

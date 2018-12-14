@@ -41,8 +41,8 @@ export const UserRole = {
       <li>
         <label for={`user_role_${role}`}>
           <input class='roles_ids' name='user[role]' type='radio'
-                 id={`user_role_${role}`} checked={ role === context.role }
-                 value={role} onChange={ change } />{' '}{ label }</label>
+            id={`user_role_${role}`} checked={ role === context.role }
+            value={role} onChange={ change } />{' '}{ label }</label>
       </li>
     )
   }
@@ -52,7 +52,7 @@ export const Permissions = { // eslint-disable-line no-unused-vars
   render ({ props, context, children }) {
     return (
       <li class='radio optional' id='user_member_permissions_input'
-          style={{ display: context.role === props.role ? 'block' : 'none' }}>
+        style={{ display: context.role === props.role ? 'block' : 'none' }}>
         { children }
       </li>
     )
@@ -104,9 +104,9 @@ export const FeatureAccess = { // eslint-disable-line no-unused-vars
       <li class={liClass}>
         <label for={`user_member_permission_ids_${value}`}>
           <input class={inputClass} name='user[member_permission_ids][]'
-                 id={`user_member_permission_ids_${value}`} value={value}
-                 type='checkbox' checked={ checked }
-                 onChange={ toggle }
+            id={`user_member_permission_ids_${value}`} value={value}
+            type='checkbox' checked={ checked }
+            onChange={ toggle }
           />{ children }
         </label>
       </li>
@@ -138,9 +138,9 @@ export const ServiceFeatureAccess = { // eslint-disable-line no-unused-vars
       <li class={liClass}>
         <label for={`user_member_permission_ids_${value}`}>
           <input class='user_member_permission_ids' name='user[member_permission_service_ids]'
-                 id={`user_member_permission_ids_${value}`} attributes={{value: ''}}
-                 type='checkbox' checked={ checked }
-                 onChange={ change }
+            id={`user_member_permission_ids_${value}`} attributes={{value: ''}}
+            type='checkbox' checked={ checked }
+            onChange={ change }
           />{ children }
         </label>
         { blankServiceIdsInput }
@@ -202,11 +202,11 @@ export const ServiceAccess = { // eslint-disable-line no-unused-vars
     return (
       <li class='ServiceAccessList-item'>
         <label class='ServiceAccessList-label is-checked'
-               for={`user_member_permission_service_ids_${id}`}>
+          for={`user_member_permission_service_ids_${id}`}>
           <input class='user_member_permission_service_ids'
-                 id={`user_member_permission_service_ids_${id}`}
-                 name='user[member_permission_service_ids][]' type='checkbox' value={id}
-                 checked={ checked } disabled={ disabled } onChange={toggle}/>
+            id={`user_member_permission_service_ids_${id}`}
+            name='user[member_permission_service_ids][]' type='checkbox' value={id}
+            checked={ checked } disabled={ disabled } onChange={toggle}/>
           <span class='ServiceAccessList-labelText'>&nbsp;{ name }</span>
         </label>
         <ul class='ServiceAccessList-sections'>

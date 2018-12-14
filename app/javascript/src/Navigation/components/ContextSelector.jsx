@@ -13,7 +13,6 @@ import 'Navigation/styles/ContextSelector.scss'
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
 class ContextSelector extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
