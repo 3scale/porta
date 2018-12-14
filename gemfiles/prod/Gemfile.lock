@@ -106,14 +106,14 @@ GIT
     multi_fetch_fragments (0.0.17)
 
 PATH
-  remote: lib/developer_portal
+  remote: ../../lib/developer_portal
   specs:
     developer_portal (1.0.0)
       liquid (~> 3.0.5)
       railties (>= 3.2)
 
 PATH
-  remote: vendor/active-docs
+  remote: ../../vendor/active-docs
   specs:
     active-docs (1.0.0)
       railties (> 3.1)
@@ -1007,7 +1007,7 @@ DEPENDENCIES
   zip-zip
 
 RUBY VERSION
-   ruby 2.3.4p301
+   ruby 2.3.7p456
 
 BUNDLED WITH
    1.17.0
