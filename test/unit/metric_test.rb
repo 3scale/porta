@@ -209,6 +209,17 @@ class MetricTest < ActiveSupport::TestCase
       @metric = Factory(:metric, :service => @plan.service)
     end
 
+    should 'visible_in_plan? be always true unless it has a plan_metric with visible false' do
+      plan = FactoryGirl.create(:application_plan)
+      metric_with_visible_plan_metric = FactoryGirl.create(:plan_metric, visible: true, plan: plan).metric
+      metric_with_hidden_plan_metric = FactoryGirl.create(:plan_metric, visible: false, plan: plan).metric
+      metric_without_plan_metric = FactoryGirl.create(:metric)
+
+      assert metric_with_visible_plan_metric.visible_in_plan?(plan)
+      assert metric_without_plan_metric.visible_in_plan?(plan)
+      refute metric_with_hidden_plan_metric.visible_in_plan?(plan)
+    end
+
     should 'be visible by default' do
       assert @metric.visible_in_plan?(@plan)
     end

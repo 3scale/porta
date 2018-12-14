@@ -4,6 +4,7 @@ class Stats::Data::BaseController < ApplicationController
   include ApiAuthentication::ByAccessToken
   include ApiAuthentication::ByProviderKey
   include ErrorHandling::Handlers
+  include ApiSupport::PrepareResponseRepresenter
 
   self.access_token_scopes = :stats
 

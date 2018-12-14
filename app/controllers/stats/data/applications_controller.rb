@@ -32,7 +32,7 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
     @methods = @service.method_metrics
     respond_to do |format|
       format.html { render action: action }
-      format.json { render json: metrics_with_methods }
+      format.json { respond_with(metrics_with_methods, representer: ::MetricsWithMethodsRepresenter) }
     end
   end
 
@@ -67,6 +67,6 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
   end
 
   def metrics_with_methods
-    {metrics: @metrics, methods: @methods}
+    MetricsWithMethodsPresenter.new(metrics: @metrics, methods: @methods, plan: @cinstance.plan)
   end
 end
