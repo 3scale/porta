@@ -10,34 +10,32 @@ class Alerts::PublishAlertEventServiceTest < ActiveSupport::TestCase
   def test_run_alert_for_provider
     alert = FactoryGirl.create(:limit_alert)
 
-    Alerts::LimitAlertReachedProviderEvent.expects(:create).once
-
-    assert Alerts::PublishAlertEventService.run! alert
+    assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitAlertReachedProviderEvent').method(:count)) do
+      assert Alerts::PublishAlertEventService.run! alert
+    end
   end
 
   def test_run_alert_for_buyer
-    alert = FactoryGirl.create(:limit_alert, account: @account,
-                                 cinstance: @cinstance)
+    alert = FactoryGirl.create(:limit_alert, account: @account, cinstance: @cinstance)
 
-    Alerts::LimitAlertReachedBuyerEvent.expects(:create).once
-
-    assert Alerts::PublishAlertEventService.run! alert
+    assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitAlertReachedBuyerEvent').method(:count)) do
+      assert Alerts::PublishAlertEventService.run! alert
+    end
   end
 
   def test_run_violation_for_provider
     alert = FactoryGirl.create(:limit_violation)
 
-    Alerts::LimitViolationReachedProviderEvent.expects(:create).once
-
-    assert Alerts::PublishAlertEventService.run! alert
+    assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitViolationReachedProviderEvent').method(:count)) do
+      assert Alerts::PublishAlertEventService.run! alert
+    end
   end
 
   def test_run_violation_for_buyer
-    alert = FactoryGirl.create(:limit_violation, account: @account,
-                                 cinstance: @cinstance)
+    alert = FactoryGirl.create(:limit_violation, account: @account, cinstance: @cinstance)
 
-    Alerts::LimitViolationReachedBuyerEvent.expects(:create).once
-
-    assert Alerts::PublishAlertEventService.run! alert
+    assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitViolationReachedBuyerEvent').method(:count)) do
+      assert Alerts::PublishAlertEventService.run! alert
+    end
   end
 end
