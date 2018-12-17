@@ -66,6 +66,27 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_same_elements %w[account_management stats], member.allowed_access_token_scopes.values
   end
 
+  def test_validates_real_scopes
+    @token.owner = member
+    @token.scopes = %w[stats cms wrong]
+    refute @token.valid?
+    assert_equal ['invalid'], @token.errors[:scopes]
+
+    @token.owner = member
+    @token.scopes = %w[stats cms]
+    assert @token.valid?
+
+    ThreeScale.stubs(master_on_premises?: true)
+    @token.owner = member
+    @token.scopes = %w[stats cms]
+    refute @token.valid?
+    assert_equal ['invalid'], @token.errors[:scopes]
+
+    @token.owner = member
+    @token.scopes = %w[stats]
+    assert @token.valid?
+  end
+
   def test_human_scopes
     assert Array, @token.human_scopes
   end

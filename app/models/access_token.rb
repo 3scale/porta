@@ -103,6 +103,7 @@ class AccessToken < ApplicationRecord
   validates :value, uniqueness: { scope: [:owner_id] }, length: { maximum: 255 }
   validates :permission, inclusion: { in: PERMISSIONS.values }, length: { maximum: 255 }
   validates :scopes, length: { minimum: 1, maximum: 65535 }
+  validate :validate_scope_exists
 
   after_initialize :generate_value
 
@@ -130,6 +131,14 @@ class AccessToken < ApplicationRecord
 
   def scopes=(values)
     super Array(values).select(&:present?)
+  end
+
+  def validate_scope_exists
+    # We allow to create non allowed scopes for the member user specifically but we don't allow to authenticate with them.
+    # More info in https://github.com/3scale/porta/pull/430#discussion_r242879832
+    scopes_allowed_values = self.class.allowed_scopes.values
+    return true if Array(scopes).all? { |scope| scopes_allowed_values.include? scope }
+    errors.add :scopes, :invalid
   end
 
   def generate_value
