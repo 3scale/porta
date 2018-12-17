@@ -1,4 +1,4 @@
-version: 2.0
+version: 2.1
 
 #### YAML ANCHORS INSTEAD OF COMMANDS # while version 2.1 already supports commands, the local runner doesn't. When it does, we can upgrade.
 
@@ -91,6 +91,12 @@ oracle-db-container: &oracle-db-container
   command: |
     bash -c "sed -i.bak 's|2048|6144|g' /opt/oracle/dbca.rsp.tmpl && exec /opt/oracle/runOracle.sh"
 
+memcached-container: &memcached-container
+  image: memcached:1.5-alpine
+
+redis-container: &redis-container
+  image: redis:4.0-alpine
+
 clone-oracle-libs: &clone-oracle-libs
   run:
     name: "Fetch oracle libraries"
@@ -105,10 +111,31 @@ clone-oracle-libs: &clone-oracle-libs
       rm -rf vendor/oracle/*.zip
       sudo cp config/oracle/*.ini /etc/
 
-jobs:
-  dependencies_bundler:
+executors:
+  builder:
     docker:
       - *system-builder
+    working_directory: /opt/app-root/src/project
+
+  builder-with-mysql:
+    docker:
+      - *system-builder
+      - *mysql-container
+      - *memcached-container
+      - *redis-container
+    working_directory: /opt/app-root/src/project
+
+  builder-with-oracle:
+    docker:
+      - *system-builder
+      - *oracle-db-container
+      - *memcached-container
+      - *redis-container
+    working_directory: /opt/app-root/src/project
+
+jobs:
+  dependencies_bundler:
+    executor: builder
     steps:
       - checkout
       - *git-submodules
@@ -134,8 +161,7 @@ jobs:
           - ./vendor/bundle
           - ./.bundle/
   deps_bundler_oracle:
-    docker:
-      - *system-builder
+    executor: builder
     steps:
       - checkout
       - *git-submodules
@@ -165,8 +191,7 @@ jobs:
           - ./vendor/bundle
           - ./.bundle/
   dependencies_npm:
-    docker:
-      - *system-builder
+    executor: builder
     steps:
       - checkout
       - *git-submodules
@@ -187,8 +212,7 @@ jobs:
             - ./node_modules
 
   assets_precompile:
-    docker:
-      - *system-builder
+    executor: builder
     steps:
       - checkout
       - *git-submodules
@@ -208,11 +232,7 @@ jobs:
             - ./config/*.yml
 
   lint:
-    docker:
-      - *system-builder
-#      - *mysql-container
-#      - image: memcached:1.5-alpine
-#      - image: redis:4.0-alpine
+    executor: builder
     steps:
       - run:
           name: Start Xvfb
@@ -252,11 +272,7 @@ jobs:
   unit:
     parallelism: 8
     resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
       - checkout
       - *git-submodules
@@ -274,11 +290,7 @@ jobs:
   unit-oracle:
     parallelism: 6
     resource_class: large
-    docker:
-    - *system-builder
-    - *oracle-db-container
-    - image: memcached:1.5-alpine
-    - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
     - checkout
     - *git-submodules
@@ -301,11 +313,7 @@ jobs:
   functional:
     parallelism: 2
     resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
       - checkout
       - *git-submodules
@@ -323,11 +331,7 @@ jobs:
   functional-oracle:
     parallelism: 2
     resource_class: large
-    docker:
-    - *system-builder
-    - *oracle-db-container
-    - image: memcached:1.5-alpine
-    - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
     - checkout
     - *git-submodules
@@ -350,11 +354,7 @@ jobs:
   integration:
     parallelism: 8
     resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
       - checkout
       - *git-submodules
@@ -372,11 +372,7 @@ jobs:
   integration-oracle:
     parallelism: 6
     resource_class: large
-    docker:
-    - *system-builder
-    - *oracle-db-container
-    - image: memcached:1.5-alpine
-    - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
     - checkout
     - *git-submodules
@@ -400,11 +396,7 @@ jobs:
   rspec:
     parallelism: 3
     resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
       - checkout
       - *git-submodules
@@ -425,11 +417,7 @@ jobs:
   rspec-oracle:
     parallelism: 4
     resource_class: large
-    docker:
-      - *system-builder
-      - *oracle-db-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
       - checkout
       - *git-submodules
