@@ -17,7 +17,7 @@ import 'Policies/styles/policies.scss'
 const Policies = (store, element) => {
   render(
     <AppContainer>
-      <Root store={store} /* history={history} */ />
+      <Root store={store} />
     </AppContainer>,
     document.getElementById(element)
   )
@@ -27,7 +27,7 @@ const Policies = (store, element) => {
       const NewRoot = require('./components/Root').default
       render(
         <AppContainer>
-          <NewRoot store={store} /* history={history} */ />
+          <NewRoot store={store} />
         </AppContainer>,
         document.getElementById(element)
       )
