@@ -161,11 +161,13 @@ commands: # reusable commands with parameters
 
   cucumber-tests:
     steps:
+      - *disable-internet-access
       - run:
           name: Run cucumber tests
           command: |
             TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
             bundle exec cucumber --profile ci ${TESTS}
+      - *enable-internet-access
 
   rails-tests:
     steps:
@@ -432,9 +434,7 @@ jobs:
       - checkout-with-submodules
       - *attach-to-workspace
       - prepare-db-for-tests
-      - *disable-internet-access
       - cucumber-tests
-      - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
@@ -454,9 +454,7 @@ jobs:
       - *attach-to-workspace
       - clone-oracle-libraries
       - prepare-db-for-tests
-      - *disable-internet-access
       - cucumber-tests
-      - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
