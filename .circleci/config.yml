@@ -1,6 +1,6 @@
 version: 2.1
 
-#### YAML ANCHORS INSTEAD OF COMMANDS # while version 2.1 already supports commands, the local runner doesn't. When it does, we can upgrade.
+##################################### YAML ANCHORS  ############################################
 
 upload-coverage: &upload-coverage
   run:
@@ -102,6 +102,7 @@ dnsmasq-container: &dnsmasq-container
   - --no-poll
   - --address=/#/127.0.0.1
 
+##################################### CIRCLECI COMMANDS ############################################
 
 commands: # reusable commands with parameters
 
@@ -197,6 +198,7 @@ commands: # reusable commands with parameters
       - *store-log-artifacts
       - *upload-coverage
 
+##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
   builder:
@@ -223,6 +225,8 @@ executors:
     working_directory: /opt/app-root/src/project
     environment:
       DB: oracle
+
+##################################### CIRCLECI JOBS ############################################
 
 jobs:
   dependencies_bundler:
@@ -609,6 +613,8 @@ jobs:
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
+
+##################################### CIRCLECI WORKFLOWS ############################################
 
 workflows:
   version: 2
