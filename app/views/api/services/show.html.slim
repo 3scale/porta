@@ -105,8 +105,8 @@ section class="service-widget"
 
       - if can? :manage, :monitoring
         h2 = link_to 'Analytics', admin_service_stats_usage_path(service), :title => 'Show more stats for this service'
-        - cache [ 'v1', 'service', 'sparklines', service ] do
-          = render 'stats/sparklines', :metrics => service.metrics.top_level
+        = render 'stats/inlinechart',
+                 :metrics => service.metrics.top_level
 
       - if can? :manage, :partners
         h2
