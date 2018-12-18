@@ -2,17 +2,10 @@ version: 2.1
 
 #### YAML ANCHORS INSTEAD OF COMMANDS # while version 2.1 already supports commands, the local runner doesn't. When it does, we can upgrade.
 
-git-submodules: &git-submodules
+upload-coverage: &upload-coverage
   run:
-    name: "Pull Submodules"
-    command: |
-      git submodule init
-      git submodule update
-
-github-access-through-ssh: &github-access-through-ssh
-  add_ssh_keys:
-    fingerprints:
-      - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+    name: Upload test coverage to Codecov
+    command: bash <(curl -s https://codecov.io/bash)
 
 persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
   persist_to_workspace:
@@ -20,11 +13,6 @@ persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-wo
     paths:
     - ./vendor/bundle
     - ./.bundle/
-
-upload-coverage: &upload-coverage
-  run:
-    name: Upload test coverage to Codecov
-    command: bash <(curl -s https://codecov.io/bash)
 
 store-junit-results: &store-junit-test-results
   store_test_results:
@@ -132,21 +120,17 @@ dnsmasq-container: &dnsmasq-container
     - --no-poll
     - --address=/#/127.0.0.1
 
-clone-oracle-libs: &clone-oracle-libs
-  run:
-    name: "Fetch oracle libraries"
-    command: |
-      git clone git@github.com:3scale/system-libraries.git
-      cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
-      sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-      sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-      sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
-      sudo ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so
-      sudo rm -rf /opt/system/vendor/oracle
-      rm -rf vendor/oracle/*.zip
-      sudo cp config/oracle/*.ini /etc/
 
 commands: # reusable commands with parameters
+
+  checkout-with-submodules:
+    steps:
+      - checkout
+      - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule init
+            git submodule update
 
   install-gem-dependencies:
     parameters:
@@ -163,6 +147,24 @@ commands: # reusable commands with parameters
           environment:
             BUNDLE_RETRY: 3
             BUNDLE_JOBS: 3
+
+  clone-oracle-libraries:
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+      - run:
+          name: "Fetch oracle libraries"
+          command: |
+            git clone git@github.com:3scale/system-libraries.git
+            cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
+            sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
+            sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
+            sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
+            sudo ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so
+            sudo rm -rf /opt/system/vendor/oracle
+            rm -rf vendor/oracle/*.zip
+            sudo cp config/oracle/*.ini /etc/
 
   prepare-db-for-tests:
     parameters:
@@ -206,6 +208,13 @@ commands: # reusable commands with parameters
           - ./vendor/bundle
           - ./.bundle/
 
+  upload-artifacts:
+    steps:
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - *upload-coverage
+
 
 executors:
   builder:
@@ -233,8 +242,7 @@ jobs:
   dependencies_bundler:
     executor: builder
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *restore-bundler-cache
       - install-gem-dependencies:
           database: mysql
@@ -245,11 +253,9 @@ jobs:
   deps_bundler_oracle:
     executor: builder
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *restore-bundler-cache
-      - *github-access-through-ssh
-      - *clone-oracle-libs
+      - clone-oracle-libraries
       - install-gem-dependencies:
           database: oracle
       - save-gem-cache:
@@ -259,8 +265,7 @@ jobs:
   dependencies_npm:
     executor: builder
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *restore-npm-cache
       - run:
           name: Install NPM dependencies
@@ -280,8 +285,7 @@ jobs:
   assets_precompile:
     executor: builder
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - run:
           name: Precompile assets
@@ -304,8 +308,7 @@ jobs:
           name: Start Xvfb
           command: Xvfb :99 -screen 0 1280x1024x24
           background: true
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - run:
           name: Licences check
@@ -340,144 +343,107 @@ jobs:
     resource_class: small
     executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
       - *rails-tests
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - upload-artifacts
   unit-oracle:
     parallelism: 6
     resource_class: large
     executor: builder-with-oracle
     steps:
-    - checkout
-    - *git-submodules
+    - checkout-with-submodules
     - *attach-to-workspace
-    - *github-access-through-ssh
-    - *clone-oracle-libs
+    - clone-oracle-libraries
     - *use-example-config-files
     - prepare-db-for-tests:
         database: oracle
     - *rails-tests-oracle
-    - *store-junit-test-results
-    - *store-test-artifacts
-    - *store-log-artifacts
-    - *upload-coverage
+    - upload-artifacts
 
   functional:
     parallelism: 2
     resource_class: small
     executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
       - *rails-tests
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - upload-artifacts
 
   functional-oracle:
     parallelism: 2
     resource_class: large
     executor: builder-with-oracle
     steps:
-    - checkout
-    - *git-submodules
+    - checkout-with-submodules
     - *attach-to-workspace
-    - *github-access-through-ssh
-    - *clone-oracle-libs
+    - clone-oracle-libraries
     - *use-example-config-files
     - prepare-db-for-tests:
         database: oracle
     - *rails-tests-oracle
-    - *store-junit-test-results
-    - *store-test-artifacts
-    - *store-log-artifacts
-    - *upload-coverage
+    - upload-artifacts
 
   integration:
     parallelism: 8
     resource_class: small
     executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
       - *rails-tests
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - upload-artifacts
   integration-oracle:
     parallelism: 6
     resource_class: large
     executor: builder-with-oracle
     steps:
-    - checkout
-    - *git-submodules
+    - checkout-with-submodules
     - *attach-to-workspace
-    - *github-access-through-ssh
-    - *clone-oracle-libs
+    - clone-oracle-libraries
     - *use-example-config-files
     - prepare-db-for-tests:
         database: oracle
     - *rails-tests-oracle
-    - *store-junit-test-results
-    - *store-test-artifacts
-    - *store-log-artifacts
-    - *upload-coverage
-
+    - upload-artifacts
 
   rspec:
     parallelism: 3
     resource_class: small
     executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
       - rspec-tests:
           database: mysql
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - upload-artifacts
   rspec-oracle:
     parallelism: 4
     resource_class: large
     executor: builder-with-oracle
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
-      - *github-access-through-ssh
-      - *clone-oracle-libs
+      - clone-oracle-libraries
       - *use-example-config-files
       - prepare-db-for-tests:
           database: oracle
       - rspec-tests:
           database: oracle
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - upload-artifacts
 
 
 
@@ -491,8 +457,7 @@ jobs:
       - *memcached-container
       - *redis-container
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - prepare-db-for-tests:
           database: mysql
@@ -500,13 +465,10 @@ jobs:
       - cucumber-tests:
           database: mysql
       - *enable-internet-access
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
+      - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
-      - *upload-coverage
 
   cucumber-oracle:
     parallelism: 30
@@ -518,24 +480,19 @@ jobs:
       - *memcached-container
       - *redis-container
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
-      - *github-access-through-ssh
-      - *clone-oracle-libs
+      - clone-oracle-libraries
       - prepare-db-for-tests:
           database: oracle
       - *disable-internet-access
       - cucumber-tests:
           database: oracle
       - *enable-internet-access
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
+      - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
-      - *upload-coverage
 
 
   docker-build:
@@ -673,8 +630,7 @@ jobs:
       - *memcached-container
       - *redis-container
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - prepare-db-for-tests:
           database: mysql
@@ -684,13 +640,10 @@ jobs:
           command: |
             PERCY_PROJECT=3scale/porta PERCY_BRANCH=$CIRCLE_BRANCH PERCY_COMMIT=$CIRCLE_SHA1 PERCY_ENABLE=1 bundle exec cucumber --profile ci --profile visual features
       - *enable-internet-access
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
+      - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
-      - *upload-coverage
 
 workflows:
   version: 2
