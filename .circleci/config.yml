@@ -338,13 +338,13 @@ jobs:
     resource_class: large
     executor: builder-with-oracle
     steps:
-    - checkout-with-submodules
-    - *attach-to-workspace
-    - clone-oracle-libraries
-    - *use-example-config-files
-    - prepare-db-for-tests
-    - rails-tests
-    - upload-artifacts
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - clone-oracle-libraries
+      - *use-example-config-files
+      - prepare-db-for-tests
+      - rails-tests
+      - upload-artifacts
 
   functional:
     parallelism: 2
@@ -363,13 +363,13 @@ jobs:
     resource_class: large
     executor: builder-with-oracle
     steps:
-    - checkout-with-submodules
-    - *attach-to-workspace
-    - clone-oracle-libraries
-    - *use-example-config-files
-    - prepare-db-for-tests
-    - rails-tests
-    - upload-artifacts
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - clone-oracle-libraries
+      - *use-example-config-files
+      - prepare-db-for-tests
+      - rails-tests
+      - upload-artifacts
 
   integration:
     parallelism: 8
@@ -387,13 +387,13 @@ jobs:
     resource_class: large
     executor: builder-with-oracle
     steps:
-    - checkout-with-submodules
-    - *attach-to-workspace
-    - clone-oracle-libraries
-    - *use-example-config-files
-    - prepare-db-for-tests
-    - rails-tests
-    - upload-artifacts
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - clone-oracle-libraries
+      - *use-example-config-files
+      - prepare-db-for-tests
+      - rails-tests
+      - upload-artifacts
 
   rspec:
     parallelism: 3
