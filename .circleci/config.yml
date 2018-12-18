@@ -9,6 +9,11 @@ git-submodules: &git-submodules
       git submodule init
       git submodule update
 
+github-access-through-ssh: &github-access-through-ssh
+  add_ssh_keys:
+    fingerprints:
+      - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+
 upload-coverage: &upload-coverage
   run:
     name: Upload test coverage to Codecov
@@ -97,6 +102,12 @@ memcached-container: &memcached-container
 redis-container: &redis-container
   image: redis:4.0-alpine
 
+dnsmasq-container: &dnsmasq-container
+  image: quay.io/mikz/dnsmasq
+    command:
+    - --no-poll
+    - --address=/#/127.0.0.1
+
 clone-oracle-libs: &clone-oracle-libs
   run:
     name: "Fetch oracle libraries"
@@ -166,9 +177,7 @@ jobs:
       - checkout
       - *git-submodules
       - *restore-bundler-cache
-      - add_ssh_keys:
-          fingerprints:
-          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+      - *github-access-through-ssh
       - *clone-oracle-libs
       - run:
           name: Install gems with bundler
@@ -422,9 +431,7 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - add_ssh_keys:
-          fingerprints:
-          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+      - *github-access-through-ssh
       - *clone-oracle-libs
       - run:
           name: Prepare database & config files
@@ -447,13 +454,10 @@ jobs:
     resource_class: small
     docker:
       - *system-builder
-      - image: quay.io/mikz/dnsmasq
-        command:
-        - --no-poll
-        - --address=/#/127.0.0.1
+      - *dnsmasq-container
       - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+      - *memcached-container
+      - *redis-container
     steps:
       - checkout
       - *git-submodules
@@ -486,20 +490,15 @@ jobs:
     resource_class: large
     docker:
       - *system-builder
-      - image: quay.io/mikz/dnsmasq
-        command:
-        - --no-poll
-        - --address=/#/127.0.0.1
+      - *dnsmasq-container
       - *oracle-db-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+      - *memcached-container
+      - *redis-container
     steps:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - add_ssh_keys:
-          fingerprints:
-          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+      - *github-access-through-ssh
       - *clone-oracle-libs
       - run:
           name: Prepare database
@@ -657,13 +656,9 @@ jobs:
         - --no-poll
         - --address=/#/127.0.0.1
         - --server=/percy.io/8.8.8.8
-      - image: circleci/mysql:5.7-ram
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: ''
-          MYSQL_DATABASE: circleci
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+      - *mysql-container
+      - *memcached-container
+      - *redis-container
     steps:
       - checkout
       - *git-submodules
