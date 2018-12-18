@@ -54,10 +54,9 @@ div#twoCol.equal-width
 
     div.wide_dashboard_bubble.round
       h3 Usage in last 30 Days
-      - cache [ 'v1', 'cinstance', 'sparklines', @cinstance.service, @cinstance ] do
-        = render 'stats/sparklines',
-                 cinstance: @cinstance,
-                 metrics: @cinstance.service.metrics.top_level
+      = render 'stats/inlinechart',
+               cinstance: @cinstance,
+               metrics: @cinstance.service.metrics.top_level
 
     div.wide_dashboard_bubble.round
       h3 Current Utilization
