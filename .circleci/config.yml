@@ -223,6 +223,7 @@ executors:
     working_directory: /opt/app-root/src/project
 
   builder-with-mysql:
+    resource_class: small
     docker:
       - *system-builder
       - *mysql-container
@@ -233,6 +234,7 @@ executors:
       DB: mysql
 
   builder-with-oracle:
+    resource_class: large
     docker:
       - *system-builder
       - *oracle-db-container
@@ -350,7 +352,6 @@ jobs:
 
   unit:
     parallelism: 8
-    resource_class: small
     executor: builder-with-mysql
     steps:
       - checkout-with-submodules
@@ -361,7 +362,6 @@ jobs:
       - upload-artifacts
   unit-oracle:
     parallelism: 6
-    resource_class: large
     executor: builder-with-oracle
     steps:
       - checkout-with-submodules
@@ -374,7 +374,6 @@ jobs:
 
   functional:
     parallelism: 2
-    resource_class: small
     executor: builder-with-mysql
     steps:
       - checkout-with-submodules
@@ -386,7 +385,6 @@ jobs:
 
   functional-oracle:
     parallelism: 2
-    resource_class: large
     executor: builder-with-oracle
     steps:
       - checkout-with-submodules
@@ -399,7 +397,6 @@ jobs:
 
   integration:
     parallelism: 8
-    resource_class: small
     executor: builder-with-mysql
     steps:
       - checkout-with-submodules
@@ -410,7 +407,6 @@ jobs:
       - upload-artifacts
   integration-oracle:
     parallelism: 6
-    resource_class: large
     executor: builder-with-oracle
     steps:
       - checkout-with-submodules
@@ -423,7 +419,6 @@ jobs:
 
   rspec:
     parallelism: 3
-    resource_class: small
     executor: builder-with-mysql
     steps:
       - checkout-with-submodules
@@ -434,7 +429,6 @@ jobs:
       - upload-artifacts
   rspec-oracle:
     parallelism: 4
-    resource_class: large
     executor: builder-with-oracle
     steps:
       - checkout-with-submodules
@@ -449,7 +443,6 @@ jobs:
 
   cucumber:
     parallelism: 40
-    resource_class: small
     docker:
       - *system-builder
       - *dnsmasq-container
@@ -468,7 +461,6 @@ jobs:
 
   cucumber-oracle:
     parallelism: 30
-    resource_class: large
     docker:
       - *system-builder
       - *dnsmasq-container
