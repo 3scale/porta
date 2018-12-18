@@ -116,9 +116,9 @@ redis-container: &redis-container
 
 dnsmasq-container: &dnsmasq-container
   image: quay.io/mikz/dnsmasq
-    command:
-    - --no-poll
-    - --address=/#/127.0.0.1
+  command:
+  - --no-poll
+  - --address=/#/127.0.0.1
 
 
 commands: # reusable commands with parameters
@@ -172,9 +172,9 @@ commands: # reusable commands with parameters
         type: string
     steps:
       - run:
-        name: Prepare database for tests
-        command: |
-          DB=<< parameters.database >> bundle exec rake ci:db:ready db:create db:test:prepare
+          name: Prepare database for tests
+          command: |
+            DB=<< parameters.database >> bundle exec rake ci:db:ready db:create db:test:prepare
 
   rspec-tests:
     parameters:
