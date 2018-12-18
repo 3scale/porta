@@ -1,4 +1,4 @@
-@javascript @selenium @ignore
+@javascript 
 Feature: Applications management
   As a provider
   I want manage my applications
