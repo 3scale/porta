@@ -1095,6 +1095,7 @@ en:
     credentials_location:
       headers: "As HTTP Headers"
       query: "As query parameters (GET) or body parameters (POST/PUT/DELETE)"
+      authorization: "As HTTP Basic Authorization"
 
   formtastic:
     hints:
