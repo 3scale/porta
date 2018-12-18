@@ -120,6 +120,7 @@ commands: # reusable commands with parameters
       - run:
           name: Install gems with bundler
           command: |
+            echo "Running gems install for database: $DB"
             bundle check || bundle install --deployment
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
@@ -186,10 +187,19 @@ commands: # reusable commands with parameters
         type: string
     steps:
       - save_cache:
-          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
+          key: v1-bundler-gems-<< parameters.database >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
           paths:
           - ./vendor/bundle
           - ./.bundle/
+
+  restore-gem-cache:
+    parameters:
+      database:
+        type: string
+    steps:
+      - restore_cache:
+          keys:
+            - v1-bundler-gems-<< parameters.database >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
   upload-artifacts:
     steps:
@@ -202,8 +212,14 @@ commands: # reusable commands with parameters
 
 executors:
   builder:
+    parameters:
+      database:
+        type: string
+        default: mysql
     docker:
       - *system-builder
+    environment:
+      DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
 
   builder-with-mysql:
@@ -230,20 +246,26 @@ executors:
 
 jobs:
   dependencies_bundler:
-    executor: builder
+    executor:
+      name: builder
+      database: mysql
     steps:
       - checkout-with-submodules
-      - *restore-bundler-cache
+      - restore-gem-cache:
+          database: mysql
       - install-gem-dependencies
       - save-gem-cache:
           database: mysql
       - *persist-vendored-dependencies-to-workspace
 
   deps_bundler_oracle:
-    executor: builder
+    executor:
+      name: builder
+      database: oracle
     steps:
       - checkout-with-submodules
-      - *restore-bundler-cache
+      - restore-gem-cache:
+          database: oracle
       - clone-oracle-libraries
       - install-gem-dependencies
       - save-gem-cache:
