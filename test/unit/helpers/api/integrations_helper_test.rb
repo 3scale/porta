@@ -25,6 +25,18 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     assert_match(/-H&#39;user_key: USER_KEY/, res) # 39 is ', 27 is escape
   end
 
+  test 'auth basic' do
+    @proxy.update_attributes(credentials_location: 'authorization')
+
+    res = api_test_curl(@proxy)
+    assert_match %r(http://USER_KEY@), res
+
+    @proxy.service.update_attributes(backend_version: '2')
+    @proxy.reload
+    res = api_test_curl(@proxy)
+    assert_match %r(http://APP_ID:APP_KEY@), res
+  end
+
   test 'no double ?' do
     @proxy.update_attributes(api_test_path:  '/a?b=c')
     res = api_test_curl(@proxy)
@@ -59,4 +71,5 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     refute(is_https?(1))
     refute(is_https?(nil))
   end
+
 end

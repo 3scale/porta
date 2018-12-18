@@ -56,6 +56,7 @@ class ProxyTestService
     client.receive_timeout = 10
 
     client.transparent_gzip_decompression = true
+    client.force_basic_auth = true
 
     if (verify_mode = config.verify_mode)
       client.ssl_config.verify_mode = verify_mode
@@ -74,10 +75,17 @@ class ProxyTestService
   def credentials
     credentials = proxy.authentication_params_for_proxy
 
-    if proxy.credentials_location == 'headers'
+    case proxy.credentials_location
+    when 'headers'
       { header: credentials }
-    else
+    when 'query'
       { query: credentials }
+    when 'authorization'
+      user, password = proxy.authorization_credentials
+
+      # See: https://github.com/3scale/apicast/blob/e3130292b1b543c19a2de3c4f006da16d501964d/gateway/src/resty/http_authorization.lua#L13
+      encoded = Base64.encode64([user,password].join(':')).strip
+      { header: { 'Authorization' => "Basic #{encoded}"}}
     end
   end
 
