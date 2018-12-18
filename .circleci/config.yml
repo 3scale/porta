@@ -14,6 +14,13 @@ github-access-through-ssh: &github-access-through-ssh
     fingerprints:
       - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
 
+persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
+  persist_to_workspace:
+    root: .
+    paths:
+    - ./vendor/bundle
+    - ./.bundle/
+
 upload-coverage: &upload-coverage
   run:
     name: Upload test coverage to Codecov
@@ -59,6 +66,23 @@ rails-tests-oracle: &rails-tests-oracle
       DB=oracle bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
     environment:
       LC_ALL: en_US.UTF-8
+
+use-example-config-files: &use-example-config-files
+  run:
+    name: Copy example config files into place to be used by tests
+    command: |
+      cp config/examples/*.yml config/
+
+disable-internet-access: &disable-internet-access
+  run:
+    name: Disable internet access
+    command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+
+enable-internet-access: &enable-internet-access
+  run:
+    name: Enabled internet access
+    command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+    when: always
 
 attach-to-workspace: &attach-to-workspace
   attach_workspace:
@@ -122,6 +146,67 @@ clone-oracle-libs: &clone-oracle-libs
       rm -rf vendor/oracle/*.zip
       sudo cp config/oracle/*.ini /etc/
 
+commands: # reusable commands with parameters
+
+  install-gem-dependencies:
+    parameters:
+      database:
+        type: string
+    steps:
+      - run:
+          name: Install gems with bundler
+          command: |
+            DB=<< parameters.database >> bundle check || DB=<< parameters.database >> bundle install --deployment
+            DB=<< parameters.database >> bundle clean
+            # remove capybara-webkit source, save more than 400 MB
+            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
+          environment:
+            BUNDLE_RETRY: 3
+            BUNDLE_JOBS: 3
+
+  prepare-db-for-tests:
+    parameters:
+      database:
+        type: string
+    steps:
+      - run:
+        name: Prepare database for tests
+        command: |
+          DB=<< parameters.database >> bundle exec rake ci:db:ready db:create db:test:prepare
+
+  rspec-tests:
+    parameters:
+      database:
+        type: string
+    steps:
+      - run:
+          name: Rspec tests
+          command: |
+            DB=<< parameters.database >> bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+  cucumber-tests:
+    parameters:
+      database:
+        type: string
+    steps:
+      - run:
+          name: Run cucumber tests
+          command: |
+            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            DB=<< parameters.database >> bundle exec cucumber --profile ci ${TESTS}
+
+  save-gem-cache:
+    parameters:
+      database:
+        type: string
+    steps:
+      - save_cache:
+          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
+          paths:
+          - ./vendor/bundle
+          - ./.bundle/
+
+
 executors:
   builder:
     docker:
@@ -151,26 +236,12 @@ jobs:
       - checkout
       - *git-submodules
       - *restore-bundler-cache
-      - run:
-          name: Install gems with bundler
-          command: |
-            bundle check || bundle install --deployment
-            bundle clean
-            # remove capybara-webkit source, save more than 400 MB
-            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
-          environment:
-            BUNDLE_RETRY: 3
-            BUNDLE_JOBS: 3
-      - save_cache:
-          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
-          paths:
-            - ./vendor/bundle
-            - ./.bundle/
-      - persist_to_workspace:
-          root: .
-          paths:
-          - ./vendor/bundle
-          - ./.bundle/
+      - install-gem-dependencies:
+          database: mysql
+      - save-gem-cache:
+          database: mysql
+      - *persist-vendored-dependencies-to-workspace
+
   deps_bundler_oracle:
     executor: builder
     steps:
@@ -179,26 +250,12 @@ jobs:
       - *restore-bundler-cache
       - *github-access-through-ssh
       - *clone-oracle-libs
-      - run:
-          name: Install gems with bundler
-          command: |
-            DB=oracle bundle check || DB=oracle bundle install --deployment
-            DB=oracle bundle clean
-            # remove capybara-webkit source, save more than 400 MB
-            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
-          environment:
-            BUNDLE_RETRY: 3
-            BUNDLE_JOBS: 3
-      - save_cache:
-          key: v1-bundler-gems-oracle-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
-          paths:
-            - ./vendor/bundle
-            - ./.bundle/
-      - persist_to_workspace:
-          root: .
-          paths:
-          - ./vendor/bundle
-          - ./.bundle/
+      - install-gem-dependencies:
+          database: oracle
+      - save-gem-cache:
+          database: oracle
+      - *persist-vendored-dependencies-to-workspace
+
   dependencies_npm:
     executor: builder
     steps:
@@ -286,11 +343,9 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
+      - *use-example-config-files
+      - prepare-db-for-tests:
+          database: mysql
       - *rails-tests
       - *store-junit-test-results
       - *store-test-artifacts
@@ -304,15 +359,11 @@ jobs:
     - checkout
     - *git-submodules
     - *attach-to-workspace
-    - add_ssh_keys:
-        fingerprints:
-        - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+    - *github-access-through-ssh
     - *clone-oracle-libs
-    - run:
-        name: Prepare database & config files
-        command: |
-          cp config/examples/*.yml config/
-          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
+    - *use-example-config-files
+    - prepare-db-for-tests:
+        database: oracle
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -327,16 +378,15 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
+      - *use-example-config-files
+      - prepare-db-for-tests:
+          database: mysql
       - *rails-tests
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
       - *upload-coverage
+
   functional-oracle:
     parallelism: 2
     resource_class: large
@@ -345,15 +395,11 @@ jobs:
     - checkout
     - *git-submodules
     - *attach-to-workspace
-    - add_ssh_keys:
-        fingerprints:
-        - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+    - *github-access-through-ssh
     - *clone-oracle-libs
-    - run:
-        name: Prepare database & config files
-        command: |
-          cp config/examples/*.yml config/
-          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
+    - *use-example-config-files
+    - prepare-db-for-tests:
+        database: oracle
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -368,11 +414,9 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
+      - *use-example-config-files
+      - prepare-db-for-tests:
+          database: mysql
       - *rails-tests
       - *store-junit-test-results
       - *store-test-artifacts
@@ -386,15 +430,11 @@ jobs:
     - checkout
     - *git-submodules
     - *attach-to-workspace
-    - add_ssh_keys:
-        fingerprints:
-        - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+    - *github-access-through-ssh
     - *clone-oracle-libs
-    - run:
-        name: Prepare database & config files
-        command: |
-          cp config/examples/*.yml config/
-          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
+    - *use-example-config-files
+    - prepare-db-for-tests:
+        database: oracle
     - *rails-tests-oracle
     - *store-junit-test-results
     - *store-test-artifacts
@@ -410,15 +450,11 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Rspec tests
-          command: |
-            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - *use-example-config-files
+      - prepare-db-for-tests:
+          database: mysql
+      - rspec-tests:
+          database: mysql
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -433,15 +469,11 @@ jobs:
       - *attach-to-workspace
       - *github-access-through-ssh
       - *clone-oracle-libs
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-      - run:
-          name: Rspec tests
-          command: |
-            DB=oracle bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - *use-example-config-files
+      - prepare-db-for-tests:
+          database: oracle
+      - rspec-tests:
+          database: oracle
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -462,22 +494,12 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database
-          command: |
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
-      - run:
-          name: Run cucumber tests
-          command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            bundle exec cucumber --profile ci ${TESTS}
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
+      - prepare-db-for-tests:
+          database: mysql
+      - *disable-internet-access
+      - cucumber-tests:
+          database: mysql
+      - *enable-internet-access
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -485,6 +507,7 @@ jobs:
           path: tmp/capybara
           destination: capybara
       - *upload-coverage
+
   cucumber-oracle:
     parallelism: 30
     resource_class: large
@@ -500,22 +523,12 @@ jobs:
       - *attach-to-workspace
       - *github-access-through-ssh
       - *clone-oracle-libs
-      - run:
-          name: Prepare database
-          command: |
-            DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
-      - run:
-          name: Run cucumber tests
-          command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            DB=oracle bundle exec cucumber --profile ci ${TESTS}
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
+      - prepare-db-for-tests:
+          database: oracle
+      - *disable-internet-access
+      - cucumber-tests:
+          database: oracle
+      - *enable-internet-access
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
@@ -663,21 +676,14 @@ jobs:
       - checkout
       - *git-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database
-          command: |
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+      - prepare-db-for-tests:
+          database: mysql
+      - *disable-internet-access
       - run:
           name: Run percy.io visual tests
           command: |
             PERCY_PROJECT=3scale/porta PERCY_BRANCH=$CIRCLE_BRANCH PERCY_COMMIT=$CIRCLE_SHA1 PERCY_ENABLE=1 bundle exec cucumber --profile ci --profile visual features
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
+      - *enable-internet-access
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
