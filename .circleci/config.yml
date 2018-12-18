@@ -152,17 +152,38 @@ commands: # reusable commands with parameters
       - run:
           name: Prepare database for tests
           command: |
+            echo "Running for database: $DB"
             bundle exec rake ci:db:ready db:create db:test:prepare
 
   rspec-tests:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies are required, e.g. to connect to db."
+        type: steps
+        default: []
     steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - *use-example-config-files
+      - steps: << parameters.extra-deps >>
+      - prepare-db-for-tests
       - run:
           name: Rspec tests
           command: |
             bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - upload-artifacts
 
   cucumber-tests:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies are required, e.g. to connect to db."
+        type: steps
+        default: []
     steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - steps: << parameters.extra-deps >>
+      - prepare-db-for-tests
       - *disable-internet-access
       - run:
           name: Run cucumber tests
@@ -170,9 +191,23 @@ commands: # reusable commands with parameters
             TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
             bundle exec cucumber --profile ci ${TESTS}
       - *enable-internet-access
+      - upload-artifacts
+      - store_artifacts:
+          path: tmp/capybara
+          destination: capybara
 
   rails-tests:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies are required, e.g. to connect to db."
+        type: steps
+        default: []
     steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - *use-example-config-files
+      - steps: << parameters.extra-deps >>
+      - prepare-db-for-tests
       - run:
           name: Run Rails tests
           command: |
@@ -180,6 +215,7 @@ commands: # reusable commands with parameters
             bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
           environment:
             LC_ALL: en_US.UTF-8
+      - upload-artifacts
 
   save-gem-cache:
     parameters:
@@ -354,95 +390,62 @@ jobs:
     parallelism: 8
     executor: builder-with-mysql
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - *use-example-config-files
-      - prepare-db-for-tests
       - rails-tests
-      - upload-artifacts
+
   unit-oracle:
     parallelism: 6
     executor: builder-with-oracle
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - clone-oracle-libraries
-      - *use-example-config-files
-      - prepare-db-for-tests
-      - rails-tests
-      - upload-artifacts
+      - rails-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
   functional:
     parallelism: 2
     executor: builder-with-mysql
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - *use-example-config-files
-      - prepare-db-for-tests
       - rails-tests
-      - upload-artifacts
 
   functional-oracle:
     parallelism: 2
     executor: builder-with-oracle
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - clone-oracle-libraries
-      - *use-example-config-files
-      - prepare-db-for-tests
-      - rails-tests
-      - upload-artifacts
+      - rails-tests:
+          extra-deps:
+            - clone-oracle-libraries
+
 
   integration:
     parallelism: 8
     executor: builder-with-mysql
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - *use-example-config-files
-      - prepare-db-for-tests
       - rails-tests
-      - upload-artifacts
+
   integration-oracle:
     parallelism: 6
     executor: builder-with-oracle
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - clone-oracle-libraries
-      - *use-example-config-files
-      - prepare-db-for-tests
-      - rails-tests
-      - upload-artifacts
+      - rails-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
   rspec:
     parallelism: 3
     executor: builder-with-mysql
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - *use-example-config-files
-      - prepare-db-for-tests
       - rspec-tests
-      - upload-artifacts
   rspec-oracle:
     parallelism: 4
     executor: builder-with-oracle
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - clone-oracle-libraries
-      - *use-example-config-files
-      - prepare-db-for-tests
-      - rspec-tests
-      - upload-artifacts
-
+      - rspec-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
 
   cucumber:
     parallelism: 40
+    resource_class: small
     docker:
       - *system-builder
       - *dnsmasq-container
@@ -450,34 +453,23 @@ jobs:
       - *memcached-container
       - *redis-container
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - prepare-db-for-tests
       - cucumber-tests
-      - upload-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
 
   cucumber-oracle:
     parallelism: 30
+    resource_class: large
     docker:
       - *system-builder
       - *dnsmasq-container
       - *oracle-db-container
       - *memcached-container
       - *redis-container
+    environment:
+      DB: oracle
     steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - clone-oracle-libraries
-      - prepare-db-for-tests
-      - cucumber-tests
-      - upload-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
-
+      - cucumber-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
   docker-build:
     resource_class: small
