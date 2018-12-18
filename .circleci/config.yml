@@ -37,24 +37,6 @@ restore-npm-cache: &restore-npm-cache
     keys:
       - v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
 
-rails-tests: &rails-tests
-  run:
-    name: Rails tests
-    command: |
-      TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-      bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
-    environment:
-      LC_ALL: en_US.UTF-8
-
-rails-tests-oracle: &rails-tests-oracle
-  run:
-    name: Rails tests
-    command: |
-      TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
-      DB=oracle bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
-    environment:
-      LC_ALL: en_US.UTF-8
-
 use-example-config-files: &use-example-config-files
   run:
     name: Copy example config files into place to be used by tests
@@ -196,6 +178,19 @@ commands: # reusable commands with parameters
           command: |
             TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
             DB=<< parameters.database >> bundle exec cucumber --profile ci ${TESTS}
+
+  rails-tests:
+    parameters:
+      database:
+        type: string
+    steps:
+      - run:
+          name: Run Rails tests
+          command: |
+            TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
+            DB=<< parameters.database >> bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+          environment:
+            LC_ALL: en_US.UTF-8
 
   save-gem-cache:
     parameters:
@@ -348,7 +343,8 @@ jobs:
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
-      - *rails-tests
+      - rails-tests:
+          database: mysql
       - upload-artifacts
   unit-oracle:
     parallelism: 6
@@ -361,7 +357,8 @@ jobs:
     - *use-example-config-files
     - prepare-db-for-tests:
         database: oracle
-    - *rails-tests-oracle
+    - rails-tests:
+        database: oracle
     - upload-artifacts
 
   functional:
@@ -374,7 +371,8 @@ jobs:
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
-      - *rails-tests
+      - rails-tests:
+          database: oracle
       - upload-artifacts
 
   functional-oracle:
@@ -388,7 +386,8 @@ jobs:
     - *use-example-config-files
     - prepare-db-for-tests:
         database: oracle
-    - *rails-tests-oracle
+    - rails-tests:
+        database: oracle
     - upload-artifacts
 
   integration:
@@ -401,7 +400,8 @@ jobs:
       - *use-example-config-files
       - prepare-db-for-tests:
           database: mysql
-      - *rails-tests
+      - rails-tests:
+          database: mysql
       - upload-artifacts
   integration-oracle:
     parallelism: 6
@@ -414,7 +414,8 @@ jobs:
     - *use-example-config-files
     - prepare-db-for-tests:
         database: oracle
-    - *rails-tests-oracle
+    - rails-tests:
+        database: oracle
     - upload-artifacts
 
   rspec:
