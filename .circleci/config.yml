@@ -115,15 +115,12 @@ commands: # reusable commands with parameters
             git submodule update
 
   install-gem-dependencies:
-    parameters:
-      database:
-        type: string
     steps:
       - run:
           name: Install gems with bundler
           command: |
-            DB=<< parameters.database >> bundle check || DB=<< parameters.database >> bundle install --deployment
-            DB=<< parameters.database >> bundle clean
+            bundle check || bundle install --deployment
+            bundle clean
             # remove capybara-webkit source, save more than 400 MB
             rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
           environment:
@@ -149,46 +146,34 @@ commands: # reusable commands with parameters
             sudo cp config/oracle/*.ini /etc/
 
   prepare-db-for-tests:
-    parameters:
-      database:
-        type: string
     steps:
       - run:
           name: Prepare database for tests
           command: |
-            DB=<< parameters.database >> bundle exec rake ci:db:ready db:create db:test:prepare
+            bundle exec rake ci:db:ready db:create db:test:prepare
 
   rspec-tests:
-    parameters:
-      database:
-        type: string
     steps:
       - run:
           name: Rspec tests
           command: |
-            DB=<< parameters.database >> bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
 
   cucumber-tests:
-    parameters:
-      database:
-        type: string
     steps:
       - run:
           name: Run cucumber tests
           command: |
             TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            DB=<< parameters.database >> bundle exec cucumber --profile ci ${TESTS}
+            bundle exec cucumber --profile ci ${TESTS}
 
   rails-tests:
-    parameters:
-      database:
-        type: string
     steps:
       - run:
           name: Run Rails tests
           command: |
             TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
-            DB=<< parameters.database >> bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
           environment:
             LC_ALL: en_US.UTF-8
 
@@ -224,6 +209,8 @@ executors:
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
+    environment:
+      DB: mysql
 
   builder-with-oracle:
     docker:
@@ -232,6 +219,8 @@ executors:
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
+    environment:
+      DB: oracle
 
 jobs:
   dependencies_bundler:
@@ -239,8 +228,7 @@ jobs:
     steps:
       - checkout-with-submodules
       - *restore-bundler-cache
-      - install-gem-dependencies:
-          database: mysql
+      - install-gem-dependencies
       - save-gem-cache:
           database: mysql
       - *persist-vendored-dependencies-to-workspace
@@ -251,8 +239,7 @@ jobs:
       - checkout-with-submodules
       - *restore-bundler-cache
       - clone-oracle-libraries
-      - install-gem-dependencies:
-          database: oracle
+      - install-gem-dependencies
       - save-gem-cache:
           database: oracle
       - *persist-vendored-dependencies-to-workspace
@@ -341,10 +328,8 @@ jobs:
       - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
-      - prepare-db-for-tests:
-          database: mysql
-      - rails-tests:
-          database: mysql
+      - prepare-db-for-tests
+      - rails-tests
       - upload-artifacts
   unit-oracle:
     parallelism: 6
@@ -355,10 +340,8 @@ jobs:
     - *attach-to-workspace
     - clone-oracle-libraries
     - *use-example-config-files
-    - prepare-db-for-tests:
-        database: oracle
-    - rails-tests:
-        database: oracle
+    - prepare-db-for-tests
+    - rails-tests
     - upload-artifacts
 
   functional:
@@ -369,10 +352,8 @@ jobs:
       - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
-      - prepare-db-for-tests:
-          database: mysql
-      - rails-tests:
-          database: oracle
+      - prepare-db-for-tests
+      - rails-tests
       - upload-artifacts
 
   functional-oracle:
@@ -384,10 +365,8 @@ jobs:
     - *attach-to-workspace
     - clone-oracle-libraries
     - *use-example-config-files
-    - prepare-db-for-tests:
-        database: oracle
-    - rails-tests:
-        database: oracle
+    - prepare-db-for-tests
+    - rails-tests
     - upload-artifacts
 
   integration:
@@ -398,10 +377,8 @@ jobs:
       - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
-      - prepare-db-for-tests:
-          database: mysql
-      - rails-tests:
-          database: mysql
+      - prepare-db-for-tests
+      - rails-tests
       - upload-artifacts
   integration-oracle:
     parallelism: 6
@@ -412,10 +389,8 @@ jobs:
     - *attach-to-workspace
     - clone-oracle-libraries
     - *use-example-config-files
-    - prepare-db-for-tests:
-        database: oracle
-    - rails-tests:
-        database: oracle
+    - prepare-db-for-tests
+    - rails-tests
     - upload-artifacts
 
   rspec:
@@ -426,10 +401,8 @@ jobs:
       - checkout-with-submodules
       - *attach-to-workspace
       - *use-example-config-files
-      - prepare-db-for-tests:
-          database: mysql
-      - rspec-tests:
-          database: mysql
+      - prepare-db-for-tests
+      - rspec-tests
       - upload-artifacts
   rspec-oracle:
     parallelism: 4
@@ -440,10 +413,8 @@ jobs:
       - *attach-to-workspace
       - clone-oracle-libraries
       - *use-example-config-files
-      - prepare-db-for-tests:
-          database: oracle
-      - rspec-tests:
-          database: oracle
+      - prepare-db-for-tests
+      - rspec-tests
       - upload-artifacts
 
 
@@ -460,11 +431,9 @@ jobs:
     steps:
       - checkout-with-submodules
       - *attach-to-workspace
-      - prepare-db-for-tests:
-          database: mysql
+      - prepare-db-for-tests
       - *disable-internet-access
-      - cucumber-tests:
-          database: mysql
+      - cucumber-tests
       - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
@@ -484,11 +453,9 @@ jobs:
       - checkout-with-submodules
       - *attach-to-workspace
       - clone-oracle-libraries
-      - prepare-db-for-tests:
-          database: oracle
+      - prepare-db-for-tests
       - *disable-internet-access
-      - cucumber-tests:
-          database: oracle
+      - cucumber-tests
       - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
@@ -633,8 +600,7 @@ jobs:
     steps:
       - checkout-with-submodules
       - *attach-to-workspace
-      - prepare-db-for-tests:
-          database: mysql
+      - prepare-db-for-tests
       - *disable-internet-access
       - run:
           name: Run percy.io visual tests
