@@ -13,12 +13,10 @@
 //= require provider/admin/apiconfig/services/service_discovery
 //= require application
 //= require vendor/jquery.iframe-post-form.js
-//= require vendor/jquery.sparkline.min.js
 //= require vendor/colorbox/jquery.colorbox.js
 //= require vendor/farbtastic
 //= require threescale
 //= require vendor/pluralize
-//= require analytics/dashboards/sparklines
 //= require master_application
 //= require docs
 //= require flash
