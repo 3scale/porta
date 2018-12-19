@@ -650,7 +650,7 @@ GEM
     ruby-prof (0.15.8)
     ruby-progressbar (1.9.0)
     ruby_event_store (0.9.0)
-    rubyzip (1.1.7)
+    rubyzip (1.2.2)
     rufus-scheduler (3.0.9)
       tzinfo
     safe_yaml (1.0.4)
@@ -946,7 +946,7 @@ DEPENDENCIES
   ruby-oci8
   ruby-openid
   ruby-prof
-  rubyzip (~> 1.1.7)
+  rubyzip (~> 1.2.2)
   sass-rails (~> 5.0)
   secure_headers (~> 2.2)
   selenium-webdriver (~> 3.4)
