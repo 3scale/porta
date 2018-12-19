@@ -28,10 +28,6 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-restore-bundler-cache: &restore-bundler-cache
-  restore_cache:
-    keys:
-      - v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
 restore-npm-cache: &restore-npm-cache
   restore_cache:
     keys:
@@ -117,7 +113,15 @@ commands: # reusable commands with parameters
             git submodule update
 
   install-gem-dependencies:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies."
+        type: steps
+        default: []
     steps:
+      - checkout-with-submodules
+      - restore-gem-cache
+      - steps: << parameters.extra-deps >>
       - run:
           name: Install gems with bundler
           command: |
@@ -129,6 +133,8 @@ commands: # reusable commands with parameters
           environment:
             BUNDLE_RETRY: 3
             BUNDLE_JOBS: 3
+      - save-gem-cache
+      - *persist-vendored-dependencies-to-workspace
 
   clone-oracle-libraries:
     steps:
@@ -217,24 +223,18 @@ commands: # reusable commands with parameters
       - upload-artifacts
 
   save-gem-cache:
-    parameters:
-      database:
-        type: string
     steps:
       - save_cache:
-          key: v1-bundler-gems-<< parameters.database >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
+          key: v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
           paths:
           - ./vendor/bundle
           - ./.bundle/
 
   restore-gem-cache:
-    parameters:
-      database:
-        type: string
     steps:
       - restore_cache:
           keys:
-            - v1-bundler-gems-<< parameters.database >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
 
   upload-artifacts:
     steps:
@@ -287,27 +287,16 @@ jobs:
       name: builder
       database: mysql
     steps:
-      - checkout-with-submodules
-      - restore-gem-cache:
-          database: mysql
       - install-gem-dependencies
-      - save-gem-cache:
-          database: mysql
-      - *persist-vendored-dependencies-to-workspace
 
   deps_bundler_oracle:
     executor:
       name: builder
       database: oracle
     steps:
-      - checkout-with-submodules
-      - restore-gem-cache:
-          database: oracle
-      - clone-oracle-libraries
-      - install-gem-dependencies
-      - save-gem-cache:
-          database: oracle
-      - *persist-vendored-dependencies-to-workspace
+      - install-gem-dependencies:
+          extra-deps:
+            - clone-oracle-libraries
 
   dependencies_npm:
     executor: builder
