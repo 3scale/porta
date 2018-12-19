@@ -31,7 +31,7 @@ store-log-artifacts: &store-log-artifacts
 restore-bundler-cache: &restore-bundler-cache
   restore_cache:
     keys:
-      - v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+      - v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
 restore-npm-cache: &restore-npm-cache
   restore_cache:
     keys:
@@ -124,7 +124,7 @@ jobs:
             BUNDLE_RETRY: 3
             BUNDLE_JOBS: 3
       - save_cache:
-          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
           paths:
             - ./vendor/bundle
             - ./.bundle/
@@ -155,7 +155,7 @@ jobs:
             BUNDLE_RETRY: 3
             BUNDLE_JOBS: 3
       - save_cache:
-          key: v1-bundler-gems-oracle-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: v1-bundler-gems-oracle-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
           paths:
             - ./vendor/bundle
             - ./.bundle/
