@@ -783,7 +783,7 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (1.4.1)
-    timecop (0.8.0)
+    timecop (0.9.1)
     toml (0.2.0)
       parslet (~> 1.8.0)
     ts-datetime-delta (2.0.2)
@@ -993,7 +993,7 @@ DEPENDENCIES
   symbolize (~> 4.5)
   thin
   thinking-sphinx (~> 3.2.0)
-  timecop (~> 0.8)
+  timecop (~> 0.9)
   ts-datetime-delta
   uglifier
   unicorn
