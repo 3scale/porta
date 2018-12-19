@@ -50,6 +50,34 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     end
   end
 
+  test 'deleted application recreates dependencies' do
+    application = FactoryGirl.create(:simple_cinstance)
+    FactoryGirl.create(:admin, account: application.provider_account)
+    application.destroy!
+    event_store_event = EventStore::Event.where(event_type: Applications::ApplicationDeletedEvent).last!
+    application_event = EventStore::Repository.find_event!(event_store_event.event_id)
+    zync_event = ZyncEvent.create(application_event, application_event.application)
+
+    worker = ZyncWorker.new
+    worker.config.stubs(endpoint: 'http://example.com') # so it makes http request
+    worker.publisher.call(zync_event) # so it is later available to find
+
+    stub_request(:put, 'http://example.com/tenant').to_return(status: 200)
+    stub_request(:put, 'http://example.com/notification').to_return(status: 422)
+
+    zync_events = RailsEventStoreActiveRecord::Event.where(event_type: 'ZyncEvent')
+    assert_difference(zync_events.method(:count), +2) do
+      assert_raises ZyncWorker::UnprocessableEntityError do
+        worker.perform(zync_event.event_id, zync_event.data)
+      end
+    end
+    dependency_event_service, dependency_event_proxy = zync_events.last(2)
+    assert_equal 'Service', dependency_event_service.data['type']
+    assert_equal zync_event.data[:service_id], dependency_event_service.data['id']
+    assert_equal 'Proxy',  dependency_event_proxy.data['type']
+    assert_equal zync_event.data[:proxy_id], dependency_event_proxy.data['id']
+  end
+
   class MessageBusPublisherTest < ActiveSupport::TestCase
     test 'enabled only for proxy' do
       ZyncWorker::MessageBusPublisher.stubs(enabled: true)

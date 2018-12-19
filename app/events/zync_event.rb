@@ -25,7 +25,7 @@ class ZyncEvent < RailsEventStore::Event
   end
 
   def record
-    @_record ||= model.find(id)
+    @_record ||= model.find_by(id: id) || model.new(id: id)
   end
 
   def model
@@ -39,6 +39,7 @@ class ZyncEvent < RailsEventStore::Event
   private_constant :NONE
 
   def dependencies
+    return non_persisted_dependencies unless record.persisted?
     case record
     when Cinstance
       [ service = record.service, service.proxy ]
@@ -55,6 +56,21 @@ class ZyncEvent < RailsEventStore::Event
     case model
     when Cinstance, ApplicationRelatedEvent then 'Application'
     else model.model_name.name
+    end
+  end
+
+  private
+
+  def non_persisted_dependencies
+    proxy_id = data[:proxy_id]
+    case record
+    when Cinstance
+      [Service.new({id: data[:service_id]}, without_protection: true),
+       Proxy.new({id: proxy_id}, without_protection: true)]
+    when Proxy
+      [Proxy.new({id: proxy_id}, without_protection: true)]
+    else
+      NONE
     end
   end
 end
