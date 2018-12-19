@@ -3,7 +3,7 @@ const { environment } = require('@rails/webpacker')
 // Add global webpack configs here
 
 const babelLoader = environment.loaders.get('babel')
-babelLoader.test = /\.jsx?|.es6?|.spec.js?$/
+babelLoader.test = /\.jsx?|.spec.js?$/
 
 environment.loaders.delete('css')
 environment.loaders.delete('moduleCss')
