@@ -6772,22 +6772,6 @@
               "paramType": "query"
             },
             {
-              "name": "tech_support_email",
-              "description": "New technical support email.",
-              "dataType": "string",
-              "allowMultiple": false,
-              "required": false,
-              "paramType": "query"
-            },
-            {
-              "name": "admin_support_email",
-              "description": "New admin support email.",
-              "dataType": "string",
-              "allowMultiple": false,
-              "required": false,
-              "paramType": "query"
-            },
-            {
               "name": "deployment_option",
               "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self-managed' for APIcast Self-managed option",
               "dataType": "string",

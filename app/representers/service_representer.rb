@@ -12,8 +12,6 @@ module ServiceRepresenter
   property :backend_version
   property :deployment_option
   property :support_email
-  property :tech_support_email
-  property :admin_support_email
   property :description
 
   property :created_at
