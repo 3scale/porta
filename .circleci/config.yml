@@ -146,6 +146,7 @@ commands: # reusable commands with parameters
           command: |
             git clone git@github.com:3scale/system-libraries.git
             cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
+            # using sudo due to `/opt/oracle/` set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
             sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
             sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
             sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
@@ -441,6 +442,8 @@ jobs:
       - *mysql-container
       - *memcached-container
       - *redis-container
+    environment:
+      DB: mysql
     steps:
       - cucumber-tests
 
