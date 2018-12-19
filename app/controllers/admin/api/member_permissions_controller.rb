@@ -40,8 +40,8 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_admin_id_by_id
-  ##~ op.parameters.add :name => "allowed_service_ids", :description => "IDs of the services that need to be enabled, comma-separated. To enable all services, no value should be provided. To disable all services, the value should be: '[]'.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "allowed_sections", :description => "The list of sections in the admin portal that the user can access, comma-separated. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans)", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "allowed_service_ids", :defaultName => "allowed_service_ids[]", :description => "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "allowed_sections", :defaultName => "allowed_sections[]", :description => "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans). To disable all sections, set the value to '[]'.", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def update
     authorize! :update_permissions, user
