@@ -190,7 +190,7 @@ group :development do
   gem 'yard', require: false
 
   # Install rubocop only when using RubyMine (for the rubocop plugin)
-  gem 'rubocop', '0.52.1', install_if: ENV['TEAMCITY_RAKE_RUNNER_MODE'], require: false
+  gem 'rubocop', '0.61.1', install_if: ENV['TEAMCITY_RAKE_RUNNER_MODE'], require: false
 end
 
 gem 'message_bus', '~> 2.0.2'
