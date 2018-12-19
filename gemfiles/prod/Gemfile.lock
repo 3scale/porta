@@ -664,7 +664,7 @@ GEM
     rufus-scheduler (3.0.9)
       tzinfo
     safe_yaml (1.0.4)
-    sanitize (2.1.0)
+    sanitize (2.1.1)
       nokogiri (>= 1.4.4)
     sass (3.4.25)
     sass-rails (5.0.7)
