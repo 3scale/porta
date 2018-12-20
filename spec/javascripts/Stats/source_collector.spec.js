@@ -17,7 +17,7 @@ describe('StatsSourceCollector', () => {
       return Promise.resolve({ metrics: [
         { id: 1, systemName: 'awesome_metric' },
         { id: 2, systemName: 'amazing_metric' }
-        ]})
+      ]})
     })
     done()
   })
@@ -49,7 +49,6 @@ describe('StatsSourceCollector', () => {
     })
   })
 
-
   it('should build the right sources', () => {
     class StubbedSource {
       constructor ({id, details}) {
@@ -72,6 +71,5 @@ describe('StatsSourceCollector', () => {
     expect(sources[0] instanceof StubbedSource).toBe(true)
     expect(JSON.stringify(sources))
       .toEqual('[{"id":42,"details":{"id":7,"systemName":"bond"}}]')
-
   })
 })

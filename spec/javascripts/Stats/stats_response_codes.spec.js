@@ -31,7 +31,7 @@ describe('StatsResponseCodeSource', () => {
 
 describe('StatsResponseCodeChart', () => {
   beforeEach(() => {
-    fixture.set(`<div id="chart"></div><div id="no-data">No data 'ere mate!</div>`)
+    fixture.set('<div id="chart"></div><div id="no-data">No data \'ere mate!</div>')
   })
 
   it('shows no data message when no data available', () => {
@@ -65,7 +65,7 @@ describe('StatsResponseCodeChart', () => {
 
     chart.showData(false)
 
-    expect(noDataMessage).toContainText(`No data 'ere mate!`)
+    expect(noDataMessage).toContainText('No data \'ere mate!')
   })
 
   it('should call setState with the right args when updateFromSeries', () => {
