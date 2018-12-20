@@ -1,6 +1,10 @@
 {
   "private": true,
-  "repository": "github.com:3scale/system.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3scale/porta"
+  },
+  "license": "Apache-2.0",
   "scripts": {
     "clear": "rm -rf node_modules/",
     "test": "karma start --single-run",
