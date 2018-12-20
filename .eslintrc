@@ -11,6 +11,10 @@
     "jest": true,
     "jasmine": true
   },
+  "globals": {
+    "fixture": true,
+    "spyOnEvent": true
+  },
   "extends" : "standard",
   "plugins": [
     "flowtype",
