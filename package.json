@@ -48,7 +48,7 @@
     "karma-cli": "^1.0.1",
     "karma-firefox-launcher": "^1.1.0",
     "karma-fixture": "^0.2.6",
-    "karma-jasmine": "^1.0.2",
+    "karma-jasmine": "^2.0.1",
     "karma-jasmine-jquery": "^0.1.1",
     "karma-jquery": "^0.2.3",
     "karma-junit-reporter": "^1.1.0",
