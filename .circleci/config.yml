@@ -308,7 +308,7 @@ jobs:
           name: Install NPM dependencies
           command: |
             npm --version
-            npm install
+            npm install --no-audit
             npm dedupe
       - save_cache:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}

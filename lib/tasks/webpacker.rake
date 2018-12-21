@@ -21,6 +21,6 @@ namespace :webpacker do
   end
 
   task :npm_install do
-    system 'npm install'
+    system 'npm install --no-audit'
   end
 end
