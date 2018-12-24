@@ -6,6 +6,6 @@ end
 
 Factory.define(:notification_with_parent_event, parent: :notification) do |factory|
   factory.event do
-    FactoryGirl.create(:event, data: { parent_event_id: FactoryGirl.create(:event).event_id })
+    FactoryBot.create(:event, data: { parent_event_id: FactoryBot.create(:event).event_id })
   end
 end

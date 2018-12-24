@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FactoriesTest < ActiveSupport::TestCase
   def test_payment_gateway_settings_of_provider_account
-    provider_account = FactoryGirl.create(:provider_account,
+    provider_account = FactoryBot.create(:provider_account,
     payment_gateway_options: {key: 'hello', value: 'world'},
     payment_gateway_type: 'stripe'
                                          )

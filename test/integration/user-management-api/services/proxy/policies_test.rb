@@ -3,10 +3,10 @@ require 'test_helper'
 class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTest
 
   def setup
-    account  = FactoryGirl.create(:provider_account)
-    @service = FactoryGirl.create(:simple_service, account: account)
-    admin    = FactoryGirl.create(:admin, account: account)
-    @token   = FactoryGirl.create(:access_token, owner: admin, scopes: 'account_management')
+    account  = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:simple_service, account: account)
+    admin    = FactoryBot.create(:admin, account: account)
+    @token   = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
 
     host! account.admin_domain
   end

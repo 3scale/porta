@@ -8,7 +8,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test '#create' do
-    provider_user = FactoryGirl.create(:user, account: @provider)
+    provider_user = FactoryBot.create(:user, account: @provider)
     provider_user.activate!
 
     Authentication::Strategy::ProviderOauth2.any_instance.expects(:authenticate).returns(provider_user)
@@ -47,7 +47,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   test 'sso user_id has precedence over username if both passed in' do
     user_id  = @buyer.users.first!.id
 
-    user = FactoryGirl.create(:user, :account => @buyer, :username => 'someuser')
+    user = FactoryBot.create(:user, :account => @buyer, :username => 'someuser')
 
     host! @provider.admin_domain
 

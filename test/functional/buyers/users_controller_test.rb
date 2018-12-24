@@ -3,8 +3,8 @@ require 'test_helper'
 class Buyers::UsersControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create :provider_account
-    @buyer    = FactoryGirl.create :buyer_account, provider_account: @provider
+    @provider = FactoryBot.create :provider_account
+    @buyer    = FactoryBot.create :buyer_account, provider_account: @provider
   end
 
   test 'activating a pending user' do

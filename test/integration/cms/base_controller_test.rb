@@ -9,12 +9,12 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
   class ProviderAccountTest < Admin::Api::CMS::BaseControllerTest
     setup do
-      @provider = FactoryGirl.create(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       host! @provider.admin_domain
     end
 
     test 'admin user with cms scope has permission' do
-      token = FactoryGirl.create(:access_token, owner: @provider.admin_users.first, scopes: ['cms'], permission: 'rw')
+      token = FactoryBot.create(:access_token, owner: @provider.admin_users.first, scopes: ['cms'], permission: 'rw')
       with_api_routes do
         get '/cms_api', access_token: token.value
         assert_response :ok
@@ -23,15 +23,15 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
     test 'admin user without cms scope does not have permission' do
       with_api_routes do
-        token = FactoryGirl.create(:access_token, owner: @provider.admin_users.first)
+        token = FactoryBot.create(:access_token, owner: @provider.admin_users.first)
         get '/cms_api', access_token: token.value
         assert_response :forbidden
       end
     end
 
     test 'member user with admin_section portal and cms scope has permission' do
-      member = FactoryGirl.create(:member, account: @provider, admin_sections: ['portal'])
-      token  = FactoryGirl.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
+      member = FactoryBot.create(:member, account: @provider, admin_sections: ['portal'])
+      token  = FactoryBot.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
       with_api_routes do
         get '/cms_api', access_token: token.value
         assert_response :ok
@@ -39,8 +39,8 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'member user without cms scope does not have permission' do
-      member = FactoryGirl.create(:member, account: @provider, admin_sections: ['portal'])
-      token  = FactoryGirl.create(:access_token, owner: member)
+      member = FactoryBot.create(:member, account: @provider, admin_sections: ['portal'])
+      token  = FactoryBot.create(:access_token, owner: member)
       with_api_routes do
         get '/cms_api', access_token: token.value
         assert_response :forbidden
@@ -48,8 +48,8 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'member user without admin_section portal does not have permission' do
-      member = FactoryGirl.create(:member, account: @provider)
-      token  = FactoryGirl.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
+      member = FactoryBot.create(:member, account: @provider)
+      token  = FactoryBot.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
       with_api_routes do
         get '/cms_api', access_token: token.value
         assert_response :forbidden
@@ -69,9 +69,9 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
       test 'user with cms scope does not have permission' do
         admin = master_account.admin_users.first
-        member = FactoryGirl.create(:member, account: master_account, admin_sections: ['portal'])
+        member = FactoryBot.create(:member, account: master_account, admin_sections: ['portal'])
         [admin, member].each do |user|
-          token = FactoryGirl.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
+          token = FactoryBot.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
           with_api_routes do
             get '/cms_api', access_token: token.value
             assert_response :forbidden
@@ -81,9 +81,9 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
       test 'user with account_management scope does not have permission' do
         admin = master_account.admin_users.first
-        member = FactoryGirl.create(:member, account: master_account, admin_sections: ['partners'])
+        member = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
         [admin, member].each do |user|
-          token  = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
+          token  = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
           with_api_routes do
             get '/cms_api', access_token: token.value
             assert_response :forbidden
@@ -95,9 +95,9 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     class MasterAccountSaasTest < MasterAccountTest
       test 'user with cms scope has permission' do
         admin = master_account.admin_users.first
-        member = FactoryGirl.create(:member, account: master_account, admin_sections: ['portal'])
+        member = FactoryBot.create(:member, account: master_account, admin_sections: ['portal'])
         [admin, member].each do |user|
-          token  = FactoryGirl.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
+          token  = FactoryBot.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
           with_api_routes do
             get '/cms_api', access_token: token.value
             assert_response :success
@@ -107,9 +107,9 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
       test 'user with account_management scope has permission' do
         admin = master_account.admin_users.first
-        member = FactoryGirl.create(:member, account: master_account, admin_sections: ['partners'])
+        member = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
         [admin, member].each do |user|
-          token  = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
+          token  = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
           with_api_routes do
             get '/cms_api', access_token: token.value
             assert_response :success

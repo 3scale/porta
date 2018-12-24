@@ -11,7 +11,7 @@ class PaymentGateways::StripeCryptTest < ActiveSupport::TestCase
         password: 'world'
       }
     }
-    @provider_account = FactoryGirl.build_stubbed(:simple_provider, attributes)
+    @provider_account = FactoryBot.build_stubbed(:simple_provider, attributes)
     @payment_gateway = @provider_account.payment_gateway
 
     @account.stubs(provider_account: @provider_account, id: 123)

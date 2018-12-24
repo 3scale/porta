@@ -47,7 +47,7 @@ class AuthorizeNetTest < ActionDispatch::IntegrationTest
   # end
 
   def create_provider_account
-    provider_account = FactoryGirl.create(:provider_with_billing)
+    provider_account = FactoryBot.create(:provider_with_billing)
 
     provider_account.gateway_setting.attributes = {
       gateway_type: :authorize_net,

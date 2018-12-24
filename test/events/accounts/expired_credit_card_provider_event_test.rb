@@ -3,7 +3,7 @@ require 'test_helper'
 class Accounts::ExpiredCreditCardProviderEventTest < ActiveSupport::TestCase
 
   def test_create
-    buyer = FactoryGirl.build_stubbed(:buyer_account, id: 1,
+    buyer = FactoryBot.build_stubbed(:buyer_account, id: 1,
                                         provider_account_id: 2)
     event = Accounts::ExpiredCreditCardProviderEvent.create(buyer)
 

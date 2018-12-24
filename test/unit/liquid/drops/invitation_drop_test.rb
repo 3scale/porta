@@ -5,7 +5,7 @@ class Liquid::Drops::InvitationDropTest < ActiveSupport::TestCase
   include DeveloperPortal::Engine.routes.url_helpers
 
   def setup
-    @invitation = FactoryGirl.build_stubbed(:invitation)
+    @invitation = FactoryBot.build_stubbed(:invitation)
     @drop = Drops::Invitation.new(@invitation)
   end
 

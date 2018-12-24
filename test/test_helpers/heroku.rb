@@ -38,7 +38,7 @@ module TestHelpers
     end
 
     def prepare_master_account
-      @partner = FactoryGirl.create(:partner, system_name: 'heroku', name: 'Heroku')
+      @partner = FactoryBot.create(:partner, system_name: 'heroku', name: 'Heroku')
       service = master_account.default_service
       %w{blibli bloblo blabla}.each do |key|
         service.application_plans.create(name: key, system_name: key, partner: @partner)

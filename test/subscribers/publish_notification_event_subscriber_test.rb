@@ -13,7 +13,7 @@ class PublishNotificationEventSubscriberTest < ActiveSupport::TestCase
     end
 
     subscriber = PublishNotificationEventSubscriber.new(:some_name, publisher)
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     event = Class.new(RailsEventStore::Event).new(provider: provider)
 
     assert subscriber.call(event)

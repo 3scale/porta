@@ -56,7 +56,7 @@ class LineItemTest < ActiveSupport::TestCase
   end
 
   test 'audited' do
-    invoice = FactoryGirl.create :invoice
+    invoice = FactoryBot.create :invoice
 
     LineItem.with_auditing do
       item = invoice.line_items.create!(name: 'Item #1', cost: 10.0, quantity: 1)

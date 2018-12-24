@@ -4,12 +4,12 @@ class Account::ProviderTest < ActiveSupport::TestCase
 
   context 'authentication_providers' do
     setup do
-      @account = FactoryGirl.create(:simple_provider)
+      @account = FactoryBot.create(:simple_provider)
     end
 
     should 'destroy dependent' do
-      FactoryGirl.create(:authentication_provider, account: @account)
-      FactoryGirl.create(:self_authentication_provider, account: @account)
+      FactoryBot.create(:authentication_provider, account: @account)
+      FactoryBot.create(:self_authentication_provider, account: @account)
       assert_difference('AuthenticationProvider.count', -2) { @account.destroy! }
     end
 
@@ -129,7 +129,7 @@ class Account::ProviderTest < ActiveSupport::TestCase
   should have_many(:provided_sections)
 
   should '#show_xss_protection_options?' do
-    account = FactoryGirl.build_stubbed(:provider_account)
+    account = FactoryBot.build_stubbed(:provider_account)
     settings = account.settings
 
     settings.cms_escape_published_html = true

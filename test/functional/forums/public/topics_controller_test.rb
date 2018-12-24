@@ -107,8 +107,8 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
 
   test 'list posts within topic ascendingly: oldest on the top' do
     @topic.posts.delete_all
-    post1  = FactoryGirl.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
-    post2  = FactoryGirl.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
+    post1  = FactoryBot.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
+    post2  = FactoryBot.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
 
     get :show, :id => @topic.permalink
 

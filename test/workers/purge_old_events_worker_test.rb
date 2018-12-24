@@ -4,7 +4,7 @@ require 'test_helper'
 
 class PurgeOldEventsWorkerTest < ActiveSupport::TestCase
   def setup
-    Timecop.freeze(EventStore::Event::TTL.ago) { FactoryGirl.create(:service_token) }
+    Timecop.freeze(EventStore::Event::TTL.ago) { FactoryBot.create(:service_token) }
   end
 
   def test_perform

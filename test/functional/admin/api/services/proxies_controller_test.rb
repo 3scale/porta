@@ -3,7 +3,7 @@ require 'test_helper'
 module Admin::Api::Services
   class ProxiesControllerTest < ActionController::TestCase
     def setup
-      provider = FactoryGirl.create(:provider_account)
+      provider = FactoryBot.create(:provider_account)
       @service = provider.default_service
 
       host! provider.admin_domain

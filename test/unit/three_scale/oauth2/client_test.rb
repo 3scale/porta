@@ -3,7 +3,7 @@ require 'test_helper'
 class ThreeScale::OAuth2::ClientTest < ActiveSupport::TestCase
 
   setup do
-    @authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+    @authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
     @client = ThreeScale::OAuth2::Client.build(@authentication_provider)
   end
 
@@ -28,7 +28,7 @@ class ThreeScale::OAuth2::ClientTest < ActiveSupport::TestCase
   %i[github_authentication_provider keycloak_authentication_provider self_authentication_provider].each do |factory|
     test "ssl verification mode #{factory}" do
       [OpenSSL::SSL::VERIFY_NONE, OpenSSL::SSL::VERIFY_PEER].each do |mode|
-        authentication_provider = FactoryGirl.build_stubbed(factory)
+        authentication_provider = FactoryBot.build_stubbed(factory)
         authentication_provider.stubs(ssl_verify_mode: mode)
 
         client = ThreeScale::OAuth2::Client.build(authentication_provider)

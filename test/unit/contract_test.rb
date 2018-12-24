@@ -75,10 +75,10 @@ class ContractTest < ActiveSupport::TestCase
 
 
   def test_bill_for
-    invoice = FactoryGirl.create(:invoice)
+    invoice = FactoryBot.create(:invoice)
     month = Month.new(Time.now)
 
-    contract = FactoryGirl.create(:simple_cinstance, paid_until: 1.day.ago)
+    contract = FactoryBot.create(:simple_cinstance, paid_until: 1.day.ago)
 
     contract.bill_for(month, invoice)
 
@@ -86,14 +86,14 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   def test_billable
-    pending_contract = FactoryGirl.create(:simple_cinstance)
+    pending_contract = FactoryBot.create(:simple_cinstance)
     # Needed because of a callback `before_create :accept_on_create`
     pending_contract.update_attribute :state, :pending
 
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     buyer = pending_contract.user_account
     buyer.stubs(provider_account: provider)
-    active_contract = FactoryGirl.create(:simple_cinstance, state: 'live', user_account: buyer)
+    active_contract = FactoryBot.create(:simple_cinstance, state: 'live', user_account: buyer)
 
     provider.stubs(:provider_can_use?).with(:billable_contracts).returns(true)
     assert_not_includes buyer.billable_contracts, pending_contract
@@ -107,9 +107,9 @@ class ContractTest < ActiveSupport::TestCase
   def test_bill_plan_change_with_bad_period_due_to_time_zone
     Time.zone = 'CET'
     Timecop.freeze(Date.parse('2018-01-17')) do
-      other_plan = FactoryGirl.create(:simple_application_plan, cost_per_month: 3100.0)
-      contract = FactoryGirl.create(:simple_cinstance, trial_period_expires_at: nil)
-      provider = FactoryGirl.create(:simple_provider)
+      other_plan = FactoryBot.create(:simple_application_plan, cost_per_month: 3100.0)
+      contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
+      provider = FactoryBot.create(:simple_provider)
       Finance::PrepaidBillingStrategy.create!(account: provider, currency: 'EUR')
       contract.buyer_account.stubs(provider_account: provider)
 

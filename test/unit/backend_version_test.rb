@@ -3,7 +3,7 @@ require 'test_helper'
 class BackendVersionTest < ActiveSupport::TestCase
 
   def test_visible_versions
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     versions = BackendVersion.visible_versions(service: service)
     assert versions.is_a?(Hash)
   end
@@ -11,7 +11,7 @@ class BackendVersionTest < ActiveSupport::TestCase
   def test_visible_versions_oidc
     rolling_updates_off
     rolling_update(:apicast_oidc, enabled: false)
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     versions = BackendVersion.visible_versions(service: service)
     refute versions.values.include?('oidc')
 
@@ -26,7 +26,7 @@ class BackendVersionTest < ActiveSupport::TestCase
   end
 
   def test_visible_versions_oauth
-    service = FactoryGirl.create(:service, backend_version: 'oidc')
+    service = FactoryBot.create(:service, backend_version: 'oidc')
     versions = BackendVersion.visible_versions(service: service)
     assert service.oidc?
     refute versions.values.include?('oauth')
@@ -45,7 +45,7 @@ class BackendVersionTest < ActiveSupport::TestCase
 
   def test_usable_versions
     rolling_updates_off
-    service = FactoryGirl.build_stubbed(:simple_service, backend_version: 'oauth')
+    service = FactoryBot.build_stubbed(:simple_service, backend_version: 'oauth')
     versions = BackendVersion.usable_versions(service: service)
     assert versions.is_a?(Array)
     assert versions.exclude?('oidc')

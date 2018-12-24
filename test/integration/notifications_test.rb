@@ -91,7 +91,7 @@ class NotificationsTest < ActiveSupport::TestCase
     end
 
     should 'NOT notify recipient when dispatch rule is set to true and notification preferences are enabled' do
-      @rule = FactoryGirl.create(:mail_dispatch_rule, account: @provider_recipient, dispatch: true, system_operation: @operation)
+      @rule = FactoryBot.create(:mail_dispatch_rule, account: @provider_recipient, dispatch: true, system_operation: @operation)
 
       Logic::RollingUpdates.stubs(skipped?: false, disabled?: true)
 

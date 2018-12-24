@@ -146,7 +146,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     def test_add_credit_card_details
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
       account.credit_card_auth_code = account.credit_card_partial_number = '0000'
       account.credit_card_expires_on = Date.new(2017, 11, 1)
 
@@ -163,7 +163,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     end
 
     def test_remove_credit_card_details
-      account = FactoryGirl.create(:provider_account,
+      account = FactoryBot.create(:provider_account,
                                    credit_card_auth_code: '0000',
                                    credit_card_partial_number: '0000',
                                    credit_card_expires_on: Date.new(2017, 11, 1))
@@ -182,7 +182,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     end
 
     def test_events_without_change
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
 
       account.org_name += 'foobar'
       ThreeScale::Analytics.expects(:track_account).never

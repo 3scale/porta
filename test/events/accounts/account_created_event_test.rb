@@ -3,7 +3,7 @@ require 'test_helper'
 class Accounts::AccountCreatedEventTest < ActiveSupport::TestCase
 
   def test_create
-    account = FactoryGirl.build_stubbed(:simple_buyer, id: 1,
+    account = FactoryBot.build_stubbed(:simple_buyer, id: 1,
                                           provider_account_id: 2)
     event   = Accounts::AccountCreatedEvent.create(account, user)
 
@@ -22,13 +22,13 @@ class Accounts::AccountCreatedEventTest < ActiveSupport::TestCase
     assert_equal event.provider, master
 
     # provider for master
-    provider = FactoryGirl.build_stubbed(:simple_provider, provider_account: master)
+    provider = FactoryBot.build_stubbed(:simple_provider, provider_account: master)
     event    = Accounts::AccountCreatedEvent.create(provider, user)
 
     assert_equal event.provider, master
 
     # buyer for provider
-    buyer = FactoryGirl.build_stubbed(:simple_buyer, provider_account: provider)
+    buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: provider)
     event = Accounts::AccountCreatedEvent.create(buyer, user)
 
     assert_equal event.provider, provider
@@ -37,6 +37,6 @@ class Accounts::AccountCreatedEventTest < ActiveSupport::TestCase
   private
 
   def user
-    @_user ||= FactoryGirl.build_stubbed(:simple_user)
+    @_user ||= FactoryBot.build_stubbed(:simple_user)
   end
 end

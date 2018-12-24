@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CMS::Builtin::SectionTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   test 'destroy! can only be used' do

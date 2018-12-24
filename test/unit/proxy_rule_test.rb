@@ -3,7 +3,7 @@ require 'test_helper'
 class ProxyRuleTest < ActiveSupport::TestCase
 
   test 'patterns' do
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
 
     assert_valid proxy_rule
 
@@ -41,28 +41,28 @@ class ProxyRuleTest < ActiveSupport::TestCase
   end
 
   test 'duplicated vars' do
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
     proxy_rule.pattern = "/foo/{bar}/baz/{bar}/quux"
     refute_valid proxy_rule
     assert proxy_rule.errors[:pattern].presence
   end
 
   test 'duplicated params with var and var' do
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
     proxy_rule.pattern = "/foo/bar/baz?a={foo}&a={bar}"
     refute_valid proxy_rule
     assert proxy_rule.errors[:pattern].presence
   end
 
   test 'duplicated params with var and fixed' do
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
     proxy_rule.pattern = "/foo/bar/baz?a=foo&a={bar}"
     refute_valid proxy_rule
     assert proxy_rule.errors[:pattern].presence
   end
 
   test 'duplicated params with fixed and fixed' do
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
     proxy_rule.pattern = "/foo/bar/baz?a=foo&a={bar}"
     refute_valid proxy_rule
     assert proxy_rule.errors[:pattern].presence
@@ -98,7 +98,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   end
 
   test '256 is the max length' do
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
     proxy_rule.pattern = '/'+ ("a" * 255)
     assert_valid proxy_rule
 
@@ -108,11 +108,11 @@ class ProxyRuleTest < ActiveSupport::TestCase
 
   test 'redirect_url' do
     # should accept a nil value
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule, redirect_url: nil)
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule, redirect_url: nil)
     assert_valid proxy_rule
 
     # should validate that is an URL
-    proxy_rule = FactoryGirl.build_stubbed(:proxy_rule, redirect_url: 'foo')
+    proxy_rule = FactoryBot.build_stubbed(:proxy_rule, redirect_url: 'foo')
     refute_valid proxy_rule
 
     # should accept an url with http
@@ -137,7 +137,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   end
 
   test 'save' do
-    proxy_rule = FactoryGirl.build(:proxy_rule, redirect_url: nil)
+    proxy_rule = FactoryBot.build(:proxy_rule, redirect_url: nil)
     # should accept string up to 10000 characters
     proxy_rule.redirect_url = "https://example.com/#{'1' * 9980}"
     assert_valid proxy_rule

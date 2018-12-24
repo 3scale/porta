@@ -1,7 +1,7 @@
 class Apicast::ProviderPackageGeneratorTest < ActiveSupport::TestCase
 
   def test_nginx_conf
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
     generator = Apicast::ProviderPackageGenerator.new(source)
 
@@ -17,7 +17,7 @@ class Apicast::ProviderPackageGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_lua_file
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
     generator = Apicast::ProviderPackageGenerator.new(source)
 
@@ -25,7 +25,7 @@ class Apicast::ProviderPackageGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_each_enumerator
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
     generator = Apicast::ProviderPackageGenerator.new(source)
 
@@ -34,7 +34,7 @@ class Apicast::ProviderPackageGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_each_keys
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
     generator = Apicast::ProviderPackageGenerator.new(source)
 
@@ -47,7 +47,7 @@ class Apicast::ProviderPackageGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_each_values
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
     generator = Apicast::ProviderPackageGenerator.new(source)
 
@@ -61,7 +61,7 @@ class Apicast::ProviderPackageGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_each_oauth_keys
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
     service = OpenStruct.new(proxy: OpenStruct.new, backend_version: 'oauth')
     source.expects(services: [ service ]).at_least_once

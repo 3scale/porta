@@ -211,12 +211,12 @@ Factory.define(:master_account, :parent => :account) do |factory|
     account.approve! if account.can_approve?
 
     #[multiservice] First service is the default
-    service = FactoryGirl.create(:service, :account => account)
+    service = FactoryBot.create(:service, :account => account)
 
     # Defaults
-    application_plan = FactoryGirl.create(:application_plan, :issuer => service, :name => 'Free')
+    application_plan = FactoryBot.create(:application_plan, :issuer => service, :name => 'Free')
     application_plan.publish!
-    account_plan = FactoryGirl.create(:account_plan, :issuer => account, :name => 'FreeAccountPlan')
+    account_plan = FactoryBot.create(:account_plan, :issuer => account, :name => 'FreeAccountPlan')
     account_plan.publish!
 
     service.update_attribute :default_application_plan, application_plan

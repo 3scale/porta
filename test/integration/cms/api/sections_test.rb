@@ -10,7 +10,7 @@ module CMS
       end
 
       def create_section
-        FactoryGirl.create :cms_section, :provider => @provider, parent: @provider.sections.root
+        FactoryBot.create :cms_section, :provider => @provider, parent: @provider.sections.root
       end
 
       test 'index' do

@@ -3,7 +3,7 @@ require 'test_helper'
 class AccountMailerTest < ActionMailer::TestCase
 
   def setup
-    @account = FactoryGirl.create(:buyer_account)
+    @account = FactoryBot.create(:buyer_account)
   end
 
   test 'send mails' do
@@ -18,7 +18,7 @@ class AccountMailerTest < ActionMailer::TestCase
       ThreeScale.config.redhat_customer_portal.stubs(assign_entitlements_email: 'assign.entitlements@example.com')
       ThreeScale.config.redhat_customer_portal.stubs(revoke_entitlements_email: 'revoke.entitlements@example.com')
 
-      @service = FactoryGirl.create(:service, account: master_account)
+      @service = FactoryBot.create(:service, account: master_account)
 
       account_data = {
         org_name: 'Fake Provider',
@@ -33,11 +33,11 @@ class AccountMailerTest < ActionMailer::TestCase
         billing_address_phone: '+123 456 789',
         finance_support_email: 'john.doe@fake.example.com'
       }
-      @account = FactoryGirl.create(:simple_provider, account_data)
+      @account = FactoryBot.create(:simple_provider, account_data)
 
-      FactoryGirl.create(:simple_admin, account: @account, username: 'john_doe')
+      FactoryBot.create(:simple_admin, account: @account, username: 'john_doe')
 
-      @invoice = FactoryGirl.create(:invoice, issued_on: Time.parse('2017-11-16'))
+      @invoice = FactoryBot.create(:invoice, issued_on: Time.parse('2017-11-16'))
     end
 
     def test_support_entitlements_assigned

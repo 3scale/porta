@@ -26,7 +26,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   def test_preload_used_associations
-    usage_limit = FactoryGirl.create(:usage_limit)
+    usage_limit = FactoryBot.create(:usage_limit)
 
     usage_limit.expects(:service).returns(nil).at_least_once
 
@@ -34,7 +34,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   def test_delete_backend_usage_limit
-    usage_limit = FactoryGirl.create(:usage_limit)
+    usage_limit = FactoryBot.create(:usage_limit)
 
     usage_limit.expects(:service).returns(nil).at_least_once
 

@@ -58,7 +58,7 @@ class Liquid::FormsTest < ActiveSupport::TestCase
 
   test 'reply message form' do
     form = get('message.reply', 'reply')
-    reply = FactoryGirl.build_stubbed(:message)
+    reply = FactoryBot.build_stubbed(:message)
     form.context['reply'] = Liquid::Drops::Message.new(reply)
     content = form.render('content')
 
@@ -70,7 +70,7 @@ class Liquid::FormsTest < ActiveSupport::TestCase
 
   test 'create message form' do
     form = get('message.create', 'message')
-    message = FactoryGirl.build_stubbed(:message)
+    message = FactoryBot.build_stubbed(:message)
     form.context['message'] = Liquid::Drops::Message.new(message)
     content = form.render('content')
 

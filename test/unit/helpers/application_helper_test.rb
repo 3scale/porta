@@ -5,11 +5,11 @@ class ApplicationHelperTest < ActionView::TestCase
   delegate :can?, to: :ability
 
   def test_link_to_export_widget_for
-    self.current_user = FactoryGirl.build_stubbed(:member, account: account)
+    self.current_user = FactoryBot.build_stubbed(:member, account: account)
     link = link_to_export_widget_for('Accounts')
     assert_nil link
 
-    self.current_user = FactoryGirl.build_stubbed(:admin, account: account)
+    self.current_user = FactoryBot.build_stubbed(:admin, account: account)
     link = link_to_export_widget_for('Accounts')
     assert_match /a/, link
   end
@@ -29,6 +29,6 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   def account
-    @account ||= FactoryGirl.build_stubbed(:simple_provider)
+    @account ||= FactoryBot.build_stubbed(:simple_provider)
   end
 end

@@ -23,8 +23,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'index (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_accounts_path(format: :xml))
     assert_response :forbidden
@@ -34,8 +34,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'show (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_account_path(@buyer, format: :xml), access_token: token.value)
     assert_response :success
@@ -48,8 +48,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'find (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(find_admin_api_accounts_path(format: :xml), access_token: token.value)
     assert_response :not_found
@@ -65,8 +65,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot update an account
     rolling_updates_off
@@ -86,8 +86,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'changing billing status' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     settings = @buyer.settings
     settings.update!(monthly_charging_enabled: false, monthly_billing_enabled: false)
@@ -103,8 +103,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot destroy an account
     delete(admin_api_account_path(format: :xml, id: @buyer.id), access_token: token.value)
@@ -118,9 +118,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'change_plan (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
-    plan  = FactoryGirl.create(:account_plan, issuer: @provider)
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    plan  = FactoryBot.create(:account_plan, issuer: @provider)
 
     # member cannot update an account
     rolling_updates_off
@@ -140,8 +140,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'approve/reject (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot reject or approve an account
     put(approve_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
@@ -440,11 +440,11 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update billing_address' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     user.role = 'admin'
     user.save!
 
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain')
     assert_response :unprocessable_entity
 

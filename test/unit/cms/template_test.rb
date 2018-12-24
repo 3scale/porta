@@ -3,14 +3,14 @@ require 'test_helper'
 class CMS::TemplateTest < ActiveSupport::TestCase
 
   def test_tenant_id
-    template = FactoryGirl.create(:cms_template)
+    template = FactoryBot.create(:cms_template)
     template.reload
     assert_not_nil template.tenant_id
     assert_equal template.provider.id, template.tenant_id
   end
 
   def test_mime_type
-    template = FactoryGirl.build_stubbed(:cms_template, content_type: nil)
+    template = FactoryBot.build_stubbed(:cms_template, content_type: nil)
 
     refute template.mime_type
 

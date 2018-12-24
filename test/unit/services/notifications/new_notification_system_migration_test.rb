@@ -4,8 +4,8 @@ class Notifications::NewNotificationSystemMigrationTest < ActiveSupport::TestCas
   Migration = Notifications::NewNotificationSystemMigration
 
   def setup
-    @account   = FactoryGirl.create(:simple_provider)
-    @user      = FactoryGirl.create(:simple_user, account: @account)
+    @account   = FactoryBot.create(:simple_provider)
+    @user      = FactoryBot.create(:simple_user, account: @account)
     @migration = Migration.new(@account)
 
     assert @account.users.count > 0, 'account has to have at least 1 user'
@@ -37,7 +37,7 @@ class Notifications::NewNotificationSystemMigrationTest < ActiveSupport::TestCas
 
     refute @migration.enabled?
 
-    refute Migration.new(FactoryGirl.build_stubbed(:simple_buyer)).enabled?
+    refute Migration.new(FactoryBot.build_stubbed(:simple_buyer)).enabled?
   end
 
   def test_dispatch?

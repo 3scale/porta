@@ -159,7 +159,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
   end
 
   def test_all_new_and_overriden
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     assert provider.provider_can_use?(:new_notification_system)
 

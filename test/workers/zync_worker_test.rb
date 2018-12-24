@@ -29,8 +29,8 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
   test 'tries to recreate dependencies' do
     worker = ZyncWorker.new
-    application = FactoryGirl.create(:simple_cinstance).reload # reload to get tenant_id
-    FactoryGirl.create(:simple_admin, account: application.provider_account) # for the access token
+    application = FactoryBot.create(:simple_cinstance).reload # reload to get tenant_id
+    FactoryBot.create(:simple_admin, account: application.provider_account) # for the access token
     event = ZyncEvent.create(RailsEventStore::Event.new, application)
 
     worker.config.stubs(endpoint: 'http://example.com') # so it makes http request

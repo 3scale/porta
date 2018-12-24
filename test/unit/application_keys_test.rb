@@ -3,11 +3,11 @@ require 'test_helper'
 class ApplicationKeysTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
-  subject { @application_key ||= FactoryGirl.create(:application_key) }
+  subject { @application_key ||= FactoryBot.create(:application_key) }
 
   def setup
     ApplicationKey.disable_backend!
-    @application = FactoryGirl.create(:cinstance)
+    @application = FactoryBot.create(:cinstance)
     @application_keys = @application.application_keys
   end
 

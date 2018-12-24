@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ZyncEventTest < ActiveSupport::TestCase
   def test_create_application
-    application = FactoryGirl.build_stubbed(:simple_cinstance)
+    application = FactoryBot.build_stubbed(:simple_cinstance)
 
     event = ApplicationRelatedEvent.new(id: application.id, tenant_id: application.provider_account.id)
 
@@ -10,7 +10,7 @@ class ZyncEventTest < ActiveSupport::TestCase
   end
 
   def test_dependencies
-    application = FactoryGirl.create(:simple_cinstance)
+    application = FactoryBot.create(:simple_cinstance)
     parent_event = RailsEventStore::Event.new
 
     assert event = ZyncEvent.create(parent_event, application)
@@ -19,7 +19,7 @@ class ZyncEventTest < ActiveSupport::TestCase
   end
 
   def test_record
-    application = FactoryGirl.create(:simple_cinstance)
+    application = FactoryBot.create(:simple_cinstance)
     parent_event = RailsEventStore::Event.new
 
     assert event = ZyncEvent.create(parent_event, application)
@@ -28,7 +28,7 @@ class ZyncEventTest < ActiveSupport::TestCase
   end
 
   def test_model
-    application = FactoryGirl.build_stubbed(:simple_cinstance)
+    application = FactoryBot.build_stubbed(:simple_cinstance)
     parent_event = RailsEventStore::Event.new
 
     assert event = ZyncEvent.create(parent_event, application)

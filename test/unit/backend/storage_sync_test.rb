@@ -5,7 +5,7 @@ require 'test_helper'
 class Backend::StorageSyncTest < ActiveSupport::TestCase
 
   setup do
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @backend_storage_sync = Backend::StorageSync.new(provider)
   end
 
@@ -38,7 +38,7 @@ class Backend::StorageSyncTest < ActiveSupport::TestCase
   end
 
   test 'provider_sync deactivates all the providers\' services when the provider is scheduled for deletion' do
-    FactoryGirl.create(:simple_service, account: provider)
+    FactoryBot.create(:simple_service, account: provider)
     provider.schedule_for_deletion!
 
     mock_update_backend_services provider.services.select(:id), :deactivate
@@ -47,7 +47,7 @@ class Backend::StorageSyncTest < ActiveSupport::TestCase
   end
 
   test 'provider_sync activates all the providers\' services when the provider is not scheduled for deletion' do
-    FactoryGirl.create(:simple_service, account: provider)
+    FactoryBot.create(:simple_service, account: provider)
     refute provider.scheduled_for_deletion?
 
     mock_update_backend_services provider.services.select(:id), :activate

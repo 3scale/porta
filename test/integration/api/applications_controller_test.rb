@@ -8,7 +8,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     setup do
       login! master_account
       @service = master_account.default_service
-      FactoryGirl.create(:cinstance, service: @service)
+      FactoryBot.create(:cinstance, service: @service)
     end
 
     attr_reader :service
@@ -36,7 +36,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
 
   class TenantLoggedInTest < Api::ApplicationsControllerTest
     setup do
-      @provider = FactoryGirl.create(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       login! @provider
     end
 
@@ -45,8 +45,8 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     class Index < TenantLoggedInTest
       setup do
         @service = provider.services.first!
-        plans = FactoryGirl.create_list(:application_plan, 2, service: @service)
-        buyers = FactoryGirl.create_list(:buyer_account, 2, provider_account: provider)
+        plans = FactoryBot.create_list(:application_plan, 2, service: @service)
+        buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
         plans.each_with_index { |plan, index| buyers[index].buy! plan }
       end
 
@@ -86,17 +86,17 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
 
     class Show < TenantLoggedInTest
       setup do
-        plan = FactoryGirl.create(:application_plan, issuer: provider.default_service)
-        @application = FactoryGirl.create(:cinstance, plan: plan)
+        plan = FactoryBot.create(:application_plan, issuer: provider.default_service)
+        @application = FactoryBot.create(:cinstance, plan: plan)
       end
 
       attr_reader :application
 
       test 'show plan widget features are drawn correctly' do
         service = provider.default_service
-        feature = FactoryGirl.create(:feature, featurable: service, name: 'ticked')
+        feature = FactoryBot.create(:feature, featurable: service, name: 'ticked')
         application.plan.features_plans.create!(feature: feature)
-        FactoryGirl.create(:feature, featurable: service, name: 'crossed')
+        FactoryBot.create(:feature, featurable: service, name: 'crossed')
 
         get admin_service_application_path(application.service, application)
 
@@ -124,9 +124,9 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
       end
 
       test 'show renders application for the permitted services ids when there is no access to all services' do
-        second_service = FactoryGirl.create(:simple_service, account: provider)
-        second_plan = FactoryGirl.create(:application_plan, issuer: second_service)
-        second_app = FactoryGirl.create(:cinstance, plan: second_plan)
+        second_service = FactoryBot.create(:simple_service, account: provider)
+        second_plan = FactoryBot.create(:application_plan, issuer: second_service)
+        second_app = FactoryBot.create(:cinstance, plan: second_plan)
 
         User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
         User.any_instance.expects(:member_permission_service_ids).returns([application.issuer.id]).at_least_once
@@ -139,8 +139,8 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
 
     class Edit < TenantLoggedInTest
       setup do
-        plan = FactoryGirl.create(:application_plan, issuer: provider.default_service)
-        @application = FactoryGirl.create(:cinstance, plan: plan, name: 'example-name', description: 'example-description')
+        plan = FactoryBot.create(:application_plan, issuer: provider.default_service)
+        @application = FactoryBot.create(:cinstance, plan: plan, name: 'example-name', description: 'example-description')
       end
 
       attr_reader :application

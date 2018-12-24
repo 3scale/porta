@@ -7,7 +7,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
   include BillingResultsTestHelpers
 
   setup do
-    @provider = FactoryGirl.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_with_billing)
   end
 
   test 'enqueues a sidekiq worker' do
@@ -66,8 +66,8 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     include BillingResultsTestHelpers
 
     setup do
-      @provider = FactoryGirl.create(:provider_with_billing)
-      @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
+      @provider = FactoryBot.create(:provider_with_billing)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     end
 
     test 'enqueues sidekiq worker' do
@@ -113,7 +113,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     end
 
     test 'buyer locks do not affect each other' do
-      buyer_2 = FactoryGirl.create(:buyer_account, provider_account: @provider)
+      buyer_2 = FactoryBot.create(:buyer_account, provider_account: @provider)
       now = Time.utc(2018, 1, 16, 8)
       BillingLock.create!(account_id: buyer_2.id)
       assert Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)

@@ -10,7 +10,7 @@ end
 
 Before do
   ThreeScale.config.stubs(superdomain: 'example.com')
-  FieldsDefinition.create_defaults FactoryGirl.create(:master_account)
+  FieldsDefinition.create_defaults FactoryBot.create(:master_account)
   ThreeScale.config.stubs(onpremises: false)
   ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'http://apicast.alaska/policies')
 end

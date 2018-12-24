@@ -6,7 +6,7 @@ class TopicTest < ActiveSupport::TestCase
   end
 
   test 'destroy' do
-    topic = FactoryGirl.create(:topic)
+    topic = FactoryBot.create(:topic)
 
     assert topic.destroy
   end
@@ -64,8 +64,8 @@ class TopicTest < ActiveSupport::TestCase
   end
 
   test 'topic created by last user is not nil' do
-    topic = FactoryGirl.create(:topic)
-    post  = FactoryGirl.create(:post, topic: topic)
+    topic = FactoryBot.create(:topic)
+    post  = FactoryBot.create(:post, topic: topic)
     topic.update_cached_post_fields(post)
 
 
@@ -78,10 +78,10 @@ class TopicTest < ActiveSupport::TestCase
   end
 
   test 'updates cached columns on when plan is destroyed' do
-    topic = FactoryGirl.create(:topic)
+    topic = FactoryBot.create(:topic)
     previous_post = topic.posts.first!
 
-    post  = FactoryGirl.create(:post, topic: topic, user_id: 99)
+    post  = FactoryBot.create(:post, topic: topic, user_id: 99)
 
     post.destroy
     assert post.frozen?
@@ -97,9 +97,9 @@ class TopicTest < ActiveSupport::TestCase
   end
 
   def test_destroy_topic_with_anonynous_post
-    topic = FactoryGirl.create(:topic)
-    posts = FactoryGirl.create_list(:post, 2, topic: topic)
-    posts << FactoryGirl.create(:post, topic: topic, user_id: nil, anonymous_user: true)
+    topic = FactoryBot.create(:topic)
+    posts = FactoryBot.create_list(:post, 2, topic: topic)
+    posts << FactoryBot.create(:post, topic: topic, user_id: nil, anonymous_user: true)
     assert 3, topic.posts.count
     assert topic.destroy!
   end

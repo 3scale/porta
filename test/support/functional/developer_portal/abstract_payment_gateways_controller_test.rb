@@ -21,26 +21,26 @@ class DeveloperPortal::AbstractPaymentGatewaysControllerTest < DeveloperPortal::
   def setup_provider
     @provider = create_provider_with_gateway_setting
 
-    FactoryGirl.create(:postpaid_billing, charging_enabled: true, account: @provider)
+    FactoryBot.create(:postpaid_billing, charging_enabled: true, account: @provider)
 
     @provider.settings.update_attribute(:finance_switch, 'visible')
     @service = @provider.default_service
     @service.update_attribute :buyer_plan_change_permission, 'request_credit_card'
 
-    @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @buyer.buy! @service.service_plans.first
     admin = @buyer.admins.first
     @account = admin.account
 
-    @plan  = FactoryGirl.create :application_plan, issuer: @service, name: 'current plan'
+    @plan  = FactoryBot.create :application_plan, issuer: @service, name: 'current plan'
     @plan.publish!
 
     @application = @buyer.buy! @plan
     @buyer.reload
 
-    @paid_plan  = FactoryGirl.create :application_plan, issuer: @service, setup_fee: 10, name: 'paid plan'
+    @paid_plan  = FactoryBot.create :application_plan, issuer: @service, setup_fee: 10, name: 'paid plan'
     @paid_plan.publish!
-    @free_plan  = FactoryGirl.create :application_plan, issuer: @service, name: 'free plan'
+    @free_plan  = FactoryBot.create :application_plan, issuer: @service, name: 'free plan'
     @free_plan.publish!
 
     host! @provider.domain
@@ -49,7 +49,7 @@ class DeveloperPortal::AbstractPaymentGatewaysControllerTest < DeveloperPortal::
   end
 
   def create_provider_with_gateway_setting
-    FactoryGirl.create(:provider_account, payment_gateway_type: payment_gateway_type, payment_gateway_options: payment_gateway_fields)
+    FactoryBot.create(:provider_account, payment_gateway_type: payment_gateway_type, payment_gateway_options: payment_gateway_fields)
   end
 
   def payment_gateway_fields

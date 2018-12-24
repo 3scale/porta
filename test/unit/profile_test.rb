@@ -139,7 +139,7 @@ class ProfileTest < ActiveSupport::TestCase
     end
 
     def test_logo_upload
-      profile = FactoryGirl.create(:profile)
+      profile = FactoryBot.create(:profile)
       hypnotoad = Rails.root.join('test', 'fixtures', 'hypnotoad.jpg').open
 
       profile.logo = hypnotoad

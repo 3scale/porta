@@ -15,8 +15,8 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'index (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # no token
     get(admin_api_account_plans_path(format: :xml))

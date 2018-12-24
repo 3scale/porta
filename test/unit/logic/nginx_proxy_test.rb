@@ -3,7 +3,7 @@ require 'test_helper'
 class Logic::NginxProxyTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   def test_generate_proxy_zip

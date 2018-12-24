@@ -13,9 +13,9 @@ class Provider::InviteeSignupsControllerTest < ActionController::TestCase
   end
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     host! @provider.admin_domain
-    @invitation = FactoryGirl.create(:invitation, account: @provider)
+    @invitation = FactoryBot.create(:invitation, account: @provider)
   end
 
   def test_show

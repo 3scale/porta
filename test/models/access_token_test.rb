@@ -3,7 +3,7 @@ require 'test_helper'
 class AccessTokenTest < ActiveSupport::TestCase
 
   def setup
-    @token = FactoryGirl.build(:access_token, owner: nil)
+    @token = FactoryBot.build(:access_token, owner: nil)
   end
 
   def test_destroy_dependency
@@ -73,10 +73,10 @@ class AccessTokenTest < ActiveSupport::TestCase
   private
 
   def member
-    @member ||= FactoryGirl.build(:member, account: account)
+    @member ||= FactoryBot.build(:member, account: account)
   end
 
   def account
-    @account ||= FactoryGirl.build_stubbed(:simple_provider)
+    @account ||= FactoryBot.build_stubbed(:simple_provider)
   end
 end

@@ -76,7 +76,7 @@ class WebHook::EventTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'enqueue' do
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
 
       account.stubs(web_hooks_allowed?: true,
                     web_hook: WebHook.new(active: true, account_created_on: true))

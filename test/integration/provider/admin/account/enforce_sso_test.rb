@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::Admin::Account::EnforceSSOTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     login_provider @provider
 
@@ -11,7 +11,7 @@ class Provider::Admin::Account::EnforceSSOTest < ActionDispatch::IntegrationTest
   end
 
   def test_create
-    user = FactoryGirl.create(:user, account: @provider)
+    user = FactoryBot.create(:user, account: @provider)
     user_session = user.user_sessions.create
 
     EnforceSSOValidator.any_instance.expects(:valid?).returns(false)

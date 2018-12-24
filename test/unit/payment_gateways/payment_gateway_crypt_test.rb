@@ -5,8 +5,8 @@ module PaymentGateways
 
     def setup
       @user = mock
-      @provider_account = FactoryGirl.build_stubbed(:simple_provider)
-      @account = FactoryGirl.build_stubbed(:simple_account)
+      @provider_account = FactoryBot.build_stubbed(:simple_provider)
+      @account = FactoryBot.build_stubbed(:simple_account)
       @account.stubs(provider_account: @provider_account)
       @user.stubs(account: @account, email: 'user@example.com')
       @gateway = PaymentGateways::PaymentGatewayCrypt.new(@user)

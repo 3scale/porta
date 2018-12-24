@@ -3,9 +3,9 @@ require 'test_helper'
 class DeveloperPortal::ActivationsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @buyer    = FactoryGirl.create(:buyer_account)
+    @buyer    = FactoryBot.create(:buyer_account)
     @provider = @buyer.provider_account
-    @user     = FactoryGirl.create(:pending_user, account: @buyer)
+    @user     = FactoryBot.create(:pending_user, account: @buyer)
     @service  = @provider.first_service!
 
     host! @provider.domain

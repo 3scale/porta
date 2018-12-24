@@ -3,7 +3,7 @@ require 'test_helper'
 class Cinstance::SearchTest < ActiveSupport::TestCase
 
   def test_by_name
-    cinstance = FactoryGirl.create(:cinstance, user_key: 'foobar')
+    cinstance = FactoryBot.create(:cinstance, user_key: 'foobar')
 
     result = Cinstance.by_name('user_key: foobar')
 

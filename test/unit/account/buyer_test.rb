@@ -18,13 +18,13 @@ class Account::BuyerTest < ActiveSupport::TestCase
   should have_many(:bought_service_plans).through(:bought_service_contracts)
 
   test "factory simple buyer should not have domains" do
-    buyer = FactoryGirl.build(:simple_buyer)
+    buyer = FactoryBot.build(:simple_buyer)
     assert_nil buyer.domain
     assert_nil buyer.self_domain
   end
 
   test "factory simple account should include 'simple' in domain" do
-    buyer = FactoryGirl.build(:simple_account)
+    buyer = FactoryBot.build(:simple_account)
     assert_match(/simple/, buyer.domain)
   end
 

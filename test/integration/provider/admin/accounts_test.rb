@@ -5,7 +5,7 @@ class Provider::Admin::AccountsTest < ActionDispatch::IntegrationTest
   DoubleField = Struct.new(:name)
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @master = @provider.provider_account
 
     login_provider @provider

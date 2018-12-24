@@ -15,7 +15,7 @@ module PaymentGateways
           private_key: 'world'
         }
       }
-      @provider_account = FactoryGirl.build_stubbed(:simple_provider, attributes)
+      @provider_account = FactoryBot.build_stubbed(:simple_provider, attributes)
       @payment_gateway = @provider_account.payment_gateway
 
       @account.stubs(provider_account: @provider_account, id: 12345678, credit_card_auth_code_was: nil)
@@ -160,7 +160,7 @@ module PaymentGateways
     end
 
     test '#buyer_reference takes into account the last saved customer.id' do
-      account = FactoryGirl.create(:simple_provider)
+      account = FactoryBot.create(:simple_provider)
       account.update_attributes(credit_card_auth_code: "#{@braintree.buyer_reference}-3")
       @braintree.stubs(:account).returns(account)
       account.credit_card_auth_code = nil

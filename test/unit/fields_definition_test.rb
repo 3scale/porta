@@ -3,16 +3,16 @@ require 'test_helper'
 class FieldsDefinitionTest < ActiveSupport::TestCase
 
   test 'visible_for?' do
-    provider_account = FactoryGirl.create(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     provider_user = provider_account.first_admin
 
-    buyer_user = FactoryGirl.create(:buyer_account).first_admin
-    other_provider_user = FactoryGirl.create(:provider_account).first_admin
+    buyer_user = FactoryBot.create(:buyer_account).first_admin
+    other_provider_user = FactoryBot.create(:provider_account).first_admin
 
     #
     # With a hidden field
     #
-    fd = FactoryGirl.create(:fields_definition, account: provider_account, hidden: true)
+    fd = FactoryBot.create(:fields_definition, account: provider_account, hidden: true)
 
     # For a buyer
     refute fd.visible_for?(buyer_user)
@@ -26,7 +26,7 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
     #
     # With a visible field
     #
-    fd = FactoryGirl.create(:fields_definition, account: provider_account, hidden: false)
+    fd = FactoryBot.create(:fields_definition, account: provider_account, hidden: false)
 
     # For a buyer
     assert fd.visible_for?(buyer_user)

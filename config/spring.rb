@@ -1,4 +1,4 @@
 Spring.after_fork do
-  FactoryGirl.reload if defined?(FactoryGirl)
+  FactoryBot.reload if defined?(FactoryBot)
   MessageBus.after_fork if defined?(MessageBus)
 end

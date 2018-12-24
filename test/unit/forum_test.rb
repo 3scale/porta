@@ -15,7 +15,7 @@ class ForumTest < ActiveSupport::TestCase
   test 'smart_search escapes the query' do
     skip 'Not available for Oracle' if System::Database.oracle?
 
-    forum = FactoryGirl.create(:forum)
+    forum = FactoryBot.create(:forum)
 
     ThinkingSphinx::Test.run do
       assert forum.topics.smart_search('fo/o').populate

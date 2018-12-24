@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Apicast::ProviderSourceTest < ActiveSupport::TestCase
   def setup
-    @account = FactoryGirl.build_stubbed(:simple_provider)
+    @account = FactoryBot.build_stubbed(:simple_provider)
     @source = Apicast::ProviderSource.new(@account)
   end
 
@@ -21,8 +21,8 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
   end
 
   def test_services
-    proxy = FactoryGirl.build_stubbed(:proxy)
-    service = FactoryGirl.build_stubbed(:simple_service, proxy: proxy)
+    proxy = FactoryBot.build_stubbed(:proxy)
+    service = FactoryBot.build_stubbed(:simple_service, proxy: proxy)
 
     @account.stubs(services: [ service ])
 
@@ -39,7 +39,7 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
 
   def test_policies_with_default_apicast_policy
     ThreeScale.config.stubs(onpremises: true)
-    proxy = FactoryGirl.build_stubbed(:proxy, policies_config: [{ name: 'cors',
+    proxy = FactoryBot.build_stubbed(:proxy, policies_config: [{ name: 'cors',
                                                                   humanName: 'Cors Proxy',
                                                                   version: '0.0.1',
                                                                   description: 'Cors proxy for service 1',
@@ -48,7 +48,7 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
                                                                   id: '1'
                                                                 }])
 
-    service = FactoryGirl.build_stubbed(:simple_service, proxy: proxy)
+    service = FactoryBot.build_stubbed(:simple_service, proxy: proxy)
 
     @account.stubs(services: [ service ])
     assert_equal [{'name' => 'cors', 'version' => '0.0.1', 'configuration' => {'foo' => 'bar'}},  {'name'=>'apicast', 'version'=>'builtin', 'configuration'=>{}}],

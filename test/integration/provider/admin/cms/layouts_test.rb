@@ -4,7 +4,7 @@ class Provider::Admin::Cms::LayoutsTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     login_provider @provider
 
@@ -12,7 +12,7 @@ class Provider::Admin::Cms::LayoutsTest < ActionDispatch::IntegrationTest
   end
 
   def test_update
-    layout = FactoryGirl.create(:cms_layout, provider: @provider)
+    layout = FactoryBot.create(:cms_layout, provider: @provider)
     params = { id: layout.id, cms_template: { draft: '<abc>0</abc>' }}
 
     (ENV['BRUTOFORCE'].present? ? 200 : 1).times do |i|

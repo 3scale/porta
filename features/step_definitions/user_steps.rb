@@ -19,7 +19,7 @@ Given /^an active admin "([^"]*)" of (account "[^"]*")$/ do |username, account|
 end
 
 Given /^an active user "([^"]*)" of (account "[^"]*") with ([^\"]*) permission$/ do |username, account, permission|
-  user = FactoryGirl.create(:active_user, account: account, username: username)
+  user = FactoryBot.create(:active_user, account: account, username: username)
 
   user.admin_sections = permission == 'no' ? [] : [permission]
 

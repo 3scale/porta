@@ -6,7 +6,7 @@ class Admin::Api::NginxesControllerTest < ActionController::TestCase
   end
 
   test 'show' do
-    provider = FactoryGirl.create(:provider_account, domain: 'provider.example.com')
+    provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     host! provider.admin_domain
 
     get :show, format: :zip, provider_key: provider.api_key
@@ -23,7 +23,7 @@ class Admin::Api::NginxesControllerTest < ActionController::TestCase
   end
 
   test 'spec returns a json' do
-    provider = FactoryGirl.create(:provider_account, domain: 'provider.example.com')
+    provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     host! provider.admin_domain
 
     get :spec, format: :json, provider_key: provider.api_key

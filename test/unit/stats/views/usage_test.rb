@@ -5,7 +5,7 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
   def setup
     Time.zone = 'UTC'
     @dummy = DummyClass.new
-    @metric = FactoryGirl.build_stubbed(:metric)
+    @metric = FactoryBot.build_stubbed(:metric)
     @dummy.stubs(:extract_metric).returns(@metric)
 
     @options = { since: '2010-01-01',

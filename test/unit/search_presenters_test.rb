@@ -10,10 +10,10 @@ class SearchPresentersTest < ActiveSupport::TestCase
   end
 
   test 'index presenter as json' do
-    provider = FactoryGirl.create(:simple_account)
-    provider.sections << FactoryGirl.create(:root_cms_section, :provider => provider)
+    provider = FactoryBot.create(:simple_account)
+    provider.sections << FactoryBot.create(:root_cms_section, :provider => provider)
 
-    page = FactoryGirl.create(:cms_page, :published => 'my text whatever', :provider => provider).reload
+    page = FactoryBot.create(:cms_page, :published => 'my text whatever', :provider => provider).reload
     request = stub('request')
     params = {:q => '*text*'}
 
@@ -35,11 +35,11 @@ class SearchPresentersTest < ActiveSupport::TestCase
   end
 
   test 'pagination' do
-    provider = FactoryGirl.create(:simple_account)
-    provider.sections << section = FactoryGirl.create(:root_cms_section, :provider => provider)
+    provider = FactoryBot.create(:simple_account)
+    provider.sections << section = FactoryBot.create(:root_cms_section, :provider => provider)
 
     10.times do
-      FactoryGirl.create(:cms_page, published: 'my text whatever', provider: provider, section: section)
+      FactoryBot.create(:cms_page, published: 'my text whatever', provider: provider, section: section)
     end
 
     request = stub('request')

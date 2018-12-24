@@ -4,7 +4,7 @@ class Liquid::Drops::InvoiceDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @invoice =  FactoryGirl.build_stubbed(:invoice)
+    @invoice =  FactoryBot.build_stubbed(:invoice)
     @drop = Drops::Invoice.new(@invoice)
   end
 

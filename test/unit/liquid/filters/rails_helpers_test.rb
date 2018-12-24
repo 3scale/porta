@@ -62,7 +62,7 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
 
     CMS::S3.stubs(:bucket).returns('test')
 
-    file = FactoryGirl.create(:cms_file)
+    file = FactoryBot.create(:cms_file)
     file.attachment = Rails.root.join('test', 'fixtures', 'hypnotoad.jpg').open
     file.save!
 

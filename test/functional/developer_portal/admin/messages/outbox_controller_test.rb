@@ -10,8 +10,8 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
   end
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
-    @user    = FactoryGirl.create(:user, account: provider)
+    provider = FactoryBot.create(:provider_account)
+    @user    = FactoryBot.create(:user, account: provider)
 
     host! provider.domain
 

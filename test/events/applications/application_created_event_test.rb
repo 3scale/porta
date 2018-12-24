@@ -3,8 +3,8 @@ require 'test_helper'
 class Applications::ApplicationCreatedEventTest < ActiveSupport::TestCase
 
   def test_create
-    application = FactoryGirl.build_stubbed(:simple_cinstance, id: 1, service_id: 2,
-                    plan: FactoryGirl.build_stubbed(:simple_application_plan, id: 5))
+    application = FactoryBot.build_stubbed(:simple_cinstance, id: 1, service_id: 2,
+                    plan: FactoryBot.build_stubbed(:simple_application_plan, id: 5))
     application.stubs(:provider_account_id).returns(10)
     event       = Applications::ApplicationCreatedEvent.create(application, user)
 
@@ -18,21 +18,21 @@ class Applications::ApplicationCreatedEventTest < ActiveSupport::TestCase
 
   def test_provider
     # master's service
-    master         = FactoryGirl.build_stubbed(:master_account)
-    master_service = FactoryGirl.build_stubbed(:service, account: master)
-    master_plan    = FactoryGirl.build_stubbed(:simple_application_plan, issuer: master_service)
+    master         = FactoryBot.build_stubbed(:master_account)
+    master_service = FactoryBot.build_stubbed(:service, account: master)
+    master_plan    = FactoryBot.build_stubbed(:simple_application_plan, issuer: master_service)
 
-    master_application = FactoryGirl.build_stubbed(:simple_cinstance, service: master_service, plan: master_plan)
+    master_application = FactoryBot.build_stubbed(:simple_cinstance, service: master_service, plan: master_plan)
     master_event       = Applications::ApplicationCreatedEvent.create(master_application, user)
 
     assert_equal master_event.provider, master
 
     # provider's service
-    provider          = FactoryGirl.build_stubbed(:simple_provider, provider_account: master)
-    provider_service  = FactoryGirl.build_stubbed(:service, account: provider)
-    provider_plan     = FactoryGirl.build_stubbed(:simple_application_plan, issuer: provider_service)
+    provider          = FactoryBot.build_stubbed(:simple_provider, provider_account: master)
+    provider_service  = FactoryBot.build_stubbed(:service, account: provider)
+    provider_plan     = FactoryBot.build_stubbed(:simple_application_plan, issuer: provider_service)
 
-    provider_application = FactoryGirl.build_stubbed(:simple_cinstance, service: provider_service, plan: provider_plan)
+    provider_application = FactoryBot.build_stubbed(:simple_cinstance, service: provider_service, plan: provider_plan)
     provider_event       = Applications::ApplicationCreatedEvent.create(provider_application, user)
 
     assert_equal provider_event.provider, provider
@@ -41,6 +41,6 @@ class Applications::ApplicationCreatedEventTest < ActiveSupport::TestCase
   private
 
   def user
-    @_user ||= FactoryGirl.build_stubbed(:simple_user)
+    @_user ||= FactoryBot.build_stubbed(:simple_user)
   end
 end

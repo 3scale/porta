@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::IntegrationTest
   test 'Finance is globally disabled' do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     login! provider
     plan = ApplicationPlan.new(issuer: master_account.first_service!, name: 'enterprise')
     provider.force_upgrade_to_provider_plan!(plan)

@@ -8,8 +8,8 @@ module ServiceDiscovery
       include TestHelpers::ServiceDiscovery
 
       setup do
-        @provider = FactoryGirl.create(:simple_provider)
-        @service = FactoryGirl.create(:service, account: @provider)
+        @provider = FactoryBot.create(:simple_provider)
+        @service = FactoryBot.create(:service, account: @provider)
 
         cluster_service_metadata = {
           name: 'fake-api',
@@ -34,30 +34,30 @@ module ServiceDiscovery
 
     class ApiDocs::ServiceTest < ActiveSupport::TestCase
       test 'discovered is readonly' do
-        api_doc = FactoryGirl.create(:api_docs_service, discovered: true)
+        api_doc = FactoryBot.create(:api_docs_service, discovered: true)
 
         api_doc.update! discovered: false
         assert api_doc.reload.discovered
       end
 
       test 'discovered scope' do
-        api_docs =  FactoryGirl.create_list(:api_docs_service, 2, discovered: true)
-        api_docs += FactoryGirl.create_list(:api_docs_service, 3, discovered: false)
+        api_docs =  FactoryBot.create_list(:api_docs_service, 2, discovered: true)
+        api_docs += FactoryBot.create_list(:api_docs_service, 3, discovered: false)
 
         assert_same_elements api_docs[0..1].map(&:id), ::ApiDocs::Service.discovered.pluck(:id)
       end
 
       test 'only one discovered by service' do
-        service = FactoryGirl.create(:simple_service)
+        service = FactoryBot.create(:simple_service)
 
-        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account)
+        api_doc = FactoryBot.build(:api_docs_service, service: service, account: service.account)
         assert api_doc.valid?
 
-        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account, discovered: true)
+        api_doc = FactoryBot.build(:api_docs_service, service: service, account: service.account, discovered: true)
         assert api_doc.valid?
 
-        FactoryGirl.create(:api_docs_service, service: service, account: service.account, discovered: true)
-        api_doc = FactoryGirl.build(:api_docs_service, service: service, account: service.account, discovered: true)
+        FactoryBot.create(:api_docs_service, service: service, account: service.account, discovered: true)
+        api_doc = FactoryBot.build(:api_docs_service, service: service, account: service.account, discovered: true)
         refute api_doc.valid?
         assert api_doc.errors[:discovered].present?
 

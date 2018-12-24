@@ -14,7 +14,7 @@ class MetricTest < ActiveSupport::TestCase
   should_not allow_value('hello!').for(:system_name)
 
   def test_destroyable?
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     metric  = service.metrics.hits
 
     assert metric
@@ -40,10 +40,10 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   test 'system_name is not case sensitive' do
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
-    metric_one = FactoryGirl.create(:metric, service: service, system_name: 'frags')
-    metric_two = FactoryGirl.create(:metric, service: service)
+    metric_one = FactoryBot.create(:metric, service: service, system_name: 'frags')
+    metric_two = FactoryBot.create(:metric, service: service)
 
     assert metric_two.update_column(:system_name, 'Frags')
   end
@@ -278,7 +278,7 @@ class MetricTest < ActiveSupport::TestCase
     end
 
     should 'disable the given metric even if usage limit already exists' do
-      FactoryGirl.create :usage_limit, plan: @plan, metric: @metric1, period: :minute, value: 1
+      FactoryBot.create :usage_limit, plan: @plan, metric: @metric1, period: :minute, value: 1
 
       assert @metric1.enabled_for_plan?(@plan)
       refute @metric1.disabled_for_plan?(@plan)
@@ -293,7 +293,7 @@ class MetricTest < ActiveSupport::TestCase
       used_periods = @plan.usage_limits.of_metric(@metric1).pluck(:period).uniq
 
       (UsageLimit::PERIODS - used_periods.map(&:to_sym)).each do |period|
-        FactoryGirl.create :usage_limit, plan: @plan, metric: @metric1, period: period, value: 1
+        FactoryBot.create :usage_limit, plan: @plan, metric: @metric1, period: period, value: 1
       end
 
       assert @metric1.enabled_for_plan?(@plan)

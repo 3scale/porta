@@ -14,9 +14,9 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    feature = FactoryGirl.create(:feature, featurable: @service)
-    user    = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token   = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    feature = FactoryBot.create(:feature, featurable: @service)
+    user    = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_service_feature_path(@service, feature))
     assert_response :forbidden

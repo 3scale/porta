@@ -3,8 +3,8 @@ require 'test_helper'
 class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
 
   def setup
-    @account    = FactoryGirl.create(:provider_account)
-    @service    = FactoryGirl.create(:simple_service, account: @account)
+    @account    = FactoryBot.create(:provider_account)
+    @service    = FactoryBot.create(:simple_service, account: @account)
     @proxy_rule = @service.proxy.proxy_rules.last
 
     host! @account.admin_domain
@@ -12,8 +12,8 @@ class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
 
   def test_crud_access_token
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @account, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @account, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # index
     get(admin_api_service_proxy_mapping_rules_path(access_token_params))

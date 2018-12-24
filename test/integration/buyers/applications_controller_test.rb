@@ -4,7 +4,7 @@ class Buyers::ApplicationsTest < ActionDispatch::IntegrationTest
   class MasterLoggedInTest < Buyers::ApplicationsTest
     setup do
       login! master_account
-      FactoryGirl.create(:cinstance, service: master_account.default_service)
+      FactoryBot.create(:cinstance, service: master_account.default_service)
     end
 
     attr_reader :service

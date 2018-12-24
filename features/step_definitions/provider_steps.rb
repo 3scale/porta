@@ -91,7 +91,7 @@ Given(/^a provider "(.*?)" with impersonation_admin admin$/) do |provider_name|
   step %(a provider "#{provider_name}")
   provider = Account.find_by_org_name(provider_name)
   if provider.admins.impersonation_admins.empty?
-    FactoryGirl.create :active_admin, username: ThreeScale.config.impersonation_admin['username'], account: provider
+    FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin['username'], account: provider
   end
 end
 
@@ -111,7 +111,7 @@ Given(/^a provider signs up and activates his account$/) do
   step 'current domain is the admin domain of provider "master"'
   visit provider_signup_path
 
-  user = FactoryGirl.build_stubbed(:user)
+  user = FactoryBot.build_stubbed(:user)
 
   within signup_form do
     fill_in 'Email', with: user.email
@@ -208,7 +208,7 @@ end
 
 Given(/^a master admin with extra fields is logged in/) do
   step 'master admin is logged in'
-  FactoryGirl.create(:fields_definition, account: @master, target: 'Account', name: 'account_extra_field')
+  FactoryBot.create(:fields_definition, account: @master, target: 'Account', name: 'account_extra_field')
 end
 
 When /^new form to create a tenant is filled and submitted$/ do

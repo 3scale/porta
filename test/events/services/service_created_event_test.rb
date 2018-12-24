@@ -5,9 +5,9 @@ class Services::ServiceCreatedEventTest < ActiveSupport::TestCase
   def test_create
     Services::ServiceCreatedEvent.expects(:generate_token_value).returns('12345')
 
-    provider = FactoryGirl.build_stubbed(:simple_provider)
-    service  = FactoryGirl.build_stubbed(:simple_service, account: provider)
-    user     = FactoryGirl.build_stubbed(:simple_user)
+    provider = FactoryBot.build_stubbed(:simple_provider)
+    service  = FactoryBot.build_stubbed(:simple_service, account: provider)
+    user     = FactoryBot.build_stubbed(:simple_user)
     event    = Services::ServiceCreatedEvent.create(service, user)
 
     assert event
@@ -18,9 +18,9 @@ class Services::ServiceCreatedEventTest < ActiveSupport::TestCase
   end
 
   def test_after_commit
-    provider = FactoryGirl.build_stubbed(:simple_provider)
-    service  = FactoryGirl.build_stubbed(:simple_service, account: provider)
-    user     = FactoryGirl.build_stubbed(:simple_user)
+    provider = FactoryBot.build_stubbed(:simple_provider)
+    service  = FactoryBot.build_stubbed(:simple_service, account: provider)
+    user     = FactoryBot.build_stubbed(:simple_user)
     event    = Services::ServiceCreatedEvent.create(service, user)
 
     assert_difference CreateServiceTokenWorker.jobs.method(:size) do

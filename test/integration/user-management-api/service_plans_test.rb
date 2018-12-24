@@ -19,8 +19,8 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user    = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
-    token   = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user    = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
+    token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     service = @provider.default_service
     plan    = service.service_plans.first
 
@@ -109,7 +109,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'update' do
-    plan = FactoryGirl.create(:service_plan, issuer: @provider.default_service, name: 'namy')
+    plan = FactoryBot.create(:service_plan, issuer: @provider.default_service, name: 'namy')
 
     put admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml),
                                                  :state_event => 'publish',

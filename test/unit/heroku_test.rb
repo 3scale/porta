@@ -5,7 +5,7 @@ require 'webmock/minitest'
 class HerokuTest < ActiveSupport::TestCase
 
   test 'should sync heroku data' do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     admin = provider.first_admin
     admin.update_column(:state, "pending")
 
@@ -39,7 +39,7 @@ class HerokuTest < ActiveSupport::TestCase
   end
 
   test 'should raise error if heroku api returns something diferent of 200 or 404' do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     heroku_id = 'foo'
     provider.settings.update_column(:heroku_id, heroku_id)
 
@@ -51,12 +51,12 @@ class HerokuTest < ActiveSupport::TestCase
   end
 
   test 'should return false isnt a provider account' do
-    buyer = FactoryGirl.create(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
     refute Heroku.sync(buyer)
   end
 
   test 'should return false isnt a heroku account' do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     refute Heroku.sync(provider)
     provider.reload
     assert provider.settings.heroku_id.nil?

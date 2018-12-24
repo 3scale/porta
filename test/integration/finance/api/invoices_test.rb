@@ -22,8 +22,8 @@ module Finance::Api
         end
 
         should 'deny access if access token does not include finance scope' do
-          member = FactoryGirl.create(:member, account: @provider, admin_sections: [:finance])
-          token  = FactoryGirl.create(:access_token, owner: member)
+          member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
+          token  = FactoryBot.create(:access_token, owner: member)
 
           get "/api/invoices.xml?access_token=#{token.value}"
 
@@ -31,8 +31,8 @@ module Finance::Api
         end
 
         should 'allow access if access token include finance scope' do
-          member = FactoryGirl.create(:member, account: @provider, admin_sections: [:finance])
-          token  = FactoryGirl.create(:access_token, owner: member, scopes: ['finance'])
+          member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
+          token  = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
           get "/api/invoices.xml?access_token=#{token.value}"
 
@@ -40,8 +40,8 @@ module Finance::Api
         end
 
         should 'deny access if member does not have finance permission' do
-          member = FactoryGirl.create(:member, account: @provider, admin_sections: [])
-          token  = FactoryGirl.create(:access_token, owner: member, scopes: ['finance'])
+          member = FactoryBot.create(:member, account: @provider, admin_sections: [])
+          token  = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
           get "/api/invoices.xml?access_token=#{token.value}"
 

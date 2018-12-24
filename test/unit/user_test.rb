@@ -21,7 +21,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_user_suspended_no_sessions
-    user = FactoryGirl.create(:simple_user)
+    user = FactoryBot.create(:simple_user)
     UserSession.create!(user: user)
 
     user.activate!
@@ -35,7 +35,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_find_with_valid_password_token
-    user = FactoryGirl.create(:simple_user)
+    user = FactoryBot.create(:simple_user)
     token = user.generate_lost_password_token
     assert_not_nil user.account.users.find_with_valid_password_token(token)
 
@@ -44,7 +44,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_nullify_authentication_id
-    user = FactoryGirl.create(:simple_user)
+    user = FactoryBot.create(:simple_user)
     user.expects(:any_sso_authorizations?).returns(true).at_least_once
     user.expects(:nullify_authentication_id).once
     assert user.save
@@ -58,7 +58,7 @@ class UserTest < ActiveSupport::TestCase
 
   def test_any_sso_authorizations?
     sso_authorizations = DoubleSsoAuthorizations.new
-    user = FactoryGirl.build_stubbed(:simple_user)
+    user = FactoryBot.build_stubbed(:simple_user)
     user.stubs(:sso_authorizations).returns(sso_authorizations)
 
     user.expects(:persisted?).returns(true).once
@@ -71,9 +71,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_accessible_service_tokens
-    provider = FactoryGirl.create(:simple_provider)
-    service  = FactoryGirl.create(:service, account: provider)
-    member   = FactoryGirl.build_stubbed(:member, account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    service  = FactoryBot.create(:service, account: provider)
+    member   = FactoryBot.build_stubbed(:member, account: provider)
 
     service.service_tokens.create!(value: 'money-makes-people-cautious')
 
@@ -86,10 +86,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_accessible_services
-    provider = FactoryGirl.create(:simple_provider)
-    service  = FactoryGirl.create(:service, account: provider)
-    admin    = FactoryGirl.build_stubbed(:admin, account: provider)
-    member   = FactoryGirl.build_stubbed(:member, account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    service  = FactoryBot.create(:service, account: provider)
+    admin    = FactoryBot.build_stubbed(:admin, account: provider)
+    member   = FactoryBot.build_stubbed(:member, account: provider)
 
     assert_equal 1, admin.accessible_services.count
     assert_equal 1, member.accessible_services.count
@@ -109,9 +109,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#multiple_accessible_services?' do
-    provider = FactoryGirl.create(:simple_provider)
-    user = FactoryGirl.create(:user, account: provider)
-    FactoryGirl.create_list(:simple_service, 2, account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:user, account: provider)
+    FactoryBot.create_list(:simple_service, 2, account: provider)
 
     Service.stubs(permitted_for_user: [provider.services.last!.id])
     refute user.multiple_accessible_services?
@@ -447,28 +447,28 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'users of buyer accounts of a provider can use same email address and/or username than users of the provider' do
-    provider_account = FactoryGirl.create(:simple_provider)
-    buyer_account = FactoryGirl.create(:simple_buyer, provider_account: provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
 
-    provider_user = FactoryGirl.create(:simple_user, account: provider_account, email: 'foo@example.org', username: 'unique_username')
+    provider_user = FactoryBot.create(:simple_user, account: provider_account, email: 'foo@example.org', username: 'unique_username')
 
-    buyer_user = FactoryGirl.build(:simple_user, account: buyer_account, email: provider_user.email)
+    buyer_user = FactoryBot.build(:simple_user, account: buyer_account, email: provider_user.email)
     assert buyer_user.valid?
 
-    buyer_user = FactoryGirl.build(:simple_user, account: buyer_account, username: buyer_user.username)
+    buyer_user = FactoryBot.build(:simple_user, account: buyer_account, username: buyer_user.username)
     assert buyer_user.valid?
   end
 
   test 'users of a provider can use same email address and/or username than users of buyer accounts of the provider' do
-    provider_account = FactoryGirl.create(:simple_provider)
-    buyer_account = FactoryGirl.create(:simple_buyer, provider_account: provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
 
-    buyer_user = FactoryGirl.create(:simple_user, account: buyer_account, email: 'foo@example.org', username: 'unique_username')
+    buyer_user = FactoryBot.create(:simple_user, account: buyer_account, email: 'foo@example.org', username: 'unique_username')
 
-    provider_user = FactoryGirl.build(:simple_user, account: provider_account, email: buyer_user.email)
+    provider_user = FactoryBot.build(:simple_user, account: provider_account, email: buyer_user.email)
     assert provider_user.valid?
 
-    provider_user = FactoryGirl.build(:simple_user, account: provider_account, username: buyer_user.username)
+    provider_user = FactoryBot.build(:simple_user, account: provider_account, username: buyer_user.username)
     assert provider_user.valid?
   end
 

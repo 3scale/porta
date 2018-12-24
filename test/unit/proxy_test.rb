@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ProxyTest < ActiveSupport::TestCase
   def setup
-    @proxy = FactoryGirl.create(:simple_proxy, api_backend: nil)
+    @proxy = FactoryBot.create(:simple_proxy, api_backend: nil)
     @proxy.update_attributes!(apicast_configuration_driven: false)
     @service = @proxy.service
     @account = @service.account
@@ -15,7 +15,7 @@ class ProxyTest < ActiveSupport::TestCase
   class NoContextNecessary < ActiveSupport::TestCase
 
     def test_policies_config_structure
-      service = FactoryGirl.build_stubbed(:simple_service)
+      service = FactoryBot.build_stubbed(:simple_service)
       proxy = Proxy.new(policies_config: [{ name: '1', version: 'a', configuration: {} }], service: service)
       assert proxy.valid?
 
@@ -63,7 +63,7 @@ class ProxyTest < ActiveSupport::TestCase
                       id: '3'
                     }]
       proxy = Proxy.new(policies_config: raw_config.to_json)
-      proxy.stubs(:account).returns(FactoryGirl.build_stubbed(:simple_provider))
+      proxy.stubs(:account).returns(FactoryBot.build_stubbed(:simple_provider))
       policy_chain =  [
         {'name' => 'cors', 'version' => '0.0.1', 'configuration' => {'foo' => 'bar'}},
         {'name' => 'cors', 'version' => '0.0.1', 'configuration' => {'hello' => 'Aloha'}},
@@ -83,12 +83,12 @@ class ProxyTest < ActiveSupport::TestCase
 
     def test_set_sandbox_endpoint_callback
       Proxy.any_instance.expects(:set_sandbox_endpoint).at_least_once
-      FactoryGirl.create(:simple_proxy)
+      FactoryBot.create(:simple_proxy)
     end
 
     def test_set_production_endpoint_callback
       Proxy.any_instance.expects(:set_production_endpoint).at_least_once
-      FactoryGirl.create(:simple_proxy)
+      FactoryBot.create(:simple_proxy)
     end
 
     def test_endpoint_validation
@@ -283,7 +283,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test '#endpoint_port' do
-    proxy = FactoryGirl.build_stubbed(:proxy)
+    proxy = FactoryBot.build_stubbed(:proxy)
 
     proxy.endpoint = nil
     assert_equal 80, proxy.endpoint_port
@@ -393,18 +393,18 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'sandbox_deployed? when last proxy log entry says so' do
-    proxy = FactoryGirl.create(:proxy, created_at: Time.now)
+    proxy = FactoryBot.create(:proxy, created_at: Time.now)
     refute proxy.sandbox_deployed?
-    FactoryGirl.create(:proxy_log, provider: proxy.service.account, status: 'Deployed successfully.', created_at: Time.now - 1.minute)
+    FactoryBot.create(:proxy_log, provider: proxy.service.account, status: 'Deployed successfully.', created_at: Time.now - 1.minute)
     refute proxy.sandbox_deployed?
-    FactoryGirl.create(:proxy_log, provider: proxy.service.account, status: 'Deployed successfully.', created_at: Time.now + 1.minute)
+    FactoryBot.create(:proxy_log, provider: proxy.service.account, status: 'Deployed successfully.', created_at: Time.now + 1.minute)
     assert proxy.sandbox_deployed?
-    FactoryGirl.create(:proxy_log, provider: proxy.service.account, status: 'Deploy failed.', created_at: Time.now + 2.minutes)
+    FactoryBot.create(:proxy_log, provider: proxy.service.account, status: 'Deploy failed.', created_at: Time.now + 2.minutes)
     refute proxy.sandbox_deployed?
   end
 
   test 'send_api_test_request!' do
-    proxy = FactoryGirl.build_stubbed(:proxy,
+    proxy = FactoryBot.build_stubbed(:proxy,
                                       api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
                                       sandbox_endpoint: 'http://proxy:80',
                                       api_test_path: '/v1/word/stuff.json',
@@ -417,7 +417,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'send_api_test_request! with oauth' do
-    proxy = FactoryGirl.build_stubbed(:proxy,
+    proxy = FactoryBot.build_stubbed(:proxy,
                                       api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
                                       sandbox_endpoint: 'http://proxy:80',
                                       api_test_path: '/v1/word/stuff.json',
@@ -430,7 +430,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'save_and_deploy' do
-    proxy = FactoryGirl.build(:proxy,
+    proxy = FactoryBot.build(:proxy,
                               api_backend: 'http://example.com',
                               api_test_path: '/path',
                               apicast_configuration_driven: false)
