@@ -4,7 +4,7 @@ class Stats::KeyHelpersTest < ActiveSupport::TestCase
   include Stats::KeyHelpers
 
   test 'key_for with active record' do
-    plan = FactoryBot.stub(:application_plan, :issuer => nil)
+    plan = FactoryBot.build_stubbed(:application_plan, :issuer => nil)
 
     assert_equal "plan:#{plan.id}", key_for(plan)
   end
@@ -22,7 +22,7 @@ class Stats::KeyHelpersTest < ActiveSupport::TestCase
   end
 
   test 'key_for with hash with active record value' do
-    plan = FactoryBot.stub(:application_plan, :issuer => nil)
+    plan = FactoryBot.build_stubbed(:application_plan, :issuer => nil)
 
     assert_equal "foo:#{plan.id}", key_for(:foo => plan)
   end
@@ -36,7 +36,7 @@ class Stats::KeyHelpersTest < ActiveSupport::TestCase
   end
 
   test 'key_for with array' do
-    plan = FactoryBot.stub(:application_plan, :issuer => nil)
+    plan = FactoryBot.build_stubbed(:application_plan, :issuer => nil)
 
     assert_equal "foo/bar/plan:#{plan.id}/day:20091101",
                  key_for(:foo, :bar, plan, :day => '20091101')

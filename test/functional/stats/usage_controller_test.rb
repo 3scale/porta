@@ -34,7 +34,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
   end
 
   test 'hours' do
-    metric = FactoryBot.stub(:metric, :service => @service)
+    metric = FactoryBot.build_stubbed(:metric, :service => @service)
 
     data = (0..23).inject(ActiveSupport::OrderedHash.new) do |memo, hour|
       memo["#{hour}:00"] = rand(1000)
