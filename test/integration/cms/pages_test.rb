@@ -4,13 +4,13 @@ module CMS
   class PagesTest < ActionDispatch::IntegrationTest
 
     def setup
-      @provider = FactoryGirl.create(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       login_provider @provider
     end
 
     test 'update - without layout' do
-      new_layout = FactoryGirl.create(:cms_layout, system_name: 'NEW', provider: @provider)
-      page = FactoryGirl.create(:cms_page, provider: @provider, layout: new_layout)
+      new_layout = FactoryBot.create(:cms_layout, system_name: 'NEW', provider: @provider)
+      page = FactoryBot.create(:cms_page, provider: @provider, layout: new_layout)
 
       patch provider_admin_cms_page_path(page), provider_key: @provider.provider_key, id: page.id, format: :js,
         cms_template: {

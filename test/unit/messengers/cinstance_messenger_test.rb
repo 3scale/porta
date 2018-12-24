@@ -143,7 +143,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     end
 
     def test_plan_change_for_buyer
-      provider = FactoryGirl.create(:provider_account)
+      provider = FactoryBot.create(:provider_account)
 
       app = provider.bought_cinstance
 
@@ -163,7 +163,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     end
 
     def test_plan_change
-      provider = FactoryGirl.create(:provider_account)
+      provider = FactoryBot.create(:provider_account)
 
       app = provider.bought_cinstance
 

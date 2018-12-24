@@ -3,7 +3,7 @@ require 'test_helper'
 class Api::IntegrationsControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @provider.default_service.service_tokens.create!(value: 'token')
 
     host! @provider.admin_domain
@@ -11,7 +11,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
   end
 
   test "should not have access" do
-    member = FactoryGirl.create(:member)
+    member = FactoryBot.create(:member)
     @provider.users << member
     host! @provider.admin_domain
     login_as member
@@ -23,7 +23,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
   test 'should have access' do
     rolling_updates_off
     
-    member = FactoryGirl.create(:member)
+    member = FactoryBot.create(:member)
     member.member_permissions.create(admin_section: 'plans')
     @provider.users << member
     host! @provider.admin_domain
@@ -241,7 +241,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
 
   test 'show' do
     service = @provider.default_service
-    config = FactoryGirl.create(:proxy_config, proxy: service.proxy, version: 3, environment: 'sandbox')
+    config = FactoryBot.create(:proxy_config, proxy: service.proxy, version: 3, environment: 'sandbox')
 
     get :show, service_id: service.id
 
@@ -253,7 +253,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
     service = @provider.default_service
     service.proxy.update_columns(apicast_configuration_driven: true)
 
-    staging = FactoryGirl.create(:proxy_config, proxy: service.proxy, environment: 'sandbox')
+    staging = FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'sandbox')
 
     put :promote_to_production, service_id: service.id
 

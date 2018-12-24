@@ -4,9 +4,9 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
 
 
   def setup
-    @provider = FactoryGirl.create(:provider_with_billing)
-    @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
-    @invoice = FactoryGirl.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
+    @provider = FactoryBot.create(:provider_with_billing)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
     @data = Pdf::Finance::InvoiceReportData.new(@invoice)
   end
 
@@ -18,8 +18,8 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   end
 
   test 'respect the defined labels of fields' do
-    FactoryGirl.create(:fields_definition, target: 'Account', name: 'vat_code', label: 'ABN', account: @provider)
-    FactoryGirl.create(:fields_definition, target: 'Account', name: 'vat_rate', label: 'GST', account: @provider)
+    FactoryBot.create(:fields_definition, target: 'Account', name: 'vat_code', label: 'ABN', account: @provider)
+    FactoryBot.create(:fields_definition, target: 'Account', name: 'vat_rate', label: 'GST', account: @provider)
     @buyer.vat_code = '5555'
     @buyer.save!
 
@@ -57,8 +57,8 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   end
 
   test 'respect and provide VAT rate and po number if present and modified by provider' do
-    FactoryGirl.create(:fields_definition, target: 'Account', name: 'vat_code', label: 'ABN', account: @provider)
-    FactoryGirl.create(:fields_definition, target: 'Account', name: 'vat_rate', label: 'GST', account: @provider)
+    FactoryBot.create(:fields_definition, target: 'Account', name: 'vat_code', label: 'ABN', account: @provider)
+    FactoryBot.create(:fields_definition, target: 'Account', name: 'vat_rate', label: 'GST', account: @provider)
 
     @buyer.fiscal_code = 'chino22'
     @buyer.vat_code = 'vat55'

@@ -29,7 +29,7 @@ class ServiceContractTest < ActiveSupport::TestCase
   end
 
   test 'bought_service_contracts' do
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     assert ServiceContract.issued_by(service).count
   end
 end

@@ -5,7 +5,7 @@ class Liquid::Drops::ApiSpecDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     @service = provider.default_service
     @spec = provider.api_docs_services.create!(:name => 'Das Paella', :body => '{"basePath":"http://paella4guiris", "apis":[]}', :published => true)
   end

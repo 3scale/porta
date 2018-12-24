@@ -6,9 +6,9 @@ class CMS::UpgradeContentWorkerTest < ActiveSupport::TestCase
   end
 
   def test_upgrade_include
-    provider = FactoryGirl.create(:simple_provider)
-    section = FactoryGirl.create(:root_cms_section, provider: provider)
-    page = FactoryGirl.create(:cms_page, provider: provider, section: section)
+    provider = FactoryBot.create(:simple_provider)
+    section = FactoryBot.create(:root_cms_section, provider: provider)
+    page = FactoryBot.create(:cms_page, provider: provider, section: section)
     page.published = "{% include 'login/cas' %}"
     page.draft = "{%  include 'signup/cas'  %}"
     page.save!

@@ -3,8 +3,8 @@ require 'test_helper'
 class Provider::SessionsControllerTest < ActionController::TestCase
 
   test 'logout of provider with partner and logout_url' do
-    partner = FactoryGirl.create(:partner, logout_url: "http://example.net/?")
-    account = FactoryGirl.create(:provider_account, partner: partner)
+    partner = FactoryBot.create(:partner, logout_url: "http://example.net/?")
+    account = FactoryBot.create(:provider_account, partner: partner)
     host! account.self_domain
 
     login_as(account.first_admin)

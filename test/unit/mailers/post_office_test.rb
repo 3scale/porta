@@ -5,8 +5,8 @@ class PostOfficeTest < ActionMailer::TestCase
     ActionMailer::Base.deliveries = []
     @host = ActionMailer::Base.default_url_options[:host]
 
-    @provider  = FactoryGirl.create(:provider_account)
-    @buyer     = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @provider  = FactoryBot.create(:provider_account)
+    @buyer     = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
   test 'message_notification has a header to locate the message' do

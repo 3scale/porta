@@ -30,8 +30,8 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
 
   # Access token
   test 'create (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider)
-    token = FactoryGirl.create(:access_token, owner: user)
+    user  = FactoryBot.create(:member, account: @provider)
+    token = FactoryBot.create(:access_token, owner: user)
 
     post(admin_api_signup_path, format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona')
     assert_response :forbidden

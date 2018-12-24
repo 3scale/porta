@@ -5,12 +5,12 @@ require 'test_helper'
 class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     host! provider.admin_domain
     settings = provider.settings
     settings.allow_branding
     settings.allow_iam_tools
-    @access_token = FactoryGirl.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
+    @access_token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
   end
 
   test '#create persists' do
@@ -78,7 +78,7 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
   end
 
   test '#update saves the new attributes values' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider)
     attributes = {client_id: 'updated-cid', client_secret: 'updated_client_secret', site: 'http://new.example.net'}
     put admin_api_authentication_provider_path(authentication_provider, authentication_provider_params(different_attributes: attributes))
     assert_response :ok
@@ -89,9 +89,9 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
   end
 
   test '#index returns all the authentication providers of the current account in json' do
-    FactoryGirl.create(:redhat_customer_portal_authentication_provider, account: provider)
-    FactoryGirl.create(:keycloak_authentication_provider, account: provider)
-    FactoryGirl.create(:redhat_customer_portal_authentication_provider, account: FactoryGirl.build_stubbed(:simple_provider))
+    FactoryBot.create(:redhat_customer_portal_authentication_provider, account: provider)
+    FactoryBot.create(:keycloak_authentication_provider, account: provider)
+    FactoryBot.create(:redhat_customer_portal_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider))
     get admin_api_authentication_providers_path(format: :json, access_token: access_token.value)
     assert_response :ok
     authentication_providers = JSON.parse(response.body)['authentication_providers']
@@ -103,23 +103,23 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
   end
 
   test '#index returns all the authentication providers of the current account in xml' do
-    FactoryGirl.create(:redhat_customer_portal_authentication_provider, account: provider)
-    FactoryGirl.create(:keycloak_authentication_provider, account: provider)
-    FactoryGirl.create(:redhat_customer_portal_authentication_provider, account: FactoryGirl.build_stubbed(:simple_provider))
+    FactoryBot.create(:redhat_customer_portal_authentication_provider, account: provider)
+    FactoryBot.create(:keycloak_authentication_provider, account: provider)
+    FactoryBot.create(:redhat_customer_portal_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider))
     get admin_api_authentication_providers_path(format: :xml, access_token: access_token.value)
     assert_response :ok
     assert_xml './authentication_providers/authentication_provider', 2
   end
 
   test '#show returns the requested authentication provider' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider)
     get admin_api_authentication_provider_path(authentication_provider, format: :json, access_token: access_token.value)
     assert_response :ok
     assert_equal authentication_provider.id, JSON.parse(response.body).dig('authentication_provider', 'id')
   end
 
   test '#show checks authorization' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider)
     AuthenticationProvider.any_instance.expects(:authorization_scope).with('show').returns('show')
     Ability.any_instance.expects(:authorize!).raises(CanCan::AccessDenied)
     get admin_api_authentication_provider_path(authentication_provider, format: :json, access_token: access_token.value)

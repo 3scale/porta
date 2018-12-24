@@ -3,9 +3,9 @@
 require 'test_helper'
 class Provider::Admin::Dashboard::Service::TopTrafficControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
-    FactoryGirl.create_list(:cinstance, 2, service: @service)
+    FactoryBot.create_list(:cinstance, 2, service: @service)
     @cinstances = @service.cinstances
     login! @provider
   end

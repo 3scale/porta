@@ -2,16 +2,16 @@ require 'test_helper'
 
 class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @admin = FactoryGirl.create(:simple_admin, account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @admin = FactoryBot.create(:simple_admin, account: @provider)
     @admin.activate!
-    @member = FactoryGirl.create(:simple_user, account: @provider)
+    @member = FactoryBot.create(:simple_user, account: @provider)
 
     host! @provider.self_domain
   end
 
   test 'create with access_token' do
-    access_token = FactoryGirl.create(:access_token, owner: @admin, scopes: %w(account_management))
+    access_token = FactoryBot.create(:access_token, owner: @admin, scopes: %w(account_management))
 
     post admin_api_user_access_tokens_path(user_id: @admin.id, access_token: access_token.value, format: :json),
          access_token_params

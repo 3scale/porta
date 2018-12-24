@@ -11,7 +11,7 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
   attr_reader :provider
 
   test 'get index contains the proper urls of the cinstances' do
-    alert_limit_collection = FactoryGirl.create_list(:limit_alert, 2, account: provider)
+    alert_limit_collection = FactoryBot.create_list(:limit_alert, 2, account: provider)
     get admin_alerts_path
     assert_response :ok
     alert_limit_collection.each do |alert_limit|

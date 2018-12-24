@@ -3,11 +3,11 @@ require 'test_helper'
 class ServiceSubscriptionServiceTest < ActiveSupport::TestCase
 
   def setup
-    @service_contract = FactoryGirl.create(:simple_service_contract)
+    @service_contract = FactoryBot.create(:simple_service_contract)
     @buyer            = @service_contract.user_account
     @service          = @service_contract.plan.issuer
     @provider         = @service.account
-    @application_plan = FactoryGirl.create(:application_plan, issuer: @service)
+    @application_plan = FactoryBot.create(:application_plan, issuer: @service)
 
     @buyer.buy! @application_plan
   end

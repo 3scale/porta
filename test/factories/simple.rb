@@ -33,9 +33,9 @@ Factory.define(:simple_master, class: Account, parent: :simple_account) do |fact
   factory.self_domain 'www.example.com'
 
   factory.after_create do |account| # not so simple, but works like normal master
-    FactoryGirl.create(:simple_account_plan, issuer: account)
-    service = FactoryGirl.create(:simple_service, account: account)
-    FactoryGirl.create(:simple_application_plan, issuer: service)
+    FactoryBot.create(:simple_account_plan, issuer: account)
+    service = FactoryBot.create(:simple_service, account: account)
+    FactoryBot.create(:simple_application_plan, issuer: service)
     account.update_columns(provider_account_id: account.id) # master is it's own provider!
   end
 
@@ -62,7 +62,7 @@ Factory.define(:simple_provider, :class => Account, :parent => :simple_account) 
     account.provider_account ||= if Account.exists?(:master => true)
                                    Account.master
                                  else
-                                    FactoryGirl.create(:simple_master)
+                                    FactoryBot.create(:simple_master)
                                  end
     account.provider = true
     account.tenant_id = account.id

@@ -15,7 +15,7 @@ class AccountTest < ActionDispatch::IntegrationTest
     enterprise_plan = ApplicationPlan.create!(issuer: master_service, name: 'enterprise')
     master_service.application_plans.default!(enterprise_plan)
 
-    account = FactoryGirl.create(:provider_account)
+    account = FactoryBot.create(:provider_account)
     assert_equal [enterprise_plan], account.bought_application_plans
   end
 
@@ -25,7 +25,7 @@ class AccountTest < ActionDispatch::IntegrationTest
     include WebHookTestHelpers
 
     def setup
-      @account = FactoryGirl.create(:buyer_account)
+      @account = FactoryBot.create(:buyer_account)
       @provider = @account.provider_account
 
       @user = @account.admins.first
@@ -38,8 +38,8 @@ class AccountTest < ActionDispatch::IntegrationTest
     end
 
     test 'be pushed if the account is created by user' do
-      buyer = FactoryGirl.build(:simple_buyer, provider_account: @provider)
-      user = FactoryGirl.build(:simple_user, account: buyer)
+      buyer = FactoryBot.build(:simple_buyer, provider_account: @provider)
+      user = FactoryBot.build(:simple_user, account: buyer)
 
       assert User.current = user, 'missing user'
 
@@ -53,7 +53,7 @@ class AccountTest < ActionDispatch::IntegrationTest
     end
 
     test 'not be pushed if the account is not created by user' do
-      buyer = FactoryGirl.build(:simple_buyer, provider_account: @provider)
+      buyer = FactoryBot.build(:simple_buyer, provider_account: @provider)
       User.current = nil
 
       fires_webhook.never
@@ -84,8 +84,8 @@ class AccountTest < ActionDispatch::IntegrationTest
     #TODO: is this better to be tested in account_contract tests?
     # the thing is account.change_plan! looks like making sense to me
     test 'be pushed if account plan is changed by an user' do
-      account_plan = FactoryGirl.create :account_plan, :issuer => @provider
-      other_account_plan = FactoryGirl.create :account_plan, :issuer => @provider
+      account_plan = FactoryBot.create :account_plan, :issuer => @provider
+      other_account_plan = FactoryBot.create :account_plan, :issuer => @provider
 
       @account.buy!(account_plan)
       @account.reload
@@ -100,8 +100,8 @@ class AccountTest < ActionDispatch::IntegrationTest
     #TODO: is this better to be tested in account_contract tests?
     # the thing is account.change_plan! looks like making sense to me
     test 'not be pushed if account plan is not changed by an user' do
-      account_plan = FactoryGirl.create :account_plan, :issuer => @provider
-      other_account_plan = FactoryGirl.create :account_plan, :issuer => @provider
+      account_plan = FactoryBot.create :account_plan, :issuer => @provider
+      other_account_plan = FactoryBot.create :account_plan, :issuer => @provider
       @account.buy!(account_plan)
       @account.reload
 

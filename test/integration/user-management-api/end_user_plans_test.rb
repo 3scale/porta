@@ -13,10 +13,10 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index (access_token)' do
-    FactoryGirl.create(:end_user_plan, issuer: @service)
+    FactoryBot.create(:end_user_plan, issuer: @service)
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_end_user_plans_path(access_token: token.value, format: :json))
     assert_response :success

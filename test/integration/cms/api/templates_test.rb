@@ -166,7 +166,7 @@ module CMS
       end
 
       test 'update - content type is multipart/form-data' do
-        page   = FactoryGirl.create(:cms_page, provider: @provider)
+        page   = FactoryBot.create(:cms_page, provider: @provider)
         params = {
           provider_key: @provider.provider_key,
           title:        'Alaska',

@@ -1,7 +1,7 @@
 Factory.define(:event, class: EventStore::Repository.adapter) do |event|
   event.event_id { SecureRandom.uuid }
   event.event_type RailsEventStore::Event.name
-  event.provider_id { Account.master? ? Account.master.id : FactoryGirl.create(:simple_master).id }
+  event.provider_id { Account.master? ? Account.master.id : FactoryBot.create(:simple_master).id }
 
   event.stream 'all'
 

@@ -5,7 +5,7 @@ class Provider::Admin::User::NotificationPreferencesControllerTest < ActionContr
   delegate :hidden_notifications, to: NotificationPreferences
 
   setup do
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @hidden   = NotificationMailer.hidden_notifications
     @visible  = NotificationMailer.event_mapping.keys - @hidden
 

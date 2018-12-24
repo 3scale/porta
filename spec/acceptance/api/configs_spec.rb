@@ -8,7 +8,7 @@ resource "ProxyConfig" do
     service
   end
   let(:service_id)  { service.id }
-  let(:resource)    { FactoryGirl.create(:proxy_config, proxy: service.proxy) }
+  let(:resource)    { FactoryBot.create(:proxy_config, proxy: service.proxy) }
   let(:environment) { resource.environment }
   let(:version)     { resource.version }
 

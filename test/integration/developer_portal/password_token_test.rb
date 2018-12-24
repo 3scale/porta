@@ -3,9 +3,9 @@ require 'test_helper'
 class DeveloperPortal::PasswordTokenTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
-    @user = FactoryGirl.create(:user, account: @buyer)
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @user = FactoryBot.create(:user, account: @buyer)
 
     host! @provider.domain
   end

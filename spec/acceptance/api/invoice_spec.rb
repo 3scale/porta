@@ -44,7 +44,7 @@ resource "Invoice", transactions: false do
     # should include('paid_at', 'due_on', 'issued_on', 'currency', 'cost')
 
     context 'when cost > 0' do
-      before { FactoryGirl.create(:line_item, cost: 100, invoice: resource) }
+      before { FactoryBot.create(:line_item, cost: 100, invoice: resource) }
 
       context 'vat_rate is nil' do
         it { should include('cost' => 100.0, 'vat_rate' => nil, 'vat_amount' => 0.0, 'cost_without_vat' => 100.0) }

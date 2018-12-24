@@ -3,8 +3,8 @@ require 'test_helper'
 class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @user = FactoryGirl.create(:simple_admin, account: @provider, password: 'alaska1233')
+    @provider = FactoryBot.create(:provider_account)
+    @user = FactoryBot.create(:simple_admin, account: @provider, password: 'alaska1233')
     @user.activate!
 
     host! @provider.admin_domain

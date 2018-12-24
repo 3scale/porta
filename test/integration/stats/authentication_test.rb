@@ -13,7 +13,7 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_content_type 'application/json'
 
-    token = FactoryGirl.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
+    token = FactoryBot.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
     get "/stats/services/#{@service.id}/usage.json", period: 'day', metric_name: 'hits', access_token: token.value
     assert_response :success
     assert_content_type 'application/json'

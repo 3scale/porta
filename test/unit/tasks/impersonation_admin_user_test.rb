@@ -5,12 +5,12 @@ require 'test_helper'
 class Tasks::ImpersonationAdminUserTest < ActiveSupport::TestCase
   setup do
     3.times do
-      FactoryGirl.create(:active_admin,
+      FactoryBot.create(:active_admin,
                             username: '3scaleadmin',
-                            account: FactoryGirl.create(:simple_provider, provider_account: master_account)
+                            account: FactoryBot.create(:simple_provider, provider_account: master_account)
                           )
     end
-    FactoryGirl.create_list(:active_admin, 2)
+    FactoryBot.create_list(:active_admin, 2)
   end
 
   test 'update' do

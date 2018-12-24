@@ -4,23 +4,23 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
   tests DeveloperPortal::Admin::PlansWidgetController
 
   def setup
-    @provider  = FactoryGirl.create(:provider_account, :payment_gateway_type => 'braintree_blue',
-                         :billing_strategy => FactoryGirl.create(:postpaid_billing, :charging_enabled => true))
+    @provider  = FactoryBot.create(:provider_account, :payment_gateway_type => 'braintree_blue',
+                         :billing_strategy => FactoryBot.create(:postpaid_billing, :charging_enabled => true))
     @service = @provider.default_service
     @service.update_attribute :buyer_plan_change_permission, 'request_credit_card'
 
-    @buyer = FactoryGirl.create(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @service.service_plans.first
 
-    @plan  = FactoryGirl.create :application_plan, :issuer => @service, :name => 'current plan'
+    @plan  = FactoryBot.create :application_plan, :issuer => @service, :name => 'current plan'
     @plan.publish!
 
     @application = @buyer.buy! @plan
     @buyer.reload
 
-    @paid_plan  = FactoryGirl.create :application_plan, :issuer => @service, :setup_fee => 10, :name => 'paid plan'
+    @paid_plan  = FactoryBot.create :application_plan, :issuer => @service, :setup_fee => 10, :name => 'paid plan'
     @paid_plan.publish!
-    @free_plan  = FactoryGirl.create :application_plan, :issuer => @service, :name => 'free plan'
+    @free_plan  = FactoryBot.create :application_plan, :issuer => @service, :name => 'free plan'
     @free_plan.publish!
 
     host! @provider.domain

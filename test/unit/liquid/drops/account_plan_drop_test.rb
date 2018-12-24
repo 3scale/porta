@@ -3,7 +3,7 @@ require 'test_helper'
 class Liquid::Drops::AccountPlanDropTest < ActiveSupport::TestCase
 
   setup do
-    @plan = FactoryGirl.create(:account_plan)
+    @plan = FactoryBot.create(:account_plan)
     @drop = Liquid::Drops::AccountPlan.new(@plan)
   end
 
@@ -12,7 +12,7 @@ class Liquid::Drops::AccountPlanDropTest < ActiveSupport::TestCase
   end
 
   test 'features' do
-    feature = FactoryGirl.build_stubbed(:feature)
+    feature = FactoryBot.build_stubbed(:feature)
     @plan.stub_chain(:issuer, :features, :visible).returns([feature])
     @plan.stubs includes_feature?: true
 
@@ -20,7 +20,7 @@ class Liquid::Drops::AccountPlanDropTest < ActiveSupport::TestCase
   end
 
   test "enabled?" do
-    feature = FactoryGirl.build_stubbed(:feature)
+    feature = FactoryBot.build_stubbed(:feature)
     @plan.stub_chain(:issuer, :features, :visible).returns([feature])
     @plan.stubs includes_feature?: true
     assert @drop.features[0].enabled?

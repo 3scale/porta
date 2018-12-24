@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Account::StatesTest < ActiveSupport::TestCase
   test '.without_deleted' do
-    accounts = FactoryGirl.create_list(:simple_account, 2)
+    accounts = FactoryBot.create_list(:simple_account, 2)
     accounts.first.schedule_for_deletion!
 
     ids_without_deleted = Account.without_deleted.pluck(:id)
@@ -15,7 +15,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   def test_events_when_state_changed
-    account = FactoryGirl.create(:simple_account)
+    account = FactoryBot.create(:simple_account)
 
     Accounts::AccountStateChangedEvent.expects(:create)
                                       .with(account, 'approved').once
@@ -28,7 +28,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   def test_events_when_state_not_changed
-    account = FactoryGirl.create(:simple_account)
+    account = FactoryBot.create(:simple_account)
     account.schedule_for_deletion!
 
     Accounts::AccountStateChangedEvent.expects(:create)
@@ -137,7 +137,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   def test_suspend_master
-    account = FactoryGirl.build_stubbed(:simple_provider, master: true)
+    account = FactoryBot.build_stubbed(:simple_provider, master: true)
     assert_raise StateMachines::InvalidTransition do
       account.suspend!
     end
@@ -161,7 +161,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test '.deleted_since' do
-    accounts = FactoryGirl.create_list(:simple_account, 3)
+    accounts = FactoryBot.create_list(:simple_account, 3)
 
     account_deleted_recently = accounts[0]
     account_deleted_recently.schedule_for_deletion!
@@ -180,34 +180,34 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test '.deletion_date' do
-    account = FactoryGirl.create(:simple_account)
+    account = FactoryBot.create(:simple_account)
     account.schedule_for_deletion!
     assert_equal Account::States::PERIOD_BEFORE_DELETION.from_now.to_date, account.deletion_date.to_date
   end
 
   test '.suspended_since' do
-    FactoryGirl.create(:simple_account, state: 'suspended')
-    FactoryGirl.create(:simple_account, state: 'approved')
-    FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: (Account::States::MAX_PERIOD_OF_SUSPENSION - 1.day).ago)
-    account_suspended_antiquely = FactoryGirl.create(:simple_account, state: 'suspended', state_changed_at: Account::States::MAX_PERIOD_OF_SUSPENSION.ago)
+    FactoryBot.create(:simple_account, state: 'suspended')
+    FactoryBot.create(:simple_account, state: 'approved')
+    FactoryBot.create(:simple_account, state: 'suspended', state_changed_at: (Account::States::MAX_PERIOD_OF_SUSPENSION - 1.day).ago)
+    account_suspended_antiquely = FactoryBot.create(:simple_account, state: 'suspended', state_changed_at: Account::States::MAX_PERIOD_OF_SUSPENSION.ago)
     assert_equal [account_suspended_antiquely.id], Account.suspended_since.pluck(:id)
   end
 
   test '.inactive_since' do
-    old_account_without_traffic = FactoryGirl.create(:simple_account)
+    old_account_without_traffic = FactoryBot.create(:simple_account)
     old_account_without_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
 
-    old_account_with_old_traffic = FactoryGirl.create(:simple_account)
+    old_account_with_old_traffic = FactoryBot.create(:simple_account)
     old_account_with_old_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    FactoryGirl.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    FactoryBot.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
 
-    recent_account_without_traffic = FactoryGirl.create(:simple_account)
+    recent_account_without_traffic = FactoryBot.create(:simple_account)
     recent_account_without_traffic.update_attribute(:created_at, (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
-    FactoryGirl.create(:cinstance, user_account: recent_account_without_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    FactoryBot.create(:cinstance, user_account: recent_account_without_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
 
-    recent_account_with_recent_traffic = FactoryGirl.create(:simple_account)
+    recent_account_with_recent_traffic = FactoryBot.create(:simple_account)
     recent_account_with_recent_traffic.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
-    FactoryGirl.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    FactoryBot.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
 
     results = Account.inactive_since.pluck(:id)
     assert_includes     results, old_account_without_traffic.id
@@ -217,13 +217,13 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test '.without_traffic_since' do
-    account_without_traffic = FactoryGirl.create(:simple_account)
+    account_without_traffic = FactoryBot.create(:simple_account)
 
-    account_with_old_traffic = FactoryGirl.create(:simple_account)
-    FactoryGirl.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    account_with_old_traffic = FactoryBot.create(:simple_account)
+    FactoryBot.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
 
-    account_with_recent_traffic = FactoryGirl.create(:simple_account)
-    FactoryGirl.create(:cinstance, user_account: account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
+    account_with_recent_traffic = FactoryBot.create(:simple_account)
+    FactoryBot.create(:cinstance, user_account: account_with_recent_traffic, first_daily_traffic_at: (Account::States::MAX_PERIOD_OF_INACTIVITY - 1.day).ago)
 
     results = Account.without_traffic_since.pluck(:id)
     assert_includes     results, account_without_traffic.id
@@ -236,7 +236,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     def test_suspend
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
 
       ThreeScale::Analytics.expects(:track).with(account.first_admin, 'Account Suspended')
       ReverseProviderKeyWorker.expects(:enqueue).with(account)
@@ -245,7 +245,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     end
 
     def test_resume_from_suspended
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
       account.update_columns(state: 'suspended')
 
       ThreeScale::Analytics.expects(:track).with(account.first_admin, 'Account Resumed')
@@ -255,7 +255,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     end
 
     def test_resume_from_scheduled_for_deletion
-      account = FactoryGirl.create(:simple_provider)
+      account = FactoryBot.create(:simple_provider)
       account.schedule_for_deletion!
 
       BackendProviderSyncWorker.expects(:enqueue).with(account.id)
@@ -264,7 +264,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     end
 
     def test_schedule_for_deletion
-      account = FactoryGirl.create(:simple_provider)
+      account = FactoryBot.create(:simple_provider)
       refute account.scheduled_for_deletion?
 
       BackendProviderSyncWorker.expects(:enqueue).with(account.id)
@@ -273,7 +273,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     end
 
     def test_state_changed_at_from_any_to_any
-      account = FactoryGirl.create(:simple_provider, state: :created)
+      account = FactoryBot.create(:simple_provider, state: :created)
 
       %i[make_pending! reject! approve! suspend! resume! schedule_for_deletion!].each do |transition|
         Timecop.freeze do

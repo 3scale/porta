@@ -81,17 +81,17 @@ class Pdf::DataTest < ActiveSupport::TestCase
   end
 
   test 'sanitize escape sequences' do
-    buyer1     = FactoryGirl.create(:buyer_account, :org_name => 'fi\rst buye\r', :provider_account => @provider_account, :created_at => 1.day.ago)
-    buyer2     = FactoryGirl.create(:buyer_account, :org_name => 'seco\nd buyer\r\n', :provider_account => @provider_account, :created_at => 5.days.ago)
-    buyer3     = FactoryGirl.create(:buyer_account, :org_name => '\nthi\rd buyer', :provider_account => @provider_account, :created_at => 10.days.ago)
+    buyer1     = FactoryBot.create(:buyer_account, :org_name => 'fi\rst buye\r', :provider_account => @provider_account, :created_at => 1.day.ago)
+    buyer2     = FactoryBot.create(:buyer_account, :org_name => 'seco\nd buyer\r\n', :provider_account => @provider_account, :created_at => 5.days.ago)
+    buyer3     = FactoryBot.create(:buyer_account, :org_name => '\nthi\rd buyer', :provider_account => @provider_account, :created_at => 10.days.ago)
 
-    plan1 = FactoryGirl.create( :application_plan, :issuer => @service, :created_at => 10.days.ago)
-    plan2 = FactoryGirl.create( :application_plan, :issuer => @service, :created_at => 5.days.ago)
-    plan3 = FactoryGirl.create( :application_plan, :issuer => @service, :created_at => 1.day.ago)
+    plan1 = FactoryBot.create( :application_plan, :issuer => @service, :created_at => 10.days.ago)
+    plan2 = FactoryBot.create( :application_plan, :issuer => @service, :created_at => 5.days.ago)
+    plan3 = FactoryBot.create( :application_plan, :issuer => @service, :created_at => 1.day.ago)
 
-    FactoryGirl.create(:cinstance, :plan => plan1, :user_account => buyer1)
-    FactoryGirl.create(:cinstance, :plan => plan2, :user_account => buyer2)
-    FactoryGirl.create(:cinstance, :plan => plan3, :user_account => buyer3)
+    FactoryBot.create(:cinstance, :plan => plan1, :user_account => buyer1)
+    FactoryBot.create(:cinstance, :plan => plan2, :user_account => buyer2)
+    FactoryBot.create(:cinstance, :plan => plan3, :user_account => buyer3)
 
     data = Pdf::Data.new(@provider_account, @service, :period => :day)
 

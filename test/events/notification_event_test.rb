@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NotificationEventTest < ActiveSupport::TestCase
   def test_create
-    provider = FactoryGirl.build_stubbed(:simple_provider, id: 42)
+    provider = FactoryBot.build_stubbed(:simple_provider, id: 42)
     other_event = Class.new(RailsEventStore::Event).new(provider: provider)
 
     notification_event = NotificationEvent.create(:some_name, other_event)

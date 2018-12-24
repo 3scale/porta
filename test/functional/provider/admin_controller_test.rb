@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::AdminControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     host! @provider.admin_domain
     login_provider @provider
@@ -28,7 +28,7 @@ class Provider::AdminControllerTest < ActionController::TestCase
   end
 
   test 'show should redirect to dashboard when user does not have permissions' do
-    user = FactoryGirl.create(:pending_user)
+    user = FactoryBot.create(:pending_user)
     @provider.create_onboarding.start_wizard
     @provider.users << user
     login_as user

@@ -3,7 +3,7 @@ require 'test_helper'
 class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account, domain: 'provider.example.net', from_email: 'support@example.net')
+    @provider = FactoryBot.create(:provider_account, domain: 'provider.example.net', from_email: 'support@example.net')
     login! @provider
   end
 

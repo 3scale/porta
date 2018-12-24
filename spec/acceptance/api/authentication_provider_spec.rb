@@ -5,7 +5,7 @@ require 'spec_helper'
 resource 'AuthenticationProvider' do
 
   let(:authentication_provider) do
-    FactoryGirl.build_stubbed(:authentication_provider,
+    FactoryBot.build_stubbed(:authentication_provider,
                       token_url: 'http://token_url', user_info_url: 'http://user_info_url',
                       authorize_url: 'http://authorize_url', updated_at: Time.now)
   end
@@ -29,7 +29,7 @@ resource 'AuthenticationProvider' do
     it { should have_properties(expected_properties).from(authentication_provider) }
 
     context 'auth0' do
-      let(:authentication_provider) { FactoryGirl.build_stubbed(:authentication_provider, kind: 'auth0') }
+      let(:authentication_provider) { FactoryBot.build_stubbed(:authentication_provider, kind: 'auth0') }
       it do
         expected_callback = "https://#{domain}/auth/#{system_name}/callback, https://#{domain}/auth/invitations/auth0/#{system_name}/callback"
         should include('callback_url' => expected_callback)
@@ -37,7 +37,7 @@ resource 'AuthenticationProvider' do
     end
 
     context 'redhat_customer_portal' do
-      let(:authentication_provider) { FactoryGirl.build_stubbed(:authentication_provider, kind: 'red_hat_customer_portal') }
+      let(:authentication_provider) { FactoryBot.build_stubbed(:authentication_provider, kind: 'red_hat_customer_portal') }
       it do
         expected_callback = "https://#{domain}/auth/#{system_name}/callback"
         should include('callback_url' => expected_callback)
@@ -45,7 +45,7 @@ resource 'AuthenticationProvider' do
     end
 
     context 'github' do
-      let(:authentication_provider) { FactoryGirl.build_stubbed(:authentication_provider, kind: 'github') }
+      let(:authentication_provider) { FactoryBot.build_stubbed(:authentication_provider, kind: 'github') }
       it do
         authentication_provider.stubs(:callback_account).returns(master_account)
         should_not include('callback_url')
@@ -75,7 +75,7 @@ resource 'AuthenticationProvider' do
     end
 
     context 'auth0' do
-      let(:authentication_provider) { FactoryGirl.build_stubbed(:authentication_provider, kind: 'auth0') }
+      let(:authentication_provider) { FactoryBot.build_stubbed(:authentication_provider, kind: 'auth0') }
 
       it do
         expected_callback = "https://#{domain}/auth/#{system_name}/callback, https://#{domain}/auth/invitations/auth0/#{system_name}/callback"
@@ -84,7 +84,7 @@ resource 'AuthenticationProvider' do
     end
 
     context 'redhat_customer_portal' do
-      let(:authentication_provider) { FactoryGirl.build_stubbed(:authentication_provider, kind: 'red_hat_customer_portal') }
+      let(:authentication_provider) { FactoryBot.build_stubbed(:authentication_provider, kind: 'red_hat_customer_portal') }
       subject { xml.root }
       it do
         expected_callback = "https://#{domain}/auth/#{system_name}/callback"
@@ -93,7 +93,7 @@ resource 'AuthenticationProvider' do
     end
 
     context 'github' do
-      let(:authentication_provider) { FactoryGirl.build_stubbed(:authentication_provider, kind: 'github') }
+      let(:authentication_provider) { FactoryBot.build_stubbed(:authentication_provider, kind: 'github') }
       subject { xml.root }
       it do
         authentication_provider.stubs(:callback_account).returns(master_account)

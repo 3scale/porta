@@ -193,7 +193,7 @@ Given('the provider has a buyer') do
 
   visit signup_path
 
-  user = FactoryGirl.build_stubbed(:user)
+  user = FactoryBot.build_stubbed(:user)
 
   within signup_form do
     fill_in 'Email', with: user.email

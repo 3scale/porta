@@ -10,7 +10,7 @@ class ThreeScale::JobsTest < ActiveSupport::TestCase
     name = job.tr(':.', '_')
     module_eval <<-RUBY, __FILE__, __LINE__ + 1
       def test_#{name}
-        FactoryGirl.create(:provider_account)
+        FactoryBot.create(:provider_account)
         #{job}
       end
     RUBY

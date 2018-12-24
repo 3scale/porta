@@ -141,9 +141,9 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
 
     setup do
       @service = manager_account.first_service!
-      @account_plan = FactoryGirl.create(:account_plan, :issuer => manager_account, approval_required: false)
-      @service_plan = FactoryGirl.create(:service_plan, :issuer => @service)
-      @application_plan = FactoryGirl.create(:application_plan, :issuer => @service)
+      @account_plan = FactoryBot.create(:account_plan, :issuer => manager_account, approval_required: false)
+      @service_plan = FactoryBot.create(:service_plan, :issuer => @service)
+      @application_plan = FactoryBot.create(:application_plan, :issuer => @service)
 
       manager_account.update_attribute :default_account_plan, @account_plan
       @service.update_attribute :default_service_plan, @service_plan
@@ -237,7 +237,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
     private
 
     def manager_account
-      @manager_account ||= FactoryGirl.create(:provider_account)
+      @manager_account ||= FactoryBot.create(:provider_account)
     end
 
     def signup_account_manager
@@ -247,7 +247,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
 
   class PlansWithDefaultsTest < Signup::AccountManagerTest
     setup do
-      @manager_account ||= FactoryGirl.create(:provider_account)
+      @manager_account ||= FactoryBot.create(:provider_account)
       @service = @manager_account.first_service!
       @manager_account.update_attribute :default_account_plan, nil
       @service.update_attribute :default_service_plan, nil
@@ -276,7 +276,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
 
     context 'with default account plan' do
       setup do
-        @account_plan = FactoryGirl.create(:account_plan, :issuer => @manager_account)
+        @account_plan = FactoryBot.create(:account_plan, :issuer => @manager_account)
         @manager_account.update_attribute :default_account_plan, @account_plan
       end
 
@@ -289,7 +289,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
 
       context 'and default service plan' do
         setup do
-          @service_plan = FactoryGirl.create(:service_plan, :issuer => @service)
+          @service_plan = FactoryBot.create(:service_plan, :issuer => @service)
           @service.update_attribute :default_service_plan, @service_plan
         end
 
@@ -311,7 +311,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
 
         context 'and default application plan' do
           setup do
-            @application_plan = FactoryGirl.create(:application_plan, :issuer => @service)
+            @application_plan = FactoryBot.create(:application_plan, :issuer => @service)
             @service.update_attribute :default_application_plan, @application_plan
           end
 
@@ -326,7 +326,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
 
       context 'and default application plan without service plan' do
         setup do
-          @application_plan = FactoryGirl.create(:application_plan, :issuer => @service)
+          @application_plan = FactoryBot.create(:application_plan, :issuer => @service)
           @service.update_attribute :default_application_plan, @application_plan
         end
 
@@ -420,7 +420,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     setup do
-      @provider_account = FactoryGirl.create(:provider_account)
+      @provider_account = FactoryBot.create(:provider_account)
 
       buyer_params = { org_name: 'My company' }
       user_params = { username: 'new_user', email: 'new.user@company.com', signup_type: :minimal }

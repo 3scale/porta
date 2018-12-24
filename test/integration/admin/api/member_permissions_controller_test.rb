@@ -5,9 +5,9 @@ require 'test_helper'
 class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @provider = FactoryGirl.create(:provider_account)
-    @services = FactoryGirl.create_list(:simple_service, 2, account: @provider)
-    @user = FactoryGirl.create(:active_user, account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @services = FactoryBot.create_list(:simple_service, 2, account: @provider)
+    @user = FactoryBot.create(:active_user, account: @provider)
 
     login! @provider
   end

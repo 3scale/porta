@@ -19,7 +19,7 @@ module PaymentGateways
         }
       }
 
-      @provider_account = FactoryGirl.build_stubbed(:simple_provider, attributes)
+      @provider_account = FactoryBot.build_stubbed(:simple_provider, attributes)
       @payment_gateway = @provider_account.payment_gateway
 
       @account.stubs(provider_account: @provider_account, id: 'account-id')
@@ -72,7 +72,7 @@ module PaymentGateways
     end
 
     test '#update_user' do
-      account = FactoryGirl.create :simple_account
+      account = FactoryBot.create :simple_account
       @authorize_net.stubs(account: account)
       @authorize_net.update_user(successful_get_customer_profile_response)
 

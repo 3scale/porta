@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "WebHook" do
 
-  let(:resource) { FactoryGirl.create(:web_hook, account: provider) }
+  let(:resource) { FactoryBot.create(:web_hook, account: provider) }
 
   api 'webhooks', format: [:json] do
     put '/admin/api/webhooks.json', action: :update do

@@ -225,12 +225,12 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test '#delete_backend_cinstance deletes application_keys, referrer_filters, user_key and application' do
-    plan      = FactoryGirl.create(:application_plan)
+    plan      = FactoryBot.create(:application_plan)
     service   = plan.service
-    buyer     = FactoryGirl.create(:buyer_account)
+    buyer     = FactoryBot.create(:buyer_account)
     cinstance = Cinstance.create!(plan: plan, user_account: buyer, service: service)
-    FactoryGirl.create_list(:application_key, 2, application: cinstance)
-    FactoryGirl.create_list(:referrer_filter, 2, application: cinstance)
+    FactoryBot.create_list(:application_key, 2, application: cinstance)
+    FactoryBot.create_list(:referrer_filter, 2, application: cinstance)
 
     backend_id = service.backend_id
     app_id     = cinstance.application_id

@@ -10,15 +10,15 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
   class ProviderLoggedInTest < Admin::ApiDocs::AccountApiDocsControllerTest
     setup do
-      @provider = FactoryGirl.create(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       @service = @provider.default_service
-      @api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: nil)
+      @api_docs_service = FactoryBot.create(:api_docs_service, account: @provider, service: nil)
     end
 
     test 'index gets the api_docs of an account independently of the service' do
-      service_2 = FactoryGirl.create(:simple_service, account: provider)
-      FactoryGirl.create(:api_docs_service, service: service, account: provider)
-      FactoryGirl.create(:api_docs_service, service: service_2, account: provider)
+      service_2 = FactoryBot.create(:simple_service, account: provider)
+      FactoryBot.create(:api_docs_service, service: service, account: provider)
+      FactoryBot.create(:api_docs_service, service: service_2, account: provider)
 
       get admin_api_docs_services_path
       assert_account_active_docs_menus

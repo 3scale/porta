@@ -40,7 +40,7 @@ class ProxyExampleTest < ActiveSupport::TestCase
     assert_equal 200, response.status
     assert_equal '', response.body.to_str
 
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @service = @provider.first_service! || @provider.services.first!
 
     # the backend mockup expects the api_id/api_key auth mode
@@ -221,7 +221,7 @@ class ProxyExampleTest < ActiveSupport::TestCase
   ### THIS IS WHERE THE TEST START
 
   test 'multiple services' do
-    FactoryGirl.create(:service, account: @provider)
+    FactoryBot.create(:service, account: @provider)
     one, two = @provider.proxies.map(&method(:enable_proxy))
 
     rules = [ { pattern: '/', http_method: 'GET' } ]

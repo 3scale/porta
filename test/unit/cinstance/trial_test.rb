@@ -6,13 +6,13 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
     plan = nil
 
     Timecop.freeze(2010, 1, 1) do
-      provider  = FactoryGirl.create(:provider_account,
+      provider  = FactoryBot.create(:provider_account,
                     payment_gateway_options: { test: false })
-      plan      = FactoryGirl.create(:application_plan,
+      plan      = FactoryBot.create(:application_plan,
                     issuer: provider.default_service,
                     trial_period_days: 20, cost_per_month: 10)
 
-      FactoryGirl.create(:cinstance, plan: plan)
+      FactoryBot.create(:cinstance, plan: plan)
     end
     
     Timecop.freeze(2010, 1, 5) do

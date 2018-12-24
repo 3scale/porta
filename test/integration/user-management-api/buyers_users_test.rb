@@ -22,16 +22,16 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     disable_transactional_fixtures!
 
     def setup
-      @provider = FactoryGirl.create(:simple_provider)
-      @buyer    = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer    = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
       host! @provider.admin_domain
     end
 
     test 'create action should not logout a current user' do
       Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-      user  = FactoryGirl.create(:admin, account: @provider)
-      token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+      user  = FactoryBot.create(:admin, account: @provider)
+      token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
       User.any_instance.expects(:forget_me).never
 
@@ -45,8 +45,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'index (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider)
-    token = FactoryGirl.create(:access_token, owner: user)
+    user  = FactoryBot.create(:member, account: @provider)
+    token = FactoryBot.create(:access_token, owner: user)
 
     get(admin_api_account_users_path(@buyer, format: :xml), access_token: token.value)
     assert_response :forbidden
@@ -64,8 +64,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     get(admin_api_account_user_path(@buyer, id: @member.id, format: :xml), access_token: token.value)
     assert_response :success
@@ -78,8 +78,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'update (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     put(admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml),
           username: 'Alex', access_token: token.value)
@@ -94,8 +94,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'create (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     post(admin_api_account_users_path(@buyer, format: :xml),
            username: 'alex', email: 'alex@alaska.hu', access_token: token.value)
@@ -110,8 +110,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'update/activate (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     put(admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml),
           username: 'alex', access_token: token.value)
@@ -132,8 +132,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'admin/member (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     put(admin_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml),
           username: 'alex', access_token: token.value)
@@ -154,8 +154,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'destroy (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     User.any_instance.expects(:destroy).returns(true)
     delete(admin_api_account_user_path(@buyer, format: :xml, id: @member.id), access_token: token.value)
@@ -170,8 +170,8 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   test 'suspend/unsuspend (access_token)' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: ['account_management'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     User.any_instance.expects(:suspend!).returns(true)
     put(suspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml),
@@ -614,7 +614,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   protected
 
   def active_user
-    user = FactoryGirl.create(:user, :account => @buyer)
+    user = FactoryBot.create(:user, :account => @buyer)
     user.activate!
     user
   end

@@ -4,15 +4,15 @@ class ServiceTest < ActiveSupport::TestCase
 
   def test_create_default_proxy
     Service.any_instance.expects(:create_proxy!).at_least_once
-    FactoryGirl.create(:simple_service, proxy: nil)
+    FactoryBot.create(:simple_service, proxy: nil)
 
     Service.any_instance.expects(:create_proxy!).never
-    service = FactoryGirl.create(:simple_service, proxy: FactoryGirl.build(:proxy))
+    service = FactoryBot.create(:simple_service, proxy: FactoryBot.build(:proxy))
     assert_not_nil service.proxy
   end
 
   def test_backend_version=
-    service = FactoryGirl.build_stubbed(:simple_service)
+    service = FactoryBot.build_stubbed(:simple_service)
     service.backend_version = 'oauth'
     assert_equal 'oauth', service.backend_version
     assert_equal 'oauth', service.proxy.authentication_method
@@ -31,7 +31,7 @@ class ServiceTest < ActiveSupport::TestCase
   # Backward compatibility with providers that still have default service.
   # It cannot be deleted in backend that is why we need this
   def test_stop_destroy_if_last_default
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
     service.expects(:default?).returns(true)
 
@@ -47,13 +47,13 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_create_with_plugin
-    service = FactoryGirl.build(:simple_service, deployment_option: 'plugin_rest')
+    service = FactoryBot.build(:simple_service, deployment_option: 'plugin_rest')
 
     assert service.save!
   end
 
   def test_deployment_option=
-    FactoryGirl.create(:simple_service, deployment_option: 'self_managed')
+    FactoryBot.create(:simple_service, deployment_option: 'self_managed')
 
     service = Service.last!
     service.update_attributes!(deployment_option: 'hosted')
@@ -77,7 +77,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   # Now the last remaining service cannot be destroyed
   def test_stop_destroy_if_last
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
     service.expects(:last_accessible?).returns(true)
 
@@ -93,9 +93,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_update_account_default_service
-    default_service = FactoryGirl.create(:simple_service)
-    other_service   = FactoryGirl.create(:simple_service)
-    account         = FactoryGirl.create(:simple_account,
+    default_service = FactoryBot.create(:simple_service)
+    other_service   = FactoryBot.create(:simple_service)
+    account         = FactoryBot.create(:simple_account,
                                          services: [default_service, other_service],
                                          default_service_id: default_service.id)
 
@@ -222,7 +222,7 @@ class ServiceTest < ActiveSupport::TestCase
   test '#mode_type' do
     assert_nil Service.new.mode_type
 
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
     service.assign_attributes(deployment_option: 'hosted', backend_version: '1')
     assert_equal :hosted, service.mode_type
@@ -311,7 +311,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_default_service_plan
-    service = FactoryGirl.build(:simple_service)
+    service = FactoryBot.build(:simple_service)
     service.account.settings.service_plans_ui_visible = true
 
     service.save!
@@ -323,7 +323,7 @@ class ServiceTest < ActiveSupport::TestCase
   def test_default_published_service_plan
     Logic::RollingUpdates.stubs(skipped?: true)
 
-    service = FactoryGirl.build(:simple_service)
+    service = FactoryBot.build(:simple_service)
     service.account.settings.service_plans_ui_visible = false
 
     service.save!
@@ -335,7 +335,7 @@ class ServiceTest < ActiveSupport::TestCase
   def test_default_published_service_plan_with_rolling_update
     Logic::RollingUpdates.stubs(enabled?: true, skipped?: false)
 
-    service = FactoryGirl.build(:simple_service)
+    service = FactoryBot.build(:simple_service)
     service.account.settings.service_plans_ui_visible = false
 
     Logic::RollingUpdates.feature(:published_service_plan_signup).any_instance.expects(:missing_config).returns(true)
@@ -350,9 +350,9 @@ class ServiceTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test "destroying service destroys it's plans" do
-      service          = FactoryGirl.create(:service)
-      service_plan     = FactoryGirl.create(:application_plan, issuer: service)
-      application_plan = FactoryGirl.create(:service_plan, issuer: service)
+      service          = FactoryBot.create(:service)
+      service_plan     = FactoryBot.create(:application_plan, issuer: service)
+      application_plan = FactoryBot.create(:service_plan, issuer: service)
 
       service.destroy
 
@@ -361,8 +361,8 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     test "destroying service destroys it's features" do
-      service = FactoryGirl.create(:service)
-      feature = FactoryGirl.create(:feature, featurable: service)
+      service = FactoryBot.create(:service)
+      feature = FactoryBot.create(:feature, featurable: service)
 
       service.destroy
 
@@ -370,8 +370,8 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     test "destroying service destroys it's metrics" do
-      service = FactoryGirl.create(:service)
-      metric  = FactoryGirl.create(:metric, service: service)
+      service = FactoryBot.create(:service)
+      metric  = FactoryBot.create(:metric, service: service)
 
       service.destroy
 
@@ -379,11 +379,11 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     test 'destroying service creates a related event' do
-      service          = FactoryGirl.create(:service)
-      service_plan     = FactoryGirl.create(:service_plan, issuer: service)
-      service_contract = FactoryGirl.create(:service_contract, plan: service_plan)
-      application_plan = FactoryGirl.create(:application_plan, issuer: service)
-      cinstance        = FactoryGirl.create(:cinstance, plan: application_plan)
+      service          = FactoryBot.create(:service)
+      service_plan     = FactoryBot.create(:service_plan, issuer: service)
+      service_contract = FactoryBot.create(:service_contract, plan: service_plan)
+      application_plan = FactoryBot.create(:application_plan, issuer: service)
+      cinstance        = FactoryBot.create(:cinstance, plan: application_plan)
 
       assert_difference(RailsEventStoreActiveRecord::Event.where(
         event_type: 'Services::ServiceDeletedEvent').method(:count), +1) do
@@ -461,7 +461,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_accessible_scope
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     assert_includes Service.accessible.to_a, service
 
     service.update_column :state, 'deleted'
@@ -469,12 +469,12 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'last_accessible?' do
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     account = service.account
 
     assert service.last_accessible?
 
-    service2 = FactoryGirl.create(:simple_service, account: account)
+    service2 = FactoryBot.create(:simple_service, account: account)
     refute service.last_accessible?
 
     service2.update_column :state, 'deleted'
@@ -482,9 +482,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'Deleting services allowed until the last one' do
-    service1 = FactoryGirl.create(:simple_service)
+    service1 = FactoryBot.create(:simple_service)
     account = service1.account
-    service2 = FactoryGirl.create(:simple_service, account: account)
+    service2 = FactoryBot.create(:simple_service, account: account)
     refute service1.last_accessible?
     refute service2.last_accessible?
 
@@ -494,7 +494,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'default service cannot be marked as deleted' do
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
     assert service.last_accessible?
     service.stubs(default?: true)
@@ -505,7 +505,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'last accessible service cannot be marked as deleted' do
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
     service.stubs(last_accessible?: true)
 
@@ -515,9 +515,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'destroying service with customized plan' do
-   service = FactoryGirl.create(:simple_service)
-   service1 = FactoryGirl.create(:simple_service, account: service.account)
-   application_plan = FactoryGirl.create(:simple_application_plan, service: service)
+   service = FactoryBot.create(:simple_service)
+   service1 = FactoryBot.create(:simple_service, account: service.account)
+   application_plan = FactoryBot.create(:simple_application_plan, service: service)
    custom_application_plan = application_plan.customize
    custom_application_plan.save!
 
@@ -528,7 +528,7 @@ class ServiceTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'schedule destruction of a service' do
-      service = FactoryGirl.create(:simple_service)
+      service = FactoryBot.create(:simple_service)
       service.stubs(last_accessible?: false)
       Services::ServiceScheduledForDeletionEvent.expects(:create_and_publish!).with(service).once
       System::ErrorReporting.expects(:report_error).never
@@ -536,7 +536,7 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     test 'updating state without using state machine' do
-      service = FactoryGirl.create(:simple_service)
+      service = FactoryBot.create(:simple_service)
       service.stubs(last_accessible?: false)
       Services::ServiceScheduledForDeletionEvent.expects(:create_and_publish!).never
       System::ErrorReporting.expects(:report_error).once
@@ -545,13 +545,13 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'don not call update endpoint if deployment option has not changed' do
-    service = FactoryGirl.create(:simple_service, deployment_option: 'hosted')
+    service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
     service.expects(:deployment_option_changed).times(0)
     service.update(deployment_option: 'hosted')
   end
 
   test 'call update endpoint on proxy after update when deployment option has changed' do
-    service = FactoryGirl.create(:simple_service, deployment_option: 'hosted')
+    service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
 
     Proxy.any_instance.expects(:set_correct_endpoints).never
     service.update(deployment_option: service.deployment_option)
@@ -580,13 +580,13 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'of_approved_account' do
-    account = FactoryGirl.create(:simple_provider, state: 'suspended')
-    service = FactoryGirl.create(:simple_service, account: account)
+    account = FactoryBot.create(:simple_provider, state: 'suspended')
+    service = FactoryBot.create(:simple_service, account: account)
     assert_not_includes Service.of_approved_accounts, service
   end
 
   test 'create with backend_version oidc' do
-    account = FactoryGirl.create(:simple_provider)
+    account = FactoryBot.create(:simple_provider)
     service_params = { backend_version: 'oidc', name: 'test', deployment_option: 'self_managed' }
     service = account.create_service(service_params)
 
@@ -594,7 +594,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test '.permitted_for_user' do
-    FactoryGirl.create_list(:simple_service, 2)
+    FactoryBot.create_list(:simple_service, 2)
     user = User.new
     member_permission_service_ids = [Service.last.id]
     user.stubs(member_permission_service_ids: member_permission_service_ids)

@@ -10,7 +10,7 @@ module CMS
       end
 
       def create_file
-        FactoryGirl.create(:cms_file, :provider => @provider)
+        FactoryBot.create(:cms_file, :provider => @provider)
       end
 
       def attachment_for_upload

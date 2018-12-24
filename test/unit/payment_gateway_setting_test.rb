@@ -69,7 +69,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
   end
 
   test 'cannot switch to a deprecated payment gateway' do
-    gateway_setting = FactoryGirl.create(:payment_gateway_setting, gateway_type: :stripe)
+    gateway_setting = FactoryBot.create(:payment_gateway_setting, gateway_type: :stripe)
 
     deprecated_gateway = PaymentGateway.new(:bogus, deprecated: true, field_a: 'A', field_b: 'B')
     PaymentGateway.stubs(all: [deprecated_gateway])
@@ -85,7 +85,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     deprecated_gateway = PaymentGateway.new(:bogus, deprecated: true, foo: 'Foo')
     PaymentGateway.stubs(all: [deprecated_gateway, PaymentGateway.find(:stripe)])
 
-    gateway_setting = FactoryGirl.build(:payment_gateway_setting, gateway_type: :bogus, gateway_settings: { foo: :bar })
+    gateway_setting = FactoryBot.build(:payment_gateway_setting, gateway_type: :bogus, gateway_settings: { foo: :bar })
     gateway_setting.save(validate: false)
 
     gateway_setting.gateway_type = :stripe
@@ -96,7 +96,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
   end
 
   test 'can update deprecated payment gateway in use' do
-    gateway_setting = FactoryGirl.build(:payment_gateway_setting, gateway_type: :bogus, gateway_settings: { foo: :bar })
+    gateway_setting = FactoryBot.build(:payment_gateway_setting, gateway_type: :bogus, gateway_settings: { foo: :bar })
     gateway_setting.save(validate: false)
 
     deprecated_gateway = PaymentGateway.new(:bogus, deprecated: true, field_a: 'A', field_b: 'B')

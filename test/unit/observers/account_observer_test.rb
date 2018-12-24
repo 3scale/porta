@@ -5,7 +5,7 @@ class AccountObserverTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def setup
-    @account = FactoryGirl.create(:simple_buyer)
+    @account = FactoryBot.create(:simple_buyer)
   end
 
   def test_after_delete
@@ -19,7 +19,7 @@ class AccountObserverTest < ActiveSupport::TestCase
   end
 
   def test_after_destroy
-    @account.provider_account = FactoryGirl.create(:simple_provider)
+    @account.provider_account = FactoryBot.create(:simple_provider)
     EventStore::Repository::Facade.stubs(raise_errors: true)
 
     @account.destroy

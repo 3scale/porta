@@ -6,7 +6,7 @@ class CMSResetServiceTest < ActiveSupport::TestCase
   end
 
   def test_call
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
 
     refute_operator provider.pages.count, :>, 1
 

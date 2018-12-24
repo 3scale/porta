@@ -3,7 +3,7 @@ require 'test_helper'
 class Tasks::Cms::CmsTest < ActiveSupport::TestCase
 
   def setup
-    @page = FactoryGirl.build(:cms_partial, system_name: 'shared/pagination',
+    @page = FactoryBot.build(:cms_partial, system_name: 'shared/pagination',
       published: '<p>Title</p><a href="{{ part.link }}">Supertramp</a>')
 
     @page.save(validate: false)

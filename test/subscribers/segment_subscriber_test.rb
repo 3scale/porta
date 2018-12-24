@@ -5,7 +5,7 @@ class SegmentSubscriberTest < ActiveSupport::TestCase
   def test_account_deleted
     subscriber = SegmentSubscriber.new(:account_deleted)
 
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     event = Accounts::AccountDeletedEvent.create(provider)
     user_id = provider.first_admin.id
@@ -26,7 +26,7 @@ class SegmentSubscriberTest < ActiveSupport::TestCase
   end
 
   def test_account_deleted_buyer
-    buyer = FactoryGirl.create(:simple_buyer)
+    buyer = FactoryBot.create(:simple_buyer)
     event = Accounts::AccountDeletedEvent.create(buyer)
 
     subscriber = SegmentSubscriber.new(:account_deleted)

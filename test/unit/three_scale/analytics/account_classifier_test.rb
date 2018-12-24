@@ -5,11 +5,11 @@ class ThreeScale::Analytics::AccountClassifierTest < MiniTest::Unit::TestCase
 
 
   def classifier(user_attributes = {})
-    provider = FactoryGirl.build_stubbed(:provider_account)
+    provider = FactoryBot.build_stubbed(:provider_account)
     provider.stubs(:users).returns([
-                                       FactoryGirl.build_stubbed(:admin,
+                                       FactoryBot.build_stubbed(:admin,
                                                                  username: ThreeScale.config.impersonation_admin['username']),
-                                       FactoryGirl.build_stubbed(:admin, user_attributes)
+                                       FactoryBot.build_stubbed(:admin, user_attributes)
                                    ])
 
     ThreeScale::Analytics::AccountClassifier.new(provider)

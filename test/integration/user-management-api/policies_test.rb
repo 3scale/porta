@@ -3,7 +3,7 @@ require 'test_helper'
 class Admin::Api::PoliciesTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     host! @provider.admin_domain
   end

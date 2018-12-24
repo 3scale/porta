@@ -112,7 +112,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     Accounts::AccountPlanChangeRequestedEvent.expects(:create)
 
-    assert @app.buyer_changes_plan!(FactoryGirl.create(:account_plan))
+    assert @app.buyer_changes_plan!(FactoryBot.create(:account_plan))
   end
 
   def test_request_application_plan_change_action
@@ -120,7 +120,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     Applications::ApplicationPlanChangeRequestedEvent.expects(:create)
 
-    assert @app.buyer_changes_plan!(FactoryGirl.create(:application_plan))
+    assert @app.buyer_changes_plan!(FactoryBot.create(:application_plan))
   end
 
   def test_request_service_plan_change_actions
@@ -128,7 +128,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     Services::ServicePlanChangeRequestedEvent.expects(:create)
 
-    assert @app.buyer_changes_plan!(FactoryGirl.create(:service_plan))
+    assert @app.buyer_changes_plan!(FactoryBot.create(:service_plan))
   end
 
   private

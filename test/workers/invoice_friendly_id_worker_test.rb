@@ -6,13 +6,13 @@ class InvoiceFriendlyIdWorkerTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   setup do
-    provider_account = FactoryGirl.create(:provider_with_billing)
+    provider_account = FactoryBot.create(:provider_with_billing)
     provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')
 
     Invoice.any_instance.stubs(set_friendly_id: true)
 
-    FactoryGirl.create(:invoice_counter, provider_account: provider_account, invoice_prefix: Time.now.year.to_s)
-    @invoice = FactoryGirl.create(:invoice, provider_account: provider_account)
+    FactoryBot.create(:invoice_counter, provider_account: provider_account, invoice_prefix: Time.now.year.to_s)
+    @invoice = FactoryBot.create(:invoice, provider_account: provider_account)
   end
 
   test 'updates invoice friendly id' do

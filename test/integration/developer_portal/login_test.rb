@@ -7,10 +7,10 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
   include UserDataHelpers
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @buyer    = FactoryGirl.create(:simple_buyer, provider_account: @provider)
-    @user     = FactoryGirl.create(:user, account: @buyer, authentication_id: 'bar')
-    @auth     = FactoryGirl.create(:authentication_provider, account: @provider, kind: 'base')
+    @provider = FactoryBot.create(:provider_account)
+    @buyer    = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @user     = FactoryBot.create(:user, account: @buyer, authentication_id: 'bar')
+    @auth     = FactoryBot.create(:authentication_provider, account: @provider, kind: 'base')
 
     @user.activate!
     host! @provider.domain

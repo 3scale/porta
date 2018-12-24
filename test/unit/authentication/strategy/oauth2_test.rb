@@ -3,7 +3,7 @@ require 'test_helper'
 class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
   setup do
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     @provider.settings.update_column(:authentication_strategy, 'oauth2')
     @authentication_provider = Factory(:authentication_provider, account: @provider, kind: 'base')
     @strategy = Authentication::Strategy.build(@provider)
@@ -213,7 +213,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'create an active user through sso' do
-      authentication_provider = FactoryGirl.create(:authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
       client    = mock('client')
@@ -243,7 +243,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     end
 
     test 'create a non active user through sso' do
-      authentication_provider = FactoryGirl.create(:authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
       client    = mock('client')
@@ -268,7 +268,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     end
 
     test 'not create a new user trough sso' do
-      authentication_provider = FactoryGirl.create(:authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
       client    = mock('client')
@@ -290,7 +290,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     end
 
     test 'not create a new account or try to activate it, org_name attribute is missing' do
-      authentication_provider = FactoryGirl.create(:authentication_provider, account: oauth2_provider, kind: 'base', automatically_approve_accounts: true)
+      authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base', automatically_approve_accounts: true)
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
       client    = mock('client')
@@ -306,11 +306,11 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     end
 
     test 'CreateInvitedUser' do
-      authentication_provider = FactoryGirl.create(:authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
-      buyer      = FactoryGirl.create(:simple_buyer, provider_account: FactoryGirl.create(:simple_provider))
-      invitation = FactoryGirl.create(:invitation, account: buyer)
+      buyer      = FactoryBot.create(:simple_buyer, provider_account: FactoryBot.create(:simple_provider))
+      invitation = FactoryBot.create(:invitation, account: buyer)
       client     = mock('client')
       user_data  = valid_user_data
       client.stubs(authenticate!: user_data)
@@ -337,7 +337,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
     def oauth2_provider
       @oauth2_provider ||= begin
-        provider = FactoryGirl.create(:provider_account)
+        provider = FactoryBot.create(:provider_account)
 
         provider.settings.update_column(:authentication_strategy, 'oauth2')
 
@@ -369,7 +369,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   private
 
   def buyer
-    @buyer ||= FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    @buyer ||= FactoryBot.create(:simple_buyer, provider_account: @provider)
   end
 
   def mock_request

@@ -6,9 +6,9 @@ class Api::ApplicationPlansControllerTest < ActionController::TestCase
 
   class ProviderAccountLoggedInTest < Api::ApplicationPlansControllerTest
     def setup
-      @provider = FactoryGirl.create(:provider_account)
-      @service  = FactoryGirl.create(:service, account: @provider)
-      @plan     = FactoryGirl.create(:application_plan, service: @service)
+      @provider = FactoryBot.create(:provider_account)
+      @service  = FactoryBot.create(:service, account: @provider)
+      @plan     = FactoryBot.create(:application_plan, service: @service)
 
       host! @provider.admin_domain
 
@@ -43,7 +43,7 @@ class Api::ApplicationPlansControllerTest < ActionController::TestCase
     end
 
     def test_plan_cannot_be_deleted
-      @plan.create_contract_with(FactoryGirl.create(:buyer_account))
+      @plan.create_contract_with(FactoryBot.create(:buyer_account))
 
       delete :destroy, id: @plan.id
 
@@ -52,8 +52,8 @@ class Api::ApplicationPlansControllerTest < ActionController::TestCase
     end
 
     def test_plan_cannot_be_deleted_because_of_customizations
-      customization = FactoryGirl.create(:application_plan, original_id: @plan.id)
-      customization.create_contract_with(FactoryGirl.create(:buyer_account))
+      customization = FactoryBot.create(:application_plan, original_id: @plan.id)
+      customization.create_contract_with(FactoryBot.create(:buyer_account))
 
       delete :destroy, id: @plan.id
 
@@ -118,7 +118,7 @@ class Api::ApplicationPlansControllerTest < ActionController::TestCase
     end
 
     def test_destroy_saas
-      plan = FactoryGirl.create(:application_plan, service: @service)
+      plan = FactoryBot.create(:application_plan, service: @service)
       assert_difference( @service.application_plans.method(:count), -1 ) do
         delete :destroy, id: plan.id
         assert_response :redirect
@@ -131,7 +131,7 @@ class Api::ApplicationPlansControllerTest < ActionController::TestCase
 
     def test_destroy_on_premises
       ThreeScale.stubs(master_on_premises?: true)
-      plan = FactoryGirl.create(:application_plan, service: @service)
+      plan = FactoryBot.create(:application_plan, service: @service)
       assert_no_difference @service.application_plans.method(:count) do
         delete :destroy, id: plan.id
         assert_response :forbidden

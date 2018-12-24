@@ -31,7 +31,7 @@ Given /^the metric "([^"]*)" (with|whithout) usage limit (\d+) of (plan "[^"]*")
 end
 
 Given /^the metric "([^"]*)" with all used periods of (plan "[^"]*")$/ do |name, app_plan|
-  metric = FactoryGirl.create(:metric, service: app_plan.issuer, friendly_name: name)
+  metric = FactoryBot.create(:metric, service: app_plan.issuer, friendly_name: name)
 
   UsageLimit::PERIODS.each do |period|
     app_plan.usage_limits.create!(period: period, value: 1, metric: metric)

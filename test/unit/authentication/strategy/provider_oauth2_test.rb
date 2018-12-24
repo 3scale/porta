@@ -3,7 +3,7 @@ require 'test_helper'
 class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
   setup do
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     @provider.settings.update_column(:authentication_strategy, 'oauth2')
     @authentication_provider = Factory(:self_authentication_provider, account: @provider, kind: 'base')
     @strategy = Authentication::Strategy.build_provider(@provider)
@@ -169,7 +169,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'create an active user through sso' do
-      authentication_provider = FactoryGirl.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
 
       client    = mock('client')
@@ -200,7 +200,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
     end
 
     test 'create a non active user through sso' do
-      authentication_provider = FactoryGirl.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
 
       client    = mock('client')
@@ -232,10 +232,10 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
     end
 
     test 'CreateInvitedUser' do
-      authentication_provider = FactoryGirl.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
 
-      invitation = FactoryGirl.create(:invitation, account: oauth2_provider)
+      invitation = FactoryBot.create(:invitation, account: oauth2_provider)
       client     = mock('client')
       user_data  = valid_user_data
       client.stubs(authenticate!: user_data)
@@ -262,7 +262,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
     def oauth2_provider
       @oauth2_provider ||= begin
-        provider = FactoryGirl.create(:provider_account)
+        provider = FactoryBot.create(:provider_account)
 
         provider.settings.update_column(:authentication_strategy, 'oauth2')
 

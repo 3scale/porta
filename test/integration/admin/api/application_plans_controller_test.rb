@@ -6,7 +6,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
 
   def setup
     login! current_account
-    @service = FactoryGirl.create(:service, account: current_account)
+    @service = FactoryBot.create(:service, account: current_account)
   end
 
   class ProviderAccountTest < Admin::Api::ApplicationPlansControllerTest
@@ -32,7 +32,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_update_valid_params_json
-      application_plan = FactoryGirl.create(:application_plan, name: 'firstname', state: 'hidden', service: service)
+      application_plan = FactoryBot.create(:application_plan, name: 'firstname', state: 'hidden', service: service)
       put admin_api_service_application_plan_path(application_plan, application_plan_params)
       assert_response :success
       assert_equal application_plan_params[:application_plan][:name], application_plan.reload.name
@@ -41,7 +41,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
 
     def test_update_invalid_params_json
       original_values = {name: 'firstname', state: 'hidden', service: service}
-      application_plan = FactoryGirl.create(:application_plan, original_values)
+      application_plan = FactoryBot.create(:application_plan, original_values)
       put admin_api_service_application_plan_path(application_plan, application_plan_params('fakestate'))
       assert_response :unprocessable_entity
       assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')
@@ -50,7 +50,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_destroy_json
-      plan = FactoryGirl.create(:application_plan, service: service)
+      plan = FactoryBot.create(:application_plan, service: service)
       assert_difference(service.application_plans.method(:count), -1) do
         delete admin_api_service_application_plan_path(plan.id, service_id: service.id, format: :json)
         assert_response :success
@@ -62,7 +62,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_index_json
-      FactoryGirl.create_list(:application_plan, 2, service: service)
+      FactoryBot.create_list(:application_plan, 2, service: service)
       get admin_api_service_application_plans_path(service_id: service.id, format: :json)
       assert_response :success
       assert_equal 2, JSON.parse(response.body)['plans'].length
@@ -71,7 +71,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     private
 
     def current_account
-      @provider ||= FactoryGirl.create(:provider_account)
+      @provider ||= FactoryBot.create(:provider_account)
     end
   end
 
@@ -94,7 +94,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_destroy_json_saas
-      plan = FactoryGirl.create(:application_plan, service: service)
+      plan = FactoryBot.create(:application_plan, service: service)
       assert_difference(service.application_plans.method(:count), -1) do
         delete admin_api_service_application_plan_path(plan.id, service_id: service.id, format: :json)
         assert_response :success
@@ -107,7 +107,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
 
     def test_destroy_json_on_premises
       ThreeScale.stubs(master_on_premises?: true)
-      plan = FactoryGirl.create(:application_plan, service: service)
+      plan = FactoryBot.create(:application_plan, service: service)
       assert_no_difference service.application_plans.method(:count) do
         delete admin_api_service_application_plan_path(plan.id, service_id: service.id, format: :json)
         assert_response :forbidden
@@ -117,7 +117,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_index_json_saas
-      FactoryGirl.create_list(:application_plan, 2, service: service)
+      FactoryBot.create_list(:application_plan, 2, service: service)
       get admin_api_service_application_plans_path(service_id: service.id, format: :json)
       assert_response :success
       assert_equal service.application_plans.count, JSON.parse(response.body)['plans'].length

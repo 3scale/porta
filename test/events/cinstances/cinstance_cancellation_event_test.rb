@@ -3,9 +3,9 @@ require 'test_helper'
 class Cinstances::CinstanceCancellationEventTest < ActiveSupport::TestCase
 
   def test_create
-    service   = FactoryGirl.build_stubbed(:simple_service, id: 2)
-    plan      = FactoryGirl.build_stubbed(:simple_application_plan, id: 3, issuer: service)
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance, id: 1, plan: plan)
+    service   = FactoryBot.build_stubbed(:simple_service, id: 2)
+    plan      = FactoryBot.build_stubbed(:simple_application_plan, id: 3, issuer: service)
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 1, plan: plan)
     event     = Cinstances::CinstanceCancellationEvent.create(cinstance)
 
     assert event
@@ -17,9 +17,9 @@ class Cinstances::CinstanceCancellationEventTest < ActiveSupport::TestCase
   end
 
   def test_valid?
-    service   = FactoryGirl.build_stubbed(:simple_service, id: 2)
-    plan      = FactoryGirl.build_stubbed(:simple_application_plan, id: 3, issuer: service)
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance, id: 1, plan: plan)
+    service   = FactoryBot.build_stubbed(:simple_service, id: 2)
+    plan      = FactoryBot.build_stubbed(:simple_application_plan, id: 3, issuer: service)
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 1, plan: plan)
 
     assert Cinstances::CinstanceCancellationEvent.valid?(cinstance)
 
@@ -28,9 +28,9 @@ class Cinstances::CinstanceCancellationEventTest < ActiveSupport::TestCase
   end
 
   def test_create_and_publish
-    service   = FactoryGirl.build_stubbed(:simple_service, id: 2)
-    plan      = FactoryGirl.build_stubbed(:simple_application_plan, id: 3, issuer: service)
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance, id: 1, plan: plan)
+    service   = FactoryBot.build_stubbed(:simple_service, id: 2)
+    plan      = FactoryBot.build_stubbed(:simple_application_plan, id: 3, issuer: service)
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 1, plan: plan)
 
     Cinstances::CinstanceCancellationEvent.expects(:create).once
     Cinstances::CinstanceCancellationEvent.create_and_publish!(cinstance)

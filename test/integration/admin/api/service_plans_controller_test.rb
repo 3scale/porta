@@ -5,9 +5,9 @@ require 'test_helper'
 class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     login! provider
-    @service = FactoryGirl.create(:service, account: provider)
+    @service = FactoryBot.create(:service, account: provider)
   end
 
   def test_create_valid_params_json
@@ -29,7 +29,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_update_valid_params_json
-    service_plan = FactoryGirl.create(:service_plan, name: 'firstname', state: 'hidden', service: service)
+    service_plan = FactoryBot.create(:service_plan, name: 'firstname', state: 'hidden', service: service)
     put admin_api_service_service_plan_path(service_plan, service_plan_params)
     assert_response :success
     assert_equal service_plan_params[:service_plan][:name], service_plan.reload.name
@@ -38,7 +38,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
 
   def test_update_invalid_params_json
     original_values = {name: 'firstname', state: 'hidden', service: service}
-    service_plan = FactoryGirl.create(:service_plan, original_values)
+    service_plan = FactoryBot.create(:service_plan, original_values)
     put admin_api_service_service_plan_path(service_plan, service_plan_params('fakestate'))
     assert_response :unprocessable_entity
     assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')

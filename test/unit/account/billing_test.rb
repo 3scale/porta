@@ -133,8 +133,8 @@ class Account::BillingTest < ActiveSupport::TestCase
 
 
   test 'update invoices vat rate only when changed' do
-    provider = FactoryGirl.create(:simple_provider)
-    account = FactoryGirl.create(:simple_account, provider_account: provider, vat_rate: 1.0)
+    provider = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, provider_account: provider, vat_rate: 1.0)
 
     invoice = account.invoices.create!(provider_account: provider,
                                        period: '2016-06',
@@ -153,8 +153,8 @@ class Account::BillingTest < ActiveSupport::TestCase
 
   test 'check_unresolved_invoices except for the buyers scheduled for deletion' do
     number_buyers = 2
-    provider = FactoryGirl.create(:simple_provider)
-    FactoryGirl.create_list(:simple_buyer, number_buyers, provider_account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    FactoryBot.create_list(:simple_buyer, number_buyers, provider_account: provider)
         .each { |buyer| buyer.invoices.create!(provider_account: provider, period: '2016-06', friendly_id: '2016-06-00000001', state: 'pending') }
 
     assert_raise(ActiveRecord::RecordNotDestroyed) { provider.destroy! }

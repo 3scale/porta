@@ -23,7 +23,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     end
 
     test 'multitenant accepting buyer domain' do
-      FactoryGirl.create(:simple_provider, domain: domain)
+      FactoryBot.create(:simple_provider, domain: domain)
 
       assert Account.exists?(domain: domain)
       assert BuyerDomainConstraint.matches?(request)
@@ -35,7 +35,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     end
 
     test 'multitenant not recognizing a buyer domain of a provider scheduled for deletion' do
-      provider = FactoryGirl.create(:simple_provider, domain: domain)
+      provider = FactoryBot.create(:simple_provider, domain: domain)
       provider.schedule_for_deletion!
 
       assert Account.exists?(domain: domain)
@@ -56,7 +56,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     attr_reader :self_domain, :request
 
     test 'multitenant accepting provider domain' do
-      FactoryGirl.create(:simple_provider, self_domain: self_domain)
+      FactoryBot.create(:simple_provider, self_domain: self_domain)
 
       assert Account.exists?(self_domain: self_domain)
       assert ProviderDomainConstraint.matches?(request)
@@ -68,7 +68,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     end
 
     test 'multitenant not recognizing a domain of a provider scheduled for deletion' do
-      provider = FactoryGirl.create(:simple_provider, self_domain: self_domain)
+      provider = FactoryBot.create(:simple_provider, self_domain: self_domain)
       provider.schedule_for_deletion!
 
       assert Account.exists?(self_domain: self_domain)
@@ -76,7 +76,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     end
 
     test 'multitenant recognizing a domain of a provider scheduled for deletion if the request comes from Zync' do
-      provider = FactoryGirl.create(:simple_provider, self_domain: self_domain)
+      provider = FactoryBot.create(:simple_provider, self_domain: self_domain)
       provider.schedule_for_deletion!
       AuthenticatedSystem::Request.any_instance.stubs(:zync?).returns(true)
 

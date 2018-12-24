@@ -24,8 +24,8 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
   test 'create (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'))

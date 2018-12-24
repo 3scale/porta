@@ -23,7 +23,7 @@ Factory.define(:application_plan, :parent => :plan, :class => ApplicationPlan) d
   plan.association(:issuer, :factory => :service)
 
   plan.after_build do |plan|
-    plan_rule = PlanRulesCollection.find_for_plan(plan) || FactoryGirl.build(:plan_rule, system_name: plan.system_name.to_sym)
+    plan_rule = PlanRulesCollection.find_for_plan(plan) || FactoryBot.build(:plan_rule, system_name: plan.system_name.to_sym)
     plan.stubs(:plan_rule).returns(plan_rule)
   end
 end
@@ -38,7 +38,7 @@ Factory.define(:published_plan, :parent => :application_plan) do |plan|
   end
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :plan_rule do
     initialize_with do
       plan_rule = PlanRule.new(system_name: :example, switches: [], limits: {max_users: nil, max_services: nil}, rank: 0, metadata: {})

@@ -19,8 +19,8 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id))
     assert_response :forbidden

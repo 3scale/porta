@@ -5,7 +5,7 @@ require 'test_helper'
 class SignupResultTest < ActiveSupport::TestCase
   test 'Signup::Result raises Signup::Result::AccountMismatchError in initialize when then parameter account is different than the user account' do
     assert_raise Signup::Result::AccountMismatchError do
-      Signup::Result.new(user: user, account: FactoryGirl.create(:account))
+      Signup::Result.new(user: user, account: FactoryBot.create(:account))
     end
   end
 

@@ -5,8 +5,8 @@ class Liquid::Drops::PlanFeatureDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @feature = FactoryGirl.build_stubbed(:feature)
-    @account_plan = FactoryGirl.build_stubbed(:account_plan)
+    @feature = FactoryBot.build_stubbed(:feature)
+    @account_plan = FactoryBot.build_stubbed(:account_plan)
     @drop = Liquid::Drops::PlanFeature.new(@feature, @account_plan)
   end
 

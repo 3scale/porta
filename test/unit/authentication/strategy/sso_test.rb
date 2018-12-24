@@ -3,8 +3,8 @@ require 'test_helper'
 class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @account  = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @account  = FactoryBot.create(:buyer_account, provider_account: @provider)
     @strategy = Authentication::Strategy.build(@provider)
   end
 
@@ -15,7 +15,7 @@ class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
   end
 
   def test_authenticate_user_id
-    user = FactoryGirl.create(:active_user, account: @account)
+    user = FactoryBot.create(:active_user, account: @account)
 
     stub_extract! [user.id, 'supetramp']
 
@@ -23,7 +23,7 @@ class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
   end
 
   def test_authenticate_username
-    user = FactoryGirl.create(:active_user, account: @account)
+    user = FactoryBot.create(:active_user, account: @account)
 
     stub_extract! [nil, user.username]
 

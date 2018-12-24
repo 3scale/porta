@@ -66,7 +66,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'all providers but canaries' do
-    canaries = FactoryGirl.create_list(:provider_with_billing, 4).map(&:id)
+    canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
     ThreeScale.config.expects(:billing_canaries).at_least_once.returns(canaries)
 
     all_but_canaries = Finance::BillingStrategy.all.pluck(:account_id) - canaries
@@ -75,7 +75,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'canaries' do
-    canaries = FactoryGirl.create_list(:provider_with_billing, 4).map(&:id)
+    canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
     ThreeScale.config.expects(:billing_canaries).at_least_once.returns(canaries)
 
     Finance::BillingStrategy.expects(:daily_async).with { |scope| scope.pluck(:account_id) == canaries }.returns(true)
@@ -114,8 +114,8 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'self.daily skips suspended accounts' do
     Finance::BillingStrategy.delete_all # don't really want the ones from setup
 
-    1.times { FactoryGirl.create(:prepaid_billing, :account => FactoryGirl.create(:simple_provider, state: 'suspended')) }
-    1.times { FactoryGirl.create(:prepaid_billing, :account => FactoryGirl.create(:simple_provider, state: 'approved')) }
+    1.times { FactoryBot.create(:prepaid_billing, :account => FactoryBot.create(:simple_provider, state: 'suspended')) }
+    1.times { FactoryBot.create(:prepaid_billing, :account => FactoryBot.create(:simple_provider, state: 'approved')) }
 
     results = Finance::BillingStrategy.daily
 
@@ -238,7 +238,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   def test_create_expired_credit_card_provider_event
     now = DateTime.parse('2010-01-01 08:00')
 
-    FactoryGirl.create(:simple_buyer, provider_account: @provider,
+    FactoryBot.create(:simple_buyer, provider_account: @provider,
       credit_card_expires_on: now.to_date + 10.days)
 
     Accounts::ExpiredCreditCardProviderEvent.expects(:create).once
@@ -248,7 +248,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   def test_audit_prepaid_postpaid
     Finance::BillingStrategy.with_auditing do
-      @provider = FactoryGirl.create(:provider_with_billing)
+      @provider = FactoryBot.create(:provider_with_billing)
       strategy = @provider.billing_strategy
       assert 'postpaid', strategy.type
       strategy.type = 'prepaid'
@@ -266,7 +266,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'notifies billing failure' do
-    buyer = FactoryGirl.build_stubbed(:simple_buyer, provider_account: @provider)
+    buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @provider)
     results = mock_billing_failure(Time.utc(2018, 3, 17, 18, 15), @provider, [buyer.id])
     BillingMailer.expects(:billing_finished).with(results).returns(mock(deliver_now: true))
     @bs.notify_billing_results(results)
@@ -274,7 +274,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   class DailyBillingTest < ActiveSupport::TestCase
     setup do
-      @providers = FactoryGirl.create_list(:provider_with_billing, 3)
+      @providers = FactoryBot.create_list(:provider_with_billing, 3)
       @billing_strategies = Finance::BillingStrategy.where(account: @providers)
     end
 

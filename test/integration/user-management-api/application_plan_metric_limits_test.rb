@@ -15,8 +15,8 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_application_plan_metric_limits_path(@app_plan, @metric))
     assert_response :forbidden

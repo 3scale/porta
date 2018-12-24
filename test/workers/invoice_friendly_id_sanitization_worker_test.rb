@@ -6,12 +6,12 @@ class InvoiceFriendlyIdSanitizationWorkerTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   setup do
-    @provider_account = FactoryGirl.create(:provider_with_billing)
+    @provider_account = FactoryBot.create(:provider_with_billing)
     @provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')
-    FactoryGirl.create(:invoice_counter, provider_account: @provider_account, invoice_prefix: Time.now.year.to_s)
+    FactoryBot.create(:invoice_counter, provider_account: @provider_account, invoice_prefix: Time.now.year.to_s)
 
     Invoice.any_instance.stubs(set_friendly_id: true)
-    FactoryGirl.create_list(:invoice, 3, provider_account: @provider_account)
+    FactoryBot.create_list(:invoice, 3, provider_account: @provider_account)
 
     @invoices = @provider_account.buyer_invoices
   end
@@ -27,9 +27,9 @@ class InvoiceFriendlyIdSanitizationWorkerTest < ActiveSupport::TestCase
   end
 
   test "does not affect other providers' invoices" do
-    other_provider_account = FactoryGirl.create(:provider_with_billing)
+    other_provider_account = FactoryBot.create(:provider_with_billing)
     other_provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')
-    other_invoice = FactoryGirl.create(:invoice, provider_account: other_provider_account)
+    other_invoice = FactoryBot.create(:invoice, provider_account: other_provider_account)
 
     InvoiceFriendlyIdSanitizationWorker.new.perform(@provider_account.id)
 

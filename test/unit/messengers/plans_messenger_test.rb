@@ -7,8 +7,8 @@ class PlansMessengerTest < ActiveSupport::TestCase
   end
 
   test '#plan_change_request' do
-    cinstance = FactoryGirl.create(:cinstance)
-    plan = FactoryGirl.create(:account_plan)
+    cinstance = FactoryBot.create(:cinstance)
+    plan = FactoryBot.create(:account_plan)
     PlansMessenger.plan_change_request(cinstance, plan).deliver
 
     email = ActionMailer::Base.deliveries.last

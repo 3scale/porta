@@ -4,7 +4,7 @@ require 'sidekiq/testing'
 
 class Provider::Admin::Account::DataExportsControllerTest < ActionController::TestCase
   setup do
-    @provider_account = FactoryGirl.create :provider_account
+    @provider_account = FactoryBot.create :provider_account
     login_provider @provider_account
   end
 

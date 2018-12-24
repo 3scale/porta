@@ -6,8 +6,8 @@ class BillingWorkerTest < ActiveSupport::TestCase
   include BillingResultsTestHelpers
 
   setup do
-    @provider = FactoryGirl.create(:provider_with_billing)
-    @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_with_billing)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
   test 'perform' do

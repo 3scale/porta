@@ -2,8 +2,8 @@ require 'test_helper'
 
 class Apicast::SandboxProviderConfGeneratorTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @service = FactoryGirl.create(:service, account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:service, account: @provider)
 
     @provider.proxies.update_all(apicast_configuration_driven: false)
     @generator = Apicast::SandboxProviderConfGenerator.new(@provider.id)

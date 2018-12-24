@@ -3,18 +3,18 @@ require 'test_helper'
 class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_with_billing)
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_with_billing)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     login! @provider
-    @invoice = FactoryGirl.create(:invoice, provider_account: @provider, buyer_account: @buyer)
-    @line_item = FactoryGirl.create(:line_item, invoice: @invoice, name: 'fakeName')
+    @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+    @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
   end
 
   class MasterTest < ActionDispatch::IntegrationTest
     def setup
-      @buyer = FactoryGirl.create(:simple_account, provider_account: master_account)
-      @invoice = FactoryGirl.create(:invoice, provider_account: master_account, buyer_account: @buyer)
-      @line_item = FactoryGirl.create(:line_item, invoice: @invoice, name: 'fakeName')
+      @buyer = FactoryBot.create(:simple_account, provider_account: master_account)
+      @invoice = FactoryBot.create(:invoice, provider_account: master_account, buyer_account: @buyer)
+      @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
       login! master_account
     end
 
@@ -62,7 +62,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#index returns contract plan_id' do
-    plan = FactoryGirl.create(:simple_application_plan)
+    plan = FactoryBot.create(:simple_application_plan)
     line_item = @invoice.line_items.first
     contract = @buyer.buy! plan
     line_item.update_attribute(:contract, contract)
@@ -121,14 +121,14 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#destroy gives the right error when the line item doesn\'t belong to the send invoice' do
-    another_invoice = FactoryGirl.create(:invoice, provider_account: @provider)
+    another_invoice = FactoryBot.create(:invoice, provider_account: @provider)
     delete api_invoice_line_item_path(invoice_id: another_invoice, id: @line_item.id), nil, accept: Mime[:json]
     assert_equal ({status: 'Not found'}).to_json, @response.body
     assert_response 404
   end
 
   test 'accepts adding metric_id to line_item' do
-    metric = FactoryGirl.create(:metric, service: @provider.services.first!)
+    metric = FactoryBot.create(:metric, service: @provider.services.first!)
     assert_difference '@invoice.line_items.count', 1 do
       post api_invoice_line_items_path(@invoice.id), line_item_params.merge(metric_id: metric.id), accept: Mime[:json]
       @invoice.reload
@@ -138,7 +138,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'accepts adding contract_id to line_item' do
-    application_plan = FactoryGirl.create(:simple_application_plan, issuer: @provider.services.first!)
+    application_plan = FactoryBot.create(:simple_application_plan, issuer: @provider.services.first!)
     contract = @buyer.buy! application_plan
     assert_difference '@invoice.line_items.count', 1 do
       post api_invoice_line_items_path(@invoice.id), line_item_params.merge(contract_id: contract.id), accept: Mime[:json]
@@ -150,7 +150,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'accepts adding plan_id to line_item' do
-    plan = FactoryGirl.create(:simple_application_plan, issuer: @provider.services.first!)
+    plan = FactoryBot.create(:simple_application_plan, issuer: @provider.services.first!)
 
     assert_no_difference '@invoice.line_items.count' do
       post api_invoice_line_items_path(@invoice.id), line_item_params.merge(plan_id: plan.id), accept: Mime[:json]
@@ -168,7 +168,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'accepts adding cinstance_id to line_item' do
-    plan = FactoryGirl.create(:simple_application_plan, issuer: @provider.services.first!)
+    plan = FactoryBot.create(:simple_application_plan, issuer: @provider.services.first!)
 
     cinstance = @buyer.buy! plan
 
@@ -190,7 +190,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'does not accept adding metric_id to line_item' do
-    metric = FactoryGirl.create(:metric, service: master_account.services.first!)
+    metric = FactoryBot.create(:metric, service: master_account.services.first!)
     assert_no_difference '@invoice.line_items.count' do
       post api_invoice_line_items_path(@invoice.id), line_item_params.merge(metric_id: metric.id), accept: Mime[:json]
       assert_response :not_found
@@ -206,7 +206,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'does not accept adding plan_id to line_item' do
-    plan = FactoryGirl.create(:simple_application_plan, service: master_account.services.first!)
+    plan = FactoryBot.create(:simple_application_plan, service: master_account.services.first!)
     assert_no_difference '@invoice.line_items.count' do
       post api_invoice_line_items_path(@invoice.id), line_item_params.merge(plan_id: plan.id), accept: Mime[:json]
       assert_response :not_found
@@ -214,7 +214,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'does not accept adding cinstance_id to line_item' do
-    plan = FactoryGirl.create(:simple_application_plan, service: master_account.services.first!)
+    plan = FactoryBot.create(:simple_application_plan, service: master_account.services.first!)
     cinstance = @provider.buy! plan
 
     assert_no_difference '@invoice.line_items.count' do

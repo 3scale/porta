@@ -18,8 +18,8 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user    = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
-    token   = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user    = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
+    token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     service = @provider.default_service
 
     get(admin_api_service_application_plans_path(service))

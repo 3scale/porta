@@ -19,10 +19,10 @@ class InvoiceTest < ActiveSupport::TestCase
 
   def setup
     Timecop.return
-    @provider = FactoryGirl.create(:simple_provider)
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
-    @invoice = FactoryGirl.create(:invoice,
+    @invoice = FactoryBot.create(:invoice,
                                   period: Month.new(Time.zone.local(1984, 1, 1)),
                                   provider_account: @provider,
                                   buyer_account: @buyer,
@@ -77,8 +77,8 @@ class InvoiceTest < ActiveSupport::TestCase
     time = Time.now.utc
     assert Invoice.finalized_before(time).empty?
 
-    cancelled = FactoryGirl.create(:invoice, provider_account: @provider, buyer_account: @buyer)
-    finalized = FactoryGirl.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+    cancelled = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+    finalized = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
 
     Timecop.freeze(time) { [finalized, cancelled].each(&:finalize!) }
     cancelled.cancel!
@@ -96,7 +96,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'skips validation of default friendly_id' do
-    invoice = FactoryGirl.build(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
+    invoice = FactoryBot.build(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
                                           provider_account: @provider,
                                           buyer_account: @buyer)
 
@@ -106,7 +106,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'keeps custom friendly_id if passed' do
-    invoice = FactoryGirl.create(:invoice, period: Month.new(Time.zone.local(2015, 3, 1)),
+    invoice = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(2015, 3, 1)),
                                            provider_account: @provider,
                                            buyer_account: @buyer,
                                            friendly_id: '2015-00000008').reload
@@ -118,15 +118,15 @@ class InvoiceTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     def setup
-      @provider = FactoryGirl.create(:simple_provider)
-      @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     end
 
     test 'gets sequential friendly_ids after saved' do
-      @provider.billing_strategy = FactoryGirl.create(:prepaid_billing, numbering_period: 'monthly')
+      @provider.billing_strategy = FactoryBot.create(:prepaid_billing, numbering_period: 'monthly')
       @provider.billing_strategy.create_invoice_counter('1984-01')
 
-      invoice = FactoryGirl.build(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
+      invoice = FactoryBot.build(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
                                             provider_account: @provider,
                                             buyer_account: @buyer)
 
@@ -136,7 +136,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
       assert_equal '1984-01-00000001', invoice.friendly_id
 
-      subsequent_invoice = FactoryGirl.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
+      subsequent_invoice = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
                                                         provider_account: @provider,
                                                         buyer_account: @buyer)
 
@@ -196,7 +196,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test '#to_param returns id' do
-    invoice = FactoryGirl.create(:invoice, created_at: Time.utc(1986, 4, 23),
+    invoice = FactoryBot.create(:invoice, created_at: Time.utc(1986, 4, 23),
                                            provider_account: @provider,
                                            buyer_account: @buyer)
     assert_equal invoice.id.to_s, invoice.to_param
@@ -210,7 +210,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'have cost that is sum of line items plus VAT' do
-    invoice = FactoryGirl.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+    invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     assert_equal 0, invoice.cost
 
     invoice.line_items.build(cost: 100)
@@ -233,7 +233,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'transitions from state' do
-    invoice = FactoryGirl.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+    invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
 
     transition = invoice.next_transition_from_state('finalized')
     assert_equal :finalize, transition.event
@@ -248,8 +248,8 @@ class InvoiceTest < ActiveSupport::TestCase
   # TODO: remove - use open? instead
   test 'have current? method' do
     Timecop.freeze do
-      invoice_one = FactoryGirl.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)), provider_account: @provider, buyer_account: @buyer)
-      invoice_two = FactoryGirl.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+      invoice_one = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)), provider_account: @provider, buyer_account: @buyer)
+      invoice_two = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
 
       refute invoice_one.current?
       assert invoice_two.current?
@@ -261,12 +261,12 @@ class InvoiceTest < ActiveSupport::TestCase
     now = Time.zone.now
 
     # chargeable invoices
-    FactoryGirl.create(:invoice, params.merge(state: 'unpaid', due_on: now))
-    FactoryGirl.create(:invoice, params.merge(state: 'pending', due_on: now))
+    FactoryBot.create(:invoice, params.merge(state: 'unpaid', due_on: now))
+    FactoryBot.create(:invoice, params.merge(state: 'pending', due_on: now))
 
     # not chargeable decoys
-    FactoryGirl.create(:invoice, params.merge(state: 'pending', due_on: now, last_charging_retry: now - 2.days))
-    FactoryGirl.create(:invoice, params.merge(state: 'pending', due_on: now + 1.day))
+    FactoryBot.create(:invoice, params.merge(state: 'pending', due_on: now, last_charging_retry: now - 2.days))
+    FactoryBot.create(:invoice, params.merge(state: 'pending', due_on: now + 1.day))
 
     assert_equal 2, Invoice.chargeable(now).count
   end
@@ -277,7 +277,7 @@ class InvoiceTest < ActiveSupport::TestCase
                            due_on: Time.zone.now,
                            state: 'pending' }
     cost = ThreeScale::Money.new(attributes.delete(:cost) || 100.0, 'EUR')
-    invoice = FactoryGirl.build(:invoice, invoice_attributes.merge(attributes))
+    invoice = FactoryBot.build(:invoice, invoice_attributes.merge(attributes))
     invoice.stubs(cost: cost)
     invoice
   end
@@ -291,7 +291,7 @@ class InvoiceTest < ActiveSupport::TestCase
     refute invoice.chargeable?
     assert_equal 'missing provider', invoice.reason_cannot_charge
 
-    unconfigured_provider = FactoryGirl.create(:simple_provider)
+    unconfigured_provider = FactoryBot.create(:simple_provider)
     unconfigured_provider.stubs(payment_gateway_configured?: false)
     invoice = build_invoice(provider_account: unconfigured_provider)
     refute invoice.chargeable?
@@ -305,7 +305,7 @@ class InvoiceTest < ActiveSupport::TestCase
     refute invoice.chargeable?
     assert_equal 'non-chargeable amount', invoice.reason_cannot_charge
 
-    not_paying_monthly_buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    not_paying_monthly_buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     not_paying_monthly_buyer.stubs(paying_monthly?: false)
     invoice = build_invoice(buyer_account: not_paying_monthly_buyer)
     refute invoice.chargeable?
@@ -323,12 +323,12 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   def setup_1964_and_2009_invoices
-    @invoice_one = FactoryGirl.create(:invoice,
+    @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,
                                       provider_account: @provider,
                                       period: Month.new(Time.utc(2009, 6, 1)))
 
-    @invoice_two = FactoryGirl.create(:invoice,
+    @invoice_two = FactoryBot.create(:invoice,
                                       provider_account: @provider,
                                       buyer_account: @buyer,
                                       period: Month.new(Time.utc(1964, 10, 1)))
@@ -407,7 +407,7 @@ class InvoiceTest < ActiveSupport::TestCase
   test 'unresolved invoices' do
     Invoice.delete_all
     [:open, :finalized, :pending, :unpaid, :failed, :cancelled, :paid].each do |state|
-      FactoryGirl.create(:invoice, state: state, provider_account: @provider, buyer_account: @buyer)
+      FactoryBot.create(:invoice, state: state, provider_account: @provider, buyer_account: @buyer)
     end
 
     assert_equal 4, @buyer.invoices.unresolved.count
@@ -516,15 +516,15 @@ class InvoiceTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     def setup
-      @provider = FactoryGirl.create(:simple_provider)
-      @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
       invoice_period = Month.new(Time.zone.local(2018, 1, 1))
 
-      @provider.billing_strategy = FactoryGirl.create(:prepaid_billing, numbering_period: 'yearly')
+      @provider.billing_strategy = FactoryBot.create(:prepaid_billing, numbering_period: 'yearly')
       @provider.billing_strategy.create_invoice_counter(invoice_period)
 
-      @invoice = FactoryGirl.create(:invoice, period: invoice_period,
+      @invoice = FactoryBot.create(:invoice, period: invoice_period,
                                               provider_account: @provider,
                                               buyer_account: @buyer).reload
     end
@@ -539,7 +539,7 @@ class InvoiceTest < ActiveSupport::TestCase
     end
 
     test 'jumps the counter when friendly id jumps' do
-      invoice = FactoryGirl.create(:invoice,
+      invoice = FactoryBot.create(:invoice,
                                     period: Month.new(Time.zone.local(2018, 1, 1)),
                                     provider_account: @provider,
                                     buyer_account: @buyer,
@@ -547,7 +547,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
       assert_equal 8, invoice.counter.invoice_count
 
-      other_invoice = FactoryGirl.create(:invoice, period: Month.new(Time.zone.local(2018, 1, 1)),
+      other_invoice = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(2018, 1, 1)),
                                                    provider_account: @provider,
                                                    buyer_account: @buyer).reload
 

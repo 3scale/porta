@@ -3,7 +3,7 @@ require 'test_helper'
 class Abilities::ProviderAdminTest < ActiveSupport::TestCase
 
   def setup
-    @account = FactoryGirl.create(:provider_account)
+    @account = FactoryBot.create(:provider_account)
     @admin   = @account.users.where(role: 'admin').first
     ThreeScale.config.stubs(onpremises: false)
   end
@@ -72,9 +72,9 @@ class Abilities::ProviderAdminTest < ActiveSupport::TestCase
   end
 
   def test_services
-    service_1 = FactoryGirl.build_stubbed(:service, id: 1)
-    service_2 = FactoryGirl.build_stubbed(:service, id: 2, account: @account)
-    service_3 = FactoryGirl.build_stubbed(:service, id: 3, account: @account)
+    service_1 = FactoryBot.build_stubbed(:service, id: 1)
+    service_2 = FactoryBot.build_stubbed(:service, id: 2, account: @account)
+    service_3 = FactoryBot.build_stubbed(:service, id: 3, account: @account)
 
     assert_cannot ability, :show, service_1
     assert_can ability, :show, service_2
@@ -82,12 +82,12 @@ class Abilities::ProviderAdminTest < ActiveSupport::TestCase
   end
 
   def test_destroy_services
-    service_1 = FactoryGirl.create(:simple_service)
+    service_1 = FactoryBot.create(:simple_service)
     account = service_1.account
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
-    @admin = FactoryGirl.create(:admin, account: account)
-    service_2 = FactoryGirl.create(:simple_service, account: account)
+    @admin = FactoryBot.create(:admin, account: account)
+    service_2 = FactoryBot.create(:simple_service, account: account)
 
     assert_can ability, :destroy, service_1
     assert_can ability, :destroy, service_2
@@ -98,7 +98,7 @@ class Abilities::ProviderAdminTest < ActiveSupport::TestCase
 
   def test_csv_data_export_event
     admin_1 = @admin
-    admin_2 = FactoryGirl.build_stubbed(:admin, account: @account)
+    admin_2 = FactoryBot.build_stubbed(:admin, account: @account)
     admin_1_ability = Ability.new(admin_1)
     admin_2_ability = Ability.new(admin_2)
 
@@ -115,9 +115,9 @@ class Abilities::ProviderAdminTest < ActiveSupport::TestCase
   end
 
   def test_partner_can_manage_user_and_multiple_users?
-    partner = FactoryGirl.build_stubbed(:partner)
-    provider = FactoryGirl.build_stubbed(:simple_provider, partner: partner)
-    @admin = FactoryGirl.build_stubbed(:admin, account: provider)
+    partner = FactoryBot.build_stubbed(:partner)
+    provider = FactoryBot.build_stubbed(:simple_provider, partner: partner)
+    @admin = FactoryBot.build_stubbed(:admin, account: provider)
 
     partner.system_name = 'appdirect'
     assert_cannot ability, :manage, User
@@ -148,7 +148,7 @@ class Abilities::ProviderAdminTest < ActiveSupport::TestCase
   end
 
   def test_billing
-    invoice = FactoryGirl.build_stubbed(:invoice, provider_account_id: @account.id)
+    invoice = FactoryBot.build_stubbed(:invoice, provider_account_id: @account.id)
     ThreeScale.config.stubs(onpremises: false)
     finance = mock
     finance.stubs(allowed?: true)

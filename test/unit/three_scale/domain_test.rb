@@ -18,7 +18,7 @@ class ThreeScale::DomainTest < ActiveSupport::TestCase
 
   def test_callback_endpoint
     parameters = { invitation_token: nil }
-    account    = FactoryGirl.build_stubbed(:simple_provider, domain: 'example.edu')
+    account    = FactoryBot.build_stubbed(:simple_provider, domain: 'example.edu')
     endpoint   = ThreeScale::Domain.callback_endpoint(request(parameters: parameters), account)
     assert_equal 'http://example.net/auth', endpoint
 

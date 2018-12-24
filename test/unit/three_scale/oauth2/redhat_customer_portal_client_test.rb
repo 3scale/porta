@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCase
   setup do
-    @authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+    @authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
     @authentication = ThreeScale::OAuth2::Client.build_authentication(@authentication_provider)
     @oauth2 = ThreeScale::OAuth2::RedhatCustomerPortalClient.new(@authentication)
   end
@@ -62,7 +62,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
     RedirectUri = ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri
 
     def test_call_always_redirect_to_master_admin_domain
-      authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+      authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
       authentication = ThreeScale::OAuth2::Client.build_authentication(authentication_provider)
       oauth2         = ThreeScale::OAuth2::RedhatCustomerPortalClient.new(authentication)
 
@@ -78,7 +78,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
 
   class RedhatCustomerPortalClientTest < ActiveSupport::TestCase
     test 'unsupported flow' do
-      authentication_provider = FactoryGirl.create(:redhat_customer_portal_authentication_provider, system_name: 'redhat')
+      authentication_provider = FactoryBot.create(:redhat_customer_portal_authentication_provider, system_name: 'redhat')
 
       ThreeScale.config.redhat_customer_portal.expects(flow: 'unsupported-fake-flow')
 
@@ -90,7 +90,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
 
   class ImplicitFlowTest < ActiveSupport::TestCase
     setup do
-      authentication_provider = FactoryGirl.create(:keycloak_authentication_provider, system_name: 'redhat')
+      authentication_provider = FactoryBot.create(:keycloak_authentication_provider, system_name: 'redhat')
       @authentication = ThreeScale::OAuth2::Client.build_authentication(authentication_provider)
       @oauth2 = ThreeScale::OAuth2::RedhatCustomerPortalClient::ImplicitFlow.new(@authentication)
     end

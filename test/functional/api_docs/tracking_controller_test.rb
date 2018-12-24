@@ -3,8 +3,8 @@ require 'test_helper'
 class ApiDocs::TrackingControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
-    buyer     = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    @provider = FactoryBot.create(:simple_provider)
+    buyer     = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
     host! @provider.domain
 
