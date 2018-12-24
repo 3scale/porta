@@ -16,7 +16,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   def test_deploy_success
-    proxy = FactoryBot.build_stubbed(:proxy, api_test_success: true)
+    proxy = FactoryBot.create(:proxy, api_test_success: true)
 
     stub_request(:get, "http://test.proxy/deploy/TEST?provider_id=#{@provider.id}")
         .to_return(status: 200)
@@ -34,7 +34,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   def test_deploy_failure
-    proxy = FactoryBot.build_stubbed(:proxy, api_test_success: true)
+    proxy = FactoryBot.create(:proxy, api_test_success: true)
 
     stub_request(:get, "http://test.proxy/deploy/TEST?provider_id=#{@provider.id}")
         .to_return(status: 500)

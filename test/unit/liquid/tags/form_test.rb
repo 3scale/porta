@@ -62,7 +62,7 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   end
 
   test "user.edit" do
-    user = Factory(:active_user)
+    user = FactoryBot.create(:active_user)
     @context['user'] = Liquid::Drops::User.new(user)
     @tag = Liquid::Tags::Form.parse('form', "'user.edit', user", ["CONTENT", '{% endform %}'], {})
 
