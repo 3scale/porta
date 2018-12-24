@@ -1,4 +1,4 @@
-Factory.define do
+FactoryBot.define do
   factory(:cms_template, :class => CMS::Template) do
     association :provider, :factory => :provider_account
   end
@@ -13,7 +13,7 @@ Factory.define do
   end
 
   factory :cms_section, :class => CMS::Section do
-    ssociation :provider, :factory => :provider_account
+    association :provider, :factory => :provider_account
     sequence(:title) { |n| "Section #{n}" }
     sequence(:system_name) { |n| "sysname #{n}" }
     partial_path { |section| "/#{section.title.parameterize}" }

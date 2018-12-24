@@ -1,8 +1,8 @@
-factory do
+FactoryBot.define do
   factory(:contract) do
     association :user_account, :factory => :pending_buyer_account
 
-    after_stub do |cinstance|
+    after(:stub) do |cinstance|
       cinstance.created_at = 2.months.ago
       cinstance.state = 'live'
       cinstance.user_key ||= SecureRandom.hex(16)
@@ -12,7 +12,7 @@ factory do
       cinstance.stubs(:access_rules).returns([])
     end
 
-    after_build do |contract|
+    after(:build) do |contract|
       if contract.plan && contract.user_account && contract.user_account.provider_account.nil?
         contract.plan.provider_account.buyer_accounts << contract.user_account
       end

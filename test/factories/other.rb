@@ -30,7 +30,7 @@ FactoryBot.define do
     #  association :proxy, :factory => :proxy
     sequence(:name) { |n| "service#{n}" }
     association(:account, :factory => :provider_account)
-    after_create do |record|
+    after(:create) do |record|
       record.service_tokens.first_or_create!(value: 'token')
     end
   end

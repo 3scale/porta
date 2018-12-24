@@ -7,7 +7,7 @@ FactoryBot.define do
   end
 
   factory(:active_user, :parent => :pending_user) do
-    after_create do |user|
+    after(:create) do |user|
       user.activate!
     end
   end
@@ -24,7 +24,7 @@ FactoryBot.define do
   end
 
   factory(:active_admin, :parent => :admin) do
-    after_create do |user|
+    after(:create) do |user|
       user.activate!
     end
   end
