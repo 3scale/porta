@@ -41,10 +41,10 @@ class BaseTest < ActiveSupport::TestCase
     obs = MessageObserver.instance
     obs.stubs(:after_commit_on_create)
 
-    @provider_account = Factory(:provider_account, :org_name => 'Foos & Bars',
+    @provider_account = FactoryBot.create(:provider_account, :org_name => 'Foos & Bars',
                                 :domain => 'foosandbars.com')
 
-    @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+    @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
 
     Message.destroy_all
   end

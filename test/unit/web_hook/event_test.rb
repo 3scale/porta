@@ -9,7 +9,7 @@ class WebHook::EventTest < ActiveSupport::TestCase
   end
 
   def build_provider(webhook_attrs = {})
-    provider = Factory.build(:provider_account)
+    provider = FactoryBot.build(:provider_account)
     provider.stubs(:web_hooks_allowed?).returns(true)
 
     provider.build_web_hook(webhook_attrs.merge(:active => true))

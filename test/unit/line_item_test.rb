@@ -9,14 +9,14 @@ class LineItemTest < ActiveSupport::TestCase
   end
 
   test 'returns cost in currency of the billing strategy' do
-    provider_account_one = Factory(:provider_with_billing)
-    provider_account_two = Factory(:provider_with_billing)
+    provider_account_one = FactoryBot.create(:provider_with_billing)
+    provider_account_two = FactoryBot.create(:provider_with_billing)
 
     provider_account_one.billing_strategy.update_attribute(:currency, 'EUR')
     provider_account_two.billing_strategy.update_attribute(:currency, 'USD')
 
-    invoice_one = Factory(:invoice, :provider_account => provider_account_one)
-    invoice_two = Factory(:invoice, :provider_account => provider_account_two)
+    invoice_one = FactoryBot.create(:invoice, :provider_account => provider_account_one)
+    invoice_two = FactoryBot.create(:invoice, :provider_account => provider_account_two)
 
     line_item_one = invoice_one.line_items.new(:cost => 10)
     line_item_two = invoice_two.line_items.new(:cost => 42)
@@ -32,7 +32,7 @@ class LineItemTest < ActiveSupport::TestCase
 
   context 'LineItem' do
     setup do
-      @line_item = Factory(:line_item_plan_cost)
+      @line_item = FactoryBot.create(:line_item_plan_cost)
     end
 
 

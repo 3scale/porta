@@ -2,8 +2,8 @@ require 'spec_helper'
 
 resource "Message" do
 
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
-  let(:resource) { Factory.build(:message, sender: buyer) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.build(:message, sender: buyer) }
   let(:account_id) { buyer.id }
 
   api 'message' do

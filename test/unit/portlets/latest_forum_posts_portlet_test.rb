@@ -3,8 +3,8 @@ require 'test_helper'
 class LatestForumPostsTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
-    @forum = Factory(:forum)
+    @provider = FactoryBot.create(:provider_account)
+    @forum = FactoryBot.create(:forum)
   end
 
   test "Should be able to create new instance of a portlet" do

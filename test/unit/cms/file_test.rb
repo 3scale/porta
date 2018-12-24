@@ -6,7 +6,7 @@ class CMS::FileTest < ActiveSupport::TestCase
     default_options = Paperclip::Attachment.default_options
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
 
-    @file = Factory.build(:cms_file, downloadable: true)
+    @file = FactoryBot.build(:cms_file, downloadable: true)
 
     url = @file.url
     assert_match(/amazonaws/, url) # Check that is a amazon url
@@ -20,14 +20,14 @@ class CMS::FileTest < ActiveSupport::TestCase
     default_options = Paperclip::Attachment.default_options
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
 
-    url = Factory.build_stubbed(:cms_file, downloadable: false).url
+    url = FactoryBot.build_stubbed(:cms_file, downloadable: false).url
 
     assert_match(/amazonaws/, url) # Check that is a amazon url
     assert_match /X-Amz-Signature/, url
   end
 
   test 'path should be normalized' do
-    @file = Factory.build(:cms_file, :path => " do whatever / you want ")
+    @file = FactoryBot.build(:cms_file, :path => " do whatever / you want ")
     assert @file.invalid?
     assert_equal "/do-whatever/you-want", @file.path
     assert_valid @file
@@ -46,7 +46,7 @@ class CMS::FileTest < ActiveSupport::TestCase
     hypnotoad = Rails.root.join('test', 'fixtures', 'hypnotoad.jpg').open
     pacific = ActiveSupport::TimeZone["Pacific Time (US & Canada)"]
 
-    file = Factory(:cms_file)
+    file = FactoryBot.create(:cms_file)
     file.provider.update_attribute(:timezone, pacific.name)
 
     Time.use_zone pacific do

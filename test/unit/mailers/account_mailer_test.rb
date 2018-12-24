@@ -41,7 +41,7 @@ class AccountMailerTest < ActionMailer::TestCase
     end
 
     def test_support_entitlements_assigned
-      @account.buy! Factory(:application_plan, issuer: @service, cost_per_month: 50)
+      @account.buy! FactoryBot.create(:application_plan, issuer: @service, cost_per_month: 50)
 
       mail = AccountMailer.support_entitlements_assigned(@account, effective_since: @invoice.issued_on, invoice_id: @invoice.id)
 
@@ -72,7 +72,7 @@ class AccountMailerTest < ActionMailer::TestCase
     end
 
     def test_support_entitlements_trial_plan
-      trial_plan = Factory(:application_plan, issuer: @service)
+      trial_plan = FactoryBot.create(:application_plan, issuer: @service)
       trial_plan.plan_rule.metadata = {trial: true}
       @account.buy! trial_plan
 

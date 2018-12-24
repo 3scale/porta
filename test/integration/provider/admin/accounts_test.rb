@@ -14,7 +14,7 @@ class Provider::Admin::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   def test_update
-    Factory(:fields_definition, account: @master, target: 'Account', name: 'org_legaladdress')
+    FactoryBot.create(:fields_definition, account: @master, target: 'Account', name: 'org_legaladdress')
 
     Account.any_instance.expects(:editable_defined_fields_for).returns([DoubleField.new('org_legaladdress')]).once
     put provider_admin_account_path(account: { extra_fields: { org_legaladdress: 'alaska' }})

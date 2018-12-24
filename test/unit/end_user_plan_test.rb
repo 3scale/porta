@@ -14,7 +14,7 @@ class EndUserPlanTest < ActiveSupport::TestCase
 
   context "End user plan" do
     setup do
-      @end_user_plan = Factory(:end_user_plan, :service => Factory(:service))
+      @end_user_plan = FactoryBot.create(:end_user_plan, :service => FactoryBot.create(:service))
     end
 
     should 'validate name uniqueness' do
@@ -22,7 +22,7 @@ class EndUserPlanTest < ActiveSupport::TestCase
       assert ! other.valid?
       assert !other.errors[:name].blank?
 
-      other = Factory(:end_user_plan, :service => Factory(:service), :name => @end_user_plan.name)
+      other = FactoryBot.create(:end_user_plan, :service => FactoryBot.create(:service), :name => @end_user_plan.name)
       assert other.valid?
     end
 

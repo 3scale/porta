@@ -4,7 +4,7 @@ class ForumTest < ActiveSupport::TestCase
   test 'topics.smart_search uses sphinx if search query given' do
     skip 'Not available for Oracle' if System::Database.oracle?
 
-    forum = Factory(:forum)
+    forum = FactoryBot.create(:forum)
 
     search = ThinkingSphinx.search
     ThinkingSphinx::Search.expects(:new).returns(search)
@@ -23,9 +23,9 @@ class ForumTest < ActiveSupport::TestCase
   end
 
   test 'topics.search does not use sphinx if query is empty' do
-    forum = Factory(:forum)
-    topic_one = Factory(:topic, :forum => forum)
-    topic_two = Factory(:topic, :forum => forum)
+    forum = FactoryBot.create(:forum)
+    topic_one = FactoryBot.create(:topic, :forum => forum)
+    topic_two = FactoryBot.create(:topic, :forum => forum)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -33,17 +33,17 @@ class ForumTest < ActiveSupport::TestCase
   end
 
   test 'topics.search does not return topics of other forums if query is empty' do
-    forum_one = Factory(:forum)
-    topic_one = Factory(:topic, :forum => forum_one)
+    forum_one = FactoryBot.create(:forum)
+    topic_one = FactoryBot.create(:topic, :forum => forum_one)
 
-    forum_two = Factory(:forum)
-    topic_two = Factory(:topic, :forum => forum_two)
+    forum_two = FactoryBot.create(:forum)
+    topic_two = FactoryBot.create(:topic, :forum => forum_two)
 
     assert_does_not_contain forum_one.topics.smart_search, topic_two
   end
 
   test 'topics.search return paginated collection when query is empty' do
-    forum  = Factory(:forum)
+    forum  = FactoryBot.create(:forum)
     topics = forum.topics.smart_search
 
     assert_respond_to topics, :total_pages

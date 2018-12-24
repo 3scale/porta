@@ -16,7 +16,7 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
 
   def create_buyer_for(provider, date = Time.utc(2011,1,1))
     Timecop.freeze(date) do
-      buyer = Factory.create(:buyer_account,
+      buyer = FactoryBot.create(:buyer_account,
                              provider_account: provider)
 
       plan = provider.account_plans.default
@@ -28,9 +28,9 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
 
   def create_app_for(buyer, date = Time.utc(2011,1,1))
     Timecop.freeze(date) do
-      service = Factory :service, :account => buyer.provider_account
+      service = FactoryBot.create :service, :account => buyer.provider_account
 
-      plan = Factory :application_plan, :issuer => service, :name => 'Plan of the Escape'
+      plan = FactoryBot.create :application_plan, :issuer => service, :name => 'Plan of the Escape'
       cinstance = plan.create_contract_with(buyer)
       cinstance.extra_fields = { "fruit" => "Apple" }
       cinstance.save!
@@ -38,8 +38,8 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
   end
 
   def setup
-    @provider = Factory :provider_account, org_name: 'Generalitat', domain: 'gen.example.com'
-    Factory(:fields_definition, :account => @provider, :target => "Cinstance",
+    @provider = FactoryBot.create :provider_account, org_name: 'Generalitat', domain: 'gen.example.com'
+    FactoryBot.create(:fields_definition, :account => @provider, :target => "Cinstance",
             name: "fruit",
             choices: ["Orange", "Apple", "Banana"])
     @provider.reload

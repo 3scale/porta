@@ -1,21 +1,21 @@
 Given /^an user "([^\"]*)" of (account "[^\"]*")$/ do |username, account|
-  Factory(:user, :account => account, :username => username)
+  FactoryBot.create(:user, :account => account, :username => username)
 end
 
 Given /^an user of (account "[^"]*") with first name "([^"]*)" and last name "([^"]*)"$/ do |account, first_name, last_name|
-  Factory(:user, :account => account, :first_name => first_name, :last_name => last_name)
+  FactoryBot.create(:user, :account => account, :first_name => first_name, :last_name => last_name)
 end
 
 Given /^a pending user "([^"]*)" of (account "[^"]*")$/ do |username, account|
-  Factory(:pending_user, :account => account, :username => username)
+  FactoryBot.create(:pending_user, :account => account, :username => username)
 end
 
 Given /^an active user "([^"]*)" of (account "[^"]*")$/ do |username, account|
-  Factory(:active_user, :account => account, :username => username)
+  FactoryBot.create(:active_user, :account => account, :username => username)
 end
 
 Given /^an active admin "([^"]*)" of (account "[^"]*")$/ do |username, account|
-  Factory(:active_admin, :account => account, :username => username)
+  FactoryBot.create(:active_admin, :account => account, :username => username)
 end
 
 Given /^an active user "([^"]*)" of (account "[^"]*") with ([^\"]*) permission$/ do |username, account, permission|
@@ -27,7 +27,7 @@ Given /^an active user "([^"]*)" of (account "[^"]*") with ([^\"]*) permission$/
 end
 
 Given /^an active user "([^\"]*)" of (account "[^\"]*") with email "([^"]*)"$/ do |username, account, email|
-  Factory(:active_user, :account => account, :username => username, :email => email)
+  FactoryBot.create(:active_user, :account => account, :username => username, :email => email)
 end
 
 Given /^there is no user with username "([^\"]*)"$/ do |username|

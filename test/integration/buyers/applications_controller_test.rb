@@ -20,7 +20,7 @@ class Buyers::ApplicationsTest < ActionDispatch::IntegrationTest
 
   class ProviderLoggedInTest < Buyers::ApplicationsTest
     def setup
-      @provider = Factory(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
 
       host! @provider.admin_domain
       provider_login_with @provider.admins.first.username, "supersecret"

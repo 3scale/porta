@@ -3,14 +3,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Api::PlansControllerTest < ActionController::TestCase
 
   def setup
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
     login_provider @provider
   end
 
   # Airbrake: https://3scale.airbrake.io/groups/55535047
   # Github: https://github.com/3scale/system/issues/2179
   test "publishing a published application plan" do
-    app_plan = Factory :published_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :published_plan, :issuer => @provider.default_service
 
     post :publish, id: app_plan.id
 
@@ -20,7 +20,7 @@ class Api::PlansControllerTest < ActionController::TestCase
   end
 
   test "publishing a service plan and redirecting back to google" do
-    service_plan = Factory :service_plan, :issuer => @provider.default_service
+    service_plan = FactoryBot.create :service_plan, :issuer => @provider.default_service
 
     request.env["HTTP_REFERER"] = "http://google.com"
 

@@ -12,8 +12,8 @@ class NotificationsTest < ActiveSupport::TestCase
       ['plan_change', 'weekly_reports', 'daily_reports'].each do |o|
         SystemOperation.for(o)
       end
-      @account = Factory(:account_without_users)
-      @admin = Factory(:admin, :account => @account)
+      @account = FactoryBot.create(:account_without_users)
+      @admin = FactoryBot.create(:admin, :account => @account)
     end
 
     should 'have dispatch rule created when called for the first time' do
@@ -42,8 +42,8 @@ class NotificationsTest < ActiveSupport::TestCase
   context 'receiving a message with mail dispatch rule set' do
     setup do
       @operation = SystemOperation.for('plan_change')
-      @buyer_sender = Factory :buyer_account
-      @provider_recipient = Factory :provider_account
+      @buyer_sender = FactoryBot.create :buyer_account
+      @provider_recipient = FactoryBot.create :provider_account
 
       @message = @buyer_sender.messages.build(
       :to => @provider_recipient,
@@ -79,7 +79,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
     should 'notify recipient by email when rule for operation is set to true' do
 
-      @rule = Factory :mail_dispatch_rule, :account => @provider_recipient, :dispatch => true, :system_operation => @operation
+      @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider_recipient, :dispatch => true, :system_operation => @operation
 
       assert_difference ActionMailer::Base.deliveries.method(:count) do
         @message.save!
@@ -102,7 +102,7 @@ class NotificationsTest < ActiveSupport::TestCase
     end
 
     should 'NOT notify recipient when dispatch rule for operation is set to false' do
-      @rule = Factory :mail_dispatch_rule, :account => @provider_recipient, :dispatch => false,  :system_operation => @operation
+      @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider_recipient, :dispatch => false,  :system_operation => @operation
 
       @message.save!
       @message.deliver!
@@ -129,8 +129,8 @@ class NotificationsTest < ActiveSupport::TestCase
       ActionMailer::Base.deliveries = []
 
       @operation = SystemOperation.for('plan_change')
-      @buyer_sender = Factory :buyer_account
-      @provider = Factory :provider_account
+      @buyer_sender = FactoryBot.create :buyer_account
+      @provider = FactoryBot.create :provider_account
 
       @message = Message.create!(
         :sender => @buyer_sender,
@@ -142,7 +142,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
 
      should 'be sent to provider when dispatch rule is true' do
-       @rule = Factory :mail_dispatch_rule, :account => @provider, :dispatch => true, :system_operation => @operation
+       @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider, :dispatch => true, :system_operation => @operation
 
        PostOffice.message_notification(@message, @provider_recipient).deliver_now
        @email = ActionMailer::Base.deliveries.last
@@ -169,8 +169,8 @@ class NotificationsTest < ActiveSupport::TestCase
     setup do
       @system_operation = SystemOperation.for('plan_change')
 
-      buyer = Factory :buyer_account
-      provider = Factory :provider_account
+      buyer = FactoryBot.create :buyer_account
+      provider = FactoryBot.create :provider_account
 
       @message = Message.create!(
         :sender => buyer, :to => provider,
@@ -187,12 +187,12 @@ class NotificationsTest < ActiveSupport::TestCase
 
   context 'application creation' do
     setup do
-      @provider = Factory :provider_account
+      @provider = FactoryBot.create :provider_account
       @admin = @provider.admins.first
       @admin.update_attribute :email, "provider-admin@example.com"
 
-      @buyer = Factory :buyer_account, :provider_account => @provider
-      @plan  = Factory :application_plan, :issuer => @provider.default_service
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+      @plan  = FactoryBot.create :application_plan, :issuer => @provider.default_service
       ActionMailer::Base.deliveries.clear
     end
 
@@ -214,11 +214,11 @@ class NotificationsTest < ActiveSupport::TestCase
 
   context 'account signup on confirmation' do
     setup do
-      @provider = Factory :provider_account
+      @provider = FactoryBot.create :provider_account
       @admin = @provider.admins.first
       @admin.update_attribute :email, "provider-admin@example.com"
 
-      @buyer = Factory :buyer_account, :provider_account => @provider
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
       ActionMailer::Base.deliveries.clear
 
       op = SystemOperation.for("user_signup")

@@ -5,7 +5,7 @@ class LastTrafficTest < ActiveSupport::TestCase
   delegate :storage, to: Stats::Client
 
   def test_sent_traffic_on
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     today = Date.today
     time = today.to_time

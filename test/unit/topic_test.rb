@@ -12,47 +12,47 @@ class TopicTest < ActiveSupport::TestCase
   end
 
   test 'delegates account and account_id to forum' do
-    forum = Factory(:forum)
-    topic = Factory(:topic, :forum => forum)
+    forum = FactoryBot.create(:forum)
+    topic = FactoryBot.create(:topic, :forum => forum)
     assert_equal topic.account, forum.account
     assert_equal topic.account_id, forum.account_id
   end
 
   test 'with_post_by returns only topics with at least one post by the given user' do
-    forum = Factory(:forum)
-    alice = Factory(:simple_user, :account => forum.account)
-    bob   = Factory(:simple_user, :account => forum.account)
+    forum = FactoryBot.create(:forum)
+    alice = FactoryBot.create(:simple_user, :account => forum.account)
+    bob   = FactoryBot.create(:simple_user, :account => forum.account)
 
-    topic_one = Factory(:topic, :forum => forum)
-    topic_two = Factory(:topic, :forum => forum)
+    topic_one = FactoryBot.create(:topic, :forum => forum)
+    topic_two = FactoryBot.create(:topic, :forum => forum)
 
-    Factory(:post, :topic => topic_one, :user => alice)
-    Factory(:post, :topic => topic_two, :user => bob)
+    FactoryBot.create(:post, :topic => topic_one, :user => alice)
+    FactoryBot.create(:post, :topic => topic_two, :user => bob)
 
     assert_same_elements [topic_one], forum.topics.with_post_by(alice)
   end
 
   test 'with_post_by does not return the same topic more than once' do
-    forum = Factory(:forum)
-    bob   = Factory(:simple_user, :account => forum.account)
+    forum = FactoryBot.create(:forum)
+    bob   = FactoryBot.create(:simple_user, :account => forum.account)
 
-    topic_one = Factory(:topic, :forum => forum)
-    topic_two = Factory(:topic, :forum => forum)
-    topic_three = Factory(:topic, :forum => forum)
+    topic_one = FactoryBot.create(:topic, :forum => forum)
+    topic_two = FactoryBot.create(:topic, :forum => forum)
+    topic_three = FactoryBot.create(:topic, :forum => forum)
 
-    Factory(:post, :topic => topic_one, :user => bob)
-    Factory(:post, :topic => topic_two, :user => bob)
-    Factory(:post, :topic => topic_two, :user => bob)
-    Factory(:post, :topic => topic_three, :user => bob)
+    FactoryBot.create(:post, :topic => topic_one, :user => bob)
+    FactoryBot.create(:post, :topic => topic_two, :user => bob)
+    FactoryBot.create(:post, :topic => topic_two, :user => bob)
+    FactoryBot.create(:post, :topic => topic_three, :user => bob)
 
     assert_same_elements [topic_one, topic_two, topic_three], forum.topics.with_post_by(bob)
   end
 
   test 'topic subscriptions get deleted along with topic' do
-    forum = Factory(:forum)
-    bob   = Factory(:simple_user, :account => forum.account)
+    forum = FactoryBot.create(:forum)
+    bob   = FactoryBot.create(:simple_user, :account => forum.account)
 
-    topic_one = Factory(:topic, :forum => forum)
+    topic_one = FactoryBot.create(:topic, :forum => forum)
     subscription = topic_one.user_topics.create :user => bob
 
     assert_not_nil Topic.find_by_id topic_one.id

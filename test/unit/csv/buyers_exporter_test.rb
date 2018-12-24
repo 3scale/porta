@@ -4,7 +4,7 @@ class Csv::BuyersExporterTest < ActiveSupport::TestCase
 
   def create_buyer_for(provider, date = Time.utc(2011,1,1))
     Timecop.freeze(date) do
-      buyer = Factory.create(:buyer_account,
+      buyer = FactoryBot.create(:buyer_account,
                              provider_account: provider)
 
       plan = provider.account_plans.default
@@ -15,7 +15,7 @@ class Csv::BuyersExporterTest < ActiveSupport::TestCase
   end
 
   def setup
-    @provider = Factory.create(:provider_account, org_name: 'Generalitat', domain: 'generalitat.cat')
+    @provider = FactoryBot.create(:provider_account, org_name: 'Generalitat', domain: 'generalitat.cat')
     @buyer = create_buyer_for(@provider)
     @buyer.admins.first.update_attributes(username: 'john_doe', email: 'john@my.company.it')
     @buyer.update_attributes(org_name: 'Eater')

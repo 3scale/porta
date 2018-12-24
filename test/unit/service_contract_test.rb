@@ -4,14 +4,14 @@ class ServiceContractTest < ActiveSupport::TestCase
   context 'plan class validation' do
 
     should 'be valid with an service plan' do
-      service_plan = Factory :service_plan
+      service_plan = FactoryBot.create :service_plan
       service_contract = ServiceContract.new :plan => service_plan
 
       assert service_contract.valid?
     end
 
     should 'not be valid with an application plan' do
-      app_plan = Factory :application_plan
+      app_plan = FactoryBot.create :application_plan
       service_contract = ServiceContract.new :plan => app_plan
 
       assert !service_contract.valid?
@@ -19,7 +19,7 @@ class ServiceContractTest < ActiveSupport::TestCase
     end
 
     should 'not be valid with an account plan' do
-      acc_plan = Factory :account_plan
+      acc_plan = FactoryBot.create :account_plan
       service_contract = ServiceContract.new :plan => acc_plan
 
       assert !service_contract.valid?

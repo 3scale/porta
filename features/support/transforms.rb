@@ -41,7 +41,7 @@ end
 Transform /^provider "(.+?)"$/ do |name|
   # TODO: fix this hacky way of getting master
   if name == 'master'
-    Account.master rescue Factory(:master_account)
+    Account.master rescue FactoryBot.create(:master_account)
   else
     Account.providers.readonly(false).find_by_org_name!(name)
   end

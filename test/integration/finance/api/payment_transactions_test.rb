@@ -4,13 +4,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 module Finance::Api
   class PaymentTransactionsTest < ActionDispatch::IntegrationTest
     setup do
-      @provider = Factory(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       @provider.create_billing_strategy
       @provider.save!
       @key = @provider.api_key
 
-      @buyer = Factory(:buyer_account, :provider_account => @provider)
-      @invoice = Factory(:invoice, :provider_account => @provider, :buyer_account => @buyer)
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+      @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
 
       host! @provider.admin_domain
     end
@@ -18,7 +18,7 @@ module Finance::Api
     test "returns payment_transactions" do
       gr = { "transaction_id"=>"27c73cba53ec35c693c6708085fced14", "auth_response_text"=>"Exact Match",
              "avs_result"=>"Y", "error_code"=>"000", "auth_code"=>"005308"}
-      Factory :payment_transaction, :invoice => @invoice, :params => gr
+      FactoryBot.create :payment_transaction, :invoice => @invoice, :params => gr
 
       get "/api/invoices/#{@invoice.id}/payment_transactions.xml?provider_key=#{@key}"
 
@@ -34,7 +34,7 @@ module Finance::Api
     end
 
     test "payment_transaction with nil params" do
-      Factory :payment_transaction, :invoice => @invoice, :params => nil
+      FactoryBot.create :payment_transaction, :invoice => @invoice, :params => nil
 
       get "/api/invoices/#{@invoice.id}/payment_transactions.xml?provider_key=#{@key}"
       assert_response :ok
@@ -47,10 +47,10 @@ module Finance::Api
       end
 
       should 'deny access if finance module is disabled' do
-        without_finance = Factory.create(:provider_account, :billing_strategy => nil)
-        buyer = Factory(:buyer_account, :provider_account => without_finance)
-        invoice = Factory(:invoice, :provider_account => without_finance, :buyer_account => buyer)
-        Factory.create(:payment_transaction, :success => true, :invoice => invoice)
+        without_finance = FactoryBot.create(:provider_account, :billing_strategy => nil)
+        buyer = FactoryBot.create(:buyer_account, :provider_account => without_finance)
+        invoice = FactoryBot.create(:invoice, :provider_account => without_finance, :buyer_account => buyer)
+        FactoryBot.create(:payment_transaction, :success => true, :invoice => invoice)
         host! without_finance.self_domain
 
         get "/api/invoices/#{invoice.id}.xml?provider_key=#{without_finance.api_key}"

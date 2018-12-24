@@ -15,7 +15,7 @@ class Liquid::FormsTest < ActiveSupport::TestCase
 
   test 'create application form' do
     form = get('application.create', 'application')
-    application = Factory(:simple_cinstance)
+    application = FactoryBot.create(:simple_cinstance)
     form.context['application'] = Liquid::Drops::Application.new(application)
     content = form.render('content')
 

@@ -4,13 +4,13 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @service = @provider.services.first
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @app_plan = Factory :application_plan, :issuer => @provider.default_service
+    @app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     @buyer.buy! @app_plan
     @buyer.reload
 
@@ -72,7 +72,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy' do
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
 
     post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy",
               :provider_key => @provider.api_key,
@@ -90,7 +90,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy an already bought plan' do
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     app_plan.publish!
 
     @buyer.buy! app_plan, {:name => "name1", :description => "description1"}
@@ -111,7 +111,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy a custom plan is not allowed' do
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     custom_plan = app_plan.customize
 
     post("/admin/api/accounts/#{@buyer.id}/application_plans/#{custom_plan.id}/buy",

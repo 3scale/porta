@@ -4,11 +4,11 @@ require 'test_helper'
 class SSOTokenTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
   end
 
   test "creating a valid sso token using user_id" do
-    buyer     = Factory(:buyer_account, :provider_account => @provider)
+    buyer     = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
     sso_token = SSOToken.new :user_id => buyer.users.first.id, :account => @provider, :expires_in => 6000
 
@@ -23,7 +23,7 @@ class SSOTokenTest < ActiveSupport::TestCase
   end
 
   test "creating a valid sso token using username" do
-    buyer     = Factory(:buyer_account, :provider_account => @provider)
+    buyer     = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
     sso_token = SSOToken.new :username => buyer.users.first.username
     sso_token.account= @provider
@@ -53,7 +53,7 @@ class SSOTokenTest < ActiveSupport::TestCase
   end
 
   test "user and account validations" do
-    sso_token = SSOToken.new :username => Factory(:user).username
+    sso_token = SSOToken.new :username => FactoryBot.create(:user).username
 
     assert_equal 600, sso_token.expires_in
 
@@ -61,7 +61,7 @@ class SSOTokenTest < ActiveSupport::TestCase
     refute sso_token.valid?
     refute sso_token.errors[:account].empty?
 
-    buyer = Factory(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
 
     sso_token.account = buyer
     refute sso_token.valid?

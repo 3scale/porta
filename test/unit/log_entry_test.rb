@@ -2,8 +2,8 @@ require 'test_helper'
 
 class LogEntryTest < ActiveSupport::TestCase
   def setup
-    @provider = Factory(:provider_account)
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
   end
 
   test 'create all log levels' do
@@ -20,7 +20,7 @@ class LogEntryTest < ActiveSupport::TestCase
   end
 
   test 'filters by buyer shows buyer and globals' do
-    @buyer2 = Factory(:buyer_account, :provider_account => @provider)
+    @buyer2 = FactoryBot.create(:buyer_account, :provider_account => @provider)
     Account.stubs(:search_ids).returns([@buyer.id])
 
     LogEntry.log :info, 'all your base are belong to us', @provider, @buyer

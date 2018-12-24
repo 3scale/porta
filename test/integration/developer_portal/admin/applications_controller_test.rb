@@ -4,13 +4,13 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
   include DeveloperPortal::Engine.routes.url_helpers
 
   def setup
-    @provider  = Factory(:provider_account)
+    @provider  = FactoryBot.create(:provider_account)
     @service = @provider.default_service
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @service.service_plans.first
 
-    @plan  = Factory :application_plan, :issuer => @service
+    @plan  = FactoryBot.create :application_plan, :issuer => @service
     @plan.publish!
 
     @buyer.buy! @plan
@@ -47,7 +47,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
 
   context 'authorization' do
     setup do
-      @buyer_auth = Factory(:buyer_account, :provider_account => @provider)
+      @buyer_auth = FactoryBot.create(:buyer_account, :provider_account => @provider)
       @buyer_auth.buy! @service.service_plans.first
       login_buyer @buyer_auth
     end
@@ -245,7 +245,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
         end
 
         should 'allow access to create' do
-          new_plan  = Factory :application_plan, :issuer => @service
+          new_plan  = FactoryBot.create :application_plan, :issuer => @service
           post admin_applications_path(cinstance: { plan_id: new_plan.id, name: 'App name', description: 'Desc' })
 
           assert_response :redirect

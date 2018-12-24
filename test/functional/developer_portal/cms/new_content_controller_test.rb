@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DeveloperPortal::CMS::NewContentControllerTest < DeveloperPortal::ActionController::TestCase
   def setup
-    @provider = Factory(:simple_provider, state: 'approved')
+    @provider = FactoryBot.create(:simple_provider, state: 'approved')
     host! @provider.domain
 
     section = FactoryBot.create(:root_cms_section, provider: @provider)

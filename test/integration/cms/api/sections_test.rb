@@ -5,7 +5,7 @@ module CMS
     class SectionsTest < ActionDispatch::IntegrationTest
 
       def setup
-        @provider = Factory(:provider_account)
+        @provider = FactoryBot.create(:provider_account)
         host! @provider.admin_domain
       end
 

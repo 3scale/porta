@@ -18,7 +18,7 @@ class Provider::Admin::Messages::OutboxControllerTest < ActionController::TestCa
   end
 
   test 'should render a 404 when given an invalid page parameter' do
-    provider = Factory :provider_account
+    provider = FactoryBot.create :provider_account
     login_as provider.first_admin
     host! provider.admin_domain
 

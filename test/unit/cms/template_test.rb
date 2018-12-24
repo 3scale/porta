@@ -20,24 +20,24 @@ class CMS::TemplateTest < ActiveSupport::TestCase
   end
 
   test '#but scope' do
-    page = Factory(:cms_page, draft: 'something to publish')
-    page = Factory(:cms_page, draft: 'something to publish')
-    page = Factory(:cms_page, draft: 'something to publish')
-    page = Factory(:cms_email_template, draft: 'something to publish')
+    page = FactoryBot.create(:cms_page, draft: 'something to publish')
+    page = FactoryBot.create(:cms_page, draft: 'something to publish')
+    page = FactoryBot.create(:cms_page, draft: 'something to publish')
+    page = FactoryBot.create(:cms_email_template, draft: 'something to publish')
     assert_equal 1, CMS::Template.but(CMS::Page).count
   end
 
   test '#but scope with many butts' do
-    page = Factory(:cms_page, draft: 'something to publish')
-    page = Factory(:cms_page, draft: 'something to publish')
-    page = Factory(:cms_email_template, draft: 'something to publish')
-    page = Factory(:cms_layout, draft: 'something to publish')
+    page = FactoryBot.create(:cms_page, draft: 'something to publish')
+    page = FactoryBot.create(:cms_page, draft: 'something to publish')
+    page = FactoryBot.create(:cms_email_template, draft: 'something to publish')
+    page = FactoryBot.create(:cms_layout, draft: 'something to publish')
 
     assert_equal 2, CMS::Template.but(CMS::Layout, "CMS::EmailTemplate").count
   end
 
   test 'publish' do
-    page = Factory(:cms_page, draft: 'something to publish')
+    page = FactoryBot.create(:cms_page, draft: 'something to publish')
     assert_nil page.content
     page.publish!
     assert_equal page.content, 'something to publish'
@@ -45,14 +45,14 @@ class CMS::TemplateTest < ActiveSupport::TestCase
   end
 
   test 'revert' do
-    page = Factory(:cms_page, draft: 'new', published: 'old')
+    page = FactoryBot.create(:cms_page, draft: 'new', published: 'old')
     assert_equal 'new', page.current
     page.revert!
     assert_equal 'old', page.current
   end
 
   test '#upgrade_content' do
-    page = Factory(:cms_page, draft: 'old draft', published: 'published')
+    page = FactoryBot.create(:cms_page, draft: 'old draft', published: 'published')
 
     page.upgrade_content!('NEW THING')
 
@@ -64,7 +64,7 @@ class CMS::TemplateTest < ActiveSupport::TestCase
   end
 
   test 'liquid syntax validation' do
-    page = Factory.build(:cms_page, draft: '{% invalid liquid %}', published: '{{ valid.one }}', liquid_enabled: false)
+    page = FactoryBot.build(:cms_page, draft: '{% invalid liquid %}', published: '{{ valid.one }}', liquid_enabled: false)
 
     assert page.valid?
 

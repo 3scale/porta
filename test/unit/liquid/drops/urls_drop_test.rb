@@ -4,7 +4,7 @@ class Liquid::Drops::UrlsDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @provider = Factory(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     @drop = Drops::Urls.new(@provider)
   end
 

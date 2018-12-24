@@ -4,8 +4,8 @@ require 'test_helper'
 class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @buyer    = Factory :buyer_account,    :provider_account => @provider
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @buyer    = FactoryBot.create :buyer_account,    :provider_account => @provider
 
     host! @provider.admin_domain
   end

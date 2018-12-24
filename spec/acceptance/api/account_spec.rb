@@ -5,7 +5,7 @@ require 'spec_helper'
 resource "Account" do
 
   # build the object which will be used for CRUD actions
-  let(:account) { Factory.build(:buyer_account, provider_account: provider) }
+  let(:account) { FactoryBot.build(:buyer_account, provider_account: provider) }
   let(:payment_detail) { FactoryBot.create(:payment_detail, account: account) }
 
   let(:resource) do

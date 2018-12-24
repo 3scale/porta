@@ -47,7 +47,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test 'approve! transitions from pending to approved' do
-    account = Factory(:pending_account)
+    account = FactoryBot.create(:pending_account)
 
     assert_change :of   => lambda { account.state },
                   :from => "pending",
@@ -57,7 +57,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test 'approve! transitions from rejected to approved' do
-    account = Factory(:pending_account)
+    account = FactoryBot.create(:pending_account)
     account.reject!
 
     assert_change :of   => lambda { account.state },
@@ -82,7 +82,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   # end
 
   test 'sends notification email when account is made pending' do
-    account = Factory(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account_with_provider)
     account.make_pending!
 
     AccountMailer.any_instance.expects(:confirmed)
@@ -90,7 +90,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test 'sends notification email when account is rejected' do
-    account = Factory(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account_with_provider)
     account.reject!
 
     AccountMailer.any_instance.expects(:rejected)
@@ -98,10 +98,10 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test 'sends notification email when buyer account is approved' do
-    account = Factory(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account_with_provider)
 
     account.update_attribute(:state, 'pending')
-    account.buy! Factory(:account_plan, :approval_required => true)
+    account.buy! FactoryBot.create(:account_plan, :approval_required => true)
     account.reload
     account.approve!
 
@@ -112,7 +112,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   test 'does not send notification email when non buyer account is approved' do
     AccountMailer.any_instance.expects(:approved).never
 
-    account = Factory(:pending_account)
+    account = FactoryBot.create(:pending_account)
     account.approve!
 
     account.send(:_run_after_commit_queue)

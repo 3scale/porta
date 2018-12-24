@@ -13,7 +13,7 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   end
 
   test 'subscription' do
-    buyer = Factory(:buyer_account, provider_account: @service.provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @service.provider)
     User.current = buyer.admins.first
 
     # service subscription is missing

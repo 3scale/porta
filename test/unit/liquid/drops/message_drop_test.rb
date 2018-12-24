@@ -4,7 +4,7 @@ class Liquid::Drops::MessageDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @message = Factory(:message)
+    @message = FactoryBot.create(:message)
     @drop = Drops::Message.new(@message)
   end
 

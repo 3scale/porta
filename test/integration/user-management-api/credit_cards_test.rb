@@ -7,12 +7,12 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   include TestHelpers::ApiPagination
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @application_plan = Factory(:application_plan,
+    @application_plan = FactoryBot.create(:application_plan,
                                 :issuer => @provider.default_service)
     @application_plan.publish!
 

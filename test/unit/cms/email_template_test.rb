@@ -18,7 +18,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
 
   test 'save headers' do
     saved = CMS::EmailTemplate.create! :system_name => 'system_name', :published => 'text',
-                                        :provider => Factory(:provider_account),
+                                        :provider => FactoryBot.create(:provider_account),
                                         :headers => {
                                           :key => 'value'
                                         }
@@ -29,7 +29,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
   end
 
   test 'comma separated emails in headers are valid' do
-    template = Factory.build(:cms_email_template)
+    template = FactoryBot.build(:cms_email_template)
     template.headers = {
       :bcc => 'email@address.example.com, email@address.example.com',
       :cc => 'email@address.example.com, email@address.example.com',
@@ -40,7 +40,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
   end
 
   test 'validates email format' do
-    template = Factory.build(:cms_email_template)
+    template = FactoryBot.build(:cms_email_template)
     template.headers = {
       :bcc => 'email@address.example.com and some other stuff'
     }
@@ -48,7 +48,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
   end
 
   test 'validates headers' do
-    template = Factory.build(:cms_email_template)
+    template = FactoryBot.build(:cms_email_template)
     template.headers = {
       :bcc => 'bcc',
       :cc => 'email@address.example.com',
@@ -60,8 +60,8 @@ class EmailTemplateTest < ActiveSupport::TestCase
 
   context "Account Messenger expired_credit_card_notification_for_buyer" do
     setup do
-      @provider = Factory(:provider_account)
-      @buyer = Factory(:buyer_account, :provider_account => @provider)
+      @provider = FactoryBot.create(:provider_account)
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
       @body = "more awesome content"
       @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_expired_credit_card_notification_for_buyer', :published => @body,
                                         :provider => @provider,
@@ -105,8 +105,8 @@ class EmailTemplateTest < ActiveSupport::TestCase
   # this is to check we can override template of message send to provider to buyer
   context "Account Messenger New Signup template" do
     setup do
-      @provider = Factory(:provider_account)
-      @buyer = Factory(:buyer_account, :provider_account => @provider)
+      @provider = FactoryBot.create(:provider_account)
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
       @body = "awesome content"
       @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_new_signup', :published => @body,
                                         :provider => @provider,
@@ -127,8 +127,8 @@ class EmailTemplateTest < ActiveSupport::TestCase
 
   context "Account Approved template" do
     setup do
-      @provider = Factory(:provider_account)
-      @buyer = Factory(:buyer_account, :provider_account => @provider)
+      @provider = FactoryBot.create(:provider_account)
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
       @body = "My content"
       @template = CMS::EmailTemplate.create! :system_name => 'account_approved', :published => @body,
                                         :provider => @provider,

@@ -2,13 +2,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    plan = Factory :application_plan, :issuer => @provider.default_service
+    plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     plan.publish!
 
-    Factory :account_plan,     :issuer => @provider
-    Factory :service_plan,     :issuer => @provider.default_service
+    FactoryBot.create :account_plan,     :issuer => @provider
+    FactoryBot.create :service_plan,     :issuer => @provider.default_service
 
 
     host! @provider.admin_domain
@@ -53,8 +53,8 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    service = Factory :service, :account => @provider
-    Factory :application_plan, :issuer => service
+    service = FactoryBot.create :service, :account => @provider
+    FactoryBot.create :application_plan, :issuer => service
 
     get admin_api_service_application_plans_path(service,
                                                       :provider_key => @provider.api_key,
@@ -115,7 +115,7 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
 
 
   test 'update' do
-    plan = Factory :application_plan, :issuer => @provider.default_service, :name => 'namy'
+    plan = FactoryBot.create :application_plan, :issuer => @provider.default_service, :name => 'namy'
 
     put admin_api_service_application_plan_path(@provider.default_service, plan, format: :xml),
                                                      :state_event => 'publish',
@@ -135,7 +135,7 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'default' do
-    plan = Factory :application_plan, :issuer => @provider.default_service, :name => 'namy'
+    plan = FactoryBot.create :application_plan, :issuer => @provider.default_service, :name => 'namy'
     plan.publish!
 
     put default_admin_api_service_application_plan_path(@provider.default_service,
@@ -154,7 +154,7 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy' do
-    application_plan = Factory :application_plan, :issuer => @provider.default_service
+    application_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
 
     delete("/admin/api/services/#{@provider.default_service.id}/application_plans/#{application_plan.id}",
                 :provider_key => @provider.api_key,
@@ -172,8 +172,8 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
     #TODO: move this to some setup
     service = @provider.first_service!
 
-    application_plan = Factory :application_plan, :issuer => service
-    Factory :cinstance, :plan => application_plan
+    application_plan = FactoryBot.create :application_plan, :issuer => service
+    FactoryBot.create :cinstance, :plan => application_plan
 
     delete("/admin/api/services/#{service.id}/application_plans/#{application_plan.id}",
                 :provider_key => @provider.api_key,

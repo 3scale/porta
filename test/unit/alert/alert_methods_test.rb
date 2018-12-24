@@ -2,13 +2,13 @@ require_relative '../../test_helper'
 
 class AlertMethodsTest < ActiveSupport::TestCase
   def setup
-    provider    = Factory(:provider_account)
+    provider    = FactoryBot.create(:provider_account)
     service    = provider.first_service!
     service_id = service.backend_id
-    buyer       = Factory(:buyer_account, :provider_account => provider)
-    plan              = Factory(:application_plan, :issuer => service)
-    cinstance         = Factory(:cinstance, :plan => plan, :user_account => buyer)
-    @alert = Factory.build(:limit_alert, :id => 4, :account_id => buyer.id, :cinstance => cinstance, :timestamp => "2011-07-07 23:25:53 +0000",
+    buyer       = FactoryBot.create(:buyer_account, :provider_account => provider)
+    plan              = FactoryBot.create(:application_plan, :issuer => service)
+    cinstance         = FactoryBot.create(:cinstance, :plan => plan, :user_account => buyer)
+    @alert = FactoryBot.build(:limit_alert, :id => 4, :account_id => buyer.id, :cinstance => cinstance, :timestamp => "2011-07-07 23:25:53 +0000",
                        :utilization=> 50, :level => 100, :message => "hits per month: 115 of 100", :tenant_id => provider.id)
 
   end

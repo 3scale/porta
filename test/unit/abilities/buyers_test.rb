@@ -5,9 +5,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Abilities::BuyersTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
-    @buyer    = Factory(:buyer_account, :provider_account => @provider)
-    @not_admin = Factory(:user, :account => @buyer, :role => :member)
+    @provider = FactoryBot.create(:provider_account)
+    @buyer    = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    @not_admin = FactoryBot.create(:user, :account => @buyer, :role => :member)
   end
 
   test 'provider admin can read, update and destroy buyer accounts' do
@@ -28,14 +28,14 @@ class Abilities::BuyersTest < ActiveSupport::TestCase
   end
 
   test 'provider members can read buyer accounts' do
-    ability = Ability.new(Factory(:user, :account => @provider))
+    ability = Ability.new(FactoryBot.create(:user, :account => @provider))
 
     assert_can ability, :read, @provider => Account
     assert_can ability, :read, @buyer
   end
 
   test 'provider members can\'t create/update/destroy buyer accounts' do
-    ability = Ability.new(Factory(:user, :account => @provider))
+    ability = Ability.new(FactoryBot.create(:user, :account => @provider))
 
     assert_cannot ability, :create, @provider => Account
     assert_cannot ability, :update,  @buyer
@@ -43,7 +43,7 @@ class Abilities::BuyersTest < ActiveSupport::TestCase
   end
 
   test 'provider members can\'t reject nor approve buyer accounts' do
-    ability = Ability.new(Factory(:user, :account => @provider))
+    ability = Ability.new(FactoryBot.create(:user, :account => @provider))
 
     assert_cannot ability, :approve,  @buyer
     assert_cannot ability, :reject,  @buyer
@@ -72,7 +72,7 @@ class Abilities::BuyersTest < ActiveSupport::TestCase
 
   test 'provider admin can update role of his buyer users' do
     admin = @provider.admins.first
-    buyer_user = Factory(:user, :account => @buyer)
+    buyer_user = FactoryBot.create(:user, :account => @buyer)
     assert_can Ability.new(admin), :update_role, buyer_user
   end
 
@@ -87,7 +87,7 @@ class Abilities::BuyersTest < ActiveSupport::TestCase
   end
 
   test 'provider admin can\'t impersonate other provider users' do
-    other_provider = Factory(:provider_account)
+    other_provider = FactoryBot.create(:provider_account)
     assert_cannot Ability.new( @provider.admins.first), :impersonate, other_provider.users.first
   end
 
@@ -118,7 +118,7 @@ class Abilities::BuyersTest < ActiveSupport::TestCase
   end
 
   test 'buyers can manage alerts if they are enable in cinstance' do
-    cinstance = Factory(:cinstance, :name => 'cde', :user_account => @buyer)
+    cinstance = FactoryBot.create(:cinstance, :name => 'cde', :user_account => @buyer)
     ability = Ability.new(@buyer.admins.first)
 
     cinstance.stubs(:buyer_alerts_enabled?).returns(false)

@@ -12,7 +12,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   # {{{ CAS
 
   test 'cas is not displayed on login page' do
-    provider_account = Factory :provider_account
+    provider_account = FactoryBot.create :provider_account
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'internal'
     provider_settings.save!
@@ -25,7 +25,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'cas is displayed on login page' do
-    provider_account = Factory :provider_account
+    provider_account = FactoryBot.create :provider_account
 
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'cas'
@@ -40,14 +40,14 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'cas successful auth' do
-    provider_account = Factory :provider_account
+    provider_account = FactoryBot.create :provider_account
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'cas'
     provider_settings.cas_server_url = "http://mamacit.as"
     provider_settings.save!
 
-    buyer_account = Factory :buyer_account, :provider_account => provider_account
-    user = Factory :user, :account  => buyer_account, :cas_identifier => "laurie"
+    buyer_account = FactoryBot.create :buyer_account, :provider_account => provider_account
+    user = FactoryBot.create :user, :account  => buyer_account, :cas_identifier => "laurie"
     user.activate!
     user.save!
 

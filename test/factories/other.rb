@@ -1,105 +1,107 @@
-Factory.define(:profile) do |profile|
-  profile.association :account
-end
-
-Factory.define(:forum) do |f|
-  f.name 'Forum'
-  f.account {|a| a.association(:provider_account)}
-end
-
-Factory.define(:topic_category) do |c|
-  c.name 'Tech'
-end
-
-Factory.define(:topic) do |factory|
-  factory.title { "Title #{SecureRandom.hex}" }
-  factory.body 'body body body of the first post'
-  factory.forum { |topic| topic.association(:forum) }
-  factory.user  { |topic| topic.association(:user_with_account) }
-end
-
-Factory.define(:post) do |factory|
-  factory.body "Body of post"
-  factory.user  { |post| post.association(:user_with_account) }
-  factory.topic { |post| post.association(:topic) }
-end
-
-Factory.define(:service) do |service|
-  service.mandatory_app_key false
-  #  service.association :proxy, :factory => :proxy
-  service.sequence(:name) { |n| "service#{n}" }
-  service.association(:account, :factory => :provider_account)
-  service.after_create do |record|
-    record.service_tokens.first_or_create!(value: 'token')
+FactoryBot.define do
+  factory(:profile) do
+    association :account
   end
-end
 
-Factory.define(:service_token) do |service_token|
-  service_token.association :service
-  service_token.sequence(:value) { |n| "value#{n}" }
-end
+  factory(:forum) do
+    name 'Forum'
+    account {|a| a.association(:provider_account)}
+  end
 
-Factory.define(:metric) do |metric|
-  metric.association :service
-  metric.sequence(:friendly_name) { |n| "Metric #{n}" }
-  metric.sequence(:unit) { |m| "metric_#{m}" }
-end
+  factory(:topic_category) do
+    name 'Tech'
+  end
 
-Factory.define(:feature) do |feature|
-  feature.sequence(:name) { |n| "feature#{n}" }
-end
+  factory(:topic) do
+    title { "Title #{SecureRandom.hex}" }
+    body 'body body body of the first post'
+    forum { |topic| topic.association(:forum) }
+    user  { |topic| topic.association(:user_with_account) }
+  end
 
-Factory.define(:usage_limit) do |usage_limit|
-  usage_limit.association(:plan, :factory => :application_plan)
-  usage_limit.association(:metric)
-  usage_limit.period :month
-  usage_limit.value 10_000
-end
+  factory(:post) do
+    body "Body of post"
+    user  { |post| post.association(:user_with_account) }
+    topic { |post| post.association(:topic) }
+  end
 
-Factory.define(:pricing_rule) do |pricing_rule|
-  pricing_rule.metric { |metric| metric.association(:metric) }
-  pricing_rule.cost_per_unit 0.1
-  pricing_rule.sequence(:min) { |n| n }
-  pricing_rule.sequence(:max) { |n| n + 0.99 }
-end
+  factory(:service) do
+    mandatory_app_key false
+    #  association :proxy, :factory => :proxy
+    sequence(:name) { |n| "service#{n}" }
+    association(:account, :factory => :provider_account)
+    after_create do |record|
+      record.service_tokens.first_or_create!(value: 'token')
+    end
+  end
 
-Factory.define(:country) do |c|
-  c.sequence(:name) { |n| "country#{n}" }
-  c.sequence(:code) { |n| "X#{n}" }
-  c.currency 'EUR'
-end
+  factory(:service_token) do
+    association :service
+    sequence(:value) { |n| "value#{n}" }
+  end
 
-Factory.define(:system_operation) do |op|
-  op.ref "plan_change"
-  op.name "Contract type change"
-  op.description ""
-end
+  factory(:metric) do
+    association :service
+    sequence(:friendly_name) { |n| "Metric #{n}" }
+    sequence(:unit) { |m| "metric_#{m}" }
+  end
 
-Factory.define(:mail_dispatch_rule) do |t|
-  t.account {|account| account.association(:account)}
-  t.system_operation {|operation| operation.association(:system_operation)}
-  t.emails "email@email.example.net"
-  t.dispatch true
-end
+  factory(:feature) do
+    sequence(:name) { |n| "feature#{n}" }
+  end
 
-Factory.define(:settings) {}
+  factory(:usage_limit) do
+    association(:plan, :factory => :application_plan)
+    association(:metric)
+    period :month
+    value 10_000
+  end
 
-Factory.define(:webhook, :class => WebHook) do |wh|
-  wh.account { |wh| wh.association(:provider_account) }
-  wh.url { |wh| 'http://' + wh.account.domain }
-  wh.active true
-  wh.provider_actions true
-end
+  factory(:pricing_rule) do
+    metric { |metric| metric.association(:metric) }
+    cost_per_unit 0.1
+    sequence(:min) { |n| n }
+    sequence(:max) { |n| n + 0.99 }
+  end
 
-Factory.define(:payment_gateway_setting, :class => PaymentGatewaySetting) do |factory|
-  factory.gateway_type :bogus
-  factory.gateway_settings foo: :bar
-  factory.association :account
-end
+  factory(:country) do
+    sequence(:name) { |n| "country#{n}" }
+    sequence(:code) { |n| "X#{n}" }
+    currency 'EUR'
+  end
 
-Factory.define(:sso_authorization) do |sso|
-  sso.sequence(:uid) { |n| "#{n}234" }
-  sso.id_token 'first-token'
-  sso.association(:authentication_provider, factory: :authentication_provider)
-  sso.association(:user, factory: :user_with_account)
+  factory(:system_operation) do
+    ref "plan_change"
+    name "Contract type change"
+    description ""
+  end
+
+  factory(:mail_dispatch_rule) do
+    account {|account| account.association(:account)}
+    system_operation {|operation| operation.association(:system_operation)}
+    emails "email@email.example.net"
+    dispatch true
+  end
+
+  factory(:settings)
+
+  factory(:webhook, :class => WebHook) do
+    account { |wh| wh.association(:provider_account) }
+    url { |wh| 'http://' + wh.account.domain }
+    active true
+    provider_actions true
+  end
+
+  factory(:payment_gateway_setting, :class => PaymentGatewaySetting) do
+    gateway_type :bogus
+    gateway_settings foo: :bar
+    association :account
+  end
+
+  factory(:sso_authorization) do
+    sequence(:uid) { |n| "#{n}234" }
+    id_token 'first-token'
+    association(:authentication_provider, factory: :authentication_provider)
+    association(:user, factory: :user_with_account)
+  end
 end

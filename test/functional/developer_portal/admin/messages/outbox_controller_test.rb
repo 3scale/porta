@@ -19,7 +19,7 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
   end
 
   test "creates messages with origin == 'web'" do
-    buyer = Factory :buyer_account, :provider_account => @provider
+    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
     post :create, :message => { :subject => "message via web", :body => "message via web" }, :to => buyer.id
 

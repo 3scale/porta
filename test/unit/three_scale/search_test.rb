@@ -63,10 +63,10 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
 
   context "ServiceContract" do
     should "can search by service_id and plan_id same time" do
-      Factory(:service_plan)
-      service_plan = Factory(:service_plan)
+      FactoryBot.create(:service_plan)
+      service_plan = FactoryBot.create(:service_plan)
       service = service_plan.service
-      service_contract = Factory(:service_contract, :plan => service_plan)
+      service_contract = FactoryBot.create(:service_contract, :plan => service_plan)
       query = { "account_query"=>"", "deleted_accounts"=>"0", "service_id"=>service.id, "plan_type"=>"", "plan_id"=>"", "state"=>"" }
       search = ThreeScale::Search.new(query)
       assert_equal [service_contract], ServiceContract.scope_search(query).order_by(nil)
@@ -76,8 +76,8 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
 
   context "Alert" do
     should "sort by timestmap" do
-      alert_one = Factory(:limit_alert)
-      alert_two = Factory(:limit_alert)
+      alert_one = FactoryBot.create(:limit_alert)
+      alert_two = FactoryBot.create(:limit_alert)
       assert_equal [alert_one, alert_two], Alert.order_by(:timestamp, :asc)
     end
 
@@ -88,8 +88,8 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
 
   context "Cinstance" do
     should "retain previous scope on search" do
-      abc = Factory(:cinstance, :user_key => "abc")
-      bcd = Factory(:cinstance, :user_key => "bcd")
+      abc = FactoryBot.create(:cinstance, :user_key => "abc")
+      bcd = FactoryBot.create(:cinstance, :user_key => "bcd")
 
       assert_equal [abc], Cinstance.by_user_key("abc").scope_search(:user_key => 'abc')
       assert_equal [bcd], Cinstance.by_user_key("bcd").scope_search(:user_key => 'bcd')
@@ -97,11 +97,11 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
     end
 
     should "order and search" do
-      account = Factory(:account)
+      account = FactoryBot.create(:account)
 
-      abc = Factory(:cinstance, :name => "abc", :user_account => account)
-      bcd = Factory(:cinstance, :name => "bcd", :user_account => account)
-      cde = Factory(:cinstance, :name => "cde", :user_account => account)
+      abc = FactoryBot.create(:cinstance, :name => "abc", :user_account => account)
+      bcd = FactoryBot.create(:cinstance, :name => "bcd", :user_account => account)
+      cde = FactoryBot.create(:cinstance, :name => "cde", :user_account => account)
 
       options = {:account => account}
       array = [abc, bcd, cde]
@@ -113,7 +113,7 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
     end
 
     should "work with all scopes" do
-      app = Factory(:cinstance, :name => "test")
+      app = FactoryBot.create(:cinstance, :name => "test")
       plan = app.plan
 
       options = {:account => app.user_account, :deleted_accounts => true, :plan_type => "free", :plan_id => plan.id, :type => "Cinstance"}
@@ -125,8 +125,8 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
   context "ServiceContract" do
 
     should "not depend on parameters order" do
-      sc1 = Factory(:service_contract)
-      sc2 = Factory(:service_contract)
+      sc1 = FactoryBot.create(:service_contract)
+      sc2 = FactoryBot.create(:service_contract)
 
       plan2 = sc2.plan
       plan2.update_attribute :setup_fee, 30
@@ -143,13 +143,13 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
 
   context "Account" do
     should "order by country name" do
-      it = Factory(:country, :code => "IT", :name => "Italy")
-      zb = Factory(:country, :code => "ZB", :name => "Zimbabwe")
+      it = FactoryBot.create(:country, :code => "IT", :name => "Italy")
+      zb = FactoryBot.create(:country, :code => "ZB", :name => "Zimbabwe")
 
-      provider = Factory(:provider_account)
+      provider = FactoryBot.create(:provider_account)
 
-      buyer_it = Factory(:buyer_account, :provider_account => provider, :country => it)
-      buyer_zb = Factory(:buyer_account, :provider_account => provider, :country => zb)
+      buyer_it = FactoryBot.create(:buyer_account, :provider_account => provider, :country => it)
+      buyer_zb = FactoryBot.create(:buyer_account, :provider_account => provider, :country => zb)
 
       assert_equal [buyer_it, buyer_zb], provider.buyer_accounts.order_by('countries.name', :asc)
     end

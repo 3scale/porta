@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Stats::BaseTest < ActiveSupport::TestCase
   def setup
-    provider_account = Factory(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     service = provider_account.first_service!
 
     @stats_base = Stats::Base.new(service)
@@ -35,7 +35,7 @@ class Stats::BaseTest < ActiveSupport::TestCase
 
   class Stats::BaseExtractTimezoneTest < ActiveSupport::TestCase
     test 'Base#extract_timezone should return nil if a wrong timezone parameter is sent' do
-      provider_account = Factory(:provider_account)
+      provider_account = FactoryBot.create(:provider_account)
       service = provider_account.first_service!
 
       @stats_base = Stats::Base.new(service)

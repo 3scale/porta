@@ -2,11 +2,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::EndUserPlanLimitsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @service  = @provider.first_service!
-    @plan     = Factory :end_user_plan, :service => @service
-    @metric   = Factory :metric, :service => @service
-    @limit    = Factory :usage_limit, :plan => @plan, :metric => @metric
+    @plan     = FactoryBot.create :end_user_plan, :service => @service
+    @metric   = FactoryBot.create :metric, :service => @service
+    @limit    = FactoryBot.create :usage_limit, :plan => @plan, :metric => @metric
 
     @provider.settings.allow_end_users!
 

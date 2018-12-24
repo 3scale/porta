@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 class UserTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
-  subject { @user || Factory(:user) }
+  subject { @user || FactoryBot.create(:user) }
 
   should belong_to :account
   should allow_mass_assignment_of :username
@@ -124,18 +124,18 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'validate emails of providers users' do
-    provider = Factory(:simple_provider)
-    other_provider = Factory(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
+    other_provider = FactoryBot.create(:simple_provider)
 
-    provider_user = Factory(:simple_user, :account => provider)
-    other_provider_user = Factory(:simple_user, :account => other_provider)
+    provider_user = FactoryBot.create(:simple_user, :account => provider)
+    other_provider_user = FactoryBot.create(:simple_user, :account => other_provider)
 
-    buyer = Factory(:simple_buyer, :provider_account => provider)
-    other_buyer = Factory(:buyer_account, :provider_account => other_provider)
+    buyer = FactoryBot.create(:simple_buyer, :provider_account => provider)
+    other_buyer = FactoryBot.create(:buyer_account, :provider_account => other_provider)
 
-    user = Factory(:simple_user, :account => buyer)
-    other_user = Factory(:simple_user, :account => buyer)
-    other_buyer_user = Factory(:simple_user, :account => other_buyer)
+    user = FactoryBot.create(:simple_user, :account => buyer)
+    other_user = FactoryBot.create(:simple_user, :account => buyer)
+    other_buyer_user = FactoryBot.create(:simple_user, :account => other_buyer)
 
     assert user.unique?(:email)
     assert other_user.unique?(:email)
@@ -161,7 +161,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'signup.oauth2?' do
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
 
     user.authentication_id = 'foobar'
     assert user.signup.oauth2?
@@ -177,10 +177,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should validate uniqueness of username and email' do
-    provider = Factory(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
 
-    user = Factory(:simple_user, :account => provider)
-    other_user = Factory(:simple_user, :account => provider)
+    user = FactoryBot.create(:simple_user, :account => provider)
+    other_user = FactoryBot.create(:simple_user, :account => provider)
 
     assert user.valid?
     assert other_user.valid?
@@ -197,7 +197,7 @@ class UserTest < ActiveSupport::TestCase
 
   context 'destroyed user' do
     setup do
-      @user = Factory(:simple_user)
+      @user = FactoryBot.create(:simple_user)
       @user.destroy
     end
 
@@ -275,7 +275,7 @@ class UserTest < ActiveSupport::TestCase
   end # created_by_provider signup
 
   test 'reset password' do
-    user = Factory(:simple_user, :username => 'person', :password => 'foobar')
+    user = FactoryBot.create(:simple_user, :username => 'person', :password => 'foobar')
     user.activate!
 
     user.update_attributes(:password => 'new password',
@@ -287,11 +287,11 @@ class UserTest < ActiveSupport::TestCase
   # TODO: get rid of this context
   context 'Existing Provider user' do
     setup do
-      provider_account = Factory(:simple_provider)
+      provider_account = FactoryBot.create(:simple_provider)
 
-      account = Factory(:simple_account, :provider_account => provider_account, state: 'approved')
+      account = FactoryBot.create(:simple_account, :provider_account => provider_account, state: 'approved')
 
-      @user = Factory(:simple_user, :account  => account,
+      @user = FactoryBot.create(:simple_user, :account  => account,
                       :username => 'person',
                       :email    => 'person@example.org',
                       :password => 'redpanda')
@@ -414,34 +414,34 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'two users of two buyer accounts of the same provider accounts need unique email' do
-    provider_account = Factory(:simple_provider)
-    buyer_account_one = Factory(:simple_buyer, :provider_account => provider_account)
-    buyer_account_two = Factory(:simple_buyer, :provider_account => provider_account)
-    Factory(:simple_user, :account => buyer_account_one, :email => 'foo@example.org')
+    provider_account = FactoryBot.create(:simple_provider)
+    buyer_account_one = FactoryBot.create(:simple_buyer, :provider_account => provider_account)
+    buyer_account_two = FactoryBot.create(:simple_buyer, :provider_account => provider_account)
+    FactoryBot.create(:simple_user, :account => buyer_account_one, :email => 'foo@example.org')
 
-    user_two = Factory.build(:simple_user, :account => buyer_account_two, :email => 'foo@example.org')
+    user_two = FactoryBot.build(:simple_user, :account => buyer_account_two, :email => 'foo@example.org')
     assert !user_two.valid?
     assert !user_two.errors[:email].blank?
   end
 
   test 'two users of two buyer accounts of two different provider accounts can have the same email' do
-    provider_account_one = Factory(:simple_provider)
-    provider_account_two = Factory(:simple_provider)
-    buyer_account_one = Factory(:simple_buyer, :provider_account => provider_account_one)
-    buyer_account_two = Factory(:simple_buyer, :provider_account => provider_account_two)
-    Factory(:simple_user, :account => buyer_account_one, :email => 'foo@example.org')
+    provider_account_one = FactoryBot.create(:simple_provider)
+    provider_account_two = FactoryBot.create(:simple_provider)
+    buyer_account_one = FactoryBot.create(:simple_buyer, :provider_account => provider_account_one)
+    buyer_account_two = FactoryBot.create(:simple_buyer, :provider_account => provider_account_two)
+    FactoryBot.create(:simple_user, :account => buyer_account_one, :email => 'foo@example.org')
 
-    user_two = Factory.build(:simple_user, :account => buyer_account_two, :email => 'foo@example.org')
+    user_two = FactoryBot.build(:simple_user, :account => buyer_account_two, :email => 'foo@example.org')
     assert user_two.valid?
   end
 
   # currently provider has to have self domain
   pending_test 'two users of two provider accounts need unique emails when provider has no self domain' do
-    account_one = Factory(:provider_account, :self_domain => nil)
-    account_two = Factory(:provider_account, :self_domain => nil)
-    Factory(:user, :account => account_one, :email => 'foo@example.org')
+    account_one = FactoryBot.create(:provider_account, :self_domain => nil)
+    account_two = FactoryBot.create(:provider_account, :self_domain => nil)
+    FactoryBot.create(:user, :account => account_one, :email => 'foo@example.org')
 
-    user_two = Factory.build(:user, :account => account_two, :email => 'foo@example.org')
+    user_two = FactoryBot.build(:user, :account => account_two, :email => 'foo@example.org')
     assert !user_two.valid?
     assert_not_nil user_two.errors[:email].presence
   end
@@ -473,13 +473,13 @@ class UserTest < ActiveSupport::TestCase
   end
 
   #   test 'does not set session token when created' do
-  #     user = Factory(:user)
+  #     user = FactoryBot.create(:user)
   #     assert_nil user.session_token
   #     assert_nil user.session_token_expires_at
   #   end
   #
   #   test 'generates session_token' do
-  #     user = Factory(:user)
+  #     user = FactoryBot.create(:user)
   #
   #     Timecop.freeze(2009, 11, 22, 14, 30, 12) do
   #       user.generate_session_token!
@@ -490,7 +490,7 @@ class UserTest < ActiveSupport::TestCase
   #   end
   #
   #   test 'User.authenticate_by_session_token returns user with the given token' do
-  #     user = Factory(:user)
+  #     user = FactoryBot.create(:user)
   #     user.generate_session_token!
   #
   #     found_user = User.authenticate_by_session_token(user.session_token)
@@ -505,7 +505,7 @@ class UserTest < ActiveSupport::TestCase
   #   end
   #
   #   test 'User.authenticate_by_session_token returns nil if token is expired' do
-  #     user = Factory(:user)
+  #     user = FactoryBot.create(:user)
   #     user.generate_session_token!
   #
   #     Timecop.travel(1.minute.from_now) do
@@ -514,7 +514,7 @@ class UserTest < ActiveSupport::TestCase
   #   end
   #
   #   test 'User#url_with_session_token appends session token to the given url' do
-  #     user = Factory(:user)
+  #     user = FactoryBot.create(:user)
   #     user.generate_session_token!
   #
   #     assert_equal "http://example.net?session_token=#{user.session_token}",
@@ -525,7 +525,7 @@ class UserTest < ActiveSupport::TestCase
   #   end
 
   test '#update_last_login! updates last_login_at and last_login_ip' do
-    user = Factory(:simple_user)
+    user = FactoryBot.create(:simple_user)
     user.update_last_login!(:time => Time.utc(2010, 6, 30, 12, 36), :ip => '2.3.4.5')
 
     assert_equal Time.utc(2010, 6, 30, 12, 36), user.last_login_at
@@ -533,12 +533,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns false if user is not active' do
-    user = Factory(:pending_user)
+    user = FactoryBot.create(:pending_user)
     assert !user.can_login?
   end
 
   test 'admin sections' do
-    user = Factory(:simple_user)
+    user = FactoryBot.create(:simple_user)
     assert user.valid?
 
     user.admin_sections = ['monitoring']
@@ -548,7 +548,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns false if user is suspended' do
-    user = Factory(:simple_user)
+    user = FactoryBot.create(:simple_user)
     user.activate!
     user.suspend!
 
@@ -556,8 +556,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns false if the account is pending' do
-    account = Factory(:account_without_users)
-    user    = Factory(:user, :account => account)
+    account = FactoryBot.create(:account_without_users)
+    user    = FactoryBot.create(:user, :account => account)
 
     user.activate!
     account.make_pending!
@@ -566,8 +566,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns false if the account is rejected' do
-    account = Factory(:account_without_users)
-    user    = Factory(:user, :account => account)
+    account = FactoryBot.create(:account_without_users)
+    user    = FactoryBot.create(:user, :account => account)
 
     user.activate!
     account.reject!
@@ -576,8 +576,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns true if the user is active and the account is approved' do
-    account = Factory(:account_without_users)
-    user    = Factory(:user, :account => account)
+    account = FactoryBot.create(:account_without_users)
+    user    = FactoryBot.create(:user, :account => account)
 
     user.activate!
 
@@ -616,12 +616,12 @@ class UserTest < ActiveSupport::TestCase
 
   context 'deletion of users' do
     setup do
-      @account = Factory(:account, :org_name => "Alice's web empire")
+      @account = FactoryBot.create(:account, :org_name => "Alice's web empire")
     end
 
     context 'with role not admin' do
       setup do
-        @not_admin = Factory(:simple_user, :account => @account, :role => :member)
+        @not_admin = FactoryBot.create(:simple_user, :account => @account, :role => :member)
       end
 
       should 'be allowed' do
@@ -642,7 +642,7 @@ class UserTest < ActiveSupport::TestCase
 
       context 'not being the unique admin' do
         setup do
-          @admin = Factory(:user, :account => @account, :role => :admin)
+          @admin = FactoryBot.create(:user, :account => @account, :role => :admin)
         end
 
         should 'be allowed' do
@@ -683,13 +683,13 @@ class UserTest < ActiveSupport::TestCase
     include WebHookTestHelpers
 
     setup do
-      @buyer = Factory :buyer_account
+      @buyer = FactoryBot.create :buyer_account
       @provider = @buyer.provider_account
       @user = @provider.admins.first
     end
 
     should 'be pushed if the user is created by user' do
-      new_user = Factory.build :simple_user, :account => @buyer
+      new_user = FactoryBot.build :simple_user, :account => @buyer
       User.current = @user
 
       fires_webhook(new_user)
@@ -698,7 +698,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should 'not be pushed if the user is not created by user' do
-      new_user = Factory.build :simple_user, :account => @buyer
+      new_user = FactoryBot.build :simple_user, :account => @buyer
       User.current = nil
 
       fires_webhook.never
@@ -706,7 +706,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should 'be pushed if the user is updated by user' do
-      updated_user = Factory :simple_user, :account => @buyer
+      updated_user = FactoryBot.create :simple_user, :account => @buyer
       User.current = @user
 
       fires_webhook(updated_user)
@@ -716,7 +716,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should 'not be pushed if the user is not updated by user' do
-      updated_user = Factory :simple_user, :account => @buyer
+      updated_user = FactoryBot.create :simple_user, :account => @buyer
       User.current = nil
 
       fires_webhook.never
@@ -726,7 +726,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should 'be pushed asynchronously if the user is destroyed by user' do
-      destroyed_user = Factory :simple_user, :account => @buyer
+      destroyed_user = FactoryBot.create :simple_user, :account => @buyer
       User.current = @user
 
       fires_webhook(destroyed_user, 'deleted')
@@ -735,7 +735,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should 'not be pushed if the user is not destroyed by user' do
-      destroyed_user = Factory :simple_user, :account => @buyer
+      destroyed_user = FactoryBot.create :simple_user, :account => @buyer
       User.current = nil
 
       fires_webhook.never
@@ -760,7 +760,7 @@ class UserTest < ActiveSupport::TestCase
   context '#sections' do
 
     setup do
-      @buyer = Factory(:buyer_account)
+      @buyer = FactoryBot.create(:buyer_account)
       @user = @buyer.users.first
     end
 
@@ -774,7 +774,7 @@ class UserTest < ActiveSupport::TestCase
 
     context 'users with sections' do
       setup do
-        @section = Factory(:cms_section, :public => false,
+        @section = FactoryBot.create(:cms_section, :public => false,
                            :title => "protected-section",
                            :parent => @buyer.provider_account.sections.root)
 
@@ -792,8 +792,8 @@ class UserTest < ActiveSupport::TestCase
   context 'password strength' do
 
     setup do
-      provider = Factory(:simple_provider)
-      @buyer = Factory(:buyer_account, provider_account: provider)
+      provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
     end
 
     should 'by default allow weak ones' do
@@ -903,7 +903,7 @@ class UserTest < ActiveSupport::TestCase
   end # passwords
 
   test 'destroys its invitation' do
-    invitation = Factory :invitation, :email => "invited@example.com", :account => Factory(:provider_account)
+    invitation = FactoryBot.create :invitation, :email => "invited@example.com", :account => FactoryBot.create(:provider_account)
     user = invitation.make_user :username => "username", :password => "password"
     user.save!
 
@@ -914,7 +914,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "kill user sessions but current one" do
-    user = Factory :user
+    user = FactoryBot.create :user
     session1 = user.user_sessions.create
     session2 = user.user_sessions.create
 

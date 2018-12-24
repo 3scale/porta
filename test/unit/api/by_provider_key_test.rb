@@ -17,8 +17,8 @@ class ApiAuthentication::ByProviderKeyTest < ActiveSupport::TestCase
   end
 
   test 'scopes search by domain' do
-    p1 = Factory(:provider_account)
-    p2 = Factory(:provider_account)
+    p1 = FactoryBot.create(:provider_account)
+    p2 = FactoryBot.create(:provider_account)
 
     object = Params.new(:provider_key => p2.api_key)
     object.request = mock(:host => p2.self_domain)

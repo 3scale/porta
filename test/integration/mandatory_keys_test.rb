@@ -6,11 +6,11 @@ class MandatoryKeysTest < ActionDispatch::IntegrationTest
   context 'Mandatory keys: ' do
 
     setup do
-      @provider = Factory :provider_account, :domain => 'provider.example.com'
-      @plan = Factory :application_plan, :issuer => @provider.default_service
+      @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+      @plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
       @service = @provider.first_service!
       @service.update_attribute(:backend_version, '2')
-      @buyer = Factory :buyer_account, :provider_account => @provider
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
       ApplicationKey.disable_backend!
     end

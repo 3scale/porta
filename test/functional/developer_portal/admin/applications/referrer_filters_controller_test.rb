@@ -3,9 +3,9 @@ require 'test_helper'
 class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < DeveloperPortal::ActionController::TestCase
   def setup
     super
-    @provider  = Factory(:provider_account)
-    @buyer     = Factory(:buyer_account, :provider_account => @provider)
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    @provider  = FactoryBot.create(:provider_account)
+    @buyer     = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     @cinstance = @buyer.buy! app_plan
     @referrer  = 'only.my.example.com'
   end

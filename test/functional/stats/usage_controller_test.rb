@@ -3,7 +3,7 @@ require 'test_helper'
 
 class Stats::UsageControllerTest < ActionController::TestCase
   def setup
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
     @service = @provider.default_service
     @request.host = @provider.domain
   end
@@ -24,7 +24,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
   end
 
   test 'top_applications' do
-    metric = Factory(:metric, :service => @service,
+    metric = FactoryBot.create(:metric, :service => @service,
                      :parent_id => @service.metrics.hits.id)
     login_as(@provider.admins.first)
     get :top_applications, :service_id => @service.id
@@ -34,7 +34,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
   end
 
   test 'hours' do
-    metric = Factory.stub(:metric, :service => @service)
+    metric = FactoryBot.stub(:metric, :service => @service)
 
     data = (0..23).inject(ActiveSupport::OrderedHash.new) do |memo, hour|
       memo["#{hour}:00"] = rand(1000)

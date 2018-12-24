@@ -32,7 +32,7 @@ class Account::BuyerTest < ActiveSupport::TestCase
     #TODO: when the separation of accounts in Buyer, Provider and Master is done
     # this test will make no sense, now is kind of paranoic
     should 'have no services and no s3_prefix' do
-      @provider =  Factory :provider_account
+      @provider =  FactoryBot.create :provider_account
       buyer = Account.new :org_name => "buyer", :provider_account => @provider
       buyer.buyer = true
       buyer.save!
@@ -46,10 +46,10 @@ class Account::BuyerTest < ActiveSupport::TestCase
   context "for buyer" do
 
     setup do
-      @provider =  Factory.create(:provider_account)
-      @acc_plan = Factory.create(:account_plan, :issuer => @provider)
-      @buyer = Factory.create(:simple_buyer, :provider_account => @provider)
-      @acc_contract =  Factory.create(:account_contract, :plan => @acc_plan, :user_account => @buyer)
+      @provider =  FactoryBot.create(:provider_account)
+      @acc_plan = FactoryBot.create(:account_plan, :issuer => @provider)
+      @buyer = FactoryBot.create(:simple_buyer, :provider_account => @provider)
+      @acc_contract =  FactoryBot.create(:account_contract, :plan => @acc_plan, :user_account => @buyer)
     end
 
     context 'with bought plans' do
@@ -57,36 +57,36 @@ class Account::BuyerTest < ActiveSupport::TestCase
         @provider.config.set!(:multiple_applications, true)
         @provider.save!
 
-        @service_one = Factory(:service, :account => @provider)
-        @service_two = Factory(:service, :account => @provider)
-        @service_three = Factory(:service, :account => @provider)
+        @service_one = FactoryBot.create(:service, :account => @provider)
+        @service_two = FactoryBot.create(:service, :account => @provider)
+        @service_three = FactoryBot.create(:service, :account => @provider)
 
-        Factory(:service_plan, :issuer => @service_one)
-        Factory(:service_plan, :issuer => @service_two)
-        Factory(:application_plan, :issuer => @service_two)
+        FactoryBot.create(:service_plan, :issuer => @service_one)
+        FactoryBot.create(:service_plan, :issuer => @service_two)
+        FactoryBot.create(:application_plan, :issuer => @service_two)
 
         @plans = {
             :service => [
-              Factory(:service_plan, :issuer => @service_one),
-              Factory(:service_plan, :issuer => @service_two)
+              FactoryBot.create(:service_plan, :issuer => @service_one),
+              FactoryBot.create(:service_plan, :issuer => @service_two)
             ],
             :application => [
-              Factory(:application_plan, :issuer => @service_one),
-              Factory(:application_plan, :issuer => @service_one),
-              Factory(:application_plan, :issuer => @service_two),
-              Factory(:application_plan, :issuer => @service_two)
+              FactoryBot.create(:application_plan, :issuer => @service_one),
+              FactoryBot.create(:application_plan, :issuer => @service_one),
+              FactoryBot.create(:application_plan, :issuer => @service_two),
+              FactoryBot.create(:application_plan, :issuer => @service_two)
             ]
         }
         @contracts = []
 
         @plans[:service].each do |plan|
-          @contracts << Factory(:service_contract, :plan => plan, :user_account => @buyer)
+          @contracts << FactoryBot.create(:service_contract, :plan => plan, :user_account => @buyer)
         end
 
         i = 0
         name = "app"
         @plans[:application].each do |plan|
-          @contracts << Factory(:cinstance, :plan => plan, :user_account => @buyer, :name => (name + (i += 1).to_s), :description => 'Desc')
+          @contracts << FactoryBot.create(:cinstance, :plan => plan, :user_account => @buyer, :name => (name + (i += 1).to_s), :description => 'Desc')
         end
 
         @contracts << @acc_contract
@@ -155,30 +155,30 @@ class Account::BuyerTest < ActiveSupport::TestCase
   end
 
   test 'Account#bought_plan' do
-    provider_account = Factory(:provider_account)
-    service = Factory(:simple_service, :account => provider_account)
-    plan = Factory(:application_plan, :service => service)
+    provider_account = FactoryBot.create(:provider_account)
+    service = FactoryBot.create(:simple_service, :account => provider_account)
+    plan = FactoryBot.create(:application_plan, :service => service)
 
-    buyer_account = Factory(:simple_buyer, :provider_account => provider_account)
+    buyer_account = FactoryBot.create(:simple_buyer, :provider_account => provider_account)
     buyer_account.buy(plan)
 
     assert_equal plan, buyer_account.bought_plan
   end
 
   test 'Account#feature_allowed? return false if account has no bought cinstance' do
-    provider_account = Factory(:simple_provider)
-    buyer_account = Factory(:simple_account, :provider_account => provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    buyer_account = FactoryBot.create(:simple_account, :provider_account => provider_account)
 
     assert !buyer_account.feature_allowed?(:world_domination)
   end
 
   test 'forum is not created for buyers' do
-     account = Factory(:simple_buyer)
+     account = FactoryBot.create(:simple_buyer)
      assert_nil account.forum
   end
 
   test '#destroy returns false if buyer has unresolved invoices' do
-    invoice = Factory(:invoice)
+    invoice = FactoryBot.create(:invoice)
     buyer = invoice.buyer
 
     assert_equal false, buyer.destroy

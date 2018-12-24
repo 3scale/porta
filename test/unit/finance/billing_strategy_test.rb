@@ -9,12 +9,12 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def setup
-    @provider = Factory(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_with_billing)
 
     @bs = @provider.billing_strategy
     @bs.numbering_period = 'monthly'
 
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
   end
 
   test 'add_cost' do
@@ -31,11 +31,11 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'self.daily only a buyer of a provider, prepaid' do
-    provider = Factory(:simple_provider)
-    Factory(:prepaid_billing, account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:prepaid_billing, account: provider)
 
-    buyer = Factory(:simple_buyer, provider_account: provider)
-    Factory(:simple_buyer, provider_account: provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+    FactoryBot.create(:simple_buyer, provider_account: provider)
 
     # Should run the method two time, one per buyer
     Finance::PrepaidBillingStrategy.any_instance.expects(:bill_expired_trials).twice
@@ -48,11 +48,11 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'self.daily only a buyer of a provider, postpaid' do
-    provider = Factory(:simple_provider)
-    Factory(:postpaid_billing, account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:postpaid_billing, account: provider)
 
-    buyer = Factory(:simple_buyer, provider_account: provider)
-    Factory(:simple_buyer, provider_account: provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+    FactoryBot.create(:simple_buyer, provider_account: provider)
 
     # Should run the method two time, one per buyer
     Finance::PostpaidBillingStrategy.any_instance.expects(:bill_expired_trials).twice
@@ -83,8 +83,8 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'empty canaries' do
-    2.times { Factory(:prepaid_billing, :account => Factory(:simple_provider)) }
-    2.times { Factory(:postpaid_billing, :account => Factory(:simple_provider)) }
+    2.times { FactoryBot.create(:prepaid_billing, :account => FactoryBot.create(:simple_provider)) }
+    2.times { FactoryBot.create(:postpaid_billing, :account => FactoryBot.create(:simple_provider)) }
     ThreeScale.config.stubs(billing_canaries: nil)
 
     Finance::BillingStrategy.expects(:daily_async).never
@@ -92,8 +92,8 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'self.daily with providers excluded' do
-    2.times { Factory(:prepaid_billing, :account => Factory(:simple_provider)) }
-    2.times { Factory(:postpaid_billing, :account => Factory(:simple_provider)) }
+    2.times { FactoryBot.create(:prepaid_billing, :account => FactoryBot.create(:simple_provider)) }
+    2.times { FactoryBot.create(:postpaid_billing, :account => FactoryBot.create(:simple_provider)) }
 
     results = Finance::BillingStrategy.daily(exclude: [ @provider.id ])
 
@@ -103,7 +103,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'self.daily only with selected providers' do
-    3.times { Factory(:prepaid_billing, :account => Factory(:simple_provider)) }
+    3.times { FactoryBot.create(:prepaid_billing, :account => FactoryBot.create(:simple_provider)) }
 
     results = Finance::BillingStrategy.daily(only: [ @provider.id ])
 
@@ -176,9 +176,9 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'increment id by provider' do
     create_two_invoices
 
-    second_provider = Factory(:provider_with_billing)
+    second_provider = FactoryBot.create(:provider_with_billing)
     second_provider.billing_strategy.numbering_period = 'monthly'
-    second_buyer = Factory(:buyer_account)
+    second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer,
                                               :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer,
@@ -209,9 +209,9 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     two = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     other_month = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 2, 2)))
 
-    second_provider = Factory(:provider_with_billing)
+    second_provider = FactoryBot.create(:provider_with_billing)
     second_provider.billing_strategy.update_attribute(:numbering_period, 'yearly')
-    second_buyer = Factory(:buyer_account)
+    second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
 

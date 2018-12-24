@@ -3,8 +3,8 @@ require 'test_helper'
 class Admin::Api::NginxTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory :provider_account, domain: 'provider.example.com'
-    @service = Factory(:service, account: @provider)
+    @provider = FactoryBot.create :provider_account, domain: 'provider.example.com'
+    @service = FactoryBot.create(:service, account: @provider)
 
     rolling_updates_on
 

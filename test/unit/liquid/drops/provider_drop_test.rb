@@ -4,7 +4,7 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @drop = Drops::Provider.new(@provider)
   end
 
@@ -18,7 +18,7 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
   end
 
   test "#services" do
-    Factory  :service, account: @provider
+    FactoryBot.create  :service, account: @provider
     assert_equal 2, @drop.services.size
   end
 

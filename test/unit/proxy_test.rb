@@ -331,11 +331,11 @@ class ProxyTest < ActiveSupport::TestCase
 
   test 'proxy_endpoint is unique' do
     @proxy.update_attributes(endpoint: 'http://foo:80', api_backend: 'http://A:1', secret_token: 'fdsa')
-    p2 = Factory(:proxy, endpoint: 'http://foo:80', service: @service, api_backend: 'http://B:1', secret_token: 'fdsafsda')
+    p2 = FactoryBot.create(:proxy, endpoint: 'http://foo:80', service: @service, api_backend: 'http://B:1', secret_token: 'fdsafsda')
   end
 
   test 'credentials names should allow good params' do
-    m = Factory(:metric, service: @service)
+    m = FactoryBot.create(:metric, service: @service)
 
     %W[ foo bar-baz bar_baz].each do |w|
       @proxy.auth_app_id = w
@@ -352,7 +352,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'credentials names cannot have strange params' do
-    m = Factory(:metric, service: @service)
+    m = FactoryBot.create(:metric, service: @service)
 
     %W|foo/bar {fdsa} fda [fdsa]|.each do |w|
       @proxy.auth_app_id = w

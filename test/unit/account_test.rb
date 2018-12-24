@@ -133,7 +133,7 @@ class AccountTest < ActiveSupport::TestCase
     account = FactoryBot.build_stubbed(:simple_provider)
     # Users should always have an email, but old/test ones might not
     # Return a properly empty list instead of a "list with nils"
-    Factory.build(:admin, email: nil, account_id: account.id).save(validate: false)
+    FactoryBot.build(:admin, email: nil, account_id: account.id).save(validate: false)
 
     assert_equal([], account.emails)
   end
@@ -253,7 +253,7 @@ class AccountTest < ActiveSupport::TestCase
 
     context 'with country that has no currency' do
       setup do
-        @account.country = Factory(:country, :currency => nil)
+        @account.country = FactoryBot.create(:country, :currency => nil)
       end
 
       should 'return EUR on :currency' do
@@ -278,14 +278,14 @@ class AccountTest < ActiveSupport::TestCase
 
   test 'Account.buyer_users returns all users of all buyer accounts' do
     provider_account  = FactoryBot.build_stubbed(:simple_provider)
-    buyer_account_one = Factory.build(:simple_buyer, provider_account: provider_account)
+    buyer_account_one = FactoryBot.build(:simple_buyer, provider_account: provider_account)
 
-    buyer_account_one.users << Factory.build(:simple_user)
-    buyer_account_one.users << Factory.build(:simple_user)
+    buyer_account_one.users << FactoryBot.build(:simple_user)
+    buyer_account_one.users << FactoryBot.build(:simple_user)
     buyer_account_one.save!
 
-    buyer_account_two = Factory.build(:simple_buyer, provider_account: provider_account)
-    buyer_account_two.users << Factory.build(:simple_user)
+    buyer_account_two = FactoryBot.build(:simple_buyer, provider_account: provider_account)
+    buyer_account_two.users << FactoryBot.build(:simple_user)
     buyer_account_two.save!
 
     assert_same_elements buyer_account_one.users + buyer_account_two.users,

@@ -3,23 +3,23 @@ require 'test_helper'
 class Api::AlertsControllerTest < ActionController::TestCase
 
   test "get index should filter by account_id, cinstance_id and fulltext" do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
 
     login_provider provider
 
 
-    buyer1 = Factory(:simple_buyer, :provider_account => provider)
-    buyer2 = Factory(:simple_buyer, :provider_account => provider)
+    buyer1 = FactoryBot.create(:simple_buyer, :provider_account => provider)
+    buyer2 = FactoryBot.create(:simple_buyer, :provider_account => provider)
 
-    plan = Factory(:simple_application_plan, :issuer => provider.default_service)
+    plan = FactoryBot.create(:simple_application_plan, :issuer => provider.default_service)
 
-    cinstance1 = Factory(:simple_cinstance, :plan => plan, :user_account => buyer1)
-    cinstance2 = Factory(:simple_cinstance, :plan => plan, :user_account => buyer2)
+    cinstance1 = FactoryBot.create(:simple_cinstance, :plan => plan, :user_account => buyer1)
+    cinstance2 = FactoryBot.create(:simple_cinstance, :plan => plan, :user_account => buyer2)
 
 
-    Factory(:limit_alert, account: provider, cinstance: cinstance1)
-    Factory(:limit_alert, account: provider, cinstance: cinstance2)
+    FactoryBot.create(:limit_alert, account: provider, cinstance: cinstance1)
+    FactoryBot.create(:limit_alert, account: provider, cinstance: cinstance2)
 
     get :index
     assert_equal 2, assigns(:alerts).count
