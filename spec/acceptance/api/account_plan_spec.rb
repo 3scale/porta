@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "AccountPlan" do
 
-  let(:resource) { Factory.build(:account_plan, issuer: provider) }
+  let(:resource) { FactoryBot.build(:account_plan, issuer: provider) }
 
   api 'account plan' do
 
@@ -30,7 +30,7 @@ resource "AccountPlan" do
   end
 
   api 'buyer account plan' do
-    let(:account) { Factory(:buyer_account, provider_account: provider) }
+    let(:account) { FactoryBot.create(:buyer_account, provider_account: provider) }
     let(:account_id) { account.id }
 
     put '/admin/api/accounts/:account_id/change_plan.:format', :resource do
@@ -39,7 +39,7 @@ resource "AccountPlan" do
 
       parameter :plan_id, 'Plan ID'
 
-      let(:other_plan) { Factory(:account_plan, issuer: provider) }
+      let(:other_plan) { FactoryBot.create(:account_plan, issuer: provider) }
       let(:plan_id) { other_plan.id }
       let(:serializable) { other_plan }
 

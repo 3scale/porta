@@ -3,10 +3,10 @@ require 'test_helper'
 class RemoveDupUsageLimitsTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory :provider_account
-    @service_plan = Factory :service_plan, :issuer => @provider.first_service!
-    @application_plan = Factory :application_plan, :issuer => @provider.first_service!, :service => @provider.first_service!
-    @metric = Factory :metric, :service => @application_plan.service
+    @provider = FactoryBot.create :provider_account
+    @service_plan = FactoryBot.create :service_plan, :issuer => @provider.first_service!
+    @application_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!, :service => @provider.first_service!
+    @metric = FactoryBot.create :metric, :service => @application_plan.service
   end
 
   test 'does not remove if there is only one usagelimit' do

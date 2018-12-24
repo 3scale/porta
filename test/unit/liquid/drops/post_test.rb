@@ -3,8 +3,8 @@ require 'test_helper'
 class Liquid::Drops::PostTest < ActiveSupport::TestCase
 
   test 'body and url' do
-    topic = Factory(:topic, title: 'IMPORTANT')
-    post = Factory(:post, body: 'very good point', topic: topic)
+    topic = FactoryBot.create(:topic, title: 'IMPORTANT')
+    post = FactoryBot.create(:post, body: 'very good point', topic: topic)
     drop = ::Liquid::Drops::Post.new(post)
 
     assert_equal 'very good point', drop.body

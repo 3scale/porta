@@ -8,10 +8,10 @@ resource "UsageLimit" do
   let(:plan_id) { plan.id }
   let(:metric_id) { metric.id }
 
-  let(:resource) { Factory.build(:usage_limit, metric: metric, plan: plan) }
+  let(:resource) { FactoryBot.build(:usage_limit, metric: metric, plan: plan) }
 
   api 'application plan limits' do
-    let(:plan) { Factory(:application_plan, issuer: service) }
+    let(:plan) { FactoryBot.create(:application_plan, issuer: service) }
 
     get '/admin/api/application_plans/:plan_id/limits.:format', action: :index
     get '/admin/api/application_plans/:plan_id/metrics/:metric_id/limits.:format', action: :index
@@ -35,7 +35,7 @@ resource "UsageLimit" do
   api 'end user plan limits' do
     before { provider.settings.allow_end_users! }
 
-    let(:plan) { Factory(:end_user_plan, issuer: service) }
+    let(:plan) { FactoryBot.create(:end_user_plan, issuer: service) }
 
     get '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits.:format', action: :index
     get  '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits/:id.:format', action: :show
@@ -55,7 +55,7 @@ resource "UsageLimit" do
   end
 
   context do
-    let(:plan) { Factory.build(:application_plan, issuer: service) }
+    let(:plan) { FactoryBot.build(:application_plan, issuer: service) }
 
     json(:resource) do
       let(:root) { 'limit' }

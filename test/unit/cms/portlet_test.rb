@@ -4,7 +4,7 @@ class CMS::PortletTest < ActiveSupport::TestCase
 
   test 'convertion to portlet' do
     partial = CMS::Partial.new # loading this class will create attribute methods for options
-    portlet = Factory(:cms_portlet, :portlet_type => 'ExternalRssFeedPortlet')
+    portlet = FactoryBot.create(:cms_portlet, :portlet_type => 'ExternalRssFeedPortlet')
     portlet = CMS::Portlet.find(portlet.id)
 
     feed = portlet.to_portlet

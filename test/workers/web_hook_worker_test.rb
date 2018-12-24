@@ -19,13 +19,13 @@ class WebHookWorkerTest < ActiveSupport::TestCase
   end
 
   test 'webhook job performs work' do
-    webhook = Factory(:webhook, :account_created_on => true, :user_created_on => true)
+    webhook = FactoryBot.create(:webhook, :account_created_on => true, :user_created_on => true)
     Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
     User.current = webhook.account.users.first
 
     jobs = WebHookWorker.jobs
     assert jobs.empty?
-    Factory(:buyer_account, :provider_account => webhook.account)
+    FactoryBot.create(:buyer_account, :provider_account => webhook.account)
     assert_equal 2, jobs.size
   end
 

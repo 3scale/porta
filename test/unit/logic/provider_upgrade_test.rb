@@ -83,7 +83,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
   test 'force_to_change_plan!' do
     issuer = master_account.first_service!
-    plan = Factory(:application_plan, issuer: issuer, name: "plus", system_name: "plus")
+    plan = FactoryBot.create(:application_plan, issuer: issuer, name: "plus", system_name: "plus")
     @provider.stubs(:provider_can_use?).with(:require_cc_on_signup).returns(false)
 
 

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
   def setup
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.default_service
 
     host! @provider_account.admin_domain

@@ -5,9 +5,9 @@ class Finance::VariableCostCalculationTest < ActiveSupport::TestCase
   # I wanted to avoid getting drowned in a quagmire of mocks...
 
   def setup
-    @cinstance  = Factory(:cinstance)
+    @cinstance  = FactoryBot.create(:cinstance)
     @metric_one = @cinstance.service.metrics.hits
-    @metric_two = Factory(:metric, :service => @cinstance.service)
+    @metric_two = FactoryBot.create(:metric, :service => @cinstance.service)
 
     @stats = stub('stats')
     Stats::Client.stubs(:new).with(@cinstance).returns(@stats)
@@ -21,7 +21,7 @@ class Finance::VariableCostCalculationTest < ActiveSupport::TestCase
   test "variable line items are created" do
     Timecop.travel(Date.today.year + 1, 11, 04) do
 
-      billing_strategy = @cinstance.provider_account.billing_strategy = Factory(:postpaid_billing)
+      billing_strategy = @cinstance.provider_account.billing_strategy = FactoryBot.create(:postpaid_billing)
 
       period = Date.today..Month.new(Time.zone.now).end
       @stats.stubs(:total).with(

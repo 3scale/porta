@@ -4,9 +4,9 @@ resource "PricingRule" do
 
   let(:service) { provider.services.default }
   let(:metric) { service.metrics.hits }
-  let(:plan) { Factory(:application_plan, issuer: service) }
+  let(:plan) { FactoryBot.create(:application_plan, issuer: service) }
 
-  let(:resource) { Factory.build(:pricing_rule, plan: plan, metric: metric, min: 2, max: 5) }
+  let(:resource) { FactoryBot.build(:pricing_rule, plan: plan, metric: metric, min: 2, max: 5) }
 
   api 'pricing rule' do
 

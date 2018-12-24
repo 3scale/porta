@@ -44,8 +44,8 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'stores usage_limit backend data when usage_limit is created' do
-    plan   = Factory(:application_plan)
-    metric = Factory(:metric, :service => plan.service)
+    plan   = FactoryBot.create(:application_plan)
+    metric = FactoryBot.create(:metric, :service => plan.service)
 
     usage_limit = metric.usage_limits.new(:period => :week, :value => 7000)
     usage_limit.plan = plan
@@ -56,9 +56,9 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'stores usage_limit backend data when usage_limit is created for end user plan with right backend_id' do
-    service = Factory(:service)
-    plan   = Factory(:end_user_plan, :service => service)
-    metric = Factory(:metric, :service => service)
+    service = FactoryBot.create(:service)
+    plan   = FactoryBot.create(:end_user_plan, :service => service)
+    metric = FactoryBot.create(:metric, :service => service)
 
     usage_limit = metric.usage_limits.new(:period => :week, :value => 7000)
     usage_limit.plan = plan
@@ -69,7 +69,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'updates usage_limit backend data when usage_limit changes period' do
-    usage_limit = Factory(:usage_limit, :period => :month, :value => 2000)
+    usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000)
 
     ThreeScale::Core::UsageLimit.expects(:save).with(has_key(:month)).never
 
@@ -81,7 +81,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'updates usage_limit backend data when usage_limit changes value' do
-    usage_limit = Factory(:usage_limit, :period => :month, :value => 2000)
+    usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000)
 
     usage_limit.value = 3000
 
@@ -91,10 +91,10 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'updates usage_limit backend data when usage_limit changes value with right plan backend_id' do
-    service = Factory(:service)
-    plan   = Factory(:end_user_plan, :service => service)
+    service = FactoryBot.create(:service)
+    plan   = FactoryBot.create(:end_user_plan, :service => service)
 
-    usage_limit = Factory(:usage_limit, :period => :month, :value => 2000, :plan => plan)
+    usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000, :plan => plan)
 
     usage_limit.value = 3000
 
@@ -108,7 +108,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
     ThreeScale::Core::UsageLimit.expects(:save).with(has_key(:seven_years)).never
     ThreeScale::Core::UsageLimit.expects(:save).with(has_key(:month)).once
 
-    usage_limit = Factory(:usage_limit, :period => :month, :value => 2000)
+    usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000)
 
     usage_limit.period = :seven_years
 
@@ -118,7 +118,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'deletes usage_limit backend data when usage_limit is destroyed' do
-    usage_limit = Factory(:usage_limit, :period => :month, :value => 2000)
+    usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000)
 
     ThreeScale::Core::UsageLimit.expects(:delete).with(
       usage_limit.service.backend_id, usage_limit.plan.id, usage_limit.metric.id, usage_limit.period)

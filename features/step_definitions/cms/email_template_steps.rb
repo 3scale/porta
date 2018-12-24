@@ -19,7 +19,7 @@ Given /^I have following email templates? of (provider ".+?"):$/ do |provider, t
   table.hashes.each do |attrs|
     attrs[:provider] = provider
     attrs[:updated_at] = Time.now
-    Factory(:cms_email_template, attrs).save!
+    FactoryBot.create(:cms_email_template, attrs).save!
   end
 end
 

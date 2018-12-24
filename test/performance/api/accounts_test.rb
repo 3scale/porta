@@ -4,15 +4,15 @@ class Api::AccountsTest < ActionDispatch::PerformanceTest
   self.profile_options = { metrics: [:wall_time] }
 
   def setup
-    @provider = Factory(:provider_with_billing)
-    @application_plan = Factory(:application_plan,
+    @provider = FactoryBot.create(:provider_with_billing)
+    @application_plan = FactoryBot.create(:application_plan,
                                 :issuer => @provider.default_service)
     @application_plan.publish!
 
     @provider.billing_strategy.update_attributes(:currency => 'EUR')
 
     10.times do
-      buyer = Factory(:buyer_account, :provider_account => @provider)
+      buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
       buyer.buy! @provider.default_account_plan
       buyer.buy! @application_plan
     end

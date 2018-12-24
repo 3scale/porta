@@ -5,10 +5,10 @@ class ContractTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def test_plan_changed_is_notified_after_commit
-    plan = Factory(:account_plan, :issuer => Factory(:simple_account))
-    contract = Factory(:contract, :plan => plan)
+    plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
+    contract = FactoryBot.create(:contract, :plan => plan)
 
-    other_plan = Factory(:account_plan, :issuer => Factory(:simple_account))
+    other_plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
 
     Contract.transaction do
       contract.change_plan!(other_plan)
@@ -22,11 +22,11 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   def test_plan_changed_is_notified_just_once
-    plan = Factory(:account_plan, :issuer => Factory(:simple_account))
-    contract = Factory(:contract, :plan => plan)
+    plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
+    contract = FactoryBot.create(:contract, :plan => plan)
 
     ## explicit transaction
-    other_plan = Factory(:account_plan, :issuer => Factory(:simple_account))
+    other_plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
 
     contract.expects(:notify_observers).with(:plan_changed).once
 
@@ -37,7 +37,7 @@ class ContractTest < ActiveSupport::TestCase
     end
 
     ## just save
-    other_contract = Factory(:contract, :plan => plan)
+    other_contract = FactoryBot.create(:contract, :plan => plan)
 
     other_contract.expects(:notify_observers).with(:plan_changed).once
     other_contract.expects(:notify_observers).with(:bill_variable_for_plan_changed, kind_of(Plan)).once
@@ -51,7 +51,7 @@ class ContractTest < ActiveSupport::TestCase
 
   context '#paid?' do
     setup do
-      buyer = Factory :buyer_account
+      buyer = FactoryBot.create :buyer_account
       service = buyer.provider_account.first_service!
       #making the service subscribeable
       service.publish!
@@ -120,10 +120,10 @@ class ContractTest < ActiveSupport::TestCase
 
   class CanChangePlan < ActiveSupport::TestCase
     def setup
-      @provider = Factory :provider_account
-      @buyer = Factory :buyer_account, :provider_account => @provider
+      @provider = FactoryBot.create :provider_account
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
-      @service_plan = Factory :service_plan, :issuer => @provider.first_service!
+      @service_plan = FactoryBot.create :service_plan, :issuer => @provider.first_service!
 
       @provider.set_change_service_plan_permission!(:none)
     end

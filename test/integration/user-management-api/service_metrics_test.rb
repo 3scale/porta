@@ -2,15 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @service = Factory(:service, :account => @provider)
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @service = FactoryBot.create(:service, :account => @provider)
 
     host! @provider.admin_domain
   end
 
   test 'index' do
-    service = Factory :service, :account => @provider
-    Factory :metric, :service => service
+    service = FactoryBot.create :service, :account => @provider
+    FactoryBot.create :metric, :service => service
 
     get(admin_api_service_metrics_path(service),
              :provider_key => @provider.api_key, :format => :xml)
@@ -23,7 +23,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   end
 
   test 'show' do
-    metric = Factory :metric, :service => @service
+    metric = FactoryBot.create :metric, :service => @service
 
     get(admin_api_service_metric_path(@service, metric), :provider_key => @provider.api_key, :format => :xml)
 
@@ -44,7 +44,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
 
   test 'show with wrong id' do
     # a metric of another service
-    metric = Factory :metric, :service => Factory(:service, :account => @provider)
+    metric = FactoryBot.create :metric, :service => FactoryBot.create(:service, :account => @provider)
 
     get(admin_api_service_metric_path(@service, metric), :provider_key => @provider.api_key, :format => :xml)
 
@@ -111,7 +111,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy' do
-    metric = Factory :metric, :service => @service
+    metric = FactoryBot.create :metric, :service => @service
 
     delete("/admin/api/services/#{@service.id}/metrics/#{metric.id}",
            :provider_key => @provider.api_key, :format => :xml)

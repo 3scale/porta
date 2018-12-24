@@ -6,7 +6,7 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
     @provider_account = FactoryBot.create(:provider_account)
     @service          = @provider_account.default_service
     @plan             = FactoryBot.create(:simple_application_plan, issuer: @service)
-    @buyer_account    = Factory(:simple_buyer, provider_account: @provider_account)
+    @buyer_account    = FactoryBot.create(:simple_buyer, provider_account: @provider_account)
     @application      = @buyer_account.buy!(@plan)
 
     host! @provider_account.self_domain

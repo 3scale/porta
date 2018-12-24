@@ -4,7 +4,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @app = Factory(:cinstance, :name => 'some instance')
+    @app = FactoryBot.create(:cinstance, :name => 'some instance')
     @buyer = @app.user_account
     @drop = Drops::Application.new(@app)
   end
@@ -33,7 +33,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
       [{ :target => "Cinstance", :name => "visible_extra", :label => "visible_extra" },
        { :target => "Cinstance", :name => "hidden_extra",  :label => "hidden_extra", :hidden => true }]
        .each do |field|
-         Factory :fields_definition, field.merge({:account_id => @buyer.provider_account.id})
+         FactoryBot.create :fields_definition, field.merge({:account_id => @buyer.provider_account.id})
       end
 
       @app.reload

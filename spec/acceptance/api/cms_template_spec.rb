@@ -3,10 +3,10 @@ require 'spec_helper'
 resource "CMS::Template" do
 
   let(:resource) { double.as_null_object }
-  let(:partial) { Factory.build(:cms_partial, provider: provider) }
-  let(:layout) { Factory.build(:cms_layout, provider: provider) }
-  let(:page) { Factory.build(:cms_page, provider: provider) }
-  let(:section) { Factory(:cms_section, provider: provider, parent: provider.sections.root) }
+  let(:partial) { FactoryBot.build(:cms_partial, provider: provider) }
+  let(:layout) { FactoryBot.build(:cms_layout, provider: provider) }
+  let(:page) { FactoryBot.build(:cms_page, provider: provider) }
+  let(:section) { FactoryBot.create(:cms_section, provider: provider, parent: provider.sections.root) }
 
   let(:collection) { [partial, layout, page] }
 
@@ -87,9 +87,9 @@ resource "CMS::Template" do
     it { should be_an(Array) }
 
     context do
-      let(:page) { Factory(:cms_page, path: '/some-path') }
-      let(:layout) { Factory(:cms_layout, title: 'title', system_name: 'layout') }
-      let(:partial) { Factory(:cms_partial, liquid_enabled: true) }
+      let(:page) { FactoryBot.create(:cms_page, path: '/some-path') }
+      let(:layout) { FactoryBot.create(:cms_layout, title: 'title', system_name: 'layout') }
+      let(:partial) { FactoryBot.create(:cms_partial, liquid_enabled: true) }
       let(:collection) { [page, layout, partial] }
 
       it "should be wrapped by relevant representers" do

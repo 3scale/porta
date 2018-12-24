@@ -3,8 +3,8 @@ require 'test_helper'
 class CMS::Builtin::LegalTermsTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:simple_provider)
-    @root_sec = Factory(:root_cms_section, provider: @provider)
+    @provider = FactoryBot.create(:simple_provider)
+    @root_sec = FactoryBot.create(:root_cms_section, provider: @provider)
   end
 
 

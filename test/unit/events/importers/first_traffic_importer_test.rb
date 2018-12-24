@@ -3,7 +3,7 @@ require 'test_helper'
 class Events::Importers::FirstTrafficImporterTest < ActiveSupport::TestCase
 
   def setup
-    @cinstance = Factory(:cinstance)
+    @cinstance = FactoryBot.create(:cinstance)
     service = @cinstance.service
 
     @timestamp = 1.day.ago.round

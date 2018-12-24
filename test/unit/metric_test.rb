@@ -31,9 +31,9 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   test 'index uniq of system_name in service scope' do
-    service = Factory(:service)
-    Factory(:metric, :service => service, :system_name => 'frags')
-    metric_two = Factory(:metric, :service => service)
+    service = FactoryBot.create(:service)
+    FactoryBot.create(:metric, :service => service, :system_name => 'frags')
+    metric_two = FactoryBot.create(:metric, :service => service)
     assert_raise ActiveRecord::RecordNotUnique do
       metric_two.update_column(:system_name, 'frags')
     end
@@ -50,21 +50,21 @@ class MetricTest < ActiveSupport::TestCase
 
   # This should be tested by system_name plugin
   test 'validate uniqueness of system_name in service scope' do
-    service_one = Factory(:service)
-    service_two = Factory(:service)
+    service_one = FactoryBot.create(:service)
+    service_two = FactoryBot.create(:service)
 
-    Factory(:metric, :service => service_one, :system_name => 'frags')
+    FactoryBot.create(:metric, :service => service_one, :system_name => 'frags')
 
-    metric_two = Factory.build(:metric, :service => service_one, :system_name => 'frags')
+    metric_two = FactoryBot.build(:metric, :service => service_one, :system_name => 'frags')
     refute metric_two.valid?
     assert_not_nil metric_two.errors[:system_name].presence
 
-    metric_three = Factory.build(:metric, :service => service_two, :system_name => 'frags')
+    metric_three = FactoryBot.build(:metric, :service => service_two, :system_name => 'frags')
     assert metric_three.valid?
   end
 
   test 'validate uniqueness of system_name in service scope for a method' do
-    service = Factory(:service)
+    service = FactoryBot.create(:service)
     hits = service.metrics.hits
     hits.children.create(system_name: "foo", friendly_name: "bar")
     metric_method = hits.children.build(system_name: "foo", friendly_name: "bar")
@@ -81,7 +81,7 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   should 'create_default! with :hits' do
-    service = Factory(:service)
+    service = FactoryBot.create(:service)
     service.metrics.find_by_system_name("hits").delete
     metric = Metric.create_default!(:hits, :service_id => service.id)
 
@@ -92,7 +92,7 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   should 'return false on default?(:hits) if not hits' do
-    service = Factory(:service)
+    service = FactoryBot.create(:service)
     metric = Metric.new(:system_name => 'foos', :friendly_name => 'Foos', :unit => 'foo')
     metric.service = service
     metric.save!
@@ -102,7 +102,7 @@ class MetricTest < ActiveSupport::TestCase
 
   context 'child metric' do
     setup do
-      @service = Factory(:service)
+      @service = FactoryBot.create(:service)
       @parent_metric = @service.metrics.first
       @child_metric = @parent_metric.children.create!(:system_name => 'articles/create',
                                                       :friendly_name => 'Create an article')
@@ -133,7 +133,7 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   context 'metric that is not child' do
-    setup { @metric = Factory(:metric) }
+    setup { @metric = FactoryBot.create(:metric) }
 
     should 'respond false to child?' do
       refute @metric.child?
@@ -142,7 +142,7 @@ class MetricTest < ActiveSupport::TestCase
 
   context 'metric that has children' do
     setup do
-      @metric = service = Factory(:service).metrics.first
+      @metric = service = FactoryBot.create(:service).metrics.first
       @metric.children.create!(:friendly_name => 'Foos')
     end
 
@@ -152,7 +152,7 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   context 'metric that does not have children' do
-    setup { @metric = Factory(:metric) }
+    setup { @metric = FactoryBot.create(:metric) }
 
     should 'return false on parent?' do
       refute @metric.parent?
@@ -160,53 +160,53 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   should 'return only top-level metric on top_level' do
-    service = Factory(:service)
-    metric_one = Factory(:metric, :service => service)
-    metric_two = Factory(:metric, :service => service)
-    metric_three = Factory(:metric, :parent => service.metrics.hits, :service => service)
+    service = FactoryBot.create(:service)
+    metric_one = FactoryBot.create(:metric, :service => service)
+    metric_two = FactoryBot.create(:metric, :service => service)
+    metric_three = FactoryBot.create(:metric, :parent => service.metrics.hits, :service => service)
 
     assert_same_elements [service.metrics.hits, metric_one, metric_two], service.metrics.top_level
   end
 
   should '.ids_indexed_by_names returns metric ids indexed by names' do
-    service = Factory(:service)
-    metric_1 = Factory(:metric, :system_name => 'foo', :service => service)
-    metric_2 = Factory(:metric, :system_name => 'bar', :service => service)
-    metric_3 = Factory(:metric, :system_name => 'XoXo', :service => service)
+    service = FactoryBot.create(:service)
+    metric_1 = FactoryBot.create(:metric, :system_name => 'foo', :service => service)
+    metric_2 = FactoryBot.create(:metric, :system_name => 'bar', :service => service)
+    metric_3 = FactoryBot.create(:metric, :system_name => 'XoXo', :service => service)
     hits = service.metrics.hits
     assert_equal({'hits' => hits.id, 'foo' => metric_1.id, 'bar' => metric_2.id, 'xoxo' => metric_3.id},
                  service.metrics.ids_indexed_by_names)
   end
 
   should '.ancestors_ids returns hash of ancestors ids indexed by descendant id' do
-    service = Factory(:service)
+    service = FactoryBot.create(:service)
     hits = service.metrics.hits
-    child = Factory(:metric, :parent => hits, :service => service)
+    child = FactoryBot.create(:metric, :parent => hits, :service => service)
 
     assert_equal({child.id => [hits.id]},
                  service.metrics.ancestors_ids)
   end
 
   test '.hits returns metric called hits if it exists' do
-    service = Factory(:service)
+    service = FactoryBot.create(:service)
     metric = service.metrics.find_by_system_name("hits")
 
     assert_equal metric, service.metrics.hits
   end
 
   test '.hits returns first metric if there is no one called hits' do
-    service = Factory(:service)
+    service = FactoryBot.create(:service)
     service.metrics.find_by_system_name("hits").delete
-    metric_one = Factory(:metric, :system_name => 'foos', :service => service)
-    metric_two = Factory(:metric, :system_name => 'bars', :service => service)
+    metric_one = FactoryBot.create(:metric, :system_name => 'foos', :service => service)
+    metric_two = FactoryBot.create(:metric, :system_name => 'bars', :service => service)
 
     assert_equal metric_one, service.metrics.hits
   end
 
   context 'visibility options for plan' do
     setup do
-      @plan =  Factory(:application_plan)
-      @metric = Factory(:metric, :service => @plan.service)
+      @plan =  FactoryBot.create(:application_plan)
+      @metric = FactoryBot.create(:metric, :service => @plan.service)
     end
 
     should 'be visible by default' do
@@ -241,16 +241,16 @@ class MetricTest < ActiveSupport::TestCase
 
   context 'availability for plan' do
     setup do
-      @plan =  Factory(:application_plan)
-      @metric1 = Factory(:metric,  :service => @plan.service)
-      @metric2 = Factory(:metric,  :service => @plan.service)
+      @plan =  FactoryBot.create(:application_plan)
+      @metric1 = FactoryBot.create(:metric,  :service => @plan.service)
+      @metric2 = FactoryBot.create(:metric,  :service => @plan.service)
 
-      Factory :usage_limit, :plan => @plan, :metric => @metric1, :period => :day, :value => 1
-      Factory :usage_limit, :plan => @plan, :metric => @metric2, :period => :day, :value => 1
+      FactoryBot.create :usage_limit, :plan => @plan, :metric => @metric1, :period => :day, :value => 1
+      FactoryBot.create :usage_limit, :plan => @plan, :metric => @metric2, :period => :day, :value => 1
 
-      @disabled_plan =  Factory(:application_plan)
-      Factory :usage_limit, :plan => @disabled_plan, :metric => @metric1, :period => :day, :value => 0
-      Factory :usage_limit, :plan => @disabled_plan, :metric => @metric2, :period => :day, :value => 0
+      @disabled_plan =  FactoryBot.create(:application_plan)
+      FactoryBot.create :usage_limit, :plan => @disabled_plan, :metric => @metric1, :period => :day, :value => 0
+      FactoryBot.create :usage_limit, :plan => @disabled_plan, :metric => @metric2, :period => :day, :value => 0
     end
 
     should 'be enabled for plan if no limit 0 is present' do

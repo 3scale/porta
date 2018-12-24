@@ -4,7 +4,7 @@ Before do
                'US' => 'United States of America'}
 
   countries.each do |code, name|
-    Factory(:country, :name => name, :code => code) unless Country.exists?(:code => code)
+    FactoryBot.create(:country, :name => name, :code => code) unless Country.exists?(:code => code)
   end
 end
 

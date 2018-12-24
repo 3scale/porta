@@ -5,15 +5,15 @@ module CMS
     class TemplatesTest < ActionDispatch::IntegrationTest
 
       def setup
-        @provider = Factory(:provider_account)
+        @provider = FactoryBot.create(:provider_account)
         host! @provider.admin_domain
       end
 
       test 'index' do
-        Factory(:cms_layout, :provider => @provider)
-        Factory(:cms_partial, :provider => @provider)
-        Factory(:cms_page, :provider => @provider)
-        Factory(:cms_builtin_page, :provider => @provider,
+        FactoryBot.create(:cms_layout, :provider => @provider)
+        FactoryBot.create(:cms_partial, :provider => @provider)
+        FactoryBot.create(:cms_page, :provider => @provider)
+        FactoryBot.create(:cms_builtin_page, :provider => @provider,
                 :section => @provider.sections.root)
 
         get admin_api_cms_templates_path(format: :xml), provider_key: @provider.provider_key
@@ -33,7 +33,7 @@ module CMS
       end
 
       test 'index with pagination' do
-        23.times { Factory(:cms_page, :provider => @provider)  }
+        23.times { FactoryBot.create(:cms_page, :provider => @provider)  }
 
         # first page
         get admin_api_cms_templates_path(format: :xml), provider_key: @provider.provider_key
@@ -53,9 +53,9 @@ module CMS
       end
 
       test 'json index' do
-        Factory :cms_layout, provider: @provider, published: "the world will not be the same again.", draft: "The Simpsons"
-        Factory :cms_page,   provider: @provider, published: "mushrooms and pepperoni.",              draft: "yo que se"
-        Factory :cms_builtin_partial, provider: @provider, published: "storing the cheese at room temperature"
+        FactoryBot.create :cms_layout, provider: @provider, published: "the world will not be the same again.", draft: "The Simpsons"
+        FactoryBot.create :cms_page,   provider: @provider, published: "mushrooms and pepperoni.",              draft: "yo que se"
+        FactoryBot.create :cms_builtin_partial, provider: @provider, published: "storing the cheese at room temperature"
 
         get admin_api_cms_templates_path(format: :json), provider_key: @provider.provider_key
         assert_response :success
@@ -65,7 +65,7 @@ module CMS
       end
 
       test 'explicit per_page parameter' do
-        10.times { Factory(:cms_layout, :provider => @provider) }
+        10.times { FactoryBot.create(:cms_layout, :provider => @provider) }
 
         common = { provider_key: @provider.provider_key, format: :xml }
         get admin_api_cms_templates_path, common.merge(per_page: 5)
@@ -79,9 +79,9 @@ module CMS
       end
 
       test 'index does not show email templates' do
-        2.times { Factory(:cms_page, :provider => @provider)  }
-        1.times { Factory(:cms_email_template, :provider => @provider)  }
-        1.times { Factory(:cms_builtin_legal_term, :provider => @provider)  }
+        2.times { FactoryBot.create(:cms_page, :provider => @provider)  }
+        1.times { FactoryBot.create(:cms_email_template, :provider => @provider)  }
+        1.times { FactoryBot.create(:cms_builtin_legal_term, :provider => @provider)  }
 
         # first page
         get admin_api_cms_templates_path, provider_key: @provider.provider_key, format: :xml
@@ -93,14 +93,14 @@ module CMS
 
       # TODO: check XML content
       test 'show partial' do
-        partial = Factory(:cms_partial, provider: @provider)
+        partial = FactoryBot.create(:cms_partial, provider: @provider)
 
         get admin_api_cms_template_path(partial), provider_key: @provider.provider_key, id: partial.id, format: :xml
         assert_response :success
       end
 
       test 'show builtin page' do
-        builtin = Factory(:cms_builtin_page, provider: @provider)
+        builtin = FactoryBot.create(:cms_builtin_page, provider: @provider)
 
         get admin_api_cms_template_path(builtin), provider_key: @provider.provider_key, id: builtin.id, format: :xml
         assert_response :success
@@ -110,7 +110,7 @@ module CMS
       end
 
       test 'show static build in page' do
-        static = Factory(:cms_builtin_static_page, provider: @provider)
+        static = FactoryBot.create(:cms_builtin_static_page, provider: @provider)
 
         get admin_api_cms_template_path(static, format: :json), provider_key: @provider.provider_key, id: static.id
 
@@ -125,7 +125,7 @@ module CMS
       end
 
       test 'show page' do
-        page = Factory(:cms_page, provider: @provider, path: '/cool')
+        page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool')
         get admin_api_cms_template_path(page), provider_key: @provider.provider_key, id: page.id, format: :xml
         assert_response :success
 
@@ -134,7 +134,7 @@ module CMS
       end
 
       test 'publish' do
-        page = Factory(:cms_page, :provider => @provider, draft: 'new', published: 'old' )
+        page = FactoryBot.create(:cms_page, :provider => @provider, draft: 'new', published: 'old' )
 
         put publish_admin_api_cms_template_path(page), provider_key: @provider.provider_key, format: :xml
         assert_response :success
@@ -143,14 +143,14 @@ module CMS
       end
 
       test 'invalid update' do
-        page = Factory(:cms_page, :provider => @provider)
+        page = FactoryBot.create(:cms_page, :provider => @provider)
         put admin_api_cms_template_path(page), :provider_key => @provider.provider_key, :id => page.id, :path => 'invalid-path/', format: :xml
         assert_response :unprocessable_entity
       end
 
       test 'update' do
-        new_layout = Factory(:cms_layout, :system_name => 'NEW', :provider => @provider)
-        page = Factory(:cms_page, :provider => @provider)
+        new_layout = FactoryBot.create(:cms_layout, :system_name => 'NEW', :provider => @provider)
+        page = FactoryBot.create(:cms_page, :provider => @provider)
 
         put admin_api_cms_template_path(page), provider_key: @provider.provider_key, id: page.id, format: :xml,
         title: 'new title',
@@ -186,8 +186,8 @@ module CMS
       end
 
       test 'update layout by id' do
-        new_layout = Factory(:cms_layout, :system_name => 'NEW', :provider => @provider)
-        page = Factory(:cms_page, :provider => @provider)
+        new_layout = FactoryBot.create(:cms_layout, :system_name => 'NEW', :provider => @provider)
+        page = FactoryBot.create(:cms_page, :provider => @provider)
 
         put admin_api_cms_template_path(page), :provider_key => @provider.provider_key, :id => page.id, format: :xml,
         :template => {:layout_id => new_layout.id }
@@ -205,7 +205,7 @@ module CMS
       end
 
       test 'create' do
-        layout = Factory(:cms_layout, :system_name => 'new-layout', :provider => @provider)
+        layout = FactoryBot.create(:cms_layout, :system_name => 'new-layout', :provider => @provider)
 
         post admin_api_cms_templates_path, { provider_key: @provider.provider_key, format: :xml,
           type: 'page',
@@ -227,7 +227,7 @@ module CMS
       end
 
       test 'create a page within a section and check it out' do
-        section = Factory :cms_section, title: "important", parent: @provider.sections.root, provider: @provider
+        section = FactoryBot.create :cms_section, title: "important", parent: @provider.sections.root, provider: @provider
 
         post admin_api_cms_templates_path(format: :json), {
           provider_key: @provider.provider_key, type: "page", path: "/important/page.html",

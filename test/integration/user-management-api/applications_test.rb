@@ -8,13 +8,13 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   def setup
     stub_backend_get_keys
 
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @service = @provider.services.first
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @application_plan = Factory :application_plan, :issuer => @provider.default_service
+    @application_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     @application_plan.publish!
     @buyer.buy! @application_plan
 
@@ -80,9 +80,9 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   test 'index is paginated' do
     # creating more apps
     #TODO move app creation to helpers...
-    buyer = Factory(:buyer_account, :provider_account => @provider)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     buyer.buy! @provider.default_account_plan
-    @application_plan = Factory :application_plan, :issuer => @provider.first_service!
+    @application_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @application_plan.publish!
     buyer.buy! @application_plan
 
@@ -95,7 +95,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'pagination per_page has a maximum allowed' do
     # Two applications because pagination should be shown only if needed, so total_entries > per_page
-    application_plan = Factory :application_plan, :issuer => @provider.first_service!
+    application_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @buyer.buy! application_plan
 
     max_per_page = set_api_pagination_max_per_page(:to => 1)
@@ -109,7 +109,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'pagination page defaults to 1 for invalid values' do
     # Two applications because pagination should be shown only if needed, so total_entries > per_page
-    application_plan = Factory :application_plan, :issuer => @provider.first_service!
+    application_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @buyer.buy! application_plan
 
     max_per_page = set_api_pagination_max_per_page(:to => 1)
@@ -122,7 +122,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'pagination per_page defaults to max for invalid values' do
     # Two applications because pagination should be shown only if needed, so total_entries > per_page
-    application_plan = Factory :application_plan, :issuer => @provider.first_service!
+    application_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @buyer.buy! application_plan
 
     max_per_page = set_api_pagination_max_per_page(:to => 1)
@@ -134,9 +134,9 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination per_page defaults to max for values lesser than 1' do
-    application_plan = Factory :application_plan, :issuer => @provider.first_service!
+    application_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @buyer.buy! application_plan
-    application_plan2 = Factory :application_plan, :issuer => @provider.first_service!
+    application_plan2 = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @buyer.buy! application_plan2
 
     max_per_page = set_api_pagination_max_per_page(:to => 2)

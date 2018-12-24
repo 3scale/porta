@@ -2,15 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class EnterpriseApiBuyersAccountPlanChangeTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
     @buyer.reload
 
-    @published_account_plan = Factory :account_plan, :issuer => @provider
+    @published_account_plan = FactoryBot.create :account_plan, :issuer => @provider
     @published_account_plan.publish!
 
-    @hidden_account_plan = Factory :account_plan, :issuer => @provider
+    @hidden_account_plan = FactoryBot.create :account_plan, :issuer => @provider
 
     host! @provider.admin_domain
   end

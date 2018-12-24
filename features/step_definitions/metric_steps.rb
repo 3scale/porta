@@ -1,18 +1,18 @@
 Given /^a metric "([^"]*)" of (provider "[^"]*")$/ do |metric_name, provider|
-  Factory(:metric, :service => provider.default_service, :system_name => metric_name, :friendly_name => metric_name)
+  FactoryBot.create(:metric, :service => provider.default_service, :system_name => metric_name, :friendly_name => metric_name)
 end
 
 Given /^a metric "([^"]*)" with friendly name "([^"]*)" of (provider "[^"]*")$/ do |name, friendly_name, provider|
-  Factory(:metric, :service => provider.default_service, :system_name => name, :friendly_name => friendly_name)
+  FactoryBot.create(:metric, :service => provider.default_service, :system_name => name, :friendly_name => friendly_name)
 end
 
 Given /^a method "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
-  Factory(:metric, :friendly_name => name, :parent => provider.default_service.metrics.hits)
+  FactoryBot.create(:metric, :friendly_name => name, :parent => provider.default_service.metrics.hits)
 end
 
 Given /^the metrics (with|without) usage limits of (plan "[^"]*"):$/ do |enabled, app_plan, table|
   table.hashes.each do |hash|
-    metric = Factory(:metric, :service => app_plan.issuer, :friendly_name => hash['metric'])
+    metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => hash['metric'])
     if enabled == 'with'
       ul = app_plan.usage_limits.new(:period => "day", :value => 1)
       ul.metric = metric
@@ -22,7 +22,7 @@ Given /^the metrics (with|without) usage limits of (plan "[^"]*"):$/ do |enabled
 end
 
 Given /^the metric "([^"]*)" (with|whithout) usage limit (\d+) of (plan "[^"]*")$/ do |name, enabled, limit, app_plan|
-  metric = Factory(:metric, :service => app_plan.issuer, :friendly_name => name)
+  metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => name)
   if enabled == 'with'
     ul = app_plan.usage_limits.new(:period => "day", :value => limit.to_i)
     ul.metric = metric

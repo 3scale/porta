@@ -1,18 +1,18 @@
 
 Given /^(provider "[^\"]*") has section "(.+?)"$/ do |provider, title|
-  section = Factory :cms_section, :provider => provider, :title => title, :system_name => title, :parent => provider.sections.first
+  section = FactoryBot.create :cms_section, :provider => provider, :title => title, :system_name => title, :parent => provider.sections.first
 end
 
 # Given /^(provider "[^\"]*") has a public section "([^"]*)"$/ do |provider, name|
-#   Factory :section, :name => name, :account => provider
+#   FactoryBot.create :section, :name => name, :account => provider
 # end
 
 # Given /^(provider "[^\"]*") has a private section "([^"]*)"$/ do |provider, name|
-#   Factory :cms_section, :name => name, :public => false, :account => provider
+#   FactoryBot.create :cms_section, :name => name, :public => false, :account => provider
 # end
 
 Given /^(provider "[^\"]*") has a (public|private|restricted) section "([^"]*)"(?: with path "([^"]*)")?$/ do |provider, protection, name, path|
-  root = provider.sections.root || Factory(:root_cms_section, :account => provider)
+  root = provider.sections.root || FactoryBot.create(:root_cms_section, :account => provider)
 
   options = {:title => name,
     :system_name => name,

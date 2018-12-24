@@ -6,7 +6,7 @@ class EndUserTest < ActiveSupport::TestCase
   subject { @end_user }
 
   def setup
-    @service = Factory(:service)
+    @service = FactoryBot.create(:service)
   end
 
   context 'blank new end user' do
@@ -48,7 +48,7 @@ class EndUserTest < ActiveSupport::TestCase
     end
 
     should 'allow changing of plan' do
-      plan = Factory(:end_user_plan, :service => @service)
+      plan = FactoryBot.create(:end_user_plan, :service => @service)
       subject.plan = plan
 
       assert_equal plan, subject.plan
@@ -59,8 +59,8 @@ class EndUserTest < ActiveSupport::TestCase
     end
 
     should 'not allow to change plan from another service' do
-      service = Factory(:service)
-      plan = Factory(:end_user_plan, :service => service)
+      service = FactoryBot.create(:service)
+      plan = FactoryBot.create(:end_user_plan, :service => service)
 
       assert_raise ActiveRecord::RecordNotFound do
         subject.plan = plan
@@ -82,7 +82,7 @@ class EndUserTest < ActiveSupport::TestCase
 
     context 'with plan' do
       setup do
-        @plan = Factory(:end_user_plan, :service => @service, :name => 'test-plan')
+        @plan = FactoryBot.create(:end_user_plan, :service => @service, :name => 'test-plan')
         @end_user = EndUser.new(@service, :username => 'test-subject')
       end
 
@@ -102,7 +102,7 @@ class EndUserTest < ActiveSupport::TestCase
       context 'and non default plan' do
         setup do
           @default = @plan
-          @plan = Factory(:end_user_plan, :service => @service, :name => 'non-default-plan')
+          @plan = FactoryBot.create(:end_user_plan, :service => @service, :name => 'non-default-plan')
           @end_user = EndUser.new(@service, :username => 'test-subject')
         end
 
@@ -127,7 +127,7 @@ class EndUserTest < ActiveSupport::TestCase
 
   context 'existing End User' do
     setup do
-      @plan = Factory(:end_user_plan, :service => @service, :name => 'test-plan')
+      @plan = FactoryBot.create(:end_user_plan, :service => @service, :name => 'test-plan')
       end_user = EndUser.new(@service, username: 'test-subject')
       EndUser.stubs(:find).with(@service, 'test-subject').returns(end_user)
       #EndUser::BACKEND_CLASS.save! :username => 'test-subject',
@@ -172,7 +172,7 @@ class EndUserTest < ActiveSupport::TestCase
 
     context 'with non default plan' do
       setup do
-        @service.update_attribute :default_end_user_plan, Factory(:end_user_plan, :service => @service, :name => 'default-plan')
+        @service.update_attribute :default_end_user_plan, FactoryBot.create(:end_user_plan, :service => @service, :name => 'default-plan')
         @end_user = EndUser.find(@service, 'test-subject')
       end
 

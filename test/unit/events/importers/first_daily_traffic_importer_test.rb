@@ -3,7 +3,7 @@ require 'test_helper'
 class Events::Importers::FirstDailyTrafficImporterTest < ActiveSupport::TestCase
 
   def setup
-    @cinstance = Factory(:cinstance)
+    @cinstance = FactoryBot.create(:cinstance)
     @timestamp = 1.day.ago.round
     @object    = OpenStruct.new(
                    application_id: @cinstance.application_id,

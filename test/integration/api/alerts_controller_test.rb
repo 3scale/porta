@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     login! @provider
   end
 

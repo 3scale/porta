@@ -1,34 +1,34 @@
 Given /^(the forum of "[^\"]*") have topics$/ do |forum|
-  Factory(:topic, :forum => forum, :user => forum.account.users.first)
+  FactoryBot.create(:topic, :forum => forum, :user => forum.account.users.first)
 end
 
 Given /^(the forum of "[^"]*") has topics? #{QUOTED_LIST_PATTERN}$/ do |forum, titles|
   user = forum.account.admins.first
 
   titles.each do |item|
-    Factory(:topic, :forum => forum, :title => item, :user => user)
+    FactoryBot.create(:topic, :forum => forum, :title => item, :user => user)
   end
 end
 
 Given /^(the forum of "[^"]*") has topic "([^"]*)" with "([^"]*)"$/ do |forum, title, body|
-  Factory(:topic, :forum => forum,
+  FactoryBot.create(:topic, :forum => forum,
                   :title => title,
                   :body  => body,
                   :user  => forum.account.admins.first)
 end
 
 Given /^(the forum of "[^"]*") has topic "([^"]*)" from (user "[^"]*")$/ do |forum, title, user|
-  Factory(:topic, :forum => forum, :title => title, :user => user)
+  FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
 end
 
 Given /^(the forum of "[^"]*") has topic "([^"]*)" from (user "[^"]*") created (.*)$/ do |forum, title, user, time|
   Timecop.travel(Chronic.parse(time)) do
-    Factory(:topic, :forum => forum, :title => title, :user => user)
+    FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
   end
 end
 
 Given /^(the forum of "[^"]*") has topic "([^"]*)" in category "([^"]*)"$/ do |forum, title, category_name|
-  Factory(:topic, :forum    => forum,
+  FactoryBot.create(:topic, :forum    => forum,
                   :category => forum.categories.find_by_name!(category_name),
                   :title    => title,
                   :user     => forum.account.admins.first)
@@ -47,7 +47,7 @@ Given /^(the forum of "[^"]*") has the following topics:$/ do |forum, table|
     created_at = hash['Created at'] || 'now'
 
     Timecop.travel(Chronic.parse(created_at)) do
-      topic = Factory(:topic, :forum    => forum,
+      topic = FactoryBot.create(:topic, :forum    => forum,
                               :title    => hash['Topic'],
                               :tag_list => hash['Tags'],
                               :user     => user,
@@ -56,7 +56,7 @@ Given /^(the forum of "[^"]*") has the following topics:$/ do |forum, table|
 
       # We are creating topics with more that one post, since last post deletion
       # deletes also the topic.
-      Factory(:post, :topic => topic, :user => user)
+      FactoryBot.create(:post, :topic => topic, :user => user)
     end
   end
 end
@@ -69,7 +69,7 @@ When /^I create a new topic "([^\"]*)"$/ do |topic|
 end
 
 When /^the (user "[^"]*") post in the topic in (the forum of "[^"]*")$/ do |user, forum|
-  Factory(:post, :topic => forum.topics.first, :forum => forum, :user => user)
+  FactoryBot.create(:post, :topic => forum.topics.first, :forum => forum, :user => user)
 end
 
 Then /^(the forum of "[^"]*") should have topic "([^"]*)"$/ do |forum, title|

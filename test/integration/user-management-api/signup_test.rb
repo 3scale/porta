@@ -4,23 +4,23 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory(:provider_account, domain: 'provider.example.com')
+    @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
 
     @account_plan1 = @provider.account_plans.first
     @provider.account_plans.default! @account_plan1
 
-    @application_plan1 = Factory :application_plan, issuer: @provider.default_service
+    @application_plan1 = FactoryBot.create :application_plan, issuer: @provider.default_service
     @application_plan1.publish!
     @provider.default_service.application_plans.default! @application_plan1
 
-    @application_plan2 = Factory :application_plan, issuer: @provider.default_service
+    @application_plan2 = FactoryBot.create :application_plan, issuer: @provider.default_service
     @application_plan2.publish!
 
-    @service_plan1 = Factory :service_plan, issuer: @provider.default_service
+    @service_plan1 = FactoryBot.create :service_plan, issuer: @provider.default_service
     @service_plan1.publish!
     @provider.default_service.service_plans.default! @service_plan1
 
-    @service_plan2 = Factory :service_plan, issuer: @provider.default_service
+    @service_plan2 = FactoryBot.create :service_plan, issuer: @provider.default_service
     @service_plan2.publish!
 
     host! @provider.admin_domain
@@ -308,7 +308,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   test 'api signup on a plan with eternity limits' do
     UserMailer.expects(:deliver_signup_notification).never
 
-    application_plan_local = Factory :application_plan, issuer: @provider.default_service
+    application_plan_local = FactoryBot.create :application_plan, issuer: @provider.default_service
     application_plan_local.publish!
 
     metric_local = application_plan_local.service.metrics.create!(friendly_name: 'CPU ticks', unit: 'tick')

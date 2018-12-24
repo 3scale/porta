@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "Metric" do
 
   let(:service) { provider.services.default }
-  let(:resource) { Factory.build(:metric, service: service) }
+  let(:resource) { FactoryBot.build(:metric, service: service) }
 
   let(:service_id) { service.id }
 

@@ -3,9 +3,9 @@ require 'test_helper'
 class Abilities::MultipleApplicationsTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @admin = @provider.admins.first
-    @member = Factory(:user, :account => @provider, :role => :member)
+    @member = FactoryBot.create(:user, :account => @provider, :role => :member)
   end
 
   context "switch multiple applications denied" do

@@ -153,7 +153,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   should 'not be able to disable end user registration' do
-    @service = Service.create!(:account => Factory(:simple_provider), :name => 'PandaCam')
+    @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
     @service.end_user_registration_required = false
 
     assert @service.invalid?
@@ -166,49 +166,49 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   should 'be in incomplete state' do
-    @service = Service.create!(:account => Factory(:simple_provider), :name => 'PandaCam')
+    @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
     assert @service.incomplete?
   end
 
   should 'have default metrics' do
-    @service = Service.create!(:account => Factory(:simple_provider), :name => 'PandaCam')
+    @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
     assert_not_nil @service.metrics.first
     assert_equal 'hits', @service.metrics.first.name
   end
 
   test 'alert_limits' do
-   service = Factory(:simple_service)
+   service = FactoryBot.create(:simple_service)
    ThreeScale::Core::AlertLimit.expects(:load_all).with(service.backend_id).returns([])
    service.send(:alert_limits)
   end
 
   test 'delete_alert_limits' do
-    service = Factory(:simple_service)
+    service = FactoryBot.create(:simple_service)
     ThreeScale::Core::AlertLimit.expects(:delete).with(service.backend_id, :foo)
     service.send(:delete_alert_limits, :foo)
   end
 
   test 'create_alert_limits' do
-    service = Factory(:simple_service)
+    service = FactoryBot.create(:simple_service)
     ThreeScale::Core::AlertLimit.expects(:save).with(service.backend_id, :foo)
     service.send(:create_alert_limits, :foo)
   end
 
   test 'Service#cinstances returns cinstances of plans of the service' do
-    service = Factory(:simple_service)
-    plan = Factory(:application_plan, :issuer => service)
-    buyer_account = Factory(:simple_buyer)
+    service = FactoryBot.create(:simple_service)
+    plan = FactoryBot.create(:application_plan, :issuer => service)
+    buyer_account = FactoryBot.create(:simple_buyer)
 
     cinstance = buyer_account.buy!(plan)
     assert_contains service.cinstances, cinstance
   end
 
   test '#has_traffic?' do
-    service = Factory(:simple_service)
-    plan = Factory(:application_plan, :issuer => service)
+    service = FactoryBot.create(:simple_service)
+    plan = FactoryBot.create(:application_plan, :issuer => service)
 
-    buyer1 = Factory(:simple_buyer)
-    buyer2 = Factory(:simple_buyer)
+    buyer1 = FactoryBot.create(:simple_buyer)
+    buyer2 = FactoryBot.create(:simple_buyer)
 
     app1 = buyer1.buy!(plan)
     buyer2.buy!(plan)
@@ -235,9 +235,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'Service#cinstances does not return destroyed cinstances' do
-    service = Factory(:simple_service)
-    plan = Factory(:application_plan, :issuer => service)
-    buyer_account = Factory(:simple_buyer)
+    service = FactoryBot.create(:simple_service)
+    plan = FactoryBot.create(:application_plan, :issuer => service)
+    buyer_account = FactoryBot.create(:simple_buyer)
 
     cinstance = buyer_account.buy!(plan)
     cinstance.destroy
@@ -246,9 +246,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'Service#cinstances returns read-write cinstances' do
-    service = Factory(:simple_service)
-    plan = Factory(:application_plan, :issuer => service)
-    buyer_account = Factory(:simple_buyer)
+    service = FactoryBot.create(:simple_service)
+    plan = FactoryBot.create(:application_plan, :issuer => service)
+    buyer_account = FactoryBot.create(:simple_buyer)
 
     buyer_account.buy!(plan)
 
@@ -257,7 +257,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   context 'has_method_metrics?' do
     setup do
-      @service = Factory(:simple_service)
+      @service = FactoryBot.create(:simple_service)
       @metric = @service.metrics.first
     end
 
@@ -273,7 +273,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   context 'method_metrics' do
     setup do
-      @service = Factory(:simple_service)
+      @service = FactoryBot.create(:simple_service)
       @hits = @service.metrics.hits!
     end
 
@@ -283,7 +283,7 @@ class ServiceTest < ActiveSupport::TestCase
 
       assert_equal 'foos', method_1.system_name
 
-      Factory(:metric, :service => @service)
+      FactoryBot.create(:metric, :service => @service)
 
       assert_same_elements [method_1, method_2], @service.method_metrics
     end
@@ -294,7 +294,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test "default service cannot be destroyed" do
-    provider = Factory :provider_account
+    provider = FactoryBot.create :provider_account
     service  = provider.default_service
 
     service.destroy
@@ -303,7 +303,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test "#destroy_default destroys a default service" do
-    provider = Factory :provider_account
+    provider = FactoryBot.create :provider_account
     service  = provider.default_service
 
     service.destroy_default
@@ -398,11 +398,11 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'reordering plans' do
-    service = Factory(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
-    free = Factory(:application_plan, :issuer => service)
-    basic = Factory(:application_plan, :issuer => service)
-    pro = Factory(:application_plan, :issuer => service)
+    free = FactoryBot.create(:application_plan, :issuer => service)
+    basic = FactoryBot.create(:application_plan, :issuer => service)
+    pro = FactoryBot.create(:application_plan, :issuer => service)
 
     service.reorder_plans([free.id, basic.id, pro.id])
     [free, basic, pro].map(&:reload)
@@ -419,7 +419,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   context "support_email" do
     should 'fallback to account.support_email' do
-      service = Factory(:simple_service)
+      service = FactoryBot.create(:simple_service)
       service.account.update_attribute :support_email, "support@accounts-table.example.net"
       assert_equal service.support_email, service.account.support_email
 
@@ -428,7 +428,7 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "be validated by email format" do
-      service = Factory.build(:simple_service, :support_email => "invalid email")
+      service = FactoryBot.build(:simple_service, :support_email => "invalid email")
       service.valid?
       assert service.errors[:support_email].present?
     end

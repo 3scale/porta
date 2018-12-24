@@ -2,12 +2,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @service_plan = Factory :service_plan, :issuer => @provider.default_service
+    @service_plan = FactoryBot.create :service_plan, :issuer => @provider.default_service
     @buyer.buy! @service_plan
     @buyer.reload
 
@@ -48,8 +48,8 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy' do
-    service = Factory(:service, account: @provider)
-    service_plan = Factory(:service_plan, :issuer => service)
+    service = FactoryBot.create(:service, account: @provider)
+    service_plan = FactoryBot.create(:service_plan, :issuer => service)
 
     post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy",
               :provider_key => @provider.api_key,
@@ -66,7 +66,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy an already subscribed service' do
-    service_plan = Factory(:service_plan, :issuer => @provider.first_service!)
+    service_plan = FactoryBot.create(:service_plan, :issuer => @provider.first_service!)
 
     post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy",
               :provider_key => @provider.api_key,
@@ -77,8 +77,8 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy a hidden plan is allowed' do
-    service = Factory(:service, account: @provider)
-    service_plan = Factory(:service_plan, :issuer => service)
+    service = FactoryBot.create(:service, account: @provider)
+    service_plan = FactoryBot.create(:service_plan, :issuer => service)
 
     assert service_plan.hidden?
     post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy",
@@ -89,8 +89,8 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy a custom plan is not allowed' do
-    service = Factory(:service, account: @provider)
-    service_plan = Factory(:service_plan, :issuer => service)
+    service = FactoryBot.create(:service, account: @provider)
+    service_plan = FactoryBot.create(:service_plan, :issuer => service)
     custom_plan = service_plan.customize
 
     post("/admin/api/accounts/#{@buyer.id}/service_plans/#{custom_plan.id}/buy",

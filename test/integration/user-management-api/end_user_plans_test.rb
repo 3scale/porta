@@ -4,7 +4,7 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   self.use_transactional_fixtures = true
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @service = @provider.first_service!
 
     @provider.settings.allow_end_users!
@@ -37,8 +37,8 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'fast track: index' do
-    Factory(:end_user_plan, :issuer => @service)
-    Factory(:end_user_plan, :issuer => Factory(:service, :account => @provider))
+    FactoryBot.create(:end_user_plan, :issuer => @service)
+    FactoryBot.create(:end_user_plan, :issuer => FactoryBot.create(:service, :account => @provider))
 
     get admin_api_end_user_plans_path(:provider_key => @provider.api_key, :format => :xml)
 
@@ -50,9 +50,9 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    Factory(:end_user_plan, :issuer => @service)
-    Factory(:end_user_plan, :issuer => @service)
-    Factory(:end_user_plan, :issuer => Factory(:service, :account => @provider))
+    FactoryBot.create(:end_user_plan, :issuer => @service)
+    FactoryBot.create(:end_user_plan, :issuer => @service)
+    FactoryBot.create(:end_user_plan, :issuer => FactoryBot.create(:service, :account => @provider))
 
     get admin_api_service_end_user_plans_path(@service,
                                               :provider_key => @provider.api_key,
@@ -70,7 +70,7 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'show' do
-    plan = Factory(:end_user_plan, :issuer => @service)
+    plan = FactoryBot.create(:end_user_plan, :issuer => @service)
     get admin_api_service_end_user_plan_path(@service, plan,
                                              :provider_key => @provider.api_key,
                                              :format => :xml)
@@ -102,7 +102,7 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'update' do
-    plan = Factory(:end_user_plan, :issuer => @service)
+    plan = FactoryBot.create(:end_user_plan, :issuer => @service)
 
     put admin_api_service_end_user_plan_path(@service, plan,
                                              :name => 'new name',
@@ -117,7 +117,7 @@ class Admin::Api::EndUserPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'default' do
-    plan = Factory(:end_user_plan, :issuer => @service)
+    plan = FactoryBot.create(:end_user_plan, :issuer => @service)
 
     put default_admin_api_service_end_user_plan_path(@service, plan,
                                                      :provider_key => @provider.api_key,

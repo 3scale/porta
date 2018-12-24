@@ -7,12 +7,12 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     # TODO: use plain ruby objects and include the Logic::PlanChanges
     # into them
-    @plan = Factory(:application_plan, name: 'Old plan')
-    @new_plan = Factory(:application_plan, issuer: @plan.issuer, name: 'Better plan')
-    @new_paid_plan = Factory(:application_plan, issuer: @plan.issuer, name: 'Better plan', :cost_per_month => 3)
+    @plan = FactoryBot.create(:application_plan, name: 'Old plan')
+    @new_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'Better plan')
+    @new_paid_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'Better plan', :cost_per_month => 3)
     @new_plan.publish!
 
-    @app = Factory(:cinstance, plan: @plan)
+    @app = FactoryBot.create(:cinstance, plan: @plan)
     ActionMailer::Base.deliveries = []
   end
 

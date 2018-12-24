@@ -2,16 +2,16 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Api::PricingRulesControllerTest < ActionController::TestCase
   def setup
-    @provider_account = Factory :provider_account
-    @plan = Factory(:application_plan, :issuer => @provider_account.default_service)
-    @metric = Factory(:metric, :service => @provider_account.default_service)
+    @provider_account = FactoryBot.create :provider_account
+    @plan = FactoryBot.create(:application_plan, :issuer => @provider_account.default_service)
+    @metric = FactoryBot.create(:metric, :service => @provider_account.default_service)
 
     @request.host = @provider_account.admin_domain
     login_as(@provider_account.admins.first)
   end
 
   test 'index with pricing rule without upper bound via ajax' do
-    pricing_rule = Factory(:pricing_rule, :plan => @plan, :min => 1, :max => nil)
+    pricing_rule = FactoryBot.create(:pricing_rule, :plan => @plan, :min => 1, :max => nil)
     @plan.pricing_rules.stubs(:find_all_by_metric_id).with(@metric.id).returns([pricing_rule])
 
     xhr :get, :index, :application_plan_id => @plan.to_param, :metric_id => @metric.to_param
@@ -36,7 +36,7 @@ class Api::PricingRulesControllerTest < ActionController::TestCase
   end
 
   test 'edit via ajax' do
-    pricing_rule = Factory(:pricing_rule, :plan => @plan)
+    pricing_rule = FactoryBot.create(:pricing_rule, :plan => @plan)
 
     xhr :get, :edit, :application_plan_id => @plan.to_param, :id => pricing_rule.to_param
 
@@ -52,7 +52,7 @@ class Api::PricingRulesControllerTest < ActionController::TestCase
   end
 
   test 'update via ajax' do
-    pricing_rule = Factory(:pricing_rule, :plan => @plan,
+    pricing_rule = FactoryBot.create(:pricing_rule, :plan => @plan,
                            :cost_per_unit => 6)
 
     xhr :put, :update, :application_plan_id => @plan.to_param, :id => pricing_rule.to_param,
@@ -64,7 +64,7 @@ class Api::PricingRulesControllerTest < ActionController::TestCase
   end
 
   test 'destroy via ajax' do
-    pricing_rule = Factory(:pricing_rule, :plan => @plan)
+    pricing_rule = FactoryBot.create(:pricing_rule, :plan => @plan)
 
     xhr :delete, :destroy, :application_plan_id => @plan.to_param, :id => pricing_rule.to_param
 

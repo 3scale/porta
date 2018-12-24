@@ -7,7 +7,7 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
     @provider_account.settings.allow_finance! unless @provider_account.settings.finance.allowed?
     @provider_account.settings.show_finance! unless @provider_account.settings.finance.visible?
 
-    @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+    @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
     @buyer_account.buy!(plan)
     host! @provider_account.domain
   end
@@ -52,11 +52,11 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
   end
 
   def create_provider_account
-    provider_account = Factory(:provider_with_billing, :payment_gateway_type => :braintree_blue, :payment_gateway_options => {:merchant_id => 'foo', :public_key => 'bar', :private_key => 'baz'})
-    provider_account.billing_strategy = Factory(:postpaid_with_charging)
+    provider_account = FactoryBot.create(:provider_with_billing, :payment_gateway_type => :braintree_blue, :payment_gateway_options => {:merchant_id => 'foo', :public_key => 'bar', :private_key => 'baz'})
+    provider_account.billing_strategy = FactoryBot.create(:postpaid_with_charging)
     provider_account.payment_gateway_type = :braintree_blue
 
-    plan = Factory(:application_plan, :issuer => provider_account.default_service)
+    plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service)
     [provider_account, plan]
   end
 end

@@ -3,7 +3,7 @@ require 'test_helper'
 class Csv::MessagesExporterTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory.create(:provider_account, org_name: 'Generalitat', domain: 'generalitat.cat')
+    @provider = FactoryBot.create(:provider_account, org_name: 'Generalitat', domain: 'generalitat.cat')
     create_message_for @provider
     create_message_for @provider, Time.now.utc
   end
@@ -21,7 +21,7 @@ class Csv::MessagesExporterTest < ActiveSupport::TestCase
 
   test 'to_csv' do
     Timecop.freeze(Time.utc(2011,1,1)) do
-      buyer = Factory.create(:buyer_account,
+      buyer = FactoryBot.create(:buyer_account,
                              org_name: 'Eater',
                              provider_account: @provider)
       buyer.admins.first.update_attributes(username: 'john_doe', email: 'john@my.company.it')

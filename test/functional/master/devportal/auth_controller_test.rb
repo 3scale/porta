@@ -5,8 +5,8 @@ class Master::Devportal::AuthControllerTest < ActionController::TestCase
   setup do
     host! master_account.domain
 
-    @provider = Factory(:simple_provider)
-    @authentication_provider = Factory(:authentication_provider, account: @provider)
+    @provider = FactoryBot.create(:simple_provider)
+    @authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
   end
 
   test '#show must redirect to the login dev portal of the provider' do

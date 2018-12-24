@@ -2,11 +2,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @service  = Factory :service, :account => @provider
-    @app_plan = Factory :application_plan, :issuer => @service
-    @metric   = Factory :metric, :service => @service
-    @limit    = Factory :usage_limit, :plan => @app_plan, :metric => @metric
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @service  = FactoryBot.create :service, :account => @provider
+    @app_plan = FactoryBot.create :application_plan, :issuer => @service
+    @metric   = FactoryBot.create :metric, :service => @service
+    @limit    = FactoryBot.create :usage_limit, :plan => @app_plan, :metric => @metric
 
 
     host! @provider.admin_domain

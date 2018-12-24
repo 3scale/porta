@@ -162,7 +162,7 @@ class PlanTest < ActiveSupport::TestCase
     end
 
     should 'not fail with usage_limits validating presence of plan' do
-      Factory :usage_limit, :plan => @plan
+      FactoryBot.create :usage_limit, :plan => @plan
 
       custom = @plan.customize
       custom.save
@@ -287,7 +287,7 @@ class PlanTest < ActiveSupport::TestCase
         feature = stock.issuer.features.create!(:name => "feature enabled",
                                                 :scope => 'ApplicationPlan')
         stock.features_plans.create! :feature => feature
-        metric = Factory(:metric, :service => stock.service, :system_name => 'frags')
+        metric = FactoryBot.create(:metric, :service => stock.service, :system_name => 'frags')
         stock.pricing_rules.create! :metric => metric, :min => 1, :max => 5, :cost_per_unit => 1
         ul1 = stock.usage_limits.new :period => :day, :value => 10
         ul1.metric = metric
@@ -511,7 +511,7 @@ class PlanTest < ActiveSupport::TestCase
 
     should "destroy it's usage limits" do
       plan = FactoryBot.create(:simple_application_plan)
-      usage_limit = Factory(:usage_limit, :plan => plan)
+      usage_limit = FactoryBot.create(:usage_limit, :plan => plan)
 
       plan.destroy
 
@@ -520,7 +520,7 @@ class PlanTest < ActiveSupport::TestCase
 
     should "destroy it's pricing rules" do
       plan = FactoryBot.create(:simple_application_plan)
-      pricing_rule = Factory(:pricing_rule, :plan => plan)
+      pricing_rule = FactoryBot.create(:pricing_rule, :plan => plan)
 
       plan.destroy
 

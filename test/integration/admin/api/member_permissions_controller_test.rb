@@ -119,7 +119,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   test "member user can't update other users' permissions" do
     logged_in_user = @provider.admins.first
     logged_in_user.update_attribute :role, 'member'
-    another_user = Factory(:user, account: @provider)
+    another_user = FactoryBot.create(:user, account: @provider)
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: '' }
 

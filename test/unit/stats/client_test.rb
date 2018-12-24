@@ -2,11 +2,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Stats::ClientTest < ActiveSupport::TestCase
   def setup
-    provider_account = Factory(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     @service = provider_account.first_service!
-    plan = Factory(:application_plan, :issuer => @service)
+    plan = FactoryBot.create(:application_plan, :issuer => @service)
     @metric = @service.metrics.hits!
-    @cinstance = Factory(:cinstance, :plan => plan)
+    @cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     @storage = Stats::Base.storage
     @storage.flushdb

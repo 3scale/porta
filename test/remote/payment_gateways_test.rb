@@ -3,10 +3,10 @@ require 'fakeweb'
 
 class PaymentGatewaysTest < ActiveSupport::TestCase
   def setup
-    @provider_account = Factory(:provider_account)
-    @provider_account.billing_strategy = Factory(:postpaid_billing)
+    @provider_account = FactoryBot.create(:provider_account)
+    @provider_account.billing_strategy = FactoryBot.create(:postpaid_billing)
 
-    @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+    @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
     FakeWeb.allow_net_connect = true
 
     @billing_address= {

@@ -22,7 +22,7 @@ Given(/^a provider "([^"]*)" signed up to (plan "[^"]*") with partner "(.*?)"$/)
   end
   partner.application_plans << plan
   partner.save
-  provider = Factory(:provider_account_with_pending_users_signed_up_to_no_plan,
+  provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan,
                      org_name: name,
                      domain: name,
                      self_domain: "admin.#{name}",
@@ -37,7 +37,7 @@ Given(/^a provider "([^"]*)" signed up to (plan "[^"]*") with partner "(.*?)"$/)
 end
 
 Given(/^a provider "([^"]*)" signed up to (plan "[^"]*")$/) do |name, plan|
-  @provider = Factory(:provider_account_with_pending_users_signed_up_to_no_plan,
+  @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan,
                       org_name: name,
                       domain: name,
                       self_domain: "admin.#{name}")

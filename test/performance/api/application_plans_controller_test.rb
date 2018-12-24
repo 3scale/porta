@@ -4,7 +4,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::PerformanceTest
   self.profile_options = { metrics: [ :wall_time ] }
 
   def setup
-    @plan = Factory(:application_plan)
+    @plan = FactoryBot.create(:application_plan)
     @service = @plan.service
     @provider = @service.account
 
@@ -13,12 +13,12 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::PerformanceTest
 
     # metrics
     10.times do |i|
-      metrics << Factory(:metric, service: @service)
+      metrics << FactoryBot.create(:metric, service: @service)
     end
 
     # methods
     10.times do
-      metrics << Factory(:metric, service: @service, unit: nil, parent: hits)
+      metrics << FactoryBot.create(:metric, service: @service, unit: nil, parent: hits)
     end
 
     # metrics = metrics.to_a

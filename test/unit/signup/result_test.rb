@@ -16,7 +16,7 @@ class SignupResultTest < ActiveSupport::TestCase
   end
 
   test '#valid? returns false if the user is valid but the account is not' do
-    @account = Factory.build(:account, org_name: nil)
+    @account = FactoryBot.build(:account, org_name: nil)
     assert user.valid?
     refute account.valid?
     refute signup_result.valid?
@@ -37,7 +37,7 @@ class SignupResultTest < ActiveSupport::TestCase
   end
 
   test '#persisted? returns false if the user is persisted but the account is not' do
-    @account = Factory.build(:account, org_name: nil)
+    @account = FactoryBot.build(:account, org_name: nil)
     user.save
     assert user.persisted?
     refute account.persisted?
@@ -72,7 +72,7 @@ class SignupResultTest < ActiveSupport::TestCase
   end
 
   test '#save! raises ActiveRecord::RecordInvalid when the account is invalid' do
-    @account = Factory.build(:account, org_name: nil)
+    @account = FactoryBot.build(:account, org_name: nil)
     assert_raise ActiveRecord::RecordInvalid do
       signup_result.save!
     end
@@ -109,7 +109,7 @@ class SignupResultTest < ActiveSupport::TestCase
   end
 
   test '#save does not save and #errors return the error when the account is invalid' do
-    @account = Factory.build(:account, org_name: nil)
+    @account = FactoryBot.build(:account, org_name: nil)
     signup_result.save
     refute user.persisted?
     refute account.persisted?
@@ -202,11 +202,11 @@ class SignupResultTest < ActiveSupport::TestCase
   private
 
   def user
-    @user ||= Factory.build(:user, account: account)
+    @user ||= FactoryBot.build(:user, account: account)
   end
 
   def account
-    @account ||= Factory.build(:account_without_users)
+    @account ||= FactoryBot.build(:account_without_users)
   end
 
   def signup_result

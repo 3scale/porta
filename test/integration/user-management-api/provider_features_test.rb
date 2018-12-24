@@ -2,14 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
 
     host! @provider.admin_domain
   end
 
   test 'index' do
-    Factory :feature, :featurable => @provider
+    FactoryBot.create :feature, :featurable => @provider
 
     get(admin_api_features_path,
              :provider_key => @provider.api_key,
@@ -23,7 +23,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'show' do
-    feature = Factory :feature, :featurable => @provider
+    feature = FactoryBot.create :feature, :featurable => @provider
 
     get(admin_api_feature_path(feature),
              :provider_key => @provider.api_key, :format => :xml)
@@ -60,7 +60,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'create features with scope is ignored'
 
   test 'update' do
-    feature = Factory(:feature, :featurable => @provider,
+    feature = FactoryBot.create(:feature, :featurable => @provider,
                       :name => 'old name', :system_name => 'old_system_name')
 
     put("/admin/api/features/#{feature.id}",
@@ -84,7 +84,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'update errors xml'
 
   test 'destroy' do
-    feature = Factory :feature, :featurable => @provider
+    feature = FactoryBot.create :feature, :featurable => @provider
 
     delete("/admin/api/features/#{feature.id}",
                 :provider_key => @provider.api_key,

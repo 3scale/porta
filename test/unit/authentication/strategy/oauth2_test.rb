@@ -5,7 +5,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   setup do
     @provider = FactoryBot.create(:simple_provider)
     @provider.settings.update_column(:authentication_strategy, 'oauth2')
-    @authentication_provider = Factory(:authentication_provider, account: @provider, kind: 'base')
+    @authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, kind: 'base')
     @strategy = Authentication::Strategy.build(@provider)
   end
 
@@ -23,7 +23,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
   test '#authenticate find user that can login' do
     system_name = @authentication_provider.system_name
-    user = Factory(:active_user, account: buyer, authentication_id: 'foobar')
+    user = FactoryBot.create(:active_user, account: buyer, authentication_id: 'foobar')
 
     mock_client(@authentication_provider, uid: user.authentication_id)
     result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
@@ -34,7 +34,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
   test '#authenticate find user that cannot login' do
     system_name = @authentication_provider.system_name
-    user = Factory(:pending_user, account: buyer, authentication_id: 'foobar')
+    user = FactoryBot.create(:pending_user, account: buyer, authentication_id: 'foobar')
 
     mock_client(@authentication_provider, uid: user.authentication_id)
     result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
@@ -92,7 +92,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   test '#on_signup_complete should clear session authentication data' do
     session = { authentication_id: 'B5678' }
 
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
     @strategy.on_new_user(user, session)
 
     @strategy.on_signup_complete(session)
@@ -103,7 +103,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#on_signup_complete when user email is the same as session authentication_email' do
-    user    = Factory.build(:user)
+    user    = FactoryBot.build(:user)
     session = {
       authentication_id: 'B5678',
       authentication_email: user.email,
@@ -117,7 +117,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#on_signup_complete when user email is different from session authentication_email' do
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
     session = { authentication_id: 'B5678', authentication_email: 'diferent@email.com' }
     @strategy.on_new_user(user, session)
 
@@ -127,7 +127,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#track_signup_options with oauth2' do
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
     session = {
       authentication_id: 'B5678',
       authentication_email: 'diferent@email.com',
@@ -181,7 +181,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
   test '#user_used_sso_authorization creates a new sso_authorization for the given user when the user existed but the sso did not' do
     Timecop.freeze do
-      user = Factory.create(:user_with_account)
+      user = FactoryBot.create(:user_with_account)
       @strategy.stubs(:authentication_provider).returns(@authentication_provider)
       @strategy.user_used_sso_authorization(user, ThreeScale::OAuth2::UserData.new(uid: '123456', id_token: 'fake-token'))
       authorization = user.sso_authorizations.last
@@ -192,7 +192,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
   test '#user_used_sso_authorization updates the id_token when the sso already existed and the id_token has changed' do
     Timecop.freeze do
-      authorization = Factory.create(:sso_authorization, authentication_provider: @authentication_provider, id_token: 'first-token', updated_at: Time.now.utc - 1.week)
+      authorization = FactoryBot.create(:sso_authorization, authentication_provider: @authentication_provider, id_token: 'first-token', updated_at: Time.now.utc - 1.week)
       @strategy.stubs(:authentication_provider).returns(@authentication_provider)
       @strategy.user_used_sso_authorization(authorization.user, ThreeScale::OAuth2::UserData.new(uid: authorization.uid, id_token: 'fake-token'))
       assert_equal 'fake-token', authorization.reload.id_token
@@ -201,7 +201,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
   test '#user_used_sso_authorization updates the updated_at when the sso already existed but the id_token has not changed' do
     Timecop.freeze do
-      authorization = Factory.create(:sso_authorization, authentication_provider: @authentication_provider, id_token: nil, updated_at: Time.now.utc - 1.week)
+      authorization = FactoryBot.create(:sso_authorization, authentication_provider: @authentication_provider, id_token: nil, updated_at: Time.now.utc - 1.week)
       @strategy.stubs(:authentication_provider).returns(@authentication_provider)
       @strategy.user_used_sso_authorization(authorization.user, ThreeScale::OAuth2::UserData.new(uid: authorization.uid, id_token: nil))
       assert_equal Time.now.utc.to_i, authorization.reload.updated_at.to_i

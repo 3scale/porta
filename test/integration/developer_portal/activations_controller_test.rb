@@ -44,7 +44,7 @@ class DeveloperPortal::ActivationsControllerTest < ActionDispatch::IntegrationTe
   end
 
   test 'emails has been taken problem' do
-    second_user = Factory.build(:pending_user, account: @buyer, email: @user.email)
+    second_user = FactoryBot.build(:pending_user, account: @buyer, email: @user.email)
 
     second_user.save validate: false
 

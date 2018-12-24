@@ -20,7 +20,7 @@ class BillingObserverTest < ActiveSupport::TestCase
   end
 
   def test_plan_change
-    new_plan = Factory(:application_plan, issuer: @service, cost_per_month: 50)
+    new_plan = FactoryBot.create(:application_plan, issuer: @service, cost_per_month: 50)
     invoice = FactoryBot.create(:invoice)
     line_item = FactoryBot.create(:line_item_plan_cost, invoice: invoice)
 

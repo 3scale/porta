@@ -4,14 +4,14 @@ class Tasks::BackendTest < ActiveSupport::TestCase
   include TestHelpers::FakeWeb
 
   test 'storage:rewrite' do
-    provider = Factory(:provider_account)
-    buyer    = Factory(:buyer_account, provider_account: provider)
-    app      = Factory(:cinstance, user_account: buyer)
+    provider = FactoryBot.create(:provider_account)
+    buyer    = FactoryBot.create(:buyer_account, provider_account: provider)
+    app      = FactoryBot.create(:cinstance, user_account: buyer)
     key, filter = nil
 
     BackendClient::ToggleBackend.without_backend do
-      key    = Factory(:application_key, application: app)
-      filter = Factory(:referrer_filter, application: app)
+      key    = FactoryBot.create(:application_key, application: app)
+      filter = FactoryBot.create(:referrer_filter, application: app)
     end
 
     expect_backend_create_key(app, key.value)

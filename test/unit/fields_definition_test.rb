@@ -48,7 +48,7 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
 
   context "validations" do
     setup do
-      @provider = Factory(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       FieldsDefinition.delete_all(:account_id => @provider.id) # removing default ones
       @field_definition1 = FieldsDefinition.create(:account => @provider, :name => 'org_name', :target => 'Account', :label => 'foo')
     end
@@ -225,15 +225,15 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
 
   context '.editable_by' do
     setup do
-      @provider = Factory :provider_account
+      @provider = FactoryBot.create :provider_account
       FieldsDefinition.delete_all
-      Factory(:fields_definition, :account => @provider, :name => "hidden",
+      FactoryBot.create(:fields_definition, :account => @provider, :name => "hidden",
               :hidden => true)
-      Factory(:fields_definition, :account => @provider, :name => "read_only",
+      FactoryBot.create(:fields_definition, :account => @provider, :name => "read_only",
               :read_only => true)
-      @public_field = Factory(:fields_definition, :account => @provider,
+      @public_field = FactoryBot.create(:fields_definition, :account => @provider,
                               :name => "public")
-      @buyer = Factory :buyer_account, :provider_account => @provider
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
     end
 
     should 'return all fields for provider users' do

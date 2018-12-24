@@ -3,8 +3,8 @@ require 'will_paginate/array'
 
 resource "Invoice", transactions: false do
 
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
-  let(:resource) { Factory(:invoice, buyer_account: buyer, provider_account: provider) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider) }
 
   let(:collection) { [resource].paginate(page: 1, per_page: 20) }
   let(:account_id) { buyer.id }

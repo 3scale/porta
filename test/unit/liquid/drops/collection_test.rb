@@ -3,7 +3,7 @@ require 'test_helper'
 class Liquid::Drops::CollectionTest < ActiveSupport::TestCase
 
   def setup
-    @plans = [ Factory(:application_plan, system_name: 'my_plan') ]
+    @plans = [ FactoryBot.create(:application_plan, system_name: 'my_plan') ]
   end
 
   test 'indexable by system_name' do
@@ -23,8 +23,8 @@ class Liquid::Drops::CollectionTest < ActiveSupport::TestCase
   end
 
   test 'can contain different types' do
-    c = Liquid::Drops::Collection.new [ Factory(:application_plan, system_name: 'my_app_plan'),
-                                        Factory(:account_plan, system_name: 'my_account_plan')
+    c = Liquid::Drops::Collection.new [ FactoryBot.create(:application_plan, system_name: 'my_app_plan'),
+                                        FactoryBot.create(:account_plan, system_name: 'my_account_plan')
                                       ]
     assert_equal Liquid::Drops::ApplicationPlan, c.first.class
     assert_equal Liquid::Drops::AccountPlan, c.second.class

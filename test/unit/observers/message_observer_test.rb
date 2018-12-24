@@ -8,10 +8,10 @@ class MessageObserverTest < ActiveSupport::TestCase
 
   def setup
     @observer = MessageObserver.instance
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
     @provider = @buyer.provider_account
     @service = @provider.first_service!
-    @plan = Factory(:application_plan, :issuer => @service)
+    @plan = FactoryBot.create(:application_plan, :issuer => @service)
   end
 
   def test_after_create_after_destroy
@@ -57,8 +57,8 @@ class MessageObserverTest < ActiveSupport::TestCase
 
   context "after_commit_on_create" do
     should "call correct messenger" do
-      @app_plan = Factory(:application_plan, :issuer => @service)
-      @service_plan = Factory(:service_plan, :issuer => @service)
+      @app_plan = FactoryBot.create(:application_plan, :issuer => @service)
+      @service_plan = FactoryBot.create(:service_plan, :issuer => @service)
 
       @cinstance = contract(@app_plan)
       CinstanceMessenger.expects(:new_contract).with(@cinstance).returns(message)

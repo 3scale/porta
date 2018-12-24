@@ -14,7 +14,7 @@ module Finance::Api
         end
 
         should 'deny access if finance module is disabled' do
-          without_finance = Factory.create(:provider_account, :billing_strategy => nil)
+          without_finance = FactoryBot.create(:provider_account, :billing_strategy => nil)
           host! without_finance.self_domain
           get "/api/#{@context}invoices.xml?provider_key=#{without_finance.api_key}"
           assert_response :forbidden
@@ -58,9 +58,9 @@ module Finance::Api
         disable_transactional_fixtures!
 
         setup do
-          @buyer ||= Factory(:buyer_account, :provider_account => @provider)
-          @invoice = Factory(:invoice, :provider_account => @provider, :buyer_account => @buyer)
-          2.times { Factory(:line_item_plan_cost, :invoice => @invoice, :name => 'fake', :cost => 10.0) }
+          @buyer ||= FactoryBot.create(:buyer_account, :provider_account => @provider)
+          @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
+          2.times { FactoryBot.create(:line_item_plan_cost, :invoice => @invoice, :name => 'fake', :cost => 10.0) }
         end
 
         should 'return XML invoice specified by ID' do
@@ -83,9 +83,9 @@ module Finance::Api
 
         context 'with deleted account' do
           setup do
-            @buyer = Factory(:buyer_account, :provider_account => @provider)
+            @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
-            @invoice = Factory(:invoice, :provider_account => @provider, :buyer_account => @buyer)
+            @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
             # @invoice.finalize!
             # @invoice.pay!
 
@@ -120,10 +120,10 @@ module Finance::Api
         end
 
         should 'provide list of invoices' do
-          buyer = @buyer || Factory(:buyer_account, :provider_account => @provider)
+          buyer = @buyer || FactoryBot.create(:buyer_account, :provider_account => @provider)
 
           25.times do
-            Factory(:invoice, :provider_account => @provider, :buyer_account => buyer)
+            FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => buyer)
           end
 
           get "/api/#{@context}invoices.xml?provider_key=#{@key}&page=1&per_page=21"
@@ -142,10 +142,10 @@ module Finance::Api
 
         context 'filter' do
           setup do
-            buyer = @buyer || Factory(:buyer_account, :provider_account => @provider)
+            buyer = @buyer || FactoryBot.create(:buyer_account, :provider_account => @provider)
 
             2.times do
-              Factory(:invoice, :provider_account => @provider, :buyer_account => buyer)
+              FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => buyer)
             end
           end
 
@@ -176,7 +176,7 @@ module Finance::Api
 
     context 'Invoice API[not-scoped]' do
       setup do
-        @provider = Factory(:provider_account)
+        @provider = FactoryBot.create(:provider_account)
         @provider.create_billing_strategy
         @provider.save!
         @key = @provider.api_key
@@ -190,8 +190,8 @@ module Finance::Api
 
     context 'Invoice API[by buyers]' do
       setup do
-        @provider = Factory(:provider_account)
-        @buyer = Factory(:buyer_account, :provider_account => @provider)
+        @provider = FactoryBot.create(:provider_account)
+        @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
         @provider.create_billing_strategy
         @provider.save!

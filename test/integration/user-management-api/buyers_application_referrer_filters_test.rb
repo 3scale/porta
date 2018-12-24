@@ -7,13 +7,13 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     host! @provider.admin_domain
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
     @service = @provider.first_service!
-    @app_plan = Factory :application_plan, :issuer => @service
+    @app_plan = FactoryBot.create :application_plan, :issuer => @service
     @app_plan.publish!
     @buyer.buy! @app_plan
 

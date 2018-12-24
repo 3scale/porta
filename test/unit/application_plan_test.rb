@@ -5,7 +5,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   should belong_to :partner
 
   should 'not allow setting of end_user_required' do
-    plan = Factory(:application_plan)
+    plan = FactoryBot.create(:application_plan)
     plan.end_user_required = true
 
     assert plan.invalid?
@@ -21,10 +21,10 @@ class ApplicationPlanTest < ActiveSupport::TestCase
 
   context '#customize' do
     setup do
-      @app_plan = Factory(:application_plan)
-      @original_plan_metric = Factory(:plan_metric, :plan => @app_plan,
+      @app_plan = FactoryBot.create(:application_plan)
+      @original_plan_metric = FactoryBot.create(:plan_metric, :plan => @app_plan,
                                       :visible => false, :limits_only_text => false)
-      @original_usage_limit = Factory(:usage_limit, :plan => @app_plan,
+      @original_usage_limit = FactoryBot.create(:usage_limit, :plan => @app_plan,
                                       :period => "year", :value => 666)
     end
 

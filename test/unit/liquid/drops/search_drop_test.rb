@@ -3,8 +3,8 @@ require 'test_helper'
 class Liquid::Drops::SearchTest < ActiveSupport::TestCase
 
   def setup
-    @topic = Factory(:topic, title: 'RIP')
-    @post = Factory(:post, body: 'Can we delete the forum, please?', topic: @topic)
+    @topic = FactoryBot.create(:topic, title: 'RIP')
+    @post = FactoryBot.create(:post, body: 'Can we delete the forum, please?', topic: @topic)
   end
 
   test 'post found' do

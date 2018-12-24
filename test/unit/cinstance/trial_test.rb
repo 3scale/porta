@@ -36,12 +36,12 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
 
   context 'with 30 days trial period plan' do
     setup do
-      @plan = Factory(:application_plan, :trial_period_days => 30)
+      @plan = FactoryBot.create(:application_plan, :trial_period_days => 30)
     end
 
     should 'compute correct expiration date' do
       Timecop.freeze(2009,11,4) do
-        cinstance = Factory(:cinstance, :plan => @plan)
+        cinstance = FactoryBot.create(:cinstance, :plan => @plan)
         expected = (cinstance.created_at  + 30.days).to_date
         assert_equal expected, cinstance.trial_period_expires_at.to_date
       end
@@ -49,17 +49,17 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
 
     should 'expire the trial after 31 days' do
       Timecop.freeze
-      cinstance = Factory(:cinstance, :plan => @plan)
+      cinstance = FactoryBot.create(:cinstance, :plan => @plan)
       Timecop.travel(31.days.from_now) { assert !cinstance.trial? }
     end
 
     context 'with no trial' do
       setup do
-        @plan = Factory(:application_plan, :trial_period_days => nil)
+        @plan = FactoryBot.create(:application_plan, :trial_period_days => nil)
       end
 
       should 'find those expired yesterday' do
-        Timecop.travel(3.days.from_now) { @cinstance = Factory(:cinstance, :plan => @plan) }
+        Timecop.travel(3.days.from_now) { @cinstance = FactoryBot.create(:cinstance, :plan => @plan) }
 
         Timecop.travel(4.days.from_now) do
           found = Cinstance.with_trial_period_expired(Time.zone.now - 1.day)
@@ -74,15 +74,15 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
 
 
   test 'trial? returns false if plan has no trial period' do
-    plan = Factory(:application_plan, :trial_period_days => 0)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :trial_period_days => 0)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     assert !cinstance.trial?
   end
 
   test 'trial? accepts a date as argument' do
-    plan = Factory(:application_plan, :trial_period_days => 0)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :trial_period_days => 0)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     expires_at = Time.parse('2017-11-13T08:00:00-09:00') # 17:00:00 UTC
     cinstance.expects(:trial_period_expires_at).at_least_once.returns(expires_at)
@@ -96,7 +96,7 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
 
   should 'remaining_trial_period_days returns remaining days of trial period'
   # do
-  #     plan = Factory(:plan, :trial_period_days => 30)
+  #     plan = FactoryBot.create(:plan, :trial_period_days => 30)
   #     cinstance = Cinstance.new(:plan => plan)
 
   #     assert_equal 30, cinstance.remaining_trial_period_days
@@ -111,8 +111,8 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
   #   end
 
   test 'Cinstance#remaining_trial_period_days returns 0 if trial period expired' do
-    plan = Factory(:application_plan, :trial_period_days => 30)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :trial_period_days => 30)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     Timecop.travel(40.days.from_now) do
       assert_equal 0, cinstance.remaining_trial_period_days

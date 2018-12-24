@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Account::AddressTest < ActiveSupport::TestCase
   def setup
-    @account = Factory :simple_buyer, org_legaladdress: nil
+    @account = FactoryBot.create :simple_buyer, org_legaladdress: nil
   end
 
   test '#presence' do

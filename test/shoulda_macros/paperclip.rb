@@ -82,7 +82,7 @@ module Paperclip
       end
     end
 
-    # Stub S3 and return a file for attachment. Best with Factory Girl.
+    # Stub S3 and return a file for attachment. Best with FactoryBot.create Girl.
     # Uses a strict directory convention:
     #
     #     features/support/paperclip
@@ -92,7 +92,8 @@ module Paperclip
     #     When I attach a "demo_tape" "mp3" file to a "band" on S3
     #
     # @example
-    #   Factory.define :band_with_demo_tape, :parent => :band do |band|
+    #   FactoryBot.define do
+    #  factory :band_with_demo_tape, :parent => :band do |band|
     #     band.demo_tape { band.paperclip_fixture("band", "demo_tape", "png") }
     #   end
     def paperclip_fixture(model, attachment, extension)
@@ -110,7 +111,7 @@ if defined?(ActionController::Integration::Session)
   end
 end
 
-class Factory
+module FactoryBot
   include Paperclip::Shoulda  #:nodoc:
 end
 

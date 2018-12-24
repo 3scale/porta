@@ -5,11 +5,11 @@ require 'test_helper'
 class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
 
   def setup
-    @provider     = Factory(:provider_account)
-    @buyer        = Factory(:buyer_account, provider_account: @provider)
+    @provider     = FactoryBot.create(:provider_account)
+    @buyer        = FactoryBot.create(:buyer_account, provider_account: @provider)
     @request.host = @provider.admin_domain
-    @invoice      = Factory(:invoice, provider_account: @provider, buyer_account: @buyer)
-    @line_item    = Factory(:line_item_plan_cost, invoice: @invoice, name: 'JohnDoe', cost: 10.0)
+    @invoice      = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+    @line_item    = FactoryBot.create(:line_item_plan_cost, invoice: @invoice, name: 'JohnDoe', cost: 10.0)
 
     login_as(@provider.admins.first)
   end
