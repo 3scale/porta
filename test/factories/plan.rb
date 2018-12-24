@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-factory do
+FactoryBot.define do
   factory (:plan) do
     sequence(:name) { |n| "plan#{n}" }
     sequence(:system_name) {|n| "plan#{n}" }
 
-    after_stub do |plan|
+    after(:stub) do |plan|
       plan.stubs(:features).returns([])
       plan.features.stubs(:find).with(:all, Mocha::ParameterMatchers::AnyParameters.new).returns([])
       plan.features.stubs(:visible).returns([])
@@ -23,18 +23,18 @@ factory do
   factory(:application_plan, :parent => :plan, :class => ApplicationPlan) do
     association(:issuer, :factory => :service)
 
-    after_build do |plan|
+    after(:build) do |plan|
       plan_rule = PlanRulesCollection.find_for_plan(plan) || FactoryBot.build(:plan_rule, system_name: plan.system_name.to_sym)
       plan.stubs(:plan_rule).returns(plan_rule)
     end
   end
 
   factory(:published_plan, :parent => :application_plan) do
-    after_create do |plan|
+    after(:create) do |plan|
       plan.publish!
     end
 
-    after_stub do |plan|
+    after(:stub) do |plan|
       plan.stubs(:state).returns('published')
     end
   end

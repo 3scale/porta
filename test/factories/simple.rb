@@ -1,4 +1,4 @@
-Factory.define do
+FactoryBot.define do
 # TODO: dry up with account_without_users
   factory(:simple_account, :class => Account) do
     association(:country)
@@ -33,14 +33,14 @@ Factory.define do
     domain 'www.example.com'
     self_domain 'www.example.com'
 
-    after_create do |account| # not so simple, but works like normal master
+    after(:create) do |account| # not so simple, but works like normal master
       FactoryBot.create(:simple_account_plan, issuer: account)
       service = FactoryBot.create(:simple_service, account: account)
       FactoryBot.create(:simple_application_plan, issuer: service)
       account.update_columns(provider_account_id: account.id) # master is it's own provider!
     end
 
-    after_stub do |account|
+    after(:stub) do |account|
       Account.stubs(:master).returns(account)
       Account.stubs(:find_by_domain).with(account.domain).returns(account)
     end
@@ -54,12 +54,12 @@ Factory.define do
     payment_gateway_type :bogus
     sequence(:s3_prefix) { |n| "fake-s3-prefix-#{n}" }
 
-    after_stub do |account|
+    after(:stub) do |account|
       account.provider = true
       account.stubs(:provider_key).returns("stubbed-#{SecureRandom.hex(16)}")
     end
 
-    after_create do |account|
+    after(:create) do |account|
       account.provider_account ||= if Account.exists?(:master => true)
                                      Account.master
                                    else
@@ -75,7 +75,7 @@ Factory.define do
     mandatory_app_key false
     sequence(:name) { |n| "service#{n}" }
     association(:account, :factory => :simple_provider)
-    after_create do |record|
+    after(:create) do |record|
       record.service_tokens.first_or_create!(value: 'token')
     end
   end
@@ -84,7 +84,7 @@ Factory.define do
     association(:plan, :factory => :simple_application_plan)
     association(:user_account, :factory => :simple_account)
 
-    after_stub do |app|
+    after(:stub) do |app|
       app.stubs(:service).returns(app.plan.issuer)
     end
   end

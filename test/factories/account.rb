@@ -21,7 +21,7 @@ FactoryBot.define do
   end
 
   factory(:account, :parent => :account_without_users) do
-    after_create do |account|
+    after(:create) do |account|
       if account.users.empty?
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
 
@@ -30,7 +30,7 @@ FactoryBot.define do
       end
     end
 
-    after_stub do |account|
+    after(:stub) do |account|
       admin = FactoryBot.stub(:admin)
 
       account.stubs(:admins).returns([admin])
@@ -39,7 +39,7 @@ FactoryBot.define do
   end
 
   factory(:pending_account, :parent => :account) do
-    after_create do |account|
+    after(:create) do |account|
       account.make_pending!
     end
   end
@@ -50,7 +50,7 @@ FactoryBot.define do
   end
 
   factory(:pending_buyer_account, :parent => :buyer_account_with_pending_user) do
-    after_create do |account|
+    after(:create) do |account|
       account.users.each do |user|
         user.activate! unless user.active? # horrible horrible factories
       end
@@ -59,11 +59,11 @@ FactoryBot.define do
 
   factory(:buyer_account, :parent => :pending_buyer_account) do
     association :provider_account
-    after_create do |account|
+    after(:create) do |account|
       account.approve! if account.can_approve?
     end
 
-    after_build do |account|
+    after(:build) do |account|
       if account.users.empty?
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
         account.users << FactoryBot.build(:admin, :account => account, :username => username)
@@ -74,7 +74,7 @@ FactoryBot.define do
   factory(:buyer_account_without_billing_address, :parent => :buyer_account) do
     association :provider_account
 
-    after_create do |account|
+    after(:create) do |account|
       account.billing_address_name = nil
       account.billing_address_address1 = nil
       account.billing_address_address2 = nil
@@ -99,7 +99,7 @@ FactoryBot.define do
     payment_gateway_type :bogus
     provider true
 
-    after_build do |account|
+    after(:build) do |account|
       account.provider_account ||= if Account.exists?(:master => true)
                                      Account.master
                                    else
@@ -108,7 +108,7 @@ FactoryBot.define do
     end
 
 
-    after_stub do |account|
+    after(:stub) do |account|
       # [multiservices] This might not be right
       account.stubs(:service).returns(FactoryBot.stub(:service, :account => account))
 
@@ -124,7 +124,7 @@ FactoryBot.define do
       Account.stubs(:find_by_domain).with(account.domain).returns(account)
     end
 
-    after_create do |account|
+    after(:create) do |account|
       master = Account.master
 
       # TODO: [multiservice] this is not needed, remove!
@@ -151,7 +151,7 @@ FactoryBot.define do
   factory(:provider_account_with_pending_users_signed_up_to_default_plan,
           :parent => :provider_account_with_pending_users_signed_up_to_no_plan) do
 
-    after_stub do |account|
+    after(:stub) do |account|
       master_account = begin
         Account.master
       rescue ActiveRecord::RecordNotFound
@@ -171,7 +171,7 @@ FactoryBot.define do
   factory(:provider_account,
           :parent => :provider_account_with_pending_users_signed_up_to_default_plan) do
 
-    after_create do |account|
+    after(:create) do |account|
       if account.users.reload.empty?
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
         account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
@@ -182,7 +182,7 @@ FactoryBot.define do
   end
 
   factory(:provider_with_billing, :parent => :provider_account) do
-    after_create do |a|
+    after(:create) do |a|
       a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly');
       a.save
     end
@@ -194,7 +194,7 @@ FactoryBot.define do
     payment_gateway_type :bogus
     association :settings
 
-    after_build do |account|
+    after(:build) do |account|
       account.billing_strategy = FactoryBot.build(:postpaid_with_charging)
       if account.users.empty?
         account.users << FactoryBot.build(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
@@ -202,7 +202,7 @@ FactoryBot.define do
       account.admins.each { |user| user.activate! if user.can_activate? }
     end
 
-    after_create do |account|
+    after(:create) do |account|
       account.provider_account = account
 
       if account.users.empty?
@@ -236,7 +236,7 @@ FactoryBot.define do
     end
 
 
-    after_stub do |account|
+    after(:stub) do |account|
       Account.stubs(:master).returns(account)
       Account.stubs(:find_by_domain).with(account.domain).returns(account)
     end
