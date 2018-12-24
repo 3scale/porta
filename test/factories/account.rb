@@ -7,17 +7,17 @@ FactoryBot.define do
 
     sequence(:domain) { |n| "company#{n}.com" }
     sequence(:org_name) { |n| "company#{n}" }
-    org_legaladdress 'Perdido Street 123'
+    org_legaladdress { 'Perdido Street 123' }
 
-    billing_address_name 'Tim'
-    billing_address_address1 'Booked 2'
-    billing_address_address2 'Second Line of Address'
-    billing_address_city 'Timbuktu'
-    billing_address_state 'Mali'
-    billing_address_zip '10100'
-    billing_address_phone '+123 456 789'
-    billing_address_country 'ES'
-    site_access_code ''
+    billing_address_name { 'Tim' }
+    billing_address_address1 { 'Booked 2' }
+    billing_address_address2 { 'Second Line of Address' }
+    billing_address_city { 'Timbuktu' }
+    billing_address_state { 'Mali' }
+    billing_address_zip { '10100' }
+    billing_address_phone { '+123 456 789' }
+    billing_address_country { 'ES' }
+    site_access_code { '' }
   end
 
   factory(:account, :parent => :account_without_users) do
@@ -46,7 +46,7 @@ FactoryBot.define do
 
 #FIXME: buyer accounts without provider accounts??? is that ok?
   factory(:buyer_account_with_pending_user, :parent => :account) do
-    buyer true
+    buyer { true }
   end
 
   factory(:pending_buyer_account, :parent => :buyer_account_with_pending_user) do
@@ -89,15 +89,15 @@ FactoryBot.define do
   end
 
   factory(:pending_buyer_account_with_provider, :parent => :pending_buyer_account) do
-    buyer true
+    buyer { true }
   end
 
 #TODO: rename this, it is actually buying plans!
   factory(:provider_account_with_pending_users_signed_up_to_no_plan, :parent => :account) do
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
-    site_access_code ''
-    payment_gateway_type :bogus
-    provider true
+    site_access_code { '' }
+    payment_gateway_type { :bogus }
+    provider { true }
 
     after(:build) do |account|
       account.provider_account ||= if Account.exists?(:master => true)
@@ -189,9 +189,9 @@ FactoryBot.define do
   end
 
   factory(:master_account, :parent => :account) do
-    master true
-    org_name 'Master account'
-    payment_gateway_type :bogus
+    master { true }
+    org_name { 'Master account' }
+    payment_gateway_type { :bogus }
     association :settings
 
     after(:build) do |account|

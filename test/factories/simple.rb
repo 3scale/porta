@@ -5,33 +5,33 @@ FactoryBot.define do
 
     sequence(:domain) { |n| "simplecompany#{n}.com" }
     sequence(:org_name) { |n| "simplecompany#{n}" }
-    org_legaladdress 'Perdido Street 123'
-    city 'Barcelona'
+    org_legaladdress { 'Perdido Street 123' }
+    city { 'Barcelona' }
 
-    billing_address_name 'Tim'
-    billing_address_address1 'Booked 2'
-    billing_address_address2 'Second Line of Address'
-    billing_address_city 'Timbuktu'
-    billing_address_state 'Mali'
-    billing_address_zip '10100'
-    billing_address_phone '+123 456 789'
-    billing_address_country 'ES'
+    billing_address_name { 'Tim' }
+    billing_address_address1 { 'Booked 2' }
+    billing_address_address2 { 'Second Line of Address' }
+    billing_address_city { 'Timbuktu' }
+    billing_address_state { 'Mali' }
+    billing_address_zip { '10100' }
+    billing_address_phone { '+123 456 789' }
+    billing_address_country { 'ES' }
 
-    site_access_code ''
+    site_access_code { '' }
 
-    state 'approved'
+    state { 'approved' }
   end
 
   factory(:simple_buyer, :class => Account, :parent => :simple_account) do
-    buyer true
-    domain nil
-    self_domain nil
+    buyer { true }
+    domain { nil }
+    self_domain { nil }
   end
 
   factory(:simple_master, class: Account, parent: :simple_account) do
-    master true
-    domain 'www.example.com'
-    self_domain 'www.example.com'
+    master { true }
+    domain { 'www.example.com' }
+    self_domain { 'www.example.com' }
 
     after(:create) do |account| # not so simple, but works like normal master
       FactoryBot.create(:simple_account_plan, issuer: account)
@@ -50,8 +50,8 @@ FactoryBot.define do
     sequence(:domain) { |n| "simple#{n}.example.com" }
     sequence(:self_domain) { |n| "simple#{n}-admin.example.com" }
 
-    site_access_code nil
-    payment_gateway_type :bogus
+    site_access_code { nil }
+    payment_gateway_type { :bogus }
     sequence(:s3_prefix) { |n| "fake-s3-prefix-#{n}" }
 
     after(:stub) do |account|
@@ -72,7 +72,7 @@ FactoryBot.define do
   end
 
   factory(:simple_service, :class => Service) do
-    mandatory_app_key false
+    mandatory_app_key { false }
     sequence(:name) { |n| "service#{n}" }
     association(:account, :factory => :simple_provider)
     after(:create) do |record|
@@ -102,13 +102,13 @@ FactoryBot.define do
   factory(:simple_user, :class => User) do
     sequence(:email) { |n| "simple#{n}@example.net" }
     sequence(:username) { |n| "simpledude#{n}" }
-    password 'supersecret'
+    password { 'supersecret' }
     association(:account, :factory => :simple_provider)
     # TODO: maybe activate it?
   end
 
   factory(:simple_admin, parent: :simple_user) do
-    role :admin
+    role { :admin }
   end
 
   factory(:simple_account_plan, parent: :simple_plan, class: AccountPlan) do
@@ -125,7 +125,7 @@ FactoryBot.define do
 
   factory(:simple_proxy, class: Proxy) do
     association :service, factory: :simple_service
-    api_backend 'http://api.example.net:80'
-    secret_token '123'
+    api_backend { 'http://api.example.net:80' }
+    secret_token { '123' }
   end
 end

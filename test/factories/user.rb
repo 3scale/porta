@@ -2,8 +2,8 @@ FactoryBot.define do
   factory(:pending_user, :class => :user) do
     sequence(:email) { |n| "foo#{n}@example.net" }
     sequence(:username) { |n| "dude#{n}" }
-    password 'supersecret'
-    signup_type 'new_signup' # means the user signed up for a plan
+    password { 'supersecret' }
+    signup_type { 'new_signup' } # means the user signed up for a plan
   end
 
   factory(:active_user, :parent => :pending_user) do
@@ -20,7 +20,7 @@ FactoryBot.define do
   factory(:user, :parent => :pending_user)
 
   factory(:admin, :parent => :user) do
-    role :admin
+    role { :admin }
   end
 
   factory(:active_admin, :parent => :admin) do
@@ -34,6 +34,6 @@ FactoryBot.define do
   end
 
   factory(:member, :parent => :user) do
-    role :member
+    role { :member }
   end
 end

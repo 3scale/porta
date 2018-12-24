@@ -17,14 +17,14 @@ FactoryBot.define do
     sequence(:title) { |n| "Section #{n}" }
     sequence(:system_name) { |n| "sysname #{n}" }
     partial_path { |section| "/#{section.title.parameterize}" }
-    public true
+    public { true }
   end
 
   factory(:cms_portlet, :class => CMS::Portlet) do
     sequence(:system_name) { |n| "portlet-#{n}" }
     association(:provider, :factory => :provider_account)
-    portlet_type CMS::Portlet.available.first.to_s
-    type CMS::Portlet.available.first.to_s
+    portlet_type { CMS::Portlet.available.first.to_s }
+    type { CMS::Portlet.available.first.to_s }
   end
 
   factory :cms_group, :class => CMS::Group do
@@ -33,14 +33,14 @@ FactoryBot.define do
   end
 
   factory :root_cms_section, :parent => :cms_section, :class => CMS::Builtin::Section do
-    title "Root Section"
-    system_name "root"
-    partial_path '/'
+    title { "Root Section" }
+    system_name { "root" }
+    partial_path { '/' }
   end
 
   factory :cms_email_template, :parent => :cms_template, :class => CMS::EmailTemplate do
     sequence(:system_name) { |n| "email-template-#{n}" }
-    published 'published content'
+    published { 'published content' }
   end
 
   factory :cms_file, :class => CMS::File do
@@ -56,7 +56,7 @@ FactoryBot.define do
     association :provider, :factory => :provider_account
     sequence(:title) { |n| "page-#{n}" }
     sequence(:path) { |n| "/page-#{n}" }
-    content_type 'text/html'
+    content_type { 'text/html' }
     section { |p| p.provider && p.provider.builtin_sections.root }
   end
 
@@ -78,8 +78,8 @@ FactoryBot.define do
   end
 
   factory :cms_builtin_legal_term, :parent => :cms_builtin_partial, :class => CMS::Builtin::LegalTerm do
-    system_name 'signup_licence'
+    system_name { 'signup_licence' }
     sequence(:title) { |n| "Legal Term ##{n}" }
-    published "some text"
+    published { "some text" }
   end
 end
