@@ -15,7 +15,7 @@ class ProxyTest < ActiveSupport::TestCase
   class NoContextNecessary < ActiveSupport::TestCase
 
     def test_policies_config_structure
-      service = FactoryBot.build_stubbed(:simple_service)
+      service = FactoryBot.create(:simple_service)
       proxy = Proxy.new(policies_config: [{ name: '1', version: 'a', configuration: {} }], service: service)
       assert proxy.valid?
 
@@ -404,11 +404,10 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'send_api_test_request!' do
-    proxy = FactoryBot.build_stubbed(:proxy,
-                                      api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
-                                      sandbox_endpoint: 'http://proxy:80',
-                                      api_test_path: '/v1/word/stuff.json',
+    proxy = FactoryBot.create(:proxy, api_test_path: '/v1/word/stuff.json',
                                       secret_token: '123')
+    proxy.update!(api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
+                                      sandbox_endpoint: 'http://proxy:80')
     stub_request(:get, 'http://proxy/v1/word/stuff.json?user_key=USER_KEY')
         .to_return(status: 201, body: '', headers: {})
 
@@ -417,7 +416,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'send_api_test_request! with oauth' do
-    proxy = FactoryBot.build_stubbed(:proxy,
+    proxy = FactoryBot.create(:proxy,
                                       api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
                                       sandbox_endpoint: 'http://proxy:80',
                                       api_test_path: '/v1/word/stuff.json',
