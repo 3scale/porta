@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory(:event, class: EventStore::Repository.adapter) do
     event_id { SecureRandom.uuid }
-    event_type RailsEventStore::Event.name
+    event_type { RailsEventStore::Event.name }
     provider_id { Account.master? ? Account.master.id : FactoryBot.create(:simple_master).id }
 
-    stream 'all'
+    stream { 'all' }
 
     data do
       {  }
@@ -19,7 +19,7 @@ FactoryBot.define do
     association :account
     association :cinstance
 
-    state :unread
+    state { :unread }
 
     timestamp { Time.now }
     sequence(:alert_id) {|n| n }

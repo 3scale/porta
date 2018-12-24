@@ -1,10 +1,10 @@
 FactoryBot.define do
 
   factory(:fields_definition, :class => FieldsDefinition) do
-    target 'User'
+    target { 'User' }
     sequence(:name) {|n| "name-#{n}" }
     sequence(:label) {|n| "label-#{n}" }
-    required false
+    required { false }
     association :account, factory: :provider_account
   end
 end
