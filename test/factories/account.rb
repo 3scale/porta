@@ -31,7 +31,7 @@ FactoryBot.define do
     end
 
     after(:stub) do |account|
-      admin = FactoryBot.stub(:admin)
+      admin = FactoryBot.build_stubbed(:admin)
 
       account.stubs(:admins).returns([admin])
       admin.stubs(:account).returns(account)
@@ -110,12 +110,12 @@ FactoryBot.define do
 
     after(:stub) do |account|
       # [multiservices] This might not be right
-      account.stubs(:service).returns(FactoryBot.stub(:service, :account => account))
+      account.stubs(:service).returns(FactoryBot.build_stubbed(:service, :account => account))
 
-      settings = FactoryBot.stub(:settings, :account => account)
+      settings = FactoryBot.build_stubbed(:settings, :account => account)
       account.stubs(:settings).returns(settings)
 
-      profile = FactoryBot.stub(:profile, :account => account)
+      profile = FactoryBot.build_stubbed(:profile, :account => account)
       account.stubs(:profile).returns(profile)
 
       # Everything disallowed by default
@@ -158,7 +158,7 @@ FactoryBot.define do
         FactoryBot.create(:master_account)
       end
 
-      bought_cinstance = FactoryBot.stub(:cinstance,
+      bought_cinstance = FactoryBot.build_stubbed(:cinstance,
                                          :plan => master_account.default_service.application_plans.published.first,
                                          :user_account => account)
 

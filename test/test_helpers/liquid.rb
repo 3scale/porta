@@ -4,7 +4,7 @@ module TestHelpers
       extend self
 
       def stub_liquid_page_for(account, title)
-        page = FactoryBot.stub(:liquid_page, :title => title)
+        page = FactoryBot.build_stubbed(:liquid_page, :title => title)
         account.stubs(:liquid_page_for).with(title).returns(page)
         page
       end
