@@ -467,10 +467,7 @@ GEM
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.11.0)
-    newrelic-redis (2.0.2)
-      newrelic_rpm (~> 3.11)
-      redis (< 4.0)
-    newrelic_rpm (3.18.1.330)
+    newrelic_rpm (5.6.0.349)
     nokogiri (1.9.1)
       mini_portile2 (~> 2.4.0)
     non-stupid-digest-assets (1.0.5)
@@ -620,8 +617,6 @@ GEM
       roar (>= 1.0.0, <= 1.1.0)
       test_xml (>= 0.1.6)
       uber (>= 0.0.5)
-    rpm_contrib (2.2.0)
-      newrelic_rpm (>= 3.1.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -919,8 +914,7 @@ DEPENDENCIES
   money (= 6.7.1)
   multi_fetch_fragments!
   mysql2 (~> 0.3.11)
-  newrelic-redis
-  newrelic_rpm (~> 3.5)
+  newrelic_rpm (~> 5.6)
   nokogiri (>= 1.6.8)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
@@ -951,7 +945,6 @@ DEPENDENCIES
   rest-client (~> 1.6)
   rmagick (~> 2.15.3)
   roar-rails
-  rpm_contrib
   rspec-html-matchers!
   rspec-rails (~> 3.8)
   rspec_api_documentation
