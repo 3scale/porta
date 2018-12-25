@@ -7,7 +7,7 @@ class Provider::Admin::Dashboard::Service::HitsControllerTest < ActionDispatch::
   end
 
   test "should get show" do
-    service = FactoryGirl.create(:simple_service, account: @provider)
+    service = FactoryBot.create(:simple_service, account: @provider)
     get provider_admin_dashboard_service_hits_path(service_id: service.id), xhr: true
     assert_response :success
   end

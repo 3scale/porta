@@ -146,7 +146,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'service_token' do
     account = FactoryBot.create(:simple_account)
-    service = Service.new { |s| s.account_id = account.id; s.system_name = 'foo' }
+    service = Service.new { |s| s.account = FactoryBot.create(:simple_account); s.system_name = 'foo' }
     service.save(validate: false)
 
     refute service.service_token
