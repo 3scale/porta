@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'will_paginate/array'
 
 resource "Invoice", transactions: false do

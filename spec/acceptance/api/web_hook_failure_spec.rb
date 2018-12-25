@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "WebHook::Failure" do
   let(:collection) { WebHookFailures.new(provider.id) }
