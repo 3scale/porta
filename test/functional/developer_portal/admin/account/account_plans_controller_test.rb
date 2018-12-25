@@ -17,10 +17,10 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
 
   def setup
     super
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @provider.settings.allow_account_plans!
     @provider.settings.show_account_plans!
-    @plan = Factory(:application_plan, :issuer => @provider.default_service)
+    @plan = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
   end
 
   test 'login is required' do
@@ -30,8 +30,8 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
   end
 
   test 'index with only one account plan forbides access' do
-    plan = Factory(:account_plan, :issuer => @provider)
-    buyer = Factory(:buyer_account, :provider_account => @provider)
+    plan = FactoryBot.create(:account_plan, :issuer => @provider)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     buyer.buy! plan
 
     @request.host = @provider.domain
@@ -42,11 +42,11 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
   end
 
   test 'index with several published account plans' do
-    plan = Factory(:account_plan, :issuer => @provider)
-    buyer = Factory(:buyer_account, :provider_account => @provider)
+    plan = FactoryBot.create(:account_plan, :issuer => @provider)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     buyer.buy! plan
 
-    plan2 = Factory(:account_plan, :issuer => @provider)
+    plan2 = FactoryBot.create(:account_plan, :issuer => @provider)
     plan2.publish!
 
     @request.host = @provider.domain

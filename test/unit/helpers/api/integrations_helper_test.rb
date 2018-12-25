@@ -3,7 +3,7 @@ require 'test_helper'
 class Api::IntegrationsHelperTest < ActionView::TestCase
 
   def setup
-      @proxy = Factory(:proxy, :service => Factory(:service))
+      @proxy = FactoryBot.create(:proxy, :service => FactoryBot.create(:service))
   end
 
   test 'auth in query' do

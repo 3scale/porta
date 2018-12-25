@@ -2,15 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @account_plan = Factory :account_plan, :issuer => @provider
-    Factory :feature, :featurable => @provider
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @account_plan = FactoryBot.create :account_plan, :issuer => @provider
+    FactoryBot.create :feature, :featurable => @provider
 
     host! @provider.admin_domain
   end
 
   test 'index' do
-    feat = Factory :feature, :featurable => @provider
+    feat = FactoryBot.create :feature, :featurable => @provider
     @account_plan.features << feat
     @account_plan.save!
 
@@ -31,7 +31,7 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'enable new feature' do
-    feat = Factory :feature, :featurable => @provider
+    feat = FactoryBot.create :feature, :featurable => @provider
 
     post(admin_api_account_plan_features_path(@account_plan.id),
               :feature_id => feat.id,
@@ -45,8 +45,8 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'enabling feature not in account replies 404' do
-    feature_not_in_account = Factory(:feature,
-                                     :featurable => Factory(:provider_account),
+    feature_not_in_account = FactoryBot.create(:feature,
+                                     :featurable => FactoryBot.create(:provider_account),
                                      :scope => "AccountPlan")
 
     post(admin_api_account_plan_features_path(@account_plan.id),
@@ -58,7 +58,7 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'enable existing feature'
 
   test 'disable feature' do
-    feat = Factory :feature, :featurable => @provider
+    feat = FactoryBot.create :feature, :featurable => @provider
 
     post(admin_api_account_plan_features_path(@account_plan.id),
               :feature_id => feat.id,

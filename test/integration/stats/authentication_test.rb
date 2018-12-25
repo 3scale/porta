@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
   def setup
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.default_service
 
     host! @provider_account.admin_domain
@@ -13,7 +13,7 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_content_type 'application/json'
 
-    token = FactoryGirl.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
+    token = FactoryBot.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
     get "/stats/services/#{@service.id}/usage.json", period: 'day', metric_name: 'hits', access_token: token.value
     assert_response :success
     assert_content_type 'application/json'

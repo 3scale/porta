@@ -3,13 +3,13 @@ require 'test_helper'
 class Services::ServicePlanChangeRequestedEventTest < ActiveSupport::TestCase
 
   def test_create
-    provider       = FactoryGirl.build_stubbed(:simple_provider)
-    service        = FactoryGirl.build_stubbed(:simple_service, account: provider)
-    user           = FactoryGirl.build_stubbed(:simple_user)
-    account        = FactoryGirl.build_stubbed(:simple_account, id: 3)
-    requested_plan = FactoryGirl.build_stubbed(:simple_plan, id: 1, issuer: service)
+    provider       = FactoryBot.build_stubbed(:simple_provider)
+    service        = FactoryBot.build_stubbed(:simple_service, account: provider)
+    user           = FactoryBot.build_stubbed(:simple_user)
+    account        = FactoryBot.build_stubbed(:simple_account, id: 3)
+    requested_plan = FactoryBot.build_stubbed(:simple_plan, id: 1, issuer: service)
     requested_plan.stubs(:provider_account).returns(provider)
-    contract       = FactoryGirl.build_stubbed(:simple_service_contract, user_account: account)
+    contract       = FactoryBot.build_stubbed(:simple_service_contract, user_account: account)
 
     event = Services::ServicePlanChangeRequestedEvent.create(contract, user, requested_plan)
 

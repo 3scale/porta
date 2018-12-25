@@ -4,9 +4,9 @@ require 'test_helper'
 
 class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
-    @authentication_provider = FactoryGirl.create(:self_authentication_provider, account: @provider)
+    @authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider)
   end
 
   attr_reader :authentication_provider
@@ -18,7 +18,7 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'bounce returns not found if the authentication provider belongs to another provider' do
-    authentication_provider = FactoryGirl.create(:self_authentication_provider)
+    authentication_provider = FactoryBot.create(:self_authentication_provider)
     get authorization_provider_bounce_path(authentication_provider.system_name)
     assert_response :not_found
   end

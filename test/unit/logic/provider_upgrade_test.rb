@@ -4,27 +4,27 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
   def setup
     service = master_account.first_service!
-    @provider = FactoryGirl.create(:provider_account)
-    @power1M = FactoryGirl.create(:published_plan, :system_name => 'power1M', :issuer => service)
+    @provider = FactoryBot.create(:provider_account)
+    @power1M = FactoryBot.create(:published_plan, :system_name => 'power1M', :issuer => service)
     @power1M.plan_rule.stubs(:switches).returns(%i[finance multiple_applications branding require_cc_on_signup
       account_plans multiple_users groups]
     )
     @power1M.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 1, max_users: 1))
     @power1M.plan_rule.stubs(:rank).returns(10)
-    @pro = FactoryGirl.create(:published_plan, :system_name => 'pro3M', :issuer => service)
+    @pro = FactoryBot.create(:published_plan, :system_name => 'pro3M', :issuer => service)
     @pro.plan_rule.stubs(:switches).returns(%i[finance multiple_applications branding require_cc_on_signup account_plans
       multiple_users groups end_users multiple_services service_plans]
     )
     @pro.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 3, max_users: 5))
     @pro.plan_rule.stubs(:rank).returns(19)
-    @enterprise = FactoryGirl.create(:published_plan, :system_name => 'super_enterprise2020xl', :issuer => service)
+    @enterprise = FactoryBot.create(:published_plan, :system_name => 'super_enterprise2020xl', :issuer => service)
     @enterprise.plan_rule.stubs(:metadata).returns({cannot_automatically_be_upgraded_to: true})
     @enterprise.plan_rule.stubs(:switches).returns(
         %i[finance multiple_applications branding require_cc_on_signup account_plans multiple_users groups end_users
         multiple_services service_plans skip_email_engagement_footer web_hooks iam_tools]
     )
     @enterprise.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: nil, max_users: nil))
-    @base = FactoryGirl.create(:published_plan, :system_name => 'base', :issuer => service)
+    @base = FactoryBot.create(:published_plan, :system_name => 'base', :issuer => service)
     @base.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 1, max_users: 1))
   end
 
@@ -83,7 +83,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
   test 'force_to_change_plan!' do
     issuer = master_account.first_service!
-    plan = Factory(:application_plan, issuer: issuer, name: "plus", system_name: "plus")
+    plan = FactoryBot.create(:application_plan, issuer: issuer, name: "plus", system_name: "plus")
     @provider.stubs(:provider_can_use?).with(:require_cc_on_signup).returns(false)
 
 
@@ -132,7 +132,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     @provider.force_to_change_plan! @power1M
     assert @provider.settings.require_cc_on_signup.visible?
 
-    other_provider = FactoryGirl.create :provider_account
+    other_provider = FactoryBot.create :provider_account
     assert other_provider.settings.require_cc_on_signup.denied?
     other_provider.stubs(:provider_can_use?).returns(true)
 
@@ -191,15 +191,15 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
   end
 
   test 'checking if available_plans on provider are a hash' do
-    partner = FactoryGirl.create(:partner)
-    provider = FactoryGirl.create(:simple_provider, partner: partner)
+    partner = FactoryBot.create(:partner)
+    provider = FactoryBot.create(:simple_provider, partner: partner)
 
     assert provider.available_plans.keys.empty?
   end
 
   test 'available_switches for partner' do
-    partner = FactoryGirl.create(:partner)
-    provider =  FactoryGirl.create(:simple_provider, partner: partner)
+    partner = FactoryBot.create(:partner)
+    provider =  FactoryBot.create(:simple_provider, partner: partner)
 
     partner.system_name = 'redhat'
     assert_includes provider.available_switches.map(&:name), :multiple_users

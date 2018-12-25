@@ -10,7 +10,7 @@ class Api::AccountHelperTest < ActionView::TestCase
   include AccountHelper
 
   setup do
-    @provider = FactoryGirl.create(:simple_provider, provider_account: master_account)
+    @provider = FactoryBot.create(:simple_provider, provider_account: master_account)
   end
 
   attr_reader :provider
@@ -18,11 +18,11 @@ class Api::AccountHelperTest < ActionView::TestCase
 
   class ProviderLoggedIn < Api::AccountHelperTest
     def current_user
-      @current_user ||= FactoryGirl.create(:active_admin, account: provider)
+      @current_user ||= FactoryBot.create(:active_admin, account: provider)
     end
 
     test 'delete_buyer_link for a developer account' do
-      developer = FactoryGirl.create(:simple_buyer, provider_account: provider)
+      developer = FactoryBot.create(:simple_buyer, provider_account: provider)
 
       link = delete_buyer_link(developer)
 

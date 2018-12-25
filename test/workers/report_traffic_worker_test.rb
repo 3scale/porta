@@ -4,7 +4,7 @@ class ReportTrafficWorkerTest < ActiveSupport::TestCase
   setup do
     @master = master_account
 
-    @account    = FactoryGirl.create(:simple_provider)
+    @account    = FactoryBot.create(:simple_provider)
     @service    = Service.create!(account: @account, name: 'service')
     @cinstance  = Cinstance.create!(plan: @master.application_plans.first!, user_account: @account)
     @metric     = :hits

@@ -3,8 +3,8 @@ require 'test_helper'
 class ServiceContracts::ServiceContractCreatedEventTest < ActiveSupport::TestCase
 
   def test_create
-    contract = FactoryGirl.build_stubbed(:simple_service_contract, id: 1)
-    user     = FactoryGirl.build_stubbed(:simple_user, id: 2)
+    contract = FactoryBot.build_stubbed(:simple_service_contract, id: 1)
+    user     = FactoryBot.build_stubbed(:simple_user, id: 2)
     event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, user)
 
     assert event

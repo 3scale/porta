@@ -11,7 +11,7 @@ class Apicast::ZipGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_filename
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     provider.id = 42
     source = Apicast::ProviderSource.new(provider)
 
@@ -21,7 +21,7 @@ class Apicast::ZipGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_data
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     provider.id = 42
     source = Apicast::ProviderSource.new(provider)
 
@@ -44,7 +44,7 @@ class Apicast::ZipGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_each
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     source = Apicast::ProviderSource.new(provider)
 
     subject = Apicast::ZipGenerator.new(source).each.to_h

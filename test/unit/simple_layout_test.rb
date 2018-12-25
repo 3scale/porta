@@ -3,7 +3,7 @@ require 'test_helper'
 
 class SimpleLayoutTest < ActiveSupport::TestCase
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   test '#import - builtin pages' do

@@ -6,7 +6,7 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
 
   context 'provider account_plans switch' do
     setup do
-      @provider = Factory :provider_account
+      @provider = FactoryBot.create :provider_account
       @request.host = @provider.domain
 
       login_as(@provider.admins.first)
@@ -97,7 +97,7 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
   end
 
   test 'destroy account plan, when account plan cant be destroyed, should not raise error' do
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
     @request.host = @provider.domain
 
     login_as(@provider.first_admin)

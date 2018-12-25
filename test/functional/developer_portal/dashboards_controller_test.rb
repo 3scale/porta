@@ -4,14 +4,14 @@ class DeveloperPortal::DashboardsControllerTest < DeveloperPortal::ActionControl
 
   def setup
     super
-    @provider = Factory(:provider_account)
-    @buyer = Factory(:buyer_account, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     login_buyer(@buyer)
   end
 
   test 'trial' do
-    @plan = Factory(:application_plan, service: @provider.first_service!, trial_period_days: 10)
-    @app = Factory(:cinstance, plan: @plan, user_account: @buyer)
+    @plan = FactoryBot.create(:application_plan, service: @provider.first_service!, trial_period_days: 10)
+    @app = FactoryBot.create(:cinstance, plan: @plan, user_account: @buyer)
 
     get :show
 

@@ -4,7 +4,7 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory :provider_account, domain: 'yo-provider.example.com'
+    @provider = FactoryBot.create :provider_account, domain: 'yo-provider.example.com'
     host! @provider.admin_domain
   end
 

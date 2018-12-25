@@ -3,9 +3,9 @@ require 'test_helper'
 class Provider::Admin::Account::UsersControllerTest < ActionController::TestCase
 
   def setup
-    @provider    = FactoryGirl.create :provider_account
+    @provider    = FactoryBot.create :provider_account
     @default_ids = [:partners]
-    @user        = FactoryGirl.create :simple_user, account: @provider, member_permission_ids: @default_ids
+    @user        = FactoryBot.create :simple_user, account: @provider, member_permission_ids: @default_ids
 
     login_provider @provider
   end

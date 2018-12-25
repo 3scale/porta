@@ -3,15 +3,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 class Authentication::Strategy::CasTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
     @provider.settings.update_attribute :cas_server_url, "http://palomit.as"
 
-    @account  = Factory :buyer_account, :provider_account => @provider
+    @account  = FactoryBot.create :buyer_account, :provider_account => @provider
     @strategy = Authentication::Strategy::Cas.new @provider
   end
 
   test "basic cas setup" do
-    provider = Factory :provider_account
+    provider = FactoryBot.create :provider_account
     strategy = Authentication::Strategy::Cas.new provider
 
     assert_raise StandardError do
@@ -23,7 +23,7 @@ class Authentication::Strategy::CasTest < ActiveSupport::TestCase
   end
 
   test "authenticate falls back to internal strategy" do
-    user = Factory :user, :account  => @account,
+    user = FactoryBot.create :user, :account  => @account,
                           :username => 'dave',
                           :password => 'kangaroo'
     user.activate!
@@ -33,7 +33,7 @@ class Authentication::Strategy::CasTest < ActiveSupport::TestCase
   end
 
   test "authenticate a user with cas" do
-    user = Factory :user, :account  => @account, :cas_identifier => "kongaroo"
+    user = FactoryBot.create :user, :account  => @account, :cas_identifier => "kongaroo"
     user.activate!
 
     assert_equal user,
@@ -55,7 +55,7 @@ class Authentication::Strategy::CasTest < ActiveSupport::TestCase
   end
 
   test "can't authenticate if the user cannot login" do
-    user = Factory :user, :account  => @account, :cas_identifier => "kongaroo"
+    user = FactoryBot.create :user, :account  => @account, :cas_identifier => "kongaroo"
     assert !authenticate_with_cas(user)
   end
 

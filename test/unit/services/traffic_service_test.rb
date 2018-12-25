@@ -4,7 +4,7 @@ require 'test_helper'
 class TrafficServiceTest < ActiveSupport::TestCase
 
   def setup
-    @cinstance = FactoryGirl.build_stubbed(:simple_cinstance, id: 42)
+    @cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 42)
     @stats = Stats::Client.new(@cinstance)
     @traffic_service = TrafficService.new(@stats)
   end
@@ -68,8 +68,8 @@ class TrafficServiceTest < ActiveSupport::TestCase
   end
 
   def test_build
-    provider = FactoryGirl.build_stubbed(:simple_provider)
-    provider.expects(bought_cinstance: FactoryGirl.build_stubbed(:simple_cinstance))
+    provider = FactoryBot.build_stubbed(:simple_provider)
+    provider.expects(bought_cinstance: FactoryBot.build_stubbed(:simple_cinstance))
 
     service = TrafficService.build(provider, metric_name: 'foo')
 

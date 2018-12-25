@@ -10,7 +10,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   def test_sidekiq
-    login_provider FactoryGirl.create(:provider_account)
+    login_provider FactoryBot.create(:provider_account)
     assert_raise(ActionController::RoutingError) { get '/sidekiq' }
 
     login_provider master_account
@@ -20,7 +20,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   def test_onboarding_redirect
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     provider.create_onboarding
 
     host! provider.admin_domain

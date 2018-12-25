@@ -4,8 +4,8 @@ require 'spec_helper'
 
 resource "User" do
 
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
-  let(:user) { Factory.build(:user, account: buyer) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:user) { FactoryBot.build(:user, account: buyer) }
 
   let(:resource) do
     FieldsDefinition.create_defaults(master)

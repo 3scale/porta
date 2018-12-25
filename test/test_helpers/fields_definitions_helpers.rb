@@ -1,5 +1,5 @@
 module FieldsDefinitionsHelpers
   def field_defined(provider, options)
-    Factory :fields_definition, options.merge(:account_id => provider.id)
+    FactoryBot.create :fields_definition, options.merge(:account_id => provider.id)
   end
 end

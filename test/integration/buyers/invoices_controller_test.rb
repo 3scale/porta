@@ -3,7 +3,7 @@ require 'test_helper'
 class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @cinstance = FactoryGirl.create(:cinstance)
+    @cinstance = FactoryBot.create(:cinstance)
     @buyer = @cinstance.buyer_account
     @provider_account = @cinstance.provider_account
     @provider_account.create_billing_strategy
@@ -32,7 +32,7 @@ class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'edit existing invoice header' do
-    @invoice = FactoryGirl.create(:invoice,
+    @invoice = FactoryBot.create(:invoice,
                                 :buyer_account => @buyer,
                                 :provider_account => @provider_account)
     Invoice.any_instance.stubs(:find).returns(@invoice)

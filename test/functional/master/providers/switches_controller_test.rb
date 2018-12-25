@@ -3,8 +3,8 @@ require 'test_helper'
 class Master::Providers::SwitchesControllerTest < ActionController::TestCase
 
   setup do
-    master = Account.master rescue FactoryGirl.create(:simple_master)
-    login_as FactoryGirl.create(:simple_user, account: master)
+    master = Account.master rescue FactoryBot.create(:simple_master)
+    login_as FactoryBot.create(:simple_user, account: master)
 
     host! master.domain
   end
@@ -58,7 +58,7 @@ class Master::Providers::SwitchesControllerTest < ActionController::TestCase
 
   # @return [Account]
   def provider
-    @_provider ||= FactoryGirl.create(:simple_provider)
+    @_provider ||= FactoryBot.create(:simple_provider)
   end
 
   def allowed_switch(name)

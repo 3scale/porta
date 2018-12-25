@@ -4,7 +4,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @app = Factory(:cinstance, :name => 'some instance')
+    @app = FactoryBot.create(:cinstance, :name => 'some instance')
     @buyer = @app.user_account
     @drop = Drops::Application.new(@app)
   end
@@ -22,9 +22,9 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
   end
 
   test 'alerts' do
-    _provider_alerts = FactoryGirl.create_list(:limit_alert, 3, cinstance: @app, account: @app.provider_account)
-    expected_alerts = FactoryGirl.create_list(:limit_alert, 2, cinstance: @app, account: @app.buyer_account)
-    _deleted_alert = FactoryGirl.create(:limit_alert, cinstance: @app, account: @app.buyer_account, state: 'deleted')
+    _provider_alerts = FactoryBot.create_list(:limit_alert, 3, cinstance: @app, account: @app.provider_account)
+    expected_alerts = FactoryBot.create_list(:limit_alert, 2, cinstance: @app, account: @app.buyer_account)
+    _deleted_alert = FactoryBot.create(:limit_alert, cinstance: @app, account: @app.buyer_account, state: 'deleted')
     assert_same_elements Drops::Collection.for_drop(Drops::Alert).new(expected_alerts), @drop.alerts
   end
 
@@ -33,7 +33,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
       [{ :target => "Cinstance", :name => "visible_extra", :label => "visible_extra" },
        { :target => "Cinstance", :name => "hidden_extra",  :label => "hidden_extra", :hidden => true }]
        .each do |field|
-         Factory :fields_definition, field.merge({:account_id => @buyer.provider_account.id})
+         FactoryBot.create :fields_definition, field.merge({:account_id => @buyer.provider_account.id})
       end
 
       @app.reload

@@ -3,11 +3,11 @@ require 'test_helper'
 class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
 
   def setup
-    account  = FactoryGirl.create(:provider_account)
-    @service = FactoryGirl.create(:simple_service, account: account)
-    @config  = FactoryGirl.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
-    admin    = FactoryGirl.create(:admin, account: account)
-    @token   = FactoryGirl.create(:access_token, owner: admin, scopes: 'account_management')
+    account  = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:simple_service, account: account)
+    @config  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
+    admin    = FactoryBot.create(:admin, account: account)
+    @token   = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
 
     host! account.admin_domain
   end
@@ -77,7 +77,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_equal 1, parsed_response['proxy_configs'].count
     assert_equal @config.version, parsed_response['proxy_configs'].first['proxy_config']['version']
 
-    new_config = FactoryGirl.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
+    new_config = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
     get "/admin/api/services/proxy/configs/#{ProxyConfig::ENVIRONMENTS.first}.json?#{host_valid_params.to_query}"
     assert_response :success
     assert_equal 1, parsed_response['proxy_configs'].count

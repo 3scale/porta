@@ -5,7 +5,7 @@ require 'test_helper'
 class Provider::Admin::ServiceSettingsTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     login_provider @provider
 

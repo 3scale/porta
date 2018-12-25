@@ -8,21 +8,21 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     setup do
 
-      @provider = Factory :provider_account
-      @plan1 = Factory :application_plan, :issuer => @provider.default_service
+      @provider = FactoryBot.create :provider_account
+      @plan1 = FactoryBot.create :application_plan, :issuer => @provider.default_service
 
-      @service1 = Factory :service, :account => @provider, :name => "API1"
+      @service1 = FactoryBot.create :service, :account => @provider, :name => "API1"
 
-      @plan1 = Factory :application_plan, :issuer => @service1
+      @plan1 = FactoryBot.create :application_plan, :issuer => @service1
 
-      @buyer = Factory :buyer_account, :provider_account => @provider
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
       @application1 = @plan1.create_contract_with(@buyer)
 
       host! @provider.admin_domain
       provider_login_with @provider.admins.first.username, 'supersecret'
 
-      metrics = FactoryGirl.create_list(:metric, 4, service: @service1)
+      metrics = FactoryBot.create_list(:metric, 4, service: @service1)
 
       @data_empty = []
 

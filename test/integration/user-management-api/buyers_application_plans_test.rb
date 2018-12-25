@@ -4,13 +4,13 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @service = @provider.services.first
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @app_plan = Factory :application_plan, :issuer => @provider.default_service
+    @app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     @buyer.buy! @app_plan
     @buyer.reload
 
@@ -25,8 +25,8 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get admin_api_account_application_plans_path(@buyer)
     assert_response :forbidden
@@ -72,7 +72,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy' do
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
 
     post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy",
               :provider_key => @provider.api_key,
@@ -90,7 +90,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy an already bought plan' do
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     app_plan.publish!
 
     @buyer.buy! app_plan, {:name => "name1", :description => "description1"}
@@ -111,7 +111,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy a custom plan is not allowed' do
-    app_plan = Factory :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     custom_plan = app_plan.customize
 
     post("/admin/api/accounts/#{@buyer.id}/application_plans/#{custom_plan.id}/buy",

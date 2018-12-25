@@ -1,10 +1,10 @@
 # MT start
 Given /^(provider "[^\"]*") has pages on the root section$/ do |provider|
-  page = Factory :cms_page, :provider => provider, :section => provider.sections.root
+  page = FactoryBot.create :cms_page, :provider => provider, :section => provider.sections.root
 end
 
 Given /^(provider "[^\"]*") has a page on the root section named "([^\"]*)"$/ do |provider, name|
-  page = Factory :cms_page, :provider => provider, :title => name, :section => provider.sections.root
+  page = FactoryBot.create :cms_page, :provider => provider, :title => name, :section => provider.sections.root
 end
 
 Given /^(provider "[^\"]*") has no pages$/ do |provider|
@@ -19,25 +19,25 @@ Given /^the page at "([^\"]*)" of (provider "[^\"]*") is public$/ do |path, prov
 end
 
 Given /^(provider "[^\"]*") has a hidden page with the title "([^\"]*)"$/ do |provider, title|
-  Factory :hidden_page, :title => title, :account => provider
+  FactoryBot.create :hidden_page, :title => title, :account => provider
 end
 
 Given /^(provider "[^\"]*") has a draft page with the title "([^\"]*)"$/ do |provider, title|
-  Factory :page, :title => title, :account => provider
+  FactoryBot.create :page, :title => title, :account => provider
 end
 
 Given /^(provider "[^\"]*") has a published page with the title "([^\"]*)"$/ do |provider, title|
-  Factory :published_page, :title => title, :account => provider, :section => provider.provided_sections.first # HACK: hack
+  FactoryBot.create :published_page, :title => title, :account => provider, :section => provider.provided_sections.first # HACK: hack
 end
 
 Given /^(provider "[^\"]*") has a published page with the title "([^"]*)" of section "([^"]*)"$/ do |provider, title, sec_name|
   section = provider.sections.find_by_system_name(sec_name)
-  Factory :cms_page, :title => title, :body => title, :section => section, :provider_id => provider.id, :path => "#{section.full_path}/#{title.parameterize}"
+  FactoryBot.create :cms_page, :title => title, :body => title, :section => section, :provider_id => provider.id, :path => "#{section.full_path}/#{title.parameterize}"
 end
 
 Given /^(provider "[^\"]*") has a published page with the title "([^"]*)" and path "([^"]*)" of section "([^"]*)"$/ do |provider, title, path, sec_name|
   section = provider.sections.find_by_system_name(sec_name)
-  Factory :cms_page, :title => title, :body => title, :section => section, :provider_id => provider.id, :path => path, :tenant_id => provider.id
+  FactoryBot.create :cms_page, :title => title, :body => title, :section => section, :provider_id => provider.id, :path => path, :tenant_id => provider.id
 end
 
 
@@ -46,7 +46,7 @@ Given /^(provider "[^\"]*") has a page at "([^"]*)" with content$/ do |provider,
     page.update_attribute(:draft, content)
     page.publish!
   else
-    Factory(:cms_page, :path => path, :provider => provider, :draft => content).publish!
+    FactoryBot.create(:cms_page, :path => path, :provider => provider, :draft => content).publish!
   end
 end
 

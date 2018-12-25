@@ -5,8 +5,8 @@ class PostOfficeTest < ActionMailer::TestCase
     ActionMailer::Base.deliveries = []
     @host = ActionMailer::Base.default_url_options[:host]
 
-    @provider  = FactoryGirl.create(:provider_account)
-    @buyer     = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @provider  = FactoryBot.create(:provider_account)
+    @buyer     = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
   test 'message_notification has a header to locate the message' do
@@ -37,7 +37,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from master to provider test send only to admins' do
-    Factory(:simple_user, account: @provider)
+    FactoryBot.create(:simple_user, account: @provider)
     @provider.reload
     Account.master.update_column(:email_all_users, false)
     message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => 'message', :body => "message")
@@ -50,7 +50,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from master to provider should send to all users' do
-    Factory(:simple_user, account: @provider)
+    FactoryBot.create(:simple_user, account: @provider)
     @provider.reload
     Account.master.update_column(:email_all_users, true)
     message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => 'message', :body => "message")
@@ -63,7 +63,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from provider to master should send only to admin' do
-    Factory(:simple_user, account: Account.master)
+    FactoryBot.create(:simple_user, account: Account.master)
     Account.master.update_column(:email_all_users, true)
     @provider.reload
     message   = Message.create!(:sender => @provider, :to => [Account.master], :subject => 'message', :body => "message")
@@ -76,7 +76,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from provider to buyer should send only to admin' do
-    Factory(:simple_user, account: @buyer)
+    FactoryBot.create(:simple_user, account: @buyer)
     @provider.update_column(:email_all_users, false)
     @provider.reload
     message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => 'message', :body => "message")
@@ -89,7 +89,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from provider to buyer should send to all users' do
-    Factory(:simple_user, account: @buyer)
+    FactoryBot.create(:simple_user, account: @buyer)
     @provider.update_column(:email_all_users, true)
     @provider.reload
     message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => 'message', :body => "message")
@@ -102,7 +102,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from buyer to provider should send only to admin' do
-    Factory(:simple_user, account: @provider)
+    FactoryBot.create(:simple_user, account: @provider)
     @provider.update_column(:email_all_users, true)
     @provider.reload
     message   = Message.create!(:sender => @buyer, :to => [@provider], :subject => 'message', :body => "message")

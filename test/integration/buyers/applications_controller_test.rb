@@ -4,7 +4,7 @@ class Buyers::ApplicationsTest < ActionDispatch::IntegrationTest
   class MasterLoggedInTest < Buyers::ApplicationsTest
     setup do
       login! master_account
-      FactoryGirl.create(:cinstance, service: master_account.default_service)
+      FactoryBot.create(:cinstance, service: master_account.default_service)
     end
 
     attr_reader :service
@@ -20,7 +20,7 @@ class Buyers::ApplicationsTest < ActionDispatch::IntegrationTest
 
   class ProviderLoggedInTest < Buyers::ApplicationsTest
     def setup
-      @provider = Factory(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
 
       host! @provider.admin_domain
       provider_login_with @provider.admins.first.username, "supersecret"

@@ -7,8 +7,8 @@ class AuthenticationProviderPublishValidatorTest < ActiveSupport::TestCase
   end
 
   def test_published_valid?
-    account = FactoryGirl.create(:simple_provider)
-    auth_provider = FactoryGirl.create(:self_authentication_provider, account: account, kind: 'base', published: true)
+    account = FactoryBot.create(:simple_provider)
+    auth_provider = FactoryBot.create(:self_authentication_provider, account: account, kind: 'base', published: true)
 
     validator = AuthenticationProviderPublishValidator.new(account, auth_provider)
     validator.valid?
@@ -21,8 +21,8 @@ class AuthenticationProviderPublishValidatorTest < ActiveSupport::TestCase
   end
 
   def test_unpublished_valid?
-    account = FactoryGirl.create(:simple_provider)
-    auth_provider = FactoryGirl.create(:self_authentication_provider, account: account, kind: 'base')
+    account = FactoryBot.create(:simple_provider)
+    auth_provider = FactoryBot.create(:self_authentication_provider, account: account, kind: 'base')
 
     validator = AuthenticationProviderPublishValidator.new(account, auth_provider)
     validator.valid?

@@ -86,8 +86,8 @@ class PaymentTransactionTest < ActiveSupport::TestCase
 
   context "with many transactions" do
     setup do
-      3.times { Factory.create(:payment_transaction, :success => true) }
-      2.times { Factory.create(:payment_transaction, :success => false) }
+      3.times { FactoryBot.create(:payment_transaction, :success => true) }
+      2.times { FactoryBot.create(:payment_transaction, :success => false) }
     end
 
     should "have succeeded and failed scoped" do
@@ -109,7 +109,7 @@ class PaymentTransactionTest < ActiveSupport::TestCase
                           "vault_customer"=>{"credit_cards"=>[{"bin"=>"123456"}]},
                           "merchant_account_id"=>"bestmerchant"}}
 
-      pt = Factory.create(:payment_transaction, :params => braintree_hash)
+      pt = FactoryBot.create(:payment_transaction, :params => braintree_hash)
 
       xml = Nokogiri::XML::Document.parse(pt.to_xml)
 

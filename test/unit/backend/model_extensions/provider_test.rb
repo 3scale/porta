@@ -10,7 +10,7 @@ class Backend::ModelExtensions::ProviderTest < ActiveSupport::TestCase
   end
 
   context "provider account" do
-    subject { FactoryGirl.create :provider_account }
+    subject { FactoryBot.create :provider_account }
 
     should "update backend default_service when set and saved" do
       service = subject.first_service!

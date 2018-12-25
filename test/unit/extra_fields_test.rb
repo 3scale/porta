@@ -4,12 +4,12 @@ require 'test_helper'
 class ExtraFieldsTest < ActiveSupport::TestCase
 
   setup do
-    @provider = Factory :provider_account
-    @buyer = Factory :buyer_account, :provider_account => @provider
+    @provider = FactoryBot.create :provider_account
+    @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
-    Factory(:fields_definition, :account => @provider, :target => "Account",
+    FactoryBot.create(:fields_definition, :account => @provider, :target => "Account",
             :name => "provider_extra_field", :required => true)
-    Factory(:fields_definition, :account => Account.master,
+    FactoryBot.create(:fields_definition, :account => Account.master,
             :target => "Account",
             :name => "master_extra_field", :required => true)
 
@@ -31,7 +31,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
   end
 
   test 'to_xml renders extra_fields' do
-    Factory(:fields_definition,
+    FactoryBot.create(:fields_definition,
             account: @provider,
             target: "Account",
             name: "stuff",
@@ -46,7 +46,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
 
   # Regression test for https://github.com/3scale/system/issues/2752
   test 'to_xml works with multiple valued extra field' do
-    Factory(:fields_definition,
+    FactoryBot.create(:fields_definition,
             account: @provider,
             target: "Account",
             name: "stuff",
@@ -103,7 +103,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
       # end
 
       should 'not remove already set extra_fields' do
-        bar_field = Factory(:fields_definition, :account => @provider,
+        bar_field = FactoryBot.create(:fields_definition, :account => @provider,
                             :target => "Account", :name => "deleted_field")
         @buyer.reload
         expected = @buyer.extra_fields = { :deleted_field => "exists yet" }
@@ -149,17 +149,17 @@ class ExtraFieldsTest < ActiveSupport::TestCase
     #TODO: do this test in user and cinstance also or find a way of doing
     # shared_examples
     setup do
-      @provider = Factory :provider_account
+      @provider = FactoryBot.create :provider_account
 
       @provider_field = Account.optional_fields.first
       @master_field = Account.optional_fields.last
 
-      @buyer = Factory(:buyer_account, :provider_account => @provider,
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider,
                        @provider_field => "") # <= this won't be needed when accounts.org_legaladdress can be null in db
 
-      Factory(:fields_definition, :account => Account.master,
+      FactoryBot.create(:fields_definition, :account => Account.master,
               :target => "Account", :name => @master_field, :required => true)
-      Factory(:fields_definition, :account => @provider, :target => "Account",
+      FactoryBot.create(:fields_definition, :account => @provider, :target => "Account",
               :name => @provider_field, :required => true)
 
       @provider.reload
@@ -168,7 +168,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
 
     context 'fields methods' do
       setup do
-        Factory(:fields_definition, :account => @provider,
+        FactoryBot.create(:fields_definition, :account => @provider,
                 :target => "Account", :name => "extra_field", :required => true)
       end
 
@@ -207,7 +207,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
           setup do
             #OPTIMIZE: better would be not to have this here by rewriting the tests
             @buyer.reload
-            Factory(:fields_definition,
+            FactoryBot.create(:fields_definition,
                     :account => @provider,
                     :target => "Account",
                     :name => "city",
@@ -260,14 +260,14 @@ class ExtraFieldsTest < ActiveSupport::TestCase
       end
 
       should 'be master fields for new providers' do
-        new_provider = Factory.build :provider_account
+        new_provider = FactoryBot.build :provider_account
         assert new_provider.defined_fields.map(&:name).include?(@master_field)
       end
     end # source
 
     context 'required fields' do
       should 'be created automatically for provider' do
-        provider = Factory.build :provider_account
+        provider = FactoryBot.build :provider_account
         provider.save
 
         assert provider.fields_definitions.present?

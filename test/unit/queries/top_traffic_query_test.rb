@@ -4,7 +4,7 @@ require 'active_support/cache/dalli_store'
 class TopTrafficQueryTest < ActiveSupport::TestCase
 
   def setup
-    @provider          = FactoryGirl.create :provider_account
+    @provider          = FactoryBot.create :provider_account
     @stats             = Stats::Service.new @provider.first_service!
     @top_traffic_query = TopTrafficQuery.new @stats
 
@@ -65,8 +65,8 @@ class TopTrafficQueryTest < ActiveSupport::TestCase
 
   # @return [Cinstance]
   def create_cinstance(attributes = {})
-    plan = FactoryGirl.create(:simple_application_plan, issuer: @provider.first_service!)
+    plan = FactoryBot.create(:simple_application_plan, issuer: @provider.first_service!)
 
-    FactoryGirl.create(:simple_cinstance, attributes.merge(plan: plan))
+    FactoryBot.create(:simple_cinstance, attributes.merge(plan: plan))
   end
 end

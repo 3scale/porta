@@ -3,13 +3,13 @@ require 'test_helper'
 class Abilities::MasterAdminTest < ActiveSupport::TestCase
 
   def setup
-    @account = FactoryGirl.build_stubbed(:simple_master)
-    @admin  = FactoryGirl.build_stubbed(:simple_admin, account: @account)
+    @account = FactoryBot.build_stubbed(:simple_master)
+    @admin  = FactoryBot.build_stubbed(:simple_admin, account: @account)
   end
 
   def test_tenant_users
-    tenant      = FactoryGirl.build_stubbed(:simple_buyer, provider_account: @account)
-    tenant_user = FactoryGirl.build_stubbed(:simple_user, account: tenant)
+    tenant      = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account)
+    tenant_user = FactoryBot.build_stubbed(:simple_user, account: tenant)
 
     assert_can ability, :activate, tenant_user
   end
@@ -19,7 +19,7 @@ class Abilities::MasterAdminTest < ActiveSupport::TestCase
   end
 
   def test_provider_management
-    provider = FactoryGirl.build_stubbed(:simple_provider, provider_account: @account)
+    provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @account)
     assert_cannot ability, :resume, provider
 
     assert_can ability, :update, provider
@@ -73,7 +73,7 @@ class Abilities::MasterAdminTest < ActiveSupport::TestCase
   end
 
   def test_finance_on_saas
-    invoice = FactoryGirl.build_stubbed(:invoice, provider_account_id: @account.id)
+    invoice = FactoryBot.build_stubbed(:invoice, provider_account_id: @account.id)
 
     ThreeScale.config.stubs(onpremises: false)
     assert_can ability, :manage, :finance

@@ -21,13 +21,13 @@ Given /^provider "([^\"]*)" has the following buyers with users:$/ do |provider,
       provider_account = Account.find_or_create_by(org_name: provider) do |acc|
         acc.org_name = hash['Account Name']
       end
-      buyer = Factory.create(:account, provider_account: provider_account)
+      buyer = FactoryBot.create(:account, provider_account: provider_account)
     end
 
     buyer.update_attribute :state, hash['Account State']
     if user= buyer.users.find_by_email_and_username(hash['User Email'], hash['User Name'])
     else
-      user= Factory.create(:user, :account => buyer, :email => hash['User Email'], :username => hash['User Name'])
+      user= FactoryBot.create(:user, :account => buyer, :email => hash['User Email'], :username => hash['User Name'])
     end
     user.update_attribute :state, hash['User State']
   end
@@ -37,7 +37,7 @@ Given /^(provider "[^"]*") has (\d+) buyers$/ do |provider, number|
   provider.buyer_accounts.destroy_all
 
   number.to_i.times do
-    buyer = Factory(:buyer_account, :provider_account => provider)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => provider)
     buyer.buy! provider.account_plans.default
   end
 end
@@ -119,8 +119,8 @@ Then /^the following buyers should be (\w+):$/ do |state, table|
 end
 
 When /^I do a HTTP request to create new buyer with name "([^"]*)"$/ do |name|
-  attributes = {:account => Factory.attributes_for(:buyer_account, :org_name => name),
-                :user    => Factory.attributes_for(:user)}
+  attributes = {:account => FactoryBot.attributes_for(:buyer_account, :org_name => name),
+                :user    => FactoryBot.attributes_for(:user)}
 
   page.driver.browser.process_and_follow_redirects :post, admin_buyers_accounts_path, :signup => attributes
 end
@@ -134,7 +134,7 @@ When /^I do a HTTP request to delete (buyer "[^"]*")$/ do |buyer|
 end
 
 When /^I create new buyer account "([^\"]*)"$/ do |name|
-  user = Factory.attributes_for(:user)
+  user = FactoryBot.attributes_for(:user)
 
   step %(I go to the new buyer account page)
   fill_in "Organization/Group Name", :with => name

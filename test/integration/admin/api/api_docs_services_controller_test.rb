@@ -29,9 +29,9 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
 
   class ProviderAccountTest < Admin::Api::ApiDocsServicesControllerTest
     setup do
-      @provider = FactoryGirl.create(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       @service = @provider.default_service
-      @api_docs_service = FactoryGirl.create(:api_docs_service, account: @provider, service: nil)
+      @api_docs_service = FactoryBot.create(:api_docs_service, account: @provider, service: nil)
     end
 
     attr_reader :provider, :service, :api_docs_service

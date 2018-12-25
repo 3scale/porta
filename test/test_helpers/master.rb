@@ -3,7 +3,7 @@
 module TestHelpers
   module Master
     def master_account
-      ::Account.exists?(master: true) ? ::Account.master : FactoryGirl.create(:master_account)
+      ::Account.exists?(master: true) ? ::Account.master : FactoryBot.create(:master_account)
     end
   end
 end

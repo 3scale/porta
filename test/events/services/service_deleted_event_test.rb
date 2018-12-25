@@ -3,7 +3,7 @@ require 'test_helper'
 class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
 
   def test_create
-    service = FactoryGirl.build_stubbed(:simple_service, id: 1, name: 'Alaska')
+    service = FactoryBot.build_stubbed(:simple_service, id: 1, name: 'Alaska')
     event   = Services::ServiceDeletedEvent.create(service)
 
     assert event
@@ -13,9 +13,9 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
   end
 
   def test_ability
-    service = FactoryGirl.create(:service)
-    admin   = FactoryGirl.build_stubbed(:simple_admin, account: service.account)
-    member  = FactoryGirl.build_stubbed(:simple_user, account: service.account,
+    service = FactoryBot.create(:service)
+    admin   = FactoryBot.build_stubbed(:simple_admin, account: service.account)
+    member  = FactoryBot.build_stubbed(:simple_user, account: service.account,
                                         admin_sections: [:partners, :services])
 
     member.member_permission_service_ids = [service.id]

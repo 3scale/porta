@@ -4,7 +4,7 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @service = FactoryGirl.create(:service)
+    @service = FactoryBot.create(:service)
     @drop = Drops::Service.new(@service)
   end
 
@@ -13,7 +13,7 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   end
 
   test 'subscription' do
-    buyer = Factory(:buyer_account, provider_account: @service.provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @service.provider)
     User.current = buyer.admins.first
 
     # service subscription is missing
@@ -26,7 +26,7 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   end
 
   test 'api_specs' do
-    api_spec = FactoryGirl.create(:api_docs_service, service: @service, account: @service.account)
+    api_spec = FactoryBot.create(:api_docs_service, service: @service, account: @service.account)
     api_specs_collection_drop = @drop.api_specs
     assert_equal 1, api_specs_collection_drop.length
     api_spec_drop = api_specs_collection_drop.first

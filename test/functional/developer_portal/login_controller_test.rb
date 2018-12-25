@@ -12,7 +12,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   # {{{ CAS
 
   test 'cas is not displayed on login page' do
-    provider_account = Factory :provider_account
+    provider_account = FactoryBot.create :provider_account
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'internal'
     provider_settings.save!
@@ -25,7 +25,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'cas is displayed on login page' do
-    provider_account = Factory :provider_account
+    provider_account = FactoryBot.create :provider_account
 
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'cas'
@@ -40,14 +40,14 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'cas successful auth' do
-    provider_account = Factory :provider_account
+    provider_account = FactoryBot.create :provider_account
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'cas'
     provider_settings.cas_server_url = "http://mamacit.as"
     provider_settings.save!
 
-    buyer_account = Factory :buyer_account, :provider_account => provider_account
-    user = Factory :user, :account  => buyer_account, :cas_identifier => "laurie"
+    buyer_account = FactoryBot.create :buyer_account, :provider_account => provider_account
+    user = FactoryBot.create :user, :account  => buyer_account, :cas_identifier => "laurie"
     user.activate!
     user.save!
 
@@ -67,7 +67,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   test 'oauth2 successful authenticate for the first time using oauth2' do
     user
 
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider_account, kind: 'base')
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
     @request.host = provider_account.domain
 
     mock_oauth2('oauth|1234', 'C6789', authentication_provider.user_info_url)
@@ -81,7 +81,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   test 'oauth2 successful authenticate and it is not the first time' do
     user
 
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider_account, kind: 'base')
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
     @request.host = provider_account.domain
 
     user.sso_authorizations.create(authentication_provider: authentication_provider, uid: user.authentication_id, id_token: 'first-id_token')
@@ -95,7 +95,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'oauth2 redirect to signup' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider_account, kind: 'base')
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
     @request.host = provider_account.domain
 
     mock_oauth2('foo', 'C6789', authentication_provider.user_info_url)
@@ -108,7 +108,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'disabled when account is suspended' do
-    host! FactoryGirl.create(:simple_provider, state: 'suspended').domain
+    host! FactoryBot.create(:simple_provider, state: 'suspended').domain
 
     get :new
 
@@ -116,7 +116,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'ssl certificate error' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: provider_account, kind: 'base')
+    authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
     host! provider_account.domain
 
     client = mock
@@ -135,12 +135,12 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   def create_user_and_account
-    buyer_account = FactoryGirl.create(:buyer_account, provider_account: provider_account)
-    FactoryGirl.create(:user, account: buyer_account, password: 'kangaroo', state: 'active', authentication_id: 'oauth|1234')
+    buyer_account = FactoryBot.create(:buyer_account, provider_account: provider_account)
+    FactoryBot.create(:user, account: buyer_account, password: 'kangaroo', state: 'active', authentication_id: 'oauth|1234')
   end
 
   def create_oauth2_provider_account
-    provider_account = FactoryGirl.create(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     provider_account.settings.update_attributes({authentication_strategy: 'oauth2'})
     provider_account
   end

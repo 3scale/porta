@@ -3,9 +3,9 @@ require 'test_helper'
 class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @provider.settings.allow_branding
-    FactoryGirl.create(:admin, account: @provider)
+    FactoryBot.create(:admin, account: @provider)
     login_provider @provider
   end
 
@@ -20,7 +20,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   end
 
   test 'GET edit' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: @provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
     get edit_provider_admin_authentication_provider_path(authentication_provider)
     assert_response :success
   end
@@ -56,7 +56,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   end
 
   test 'POST create success' do
-    attrs = FactoryGirl.attributes_for(:authentication_provider)
+    attrs = FactoryBot.attributes_for(:authentication_provider)
     refute @provider.authentication_providers.find_by kind: attrs[:kind]
     post provider_admin_authentication_providers_path, authentication_provider: attrs
     authentication_provider = @provider.authentication_providers.find_by! kind: attrs[:kind]
@@ -64,7 +64,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   end
 
   test 'PUT update automatically_approve_accounts' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: @provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
     refute authentication_provider.automatically_approve_accounts
     put provider_admin_authentication_provider_path(authentication_provider),
         authentication_provider: {automatically_approve_accounts: true}
@@ -73,7 +73,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   end
 
   test 'PUT update updates the param correctly and renders show' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: @provider, client_id: 'client_id')
+    authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, client_id: 'client_id')
     put provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {client_id: 'clientID'})
     assert_template 'provider/admin/authentication_providers/show'
     assert_equal 'Authentication provider updated', flash[:notice]
@@ -83,7 +83,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   test 'PUT update renders edit when there are errors' do
     @provider.settings.allow_branding
     AuthenticationProvider.any_instance.stubs(:update_attributes).returns(false)
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: @provider, client_id: 'client_id')
+    authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, client_id: 'client_id')
     put provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {client_id: 'clientID'})
     assert_template 'provider/admin/authentication_providers/edit'
     assert_equal 'Authentication provider has not been updated', flash[:notice]
@@ -91,7 +91,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
 
   test 'PUT publish_or_hide updates \'published\' correctly and renders show' do
     @provider.settings.allow_branding
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: @provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
     patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {published: true})
     assert_template 'provider/admin/authentication_providers/show'
     assert_equal 'Authentication provider updated', flash[:notice]
@@ -101,14 +101,14 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   test 'PUT publish_or_hide renders show when there are errors and there is github branding denied' do
     @provider.settings.deny_branding
     AuthenticationProvider.any_instance.stubs(:update_attributes).returns(false)
-    authentication_provider = FactoryGirl.create(:github_authentication_provider, account: @provider, branding_state: 'threescale_branded')
+    authentication_provider = FactoryBot.create(:github_authentication_provider, account: @provider, branding_state: 'threescale_branded')
     patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {published: true})
     assert_template 'provider/admin/authentication_providers/show'
     assert_equal 'Authentication provider has not been updated', flash[:notice]
   end
 
   test 'DELETE destroy' do
-    authentication_provider = FactoryGirl.create(:authentication_provider, account: @provider)
+    authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
 
     delete provider_admin_authentication_provider_path(authentication_provider)
 

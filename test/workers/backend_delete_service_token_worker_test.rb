@@ -9,7 +9,7 @@ class BackendDeleteServiceTokenWorkerTest < ActiveSupport::TestCase
   end
 
   test 'destroy service token' do
-    service_token = FactoryGirl.create(:service_token)
+    service_token = FactoryBot.create(:service_token)
     event = ServiceTokenDeletedEvent.create(service_token)
     Rails.application.config.event_store.publish_event(event)
 

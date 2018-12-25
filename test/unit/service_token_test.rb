@@ -15,7 +15,7 @@ class ServiceTokenTest < ActiveSupport::TestCase
     assert service_token.errors[:service].present?
     refute service_token.errors[:value].present?
 
-    service_token.service = FactoryGirl.build_stubbed(:simple_service)
+    service_token.service = FactoryBot.build_stubbed(:simple_service)
 
     assert service_token.valid?
     refute service_token.errors[:service].present?
@@ -29,7 +29,7 @@ class ServiceTokenTest < ActiveSupport::TestCase
   end
 
   test 'ServiceTokenDeletedEvent is created and published when service token is destroyed' do
-    service_token = FactoryGirl.create(:service_token)
+    service_token = FactoryBot.create(:service_token)
     ServiceTokenDeletedEvent.expects(:create_and_publish!).with(service_token)
     service_token.destroy!
   end

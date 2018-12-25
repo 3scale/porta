@@ -21,7 +21,7 @@ Given /^a (published|hidden) plan "([^\"]*)" of provider "([^\"]*)"$/ do |state,
   end
 
   account = Account.find_by_org_name!(account_name)
-  plan = Factory(:application_plan, :name => plan_name, :issuer => account.default_service)
+  plan = FactoryBot.create(:application_plan, :name => plan_name, :issuer => account.default_service)
   plan.publish! if state == 'published'
 end
 
@@ -58,7 +58,7 @@ Given /^(provider "[^"]*") has no published application plans$/ do |provider|
 end
 
 Given /^(plan "[^\"]*") has applications$/ do |plan|
-  Factory(:cinstance, :application_id => SecureRandom.hex(8), :plan => plan)
+  FactoryBot.create(:cinstance, :application_id => SecureRandom.hex(8), :plan => plan)
 end
 
 When /^I change application plan to "([^"]*)"$/ do |name|

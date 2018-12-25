@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NotificationTest < ActiveSupport::TestCase
   test 'state' do
-    notification = FactoryGirl.build(:notification, user: FactoryGirl.build_stubbed(:user))
+    notification = FactoryBot.build(:notification, user: FactoryBot.build_stubbed(:user))
     assert_equal 'created', notification.state
 
     NotificationDeliveryService.expects(:call).with(notification)
@@ -17,7 +17,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'deliver_email_notification!' do
-    notification = FactoryGirl.build_stubbed(:notification, system_name: :application_created)
+    notification = FactoryBot.build_stubbed(:notification, system_name: :application_created)
 
     NotificationDeliveryService.expects(:call).with(notification)
 
@@ -25,7 +25,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'deliver!' do
-    notification = FactoryGirl.build_stubbed(:notification)
+    notification = FactoryBot.build_stubbed(:notification)
 
     NotificationDeliveryService.expects(:call).with(notification)
 
@@ -33,7 +33,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'should_deliver?' do
-    notification = FactoryGirl.build_stubbed(:notification_with_parent_event)
+    notification = FactoryBot.build_stubbed(:notification_with_parent_event)
 
     notification.expects(:permitted?).returns(true).at_least_once
     assert notification.should_deliver?
@@ -87,7 +87,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   def test_not_utf8_title
-    notification = FactoryGirl.build(:notification, title: '百鬼斬 HYAKKI GIRI Vögel')
+    notification = FactoryBot.build(:notification, title: '百鬼斬 HYAKKI GIRI Vögel')
 
     assert notification.save!
   end

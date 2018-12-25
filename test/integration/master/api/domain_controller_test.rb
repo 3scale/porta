@@ -5,7 +5,7 @@ require 'test_helper'
 class Master::Api::DomainControllerTest < ActionDispatch::IntegrationTest
   setup do
     host! master_account.domain
-    @token =  FactoryGirl.create(:access_token,
+    @token =  FactoryBot.create(:access_token,
                                  owner: master_account.first_admin!,
                                  scopes: 'account_management')
   end

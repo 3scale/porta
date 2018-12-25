@@ -4,11 +4,11 @@ class Liquid::WrapperTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @service = Factory(:service)
+    @service = FactoryBot.create(:service)
   end
 
   test 'wrap_service with current account' do
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
     wrapper = Liquid::Wrapper.new(@buyer)
 
     drop = wrapper.wrap_service(@service)

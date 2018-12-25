@@ -216,8 +216,6 @@ group :test do
   gem 'cucumber', '~>2.0'
   gem 'cucumber-rails', require: false
   gem 'email_spec', require: false
-  gem 'factory_girl', '~>2.6.4' # versions 3.0 and up are for ruby 1.9 only
-  gem 'factory_girl_rails'
   gem 'fakefs', '~>0.4.2', require: 'fakefs/safe'
   gem 'fakeweb', git: 'https://github.com/3scale/fakeweb.git', ref: '6c9392c03879b85b06b0d8f6dbabe75e69b7abb7', require: false
   gem 'webmock', '~> 1.21', require: false
@@ -261,6 +259,7 @@ group :test do
 end
 
 group :development, :test do
+  gem 'factory_bot_rails', '~> 4.11.1'
   gem 'unicorn-rails'
 
   gem 'pry-rails'

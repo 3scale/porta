@@ -10,7 +10,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
       credit_card_authorize_net_payment_profile_token: 'auth_net_token'
     }
 
-    @account = FactoryGirl.create(:simple_account)
+    @account = FactoryBot.create(:simple_account)
 
     @account.update_columns(@cc_attributes)
     PaymentDetail.where(account_id: @account.id).delete_all
@@ -18,7 +18,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
   end
 
   test 'create payment detail if any credit card data exists in account' do
-    account = FactoryGirl.create(:simple_account)
+    account = FactoryBot.create(:simple_account)
     refute PaymentDetail.where(account_id: account.id).exists?
 
     Account.where(id: account.id).update_all(@cc_attributes)
@@ -30,7 +30,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
   end
 
   test 'build payment_detail on access' do
-    account = FactoryGirl.create(:simple_account)
+    account = FactoryBot.create(:simple_account)
     assert account.payment_detail.new_record?
   end
 

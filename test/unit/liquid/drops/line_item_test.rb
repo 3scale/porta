@@ -5,7 +5,7 @@ class Liquid::Drops::LineItemDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @line_item = Factory.build(:line_item)
+    @line_item = FactoryBot.build(:line_item)
     @drop = Drops::LineItem.new(@line_item)
   end
 

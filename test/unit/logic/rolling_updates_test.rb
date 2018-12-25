@@ -8,7 +8,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   def test_policies
-    account = FactoryGirl.build_stubbed(:simple_account)
+    account = FactoryBot.build_stubbed(:simple_account)
 
     Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: true })
     assert account.provider_can_use?(:policies)
@@ -18,7 +18,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   def test_forum
-    account = FactoryGirl.build_stubbed(:simple_account)
+    account = FactoryBot.build_stubbed(:simple_account)
 
     Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ forum: true })
     assert account.provider_can_use?(:forum)
@@ -28,7 +28,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   def test_cms_api
-    account = FactoryGirl.build_stubbed(:simple_account)
+    account = FactoryBot.build_stubbed(:simple_account)
 
     Rails.configuration.three_scale.rolling_updates.stubs(features: { cms_api: [account.id] })
     assert account.provider_can_use?(:cms_api)
@@ -44,8 +44,8 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   def test_enterprise
-    account = FactoryGirl.build_stubbed(:simple_account)
-    plan    = FactoryGirl.build_stubbed(:simple_application_plan, system_name: 'alex')
+    account = FactoryBot.build_stubbed(:simple_account)
+    plan    = FactoryBot.build_stubbed(:simple_application_plan, system_name: 'alex')
 
     account.expects(:bought_plan).returns(plan).at_least_once
     account.expects(:has_bought_cinstance?).returns(true).at_least_once
@@ -84,8 +84,8 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   test "Provider: provider_can_use? delegates to provider_account if account is actually a buyer" do
     Rails.configuration.three_scale.rolling_updates.stubs(raise_error_unknown_features: false)
 
-    provider = FactoryGirl.build_stubbed(:simple_provider)
-    buyer = FactoryGirl.build_stubbed(:simple_buyer, provider_account: provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
+    buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: provider)
 
     provider.expects(:provider_can_use?).returns(false).once
     buyer.send(:provider_can_use?, :whatever)
@@ -160,7 +160,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   test 'admin portal sso' do
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     provider.stubs(enterprise?: true)
 
     assert provider.provider_can_use?(:provider_sso)

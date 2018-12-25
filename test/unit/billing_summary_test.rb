@@ -53,7 +53,7 @@ class BillingSummaryTest < ActiveSupport::TestCase
   end
 
   test 'build billing result' do
-    provider = FactoryGirl.create(:provider_with_billing)
+    provider = FactoryBot.create(:provider_with_billing)
     billing_date = Time.utc(2018, 2, 5)
 
     billing_success = mock_billing_success(billing_date, provider)

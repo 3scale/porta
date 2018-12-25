@@ -4,7 +4,7 @@ resource 'CMS::File' do
 
   include ActionDispatch::TestProcess # to upload fixture files.
 
-  let(:resource) { Factory(:cms_file, provider: provider, section: provider.sections.root) }
+  let(:resource) { FactoryBot.create(:cms_file, provider: provider, section: provider.sections.root) }
 
   api 'cms file' do
 

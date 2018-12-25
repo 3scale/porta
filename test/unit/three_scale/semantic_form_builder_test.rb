@@ -21,7 +21,7 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
   end
 
   def test_select_input
-    user = FactoryGirl.create(:simple_user)
+    user = FactoryBot.create(:simple_user)
 
     semantic_form_for(user, url: '', as: :dummy) do |f|
 

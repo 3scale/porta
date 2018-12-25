@@ -3,9 +3,9 @@ require 'test_helper'
 class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::TestCase
 
   def setup
-    @provider         = FactoryGirl.create(:provider_account)
-    @received_message = FactoryGirl.create(:received_message, receiver: @provider)
-    @sent_message     = FactoryGirl.create(:message, sender: @provider)
+    @provider         = FactoryBot.create(:provider_account)
+    @received_message = FactoryBot.create(:received_message, receiver: @provider)
+    @sent_message     = FactoryBot.create(:message, sender: @provider)
 
     host! @provider.admin_domain
 

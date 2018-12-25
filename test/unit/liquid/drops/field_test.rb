@@ -4,7 +4,7 @@ class Liquid::Drops::FieldTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @account = Factory(:buyer_account)
+    @account = FactoryBot.create(:buyer_account)
 
     # With the update to rails 3.2.15
     # we have to reload @account, to access properly to #define_fields,

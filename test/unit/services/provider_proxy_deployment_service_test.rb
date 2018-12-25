@@ -8,7 +8,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   def setup
     Logic::RollingUpdates.stubs(skipped?: !rolling_updates)
 
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @provider.proxies.update_all(apicast_configuration_driven: false)
     @service = ProviderProxyDeploymentService.new(@provider)
 
@@ -16,7 +16,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   def test_deploy_success
-    proxy = FactoryGirl.build_stubbed(:proxy, api_test_success: true)
+    proxy = FactoryBot.create(:proxy, api_test_success: true)
 
     stub_request(:get, "http://test.proxy/deploy/TEST?provider_id=#{@provider.id}")
         .to_return(status: 200)
@@ -34,7 +34,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   def test_deploy_failure
-    proxy = FactoryGirl.build_stubbed(:proxy, api_test_success: true)
+    proxy = FactoryBot.create(:proxy, api_test_success: true)
 
     stub_request(:get, "http://test.proxy/deploy/TEST?provider_id=#{@provider.id}")
         .to_return(status: 500)
@@ -62,7 +62,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   test 'conf_content having services integrated via plugin' do
-    FactoryGirl.create(:service, account: @provider, deployment_option: 'plugin_ruby')
+    FactoryBot.create(:service, account: @provider, deployment_option: 'plugin_ruby')
     deployment_service = ProviderProxyDeploymentService.new(@provider)
 
     assert_nothing_raised do

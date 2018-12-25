@@ -13,7 +13,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
   end
 
   test 'update metric' do
-    metric = Factory.create(:metric, system_name: 'some_system_name')
+    metric = FactoryBot.create(:metric, system_name: 'some_system_name')
     service = metric.service
 
     ThreeScale::Core::Metric.expects(:save).with(id: metric.id, service_id: service.backend_id,

@@ -2,9 +2,9 @@ require 'test_helper'
 
 class DetailedInvoicesByPeriodQueryTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
-    @invoice_one = FactoryGirl.create(:invoice,
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,
                                       provider_account: @provider,
                                       period: Month.new(Time.utc(2009, 6, 1)),
@@ -12,9 +12,9 @@ class DetailedInvoicesByPeriodQueryTest < ActiveSupport::TestCase
     @line_item_one = @invoice_one.line_items.create!(name: 'A', cost: 42)
     @line_item_two = @invoice_one.line_items.create!(name: 'B', cost: 58)
 
-    @invoice_two = FactoryGirl.create(:invoice,
+    @invoice_two = FactoryBot.create(:invoice,
                                       provider_account: @provider,
-                                      buyer_account: FactoryGirl.create(:simple_buyer, provider_account: @provider),
+                                      buyer_account: FactoryBot.create(:simple_buyer, provider_account: @provider),
                                       period: Month.new(Time.utc(2009, 10, 1)),
                                       created_at: Time.utc(2009, 6, 1))
   end

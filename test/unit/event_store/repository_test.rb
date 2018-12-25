@@ -64,7 +64,7 @@ class EventStore::RepositoryTest < ActiveSupport::TestCase
   end
 
   def test_build_entity
-    event = FactoryGirl.build(:event, data: { foo: 'bar' })
+    event = FactoryBot.build(:event, data: { foo: 'bar' })
 
     assert entity = Repository.build_entity(event)
     assert_equal event.event_id, entity.event_id
@@ -78,9 +78,9 @@ class EventStore::RepositoryTest < ActiveSupport::TestCase
     # better way to solve this?
     # factory girl should not call observer callbacks!
     Account.observers.disable :all do
-      provider = FactoryGirl.create(:simple_provider)
-      account  = FactoryGirl.create(:simple_buyer, provider_account: provider)
-      user     = FactoryGirl.create(:simple_user)
+      provider = FactoryBot.create(:simple_provider)
+      account  = FactoryBot.create(:simple_buyer, provider_account: provider)
+      user     = FactoryBot.create(:simple_user)
     end
 
     event      = Accounts::AccountCreatedEvent.create(account, user)
@@ -132,6 +132,6 @@ class EventStore::RepositoryTest < ActiveSupport::TestCase
   end
 
   def provider
-    @provider ||= FactoryGirl.create(:simple_provider)
+    @provider ||= FactoryBot.create(:simple_provider)
   end
 end

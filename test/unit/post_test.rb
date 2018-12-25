@@ -2,10 +2,10 @@ require 'test_helper'
 
 class PostTest < ActiveSupport::TestCase
   def setup
-    @user  = Factory(:simple_user)
+    @user  = FactoryBot.create(:simple_user)
 
-    @forum = Factory(:forum, :account => @user.account)
-    @topic = Factory(:topic, :forum => @forum, :user => @user)
+    @forum = FactoryBot.create(:forum, :account => @user.account)
+    @topic = FactoryBot.create(:topic, :forum => @forum, :user => @user)
   end
 
   def teardown

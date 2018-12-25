@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Apicast::UserSourceTest < ActiveSupport::TestCase
   def setup
-    @user = FactoryGirl.build_stubbed(:simple_user)
+    @user = FactoryBot.build_stubbed(:simple_user)
     @source = Apicast::UserSource.new(@user)
   end
 
@@ -18,8 +18,8 @@ class Apicast::UserSourceTest < ActiveSupport::TestCase
   end
 
   def test_services
-    proxy = FactoryGirl.build_stubbed(:proxy)
-    service = FactoryGirl.build_stubbed(:simple_service, proxy: proxy)
+    proxy = FactoryBot.build_stubbed(:proxy)
+    service = FactoryBot.build_stubbed(:simple_service, proxy: proxy)
     services = [ service ]
     @user.stubs(accessible_services: services)
 

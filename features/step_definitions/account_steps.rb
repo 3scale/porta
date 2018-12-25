@@ -20,7 +20,7 @@ end
 
 
 Given /^an account "([^"]*)" signed up to (plan "[^"]*")$/ do |account_name, plan|
-  account = Factory.create(:account, :provider_account => plan.provider_account,
+  account = FactoryBot.create(:account, :provider_account => plan.provider_account,
                            :org_name         => account_name)
   account.admin.activate!
   account.buy!(plan)

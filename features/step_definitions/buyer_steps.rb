@@ -5,7 +5,7 @@ Given /^a buyer "([^\"]*)" have not signed up to plan "([^\"]*)"$/ do |buyer_nam
 end
 
 When /^(?:a )?buyer "(.+?)" with email "(.+?)" signs up to (provider ".+?")$/ do |name, email, provider|
-  buyer = Factory.build(:buyer_account, :provider_account => provider,
+  buyer = FactoryBot.build(:buyer_account, :provider_account => provider,
                         :org_name => name, :state => :created)
   buyer.users.each do |user|
     user.email = email
@@ -19,7 +19,7 @@ When /^(?:a )?buyer "(.+?)" with email "(.+?)" signs up to (provider ".+?")$/ do
 end
 
 Given /^a buyer "([^"]*)" of (provider "[^"]*")$/ do |org_name, provider|
-  account = Factory(:buyer_account, :provider_account => provider,
+  account = FactoryBot.create(:buyer_account, :provider_account => provider,
                     :org_name => org_name)
   account.buy! provider.account_plans.default
 end
@@ -30,7 +30,7 @@ Given /^a buyer "([^"]*)" signed up to plan "([^"]*)"$/ do |buyer, plan|
 end
 
 Given /^a buyer "([^"]*)" signed up to ((?:application|service) plan "[^"]*")$/ do |org_name, plan|
-  account = Factory(:buyer_account,
+  account = FactoryBot.create(:buyer_account,
                     :provider_account => plan.provider_account,
                     :org_name => org_name)
   account.buy! plan.provider_account.account_plans.default
@@ -38,7 +38,7 @@ Given /^a buyer "([^"]*)" signed up to ((?:application|service) plan "[^"]*")$/ 
 end
 
 Given /^a buyer without billing address "([^"]*)" signed up to ((?:application|service) plan "[^"]*")$/ do |org_name, plan|
-  account = Factory(:buyer_account_without_billing_address,
+  account = FactoryBot.create(:buyer_account_without_billing_address,
                     :provider_account => plan.provider_account,
                     :org_name => org_name)
   account.buy! plan.provider_account.account_plans.default
@@ -46,14 +46,14 @@ Given /^a buyer without billing address "([^"]*)" signed up to ((?:application|s
 end
 
 Given /^a buyer "([^"]*)" signed up to (account plan "[^"]*")$/ do |org_name, plan|
-  account = Factory(:buyer_account,
+  account = FactoryBot.create(:buyer_account,
                     :provider_account => plan.provider_account,
                     :org_name => org_name)
   account.buy! plan
 end
 
 Given /^a buyer "([^"]*)" with application ID "([^"]*)" signed up to (plan "[^"]*")$/ do |org_name, app_id, plan|
-  account = Factory(:buyer_account, :provider_account => plan.provider_account,
+  account = FactoryBot.create(:buyer_account, :provider_account => plan.provider_account,
                                     :org_name => org_name)
   account.buy! plan.provider_account.account_plans.default
 
@@ -73,8 +73,8 @@ Given(/^a buyer signed up to the provider$/) do
 end
 
 Given /^a freshly created buyer "([^\"]*)" signed up to (provider "[^\"]*")$/ do |account_name, provider|
-  buyer = Factory(:buyer_account, :provider_account => provider,
-                  #buyer = Factory(:account, :provider_account => provider,
+  buyer = FactoryBot.create(:buyer_account, :provider_account => provider,
+                  #buyer = FactoryBot.create(:account, :provider_account => provider,
                   :org_name => account_name,
                   :buyer => true)
   buyer.buy! provider.account_plans.default
@@ -193,7 +193,7 @@ Given('the provider has a buyer') do
 
   visit signup_path
 
-  user = FactoryGirl.build_stubbed(:user)
+  user = FactoryBot.build_stubbed(:user)
 
   within signup_form do
     fill_in 'Email', with: user.email

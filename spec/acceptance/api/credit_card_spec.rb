@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Account" do
 
-  let(:resource) { Factory(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.create(:buyer_account, provider_account: provider) }
 
   api 'credit card' do
     let(:account_id) { resource.id }

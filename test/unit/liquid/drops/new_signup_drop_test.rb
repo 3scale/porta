@@ -4,11 +4,11 @@ class Liquid::Drops::NewSignupDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   test "returns published account plans" do
-    Factory(:account_plan, :issuer => @provider).publish!
+    FactoryBot.create(:account_plan, :issuer => @provider).publish!
 
     drop = Liquid::Drops::NewSignup.new(@provider,{})
 
@@ -27,15 +27,15 @@ class Liquid::Drops::NewSignupDropTest < ActiveSupport::TestCase
   end
 
   test "returns services" do
-    Factory  :service, :account => @provider
+    FactoryBot.create  :service, :account => @provider
     drop = Liquid::Drops::NewSignup.new(@provider,{})
     assert_equal 2, drop.services.size
   end
 
   test "#selected_plans method returns only published drops" do
     service = @provider.services.first
-    service_plan = Factory( :service_plan, :issuer => service).tap(&:publish!)
-    app_plan = Factory( :application_plan, :issuer => service)
+    service_plan = FactoryBot.create( :service_plan, :issuer => service).tap(&:publish!)
+    app_plan = FactoryBot.create( :application_plan, :issuer => service)
 
     params = { :plans => [ app_plan.id, service_plan.id ]}
     drop = Liquid::Drops::NewSignup.new(@provider, params)

@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '/../../test_helper')
 class ExternalRssFeedTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   test "Should be able to create new instance of a portlet" do

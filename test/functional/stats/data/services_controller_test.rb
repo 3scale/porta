@@ -23,9 +23,9 @@ class Stats::Data::ServicesControllerTest < ActionController::TestCase
 
   # Example for future tests
   def setup_data
-    @provider = Factory :provider_account
-    @buyer    = Factory(:buyer_account, :provider_account => @provider, timezone: 'Mountain Time (US & Canada)')
-    @app_plan = Factory(:application_plan, :issuer => @provider.default_service)
+    @provider = FactoryBot.create :provider_account
+    @buyer    = FactoryBot.create(:buyer_account, :provider_account => @provider, timezone: 'Mountain Time (US & Canada)')
+    @app_plan = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
     @app = @buyer.buy! @app_plan
     @request.host = @provider.admin_domain
     login_provider @provider

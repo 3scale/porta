@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Stats::Data::ApplicationsTest < ActionDispatch::IntegrationTest
   def setup
-    @cinstance = Factory :cinstance
+    @cinstance = FactoryBot.create :cinstance
     host! @cinstance.provider_account.admin_domain
     @admin = @cinstance.provider_account.admins.first.username
   end

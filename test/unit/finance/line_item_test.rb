@@ -4,10 +4,10 @@ module Finance
   class LineItemTest < ActiveSupport::TestCase
 
     def setup
-      @provider = Factory(:simple_provider)
-      @buyer = Factory(:simple_buyer, :provider_account => @provider)
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:simple_buyer, :provider_account => @provider)
 
-      @invoice = Factory.create(:invoice,
+      @invoice = FactoryBot.create(:invoice,
                                 :period => Month.new(Time.zone.local(1984, 1, 1)),
                                 :provider_account => @provider,
                                 :buyer_account => @buyer,

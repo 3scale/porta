@@ -5,7 +5,7 @@ class LastTrafficTest < ActiveSupport::TestCase
   delegate :storage, to: Stats::Client
 
   def test_sent_traffic_on
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     today = Date.today
     time = today.to_time
@@ -31,7 +31,7 @@ class LastTrafficTest < ActiveSupport::TestCase
 
   def test_send_traffic_in_day
     now = Time.now
-    cinstance = FactoryGirl.build_stubbed(:cinstance)
+    cinstance = FactoryBot.build_stubbed(:cinstance)
     LastTraffic.send_traffic_in_day(cinstance, now)
 
     assert_equal 1, LastTrafficWorker.jobs.size

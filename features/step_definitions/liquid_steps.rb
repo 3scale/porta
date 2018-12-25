@@ -1,5 +1,5 @@
 Given /^the provider has cms page "(.*?)" with:$/ do |path, content|
-  Factory(:cms_page, provider: @provider, path: path, published: content, liquid_enabled: true)
+  FactoryBot.create(:cms_page, provider: @provider, path: path, published: content, liquid_enabled: true)
 end
 
 Given /^I visit a page showing the current user's SSO data$/ do

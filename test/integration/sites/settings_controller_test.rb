@@ -3,7 +3,7 @@ require 'test_helper'
 class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
 
   test 'show emails tab if not master account' do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     login_provider provider
 
@@ -16,7 +16,7 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
   test 'do not show emails tab if master account' do
     ThreeScale.config.stubs(onpremises: true, tenant_mode: 'master')
 
-    member = FactoryGirl.create(:simple_admin, account: master_account)
+    member = FactoryBot.create(:simple_admin, account: master_account)
     member.activate!
 
     provider_login member

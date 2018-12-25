@@ -4,7 +4,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
 
   def setup
     super
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   test 'no access granted for provider admin' do
@@ -22,7 +22,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
     # now exists other routes in provider side
     @request.host = @provider.admin_domain
 
-    provider_member = Factory :active_user, :account => @provider
+    provider_member = FactoryBot.create :active_user, :account => @provider
     assert provider_member.member?
 
     login_as provider_member
@@ -34,7 +34,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
   context 'buyer' do
     setup do
       @request.host = @provider.domain
-      @buyer = Factory :buyer_account, :provider_account => @provider
+      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
     end
 
     should 'grant access to admin' do
@@ -45,7 +45,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
     end
 
     should 'grant access to member' do
-      buyer_member = Factory :active_user, :account => @buyer
+      buyer_member = FactoryBot.create :active_user, :account => @buyer
       assert buyer_member.member?
 
       login_as buyer_member

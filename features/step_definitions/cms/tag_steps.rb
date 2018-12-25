@@ -1,9 +1,9 @@
 Given /^(provider "[^\"]*") has tags$/ do |provider|
-  Factory :tag, :account => provider
+  FactoryBot.create :tag, :account => provider
 end
 
 Given /^(provider "[^\"]*") has the tag "lorem"$/ do |provider|
-  Factory :tag, :account => provider, :name => "lorem"
+  FactoryBot.create :tag, :account => provider, :name => "lorem"
 end
 
 

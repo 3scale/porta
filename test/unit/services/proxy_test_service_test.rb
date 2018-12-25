@@ -3,7 +3,7 @@ require 'test_helper'
 class ProxyTestServiceTest < ActiveSupport::TestCase
 
   def setup
-    @proxy = FactoryGirl.build_stubbed(:proxy)
+    @proxy = FactoryBot.build_stubbed(:proxy)
     @service = ProxyTestService.new(@proxy)
   end
 

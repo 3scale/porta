@@ -3,7 +3,7 @@ require 'test_helper'
 class Services::ServiceScheduledForDeletionEventTest < ActiveSupport::TestCase
 
   def test_create
-    service = FactoryGirl.build_stubbed(:simple_service, id: 1, name: 'Alaska')
+    service = FactoryBot.build_stubbed(:simple_service, id: 1, name: 'Alaska')
     event   = Services::ServiceScheduledForDeletionEvent.create(service)
 
     assert event

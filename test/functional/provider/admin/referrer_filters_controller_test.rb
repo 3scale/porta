@@ -4,9 +4,9 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionController::TestCas
 
   def setup
     super
-    @provider  = Factory(:provider_account)
-    @buyer     = Factory(:buyer_account, :provider_account => @provider)
-    app_plan   = Factory :application_plan, :issuer => @provider.default_service
+    @provider  = FactoryBot.create(:provider_account)
+    @buyer     = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    app_plan   = FactoryBot.create :application_plan, :issuer => @provider.default_service
     @cinstance = @buyer.buy! app_plan
     @referrer  = 'example.com'
 

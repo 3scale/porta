@@ -17,7 +17,7 @@ class Apicast::ProviderNginxGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_emit_provider
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     source = Apicast::ProviderSource.new(provider)
 
     subject = @generator.emit(source)
@@ -26,7 +26,7 @@ class Apicast::ProviderNginxGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_emit_user
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     user = provider.admins.first!
     source = Apicast::UserSource.new(user)
 
@@ -36,7 +36,7 @@ class Apicast::ProviderNginxGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_emit_oauth
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     provider.services.update_all(backend_version: 'oauth')
     source = Apicast::ProviderSource.new(provider.reload)
     System::Application.config.stubs(backend_client: {host: 'apisonator.example.com'})

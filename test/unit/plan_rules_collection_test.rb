@@ -15,7 +15,7 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
 
   test '.all_plan_rules_with_switches' do
     plan_rules = (3..5).to_a.map do |index|
-      FactoryGirl.build(:plan_rule, system_name: "planRule#{index}".to_sym, switches: Settings::SWITCHES[0..index])
+      FactoryBot.build(:plan_rule, system_name: "planRule#{index}".to_sym, switches: Settings::SWITCHES[0..index])
     end
 
     response = PlanRulesCollection.all_plan_rules_with_switches
@@ -35,7 +35,7 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
   end
 
   test '.can_upgrade? returns true if both plans have plan_rule with no metadata and the \'to\' has higher rank' do
-    to, from = FactoryGirl.create_list(:application_plan, 2)
+    to, from = FactoryBot.create_list(:application_plan, 2)
     from.plan_rule.rank = 3
     to.plan_rule.rank = 4
 
@@ -43,21 +43,21 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
   end
 
   test '.can_upgrade? returns true if the \'from\' argument does not have a plan_rule' do
-    to = FactoryGirl.create(:application_plan)
+    to = FactoryBot.create(:application_plan)
     from = Plan.new(system_name: 'plan_without_plan_rule')
 
     assert PlanRulesCollection.can_upgrade?(from: from, to: to)
   end
 
   test '.can_upgrade? returns false if the \'to\' argument does not have a plan_rule' do
-    from = FactoryGirl.create(:application_plan)
+    from = FactoryBot.create(:application_plan)
     to = Plan.new(system_name: 'plan_without_plan_rule')
 
     refute PlanRulesCollection.can_upgrade?(from: from, to: to)
   end
 
   test '.can_upgrade? returns false if the \'to\' argument is has a plan_rule with not_automatically_upgradable_to' do
-    from, to = FactoryGirl.create_list(:application_plan, 2)
+    from, to = FactoryBot.create_list(:application_plan, 2)
     to.plan_rule.metadata = {cannot_automatically_be_upgraded_to: true}
 
     refute PlanRulesCollection.can_upgrade?(from: from, to: to)
@@ -70,7 +70,7 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
     plans = []
     (3..6).to_a.each do |number|
       2.times do |plan_type_index|
-        plan = FactoryGirl.create((plan_types[plan_type_index]), issuer: service)
+        plan = FactoryBot.create((plan_types[plan_type_index]), issuer: service)
         plan.plan_rule.switches = Settings::SWITCHES[0..number]
         plan.plan_rule.rank = number
         plans << plan

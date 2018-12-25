@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Provider::Admin::LiquidDocsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    login! FactoryGirl.create(:provider_account)
+    login! FactoryBot.create(:provider_account)
   end
 
   test 'show activates the proper menus' do

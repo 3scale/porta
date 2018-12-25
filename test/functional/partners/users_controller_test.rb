@@ -4,8 +4,8 @@ class Partners::UsersControllerTest < ActionController::TestCase
 
   def setup
     @request.host = master_account.domain
-    @partner = FactoryGirl.create(:partner)
-    @account = FactoryGirl.create(:simple_provider, partner: @partner)
+    @partner = FactoryBot.create(:partner)
+    @account = FactoryBot.create(:simple_provider, partner: @partner)
   end
 
   test 'create user' do
@@ -28,7 +28,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'show user' do
-    user = FactoryGirl.create(:simple_user, account: @account, open_id: "lalala")
+    user = FactoryBot.create(:simple_user, account: @account, open_id: "lalala")
     get :show, provider_id: @account.id, api_key: @partner.api_key, id: user.id
     body = JSON.parse(response.body)
 
@@ -36,7 +36,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'find a user by open_id' do
-    user = FactoryGirl.create(:simple_user, account: @account, open_id: "abcde")
+    user = FactoryBot.create(:simple_user, account: @account, open_id: "abcde")
 
     get :index, provider_id: @account.id, api_key: @partner.api_key, open_id: "abcde"
 
@@ -46,7 +46,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'delete a user' do
-    user = FactoryGirl.create(:simple_user, account: @account)
+    user = FactoryBot.create(:simple_user, account: @account)
 
     delete :destroy, provider_id: @account.id, api_key: @partner.api_key, id: user.id
 

@@ -3,7 +3,7 @@ end
 
 Given /^the following groups are created:$/ do | groups |
   groups.hashes.each do | hash |
-    Factory.create(:group, :name => hash['name'], :group_type => GroupType.find_by_name("Member"),
+    FactoryBot.create(:group, :name => hash['name'], :group_type => GroupType.find_by_name("Member"),
       :permissions => Permission.find(:all, :conditions => {:name => hash['permissions'].split(",")}))
   end
 end

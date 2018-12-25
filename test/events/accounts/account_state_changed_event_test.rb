@@ -3,7 +3,7 @@ require 'test_helper'
 class Accounts::AccountStateChangedEventTest < ActiveSupport::TestCase
 
   def test_create
-    account = FactoryGirl.build_stubbed(:simple_buyer, id: 1, state: 'pending',
+    account = FactoryBot.build_stubbed(:simple_buyer, id: 1, state: 'pending',
                                           provider_account_id: 2)
     event   = Accounts::AccountStateChangedEvent.create(account, 'created')
 
