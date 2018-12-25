@@ -5,7 +5,7 @@ require 'test_helper'
 class Master::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @provider = FactoryGirl.create(:provider_account, provider_account: master_account)
+    @provider = FactoryBot.create(:provider_account, provider_account: master_account)
     @service = @provider.services.create!(system_name: 'servicename', name: 'servicename')
     host! master_account.admin_domain
   end

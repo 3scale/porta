@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ThreeScale::OAuth2::KeycloakClientTest < ActiveSupport::TestCase
   setup do
-    authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+    authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
     @authentication = ThreeScale::OAuth2::Client.build_authentication(authentication_provider)
     @oauth2 = ThreeScale::OAuth2::KeycloakClient.new(@authentication)
   end
@@ -64,7 +64,7 @@ class ThreeScale::OAuth2::KeycloakClientTest < ActiveSupport::TestCase
     RedirectUri = ThreeScale::OAuth2::KeycloakClient::RedirectUri
 
     def setup
-      authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+      authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
       authentication = ThreeScale::OAuth2::Client.build_authentication(authentication_provider)
       @oauth2        = ThreeScale::OAuth2::KeycloakClient.new(authentication)
     end

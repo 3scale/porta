@@ -4,7 +4,7 @@ require 'spec_helper'
 
 resource "MemberPermission" do
 
-  let(:user) { Factory(:user, account: provider) }
+  let(:user) { FactoryBot.create(:user, account: provider) }
   let(:resource) { user.member_permissions }
   let(:serialized) { representer.send(serialization_format, user: user) }
 

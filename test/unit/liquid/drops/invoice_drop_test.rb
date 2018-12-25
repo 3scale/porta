@@ -4,7 +4,7 @@ class Liquid::Drops::InvoiceDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @invoice =  FactoryGirl.build_stubbed(:invoice)
+    @invoice =  FactoryBot.build_stubbed(:invoice)
     @drop = Drops::Invoice.new(@invoice)
   end
 
@@ -100,7 +100,7 @@ class Liquid::Drops::InvoiceDropTest < ActiveSupport::TestCase
   end
 
   should 'returns payment_transactions' do
-    Factory.create(:payment_transaction, invoice: @invoice)
+    FactoryBot.create(:payment_transaction, invoice: @invoice)
 
     assert_kind_of Liquid::Drops::Collection, @drop.payment_transactions
     assert_equal @drop.payment_transactions.count, @invoice.payment_transactions.count

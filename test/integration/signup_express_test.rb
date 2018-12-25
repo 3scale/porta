@@ -5,7 +5,7 @@ class SignupExpressTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
   def setup
-    @account_plan = FactoryGirl.create(:account_plan, approval_required: true)
+    @account_plan = FactoryBot.create(:account_plan, approval_required: true)
     @provider = @account_plan.provider
     host! @provider.admin_domain
   end

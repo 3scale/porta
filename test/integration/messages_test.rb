@@ -3,8 +3,8 @@ require 'test_helper'
 class MessagesTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory :provider_account
-    @buyer = Factory :buyer_account, :provider_account => @provider
+    @provider = FactoryBot.create :provider_account
+    @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
     host! @provider.admin_domain
     provider_login_with @provider.admins.first, 'supersecret'
   end

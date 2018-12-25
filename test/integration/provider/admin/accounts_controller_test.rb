@@ -11,7 +11,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     @service_plan = master.default_service_plans.first
     @application_plan = master.default_application_plans.first
     @application_plan.update_attribute(:system_name, 'enterprise') # for the switches tested later
-    FactoryGirl.create(:fields_definition, account: @master, target: 'User', name: 'created_by')
+    FactoryBot.create(:fields_definition, account: @master, target: 'User', name: 'created_by')
   end
 
   test '#create without approval required' do

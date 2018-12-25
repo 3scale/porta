@@ -11,8 +11,8 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
   context "Pdf::InvoiceGenerator" do
     setup do
-      cinstance = Factory(:cinstance)
-      @invoice = Factory(:invoice, :buyer_account => cinstance.buyer_account )
+      cinstance = FactoryBot.create(:cinstance)
+      @invoice = FactoryBot.create(:invoice, :buyer_account => cinstance.buyer_account )
       @data = Pdf::Finance::InvoiceReportData.new(@invoice)
       @generator = Pdf::Finance::InvoiceGenerator.new(@data)
     end

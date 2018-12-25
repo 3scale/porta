@@ -6,7 +6,7 @@ class StripeTest < ActionDispatch::IntegrationTest
     @provider_account.settings.allow_finance!
     @provider_account.settings.show_finance!
 
-    @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+    @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
     @buyer_account.buy!(plan)
     host! @provider_account.domain
   end
@@ -20,7 +20,7 @@ class StripeTest < ActionDispatch::IntegrationTest
   end
 
   def create_provider_account
-    provider_account = Factory(:provider_with_billing,
+    provider_account = FactoryBot.create(:provider_with_billing,
       payment_gateway_type: :stripe,
       payment_gateway_options: {
         number: '1234567890123456',
@@ -30,10 +30,10 @@ class StripeTest < ActionDispatch::IntegrationTest
       }
                               )
 
-    provider_account.billing_strategy = Factory(:postpaid_with_charging)
+    provider_account.billing_strategy = FactoryBot.create(:postpaid_with_charging)
     provider_account.payment_gateway_type = :stripe
 
-    plan = Factory(:application_plan, :issuer => provider_account.default_service)
+    plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service)
     [provider_account, plan]
   end
 end

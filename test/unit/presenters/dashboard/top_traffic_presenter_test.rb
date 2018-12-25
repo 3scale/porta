@@ -3,7 +3,7 @@ require 'test_helper'
 class TopTrafficPresenterTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   def test_present
@@ -53,8 +53,8 @@ class TopTrafficPresenterTest < ActiveSupport::TestCase
 
   # @return [Cinstance]
   def create_cinstance(attributes = {})
-    plan = FactoryGirl.create(:simple_application_plan, issuer: @provider.first_service!)
-    FactoryGirl.create(:simple_cinstance, attributes.merge(plan: plan))
+    plan = FactoryBot.create(:simple_application_plan, issuer: @provider.first_service!)
+    FactoryBot.create(:simple_cinstance, attributes.merge(plan: plan))
   end
 
   def apps

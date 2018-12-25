@@ -18,7 +18,7 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
 
   test 'should set the switches to everything is allowed (because it is enterprise) for on-prem' do
     ThreeScale.config.stubs(onpremises: true)
-    enterprise_plan = FactoryGirl.create(:application_plan, system_name: 'enterprise', name: 'enterprise', issuer: @service)
+    enterprise_plan = FactoryBot.create(:application_plan, system_name: 'enterprise', name: 'enterprise', issuer: @service)
     @service.update_attribute(:default_application_plan, enterprise_plan)
     default_signup_provider.settings.switches.each do |_name, switch|
       assert switch.allowed?

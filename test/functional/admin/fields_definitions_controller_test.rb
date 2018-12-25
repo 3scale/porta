@@ -3,13 +3,13 @@ require 'test_helper'
 class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     login_provider @provider
   end
 
 
   def field_definition
-    @field_definition ||= Factory(:fields_definition, account: @provider)
+    @field_definition ||= FactoryBot.create(:fields_definition, account: @provider)
   end
 
   test 'index' do
@@ -68,8 +68,8 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
   test 'sort' do
     FieldsDefinition.delete_all
 
-    other = Factory(:fields_definition, account: @provider, target: 'Account', pos: 1)
-    field_definition = Factory(:fields_definition, account: @provider, pos: 2)
+    other = FactoryBot.create(:fields_definition, account: @provider, target: 'Account', pos: 1)
+    field_definition = FactoryBot.create(:fields_definition, account: @provider, pos: 2)
 
     assert_equal [other, field_definition], @provider.fields_definitions(true).order(:id).to_a
 

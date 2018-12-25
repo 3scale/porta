@@ -4,9 +4,9 @@ class DeveloperPortal::Admin::Applications::AccessDetailsControllerTest < Develo
 
   # regression test for https://github.com/3scale/system/pull/2565
   test 'return the real amount of reference_filters' do
-    buyer = Factory(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
     provider = buyer.provider_account
-    Factory(:application_contract, user_account: buyer)
+    FactoryBot.create(:application_contract, user_account: buyer)
     host! provider.domain
     login_as(buyer.admins.first)
 

@@ -1,3 +1,5 @@
-Factory.define(:end_user_plan) do |plan|
-  plan.sequence(:name) { |n| "plan-#{n}" }
+FactoryBot.define do
+  factory(:end_user_plan) do
+    sequence(:name) { |n| "plan-#{n}" }
+  end
 end

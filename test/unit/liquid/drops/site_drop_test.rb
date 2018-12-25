@@ -4,7 +4,7 @@ class Liquid::Drops::SiteDropTest < ActiveSupport::TestCase
   include Liquid
 
   setup do
-    @provider = Factory.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @drop     = Drops::Site.new(@provider)
   end
 
@@ -12,11 +12,11 @@ class Liquid::Drops::SiteDropTest < ActiveSupport::TestCase
   test '#authentication_providers' do
     assert @drop.authentication_providers.respond_to?(:each)
 
-    Factory.create(:github_authentication_provider, published: true, account: @provider)
-    Factory.create(:keycloak_authentication_provider, published: false, account: @provider)
+    FactoryBot.create(:github_authentication_provider, published: true, account: @provider)
+    FactoryBot.create(:keycloak_authentication_provider, published: false, account: @provider)
 
-    Factory.create(:github_authentication_provider, published: true, account: master_account)
-    Factory.create(:keycloak_authentication_provider, published: false, account: master_account)
+    FactoryBot.create(:github_authentication_provider, published: true, account: master_account)
+    FactoryBot.create(:keycloak_authentication_provider, published: false, account: master_account)
 
     # Should return published authentication providers from the account and
     # master account

@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "CMS::Partial" do
 
   let(:resource) do
-    Factory(:cms_partial, body: 'body', draft: 'draft',
+    FactoryBot.create(:cms_partial, body: 'body', draft: 'draft',
             system_name: 'some-partial', liquid_enabled: false, handler: 'markdown')
   end
 

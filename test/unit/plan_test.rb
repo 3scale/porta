@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 class PlanTest < ActiveSupport::TestCase
   fixtures :countries
 
-  subject { FactoryGirl.build_stubbed(:simple_plan) }
+  subject { FactoryBot.build_stubbed(:simple_plan) }
 
   should validate_presence_of :name
   should validate_numericality_of :setup_fee
@@ -24,11 +24,11 @@ class PlanTest < ActiveSupport::TestCase
   should_not allow_value(nil).for(:cost_aggregation_rule)
 
   def test_reset_contracts_counter
-    assert FactoryGirl.create(:simple_application_plan).reset_contracts_counter
+    assert FactoryBot.create(:simple_application_plan).reset_contracts_counter
   end
 
   test '#destroy does not lock if cannot be destroyed' do
-    plan_one = FactoryGirl.create(:application_plan)
+    plan_one = FactoryBot.create(:application_plan)
     plan_one.expects(:can_be_destroyed?).returns(false)
     plan_one.expects(:lock!).never
     refute plan_one.destroy
@@ -36,17 +36,17 @@ class PlanTest < ActiveSupport::TestCase
 
 
   test 'published returns only published plans' do
-    plan_one = FactoryGirl.create(:simple_application_plan)
+    plan_one = FactoryBot.create(:simple_application_plan)
     plan_one.publish!
 
-    plan_two = FactoryGirl.create(:simple_application_plan)
+    plan_two = FactoryBot.create(:simple_application_plan)
 
     assert_contains         Plan.published, plan_one
     assert_does_not_contain Plan.published, plan_two
   end
 
   test 'Plan.stock returns only stock plans' do
-    stock_plan = FactoryGirl.create(:simple_application_plan)
+    stock_plan = FactoryBot.create(:simple_application_plan)
     custom_plan = stock_plan.customize.save!
 
     assert_contains         Plan.stock, stock_plan
@@ -55,7 +55,7 @@ class PlanTest < ActiveSupport::TestCase
 
   context 'customizations' do
     setup do
-      @stock  = FactoryGirl.create(:simple_application_plan)
+      @stock  = FactoryBot.create(:simple_application_plan)
       @custom = @stock.customize
       @custom.save!
     end
@@ -71,8 +71,8 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'published plan is not losing master status when hidden' do
-    service = FactoryGirl.create(:simple_service)
-    plan = FactoryGirl.create(:simple_application_plan, :issuer => service)
+    service = FactoryBot.create(:simple_service)
+    plan = FactoryBot.create(:simple_application_plan, :issuer => service)
     plan.publish!
     service.application_plans.default = plan
 
@@ -84,11 +84,11 @@ class PlanTest < ActiveSupport::TestCase
 
   context 'Customized Plans' do
     setup do
-      @custom_account_plan = FactoryGirl.create(:simple_application_plan).customize
-      @custom_service_plan = FactoryGirl.create(:simple_service_plan).customize
+      @custom_account_plan = FactoryBot.create(:simple_application_plan).customize
+      @custom_service_plan = FactoryBot.create(:simple_service_plan).customize
       # app plans are tested elsewhere
 
-      @buyer = FactoryGirl.create(:simple_buyer)
+      @buyer = FactoryBot.create(:simple_buyer)
     end
 
     should 'destroy custom account plans if its single buyer is destroyed' do
@@ -111,7 +111,7 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'nil values' do
-    plan = FactoryGirl.create(:simple_plan, issuer_id: 42, issuer_type: 'Plan', type: 'Plan')
+    plan = FactoryBot.create(:simple_plan, issuer_id: 42, issuer_type: 'Plan', type: 'Plan')
     assert plan.valid?
 
     plan.setup_fee = nil
@@ -128,7 +128,7 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   context 'A Plan instance' do
-    setup { @plan = FactoryGirl.create(:simple_application_plan) }
+    setup { @plan = FactoryBot.create(:simple_application_plan) }
 
     context 'in published state' do
       setup { @plan.publish! }
@@ -162,7 +162,7 @@ class PlanTest < ActiveSupport::TestCase
     end
 
     should 'not fail with usage_limits validating presence of plan' do
-      Factory :usage_limit, :plan => @plan
+      FactoryBot.create :usage_limit, :plan => @plan
 
       custom = @plan.customize
       custom.save
@@ -213,7 +213,7 @@ class PlanTest < ActiveSupport::TestCase
 
       should 'be of the same class as the original' do
         %W(application_plan account_plan service_plan).each do |plan_type|
-          stock = FactoryGirl.create("simple_#{plan_type}".to_sym)
+          stock = FactoryBot.create("simple_#{plan_type}".to_sym)
           stock.customize.save!
           assert stock.customizations.all? { |custom| stock.class == custom.class }
         end
@@ -222,7 +222,7 @@ class PlanTest < ActiveSupport::TestCase
       context 'features' do
         %W(application_plan account_plan service_plan).each do |plan_type|
           should "be the same as of the original plan (#{plan_type})" do
-            stock = FactoryGirl.create("simple_#{plan_type}".to_sym)
+            stock = FactoryBot.create("simple_#{plan_type}".to_sym)
             enabled = stock.issuer.features.create!(:name => "feature enabled",
                                                     :scope => plan_type.camelize)
 
@@ -240,7 +240,7 @@ class PlanTest < ActiveSupport::TestCase
     context 'copy' do
       should "create identical copy of plan with (copy) suffix in name" do
         %W(account_plan service_plan).each do |plan_type|
-          stock = FactoryGirl.create("simple_#{plan_type}".to_sym)
+          stock = FactoryBot.create("simple_#{plan_type}".to_sym)
           feature = stock.issuer.features.create!(:name => "#{plan_type} feature enabled",
                                                   :scope => plan_type.camelize)
           stock.features_plans.create! :feature => feature
@@ -260,7 +260,7 @@ class PlanTest < ActiveSupport::TestCase
       end
 
       should "generate randomized system_names to avoid clashes" do
-        plan = FactoryGirl.build_stubbed(:simple_application_plan, system_name: 'somee_plan_foo')
+        plan = FactoryBot.build_stubbed(:simple_application_plan, system_name: 'somee_plan_foo')
         plan.stubs(:randomized).returns(1)
         copy1 = plan.copy
         assert_equal "#{plan.system_name}_copy_1", copy1.system_name
@@ -273,7 +273,7 @@ class PlanTest < ActiveSupport::TestCase
 
       # this is bug in aasm plugin - replace it with state_machine gem
       should_eventually "clone state" do
-        stock = FactoryGirl.build_stubbed(:simple_application_plan, state: 'published')
+        stock = FactoryBot.build_stubbed(:simple_application_plan, state: 'published')
 
         clone = stock.copy
         clone.save!
@@ -283,11 +283,11 @@ class PlanTest < ActiveSupport::TestCase
       end
 
       should "create identical copy of application plan with associations" do
-        stock = FactoryGirl.create(:simple_application_plan)
+        stock = FactoryBot.create(:simple_application_plan)
         feature = stock.issuer.features.create!(:name => "feature enabled",
                                                 :scope => 'ApplicationPlan')
         stock.features_plans.create! :feature => feature
-        metric = Factory(:metric, :service => stock.service, :system_name => 'frags')
+        metric = FactoryBot.create(:metric, :service => stock.service, :system_name => 'frags')
         stock.pricing_rules.create! :metric => metric, :min => 1, :max => 5, :cost_per_unit => 1
         ul1 = stock.usage_limits.new :period => :day, :value => 10
         ul1.metric = metric
@@ -314,7 +314,7 @@ class PlanTest < ActiveSupport::TestCase
 
       should "create a copy even if original's plan system_name has about 220 characters" do
         # real system_name from one of our customers
-        plan = FactoryGirl.create(:application_plan, system_name:
+        plan = FactoryBot.create(:application_plan, system_name:
           '99_mo_15kPerson_5kCompany_006Overage_copy_1427860479286288_copy_1427' \
           '8611021696677_copy_14404293909783192_copy_1443476994469875_copy_1443' \
           '5533977474842_copy_1443819978875712_copy_14460495243248389')
@@ -416,7 +416,7 @@ class PlanTest < ActiveSupport::TestCase
     context 'on :bought_by?' do
       setup do
         @plan.cinstances.delete_all
-        @buyer = FactoryGirl.create(:simple_buyer)
+        @buyer = FactoryBot.create(:simple_buyer)
       end
 
       should 'return true if there is cinstance for given user account' do
@@ -466,7 +466,7 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   test 'new plan is created in hidden state' do
-    plan = FactoryGirl.create(:simple_service).application_plans.build(:name => 'name')
+    plan = FactoryBot.create(:simple_service).application_plans.build(:name => 'name')
     plan.save!
 
     assert_equal 'hidden', plan.state
@@ -474,8 +474,8 @@ class PlanTest < ActiveSupport::TestCase
 
   context 'destroying a plan' do
     should "not be possible if has contract" do
-      plan = FactoryGirl.create(:simple_application_plan)
-      cinstance = FactoryGirl.create(:simple_cinstance, :plan => plan)
+      plan = FactoryBot.create(:simple_application_plan)
+      cinstance = FactoryBot.create(:simple_cinstance, :plan => plan)
 
       plan.reload
       plan.destroy
@@ -485,8 +485,8 @@ class PlanTest < ActiveSupport::TestCase
     end
 
     should "not be possible if any of it's customization has contract" do
-      plan = FactoryGirl.create(:simple_application_plan)
-      cinstance = FactoryGirl.create(:simple_cinstance, :plan => plan)
+      plan = FactoryBot.create(:simple_application_plan)
+      cinstance = FactoryBot.create(:simple_cinstance, :plan => plan)
 
       cinstance.customize_plan!
 
@@ -498,8 +498,8 @@ class PlanTest < ActiveSupport::TestCase
     end
 
     should "not destroy application in backend when plan cannot be destroyed" do
-      plan = FactoryGirl.create(:simple_application_plan)
-      cinstance = FactoryGirl.create(:simple_cinstance, :plan => plan)
+      plan = FactoryBot.create(:simple_application_plan)
+      cinstance = FactoryBot.create(:simple_cinstance, :plan => plan)
 
       refute plan.can_be_destroyed?
 
@@ -510,8 +510,8 @@ class PlanTest < ActiveSupport::TestCase
     end
 
     should "destroy it's usage limits" do
-      plan = FactoryGirl.create(:simple_application_plan)
-      usage_limit = Factory(:usage_limit, :plan => plan)
+      plan = FactoryBot.create(:simple_application_plan)
+      usage_limit = FactoryBot.create(:usage_limit, :plan => plan)
 
       plan.destroy
 
@@ -519,8 +519,8 @@ class PlanTest < ActiveSupport::TestCase
     end
 
     should "destroy it's pricing rules" do
-      plan = FactoryGirl.create(:simple_application_plan)
-      pricing_rule = Factory(:pricing_rule, :plan => plan)
+      plan = FactoryBot.create(:simple_application_plan)
+      pricing_rule = FactoryBot.create(:pricing_rule, :plan => plan)
 
       plan.destroy
 
@@ -532,7 +532,7 @@ class PlanTest < ActiveSupport::TestCase
   # Regression tests for https://github.com/3scale/system/issues/2521
   #
   should "don't raise exception when setup_fee is nil" do
-    plan = FactoryGirl.build_stubbed(:application_plan)
+    plan = FactoryBot.build_stubbed(:application_plan)
     plan.setup_fee = nil
     assert_nothing_raised(NoMethodError) do
       plan.valid?
@@ -540,7 +540,7 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   should "don't raise exception when cost_per_month is nil" do
-    plan = FactoryGirl.build_stubbed(:application_plan)
+    plan = FactoryBot.build_stubbed(:application_plan)
     plan.cost_per_month = nil
     assert_nothing_raised(NoMethodError) do
       plan.valid?
@@ -548,7 +548,7 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   should 'let global finance setting prevail' do
-    @plan = FactoryGirl.create(:simple_application_plan)
+    @plan = FactoryBot.create(:simple_application_plan)
     @plan.provider_account.billing_strategy = Finance::BillingStrategy.new
 
     assert @plan.pricing_enabled?
@@ -559,21 +559,21 @@ class PlanTest < ActiveSupport::TestCase
   end
 
   def test_plan_not_locked_if_deleted_from_db
-    plan = FactoryGirl.create(:simple_application_plan)
+    plan = FactoryBot.create(:simple_application_plan)
     plan.class.expects(:exists?).with(plan.id).at_least_once.returns(false)
     plan.expects(:lock!).never
     plan.destroy
   end
 
   def test_plan_not_audited_if_deleted_from_db
-    plan = FactoryGirl.create(:simple_application_plan)
+    plan = FactoryBot.create(:simple_application_plan)
     plan.class.expects(:exists?).with(plan.id).at_least_once.returns(false)
     plan.expects(:audit_destroy).never
     plan.destroy
   end
 
   def test_provided_by
-    plan = FactoryGirl.create(:application_plan)
+    plan = FactoryBot.create(:application_plan)
     provider = plan.provider_account
 
     assert_same_elements [

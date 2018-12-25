@@ -4,18 +4,18 @@ class MonthlyRevenueQueryTest < ActiveSupport::TestCase
 
   def setup
     Timecop.return
-    @provider = FactoryGirl.create(:simple_provider)
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
-    @invoice_one = FactoryGirl.create(:invoice,
+    @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,
                                       provider_account: @provider,
                                       period: Month.new(Time.utc(2009, 6, 1)),
                                       created_at: Time.utc(2009, 6, 2))
 
-    @invoice_two = FactoryGirl.create(:invoice,
+    @invoice_two = FactoryBot.create(:invoice,
                                       provider_account: @provider,
-                                      buyer_account: FactoryGirl.create(:simple_buyer, provider_account: @provider),
+                                      buyer_account: FactoryBot.create(:simple_buyer, provider_account: @provider),
                                       period: Month.new(Time.utc(1964, 10, 1)),
                                       created_at: Time.utc(2009, 6, 1))
 
@@ -66,7 +66,7 @@ class MonthlyRevenueQueryTest < ActiveSupport::TestCase
   end
 
   test 'with_states does not include cancelled invoices' do
-    trap = FactoryGirl.create(:invoice, period: @invoice_one.period,
+    trap = FactoryBot.create(:invoice, period: @invoice_one.period,
                               provider_account: @provider, buyer_account: @buyer)
     trap.line_items.create!(name: 'C', cost: 11)
     trap.cancel!
@@ -81,7 +81,7 @@ class MonthlyRevenueQueryTest < ActiveSupport::TestCase
   end
 
   test '#with_states groups by state' do
-    @invoice_three = FactoryGirl.create(:invoice,
+    @invoice_three = FactoryBot.create(:invoice,
                                         buyer_account: @buyer,
                                         provider_account: @provider,
                                         period: Month.new(Time.utc(2009, 6, 1)),

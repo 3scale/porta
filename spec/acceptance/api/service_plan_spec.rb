@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "ServicePlan" do
 
   let(:service) { provider.services.default }
-  let(:resource) { Factory.build(:service_plan, issuer: service) }
+  let(:resource) { FactoryBot.build(:service_plan, issuer: service) }
 
   let(:service_id) { service.id }
 
@@ -32,7 +32,7 @@ resource "ServicePlan" do
   end
 
   api 'buyer service plans' do
-    let(:account) { Factory(:buyer_account, provider_account: provider) }
+    let(:account) { FactoryBot.create(:buyer_account, provider_account: provider) }
     let(:account_id) { account.id }
 
     get '/admin/api/accounts/:account_id/service_plans.:format', action: :index do

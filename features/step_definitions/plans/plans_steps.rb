@@ -4,7 +4,7 @@ Given /^the (provider ".+?") has following (#{PLANS} plan)s?:$/ do |provider, pl
   plan = plan.parameterize.underscore # application plan => application_plan
 
   table.hashes.each do |row|
-    Factory plan, row.reverse_merge!(:issuer => provider.first_service!)
+    FactoryBot.create plan, row.reverse_merge!(:issuer => provider.first_service!)
   end
 end
 

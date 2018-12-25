@@ -2,14 +2,14 @@ require 'test_helper'
 
 class Liquid::LegacyTagsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory(:provider_account)
-    @buyer = Factory(:buyer_account, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     login_buyer(@buyer)
   end
 
   test 'latest_forum_posts' do
-    topic = Factory(:topic, forum: @provider.forum)
-    Factory(:post, forum: @provider.forum, topic: topic)
+    topic = FactoryBot.create(:topic, forum: @provider.forum)
+    FactoryBot.create(:post, forum: @provider.forum, topic: topic)
     override_dashboard_with '{% latest_forum_posts %}'
 
     get '/admin'

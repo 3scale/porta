@@ -5,11 +5,11 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
   include ThreeScale::PrivateModule(Rails.application.routes.url_helpers)
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @service  = Factory :service, :account => @provider
-    @app_plan = Factory :application_plan, :issuer => @service
-    @metric   = Factory :metric, :service => @service
-    @pricing_rule = Factory :pricing_rule, :plan => @app_plan, :metric => @metric
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @service  = FactoryBot.create :service, :account => @provider
+    @app_plan = FactoryBot.create :application_plan, :issuer => @service
+    @metric   = FactoryBot.create :metric, :service => @service
+    @pricing_rule = FactoryBot.create :pricing_rule, :plan => @app_plan, :metric => @metric
 
 
     host! @provider.admin_domain
@@ -19,8 +19,8 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id))
     assert_response :forbidden

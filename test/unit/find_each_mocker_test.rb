@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FindEachMockerTest < ActiveSupport::TestCase
   def setup
-    @items = FactoryGirl.create_list(:line_item, 31)
+    @items = FactoryBot.create_list(:line_item, 31)
     @items.sort_by(&:id)
     @batch = FindEachMocker.new(LineItem.all.order(id: :asc), per_page: 5, page: 1)
   end

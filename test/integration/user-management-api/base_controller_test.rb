@@ -4,9 +4,9 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
   include ApiRouting
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
-    @user = FactoryGirl.create(:simple_admin, account: @provider)
-    @token = FactoryGirl.create(:access_token, owner: @user, scopes: %w(account_management), permission: 'rw')
+    @provider = FactoryBot.create(:simple_provider)
+    @user = FactoryBot.create(:simple_admin, account: @provider)
+    @token = FactoryBot.create(:access_token, owner: @user, scopes: %w(account_management), permission: 'rw')
 
     host! @provider.admin_domain
   end
@@ -35,8 +35,8 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     disable_transactional_fixtures!
 
     def setup
-      @provider = FactoryGirl.create(:simple_provider)
-      @user = FactoryGirl.create(:simple_admin, account: @provider)
+      @provider = FactoryBot.create(:simple_provider)
+      @user = FactoryBot.create(:simple_admin, account: @provider)
       @user.access_tokens.create!(name: 'API', scopes: %w(account_management), permission: 'ro') do |token|
         token.value = 'access_token'
       end
@@ -64,7 +64,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       host! 'random.example.net'
       ThreeScale.config.stubs(tenant_mode: 'master')
       ThreeScale.config.stubs(onpremises: true)
-      user = FactoryGirl.create(:simple_admin, account: master_account)
+      user = FactoryBot.create(:simple_admin, account: master_account)
       user.access_tokens.create!(name: 'API', scopes: %w(account_management), permission: 'ro') do |token|
         token.value = 'master_access_token'
       end

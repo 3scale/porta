@@ -49,7 +49,7 @@ class WebHookFailuresTest < ActiveSupport::TestCase
   end
 
   test '#to_xml expected xml structure' do
-    buyer = Factory.build(:buyer_account)
+    buyer = FactoryBot.build(:buyer_account)
     event = WebHook::Event.new(buyer.provider_account, buyer, :event => 'created')
     xml = event.to_xml
 
@@ -67,7 +67,7 @@ class WebHookFailuresTest < ActiveSupport::TestCase
   end
 
   test '#to_xml no double escaping of xml' do
-    buyer = Factory(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
     event = WebHook::Event.new(buyer.provider_account, buyer, :event => 'updated')
     xml = event.to_xml
 

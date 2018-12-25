@@ -44,6 +44,6 @@ class BaseEventStoreEventTest < ActiveSupport::TestCase
   private
 
   def provider
-    @_provider ||= FactoryGirl.build_stubbed(:simple_provider, id: 1)
+    @_provider ||= FactoryBot.build_stubbed(:simple_provider, id: 1)
   end
 end

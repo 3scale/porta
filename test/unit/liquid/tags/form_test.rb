@@ -23,20 +23,20 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   end
 
   test "application.create form" do
-    @context['app'] = Liquid::Drops::Application.new(Factory(:application))
+    @context['app'] = Liquid::Drops::Application.new(FactoryBot.create(:application))
     @tag = Liquid::Tags::Form.parse('form', "'application.create', app", ["CONTENT", '{% endform %}'], {})
     assert_match %r{<form.*>.*</form>}, @tag.render(@context)
   end
 
   test "signup form basics" do
-    @context['my_account'] = Liquid::Drops::Account.new(Factory(:simple_buyer))
+    @context['my_account'] = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
     @tag = Liquid::Tags::Form.parse('form', "'signup', my_account", ["CONTENT", '{% endform %}'], {})
     assert_match %r{<form.*id="signup_form".*>.*</form>}, @tag.render(@context)
   end
 
 
   test "signup form with plan_ids param" do
-    @context['my_account'] = Liquid::Drops::Account.new(Factory(:simple_buyer))
+    @context['my_account'] = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
     @context.registers[:request] = stub(params: { plan_ids: [ 1,2,42 ]})
 
     @tag = Liquid::Tags::Form.parse('form', "'signup', my_account", ["CONTENT", '{% endform %}'], {})
@@ -48,7 +48,7 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   end
 
   test "user.personal_details" do
-    @context['user'] = Liquid::Drops::User.new(Factory(:active_user))
+    @context['user'] = Liquid::Drops::User.new(FactoryBot.create(:active_user))
     @tag = Liquid::Tags::Form.parse('form', "'user.personal_details', user", ["CONTENT", '{% endform %}'], {})
     assert_match %r{<form.*id="edit_personal_details".*>.*</form>}, @tag.render(@context)
     assert_match %r{<form.*class=.*personal_details.*>.*</form>}, @tag.render(@context)
@@ -62,7 +62,7 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   end
 
   test "user.edit" do
-    user = Factory(:active_user)
+    user = FactoryBot.create(:active_user)
     @context['user'] = Liquid::Drops::User.new(user)
     @tag = Liquid::Tags::Form.parse('form', "'user.edit', user", ["CONTENT", '{% endform %}'], {})
 

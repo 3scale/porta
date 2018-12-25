@@ -3,7 +3,7 @@ require 'test_helper'
 class ThreeScale::OAuth2::Auth0ClientTest < ActiveSupport::TestCase
 
   setup do
-    authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+    authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
     @authentication = ThreeScale::OAuth2::Client.build_authentication(authentication_provider)
     @oauth2 = ThreeScale::OAuth2::Auth0Client.new(@authentication)
   end

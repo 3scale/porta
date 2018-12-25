@@ -8,15 +8,15 @@ class MessageObserverTest < ActiveSupport::TestCase
 
   def setup
     @observer = MessageObserver.instance
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
     @provider = @buyer.provider_account
     @service = @provider.first_service!
-    @plan = Factory(:application_plan, :issuer => @service)
+    @plan = FactoryBot.create(:application_plan, :issuer => @service)
   end
 
   def test_after_create_after_destroy
-    app_plan  = FactoryGirl.create(:application_plan, issuer: @service)
-    contract  = FactoryGirl.build(:service_contract)
+    app_plan  = FactoryBot.create(:application_plan, issuer: @service)
+    contract  = FactoryBot.build(:service_contract)
     cinstance = contract(app_plan)
 
     Applications::ApplicationCreatedEvent.expects(:create).once
@@ -33,32 +33,32 @@ class MessageObserverTest < ActiveSupport::TestCase
   end
 
   def test_plan_changed
-    contract = FactoryGirl.create(:service_contract)
+    contract = FactoryBot.create(:service_contract)
 
     ServiceContracts::ServiceContractPlanChangedEvent.expects(:create).once
     ContractMessenger.expects(:plan_change).never
 
-    contract.change_plan! FactoryGirl.create(:simple_service_plan)
+    contract.change_plan! FactoryBot.create(:simple_service_plan)
 
-    cinstance = FactoryGirl.create(:cinstance)
+    cinstance = FactoryBot.create(:cinstance)
 
     Cinstances::CinstancePlanChangedEvent.expects(:create).once
     ContractMessenger.expects(:plan_change).never
 
-    cinstance.change_plan! FactoryGirl.create(:simple_application_plan)
+    cinstance.change_plan! FactoryBot.create(:simple_application_plan)
 
     Logic::RollingUpdates.stubs(skipped?: true)
 
     Cinstances::CinstancePlanChangedEvent.expects(:create).never
     ContractMessenger.expects(:plan_change).once.returns(mock(deliver: true))
 
-    cinstance.change_plan! FactoryGirl.create(:simple_application_plan)
+    cinstance.change_plan! FactoryBot.create(:simple_application_plan)
   end
 
   context "after_commit_on_create" do
     should "call correct messenger" do
-      @app_plan = Factory(:application_plan, :issuer => @service)
-      @service_plan = Factory(:service_plan, :issuer => @service)
+      @app_plan = FactoryBot.create(:application_plan, :issuer => @service)
+      @service_plan = FactoryBot.create(:service_plan, :issuer => @service)
 
       @cinstance = contract(@app_plan)
       CinstanceMessenger.expects(:new_contract).with(@cinstance).returns(message)

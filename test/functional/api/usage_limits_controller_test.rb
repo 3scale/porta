@@ -4,9 +4,9 @@ class Api::UsageLimitsControllerTest < ActionController::TestCase
 
 
   def setup
-    @provider_account = Factory :provider_account
-    @plan = Factory(:application_plan, issuer: @provider_account.default_service)
-    @metric = Factory(:metric, service: @provider_account.default_service)
+    @provider_account = FactoryBot.create :provider_account
+    @plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
+    @metric = FactoryBot.create(:metric, service: @provider_account.default_service)
 
     @request.host = @provider_account.admin_domain
     login_as(@provider_account.admins.first)

@@ -18,7 +18,7 @@ def fill_draft(text)
 end
 
 Given /^the template "([^"]*)" of (provider "[^"]*") is$/ do |name, provider, html|
-  #TODO: extract PageTemplate construction to FactoryGirl or whatever factory
+  #TODO: extract PageTemplate construction to FactoryBot or whatever factory
   if layout = provider.layouts.find_by_system_name(name)
     layout.update_attribute(:body, html)
   else

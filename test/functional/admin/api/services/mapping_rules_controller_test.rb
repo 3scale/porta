@@ -3,7 +3,7 @@ require 'test_helper'
 module Admin::Api::Services
   class MappingRulesControllerTest < ActionController::TestCase
     def setup
-      provider = FactoryGirl.create(:provider_account)
+      provider = FactoryBot.create(:provider_account)
       assert @service = provider.first_service!
       assert @proxy = @service.proxy
 

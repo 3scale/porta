@@ -4,8 +4,8 @@ class UserObserverTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def buyer_user(attributes)
-    buyer_account = Factory(:simple_buyer, provider_account: Factory(:simple_provider))
-    Factory.build(:simple_user, attributes.merge(account: buyer_account))
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: FactoryBot.create(:simple_provider))
+    FactoryBot.build(:simple_user, attributes.merge(account: buyer_account))
   end
 
   test 'send email when new user is created' do
@@ -21,7 +21,7 @@ class UserObserverTest < ActiveSupport::TestCase
   end
 
   def provider_user
-    Factory.build(:simple_user, signup_type: :new_signup, account: Factory(:simple_provider))
+    FactoryBot.build(:simple_user, signup_type: :new_signup, account: FactoryBot.create(:simple_provider))
   end
 
   test 'send provider activation email when new provider user is created' do

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DataExportsWorkerTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @master   = master_account.delete && master_account
     @worker   = DataExportsWorker.new
   end

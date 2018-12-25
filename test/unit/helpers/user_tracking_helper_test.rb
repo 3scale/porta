@@ -7,7 +7,7 @@ class UserTrackingHelperTest < ActionView::TestCase
   attr_accessor :current_user
 
   test '#analytics_identity_data' do
-    self.current_user = FactoryGirl.build_stubbed(:user_with_account)
+    self.current_user = FactoryBot.build_stubbed(:user_with_account)
 
     assert analytics_identity_data
   end

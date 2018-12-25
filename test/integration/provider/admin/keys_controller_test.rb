@@ -2,18 +2,18 @@ require 'test_helper'
 
 class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
   def setup
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     service = provider.default_service
 
-    plan = FactoryGirl.create(
+    plan = FactoryBot.create(
       :application_plan,
       issuer: service
     )
 
-    @application = FactoryGirl.create(
+    @application = FactoryBot.create(
       :cinstance,
       plan: plan,
-      application_keys: FactoryGirl.create_list(
+      application_keys: FactoryBot.create_list(
         :application_key,
         2
       )
@@ -21,13 +21,13 @@ class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
 
     @key = @application.application_keys.first!
 
-    @member_user = FactoryGirl.create(
+    @member_user = FactoryBot.create(
       :member,
       account: provider
     )
     @member_user.activate!
 
-    @member_user_with_app_access = FactoryGirl.create(
+    @member_user_with_app_access = FactoryBot.create(
       :member,
       account: provider,
       admin_sections: ['partners']

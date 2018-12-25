@@ -8,8 +8,8 @@ module ServiceDiscovery
 
     class AsyncMethodsTest < ActiveSupport::TestCase
       setup do
-        @account = FactoryGirl.create(:simple_provider)
-        @service = FactoryGirl.create(:service, account: @account,
+        @account = FactoryBot.create(:simple_provider)
+        @service = FactoryBot.create(:service, account: @account,
                                                 name: 'fake-api',
                                                 system_name: 'fake-project-fake-api',
                                                 kubernetes_service_link: '/api/v1/namespaces/fake-project/services/fake-api')
@@ -31,12 +31,12 @@ module ServiceDiscovery
 
     setup do
       stub_external_cluster_initialization!
-      @account = FactoryGirl.create(:simple_provider)
-      @service = FactoryGirl.create(:service, account: @account,
+      @account = FactoryBot.create(:simple_provider)
+      @service = FactoryBot.create(:service, account: @account,
                                               name: 'fake-api',
                                               system_name: 'fake-project-fake-api',
                                               kubernetes_service_link: '/api/v1/namespaces/fake-project/services/fake-api')
-      FactoryGirl.create(:proxy, service: @service, api_backend: 'http://api.example.net:80')
+      FactoryBot.create(:proxy, service: @service, api_backend: 'http://api.example.net:80')
 
       @cluster_service = ServiceDiscovery::ClusterService.new raw_cluster_service_resource
       @cluster_service.stubs(specification: mock_cluster_service_spec)
@@ -115,7 +115,7 @@ module ServiceDiscovery
     test 'refreshes existing discovered api_docs_service' do
       @import_service.stubs(cluster_service: @cluster_service)
 
-      discovered_api_docs_service = FactoryGirl.create(:api_docs_service, account: @account, service: @service, discovered: true)
+      discovered_api_docs_service = FactoryBot.create(:api_docs_service, account: @account, service: @service, discovered: true)
 
       assert_no_difference @service.api_docs_services.method(:count) do
         @import_service.send(:import_cluster_active_docs_to, @service)

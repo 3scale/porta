@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ServiceBackendServiceTest < ActiveSupport::TestCase
   setup do
-    @service = FactoryGirl.create(:service)
+    @service = FactoryBot.create(:service)
     @service_update_backend_service = ServiceUpdateBackendService.new(service)
   end
 

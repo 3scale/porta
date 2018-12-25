@@ -4,7 +4,7 @@ class Liquid::Drops::PaginationDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    10.times { Factory(:invoice) }
+    10.times { FactoryBot.create(:invoice) }
     @url_builder = Object.new
 
     @url_builder.stubs params: {}

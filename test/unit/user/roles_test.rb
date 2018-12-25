@@ -19,8 +19,8 @@ class User::RolesTest < ActiveSupport::TestCase
 
     context 'instance methods' do
       setup do
-        @buyer_user = Factory(:buyer_account).users.first
-        @provider_user = Factory(:provider_account).users.first
+        @buyer_user = FactoryBot.create(:buyer_account).users.first
+        @provider_user = FactoryBot.create(:provider_account).users.first
       end
 
       should 'buyer users have buyers possible roles' do
@@ -46,11 +46,11 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'User.by_role' do
-    admin = Factory.build(:user)
+    admin = FactoryBot.build(:user)
     admin.role = :admin
     admin.save!
 
-    member = Factory.build(:user)
+    member = FactoryBot.build(:user)
     member.role = :member
     member.save!
 
@@ -59,11 +59,11 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'User.admins' do
-    admin = Factory.build(:user)
+    admin = FactoryBot.build(:user)
     admin.role = :admin
     admin.save!
 
-    member = Factory.build(:user)
+    member = FactoryBot.build(:user)
     member.role = :member
     member.save!
 
@@ -72,8 +72,8 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'User#superadmin? return true only if user is admin of the master account' do
-    regular_account = Factory(:account)
-    member = Factory(:user, :account => regular_account)
+    regular_account = FactoryBot.create(:account)
+    member = FactoryBot.create(:user, :account => regular_account)
     admin = regular_account.admins.first
 
     master_account.delete
@@ -85,25 +85,25 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'User#provider_admin? returns true if user is an admin of provider account' do
-    account = Factory(:provider_account)
+    account = FactoryBot.create(:provider_account)
     assert account.admins.first.provider_admin?
   end
 
   test 'User#provider_admin? returns false if user is non admin of provider account' do
-    account = Factory(:provider_account)
-    user    = Factory(:user, :account => account)
+    account = FactoryBot.create(:provider_account)
+    user    = FactoryBot.create(:user, :account => account)
 
     refute user.provider_admin?
   end
 
   test 'User#provider_admin? return false if user is of non provider account' do
-    account = Factory(:account, :provider => false)
+    account = FactoryBot.create(:account, :provider => false)
 
     refute account.admins.first.provider_admin?
   end
 
   test 'role is not mass assignable' do
-    user = Factory(:user)
+    user = FactoryBot.create(:user)
 
     assert_no_change :of => lambda { user.role } do
       user.update_attributes(:role => :admin)
@@ -111,7 +111,7 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'role accepts also string' do
-    user = Factory(:user)
+    user = FactoryBot.create(:user)
     user.role = "admin"
     user.save!
 
@@ -120,7 +120,7 @@ class User::RolesTest < ActiveSupport::TestCase
 
   context 'user roles metaprogrammed methods' do
     setup do
-      @user = Factory(:user)
+      @user = FactoryBot.create(:user)
     end
 
     User::ROLES.each do |user_role|

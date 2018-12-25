@@ -5,8 +5,8 @@ require 'spec_helper'
 resource "Account" do
 
   # build the object which will be used for CRUD actions
-  let(:account) { Factory.build(:buyer_account, provider_account: provider) }
-  let(:payment_detail) { FactoryGirl.create(:payment_detail, account: account) }
+  let(:account) { FactoryBot.build(:buyer_account, provider_account: provider) }
+  let(:payment_detail) { FactoryBot.create(:payment_detail, account: account) }
 
   let(:resource) do
     FieldsDefinition.create_defaults(master)
@@ -145,7 +145,7 @@ resource "Account" do
       end
 
       context 'if scheduled_for_deletion' do
-        let(:resource) { FactoryGirl.build(:provider_account, state: 'scheduled_for_deletion', state_changed_at: Time.zone.now.beginning_of_day) }
+        let(:resource) { FactoryBot.build(:provider_account, state: 'scheduled_for_deletion', state_changed_at: Time.zone.now.beginning_of_day) }
         it { should have_properties(%w[state deletion_date]) }
       end
 
@@ -157,7 +157,7 @@ resource "Account" do
 
     context 'provider account' do
       let(:resource) do
-        FactoryGirl.build(:provider_account, support_email: 'support@email.com',
+        FactoryBot.build(:provider_account, support_email: 'support@email.com',
                           finance_support_email: 'finance@email.com', site_access_code: 'access-code')
       end
 
@@ -194,7 +194,7 @@ resource "Account" do
       end
 
       context 'if scheduled_for_deletion' do
-        let(:resource) { FactoryGirl.build(:provider_account, state: 'scheduled_for_deletion', state_changed_at: Time.zone.now) }
+        let(:resource) { FactoryBot.build(:provider_account, state: 'scheduled_for_deletion', state_changed_at: Time.zone.now) }
         it { should have_tags(%w[state deletion_date]).from(resource) }
       end
 
@@ -207,7 +207,7 @@ resource "Account" do
 
     context 'provider account' do
       let(:resource) do
-        FactoryGirl.build(:provider_account, support_email: 'support@email.com',
+        FactoryBot.build(:provider_account, support_email: 'support@email.com',
                           finance_support_email: 'finance@email.com', site_access_code: 'access-code')
       end
 

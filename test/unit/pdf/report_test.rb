@@ -3,14 +3,14 @@ require 'test_helper'
 class Pdf::ReportTest < ActiveSupport::TestCase
 
   setup do
-    @account = FactoryGirl.create(:simple_provider)
-    @service = FactoryGirl.create(:simple_service, account: @account)
+    @account = FactoryBot.create(:simple_provider)
+    @service = FactoryBot.create(:simple_service, account: @account)
 
     @report = Pdf::Report.new(@account, @service, period: :day).generate
   end
 
   test 'send_notification!' do
-    user = FactoryGirl.create(:simple_user, role: :admin, account: @account)
+    user = FactoryBot.create(:simple_user, role: :admin, account: @account)
     user.create_notification_preferences!(enabled_notifications: %w[daily_report])
 
     assert_difference ActionMailer::Base.deliveries.method(:count) do
@@ -27,8 +27,8 @@ class Pdf::ReportTest < ActiveSupport::TestCase
   end
 
   test 'generate without metrics' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
-    service = FactoryGirl.build_stubbed(:simple_service, account: account)
+    account = FactoryBot.build_stubbed(:simple_provider)
+    service = FactoryBot.build_stubbed(:simple_service, account: account)
 
     report = Pdf::Report.new(account, service, period: :day)
 
@@ -36,8 +36,8 @@ class Pdf::ReportTest < ActiveSupport::TestCase
   end
 
   test 'sanitize html entitites' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
-    service = FactoryGirl.build_stubbed(:simple_service, account: account, name: 'Name Contains & Symbol')
+    account = FactoryBot.build_stubbed(:simple_provider)
+    service = FactoryBot.build_stubbed(:simple_service, account: account, name: 'Name Contains & Symbol')
 
     report = Pdf::Report.new(account, service, period: :day)
 

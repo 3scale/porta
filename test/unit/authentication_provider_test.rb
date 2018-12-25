@@ -3,27 +3,27 @@ require 'test_helper'
 class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test "name" do
-    authentication_provider = FactoryGirl.build_stubbed(:authentication_provider, name: '')
+    authentication_provider = FactoryBot.build_stubbed(:authentication_provider, name: '')
     refute authentication_provider.valid?
     assert authentication_provider.errors[:name].present?
   end
 
   test "system_name" do
-    authentication_provider = FactoryGirl.build(:authentication_provider, name: "foo", system_name: nil, account_id: 1)
+    authentication_provider = FactoryBot.build(:authentication_provider, name: "foo", system_name: nil, account_id: 1)
     authentication_provider.save!
     assert_equal "foo", authentication_provider.system_name
 
-    authentication_provider = FactoryGirl.build(:authentication_provider, name: "foo", system_name: nil, account_id: 1)
+    authentication_provider = FactoryBot.build(:authentication_provider, name: "foo", system_name: nil, account_id: 1)
     refute authentication_provider.valid?
     assert authentication_provider.errors[:system_name].present?
 
-    authentication_provider = FactoryGirl.build(:authentication_provider, name: "foo", system_name: nil, account_id: 2)
+    authentication_provider = FactoryBot.build(:authentication_provider, name: "foo", system_name: nil, account_id: 2)
     assert authentication_provider.valid?, authentication_provider.errors.to_a.to_sentence
     assert_equal "foo", authentication_provider.system_name
   end
 
   test 'validate urls' do
-    authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+    authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
 
     authentication_provider.site = ''
     authentication_provider.token_url = ''
@@ -55,9 +55,9 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test 'callback_account' do
-      auth_provider = FactoryGirl.build_stubbed(:authentication_provider)
+      auth_provider = FactoryBot.build_stubbed(:authentication_provider)
           .becomes(AuthenticationProvider::GitHub)
-      master = FactoryGirl.build_stubbed(:master_account)
+      master = FactoryBot.build_stubbed(:master_account)
 
       auth_provider.branding_state = 'threescale_branded'
       assert auth_provider.threescale_branded?, 'should be 3scale branded'
@@ -121,8 +121,8 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test '::published' do
-    ap_published = FactoryGirl.create(:authentication_provider, published: true)
-    FactoryGirl.create(:authentication_provider, published: false)
+    ap_published = FactoryBot.create(:authentication_provider, published: true)
+    FactoryBot.create(:authentication_provider, published: false)
 
     assert_equal [ap_published], AuthenticationProvider.published
     assert_equal 2, AuthenticationProvider.count

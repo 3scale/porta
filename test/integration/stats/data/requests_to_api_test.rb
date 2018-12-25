@@ -3,10 +3,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider_account = FactoryGirl.create(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service          = @provider_account.default_service
-    @plan             = FactoryGirl.create(:simple_application_plan, issuer: @service)
-    @buyer_account    = Factory(:simple_buyer, provider_account: @provider_account)
+    @plan             = FactoryBot.create(:simple_application_plan, issuer: @service)
+    @buyer_account    = FactoryBot.create(:simple_buyer, provider_account: @provider_account)
     @application      = @buyer_account.buy!(@plan)
 
     host! @provider_account.self_domain
@@ -17,8 +17,8 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'usage with access token' do
-    member = FactoryGirl.create(:member, account: @provider_account, admin_sections: ['monitoring'])
-    token  = FactoryGirl.create(:access_token, owner: member, scopes: ['stats'])
+    member = FactoryBot.create(:member, account: @provider_account, admin_sections: ['monitoring'])
+    token  = FactoryBot.create(:access_token, owner: member, scopes: ['stats'])
     params = { period: 'day', metric_name: 'hits', access_token: token.value }
 
     # token includes the right scope, member has the right permission, all services are accessible
@@ -53,8 +53,8 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
   end
 
   test 'summary with access token' do
-    member = FactoryGirl.create(:member, account: @provider_account, admin_sections: ['monitoring'])
-    token  = FactoryGirl.create(:access_token, owner: member, scopes: ['stats'])
+    member = FactoryBot.create(:member, account: @provider_account, admin_sections: ['monitoring'])
+    token  = FactoryBot.create(:access_token, owner: member, scopes: ['stats'])
     params = { period: 'day', metric_name: 'hits', access_token: token.value }
 
     get "/stats/applications/#{@application.id}/summary.json", params

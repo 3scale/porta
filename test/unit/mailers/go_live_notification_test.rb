@@ -5,7 +5,7 @@ class GoLiveNotificationTest < ActionMailer::TestCase
   end
 
   test "send the notification" do
-    account = FactoryGirl.create(:provider_account)
+    account = FactoryBot.create(:provider_account)
     GoLiveNotification.notice(account).deliver_now
     email = ActionMailer::Base.deliveries.last
     assert_match account.domain, email.subject

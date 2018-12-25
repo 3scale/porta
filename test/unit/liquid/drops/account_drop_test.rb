@@ -4,7 +4,7 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @app = FactoryGirl.create(:cinstance)
+    @app = FactoryBot.create(:cinstance)
     @buyer = @app.user_account
     @drop = Drops::Account.new(@buyer)
   end
@@ -32,7 +32,7 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
   end
 
   test '#bought_account_contract' do
-    contract = FactoryGirl.build_stubbed(:contract)
+    contract = FactoryBot.build_stubbed(:contract)
     @buyer.stubs bought_account_contract: contract
     assert_equal Drops::Contract.new(contract), @drop.bought_account_contract
   end
@@ -76,13 +76,13 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
     include Liquid
 
     def setup
-      @app = FactoryGirl.create(:cinstance)
+      @app = FactoryBot.create(:cinstance)
       @buyer = @app.user_account
       [{ target: "Account", name: "telephone_number", label: "telephone_number", hidden: true },
        { target: "Account", name: "visible_extra", label: "visible_extra" },
        { target: "Account", name: "hidden_extra",  label: "hidden_extra", hidden: true }]
         .each do |field|
-        FactoryGirl.create :fields_definition, field.merge({account_id: @buyer.provider_account.id})
+        FactoryBot.create :fields_definition, field.merge({account_id: @buyer.provider_account.id})
       end
 
       @buyer.reload

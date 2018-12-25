@@ -5,7 +5,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
 
 
   def setup
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
     @user = @buyer.users.first
     @drop = Drops::User.new(@user)
   end
@@ -41,7 +41,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
     setup do
       ::User.current = @user
 
-      @drop2 = Drops::User.new(Factory.create(:user, account: @buyer))
+      @drop2 = Drops::User.new(FactoryBot.create(:user, account: @buyer))
 
     end
 
@@ -61,7 +61,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
 
   context 'by a normal user' do
     setup do
-      ::User.current = Factory.create(:user, account: @buyer)
+      ::User.current = FactoryBot.create(:user, account: @buyer)
     end
 
     should "can't be destroyed" do
@@ -90,7 +90,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
 
     context 'users with sections' do
       setup do
-        @section = Factory(:cms_section, :public => false,
+        @section = FactoryBot.create(:cms_section, :public => false,
                            :provider => @buyer.provider_account,
                            :title => "protected-section",
                            :parent => @buyer.provider_account.sections.root)
@@ -111,11 +111,11 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
        { target: "User", name: "visible_extra", label: "visible_extra" },
        { target: "User", name: "hidden_extra",  label: "hidden_extra", hidden: true }]
        .each do |field|
-         Factory :fields_definition, field.merge({account_id: @buyer.provider_account.id})
+         FactoryBot.create :fields_definition, field.merge({account_id: @buyer.provider_account.id})
       end
 
       @buyer.reload
-      @user = Factory :user, account: @buyer
+      @user = FactoryBot.create :user, account: @buyer
       @user.extra_fields = {"visible_extra" => "visible extra value", "hidden_extra" => "hidden extra value" }
       @user.save!
 

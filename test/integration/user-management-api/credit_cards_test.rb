@@ -7,12 +7,12 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   include TestHelpers::ApiPagination
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @application_plan = Factory(:application_plan,
+    @application_plan = FactoryBot.create(:application_plan,
                                 :issuer => @provider.default_service)
     @application_plan.publish!
 
@@ -27,8 +27,8 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'update (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['finance'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'finance')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['finance'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'finance')
 
     put(admin_api_account_credit_card_path(@buyer, format: :xml), valid_params(token))
     assert_response :success
@@ -49,8 +49,8 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['finance'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'finance')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['finance'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'finance')
 
     delete(admin_api_account_credit_card_path(@buyer, format: :xml), access_token: token.value)
     assert_response :success

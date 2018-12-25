@@ -4,7 +4,7 @@ require 'test_helper'
 
 class InvoiceCounterTest < ActiveSupport::TestCase
   setup do
-    @invoice_count = FactoryGirl.create(:invoice_counter, invoice_count: 5)
+    @invoice_count = FactoryBot.create(:invoice_counter, invoice_count: 5)
   end
 
   test 'update_count' do

@@ -4,7 +4,7 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @drop = Drops::Provider.new(@provider)
   end
 
@@ -18,7 +18,7 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
   end
 
   test "#services" do
-    Factory  :service, account: @provider
+    FactoryBot.create  :service, account: @provider
     assert_equal 2, @drop.services.size
   end
 
@@ -57,7 +57,7 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
 
   test 'api_specs' do
     valid_attributes = {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
-    services = FactoryGirl.create_list(:service, 2, account: @provider)
+    services = FactoryBot.create_list(:service, 2, account: @provider)
     @provider.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
     services.first.api_docs_services.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
     services.last.api_docs_services.create!(valid_attributes.merge({name: 'service-deleted'})) # non-accessible with service

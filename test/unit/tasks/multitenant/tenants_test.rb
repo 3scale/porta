@@ -2,8 +2,8 @@ require 'test_helper'
 
 class Tasks::Multitenant::TenantsTest < ActiveSupport::TestCase
   setup do
-    FactoryGirl.create_list(:simple_provider, 5)
-    FactoryGirl.create_list(:simple_buyer, 2)
+    FactoryBot.create_list(:simple_provider, 5)
+    FactoryBot.create_list(:simple_buyer, 2)
   end
 
   teardown do

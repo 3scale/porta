@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Master::EventsImporterTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     ::Events.stubs(shared_secret: 'shared-secret!')
   end
 

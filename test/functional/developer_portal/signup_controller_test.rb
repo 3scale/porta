@@ -4,7 +4,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   disable_transactional_fixtures!
   def setup
     super
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @service = @provider.first_service!
 
     @request.host = @provider.domain
@@ -23,7 +23,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   end
 
   test '#create should send the confirmation email without the activation link' do
-    auth_provider = FactoryGirl.create(:authentication_provider, account: @provider)
+    auth_provider = FactoryBot.create(:authentication_provider, account: @provider)
 
     deliveries = ActionMailer::Base.deliveries
     deliveries.clear
@@ -60,7 +60,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   end
 
   test '#create successfully from oauth2 should save the id_token' do
-    auth_provider = FactoryGirl.create(:keycloak_authentication_provider, account: @provider)
+    auth_provider = FactoryBot.create(:keycloak_authentication_provider, account: @provider)
     session[:id_token] = 'fake-token'
     session[:authentication_id] = 'foo'
     session[:authentication_provider] = auth_provider.system_name
@@ -71,9 +71,9 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
   context "with all default plans" do
     setup do
-      @provider.update_attribute :default_account_plan,  FactoryGirl.create(:account_plan, :issuer => @provider)
-      @service.update_attribute :default_service_plan,  FactoryGirl.create(:service_plan, :issuer => @service)
-      @service.update_attribute :default_application_plan,  FactoryGirl.create(:application_plan, :issuer => @service)
+      @provider.update_attribute :default_account_plan,  FactoryBot.create(:account_plan, :issuer => @provider)
+      @service.update_attribute :default_service_plan,  FactoryBot.create(:service_plan, :issuer => @service)
+      @service.update_attribute :default_application_plan,  FactoryBot.create(:application_plan, :issuer => @service)
     end
 
     # making sure create doesn't crash with an empty post, some browsers are weird
@@ -114,8 +114,8 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   context "provider with multiple services and service plans" do
     setup do
       @service_two = @provider.services.create :name => "Second"
-      @service_two_plan = FactoryGirl.create(:service_plan, :issuer => @service)
-      @service_two_plan_two = FactoryGirl.create(:service_plan, :issuer => @service)
+      @service_two_plan = FactoryBot.create(:service_plan, :issuer => @service)
+      @service_two_plan_two = FactoryBot.create(:service_plan, :issuer => @service)
 
       [@service_two_plan, @service_two_plan_two].each &:publish!
     end

@@ -12,7 +12,7 @@ end
 
 Given /^(provider "[^\"]*") is (not )?charging$/ do |provider,not_charging|
   unless provider.billing_strategy
-    provider.billing_strategy = Factory(:postpaid_billing)
+    provider.billing_strategy = FactoryBot.create(:postpaid_billing)
     provider.save!
   end
 
@@ -35,7 +35,7 @@ Given /^(provider "[^\"]*") is fake charging$/ do |provider|
   provider.settings.allow_finance! unless provider.settings.finance.allowed?
 
   unless provider.billing_strategy
-    provider.billing_strategy = Factory(:postpaid_billing, :account => provider)
+    provider.billing_strategy = FactoryBot.create(:postpaid_billing, :account => provider)
     provider.save!
   end
 

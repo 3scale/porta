@@ -6,7 +6,7 @@ class ReverseProviderKeyWorkerTest < ActiveSupport::TestCase
   end
 
   def test_perform
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     app = provider.bought_cinstance
     app.user_key = 'foobar'
@@ -24,7 +24,7 @@ class ReverseProviderKeyWorkerTest < ActiveSupport::TestCase
 
   def test_enqueue
     worker = @worker.class
-    provider = FactoryGirl.build_stubbed(:simple_provider)
+    provider = FactoryBot.build_stubbed(:simple_provider)
     Sidekiq::Testing.fake! do
       worker.enqueue(provider)
 

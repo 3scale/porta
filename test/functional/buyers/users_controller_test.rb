@@ -3,12 +3,12 @@ require 'test_helper'
 class Buyers::UsersControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create :provider_account
-    @buyer    = FactoryGirl.create :buyer_account, provider_account: @provider
+    @provider = FactoryBot.create :provider_account
+    @buyer    = FactoryBot.create :buyer_account, provider_account: @provider
   end
 
   test 'activating a pending user' do
-    user = Factory.build :pending_user, account: @buyer, email: nil
+    user = FactoryBot.build :pending_user, account: @buyer, email: nil
 
     user.save validate: false
 
@@ -21,7 +21,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
   end
 
   test 'activate a user creates onboarding process' do
-    user = Factory.build :pending_user, account: @buyer, email: 'the_user@buyer.example.com'
+    user = FactoryBot.build :pending_user, account: @buyer, email: 'the_user@buyer.example.com'
 
     user.save validate: false
 
@@ -35,8 +35,8 @@ class Buyers::UsersControllerTest < ActionController::TestCase
   end
 
   test 'email has been taken problem' do
-    first_user  = Factory.create :pending_user, account: @buyer, email: 'john@doe.example.net'
-    second_user = Factory.build :pending_user, account: @buyer, email: 'john@doe.example.net'
+    first_user  = FactoryBot.create :pending_user, account: @buyer, email: 'john@doe.example.net'
+    second_user = FactoryBot.build :pending_user, account: @buyer, email: 'john@doe.example.net'
 
     second_user.save validate: false
 
@@ -50,7 +50,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
   end
 
   test 'redirect back to the index page' do
-    user      = Factory.create :pending_user, account: @buyer, email: 'john@doe.example.net'
+    user      = FactoryBot.create :pending_user, account: @buyer, email: 'john@doe.example.net'
     index_url = 'http://multitenant-admin.3scale.net.dev:3000/buyers/accounts'
 
     login_provider @provider
@@ -63,7 +63,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
   end
 
   test 'redirect to the resource url if theres\'s no info about the previous request'  do
-    user = Factory.create :pending_user, account: @buyer, email: 'john@doe.example.net'
+    user = FactoryBot.create :pending_user, account: @buyer, email: 'john@doe.example.net'
 
     login_provider @provider
 

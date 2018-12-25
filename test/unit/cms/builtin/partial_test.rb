@@ -3,11 +3,11 @@ require 'test_helper'
 class CMS::Builtin::PartialTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
   end
 
   test 'cannot be deleted' do
-    partial = Factory.build(:cms_builtin_partial, provider: @provider)
+    partial = FactoryBot.build(:cms_builtin_partial, provider: @provider)
 
     assert_equal false, partial.respond_to?(:destroy)
     assert_raises(NoMethodError) { partial.destroy }
@@ -40,7 +40,7 @@ class CMS::Builtin::PartialTest < ActiveSupport::TestCase
   end
 
   test 'can be reset' do
-    partial = Factory.build(:cms_builtin_partial, provider: @provider,
+    partial = FactoryBot.build(:cms_builtin_partial, provider: @provider,
                           # has to be a known system_name
                           system_name: 'applications/form')
     partial.draft = 'BEFORE'
@@ -52,12 +52,12 @@ class CMS::Builtin::PartialTest < ActiveSupport::TestCase
   end
 
   test 'always has liquid enabled' do
-    partial = Factory.build(:cms_builtin_partial, provider: @provider, liquid_enabled: false)
+    partial = FactoryBot.build(:cms_builtin_partial, provider: @provider, liquid_enabled: false)
     assert partial.liquid_enabled?, 'liquid processing disabled for builtin page'
   end
 
   test 'content_type is text/html' do
-    page = Factory.build(:cms_builtin_partial, provider: @provider)
+    page = FactoryBot.build(:cms_builtin_partial, provider: @provider)
     assert_equal 'text/html', page.content_type
   end
 

@@ -7,7 +7,7 @@ class Stats::Views::UsageHackTest < ActiveSupport::TestCase
   end
 
   def prepare_stats
-    @cinstance = Factory(:cinstance)
+    @cinstance = FactoryBot.create(:cinstance)
     @stats = Stats::Client.new(@cinstance)
     @stats.extend(Stats::Views::UsageHack)
   end

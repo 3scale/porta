@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @user = FactoryGirl.create(:simple_user)
+    @user = FactoryBot.create(:simple_user)
 
     host! @user.account.self_domain
   end

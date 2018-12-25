@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ServiceDeletionSubscriberTest < ActiveSupport::TestCase
   def test_create
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     event = Services::ServiceScheduledForDeletionEvent.create(service)
 
     DeleteObjectHierarchyWorker.expects(:perform_later).with(service)

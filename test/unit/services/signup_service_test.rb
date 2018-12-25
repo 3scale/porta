@@ -3,7 +3,7 @@ require 'test_helper'
 class SignupServiceTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @session  = ActionDispatch::Request.new({}).session
   end
 

@@ -6,7 +6,7 @@ resource 'ProxyRule' do
   let(:proxy) { service.proxy }
   let(:metric) { service.metrics.hits }
 
-  let(:resource) { FactoryGirl.build(:proxy_rule, proxy: proxy, metric: metric) }
+  let(:resource) { FactoryBot.build(:proxy_rule, proxy: proxy, metric: metric) }
   let(:collection) { proxy.proxy_rules }
 
   let(:service_id) { service.id }

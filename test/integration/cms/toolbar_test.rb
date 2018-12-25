@@ -2,8 +2,8 @@ require 'test_helper'
 
 class CMS::ToolbarTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory(:provider_account)
-    @buyer = Factory(:buyer_account, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     SimpleLayout.new(@provider).import!
   end
 

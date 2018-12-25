@@ -5,12 +5,12 @@ module CMS
     class SectionsTest < ActionDispatch::IntegrationTest
 
       def setup
-        @provider = Factory(:provider_account)
+        @provider = FactoryBot.create(:provider_account)
         host! @provider.admin_domain
       end
 
       def create_section
-        FactoryGirl.create :cms_section, :provider => @provider, parent: @provider.sections.root
+        FactoryBot.create :cms_section, :provider => @provider, parent: @provider.sections.root
       end
 
       test 'index' do

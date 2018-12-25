@@ -3,8 +3,8 @@ require 'test_helper'
 class Provider::Admin::Messages::TrashControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @message  = FactoryGirl.create(:received_message, receiver: @provider,
+    @provider = FactoryBot.create(:provider_account)
+    @message  = FactoryBot.create(:received_message, receiver: @provider,
       hidden_at: DateTime.new(2015, 11, 11))
 
     host! @provider.admin_domain

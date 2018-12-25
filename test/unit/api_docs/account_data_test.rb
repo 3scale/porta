@@ -5,25 +5,25 @@ class ApiDocs::AccountDataTest < ActiveSupport::TestCase
   SORT_PROC = ->(result) { result[:name] }
 
   def setup
-    @account = FactoryGirl.create(:account, org_name: 'mycompany')
+    @account = FactoryBot.create(:account, org_name: 'mycompany')
 
-    @provider = FactoryGirl.create(:simple_provider)
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider)
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
     @services = [
-        service1 = FactoryGirl.create(:simple_service, name: 'service-user-key', backend_version: 1, account_id: @provider.id),
-        service2 = FactoryGirl.create(:simple_service, name: 'service-app-key', backend_version: 2, account_id: @provider.id),
-        service3 = FactoryGirl.create(:simple_service, name: 'service-oauth', backend_version: 'oauth', account_id: @provider.id),
+        service1 = FactoryBot.create(:simple_service, name: 'service-user-key', backend_version: 1, account_id: @provider.id),
+        service2 = FactoryBot.create(:simple_service, name: 'service-app-key', backend_version: 2, account_id: @provider.id),
+        service3 = FactoryBot.create(:simple_service, name: 'service-oauth', backend_version: 'oauth', account_id: @provider.id),
     ]
 
-    plan1 = FactoryGirl.create(:simple_application_plan, issuer: service1)
-    plan2 = FactoryGirl.create(:simple_application_plan, issuer: service2)
-    plan3 = FactoryGirl.create(:simple_application_plan, issuer: service3)
+    plan1 = FactoryBot.create(:simple_application_plan, issuer: service1)
+    plan2 = FactoryBot.create(:simple_application_plan, issuer: service2)
+    plan3 = FactoryBot.create(:simple_application_plan, issuer: service3)
 
     apps = [
-      bought_app1 = FactoryGirl.create(:simple_cinstance, service: service1, application_id: 'APP1_ID', name: 'User key app', plan: plan1, user_account: @buyer, user_key: 'secret-key'),
-      bought_app2 = FactoryGirl.create(:simple_cinstance, service: service2, application_id: 'APP2_ID', name: 'App key app', plan: plan2, user_account: @buyer),
-      bought_app3 = FactoryGirl.create(:simple_cinstance, service: service3, application_id: 'APP3_ID', name: 'OAuth app', plan: plan3, user_account: @buyer)
+      bought_app1 = FactoryBot.create(:simple_cinstance, service: service1, application_id: 'APP1_ID', name: 'User key app', plan: plan1, user_account: @buyer, user_key: 'secret-key'),
+      bought_app2 = FactoryBot.create(:simple_cinstance, service: service2, application_id: 'APP2_ID', name: 'App key app', plan: plan2, user_account: @buyer),
+      bought_app3 = FactoryBot.create(:simple_cinstance, service: service3, application_id: 'APP3_ID', name: 'OAuth app', plan: plan3, user_account: @buyer)
     ]
 
     bought_app2.application_keys.add('app-secret-key').save!
@@ -42,7 +42,7 @@ class ApiDocs::AccountDataTest < ActiveSupport::TestCase
 
   def test_returns_metrics_for_provider
     @services.each { |s| s.metrics.delete_all }
-    metric = FactoryGirl.create(:metric, service: @services[0], friendly_name: 'top level metric', unit: '1 per day', system_name: 'foo_metric')
+    metric = FactoryBot.create(:metric, service: @services[0], friendly_name: 'top level metric', unit: '1 per day', system_name: 'foo_metric')
     data = ApiDocs::ProviderData.new(@provider).as_json[:results]
     assert_equal [{name: 'top level metric | service-user-key', value: 'foo_metric'}], data[:metric_names]
     assert_equal [{name: 'top level metric | service-user-key', value: metric.id}], data[:metric_ids]

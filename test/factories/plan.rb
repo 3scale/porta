@@ -1,44 +1,44 @@
 # frozen_string_literal: true
 
-Factory.define(:plan) do |plan|
-  plan.sequence(:name) { |n| "plan#{n}" }
-  plan.sequence(:system_name) {|n| "plan#{n}" }
+FactoryBot.define do
+  factory (:plan) do
+    sequence(:name) { |n| "plan#{n}" }
+    sequence(:system_name) {|n| "plan#{n}" }
 
-  plan.after_stub do |plan|
-    plan.stubs(:features).returns([])
-    plan.features.stubs(:find).with(:all, Mocha::ParameterMatchers::AnyParameters.new).returns([])
-    plan.features.stubs(:visible).returns([])
-  end
-end
-
-Factory.define(:account_plan, :parent => :plan, :class => AccountPlan) do |plan|
-  plan.association(:issuer, :factory => :provider_account)
-end
-
-Factory.define(:service_plan, :parent => :plan, :class => ServicePlan) do |plan|
-  plan.association(:issuer, :factory => :service)
-end
-
-Factory.define(:application_plan, :parent => :plan, :class => ApplicationPlan) do |plan|
-  plan.association(:issuer, :factory => :service)
-
-  plan.after_build do |plan|
-    plan_rule = PlanRulesCollection.find_for_plan(plan) || FactoryGirl.build(:plan_rule, system_name: plan.system_name.to_sym)
-    plan.stubs(:plan_rule).returns(plan_rule)
-  end
-end
-
-Factory.define(:published_plan, :parent => :application_plan) do |plan|
-  plan.after_create do |plan|
-    plan.publish!
+    after(:stub) do |plan|
+      plan.stubs(:features).returns([])
+      plan.features.stubs(:find).with(:all, Mocha::ParameterMatchers::AnyParameters.new).returns([])
+      plan.features.stubs(:visible).returns([])
+    end
   end
 
-  plan.after_stub do |plan|
-    plan.stubs(:state).returns('published')
+  factory(:account_plan, :parent => :plan, :class => AccountPlan) do
+    association(:issuer, :factory => :provider_account)
   end
-end
 
-FactoryGirl.define do
+  factory(:service_plan, :parent => :plan, :class => ServicePlan) do
+    association(:issuer, :factory => :service)
+  end
+
+  factory(:application_plan, :parent => :plan, :class => ApplicationPlan) do
+    association(:issuer, :factory => :service)
+
+    after(:build) do |plan|
+      plan_rule = PlanRulesCollection.find_for_plan(plan) || FactoryBot.build(:plan_rule, system_name: plan.system_name.to_sym)
+      plan.stubs(:plan_rule).returns(plan_rule)
+    end
+  end
+
+  factory(:published_plan, :parent => :application_plan) do
+    after(:create) do |plan|
+      plan.publish!
+    end
+
+    after(:stub) do |plan|
+      plan.stubs(:state).returns('published')
+    end
+  end
+
   factory :plan_rule do
     initialize_with do
       plan_rule = PlanRule.new(system_name: :example, switches: [], limits: {max_users: nil, max_services: nil}, rank: 0, metadata: {})

@@ -4,7 +4,7 @@ class Finance::Provider::DashboardsControllerTest < ActionController::TestCase
 
   context 'when logged in' do
     setup do
-      @provider = Factory(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       @request.host = @provider.admin_domain
       login_as(@provider.admins.first)
     end

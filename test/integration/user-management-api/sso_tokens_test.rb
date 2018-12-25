@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Admin::Api::SsoTokensTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory(:provider_account, :domain => 'provider.example.com')
+    @provider = FactoryBot.create(:provider_account, :domain => 'provider.example.com')
 
     host! @provider.admin_domain
   end
@@ -15,7 +15,7 @@ class Admin::Api::SsoTokensTest < ActionDispatch::IntegrationTest
   end
 
   test 'creating a valid sso token' do
-    buyer = Factory(:buyer_account, :provider_account => @provider)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
     post(admin_api_sso_tokens_path,
           :format => :xml,
@@ -27,7 +27,7 @@ class Admin::Api::SsoTokensTest < ActionDispatch::IntegrationTest
   end
 
   test 'creating an sso token for ssl' do
-    buyer = Factory(:buyer_account, :provider_account => @provider)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
     post(admin_api_sso_tokens_path,
           :format => :xml,
@@ -44,7 +44,7 @@ class Admin::Api::SsoTokensTest < ActionDispatch::IntegrationTest
   #  - is also passing an username to the api
   #  - is also not passing an expires_in
   test 'creating an sso token for another provider buyer' do
-    buyer = Factory(:buyer_account, :provider_account => Factory(:simple_provider))
+    buyer = FactoryBot.create(:buyer_account, :provider_account => FactoryBot.create(:simple_provider))
 
     post(admin_api_sso_tokens_path, :format => :xml,
               :provider_key => @provider.api_key,

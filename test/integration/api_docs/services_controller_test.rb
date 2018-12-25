@@ -3,7 +3,7 @@ require 'test_helper'
 class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     login_provider provider
   end
 

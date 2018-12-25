@@ -9,12 +9,12 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
   include TestHelpers::BackendClientStubs
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @provider.first_service!.update_attribute(:backend_version, '2')
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
-    @app_plan = Factory :application_plan, :issuer => @provider.first_service!
+    @app_plan = FactoryBot.create :application_plan, :issuer => @provider.first_service!
     @buyer.buy! @app_plan
     @buyer.reload
     host! @provider.admin_domain
@@ -24,8 +24,8 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
   test 'create (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'))

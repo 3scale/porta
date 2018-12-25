@@ -5,7 +5,7 @@ module CMS
   class PageTitleTest < ActionDispatch::IntegrationTest
 
     def setup
-      @provider = FactoryGirl.create(:provider_account, org_name: 'lalala')
+      @provider = FactoryBot.create(:provider_account, org_name: 'lalala')
       @simple_layout = SimpleLayout.new(@provider)
       @main_layout = @simple_layout.setup_main_layout!
       @root_section = @provider.sections.root

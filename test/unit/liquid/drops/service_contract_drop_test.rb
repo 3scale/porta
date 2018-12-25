@@ -3,7 +3,7 @@ require 'test_helper'
 class Liquid::Drops::ServiceContractDroptest < ActiveSupport::TestCase
 
   def setup
-    @service_contract = Factory.create(:service_contract)
+    @service_contract = FactoryBot.create(:service_contract)
     @drop = Liquid::Drops::ServiceContract.new(@service_contract)
   end
 

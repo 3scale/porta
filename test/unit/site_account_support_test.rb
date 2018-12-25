@@ -17,8 +17,8 @@ class SiteAccountSupportTest < ActiveSupport::TestCase
   end
 
   test 'scopes provider key search by domain' do
-    p1 = FactoryGirl.create(:provider_account)
-    p2 = FactoryGirl.create(:provider_account)
+    p1 = FactoryBot.create(:provider_account)
+    p2 = FactoryBot.create(:provider_account)
 
     object = Params.new
     object.request = mock(host: p2.self_domain)

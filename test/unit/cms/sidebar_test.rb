@@ -3,13 +3,13 @@ require 'test_helper'
 class CMS::SidebarTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @sidebar  = CMS::Sidebar.new(@provider)
   end
 
   def test_builtins
-    page        = FactoryGirl.create(:cms_builtin_page, provider: @provider, title: 'a')
-    static_page = FactoryGirl.create(:cms_builtin_static_page, provider: @provider, title: 'b')
+    page        = FactoryBot.create(:cms_builtin_page, provider: @provider, title: 'a')
+    static_page = FactoryBot.create(:cms_builtin_static_page, provider: @provider, title: 'b')
 
     assert_equal [page, static_page], @sidebar.builtins
     assert @sidebar.builtins.all?{ |x| x.type.present? }

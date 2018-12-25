@@ -5,7 +5,7 @@ require 'test_helper'
 class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     @service = provider.default_service
     login! provider
   end

@@ -6,7 +6,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   def setup
     @request.host = master_account.domain
-    @partner = FactoryGirl.create(:partner, system_name: 'someone')
+    @partner = FactoryBot.create(:partner, system_name: 'someone')
   end
 
   def prepare_master_account

@@ -5,7 +5,7 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
 
   disable_transactional_fixtures!
 
-  subject { @referrer_filter ||= Factory(:referrer_filter) }
+  subject { @referrer_filter ||= FactoryBot.create(:referrer_filter) }
 
   def setup
     ReferrerFilter.disable_backend!
@@ -20,7 +20,7 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
   context 'referrer_filters' do
 
     setup do
-      @application = Factory(:cinstance)
+      @application = FactoryBot.create(:cinstance)
       @referrer_filters = @application.referrer_filters
     end
 
@@ -64,7 +64,7 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
     end
 
     should 'remove key' do
-      key = Factory(:referrer_filter, :application => @application)
+      key = FactoryBot.create(:referrer_filter, :application => @application)
       assert_equal [key], @application.referrer_filters(true)
       assert @application.referrer_filters.remove(key.value)
       assert_equal [], @application.referrer_filters

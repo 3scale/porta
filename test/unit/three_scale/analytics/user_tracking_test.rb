@@ -4,8 +4,8 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
   include ThreeScale::Analytics
 
   def setup
-    account = FactoryGirl.build_stubbed(:simple_account, provider: true)
-    @user = FactoryGirl.build_stubbed(:user, account: account, email: 'foo@example.net')
+    account = FactoryBot.build_stubbed(:simple_account, provider: true)
+    @user = FactoryBot.build_stubbed(:user, account: account, email: 'foo@example.net')
   end
 
   def test_track_uses_segment

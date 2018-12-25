@@ -2,9 +2,9 @@ require 'spec_helper'
 
 resource "PaymentTransaction", transactions: true do
 
-  let(:invoice) { Factory(:invoice, provider_account: provider) }
+  let(:invoice) { FactoryBot.create(:invoice, provider_account: provider) }
   let(:resource) do
-    Factory(:payment_transaction, invoice: invoice, account: invoice.buyer_account,
+    FactoryBot.create(:payment_transaction, invoice: invoice, account: invoice.buyer_account,
                             reference: 'ABC', message: 'bcd', action: 'charge')
   end
 

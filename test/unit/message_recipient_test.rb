@@ -3,9 +3,9 @@ require 'test_helper'
 class MessageRecipientTest < ActiveSupport::TestCase
 
   def test_not_system_scope
-    account        = FactoryGirl.create(:simple_account)
-    system_message = FactoryGirl.create(:received_message, receiver: account)
-    normal_message = FactoryGirl.create(:received_message, receiver: account)
+    account        = FactoryBot.create(:simple_account)
+    system_message = FactoryBot.create(:received_message, receiver: account)
+    normal_message = FactoryBot.create(:received_message, receiver: account)
 
     system_message.message.update_attributes system_operation_id: 1
     normal_message.message.update_attributes system_operation_id: nil
@@ -35,7 +35,7 @@ class MessageRecipientTest < ActiveSupport::TestCase
   end
 
   test 'notifiable? with no system operation' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
+    account = FactoryBot.build_stubbed(:simple_provider)
     message = Message.new(system_operation: nil)
     recipient = MessageRecipient.new(message: message, receiver: account)
     account.expects(:dispatch_rule_for).never
@@ -62,11 +62,11 @@ class MessageRecipientTest < ActiveSupport::TestCase
   private
 
   def sender
-    @sender ||= FactoryGirl.create(:provider_account)
+    @sender ||= FactoryBot.create(:provider_account)
   end
 
   def receiver
-    @receiver ||= FactoryGirl.create(:buyer_account, provider_account: sender)
+    @receiver ||= FactoryBot.create(:buyer_account, provider_account: sender)
   end
 
   def reply

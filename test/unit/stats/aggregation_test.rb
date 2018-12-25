@@ -4,12 +4,12 @@ class Stats::AggregationTest < ActiveSupport::TestCase
   include Stats
 
   def setup
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.first_service!
     @metric = @service.metrics.hits!
 
-    @plan = Factory( :application_plan, :issuer => @service)
-    @cinstance = Factory(:cinstance, :plan => @plan)
+    @plan = FactoryBot.create( :application_plan, :issuer => @service)
+    @cinstance = FactoryBot.create(:cinstance, :plan => @plan)
 
     @storage = Stats::Base.storage
     @storage.flushdb

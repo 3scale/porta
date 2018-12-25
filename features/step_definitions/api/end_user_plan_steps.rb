@@ -1,6 +1,6 @@
 Given /^an end user plan "(.+?)" of (provider ".+?")$/ do |name, provider|
   service = provider.first_service!
-  Factory(:end_user_plan, :service => service, :name => name)
+  FactoryBot.create(:end_user_plan, :service => service, :name => name)
 end
 
 Then /^"(.*?)" should be default end user plan for service "(.*?)"$/ do |plan_name, service_name|

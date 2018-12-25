@@ -3,13 +3,13 @@ require 'test_helper'
 class InvoiceMessengerTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_with_billing,
+    @provider = FactoryBot.create(:provider_with_billing,
                         org_name: 'foos & bars',
                         payment_gateway_type: 'braintree_blue')
     @provider.billing_strategy.update_attribute(:currency, 'EUR')
-    @buyer = Factory(:buyer_account, provider_account: @provider, org_name: 'DEVELOPER')
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'DEVELOPER')
 
-    @invoice = Factory(:invoice, buyer_account: @buyer, provider_account: @provider)
+    @invoice = FactoryBot.create(:invoice, buyer_account: @buyer, provider_account: @provider)
   end
 
   test 'upcoming_charge_notification' do
@@ -26,7 +26,7 @@ class InvoiceMessengerTest < ActiveSupport::TestCase
   end
 
   test 'url for provider invoices is on their own domain' do
-    master_invoice = Factory(:invoice, buyer_account: @provider, provider_account: Account.master)
+    master_invoice = FactoryBot.create(:invoice, buyer_account: @provider, provider_account: Account.master)
 
     InvoiceMessenger.upcoming_charge_notification(master_invoice).deliver
 
@@ -60,7 +60,7 @@ MSG
 
   test 'send invoice to providers from master' do
     Account.master.update_attribute(:payment_gateway_type, 'braintree_blue')
-    invoice  = Factory :invoice, provider_account: Account.master, buyer_account: @provider
+    invoice  = FactoryBot.create :invoice, provider_account: Account.master, buyer_account: @provider
     InvoiceMessenger.unsuccessfully_charged_for_buyer(invoice).deliver
 
     message = Message.last
@@ -69,8 +69,8 @@ MSG
   end
 
   test 'send invoice to buyers from provider' do
-    buyer    = Factory :buyer_account, provider_account: @provider
-    invoice  = Factory :invoice, provider_account: @provider, buyer_account: buyer
+    buyer    = FactoryBot.create :buyer_account, provider_account: @provider
+    invoice  = FactoryBot.create :invoice, provider_account: @provider, buyer_account: buyer
 
     InvoiceMessenger.unsuccessfully_charged_for_buyer(invoice).deliver
 

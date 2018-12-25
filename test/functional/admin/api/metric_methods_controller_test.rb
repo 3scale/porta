@@ -3,8 +3,8 @@ require 'test_helper'
 class Admin::Api::MetricMethodsControllerTest < ActionController::TestCase
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
-    @service = FactoryGirl.create(:service, account: provider)
+    provider = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:service, account: provider)
     @metric  = @service.metrics.first
 
     host! provider.admin_domain

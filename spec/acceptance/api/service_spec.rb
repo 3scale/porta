@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Service" do
 
-  let(:resource) { Factory.build(:service, account: provider, system_name: 'foobar') }
+  let(:resource) { FactoryBot.build(:service, account: provider, system_name: 'foobar') }
 
   before do
     provider.settings.allow_multiple_services!

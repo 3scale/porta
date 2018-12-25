@@ -4,14 +4,14 @@ require 'test_helper'
 
 class Tasks::UserTest < ActiveSupport::TestCase
   setup do
-    providers = FactoryGirl.create_list(:simple_provider, 3, provider_account: master_account)
+    providers = FactoryBot.create_list(:simple_provider, 3, provider_account: master_account)
     providers.each do |provider|
-      FactoryGirl.create(:member, account: provider)
-      FactoryGirl.create(:admin, username: '3scaleadmin', account: provider)
-      FactoryGirl.create_list(:admin, 2, account: provider)
+      FactoryBot.create(:member, account: provider)
+      FactoryBot.create(:admin, username: '3scaleadmin', account: provider)
+      FactoryBot.create_list(:admin, 2, account: provider)
     end
 
-    FactoryGirl.create(:admin, account: FactoryGirl.create(:simple_buyer, provider_account: providers.first))
+    FactoryBot.create(:admin, account: FactoryBot.create(:simple_buyer, provider_account: providers.first))
   end
 
   test 'update_all_first_admin_id' do

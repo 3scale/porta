@@ -2,9 +2,9 @@ require 'test_helper'
 
 class Api::MetricsControllerTest < ActionController::TestCase
   def setup
-    provider  = FactoryGirl.create(:provider_account)
-    @service   = FactoryGirl.create(:service, account: provider)
-    @metric   = FactoryGirl.create(:metric, service: @service, friendly_name: 'super metric')
+    provider  = FactoryBot.create(:provider_account)
+    @service   = FactoryBot.create(:service, account: provider)
+    @metric   = FactoryBot.create(:metric, service: @service, friendly_name: 'super metric')
 
     request.host = provider.admin_domain
     login_as(provider.admins.first)

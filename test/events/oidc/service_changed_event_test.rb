@@ -12,7 +12,7 @@ class OIDC::ServiceChangedEventTest < ActiveSupport::TestCase
   attr_reader :event_store
 
   def test_create
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
 
     assert event = OIDC::ServiceChangedEvent.create(service)
 

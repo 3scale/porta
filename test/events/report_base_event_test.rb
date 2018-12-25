@@ -5,7 +5,7 @@ class Reports::ReportBaseEventTest < ActiveSupport::TestCase
   self.event_class = Reports::ReportBaseEvent
 
   def test_create
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     provider = service.account
     report = Pdf::Report.new(provider, service, period: :week)
     event = event_class.create(report)

@@ -3,7 +3,7 @@ require 'test_helper'
 class DestroyAllDeletedObjectsWorkerTest < ActiveSupport::TestCase
 
   def setup
-    @message = FactoryGirl.create(:received_message, deleted_at: DateTime.yesterday)
+    @message = FactoryBot.create(:received_message, deleted_at: DateTime.yesterday)
   end
 
   def test_perform

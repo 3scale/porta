@@ -5,12 +5,12 @@ module CMS
     class FilesTest < ActionDispatch::IntegrationTest
 
       def setup
-        @provider = Factory(:provider_account)
+        @provider = FactoryBot.create(:provider_account)
         host! @provider.admin_domain
       end
 
       def create_file
-        FactoryGirl.create(:cms_file, :provider => @provider)
+        FactoryBot.create(:cms_file, :provider => @provider)
       end
 
       def attachment_for_upload
@@ -27,9 +27,9 @@ module CMS
       end
 
       test 'index with section' do
-        section = Factory :cms_section, provider: @provider, parent: @provider.sections.root
-        Factory :cms_file, provider: @provider, title: 'file-in-root-section'
-        Factory :cms_file, provider: @provider, section_id: section.id, title: 'a file'
+        section = FactoryBot.create :cms_section, provider: @provider, parent: @provider.sections.root
+        FactoryBot.create :cms_file, provider: @provider, title: 'file-in-root-section'
+        FactoryBot.create :cms_file, provider: @provider, section_id: section.id, title: 'a file'
 
         get admin_api_cms_section_files_path(section, format: :xml), provider_key: @provider.provider_key
 
@@ -37,8 +37,8 @@ module CMS
         assert_not_match 'file-in-root-section', response.body
         assert_match 'a file', response.body
 
-        other_provider = Factory :provider_account
-        other_section  = Factory :cms_section, provider: other_provider, parent: other_provider.sections.root
+        other_provider = FactoryBot.create :provider_account
+        other_section  = FactoryBot.create :cms_section, provider: other_provider, parent: other_provider.sections.root
         get admin_api_cms_section_files_path(other_section, format: :xml), provider_key: @provider.provider_key
         assert_response :not_found
 

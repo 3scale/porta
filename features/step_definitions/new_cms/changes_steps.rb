@@ -1,13 +1,13 @@
 Given /^I have changed CMS page "(.*?)"$/ do |name|
   assert @provider
-  page = Factory(:cms_page, :system_name => name, :provider => @provider)
+  page = FactoryBot.create(:cms_page, :system_name => name, :provider => @provider)
   page.draft = "some draft content"
   page.save!
 end
 
 Given /^I have changed CMS partial "(.*?)"$/ do |name|
   assert @provider
-  page = Factory(:cms_partial, :system_name => name, :provider => @provider)
+  page = FactoryBot.create(:cms_partial, :system_name => name, :provider => @provider)
   page.draft = "some draft content"
   page.save!
 end

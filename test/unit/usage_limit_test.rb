@@ -41,8 +41,8 @@ class UsageLimitTest < ActiveSupport::TestCase
 
   test 'value default_value' do
     l = UsageLimit.new(:period => 'week')
-    l.metric = Factory(:metric)
-    l.plan = Factory(:simple_application_plan)
+    l.metric = FactoryBot.create(:metric)
+    l.plan = FactoryBot.create(:simple_application_plan)
     l.save!
 
     assert l.value.zero?
@@ -50,8 +50,8 @@ class UsageLimitTest < ActiveSupport::TestCase
 
   test  'value default_value for values < 0' do
     l = UsageLimit.new(:period => 'week', value: -1)
-    l.metric = Factory(:metric)
-    l.plan = Factory(:simple_application_plan)
+    l.metric = FactoryBot.create(:metric)
+    l.plan = FactoryBot.create(:simple_application_plan)
     l.save!
 
     assert l.value.zero?

@@ -2,9 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @app_plan = Factory :application_plan, :issuer => @provider.default_service
-    Factory :feature, :featurable => @provider.default_service
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
+    FactoryBot.create :feature, :featurable => @provider.default_service
 
 
     host! @provider.admin_domain
@@ -14,8 +14,8 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_application_plan_features_path(@app_plan))
     assert_response :forbidden
@@ -29,7 +29,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   # Provider key
 
   test 'index' do
-    feat = Factory :feature, :featurable => @provider.default_service
+    feat = FactoryBot.create :feature, :featurable => @provider.default_service
     @app_plan.features << feat
     @app_plan.save!
 
@@ -54,7 +54,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'security test on another provider plans'
 
   test 'enable new feature' do
-    feat = Factory :feature, :featurable => @provider.default_service
+    feat = FactoryBot.create :feature, :featurable => @provider.default_service
 
     post(admin_api_application_plan_features_path(@app_plan),
               :feature_id => feat.id,
@@ -68,7 +68,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'enabling feature not in service replies 404' do
-    feature_not_in_service = Factory(:feature, :featurable => @provider,
+    feature_not_in_service = FactoryBot.create(:feature, :featurable => @provider,
                                      :scope => "AccountPlan")
 
     post(admin_api_application_plan_features_path(@app_plan),
@@ -79,7 +79,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'enabling feature with wrong scope is denied' do
-    wrong_feature = Factory(:feature, :featurable => @provider.default_service,
+    wrong_feature = FactoryBot.create(:feature, :featurable => @provider.default_service,
                             :scope => "ServicePlan")
 
     post(admin_api_application_plan_features_path(@app_plan),
@@ -93,7 +93,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'enable existing feature'
 
   test 'disable feature' do
-    feat = Factory :feature, :featurable => @provider.default_service
+    feat = FactoryBot.create :feature, :featurable => @provider.default_service
 
     post(admin_api_application_plan_features_path(@app_plan),
               :feature_id => feat.id,

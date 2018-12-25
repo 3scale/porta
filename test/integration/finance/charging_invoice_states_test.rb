@@ -5,7 +5,7 @@ class Finance::ChargingInvoiceStatesTest < ActionDispatch::IntegrationTest
   context 'when unpaid' do
 
     setup do
-      @invoice = Factory.create(:invoice,
+      @invoice = FactoryBot.create(:invoice,
                                 :period => Month.new(Time.zone.local(1984, 1, 1)))
 
       @invoice.stubs(:cost).returns(100.to_has_money('EUR'))
@@ -29,8 +29,8 @@ class Finance::ChargingInvoiceStatesTest < ActionDispatch::IntegrationTest
   context 'when 3scale charging provider' do
       setup do
         @master = master_account
-        @provider =  Factory(:provider_account)
-        @invoice = Factory.create(:invoice,
+        @provider =  FactoryBot.create(:provider_account)
+        @invoice = FactoryBot.create(:invoice,
                                   provider_account: @master,
                                   buyer_account: @provider,
                                   period:  Month.new(Time.zone.local(1984, 1, 1)))

@@ -3,8 +3,8 @@ require 'test_helper'
 class Abilities::MasterMemberTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.build_stubbed(:simple_provider)
-    @member   = FactoryGirl.build_stubbed(:member, account: @provider)
+    @provider = FactoryBot.build_stubbed(:simple_provider)
+    @member   = FactoryBot.build_stubbed(:member, account: @provider)
 
     @provider.stubs(:master?).returns(true)
   end
@@ -34,7 +34,7 @@ class Abilities::MasterMemberTest < ActiveSupport::TestCase
   end
 
   def test_provider_management
-    provider = FactoryGirl.build_stubbed(:simple_provider, provider_account: @account)
+    provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @account)
     assert_cannot ability, :resume, provider
 
     assert_cannot ability, :update, provider
