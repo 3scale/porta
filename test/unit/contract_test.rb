@@ -52,7 +52,7 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   def test_plan_changed_is_notified_just_once
-    plan = FactoryBot.create(:account_plan, :issuer => FactoryGirl.create(:simple_account))
+    plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
     contract = FactoryBot.create(:account_contract, :plan => plan)
 
     ## explicit transaction
