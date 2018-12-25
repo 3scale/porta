@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Service" do
 
@@ -13,7 +13,7 @@ resource "Service" do
 
     get "/admin/api/services.:format", action: :index do
       # reload resource because it has been touched
-      let(:serializable) { [provider.services.default, resource.reload] }
+      let(:serializable) { binding.pry; [provider.services.default, resource.reload] }
     end
 
     get "/admin/api/services/:id.:format", action: :show do

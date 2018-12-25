@@ -227,7 +227,7 @@ group :test do
 
   gem 'equivalent-xml', require: false
 
-  gem 'rspec-rails', require: false # version 3 and up require capybara >= 2.2
+  gem 'rspec-rails', '~> 3.8', require: false # version 3 and up require capybara >= 2.2
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', require: false
