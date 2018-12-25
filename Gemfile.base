@@ -216,7 +216,7 @@ group :test do
   gem 'cucumber', '~>2.0'
   gem 'cucumber-rails', require: false
   gem 'email_spec', require: false
-  gem 'fakefs', '~>0.4.2', require: 'fakefs/safe'
+  gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
   gem 'fakeweb', git: 'https://github.com/3scale/fakeweb.git', ref: '6c9392c03879b85b06b0d8f6dbabe75e69b7abb7', require: false
   gem 'webmock', '~> 1.21', require: false
   gem 'launchy'
