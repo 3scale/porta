@@ -9,11 +9,14 @@ resource "WebHook::Failure" do
   api 'webhook failure' do
     before { collection.add(resource) }
 
-    get '/admin/api/webhooks/failures.:format', :collection do
+    get '/admin/api/webhooks/failures.:format' do
+      include_context "collection"
       request "List #{models}"
     end
 
-    delete '/admin/api/webhooks/failures.:format', :collection do
+    delete '/admin/api/webhooks/failures.:format' do
+      include_context "collection"
+
       parameter :time, 'Destroy WebHook Failures with time less then or equal to passed value'
       let(:time) { '2012-01-01' }
 
@@ -24,8 +27,6 @@ resource "WebHook::Failure" do
   end
 
   json(:resource) do
-    before { resource.stub(:save!) }
-
     let(:root) { 'webhooks-failure' }
     it do
       should include('id' => '12345', 'time' => Time.parse('2010-01-01').as_json,

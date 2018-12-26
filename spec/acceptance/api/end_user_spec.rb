@@ -33,7 +33,9 @@ resource "EndUser", transactions: false do
       let(:serializable) { EndUser.find(service, username) }
     end
 
-    put "/admin/api/services/:service_id/end_users/:id/change_plan.:format", :action, :resource do
+    put "/admin/api/services/:service_id/end_users/:id/change_plan.:format", action: true do
+      include_context "resource"
+
       before do
         resource.stubs(:new_record?).returns(false)
         EndUser.stubs(:find).with(service, resource.username).returns(resource)
