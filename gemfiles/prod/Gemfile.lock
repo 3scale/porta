@@ -45,11 +45,12 @@ GIT
 
 GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
-  revision: d2bee2258d2305c5cf562d4697180384e320f6d4
+  revision: 58b19212afcf66540da729214287d85f586fa7cd
+  branch: fix/rspec-3-with-xml-document
   specs:
-    rspec-html-matchers (0.4.1)
-      nokogiri (>= 1.4.4)
-      rspec (>= 2.11.0, >= 2.0.0)
+    rspec-html-matchers (0.9.1)
+      nokogiri (~> 1)
+      rspec (>= 3.0.0.a, < 4)
 
 GIT
   remote: https://github.com/3scale/source2swagger
@@ -461,7 +462,7 @@ GEM
     multi_test (0.1.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mustache (0.99.8)
+    mustache (1.1.0)
     mysql2 (0.3.18)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
@@ -642,12 +643,10 @@ GEM
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
-    rspec_api_documentation (3.0.0)
+    rspec_api_documentation (6.1.0)
       activesupport (>= 3.0.0)
-      i18n (>= 0.1.0)
-      json (>= 1.4.6)
-      mustache (>= 0.99.4)
-      rspec (>= 2.14.0)
+      mustache (~> 1.0, >= 0.99.4)
+      rspec (~> 3.0)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (0.52.1)

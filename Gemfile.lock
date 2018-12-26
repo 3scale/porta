@@ -45,11 +45,12 @@ GIT
 
 GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
-  revision: d2bee2258d2305c5cf562d4697180384e320f6d4
+  revision: 58b19212afcf66540da729214287d85f586fa7cd
+  branch: fix/rspec-3-with-xml-document
   specs:
-    rspec-html-matchers (0.4.1)
-      nokogiri (>= 1.4.4)
-      rspec (>= 2.11.0, >= 2.0.0)
+    rspec-html-matchers (0.9.1)
+      nokogiri (~> 1)
+      rspec (>= 3.0.0.a, < 4)
 
 GIT
   remote: https://github.com/3scale/source2swagger
