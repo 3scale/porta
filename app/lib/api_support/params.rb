@@ -25,7 +25,7 @@ module ApiSupport::Params
     def wrap_parameters_check
       option_name = _wrapper_options[:name]
       param_name = params[option_name]
-      return if !param_name || param_name.is_a?(Hash)
+      return if !param_name || param_name.is_a?(ActionController::Parameters)
 
       respond_to do |format|
         format.any(:xml, :json) { render request.format.to_sym => "Wrong type for parameter: #{option_name}", status: :unprocessable_entity }
