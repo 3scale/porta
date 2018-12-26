@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "AccountPlan" do
 
@@ -33,8 +33,9 @@ resource "AccountPlan" do
     let(:account) { FactoryBot.create(:buyer_account, provider_account: provider) }
     let(:account_id) { account.id }
 
-    put '/admin/api/accounts/:account_id/change_plan.:format', :resource do
-      before { resource.save! }
+    put '/admin/api/accounts/:account_id/change_plan.:format' do
+      include_context "resource"
+      include_context "resource save"
       before { resource.create_contract_with!(account) }
 
       parameter :plan_id, 'Plan ID'
