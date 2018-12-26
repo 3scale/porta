@@ -86,6 +86,8 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
   end
 
   class StaleObjectErrorTest < DeletePlainObjectWorkerTest
+    include ActiveJob::TestHelper
+
     module LoadTargetWithFiber
       # Overriding the `delete` method of HasOneAssociation https://github.com/rails/rails/blob/4-2-stable/activerecord/lib/active_record/associations/has_one_association.rb#L53-L64
       # When entering this method, override the `load_target` method so we can hand over the execution to the main thread
@@ -126,9 +128,11 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
         Sidekiq::Testing.inline! { DeletePlainObjectWorker.perform_now(proxy, ['Hierarchy-Service-ID', 'Hierarchy-Proxy-ID']) }
       end
 
-      f1.resume
-      f2.resume
-      f1.resume
+      perform_enqueued_jobs only: DeletePlainObjectWorker do
+        f1.resume
+        f2.resume
+        f1.resume
+      end
 
       assert_raise(ActiveRecord::RecordNotFound) { proxy.reload }
       assert_raise(ActiveRecord::RecordNotFound) { service.reload }
