@@ -230,7 +230,7 @@ group :test do
   gem 'rspec-rails', '~> 3.8', require: false # version 3 and up require capybara >= 2.2
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
-  gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', require: false
+  gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
   gem 'rspec_api_documentation'
 
   gem 'shoulda', '~> 3.5.0', require: false
