@@ -463,7 +463,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mustache (1.1.0)
-    mysql2 (0.3.18)
+    mysql2 (0.5.2)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.11.0)
@@ -755,7 +755,7 @@ GEM
     state_machines-activerecord (0.4.0)
       activerecord (>= 4.1, < 5.1)
       state_machines-activemodel (>= 0.3.0)
-    statsd-ruby (1.3.0)
+    statsd-ruby (1.4.0)
     stripe (1.16.0)
       json (~> 1.8.1)
       mime-types (>= 1.25, < 3.0)
@@ -918,7 +918,7 @@ DEPENDENCIES
   mocha (~> 1.1.0)
   money (= 6.7.1)
   multi_fetch_fragments!
-  mysql2 (~> 0.3.11)
+  mysql2 (~> 0.5.2)
   newrelic-redis
   newrelic_rpm (~> 3.5)
   nokogiri (>= 1.6.8)

@@ -459,7 +459,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mustache (1.1.0)
-    mysql2 (0.3.18)
+    mysql2 (0.5.2)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.11.0)
@@ -907,7 +907,7 @@ DEPENDENCIES
   mocha (~> 1.1.0)
   money (= 6.7.1)
   multi_fetch_fragments!
-  mysql2 (~> 0.3.11)
+  mysql2 (~> 0.5.2)
   nokogiri (>= 1.6.8)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
