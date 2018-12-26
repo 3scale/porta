@@ -255,7 +255,7 @@ group :test do
   gem 'ruby-prof'
 
   gem 'percy-capybara', '~> 2.5.1', require: false
-  gem 'm', '~> 1.5.0' # To be removed in rails 5.0
+  gem 'm', '~> 1.5.1' # To be removed in rails 5.0
 end
 
 group :development, :test do
