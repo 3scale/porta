@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'will_paginate/array'
 
 resource "Invoice", transactions: false do
@@ -25,7 +25,9 @@ resource "Invoice", transactions: false do
   api 'set invoice state' do
     let(:id) { resource.id }
 
-    put '/api/invoices/:id/state.:format', :resource do
+    put '/api/invoices/:id/state.:format' do
+      include_context "resource"
+
       parameter :state, "The destination state you want to transit."
       let(:state){'cancel'}
       request "Set State" do

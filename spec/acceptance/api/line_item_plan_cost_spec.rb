@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "LineItem", transactions: false do
   let(:provider) { FactoryBot.create(:simple_provider) }

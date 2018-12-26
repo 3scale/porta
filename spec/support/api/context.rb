@@ -50,6 +50,7 @@ end
 shared_context "resource", resource: true do
   let(:serializable) { resource }
   let(:representer) { resource_representer.constantize.format(format).prepare(serializable) }
+  let(:updatable_resource) { resource } unless method_defined?(:updatable_resource)
 
   let(:id) { resource.id }
 end
@@ -74,11 +75,17 @@ shared_context "json", json: true do
 
   subject { json[root] }
 
-  it("should have root") { json.should have_key(root) }
+  it("should have root") { expect(json).to have_key(root) }
 end
 
 shared_context "xml", xml: true do
   let(:format) { :xml }
   subject(:xml) { Nokogiri::XML(serialized) }
   let(:example) { Nokogiri::XML(sample) }
+end
+
+shared_context 'resource save' do
+  before do
+    resource.save! unless example.metadata[:skip_resource_save]
+  end
 end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 # merge this one with user_spec.rb ?
 

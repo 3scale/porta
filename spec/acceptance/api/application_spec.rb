@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Cinstance" do
 
@@ -46,7 +46,7 @@ resource "Cinstance" do
       let(:collection) { [app1, app2] }
     end
 
-    get '/admin/api/applications/find.:format', :resource do
+    get '/admin/api/applications/find.:format', resource: true do
       context 'with id', action: :show do
         parameter :id, 'Application ID'
         let(:id) { resource.id }
@@ -101,7 +101,8 @@ resource "Cinstance" do
       end
     end
 
-    context 'plan actions', :resource do
+    context 'plan actions' do
+      include_context "resource"
       let(:resource_representer) { 'ApplicationPlanRepresenter' }
 
       put '/admin/api/accounts/:account_id/applications/:id/change_plan.:format' do

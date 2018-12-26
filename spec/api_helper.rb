@@ -42,23 +42,16 @@ module ApiHelper
     end
 
     def request(description, params = {}, &block)
-      # nasty way - find first file called something_spec.rb and use it as example definition
-      source = caller.find{|caller| caller =~ /\_spec\.rb:\d+\:in/ }
-      file_path = source[0, source =~ /:/]
-      location = source[0, source =~ /(:in|$)/]
-      location = ApiHelper::Request.relative_path(location)
-
-      example(description, location: location, file_path: file_path) do
+      example description, :caller => block.send(:caller) do
         contexts = params.extract!(:status, :body)
-
         do_request(params)
         instance_eval &block if block_given?
 
         case contexts[:body]
         when nil, true
-            response_body.should == serialized
+          response_body.should == serialized
         when false
-            response_body.presence.should == nil
+          response_body.presence.should be_nil
         end
 
         code = contexts[:status] || 200
@@ -73,9 +66,10 @@ module ApiHelper
     shared_examples(api_name, &block)
 
     formats = options.fetch(:format){ [:json, :xml] }
-    metadata = options.except(:format).merge(api: true)
+    metadata = options.except(:format) #.merge(api: true)
 
     context name, metadata do
+      include_context "api" # instead of metadata[:api] = true
       # for each format create context and include api examples
       formats.each do |format|
         context "#{format} format", format: format do
@@ -86,8 +80,32 @@ module ApiHelper
     end
   end
 
+  %i[get post put delete head patch].each do |name|
+    define_method name do |*args, &block|
+      previous_definition = block
+      new_definition = proc do
+        options = args.extract_options!
+        action = options[:action]
+        if action
+          name = "CRUD ##{action}"
+          shared_module = RSpec.world.shared_example_group_registry.find(parent_groups, name)
+          include_context name if shared_module
+        end
+        class_exec(&previous_definition) if previous_definition
+      end
+      super(*args, &new_definition)
+    end
+  end
+
   def format_context(format, context, &block)
-    context("#{format} #{context}", :api, context.to_sym, format.to_sym, serialize: :resource, &block)
+    previous_definition = block
+    new_definition = proc do
+      include_context "api"
+      include_context context.to_s
+      include_context format.to_s
+      class_exec(&previous_definition) if previous_definition
+    end
+    context("#{format} #{context}", :api, context.to_sym, format.to_sym, serialize: :resource, &new_definition)
   end
 
   def json(context, &block)
@@ -100,19 +118,16 @@ module ApiHelper
 end
 
 RSpec.configure do |config|
-  # rspec 3 default
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.expose_current_running_example_as :example
 
   config.extend NamingHelper, api_doc_dsl: :endpoint
-  config.extend NamingHelper, :api
+  config.extend NamingHelper, api: true
   config.extend ApiHelper, api_doc_dsl: :resource
   config.extend ApiHelper, api_doc_dsl: :resource
   config.extend ApiHelper::Request, api_doc_dsl: :endpoint
   config.extend ApiHelper::Resource, serialize: :resource
 end
 
-require 'spec_helper'
 require 'equivalent-xml/rspec_matchers'
 require 'rspec-html-matchers'

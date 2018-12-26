@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Account" do
 
@@ -62,7 +62,9 @@ resource "Account" do
 
     # or you can just say that it is resource or collection
     # and appropriate callbacks and values will be set in place
-    put '/admin/api/accounts/:id/make_pending.:format', :resource do
+    put '/admin/api/accounts/:id/make_pending.:format' do
+      include_context "resource"
+
       before { resource.approve! }
       before { resource.state.should_not == "pending" }
 
@@ -76,7 +78,8 @@ resource "Account" do
       end
     end
 
-    put '/admin/api/accounts/:id/approve.:format', :resource do
+    put '/admin/api/accounts/:id/approve.:format' do
+      include_context "resource"
       before { resource.make_pending! }
       before { resource.state.should_not == "approved" }
 
@@ -85,7 +88,8 @@ resource "Account" do
       end
     end
 
-    put '/admin/api/accounts/:id/reject.:format', :resource do
+    put '/admin/api/accounts/:id/reject.:format' do
+      include_context "resource"
       before { resource.make_pending! }
       before { resource.state.should_not == "rejected" }
 
