@@ -41,8 +41,9 @@ resource "ApplicationPlan" do
       after { collection.should include(resource) }
     end
 
-    post '/admin/api/accounts/:account_id/application_plans/:id/buy.:format', :resource do
-      before { resource.save! }
+    post '/admin/api/accounts/:account_id/application_plans/:id/buy.:format' do
+      include_context "resource"
+      include_context "resource save"
       before { account.reload.bought_application_plans.should_not include(resource) }
 
       parameter :id, "Application Plan ID"

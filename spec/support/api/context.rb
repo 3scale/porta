@@ -83,3 +83,9 @@ shared_context "xml", xml: true do
   subject(:xml) { Nokogiri::XML(serialized) }
   let(:example) { Nokogiri::XML(sample) }
 end
+
+shared_context 'resource save' do
+  before do
+    resource.save! unless example.metadata[:skip_resource_save]
+  end
+end

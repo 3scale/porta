@@ -7,6 +7,7 @@ resource "MemberPermission" do
   let(:user) { FactoryBot.create(:user, account: provider) }
   let(:resource) { user.member_permissions }
   let(:serialized) { representer.send(serialization_format, user: user) }
+  let(:updatable_resource){ user }
 
   before do
     provider.settings.allow_multiple_users!
@@ -37,22 +38,14 @@ resource "MemberPermission" do
     end
   end
 
-  api 'user permissions' do
+  api 'user permissions', skip_resource_save: true do
     let(:user_id) { user.id }
     let(:resource_representer) { 'MemberPermissionsRepresenter' }
-
-    before do
-      expect(resource).to receive(:save!).and_return(resource)
-    end
 
     get '/admin/api/users/:user_id/permissions.:format', action: :show
 
     put '/admin/api/users/:user_id/permissions.:format', action: :update do
       include_context 'allowed sections are configured'
-      before do
-        expect(resource).to receive(:created_at).and_return(user.created_at)
-        expect(resource).to receive(:updated_at).and_return(user.updated_at)
-      end
 
       parameter :allowed_sections, 'Allowed sections'
       let(:allowed_sections) { %w[monitoring finance] }
