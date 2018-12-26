@@ -50,6 +50,7 @@ end
 shared_context "resource", resource: true do
   let(:serializable) { resource }
   let(:representer) { resource_representer.constantize.format(format).prepare(serializable) }
+  let(:updatable_resource) { resource } unless method_defined?(:updatable_resource)
 
   let(:id) { resource.id }
 end
@@ -74,7 +75,7 @@ shared_context "json", json: true do
 
   subject { json[root] }
 
-  it("should have root") { json.should have_key(root) }
+  it("should have root") { expect(json).to have_key(root) }
 end
 
 shared_context "xml", xml: true do

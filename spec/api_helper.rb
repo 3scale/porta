@@ -80,11 +80,32 @@ module ApiHelper
     end
   end
 
+  %i[get post put delete head patch].each do |name|
+    define_method name do |*args, &block|
+      previous_definition = block
+      new_definition = proc do
+        options = args.extract_options!
+        action = options[:action]
+        if action
+          name = "CRUD ##{action}"
+          shared_module = RSpec.world.shared_example_group_registry.find(parent_groups, name)
+          include_context name if shared_module
+        end
+        class_exec(&previous_definition) if previous_definition
+      end
+      super(*args, &new_definition)
+    end
+  end
+
   def format_context(format, context, &block)
-    klass = context("#{format} #{context}", :api, context.to_sym, format.to_sym, serialize: :resource, &block)
-    klass.include_context "api"
-    klass.include_context context.to_s
-    klass.include_context format.to_s
+    previous_definition = block
+    new_definition = proc do
+      include_context "api"
+      include_context context.to_s
+      include_context format.to_s
+      class_exec(&previous_definition) if previous_definition
+    end
+    context("#{format} #{context}", :api, context.to_sym, format.to_sym, serialize: :resource, &new_definition)
   end
 
   def json(context, &block)
@@ -108,6 +129,5 @@ RSpec.configure do |config|
   config.extend ApiHelper::Resource, serialize: :resource
 end
 
-require 'rails_helper'
 require 'equivalent-xml/rspec_matchers'
 require 'rspec-html-matchers'
