@@ -36,7 +36,7 @@ class ContractTest < ActiveSupport::TestCase
 
   def test_plan_changed_is_notified_after_commit
     plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
-    contract = FactoryBot.create(:contract, :plan => plan)
+    contract = FactoryBot.create(:account_contract, :plan => plan)
 
     other_plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
 
