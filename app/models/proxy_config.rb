@@ -92,7 +92,7 @@ class ProxyConfig < ApplicationRecord
     # Double subquery because mysql needs to create a temporary table.
     # You can't run an UPDATE and subquery from the same table without any temporary one.
 
-    config.update_all("#{self.class.table_name}.version = 1 + (#{Arel.sql max_version.to_sql})")
+    config.update_all("version = 1 + (#{Arel.sql max_version.to_sql})")
 
     # Read the value
     version = config.connection.select_value(config.select(:version))
