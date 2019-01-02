@@ -71,7 +71,8 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         admin = master_account.admin_users.first
         member = FactoryBot.create(:member, account: master_account, admin_sections: ['portal'])
         [admin, member].each do |user|
-          token = FactoryBot.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
+          token = FactoryBot.create(:access_token, owner: user, permission: 'rw')
+          token.update_column(:scopes, ['cms']) # It must be done this way because it is invalid now.
           with_api_routes do
             get '/cms_api', access_token: token.value
             assert_response :forbidden

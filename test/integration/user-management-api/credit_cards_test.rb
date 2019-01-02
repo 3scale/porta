@@ -41,7 +41,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
 
     user.admin_sections = ['finance']
     user.save!
-    token.scopes = ['alaska']
+    token.scopes = ['cms']
     token.save!
 
     put(admin_api_account_credit_card_path(@buyer, format: :xml), valid_params(token))
