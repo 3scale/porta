@@ -10,7 +10,7 @@ class Applications::ApplicationDeletedEvent < ApplicationRelatedEvent
         provider_id: application.provider_account_id || application.tenant_id,
         zync: {
           service_id: application.service_id,
-          proxy_id: application.service.proxy.id # TODO: It could not exist anymore!
+          proxy_id: application.service.try(:proxy).try(:id)
         }
       }
     )
