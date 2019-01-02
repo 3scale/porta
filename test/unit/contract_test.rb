@@ -50,7 +50,7 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   test 'provider_account' do
-    contract = Factory.build_stubbed(:simple_cinstance)
+    contract = FactoryBot.build_stubbed(:simple_cinstance)
     assert_equal contract.provider_account_id, contract.provider_account.id
   end
 
