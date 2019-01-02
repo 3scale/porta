@@ -4,8 +4,6 @@ class DeveloperPortal::Buyer::StatsController < DeveloperPortal::BaseController
   liquify prefix: 'stats'
 
   def index
-    @cinstances = applications
-
     if applications.present?
       assign_drops metrics: Liquid::Drops::Metric.wrap(metrics),
       methods: Liquid::Drops::Metric.wrap(methods),
