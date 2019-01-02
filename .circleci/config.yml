@@ -103,6 +103,7 @@ notify_slack_if_failure: &notify_slack_if_failure
   post-steps:
     - slack/status:
         fail_only: 'true'
+        webhook:  https://hooks.slack.com/services/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
 #        only_for_branch: "master"
 
 ##################################### CIRCLECI ORBS ############################################
@@ -498,6 +499,7 @@ jobs:
       - slack/notify:
           message: Build started on master, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.
           color: "#D3D3D3"
+          webhook: https://hooks.slack.com/services/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
 
   notify_success:
     docker:
@@ -506,6 +508,7 @@ jobs:
       - slack/notify:
           message: All is well & green on $CIRCLE_BRANCH. Nothing to see here.
           color: "#00B700"
+          webhook: https://hooks.slack.com/services/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
 
 
 
