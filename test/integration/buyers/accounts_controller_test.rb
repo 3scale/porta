@@ -35,6 +35,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
                          target: 'Account', name: 'billing_address', read_only: true)
 
       @provider.settings.allow_web_hooks!
+      WebHook.delete_all
       FactoryBot.create(:webhook, account: @provider, account_created_on: true, active: true)
 
       assert_difference @provider.buyers.method(:count) do
