@@ -25,7 +25,7 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
     get "/stats/applications/#{@application.id}/usage.json", params
     assert_response :success
 
-    token.scopes = ['alaska']
+    token.scopes = ['finance']
     token.save!
     # token does not include the right scope
     get "/stats/applications/#{@application.id}/usage.json", params

@@ -1,6 +1,58 @@
 {
   "apis": [
     {
+      "path": "/admin/api/users/{user_id}/access_tokens.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Access Token Create",
+          "description": "Creates an access token.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "user_id",
+              "description": "ID of the user.",
+              "dataType": "integer",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "name",
+              "description": "Name of the access token.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "permission",
+              "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "scopes",
+              "defaultName": "scopes[]",
+              "description": "Scope of the access token. URL-encoded array containing one or more of the possible values values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
+              "dataType": "custom",
+              "allowMultiple": true,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/account/authentication_providers.xml",
       "responseClass": "authentication_provider",
       "operations": [

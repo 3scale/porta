@@ -81,7 +81,7 @@ class Master::Api::Finance::Accounts::BillingJobsControllerTest < ActionDispatch
     end
 
     test 'scope account_management is required to create jobs' do
-      unauthorized_token = FactoryBot.create(:access_token, owner: @master_admin, scopes: ['other'])
+      unauthorized_token = FactoryBot.create(:access_token, owner: @master_admin, scopes: ['finance'])
       post master_api_provider_account_billing_jobs_path(@provider, @buyer, date: '2018-02-08'), access_token: unauthorized_token.value
       assert_response :forbidden
 
