@@ -99,6 +99,17 @@ dnsmasq-container: &dnsmasq-container
   - --no-poll
   - --address=/#/127.0.0.1
 
+notify_slack_if_failure: &notify_slack_if_failure
+  post-steps:
+    - slack/status:
+        fail_only: 'true'
+        only_for_branch: "master"
+
+##################################### CIRCLECI ORBS ############################################
+
+orbs:
+  slack: circleci/slack@volatile
+
 ##################################### CIRCLECI COMMANDS ############################################
 
 commands: # reusable commands with parameters
@@ -484,103 +495,17 @@ jobs:
     docker:
     - image: circleci/buildpack-deps
     steps:
-    - run:
-        name: Notify Slack about tests start
-        command: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data \
-          "{ \
-            \"attachments\": [ \
-            { \
-              \"fallback\": \"Build started on master, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-              \"color\": \"#D3D3D3\", \
-              \"pretext\": \"Build started on master: \", \
-              \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-              \"title\": \"Job: $CIRCLE_JOB  \", \
-              \"title_link\": \"$CIRCLE_BUILD_URL\", \
-              \"text\": \"Changes: $CIRCLE_COMPARE_URL\", \
-              \"fields\": [ \
-              { \
-                \"title\": \"Commit\", \
-                \"value\": \"$CIRCLE_SHA1\", \
-                \"short\": false \
-              }, \
-              { \
-                \"title\": \"GitHub Repo\", \
-                \"value\": \"$CIRCLE_REPOSITORY_URL\", \
-                \"short\": false \
-              }, \
-              { \
-                \"title\": \"Triggered by:\", \
-                \"value\": \"$CIRCLE_USERNAME\", \
-                \"short\": false \
-              } \
-              ] \
-            } \
-            ] \
-          }" $SLACK_WEBHOOK_URL
-
-  notify_failure:
-    docker:
-    - image: circleci/buildpack-deps
-    steps:
-    - run:
-        name: Notify Slack about tests failure
-        command: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data \
-          "{ \
-            \"attachments\": [ \
-            { \
-              \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-              \"color\": \"#CD0000\", \
-              \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
-              \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-              \"title\": \"Job: $CIRCLE_JOB \", \
-              \"title_link\": \"$CIRCLE_BUILD_URL\", \
-              \"text\": \"$CIRCLE_BUILD_URL\", \
-              \"fields\": [ \
-              { \
-                \"title\": \"Commit\", \
-                \"value\": \"$CIRCLE_SHA1\", \
-                \"short\": false \
-              } \
-              ] \
-            } \
-            ] \
-          }" $SLACK_WEBHOOK_URL
-        when: on_fail
+      - slack/notify:
+          message: Build started on master, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.
+          color: "#D3D3D3"
 
   notify_success:
     docker:
     - image: circleci/buildpack-deps
     steps:
-    - run:
-        name: Notify Slack about tests passing
-        command: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data \
-          "{ \
-            \"attachments\": [ \
-            { \
-              \"fallback\": \"All is well & green on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-              \"color\": \"#00B700\", \
-              \"pretext\": \"All is well & green on $CIRCLE_BRANCH. Nothing to see here. \", \
-              \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-              \"title\": \"Job: $CIRCLE_JOB \", \
-              \"title_link\": \"$CIRCLE_BUILD_URL\", \
-              \"text\": \"$CIRCLE_BUILD_URL\", \
-              \"fields\": [ \
-              { \
-                \"title\": \"Commit\", \
-                \"value\": \"$CIRCLE_SHA1\", \
-                \"short\": false \
-              } \
-              ] \
-            } \
-            ] \
-          }" $SLACK_WEBHOOK_URL
-        when: on_success
+      - slack/notify:
+          message: All is well & green on $CIRCLE_BRANCH. Nothing to see here.
+          color: "#00B700"
 
 
 
@@ -622,45 +547,47 @@ workflows:
           filters:
             branches:
               only: master
-      - dependencies_bundler
-      - dependencies_npm
+      - dependencies_bundler:
+          *notify_slack_if_failure
+
+      - dependencies_npm:
+          *notify_slack_if_failure
+
       - docker-build:
           context: org-global
+          <<: *notify_slack_if_failure
+
       - assets_precompile:
           requires:
             - dependencies_bundler
             - dependencies_npm
+          <<: *notify_slack_if_failure
 
       - lint:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - unit:
           requires:
             - dependencies_bundler
+          <<: *notify_slack_if_failure
       - functional:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - integration:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - rspec:
           requires:
             - dependencies_bundler
+          <<: *notify_slack_if_failure
       - cucumber:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - notify_success:
-          requires:
-            - rspec
-            - unit
-            - cucumber
-            - integration
-            - functional
-            - lint
-          filters:
-            branches:
-              only: master
-      - notify_failure:
           requires:
             - rspec
             - unit
@@ -684,37 +611,48 @@ workflows:
               only: master
       - deps_bundler_oracle:
           requires:
-          - manual_approval
+            - manual_approval
+          <<: *notify_slack_if_failure
       - dependencies_npm:
           requires:
-          - manual_approval
+            - manual_approval
+          <<: *notify_slack_if_failure
       - docker-build:
           context: org-global
           requires:
-          - manual_approval
+            - manual_approval
+          <<: *notify_slack_if_failure
       - assets_precompile:
           requires:
             - deps_bundler_oracle
             - dependencies_npm
+          <<: *notify_slack_if_failure
 
       - lint:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - unit-oracle:
           requires:
             - deps_bundler_oracle
+          <<: *notify_slack_if_failure
+
       - functional-oracle:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - integration-oracle:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - rspec-oracle:
           requires:
             - deps_bundler_oracle
+          <<: *notify_slack_if_failure
       - cucumber-oracle:
           requires:
             - assets_precompile
+          <<: *notify_slack_if_failure
       - notify_success:
           requires:
             - rspec-oracle
@@ -727,17 +665,6 @@ workflows:
             branches:
               only: master
 
-      - notify_failure:
-          requires:
-            - rspec-oracle
-            - unit-oracle
-            - cucumber-oracle
-            - integration-oracle
-            - functional-oracle
-            - lint
-          filters:
-            branches:
-              only: master
 
   visual_tests:
     jobs:
@@ -747,15 +674,19 @@ workflows:
     - dependencies_bundler:
         requires:
         - manual_approval
+        <<: *notify_slack_if_failure
     - dependencies_npm:
         requires:
         - manual_approval
+        <<: *notify_slack_if_failure
     - assets_precompile:
         requires:
         - dependencies_bundler
         - dependencies_npm
+        <<: *notify_slack_if_failure
     - visual:
         context: percy
         requires:
         - assets_precompile
+        <<: *notify_slack_if_failure
 
