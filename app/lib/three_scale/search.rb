@@ -14,8 +14,11 @@ class ThreeScale::Search < HashWithIndifferentAccess
   end
 
   def initialize(params = nil)
-    if params.respond_to?(:to_hash)
-      params.to_hash.each_pair do |key, val|
+    hash_methods = %I[to_unsafe_h to_hash]
+    to_hash_method = hash_methods.find { |method| params.respond_to?(method) }
+
+    if to_hash_method
+      params.public_send(to_hash_method).each_pair do |key, val|
         self[key] = val
       end
     end

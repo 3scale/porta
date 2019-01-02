@@ -208,8 +208,31 @@ class CMS::EmailTemplate < CMS::Template
     extend ActiveSupport::Concern
 
     included do
-      alias_method_chain :render, :liquid
-      alias_method_chain :mail, :liquid
+      prepend(Module.new do
+        protected
+
+        def mail(headers, &block)
+          if @provider_account
+            headers[:template_path] ||= 'emails'
+            prepend_view_path Liquid::Template::Resolver.instance(@provider_account)
+
+            headers[::Message::APPLY_ENGAGEMENT_FOOTER]= @provider_account.should_apply_email_engagement_footer?
+          else
+            Rails.logger.warn { "#{caller[2]} does not have provider_account set, falling back to filesytem templates" }
+          end
+
+          super(headers, &block)
+        end
+
+        def render(options)
+          template = options.fetch(:template)
+          if template.respond_to?(:record)
+            apply_headers!(template.record)
+          end
+          super(options)
+        end
+      end)
+
       attr_reader :provider_account
       alias_method :provider, :provider_account
 
@@ -233,26 +256,7 @@ class CMS::EmailTemplate < CMS::Template
       end
     end
 
-    def mail_with_liquid(headers, &block)
-      if @provider_account
-        headers[:template_path] ||= 'emails'
-        prepend_view_path Liquid::Template::Resolver.instance(@provider_account)
 
-        headers[::Message::APPLY_ENGAGEMENT_FOOTER]= @provider_account.should_apply_email_engagement_footer?
-      else
-        Rails.logger.warn { "#{caller[2]} does not have provider_account set, falling back to filesytem templates" }
-      end
-
-      mail_without_liquid(headers, &block)
-    end
-
-    def render_with_liquid(options)
-      template = options.fetch(:template)
-      if template.respond_to?(:record)
-        apply_headers!(template.record)
-      end
-      render_without_liquid(options)
-    end
 
     def prepare_liquid_template(template)
       template.registers[:mail] = @_message
