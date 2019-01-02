@@ -8,7 +8,7 @@ class ThreeScale::Api::Responder < ActionController::Responder
 
     case
     when get?
-      display(resource, status: :ok) if controller.stale?(resource)
+      display(resource, status: :ok) if controller.stale?(serializable)
     when post? # create
       display resource, status: :created, location: api_location
     when put? || patch? # update
