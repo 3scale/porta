@@ -51,8 +51,8 @@ class ZyncWorkerTest < ActiveSupport::TestCase
   end
 
   test 'deleted application recreates dependencies' do
-    application = FactoryGirl.create(:simple_cinstance)
-    FactoryGirl.create(:admin, account: application.provider_account)
+    application = FactoryBot.create(:simple_cinstance)
+    FactoryBot.create(:admin, account: application.provider_account)
     application.destroy!
     event_store_event = EventStore::Event.where(event_type: Applications::ApplicationDeletedEvent).last!
     application_event = EventStore::Repository.find_event!(event_store_event.event_id)
