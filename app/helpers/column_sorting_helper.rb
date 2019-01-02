@@ -19,6 +19,10 @@ module ColumnSortingHelper
     new_direction = current_direction == 'asc' ? 'desc' : 'asc'
 
     sort_params = params.merge(sort: column, direction: new_direction, page: nil)
+    hash_methods = %I[to_unsafe_h to_hash]
+    to_hash_method = hash_methods.find { |method| sort_params.respond_to?(method) }
+    sort_params = sort_params.public_send(to_hash_method)
+
     url = public_send(path, sort_params.symbolize_keys)
 
     link_to title_with_order_indicator(title, current_direction),
