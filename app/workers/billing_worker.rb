@@ -29,8 +29,11 @@ class BillingWorker
   # @param [Time] billing_date
   # @param [ActiveRecord::Relation] buyers_scope
   def self.enqueue(provider, billing_date, buyers_scope = nil)
+
     with_billing_batch(provider.id, billing_date) do
-      provider.buyer_accounts.select(:id, :provider_account_id).merge(buyers_scope).find_in_batches do |group|
+      scope = provider.buyer_accounts.select(:id, :provider_account_id)
+      scope = scope.merge(buyers_scope) if buyers_scope
+      scope.find_in_batches do |group|
         group.each { |buyer| enqueue_for_buyer(buyer, billing_date) }
       end
     end
