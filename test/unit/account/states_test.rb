@@ -279,7 +279,6 @@ class Account::StatesTest < ActiveSupport::TestCase
         Timecop.freeze do
           account.public_send(transition)
           assert_equal Time.zone.now.to_s, account.reload.state_changed_at.to_s
-          assert_equal Time.zone.now.to_s, account.reload.deleted_at.to_s
         end
       end
     end
