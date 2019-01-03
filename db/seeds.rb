@@ -126,7 +126,7 @@ master.update_columns(provider: false)
 ###
 
 user_login = ENV.fetch('USER_LOGIN', 'admin')
-user_email = ENV.fetch('USER_EMAIL', "#{user_login}@#{provider.domain}")
+user_email = ENV['USER_EMAIL'].presence || "#{user_login}@#{provider.domain}"
 user_password = ENV.fetch('USER_PASSWORD') { SecureRandom.base64(32) }
 
 user = User.create!(username: user_login, password: user_password, password_confirmation: user_password) do |user|
