@@ -6,7 +6,8 @@ namespace :impersonation_admin_user do
     username = ActiveRecord::Base.connection.quote(args[:username])
     domain = ActiveRecord::Base.connection.quote(args[:domain])
 
-    complete_query = if System::Database.oracle?
+    complete_query = case System::Database.adapter.to_sym
+                     when :oracle, :postgres
                        <<~SQL
                          UPDATE users
                           SET username =  #{username},
@@ -15,7 +16,7 @@ namespace :impersonation_admin_user do
                                       '@' || #{domain}
                           WHERE users.username = '3scaleadmin'
                        SQL
-                     else
+                     when :mysql
                        <<~SQL
                          UPDATE users
                          INNER JOIN accounts ON accounts.id = users.account_id
