@@ -506,7 +506,7 @@ jobs:
     - image: circleci/buildpack-deps
     steps:
       - slack/notify:
-          message: All is well & green on $CIRCLE_BRANCH. Nothing to see here.
+          message: ":white_check_mark: All is well & green on $CIRCLE_BRANCH. Nothing to see here."
           color: "#00B700"
           webhook: https://hooks.slack.com/services/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
 
