@@ -13,8 +13,6 @@ gem 'airbrake', '~> 4.3.3'
 # NewRelic RPM
 # docs says it should be loaded latest as possible
 group :production, :preview, :development do
-  gem 'newrelic-redis'
-  gem 'newrelic_rpm', '~>3.5'
-  gem 'rpm_contrib'
+  gem 'newrelic_rpm', '~> 5.6'
 end
 
