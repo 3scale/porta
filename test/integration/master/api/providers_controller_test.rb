@@ -209,7 +209,6 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
       assert_response :ok
       assert_equal '', response.body
       assert provider.reload.scheduled_for_deletion?
-      assert_equal Time.zone.now.to_s, provider.deleted_at.to_s
       assert_equal Time.zone.now.to_s, provider.state_changed_at.to_s
     end
   end

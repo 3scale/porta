@@ -59,8 +59,7 @@ module Account::States
       end
 
       after_transition any => any do |account|
-        time_state_changed_at = Time.zone.now
-        account.update_attributes(state_changed_at: time_state_changed_at, deleted_at: time_state_changed_at)
+        account.update_attributes(state_changed_at: Time.zone.now)
       end
 
       event :make_pending do
