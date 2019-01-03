@@ -15,7 +15,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.6",
-    "babel-jest": "^22.2.0",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^6.4.1",
     "babel-plugin-react": "^1.0.0",
     "babel-plugin-transform-es2015-destructuring": "^6.23.0",
