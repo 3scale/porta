@@ -26,7 +26,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.0.0",
+    "eslint-config-airbnb": "^17.1.0",
     "eslint-config-standard": "^5.3.5",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-flowtype": "^2.39.1",
