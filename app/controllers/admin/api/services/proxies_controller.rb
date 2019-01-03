@@ -40,7 +40,7 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   ##~ op.parameters.add @parameter_service_id_by_id_name
   ##~ op.parameters.add name: "endpoint", description: "Public Base URL for production environment.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "api_backend", description: "Private Base URL.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "credentials_location", description: "Credentials Location. Either headers or query.", dataType: "string", paramType: "query", required: false
+  ##~ op.parameters.add name: "credentials_location", description: "Credentials Location. Either headers, query or authorization for the Basic Authorization.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "auth_app_key", description: "Parameter/Header where App Key is expected.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "auth_app_id", description: "Parameter/Header where App ID is expected.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "auth_user_key", description: "Parameter/Header where User Key is expected.", dataType: "string", paramType: "query", required: false
