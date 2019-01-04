@@ -148,8 +148,7 @@ group :assets do
   gem 'uglifier'
   gem 'font-awesome-rails', '~> 4.7.0.4'
   gem 'codemirror-rails', '~> 5.6'
-  gem 'jquery-rails', '~> 3.1'
-  # TODO: gem 'jquery-rails', '~> 4.3'
+  gem 'jquery-rails', '~> 4.3'
 
   gem 'active-docs', path: 'vendor/active-docs'
 end
