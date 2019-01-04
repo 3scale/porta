@@ -98,6 +98,18 @@ class ProxyConfigTest < ActiveSupport::TestCase
     assert_contains proxy_config.errors[:service_token], proxy_config.errors.generate_message(:service_token, :missing)
   end
 
+  def test_maximum_length
+    proxy_config = FactoryGirl.build(:proxy_config)
+    content = proxy_config.content
+    json = JSON.parse(content).deep_symbolize_keys
+    json.merge!(foo: 'a' * 2.megabytes)
+    content = json.to_json
+    proxy_config.content = content
+
+    refute proxy_config.valid?
+    assert_contains proxy_config.errors[:content], proxy_config.errors.generate_message(:content, :too_long, count: ProxyConfig::MAX_CONTENT_LENGTH)
+  end
+
   private
 
   def json_content(hosts: [])
