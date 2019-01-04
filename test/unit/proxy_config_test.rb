@@ -99,7 +99,7 @@ class ProxyConfigTest < ActiveSupport::TestCase
   end
 
   def test_maximum_length
-    proxy_config = FactoryGirl.build(:proxy_config)
+    proxy_config = FactoryBot.build(:proxy_config)
     content = proxy_config.content
     json = JSON.parse(content).deep_symbolize_keys
     json.merge!(foo: 'a' * 2.megabytes)
