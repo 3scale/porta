@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/string_inquirer'
-require 'system/database/triggers'
-require 'system/database/procedures'
+
 module System
   module Database
     class ConnectionError < ActiveRecord::NoDatabaseError; end
@@ -32,8 +31,13 @@ module System
       adapter_method.mysql2_connection?
     end
 
-    def postgresql?
+    def postgres?
       adapter_method.postgresql_connection?
+    end
+
+    def execute_procedure(name, *params)
+      command = postgres? ? 'SELECT' : 'CALL'
+      ActiveRecord::Base.connection.execute("#{command} #{name}(#{params.join(',')})")
     end
 
     # Just adding another connection to the pool so we do not mess up with the primary connection
@@ -123,6 +127,54 @@ module System
       end
     end
 
+    module Definitions
+      extend ActiveSupport::Concern
+
+      included do
+        @triggers = []
+        @procedures = []
+
+        class << self
+          attr_reader :triggers, :procedures
+
+          def define(&block)
+            @triggers.clear
+            @procedures.clear
+
+            class_eval(&block)
+          end
+
+          def trigger(name, options = {})
+            klass_name = "#{System::Database.adapter_module}::Trigger"
+            args = [name, yield]
+            if variables = options[:with_variables].presence
+              klass_name += 'WithVariables'
+              args << variables
+            end
+            @triggers << klass_name.constantize.new(*args)
+          end
+
+          def procedure(name, parameters = {})
+            klass_name = "#{System::Database.adapter_module}::Procedure"
+            @procedures << klass_name.constantize.new(name, yield, parameters)
+          end
+        end
+      end
+    end
+
+    def adapter_module
+      case adapter.to_sym
+      when :mysql
+        require 'system/database/mysql'
+        MySQL
+      else
+        "System::Database::#{adapter.camelize}".constantize
+      end
+    end
+
+    extend SingleForwardable
+
+    def_delegators :adapter_module, :triggers, :procedures
   end
 end
 
@@ -136,7 +188,7 @@ if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::Oracle
         connection.execute "GRANT create procedure TO #{username}"
       end
 
-              protected
+      protected
 
       def username
         @config['username']
