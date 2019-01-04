@@ -18,8 +18,7 @@ module TestHelpers
     #
     # * users, settings, profile, service, test plan and one real plan.
     #
-    # TODO: since factorygirl now supports callbacks, this could be replaced with
-    # a factory.
+    # TODO: should be factory
     #
     def stub_provider_account(attributes = {})
       FactoryBot.build_stubbed(:provider_account, attributes)
