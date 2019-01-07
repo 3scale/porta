@@ -5,17 +5,23 @@ class ApplicationRecord < ActiveRecord::Base
 
 
   sifter(:month_number) do |column|
-    if System::Database.mysql?
+    case System::Database.adapter.to_sym
+    when :mysql
       func(:month, column)
-    else
+    when :postgres
+      cast(func(:to_char, column, quoted('MM')).as('integer'))
+    when :oracle
       func(:to_number, func(:to_char, column, quoted('MM')))
     end
   end
 
   sifter(:year) do |column|
-    if System::Database.mysql?
+    case System::Database.adapter.to_sym
+    when :mysql
       func(:year, column)
-    else
+    when :postgres
+      cast(func(:to_char, column, quoted('YYYY')).as('integer'))
+    when :oracle
       func(:to_number, func(:to_char, column, quoted('YYYY')))
     end
   end
