@@ -58,7 +58,7 @@ class Buyers::UsersController < Buyers::BaseController
   end
 
   def collection
-    @users ||= end_of_association_chain.paginate(:page => params[:page])
+    @users ||= end_of_association_chain.order(:id).paginate(:page => params[:page])
   end
 
   def update_resource(user, attributes)
