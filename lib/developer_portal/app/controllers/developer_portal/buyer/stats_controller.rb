@@ -31,7 +31,7 @@ class DeveloperPortal::Buyer::StatsController < DeveloperPortal::BaseController
   private
 
   def applications
-    @applications ||= current_account.bought_cinstances.live
+    @applications ||= current_account.bought_cinstances.live.order(:id)
   end
 
   def application

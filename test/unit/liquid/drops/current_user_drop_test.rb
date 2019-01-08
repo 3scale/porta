@@ -34,14 +34,10 @@ class Liquid::Drops::CurrentUserDropTest < ActiveSupport::TestCase
   end
 
   test '#sso_authorizations' do
-    sso_authorizations = create_sso_authorizations(@user)
-    assert_equal sso_authorizations.size, @drop.sso_authorizations.size
+    sso_authorizations = create_sso_authorizations(@user).map { |sso| [sso.id_token, sso.authentication_provider.system_name] }
+    drops_sso_authorizations = @drop.sso_authorizations.map { |sso| [sso.id_token, sso.authentication_provider_system_name] }
 
-    assert_equal sso_authorizations.first.id_token, @drop.sso_authorizations.first.id_token
-    assert_equal sso_authorizations.first.authentication_provider.system_name, @drop.sso_authorizations.first.authentication_provider_system_name
-
-    assert_equal sso_authorizations.last.id_token, @drop.sso_authorizations.last.id_token
-    assert_equal sso_authorizations.last.authentication_provider.system_name, @drop.sso_authorizations.last.authentication_provider_system_name
+    assert_same_elements sso_authorizations, drops_sso_authorizations
   end
 
   private
