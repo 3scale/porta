@@ -55,7 +55,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder: &system-builder
-  image: quay.io/3scale/system-builder:latest
+  image: quay.io/hery/3scale-system-builder:latest
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
