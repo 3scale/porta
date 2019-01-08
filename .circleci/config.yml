@@ -341,10 +341,10 @@ jobs:
   lint:
     executor: builder
     steps:
-      - run:
-          name: Start Xvfb
-          command: Xvfb :99 -screen 0 1280x1024x24
-          background: true
+#      - run:
+#          name: Start Xvfb
+#          command: Xvfb :99 -screen 0 1280x1024x24
+#          background: true
       - checkout-with-submodules
       - *attach-to-workspace
       - run:

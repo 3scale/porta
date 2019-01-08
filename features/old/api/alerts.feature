@@ -64,11 +64,11 @@ Feature: API Usage alerts
   @javascript
   Scenario: Deleting alerts
     When I go to the API alerts page
-     And I press "Delete" for the 1st API alert
+     And I press "Delete" for the 1st API alert and I confirm dialog box
 
     Then I should see 3 API alerts
 
-    When I press "Delete" for the 2nd API alert
+    When I press "Delete" for the 2nd API alert and I confirm dialog box
 
     Then I should see only the following API alert:
       | Account | Application | Message        | Level  | Time (UTC)               | State  |

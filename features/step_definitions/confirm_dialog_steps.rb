@@ -4,7 +4,7 @@ When 'I will confirm dialog box' do
 end
 
 Then /^(.+) and I confirm dialog box$/ do |original|
-  if [:webkit, :selenium, :webkit_debug].include? Capybara.current_driver
+  if [:webkit, :selenium, :webkit_debug, :headless_chrome, :chrome].include? Capybara.current_driver
     accept_confirm do
       step original
     end

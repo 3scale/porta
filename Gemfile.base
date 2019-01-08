@@ -208,7 +208,6 @@ group :test do
   # gem 'capybara-webkit', '~> 1.15', source: 'https://rubygems.org'
   gem 'xpath', '~>2.1'
 
-  gem 'headless', '~> 2.3.1'
   gem 'selenium-webdriver', '~> 3.4', require: false
   gem 'chronic'
   gem 'cucumber', '~>2.0'
