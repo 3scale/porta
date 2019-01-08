@@ -205,7 +205,7 @@ group :test do
   gem 'simplecov', '~> 0.10.0'
 
   gem 'capybara', '~> 2.18', source: 'https://rubygems.org'
-  gem 'capybara-webkit', '~> 1.15', source: 'https://rubygems.org'
+  # gem 'capybara-webkit', '~> 1.15', source: 'https://rubygems.org'
   gem 'xpath', '~>2.1'
 
   gem 'headless', '~> 2.3.1'

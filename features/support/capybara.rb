@@ -1,4 +1,4 @@
-require 'capybara/webkit'
+require 'selenium/webdriver'
 require 'capybara/minitest'
 include Capybara::Minitest::Assertions
 
@@ -7,7 +7,7 @@ include Capybara::Minitest::Assertions
 #  Capybara::Selenium::Driver.new(app, :browser => :chrome)
 #end
 
-DEFAULT_JS_DRIVER = :webkit
+DEFAULT_JS_DRIVER = :headless_chrome
 #DEFAULT_JS_DRIVER = :webkit_debug
 
 Capybara.default_selector    = :css
@@ -38,18 +38,18 @@ Before '@javascript' do
  headless.start
 end
 
-Capybara::Webkit.configure do |config|
-  config.allow_url('foo.example.com')
-  config.allow_url('admin.foo.example.com')
-  config.allow_url('foo-admin.example.com')
-  config.allow_url('foo-admin.3scale.net')
-  config.allow_url('www.example.com')
-  config.allow_url('master-account.example.com')
-  config.allow_url('foo.3scale.net')
-
-  config.block_unknown_urls
-  config.raise_javascript_errors = true # we would like this to be true, but need to fix our failing tests
-end
+# Capybara::Webkit.configure do |config|
+#   config.allow_url('foo.example.com')
+#   config.allow_url('admin.foo.example.com')
+#   config.allow_url('foo-admin.example.com')
+#   config.allow_url('foo-admin.3scale.net')
+#   config.allow_url('www.example.com')
+#   config.allow_url('master-account.example.com')
+#   config.allow_url('foo.3scale.net')
+#
+#   config.block_unknown_urls
+#   config.raise_javascript_errors = true # we would like this to be true, but need to fix our failing tests
+# end
 
 # monkeypatch to fix
 # not opened for reading (IOError)
@@ -64,4 +64,23 @@ class Cucumber::Formatter::Interceptor::Pipe
   def is_a?(klass)
     super || klass == IO
   end
+end
+
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+Capybara.register_driver :headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+
+  options.add_argument('--headless')
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-popup-blocking')
+  options.add_argument('--window-size=1280,1024')
+
+  options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+
+  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+
+  driver
 end
