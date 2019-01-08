@@ -361,7 +361,6 @@ GEM
       activesupport (>= 4.1, < 5.2)
     hashdiff (0.3.0)
     hashie (3.4.4)
-    headless (2.3.1)
     hiredis (0.6.0)
     htmlentities (4.3.4)
     http (2.2.2)
@@ -867,7 +866,6 @@ DEPENDENCIES
   google-api-client
   gruff (~> 0.3)
   hashie
-  headless (~> 2.3.1)
   hiredis (~> 0.6.0)
   html-pipeline!
   htmlentities (~> 4.3, >= 4.3.4)
