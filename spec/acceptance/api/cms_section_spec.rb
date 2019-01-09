@@ -7,7 +7,7 @@ resource 'CMS::Section' do
   api 'cms section' do
 
     get '/admin/api/cms/sections.:format', action: :index do
-      let(:collection) { provider.sections }
+      let(:collection) { provider.sections.order(:id) }
     end
 
     get '/admin/api/cms/sections/:id.:format', action: :show
@@ -46,4 +46,3 @@ edit_admin_api_cms_section GET      /admin/api/cms/sections/:id/edit(.:format) a
      admin_api_cms_section GET      /admin/api/cms/sections/:id(.:format)      admin/api/cms/sections#show {:format=>'xml'}
                            PUT      /admin/api/cms/sections/:id(.:format)      admin/api/cms/sections#update {:format=>'xml'}
                            DELETE   /admin/api/cms/sections/:id(.:format)      admin/api/cms/sections#destroy {:format=>'xml'}
-

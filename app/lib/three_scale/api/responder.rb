@@ -75,10 +75,17 @@ class ThreeScale::Api::Responder < ActionController::Responder
   def serializable
     @serializable ||= begin
       resource = options.fetch(:serialize){ self.resource }
-      resource = resource.is_a?(ActiveRecord::Relation) ? resource.to_a : resource
+      resource = resource.is_a?(ActiveRecord::Relation) ? ordered_relation(resource).to_a : resource
 
       resource
     end
   end
 
+  def ordered_relation(relation)
+    if System::Database.postgres? && relation.order_values.empty?
+      relation.order(:id)
+    else
+      relation
+    end
+  end
 end
