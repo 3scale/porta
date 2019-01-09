@@ -7,7 +7,7 @@ include Capybara::Minitest::Assertions
 #  Capybara::Selenium::Driver.new(app, :browser => :firefox)
 #end
 
-DEFAULT_JS_DRIVER = :firefox
+DEFAULT_JS_DRIVER = :headless_firefox
 
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = DEFAULT_JS_DRIVER
