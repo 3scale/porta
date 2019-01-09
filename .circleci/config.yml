@@ -363,7 +363,7 @@ jobs:
       - run:
           name: NPM test
           command: |
-            npm test -- --reporters dots,junit --browsers Firefox
+            npm test -- --reporters dots,junit --browsers ChromeHeadless
             npm run-script jest
       - *store-junit-test-results
       - *store-test-artifacts
