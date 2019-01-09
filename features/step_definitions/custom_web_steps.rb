@@ -117,6 +117,13 @@ Then /^I should get (\d+)$/ do |code|
   assert_equal code.to_i, page.status_code
 end
 
+When /^(.+) and looking at the request, I should get (\d+)$/ do |pre_step, code|
+  requests = inspect_requests do
+    step pre_step
+  end
+  assert_equal code.to_i, requests.first.status_code
+end
+
 Then /^I should see the fields contain:$/ do |table|
   table.rows_hash.each do |field, value|
     step %{the "#{field}" field should contain "#{value}"}
