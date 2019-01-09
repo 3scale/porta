@@ -1,19 +1,20 @@
 When /^I delete the buyer "([^\"]*)" via API using provider key of "([^\"]*)"$/ do |buyer_name, provider_name|
   provider_account = Account.find_by_org_name!(provider_name)
   service = provider_account.first_service!
-
-  http_request Account.master.domain, :delete, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key
-  assert_equal 200, page.status_code
+  requests = inspect_requests do
+    http_request Account.master.domain, :delete, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key
+  end
+  assert_equal 200, requests.first.status_code
 end
-
-
 
 
 When /^I update the user "([^\"]*)" with user_key "([^\"]*)" via API using provider key of "([^\"]*)"$/ do |buyer_name, buyer_key, provider_name|
   provider_account = Account.find_by_org_name!(provider_name)
 
-  http_request Account.master.domain, :put, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key, :user_key => buyer_key
-  assert_equal 200, page.status_code
+  requests = inspect_requests do
+    http_request Account.master.domain, :put, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key, :user_key => buyer_key
+  end
+  assert_equal 200, requests.first.status_code
 end
 
 Then /^I should have a user "([^\"]*)" with email "([^\"]*)"$/ do |buyer_name, buyer_email|
