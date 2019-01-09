@@ -40,7 +40,7 @@
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^2.0.0",
     "file-loader": "^1.1.6",
-    "flow-bin": "^0.56.0",
+    "flow-bin": "^0.89.0",
     "flow-typed": "^2.2.0",
     "hosted-git-info": "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.1.5.tgz",
     "jasmine": "^3.2.0",
