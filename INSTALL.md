@@ -81,16 +81,14 @@ brew install node@8
 #### Xcode
 
 Install Xcode from the App Store.
-Alternatively you can download all Xcode versions from the [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
+You can download all Xcode versions from the [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
 
 #### Dependencies
 
 Make sure you have [Homebrew](https://brew.sh/) in your machine in order to install the following dependencies:
 
 ```shell
-brew tap caskroom/cask
-brew cask install chromedriver
-brew install imagemagick@6 mysql@5.7 gs pkg-config openssl chromewebdriver
+brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 ```
