@@ -2,14 +2,12 @@ require 'selenium/webdriver'
 require 'capybara/minitest'
 include Capybara::Minitest::Assertions
 
-# in case chrome is needed!
+# in case firefox is needed!
 #Capybara.register_driver :selenium do |app|
-#  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+#  Capybara::Selenium::Driver.new(app, :browser => :firefox)
 #end
 
-DEFAULT_JS_DRIVER = :headless_chrome
-DEFAULT_SELENIUM_DRIVER = :headless_chrome
-#DEFAULT_JS_DRIVER = :webkit_debug
+DEFAULT_JS_DRIVER = :firefox
 
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = DEFAULT_JS_DRIVER
@@ -28,7 +26,7 @@ Capybara.configure do |config|
 end
 #
 # Before '@selenium' do
-#   Capybara.javascript_driver   = :headless_chrome
+#   Capybara.javascript_driver   = :headless_firefox
 # end
 #
 # After '@selenium' do
@@ -76,21 +74,17 @@ class Cucumber::Formatter::Interceptor::Pipe
   end
 end
 
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
+Capybara.register_driver :firefox do |app|
+  Capybara::Selenium::Driver.new(app, browser: :firefox)
 end
 
-Capybara.register_driver :headless_chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
+Capybara.register_driver :headless_firefox do |app|
+  options = Selenium::WebDriver::Firefox::Options.new
 
-  options.add_argument('--headless')
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-popup-blocking')
+  options.add_argument('-headless')
   options.add_argument('--window-size=1280,1024')
 
-  options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
-
-  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  driver = Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
 
   driver
 end
