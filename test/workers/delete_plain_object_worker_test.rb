@@ -54,4 +54,55 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
       refute object.destroyed?
     end
   end
+
+  class StaleObjectErrorTest < DeletePlainObjectWorkerTest
+    module LoadTargetWithFiber
+      # Overriding the `delete` method of HasOneAssociation https://github.com/rails/rails/blob/4-2-stable/activerecord/lib/active_record/associations/has_one_association.rb#L53-L64
+      # When entering this method, override the `load_target` method so we can hand over the execution to the main thread
+      def delete
+        def load_target
+          super.tap { Fiber.yield }
+        end
+
+        super
+      end
+    end
+
+    def test_race_condition
+      service = FactoryGirl.create(:simple_service)
+      # There is a restriction on deleting service, at least one should remain
+      FactoryGirl.create(:simple_service, account: service.account)
+
+      proxy = Proxy.find service.proxy.id
+      service = Service.find service.id
+
+      # Make sure that there is no more than one because it is a `has_one` association
+      assert_equal 1, Proxy.where(service_id: service.id).count
+
+      proxy_association = service.association :proxy
+
+      # Hook into the Eigenclass
+      class << proxy_association
+        prepend LoadTargetWithFiber
+      end
+
+      # Execute deletion of service but suspend the execution of deleting the proxy by `:dependent => :destroy`
+      f1 = Fiber.new do
+        DeletePlainObjectWorker.perform_now(service, ['Hierarchy-Service-ID'])
+      end
+
+      # Destroy the proxy in another thread
+      f2 = Fiber.new do
+        DeletePlainObjectWorker.perform_now(proxy, ['Hierarchy-Service-ID', 'Hierarchy-Proxy-ID'])
+      end
+
+      f1.resume
+      f2.resume
+      f1.resume
+
+      assert_raise(ActiveRecord::RecordNotFound) { proxy.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+    end
+
+  end
 end

@@ -93,6 +93,7 @@ class Service < ApplicationRecord
   has_many :service_tokens, inverse_of: :service, dependent: :destroy
 
   scope :accessible, -> { where.not(state: DELETE_STATE) }
+  scope :deleted, -> { where(state: DELETE_STATE) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
   scope(:permitted_for_user, lambda do |user|
     # TODO: this is probably wrong...
@@ -188,7 +189,7 @@ class Service < ApplicationRecord
     end
 
     event :mark_as_deleted do
-      transition [:incomplete, :published, :offline, :hidden] => :deleted, unless: :last_accessible?
+      transition [:incomplete, :published, :offline, :hidden] => :deleted, unless: :default_or_last?
     end
 
     before_transition to: [:deleted], do: :deleted_by_state_machine
