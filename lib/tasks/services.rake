@@ -7,6 +7,6 @@ namespace :services do
   end
 
   task :destroy_marked_as_deleted => :environment do
-    Service.deleted.find_each(&DeleteObjectHierarchyWorker.method(:perform_later))
+    DestroyAllDeletedObjectsWorker.perform_async(Service.to_s)
   end
 end

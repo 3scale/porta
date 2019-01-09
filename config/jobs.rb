@@ -31,6 +31,7 @@ module ThreeScale
       Pdf::Dispatch.daily
       FindAndDeleteScheduledAccountsWorker.perform_async
       DeleteProvidedAccessTokensWorker.perform_async
+      DestroyAllDeletedObjectsWorker.perform_async(Service.to_s)
     ].freeze
 
     BILLING = %w[
