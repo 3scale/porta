@@ -7,7 +7,7 @@ export class StatsStore {
   }
 
   save (state) {
-    this.window.history.pushState(state, '', `#${JSON.stringify(state)}`)
+    this.window.history.pushState(state, '', `#${encodeURI(JSON.stringify(state))}`)
   }
 
   load () {
