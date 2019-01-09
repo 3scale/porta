@@ -185,13 +185,16 @@ And(/^creates metric for that plan$/) do
   page.should have_content 'Metric has been created'
 end
 
-
+Capybara::Node::Element
+Capybara::Selenium::Node
 And(/^makes hits invisible for that plan$/) do
   visit_edit_plan(@plan)
 
   visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
-  assert_equal 'visible', visibility_field['class']
+  assert_equal 'visible', visibility_field[:class]
   visibility_field.click
-  step 'I wait for 1 seconds'
-  assert_equal 'hidden', visibility_field['class']
+  block_and_wait_for_requests_complete
+  # need to query again the page so it does not use the cached object defined before
+  visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
+  assert_equal 'hidden', visibility_field[:class]
 end
