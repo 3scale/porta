@@ -38,7 +38,7 @@ module.exports = function (config) {
 
     browserNoActivityTimeout: 60000,
 
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless', 'FirefoxHeadless'],
 
     reporters: ['progress'],
 

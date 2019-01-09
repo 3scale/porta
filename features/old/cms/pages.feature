@@ -52,8 +52,7 @@ Feature: CMS Pages
       And I press "Hide" inside the dropdown
      Then I should see "Page has been hidden"
 
-     When I hit "/potato" on foo.example.com
-     Then I should get 404
+     When I hit "/potato" on foo.example.com and looking at the request, I should get 404
 
   Scenario: Builtin page
     Given provider "foo.example.com" has all the templates setup

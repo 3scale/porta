@@ -55,7 +55,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder: &system-builder
-  image: quay.io/3scale/system-builder:latest
+  image: quay.io/3scale/system-builder:headless
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -341,10 +341,6 @@ jobs:
   lint:
     executor: builder
     steps:
-      - run:
-          name: Start Xvfb
-          command: Xvfb :99 -screen 0 1280x1024x24
-          background: true
       - checkout-with-submodules
       - *attach-to-workspace
       - run:
@@ -363,7 +359,7 @@ jobs:
       - run:
           name: NPM test
           command: |
-            npm test -- --reporters dots,junit --browsers Firefox
+            npm test -- --reporters dots,junit --browsers ChromeHeadless
             npm run-script jest
       - *store-junit-test-results
       - *store-test-artifacts
