@@ -3,6 +3,8 @@
 require 'sidekiq/testing'
 require 'sidekiq/batch'
 
+# Turn off Sidekiq logging which pollutes the CI logs
+Sidekiq::Logging.logger = nil
 Sidekiq::Testing.inline!
 
 module Sidekiq
