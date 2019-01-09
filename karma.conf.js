@@ -31,13 +31,14 @@ module.exports = function (config) {
       'karma-jquery',
       'karma-fixture',
       'karma-webpack',
+      'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-junit-reporter'
     ],
 
     browserNoActivityTimeout: 60000,
 
-    browsers: ['FirefoxHeadless'],
+    browsers: ['ChromeHeadless', 'FirefoxHeadless'],
 
     reporters: ['progress'],
 
