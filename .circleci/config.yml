@@ -55,7 +55,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder: &system-builder
-  image: quay.io/3scale/system-builder:firefox-headless
+  image: quay.io/3scale/system-builder:headless
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -359,7 +359,7 @@ jobs:
       - run:
           name: NPM test
           command: |
-            npm test -- --reporters dots,junit
+            npm test -- --reporters dots,junit --browsers ChromeHeadless
             npm run-script jest
       - *store-junit-test-results
       - *store-test-artifacts

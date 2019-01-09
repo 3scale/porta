@@ -7,7 +7,9 @@ include Capybara::Minitest::Assertions
 #  Capybara::Selenium::Driver.new(app, :browser => :firefox)
 #end
 
-DEFAULT_JS_DRIVER = :headless_firefox
+DEFAULT_JS_DRIVER = :headless_chrome
+# in case firefox is needed!
+# DEFAULT_JS_DRIVER = :headless_firefox
 
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = DEFAULT_JS_DRIVER
@@ -24,14 +26,6 @@ Capybara.configure do |config|
   config.always_include_port = true
   config.default_max_wait_time = 10
 end
-#
-# Before '@selenium' do
-#   Capybara.javascript_driver   = :headless_firefox
-# end
-#
-# After '@selenium' do
-#   Capybara.javascript_driver   = DEFAULT_JS_DRIVER
-# end
 
 # Needed because cucumber-rails requires capybara/cucumber
 # https://github.com/cucumber/cucumber-rails/blob/7b47bf1dda3368247bf2d45bcb17a224e80ec6fd/lib/cucumber/rails/capybara.rb#L3
@@ -39,25 +33,7 @@ end
 Before '@javascript' do
   Capybara.current_driver = DEFAULT_JS_DRIVER
 end
-# Before '@javascript' do
-#  require 'headless' # this requires Xvfb
-#
-#  headless = Headless.new :destroy_at_exit => false # otherwise it'll cause issues when running in parallel
-#  headless.start
-# end
 
-# Capybara::Webkit.configure do |config|
-#   config.allow_url('foo.example.com')
-#   config.allow_url('admin.foo.example.com')
-#   config.allow_url('foo-admin.example.com')
-#   config.allow_url('foo-admin.3scale.net')
-#   config.allow_url('www.example.com')
-#   config.allow_url('master-account.example.com')
-#   config.allow_url('foo.3scale.net')
-#
-#   config.block_unknown_urls
-#   config.raise_javascript_errors = true # we would like this to be true, but need to fix our failing tests
-# end
 
 # monkeypatch to fix
 # not opened for reading (IOError)
@@ -85,6 +61,25 @@ Capybara.register_driver :headless_firefox do |app|
   options.add_argument('--window-size=1280,1024')
 
   driver = Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
+
+  driver
+end
+
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+Capybara.register_driver :headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+
+  options.add_argument('--headless')
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-popup-blocking')
+  options.add_argument('--window-size=1280,1024')
+
+  options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+
+  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 
   driver
 end
