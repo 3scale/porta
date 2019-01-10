@@ -128,3 +128,6 @@ Gemfile.local
 /node_modules
 
 /vendor/oracle/*.zip
+
+# IDE local settings
+.vscode
