@@ -3,7 +3,7 @@ require "test_helper"
 class Stats::ResponseCodesControllerTest < ActionController::TestCase
 
   setup do
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     login_provider @provider
 
     @service = @provider.default_service

@@ -18,7 +18,7 @@ class UserMailerTest < ActionMailer::TestCase
   context "lost_password" do
 
     setup do
-      @provider_account = Factory(:provider_account,
+      @provider_account = FactoryBot.create(:provider_account,
                                   :domain     => 'api.monkey.com',
                                   :org_name   => "Monkey",
                                   :from_email => 'api@monkey.com')
@@ -82,15 +82,15 @@ class UserMailerTest < ActionMailer::TestCase
   context "signup_notification" do
     context "for buyer" do
       setup do
-        @provider_account = Factory(:provider_account,
+        @provider_account = FactoryBot.create(:provider_account,
                                     :domain     => 'api.monkey.com',
                                     :org_name   => "Monkey",
                                     :from_email => 'api@monkey.com')
 
-        @buyer_account = Factory(:buyer_account_with_pending_user,
+        @buyer_account = FactoryBot.create(:buyer_account_with_pending_user,
                                  :provider_account => @provider_account)
 
-        @user = Factory :admin, :account => @buyer_account
+        @user = FactoryBot.create :admin, :account => @buyer_account
       end
 
       should "have specific headers" do

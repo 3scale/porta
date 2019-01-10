@@ -16,7 +16,7 @@ module PaymentGateways
           signature_out: "signature"
         }
       }
-      @provider_account = FactoryGirl.build_stubbed(:simple_provider, attributes)
+      @provider_account = FactoryBot.build_stubbed(:simple_provider, attributes)
       @payment_gateway = @provider_account.payment_gateway
 
       @account.stubs(provider_account: @provider_account, id: 'account-id')
@@ -48,7 +48,7 @@ module PaymentGateways
     end
 
     test '#update_user' do
-      account = FactoryGirl.create :simple_account
+      account = FactoryBot.create :simple_account
       @ogone.stubs(account: account)
       @ogone.update_user('ED' => '0718', 'CARDNO' => 'XXXXXXXXXXXX1111')
       assert_equal '2018-07-01', account.credit_card_expires_on_with_default.to_s

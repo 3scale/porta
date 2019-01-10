@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::PasswordsControllerTest < ActionController::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @user = @provider.first_admin
     @request.host = @provider.self_domain
   end

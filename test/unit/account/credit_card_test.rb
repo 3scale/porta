@@ -7,8 +7,8 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test 'credit_card_stored? return true for authorize.net users iff have credit_card_auth_code and cc_token' do
-    provider_account = Factory(:simple_provider)
-    account = Factory(:simple_account, :provider_account => provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, :provider_account => provider_account)
     provider_account.payment_gateway_type = :authorize_net
     account.credit_card_auth_code = 'code'
     refute account.credit_card_stored?
@@ -18,8 +18,8 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test 'credit_card_stored_attribute' do
-    provider_account = Factory(:simple_provider)
-    account = Factory(:simple_account, provider_account: provider_account, payment_gateway_type: nil)
+    provider_account = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, provider_account: provider_account, payment_gateway_type: nil)
 
     assert_equal :credit_card_auth_code, account.credit_card_stored_attribute
 
@@ -29,16 +29,16 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test 'credit_card_stored? return true when credit_card_auth_code present for payment gateways different from authorize.net' do
-    provider_account = Factory(:simple_provider)
-    account = Factory(:simple_account, :provider_account => provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, :provider_account => provider_account)
     provider_account.payment_gateway_type = :braintree_blue
     account.credit_card_auth_code = 'code'
     assert account.credit_card_stored?
   end
 
   test 'credit_card_authorize_net_profile_stored? true if account has an auth.net profile ' do
-    provider_account = Factory(:simple_provider)
-    account = Factory(:simple_account, :provider_account => provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, :provider_account => provider_account)
     provider_account.payment_gateway_type = :authorize_net
     account.credit_card_auth_code = 'profile'
     account.credit_card_authorize_net_payment_profile_token = nil
@@ -46,8 +46,8 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test 'credit_card_authorize_net_profile_stored? false for new customers' do
-    provider_account = Factory(:simple_provider)
-    account = Factory(:simple_account, :provider_account => provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, :provider_account => provider_account)
     provider_account.payment_gateway_type = :authorize_net
     account.credit_card_auth_code = 'profile'
     account.credit_card_authorize_net_payment_profile_token = nil
@@ -55,8 +55,8 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test 'remove cc info after delete_cc_details' do
-    provider_account = Factory(:simple_provider)
-    account = Factory(:simple_account, :provider_account => provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    account = FactoryBot.create(:simple_account, :provider_account => provider_account)
     account.credit_card_auth_code = 'code'
     assert account.credit_card_stored?
     account.delete_cc_details
@@ -67,7 +67,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test 'unstore credit card is callable from outside the class' do
-    provider = Factory(:simple_account, :payment_gateway_type => :bogus, :credit_card_auth_code => "fdsa",
+    provider = FactoryBot.create(:simple_account, :payment_gateway_type => :bogus, :credit_card_auth_code => "fdsa",
                        :credit_card_expires_on => Date.new(2020, 4, 2), :credit_card_partial_number => "0989")
 
     assert_nothing_raised do
@@ -97,7 +97,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
 
   test '#credit_card_exires_on_with_default' do
     Timecop.freeze(Time.utc(2017,8,30))
-    account = Factory(:simple_provider)
+    account = FactoryBot.create(:simple_provider)
 
     assert_equal '2017-08-01', account.credit_card_expires_on_with_default.to_s
     assert_nil account.credit_card_expires_on
@@ -106,11 +106,11 @@ class Account::CreditCardTest < ActiveSupport::TestCase
 
   class CreditCardNeededTest < ActiveSupport::TestCase
     setup do
-      @provider_account = Factory.create(:provider_account,
-                                         :billing_strategy => Factory(:postpaid_billing, :charging_enabled => true))
+      @provider_account = FactoryBot.create(:provider_account,
+                                         :billing_strategy => FactoryBot.create(:postpaid_billing, :charging_enabled => true))
 
-      @buyer = Factory :simple_buyer, :provider_account => @provider_account
-      @paid_plan = Factory :service_plan, :issuer => @provider_account.default_service, :cost_per_month => 10
+      @buyer = FactoryBot.create :simple_buyer, :provider_account => @provider_account
+      @paid_plan = FactoryBot.create :service_plan, :issuer => @provider_account.default_service, :cost_per_month => 10
       @buyer.buy! @paid_plan
     end
 
@@ -146,7 +146,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     def test_add_credit_card_details
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
       account.credit_card_auth_code = account.credit_card_partial_number = '0000'
       account.credit_card_expires_on = Date.new(2017, 11, 1)
 
@@ -163,7 +163,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     end
 
     def test_remove_credit_card_details
-      account = FactoryGirl.create(:provider_account,
+      account = FactoryBot.create(:provider_account,
                                    credit_card_auth_code: '0000',
                                    credit_card_partial_number: '0000',
                                    credit_card_expires_on: Date.new(2017, 11, 1))
@@ -182,7 +182,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     end
 
     def test_events_without_change
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
 
       account.org_name += 'foobar'
       ThreeScale::Analytics.expects(:track_account).never

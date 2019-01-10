@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210222627) do
+ActiveRecord::Schema.define(version: 20190104134224) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -1051,14 +1051,14 @@ ActiveRecord::Schema.define(version: 20181210222627) do
   add_index "proxies", ["service_id"], name: "index_proxies_on_service_id", using: :btree
 
   create_table "proxy_configs", force: :cascade do |t|
-    t.integer  "proxy_id",    limit: 8,                 null: false
+    t.integer  "proxy_id",    limit: 8,                    null: false
     t.integer  "user_id",     limit: 8
-    t.integer  "version",     limit: 4,     default: 0, null: false
+    t.integer  "version",     limit: 4,        default: 0, null: false
     t.integer  "tenant_id",   limit: 8
-    t.string   "environment", limit: 255,               null: false
-    t.text     "content",     limit: 65535,             null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.string   "environment", limit: 255,                  null: false
+    t.text     "content",     limit: 16777215,             null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "hosts",       limit: 8192
   end
 

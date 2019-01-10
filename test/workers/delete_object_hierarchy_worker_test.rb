@@ -4,7 +4,7 @@ require 'test_helper'
 
 class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   setup do
-    @object = FactoryGirl.create(:metric)
+    @object = FactoryBot.create(:metric)
   end
 
   def test_perform
@@ -42,7 +42,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   class ObjectDoesNotExistAnymoreTest < DeleteObjectHierarchyWorkerTest
     setup do
-      @object = FactoryGirl.create(:provider_account)
+      @object = FactoryBot.create(:provider_account)
       Rails.logger.stubs(:info)
     end
 
@@ -63,10 +63,10 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   class DeleteServiceHierarchyTest < DeleteObjectHierarchyWorkerTest
     setup do
-      @object = @service = FactoryGirl.create(:service)
+      @object = @service = FactoryBot.create(:service)
       @service_plan = service.service_plans.first
-      @application_plan = FactoryGirl.create(:application_plan, :issuer => service)
-      @end_user_plan = FactoryGirl.create(:end_user_plan, service: service)
+      @application_plan = FactoryBot.create(:application_plan, :issuer => service)
+      @end_user_plan = FactoryBot.create(:end_user_plan, service: service)
       @metrics = service.metrics
       service.update_attribute :default_service_plan, @service_plan
       service.update_attribute :default_application_plan, @application_plan
@@ -87,20 +87,20 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   class DeleteAccountHierarchyTest < DeleteObjectHierarchyWorkerTest
     setup do
-      @object = @provider = FactoryGirl.create(:provider_account)
+      @object = @provider = FactoryBot.create(:provider_account)
       @provider.schedule_for_deletion!
 
-      non_default_service = FactoryGirl.create(:service, account: provider)
+      non_default_service = FactoryBot.create(:service, account: provider)
       non_default_service.stubs(:default?).returns(false)
       @services = [provider.services.default, non_default_service]
       @account_plan = provider.account_plans.default
 
-      FactoryGirl.create(:service_contract, user_account: provider)
-      FactoryGirl.create(:account_contract, user_account: provider)
-      FactoryGirl.create(:application_contract, user_account: provider)
+      FactoryBot.create(:service_contract, user_account: provider)
+      FactoryBot.create(:account_contract, user_account: provider)
+      FactoryBot.create(:application_contract, user_account: provider)
       @contracts = provider.reload.contracts
 
-      @buyers = FactoryGirl.create_list(:buyer_account, 2, provider_account: provider)
+      @buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
       @users = provider.users
     end
 
@@ -133,9 +133,9 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   class DeletePlanTest < DeleteObjectHierarchyWorkerTest
     setup do
       # ApplicationPlan setup
-      @object = @plan = FactoryGirl.create(:application_plan)
-      @contract = FactoryGirl.create(:application_contract, plan: @plan)
-      @customized_plan = FactoryGirl.create(:application_plan, original_id: @plan.id)
+      @object = @plan = FactoryBot.create(:application_plan)
+      @contract = FactoryBot.create(:application_contract, plan: @plan)
+      @customized_plan = FactoryBot.create(:application_plan, original_id: @plan.id)
     end
 
     private
@@ -150,17 +150,17 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     class AccountPlanTest < DeletePlanTest
       def setup
-        @object = @plan = FactoryGirl.create(:account_plan)
-        @contract = FactoryGirl.create(:account_contract, plan: @plan)
-        @customized_plan = FactoryGirl.create(:account_plan, original_id: @plan.id)
+        @object = @plan = FactoryBot.create(:account_plan)
+        @contract = FactoryBot.create(:account_contract, plan: @plan)
+        @customized_plan = FactoryBot.create(:account_plan, original_id: @plan.id)
       end
     end
 
     class ServicePlanTest < DeletePlanTest
       def setup
-        @object = @plan = FactoryGirl.create(:service_plan)
-        @contract = FactoryGirl.create(:service_contract, plan: @plan)
-        @customized_plan = FactoryGirl.create(:service_plan, original_id: @plan.id)
+        @object = @plan = FactoryBot.create(:service_plan)
+        @contract = FactoryBot.create(:service_contract, plan: @plan)
+        @customized_plan = FactoryBot.create(:service_plan, original_id: @plan.id)
       end
     end
   end

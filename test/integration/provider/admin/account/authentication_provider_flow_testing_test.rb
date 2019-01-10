@@ -3,9 +3,9 @@ require 'test_helper'
 class Provider::Admin::Account::AuthenticationProviderFlowTestingTest < ActionDispatch::IntegrationTest
 
   def setup
-    @account = FactoryGirl.create(:provider_account)
-    @auth_provider = FactoryGirl.create(:self_authentication_provider, account: @account)
-    @user = FactoryGirl.create(:simple_user, account: @account)
+    @account = FactoryBot.create(:provider_account)
+    @auth_provider = FactoryBot.create(:self_authentication_provider, account: @account)
+    @user = FactoryBot.create(:simple_user, account: @account)
 
     login_provider @account
 

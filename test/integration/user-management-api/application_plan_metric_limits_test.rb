@@ -2,11 +2,11 @@ require 'test_helper'
 
 class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @service  = Factory :service, :account => @provider
-    @app_plan = Factory :application_plan, :issuer => @service
-    @metric   = Factory :metric, :service => @service
-    @limit    = Factory :usage_limit, :plan => @app_plan, :metric => @metric
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @service  = FactoryBot.create :service, :account => @provider
+    @app_plan = FactoryBot.create :application_plan, :issuer => @service
+    @metric   = FactoryBot.create :metric, :service => @service
+    @limit    = FactoryBot.create :usage_limit, :plan => @app_plan, :metric => @metric
 
     host! @provider.admin_domain
   end
@@ -15,8 +15,8 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_application_plan_metric_limits_path(@app_plan, @metric))
     assert_response :forbidden
@@ -47,8 +47,8 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
 
   test 'application_plan_metric_limits_index' do
     #regression test to assert that only limits of this metric are returned
-    another_metric = Factory :metric, :service => @service
-    alien_limit    = Factory :usage_limit, :plan => @app_plan, :metric => another_metric
+    another_metric = FactoryBot.create :metric, :service => @service
+    alien_limit    = FactoryBot.create :usage_limit, :plan => @app_plan, :metric => another_metric
 
     get(admin_api_application_plan_metric_limits_path(@app_plan, @metric),
              :provider_key => @provider.api_key, :format => :xml)

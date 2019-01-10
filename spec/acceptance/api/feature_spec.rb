@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Feature" do
 
@@ -6,7 +6,7 @@ resource "Feature" do
 
   let(:plan_id) { plan.id }
 
-  let(:feature) { Factory(:feature, featurable: featurable, scope: scope) }
+  let(:feature) { FactoryBot.create(:feature, featurable: featurable, scope: scope) }
   let(:resource) { feature }
   let(:scope) { nil }
 
@@ -28,7 +28,7 @@ resource "Feature" do
   api 'account plan features' do
     let(:featurable) { provider }
     let(:scope) { 'AccountPlan' }
-    let(:plan) { Factory(:account_plan, issuer: provider) }
+    let(:plan) { FactoryBot.create(:account_plan, issuer: provider) }
 
     post  '/admin/api/account_plans/:plan_id/features.:format', action: :create do
       include_context "feature params"
@@ -43,7 +43,7 @@ resource "Feature" do
   api 'application plan features' do
     let(:featurable) { service }
     let(:scope) { 'ApplicationPlan' }
-    let(:plan) { Factory(:application_plan, issuer: service) }
+    let(:plan) { FactoryBot.create(:application_plan, issuer: service) }
 
     post  '/admin/api/application_plans/:plan_id/features.:format', action: :create do
       include_context "feature params"
@@ -58,7 +58,7 @@ resource "Feature" do
   api 'service plan features' do
     let(:featurable) { service }
     let(:scope) { 'ServicePlan' }
-    let(:plan) { Factory(:service_plan, issuer: service) }
+    let(:plan) { FactoryBot.create(:service_plan, issuer: service) }
 
     post  '/admin/api/service_plans/:plan_id/features.:format', action: :create do
       include_context "feature params"
@@ -72,7 +72,7 @@ resource "Feature" do
 
 
   api 'account features' do
-    let(:resource) { Factory.build(:feature, scope: 'Account', featurable: provider) }
+    let(:resource) { FactoryBot.build(:feature, scope: 'Account', featurable: provider) }
 
     get '/admin/api/features.:format', action: :index
     get '/admin/api/features/:id.:format', action: :show
@@ -86,7 +86,7 @@ resource "Feature" do
   end
 
   api 'service features' do
-    let(:resource) { Factory.build(:feature, featurable: service) }
+    let(:resource) { FactoryBot.build(:feature, featurable: service) }
     let(:service_id) { service.id }
 
     get '/admin/api/services/:service_id/features.:format', action: :index
@@ -104,7 +104,7 @@ resource "Feature" do
   end
 
   context do
-    let(:resource) { Factory(:feature, featurable: featurable, scope: scope) }
+    let(:resource) { FactoryBot.create(:feature, featurable: featurable, scope: scope) }
     let(:scope) { nil }
     let(:featurable) { provider }
 

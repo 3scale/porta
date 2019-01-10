@@ -7,16 +7,16 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   include TestHelpers::BackendClientStubs
 
   test 'generates application_id when created' do
-    cinstance = Cinstance.new(:plan         => Factory(:application_plan),
-                              :user_account => Factory(:buyer_account))
+    cinstance = Cinstance.new(:plan         => FactoryBot.create(:application_plan),
+                              :user_account => FactoryBot.create(:buyer_account))
     cinstance.save!
 
     assert_not_nil cinstance.application_id
   end
 
   test 'can be created with a custom application_id' do
-    cinstance = Cinstance.new(:plan           => Factory(:application_plan),
-                              :user_account   => Factory(:buyer_account))
+    cinstance = Cinstance.new(:plan           => FactoryBot.create(:application_plan),
+                              :user_account   => FactoryBot.create(:buyer_account))
     cinstance.application_id = 'custom_app_id'
     cinstance.save!
 
@@ -24,7 +24,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'application_id is properly validated' do
-    cinstance = Cinstance.new(:plan => Factory(:application_plan), :user_account   => Factory(:buyer_account))
+    cinstance = Cinstance.new(:plan => FactoryBot.create(:application_plan), :user_account   => FactoryBot.create(:buyer_account))
 
     cinstance.application_id = "1"
     assert !cinstance.valid?
@@ -43,7 +43,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'application_id is immutable' do
-    cinstance = Factory(:simple_cinstance)
+    cinstance = FactoryBot.create(:simple_cinstance)
 
     assert_raise(ActiveRecord::ActiveRecordError) do
       cinstance.update_attribute :application_id, 'other_app_id'
@@ -51,14 +51,14 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'application_id is unique for a tenant' do
-    provider = Factory(:provider_account)
-    cinstance = Cinstance.new(:plan           => Factory(:application_plan, :issuer => provider.default_service),
-                              :user_account   => Factory(:buyer_account))
+    provider = FactoryBot.create(:provider_account)
+    cinstance = Cinstance.new(:plan           => FactoryBot.create(:application_plan, :issuer => provider.default_service),
+                              :user_account   => FactoryBot.create(:buyer_account))
     cinstance.application_id = 'custom_app_id'
     cinstance.save!
     assert_equal 'custom_app_id', cinstance.application_id
 
-    invalid_cinstance = Cinstance.new(:plan => Factory(:application_plan, :issuer => provider.default_service),
+    invalid_cinstance = Cinstance.new(:plan => FactoryBot.create(:application_plan, :issuer => provider.default_service),
                                       :user_account => cinstance.user_account)
     invalid_cinstance.application_id = 'custom_app_id'
     assert !invalid_cinstance.valid?
@@ -66,7 +66,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'updates service data when provider cinstance changes user_key' do
-    provider_account = Factory(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     cinstance = provider_account.bought_cinstances.first
 
     ThreeScale::Core::Service.expects(:change_provider_key!).with(cinstance.user_key, anything)
@@ -75,10 +75,10 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
 
 
   test 'stores backend application when cinstance is created' do
-    provider_account = Factory(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     service = provider_account.default_service
-    plan = Factory(:application_plan, :issuer => service)
-    buyer_account = Factory(:buyer_account, :provider_account => provider_account)
+    plan = FactoryBot.create(:application_plan, :issuer => service)
+    buyer_account = FactoryBot.create(:buyer_account, :provider_account => provider_account)
 
     cinstance = Cinstance.new(:plan => plan, :user_account => buyer_account)
 
@@ -97,7 +97,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'updates backend application when cinstance changes state' do
-    cinstance = Factory(:cinstance)
+    cinstance = FactoryBot.create(:cinstance)
 
     ThreeScale::Core::Application.expects(:save)
         .with(has_entries(service_id: cinstance.service.backend_id,
@@ -108,7 +108,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'updates backend application when cinstance changes end_user_required' do
-    cinstance = Factory(:cinstance)
+    cinstance = FactoryBot.create(:cinstance)
 
     ThreeScale::Core::Application.expects(:save)
       .with(has_entries(service_id: cinstance.service.backend_id,
@@ -119,8 +119,8 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'updates backend application when cinstance changes plan' do
-    cinstance = Factory(:cinstance)
-    new_plan  = Factory(:application_plan, :service => cinstance.service)
+    cinstance = FactoryBot.create(:cinstance)
+    new_plan  = FactoryBot.create(:application_plan, :service => cinstance.service)
     cinstance.plan = new_plan
 
     ThreeScale::Core::Application.expects(:save)
@@ -133,7 +133,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'delete backend application when cinstance is destroyed' do
-    cinstance = Factory(:cinstance)
+    cinstance = FactoryBot.create(:cinstance)
 
     ThreeScale::Core::Application.expects(:delete)
       .with(cinstance.service.backend_id, cinstance.application_id)
@@ -149,7 +149,7 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
       service_id, user_key, app_id = params
     end
 
-    provider_account = Factory(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     cinstance        = provider_account.bought_cinstance
     service          = Account.master.default_service
 
@@ -159,8 +159,8 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'creates user_key to application_id mapping when buyer cinstance is created' do
-    plan  = Factory(:application_plan)
-    buyer = Factory(:buyer_account)
+    plan  = FactoryBot.create(:application_plan)
+    buyer = FactoryBot.create(:buyer_account)
 
     user_key = app_id = nil
 
@@ -176,8 +176,8 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'updates user_key to application_id mapping when cinstance changes user_key' do
-    plan         = Factory(:application_plan)
-    buyer        = Factory(:buyer_account)
+    plan         = FactoryBot.create(:application_plan)
+    buyer        = FactoryBot.create(:buyer_account)
     cinstance    = Cinstance.create!(:plan => plan, :user_account => buyer)
     old_user_key = cinstance.user_key
 
@@ -200,8 +200,8 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   # Regression test for https://github.com/3scale/system/issues/2033
   #
   test 'does not save empty user_key' do
-    plan         = Factory(:application_plan)
-    buyer        = Factory(:buyer_account)
+    plan         = FactoryBot.create(:application_plan)
+    buyer        = FactoryBot.create(:buyer_account)
     cinstance    = Cinstance.create!(:plan => plan, :user_account => buyer)
     old_user_key = cinstance.user_key
 
@@ -214,8 +214,8 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
 
 
   test 'deletes user_key to application_id mapping when cinstance is destroyed' do
-    plan      = Factory(:application_plan)
-    buyer     = Factory(:buyer_account)
+    plan      = FactoryBot.create(:application_plan)
+    buyer     = FactoryBot.create(:buyer_account)
     cinstance = Cinstance.create!(:plan => plan, :user_account => buyer)
 
     ThreeScale::Core::Application.expects(:delete_id_by_key)
@@ -225,12 +225,12 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
   end
 
   test '#delete_backend_cinstance deletes application_keys, referrer_filters, user_key and application' do
-    plan      = FactoryGirl.create(:application_plan)
+    plan      = FactoryBot.create(:application_plan)
     service   = plan.service
-    buyer     = FactoryGirl.create(:buyer_account)
+    buyer     = FactoryBot.create(:buyer_account)
     cinstance = Cinstance.create!(plan: plan, user_account: buyer, service: service)
-    FactoryGirl.create_list(:application_key, 2, application: cinstance)
-    FactoryGirl.create_list(:referrer_filter, 2, application: cinstance)
+    FactoryBot.create_list(:application_key, 2, application: cinstance)
+    FactoryBot.create_list(:referrer_filter, 2, application: cinstance)
 
     backend_id = service.backend_id
     app_id     = cinstance.application_id

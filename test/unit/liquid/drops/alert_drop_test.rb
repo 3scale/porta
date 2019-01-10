@@ -5,7 +5,7 @@ class Liquid::Drops::AlertTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @alert = FactoryGirl.build_stubbed(:limit_alert)
+    @alert = FactoryBot.build_stubbed(:limit_alert)
     @drop = Drops::Alert.new(@alert)
   end
 

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class PricingRuleTest < ActiveSupport::TestCase
   def setup
-    @plan = Factory(:application_plan)
+    @plan = FactoryBot.create(:application_plan)
   end
 
   should have_db_column(:min).with_options(:default => 1)
@@ -76,8 +76,8 @@ class PricingRuleTest < ActiveSupport::TestCase
   end
 
   should 'allow range overlap for pricing rules with different metrics' do
-    metric_one = Factory(:metric, :service => @plan.service)
-    metric_two = Factory(:metric, :service => @plan.service)
+    metric_one = FactoryBot.create(:metric, :service => @plan.service)
+    metric_two = FactoryBot.create(:metric, :service => @plan.service)
 
     rule_one = @plan.pricing_rules.create!(:metric => metric_one, :min => 1, :max => 10,
                                            :cost_per_unit => 0.2)

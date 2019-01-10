@@ -3,7 +3,7 @@ require 'test_helper'
 class UsageLimitViolationsQueryTest < ActiveSupport::TestCase
   def setup
     # TODO: use simple factory and fix Account#buyer_alerts
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     @query = UsageLimitViolationsQuery.new(@provider)
   end
 
@@ -47,14 +47,14 @@ class UsageLimitViolationsQueryTest < ActiveSupport::TestCase
   end
 
   def create_alert
-    FactoryGirl.create(:limit_alert,
+    FactoryBot.create(:limit_alert,
                        account: @provider,
-                       cinstance: FactoryGirl.create(:simple_cinstance))
+                       cinstance: FactoryBot.create(:simple_cinstance))
   end
 
   def create_violation
-    FactoryGirl.create(:limit_violation,
+    FactoryBot.create(:limit_violation,
                        account: @provider,
-                       cinstance: FactoryGirl.create(:simple_cinstance))
+                       cinstance: FactoryBot.create(:simple_cinstance))
   end
 end

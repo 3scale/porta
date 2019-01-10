@@ -3,7 +3,7 @@ require 'test_helper'
 class PartialTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
   end
 
   test 'should not use builtin partials system_names' do

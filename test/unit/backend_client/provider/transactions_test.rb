@@ -7,7 +7,7 @@ class BackendClient::Provider::TransactionsTest < ActiveSupport::TestCase
   def setup
     set_backend_host 'example.org'
 
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @provider_key     = @provider_account.api_key
 
     @connection = BackendClient::Connection.new(:host => backend_host)
@@ -25,13 +25,13 @@ class BackendClient::Provider::TransactionsTest < ActiveSupport::TestCase
   end
 
   test '#latest_transactions returns collection of transaction objects' do
-    plan          = Factory(:application_plan, :issuer => @provider_account.default_service)
+    plan          = FactoryBot.create(:application_plan, :issuer => @provider_account.default_service)
 
-    cinstance_one = Factory(:cinstance, :plan => plan)
-    cinstance_two = Factory(:cinstance, :plan => plan)
+    cinstance_one = FactoryBot.create(:cinstance, :plan => plan)
+    cinstance_two = FactoryBot.create(:cinstance, :plan => plan)
 
-    metric_one    = Factory(:metric, :service => @provider_account.default_service)
-    metric_two    = Factory(:metric, :service => @provider_account.default_service)
+    metric_one    = FactoryBot.create(:metric, :service => @provider_account.default_service)
+    metric_two    = FactoryBot.create(:metric, :service => @provider_account.default_service)
 
     transactions = [
       {:application_id => cinstance_one.application_id, :timestamp => "2010-09-13 14:14:00 UTC",
@@ -59,8 +59,8 @@ class BackendClient::Provider::TransactionsTest < ActiveSupport::TestCase
   end
 
   test '#latest_transactions converts timestamps to the current timezone' do
-    plan      = Factory( :application_plan, :issuer => @provider_account.default_service)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan      = FactoryBot.create( :application_plan, :issuer => @provider_account.default_service)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
     metric    = @provider_account.default_service.metrics.hits
 
     transactions = [
@@ -92,14 +92,14 @@ class BackendClient::Provider::TransactionsTest < ActiveSupport::TestCase
 
   test '#latest_transactions sorts transactions from multiple services by timestamp overall' do
     service_a = @provider_account.default_service
-    service_b = Factory(:service, account: @provider_account)
+    service_b = FactoryBot.create(:service, account: @provider_account)
 
-    cinstance_one = Factory(:cinstance, :plan => Factory(:application_plan, :issuer => service_a))
-    cinstance_two = Factory(:cinstance, :plan => Factory(:application_plan, :issuer => service_b))
+    cinstance_one = FactoryBot.create(:cinstance, :plan => FactoryBot.create(:application_plan, :issuer => service_a))
+    cinstance_two = FactoryBot.create(:cinstance, :plan => FactoryBot.create(:application_plan, :issuer => service_b))
 
-    metric_one = Factory(:metric, :service => service_a)
-    metric_two = Factory(:metric, :service => service_a)
-    metric_three = Factory(:metric, :service => service_b)
+    metric_one = FactoryBot.create(:metric, :service => service_a)
+    metric_two = FactoryBot.create(:metric, :service => service_a)
+    metric_three = FactoryBot.create(:metric, :service => service_b)
 
     transactions_a = [
       { application_id: cinstance_one.application_id, timestamp: "2017-09-29 10:43:00 UTC", usage: { metric_one.id.to_s => 10, metric_two.id.to_s => 6 } },

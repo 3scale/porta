@@ -3,7 +3,6 @@ require 'test_helper'
 class NotificationMailerTest < ActionMailer::TestCase
   FakeContract = Struct.new(:old_plan, :plan, :provider_account, :service, :account, :issuer)
 
-  include ActionDispatch::Assertions::SelectorAssertions
   include CinstancesHelper
 
   def test_event_to_header
@@ -39,9 +38,9 @@ class NotificationMailerTest < ActionMailer::TestCase
 
   def test_application_created
     FieldsDefinition.create!(account: provider, name: 'LALA', target: 'Account', label: 'foo')
-    application = FactoryGirl.create(:cinstance, name: 'Bob app')
+    application = FactoryBot.create(:cinstance, name: 'Bob app')
     service     = application.service
-    user        = FactoryGirl.create(:simple_user, first_name: 'Some Gal')
+    user        = FactoryBot.create(:simple_user, first_name: 'Some Gal')
     event       = Applications::ApplicationCreatedEvent.create(application, user)
     mail        = NotificationMailer.application_created(event, receiver)
 
@@ -64,10 +63,10 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_account_created
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     FieldsDefinition.create!(account: provider, name: 'org_name', target: 'Account', label: 'foo')
-    account = FactoryGirl.create(:simple_account, provider_account: provider)
-    user  = FactoryGirl.build_stubbed(:simple_user, first_name: 'Some Gal', account: account)
+    account = FactoryBot.create(:simple_account, provider_account: provider)
+    user  = FactoryBot.build_stubbed(:simple_user, first_name: 'Some Gal', account: account)
     event = Accounts::AccountCreatedEvent.create(account, user)
     mail  = NotificationMailer.account_created(event, receiver)
 
@@ -103,7 +102,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_limit_violation_reached_provider
-    alert   = FactoryGirl.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
+    alert   = FactoryBot.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
     service = application.service
     event   = Alerts::LimitViolationReachedProviderEvent.create(alert)
     mail    = NotificationMailer.limit_violation_reached_provider(event, receiver)
@@ -124,7 +123,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_limit_alert_reached_provider
-    alert   = FactoryGirl.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
+    alert   = FactoryBot.build_stubbed(:limit_violation, id: 2, cinstance: application, message: 'Traffic')
     service = application.service
     event   = Alerts::LimitAlertReachedProviderEvent.create(alert)
     mail    = NotificationMailer.limit_alert_reached_provider(event, receiver)
@@ -145,8 +144,8 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_unsuccessfully_charged_invoice_provider
-    buyer   = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alexander')
-    invoice = FactoryGirl.build_stubbed(:invoice, id: 1, provider_account: provider,
+    buyer   = FactoryBot.build_stubbed(:simple_buyer, name: 'Alexander')
+    invoice = FactoryBot.build_stubbed(:invoice, id: 1, provider_account: provider,
                                                   state: 'created', buyer_account: buyer)
     event   = Invoices::UnsuccessfullyChargedInvoiceProviderEvent.create(invoice)
     mail    = NotificationMailer.unsuccessfully_charged_invoice_provider(event, receiver)
@@ -161,12 +160,12 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_account_plan_change_requested
-    plan     = FactoryGirl.build_stubbed(:simple_account_plan, id: 1)
-    plan_2   = FactoryGirl.build_stubbed(:simple_account_plan, id: 2)
-    provider = FactoryGirl.build_stubbed(:simple_provider, id: 3)
-    account  = FactoryGirl.build_stubbed(:simple_buyer, id: 4, name: 'Alex',
+    plan     = FactoryBot.build_stubbed(:simple_account_plan, id: 1)
+    plan_2   = FactoryBot.build_stubbed(:simple_account_plan, id: 2)
+    provider = FactoryBot.build_stubbed(:simple_provider, id: 3)
+    account  = FactoryBot.build_stubbed(:simple_buyer, id: 4, name: 'Alex',
                                                         bought_account_plan: plan_2, provider_account: provider)
-    user     = FactoryGirl.build_stubbed(:simple_user, account: account)
+    user     = FactoryBot.build_stubbed(:simple_user, account: account)
     event    = Accounts::AccountPlanChangeRequestedEvent.create(account, user, plan)
     mail     = NotificationMailer.account_plan_change_requested(event, receiver)
 
@@ -181,12 +180,12 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_plan_change_requested
-    service          = FactoryGirl.build_stubbed(:simple_service, name: 'Foo Service')
-    current_plan     = FactoryGirl.build_stubbed(:simple_service_plan, issuer: service, name: 'Plan 1')
-    requested_plan   = FactoryGirl.build_stubbed(:simple_service_plan, issuer: service, name: 'Plan 2')
-    user             = FactoryGirl.build_stubbed(:simple_user, account: account)
-    account          = FactoryGirl.build_stubbed(:simple_buyer, name: 'SimpleCompany', provider_account: provider)
-    service_contract = FactoryGirl.build_stubbed(:simple_service_contract, plan: current_plan, user_account: account)
+    service          = FactoryBot.build_stubbed(:simple_service, name: 'Foo Service')
+    current_plan     = FactoryBot.build_stubbed(:simple_service_plan, issuer: service, name: 'Plan 1')
+    requested_plan   = FactoryBot.build_stubbed(:simple_service_plan, issuer: service, name: 'Plan 2')
+    user             = FactoryBot.build_stubbed(:simple_user, account: account)
+    account          = FactoryBot.build_stubbed(:simple_buyer, name: 'SimpleCompany', provider_account: provider)
+    service_contract = FactoryBot.build_stubbed(:simple_service_contract, plan: current_plan, user_account: account)
     event            = Services::ServicePlanChangeRequestedEvent.create(service_contract, user, requested_plan)
     mail             = NotificationMailer.service_plan_change_requested(event, receiver)
 
@@ -203,7 +202,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_invoices_to_review
-    provider = FactoryGirl.build_stubbed(:simple_provider, id: 1)
+    provider = FactoryBot.build_stubbed(:simple_provider, id: 1)
     event    = Invoices::InvoicesToReviewEvent.create(provider)
     mail     = NotificationMailer.invoices_to_review(event, receiver)
 
@@ -217,8 +216,8 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_expired_credit_card_provider
-    provider = FactoryGirl.build_stubbed(:simple_provider, id: 1)
-    account  = FactoryGirl.build_stubbed(:simple_buyer, id: 2, name: 'Alex', provider_account: provider)
+    provider = FactoryBot.build_stubbed(:simple_provider, id: 1)
+    account  = FactoryBot.build_stubbed(:simple_buyer, id: 2, name: 'Alex', provider_account: provider)
     event    = Accounts::ExpiredCreditCardProviderEvent.create(account)
     mail     = NotificationMailer.expired_credit_card_provider(event, receiver)
 
@@ -246,9 +245,9 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_contract_cancellation
-    account  = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alex')
-    contract = FactoryGirl.build_stubbed(:service_contract, user_account: account)
-    contract.stubs(:provider_account).returns(FactoryGirl.build_stubbed(:simple_provider))
+    account  = FactoryBot.build_stubbed(:simple_buyer, name: 'Alex')
+    contract = FactoryBot.build_stubbed(:service_contract, user_account: account)
+    contract.stubs(:provider_account).returns(FactoryBot.build_stubbed(:simple_provider))
     event    = ServiceContracts::ServiceContractCancellationEvent.create(contract)
     mail     = NotificationMailer.service_contract_cancellation(event, receiver)
 
@@ -261,12 +260,12 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_contract_created
-    service  = FactoryGirl.build_stubbed(:simple_service)
-    plan     = FactoryGirl.build_stubbed(:service_plan, issuer: service)
-    account  = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alex')
-    contract = FactoryGirl.build_stubbed(:service_contract, plan: plan, user_account: account)
-    contract.stubs(:provider_account).returns(FactoryGirl.build_stubbed(:simple_provider))
-    user     = FactoryGirl.build_stubbed(:simple_user, account: account)
+    service  = FactoryBot.build_stubbed(:simple_service)
+    plan     = FactoryBot.build_stubbed(:service_plan, issuer: service)
+    account  = FactoryBot.build_stubbed(:simple_buyer, name: 'Alex')
+    contract = FactoryBot.build_stubbed(:service_contract, plan: plan, user_account: account)
+    contract.stubs(:provider_account).returns(FactoryBot.build_stubbed(:simple_provider))
+    user     = FactoryBot.build_stubbed(:simple_user, account: account)
     event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, user)
     mail     = NotificationMailer.service_contract_created(event, receiver)
 
@@ -289,9 +288,9 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_cinstance_expired_trial
-    account   = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alex')
-    plan      = FactoryGirl.build_stubbed(:simple_application_plan, name: 'planLALA')
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance, user_account: account, plan: plan, name: 'LALA')
+    account   = FactoryBot.build_stubbed(:simple_buyer, name: 'Alex')
+    plan      = FactoryBot.build_stubbed(:simple_application_plan, name: 'planLALA')
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, user_account: account, plan: plan, name: 'LALA')
     service   = cinstance.service
     event     = Cinstances::CinstanceExpiredTrialEvent.create(cinstance)
     mail      = NotificationMailer.cinstance_expired_trial(event, receiver)
@@ -307,10 +306,10 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_contract_plan_changed
-    old_plan = FactoryGirl.build_stubbed(:simple_service_plan, name: 'Plan 1')
-    new_plan = FactoryGirl.build_stubbed(:simple_service_plan, name: 'Plan 2')
-    service  = FactoryGirl.build_stubbed(:simple_service, name: 'Service 1')
-    user     = FactoryGirl.build_stubbed(:simple_user, account: account)
+    old_plan = FactoryBot.build_stubbed(:simple_service_plan, name: 'Plan 1')
+    new_plan = FactoryBot.build_stubbed(:simple_service_plan, name: 'Plan 2')
+    service  = FactoryBot.build_stubbed(:simple_service, name: 'Service 1')
+    user     = FactoryBot.build_stubbed(:simple_user, account: account)
     contract = FakeContract.new(old_plan, new_plan, provider, service, account, issuer: service)
     event    = ServiceContracts::ServiceContractPlanChangedEvent.create(contract, user)
     mail     = NotificationMailer.service_contract_plan_changed(event, receiver)
@@ -327,10 +326,10 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_plan_downgraded
-    service  = FactoryGirl.build_stubbed(:simple_service, name: 'Service 1', account: provider)
-    new_plan = FactoryGirl.build_stubbed(:simple_application_plan, name: '1', issuer: service)
-    old_plan = FactoryGirl.build_stubbed(:simple_application_plan, name: '2')
-    contract = FactoryGirl.build_stubbed(:simple_service_contract, user_account: account)
+    service  = FactoryBot.build_stubbed(:simple_service, name: 'Service 1', account: provider)
+    new_plan = FactoryBot.build_stubbed(:simple_application_plan, name: '1', issuer: service)
+    old_plan = FactoryBot.build_stubbed(:simple_application_plan, name: '2')
+    contract = FactoryBot.build_stubbed(:simple_service_contract, user_account: account)
     event    = Plans::PlanDowngradedEvent.create(new_plan, old_plan, contract)
     mail     = NotificationMailer.plan_downgraded(event, receiver)
 
@@ -345,8 +344,8 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_unsuccessfully_charged_invoice_final_provider
-    buyer   = FactoryGirl.build_stubbed(:simple_buyer, name: 'Alexander')
-    invoice = FactoryGirl.build_stubbed(:invoice, id: 1, provider_account: provider,
+    buyer   = FactoryBot.build_stubbed(:simple_buyer, name: 'Alexander')
+    invoice = FactoryBot.build_stubbed(:invoice, id: 1, provider_account: provider,
                                         state: 'created', buyer_account: buyer)
     event   = Invoices::UnsuccessfullyChargedInvoiceFinalProviderEvent.create(invoice)
     mail    = NotificationMailer.unsuccessfully_charged_invoice_final_provider(event, receiver)
@@ -361,7 +360,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_account_deleted
-    buyer = FactoryGirl.build_stubbed(:simple_buyer, name: 'Supertramp', provider_account: provider)
+    buyer = FactoryBot.build_stubbed(:simple_buyer, name: 'Supertramp', provider_account: provider)
     event = Accounts::AccountDeletedEvent.create(buyer)
     mail  = NotificationMailer.account_deleted(event, receiver)
 
@@ -376,10 +375,10 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_cinstance_plan_changed
-    buyer     = FactoryGirl.build_stubbed(:simple_buyer, name: 'Supertramp', provider_account: provider)
-    user      = FactoryGirl.build_stubbed(:simple_user, account: buyer, first_name: 'Alex')
-    old_plan  = FactoryGirl.build_stubbed(:simple_application_plan, name: 'Old plan')
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance, name: 'Some Name', user_account: buyer)
+    buyer     = FactoryBot.build_stubbed(:simple_buyer, name: 'Supertramp', provider_account: provider)
+    user      = FactoryBot.build_stubbed(:simple_user, account: buyer, first_name: 'Alex')
+    old_plan  = FactoryBot.build_stubbed(:simple_application_plan, name: 'Old plan')
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, name: 'Some Name', user_account: buyer)
 
     cinstance.expects(:old_plan).returns(old_plan)
 
@@ -402,8 +401,8 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_message_received
-    message   = FactoryGirl.build_stubbed(:message)
-    recipient = FactoryGirl.build_stubbed(:received_message, message: message, receiver: provider)
+    message   = FactoryBot.build_stubbed(:message)
+    recipient = FactoryBot.build_stubbed(:received_message, message: message, receiver: provider)
     recipient.id = 42
     event     = Messages::MessageReceivedEvent.create(message, recipient)
     mail      = NotificationMailer.message_received(event, receiver)
@@ -420,9 +419,9 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_post_created
-    forum = FactoryGirl.build_stubbed(:forum, account: provider)
-    topic = FactoryGirl.build_stubbed(:topic, forum: forum, permalink: 'alex')
-    post  = FactoryGirl.build_stubbed(:post, forum: forum, topic: topic)
+    forum = FactoryBot.build_stubbed(:forum, account: provider)
+    topic = FactoryBot.build_stubbed(:topic, forum: forum, permalink: 'alex')
+    post  = FactoryBot.build_stubbed(:post, forum: forum, topic: topic)
     event = Posts::PostCreatedEvent.create(post)
     mail  = NotificationMailer.post_created(event, receiver)
 
@@ -449,7 +448,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_csv_data_export
-    user  = FactoryGirl.build_stubbed(:simple_user, account: account)
+    user  = FactoryBot.build_stubbed(:simple_user, account: account)
     event = Reports::CsvDataExportEvent.create(provider, user, 'users', 'week')
     mail  = NotificationMailer.csv_data_export(event, receiver)
 
@@ -469,7 +468,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_daily_report
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     report  = Pdf::Report.new(provider, service, period: 'day').generate
     mail    = NotificationMailer.daily_report(report, receiver)
 
@@ -485,7 +484,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_weekly_report
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     report  = Pdf::Report.new(provider, service, period: 'week').generate
     mail    = NotificationMailer.weekly_report(report, receiver)
 
@@ -501,7 +500,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_deleted
-    service = FactoryGirl.build_stubbed(:simple_service, account: provider)
+    service = FactoryBot.build_stubbed(:simple_service, account: provider)
     event   = Services::ServiceDeletedEvent.create(service)
     mail    = NotificationMailer.service_deleted(event, receiver)
 
@@ -514,13 +513,13 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_application_plan_change_requested
-    provider    = FactoryGirl.build_stubbed(:simple_provider, id: 3)
-    account     = FactoryGirl.build_stubbed(:simple_buyer, id: 4, name: 'Boo Account', provider_account: provider)
-    service     = FactoryGirl.build_stubbed(:simple_service, account: provider)
-    plan        = FactoryGirl.build_stubbed(:simple_application_plan, id: 1, issuer: service)
-    plan_2      = FactoryGirl.build_stubbed(:simple_application_plan, id: 2, issuer: service)
-    user        = FactoryGirl.build_stubbed(:simple_user, account: account, username: 'Bob')
-    application = FactoryGirl.build_stubbed(:simple_cinstance, plan: plan, user_account: account, service: service, name: 'Boo App')
+    provider    = FactoryBot.build_stubbed(:simple_provider, id: 3)
+    account     = FactoryBot.build_stubbed(:simple_buyer, id: 4, name: 'Boo Account', provider_account: provider)
+    service     = FactoryBot.build_stubbed(:simple_service, account: provider)
+    plan        = FactoryBot.build_stubbed(:simple_application_plan, id: 1, issuer: service)
+    plan_2      = FactoryBot.build_stubbed(:simple_application_plan, id: 2, issuer: service)
+    user        = FactoryBot.build_stubbed(:simple_user, account: account, username: 'Bob')
+    application = FactoryBot.build_stubbed(:simple_cinstance, plan: plan, user_account: account, service: service, name: 'Boo App')
     event       = Applications::ApplicationPlanChangeRequestedEvent.create(application, user, plan_2)
     mail        = NotificationMailer.application_plan_change_requested(event, receiver)
 
@@ -542,19 +541,19 @@ class NotificationMailerTest < ActionMailer::TestCase
   private
 
   def receiver
-    FactoryGirl.build_stubbed(:simple_user, first_name: 'Foobar Admin', email: 'admin@example.com')
+    FactoryBot.build_stubbed(:simple_user, first_name: 'Foobar Admin', email: 'admin@example.com')
   end
 
   def account
-    @_account ||= FactoryGirl.build_stubbed(:simple_account, provider_account: provider)
+    @_account ||= FactoryBot.build_stubbed(:simple_account, provider_account: provider)
   end
 
   def provider
-    @_provider ||= FactoryGirl.build_stubbed(:simple_provider)
+    @_provider ||= FactoryBot.build_stubbed(:simple_provider)
   end
 
   def application
-    @_application ||= FactoryGirl.build_stubbed(:simple_cinstance, name: 'Some Name')
+    @_application ||= FactoryBot.build_stubbed(:simple_cinstance, name: 'Some Name')
   end
 
   def url_helpers

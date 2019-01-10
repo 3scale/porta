@@ -1,13 +1,14 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Account" do
 
-  let(:resource) { Factory(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.create(:buyer_account, provider_account: provider) }
 
   api 'credit card' do
     let(:account_id) { resource.id }
+    include_context "resource"
 
-    put '/admin/api/accounts/:account_id/credit_card.:format', :resource do
+    put '/admin/api/accounts/:account_id/credit_card.:format' do
       parameter :credit_card_token, "The token returned by the payment gateway."
       parameter :credit_card_expiration_year, "Year of expiration of credit card"
       parameter :credit_card_expiration_month, "Month of expiration of credit card"
@@ -29,7 +30,7 @@ resource "Account" do
       end
     end
 
-    delete '/admin/api/accounts/:account_id/credit_card.xml', :resource do
+    delete '/admin/api/accounts/:account_id/credit_card.xml' do
       before { resource.update_attribute(:credit_card_auth_code, true) }
 
       request "Destroy stored Credit Card", body: false do

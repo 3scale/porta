@@ -3,7 +3,7 @@ require 'test_helper'
 class Logic::CMSTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
   end
 
   test 'cms_toolbar_intro_visible?' do

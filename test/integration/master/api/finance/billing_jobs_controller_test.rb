@@ -7,9 +7,9 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
   include BillingResultsTestHelpers
 
   setup do
-    @provider = FactoryGirl.create(:provider_with_billing)
-    @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
-    @access_token = FactoryGirl.create(:access_token, owner: master_account.first_admin, scopes: ['account_management'])
+    @provider = FactoryBot.create(:provider_with_billing)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @access_token = FactoryBot.create(:access_token, owner: master_account.first_admin, scopes: ['account_management'])
     
     host! master_account.domain
   end
@@ -29,7 +29,7 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
 
   test 'trigger billing to all buyers of a provider' do
     Sidekiq::Testing.inline! do
-      FactoryGirl.create_list(:buyer_account, 4, provider_account: @provider)
+      FactoryBot.create_list(:buyer_account, 4, provider_account: @provider)
 
       billing_date = Time.utc(2018, 2, 8).to_date
       billing_options = { only: [@provider.id], now: billing_date, skip_notifications: true }
@@ -73,12 +73,12 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
   end
 
   test 'forbids for providers without billing enabled' do
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     post master_api_provider_billing_jobs_path(provider, date: '2018-02-08'), access_token: @access_token.value
     assert_response :forbidden
     assert_equal 'Finance module not enabled for the account', JSON.parse(response.body)['error']
 
-    FactoryGirl.create(:prepaid_billing, account: provider)
+    FactoryBot.create(:prepaid_billing, account: provider)
     Finance::BillingService.expects(:async_call).returns(true)
     post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: @access_token.value
     assert_response :accepted
@@ -88,40 +88,40 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
     disable_transactional_fixtures!
 
     setup do
-      @provider = FactoryGirl.create(:provider_with_billing)
-      @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
+      @provider = FactoryBot.create(:provider_with_billing)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       @master_admin = master_account.first_admin
       host! master_account.domain
     end
 
     test 'scope account_management is required to create jobs' do
-      unauthorized_token = FactoryGirl.create(:access_token, owner: @master_admin, scopes: ['other'])
+      unauthorized_token = FactoryBot.create(:access_token, owner: @master_admin, scopes: ['finance'])
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: unauthorized_token.value
       assert_response :forbidden
 
-      authorized_token = FactoryGirl.create(:access_token, owner: @master_admin, scopes: ['account_management'])
+      authorized_token = FactoryBot.create(:access_token, owner: @master_admin, scopes: ['account_management'])
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: authorized_token.value
       assert_response :accepted
     end
 
     test 'members can create jobs with proper admin permission' do
-      unauthorized_member = FactoryGirl.create(:member, account: master_account, admin_sections: [])
-      unauthorized_token = FactoryGirl.create(:access_token, owner: unauthorized_member, scopes: ['account_management'])
+      unauthorized_member = FactoryBot.create(:member, account: master_account, admin_sections: [])
+      unauthorized_token = FactoryBot.create(:access_token, owner: unauthorized_member, scopes: ['account_management'])
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: unauthorized_token.value
       assert_response :forbidden
 
-      authorized_member = FactoryGirl.create(:member, account: master_account, admin_sections: [:partners])
-      authorized_token = FactoryGirl.create(:access_token, owner: authorized_member, scopes: ['account_management'])
+      authorized_member = FactoryBot.create(:member, account: master_account, admin_sections: [:partners])
+      authorized_token = FactoryBot.create(:access_token, owner: authorized_member, scopes: ['account_management'])
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: authorized_token.value
       assert_response :accepted
     end
 
     test 'only rw access tokens can create jobs' do
-      unauthorized_token = FactoryGirl.create(:access_token, owner: @master_admin, scopes: ['account_management'], permission: 'ro')
+      unauthorized_token = FactoryBot.create(:access_token, owner: @master_admin, scopes: ['account_management'], permission: 'ro')
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: unauthorized_token.value
       assert_response :forbidden
 
-      authorized_token = FactoryGirl.create(:access_token, owner: @master_admin, scopes: ['account_management'], permission: 'rw')
+      authorized_token = FactoryBot.create(:access_token, owner: @master_admin, scopes: ['account_management'], permission: 'rw')
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08'), access_token: authorized_token.value
       assert_response :accepted
     end

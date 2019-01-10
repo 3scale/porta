@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "User" do
 
-  let(:resource) { Factory.build(:user, account: provider) }
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.build(:user, account: provider) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
 
   before do
     provider.settings.allow_multiple_users!
@@ -75,7 +75,7 @@ resource "User" do
 
     let(:account_id) { buyer.id }
 
-    let (:user) { Factory.build(:user, account: buyer) }
+    let (:user) { FactoryBot.build(:user, account: buyer) }
 
     let(:resource) do
       FieldsDefinition.create_defaults(master)
@@ -145,7 +145,7 @@ resource "User" do
   json(:resource) do
     let(:root) { 'user' }
 
-    let(:user) { Factory(:user, account: provider) }
+    let(:user) { FactoryBot.create(:user, account: provider) }
 
     # creating new db records for fields that are in db is pathetic as it can get
     let(:resource) do
@@ -159,13 +159,13 @@ resource "User" do
     # TODO: test different conditions like signup types
 
     context "provider user" do
-      let(:resource) { Factory(:user, account: provider) }
+      let(:resource) { FactoryBot.create(:user, account: provider) }
       it { should have_links('self') }
       it { should_not have_links('account') }
     end
 
     context "buyer user" do
-      let(:resource) { Factory(:user, account: buyer) }
+      let(:resource) { FactoryBot.create(:user, account: buyer) }
       it { should have_links('self', 'account') }
     end
   end

@@ -3,7 +3,7 @@ require 'test_helper'
 class PdfReportWorkerTest < ActiveSupport::TestCase
 
   def test_enqueue
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     operation = SystemOperation.for(:weekly_reports)
 
     assert_difference PdfReportWorker.jobs.method(:count) do
@@ -12,8 +12,8 @@ class PdfReportWorkerTest < ActiveSupport::TestCase
   end
 
   def test_perform_with_system_operation
-    service = FactoryGirl.create(:simple_service)
-    FactoryGirl.create(:simple_user, role: :admin, account: service.account)
+    service = FactoryBot.create(:simple_service)
+    FactoryBot.create(:simple_user, role: :admin, account: service.account)
     service.account.mail_dispatch_rules.create!(system_operation: SystemOperation.for(:weekly_reports), dispatch: true)
     service.account.mail_dispatch_rules.create!(system_operation: SystemOperation.for(:daily_reports), dispatch: true)
     worker = PdfReportWorker.new
@@ -27,8 +27,8 @@ class PdfReportWorkerTest < ActiveSupport::TestCase
   end
 
   def test_perform_not_enabled
-    service = FactoryGirl.create(:simple_service)
-    FactoryGirl.create(:simple_user, role: :admin, account: service.account)
+    service = FactoryBot.create(:simple_service)
+    FactoryBot.create(:simple_user, role: :admin, account: service.account)
     worker = PdfReportWorker.new
 
     Pdf::Report.any_instance.expects(:send_notification!).never
@@ -41,8 +41,8 @@ class PdfReportWorkerTest < ActiveSupport::TestCase
   end
 
   def test_perform_with_notification
-    service = FactoryGirl.create(:simple_service)
-    admin = FactoryGirl.create(:simple_user, role: :admin, account: service.account)
+    service = FactoryBot.create(:simple_service)
+    admin = FactoryBot.create(:simple_user, role: :admin, account: service.account)
     admin.notification_preferences.enabled_notifications = %w(weekly_report daily_report)
     admin.notification_preferences.save!
     worker = PdfReportWorker.new

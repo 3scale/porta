@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 class Stats::Service::ServiceTest < ActiveSupport::TestCase
   def setup
     # TestHelpers::Time::set_format("%a, %e %B %Y %k:%M")
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.first_service!
     @metric = @service.metrics.hits!
 

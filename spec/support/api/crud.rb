@@ -1,4 +1,4 @@
-shared_examples action: :create do
+shared_examples 'CRUD #create', action: :create do
   include_context "provider api"
   include_context "resource"
 
@@ -7,50 +7,45 @@ shared_examples action: :create do
   request "Create #{model}", status: 201
 end
 
-shared_examples action: :show do
+shared_examples 'CRUD #show', action: :show do
   include_context "provider api"
   include_context "resource"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Get #{model}"
 end
 
-shared_examples action: :update do
+shared_examples 'CRUD #update', action: :update do
   include_context "provider api"
   include_context "resource"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Update #{model}" do
-    resource.reload
-    resource.updated_at.should_not == resource.created_at
+    updatable_resource.reload
+    updatable_resource.updated_at.should_not == updatable_resource.created_at
   end
 end
 
-shared_examples action: :index do
+shared_examples 'CRUD #index', action: :index do
   include_context "provider api"
   include_context "collection"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "List #{models}"
 end
 
-shared_examples action: :destroy do
+shared_examples 'CRUD #destroy', action: :destroy do
   include_context "provider api"
   include_context "resource"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Destroy #{model}", body: false
 end
 
-shared_examples action: :default do
+shared_examples 'CRUD #default', action: :default do
   include_context "provider api"
   include_context "resource"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Mark #{model} as default" do
     resource.reload
@@ -58,59 +53,54 @@ shared_examples action: :default do
   end
 end
 
-shared_examples action: :activate do
+shared_examples 'CRUD #activate', action: :activate do
   include_context "resource"
   let(:desired_state) { 'active' }
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Activate #{model}" do
     resource.reload.state == desired_state
   end
 end
 
-shared_examples action: :suspend do
+shared_examples 'CRUD #suspend',  action: :suspend do
   include_context "resource"
   let(:desired_state) { 'suspended' }
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Suspend #{model}" do
     resource.reload.state == desired_state
   end
 end
 
-shared_examples action: :unsuspend do
+shared_examples 'CRUD #unsuspend', action: :unsuspend do
   include_context "resource"
   let(:desired_state) { 'active' }
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Unsuspend #{model}" do
     resource.reload.state == desired_state
   end
 end
 
-shared_examples action: :admin do
+shared_examples 'CRUD #admin', action: :admin do
   include_context "resource"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Make #{model} admin" do
     resource.reload.role == :admin
   end
 end
 
-shared_examples action: :member do
+shared_examples 'CRUD #member', action: :member do
   include_context "resource"
-
-  before { resource.save! }
+  include_context 'resource save'
 
   request "Make #{model} member" do
     resource.reload.role == :member
   end
 end
 
-shared_examples action: true do
+shared_examples 'CRUD #true', action: true do
   include_context "provider api"
 end

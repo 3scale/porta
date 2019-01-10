@@ -4,9 +4,9 @@ require 'test_helper'
 
 class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
-    @api_docs_service = FactoryGirl.create(:api_docs_service, service: @service, account: @service.account)
+    @api_docs_service = FactoryBot.create(:api_docs_service, service: @service, account: @service.account)
     login! @provider
   end
 

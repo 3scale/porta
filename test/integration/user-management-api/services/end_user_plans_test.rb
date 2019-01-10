@@ -3,9 +3,9 @@ require 'test_helper'
 class Admin::Api::Services::EndUserPlansTest < ActionDispatch::IntegrationTest
 
   def setup
-    @account  = FactoryGirl.create(:provider_account)
-    @service  = FactoryGirl.create(:simple_service, account: @account)
-    @plan     = FactoryGirl.create(:end_user_plan, service: @service)
+    @account  = FactoryBot.create(:provider_account)
+    @service  = FactoryBot.create(:simple_service, account: @account)
+    @plan     = FactoryBot.create(:end_user_plan, service: @service)
 
     host! @account.admin_domain
   end
@@ -13,8 +13,8 @@ class Admin::Api::Services::EndUserPlansTest < ActionDispatch::IntegrationTest
   def test_crud_access_token
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @account, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @account, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # show
     params = access_token_params.merge(id: @plan.id)

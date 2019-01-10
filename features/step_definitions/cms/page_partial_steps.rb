@@ -1,10 +1,10 @@
 Given /^(provider "[^\"]*") has page partials$/ do |provider|
-  Factory :page_partial, :account => provider
+  FactoryBot.create :page_partial, :account => provider
 end
 
 
 Given /^the partial "([^\"]*)" of (provider "[^\"]*") is$/ do |name, provider, body|
-  Factory(:cms_partial, :system_name => name, :provider => provider, :draft => body).publish!
+  FactoryBot.create(:cms_partial, :system_name => name, :provider => provider, :draft => body).publish!
 end
 
 When /^I create a bcms page partial$/ do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource 'Proxy' do
   let(:service) { provider.services.default }

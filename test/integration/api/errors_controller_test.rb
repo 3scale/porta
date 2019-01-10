@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Api::ErrorsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     @service = provider.default_service
     @service_errors = [{timestamp: Time.now.iso8601, message: 'fake error 1'}, {timestamp: 1.day.ago.to_time.iso8601, message: 'fake error 2'}]
     stub_backend_service_errors(@service, @service_errors)

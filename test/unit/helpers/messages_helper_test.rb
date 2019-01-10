@@ -10,24 +10,24 @@ class MessagesHelperTest < ActionView::TestCase
 
   context 'message_receiver' do
     setup do
-      @buyer_receiver = Factory(:buyer_account)
-      @provider_receiver = Factory(:account)
+      @buyer_receiver = FactoryBot.create(:buyer_account)
+      @provider_receiver = FactoryBot.create(:account)
     end
 
     should 'return link to buyer for buyer recipient' do
-      message = Factory(:message, :to => [@buyer_receiver])
+      message = FactoryBot.create(:message, :to => [@buyer_receiver])
       assert_equal link_to(@buyer_receiver.org_name, admin_buyers_account_path(@buyer_receiver), :title => account_title(@buyer_receiver)),
                    message_receiver(message)
     end
 
     should 'return org name for provider recipient' do
-      message = Factory(:message, :to => [@provider_receiver])
+      message = FactoryBot.create(:message, :to => [@provider_receiver])
       assert_equal @provider_receiver.org_name,
                    message_receiver(message)
     end
 
     should 'return (deleted) for non existing recipient' do
-      message = Factory(:message, :to => [@buyer_receiver])
+      message = FactoryBot.create(:message, :to => [@buyer_receiver])
       message.recipients.first.receiver = nil
       assert_equal "<span class=\"deleted\">(deleted)</span>", message_receiver(message)
       message.recipients = []
@@ -35,31 +35,31 @@ class MessagesHelperTest < ActionView::TestCase
     end
 
     should 'not return org names for message with multi recipients' do
-      message = Factory(:message, :to => [@buyer_receiver, @provider_receiver])
+      message = FactoryBot.create(:message, :to => [@buyer_receiver, @provider_receiver])
       assert_equal "Multiple Recipients", message_receiver(message)
     end
   end
 
   context 'message_sender' do
     setup do
-      @buyer_sender = Factory(:buyer_account)
-      @provider_sender = Factory(:account)
+      @buyer_sender = FactoryBot.create(:buyer_account)
+      @provider_sender = FactoryBot.create(:account)
     end
 
     should 'return link to buyer account' do
-      message_from_buyer = Factory(:message, :sender => @buyer_sender)
+      message_from_buyer = FactoryBot.create(:message, :sender => @buyer_sender)
       assert_equal link_to(@buyer_sender.org_name, admin_buyers_account_path(@buyer_sender), :title => account_title(@buyer_sender)),
                    message_sender(message_from_buyer)
     end
 
     should 'return org name of provider account' do
-      message_from_provider = Factory(:message, :sender => @provider_sender)
+      message_from_provider = FactoryBot.create(:message, :sender => @provider_sender)
       assert_equal @provider_sender.org_name,
                    message_sender(message_from_provider)
     end
 
     should 'return (deleted) for non existing sender' do
-      message = Factory(:message, :to => [@buyer_sender])
+      message = FactoryBot.create(:message, :to => [@buyer_sender])
       message.sender = nil
       assert_equal "<span class=\"deleted\">(deleted)</span>",
                    message_sender(message)

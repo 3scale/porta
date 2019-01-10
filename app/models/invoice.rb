@@ -429,6 +429,7 @@ class Invoice < ApplicationRecord
 
     unless chargeable?
       logger.info "Not charging invoice ID #{self.id} (#{reason_cannot_charge})"
+      cancel! unless positive?
       return
     end
 
@@ -501,10 +502,8 @@ class Invoice < ApplicationRecord
   CONDITIONS_TO_CHARGE = %i[not_paid provider_present provider_payment_gateway_configured positive buyer_account_paying_monthly].freeze
 
   def reason_cannot_charge
-    CONDITIONS_TO_CHARGE.each do |condition_method|
-      return I18n.t(condition_method, scope: %i[invoices reasons_cannot_charge]) unless method("#{condition_method}?").call
-    end
-    nil
+    reason = CONDITIONS_TO_CHARGE.find { |condition| !method("#{condition}?").call }
+    I18n.t(reason, scope: %i[invoices reasons_cannot_charge]) if reason
   end
 
   def chargeable?

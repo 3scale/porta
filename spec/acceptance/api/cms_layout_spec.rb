@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "CMS::Layout" do
 
-  let(:resource) { Factory(:cms_layout, body: 'body', draft: 'draft') }
+  let(:resource) { FactoryBot.create(:cms_layout, body: 'body', draft: 'draft') }
 
   json(:resource) do
     let(:root) { 'layout' }

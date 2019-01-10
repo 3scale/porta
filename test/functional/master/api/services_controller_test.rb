@@ -16,11 +16,11 @@ class Master::Api::ServicesControllerTest < ActionController::TestCase
   end
 
   test 'destroy a service' do
-    provider  = FactoryGirl.create(:provider_account)
-    buyer     = FactoryGirl.create(:simple_buyer, provider_account: provider)
-    cinstance = FactoryGirl.create(:simple_cinstance, user_account: buyer)
-    service   = FactoryGirl.create(:simple_service, account: provider)
-    app_plan  =  FactoryGirl.create(:simple_application_plan, cinstances: [cinstance], issuer: service)
+    provider  = FactoryBot.create(:provider_account)
+    buyer     = FactoryBot.create(:simple_buyer, provider_account: provider)
+    cinstance = FactoryBot.create(:simple_cinstance, user_account: buyer)
+    service   = FactoryBot.create(:simple_service, account: provider)
+    app_plan  =  FactoryBot.create(:simple_application_plan, cinstances: [cinstance], issuer: service)
 
     method_event_count = RailsEventStoreActiveRecord::Event.where(event_type: %w[Services::ServiceDeletedEvent NotificationEvent]).method(:count)
     assert_difference(method_event_count, +2) do

@@ -3,7 +3,7 @@ require 'test_helper'
 class IntegrationsTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     login_provider @provider
 
@@ -11,7 +11,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_index
-    service = FactoryGirl.create(:simple_service, account: @provider)
+    service = FactoryBot.create(:simple_service, account: @provider)
 
     get admin_service_integration_path(service_id: service)
     assert_response :success
@@ -19,7 +19,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_promote_to_production_error
-    service = FactoryGirl.create(:simple_service, account: @provider)
+    service = FactoryBot.create(:simple_service, account: @provider)
 
     Proxy.any_instance.expects(:deploy_production).returns(true).once
     patch promote_to_production_admin_service_integration_path(service_id: service)
@@ -29,7 +29,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_promote_to_production_success
-    service = FactoryGirl.create(:simple_service, account: @provider)
+    service = FactoryBot.create(:simple_service, account: @provider)
 
     Proxy.any_instance.expects(:deploy_production).returns(false).once
     patch promote_to_production_admin_service_integration_path(service_id: service)
@@ -68,7 +68,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     get "/apiconfig/services/#{service_id}/integration/edit"
     assert_response :not_found
 
-    service = FactoryGirl.create(:simple_service, account: @provider)
+    service = FactoryBot.create(:simple_service, account: @provider)
     get "/apiconfig/services/#{service.id}/integration/edit"
     assert_response :success
   end

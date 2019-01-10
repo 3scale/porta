@@ -1,13 +1,15 @@
-Factory.define(:received_message, class: MessageRecipient) do |factory|
-  factory.kind 'to'
-  factory.hidden_at nil
-  factory.association :receiver, factory: :account
-  factory.association :message, state: 'sent'
-end
+FactoryBot.define do
+  factory(:received_message, class: MessageRecipient) do
+    kind { 'to' }
+    hidden_at { nil }
+    association :receiver, factory: :account
+    association :message, state: 'sent'
+  end
 
-Factory.define(:message) do |factory|
-  factory.subject 'Hola'
-  factory.body 'The Greatest Adventure'
-  factory.state 'unsent'
-  factory.association :sender, factory: :account
+  factory(:message) do
+    subject { 'Hola' }
+    body { 'The Greatest Adventure' }
+    state { 'unsent' }
+    association :sender, factory: :account
+  end
 end

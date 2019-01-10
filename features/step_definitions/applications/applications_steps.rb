@@ -1,7 +1,7 @@
 #TODO: does this step belong to extra_field steps
 Given /^(buyer "[^\"]*") has application "([^\"]*)" with extra fields:$/ do |buyer, app_name, table|
   plan = buyer.provider_account.first_service!.plans.default or raise 'Provider has no default application plan'
-  cinstance = Factory.build(:cinstance, { :user_account => buyer, :plan => plan,
+  cinstance = FactoryBot.build(:cinstance, { :user_account => buyer, :plan => plan,
                               :name => app_name, :description => app_name })
   cinstance.extra_fields = table.hashes.first
   cinstance.save!
@@ -9,7 +9,7 @@ end
 
 Given /^(buyer "[^"]*") has application "([^"]*)" with description "([^"]*)"$/ do |buyer, name, description|
   plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
-  Factory(:cinstance, :user_account => buyer,
+  FactoryBot.create(:cinstance, :user_account => buyer,
                       :plan         => plan,
                       :name         => name,
                       :description  => description)
@@ -21,7 +21,7 @@ end
 
 Given /^(buyer "[^"]*") has application "([^"]*)" with ID "([^"]*)"$/ do |buyer, name, id|
   plan = buyer.provider_account.first_service!.application_plans.default
-  Factory(:cinstance, :application_id => id,
+  FactoryBot.create(:cinstance, :application_id => id,
                       :user_account   => buyer,
                       :plan           => plan,
                       :name           => name,
@@ -39,7 +39,7 @@ Given /^(buyer "[^"]*") has the following applications:$/ do |buyer, table|
   table.hashes.each do |hash|
     attributes = hash.symbolize_keys!.slice!(:state)
 
-    cinstance = Factory.build(:cinstance, attributes.merge(:user_account => buyer, :plan => plan))
+    cinstance = FactoryBot.build(:cinstance, attributes.merge(:user_account => buyer, :plan => plan))
     cinstance.description = 'Blah blah' if cinstance.description.blank?
     cinstance.save!
 
@@ -54,7 +54,7 @@ Given /^(buyer "[^"]*") has (\d+) applications?$/ do |buyer, number|
   buyer.bought_cinstances.destroy_all
 
   number.to_i.times do |index|
-    Factory(:cinstance, :user_account => buyer,
+    FactoryBot.create(:cinstance, :user_account => buyer,
                         :plan         => plan,
                         :name         => "App #{index + 1}",
                         :description  => "Yet another app")
@@ -64,7 +64,7 @@ end
 Given /^the (provider ".+?") has the following applications:$/ do |provider, table|
   table.hashes.each do |row|
     assert provider.application_plans.include?(row[:plan]) if row[:plan]
-    Factory :cinstance, :user_account => row[:buyer],
+    FactoryBot.create :cinstance, :user_account => row[:buyer],
                         :plan => row[:plan],
                         :name => row[:name],
                         :description => row[:description] || "Description"
@@ -157,7 +157,7 @@ end
 
 
 And(/^has an application$/) do
-  buyer_name = SecureRandom.uuid # Use Faker ? use Factory to generate just he values?
+  buyer_name = SecureRandom.uuid # Use Faker ? use FactoryBot.create to generate just he values?
   plan_name = SecureRandom.uuid
 
   step %{an application plan "#{plan_name}" of provider "#{@provider.domain}"}

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Apicast::SandboxProxyTest < ActiveSupport::TestCase
   def test_proxy_host
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     proxy = Apicast::SandboxProxy.service(service)
 
     service.proxy.apicast_configuration_driven = false

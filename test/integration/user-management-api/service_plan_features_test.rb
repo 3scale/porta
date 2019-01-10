@@ -2,16 +2,16 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @service_plan = Factory :service_plan, :issuer => @provider.default_service
-    Factory :feature, :featurable => @provider.default_service, :scope => "ServicePlan"
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @service_plan = FactoryBot.create :service_plan, :issuer => @provider.default_service
+    FactoryBot.create :feature, :featurable => @provider.default_service, :scope => "ServicePlan"
 
 
     host! @provider.admin_domain
   end
 
   test 'index' do
-    feat = Factory(:feature, :featurable => @provider.default_service,
+    feat = FactoryBot.create(:feature, :featurable => @provider.default_service,
                    :scope => "ServicePlan")
     @service_plan.features << feat
     @service_plan.save!
@@ -36,7 +36,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'security test on another provider plans' #???
 
   test 'enable new feature' do
-    feat = Factory(:feature, :featurable => @provider.default_service,
+    feat = FactoryBot.create(:feature, :featurable => @provider.default_service,
                    :scope => "ServicePlan")
 
     post(admin_api_service_plan_features_path(@service_plan),
@@ -51,7 +51,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'enabling feature not in service replies 404' do
-    feature_not_in_service = Factory(:feature, :featurable => @provider,
+    feature_not_in_service = FactoryBot.create(:feature, :featurable => @provider,
                                      :scope => "AccountPlan")
 
     post(admin_api_service_plan_features_path(@service_plan),
@@ -61,7 +61,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'enabling feature with wrong scope is denied' do
-    wrong_feature = Factory(:feature, :featurable => @provider.default_service,
+    wrong_feature = FactoryBot.create(:feature, :featurable => @provider.default_service,
                             :scope => "ApplicationPlan")
 
     post(admin_api_service_plan_features_path(@service_plan),
@@ -75,7 +75,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'enable existing feature'
 
   test 'disable feature' do
-    feat = Factory(:feature, :featurable => @provider.default_service,
+    feat = FactoryBot.create(:feature, :featurable => @provider.default_service,
                    :scope => "ServicePlan")
 
     post(admin_api_service_plan_features_path(@service_plan),

@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Stats::DaysControllerTest < ActionController::TestCase
 
   # def setup
-  #   Factory.stub(:master_account)
+  #   FactoryBot.build_stubbed(:master_account)
   #   @request.host = MAIN_DOMAIN
   # end
 
@@ -20,7 +20,7 @@ class Stats::DaysControllerTest < ActionController::TestCase
   # test 'index' do
   #   provider_account = stub_provider_account
 
-  #   metric = Factory.stub(:metric)
+  #   metric = FactoryBot.build_stubbed(:metric)
   #
   #   data = ActiveSupport::OrderedHash.new
   #   data['monday'] = 346
@@ -47,7 +47,7 @@ class Stats::DaysControllerTest < ActionController::TestCase
   # test 'show' do
   #   provider_account = stub_provider_account
 
-  #   metric = Factory.stub(:metric)
+  #   metric = FactoryBot.build_stubbed(:metric)
   #   stub_find(provider_account.service.metrics, metric)
 
   #   expect_data_for_show(provider_account.service, metric)
@@ -62,7 +62,7 @@ class Stats::DaysControllerTest < ActionController::TestCase
   # test 'show via ajax' do
   #   provider_account = stub_provider_account
 
-  #   metric = Factory.stub(:metric)
+  #   metric = FactoryBot.build_stubbed(:metric)
   #   stub_find(provider_account.service.metrics, metric)
 
   #   expect_data_for_show(provider_account.service, metric)

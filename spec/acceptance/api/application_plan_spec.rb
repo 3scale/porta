@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "ApplicationPlan" do
 
   let(:service) { provider.services.default }
-  let(:resource) { Factory.build(:application_plan, issuer: service) }
+  let(:resource) { FactoryBot.build(:application_plan, issuer: service) }
 
   let(:service_id) { service.id }
 
@@ -30,7 +30,7 @@ resource "ApplicationPlan" do
   end
 
   api 'buyer application plans' do
-    let(:account) { Factory(:buyer_account, provider_account: provider) }
+    let(:account) { FactoryBot.create(:buyer_account, provider_account: provider) }
     let(:account_id) { account.id }
 
     get '/admin/api/accounts/:account_id/application_plans.:format', action: :index do
@@ -41,8 +41,9 @@ resource "ApplicationPlan" do
       after { collection.should include(resource) }
     end
 
-    post '/admin/api/accounts/:account_id/application_plans/:id/buy.:format', :resource do
-      before { resource.save! }
+    post '/admin/api/accounts/:account_id/application_plans/:id/buy.:format' do
+      include_context "resource"
+      include_context "resource save"
       before { account.reload.bought_application_plans.should_not include(resource) }
 
       parameter :id, "Application Plan ID"

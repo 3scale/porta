@@ -3,7 +3,7 @@ require 'test_helper'
 class ActivationReminderWorkerTest < ActiveSupport::TestCase
 
   setup do
-    @user = FactoryGirl.create(:simple_user, state: "pending")
+    @user = FactoryBot.create(:simple_user, state: "pending")
   end
 
   should "send reminder if user is pending" do

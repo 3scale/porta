@@ -6,12 +6,12 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   include TestHelpers::FakeWeb
 
   def setup
-    @provider = Factory :provider_account, domain: 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, domain: 'provider.example.com'
 
-    @buyer = Factory(:buyer_account, provider_account: @provider)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @application_plan = Factory(:application_plan,
+    @application_plan = FactoryBot.create(:application_plan,
                                 issuer: @provider.default_service)
     @application_plan.publish!
 
@@ -23,8 +23,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'index (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_accounts_path(format: :xml))
     assert_response :forbidden
@@ -34,8 +34,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'show (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_account_path(@buyer, format: :xml), access_token: token.value)
     assert_response :success
@@ -48,8 +48,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'find (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(find_admin_api_accounts_path(format: :xml), access_token: token.value)
     assert_response :not_found
@@ -65,8 +65,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot update an account
     rolling_updates_off
@@ -86,8 +86,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'changing billing status' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     settings = @buyer.settings
     settings.update!(monthly_charging_enabled: false, monthly_billing_enabled: false)
@@ -103,8 +103,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot destroy an account
     delete(admin_api_account_path(format: :xml, id: @buyer.id), access_token: token.value)
@@ -118,9 +118,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'change_plan (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
-    plan  = FactoryGirl.create(:account_plan, issuer: @provider)
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    plan  = FactoryBot.create(:account_plan, issuer: @provider)
 
     # member cannot update an account
     rolling_updates_off
@@ -140,8 +140,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'approve/reject (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot reject or approve an account
     put(approve_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
@@ -180,7 +180,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'index is paginated' do
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
 
     buyers_max = @provider.buyers.count
@@ -194,7 +194,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'pagination per_page has a maximum allowed' do
     max_per_page = set_api_pagination_max_per_page(to: 1)
 
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
 
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, per_page: (max_per_page +1))
@@ -204,7 +204,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination page defaults to 1 for invalid values' do
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
 
     max_per_page = set_api_pagination_max_per_page(to: 1)
@@ -216,7 +216,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination per_page defaults to max for invalid values' do
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
 
     max_per_page = set_api_pagination_max_per_page(to: 1)
@@ -228,9 +228,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination per_page defaults to 1 for values lesser than 1' do
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
-    buyer2 = Factory(:buyer_account, provider_account: @provider)
+    buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer2.buy! @provider.default_account_plan
 
     max_per_page = set_api_pagination_max_per_page(to: 2)
@@ -263,7 +263,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
   test 'index approved' do
     #building a pending one to assert it does no go in the search afterward
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
 
     buyer.make_pending!
@@ -277,7 +277,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
   test 'index by states is paginated' do
     2.times do
-      buyer = Factory(:buyer_account, provider_account: @provider)
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       buyer.buy! @provider.default_account_plan
       buyer.make_pending!
       assert buyer.state == 'pending'
@@ -290,7 +290,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'index pending' do
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
     buyer.make_pending!
     assert buyer.state == 'pending'
@@ -302,7 +302,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'index rejected' do
-    buyer = Factory(:buyer_account, provider_account: @provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
     buyer.reject!
     assert buyer.state == 'rejected'
@@ -316,8 +316,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'find accounts by username or user_id or email empty when empty' do
     assert_equal 1, @provider.buyer_users.size
 
-    buyer1 = Factory(:buyer_account, provider_account: @provider)
-    buyer2 = Factory(:buyer_account, provider_account: @provider)
+    buyer1 = FactoryBot.create(:buyer_account, provider_account: @provider)
+    buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
 
     assert_not_nil buyer1.emails.first
     assert_not_nil buyer1.users.first.username
@@ -345,11 +345,11 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'account find' do
     assert_equal 1, @provider.buyer_users.size
 
-    buyer1 = Factory(:buyer_account, provider_account: @provider)
+    buyer1 = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer1.buy! @provider.default_account_plan
     buyer1.reload
 
-    buyer2 = Factory(:buyer_account, provider_account: @provider)
+    buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer2.buy! @provider.default_account_plan
     buyer2.reload
 
@@ -391,8 +391,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'show returns fields defined' do
-    Factory(:fields_definition, account: @provider, target: "Account", name: "org_legaladdress")
-    Factory(:fields_definition, account: @provider, target: "Account", name: "country")
+    FactoryBot.create(:fields_definition, account: @provider, target: "Account", name: "org_legaladdress")
+    FactoryBot.create(:fields_definition, account: @provider, target: "Account", name: "country")
 
     country = Country.first
 
@@ -440,11 +440,11 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update billing_address' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     user.role = 'admin'
     user.save!
 
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain')
     assert_response :unprocessable_entity
 

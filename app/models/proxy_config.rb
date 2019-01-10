@@ -9,6 +9,9 @@ class ProxyConfig < ApplicationRecord
   VALID_ENVIRONMENTS = Hash.new { |_,env| ENVIRONMENT_CHECK.call(env) }
                            .merge('staging' => 'sandbox').freeze
 
+  # Do not set it too high though the column accept until 16.megabytes
+  MAX_CONTENT_LENGTH = 2.megabytes
+
   belongs_to :proxy, required: true
   belongs_to :user, required: false
 
@@ -21,6 +24,7 @@ class ProxyConfig < ApplicationRecord
   validates :content, :version, :environment, presence: true
   validates :environment, inclusion: { in: ENVIRONMENTS }
   validate :service_token_exists
+  validates :content, length: { maximum: MAX_CONTENT_LENGTH }
 
   after_create :update_version
   before_create :denormalize_hosts

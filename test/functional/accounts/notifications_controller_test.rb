@@ -4,7 +4,7 @@ require 'test_helper'
 class Provider::Admin::Account::NotificationsControllerTest < ActionController::TestCase
 
   setup do
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     login_provider @provider
   end
 

@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Finance::SettingsTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @settings = @provider.settings
   end
 

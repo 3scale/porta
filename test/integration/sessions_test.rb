@@ -3,12 +3,12 @@ require 'test_helper'
 class SessionsTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory :provider_account
-    @buyer    = Factory(:buyer_account, :provider_account => @provider)
+    @provider = FactoryBot.create :provider_account
+    @buyer    = FactoryBot.create(:buyer_account, :provider_account => @provider)
   end
 
   test '#create' do
-    provider_user = FactoryGirl.create(:user, account: @provider)
+    provider_user = FactoryBot.create(:user, account: @provider)
     provider_user.activate!
 
     Authentication::Strategy::ProviderOauth2.any_instance.expects(:authenticate).returns(provider_user)
@@ -47,7 +47,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   test 'sso user_id has precedence over username if both passed in' do
     user_id  = @buyer.users.first!.id
 
-    user = FactoryGirl.create(:user, :account => @buyer, :username => 'someuser')
+    user = FactoryBot.create(:user, :account => @buyer, :username => 'someuser')
 
     host! @provider.admin_domain
 
@@ -105,7 +105,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'redirect_url parameter is discarded if login is not via sso' do
-    user= Factory(:user, :account => @buyer, :username => "xi@example.net", :password => "wwwwww")
+    user= FactoryBot.create(:user, :account => @buyer, :username => "xi@example.net", :password => "wwwwww")
     user.activate
 
     host! @provider.domain
@@ -117,7 +117,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
   test 'passing redirect_url with sso' do
 
-    user= Factory(:user, :account => @buyer, :username => "xi@example.net", :password => "wwwwww")
+    user= FactoryBot.create(:user, :account => @buyer, :username => "xi@example.net", :password => "wwwwww")
     user.activate
 
     Authentication::Strategy::Internal.any_instance.expects(:authenticate_with_sso).with('yabadabado', '2016').returns(user)
@@ -130,7 +130,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'passing redirect_to to login form' do
-    user= Factory(:user, :account => @buyer, :username => "xi@example.net", :password => "password")
+    user= FactoryBot.create(:user, :account => @buyer, :username => "xi@example.net", :password => "password")
     user.activate
 
     host! @provider.domain
@@ -143,7 +143,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'passing redirect_to to outside domain' do
-    user= Factory(:user, :account => @buyer, :username => "xi@example.net", :password => "password")
+    user= FactoryBot.create(:user, :account => @buyer, :username => "xi@example.net", :password => "password")
     user.activate
 
     host! @provider.domain
@@ -155,7 +155,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'current user is not persisted across domains' do
-    provider_user = Factory(:user, :account => @provider,
+    provider_user = FactoryBot.create(:user, :account => @provider,
                               :username => 'provider', :password => 'provider')
     provider_user.activate!
 
@@ -177,11 +177,11 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'mixpanel event properties are not persisted across requests' do
-    provider_user = Factory(:user, :account => @provider,
+    provider_user = FactoryBot.create(:user, :account => @provider,
                             :username => 'provider', :password => 'provider')
     provider_user.activate!
 
-    other_provider_user = Factory(:user, :account => @provider,
+    other_provider_user = FactoryBot.create(:user, :account => @provider,
                                   :username => 'other_provider', :password => 'provider')
     other_provider_user.activate!
 

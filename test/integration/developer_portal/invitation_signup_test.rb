@@ -6,10 +6,10 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   Oauth2 = Authentication::Strategy::Oauth2
 
   def setup
-    @provider   = FactoryGirl.create(:simple_provider)
-    @buyer      = FactoryGirl.create(:simple_buyer, provider_account: @provider)
-    @invitation = FactoryGirl.create(:invitation, account: @buyer)
-    @auth_provider = FactoryGirl.create(:authentication_provider, account: @provider)
+    @provider   = FactoryBot.create(:simple_provider)
+    @buyer      = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @invitation = FactoryBot.create(:invitation, account: @buyer)
+    @auth_provider = FactoryBot.create(:authentication_provider, account: @provider)
 
     host! @provider.domain
   end
@@ -48,8 +48,8 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     assert_match 'Invitation sign in', response.body
     assert_not_match 'Custom title', response.body
 
-    root = FactoryGirl.create(:root_cms_section, provider: @provider)
-    FactoryGirl.create(:cms_builtin_page,
+    root = FactoryBot.create(:root_cms_section, provider: @provider)
+    FactoryBot.create(:cms_builtin_page,
       provider:    @provider,
       section:     root,
       system_name: 'accounts/invitee_signups/show',
@@ -62,7 +62,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   end
 
   def test_auth0_sso_create
-    user = FactoryGirl.create(:simple_user, account: @buyer)
+    user = FactoryBot.create(:simple_user, account: @buyer)
     Oauth2.any_instance.expects(:authenticate).returns(user).at_least_once
     get "/auth/invitations/auth0/auth0_ab1234/callback?state=#{@invitation.token}"
     assert_response :redirect
@@ -83,7 +83,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     assert_equal '12345', session[:invitation_sso_uid]
     refute assigns(:user).valid?
 
-    user = FactoryGirl.create(:simple_user, account: @buyer)
+    user = FactoryBot.create(:simple_user, account: @buyer)
     Oauth2.any_instance.expects(:authenticate).returns(user).at_least_once
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :redirect

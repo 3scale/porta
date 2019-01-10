@@ -6,10 +6,10 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   fixtures :countries
 
   def setup
-    @plan = Factory(:application_plan)
+    @plan = FactoryBot.create(:application_plan)
     @service = @plan.service
 
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
 
     @provider = @plan.provider_account
 
@@ -148,7 +148,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   context 'When cinstance changes a plan' do
     setup do
       @cinstance = @buyer.buy!(@plan)
-      @new_plan = Factory( :application_plan, :issuer => @service)
+      @new_plan = FactoryBot.create( :application_plan, :issuer => @service)
 
       @cinstance.change_plan!(@new_plan)
       @cinstance.save!

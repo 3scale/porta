@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < ActionDispatch::IntegrationTest
   include ActiveMerchantTestHelpers::BraintreeBlue
   def setup
-    @provider = FactoryGirl.create(:provider_account, credit_card_auth_code: 'foo')
+    @provider = FactoryBot.create(:provider_account, credit_card_auth_code: 'foo')
     login_provider @provider
   end
 

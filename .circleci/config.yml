@@ -1,18 +1,18 @@
-version: 2.0
+version: 2.1
 
-#### YAML ANCHORS INSTEAD OF COMMANDS # while version 2.1 already supports commands, the local runner doesn't. When it does, we can upgrade.
-
-git-submodules: &git-submodules
-  run:
-    name: "Pull Submodules"
-    command: |
-      git submodule init
-      git submodule update
+##################################### YAML ANCHORS  ############################################
 
 upload-coverage: &upload-coverage
   run:
     name: Upload test coverage to Codecov
     command: bash <(curl -s https://codecov.io/bash)
+
+persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
+  persist_to_workspace:
+    root: .
+    paths:
+    - ./vendor/bundle
+    - ./.bundle/
 
 store-junit-results: &store-junit-test-results
   store_test_results:
@@ -28,39 +28,34 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-restore-bundler-cache: &restore-bundler-cache
-  restore_cache:
-    keys:
-      - v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 restore-npm-cache: &restore-npm-cache
   restore_cache:
     keys:
       - v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
 
-rails-tests: &rails-tests
+use-example-config-files: &use-example-config-files
   run:
-    name: Rails tests
+    name: Copy example config files into place to be used by tests
     command: |
-      TESTS=$(bundle exec rake "test:files:$CIRCLE_JOB" | circleci tests split --split-by=timings)
-      bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
-    environment:
-      LC_ALL: en_US.UTF-8
+      cp config/examples/*.yml config/
 
-rails-tests-oracle: &rails-tests-oracle
+disable-internet-access: &disable-internet-access
   run:
-    name: Rails tests
-    command: |
-      TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
-      DB=oracle bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
-    environment:
-      LC_ALL: en_US.UTF-8
+    name: Disable internet access
+    command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+
+enable-internet-access: &enable-internet-access
+  run:
+    name: Enabled internet access
+    command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+    when: always
 
 attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
 system-builder: &system-builder
-  image: quay.io/3scale/system-builder:latest
+  image: quay.io/3scale/system-builder:headless
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -70,6 +65,7 @@ system-builder: &system-builder
     TZ: UTC
     MASTER_PASSWORD: p
     USER_PASSWORD: p
+    LC_ALL: en_US.UTF-8
 
 mysql-container: &mysql-container
   image: circleci/mysql:5.7-ram
@@ -91,31 +87,45 @@ oracle-db-container: &oracle-db-container
   command: |
     bash -c "sed -i.bak 's|2048|6144|g' /opt/oracle/dbca.rsp.tmpl && exec /opt/oracle/runOracle.sh"
 
-clone-oracle-libs: &clone-oracle-libs
-  run:
-    name: "Fetch oracle libraries"
-    command: |
-      git clone git@github.com:3scale/system-libraries.git
-      cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
-      sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-      sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-      sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
-      sudo ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so
-      sudo rm -rf /opt/system/vendor/oracle
-      rm -rf vendor/oracle/*.zip
-      sudo cp config/oracle/*.ini /etc/
+memcached-container: &memcached-container
+  image: memcached:1.5-alpine
 
-jobs:
-  dependencies_bundler:
-    docker:
-      - *system-builder
+redis-container: &redis-container
+  image: redis:4.0-alpine
+
+dnsmasq-container: &dnsmasq-container
+  image: quay.io/mikz/dnsmasq
+  command:
+  - --no-poll
+  - --address=/#/127.0.0.1
+
+##################################### CIRCLECI COMMANDS ############################################
+
+commands: # reusable commands with parameters
+
+  checkout-with-submodules:
     steps:
       - checkout
-      - *git-submodules
-      - *restore-bundler-cache
+      - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule init
+            git submodule update
+
+  install-gem-dependencies:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies."
+        type: steps
+        default: []
+    steps:
+      - checkout-with-submodules
+      - restore-gem-cache
+      - steps: << parameters.extra-deps >>
       - run:
           name: Install gems with bundler
           command: |
+            echo "Running gems install for database: $DB"
             bundle check || bundle install --deployment
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
@@ -123,53 +133,176 @@ jobs:
           environment:
             BUNDLE_RETRY: 3
             BUNDLE_JOBS: 3
-      - save_cache:
-          key: v1-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ./vendor/bundle
-            - ./.bundle/
-      - persist_to_workspace:
-          root: .
-          paths:
-          - ./vendor/bundle
-          - ./.bundle/
-  deps_bundler_oracle:
-    docker:
-      - *system-builder
+      - save-gem-cache
+      - *persist-vendored-dependencies-to-workspace
+
+  clone-oracle-libraries:
     steps:
-      - checkout
-      - *git-submodules
-      - *restore-bundler-cache
       - add_ssh_keys:
           fingerprints:
           - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
-      - *clone-oracle-libs
       - run:
-          name: Install gems with bundler
+          name: "Fetch oracle libraries"
           command: |
-            DB=oracle bundle check || DB=oracle bundle install --deployment
-            DB=oracle bundle clean
-            # remove capybara-webkit source, save more than 400 MB
-            rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
-          environment:
-            BUNDLE_RETRY: 3
-            BUNDLE_JOBS: 3
+            git clone git@github.com:3scale/system-libraries.git
+            cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
+            # using sudo due to `/opt/oracle/` set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
+            sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
+            sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
+            sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
+            sudo ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so
+            sudo rm -rf /opt/system/vendor/oracle
+            rm -rf vendor/oracle/*.zip
+            sudo cp config/oracle/*.ini /etc/
+
+  prepare-db-for-tests:
+    steps:
+      - run:
+          name: Prepare database for tests
+          command: |
+            echo "Running for database: $DB"
+            bundle exec rake ci:db:ready db:create db:test:prepare
+
+  rspec-tests:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies are required, e.g. to connect to db."
+        type: steps
+        default: []
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - *use-example-config-files
+      - steps: << parameters.extra-deps >>
+      - prepare-db-for-tests
+      - run:
+          name: Rspec tests
+          command: |
+            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - upload-artifacts
+
+  cucumber-tests:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies are required, e.g. to connect to db."
+        type: steps
+        default: []
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - steps: << parameters.extra-deps >>
+      - prepare-db-for-tests
+      - *disable-internet-access
+      - run:
+          name: Run cucumber tests
+          command: |
+            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            bundle exec cucumber --profile ci ${TESTS}
+      - *enable-internet-access
+      - upload-artifacts
+      - store_artifacts:
+          path: tmp/capybara
+          destination: capybara
+
+  rails-tests:
+    parameters:
+      extra-deps:
+        description: "Steps that will be executed in case extra dependencies are required, e.g. to connect to db."
+        type: steps
+        default: []
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - *use-example-config-files
+      - steps: << parameters.extra-deps >>
+      - prepare-db-for-tests
+      - run:
+          name: Run Rails tests
+          command: |
+            TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
+            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+      - upload-artifacts
+
+  save-gem-cache:
+    steps:
       - save_cache:
-          key: v1-bundler-gems-oracle-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ./vendor/bundle
-            - ./.bundle/
-      - persist_to_workspace:
-          root: .
+          key: v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
           paths:
           - ./vendor/bundle
           - ./.bundle/
-  dependencies_npm:
+
+  restore-gem-cache:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/prod/Gemfile.lock" }}
+
+  upload-artifacts:
+    steps:
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *store-log-artifacts
+      - *upload-coverage
+
+##################################### CIRCLECI EXECUTORS ############################################
+
+executors:
+  builder:
+    parameters:
+      database:
+        type: string
+        default: mysql
     docker:
       - *system-builder
+    environment:
+      DB: << parameters.database >>
+    working_directory: /opt/app-root/src/project
+
+  builder-with-mysql:
+    resource_class: small
+    docker:
+      - *system-builder
+      - *mysql-container
+      - *memcached-container
+      - *redis-container
+    working_directory: /opt/app-root/src/project
+    environment:
+      DB: mysql
+
+  builder-with-oracle:
+    resource_class: large
+    docker:
+      - *system-builder
+      - *oracle-db-container
+      - *memcached-container
+      - *redis-container
+    working_directory: /opt/app-root/src/project
+    environment:
+      DB: oracle
+
+##################################### CIRCLECI JOBS ############################################
+
+jobs:
+  dependencies_bundler:
+    executor:
+      name: builder
+      database: mysql
     steps:
-      - checkout
-      - *git-submodules
+      - install-gem-dependencies
+
+  deps_bundler_oracle:
+    executor:
+      name: builder
+      database: oracle
+    steps:
+      - install-gem-dependencies:
+          extra-deps:
+            - clone-oracle-libraries
+
+  dependencies_npm:
+    executor: builder
+    steps:
+      - checkout-with-submodules
       - *restore-npm-cache
       - run:
           name: Install NPM dependencies
@@ -187,11 +320,9 @@ jobs:
             - ./node_modules
 
   assets_precompile:
-    docker:
-      - *system-builder
+    executor: builder
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - run:
           name: Precompile assets
@@ -208,18 +339,9 @@ jobs:
             - ./config/*.yml
 
   lint:
-    docker:
-      - *system-builder
-#      - *mysql-container
-#      - image: memcached:1.5-alpine
-#      - image: redis:4.0-alpine
+    executor: builder
     steps:
-      - run:
-          name: Start Xvfb
-          command: Xvfb :99 -screen 0 1280x1024x24
-          background: true
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
       - run:
           name: Licences check
@@ -237,7 +359,7 @@ jobs:
       - run:
           name: NPM test
           command: |
-            npm test -- --reporters dots,junit --browsers Firefox
+            npm test -- --reporters dots,junit --browsers ChromeHeadless
             npm run-script jest
       - *store-junit-test-results
       - *store-test-artifacts
@@ -251,207 +373,60 @@ jobs:
 
   unit:
     parallelism: 8
-    resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - *rails-tests
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - rails-tests
+
   unit-oracle:
     parallelism: 6
-    resource_class: large
-    docker:
-    - *system-builder
-    - *oracle-db-container
-    - image: memcached:1.5-alpine
-    - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
-    - checkout
-    - *git-submodules
-    - *attach-to-workspace
-    - add_ssh_keys:
-        fingerprints:
-        - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
-    - *clone-oracle-libs
-    - run:
-        name: Prepare database & config files
-        command: |
-          cp config/examples/*.yml config/
-          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-    - *rails-tests-oracle
-    - *store-junit-test-results
-    - *store-test-artifacts
-    - *store-log-artifacts
-    - *upload-coverage
+      - rails-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
   functional:
     parallelism: 2
-    resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - *rails-tests
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - rails-tests
+
   functional-oracle:
     parallelism: 2
-    resource_class: large
-    docker:
-    - *system-builder
-    - *oracle-db-container
-    - image: memcached:1.5-alpine
-    - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
-    - checkout
-    - *git-submodules
-    - *attach-to-workspace
-    - add_ssh_keys:
-        fingerprints:
-        - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
-    - *clone-oracle-libs
-    - run:
-        name: Prepare database & config files
-        command: |
-          cp config/examples/*.yml config/
-          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-    - *rails-tests-oracle
-    - *store-junit-test-results
-    - *store-test-artifacts
-    - *store-log-artifacts
-    - *upload-coverage
+      - rails-tests:
+          extra-deps:
+            - clone-oracle-libraries
+
 
   integration:
     parallelism: 8
-    resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - *rails-tests
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - rails-tests
+
   integration-oracle:
     parallelism: 6
-    resource_class: large
-    docker:
-    - *system-builder
-    - *oracle-db-container
-    - image: memcached:1.5-alpine
-    - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
-    - checkout
-    - *git-submodules
-    - *attach-to-workspace
-    - add_ssh_keys:
-        fingerprints:
-        - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
-    - *clone-oracle-libs
-    - run:
-        name: Prepare database & config files
-        command: |
-          cp config/examples/*.yml config/
-          DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-    - *rails-tests-oracle
-    - *store-junit-test-results
-    - *store-test-artifacts
-    - *store-log-artifacts
-    - *upload-coverage
-
+      - rails-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
   rspec:
     parallelism: 3
-    resource_class: small
-    docker:
-      - *system-builder
-      - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-mysql
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Rspec tests
-          command: |
-            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
+      - rspec-tests
+
   rspec-oracle:
     parallelism: 4
-    resource_class: large
-    docker:
-      - *system-builder
-      - *oracle-db-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+    executor: builder-with-oracle
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - add_ssh_keys:
-          fingerprints:
-          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
-      - *clone-oracle-libs
-      - run:
-          name: Prepare database & config files
-          command: |
-            cp config/examples/*.yml config/
-            DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-      - run:
-          name: Rspec tests
-          command: |
-            DB=oracle bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - *upload-coverage
-
+      - rspec-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
 
   cucumber:
@@ -459,84 +434,30 @@ jobs:
     resource_class: small
     docker:
       - *system-builder
-      - image: quay.io/mikz/dnsmasq
-        command:
-        - --no-poll
-        - --address=/#/127.0.0.1
+      - *dnsmasq-container
       - *mysql-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+      - *memcached-container
+      - *redis-container
+    environment:
+      DB: mysql
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - run:
-          name: Prepare database
-          command: |
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
-      - run:
-          name: Run cucumber tests
-          command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            bundle exec cucumber --profile ci ${TESTS}
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
-      - *upload-coverage
+      - cucumber-tests
+
   cucumber-oracle:
     parallelism: 30
     resource_class: large
     docker:
       - *system-builder
-      - image: quay.io/mikz/dnsmasq
-        command:
-        - --no-poll
-        - --address=/#/127.0.0.1
+      - *dnsmasq-container
       - *oracle-db-container
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+      - *memcached-container
+      - *redis-container
+    environment:
+      DB: oracle
     steps:
-      - checkout
-      - *git-submodules
-      - *attach-to-workspace
-      - add_ssh_keys:
-          fingerprints:
-          - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
-      - *clone-oracle-libs
-      - run:
-          name: Prepare database
-          command: |
-            DB=oracle bundle exec rake ci:db:ready db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
-      - run:
-          name: Run cucumber tests
-          command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            DB=oracle bundle exec cucumber --profile ci ${TESTS}
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
-      - *upload-coverage
-
+      - cucumber-tests:
+          extra-deps:
+            - clone-oracle-libraries
 
   docker-build:
     resource_class: small
@@ -669,39 +590,25 @@ jobs:
         - --no-poll
         - --address=/#/127.0.0.1
         - --server=/percy.io/8.8.8.8
-      - image: circleci/mysql:5.7-ram
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: ''
-          MYSQL_DATABASE: circleci
-      - image: memcached:1.5-alpine
-      - image: redis:4.0-alpine
+      - *mysql-container
+      - *memcached-container
+      - *redis-container
     steps:
-      - checkout
-      - *git-submodules
+      - checkout-with-submodules
       - *attach-to-workspace
-      - run:
-          name: Prepare database
-          command: |
-            bundle exec rake db:create db:test:prepare
-      - run:
-          name: Disable internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+      - prepare-db-for-tests
+      - *disable-internet-access
       - run:
           name: Run percy.io visual tests
           command: |
             PERCY_PROJECT=3scale/porta PERCY_BRANCH=$CIRCLE_BRANCH PERCY_COMMIT=$CIRCLE_SHA1 PERCY_ENABLE=1 bundle exec cucumber --profile ci --profile visual features
-      - run:
-          name: Enabled internet access
-          command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
-          when: always
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *store-log-artifacts
+      - *enable-internet-access
+      - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
-      - *upload-coverage
+
+##################################### CIRCLECI WORKFLOWS ############################################
 
 workflows:
   version: 2

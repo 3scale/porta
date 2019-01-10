@@ -5,7 +5,7 @@ require 'test_helper'
 class ApplicationDeletedEventTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
   def setup
-    @application = FactoryGirl.create(:cinstance)
+    @application = FactoryBot.create(:cinstance)
   end
 
   attr_reader :application

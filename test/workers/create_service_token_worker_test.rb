@@ -15,7 +15,7 @@ class CreateServiceTokenWorkerTest < ActiveSupport::TestCase
   def test_perform
     Sidekiq::Testing.inline! do
       token   = 'Alaska12345'
-      service = FactoryGirl.create(:simple_service, id: 999)
+      service = FactoryBot.create(:simple_service, id: 999)
       service.service_tokens.delete_all
       event   = FakeEvent.new('1235', service, token)
 

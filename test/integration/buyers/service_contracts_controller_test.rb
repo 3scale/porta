@@ -3,14 +3,14 @@ require 'test_helper'
 class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider         = FactoryGirl.create(:provider_account, provider_account: master_account)
-    @service          = FactoryGirl.create(:service, account: @provider)
-    @service_plan     = FactoryGirl.create(:service_plan, issuer: @service)
-    @application_plan = FactoryGirl.create(:application_plan, issuer: @service)
+    @provider         = FactoryBot.create(:provider_account, provider_account: master_account)
+    @service          = FactoryBot.create(:service, account: @provider)
+    @service_plan     = FactoryBot.create(:service_plan, issuer: @service)
+    @application_plan = FactoryBot.create(:application_plan, issuer: @service)
 
-    @buyer1           = FactoryGirl.create(:buyer_account, provider_account: @provider)
-    @buyer2           = FactoryGirl.create(:buyer_account, provider_account: @provider)
-    @service_contract = FactoryGirl.create(:simple_service_contract, plan: @service_plan, user_account: @buyer1)
+    @buyer1           = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @buyer2           = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @service_contract = FactoryBot.create(:simple_service_contract, plan: @service_plan, user_account: @buyer1)
 
     @buyer1.buy! @application_plan
     @buyer2.buy! @application_plan
@@ -62,7 +62,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_unsubscribe_developers_from_service_with_two_no_suspended_applications
-    application_plan2 = FactoryGirl.create(:application_plan, issuer: @service)
+    application_plan2 = FactoryBot.create(:application_plan, issuer: @service)
 
     @buyer1.buy! application_plan2
     delete admin_buyers_account_service_contract_path(account_id: @buyer1.id,

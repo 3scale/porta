@@ -43,7 +43,7 @@ class Api::PlanCopiesControllerTest < ActionDispatch::IntegrationTest
     private
 
     def current_account
-      @provider ||= FactoryGirl.create(:provider_account)
+      @provider ||= FactoryBot.create(:provider_account)
     end
   end
 

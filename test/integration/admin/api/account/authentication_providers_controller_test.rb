@@ -5,9 +5,9 @@ require 'test_helper'
 class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
-    @access_token = FactoryGirl.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
+    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
   end
 
   test '#create persists' do
@@ -96,9 +96,9 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#index returns all the admin portal authentication providers of the current account in json' do
-    FactoryGirl.create(:auth0_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
-    FactoryGirl.create(:keycloak_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
-    FactoryGirl.create(:auth0_authentication_provider, account: FactoryGirl.build_stubbed(:simple_provider), account_type: AuthenticationProvider.account_types[:provider])
+    FactoryBot.create(:auth0_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
+    FactoryBot.create(:keycloak_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
+    FactoryBot.create(:auth0_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider), account_type: AuthenticationProvider.account_types[:provider])
     get admin_api_account_authentication_providers_path(format: :json, access_token: @access_token.value)
     assert_response :ok
     authentication_providers = JSON.parse(response.body)['authentication_providers']
@@ -110,9 +110,9 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#index returns all the authentication providers of the current account in xml' do
-    FactoryGirl.create(:auth0_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
-    FactoryGirl.create(:keycloak_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
-    FactoryGirl.create(:auth0_authentication_provider, account: FactoryGirl.build_stubbed(:simple_provider), account_type: AuthenticationProvider.account_types[:provider])
+    FactoryBot.create(:auth0_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
+    FactoryBot.create(:keycloak_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
+    FactoryBot.create(:auth0_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider), account_type: AuthenticationProvider.account_types[:provider])
     get admin_api_account_authentication_providers_path(format: :xml, access_token: @access_token.value)
     assert_response :ok
     assert_xml './authentication_providers/authentication_provider', 2
@@ -126,7 +126,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#show returns the requested authentication provider' do
-    authentication_provider = FactoryGirl.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
+    authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.value)
     assert_response :ok
     assert_equal authentication_provider.id, JSON.parse(response.body).dig('authentication_provider', 'id')
@@ -135,7 +135,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   test '#show ensures provider can use provider_sso' do
     Logic::RollingUpdates.stubs(:enabled?).returns(true)
     @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
-    authentication_provider = FactoryGirl.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
+    authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.value)
     assert_response :not_found
   end

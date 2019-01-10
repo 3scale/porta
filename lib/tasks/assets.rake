@@ -12,12 +12,12 @@ namespace :assets do
       end
     end
 
-    task :factory_girl do
+    task :factory_bot do
       System::Application.configure do
-        initializer 'factory_girl.reset_factory_paths',
-                    after: 'factory_girl.set_factory_paths' do
-          if defined?(FactoryGirl)
-            FactoryGirl.definition_file_paths = []
+        initializer 'factory_bot.reset_factory_paths',
+                    after: 'factory_bot.set_factory_paths' do
+          if defined?(FactoryBot)
+            FactoryBot.definition_file_paths = []
           end
         end
       end
@@ -30,5 +30,5 @@ namespace :assets do
     Rails.root.join('tmp', 'cache', 'assets').rmtree
   end
 
-  Rake::Task['assets:environment'].enhance(%w(assets:environment:factory_girl assets:environment:observers))
+  Rake::Task['assets:environment'].enhance(%w(assets:environment:factory_bot assets:environment:observers))
 end

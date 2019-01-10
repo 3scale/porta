@@ -2,7 +2,7 @@ require 'test_helper'
 
 class RedhatCustomerOAuthFlowPresenterTest < ActiveSupport::TestCase
   def setup
-    provider_account = FactoryGirl.create(:simple_provider, provider_account: master_account, self_domain: 'admin.company.com', domain: 'company.com')
+    provider_account = FactoryBot.create(:simple_provider, provider_account: master_account, self_domain: 'admin.company.com', domain: 'company.com')
 
     query_params = { plan_id: 52 }
     host = provider_account.self_domain

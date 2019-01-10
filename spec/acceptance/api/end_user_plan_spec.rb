@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "EndUserPlan" do
 
   let(:service) { provider.services.default }
-  let(:resource) { Factory.build(:end_user_plan, issuer: service) }
+  let(:resource) { FactoryBot.build(:end_user_plan, issuer: service) }
   let(:plan) { resource }
 
   let(:service_id) { service.id }

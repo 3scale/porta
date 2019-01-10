@@ -7,11 +7,11 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
   def setup
     set_backend_host 'example.org'
 
-    provider_account = Factory(:provider_account)
+    provider_account = FactoryBot.create(:provider_account)
     @provider_key    = provider_account.api_key
 
-    @application_plan = Factory( :application_plan, :issuer => provider_account.default_service)
-    cinstance         = Factory(:cinstance, :plan => @application_plan)
+    @application_plan = FactoryBot.create( :application_plan, :issuer => provider_account.default_service)
+    cinstance         = FactoryBot.create(:cinstance, :plan => @application_plan)
     @application_id   = cinstance.application_id
     @service_id       = cinstance.service.backend_id
 
@@ -43,7 +43,7 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
   end
 
   def test_output_order
-    metrics = FactoryGirl.create_list(:metric, 3, service: @application_plan.issuer)
+    metrics = FactoryBot.create_list(:metric, 3, service: @application_plan.issuer)
 
     utilization_records = ThreeScale::Core::APIClient::Collection.new([
       { period: 'day', metric_name: metrics.first.name, max_value: 5000, current_value: 2500 },

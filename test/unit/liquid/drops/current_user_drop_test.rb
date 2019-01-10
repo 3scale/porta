@@ -6,7 +6,7 @@ class Liquid::Drops::CurrentUserDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @user = FactoryGirl.create(:user_with_account)
+    @user = FactoryBot.create(:user_with_account)
     @drop = Drops::CurrentUser.new(@user)
   end
 
@@ -49,7 +49,7 @@ class Liquid::Drops::CurrentUserDropTest < ActiveSupport::TestCase
   def create_sso_authorizations(user)
     authorizations = []
     %i[keycloak_authentication_provider github_authentication_provider].each do |authentication_provider_sym|
-      authorizations << FactoryGirl.create(:sso_authorization, user: user, authentication_provider: FactoryGirl.create(authentication_provider_sym) )
+      authorizations << FactoryBot.create(:sso_authorization, user: user, authentication_provider: FactoryBot.create(authentication_provider_sym) )
     end
     authorizations
   end

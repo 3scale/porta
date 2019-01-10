@@ -6,13 +6,13 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     disable_transactional_fixtures!
 
     def setup
-      @buyer = FactoryGirl.create :buyer_account
+      @buyer = FactoryBot.create :buyer_account
       @provider = @buyer.provider_account
       login! @provider
     end
 
     test 'POST creates the user and the account also when extra_fields are sent' do
-      FactoryGirl.create(:fields_definition, account: @provider, target: 'User', name: 'created_by')
+      FactoryBot.create(:fields_definition, account: @provider, target: 'User', name: 'created_by')
 
       post admin_buyers_accounts_path, {
           account: {
@@ -31,11 +31,11 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'billing address extra field and webhooks' do
-      FactoryGirl.create(:fields_definition, account: @provider,
+      FactoryBot.create(:fields_definition, account: @provider,
                          target: 'Account', name: 'billing_address', read_only: true)
 
       @provider.settings.allow_web_hooks!
-      FactoryGirl.create(:webhook, account: @provider, account_created_on: true, active: true)
+      FactoryBot.create(:webhook, account: @provider, account_created_on: true, active: true)
 
       assert_difference @provider.buyers.method(:count) do
         assert_equal 0, WebHookWorker.jobs.size
@@ -58,15 +58,15 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   class MemberPermissionsTest < Buyers::AccountsControllerTest
     def setup
-      @provider = FactoryGirl.create(:provider_account)
-      user = FactoryGirl.create(:active_user, account: @provider, role: :member, member_permission_ids: [:partners])
+      @provider = FactoryBot.create(:provider_account)
+      user = FactoryBot.create(:active_user, account: @provider, role: :member, member_permission_ids: [:partners])
       login! @provider, user: user
     end
 
     def test_show
-      buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
-      service = FactoryGirl.create(:service, account: @provider)
-      plan  = FactoryGirl.create(:application_plan, issuer: service)
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      service = FactoryBot.create(:service, account: @provider)
+      plan  = FactoryBot.create(:application_plan, issuer: service)
       plan.publish!
       buyer.buy! plan
       cinstance = service.cinstances.last
@@ -91,7 +91,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   class ProviderLoggedInTest < Buyers::AccountsControllerTest
     def setup
-      @buyer = FactoryGirl.create :buyer_account
+      @buyer = FactoryBot.create :buyer_account
       @provider = @buyer.provider_account
       login! @provider
     end
@@ -105,9 +105,9 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'checks if link under number of applications is correct' do
       @provider.settings.allow_multiple_applications!
 
-      service = FactoryGirl.create(:service, account: @provider)
-      FactoryGirl.create_list(:application, 2, user_account: @buyer, service: @provider.default_service)
-      FactoryGirl.create_list(:application, 3, service: service, user_account: @buyer)
+      service = FactoryBot.create(:service, account: @provider)
+      FactoryBot.create_list(:application, 2, user_account: @buyer, service: @provider.default_service)
+      FactoryBot.create_list(:application, 3, service: service, user_account: @buyer)
 
       get admin_buyers_accounts_path
 
@@ -116,13 +116,13 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
     test 'checks if link under number of applications is correct as member' do
       @provider.settings.allow_multiple_applications!
-      service = FactoryGirl.create(:service, account: @provider)
+      service = FactoryBot.create(:service, account: @provider)
 
-      FactoryGirl.create_list(:application, 2, user_account: @buyer)
-      FactoryGirl.create_list(:application, 3, service: service, user_account: @buyer)
+      FactoryBot.create_list(:application, 2, user_account: @buyer)
+      FactoryBot.create_list(:application, 3, service: service, user_account: @buyer)
 
       # Testing member permissions
-      member = FactoryGirl.create(:member, account: @provider)
+      member = FactoryBot.create(:member, account: @provider)
       member.member_permission_service_ids = [service.id]
       member.save!
       login! @provider, user: member
@@ -157,7 +157,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
   class MasterLoggedInTest < Buyers::AccountsControllerTest
     def setup
       @master = master_account
-      @provider = FactoryGirl.create(:provider_account, provider_account: @master)
+      @provider = FactoryBot.create(:provider_account, provider_account: @master)
       login! @master
     end
 

@@ -5,7 +5,7 @@ end
 
 When /^provider "(.*?)" has deleted the buyer "(.*?)"$/ do | provider_domain,  buyer_name |
   provider = Account.find_by_domain! provider_domain
-  buyer    = Factory(:buyer_account, :provider_account => provider, :org_name => buyer_name, :state => :created)
+  buyer    = FactoryBot.create(:buyer_account, :provider_account => provider, :org_name => buyer_name, :state => :created)
   buyer.destroy
 end
 

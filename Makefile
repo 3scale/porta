@@ -159,10 +159,10 @@ clean-cache:
 	$(MAKE) clean
 
 bundle: ## Installs dependencies using bundler. Run this after you make some changes to Gemfile.
-bundle: Gemfile.prod Gemfile
+bundle: gemfiles/prod/Gemfile Gemfile
 	BUNDLE_GEMFILE=Gemfile bundle lock
-	cp Gemfile.lock Gemfile.prod.lock
-	BUNDLE_GEMFILE=Gemfile.prod bundle lock
+	cp Gemfile.lock gemfiles/prod/Gemfile.lock
+	BUNDLE_GEMFILE=gemfiles/prod/Gemfile bundle lock
 
 oracle-db-setup: ## Creates databases in Oracle
 oracle-db-setup: oracle-database

@@ -53,7 +53,7 @@ class Dashboard::MessagesPresenterTest < Draper::TestCase
 
   def create_messages(created_at = DateTime.now)
     message_ids = Array.new(LIMIT) do |n|
-      FactoryGirl.create(:message, subject: "Alaska_#{n}", created_at: created_at).id
+      FactoryBot.create(:message, subject: "Alaska_#{n}", created_at: created_at).id
     end
 
     Message.where(id: message_ids)

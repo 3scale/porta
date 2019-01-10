@@ -10,7 +10,7 @@ class ProfileTest < ActiveSupport::TestCase
 
   context '#account attribute validation' do
     setup do
-      @invalid_profile = Factory.build(:profile, :account_id => nil)
+      @invalid_profile = FactoryBot.build(:profile, :account_id => nil)
     end
 
     should 'not be saved without account' do
@@ -23,7 +23,7 @@ class ProfileTest < ActiveSupport::TestCase
 
   context 'initialization' do
     setup do
-      @profile = Factory(:profile)
+      @profile = FactoryBot.create(:profile)
     end
 
     should 'create profile in private state' do
@@ -37,7 +37,7 @@ class ProfileTest < ActiveSupport::TestCase
 
   context 'customers_type field' do
     setup do
-      @profile = Factory(:profile, :customers_type => ["item"])
+      @profile = FactoryBot.create(:profile, :customers_type => ["item"])
     end
 
     should 'be serialized as an array' do
@@ -47,10 +47,10 @@ class ProfileTest < ActiveSupport::TestCase
 
   context '.published class method' do
     setup do
-      @profile = Factory(:profile)
+      @profile = FactoryBot.create(:profile)
       @profile.update_attribute(:state, 'published')
 
-      @profile_unpublished = Factory(:profile)
+      @profile_unpublished = FactoryBot.create(:profile)
       @profile_unpublished.update_attribute(:state, 'private')
     end
 
@@ -64,9 +64,9 @@ class ProfileTest < ActiveSupport::TestCase
 
   context 'with individual or company profiles' do
     setup do
-      @individual_profile = Factory
+      @individual_profile = FactoryBot
         .build(:profile, :company_size => Profile::IndividualNotCompany)
-      @company_profile = Factory
+      @company_profile = FactoryBot
         .build(:profile, :company_size => Profile::CompanySizes.last)
     end
 
@@ -139,7 +139,7 @@ class ProfileTest < ActiveSupport::TestCase
     end
 
     def test_logo_upload
-      profile = FactoryGirl.create(:profile)
+      profile = FactoryBot.create(:profile)
       hypnotoad = Rails.root.join('test', 'fixtures', 'hypnotoad.jpg').open
 
       profile.logo = hypnotoad

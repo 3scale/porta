@@ -5,7 +5,6 @@ import h from 'virtual-dom/h'
 import createElement from 'virtual-dom/create-element'
 
 export class StatsUI {
-
   static dom (el, props, ...children) {
     return h(el, props, children)
   }

@@ -90,7 +90,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
   class ProviderLoggedInTest < Api::ApplicationPlansControllerTest
     setup do
-      @plan = FactoryGirl.create(:application_plan, issuer: service)
+      @plan = FactoryBot.create(:application_plan, issuer: service)
     end
 
     test 'GET index shows always the management buttons (create, delete, copy, hide/publish) indepently of the onpremises value' do
@@ -116,7 +116,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
     test 'Actions are always authorized' do
       [true, false].each do |onpremises|
-        @plan = FactoryGirl.create(:application_plan, issuer: @service)
+        @plan = FactoryBot.create(:application_plan, issuer: @service)
         ThreeScale.config.stubs(onpremises: onpremises)
 
         get new_admin_service_application_plan_path(service)
@@ -145,7 +145,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     private
 
     def current_account
-      @current_account ||= FactoryGirl.create(:provider_account)
+      @current_account ||= FactoryBot.create(:provider_account)
     end
   end
 

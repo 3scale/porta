@@ -3,7 +3,7 @@ require 'test_helper'
 class Invoices::UnsuccessfullyChargedInvoiceProviderEventTest < ActiveSupport::TestCase
 
   def test_create
-    invoice = FactoryGirl.build_stubbed(:invoice, id: 1, provider_account_id: 2,
+    invoice = FactoryBot.build_stubbed(:invoice, id: 1, provider_account_id: 2,
                                           state: 'created')
     event   = Invoices::UnsuccessfullyChargedInvoiceProviderEvent.create(invoice)
 

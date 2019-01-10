@@ -12,8 +12,8 @@ class Apicast::ProviderLuaGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_emit
-    account = FactoryGirl.create(:provider_account)
-    FactoryGirl.create(:service, account: account)
+    account = FactoryBot.create(:provider_account)
+    FactoryBot.create(:service, account: account)
     source = Apicast::ProviderSource.new(account)
 
     account.services.update_all(backend_version: '1')

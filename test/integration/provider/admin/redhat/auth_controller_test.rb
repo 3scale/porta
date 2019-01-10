@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @callback_url = "/p/admin/auth/#{RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME}/callback"
 
     ThreeScale.config.redhat_customer_portal.stubs(enabled: true)

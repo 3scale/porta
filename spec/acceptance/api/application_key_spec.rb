@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "ApplicationKey" do
 
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
-  let(:application) { Factory(:cinstance, user_account: buyer, service: provider.default_service) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:application) { FactoryBot.create(:cinstance, user_account: buyer, service: provider.default_service) }
 
   let(:resource) { ApplicationKey.create!(application: application, value: 'key-abc') }
 

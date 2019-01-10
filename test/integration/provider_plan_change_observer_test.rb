@@ -8,19 +8,19 @@ class ProviderPlanChangeObserverTest < ActionDispatch::IntegrationTest
   end
 
   def test_plan_changed
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     assert @observer.plan_changed(provider.bought_cinstance)
 
     provider.default_service.application_plans.create!(name: 'Default')
 
-    buyer = FactoryGirl.create(:buyer_account, provider_account: provider)
+    buyer = FactoryBot.create(:buyer_account, provider_account: provider)
     provider.application_plans.first!.create_contract_with(buyer)
 
     refute @observer.plan_changed(buyer.bought_cinstance)
   end
 
   def test_observer
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     other_plan = master_account.default_service.application_plans.create!(name: 'Other Plan')
 
     application = provider.bought_cinstance

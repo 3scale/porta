@@ -5,7 +5,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   include UserDataHelpers
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     host! @provider.domain
   end
@@ -27,7 +27,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   def test_signup_with_oauth_if_account_requires_approval
     @provider.settings.update_attributes(account_approval_required: true)
 
-    @auth = FactoryGirl.create(:authentication_provider, published: true, account: @provider)
+    @auth = FactoryBot.create(:authentication_provider, published: true, account: @provider)
     stub_user_data({uid: '12345', email: 'foo@example.edu', email_verified: true}, stubbed_method: :authenticate!)
 
     post session_path(system_name: @auth.system_name, code: 'alaska')

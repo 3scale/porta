@@ -4,7 +4,7 @@ class Liquid::Drops::CountryFieldTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @buyer = Factory(:buyer_account)
+    @buyer = FactoryBot.create(:buyer_account)
     FieldsDefinition.create(account: @buyer.provider_account, target: 'Account',
                             name: 'country', label: 'Country')
     @buyer.reload

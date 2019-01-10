@@ -7,7 +7,7 @@ class Stats::Aggregation::RuleTest < ActiveSupport::TestCase
   end
 
   test 'sets expiration time for volatile keys' do
-    service = Factory :service
+    service = FactoryBot.create :service
     rule = Stats::Aggregation::Rule.new(:service, :granularity => :day, :expires_in => 2.days)
     time = Time.zone.now
 

@@ -3,7 +3,7 @@ require 'test_helper'
 class DeveloperPortal::SettingsControllerTest < DeveloperPortal::ActionController::TestCase
 
   setup do
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
     request.host = @provider.domain
   end
 

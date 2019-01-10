@@ -55,4 +55,10 @@ System::Application.configure do
   config.after_initialize do
     ::GATEWAY = ActiveMerchant::Billing::BogusGateway.new
   end
+
+  # Make sure the middleware is inserted first in middleware chain
+  require 'gitlab/testing/request_blocker_middleware'
+  require 'gitlab/testing/request_inspector_middleware'
+  config.middleware.insert_before ActionDispatch::Static, Gitlab::Testing::RequestBlockerMiddleware
+  config.middleware.insert_before ActionDispatch::Static, Gitlab::Testing::RequestInspectorMiddleware
 end

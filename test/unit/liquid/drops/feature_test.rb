@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Liquid::Drops::FeatureDropTest < ActiveSupport::TestCase
   def setup
-    @feature = FactoryGirl.build_stubbed(:feature)
+    @feature = FactoryBot.build_stubbed(:feature)
     @drop = Liquid::Drops::Feature.new(@feature)
   end
 

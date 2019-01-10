@@ -81,6 +81,7 @@ module EventStore
         raise if raise_errors
         System::ErrorReporting.report_error(exception)
         logger.error([exception, exception.backtrace].join("\n\t"))
+        false
       end
 
       def append_to_stream(stream_name, event, expected_version = :any)

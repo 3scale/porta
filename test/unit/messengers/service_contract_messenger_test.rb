@@ -3,7 +3,7 @@ require 'test_helper'
 class ServiceContractMessengerTest < ActiveSupport::TestCase
 
   def setup
-    @contract = Factory(:service_contract)
+    @contract = FactoryBot.create(:service_contract)
     @provider = @contract.provider_account
     @plan = @contract.plan
     @buyer = @contract.user_account

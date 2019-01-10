@@ -2,8 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @service = Factory(:service, :account => @provider)
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @service = FactoryBot.create(:service, :account => @provider)
 
     host! @provider.admin_domain
   end
@@ -12,8 +12,8 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_service_path(@service))
     assert_response :forbidden
@@ -117,9 +117,9 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
   test 'destroy' do
     # Creating at least two services so that one service still remains
     @provider.settings.allow_multiple_services!
-    _other_service  = FactoryGirl.create(:simple_service, account: @provider)
+    _other_service  = FactoryBot.create(:simple_service, account: @provider)
 
-    access_token = FactoryGirl.create(:access_token, owner: @provider.admins.first, scopes: 'account_management')
+    access_token = FactoryBot.create(:access_token, owner: @provider.admins.first, scopes: 'account_management')
     delete admin_api_service_path @service.id, access_token: access_token.value, format: :json
 
     assert_response 200
@@ -130,16 +130,16 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     disable_transactional_fixtures!
 
     def setup
-      @provider = Factory :provider_account, :domain => 'provider.example.com'
-      @service = Factory(:service, :account => @provider)
+      @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+      @service = FactoryBot.create(:service, :account => @provider)
 
       host! @provider.admin_domain
     end
 
     test 'update with a ro token fails' do
-      user = FactoryGirl.create(:simple_admin, account: @provider)
-      ro_token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management', permission: 'ro')
-      rw_token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw')
+      user = FactoryBot.create(:simple_admin, account: @provider)
+      ro_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'ro')
+      rw_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw')
 
       put("/admin/api/services/#{@service.id}", access_token: rw_token.value, format: :xml, name: 'new service name')
       assert_response :success

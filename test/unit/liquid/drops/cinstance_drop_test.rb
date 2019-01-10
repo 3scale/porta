@@ -4,8 +4,8 @@ class Liquid::Drops::CinstanceDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @plan = Factory(:application_plan)
-    @app = Factory(:cinstance, :plan => @plan)
+    @plan = FactoryBot.create(:application_plan)
+    @app = FactoryBot.create(:cinstance, :plan => @plan)
   end
 
   test "returns the associated plan" do

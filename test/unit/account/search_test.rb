@@ -2,9 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Account::SearchTest < ActiveSupport::TestCase
   test 'search without query returns all accounts by default, not using sphinx' do
-    pending  = Factory(:pending_account)
-    approved = Factory(:pending_account).tap(&:approve!)
-    rejected = Factory(:pending_account).tap(&:reject!)
+    pending  = FactoryBot.create(:pending_account)
+    approved = FactoryBot.create(:pending_account).tap(&:approve!)
+    rejected = FactoryBot.create(:pending_account).tap(&:reject!)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -15,9 +15,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search without query returns all account is state is "all", not using sphinx' do
-    pending  = Factory(:pending_account)
-    approved = Factory(:pending_account).tap(&:approve!)
-    rejected = Factory(:pending_account).tap(&:reject!)
+    pending  = FactoryBot.create(:pending_account)
+    approved = FactoryBot.create(:pending_account).tap(&:approve!)
+    rejected = FactoryBot.create(:pending_account).tap(&:reject!)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -28,9 +28,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search without query returns accounts by state if given, not using sphinx' do
-    pending  = Factory(:pending_account)
-    approved = Factory(:pending_account).tap(&:approve!)
-    rejected = Factory(:pending_account).tap(&:reject!)
+    pending  = FactoryBot.create(:pending_account)
+    approved = FactoryBot.create(:pending_account).tap(&:approve!)
+    rejected = FactoryBot.create(:pending_account).tap(&:reject!)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -47,9 +47,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search with query on Account#buyer_accounts scopes to the provider account' do
-    provider = Factory(:provider_account)
-    buyer = Factory(:buyer_account, :provider_account => provider)
-    buyer2 = Factory(:buyer_account)
+    provider = FactoryBot.create(:provider_account)
+    buyer = FactoryBot.create(:buyer_account, :provider_account => provider)
+    buyer2 = FactoryBot.create(:buyer_account)
 
     Account.expects(:search_ids).with('foo').returns([buyer.id, buyer2.id])
 
@@ -84,11 +84,11 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search without query on Account#buyer_accounts scopes to the provider account' do
-    provider_one = Factory(:provider_account)
-    buyer_one    = Factory(:buyer_account, :provider_account => provider_one)
+    provider_one = FactoryBot.create(:provider_account)
+    buyer_one    = FactoryBot.create(:buyer_account, :provider_account => provider_one)
 
-    provider_two = Factory(:provider_account)
-    buyer_two    = Factory(:buyer_account, :provider_account => provider_two)
+    provider_two = FactoryBot.create(:provider_account)
+    buyer_two    = FactoryBot.create(:buyer_account, :provider_account => provider_two)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -98,7 +98,7 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'user_key keyword search in the query' do
-    application = Factory(:cinstance, user_key: 'foobarkey')
+    application = FactoryBot.create(:cinstance, user_key: 'foobarkey')
     buyer = application.user_account
     provider = buyer.provider_account
 

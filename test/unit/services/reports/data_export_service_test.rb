@@ -3,7 +3,7 @@ require 'test_helper'
 class Reports::DataExportServiceTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider, org_name: 'ontheroad')
+    @provider = FactoryBot.create(:simple_provider, org_name: 'ontheroad')
   end
 
   def test_initialize

@@ -4,7 +4,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     Audited.audit_class.delete_all
   end
 

@@ -1,18 +1,5 @@
 @import 'provider/typography'; // needed for legacy dev portals that include this stylesheet directly
 
-// tooltip styling
-.jqstooltip {
-  background-color: transparent !important;
-  color: $color-base !important;
-  border: 0 !important;
-}
-
-.jqsfield {
-  background-color: transparent !important;
-  font-size: $font-size-sm !important;
-  color: $color-base !important;
-}
-
 #mini-charts .metric-name {
   color: $label-color;
   float: right;
@@ -33,14 +20,21 @@
   background: $content-background;
   border: $border-width solid $border-color;
   min-width: 0;
-  height: line-height-times(3);
+  height: line-height-times(3.5);
   margin-top: line-height-times(1);
 }
 
-#mini-charts .spark {
-  display: block;
-  height: 100%;
+.charts .inline-chart-container .inline-chart-graph {
+  height: line-height-times(3.5);
   width: 80%;
+}
+
+.c3-tooltip-container .tooltip-dot {
+  background-color: $lochMaraBlue;
+  border-radius: 50%;
+  display: inline-block;
+  height: 6px;
+  width: 6px;
 }
 
 #mini-charts .total {
@@ -69,6 +63,10 @@
   z-index: 1000;
   text-align: center;
   padding-top: line-height-times(1)
+}
+
+#mini-charts .loading.hide {
+  display: none;
 }
 
 // override stats stylesheets
@@ -104,13 +102,5 @@
     max-width: 100%;
     margin-bottom: line-height-times(1/2);
     margin-top: line-height-times(1/2);
-
-    .spark {
-
-      canvas {
-        width: 100% !important;
-        height: 100% !important;
-      }
-    }
   }
 }

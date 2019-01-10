@@ -3,8 +3,8 @@ require 'test_helper'
 class EnforceSSOValidatorTest < ActiveSupport::TestCase
 
   def setup
-    @account = FactoryGirl.create(:simple_provider)
-    @user = FactoryGirl.create(:user, account: @account)
+    @account = FactoryBot.create(:simple_provider)
+    @user = FactoryBot.create(:user, account: @account)
     @user_session = @user.user_sessions.create
   end
 
@@ -13,7 +13,7 @@ class EnforceSSOValidatorTest < ActiveSupport::TestCase
     refute service.valid?
     assert_match 'No published authentication providers', service.error_message
 
-    auth_provider = FactoryGirl.create(:self_authentication_provider, account: @account, kind: 'base', published: true)
+    auth_provider = FactoryBot.create(:self_authentication_provider, account: @account, kind: 'base', published: true)
     service = EnforceSSOValidator.new(@user_session)
     refute service.valid?
     assert_match 'Authentication flow has to be checked', service.error_message

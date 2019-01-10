@@ -1,9 +1,9 @@
 Given /^I have(?: a)? cms page "(.+?)" of (provider ".+?")$/i do |path, provider|
-  Factory(:cms_page, :path => path, :provider => provider)
+  FactoryBot.create(:cms_page, :path => path, :provider => provider)
 end
 
 Given /^I have(?: a)? cms page "(.+?)" of (provider ".+?") with markdown content$/i do |path, provider|
-  Factory(:cms_page, :path => path, :provider => provider, :handler => :markdown, :published => '# Markdown content')
+  FactoryBot.create(:cms_page, :path => path, :provider => provider, :handler => :markdown, :published => '# Markdown content')
 end
 
 Then /^I should see rendered markdown content$/ do

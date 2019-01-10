@@ -1,9 +1,11 @@
 
 class Contract < ApplicationRecord
+  # Need to define table_name before audited because of
+  # https://github.com/collectiveidea/audited/blob/f03c5b5d1717f2ebec64032d269316dc74476056/lib/audited/auditor.rb#L305-L311
+  self.table_name = 'cinstances'
+
   audited :allow_mass_assignment => true
   include ::ThreeScale::MethodTracing
-
-  self.table_name = 'cinstances'
 
   # FIXME: This class should be an abstract class I think, but doing so makes plenty of tests fail
   # self.abstract_class = true

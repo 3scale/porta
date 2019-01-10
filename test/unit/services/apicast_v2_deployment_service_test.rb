@@ -5,7 +5,7 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
   Service = ApicastV2DeploymentService
 
   def setup
-    @proxy = FactoryGirl.create(:simple_proxy)
+    @proxy = FactoryBot.create(:simple_proxy)
   end
 
   def test_deployment_save_policies

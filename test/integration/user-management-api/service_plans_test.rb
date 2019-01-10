@@ -2,14 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    plan = Factory :service_plan, :issuer => @provider.default_service
+    plan = FactoryBot.create :service_plan, :issuer => @provider.default_service
     plan.publish!
-    Factory :service_plan, :issuer => @provider.default_service
+    FactoryBot.create :service_plan, :issuer => @provider.default_service
 
-    Factory :account_plan,     :issuer => @provider
-    Factory :application_plan, :issuer => @provider.default_service
+    FactoryBot.create :account_plan,     :issuer => @provider
+    FactoryBot.create :application_plan, :issuer => @provider.default_service
 
 
     host! @provider.admin_domain
@@ -19,8 +19,8 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user    = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
-    token   = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user    = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'plans'])
+    token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     service = @provider.default_service
     plan    = service.service_plans.first
 
@@ -57,8 +57,8 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    service = Factory :service, :account => @provider
-    Factory :service_plan, :issuer => service
+    service = FactoryBot.create :service, :account => @provider
+    FactoryBot.create :service_plan, :issuer => service
 
     get admin_api_service_service_plans_path(service,
                                                   :provider_key => @provider.api_key,
@@ -109,7 +109,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'update' do
-    plan = FactoryGirl.create(:service_plan, issuer: @provider.default_service, name: 'namy')
+    plan = FactoryBot.create(:service_plan, issuer: @provider.default_service, name: 'namy')
 
     put admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml),
                                                  :state_event => 'publish',
@@ -128,7 +128,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'default' do
-    plan = Factory :service_plan, :issuer => @provider.default_service, :name => 'namy'
+    plan = FactoryBot.create :service_plan, :issuer => @provider.default_service, :name => 'namy'
     plan.publish!
 
     put default_admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml),
@@ -148,7 +148,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy' do
-    service_plan = Factory :service_plan, :issuer => @provider.default_service
+    service_plan = FactoryBot.create :service_plan, :issuer => @provider.default_service
 
     delete("/admin/api/services/#{@provider.default_service.id}/service_plans/#{service_plan.id}",
                 :provider_key => @provider.api_key,
@@ -164,8 +164,8 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
 
   test 'destroy returns error when deletion failed' do
     #TODO: move this to some setup
-    service_plan = Factory :service_plan, :issuer => @provider.first_service!
-    buyer = Factory(:buyer_account, :provider_account => @provider)
+    service_plan = FactoryBot.create :service_plan, :issuer => @provider.first_service!
+    buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     buyer.buy! service_plan
 
     delete("/admin/api/services/#{@provider.first_service!.id}/service_plans/#{service_plan.id}",

@@ -2,7 +2,7 @@ require 'test_helper'
 class Authentication::ByHasSecurePasswordTest < ActiveSupport::TestCase
 
   def setup
-    @user = FactoryGirl.create(:simple_user, account: nil)
+    @user = FactoryBot.create(:simple_user, account: nil)
   end
 
   test 'User creatd without old crypted_password' do
@@ -40,7 +40,7 @@ class Authentication::ByHasSecurePasswordTest < ActiveSupport::TestCase
 
   test 'Internal Strategy authentication migrates to has_secure_password when user can login' do
     reset_to_old_crypted_password!
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     strategy = Authentication::Strategy::Internal.new(provider, true)
     @user.update_columns(account_id: provider.id, password_digest: nil)
     @user.activate!
@@ -55,7 +55,7 @@ class Authentication::ByHasSecurePasswordTest < ActiveSupport::TestCase
 
   test 'Internal Strategy authentication migrates to has_secure_password when user cannot login' do
     reset_to_old_crypted_password!
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     strategy = Authentication::Strategy::Internal.new(provider, true)
     @user.update_columns(account_id: provider.id, password_digest: nil)
     refute @user.authenticate('supersecret')

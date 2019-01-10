@@ -3,10 +3,10 @@ require 'test_helper'
 class BillingTest < ActiveSupport::TestCase
 
   def setup
-    provider = Factory(:simple_provider)
-    buyer = Factory(:simple_buyer, :provider_account => provider)
+    provider = FactoryBot.create(:simple_provider)
+    buyer = FactoryBot.create(:simple_buyer, :provider_account => provider)
 
-    @invoice = Factory.create(:invoice,
+    @invoice = FactoryBot.create(:invoice,
                               :period => Month.new(Time.zone.local(1984, 1, 1)),
                               :provider_account => provider,
                               :buyer_account => buyer,
@@ -56,14 +56,14 @@ class BillingTest < ActiveSupport::TestCase
   end
 
   test '#destroy_line_item works' do
-    line_item = Factory(:line_item, invoice: @invoice)
+    line_item = FactoryBot.create(:line_item, invoice: @invoice)
     assert_difference LineItem.method(:count), -1 do
       @billing_invoice.destroy_line_item(line_item)
     end
   end
 
   test '#destroy_line_item returns error when the invoice shouldn\'t allow to destroy line_items' do
-    line_item = Factory(:line_item, invoice: @invoice)
+    line_item = FactoryBot.create(:line_item, invoice: @invoice)
     @invoice.update_attribute(:state, 'pending')
     @billing_invoice.destroy_line_item(line_item)
     assert_equal true, line_item.persisted?
@@ -71,7 +71,7 @@ class BillingTest < ActiveSupport::TestCase
   end
 
   test '#destroy_line_item raises error when the @invoice is not the same as line_item.invoice' do
-    line_item = Factory(:line_item, invoice: Factory.create(:invoice))
+    line_item = FactoryBot.create(:line_item, invoice: FactoryBot.create(:invoice))
     assert_raise ActiveRecord::RecordNotFound do
       @billing_invoice.destroy_line_item(line_item)
     end

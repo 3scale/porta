@@ -3,8 +3,8 @@ require 'test_helper'
 class PaymentDetailTest < ActiveSupport::TestCase
 
   setup do
-    @account = FactoryGirl.create(:simple_account)
-    @payment_detail = FactoryGirl.create(:payment_detail, account: @account)
+    @account = FactoryBot.create(:simple_account)
+    @payment_detail = FactoryBot.create(:payment_detail, account: @account)
     @empty_attributes = { buyer_reference: nil, payment_service_reference: nil, credit_card_partial_number: nil, credit_card_expires_on: nil }
   end
 
@@ -45,17 +45,17 @@ class PaymentDetailTest < ActiveSupport::TestCase
     assert @payment_detail.changed_for_autosave?
 
     # new_record / not empty
-    payment_detail = FactoryGirl.build(:payment_detail, account: @account)
+    payment_detail = FactoryBot.build(:payment_detail, account: @account)
     assert payment_detail.changed_for_autosave?
 
     # new_record / empty
-    payment_detail = FactoryGirl.build(:payment_detail, { account: @account }.merge(@empty_attributes))
+    payment_detail = FactoryBot.build(:payment_detail, { account: @account }.merge(@empty_attributes))
     refute payment_detail.changed_for_autosave?
   end
 
   test 'audits' do
     PaymentDetail.with_auditing do
-      payment_detail = FactoryGirl.create(:payment_detail, account: @account, credit_card_partial_number: '1111')
+      payment_detail = FactoryBot.create(:payment_detail, account: @account, credit_card_partial_number: '1111')
 
       audit = payment_detail.audits.last
       assert_equal 'create', audit.action
@@ -82,7 +82,7 @@ class PaymentDetailTest < ActiveSupport::TestCase
     end
 
     test 'does not notify on copy from account' do
-      account = FactoryGirl.create(:simple_account)
+      account = FactoryBot.create(:simple_account)
       refute PaymentDetail.where(account_id: account.id).exists?
       Account.where(id: account.id).update_all(@cc_attributes)
       account.reload
@@ -91,7 +91,7 @@ class PaymentDetailTest < ActiveSupport::TestCase
     end
 
     test 'notify if new changes' do
-      account = FactoryGirl.create(:simple_account)
+      account = FactoryBot.create(:simple_account)
 
       PaymentDetail::CreditCardChangeNotifier.any_instance.expects(:call)
       account.credit_card_auth_code = '12345'

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class HerokuWorkerTest < ActiveSupport::TestCase
   def test_perform
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
 
     Heroku.expects(:sync).with(provider)
 

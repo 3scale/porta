@@ -3,11 +3,11 @@ require 'test_helper'
 class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionController::TestCase
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
-    service  = FactoryGirl.create(:service, account: provider)
-    @plan    = FactoryGirl.create(:application_plan, service: service)
-    @metric  = FactoryGirl.create(:metric, service: service)
-    @rule    = FactoryGirl.create(:pricing_rule, metric: @metric, plan: @plan,
+    provider = FactoryBot.create(:provider_account)
+    service  = FactoryBot.create(:service, account: provider)
+    @plan    = FactoryBot.create(:application_plan, service: service)
+    @metric  = FactoryBot.create(:metric, service: service)
+    @rule    = FactoryBot.create(:pricing_rule, metric: @metric, plan: @plan,
                 min: 1, max: 2)
 
     host! provider.admin_domain

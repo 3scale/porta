@@ -7,11 +7,11 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
   disable_transactional_fixtures!
 
   def setup
-    @service_plan     = FactoryGirl.create(:service_plan, issuer: service)
-    @application_plan = FactoryGirl.create(:application_plan, issuer: service)
+    @service_plan     = FactoryBot.create(:service_plan, issuer: service)
+    @application_plan = FactoryBot.create(:application_plan, issuer: service)
 
-    @buyer            = FactoryGirl.create(:buyer_account, provider_account: current_account)
-    @service_contract = FactoryGirl.create(:simple_service_contract, plan: @service_plan, user_account: @buyer)
+    @buyer            = FactoryBot.create(:buyer_account, provider_account: current_account)
+    @service_contract = FactoryBot.create(:simple_service_contract, plan: @service_plan, user_account: @buyer)
 
     @buyer.buy! @application_plan
 
@@ -45,11 +45,11 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     private
 
     def current_account
-      @provider ||= FactoryGirl.create(:provider_account, provider_account: master_account)
+      @provider ||= FactoryBot.create(:provider_account, provider_account: master_account)
     end
 
     def service
-      @service ||= FactoryGirl.create(:service, account: current_account)
+      @service ||= FactoryBot.create(:service, account: current_account)
     end
   end
 

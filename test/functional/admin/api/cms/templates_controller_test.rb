@@ -3,7 +3,7 @@ require 'test_helper'
 class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
   def setup
-    @provider     = FactoryGirl.create(:provider_account)
+    @provider     = FactoryBot.create(:provider_account)
     @request.host = @provider.admin_domain
 
     login_provider @provider
@@ -11,7 +11,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
   def test_show
     CMS::Portlet.available.each do |portlet_type|
-      portlet = FactoryGirl.create(:cms_portlet, provider: @provider,
+      portlet = FactoryBot.create(:cms_portlet, provider: @provider,
         portlet_type: portlet_type.to_s, type: portlet_type.to_s)
 
       get :show, id: portlet.id, format: :xml
@@ -23,7 +23,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   end
 
   def test_show_builtin_partial
-    partial = FactoryGirl.create(:cms_builtin_partial, provider: @provider)
+    partial = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
     get :show, id: partial.id, format: :xml
 
@@ -40,7 +40,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   end
 
   def test_destroy_success
-    page = FactoryGirl.create(:cms_page, provider: @provider)
+    page = FactoryBot.create(:cms_page, provider: @provider)
 
     delete :destroy, id: page.id, format: :json
 
@@ -49,7 +49,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
   def test_destroy_locked
     # builtin pages cannot be destroyed
-    page = FactoryGirl.create(:cms_builtin_partial, provider: @provider)
+    page = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
     delete :destroy, id: page.id, format: :json
 

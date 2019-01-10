@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
-    @buyer = Factory :buyer_account, :provider_account => @provider
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
     host! @provider.self_domain
   end
@@ -12,8 +12,8 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'show (access_token)' do
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
     # member should not be able to work with webhooks at all
@@ -31,8 +31,8 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy (access_token)' do
-    user  = FactoryGirl.create(:admin, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:admin, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
     delete(admin_api_webhooks_failures_path, access_token: token.value)

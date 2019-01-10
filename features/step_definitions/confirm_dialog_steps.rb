@@ -3,9 +3,9 @@ When 'I will confirm dialog box' do
   bypass_confirm_dialog
 end
 
-Then /^(.+) and I confirm dialog box$/ do |original|
-  if [:webkit, :selenium, :webkit_debug].include? Capybara.current_driver
-    accept_confirm do
+Then /^(.+) and I confirm dialog box(?: "(.*)")?$/ do |original, text|
+  if [:webkit, :selenium, :webkit_debug, :headless_chrome, :chrome, :headless_firefox, :firefox].include? Capybara.current_driver
+    accept_confirm(text) do
       step original
     end
   else # :rack_test but should not work if it relies on some JS

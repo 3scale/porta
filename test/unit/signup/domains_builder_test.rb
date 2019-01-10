@@ -8,13 +8,13 @@ class Signup::DomainsBuilderTest < ActiveSupport::TestCase
   end
 
   test 'generate returns unique subdomain' do
-    FactoryGirl.create(:simple_account, :provider_account => master_account, :domain => "foo.#{master_account.superdomain}")
+    FactoryBot.create(:simple_account, :provider_account => master_account, :domain => "foo.#{master_account.superdomain}")
     assert_equal 'foo-2', generate_subdomain(org_name: 'Foo')
 
-    FactoryGirl.create(:simple_account, :provider_account => master_account, :domain => "foo-2.#{master_account.superdomain}")
+    FactoryBot.create(:simple_account, :provider_account => master_account, :domain => "foo-2.#{master_account.superdomain}")
     assert_equal 'foo-3', generate_subdomain(org_name: 'Foo')
 
-    FactoryGirl.create(:simple_account, :provider_account => master_account, :domain => "foo-42.#{master_account.superdomain}")
+    FactoryBot.create(:simple_account, :provider_account => master_account, :domain => "foo-42.#{master_account.superdomain}")
     assert_equal 'foo-3', generate_subdomain(org_name: 'Foo')
   end
 
@@ -25,7 +25,7 @@ class Signup::DomainsBuilderTest < ActiveSupport::TestCase
   private
   
   def generate_subdomain(org_name:, current_subdomain: nil)
-    provider = FactoryGirl.build(:simple_provider)
+    provider = FactoryBot.build(:simple_provider)
     Signup::DomainsBuilder.new(org_name: org_name, current_subdomain: current_subdomain, invalid_subdomain_condition: provider.method(:subdomain_exists?))
         .generate
         .subdomain

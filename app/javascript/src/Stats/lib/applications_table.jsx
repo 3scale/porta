@@ -16,30 +16,30 @@ export class StatsApplicationsTable extends StatsUI {
     return (
       <table id='applications_table' className={`data StatsTable ${applicationsTable._tableVisibility()}`}>
         <thead>
-        <tr>
-          <th>Application</th>
-          <th>Account</th>
-          <th>Traffic</th>
-        </tr>
+          <tr>
+            <th>Application</th>
+            <th>Account</th>
+            <th>Traffic</th>
+          </tr>
         </thead>
         <tbody>
-        {
-          applicationsDetails.map(details =>
-            [
-              <tr>
-                <td>
-                  <a className="StatsApplicationsTable-application" href={details.application.link}>{details.application.name}</a>
-                </td>
-                <td>
-                  <a className="StatsApplicationsTable-account" href={details.account.link}>{details.account.name}</a>
-                </td>
-                <td className="StatsApplicationsTable-total u-amount u-tabular-number">
-                  {numeral(details.total).format('0,0').toUpperCase()}
-                </td>
-              </tr>
-            ]
-          )
-        }
+          {
+            applicationsDetails.map(details =>
+              [
+                <tr>
+                  <td>
+                    <a className="StatsApplicationsTable-application" href={details.application.link}>{details.application.name}</a>
+                  </td>
+                  <td>
+                    <a className="StatsApplicationsTable-account" href={details.account.link}>{details.account.name}</a>
+                  </td>
+                  <td className="StatsApplicationsTable-total u-amount u-tabular-number">
+                    {numeral(details.total).format('0,0').toUpperCase()}
+                  </td>
+                </tr>
+              ]
+            )
+          }
         </tbody>
       </table>
 

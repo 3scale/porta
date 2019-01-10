@@ -1,6 +1,6 @@
 
 When /^I fill in the user invitation needed data$/ do
-  @user_attrs = Factory.attributes_for(:user)
+  @user_attrs = FactoryBot.attributes_for(:user)
   fill_in 'Send invitation to', :with => @user_attrs[:email]
 end
 

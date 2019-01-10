@@ -17,7 +17,7 @@ Scenario: Disable 'Suspend Application' notification
     And buyer "bob" has application "other"
     And I go to the provider side "other" application page
     Then I should see that application "other" is live
-    When I follow "Suspend"
+    When I follow "Suspend" and I confirm dialog box
     Then application "other" should be suspended
 
     And I act as "bob"

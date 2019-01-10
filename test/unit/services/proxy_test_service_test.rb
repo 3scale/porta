@@ -3,7 +3,7 @@ require 'test_helper'
 class ProxyTestServiceTest < ActiveSupport::TestCase
 
   def setup
-    @proxy = FactoryGirl.build_stubbed(:proxy)
+    @proxy = FactoryBot.build_stubbed(:proxy)
     @service = ProxyTestService.new(@proxy)
   end
 
@@ -30,6 +30,15 @@ class ProxyTestServiceTest < ActiveSupport::TestCase
 
     @proxy.credentials_location = 'headers'
     assert_equal({header: {user_key: 'abcd'}}, @service.credentials)
+
+    @proxy.credentials_location = 'authorization'
+
+    encoded_string = Base64.encode64("abcd:").strip
+    assert_equal({header: {'Authorization' => "Basic #{encoded_string}"}}, @service.credentials)
+
+    @proxy.stubs(:authentication_params_for_proxy).returns({app_id: 'abcd', app_key: 'efgh'})
+    encoded_string = Base64.encode64("abcd:efgh").strip
+    assert_equal({header: {'Authorization' => "Basic #{encoded_string}"}}, @service.credentials)
   end
 
   def test_client

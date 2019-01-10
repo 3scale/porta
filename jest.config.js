@@ -1,6 +1,7 @@
 module.exports = {
   roots: ['<rootDir>/spec/javascripts'],
   moduleNameMapper: {
+    'c3': '<rootDir>/__mocks__/c3.js',
     '\\.(css|less|sass|scss)$': '<rootDir>/spec/javascripts/__mocks__/styleMock.js',
     '\\.(gif|ttf|eot|svg)$': '<rootDir>/spec/javascripts/__mocks__/fileMock.js'
   },

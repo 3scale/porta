@@ -3,7 +3,7 @@ require 'test_helper'
 class Finance::Provider::SettingsControllerTest < ActionController::TestCase
 
   def setup
-    @provider = Factory(:provider_account, :billing_strategy => Factory(:postpaid_with_charging))
+    @provider = FactoryBot.create(:provider_account, :billing_strategy => FactoryBot.create(:postpaid_with_charging))
     @provider.settings.allow_finance!
     @request.host = @provider.admin_domain
   end

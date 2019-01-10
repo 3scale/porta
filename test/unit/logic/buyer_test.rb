@@ -3,9 +3,9 @@ require 'test_helper'
 class Logic::BuyerTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.build_stubbed(:simple_provider)
+    @provider = FactoryBot.build_stubbed(:simple_provider)
     @billing_strategy = Finance::BillingStrategy.new
-    @account = FactoryGirl.build_stubbed(:simple_account)
+    @account = FactoryBot.build_stubbed(:simple_account)
     @account.stubs(provider_account: @provider)
     @provider.stubs(billing_strategy: @billing_strategy)
   end

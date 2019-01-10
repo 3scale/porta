@@ -3,7 +3,7 @@ require 'test_helper'
 class SettingsTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @settings = @provider.settings
   end
 
@@ -51,13 +51,13 @@ class SettingsTest < ActiveSupport::TestCase
     refute @settings.approval_required_editable?
     refute @settings.approval_required_disabled?
 
-    account_plan_1 = FactoryGirl.build_stubbed(:simple_account_plan)
+    account_plan_1 = FactoryBot.build_stubbed(:simple_account_plan)
     @settings.expects(:not_custom_account_plans).returns([account_plan_1]).at_least_once
 
     assert @settings.approval_required_editable?
     refute @settings.approval_required_disabled?
 
-    account_plan_2 = FactoryGirl.build_stubbed(:simple_account_plan)
+    account_plan_2 = FactoryBot.build_stubbed(:simple_account_plan)
     @settings.expects(:not_custom_account_plans).returns([account_plan_1, account_plan_2]).at_least_once
     @settings.expects(:account_plans_ui_visible?).returns(true).at_least_once
 
@@ -179,7 +179,7 @@ class SettingsTest < ActiveSupport::TestCase
 
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase
     def setup
-      @provider = FactoryGirl.build_stubbed(:simple_provider)
+      @provider = FactoryBot.build_stubbed(:simple_provider)
       @finance = Settings::SwitchDenied.new(@provider.settings, :finance)
     end
 

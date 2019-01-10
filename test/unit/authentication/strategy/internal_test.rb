@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 
 class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   def setup
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @strategy = Authentication::Strategy::Internal.new(@provider_account)
   end
 
@@ -15,11 +15,11 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   end
 
   test 'authenticate authenticates buyer user' do
-    buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
-    buyer_user          = Factory(:user, :account  => buyer_account, :password => 'kangaroo')
+    buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
+    buyer_user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'kangaroo')
     buyer_user.activate!
 
-    user = Factory(:user, :account  => @provider_account,
+    user = FactoryBot.create(:user, :account  => @provider_account,
                           :username => 'dave',
                           :password => 'kangaroo')
     user.activate!
@@ -31,20 +31,20 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   end
 
   test 'authenticate returns nil if the password is incorrect' do
-    user = Factory(:user, :account => @provider_account, :password => 'foobar')
+    user = FactoryBot.create(:user, :account => @provider_account, :password => 'foobar')
     user.activate!
 
     assert_nil @strategy.authenticate(:username => user.username, :password => 'wrong!')
   end
 
   test 'authenticate returns nil if the user is pending' do
-    user = Factory(:user, :account => @provider_account, :password => 'foobar')
+    user = FactoryBot.create(:user, :account => @provider_account, :password => 'foobar')
     assert_nil @strategy.authenticate(:username => user.username,
                                       :password => 'foobar')
   end
 
   test 'authenticate returns nil if the user is suspended' do
-    user = Factory(:user, :password => 'foobar')
+    user = FactoryBot.create(:user, :password => 'foobar')
     user.activate!
     user.suspend!
 
@@ -53,8 +53,8 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   end
 
   test 'authenticate authenticates user by username in buyer side' do
-    buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
-    user          = Factory(:user, :account  => buyer_account, :password => 'kangaroo')
+    buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
+    user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'kangaroo')
 
     user.activate!
 
@@ -64,8 +64,8 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
 
 
   test 'authenticate authenticates user by email in buyer domain' do
-    buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
-    user          = Factory(:user, :account  => buyer_account, :password => 'kangaroo')
+    buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
+    user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'kangaroo')
     user.activate!
 
     assert_equal user, @strategy.authenticate(:username => user.email,
@@ -73,8 +73,8 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   end
 
   test 'authenticate returns nil if the account of the user is pending' do
-    account = Factory(:account, :provider_account => @provider_account)
-    user    = Factory(:user, :account => account, :password => 'foobar')
+    account = FactoryBot.create(:account, :provider_account => @provider_account)
+    user    = FactoryBot.create(:user, :account => account, :password => 'foobar')
 
     user.activate!
     account.make_pending!
@@ -84,8 +84,8 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   end
 
   test 'authenticate returns nil if the account of the user is rejected' do
-    account = Factory(:account, :provider_account => @provider_account)
-    user    = Factory(:user, :account => account, :password => 'foobar')
+    account = FactoryBot.create(:account, :provider_account => @provider_account)
+    user    = FactoryBot.create(:user, :account => account, :password => 'foobar')
 
     user.activate!
     account.reject!
@@ -95,8 +95,8 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
   end
 
   test 'authenticate authenticates user with approved account' do
-    account = Factory(:account, :provider_account => @provider_account)
-    user    = Factory(:user, :account => account, :password => 'foobar')
+    account = FactoryBot.create(:account, :provider_account => @provider_account)
+    user    = FactoryBot.create(:user, :account => account, :password => 'foobar')
 
     user.activate!
 
@@ -106,13 +106,13 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
 
   test 'authenticates provider side' do
     provider_strategy = Authentication::Strategy::Internal.new(@provider_account, true)
-    user = Factory(:user, :account  => @provider_account,
+    user = FactoryBot.create(:user, :account  => @provider_account,
                           :username => 'dave',
                           :password => 'kangaroo')
 
-    account = Factory(:account, :provider_account => @provider_account)
+    account = FactoryBot.create(:account, :provider_account => @provider_account)
     buyer_pass = 'foobar'
-    buyer_user    = Factory(:user, :account => account, :password => buyer_pass)
+    buyer_user    = FactoryBot.create(:user, :account => account, :password => buyer_pass)
 
     user.activate!
     buyer_user.activate!

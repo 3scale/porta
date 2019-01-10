@@ -9,7 +9,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
     @provider_account.settings.allow_finance!
     @provider_account.settings.show_finance!
 
-    @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+    @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
     @buyer_account.buy!(plan)
 
     login_buyer @buyer_account
@@ -136,7 +136,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
   end
 
   def create_provider_account
-    provider_account = FactoryGirl.create(:provider_with_billing)
+    provider_account = FactoryBot.create(:provider_with_billing)
 
     provider_account.gateway_setting.attributes = {
       gateway_type: :ogone,
@@ -144,7 +144,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
     } # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
     provider_account.gateway_setting.save!(validate: false) # We cannot use update_columns wit Oracle
 
-    plan = Factory(:application_plan, :issuer => provider_account.default_service)
+    plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service)
 
     [provider_account, plan]
   end

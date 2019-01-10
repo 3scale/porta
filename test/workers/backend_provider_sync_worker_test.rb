@@ -4,7 +4,7 @@ require 'test_helper'
 
 class BackendProviderSyncWorkerTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
   end
 
   def test_provider_sync

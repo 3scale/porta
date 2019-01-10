@@ -55,7 +55,7 @@ Given /^(topic "[^"]*") has (\d+) posts$/ do |topic, number|
   if topic.posts.count > number
     topic.posts[number..-1].each(&:destroy)
   elsif topic.posts.count < number
-    (number - topic.posts.count).times { Factory(:post, :topic => topic) }
+    (number - topic.posts.count).times { FactoryBot.create(:post, :topic => topic) }
   end
 end
 
@@ -72,12 +72,12 @@ Then /^(topic "[^"]*") should not have post "([^"]*)"$/ do |topic, body|
 end
 
 Given /^a post "([^"]*)" under (topic "[^"]*")$/ do |body, topic|
-  Factory(:post, :user => topic.user, :topic => topic, :body => body)
+  FactoryBot.create(:post, :user => topic.user, :topic => topic, :body => body)
 end
 
 Given /^(user "[^"]*") posted "([^"]*)" (today|yesterday) under (topic "[^"]*")$/ do |user, body, time, topic|
   Timecop.travel(Chronic.parse(time)) do
-    Factory(:post, :user => user, :topic => topic, :body => body)
+    FactoryBot.create(:post, :user => user, :topic => topic, :body => body)
   end
 end
 
@@ -86,7 +86,7 @@ Given /^(the forum of "[^"]*") has the following posts:$/ do |forum, table|
     topic = forum.topics.find_by_title!(hash['Topic'])
     user  = User.find_by_username!(hash['User'])
 
-    Factory(:post, :user => user, :topic => topic, :body => hash['Body'])
+    FactoryBot.create(:post, :user => user, :topic => topic, :body => hash['Body'])
   end
 end
 

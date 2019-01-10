@@ -14,13 +14,13 @@ module PlanHelpers
 
     master_plans = %w[base plus power1M power2M power3M power5M pro3M pro5M pro10M pro20M enterprise]
     plan = if master_plans.include? options[:name]
-             Factory(type.to_s + '_plan',
+             FactoryBot.create(type.to_s + '_plan',
                      :name => options[:name],
                      :issuer => issuer,
                      :cost_per_month => options[:cost],
                      :system_name => options[:name])
            else
-             Factory(type.to_s + '_plan',
+             FactoryBot.create(type.to_s + '_plan',
                      :name => options[:name],
                      :issuer => issuer,
                      :cost_per_month => options[:cost])

@@ -1,8 +1,5 @@
 # we want to audit created_at field
-module Audited
-
-  @ignored_attributes= %w(lock_version updated_at created_on updated_on)
-end
+Audited.ignored_attributes = %w(lock_version updated_at created_on updated_on)
 
 module AuditHacks
   extend ActiveSupport::Concern
@@ -41,12 +38,14 @@ module AuditHacks
   end
 
   def create_or_update
-    if synchronous
-      super
-    elsif !enqueued
-      sweeper.before_create(self)
-      run_after_commit(:enqueue_job)
-      self.enqueued = true
+    Audited.audit_class.as_user(User.current) do
+      if synchronous
+        super
+      elsif !enqueued
+        run_callbacks :create
+        run_after_commit(:enqueue_job)
+        self.enqueued = true
+      end
     end
   end
 
@@ -54,12 +53,9 @@ module AuditHacks
     AuditedWorker.perform_async(attributes)
   end
 
-  def sweeper
-    Audited::Sweeper.instance
-  end
 end
 
-Audited.audit_class.name.constantize.class_eval do
+Audited.audit_class.class_eval do
   include AuditHacks
 end
 
@@ -71,7 +67,7 @@ module AuditedHacks
 
   module ClassMethods
 
-    def audited options = {}
+    def audited(options = {})
       super
 
       self.disable_auditing if Rails.env.test?
@@ -102,6 +98,10 @@ module AuditedHacks
   end
 
   module InstanceMethods
+
+    def auditing_enabled?
+      auditing_enabled
+    end
 
     private
 
@@ -137,7 +137,9 @@ module AuditedHacks
   end
 end
 
-::ActiveRecord::Base.send :include, AuditedHacks
+::ActiveRecord::Base.class_eval do
+  include AuditedHacks
+end
 
 # This fixes issues with overloading current_user in our controllers
 Audited::Sweeper.prepend(Module.new do

@@ -7,12 +7,12 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     # TODO: use plain ruby objects and include the Logic::PlanChanges
     # into them
-    @plan = Factory(:application_plan, name: 'Old plan')
-    @new_plan = Factory(:application_plan, issuer: @plan.issuer, name: 'Better plan')
-    @new_paid_plan = Factory(:application_plan, issuer: @plan.issuer, name: 'Better plan', :cost_per_month => 3)
+    @plan = FactoryBot.create(:application_plan, name: 'Old plan')
+    @new_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'Better plan')
+    @new_paid_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'Better plan', :cost_per_month => 3)
     @new_plan.publish!
 
-    @app = Factory(:cinstance, plan: @plan)
+    @app = FactoryBot.create(:cinstance, plan: @plan)
     ActionMailer::Base.deliveries = []
   end
 
@@ -112,7 +112,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     Accounts::AccountPlanChangeRequestedEvent.expects(:create)
 
-    assert @app.buyer_changes_plan!(FactoryGirl.create(:account_plan))
+    assert @app.buyer_changes_plan!(FactoryBot.create(:account_plan))
   end
 
   def test_request_application_plan_change_action
@@ -120,7 +120,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     Applications::ApplicationPlanChangeRequestedEvent.expects(:create)
 
-    assert @app.buyer_changes_plan!(FactoryGirl.create(:application_plan))
+    assert @app.buyer_changes_plan!(FactoryBot.create(:application_plan))
   end
 
   def test_request_service_plan_change_actions
@@ -128,7 +128,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
     Services::ServicePlanChangeRequestedEvent.expects(:create)
 
-    assert @app.buyer_changes_plan!(FactoryGirl.create(:service_plan))
+    assert @app.buyer_changes_plan!(FactoryBot.create(:service_plan))
   end
 
   private

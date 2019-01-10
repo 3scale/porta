@@ -3,7 +3,7 @@ require 'test_helper'
 class AccountMailerTest < ActionMailer::TestCase
 
   def setup
-    @account = FactoryGirl.create(:buyer_account)
+    @account = FactoryBot.create(:buyer_account)
   end
 
   test 'send mails' do
@@ -18,7 +18,7 @@ class AccountMailerTest < ActionMailer::TestCase
       ThreeScale.config.redhat_customer_portal.stubs(assign_entitlements_email: 'assign.entitlements@example.com')
       ThreeScale.config.redhat_customer_portal.stubs(revoke_entitlements_email: 'revoke.entitlements@example.com')
 
-      @service = FactoryGirl.create(:service, account: master_account)
+      @service = FactoryBot.create(:service, account: master_account)
 
       account_data = {
         org_name: 'Fake Provider',
@@ -33,15 +33,15 @@ class AccountMailerTest < ActionMailer::TestCase
         billing_address_phone: '+123 456 789',
         finance_support_email: 'john.doe@fake.example.com'
       }
-      @account = FactoryGirl.create(:simple_provider, account_data)
+      @account = FactoryBot.create(:simple_provider, account_data)
 
-      FactoryGirl.create(:simple_admin, account: @account, username: 'john_doe')
+      FactoryBot.create(:simple_admin, account: @account, username: 'john_doe')
 
-      @invoice = FactoryGirl.create(:invoice, issued_on: Time.parse('2017-11-16'))
+      @invoice = FactoryBot.create(:invoice, issued_on: Time.parse('2017-11-16'))
     end
 
     def test_support_entitlements_assigned
-      @account.buy! Factory(:application_plan, issuer: @service, cost_per_month: 50)
+      @account.buy! FactoryBot.create(:application_plan, issuer: @service, cost_per_month: 50)
 
       mail = AccountMailer.support_entitlements_assigned(@account, effective_since: @invoice.issued_on, invoice_id: @invoice.id)
 
@@ -72,7 +72,7 @@ class AccountMailerTest < ActionMailer::TestCase
     end
 
     def test_support_entitlements_trial_plan
-      trial_plan = Factory(:application_plan, issuer: @service)
+      trial_plan = FactoryBot.create(:application_plan, issuer: @service)
       trial_plan.plan_rule.metadata = {trial: true}
       @account.buy! trial_plan
 

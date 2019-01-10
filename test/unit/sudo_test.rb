@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SudoTest < ActiveSupport::TestCase
   def setup
-    @user = FactoryGirl.create(:simple_user)
+    @user = FactoryBot.create(:simple_user)
     @user.activate!
     user_session = UserSession.create(user_id: @user.id)
     @sudo = Sudo.new(return_path: '/', user_session: user_session)

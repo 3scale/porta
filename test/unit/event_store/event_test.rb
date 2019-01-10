@@ -18,7 +18,7 @@ class EventStore::EventTest < ActiveSupport::TestCase
   end
 
   def test_provider_id_from_metadata
-    provider = FactoryGirl.create :simple_provider
+    provider = FactoryBot.create :simple_provider
 
     event = EventStore::Event.new(
       stream:     'dummie',
@@ -33,7 +33,7 @@ class EventStore::EventTest < ActiveSupport::TestCase
   end
 
   def test_provider
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     event    = EventStore::Event.new(
       stream:     'dummie',
       event_type: 'Dummie',
@@ -61,7 +61,7 @@ class EventStore::EventTest < ActiveSupport::TestCase
   end
 
   def test_not_utf8_data
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     event    = EventStore::Event.new(
       stream:      'dummie',
       event_type:  'Dummie',
@@ -77,12 +77,12 @@ class EventStore::EventTest < ActiveSupport::TestCase
 
   def test_stale
     Timecop.freeze(EventStore::Event::TTL.ago)
-    FactoryGirl.create(:service_token)
+    FactoryBot.create(:service_token)
     events_number = EventStore::Event.count
     assert events_number.positive?
 
     Timecop.return
-    FactoryGirl.create(:service_token)
+    FactoryBot.create(:service_token)
     assert EventStore::Event.count > events_number
 
     assert_equal events_number, EventStore::Event.stale.count

@@ -3,8 +3,8 @@ require 'test_helper'
 class CMS::SectionTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory(:provider_account)
-    @buyer = Factory(:buyer_account)
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account)
     @root = @provider.sections.first
   end
 
@@ -15,7 +15,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
   end
 
   test 'partial_path should be normalized' do
-    @section = Factory.build(:cms_section, :parent => @root, :partial_path => " do whatever / you want ")
+    @section = FactoryBot.build(:cms_section, :parent => @root, :partial_path => " do whatever / you want ")
     assert @section.invalid?, "section should be valid"
     assert_equal "do-whatever/you-want", @section.partial_path
     assert_valid @section
@@ -46,8 +46,8 @@ class CMS::SectionTest < ActiveSupport::TestCase
   test "destroy moves children up" do
     child = @root.children.create!(:title => 'child', :provider => @provider)
     gchild = child.children.create!(:title => 'gchild', :provider => @provider)
-    page = Factory(:cms_page, :section => child, :provider => @provider)
-    bpage = Factory(:cms_builtin_page, :section => child, :provider => @provider)
+    page = FactoryBot.create(:cms_page, :section => child, :provider => @provider)
+    bpage = FactoryBot.create(:cms_builtin_page, :section => child, :provider => @provider)
     child.destroy
 
     assert_contains @root.pages,  page
@@ -102,7 +102,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
   end
 
   test 'provider deletion cascades to sections' do
-    @provider2 = Factory(:provider_account)
+    @provider2 = FactoryBot.create(:provider_account)
     @provider.destroy
     assert_nil CMS::Section.find_by_provider_id(@provider.id)
     assert_not_nil CMS::Section.find_by_provider_id(@provider2.id)

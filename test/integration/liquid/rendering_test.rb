@@ -2,9 +2,9 @@ require 'test_helper'
 
 class Liquid::RenderingTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory(:simple_provider)
-    @buyer = Factory(:simple_buyer, provider_account: @provider)
-    @user = Factory(:simple_user, account: @buyer, role: :admin)
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @user = FactoryBot.create(:simple_user, account: @buyer, role: :admin)
     @user.activate!
 
     login_buyer(@buyer)

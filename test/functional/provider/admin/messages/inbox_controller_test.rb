@@ -3,12 +3,12 @@ require 'test_helper'
 class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCase
 
   def setup
-    account  = FactoryGirl.create(:provider_account)
-    @message = FactoryGirl.create(:received_message, receiver: account)
+    account  = FactoryBot.create(:provider_account)
+    @message = FactoryBot.create(:received_message, receiver: account)
 
     host! account.self_domain
 
-    @member = FactoryGirl.create(:member)
+    @member = FactoryBot.create(:member)
     account.users << @member
     @admin = account.admins.first
   end

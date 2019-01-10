@@ -3,7 +3,7 @@ require 'test_helper'
 class ChangeApplicationPlanTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     login_provider @provider
 
@@ -11,10 +11,10 @@ class ChangeApplicationPlanTest < ActionDispatch::IntegrationTest
   end
 
   def test_change_plan
-    service = FactoryGirl.create(:service, account: @provider)
-    plan_1  = FactoryGirl.create(:application_plan, service: service)
-    plan_2  = FactoryGirl.create(:application_plan, service: service)
-    app     = FactoryGirl.create(:cinstance, service: service, plan: plan_1)
+    service = FactoryBot.create(:service, account: @provider)
+    plan_1  = FactoryBot.create(:application_plan, service: service)
+    plan_2  = FactoryBot.create(:application_plan, service: service)
+    app     = FactoryBot.create(:cinstance, service: service, plan: plan_1)
 
     assert_equal plan_1.id, app.plan_id
     assert_equal 1, plan_1.contracts_count

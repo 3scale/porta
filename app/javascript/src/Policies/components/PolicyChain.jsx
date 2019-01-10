@@ -75,19 +75,19 @@ const PolicyChain = ({chain, visible, actions}: Props) => {
   }
 
   return (
-      <section className="PolicyChain">
-        <header className={(visible ? 'PolicyChain-header' : 'is-hidden PolicyChain-header')}>
-          <h2 className="PolicyChain-title">Policy Chain</h2>
-          <AddPolicyButton openPolicyRegistry={actions.openPolicyRegistry} />
-        </header>
-        <SortableList
-          items={chain}
-          visible={visible}
-          onSortEnd={onSortEnd}
-          useDragHandle={true}
-          editPolicy={actions.editPolicy}
-        />
-      </section>
+    <section className="PolicyChain">
+      <header className={(visible ? 'PolicyChain-header' : 'is-hidden PolicyChain-header')}>
+        <h2 className="PolicyChain-title">Policy Chain</h2>
+        <AddPolicyButton openPolicyRegistry={actions.openPolicyRegistry} />
+      </header>
+      <SortableList
+        items={chain}
+        visible={visible}
+        onSortEnd={onSortEnd}
+        useDragHandle={true}
+        editPolicy={actions.editPolicy}
+      />
+    </section>
   )
 }
 

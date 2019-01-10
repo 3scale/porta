@@ -3,7 +3,7 @@ require 'test_helper'
 class PartnerTest < ActiveSupport::TestCase
 
   test 'should be valid' do
-    partner = FactoryGirl.build(:partner)
+    partner = FactoryBot.build(:partner)
     assert partner.valid?
     assert partner.save
   end
@@ -17,27 +17,27 @@ class PartnerTest < ActiveSupport::TestCase
   end
 
   test 'has many providers' do
-    partner = FactoryGirl.create(:partner)
-    provider = FactoryGirl.create(:simple_provider)
+    partner = FactoryBot.create(:partner)
+    provider = FactoryBot.create(:simple_provider)
     partner.providers << provider
     assert_equal [provider], partner.providers
   end
 
   test 'has many applicatio_plans' do
-    partner = FactoryGirl.create(:partner)
-    application_plan = FactoryGirl.create(:application_plan)
+    partner = FactoryBot.create(:partner)
+    application_plan = FactoryBot.create(:application_plan)
     partner.application_plans << application_plan
     assert_equal [application_plan], partner.application_plans
   end
 
   test 'has signup_type' do
-    partner = FactoryGirl.build_stubbed(:partner, system_name: 'some-name')
+    partner = FactoryBot.build_stubbed(:partner, system_name: 'some-name')
 
     assert_equal 'partner:some-name', partner.signup_type
   end
 
   test 'can manage users?' do
-    partner = FactoryGirl.build_stubbed(:partner)
+    partner = FactoryBot.build_stubbed(:partner)
 
     partner.system_name = 'heroku'
     assert_equal false, partner.can_manage_users?

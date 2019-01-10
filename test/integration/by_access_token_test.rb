@@ -3,7 +3,7 @@ require 'test_helper'
 class ApiAuthentication::ByAccessTokenTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
 
     login_provider @provider
 
@@ -11,9 +11,9 @@ class ApiAuthentication::ByAccessTokenTest < ActionDispatch::IntegrationTest
   end
 
   def test_index_with_access_token
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners', 'finance'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
-    provider_2 = FactoryGirl.create(:simple_provider)
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners', 'finance'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    provider_2 = FactoryBot.create(:simple_provider)
 
     # none token
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)

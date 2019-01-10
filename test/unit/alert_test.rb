@@ -12,8 +12,8 @@ class AlertTest < ActiveSupport::TestCase
   should validate_numericality_of(:utilization)
 
   def test_by_level
-    FactoryGirl.create(:limit_alert, level: 50)
-    FactoryGirl.create(:limit_alert, level: 80)
+    FactoryBot.create(:limit_alert, level: 50)
+    FactoryBot.create(:limit_alert, level: 80)
 
     alerts = Alert.by_level(80)
     assert_kind_of Alert::ActiveRecord_Relation, alerts

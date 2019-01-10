@@ -7,13 +7,13 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     host! @provider.admin_domain
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
     @service = @provider.first_service!
-    @app_plan = Factory :application_plan, :issuer => @service
+    @app_plan = FactoryBot.create :application_plan, :issuer => @service
     @app_plan.publish!
     @buyer.buy! @app_plan
 
@@ -24,8 +24,8 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
   test 'index (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 
     get(admin_api_account_application_referrer_filters_path(@buyer, app))

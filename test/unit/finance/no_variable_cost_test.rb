@@ -3,9 +3,9 @@ require 'test_helper'
 class Finance::NoVariableCostClass < ActiveSupport::TestCase
 
   def test_bill_for_variable
-    contract = FactoryGirl.build_stubbed(:contract)
-    account  = FactoryGirl.build_stubbed(:simple_account)
-    app_plan = FactoryGirl.build_stubbed(:application_plan)
+    contract = FactoryBot.build_stubbed(:contract)
+    account  = FactoryBot.build_stubbed(:simple_account)
+    app_plan = FactoryBot.build_stubbed(:application_plan)
 
     contract.stubs(:provider_account).returns(account)
     account.stubs(:provider_can_use?).returns(true)

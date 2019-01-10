@@ -5,7 +5,7 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
   def setup
     super
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
     @request.host = @provider.domain
   end
 
@@ -16,8 +16,8 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
   context "buyer without live cinstances" do
     setup do
-      @buyer = Factory(:buyer_account, :provider_account => @provider)
-      @app_plan = Factory(:application_plan, :issuer => @provider.default_service)
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+      @app_plan = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
       app = @buyer.buy! @app_plan
       app.suspend!
 
@@ -32,8 +32,8 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
   context "resources for buyers" do
     setup do
-      @buyer = Factory(:buyer_account, :provider_account => @provider)
-      @app_plan = Factory(:application_plan, :issuer => @provider.default_service)
+      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+      @app_plan = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
       @live_app1 = @buyer.buy! @app_plan
       @hits = @provider.default_service.metrics.first
 
@@ -42,8 +42,8 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
     context "#index action" do
       setup do
-        app_plan2 = Factory(:application_plan, :issuer => @provider.default_service)
-        app_plan3 = Factory(:application_plan, :issuer => @provider.default_service)
+        app_plan2 = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
+        app_plan3 = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
         @live_app2 = @buyer.buy! app_plan2
         cinstance = @buyer.buy! app_plan3
         cinstance.suspend!
@@ -53,7 +53,7 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
         get :index
 
         doc = Nokogiri::HTML.parse(response.body)
-        assert_equal [@live_app1, @live_app2], @controller.instance_variable_get('@cinstances')
+        assert_equal [@live_app1, @live_app2], assigns(:applications)
         assert_equal @live_app1.id.to_s,  doc.css('#client-name[data-client]').attr('data-client').value
       end
 
@@ -76,11 +76,11 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
     context "#metrics action" do
       setup do
-        disabled_metric = Factory(:metric, :service => @provider.default_service)
+        disabled_metric = FactoryBot.create(:metric, :service => @provider.default_service)
         disabled_metric.disable_for_plan @app_plan
         assert disabled_metric.disabled_for_plan?(@app_plan) #being paranoid about initial state
 
-        hidden_metric = Factory(:metric, :service => @provider.default_service)
+        hidden_metric = FactoryBot.create(:metric, :service => @provider.default_service)
         hidden_metric.toggle_visible_for_plan(@app_plan)
         assert !hidden_metric.visible_in_plan?(@app_plan) #being paranoid about initial state
       end
