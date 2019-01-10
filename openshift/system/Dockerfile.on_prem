@@ -31,6 +31,7 @@ ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
 ADD Gemfile* ./
 ADD Rakefile ./
+ADD .ruby-version ./
 
 COPY openshift/system/contrib/scl_enable ./etc/
 
