@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 resource 'AccessToken' do
   let(:resource) { FactoryBot.build(:access_token) }
