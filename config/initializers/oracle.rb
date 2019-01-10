@@ -139,4 +139,20 @@ if System::Database.oracle?
     end
   end)
 
+  ActiveRecord::ConnectionAdapters::OracleEnhanced::SchemaStatements.module_eval do
+    def add_index(table_name, column_name, options = {}) #:nodoc:
+      # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
+      # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
+      index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, options)
+      quoted_table_name = quote_table_name(table_name)
+      quoted_column_name = quote_column_name(index_name)
+      execute "CREATE #{index_type} INDEX #{quoted_column_name} ON #{quoted_table_name} (#{quoted_column_names})#{tablespace} #{index_options}"
+      if index_type == 'UNIQUE' && quoted_column_names !~ /\(.*\)/
+        execute "ALTER TABLE #{quoted_table_name} ADD CONSTRAINT #{quoted_column_name} #{index_type} (#{quoted_column_names}) USING INDEX #{quoted_column_name}"
+      end
+    ensure
+      self.all_schema_indexes = nil
+    end
+  end
+
 end
