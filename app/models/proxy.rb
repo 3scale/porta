@@ -42,7 +42,7 @@ class Proxy < ApplicationRecord
 
   validates :oauth_login_url, format: { without: OAUTH_PARAMS }, length: { maximum: 255 }
 
-  validates :credentials_location, inclusion: { in: %w(headers query), allow_nil: false }
+  validates :credentials_location, inclusion: { in: %w[headers query authorization], allow_nil: false }
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed,
                             numericality: { greater_than_or_equal_to: 200, less_than: 600 }
@@ -319,6 +319,11 @@ class Proxy < ApplicationRecord
        param_name = opts[:original_names] ? x.to_s : send(keys_to_proxy_args[x])
        [ param_name, params[x]  ]
     end.to_h
+  end
+
+  def authorization_credentials
+    params = authentication_params_for_proxy.symbolize_keys
+    params.values_at(:user_key).compact.presence || params.values_at(:app_id, :app_key)
   end
 
   def skip_test_request?

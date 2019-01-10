@@ -7,7 +7,6 @@ import 'moment-range'
 const CHART_TIMESTAMP_FORMAT = 'YYYY-MM-DDTHH:mm:ss'
 
 export class StatsSeries {
-
   constructor (sources) {
     this.sources = sources
   }

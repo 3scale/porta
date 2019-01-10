@@ -21,6 +21,6 @@ class Signup::ImpersonationAdminBuilderTest < ActiveSupport::TestCase
   private
 
   def account
-    @account ||= Factory.build(:account)
+    @account ||= FactoryBot.build(:account)
   end
 end

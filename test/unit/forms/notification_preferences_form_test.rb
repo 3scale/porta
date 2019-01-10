@@ -3,9 +3,9 @@ require 'test_helper'
 class NotificationPreferencesFormTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryGirl.build_stubbed(:simple_provider)
-    buyer     = FactoryGirl.build_stubbed(:simple_buyer, provider_account: @provider)
-    @user     = FactoryGirl.build_stubbed(:simple_user, account: buyer) end
+    @provider = FactoryBot.build_stubbed(:simple_provider)
+    buyer     = FactoryBot.build_stubbed(:simple_buyer, provider_account: @provider)
+    @user     = FactoryBot.build_stubbed(:simple_user, account: buyer) end
 
   def test_initialize
     form = NotificationPreferencesForm.new(@user, @user.notification_preferences)

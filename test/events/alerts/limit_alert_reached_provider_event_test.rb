@@ -3,9 +3,9 @@ require 'test_helper'
 class Alerts::LimitAlertReachedProviderEventTest < ActiveSupport::TestCase
 
   def test_create
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance)
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance)
     cinstance.stubs(:provider_account_id).returns(10)
-    alert     = FactoryGirl.build_stubbed(:limit_alert, id: 2, cinstance: cinstance)
+    alert     = FactoryBot.build_stubbed(:limit_alert, id: 2, cinstance: cinstance)
     event     = Alerts::LimitAlertReachedProviderEvent.create(alert)
 
     assert event

@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 class MessageTest < ActiveSupport::TestCase
 
   def test_not_system_for_provider
-    provider = FactoryGirl.create(:simple_provider)
-    buyer    = FactoryGirl.create(:simple_buyer, provider_account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    buyer    = FactoryBot.create(:simple_buyer, provider_account: provider)
     assert_equal 0, provider.messages.reload.not_system_for_provider.count
 
     Message.create!(sender: provider, to: [buyer], subject: '1', body: '1')
@@ -18,8 +18,8 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   def test_send_notifications
-    provider = FactoryGirl.create(:simple_provider)
-    buyer    = FactoryGirl.create(:simple_buyer, provider_account: provider)
+    provider = FactoryBot.create(:simple_provider)
+    buyer    = FactoryBot.create(:simple_buyer, provider_account: provider)
 
     message  = Message.create!(sender: buyer, to: [provider], subject: '1', body: '2')
     Messages::MessageReceivedEvent.expects(:create).with(message, instance_of(MessageRecipient)).once
@@ -33,11 +33,11 @@ class MessageTest < ActiveSupport::TestCase
   test 'notifies recipients with email' do
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
-    sender = FactoryGirl.create(:simple_provider)
-    recipients = [ FactoryGirl.create(:simple_buyer, provider_account: sender), FactoryGirl.create(:simple_buyer, provider_account: sender)]
+    sender = FactoryBot.create(:simple_provider)
+    recipients = [ FactoryBot.create(:simple_buyer, provider_account: sender), FactoryBot.create(:simple_buyer, provider_account: sender)]
 
     recipients.each do |account|
-      FactoryGirl.create(:simple_admin, account: account)
+      FactoryBot.create(:simple_admin, account: account)
     end
 
     ActionMailer::Base.deliveries = []
@@ -59,7 +59,7 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   test 'keeps subject' do
-    message = FactoryGirl.create(:message)
+    message = FactoryBot.create(:message)
 
     message.update_column(:subject, 'foobar')
 
@@ -70,7 +70,7 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   test 'can search by subject' do
-    message = FactoryGirl.create(:message, subject: 'some unique subject value')
+    message = FactoryBot.create(:message, subject: 'some unique subject value')
 
     scope = Message.where(subject: message.subject)
 
@@ -81,13 +81,13 @@ class MessageTest < ActiveSupport::TestCase
   test 'changes the from header if it s set in the provider' do
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
-    sender = FactoryGirl.create(:provider_account, from_email: 'fake_email@example.com')
+    sender = FactoryBot.create(:provider_account, from_email: 'fake_email@example.com')
 
-    recipients = [FactoryGirl.create(:simple_buyer, provider_account: sender),
-                  FactoryGirl.create(:simple_buyer, provider_account: sender)]
+    recipients = [FactoryBot.create(:simple_buyer, provider_account: sender),
+                  FactoryBot.create(:simple_buyer, provider_account: sender)]
 
     recipients.each do |account|
-      FactoryGirl.create(:simple_admin, account: account)
+      FactoryBot.create(:simple_admin, account: account)
     end
 
     ActionMailer::Base.deliveries = []
@@ -106,8 +106,8 @@ class MessageTest < ActiveSupport::TestCase
 
     Rails.env.stubs(:test?).returns(false)
 
-    message = FactoryGirl.create(:message)
-    acc1, acc2 = FactoryGirl.create(:simple_account), FactoryGirl.create(:simple_account)
+    message = FactoryBot.create(:message)
+    acc1, acc2 = FactoryBot.create(:simple_account), FactoryBot.create(:simple_account)
 
     message.to = acc1
     message.bcc = acc2
@@ -147,37 +147,37 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'A message' do
      setup do
-       @account = FactoryGirl.create(:simple_account)
+       @account = FactoryBot.create(:simple_account)
      end
 
      should 'be valid with a set of valid attributes' do
-       message = FactoryGirl.build(:message, :sender => @account)
+       message = FactoryBot.build(:message, :sender => @account)
        assert message.valid?
      end
 
      should 'require a sender_id' do
-       message = FactoryGirl.build(:message, :sender => nil)
+       message = FactoryBot.build(:message, :sender => nil)
        assert !message.valid?
        assert_equal 1, message.errors[:sender_id].size
      end
 
      should 'not require a subject' do
-       message = FactoryGirl.build(:message, :subject => nil, :sender => @account)
+       message = FactoryBot.build(:message, :subject => nil, :sender => @account)
        assert message.valid?
      end
 
      should 'not require a body' do
-       message = FactoryGirl.build(:message, :body => nil, :sender => @account)
+       message = FactoryBot.build(:message, :body => nil, :sender => @account)
        assert message.valid?
      end
    end
 
    context 'message before being created' do
      setup do
-       @sender   = FactoryGirl.create(:simple_provider)
-       @receiver = FactoryGirl.create(:simple_buyer, provider_account: @sender)
+       @sender   = FactoryBot.create(:simple_provider)
+       @receiver = FactoryBot.create(:simple_buyer, provider_account: @sender)
 
-       @message = FactoryGirl.build(:message, sender: @sender)
+       @message = FactoryBot.build(:message, sender: @sender)
      end
 
      should 'be enqueueable to background job queue' do
@@ -227,10 +227,10 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message after being created' do
      setup do
-       @sender = FactoryGirl.create(:simple_account)
-       @receiver = FactoryGirl.create(:simple_account)
+       @sender = FactoryBot.create(:simple_account)
+       @receiver = FactoryBot.create(:simple_account)
 
-       @message = FactoryGirl.create(:message, sender: @sender)
+       @message = FactoryBot.create(:message, sender: @sender)
      end
 
      should "not be enqued to background job queue" do
@@ -280,11 +280,11 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message with recipients' do
      setup do
-       sender = FactoryGirl.create(:simple_provider)
-       @erich = FactoryGirl.create(:simple_buyer, provider_account: sender)
-       @richard = FactoryGirl.create(:simple_buyer, provider_account: sender)
-       @ralph = FactoryGirl.create(:simple_buyer, provider_account: sender)
-       @message = FactoryGirl.create(:message,
+       sender = FactoryBot.create(:simple_provider)
+       @erich = FactoryBot.create(:simple_buyer, provider_account: sender)
+       @richard = FactoryBot.create(:simple_buyer, provider_account: sender)
+       @ralph = FactoryBot.create(:simple_buyer, provider_account: sender)
+       @message = FactoryBot.create(:message,
          :to => @erich,
          :cc => @richard,
          :bcc => @ralph,
@@ -315,7 +315,7 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message hidden' do
      setup do
-       @message = FactoryGirl.create(:message, :sender => FactoryGirl.create(:simple_account))
+       @message = FactoryBot.create(:message, :sender => FactoryBot.create(:simple_account))
        @message.hide!
      end
 
@@ -330,7 +330,7 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message unhidden' do
      setup do
-       @message = FactoryGirl.create(:message, :sender => FactoryGirl.create(:simple_account))
+       @message = FactoryBot.create(:message, :sender => FactoryBot.create(:simple_account))
        @message.hide!
        @message.unhide!
      end
@@ -346,14 +346,14 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message forwarded' do
      setup do
-       @sender = FactoryGirl.create(:simple_account)
-       original_message = FactoryGirl.create(:message,
+       @sender = FactoryBot.create(:simple_account)
+       original_message = FactoryBot.create(:message,
          :subject => 'Hello',
          :body => 'How are you?',
          :sender => @sender,
-         :to => FactoryGirl.create(:simple_account),
-         :cc => FactoryGirl.create(:simple_account),
-         :bcc => FactoryGirl.create(:simple_account)
+         :to => FactoryBot.create(:simple_account),
+         :cc => FactoryBot.create(:simple_account),
+         :bcc => FactoryBot.create(:simple_account)
                                  )
 
        @message = original_message.forward
@@ -394,12 +394,12 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message replied' do
      setup do
-       @admin = FactoryGirl.create(:simple_account)
-       @erich = FactoryGirl.create(:simple_account)
-       @richard = FactoryGirl.create(:simple_account)
-       @ralph = FactoryGirl.create(:simple_account)
+       @admin = FactoryBot.create(:simple_account)
+       @erich = FactoryBot.create(:simple_account)
+       @richard = FactoryBot.create(:simple_account)
+       @ralph = FactoryBot.create(:simple_account)
 
-       original_message = FactoryGirl.create(:message,
+       original_message = FactoryBot.create(:message,
          :subject => 'Hello',
          :body => "This is first line.\n\nThis is second line.",
          :sender => @admin,
@@ -446,12 +446,12 @@ class MessageTest < ActiveSupport::TestCase
 
    context 'message replied to all' do
      setup do
-       @admin = FactoryGirl.create(:simple_account)
-       @erich = FactoryGirl.create(:simple_account)
-       @richard = FactoryGirl.create(:simple_account)
-       @ralph = FactoryGirl.create(:simple_account)
+       @admin = FactoryBot.create(:simple_account)
+       @erich = FactoryBot.create(:simple_account)
+       @richard = FactoryBot.create(:simple_account)
+       @ralph = FactoryBot.create(:simple_account)
 
-       original_message = FactoryGirl.create(:message,
+       original_message = FactoryBot.create(:message,
          :subject => 'Hello',
          :body => 'How are you?',
          :sender => @admin,
@@ -498,9 +498,9 @@ class MessageTest < ActiveSupport::TestCase
    context 'message as a class' do
      setup do
        Message.delete_all
-       @hidden_message = FactoryGirl.create(:message, :hidden_at => Time.now,
-         :sender => FactoryGirl.create(:simple_account))
-       @visible_message = FactoryGirl.create(:message, :sender => FactoryGirl.create(:simple_account))
+       @hidden_message = FactoryBot.create(:message, :hidden_at => Time.now,
+         :sender => FactoryBot.create(:simple_account))
+       @visible_message = FactoryBot.create(:message, :sender => FactoryBot.create(:simple_account))
      end
 
      should 'include only visible messages in visible scope' do

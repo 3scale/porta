@@ -3,7 +3,7 @@ require 'test_helper'
 class Messages::DestroyServiceTest < ActiveSupport::TestCase
 
   def setup
-    @message  = FactoryGirl.create(:received_message)
+    @message  = FactoryBot.create(:received_message)
     @messages = MessageRecipient.where(id: @message.id)
   end
 

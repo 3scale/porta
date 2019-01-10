@@ -6,23 +6,23 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     host! @provider.admin_domain
 
     @service = @provider.default_service
 
-    @buyer = Factory(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
     @buyer.bought_service_contracts.create! :plan => @service.service_plans.first
 
-    @app_plan = Factory :application_plan, :issuer => @service
+    @app_plan = FactoryBot.create :application_plan, :issuer => @service
     @app_plan.publish!
     @buyer.buy! @app_plan
 
-    @published_app_plan = Factory :application_plan, :issuer => @service
+    @published_app_plan = FactoryBot.create :application_plan, :issuer => @service
     @published_app_plan.publish!
-    @hidden_app_plan = Factory :application_plan, :issuer => @service
+    @hidden_app_plan = FactoryBot.create :application_plan, :issuer => @service
 
     @buyer.reload
 
@@ -43,12 +43,12 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'index states' do
     #TODO: dry these setups outta the examples
-    pending_plan = Factory :application_plan, :issuer => @service, :approval_required => true
+    pending_plan = FactoryBot.create :application_plan, :issuer => @service, :approval_required => true
     @buyer.buy! pending_plan
     @buyer.reload
     assert @buyer.bought_cinstances.find_by_plan_id(pending_plan.id).pending?
 
-    suspend_plan = Factory :application_plan, :issuer => @service, :approval_required => true
+    suspend_plan = FactoryBot.create :application_plan, :issuer => @service, :approval_required => true
     @buyer.buy! suspend_plan
     @buyer.reload
     @buyer.bought_cinstances.last.accept!

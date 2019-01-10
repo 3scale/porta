@@ -27,12 +27,13 @@ module ThreeScale
     ].freeze
 
     DAILY = %w[
-      Audited::Adapters::ActiveRecord::Audit.delete_old
+      Audited.audit_class.delete_old
       LogEntry.delete_old
       Cinstance.notify_about_expired_trial_periods
       Pdf::Dispatch.daily
       FindAndDeleteScheduledAccountsWorker.perform_async
       DeleteProvidedAccessTokensWorker.perform_async
+      DestroyAllDeletedObjectsWorker.perform_async(Service.to_s)
     ].freeze
 
     BILLING = %w[

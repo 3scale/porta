@@ -4,17 +4,17 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com')
-    @buyer = FactoryGirl.create(:simple_buyer, provider_account: @provider, org_legaladdress: 'Null street')
+    @provider = FactoryBot.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com')
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, org_legaladdress: 'Null street')
 
-    @invoice_one = FactoryGirl.create(:invoice,
+    @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,
                                       provider_account: @provider,
                                       period: Month.new(Time.utc(2009, 6, 1)),
                                       created_at: Time.utc(2009, 6, 2))
 
-    @buyer2 =  FactoryGirl.create(:simple_buyer, provider_account: @provider)
-    @invoice_two = FactoryGirl.create(:invoice,
+    @buyer2 =  FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @invoice_two = FactoryBot.create(:invoice,
                                       provider_account: @provider,
                                       buyer_account: @buyer2,
                                       period: Month.new(Time.utc(1964, 10, 1)),

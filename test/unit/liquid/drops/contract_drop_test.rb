@@ -5,7 +5,7 @@ class Liquid::Drops::ContractDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @contract = FactoryGirl.build_stubbed(:contract)
+    @contract = FactoryBot.build_stubbed(:contract)
     @drop = Drops::Contract.new(@contract)
   end
 
@@ -27,10 +27,10 @@ class Liquid::Drops::ContractDropTest < ActiveSupport::TestCase
   end
 
   should 'returns plan' do
-    @contract.stubs plan: FactoryGirl.build_stubbed(:account_plan)
+    @contract.stubs plan: FactoryBot.build_stubbed(:account_plan)
     assert_kind_of Liquid::Drops::AccountPlan, @drop.plan
 
-    @contract.stubs plan: FactoryGirl.build_stubbed(:plan)
+    @contract.stubs plan: FactoryBot.build_stubbed(:plan)
     assert_kind_of Liquid::Drops::Plan, @drop.plan
   end
 

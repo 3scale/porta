@@ -18,7 +18,7 @@ class SignupWorkerTest < ActiveSupport::TestCase
 
 
   def test_sample_data_worker
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
 
     Sidekiq::Testing.inline! do
       SignupWorker::SampleDataWorker.perform_async(provider.id)
@@ -30,7 +30,7 @@ class SignupWorkerTest < ActiveSupport::TestCase
   end
 
   def test_import_simple_layout_worker
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     assert_equal 0, provider.pages.count
 

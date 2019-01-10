@@ -2,8 +2,8 @@ require 'test_helper'
 
 class Pdf::DispatchTest < ActiveSupport::TestCase
   test 'enqueues report worker' do
-    account = FactoryGirl.create(:simple_provider, state: 'approved')
-    service = FactoryGirl.create(:simple_service, account: account)
+    account = FactoryBot.create(:simple_provider, state: 'approved')
+    service = FactoryBot.create(:simple_service, account: account)
 
     assert_difference PdfReportWorker.jobs.method(:count), 2 do
       Pdf::Dispatch.daily
@@ -15,8 +15,8 @@ class Pdf::DispatchTest < ActiveSupport::TestCase
   end
 
   test 'not enqueue report for deleted services' do
-    account = FactoryGirl.create(:simple_provider, state: 'approved')
-    FactoryGirl.create(:simple_service, account: account, state: 'deleted')
+    account = FactoryBot.create(:simple_provider, state: 'approved')
+    FactoryBot.create(:simple_service, account: account, state: 'deleted')
 
     # Only master is reported
     assert_difference PdfReportWorker.jobs.method(:count), 1 do
@@ -28,8 +28,8 @@ class Pdf::DispatchTest < ActiveSupport::TestCase
   end
 
   test 'not enqueue report for non approved accounts' do
-    account = FactoryGirl.create(:simple_provider, state: 'suspended')
-    FactoryGirl.create(:simple_service, account: account)
+    account = FactoryBot.create(:simple_provider, state: 'suspended')
+    FactoryBot.create(:simple_service, account: account)
 
     # Only master is reported
     assert_difference PdfReportWorker.jobs.method(:count), 1 do

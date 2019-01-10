@@ -4,8 +4,8 @@ require 'test_helper'
 class Provider::ActivationsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
-    @user = FactoryGirl.create(:pending_user, account: @provider)
+    @provider = FactoryBot.create(:provider_account)
+    @user = FactoryBot.create(:pending_user, account: @provider)
 
     host! @provider.admin_domain
   end

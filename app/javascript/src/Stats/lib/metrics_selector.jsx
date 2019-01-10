@@ -29,7 +29,7 @@ export class StatsMetricsSelector extends StatsUI {
             metrics.map(metric =>
               [
                 <li><a onclick={ ev => this.selectMetric(metric)}
-                       className={`StatsSelector-item ${metric.isMethod ? 'is-children' : ''} ${selectedMetric.name === metric.name ? 'is-selected' : ''}`}
+                  className={`StatsSelector-item ${metric.isMethod ? 'is-children' : ''} ${selectedMetric.name === metric.name ? 'is-selected' : ''}`}
                 >{metric.name}
                 </a></li>
               ]
@@ -57,5 +57,4 @@ export class StatsMetricsSelector extends StatsUI {
     this.open = !this.open
     this.refresh()
   }
-
 }

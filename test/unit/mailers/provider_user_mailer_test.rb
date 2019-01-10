@@ -172,11 +172,11 @@ class ProviderUserMailerTest < ActionMailer::TestCase
     end
 
     def create_user
-      FactoryGirl.create(:admin, account: account, first_name: 'Jolly Good', last_name: 'Fellow')
+      FactoryBot.create(:admin, account: account, first_name: 'Jolly Good', last_name: 'Fellow')
     end
 
     def create_account
-      FactoryGirl.create(:provider_account, provider_account: master_account, domain: 'api.monkey.com', org_name: 'Monkey', self_domain: 'monkey-admin.com', from_email: 'api@monkey.com', subdomain: 'monkey')
+      FactoryBot.create(:provider_account, provider_account: master_account, domain: 'api.monkey.com', org_name: 'Monkey', self_domain: 'monkey-admin.com', from_email: 'api@monkey.com', subdomain: 'monkey')
     end
   end
 

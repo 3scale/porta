@@ -3,7 +3,7 @@ require 'test_helper'
 class DeveloperPortal::AccessCodeTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     host! Account.master.admin_domain
   end
 

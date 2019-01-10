@@ -1,18 +1,18 @@
 Given /^a metric "([^"]*)" of (provider "[^"]*")$/ do |metric_name, provider|
-  Factory(:metric, :service => provider.default_service, :system_name => metric_name, :friendly_name => metric_name)
+  FactoryBot.create(:metric, :service => provider.default_service, :system_name => metric_name, :friendly_name => metric_name)
 end
 
 Given /^a metric "([^"]*)" with friendly name "([^"]*)" of (provider "[^"]*")$/ do |name, friendly_name, provider|
-  Factory(:metric, :service => provider.default_service, :system_name => name, :friendly_name => friendly_name)
+  FactoryBot.create(:metric, :service => provider.default_service, :system_name => name, :friendly_name => friendly_name)
 end
 
 Given /^a method "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
-  Factory(:metric, :friendly_name => name, :parent => provider.default_service.metrics.hits)
+  FactoryBot.create(:metric, :friendly_name => name, :parent => provider.default_service.metrics.hits)
 end
 
 Given /^the metrics (with|without) usage limits of (plan "[^"]*"):$/ do |enabled, app_plan, table|
   table.hashes.each do |hash|
-    metric = Factory(:metric, :service => app_plan.issuer, :friendly_name => hash['metric'])
+    metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => hash['metric'])
     if enabled == 'with'
       ul = app_plan.usage_limits.new(:period => "day", :value => 1)
       ul.metric = metric
@@ -22,7 +22,7 @@ Given /^the metrics (with|without) usage limits of (plan "[^"]*"):$/ do |enabled
 end
 
 Given /^the metric "([^"]*)" (with|whithout) usage limit (\d+) of (plan "[^"]*")$/ do |name, enabled, limit, app_plan|
-  metric = Factory(:metric, :service => app_plan.issuer, :friendly_name => name)
+  metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => name)
   if enabled == 'with'
     ul = app_plan.usage_limits.new(:period => "day", :value => limit.to_i)
     ul.metric = metric
@@ -31,7 +31,7 @@ Given /^the metric "([^"]*)" (with|whithout) usage limit (\d+) of (plan "[^"]*")
 end
 
 Given /^the metric "([^"]*)" with all used periods of (plan "[^"]*")$/ do |name, app_plan|
-  metric = FactoryGirl.create(:metric, service: app_plan.issuer, friendly_name: name)
+  metric = FactoryBot.create(:metric, service: app_plan.issuer, friendly_name: name)
 
   UsageLimit::PERIODS.each do |period|
     app_plan.usage_limits.create!(period: period, value: 1, metric: metric)
@@ -185,13 +185,16 @@ And(/^creates metric for that plan$/) do
   page.should have_content 'Metric has been created'
 end
 
-
+Capybara::Node::Element
+Capybara::Selenium::Node
 And(/^makes hits invisible for that plan$/) do
   visit_edit_plan(@plan)
 
   visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
-  assert_equal 'visible', visibility_field['class']
+  assert_equal 'visible', visibility_field[:class]
   visibility_field.click
-  step 'I wait for 1 seconds'
-  assert_equal 'hidden', visibility_field['class']
+  block_and_wait_for_requests_complete
+  # need to query again the page so it does not use the cached object defined before
+  visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
+  assert_equal 'hidden', visibility_field[:class]
 end

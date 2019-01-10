@@ -2,16 +2,16 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Account::DomainsTest < ActiveSupport::TestCase
   test '#domain must be downcase' do
-    account_one = FactoryGirl.create(:simple_provider)
+    account_one = FactoryBot.create(:simple_provider)
     account_one.subdomain = 'FOO'
     refute account_one.valid?
   end
 
   test '#domain must be unique' do
-    account_one = FactoryGirl.create(:simple_provider)
+    account_one = FactoryBot.create(:simple_provider)
 
     ThreeScale.config.stubs(superdomain: 'example.com')
-    account_two = Factory.build(:provider_account)
+    account_two = FactoryBot.build(:provider_account)
     account_two.domain = account_one.domain
 
     refute account_two.valid?
@@ -19,10 +19,10 @@ class Account::DomainsTest < ActiveSupport::TestCase
   end
 
   test '#domain uniqueness ignores deleted' do
-    account_one = FactoryGirl.create(:simple_provider)
+    account_one = FactoryBot.create(:simple_provider)
 
     ThreeScale.config.stubs(superdomain: 'example.com')
-    account_two = Factory.build(:provider_account)
+    account_two = FactoryBot.build(:provider_account)
     account_two.domain = account_one.domain
 
     refute account_two.valid?
@@ -76,7 +76,7 @@ class Account::DomainsTest < ActiveSupport::TestCase
   end
 
   test 'find_by_domain! finds account by domain' do
-    account = Factory(:simple_account, :domain => 'example.net')
+    account = FactoryBot.create(:simple_account, :domain => 'example.net')
     assert_equal account, Account.find_by_domain!('example.net')
   end
 

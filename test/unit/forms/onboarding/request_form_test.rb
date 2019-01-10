@@ -3,7 +3,7 @@ require 'test_helper'
 class Onboarding::RequestFormTest < ActiveSupport::TestCase
 
   def test_path
-    proxy = FactoryGirl.build(:proxy)
+    proxy = FactoryBot.build(:proxy)
     form = Onboarding::RequestForm.new(proxy)
 
     assert_nil form.path
@@ -21,7 +21,7 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
   end
 
   def test_api_base_url
-    proxy = FactoryGirl.build(:proxy)
+    proxy = FactoryBot.build(:proxy)
     form = Onboarding::RequestForm.new(proxy)
 
     assert form.save
@@ -33,7 +33,8 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
   end
 
   def test_test_api!
-    proxy = FactoryGirl.build_stubbed(:proxy, sandbox_endpoint: 'http://staging.apicast.io')
+    proxy = FactoryBot.create(:proxy)
+    proxy.update! sandbox_endpoint: 'http://staging.apicast.io'
     proxy.expects(:deploy!).returns(true)
 
     form = Onboarding::RequestForm.new(proxy)
@@ -47,7 +48,7 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
   end
 
   def test_path_without_slash
-    proxy = FactoryGirl.build(:proxy)
+    proxy = FactoryBot.build(:proxy)
     form = Onboarding::RequestForm.new(proxy)
     assert_equal '', form.path_without_slash
 

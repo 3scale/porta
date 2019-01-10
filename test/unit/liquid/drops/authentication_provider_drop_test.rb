@@ -4,7 +4,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
   include Liquid
 
   setup do
-    @authentication_provider = FactoryGirl.build_stubbed(:authentication_provider)
+    @authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
 
     @drop = Drops::AuthenticationProvider.new(@authentication_provider)
 

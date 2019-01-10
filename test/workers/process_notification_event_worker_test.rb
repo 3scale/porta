@@ -18,10 +18,10 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
   end
 
   def test_create_notifications
-    provider     = FactoryGirl.create(:simple_provider)
+    provider     = FactoryBot.create(:simple_provider)
     event        = Invoices::InvoicesToReviewEvent.create(provider)
     notification = NotificationEvent.create(:invoices_to_review, event)
-    user         = FactoryGirl.create(:simple_admin, account: provider)
+    user         = FactoryBot.create(:simple_admin, account: provider)
 
     user.create_notification_preferences!(preferences: { invoices_to_review: true })
 
@@ -37,7 +37,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
   end
 
   def test_create_notifications_with_master
-    master = Account.master rescue FactoryGirl.create(:simple_master)
+    master = Account.master rescue FactoryBot.create(:simple_master)
     event  = CustomEvent.new(provider: master)
     notification = NotificationEvent.create(:application_created, event)
 
@@ -45,7 +45,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
   end
 
   def test_skip_notifications_for_suspended_account
-    provider = FactoryGirl.create(:simple_provider, state: 'suspended')
+    provider = FactoryBot.create(:simple_provider, state: 'suspended')
     event  = CustomEvent.new(provider: provider)
     notification = NotificationEvent.create(:application_created, event)
 
@@ -55,10 +55,10 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
   end
 
   def test_rescue_errors
-    provider     = FactoryGirl.create(:simple_provider)
+    provider     = FactoryBot.create(:simple_provider)
     event        = Invoices::InvoicesToReviewEvent.create(provider)
     notification = NotificationEvent.create(:invoices_to_review, event)
-    user         = FactoryGirl.create(:simple_admin, account: provider)
+    user         = FactoryBot.create(:simple_admin, account: provider)
 
     user.create_notification_preferences!(preferences: { invoices_to_review: true })
 

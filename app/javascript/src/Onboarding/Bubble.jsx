@@ -54,7 +54,6 @@ export class Onboarding {
 }
 
 class ApiBubble extends Bubble {
-
   constructor () {
     super()
     this.name = 'api'
@@ -78,7 +77,6 @@ class ApiBubble extends Bubble {
 }
 
 class MetricBubble extends Bubble {
-
   constructor () {
     super()
     this.name = 'metric'
@@ -88,7 +86,6 @@ class MetricBubble extends Bubble {
 }
 
 class MappingBubble extends Bubble {
-
   constructor () {
     super()
     this.name = 'mapping'
@@ -98,7 +95,6 @@ class MappingBubble extends Bubble {
 }
 
 class LimitBubble extends Bubble {
-
   constructor () {
     super()
     this.name = 'limit'
@@ -108,7 +104,6 @@ class LimitBubble extends Bubble {
 }
 
 class DeploymentBubble extends Bubble {
-
   constructor () {
     super()
     this.name = 'deployment'

@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource 'CMS::Section' do
 
-  let(:resource) { Factory(:cms_section, provider: provider, parent: provider.sections.root) }
+  let(:resource) { FactoryBot.create(:cms_section, provider: provider, parent: provider.sections.root) }
 
   api 'cms section' do
 

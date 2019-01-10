@@ -3,14 +3,14 @@ require 'test_helper'
 class AccountContractTest < ActiveSupport::TestCase
 
   test 'be valid with an account plan' do
-    account_plan = FactoryGirl.create :account_plan
+    account_plan = FactoryBot.create :account_plan
     account_contract = AccountContract.new plan: account_plan
 
     assert_valid account_contract
   end
 
   test 'not be valid with an application plan' do
-    app_plan = FactoryGirl.create :application_plan
+    app_plan = FactoryBot.create :application_plan
     account_contract = AccountContract.new plan: app_plan
 
     refute_valid account_contract
@@ -18,7 +18,7 @@ class AccountContractTest < ActiveSupport::TestCase
   end
 
   test 'not be valid with a service plan' do
-    service_plan = FactoryGirl.create :service_plan
+    service_plan = FactoryBot.create :service_plan
     account_contract = AccountContract.new plan: service_plan
 
     refute_valid account_contract
@@ -26,8 +26,8 @@ class AccountContractTest < ActiveSupport::TestCase
   end
 
   test 'account contract states depends on account state (provider)' do
-    account = FactoryGirl.create :simple_provider, state: 'pending'
-    account_plan = FactoryGirl.create :account_plan
+    account = FactoryBot.create :simple_provider, state: 'pending'
+    account_plan = FactoryBot.create :account_plan
 
     account_contract = account.buy!(account_plan)
     assert account.pending?
@@ -47,8 +47,8 @@ class AccountContractTest < ActiveSupport::TestCase
   end
 
   test 'account contract states depends on account state (developer pending)' do
-    account = FactoryGirl.create :simple_account, state: 'pending'
-    account_plan = FactoryGirl.create :account_plan
+    account = FactoryBot.create :simple_account, state: 'pending'
+    account_plan = FactoryBot.create :account_plan
 
     account_contract = account.buy!(account_plan)
     assert account.pending?
@@ -60,8 +60,8 @@ class AccountContractTest < ActiveSupport::TestCase
   end
 
   test 'account contract states depends on account state (developer created)' do
-    account = FactoryGirl.create :simple_account, state: 'created'
-    account_plan = FactoryGirl.create :account_plan
+    account = FactoryBot.create :simple_account, state: 'created'
+    account_plan = FactoryBot.create :account_plan
 
     account_contract = account.buy!(account_plan)
     assert account.created?

@@ -3,7 +3,7 @@ require 'test_helper'
 class NewAccountsQueryTest < ActiveSupport::TestCase
 
   def setup
-    @simple_provider    = FactoryGirl.create :simple_provider
+    @simple_provider    = FactoryBot.create :simple_provider
     @new_accounts_query = NewAccountsQuery.new @simple_provider
   end
 
@@ -16,7 +16,7 @@ class NewAccountsQueryTest < ActiveSupport::TestCase
     assert_equal current_range.to_a.size, data.size
     assert_equal 0, delete_zero_values(data).size
 
-    FactoryGirl.create :simple_buyer, provider_account: @simple_provider,
+    FactoryBot.create :simple_buyer, provider_account: @simple_provider,
       created_at: DateTime.parse('2014-10-15')
 
     data = @new_accounts_query.within_timeframe(range: current_range)
@@ -37,7 +37,7 @@ class NewAccountsQueryTest < ActiveSupport::TestCase
       DateTime.parse('2014-1-1T01:00')
     ]
 
-    FactoryGirl.create :simple_buyer, provider_account: @simple_provider,
+    FactoryBot.create :simple_buyer, provider_account: @simple_provider,
       created_at: DateTime.parse('2014-1-1T00:29')
 
     data = @new_accounts_query.within_timeframe(range: range, granularity: :year)
@@ -80,7 +80,7 @@ class NewAccountsQueryTest < ActiveSupport::TestCase
       # saving date is
       # 2010.12.31 in Pacific time
       # 2011.01.01 in UTC
-      FactoryGirl.create :simple_buyer, provider_account: @simple_provider,
+      FactoryBot.create :simple_buyer, provider_account: @simple_provider,
         created_at: DateTime.parse('2010-12-31T23:00:00-08:00')
     end
 

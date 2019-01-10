@@ -30,11 +30,11 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def setup
-    @provider = FactoryGirl.create(:provider_with_billing)
-    @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @provider = FactoryBot.create(:provider_with_billing)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     login_provider @provider
 
-    %w[2017-07 2018-08].each { | month| FactoryGirl.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
+    %w[2017-07 2018-08].each { | month| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
   end
 
   test '#index' do
@@ -157,7 +157,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   protected
 
   def invoice
-    @invoice ||= FactoryGirl.create(:invoice, provider_account: @provider,
+    @invoice ||= FactoryBot.create(:invoice, provider_account: @provider,
                                               buyer_account: @buyer,
                                               period: Month.parse_month('2018-08-01')).reload
   end

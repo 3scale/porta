@@ -11,7 +11,7 @@ module ServiceDiscovery
 
     test 'perform' do
       oauth_manager = mock(service_usable?: true)
-      account = FactoryGirl.create(:simple_provider)
+      account = FactoryBot.create(:simple_provider)
       ServiceDiscovery::OAuthManager.expects(:new).with(@user).returns(oauth_manager).at_least_once
       import_definition = mock
       import_definition.expects(:create_service).with(account, cluster_namespace: 'fake-project', cluster_service_name: 'fake-api')
@@ -23,7 +23,7 @@ module ServiceDiscovery
   class CreateServiceWorkerWithUserTest < CreateServiceWorkerTest
     def setup
       super
-      @user = FactoryGirl.create(:simple_user)
+      @user = FactoryBot.create(:simple_user)
     end
   end
 end

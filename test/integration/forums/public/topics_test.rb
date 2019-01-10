@@ -3,9 +3,9 @@ require 'test_helper'
 class Forums::Public::TopicsTest < ActionDispatch::IntegrationTest
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
-    @forum   = FactoryGirl.create(:forum, account: provider)
-    @topic   = FactoryGirl.create(:topic, forum: @forum, user: provider.admins.first!)
+    provider = FactoryBot.create(:provider_account)
+    @forum   = FactoryBot.create(:forum, account: provider)
+    @topic   = FactoryBot.create(:topic, forum: @forum, user: provider.admins.first!)
 
     provider.settings.forum_enabled = true
     provider.settings.forum_public  = true

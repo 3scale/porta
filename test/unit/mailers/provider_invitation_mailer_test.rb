@@ -3,7 +3,7 @@ require 'test_helper'
 class ProviderInvitationMailerTest < ActionMailer::TestCase
 
   def setup
-    @invitation = FactoryGirl.create(:invitation)
+    @invitation = FactoryBot.create(:invitation)
     @account = @invitation.account
     @provider_invitation_email = ProviderInvitationMailer.invitation(@invitation)
   end

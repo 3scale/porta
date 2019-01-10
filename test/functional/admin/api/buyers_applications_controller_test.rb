@@ -3,10 +3,10 @@ require 'test_helper'
 class Admin::Api::BuyersApplicationsControllerTest < ActionController::TestCase
 
   def setup
-    provider = FactoryGirl.create(:provider_account)
-    @service  = FactoryGirl.create(:service, account: provider)
-    @plan    = FactoryGirl.create(:application_plan, service: @service)
-    @buyer   = FactoryGirl.create(:buyer_account, provider_account: provider)
+    provider = FactoryBot.create(:provider_account)
+    @service  = FactoryBot.create(:service, account: provider)
+    @plan    = FactoryBot.create(:application_plan, service: @service)
+    @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
 
     host! provider.admin_domain
 
@@ -26,7 +26,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionController::TestCase
   end
 
   def test_delete
-    application = FactoryGirl.create(:cinstance, user_account: @buyer, service: @service)
+    application = FactoryBot.create(:cinstance, user_account: @buyer, service: @service)
 
     delete :destroy, account_id: @buyer.id, id: application.id, format: :xml
 

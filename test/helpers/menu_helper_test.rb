@@ -3,7 +3,7 @@ require 'test_helper'
 class MenuHelperTest < ActionView::TestCase
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @ability = Ability.new(@provider.admins.first)
   end
 

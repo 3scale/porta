@@ -20,5 +20,5 @@ Feature: CMS Redirects
       And I press "Update Redirect"
     Then I should see "Redirect updated"
 
-    When I follow "Delete"
+    When I follow "Delete" and I confirm dialog box
     Then I should see "Redirect deleted"

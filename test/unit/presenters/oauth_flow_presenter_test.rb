@@ -3,9 +3,9 @@ require 'test_helper'
 class OAuthFlowPresenterTest < ActiveSupport::TestCase
 
   setup do
-    FactoryGirl.build_stubbed(:master_account)
+    FactoryBot.build_stubbed(:master_account)
 
-    @authentication_provider = FactoryGirl.build_stubbed(:authentication_provider, kind: 'auth0')
+    @authentication_provider = FactoryBot.build_stubbed(:authentication_provider, kind: 'auth0')
     @provider = @authentication_provider.account
 
     @request = stubs(:request)
@@ -44,7 +44,7 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
   end
 
   test 'master callback endpoint' do
-    authentication_provider = FactoryGirl.build_stubbed(:github_authentication_provider)
+    authentication_provider = FactoryBot.build_stubbed(:github_authentication_provider)
 
     presenter = OauthFlowPresenter.new(authentication_provider, mock('request', scheme: 'http', query_parameters: {}))
 
@@ -53,7 +53,7 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
   end
 
   test 'ssl verification mode' do
-    authentication_provider = FactoryGirl.build_stubbed(:github_authentication_provider)
+    authentication_provider = FactoryBot.build_stubbed(:github_authentication_provider)
     ssl = mock
     ssl.expects(:verify=).with(OpenSSL::SSL::VERIFY_NONE)
     Faraday::Connection.any_instance.stubs(ssl: ssl)

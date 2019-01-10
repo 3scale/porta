@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 class Liquid::Drops::ApplicationPlanDropTest < ActiveSupport::TestCase
   context 'ApplicationPlanDrop' do
     setup do
-      @plan = Factory(:application_plan)
-      2.times { |u| Factory(:usage_limit, :plan => @plan) }
+      @plan = FactoryBot.create(:application_plan)
+      2.times { |u| FactoryBot.create(:usage_limit, :plan => @plan) }
       @drop = Liquid::Drops::ApplicationPlan.new(@plan)
     end
 

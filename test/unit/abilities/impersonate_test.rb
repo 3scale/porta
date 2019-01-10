@@ -3,7 +3,7 @@ require 'test_helper'
 class Abilities::ImpersonateTest < ActiveSupport::TestCase
 
   def setup
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
   end
 
   test "master admin cannot impersonate provider accounts without 3scale admin user" do

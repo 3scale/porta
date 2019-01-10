@@ -29,19 +29,19 @@ class WebHookTest < ActiveSupport::TestCase
     setup do
       stub_backend_get_keys
 
-      @provider = Factory(:provider_account)
+      @provider = FactoryBot.create(:provider_account)
       Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
 
-      @service = Factory :simple_service, backend_version: '2', :account => @provider
-      app_plan = Factory :simple_application_plan, :issuer => @service
+      @service = FactoryBot.create :simple_service, backend_version: '2', :account => @provider
+      app_plan = FactoryBot.create :simple_application_plan, :issuer => @service
       @app_plan = app_plan
       @wh = WebHook.create!(:account => @provider, :url => 'http://' + @provider.domain,
                             :active => true)
 
       # no idea how, but buyer from factory comes with strange user
       # user has account association preloaded to nil
-      @buyer = Factory(:simple_buyer, :provider_account => @provider)
-      @user  = Factory(:simple_user, :account => @buyer)
+      @buyer = FactoryBot.create(:simple_buyer, :provider_account => @provider)
+      @user  = FactoryBot.create(:simple_user, :account => @buyer)
 
       @buyer.buy! @provider.account_plans.first
       @application = @buyer.buy! app_plan
@@ -52,7 +52,7 @@ class WebHookTest < ActiveSupport::TestCase
                             :account_deleted_on => true,
                             :user_deleted_on => false
 
-      User.current = Factory(:simple_user, :account => @provider)
+      User.current = FactoryBot.create(:simple_user, :account => @provider)
       @buyer.destroy
 
       job = WebHookWorker.jobs.first
@@ -77,7 +77,7 @@ class WebHookTest < ActiveSupport::TestCase
                             application_deleted_on: false,
                             user_deleted_on: false
 
-      User.current = Factory(:simple_user, :account => @provider)
+      User.current = FactoryBot.create(:simple_user, :account => @provider)
 
       Cinstance.any_instance.stubs(create_key_after_create?: true)
       application = @buyer.buy!(@app_plan)

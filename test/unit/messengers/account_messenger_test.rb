@@ -3,10 +3,10 @@ require 'test_helper'
 class AccountMessengerTest < ActiveSupport::TestCase
 
   def setup
-    @provider_account = Factory(:provider_account,
+    @provider_account = FactoryBot.create(:provider_account,
                                 :org_name => 'Foos & Bars',
                                 :domain => 'foosandbars.com')
-    @buyer_account = Factory(:buyer_account,
+    @buyer_account = FactoryBot.create(:buyer_account,
                              :provider_account => @provider_account)
   end
 
@@ -37,7 +37,7 @@ class AccountMessengerTest < ActiveSupport::TestCase
   end
 
   test 'new signup with required approval' do
-    @buyer_account.buy! Factory(:account_plan, :approval_required => true)
+    @buyer_account.buy! FactoryBot.create(:account_plan, :approval_required => true)
     AccountMessenger.new_signup(@buyer_account).deliver
     message = @provider_account.received_messages.last
 
@@ -48,7 +48,7 @@ class AccountMessengerTest < ActiveSupport::TestCase
   end
 
   test 'new signup without required approval' do
-    @buyer_account.buy! Factory(:account_plan, :approval_required => false)
+    @buyer_account.buy! FactoryBot.create(:account_plan, :approval_required => false)
     AccountMessenger.new_signup(@buyer_account).deliver
     message = @provider_account.received_messages.last
 

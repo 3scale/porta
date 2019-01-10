@@ -5,8 +5,8 @@ class Reports::CsvDataExportEventTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def test_create
-    provider  = FactoryGirl.build_stubbed(:simple_provider)
-    recipient = FactoryGirl.build_stubbed(:simple_user)
+    provider  = FactoryBot.build_stubbed(:simple_provider)
+    recipient = FactoryBot.build_stubbed(:simple_user)
     event     = Reports::CsvDataExportEvent.create(provider, recipient, 'users', 'week')
 
     assert event
@@ -18,8 +18,8 @@ class Reports::CsvDataExportEventTest < ActiveSupport::TestCase
   end
 
   def test_create_period
-    provider = FactoryGirl.build_stubbed(:simple_provider)
-    recipient = FactoryGirl.build_stubbed(:simple_user)
+    provider = FactoryBot.build_stubbed(:simple_provider)
+    recipient = FactoryBot.build_stubbed(:simple_user)
 
     event = Reports::CsvDataExportEvent.create(provider, recipient, 'users', '')
 

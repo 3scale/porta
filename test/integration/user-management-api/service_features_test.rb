@@ -2,9 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    @service = Factory(:service, :account => @provider)
+    @service = FactoryBot.create(:service, :account => @provider)
 
 
     host! @provider.admin_domain
@@ -14,9 +14,9 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    feature = FactoryGirl.create(:feature, featurable: @service)
-    user    = FactoryGirl.create(:member, account: @provider, admin_sections: ['partners'])
-    token   = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    feature = FactoryBot.create(:feature, featurable: @service)
+    user    = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get(admin_api_service_feature_path(@service, feature))
     assert_response :forbidden
@@ -30,8 +30,8 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   # Provider key
 
   test 'index' do
-    service = Factory :service, :account => @provider
-    Factory :feature, :featurable => service
+    service = FactoryBot.create :service, :account => @provider
+    FactoryBot.create :feature, :featurable => service
 
     get(admin_api_service_features_path(service),
              :provider_key => @provider.api_key, :format => :xml)
@@ -44,7 +44,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'show' do
-    feature = Factory :feature, :featurable => @service
+    feature = FactoryBot.create :feature, :featurable => @service
 
     get(admin_api_service_feature_path(@service, feature),
              :provider_key => @provider.api_key, :format => :xml)
@@ -109,7 +109,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'create features with scope'
 
   test 'update' do
-    feature = Factory(:feature, :featurable => @service,
+    feature = FactoryBot.create(:feature, :featurable => @service,
                       :name => 'old name', :system_name => 'old_system_name')
 
     put("/admin/api/services/#{@service.id}/features/#{feature.id}",
@@ -133,7 +133,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   pending_test 'update errors xml'
 
   test 'destroy' do
-    feature = Factory :feature, :featurable => @service
+    feature = FactoryBot.create :feature, :featurable => @service
 
     delete("/admin/api/services/#{@service.id}/features/#{feature.id}",
                 :provider_key => @provider.api_key,

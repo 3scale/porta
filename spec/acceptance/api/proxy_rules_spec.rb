@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource 'ProxyRule' do
 
@@ -6,7 +6,7 @@ resource 'ProxyRule' do
   let(:proxy) { service.proxy }
   let(:metric) { service.metrics.hits }
 
-  let(:resource) { FactoryGirl.build(:proxy_rule, proxy: proxy, metric: metric) }
+  let(:resource) { FactoryBot.build(:proxy_rule, proxy: proxy, metric: metric) }
   let(:collection) { proxy.proxy_rules }
 
   let(:service_id) { service.id }
@@ -14,15 +14,15 @@ resource 'ProxyRule' do
   api 'mapping rules' do
     get '/admin/api/services/:service_id/proxy/mapping_rules.:format', action: :index
     get '/admin/api/services/:service_id/proxy/mapping_rules/:id.:format', action: :show
-    delete '/admin/api/services/:service_id/proxy/mapping_rules/:id.:format', action: :delete
+    delete '/admin/api/services/:service_id/proxy/mapping_rules/:id.:format', action: :destroy
 
     context do
       parameter :metric_id, 'Metric ID'
       let(:metric_id) { metric.id } # TODO: create & use different metric
       parameter :delta, 'Delta'
       let(:delta) { 2 }
-      parameter :http_method, 'HTTP Method'
-      let(:http_method) { 'PATCH' }
+      parameter :http_method, 'HTTP Method', method: :http_verb
+      let(:http_verb) { 'PATCH' }
       parameter :pattern, 'Pattern'
       let(:pattern) { '/foo' }
 

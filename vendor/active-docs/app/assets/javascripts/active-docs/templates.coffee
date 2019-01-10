@@ -91,8 +91,8 @@ templates  =
   <tr class='zebra'>
     <td class='code'>${name} {{if allowMultiple }} <a class='add' href='#' data-guid='${guid}'>&nbsp;</a> {{/if}}</td>
     <td>
-      <input class='custom name' {{if threescale_name }}data-threescale-name='${threescale_name}'{{/if}} data-param-type='custom'  minlength='0' name='${name}' placeholder='name' type='text' value='' />
-      <input class='custom value' data-param-type='custom'  minlength='0' name='${name}' placeholder='value' type='text' value='' />
+      <input class='custom name' {{if threescale_name }}data-threescale-name='${threescale_name}'{{/if}} data-param-type='custom'  minlength='0' name='${name}' placeholder='name' type='text' value='${defaultName}' />
+      <input class='custom value' data-param-type='custom'  minlength='0' name='${name}' placeholder='value' type='text' value='${defaultValue}' />
       <input class='custom-hidden'  data-guid='${guid}' data-param-type='${paramType}' name='${name}' type='hidden' data-original-name='' value='' />
      <div class='apidocs-description'>
         ${description_inline}

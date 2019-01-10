@@ -25,7 +25,7 @@ class PrometheusTest < ActionDispatch::IntegrationTest
   end
 
   test 'metrics on provider admin domain' do
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
 
     host! provider.self_domain
     assert_raises ActionController::RoutingError do
@@ -37,7 +37,7 @@ class PrometheusTest < ActionDispatch::IntegrationTest
   end
 
   test 'metrics on provider domain' do
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     host! provider.domain
 
     # The assertion is a bit different from admin domain as CMS has a wildcard route

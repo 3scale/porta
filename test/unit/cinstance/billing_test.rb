@@ -11,7 +11,7 @@ class Cinstance::BillingTest < ActiveSupport::TestCase
         @november = Month.new(2009,11)
         @last_of_october = Time.zone.local(2009,9,30)
 
-        @plan = Factory(:application_plan, :name => 'FAKE')
+        @plan = FactoryBot.create(:application_plan, :name => 'FAKE')
         @plan.stubs(:cost_for_period).returns(42)
     end
 
@@ -27,19 +27,19 @@ class Cinstance::BillingTest < ActiveSupport::TestCase
 
     #   should 'bill if something is paid' do
     #     Finance::Billing.any_instance.expects(:create_line_item!).once
-    #     cinstance = Factory.create(:cinstance, :paid_until => @end_of_november, :plan => @plan)
+    #     cinstance = FactoryBot.create(:cinstance, :paid_until => @end_of_november, :plan => @plan)
     #     cinstance.refund_fixed_cost(@last_of_october)
     #   end
     # end
 
     context '#bill_for' do
       setup do
-        @cinstance = Factory.create(:cinstance, :paid_until => nil, :plan => @plan)
+        @cinstance = FactoryBot.create(:cinstance, :paid_until => nil, :plan => @plan)
       end
 
       context 'with nothing to bill' do
         setup do
-          @invoice = Factory(:invoice)
+          @invoice = FactoryBot.create(:invoice)
         end
 
         should 'not bill [already paid]' do
@@ -65,7 +65,7 @@ class Cinstance::BillingTest < ActiveSupport::TestCase
       context 'with stuff to bill' do
         setup do
           Timecop.freeze(2010,1,1)
-          @invoice = Factory(:invoice)
+          @invoice = FactoryBot.create(:invoice)
         end
 
         should 'bill for setup fee just once' do

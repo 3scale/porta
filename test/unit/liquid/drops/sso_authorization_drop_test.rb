@@ -6,7 +6,7 @@ class Liquid::Drops::SSOAuthorizationDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @authorization = FactoryGirl.build(:sso_authorization)
+    @authorization = FactoryBot.build(:sso_authorization)
     @drop = Drops::SSOAuthorization.new(@authorization)
   end
 

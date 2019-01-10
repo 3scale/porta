@@ -5,7 +5,7 @@ require 'test_helper'
 class Account::BillingAddressTest < ActiveSupport::TestCase
 
   def setup
-    @account = FactoryGirl.create(:simple_provider,
+    @account = FactoryBot.create(:simple_provider,
                                   org_name: 'PP',
                                   org_legaladdress: "Palacio Moncloa",
                                   billing_address_name: 'Tim',

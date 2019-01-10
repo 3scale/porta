@@ -1,7 +1,7 @@
 
 Given /^(provider "[^\"]*") has groups for buyers:$/ do |provider, table|
   table.hashes.each do |hash|
-    Factory :cms_group, :name => hash['name'], :provider => provider
+    FactoryBot.create :cms_group, :name => hash['name'], :provider => provider
   end
 end
 

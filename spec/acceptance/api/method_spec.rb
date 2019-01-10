@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Metric" do
 
@@ -8,7 +8,7 @@ resource "Metric" do
   let(:service_id) { service.id }
   let(:metric_id) { service.metrics.hits.id }
 
-  let(:resource) { Factory.build(:metric, service: service, parent: hits) }
+  let(:resource) { FactoryBot.build(:metric, service: service, parent: hits) }
 
   let(:resource_representer) { 'MethodRepresenter' }
   let(:collection_representer) { 'MethodsRepresenter' }

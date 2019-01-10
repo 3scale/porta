@@ -11,7 +11,7 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
   attr_reader :event_store
 
   def test_create_and_publish!
-    proxy = FactoryGirl.create(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
+    proxy = FactoryBot.create(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
     refute OIDC::ProxyChangedEvent.create_and_publish!(proxy), 'service is not oauth'
 
     proxy.service.backend_version = 'oauth'
@@ -19,7 +19,7 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
   end
 
   def test_create
-    proxy = FactoryGirl.build_stubbed(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
+    proxy = FactoryBot.build_stubbed(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
     assert OIDC::ProxyChangedEvent.create(proxy)
 
     proxy.service.backend_version = 'oauth'

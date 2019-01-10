@@ -4,7 +4,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   test 'sync backend metric data when metric is created' do
-    service = Factory(:simple_service)
+    service = FactoryBot.create(:simple_service)
     metric = Metric.new(service: service, system_name: 'koos', friendly_name: 'Foos', unit: 'foo')
 
     BackendMetricWorker.expects(:sync)
@@ -13,7 +13,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   end
 
   test 'sync backend metric data when metric is updated' do
-    service = Factory(:simple_service)
+    service = FactoryBot.create(:simple_service)
     metric = Metric.new(service: service, system_name: 'foos', friendly_name: 'Foos', unit: 'foo')
 
     BackendMetricWorker.expects(:sync)
@@ -26,8 +26,8 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   end
 
   test 'does not sync backend metric when validation fails creating a nested metric (method)' do
-    service = Factory(:simple_service)
-    metric  = Factory(:metric, :service => service, :friendly_name => 'Foos')
+    service = FactoryBot.create(:simple_service)
+    metric  = FactoryBot.create(:metric, :service => service, :friendly_name => 'Foos')
 
     Metric.any_instance.expects(:sync_backend).never
     BackendMetricWorker.expects(:sync).never
@@ -38,8 +38,8 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   end
 
   test 'does not sync backend metric data when validation fails' do
-    service = Factory(:simple_service)
-    metric  = Factory(:metric, :service => service, :friendly_name => 'Foos')
+    service = FactoryBot.create(:simple_service)
+    metric  = FactoryBot.create(:metric, :service => service, :friendly_name => 'Foos')
 
     BackendMetricWorker.expects(:sync).never
 
@@ -50,7 +50,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   end
 
   test 'sync backend metric data when metric is destroyed' do
-    metric = Factory(:metric)
+    metric = FactoryBot.create(:metric)
 
     BackendMetricWorker.expects(:sync).with(metric.service.backend_id, metric.id, metric.name)
 

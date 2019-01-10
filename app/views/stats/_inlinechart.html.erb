@@ -1,0 +1,19 @@
+<%= javascript_pack_tag 'inlineChart' %>
+
+<div id="mini-charts">
+  <% Array.wrap(metrics).each do |metric| %>
+  <% endpoint = defined?(cinstance) ? usage_stats_data_applications_path(cinstance) : usage_stats_data_services_path(metric.service_id) %>
+    <div class="charts inlinechart" id="chart-<%= metric.id %>" data-unit-pluralized="<%= metric.unit.pluralize %>" data-metric="<%= metric.name %>" data-source="<%= endpoint %>">
+      <%= content_tag :div,
+        class: "inline-chart-container",
+        id: "inline-chart-container-#{metric.id}",
+        data: {
+          "endpoint": "#{endpoint}",
+          "metric-name": "#{metric.name}",
+          "metric-id": "#{metric.id}",
+          "title": "#{metric.friendly_name}"
+        } do %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

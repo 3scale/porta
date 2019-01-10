@@ -3,9 +3,9 @@ require 'test_helper'
 class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
   setup do
-    @provider = FactoryGirl.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
     @provider.settings.update_column(:authentication_strategy, 'oauth2')
-    @authentication_provider = Factory(:self_authentication_provider, account: @provider, kind: 'base')
+    @authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider, kind: 'base')
     @strategy = Authentication::Strategy.build_provider(@provider)
   end
 
@@ -23,7 +23,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
   test '#authenticate find user that can login' do
     system_name = @authentication_provider.system_name
-    user = Factory(:active_user, account: @provider, authentication_id: 'foobar')
+    user = FactoryBot.create(:active_user, account: @provider, authentication_id: 'foobar')
 
     mock_client(@authentication_provider, uid: user.authentication_id)
     result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
@@ -34,7 +34,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
   test '#authenticate find activate pending user if the email was verified' do
     system_name = @authentication_provider.system_name
-    user = Factory(:pending_user, account: @provider, authentication_id: 'foobar', email: 'foo@example.com')
+    user = FactoryBot.create(:pending_user, account: @provider, authentication_id: 'foobar', email: 'foo@example.com')
 
     mock_client(@authentication_provider, uid: user.authentication_id, email: 'foo@example.com')
     assert result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
@@ -89,7 +89,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
   test '#on_signup_complete should clear session authentication data' do
     session = { authentication_id: 'B5678' }
 
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
     @strategy.on_new_user(user, session)
 
     @strategy.on_signup_complete(session)
@@ -100,7 +100,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
   end
 
   test '#on_signup_complete when user email is the same as session authentication_email' do
-    user    = Factory.build(:user)
+    user    = FactoryBot.build(:user)
     session = {
       authentication_id: 'B5678',
       authentication_email: user.email,
@@ -114,7 +114,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
   end
 
   test '#on_signup_complete when user email is different from session authentication_email' do
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
     session = { authentication_id: 'B5678', authentication_email: 'diferent@email.com' }
     @strategy.on_new_user(user, session)
 
@@ -124,7 +124,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
   end
 
   test '#track_signup_options with oauth2' do
-    user = Factory.build(:user)
+    user = FactoryBot.build(:user)
     session = {
       authentication_id: 'B5678',
       authentication_email: 'diferent@email.com',
@@ -169,7 +169,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'create an active user through sso' do
-      authentication_provider = FactoryGirl.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
 
       client    = mock('client')
@@ -200,7 +200,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
     end
 
     test 'create a non active user through sso' do
-      authentication_provider = FactoryGirl.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
 
       client    = mock('client')
@@ -232,10 +232,10 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
     end
 
     test 'CreateInvitedUser' do
-      authentication_provider = FactoryGirl.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
+      authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
 
-      invitation = FactoryGirl.create(:invitation, account: oauth2_provider)
+      invitation = FactoryBot.create(:invitation, account: oauth2_provider)
       client     = mock('client')
       user_data  = valid_user_data
       client.stubs(authenticate!: user_data)
@@ -262,7 +262,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
     def oauth2_provider
       @oauth2_provider ||= begin
-        provider = FactoryGirl.create(:provider_account)
+        provider = FactoryBot.create(:provider_account)
 
         provider.settings.update_column(:authentication_strategy, 'oauth2')
 

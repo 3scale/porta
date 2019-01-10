@@ -42,7 +42,8 @@ describe('StatsSeries', () => {
             granularity: 'day',
             since: '2006-11-17T00:00:00-07:00',
             until: '2006-11-18T23:59:59-07:00',
-            timezone:'America/Los_Angeles', },
+            timezone: 'America/Los_Angeles'
+          },
           _totalValues: 42
         })
       )

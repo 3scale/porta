@@ -4,7 +4,7 @@ class Backend::RandomDataGeneratorTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   test 'generate' do
-    provider = Factory :provider_account
+    provider = FactoryBot.create :provider_account
     cinstance = provider.bought_cinstances.first
     stats = Stats::Client.new(cinstance)
 

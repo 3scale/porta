@@ -4,8 +4,8 @@ class Service::EndUserPlanTest < ActiveSupport::TestCase
 
   context "service without end user registration required" do
     subject do
-      service = Factory(:service)
-      plan    = Factory(:end_user_plan, :service => service)
+      service = FactoryBot.create(:service)
+      plan    = FactoryBot.create(:end_user_plan, :service => service)
 
       service.account.settings.allow_end_users!
 
@@ -19,7 +19,7 @@ class Service::EndUserPlanTest < ActiveSupport::TestCase
   end
 
   context "service with end user registation required" do
-    subject { Factory(:service, :end_user_registration_required => true) }
+    subject { FactoryBot.create(:service, :end_user_registration_required => true) }
     should_not validate_presence_of(:default_end_user_plan)
   end
 

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @cinstance = FactoryGirl.create(:cinstance)
+    @cinstance = FactoryBot.create(:cinstance)
     @buyer = @cinstance.buyer_account
     @provider_account = @cinstance.provider_account
     @provider_account.create_billing_strategy
@@ -33,7 +33,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
 
     context 'with existing Invoice' do
       setup do
-        @invoice = FactoryGirl.create(:invoice,
+        @invoice = FactoryBot.create(:invoice,
                                   :buyer_account => @cinstance.buyer_account,
                                   :provider_account => @cinstance.provider_account)
         Invoice.any_instance.stubs(:find).returns(@invoice)
@@ -89,7 +89,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
 
       context 'with line items' do
         setup do
-          @line_item = FactoryGirl.create(:line_item, :invoice => @invoice, cost: 2000)
+          @line_item = FactoryBot.create(:line_item, :invoice => @invoice, cost: 2000)
         end
 
         should 'show with current invoice renders link to add custom line item' do
@@ -121,7 +121,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
   end
 
   test '#charge does not invoke invoice automatic charging' do
-    invoice = FactoryGirl.create(:invoice,
+    invoice = FactoryBot.create(:invoice,
                               buyer_account: @buyer, provider_account: @provider_account)
     Invoice.any_instance.stubs('transition_allowed?').returns(true)
     Invoice.any_instance.expects(:charge!).with(false).returns(true)

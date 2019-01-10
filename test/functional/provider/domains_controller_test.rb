@@ -2,8 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Provider::DomainsControllerTest < ActionController::TestCase
   def setup
-    @provider1 = Factory :provider_account
-    @provider2 = Factory :provider_account
+    @provider1 = FactoryBot.create :provider_account
+    @provider2 = FactoryBot.create :provider_account
     u = @provider2.users.first
     u.email = @provider1.emails.first
     u.save!

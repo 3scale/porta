@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::Admin::ApiDocs::SpecsControllerTest < ActionController::TestCase
 
   def setup
-    account = Factory.create(:provider_account)
+    account = FactoryBot.create(:provider_account)
     host! account.self_domain
     login_as(account.admins.first)
   end

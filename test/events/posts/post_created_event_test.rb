@@ -3,8 +3,8 @@ require 'test_helper'
 class Posts::PostCreatedEventTest < ActiveSupport::TestCase
 
   def test_create_registered_user
-    forum = FactoryGirl.build_stubbed(:forum)
-    post  = FactoryGirl.build_stubbed(:post, forum: forum)
+    forum = FactoryBot.build_stubbed(:forum)
+    post  = FactoryBot.build_stubbed(:post, forum: forum)
     event = Posts::PostCreatedEvent.create(post)
 
     assert event
@@ -17,8 +17,8 @@ class Posts::PostCreatedEventTest < ActiveSupport::TestCase
   end
 
   def test_create_anonymous_user
-    forum = FactoryGirl.build_stubbed(:forum)
-    post  = FactoryGirl.build_stubbed(:post, forum: forum, user: nil)
+    forum = FactoryBot.build_stubbed(:forum)
+    post  = FactoryBot.build_stubbed(:post, forum: forum, user: nil)
     event = Posts::PostCreatedEvent.create(post)
 
     assert event

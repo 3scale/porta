@@ -4,11 +4,11 @@ class Api::SignupTest < ActionDispatch::PerformanceTest
   self.profile_options = { metrics: [:wall_time] }
 
   def setup
-    @provider = Factory(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @provider.account_plans.default! @provider.account_plans.first
 
-    @provider.default_service.application_plans.default! Factory(:application_plan, :issuer => @provider.default_service)
-    @provider.default_service.service_plans.default! Factory(:service_plan, :issuer => @provider.default_service)
+    @provider.default_service.application_plans.default! FactoryBot.create(:application_plan, :issuer => @provider.default_service)
+    @provider.default_service.service_plans.default! FactoryBot.create(:service_plan, :issuer => @provider.default_service)
 
     host! @provider.admin_domain
 

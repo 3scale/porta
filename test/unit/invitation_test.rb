@@ -6,7 +6,7 @@ class InvitationTest < ActiveSupport::TestCase
   should belong_to :account
 
   def setup
-    @provider = Factory(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider)
   end
 
   test 'requires an email' do
@@ -17,7 +17,7 @@ class InvitationTest < ActiveSupport::TestCase
   end
 
   test 'requires the email to not belong to a provider user' do
-    user = Factory(:simple_user, :account => @provider)
+    user = FactoryBot.create(:simple_user, :account => @provider)
     invitation = Invitation.new(:account => @provider, :email => user.email)
 
     refute invitation.valid?
@@ -25,16 +25,16 @@ class InvitationTest < ActiveSupport::TestCase
   end
 
   test 'does not require the email to not belong to a buyer user' do
-    buyer = Factory :simple_buyer, :provider_account => @provider
-    buyer_user = Factory(:simple_user, :account => buyer)
+    buyer = FactoryBot.create :simple_buyer, :provider_account => @provider
+    buyer_user = FactoryBot.create(:simple_user, :account => buyer)
     invitation = Invitation.new(:account => @provider, :email => buyer_user.email)
 
     assert invitation.valid?
   end
 
   test 'does not require globally unique email' do
-    other_account = Factory(:simple_account)
-    other_user = Factory(:simple_user, :account => other_account)
+    other_account = FactoryBot.create(:simple_account)
+    other_user = FactoryBot.create(:simple_user, :account => other_account)
     invitation = @provider.invitations.new(:email => other_user.email)
 
     assert invitation.valid?
@@ -145,11 +145,11 @@ class InvitationTest < ActiveSupport::TestCase
 
   # regression test for: https://github.com/3scale/system/pull/3316
   test 'send invitation with helper tag' do
-    buyer = Factory(:simple_buyer, provider_account: @provider)
-    Factory(:cms_email_template, system_name: 'invitation', provider: @provider, published: '{% debug:help %}', rails_view_path: 'emails/invitation')
+    buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    FactoryBot.create(:cms_email_template, system_name: 'invitation', provider: @provider, published: '{% debug:help %}', rails_view_path: 'emails/invitation')
 
     assert_difference('ActionMailer::Base.deliveries.count') do
-      Factory(:invitation, account: buyer)
+      FactoryBot.create(:invitation, account: buyer)
     end
   end
 

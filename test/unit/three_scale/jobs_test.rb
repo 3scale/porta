@@ -7,10 +7,10 @@ class ThreeScale::JobsTest < ActiveSupport::TestCase
   ALL = MONTH + DAILY + BILLING + HOUR
 
   ALL.each do |job|
-    name = job.tr(':.', '_')
+    name = job.tr('():.', '_')
     module_eval <<-RUBY, __FILE__, __LINE__ + 1
       def test_#{name}
-        FactoryGirl.create(:provider_account)
+        FactoryBot.create(:provider_account)
         #{job}
       end
     RUBY

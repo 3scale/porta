@@ -3,9 +3,9 @@ require 'test_helper'
 class CinstanceMessengerTest < ActiveSupport::TestCase
 
   def setup
-    @provider_account = Factory(:provider_account, :org_name => 'Foos & Bars', :domain => 'foosandbars.com')
-    @plan = Factory( :application_plan, :issuer => @provider_account.first_service!)
-    @app = Factory(:cinstance, :plan => @plan, :name => "Foo Bar", :description => "Foo Bar Foo")
+    @provider_account = FactoryBot.create(:provider_account, :org_name => 'Foos & Bars', :domain => 'foosandbars.com')
+    @plan = FactoryBot.create( :application_plan, :issuer => @provider_account.first_service!)
+    @app = FactoryBot.create(:cinstance, :plan => @plan, :name => "Foo Bar", :description => "Foo Bar Foo")
 
     Message.destroy_all
   end
@@ -87,7 +87,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
   end
 
   test "plan change" do
-    old_plan = Factory( :application_plan, :issuer => @provider_account.first_service!)
+    old_plan = FactoryBot.create( :application_plan, :issuer => @provider_account.first_service!)
     @app.stubs(old_plan: old_plan)
     CinstanceMessenger.plan_change(@app).deliver
     message = @app.provider_account.received_messages.last
@@ -143,7 +143,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     end
 
     def test_plan_change_for_buyer
-      provider = FactoryGirl.create(:provider_account)
+      provider = FactoryBot.create(:provider_account)
 
       app = provider.bought_cinstance
 
@@ -163,7 +163,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     end
 
     def test_plan_change
-      provider = FactoryGirl.create(:provider_account)
+      provider = FactoryBot.create(:provider_account)
 
       app = provider.bought_cinstance
 

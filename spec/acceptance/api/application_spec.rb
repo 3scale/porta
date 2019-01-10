@@ -1,12 +1,12 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "Cinstance" do
 
   let(:service) { provider.services.default }
-  let(:plan) { Factory(:application_plan, service: service) }
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
-  let(:resource) { Factory(:cinstance, user_account: buyer, plan: plan) }
-  let(:other_plan) { Factory(:application_plan, service: service) }
+  let(:plan) { FactoryBot.create(:application_plan, service: service) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.create(:cinstance, user_account: buyer, plan: plan) }
+  let(:other_plan) { FactoryBot.create(:application_plan, service: service) }
 
   shared_examples "find application" do
     context 'with app id', action: :show do
@@ -35,8 +35,8 @@ resource "Cinstance" do
 
   api 'application' do
 
-    let!(:app1) {Factory(:cinstance, user_account: buyer, plan: plan, first_daily_traffic_at: DateTime.parse('2014-01-01'))}
-    let!(:app2) {Factory(:cinstance, user_account: buyer, plan: plan, first_daily_traffic_at: DateTime.parse('2013-01-01'))}
+    let!(:app1) {FactoryBot.create(:cinstance, user_account: buyer, plan: plan, first_daily_traffic_at: DateTime.parse('2014-01-01'))}
+    let!(:app2) {FactoryBot.create(:cinstance, user_account: buyer, plan: plan, first_daily_traffic_at: DateTime.parse('2013-01-01'))}
 
     get '/admin/api/applications.:format', action: :index do
       parameter(:inactive_since, "Date to filter applications")
@@ -46,7 +46,7 @@ resource "Cinstance" do
       let(:collection) { [app1, app2] }
     end
 
-    get '/admin/api/applications/find.:format', :resource do
+    get '/admin/api/applications/find.:format', resource: true do
       context 'with id', action: :show do
         parameter :id, 'Application ID'
         let(:id) { resource.id }
@@ -101,7 +101,8 @@ resource "Cinstance" do
       end
     end
 
-    context 'plan actions', :resource do
+    context 'plan actions' do
+      include_context "resource"
       let(:resource_representer) { 'ApplicationPlanRepresenter' }
 
       put '/admin/api/accounts/:account_id/applications/:id/change_plan.:format' do
@@ -159,7 +160,7 @@ resource "Cinstance" do
     end
 
     delete "/admin/api/accounts/:account_id/applications/:application_id/keys/:key.:format", action: :destroy do
-      let(:app_key) { Factory(:application_key, application: resource) }
+      let(:app_key) { FactoryBot.create(:application_key, application: resource) }
 
       parameter :key, 'app_key to be deleted'
       let(:key) { app_key.value }
@@ -176,7 +177,7 @@ resource "Cinstance" do
     end
 
     delete "/admin/api/accounts/:account_id/applications/:application_id/referrer_filters/:filter_id.:format", action: :destroy do
-      let(:filter) { Factory(:referrer_filter, application: resource) }
+      let(:filter) { FactoryBot.create(:referrer_filter, application: resource) }
       parameter :filter_id, 'Referrer Filter ID'
       let(:filter_id) { filter.id }
     end
@@ -186,7 +187,7 @@ resource "Cinstance" do
     let(:root) { 'application' }
 
     let(:resource) do
-      buyer = Factory :buyer_account, provider_account: provider
+      buyer = FactoryBot.create :buyer_account, provider_account: provider
       buyer.buy! provider.default_account_plan
       buyer.bought_service_contracts.create! :plan => service.service_plans.first
       buyer.buy! plan

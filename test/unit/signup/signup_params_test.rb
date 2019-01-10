@@ -37,8 +37,8 @@ class Signup::SignupParamsTest < ActiveSupport::TestCase
   end
 
   test 'extra fields are accepted' do
-    FactoryGirl.create(:fields_definition, account: provider_account, target: 'User', name: 'created_by')
-    FactoryGirl.create(:fields_definition, account: provider_account, target: 'Account', name: 'extra_for_account')
+    FactoryBot.create(:fields_definition, account: provider_account, target: 'User', name: 'created_by')
+    FactoryBot.create(:fields_definition, account: provider_account, target: 'Account', name: 'extra_for_account')
 
     user_attributes = { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
                     password: '123456', password_confirmation: '123456', signup_type: :minimal, 'created_by': 'hi' }
@@ -67,7 +67,7 @@ class Signup::SignupParamsTest < ActiveSupport::TestCase
   end
 
   def provider_account
-    @provider_account ||= FactoryGirl.create(:provider_account)
+    @provider_account ||= FactoryBot.create(:provider_account)
   end
 
   def user_params

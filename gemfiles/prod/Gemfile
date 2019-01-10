@@ -1,6 +1,6 @@
 ruby '~> 2.3.0'
 
-eval_gemfile 'Gemfile.base'
+eval_gemfile '../../Gemfile.base'
 
 source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro', '~> 3.4', require: %w(sidekiq-pro sidekiq/pro/web)
@@ -13,8 +13,6 @@ gem 'airbrake', '~> 4.3.3'
 # NewRelic RPM
 # docs says it should be loaded latest as possible
 group :production, :preview, :development do
-  gem 'newrelic-redis'
-  gem 'newrelic_rpm', '~>3.5'
-  gem 'rpm_contrib'
+  gem 'newrelic_rpm', '~> 5.6'
 end
 

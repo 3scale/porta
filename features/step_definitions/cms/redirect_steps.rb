@@ -1,5 +1,5 @@
 Given /^(provider "[^\"]*") has redirects$/ do |provider|
-  Factory :redirect, :account => provider
+  FactoryBot.create :redirect, :account => provider
 end
 
 

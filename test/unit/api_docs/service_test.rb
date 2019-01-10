@@ -4,7 +4,7 @@ require 'test_helper'
 class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
   setup do
-    @account = FactoryGirl.create(:simple_provider)
+    @account = FactoryBot.create(:simple_provider)
   end
 
   attr_reader :account
@@ -512,8 +512,8 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'It validates the Service belongs to the Account if both are set' do
-    service          = FactoryGirl.create(:simple_service, account: account)
-    another_account  = FactoryGirl.create(:simple_provider)
+    service          = FactoryBot.create(:simple_service, account: account)
+    another_account  = FactoryBot.create(:simple_provider)
 
     api_doc = service.api_docs_services.new(valid_attributes)
     api_doc.account = account
@@ -538,7 +538,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'scope accessible' do
-    services = FactoryGirl.create_list(:simple_service, 2, account: account)
+    services = FactoryBot.create_list(:simple_service, 2, account: account)
     api_docs = []
     api_docs << account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
     api_docs << services.first.api_docs_services.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
@@ -548,8 +548,8 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'scope without_service' do
-    api_docs_services = FactoryGirl.create_list(:api_docs_service, 2)
-    service = FactoryGirl.create(:simple_service, account: api_docs_services.first.account)
+    api_docs_services = FactoryBot.create_list(:api_docs_service, 2)
+    service = FactoryBot.create(:simple_service, account: api_docs_services.first.account)
     api_docs_services.first.update_column(:service_id, service.id)
     assert_equal [api_docs_services.last.id], ApiDocs::Service.without_service.pluck(:id)
   end

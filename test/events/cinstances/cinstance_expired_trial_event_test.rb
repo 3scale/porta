@@ -3,7 +3,7 @@ require 'test_helper'
 class Cinstances::CinstanceExpiredTrialEventTest < ActiveSupport::TestCase
 
   def test_create
-    cinstance = FactoryGirl.build_stubbed(:simple_cinstance, id: 1)
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 1)
     cinstance.stubs(:provider_account_id).returns(10)
     event     = Cinstances::CinstanceExpiredTrialEvent.create(cinstance)
 

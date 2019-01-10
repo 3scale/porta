@@ -12,19 +12,19 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
   end
 
  test "without application_plan" do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     post :change_partner, id: provider.id, api_key: master_account.api_key
     assert_response 404
  end
 
   test "application_plan invalid" do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: "lala"
     assert_response 404
   end
 
   test "valid application_plan for master" do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     application_plan = master_account.default_service.application_plans.create(name: "last plan")
 
     post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: application_plan.system_name
@@ -36,7 +36,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'valid partner application_plan without specify the partner' do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     partner_application_plan = create_partner_application_plan
     post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name
@@ -45,7 +45,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'valid partner application_plan for a valid partner' do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     partner_application_plan = create_partner_application_plan
     post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name, partner: partner_application_plan.partner.system_name
 
@@ -55,10 +55,10 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'valid partner application_plan for a invalid partner' do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     partner_application_plan = create_partner_application_plan
-    partner2 = Factory(:partner)
+    partner2 = FactoryBot.create(:partner)
     post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name, partner: partner2.system_name
 
     assert_response 404
@@ -66,7 +66,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
 
 
   def create_partner_application_plan
-    partner = Factory(:partner)
+    partner = FactoryBot.create(:partner)
     master_account.default_service.application_plans.create(name: "partner application plan", partner: partner)
   end
 end

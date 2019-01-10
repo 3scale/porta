@@ -40,7 +40,7 @@ class KeyTest < ActiveSupport::TestCase
   end
 
   def application_key
-    BackendClient::ToggleBackend.without_backend { Factory(:application_key) }
+    BackendClient::ToggleBackend.without_backend { FactoryBot.create(:application_key) }
   ensure
     ApplicationKey.stubs(:backend_enabled?).returns(true)
   end

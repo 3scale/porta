@@ -5,9 +5,9 @@ class ServiceContracts::ServiceContractCancellationEventTest < ActiveSupport::Te
   disable_transactional_fixtures!
 
   def test_create
-    service  = FactoryGirl.build_stubbed(:simple_service, id: 1)
-    plan     = FactoryGirl.build_stubbed(:simple_service_plan, id: 2, issuer: service)
-    contract = FactoryGirl.build_stubbed(:simple_service_contract, id: 3, plan: plan)
+    service  = FactoryBot.build_stubbed(:simple_service, id: 1)
+    plan     = FactoryBot.build_stubbed(:simple_service_plan, id: 2, issuer: service)
+    contract = FactoryBot.build_stubbed(:simple_service_contract, id: 3, plan: plan)
     event    = ServiceContracts::ServiceContractCancellationEvent.create(contract)
 
     assert event
@@ -20,9 +20,9 @@ class ServiceContracts::ServiceContractCancellationEventTest < ActiveSupport::Te
   end
 
   def test_valid?
-    service  = FactoryGirl.build_stubbed(:simple_service, id: 1)
-    plan     = FactoryGirl.build_stubbed(:simple_service_plan, id: 2, issuer: service)
-    contract = FactoryGirl.build_stubbed(:simple_service_contract, id: 3, plan: plan)
+    service  = FactoryBot.build_stubbed(:simple_service, id: 1)
+    plan     = FactoryBot.build_stubbed(:simple_service_plan, id: 2, issuer: service)
+    contract = FactoryBot.build_stubbed(:simple_service_contract, id: 3, plan: plan)
 
     assert ServiceContracts::ServiceContractCancellationEvent.valid?(contract)
 
@@ -32,9 +32,9 @@ class ServiceContracts::ServiceContractCancellationEventTest < ActiveSupport::Te
   end
 
   def test_create_and_publish
-    service  = FactoryGirl.build_stubbed(:simple_service, id: 1)
-    plan     = FactoryGirl.build_stubbed(:simple_service_plan, id: 2, issuer: service)
-    contract = FactoryGirl.build_stubbed(:simple_service_contract, id: 3, plan: plan)
+    service  = FactoryBot.build_stubbed(:simple_service, id: 1)
+    plan     = FactoryBot.build_stubbed(:simple_service_plan, id: 2, issuer: service)
+    contract = FactoryBot.build_stubbed(:simple_service_contract, id: 3, plan: plan)
 
     ServiceContracts::ServiceContractCancellationEvent.expects(:create).once
     ServiceContracts::ServiceContractCancellationEvent.create_and_publish!(contract)

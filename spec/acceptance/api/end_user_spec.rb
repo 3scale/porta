@@ -1,9 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "EndUser", transactions: false do
 
   let(:service) { provider.services.default }
-  let(:plan) { Factory(:end_user_plan, service: service) }
+  let(:plan) { FactoryBot.create(:end_user_plan, service: service) }
   let(:resource) { EndUser.new(service, username: 'some-end-user', plan_id: plan.id) }
 
   let(:service_id) { service.id }
@@ -33,13 +33,15 @@ resource "EndUser", transactions: false do
       let(:serializable) { EndUser.find(service, username) }
     end
 
-    put "/admin/api/services/:service_id/end_users/:id/change_plan.:format", :action, :resource do
+    put "/admin/api/services/:service_id/end_users/:id/change_plan.:format", action: true do
+      include_context "resource"
+
       before do
         resource.stubs(:new_record?).returns(false)
         EndUser.stubs(:find).with(service, resource.username).returns(resource)
       end
 
-      let(:new_plan) { Factory(:end_user_plan, issuer: service) }
+      let(:new_plan) { FactoryBot.create(:end_user_plan, issuer: service) }
 
       parameter :plan_id, 'End User Plan ID'
       let(:plan_id) { new_plan.id }

@@ -11,7 +11,7 @@ class ServiceTokenServiceTest < ActiveSupport::TestCase
   end
 
   def test_delete_backend
-    service = FactoryGirl.create(:simple_service)
+    service = FactoryBot.create(:simple_service)
     token = service.service_tokens.first!
 
     ThreeScale::Core::ServiceToken.expects(:delete).with([{ service_token: token.value, service_id: service.id }])

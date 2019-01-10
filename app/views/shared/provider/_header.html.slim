@@ -54,25 +54,3 @@ header.Header id="user_widget" class=('Header--master' if current_account.master
   // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
   div class="username" style="display:none;"
     = current_user.username
-
-  javascript:
-    $(document)
-      .on('click', '.u-toggler', function (e) {
-        e.stopPropagation()
-        window.toggleNavigation(e.currentTarget)
-        e.preventDefault()
-      })
-      .on('click', 'body', function (e) {
-        if (e.target.type !== 'search') {
-          window.hideAllToggleable()
-        }
-      })
-      .on('click', '.vert-nav-toggle', function (e) {
-        var shouldVertNavCollapse = !JSON.parse(store.isVerticalNavCollapsed || false)
-
-        document.querySelector('.vertical-nav')
-          .classList
-          .toggle('collapsed', shouldVertNavCollapse)
-
-        store.isVerticalNavCollapsed = shouldVertNavCollapse
-      })

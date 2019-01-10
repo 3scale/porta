@@ -1,6 +1,58 @@
 {
   "apis": [
     {
+      "path": "/admin/api/users/{user_id}/access_tokens.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Access Token Create",
+          "description": "Creates an access token.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "user_id",
+              "description": "ID of the user.",
+              "dataType": "integer",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "name",
+              "description": "Name of the access token.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "permission",
+              "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "scopes",
+              "defaultName": "scopes[]",
+              "description": "Scope of the access token. URL-encoded array containing one or more of the possible values values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
+              "dataType": "custom",
+              "allowMultiple": true,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/account/authentication_providers.xml",
       "responseClass": "authentication_provider",
       "operations": [
@@ -3979,17 +4031,19 @@
             },
             {
               "name": "allowed_service_ids",
-              "description": "IDs of the services that need to be enabled, comma-separated. To enable all services, no value should be provided. To disable all services, the value should be: '[]'.",
-              "dataType": "string",
-              "allowMultiple": false,
+              "defaultName": "allowed_service_ids[]",
+              "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)",
+              "dataType": "custom",
+              "allowMultiple": true,
               "required": false,
               "paramType": "query"
             },
             {
               "name": "allowed_sections",
-              "description": "The list of sections in the admin portal that the user can access, comma-separated. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans)",
-              "dataType": "string",
-              "allowMultiple": false,
+              "defaultName": "allowed_sections[]",
+              "description": "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans). To disable all sections, set the value to '[]'.",
+              "dataType": "custom",
+              "allowMultiple": true,
               "required": false,
               "paramType": "query"
             }

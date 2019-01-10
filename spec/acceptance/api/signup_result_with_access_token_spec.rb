@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 resource 'Signup::ResultWithAccessToken' do
   let(:resource) do
-    account = Factory.build(:provider_account)
-    user = Factory.build(:user, account: account)
+    account = FactoryBot.build(:provider_account)
+    user = FactoryBot.build(:user, account: account)
     result = ::Signup::ResultWithAccessToken.new(user: user, account: account)
     result.save
     result

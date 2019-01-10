@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'will_paginate/array'
 
 resource "Invoice", transactions: false do
 
-  let(:buyer) { Factory(:buyer_account, provider_account: provider) }
-  let(:resource) { Factory(:invoice, buyer_account: buyer, provider_account: provider) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:resource) { FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider) }
 
   let(:collection) { [resource].paginate(page: 1, per_page: 20) }
   let(:account_id) { buyer.id }
@@ -25,7 +25,9 @@ resource "Invoice", transactions: false do
   api 'set invoice state' do
     let(:id) { resource.id }
 
-    put '/api/invoices/:id/state.:format', :resource do
+    put '/api/invoices/:id/state.:format' do
+      include_context "resource"
+
       parameter :state, "The destination state you want to transit."
       let(:state){'cancel'}
       request "Set State" do
@@ -44,7 +46,7 @@ resource "Invoice", transactions: false do
     # should include('paid_at', 'due_on', 'issued_on', 'currency', 'cost')
 
     context 'when cost > 0' do
-      before { FactoryGirl.create(:line_item, cost: 100, invoice: resource) }
+      before { FactoryBot.create(:line_item, cost: 100, invoice: resource) }
 
       context 'vat_rate is nil' do
         it { should include('cost' => 100.0, 'vat_rate' => nil, 'vat_amount' => 0.0, 'cost_without_vat' => 100.0) }

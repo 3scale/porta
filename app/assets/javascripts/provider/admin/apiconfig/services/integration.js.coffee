@@ -27,19 +27,35 @@ $(document).on 'initialize', '#proxy', ->
 
       # Fetch and translate auth parameter names: user_key => my_user_key
       credentials = {}
+      original_credentials = {}
       for param,value of el.data('credentials')
         param_name = $("#proxy_auth_#{param}").val() || param
-        credentials[param_name] = value
+        original_credentials[param] = credentials[param_name] = value
 
       # append auth parameters to URL or as headers
-      if $("#proxy_credentials_location_input input:checked").val() == 'headers'
-        for k,v of credentials
-          extheaders +=  "-H '#{k}: #{v}' "
-        query = ''
-      else
-        q = if path.match(/\?/) then '&' else '?'
-        query = "#{q}#{$.param(credentials)}"
-        extheaders = ''
+      query = ''
+      switch $("#proxy_credentials_location_input input:checked").val()
+        when 'headers'
+          for k,v of credentials
+            extheaders +=  "-H '#{k}: #{v}' "
+        when 'query'
+          q = if path.match(/\?/) then '&' else '?'
+          query = "#{q}#{$.param(credentials)}"
+          extheaders = ''
+        when 'authorization'
+          username = original_credentials['user_key']
+          part = username
+
+          unless username
+            username = original_credentials['app_id']
+            password = original_credentials['app_key']
+            part = if password then "#{username}:#{password}" else username
+
+
+          # Using url = new URL(proxy) is simpler but not compatible with IE11
+          proxy = proxy.replace(/^(https?:\/\/)/, '$1' + "#{part}@" )
+          proxy = proxy.toString().replace(/\/+$/, '')
+
 
       code = "curl \"#{proxy}#{path}#{query}\" #{extheaders}"
       el.html(code)

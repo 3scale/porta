@@ -3,10 +3,10 @@ require 'test_helper'
 class Api::ServicesControllerTest < ActionController::TestCase
 
   def setup
-    @provider  = FactoryGirl.create(:provider_account)
-    @service   = FactoryGirl.create(:service, account: @provider)
-    member     = FactoryGirl.create(:member, account: @provider)
-    permission = FactoryGirl.create(:member_permission, admin_section: :plans)
+    @provider  = FactoryBot.create(:provider_account)
+    @service   = FactoryBot.create(:service, account: @provider)
+    member     = FactoryBot.create(:member, account: @provider)
+    permission = FactoryBot.create(:member_permission, admin_section: :plans)
 
     member.member_permissions << permission
 
@@ -16,7 +16,7 @@ class Api::ServicesControllerTest < ActionController::TestCase
   end
 
   def test_load_and_authorize_resource
-    get :show, id: FactoryGirl.create(:service).id
+    get :show, id: FactoryBot.create(:service).id
 
     assert_response 404
   end

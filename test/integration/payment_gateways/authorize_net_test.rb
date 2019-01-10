@@ -9,7 +9,7 @@ class AuthorizeNetTest < ActionDispatch::IntegrationTest
     @provider_account.settings.allow_finance! unless @provider_account.settings.finance.allowed?
     @provider_account.settings.show_finance! unless @provider_account.settings.finance.visible?
 
-    @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+    @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
     @buyer_account.buy!(plan)
 
     login_buyer @buyer_account
@@ -47,7 +47,7 @@ class AuthorizeNetTest < ActionDispatch::IntegrationTest
   # end
 
   def create_provider_account
-    provider_account = FactoryGirl.create(:provider_with_billing)
+    provider_account = FactoryBot.create(:provider_with_billing)
 
     provider_account.gateway_setting.attributes = {
       gateway_type: :authorize_net,
@@ -55,7 +55,7 @@ class AuthorizeNetTest < ActionDispatch::IntegrationTest
     } # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
     provider_account.gateway_setting.save!(validate: false) # We cannot use update_columns with Oracle
 
-    plan = Factory(:application_plan, :issuer => provider_account.default_service)
+    plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service)
 
     [provider_account, plan]
   end

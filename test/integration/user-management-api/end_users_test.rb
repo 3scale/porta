@@ -4,13 +4,13 @@ class Admin::Api::EndUsersTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     @service = @provider.first_service!
 
     @provider.settings.allow_end_users!
 
     host! @provider.admin_domain
-    @plan = Factory(:end_user_plan, :service => @service)
+    @plan = FactoryBot.create(:end_user_plan, :service => @service)
     ThreeScale::Core::User.stubs(:load).with(@service.backend_id, 'test-subject')
       .returns(stub(username: 'test-subject', plan_id: nil))
     @end_user = EndUser.find(@service, 'test-subject')
@@ -46,8 +46,8 @@ class Admin::Api::EndUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create end user' do
-    Factory(:end_user_plan, :service => @service)
-    second = Factory(:end_user_plan, :service => @service)
+    FactoryBot.create(:end_user_plan, :service => @service)
+    second = FactoryBot.create(:end_user_plan, :service => @service)
     ThreeScale::Core::User.stubs(:load).with(@service.backend_id, 'some-characters').returns(nil)
     post admin_api_service_end_users_path(@service, :username => 'some-characters', :plan_id => second.id,
                                           :provider_key => @provider.api_key, :format => :xml)
@@ -71,7 +71,7 @@ class Admin::Api::EndUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'update end user' do
-    other = Factory(:end_user_plan, :service => @service)
+    other = FactoryBot.create(:end_user_plan, :service => @service)
     @end_user.stubs(:new_record?).returns(false)
     put change_plan_admin_api_service_end_user_path(@service, @end_user,
       :plan_id => other, :provider_key => @provider.api_key, :format => :xml)

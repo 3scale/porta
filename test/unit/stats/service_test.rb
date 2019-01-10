@@ -4,7 +4,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
   def setup
     Timecop.return
     # TestHelpers::Time::set_format("%a, %e %B %Y %k:%M")
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.first_service!
     @metric = @service.metrics.hits!
 
@@ -120,11 +120,11 @@ class Stats::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'Service#top_clients returns array of entries for the most active clients' do
-    plan = Factory( :application_plan, :issuer => @service)
+    plan = FactoryBot.create( :application_plan, :issuer => @service)
 
-    cinstance1 = Factory(:cinstance, :plan => plan, :name => 'cinstance1')
-    cinstance2 = Factory(:cinstance, :plan => plan, :name => 'cinstance2')
-    cinstance3 = Factory(:cinstance, :plan => plan)
+    cinstance1 = FactoryBot.create(:cinstance, :plan => plan, :name => 'cinstance1')
+    cinstance2 = FactoryBot.create(:cinstance, :plan => plan, :name => 'cinstance2')
+    cinstance3 = FactoryBot.create(:cinstance, :plan => plan)
 
     key = lambda do |cinstance|
       "stats/{service:#{@service.backend_id}}/cinstance:#{cinstance.application_id}/metric:#{@metric.id}/month:20091201"
@@ -184,11 +184,11 @@ class Stats::ServiceTest < ActiveSupport::TestCase
   #   Time.zone = 'Hawaii'
   #   @zone = Time.zone
 
-  #   plan = Factory( :application_plan, :issuer => @service)
+  #   plan = FactoryBot.create( :application_plan, :issuer => @service)
 
-  #   cinstance1 = Factory(:cinstance, :plan => plan, :name => 'cinstance1')
-  #   cinstance2 = Factory(:cinstance, :plan => plan, :name => 'cinstance2')
-  #   cinstance3 = Factory(:cinstance, :plan => plan)
+  #   cinstance1 = FactoryBot.create(:cinstance, :plan => plan, :name => 'cinstance1')
+  #   cinstance2 = FactoryBot.create(:cinstance, :plan => plan, :name => 'cinstance2')
+  #   cinstance3 = FactoryBot.create(:cinstance, :plan => plan)
 
   #   key = lambda do |cinstance|
   #     "stats/{service:#{@service.backend_id}}/cinstance:#{cinstance.application_id}/metric:#{@metric.id}/month:20091201"
@@ -278,13 +278,13 @@ class Stats::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'Service#active_clients_progress returns hash with progress, total and change' do
-    plan = Factory( :application_plan, :issuer => @service)
+    plan = FactoryBot.create( :application_plan, :issuer => @service)
 
     # fake data
-    Timecop.freeze(@zone.local(2009, 11, 19)) { Factory(:cinstance, :plan => plan) }
-    Timecop.freeze(@zone.local(2009, 12,  4)) { Factory(:cinstance, :plan => plan) }
-    Timecop.freeze(@zone.local(2009, 12, 22)) { Factory(:cinstance, :plan => plan) }
-    Timecop.freeze(@zone.local(2010,  1,  3)) { Factory(:cinstance, :plan => plan) }
+    Timecop.freeze(@zone.local(2009, 11, 19)) { FactoryBot.create(:cinstance, :plan => plan) }
+    Timecop.freeze(@zone.local(2009, 12,  4)) { FactoryBot.create(:cinstance, :plan => plan) }
+    Timecop.freeze(@zone.local(2009, 12, 22)) { FactoryBot.create(:cinstance, :plan => plan) }
+    Timecop.freeze(@zone.local(2010,  1,  3)) { FactoryBot.create(:cinstance, :plan => plan) }
 
     source = Stats::Service.new(@service)
 

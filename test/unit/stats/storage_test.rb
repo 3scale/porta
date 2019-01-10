@@ -8,8 +8,8 @@ class Stats::StorageTest < ActiveSupport::TestCase
     storage = Storage.instance
     storage.flushdb
 
-    service = Factory(:service)
-    metric  = Factory(:metric, :service => service)
+    service = FactoryBot.create(:service)
+    metric  = FactoryBot.create(:metric, :service => service)
 
     # some fake data
     storage.set("stats/{service:#{service.backend_id}}/metric:#{metric.id}/day:20091210", 12)
@@ -26,10 +26,10 @@ class Stats::StorageTest < ActiveSupport::TestCase
     storage = Storage.instance
     storage.flushdb
 
-    service = Factory(:service)
-    metric = Factory(:metric)
-    cinstance1 = Factory(:cinstance)
-    cinstance2 = Factory(:cinstance)
+    service = FactoryBot.create(:service)
+    metric = FactoryBot.create(:metric)
+    cinstance1 = FactoryBot.create(:cinstance)
+    cinstance2 = FactoryBot.create(:cinstance)
 
     # fake data
     storage.set("stats/{service:#{service.backend_id}}/cinstance:#{cinstance1.id}/metric:#{metric.id}/day:20091211", 12)

@@ -4,12 +4,12 @@ class Account::ProviderTest < ActiveSupport::TestCase
 
   context 'authentication_providers' do
     setup do
-      @account = FactoryGirl.create(:simple_provider)
+      @account = FactoryBot.create(:simple_provider)
     end
 
     should 'destroy dependent' do
-      FactoryGirl.create(:authentication_provider, account: @account)
-      FactoryGirl.create(:self_authentication_provider, account: @account)
+      FactoryBot.create(:authentication_provider, account: @account)
+      FactoryBot.create(:self_authentication_provider, account: @account)
       assert_difference('AuthenticationProvider.count', -2) { @account.destroy! }
     end
 
@@ -56,10 +56,10 @@ class Account::ProviderTest < ActiveSupport::TestCase
   end
 
   test 'viral footer should not be applied on plan upgrade' do
-    provider = Factory :provider_account
+    provider = FactoryBot.create :provider_account
     assert provider.should_apply_email_engagement_footer?, 'Expected to have a viral footer'
 
-    plan = Factory :published_plan, :system_name => 'enterprise', :issuer => master_account.services.first
+    plan = FactoryBot.create :published_plan, :system_name => 'enterprise', :issuer => master_account.services.first
 
     provider.force_upgrade_to_provider_plan! plan
     refute provider.should_apply_email_engagement_footer?, 'Expected to skip the viral footer'
@@ -129,7 +129,7 @@ class Account::ProviderTest < ActiveSupport::TestCase
   should have_many(:provided_sections)
 
   should '#show_xss_protection_options?' do
-    account = FactoryGirl.build_stubbed(:provider_account)
+    account = FactoryBot.build_stubbed(:provider_account)
     settings = account.settings
 
     settings.cms_escape_published_html = true
@@ -188,11 +188,11 @@ class Account::ProviderTest < ActiveSupport::TestCase
   context "for the provider" do
 
     setup do
-      @provider =  Factory.create(:provider_account)
-      @acc_plan = Factory.create(:account_plan, :issuer => @provider)
+      @provider =  FactoryBot.create(:provider_account)
+      @acc_plan = FactoryBot.create(:account_plan, :issuer => @provider)
       @buyers = []
-      @buyers << Factory.create(:simple_buyer, :provider_account => @provider)
-      @buyers << Factory.create(:simple_buyer, :provider_account => @provider)
+      @buyers << FactoryBot.create(:simple_buyer, :provider_account => @provider)
+      @buyers << FactoryBot.create(:simple_buyer, :provider_account => @provider)
     end
 
     context 'Account#from_email' do
@@ -210,21 +210,21 @@ class Account::ProviderTest < ActiveSupport::TestCase
     context 'with provided plans' do
       setup do
 
-        @service_one = Factory(:simple_service, :account => @provider)
-        @service_two = Factory(:simple_service, :account => @provider)
-        @service_three = Factory(:simple_service, :account => @provider)
+        @service_one = FactoryBot.create(:simple_service, :account => @provider)
+        @service_two = FactoryBot.create(:simple_service, :account => @provider)
+        @service_three = FactoryBot.create(:simple_service, :account => @provider)
 
         @plans = {
             :service => [
-              Factory(:service_plan, :issuer => @service_one),
-              Factory(:service_plan, :issuer => @service_two)
+              FactoryBot.create(:service_plan, :issuer => @service_one),
+              FactoryBot.create(:service_plan, :issuer => @service_two)
             ],
             :application => [
-              Factory(:simple_application_plan, :issuer => @service_one),
-              Factory(:simple_application_plan, :issuer => @service_one),
+              FactoryBot.create(:simple_application_plan, :issuer => @service_one),
+              FactoryBot.create(:simple_application_plan, :issuer => @service_one),
 
-              Factory(:simple_application_plan, :issuer => @service_two),
-              Factory(:simple_application_plan, :issuer => @service_two)
+              FactoryBot.create(:simple_application_plan, :issuer => @service_two),
+              FactoryBot.create(:simple_application_plan, :issuer => @service_two)
             ]
         }
 

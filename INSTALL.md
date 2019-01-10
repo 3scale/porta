@@ -80,8 +80,7 @@ brew install node@8
 
 #### Xcode
 
-It's required to have **Xcode 9.4** installed, newer versions are not compatible with some dependencies (read more about this [here](https://github.com/thoughtbot/capybara-webkit/issues/1071)).
-
+Install Xcode from the App Store.
 You can download all Xcode versions from the [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
 
 #### Dependencies
@@ -89,8 +88,7 @@ You can download all Xcode versions from the [Apple's developer site](https://de
 Make sure you have [Homebrew](https://brew.sh/) in your machine in order to install the following dependencies:
 
 ```shell
-brew install imagemagick@6 qt@5.5 mysql@5.7 gs pkg-config openssl
-brew link qt@5.5 --force
+brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 ```

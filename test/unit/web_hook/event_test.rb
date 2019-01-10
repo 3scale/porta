@@ -9,7 +9,7 @@ class WebHook::EventTest < ActiveSupport::TestCase
   end
 
   def build_provider(webhook_attrs = {})
-    provider = Factory.build(:provider_account)
+    provider = FactoryBot.build(:provider_account)
     provider.stubs(:web_hooks_allowed?).returns(true)
 
     provider.build_web_hook(webhook_attrs.merge(:active => true))
@@ -76,7 +76,7 @@ class WebHook::EventTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'enqueue' do
-      account = FactoryGirl.create(:provider_account)
+      account = FactoryBot.create(:provider_account)
 
       account.stubs(web_hooks_allowed?: true,
                     web_hook: WebHook.new(active: true, account_created_on: true))

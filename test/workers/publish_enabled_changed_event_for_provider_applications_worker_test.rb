@@ -1,11 +1,11 @@
 require 'test_helper'
 class PublishEnabledChangedEventForProviderApplicationsWorkerTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     service = provider.services.first!
     service.service_tokens.create!(value: 'token')
-    plan = FactoryGirl.create(:application_plan, service: service)
-    buyer = FactoryGirl.create(:buyer_account, provider_account: provider)
+    plan = FactoryBot.create(:application_plan, service: service)
+    buyer = FactoryBot.create(:buyer_account, provider_account: provider)
     buyer.buy! plan
     provider.reload
   end

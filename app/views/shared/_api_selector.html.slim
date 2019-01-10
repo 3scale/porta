@@ -1,11 +1,1 @@
-#api_selector
-
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    window.ContextSelector({
-      currentApi: #{json @service},
-      apis: #{json api_selector_services},
-      activeMenu: #{json active_menu},
-      audienceLink: #{json audience_link}
-    }, 'api_selector')
-  })
+#api_selector data-api={currentApi: @service, apis: api_selector_services, activeMenu: active_menu, audienceLink: audience_link}.to_json

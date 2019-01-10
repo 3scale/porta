@@ -16,7 +16,7 @@ module PaymentGateways
           password: 'world'
         }
       }
-      @provider_account = FactoryGirl.build_stubbed(:simple_provider, attributes)
+      @provider_account = FactoryBot.build_stubbed(:simple_provider, attributes)
       @payment_gateway = @provider_account.payment_gateway
       @payment_detail = mock
 

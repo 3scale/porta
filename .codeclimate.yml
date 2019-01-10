@@ -22,10 +22,10 @@ engines:
   reek:
     enabled: true
   eslint:
-    enabled: false
+    enabled: true
     config:
+      config: .eslintrc
       extensions:
-      - .es6
       - .js
       - .jsx
   csslint:
@@ -60,7 +60,7 @@ engines:
 ratings:
   paths:
     - "Gemfile.lock"
-    - "assets/**/*.es6"
+    - "app/javascript/**/*.jsx"
     - "app/**/*.{rb,js,es6,coffee,scss,css}"
     - "lib/**/*.{rb,js,es6,coffee}"
     - "test/**/*.rb"
@@ -83,8 +83,6 @@ exclude_paths:
   - "lib/developer_portal/app/views/developer_portal/javascripts/*"
   - "lib/developer_portal/app/views/developer_portal/css/*"
   - "assets/bundles/*.js"
-  - "assets/jspm_packages/*"
-  - "assets/jspm.*.js"
   - "spec/**/*"
   - "spec/**/**/*"
   - "test/**/*"

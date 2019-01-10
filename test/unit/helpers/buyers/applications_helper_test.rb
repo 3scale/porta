@@ -3,21 +3,21 @@ require 'test_helper'
 class Buyers::ApplicationsHelperTest < ActionView::TestCase
 
   test "services_contracted should return a json array of service ids" do
-    buyer = Factory(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
     service_ids = []
-    service_ids << Factory(:service_contract, user_account: buyer).service.id
-    service_ids << Factory(:service_contract, user_account: buyer).service.id
+    service_ids << FactoryBot.create(:service_contract, user_account: buyer).service.id
+    service_ids << FactoryBot.create(:service_contract, user_account: buyer).service.id
     assert_equal services_contracted(buyer), service_ids.to_json
   end
 
   test "services_contracted should return a empty array" do
-    buyer = Factory(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
     assert_equal services_contracted(buyer), [].to_json
   end
 
   test "service_plan_contracted_for_service" do
-    buyer = Factory(:buyer_account)
-    service_contract = Factory(:service_contract, user_account: buyer)
+    buyer = FactoryBot.create(:buyer_account)
+    service_contract = FactoryBot.create(:service_contract, user_account: buyer)
     buyer.reload
 
     service_plan = buyer.bought_service_plans[0]
@@ -33,7 +33,7 @@ class Buyers::ApplicationsHelperTest < ActionView::TestCase
   end
 
   test "relation_service_and_service_plans" do
-    provider = Factory(:provider_account)
+    provider = FactoryBot.create(:provider_account)
 
     service = provider.services[0]
     service_plan = service.service_plans[0]
@@ -49,7 +49,7 @@ class Buyers::ApplicationsHelperTest < ActionView::TestCase
   end
 
   test "relation_plans_services" do
-    application_plan = Factory(:application_plan)
+    application_plan = FactoryBot.create(:application_plan)
     service = application_plan.service
     provided_plan = service.provided_plans[0]
     provider = provided_plan.provider_account
@@ -65,7 +65,7 @@ class Buyers::ApplicationsHelperTest < ActionView::TestCase
 
   test "remaining_trial_days should return the right expiration date text" do
     time = Time.utc(2015, 1,20, 10, 10, 10)
-    cinstance = Factory.build(:cinstance, trial_period_expires_at: time)
+    cinstance = FactoryBot.build(:cinstance, trial_period_expires_at: time)
     expected_date = '&ndash; trial expires in <time datetime="2015-01-20T10:10:10Z" title="20 Jan 2015 10:10:10 UTC">20 days</time>'
 
     Timecop.freeze(time - 20.days) do

@@ -4,8 +4,8 @@ class DeveloperPortal::EditAccountTest < ActionDispatch::IntegrationTest
   include DeveloperPortal::Engine.routes.url_helpers
 
   def setup
-    @provider = FactoryGirl.create(:simple_provider)
-    @buyer    = FactoryGirl.create(:buyer_account, provider_account: @provider, org_name: 'ontheroad')
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer    = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'ontheroad')
 
     login_buyer @buyer
 
@@ -21,7 +21,7 @@ class DeveloperPortal::EditAccountTest < ActionDispatch::IntegrationTest
   end
 
   def test_show_form
-    FactoryGirl.create(:fields_definition, account: @provider, target: 'Account', name: 'country')
+    FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'country')
 
     get edit_admin_account_path
     assert_response :success

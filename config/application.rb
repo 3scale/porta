@@ -104,8 +104,8 @@ module System
     config.assets.enabled = true
 
     config.assets.precompile = []
-    config.assets.precompile << ->(path) do
-      basename = File.basename(path)
+    config.assets.precompile << ->(filename, _path) do
+      basename = File.basename(filename)
 
       extname = File.extname(basename)
 
@@ -123,7 +123,7 @@ module System
     config.assets.digest = true
     config.assets.initialize_on_precompile = false
 
-    config.assets.version = 1437647386 # unix timestamp
+    config.assets.version = '1437647386' # unix timestamp
 
 
     config.serve_static_files = false
@@ -252,6 +252,8 @@ module System
       require 'system/redis_pool'
       System.redis = System::RedisPool.new(config.redis)
     end
+
+    config.assets.quiet = true
 
     initializer :jobs do
       # Loading jobs used by Whenever

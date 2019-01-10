@@ -5,13 +5,13 @@ class Finance::ChargingTest < ActiveSupport::TestCase
   context 'Invoice#charge! ... ' do
     setup do
       Invoice.any_instance.stubs log_entry_created: true
-      @provider_account = Factory(:provider_account,
-                                  :billing_strategy => Factory(:postpaid_billing))
+      @provider_account = FactoryBot.create(:provider_account,
+                                  :billing_strategy => FactoryBot.create(:postpaid_billing))
 
       @provider_account.bought_plan.enable_feature!(:postpaid_billing)
-      @plan = Factory(:application_plan, :issuer => @provider_account.default_service)
+      @plan = FactoryBot.create(:application_plan, :issuer => @provider_account.default_service)
 
-      @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+      @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
       @cinstance = @buyer_account.buy!(@plan)
     end
 
@@ -211,13 +211,13 @@ class Finance::ChargingTest < ActiveSupport::TestCase
           disable_transactional_fixtures!
 
           setup do
-            @provider_account = Factory(:provider_account,
-                                        :billing_strategy => Factory(:postpaid_billing))
+            @provider_account = FactoryBot.create(:provider_account,
+                                        :billing_strategy => FactoryBot.create(:postpaid_billing))
 
             @provider_account.bought_plan.enable_feature!(:postpaid_billing)
-            @plan = Factory(:application_plan, :issuer => @provider_account.default_service)
+            @plan = FactoryBot.create(:application_plan, :issuer => @provider_account.default_service)
 
-            @buyer_account = Factory(:buyer_account, :provider_account => @provider_account)
+            @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
             @cinstance = @buyer_account.buy!(@plan)
 
             @buyer_account.paying_monthly!

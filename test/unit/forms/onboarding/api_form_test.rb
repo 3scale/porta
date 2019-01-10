@@ -3,14 +3,14 @@ require 'test_helper'
 class Onboarding::ApiFormTest < ActiveSupport::TestCase
 
   def test_api_backend
-    api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
-                                  proxy:   FactoryGirl.build(:proxy))
+    api = Onboarding::ApiForm.new(service: FactoryBot.build(:service),
+                                  proxy:   FactoryBot.build(:proxy))
 
     assert_nil api.backend
 
 
-    api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
-                                  proxy:   FactoryGirl.build(:proxy,
+    api = Onboarding::ApiForm.new(service: FactoryBot.build(:service),
+                                  proxy:   FactoryBot.build(:proxy,
                                                              created_at: 1.week.ago,
                                                              api_backend: 'http://example.com'))
 
@@ -18,23 +18,23 @@ class Onboarding::ApiFormTest < ActiveSupport::TestCase
   end
 
   def test_name
-    api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
-                                  proxy:   FactoryGirl.build(:proxy))
+    api = Onboarding::ApiForm.new(service: FactoryBot.build(:service),
+                                  proxy:   FactoryBot.build(:proxy))
 
     assert_nil api.name
 
 
-    api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service,
+    api = Onboarding::ApiForm.new(service: FactoryBot.build(:service,
                                                              name: 'Some Name',
                                                              created_at: 1.week.ago),
-                                  proxy:   FactoryGirl.build(:proxy))
+                                  proxy:   FactoryBot.build(:proxy))
 
     assert_equal 'Some Name', api.name
   end
 
   def test_invalid_backend
-    api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
-                                  proxy:   FactoryGirl.build(:proxy))
+    api = Onboarding::ApiForm.new(service: FactoryBot.build(:service),
+                                  proxy:   FactoryBot.build(:proxy))
     api.name = 'foo'
 
     assert api.save, api.errors
@@ -46,8 +46,8 @@ class Onboarding::ApiFormTest < ActiveSupport::TestCase
   end
 
   def test_save
-    api = Onboarding::ApiForm.new(service: FactoryGirl.build(:service),
-                                  proxy:   FactoryGirl.build(:proxy))
+    api = Onboarding::ApiForm.new(service: FactoryBot.build(:service),
+                                  proxy:   FactoryBot.build(:proxy))
 
 
     assert api.validate(backend: 'invalid', name: 'foo')

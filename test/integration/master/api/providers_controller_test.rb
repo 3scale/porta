@@ -8,8 +8,8 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
     @service_plan = master_account.default_service_plans.first
     @application_plan = master_account.default_application_plans.first
 
-    FactoryGirl.create(:fields_definition, account: master_account, target: 'Account', name: 'account_extra_field')
-    FactoryGirl.create(:fields_definition, account: master_account, target: 'User', name: 'user_extra_field')
+    FactoryBot.create(:fields_definition, account: master_account, target: 'Account', name: 'account_extra_field')
+    FactoryBot.create(:fields_definition, account: master_account, target: 'User', name: 'user_extra_field')
 
     master_account.stubs(:provider_can_use?).with(:service_permissions).returns(true)
 
@@ -65,7 +65,7 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
 
   test '#create with published account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
-    new_account_plan = FactoryGirl.create(:account_plan, approval_required: true, provider: master_account, state: 'published')
+    new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'published')
     post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
     refute user.can_login?
     assert user.pending?
@@ -76,7 +76,7 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
 
   test '#create with unpublished account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
-    new_account_plan = FactoryGirl.create(:account_plan, approval_required: true, provider: master_account, state: 'hidden')
+    new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'hidden')
     post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
     refute user.can_login?
     assert user.pending?
@@ -87,7 +87,7 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
 
   test '#create with account plan send (for on-premises) is ignored' do
     ThreeScale.config.stubs(onpremises: true)
-    new_account_plan = FactoryGirl.create(:account_plan, provider: master_account)
+    new_account_plan = FactoryBot.create(:account_plan, provider: master_account)
     post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
     assert_equal account_plan, account.bought_account_plan
   end
@@ -121,7 +121,7 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#create with access_token instead of api_key works as well' do
-    token = FactoryGirl.create(:access_token, owner: master_account.admins.first, scopes: 'account_management')
+    token = FactoryBot.create(:access_token, owner: master_account.admins.first, scopes: 'account_management')
     assert_difference Account.method(:count), 1 do
       assert_difference User.method(:count), 2 do # the main user and the impersonation_admin user
         post master_api_providers_path, signup_params({api_key: '', access_token: token.value})
@@ -132,8 +132,8 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
 
   test '#create is forbidden for a member user without member permission partners' do
     assert_no_difference Account.method(:count) do
-      user = FactoryGirl.create(:member, account: master_account)
-      token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+      user = FactoryBot.create(:member, account: master_account)
+      token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
       post master_api_providers_path, signup_params({access_token: token.value}).except(:api_key)
       assert_response :forbidden
       assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body).dig('error')
@@ -142,8 +142,8 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
 
   test '#create is allowed for a member user with member permission partner' do
     assert_difference Account.method(:count) do
-      user = FactoryGirl.create(:member, account: master_account, member_permission_ids: [:partners])
-      token = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+      user = FactoryBot.create(:member, account: master_account, member_permission_ids: [:partners])
+      token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
       post master_api_providers_path, signup_params({access_token: token.value}).except(:api_key)
       assert_response :created
     end
@@ -162,9 +162,9 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#update' do
-    provider = FactoryGirl.create(:provider_account, provider_account: master_account)
-    user     = FactoryGirl.create(:member, account: master_account, admin_sections: ['partners'])
-    token    = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     update_params = { account: {
         from_email: 'from@email.com', support_email: 'support@email.com',
@@ -184,9 +184,9 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#update can only resume when the account is scheduled_for_deletion' do
-    provider = FactoryGirl.create(:provider_account, provider_account: master_account)
-    user     = FactoryGirl.create(:member, account: master_account, admin_sections: ['partners'])
-    token    = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     provider.schedule_for_deletion!
 
     update_params = { account: { from_email: 'from@email.com', state_event: 'resume'},
@@ -200,32 +200,31 @@ class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#destroy' do
-    provider = FactoryGirl.create(:provider_account, provider_account: master_account)
-    user     = FactoryGirl.create(:member, account: master_account, admin_sections: ['partners'])
-    token    = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     Timecop.freeze do
       delete master_api_provider_path(provider, access_token: token.value, format: :json)
       assert_response :ok
       assert_equal '', response.body
       assert provider.reload.scheduled_for_deletion?
-      assert_equal Time.zone.now.to_s, provider.deleted_at.to_s
       assert_equal Time.zone.now.to_s, provider.state_changed_at.to_s
     end
   end
 
   test '#destroy is forbidden for a member user without member permission partners' do
-    provider = FactoryGirl.create(:provider_account, provider_account: master_account)
-    user     = FactoryGirl.create(:member, account: master_account)
-    token    = FactoryGirl.create(:access_token, owner: user, scopes: 'account_management')
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user     = FactoryBot.create(:member, account: master_account)
+    token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     delete master_api_provider_path(provider, access_token: token.value, format: :json)
     assert_response :forbidden
     assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body).dig('error')
   end
 
   test '#show' do
-    provider = FactoryGirl.create(:provider_account, provider_account: master_account)
-    token    = FactoryGirl.create(:access_token, owner: master_account.admin_users.first, scopes: 'account_management')
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    token    = FactoryBot.create(:access_token, owner: master_account.admin_users.first, scopes: 'account_management')
 
     get master_api_provider_path(provider, access_token: token.value, format: :json)
 

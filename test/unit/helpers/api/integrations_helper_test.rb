@@ -3,7 +3,7 @@ require 'test_helper'
 class Api::IntegrationsHelperTest < ActionView::TestCase
 
   def setup
-      @proxy = Factory(:proxy, :service => Factory(:service))
+      @proxy = FactoryBot.create(:proxy, :service => FactoryBot.create(:service))
   end
 
   test 'auth in query' do
@@ -23,6 +23,18 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     @proxy.update_attributes(credentials_location:  'headers')
     res = api_test_curl(@proxy)
     assert_match(/-H&#39;user_key: USER_KEY/, res) # 39 is ', 27 is escape
+  end
+
+  test 'auth basic' do
+    @proxy.update_attributes(credentials_location: 'authorization')
+
+    res = api_test_curl(@proxy)
+    assert_match %r(http://USER_KEY@), res
+
+    @proxy.service.update_attributes(backend_version: '2')
+    @proxy.reload
+    res = api_test_curl(@proxy)
+    assert_match %r(http://APP_ID:APP_KEY@), res
   end
 
   test 'no double ?' do
@@ -59,4 +71,5 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     refute(is_https?(1))
     refute(is_https?(nil))
   end
+
 end

@@ -1,5 +1,5 @@
 Given /^(provider "[^\"]*") has portlets$/ do |provider|
-  Factory :blog_post_portlet, :account => provider
+  FactoryBot.create :blog_post_portlet, :account => provider
 end
 
 Given /^(provider "[^\"]*") has no portlets$/ do |provider|
@@ -8,7 +8,7 @@ end
 
 
 Given /^(provider "[^\"]*") has the blog posts portlet is connected to "([^"]*)" container in (page "[^"]*")$/ do |provider, container, page|
-  blog = Factory :blog
+  blog = FactoryBot.create :blog
 
   BlogPostsPortlet.create!(:name => "Articles Portlet", :blog_id => blog.id,
                            :template => BlogPostsPortlet.default_template,

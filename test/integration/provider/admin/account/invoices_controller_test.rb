@@ -13,7 +13,7 @@ class Provider::Admin::Account::InvoicesControllerTest < ActionDispatch::Integra
   end
 
   test '#index for provider' do
-    provider = FactoryGirl.create(:provider_account)
+    provider = FactoryBot.create(:provider_account)
     login! provider
 
     ThreeScale.config.stubs(onpremises: false)

@@ -4,7 +4,7 @@ class Liquid::Drops::PlanDropTest < ActiveSupport::TestCase
   include Liquid::StandardFilters
 
   def setup
-    @plan = FactoryGirl.create(:account_plan, cost_per_month: 2)
+    @plan = FactoryBot.create(:account_plan, cost_per_month: 2)
     @drop = Drops::Plan.new(@plan)
   end
 
@@ -17,7 +17,7 @@ class Liquid::Drops::PlanDropTest < ActiveSupport::TestCase
   end
 
   def test_sort_by_flat_cost
-    plan_2 = FactoryGirl.create(:account_plan, cost_per_month: 1)
+    plan_2 = FactoryBot.create(:account_plan, cost_per_month: 1)
     drop_2 = Drops::Plan.new(plan_2)
 
     sorted_plan_ids = sort([@drop, drop_2], :flat_cost).map(&:id)
@@ -26,7 +26,7 @@ class Liquid::Drops::PlanDropTest < ActiveSupport::TestCase
   end
 
   def test_sort_by_flat_cost_with_cost_per_month_zero
-    plan_2 = FactoryGirl.create(:account_plan, cost_per_month: 0)
+    plan_2 = FactoryBot.create(:account_plan, cost_per_month: 0)
     drop_2 = Drops::Plan.new(plan_2)
 
     sorted_plan_ids = sort([@drop, drop_2], :flat_cost).map(&:id)
@@ -35,7 +35,7 @@ class Liquid::Drops::PlanDropTest < ActiveSupport::TestCase
   end
 
   def test_sort_by_cost
-    plan_2 = FactoryGirl.create(:account_plan, cost_per_month: 0)
+    plan_2 = FactoryBot.create(:account_plan, cost_per_month: 0)
     drop_2 = Drops::Plan.new(plan_2)
 
     sorted_plan_ids = sort([@drop, drop_2], :cost).map(&:id)

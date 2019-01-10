@@ -1,14 +1,14 @@
-require 'spec_helper'
+require 'rails_helper'
 
 resource "LineItem", transactions: false do
-  let(:provider) { Factory(:simple_provider) }
-  let(:buyer) { Factory(:simple_buyer, provider_account: provider) }
-  let(:application) { Factory(:simple_cinstance, user_account: buyer) }
+  let(:provider) { FactoryBot.create(:simple_provider) }
+  let(:buyer) { FactoryBot.create(:simple_buyer, provider_account: provider) }
+  let(:application) { FactoryBot.create(:simple_cinstance, user_account: buyer) }
 
-  let(:invoice) { Factory(:invoice, buyer_account: buyer, provider_account: provider) }
+  let(:invoice) { FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider) }
 
   let(:resource) do
-    Factory(:line_item_plan_cost, invoice: invoice, contract: application,
+    FactoryBot.create(:line_item_plan_cost, invoice: invoice, contract: application,
                            name: 'Line item', description: 'desc', quantity: 2, cost: 10, metric_id: 42)
   end
 

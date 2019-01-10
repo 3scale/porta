@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Given(/^the provider has (\d) active docs?$/) do |number_active_docs|
-  @active_docs = FactoryGirl.create_list(:api_docs_service, number_active_docs.to_i, account: @provider, service: @provider.default_service)
+  @active_docs = FactoryBot.create_list(:api_docs_service, number_active_docs.to_i, account: @provider, service: @provider.default_service)
 end
 
 When /^I try to (create|update) the active docs( of the service)? with (in)?valid data$/ do |action, optional_scope, invalid|
@@ -9,7 +9,7 @@ When /^I try to (create|update) the active docs( of the service)? with (in)?vali
   scope = optional_scope.present? ? ' for a service' : ''
   step "I go to the #{action_page} active docs page#{scope}"
   fill_in('Name', with: 'ActiveDocsName')
-  api_spec = invalid ? 'invalid' : FactoryGirl.build(:api_docs_service).body
+  api_spec = invalid ? 'invalid' : FactoryBot.build(:api_docs_service).body
   fill_in('API JSON Spec', with: api_spec)
   click_on "#{action.capitalize!} Service"
 end

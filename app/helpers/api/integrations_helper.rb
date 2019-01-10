@@ -6,18 +6,30 @@ module Api::IntegrationsHelper
     extheaders = ''
     query = ''
 
-    if proxy.credentials_location == 'headers'
+    endpoint = "#{production ? proxy.default_production_endpoint : proxy.sandbox_endpoint}#{proxy.api_test_path}"
+
+    case proxy.credentials_location
+    when 'headers'
       credentials.each { |k, v| extheaders += " -H'#{k}: #{v}'" }
-    elsif test_path = proxy.api_test_path
-      query = "#{(test_path.index('?') ? '&' : '?')}#{credentials.to_query}"
-    else
-      query = "?#{credentials.to_query}"
+    when 'query'
+      test_path = proxy.api_test_path
+      if test_path
+        query = "#{(test_path.index('?') ? '&' : '?')}#{credentials.to_query}"
+      else
+        query = "?#{credentials.to_query}"
+      end
+    when 'authorization'
+      uri = URI(endpoint)
+
+      uri.user, uri.password = proxy.authorization_credentials
+
+      endpoint = uri.to_s
     end
 
     content_tag :code,
                 id: (production ? 'api-production-curl' : 'api-test-curl'),
                 'data-credentials' => credentials_3scale.to_json do
-      %{curl "#{production ? proxy.default_production_endpoint : proxy.sandbox_endpoint}#{proxy.api_test_path}#{query}" #{extheaders}}
+      %(curl "#{endpoint}#{query}" #{extheaders})
     end
   end
 

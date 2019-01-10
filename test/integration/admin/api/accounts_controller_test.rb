@@ -11,8 +11,8 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     def test_find
-      account = FactoryGirl.create(:simple_provider, provider: master_account)
-      service = FactoryGirl.create(:simple_service, account: account)
+      account = FactoryBot.create(:simple_provider, provider: master_account)
+      service = FactoryBot.create(:simple_service, account: account)
       service.service_tokens.create!(value: 'token')
 
       get find_admin_api_accounts_path(format: :xml, provider_key: master_account.api_key, buyer_service_token: 'token')
@@ -31,18 +31,18 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
   def setup
-    @provider = FactoryGirl.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
-    @member = FactoryGirl.create(:member, account: @provider, member_permission_ids: [:partners])
-    @access_token = FactoryGirl.create(:access_token, owner: @member, scopes: 'account_management')
-    @account = FactoryGirl.create(:buyer_account, provider_account: @provider)
+    @member = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners])
+    @access_token = FactoryBot.create(:access_token, owner: @member, scopes: 'account_management')
+    @account = FactoryBot.create(:buyer_account, provider_account: @provider)
     @account.settings.update_column(:monthly_billing_enabled, false)
     Logic::RollingUpdates.stubs(:enabled?).returns(true)
   end
 
   def test_find
-    account = FactoryGirl.create(:simple_provider, provider: @provider)
-    service = FactoryGirl.create(:simple_service, account: account)
+    account = FactoryBot.create(:simple_provider, provider: @provider)
+    service = FactoryBot.create(:simple_service, account: account)
     service.service_tokens.create!(value: 'token')
 
     get find_admin_api_accounts_path(format: :xml, provider_key: @provider.api_key, buyer_service_token: 'token')

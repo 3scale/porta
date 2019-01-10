@@ -3,13 +3,13 @@ require 'test_helper'
 class Abilities::ProviderMemberTest < ActiveSupport::TestCase
 
   def setup
-    @account = FactoryGirl.create(:simple_provider)
-    @member  = FactoryGirl.create(:simple_user, account: @account)
+    @account = FactoryBot.create(:simple_provider)
+    @member  = FactoryBot.create(:simple_user, account: @account)
   end
 
   def test_buyer_users
-    buyer      = FactoryGirl.build_stubbed(:simple_buyer, provider_account: @account)
-    buyer_user = FactoryGirl.build_stubbed(:simple_user, account: buyer)
+    buyer      = FactoryBot.build_stubbed(:simple_buyer, provider_account: @account)
+    buyer_user = FactoryBot.build_stubbed(:simple_user, account: buyer)
     actions    = %i(read update update_role destroy suspend unsuspend)
 
     @member.admin_sections = []
@@ -29,9 +29,9 @@ class Abilities::ProviderMemberTest < ActiveSupport::TestCase
 
   def test_events_according_the_service
     # service has to be stored in database, because ability depends on scope user.accessible_services
-    service  = FactoryGirl.create(:simple_service, id: 1, account: @account)
-    plan     = FactoryGirl.build_stubbed(:simple_service_plan, issuer: service)
-    contract = FactoryGirl.build_stubbed(:simple_service_contract, plan: plan)
+    service  = FactoryBot.create(:simple_service, id: 1, account: @account)
+    plan     = FactoryBot.build_stubbed(:simple_service_plan, issuer: service)
+    contract = FactoryBot.build_stubbed(:simple_service_contract, plan: plan)
     event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, @member)
 
     @member.stubs(:has_permission?).with(anything)
@@ -53,7 +53,7 @@ class Abilities::ProviderMemberTest < ActiveSupport::TestCase
   def test_events_according_the_users_permissions
     billing_event = Invoices::InvoicesToReviewEvent.create(@account)
     account_event = Accounts::AccountCreatedEvent.create(@account, @member)
-    limit_alert   = FactoryGirl.build_stubbed(:limit_alert)
+    limit_alert   = FactoryBot.build_stubbed(:limit_alert)
     alert_event   = Alerts::LimitAlertReachedProviderEvent.create(limit_alert)
 
     @member.stubs(:has_permission?).with(anything)
@@ -78,9 +78,9 @@ class Abilities::ProviderMemberTest < ActiveSupport::TestCase
   end
 
   def test_services
-    service_1 = FactoryGirl.create(:simple_service, id: 1)
-    service_2 = FactoryGirl.create(:simple_service, id: 2, account: @account)
-    service_3 = FactoryGirl.create(:simple_service, id: 3, account: @account)
+    service_1 = FactoryBot.create(:simple_service, id: 1)
+    service_2 = FactoryBot.create(:simple_service, id: 2, account: @account)
+    service_3 = FactoryBot.create(:simple_service, id: 3, account: @account)
 
     assert_cannot ability, :show, service_1, 'foreign service'
     assert_can ability, :show, service_2, 'all services allowed by default'
@@ -117,17 +117,17 @@ class Abilities::ProviderMemberTest < ActiveSupport::TestCase
   end
 
   def test_cinstances
-    service_1 = FactoryGirl.create(:simple_service)
-    service_2 = FactoryGirl.create(:simple_service, account: @account)
-    service_3 = FactoryGirl.create(:simple_service, account: @account)
+    service_1 = FactoryBot.create(:simple_service)
+    service_2 = FactoryBot.create(:simple_service, account: @account)
+    service_3 = FactoryBot.create(:simple_service, account: @account)
 
-    plan_1 = FactoryGirl.build_stubbed(:simple_application_plan, service: service_1)
-    plan_2 = FactoryGirl.build_stubbed(:simple_application_plan, service: service_2)
-    plan_3 = FactoryGirl.build_stubbed(:simple_application_plan, service: service_3)
+    plan_1 = FactoryBot.build_stubbed(:simple_application_plan, service: service_1)
+    plan_2 = FactoryBot.build_stubbed(:simple_application_plan, service: service_2)
+    plan_3 = FactoryBot.build_stubbed(:simple_application_plan, service: service_3)
 
-    app_1 = FactoryGirl.create(:simple_cinstance, plan: plan_1)
-    app_2 = FactoryGirl.create(:simple_cinstance, plan: plan_2)
-    app_3 = FactoryGirl.create(:simple_cinstance, plan: plan_3)
+    app_1 = FactoryBot.create(:simple_cinstance, plan: plan_1)
+    app_2 = FactoryBot.create(:simple_cinstance, plan: plan_2)
+    app_3 = FactoryBot.create(:simple_cinstance, plan: plan_3)
 
     assert_cannot ability, :show, app_1, 'foreign service'
     assert_cannot ability, :show, app_2, 'none services allowed'
@@ -190,7 +190,7 @@ class Abilities::ProviderMemberTest < ActiveSupport::TestCase
 
   def test_billing
     ThreeScale.config.stubs(onpremises: true)
-    invoice = FactoryGirl.build_stubbed(:invoice, buyer_account_id: @account.id)
+    invoice = FactoryBot.build_stubbed(:invoice, buyer_account_id: @account.id)
 
     @account.stubs(master?: true)
 

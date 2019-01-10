@@ -1,13 +1,13 @@
-Factory.define :billing_strategy, :class => Finance::BillingStrategy do |s|
-  s.currency 'EUR'
-end
+FactoryBot.define do
+  factory :billing_strategy, :class => Finance::BillingStrategy do
+    currency { 'EUR' }
+  end
 
-Factory.define :prepaid_billing, :parent => :billing_strategy, :class => Finance::PrepaidBillingStrategy do |s|
-end
+  factory :prepaid_billing, :parent => :billing_strategy, :class => Finance::PrepaidBillingStrategy
 
-Factory.define :postpaid_billing, :parent => :billing_strategy, :class => Finance::PostpaidBillingStrategy do |s|
-end
+  factory :postpaid_billing, :parent => :billing_strategy, :class => Finance::PostpaidBillingStrategy
 
-Factory.define :postpaid_with_charging, :parent => :postpaid_billing do |s|
-  s.charging_enabled true
+  factory :postpaid_with_charging, :parent => :postpaid_billing do
+    charging_enabled { true }
+  end
 end

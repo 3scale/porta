@@ -4,10 +4,10 @@ class DeveloperPortal::Admin::Applications::KeysControllerTest < DeveloperPortal
 
   def setup
     super
-    @provider = Factory :provider_account
+    @provider = FactoryBot.create :provider_account
 
-    @buyer = Factory :buyer_account, :provider_account => @provider
-    plan  = Factory :application_plan, :issuer => @provider.default_service
+    @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+    plan  = FactoryBot.create :application_plan, :issuer => @provider.default_service
     @buyer.buy! plan
     @buyer.reload
 

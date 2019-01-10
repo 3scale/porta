@@ -2,11 +2,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = Factory :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
 
-    @service = Factory(:service, :account => @provider)
+    @service = FactoryBot.create(:service, :account => @provider)
     @metric  = @service.metrics.hits
-    @metric_method = Factory(:metric,
+    @metric_method = FactoryBot.create(:metric,
                              :service => @service, :parent_id => @metric.id)
 
 
@@ -26,9 +26,9 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
   end
 
   test 'service api metrics index' do
-    other_service = Factory :service, :account => @provider
+    other_service = FactoryBot.create :service, :account => @provider
     other_metric  = other_service.metrics.hits
-    Factory(:metric, :service => other_service, :parent_id => other_metric.id)
+    FactoryBot.create(:metric, :service => other_service, :parent_id => other_metric.id)
 
     get(admin_api_service_metric_methods_path(@service, @metric),
              :provider_key => @provider.api_key, :format => :xml)

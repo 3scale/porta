@@ -9,7 +9,7 @@ end
 
 class Authentication::Strategy::BaseTest < ActiveSupport::TestCase
   def setup
-    account = Factory(:provider_account)
+    account = FactoryBot.create(:provider_account)
     @strategy = Authentication::Strategy::FooBar.new(account)
   end
 

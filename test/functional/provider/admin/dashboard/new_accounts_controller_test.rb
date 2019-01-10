@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Provider::Admin::Dashboard::NewAccountsControllerTest < ActionController::TestCase
   setup do
-    @provider = FactoryGirl.create(:simple_admin).account
+    @provider = FactoryBot.create(:simple_admin).account
     login_provider(@provider)
   end
 

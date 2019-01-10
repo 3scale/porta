@@ -5,7 +5,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   def setup
     Stats::Base.storage.flushdb
-    @provider_account = Factory(:provider_account)
+    @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.default_service
     @metric = @service.metrics.hits!
     Stats::Base.storage.flushdb
@@ -19,8 +19,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'usage_response_code with no data as json' do
     Timecop.freeze(Time.utc(2009, 12, 4, 11, 12))
-    plan = Factory(:application_plan, :issuer => @provider_account.default_service)
-    @cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :issuer => @provider_account.default_service)
+    @cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
     get "/stats/services/#{@cinstance.service_id}/usage_response_code.json", period:'day', :response_code => 200, timezone:'Madrid', skip_change: false
@@ -43,8 +43,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'usage with no data as json' do
     Timecop.freeze(Time.utc(2009, 12, 4, 11, 12))
-    plan = Factory(:application_plan, :issuer => @provider_account.default_service)
-    @cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :issuer => @provider_account.default_service)
+    @cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
     get "/stats/services/#{@cinstance.service_id}/usage.json", period:'day', :metric_name => @metric.system_name, timezone:'Madrid', skip_change: false
@@ -71,8 +71,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   context 'with simple plan and cinstance' do
     setup do
-      plan = Factory(:application_plan, :issuer => @service)
-      @cinstance = Factory(:cinstance, :plan => plan)
+      plan = FactoryBot.create(:application_plan, :issuer => @service)
+      @cinstance = FactoryBot.create(:cinstance, :plan => plan)
       provider_login_with @provider_account.admins.first.username, 'supersecret'
       Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
     end
@@ -113,8 +113,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'usage with some data as json' do
-    plan = Factory(:application_plan, :issuer => @service)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :issuer => @service)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     # This one is outside of the time range
     make_transaction_at(Time.utc(2009, 12, 11, 10, 35), :cinstance_id => cinstance.id)
@@ -146,8 +146,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'positive timezone shifting' do
-    plan = Factory(:application_plan, :issuer => @service)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :issuer => @service)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     # This one is outside of the time range
     make_transaction_at(Time.utc(2009, 12, 31, 10, 35), :cinstance_id => cinstance.id)
@@ -180,8 +180,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'negative timezone shifting' do
-    plan = Factory(:application_plan, :issuer => @service)
-    cinstance = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :issuer => @service)
+    cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     # This one is outside of the time range
     make_transaction_at(Time.utc(2010, 01, 01, 00, 35), :cinstance_id => cinstance.id)
@@ -214,9 +214,9 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'top_clients as json' do
-    plan = Factory(:application_plan, :issuer => @service)
-    cinstance1 = Factory(:cinstance, :plan => plan)
-    cinstance2 = Factory(:cinstance, :plan => plan)
+    plan = FactoryBot.create(:application_plan, :issuer => @service)
+    cinstance1 = FactoryBot.create(:cinstance, :plan => plan)
+    cinstance2 = FactoryBot.create(:cinstance, :plan => plan)
 
     make_transaction_at(Time.utc(2009, 12,  2), :cinstance_id => cinstance1.id)
     make_transaction_at(Time.utc(2009, 12,  3), :cinstance_id => cinstance2.id)

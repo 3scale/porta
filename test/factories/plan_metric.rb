@@ -1,4 +1,6 @@
-Factory.define(:plan_metric) do |plan_metric|
-  plan_metric.association(:plan, :factory => :application_plan)
-  plan_metric.association(:metric)
+FactoryBot.define do
+  factory(:plan_metric) do
+    association(:plan, :factory => :application_plan)
+    association(:metric)
+  end
 end

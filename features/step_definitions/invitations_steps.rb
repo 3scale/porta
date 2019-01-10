@@ -1,21 +1,21 @@
 # TODO: the second step wording reads better, replace the occurences of the first one
 Given(/^an invitation from (account "[^\"]*") sent to "([^\"]*)"$/) do |account, email|
-  Factory(:invitation, account: account, email: email)
+  FactoryBot.create(:invitation, account: account, email: email)
 end
 
 Given(/^an invitation sent to "([^\"]*)" to join (account "[^\"]*")$/) do |address, account|
-  Factory(:invitation, account: account, email: address)
+  FactoryBot.create(:invitation, account: account, email: address)
 end
 
 Given(/^the following invitations from (account "[^\"]*") exist:$/) do |account, table|
   table.hashes.each do |row|
-    invitation = Factory(:invitation, account: account, email: row['Email'])
+    invitation = FactoryBot.create(:invitation, account: account, email: row['Email'])
     invitation.accept! if row['State'] == 'accepted'
   end
 end
 
 Given(/^(?:an|the) invitation sent to "([^\"]*)" to join (account "[^\"]*") was accepted$/) do |address, account|
-  Factory(:invitation, account: account, email: address)
+  FactoryBot.create(:invitation, account: account, email: address)
   invitation = account.invitations.find_by_email!(address)
   invitation.accept!
 end

@@ -5,12 +5,12 @@ class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
   def setup
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
-    provider        = Factory(:provider_account)
+    provider        = FactoryBot.create(:provider_account)
     @service        = provider.first_service!
     service_id      = @service.backend_id
-    buyer           = Factory(:buyer_account, :provider_account  => provider)
-    plan            = Factory(:application_plan, :issuer => @service)
-    @cinstance      = Factory(:cinstance, :plan => plan, :user_account => buyer)
+    buyer           = FactoryBot.create(:buyer_account, :provider_account  => provider)
+    plan            = FactoryBot.create(:application_plan, :issuer => @service)
+    @cinstance      = FactoryBot.create(:cinstance, :plan => plan, :user_account => buyer)
     application_id  = @cinstance.application_id
 
     event_attrs = [

@@ -9,7 +9,7 @@ class Account::FieldsTest < ActiveSupport::TestCase
   context 'source of field definitions for buyer' do
 
     should 'built by normal association' do
-      @provider = Factory(:simple_provider)
+      @provider = FactoryBot.create(:simple_provider)
       buyer = @provider.buyers.build :org_name => 'buyer'
       assert_equal @provider, buyer.fields_definitions_source_root
 
@@ -21,7 +21,7 @@ class Account::FieldsTest < ActiveSupport::TestCase
     end
 
     should 'buit with fields' do
-      @provider = Factory(:simple_provider)
+      @provider = FactoryBot.create(:simple_provider)
       buyer = @provider.buyers.build_with_fields :org_name => 'buyer'
       assert_equal @provider, buyer.fields_definitions_source_root
 
@@ -35,7 +35,7 @@ class Account::FieldsTest < ActiveSupport::TestCase
     end
 
     should 'which exists' do
-      buyer = Factory(:simple_buyer)
+      buyer = FactoryBot.create(:simple_buyer)
       assert_equal buyer.provider_account, buyer.fields_definitions_source_root
 
       user = buyer.users.build(@user_attrs)
@@ -63,7 +63,7 @@ class Account::FieldsTest < ActiveSupport::TestCase
     end
 
     should 'which exists' do
-      provider = Factory(:simple_provider)
+      provider = FactoryBot.create(:simple_provider)
       assert_equal provider.provider_account, provider.fields_definitions_source_root
     end
   end

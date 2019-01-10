@@ -23,7 +23,7 @@ class AccountTest < ActiveSupport::TestCase
 
   def test_not_master
     master = master_account
-    buyer = FactoryGirl.create(:simple_buyer, provider_account: master)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: master)
 
     assert master.buyer_account_ids.include?(buyer.id)
     assert master.buyer_account_ids.include?(master.id)
@@ -33,7 +33,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   def test_provider_but_not_master
-    account = FactoryGirl.build_stubbed(:simple_account, provider: false, master: false)
+    account = FactoryBot.build_stubbed(:simple_account, provider: false, master: false)
     refute account.tenant?
     
     account.provider = true
@@ -44,8 +44,8 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   def test_destroy_association
-    account = FactoryGirl.create(:simple_account)
-    service = FactoryGirl.create(:simple_service, account: account)
+    account = FactoryBot.create(:simple_account)
+    service = FactoryBot.create(:simple_service, account: account)
     account.update_column(:default_service_id, service.id)
     metric  = service.metrics.hits
 
@@ -59,8 +59,8 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   def test_default_service_id
-    service = FactoryGirl.create(:simple_service)
-    account = FactoryGirl.create(:simple_account, services: [service], default_service_id: service.id)
+    service = FactoryBot.create(:simple_service)
+    account = FactoryBot.create(:simple_account, services: [service], default_service_id: service.id)
 
     assert service.default?
     assert_equal service.id, account.default_service_id
@@ -74,10 +74,10 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test '#trashed_messages' do
-    account  = FactoryGirl.build_stubbed(:simple_account)
-    other    = FactoryGirl.build_stubbed(:simple_account)
-    message1 = FactoryGirl.create(:message, sender: account, to: other, state: 'sent')
-    message2 = FactoryGirl.create(:message, sender: other, to: account, state: 'sent')
+    account  = FactoryBot.build_stubbed(:simple_account)
+    other    = FactoryBot.build_stubbed(:simple_account)
+    message1 = FactoryBot.create(:message, sender: account, to: other, state: 'sent')
+    message2 = FactoryBot.create(:message, sender: other, to: account, state: 'sent')
 
     assert_equal 0, account.trashed_messages.count
 
@@ -91,8 +91,8 @@ class AccountTest < ActiveSupport::TestCase
   test 'avoid deletion of master account' do
     refute master_account.destroy, "Should not destroy master account"
 
-    provider = FactoryGirl.create(:simple_provider)
-    buyer    = FactoryGirl.create(:simple_buyer)
+    provider = FactoryBot.create(:simple_provider)
+    buyer    = FactoryBot.create(:simple_buyer)
 
     assert provider.destroy, "Should destroy provider account"
     assert buyer.destroy, "Should destroy buyer account"
@@ -100,13 +100,13 @@ class AccountTest < ActiveSupport::TestCase
 
   # regression test: https://github.com/3scale/system/pull/3406
   test 'update_attributes with nil as param should not raise error' do
-    buyer = FactoryGirl.create(:simple_buyer)
+    buyer = FactoryBot.create(:simple_buyer)
     buyer.update_attributes(nil)
   end
 
   test 'should validate self_domain uniqueness' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
-    other   = FactoryGirl.build_stubbed(:simple_provider)
+    account = FactoryBot.build_stubbed(:simple_provider)
+    other   = FactoryBot.build_stubbed(:simple_provider)
 
     assert account.valid?
     assert other.valid?
@@ -130,16 +130,16 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'emails should not contain nils' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
+    account = FactoryBot.build_stubbed(:simple_provider)
     # Users should always have an email, but old/test ones might not
     # Return a properly empty list instead of a "list with nils"
-    Factory.build(:admin, email: nil, account_id: account.id).save(validate: false)
+    FactoryBot.build(:admin, email: nil, account_id: account.id).save(validate: false)
 
     assert_equal([], account.emails)
   end
 
   test 'has messages' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
+    account = FactoryBot.build_stubbed(:simple_provider)
 
     assert_equal [], account.hidden_messages
     assert_equal [], account.received_messages
@@ -147,7 +147,7 @@ class AccountTest < ActiveSupport::TestCase
 
   context 'providers named_scope' do
     setup do
-      provider = FactoryGirl.create(:simple_provider)
+      provider = FactoryBot.create(:simple_provider)
 
       @named_scoped_provider = provider
     end
@@ -159,7 +159,7 @@ class AccountTest < ActiveSupport::TestCase
 
   context 'deleted buyer account' do
     should 'have working #to_xml' do
-      buyer = FactoryGirl.create(:simple_buyer)
+      buyer = FactoryBot.create(:simple_buyer)
 
       buyer.destroy
 
@@ -173,8 +173,8 @@ class AccountTest < ActiveSupport::TestCase
       @january = Date.parse '1 - Jan - 2010'
       @april   = Date.parse '1 - Apr - 2010'
 
-      @created_in_january = FactoryGirl.create(:simple_provider, created_at: @january + 1)
-      @created_in_april   = FactoryGirl.create(:simple_provider, created_at: @april + 1)
+      @created_in_january = FactoryBot.create(:simple_provider, created_at: @january + 1)
+      @created_in_april   = FactoryBot.create(:simple_provider, created_at: @april + 1)
     end
 
     context '.created_after named_scope' do
@@ -199,16 +199,16 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'Account#admins returns users with admin role' do
-    account = FactoryGirl.create(:account_without_users)
-    FactoryGirl.create(:simple_user, account: account)
-    admin = FactoryGirl.create(:admin, account: account)
+    account = FactoryBot.create(:account_without_users)
+    FactoryBot.create(:simple_user, account: account)
+    admin = FactoryBot.create(:admin, account: account)
 
     assert_equal [admin], account.admins
   end
 
   context 'An Account' do
     setup do
-      @account = FactoryGirl.build(:simple_account, org_name: 'Panda Research Base')
+      @account = FactoryBot.build(:simple_account, org_name: 'Panda Research Base')
     end
 
     should 'have nil VAT rate' do
@@ -253,7 +253,7 @@ class AccountTest < ActiveSupport::TestCase
 
     context 'with country that has no currency' do
       setup do
-        @account.country = Factory(:country, :currency => nil)
+        @account.country = FactoryBot.create(:country, :currency => nil)
       end
 
       should 'return EUR on :currency' do
@@ -277,15 +277,15 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'Account.buyer_users returns all users of all buyer accounts' do
-    provider_account  = FactoryGirl.build_stubbed(:simple_provider)
-    buyer_account_one = Factory.build(:simple_buyer, provider_account: provider_account)
+    provider_account  = FactoryBot.build_stubbed(:simple_provider)
+    buyer_account_one = FactoryBot.build(:simple_buyer, provider_account: provider_account)
 
-    buyer_account_one.users << Factory.build(:simple_user)
-    buyer_account_one.users << Factory.build(:simple_user)
+    buyer_account_one.users << FactoryBot.build(:simple_user)
+    buyer_account_one.users << FactoryBot.build(:simple_user)
     buyer_account_one.save!
 
-    buyer_account_two = Factory.build(:simple_buyer, provider_account: provider_account)
-    buyer_account_two.users << Factory.build(:simple_user)
+    buyer_account_two = FactoryBot.build(:simple_buyer, provider_account: provider_account)
+    buyer_account_two.users << FactoryBot.build(:simple_user)
     buyer_account_two.save!
 
     assert_same_elements buyer_account_one.users + buyer_account_two.users,
@@ -293,17 +293,17 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "Account.managed_users returns users of the account and users of it's buyer accounts" do
-    provider_account = FactoryGirl.create(:simple_provider)
-    provider_user    = FactoryGirl.create(:simple_user, account: provider_account)
+    provider_account = FactoryBot.create(:simple_provider)
+    provider_user    = FactoryBot.create(:simple_user, account: provider_account)
 
-    buyer_account = FactoryGirl.create(:simple_buyer, provider_account: provider_account)
-    buyer_user    = FactoryGirl.create(:simple_user, account: buyer_account)
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
+    buyer_user    = FactoryBot.create(:simple_user, account: buyer_account)
 
-    other_provider_account = FactoryGirl.create(:simple_provider)
-    other_provider_user    = FactoryGirl.create(:simple_user, account: other_provider_account)
+    other_provider_account = FactoryBot.create(:simple_provider)
+    other_provider_user    = FactoryBot.create(:simple_user, account: other_provider_account)
 
-    other_buyer_account = FactoryGirl.create(:simple_buyer, provider_account: other_provider_account)
-    other_buyer_user    = FactoryGirl.create(:simple_user, account: other_buyer_account)
+    other_buyer_account = FactoryBot.create(:simple_buyer, provider_account: other_provider_account)
+    other_buyer_user    = FactoryBot.create(:simple_user, account: other_buyer_account)
 
     assert_contains provider_account.managed_users, provider_user
     assert_contains provider_account.managed_users, buyer_user
@@ -313,9 +313,9 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'Account.managed_users returns read-write records' do
-    provider_account = FactoryGirl.create(:simple_provider)
+    provider_account = FactoryBot.create(:simple_provider)
 
-    FactoryGirl.create(:simple_user, account: provider_account)
+    FactoryBot.create(:simple_user, account: provider_account)
 
     assert !provider_account.managed_users.first.readonly?
   end
@@ -348,26 +348,26 @@ class AccountTest < ActiveSupport::TestCase
     account = nil
 
     assert_no_change :of => lambda { Forum.count } do
-      account = FactoryGirl.create(:simple_provider)
+      account = FactoryBot.create(:simple_provider)
     end
 
     assert_not_nil account.forum
   end
 
   test 'forum is created with default name' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
+    account = FactoryBot.build_stubbed(:simple_provider)
 
     assert_equal 'Forum', account.forum.name
   end
 
   test '#forum! returns the forum when called on a provider account' do
-    account = FactoryGirl.build_stubbed(:simple_provider)
+    account = FactoryBot.build_stubbed(:simple_provider)
 
     assert_instance_of Forum, account.forum!
   end
 
   test '#forum! raises an exception when called on a buyer account' do
-    account = FactoryGirl.build_stubbed(:simple_buyer)
+    account = FactoryBot.build_stubbed(:simple_buyer)
 
     assert_raise ActiveRecord::RecordNotFound do
       account.forum!
@@ -410,7 +410,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "Account.find_by_provider_key! finds account by bought cinstance's user_key" do
-    account = FactoryGirl.create(:simple_account, provider_account: master_account)
+    account = FactoryBot.create(:simple_account, provider_account: master_account)
     cinstance = account.buy!(master_account.default_service.published_plans.first)
 
     assert_equal account, Account.find_by_provider_key!(cinstance.user_key)
@@ -426,7 +426,7 @@ class AccountTest < ActiveSupport::TestCase
 
   test 'Account.master returns master account' do
     Account.delete_all
-    FactoryGirl.build_stubbed(:simple_account) # create one normal account, so I don't get false positives
+    FactoryBot.build_stubbed(:simple_account) # create one normal account, so I don't get false positives
 
     master_account = Account.new(org_name: 'master')
     master_account.master = true
@@ -490,7 +490,7 @@ class AccountTest < ActiveSupport::TestCase
     plan = master_account.default_service.plans.published.first
     plan.enable_feature!(feature_one.system_name)
 
-    account = FactoryGirl.create(:provider_account, provider_account: master_account)
+    account = FactoryBot.create(:provider_account, provider_account: master_account)
 
     assert account.feature_allowed?(:free_t_shirt)  # works with symbols
     assert account.feature_allowed?('free_t_shirt') # and strings
@@ -509,7 +509,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "deleted billing strategy on destroy" do
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
     id = provider.create_billing_strategy.id
     provider.destroy
     assert_nil Finance::BillingStrategy.find_by_id(id), 'BillingStrategy not deleted'
@@ -524,7 +524,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'Account.id_from_api_key loads data from database and writes to cache on cache miss' do
-    account = FactoryGirl.create(:provider_account)
+    account = FactoryBot.create(:provider_account)
 
     Rails.cache.stubs(:read).with("account_ids/#{account.api_key}", any_parameters).returns(nil)
     Rails.cache.expects(:write).with("account_ids/#{account.api_key}", account.id, any_parameters)
@@ -537,8 +537,8 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "destroying account destroys it's services" do
-    account = FactoryGirl.create(:provider_account)
-    service = FactoryGirl.create(:simple_service, account: account)
+    account = FactoryBot.create(:provider_account)
+    service = FactoryBot.create(:simple_service, account: account)
 
     account.destroy
 
@@ -546,10 +546,10 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "destroying account destroys the default service firing services destroy callbacks" do
-    account = FactoryGirl.create(:provider_account)
+    account = FactoryBot.create(:provider_account)
     service = account.default_service
-    metric  = FactoryGirl.create(:metric, service: service)
-    feature = FactoryGirl.create(:feature, featurable: service)
+    metric  = FactoryBot.create(:metric, service: service)
+    feature = FactoryBot.create(:feature, featurable: service)
 
     account.destroy
 
@@ -559,10 +559,10 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'destroying provider account with buyer accounts' do
-    provider_account = FactoryGirl.create(:provider_account)
-    plan = FactoryGirl.create(:simple_application_plan, service: provider_account.default_service)
+    provider_account = FactoryBot.create(:provider_account)
+    plan = FactoryBot.create(:simple_application_plan, service: provider_account.default_service)
 
-    buyer_account = FactoryGirl.create(:simple_buyer, provider_account: provider_account)
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
     buyer_account.buy!(plan)
 
     assert_change :of => lambda { Account.providers.count }, :by => -1 do
@@ -576,19 +576,19 @@ class AccountTest < ActiveSupport::TestCase
 
   context '#can_create_application?' do
     setup do
-      provider = FactoryGirl.create(:provider_account)
-      @buyer   = FactoryGirl.create(:simple_buyer, provider_account: provider)
+      provider = FactoryBot.create(:provider_account)
+      @buyer   = FactoryBot.create(:simple_buyer, provider_account: provider)
 
       @service = @buyer.provider_account.default_service
       #making the service subscribeable
       @service.publish!
-      @plan = FactoryGirl.create(:simple_application_plan, service: @service)
+      @plan = FactoryBot.create(:simple_application_plan, service: @service)
       @plan.publish!
 
       #another subscribeable service
-      @service_denied = FactoryGirl.create(:service, account: @buyer.provider_account)
+      @service_denied = FactoryBot.create(:service, account: @buyer.provider_account)
       @service_denied.publish!
-      @plan2 = FactoryGirl.create(:simple_application_plan, service: @service_denied)
+      @plan2 = FactoryBot.create(:simple_application_plan, service: @service_denied)
       @plan2.publish!
 
       #subscribing to services
@@ -624,16 +624,16 @@ class AccountTest < ActiveSupport::TestCase
 
   context '#paid?' do
     setup do
-      @buyer = FactoryGirl.create(:buyer_account)
+      @buyer = FactoryBot.create(:buyer_account)
 
       @service = @buyer.provider_account.default_service
       #making the service subscribeable
       @service.publish!
 
-      @paid_plan = FactoryGirl.create(:simple_application_plan, service: @service, cost_per_month: 10.0)
+      @paid_plan = FactoryBot.create(:simple_application_plan, service: @service, cost_per_month: 10.0)
       @paid_plan.publish!
 
-      @free_plan = FactoryGirl.create(:simple_application_plan, service: @service)
+      @free_plan = FactoryBot.create(:simple_application_plan, service: @service)
       @free_plan.publish!
 
       #subscribing to services
@@ -653,7 +653,7 @@ class AccountTest < ActiveSupport::TestCase
 
   context '#on_trial?' do
     setup do
-      @buyer = FactoryGirl.create(:buyer_account)
+      @buyer = FactoryBot.create(:buyer_account)
       @service = @buyer.provider_account.default_service
       #making the service subscribeable
       @service.publish!
@@ -661,7 +661,7 @@ class AccountTest < ActiveSupport::TestCase
       @paid_15days = @service.service_plans.first
       @paid_15days.update_attributes(cost_per_month: 10.0, trial_period_days: 15, state: 'published')
 
-      @paid_notrial = FactoryGirl.create(:simple_application_plan, service: @service, cost_per_month: 10.0, state: 'published')
+      @paid_notrial = FactoryBot.create(:simple_application_plan, service: @service, cost_per_month: 10.0, state: 'published')
 
       @buyer.buy! @paid_15days
     end
@@ -678,7 +678,7 @@ class AccountTest < ActiveSupport::TestCase
   end #on_trial?
 
   test "support email should have a valid email format for providers" do
-    provider = FactoryGirl.build(:simple_provider, :support_email         => "support-email-acc.example.net",
+    provider = FactoryBot.build(:simple_provider, :support_email         => "support-email-acc.example.net",
                                                 :finance_support_email => "finance-support-acc.example.net")
     provider.valid?
 
@@ -688,7 +688,7 @@ class AccountTest < ActiveSupport::TestCase
 
   #regression test
   test "support email should not be validated for buyers" do
-    buyer = FactoryGirl.build(:simple_buyer, :support_email         => "support-email-acc.example.net",
+    buyer = FactoryBot.build(:simple_buyer, :support_email         => "support-email-acc.example.net",
                                           :finance_support_email => "finance-support-acc.example.net")
 
     assert buyer.valid?
@@ -697,12 +697,12 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "support_email should fall back to first admin email" do
-    provider = FactoryGirl.build_stubbed(:provider_account)
+    provider = FactoryBot.build_stubbed(:provider_account)
     assert_equal provider.support_email, provider.admins.first.email
   end
 
   test "finance_support_email should fall back to support_email" do
-    provider = FactoryGirl.build(:simple_provider, support_email: "support-email@acc.example.net")
+    provider = FactoryBot.build(:simple_provider, support_email: "support-email@acc.example.net")
     assert_equal provider.finance_support_email, provider.support_email
 
     provider.update_attribute :finance_support_email, "finance-support@acc.example.net"
@@ -739,7 +739,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'onboarding builds object if not already created' do
-    account = FactoryGirl.build(:account)
+    account = FactoryBot.build(:account)
 
     assert_not_nil account.onboarding
   end
@@ -779,7 +779,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'fetch_dispatch_rule' do
-    account = FactoryGirl.create(:simple_account)
+    account = FactoryBot.create(:simple_account)
 
     user_signup = SystemOperation.for(:user_signup)
     daily_reports = SystemOperation.for(:daily_reports)
@@ -789,11 +789,11 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'dispatch_rule_for' do
-    account       = FactoryGirl.build_stubbed(:simple_provider)
+    account       = FactoryBot.build_stubbed(:simple_provider)
     user_signup   = SystemOperation.for(:user_signup)
     daily_reports = SystemOperation.for(:daily_reports)
 
-    FactoryGirl.create(:mail_dispatch_rule, system_operation: daily_reports, account: account)
+    FactoryBot.create(:mail_dispatch_rule, system_operation: daily_reports, account: account)
 
     # When the migration is enabled, we disable the dispatch rules
     # because notifications are delivered and we don't want to deliver the info twice.
@@ -807,8 +807,8 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   def test_accessible_services
-    service = FactoryGirl.create(:simple_service)
-    account = FactoryGirl.create(:simple_account, services: [service], default_service_id: service.id)
+    service = FactoryBot.create(:simple_service)
+    account = FactoryBot.create(:simple_account, services: [service], default_service_id: service.id)
 
     assert_equal [service], account.accessible_services
 
@@ -817,14 +817,14 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   def test_smart_destroy_buyer
-    buyer = FactoryGirl.create(:buyer_account)
+    buyer = FactoryBot.create(:buyer_account)
 
     buyer.smart_destroy
     assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
   end
 
   def test_smart_destroy_provider
-    provider = FactoryGirl.create(:simple_provider)
+    provider = FactoryBot.create(:simple_provider)
 
     provider.smart_destroy
     assert provider.reload.scheduled_for_deletion?

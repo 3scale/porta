@@ -4,12 +4,12 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::
   include DeveloperPortal::Engine.routes.url_helpers
 
   setup do
-    @provider = FactoryGirl.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_with_billing)
 
     @provider.settings.allow_finance!
     @provider.settings.show_finance!
 
-    @buyer = FactoryGirl.create(:buyer_account, provider_account: @provider.reload)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider.reload)
     login_buyer @buyer
   end
 
