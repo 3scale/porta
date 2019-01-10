@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190104134224) do
+ActiveRecord::Schema.define(version: 20190110095221) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -96,23 +96,19 @@ ActiveRecord::Schema.define(version: 20190104134224) do
     t.datetime "proxy_configs_conf_updated_at"
     t.datetime "hosted_proxy_deployed_at"
     t.string   "po_number",                                       limit: 255
-    t.datetime "deleted_at"
     t.datetime "state_changed_at"
     t.integer  "first_admin_id",                                  limit: 8
   end
 
   add_index "accounts", ["default_service_id"], name: "index_accounts_on_default_service_id", using: :btree
-  add_index "accounts", ["domain", "deleted_at"], name: "index_accounts_on_domain_and_deleted_at", using: :btree
   add_index "accounts", ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at", using: :btree
   add_index "accounts", ["domain"], name: "index_accounts_on_domain", unique: true, using: :btree
   add_index "accounts", ["master"], name: "index_accounts_on_master", unique: true, using: :btree
   add_index "accounts", ["provider_account_id", "created_at"], name: "index_accounts_on_provider_account_id_and_created_at", using: :btree
   add_index "accounts", ["provider_account_id", "state"], name: "index_accounts_on_provider_account_id_and_state", using: :btree
   add_index "accounts", ["provider_account_id"], name: "index_accounts_on_provider_account_id", using: :btree
-  add_index "accounts", ["self_domain", "deleted_at"], name: "index_accounts_on_self_domain_and_deleted_at", using: :btree
   add_index "accounts", ["self_domain", "state_changed_at"], name: "index_accounts_on_self_domain_and_state_changed_at", using: :btree
   add_index "accounts", ["self_domain"], name: "index_accounts_on_self_domain", unique: true, using: :btree
-  add_index "accounts", ["state", "deleted_at"], name: "index_accounts_on_state_and_deleted_at", using: :btree
   add_index "accounts", ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at", using: :btree
 
   create_table "alerts", force: :cascade do |t|
