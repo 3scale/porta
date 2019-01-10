@@ -13,7 +13,6 @@
 .rvmrc
 .deploy_info
 .ruby-gemset
-.ruby-version
 .pt
 .pivotalrc
 .pivotal_cache
