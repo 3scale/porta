@@ -314,6 +314,13 @@ class InvoiceTest < ActiveSupport::TestCase
     assert build_invoice.chargeable?
   end
 
+  test 'charge! should cancel the invoice if negative' do
+    @invoice.update_attribute(:state, 'pending')
+    @invoice.stubs(:cost).returns(-100.0.to_has_money('EUR'))
+    refute @invoice.charge!
+    assert_equal 'cancelled', @invoice.state
+  end
+
   test 'charge! should raise if cancelled or paid' do
     @invoice.cancel!
     assert_raises(Invoice::InvalidInvoiceStateException) { @invoice.charge! }
