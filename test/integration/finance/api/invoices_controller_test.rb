@@ -29,6 +29,8 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  disable_transactional_fixtures!
+
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
