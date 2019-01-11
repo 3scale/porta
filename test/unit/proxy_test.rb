@@ -497,6 +497,7 @@ class ProxyTest < ActiveSupport::TestCase
                                    api_backend: 'http://example.com:80',
                                    api_test_path: '/path',
                                    success: true)
+    analytics.expects(:track).with('APIcast Hosted Version Change', {enabled: false, service_id: proxy.service_id, deployment_option: 'hosted'})
     Logic::RollingUpdates.stubs(skipped?: true)
 
     assert proxy.save_and_deploy
