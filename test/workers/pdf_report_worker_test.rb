@@ -22,7 +22,7 @@ class PdfReportWorkerTest < ActiveSupport::TestCase
       worker.perform(service.id, service.account.id, 'week', 'weekly_reports')
     end
 
-    Pdf::Report.any_instance.expects(:mail_report).once
+    Pdf::Report.any_instance.expects(:send_notification!).once
     worker.perform(service.id, service.account.id, 'day', 'daily_reports')
   end
 

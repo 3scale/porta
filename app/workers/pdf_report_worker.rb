@@ -27,12 +27,12 @@ class PdfReportWorker
     end
 
     case
-    when dispatch
-        report.generate.mail_report
     when provider.provider_can_use?(:new_notification_system) && notification
-        report.generate.send_notification!
+      report.generate.send_notification!
+    when dispatch
+      report.generate.mail_report
     else
-        logger.info "[PdfReportWorker] Skipping report for Service #{service_id} of Account #{account_id}"
+      logger.info "[PdfReportWorker] Skipping report for Service #{service_id} of Account #{account_id}"
     end
   end
 
