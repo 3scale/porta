@@ -838,6 +838,7 @@ DEPENDENCIES
   braintree (~> 2.89)
   bugsnag (~> 6.0)
   bullet (~> 4.2)
+  bundler (= 1.17.3)
   cancancan (~> 1.7.1)
   capybara (~> 2.18)!
   childprocess
@@ -985,4 +986,4 @@ RUBY VERSION
    ruby 2.3.6p384
 
 BUNDLED WITH
-   1.17.2
+   1.17.3

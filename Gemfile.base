@@ -6,6 +6,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # on servers we don't have proper LANG
 Encoding.default_external = Encoding::UTF_8
 
+gem 'bundler', '1.17.3'
+
 gem 'aws-sdk', '~> 2'
 gem 'aws-sdk-rails', '~> 1.0'
 
