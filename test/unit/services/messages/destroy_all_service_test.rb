@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Messages::DestroyAllServiceTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
 
   def setup
     @message  = FactoryBot.create(:received_message, hidden_at: DateTime.yesterday)
@@ -13,10 +16,10 @@ class Messages::DestroyAllServiceTest < ActiveSupport::TestCase
       assert_nil @message.deleted_at
 
       ::Messages::DestroyAllService.run!({
-        account:           @account,
-        association_class: MessageRecipient,
-        scope:             :hidden
-      })
+                                           account: @account,
+                                           association_class: MessageRecipient,
+                                           scope: :hidden
+                                         })
 
       @message.reload
 
@@ -25,19 +28,20 @@ class Messages::DestroyAllServiceTest < ActiveSupport::TestCase
   end
 
   def test_run_with_sidekiq_job
-    Sidekiq::Testing.inline! do
-      assert @message.present?
+    perform_enqueued_jobs do
+      Sidekiq::Testing.inline! do
+        assert @message.present?
 
-      ::Messages::DestroyAllService.run!({
-        account:           @account,
-        association_class: MessageRecipient,
-        scope:             :hidden
-      })
+        ::Messages::DestroyAllService.run!({
+                                             account: @account,
+                                             association_class: MessageRecipient,
+                                             scope: :hidden
+                                           })
 
-      assert_raise(ActiveRecord::RecordNotFound) do
-        @message.reload
+        assert_raise(ActiveRecord::RecordNotFound) do
+          @message.reload
+        end
       end
     end
   end
 end
-
