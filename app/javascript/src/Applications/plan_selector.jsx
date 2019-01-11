@@ -53,7 +53,7 @@ function modelMatcher (params, data) {
 }
 
 export function initialize () {
-  /*eslint no-new: 0*/
+  /* eslint no-new: 0 */
   jQuery('#cinstance_plan_id').select2({matcher: modelMatcher})
     .on('change', function () {
       window.createApplication.check_selected_plan()
