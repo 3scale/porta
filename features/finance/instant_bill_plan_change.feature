@@ -57,9 +57,6 @@ Feature: Instant biling plan change feature
     # but actually the total (fixed + variable) > 0
     # This is a case we need to solve with negative invoices
 
-    # FIXME: the cost for hits is wrong
-    # 1000 - 100 = 900 and for each hits it costs 0.1 so it should be 90.00 and not 90.10
-    # it seems that it counts 901 hits instead
     And the buyer should have following line items for "January, 2017" in the 3rd invoice:
       | name                                                    | quantity |  cost     |
       | Hits                                                    |     1000 |     90.10 |
