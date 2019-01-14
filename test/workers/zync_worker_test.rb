@@ -50,7 +50,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  test 'deleted application recreates dependencies' do
+  test 'deleted application rebuilds dependencies' do
     application = FactoryBot.create(:simple_cinstance)
     FactoryBot.create(:admin, account: application.provider_account)
     application.destroy!
