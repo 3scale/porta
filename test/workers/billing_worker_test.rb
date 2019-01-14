@@ -10,12 +10,16 @@ class BillingWorkerTest < ActiveSupport::TestCase
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
+  def teardown
+    clear_sidekiq_lock
+  end
+
   test 'perform' do
     time = Time.utc(2017, 12, 1, 8, 0)
 
     billing_options = { only: [@provider.id], buyer_ids: [@buyer.id], now: time, skip_notifications: true }
     Finance::BillingStrategy.expects(:daily).with(billing_options).returns(mock_billing_success(time, @provider))
-    assert BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
+    assert BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601), false)
   end
 
   test 'creates a lock per buyer account' do
@@ -25,7 +29,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
       billing_options = { only: [@provider.id], buyer_ids: [@buyer.id], now: time, skip_notifications: true }
       Finance::BillingStrategy.expects(:daily).with(billing_options).returns(mock_billing_success(time, @provider))
       BillingLock.expects(:delete).with(@buyer.id).returns(false)
-      BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
+      BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601), false)
     end
   end
 
@@ -33,7 +37,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
     time = Time.utc(2017, 12, 1, 8, 0)
 
     BillingLock.create!(account_id: @buyer.id)
-    refute BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
+    refute BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601), false)
   end
 
   test 'callback' do
@@ -44,7 +48,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
       callback_options = { batch_id: batch.bid, account_id: @provider.id, billing_date: time }
       batch.on(:complete, BillingWorker::Callback, callback_options)
       batch.jobs do
-        BillingWorker.perform_async(@buyer.id, @provider.id, time)
+        BillingWorker.perform_async(@buyer.id, @provider.id, time, false)
       end
 
       Finance::BillingService.any_instance.expects(:notify_billing_finished).returns(true)
@@ -52,5 +56,83 @@ class BillingWorkerTest < ActiveSupport::TestCase
 
       assert BillingWorker::Callback.new.on_complete(Sidekiq::Batch::Status.new(batch.bid), callback_options.stringify_keys)
     end
+  end
+
+  test 'lock_name' do
+    assert_equal 'billing::provider:123', BillingWorker.lock_name(nil, 123)
+  end
+
+  test 'enqueues checks whether lock is needed' do
+    time = Time.utc(2019, 1, 1, 8, 0)
+
+    gateway = mock(need_lock?: true)
+    PaymentGateway.expects(:find).returns(gateway)
+    BillingWorker.expects(:enqueue_for_buyer).once.with(@buyer, time, true)
+    assert BillingWorker.enqueue(@provider, time)
+
+    gateway = mock(need_lock?: false)
+    PaymentGateway.expects(:find).returns(gateway)
+    BillingWorker.expects(:enqueue_for_buyer).once.with(@buyer, time, false)
+    assert BillingWorker.enqueue(@provider, time)
+  end
+
+  test 'perform acquires a lock' do
+    time = Time.utc(2017, 12, 1, 8, 0)
+    job_options = [@buyer.id, @provider.id, time, true]
+    billing_options = [@buyer.id, { provider_account_id: @provider.id, now: time, skip_notifications: true }]
+
+    job = BillingWorker.new
+    job.expects(:lock).twice.returns(mock acquire!: true, release!: true)
+    Finance::BillingService.expects(:call!).with(*billing_options)
+    job.perform(*job_options)
+  end
+
+  test 'perform reschedules if it fails to acquire the lock' do
+    time = Time.utc(2017, 12, 1, 8, 0)
+    job_options = [@buyer.id, @provider.id, time, true]
+    billing_options = [@buyer.id, { provider_account_id: @provider.id, now: time, skip_notifications: true }]
+
+    job = BillingWorker.new
+    job.expects(:lock).once.returns(mock acquire!: false)
+    Finance::BillingService.expects(:call!).with(*billing_options).never
+    BillingWorker::LockError.expects(:new)
+    BillingWorker.expects(:perform_async).with(*job_options)
+    job.perform(*job_options)
+  end
+
+  test 'perform ignores the lock when not needed' do
+    time = Time.utc(2017, 12, 1, 8, 0)
+    job_options = [@buyer.id, @provider.id, time, false]
+    billing_options = [@buyer.id, { provider_account_id: @provider.id, now: time, skip_notifications: true }]
+
+    job = BillingWorker.new
+    job.expects(:lock).never
+    Finance::BillingService.expects(:call!).with(*billing_options)
+    job.perform(*job_options)
+  end
+
+  test 'lock is scoped per provider' do
+    lock1 = lock2 = lock3 = nil
+
+    f1 = Fiber.new { lock1 = BillingWorker.new.lock(nil, 1).acquire! }
+    f2 = Fiber.new { lock2 = BillingWorker.new.lock(nil, 1).acquire! }
+    f3 = Fiber.new { lock3 = BillingWorker.new.lock(nil, 2).acquire! }
+
+    f1.resume
+    f2.resume
+    f3.resume
+
+    assert lock1
+    refute lock2
+    assert lock3
+  end
+
+  test 'jobs get rescheduled when provider is locked' do
+    job_options = [@buyer.id, @provider.id, time, true]
+    lock = set_sidekiq_lock(BillingWorker, job_options)
+    lock.expects(:acquire!).returns(false)
+    BillingWorker::LockError.expects(:new)
+    BillingWorker.expects(:perform_async).with(*job_options)
+    BillingWorker.new.perform(*job_options)
   end
 end

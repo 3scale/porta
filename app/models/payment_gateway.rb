@@ -65,6 +65,10 @@ class PaymentGateway
     self.class.implementation(type)
   end
 
+  def need_lock?
+    type == :braintree_blue
+  end
+
   delegate :display_name, :homepage_url, :to => :implementation
 
   def deprecated?

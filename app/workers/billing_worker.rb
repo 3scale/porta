@@ -2,8 +2,21 @@
 
 class BillingWorker
   include Sidekiq::Worker
+  include ThreeScale::SidekiqLockWorker
 
-  sidekiq_options queue: :billing, retry: 3
+  sidekiq_options queue: :billing,
+                  retry: 3,
+                  lock: {
+                    timeout: 2.seconds.in_milliseconds,
+                    name: proc { |*args| BillingWorker.lock_name(*args) }
+                  }
+
+  class LockError < StandardError
+    def initialize(metadata = {})
+      super 'Billing job failed to acquire required lock at provider level'
+      System::ErrorReporting.report_error(self, metadata)
+    end
+  end
 
   class Callback
     delegate :logger, to: 'Rails'
@@ -29,16 +42,12 @@ class BillingWorker
   # @param [Time] billing_date
   # @param [ActiveRecord::Relation] buyers_scope
   def self.enqueue(provider, billing_date, buyers_scope = nil)
+    needs_lock = PaymentGateway.find(provider.payment_gateway_type)&.need_lock?
     with_billing_batch(provider.id, billing_date) do
       provider.buyer_accounts.select(:id, :provider_account_id).merge(buyers_scope).find_in_batches do |group|
-        group.each { |buyer| enqueue_for_buyer(buyer, billing_date) }
+        group.each { |buyer| enqueue_for_buyer(buyer, billing_date, needs_lock) }
       end
     end
-  end
-
-  def self.enqueue_for_buyer(buyer, billing_date)
-    time = billing_date.to_s(:iso8601)
-    perform_async(buyer.id, buyer.provider_account_id, time)
   end
 
   def self.with_billing_batch(provider_id, billing_date, &block)
@@ -48,12 +57,31 @@ class BillingWorker
     batch.jobs(&block)
   end
 
+  def self.enqueue_for_buyer(buyer, billing_date, needs_lock = false)
+    time = billing_date.to_s(:iso8601)
+    perform_async(buyer.id, buyer.provider_account_id, time, needs_lock)
+  end
+
+  def self.lock_name(_buyer_id, provider_id, *)
+    "billing::provider:#{provider_id}"
+  end
+
   # @param [Integer] buyer_id
   # @param [Integer] provider_id
   # @param [String] time
-  def perform(buyer_id, provider_id, time)
-    billing_results = Finance::BillingService.call!(buyer_id, provider_account_id: provider_id, now: time, skip_notifications: true)
-    store_summary(buyer_id, billing_results[provider_id]) if billing_results
+  # @param [Boolean] needs_lock
+  def perform(buyer_id, provider_id, time, needs_lock = false)
+    if needs_lock && !lock(nil, provider_id).acquire!
+      LockError.new buyer_id: buyer_id, provider_id: provider_id, time: time
+      return self.class.perform_async buyer_id, provider_id, time, needs_lock
+    end
+
+    begin
+      billing_results = Finance::BillingService.call!(buyer_id, provider_account_id: provider_id, now: time, skip_notifications: true)
+      store_summary(buyer_id, billing_results[provider_id]) if billing_results
+    ensure
+      lock.release! if needs_lock
+    end
   end
 
   private
