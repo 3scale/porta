@@ -1,0 +1,5 @@
+tap "InstantClientTap/instantclient"
+brew "mysql@5.7"
+brew "postgresql@10"
+brew "instantclient-basic"
+brew "instantclient-sdk"
