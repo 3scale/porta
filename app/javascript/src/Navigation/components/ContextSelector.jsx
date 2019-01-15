@@ -47,8 +47,10 @@ class ContextSelector extends React.Component {
   getClassNamesForMenu (menu) {
     const { activeMenu } = this.props
 
-    if (menu === 'dashboard' && activeMenu === 'dashboard' ||
-      menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)) {
+    const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
+    const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)
+
+    if (isDashboardSelected || isAudienceSelected) {
       return 'PopNavigation-link current-context'
     }
 

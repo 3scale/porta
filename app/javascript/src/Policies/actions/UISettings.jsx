@@ -26,4 +26,3 @@ export type APIRequestStopAction = { type: string }
 export function apiRequestStop (): APIRequestStopAction {
   return { type: 'API_REQUEST_STOP' }
 }
-
