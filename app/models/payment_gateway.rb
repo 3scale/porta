@@ -68,6 +68,7 @@ class PaymentGateway
   def need_lock?
     type == :braintree_blue
   end
+  alias need_sparsing? need_lock?
 
   delegate :display_name, :homepage_url, :to => :implementation
 

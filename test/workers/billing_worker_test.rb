@@ -65,14 +65,14 @@ class BillingWorkerTest < ActiveSupport::TestCase
   test 'enqueues checks whether lock is needed' do
     time = Time.utc(2019, 1, 1, 8, 0)
 
-    gateway = mock(need_lock?: true)
+    gateway = mock(need_lock?: true, need_sparsing?: false)
     PaymentGateway.expects(:find).returns(gateway)
-    BillingWorker.expects(:enqueue_for_buyer).once.with(@buyer, time, true)
+    BillingWorker.expects(:enqueue_for_buyer).once.with(@buyer, time, needs_lock: true)
     assert BillingWorker.enqueue(@provider, time)
 
-    gateway = mock(need_lock?: false)
+    gateway = mock(need_lock?: false, need_sparsing?: false)
     PaymentGateway.expects(:find).returns(gateway)
-    BillingWorker.expects(:enqueue_for_buyer).once.with(@buyer, time, false)
+    BillingWorker.expects(:enqueue_for_buyer).once.with(@buyer, time, needs_lock: false)
     assert BillingWorker.enqueue(@provider, time)
   end
 
@@ -134,5 +134,25 @@ class BillingWorkerTest < ActiveSupport::TestCase
     BillingWorker::LockError.expects(:new)
     BillingWorker.expects(:perform_async).with(*job_options)
     BillingWorker.new.perform(*job_options)
+  end
+
+  test '#enqueue_for_buyer accepts a delay' do
+    time = Time.utc(2019, 1, 15, 8, 0)
+    BillingWorker.expects(:perform_in).with(5.seconds, @buyer.id, @provider.id, time.to_s(:iso8601), false)
+    BillingWorker.enqueue_for_buyer(@buyer, time, delay: 5.seconds)
+
+    BillingWorker.expects(:perform_in).with(0.second, @buyer.id, @provider.id, time.to_s(:iso8601), false)
+    BillingWorker.enqueue_for_buyer(@buyer, time)
+  end
+
+  test 'enqueue sparses jobs in time' do
+    time = Time.utc(2019, 1, 15, 8, 0)
+
+    FactoryBot.create_list(:buyer_account, 10, provider_account: @provider)
+    BillingWorker.stubs(sparsing_rate: 0.5)
+    PaymentGateway.expects(:find).returns(mock(need_lock?: false, need_sparsing?: true))
+
+    @provider.buyer_accounts.each_with_index { |buyer, index| BillingWorker.expects(:enqueue_for_buyer).with(buyer, time, needs_lock:  false, delay: 0.5*index) }
+    BillingWorker.enqueue(@provider, time)
   end
 end
