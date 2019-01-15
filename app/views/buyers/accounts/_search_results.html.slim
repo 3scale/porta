@@ -15,7 +15,7 @@ table class="data" id="buyer_accounts"
 
       th class="actions"
         - if current_account.master?
-          = link_to 'Create', new_provider_admin_account_path, title: 'Create new tenant account', class: 'action add'
+          = link_to 'Create', new_provider_admin_account_path, title: 'Create new account', class: 'action add'
         - elsif can?(:create, Account)
           = link_to 'Create', new_admin_buyers_account_path, title: 'Create new account', class: 'action add'
 
