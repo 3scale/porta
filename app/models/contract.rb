@@ -41,7 +41,8 @@ class Contract < ApplicationRecord
   alias buyer         user_account
   alias account       user_account
 
-  delegate :provider_account_id, to: :provider_account, allow_nil: true
+  delegate :provider_account, to: :plan, allow_nil: true
+  delegate :id, to: :provider_account, allow_nil: true, prefix: true
   delegate :id, to: :old_plan, prefix: true, allow_nil: true
 
   # TODO: remove with Rails 3

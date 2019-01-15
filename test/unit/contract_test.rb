@@ -49,6 +49,11 @@ class ContractTest < ActiveSupport::TestCase
     assert Contract.by_name('foo').count
   end
 
+  test 'provider_account' do
+    contract = FactoryBot.build_stubbed(:simple_cinstance)
+    assert_equal contract.provider_account_id, contract.provider_account.id
+  end
+
   context '#paid?' do
     setup do
       buyer = FactoryBot.create :buyer_account
