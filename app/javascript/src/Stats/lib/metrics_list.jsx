@@ -17,7 +17,7 @@ export class StatsMetrics {
     return new Promise((resolve, reject) => {
       $.getJSON(url)
         .done(response => resolve(response))
-        .fail((xhr, status, error) => reject(`Request failed: ${status}, ${error}`))
+        .fail((xhr, status, error) => reject(new Error(`Request failed: ${status}, ${error}`)))
     })
   }
 
