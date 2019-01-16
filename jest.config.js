@@ -9,6 +9,9 @@ module.exports = {
     'jsx',
     'js'
   ],
+  setupFiles: [
+    '<rootDir>/spec/javascripts/__mocks__/global-mocks.js'
+  ],
   moduleDirectories: [
     'node_modules',
     'app/javascript/src'
