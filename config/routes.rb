@@ -471,6 +471,10 @@ without fake Core server your after commit callbacks will crash and you might ge
       # called from heroku deploy hook after heroku proxy deploy script
       post 'heroku-proxy/deployed', to: 'heroku_proxy#deployed', as: :heroku_proxy_deployed
 
+      namespace :personal do
+        resources :access_tokens, only: %i[create]
+      end
+
       # /admin/api/provider
       resource :provider, only: [:show, :update]
 
@@ -599,7 +603,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           resource :permissions, controller: 'member_permissions', only: [:show, :update]
         end
 
-        resource :access_tokens, only: %i(create)
+        resources :access_tokens, only: %i[create]
       end
       resources :end_user_plans, :only => [:index] do
         scope module: :end_user_plans do
