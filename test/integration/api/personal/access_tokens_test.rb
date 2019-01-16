@@ -10,76 +10,158 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     @admin_access_token = FactoryBot.create(:access_token, owner: @admin, scopes: %w[account_management])
   end
 
-  test 'POST creates an access token for the admin user of the access token' do
-    assert_difference @admin.access_tokens.method(:count) do
-      post admin_api_personal_access_tokens_path({access_token: @admin_access_token.value, format: :json}), access_token_params
-      assert_response :created
-      assert JSON.parse(response.body).dig('access_token', 'value')
+  class ActionsOnAnAccessToken < Admin::Api::Personal::AccessTokensTest
+    def setup
+      super
+      @access_token_object = FactoryBot.create(:access_token, owner: @admin, scopes: %w[finance])
+    end
+
+    test 'access by a non-existent ID or value responds with not_found' do
+      return unless respond_to?(:perform_request)
+
+      perform_request(different_params: {id: 'wrong'})
+      assert_response :not_found
+    end
+
+    test 'perform request for a token of another user responds with not_found' do
+      return unless respond_to?(:perform_request)
+      access_token_object_admin = FactoryBot.create(:access_token, owner: @admin, scopes: %w[finance])
+      access_token_another_admin = FactoryBot.create(:access_token, scopes: %w[account_management],
+                                                     owner: FactoryBot.create(:admin, account: @provider, admin_sections: [:partners]))
+
+      access_token_object_admin.slice(:id, :value).each_value do |id_or_value|
+        perform_request(authentication: {access_token: access_token_another_admin.value}, different_params: {id: id_or_value})
+        assert_response :not_found
+      end
+    end
+
+    test 'perform request by ID works well' do
+      return unless respond_to?(:perform_request)
+      perform_request
+      assert_it_worked
+    end
+
+    test 'perform request by value works well' do
+      return unless respond_to?(:perform_request)
+      perform_request(different_params: {id: @access_token_object.value})
+      assert_it_worked
+    end
+
+    class Admin::Api::Personal::ShowAccessTokenTest < ActionsOnAnAccessToken
+      def assert_it_worked
+        assert_response :ok
+        json_response = JSON.parse(response.body)
+        assert_equal @access_token_object.id, json_response.dig('access_token', 'id')
+        refute json_response.dig('access_token', 'value')
+      end
+
+      def perform_request(authentication: {access_token: @admin_access_token.value}, different_params: {})
+        get admin_api_personal_access_token_path({id: @access_token_object.id}.merge(authentication).merge(different_params))
+      end
+    end
+
+    class Admin::Api::Personal::DeleteAccessTokenTest < ActionsOnAnAccessToken
+      def assert_it_worked
+        assert_response :ok
+        assert_raise(ActiveRecord::RecordNotFound) { @access_token_object.reload }
+        assert_empty response.body
+      end
+
+      def perform_request(authentication: {access_token: @admin_access_token.value}, different_params: {})
+        delete admin_api_personal_access_token_path({id: @access_token_object.id}.merge(authentication).merge(different_params))
+      end
     end
   end
 
-  test 'POST creates an access token for member user with the right permissions and access token' do
-    authorized_member = FactoryBot.create(:member, account: @provider, admin_sections: [:partners])
-    access_token = FactoryBot.create(:access_token, owner: authorized_member, scopes: %w[account_management])
+  class Admin::Api::Personal::CreateAccessTokenTest < Admin::Api::Personal::AccessTokensTest
+    test 'POST creates an access token for the admin user of the access token' do
+      assert_difference @admin.access_tokens.method(:count) do
+        post admin_api_personal_access_tokens_path({access_token: @admin_access_token.value}), access_token_params
+        assert_response :created
+        assert JSON.parse(response.body).dig('access_token', 'value')
+      end
+    end
 
-    assert_difference authorized_member.access_tokens.method(:count) do
-      post admin_api_personal_access_tokens_path({access_token: access_token.value, format: :json}), access_token_params
+    test 'POST creates an access token for member user with the right permissions and access token' do
+      authorized_member = FactoryBot.create(:member, account: @provider, admin_sections: [:partners])
+      access_token = FactoryBot.create(:access_token, owner: authorized_member, scopes: %w[account_management])
+
+      assert_difference authorized_member.access_tokens.method(:count) do
+        perform_request(authentication: {access_token: access_token.value})
+        assert_response :created
+      end
+      created_token = authorized_member.access_tokens.last
+      access_token_params.each do |key, value|
+        assert_equal value, created_token.public_send(key)
+      end
+    end
+
+    test 'POST does not accept a custom value' do
+      @access_token_params = access_token_params.merge({value: 'foobar'})
+
+      assert_difference @admin.access_tokens.method(:count) do
+        perform_request
+        assert_response :created
+        assert_not_equal 'foobar', JSON.parse(response.body).dig('access_token', 'value')
+      end
+    end
+
+    test 'POST does not accept a wrong scope' do
+      @access_token_params = access_token_params.merge({scopes: %w[wrong]})
+
+      assert_no_difference(AccessToken.method(:count)) do
+        perform_request
+        assert_response :unprocessable_entity
+        assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'scopes')
+      end
+    end
+
+    def assert_it_worked
       assert_response :created
+      created_token = AccessToken.last
+      access_token_params.each do |key, value|
+        assert_equal value, created_token.public_send(key)
+      end
+    end
+
+    def access_token_params(different_params = {})
+      @access_token_params ||= { name: 'token name', permission: 'ro', scopes: %w[finance] }.merge(different_params)
+    end
+
+    def perform_request(authentication: {access_token: @admin_access_token.value}, different_params: {})
+      post admin_api_personal_access_tokens_path((authentication).merge(different_params)), access_token_params
     end
   end
 
-  test 'POST does not create an access token for member user with the wrong permissions' do
+  test 'authenticate with provider_key is forbidden' do
+    return unless respond_to?(:perform_request)
+    FactoryBot.create(:cinstance, service: master_account.default_service, user_account: @provider)
+
+    assert_no_difference(AccessToken.method(:count)) do
+      perform_request(authentication: {provider_key: @provider.provider_key})
+      assert_response :forbidden
+    end
+  end
+
+  test 'authentication forbidden for member user with the wrong permissions' do
+    return unless respond_to?(:perform_request)
     unauthorized_member = FactoryBot.create(:member, account: @provider, admin_sections: [])
     access_token = FactoryBot.create(:access_token, owner: unauthorized_member, scopes: %w[account_management])
 
     assert_no_difference(AccessToken.method(:count)) do
-      post admin_api_personal_access_tokens_path({access_token: access_token.value, format: :json}), access_token_params
+      perform_request(authentication: {access_token: access_token.value})
       assert_response :forbidden
     end
   end
 
-  test 'POST does not create an access token for member user with the right permissions but wrong access token' do
+  test 'authentication forbidden for member user with the right permissions but wrong access token' do
+    return unless respond_to?(:perform_request)
     authorized_member = FactoryBot.create(:member, account: @provider, admin_sections: [:partners])
     wrong_token_scope = FactoryBot.create(:access_token, owner: authorized_member, scopes: %w[finance])
 
     assert_no_difference(AccessToken.method(:count)) do
-      post admin_api_personal_access_tokens_path({access_token: wrong_token_scope.value, format: :json}), access_token_params
+      perform_request(authentication: {access_token: wrong_token_scope.value})
       assert_response :forbidden
     end
   end
-
-  test 'POST does not accept a custom value' do
-    assert_difference @admin.access_tokens.method(:count) do
-      post admin_api_personal_access_tokens_path({access_token: @admin_access_token.value, format: :json}), access_token_params({value: 'foobar'})
-      assert_response :created
-      assert_not_equal 'foobar', JSON.parse(response.body).dig('access_token', 'value')
-    end
-  end
-
-  test 'POST does not accept a wrong scope' do
-    assert_no_difference(AccessToken.method(:count)) do
-      post admin_api_personal_access_tokens_path({access_token: @admin_access_token.value, format: :json}), access_token_params({scopes: %w[wrong]})
-      assert_response :unprocessable_entity
-      assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'scopes')
-    end
-  end
-
-  test 'POST create with provider_key is forbidden' do
-    FactoryBot.create(:cinstance, service: master_account.default_service, user_account: @provider)
-
-    assert_no_difference(AccessToken.method(:count)) do
-      post admin_api_personal_access_tokens_path({provider_key: @provider.provider_key, format: :json}), access_token_params
-      assert_response :forbidden
-    end
-  end
-
-  private
-
-  def access_token_params(different_params = {})
-    { name: 'token name', permission: 'ro', scopes: %w[finance] }.merge(different_params)
-  end
-
-  # TODO:
-  # documentation... api docs
-  # mark the previous api as deprecated
 end

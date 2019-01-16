@@ -4622,6 +4622,64 @@
       ]
     },
     {
+      "path": "/admin/api/personal/access_tokens/{id}.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Personal Access Token Delete",
+          "description": "Deletes an access token.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "id",
+              "description": "ID or value of the access token.",
+              "dataType": "integer",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/personal/access_tokens/{id}.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Personal Access Token Read",
+          "description": "Shows an access token.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "id",
+              "description": "ID or value of the access token.",
+              "dataType": "integer",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/policies.json",
       "responseClass": "json",
       "operations": [

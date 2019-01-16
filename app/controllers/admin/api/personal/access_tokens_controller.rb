@@ -27,7 +27,53 @@ class Admin::Api::Personal::AccessTokensController < Admin::Api::Personal::BaseC
     respond_with current_user.access_tokens.create(access_token_params)
   end
 
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/personal/access_tokens/{id}.json"
+  ##~ e.responseClass = "access_token"
+  #
+  ##~ op            = e.operations.add
+  ##~ op.httpMethod = "DELETE"
+  ##~ op.summary    = "Personal Access Token Delete"
+  ##~ op.description = "Deletes an access token."
+  ##~ op.group = "access_token"
+  #
+  ##~ op.parameters.add :name => "id", :description => "ID or value of the access token.", :dataType => "integer", :paramType => "path", :required => true
+  #
+  ##~ op.parameters.add @parameter_access_token
+  #
+  def destroy
+    token.destroy
+    respond_with token
+  end
+
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/personal/access_tokens/{id}.json"
+  ##~ e.responseClass = "access_token"
+  #
+  ##~ op            = e.operations.add
+  ##~ op.httpMethod = "GET"
+  ##~ op.summary    = "Personal Access Token Read"
+  ##~ op.description = "Shows an access token."
+  ##~ op.group = "access_token"
+  #
+  ##~ op.parameters.add :name => "id", :description => "ID or value of the access token.", :dataType => "integer", :paramType => "path", :required => true
+  #
+  ##~ op.parameters.add @parameter_access_token
+  #
+  def show
+    respond_with token
+  end
+
+
   private
+
+  def token
+    @token ||= begin
+      id_or_value = params[:id]
+      scoped_access_tokens = current_user.access_tokens
+      scoped_access_tokens.by_value(id_or_value) || scoped_access_tokens.find(id_or_value)
+    end
+  end
 
   def access_token_params
     params.require(:token).permit(:name, :permission, scopes: [])
