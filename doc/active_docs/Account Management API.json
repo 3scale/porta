@@ -4622,6 +4622,35 @@
       ]
     },
     {
+      "path": "/admin/api/personal/access_tokens.json",
+      "responseClass": "List[access_token]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Personal Access Token List",
+          "description": "Returns the list of access tokens of the user. If the parameter name is sent, it returns only those whose name contain the string of the param",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Part of the name of the access token.",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/personal/access_tokens/{id}.json",
       "responseClass": "access_token",
       "operations": [

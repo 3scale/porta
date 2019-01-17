@@ -9,6 +9,8 @@ class AccessToken < ApplicationRecord
     end.to_h
   end
 
+  scope :by_name, ->(name) { name.present? ? where("name LIKE ?", "%#{name}%") : all }
+
   PERMISSIONS = options_to_hash(%w(ro rw)).freeze
   SCOPES      = options_to_hash(%w(cms finance account_management stats)).freeze
 
@@ -120,6 +122,14 @@ class AccessToken < ApplicationRecord
     find_by(value: value.to_s.scrub)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
+  end
+
+  def self.find_from_id_or_value!(id_or_value)
+    find_from_id_or_value(id_or_value) or raise(ActiveRecord::RecordNotFound)
+  end
+
+  def self.find_from_id_or_value(id_or_value)
+    find_by(id: id_or_value) || find_from_value(id_or_value)
   end
 
   # This can't change or it will create new tokens for everyone
