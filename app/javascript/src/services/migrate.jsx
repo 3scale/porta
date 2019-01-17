@@ -1,3 +1,5 @@
+// @flow
+
 import 'core-js/fn/array/includes'
 import 'core-js/fn/array/find'
 
@@ -23,7 +25,7 @@ const setAsMigrated = function () {
 }
 
 // ident, classList, toggle, className
-export function migrateDataToLocalStorage (ids) {
+export function migrateDataToLocalStorage (ids: string[]) {
   let services = document.querySelectorAll('.u-legacy-cookie')
   for (let wrapper of Array.from(services)) {
     if (!~ids.indexOf(wrapper.id)) {

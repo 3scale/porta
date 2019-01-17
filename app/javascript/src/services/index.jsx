@@ -1,3 +1,5 @@
+// @flow
+
 import toggle, { moveState } from 'utilities/toggle'
 import migrate from 'services/migrate'
 
