@@ -472,7 +472,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       post 'heroku-proxy/deployed', to: 'heroku_proxy#deployed', as: :heroku_proxy_deployed
 
       namespace :personal, defaults: { format: :json } do
-        resources :access_tokens, only: %i[create destroy show]
+        resources :access_tokens, except: %i[new edit]
       end
 
       # /admin/api/provider

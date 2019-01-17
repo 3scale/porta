@@ -28,6 +28,24 @@ class Admin::Api::Personal::AccessTokensController < Admin::Api::Personal::BaseC
   end
 
   ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/personal/access_tokens.json"
+  ##~ e.responseClass = "List[access_token]"
+  #
+  ##~ op = e.operations.add
+  ##~ op.httpMethod = "GET"
+  ##~ op.summary   = "Personal Access Token List"
+  ##~ op.description = "Returns the list of access tokens of the user. If the parameter name is sent, it returns only those whose name contain the string of the param"
+  ##~ op.group = "access_token"
+  #
+  ##~ op.parameters.add :name => "name", :description => "Part of the name of the access token.", :dataType => "string", :required => false, :paramType => "query"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  #
+  def index
+    respond_with current_user.access_tokens.by_name(params[:name])
+  end
+
+  ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/personal/access_tokens/{id}.json"
   ##~ e.responseClass = "access_token"
   #
@@ -68,11 +86,7 @@ class Admin::Api::Personal::AccessTokensController < Admin::Api::Personal::BaseC
   private
 
   def token
-    @token ||= begin
-      id_or_value = params[:id]
-      scoped_access_tokens = current_user.access_tokens
-      scoped_access_tokens.by_value(id_or_value) || scoped_access_tokens.find(id_or_value)
-    end
+    @token ||= current_user.access_tokens.find_from_id_or_value!(params[:id])
   end
 
   def access_token_params
