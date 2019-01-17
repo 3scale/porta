@@ -1,13 +1,12 @@
 // @flow
 
 import React from 'react'
-import Form from 'react-jsonschema-form'
+
+import { PoliciesForm } from 'Policies/components/PoliciesForm'
 
 import type { ThunkAction } from 'Policies/types/index'
 import type { ChainPolicy } from 'Policies/types/Policies'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
-
-import { isNotApicastPolicy } from 'Policies/components/util'
 
 type Props = {
   visible: boolean,
@@ -18,70 +17,6 @@ type Props = {
     closePolicyConfig: () => ThunkAction,
     updatePolicyConfig: (ChainPolicy) => UpdatePolicyConfigAction
   }
-}
-
-function hiddenClass (bool: boolean): string {
-  return bool ? '' : 'hidden'
-}
-
-class PolicyForm extends Form {
-  componentWillReceiveProps (nextProps: Object) {
-    if (nextProps.schema !== this.state.schema) {
-      this.setState({...this.getStateFromProps(nextProps), ...{errors: []}})
-    }
-  }
-}
-
-function PoliciesForm ({
-  visible, policy, submitForm, updatePolicy, removePolicy,
-  closePolicyConfig}) {
-  const onSubmit = (policy) => {
-    return ({formData, schema}) => {
-      submitForm({...policy, ...{schema, configuration: formData}})
-    }
-  }
-  const togglePolicy = (event) => {
-    updatePolicy({...policy, ...{enabled: event.target.checked}})
-  }
-  const remove = () => removePolicy(policy)
-  const cancel = () => closePolicyConfig()
-
-  return (
-    <section className={`PolicyConfiguration ${hiddenClass(visible)}`}>
-      <header className="PolicyConfiguration-header">
-        <h2 className="PolicyConfiguration-title">Edit Policy</h2>
-        <div onClick={cancel} className="PolicyConfiguration-cancel"><i className="fa fa-times-circle"></i> Cancel</div>
-      </header>
-      <h2 className="PolicyConfiguration-name">{policy.humanName}</h2>
-      <p className="PolicyConfiguration-version-and-summary">
-        <span className="PolicyConfiguration-version">{policy.version}</span>
-        {' - '}
-        <span className="PolicyConfiguration-summary">{policy.summary}</span>
-      </p>
-      <p className="PolicyConfiguration-description">{policy.description}</p>
-      <label className={`${hiddenClass(isNotApicastPolicy(policy))} Policy-status`} htmlFor="policy-enabled">
-        <input
-          id="policy-enabled" name="policy-enabled" type="checkbox"
-          checked={policy.enabled}
-          onChange={togglePolicy}
-        />
-        {' '} Enabled
-      </label>
-      <PolicyForm
-        className={`PolicyConfiguration-form ${hiddenClass(isNotApicastPolicy(policy))}`}
-        schema={policy.schema}
-        formData={policy.configuration}
-        onSubmit={onSubmit(policy)}
-      >
-        <button className='btn btn-info' type="submit">Update Policy</button>
-      </PolicyForm>
-      <div
-        className={`PolicyConfiguration-remove btn btn-danger btn-sm ${hiddenClass(policy.removable)}`}
-        onClick={remove}>
-        <i className="fa fa-trash"></i> Remove
-      </div>
-    </section>
-  )
 }
 
 const PolicyConfig = ({visible, policy, actions}: Props) => {
@@ -95,4 +30,4 @@ const PolicyConfig = ({visible, policy, actions}: Props) => {
   />)
 }
 
-export { PolicyConfig, PolicyForm }
+export { PolicyConfig }
