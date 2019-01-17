@@ -1,26 +1,37 @@
-// TODO: @flow
-// TODO: test
+// @flow
+
 import 'raf/polyfill'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
 import 'core-js/es6/array'
+
 import React from 'react'
 import { render } from 'react-dom'
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 
 import 'Navigation/styles/ContextSelector.scss'
 
+import type { Api, Service, Menu, ReactWrapper } from 'Types'
+
+type Props = {
+  apis: Api[],
+  currentApi: Api,
+  activeMenu: Menu,
+  audienceLink: string
+}
+
+type State = {
+  filterQuery: string
+}
+
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-class ContextSelector extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      filterQuery: ''
-    }
+class ContextSelector extends React.Component<Props, State> {
+  state = {
+    filterQuery: ''
   }
 
-  onFilterChange (event) {
+  onFilterChange (event: SyntheticInputEvent<HTMLInputElement>) {
     const filterQuery = event.target.value.toLowerCase()
     this.setState({ filterQuery })
   }
@@ -35,7 +46,7 @@ class ContextSelector extends React.Component {
     return (
       <li className="PopNavigation-listItem nav-search-widget docs-search" id="context-widget">
         <input
-          onChange={e => this.onFilterChange(e)}
+          onChange={(e: SyntheticInputEvent<HTMLInputElement>) => this.onFilterChange(e)}
           type="search"
           className="docs-search-input"
           placeholder="Type the API name"
@@ -44,7 +55,7 @@ class ContextSelector extends React.Component {
     )
   }
 
-  getClassNamesForMenu (menu) {
+  getClassNamesForMenu (menu: Menu): string {
     const { activeMenu } = this.props
 
     const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
@@ -57,7 +68,7 @@ class ContextSelector extends React.Component {
     return 'PopNavigation-link'
   }
 
-  getClassNamesForService (service) {
+  getClassNamesForService (service: Service): string {
     const { activeMenu, currentApi } = this.props
     let classNames = 'PopNavigation-link'
 
@@ -128,11 +139,12 @@ class ContextSelector extends React.Component {
   }
 }
 
-const ContextSelectorWrapper = (props, element) => {
-  render(
-    <ContextSelector {...props} />,
-    document.getElementById(element)
-  )
+const ContextSelectorWrapper: ReactWrapper<Props> = (props, elementId) => {
+  const element = document.getElementById(elementId)
+  if (element == null) {
+    throw new Error(`${elementId} is not part of the DOM`)
+  }
+  render(<ContextSelector {...props} />, element)
 }
 
 export { ContextSelector, ContextSelectorWrapper }
