@@ -1,11 +1,11 @@
 // @flow
 
 export type RawPolicy = {
-  $schema: string,
+  $schema?: string,
   name: string,
   version: string,
   description: string,
-  summary: string,
+  summary?: string,
   configuration: Object
 }
 
@@ -15,13 +15,13 @@ export type RawRegistry = {
 
 export type RegistryPolicy = & RawPolicy & {
   humanName: string,
-  schema: Object
+  schema?: Object
 }
 
 export type ChainPolicy = & RegistryPolicy & {
   enabled: boolean,
-  removable: boolean,
-  uuid: string
+  removable?: boolean,
+  uuid?: string
 }
 
 export type StoredChainPolicy = {

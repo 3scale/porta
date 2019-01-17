@@ -1,4 +1,5 @@
-/* eslint-disable import/default */
+// @flow
+
 import 'core-js/modules/es6.set'
 import 'core-js/modules/es6.map'
 import 'core-js/es7/array'
@@ -10,16 +11,25 @@ import { AppContainer } from 'react-hot-loader'
 import Root from 'Policies/components/Root'
 import configureStore from 'Policies/store/configureStore'
 import { initialState } from 'Policies/reducers/initialState'
-import * as actions from 'Policies/actions/index'
+import { actions } from 'Policies/actions/index'
+
+import type { RawRegistry, StoredChainPolicy } from 'Policies/types/Policies'
 
 import 'Policies/styles/policies.scss'
 
-const Policies = (store, element) => {
+const Policies = (store, elementId) => {
+  const element = document.getElementById(elementId)
+
+  if (element === null) {
+    console.error(`Policies cannot be rendered. Id '${elementId}' is not an element of the DOM.`)
+    return
+  }
+
   render(
     <AppContainer>
       <Root store={store} />
     </AppContainer>,
-    document.getElementById(element)
+    element
   )
 
   if (module.hot) {
@@ -29,13 +39,20 @@ const Policies = (store, element) => {
         <AppContainer>
           <NewRoot store={store} />
         </AppContainer>,
-        document.getElementById(element)
+        element
       )
     })
   }
 }
 
-const initPolicies = ({element, registry, chain, serviceId}) => {
+type InitPolicies = {
+  element: string,
+  registry: RawRegistry,
+  chain: StoredChainPolicy[],
+  serviceId: string
+}
+
+const initPolicies = ({element, registry, chain, serviceId}: InitPolicies) => {
   const store = configureStore(initialState)
   const policies = {chain, registry}
   store.dispatch(actions.populatePolicies(serviceId, policies))

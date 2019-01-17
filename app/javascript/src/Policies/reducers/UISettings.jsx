@@ -16,6 +16,9 @@ function updateRequestsCounter (number: number) {
   }
 }
 
+// eslint-disable-next-line space-infix-ops
+// const UISettingsReducer = createReducer<UIState>(initialState.ui, {
+// $FlowFixMe TODO: in order to fully type createReducer, set UIState and re-enable flow. (use lines above)
 const UISettingsReducer = createReducer(initialState.ui, {
   'UI_COMPONENT_TRANSITION': updateComponentTransition,
   'FETCH_CHAIN_ERROR': updateError,

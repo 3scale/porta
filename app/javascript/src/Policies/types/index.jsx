@@ -41,6 +41,10 @@ export type PolicyChainMiddlewareAction = UpdatePolicyInChainAction
   | RemovePolicyFromChainAction | LoadChainAction
 export type FetchErrorAction = FetchChainErrorAction | FetchRegistryErrorAction
 // Actions
+export interface IAction {
+  type: string
+}
+
 export type Action = PolicyConfigAction | PolicyRegistryAction
   | PolicyChainAction | UIComponentTransitionAction | PolicyChainMiddlewareAction
 
@@ -48,3 +52,5 @@ export type Dispatch = (action: Action | ThunkAction | PromiseAction | RSSAActio
 export type GetState = () => State
 export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any
 export type PromiseAction = Promise<Action>
+
+export type Reducer<S> = (state?: S, action: IAction) => S
