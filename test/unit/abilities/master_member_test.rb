@@ -49,6 +49,10 @@ class Abilities::MasterMemberTest < ActiveSupport::TestCase
     assert_can ability, :resume, provider
   end
 
+  def test_account
+    assert_can ability, :create, Account
+  end
+
   private
 
   def ability

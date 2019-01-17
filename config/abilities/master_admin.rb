@@ -20,6 +20,7 @@ Ability.define do |user|
     end
 
     can :manage, user.account
+    can(:create, Account, &:signup_provider_possible?)
 
     if ThreeScale.config.onpremises
       cannot :manage, :multiple_services
