@@ -7,11 +7,12 @@
   "license": "Apache-2.0",
   "scripts": {
     "clear": "rm -rf node_modules/",
+    "pretest": "flow",
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
     "postshrinkwrap": "replace --silent 'http://' 'https://' ./package-lock.json",
-    "postinstall": "npm rebuild node-sass"
+    "postinstall": "npm rebuild node-sass && flow-typed install"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
