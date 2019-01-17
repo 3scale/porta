@@ -3,8 +3,8 @@
 # TODO: Rails 5 --> class DeleteObjectHierarchyWorker < ApplicationJob
 class DeleteObjectHierarchyWorker < ActiveJob::Base
 
-  # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
-  rescue_from(ActiveJob::DeserializationError) do |exception|
+  # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError, ActiveRecord::RecordNotFound
+  rescue_from(ActiveJob::DeserializationError, ActiveRecord::RecordNotFound) do |exception|
     Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
