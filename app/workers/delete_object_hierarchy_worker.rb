@@ -66,6 +66,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
 
   def batch_success_callback(batch)
     options = callback_options
+    workers_hierarchy = options['caller_worker_hierarchy']
     batch.on(:success, self.class, options)
     yield
     bid = batch.bid
