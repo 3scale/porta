@@ -11,7 +11,7 @@ module Buyers::ApplicationsHelper
   end
 
   def services_contracted(buyer)
-    buyer.bought_service_contracts.map(&:service).map(&:id).to_json
+    buyer.bought_service_contracts.services.pluck(:id).to_json
   end
 
   def service_plan_contracted_for_service(buyer)
