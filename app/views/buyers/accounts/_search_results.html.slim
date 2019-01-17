@@ -14,7 +14,7 @@ table class="data" id="buyer_accounts"
       th = sortable('state', 'State')
 
       th class="actions"
-        - if can?(:create, current_account)
+        - if can?(:create, Account)
           = link_to 'Create', (current_account.master? ? new_provider_admin_account_path : new_admin_buyers_account_path), title: 'Create new account', class: 'action add'
 
     tr class="search"
