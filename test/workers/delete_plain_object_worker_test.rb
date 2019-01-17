@@ -88,12 +88,12 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
 
       # Execute deletion of service but suspend the execution of deleting the proxy by `:dependent => :destroy`
       f1 = Fiber.new do
-        DeletePlainObjectWorker.perform_now(service, ['Hierarchy-Service-ID'])
+        Sidekiq::Testing.inline! { DeletePlainObjectWorker.perform_now(service, ['Hierarchy-Service-ID']) }
       end
 
       # Destroy the proxy in another thread
       f2 = Fiber.new do
-        DeletePlainObjectWorker.perform_now(proxy, ['Hierarchy-Service-ID', 'Hierarchy-Proxy-ID'])
+        Sidekiq::Testing.inline! { DeletePlainObjectWorker.perform_now(proxy, ['Hierarchy-Service-ID', 'Hierarchy-Proxy-ID']) }
       end
 
       f1.resume
