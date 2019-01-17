@@ -1,3 +1,5 @@
+// @flow
+
 import {createStore, compose, applyMiddleware} from 'redux'
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant'
 import thunk from 'redux-thunk'
@@ -5,7 +7,7 @@ import { apiMiddleware } from 'redux-api-middleware'
 import { policyChainMiddleware } from 'Policies/middleware/PolicyChain'
 import rootReducer from 'Policies/reducers'
 
-function configureStoreProd (initialState) {
+function configureStoreProd (initialState: any) {
   const middlewares = [
     // Add other middleware on this line...
 
@@ -16,13 +18,14 @@ function configureStoreProd (initialState) {
     policyChainMiddleware
   ]
 
+  // $FlowFixMe
   return createStore(rootReducer, initialState, compose(
+    // $FlowFixMe
     applyMiddleware(...middlewares)
-  )
-  )
+  ))
 }
 
-function configureStoreDev (initialState) {
+function configureStoreDev (initialState: any) {
   const middlewares = [
     // Add other middleware on this line...
 
@@ -37,10 +40,11 @@ function configureStoreDev (initialState) {
   ]
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // add support for Redux dev tools
+  // $FlowFixMe
   const store = createStore(rootReducer, initialState, composeEnhancers(
+    // $FlowFixMe
     applyMiddleware(...middlewares)
-  )
-  )
+  ))
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers

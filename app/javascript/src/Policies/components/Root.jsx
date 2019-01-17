@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -5,7 +7,11 @@ import { Provider } from 'react-redux'
 
 import App from 'Policies/components/App'
 
-export default function Root (props) {
+type Props = {
+  store: any
+}
+
+export default function Root (props: Props) {
   const { store } = props
 
   return (

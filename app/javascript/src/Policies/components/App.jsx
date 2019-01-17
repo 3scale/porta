@@ -1,4 +1,5 @@
-/* eslint-disable import/no-named-as-default */
+// @flow
+
 import React from 'react'
 import PoliciesWidget from 'Policies/components/PoliciesWidget'
 
@@ -6,9 +7,13 @@ import PoliciesWidget from 'Policies/components/PoliciesWidget'
 // version of hot reloading won't hot reload a stateless
 // component at the top-level.
 
-class App extends React.Component {
+type Props = {
+  store: any
+}
+
+class App extends React.Component<Props, {}> {
   render () {
-    const {store} = this.props
+    const { store } = this.props
 
     return (
       <div>
