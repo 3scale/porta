@@ -1,3 +1,5 @@
+// @flow
+
 'use strict'
 import 'core-js/fn/string/includes'
 import 'core-js/fn/symbol'
@@ -34,7 +36,7 @@ const update = function (ident, changes) {
 // @param {string} ident - identifier for the storage
 // @param {string} currentClassName - original class name
 // @param {string} newClassName - new class name
-export function moveState (ident, currentClassName, newClassName) {
+export function moveState (ident: string, currentClassName: string, newClassName: string) {
   let state = load(ident)
   if (state && typeof (state[newClassName]) === 'undefined') {
     state[newClassName] = state[currentClassName]
@@ -45,7 +47,7 @@ export function moveState (ident, currentClassName, newClassName) {
 
 // @param {string} ident - identifier for the storage
 // @param {DOMTokenList} classList - element.classList
-export function recoverState (ident, classList, className) {
+export function recoverState (ident: string, classList: DOMTokenList, className: string) {
   let storedState = load(ident) || { [className]: classList.contains(className) }
   let classState = typeof (storedState) === 'object' && storedState[className]
 
@@ -55,16 +57,16 @@ export function recoverState (ident, classList, className) {
 }
 
 // @param {string} ident - identifier for the storage
-// @param {DOMTokenList} classList - element.classList
+// @param {DOMTokenList} classList - element.classList FIXME: wrong param
 // @param {Boolean} value - classList.toggle
-export function setState (ident, className, value) {
+export function setState (ident: string, className: string, value: boolean) {
   update(ident, { [className]: value })
 }
 
 // @param {string} ident - identifier for the storage
 // @param {DOMTokenList} classList - element.classList
 // @param {string} className - class to be toggled
-export function toggleState (ident, classList, className) {
+export function toggleState (ident: string, classList: DOMTokenList, className: string) {
   // .toggle returns true/false depending if the class is there or not
   setState(ident, className, classList.toggle(className))
 }
@@ -73,7 +75,7 @@ export function toggleState (ident, classList, className) {
 // @param {DOMTokenList} classList - element.classList
 // @param {Element} toggle - Element that toggles
 // @param {string} className - class to be toggled
-export function toggle (ident, classList, toggle, className) {
+export function toggle (ident: string, classList: DOMTokenList, toggle: Element, className: string) {
   let handler = () => {
     toggleState(ident, classList, className)
     window.dispatchEvent(new Event('resize'))
