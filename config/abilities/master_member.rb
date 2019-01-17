@@ -16,6 +16,7 @@ Ability.define do |user|
       end
     end
 
+    can(:create, Account, &:signup_provider_possible?)
     if user.has_permission?(:partners)
       can :manage, :partners
       if user.account.provider_can_use?(:service_permissions)

@@ -16,6 +16,8 @@ class Abilities::MasterAdminTest < ActiveSupport::TestCase
 
   def test_account
     assert_can ability, :manage, @account
+
+    assert_can ability, :create, Account
   end
 
   def test_provider_management
