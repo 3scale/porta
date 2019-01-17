@@ -8,7 +8,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
-  queue_as :low
+  queue_as :default
 
   before_perform do |job|
     @object, workers_hierarchy = job.arguments
@@ -32,7 +32,18 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     DeletePlainObjectWorker.perform_later(object, workers_hierarchy)
     info "Finished DeleteObjectHierarchyWorker#on_success with the hierarchy of workers: #{workers_hierarchy}"
   rescue ActiveRecord::RecordNotFound => exception
-    Rails.logger.info "DeleteObjectHierarchyWorker#on_success raised #{exception.class} with message #{exception.message}"
+    info "DeleteObjectHierarchyWorker#on_success raised #{exception.class} with message #{exception.message}"
+  end
+
+  def on_complete(_status, options)
+    global_id = options['object_global_id']
+    workers_hierarchy = options['caller_worker_hierarchy']
+    info "Starting DeleteObjectHierarchyWorker#on_complete with the hierarchy of workers: #{workers_hierarchy}"
+    object = GlobalID::Locator.locate(global_id)
+    DeletePlainObjectWorker.perform_later(object, workers_hierarchy)
+    info "Finished DeleteObjectHierarchyWorker#on_complete with the hierarchy of workers: #{workers_hierarchy}"
+  rescue ActiveRecord::RecordNotFound
+    info "DeleteObjectHierarchyWorker#on_complete #{global_id} has been already destroyed"
   end
 
   protected
@@ -44,6 +55,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   def build_batch
     batch = Sidekiq::Batch.new
     batch.description = batch_description
+    batch.on(:complete, self.class, callback_options)
     batch_success_callback(batch) { batch.jobs { delete_associations(object) } }
     batch
   end
@@ -53,8 +65,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   def batch_success_callback(batch)
-    options = { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
-
+    options = callback_options
     batch.on(:success, self.class, options)
     yield
     bid = batch.bid
@@ -69,6 +80,10 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   private
+
+  def callback_options
+    { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
+  end
 
   def delete_objects_of_association(main_object, association_name, worker)
     return unless (associated_objects = main_object.public_send(association_name))
