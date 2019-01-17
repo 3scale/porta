@@ -35,6 +35,8 @@ module System
 
   class Application < Rails::Application
 
+    config.active_job.queue_adapter = :sidekiq
+
     def simple_try_config_for(*args)
       config_for(*args)
     rescue ConfigFor::ReadError, ConfigFor::MissingEnvironmentError => error

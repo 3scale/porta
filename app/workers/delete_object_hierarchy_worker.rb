@@ -69,7 +69,12 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     batch.on(:success, self.class, options)
     yield
     bid = batch.bid
-    on_success(bid, options) if Sidekiq::Batch::Status.new(bid).total.zero?
+    if Sidekiq::Batch::Status.new(bid).total.zero?
+      on_success(bid, options)
+    else
+      info "DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{workers_hierarchy}"
+      retry_job wait: 5.minutes
+    end
   end
 
   def delete_associations(object)
