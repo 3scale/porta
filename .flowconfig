@@ -5,7 +5,8 @@
 [include]
 
 [libs]
-./app/javascript/src/Types/libs/module.js
+./app/javascript/src/Types/libs/libdefs.js
+
 
 [lints]
 
