@@ -20,6 +20,16 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
   end
 
+  test 'the event is created when the user is destroyed' do
+    account = FactoryBot.create(:simple_provider, provider_account: master_account)
+    user = FactoryBot.create(:user, account: account)
+
+    user.destroy!
+
+    assert_not_nil(last_user_deleted_event = EventStore::Event.where(event_type: Users::UserDeletedEvent).last)
+    assert_equal user.id, last_user_deleted_event.data[:user_id]
+  end
+
   def test_user_suspended_no_sessions
     user = FactoryBot.create(:simple_user)
     UserSession.create!(user: user)
