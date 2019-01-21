@@ -36,9 +36,8 @@ module Buyers::ApplicationsHelper
   end
 
   def relation_plans_services(provider)
-    provider.application_plans.inject({}) do |hash, application_plan|
+    provider.application_plans.includes(:service).each_with_object({}) do |application_plan, hash|
       hash[application_plan.id] = application_plan.service.id
-      hash
     end.to_json
   end
 
