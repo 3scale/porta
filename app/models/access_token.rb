@@ -116,7 +116,7 @@ class AccessToken < ApplicationRecord
     super.reject { |column| column.name == 'owner_type' }
   end
 
-  def self.by_value(value)
+  def self.find_from_value(value)
     find_by(value: value.to_s.scrub)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
