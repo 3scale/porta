@@ -7,8 +7,10 @@ import { Provider } from 'react-redux'
 
 import App from 'Policies/components/App'
 
+import type { Store } from 'Policies/types'
+
 type Props = {
-  store: any
+  store: Store
 }
 
 export default function Root (props: Props) {

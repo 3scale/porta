@@ -7,7 +7,10 @@ import { apiMiddleware } from 'redux-api-middleware'
 import { policyChainMiddleware } from 'Policies/middleware/PolicyChain'
 import rootReducer from 'Policies/reducers'
 
-function configureStoreProd (initialState: any) {
+import type {State} from 'Policies/types/State'
+import type {Store} from 'Policies/types'
+
+function configureStoreProd (initialState: State): Store {
   const middlewares = [
     // Add other middleware on this line...
 
@@ -18,14 +21,14 @@ function configureStoreProd (initialState: any) {
     policyChainMiddleware
   ]
 
-  // $FlowFixMe
+  // $FlowFixMe returns Store
   return createStore(rootReducer, initialState, compose(
     // $FlowFixMe
     applyMiddleware(...middlewares)
   ))
 }
 
-function configureStoreDev (initialState: any) {
+function configureStoreDev (initialState: State): Store {
   const middlewares = [
     // Add other middleware on this line...
 
@@ -54,6 +57,7 @@ function configureStoreDev (initialState: any) {
     })
   }
 
+  // $FlowFixMe this is of type State
   return store
 }
 
