@@ -1,5 +1,5 @@
-// TODO: @flow
-// TODO: test
+// @flow
+
 import 'raf/polyfill'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
@@ -10,7 +10,14 @@ import { render } from 'react-dom'
 
 import 'Dashboard/styles/dashboard.scss'
 
-const ApiFilter = ({ apis, displayApis }) => {
+import type { Api } from 'Types'
+
+type Props = {
+  apis: Api[],
+  displayApis: Api[] => void
+}
+
+const ApiFilter = ({ apis, displayApis }: Props) => {
   const onInputChange = event => {
     const filterQuery = event.target.value.toLowerCase()
     const displayedApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
@@ -30,9 +37,12 @@ const ApiFilter = ({ apis, displayApis }) => {
   )
 }
 
-const ApiFilterWrapper = (props, element) => render(
-  <ApiFilter {...props} />,
-  document.getElementById(element)
-)
+const ApiFilterWrapper = (props: Props, element: string) => {
+  const container = document.getElementById(element)
+  if (container == null) {
+    throw new Error(`${element} is not part of the DOM`)
+  }
+  render(<ApiFilter {...props} />, container)
+}
 
 export { ApiFilter, ApiFilterWrapper }

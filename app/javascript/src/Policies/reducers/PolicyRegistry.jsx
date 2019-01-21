@@ -33,6 +33,9 @@ function updateRegistry (state: RegistryState, action: FetchRegistrySuccessActio
   return updateArray(state, parsePolicies(action.payload))
 }
 
+// eslint-disable-next-line space-infix-ops
+// const RegistryReducer = createReducer<RegistryState>(initialState.registry, {
+// $FlowFixMe TODO: in order to fully type createReducer, set UIState and re-enable flow. (use lines above)
 const RegistryReducer = createReducer(initialState.registry, {
   'LOAD_REGISTRY_SUCCESS': updateRegistry,
   'FETCH_REGISTRY_SUCCESS': updateRegistry

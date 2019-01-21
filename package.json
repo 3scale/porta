@@ -7,11 +7,12 @@
   "license": "Apache-2.0",
   "scripts": {
     "clear": "rm -rf node_modules/",
+    "pretest": "flow",
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
     "postshrinkwrap": "replace --silent 'http://' 'https://' ./package-lock.json",
-    "postinstall": "npm rebuild node-sass"
+    "postinstall": "npm rebuild node-sass && flow-typed install"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -41,8 +42,8 @@
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^2.0.0",
     "file-loader": "^1.1.6",
-    "flow-bin": "^0.56.0",
-    "flow-typed": "^2.2.0",
+    "flow-bin": "^0.91.0",
+    "flow-typed": "^2.5.1",
     "hosted-git-info": "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.1.5.tgz",
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.3.0",
