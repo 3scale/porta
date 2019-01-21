@@ -1,11 +1,16 @@
 [ignore]
+<PROJECT_ROOT>/vendor/.*
+<PROJECT_ROOT>/node_modules/.*
 
 [include]
-app/javascripts/packs
 
 [libs]
+./app/javascript/src/Types/libs/libdefs.js
+
 
 [lints]
 
 [options]
 module.name_mapper.extension='scss' -> 'empty/object'
+module.system=haste
+module.name_mapper='\(Applications\|Dashboard\|Navigation\|Onboarding\|Policies\|services\|Stats\|Types\|Users\|utilities\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'

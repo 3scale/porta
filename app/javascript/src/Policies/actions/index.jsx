@@ -1,14 +1,5 @@
 // @flow
 
-import type { Dispatch, ThunkAction } from 'types/index'
-import type {
-  RawRegistry,
-  RegistryPolicy,
-  ChainPolicy,
-  StoredChainPolicy
-} from 'types/Policies'
-import type { UIComponent } from 'Policies/actions/UISettings'
-
 import { uiComponentTransition } from 'Policies/actions/UISettings'
 import { fetchRegistry, loadRegistrySuccess } from 'Policies/actions/PolicyRegistry'
 
@@ -22,6 +13,12 @@ import {
 } from 'Policies/actions/PolicyChain'
 
 import { updatePolicyConfig } from 'Policies/actions/PolicyConfig'
+
+import type { UIComponent } from 'Policies/actions/UISettings'
+import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
+import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
+import type { Dispatch, ThunkAction } from 'Policies/types/index'
+import type { RawRegistry, RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types/Policies'
 
 const chainComponent: UIComponent = 'chain'
 const registryComponent: UIComponent = 'registry'
@@ -96,7 +93,20 @@ function closePolicyConfig (): ThunkAction {
   }
 }
 
-export {
+export interface IPoliciesActions {
+  openPolicyRegistry: () => ThunkAction,
+  editPolicy: ChainPolicy => ThunkAction,
+  sortPolicyChain: Array<ChainPolicy> => SortPolicyChainAction,
+  submitPolicyConfig: (ChainPolicy) => ThunkAction,
+  removePolicyFromChain: (ChainPolicy) => ThunkAction,
+  closePolicyConfig: () => ThunkAction,
+  addPolicy: RegistryPolicy => ThunkAction,
+  closePolicyRegistry: () => ThunkAction,
+  populatePolicies: (serviceId: string, policies?: { chain: Array<StoredChainPolicy>, registry: RawRegistry }) => ThunkAction,
+  updatePolicyConfig: (ChainPolicy) => UpdatePolicyConfigAction
+}
+
+export const actions: IPoliciesActions = {
   openPolicyRegistry,
   editPolicy,
   sortPolicyChain,

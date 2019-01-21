@@ -1,11 +1,20 @@
+// @flow
+
 import React from 'react'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
 
 import 'Navigation/styles/ActiveMenuTitle.scss'
 
-const ActiveMenuTitle = ({ activeMenu, currentApi }) => {
-  const getIconAndText = () => {
+import type { Api, Menu } from 'Types'
+
+type Props = {
+  activeMenu: Menu,
+  currentApi: Api
+}
+
+const ActiveMenuTitle = ({ activeMenu, currentApi }: Props) => {
+  const getIconAndText: () => [string, string] = () => {
     switch (activeMenu) {
       case 'dashboard':
         return ['fa-home', 'Dashboard']

@@ -1,8 +1,8 @@
 // @flow
 
 import { RSAA } from 'redux-api-middleware'
-import type { RSSAAction } from 'types/index'
-import type { RawRegistry } from 'types/Policies'
+import type { RSSAAction } from 'Policies/types/index'
+import type { RawRegistry } from 'Policies/types/Policies'
 
 export type FetchRegistrySuccessAction = { type: 'FETCH_REGISTRY_SUCCESS', payload: RawRegistry, meta: ?{} }
 export type FetchRegistryErrorAction = { type: 'FETCH_REGISTRY_ERROR', payload: Object, error: boolean, meta: ?{} }
