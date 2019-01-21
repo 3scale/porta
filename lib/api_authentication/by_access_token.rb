@@ -102,7 +102,7 @@ module ApiAuthentication
 
     def authenticated_token
       return @authenticated_token if instance_variable_defined?(:@authenticated_token)
-      @authenticated_token = domain_account.access_tokens.by_value(access_token) if access_token
+      @authenticated_token = domain_account.access_tokens.find_from_value(access_token) if access_token
     end
 
     def enforce_access_token_permission
