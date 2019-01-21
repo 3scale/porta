@@ -20,7 +20,7 @@ class ApiAuthentication::ByAuthenticationTokenTest < MiniTest::Unit::TestCase
   def mock_token(attributes = {})
     @params = { access_token: 'some-token' }
     token = mock('access-token', attributes)
-    @access_tokens.expects(:by_value).with('some-token').returns(token)
+    @access_tokens.expects(:find_from_value).with('some-token').returns(token)
     token
   end
 
