@@ -15,11 +15,11 @@
             = link_to 'Define', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service'
             | )
 
-      tbody
+      tbody#sortable.ui-sortable
         - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
 
         - @proxy.proxy_rules.each do |rule|
-          tr
+          tr.ui-state-default.ui-sortable-handle
             = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics
         tr#new-proxy-rule-template style="display:none;"
           = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
@@ -31,4 +31,13 @@
 javascript:
   jQuery('#proxy-rules .metric select[data-selected]').each(function(){
     jQuery(this).val(jQuery(this).data('selected'))
+  })
+
+  jQuery(function () {
+    jQuery("#sortable").sortable({
+      revert: true,
+      handle: 'a.ui-draggable',
+      cursor: 'move'
+    })
+    jQuery("tr, td").disableSelection();
   })
