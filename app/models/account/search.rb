@@ -13,7 +13,7 @@ class Account
       self.allowed_search_scopes = [:query, :state, :country_id, :plan_id, :created_within]
 
       scope :by_created_within, ->(from, to) do
-        where{ date(created_at).in(from..to) }
+        where{ sift(:date, created_at).in(from..to) }
       end
 
       scope :by_query, ->(query) do

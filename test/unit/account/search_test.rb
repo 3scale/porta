@@ -122,4 +122,14 @@ class Account::SearchTest < ActiveSupport::TestCase
     ThinkingSphinx::Search.expects(:new).never
     Account.scope_search(:query => '')
   end
+
+  test 'by_created_within' do
+    ThinkingSphinx::Search.expects(:new).never
+    provider = FactoryBot.create(:simple_provider)
+    assert_equal 0, provider.buyers.count
+    buyers = FactoryBot.create_list(:buyer_account, 3, provider_account: provider, created_at: Time.parse('2019-01-10') )
+    buyers.first.update_attribute(:created_at, '2019-02-10'.to_time)
+    result = provider.buyers.scope_search(created_within: ['2019-01-01', '2019-01-31'])
+    assert_equal 2, result.size
+  end
 end
