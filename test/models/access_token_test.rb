@@ -91,6 +91,23 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert Array, @token.human_scopes
   end
 
+  def test_scope_by_name
+    %w[searchable another_name].each { |name| FactoryBot.create_list(:access_token, 2, name: name) }
+    assert_same_elements AccessToken.where('name LIKE \'%arch%\'').pluck(:id), AccessToken.by_name('arch').pluck(:id)
+    assert_same_elements AccessToken.all.pluck(:id), AccessToken.by_name('').pluck(:id)
+  end
+
+  def test_find_from_id_or_value_and_bang
+    FactoryBot.create_list(:access_token, 2).each do |token|
+      assert_equal token.id, AccessToken.find_from_id_or_value(token.id).id
+      assert_equal token.id, AccessToken.find_from_id_or_value(token.value).id
+      assert_equal token.id, AccessToken.find_from_id_or_value!(token.id).id
+      assert_equal token.id, AccessToken.find_from_id_or_value!(token.value).id
+    end
+    assert_nil AccessToken.find_from_id_or_value('fake')
+    assert_raise(ActiveRecord::RecordNotFound) { AccessToken.find_from_id_or_value!('fake') }
+  end
+
   private
 
   def member

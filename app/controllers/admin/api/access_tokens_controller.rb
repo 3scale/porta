@@ -18,9 +18,10 @@ class Admin::Api::AccessTokensController < Admin::Api::BaseController
   ##~ e.responseClass = "access_token"
   #
   ##~ op = e.operations.add
+  ##~ op.deprecated = true
   ##~ op.httpMethod = "POST"
   ##~ op.summary   = "Access Token Create"
-  ##~ op.description = "Creates an access token."
+  ##~ op.description = "[Deprecated API] Use \"Personal Access Tokens Create\". Creates an access token. Make sure to copy your new personal access token now. You will not be able to see it again as it is not stored for security reasons."
   ##~ op.group = "access_token"
   #
   ##~ op.parameters.add :name => "user_id", :description => "ID of the user.", :dataType => "integer", :paramType => "path", :required => true
