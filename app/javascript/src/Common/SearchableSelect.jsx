@@ -4,7 +4,6 @@ import { TextInput } from '@patternfly/react-core'
 import './SearchableSelect.scss'
 
 class SearchableSelect extends React.Component {
-
   constructor (props) {
     super(props)
     const { options = [], defaultOption = options[0] || {} } = this.props

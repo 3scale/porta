@@ -2,7 +2,6 @@ import React from 'react'
 import { SearchableSelect } from '../Common/SearchableSelect'
 
 class ApplicationForm extends React.Component {
-
   state = {
     appPlan: this.props.appPlans[0],
     name: '',
