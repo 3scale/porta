@@ -5,9 +5,10 @@
       "responseClass": "access_token",
       "operations": [
         {
+          "deprecated": true,
           "httpMethod": "POST",
           "summary": "Access Token Create",
-          "description": "Creates an access token.",
+          "description": "[Deprecated API] Use \"Personal Access Tokens Create\". Creates an access token. Make sure to copy your new personal access token now. You will not be able to see it again as it is not stored for security reasons.",
           "group": "access_token",
           "parameters": [
             {
@@ -4570,6 +4571,138 @@
               "required": true,
               "paramType": "path",
               "threescale_name": "metric_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/personal/access_tokens.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Personal Access Token Create",
+          "description": "Creates an access token. Make sure to copy your new personal access token now. You will not be able to see it again as it is not stored for security reasons.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Name of the access token.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "permission",
+              "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "scopes",
+              "defaultName": "scopes[]",
+              "description": "Scope of the access token. URL-encoded array containing one or more of the possible values values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
+              "dataType": "custom",
+              "allowMultiple": true,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/personal/access_tokens.json",
+      "responseClass": "List[access_token]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Personal Access Token List",
+          "description": "Returns the list of access tokens of the user. If the parameter name is sent, it returns only those whose name contain the string of the param",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Part of the name of the access token.",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/personal/access_tokens/{id}.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Personal Access Token Delete",
+          "description": "Deletes an access token.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "id",
+              "description": "ID or value of the access token.",
+              "dataType": "integer",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/personal/access_tokens/{id}.json",
+      "responseClass": "access_token",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Personal Access Token Read",
+          "description": "Shows an access token.",
+          "group": "access_token",
+          "parameters": [
+            {
+              "name": "id",
+              "description": "ID or value of the access token.",
+              "dataType": "integer",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
             }
           ]
         }
