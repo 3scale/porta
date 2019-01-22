@@ -31,5 +31,6 @@
       <%= link_to '', '#delete-proxy-rule', :class => 'action delete' %>
       <%= p.hidden_field :_destroy, {}.merge(:class => 'destroyer', :value => 1, :disabled => true) %>
       <%= p.hidden_field :id, html_options.merge(:class => 'proxy_rule_id') %>
+      <%= link_to '', '#', :class => 'action ui-draggable fa fa-sort' %>
     </td>
 <% end %>
