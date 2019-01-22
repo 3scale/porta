@@ -3,8 +3,9 @@
 # TODO: Rails 5 --> class DeleteObjectHierarchyWorker < ApplicationJob
 class DeleteObjectHierarchyWorker < ActiveJob::Base
 
-  # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError, ActiveRecord::RecordNotFound
-  rescue_from(ActiveJob::DeserializationError, ActiveRecord::RecordNotFound) do |exception|
+  # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
+  # No need of ActiveRecord::RecordNotFound because that can only happen in the callbacks and those callbacks don't use this rescue_from but its own rescue
+  rescue_from(ActiveJob::DeserializationError) do |exception|
     Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
@@ -55,8 +56,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   def build_batch
     batch = Sidekiq::Batch.new
     batch.description = batch_description
-    batch.on(:complete, self.class, callback_options)
-    batch_success_callback(batch) { batch.jobs { delete_associations(object) } }
+    batch_callbacks(batch) { batch.jobs { delete_associations(object) } }
     batch
   end
 
@@ -64,16 +64,14 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     "Deleting #{object.class.name} [##{object.id}]"
   end
 
-  def batch_success_callback(batch)
-    options = callback_options
-    workers_hierarchy = options['caller_worker_hierarchy']
-    batch.on(:success, self.class, options)
+  def batch_callbacks(batch)
+    %i[success complete].each { |callback_name| batch.on(callback_name, self.class, callback_options) }
     yield
     bid = batch.bid
     if Sidekiq::Batch::Status.new(bid).total.zero?
-      on_success(bid, options)
+      on_success(bid, callback_options)
     else
-      info "DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{workers_hierarchy}"
+      info "DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{caller_worker_hierarchy}"
       retry_job wait: 5.minutes
     end
   end

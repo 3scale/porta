@@ -15,19 +15,16 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  def test_callback
+  def test_success_callback_method
     caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
     DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy)
     hierarchy_worker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
-  def test_success_when_empty_batch
-    worker = hierarchy_worker.new
-    worker.instance_variable_set(:@object, object)
+  def test_complete_callback_method
     caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    worker.instance_variable_set(:@caller_worker_hierarchy, caller_worker_hierarchy)
-    worker.expects(:on_success).with(anything, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
-    worker.perform(object: object)
+    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy)
+    hierarchy_worker.new.on_complete(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
   private
@@ -40,24 +37,36 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     DeleteObjectHierarchyWorker
   end
 
-  class ObjectDoesNotExistAnymoreTest < DeleteObjectHierarchyWorkerTest
+  class DeleteObjectHierarchyWorkerWhenDoesNotHaveAssociationsTest < ActiveSupport::TestCase
+    def test_execute_success_when_empty_batch
+      object = FactoryBot.create(:metric)
+      worker = DeleteObjectHierarchyWorker.new
+      worker.instance_variable_set(:@object, object)
+      caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
+      worker.instance_variable_set(:@caller_worker_hierarchy, caller_worker_hierarchy)
+      worker.expects(:on_success).with(anything, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
+      worker.perform(object: object)
+    end
+  end
+
+  class DeleteObjectHierarchyWorkerWhenObjectDoesNotExistAnymoreTest < ActiveSupport::TestCase
     setup do
-      @object = FactoryBot.create(:provider_account)
+      @object = FactoryBot.create(:simple_account)
       Rails.logger.stubs(:info)
     end
+
+    attr_reader :object
 
     def test_perform_deserialization_error
       object.destroy!
       Rails.logger.expects(:info).with { |message| message.match(/DeleteObjectHierarchyWorker#perform raised ActiveJob::DeserializationError/) }
-      assert_nothing_raised(ActiveJob::DeserializationError) { hierarchy_worker.perform_now(object) }
+      Sidekiq::Testing.inline! { DeleteObjectHierarchyWorker.perform_later(object) }
     end
 
     def test_success_record_not_found
       object.destroy!
       Rails.logger.expects(:info).with("DeleteObjectHierarchyWorker#on_success raised ActiveRecord::RecordNotFound with message Couldn't find #{object.class} with 'id'=#{object.id}")
-      assert_nothing_raised(ActiveRecord::RecordNotFound) do
-        hierarchy_worker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
-      end
+      DeleteObjectHierarchyWorker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
     end
   end
 
