@@ -3,30 +3,29 @@
 require 'test_helper'
 
 class WebHookWorkerTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   setup do
-    User.current = nil
     @worker = WebHookWorker.new
   end
 
-  teardown do
-    User.current = nil
+  class TransactionalTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'webhook job performs work' do
+      WebHook.delete_all
+      webhook = FactoryBot.create(:webhook, :account_created_on => true, :user_created_on => true)
+      Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
+
+      User.current = webhook.account.users.first
+
+      jobs = WebHookWorker.jobs
+      assert jobs.empty?
+      FactoryBot.create(:buyer_account, :provider_account => webhook.account)
+      assert_equal 2, jobs.size
+    end
   end
 
-  test 'heandled errors' do
+  test 'handled errors' do
     assert_same_elements [SocketError, RestClient::Exception, Errno::ECONNREFUSED, Errno::ECONNRESET],  WebHookWorker::HANDLED_ERRORS
-  end
-
-  test 'webhook job performs work' do
-    webhook = FactoryBot.create(:webhook, :account_created_on => true, :user_created_on => true)
-    Account.any_instance.stubs(:web_hooks_allowed?).returns(true)
-    User.current = webhook.account.users.first
-
-    jobs = WebHookWorker.jobs
-    assert jobs.empty?
-    FactoryBot.create(:buyer_account, :provider_account => webhook.account)
-    assert_equal 2, jobs.size
   end
 
   test 'be retried' do
