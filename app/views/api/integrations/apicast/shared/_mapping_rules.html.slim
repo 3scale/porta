@@ -19,9 +19,9 @@
         - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
 
         - @proxy.proxy_rules.each do |rule|
-          tr.ui-state-default.ui-sortable-handle
+          tr.ui-sortable-item
             = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics
-        tr#new-proxy-rule-template style="display:none;"
+        tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
           = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
       tfoot
         tr
@@ -32,12 +32,25 @@ javascript:
   jQuery('#proxy-rules .metric select[data-selected]').each(function(){
     jQuery(this).val(jQuery(this).data('selected'))
   })
+  jQuery(function() {
+    var PIXEL_CORRECTOR = 4
+    var tdWidths = jQuery.map(jQuery('.ui-sortable-item').first().children(), function(td, _i) {
 
-  jQuery(function () {
-    jQuery("#sortable").sortable({
-      revert: true,
-      handle: 'a.ui-draggable',
-      cursor: 'move'
+      return td.offsetWidth + PIXEL_CORRECTOR
     })
-    jQuery("tr, td").disableSelection();
+
+    jQuery(function () {
+      jQuery('#sortable').sortable({
+        handle: 'a.ui-sortable-handler',
+        cursor: 'move',
+        containment: '#mapping-rules',
+        start: function (event, ui) {
+          jQuery.each(ui.item.children(), function(i, td) {
+            jQuery(td).css({ width: tdWidths[i] })
+          })
+        }
+      })
+      jQuery('tr, td').disableSelection()
+  })
+
   })
