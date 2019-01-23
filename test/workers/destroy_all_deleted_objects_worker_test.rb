@@ -3,14 +3,17 @@
 require 'test_helper'
 
 class DestroyAllDeletedObjectsWorkerTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
 
   def test_perform_destroys_message_recipient
     message = FactoryBot.create(:received_message, deleted_at: DateTime.yesterday)
     Sidekiq::Testing.inline! do
-      assert_difference(MessageRecipient.method(:count), -1) do
-        DestroyAllDeletedObjectsWorker.perform_async('MessageRecipient')
+      perform_enqueued_jobs do
+        assert_difference(MessageRecipient.method(:count), -1) do
+          DestroyAllDeletedObjectsWorker.perform_async('MessageRecipient')
+        end
+        assert_raise(ActiveRecord::RecordNotFound) { message.reload }
       end
-      assert_raise(ActiveRecord::RecordNotFound) { message.reload }
     end
   end
 
