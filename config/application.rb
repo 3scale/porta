@@ -41,6 +41,8 @@ module System
       config.is_a?(Hash) ? config.with_indifferent_access : config
     end
 
+    config.active_job.queue_adapter = :sidekiq
+
     def simple_try_config_for(*args)
       config_for(*args)
     rescue => error # rubocop:disable Style/RescueStandardError
