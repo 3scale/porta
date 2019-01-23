@@ -6422,6 +6422,13 @@
               "paramType": "query"
             },
             {
+              "name": "description",
+              "description": "Description of the service to be created.",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
               "name": "deployment_option",
               "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed option",
               "dataType": "string",
@@ -6507,6 +6514,14 @@
             {
               "name": "name",
               "description": "New name for the service.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "New description for the service.",
               "dataType": "string",
               "allowMultiple": false,
               "required": false,
