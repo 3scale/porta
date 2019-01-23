@@ -65,6 +65,13 @@ class ApiDocs::Service < ApplicationRecord
     specification.base_path || self[:base_path]
   end
 
+  def host_with_port
+    return unless service
+    endpoint = service.proxy.endpoint
+    uri = Addressable::URI.parse(endpoint)
+    "#{uri.normalized_host}:#{uri.port}"
+  end
+
   def swagger_version
     self[:swagger_version] or specification.swagger_version
   end

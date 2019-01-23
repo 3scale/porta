@@ -365,6 +365,9 @@ Returns the name of the spec.
 ### service
 Returns the service of the spec if it has any or `nil` otherwise.
 
+### host_with_port
+Returns the public production host endpoint if it linked to a service `nil` otherwise
+
 -----------
 
 # Application drop
@@ -701,6 +704,19 @@ OAuth callback url.
 
 
 ## Methods
+### login_url
+
+### user_identified?
+
+-----------
+
+# Base drop
+
+
+
+
+
+## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -723,19 +739,6 @@ Returns the resource URL of the result.
 
 ### description
 Returns a descriptive string for the result.
-
------------
-
-# Base drop
-
-
-
-
-
-## Methods
-### login_url
-
-### user_identified?
 
 -----------
 
@@ -777,6 +780,17 @@ Returns a descriptive string for the result.
 
 
 ## Methods
+### change_plan?
+
+-----------
+
+# Can drop
+
+
+
+
+
+## Methods
 ### be_updated?
 
 ### be_destroyed?
@@ -792,17 +806,6 @@ Returns a descriptive string for the result.
 ### manage_keys?
 
 ### delete_key?
-
------------
-
-# Can drop
-
-
-
-
-
-## Methods
-### change_plan?
 
 -----------
 
@@ -1612,6 +1615,27 @@ this returns the errors that occurred.
 
 
 ## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1651,27 +1675,6 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
 
 -----------
 
@@ -2871,12 +2874,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 
@@ -2899,9 +2899,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 

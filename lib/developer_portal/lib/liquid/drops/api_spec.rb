@@ -21,6 +21,11 @@ module Liquid
         return unless (service = @spec.service)
         Drops::Service.new(service)
       end
+
+      desc 'Returns the public production host endpoint if it linked to a service `nil` otherwise'
+      def host_with_port
+        @spec.host_with_port
+      end
     end
   end
 end
