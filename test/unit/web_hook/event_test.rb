@@ -70,6 +70,19 @@ class WebHook::EventTest < ActiveSupport::TestCase
 
   end
 
+
+  test 'guess_event' do
+    provider = build_provider(:application_created_on => true)
+    provider.save!
+    assert_equal 'created', WebHook::Event.new(provider, provider).event
+
+    provider.update_column(:updated_at, provider.created_at + 0.0001.second)
+    provider.reload
+    event = WebHook::Event.new(provider, provider)
+
+    assert_equal 'updated', event.event
+  end
+
   # TODO: check xml of webhook event and compare it to model
 
   class EnqueueTest < ActiveSupport::TestCase
