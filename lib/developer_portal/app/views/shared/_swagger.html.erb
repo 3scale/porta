@@ -16,12 +16,17 @@
 <script type="text/javascript">
   $(function () {
     var url = "<%= services.empty? ? swagger_spec_index_url(format: :json) : swagger_spec_index_url(format: :json, services: services.join(',')) %>";
+    var host = "<%= @api_docs_service.host_with_port  %>";
+
     window.swaggerUi = new SwaggerUi({
       url: url,
       dom_id: "swagger-ui-container",
       supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
       onComplete: function(swaggerApi, swaggerUi) {
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+        if (host) {
+          swaggerApi.setHost(host);
+        }
       },
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");

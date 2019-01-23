@@ -25,6 +25,8 @@
 
   $(function () {
     var url = "<%= swagger_spec_url(services.first, format: :json) -%>";
+    var host = "<%= @api_docs_service.host_with_port %>";
+
     window.swaggerUi = new SwaggerUi({
       url: url,
       dom_id: "swagger-ui-container",
@@ -33,6 +35,9 @@
       operationsSorter: "method", // can also be 'alpha' or a function
       onComplete: function(swaggerApi, swaggerUi) {
         $('#swagger-ui-container pre code').each(function(i, e) {hljs.highlightBlock(e)});
+        if (host) {
+          swaggerApi.setHost(host);
+        }
       },
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");
