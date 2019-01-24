@@ -50,32 +50,34 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  test 'deleted application rebuilds dependencies' do
+  test 'deleted application rebuilds dependency that can be performed' do
     application = FactoryBot.create(:simple_cinstance)
     FactoryBot.create(:admin, account: application.provider_account)
-    application.destroy!
+    application.service.proxy.delete
+    application.reload.destroy!
     event_store_event = EventStore::Event.where(event_type: Applications::ApplicationDeletedEvent).last!
     application_event = EventStore::Repository.find_event!(event_store_event.event_id)
-    zync_event = ZyncEvent.create(application_event, application_event.application)
+    ZyncEvent.create_and_publish!(application_event, application_event.application)
 
-    worker = ZyncWorker.new
-    worker.config.stubs(endpoint: 'http://example.com') # so it makes http request
-    worker.publisher.call(zync_event) # so it is later available to find
+    Rails.configuration.zync.stubs(endpoint: 'http://example.com') # so it makes http request
+    Rails.configuration.zync.stubs(message_bus: true)
 
     stub_request(:put, 'http://example.com/tenant').to_return(status: 200)
     stub_request(:put, 'http://example.com/notification').to_return(status: 422)
 
-    zync_events = RailsEventStoreActiveRecord::Event.where(event_type: 'ZyncEvent')
-    assert_difference(zync_events.method(:count), +2) do
+    zync_event = EventStore::Event.where(event_type: ZyncEvent).last!
+    assert_difference(EventStore::Event.where(event_type: ZyncEvent).method(:count), +1) do
       assert_raises ZyncWorker::UnprocessableEntityError do
-        worker.perform(zync_event.event_id, zync_event.data)
+        Sidekiq::Testing.inline! { ZyncWorker.perform_async(zync_event.event_id, zync_event.data) }
       end
     end
-    dependency_event_service, dependency_event_proxy = zync_events.last(2)
-    assert_equal 'Service', dependency_event_service.data['type']
-    assert_equal zync_event.data[:service_id], dependency_event_service.data['id']
-    assert_equal 'Proxy',  dependency_event_proxy.data['type']
-    assert_equal zync_event.data[:proxy_id], dependency_event_proxy.data['id']
+
+    stub_request(:put, 'http://example.com/notification').to_return(status: 200)
+
+    dependency_event_service = EventStore::Event.where(event_type: ZyncEvent).last!
+    assert_equal 'Service', dependency_event_service.data[:type]
+    assert_equal zync_event.data[:service_id], dependency_event_service.data[:id]
+    Sidekiq::Testing.inline! { ZyncWorker.perform_async( dependency_event_service.event_id,  dependency_event_service.data) }
   end
 
   class MessageBusPublisherTest < ActiveSupport::TestCase
