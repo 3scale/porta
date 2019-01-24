@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::ProviderTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   def setup
     @storage = Backend::Storage.instance
     @storage.flushdb

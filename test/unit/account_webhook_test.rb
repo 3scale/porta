@@ -20,7 +20,6 @@ class AccountWebhookTest < ActiveSupport::TestCase
   end
 
   class WebhooksTest < ActionDispatch::IntegrationTest
-    disable_transactional_fixtures!
 
     include WebHookTestHelpers
 

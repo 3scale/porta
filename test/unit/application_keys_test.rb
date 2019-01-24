@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ApplicationKeysTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   subject { @application_key ||= FactoryBot.create(:application_key) }
 

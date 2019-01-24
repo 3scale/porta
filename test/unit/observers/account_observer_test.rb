@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class AccountObserverTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   def setup
     @account = FactoryBot.create(:simple_buyer)
   end
