@@ -51,6 +51,7 @@ class Admin::Api::ServicePlansController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the service plan.", :dataType => "string", :required => true, :paramType => "query"
+  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Service subscriptions require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
   ##~ op.parameters.add @parameter_service_plan_state_event
   #
@@ -89,6 +90,7 @@ class Admin::Api::ServicePlansController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_service_id_by_id_name
   ##~ op.parameters.add @parameter_service_plan_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the service plan.", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Service subscriptions require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_service_plan_state_event
   #
   def update
@@ -135,7 +137,7 @@ class Admin::Api::ServicePlansController < Admin::Api::ServiceBaseController
 
   protected
 
-  DEFAULT_PARAMS = %i[name state_event].freeze
+  DEFAULT_PARAMS = %i[name state_event approval_required].freeze
 
   def service_plan_update_params
     params.require(:service_plan).permit(DEFAULT_PARAMS)

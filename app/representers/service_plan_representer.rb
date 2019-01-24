@@ -4,8 +4,6 @@ module ServicePlanRepresenter
 
   wraps_resource
 
-  property :approval_required
-
   link :service do
     admin_api_service_url(issuer_id) if issuer_id
   end

@@ -58,6 +58,7 @@ class ApplicationPlan < Plan
       xml.service_id issuer_id
 
       xml.end_user_required end_user_required
+      xml.approval_required approval_required
 
       xml.setup_fee setup_fee
       xml.cost_per_month cost_per_month
