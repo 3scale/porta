@@ -37,6 +37,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "name", :description => "Name of the service to be created.", :dataType => "string", :required => true, :paramType => "query"
+  ##~ op.parameters.add :name => "description", :description => "Description of the service to be created.", :dataType => "string", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "backend_version", :description => "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
@@ -75,6 +76,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id
   ##~ op.parameters.add :name => "name", :description => "New name for the service.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "description", :description => "New description for the service.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "support_email", :description => "New support email.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "tech_support_email", :description => "New technical support email.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "admin_support_email", :description => "New admin support email.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
