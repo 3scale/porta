@@ -73,3 +73,36 @@ Given(%r{^the service uses app_id/app_key as authentication method$}) do
   @service ||= @provider.default_service
   @service.update_attributes!(backend_version: '2')
 end
+
+Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" delta "([^"]*)" and metric "([^"]*)"$/) do |method, pattern, delta, metric|
+  click_on 'add-proxy-rule'
+  within(page.find('#sortable tr:last-child')) do
+    find("td.http_method select option[value='#{method}']").select_option
+    find('td.pattern input').set pattern
+    find('td.delta input').set delta
+    find('td.metric select').find(:xpath, "//*[.='#{metric}']").select_option
+  end
+end
+
+Given(/^I drag the last mapping rule to the first position$/) do
+  within(page.find('#sortable')) do
+    last_index = all('#sortable tr').count
+    element = page.find("#sortable tr:nth-child(#{last_index}) a.ui-sortable-handler")
+    target = page.find("#sortable tr:nth-child(1)")
+    element.drag_to(target)
+  end
+end
+
+Given(/^I save the proxy config$/) do
+  click_on 'proxy-button-save-and-deploy'
+end
+
+Then(/^the mapping rules should be in the following order:$/) do |table|
+  data = @provider.default_service.proxy.proxy_rules
+  MAPPING_RULE_ATTR = %w[http_method pattern delta metric_id].freeze
+  data.each_with_index do |mapping_rule, index|
+    MAPPING_RULE_ATTR.each do |attr|
+      assert_equal table.hashes[index][attr], mapping_rule[attr]
+    end
+  end
+end
