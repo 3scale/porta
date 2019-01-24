@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   def expect_save_for(usage_limit, without: [], with: {}, &blk)
     entries = {

@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class AuditedHacksTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   def setup
     @provider = FactoryBot.create(:provider_account)
