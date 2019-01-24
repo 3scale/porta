@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class Master::Api::ServicesControllerTest < ActionController::TestCase
-
-  disable_transactional_fixtures!
-
   def setup
     @request.host = master_account.domain
   end

@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class Reports::CsvDataExportEventTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   def test_create
     provider  = FactoryBot.build_stubbed(:simple_provider)
     recipient = FactoryBot.build_stubbed(:simple_user)

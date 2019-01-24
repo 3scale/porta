@@ -5,8 +5,6 @@ require 'test_helper'
 class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
   include ApiRouting
-  disable_transactional_fixtures!
-
   class ProviderAccountTest < Admin::Api::CMS::BaseControllerTest
     setup do
       @provider = FactoryBot.create(:provider_account)

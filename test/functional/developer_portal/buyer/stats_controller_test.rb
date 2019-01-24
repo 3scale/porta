@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionController::TestCase
-  disable_transactional_fixtures!
-
   def setup
     super
     @provider = FactoryBot.create :provider_account

@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   def setup
     @account = FactoryBot.create(:provider_account)
     @master = Account.master
