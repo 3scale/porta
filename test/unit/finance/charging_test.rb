@@ -208,8 +208,6 @@ class Finance::ChargingTest < ActiveSupport::TestCase
 
         class BuyerNotificationWhenPaidTest < ActiveSupport::TestCase
 
-          disable_transactional_fixtures!
-
           setup do
             @provider_account = FactoryBot.create(:provider_account,
                                         :billing_strategy => FactoryBot.create(:postpaid_billing))

@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class EndUserTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   subject { @end_user }
 
   def setup

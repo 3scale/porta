@@ -2,8 +2,6 @@ require 'test_helper'
 
 class ContractTest < ActiveSupport::TestCase
 
-  disable_transactional_fixtures!
-
   def test_by_account
     accounts = [FactoryBot.create(:simple_buyer), FactoryBot.create(:simple_provider)]
     accounts.each { |account| FactoryBot.create_list(:application, 2, user_account: account) }
@@ -145,7 +143,6 @@ class ContractTest < ActiveSupport::TestCase
     Timecop.freeze(Date.parse('2018-01-17')) do
       provider = FactoryBot.create(:simple_provider)
       contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
-      contract.buyer_account.stubs(provider_account: provider)
       other_plan = FactoryBot.create(:simple_application_plan, service: contract.service, cost_per_month: 3100.0)
       Finance::PrepaidBillingStrategy.create!(account: provider, currency: 'EUR')
 

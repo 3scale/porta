@@ -365,8 +365,6 @@ class ServiceTest < ActiveSupport::TestCase
 
   class DestroyingServiceTest < ActiveSupport::TestCase
 
-    disable_transactional_fixtures!
-
     test "destroying service destroys it's plans" do
       service          = FactoryBot.create(:service)
       service_plan     = FactoryBot.create(:application_plan, issuer: service)
@@ -563,8 +561,6 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   class AsynchronousDeletionOfService < ActiveSupport::TestCase
-    disable_transactional_fixtures!
-
     test 'schedule destruction of a service' do
       service = FactoryBot.create(:simple_service)
       service.stubs(last_accessible?: false)
