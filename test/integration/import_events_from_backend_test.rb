@@ -2,8 +2,6 @@ require 'test_helper'
 require 'sidekiq/testing'
 
 class ImportEventsFromBackendTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   test "import should delete events from backend, create backend events and call Events::Importer" do
     master_account
 

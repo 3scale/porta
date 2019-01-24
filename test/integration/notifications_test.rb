@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class NotificationsTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   setup do
     Logic::RollingUpdates.stubs(skipped?: true)
   end
