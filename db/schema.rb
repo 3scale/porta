@@ -96,21 +96,17 @@ ActiveRecord::Schema.define(version: 20200121142649) do
     t.datetime "proxy_configs_conf_updated_at"
     t.datetime "hosted_proxy_deployed_at"
     t.string   "po_number"
-    t.datetime "deleted_at"
     t.datetime "state_changed_at"
     t.bigint   "first_admin_id"
     t.index ["default_service_id"], name: "index_accounts_on_default_service_id", using: :btree
-    t.index ["domain", "deleted_at"], name: "index_accounts_on_domain_and_deleted_at", using: :btree
     t.index ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at", using: :btree
     t.index ["domain"], name: "index_accounts_on_domain", unique: true, using: :btree
     t.index ["master"], name: "index_accounts_on_master", unique: true, using: :btree
     t.index ["provider_account_id", "created_at"], name: "index_accounts_on_provider_account_id_and_created_at", using: :btree
     t.index ["provider_account_id", "state"], name: "index_accounts_on_provider_account_id_and_state", using: :btree
     t.index ["provider_account_id"], name: "index_accounts_on_provider_account_id", using: :btree
-    t.index ["self_domain", "deleted_at"], name: "index_accounts_on_self_domain_and_deleted_at", using: :btree
     t.index ["self_domain", "state_changed_at"], name: "index_accounts_on_self_domain_and_state_changed_at", using: :btree
     t.index ["self_domain"], name: "index_accounts_on_self_domain", unique: true, using: :btree
-    t.index ["state", "deleted_at"], name: "index_accounts_on_state_and_deleted_at", using: :btree
     t.index ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at", using: :btree
   end
 
