@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Csv::InvoicesExporterTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   def setup
     @provider = FactoryBot.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com')

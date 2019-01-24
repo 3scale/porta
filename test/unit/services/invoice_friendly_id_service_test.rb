@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class InvoiceFriendlyIdServiceTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   setup do
     provider_account = FactoryBot.create(:provider_with_billing)

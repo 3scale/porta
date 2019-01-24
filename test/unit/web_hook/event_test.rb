@@ -86,7 +86,6 @@ class WebHook::EventTest < ActiveSupport::TestCase
   # TODO: check xml of webhook event and compare it to model
 
   class EnqueueTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     test 'enqueue' do
       account = FactoryBot.create(:provider_account)

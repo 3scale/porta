@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class MessageObserverTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   fixtures :countries
 
   def setup

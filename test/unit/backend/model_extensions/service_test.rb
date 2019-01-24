@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::ServiceTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   test 'stores backend service data when service is saved' do
     service = FactoryBot.build(:service,

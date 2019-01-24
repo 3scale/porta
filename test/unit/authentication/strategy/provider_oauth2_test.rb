@@ -166,8 +166,6 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
   class SsoSignupTest < ActiveSupport::TestCase
 
-    disable_transactional_fixtures!
-
     test 'create an active user through sso' do
       authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)

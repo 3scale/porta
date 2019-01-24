@@ -70,7 +70,6 @@ class PaymentDetailTest < ActiveSupport::TestCase
   end
 
   class NotifierTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def setup
       @cc_attributes = {

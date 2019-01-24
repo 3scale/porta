@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   include ThreeScale
   include TestHelpers::BackendClientStubs
 

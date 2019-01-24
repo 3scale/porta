@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   subject { @user || FactoryBot.create(:user) }
 
