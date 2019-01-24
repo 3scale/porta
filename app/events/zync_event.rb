@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ZyncEvent < RailsEventStore::Event
+class ZyncEvent < BaseEventStoreEvent
 
   # Create Zync Event
 
@@ -62,13 +62,9 @@ class ZyncEvent < RailsEventStore::Event
   private
 
   def non_persisted_dependencies
-    proxy_id = data[:proxy_id]
     case record
-    when Cinstance
-      [Service.new({id: data[:service_id]}, without_protection: true),
-       Proxy.new({id: proxy_id}, without_protection: true)]
-    when Proxy
-      [Proxy.new({id: proxy_id}, without_protection: true)]
+    when Proxy, Cinstance
+      [Service.new({id: data[:service_id]}, without_protection: true)]
     else
       NONE
     end
