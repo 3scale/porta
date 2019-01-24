@@ -1,4 +1,4 @@
-@javascript @ajax @selenium
+@javascript @selenium
 Feature: ActiveDocs
   In order to rule the world
   As a provider I wanna provide swagger
