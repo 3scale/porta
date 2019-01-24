@@ -16,19 +16,21 @@ module Liquid
         super
         if params =~ Syntax
           @version  = $1.strip
-          @services = $2.nil? ? [] : $2.split(",").map(&:strip)
+          @system_names = $2.nil? ? [] : $2.split(",").map(&:strip)
         end
       end
 
+      attr_reader :system_names
+
       def render context
-        if @services.empty? && @version > "1.2"
-          @services =
-            context.registers[:controller].send(:site_account)
-            .api_docs_services.published
-            .select{|e| e.specification.swagger_2_0?}.map(&:system_name)
+        provider_account = context.registers[:controller].send(:site_account)
+        published_api_docs = provider_account.api_docs_services.published
+
+        if system_names.empty? && swagger2?
+          @system_names = published_api_docs.swagger2.map(&:system_name)
         end
 
-        render_erb context, "shared/#{version}", {services: @services}
+        render_erb context, "shared/#{version}", services: published_api_docs.where(system_name: system_names)
       end
 
       # version can be 1.0, 1.2 or 2.0, defaults to 2.0
@@ -43,6 +45,9 @@ module Liquid
         end
       end
 
+      def swagger2?
+        @version > "1.2"
+      end
     end
   end
 end

@@ -23,8 +23,6 @@
 <script>
 $(function(){
   function showSpec(name){
-    var host = "<%= @api_docs_service.host_with_port %>";
-    
     new SwaggerUi({
       url: '/p/admin/api_docs/specs/' + name ,
       dom_id: 'swagger-ui-' + name,
@@ -33,9 +31,6 @@ $(function(){
       operationsSorter: "alpha", // can also be 'alpha' or a function
       onComplete: function(swaggerApi, swaggerUi) {
         $('#swagger-ui-' + name + ' pre code').each(function(i, e) {hljs.highlightBlock(e)});
-        if (host) {
-          swaggerApi.setHost(host);
-        }
       },
       docExpansion: "list",
       transport: function(httpClient, obj) {

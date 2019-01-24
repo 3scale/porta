@@ -24,8 +24,8 @@
   }
 
   $(function () {
-    var url = "<%= swagger_spec_url(services.first, format: :json) -%>";
-    var host = "<%= @api_docs_service.host_with_port %>";
+    var url = "<%= swagger_spec_url(services.first&.system_name, format: :json) -%>";
+    var host = "<%= services.first&.host_with_port %>";
 
     window.swaggerUi = new SwaggerUi({
       url: url,

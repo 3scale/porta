@@ -10,7 +10,7 @@
 <script type="text/javascript">
   (function () {
     var url = "{{provider.api_specs.first.url}}";
-    var host = "<%= @api_docs_service.host_with_port %>";
+    var host = "{{provider.api_specs.first.host_with_port}}";
 
     window.swaggerUi = new SwaggerUi({
       url: url,

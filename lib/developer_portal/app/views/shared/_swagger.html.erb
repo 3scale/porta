@@ -13,10 +13,12 @@
   <p><a href='#'>Sign in</a> to your account for quick access to useful values.</p>
 </div>
 
+<% url_opts = { format: :json }; url_opts[:services] = services.pluck(:system_name).join(',') unless services.empty? %>
+
 <script type="text/javascript">
   $(function () {
-    var url = "<%= services.empty? ? swagger_spec_index_url(format: :json) : swagger_spec_index_url(format: :json, services: services.join(',')) %>";
-    var host = "<%= @api_docs_service.host_with_port  %>";
+    var url = "<%= swagger_spec_index_url(url_opts) %>";
+    var host = "<%= services.first&.host_with_port %>";
 
     window.swaggerUi = new SwaggerUi({
       url: url,
