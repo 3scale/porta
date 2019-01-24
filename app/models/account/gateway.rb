@@ -10,14 +10,7 @@ module Account::Gateway
 
     attr_accessor :payment_gateway_changed
 
-    # Hack to remove payment_gateway_type and payment_gateway_options from @attributes
-    # It is enough for rails not persisting them in actual columns.
-    def self.columns
-      super.reject{|column| /\Apayment_gateway_(type|options)\Z/ =~ column.name }
-    end
 
-    # need to reset column information to clear column_names and such
-    reset_column_information
   end
 
   # Payment gateway this account accepts payments through.
