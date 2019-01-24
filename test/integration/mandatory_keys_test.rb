@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class MandatoryKeysTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   context 'Mandatory keys: ' do
 
     setup do

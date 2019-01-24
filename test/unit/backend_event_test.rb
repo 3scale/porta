@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class BackendEventTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   test "find" do
     BackendEvent.create(id: 232)
     assert BackendEvent.find(232)

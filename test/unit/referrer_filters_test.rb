@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ReferrerFiltersTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   subject { @referrer_filter ||= FactoryBot.create(:referrer_filter) }
 

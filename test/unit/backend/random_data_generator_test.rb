@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Backend::RandomDataGeneratorTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   test 'generate' do
     provider = FactoryBot.create :provider_account

@@ -45,8 +45,6 @@ class AfterCommitSubscriberTest < ActiveSupport::TestCase
   end
 
   class WithoutTransactionsTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
-
     def setup
       @dummie_object = OpenStruct.new(name: 'Supetramp')
     end

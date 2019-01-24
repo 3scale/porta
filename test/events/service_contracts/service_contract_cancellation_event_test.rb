@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class ServiceContracts::ServiceContractCancellationEventTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   def test_create
     service  = FactoryBot.build_stubbed(:simple_service, id: 1)
     plan     = FactoryBot.build_stubbed(:simple_service_plan, id: 2, issuer: service)

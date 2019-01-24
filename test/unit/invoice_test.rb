@@ -118,7 +118,6 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   class AutoFriendlyIdTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def setup
       @provider = FactoryBot.create(:simple_provider)
@@ -524,7 +523,6 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   class CounterUpdateTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def setup
       @provider = FactoryBot.create(:simple_provider)

@@ -250,7 +250,6 @@ class Account::StatesTest < ActiveSupport::TestCase
 
 
   class CallbacksTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def test_suspend
       account = FactoryBot.create(:provider_account)
