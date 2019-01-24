@@ -38,6 +38,7 @@ default: &DEFAULT
   adapter: mysql2
   encoding: utf8
   collation: utf8_bin
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
 
 production:
   <<: *DEFAULT
