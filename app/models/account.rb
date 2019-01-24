@@ -3,6 +3,10 @@
 require_dependency 'backend_client'
 
 class Account < ApplicationRecord
+  def self.columns
+    super.reject { |c| c.name == "deleted_at" }
+  end
+
   set_date_columns :credit_card_expires_on
 
   # it has to be THE FIRST callback after create, so associations get the tenant id
