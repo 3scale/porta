@@ -21,6 +21,12 @@ class AccountTest < ActiveSupport::TestCase
   should have_many :invoices
   should have_many :payment_transactions
 
+  def test_removed_columns
+    %W[payment_gateway_type payment_gateway_options deleted_at].each do |column|
+      refute_includes Account.column_names, column
+    end
+  end
+
   def test_not_master
     master = master_account
     buyer = FactoryBot.create(:simple_buyer, provider_account: master)
