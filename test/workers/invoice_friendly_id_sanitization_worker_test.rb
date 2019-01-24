@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class InvoiceFriendlyIdSanitizationWorkerTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   setup do
     @provider_account = FactoryBot.create(:provider_with_billing)
     @provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')

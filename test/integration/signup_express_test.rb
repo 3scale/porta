@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class SignupExpressTest < ActionDispatch::IntegrationTest
-
-  disable_transactional_fixtures!
-
   def setup
     @account_plan = FactoryBot.create(:account_plan, approval_required: true)
     @provider = @account_plan.provider

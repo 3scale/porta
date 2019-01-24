@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Accounts::AccountDeletedEventTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   def test_create
     account = FactoryBot.build_stubbed(:simple_buyer, id: 1, provider_account_id: 2)
     event   = Accounts::AccountDeletedEvent.create(account)
