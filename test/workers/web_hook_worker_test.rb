@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class WebHookWorkerTest < ActiveSupport::TestCase
-
   setup do
     @worker = WebHookWorker.new
   end

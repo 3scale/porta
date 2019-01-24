@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# TODO: Split this file as it takes too long.
 class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
@@ -18,8 +19,6 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   class AccessTokenWithCallbacks < ActionDispatch::IntegrationTest
-
-    disable_transactional_fixtures!
 
     def setup
       @provider = FactoryBot.create(:simple_provider)

@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   include FieldsDefinitionsHelpers
 
   def setup
