@@ -25,7 +25,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
 
     def test_create_invalid_params_json
       assert_no_difference service.application_plans.method(:count) do
-        post admin_api_service_application_plans_path(application_plan_params('fakestate'))
+        post admin_api_service_application_plans_path(application_plan_params(state_event: 'fakestate'))
         assert_response :unprocessable_entity
         assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')
       end
@@ -42,7 +42,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     def test_update_invalid_params_json
       original_values = {name: 'firstname', state: 'hidden', service: service}
       application_plan = FactoryBot.create(:application_plan, original_values)
-      put admin_api_service_application_plan_path(application_plan, application_plan_params('fakestate'))
+      put admin_api_service_application_plan_path(application_plan, application_plan_params(state_event: 'fakestate'))
       assert_response :unprocessable_entity
       assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')
       assert_equal original_values[:name], application_plan.reload.name
@@ -130,18 +130,28 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       assert_equal 'Forbidden', JSON.parse(response.body)['status']
     end
 
+    def test_approval_required
+      assert_difference service.application_plans.method(:count) do
+        post admin_api_service_application_plans_path(application_plan_params(approval_required: true))
+        assert_response :success
+        assert JSON.parse(response.body).dig('application_plan', 'id').present?
+      end
+      application_plan = service.application_plans.last
+      assert application_plan.approval_required
+    end
+
     private
 
     def current_account
       master_account
     end
   end
-  
+
   private
-  
+
   attr_reader :service
 
-  def application_plan_params(state_event = 'publish')
-    @application_plan_params ||= { service_id: service.id, application_plan: { name: 'testing', system_name: 'testing', approval_required: 0, state_event: state_event }, format: :json }
+  def application_plan_params(state_event: 'publish', approval_required: 0)
+    @application_plan_params ||= { service_id: service.id, application_plan: { name: 'testing', system_name: 'testing', approval_required: approval_required, state_event: state_event }, format: :json }
   end
 end

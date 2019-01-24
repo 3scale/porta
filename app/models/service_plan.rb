@@ -37,7 +37,6 @@ class ServicePlan < Plan
       xml.type_ self.class.to_s.underscore
       xml.state state
       xml.service_id issuer_id
-      xml.approval_required approval_required
 
       xml.setup_fee setup_fee
       xml.cost_per_month cost_per_month

@@ -379,6 +379,7 @@ class Plan < ApplicationRecord
       xml.type_  self.class.to_s.underscore
       xml.state state
 
+      xml.approval_required approval_required
       xml.setup_fee setup_fee
       xml.cost_per_month cost_per_month
       xml.trial_period_days trial_period_days
