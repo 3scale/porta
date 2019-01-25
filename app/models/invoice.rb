@@ -6,7 +6,9 @@ require_dependency 'month'
 # TODO: add uniqueness check on provider/buyer/period scope
 #
 class Invoice < ApplicationRecord
-  set_date_columns :due_on, :period, :issued_on, :last_charging_retry
+  %I[due_on period issued_on last_charging_retry].each do |attr|
+    attribute attr, :date
+  end
 
   MAX_CHARGE_RETRIES = 3
   DECIMALS   = 2
