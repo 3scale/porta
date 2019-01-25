@@ -72,6 +72,8 @@ class NewAccountsQueryTest < ActiveSupport::TestCase
 
   class WithinTimeframeTest < self
 
+    disable_transactional_fixtures!
+
     def setup
       super
 
@@ -116,6 +118,17 @@ class NewAccountsQueryTest < ActiveSupport::TestCase
 
       assert_equal 0, data.fetch('2010-12-31')
       assert_equal 1, data.fetch('2011-01-01')
+    end
+
+    def test_within_timeframe_in_invalid_timezone_with_transaction
+      ActiveRecord::Base.transaction do
+        Time.zone.tzinfo.stubs(name: 'TimezoneWhichDoesNotExist')
+
+        data = @new_accounts_query.within_timeframe(range: @range, granularity: :day)
+
+        assert_equal 0, data.fetch('2010-12-31')
+        assert_equal 1, data.fetch('2011-01-01')        
+      end
     end
   end
 
