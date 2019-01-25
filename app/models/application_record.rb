@@ -48,6 +48,11 @@ class ApplicationRecord < ActiveRecord::Base
     func(name, column)
   end
 
+  sifter :to_date do |value, format='%Y-%m-%d'|
+    name = System::Database.oracle? ? :to_date : :str_to_date
+    func(name, value, quoted(DatabaseUtilities.convert_to_oracle_date_format(format)))
+  end
+
   sifter :in_timezone do |column, zone = Time.zone, name: zone.tzinfo.name, offset: zone.formatted_offset|
     case System::Database.adapter.to_sym
     when :mysql
