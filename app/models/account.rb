@@ -3,9 +3,14 @@
 require_dependency 'backend_client'
 
 class Account < ApplicationRecord
+  # Hack to remove payment_gateway_type, payment_gateway_options and deleted_at from @attributes
+  # It is enough for rails not persisting them in actual columns.
   def self.columns
-    super.reject { |c| c.name == "deleted_at" }
+    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at\Z/ =~ column.name }
   end
+
+  # need to reset column information to clear column_names and such
+  reset_column_information
 
   set_date_columns :credit_card_expires_on
 
