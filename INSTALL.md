@@ -88,6 +88,8 @@ You can download all Xcode versions from the [Apple's developer site](https://de
 Make sure you have [Homebrew](https://brew.sh/) in your machine in order to install the following dependencies:
 
 ```shell
+brew tap homebrew/cask
+brew cask install chromedriver
 brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
