@@ -38,4 +38,10 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     @accounts[:to_suspend].each     { |account| assert account.reload.suspended? }
     @accounts[:not_to_suspend].each { |account| refute account.reload.suspended? }
   end
+
+  test 'it does not perform for on-prem' do
+    ThreeScale.config.stubs(onpremises: true)
+    SuspendInactiveAccountsWorker.new.perform
+    (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
+  end
 end
