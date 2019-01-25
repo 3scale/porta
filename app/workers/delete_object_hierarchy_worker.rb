@@ -68,9 +68,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     if Sidekiq::Batch::Status.new(bid).total.zero?
       on_complete(bid, callback_options)
     else
-      error_message = "DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{caller_worker_hierarchy}"
-      System::ErrorReporting.report_error(error_message)
-      info(error_message)
+      info("DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{caller_worker_hierarchy}")
       retry_job wait: 5.minutes
     end
   end
