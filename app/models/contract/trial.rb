@@ -9,7 +9,7 @@ module Contract::Trial
     attr_protected :trial_period_expires_at
 
     sifter :trial_period_expires_on do |date|
-      sift(:date, trial_period_expires_at) == sift(:date, quoted(date.to_date))
+      sift(:date, trial_period_expires_at) == sift(:to_date, quoted(date.to_date))
     end
 
     scope :with_trial_period_expiring_in_days_since, ->(days,now) do
