@@ -33,6 +33,7 @@ class Admin::Api::AccountPlansController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "name", :description => "Name of the account plan.", :dataType => "string", :required => true, :paramType => "query"
+  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Accounts require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
   ##~ op.parameters.add @parameter_account_plan_state_event
   #
@@ -67,6 +68,7 @@ class Admin::Api::AccountPlansController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_account_plan_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the account plan.", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Accounts require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_account_plan_state_event
   #
   def update
@@ -111,7 +113,7 @@ class Admin::Api::AccountPlansController < Admin::Api::BaseController
 
   private
 
-  DEFAULT_PARAMS = %i[name state_event].freeze
+  DEFAULT_PARAMS = %i[name state_event approval_required].freeze
 
   def account_plan_update_params
     params.require(:account_plan).permit(DEFAULT_PARAMS)

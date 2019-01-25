@@ -365,28 +365,8 @@ class Plan < ApplicationRecord
   end
 
   def to_xml(options = {})
-    xml = options[:builder] || ThreeScale::XML::Builder.new
-
-    attrs = if self.master?
-              { :default => true }
-            else
-              { }
-            end
-
-    xml.plan(attrs) do |xml|
-      xml.id_ id unless new_record?
-      xml.name  name
-      xml.type_  self.class.to_s.underscore
-      xml.state state
-
-      xml.approval_required approval_required
-      xml.setup_fee setup_fee
-      xml.cost_per_month cost_per_month
-      xml.trial_period_days trial_period_days
-      xml.cancellation_period cancellation_period
-    end
-
-    xml.to_xml
+    attrs = self.master? ? { :default => true } : {}
+    xml_builder(options, attrs).to_xml
   end
 
   #TODO: test
@@ -458,6 +438,28 @@ class Plan < ApplicationRecord
   end
 
   protected
+
+  def xml_builder(options, attrs = {}, extra_nodes = {})
+    xml = options[:builder] || ThreeScale::XML::Builder.new
+
+    xml.plan(attrs) do |xml|
+      xml.id_ id unless new_record?
+      xml.name  name
+      xml.type_  self.class.to_s.underscore
+      xml.state state
+      xml.approval_required approval_required
+
+      xml.setup_fee setup_fee
+      xml.cost_per_month cost_per_month
+      xml.trial_period_days trial_period_days
+      xml.cancellation_period cancellation_period
+
+      extra_nodes.each do |key,value|
+        xml.__send__(:method_missing, key, value)
+      end
+    end
+    xml
+  end
 
   def money_in_currency(amount)
     amount.try!(:to_has_money, currency)
