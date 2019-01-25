@@ -153,11 +153,6 @@ end
 
 # TODO: these steps should be moved over to more appropriately named step definition files.
 
-#OPTIMIZE: here should be better to actually click the "Upgrade" link but it uses js heavily
-When /^I upgrade the (account "[^"]*")$/ do |account|
-  account.paid!
-end
-
 When /^I follow the link to create a new buyer account$/ do
   click_link "Create new account"
 end
