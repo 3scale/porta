@@ -68,6 +68,16 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       assert_equal 2, JSON.parse(response.body)['plans'].length
     end
 
+    def test_approval_required
+      assert_difference service.application_plans.method(:count) do
+        post admin_api_service_application_plans_path(application_plan_params(approval_required: true))
+        assert_response :success
+        assert JSON.parse(response.body).dig('application_plan', 'id').present?
+      end
+      application_plan = service.application_plans.last
+      assert application_plan.approval_required
+    end
+
     private
 
     def current_account
@@ -130,16 +140,6 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       assert_equal 'Forbidden', JSON.parse(response.body)['status']
     end
 
-    def test_approval_required
-      assert_difference service.application_plans.method(:count) do
-        post admin_api_service_application_plans_path(application_plan_params(approval_required: true))
-        assert_response :success
-        assert JSON.parse(response.body).dig('application_plan', 'id').present?
-      end
-      application_plan = service.application_plans.last
-      assert application_plan.approval_required
-    end
-
     private
 
     def current_account
@@ -152,6 +152,6 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
   attr_reader :service
 
   def application_plan_params(state_event: 'publish', approval_required: 0)
-    @application_plan_params ||= { service_id: service.id, application_plan: { name: 'testing', system_name: 'testing', approval_required: approval_required, state_event: state_event }, format: :json }
+    @application_plan_params ||= { service_id: service.id, application_plan: { name: 'testing', system_name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json }
   end
 end
