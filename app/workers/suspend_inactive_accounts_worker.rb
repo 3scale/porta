@@ -5,6 +5,6 @@ class SuspendInactiveAccountsWorker
 
   def perform
     return if ThreeScale.config.onpremises
-    Account.tenants.inactive_since.find_each(&:suspend!)
+    Account.tenants.free.inactive_since.find_each(&:suspend!)
   end
 end

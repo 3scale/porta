@@ -27,6 +27,20 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
+  def test_class_method_free
+    paid_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:application, user_account: paid_tenant, paid_until: 5.months.ago)
+
+    free_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:application, user_account: free_tenant)
+
+    another_free_tenant = FactoryBot.create(:simple_provider)
+
+    assert_includes Account.free.pluck(:id), free_tenant.id
+    assert_includes Account.free.pluck(:id), another_free_tenant.id
+    assert_not_includes Account.free.pluck(:id), paid_tenant.id
+  end
+
   def test_not_master
     master = master_account
     buyer = FactoryBot.create(:simple_buyer, provider_account: master)

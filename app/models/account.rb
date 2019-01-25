@@ -109,6 +109,13 @@ class Account < ApplicationRecord
 
   before_destroy :destroy_features
 
+  def self.free
+    where.has do
+      # TODO: I will refactor this :)
+      not_exists Contract.where.has { user_account_id == BabySqueel[:accounts].id }.where.has { (paid_until >= 6.months.ago) | (variable_cost_paid_until >= 6.months.ago) }
+    end
+  end
+
   def destroy_features
     features.destroy_all
   end

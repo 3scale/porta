@@ -44,4 +44,10 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     SuspendInactiveAccountsWorker.new.perform
     (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
   end
+
+  test 'it does not perform for paid accounts' do
+    Account.stubs(free: Account.none)
+    SuspendInactiveAccountsWorker.new.perform
+    (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
+  end
 end
