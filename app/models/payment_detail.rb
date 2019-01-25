@@ -3,7 +3,7 @@
 class PaymentDetail < ApplicationRecord
   ATTRIBUTES = [:buyer_reference, :payment_service_reference, :credit_card_partial_number, :credit_card_expires_on].freeze
 
-  set_date_columns :credit_card_expires_on
+  attribute :credit_card_expires_on, :date
 
   class_attribute :notify_changes
   self.notify_changes = true
