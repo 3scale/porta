@@ -4,6 +4,8 @@ require 'addressable/template'
 
 class ProxyRule < ApplicationRecord
 
+  acts_as_list scope: :proxy, add_new_at: :bottom
+
   belongs_to :proxy, touch: true
   belongs_to :metric
 

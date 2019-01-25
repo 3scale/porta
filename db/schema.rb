@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190104134224) do
+ActiveRecord::Schema.define(version: 20190125090030) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -1085,6 +1085,7 @@ ActiveRecord::Schema.define(version: 20190104134224) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at"
     t.text     "redirect_url",       limit: 65535
+    t.integer  "position",           limit: 4
   end
 
   add_index "proxy_rules", ["proxy_id"], name: "index_proxy_rules_on_proxy_id", using: :btree
