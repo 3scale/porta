@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
+  attribute :credit_card_expires_on, :date
   # Hack to remove all the attributes with names matching the regex from @attributes
   # It is enough for rails not persisting them in actual columns.
   def self.columns
@@ -9,8 +10,6 @@ class Account < ApplicationRecord
 
   # need to reset column information to clear column_names and such
   reset_column_information
-
-  set_date_columns :credit_card_expires_on
 
   # it has to be THE FIRST callback after create, so associations get the tenant id
   after_create :update_tenant_id, if: :provider?, prepend: true
