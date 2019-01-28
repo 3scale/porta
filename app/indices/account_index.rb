@@ -16,16 +16,12 @@ ThinkingSphinx::Index.define(:account,
 
   has :provider_account_id
   has :tenant_id
+  has :state
 
   if System::Database.oracle?
-    # FIXME: creating a CRC32 in Oracle needs a custom function ...
-    # As we only have few values, I suppose ORA_HASH is enough
-    has 'ORA_HASH(accounts.state)', as: :state, type: :integer
     # Need to add the group by otherwise it will complain about ORA-00979 not a Group By function error
     group_by "accounts.state"
-  else
-    has 'CRC32(accounts.state)', as: :state, type: :integer
   end
 
-  where 'COALESCE(accounts.master, 0) = 0'
+  where sanitize_sql(['COALESCE(accounts.master, ?) = ?', false, false])
 end

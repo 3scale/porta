@@ -48,7 +48,7 @@ class InvoiceFriendlyIdService
 
   def update_friendly_id
     return friendly_id if friendly_id.present? && friendly_id != default_friendly_id
-    ActiveRecord::Base.connection.execute("call sp_invoices_friendly_id(#{invoice.id})")
+    System::Database.execute_procedure 'sp_invoices_friendly_id', invoice.id
     invoice.reload.friendly_id
   end
 

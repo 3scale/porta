@@ -167,12 +167,10 @@ module ApiAuthentication
 
         connection.transaction(requires_new: true, &Proc.new)
       rescue ActiveRecord::StatementInvalid => error
-        case error.message
-        when /Cannot execute statement in a READ ONLY transaction/,
-             %r{may not perform insert/delete/update operation inside a READ ONLY transaction},
-             /READ ONLY transaction/
+        if error.message =~ /read(-|\s)only transaction/i
           fail PermissionError, error.message, caller
-        else raise
+        else
+          raise
         end
       ensure
         Rails.logger.info "PermissionEnforcer#ensure clear level"

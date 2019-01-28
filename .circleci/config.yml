@@ -74,6 +74,12 @@ mysql-container: &mysql-container
     MYSQL_ROOT_PASSWORD: ''
     MYSQL_DATABASE: circleci
 
+postgres-container: &postgres-container
+  image: circleci/postgres:10.5-alpine
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_DB: systemdb
+
 oracle-db-container: &oracle-db-container
   image: quay.io/3scale/oracle:12.2.0.1-ee-scripted
   auth:
@@ -219,7 +225,8 @@ commands: # reusable commands with parameters
       - run:
           name: Run Rails tests
           command: |
-            TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-oracle}" | circleci tests split --split-by=timings)
+            shopt -s extglob
+            TESTS=$(bundle exec rake "test:files:${CIRCLE_JOB%-@(postgres|oracle)}" | circleci tests split --split-by=timings)
             bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
 
@@ -269,6 +276,17 @@ executors:
     environment:
       DB: mysql
 
+  builder-with-postgres:
+    resource_class: small
+    docker:
+      - *system-builder
+      - *postgres-container
+      - *memcached-container
+      - *redis-container
+    working_directory: /opt/app-root/src/project
+    environment:
+      DB: postgresql
+
   builder-with-oracle:
     resource_class: large
     docker:
@@ -287,6 +305,13 @@ jobs:
     executor:
       name: builder
       database: mysql
+    steps:
+      - install-gem-dependencies
+
+  deps_bundler_postgres:
+    executor:
+      name: builder
+      database: postgresql
     steps:
       - install-gem-dependencies
 
@@ -379,6 +404,12 @@ jobs:
     steps:
       - rails-tests
 
+  unit-postgres:
+    parallelism: 8
+    executor: builder-with-postgres
+    steps:
+      - rails-tests
+
   unit-oracle:
     parallelism: 6
     executor: builder-with-oracle
@@ -393,6 +424,12 @@ jobs:
     steps:
       - rails-tests
 
+  functional-postgres:
+    parallelism: 2
+    executor: builder-with-postgres
+    steps:
+      - rails-tests
+
   functional-oracle:
     parallelism: 2
     executor: builder-with-oracle
@@ -401,10 +438,15 @@ jobs:
           extra-deps:
             - clone-oracle-libraries
 
-
   integration:
     parallelism: 8
     executor: builder-with-mysql
+    steps:
+      - rails-tests
+
+  integration-postgres:
+    parallelism: 8
+    executor: builder-with-postgres
     steps:
       - rails-tests
 
@@ -422,6 +464,12 @@ jobs:
     steps:
       - rspec-tests
 
+  rspec-postgres:
+    parallelism: 3
+    executor: builder-with-postgres
+    steps:
+      - rspec-tests
+
   rspec-oracle:
     parallelism: 4
     executor: builder-with-oracle
@@ -429,7 +477,6 @@ jobs:
       - rspec-tests:
           extra-deps:
             - clone-oracle-libraries
-
 
   cucumber:
     parallelism: 40
@@ -442,6 +489,20 @@ jobs:
       - *redis-container
     environment:
       DB: mysql
+    steps:
+      - cucumber-tests
+
+  cucumber-postgres:
+    parallelism: 40
+    resource_class: small
+    docker:
+      - *system-builder
+      - *dnsmasq-container
+      - *postgres-container
+      - *memcached-container
+      - *redis-container
+    environment:
+      DB: postgresql
     steps:
       - cucumber-tests
 
@@ -580,8 +641,6 @@ jobs:
           }" $SLACK_WEBHOOK_URL
         when: on_success
 
-
-
   visual:
     parallelism: 1
     resource_class: small
@@ -614,6 +673,7 @@ jobs:
 
 workflows:
   version: 2
+
   mysql_build:
     jobs:
       - notify_start:
@@ -628,7 +688,6 @@ workflows:
           requires:
             - dependencies_bundler
             - dependencies_npm
-
       - lint:
           requires:
             - assets_precompile
@@ -669,6 +728,73 @@ workflows:
           filters:
             branches:
               only: master
+
+  postgres_build:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - notify_start:
+          requires:
+            - manual_approval
+          filters:
+            branches:
+              only: master
+      - deps_bundler_postgres:
+          requires:
+            - manual_approval
+      - dependencies_npm:
+          requires:
+            - manual_approval
+      - docker-build:
+          context: org-global
+          requires:
+            - manual_approval
+      - assets_precompile:
+          requires:
+            - deps_bundler_postgres
+            - dependencies_npm
+      - lint:
+          requires:
+            - assets_precompile
+      - unit-postgres:
+          requires:
+            - deps_bundler_postgres
+      - functional-postgres:
+          requires:
+            - assets_precompile
+      - integration-postgres:
+          requires:
+            - assets_precompile
+      - rspec-postgres:
+          requires:
+            - deps_bundler_postgres
+      - cucumber-postgres:
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec-postgres
+            - unit-postgres
+            - cucumber-postgres
+            - integration-postgres
+            - functional-postgres
+            - lint
+          filters:
+            branches:
+              only: master
+      - notify_failure:
+          requires:
+            - rspec-postgres
+            - unit-postgres
+            - cucumber-postgres
+            - integration-postgres
+            - functional-postgres
+            - lint
+          filters:
+            branches:
+              only: master
+
   oracle_build:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
@@ -756,4 +882,3 @@ workflows:
         context: percy
         requires:
         - assets_precompile
-

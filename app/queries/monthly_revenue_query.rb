@@ -17,6 +17,15 @@ class MonthlyRevenueQuery
     @options = options
   end
 
+  module CastValues
+    def cast_values(klass=Hash)
+      hash_rows.map { |row|
+        row.each_with_object(klass.new) { |(key, value), memo|
+          memo[key] = column_types.present? ? column_types[key].type_cast_from_database(value) : value
+        }
+      }
+    end
+  end
   # Returns an array of Hash of costs by months.
   # Each Hash has following String keys:
   #
@@ -29,12 +38,14 @@ class MonthlyRevenueQuery
   # @return [Array<Hash>]
 
   def with_states
+    selection = [arel_table[:period], *sums_with_states]
     arel = uncancelled_buyer_invoices
-           .select([arel_table[:period], *sums_with_states])
+           .selecting { selection }
            .group(:period)
            .joins { line_items.outer } # This is a left outer joins so if no line items the columns will be set to NULL
            .reorder(period: :desc)
-    connection.select_all(arel).map { |row| MonthlyRevenueRow.new(row) }
+    result = connection.select_all(arel).extend(CastValues)
+    result.cast_values(MonthlyRevenueRow)
   end
 
   protected
@@ -51,12 +62,12 @@ class MonthlyRevenueQuery
   end
 
   def sums_with_states
-    sum_query_by_state = "SUM(CASE WHEN invoices.state IN (?) THEN #{cost_formula} ELSE 0 END)".freeze
+    sum_query_by_state = "CASE WHEN invoices.state IN (?) THEN #{cost_formula} ELSE 0 END".freeze
     sums = DASHBOARD_EARNINGS_GROUP_STATES.map do |group, states_cases|
       sum_sql_with_state = sanitize_sql([sum_query_by_state, states_cases])
-      Arel.sql(sum_sql_with_state).as("#{group}_cost")
+      Arel.sql(sum_sql_with_state).sum.as("#{group}_cost")
     end
-    sums << Arel.sql("SUM(#{cost_formula})").as('total_cost')
+    sums << Arel.sql(cost_formula).sum.as('total_cost')
     sums
   end
 

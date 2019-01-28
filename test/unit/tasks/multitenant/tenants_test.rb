@@ -14,6 +14,6 @@ class Tasks::Multitenant::TenantsTest < ActiveSupport::TestCase
   test 'export_org_names_to_yaml' do
     execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:export_org_names_to_yaml'
 
-    assert_equal Account.providers.pluck(:org_name), YAML.load_file('tenants_organization_names.yml')
+    assert_equal Account.providers.order(:id).pluck(:org_name), YAML.load_file('tenants_organization_names.yml')
   end
 end
