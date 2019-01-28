@@ -116,6 +116,13 @@ class Account < ApplicationRecord
     end
   end
 
+  def self.not_enterprise
+    where.has do
+      # TODO: I will refactor this :)
+      not_exists ApplicationPlan.where('plans.system_name LIKE ?', '%enterprise%').where(issuer_id: Service.where.has { account_id == BabySqueel[:accounts].id } )
+    end
+  end
+
   def destroy_features
     features.destroy_all
   end

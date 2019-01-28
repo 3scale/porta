@@ -5,6 +5,6 @@ class StaleAccountWorker
 
   def perform
     return if ThreeScale.config.onpremises
-    Account.tenants.free.suspended_since.find_each(&:schedule_for_deletion!)
+    Account.tenants.free.not_enterprise.suspended_since.find_each(&:schedule_for_deletion!)
   end
 end
