@@ -11,3 +11,9 @@ if defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter)
     include ApiAuthentication::ByAccessToken::OracleEnhancedConnectionExtension
   end
 end
+
+if defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+  ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
+    include ApiAuthentication::ByAccessToken::ConnectionExtension
+  end
+end

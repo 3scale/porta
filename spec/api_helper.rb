@@ -25,7 +25,6 @@ module NamingHelper
 end
 
 module ApiHelper
-
   module Resource
     def resource(alias_name = nil, &block)
       let(:resource, &block)
@@ -56,7 +55,6 @@ module ApiHelper
 
         code = contexts[:status] || 200
         status.should == code
-
       end
     end
   end

@@ -27,7 +27,7 @@ class ApiDocs::ProviderUserDataTest < ActiveSupport::TestCase
     service_other.service_tokens.create!(value: 'Bar')
 
     admin_data = ApiDocs::ProviderUserData.new(@admin).as_json[:results]
-    assert_equal [{ name: service.name, value: 'Foo' }, { name: service_other.name, value: 'Bar' }], admin_data[:service_tokens]
+    assert_same_elements [{ name: service.name, value: 'Foo' }, { name: service_other.name, value: 'Bar' }], admin_data[:service_tokens]
 
     member = FactoryBot.create(:simple_user, account: @admin.account)
     member.stubs(member_permission_service_ids: [service.id])

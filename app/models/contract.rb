@@ -82,8 +82,7 @@ class Contract < ApplicationRecord
   scope :by_name, lambda { |text|
     # replace start and end of string with % unless already has %
     pattern = text.sub(/(^[^%])/, '%\\1').sub( /([^%]$)/, '\\1%')
-    collate = System::Database.oracle? ? 'GENERIC_M_CI' : 'UTF8_GENERAL_CI'
-
+    collate = { oracle: 'GENERIC_M_CI', postgres: '"und-x-icu"', mysql: 'UTF8_GENERAL_CI' }.fetch(System::Database.adapter.to_sym)
     where.has { name.op('COLLATE', sql(collate)).matches(pattern)}
   }
 
