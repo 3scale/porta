@@ -1,5 +1,6 @@
 
 class Contract < ApplicationRecord
+  MAX_UNPAID_TIME = 6.months
   # Need to define table_name before audited because of
   # https://github.com/collectiveidea/audited/blob/f03c5b5d1717f2ebec64032d269316dc74476056/lib/audited/auditor.rb#L305-L311
   self.table_name = 'cinstances'
@@ -86,8 +87,10 @@ class Contract < ApplicationRecord
     where.has { name.op('COLLATE', sql(collate)).matches(pattern)}
   }
 
-  scope :by_account, lambda { |account| where({ :user_account_id => account.id } ) }
+  scope :by_account, ->(account) { where.has { user_account_id == account } }
   scope :by_account_query, lambda { |query| where( { :user_account_id => Account.buyers.search_ids(query) } ) }
+
+  scope :has_paid_on, ->(paid_time = MAX_UNPAID_TIME.ago) { where.has { (paid_until >= paid_time) | (variable_cost_paid_until >= paid_time) } }
 
   def self.by_plan_type(type)
 

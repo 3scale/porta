@@ -16,11 +16,13 @@ class ApplicationPlan < Plan
     if provider == :all || provider.blank?
       {}
     else
-      where(services: { account_id: provider.id }).joins(:service).references(:service).readonly(false)
+      where(services: { account_id: provider }).joins(:service).references(:service).readonly(false)
     end
   }
 
   delegate :metrics, :to => :service
+
+  scope :enterprise, -> { where.has { (system_name =~ '%enterprise%') } }
 
   DEFAULT_CONTRACT_OPTIONS = { :name => '%s\'s App', :description => 'Default application created on signup.' }.freeze
 
