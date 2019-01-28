@@ -109,19 +109,8 @@ class Account < ApplicationRecord
 
   before_destroy :destroy_features
 
-  def self.free
-    where.has do
-      # TODO: I will refactor this :)
-      not_exists Contract.where.has { user_account_id == BabySqueel[:accounts].id }.where.has { (paid_until >= 6.months.ago) | (variable_cost_paid_until >= 6.months.ago) }
-    end
-  end
-
-  def self.not_enterprise
-    where.has do
-      # TODO: I will refactor this :)
-      not_exists ApplicationPlan.where('plans.system_name LIKE ?', '%enterprise%').where(issuer_id: Service.where.has { account_id == BabySqueel[:accounts].id } )
-    end
-  end
+  scope :free, -> { where.has { not_exists Contract.has_paid_on.by_account(BabySqueel[:accounts].id).select(:id) } }
+  scope :not_enterprise, -> { where.has { not_exists Service.of_account(BabySqueel[:accounts].id).with_enterprise_application_plans.select(:id) } }
 
   def destroy_features
     features.destroy_all

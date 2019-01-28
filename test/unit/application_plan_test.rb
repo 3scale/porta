@@ -4,6 +4,20 @@ class ApplicationPlanTest < ActiveSupport::TestCase
 
   should belong_to :partner
 
+  test '.provided_by' do
+    tenants = FactoryBot.create_list(:simple_provider, 2)
+    tenants.each do |tenant|
+      service = FactoryBot.create(:simple_service, account: tenant)
+      FactoryBot.create_list(:application_plan, 2, issuer: service)
+    end
+
+    assert_equal({}, ApplicationPlan.provided_by(''))
+    assert_equal({}, ApplicationPlan.provided_by(:all))
+    tenants.each do |tenant|
+      assert_same_elements ApplicationPlan.where(issuer_id: tenant.services.first).pluck(:id), ApplicationPlan.provided_by(tenant.id).pluck(:id)
+    end
+  end
+
   should 'not allow setting of end_user_required' do
     plan = FactoryBot.create(:application_plan)
     plan.end_user_required = true
@@ -17,6 +31,16 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     assert plan.valid?
   end
 
+  test '.enterprise' do
+    enterprise_plans = []
+    enterprise_plans << FactoryBot.create(:application_plan, system_name: 'enterprise')
+    enterprise_plans << FactoryBot.create(:application_plan, system_name: 'enterprise_1')
+    enterprise_plans << FactoryBot.create(:application_plan, system_name: '1_enterprise')
+    enterprise_plans << FactoryBot.create(:application_plan, system_name: '1_enterprise_1')
+    FactoryBot.create(:application_plan, system_name: 'another')
+
+    assert_same_elements enterprise_plans.map(&:id), ApplicationPlan.enterprise.pluck(:id)
+  end
 
 
   context '#customize' do
