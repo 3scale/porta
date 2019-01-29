@@ -355,8 +355,8 @@ jobs:
           name: Precompile assets
           command: |
             cp config/examples/*.yml config/
-            bundle exec rake assets:precompile RAILS_ENV=test
-            bundle exec rake assets:precompile RAILS_ENV=production
+            bundle exec rake webpacker:clear_npm_install assets:precompile RAILS_ENV=test
+            bundle exec rake webpacker:clear_npm_install assets:precompile RAILS_ENV=production
           environment:
             RAILS_GROUPS: assets
       - persist_to_workspace:

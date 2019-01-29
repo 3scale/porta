@@ -23,4 +23,9 @@ namespace :webpacker do
   task :npm_install do
     system 'npm install'
   end
+
+  desc 'Invoke this task if you are sure not to install npm dependencies'
+  task :clear_npm_install do
+    Rake::Task['webpacker:npm_install'].clear
+  end
 end
