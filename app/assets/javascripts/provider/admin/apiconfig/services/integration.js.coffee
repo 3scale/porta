@@ -80,12 +80,15 @@ $(document).on 'initialize', '#proxy', ->
 
   # adding proxy rules
   $("a[href=\"#add-proxy-rule\"]").live "click", ->
+    $mappingRuleList = $("table#proxy-rules > tbody")
     rule = $("#new-proxy-rule-template").html()
     timestamp = new Date().getTime()
     rule = rule.replace(/\{new_id_.*\}/g, timestamp)
     rule = $("<tr>").append(rule)
     rule.find("input:not(.destroyer),select").removeAttr "disabled"
-    $("table#proxy-rules > tbody").append rule
+    newIndex = $mappingRuleList.children().length - 1
+    rule.find("input.position").val(newIndex)
+    $mappingRuleList.append rule
     rule.find('.pattern input:first').focus()
     false
 
