@@ -31,17 +31,6 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     assert plan.valid?
   end
 
-  test '.enterprise' do
-    enterprise_plans = []
-    enterprise_plans << FactoryBot.create(:application_plan, system_name: 'enterprise')
-    enterprise_plans << FactoryBot.create(:application_plan, system_name: 'enterprise_1')
-    enterprise_plans << FactoryBot.create(:application_plan, system_name: '1_enterprise')
-    enterprise_plans << FactoryBot.create(:application_plan, system_name: '1_enterprise_1')
-    FactoryBot.create(:application_plan, system_name: 'another')
-
-    assert_same_elements enterprise_plans.map(&:id), ApplicationPlan.enterprise.pluck(:id)
-  end
-
 
   context '#customize' do
     setup do

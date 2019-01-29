@@ -22,8 +22,6 @@ class ApplicationPlan < Plan
 
   delegate :metrics, :to => :service
 
-  scope :enterprise, -> { where.has { (system_name =~ '%enterprise%') } }
-
   DEFAULT_CONTRACT_OPTIONS = { :name => '%s\'s App', :description => 'Default application created on signup.' }.freeze
 
   def provider_account
