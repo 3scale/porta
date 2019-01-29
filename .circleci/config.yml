@@ -5,7 +5,7 @@ version: 2.1
 upload-coverage: &upload-coverage
   run:
     name: Upload test coverage to Codecov
-    command: bash <(curl -s https://codecov.io/bash)
+    command: bash <(curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 2 --retry-max-time 60 -s https://codecov.io/bash)
 
 persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
   persist_to_workspace:
