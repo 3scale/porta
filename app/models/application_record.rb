@@ -49,7 +49,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   sifter :to_date do |value, format='%Y-%m-%d'|
-    name = System::Database.oracle? ? :to_date : :str_to_date
+    name = System::Database.mysql? ? :str_to_date : :to_date
     func(name, value, quoted(DatabaseUtilities.convert_to_oracle_date_format(format)))
   end
 
