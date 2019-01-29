@@ -2,6 +2,7 @@
 
   disabled ||= !rule.new_record? && !@marked_for_update.try(:include?,rule.id.to_s)
   html_options = { :disabled => disabled , :class => 'message-when-change' }
+  index ||= false
 
  %>
 
@@ -30,6 +31,7 @@
       <%= link_to '', '#edit-proxy-rule', :class => 'action edit' %>
       <%= link_to '', '#delete-proxy-rule', :class => 'action delete' %>
       <%= p.hidden_field :_destroy, {}.merge(:class => 'destroyer', :value => 1, :disabled => true) %>
+      <%= p.hidden_field :position, {}.merge(:class => 'position', :value => index, :disabled => true) %>
       <%= p.hidden_field :id, html_options.merge(:class => 'proxy_rule_id') %>
       <%= link_to '', '#', :class => 'action ui-sortable-handler fa fa-sort' %>
     </td>

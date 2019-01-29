@@ -18,9 +18,9 @@
       tbody#sortable.ui-sortable
         - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
 
-        - @proxy.proxy_rules.each do |rule|
+        - @proxy.proxy_rules.each_with_index do |rule, i|
           tr.ui-sortable-item
-            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics
+            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: i
         tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
           = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
       tfoot
@@ -43,9 +43,16 @@ javascript:
       jQuery('#sortable').sortable({
         cursor: 'move',
         containment: '#mapping-rules',
+        items: 'tr:not(#new-proxy-rule-template)',
         start: function (event, ui) {
           jQuery.each(ui.item.children(), function(i, td) {
             jQuery(td).css({ width: tdWidths[i] })
+          })
+        },
+        stop: function () {
+          $('tr:not(#new-proxy-rule-template)', this).each(function (index, mappingRule) {
+            if (!$(mappingRule).hasClass('deleted')) $(mappingRule).find('select,input:not(.destroyer)').removeAttr('disabled')
+            $(mappingRule).find('.position').val(index)
           })
         }
       })
