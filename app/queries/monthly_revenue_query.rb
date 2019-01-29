@@ -21,7 +21,7 @@ class MonthlyRevenueQuery
     def cast_values(klass=Hash)
       hash_rows.map { |row|
         row.each_with_object(klass.new) { |(key, value), memo|
-          memo[key] = column_types.present? ? column_types[key].type_cast_from_database(value) : value
+          memo[key] = column_types.present? ? column_types[key].cast(value) : value
         }
       }
     end
