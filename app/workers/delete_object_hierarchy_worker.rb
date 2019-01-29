@@ -4,6 +4,7 @@
 class DeleteObjectHierarchyWorker < ActiveJob::Base
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
+  # No need of ActiveRecord::RecordNotFound because that can only happen in the callbacks and those callbacks don't use this rescue_from but its own rescue
   rescue_from(ActiveJob::DeserializationError) do |exception|
     Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
   end
@@ -25,14 +26,22 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     build_batch
   end
 
-  def on_success(_status, options)
+  def on_success(_, options)
+    on_finish('on_success', options)
+  end
+
+  def on_complete(_, options)
+    on_finish('on_complete', options)
+  end
+
+  def on_finish(method_name, options)
     workers_hierarchy = options['caller_worker_hierarchy']
-    info "Starting DeleteObjectHierarchyWorker#on_success with the hierarchy of workers: #{workers_hierarchy}"
-    object = GlobalID::Locator.locate options['object_global_id']
+    info "Starting DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
+    object = GlobalID::Locator.locate(options['object_global_id'])
     DeletePlainObjectWorker.perform_later(object, workers_hierarchy)
-    info "Finished DeleteObjectHierarchyWorker#on_success with the hierarchy of workers: #{workers_hierarchy}"
+    info "Finished DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
   rescue ActiveRecord::RecordNotFound => exception
-    Rails.logger.info "DeleteObjectHierarchyWorker#on_success raised #{exception.class} with message #{exception.message}"
+    info "DeleteObjectHierarchyWorker##{method_name} raised #{exception.class} with message #{exception.message}"
   end
 
   protected
@@ -44,7 +53,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   def build_batch
     batch = Sidekiq::Batch.new
     batch.description = batch_description
-    batch_success_callback(batch) { batch.jobs { delete_associations(object) } }
+    batch_callbacks(batch) { batch.jobs { delete_associations(object) } }
     batch
   end
 
@@ -52,13 +61,16 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     "Deleting #{object.class.name} [##{object.id}]"
   end
 
-  def batch_success_callback(batch)
-    options = { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
-
-    batch.on(:success, self.class, options)
+  def batch_callbacks(batch)
+    %i[success complete].each { |name| batch.on(name, self.class, callback_options) }
     yield
     bid = batch.bid
-    on_success(bid, options) if Sidekiq::Batch::Status.new(bid).total.zero?
+    if Sidekiq::Batch::Status.new(bid).total.zero?
+      on_complete(bid, callback_options)
+    else
+      info("DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{caller_worker_hierarchy}")
+      retry_job wait: 5.minutes
+    end
   end
 
   def delete_associations(object)
@@ -69,6 +81,10 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   private
+
+  def callback_options
+    { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
+  end
 
   def delete_objects_of_association(main_object, association_name, worker)
     return unless (associated_objects = main_object.public_send(association_name))
@@ -91,5 +107,4 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     delete_hierarchy_workers = Hash.new(DeleteObjectHierarchyWorker).merge('Account' => DeleteAccountHierarchyWorker)
     delete_hierarchy_workers[reflection.options[:class_name]]
   end
-
 end
