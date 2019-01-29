@@ -16,6 +16,14 @@ class SymbolizeTest < ActiveSupport::TestCase
     end
   end
 
+  def setup
+    Timecop.freeze
+  end
+
+  def teardown
+    Timecop.return
+  end
+
   def test_symbolization
     usage = UsageLimit.new(period: 'year')
     assert_equal :year, usage.period
