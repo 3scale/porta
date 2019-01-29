@@ -9,7 +9,7 @@ class ServiceTest < ActiveSupport::TestCase
 
     service_with_enterprise_plan = FactoryBot.create(:simple_service)
     FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: 'example2')
-    FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: 'enterprise')
+    FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: '1_enterprise_2')
 
     assert_equal [service_with_enterprise_plan.id], Service.with_enterprise_application_plans.pluck(:id)
   end
