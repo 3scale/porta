@@ -29,7 +29,7 @@
             = link_to "Add Mapping Rule", '#add-proxy-rule', class: 'action add', id: 'add-proxy-rule'
 
 javascript:
-  jQuery('#proxy-rules .metric select[data-selected]').each(function(){
+  jQuery('#proxy-rules .metric select[data-selected]').each(function () {
     jQuery(this).val(jQuery(this).data('selected'))
   })
   jQuery(function () {
