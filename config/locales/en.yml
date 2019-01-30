@@ -855,6 +855,11 @@ en:
         service_plan:
           has_contracts: 'This service plan cannot be deleted! At least one contract depends on it.'
 
+        cinstance:
+          attributes:
+            plan_id:
+              not_allowed: "not allowed in this context"
+
         application_key:
           attributes:
             base:

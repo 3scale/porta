@@ -158,12 +158,10 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ##~ op.parameters.add :name => "plan_id", :description => "ID of the new application plan.", :dataType => "int", :paramType => "query", :required => true, :threescale_name => "application_plan_ids"
   #
   def change_plan
-    plan = application.change_plan!(application_plan)
+    plan = application.change_plan(application_plan)
 
     # changing a plan to same returns nil so we just return existing plan here:
     respond_with(application, serialize: plan || application_plan, representer: ApplicationPlanRepresenter)
-  rescue Cinstance::DifferentServicesPlanChangeError
-    render_error 'Cannot change to an application plan of a different service', status: :precondition_failed
   end
 
   ##~ e = sapi.apis.add

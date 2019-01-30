@@ -107,6 +107,8 @@ class Cinstance < Contract
 
   validate :end_users_switch
 
+  validate :same_service, on: :update, if: :plan_id_changed?
+
   APP_ID_FORMAT = /[\w-]+/.freeze
   # letter, number, underscore (_), hyphen-minus (-), dot (.), base64 format
   # In base64 encoding, the character set is [A-Z,a-z,0-9,and + /], if rest length is less than 4, fill of '=' character.
@@ -380,13 +382,6 @@ class Cinstance < Contract
     service.plan_change_permission(ApplicationPlan) == :request_credit_card
   end
 
-  class DifferentServicesPlanChangeError < StandardError; end
-
-  def change_plan!(new_plan)
-    raise DifferentServicesPlanChangeError if new_plan.service != service
-    super
-  end
-
   protected
 
   def correct_plan_subclass?
@@ -414,6 +409,10 @@ class Cinstance < Contract
 
       @webhook_event = 'plan_changed'
     end
+  end
+
+  def same_service
+    errors.add(:plan_id, :not_allowed) if plan&.service != service
   end
 
   def reject_if_pending

@@ -678,9 +678,10 @@ class CinstanceTest < ActiveSupport::TestCase
     test 'cannot change to a plan of different service' do
       other_service = FactoryBot.create(:service, account: @cinstance.provider_account)
       other_plan = FactoryBot.create(:application_plan, service: other_service, name: "other plan")
-      assert_raise Cinstance::DifferentServicesPlanChangeError do
+      assert_raise ActiveRecord::RecordInvalid do
         @cinstance.change_plan! other_plan
       end
+      assert_includes @cinstance.errors['plan_id'], 'not allowed in this context'
     end
   end
 
