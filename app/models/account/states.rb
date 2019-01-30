@@ -94,6 +94,7 @@ module Account::States
       end
     end
 
+    scope :without_suspended, -> { where.not(state: :suspended) }
     scope :without_deleted, ->(without = true) { where.has { state != :scheduled_for_deletion } if without }
 
     scope :by_state, ->(state) do
