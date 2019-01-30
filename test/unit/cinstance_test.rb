@@ -656,7 +656,7 @@ class CinstanceTest < ActiveSupport::TestCase
     end
   end
 
-  context 'change_plan! method' do
+  class ChangePlanTest < ActiveSupport::TestCase
     setup do
       service = FactoryBot.create(:service)
       stock = FactoryBot.create(:application_plan, :issuer => service)
@@ -668,11 +668,19 @@ class CinstanceTest < ActiveSupport::TestCase
       @custom = Plan.find @cinstance.plan.id
     end
 
-    should 'delete custom plan' do
+    test 'delete custom plan' do
       @cinstance.change_plan! @another_plan
       assert @cinstance.reload.plan_id == @another_plan.id
 
       assert_raises(ActiveRecord::RecordNotFound) { @custom.reload }
+    end
+
+    test 'cannot change to a plan of different service' do
+      other_service = FactoryBot.create(:service, account: @cinstance.provider_account)
+      other_plan = FactoryBot.create(:application_plan, service: other_service, name: "other plan")
+      assert_raise Cinstance::DifferentServicesPlanChangeError do
+        @cinstance.change_plan! other_plan
+      end
     end
   end
 
