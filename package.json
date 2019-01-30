@@ -18,7 +18,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^8.0.5",
     "babel-plugin-react": "^1.0.0",
     "babel-plugin-transform-es2015-destructuring": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
