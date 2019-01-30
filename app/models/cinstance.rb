@@ -380,6 +380,13 @@ class Cinstance < Contract
     service.plan_change_permission(ApplicationPlan) == :request_credit_card
   end
 
+  class DifferentServicesPlanChangeError < StandardError; end
+
+  def change_plan!(new_plan)
+    raise DifferentServicesPlanChangeError if new_plan.service != service
+    super
+  end
+
   protected
 
   def correct_plan_subclass?

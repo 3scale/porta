@@ -81,7 +81,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
       params = { access_token: @access_token.value, plan_id: new_plan.id }
       put change_plan_admin_api_account_application_path(account_id: @account.id, id: @application.id, format: :xml), params
 
-      assert_response :not_found
+      assert_response :precondition_failed
       assert_equal @plan, @application.reload.plan
     end
   end
