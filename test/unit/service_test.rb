@@ -2,6 +2,18 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ServiceTest < ActiveSupport::TestCase
 
+  def test_with_enterprise_application_plans
+    FactoryBot.create(:simple_service)
+
+    FactoryBot.create(:application_plan, service: FactoryBot.create(:simple_service), system_name: 'example1')
+
+    service_with_enterprise_plan = FactoryBot.create(:simple_service)
+    FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: 'example2')
+    FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: '1_enterprise_2')
+
+    assert_equal [service_with_enterprise_plan.id], Service.with_enterprise_application_plans.pluck(:id)
+  end
+
   def test_create_default_proxy
     Service.any_instance.expects(:create_proxy!).at_least_once
     FactoryBot.create(:simple_service, proxy: nil)

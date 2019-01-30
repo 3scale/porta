@@ -28,4 +28,22 @@ class StaleAccountWorkerTest < ActiveSupport::TestCase
     @accounts[:to_delete].each     { |account| assert account.reload.scheduled_for_deletion? }
     @accounts[:not_to_delete].each { |account| refute account.reload.scheduled_for_deletion? }
   end
+
+  test 'it does not perform for on-prem' do
+    ThreeScale.config.stubs(onpremises: true)
+    StaleAccountWorker.new.perform
+    (@accounts[:to_delete] + @accounts[:not_to_delete]).each { |account| refute account.reload.scheduled_for_deletion? }
+  end
+
+  test 'it does not perform for paid accounts' do
+    Account.stubs(free: Account.none)
+    StaleAccountWorker.new.perform
+    (@accounts[:to_delete] + @accounts[:not_to_delete]).each { |account| refute account.reload.scheduled_for_deletion? }
+  end
+
+  test 'it does not perform for enterprise accounts' do
+    Account.stubs(not_enterprise: Account.none)
+    StaleAccountWorker.new.perform
+    (@accounts[:to_delete] + @accounts[:not_to_delete]).each { |account| refute account.reload.scheduled_for_deletion? }
+  end
 end

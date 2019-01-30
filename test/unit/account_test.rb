@@ -27,6 +27,42 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
+  def test_class_method_free
+    recent_date = (Contract::MAX_UNPAID_TIME - 1.day).ago
+    old_date    = (Contract::MAX_UNPAID_TIME + 1.day).ago
+
+    paid_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:application, user_account: paid_tenant, paid_until: recent_date)
+
+    paid_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:application, user_account: paid_tenant, variable_cost_paid_until: recent_date)
+
+    free_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:application, user_account: free_tenant, paid_until: old_date, variable_cost_paid_until: old_date)
+
+    another_free_tenant = FactoryBot.create(:simple_provider)
+
+    assert_includes Account.free.pluck(:id), free_tenant.id
+    assert_includes Account.free.pluck(:id), another_free_tenant.id
+    assert_not_includes Account.free.pluck(:id), paid_tenant.id
+  end
+
+  def test_class_method_non_enterprise
+    enterprise_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:simple_service, account: enterprise_tenant)
+    FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: enterprise_tenant.default_service)
+
+    non_enterprise_tenant = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:simple_service, account: non_enterprise_tenant)
+    FactoryBot.create(:application_plan, system_name: '2017-pro-500k', issuer: non_enterprise_tenant.default_service)
+
+    another_non_enterprise_tenant = FactoryBot.create(:simple_provider)
+
+    assert_includes Account.not_enterprise.pluck(:id), non_enterprise_tenant.id
+    assert_includes Account.not_enterprise.pluck(:id), another_non_enterprise_tenant.id
+    assert_not_includes Account.not_enterprise.pluck(:id), enterprise_tenant.id
+  end
+
   def test_not_master
     master = master_account
     buyer = FactoryBot.create(:simple_buyer, provider_account: master)

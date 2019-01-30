@@ -44,9 +44,8 @@ class Service < ApplicationRecord
     super.reject { |column| column.name == 'buyer_can_see_log_requests'}
   end
 
-  def self.of_account(account)
-    where(account_id: account)
-  end
+  scope :of_account, ->(account) { where.has { account_id == account } }
+  scope :with_enterprise_application_plans, -> { joins(:application_plans).where('plans.system_name LIKE ?', '%enterprise%') }
 
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
 
