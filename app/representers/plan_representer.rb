@@ -10,6 +10,7 @@ module PlanRepresenter
     property :cost_per_month
     property :trial_period_days
     property :cancellation_period
+    property :approval_required
 
     property :default
 

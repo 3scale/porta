@@ -62,6 +62,7 @@ resource "ServicePlan" do
     let(:root) { 'service_plan' }
     it { should have_properties('id', 'name', 'state', 'approval_required').from(resource) }
     it { should have_properties(%w|setup_fee cost_per_month trial_period_days cancellation_period|).from(resource) }
+    it { should have_properties('approval_required').from(resource) }
     it { should have_links('service', 'self') }
   end
 

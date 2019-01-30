@@ -522,6 +522,13 @@
               "paramType": "query"
             },
             {
+              "name": "approval_required",
+              "description": "Set the 'Accounts require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
               "name": "system_name",
               "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
               "dataType": "string",
@@ -592,6 +599,13 @@
               "name": "name",
               "description": "Name of the account plan.",
               "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "approval_required",
+              "description": "Set the 'Accounts require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
               "required": false,
               "paramType": "query"
             },
@@ -1753,6 +1767,13 @@
               "paramType": "query"
             },
             {
+              "name": "approval_required",
+              "description": "Set the 'Applications require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
               "name": "system_name",
               "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
               "dataType": "string",
@@ -1839,6 +1860,13 @@
               "name": "name",
               "description": "Name of the application plan.",
               "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "approval_required",
+              "description": "Set the 'Applications require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
+              "required": false,
               "paramType": "query"
             },
             {
@@ -5221,6 +5249,13 @@
               "paramType": "query"
             },
             {
+              "name": "approval_required",
+              "description": "Set the 'Service subscriptions require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
               "name": "system_name",
               "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
               "dataType": "string",
@@ -5307,6 +5342,13 @@
               "name": "name",
               "description": "Name of the service plan.",
               "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "approval_required",
+              "description": "Set the 'Service subscriptions require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
               "required": false,
               "paramType": "query"
             },
