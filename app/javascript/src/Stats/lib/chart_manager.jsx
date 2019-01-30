@@ -3,11 +3,12 @@ import $ from 'jquery'
 import {StatsSeries} from 'Stats/lib/series'
 
 export class StatsChartManager {
-  constructor ({statsState, sources, chart, widgets = []}) {
+  constructor ({statsState, metricsSelector, sources, chart, widgets = []}) {
     this.statsState = statsState
     this.Sources = sources
     this.chart = chart
     this.widgets = widgets
+    this.metricsSelector = metricsSelector
 
     this._bindEvents()
   }
@@ -20,11 +21,24 @@ export class StatsChartManager {
     return new Promise(resolve => resolve(this.Sources))
   }
 
+  render () {
+    this.renderMetricsSelector()
+    this.renderChart()
+  }
+
+  update () {
+    this.updateChart()
+  }
+
   renderChart () {
     return this._processChart().then((data) => {
       let selectedSeries = data ? this._getSelectedSeries(data) : null
       return this.chart.render({data, selectedSeries})
     })
+  }
+
+  renderMetricsSelector () {
+    this.metricsSelector.render()
   }
 
   updateChart () {
@@ -94,7 +108,7 @@ export class StatsChartManager {
   }
 
   _bindEvents () {
-    $(this.statsState).on('redraw refresh', () => this.updateChart())
+    $(this.statsState).on('redraw refresh', () => this.update())
   }
 
   _options () {

@@ -7,6 +7,7 @@ import {StatsMethodsTable} from 'Stats/lib/methods_table'
 import {StatsApplicationMetricsSource} from 'Stats/lib/application_metrics_source'
 import {StatsCSVLink} from 'Stats/lib/csv_link'
 import {Stats} from 'Stats/lib/stats'
+import $ from 'jquery'
 
 export class StatsApplicationSourceCollector extends StatsSourceCollector {
   static get Source () {
@@ -16,12 +17,24 @@ export class StatsApplicationSourceCollector extends StatsSourceCollector {
   getSources (options) {
     let id = options.selectedApplicationId
     let selectedMetricName = options.selectedMetricName
-    let requestNew = (id && id !== this.id)
-    let url
+    return super.getSources({id, selectedMetricName})
+  }
+}
 
-    if (requestNew) url = this._metricUrl(id)
+export class StatsApplicationChartManager extends StatsUsageChartManager {
+  updateMetrics () {
+    let id = this.statsState.state.selectedApplicationId
+    let url = this._metricUrl(id)
+    this.sourceCollector.getMetrics(url).then(list => this.metricsSelector.update(this._groupMetrics(list)))
+  }
 
-    return super.getSources({id, selectedMetricName, url})
+  _groupMetrics (list) {
+    return [list.metrics[0], ...list.methods, ...list.metrics.slice(1)]
+  }
+
+  _bindEvents () {
+    $(this.statsState).on('applicationSelected', () => { this.updateMetrics() })
+    super._bindEvents()
   }
 
   _metricUrl (id) {
@@ -30,13 +43,12 @@ export class StatsApplicationSourceCollector extends StatsSourceCollector {
 }
 
 let statsApplication = (applicationId, options = {}) => {
-  let version = 2.0 // Needed to identify new version, some people is still using old charts https://github.com/3scale/system/issues/7769
-  let applicationMetricsUrl = `/stats/applications/${applicationId}/summary.json?version=${version}`
+  let applicationMetricsUrl = `/stats/applications/${applicationId}/summary.json?version=2.0`
   let metrics = StatsMetrics.getMetrics(applicationMetricsUrl)
   let csvLink = new StatsCSVLink({container: options.csvLinkContainer})
   let methodsTable = new StatsMethodsTable({container: options.methodsTableContainer})
 
-  Stats({ChartManager: StatsUsageChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector}).build({
+  Stats({ChartManager: StatsApplicationChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector}).build({
     id: applicationId,
     selectedState: {timezone: options.timezone},
     metrics,

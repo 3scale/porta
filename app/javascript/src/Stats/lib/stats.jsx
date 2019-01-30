@@ -52,19 +52,20 @@ export const Stats = function ({ChartManager, Chart, Sources}) {
 
       metrics.then(list => {
         let groupedMetrics = settings.hasGroupedMethods ? list.metrics : [list.metrics[0], ...list.methods, ...list.metrics.slice(1)]
-        new StatsMetricsSelector({statsState, metrics: groupedMetrics, container: settings.selectorContainer}).render()
+        let metricsSelector = new StatsMetricsSelector({statsState, metrics: groupedMetrics, container: settings.selectorContainer})
         widgets.forEach(widget => widget.render())
         let groupedMethods = settings.hasGroupedMethods ? list.methods.map(method => method.name) : null
         let chart = new Chart({container: settings.chartContainer, groupedSeries: groupedMethods})
         let sources = (settings.isSourceCollector) ? new Sources({id, metrics}) : [new Sources({id})]
         let chartManager = new ChartManager({
           statsState,
+          metricsSelector,
           sources,
           chart,
           widgets
         })
         chart.registerManager(chartManager)
-        chartManager.renderChart()
+        chartManager.render()
 
         if (settings.hasMenu) renderDateRangeSelector(statsState, settings)
 
