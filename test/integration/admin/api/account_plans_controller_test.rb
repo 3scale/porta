@@ -21,7 +21,7 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
 
   def test_create_invalid_params_json
     assert_no_difference provider.account_plans.method(:count) do
-      post admin_api_account_plans_path(account_plan_params('fakestate'))
+      post admin_api_account_plans_path(account_plan_params(state_event: 'fakestate'))
       assert_response :unprocessable_entity
       assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')
     end
@@ -38,18 +38,28 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
   def test_update_invalid_params_json
     original_values = {name: 'firstname', state: 'hidden', provider: provider}
     account_plan = FactoryBot.create(:account_plan, original_values)
-    put admin_api_account_plan_path(account_plan, account_plan_params('fakestate'))
+    put admin_api_account_plan_path(account_plan, account_plan_params(state_event: 'fakestate'))
     assert_response :unprocessable_entity
     assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')
     assert_equal original_values[:name], account_plan.reload.name
     assert_equal original_values[:state], account_plan.state
   end
-  
+
+  def test_approval_required
+    assert_difference provider.account_plans.method(:count) do
+      post admin_api_account_plans_path(account_plan_params(approval_required: true))
+      assert_response :success
+      assert JSON.parse(response.body).dig('account_plan', 'id').present?
+    end
+    account_plan = provider.account_plans.last
+    assert account_plan.approval_required
+  end
+
   private
-  
+
   attr_reader :provider
 
-  def account_plan_params(state_event = 'publish')
-    @account_plan_params ||= { account_plan: {name: 'testing', state_event: state_event}, format: :json }
+  def account_plan_params(state_event: 'publish', approval_required: 0)
+    @account_plan_params ||= { account_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json }
   end
 end

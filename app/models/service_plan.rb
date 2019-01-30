@@ -23,29 +23,11 @@ class ServicePlan < Plan
   end
 
   def to_xml(options = {})
-    xml = options[:builder] || ThreeScale::XML::Builder.new
-
-    attrs = if self.master?
-              { :default => true }
-            else
-              { }
-            end
-
-    xml.plan(attrs) do |xml|
-      xml.id_ id unless new_record?
-      xml.name name
-      xml.type_ self.class.to_s.underscore
-      xml.state state
-      xml.service_id issuer_id
-      xml.approval_required approval_required
-
-      xml.setup_fee setup_fee
-      xml.cost_per_month cost_per_month
-      xml.trial_period_days trial_period_days
-      xml.cancellation_period cancellation_period
-    end
-
-    xml.to_xml
+    attrs = self.master? ? { :default => true } : {}
+    extra_nodes = {
+      service_id: issuer_id
+    }
+    xml_builder(options, attrs, extra_nodes).to_xml
   end
 
   add_three_scale_method_tracer :to_xml, 'ActiveRecord/ServicePlan/to_xml'

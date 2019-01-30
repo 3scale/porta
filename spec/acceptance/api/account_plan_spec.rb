@@ -61,6 +61,7 @@ resource "AccountPlan" do
     it { should have_properties('id', 'name', 'state', 'created_at', 'updated_at').from(resource) }
     it { should have_properties('setup_fee', 'cost_per_month').from(resource) }
     it { should have_properties('trial_period_days', 'cancellation_period', 'default').from(resource) }
+    it { should have_properties('approval_required').from(resource) }
   end
 
   json(:collection) do

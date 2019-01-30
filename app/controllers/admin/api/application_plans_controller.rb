@@ -49,6 +49,7 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
   ##~ op.parameters.add :name => "name", :description => "Name of the application plan.", :dataType => "string", :required => true, :paramType => "query"
+  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Applications require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
   ##~ op.parameters.add @parameter_application_plan_state_event
   #
@@ -85,6 +86,7 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_service_id_by_id_name
   ##~ op.parameters.add @parameter_application_plan_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the application plan.", :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Applications require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_application_plan_state_event
   #
   def update
@@ -130,7 +132,7 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
 
   protected
 
-  DEFAULT_PARAMS = %i[name state_event description].freeze
+  DEFAULT_PARAMS = %i[name state_event description approval_required].freeze
 
   def application_plan_update_params
     params.require(:application_plan).permit(DEFAULT_PARAMS)
