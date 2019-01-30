@@ -158,11 +158,12 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ##~ op.parameters.add :name => "plan_id", :description => "ID of the new application plan.", :dataType => "int", :paramType => "query", :required => true, :threescale_name => "application_plan_ids"
   #
   def change_plan
-    application_plan = same_service_application_plans.find(params[:plan_id])
     plan = application.change_plan!(application_plan)
 
     # changing a plan to same returns nil so we just return existing plan here:
     respond_with(application, serialize: plan || application_plan, representer: ApplicationPlanRepresenter)
+  rescue Cinstance::DifferentServicesPlanChangeError
+    render_error 'Cannot change to an application plan of a different service', status: :precondition_failed
   end
 
   ##~ e = sapi.apis.add
@@ -272,10 +273,6 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   def applications
     # bullet says that it detected N+1 queries and recommended following eager loading:
     @applications ||= accessible_bought_cinstances.includes(:user_account, :plan, :service)
-  end
-
-  def same_service_application_plans
-    accessible_application_plans.where(issuer: application.service)
   end
 
   def application
