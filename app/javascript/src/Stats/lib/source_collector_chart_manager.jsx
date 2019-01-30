@@ -1,8 +1,8 @@
 import {StatsChartManager} from 'Stats/lib/chart_manager'
 
 export class StatsSourceCollectorChartManager extends StatsChartManager {
-  constructor ({statsState, sources, chart, widgets = []}) {
-    super({statsState, chart, widgets})
+  constructor ({statsState, metricsSelector, sources, chart, widgets = []}) {
+    super({statsState, metricsSelector, chart, widgets})
     this.sourceCollector = sources
   }
 
