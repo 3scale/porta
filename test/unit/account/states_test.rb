@@ -1,6 +1,15 @@
 require 'test_helper'
 
 class Account::StatesTest < ActiveSupport::TestCase
+  test '.without_suspended' do
+    accounts = FactoryBot.create_list(:simple_provider, 2)
+    accounts.first.suspend!
+
+    ids_without_suspended = Account.without_suspended.pluck(:id)
+    assert_not_includes ids_without_suspended, accounts.first.id
+    assert_includes     ids_without_suspended, accounts.last.id
+  end
+
   test '.without_deleted' do
     accounts = FactoryBot.create_list(:simple_account, 2)
     accounts.first.schedule_for_deletion!

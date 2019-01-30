@@ -38,4 +38,36 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     @accounts[:to_suspend].each     { |account| assert account.reload.suspended? }
     @accounts[:not_to_suspend].each { |account| refute account.reload.suspended? }
   end
+
+  test 'it does not perform for already suspended or deleted accounts' do
+    old_time = 5.years.ago
+    already_suspended = FactoryBot.create(:simple_provider, state: 'suspended', state_changed_at: old_time)
+    already_suspended.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+    already_deleted = FactoryBot.create(:simple_provider, state: 'scheduled_for_deletion', state_changed_at: old_time)
+    already_deleted.update_attribute(:created_at, Account::States::MAX_PERIOD_OF_INACTIVITY.ago)
+
+    SuspendInactiveAccountsWorker.new.perform
+
+    assert_equal old_time.to_date, already_suspended.reload.state_changed_at.to_date
+    assert_equal old_time.to_date, already_deleted.reload.state_changed_at.to_date
+    assert already_deleted.scheduled_for_deletion?
+  end
+
+  test 'it does not perform for on-prem' do
+    ThreeScale.config.stubs(onpremises: true)
+    SuspendInactiveAccountsWorker.new.perform
+    (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
+  end
+
+  test 'it does not perform for paid accounts' do
+    Account.stubs(free: Account.none)
+    SuspendInactiveAccountsWorker.new.perform
+    (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
+  end
+
+  test 'it does not perform for enterprise accounts' do
+    Account.stubs(not_enterprise: Account.none)
+    SuspendInactiveAccountsWorker.new.perform
+    (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
+  end
 end
