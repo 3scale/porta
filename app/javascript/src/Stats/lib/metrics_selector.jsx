@@ -58,7 +58,7 @@ export class StatsMetricsSelector extends StatsUI {
     this.refresh()
   }
 
-  _setState (state, topics, toggle) {
+  _setState (state, topics) {
     super._setState(state, topics)
   }
 

@@ -26,7 +26,7 @@ export class StatsSourceCollector {
   }
 
   getMetrics (url) {
-    let metricsPromise = StatsMetrics.getMetrics(url)
+    let metricsPromise = this._fetchMetrics(url)
     this.metrics = metricsPromise
     return metricsPromise
   }
@@ -49,6 +49,10 @@ export class StatsSourceCollector {
   buildSources (id, metrics) {
     const Source = Object.getPrototypeOf(this).constructor.Source
     return metrics.map(metricDetails => new Source({id, details: metricDetails}))
+  }
+
+  _fetchMetrics (url) {
+    return StatsMetrics.getMetrics(url)
   }
 
   _resolveSources ({id, selectedMetricName, metrics}) {
