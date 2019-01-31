@@ -51,7 +51,7 @@ export class StatsApplicationsSelector extends StatsUI {
             applicationGroups[serviceName].map(application =>
               [
                 <option value={application.id}
-                  selected={selectedApplicationId === application.id}
+                  selected={selectedApplicationId === Number.parseInt(application.id)}
                 >{application.name}</option>
               ]
             )

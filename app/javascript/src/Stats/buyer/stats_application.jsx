@@ -7,7 +7,13 @@ import {StatsMethodsTable} from 'Stats/lib/methods_table'
 import {StatsApplicationMetricsSource} from 'Stats/lib/application_metrics_source'
 import {StatsCSVLink} from 'Stats/lib/csv_link'
 import {Stats} from 'Stats/lib/stats'
+import {StatsStore} from 'Stats/lib/store'
 import $ from 'jquery'
+
+function getStoredApplicationId () {
+  let storedState = new StatsStore(window).getStateFromURL()
+  if (storedState && storedState.selectedApplicationId) return storedState.selectedApplicationId
+}
 
 export class StatsApplicationSourceCollector extends StatsSourceCollector {
   static get Source () {
@@ -43,14 +49,15 @@ export class StatsApplicationChartManager extends StatsUsageChartManager {
 }
 
 let statsApplication = (applicationId, options = {}) => {
-  let applicationMetricsUrl = `/stats/applications/${applicationId}/summary.json?version=2.0`
+  let id = getStoredApplicationId() || applicationId
+  let applicationMetricsUrl = `/stats/applications/${id}/summary.json?version=2.0`
   let metrics = StatsMetrics.getMetrics(applicationMetricsUrl)
   let csvLink = new StatsCSVLink({container: options.csvLinkContainer})
   let methodsTable = new StatsMethodsTable({container: options.methodsTableContainer})
 
   Stats({ChartManager: StatsApplicationChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector}).build({
-    id: applicationId,
-    selectedState: {timezone: options.timezone},
+    id,
+    selectedState: {timezone: options.timezone, selectedApplicationId: id},
     metrics,
     widgets: [csvLink, methodsTable],
     options
