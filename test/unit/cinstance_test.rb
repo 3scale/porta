@@ -683,6 +683,12 @@ class CinstanceTest < ActiveSupport::TestCase
       end
       assert_includes @cinstance.errors['plan_id'], 'not allowed in this context'
     end
+
+    test 'cannot change plan to not plan at all' do
+      previous_plan = @cinstance.plan_id
+      assert_nothing_raised { @cinstance.change_plan! nil }
+      assert_equal previous_plan, @cinstance.reload.plan_id
+    end
   end
 
   class WebHooksTest < ActiveSupport::TestCase
