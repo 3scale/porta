@@ -868,6 +868,9 @@ workflows:
     - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
         type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
       # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+        filters:
+          branches:
+            ignore: master
     - dependencies_bundler:
         requires:
         - manual_approval
