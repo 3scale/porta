@@ -105,6 +105,11 @@ dnsmasq-container: &dnsmasq-container
     - --no-poll
     - --address=/#/127.0.0.1
 
+only-master-filter: &only-master-filter
+  filters:
+    branches:
+      only: master
+
 ##################################### CIRCLECI COMMANDS ############################################
 
 commands: # reusable commands with parameters
@@ -677,9 +682,7 @@ workflows:
   mysql_build:
     jobs:
       - notify_start:
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
       - dependencies_bundler
       - dependencies_npm
       - docker-build:
@@ -714,9 +717,7 @@ workflows:
             - integration
             - functional
             - lint
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
       - notify_failure:
           requires:
             - rspec
@@ -725,9 +726,7 @@ workflows:
             - integration
             - functional
             - lint
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
 
   postgres_build:
     jobs:
@@ -737,9 +736,7 @@ workflows:
       - notify_start:
           requires:
             - manual_approval
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
       - deps_bundler_postgres:
           requires:
             - manual_approval
@@ -780,9 +777,7 @@ workflows:
             - integration-postgres
             - functional-postgres
             - lint
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
       - notify_failure:
           requires:
             - rspec-postgres
@@ -791,9 +786,7 @@ workflows:
             - integration-postgres
             - functional-postgres
             - lint
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
 
   oracle_build:
     jobs:
@@ -803,9 +796,7 @@ workflows:
       - notify_start:
           requires:
             - manual_approval
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
       - deps_bundler_oracle:
           requires:
             - manual_approval
@@ -847,9 +838,7 @@ workflows:
             - integration-oracle
             - functional-oracle
             - lint
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
 
       - notify_failure:
           requires:
@@ -859,9 +848,7 @@ workflows:
             - integration-oracle
             - functional-oracle
             - lint
-          filters:
-            branches:
-              only: master
+          <<: *only-master-filter
 
   visual_tests:
     jobs:
@@ -885,3 +872,20 @@ workflows:
           context: percy
           requires:
             - assets_precompile
+
+  visual_test-master:
+    jobs:
+      - dependencies_bundler:
+          <<: *only-master-filter
+      - dependencies_npm:
+          <<: *only-master-filter
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+          <<: *only-master-filter
+      - visual:
+          context: percy
+          requires:
+            - assets_precompile
+          <<: *only-master-filter
