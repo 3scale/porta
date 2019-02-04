@@ -4,7 +4,9 @@ class StaleAccountWorker
   include Sidekiq::Worker
 
   def perform
-    return if ThreeScale.config.onpremises
-    Account.tenants.free.not_enterprise.suspended_since.find_each(&:schedule_for_deletion!)
+    return unless MaxAllowedDaysLoader.valid_configuration?
+    suspension_date = MaxAllowedDaysLoader.load_account_suspension.ago
+    free_since_date = MaxAllowedDaysLoader.load_contract_unpaid_time.ago
+    Account.tenants.free(free_since_date).not_enterprise.suspended_since(suspension_date).find_each(&:schedule_for_deletion!)
   end
 end

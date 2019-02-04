@@ -1,0 +1,14 @@
+max_allowed_days: &default
+  account_inactivity: 365
+  account_suspension: 90
+  contract_unpaid_time: 183
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+
+preview:
