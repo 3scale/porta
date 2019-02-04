@@ -261,7 +261,7 @@ class Contract < ApplicationRecord
   # to run something after successful trnsaction
   #
   def change_plan_internal(new_plan, &block)
-    return if self.plan == new_plan || new_plan.nil?
+    return if self.plan == new_plan
     raise 'change_plan_internal must be called with a block' unless block_given?
 
     transaction do

@@ -412,7 +412,8 @@ class Cinstance < Contract
   end
 
   def same_service
-    errors.add(:plan_id, :not_allowed) if plan&.service != service
+    return if plan.blank? || plan.service == service
+    errors.add(:plan_id, :not_allowed)
   end
 
   def reject_if_pending

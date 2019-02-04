@@ -684,10 +684,14 @@ class CinstanceTest < ActiveSupport::TestCase
       assert_includes @cinstance.errors['plan_id'], 'not allowed in this context'
     end
 
-    test 'cannot change plan to not plan at all' do
+    test 'cannot change plan to nil and adds the right error' do
       previous_plan = @cinstance.plan_id
-      assert_nothing_raised { @cinstance.change_plan! nil }
+      assert_raise ActiveRecord::RecordInvalid do
+        @cinstance.change_plan! nil
+      end
       assert_equal previous_plan, @cinstance.reload.plan_id
+      assert_includes @cinstance.errors[:plan], 'can\'t be blank'
+      assert_empty @cinstance.errors['plan_id']
     end
   end
 
