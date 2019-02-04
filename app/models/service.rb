@@ -30,7 +30,6 @@ class Service < ApplicationRecord
   after_save :deleted_without_state_machine
 
   before_destroy :stop_destroy_if_last_or_default
-  before_destroy :destroy_features
   after_destroy :update_account_default_service
 
   with_options(dependent: :destroy, inverse_of: :service) do |service|
@@ -84,7 +83,7 @@ class Service < ApplicationRecord
 
   has_many :usage_limits, through: :application_plans
 
-  has_many :features, as: :featurable
+  has_many :features, as: :featurable, dependent: :destroy
 
   has_many :metrics, dependent: :destroy
   has_many :top_level_metrics, -> { includes(:children).top_level }, class_name: 'Metric'
@@ -274,10 +273,6 @@ class Service < ApplicationRecord
     return if destroyable?
     errors.add :base, 'This service cannot be removed'
     false
-  end
-
-  def destroy_features
-    features.destroy_all
   end
 
   # Returns either a service between that service and buyer account or nil.
