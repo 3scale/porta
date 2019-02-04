@@ -142,7 +142,6 @@ module EventStore
       subscribe_for_notification(:service_deleted, Services::ServiceDeletedEvent)
       subscribe_for_notification(:service_plan_change_requested, Services::ServicePlanChangeRequestedEvent)
 
-      subscribe_event(SegmentSubscriber.new(:account_deleted), Accounts::AccountDeletedEvent)
       subscribe_event(UserEventSegmentSubscriber.new, Users::UserDeletedEvent)
       subscribe_event(PublishZyncEventSubscriber.new,
                       Applications::ApplicationCreatedEvent,

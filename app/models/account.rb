@@ -60,8 +60,6 @@ class Account < ApplicationRecord
   include States
   include Domains
 
-  alias_attribute :first_admin_id_on_account_signup, :first_admin_id
-
   #TODO: this needs testing?
   scope :providers, -> { where(provider: true) }
 
