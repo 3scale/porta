@@ -28,8 +28,8 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   def test_class_method_free
-    recent_date = (Contract::MAX_UNPAID_TIME - 1.day).ago
-    old_date    = (Contract::MAX_UNPAID_TIME + 1.day).ago
+    recent_date = 4.days.ago
+    old_date    = 6.days.ago
 
     paid_tenant = FactoryBot.create(:simple_provider)
     FactoryBot.create(:application, user_account: paid_tenant, paid_until: recent_date)
@@ -42,9 +42,10 @@ class AccountTest < ActiveSupport::TestCase
 
     another_free_tenant = FactoryBot.create(:simple_provider)
 
-    assert_includes Account.free.pluck(:id), free_tenant.id
-    assert_includes Account.free.pluck(:id), another_free_tenant.id
-    assert_not_includes Account.free.pluck(:id), paid_tenant.id
+    free_tenant_ids = Account.free(5.days.ago).pluck(:id)
+    assert_includes free_tenant_ids, free_tenant.id
+    assert_includes free_tenant_ids, another_free_tenant.id
+    assert_not_includes free_tenant_ids, paid_tenant.id
   end
 
   def test_class_method_non_enterprise

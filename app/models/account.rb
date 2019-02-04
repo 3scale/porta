@@ -109,7 +109,7 @@ class Account < ApplicationRecord
 
   before_destroy :destroy_features
 
-  scope :free, -> { where.has { not_exists Contract.have_paid_on.by_account(BabySqueel[:accounts].id).select(:id) } }
+  scope :free, ->(free_date) { where.has { not_exists Contract.have_paid_on(free_date).by_account(BabySqueel[:accounts].id).select(:id) } }
   scope :not_enterprise, -> { where.has { not_exists Service.of_account(BabySqueel[:accounts].id).with_enterprise_application_plans.select(:id) } }
 
   def destroy_features

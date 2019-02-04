@@ -13,8 +13,8 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   def test_have_paid_on
-    recent_date = (Contract::MAX_UNPAID_TIME - 1.minute).ago
-    old_date    = (Contract::MAX_UNPAID_TIME + 1.day).ago
+    recent_date = (5.days - 1.minute).ago
+    old_date    = (5.days + 1.day).ago
 
     paid_apps = [
       FactoryBot.create(:application, paid_until: recent_date, variable_cost_paid_until: nil),
@@ -28,7 +28,8 @@ class ContractTest < ActiveSupport::TestCase
       FactoryBot.create(:application, paid_until: old_date, variable_cost_paid_until: old_date)
     ]
 
-    response_paid_apps = Contract.have_paid_on.pluck(:id)
+    assert_raise(ArgumentError) { Contract.have_paid_on.pluck(:id) }
+    response_paid_apps = Contract.have_paid_on(5.days.ago).pluck(:id)
     paid_apps.each { |paid_app| assert_includes response_paid_apps, paid_app.id }
     unpaid_apps.each { |unpaid_app| assert_not_includes response_paid_apps, unpaid_app.id }
   end

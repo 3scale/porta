@@ -194,6 +194,9 @@ module System
     config.three_scale.plan_rules = ActiveSupport::OrderedOptions.new
     config.three_scale.plan_rules.merge!(try_config_for(:plan_rules) || {})
 
+    config.three_scale.max_allowed_days = ActiveSupport::OrderedOptions.new
+    config.three_scale.max_allowed_days.merge!(try_config_for(:max_allowed_days) || {})
+
     config.three_scale.prometheus = ActiveSupport::OrderedOptions.new
     config.three_scale.prometheus.merge!(try_config_for(:prometheus) || {})
 

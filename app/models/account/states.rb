@@ -1,7 +1,5 @@
 module Account::States
   PERIOD_BEFORE_DELETION   = 15.days.freeze
-  MAX_PERIOD_OF_SUSPENSION = 90.days.freeze
-  MAX_PERIOD_OF_INACTIVITY =  1.year.freeze
   STATES = %i[created pending approved rejected suspended scheduled_for_deletion].freeze
   extend ActiveSupport::Concern
 
@@ -105,15 +103,15 @@ module Account::States
       scheduled_for_deletion.where.has { state_changed_at <= deletion_time }
     end
 
-    scope :suspended_since, ->(suspension_time = MAX_PERIOD_OF_SUSPENSION.ago) do
+    scope :suspended_since, ->(suspension_time) do
       suspended.where.has { state_changed_at <= suspension_time }
     end
 
-    scope :inactive_since, ->(inactivity_time = MAX_PERIOD_OF_INACTIVITY.ago) do
+    scope :inactive_since, ->(inactivity_time) do
       where.has { created_at <= inactivity_time }.without_traffic_since(inactivity_time)
     end
 
-    scope :without_traffic_since, ->(inactivity_time = MAX_PERIOD_OF_INACTIVITY.ago) do
+    scope :without_traffic_since, ->(inactivity_time) do
       where.has do
         not_exists Cinstance.where.has { user_account_id == BabySqueel[:accounts].id }.active_since(inactivity_time)
       end
