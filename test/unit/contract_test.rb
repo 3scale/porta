@@ -12,7 +12,7 @@ class ContractTest < ActiveSupport::TestCase
     assert_same_elements Contract.where(user_account: accounts[1].id).pluck(:id), Contract.by_account(accounts[1]).pluck(:id)
   end
 
-  def test_has_paid_on
+  def test_have_paid_on
     recent_date = (Contract::MAX_UNPAID_TIME - 1.minute).ago
     old_date    = (Contract::MAX_UNPAID_TIME + 1.day).ago
 
@@ -28,7 +28,7 @@ class ContractTest < ActiveSupport::TestCase
       FactoryBot.create(:application, paid_until: old_date, variable_cost_paid_until: old_date)
     ]
 
-    response_paid_apps = Contract.has_paid_on.pluck(:id)
+    response_paid_apps = Contract.have_paid_on.pluck(:id)
     paid_apps.each { |paid_app| assert_includes response_paid_apps, paid_app.id }
     unpaid_apps.each { |unpaid_app| assert_not_includes response_paid_apps, unpaid_app.id }
   end
