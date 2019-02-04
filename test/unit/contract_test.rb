@@ -141,11 +141,11 @@ class ContractTest < ActiveSupport::TestCase
   def test_bill_plan_change_with_bad_period_due_to_time_zone
     Time.zone = 'CET'
     Timecop.freeze(Date.parse('2018-01-17')) do
-      other_plan = FactoryBot.create(:simple_application_plan, cost_per_month: 3100.0)
-      contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
       provider = FactoryBot.create(:simple_provider)
-      Finance::PrepaidBillingStrategy.create!(account: provider, currency: 'EUR')
+      contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
       contract.buyer_account.stubs(provider_account: provider)
+      other_plan = FactoryBot.create(:simple_application_plan, service: contract.service, cost_per_month: 3100.0)
+      Finance::PrepaidBillingStrategy.create!(account: provider, currency: 'EUR')
 
       System::ErrorReporting.expects(:report_error).with(instance_of(Finance::PrepaidBillingStrategy::BadPeriodError)).never
       contract.change_plan!(other_plan)

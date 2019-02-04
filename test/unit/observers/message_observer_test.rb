@@ -40,19 +40,19 @@ class MessageObserverTest < ActiveSupport::TestCase
 
     contract.change_plan! FactoryBot.create(:simple_service_plan)
 
-    cinstance = FactoryBot.create(:cinstance)
+    cinstance = FactoryBot.create(:cinstance, service: @service)
 
     Cinstances::CinstancePlanChangedEvent.expects(:create).once
     ContractMessenger.expects(:plan_change).never
 
-    cinstance.change_plan! FactoryBot.create(:simple_application_plan)
+    cinstance.change_plan! FactoryBot.create(:simple_application_plan, service: @service)
 
     Logic::RollingUpdates.stubs(skipped?: true)
 
     Cinstances::CinstancePlanChangedEvent.expects(:create).never
     ContractMessenger.expects(:plan_change).once.returns(mock(deliver: true))
 
-    cinstance.change_plan! FactoryBot.create(:simple_application_plan)
+    cinstance.change_plan! FactoryBot.create(:simple_application_plan, service: @service)
   end
 
   context "after_commit_on_create" do

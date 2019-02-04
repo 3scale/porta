@@ -656,7 +656,21 @@ class CinstanceTest < ActiveSupport::TestCase
     end
   end
 
-  context 'change_plan! method' do
+  test "validate cinstance's service and cinstance's plan's service are the same" do
+    cinstance = FactoryBot.create(:cinstance)
+
+    other_service = FactoryBot.create(:service, account: cinstance.provider_account)
+    other_plan_diff_service = FactoryBot.create(:application_plan, service: other_service, name: "other plan of different service")
+    cinstance.plan = other_plan_diff_service
+    refute cinstance.valid?
+    assert_includes cinstance.errors['plan'], 'not allowed in this context'
+
+    other_plan_same_service = FactoryBot.build_stubbed(:application_plan, service: cinstance.service, name: "other plan of same service")
+    cinstance.plan = other_plan_same_service
+    assert cinstance.valid?
+  end
+
+  class ChangePlanTest < ActiveSupport::TestCase
     setup do
       service = FactoryBot.create(:service)
       stock = FactoryBot.create(:application_plan, :issuer => service)
@@ -668,11 +682,25 @@ class CinstanceTest < ActiveSupport::TestCase
       @custom = Plan.find @cinstance.plan.id
     end
 
-    should 'delete custom plan' do
+    test 'delete custom plan' do
       @cinstance.change_plan! @another_plan
       assert @cinstance.reload.plan_id == @another_plan.id
 
       assert_raises(ActiveRecord::RecordNotFound) { @custom.reload }
+    end
+
+    test 'cannot change to a plan of different service' do
+      other_service = FactoryBot.create(:service, account: @cinstance.provider_account)
+      other_plan = FactoryBot.create(:application_plan, service: other_service, name: "other plan")
+      refute @cinstance.change_plan other_plan
+      assert_includes @cinstance.errors['plan'], 'not allowed in this context'
+    end
+
+    test 'does not change plan to no plan at all' do
+      previous_plan = @cinstance.plan
+      refute @cinstance.change_plan nil
+      assert_empty @cinstance.errors['plan']
+      assert_equal previous_plan, @cinstance.reload.plan
     end
   end
 
