@@ -27,10 +27,10 @@ development:
 
 test: &test
   <<: *sphinx
-  <% case ENV['DB']
-  when 'oracle' %>
+<% case ENV['DATABASE_URL'].to_s
+   when /^oracle/ %>
 sql_port: 1521
-  <% when 'postgresql' %>
+  <% when /^postgresql/ %>
 sql_port: 5432
   <% else %>
 mysql41:            <%= 9313 + ENV['TEST_ENV_NUMBER'].to_i %>

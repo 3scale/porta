@@ -9,7 +9,7 @@ namespace :ci do
       timeout = ENV.fetch('DB_BOOT_TIMEOUT', 300).to_i
       interval = ENV.fetch('DB_BOOT_SLEEP_SECONDS', 1).to_i
 
-      if ENV['DB'] == 'oracle'
+      if ENV['DATABASE_URL']&.start_with?('oracle')
         # allow some startup time for oracle to boot...  ¯\_(ツ)_/¯
         sleep 300
       end
@@ -21,7 +21,7 @@ namespace :ci do
         timeout -= interval
       end
 
-      if ENV['DB'] == 'oracle'
+      if ENV['DATABASE_URL']&.start_with?('oracle')
         # allow some MORE time for setup to complete in oracle...  ¯\_(ツ)_/¯
         sleep 300
       end
