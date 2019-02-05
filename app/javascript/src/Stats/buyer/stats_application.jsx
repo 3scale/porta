@@ -11,8 +11,8 @@ import {StatsStore} from 'Stats/lib/store'
 import $ from 'jquery'
 
 function getStoredApplicationId () {
-  let storedState = new StatsStore(window).getStateFromURL()
-  if (storedState && storedState.selectedApplicationId) return storedState.selectedApplicationId
+  const storedState = new StatsStore(window).getStateFromURL()
+  return storedState && storedState.selectedApplicationId
 }
 
 export class StatsApplicationSourceCollector extends StatsSourceCollector {
@@ -21,16 +21,15 @@ export class StatsApplicationSourceCollector extends StatsSourceCollector {
   }
 
   getSources (options) {
-    let id = options.selectedApplicationId
-    let selectedMetricName = options.selectedMetricName
-    return super.getSources({id, selectedMetricName})
+    const { selectedApplicationId, selectedMetricName } = options
+    return super.getSources({id: selectedApplicationId, selectedMetricName})
   }
 }
 
 export class StatsApplicationChartManager extends StatsUsageChartManager {
   updateMetrics () {
-    let id = this.statsState.state.selectedApplicationId
-    let url = this._metricUrl(id)
+    const id = this.statsState.state.selectedApplicationId
+    const url = this._metricUrl(id)
     this.sourceCollector.getMetrics(url).then(list => this.metricsSelector.update(this._groupMetrics(list)))
   }
 
@@ -49,20 +48,21 @@ export class StatsApplicationChartManager extends StatsUsageChartManager {
 }
 
 let statsApplication = (applicationId, options = {}) => {
-  let id = getStoredApplicationId() || applicationId
-  let applicationMetricsUrl = `/stats/applications/${id}/summary.json?version=2.0`
-  let metrics = StatsMetrics.getMetrics(applicationMetricsUrl)
-  let csvLink = new StatsCSVLink({container: options.csvLinkContainer})
-  let methodsTable = new StatsMethodsTable({container: options.methodsTableContainer})
+  const id = getStoredApplicationId() || applicationId
+  const applicationMetricsUrl = `/stats/applications/${id}/summary.json?version=2.0`
+  const metrics = StatsMetrics.getMetrics(applicationMetricsUrl)
+  const csvLink = new StatsCSVLink({container: options.csvLinkContainer})
+  const methodsTable = new StatsMethodsTable({container: options.methodsTableContainer})
 
-  Stats({ChartManager: StatsApplicationChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector}).build({
-    id,
-    selectedState: {timezone: options.timezone, selectedApplicationId: id},
-    metrics,
-    widgets: [csvLink, methodsTable],
-    options
+  Stats({ChartManager: StatsApplicationChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector})
+    .build({
+      id,
+      selectedState: {timezone: options.timezone, selectedApplicationId: id},
+      metrics,
+      widgets: [csvLink, methodsTable],
+      options
 
-  })
+    })
 }
 
 export { statsApplication }
