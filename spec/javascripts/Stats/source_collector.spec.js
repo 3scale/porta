@@ -13,7 +13,7 @@ describe('StatsSourceCollector', () => {
   let sourceCollector = new StatsSourceCollector({id: 42, metrics: []})
 
   beforeEach((done) => {
-    spyOn(sourceCollector, 'getMetrics').and.callFake(() => {
+    spyOn(sourceCollector, '_fetchMetrics').and.callFake(() => {
       return Promise.resolve({ metrics: [
         { id: 1, systemName: 'awesome_metric' },
         { id: 2, systemName: 'amazing_metric' }
@@ -43,7 +43,8 @@ describe('StatsSourceCollector', () => {
 
   it('should get the correct sources', (done) => {
     spyOn(sourceCollector, 'buildSources')
-    sourceCollector.getSources({id: 42, selectedMetricName: 'awesome_metric', url: '/le/cool/url'}).then(_res => {
+    sourceCollector.getMetrics('/le/cool/url')
+    sourceCollector.getSources({id: 42, selectedMetricName: 'awesome_metric'}).then(_res => {
       expect(sourceCollector.buildSources).toHaveBeenCalledWith(42, [{id: 1, systemName: 'awesome_metric'}])
       done()
     })

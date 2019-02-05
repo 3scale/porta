@@ -6,7 +6,7 @@ import {StatsMetrics} from 'Stats/lib/metrics_list'
 export class StatsSourceCollector {
   constructor ({id, metrics}) {
     this.id = id
-    this.metrics = metrics
+    this.metricsPromise = metrics
   }
 
   static get Source () {
@@ -17,14 +17,23 @@ export class StatsSourceCollector {
     throw new Error('It should implement url getter in subclasses.')
   }
 
-  getMetrics (url) {
-    return StatsMetrics.getMetrics(url)
+  get metrics () {
+    return this.metricsPromise
   }
 
-  getSources ({id, selectedMetricName, url}) {
+  set metrics (metrics) {
+    this.metricsPromise = metrics
+  }
+
+  getMetrics (url) {
+    let metricsPromise = this._fetchMetrics(url)
+    this.metrics = metricsPromise
+    return metricsPromise
+  }
+
+  getSources ({id, selectedMetricName}) {
     let selectedId = id || this.id
-    let metrics = url ? this.getMetrics(url) : this.metrics
-    return this._resolveSources({id: selectedId, selectedMetricName, metrics})
+    return this._resolveSources({id: selectedId, selectedMetricName, metrics: this.metrics})
   }
 
   params ({dateRange, selectedMetricName}) {
@@ -40,6 +49,10 @@ export class StatsSourceCollector {
   buildSources (id, metrics) {
     const Source = Object.getPrototypeOf(this).constructor.Source
     return metrics.map(metricDetails => new Source({id, details: metricDetails}))
+  }
+
+  _fetchMetrics (url) {
+    return StatsMetrics.getMetrics(url)
   }
 
   _resolveSources ({id, selectedMetricName, metrics}) {

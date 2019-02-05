@@ -4,8 +4,9 @@ import {StatsChartManager} from 'Stats/lib/chart_manager'
 let statsState = jasmine.createSpyObj('statsState', ['setState', 'state'])
 let sources = jasmine.createSpyObj('sources', ['getSources'])
 let chart = jasmine.createSpyObj('chart', ['render', 'update'])
+let metricsSelector = jasmine.createSpyObj('metricsSelector', ['render'])
 
-let chartManager = new StatsChartManager({statsState, sources, chart})
+let chartManager = new StatsChartManager({statsState, metricsSelector, sources, chart})
 let data = {
   columns: [
     [
@@ -35,8 +36,9 @@ describe('ChartManager', () => {
     done()
   })
 
-  it('should render chart with all series', (done) => {
+  it('should render chart with metrics selector and all series', (done) => {
     chartManager.renderChart('#container').then(() => {
+      expect(chart.render).toHaveBeenCalled()
       expect(chart.render).toHaveBeenCalledWith({data, selectedSeries: ['Hits', 'Hots']})
       done()
     })
