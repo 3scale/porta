@@ -110,6 +110,19 @@ only-master-filter: &only-master-filter
     branches:
       only: master
 
+build-envs:
+  mysql: &build-envs-mysql
+    environment:
+      DATABASE_URL: mysql2://root:@127.0.0.1:3306/3scale_system_test
+
+  postgresql: &build-envs-postgresql
+    environment:
+      DATABASE_URL: postgresql://postgres:@127.0.0.1:5432/systemdb
+
+  oracle: &build-envs-oracle
+    environment:
+      DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
+
 ##################################### CIRCLECI COMMANDS ############################################
 
 commands: # reusable commands with parameters
@@ -171,7 +184,9 @@ commands: # reusable commands with parameters
       - run:
           name: Prepare database for tests
           command: |
-            echo "Running for database: $DB"
+            set +o pipefail
+            echo "Running for database: $(echo $DATABASE_URL | sed -e 's/\(oracle\|mysql\|postgresql\).*/\1/g')"
+            set -o pipefail
             bundle exec rake ci:db:ready db:create db:test:prepare
 
   rspec-tests:
@@ -278,8 +293,7 @@ executors:
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
-    environment:
-      DB: mysql
+    <<: *build-envs-mysql
 
   builder-with-postgres:
     resource_class: small
@@ -289,8 +303,7 @@ executors:
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
-    environment:
-      DB: postgresql
+    <<: *build-envs-postgresql
 
   builder-with-oracle:
     resource_class: large
@@ -300,8 +313,7 @@ executors:
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
-    environment:
-      DB: oracle
+    <<: *build-envs-oracle
 
 ##################################### CIRCLECI JOBS ############################################
 
@@ -504,6 +516,7 @@ jobs:
             - clone-oracle-libraries
 
   cucumber:
+    <<: *build-envs-mysql
     parallelism: 40
     resource_class: small
     docker:
@@ -512,12 +525,11 @@ jobs:
       - *mysql-container
       - *memcached-container
       - *redis-container
-    environment:
-      DB: mysql
     steps:
       - cucumber-tests
 
   cucumber-postgres:
+    <<: *build-envs-postgresql
     parallelism: 40
     resource_class: small
     docker:
@@ -526,12 +538,11 @@ jobs:
       - *postgres-container
       - *memcached-container
       - *redis-container
-    environment:
-      DB: postgresql
     steps:
       - cucumber-tests
 
   cucumber-oracle:
+    <<: *build-envs-oracle
     parallelism: 30
     resource_class: large
     docker:
@@ -540,8 +551,6 @@ jobs:
       - *oracle-db-container
       - *memcached-container
       - *redis-container
-    environment:
-      DB: oracle
     steps:
       - cucumber-tests:
           extra-deps:
