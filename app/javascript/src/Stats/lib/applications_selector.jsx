@@ -2,6 +2,8 @@
 import {StatsUI} from 'Stats/lib/ui'
 import $ from 'jquery'
 
+const DEFAULT_METRIC = 'hits'
+
 export class StatsApplicationsSelector extends StatsUI {
   constructor ({statsState, applicationGroups, container}) {
     super({statsState, container})
@@ -30,7 +32,7 @@ export class StatsApplicationsSelector extends StatsUI {
 
   selectApplication (event) {
     let applicationId = $(event.target).val()
-    this._setState({selectedApplicationId: applicationId}, ['redraw'])
+    this._setState({selectedApplicationId: applicationId, selectedMetricName: DEFAULT_METRIC}, ['applicationSelected'])
   }
 
   _removeOriginalSelector () {
@@ -49,7 +51,7 @@ export class StatsApplicationsSelector extends StatsUI {
             applicationGroups[serviceName].map(application =>
               [
                 <option value={application.id}
-                  selected={selectedApplicationId === application.id}
+                  selected={selectedApplicationId === Number.parseInt(application.id)}
                 >{application.name}</option>
               ]
             )
