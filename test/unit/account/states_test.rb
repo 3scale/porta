@@ -208,18 +208,18 @@ class Account::StatesTest < ActiveSupport::TestCase
     inactive_since_days = 5.days
 
     old_account_without_traffic = FactoryBot.create(:simple_account)
-    old_account_without_traffic.update_attribute(:created_at, MaxAllowedDaysLoader.load_account_inactivity.ago)
+    old_account_without_traffic.update_attribute(:created_at, inactive_since_days.ago)
 
     old_account_with_old_traffic = FactoryBot.create(:simple_account)
-    old_account_with_old_traffic.update_attribute(:created_at, MaxAllowedDaysLoader.load_account_inactivity.ago)
+    old_account_with_old_traffic.update_attribute(:created_at, inactive_since_days.ago)
     FactoryBot.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago)
 
     recent_account_without_traffic = FactoryBot.create(:simple_account)
-    recent_account_without_traffic.update_attribute(:created_at, (MaxAllowedDaysLoader.load_account_inactivity - 1.day).ago)
+    recent_account_without_traffic.update_attribute(:created_at, (inactive_since_days - 1.day).ago)
     FactoryBot.create(:cinstance, user_account: recent_account_without_traffic, first_daily_traffic_at: (inactive_since_days - 1.day).ago)
 
     recent_account_with_recent_traffic = FactoryBot.create(:simple_account)
-    recent_account_with_recent_traffic.update_attribute(:created_at, MaxAllowedDaysLoader.load_account_inactivity.ago)
+    recent_account_with_recent_traffic.update_attribute(:created_at, inactive_since_days.ago)
     FactoryBot.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: (inactive_since_days - 1.day).ago)
 
     assert_raise(ArgumentError) { Account.inactive_since.pluck(:id) }
