@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AccountSuspensionConfig
+module AccountDeletionConfig
   module_function
 
   def config
@@ -8,7 +8,7 @@ module AccountSuspensionConfig
   end
 
   def valid?
-    @valid ||= check_validity
+    instance_variable_defined?(:@valid) ? @valid : (@valid = check_validity)
   end
 
   def load_config
@@ -20,11 +20,8 @@ module AccountSuspensionConfig
 
   def check_validity
     valid = %i[account_suspension account_inactivity contract_unpaid_time].all? { |key| config.key?(key) }
-    inform_invalid_configuration if !valid && ThreeScale.config.ttl.account_deletion.present?
-    valid
-  end
-
-  def inform_invalid_configuration
+    return valid if valid || ThreeScale.config.ttl.account_deletion.blank?
     Rails.logger.warn '[WARNING] Can\'t enable "automatic inactive tenant account deletion". Please revise your config"'
+    valid
   end
 end
