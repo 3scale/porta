@@ -18,7 +18,7 @@
       tbody#sortable.ui-sortable
         - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
 
-        - @proxy.proxy_rules.each_with_index do |rule, i|
+        - @proxy.proxy_rules.ordered.each_with_index do |rule, i|
           tr.ui-sortable-item
             = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: i
         tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
