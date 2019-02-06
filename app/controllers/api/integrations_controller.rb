@@ -27,6 +27,7 @@ class Api::IntegrationsController < Api::BaseController
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
       flash[:notice] = flash_message(:update_success, environment: environment)
       update_onboarding_mapping_bubble
+      update_mapping_rules_position
 
       if @proxy.send_api_test_request!
         onboarding.bubble_update('api')
@@ -36,7 +37,7 @@ class Api::IntegrationsController < Api::BaseController
       render :edit
 
     else
-      attrs = params.fetch(:proxy, {}).fetch(:proxy_rules_attributes,{})
+      attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
 
       @marked_for_destroy = splitted[true]
@@ -146,6 +147,7 @@ class Api::IntegrationsController < Api::BaseController
     if @proxy.update_attributes(proxy_params)
       update_onboarding_mapping_bubble
       onboarding.bubble_update('api')
+      update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
       redirect_to edit_path
     else
@@ -199,6 +201,17 @@ class Api::IntegrationsController < Api::BaseController
   def authorize
     authorize! :manage, :plans
     authorize! :edit, @service
+  end
+
+  def update_mapping_rules_position
+    proxy_rules_attributes.each do |id, attrs|
+      position = attrs['position']
+      @proxy.proxy_rules.find(id).set_list_position(position) if position
+    end
+  end
+
+  def proxy_rules_attributes
+    params.fetch(:proxy, {}).fetch(:proxy_rules_attributes, {})
   end
 
   def proxy_params
