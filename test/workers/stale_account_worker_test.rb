@@ -34,7 +34,7 @@ class StaleAccountWorkerTest < ActiveSupport::TestCase
   end
 
   test 'it does not perform for unless it has the valid configuration' do
-    MaxAllowedDaysLoader.stubs(valid?: false)
+    AccountSuspensionConfig.stubs(valid?: false)
     StaleAccountWorker.new.perform
     (@accounts[:to_delete] + @accounts[:not_to_delete]).each { |account| refute account.reload.scheduled_for_deletion? }
   end

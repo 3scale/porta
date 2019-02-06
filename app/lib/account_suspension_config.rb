@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MaxAllowedDaysLoader
+module AccountSuspensionConfig
   module_function
 
   def config

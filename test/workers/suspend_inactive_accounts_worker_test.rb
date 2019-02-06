@@ -58,7 +58,7 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
   end
 
   test 'it does not perform for unless it has the valid configuration' do
-    MaxAllowedDaysLoader.stubs(valid?: false)
+    AccountSuspensionConfig.stubs(valid?: false)
     SuspendInactiveAccountsWorker.new.perform
     (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
   end
