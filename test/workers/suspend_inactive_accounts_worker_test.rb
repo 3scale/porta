@@ -57,8 +57,8 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     assert already_deleted.scheduled_for_deletion?
   end
 
-  test 'it does not perform for unless it has the valid configuration' do
-    AccountSuspensionConfig.stubs(valid?: false)
+  test 'it does not perform unless it has the valid configuration' do
+    AccountDeletionConfig.stubs(valid?: false)
     SuspendInactiveAccountsWorker.new.perform
     (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
   end
