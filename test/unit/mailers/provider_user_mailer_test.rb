@@ -90,7 +90,9 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
         assert_match %r{Dear #{user.informal_name}}, email_body
+        assert_match %r{Thank you for signing up to #{master_account.org_name}}, email_body
         assert_match %r{#{account.admin_domain}/p/activate/[a-z0-9]+}, email_body
+        assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
 
@@ -104,7 +106,9 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
         assert_match %r{#{user.informal_name}}, email_body
+        assert_match %r{A couple of days ago you signed up for #{master_account.org_name} to manage your API}, email_body
         assert_match %r{#{account.admin_domain}/p/activate/[a-z0-9]+}, email_body
+        assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
 
@@ -120,6 +124,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{Dear User}, email_body
         assert_match %r{https://#{account.domain}/p/login}, email_body
+        assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
 
@@ -135,6 +140,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_match %r{Dear #{user.display_name}}, email_body
         assert_match %r{You can reset your password by visiting the following link}, email_body
         assert_match %r{#{account.admin_domain}/p/password}, email_body
+        assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
 
