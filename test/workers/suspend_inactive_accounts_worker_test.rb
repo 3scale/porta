@@ -11,13 +11,13 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     @accounts = {to_suspend: [], not_to_suspend: []}
 
     old_tenant_with_old_traffic = FactoryBot.create(:simple_provider)
-    old_tenant_with_old_traffic.update_attribute(:created_at, account_inactivity.days.ago)
-    FactoryBot.create(:cinstance, user_account: old_tenant_with_old_traffic, first_daily_traffic_at: account_inactivity.days.ago)
+    old_tenant_with_old_traffic.update_attribute(:created_at, (account_inactivity + 1).days.ago)
+    FactoryBot.create(:cinstance, user_account: old_tenant_with_old_traffic, first_daily_traffic_at: (account_inactivity + 1).days.ago)
     @accounts[:to_suspend] << old_tenant_with_old_traffic
 
     old_buyer_with_old_traffic = FactoryBot.create(:simple_buyer)
-    old_buyer_with_old_traffic.update_attribute(:created_at, account_inactivity.days.ago)
-    FactoryBot.create(:cinstance, user_account: old_buyer_with_old_traffic, first_daily_traffic_at: account_inactivity.days.ago)
+    old_buyer_with_old_traffic.update_attribute(:created_at, (account_inactivity + 1).days.ago)
+    FactoryBot.create(:cinstance, user_account: old_buyer_with_old_traffic, first_daily_traffic_at: (account_inactivity + 1).days.ago)
     @accounts[:not_to_suspend] << old_buyer_with_old_traffic
 
     recent_tenant_without_traffic = FactoryBot.create(:simple_provider)
@@ -25,15 +25,15 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     @accounts[:not_to_suspend] << recent_tenant_without_traffic
 
     recent_tenant_with_recent_traffic = FactoryBot.create(:simple_provider)
-    recent_tenant_with_recent_traffic.update_attribute(:created_at, account_inactivity.days.ago)
+    recent_tenant_with_recent_traffic.update_attribute(:created_at, (account_inactivity + 1).days.ago)
     FactoryBot.create(:cinstance, user_account: recent_tenant_with_recent_traffic, first_daily_traffic_at:  (account_inactivity - 1).days.ago)
     @accounts[:not_to_suspend] << recent_tenant_with_recent_traffic
 
     old_tenant_without_traffic = FactoryBot.create(:simple_provider)
-    old_tenant_without_traffic.update_attribute(:created_at, account_inactivity.days.ago)
+    old_tenant_without_traffic.update_attribute(:created_at, (account_inactivity + 1).days.ago)
     @accounts[:to_suspend] << old_tenant_without_traffic
 
-    master_account.update_attribute(:created_at, account_inactivity.days.ago)
+    master_account.update_attribute(:created_at, (account_inactivity + 1).days.ago)
     @accounts[:not_to_suspend] << master_account
   end
 
