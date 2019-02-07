@@ -6,7 +6,7 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
   setup do
     account_inactivity = 50
     config = {'account_suspension' => 30, 'account_inactivity' => account_inactivity, 'contract_unpaid_time' => 70}
-    ThreeScale.config.ttl.stubs(:account_deletion).returns(config)
+    ThreeScale.config.features.stubs(:account_deletion).returns(config)
 
     @accounts = {to_suspend: [], not_to_suspend: []}
 

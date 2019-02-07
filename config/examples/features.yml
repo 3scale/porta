@@ -1,4 +1,4 @@
-ttl: &default
+features: &default
   account_deletion:
     account_inactivity: 365
     account_suspension: 90
