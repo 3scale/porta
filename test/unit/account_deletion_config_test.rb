@@ -8,6 +8,10 @@ class AccountDeletionConfigTest < ActiveSupport::TestCase
     @valid_config = {'account_suspension' => 30, 'account_inactivity' => 50, 'contract_unpaid_time' => 70}
   end
 
+  def teardown
+    %i[@config @valid].each { |variable| AccountDeletionConfig.remove_instance_variable(variable) if AccountDeletionConfig.instance_variable_defined?(variable) }
+  end
+
   attr_reader :valid_config
 
   test 'loads and fetches all the values' do
