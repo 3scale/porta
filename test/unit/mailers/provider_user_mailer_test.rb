@@ -39,6 +39,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
         assert_match %r{#{user.informal_name}}, email_body
+        assert_match %r{A couple of days ago you signed up for Red Hat 3scale to manage your API}, email_body
         assert_match %r{#{account.admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
       end
