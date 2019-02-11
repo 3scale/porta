@@ -38,6 +38,46 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     assert_not_nil flash[:error]
   end
 
+  def test_update_proxy_rule_position
+    Proxy.any_instance.stubs(:deploy).returns(true)
+    Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
+
+    service = @provider.services.first
+    service.proxy.proxy_rules.destroy_all
+    proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: service.proxy)
+    proxy_rule_2 = FactoryBot.create(:proxy_rule, proxy: service.proxy)
+
+    # sending both proxy rules
+    assert_not_equal 1, proxy_rule_2.position
+    proxy_rules_attributes = {
+      proxy_rules_attributes: {
+        proxy_rule_1.id => { id: proxy_rule_1.id, position: 2 },
+        proxy_rule_2.id => { id: proxy_rule_2.id, position: 1 }
+      }
+    }
+    put admin_service_integration_path(service_id: service), proxy: proxy_rules_attributes
+    assert_response :redirect
+
+    proxy_rule_1.reload
+    proxy_rule_2.reload
+    assert_equal 1, proxy_rule_2.position
+    assert_equal 2, proxy_rule_1.position
+
+    # sending just one proxy rule
+    proxy_rules_attributes = {
+      proxy_rules_attributes: {
+        proxy_rule_1.id => { id: proxy_rule_1.id, position: 1 }
+      }
+    }
+    put admin_service_integration_path(service_id: service), proxy: proxy_rules_attributes
+    assert_response :redirect
+
+    proxy_rule_1.reload
+    proxy_rule_2.reload
+    assert_equal 2, proxy_rule_2.position
+    assert_equal 1, proxy_rule_1.position
+  end
+
   test 'deploy is called when saving proxy info' do
     Account.any_instance.stubs(:provider_can_use?).returns(false)
 
