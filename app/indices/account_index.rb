@@ -17,7 +17,7 @@ ThinkingSphinx::Index.define(:account,
   set_property field_weights: { name: 2 }
 
   if System::Database.mysql? # rubocop:disable Style/IfUnlessModifier
-    set_property group_concat_max_len: 32_000
+    set_property group_concat_max_len: (32_000 - 1)
   end
 
   has :provider_account_id
