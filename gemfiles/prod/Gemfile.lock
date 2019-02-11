@@ -171,7 +171,7 @@ GEM
       tzinfo (~> 1.1)
     acts-as-taggable-on (4.0.0)
       activerecord (>= 4.0)
-    acts_as_list (0.7.6)
+    acts_as_list (0.8.2)
       activerecord (>= 3.0)
     acts_as_tree (1.4.0)
       activerecord (>= 3.0.0)
@@ -458,7 +458,7 @@ GEM
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.11.0)
-    newrelic_rpm (5.6.0.349)
+    newrelic_rpm (5.7.0.350)
     nokogiri (1.9.1)
       mini_portile2 (~> 2.4.0)
     non-stupid-digest-assets (1.0.9)
@@ -821,7 +821,7 @@ DEPENDENCIES
   activemerchant (~> 1.77.0)
   activerecord-oracle_enhanced-adapter (~> 1.6.0)
   acts-as-taggable-on (~> 4.0)
-  acts_as_list (~> 0.7.6)
+  acts_as_list (~> 0.8.2)
   acts_as_tree
   addressable
   after_commit_queue (~> 1.1.0)
