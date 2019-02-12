@@ -2,6 +2,7 @@
 
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+  include ResetTenantId
 
 
   sifter(:month_number) do |column|

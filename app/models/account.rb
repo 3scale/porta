@@ -594,5 +594,8 @@ class Account < ApplicationRecord
     errors.add :master, 'can be only one' if scope.exists?(master: true)
   end
 
-  protected
+  define_reset_tenant_id do
+    updates(:buyers_not_master, collection: -> { buyers.not_master } , with: :provider_account_id)
+    updates(:providers, with: :id)
+  end
 end

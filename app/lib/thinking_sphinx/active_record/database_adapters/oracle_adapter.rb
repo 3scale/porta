@@ -45,4 +45,5 @@ class ThinkingSphinx::ActiveRecord::DatabaseAdapters::OracleAdapter <
   def utf8_query_pre
     []
   end
+
 end
