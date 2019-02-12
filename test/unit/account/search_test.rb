@@ -113,10 +113,10 @@ class Account::SearchTest < ActiveSupport::TestCase
     assert_equal 0, result.size
   end
 
-  test 'search user_key without keyword with many records is always indexes and found' do
+  test 'search user_key without keyword with many records is always indexed and found' do
     service = FactoryBot.create(:simple_service)
     buyer = FactoryBot.create(:simple_buyer)
-    FactoryBot.create_list(:application_plan, 70, issuer: service).each do |plan|
+    FactoryBot.create_list(:application_plan, 5, issuer: service).each do |plan|
       plan.create_contract_with!(buyer)
     end
 
