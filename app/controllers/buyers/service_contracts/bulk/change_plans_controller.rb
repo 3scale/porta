@@ -14,7 +14,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
     @errors = []
     @service_contracts.each do |contract|
       unless contract.change_plan(@plan)
-        @errors << application
+        @errors << contract
       end
     end
 
