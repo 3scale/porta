@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ThinkingSphinx::Index.define(:account,
                              with: :active_record,
                              delta: ThinkingSphinx::Deltas::DatetimeDelta,
@@ -13,6 +15,10 @@ ThinkingSphinx::Index.define(:account,
   indexes users.id,                            as: :user_id
 
   set_property field_weights: { name: 2 }
+
+  if System::Database.mysql? # rubocop:disable Style/IfUnlessModifier
+    set_property group_concat_max_len: (32_000 - 1)
+  end
 
   has :provider_account_id
   has :tenant_id
