@@ -1,6 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
 class Account::SearchTest < ActiveSupport::TestCase
+  disable_transactional_fixtures!
+
   test 'search without query returns all accounts by default, not using sphinx' do
     pending  = FactoryBot.create(:pending_account)
     approved = FactoryBot.create(:pending_account).tap(&:approve!)
@@ -109,6 +111,22 @@ class Account::SearchTest < ActiveSupport::TestCase
 
     result = provider.buyer_accounts.scope_search(:query => 'user_key: wrongkey')
     assert_equal 0, result.size
+  end
+
+  test 'search user_key without keyword with many records is always indexed and found' do
+    service = FactoryBot.create(:simple_service)
+    buyer = FactoryBot.create(:simple_buyer)
+    FactoryBot.create_list(:application_plan, 5, issuer: service).each do |plan|
+      plan.create_contract_with!(buyer)
+    end
+
+    ThinkingSphinx::Test.run do
+      ThinkingSphinx::Test.index
+
+      buyer.bought_cinstances.pluck(:user_key).each do |user_key|
+        assert_equal [buyer.id], Account.scope_search(query: user_key).pluck(:id)
+      end
+    end
   end
 
   # For mysterious reason, the thing didn't use to work when indifferent hash was passed in.
