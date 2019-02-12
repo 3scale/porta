@@ -57,10 +57,15 @@ document.addEventListener("DOMContentLoaded", function(e) {
     opt.text = val;
     return selectElem.appendChild(opt);
   };
+  
+  function safe_fetch(url, init) {
+    const tempRequest = new Request(url, init);
+    return fetch(tempRequest, { credentials: "same-origin" });
+  }
 
   function fetchData(url, type) {
     if ('fetch' in window) {
-      fetch(url)
+      safe_fetch(url)
       .then(function(response) {
           return response.json();
       })
