@@ -19,6 +19,15 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     policy_params[:policy].each { |key, value| assert_equal(value, policy.public_send(key)) }
   end
 
+  test 'POST create responds with an error message when it is incorrect' do
+    FactoryBot.create(:policy, policy_params[:policy].merge(account: @provider))
+    assert_no_difference(@provider.policies.method(:count)) do
+      post admin_api_registry_policies_path(policy_params)
+    end
+    assert_response :unprocessable_entity
+    assert_equal ['has already been taken'], JSON.parse(response.body).dig('errors', 'version')
+  end
+
   def policy_params
     { policy: {name: 'my-name', version: 'my-version', schema: '{"foo": "bar"}'}, access_token: @access_token.value }
   end
