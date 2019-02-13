@@ -688,6 +688,10 @@ without fake Core server your after commit callbacks will crash and you might ge
         resource :failures, controller: 'web_hooks_failures', only: [:show, :destroy]
       end
       resource :settings, only: [:show, :update]
+
+      namespace :registry, defaults: { format: :json } do
+        resources :policies, only: :create
+      end
     end
   end
 
