@@ -3,6 +3,11 @@
 require 'test_helper'
 
 class PolicyTest < ActiveSupport::TestCase
+  should validate_presence_of :name
+  should validate_presence_of :version
+  should validate_presence_of :account_id
+  should validate_presence_of :schema
+
   test 'validates uniqueness of [account_id, name, version]' do
     persisted_policy = FactoryBot.create(:policy)
 
