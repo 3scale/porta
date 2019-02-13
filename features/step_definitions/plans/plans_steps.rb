@@ -28,8 +28,8 @@ Given(/^the provider has a (default )?free application plan(?: "([^\"]*)")?$/) d
   @free_application_plan ||= create_plan :application, name: plan_name || 'Copper', issuer: @service, published: true, default: default.present?
 end
 
-Given(/^the provider has a(nother)? (default )?paid (application|service|account) plan(?: "([^\"]*)")?(?: of (\d+) per month)?$/) do |other, default, plan_type, plan_name, cost|
-  plan_type_name = (other ? 'other_' : '') + plan_type
+Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (application|service|account) plan(?: "([^\"]*)")?(?: of (\d+) per month)?$/) do |other, default, plan_type, plan_name, cost|
+  plan_type_name = (other ? "#{other.strip}_" : '') + plan_type
   return instance_variable_get("@paid_#{plan_type_name}_plan") if instance_variable_defined?("@paid_#{plan_type_name}_plan")
   default_plan_names = {
     'application' => 'Gold',
@@ -45,7 +45,6 @@ Given(/^the provider has a(nother)? (default )?paid (application|service|account
   plan = create_plan plan_type.to_sym, name: plan_name, issuer: @service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
-
 
 Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^\"]*)" (?:of|for) ((?:provider|service) "[^\"]*")(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, issuer, cost|
   type ||= :application
