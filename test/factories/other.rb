@@ -104,4 +104,11 @@ FactoryBot.define do
     association(:authentication_provider, factory: :authentication_provider)
     association(:user, factory: :user_with_account)
   end
+
+  factory(:policy) do
+    sequence(:name) { |n| "name #{n}" }
+    sequence(:version) { |n| "version #{n}" }
+    schema { {foo: 'bar'}.to_json }
+    association(:account, factory: :simple_provider)
+  end
 end
