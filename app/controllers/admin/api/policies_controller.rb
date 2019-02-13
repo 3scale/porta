@@ -11,8 +11,8 @@ class Admin::Api::PoliciesController < Admin::Api::BaseController
   #
   ##~ op             = e.operations.add
   ##~ op.httpMethod  = "GET"
-  ##~ op.summary     = "APIcast Policies Registry"
-  ##~ op.description = "Returns APIcast Policies Registry"
+  ##~ op.summary     = "APIcast Policy Registry"
+  ##~ op.description = "Returns APIcast Policy Registry"
   ##~ op.group = "apicast_policies"
   #
   ##~ op.parameters.add @parameter_access_token
