@@ -824,7 +824,7 @@ ActiveRecord::Schema.define(version: 20190225170501) do
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id"
 
   create_table "oidc_configurations", force: :cascade do |t|
-    t.text   "config"
+    t.text     "config"
     t.string   "oidc_configurable_type",                null: false
     t.integer  "oidc_configurable_id",   precision: 38, null: false
     t.integer  "tenant_id",              precision: 38
@@ -944,6 +944,18 @@ ActiveRecord::Schema.define(version: 20190225170501) do
   add_index "plans", ["cost_per_month", "setup_fee"], name: "index_plans_on_cost_per_month_and_setup_fee"
   add_index "plans", ["issuer_id", "issuer_type", "type", "original_id"], name: "idx_plans_issuer_type_original"
   add_index "plans", ["issuer_id"], name: "fk_contracts_service_id"
+
+  create_table "policies", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.string   "version",                   null: false
+    t.binary   "schema",                    null: false
+    t.integer  "account_id", precision: 38, null: false
+    t.integer  "tenant_id",  precision: 38
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "policies", ["account_id"], name: "index_policies_on_account_id"
 
   create_table "posts", force: :cascade do |t|
     t.integer  "user_id",                    precision: 38
@@ -1450,6 +1462,7 @@ ActiveRecord::Schema.define(version: 20190225170501) do
 
   add_foreign_key "api_docs_services", "services"
   add_foreign_key "payment_details", "accounts", on_delete: :cascade
+  add_foreign_key "policies", "accounts", on_delete: :cascade
   add_foreign_key "provided_access_tokens", "users"
   add_foreign_key "proxy_configs", "proxies", on_delete: :cascade
   add_foreign_key "proxy_configs", "users", on_delete: :nullify
