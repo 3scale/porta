@@ -100,6 +100,10 @@ Then /^(provider "[^"]*") time zone should be "([^"]*)"$/ do |provider, time_zon
   provider.timezone.should == time_zone
 end
 
+Then /^the provider time zone is "([^"]*)"$/ do |time_zone|
+  @provider.update_column(:timezone, time_zone)
+end
+
 Then /^(account "[^"]*") should be (provider|buyer|master)$/ do |account,type|
   assert account.send("#{type}?"), "Account '#{account.org_name}' is not a #{type}"
 end

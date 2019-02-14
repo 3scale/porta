@@ -86,3 +86,19 @@ Feature: Variable cost on automatic billing
       | name                        | quantity |  cost     |
       | Hits                        |      500 |    50.00  |
       | Total cost                  |          |    50.00  |
+
+  Scenario: Variable cost in automated billing is always UTC
+    Given the provider time zone is "Pacific Time (US & Canada)"
+    And the buyer signed up for plan "VariableOnly" on 31st January 2019 22:00 PST
+    And the buyer makes a service transactions with:
+      | Metric   | Value  |
+      | hits     |    400 |
+    And time flies to 1st February 2019 12:00 PST
+    And the buyer makes a service transactions with:
+      | Metric   | Value  |
+      | hits     |    500 |
+    When time flies to 3rd March 2019
+    Then the buyer should have following line items for "February, 2019" invoice:
+      | name                        | quantity |  cost     |
+      | Hits                        |      900 |    90.00  |
+      | Total cost                  |          |    90.00  |
