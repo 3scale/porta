@@ -66,17 +66,6 @@ When /^I change application plan to "([^"]*)"$/ do |name|
   current_account.bought_cinstance.change_plan!(plan)
 end
 
-When /^I change application plan to "([^"]*)" on (.*)$/ do |name,date|
-  # this ensures billing actions are run
-  step %(time flies to #{date})
-
-  # and then we freeze the time
-  Timecop.freeze(Time.zone.parse(date)) do
-    step %(I change application plan to "#{name}")
-  end
-end
-
-
 Then /^(plan "[^\"]*") should be published$/ do |plan|
   assert plan.published?
 end
