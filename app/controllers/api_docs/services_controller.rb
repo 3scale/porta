@@ -94,7 +94,7 @@ class ApiDocs::ServicesController < FrontendController
     end
   end
 
-  API_SYSTEM_NAMES = %i[service_management_api account_management_api analytics_api billing_api master_api].freeze
+  API_SYSTEM_NAMES = %i[service_management_api account_management_api analytics_api billing_api master_api policy_registry_api].freeze
 
   APIS = API_SYSTEM_NAMES.map do |system_name|
     {

@@ -1,6 +1,6 @@
 class AdminSection
 
-  PERMISSIONS = %I[ portal finance settings partners monitoring plans ].freeze
+  PERMISSIONS = %I[ portal finance settings partners monitoring plans policy_registry ].freeze
 
   def self.permissions
     if ThreeScale.master_on_premises?

@@ -6,7 +6,7 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
   def setup
     @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
-    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
+    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry], permission: 'rw')
   end
 
   test 'POST create with valid params persists with those values' do
@@ -21,14 +21,54 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
 
   test 'POST create responds with an error message when it is incorrect' do
     FactoryBot.create(:policy, policy_params[:policy].merge(account: @provider))
-    assert_no_difference(@provider.policies.method(:count)) do
+    assert_no_difference(Policy.method(:count)) do
       post admin_api_registry_policies_path(policy_params)
     end
     assert_response :unprocessable_entity
     assert_equal ['has already been taken'], JSON.parse(response.body).dig('errors', 'version')
   end
 
-  def policy_params
-    { policy: {name: 'my-name', version: 'my-version', schema: '{"foo": "bar"}'}, access_token: @access_token.value }
+  test 'POST create returns forbidden when wrong scope' do
+    token_admin_with_wrong_scope = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    assert_no_difference(Policy.method(:count)) do
+      post admin_api_registry_policies_path(policy_params(token_admin_with_wrong_scope))
+    end
+    assert_response :forbidden
+  end
+
+  test 'POST create returns forbidden when no permission' do
+    member_user = FactoryBot.create(:member, account: @provider)
+
+    token_member_with_right_scope_but_no_permission = FactoryBot.create(:access_token, owner: member_user, scopes: %w[policy_registry]).value
+    assert_no_difference(Policy.method(:count)) do
+      post admin_api_registry_policies_path(policy_params(token_member_with_right_scope_but_no_permission))
+    end
+    assert_response :forbidden
+  end
+
+  test 'POST create returns forbidden when wrong permission' do
+    member_user = FactoryBot.create(:member, account: @provider)
+    member_user.member_permissions.create!(admin_section: :partners) # not policy_registry
+
+    token_member_with_wrong_scope = FactoryBot.create(:access_token, owner: member_user, scopes: %w[account_management]).value
+    assert_no_difference(Policy.method(:count)) do
+      post admin_api_registry_policies_path(policy_params(token_member_with_wrong_scope))
+    end
+    assert_response :forbidden
+  end
+
+  test 'POST create returns created when correct scope and permission' do
+    member_user = FactoryBot.create(:member, account: @provider)
+    member_user.member_permissions.create!(admin_section: :policy_registry)
+
+    token_member_with_right_scope = FactoryBot.create(:access_token, owner: member_user, scopes: %w[policy_registry]).value
+    assert_difference(@provider.policies.method(:count), 1) do
+      post admin_api_registry_policies_path(policy_params(token_member_with_right_scope))
+    end
+    assert_response :created
+  end
+
+  def policy_params(token = @access_token.value)
+    { policy: {name: 'my-name', version: 'my-version', schema: '{"foo": "bar"}'}, access_token: token }
   end
 end
