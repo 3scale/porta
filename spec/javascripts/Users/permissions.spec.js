@@ -83,6 +83,7 @@ describe('FeatureAccessInput', function () {
     expect(list(['services'])).toHaveClass(noServicePermissionsGranted)
     expect(list(['finance'])).toHaveClass(noServicePermissionsGranted)
     expect(list(['partners'])).not.toHaveClass(noServicePermissionsGranted)
+    expect(list(['policy_registry'])).toHaveClass(noServicePermissionsGranted)
   })
 
   it('renders children', function () {
@@ -116,12 +117,15 @@ describe('FeatureAccess', function () {
 
   it('has correct class name', function () {
     let node = render(<FeatureAccess value='partners'/>)
-
     expect(node).toHaveClass('FeatureAccessList-item--partners')
     expect(node).toContainElement('input.user_member_permission_ids--service')
 
     node = render(<FeatureAccess value='portal'/>)
     expect(node).toHaveClass('FeatureAccessList-item--portal')
+    expect(node).not.toContainElement('input.user_member_permission_ids--service')
+
+    node = render(<FeatureAccess value='policy_registry'/>)
+    expect(node).toHaveClass('FeatureAccessList-item--policy_registry')
     expect(node).not.toContainElement('input.user_member_permission_ids--service')
   })
 
@@ -223,6 +227,7 @@ describe('ServiceAccessList', function () {
     expect(list(['services'])).toHaveClass(noServicePermissionsGranted)
     expect(list(['finance'])).toHaveClass(noServicePermissionsGranted)
     expect(list(['partners'])).not.toHaveClass(noServicePermissionsGranted)
+    expect(list(['policy_registry'])).toHaveClass(noServicePermissionsGranted)
   })
 
   it('renders children', function () {

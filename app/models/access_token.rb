@@ -11,8 +11,8 @@ class AccessToken < ApplicationRecord
 
   scope :by_name, ->(name) { name.present? ? where("name LIKE ?", "%#{name}%") : all }
 
-  PERMISSIONS = options_to_hash(%w(ro rw)).freeze
-  SCOPES      = options_to_hash(%w(cms finance account_management stats)).freeze
+  PERMISSIONS = options_to_hash(%w[ro rw]).freeze
+  SCOPES      = options_to_hash(%w[cms finance account_management stats policy_registry]).freeze
 
   Scope = Struct.new(:key, :value) do
 

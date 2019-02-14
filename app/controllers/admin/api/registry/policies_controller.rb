@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
+  self.access_token_scopes = :policy_registry
+
   clear_respond_to
   respond_to :json
 
@@ -8,7 +10,8 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
 
 
   # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
+  ##~ sapi = source2swagger.namespace("Policy Registry API")
+  ##~ sapi.basePath = @base_path
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/registry/policies.json"
   ##~ e.responseClass = "policy"

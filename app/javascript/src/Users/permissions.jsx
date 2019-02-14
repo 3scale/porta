@@ -228,7 +228,8 @@ export const Form = { // eslint-disable-line no-unused-vars
       settings: 'Settings',
       partners: 'Developer Accounts -- Applications',
       monitoring: 'Analytics',
-      plans: 'Integration & Application Plans'
+      plans: 'Integration & Application Plans',
+      policy_registry: 'Policy Registry'
     }
     return (
       <Inputs name='Administrative'>
