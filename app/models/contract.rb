@@ -137,8 +137,8 @@ class Contract < ApplicationRecord
 
   # Using `read_attribute` because the getter method is overloaded
   # Meaning changing plan the same day of the creation of the contract
-  # Useful for prepaid billing see PrepaidBillingStrategy#bill_plan_change_safely
-  def not_billed_yet?
+  # Useful for prepaid billing. See PrepaidBillingStrategy#bill_plan_change_safely
+  def never_billed?
     self[:paid_until].blank?
   end
 
