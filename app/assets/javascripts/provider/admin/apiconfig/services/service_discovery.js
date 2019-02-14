@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
     opt.text = val;
     return selectElem.appendChild(opt);
   };
-  
+
   function fetchData(url, type) {
     if ('fetch' in window) {
       fetch(url, { credentials: 'same-origin' })
