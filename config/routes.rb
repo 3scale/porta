@@ -229,6 +229,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :api_docs, :only => [:show]
       resource :liquid_docs, :only => [:show]
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]
+      resource :custom_policies, :only => [ :show ]
       resources :destroys, :only => [:index]
 
       namespace :onboarding do
