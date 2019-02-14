@@ -40,21 +40,21 @@
     function injectAuthParams(spec) {
       var version = <%= @api_docs_service.service.proxy.authentication_method %>;
       var authParams;
-      
+
       switch(version) {
         case 2:
           authParams = [{
-            name: 'x-3scale-auth-app-key',
+            name: '<%= @api_docs_service.service.proxy.auth_app_key %>',
             in: 'header',
             description: 'App Key authentication parameter',
-            'x-data-three-scale-name': 'app_key',
+            'x-data-threescale-name': 'app_keys',
             required: true,
             type: 'string'
           },{
-            name: 'x-3scale-auth-app-id',
+            name: '<%= @api_docs_service.service.proxy.auth_app_id %>',
             in: 'header',
             description: 'App ID authentication parameter',
-            'x-data-three-scale-name': 'app_id',
+            'x-data-threescale-name': 'app_ids',
             required: true,
             type: 'string'
             }]
@@ -62,10 +62,10 @@
         
         case 1:   
           authParams = [{
-            name: 'x-3scale-auth-user-key',
+            name: '<%= @api_docs_service.service.proxy.auth_user_key %>',
             in: 'header',
             description: 'User Key authentication parameter',
-            'x-data-three-scale-name': 'user_key',
+            'x-data-threescale-name': 'user_keys',
             required: true,
             type: 'string'
           }];
@@ -78,7 +78,11 @@
       for (var p in spec.paths) {
         var path = spec.paths[p];
         for (var verb in path) {
-          Array.prototype.push.apply(path[verb].parameters, authParams);
+          authParams.forEach(function(param) {
+            if (!path[verb].parameters.find(p => p.name === param.name)) {
+              path[verb].parameters.push(param);
+            }
+          })
         }
       }
     }

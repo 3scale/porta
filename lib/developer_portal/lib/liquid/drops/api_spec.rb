@@ -22,7 +22,7 @@ module Liquid
         Drops::Service.new(service)
       end
 
-      desc 'Returns the public production host endpoint if it linked to a service `nil` otherwise'
+      desc 'Returns the public production host endpoint if it is linked to a service or `nil` otherwise.'
       def host_with_port
         @spec.host_with_port
       end
