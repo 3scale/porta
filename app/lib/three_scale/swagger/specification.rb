@@ -52,7 +52,7 @@ module ThreeScale
         JSON_SCHEMA = {'$ref' => 'http://swagger.io/v2/schema.json#'}.freeze
 
         def validate!
-          JSON::Validator.fully_validate(JSON_SCHEMA, @doc).each do |error|
+          JSONValidator.fully_validate(JSON_SCHEMA, @doc).each do |error|
             @errors.add(:base, error)
           end
         end
@@ -69,7 +69,7 @@ module ThreeScale
         JSON_SCHEMA = {'$ref' => 'http://swagger-api.github.io/schemas/v1.2/apiDeclaration.json#'}.freeze
 
         def validate!
-          JSON::Validator.fully_validate(JSON_SCHEMA, @doc).each do |error|
+          JSONValidator.fully_validate(JSON_SCHEMA, @doc).each do |error|
             @errors.add(:base, error)
           end
         end
@@ -168,8 +168,7 @@ module ThreeScale
       end
 
       def self.setup_json_validator
-        # Disable JSON::Validator access to internet and fs
-        JSON::Validator.schema_reader = JSON::Schema::Reader.new(accept_uri: false, accept_file: false)
+        JSONValidator.setup
 
         # Registers all the schemas in app/lib/three_scale/swagger/schemas
         general = Dir[Rails.root.join("app/lib/three_scale/swagger/schemas/*.schema.json")]
@@ -177,7 +176,7 @@ module ThreeScale
         (general + swagger12).each do | file |
           begin
             schema = JSON.parse(File.read(file))
-            JSON::Validator.add_schema(JSON::Schema.new(schema, schema["id"]))
+            JSONValidator.add_schema(JSON::Schema.new(schema, schema["id"]))
           rescue StandardError => error
             Rails.logger.info("** Failed to register schema: #{file} -- #{error}")
           end

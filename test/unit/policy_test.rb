@@ -24,4 +24,34 @@ class PolicyTest < ActiveSupport::TestCase
     different_provider_policy = FactoryBot.build(:policy, name: persisted_policy.name, version: persisted_policy.version)
     assert different_provider_policy.save
   end
+
+  test 'validates that account is a tenant' do
+    policy = FactoryBot.build(:policy, account: nil)
+
+    policy.account = FactoryBot.build(:simple_buyer)
+    refute policy.valid?
+    assert_equal ['must be a tenant'], policy.errors[:account]
+
+    policy.account = master_account
+    refute policy.valid?
+    assert_equal ['must be a tenant'], policy.errors[:account]
+
+    policy = policy.account = FactoryBot.build(:simple_provider)
+    assert policy.valid?
+    assert_empty policy.errors[:account]
+  end
+
+  test 'validates schema' do
+    policy = FactoryBot.build(:policy, schema: 'invalid JSON')
+    refute policy.valid?
+    assert_equal ['Invalid JSON'], policy.errors[:schema]
+
+    policy.schema = '{"foo": "bar"}'
+    refute policy.valid?
+    assert_includes policy.errors[:schema], 'The property \'#/\' did not contain a required property of \'name\' in schema http://apicast.io/policy-v1/schema#'
+
+    policy.schema = file_fixture('policies/apicast-policy.json').read
+    assert policy.valid?
+    assert_empty policy.errors[:schema]
+  end
 end
