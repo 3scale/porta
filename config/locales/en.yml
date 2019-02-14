@@ -791,6 +791,8 @@ en:
           invalid_json_body_and_query_paramtypes: "JSON Spec can not have paramType='body' and paramType='query' on the same method."
           invalid_swagger: "JSON Spec is invalid"
           invalid_json: "Invalid JSON"
+        three_scale/policies/specification:
+          invalid_json: "Invalid JSON"
 
   activerecord:
     errors:
@@ -823,6 +825,10 @@ en:
           attributes:
             base:
               all_periods_used: "Metric cannot be disabled. Please contact support."
+        policy:
+          attributes:
+            account:
+              not_tenant: 'must be a tenant'
         proxy_rule:
           attributes:
             pattern:

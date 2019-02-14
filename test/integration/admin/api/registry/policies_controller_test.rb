@@ -69,6 +69,7 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
   end
 
   def policy_params(token = @access_token.value)
-    { policy: {name: 'my-name', version: 'my-version', schema: '{"foo": "bar"}'}, access_token: token }
+    @policy_attributes ||= FactoryBot.build(:policy).attributes.symbolize_keys.slice(:name, :version, :schema)
+    { policy: @policy_attributes, access_token: token }
   end
 end
