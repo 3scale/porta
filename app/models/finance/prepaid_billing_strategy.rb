@@ -119,7 +119,7 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
   # Upgrade Plan A to Plan B|   100
   # Total                   |   100
   def bill_plan_change(contract, period)
-    if contract.not_billed_yet?
+    if contract.never_billed?
       bill_plan_change_for_unbilled_contract(contract, period)
     else
       bill_plan_change_for_billed_contract(contract, period)
