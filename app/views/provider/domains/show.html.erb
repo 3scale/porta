@@ -5,13 +5,14 @@
         <li class="string">
           <%= label_tag :email, "Email address" %>
           <%= text_field_tag :email, params[:email], :class => :text, :placeholder => 'Your Email Address' %>
-          <%= submit_tag "Recover domain", :class => 'recovery' %>
-
-          <p class="inline-hints">
-            Please enter the email address you used to sign up to this site.
-            We'll email your login urls.
-          </p>
         </li>
+        <li class="commit">
+          <%= submit_tag "Recover domain", :class => 'important-button recovery' %>
+        </li>
+        <p class="inline-hints">
+          Please enter the email address you used to sign up to this site.
+          We'll email your login urls.
+        </p>
       </ol>
     </fieldset>
   <% end %>
