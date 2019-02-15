@@ -69,7 +69,7 @@ class ProxyTestService
   end
 
   def disabled?
-    !proxy&.deployable?
+    proxy&.service_mesh_integration? || !proxy&.deployable?
   end
 
   def credentials

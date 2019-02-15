@@ -463,7 +463,11 @@ class Proxy < ApplicationRecord
   end
 
   def deployable?
-    Service::DeploymentOption.gateways.include?(deployment_option)
+    Service::DeploymentOption.gateways.include?(deployment_option) || service_mesh_integration?
+  end
+
+  def service_mesh_integration?
+    Service::DeploymentOption.service_mesh.include?(deployment_option)
   end
 
   protected
@@ -550,7 +554,17 @@ class Proxy < ApplicationRecord
 
   def deploy
     return true unless deployable?
-    apicast_configuration_driven ? deploy_v2 : deploy_v1
+    # service mesh integration uses production environment directly
+    if service_mesh_integration?
+      deploy_service_mesh_integration
+    else
+      apicast_configuration_driven ? deploy_v2 : deploy_v1
+    end
+  end
+
+  def deploy_service_mesh_integration
+    return unless provider_can_use?(:service_mesh_integration)
+    deploy_v2 && deploy_production_v2
   end
 
   def deploy_v1
