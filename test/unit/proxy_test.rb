@@ -128,6 +128,7 @@ class ProxyTest < ActiveSupport::TestCase
     def test_deployable
       assert_predicate Service.new(deployment_option: 'hosted').build_proxy, :deployable?
       assert_predicate Service.new(deployment_option: 'self_managed').build_proxy, :deployable?
+      assert_predicate Service.new(deployment_option: 'service_mesh_istio').build_proxy, :deployable?
 
       refute_predicate Service.new(deployment_option: 'plugin_ruby').build_proxy, :deployable?
       refute_predicate Service.new(deployment_option: 'plugin_perl').build_proxy, :deployable?
@@ -146,6 +147,17 @@ class ProxyTest < ActiveSupport::TestCase
 
     @proxy.provider.stubs(:provider_can_use?).with(:apicast_v1).returns(false)
     assert @proxy.apicast_configuration_driven
+  end
+
+
+  def test_deploy_service_mesh_integration
+    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
+    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
+    @proxy.provider.stubs(:provider_can_use?).with(:service_mesh_integration).returns(true)
+    @proxy.stubs(:deployment_option).returns('service_mesh_istio')
+    @proxy.expects(:deploy_v2).returns(true)
+    @proxy.expects(:deploy_production_v2).returns(true)
+    assert @proxy.deploy!
   end
 
   def test_deploy_production
