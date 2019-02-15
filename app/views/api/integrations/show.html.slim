@@ -10,6 +10,7 @@
     - when /^plugin_/
       = render 'api/integrations/plugin/plugin'
     - when /^service_mesh/
+      = render 'api/integrations/apicast/configuration_driven/apicast'
     - else
       - if @show_presenter.any_sandbox_configs?
         = render 'api/integrations/apicast/configuration_driven/apicast'

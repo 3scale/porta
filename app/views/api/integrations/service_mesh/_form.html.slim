@@ -9,7 +9,10 @@
 
   = f.hidden_field :lock_version
 
-  = render 'api/integrations/apicast/shared/mapping_rules', f: f
+  div class="feedback proxy no-test"
+    i.fa.fa-hdd-o
+
+    = render 'api/integrations/apicast/shared/mapping_rules', f: f
 
   = f.buttons do
     = f.button 'Update', button_html: { class: 'important-button update' }
