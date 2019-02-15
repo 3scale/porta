@@ -17,7 +17,7 @@ javascript:
           return confirm(deprecation_message) && confirm(warning_message);
         } else {
           return confirm(warning_message);
-        } 
+        }
       };
 
       return true;
@@ -80,8 +80,26 @@ javascript:
 
       toggleOauthAvailability();
 
+      // oidc not for Istio
+      function toggleOidcAvailability() {
+        var current_deployment_option = $("input[type=radio][name='service[deployment_option]']:checked").val();
+        var wrapper = $(".backend_version_oidc");
+        var authentication_option = $("input[type=radio][name='service[backend_version]'][value='oidc']");
+
+        if (current_deployment_option == 'service_mesh_istio') {
+          authentication_option.attr("disabled", true);
+          wrapper.addClass("disabled").attr("title", "OIDC is not supported by Istio at this moment in time. Pick another Gateway or Plugin option at the top of this page to enable OIDC activation.");;
+        } else {
+          authentication_option.attr("disabled", false);
+          wrapper.removeClass("disabled").attr("title", "OAuth");;
+        }
+      };
+
+      toggleOidcAvailability()
+
       $("input[type=radio][name='service[deployment_option]']").change(function() {
         toggleOauthAvailability();
+        toggleOidcAvailability();
       });
 
       function toggleApiCastAvailability() {
@@ -92,6 +110,17 @@ javascript:
         if (current_authentication_option == 'oauth') {
           deployment_option.attr("disabled", true);
           wrapper.addClass("disabled").attr("title", "APIcast Cloud Gateway doesn't support OAuth at this moment in time. Pick another Authentication method at the bottom of this page to enable APIcast activation.");
+        } else {
+          deployment_option.attr("disabled", false);
+          wrapper.removeClass("disabled").attr("title", "APIcast");
+        }
+
+        var wrapper = $(".deployment_option_service_mesh_istio");
+        var deployment_option = $("input[type=radio][name='service[deployment_option]'][value='service_mesh_istio']");
+
+        if (current_authentication_option == 'oidc') {
+          deployment_option.attr("disabled", true);
+          wrapper.addClass("disabled").attr("title", "Istio doesn't support OIDC at this moment in time. Pick another Authentication method at the bottom of this page to enable Istio activation.");
         } else {
           deployment_option.attr("disabled", false);
           wrapper.removeClass("disabled").attr("title", "APIcast");
