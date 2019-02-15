@@ -9,6 +9,7 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
 
   ##~ e = sapi.apis.add
+  ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e.path = "/admin/api/accounts/{account_id}/service_contracts.xml"
   ##~ e.responseClass = "service_contract"
   #
