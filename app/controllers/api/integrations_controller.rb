@@ -24,7 +24,8 @@ class Api::IntegrationsController < Api::BaseController
     if @service.using_proxy_pro? && !@proxy.apicast_configuration_driven
       proxy_pro_update
     elsif @proxy.save_and_deploy(proxy_params)
-      flash[:notice] = flash_message(:update_success, environment: @proxy.service_mesh_integration? ? :Production : :Staging)
+      environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
+      flash[:notice] = flash_message(:update_success, environment: environment)
       update_onboarding_mapping_bubble
 
       if @proxy.send_api_test_request!
@@ -137,7 +138,7 @@ class Api::IntegrationsController < Api::BaseController
     render :edit, status: :conflict
   end
 
-  def flash_message(key, opts={})
+  def flash_message(key, opts = {})
     translate(key, opts.reverse_merge(scope: :api_integrations_controller, raise: Rails.env.test?))
   end
 

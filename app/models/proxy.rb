@@ -554,11 +554,13 @@ class Proxy < ApplicationRecord
 
   def deploy
     return true unless deployable?
-    # service mesh integration uses production environment directly
+
     if service_mesh_integration?
       deploy_service_mesh_integration
+    elsif apicast_configuration_driven
+      deploy_v2
     else
-      apicast_configuration_driven ? deploy_v2 : deploy_v1
+      deploy_v1
     end
   end
 
