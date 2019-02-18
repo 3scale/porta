@@ -60,7 +60,7 @@
               el: document.getElementById('user-permissions-widget'),
               state: <%= json @user.as_json(root: false, only: [:role], methods: [:admin_sections, :member_permission_service_ids]) %>,
               services: <%= json @services.as_json(root: false, only: [:id, :name, :description]) %>,
-              features: <%= json AdminSection.permissions %>
+              features: <%= json AdminSection.permissions_for_account(current_account) %>
             })
           })
         </script>

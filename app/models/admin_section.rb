@@ -10,6 +10,10 @@ class AdminSection
     end
   end
 
+  def self.permissions_for_account(account)
+    account.provider_can_use?(:policy_registry) ? permissions : (permissions - %i[policy_registry])
+  end
+
   SECTIONS = PERMISSIONS + %I[ services ]
 
   def self.sections

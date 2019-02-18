@@ -17,6 +17,22 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     refute account.provider_can_use?(:policies)
   end
 
+  def test_policy_registry
+    account = FactoryBot.build_stubbed(:simple_account)
+
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: true, policy_registry: true })
+    assert account.provider_can_use?(:policy_registry)
+
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: true, policy_registry: false })
+    refute account.provider_can_use?(:policy_registry)
+
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: false, policy_registry: false })
+    refute account.provider_can_use?(:policy_registry)
+
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: false, policy_registry: true })
+    refute account.provider_can_use?(:policy_registry)
+  end
+
   def test_forum
     account = FactoryBot.build_stubbed(:simple_account)
 
@@ -97,7 +113,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     user = User.new(username: ThreeScale.config.impersonation_admin['username'])
     controller_instance.expects(:current_user).returns(user).once
 
-    assert controller_instance.send(:provider_can_use?, :whathever)
+    assert controller_instance.send(:provider_can_use?, :whatever)
   end
 
   test "Controller: provider_can_use? delegate to current_account" do
@@ -107,10 +123,10 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     controller_instance.expects(:current_user).returns(user).once
 
     provider = Account.new
-    provider.expects(:provider_can_use?).with(:whathever)
+    provider.expects(:provider_can_use?).with(:whatever)
     controller_instance.expects(:current_account).returns(provider).once
 
-    controller_instance.send(:provider_can_use?, :whathever)
+    controller_instance.send(:provider_can_use?, :whatever)
   end
 
   test 'provider can use duplicate_user_key feature' do
@@ -121,7 +137,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     provider_2.stubs(:id).returns(2)
 
     assert provider_1.provider_can_use?(:duplicate_user_key)
-      refute provider_2.provider_can_use?(:duplicate_user_key)
+    refute provider_2.provider_can_use?(:duplicate_user_key)
   end
 
   class NewFeature < Logic::RollingUpdates::Features::Base
