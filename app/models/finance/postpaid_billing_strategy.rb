@@ -37,15 +37,10 @@ class Finance::PostpaidBillingStrategy < Finance::BillingStrategy
   def bill_plan_change(contract, period)
     plan = contract.plan
     old_plan = contract.old_plan
-    period_begin = period.begin.utc
-    period_end = period.end.utc
-    paid_until = contract.paid_until.utc
 
-    if paid_until < period_begin # This is only for fixed cost, so it means billing didn't run yet for the contract in the period
-      old_plan_period_begin = [paid_until, period_begin.beginning_of_month].max
-      old_plan_period = TimeRange.new(old_plan_period_begin, period_end)
-      add_plan_cost(:bill, contract, old_plan, old_plan_period)
-    end
+    period_begin = period.begin
+    invoice = invoice_for(contract.user_account, period_begin)
+    contract.bill_for(Month.new(period_begin), invoice, old_plan)
 
     add_plan_cost(:refund, contract, old_plan, period)
     add_plan_cost(:bill, contract, plan, period)

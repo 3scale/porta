@@ -8,13 +8,13 @@ module Finance
 
     protected
 
-    def bill_fixed_fee_for(period, invoice)
+    def bill_fixed_fee_for(period, invoice, plan = self.plan)
       fixed_cost = plan.cost_for_period(period)
       if fixed_cost.nonzero?
         Finance::BackgroundBilling.new(invoice).create_line_item!(
           {
             contract: self,
-            plan_id: plan_id,
+            plan_id: plan.id,
             name: "Fixed fee ('#{plan.name}')",
             description: period.to_time_range.to_s,
             quantity: 1,
