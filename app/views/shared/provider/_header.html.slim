@@ -1,53 +1,42 @@
+= javascript_pack_tag 'header'
 = javascript_pack_tag 'navigation'
 
-header.Header id="user_widget" class=('Header--master' if current_account.master?)
+- class_header = current_account.master ? 'Header Header--master' : 'Header'
+- header_with_logo = active_menu?(:main_menu, :dashboard) ? 'Header-logo--withIcon' : ''
 
-  = link_to provider_admin_dashboard_path, class: 'Header-link', title: 'Dashboard' do
-      .Header-logo class=('Header-logo--withIcon' if active_menu?(:main_menu, :dashboard))
-        | Red Hat 3scale API Management
+- account_settings_link = can?(:manage, current_account) ? provider_admin_account_path : edit_provider_admin_user_personal_details_path
+- account_settings_class = active_menu?(:topmenu, :account) ? 'is-current' : ''
 
-  = render 'shared/api_selector'
+- docs_link = active_menu?(:topmenu, :help) ? 'is-current' : ''
+- isSaas = saas? ? 'true' : 'false'
+- docs_links_class = 'PopNavigation-link'
+- customer_portal_link = '//access.redhat.com/products/red-hat-3scale'
+- api_docs_link = provider_admin_api_docs_path
+- liquid_reference_link = provider_admin_liquid_docs_path
+- what_is_new_link = '//access.redhat.com/articles/3107441#newfeaturesenhancements'
 
-  .PopNavigation.PopNavigation--session
-    a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#session-menu" title="Session"
-      => icon('user')
-      => icon('bolt') if impersonating?
-    ul#session-menu.PopNavigation-list.u-toggleable
-      li.PopNavigation-listItem
-        p.PopNavigation-info
-          - if impersonating?
-            => icon('bolt')
-            ' Impersonating a virtual admin user from
-          - else
-            ' Signed in to
-          => current_user.account.name
-          ' as
-          = current_user.display_name
-          | .
+- avatar_link = active_menu?(:topmenu, :help) ? 'is-current' : ''
+- impersonated = impersonating? ? 'true' : nil
+- account_name = current_user.account.name
+- display_name = current_user.display_name
 
-        = fixed_width_icon_link_to 'Sign Out', 'times', provider_logout_path, class: 'PopNavigation-link', title: "Sign Out #{current_user.username}"
+- context_switcher_data={'currentApi' => @service, 'apis' => api_selector_services, 'activeMenu' => active_menu, 'audienceLink' => audience_link}.to_json
 
-
-  .PopNavigation.PopNavigation--docs
-    a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
-      => icon('question-circle')
-    ul#documentation-menu.PopNavigation-list.u-toggleable
-      li.PopNavigation-listItem
-        = fixed_width_icon_link_to 'Customer Portal', 'external-link', '//access.redhat.com/products/red-hat-3scale', class: 'PopNavigation-link', target: '_blank'
-      li.PopNavigation-listItem
-        = fixed_width_icon_link_to '3scale API Docs', 'puzzle-piece', provider_admin_api_docs_path, class: 'PopNavigation-link'
-      li.PopNavigation-listItem
-        = fixed_width_icon_link_to 'Liquid Reference', 'code', provider_admin_liquid_docs_path, class: 'PopNavigation-link'
-      - if saas?
-        li.PopNavigation-listItem
-          = fixed_width_icon_link_to "What's new?", 'leaf', '//access.redhat.com/articles/3107441#newfeaturesenhancements', class: 'PopNavigation-link', target: '_blank'
-
-  .PopNavigation.PopNavigation--account
-    - link = can?(:manage, current_account) ? provider_admin_account_path : edit_provider_admin_user_personal_details_path
-
-    a.PopNavigation-trigger class=('is-current' if active_menu?(:topmenu, :account)) href="#{link}"  title="Account Settings"
-      => icon('cog')
-
-  // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
-  div class="username" style="display:none;"
-    = current_user.username
+header class=class_header id="user_widget"*{'data-href' => provider_admin_dashboard_path,
+  'data-class-header-with-logo' => header_with_logo,
+  'data-account-settings-link' => account_settings_link,
+  'data-account-settings-class' => account_settings_class,
+  'data-docs-link' => docs_link,
+  'data-is-saas' => isSaas,
+  'data-docs-links-class' => docs_links_class,
+  'data-customer-portal-link' => customer_portal_link,
+  'data-api-docs-link' => api_docs_link,
+  'data-liquid-reference-link' => liquid_reference_link,
+  'data-what-is-new-link' => what_is_new_link,
+  'data-avatar-link' => avatar_link,
+  'data-impersonated' => impersonated.to_s,
+  'data-account-name' => account_name,
+  'data-display-name' => display_name,
+  'data-logout-path' => provider_logout_path,
+  'data-username' => current_user.username,
+  'data-context-switcher-data' => context_switcher_data}
