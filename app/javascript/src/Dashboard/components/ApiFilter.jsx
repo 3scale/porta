@@ -6,7 +6,8 @@ import 'core-js/es6/set'
 import 'core-js/es6/array'
 
 import React from 'react'
-import { render } from 'react-dom'
+
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import 'Dashboard/styles/dashboard.scss'
 
@@ -37,12 +38,6 @@ const ApiFilter = ({ apis, displayApis }: Props) => {
   )
 }
 
-const ApiFilterWrapper = (props: Props, element: string) => {
-  const container = document.getElementById(element)
-  if (container == null) {
-    throw new Error(`${element} is not part of the DOM`)
-  }
-  render(<ApiFilter {...props} />, container)
-}
+const ApiFilterWrapper = (props: Props, containerId: string) => createReactWrapper(<ApiFilter {...props} />, containerId)
 
 export { ApiFilter, ApiFilterWrapper }
