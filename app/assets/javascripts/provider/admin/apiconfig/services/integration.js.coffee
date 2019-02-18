@@ -214,6 +214,7 @@ $(document).on 'initialize', '#proxy', ->
     elt.value = switch proxy_credentials_location_value
       when 'headers' then elt.value.replace(/_/g,'-')
       when 'query' then elt.value.replace(/-/g,'_')
+      else elt.value
 
   $(document).on 'change', 'input[name="proxy[credentials_location]"]', (event) ->
     proxy_credentials_location_value = this.value
