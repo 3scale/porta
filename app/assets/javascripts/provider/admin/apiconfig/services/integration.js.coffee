@@ -208,6 +208,8 @@ $(document).on 'initialize', '#proxy', ->
     false
 
   proxy_credentials_location_value = $('input[name="proxy[credentials_location]"]:checked').val()
+  credentials_forms = document.querySelectorAll('li[id^="proxy_auth_"]')
+  credentials_forms.forEach((el) -> el.classList.toggle('hidden', proxy_credentials_location_value is 'authorization'))
 
   replace_hyphens_or_underscores = (elt) ->
     return unless elt
@@ -220,6 +222,7 @@ $(document).on 'initialize', '#proxy', ->
     proxy_credentials_location_value = this.value
     replace_hyphens_or_underscores(document.getElementById('proxy_auth_user_key'))
     toggle_form_changed_ui()
+    credentials_forms.forEach((el) -> el.classList.toggle('hidden', proxy_credentials_location_value is 'authorization'))
 
   $(document).on 'input', 'input#proxy_auth_user_key', (event) ->
     replace_hyphens_or_underscores(this)
