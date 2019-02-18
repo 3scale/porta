@@ -822,7 +822,7 @@ DEPENDENCIES
   activemerchant (~> 1.77.0)
   activerecord-oracle_enhanced-adapter (~> 1.6.0)
   acts-as-taggable-on (~> 4.0)
-  acts_as_list (~> 0.9.0)
+  acts_as_list (~> 0.9.17)
   acts_as_tree
   addressable
   after_commit_queue (~> 1.1.0)
