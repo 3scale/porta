@@ -14,7 +14,7 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
     def test_perform_destroy_by_association
       objects.each do |object|
         DeletePlainObjectWorker.perform_now(object, %w[HTestClass123 HTestClass1123])
-        assert object.destroyed_by_association
+        object.class.any_instance.expects(:destroy!).never
         assert_raise(ActiveRecord::RecordNotFound) { object.reload }
       end
     end
@@ -22,7 +22,7 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
     def test_perform_destroy_without_association
       objects.each do |object|
         DeletePlainObjectWorker.perform_now(object, %w[HTestClass123])
-        refute object.destroyed_by_association
+        object.class.any_instance.expects(:destroy!).once
         assert_raise(ActiveRecord::RecordNotFound) { object.reload }
       end
     end
