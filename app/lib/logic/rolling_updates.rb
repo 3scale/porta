@@ -58,7 +58,7 @@ module Logic
 
       class Base
         attr_reader :provider
-        delegate :master?, :provider?, :enterprise?, to: :provider
+        delegate :master?, :provider?, :enterprise?, :provider_can_use?, to: :provider
         delegate :id, to: :provider, prefix: true
 
         OPENSHIFT_PROVIDER_ID = 2
@@ -272,6 +272,16 @@ module Logic
       end
 
       class Policies < Base
+        def missing_config
+          false
+        end
+      end
+
+      class PolicyRegistry < Base
+        def enabled?
+          super && provider_can_use?(:policies)
+        end
+
         def missing_config
           false
         end

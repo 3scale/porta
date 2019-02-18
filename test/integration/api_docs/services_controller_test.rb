@@ -19,6 +19,16 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  def test_policies_not_shown_with_its_rolling_update_forbidden
+    ::Logic::RollingUpdates.stubs(enabled?: true)
+    ::Account.any_instance.stubs(provider_can_use?: false)
+
+    get api_docs_services_path(format: :json)
+    assert_response :success
+
+    assert_not_includes JSON.parse(response.body)['apis'].map { |api| api['name'] }, 'Policy Registry API'
+  end
+
   class ProviderAccountServicesControllerTest < ApiDocs::ServicesControllerTest
     def test_index_and_show_with_finance
       get '/api_docs/services.json'
@@ -87,8 +97,8 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def test_index_and_show
       expected_names = {
-          saas: ['Service Management API', 'Account Management API', 'Analytics API', 'Billing API', 'Master API', 'Policy Registry API'],
-          onpremises: ['Service Management API', 'Account Management API', 'Analytics API', 'Master API', 'Policy Registry API']
+        saas: ['Service Management API', 'Account Management API', 'Analytics API', 'Billing API', 'Master API'],
+        onpremises: ['Service Management API', 'Account Management API', 'Analytics API', 'Master API']
       }
 
       [true, false].each do |onpremises|

@@ -7,6 +7,9 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry], permission: 'rw')
+    ::Logic::RollingUpdates.stubs(enabled?: true)
+    ::Account.any_instance.stubs(:provider_can_use?).with(any_parameters).returns(false)
+    ::Account.any_instance.stubs(:provider_can_use?).with(:policy_registry).returns(true)
   end
 
   test 'POST create with valid params persists with those values' do
@@ -66,6 +69,23 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
       post admin_api_registry_policies_path(policy_params(token_member_with_right_scope))
     end
     assert_response :created
+  end
+
+  test 'POST create when the rolling update "policies" is disabled' do
+    ::Account.any_instance.stubs(provider_can_use?: false)
+    assert_no_difference(Policy.method(:count)) do
+      post admin_api_registry_policies_path(policy_params)
+    end
+    assert_response :forbidden
+  end
+
+  test 'POST create disabled for master' do
+    host! master_account.admin_domain
+    access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[policy_registry], permission: 'rw').value
+    assert_no_difference(Policy.method(:count)) do
+      post admin_api_registry_policies_path(policy_params(access_token))
+    end
+    assert_response :forbidden
   end
 
   def policy_params(token = @access_token.value)
