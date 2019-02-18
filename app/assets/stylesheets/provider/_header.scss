@@ -8,6 +8,12 @@
   z-index: 1052; // select2 dropdown has z-index of 1051
   top: 0;
 
+  #api_selector {
+    left: line-height-times(33 / 2);
+    position: relative;
+    z-index: 2000;
+  }
+
   &--master {
     height: line-height-times(7 / 2);
     border-top: line-height-times(1) solid $header-border-color;
