@@ -41,27 +41,51 @@ const cmOptions = {
   tabSize: 2
 }
 
-function CustomPolicy () {
-  const [schema, setSchema] = useState(schemaSample)
+function Editor (props) {
+  const { onChange } = props
+  const [ state, setState ] = useState({valid: true, code: toJson(props.code)})
 
   const onCodeChange = (editor, metadata, code) => {
-    setSchema(fromJson(code))
+    setState({ valid: true, code })
+    setImmediate(() => {
+      try {
+        onChange(fromJson(code))
+      } catch (err) {
+        setState({ valid: false, code })
+      }
+    })
   }
 
+  const icon = state.valid ? 'check' : 'times'
+  const cls = state.valid ? 'valid' : 'invalid'
+
   return (
-    <div>
+    <div className="panel panel-default">
+      <div className="panel-heading">
+        <span className={`${cls} fa fa-${icon}`} />
+        {'JSON Schema'}
+      </div>
       <CodeMirror
-        value={toJson(schema)}
+        value={state.code}
         onChange={onCodeChange}
         autoCursor={false}
         options={cmOptions}
       />
-      <Form
-        schema={schema}
-      >
-      </Form>
     </div>
   )
 }
 
-export {CustomPolicy}
+function CustomPolicy () {
+  const [schema, setSchema] = useState(schemaSample)
+
+  const onSchemaEdited = schema => setSchema(schema)
+
+  return (
+    <div>
+      <Editor code={schema} onChange={onSchemaEdited} />
+      <Form schema={schema} />
+    </div>
+  )
+}
+
+export { CustomPolicy }

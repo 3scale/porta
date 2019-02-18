@@ -8,8 +8,9 @@ class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseControlle
 
   layout 'provider'
 
-  def show
-  end
+  def index; end
+
+  def edit; end
 
   protected
 
