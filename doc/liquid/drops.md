@@ -366,7 +366,7 @@ Returns the name of the spec.
 Returns the service of the spec if it has any or `nil` otherwise.
 
 ### host_with_port
-Returns the public production host endpoint if it linked to a service `nil` otherwise
+Returns the public production host endpoint if it is linked to a service or `nil` otherwise
 
 -----------
 
