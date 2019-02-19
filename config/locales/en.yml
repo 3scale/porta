@@ -583,7 +583,7 @@ en:
     apicast: APIcast<span>Nginx reverse proxy server.</span>
 
     service_mesh_istio: |
-      Istio (tech preview)
+      Istio (Technology Preview)
       <span>A uniform way to secure, connect, and monitor microservices.</span>
 
     on_heroku: Heroku
