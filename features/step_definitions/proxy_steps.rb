@@ -98,11 +98,11 @@ Given(/^I save the proxy config$/) do
 end
 
 Then(/^the mapping rules should be in the following order:$/) do |table|
-  data = @provider.default_service.proxy.proxy_rules
+  data = @provider.default_service.proxy.proxy_rules.ordered
   MAPPING_RULE_ATTR = %w[http_method pattern delta metric_id].freeze
   data.each_with_index do |mapping_rule, index|
     MAPPING_RULE_ATTR.each do |attr|
-      assert_equal table.hashes[index][attr], mapping_rule[attr]
+      assert_equal table.hashes[index][attr].to_s, mapping_rule[attr].to_s
     end
   end
 end

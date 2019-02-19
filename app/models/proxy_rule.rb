@@ -4,7 +4,7 @@ require 'addressable/template'
 
 class ProxyRule < ApplicationRecord
 
-  acts_as_list scope: :proxy, add_new_at: :bottom
+  acts_as_list scope: :proxy
   scope :ordered, -> { order(position: :asc) }
 
   belongs_to :proxy, touch: true

@@ -76,6 +76,25 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     proxy_rule_2.reload
     assert_equal 2, proxy_rule_2.position
     assert_equal 1, proxy_rule_1.position
+
+    # creating new proxy rules
+    proxy_rules_attributes = {
+      proxy_rules_attributes: {
+        '1550572218071' => { id: '', http_method: 'PUT', pattern: '/put1', delta: '1', metric_id: proxy_rule_1.metric_id, position: '1' },
+        proxy_rule_2.id => { id: proxy_rule_2.id, position: 2 },
+        '1550572218070' => { id: '', http_method: 'PUT', pattern: '/put2', delta: '1', metric_id: proxy_rule_1.metric_id, position: '3' },
+        proxy_rule_1.id => { id: proxy_rule_1.id, position: 4 }
+      }
+    }
+    put admin_service_integration_path(service_id: service), proxy: proxy_rules_attributes
+    assert_response :redirect
+
+    proxy_rule_1.reload
+    proxy_rule_2.reload
+    assert_equal 1, service.reload.proxy.proxy_rules.find_by_pattern('/put1').position
+    assert_equal 2, proxy_rule_2.position
+    assert_equal 3, service.reload.proxy.proxy_rules.find_by_pattern('/put2').position
+    assert_equal 4, proxy_rule_1.position
   end
 
   test 'deploy is called when saving proxy info' do
