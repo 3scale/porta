@@ -20,7 +20,7 @@
 
         - @proxy.proxy_rules.ordered.each_with_index do |rule, i|
           tr.ui-sortable-item
-            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: i
+            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: (i + 1)
         tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
           = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
       tfoot

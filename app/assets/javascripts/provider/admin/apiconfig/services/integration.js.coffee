@@ -86,7 +86,7 @@ $(document).on 'initialize', '#proxy', ->
     rule = rule.replace(/\{new_id_.*\}/g, timestamp)
     rule = $("<tr>").append(rule)
     rule.find("input:not(.destroyer),select").removeAttr "disabled"
-    newIndex = $mappingRuleList.children().length - 1
+    newIndex = $mappingRuleList.children().length
     rule.find("input.position").val(newIndex)
     $mappingRuleList.append rule
     rule.find('.pattern input:first').focus()
