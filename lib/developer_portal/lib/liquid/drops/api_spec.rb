@@ -3,7 +3,7 @@ module Liquid
   module Drops
     class ApiSpec < Drops::Model
       def initialize(spec)
-        @spec = spec
+        @spec = ApiDocsServicePresenter.new(spec)
       end
 
       desc 'Returns the url of the API spec.'

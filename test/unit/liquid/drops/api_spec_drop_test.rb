@@ -27,7 +27,7 @@ class Liquid::Drops::ApiSpecDropTest < ActiveSupport::TestCase
   end
 
   test 'returns the host with port' do
-    @spec.expects(host_with_port: 'example.com:3000')
+    ApiDocsServicePresenter.any_instance.expects(:host_with_port).returns('example.com:3000')
     assert_equal 'example.com:3000', api_spec.host_with_port
   end
 

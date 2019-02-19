@@ -80,7 +80,7 @@
   }
 
   $(function () {
-    var host = "<%= @api_docs_service.host_with_port %>";
+    var host = "<%= ApiDocsServicePresenter.new(@api_docs_service).host_with_port %>";
     var spec = <%= ActionController::Base.helpers.sanitize(@api_docs_service.body) %>;
 
     injectAuthParams(spec)
