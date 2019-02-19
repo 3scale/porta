@@ -1,12 +1,12 @@
-section.Configuration class=('Configuration--is-promoted' unless @service.deployment_option =~ /^service_mesh/) class="Configuration--#{@show_presenter.test_state_modifier}"
+section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service)) class="Configuration--#{@show_presenter.test_state_modifier}"
 
   = link_to 'edit APIcast configuration', edit_admin_service_integration_path(@service), class: 'SettingsBox-toggle'
 
-  article.Configuration-summary data-state="open" class=("Environment--#{@show_presenter.test_state_modifier}" unless @service.deployment_option =~ /^service_mesh/)
+  article.Configuration-summary data-state="open" class=("Environment--#{@show_presenter.test_state_modifier}" unless deployment_option_is_service_mesh?(@service))
     h3.Configuration-title APIcast Configuration
 
     dl.u-dl
-      - unless @service.deployment_option =~ /^service_mesh/
+      - unless deployment_option_is_service_mesh?(@service)
         dt.u-dl-term Private Base URL
         dd.u-dl-definition = @proxy.api_backend
       dt.u-dl-term Mapping rules
@@ -16,13 +16,13 @@ section.Configuration class=('Configuration--is-promoted' unless @service.deploy
             ' #{last_rule.pattern} => #{last_rule.metric.name}
         - if (rules_size = @proxy.proxy_rules.size) > 1
           | and #{rules_size - 1} more.
-      - unless @service.deployment_option =~ /^service_mesh/
+      - unless deployment_option_is_service_mesh?(@service)
         dt.u-dl-term Credential Location
         dd.u-dl-definition = @proxy.credentials_location
         dt.u-dl-term Secret Token
         dd.u-dl-definition = @proxy.secret_token
 
-- unless @service.deployment_option =~ /^service_mesh/
+- unless deployment_option_is_service_mesh?(@service)
   section style="margin-top: 48px;"
     h2 Environments
 
