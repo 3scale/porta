@@ -104,4 +104,9 @@ class ProxyTestServiceTest < ActiveSupport::TestCase
     assert result.error
 
   end
+
+  def test_disabled?
+    @proxy.stubs(deployment_option: 'service_mesh_istio')
+    assert @service.disabled?
+  end
 end

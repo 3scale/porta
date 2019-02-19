@@ -58,7 +58,11 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   #
   def update
     if proxy.update_attributes(proxy_params)
-      proxy.deploy_v2 if proxy.apicast_configuration_driven
+      if proxy.service_mesh_integration?
+        proxy.deploy!
+      elsif proxy.apicast_configuration_driven
+        proxy.deploy_v2
+      end
     end
 
     respond_with(proxy)

@@ -14,7 +14,7 @@ en:
     update_onpremises_production_success: 'Production configuration saved.'
     update_production_success: 'Proxy settings deployed'
     update_error: "Couldn't update the Staging Configuration"
-    update_success: 'Staging Configuration Updated'
+    update_success: '%{environment} Configuration Updated'
     async_update_success: 'Staging Configuration Updated'
     async_update_error: "Couldn't update the Staging Configuration"
     proxy_pro_update_sucess: 'Proxy settings saved.'
@@ -583,7 +583,7 @@ en:
     apicast: APIcast<span>Nginx reverse proxy server.</span>
 
     service_mesh_istio: |
-      Istio (tech preview)
+      Istio (Technology Preview)
       <span>A uniform way to secure, connect, and monitor microservices.</span>
 
     on_heroku: Heroku
