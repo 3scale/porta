@@ -1,7 +1,7 @@
 - content_for :sublayout_title, 'ActiveDocs'
 
 - if @api_docs_services.any? { |service| service.needs_swagger_update? }
-  = link_to t("api.integrations.proxy.documentation_create_active_doc_spec", docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'SwaggerUpgradeBox' do
+  = link_to t("api.integrations.proxy.documentation_create_active_doc_spec", docs_base_url: docs_base_url), class: 'SwaggerUpgradeBox' do
     p.SwaggerUpgradeBox-message
       span.SwaggerUpgradeBox-logo
       | ActiveDocs now supports Swagger 2.0. Read here why it makes sense to upgrade your service specs to Swagger 2.0

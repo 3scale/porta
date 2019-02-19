@@ -18,5 +18,5 @@ table class="data"
         td
           => api_docs.swagger_version
           - if api_docs.needs_swagger_update?
-            = link_to t('admin.api_docs.base.index.update_link_text'), t('admin.api_docs.base.index.update_link', docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'is-inline'
+            = link_to t('admin.api_docs.base.index.update_link_text'), t('admin.api_docs.base.index.update_link', docs_base_url: docs_base_url), class: 'is-inline'
         td class='operations' = link_to 'Edit', edit_admin_api_docs_service_path(api_docs), class: 'action edit'
