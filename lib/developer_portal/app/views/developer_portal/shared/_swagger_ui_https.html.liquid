@@ -8,12 +8,70 @@
 </div>
 
 <script type="text/javascript">
+  var AUTH_METHOD_USER_KEY = 1;
+  var AUTH_METHOD_ID_KEY_PAIR = 2;
+
+  function getAuthParamsForMethod(authMethod) {
+    switch(authMethod) {
+      case AUTH_METHOD_ID_KEY_PAIR:
+        authParams = [{
+          name: '<%= @api_docs_service.service.proxy.auth_app_key %>',
+          in: 'header',
+          description: 'App Key authentication parameter',
+          'x-data-threescale-name': 'app_keys',
+          required: true,
+          type: 'string'
+        },{
+          name: '<%= @api_docs_service.service.proxy.auth_app_id %>',
+          in: 'header',
+          description: 'App ID authentication parameter',
+          'x-data-threescale-name': 'app_ids',
+          required: true,
+          type: 'string'
+        }];
+        break;
+      
+      case AUTH_METHOD_USER_KEY:   
+        authParams = [{
+          name: '<%= @api_docs_service.service.proxy.auth_user_key %>',
+          in: 'header',
+          description: 'User Key authentication parameter',
+          'x-data-threescale-name': 'user_keys',
+          required: true,
+          type: 'string'
+        }];
+        break;
+          
+      default:
+        authParams = [];
+      return;
+    }
+  }
+
+  function injectAuthParams(spec) {
+    var authMethod = <%= @api_docs_service.service.proxy.authentication_method %>;
+    var authParams = getAuthParamsForMethod(authMethod);
+        
+    for (var p in spec.paths) {
+      var path = spec.paths[p];
+      for (var verb in path) {
+        authParams.forEach(function(param) {
+          if (!path[verb].parameters.find(p => p.name === param.name)) {
+            path[verb].parameters.push(param);
+          }
+        });
+      }
+    }
+  }
+
   (function () {
-    var url = "{{provider.api_specs.first.url}}";
-    var host = "{{provider.api_specs.first.host_with_port}}";
+    var host = "<%= @api_docs_service.host_with_port %>";
+    var spec = <%= ActionController::Base.helpers.sanitize(@api_docs_service.body) %>;
+
+    injectAuthParams(spec)
 
     window.swaggerUi = new SwaggerUi({
-      url: url,
+      spec: spec,
       dom_id: 'swagger-ui-container',
       supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
       apisSorter: 'alpha', // can also be a function
