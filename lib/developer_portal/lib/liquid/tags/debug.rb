@@ -34,7 +34,7 @@ module Liquid
         output.concat help(assigns(context))
 
         output << "    ================================"
-        output << "    Check more info at #{::I18n.t 'docs.developer_portal.liquid_reference', docs_base_url: docs_base_url, docs_anchor: docs_anchor}"
+        output << "    Check more info at #{::I18n.t 'docs.developer_portal.liquid_reference', docs_base_url: docs_base_url}"
 
         html_comment(output)
       end

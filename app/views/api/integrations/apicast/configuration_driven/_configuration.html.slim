@@ -18,7 +18,7 @@
         - else
           | Configure & test immediately in the staging environment
 
-      =< link_to t('api.integrations.proxy.visit_documentation'), t("api.integrations.proxy.documentation_apicast_url", docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'documentation-link', target: '_blank'
+      =< link_to t('api.integrations.proxy.visit_documentation'), t("api.integrations.proxy.documentation_apicast_url", docs_base_url: docs_base_url), class: 'documentation-link', target: '_blank'
 
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
