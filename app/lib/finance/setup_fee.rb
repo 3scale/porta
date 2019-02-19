@@ -3,12 +3,12 @@ module Finance
 
     protected
 
-    def bill_setup_fee_for(period, invoice)
+    def bill_setup_fee_for(period, invoice, plan = self.plan)
       if setup_fee && setup_fee.nonzero?
         Finance::BackgroundBilling.new(invoice).create_line_item!(
           {
             contract: self,
-            plan_id: plan_id,
+            plan_id: plan.id,
             name: "Setup fee ('#{plan.name}')",
             cost: setup_fee,
             type: LineItem::PlanCost
