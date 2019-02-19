@@ -152,7 +152,7 @@ class Contract < ApplicationRecord
   #
   # @param [Month] period
   # @param [Invoice] invoice
-  def bill_for(period, invoice)
+  def bill_for(period, invoice, plan = self.plan)
     # TODO: this makes the bill_for method dependent on Time.zone.now
     # so it should be handled differently
     #
@@ -160,14 +160,15 @@ class Contract < ApplicationRecord
 
     transaction do
       if paid_until.to_date < period.end.to_date
+
         period = intersect_with_unpaid_period(period, paid_until)
 
-        bill_fixed_fee_for(period, invoice)
+        bill_fixed_fee_for(period, invoice, plan)
 
         self.paid_until = period.end
       end
 
-      bill_setup_fee_for(period, invoice)
+      bill_setup_fee_for(period, invoice, plan)
 
       # no validation because our DB has broken data
       # TODO: cleanup DB and add validations?

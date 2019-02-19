@@ -38,6 +38,21 @@ Feature: Automatic billing with plan changes on POSTPAID
       | Fixed fee ('Paid')          |          |     31.00 |
       | Total cost                  |          |     31.00 |
 
+  Scenario: Monthly fee on application plan downgrading in the middle of the same day
+    Given all the rolling updates features are off
+    And the date is 1st January 2017
+    And the buyer signed up for plan "Expensive"
+    And the date is 1st January 2017 12:00
+    Then the buyer changed to plan "Paid"
+    When time flies to 3rd February 2017
+
+    Then the buyer should have following line items for "January, 2017" invoice:
+      | name                        | quantity |   cost    |
+      | Fixed fee ('Expensive')     |          |  3,100.00 |
+      | Refund ('Expensive')        |          | -3,050.00 |
+      | Fixed fee ('Paid')          |          |     30.50 |
+      | Total cost                  |          |     80.50 |
+
   Scenario: Monthly fee on application plan downgrading on different day
     Given all the rolling updates features are off
     And the date is 1st January 2017 UTC
@@ -57,7 +72,7 @@ Feature: Automatic billing with plan changes on POSTPAID
   Scenario: Monthly fee on several application plan upgrades in the middle of the month
     Given all the rolling updates features are off
     And the provider has a third paid application plan "ExpensiveAsHell" of 310000 per month
-    And the date is 1st January 2017 UTC
+    And the date is 1st January 2017
     And the buyer signed up for plan "Paid"
     And time flies to 2nd January 2017
     Then the buyer changed to plan "Expensive"
