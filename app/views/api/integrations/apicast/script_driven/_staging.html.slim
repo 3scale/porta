@@ -10,7 +10,7 @@
       small
         | configure & test your integration
 
-      =< link_to t('api.integrations.proxy.visit_documentation'), t("api.integrations.proxy.documentation_#{@service.mode_type}_url", docs_base_url: docs_base_url, docs_anchor: docs_anchor), class: 'documentation-link', target: '_blank'
+      =< link_to t('api.integrations.proxy.visit_documentation'), t("api.integrations.proxy.documentation_#{@service.mode_type}_url", docs_base_url: docs_base_url), class: 'documentation-link', target: '_blank'
 
       .status
         - if @proxy.sandbox_deployed?

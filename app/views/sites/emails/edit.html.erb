@@ -26,6 +26,6 @@
 
 <% if readonly_dns_domains? %>
   <h2>Outbound Email Addresses</h2>
-  <% docs_email_configuration_url = I18n.t('docs.developer_portal.email_configuration', docs_base_url: docs_base_url, docs_anchor: docs_anchor) %>
+  <% docs_email_configuration_url = I18n.t('docs.developer_portal.email_configuration', docs_base_url: docs_base_url) %>
   <p><%= t('.outbound_emails_html', docs_email_configuration_url: docs_email_configuration_url) %></p>
 <% end %>
