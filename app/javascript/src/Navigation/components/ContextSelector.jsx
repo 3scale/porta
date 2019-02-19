@@ -6,12 +6,12 @@ import 'core-js/es6/set'
 import 'core-js/es6/array'
 
 import React from 'react'
-import { render } from 'react-dom'
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import 'Navigation/styles/ContextSelector.scss'
 
-import type { Api, Service, Menu, ReactWrapper } from 'Types'
+import type { Api, Service, Menu } from 'Types'
 
 type Props = {
   apis: Api[],
@@ -139,12 +139,6 @@ class ContextSelector extends React.Component<Props, State> {
   }
 }
 
-const ContextSelectorWrapper: ReactWrapper<Props> = (props, elementId) => {
-  const element = document.getElementById(elementId)
-  if (element == null) {
-    throw new Error(`${elementId} is not part of the DOM`)
-  }
-  render(<ContextSelector {...props} />, element)
-}
+const ContextSelectorWrapper = (props: Props, containerId: string) => createReactWrapper(<ContextSelector {...props} />, containerId)
 
 export { ContextSelector, ContextSelectorWrapper }
