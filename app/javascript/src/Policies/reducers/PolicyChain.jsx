@@ -1,7 +1,7 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, generateGuid, updateArray } from 'Policies/reducers/util'
+import { createReducer, generateGuid, updateArray } from 'Policies/util'
 import type { ChainState } from 'Policies/types/State'
 import type { ChainPolicy, RegistryPolicy } from 'Policies/types/Policies'
 import type {
