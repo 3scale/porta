@@ -208,10 +208,10 @@ $(document).on 'initialize', '#proxy', ->
     false
 
   proxy_credentials_location_value = $('input[name="proxy[credentials_location]"]:checked').val()
-  credentials_forms = document.querySelectorAll('li[id^="proxy_auth_"]')
+  credentials_forms = $('li[id^="proxy_auth_"]')
 
-  toggle_hidden_credentials_forms = () ->
-    credentials_forms.forEach((el) -> el.classList.toggle('hidden', proxy_credentials_location_value is 'authorization'))
+  toggle_hidden_credentials_forms = () -> credentials_forms.toggleClass('hidden', proxy_credentials_location_value is 'authorization')
+  toggle_hidden_credentials_forms()
 
   replace_hyphens_or_underscores = (elt) ->
     return unless elt
