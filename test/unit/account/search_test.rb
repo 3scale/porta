@@ -116,11 +116,13 @@ class Account::SearchTest < ActiveSupport::TestCase
   test 'search user_key without keyword with many records is always indexed and found' do
     service = FactoryBot.create(:simple_service)
     buyer = FactoryBot.create(:simple_buyer)
-    FactoryBot.create_list(:application_plan, 5, issuer: service).each do |plan|
-      plan.create_contract_with!(buyer)
+    FactoryBot.create_list(:application_plan, 5, issuer: service).each_with_index do |plan, index|
+      contract = plan.create_contract_with!(buyer)
+      contract.update_column(:user_key, (index.to_s * 256))
     end
 
     ThinkingSphinx::Test.run do
+      ThinkingSphinx::Test.config
       ThinkingSphinx::Test.index
 
       buyer.bought_cinstances.pluck(:user_key).each do |user_key|
