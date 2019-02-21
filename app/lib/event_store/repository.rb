@@ -153,6 +153,7 @@ module EventStore
                      )
       subscribe_event(ServiceTokenEventSubscriber.new, ServiceTokenDeletedEvent)
       subscribe_event(ServiceDeletionSubscriber.new, Services::ServiceScheduledForDeletionEvent)
+      subscribe_event(ServiceDeletedSubscriber.new, Services::ServiceDeletedEvent)
       subscribe_event(ZyncSubscriber.new, ZyncEvent)
     end
 

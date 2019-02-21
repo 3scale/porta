@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Services::ServiceDeletedEvent < ServiceRelatedEvent
   def self.create(service)
-    provider = service.provider
+    provider = service.account || Account.new({id: service.tenant_id}, without_protection: true)
 
     new(
       service_id:   service.id,
