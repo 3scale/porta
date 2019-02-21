@@ -1,8 +1,13 @@
 import React from 'react'
 import { Toolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
+import AccountSettingsMenu from 'Navigation/components/AccountSettingsMenu'
 
 class SimpleToolbar extends React.Component {
   render () {
+    const accountSettingsProps = {
+      accountSettingsLink: this.props.toolbarProps.accountSettingsLink,
+      accountSettingsClass: this.props.toolbarProps.accountSettingsClass
+    }
     return (
       <Toolbar>
         <ToolbarGroup>
@@ -19,12 +24,7 @@ class SimpleToolbar extends React.Component {
         </ToolbarGroup>
         <ToolbarGroup>
           <ToolbarItem>
-            { /* TODO: Extract to own component, check with app/views/shared/provider/_header.html.slim */ }
-            <div className="PopNavigation PopNavigation--account">
-              <a className="PopNavigation-trigger" href="/p/admin/account" title="Account Settings">
-                <i className="fa fa-cog"></i>
-              </a>
-            </div>
+            <AccountSettingsMenu {...accountSettingsProps}/>
           </ToolbarItem>
           <ToolbarItem>
             { /* TODO: Extract to own component, check with app/views/shared/provider/_header.html.slim */ }
