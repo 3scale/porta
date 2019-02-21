@@ -83,4 +83,9 @@ module Api::IntegrationsHelper
   def deployment_option_is_service_mesh?(service)
     service.deployment_option =~ /^service_mesh/
   end
+
+  def edit_deployment_option_title(service)
+    title = deployment_option_is_service_mesh?(service) ? 'Service Mesh' : 'APIcast'
+    t(:edit_deployment_configuration, scope: :api_integrations_controller, deployment: title )
+  end
 end
