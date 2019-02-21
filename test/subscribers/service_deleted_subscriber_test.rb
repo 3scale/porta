@@ -7,7 +7,7 @@ class ServiceDeletedSubscriberTest < ActiveSupport::TestCase
     service = FactoryBot.build_stubbed(:simple_service)
     event = Services::ServiceDeletedEvent.create(service)
 
-    BackendDeleteEndUsersWorker.expects(:perform_async).with(service.id)
+    BackendDeleteEndUsersWorker.expects(:enqueue).with(event)
 
     ServiceDeletedSubscriber.new.after_commit(event)
   end

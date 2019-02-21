@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class NotificationEvent < BaseEventStoreEvent
 
   # Create Notification Event
 
   def self.create(system_name, event)
-    provider_id = event.provider.try!(:id)
+    provider_id = event.try(:provider)&.id || event.metadata[:provider_id]
 
     new(
       parent_event_id: event.event_id,

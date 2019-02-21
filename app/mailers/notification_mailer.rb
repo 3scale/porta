@@ -371,7 +371,7 @@ class NotificationMailer < ActionMailer::Base
   # @param [User] received
   delivers Services::ServiceDeletedEvent
   def service_deleted(event, receiver)
-    @provider_account = event.provider
+    @provider_account = Account.find(event.metadata[:provider_id])
     @receiver         = receiver
     @service_name     = event.service_name
     @event            = event
