@@ -37,11 +37,10 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
   end
 
   def test_create_notifications_with_master
-    master = Account.master rescue FactoryBot.create(:simple_master)
-    event  = CustomEvent.new(provider: master)
+    event  = CustomEvent.new(provider: master_account)
     notification = NotificationEvent.create(:application_created, event)
 
-    assert_equal master, @worker.create_notifications(notification)
+    assert_equal master_account, @worker.create_notifications(notification)
   end
 
   def test_skip_notifications_for_suspended_account

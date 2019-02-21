@@ -22,9 +22,12 @@ class Master::Api::ServicesControllerTest < ActionController::TestCase
     service   = FactoryBot.create(:simple_service, account: provider)
     app_plan  =  FactoryBot.create(:simple_application_plan, cinstances: [cinstance], issuer: service)
 
-    method_event_count = RailsEventStoreActiveRecord::Event.where(event_type: %w[Services::ServiceDeletedEvent NotificationEvent]).method(:count)
-    assert_difference(method_event_count, +2) do
-      delete :destroy, id: service.id, provider_id: provider.id, api_key: master_account.provider_key
+    method_service_deleted_event_count = RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).method(:count)
+    method_notification_event_count    = RailsEventStoreActiveRecord::Event.where(event_type: NotificationEvent).method(:count)
+    assert_difference(method_notification_event_count, +1) do
+      assert_difference(method_service_deleted_event_count, +1) do
+        delete :destroy, id: service.id, provider_id: provider.id, api_key: master_account.provider_key
+      end
     end
 
     assert_response 200

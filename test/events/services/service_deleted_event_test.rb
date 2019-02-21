@@ -12,7 +12,6 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
     assert event
     assert event.service_name, service.name
     assert event.service_id, service.id
-    assert event.provider, service.provider
   end
 
   def test_ability
