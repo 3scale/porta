@@ -15,7 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     customerPortalLink: headerElement.dataset.customerPortalLink,
     apiDocsLink: headerElement.dataset.apiDocsLink,
     liquidReferenceLink: headerElement.dataset.liquidReferenceLink,
-    whatIsNewLink: headerElement.dataset.whatIsNewLink
+    whatIsNewLink: headerElement.dataset.whatIsNewLink,
+    avatarLink: headerElement.dataset.avatarLink,
+    impersonated: headerElement.dataset.impersonated,
+    accountName: headerElement.dataset.accountName,
+    displayName: headerElement.dataset.displayName,
+    logoutPath: headerElement.dataset.logoutPath,
+    username: headerElement.dataset.username
   }
   render(<Header {...props}/>, headerElement)
 })
