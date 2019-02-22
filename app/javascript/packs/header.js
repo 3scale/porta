@@ -8,7 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     href: headerElement.dataset.href,
     classHeaderWithLogo: headerElement.dataset.classHeaderWithLogo,
     accountSettingsLink: headerElement.dataset.accountSettingsLink,
-    accountSettingsClass: headerElement.dataset.accountSettingsClass || ''
+    accountSettingsClass: headerElement.dataset.accountSettingsClass,
+    docsLink: headerElement.dataset.docsLink,
+    isSaas: headerElement.dataset.isSaas,
+    docsLinksClass: headerElement.dataset.docsLinksClass,
+    customerPortalLink: headerElement.dataset.customerPortalLink,
+    apiDocsLink: headerElement.dataset.apiDocsLink,
+    liquidReferenceLink: headerElement.dataset.liquidReferenceLink,
+    whatIsNewLink: headerElement.dataset.whatIsNewLink
   }
   render(<Header {...props}/>, headerElement)
 })

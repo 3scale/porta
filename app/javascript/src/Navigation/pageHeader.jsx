@@ -17,12 +17,22 @@ class Header extends React.Component {
       accountSettingsClass: this.props.accountSettingsClass
     }
 
+    const docsProps = {
+      docsLink: this.props.docsLink,
+      isSaas: this.props.isSaas,
+      docsLinksClass: this.props.docsLinksClass,
+      customerPortalLink: this.props.customerPortalLink,
+      apiDocsLink: this.props.apiDocsLink,
+      liquidReferenceLink: this.props.liquidReferenceLink,
+      whatIsNewLink: this.props.whatIsNewLink
+    }
+
     return (
       <PageHeader
         logo={<SimpleBrand/>}
         className = "Header"
         logoProps = {logoProps}
-        toolbar = {<SimpleToolbar toolbarProps={toolbarProps}/>}
+        toolbar = {<SimpleToolbar toolbarProps={toolbarProps} docsProps={docsProps}/>}
         avatar = {<Avatar/>}
       />
     )
