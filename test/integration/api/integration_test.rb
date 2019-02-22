@@ -38,6 +38,23 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     assert_not_nil flash[:error]
   end
 
+  def test_update
+    Proxy.any_instance.stubs(:deploy).returns(true)
+    Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
+    service = @provider.services.first
+    proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: service.proxy, last: false)
+
+    refute proxy_rule_1.last
+    proxy_rules_attributes = {
+      proxy_rules_attributes: {
+        proxy_rule_1.id => { id: proxy_rule_1.id, last: true }
+      }
+    }
+    put admin_service_integration_path(service_id: service), proxy: proxy_rules_attributes
+    assert_response :redirect
+    assert proxy_rule_1.reload.last
+  end
+
   def test_update_proxy_rule_position
     Proxy.any_instance.stubs(:deploy).returns(true)
     Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
