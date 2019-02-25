@@ -26,14 +26,7 @@ class SimpleToolbar extends React.Component {
       <Toolbar>
         <ToolbarGroup>
           <ToolbarItem>
-            { /* TODO: Use ContextSelector component, Navigation/components/ContextSelector.jsx */ }
-            <div className="PopNavigation PopNavigation--context">
-              <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Selector">
-                <span className="ActiveMenuTitle">
-                  <i className="fa fa-puzzle-piece"></i>API: API<i className="fa fa-chevron-down"></i>
-                </span>
-              </a>
-            </div>
+            <div id="api_selector"></div>
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup>
