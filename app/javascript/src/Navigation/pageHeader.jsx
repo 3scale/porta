@@ -9,6 +9,7 @@ class Header extends React.Component {
     const logoProps = {
       href: this.props.href,
       target: '_self',
+      title: 'Dashboard',
       className: `Header-link ${this.props.classHeaderWithLogo}`
     }
 
