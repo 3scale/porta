@@ -1,9 +1,9 @@
 section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service)) class="Configuration--#{@show_presenter.test_state_modifier}"
 
-  = link_to 'edit APIcast configuration', edit_admin_service_integration_path(@service), class: 'SettingsBox-toggle'
+  = link_to edit_deployment_option_title(@service), edit_admin_service_integration_path(@service), class: 'SettingsBox-toggle'
 
   article.Configuration-summary data-state="open" class=("Environment--#{@show_presenter.test_state_modifier}" unless deployment_option_is_service_mesh?(@service))
-    h3.Configuration-title APIcast Configuration
+    h3.Configuration-title = deployment_option_is_service_mesh?(@service) ? 'Service mesh Configuration' : 'APIcast Configuration'
 
     dl.u-dl
       - unless deployment_option_is_service_mesh?(@service)

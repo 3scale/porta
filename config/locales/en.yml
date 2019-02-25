@@ -22,6 +22,7 @@ en:
     apicast_version_not_reverted: 'The APIcast version for this service could not be reverted'
     apicast_version_not_upgraded: 'The APIcast version for this service could not be upgraded'
     oidc_not_available_on_old_apicast: 'OpenID Connect is not supported for the old APIcast. Pick a different authentication option before reverting back.'
+    edit_deployment_configuration: 'edit %{deployment} configuration'
 
   access_token_options:
     finance: 'Billing API'
