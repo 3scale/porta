@@ -204,7 +204,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def update_mapping_rules_position
-    proxy_rules_attributes.eachd_value do |attrs|
+    proxy_rules_attributes.each_value do |attrs|
       proxy_rule = @proxy.proxy_rules.find_by(id: attrs['id'])
       proxy_rule&.set_list_position(attrs['position'])
     end
