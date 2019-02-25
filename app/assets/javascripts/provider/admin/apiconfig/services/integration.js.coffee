@@ -208,17 +208,23 @@ $(document).on 'initialize', '#proxy', ->
     false
 
   proxy_credentials_location_value = $('input[name="proxy[credentials_location]"]:checked').val()
+  credentials_forms = $('li[id^="proxy_auth_"]')
+
+  toggle_hidden_credentials_forms = () -> credentials_forms.toggleClass('hidden', proxy_credentials_location_value is 'authorization')
+  toggle_hidden_credentials_forms()
 
   replace_hyphens_or_underscores = (elt) ->
     return unless elt
     elt.value = switch proxy_credentials_location_value
       when 'headers' then elt.value.replace(/_/g,'-')
       when 'query' then elt.value.replace(/-/g,'_')
+      else elt.value
 
   $(document).on 'change', 'input[name="proxy[credentials_location]"]', (event) ->
     proxy_credentials_location_value = this.value
     replace_hyphens_or_underscores(document.getElementById('proxy_auth_user_key'))
     toggle_form_changed_ui()
+    toggle_hidden_credentials_forms()
 
   $(document).on 'input', 'input#proxy_auth_user_key', (event) ->
     replace_hyphens_or_underscores(this)
