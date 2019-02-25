@@ -4,12 +4,14 @@ import AccountSettingsMenu from 'Navigation/components/AccountSettingsMenu'
 import DocumentationItemMenu from 'Navigation/components/Documentation'
 
 class SimpleToolbar extends React.Component {
-  render () {
-    const accountSettingsProps = {
+  getAccountSettingsProps () {
+    return {
       accountSettingsLink: this.props.toolbarProps.accountSettingsLink,
       accountSettingsClass: this.props.toolbarProps.accountSettingsClass
     }
-    const docsProps = {
+  }
+  getDocsProps () {
+    return {
       docsLink: this.props.docsProps.docsLink,
       isSaas: this.props.docsProps.isSaas,
       docsLinksClass: this.props.docsProps.docsLinksClass,
@@ -18,6 +20,8 @@ class SimpleToolbar extends React.Component {
       liquidReferenceLink: this.props.docsProps.liquidReferenceLink,
       whatIsNewLink: this.props.docsProps.whatIsNewLink
     }
+  }
+  render () {
     return (
       <Toolbar>
         <ToolbarGroup>
@@ -34,10 +38,10 @@ class SimpleToolbar extends React.Component {
         </ToolbarGroup>
         <ToolbarGroup>
           <ToolbarItem>
-            <AccountSettingsMenu {...accountSettingsProps}/>
+            <AccountSettingsMenu {...this.getAccountSettingsProps()}/>
           </ToolbarItem>
           <ToolbarItem>
-            <DocumentationItemMenu {...docsProps}/>
+            <DocumentationItemMenu {...this.getDocsProps()}/>
           </ToolbarItem>
         </ToolbarGroup>
       </Toolbar>
