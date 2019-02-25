@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import Header from '../src/Navigation/pageHeader'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const headerElement = document.getElementById('headerPF4')
+  const headerElement = document.getElementById('user_widget')
   const props = {
     href: headerElement.dataset.href,
     classHeaderWithLogo: headerElement.dataset.classHeaderWithLogo,
