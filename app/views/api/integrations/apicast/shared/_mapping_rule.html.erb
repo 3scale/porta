@@ -9,6 +9,9 @@
 <%- id = rule.id || "{new_id_#{SecureRandom.hex}}" %>
 
 <%= form.fields_for "proxy_rules_attributes[#{id}]", rule do |p| %>
+  <td class="last">
+    <%= p.check_box 'last', html_options %>
+  </td>
     <td class="http_method">
       <%= p.select 'http_method', ProxyRule::ALLOWED_HTTP_METHODS, {}, html_options %>
     </td>
