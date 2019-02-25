@@ -1055,6 +1055,7 @@ en:
         hosted_proxy_endpoint: "Public Base URL"
         production_endpoint: "Public Base URL"
         oidc_issuer_endpoint: "OpenID Connect Issuer"
+
       profile:
         company_url: URL
 

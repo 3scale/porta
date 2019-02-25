@@ -1,6 +1,7 @@
 = f.toggled_inputs 'Authentication Settings' do
   - if @service.oidc?
     = f.input :oidc_issuer_endpoint, hint: true, input_html: { placeholder: "https://sso.example.com/auth/realms/gateway" }
+    = f.input :oidc_options, :as => :check_boxes, :collection => ["Standard Flow Enabled", "Implicit Flow Enabled", "Service Accounts Enabled", "Direct Access Grants Enabled"]
   - elsif @service.oauth?
     = f.input :oauth_login_url, label: "OAuth Authorization Endpoint", input_html: { placeholder: "https://#{parameterized_org_name_of_the_current_account}.com/authorize" },  hint: t("formtastic.hints.proxy.#{oauth_hint}")
 
