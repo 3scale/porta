@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
@@ -6,7 +8,7 @@ class Api::IntegrationsController < Api::BaseController
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
 
-  PLUGIN_LANGUAGES = %w(ruby java python nodejs php rest csharp).freeze
+  PLUGIN_LANGUAGES = %w[ruby java python nodejs php rest csharp].freeze
 
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
 
@@ -16,9 +18,7 @@ class Api::IntegrationsController < Api::BaseController
     @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
   end
 
-  def settings
-
-  end
+  def settings; end
 
   def update
     if @service.using_proxy_pro? && !@proxy.apicast_configuration_driven
@@ -117,7 +117,7 @@ class Api::IntegrationsController < Api::BaseController
                       latest: apicast_configuration_driven_after_toggle,
                       service_id: @proxy.service_id,
                       deployment_option: @proxy.deployment_option
-      )
+                     )
       flash[:success] = apicast_configuration_driven_after_toggle ? flash_message(:apicast_version_upgraded) : flash_message(:apicast_version_reverted)
     else
       flash[:error] = apicast_configuration_driven ? flash_message(:apicast_not_not_reverted) :  flash_message(:apicast_not_not_upgraded)
@@ -204,9 +204,9 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def update_mapping_rules_position
-    proxy_rules_attributes.each do |_, attrs|
-      proxy_rule = @proxy.proxy_rules.find_by_id(attrs['id'])
-      proxy_rule.set_list_position(attrs['position']) if proxy_rule
+    proxy_rules_attributes.eachd_value do |attrs|
+      proxy_rule = @proxy.proxy_rules.find_by(id: attrs['id'])
+      proxy_rule&.set_list_position(attrs['position'])
     end
   end
 
