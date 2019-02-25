@@ -17,7 +17,7 @@ module Finance
 
       transaction do
 
-        if variable_cost_paid_until.to_date < period.end
+        if should_bill_variable_cost?(period)
           intersection = intersect_with_unpaid_period(period, variable_cost_paid_until)
           # intersect_with_unpaid_period returns the intersection in
           # time, but it rounds from beginning of day of the first day
@@ -75,6 +75,15 @@ module Finance
       [ values, costs ]
     end
 
+    # Using `read_attribute` because the getter method is overloaded
+    def never_billed_variable_cost?
+      self[:variable_cost_paid_until].blank?
+    end
+
+    def should_bill_variable_cost?(period)
+      never_billed_variable_cost? || variable_cost_paid_until.to_date < period.end
+    end
+
     protected
 
     def bill_variable_fee_for(period, invoice, plan_to_bill)
@@ -96,6 +105,5 @@ module Finance
         )
       end
     end
-
   end
 end
