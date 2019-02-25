@@ -5,20 +5,22 @@ import SimpleToolbar from 'Navigation/components/Toolbar'
 import SimpleBrand from 'Navigation/components/Brand'
 
 class Header extends React.Component {
-  render () {
-    const logoProps = {
+  constructor (props) {
+    super(props)
+
+    this.logoProps = {
       href: this.props.href,
       target: '_self',
       title: 'Dashboard',
       className: `Header-link ${this.props.classHeaderWithLogo}`
     }
 
-    const toolbarProps = {
+    this.toolbarProps = {
       accountSettingsLink: this.props.accountSettingsLink,
       accountSettingsClass: this.props.accountSettingsClass
     }
 
-    const docsProps = {
+    this.docsProps = {
       docsLink: this.props.docsLink,
       isSaas: this.props.isSaas,
       docsLinksClass: this.props.docsLinksClass,
@@ -28,7 +30,7 @@ class Header extends React.Component {
       whatIsNewLink: this.props.whatIsNewLink
     }
 
-    const avatarProps = {
+    this.avatarProps = {
       avatarLink: this.props.avatarLink,
       impersonated: this.props.impersonated,
       accountName: this.props.accountName,
@@ -36,14 +38,16 @@ class Header extends React.Component {
       logoutPath: this.props.logoutPath,
       username: this.props.username
     }
+  }
 
+  render () {
     return (
       <PageHeader
         logo={<SimpleBrand/>}
         className = "Header"
-        logoProps = {logoProps}
-        toolbar = {<SimpleToolbar toolbarProps={toolbarProps} docsProps={docsProps}/>}
-        avatar = {<Avatar {...avatarProps}/>}
+        logoProps = {this.logoProps}
+        toolbar = {<SimpleToolbar toolbarProps={this.toolbarProps} docsProps={this.docsProps}/>}
+        avatar = {<Avatar {...this.avatarProps}/>}
       />
     )
   }
