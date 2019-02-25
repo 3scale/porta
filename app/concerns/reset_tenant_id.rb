@@ -48,6 +48,12 @@ module ResetTenantId
       @klass = klass
       @name = name.to_sym
       @collection = wrap_collection(options[:collection] || @name)
+      value = options[:value]
+      if value
+        options[:with] = -> (record) {
+          record.update_column(:tenant_id, value.is_a?(Symbol) ? record.public_send(value) : value) # rubocop:disable Rails/SkipsModelValidations
+        }
+      end
       @update = wrap_update(options[:with] || block)
     end
 
@@ -61,7 +67,7 @@ module ResetTenantId
         raise ArgumentError, 'Pass in `:with` option or a block'
       when Symbol
         proc do |record|
-          record.update_column :tenant_id, record.public_send(with) # rubocop:disable Rails/SkipsModelValidations
+          record.public_send(with)
         end
       else
         with
@@ -129,7 +135,14 @@ module ResetTenantId
     #     record.provider_account_id
     #   end
     #
-    #   updates(first_3_accounts, collection: Account.find(1,2,3), with: :provider_account_id)
+    #   updates(first_3_accounts, collection: Account.find(1,2,3), value: :provider_account_id)
+    #
+    #   updates(first_3_accounts, collection: Account.find(1,2,3), with: :set_tenant_id_for_buyer)
+    #
+    #   def set_tenant_id_for_buyer
+    #     return unless buyer?
+    #     update_column :tenant_id, self.provider_account_id
+    #   end
     #
     #   updates(:all_tags, collection: -> { ActiveRecord::Base.connection.execute("SELECT id, account_id FROM tags") }) do |record|
     #     id, account_id = record
