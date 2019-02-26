@@ -75,7 +75,7 @@ Feature: Proxy integration
     And I go to the integration page for service "one"
     Then I should see the Policy Chain
 
-  @javascript @selenium
+  @javascript
   Scenario: Sorting mapping rules
     And I go to the integration show page for service "one"
     And I press "Start using the latest APIcast"
@@ -83,7 +83,7 @@ Feature: Proxy integration
     And I toggle "Mapping Rules"
     And I add a new mapping rule with method "POST" pattern "/beers" delta "2" and metric "hits"
     And I add a new mapping rule with method "PUT" pattern "/mixers" delta "1" and metric "hits"
-    And I drag the last mapping rule to the first position
+    And I drag the last mapping rule to the position 1
     And I save the proxy config
     Then the mapping rules should be in the following order:
       | http_method | pattern | delta | metric_id |
