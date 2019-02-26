@@ -2,7 +2,7 @@
 
   disabled ||= !rule.new_record? && !@marked_for_update.try(:include?,rule.id.to_s)
   html_options = { :disabled => disabled , :class => 'message-when-change' }
-  index ||= false
+  index = local_assigns[:index]
 
  %>
 
