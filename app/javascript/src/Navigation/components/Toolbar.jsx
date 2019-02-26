@@ -3,6 +3,11 @@ import { Toolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
 import AccountSettingsMenu from 'Navigation/components/AccountSettingsMenu'
 import DocumentationItemMenu from 'Navigation/components/Documentation'
 
+// TODO: Remove this hack
+const divStyle = {
+  display: 'none'
+}
+
 class SimpleToolbar extends React.Component {
   getAccountSettingsProps () {
     return {
@@ -26,12 +31,8 @@ class SimpleToolbar extends React.Component {
       <Toolbar>
         <ToolbarGroup>
           <ToolbarItem>
-            <div id="api_selector"></div>
-          </ToolbarItem>
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <ToolbarItem>
             <AccountSettingsMenu {...this.getAccountSettingsProps()}/>
+            <div className="username" style={divStyle}>admin</div>
           </ToolbarItem>
           <ToolbarItem>
             <DocumentationItemMenu {...this.getDocsProps()}/>
