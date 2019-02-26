@@ -1080,6 +1080,12 @@ en:
         due_on: 'Due On'
         paid_on: 'Paid On'
 
+      oidc_configuration:
+        service_accounts_enabled: Service Accounts Flow
+        standard_flow_enabled: Authorization Code Flow
+        implicit_flow_enabled: Implicit Flow
+        direct_access_grants_enabled: Direct Access Grant Flow
+
   config:
     advanced_cms: Advanced CMS
 

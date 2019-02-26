@@ -72,4 +72,17 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     get "/apiconfig/services/#{service.id}/integration/edit"
     assert_response :success
   end
+
+
+  test 'update OIDC Authorization flows' do
+    rolling_updates_off
+    service = FactoryBot.create(:simple_service, account: @provider)
+    ProxyTestService.any_instance.stubs(disabled?: true)
+    patch admin_service_integration_path(service_id: service, proxy: {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true}})
+    assert_response :redirect
+
+    service.reload
+    refute service.proxy.oidc_configuration.standard_flow_enabled
+    assert service.proxy.oidc_configuration.direct_access_grants_enabled
+  end
 end
