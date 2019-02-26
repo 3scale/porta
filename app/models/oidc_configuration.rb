@@ -11,8 +11,10 @@ class OIDCConfiguration < ApplicationRecord
     end
 
     FLOWS = %i[
-      service_accounts_enabled standard_flow_enabled
-      implicit_flow_enabled direct_access_grants_enabled
+      standard_flow_enabled
+      implicit_flow_enabled
+      service_accounts_enabled
+      direct_access_grants_enabled
     ].freeze
 
     BOOLEAN_ATTRIBUTES = FLOWS

@@ -134,7 +134,7 @@ class Proxy < ApplicationRecord
 
 
   def oidc_configuration
-    super || (oidc? && build_oidc_configuration)
+    super || build_oidc_configuration(standard_flow_enabled: true)
   end
 
   class DeploymentStrategy
