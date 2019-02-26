@@ -3,6 +3,7 @@ import { PageHeader } from '@patternfly/react-core'
 import Avatar from 'Navigation/components/Avatar'
 import SimpleToolbar from 'Navigation/components/Toolbar'
 import SimpleBrand from 'Navigation/components/Brand'
+import ContextSwitcher from 'Navigation/components/ContextSwitcherContainer'
 
 class Header extends React.Component {
   getToolbarProps () {
@@ -46,13 +47,15 @@ class Header extends React.Component {
 
   render () {
     return (
-      <PageHeader
-        logo={<SimpleBrand/>}
-        className = "Header"
-        logoProps = {this.getLogoProps()}
-        toolbar = {<SimpleToolbar toolbarProps={this.getToolbarProps()} docsProps={this.getDocsProps()}/>}
-        avatar = {<Avatar {...this.getAvatarProps()}/>}
-      />
+      <div>
+        <PageHeader
+          logo={<SimpleBrand/>}
+          className = "Header"
+          logoProps = {this.getLogoProps()}
+          toolbar = {<SimpleToolbar toolbarProps={this.getToolbarProps()} docsProps={this.getDocsProps()}/>}
+          avatar = {<Avatar {...this.getAvatarProps()}/>}/>
+        <ContextSwitcher/>
+      </div>
     )
   }
 }
