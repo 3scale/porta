@@ -83,7 +83,7 @@ $(document).on 'initialize', '#proxy', ->
     $mappingRuleList = $("table#proxy-rules > tbody")
     rule = $("#new-proxy-rule-template").html()
     timestamp = new Date().getTime()
-    rule = rule.replace(/\{new_id_.*\}/g, timestamp)
+    rule = rule.replace(/\{new_id_\w*\}/g, timestamp)
     rule = $("<tr>").append(rule)
     rule.find("input:not(.destroyer),select").removeAttr "disabled"
     newIndex = $mappingRuleList.children().length

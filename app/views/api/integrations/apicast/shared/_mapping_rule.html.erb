@@ -29,8 +29,8 @@
     </td>
     <td class="last_called_and_position">
       <%= p.check_box 'last', html_options %>
-      <%= p.hidden_field :position, {}.merge(:class => 'position', :value => index, :disabled => true) %>
       <%= link_to '', '#', :class => 'action ui-sortable-handler fa fa-sort' %>
+      <%= p.hidden_field :position, {}.merge(:class => 'position', :value => index, :disabled => true) %>
     </td>
     <td class="actions">
       <%= link_to '', '#edit-proxy-rule', :class => 'action edit' %>

@@ -86,9 +86,9 @@ end
 
 Given(/^I drag the last mapping rule to the first position$/) do
   within(page.find('#sortable')) do
-    last_index = all('#sortable tr').count
-    element = page.find("#sortable tr:nth-child(#{last_index}) a.ui-sortable-handler")
-    target = page.find("#sortable tr:nth-child(1)")
+    last_index = all('tr').count
+    element = page.find("tr:nth-child(#{last_index}) a.ui-sortable-handler")
+    target = page.find("tr:nth-child(1)")
     element.drag_to(target)
   end
 end
