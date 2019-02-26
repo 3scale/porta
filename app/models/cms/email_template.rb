@@ -120,7 +120,6 @@ class CMS::EmailTemplate < CMS::Template
 
         unless email.join.split('@').last == domain
           errors.add(field, :wrong_domain)
-          #binding.pry
         end
       end
     end
