@@ -1,6 +1,6 @@
 base: &default
   superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
-  apicast_internal_host_regexp: '\Asystem-(.*)\Z'
+  apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
   secure_cookie: true
   force_ssl: true
   apicast_oauth: true
