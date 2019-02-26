@@ -39,6 +39,6 @@ class OIDCConfigurationTest < ActiveSupport::TestCase
       "direct_access_grants_enabled" => false
     }
 
-    assert_equal json.to_json, record.config_before_type_cast
+    assert_equal json, JSON.parse(record.config_before_type_cast)
   end
 end
