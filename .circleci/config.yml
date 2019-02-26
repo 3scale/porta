@@ -383,19 +383,39 @@ jobs:
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
-      - run:
-          name: NPM test
+      - run:  
+          name: Eslint & Flow
           command: |
-            npm test -- --reporters dots,junit --browsers ChromeHeadless
-            npm run-script jest
-      - *store-junit-test-results
-      - *store-test-artifacts
+            npm run lint
       - store_artifacts:
           path: doc/licenses
           destination: licenses
       - store_artifacts:
           path: doc/active_docs
           destination: active_docs
+
+  karma:
+    executor: builder
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - run:
+          name: Karma tests
+          command: |
+            npm test -- --reporters dots,junit --browsers ChromeHeadless
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *upload-coverage
+
+  jest:
+    executor: builder
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - run:
+          name: Jest specs
+          command: |
+            npm run-script jest
       - *upload-coverage
 
   unit:
@@ -691,6 +711,12 @@ workflows:
       - lint:
           requires:
             - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
       - unit:
           requires:
             - dependencies_bundler
@@ -714,6 +740,8 @@ workflows:
             - integration
             - functional
             - lint
+            - karma
+            - jest
           filters:
             branches:
               only: master
@@ -725,6 +753,8 @@ workflows:
             - integration
             - functional
             - lint
+            - karma
+            - jest
           filters:
             branches:
               only: master
@@ -757,6 +787,12 @@ workflows:
       - lint:
           requires:
             - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
       - unit-postgres:
           requires:
             - deps_bundler_postgres
@@ -780,6 +816,8 @@ workflows:
             - integration-postgres
             - functional-postgres
             - lint
+            - karma
+            - jest
           filters:
             branches:
               only: master
@@ -791,6 +829,8 @@ workflows:
             - integration-postgres
             - functional-postgres
             - lint
+            - karma
+            - jest
           filters:
             branches:
               only: master
@@ -824,6 +864,12 @@ workflows:
       - lint:
           requires:
             - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
       - unit-oracle:
           requires:
             - deps_bundler_oracle
@@ -847,6 +893,8 @@ workflows:
             - integration-oracle
             - functional-oracle
             - lint
+            - karma
+            - jest
           filters:
             branches:
               only: master
@@ -859,6 +907,8 @@ workflows:
             - integration-oracle
             - functional-oracle
             - lint
+            - karma
+            - jest
           filters:
             branches:
               only: master
