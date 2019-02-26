@@ -521,6 +521,13 @@ System::Database::MySQL.define do
     SQL
   end
 
+  # FIXME: This will not work when we have more than 1 oidc_configurable_type
+  trigger 'oidc_configurations' do
+    <<~SQL
+      SET NEW.tenant_id = (SELECT tenant_id FROM proxies WHERE id = NEW.oidc_configurable_id AND tenant_id <> master_id);
+    SQL
+  end
+
   procedure 'sp_invoices_friendly_id', invoice_id: 'bigint' do
     <<~SQL
       BEGIN

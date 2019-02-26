@@ -537,6 +537,12 @@ System::Database::Postgres.define do
     SQL
   end
 
+  trigger 'oidc_configurations' do
+    <<~SQL
+      SELECT tenant_id INTO NEW.tenant_id FROM proxies WHERE id = NEW.oidc_configurable_id AND tenant_id <> master_id;
+    SQL
+  end
+
   procedure 'sp_invoices_friendly_id', invoice_id: 'numeric' do
     <<~SQL
       DECLARE
