@@ -13,6 +13,7 @@ class Proxy < ApplicationRecord
   has_many :proxy_rules, dependent: :destroy, inverse_of: :proxy
   has_many :proxy_configs, dependent: :delete_all, inverse_of: :proxy
   has_one :oidc_configuration, dependent: :delete, inverse_of: :oidc_configurable, as: :oidc_configurable
+  accepts_nested_attributes_for :oidc_configuration
 
   validates :api_backend, :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, presence: true
 
@@ -129,6 +130,11 @@ class Proxy < ApplicationRecord
 
   def plugin?
     !hosted? && !self_managed?
+  end
+
+
+  def oidc_configuration
+    super || (oidc? && build_oidc_configuration)
   end
 
   class DeploymentStrategy

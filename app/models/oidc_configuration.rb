@@ -10,10 +10,12 @@ class OIDCConfiguration < ApplicationRecord
       super(record.attributes)
     end
 
-    BOOLEAN_ATTRIBUTES = %i[
+    FLOWS = %i[
       service_accounts_enabled standard_flow_enabled
       implicit_flow_enabled direct_access_grants_enabled
     ].freeze
+
+    BOOLEAN_ATTRIBUTES = FLOWS
 
     ATTRIBUTES = BOOLEAN_ATTRIBUTES
     attr_accessor *ATTRIBUTES
