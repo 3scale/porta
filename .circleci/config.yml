@@ -339,12 +339,10 @@ jobs:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-            - ./flow-typed
       - persist_to_workspace:
           root: .
           paths:
             - ./node_modules
-            - ./flow-typed
 
   assets_precompile:
     executor: builder
