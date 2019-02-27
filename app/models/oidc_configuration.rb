@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OIDCConfiguration < ApplicationRecord
   class Config < ActiveRecord::Coders::JSON
     include ActiveModel::Serialization
@@ -20,18 +22,18 @@ class OIDCConfiguration < ApplicationRecord
     BOOLEAN_ATTRIBUTES = FLOWS
 
     ATTRIBUTES = BOOLEAN_ATTRIBUTES
-    attr_accessor *ATTRIBUTES
+    attr_accessor(*ATTRIBUTES)
 
     # Defining accessor for boolean to always store `true` or `false`
     BOOLEAN_ATTRIBUTES.each do |attr|
       define_method "#{attr}=" do |value|
         # Always set to `true` or `false`
         # TODO: Rails 5.0 `#type_cast_from_database` will be replaced by `#cast`
-        instance_variable_set :"@#{attr}", !!ActiveRecord::Type::Boolean.new.type_cast_from_database(value)
+        instance_variable_set :"@#{attr}", !!ActiveRecord::Type::Boolean.new.type_cast_from_database(value) #rubocop:disable Style/DoubleNegation
       end
     end
 
-    def initialize(attributes={})
+    def initialize(attributes = {})
       assign_attributes(attributes)
     end
 
@@ -44,7 +46,7 @@ class OIDCConfiguration < ApplicationRecord
         public_send "#{attr}=", attributes[attr]
       end
     end
-    alias_method :attributes=, :assign_attributes
+    alias attributes= assign_attributes
 
     def attributes
       ATTRIBUTES.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |attr, object|
@@ -56,8 +58,8 @@ class OIDCConfiguration < ApplicationRecord
   belongs_to :oidc_configurable, polymorphic: true
   serialize :config, OIDCConfiguration::Config
 
-  delegate *OIDCConfiguration::Config::ATTRIBUTES, to: :config
-  delegate *OIDCConfiguration::Config::ATTRIBUTES.map{|attr| "#{attr}=" }, to: :config
+  delegate(*OIDCConfiguration::Config::ATTRIBUTES, to: :config)
+  delegate(*OIDCConfiguration::Config::ATTRIBUTES.map {|attr| "#{attr}=" }, to: :config)
 
   # Always initialize a valid `config`
   after_initialize :config

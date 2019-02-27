@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable
 class CreateOIDCConfigurations < ActiveRecord::Migration
   def change
     create_table :oidc_configurations do |t|
@@ -8,6 +11,6 @@ class CreateOIDCConfigurations < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_index :oidc_configurations, [:oidc_configurable_type, :oidc_configurable_id], unique: true, name: :oidc_configurable
+    add_index :oidc_configurations, %i[oidc_configurable_type oidc_configurable_id], unique: true, name: :oidc_configurable
   end
 end
