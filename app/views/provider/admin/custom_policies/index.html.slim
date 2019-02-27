@@ -4,5 +4,4 @@
 - content_for(:title)
   = 'Custom Policies'
 
-
-#custom-policies-container
+= content_tag :div, id: 'custom-policies-container', data: { policies: @policies }  do end

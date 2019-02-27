@@ -8,7 +8,15 @@ class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseControlle
 
   layout 'provider'
 
-  def index; end
+  def index
+    @policies = { # sample data
+      'apicast' => [{'name'=> 'Apicast', 'summary'=> 'Apicast summary', 'description'=> 'Apicast description', 'version'=> '1.0.0', 'schema'=> {}, 'configuration'=> {}}],
+      'cors' => [{'name'=> 'CORS', 'summary'=> 'CORS summary', 'description'=> 'CORS headers', 'version'=> '1.0.0', 'schema'=> {}, 'configuration'=> {}}],
+      'echo'=> [{'name'=> 'Echo', 'summary'=> 'Echo summary', 'description'=> 'Echoes the request', 'version'=> '1.0.0', 'schema'=> {}, 'configuration'=> {}}],
+      'headers' => [{'name'=> 'Headers', 'summary'=> 'Headers summary', 'description'=> 'Allows setting Headers', 'version'=> '1.0.0', 'schema'=> {}, 'configuration'=> {}}]
+    }
+
+  end
 
   def edit; end
 
