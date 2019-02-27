@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "clear": "rm -rf node_modules/",
-    "pretest": "flow",
+    "lint": "flow && eslint .eslintrc app/javascript spec/javascripts",
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
