@@ -16,6 +16,7 @@ module ThreeScale
         end
 
         @doc ||= {}
+        @validator = JSONValidator.new(doc)
       end
 
       attr_reader :errors, :doc
@@ -24,30 +25,9 @@ module ThreeScale
 
       def valid?
         return false if errors.any?
-        JSONValidator.fully_validate(JSON_SCHEMA, doc).each { |error| errors.add(:base, error) }
+        @validator.fully_validate(JSON_SCHEMA).each { |error| errors.add(:base, error) }
         errors.empty?
-      end
-
-      def self.setup_json_validator!
-        JSONValidator.setup!
-
-        schemas = Rails.root.join('app', 'lib', 'three_scale', 'policies', 'schemas', '*.schema.json')
-        Dir.glob(schemas).each do |file|
-          schema = JSON.parse(File.read(file))
-          new_schema = JSON::Schema.new(schema, schema['$id'])
-          JSONValidator.add_schema(new_schema)
-        end
-      end
-
-      def self.setup_json_validator
-        setup_json_validator!
-      rescue StandardError => error
-        Rails.logger.info("Failed to register schema with error: #{error}")
-        nil
-
       end
     end
   end
 end
-
-ThreeScale::Policies::Specification.setup_json_validator

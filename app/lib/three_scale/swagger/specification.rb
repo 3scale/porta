@@ -6,6 +6,7 @@ module ThreeScale
         def initialize(spec)
           @doc = spec.doc
           @errors = spec.errors
+          @validator = JSONValidator.new(@doc)
         end
 
         # The base path of the specification. This is needed to have it whitelisted on api_docs_proxy.
@@ -20,7 +21,6 @@ module ThreeScale
         def swagger?
           raise "#{self.class} should implement #{__method__}"
         end
-
       end
 
       class VInvalid < VBase
@@ -52,7 +52,7 @@ module ThreeScale
         JSON_SCHEMA = {'$ref' => 'http://swagger.io/v2/schema.json#'}.freeze
 
         def validate!
-          JSONValidator.fully_validate(JSON_SCHEMA, @doc).each do |error|
+          @validator.fully_validate(JSON_SCHEMA).each do |error|
             @errors.add(:base, error)
           end
         end
@@ -69,7 +69,7 @@ module ThreeScale
         JSON_SCHEMA = {'$ref' => 'http://swagger-api.github.io/schemas/v1.2/apiDeclaration.json#'}.freeze
 
         def validate!
-          JSONValidator.fully_validate(JSON_SCHEMA, @doc).each do |error|
+          @validator.fully_validate(JSON_SCHEMA).each do |error|
             @errors.add(:base, error)
           end
         end
@@ -167,22 +167,6 @@ module ThreeScale
         @errors.empty?
       end
 
-      def self.setup_json_validator
-        JSONValidator.setup
-
-        # Registers all the schemas in app/lib/three_scale/swagger/schemas
-        general = Dir[Rails.root.join("app/lib/three_scale/swagger/schemas/*.schema.json")]
-        swagger12 = Dir[Rails.root.join("app/lib/three_scale/swagger/schemas/1.2/*.json")]
-        (general + swagger12).each do | file |
-          begin
-            schema = JSON.parse(File.read(file))
-            JSONValidator.add_schema(JSON::Schema.new(schema, schema["id"]))
-          rescue StandardError => error
-            Rails.logger.info("** Failed to register schema: #{file} -- #{error}")
-          end
-        end
-      end
-
       private
 
       def init_version
@@ -200,5 +184,3 @@ module ThreeScale
     end
   end
 end
-
-ThreeScale::Swagger::Specification.setup_json_validator
