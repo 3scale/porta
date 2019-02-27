@@ -131,6 +131,3 @@ Gemfile.local
 
 # IDE local settings
 .vscode
-
-# Typings
-flow-typed

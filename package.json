@@ -12,7 +12,7 @@
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
     "postshrinkwrap": "replace --silent 'http://' 'https://' ./package-lock.json",
-    "postinstall": "npm rebuild node-sass && flow-typed install"
+    "postinstall": "npm rebuild node-sass"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
