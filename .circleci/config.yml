@@ -383,7 +383,7 @@ jobs:
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
-      - run:  
+      - run:
           name: Eslint & Flow
           command: |
             npm run lint
