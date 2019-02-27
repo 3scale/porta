@@ -11,8 +11,7 @@
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
-    "postshrinkwrap": "replace --silent 'http://' 'https://' ./package-lock.json",
-    "postinstall": "npm rebuild node-sass"
+    "postshrinkwrap": "replace --silent 'http://' 'https://' ./package-lock.json"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -83,7 +82,7 @@
     "moment": "^2.24.0",
     "moment-range": "^2.2.0",
     "moment-timezone": "^0.5.5",
-    "node-sass": "^4.9.4",
+    "node-sass": "^4.11.0",
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
     "prop-types": "^15.6.0",
