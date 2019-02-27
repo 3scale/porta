@@ -488,7 +488,7 @@ GEM
       faraday (>= 0.9)
       httpclient (>= 2.6)
     pg (0.21.0)
-    pisoni (1.24.0)
+    pisoni (1.25.0)
       faraday (>= 0.9.1)
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
@@ -897,7 +897,7 @@ DEPENDENCIES
   parallel_tests (~> 2.3)
   percy-capybara (~> 2.5.1)
   pg (~> 0.21.0)
-  pisoni (= 1.24.0)
+  pisoni (~> 1.24)
   prawn-core!
   prawn-format (= 0.2.1)
   prawn-layout (= 0.2.1)
@@ -977,4 +977,4 @@ RUBY VERSION
    ruby 2.3.6p384
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
