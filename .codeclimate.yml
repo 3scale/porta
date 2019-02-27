@@ -89,3 +89,4 @@ exclude_paths:
   - "cdn/*"
   - "app/javascript/src/*/*/*.spec.*"
   - "bin/webpack*"
+  - "flow-typed/*"
