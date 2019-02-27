@@ -333,10 +333,11 @@ jobs:
           name: Install NPM dependencies
           command: |
             npm --version
+            npm set progress false
             npm install
             npm dedupe
       - save_cache:
-          key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
+          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
       - persist_to_workspace:
@@ -858,7 +859,6 @@ workflows:
           requires:
             - deps_bundler_oracle
             - dependencies_npm
-
       - lint:
           requires:
             - assets_precompile
