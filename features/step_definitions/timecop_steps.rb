@@ -37,7 +37,7 @@ end
 
 # Sufix 'on 5th July 2009'
 #
-Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4})$/ do |original, date|
+Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
   # this ensures billing actions are run
   step %(time flies to #{date})
   # and then we freeze the time
@@ -59,4 +59,3 @@ Then /^the (?:date|time) should be (.*)$/ do |time|
   # if you really need full precision you should write another step
   assert_equal Time.zone.parse(time).beginning_of_hour, Time.zone.now.beginning_of_hour
 end
-

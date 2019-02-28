@@ -25,7 +25,7 @@ class LineItem < ApplicationRecord
       where(["#{table_name}.created_at <= ? AND #{table_name}.finished_at >= ?", time, time])
   }
 
-  scope :oldest_first, -> { order(:created_at) }
+  scope :oldest_first, -> { unscope(:order).order(:id) }
 
   delegate :currency, :buyer_account, :to => :invoice, :allow_nil => true
 

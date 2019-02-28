@@ -32,9 +32,6 @@ header.Header id="user_widget" class=('Header--master' if current_account.master
     a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
       => icon('question-circle')
     ul#documentation-menu.PopNavigation-list.u-toggleable
-      - if saas?
-        li.PopNavigation-listItem
-          = render 'shared/docs_widget'
       li.PopNavigation-listItem
         = fixed_width_icon_link_to 'Customer Portal', 'external-link', '//access.redhat.com/products/red-hat-3scale', class: 'PopNavigation-link', target: '_blank'
       li.PopNavigation-listItem

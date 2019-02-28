@@ -79,4 +79,13 @@ module Api::IntegrationsHelper
     openshift = Rails.application.config.three_scale.apicast_custom_url && service.proxy.hosted?
     t( "formtastic.hints.proxy.endpoint_apicast_2#{'_openshift' if openshift}_html", environment_name: environment)
   end
+
+  def deployment_option_is_service_mesh?(service)
+    service.deployment_option =~ /^service_mesh/
+  end
+
+  def edit_deployment_option_title(service)
+    title = deployment_option_is_service_mesh?(service) ? 'Service Mesh' : 'APIcast'
+    t(:edit_deployment_configuration, scope: :api_integrations_controller, deployment: title )
+  end
 end

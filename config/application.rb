@@ -194,6 +194,10 @@ module System
     config.three_scale.plan_rules = ActiveSupport::OrderedOptions.new
     config.three_scale.plan_rules.merge!(try_config_for(:plan_rules) || {})
 
+    config.three_scale.features = ActiveSupport::OrderedOptions.new
+    config.three_scale.features.account_deletion = ActiveSupport::OrderedOptions.new
+    config.three_scale.features.merge!(try_config_for(:features) || {})
+
     config.three_scale.prometheus = ActiveSupport::OrderedOptions.new
     config.three_scale.prometheus.merge!(try_config_for(:prometheus) || {})
 

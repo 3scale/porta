@@ -3,8 +3,11 @@ base: &default
 <% case ENV['DB']
    when 'oracle' %>
   adapter: oracle_enhanced
+  time_zone: 'UTC'
 <% when 'postgresql' %>
   adapter: postgresql
+  variables:
+    timezone: 'UTC'
 <% else %>
   adapter: mysql2
 <% end %>

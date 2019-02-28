@@ -391,16 +391,16 @@ class Finance::BillingStrategy < ApplicationRecord
     if cost.nonzero?
       sign = action == :refund ? -1 : 1
       reason = action == :refund ? 'Refund' : 'Fixed fee'
-      add_cost(contract, "#{reason} ('#{plan.name}')", period.to_s, cost * sign)
+      add_cost(contract, "#{reason} ('#{plan.name}')", period.to_s, cost * sign, plan)
     end
   end
 
-  def add_cost(contract, name, description, cost)
+  def add_cost(contract, name, description, cost, plan = contract.plan)
     invoice = invoice_for_cinstance(contract)
     Finance::BackgroundBilling.new(invoice).create_line_item!(
       {
         contract: contract,
-        plan_id: contract.plan_id,
+        plan_id: plan.id,
         name: name,
         description: description,
         quantity: 1,

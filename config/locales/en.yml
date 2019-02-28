@@ -1,20 +1,18 @@
 en:
   docs:
-    base_url:
-      saas: 'https://support.3scale.net%{custom_path}'
-      onprem: 'https://access.redhat.com/documentation/en-us/red_hat_3scale/%{major_and_minor_version}/html-single'
-    hero_api_portal: '%{docs_base_url}/product/%{docs_anchor}hero-api-portal'
+    base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale/%{major_and_minor_version}/html'
+    hero_api_portal: '%{docs_base_url}/developer_portal/'
     developer_portal:
-      email_configuration: '%{docs_base_url}/developer-portal/%{docs_anchor}email-configuration'
-      liquid_reference: '%{docs_base_url}/developer-portal/%{docs_anchor}liquid-reference'
-    terminology: '%{docs_base_url}/terminology/%{docs_anchor}service'
+      email_configuration: '%{docs_base_url}/developer-portal/email-configuration'
+      liquid_reference: '%{docs_base_url}/developer-portal/liquid-reference'
+    terminology: '%{docs_base_url}/terminology'
   api_integrations_controller:
     promote_to_production_success: 'Staging configuration promoted to production'
     promote_to_production_error: "Couldn't promote Staging configuration to production"
     update_onpremises_production_success: 'Production configuration saved.'
     update_production_success: 'Proxy settings deployed'
     update_error: "Couldn't update the Staging Configuration"
-    update_success: 'Staging Configuration Updated'
+    update_success: '%{environment} Configuration Updated'
     async_update_success: 'Staging Configuration Updated'
     async_update_error: "Couldn't update the Staging Configuration"
     proxy_pro_update_sucess: 'Proxy settings saved.'
@@ -24,6 +22,7 @@ en:
     apicast_version_not_reverted: 'The APIcast version for this service could not be reverted'
     apicast_version_not_upgraded: 'The APIcast version for this service could not be upgraded'
     oidc_not_available_on_old_apicast: 'OpenID Connect is not supported for the old APIcast. Pick a different authentication option before reverting back.'
+    edit_deployment_configuration: 'edit %{deployment} configuration'
 
   access_token_options:
     finance: 'Billing API'
@@ -118,7 +117,7 @@ en:
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
-          update_link: "%{docs_base_url}/api-documentation/%{docs_anchor}activedocs-migrate"
+          update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
 
   admin_sections:
     partners: Developer Accounts -- Applications
@@ -520,12 +519,12 @@ en:
         disabled_html: "Not deployed. <a href='%{list}'>See the history.</a>"
 
         visit_documentation: 'documentation'
-        documentation_hosted_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-hosted'
-        documentation_apicast_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-overview'
-        documentation_self_managed_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-self-managed-nginx-config-files'
-        documentation_oauth_url: '%{docs_base_url}/deployment-options/%{docs_anchor}apicast-oauth-before-may-2017'
-        documentation_response_codes_tracking_url: '%{docs_base_url}/analytics/%{docs_anchor}response-codes-tracking'
-        documentation_create_active_doc_spec: "%{docs_base_url}/api-documentation/%{docs_anchor}create-activedocs-spec"
+        documentation_hosted_url: '%{docs_base_url}/deployment-options/apicast-hosted'
+        documentation_apicast_url: '%{docs_base_url}/deployment-options/apicast-overview'
+        documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
+        documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
+        documentation_response_codes_tracking_url: '%{docs_base_url}/analytics/response-codes-tracking'
+        documentation_create_active_doc_spec: "%{docs_base_url}/api-documentation/create-activedocs-spec"
 
         proxy_rule_help_html: |
           <h4>Mapping Rules Syntax</h4>
@@ -583,7 +582,7 @@ en:
     apicast: APIcast<span>Nginx reverse proxy server.</span>
 
     service_mesh_istio: |
-      Istio (tech preview)
+      Istio (Technology Preview)
       <span>A uniform way to secure, connect, and monitor microservices.</span>
 
     on_heroku: Heroku
@@ -855,6 +854,11 @@ en:
         service_plan:
           has_contracts: 'This service plan cannot be deleted! At least one contract depends on it.'
 
+        cinstance:
+          attributes:
+            plan:
+              not_allowed: "not allowed in this context"
+
         application_key:
           attributes:
             base:
@@ -1095,7 +1099,7 @@ en:
     credentials_location:
       headers: "As HTTP Headers"
       query: "As query parameters (GET) or body parameters (POST/PUT/DELETE)"
-      authorization: "As HTTP Basic Authorization"
+      authorization: "As HTTP Basic Authentication"
 
   formtastic:
     hints:

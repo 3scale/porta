@@ -35,13 +35,15 @@ class Finance::PostpaidBillingStrategy < Finance::BillingStrategy
   end
 
   def bill_plan_change(contract, period)
-    if contract.paid_until.to_date < period.begin.to_date
-      add_plan_cost(:bill, contract, contract.plan, period)
-    else
-      # FIXME: replace end_of_month by paid until!
-      add_plan_cost(:refund, contract, contract.old_plan, period)
-      add_plan_cost(:bill, contract, contract.plan, period)
-    end
+    plan = contract.plan
+    old_plan = contract.old_plan
+
+    period_begin = period.begin
+    invoice = invoice_for(contract.user_account, period_begin)
+    contract.bill_for(Month.new(period_begin), invoice, old_plan)
+
+    add_plan_cost(:refund, contract, old_plan, period)
+    add_plan_cost(:bill, contract, plan, period)
   end
 
   # Differs from Postpaid #bill_variable_costs just by the invoice
@@ -59,5 +61,4 @@ class Finance::PostpaidBillingStrategy < Finance::BillingStrategy
   def invoices_to_finalize_of(buyer, now)
     account.buyer_invoices.by_buyer(buyer).before(now).opened
   end
-
 end

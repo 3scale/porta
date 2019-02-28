@@ -1,0 +1,52 @@
+common: &sphinx
+  configuration_file: <%= ENV['THINKING_SPHINX_CONFIGURATION_FILE'] %>
+  big_document_ids: true
+  html_strip: 1
+  html_remove_elements: "style, script"
+  html_index_attrs: "img=alt,title; a=title"
+  min_infix_len: 3
+  enable_star: 1
+  pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
+
+  # This is from TS FAQ - makes reindex MUCH faster.
+  sql_range_step: 2000000000
+
+  # # temporarily disabled untill we upgrade sphinx
+  # index_exact_words: true
+  # expand_keywords: true
+  charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
+  indexed_models:
+    - Account
+    - Topic
+    - CMS::Page
+  query_log: /dev/stdout
+  log: /dev/stdout
+
+development:
+  <<: *sphinx
+
+test: &test
+  <<: *sphinx
+  <% case ENV['DB']
+  when 'oracle' %>
+sql_port: 1521
+  <% when 'postgresql' %>
+sql_port: 5432
+  <% else %>
+mysql41:            <%= 9313 + ENV['TEST_ENV_NUMBER'].to_i %>
+  <% end %>
+configuration_file: <%= Rails.root.join('config', "test#{ENV['TEST_ENV_NUMBER']}.sphinx.conf") %>
+indices_location:   <%= Rails.root.join("db/sphinx/test#{ENV['TEST_ENV_NUMBER']}") %>
+pid_file:           <%= Rails.root.join("log/searchd.test#{ENV['TEST_ENV_NUMBER']}.pid") %>
+hard_retry_count: 5
+binlog_path: ''
+
+preview:
+  <<: *sphinx
+  binlog_path: ''
+  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
+
+production:
+  <<: *sphinx
+  binlog_path: ''
+  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
