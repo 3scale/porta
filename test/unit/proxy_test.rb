@@ -507,6 +507,18 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
+  test 'oidc_configuration standard flow enabled by default' do
+    assert_instance_of OIDCConfiguration, @proxy.oidc_configuration
+    assert @proxy.oidc_configuration.standard_flow_enabled
+    refute @proxy.oidc_configuration.implicit_flow_enabled
+    refute @proxy.oidc_configuration.service_accounts_enabled
+    refute @proxy.oidc_configuration.direct_access_grants_enabled
+
+    @proxy.oidc_configuration.direct_access_grants_enabled = true
+    @proxy.save!
+    assert Proxy.find(@proxy.id).oidc_configuration.direct_access_grants_enabled
+  end
+
   def analytics
     ThreeScale::Analytics::UserTracking.any_instance
   end

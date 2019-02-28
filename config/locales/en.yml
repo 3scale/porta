@@ -1055,6 +1055,7 @@ en:
         hosted_proxy_endpoint: "Public Base URL"
         production_endpoint: "Public Base URL"
         oidc_issuer_endpoint: "OpenID Connect Issuer"
+
       profile:
         company_url: URL
 
@@ -1078,6 +1079,12 @@ en:
         issued_on: 'Issued On'
         due_on: 'Due On'
         paid_on: 'Paid On'
+
+      oidc_configuration:
+        service_accounts_enabled: Service Accounts Flow
+        standard_flow_enabled: Authorization Code Flow
+        implicit_flow_enabled: Implicit Flow
+        direct_access_grants_enabled: Direct Access Grant Flow
 
   config:
     advanced_cms: Advanced CMS
