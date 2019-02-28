@@ -64,6 +64,18 @@ class OIDCConfiguration < ApplicationRecord
   # Always initialize a valid `config`
   after_initialize :config
 
+  # This would really be better with a XML representer
+  def to_xml(options={})
+    result = options[:builder] || ThreeScale::XML::Builder.new
+    result.oidc_configuration do |xml|
+      xml.id id
+      Config::ATTRIBUTES.each do |attr|
+        xml.tag!(attr, public_send(attr))
+      end
+    end
+  end
+
+
   private
 
   def read_attribute_for_serialization(name)

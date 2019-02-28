@@ -492,6 +492,12 @@ class Service < ApplicationRecord
     end
   end
 
+  # This smells of :reek:NilCheck
+  # But that's OK :)
+  def oidc_configuration
+    proxy&.oidc_configuration || OIDCConfiguration.new
+  end
+
   private
 
   def deleted_by_state_machine

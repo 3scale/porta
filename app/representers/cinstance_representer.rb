@@ -36,6 +36,10 @@ module CinstanceRepresenter
     oauth.property :client_secret
   end
 
+  with_options(if: ->(*) { service.oidc? }, render_nil: true) do |oidc|
+    oidc.property :oidc_configuration, decorator: OIDCConfigurationRepresenter
+  end
+
   def provider_verification_key
     provider_public_key
   end
@@ -74,4 +78,5 @@ module CinstanceRepresenter
   end
 
   delegate :id, to: :service, prefix: true
+  delegate :oidc_configuration, to: :service
 end
