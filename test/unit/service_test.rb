@@ -618,6 +618,21 @@ class ServiceTest < ActiveSupport::TestCase
     assert_same_elements member_permission_service_ids, Service.permitted_for_user(user).pluck(:id)
   end
 
+
+  test 'oidc_configuration' do
+    service = Service.new
+
+    proxy = Proxy.new
+    config = OIDCConfiguration.new
+    service.stubs(proxy: proxy)
+    proxy.expects(oidc_configuration: config)
+
+    assert_equal config, service.oidc_configuration
+
+    service.stubs(proxy: nil)
+    assert_instance_of(OIDCConfiguration, service.oidc_configuration)
+  end
+
   class DeploymentOptionTest < ActiveSupport::TestCase
     def test_all
       all = Service::DeploymentOption.all

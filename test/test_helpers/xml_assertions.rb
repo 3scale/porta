@@ -460,6 +460,15 @@ module TestHelpers
         assert xml.xpath('.//application/provider_verification_key').presence
       end
 
+      if attrs.delete(:oidc)
+        assert xml.xpath('.//application/oidc_configuration').presence
+
+        assert xml.xpath('.//application/oidc_configuration/standard_flow_enabled').presence
+        assert xml.xpath('.//application/oidc_configuration/implicit_flow_enabled').presence
+        assert xml.xpath('.//application/oidc_configuration/service_accounts_enabled').presence
+        assert xml.xpath('.//application/oidc_configuration/direct_access_grants_enabled').presence
+      end
+
       backend_v2    = attrs.delete(:v2)
       backend_oauth = attrs.delete(:oauth)
       if backend_v2 || backend_oauth

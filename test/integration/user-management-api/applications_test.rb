@@ -207,6 +207,44 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
                            :application_id => @application.application_id })
     end
 
+
+    should 'find by app_id on backend oidc' do
+
+      @service.backend_version = 'oidc'
+      @service.save!
+
+      get(find_admin_api_applications_path(:format => :xml),
+          :app_id => @application.application_id,
+          :provider_key => @provider.api_key)
+
+      assert_response :success
+      assert_application(@response.body,
+                         { :id => @application.id,
+                           :user_account_id => @buyer.id,
+                           :application_id => @application.application_id, oidc: true})
+    end
+
+    should 'return the oidc_configuration' do
+      @service.backend_version = 'oidc'
+      @service.save!
+
+      config = @service.proxy.oidc_configuration
+      config.service_accounts_enabled = true
+      config.save!
+
+      get(find_admin_api_applications_path(:format => :json),
+          :app_id => @application.application_id,
+          :provider_key => @provider.api_key)
+
+      assert_response :success
+
+      json = JSON.parse(@response.body)
+      assert json.dig('application', 'oidc_configuration', 'service_accounts_enabled')
+      assert json.dig('application', 'oidc_configuration', 'standard_flow_enabled')
+      refute json.dig('application', 'oidc_configuration', 'implicit_flow_enabled')
+      refute json.dig('application', 'oidc_configuration', 'direct_access_grants_enabled')
+    end
+
     should 'find by id (application_id) on any backend' do
       @service.backend_version = 'oauth'
       @service.save!
