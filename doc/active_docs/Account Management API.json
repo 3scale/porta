@@ -6362,6 +6362,94 @@
       ]
     },
     {
+      "path": "/admin/api/services/{service_id}/proxy/oidc_configuration.xml",
+      "responseClass": "oidc_configuration",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "OIDC Configuration Show",
+          "description": "Get the Proxy OIDC configuration.",
+          "group": "oidc_configuration",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/services/{service_id}/proxy/oidc_configuration.xml",
+      "responseClass": "oidc_configuration",
+      "operations": [
+        {
+          "httpMethod": "PATCH",
+          "summary": "OIDC Configuration Update",
+          "description": "Changes the Proxy OIDC configuration.",
+          "group": "oidc_configuration",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            },
+            {
+              "name": "standard_flow_enabled",
+              "description": "Enable Authorization Code Flow (Standard Flow)",
+              "dataType": "boolean",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "implicit_flow_enabled",
+              "description": "Enable Implicit Flow",
+              "dataType": "boolean",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "service_accounts_enabled",
+              "description": "Enable Service Account Flow (Standard Flow)",
+              "dataType": "boolean",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "direct_access_grants_enabled",
+              "description": "Enable Direct Access Grant Flow",
+              "dataType": "boolean",
+              "paramType": "query",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/services/{service_id}/proxy/policies.json",
       "responseClass": "json",
       "operations": [
