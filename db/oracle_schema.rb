@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190104134224) do
+ActiveRecord::Schema.define(version: 20190225170501) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -822,6 +822,17 @@ ActiveRecord::Schema.define(version: 20190104134224) do
 
   add_index "notifications", ["event_id"], name: "index_notifications_on_event_id"
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id"
+
+  create_table "oidc_configurations", force: :cascade do |t|
+    t.text   "config"
+    t.string   "oidc_configurable_type",                null: false
+    t.integer  "oidc_configurable_id",   precision: 38, null: false
+    t.integer  "tenant_id",              precision: 38
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "oidc_configurations", ["oidc_configurable_type", "oidc_configurable_id"], name: "oidc_configurable", unique: true
 
   create_table "onboardings", force: :cascade do |t|
     t.integer  "account_id",              precision: 38
