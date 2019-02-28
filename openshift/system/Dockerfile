@@ -43,7 +43,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
 RUN export ${BUNDLER_ENV} >/dev/null \
     && source /opt/system/etc/scl_enable \
     && gem install bundler --version 1.16.2 \
-    && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
+    && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5 
 
 RUN chgrp root /opt/system/
 
@@ -57,6 +57,8 @@ RUN export ${BUNDLER_ENV} >/dev/null \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \ 
     && cd /opt/system \
+    && npm set progress false \
+    && npm install \
     && bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
