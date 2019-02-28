@@ -818,8 +818,6 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :proxy_configs, only: %i(index show)
         end
 
-        resources :transactions, :only => :index
-
         resources :alerts, :only => [:index, :destroy] do
           collection do
             put :all_read

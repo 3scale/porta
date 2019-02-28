@@ -1,8 +1,6 @@
 module BackendClient
   class Provider < Base
 
-    include Transactions
-
     attr_reader :connection
     attr_reader :account
 
