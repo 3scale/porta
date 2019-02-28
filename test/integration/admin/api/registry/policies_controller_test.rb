@@ -117,6 +117,14 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     assert_response :not_found
   end
 
+  test 'GET show returns the policy' do
+    policy = FactoryBot.create(:policy, account: @provider)
+    get admin_api_registry_policy_path(policy, access_token: @access_token.value)
+    assert_response :success
+    json = JSON.parse(response.body)['policy']
+    assert_equal policy.id, json['id']
+  end
+
   def policy_params(token = @access_token.value)
     @policy_attributes ||= FactoryBot.build(:policy).attributes.symbolize_keys.slice(:name, :version, :schema)
     { policy: @policy_attributes, access_token: token }
