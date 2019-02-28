@@ -24,7 +24,7 @@ describe('StatsSourceCollector', () => {
 
   it('should throw error on url getter', () => {
     expect(() => {
-      sourceCollector.url
+      sourceCollector.url // eslint-disable-line no-unused-expressions
     }).toThrow(new Error('It should implement url getter in subclasses.'))
   })
 

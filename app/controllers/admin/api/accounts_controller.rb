@@ -57,11 +57,15 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   ##~ @parameter_username = {:name => "username", :description => "Username of the account user.", :dataType => "string", :paramType => "query"}
   ##~ @parameter_email = {:name => "email", :description => "Email of the account user.", :dataType => "string", :paramType => "query"}
   ##~ @parameter_id = {:name => "user_id", :description => "ID of the account user.", :dataType => "integer", :paramType => "query"}
+  ##~ @parameter_provider_key = {:name => "buyer_provider_key", :description => "[Master API] Provider key of the account.", :dataType => "string", :paramType => "query"}
+  ##~ @parameter_service_token = {:name => "buyer_service_token", :description => "[Master API] Service token of the account service.", :dataType => "string", :paramType => "query"}
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_username
   ##~ op.parameters.add @parameter_email
   ##~ op.parameters.add @parameter_id
+  ##~ op.parameters.add @parameter_provider_key
+  ##~ op.parameters.add @parameter_service_token
   #
   def find
     buyer_account = find_buyer_account
