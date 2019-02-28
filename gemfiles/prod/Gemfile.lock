@@ -28,6 +28,13 @@ GIT
       rack
 
 GIT
+  remote: https://github.com/3scale/json-schema.git
+  revision: 26487618a68443e94d623bb585cb464b07d36702
+  specs:
+    json-schema (3.0.0)
+      addressable (>= 2.4)
+
+GIT
   remote: https://github.com/3scale/message_bus_client.git
   revision: d2e7f38c50fc8a0175ca4df4bbee5f2e090b2b77
   specs:
@@ -390,8 +397,6 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.6)
-    json-schema (2.5.0)
-      addressable (~> 2.3)
     jwt (1.5.2)
     kgio (2.10.0)
     kubeclient (2.5.2)
@@ -877,7 +882,7 @@ DEPENDENCIES
   inherited_resources (~> 1.7.2)
   jquery-rails (~> 4.3)
   json (~> 1.8.1)
-  json-schema
+  json-schema!
   jwt (~> 1.5.2)
   kubeclient
   launchy

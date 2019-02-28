@@ -10,6 +10,8 @@ Ability.define do |user|
 
     can :manage, user
 
+    can(:manage, :policy_registry) if account.tenant? && account.provider_can_use?(:policy_registry)
+
     # Overriding `can :manage, user` and `can :manage, User, :id => user.id`
     cannot :update_permissions, User, &:admin?
 

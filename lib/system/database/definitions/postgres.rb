@@ -214,6 +214,12 @@ System::Database::Postgres.define do
     SQL
   end
 
+  trigger 'policies' do
+    <<~SQL
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id;
+    SQL
+  end
+
   trigger 'posts' do
     <<~SQL
       SELECT tenant_id INTO NEW.tenant_id FROM forums WHERE id = NEW.forum_id AND tenant_id <> master_id;

@@ -4082,7 +4082,7 @@
             {
               "name": "allowed_sections",
               "defaultName": "allowed_sections[]",
-              "description": "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans). To disable all sections, set the value to '[]'.",
+              "description": "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Developer Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans), 'policy_registry'. To disable all sections, set the value to '[]'.",
               "dataType": "custom",
               "allowMultiple": true,
               "required": false,
@@ -4643,7 +4643,7 @@
             {
               "name": "scopes",
               "defaultName": "scopes[]",
-              "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
+              "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\", \"policy_registry\"], and for a tenant user [\"finance\", \"account_management\", \"stats\", \"policy_registry\"]",
               "dataType": "custom",
               "allowMultiple": true,
               "required": true,
@@ -4754,8 +4754,8 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "APIcast Policies Registry",
-          "description": "Returns APIcast Policies Registry",
+          "summary": "APIcast Policy Registry",
+          "description": "Returns APIcast Policy Registry",
           "group": "apicast_policies",
           "parameters": [
             {

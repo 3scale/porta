@@ -94,7 +94,7 @@ class ApiDocs::ServicesController < FrontendController
     end
   end
 
-  API_SYSTEM_NAMES = %i[service_management_api account_management_api analytics_api billing_api master_api].freeze
+  API_SYSTEM_NAMES = %i[service_management_api account_management_api analytics_api billing_api master_api policy_registry_api].freeze
 
   APIS = API_SYSTEM_NAMES.map do |system_name|
     {
@@ -113,8 +113,7 @@ class ApiDocs::ServicesController < FrontendController
   end.freeze
 
   def index
-    not_master_api_selector = proc { |api| api.fetch(:system_name) != :master_api }
-    render json: { host: '', apis: master? ? apis : apis(&not_master_api_selector) }
+    render json: { host: '', apis: apis(&method(:allowed_api?)) }
   end
 
   def show
@@ -123,5 +122,18 @@ class ApiDocs::ServicesController < FrontendController
     api_file['apis'] = exclude_plan_endpoints(api_file['apis']) if master_on_premises?
 
     render json: api_file
+  end
+
+  private
+
+  def allowed_api?(api)
+    case api[:system_name]
+    when :master_api
+      master?
+    when :policy_registry_api
+      current_account.tenant? && provider_can_use?(:policy_registry)
+    else
+      true
+    end
   end
 end
