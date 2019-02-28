@@ -24,7 +24,7 @@ class DeveloperPortal::Swagger::SpecController < DeveloperPortal::BaseController
   #   and somehow the call fails somewhere in the chain (api-docs-proxy/apache/nginx)
   def show
 
-    active_doc = site_account.api_docs_services.published.find_by_id_or_system_name params[:id]
+    active_doc = site_account.api_docs_services.published.find_by_id_or_system_name! params[:id]
 
     json = if active_doc.specification.swagger_2_0?
       active_doc.specification.as_json
