@@ -43,6 +43,56 @@
           ]
         }
       ]
+    },
+    {
+      "path": "/admin/api/registry/policies/{id}.json",
+      "responseClass": "policy",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "APIcast Policy Registry Update",
+          "description": "Updates an APIcast Policy",
+          "group": "apicast_policies",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the policy. It can be an integer value or a combination 'name-version' of the policy (e.g. 'mypolicy-1.0')",
+              "dataType": "string",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "name",
+              "description": "New name of the policy",
+              "required": false,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "version",
+              "description": "New version of the policy",
+              "required": false,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "schema",
+              "description": "New JSON Schema of the policy",
+              "required": false,
+              "dataType": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

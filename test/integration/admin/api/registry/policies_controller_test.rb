@@ -88,6 +88,35 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     assert_response :forbidden
   end
 
+  test 'PUT update updates the policy' do
+    policy = FactoryBot.create(:policy, account: @provider, version: '1.0')
+    put admin_api_registry_policy_path(policy, policy: { version: '1.1' }, access_token: @access_token.value)
+    assert_response :success
+    assert_equal '1.1', policy.reload.version
+  end
+
+  test 'PUT update updates the policy when name-version is passed as id' do
+    policy = FactoryBot.create(:policy, account: @provider, name: 'my_policy', version: '1.0')
+    new_schema = { name: 'my_policy', version: '1.1', configuration: false, summary: 'new summary' }.to_json
+    put admin_api_registry_policy_path('my_policy-1.0', policy: { schema: new_schema }, access_token: @access_token.value)
+    assert_response :success
+    assert_equal new_schema, policy.reload.schema
+  end
+
+  # that's how api_docs builds the request URL for this endpoint
+  test 'PUT update updates the policy when name-version id includes a file extension' do
+    policy = FactoryBot.create(:policy, account: @provider, name: 'my-policy', version: '1.0')
+    new_schema = { name: 'my-policy', version: '1.1', configuration: false, summary: 'new summary' }.to_json
+    put admin_api_registry_policy_path('my-policy-1.0.json', policy: { schema: new_schema }, access_token: @access_token.value)
+    assert_response :success
+    assert_equal new_schema, policy.reload.schema
+  end
+
+  test 'PUT update returns not found when policy does not exist' do
+    put admin_api_registry_policy_path(id: 'inexistent-policy', policy: { version: '1.1' }, access_token: @access_token.value)
+    assert_response :not_found
+  end
+
   def policy_params(token = @access_token.value)
     @policy_attributes ||= FactoryBot.build(:policy).attributes.symbolize_keys.slice(:name, :version, :schema)
     { policy: @policy_attributes, access_token: token }

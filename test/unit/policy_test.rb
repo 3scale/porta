@@ -54,4 +54,17 @@ class PolicyTest < ActiveSupport::TestCase
     assert policy.valid?
     assert_empty policy.errors[:schema]
   end
+
+  test 'find policy by id or name and version' do
+    Policy.expects(:find_by).with({ id: 1 })
+    Policy.find_by_id_or_name_version(1)
+
+    Policy.expects(:find_by).with({ name: 'my_policy', version: '1.0' })
+    Policy.find_by_id_or_name_version('my_policy-1.0')
+  end
+
+  test 'find policy by name and version when name contains dashes' do
+    Policy.expects(:find_by).with({ name: 'my-policy', version: '1.0' })
+    Policy.find_by_id_or_name_version('my-policy-1.0')
+  end
 end
