@@ -80,7 +80,7 @@ function PoliciesForm ({
 }
 
 function hiddenClass (bool?: boolean): string {
-  return bool ? '' : 'hidden'
+  return bool ? '' : 'is-hidden'
 }
 
 export { PolicyForm, PoliciesForm }

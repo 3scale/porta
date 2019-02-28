@@ -3,6 +3,8 @@ import { UnControlled as CodeMirror } from 'react-codemirror2'
 import 'codemirror/mode/javascript/javascript'
 import Form from 'react-jsonschema-form'
 
+import 'Policies/styles/policies.scss'
+
 const fromJson = json => JSON.parse(json)
 const toJson = val => JSON.stringify(val, null, 2)
 
@@ -56,11 +58,14 @@ function Editor (props) {
     })
   }
 
-  const icon = state.valid ? 'check' : 'times'
-  const cls = state.valid ? 'valid' : 'invalid'
+  const schemaValid = state.valid
+  const icon = schemaValid ? 'check' : 'times'
+  const cls = schemaValid ? 'valid' : 'invalid'
+  const hiddenClass = schemaValid ? 'is-hidden' : ''
+  const errorClass = schemaValid ? '' : 'CustomPolicy-error'
 
   return (
-    <div className="panel panel-default">
+    <div className={`${errorClass} panel panel-default`}>
       <div className="panel-heading">
         <span className={`${cls} fa fa-${icon}`} />
         {'JSON Schema'}
@@ -71,6 +76,7 @@ function Editor (props) {
         autoCursor={false}
         options={cmOptions}
       />
+      <div className={hiddenClass}> There's an error in the JSON Schema</div>
     </div>
   )
 }
@@ -81,10 +87,15 @@ function CustomPolicy () {
   const onSchemaEdited = schema => setSchema(schema)
 
   return (
-    <div>
-      <Editor code={schema} onChange={onSchemaEdited} />
-      <Form schema={schema} />
-    </div>
+    <section className="CustomPolicy">
+      <header className='CustomPolicy-header'>
+        <h2 className="CustomPolicy-title">Custom Policy</h2>
+      </header>
+      <div className="CustomPolicy-editor">
+        <Editor className="CustomPolicy-code" code={schema} onChange={onSchemaEdited} />
+        <Form className="CustomPolicy-form" schema={schema} />
+      </div>
+    </section>
   )
 }
 

@@ -1,7 +1,4 @@
 - content_for :javascripts do
   = javascript_pack_tag 'custom_policies'
 
-- content_for(:title)
-  = 'Custom Policies'
-
-= content_tag :div, id: 'custom-policies-container', data: { policies: @policies }  do end
+= content_tag :div, class: 'PoliciesWidget', id: 'custom-policies-container', data: { policies: @policies }  do end

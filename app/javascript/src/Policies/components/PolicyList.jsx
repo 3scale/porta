@@ -12,10 +12,10 @@ const navigateToEditPolicy = (url: string) => {
   history.pushState({}, '', url)
 }
 
-const PolicyList = function ({items}: {items: Array<&RegistryPolicy>}): React.Node {
+const PolicyList = function ({policies}: {policies: Array<RegistryPolicy>}): React.Node {
   return (
     <ul className='list-group'>
-      {items.map((policy, index) => (
+      {policies.map((policy, index) => (
         <PolicyTile
           edit={() => navigateToEditPolicy(policyEditLink(policy.name, policy.version))}
           policy={policy}
