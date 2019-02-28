@@ -8,6 +8,7 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   before_action :authorize_service_plans!
 
 
+  ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/accounts/{account_id}/service_contracts.xml"
   ##~ e.responseClass = "service_contract"

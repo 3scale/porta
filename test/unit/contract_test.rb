@@ -12,9 +12,9 @@ class ContractTest < ActiveSupport::TestCase
     assert_same_elements Contract.where(user_account: accounts[1].id).pluck(:id), Contract.by_account(accounts[1]).pluck(:id)
   end
 
-  def test_has_paid_on
-    recent_date = (Contract::MAX_UNPAID_TIME - 1.minute).ago
-    old_date    = (Contract::MAX_UNPAID_TIME + 1.day).ago
+  def test_have_paid_on
+    recent_date = (5.days - 1.minute).ago
+    old_date    = (5.days + 1.day).ago
 
     paid_apps = [
       FactoryBot.create(:application, paid_until: recent_date, variable_cost_paid_until: nil),
@@ -28,7 +28,8 @@ class ContractTest < ActiveSupport::TestCase
       FactoryBot.create(:application, paid_until: old_date, variable_cost_paid_until: old_date)
     ]
 
-    response_paid_apps = Contract.has_paid_on.pluck(:id)
+    assert_raise(ArgumentError) { Contract.have_paid_on.pluck(:id) }
+    response_paid_apps = Contract.have_paid_on(5.days.ago).pluck(:id)
     paid_apps.each { |paid_app| assert_includes response_paid_apps, paid_app.id }
     unpaid_apps.each { |unpaid_app| assert_not_includes response_paid_apps, unpaid_app.id }
   end
@@ -141,11 +142,11 @@ class ContractTest < ActiveSupport::TestCase
   def test_bill_plan_change_with_bad_period_due_to_time_zone
     Time.zone = 'CET'
     Timecop.freeze(Date.parse('2018-01-17')) do
-      other_plan = FactoryBot.create(:simple_application_plan, cost_per_month: 3100.0)
-      contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
       provider = FactoryBot.create(:simple_provider)
-      Finance::PrepaidBillingStrategy.create!(account: provider, currency: 'EUR')
+      contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
       contract.buyer_account.stubs(provider_account: provider)
+      other_plan = FactoryBot.create(:simple_application_plan, service: contract.service, cost_per_month: 3100.0)
+      Finance::PrepaidBillingStrategy.create!(account: provider, currency: 'EUR')
 
       System::ErrorReporting.expects(:report_error).with(instance_of(Finance::PrepaidBillingStrategy::BadPeriodError)).never
       contract.change_plan!(other_plan)

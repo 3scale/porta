@@ -2,7 +2,7 @@
 
 module MailersHelper
   def master_mailer_name
-    ThreeScale.config.onpremises ? Account.master.org_name : '3scale'
+    ThreeScale.config.onpremises ? Account.master.org_name : 'Red Hat 3scale'
   end
 
   def prepare_email(subject:, to:, **options)

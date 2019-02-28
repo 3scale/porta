@@ -19,7 +19,7 @@ Feature: Edit Integration
     Given the service uses app_id/app_key as authentication method
     And I go to the service integration page
     And I toggle "Authentication Settings"
-    When I choose "As HTTP Basic Authorization"
+    When I choose "As HTTP Basic Authentication"
     Then The curl command uses Basic Authentication with app_id/app_key credentials
     When I choose "As query parameters (GET) or body parameters (POST/PUT/DELETE)"
     Then The curl command uses Query with app_id/app_key credentials

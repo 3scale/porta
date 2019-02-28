@@ -65,6 +65,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/sandbox_proxy.yml
 /config/cache_store.yml
 /config/google_experiments.yml
+/config/features.yml
 /config/web_analytics.yml
 /config/web_hooks.yml
 /config/rolling_updates.yml

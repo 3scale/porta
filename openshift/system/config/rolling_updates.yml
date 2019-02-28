@@ -16,7 +16,7 @@ base: &default
   published_service_plan_signup: true
   policies: true
   proxy_private_base_path: true
-  service_mesh_integration: false
+  service_mesh_integration: true
 
 production:
   <<: *default

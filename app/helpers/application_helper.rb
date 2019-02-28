@@ -339,26 +339,17 @@ module ApplicationHelper
   end
 
   def major_and_minor_version
-    full_version = System::Deploy.info.release || '1.0.0'
+    full_version = System::Deploy.info.release || '2.0.0'
     simple_version = /^(?:(\d+)\.)?(?:(\d+))/.match(full_version)
-    "#{simple_version[1]}.#{simple_version[2]}"
-  end
-
-  # {%{docs_base_url}/analytics/%{docs_anchor}response-codes-tracking
-  # this can be removed once support site has been migrated and hardcoded in links
-  def docs_anchor
-    saas? ? '' : '#'
-  end
-
-  # this can be simplified once support site has been migrated:
-  # no need for custom_path attribute and saas condition can be inline
-  def docs_base_url(custom_path = '/docs')
     if saas?
-      I18n.t('docs.base_url.saas', custom_path: custom_path)
-      # after migration  https://access.redhat.com/documentation/en-us/red_hat_3scale/saas/html-single
+      "#{simple_version[1]}-saas"
     else
-      I18n.t('docs.base_url.onprem', major_and_minor_version: major_and_minor_version)
+      "#{simple_version[1]}.#{simple_version[2]}"
     end
+  end
+
+  def docs_base_url
+    I18n.t('docs.base_url', major_and_minor_version: major_and_minor_version)
   end
 
   def call_to_action?

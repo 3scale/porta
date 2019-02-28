@@ -12,6 +12,7 @@
     "jasmine": true
   },
   "globals": {
+    "$": true,
     "fixture": true,
     "spyOnEvent": true
   },

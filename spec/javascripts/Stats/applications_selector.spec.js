@@ -37,10 +37,10 @@ describe('StatsApplicationsSelector', () => {
     expect($('.StatsApplicationSelector option[value="42"]')).toBeSelected()
   })
 
-  it('should set the application id on the state when changing the dropdown', () => {
+  it('should set the application id on the state when changing the dropdown and default metric', () => {
     spyOn(userSelectedState, 'setState')
     $('.StatsApplicationSelector').val('666').trigger('change')
 
-    expect(userSelectedState.setState).toHaveBeenCalledWith({selectedApplicationId: '666'}, ['redraw'])
+    expect(userSelectedState.setState).toHaveBeenCalledWith({selectedApplicationId: '666', selectedMetricName: 'hits'}, ['applicationSelected'])
   })
 })

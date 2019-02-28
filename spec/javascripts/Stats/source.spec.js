@@ -17,7 +17,7 @@ describe('StatsSource', () => {
 
   it('should throw error when call url directly', () => {
     expect(() => {
-      source.url
+      source.url // eslint-disable-line no-unused-expressions
     }).toThrow(new Error('It should implement url getter in subclasses.'))
   })
 })

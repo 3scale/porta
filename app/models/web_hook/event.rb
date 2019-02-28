@@ -137,11 +137,14 @@ class WebHook
 
     delegate :connection, to: 'ActiveRecord::Base'
 
+    # :reek:NilCheck
+    # That is fine as we want really to check for nil value in the changes
     def guess_event
+      resource_changes = @resource.previous_changes
       case
       when @resource.destroyed?
         'deleted'
-      when @resource.created_at.present? && @resource.created_at == @resource.updated_at
+      when resource_changes.key?('created_at') && resource_changes['created_at'].first.nil?
         'created'
       when @resource.updated_at.present?
         'updated'

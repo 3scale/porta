@@ -1,6 +1,5 @@
 
 class Contract < ApplicationRecord
-  MAX_UNPAID_TIME = 6.months
   # Need to define table_name before audited because of
   # https://github.com/collectiveidea/audited/blob/f03c5b5d1717f2ebec64032d269316dc74476056/lib/audited/auditor.rb#L305-L311
   self.table_name = 'cinstances'
@@ -90,7 +89,7 @@ class Contract < ApplicationRecord
   scope :by_account, ->(account) { where.has { user_account_id == account } }
   scope :by_account_query, lambda { |query| where( { :user_account_id => Account.buyers.search_ids(query) } ) }
 
-  scope :has_paid_on, ->(paid_time = MAX_UNPAID_TIME.ago) { where.has { (paid_until >= paid_time) | (variable_cost_paid_until >= paid_time) } }
+  scope :have_paid_on, ->(paid_date) { where.has { (paid_until >= paid_date) | (variable_cost_paid_until >= paid_date) } }
 
   def self.by_plan_type(type)
 
@@ -138,8 +137,8 @@ class Contract < ApplicationRecord
 
   # Using `read_attribute` because the getter method is overloaded
   # Meaning changing plan the same day of the creation of the contract
-  # Useful for prepaid billing see PrepaidBillingStrategy#bill_plan_change_safely
-  def not_billed_yet?
+  # Useful for prepaid billing. See PrepaidBillingStrategy#bill_plan_change_safely
+  def never_billed?
     self[:paid_until].blank?
   end
 
@@ -153,7 +152,7 @@ class Contract < ApplicationRecord
   #
   # @param [Month] period
   # @param [Invoice] invoice
-  def bill_for(period, invoice)
+  def bill_for(period, invoice, plan = self.plan)
     # TODO: this makes the bill_for method dependent on Time.zone.now
     # so it should be handled differently
     #
@@ -161,14 +160,15 @@ class Contract < ApplicationRecord
 
     transaction do
       if paid_until.to_date < period.end.to_date
+
         period = intersect_with_unpaid_period(period, paid_until)
 
-        bill_fixed_fee_for(period, invoice)
+        bill_fixed_fee_for(period, invoice, plan)
 
         self.paid_until = period.end
       end
 
-      bill_setup_fee_for(period, invoice)
+      bill_setup_fee_for(period, invoice, plan)
 
       # no validation because our DB has broken data
       # TODO: cleanup DB and add validations?

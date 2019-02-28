@@ -107,6 +107,8 @@ class Cinstance < Contract
 
   validate :end_users_switch
 
+  validate :same_service, on: :update, if: :plan_id_changed?
+
   APP_ID_FORMAT = /[\w-]+/.freeze
   # letter, number, underscore (_), hyphen-minus (-), dot (.), base64 format
   # In base64 encoding, the character set is [A-Z,a-z,0-9,and + /], if rest length is less than 4, fill of '=' character.
@@ -407,6 +409,11 @@ class Cinstance < Contract
 
       @webhook_event = 'plan_changed'
     end
+  end
+
+  def same_service
+    return if plan.blank? || plan.service == service
+    errors.add(:plan, :not_allowed)
   end
 
   def reject_if_pending

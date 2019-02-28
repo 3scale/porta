@@ -389,18 +389,38 @@ jobs:
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
       - run:
-          name: NPM test
+          name: Eslint & Flow
           command: |
-            npm test -- --reporters dots,junit --browsers ChromeHeadless
-            npm run-script jest
-      - *store-junit-test-results
-      - *store-test-artifacts
+            npm run lint
       - store_artifacts:
           path: doc/licenses
           destination: licenses
       - store_artifacts:
           path: doc/active_docs
           destination: active_docs
+
+  karma:
+    executor: builder
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - run:
+          name: Karma tests
+          command: |
+            npm test -- --reporters dots,junit --browsers ChromeHeadless
+      - *store-junit-test-results
+      - *store-test-artifacts
+      - *upload-coverage
+
+  jest:
+    executor: builder
+    steps:
+      - checkout-with-submodules
+      - *attach-to-workspace
+      - run:
+          name: Jest specs
+          command: |
+            npm run-script jest
       - *upload-coverage
 
   unit:
@@ -694,6 +714,12 @@ workflows:
       - lint:
           requires:
             - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
       - unit:
           requires:
             - dependencies_bundler
@@ -717,6 +743,8 @@ workflows:
             - integration
             - functional
             - lint
+            - karma
+            - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
@@ -726,6 +754,8 @@ workflows:
             - integration
             - functional
             - lint
+            - karma
+            - jest
           <<: *only-master-filter
 
   postgres_build:
@@ -754,6 +784,12 @@ workflows:
       - lint:
           requires:
             - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
       - unit-postgres:
           requires:
             - deps_bundler_postgres
@@ -777,6 +813,8 @@ workflows:
             - integration-postgres
             - functional-postgres
             - lint
+            - karma
+            - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
@@ -786,6 +824,8 @@ workflows:
             - integration-postgres
             - functional-postgres
             - lint
+            - karma
+            - jest
           <<: *only-master-filter
 
   oracle_build:
@@ -815,6 +855,12 @@ workflows:
       - lint:
           requires:
             - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
       - unit-oracle:
           requires:
             - deps_bundler_oracle
@@ -838,6 +884,8 @@ workflows:
             - integration-oracle
             - functional-oracle
             - lint
+            - karma
+            - jest
           <<: *only-master-filter
 
       - notify_failure:
@@ -848,6 +896,8 @@ workflows:
             - integration-oracle
             - functional-oracle
             - lint
+            - karma
+            - jest
           <<: *only-master-filter
 
   visual_tests:
@@ -855,9 +905,7 @@ workflows:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
           # On approval of the `hold` job, any successive job that requires the `hold` job will run.
-          filters:
-            branches:
-              ignore: master
+          <<: *only-master-filter
       - dependencies_bundler:
           requires:
             - manual_approval

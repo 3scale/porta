@@ -25,7 +25,8 @@ default: &DEFAULT
   password:
   database: systemdb
   host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
-  time_zone: 'UTC'
+  variables:
+    timezone: 'UTC'
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
 
 production:
