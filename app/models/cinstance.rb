@@ -333,6 +333,8 @@ class Cinstance < Contract
 
       plan.to_xml(:builder => xml)
 
+      service.oidc_configuration.to_xml(builder: xml) if service.oidc?
+
       unless destroyed?
         fields_to_xml(xml)
         extra_fields_to_xml(xml)
