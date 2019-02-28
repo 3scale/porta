@@ -1786,6 +1786,34 @@
               "paramType": "query"
             },
             {
+              "name": "cost_per_month",
+              "description": "Cost per month",
+              "dataType": "decimal",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "setup_fee",
+              "description": "Setup fee",
+              "dataType": "decimal",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "trial_period_days",
+              "description": "Trial period days",
+              "dataType": "integer",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "end_user_required",
+              "description": "End user required",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
               "name": "system_name",
               "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
               "dataType": "string",
@@ -1877,6 +1905,34 @@
             {
               "name": "approval_required",
               "description": "Set the 'Applications require approval?' to 'true' or 'false'",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "cost_per_month",
+              "description": "Cost per month",
+              "dataType": "decimal",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "setup_fee",
+              "description": "Setup fee",
+              "dataType": "decimal",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "trial_period_days",
+              "description": "Trial period days",
+              "dataType": "integer",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "end_user_required",
+              "description": "End user required",
               "dataType": "boolean",
               "required": false,
               "paramType": "query"
