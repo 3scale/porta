@@ -1,6 +1,6 @@
 class AdminSection
 
-  PERMISSIONS = %I[ portal finance settings partners monitoring plans ].freeze
+  PERMISSIONS = %I[ portal finance settings partners monitoring plans policy_registry ].freeze
 
   def self.permissions
     if ThreeScale.master_on_premises?
@@ -8,6 +8,10 @@ class AdminSection
     else
       PERMISSIONS
     end
+  end
+
+  def self.permissions_for_account(account)
+    account.provider_can_use?(:policy_registry) ? permissions : (permissions - %i[policy_registry])
   end
 
   SECTIONS = PERMISSIONS + %I[ services ]

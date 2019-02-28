@@ -50,5 +50,8 @@ class MemberPermissionTest < ActiveSupport::TestCase
 
     permission.admin_section = :services
     assert permission.valid?
+
+    permission.admin_section = :policy_registry
+    assert permission.valid?
   end
 end
