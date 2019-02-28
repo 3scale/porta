@@ -672,6 +672,8 @@ without fake Core server your after commit callbacks will crash and you might ge
               get :latest, on: :collection
               post :promote, on: :member
             end
+
+            resource :oidc_configuration, only: %i[show update]
           end
 
           collection do
