@@ -761,6 +761,18 @@
               "description": "ID of the account user.",
               "dataType": "integer",
               "paramType": "query"
+            },
+            {
+              "name": "buyer_provider_key",
+              "description": "[Master API] Provider key of the account.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "buyer_service_token",
+              "description": "[Master API] Service token of the account service.",
+              "dataType": "string",
+              "paramType": "query"
             }
           ]
         }
