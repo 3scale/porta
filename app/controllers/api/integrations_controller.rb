@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
@@ -6,7 +8,7 @@ class Api::IntegrationsController < Api::BaseController
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
 
-  PLUGIN_LANGUAGES = %w(ruby java python nodejs php rest csharp).freeze
+  PLUGIN_LANGUAGES = %w[ruby java python nodejs php rest csharp].freeze
 
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
 
@@ -16,9 +18,7 @@ class Api::IntegrationsController < Api::BaseController
     @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
   end
 
-  def settings
-
-  end
+  def settings; end
 
   def update
     if @service.using_proxy_pro? && !@proxy.apicast_configuration_driven
@@ -27,6 +27,7 @@ class Api::IntegrationsController < Api::BaseController
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
       flash[:notice] = flash_message(:update_success, environment: environment)
       update_onboarding_mapping_bubble
+      update_mapping_rules_position
 
       if @proxy.send_api_test_request!
         onboarding.bubble_update('api')
@@ -36,7 +37,7 @@ class Api::IntegrationsController < Api::BaseController
       render :edit
 
     else
-      attrs = params.fetch(:proxy, {}).fetch(:proxy_rules_attributes,{})
+      attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
 
       @marked_for_destroy = splitted[true]
@@ -116,7 +117,7 @@ class Api::IntegrationsController < Api::BaseController
                       latest: apicast_configuration_driven_after_toggle,
                       service_id: @proxy.service_id,
                       deployment_option: @proxy.deployment_option
-      )
+                     )
       flash[:success] = apicast_configuration_driven_after_toggle ? flash_message(:apicast_version_upgraded) : flash_message(:apicast_version_reverted)
     else
       flash[:error] = apicast_configuration_driven ? flash_message(:apicast_not_not_reverted) :  flash_message(:apicast_not_not_upgraded)
@@ -146,6 +147,7 @@ class Api::IntegrationsController < Api::BaseController
     if @proxy.update_attributes(proxy_params)
       update_onboarding_mapping_bubble
       onboarding.bubble_update('api')
+      update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
       redirect_to edit_path
     else
@@ -201,6 +203,17 @@ class Api::IntegrationsController < Api::BaseController
     authorize! :edit, @service
   end
 
+  def update_mapping_rules_position
+    proxy_rules_attributes.each_value do |attrs|
+      proxy_rule = @proxy.proxy_rules.find_by(id: attrs['id']) || next
+      proxy_rule.set_list_position(attrs['position'])
+    end
+  end
+
+  def proxy_rules_attributes
+    params.fetch(:proxy, {}).fetch(:proxy_rules_attributes, {})
+  end
+
   def proxy_params
     basic_fields = [
       :lock_version,
@@ -209,8 +222,8 @@ class Api::IntegrationsController < Api::BaseController
       :error_headers_auth_failed, :error_auth_failed, :error_status_auth_missing,
       :error_headers_auth_missing, :error_auth_missing, :error_status_no_match,
       :error_headers_no_match, :error_no_match, :api_test_path, :policies_config,
-      proxy_rules_attributes: [:_destroy, :id, :http_method, :pattern, :delta, :metric_id, :redirect_url],
-      oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES
+      proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id
+                                 redirect_url position last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES
     ]
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?

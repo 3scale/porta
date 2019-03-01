@@ -493,6 +493,10 @@ form.proxy {
     padding-left: 6px;
     margin-bottom: 24px;
 
+    tbody#sortable {
+      overflow: auto;
+    }
+
     tr {
       &.deleted {
         background-color: $delete-background-color;

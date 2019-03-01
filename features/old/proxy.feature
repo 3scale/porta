@@ -69,8 +69,24 @@ Feature: Proxy integration
   @javascript @selenium
   Scenario: Got some fancy policy chain
     And I go to the integration show page for service "one"
-    And I press "Start using the latest APIcast"    
+    And I press "Start using the latest APIcast"
     When I have policies feature enabled
     And apicast registry is stubbed
     And I go to the integration page for service "one"
     Then I should see the Policy Chain
+
+  @javascript
+  Scenario: Sorting mapping rules
+    And I go to the integration show page for service "one"
+    And I press "Start using the latest APIcast"
+    And I go to the integration page for service "one"
+    And I toggle "Mapping Rules"
+    And I add a new mapping rule with method "POST" pattern "/beers" delta "2" and metric "hits"
+    And I add a new mapping rule with method "PUT" pattern "/mixers" delta "1" and metric "hits"
+    And I drag the last mapping rule to the position 1
+    And I save the proxy config
+    Then the mapping rules should be in the following order:
+      | http_method | pattern | delta | metric_id |
+      | PUT         | /mixers | 1     | 2         |
+      | GET         | /       | 1     | 2         |
+      | POST        | /beers  | 2     | 2         |

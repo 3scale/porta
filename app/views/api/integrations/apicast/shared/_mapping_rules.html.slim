@@ -9,26 +9,53 @@
           - if @service.using_proxy_pro?
             th Redirect
           th title="increment" +
-          th colspan="2"
+          th
             ' Metric or Method
             | (
             = link_to 'Define', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service'
             | )
+          th colspan="2"
+            ' Last?
 
-      tbody
+      tbody#sortable.ui-sortable
         - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
 
-        - @proxy.proxy_rules.each do |rule|
-          tr
-            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics
-        tr#new-proxy-rule-template style="display:none;"
+        - @proxy.proxy_rules.ordered.each_with_index do |rule, i|
+          tr.ui-sortable-item
+            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: (i + 1)
+        tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
           = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
       tfoot
         tr
-          th colspan=(@service.using_proxy_pro? ? '6' : '5')
+          th colspan=(@service.using_proxy_pro? ? '7' : '6')
             = link_to "Add Mapping Rule", '#add-proxy-rule', class: 'action add', id: 'add-proxy-rule'
 
 javascript:
-  jQuery('#proxy-rules .metric select[data-selected]').each(function(){
+  jQuery('#proxy-rules .metric select[data-selected]').each(function () {
     jQuery(this).val(jQuery(this).data('selected'))
+  })
+  jQuery(function () {
+    var PIXEL_CORRECTOR = 4
+    var tdWidths = jQuery.map(jQuery('.ui-sortable-item').first().children(), function (td, _i) {
+      return td.offsetWidth + PIXEL_CORRECTOR
+    })
+    jQuery(function () {
+      jQuery('#sortable').sortable({
+        cursor: 'move',
+        containment: '#mapping-rules',
+        items: 'tr:not(#new-proxy-rule-template)',
+        start: function (event, ui) {
+          jQuery.each(ui.item.children(), function (i, td) {
+            jQuery(td).css({ width: tdWidths[i] })
+          })
+        },
+        stop: function () {
+          $('tr:not(#new-proxy-rule-template)', this).each(function (index, mappingRule) {
+            if (!$(mappingRule).hasClass('deleted')) $(mappingRule).find('select,input:not(.destroyer)').removeAttr('disabled')
+            $(mappingRule).find('.position').val(index + 1)
+          })
+        }
+      })
+      jQuery('tr, td').disableSelection()
+    })
   })

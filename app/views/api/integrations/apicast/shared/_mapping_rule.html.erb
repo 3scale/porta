@@ -2,6 +2,7 @@
 
   disabled ||= !rule.new_record? && !@marked_for_update.try(:include?,rule.id.to_s)
   html_options = { :disabled => disabled , :class => 'message-when-change' }
+  index = local_assigns[:index]
 
  %>
 
@@ -25,6 +26,11 @@
     </td>
     <td class="metric">
       <%= p.select 'metric_id', metrics, {}, html_options.deep_merge(data: { selected: rule.metric_id }) %>
+    </td>
+    <td class="last_called_and_position">
+      <%= p.check_box 'last', html_options %>
+      <%= link_to '', '#', :class => 'action ui-sortable-handler fa fa-sort' %>
+      <%= p.hidden_field :position, {}.merge(:class => 'position', :value => index, :disabled => true) %>
     </td>
     <td class="actions">
       <%= link_to '', '#edit-proxy-rule', :class => 'action edit' %>
