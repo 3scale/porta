@@ -6,6 +6,7 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
 
   def setup
     @service = Policies::PoliciesListService
+    ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'https://apicast-staging.proda.example.com/policies')
   end
 
   GATEWAY_API_MANAGEMENT_RESPONSE = {
@@ -21,8 +22,16 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
     }
   }.freeze
 
+  test 'call with error response on gateway side' do
+    stub_request(:get, "https://apicast-staging.proda.example.com/policies")
+      .to_return(status: 502, body: '{"error":"A server error occured"}',
+                 headers: { 'Content-Type' => 'application/json' })
+
+    account = FactoryBot.build_stubbed(:simple_provider)
+    assert_nil @service.call(account)
+  end
+
   test 'call with no access to registry' do
-    ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'https://apicast-staging.proda.example.com/policies')
     stub_request(:get, "https://apicast-staging.proda.example.com/policies")
       .to_return(status: 200, body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json,
                  headers: { 'Content-Type' => 'application/json' })
@@ -36,7 +45,6 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
   end
 
   test 'call with custom policies' do
-    ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'https://apicast-staging.proda.example.com/policies')
     stub_request(:get, "https://apicast-staging.proda.example.com/policies")
       .to_return(status: 200, body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json,
                  headers: { 'Content-Type' => 'application/json' })
