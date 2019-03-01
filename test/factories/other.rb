@@ -111,4 +111,12 @@ FactoryBot.define do
     schema { {name: 'name example', version: '1', configuration: false, summary: 'example summary'}.to_json }
     association(:account, factory: :simple_provider)
   end
+
+  factory(:oidc_configuration) do
+    association(:oidc_configurable, factory: :proxy)
+    standard_flow_enabled { true }
+    implicit_flow_enabled { false }
+    service_accounts_enabled { false }
+    direct_access_grants_enabled { false }
+  end
 end
