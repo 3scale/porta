@@ -6,7 +6,8 @@ require 'set'
 class Policies::PoliciesListService
   def self.call(account)
     response = ::JSONClient.get(ThreeScale.config.sandbox_proxy.apicast_registry_url)
-    list = response.ok? ? PolicyList.from_hash(response.body['policies']) : PolicyList.new
+    return unless response.ok?
+    list = PolicyList.from_hash(response.body['policies'])
     list.merge!(PolicyList.new(account.policies)) if account.provider_can_use?(:policy_registry)
     list.to_h
   end
