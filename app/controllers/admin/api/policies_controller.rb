@@ -18,7 +18,7 @@ class Admin::Api::PoliciesController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    policies = Policies::PoliciesListService.call
+    policies = Policies::PoliciesListService.call(current_account)
 
     respond_to do |format|
       format.json { render json: policies }
