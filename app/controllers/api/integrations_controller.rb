@@ -205,8 +205,8 @@ class Api::IntegrationsController < Api::BaseController
 
   def update_mapping_rules_position
     proxy_rules_attributes.each_value do |attrs|
-      proxy_rule = @proxy.proxy_rules.find_by(id: attrs['id'])
-      proxy_rule&.set_list_position(attrs['position'])
+      proxy_rule = @proxy.proxy_rules.find_by(id: attrs['id']) || next
+      proxy_rule.set_list_position(attrs['position'])
     end
   end
 
@@ -222,8 +222,8 @@ class Api::IntegrationsController < Api::BaseController
       :error_headers_auth_failed, :error_auth_failed, :error_status_auth_missing,
       :error_headers_auth_missing, :error_auth_missing, :error_status_no_match,
       :error_headers_no_match, :error_no_match, :api_test_path, :policies_config,
-      proxy_rules_attributes: [:_destroy, :id, :http_method, :pattern, :delta, :metric_id, 
-      :redirect_url, :position, :last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES
+      proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id
+                                 redirect_url position last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES
     ]
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
