@@ -123,7 +123,7 @@ class Account::SearchTest < ActiveSupport::TestCase
 
     ThinkingSphinx::Test.run do
       ThinkingSphinx::Test.config
-      ThinkingSphinx::Test.index
+      ThinkingSphinx::Test.index verbose: true
 
       buyer.bought_cinstances.pluck(:user_key).each do |user_key|
         assert_equal [buyer.id], Account.scope_search(query: user_key).pluck(:id)
