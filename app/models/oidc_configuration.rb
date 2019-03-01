@@ -73,6 +73,7 @@ class OIDCConfiguration < ApplicationRecord
         xml.tag!(attr, public_send(attr))
       end
     end
+    result.to_xml
   end
 
 

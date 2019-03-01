@@ -37,7 +37,7 @@ module CinstanceRepresenter
   end
 
   with_options(if: ->(*) { service.oidc? }, render_nil: true) do |oidc|
-    oidc.property :oidc_configuration, decorator: OIDCConfigurationRepresenter
+    oidc.property :oidc_configuration, decorator: OIDCConfigurationRepresenter, wrap: false
   end
 
   def provider_verification_key
