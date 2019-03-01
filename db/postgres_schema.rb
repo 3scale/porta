@@ -1107,6 +1107,8 @@ ActiveRecord::Schema.define(version: 20190225170501) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at"
     t.text     "redirect_url"
+    t.integer  "position"
+    t.boolean  "last",                        default: false
   end
 
   add_index "proxy_rules", ["proxy_id"], name: "index_proxy_rules_on_proxy_id", using: :btree
