@@ -4,5 +4,5 @@ import {CustomPolicy} from 'Policies/components/CustomPolicy'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('custom-policy-container')
-  render(<CustomPolicy />, container)
+  render(<CustomPolicy jsonPolicy={container.dataset.policy}/>, container)
 })

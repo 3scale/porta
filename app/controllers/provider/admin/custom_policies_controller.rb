@@ -18,7 +18,33 @@ class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseControlle
 
   end
 
-  def edit; end
+  def edit
+    @policy = {
+      'echo': {
+        'name': 'Echo', 'summary': 'Echo summary', 'description': 'Echoes the request', 'version': '1.0.0', '$schema': {}, 'schema': {},
+        'configuration': {
+          'title': 'Custom Policy',
+          'description': 'An epic policy yet to code.',
+          'type': 'object',
+          'required': [
+              'name'
+          ],
+          'properties': {
+            'name': {
+              'type': 'string',
+              'title': 'Name',
+              'default': 'Mashing'
+            },
+            'version': {
+              'type': 'integer',
+              'title': 'Version',
+              'default': 1
+            }
+          }
+        }
+      }
+    }
+  end
 
   protected
 

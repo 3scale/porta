@@ -1,32 +1,10 @@
 import React, { useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
+import { Form as SchemaForm } from 'react-jsonschema-form'
+import {parsePolicy, fromJson, toJson} from 'Policies/util'
 import 'codemirror/mode/javascript/javascript'
-import Form from 'react-jsonschema-form'
 
 import 'Policies/styles/policies.scss'
-
-const fromJson = json => JSON.parse(json)
-const toJson = val => JSON.stringify(val, null, 2)
-
-// Sample
-const schemaSample = {
-  title: 'Custom Policy',
-  description: 'An epic policy yet to code.',
-  type: 'object',
-  required: ['name'],
-  properties: {
-    name: {
-      type: 'string',
-      title: 'Name',
-      default: 'Mashing'
-    },
-    version: {
-      type: 'integer',
-      title: 'Version',
-      default: 1
-    }
-  }
-}
 
 const cmOptions = {
   theme: 'default',
@@ -81,20 +59,35 @@ function Editor (props) {
   )
 }
 
-function CustomPolicy () {
-  const [schema, setSchema] = useState(schemaSample)
-
+function Form ({policy}) {
+  const {name, description, summary} = policy
+  const [schema, setSchema] = useState(policy.schema)
   const onSchemaEdited = schema => setSchema(schema)
+
+  return (
+    <form>
+      <input type="text" value={name} />
+      <textarea name="summary" id="" cols="30" rows="10" value={summary}></textarea>
+      <textarea name="description" id="" cols="30" rows="10" value={description}></textarea>
+      <input type="hidden" value={schema}/>
+      <div className="CustomPolicy-editor">
+        <Editor className="CustomPolicy-code" code={schema} onChange={onSchemaEdited} />
+        <SchemaForm className="CustomPolicy-form" schema={schema} />
+      </div>
+    </form>
+  )
+}
+
+function CustomPolicy ({jsonPolicy}: {jsonPolicy: string}) {
+  const rawPolicy = fromJson(jsonPolicy)
+  const policy = parsePolicy(Object.keys(rawPolicy)[0], Object.values(rawPolicy)[0])
 
   return (
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
         <h2 className="CustomPolicy-title">Custom Policy</h2>
       </header>
-      <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={schema} onChange={onSchemaEdited} />
-        <Form className="CustomPolicy-form" schema={schema} />
-      </div>
+      <Form policy={policy} />
     </section>
   )
 }

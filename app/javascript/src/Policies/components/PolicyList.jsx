@@ -16,11 +16,10 @@ const PolicyList = function ({policies}: {policies: Array<RegistryPolicy>}): Rea
   return (
     <ul className='list-group'>
       {policies.map((policy, index) => (
-        <PolicyTile
+        <li className="Policy" key={index}><PolicyTile
           edit={() => navigateToEditPolicy(policyEditLink(policy.name, policy.version))}
           policy={policy}
-          key={index}
-        />
+        /></li>
       ))}
     </ul>
   )

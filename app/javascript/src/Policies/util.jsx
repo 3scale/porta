@@ -58,6 +58,16 @@ function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
     })
 }
 
+function toJson (val) { JSON.stringify(val, null, 2) }
+
+function fromJson (json: string): string {
+  try {
+    return JSON.parse(json)
+  } catch (err) {
+    console.error('That doesn\'t look like a valid JSON')
+  }
+}
+
 export {
   updateObject,
   updateArray,
@@ -65,5 +75,7 @@ export {
   updateError,
   generateGuid,
   parsePolicies,
-  parsePolicy
+  parsePolicy,
+  toJson,
+  fromJson
 }
