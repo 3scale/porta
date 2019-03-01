@@ -90,14 +90,17 @@ Make sure you have [Homebrew](https://brew.sh/) in your machine in order to inst
 ```shell
 brew tap homebrew/cask
 brew cask install chromedriver
-brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver
+brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql memcached
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
+brew services start mysql@5.7
 ```
 
-#### XQuartz
+Optionally, depending on your needs you can launch memcached and postgresql services
 
-To be able to run [Cucumber](https://cucumber.io/) tests you also need [XQuartz](http://xquartz.macosforge.org/landing/).
+```shell
+brew services start memcached postgresql
+```
 
 #### Spring (Optional)
 [Spring](https://github.com/rails/spring) is a Rails application preloader. It speeds up development by keeping your application running in the background so you don't need to boot it every time you run a test, rake task or migration.
@@ -110,42 +113,11 @@ gem install spring -v 2.0.0
 #### Sphinx Search
 
 [Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7**:
+
 ```shell
-brew install sphinx --with-mysql@5.7
+sed -i '' -e 's|depends_on "mysql"|depends_on "mysql@5.7"|g' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb
+brew install sphinx
 ```
-
-Make sure your Sphinx configuration has the following changes applied:
-```patch
-diff --git i/Formula/sphinx.rb w/Formula/sphinx.rb
-index 1c4cc0e5b..2201bc43c 100644
---- i/Formula/sphinx.rb
-+++ w/Formula/sphinx.rb
-@@ -16,11 +16,13 @@ class Sphinx < Formula
- 
-   option "with-mysql", "Force compiling against MySQL"
-   option "with-postgresql", "Force compiling against PostgreSQL"
-+  option "with-mysql@5.7", "Force compiling against MySQL 5.7"
- 
-   deprecated_option "mysql" => "with-mysql"
-   deprecated_option "pgsql" => "with-postgresql"
- 
-   depends_on "mysql" => :optional
-+  depends_on "mysql@5.7" => :optional
-   depends_on "openssl" if build.with? "mysql"
-   depends_on "postgresql" => :optional
- 
-@@ -47,7 +49,7 @@ class Sphinx < Formula
-       --with-libstemmer
-     ]
- 
--    if build.with? "mysql"
-+    if build.with?("mysql") || build.with?("mysql@5.7")
-       args << "--with-mysql"
-     else
-       args << "--without-mysql"
-```
-
-Run `brew edit sphinx` to edit Sphinx configuration or alternatively open `${HOMEBREW_PREFIX:-/usr/local}/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb` with your favorite editor.
 
 #### Redis
 
