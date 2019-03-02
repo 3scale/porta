@@ -50,7 +50,6 @@ class Header extends React.Component {
       <div>
         <PageHeader
           logo={<SimpleBrand/>}
-          className = "Header"
           logoProps = {this.getLogoProps()}
           toolbar = {<SimpleToolbar toolbarProps={this.getToolbarProps()} docsProps={this.getDocsProps()}/>}
           avatar = {<Avatar {...this.getAvatarProps()}/>}/>
