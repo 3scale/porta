@@ -40,3 +40,7 @@ header class=class_header id="user_widget"*{'data-href' => provider_admin_dashbo
   'data-logout-path' => provider_logout_path,
   'data-username' => current_user.username,
   'data-context-switcher-data' => context_switcher_data}
+
+  // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
+  div class="username" style="display:none;"
+    = current_user.username
