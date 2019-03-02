@@ -401,7 +401,7 @@ GEM
       rest-client
     launchy (2.4.3)
       addressable (~> 2.3)
-    license_finder (5.7.0)
+    license_finder (5.5.2)
       bundler
       rubyzip
       thor
@@ -881,7 +881,7 @@ DEPENDENCIES
   jwt (~> 1.5.2)
   kubeclient
   launchy
-  license_finder (~> 5.7.0)
+  license_finder (~> 5.5.2)
   m (~> 1.5.1)
   mail_view (~> 2.0.4)
   mechanize
