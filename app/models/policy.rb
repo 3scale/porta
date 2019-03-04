@@ -7,6 +7,15 @@ class Policy < ApplicationRecord
   validates :name, :version, :account_id, :schema, presence: true
   validate :belongs_to_a_tenant
   validate :validate_schema_specification
+  serialize :schema, ActiveRecord::Coders::JSON
+
+  # Overriding attribute but that is OK
+  def schema=(value)
+    json = value.is_a?(String) ? ActiveRecord::Coders::JSON.load(value.strip) : value
+    super(json)
+  rescue JSON::ParserError
+    errors.add(:schema, :invalid_json)
+  end
 
   private
 

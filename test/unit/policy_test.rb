@@ -43,8 +43,8 @@ class PolicyTest < ActiveSupport::TestCase
 
   test 'validates schema' do
     policy = FactoryBot.build(:policy, schema: 'invalid JSON')
-    refute policy.valid?
-    assert_equal ['Invalid JSON'], policy.errors[:schema]
+    assert_equal ['Invalid JSON schema'], policy.errors[:schema]
+    assert_nil policy.schema
 
     policy.schema = '{"foo": "bar"}'
     refute policy.valid?

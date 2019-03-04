@@ -108,7 +108,7 @@ FactoryBot.define do
   factory(:policy) do
     sequence(:name) { |n| "name #{n}" }
     sequence(:version) { |n| "version #{n}" }
-    schema { {name: 'name example', version: '1', configuration: false, summary: 'example summary'}.to_json }
+    schema { {name: 'name example', version: '1', configuration: {type: 'object'}, summary: 'example summary'}.as_json }
     association(:account, factory: :simple_provider)
   end
 
