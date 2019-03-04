@@ -30,6 +30,7 @@ Feature: Menu of the Account screen
     | Users                     |
     | SSO Integrations          |
 
+  @javascript
   Scenario: finance disabled should not disable 3scale invoices
     Given provider "foo.example.com" has "finance" switch denied
     When I go to the provider dashboard

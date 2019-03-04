@@ -7,6 +7,7 @@ Feature: Personal Details
     Given a provider "foo.example.com"
     And provider "foo.example.com" has multiple applications enabled
 
+  @javascript
   Scenario: Edit personal details as provider
    Given current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"

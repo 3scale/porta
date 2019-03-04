@@ -9,6 +9,7 @@ Feature: Invitations
     And provider "foo.example.com" has multiple applications enabled
     And provider "foo.example.com" has "multiple_users" switch allowed
 
+  @javascript
   Scenario: When switch is denied as provider
     Given current domain is the admin domain of provider "foo.example.com"
       And provider "foo.example.com" has "multiple_users" switch denied
