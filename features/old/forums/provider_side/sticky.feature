@@ -10,6 +10,7 @@ Feature: Sticky Topics
     And provider "foo.example.com" has "forum" enabled
     And a buyer "bob" signed up to provider "foo.example.com"
 
+  @javascript
   Scenario: Creating a sticky topic
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -28,6 +29,7 @@ Feature: Sticky Topics
     And I go to the forum page
     Then I should see the first topic is "Read this first"
 
+  @javascript
   Scenario: Marking existing topic as sticky
     Given the forum of "foo.example.com" has the following topics:
       | Topic        | Created at |
@@ -53,6 +55,7 @@ Feature: Sticky Topics
     And I go to the forum page
     Then I should see the first topic is "Second topic"
 
+  @javascript
   Scenario: Unsticking a topic
     Given the forum of "foo.example.com" has the following topics:
       | Topic        | Sticky? | Created at |
