@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { Form as SchemaForm } from 'react-jsonschema-form'
-import {parsePolicy, fromJson, toJson} from 'Policies/util'
-import 'codemirror/mode/javascript/javascript'
+// @flow
 
+import * as React from 'react'
+import { useState } from 'react'
+import { UnControlled as CodeMirror } from 'react-codemirror2'
+import SchemaForm from 'react-jsonschema-form'
+import { parsePolicies, fromJson, toJson } from 'Policies/util'
+import type { RegistryPolicy, RawRegistry } from 'Policies/types/Policies'
+import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
 
 const cmOptions = {
@@ -21,9 +24,8 @@ const cmOptions = {
   tabSize: 2
 }
 
-function Editor (props) {
-  const { onChange } = props
-  const [ state, setState ] = useState({valid: true, code: toJson(props.code)})
+function Editor ({onChange, code}): React.Node {
+  const [ state, setState ] = useState({valid: true, code: toJson(code)})
 
   const onCodeChange = (editor, metadata, code) => {
     setState({ valid: true, code })
@@ -36,17 +38,16 @@ function Editor (props) {
     })
   }
 
-  const schemaValid = state.valid
-  const icon = schemaValid ? 'check' : 'times'
-  const cls = schemaValid ? 'valid' : 'invalid'
-  const hiddenClass = schemaValid ? 'is-hidden' : ''
-  const errorClass = schemaValid ? '' : 'CustomPolicy-error'
+  const icon = state.valid ? 'check' : 'times'
+  const cls = state.valid ? 'valid' : 'invalid'
+  const hiddenClass = state.valid ? 'is-hidden' : ''
+  const errorClass = state.valid ? '' : 'CustomPolicy-error'
 
   return (
     <div className={`${errorClass} panel panel-default`}>
       <div className="panel-heading">
-        <span className={`${cls} fa fa-${icon}`} />
-        {'JSON Schema'}
+        <i className={`${cls} fa fa-${icon}`} />
+        {' JSON Schema'}
       </div>
       <CodeMirror
         value={state.code}
@@ -59,28 +60,31 @@ function Editor (props) {
   )
 }
 
-function Form ({policy}) {
-  const {name, description, summary} = policy
-  const [schema, setSchema] = useState(policy.schema)
-  const onSchemaEdited = schema => setSchema(schema)
+function Form ({policy}: {policy: RegistryPolicy}): React.Node {
+  const [pol, setPolicy] = useState(policy)
+  const onSchemaEdited = pol => schema => setPolicy({...pol, ...{schema}})
+  const handleChange = pol => ev => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
 
   return (
-    <form>
-      <input type="text" value={name} />
-      <textarea name="summary" id="" cols="30" rows="10" value={summary}></textarea>
-      <textarea name="description" id="" cols="30" rows="10" value={description}></textarea>
-      <input type="hidden" value={schema}/>
+    <div>
       <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={schema} onChange={onSchemaEdited} />
-        <SchemaForm className="CustomPolicy-form" schema={schema} />
+        <Editor className="CustomPolicy-code" code={pol.schema} onChange={onSchemaEdited(pol)} />
+        <SchemaForm className="CustomPolicy-form" schema={pol.schema} />
       </div>
-    </form>
+      <form action={`/p/admin/custom_policies/${pol.name}-${pol.version}`} method="post">
+        <input type="text" name="name" value={pol.name} onChange={handleChange(pol)} />
+        <textarea name="summary" id="" cols="30" rows="10" value={pol.summary} onChange={handleChange(pol)} />
+        <textarea name="description" id="" cols="30" rows="10" value={pol.description} onChange={handleChange(pol)} />
+        <input type="hidden" value={pol.schema}/>
+        <input type="submit" />
+      </form>
+    </div>
   )
 }
 
-function CustomPolicy ({jsonPolicy}: {jsonPolicy: string}) {
-  const rawPolicy = fromJson(jsonPolicy)
-  const policy = parsePolicy(Object.keys(rawPolicy)[0], Object.values(rawPolicy)[0])
+function CustomPolicy ({jsonPolicy}: {jsonPolicy: string}): React.Node {
+  const rawRegistryPolicy: RawRegistry = fromJson(jsonPolicy)
+  const policy = parsePolicies(rawRegistryPolicy)[0]
 
   return (
     <section className="CustomPolicy">

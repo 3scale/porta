@@ -230,7 +230,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :liquid_docs, :only => [:show]
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]
       constraints(id: /[\w.-]+/) do
-        resources :custom_policies, only: %i[index edit]
+        resources :custom_policies, only: %i[index edit update new]
       end
       resources :destroys, :only => [:index]
 

@@ -3,16 +3,11 @@
 import * as React from 'react'
 import {PolicyList} from 'Policies/components/PolicyList'
 import {parsePolicies, fromJson} from 'Policies/util'
-import type {RawPolicy} from 'Policies/types/Policies'
 
 import 'Policies/styles/policies.scss'
 
-type Props = {
-  rawPolicies: Array<RawPolicy>
-}
-
-const CustomPolicies = ({rawPolicies}: Props): React.Node => {
-  const policies = parsePolicies(fromJson(rawPolicies))
+const CustomPolicies = ({jsonPolicies}: {jsonPolicies: string}): React.Node => {
+  const policies = parsePolicies(fromJson(jsonPolicies))
   return (
     <section className="CustomPolicies">
       <header className='CustomPolicies-header'>

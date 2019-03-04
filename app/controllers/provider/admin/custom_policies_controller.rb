@@ -18,10 +18,12 @@ class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseControlle
 
   end
 
+  def update; end
+
   def edit
     @policy = {
-      'echo': {
-        'name': 'Echo', 'summary': 'Echo summary', 'description': 'Echoes the request', 'version': '1.0.0', '$schema': {}, 'schema': {},
+      'echo': [{
+        'name': 'Echo', 'summary': 'Echo summary', 'description': 'Echoes the request', 'version': '1.0.0', '$schema': {},
         'configuration': {
           'title': 'Custom Policy',
           'description': 'An epic policy yet to code.',
@@ -42,7 +44,7 @@ class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseControlle
             }
           }
         }
-      }
+      }]
     }
   end
 

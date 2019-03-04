@@ -58,15 +58,9 @@ function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
     })
 }
 
-function toJson (val) { JSON.stringify(val, null, 2) }
+const toJson = (val: Object): string => JSON.stringify(val, null, 2)
 
-function fromJson (json: string): string {
-  try {
-    return JSON.parse(json)
-  } catch (err) {
-    console.error('That doesn\'t look like a valid JSON')
-  }
-}
+const fromJson = (json: string) => JSON.parse(json)
 
 export {
   updateObject,
