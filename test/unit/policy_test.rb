@@ -54,4 +54,29 @@ class PolicyTest < ActiveSupport::TestCase
     assert policy.valid?
     assert_empty policy.errors[:schema]
   end
+
+  test 'find policy by id or name and version' do
+    policy = FactoryBot.create(:policy, name: 'my-policy', version: '1.0')
+
+    assert_equal policy, Policy.find_by_id_or_name_version(policy.id)
+    assert_equal policy, Policy.find_by_id_or_name_version('my-policy-1.0')
+  end
+
+  test 'find policy by id or name and version when name contains spaces' do
+    policy = FactoryBot.create(:policy, name: 'this is my policy', version: '1.0')
+
+    assert_equal policy, Policy.find_by_id_or_name_version('this is my policy-1.0')
+  end
+
+  test 'update name or version also updates identifier' do
+    policy = FactoryBot.create(:policy, name: 'my-policy', version: '1.0')
+
+    policy.name = 'new-name'
+    policy.save
+    assert_equal 'new-name-1.0', policy.reload.identifier
+
+    policy.version = '1.1'
+    policy.save
+    assert_equal 'new-name-1.1', policy.reload.identifier
+  end
 end

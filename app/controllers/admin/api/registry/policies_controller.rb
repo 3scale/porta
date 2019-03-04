@@ -9,10 +9,13 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   representer ::Policy
 
   before_action :authorize_policies
+  before_action :find_policy, only: %i[show]
 
   # swagger
   ##~ sapi = source2swagger.namespace("Policy Registry API")
   ##~ sapi.basePath = @base_path
+  ##~ @parameter_policy_id = { :name => "id", :description => "ID of the policy. It can be an integer value or a combination 'name-version' of the policy (e.g. 'mypolicy-1.0')", :dataType => "string", :required => true, :paramType => "path" }
+
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/registry/policies.json"
   ##~ e.responseClass = "policy"
@@ -32,7 +35,25 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
     respond_with current_account.policies.create(policy_params)
   end
 
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/registry/policies/{id}.json"
+  ##~ e.responseClass = "policy"
+  #
+  ##~ op             = e.operations.add
+  ##~ op.httpMethod  = "GET"
+  ##~ op.summary     = "APIcast Policy Registry Read"
+  ##~ op.description = "Returns the APIcast policy by ID"
+  ##~ op.group       = "apicast_policies"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_policy_id
+  def show
+    respond_with(policy)
+  end
+
   private
+
+  attr_reader :policy
 
   def authorize_policies
     authorize! :manage, :policy_registry
@@ -40,5 +61,9 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
 
   def policy_params
     params.require(:policy).permit(:name, :version, :schema)
+  end
+
+  def find_policy
+    @policy ||= current_account.policies.find_by_id_or_name_version!(params[:id])
   end
 end
