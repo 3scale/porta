@@ -6,7 +6,7 @@
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
-    var registry = #{json Policies::PoliciesListService.call}
+    var registry = #{json Policies::PoliciesListService.call(current_account)}
     var chain = #{json @proxy.policies_config}
     var serviceId = #{json @service.id}
     initPolicies({element: 'policies', registry: registry, chain: chain, serviceId: serviceId})

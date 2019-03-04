@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Policy < ApplicationRecord
-  belongs_to :account
+  belongs_to :account, inverse_of: :policies
 
   validates :version, uniqueness: { scope: %i[account_id name] }
   validates :name, :version, :account_id, :schema, presence: true

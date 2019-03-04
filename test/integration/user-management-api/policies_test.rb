@@ -16,11 +16,8 @@ class Admin::Api::PoliciesTest < ActionDispatch::IntegrationTest
 
   def test_index
     rolling_updates_on
-    ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'https://example.com/policies')
-    stub_request(:get, 'https://example.com/policies')
-      .to_return(status: 200, body: "{\"policies\":[{\"schema\":\"1\"}]}",
-                 headers: { 'Content-Type' => 'application/json' })
+    Policies::PoliciesListService.expects(:call).with(@provider).returns("{\"cors\":[{\"schema\":\"1\"}]}")
     get admin_api_policies_path(format: :json), provider_key: @provider.api_key
-    assert_match "[{\"schema\":\"1\"}]", response.body
+    assert_match "{\"cors\":[{\"schema\":\"1\"}]}", response.body
   end
 end
