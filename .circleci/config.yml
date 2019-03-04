@@ -28,10 +28,20 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
+save-flow-typed-cache: &save-flow-typed-cache
+  save_cache:
+    key: flow-typed-{{ checksum "package-lock.json" }}
+    paths:
+      - ./flow-typed
+
 restore-npm-cache: &restore-npm-cache
   restore_cache:
     keys:
       - v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
+
+restore-flow-typed-cache: &restore-flow-typed-cache
+  restore_cache:
+    key: flow-typed-{{ checksum "package-lock.json" }}
 
 use-example-config-files: &use-example-config-files
   run:
@@ -356,12 +366,10 @@ jobs:
           key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-            - ./flow-typed
       - persist_to_workspace:
           root: .
           paths:
             - ./node_modules
-            - ./flow-typed
 
   assets_precompile:
     executor: builder
@@ -400,10 +408,13 @@ jobs:
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
+      - *restore-flow-typed-cache
       - run:
           name: Eslint & Flow
           command: |
+            npm run flow:install
             npm run lint
+      - *save-flow-typed-cache
       - store_artifacts:
           path: doc/licenses
           destination: licenses
