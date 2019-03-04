@@ -38,6 +38,7 @@ Feature: Menu of the Account screen
      And I follow "3scale Invoices"
     Then I should be on my invoices from 3scale page
 
+  @javascript
   Scenario: Account menu when master is billing
     Given master is billing tenants
     When I go to the provider dashboard
