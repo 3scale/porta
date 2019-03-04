@@ -7,6 +7,7 @@ Feature: Notifications
     Given a provider
       And all the rolling updates features are off
 
+  @javascript
   Scenario: Navigate to notifications page
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -92,4 +93,3 @@ Feature: Notifications
     Then I should have the notification "Daily aggregate reports" enabled
     When I uncheck "Daily aggregate reports"
     Then I should have the notification "Daily aggregate reports" disabled
-
