@@ -8,6 +8,7 @@ Feature: Menu of the Account screen
       And current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
 
+  @javascript
   Scenario: Help menu dropdown
     When I go to the provider account page
     Then I should see "foo.example.com"
