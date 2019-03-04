@@ -9,7 +9,7 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   representer ::Policy
 
   before_action :authorize_policies
-  before_action :find_policy, only: %i[show destroy]
+  before_action :find_policy, only: %i[show update destroy]
 
   # swagger
   ##~ sapi = source2swagger.namespace("Policy Registry API")
@@ -71,6 +71,25 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   ##~ e.responseClass = "policy"
   #
   ##~ op             = e.operations.add
+  ##~ op.httpMethod  = "PUT"
+  ##~ op.summary     = "APIcast Policy Registry Update"
+  ##~ op.description = "Updates an APIcast Policy"
+  ##~ op.group       = "apicast_policies"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_policy_id
+  ##~ op.parameters.add :name => "name", :description => "New name of the policy", :required => false, :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add :name => "version", :description => "New version of the policy", :required => false, :dataType => "string", :paramType => "query"
+  ##~ op.parameters.add :name => "schema", :description => "New JSON Schema of the policy", :required => false, :dataType => "string", :paramType => "query"
+  def update
+    policy.update_attributes(policy_params)
+    respond_with(policy)
+  end
+
+  ##~ op             = e.operations.add
+  ##~ e.path = "/admin/api/registry/policies/{id}.json"
+  ##~ e.responseClass = "policy"
+  #
   ##~ op.httpMethod  = "DELETE"
   ##~ op.summary     = "APIcast Policy Registry Delete"
   ##~ op.description = "Deletes an APIcast policy by ID"
