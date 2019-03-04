@@ -15,7 +15,7 @@ class Plan < ApplicationRecord
   has_system_name :uniqueness_scope => [ :type, :issuer_id, :issuer_type ]
 
   audited :allow_mass_assignment => true
-  acts_as_list :scope => :issuer
+  acts_as_list scope: %i[issuer_id issuer_type]
 
   # There is a race condition here, the record gets deleted but the callbacks were not triggered yet
   # So we need to verify their existence before:
