@@ -86,7 +86,7 @@ Feature: User management
     And I press "Update User"
     Then user "bob" should have role "admin"
 
-  @security @allow-rescue
+  @security @allow-rescue @javascript
   Scenario: Only admins can manage users
     Given an active user "josephine" of account "foo.example.com"
     And current domain is the admin domain of provider "foo.example.com"

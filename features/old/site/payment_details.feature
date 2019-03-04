@@ -6,6 +6,7 @@ Feature: Provider Payment Details
     And provider "master" manages payments with "braintree_blue"
     And provider "master" has testing credentials for braintree
 
+  @javascript
   Scenario: Upload logo
     Given master provider has the following fields defined for "Account":
       | name              | choices | label          | required | read_only | hidden |

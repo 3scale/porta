@@ -15,7 +15,7 @@ Feature: Change Application Plan
 
     And all the rolling updates features are off
 
-  @ignore-backend
+  @ignore-backend @javascript
   Scenario: Change application plan
    Given current domain is the admin domain of provider "foo.example.com"
      And I log in as provider "foo.example.com"
@@ -29,5 +29,3 @@ Feature: Change Application Plan
 
     When I act as "bob"
     Then I should receive an email with subject "Application plan changed to 'Advanced'"
-
-
