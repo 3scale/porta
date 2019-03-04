@@ -19,6 +19,7 @@ Feature: Personal Details
     Then I should see "User was successfully updated"
     And I should be on the provider personal details page
 
+  @javascript
   Scenario: Personal details redirects back to users list if originated there
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"

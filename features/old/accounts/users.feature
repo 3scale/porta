@@ -9,6 +9,7 @@ Feature: User management
     Given an user "alice" of account "foo.example.com"
       And an user "bob" of account "foo.example.com"
 
+  @javascript
   Scenario: Navigating to users overview for providers
     And current domain is the admin domain of provider "foo.example.com"
     Given I am logged in as provider "foo.example.com"
