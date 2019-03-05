@@ -88,7 +88,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
     end
 
     def test_update_unexistent_service
-      put admin_api_active_doc_path(api_docs_service, format: :json), update_params(service_id: 200)
+      put admin_api_active_doc_path(api_docs_service, format: :json), update_params(service_id: Service.last.id + 1)
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'service'), 'not found'
     end
