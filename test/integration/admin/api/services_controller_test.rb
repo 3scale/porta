@@ -55,4 +55,17 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     get admin_api_services_path
     assert_response :forbidden
   end
+
+  class WithProviderKey < ActionDispatch::IntegrationTest
+
+    def test_delete
+      provider = FactoryBot.create(:provider_account)
+      host! provider.admin_domain
+      service = FactoryBot.create(:service, account: provider)
+      refute service.deleted?
+      delete admin_api_service_path(service, provider_key: provider.api_key)
+      assert_response :ok
+      assert service.reload.deleted?
+    end
+  end
 end
