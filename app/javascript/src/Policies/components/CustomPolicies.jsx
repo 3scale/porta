@@ -12,7 +12,9 @@ const CustomPolicies = ({jsonPolicies}: {jsonPolicies: string}): React.Node => {
     <section className="CustomPolicies">
       <header className='CustomPolicies-header'>
         <h2 className="CustomPolicies-title">Custom Policies</h2>
-        <a className="CustomPolicies-addPolicy" ><i className="fa fa-plus-circle" /> Add new policy</a>
+        <a className="CustomPolicies-addPolicy" href="/p/admin/registry/policies/new" >
+          <i className="fa fa-plus-circle" /> Add new policy
+        </a>
       </header>
       <PolicyList policies={policies} />
     </section>

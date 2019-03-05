@@ -68,14 +68,15 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   return (
     <div>
       <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={pol.schema} onChange={onSchemaEdited(pol)} />
-        <SchemaForm className="CustomPolicy-form" schema={pol.schema} />
+        <Editor className="CustomPolicy-code" code={pol.configuration} onChange={onSchemaEdited(pol)} />
+        <SchemaForm className="CustomPolicy-form" schema={pol.configuration} />
       </div>
       <form action={`/p/admin/registry/policies/${pol.name}-${pol.version}`} method="post">
         <input type="text" name="name" value={pol.name} onChange={handleChange(pol)} />
+        <input type="text" name="version" value={pol.version} onChange={handleChange(pol)} />
         <textarea name="summary" id="" cols="30" rows="10" value={pol.summary} onChange={handleChange(pol)} />
         <textarea name="description" id="" cols="30" rows="10" value={pol.description} onChange={handleChange(pol)} />
-        <input type="hidden" value={pol.schema}/>
+        <input name="schema" type="hidden" value={JSON.stringify(pol.configuration)}/>
         <input type="submit" />
       </form>
     </div>
