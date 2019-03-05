@@ -15,10 +15,19 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
     @policy.add policy
   end
 
-  def update; end
+  def update
+    policy = current_account.create(create_policy_params)
+    @policy = Policies::PoliciesListService.new
+    @policy.add policy
+    if policy.update_attributes(create_policy_params)
+      redirect_to :index
+    else
+      render :edit
+    end
+  end
 
   def edit
-    policy = Policy.first
+    policy = Policy.find_by_id_or_name_version!(params[:id])
     @policy = Policies::PoliciesListService::PolicyList.new
     @policy.add policy
   end
@@ -26,6 +35,6 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   protected
 
   def create_policy_params
-    params.permit(:name, :version, :schema)
+    PermittedParams::PolicyParams.new(params.require(:policy)).to_params
   end
 end

@@ -9,7 +9,7 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   representer ::Policy
 
   before_action :authorize_policies
-  before_action :find_policy, only: %i[show update destroy]
+  before_action :policy, only: %i[show update destroy]
 
   # swagger
   ##~ sapi = source2swagger.namespace("Policy Registry API")
@@ -104,19 +104,15 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
 
   private
 
-  attr_reader :policy
-
   def authorize_policies
     authorize! :manage, :policy_registry
   end
 
   def policy_params
-    policy_params = params.require(:policy)
-    final_params = policy_params.permit(:name, :version)
-    final_params.merge(schema: policy_params.require(:schema)).permit!
+    PermittedParams::PolicyParams.new(params.require(:policy)).to_params
   end
 
-  def find_policy
+  def policy
     @policy ||= current_account.policies.find_by_id_or_name_version!(params[:id])
   end
 end

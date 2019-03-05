@@ -55,6 +55,12 @@ class PolicyTest < ActiveSupport::TestCase
     assert_empty policy.errors[:schema]
   end
 
+  test 'validates same version in schema and in name' do
+    policy = FactoryBot.build(:policy, schema: {version: '1.2.0'}.as_json, version: '0.5.0')
+    refute policy.valid?
+    assert_includes policy.errors[:version], policy.errors.generate_message(:version, :mismatch)
+  end
+
   test 'find policy by id or name and version' do
     policy = FactoryBot.create(:policy, name: 'my-policy', version: '1.0')
 

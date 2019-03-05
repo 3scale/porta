@@ -5,8 +5,10 @@ class Policy < ApplicationRecord
 
   validates :version, uniqueness: { scope: %i[account_id name] }
   validates :name, :version, :account_id, :schema, presence: true
-  validate :belongs_to_a_tenant
-  validate :validate_schema_specification
+  validate :belongs_to_a_tenant, :validate_schema_specification, :validate_same_version
+
+  attr_readonly :name, :version
+
   serialize :schema, ActiveRecord::Coders::JSON
 
   # Overriding attribute but that is OK
@@ -33,6 +35,12 @@ class Policy < ApplicationRecord
   def belongs_to_a_tenant
     return if !account || account.tenant?
     errors.add(:account, :not_tenant)
+  end
+
+  # Yes it :reek:NilCheck
+  def validate_same_version
+    return if version.to_s == schema&.dig('version').to_s
+    errors.add(:version, :mismatch)
   end
 
   def validate_schema_specification

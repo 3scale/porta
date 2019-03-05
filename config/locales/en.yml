@@ -830,6 +830,9 @@ en:
               not_tenant: 'must be a tenant'
             schema:
               invalid_json: "Invalid JSON schema"
+            version:
+              mismatch: "The schema version differs from the version in the name"
+
         proxy_rule:
           attributes:
             pattern:

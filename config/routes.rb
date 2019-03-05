@@ -231,8 +231,8 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]
 
       namespace :registry do
-        constraints(id: /((?!\.json\Z)[^\/])+/) do
-          resources :policies, only: %i[index edit]
+        constraints(id: /([^\/])+/) do
+          resources :policies
         end
       end
 
