@@ -37,7 +37,7 @@ gem 'i18n'
 gem 'multi_fetch_fragments', github: 'mikz/multi_fetch_fragments'
 
 # Apisonator client
-gem 'pisoni', '~> 1.24'
+gem 'pisoni', '~> 1.26'
 
 # 3scale fork that allows OPTIONS passthrough
 gem 'font_assets', git: 'https://github.com/3scale/font_assets.git', ref: 'da97b8601528ee189795cc94b953ec9a30f47e83', groups: [:production, :preview]
