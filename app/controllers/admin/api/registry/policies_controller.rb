@@ -60,7 +60,9 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   end
 
   def policy_params
-    params.require(:policy).permit(:name, :version, :schema)
+    policy_params = params.require(:policy)
+    final_params = policy_params.permit(:name, :version)
+    final_params.merge(schema: policy_params.require(:schema)).permit!
   end
 
   def find_policy
