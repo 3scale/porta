@@ -100,7 +100,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_service_id_by_id
   #
   def destroy
-    authorize! :destroy, service
+    authorize!(:destroy, service) if current_user
     service.mark_as_deleted!
 
     respond_with(service)
