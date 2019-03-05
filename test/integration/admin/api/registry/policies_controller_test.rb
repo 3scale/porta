@@ -88,6 +88,35 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     assert_response :forbidden
   end
 
+  test 'GET show returns the policy' do
+    policy = FactoryBot.create(:policy, account: @provider)
+    get admin_api_registry_policy_path(policy, access_token: @access_token.value)
+    assert_response :success
+    json = JSON.parse(response.body)['policy']
+    assert_equal policy.id, json['id']
+  end
+
+  test 'GET show finds the policy when name-version is passed as id' do
+    policy = FactoryBot.create(:policy, account: @provider, name: 'my_policy', version: '1.0')
+    get admin_api_registry_policy_path('my_policy-1.0', access_token: @access_token.value)
+    assert_response :success
+    json = JSON.parse(response.body)['policy']
+    assert_equal policy.id, json['id']
+  end
+
+  test 'GET show returns not found when policy does not exist' do
+    get admin_api_registry_policy_path(id: 'inexistent-policy', access_token: @access_token.value)
+    assert_response :not_found
+  end
+
+  test 'format is not part of id' do
+    policy = FactoryBot.create(:policy, account: @provider, name: 'my-policy', version: '1.0')
+
+    assert_raises(ActionController::UrlGenerationError) do
+      get admin_api_registry_policy_path('my-policy-1.0.json', access_token: @access_token.value)
+    end
+  end
+
   def policy_params(token = @access_token.value)
     @policy_attributes ||= FactoryBot.build(:policy).attributes.symbolize_keys.slice(:name, :version, :schema)
     { policy: @policy_attributes, access_token: token }
