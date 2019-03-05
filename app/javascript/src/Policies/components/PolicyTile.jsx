@@ -2,11 +2,12 @@
 
 import * as React from 'react'
 import type { RegistryPolicy } from 'Policies/types/Policies'
+import type { Dispatch } from 'Policies/types'
 
 type Props = {
   policy: RegistryPolicy,
   title?: string,
-  edit: any // Any Fn, PolicyChain generates a ThunkAction while PolicyList navigates outside
+  edit: Dispatch | (string) => {}
 }
 
 const PolicyTile = function ({policy, edit, title = 'Edit this Policy'}: Props): React.Node {

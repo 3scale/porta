@@ -7,14 +7,14 @@ import type {RegistryPolicy} from 'Policies/types/Policies'
 
 const policyEditLink = (name: string, version: string): string => `/p/admin/registry/policies/${name}-${version}/edit`
 
-const navigateToEditPolicy = (url: string) => {
-  window.location.href = url
-  history.pushState({}, '', url)
+const navigateToEditPolicy = (url: string, win = window) => {
+  win.location.href = url
+  win.history.pushState({}, '', url)
 }
 
 const PolicyList = function ({policies}: {policies: Array<RegistryPolicy>}): React.Node {
   return (
-    <ul className='list-group'>
+    <ul className='list-group PolicyList'>
       {policies.map((policy, index) => (
         <li className="Policy" key={index}><PolicyTile
           edit={() => navigateToEditPolicy(policyEditLink(policy.name, policy.version))}
@@ -25,4 +25,8 @@ const PolicyList = function ({policies}: {policies: Array<RegistryPolicy>}): Rea
   )
 }
 
-export { PolicyList }
+export {
+  PolicyList,
+  policyEditLink,
+  navigateToEditPolicy
+}
