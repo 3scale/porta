@@ -86,7 +86,7 @@ Feature: Proxy integration
     And I drag the last mapping rule to the position 1
     And I save the proxy config
     Then the mapping rules should be in the following order:
-      | http_method | pattern | delta | metric_id |
-      | PUT         | /mixers | 1     | 2         |
-      | GET         | /       | 1     | 2         |
-      | POST        | /beers  | 2     | 2         |
+      | http_method | pattern | delta | metric |
+      | PUT         | /mixers | 1     | hits   |
+      | GET         | /       | 1     | hits   |
+      | POST        | /beers  | 2     | hits   |
