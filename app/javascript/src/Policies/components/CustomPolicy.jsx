@@ -62,7 +62,7 @@ function Editor ({onChange, code}): React.Node {
 
 function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   const [pol, setPolicy] = useState(policy)
-  const onSchemaEdited = pol => schema => setPolicy({...pol, ...{schema}})
+  const onSchemaEdited = pol => configuration => setPolicy({...pol, ...{configuration}})
   const handleChange = pol => ev => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
 
   return (
@@ -76,7 +76,8 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
         <input type="text" name="version" value={pol.version} onChange={handleChange(pol)} />
         <textarea name="summary" id="" cols="30" rows="10" value={pol.summary} onChange={handleChange(pol)} />
         <textarea name="description" id="" cols="30" rows="10" value={pol.description} onChange={handleChange(pol)} />
-        <input name="schema" type="hidden" value={JSON.stringify(pol.configuration)}/>
+        <input name="schema" type="hidden" value={JSON.stringify(pol.configuration)} />
+        <input name="_method" type="hidden" value='put' />
         <input type="submit" />
       </form>
     </div>
