@@ -500,7 +500,8 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def test_service_deleted
-    service = FactoryBot.build_stubbed(:simple_service, account: provider)
+    persisted_provider = FactoryBot.create(:simple_provider)
+    service = FactoryBot.build_stubbed(:simple_service, account: persisted_provider)
     event   = Services::ServiceDeletedEvent.create(service)
     mail    = NotificationMailer.service_deleted(event, receiver)
 
@@ -508,7 +509,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match "The service #{service.name} has been deleted.", body.encoded
-      assert_match url_helpers.provider_admin_dashboard_url(host: provider.admin_domain), body.encoded
+      assert_match url_helpers.provider_admin_dashboard_url(host: persisted_provider.admin_domain), body.encoded
     end
   end
 

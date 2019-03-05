@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
+  disable_transactional_fixtures!
 
   def test_create
     service = FactoryBot.build_stubbed(:simple_service, id: 1, name: 'Alaska')
@@ -9,7 +12,6 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
     assert event
     assert event.service_name, service.name
     assert event.service_id, service.id
-    assert event.provider, service.provider
   end
 
   def test_ability
@@ -30,5 +32,19 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
 
     assert_cannot Ability.new(member), :show, event
     assert_can Ability.new(admin), :show, event
+  end
+
+  def test_create_and_publish_when_provider_does_not_exists_anymore
+    provider = FactoryBot.create(:simple_provider)
+    service = FactoryBot.create(:simple_service, account: provider)
+
+    provider_id = provider.id
+    provider.delete
+
+    event = Services::ServiceDeletedEvent.create(service.reload)
+    Rails.application.config.event_store.publish_event(event)
+
+    event_stored = EventStore::Repository.find_event!(event.event_id)
+    assert_equal provider_id, event_stored.metadata.fetch(:provider_id)
   end
 end
