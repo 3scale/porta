@@ -7,7 +7,7 @@ import type {RegistryPolicy} from 'Policies/types/Policies'
 
 const policyEditLink = (name: string, version: string): string => `/p/admin/registry/policies/${name}-${version}/edit`
 
-const navigateToEditPolicy = (url: string, win = window) => {
+const navigateToEditPolicy = (url: string, win: any = window) => {
   win.location.href = url
   win.history.pushState({}, '', url)
 }

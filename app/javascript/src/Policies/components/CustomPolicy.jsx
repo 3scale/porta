@@ -6,10 +6,13 @@ import { UnControlled as CodeMirror } from 'react-codemirror2'
 import SchemaForm from 'react-jsonschema-form'
 import { parsePolicies, fromJson, toJson } from 'Policies/util'
 import type { RegistryPolicy, RawRegistry } from 'Policies/types/Policies'
+import type {InputEvent} from 'Policies/types'
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
 
-function CSRFToken ({win = window}): React.Node {
+type OnChange = (InputEvent) => void
+
+function CSRFToken ({win = window}: {win?: any}): React.Node {
   const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
   const props = {
     name: getMetaContent('csrf-param'),
@@ -40,14 +43,12 @@ function Editor ({onChange, code}): React.Node {
   const [ state, setState ] = useState({valid: true, code: toJson(code)})
 
   const onCodeChange = (editor, metadata, code) => {
-    setState({ valid: true, code })
-    setImmediate(() => {
-      try {
-        onChange(fromJson(code))
-      } catch (err) {
-        setState({ valid: false, code })
-      }
-    })
+    try {
+      onChange(fromJson(code))
+      setState({ valid: true, code })
+    } catch (err) {
+      setState({ valid: false, code })
+    }
   }
 
   const icon = state.valid ? 'check' : 'times'
@@ -72,10 +73,34 @@ function Editor ({onChange, code}): React.Node {
   )
 }
 
+function FormInput (props: {type: 'text' | 'textarea', humanname: string, name: string, value?: string, onChange: OnChange}) {
+  return (
+    <label>
+      {`${props.humanname}:`}
+      {(props.type === 'text') ? <input type="text" {...props} /> : <textarea {...props} /> }
+    </label>
+  )
+}
+
+function CustomPolicyForm ({policy, onChange}: {policy: RegistryPolicy, onChange: OnChange}): React.Node {
+  return (
+    <form action={`/p/admin/registry/policies/${policy.name}-${policy.version}`} method="post">
+      <FormInput type="text" name="name" humanname="Name" value={policy.name} onChange={onChange} />
+      <FormInput type="text" name="version" humanname="Version" value={policy.version} onChange={onChange} />
+      <FormInput type="textarea" name="summary" humanname="Summary" value={policy.summary} onChange={onChange} />
+      <FormInput type="textarea" name="description" humanname="Description" value={policy.description} onChange={onChange} />
+      <input name="schema" type="hidden" value={JSON.stringify(policy.configuration)} />
+      <input name="_method" type="hidden" value='put'/>
+      <input type="submit" />
+      <CSRFToken />
+    </form>
+  )
+}
+
 function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   const [pol, setPolicy] = useState(policy)
-  const onSchemaEdited = pol => configuration => setPolicy({...pol, ...{configuration}})
-  const handleChange = pol => ev => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
+  const onSchemaEdited = (pol: RegistryPolicy) => (configuration: string) => setPolicy({...pol, ...{configuration}})
+  const handleChange = (pol: RegistryPolicy) => (ev: InputEvent) => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
 
   return (
     <div>
@@ -83,17 +108,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
         <Editor className="CustomPolicy-code" code={pol.configuration} onChange={onSchemaEdited(pol)} />
         <SchemaForm className="CustomPolicy-form" schema={pol.configuration} />
       </div>
-      <form action={`/p/admin/registry/policies/${pol.name}-${pol.version}`} method="post">
-        <input type="text" name="name" value={pol.name} onChange={handleChange(pol)} />
-        <input type="text" name="version" value={pol.version} onChange={handleChange(pol)} />
-        <textarea name="summary" id="" cols="30" rows="10" value={pol.summary} onChange={handleChange(pol)} />
-        <textarea name="description" id="" cols="30" rows="10" value={pol.description} onChange={handleChange(pol)} />
-        <input name="schema" type="hidden" value={JSON.stringify(pol.configuration)} />
-        <input name="_method" type="hidden" value='put'/>
-        <input name="_method" type="hidden" value='put' />
-        <input type="submit" />
-        <CSRFToken />
-      </form>
+      <CustomPolicyForm policy={pol} onChange={handleChange(pol)} />
     </div>
   )
 }
@@ -112,4 +127,4 @@ function CustomPolicy ({jsonPolicy}: {jsonPolicy: string}): React.Node {
   )
 }
 
-export { CustomPolicy }
+export { CustomPolicy, CSRFToken }
