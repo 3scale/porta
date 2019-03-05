@@ -5,7 +5,10 @@ class Policy < ApplicationRecord
 
   validates :version, uniqueness: { scope: %i[account_id name] }
   validates :name, :version, :account_id, :schema, presence: true
-  validate :belongs_to_a_tenant, :validate_schema_specification, :validate_same_version
+  validate :belongs_to_a_tenant
+  validate :validate_schema_specification
+  validate :validate_same_version
+  BUILT_IN_NAME = 'builtin'
 
   attr_readonly :name, :version
 
@@ -39,8 +42,11 @@ class Policy < ApplicationRecord
 
   # Yes it :reek:NilCheck
   def validate_same_version
-    return if version.to_s == schema&.dig('version').to_s
-    errors.add(:version, :mismatch)
+    if version.to_s == BUILT_IN_NAME
+      errors.add :version, :builtin
+    elsif version.to_s != schema&.dig('version').to_s
+      errors.add(:version, :mismatch)
+    end
   end
 
   def validate_schema_specification

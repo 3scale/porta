@@ -8,6 +8,10 @@ class PolicyTest < ActiveSupport::TestCase
   should validate_presence_of :account_id
   should validate_presence_of :schema
 
+  test 'builtin' do
+    assert_equal 'builtin', Policy::BUILT_IN_NAME
+  end
+
   test 'validates uniqueness of [account_id, name, version]' do
     persisted_policy = FactoryBot.create(:policy)
 
@@ -59,6 +63,10 @@ class PolicyTest < ActiveSupport::TestCase
     policy = FactoryBot.build(:policy, schema: {version: '1.2.0'}.as_json, version: '0.5.0')
     refute policy.valid?
     assert_includes policy.errors[:version], policy.errors.generate_message(:version, :mismatch)
+
+    policy.version = Policy::BUILT_IN_NAME
+    refute policy.valid?
+    assert_includes policy.errors[:version], policy.errors.generate_message(:version, :builtin)
   end
 
   test 'find policy by id or name and version' do

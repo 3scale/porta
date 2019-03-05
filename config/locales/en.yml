@@ -831,7 +831,8 @@ en:
             schema:
               invalid_json: "Invalid JSON schema"
             version:
-              mismatch: "The schema version differs from the version in the name"
+              mismatch: "differs from the schema version"
+              builtin: "cannot be 'builtin'"
 
         proxy_rule:
           attributes:
