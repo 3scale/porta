@@ -3,19 +3,9 @@
 module ThreeScale
   module Policies
     class Specification
-      extend ActiveModel::Naming
-      extend ActiveModel::Translation
-
-      def initialize(body)
+      def initialize(doc)
         @errors = ActiveModel::Errors.new(self)
-
-        begin
-          @doc = JSON.parse(body.to_s)
-        rescue JSON::ParserError
-          @errors.add(:base, :invalid_json)
-        end
-
-        @doc ||= {}
+        @doc = doc
         @validator = JSONValidator.new(doc)
       end
 
