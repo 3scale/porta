@@ -65,6 +65,13 @@
   .brand-dark-bg {
     background-color: rgba(3, 3, 3, 0.62);
   }
+
+  .pf-c-page__header-tools a {
+    color: rgb(237, 237, 237);
+  }
+  .pf-c-page__header-tools a:hover {
+    color: $white;
+  }
 }
 .pf-c-page__header-brand {
   position: absolute;
