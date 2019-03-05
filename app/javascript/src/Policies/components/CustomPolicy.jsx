@@ -9,6 +9,18 @@ import type { RegistryPolicy, RawRegistry } from 'Policies/types/Policies'
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
 
+function CSRFToken ({win = window}): React.Node {
+  const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
+  const props = {
+    name: getMetaContent('csrf-param'),
+    value: getMetaContent('csrf-token'),
+    type: 'hidden'
+  }
+  return (
+    <input {...props} />
+  )
+}
+
 const cmOptions = {
   theme: 'default',
   height: 'auto',
@@ -80,6 +92,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
         <input name="_method" type="hidden" value='put'/>
         <input name="_method" type="hidden" value='put' />
         <input type="submit" />
+        <CSRFToken />
       </form>
     </div>
   )
