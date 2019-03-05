@@ -21,6 +21,21 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   ##~ e.responseClass = "policy"
   #
   ##~ op            = e.operations.add
+  ##~ op.httpMethod = "GET"
+  ##~ op.summary    = "APIcast Policy Registry List"
+  ##~ op.description = "List the APIcast Policies"
+  ##~ op.group = "apicast_policies"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  def index
+    respond_with current_account.policies
+  end
+
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/registry/policies.json"
+  ##~ e.responseClass = "policy"
+  #
+  ##~ op            = e.operations.add
   ##~ op.httpMethod = "POST"
   ##~ op.summary    = "APIcast Policy Registry Create"
   ##~ op.description = "Creates an APIcast Policy"
