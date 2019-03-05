@@ -692,7 +692,9 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :settings, only: [:show, :update]
 
       namespace :registry, defaults: { format: :json } do
-        resources :policies, only: :create
+        constraints(id: /((?!\.json\Z|\.xml\Z)[^\/])+/) do
+          resources :policies, only: [:create, :show]
+        end
       end
     end
   end
