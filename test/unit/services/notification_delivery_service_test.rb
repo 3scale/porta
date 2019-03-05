@@ -49,8 +49,9 @@ class NotificationDeliveryServiceTest < ActiveSupport::TestCase
   end
 
   def test_empty_attribute_is_a_valid_event
+    provider = FactoryBot.create(:simple_provider)
     ['', []].each do |empty_value|
-      service = FactoryBot.build_stubbed(:simple_service, name: empty_value)
+      service = FactoryBot.build_stubbed(:simple_service, name: empty_value, account: provider)
       event = Services::ServiceDeletedEvent.create(service)
       notification = FactoryBot.build_stubbed(:notification, system_name: :service_deleted)
       notification.expects(:parent_event).returns(event)
