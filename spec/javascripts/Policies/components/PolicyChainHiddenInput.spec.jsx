@@ -7,8 +7,8 @@ Enzyme.configure({ adapter: new Adapter() })
 
 describe('PolicyRegistry Components', () => {
   const policyChain = [
-    {id: '1', enabled: true, name: 'cors', humanName: 'CORS', description: 'CORS headers', version: '1.0.0', configuration: {}, $schema: '', schema: {}},
-    {id: '2', enabled: true, name: 'echo', humanName: 'Echo', description: 'Echoes the request', version: '1.0.0', configuration: {}, $schema: '', schema: {}}
+    {id: '1', enabled: true, name: 'cors', humanName: 'CORS', description: 'CORS headers', version: '1.0.0', configuration: {}, $schema: '', data: {}},
+    {id: '2', enabled: true, name: 'echo', humanName: 'Echo', description: 'Echoes the request', version: '1.0.0', configuration: {}, $schema: '', data: {}}
   ]
   function setup () {
     const props = {

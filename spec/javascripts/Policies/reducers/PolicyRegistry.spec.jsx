@@ -29,7 +29,7 @@ describe('RegistryReducer', () => {
       summary: 'CORS Summary',
       humanName: 'CORS',
       version: 'builtin',
-      schema: {}
+      data: {}
     }])
   })
 })

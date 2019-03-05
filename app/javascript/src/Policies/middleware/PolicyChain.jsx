@@ -16,7 +16,7 @@ function convertToChainPolicy (registryPolicy: RegistryPolicy, storedPolicy: Sto
     ...registryPolicy,
     ...{
       enabled: storedPolicy.enabled,
-      configuration: storedPolicy.configuration,
+      data: storedPolicy.configuration,
       removable,
       uuid: generateGuid()
     }

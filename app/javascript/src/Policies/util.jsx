@@ -45,16 +45,11 @@ function parsePolicies (registry: RawRegistry): Array<RegistryPolicy> {
 }
 
 function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
-  return Object.assign({},
+  return Object.assign({}, policy,
     {
-      $schema: policy.$schema,
       name: key,
       humanName: policy.name,
-      schema: policy.configuration,
-      version: policy.version,
-      summary: policy.summary,
-      description: policy.description,
-      configuration: {}
+      data: {}
     })
 }
 

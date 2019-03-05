@@ -3,12 +3,12 @@ import { loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
 
 const create = () => {
   const registry = [
-    { name: 'echo', configuration: {}, summary: 'ECHO', description: 'ECHO', humanName: 'ECHO', version: 'builtin', schema: {} }
+    { name: 'echo', configuration: {}, summary: 'ECHO', description: 'ECHO', humanName: 'ECHO', version: 'builtin' }
   ]
 
   const chain = [
     { name: 'cors', configuration: {}, summary: 'CORS', description: 'CORS', humanName: 'CORS', version: 'builtin',
-      schema: {}, uuid: '007', enabled: true, removable: true }
+      data: {}, uuid: '007', enabled: true, removable: true }
   ]
 
   const store = {
@@ -37,7 +37,7 @@ describe('PolicyChain Middleware', () => {
     })
 
     expect(store.dispatch.mock.calls[0][0].type).toBe('LOAD_CHAIN_SUCCESS')
-    expect(store.dispatch.mock.calls[0][0].payload[0].configuration).toEqual({config: 'bond'})
+    expect(store.dispatch.mock.calls[0][0].payload[0].data).toEqual({config: 'bond'})
   })
 
   it('Dispatches LOAD_CHAIN_ERROR action', () => {
@@ -53,7 +53,7 @@ describe('PolicyChain Middleware', () => {
     invoke({
       type: 'REMOVE_POLICY_FROM_CHAIN',
       policy: { name: 'cors', configuration: {}, summary: 'CORS', description: 'CORS', humanName: 'CORS', version: 'builtin',
-        schema: {}, uuid: '007', enabled: true, removable: true }
+        data: {}, uuid: '007', enabled: true, removable: true }
     })
 
     expect(store.dispatch).toHaveBeenCalledWith(updatePolicyChain([]))
@@ -69,7 +69,7 @@ describe('PolicyChain Middleware', () => {
         description: 'CORS description changed',
         humanName: 'CORS changed',
         version: 'builtin',
-        schema: {},
+        data: {},
         enabled: true,
         removable: true,
         uuid: '007'
@@ -84,7 +84,7 @@ describe('PolicyChain Middleware', () => {
         description: 'CORS description changed',
         humanName: 'CORS changed',
         version: 'builtin',
-        schema: {},
+        data: {},
         enabled: true,
         removable: true,
         uuid: '007'
