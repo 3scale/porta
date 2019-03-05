@@ -5,7 +5,7 @@ import { PolicyTile } from 'Policies/components/PolicyTile'
 import 'Policies/styles/policies.scss'
 import type {RegistryPolicy} from 'Policies/types/Policies'
 
-const policyEditLink = (name: string, version: string): string => `/p/admin/custom_policies/${name}-${version}/edit`
+const policyEditLink = (name: string, version: string): string => `/p/admin/registry/policies/${name}-${version}/edit`
 
 const navigateToEditPolicy = (url: string) => {
   window.location.href = url

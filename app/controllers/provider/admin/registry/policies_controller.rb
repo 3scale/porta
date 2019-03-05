@@ -1,6 +1,6 @@
 #frozen_string_literal: true
 
-class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseController
+class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseController
   activate_menu :account, :integrate, :policies
 
   layout 'provider'
@@ -21,7 +21,6 @@ class Provider::Admin::CustomPoliciesController < Provider::Admin::BaseControlle
     policy = Policy.first
     @policy = Policies::PoliciesListService::PolicyList.new
     @policy.add policy
-
   end
 
   protected

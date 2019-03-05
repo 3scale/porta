@@ -71,7 +71,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
         <Editor className="CustomPolicy-code" code={pol.schema} onChange={onSchemaEdited(pol)} />
         <SchemaForm className="CustomPolicy-form" schema={pol.schema} />
       </div>
-      <form action={`/p/admin/custom_policies/${pol.name}-${pol.version}`} method="post">
+      <form action={`/p/admin/registry/policies/${pol.name}-${pol.version}`} method="post">
         <input type="text" name="name" value={pol.name} onChange={handleChange(pol)} />
         <textarea name="summary" id="" cols="30" rows="10" value={pol.summary} onChange={handleChange(pol)} />
         <textarea name="description" id="" cols="30" rows="10" value={pol.description} onChange={handleChange(pol)} />
