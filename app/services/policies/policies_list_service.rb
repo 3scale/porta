@@ -9,6 +9,7 @@ class Policies::PoliciesListService
     if builtin
       response = ::JSONClient.get(ThreeScale.config.sandbox_proxy.apicast_registry_url)
       return unless response.ok?
+
       list.merge!(PolicyList.from_hash(response.body['policies']))
     end
     list.merge!(PolicyList.new(account.policies)) if account.provider_can_use?(:policy_registry)

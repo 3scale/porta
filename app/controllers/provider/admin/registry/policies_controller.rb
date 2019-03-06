@@ -10,31 +10,37 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   end
 
   def create
-    policy = current_account.create(create_policy_params)
-    @policy = Policies::PoliciesListService.new
-    @policy.add policy
+    policy = Policies::PolicyCreator.new(current_account, params).call
+    @policy_list = Policies::PoliciesListService::PolicyList.new
+    @policy_list.add policy
+
+    if policy.persisted?
+      redirect_to action: :edit, id: policy
+    else
+      render :new
+    end
   end
 
   def update
-    policy = current_account.create(create_policy_params)
-    @policy = Policies::PoliciesListService.new
-    @policy.add policy
-    if policy.update_attributes(create_policy_params)
-      redirect_to :index
+    Policies::PolicyUpdater.new(policy, params).call
+    @policy_list = Policies::PoliciesListService::PolicyList.new
+    @policy_list.add policy
+
+    if policy.persisted?
+      redirect_to action: :index
     else
       render :edit
     end
   end
 
   def edit
-    policy = Policy.find_by_id_or_name_version!(params[:id])
-    @policy = Policies::PoliciesListService::PolicyList.new
-    @policy.add policy
+    @policy_list = Policies::PoliciesListService::PolicyList.new
+    @policy_list.add policy
   end
 
   protected
 
-  def create_policy_params
-    PermittedParams::PolicyParams.new(params.require(:policy)).to_params
+  def policy
+    @policy ||= current_account.policies.find_by_id_or_name_version!(params[:id])
   end
 end
