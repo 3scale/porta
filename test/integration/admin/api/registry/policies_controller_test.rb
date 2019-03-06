@@ -125,17 +125,19 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     assert_same_elements expected_policy_ids, JSON.parse(response.body)['policies'].map { |policy| policy.dig('policy', 'id') }
   end
 
-  test 'PUT update updates the policy' do
+  test 'PUT updates the policy' do
     policy = FactoryBot.create(:policy, account: @provider, version: '1.0')
     new_schema = JSON.parse(file_fixture('policies/apicast-policy.json').read).merge('description': 'New description')
+    new_schema['version'] = '1.0'
     put admin_api_registry_policy_path(policy, policy: { schema: new_schema.to_json }, access_token: @access_token.value)
     assert_response :success
     assert_equal 'New description', policy.reload.schema['description']
   end
 
-  test 'PUT update updates the policy when name-version is passed as id' do
+  test 'PUT updates the policy when name-version is passed as id' do
     policy = FactoryBot.create(:policy, account: @provider, name: 'my_policy', version: '1.0')
     new_schema = JSON.parse(file_fixture('policies/apicast-policy.json').read).merge('description': 'New description')
+    new_schema['version'] = '1.0'
     put admin_api_registry_policy_path('my_policy-1.0', policy: { schema: new_schema.to_json }, access_token: @access_token.value)
     assert_response :success
     assert_equal 'New description', policy.reload.schema['description']

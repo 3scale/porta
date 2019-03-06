@@ -107,8 +107,16 @@ FactoryBot.define do
 
   factory(:policy) do
     sequence(:name) { |n| "name #{n}" }
-    sequence(:version) { |n| "version #{n}" }
-    schema { {name: 'name example', version: '1', configuration: {type: 'object'}, summary: 'example summary'}.as_json }
+    sequence(:version) { |n| "1.0.#{n}" }
+    schema do {
+      '$schema' => "http://apicast.io/policy-v1/schema#manifest#",
+      name: 'name example',
+      version: version,
+      configuration: {type: 'object'},
+      summary: 'example summary',
+      description: 'example description'
+    }.as_json
+    end
     association(:account, factory: :simple_provider)
   end
 
