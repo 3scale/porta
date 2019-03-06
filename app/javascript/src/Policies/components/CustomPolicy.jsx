@@ -81,15 +81,16 @@ function FormInput (props: {type: 'text' | 'textarea', humanname: string, name: 
   )
 }
 
-function CustomPolicyForm ({policy, onChange}: {policy: RegistryPolicy, onChange: OnChange}): React.Node {
+function CustomPolicyForm ({policy, onChange, isNewPolicy}: {policy: RegistryPolicy, onChange: OnChange, isNewPolicy: boolean}): React.Node {
+  const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.name}-${policy.version}`
   return (
-    <form action={`/p/admin/registry/policies/${policy.name}-${policy.version}`} method="post">
+    <form action={action} method="post">
       <FormInput type="text" name="name" humanname="Name" value={policy.name} onChange={onChange} />
       <FormInput type="text" name="version" humanname="Version" value={policy.version} onChange={onChange} />
       <FormInput type="textarea" name="summary" humanname="Summary" value={policy.summary} onChange={onChange} />
       <FormInput type="textarea" name="description" humanname="Description" value={policy.description} onChange={onChange} />
-      <input name="schema" type="hidden" value={JSON.stringify(policy.configuration)} />
-      <input name="_method" type="hidden" value='put'/>
+      <input name="configuration" type="hidden" value={JSON.stringify(policy.configuration)} />
+      {(!isNewPolicy) ? <input name="_method" type="hidden" value='put' /> : ''}
       <input type="submit" />
       <CSRFToken />
     </form>
@@ -100,6 +101,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   const [pol, setPolicy] = useState(policy)
   const onSchemaEdited = (pol: RegistryPolicy) => (configuration: string) => setPolicy({...pol, ...{configuration}})
   const handleChange = (pol: RegistryPolicy) => (ev: InputEvent) => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
+  const isNewPolicy = (policy.name.length === 0)
 
   return (
     <div>
@@ -107,7 +109,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
         <Editor className="CustomPolicy-code" code={pol.configuration} onChange={onSchemaEdited(pol)} />
         <SchemaForm className="CustomPolicy-form" schema={pol.configuration} />
       </div>
-      <CustomPolicyForm policy={pol} onChange={handleChange(pol)} />
+      <CustomPolicyForm policy={pol} onChange={handleChange(pol)} isNewPolicy={isNewPolicy} />
     </div>
   )
 }
