@@ -60,3 +60,9 @@ export type Store = State & {
   boundActionCreators: IPoliciesActions,
   dispatch: Dispatch
 }
+
+export type ElementEventTemplate<E> = {
+  target: E
+} & Event
+
+export type InputEvent = ElementEventTemplate<HTMLInputElement>

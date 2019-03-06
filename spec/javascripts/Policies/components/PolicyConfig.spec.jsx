@@ -18,7 +18,7 @@ describe('PolicyConfig Component', () => {
       description: 'Configures a cache for the authentication calls against the 3scale',
       version: 'builtin',
       $schema: 'http://apicast.io/policy-v1/schema#manifest#',
-      schema: {
+      configuration: {
         properties: {
           caching_type: {
             oneOf: [
@@ -44,7 +44,7 @@ describe('PolicyConfig Component', () => {
         },
         type: 'object'
       },
-      configuration: {}
+      data: {}
     }
 
     const props = {
@@ -132,7 +132,7 @@ describe('PolicyConfig APIcast policy', () => {
       description: 'Main function...',
       version: 'builtin',
       $schema: 'http://apicast.io/policy-v1/schema#manifest#',
-      schema: { },
+      data: { },
       configuration: {}
     }
 
@@ -169,7 +169,7 @@ describe('PolicyConfig APIcast policy', () => {
   it('should hide the APIcast policy form', () => {
     const {policyConfigWrapper} = setup()
 
-    expect(policyConfigWrapper.find(PolicyForm).hasClass('hidden')).toBe(true)
+    expect(policyConfigWrapper.find(PolicyForm).hasClass('is-hidden')).toBe(true)
   })
 })
 

@@ -4,7 +4,7 @@ import type { ChainPolicy } from 'Policies/types/Policies'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
 import { initialState } from 'Policies/reducers/initialState'
-import { updateObject, createReducer } from 'Policies/reducers/util'
+import { updateObject, createReducer } from 'Policies/util'
 
 function updatePolicyConfig (state: ChainPolicy, action: UpdatePolicyConfigAction): ChainPolicy {
   return updateObject(state, action.policyConfig)
