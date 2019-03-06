@@ -117,6 +117,14 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     end
   end
 
+  test 'GET index returns the policies' do
+    FactoryBot.create_list(:policy, 3, account: @provider)
+    get admin_api_registry_policies_path(access_token: @access_token.value)
+    assert_response :success
+    expected_policy_ids = @provider.policies.pluck(:id)
+    assert_same_elements expected_policy_ids, JSON.parse(response.body)['policies'].map { |policy| policy.dig('policy', 'id') }
+  end
+
   def policy_params(token = @access_token.value)
     @policy_attributes ||= FactoryBot.build(:policy).attributes.symbolize_keys.slice(:name, :version, :schema)
     { policy: @policy_attributes, access_token: token }
