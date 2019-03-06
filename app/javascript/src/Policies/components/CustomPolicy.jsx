@@ -72,7 +72,15 @@ function Editor ({onChange, code}): React.Node {
   )
 }
 
-function FormInput (props: {type: 'text' | 'textarea', humanname: string, name: string, value?: string, onChange: OnChange}) {
+function FormInput (
+  props: {
+    type: 'text' | 'textarea',
+    humanname: string,
+    name: string,
+    value?: string,
+    onChange: OnChange,
+    disabled?: boolean
+  }) {
   return (
     <label>
       {`${props.humanname}:`}
@@ -85,9 +93,9 @@ function CustomPolicyForm ({policy, onChange, isNewPolicy}: {policy: RegistryPol
   const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.name}-${policy.version}`
   return (
     <form action={action} method="post">
-      <FormInput type="text" name="name" humanname="Name" value={policy.name} onChange={onChange} />
+      <FormInput type="text" name="name" humanname="Name" value={policy.name} onChange={onChange} disabled={!isNewPolicy} />
       <FormInput type="text" name="humanName" humanname="Human Name" value={policy.humanName} onChange={onChange} />
-      <FormInput type="text" name="version" humanname="Version" value={policy.version} onChange={onChange} />
+      <FormInput type="text" name="version" humanname="Version" value={policy.version} onChange={onChange} disabled={!isNewPolicy} />
       <FormInput type="textarea" name="summary" humanname="Summary" value={policy.summary} onChange={onChange} />
       <FormInput type="textarea" name="description" humanname="Description" value={policy.description} onChange={onChange} />
       <input name="configuration" type="hidden" value={JSON.stringify(policy.configuration)} />
