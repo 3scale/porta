@@ -2,6 +2,7 @@
 
 class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseController
   activate_menu :account, :integrate, :policies
+  before_action :authorize_policies
 
   layout 'provider'
 
@@ -39,6 +40,10 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   end
 
   protected
+
+  def authorize_policies
+    authorize! :manage, :policy_registry
+  end
 
   def policy
     @policy ||= current_account.policies.find_by_id_or_name_version!(params[:id])
