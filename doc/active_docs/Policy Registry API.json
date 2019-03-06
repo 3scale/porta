@@ -6,6 +6,28 @@
       "responseClass": "policy",
       "operations": [
         {
+          "httpMethod": "GET",
+          "summary": "APIcast Policy Registry List",
+          "description": "List the APIcast Policies",
+          "group": "apicast_policies",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/registry/policies.json",
+      "responseClass": "policy",
+      "operations": [
+        {
           "httpMethod": "POST",
           "summary": "APIcast Policy Registry Create",
           "description": "Creates an APIcast Policy",
