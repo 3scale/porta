@@ -199,7 +199,7 @@ class Service < ApplicationRecord
   end
 
   def preffix
-    @service_preffix ||= (provider.service_preffix || '')
+    @service_preffix ||= (provider&.service_preffix || '')
   end
 
   # by GrammarNazi

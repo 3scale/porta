@@ -15,7 +15,7 @@ class Backend::ModelExtensions::ServiceTest < ActiveSupport::TestCase
     service.save!
   end
 
-  test 'deletes backend service data when service is destroyed' do
+  test 'delete_backend_service deletes backend service data' do
     service = FactoryBot.create(:service, metrics: [])
 
     service.stubs(:alert_limits).returns([100, 200])
@@ -24,7 +24,14 @@ class Backend::ModelExtensions::ServiceTest < ActiveSupport::TestCase
     ThreeScale::Core::AlertLimit.expects(:delete).with(backend_id, 100).once
     ThreeScale::Core::AlertLimit.expects(:delete).with(backend_id, 200).once
 
-    service.destroy
+    service.delete_backend_service
+  end
+
+  test 'delete_backend_service deletes the service in backend even when the provider does not exist anymore' do
+    service = FactoryBot.create(:simple_service)
+    service.account.delete
+    ThreeScale::Core::Service.expects(:delete_by_id!).with(service.reload.backend_id)
+    service.delete_backend_service
   end
 
   test 'updates notification settings to backend' do
