@@ -43,9 +43,9 @@ function Editor ({onChange, code}): React.Node {
   const [ state, setState ] = useState({valid: true, code: toJson(code)})
 
   const onCodeChange = (editor, metadata, code) => {
+    setState({ valid: true, code })
     try {
       onChange(fromJson(code))
-      setState({ valid: true, code })
     } catch (err) {
       setState({ valid: false, code })
     }

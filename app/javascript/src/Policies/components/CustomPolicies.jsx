@@ -7,7 +7,12 @@ import {parsePolicies, fromJson} from 'Policies/util'
 import 'Policies/styles/policies.scss'
 
 const CustomPolicies = ({jsonPolicies}: {jsonPolicies: string}): React.Node => {
-  const policies = parsePolicies(fromJson(jsonPolicies))
+  let policies = []
+  try {
+    policies = fromJson(jsonPolicies)
+  } catch (err) {
+    console.error('That doesn\'t look like a valid JSON')
+  }
   return (
     <section className="CustomPolicies">
       <header className='CustomPolicies-header'>
@@ -16,7 +21,7 @@ const CustomPolicies = ({jsonPolicies}: {jsonPolicies: string}): React.Node => {
           <i className="fa fa-plus-circle" /> Add new policy
         </a>
       </header>
-      <PolicyList policies={policies} />
+      <PolicyList policies={parsePolicies(policies)} />
     </section>
   )
 }
