@@ -86,6 +86,7 @@ function CustomPolicyForm ({policy, onChange, isNewPolicy}: {policy: RegistryPol
   return (
     <form action={action} method="post">
       <FormInput type="text" name="name" humanname="Name" value={policy.name} onChange={onChange} />
+      <FormInput type="text" name="humanName" humanname="Human Name" value={policy.humanName} onChange={onChange} />
       <FormInput type="text" name="version" humanname="Version" value={policy.version} onChange={onChange} />
       <FormInput type="textarea" name="summary" humanname="Summary" value={policy.summary} onChange={onChange} />
       <FormInput type="textarea" name="description" humanname="Description" value={policy.description} onChange={onChange} />
