@@ -7,6 +7,7 @@ class Services::ServiceDeletedEvent < ServiceRelatedEvent
     data = {
       service_id:   service.id,
       service_name: service.name,
+      service_created_at: service.created_at.to_s,
       metadata: {
         provider_id: provider.id
       }
