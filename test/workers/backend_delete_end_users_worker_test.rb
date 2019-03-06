@@ -10,6 +10,6 @@ class BackendDeleteEndUsersWorkerTest < ActiveSupport::TestCase
 
     ThreeScale::Core::User.expects(:delete_all_for_service).with(service.id)
 
-    Sidekiq::Testing.inline! { BackendDeleteEndUsersWorker.enqueue(event) }
+    Sidekiq::Testing.inline! { BackendDeleteEndUsersWorker.perform_async(event.event_id) }
   end
 end
