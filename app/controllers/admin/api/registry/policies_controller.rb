@@ -9,7 +9,7 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   representer ::Policy
 
   before_action :authorize_policies
-  before_action :find_policy, only: %i[show]
+  before_action :find_policy, only: %i[show destroy]
 
   # swagger
   ##~ sapi = source2swagger.namespace("Policy Registry API")
@@ -63,6 +63,23 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_policy_id
   def show
+    respond_with(policy)
+  end
+
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/registry/policies/{id}.json"
+  ##~ e.responseClass = "policy"
+  #
+  ##~ op             = e.operations.add
+  ##~ op.httpMethod  = "DELETE"
+  ##~ op.summary     = "APIcast Policy Registry Delete"
+  ##~ op.description = "Deletes an APIcast policy by ID"
+  ##~ op.group       = "apicast_policies"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_policy_id
+  def destroy
+    policy.destroy
     respond_with(policy)
   end
 
