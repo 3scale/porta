@@ -1,5 +1,5 @@
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-.PoliciesWidget {
+.PolicyConfiguration, .CustomPolicy-form {
   @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 }
 
@@ -11,13 +11,16 @@ $subtleColor: #ddd;
 
 .PoliciesWidget {
   position: relative;
-  width: 510px;
-  margin: 0 auto;
   line-height: 1.5;
   padding-bottom: 2rem;
 
+  .PolicyChain, .PolicyRegistryList, .PolicyConfiguration {
+    width: 510px;
+    margin: 0 auto;
+  }
 
-  .PolicyChain {
+
+  .PolicyChain, .CustomPolicies {
     $PolicyChain-color: #464646;
     $PolicyChain-goColor: #4a90e2;
     $PolicyChain-doColor: #54b45d;
@@ -60,7 +63,7 @@ $subtleColor: #ddd;
     }
   }
 
-  .PolicyConfiguration {
+  .PolicyConfiguration, .CustomPolicy {
     $PolicyConfiguration-color: #464646;
     $PolicyConfiguration-goColor: #4a90e2;
     $PolicyConfiguration-doColor: #54b45d;
@@ -330,3 +333,15 @@ $subtleColor: #ddd;
   @extend .u-link;
   color: $doColor;
 }
+
+.CustomPolicy-editor {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  &-code, &-form {
+
+  }
+}
+
+.CustomPolicy-error { border: 5px solid red}
