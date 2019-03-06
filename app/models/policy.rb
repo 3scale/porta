@@ -32,6 +32,10 @@ class Policy < ApplicationRecord
     find_by_id_or_name_version(id_or_name_version) || raise(ActiveRecord::RecordNotFound)
   end
 
+  def to_param
+    persisted? ? identifier : nil
+  end
+
   private
 
   def belongs_to_a_tenant
