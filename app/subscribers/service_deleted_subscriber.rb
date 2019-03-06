@@ -3,7 +3,7 @@
 class ServiceDeletedSubscriber < AfterCommitSubscriber
   def after_commit(event)
     case event
-    when Services::ServiceDeletedEvent then BackendDeleteEndUsersWorker.enqueue(event)
+    when Services::ServiceDeletedEvent then BackendDeleteServiceWorker.enqueue(event)
     else raise "Unknown event type #{event.class}"
     end
   end
