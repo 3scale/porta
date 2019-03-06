@@ -27,7 +27,7 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
     @policy_list = Policies::PoliciesListService::PolicyList.new
     @policy_list.add policy
 
-    if policy.persisted?
+    if policy.errors.empty?
       redirect_to action: :index
     else
       render :edit

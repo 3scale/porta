@@ -25,6 +25,6 @@ class Policies::PolicyUpdater
   def configuration
     JSON.parse(params['configuration'])
   rescue JSON::ParserError
-    {}
+    policy.schema['configuration']
   end
 end
