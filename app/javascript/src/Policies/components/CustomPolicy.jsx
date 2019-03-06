@@ -49,7 +49,7 @@ function CSRFToken ({win = window}: {win?: any}): React.Node {
   )
 }
 
-function Editor ({onChange, code}): React.Node {
+function Editor ({onChange, code}: {onChange: (string) => void, code: Object}): React.Node {
   const [ state, setState ] = useState({valid: true, code: toJson(code)})
 
   const onCodeChange = (editor, metadata, code) => {
