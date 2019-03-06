@@ -12,19 +12,7 @@ import 'Policies/styles/policies.scss'
 
 type OnChange = (InputEvent) => void
 
-function CSRFToken ({win = window}: {win?: any}): React.Node {
-  const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
-  const props = {
-    name: getMetaContent('csrf-param'),
-    value: getMetaContent('csrf-token'),
-    type: 'hidden'
-  }
-  return (
-    <input {...props} />
-  )
-}
-
-const cmOptions = {
+const CM_OPTIONS = {
   theme: 'default',
   height: 'auto',
   viewportMargin: Infinity,
@@ -37,6 +25,28 @@ const cmOptions = {
   lineWrapping: true,
   indentWithTabs: false,
   tabSize: 2
+}
+
+const POLICY_TEMPLATE: RegistryPolicy = {
+  $schema: '',
+  name: '',
+  version: '',
+  description: '',
+  summary: '',
+  configuration: {},
+  humanName: ''
+}
+
+function CSRFToken ({win = window}: {win?: any}): React.Node {
+  const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
+  const props = {
+    name: getMetaContent('csrf-param'),
+    value: getMetaContent('csrf-token'),
+    type: 'hidden'
+  }
+  return (
+    <input {...props} />
+  )
 }
 
 function Editor ({onChange, code}): React.Node {
@@ -65,7 +75,7 @@ function Editor ({onChange, code}): React.Node {
         value={state.code}
         onChange={onCodeChange}
         autoCursor={false}
-        options={cmOptions}
+        options={CM_OPTIONS}
       />
       <div className={hiddenClass}> There's an error in the JSON Schema</div>
     </div>
@@ -123,17 +133,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   )
 }
 
-const policyTemplate: RegistryPolicy = {
-  $schema: '',
-  name: '',
-  version: '',
-  description: '',
-  summary: '',
-  configuration: {},
-  humanName: ''
-}
-
-function CustomPolicy ({policy = policyTemplate}: {policy: RegistryPolicy}): React.Node {
+function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: RegistryPolicy}): React.Node {
   return (
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
@@ -144,4 +144,12 @@ function CustomPolicy ({policy = policyTemplate}: {policy: RegistryPolicy}): Rea
   )
 }
 
-export { CustomPolicy, CSRFToken }
+export {
+  CustomPolicy,
+  CustomPolicyForm,
+  FormInput,
+  Editor,
+  CSRFToken,
+  CM_OPTIONS,
+  POLICY_TEMPLATE
+}
