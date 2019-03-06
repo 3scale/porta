@@ -6,16 +6,20 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
 
   layout 'provider'
 
+  def new
+    @policy = current_account.policies.build
+  end
+
   def index
     @policies = Policies::PoliciesListService.call(current_account, builtin: false)
   end
 
   def create
-    policy = Policies::PolicyCreator.new(current_account, params).call
+    @policy = Policies::PolicyCreator.new(current_account, params).call
     @policy_list = Policies::PoliciesListService::PolicyList.new
-    @policy_list.add policy
+    @policy_list.add @policy
 
-    if policy.persisted?
+    if @policy.persisted?
       redirect_to action: :edit, id: policy
     else
       render :new
