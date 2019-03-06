@@ -12,7 +12,7 @@ const SimpleAvatar = ({avatarLink, impersonated, accountName, displayName, logou
         { impersonated ? ' Impersonating a virtual admin user from ' : 'Signed in to '}
         { `${accountName} as ${displayName}.` }
       </p>
-      <a className="PopNavigation-link" title={`Sign Out ${username}`} href={logoutPath}>
+      <a id="sign-out-button" className="PopNavigation-link" title={`Sign Out ${username}`} href={logoutPath}>
         <i className="fa fa-times fa-fw"></i> Sign Out
       </a>
     </li>
