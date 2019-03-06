@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190304094026) do
+ActiveRecord::Schema.define(version: 20190304222108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -461,6 +461,17 @@ ActiveRecord::Schema.define(version: 20190304094026) do
   end
 
   add_index "countries", ["code"], name: "index_countries_on_code", using: :btree
+
+  create_table "deleted_object_entries", force: :cascade do |t|
+    t.integer  "owner_id",    limit: 8
+    t.string   "owner_type"
+    t.integer  "object_id",   limit: 8
+    t.string   "object_type"
+    t.datetime "created_at",            null: false
+  end
+
+  add_index "deleted_object_entries", ["object_type", "object_id"], name: "index_deleted_object_entries_on_object_type_and_object_id", using: :btree
+  add_index "deleted_object_entries", ["owner_type", "owner_id"], name: "index_deleted_object_entries_on_owner_type_and_owner_id", using: :btree
 
   create_table "end_user_plans", force: :cascade do |t|
     t.integer  "service_id", limit: 8,   null: false
@@ -1106,11 +1117,11 @@ ActiveRecord::Schema.define(version: 20190304094026) do
     t.string   "metric_system_name", limit: 255
     t.integer  "delta"
     t.integer  "tenant_id",          limit: 8
-    t.datetime "created_at",                     null: false
+    t.datetime "created_at",                                     null: false
     t.datetime "updated_at"
     t.text     "redirect_url"
     t.integer  "position"
-    t.boolean  "last",                        default: false
+    t.boolean  "last",                           default: false
   end
 
   add_index "proxy_rules", ["proxy_id"], name: "index_proxy_rules_on_proxy_id", using: :btree

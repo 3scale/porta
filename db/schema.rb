@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190304094026) do
+ActiveRecord::Schema.define(version: 20190304222108) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -462,6 +462,17 @@ ActiveRecord::Schema.define(version: 20190304094026) do
   end
 
   add_index "countries", ["code"], name: "index_countries_on_code", using: :btree
+
+  create_table "deleted_object_entries", force: :cascade do |t|
+    t.integer  "owner_id",    limit: 8
+    t.string   "owner_type",  limit: 255
+    t.integer  "object_id",   limit: 8
+    t.string   "object_type", limit: 255
+    t.datetime "created_at",              null: false
+  end
+
+  add_index "deleted_object_entries", ["object_type", "object_id"], name: "index_deleted_object_entries_on_object_type_and_object_id", using: :btree
+  add_index "deleted_object_entries", ["owner_type", "owner_id"], name: "index_deleted_object_entries_on_owner_type_and_owner_id", using: :btree
 
   create_table "end_user_plans", force: :cascade do |t|
     t.integer  "service_id", limit: 8,   null: false
@@ -1107,7 +1118,7 @@ ActiveRecord::Schema.define(version: 20190304094026) do
     t.string   "metric_system_name", limit: 255
     t.integer  "delta",              limit: 4
     t.integer  "tenant_id",          limit: 8
-    t.datetime "created_at",                       null: false
+    t.datetime "created_at",                                       null: false
     t.datetime "updated_at"
     t.text     "redirect_url",       limit: 65535
     t.integer  "position",           limit: 4
