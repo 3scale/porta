@@ -4,7 +4,7 @@ export type RawPolicy = {
   $schema?: string,
   name: string,
   version: string,
-  description: string,
+  description?: string,
   summary?: string,
   configuration: Object
 }
@@ -15,7 +15,7 @@ export type RawRegistry = {
 
 export type RegistryPolicy = & RawPolicy & {
   humanName: string,
-  schema?: Object
+  data?: Object
 }
 
 export type ChainPolicy = & RegistryPolicy & {

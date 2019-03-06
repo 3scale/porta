@@ -3,7 +3,7 @@
 import type { RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types/Policies'
 import type { Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/types/index'
 
-import { generateGuid } from 'Policies/reducers/util'
+import { generateGuid } from 'Policies/util'
 import { loadChainSuccess, loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
 
 function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: StoredChainPolicy): RegistryPolicy | typeof undefined {
@@ -16,7 +16,7 @@ function convertToChainPolicy (registryPolicy: RegistryPolicy, storedPolicy: Sto
     ...registryPolicy,
     ...{
       enabled: storedPolicy.enabled,
-      configuration: storedPolicy.configuration,
+      data: storedPolicy.configuration,
       removable,
       uuid: generateGuid()
     }

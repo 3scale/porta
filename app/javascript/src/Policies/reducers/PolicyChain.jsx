@@ -1,7 +1,7 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, generateGuid, updateArray } from 'Policies/reducers/util'
+import { createReducer, generateGuid, updateArray } from 'Policies/util'
 import type { ChainState } from 'Policies/types/State'
 import type { ChainPolicy, RegistryPolicy } from 'Policies/types/Policies'
 import type {
@@ -14,7 +14,7 @@ import type {
 export type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction
 
 function createChainPolicy (policy: RegistryPolicy): ChainPolicy {
-  return {...policy, ...{schema: policy.schema, humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid()}}
+  return {...policy, ...{humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid()}}
 }
 
 function addPolicy (state: ChainState, action: AddPolicyToChainAction): ChainState {

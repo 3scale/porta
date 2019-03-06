@@ -1,7 +1,7 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, updateError, updateObject } from 'Policies/reducers/util'
+import { createReducer, updateError, updateObject } from 'Policies/util'
 
 import type { State } from 'Policies/types/State'
 import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
