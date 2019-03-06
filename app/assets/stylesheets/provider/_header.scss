@@ -21,8 +21,8 @@
   }
 
   &--master {
-    height: line-height-times(7.2 / 2);
     border-top: line-height-times(1) solid $header-border-color;
+    height: line-height-times(7.2 / 2);
 
     &:before {
       content: 'Master';
