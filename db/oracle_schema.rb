@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190304094026) do
+ActiveRecord::Schema.define(version: 20190304222108) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -462,6 +462,17 @@ ActiveRecord::Schema.define(version: 20190304094026) do
   end
 
   add_index "countries", ["code"], name: "index_countries_on_code"
+
+  create_table "deleted_object_entries", force: :cascade do |t|
+    t.integer  "owner_id",    limit: 19, precision: 19
+    t.string   "owner_type"
+    t.integer  "object_id",   limit: 19, precision: 19
+    t.string   "object_type"
+    t.datetime "created_at",                            null: false
+  end
+
+  add_index "deleted_object_entries", ["object_type", "object_id"], name: "index_deleted_object_entries_on_object_type_and_object_id"
+  add_index "deleted_object_entries", ["owner_type", "owner_id"], name: "index_deleted_object_entries_on_owner_type_and_owner_id"
 
   create_table "end_user_plans", force: :cascade do |t|
     t.integer  "service_id", precision: 38, null: false
@@ -1098,18 +1109,18 @@ ActiveRecord::Schema.define(version: 20190304094026) do
   end
 
   create_table "proxy_rules", force: :cascade do |t|
-    t.integer  "proxy_id",           precision: 38
+    t.integer  "proxy_id",                       precision: 38
     t.string   "http_method"
     t.string   "pattern"
-    t.integer  "metric_id",          precision: 38
+    t.integer  "metric_id",                      precision: 38
     t.string   "metric_system_name"
-    t.integer  "delta",              precision: 38
-    t.integer  "tenant_id",          precision: 38
-    t.datetime "created_at",                        null: false
+    t.integer  "delta",                          precision: 38
+    t.integer  "tenant_id",                      precision: 38
+    t.datetime "created_at",                                                    null: false
     t.datetime "updated_at"
     t.text     "redirect_url"
-    t.integer  "position",           precision: 38
-    t.boolean  "last",            limit: nil,                default: false
+    t.integer  "position",                       precision: 38
+    t.boolean  "last",               limit: nil,                default: false
   end
 
   add_index "proxy_rules", ["proxy_id"], name: "index_proxy_rules_on_proxy_id"
