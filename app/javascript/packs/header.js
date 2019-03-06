@@ -28,8 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const elem = <div>
     <Header {...props}/>
-      {/* HACK of the month. See features/support/current_user.rb if you are hungry for reasons */}
-
+    {/* HACK of the month. See features/support/current_user.rb if you are hungry for reasons */}
     <div className="username" style={divStyle}>{headerElement.dataset.username}</div>
   </div>
   render(elem, headerElement)
