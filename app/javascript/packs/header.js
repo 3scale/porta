@@ -3,6 +3,9 @@ import { render } from 'react-dom'
 import Header from '../src/Navigation/components/header'
 
 document.addEventListener('DOMContentLoaded', () => {
+  const divStyle = {
+    display: 'none'
+  }
   const headerElement = document.getElementById('user_widget')
   const props = {
     href: headerElement.dataset.href,
@@ -23,5 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutPath: headerElement.dataset.logoutPath,
     username: headerElement.dataset.username
   }
-  render(<Header {...props}/>, headerElement)
+  const elem = <div>
+    <Header {...props}/>
+      {/* HACK of the month. See features/support/current_user.rb if you are hungry for reasons */}
+
+    <div className="username" style={divStyle}>{headerElement.dataset.username}</div>
+  </div>
+  render(elem, headerElement)
 })
