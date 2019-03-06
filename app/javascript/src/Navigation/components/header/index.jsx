@@ -1,8 +1,8 @@
 import React from 'react'
 import { PageHeader } from '@patternfly/react-core'
-import Avatar from 'Navigation/components/Avatar'
-import SimpleToolbar from 'Navigation/components/Toolbar'
-import SimpleBrand from 'Navigation/components/Brand'
+import Avatar from 'Navigation/components/header/Avatar'
+import Toolbar from 'Navigation/components/header/Toolbar'
+import Brand from 'Navigation/components/header/Brand'
 
 class Header extends React.Component {
   getToolbarProps () {
@@ -47,9 +47,9 @@ class Header extends React.Component {
   render () {
     return (
       <PageHeader
-        logo={<SimpleBrand/>}
+        logo={<Brand/>}
         logoProps = {this.getLogoProps()}
-        toolbar = {<SimpleToolbar toolbarProps={this.getToolbarProps()} docsProps={this.getDocsProps()}/>}
+        toolbar = {<Toolbar toolbarProps={this.getToolbarProps()} docsProps={this.getDocsProps()}/>}
         avatar = {<Avatar {...this.getAvatarProps()}/>}/>
     )
   }

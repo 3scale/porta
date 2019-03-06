@@ -1,9 +1,9 @@
 import React from 'react'
 import avatarImg from 'Navigation/images/img_avatar.svg'
 
-const SimpleAvatar = ({avatarLink, impersonated, accountName, displayName, logoutPath, username}) => <div className="PopNavigation PopNavigation--session">
+const Avatar = ({avatarLink, impersonated, accountName, displayName, logoutPath, username}) => <div className="PopNavigation PopNavigation--session">
   <a className={`PopNavigation-trigger u-toggler ${impersonated}`} href="#session-menu" title="Session">
-    <img src={avatarImg} width="30"/>
+    <img src={avatarImg} className="PF4-avatar"/>
     {impersonated ? <i className="fa fa-bolt "></i> : null }
   </a>
   <ul className="PopNavigation-list u-toggleable" id="session-menu">
@@ -20,4 +20,4 @@ const SimpleAvatar = ({avatarLink, impersonated, accountName, displayName, logou
   </ul>
 </div>
 
-export default SimpleAvatar
+export default Avatar
