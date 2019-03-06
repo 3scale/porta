@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Policy < ApplicationRecord
+  class ImmutableAttributeError < ActiveRecord::ActiveRecordError; end
+
   belongs_to :account, inverse_of: :policies
 
   validates :version, uniqueness: { scope: %i[account_id name] }
@@ -37,7 +39,23 @@ class Policy < ApplicationRecord
     persisted? ? identifier : nil
   end
 
+  def version=(value)
+    raise ImmutableAttributeError, "#{:version} is immutable" if changing_immutable_attribute?(:version, value)
+    super(value)
+  end
+
+  def name=(value)
+    raise ImmutableAttributeError, "#{:name} is immutable" if changing_immutable_attribute?(:name, value)
+    super(value)
+  end
+
   private
+
+  def changing_immutable_attribute?(field, new_value)
+    return unless persisted?
+    value = public_send(field)
+    value.present? && value != new_value
+  end
 
   def belongs_to_a_tenant
     return if !account || account.tenant?
@@ -60,6 +78,7 @@ class Policy < ApplicationRecord
   end
 
   def set_identifier
+    return if persisted? && identifier?
     self.identifier = "#{name}-#{version}"
   end
 end
