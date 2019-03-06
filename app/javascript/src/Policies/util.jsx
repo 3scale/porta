@@ -57,6 +57,15 @@ const toJson = (val: Object): string => JSON.stringify(val, null, 2)
 
 const fromJson = (json: string) => JSON.parse(json)
 
+const safeFromJson = (json: string, callback: () => {}): Object => {
+  try {
+    return JSON.parse(json)
+  } catch (err) {
+    console.error('That doesn\'t look like a valid json!', err)
+    return callback()
+  }
+}
+
 export {
   updateObject,
   updateArray,
@@ -66,5 +75,6 @@ export {
   parsePolicies,
   parsePolicy,
   toJson,
-  fromJson
+  fromJson,
+  safeFromJson
 }

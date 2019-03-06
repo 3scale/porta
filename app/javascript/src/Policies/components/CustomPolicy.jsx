@@ -4,8 +4,8 @@ import * as React from 'react'
 import { useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
 import SchemaForm from 'react-jsonschema-form'
-import { parsePolicies, fromJson, toJson } from 'Policies/util'
-import type { RegistryPolicy, RawRegistry } from 'Policies/types/Policies'
+import { fromJson, toJson } from 'Policies/util'
+import type { RegistryPolicy } from 'Policies/types/Policies'
 import type {InputEvent} from 'Policies/types'
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
@@ -113,10 +113,17 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   )
 }
 
-function CustomPolicy ({jsonPolicy}: {jsonPolicy: string}): React.Node {
-  const rawRegistryPolicy: RawRegistry = fromJson(jsonPolicy)
-  const policy = parsePolicies(rawRegistryPolicy)[0]
+const policyTemplate: RregistryPolicy = {
+  $schema: '',
+  name: '',
+  version: '',
+  description: '',
+  summary: '',
+  configuration: {},
+  humanName: ''
+}
 
+function CustomPolicy ({policy = policyTemplate}: {policy: RegistryPolicy}): React.Node {
   return (
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
