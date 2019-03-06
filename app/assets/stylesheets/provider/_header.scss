@@ -70,16 +70,17 @@
     color: $white;
   }
 }
+.u-header-brand {
+  align-items: center;
+  display: flex;
+}
+// scss-lint:disable SelectorFormat
 .pf-c-page__header {
   height: line-height-times(6.3 / 2);
 }
-// scss-lint:disable SelectorFormat
+
 .pf-c-page__header-brand {
   height: 100%;
   position: absolute;
 }
 // scss-lint:enable SelectorFormat
-.u-header-brand {
-  align-items: center;
-  display: flex;
-}
