@@ -8,7 +8,7 @@
      "replaces the upstream URL with a given string. \n",
      "When combined with the APIcast policy, the upstream policy should be ",
      "placed before it in the policy chain."],
-  "version": "builtin",
+  "version": "1.0.0",
   "configuration": {
     "type": "object",
     "properties": {

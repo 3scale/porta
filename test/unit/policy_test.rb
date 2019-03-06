@@ -8,6 +8,17 @@ class PolicyTest < ActiveSupport::TestCase
   should validate_presence_of :account_id
   should validate_presence_of :schema
 
+  test 'builtin' do
+    assert_equal 'builtin', Policy::BUILT_IN_NAME
+  end
+
+  test 'sets identifier on create' do
+    policy = FactoryBot.build(:policy, name: 'custom-policy', version: '7.6.5')
+    assert_nil policy.identifier
+    policy.save!
+    assert_equal 'custom-policy-7.6.5', policy.identifier
+  end
+
   test 'validates uniqueness of [account_id, name, version]' do
     persisted_policy = FactoryBot.create(:policy)
 
@@ -51,8 +62,23 @@ class PolicyTest < ActiveSupport::TestCase
     assert_includes policy.errors[:schema], 'The property \'#/\' did not contain a required property of \'name\' in schema http://apicast.io/policy-v1/schema#'
 
     policy.schema = file_fixture('policies/apicast-policy.json').read
+    policy.version = policy.schema['version']
     assert policy.valid?
     assert_empty policy.errors[:schema]
+  end
+
+  test 'validates same version in schema and in field' do
+    policy = FactoryBot.build(:policy, version: '0.5.0')
+    policy.schema['version'] = '1.2.0'
+    refute policy.valid?
+    assert_includes policy.errors[:version], policy.errors.generate_message(:version, :mismatch)
+
+    policy.version = Policy::BUILT_IN_NAME
+    refute policy.valid?
+    assert_includes policy.errors[:version], policy.errors.generate_message(:version, :builtin)
+
+    policy.version = '1.2.0'
+    assert policy.valid?
   end
 
   test 'find policy by id or name and version' do
@@ -68,15 +94,24 @@ class PolicyTest < ActiveSupport::TestCase
     assert_equal policy, Policy.find_by_id_or_name_version('this is my policy-1.0')
   end
 
-  test 'update name or version also updates identifier' do
+  test 'name and version cannot be updated' do
     policy = FactoryBot.create(:policy, name: 'my-policy', version: '1.0')
+    assert_raise Policy::ImmutableAttributeError do
+      policy.name = 'new-name'
+    end
+    assert_equal 'my-policy', policy.name
 
-    policy.name = 'new-name'
-    policy.save
-    assert_equal 'new-name-1.0', policy.reload.identifier
+    assert_raise Policy::ImmutableAttributeError do
+      policy.version = '2.0'
+    end
+    assert_equal '1.0', policy.version
+  end
 
-    policy.version = '1.1'
-    policy.save
-    assert_equal 'new-name-1.1', policy.reload.identifier
+  test 'to_param' do
+    policy = FactoryBot.build(:policy, name: 'my-policy', version: '1.2.0')
+    assert_nil policy.to_param
+
+    policy.save!
+    assert_equal 'my-policy-1.2.0', policy.to_param
   end
 end

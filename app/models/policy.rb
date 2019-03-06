@@ -1,12 +1,19 @@
 # frozen_string_literal: true
 
 class Policy < ApplicationRecord
+  class ImmutableAttributeError < ActiveRecord::ActiveRecordError; end
+
   belongs_to :account, inverse_of: :policies
 
   validates :version, uniqueness: { scope: %i[account_id name] }
   validates :name, :version, :account_id, :schema, presence: true
   validate :belongs_to_a_tenant
   validate :validate_schema_specification
+  validate :validate_same_version
+  BUILT_IN_NAME = 'builtin'
+
+  attr_readonly :name, :version
+
   serialize :schema, ActiveRecord::Coders::JSON
 
   # Overriding attribute but that is OK
@@ -28,11 +35,40 @@ class Policy < ApplicationRecord
     find_by_id_or_name_version(id_or_name_version) || raise(ActiveRecord::RecordNotFound)
   end
 
+  def to_param
+    persisted? ? identifier : nil
+  end
+
+  def version=(value)
+    raise ImmutableAttributeError, "#{:version} is immutable" if changing_immutable_attribute?(:version, value)
+    super(value)
+  end
+
+  def name=(value)
+    raise ImmutableAttributeError, "#{:name} is immutable" if changing_immutable_attribute?(:name, value)
+    super(value)
+  end
+
   private
+
+  def changing_immutable_attribute?(field, new_value)
+    return unless persisted?
+    value = public_send(field)
+    value.present? && value != new_value
+  end
 
   def belongs_to_a_tenant
     return if !account || account.tenant?
     errors.add(:account, :not_tenant)
+  end
+
+  # Yes it :reek:NilCheck
+  def validate_same_version
+    if version.to_s == BUILT_IN_NAME
+      errors.add :version, :builtin
+    elsif version.to_s != schema&.dig('version').to_s
+      errors.add(:version, :mismatch)
+    end
   end
 
   def validate_schema_specification
@@ -42,6 +78,7 @@ class Policy < ApplicationRecord
   end
 
   def set_identifier
+    return if persisted? && identifier?
     self.identifier = "#{name}-#{version}"
   end
 end
