@@ -229,6 +229,13 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :api_docs, :only => [:show]
       resource :liquid_docs, :only => [:show]
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]
+
+      namespace :registry do
+        constraints(id: /((?!\.json\Z)[^\/])+/) do
+          resources :policies, except: %i[show delete]
+        end
+      end
+
       resources :destroys, :only => [:index]
 
       namespace :onboarding do
@@ -692,8 +699,8 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :settings, only: [:show, :update]
 
       namespace :registry, defaults: { format: :json } do
-        constraints(id: /((?!\.json\Z|\.xml\Z)[^\/])+/) do
-          resources :policies, only: %i[create show index update destroy]
+        constraints(id: /((?!\.json\Z)[^\/])+/) do
+          resources :policies
         end
       end
     end
