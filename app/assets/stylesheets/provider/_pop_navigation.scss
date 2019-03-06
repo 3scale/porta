@@ -3,11 +3,9 @@
 
   &--context {
     float: left;
-    background-color: $header-background-color;
-
-    .PopNavigation-list {
-      left: 0;
-    }
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 
   &--session {
@@ -46,8 +44,8 @@
     overflow: hidden;
     position: absolute;
     text-align: left;
-    width: 20%;
     z-index: 1000;
+    top: line-height-times(6.3 / 2);
 
     &.is-toggled,
     &:target {
@@ -90,7 +88,7 @@
   }
 
   &-trigger {
-    color: $border-color;
+    color: var(--pf-c-button--m-plain--Color);
     cursor: pointer;
     display: block;
     padding: line-height-times(3 / 4);
@@ -99,8 +97,7 @@
     &:hover,
     &.is-toggled,
     &.is-current {
-      background-color: $header-link-background-hover-color;
-      color: $link-color;
+      color: var(--pf-c-button--m-plain--hover--Color);
     }
   }
 }
