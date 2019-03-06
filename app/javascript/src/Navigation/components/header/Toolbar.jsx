@@ -1,9 +1,9 @@
 import React from 'react'
-import { Toolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
-import AccountSettingsMenu from 'Navigation/components/AccountSettingsMenu'
-import DocumentationItemMenu from 'Navigation/components/Documentation'
+import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
+import AccountSettings from 'Navigation/components/header/AccountSettings'
+import Documentation from 'Navigation/components/header/Documentation'
 
-class SimpleToolbar extends React.Component {
+class Toolbar extends React.Component {
   getAccountSettingsProps () {
     return {
       accountSettingsLink: this.props.toolbarProps.accountSettingsLink,
@@ -23,18 +23,18 @@ class SimpleToolbar extends React.Component {
   }
   render () {
     return (
-      <Toolbar>
+      <PFToolbar>
         <ToolbarGroup>
           <ToolbarItem>
-            <AccountSettingsMenu {...this.getAccountSettingsProps()}/>
+            <AccountSettings {...this.getAccountSettingsProps()}/>
           </ToolbarItem>
           <ToolbarItem>
-            <DocumentationItemMenu {...this.getDocsProps()}/>
+            <Documentation {...this.getDocsProps()}/>
           </ToolbarItem>
         </ToolbarGroup>
-      </Toolbar>
+      </PFToolbar>
     )
   }
 }
 
-export default SimpleToolbar
+export default Toolbar

@@ -8,7 +8,7 @@ const renderItems = (items, docsLinksClass) => items.map(item => <li
   </a>
 </li>)
 
-const DocumentationItemMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}) => {
+const Documentation = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}) => {
   const items = [
     {text: 'Customer Portal', href: customerPortalLink, iconClass: 'fa-external-link', target: '_blank'},
     {text: '3scale API Docs', href: apiDocsLink, iconClass: 'fa-puzzle-piece', target: '_self'},
@@ -26,4 +26,4 @@ const DocumentationItemMenu = ({docsLink, isSaas, docsLinksClass, customerPortal
     </ul>
   </div>
 }
-export default DocumentationItemMenu
+export default Documentation

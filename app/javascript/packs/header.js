@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import Header from '../src/Navigation/pageHeader'
+import Header from '../src/Navigation/components/header'
 
 document.addEventListener('DOMContentLoaded', () => {
   const headerElement = document.getElementById('user_widget')
