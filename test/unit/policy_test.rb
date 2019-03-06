@@ -106,4 +106,12 @@ class PolicyTest < ActiveSupport::TestCase
     policy.save!
     assert_equal 'new-name-1.1', policy.reload.identifier
   end
+
+  test 'to_param' do
+    policy = FactoryBot.build(:policy, name: 'my-policy', version: '1.2.0')
+    assert_nil policy.to_param
+
+    policy.save!
+    assert_equal 'my-policy-1.2.0', policy.to_param
+  end
 end
