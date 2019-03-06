@@ -134,7 +134,7 @@ module Backend
     end
 
     def self.storage_key(service_id, id)
-      ::Service.find(service_id).preffix_key "transactions/#{id}"
+      "transactions/#{id}"
     end
 
     def to_param

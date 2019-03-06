@@ -198,13 +198,6 @@ class Service < ApplicationRecord
     provider_can_use?(:proxy_pro) && proxy.self_managed?
   end
 
-  def preffix
-    @service_preffix ||= (provider&.service_preffix || '')
-  end
-
-  # by GrammarNazi
-  alias prefix preffix
-
   def publish_events
     OIDC::ServiceChangedEvent.create_and_publish!(self)
     OIDC::ProxyChangedEvent.create_and_publish!(proxy) if backend_version_change&.include?('oauth')
@@ -253,10 +246,6 @@ class Service < ApplicationRecord
 
   def backend_version
     BackendVersion.new(super)
-  end
-
-  def preffix_key(key = id)
-    [preffix.presence, key].compact.join
   end
 
   def published_plans

@@ -33,8 +33,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def create
-    @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
-    @service.attributes = params[:service]
+    @service = collection.new(params[:service])
     @service.system_name = params[:service][:system_name]
 
     if can_create? && @service.save
