@@ -5,7 +5,8 @@ import {safeFromJson, parsePolicies} from 'Policies/util'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('custom-policy-container')
+  const jsonPolicy = container.dataset.policy
   // TODO: Notify the user something has failed. Error messages.
-  const policy = parsePolicies(safeFromJson(container.dataset.policy, () => []))[0]
-  render(<CustomPolicy policy={policy}/>, container)
+  const props = (jsonPolicy) ? {policy: parsePolicies(safeFromJson(jsonPolicy, () => []))[0]} : {}
+  render(<CustomPolicy {...props} />, container)
 })

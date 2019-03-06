@@ -51,10 +51,9 @@ function Editor ({onChange, code}): React.Node {
     }
   }
 
-  const icon = state.valid ? 'check' : 'times'
-  const cls = state.valid ? 'valid' : 'invalid'
-  const hiddenClass = state.valid ? 'is-hidden' : ''
-  const errorClass = state.valid ? '' : 'CustomPolicy-error'
+  const [ icon, cls, hiddenClass, errorClass ] = state.valid
+    ? [ 'check', 'valid', 'is-hidden', '' ]
+    : [ 'times', 'invalid', '', 'CustomPolicy-error' ]
 
   return (
     <div className={`${errorClass} panel panel-default`}>
@@ -113,7 +112,7 @@ function Form ({policy}: {policy: RegistryPolicy}): React.Node {
   )
 }
 
-const policyTemplate: RregistryPolicy = {
+const policyTemplate: RegistryPolicy = {
   $schema: '',
   name: '',
   version: '',
