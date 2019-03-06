@@ -2,9 +2,9 @@
   color: $content-background;
 
   &--context {
-    float: left;
-    display: flex;
     align-items: center;
+    display: flex;
+    float: left;
     height: 100%;
   }
 
@@ -44,8 +44,8 @@
     overflow: hidden;
     position: absolute;
     text-align: left;
-    z-index: 1000;
     top: line-height-times(6.3 / 2);
+    z-index: 1000;
 
     &.is-toggled,
     &:target {
