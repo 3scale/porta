@@ -33,9 +33,8 @@ module Backend
       end
 
       def delete_backend_service
-        has_api_key = account&.has_bought_cinstance? && account.api_key.present?
-        return if account && !has_api_key
-        delete_alert_limits(alert_limits) if has_api_key
+        return if account&.missing_api_key?
+        delete_alert_limits(alert_limits) if account.try(:api_key?)
         ThreeScale::Core::Service.delete_by_id!(backend_id)
         true
       rescue => e

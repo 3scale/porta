@@ -48,6 +48,22 @@ class Account::ProviderTest < ActiveSupport::TestCase
     end
   end
 
+  test '#api_key?' do
+    provider = FactoryBot.create(:simple_provider)
+    refute provider.api_key?
+
+    FactoryBot.create(:cinstance, user_account: provider)
+    assert provider.api_key?
+  end
+
+  test '#missing_api_key?' do
+    provider = FactoryBot.create(:simple_provider)
+    assert provider.missing_api_key?
+
+    FactoryBot.create(:cinstance, user_account: provider)
+    refute provider.missing_api_key?
+  end
+
   test 'provider?'do
     account = Account.new
     refute account.partner?
