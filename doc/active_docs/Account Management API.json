@@ -1318,6 +1318,20 @@
               "threescale_name": "access_token"
             },
             {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 50.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "50"
+            },
+            {
               "name": "application_plan_id",
               "description": "ID of the application plan.",
               "dataType": "int",
