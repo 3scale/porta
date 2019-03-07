@@ -205,7 +205,7 @@ class Metric < ApplicationRecord
   private
 
   def achieve_as_deleted
-    ::DeletedObjectEntry.create!(object: self, owner: service)
+    ::DeletedObject.create!(object: self, owner: service)
   end
 
   def destroyable?

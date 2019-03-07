@@ -13,7 +13,7 @@ class BackendDeleteStatsWorker
 
   def delete_job
     service = Service.new({id: event.service_id}, without_protection: true)
-    deleted_associations = DeletedObjectEntry.where(owner: service)
+    deleted_associations = DeletedObject.where(owner: service)
     {
       applications: deleted_associations.contracts.pluck(:object_id),
       metrics: deleted_associations.metrics.pluck(:object_id),

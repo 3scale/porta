@@ -6,9 +6,9 @@ class BackendDeleteStatsWorkerTest < ActiveSupport::TestCase
   def setup
     @service = FactoryBot.create(:simple_service)
     @applications = FactoryBot.create_list(:cinstance, 3)
-    applications.each { |cinstance| DeletedObjectEntry.create(owner: service, object: cinstance) }
+    applications.each { |cinstance| DeletedObject.create(owner: service, object: cinstance) }
     @metrics = FactoryBot.create_list(:metric, 3)
-    metrics.each { |metric| DeletedObjectEntry.create(owner: service, object: metric) }
+    metrics.each { |metric| DeletedObject.create(owner: service, object: metric) }
 
     @event = Services::ServiceDeletedEvent.create(service)
     Rails.application.config.event_store.publish_event(event)

@@ -396,7 +396,7 @@ class Cinstance < Contract
   private
 
   def achieve_as_deleted
-    ::DeletedObjectEntry.create!(object: self, owner: service)
+    ::DeletedObject.create!(object: self, owner: service)
   end
 
   # It calls to `create_key_after_create` to check if it's possible to add

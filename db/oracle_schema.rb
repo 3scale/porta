@@ -463,7 +463,7 @@ ActiveRecord::Schema.define(version: 20190304222108) do
 
   add_index "countries", ["code"], name: "index_countries_on_code"
 
-  create_table "deleted_object_entries", force: :cascade do |t|
+  create_table "deleted_objects", force: :cascade do |t|
     t.integer  "owner_id",    limit: 19, precision: 19
     t.string   "owner_type"
     t.integer  "object_id",   limit: 19, precision: 19
@@ -471,8 +471,8 @@ ActiveRecord::Schema.define(version: 20190304222108) do
     t.datetime "created_at",                            null: false
   end
 
-  add_index "deleted_object_entries", ["object_type", "object_id"], name: "index_deleted_object_entries_on_object_type_and_object_id"
-  add_index "deleted_object_entries", ["owner_type", "owner_id"], name: "index_deleted_object_entries_on_owner_type_and_owner_id"
+  add_index "deleted_objects", ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id"
+  add_index "deleted_objects", ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
 
   create_table "end_user_plans", force: :cascade do |t|
     t.integer  "service_id", precision: 38, null: false
