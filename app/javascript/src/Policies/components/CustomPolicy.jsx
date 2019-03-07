@@ -62,15 +62,15 @@ function CSRFToken ({win = window}: {win?: any}): React.Node {
 function Editor ({onChange, code}: {onChange: (Object) => void, code: Object}): React.Node {
   const [ state, setState ] = useState({valid: true, code: toJson(code)})
 
-  const getConfiguration = (schema) => {
-    return (schema.configuration)
-      ? schema.configuration
-      : (function () { throw new Error('Policy configuration not found') })()
+  const checkConfiguration = (schema) => {
+    if (!schema.configuration) throw new Error('Policy configuration not found')
   }
 
   const onCodeChange = (editor, metadata, code) => {
     try {
-      onChange(getConfiguration(fromJson(code)))
+      const schema = fromJson(code)
+      checkConfiguration(schema)
+      onChange(schema)
       setState({ valid: true, code })
     } catch (err) {
       console.warn(err)
@@ -119,7 +119,7 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
 
 function Form ({policy}: {policy: Policy}): React.Node {
   const [pol, setPolicy] = useState(policy)
-  const onSchemaEdited = (pol: Policy) => (configuration: Object) => setPolicy({...pol, ...{schema: {...pol.schema, ...{configuration}}}})
+  const onSchemaEdited = (pol: Policy) => (schema: Object) => setPolicy({...pol, ...{schema}})
   const handleChange = (pol: Policy) => (ev: InputEvent) => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
 
   return (
