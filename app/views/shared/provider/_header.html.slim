@@ -15,7 +15,7 @@
 - liquid_reference_link = provider_admin_liquid_docs_path
 - what_is_new_link = '//access.redhat.com/articles/3107441#newfeaturesenhancements'
 
-- avatar_link = active_menu?(:topmenu, :help) ? 'is-current' : ''
+- avatar_link_class = active_menu?(:topmenu, :help) ? 'is-current' : ''
 - impersonated = impersonating? ? 'true' : nil
 - account_name = current_user.account.name
 - display_name = current_user.display_name
@@ -33,7 +33,7 @@ div class=class_header id="user_widget"*{'data-href' => provider_admin_dashboard
   'data-api-docs-link' => api_docs_link,
   'data-liquid-reference-link' => liquid_reference_link,
   'data-what-is-new-link' => what_is_new_link,
-  'data-avatar-link' => avatar_link,
+  'data-avatar-link-class' => avatar_link_class,
   'data-impersonated' => impersonated.to_s,
   'data-account-name' => account_name,
   'data-display-name' => display_name,
