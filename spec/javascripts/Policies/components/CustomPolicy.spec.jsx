@@ -7,7 +7,6 @@ import { UnControlled as CodeMirror } from 'react-codemirror2'
 import {
   CustomPolicy,
   CustomPolicyForm,
-  FormInput,
   Editor,
   CSRFToken,
   CM_OPTIONS,
@@ -22,6 +21,7 @@ describe('CustomPolicy', () => {
     expect(wrapper.find('section').hasClass('CustomPolicy')).toBe(true)
     expect(wrapper.find('header').hasClass('CustomPolicy-header')).toBe(true)
     expect(wrapper.find('h2').hasClass('CustomPolicy-title')).toBe(true)
+    expect(wrapper.find('a').hasClass('CustomPolicy-cancel')).toBe(true)
     expect(wrapper.find('Form').prop('policy')).toBe(POLICY_TEMPLATE)
   })
 })
