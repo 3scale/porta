@@ -124,6 +124,9 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
         <h2 className="CustomPolicy-title">Custom Policy</h2>
+        <a className="CustomPolicy-cancel" href="/p/admin/registry/policies" >
+          <i className="fa fa-times-circle" /> Cancel
+        </a>
       </header>
       <Form policy={policy} />
     </section>
