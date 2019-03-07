@@ -31,11 +31,6 @@ nav.vertical-nav.hover-secondary-nav-pf#mainmenu
                      path:  admin_alerts_path,
                      icon:  'exclamation-triangle'
 
-          = render vertical_nav_item,
-                  title: 'Traffic',
-                  path:  admin_transactions_path,
-                  icon:  'play-circle'
-
       - when :serviceadmin, :monitoring
         = render 'shared/provider/navigation/service/nav',
                  vertical_nav_item: vertical_nav_item,
