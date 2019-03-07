@@ -74,7 +74,6 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'achieve as deleted' do
     service = FactoryBot.create(:simple_service)
-    created_at = Time.utc(2009, 12, 22)
     Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:metric, service: service) }
     metric = service.metrics.last
     metric_id = metric.id

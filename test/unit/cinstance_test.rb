@@ -906,7 +906,6 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'achieve as deleted' do
     plan = FactoryBot.create(:application_plan)
-    created_at = Time.utc(2009, 12, 22)
     Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:cinstance, plan: plan) }
     cinstance = plan.cinstances.last
     cinstance_id = cinstance.id
