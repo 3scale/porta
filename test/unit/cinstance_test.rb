@@ -904,6 +904,20 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_same_elements [other_plan], application.available_application_plans.to_a
   end
 
+  test 'achieve as deleted' do
+    plan = FactoryBot.create(:application_plan)
+    Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:cinstance, plan: plan) }
+    cinstance = plan.cinstances.last
+    cinstance_id = cinstance.id
+
+    assert_difference(DeletedObject.method(:count), +1) { cinstance.destroy! }
+    deleted_object_entry = DeletedObject.last!
+    assert_equal cinstance_id, deleted_object_entry.object_id
+    assert_equal 'Contract', deleted_object_entry.object_type
+    assert_equal plan.service.id, deleted_object_entry.owner_id
+    assert_equal 'Service', deleted_object_entry.owner_type
+  end
+
   private
 
   #TODO: take this method to another place, and make it build cinstances in a proper way

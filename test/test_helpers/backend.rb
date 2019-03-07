@@ -40,7 +40,7 @@ module TestHelpers
           :save, :delete, :load
         # mock Service
         clear_method ThreeScale::Core::Service.singleton_class,
-          :save!, :load_by_id, :delete_by_id!
+          :save!, :load_by_id, :delete_by_id!, :delete_stats
         clear_method ThreeScale::Core::ServiceToken.singleton_class,
           :save!, :delete
         clear_method ThreeScale::Core::UsageLimit.singleton_class,

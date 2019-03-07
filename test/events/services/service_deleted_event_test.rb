@@ -6,12 +6,12 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
   def test_create
-    service = FactoryBot.build_stubbed(:simple_service, id: 1, name: 'Alaska')
+    service = FactoryBot.build_stubbed(:simple_service)
     event   = Services::ServiceDeletedEvent.create(service)
 
-    assert event
-    assert event.service_name, service.name
-    assert event.service_id, service.id
+    assert_equal service.name, event.service_name
+    assert_equal service.id, event.service_id
+    assert_equal service.created_at.utc.to_s, event.service_created_at
   end
 
   def test_ability
