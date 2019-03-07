@@ -911,8 +911,8 @@ class CinstanceTest < ActiveSupport::TestCase
     cinstance = plan.cinstances.last
     cinstance_id = cinstance.id
 
-    assert_difference(DeletedObjectEntry.method(:count), +1) { cinstance.destroy! }
-    deleted_object_entry = DeletedObjectEntry.last!
+    assert_difference(DeletedObject.method(:count), +1) { cinstance.destroy! }
+    deleted_object_entry = DeletedObject.last!
     assert_equal cinstance_id, deleted_object_entry.object_id
     assert_equal 'Contract', deleted_object_entry.object_type
     assert_equal plan.service.id, deleted_object_entry.owner_id

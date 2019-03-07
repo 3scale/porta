@@ -79,8 +79,8 @@ class MetricTest < ActiveSupport::TestCase
     metric = service.metrics.last
     metric_id = metric.id
 
-    assert_difference(DeletedObjectEntry.method(:count), +1) { metric.destroy! }
-    deleted_object_entry = DeletedObjectEntry.last!
+    assert_difference(DeletedObject.method(:count), +1) { metric.destroy! }
+    deleted_object_entry = DeletedObject.last!
     assert_equal metric_id, deleted_object_entry.object_id
     assert_equal 'Metric', deleted_object_entry.object_type
     assert_equal service.id, deleted_object_entry.owner_id

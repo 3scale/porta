@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DeletedObjectEntry < ApplicationRecord
+class DeletedObject < ApplicationRecord
   belongs_to :owner, polymorphic: true
   belongs_to :object, polymorphic: true
 
