@@ -1,7 +1,7 @@
 import React from 'react'
 import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
 import AccountSettings from 'Navigation/components/header/AccountSettings'
-import Documentation from 'Navigation/components/header/Documentation'
+import DocumentationMenu from 'Navigation/components/header/DocumentationMenu'
 
 class Toolbar extends React.Component {
   getAccountSettingsProps () {
@@ -29,7 +29,7 @@ class Toolbar extends React.Component {
             <AccountSettings {...this.getAccountSettingsProps()}/>
           </ToolbarItem>
           <ToolbarItem>
-            <Documentation {...this.getDocsProps()}/>
+            <DocumentationMenu {...this.getDocsProps()}/>
           </ToolbarItem>
         </ToolbarGroup>
       </PFToolbar>
