@@ -17,6 +17,8 @@ class BackendDeleteServiceWorker
       BackendDeleteEndUsersWorker.perform_async(event_id)
       BackendDeleteStatsWorker.perform_async(event_id)
     end
+  rescue ActiveRecord::RecordNotFound => exception
+    System::ErrorReporting.report_error(exception, parameters: {event_id: event_id})
   end
 
   def on_success(_bid, options)
