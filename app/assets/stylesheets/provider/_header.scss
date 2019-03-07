@@ -20,7 +20,7 @@
 
   &--master {
     border-top: line-height-times(1) solid $header-border-color;
-    height: line-height-times(7.2 / 2);
+    height: line-height-times(7.8 / 2);
 
     &:before {
       content: 'Master';
@@ -34,13 +34,13 @@
       padding-top: line-height-times(1);
 
       #border {
-        margin-top: line-height-times(7.2 / 2);
+        margin-top: line-height-times(7.8 / 2);
       }
     }
 
     & + #wrapper .vertical-nav .nav-pf-vertical,
     & + #wrapper .vertical-nav .nav-pf-secondary-nav {
-      top: line-height-times(7.2 / 2);
+      top: line-height-times(7.8 / 2);
     }
   }
 
