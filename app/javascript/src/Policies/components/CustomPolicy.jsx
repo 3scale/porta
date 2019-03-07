@@ -126,7 +126,12 @@ function Form ({policy}: {policy: Policy}): React.Node {
     <div>
       <div className="CustomPolicy-editor">
         <Editor className="CustomPolicy-code" code={pol.schema} onChange={onSchemaEdited(pol)} />
-        <SchemaForm className="CustomPolicy-form" schema={pol.schema.configuration} />
+        <div>
+          <h3>Form Preview</h3>
+          <SchemaForm className="CustomPolicy-form" schema={pol.schema.configuration}>
+            <button type="submit" className="is-hidden">Submit</button>
+          </SchemaForm>
+        </div>
       </div>
       <CustomPolicyForm policy={pol} onChange={handleChange(pol)} />
     </div>
