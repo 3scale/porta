@@ -4,6 +4,7 @@ module PricingRuleRepresenter
   wraps_resource
 
   property :id
+  property :metric_id
   property :cost_per_unit
   property :min
   property :max
