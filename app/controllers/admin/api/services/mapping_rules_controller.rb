@@ -117,7 +117,7 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
     proxy.proxy_rules
   end
 
-  PERMITTED_PARAMS = %i(http_method pattern delta).freeze
+  PERMITTED_PARAMS = %i(http_method pattern delta last position).freeze
   PROXY_PRO_PERMITTED_PARAMS = PERMITTED_PARAMS + %i(redirect_url)
 
   def proxy_rule_params

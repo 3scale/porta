@@ -71,6 +71,25 @@ class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  def test__with_position_and_last
+    # create
+    params = provider_key_params.merge(mapping_rule_params.deep_merge(mapping_rule: {position: 4, last: true}, format: :json))
+    post(admin_api_service_proxy_mapping_rules_path(params))
+    assert_response :success
+    json = JSON.parse(response.body)
+
+    rule = ProxyRule.find(json['mapping_rule']['id'])
+    assert_equal 4, rule.position
+    assert rule.last
+
+    params = provider_key_params.merge(id: rule.id).merge(mapping_rule_params.deep_merge(mapping_rule: {position: 9, last: false}))
+    put(admin_api_service_proxy_mapping_rule_path(params))
+    assert_response :success
+    rule.reload
+    assert_equal 9, rule.position
+    refute rule.last
+  end
+
   private
 
   def mapping_rule_params
