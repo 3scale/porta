@@ -134,11 +134,12 @@ function Form ({policy}: {policy: Policy}): React.Node {
 }
 
 function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node {
+  const CANCEL_POLICY_HREF = '/p/admin/registry/policies'
   return (
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
         <h2 className="CustomPolicy-title">Custom Policy</h2>
-        <a className="CustomPolicy-cancel" href="/p/admin/registry/policies" >
+        <a className="CustomPolicy-cancel" href={CANCEL_POLICY_HREF} >
           <i className="fa fa-times-circle" /> Cancel
         </a>
       </header>
