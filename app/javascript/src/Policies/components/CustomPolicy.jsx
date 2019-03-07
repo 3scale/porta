@@ -28,7 +28,21 @@ const CM_OPTIONS = {
 }
 
 const POLICY_TEMPLATE: Policy = {
-  schema: { configuration: {} },
+  schema: {
+    '$schema': 'http://apicast.io/policy-v1/schema#manifest#',
+    'name': '[Name of the policy]',
+    'summary': '[A brief description of what it does.]',
+    'version': '[0.0.1]',
+    'configuration': {
+      'type': 'object',
+      'properties': {
+        'property': {
+          'description': 'A description of your property',
+          'type': 'string'
+        }
+      }
+    }
+  },
   directory: '',
   id: 0
 }

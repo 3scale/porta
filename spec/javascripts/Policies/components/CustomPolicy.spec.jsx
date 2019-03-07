@@ -63,7 +63,7 @@ describe('CustomPolicyForm', () => {
   it('should render correct the new policy form', () => {
     const {wrapper} = setup({policy: POLICY_TEMPLATE})
     expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/')
-    expect(wrapper.find('input[name="schema"]').prop('value')).toBe('{"configuration":{}}')
+    expect(wrapper.find('input[name="schema"]').prop('value')).toBe(JSON.stringify(POLICY_TEMPLATE.schema))
     expect(wrapper.find('input[name="_method"]').exists()).toBe(false)
   })
 })
