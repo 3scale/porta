@@ -6,5 +6,6 @@ const AccountSettings = ({accountSettingsLink, accountSettingsClass}) => (
       <i className="fa fa-cog"></i>
     </a>
   </div>
+)
 
 export default AccountSettings
