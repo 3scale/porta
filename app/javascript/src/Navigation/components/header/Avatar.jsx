@@ -2,8 +2,8 @@ import React from 'react'
 import avatarImg from 'Navigation/images/img_avatar.svg'
 
 const Avatar = ({avatarLink, impersonated, accountName, displayName, logoutPath, username}) => <div className="PopNavigation PopNavigation--session">
-  <a className={`PopNavigation-trigger u-toggler ${impersonated}`} href="#session-menu" title="Session">
-    <img src={avatarImg} className="PF4-avatar"/>
+  <a className={`PopNavigation-trigger u-toggler ${impersonated} pf-m-avatar-link`} href="#session-menu" title="Session">
+    <img src={avatarImg} className="pf-m-avatar-img"/>
     {impersonated ? <i className="fa fa-bolt "></i> : null }
   </a>
   <ul className="PopNavigation-list u-toggleable" id="session-menu">
