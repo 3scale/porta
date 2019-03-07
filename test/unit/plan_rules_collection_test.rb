@@ -15,7 +15,7 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
 
   test '.all_plan_rules_with_switches' do
     plan_rules = (3..5).to_a.map do |index|
-      FactoryBot.build(:plan_rule, system_name: "planRule#{index}".to_sym, switches: Settings::SWITCHES[0..index])
+      FactoryBot.build(:plan_rule, system_name: "planRule#{index}".to_sym, switches: Switches::SWITCHES[0..index])
     end
 
     response = PlanRulesCollection.all_plan_rules_with_switches
@@ -71,12 +71,12 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
     (3..6).to_a.each do |number|
       2.times do |plan_type_index|
         plan = FactoryBot.create((plan_types[plan_type_index]), issuer: service)
-        plan.plan_rule.switches = Settings::SWITCHES[0..number]
+        plan.plan_rule.switches = Switches::SWITCHES[0..number]
         plan.plan_rule.rank = number
         plans << plan
       end
     end
 
-    assert_equal plans[5], PlanRulesCollection.lowest_ranked_plan_with_switch(Settings::SWITCHES[5])
+    assert_equal plans[5], PlanRulesCollection.lowest_ranked_plan_with_switch(Switches::SWITCHES[5])
   end
 end
