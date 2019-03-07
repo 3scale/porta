@@ -4,6 +4,8 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   activate_menu :account, :integrate, :policies
   before_action :authorize_policies
 
+  before_action :policy, only: [:edit, :update]
+
   layout 'provider'
 
   def new
@@ -11,7 +13,7 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   end
 
   def index
-    @policies = Policies::PoliciesListService.call(current_account, builtin: false)
+    @policies = current_account.policies
   end
 
   def create
@@ -27,20 +29,11 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   end
 
   def update
-    Policies::PolicyUpdater.new(policy, params).call
-    @policy_list = Policies::PoliciesListService::PolicyList.new
-    @policy_list.add policy
-
     if policy.errors.empty?
       redirect_to action: :index
     else
       render :edit
     end
-  end
-
-  def edit
-    @policy_list = Policies::PoliciesListService::PolicyList.new
-    @policy_list.add policy
   end
 
   protected

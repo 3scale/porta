@@ -9,4 +9,4 @@
         li class="error"= error
 
 
-= content_tag :div, class: 'PoliciesWidget', id: 'custom-policy-container', data: { policy: @policy_list.to_h }  do end
+= content_tag :div, class: 'PoliciesWidget', id: 'custom-policy-container', data: { policy: @policy.as_json(root: false, only: [:id, :schema], methods: [:directory])}  do end
