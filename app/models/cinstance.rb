@@ -1,4 +1,5 @@
 class Cinstance < Contract
+  include AchieveDeletionBelongingToService
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 

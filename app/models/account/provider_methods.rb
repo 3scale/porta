@@ -185,6 +185,14 @@ module Account::ProviderMethods
     self.bought_cinstances.first!.user_key
   end
 
+  def api_key?
+    has_bought_cinstance? && api_key.present?
+  end
+
+  def missing_api_key?
+    !api_key?
+  end
+
   alias api_key provider_key
 
   def partner?

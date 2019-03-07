@@ -4,7 +4,6 @@ module Backend
       def self.included(base)
         base.class_eval do
           after_commit :update_backend_service, :unless => :destroyed?
-          after_commit :delete_backend_service, :on => :destroy
         end
       end
 
@@ -34,11 +33,9 @@ module Backend
       end
 
       def delete_backend_service
-        if account && account.has_bought_cinstance? && !account.api_key.blank?
-          delete_alert_limits(alert_limits)
-          ThreeScale::Core::Service.delete_by_id!(backend_id)
-        end
-
+        return if account&.missing_api_key?
+        delete_alert_limits(alert_limits) if account.try(:api_key?)
+        ThreeScale::Core::Service.delete_by_id!(backend_id)
         true
       rescue => e
         System::ErrorReporting.report_error e

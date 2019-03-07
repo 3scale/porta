@@ -120,7 +120,7 @@ module Account::BuyerMethods
   end
 
   def has_bought_cinstance?
-    bought_cinstances.count > 0
+    bought_cinstances.any?
   end
 
   def approval_required?
