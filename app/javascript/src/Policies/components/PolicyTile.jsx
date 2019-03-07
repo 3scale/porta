@@ -1,13 +1,13 @@
 // @flow
 
 import * as React from 'react'
-import type { RegistryPolicy } from 'Policies/types/Policies'
+import type { ShallowPolicy } from 'Policies/types/Policies'
 import type { Dispatch } from 'Policies/types'
 
 type Props = {
-  policy: RegistryPolicy,
+  policy: ShallowPolicy,
   title?: string,
-  edit: Dispatch | (string) => {}
+  edit: Dispatch | (number) => {}
 }
 
 const PolicyTile = function ({policy, edit, title = 'Edit this Policy'}: Props): React.Node {

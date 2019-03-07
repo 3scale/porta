@@ -3,9 +3,9 @@
 import * as React from 'react'
 import {PolicyList} from 'Policies/components/PolicyList'
 import 'Policies/styles/policies.scss'
-import type {RegistryPolicy} from 'Policies/types/Policies'
+import type {ShallowPolicy} from 'Policies/types/Policies'
 
-const CustomPolicies = ({policies = []}: {policies: Array<RegistryPolicy>}): React.Node => {
+const CustomPolicies = ({policies = []}: {policies: Array<ShallowPolicy>}): React.Node => {
   return (
     <section className="CustomPolicies">
       <header className='CustomPolicies-header'>

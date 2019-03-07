@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
 import SchemaForm from 'react-jsonschema-form'
 import { fromJson, toJson } from 'Policies/util'
-import type { RegistryPolicy } from 'Policies/types/Policies'
+import type { Policy } from 'Policies/types/Policies'
 import type {InputEvent} from 'Policies/types'
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
@@ -27,14 +27,10 @@ const CM_OPTIONS = {
   tabSize: 2
 }
 
-const POLICY_TEMPLATE: RegistryPolicy = {
-  $schema: '',
-  name: '',
-  version: '',
-  description: '',
-  summary: '',
-  configuration: {},
-  humanName: ''
+const POLICY_TEMPLATE: Policy = {
+  schema: { configuration: {} },
+  directory: '',
+  id: 0
 }
 
 function CSRFToken ({win = window}: {win?: any}): React.Node {
@@ -49,14 +45,21 @@ function CSRFToken ({win = window}: {win?: any}): React.Node {
   )
 }
 
-function Editor ({onChange, code}: {onChange: (string) => void, code: Object}): React.Node {
+function Editor ({onChange, code}: {onChange: (Object) => void, code: Object}): React.Node {
   const [ state, setState ] = useState({valid: true, code: toJson(code)})
 
+  const getConfiguration = (schema) => {
+    return (schema.configuration)
+      ? schema.configuration
+      : (function () { throw new Error('Policy configuration not found') })()
+  }
+
   const onCodeChange = (editor, metadata, code) => {
-    setState({ valid: true, code })
     try {
-      onChange(fromJson(code))
+      onChange(getConfiguration(fromJson(code)))
+      setState({ valid: true, code })
     } catch (err) {
+      console.warn(err)
       setState({ valid: false, code })
     }
   }
@@ -82,33 +85,17 @@ function Editor ({onChange, code}: {onChange: (string) => void, code: Object}): 
   )
 }
 
-function FormInput (
-  props: {
-    type: 'text' | 'textarea',
-    humanname: string,
-    name: string,
-    value?: string,
-    onChange: OnChange,
-    disabled?: boolean
-  }) {
-  return (
-    <label>
-      {`${props.humanname}:`}
-      {(props.type === 'text') ? <input type="text" {...props} /> : <textarea {...props} /> }
-    </label>
-  )
-}
-
-function CustomPolicyForm ({policy, onChange, isNewPolicy}: {policy: RegistryPolicy, onChange: OnChange, isNewPolicy: boolean}): React.Node {
-  const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.name}-${policy.version}`
+function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}): React.Node {
+  const isNewPolicy = !(policy.id && policy.id !== 0)
+  const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.id}`
   return (
     <form action={action} method="post">
-      <FormInput type="text" name="name" humanname="Name" value={policy.name} onChange={onChange} disabled={!isNewPolicy} />
-      <FormInput type="text" name="humanName" humanname="Human Name" value={policy.humanName} onChange={onChange} />
-      <FormInput type="text" name="version" humanname="Version" value={policy.version} onChange={onChange} disabled={!isNewPolicy} />
-      <FormInput type="textarea" name="summary" humanname="Summary" value={policy.summary} onChange={onChange} />
-      <FormInput type="textarea" name="description" humanname="Description" value={policy.description} onChange={onChange} />
-      <input name="configuration" type="hidden" value={JSON.stringify(policy.configuration)} />
+      <label>
+        Directory:
+        <input type="text" name="directory" value={policy.directory} onChange={onChange} disabled={!isNewPolicy} />
+      </label>
+      <input type="hidden" name="id" value={policy.id} disabled={true} />
+      <input name="schema" type="hidden" value={JSON.stringify(policy.schema)} />
       {(!isNewPolicy) ? <input name="_method" type="hidden" value='put' /> : ''}
       <input type="submit" />
       <CSRFToken />
@@ -116,24 +103,23 @@ function CustomPolicyForm ({policy, onChange, isNewPolicy}: {policy: RegistryPol
   )
 }
 
-function Form ({policy}: {policy: RegistryPolicy}): React.Node {
+function Form ({policy}: {policy: Policy}): React.Node {
   const [pol, setPolicy] = useState(policy)
-  const onSchemaEdited = (pol: RegistryPolicy) => (configuration: string) => setPolicy({...pol, ...{configuration}})
-  const handleChange = (pol: RegistryPolicy) => (ev: InputEvent) => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
-  const isNewPolicy = (policy.name.length === 0)
+  const onSchemaEdited = (pol: Policy) => (configuration: Object) => setPolicy({...pol, ...{schema: {...pol.schema, ...{configuration}}}})
+  const handleChange = (pol: Policy) => (ev: InputEvent) => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
 
   return (
     <div>
       <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={pol.configuration} onChange={onSchemaEdited(pol)} />
-        <SchemaForm className="CustomPolicy-form" schema={pol.configuration} />
+        <Editor className="CustomPolicy-code" code={pol.schema} onChange={onSchemaEdited(pol)} />
+        <SchemaForm className="CustomPolicy-form" schema={pol.schema.configuration} />
       </div>
-      <CustomPolicyForm policy={pol} onChange={handleChange(pol)} isNewPolicy={isNewPolicy} />
+      <CustomPolicyForm policy={pol} onChange={handleChange(pol)} />
     </div>
   )
 }
 
-function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: RegistryPolicy}): React.Node {
+function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node {
   return (
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
@@ -147,7 +133,6 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: RegistryPolicy}): Re
 export {
   CustomPolicy,
   CustomPolicyForm,
-  FormInput,
   Editor,
   CSRFToken,
   CM_OPTIONS,
