@@ -29,81 +29,43 @@ describe('CustomPolicy', () => {
 describe('CustomPolicyForm', () => {
   function setup (customProps) {
     const policy = {
-      $schema: 'http://someswonderfulschemaspec.com/v2#7',
-      name: 'awesomeness',
-      version: '4.2.0',
-      description: 'Adds awesomeness to your proxy. Period.',
-      summary: 'Adds awesomeness to your proxy.',
-      configuration: {awesome: true},
-      humanName: 'Pure Awesomeness Policy'
+      schema: {
+        $schema: 'http://someswonderfulschemaspec.com/v2#7',
+        name: 'awesomeness',
+        version: '4.2.0',
+        description: 'Adds awesomeness to your proxy. Period.',
+        summary: 'Adds awesomeness to your proxy.',
+        configuration: {awesome: true}
+      },
+      id: 42,
+      directory: 'theanswer'
     }
     const props = {
       ...{
         policy,
-        onChange: jest.fn(),
-        isNewPolicy: false
+        onChange: jest.fn()
       },
       ...customProps
     }
 
-    return shallow(<CustomPolicyForm {...props} />)
+    const wrapper = shallow(<CustomPolicyForm {...props} />)
+
+    return {wrapper, props}
   }
 
   it('should render correct the edit policy form', () => {
-    const wrapper = setup({})
-    expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/awesomeness-4.2.0')
-    expect(wrapper.find('input[name="configuration"]').prop('value')).toBe('{"awesome":true}')
+    const {wrapper, props} = setup({})
+    expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/42')
+    expect(wrapper.find('input[name="schema"]').prop('value')).toBe(JSON.stringify(props.policy.schema))
     expect(wrapper.find('input[name="_method"]').exists()).toBe(true)
   })
 
   it('should render correct the new policy form', () => {
-    const wrapper = setup({policy: POLICY_TEMPLATE, isNewPolicy: true})
+    const {wrapper} = setup({policy: POLICY_TEMPLATE})
     expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/')
-    expect(wrapper.find('input[name="configuration"]').prop('value')).toBe('{}')
+    expect(wrapper.find('input[name="schema"]').prop('value')).toBe('{"configuration":{}}')
     expect(wrapper.find('input[name="_method"]').exists()).toBe(false)
   })
-})
-
-describe('FormInput', () => {
-  function mountComponent (props) {
-    return mount(<FormInput {...props} />)
-  }
-
-  it('should render input correctly', () => {
-    const props = {
-      humanname: 'Version',
-      name: 'version',
-      value: '4.2.0',
-      type: 'text',
-      disabled: true,
-      onChange: jest.fn()
-    }
-    const wrapper = mountComponent(props)
-    expect(wrapper.find(FormInput).exists()).toBe(true)
-    expect(wrapper.find('label').text()).toBe('Version:')
-    expect(wrapper.find('input').prop('type')).toBe('text')
-    expect(wrapper.find('input').prop('name')).toBe('version')
-    expect(wrapper.find('input').prop('value')).toBe('4.2.0')
-    expect(wrapper.find('input').prop('disabled')).toBe(true)
-  })
-
-  it('should render input correctly', () => {
-    const props = {
-      humanname: 'Summary',
-      name: 'summary',
-      value: 'A very classic textarea.',
-      type: 'textarea',
-      disabled: false,
-      onChange: jest.fn()
-    }
-    const wrapper = mountComponent(props)
-    expect(wrapper.find(FormInput).exists()).toBe(true)
-    expect(wrapper.find('label').text()).toBe('Summary:A very classic textarea.')
-    expect(wrapper.find('textarea').prop('name')).toBe('summary')
-    expect(wrapper.find('textarea').prop('value')).toBe('A very classic textarea.')
-    expect(wrapper.find('textarea').prop('disabled')).toBe(false)
-  })
-
 })
 
 describe('Editor', () => {

@@ -17,8 +17,8 @@ let mockedWindow = {
 
 function mountWrapper () {
   const policies = [
-    {name: 'cors', humanName: 'CORS', summary: 'CORS', version: '1.0.0', schema: {}},
-    {name: 'echo', humanName: 'Echo', summary: 'Echo', version: '1.0.0', schema: {}}
+    {humanName: 'CORS', summary: 'CORS', version: '1.0.0', id: 42, schema: {}},
+    {humanName: 'Echo', summary: 'Echo', version: '1.0.0', id: 69, schema: {}}
   ]
 
   return mount(<PolicyList policies={policies} />)
@@ -31,7 +31,7 @@ it('should render itself correctly', () => {
 })
 
 it('should create the correct edit link', () => {
-  expect(policyEditLink('answer', '42')).toBe('/p/admin/registry/policies/answer-42/edit')
+  expect(policyEditLink(42)).toBe('/p/admin/registry/policies/42/edit')
 })
 
 it('should navigate to the edit link', () => {

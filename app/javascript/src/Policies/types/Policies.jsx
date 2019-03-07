@@ -2,6 +2,7 @@
 
 export type RawPolicy = {
   $schema?: string,
+  id: number,
   name: string,
   version: string,
   description?: string,
@@ -29,4 +30,17 @@ export type StoredChainPolicy = {
   version: string,
   configuration: Object,
   enabled: boolean
+}
+
+export type ShallowPolicy = {
+  id: number,
+  version: string,
+  humanName: string,
+  summary?: string
+}
+
+export type Policy = {
+  id: number,
+  schema: Object,
+  directory: string
 }
