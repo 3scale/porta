@@ -99,6 +99,7 @@ class Admin::Api::Services::EndUsersController < Admin::Api::Services::BaseContr
   end
 
   def authorize_end_users
+    provider_can_use!(:end_users)
     authorize_switch! :end_users
   end
 end

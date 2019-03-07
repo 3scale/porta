@@ -1,4 +1,5 @@
 class Admin::Api::Services::EndUserPlansController < Admin::Api::EndUserPlansController
+  before_action :authorize_end_user_plans
   ##~ sapi = source2swagger.namespace("Account Management API")
 
   # inherited index action
@@ -93,6 +94,10 @@ class Admin::Api::Services::EndUserPlansController < Admin::Api::EndUserPlansCon
   end
 
   private
+
+  def authorize_end_users
+    provider_can_use!(:end_users)
+  end
 
   def end_user_plan_params
     params.slice(*EndUserPlan.accessible_attributes)
