@@ -17,6 +17,15 @@ class Account::BuyerTest < ActiveSupport::TestCase
   should have_many(:bought_service_contracts)
   should have_many(:bought_service_plans).through(:bought_service_contracts)
 
+  test '#has_bought_cinstance?' do
+    buyer = FactoryBot.create(:simple_buyer)
+
+    refute buyer.has_bought_cinstance?
+
+    FactoryBot.create(:cinstance, user_account: buyer)
+    assert buyer.has_bought_cinstance?
+  end
+
   test "factory simple buyer should not have domains" do
     buyer = FactoryBot.build(:simple_buyer)
     assert_nil buyer.domain
