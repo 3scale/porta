@@ -29,12 +29,13 @@ class BackendDeleteStatsWorkerTest < ActiveSupport::TestCase
   private
 
   def assert_delete_job_params(delete_job)
-    return false unless delete_job.is_a? Hash
-    return false if (delete_job[:applications] || []).sort != applications.map(&:id).sort
-    return false if (delete_job[:metrics] || []).sort != metrics.map(&:id).sort
-    return false if delete_job[:users] != []
-    return false if delete_job[:from] != service.created_at.utc.to_i
-    return false if delete_job[:to] != Time.now.utc.to_i
-    true
+    [
+      -> { delete_job.is_a?(Hash) },
+      -> { (delete_job[:applications] || []).sort == applications.map(&:id).sort },
+      -> { (delete_job[:metrics] || []).sort == metrics.map(&:id).sort },
+      -> { delete_job[:users] == [] },
+      -> { delete_job[:from] == service.created_at.utc.to_i },
+      -> { delete_job[:to] == Time.now.utc.to_i }
+    ].all?(&:call)
   end
 end
