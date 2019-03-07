@@ -16,7 +16,7 @@ class BackendDeleteServiceWorkerTest < ActiveSupport::TestCase
   test 'on_success' do
     service_id = (Service.last&.id || 0) + 1
     ThreeScale::Core::Service.expects(:delete_by_id!).with { |param| param == service_id.to_s }
-    BackendDeleteServiceWorker.new.on_success(1, {'service_id' => service_id})
+    BackendDeleteServiceWorker::Callback.new.on_success(1, {'service_id' => service_id})
   end
 
   test 'perform reports error when the event does not exist' do
