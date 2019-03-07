@@ -1,4 +1,5 @@
 class Cinstance < Contract
+  include AchieveDeletionBelongingToService
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 
@@ -82,7 +83,6 @@ class Cinstance < Contract
 
   after_commit :push_webhook_key_updated, :on => :update, :if => :user_key_updated?
   after_save :push_application_updated_event, on: :update
-  after_destroy :achieve_as_deleted
 
   #this method marks that a human edition of the app is happening, thus description presence will be validated
   # this is done so e.g. to avoid change_plan to fail when the app misses description or name
@@ -394,10 +394,6 @@ class Cinstance < Contract
   end
 
   private
-
-  def achieve_as_deleted
-    ::DeletedObject.create!(object: self, owner: service)
-  end
 
   # It calls to `create_key_after_create` to check if it's possible to add
   # an application key.
