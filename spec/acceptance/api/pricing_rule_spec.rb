@@ -35,7 +35,7 @@ resource "PricingRule" do
 
   json(:resource) do
     let(:root) { 'pricing_rule' }
-    it { should have_properties(%w|id cost_per_unit min max|).from(resource) }
+    it { should have_properties(%w|id metric_id cost_per_unit min max|).from(resource) }
     it { should have_links('metric', 'plan') }
   end
 
