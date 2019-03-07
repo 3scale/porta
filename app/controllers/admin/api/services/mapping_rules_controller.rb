@@ -57,6 +57,8 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   ##~ op.parameters.add name: "pattern", description: "Mapping Rule pattern.", dataType: "string", paramType: "query", required: true
   ##~ op.parameters.add name: "delta", description: "Increase the metric by this delta.", dataType: "int", paramType: "query", required: true
   ##~ op.parameters.add name: "metric_id", description: "Metric ID.", dataType: "int", paramType: "query", required: true, threescale_name: "metric_ids"
+  ##~ op.parameters.add name: "position", description: "Mapping Rule position", dataType: "int", paramType: "query"
+  ##~ op.parameters.add name: "last", description: "Last matched Mapping Rule to process", dataType: "bool", paramType: "query"
   #
   def create
     proxy_rule = proxy.proxy_rules.create(proxy_rule_params)
@@ -81,6 +83,8 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   ##~ op.parameters.add name: "pattern", description: "Mapping Rule pattern.", dataType: "string", paramType: "query"
   ##~ op.parameters.add name: "delta", description: "Increase the metric by this delta.", dataType: "int", paramType: "query"
   ##~ op.parameters.add name: "metric_id", description: "Metric ID.", dataType: "int", paramType: "query", threescale_name: "metric_ids"
+  ##~ op.parameters.add name: "position", description: "Mapping Rule position", dataType: "int", paramType: "query"
+  ##~ op.parameters.add name: "last", description: "Last matched Mapping Rule to process", dataType: "bool", paramType: "query"
   #
   def update
     proxy_rule.update_attributes(proxy_rule_params)
