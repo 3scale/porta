@@ -36,6 +36,18 @@ class Policy < ApplicationRecord
     persisted? ? identifier : nil
   end
 
+  def directory
+    File.join(name, version)
+  end
+
+  def humanName
+    schema&.dig('name')
+  end
+
+  def summary
+    schema&.dig('summary')
+  end
+
   private
 
   def belongs_to_a_tenant
