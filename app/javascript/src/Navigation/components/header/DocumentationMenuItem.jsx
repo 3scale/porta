@@ -8,4 +8,4 @@ const DocumentationMenuItem = ({docsLinksClass, item}) => (
   </li>
 )
 
-export default DocumentationMenuItem
+export { DocumentationMenuItem }

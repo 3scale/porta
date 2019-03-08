@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import Header from 'Navigation/components/header'
+import { Header } from 'Navigation/components/header'
 
 document.addEventListener('DOMContentLoaded', () => {
   const divStyle = {
