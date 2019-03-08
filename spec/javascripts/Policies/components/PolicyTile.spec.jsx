@@ -15,7 +15,7 @@ function setup (customProps = {}) {
       version: '1.0.0'
     },
     title: 'Das Politik',
-    edit: jest.fn()
+    onClick: jest.fn()
   }
   const props = { ...defaultProps, ...customProps }
   const wrapper = mount(<PolicyTile {...props} />)
@@ -40,5 +40,5 @@ it('should render with the correct title', () => {
 it('should have an onclick fn', () => {
   const {props, wrapper} = setup()
   wrapper.find('.Policy-article').simulate('click')
-  expect(props.edit.mock.calls.length).toBe(1)
+  expect(props.onClick.mock.calls.length).toBe(1)
 })

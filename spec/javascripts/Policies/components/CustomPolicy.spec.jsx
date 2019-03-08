@@ -16,13 +16,13 @@ import {
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('CustomPolicy', () => {
-  it('should render input correctly', () => {
+  it('should render itself correctly', () => {
     const wrapper = shallow(<CustomPolicy />)
     expect(wrapper.find('section').hasClass('CustomPolicy')).toBe(true)
     expect(wrapper.find('header').hasClass('CustomPolicy-header')).toBe(true)
     expect(wrapper.find('h2').hasClass('CustomPolicy-title')).toBe(true)
     expect(wrapper.find('a').hasClass('CustomPolicy-cancel')).toBe(true)
-    expect(wrapper.find('Form').prop('policy')).toBe(POLICY_TEMPLATE)
+    expect(wrapper.find('Form').prop('initialPolicy')).toBe(POLICY_TEMPLATE)
   })
 })
 
