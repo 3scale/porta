@@ -1,4 +1,4 @@
 - content_for :javascripts do
   = javascript_pack_tag 'custom_policies'
 
-= content_tag :div, class: 'PoliciesWidget', id: 'custom-policies-container', data: { policies: @policies.as_json(root: false, only: [:id, :version], methods:[:summary, :humanName]) }  do end
+= content_tag :div, class: 'PoliciesWidget', id: 'custom-policies-container', data: { policies: @policies }  do end

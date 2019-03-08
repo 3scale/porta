@@ -45,7 +45,11 @@ class Provider::Admin::Registry::PoliciesControllerTest < ActionDispatch::Integr
   test '#create' do
     get new_provider_admin_registry_policy_path
     assert_response :success
-
+    model = FactoryBot.build(:policy, version: '1.2.3', name: 'foo')
+    policy_attributes = {
+      schema: model.schema.to_json,
+      directory: model.directory
+    }
     assert_difference Policy.method(:count) do
       post provider_admin_registry_policies_path, policy_attributes
       assert_response :redirect
@@ -54,29 +58,21 @@ class Provider::Admin::Registry::PoliciesControllerTest < ActionDispatch::Integr
 
   test '#update' do
     policy = FactoryBot.create(:policy, account: @provider)
-    config = {type: 'string'}
 
     get edit_provider_admin_registry_policy_path(policy)
     assert_response :success
 
-    patch provider_admin_registry_policy_path(policy), {description: 'other description', summary: 'other summary', configuration: config.to_json, humanName: 'Foo policy'}
+    schema = policy.schema
+    schema['configuration']['properties'] = {
+      property: {
+        description: "A description of your property",
+        type: "string"
+      }
+    }.as_json
+
+    patch provider_admin_registry_policy_path(policy), {schema: schema.to_json}
     assert_response :redirect
     policy.reload
-    assert_equal config.as_json, policy.schema['configuration']
-    assert_equal 'Foo policy', policy.schema['name']
-    assert_equal 'other description', policy.schema['description']
-    assert_equal 'other summary', policy.schema['summary']
-  end
-
-  protected
-
-  def policy_attributes
-    attributes = FactoryBot.build(:policy, name: 'my-policy', version: '1.2.0').attributes
-    schema = attributes.delete('schema')
-    config = schema.delete('configuration').to_json
-    attributes['configuration'] = config
-    attributes['humanName'] = attributes['name']
-    attributes.merge!(schema)
-    attributes
+    assert_equal schema, policy.schema
   end
 end

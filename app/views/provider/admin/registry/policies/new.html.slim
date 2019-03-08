@@ -8,4 +8,4 @@
       - @policy.errors.full_messages.each do |error|
         li class="error"= error
 
-= content_tag :div, class: 'PoliciesWidget', id: 'custom-policy-container' do end
+= content_tag :div, class: 'PoliciesWidget', id: 'custom-policy-container', data: { policy: @policy } do end

@@ -37,9 +37,17 @@ class Policy < ApplicationRecord
   end
 
   def directory
+    return '' unless name.present? && version.present?
     File.join(name, version)
   end
 
+  def directory=(value)
+    self.name = File.dirname(value.to_s)
+    self.version = File.basename(value.to_s)
+  end
+
+  # That is ugly but only needed by JS
+  # FIXME: Do it in the decorator
   def humanName
     schema&.dig('name')
   end
