@@ -11,4 +11,4 @@ const Brand = () => (
   </div>
 )
 
-export default Brand
+export { Brand }
