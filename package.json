@@ -72,7 +72,7 @@
     "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
-    "@patternfly/react-core": "^2.1.4",
+    "@patternfly/react-core": "^2.3.6",
     "@rails/webpacker": "^3.5.5",
     "ajv": "^6.9.2",
     "bootstrap-sass": "3",
@@ -81,7 +81,6 @@
     "codemirror": "^5.43.0",
     "core-js": "^2.6.3",
     "decca": "^2.3.0",
-    "emotion": "^9.2.12",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "moment": "^2.24.0",
