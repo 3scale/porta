@@ -26,6 +26,9 @@ class Service < ApplicationRecord
   after_create :create_default_metrics, :create_default_service_plan, :create_default_proxy
   after_commit :update_notification_settings
 
+  after_commit :create_and_publish_service_created_event, on: :create
+  after_commit :create_and_publish_service_deleted_event, on: :destroy
+
   after_save :publish_events
   after_save :deleted_without_state_machine
 
@@ -535,6 +538,14 @@ class Service < ApplicationRecord
 
     delete_alert_limits(current_alert_limits - notification_settings_levels)
     create_alert_limits(notification_settings_levels - current_alert_limits)
+  end
+
+  def create_and_publish_service_created_event
+    Services::ServiceCreatedEvent.create_and_publish!(self, User.current)
+  end
+
+  def create_and_publish_service_deleted_event
+    Services::ServiceDeletedEvent.create_and_publish!(self)
   end
 
   def notification_settings_levels

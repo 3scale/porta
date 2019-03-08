@@ -87,7 +87,6 @@ module System
                                      :message_observer,
                                      :billing_observer,
                                      :post_observer,
-                                     :service_observer,
                                      :user_observer,
                                      :billing_strategy_observer,
                                      :provider_plan_change_observer,
