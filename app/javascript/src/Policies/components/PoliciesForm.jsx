@@ -32,7 +32,7 @@ function PoliciesForm ({
   closePolicyConfig}: Props) {
   const onSubmit = (policy) => {
     return ({formData, schema}) => {
-      submitForm({...policy, ...{schema, configuration: formData}})
+      submitForm({...policy, ...{configuration: schema, data: formData}})
     }
   }
   const togglePolicy = (event) => {
@@ -64,8 +64,8 @@ function PoliciesForm ({
       </label>
       <PolicyForm
         className={`PolicyConfiguration-form ${hiddenClass(isNotApicastPolicy(policy))}`}
-        schema={policy.schema}
-        formData={policy.configuration}
+        schema={policy.configuration}
+        formData={policy.data}
         onSubmit={onSubmit(policy)}
       >
         <button className='btn btn-info' type="submit">Update Policy</button>
@@ -80,7 +80,7 @@ function PoliciesForm ({
 }
 
 function hiddenClass (bool?: boolean): string {
-  return bool ? '' : 'hidden'
+  return bool ? '' : 'is-hidden'
 }
 
 export { PolicyForm, PoliciesForm }

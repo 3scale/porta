@@ -5,6 +5,7 @@ import React from 'react'
 import type { RegistryPolicy } from 'Policies/types/Policies'
 import type { ThunkAction } from 'Policies/types/index'
 import { isNotApicastPolicy } from 'Policies/components/util'
+import { PolicyTile } from 'Policies/components/PolicyTile'
 
 type Props = {
   visible: boolean,
@@ -25,18 +26,7 @@ const PolicyRegistryItem = ({value, addPolicy}: {value: RegistryPolicy, addPolic
   const addToChain = () => addPolicy(value)
   return (
     <li className="Policy">
-      <article onClick={addToChain} className="Policy-article" title="Add this Policy.">
-        <h3 className="Policy-name Policy-name--add">{value.humanName}</h3>
-        <p className="Policy-version-and-summary">
-          <span className="Policy-version">
-            {value.version}
-          </span>
-          {' - '}
-          <span title={value.summary} className="Policy-summary">
-            {value.summary}
-          </span>
-        </p>
-      </article>
+      <PolicyTile policy={value} onClick={addToChain} title='Add this Policy.'/>
     </li>
   )
 }
