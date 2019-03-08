@@ -1,40 +1,36 @@
 import React from 'react'
 import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
-import AccountSettings from 'Navigation/components/header/AccountSettings'
+import AccountSettingsMenu from 'Navigation/components/header/AccountSettings'
 import DocumentationMenu from 'Navigation/components/header/DocumentationMenu'
 
-class Toolbar extends React.Component {
-  getAccountSettingsProps () {
-    return {
-      accountSettingsLink: this.props.toolbarProps.accountSettingsLink,
-      accountSettingsClass: this.props.toolbarProps.accountSettingsClass
-    }
-  }
-  getDocsProps () {
-    return {
-      docsLink: this.props.docsProps.docsLink,
-      isSaas: this.props.docsProps.isSaas,
-      docsLinksClass: this.props.docsProps.docsLinksClass,
-      customerPortalLink: this.props.docsProps.customerPortalLink,
-      apiDocsLink: this.props.docsProps.apiDocsLink,
-      liquidReferenceLink: this.props.docsProps.liquidReferenceLink,
-      whatIsNewLink: this.props.docsProps.whatIsNewLink
-    }
-  }
-  render () {
-    return (
-      <PFToolbar>
-        <ToolbarGroup>
-          <ToolbarItem>
-            <AccountSettings {...this.getAccountSettingsProps()}/>
-          </ToolbarItem>
-          <ToolbarItem>
-            <DocumentationMenu {...this.getDocsProps()}/>
-          </ToolbarItem>
-        </ToolbarGroup>
-      </PFToolbar>
-    )
+const getAccountSettingsProps = toolbarProps => {
+  return {
+    accountSettingsLink: toolbarProps.accountSettingsLink,
+    accountSettingsClass: toolbarProps.accountSettingsClass
   }
 }
+
+const getDocsProps = docsProps => {
+  return {
+    docsLink: docsProps.docsLink,
+    isSaas: docsProps.isSaas,
+    docsLinksClass: docsProps.docsLinksClass,
+    customerPortalLink: docsProps.customerPortalLink,
+    apiDocsLink: docsProps.apiDocsLink,
+    liquidReferenceLink: docsProps.liquidReferenceLink,
+    whatIsNewLink: docsProps.whatIsNewLink
+  }
+}
+
+const Toolbar = ({ toolbarProps, docsProps }) => <PFToolbar>
+  <ToolbarGroup>
+    <ToolbarItem>
+      <AccountSettingsMenu {...getAccountSettingsProps(toolbarProps)}/>
+    </ToolbarItem>
+    <ToolbarItem>
+      <DocumentationMenu {...getDocsProps(docsProps)}/>
+    </ToolbarItem>
+  </ToolbarGroup>
+</PFToolbar>
 
 export default Toolbar
