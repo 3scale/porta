@@ -17,7 +17,7 @@ const PolicyList = function ({policies}: {policies: Array<ShallowPolicy>}): Reac
     <ul className='list-group PolicyList'>
       {policies.map((policy, index) => (
         <li className="Policy" key={index}><PolicyTile
-          edit={() => navigateToEditPolicy(policyEditLink(policy.id))}
+          onClick={() => navigateToEditPolicy(policyEditLink(policy.id))}
           policy={policy}
         /></li>
       ))}

@@ -29,7 +29,7 @@ const SortableItem = SortableElement(({value, editPolicy, index}) => {
   const edit = () => editPolicy(value, index)
   return (
     <li className={ value.enabled ? 'Policy' : 'Policy Policy--disabled' }>
-      <PolicyTile policy={value} edit={edit} />
+      <PolicyTile policy={value} onClick={edit} />
       <DragHandle/>
     </li>
   )
