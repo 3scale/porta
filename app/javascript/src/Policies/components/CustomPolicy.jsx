@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
 import SchemaForm from 'react-jsonschema-form'
-import { fromJson, toJson } from 'Policies/util'
+import { fromJsonString, toJsonString } from 'Policies/util'
 import type { Policy } from 'Policies/types/Policies'
 import type {InputEvent} from 'Policies/types'
 import 'codemirror/mode/javascript/javascript'
@@ -60,7 +60,7 @@ function CSRFToken ({win = window}: {win?: any}): React.Node {
 }
 
 function Editor ({onChange, code}: {onChange: (Object) => void, code: Object}): React.Node {
-  const [ state, setState ] = useState({valid: true, code: toJson(code)})
+  const [ state, setState ] = useState({valid: true, code: toJsonString(code)})
 
   const checkConfiguration = (schema) => {
     if (!schema.configuration) throw new Error('Policy configuration not found')
@@ -68,7 +68,7 @@ function Editor ({onChange, code}: {onChange: (Object) => void, code: Object}): 
 
   const onCodeChange = (editor, metadata, code) => {
     try {
-      const schema = fromJson(code)
+      const schema = fromJsonString(code)
       checkConfiguration(schema)
       onChange(schema)
       setState({ valid: true, code })

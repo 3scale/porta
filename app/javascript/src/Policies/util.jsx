@@ -48,13 +48,13 @@ function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
   return { ...policy, name: key, humanName: policy.name, data: {} }
 }
 
-const toJson = (val: Object): string => JSON.stringify(val, null, 2)
+const toJsonString = (val: Object): string => JSON.stringify(val, null, 2)
 
-const fromJson = (json: string) => JSON.parse(json)
+const fromJsonString = (json: string) => JSON.parse(json)
 
-const safeFromJson = (json: string) => {
+const safeFromJsonString = (json: string) => {
   try {
-    return JSON.parse(json)
+    return fromJsonString(json)
   } catch (err) {
     console.warn('That doesn\'t look like a valid json!', err)
     return undefined
@@ -69,7 +69,7 @@ export {
   generateGuid,
   parsePolicies,
   parsePolicy,
-  toJson,
-  fromJson,
-  safeFromJson
+  toJsonString,
+  fromJsonString,
+  safeFromJsonString
 }
