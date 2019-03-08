@@ -1,10 +1,11 @@
 import React from 'react'
+import { Avatar } from '@patternfly/react-core'
 import avatarImg from 'Navigation/images/img_avatar.svg'
 
-const Avatar = ({avatarLinkClass, impersonated, accountName, displayName, logoutPath, username}) => (
+const SessionMenu = ({avatarLinkClass, impersonated, accountName, displayName, logoutPath, username}) => (
   <div className="PopNavigation PopNavigation--session">
     <a className={`PopNavigation-trigger u-toggler ${avatarLinkClass} pf-m-avatar-link`} href="#session-menu" title="Session">
-      <img src={avatarImg} className="pf-m-avatar-img"/>
+      <Avatar src={avatarImg} className="pf-m-avatar-img"/>
       {impersonated ? <i className="fa fa-bolt "></i> : null }
     </a>
     <ul className="PopNavigation-list u-toggleable" id="session-menu">
@@ -22,4 +23,4 @@ const Avatar = ({avatarLinkClass, impersonated, accountName, displayName, logout
   </div>
 )
 
-export default Avatar
+export default SessionMenu
