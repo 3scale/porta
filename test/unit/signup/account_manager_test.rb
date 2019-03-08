@@ -90,7 +90,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
       assert_equal [service_plan], account.bought_service_plans
       assert_equal [application_plan], account.bought_application_plans
       # should set the switches to everything is allowed (because it is enterprise and for on-prem it is validated)
-      switches = account.settings.switches
+      switches = account.settings.switches.except(:end_users)
       switches.each { |_name, switch| assert switch.allowed? }
 
       # Saas
@@ -102,7 +102,7 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
       assert_equal [service_plan], account.bought_service_plans
       assert_equal [application_plan], account.bought_application_plans
       # should set the switches to nothing is allowed (because the enterprise plan for saas is not automatically validated)
-      switches = account.settings.switches
+      switches = account.settings.switches.except(:end_users)
       switches.each { |_name, switch| refute switch.allowed? }
     end
 
