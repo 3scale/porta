@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseController
   ##~ sapi = source2swagger.namespace("Account Management API")
 
@@ -87,7 +89,7 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   ##~ op.parameters.add name: "last", description: "Last matched Mapping Rule to process", dataType: "bool", paramType: "query"
   #
   def update
-    proxy_rule.update_attributes(proxy_rule_params)
+    proxy_rule.update(proxy_rule_params)
     respond_with(proxy_rule)
   end
 
@@ -121,8 +123,8 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
     proxy.proxy_rules
   end
 
-  PERMITTED_PARAMS = %i(http_method pattern delta last position).freeze
-  PROXY_PRO_PERMITTED_PARAMS = PERMITTED_PARAMS + %i(redirect_url)
+  PERMITTED_PARAMS = %i[http_method pattern delta last position].freeze
+  PROXY_PRO_PERMITTED_PARAMS = PERMITTED_PARAMS + %i[redirect_url]
 
   def proxy_rule_params
     params.require(:mapping_rule).permit(permitted_params).merge(metric_params)
