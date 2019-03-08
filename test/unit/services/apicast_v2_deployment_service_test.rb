@@ -17,6 +17,22 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
     assert_match policies.first.to_json, @proxy.proxy_configs.last.content
   end
 
+
+  def test_save_proxy_rules_with_position
+    @proxy.proxy_rules.destroy_all
+    proxy_rules = FactoryBot.create_list(:proxy_rule, 3, proxy: @proxy)
+    proxy_rules.each_with_index do |rule, idx|
+      rule.update_column(:position, (idx + 1).modulo(3))
+    end
+    @proxy.reload
+    config = Service.new(@proxy).call(environment: ProxyConfig::ENVIRONMENTS.first)
+    json = JSON.parse(config.content)
+    json_rules = json.dig('proxy', 'proxy_rules')
+    assert_equal proxy_rules[0].id, json_rules[1]['id']
+    assert_equal proxy_rules[1].id, json_rules[2]['id']
+    assert_equal proxy_rules[2].id, json_rules[0]['id']
+  end
+
   def test_call
     environment = ProxyConfig::ENVIRONMENTS.first
     last_config = nil
@@ -39,5 +55,7 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
       assert new_config.version > last_config.version
     end
   end
+
+
 end
 
