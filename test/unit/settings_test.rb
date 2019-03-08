@@ -205,14 +205,14 @@ class SettingsTest < ActiveSupport::TestCase
       assert_equal [], @provider.settings.globally_denied_switches
 
       ThreeScale.config.stubs(onpremises: true)
-      assert_equal [:finance], @provider.settings.globally_denied_switches
+      assert_equal [:finance, :end_users], @provider.settings.globally_denied_switches
 
       @provider.unstub(:master?)
       ThreeScale.config.stubs(onpremises: false)
       assert_equal [], @provider.settings.globally_denied_switches
 
       ThreeScale.config.stubs(onpremises: true)
-      assert_equal [], @provider.settings.globally_denied_switches
+      assert_equal [:end_users], @provider.settings.globally_denied_switches
     end
   end
 end

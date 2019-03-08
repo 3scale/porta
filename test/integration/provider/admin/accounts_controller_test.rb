@@ -64,7 +64,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [service_plan], account.bought_service_plans
     assert_equal [application_plan], account.bought_application_plans
     # should set the switches to everything is allowed (because it is enterprise and for on-prem it is validated)
-    switches = account.settings.switches
+    switches = account.settings.switches.except(:end_users)
     switches.each { |_name, switch| assert switch.allowed? }
   end
 

@@ -20,7 +20,7 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
     ThreeScale.config.stubs(onpremises: true)
     enterprise_plan = FactoryBot.create(:application_plan, system_name: 'enterprise', name: 'enterprise', issuer: @service)
     @service.update_attribute(:default_application_plan, enterprise_plan)
-    default_signup_provider.settings.switches.each do |_name, switch|
+    default_signup_provider.settings.switches.except(:end_users).each do |_name, switch|
       assert switch.allowed?
     end
   end

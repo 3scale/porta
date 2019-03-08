@@ -56,7 +56,8 @@ class Settings < ApplicationRecord
   # Using a constant here seems weird as it depends on some parameters
   def globally_denied_switches
     [
-      account.master_on_premises? ? :finance : nil
+      account.master_on_premises? ? :finance : nil,
+      ThreeScale.config.onpremises ? :end_users : nil
     ].compact
   end
 
