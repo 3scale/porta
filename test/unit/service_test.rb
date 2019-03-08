@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'test_helper'
 
 class ServiceTest < ActiveSupport::TestCase
 
@@ -391,21 +391,24 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     test 'destroying service creates a related event' do
-      service          = FactoryBot.create(:service)
-      service_plan     = FactoryBot.create(:service_plan, issuer: service)
-      service_contract = FactoryBot.create(:service_contract, plan: service_plan)
-      application_plan = FactoryBot.create(:application_plan, issuer: service)
-      cinstance        = FactoryBot.create(:cinstance, plan: application_plan)
-
-      assert_difference(RailsEventStoreActiveRecord::Event.where(
-        event_type: 'Services::ServiceDeletedEvent').method(:count), +1) do
-
-        service.destroy_default
+      service = FactoryBot.create(:simple_service)
+      service_id = service.id
+      assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).method(:count)) do
+        assert service.destroy_default
       end
+      event = RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).last!
+      assert_equal service_id, event.data['service_id']
+    end
+  end
 
-      assert_raise(ActiveRecord::RecordNotFound) { service_contract.reload }
-      assert_raise(ActiveRecord::RecordNotFound) { application_plan.reload }
-      assert_raise(ActiveRecord::RecordNotFound) { cinstance.reload }
+  class CreateServiceTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'creating service creates a related event' do
+      User.stubs(current: FactoryBot.create(:simple_user))
+      assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceCreatedEvent).method(:count)) do
+        FactoryBot.create(:simple_service)
+      end
     end
   end
 
