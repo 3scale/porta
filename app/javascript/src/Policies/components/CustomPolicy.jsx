@@ -117,23 +117,23 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
   )
 }
 
-function Form ({policy}: {policy: Policy}): React.Node {
-  const [pol, setPolicy] = useState(policy)
-  const onSchemaEdited = (pol: Policy) => (schema: Object) => setPolicy({...pol, ...{schema}})
-  const handleChange = (pol: Policy) => (ev: InputEvent) => setPolicy({...pol, ...{[ev.target.name]: ev.target.value}})
+function Form ({initialPolicy}: {initialPolicy: Policy}): React.Node {
+  const [policy, setPolicy] = useState(initialPolicy)
+  const onSchemaEdited = (policy: Policy) => (schema: Object) => setPolicy({...policy, ...{schema}})
+  const handleChange = (policy: Policy) => (ev: InputEvent) => setPolicy({...policy, ...{[ev.target.name]: ev.target.value}})
 
   return (
     <div>
       <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={pol.schema} onChange={onSchemaEdited(pol)} />
+        <Editor className="CustomPolicy-code" code={policy.schema} onChange={onSchemaEdited(policy)} />
         <div>
           <h3>Form Preview</h3>
-          <SchemaForm className="CustomPolicy-form" schema={pol.schema.configuration}>
+          <SchemaForm className="CustomPolicy-form" schema={policy.schema.configuration}>
             <button type="submit" className="is-hidden">Submit</button>
           </SchemaForm>
         </div>
       </div>
-      <CustomPolicyForm policy={pol} onChange={handleChange(pol)} />
+      <CustomPolicyForm policy={policy} onChange={handleChange(policy)} />
     </div>
   )
 }
@@ -148,7 +148,7 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node
           <i className="fa fa-times-circle" /> Cancel
         </a>
       </header>
-      <Form policy={policy} />
+      <Form initialPolicy={policy} />
     </section>
   )
 }

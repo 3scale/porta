@@ -6,6 +6,6 @@ import {safeFromJson} from 'Policies/util'
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('custom-policy-container')
   const jsonPolicy = container.dataset.policy
-  const props = (jsonPolicy) ? {policy: safeFromJson(jsonPolicy)} : {}
-  render(<CustomPolicy {...props} />, container)
+  const policy = safeFromJson(jsonPolicy)
+  render(<CustomPolicy policy={policy} />, container)
 })

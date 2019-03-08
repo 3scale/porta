@@ -45,24 +45,19 @@ function parsePolicies (registry: RawRegistry): Array<RegistryPolicy> {
 }
 
 function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
-  return Object.assign({}, policy,
-    {
-      name: key,
-      humanName: policy.name,
-      data: {}
-    })
+  return { ...policy, name: key, humanName: policy.name, data: {} }
 }
 
 const toJson = (val: Object): string => JSON.stringify(val, null, 2)
 
 const fromJson = (json: string) => JSON.parse(json)
 
-const safeFromJson = (json: string, callback: () => {}): Object => {
+const safeFromJson = (json: string) => {
   try {
     return JSON.parse(json)
   } catch (err) {
-    console.error('That doesn\'t look like a valid json!', err)
-    return callback()
+    console.warn('That doesn\'t look like a valid json!', err)
+    return undefined
   }
 }
 

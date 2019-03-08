@@ -26,7 +26,7 @@ const PolicyRegistryItem = ({value, addPolicy}: {value: RegistryPolicy, addPolic
   const addToChain = () => addPolicy(value)
   return (
     <li className="Policy">
-      <PolicyTile policy={value} edit={addToChain} title='Add this Policy.'/>
+      <PolicyTile policy={value} onClick={addToChain} title='Add this Policy.'/>
     </li>
   )
 }
