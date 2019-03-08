@@ -1,9 +1,8 @@
 import React from 'react'
 import DocumentationMenuItem from 'Navigation/components/header/DocumentationMenuItem'
 
-let menuItemKey = 0
 const renderMenuItems = (docsLinksClass, items) => items.map(
-  item => <DocumentationMenuItem key={`docsMenuItem${menuItemKey++}`} docsLinksClass={docsLinksClass} item={item}/>
+  (item, index) => <DocumentationMenuItem key={`docsMenuItem${index}`} docsLinksClass={docsLinksClass} item={item}/>
 )
 
 const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}) => {
