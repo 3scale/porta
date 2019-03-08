@@ -10,7 +10,7 @@ class Proxy < ApplicationRecord
   belongs_to :service, touch: true, inverse_of: :proxy, required: true
   attr_readonly :service_id
 
-  has_many :proxy_rules, dependent: :destroy, inverse_of: :proxy
+  has_many :proxy_rules, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :proxy
   has_many :proxy_configs, dependent: :delete_all, inverse_of: :proxy
   has_one :oidc_configuration, dependent: :delete, inverse_of: :oidc_configurable, as: :oidc_configurable
   accepts_nested_attributes_for :oidc_configuration
