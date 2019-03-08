@@ -111,7 +111,7 @@ class UserMailerTest < ActionMailer::TestCase
           assert_match "Thank you for signing up for access to the Monkey API", email.body.to_s
           assert_match "Your username is: #{@user.username}", email.body.to_s
           assert_match "https://api.monkey.com/activate/#{@user.activation_code}", email.body.to_s
-          assert_match "The API Teams at Monkey and 3scale", email.body.to_s
+          assert_match "The API Teams at Monkey", email.body.to_s
         end
       end
 
