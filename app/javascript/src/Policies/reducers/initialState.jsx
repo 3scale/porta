@@ -11,7 +11,7 @@ export const initialState: State = {
     name: '',
     humanName: '',
     configuration: {},
-    id: '',
+    id: 0,
     version: '',
     description: '',
     summary: '',

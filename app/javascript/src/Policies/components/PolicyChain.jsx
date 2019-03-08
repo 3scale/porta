@@ -7,6 +7,7 @@ import {
   SortableHandle,
   arrayMove
 } from 'react-sortable-hoc'
+import { PolicyTile } from 'Policies/components/PolicyTile'
 
 import type { ThunkAction } from 'Policies/types/index'
 import type { ChainPolicy } from 'Policies/types/Policies'
@@ -28,18 +29,7 @@ const SortableItem = SortableElement(({value, editPolicy, index}) => {
   const edit = () => editPolicy(value, index)
   return (
     <li className={ value.enabled ? 'Policy' : 'Policy Policy--disabled' }>
-      <article onClick={edit} className="Policy-article" title="Configure this policy.">
-        <h3 className="Policy-name">{value.humanName}</h3>
-        <p className="Policy-version-and-summary">
-          <span className="Policy-version">
-            {value.version}
-          </span>
-          {' - '}
-          <span title={value.summary} className="Policy-summary">
-            {value.summary}
-          </span>
-        </p>
-      </article>
+      <PolicyTile policy={value} onClick={edit} />
       <DragHandle/>
     </li>
   )

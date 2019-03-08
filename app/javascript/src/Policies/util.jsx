@@ -2,6 +2,7 @@
 
 import type { UIState } from 'Policies/types/State'
 import type { FetchErrorAction, Reducer } from 'Policies/types/index'
+import type { RawPolicy, RawRegistry, RegistryPolicy } from 'Policies/types/Policies'
 
 function updateObject (oldObject: Object, newValues: Object): Object {
   return {...oldObject, ...newValues}
@@ -35,10 +36,40 @@ function generateGuid (): string {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 }
 
+function parsePolicies (registry: RawRegistry): Array<RegistryPolicy> {
+  let policies: Array<RegistryPolicy> = []
+  for (let key in registry) {
+    registry[key].forEach(policy => policies.push(parsePolicy(key, policy)))
+  }
+  return policies
+}
+
+function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
+  return { ...policy, name: key, humanName: policy.name, data: {} }
+}
+
+const toJsonString = (val: Object): string => JSON.stringify(val, null, 2)
+
+const fromJsonString = (json: string) => JSON.parse(json)
+
+const safeFromJsonString = (json: string) => {
+  try {
+    return fromJsonString(json)
+  } catch (err) {
+    console.warn('That doesn\'t look like a valid json!', err)
+    return undefined
+  }
+}
+
 export {
   updateObject,
   updateArray,
   createReducer,
   updateError,
-  generateGuid
+  generateGuid,
+  parsePolicies,
+  parsePolicy,
+  toJsonString,
+  fromJsonString,
+  safeFromJsonString
 }
