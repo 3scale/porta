@@ -1,5 +1,5 @@
 import React from 'react'
-import DocumentationMenuItem from 'Navigation/components/header/DocumentationMenuItem'
+import { DocumentationMenuItem } from 'Navigation/components/header'
 
 const renderMenuItems = (docsLinksClass, items) => items.map(
   (item, index) => <DocumentationMenuItem key={`docsMenuItem${index}`} docsLinksClass={docsLinksClass} item={item}/>
@@ -24,4 +24,4 @@ const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink
   </div>
 }
 
-export default DocumentationMenu
+export { DocumentationMenu }

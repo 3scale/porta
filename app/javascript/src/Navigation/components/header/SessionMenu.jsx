@@ -23,4 +23,4 @@ const SessionMenu = ({avatarLinkClass, impersonated, accountName, displayName, l
   </div>
 )
 
-export default SessionMenu
+export { SessionMenu }

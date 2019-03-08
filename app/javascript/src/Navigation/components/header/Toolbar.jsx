@@ -1,7 +1,6 @@
 import React from 'react'
 import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
-import AccountSettingsMenu from 'Navigation/components/header/AccountSettings'
-import DocumentationMenu from 'Navigation/components/header/DocumentationMenu'
+import { AccountSettingsMenu, DocumentationMenu } from 'Navigation/components/header/'
 
 const getAccountSettingsProps = toolbarProps => {
   return {
@@ -33,4 +32,4 @@ const Toolbar = ({ toolbarProps, docsProps }) => <PFToolbar>
   </ToolbarGroup>
 </PFToolbar>
 
-export default Toolbar
+export { Toolbar }

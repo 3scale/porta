@@ -8,4 +8,4 @@ const AccountSettingsMenu = ({accountSettingsLink, accountSettingsClass}) => (
   </div>
 )
 
-export default AccountSettingsMenu
+export { AccountSettingsMenu }
