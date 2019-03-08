@@ -63,6 +63,6 @@ export type Store = State & {
 
 export type ElementEventTemplate<E> = {
   target: E
-} & Event
+} & Event & SyntheticEvent<>
 
 export type InputEvent = ElementEventTemplate<HTMLInputElement>

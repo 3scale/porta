@@ -119,13 +119,16 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
 
 function Form ({initialPolicy}: {initialPolicy: Policy}): React.Node {
   const [policy, setPolicy] = useState(initialPolicy)
-  const onSchemaEdited = (policy: Policy) => (schema: Object) => setPolicy({...policy, ...{schema}})
-  const handleChange = (policy: Policy) => (ev: InputEvent) => setPolicy({...policy, ...{[ev.target.name]: ev.target.value}})
+  const onSchemaEdited = (schema: Object) => setPolicy(prevPolicy => ({ ...prevPolicy, ...{ schema } }))
+  const handleChange = (ev: InputEvent) => {
+    ev.persist()
+    return setPolicy(prevPolicy => ({ ...prevPolicy, ...{ [ev.target.name]: ev.target.value } }))
+  }
 
   return (
     <div>
       <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={policy.schema} onChange={onSchemaEdited(policy)} />
+        <Editor className="CustomPolicy-code" code={policy.schema} onChange={onSchemaEdited} />
         <div>
           <h3>Form Preview</h3>
           <SchemaForm className="CustomPolicy-form" schema={policy.schema.configuration}>
@@ -133,7 +136,7 @@ function Form ({initialPolicy}: {initialPolicy: Policy}): React.Node {
           </SchemaForm>
         </div>
       </div>
-      <CustomPolicyForm policy={policy} onChange={handleChange(policy)} />
+      <CustomPolicyForm policy={policy} onChange={handleChange} />
     </div>
   )
 }
