@@ -700,7 +700,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       namespace :registry, defaults: { format: :json } do
         constraints(id: /((?!\.json\Z)[^\/])+/) do
-          resources :policies
+          resources :policies, except: %i[new edit]
         end
       end
     end
