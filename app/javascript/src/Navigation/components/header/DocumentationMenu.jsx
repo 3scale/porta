@@ -2,7 +2,7 @@ import React from 'react'
 import { DocumentationMenuItem } from 'Navigation/components/header'
 
 const renderMenuItems = (docsLinksClass, items) => items.map(
-  (item, index) => <DocumentationMenuItem key={`docsMenuItem${index}`} docsLinksClass={docsLinksClass} item={item}/>
+  item => <DocumentationMenuItem key={item.text.replace(' ', '')} docsLinksClass={docsLinksClass} item={item}/>
 )
 
 const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}) => {
