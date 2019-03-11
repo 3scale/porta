@@ -167,9 +167,7 @@ And(/^has an application$/) do
 end
 
 Given(/^I'm on that application page$/) do
-  click_on 'Dashboard'
-  click_on 'Overview'
-  click_on 'Apps'
   assert @application, '@application is missing'
+  page.visit admin_service_applications_path(@application.service)
   click_on @application.name
 end
