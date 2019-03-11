@@ -4,7 +4,6 @@ Feature: Application Stats
     Given a provider is logged in
       And has an application
 
-  @javascript
   Scenario: Stats access
     Given I'm on that application page
     When I follow "Analytics"

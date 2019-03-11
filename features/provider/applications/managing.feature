@@ -8,7 +8,6 @@ Feature: Applications management
       And has an application
       And there are no events
 
-  @javascript
   Scenario: Delete application
     When I'm on that application page
      And I follow "Edit"
