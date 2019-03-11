@@ -35,8 +35,13 @@ Feature: Menu of the Account screen
     Given provider "foo.example.com" has "finance" switch denied
     When I go to the provider dashboard
      And I follow "Account"
+<<<<<<< HEAD
      And I follow "Billing"
      And I follow "3scale Invoices"
+=======
+    Then I should see "3scale Invoices"
+     And I choose the menu item "3scale Invoices" of "Billing"
+>>>>>>> [cukes] Fixing some features:
     Then I should be on my invoices from 3scale page
 
   @javascript

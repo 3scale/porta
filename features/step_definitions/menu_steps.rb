@@ -24,6 +24,13 @@ Then /^there should be submenu items$/ do |items|
   end
 end
 
+Then /^I choose the menu item "(.*?)"(?: of "(.*?)")?$/ do |submen_item, menu_item|
+  within '#mainmenu' do
+    click_on menu_item if menu_item
+    click_link submen_item
+  end
+end
+
 Then /^I choose "(.*?)" in the sidebar$/ do |item|
   within '#side-tabs' do
     click_link(item)
