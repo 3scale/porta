@@ -10,7 +10,6 @@ Feature: Sticky Topics
     And provider "foo.example.com" has "forum" enabled
     And a buyer "bob" signed up to provider "foo.example.com"
 
-  @javascript
   Scenario: Creating a sticky topic
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -22,14 +21,13 @@ Feature: Sticky Topics
     And I press "Create thread"
     Then the forum of "foo.example.com" should have sticky topic "Read this first"
 
-    When I log out
+    When I go to provider logout
     And I log in as "bob" on foo.example.com
     And I create a new topic "Please help!"
     And I create a new topic "Please help again!"
     And I go to the forum page
     Then I should see the first topic is "Read this first"
 
-  @javascript
   Scenario: Marking existing topic as sticky
     Given the forum of "foo.example.com" has the following topics:
       | Topic        | Created at |
@@ -41,7 +39,7 @@ Feature: Sticky Topics
     And I go to the forum page
     Then I should see the first topic is "Third topic"
 
-    When I log out
+    When I go to provider logout
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
 
@@ -50,12 +48,11 @@ Feature: Sticky Topics
     And I press "Update thread"
     Then the forum of "foo.example.com" should have sticky topic "Second topic"
 
-    When I log out
+    When I go to provider logout
     And I log in as "bob" on foo.example.com
     And I go to the forum page
     Then I should see the first topic is "Second topic"
 
-  @javascript
   Scenario: Unsticking a topic
     Given the forum of "foo.example.com" has the following topics:
       | Topic        | Sticky? | Created at |
@@ -65,7 +62,7 @@ Feature: Sticky Topics
     When I log in as "bob" on foo.example.com
     And I go to the forum page
     Then I should see the first topic is "Second topic"
-    When I log out
+    When I go to provider logout
 
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
@@ -75,7 +72,7 @@ Feature: Sticky Topics
     And I press "Update thread"
     Then the forum of "foo.example.com" should have non-sticky topic "Second topic"
 
-    When I log out
+    When I go to provider logout
     And I log in as "bob" on foo.example.com
     And I go to the forum page
     Then I should see the first topic is "First topic"
