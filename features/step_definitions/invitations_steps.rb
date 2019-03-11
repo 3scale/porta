@@ -90,9 +90,7 @@ When(/^I request the url of the invitations of the partner "([^\"]*)"$/) do |org
 end
 
 When(/^I send a provider invitation to "([^\"]*)"$/) do |address|
-  click_link 'Account'
-  click_link 'Listing'
-  click_link 'Invite a New User'
+  step %(I go to the provider new invitation page)
   fill_in 'Send invitation to', with: address
   click_button 'Send'
 end
