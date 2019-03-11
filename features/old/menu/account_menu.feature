@@ -36,7 +36,7 @@ Feature: Menu of the Account screen
     When I go to the provider dashboard
      And I follow "Account"
     Then I should see "3scale Invoices"
-     And I follow "3scale Invoices"
+     And I choose the menu item "3scale Invoices" of "Billing"
     Then I should be on my invoices from 3scale page
 
   @javascript
