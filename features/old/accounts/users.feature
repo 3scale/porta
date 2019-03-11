@@ -9,12 +9,11 @@ Feature: User management
     Given an user "alice" of account "foo.example.com"
       And an user "bob" of account "foo.example.com"
 
-  @javascript
   Scenario: Navigating to users overview for providers
     And current domain is the admin domain of provider "foo.example.com"
     Given I am logged in as provider "foo.example.com"
     When I go to the provider users page
-      And I follow "Account"
+      And go to the provider account page
       And I follow "Users"
     Then I should see "Users"
 
@@ -66,7 +65,6 @@ Feature: User management
     And I press "Update User"
     Then I should see "should look like an email address" within "#user_email_input"
 
-  @javascript
   Scenario: Delete an user
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -86,12 +84,12 @@ Feature: User management
     And I press "Update User"
     Then user "bob" should have role "admin"
 
-  @security @allow-rescue @javascript
+  @security @allow-rescue
   Scenario: Only admins can manage users
     Given an active user "josephine" of account "foo.example.com"
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "josephine"
-    And I follow "Account"
+    And go to the provider account page
     Then I should not see link to the provider users page
 
     When I go to the provider users page
