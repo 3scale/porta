@@ -44,11 +44,10 @@ Feature: Account management
     # FIXME: as the Edit button now resides elsewhere, this does not assert anything
     Then I should not see link "Edit" within "#account_details"
 
-  @javascript
   Scenario: Providers see their provider key on the account details page
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-    And I follow "Account"
+    And go to the provider account page
     Then I should see "API Key"
     Then I should see the provider key of provider "foo.example.com"
 
@@ -89,12 +88,10 @@ Feature: Account management
       And I follow "Account"
     Then I should not be able to edit the value of the customers type field
 
-  @javascript
   Scenario: Edit personal details with invalid data
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-    And I follow "Account Settings"
-    And I follow "Personal Details"
+    And go to the provider personal page
     When I fill in "Email" with ""
      And I fill in "Current password" with "supersecret"
     And I press "Update Details"
