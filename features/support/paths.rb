@@ -53,6 +53,9 @@ World(Module.new do
     when 'logout'
       logout_path
 
+    when 'provider logout'
+      provider_logout_path
+
     when 'the forgot password page'
       new_admin_account_password_path
 
