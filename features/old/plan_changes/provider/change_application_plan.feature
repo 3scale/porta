@@ -15,7 +15,7 @@ Feature: Change Application Plan
 
     And all the rolling updates features are off
 
-  @ignore-backend @javascript
+  @ignore-backend
   Scenario: Change application plan
    Given current domain is the admin domain of provider "foo.example.com"
      And I log in as provider "foo.example.com"
@@ -25,7 +25,7 @@ Feature: Change Application Plan
     When I select "Advanced" from "cinstance_plan_id"
      And I press "Change"
     Then I should see "Plan changed to 'Advanced'"
-     And I log out
+     And I go to provider logout
 
     When I act as "bob"
     Then I should receive an email with subject "Application plan changed to 'Advanced'"
