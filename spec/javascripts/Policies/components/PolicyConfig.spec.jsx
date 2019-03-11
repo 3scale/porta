@@ -203,7 +203,7 @@ describe('PolicyForm', () => {
     const statusInput = policyFormWrapper.find('input')
     statusInput.simulate('change', { target: { value: 'NaN' } })
     const instance = policyFormWrapper.instance()
-    const event = {preventDefault: jest.fn()}
+    const event = {preventDefault: jest.fn(), persist: jest.fn()}
 
     instance.onSubmit(event)
     expect(policyFormWrapper.state().errors.length).toBe(1)
