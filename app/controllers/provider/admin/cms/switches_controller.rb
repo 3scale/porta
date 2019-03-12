@@ -24,7 +24,7 @@ class Provider::Admin::CMS::SwitchesController < Provider::Admin::CMS::BaseContr
 
   def find_switch
     # https://github.com/3scale/system/issues/3162
-    @switch = current_account.hideable_switches[params[:id]]
+    @switch = current_account.hideable_switches.stringify_keys[params[:id]]
     raise ActiveRecord::RecordNotFound unless @switch
   end
 end
