@@ -900,10 +900,10 @@ workflows:
             - assets_precompile
       - karma:
           requires:
-            - assets_precompile
+            - dependencies_npm
       - jest:
           requires:
-            - assets_precompile
+            - dependencies_npm
       - notify_success:
           requires:
             - lint
