@@ -1,6 +1,7 @@
-import React from 'react'
+// @flow
+import * as React from 'react'
 
-const Brand = () => (
+const Brand = (): React.Node => (
   <div className="u-header-brand">
     <div className="u-header-left-half">
       <div className='Header-logo'>Red Hat 3scale API Management</div>

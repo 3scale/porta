@@ -1,8 +1,20 @@
-import React from 'react'
+// @flow
+
+import * as React from 'react'
 import { Avatar } from '@patternfly/react-core'
 import avatarImg from 'Navigation/images/img_avatar.svg'
+import { AvatarProps } from 'Navigation/components/header/types'
 
-const SessionMenu = ({avatarLinkClass, impersonated, accountName, displayName, logoutPath, username}) => (
+type SessionMenuProps = {
+  avatarLinkClass: AvatarProps.avatarLinkClass,
+  impersonated: AvatarProps.impersonated,
+  accountName: AvatarProps.accountName,
+  displayName: AvatarProps.displayName,
+  logoutPath: AvatarProps.logoutPath,
+  username: AvatarProps.username
+}
+
+const SessionMenu = ({avatarLinkClass, impersonated, accountName, displayName, logoutPath, username}: SessionMenuProps): React.Node => (
   <div className="PopNavigation PopNavigation--session">
     <a className={`PopNavigation-trigger u-toggler ${avatarLinkClass} pf-m-avatar-link`} href="#session-menu" title="Session">
       <Avatar src={avatarImg} className="pf-m-avatar-img"/>
