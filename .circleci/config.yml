@@ -720,15 +720,6 @@ workflows:
           requires:
             - dependencies_bundler
             - dependencies_npm
-      - lint:
-          requires:
-            - assets_precompile
-      - karma:
-          requires:
-            - assets_precompile
-      - jest:
-          requires:
-            - assets_precompile
       - unit:
           requires:
             - dependencies_bundler
@@ -751,9 +742,6 @@ workflows:
             - cucumber
             - integration
             - functional
-            - lint
-            - karma
-            - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
@@ -762,9 +750,6 @@ workflows:
             - cucumber
             - integration
             - functional
-            - lint
-            - karma
-            - jest
           <<: *only-master-filter
 
   postgres_build:
@@ -790,15 +775,6 @@ workflows:
           requires:
             - deps_bundler_postgres
             - dependencies_npm
-      - lint:
-          requires:
-            - assets_precompile
-      - karma:
-          requires:
-            - assets_precompile
-      - jest:
-          requires:
-            - assets_precompile
       - unit-postgres:
           requires:
             - deps_bundler_postgres
@@ -821,9 +797,6 @@ workflows:
             - cucumber-postgres
             - integration-postgres
             - functional-postgres
-            - lint
-            - karma
-            - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
@@ -832,9 +805,6 @@ workflows:
             - cucumber-postgres
             - integration-postgres
             - functional-postgres
-            - lint
-            - karma
-            - jest
           <<: *only-master-filter
 
   oracle_build:
@@ -861,15 +831,6 @@ workflows:
             - deps_bundler_oracle
             - dependencies_npm
 
-      - lint:
-          requires:
-            - assets_precompile
-      - karma:
-          requires:
-            - assets_precompile
-      - jest:
-          requires:
-            - assets_precompile
       - unit-oracle:
           requires:
             - deps_bundler_oracle
@@ -892,9 +853,6 @@ workflows:
             - cucumber-oracle
             - integration-oracle
             - functional-oracle
-            - lint
-            - karma
-            - jest
           <<: *only-master-filter
 
       - notify_failure:
@@ -904,9 +862,6 @@ workflows:
             - cucumber-oracle
             - integration-oracle
             - functional-oracle
-            - lint
-            - karma
-            - jest
           <<: *only-master-filter
 
   visual_tests:
@@ -929,6 +884,38 @@ workflows:
           context: percy
           requires:
             - assets_precompile
+
+  javascript_tests:
+    jobs:
+      - notify_start:
+          <<: *only-master-filter
+      - dependencies_bundler
+      - dependencies_npm
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+      - lint:
+          requires:
+            - assets_precompile
+      - karma:
+          requires:
+            - assets_precompile
+      - jest:
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - lint
+            - karma
+            - jest
+          <<: *only-master-filter
+      - notify_failure:
+          requires:
+            - lint
+            - karma
+            - jest
+          <<: *only-master-filter
 
   visual_test-master:
     jobs:
