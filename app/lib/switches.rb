@@ -125,7 +125,7 @@ module Switches
     end
 
     attr_reader :settings, :switches
-    delegate *%i[[] each keys values fetch partition map include? any? all? empty? first with_indifferent_access delete], to: :switches
+    delegate *%i[[] each keys values fetch partition map include? any? all? empty? first with_indifferent_access delete stringify_keys], to: :switches
 
     def slice(*switch_names)
       self.class.new(settings, switch_names)
