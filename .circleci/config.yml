@@ -36,8 +36,14 @@ save-flow-typed-cache: &save-flow-typed-cache
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
-    keys:
-      - v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
+    key: node-v1-{{ checksum "package-lock.json" }}
+
+save-npm-cache: &save-npm-cache
+  save_cache:
+    key: node-v1-{{ checksum "package-lock.json" }}
+    paths:
+      - ./node_modules
+      - ./flow-typed
 
 restore-flow-typed-cache: &restore-flow-typed-cache
   restore_cache:
@@ -362,10 +368,7 @@ jobs:
             npm --version
             npm install
             npm dedupe
-      - save_cache:
-          key: v1-npm-{{ arch }}-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
+      - *save-npm-cache
       - persist_to_workspace:
           root: .
           paths:
