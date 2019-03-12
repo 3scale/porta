@@ -25,6 +25,8 @@ resource 'ProxyRule' do
       let(:http_verb) { 'PATCH' }
       parameter :pattern, 'Pattern'
       let(:pattern) { '/foo' }
+      let(:position) { 9 }
+      let(:last) { true }
 
       post '/admin/api/services/:service_id/proxy/mapping_rules.:format', action: :create
       put '/admin/api/services/:service_id/proxy/mapping_rules/:id.:format', action: :update
@@ -37,6 +39,8 @@ resource 'ProxyRule' do
     it { should include('pattern' => resource.pattern) }
     it { should include('http_method' => resource.http_method) }
     it { should include('delta' => resource.delta) }
+    it { should include('position' => resource.position) }
+    it { should include('last' => resource.last) }
     it { should have_links('proxy', 'service', 'self') }
   end
 

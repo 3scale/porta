@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseController
   ##~ sapi = source2swagger.namespace("Account Management API")
 
@@ -57,6 +59,8 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   ##~ op.parameters.add name: "pattern", description: "Mapping Rule pattern.", dataType: "string", paramType: "query", required: true
   ##~ op.parameters.add name: "delta", description: "Increase the metric by this delta.", dataType: "int", paramType: "query", required: true
   ##~ op.parameters.add name: "metric_id", description: "Metric ID.", dataType: "int", paramType: "query", required: true, threescale_name: "metric_ids"
+  ##~ op.parameters.add name: "position", description: "Mapping Rule position", dataType: "int", paramType: "query"
+  ##~ op.parameters.add name: "last", description: "Last matched Mapping Rule to process", dataType: "bool", paramType: "query"
   #
   def create
     proxy_rule = proxy.proxy_rules.create(proxy_rule_params)
@@ -81,9 +85,11 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   ##~ op.parameters.add name: "pattern", description: "Mapping Rule pattern.", dataType: "string", paramType: "query"
   ##~ op.parameters.add name: "delta", description: "Increase the metric by this delta.", dataType: "int", paramType: "query"
   ##~ op.parameters.add name: "metric_id", description: "Metric ID.", dataType: "int", paramType: "query", threescale_name: "metric_ids"
+  ##~ op.parameters.add name: "position", description: "Mapping Rule position", dataType: "int", paramType: "query"
+  ##~ op.parameters.add name: "last", description: "Last matched Mapping Rule to process", dataType: "bool", paramType: "query"
   #
   def update
-    proxy_rule.update_attributes(proxy_rule_params)
+    proxy_rule.update(proxy_rule_params)
     respond_with(proxy_rule)
   end
 
@@ -117,8 +123,8 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
     proxy.proxy_rules
   end
 
-  PERMITTED_PARAMS = %i(http_method pattern delta).freeze
-  PROXY_PRO_PERMITTED_PARAMS = PERMITTED_PARAMS + %i(redirect_url)
+  PERMITTED_PARAMS = %i[http_method pattern delta last position].freeze
+  PROXY_PRO_PERMITTED_PARAMS = PERMITTED_PARAMS + %i[redirect_url]
 
   def proxy_rule_params
     params.require(:mapping_rule).permit(permitted_params).merge(metric_params)

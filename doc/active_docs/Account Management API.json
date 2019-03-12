@@ -5973,6 +5973,18 @@
               "paramType": "query",
               "required": true,
               "threescale_name": "metric_ids"
+            },
+            {
+              "name": "position",
+              "description": "Mapping Rule position",
+              "dataType": "int",
+              "paramType": "query"
+            },
+            {
+              "name": "last",
+              "description": "Last matched Mapping Rule to process",
+              "dataType": "bool",
+              "paramType": "query"
             }
           ]
         }
@@ -6035,6 +6047,18 @@
               "dataType": "int",
               "paramType": "query",
               "threescale_name": "metric_ids"
+            },
+            {
+              "name": "position",
+              "description": "Mapping Rule position",
+              "dataType": "int",
+              "paramType": "query"
+            },
+            {
+              "name": "last",
+              "description": "Last matched Mapping Rule to process",
+              "dataType": "bool",
+              "paramType": "query"
             }
           ]
         }
