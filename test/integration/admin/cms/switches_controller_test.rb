@@ -1,12 +1,18 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::IntegrationTest
-  test 'Finance is globally disabled' do
-    provider = FactoryBot.create(:provider_account)
+  def setup
+    @provider = FactoryBot.create(:provider_account)
     login! provider
     plan = ApplicationPlan.new(issuer: master_account.first_service!, name: 'enterprise')
     provider.force_upgrade_to_provider_plan!(plan)
+  end
 
+  attr_reader :provider
+
+  test 'Finance is globally disabled' do
     ThreeScale.config.stubs(onpremises: false)
     get provider_admin_cms_switches_path
     assert_response :success
@@ -16,6 +22,13 @@ class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::Integration
     get provider_admin_cms_switches_path
     assert_response :success
     assert_select '#switch-finance-toggle', true
-    assert_select %Q(table#switches th), text: 'Finance', count: 1
+    assert_select %(table#switches th), text: 'Finance', count: 1
+  end
+
+  test 'update shows the hidden switch' do
+    switch_name = provider.hideable_switches.keys.first
+    put provider_admin_cms_switch_path(switch_name, format: :js)
+    assert_response :success
+    assert provider.settings.switches[switch_name].visible?
   end
 end
