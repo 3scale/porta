@@ -6,6 +6,8 @@ class ProxyRuleRepresenter < ThreeScale::Representer
   property :pattern
   property :http_method
   property :delta
+  property :position
+  property :last
 
   with_options(if: ->(*) { proxy.service.using_proxy_pro? }, render_nil: true) do |proxy_pro|
     proxy_pro.property :redirect_url
