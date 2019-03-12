@@ -95,14 +95,14 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
       assert settings.send(switch).allowed?
     end
 
-    switches_off = Settings::SWITCHES - switches_on
+    switches_off = Switches::SWITCHES - switches_on
     switches_off.each do |switch|
       assert settings.send(switch).denied?
     end
 
 
     switches_on.each do |switch|
-      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Settings::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
     end
 
     plan = @base
@@ -114,13 +114,13 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
       assert settings.send(switch).allowed?
     end
 
-    switches_off = Settings::SWITCHES - switches_on
+    switches_off = Switches::SWITCHES - switches_on
     switches_off.each do |switch|
       assert settings.send(switch).denied?, "#{switch} switch is not denied"
     end
 
     switches_on.each do |switch|
-      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Settings::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
     end
   end
 
