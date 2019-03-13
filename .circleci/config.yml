@@ -367,7 +367,6 @@ jobs:
           command: |
             npm --version
             npm install
-            npm dedupe
       - *save-npm-cache
       - persist_to_workspace:
           root: .
