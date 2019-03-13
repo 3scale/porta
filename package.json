@@ -69,7 +69,7 @@
     "regenerator-runtime": "^0.13.1",
     "replace": "^1.0.1",
     "sass-loader": "^7.1.0",
-    "swagger-tools": "0.9.7",
+    "swagger-tools": "0.10.4",
     "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
