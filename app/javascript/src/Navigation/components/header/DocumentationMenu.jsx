@@ -7,11 +7,11 @@ import { DocsProps } from 'Navigation/components/header/types'
 type DocumentationMenuProps = {
   docsLink: DocsProps.docsLink,
   isSaas: DocsProps.isSaas,
-  docsLinksClass: DocsProps.isSaas,
-  customerPortalLink: DocsProps.isSaas,
-  apiDocsLink: DocsProps.isSaas,
-  liquidReferenceLink: DocsProps.isSaas,
-  whatIsNewLink: DocsProps.isSaas
+  docsLinksClass: DocsProps.docsLinksClass,
+  customerPortalLink: DocsProps.customerPortalLink,
+  apiDocsLink: DocsProps.apiDocsLink,
+  liquidReferenceLink: DocsProps.liquidReferenceLink,
+  whatIsNewLink: DocsProps.whatIsNewLink
 }
 
 const renderMenuItems = (docsLinksClass, items) => items.map(
