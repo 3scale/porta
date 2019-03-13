@@ -1,10 +1,10 @@
 en:
   docs:
-    base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale/%{major_and_minor_version}/html'
-    hero_api_portal: '%{docs_base_url}/developer_portal/'
+    base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/%{major_and_minor_version}/html'
+    hero_api_portal: '%{docs_base_url}/creating_developer_portal/'
     developer_portal:
-      email_configuration: '%{docs_base_url}/developer-portal/email-configuration'
-      liquid_reference: '%{docs_base_url}/developer-portal/liquid-reference'
+      email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
+      liquid_reference: '%{docs_base_url}/liquid-reference'
     terminology: '%{docs_base_url}/terminology'
   api_integrations_controller:
     promote_to_production_success: 'Staging configuration promoted to production'
@@ -526,8 +526,8 @@ en:
         documentation_apicast_url: '%{docs_base_url}/deployment-options/apicast-overview'
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
-        documentation_response_codes_tracking_url: '%{docs_base_url}/analytics/response-codes-tracking'
-        documentation_create_active_doc_spec: "%{docs_base_url}/api-documentation/create-activedocs-spec"
+        documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/response-codes-tracking'
+        documentation_create_active_doc_spec: "%{docs_base_url}/using-developer-portal/create-activedocs-spec"
 
         proxy_rule_help_html: |
           <h4>Mapping Rules Syntax</h4>
