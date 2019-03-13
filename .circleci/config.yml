@@ -34,13 +34,15 @@ save-flow-typed-cache: &save-flow-typed-cache
     paths:
       - ./flow-typed
 
+npm-cache-key: &npm-cache-key node-v1-{{ checksum "package-lock.json" }}
+
 restore-npm-cache: &restore-npm-cache
   restore_cache:
-    key: node-v1-{{ checksum "package-lock.json" }}
+    key: *npm-cache-key
 
 save-npm-cache: &save-npm-cache
   save_cache:
-    key: node-v1-{{ checksum "package-lock.json" }}
+    key: *npm-cache-key
     paths:
       - ./node_modules
       - ./flow-typed
