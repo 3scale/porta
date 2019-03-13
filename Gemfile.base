@@ -10,7 +10,7 @@ gem 'aws-sdk', '~> 2'
 gem 'aws-sdk-rails', '~> 1.0'
 
 gem 'dotenv-rails', '~> 2.0'
-gem 'rails', '4.2.9'
+gem 'rails', '4.2.11'
 #gem 'rails', '5.0.6'
 #gem 'activesupport', '4.2.9' # somehow paperclip needs to explicitly lock the version to not use 5.0
 
