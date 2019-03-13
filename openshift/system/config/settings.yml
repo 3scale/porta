@@ -12,6 +12,8 @@ base: &default
   events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
   onpremises_api_docs_version: true
   onpremises: true
+  recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
+  recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
 
   # System Emails
   noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', "no-reply@#{superdomain}") %>
