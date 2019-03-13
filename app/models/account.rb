@@ -6,7 +6,7 @@ class Account < ApplicationRecord
   # Hack to remove payment_gateway_type, payment_gateway_options and deleted_at from @attributes
   # It is enough for rails not persisting them in actual columns.
   def self.columns
-    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at\Z/ =~ column.name }
+    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at|first_admin_id\Z/ =~ column.name }
   end
 
   # need to reset column information to clear column_names and such
