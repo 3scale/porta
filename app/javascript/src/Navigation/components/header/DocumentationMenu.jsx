@@ -4,21 +4,11 @@ import * as React from 'react'
 import { DocumentationMenuItem } from 'Navigation/components/header'
 import { DocsProps } from 'Navigation/components/header/types'
 
-type DocumentationMenuProps = {
-  docsLink: DocsProps.docsLink,
-  isSaas: DocsProps.isSaas,
-  docsLinksClass: DocsProps.docsLinksClass,
-  customerPortalLink: DocsProps.customerPortalLink,
-  apiDocsLink: DocsProps.apiDocsLink,
-  liquidReferenceLink: DocsProps.liquidReferenceLink,
-  whatIsNewLink: DocsProps.whatIsNewLink
-}
-
 const renderMenuItems = (docsLinksClass, items) => items.map(
   item => <DocumentationMenuItem key={item.text.replace(' ', '')} docsLinksClass={docsLinksClass} item={item}/>
 )
 
-const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}: DocumentationMenuProps): React.Node => {
+const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}: DocsProps): React.Node => {
   const items = [
     {text: 'Customer Portal', href: customerPortalLink, iconClass: 'fa-external-link', target: '_blank'},
     {text: '3scale API Docs', href: apiDocsLink, iconClass: 'fa-puzzle-piece', target: '_self'},
