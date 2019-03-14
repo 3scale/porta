@@ -5,7 +5,7 @@ export type LogoProps = {
   className: string
 }
 
-export type ToolbarProps = {
+export type AccountSettingsProps = {
   accountSettingsLink: string,
   accountSettingsClass: string
 }

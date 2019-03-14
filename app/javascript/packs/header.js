@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const headerContainer = document.getElementById('user_widget')
   const props = {
-    toolbarProps: {
+    accountSettingsProps: {
       accountSettingsLink: headerContainer.dataset.accountSettingsLink,
       accountSettingsClass: headerContainer.dataset.accountSettingsClass
     },

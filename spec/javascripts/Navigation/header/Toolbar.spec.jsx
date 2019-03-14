@@ -7,7 +7,7 @@ import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/rea
 Enzyme.configure({ adapter: new Adapter() })
 
 const props = {
-  toolbarProps: {
+  accountSettingsProps: {
     accountSettingsLink: '#',
     accountSettingsClass: 'account-class'
   },

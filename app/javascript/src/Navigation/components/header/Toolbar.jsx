@@ -3,12 +3,12 @@
 import * as React from 'react'
 import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
 import { AccountSettingsMenu, DocumentationMenu } from 'Navigation/components/header/'
-import { ToolbarProps, DocsProps } from 'Navigation/components/header/types'
+import { AccountSettingsProps, DocsProps } from 'Navigation/components/header/types'
 
-const Toolbar = ({ toolbarProps, docsProps }: { toolbarProps: ToolbarProps, docsProps: DocsProps }): React.Node => <PFToolbar>
+const Toolbar = ({ accountSettingsProps, docsProps }: { accountSettingsProps: AccountSettingsProps, docsProps: DocsProps }): React.Node => <PFToolbar>
   <ToolbarGroup>
     <ToolbarItem>
-      <AccountSettingsMenu {...toolbarProps}/>
+      <AccountSettingsMenu {...accountSettingsProps}/>
     </ToolbarItem>
     <ToolbarItem>
       <DocumentationMenu {...docsProps}/>

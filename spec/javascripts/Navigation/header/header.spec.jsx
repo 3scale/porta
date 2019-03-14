@@ -7,7 +7,7 @@ import { PageHeader } from '@patternfly/react-core'
 Enzyme.configure({ adapter: new Adapter() })
 
 const Props = {
-  toolbarProps: {
+  accountSettingsProps: {
     accountSettingsLink: 'accountSettingsLink',
     accountSettingsClass: 'accountSettingsClass'
   },
