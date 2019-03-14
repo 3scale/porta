@@ -1,7 +1,7 @@
 en:
   docs:
     base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/%{major_and_minor_version}/html'
-    hero_api_portal: '%{docs_base_url}/creating_developer_portal/'
+    hero_api_portal: '%{docs_base_url}-single/product/index#hero-api-portal'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid-reference'
