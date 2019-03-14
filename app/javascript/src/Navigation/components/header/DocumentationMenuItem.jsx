@@ -9,7 +9,7 @@ type ItemType = {
   text: string
 }
 
-const DocumentationMenuItem = ({docsLinksClass, item}: {docsLinksClass: string, item: ItemType}): React.Node => (
+const DocumentationMenuItem = ({docsLinksClass, item}: {docsLinksClass: string, item: ItemType}) => (
   <li className="PopNavigation-listItem">
     <a className={docsLinksClass} target={item.target} href={item.href}>
       <i className={`fa ${item.iconClass} fa-fw`}></i> {item.text}

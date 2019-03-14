@@ -7,7 +7,7 @@ import { LogoProps, AccountSettingsProps, DocsProps, AvatarProps } from 'Navigat
 
 const Header = ({logoProps, accountSettingsProps, docsProps, avatarProps}: {
   logoProps: LogoProps, accountSettingsProps: AccountSettingsProps, docsProps: DocsProps, avatarProps: AvatarProps
-}): React.Node => (
+}) => (
   <PageHeader
     logo = {<Brand/>}
     logoProps = {logoProps}

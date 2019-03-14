@@ -5,7 +5,7 @@ import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/rea
 import { AccountSettingsMenu, DocumentationMenu } from 'Navigation/components/header/'
 import { AccountSettingsProps, DocsProps } from 'Navigation/components/header/types'
 
-const Toolbar = ({ accountSettingsProps, docsProps }: { accountSettingsProps: AccountSettingsProps, docsProps: DocsProps }): React.Node => <PFToolbar>
+const Toolbar = ({ accountSettingsProps, docsProps }: { accountSettingsProps: AccountSettingsProps, docsProps: DocsProps }) => <PFToolbar>
   <ToolbarGroup>
     <ToolbarItem>
       <AccountSettingsMenu {...accountSettingsProps}/>

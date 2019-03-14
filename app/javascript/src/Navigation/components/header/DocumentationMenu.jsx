@@ -8,7 +8,7 @@ const renderMenuItems = (docsLinksClass, items) => items.map(
   item => <DocumentationMenuItem key={item.text.replace(' ', '')} docsLinksClass={docsLinksClass} item={item}/>
 )
 
-const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}: DocsProps): React.Node => {
+const DocumentationMenu = ({docsLink, isSaas, docsLinksClass, customerPortalLink, apiDocsLink, liquidReferenceLink, whatIsNewLink}: DocsProps) => {
   const items = [
     {text: 'Customer Portal', href: customerPortalLink, iconClass: 'fa-external-link', target: '_blank'},
     {text: '3scale API Docs', href: apiDocsLink, iconClass: 'fa-puzzle-piece', target: '_self'},
