@@ -49,6 +49,7 @@ RUN chgrp root /opt/system/
 
 ADD . ./
 ADD config/docker/* ./config/
+ADD package*.json ./
 
 RUN export ${BUNDLER_ENV} >/dev/null \
     && source /opt/system/etc/scl_enable \
@@ -57,6 +58,7 @@ RUN export ${BUNDLER_ENV} >/dev/null \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \ 
     && cd /opt/system \
+    && npm install --no-progress \
     && bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
