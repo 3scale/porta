@@ -16,27 +16,34 @@ const props = {
 }
 
 describe('<SessionMenu/>', () => {
-  it('renders <SessionMenu/> component when impersonated', () => {
+  it('should render with right props', () => {
     const wrapper = shallow(<SessionMenu {...props} />)
-    expect(wrapper.find('.PopNavigation--session')).toHaveLength(1)
-    expect(wrapper.find('a.PopNavigation-trigger')).toHaveLength(1)
+    expect(wrapper.exists('.PopNavigation--session')).toEqual(true)
+    expect(wrapper.exists('a.PopNavigation-trigger')).toEqual(true)
     expect(wrapper.find('a.PopNavigation-trigger').hasClass(props.avatarLinkClass)).toEqual(true)
-    expect(wrapper.find(Avatar)).toHaveLength(1)
-    expect(wrapper.find('.fa-bolt')).toHaveLength(2)
-    expect(wrapper.find('.PopNavigation-list')).toHaveLength(1)
-    expect(wrapper.find('.PopNavigation-info').text()).toContain('Impersonating a virtual admin user from')
-    expect(wrapper.find('.PopNavigation-info').text()).not.toContain('Signed in to')
     expect(wrapper.find('.PopNavigation-info').text()).toContain(props.accountName)
     expect(wrapper.find('.PopNavigation-info').text()).toContain(props.displayName)
     expect(wrapper.find('#sign-out-button').props().href).toEqual(props.logoutPath)
-    expect(wrapper.find('.fa-fw')).toHaveLength(1)
+    expect(wrapper.find('#sign-out-button').props().title).toContain(props.username)
+    expect(wrapper.exists('.fa-fw')).toEqual(true)
   })
 
-  it('renders <SessionMenu/> component when not impersonated', () => {
+  it('should display proper message and two `fa-bolt` icons when impersonated', () => {
+    const wrapper = shallow(<SessionMenu {...props} />)
+    expect(wrapper.find('.fa-bolt')).toHaveLength(2)
+    expect(wrapper.find('.PopNavigation-info').text()).toContain('Impersonating a virtual admin user from')
+    expect(wrapper.find('.PopNavigation-info').text()).not.toContain('Signed in to')
+  })
+
+  it('should display proper message and not any `fa-bolt` icon when not impersonated', () => {
     const unImpersonatedProps = Object.assign({}, props, { impersonated: null })
     const wrapper = shallow(<SessionMenu {...unImpersonatedProps} />)
     expect(wrapper.find('.fa-bolt')).toHaveLength(0)
     expect(wrapper.find('.PopNavigation-info').text()).not.toContain('Impersonating a virtual admin user from')
     expect(wrapper.find('.PopNavigation-info').text()).toContain('Signed in to')
+  })
+  it('should render one <Avatar/> component', () => {
+    const wrapper = shallow(<SessionMenu {...props} />)
+    expect(wrapper.exists(Avatar)).toEqual(true)
   })
 })

@@ -1,7 +1,7 @@
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { Toolbar } from 'Navigation/components/header/Toolbar'
+import { AccountSettingsMenu, DocumentationMenu, Toolbar } from 'Navigation/components/header/'
 import { Toolbar as PFToolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core'
 
 Enzyme.configure({ adapter: new Adapter() })
@@ -23,10 +23,13 @@ const props = {
 }
 
 describe('<Toolbar/>', () => {
-  it('renders <Toolbar/> component when impersonated', () => {
+  it('should render with proper children', () => {
     const wrapper = shallow(<Toolbar {...props} />)
-    expect(wrapper.find(PFToolbar)).toHaveLength(1)
-    expect(wrapper.find(ToolbarGroup)).toHaveLength(1)
+    expect(wrapper.exists(PFToolbar)).toEqual(true)
+    expect(wrapper.exists(ToolbarGroup)).toEqual(true)
+    expect(wrapper.exists(ToolbarItem)).toEqual(true)
     expect(wrapper.find(ToolbarItem)).toHaveLength(2)
+    expect(wrapper.exists(AccountSettingsMenu)).toEqual(true)
+    expect(wrapper.exists(DocumentationMenu)).toEqual(true)
   })
 })

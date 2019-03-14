@@ -17,19 +17,17 @@ const Props = {
 }
 
 describe('<DocumentationMenu/>', () => {
-  it('renders <DocumentationMenu/> component when Saas', () => {
+  it('should render four <DocumentationMenuItem/> when Saas', () => {
     const wrapper = shallow(<DocumentationMenu {...Props} />)
-    expect(wrapper.find('.PopNavigation--docs')).toHaveLength(1)
-    expect(wrapper.find('a.PopNavigation-trigger')).toHaveLength(1)
-    expect(wrapper.find('ul.PopNavigation-list')).toHaveLength(1)
+    expect(wrapper.exists('.PopNavigation--docs')).toEqual(true)
+    expect(wrapper.find('a.PopNavigation-trigger').hasClass(Props.docsLink)).toEqual(true)
+    expect(wrapper.exists('ul.PopNavigation-list')).toEqual(true)
     expect(wrapper.find(DocumentationMenuItem)).toHaveLength(4)
   })
 
-  it('renders <DocumentationMenu/> component when no Saas', () => {
+  it('should render three <DocumentationMenuItem/> when not Saas', () => {
     let props = Object.assign({}, Props, {isSaas: null})
     const wrapper = shallow(<DocumentationMenu {...props} />)
-    expect(wrapper.find('.PopNavigation--docs')).toHaveLength(1)
-    expect(wrapper.find('ul.PopNavigation-list')).toHaveLength(1)
     expect(wrapper.find(DocumentationMenuItem)).toHaveLength(3)
   })
 })

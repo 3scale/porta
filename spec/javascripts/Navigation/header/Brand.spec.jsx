@@ -11,10 +11,10 @@ const props = {
 }
 
 describe('<Brand/>', () => {
-  it('renders <Brand/> component', () => {
+  it('should render', () => {
     const wrapper = shallow(<Brand {...props} />)
-    expect(wrapper.find('.u-header-brand')).toHaveLength(1)
-    expect(wrapper.find('.Header-logo')).toHaveLength(1)
-    expect(wrapper.find('#api_selector')).toHaveLength(1)
+    expect(wrapper.exists('.u-header-brand')).toEqual(true)
+    expect(wrapper.exists('.Header-logo')).toEqual(true)
+    expect(wrapper.exists('#api_selector')).toEqual(true)
   })
 })

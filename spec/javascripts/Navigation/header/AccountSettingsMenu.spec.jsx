@@ -11,10 +11,9 @@ const props = {
 }
 
 describe('<AccountSettingsMenu/>', () => {
-  it('renders <AccountSettingsMenu/> component', () => {
+  it('should render with right props', () => {
     const wrapper = shallow(<AccountSettingsMenu {...props} />)
-    expect(wrapper.find('.PopNavigation--account')).toHaveLength(1)
-    expect(wrapper.find('a')).toHaveLength(1)
+    expect(wrapper.exists('.PopNavigation--account')).toEqual(true)
     expect(wrapper.find('.PopNavigation-trigger').hasClass(props.accountSettingsClass)).toEqual(true)
     expect(wrapper.find('a').props().href).toEqual(props.accountSettingsLink)
   })

@@ -16,10 +16,10 @@ const props = {
 }
 
 describe('<DocumentationMenuItem/>', () => {
-  it('renders <DocumentationMenuItem/> component', () => {
+  it('should render  with right props', () => {
     const wrapper = shallow(<DocumentationMenuItem {...props} />)
-    expect(wrapper.find('.PopNavigation-listItem')).toHaveLength(1)
-    expect(wrapper.find('a')).toHaveLength(1)
+    expect(wrapper.exists('.PopNavigation-listItem')).toEqual(true)
+    expect(wrapper.exists('a')).toEqual(true)
     expect(wrapper.find('a').hasClass(props.docsLinksClass)).toEqual(true)
     expect(wrapper.find('a').props().target).toEqual(props.item.target)
     expect(wrapper.find('a').props().href).toEqual(props.item.href)
