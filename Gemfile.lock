@@ -438,7 +438,7 @@ GEM
     mini_mime (1.0.0)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
-    minitest-reporters (1.1.11)
+    minitest-reporters (1.3.6)
       ansi
       builder
       minitest (>= 5.0)
@@ -645,7 +645,7 @@ GEM
     ruby-oci8 (2.2.5.1)
     ruby-openid (2.6.0)
     ruby-prof (0.15.8)
-    ruby-progressbar (1.9.0)
+    ruby-progressbar (1.10.0)
     ruby_event_store (0.9.0)
     rubyzip (1.2.2)
     rufus-scheduler (3.0.9)
