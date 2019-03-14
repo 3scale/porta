@@ -4,7 +4,14 @@ import * as React from 'react'
 import { DocumentationMenuItem } from 'Navigation/components/header'
 import { DocsProps } from 'Navigation/components/header/types'
 
-const renderMenuItems = (docsLinksClass, items) => items.map(
+type ItemType = {
+  text: string,
+  href: string,
+  iconClass: string,
+  target: string
+}
+
+const renderMenuItems = (docsLinksClass: string, items: Array<ItemType>) => items.map(
   item => <DocumentationMenuItem key={item.text.replace(' ', '')} docsLinksClass={docsLinksClass} item={item}/>
 )
 
