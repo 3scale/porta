@@ -42,7 +42,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
 
 RUN export ${BUNDLER_ENV} >/dev/null\
     && source /opt/system/etc/scl_enable \
-    && gem install bundler --version 1.16.6 \
+    && gem install bundler --version 1.17.3 \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
