@@ -112,7 +112,7 @@ gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'RedCloth', '~>4.3', require: false
 gem 'redcarpet', '~>3.4.0', require: false
 gem 'baby_squeel', '~> 1.2.0'
-gem 'recaptcha', '4.1.0', require: 'recaptcha/rails'
+gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'hiredis', '~>0.6.0'
 gem 'redis', '~> 3.3.5', require: ['redis', 'redis/connection/hiredis']
 gem 'redis-namespace', '~> 1.5.2'
