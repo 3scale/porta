@@ -4,9 +4,10 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   activate_menu :account, :integrate, :policies
   EXAMPLE_SCHEMA = {
       '$schema': 'http://apicast.io/policy-v1/schema#manifest#',
-      name: '[Name of the policy]',
-      summary: '[A brief description of what it does.]',
-      version: '[0.0.1]',
+      name: 'Name of the policy',
+      summary: 'A one-line (less than 75 characters) summary of what this policy does.',
+      descriptoin: 'A complete description of what this policy does.',
+      version: '0.0.1',
       configuration: {
         type: 'object',
         properties: {
