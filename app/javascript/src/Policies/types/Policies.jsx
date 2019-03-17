@@ -38,9 +38,9 @@ export type ShallowPolicy = {
   humanName: string,
   summary?: string
 }
-
+export type Schema = Object
 export type Policy = {
   id: number,
-  schema: Object,
+  schema: Schema,
   directory: string
 }
