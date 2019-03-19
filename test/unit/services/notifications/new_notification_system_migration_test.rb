@@ -52,13 +52,17 @@ class Notifications::NewNotificationSystemMigrationTest < ActiveSupport::TestCas
     @user.notification_preferences.update_attributes!(preferences: {})
     MailDispatchRule.delete_all
     enabled_dispatch_rules = @account.mail_dispatch_rules.enabled
-    enabled_by_default = Migration::ENABLED_BY_DEFAULT.count
 
     assert_equal 0, enabled_dispatch_rules.count
 
+    user_notification_preferences = @user.notification_preferences
+    new_notification_preferences = @migration.notification_preferences.stringify_keys
+    new_enabled_notifications = user_notification_preferences.available_notifications & new_notification_preferences.select { |_, v| v }.keys
+
     Migration.run!(@account)
 
-    assert_equal SystemOperation.count + enabled_by_default, enabled_notifications.count
+    assert_equal new_notification_preferences, user_notification_preferences.reload.preferences
+    assert_same_elements new_enabled_notifications, enabled_notifications
 
     set_mail_dispatch_rule!('user_signup', enabled: true)
     assert_equal 5, enabled_dispatch_rules.count
