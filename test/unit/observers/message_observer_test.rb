@@ -45,12 +45,16 @@ class MessageObserverTest < ActiveSupport::TestCase
     Cinstances::CinstancePlanChangedEvent.expects(:create).once
     ContractMessenger.expects(:plan_change).never
 
+    ContractMessenger.expects(:plan_change_for_buyer).once.returns(mock(deliver: true))
+
     cinstance.change_plan! FactoryBot.create(:simple_application_plan, service: @service)
 
     Logic::RollingUpdates.stubs(skipped?: true)
 
     Cinstances::CinstancePlanChangedEvent.expects(:create).never
     ContractMessenger.expects(:plan_change).once.returns(mock(deliver: true))
+
+    ContractMessenger.expects(:plan_change_for_buyer).once.returns(mock(deliver: true))
 
     cinstance.change_plan! FactoryBot.create(:simple_application_plan, service: @service)
   end

@@ -68,8 +68,6 @@ module Logic
         permission = issuer.plan_change_permission(self.plan.class)
 
         self.change_plan!(new_plan)
-
-        CinstanceMessenger.plan_change_for_buyer(self).deliver if new_plan.is_a?(ApplicationPlan)
       end
 
       # Depending on the permissions of the plan issuer, this method
