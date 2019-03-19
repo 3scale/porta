@@ -154,8 +154,8 @@ class CinstanceObserverTest < ActiveSupport::TestCase
       @cinstance.save!
     end
 
-    context 'a message' do
-      setup { @message = Message.last }
+    context 'a message to provider' do
+      setup { @message = @buyer.messages.last }
 
       should 'be sent' do
         assert_not_nil @message
@@ -175,6 +175,23 @@ class CinstanceObserverTest < ActiveSupport::TestCase
       end
 
       should 'contain old plan name'
+
+      should 'contain new plan name' do
+        assert_match(@new_plan.name, @message.body)
+      end
+    end
+
+    context 'a message to buyer' do
+      setup { @message = @provider.messages.last }
+
+      should 'be sent' do
+        assert_not_nil @message
+        assert @message.sent?
+      end
+
+      should 'have the buyer as a recipient' do
+        assert_equal [@buyer], @message.to
+      end
 
       should 'contain new plan name' do
         assert_match(@new_plan.name, @message.body)

@@ -56,11 +56,8 @@ class MessageObserver < ActiveRecord::Observer
   end
 
   def plan_changed(contract)
-    if contract.provider_account.provider_can_use?(:new_notification_system)
-      plan_changed_publish_event!(contract)
-    elsif should_notify?(contract)
-      contract.messenger.plan_change(contract).deliver
-    end
+    notify_plan_change_provider(contract)
+    notify_plan_change_developer(contract)
   end
 
   def expired_trial_period(contract)
@@ -107,5 +104,18 @@ class MessageObserver < ActiveRecord::Observer
 
   def should_notify?(contract)
     NotificationCenter.new(contract).enabled?
+  end
+
+  def notify_plan_change_provider(contract)
+    if contract.provider_account.provider_can_use?(:new_notification_system)
+      plan_changed_publish_event!(contract)
+    elsif should_notify?(contract)
+      contract.messenger.plan_change(contract).deliver
+    end
+  end
+
+  def notify_plan_change_developer(contract)
+    return unless contract.is_a? Cinstance
+    contract.messenger.plan_change_for_buyer(contract).deliver
   end
 end
