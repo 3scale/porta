@@ -23,6 +23,10 @@ table button.action {
   display: inline-block;
 }
 
+table a.ui-sortable-handler {
+  cursor: move;
+}
+
 @mixin iconic($content) {
   font-family: FontAwesome;
   font-weight: $font-weight-normal;
