@@ -1,5 +1,5 @@
 class MailPreview < MailView
-  FakeContract = Struct.new(:old_plan, :plan, :provider_account, :service, :account, :name)
+  FakeContract = Struct.new(:id, :old_plan, :plan, :provider_account, :service, :account, :name)
 
   def application_created
     event = Applications::ApplicationCreatedEvent.create(Cinstance.last, User.last)
@@ -21,7 +21,7 @@ class MailPreview < MailView
 
   def service_contract_plan_changed
     plans    = ServicePlan.last(2)
-    contract = FakeContract.new(plans.first, plans.second, Account.providers.last, Service.last, Account.last, '1')
+    contract = build_fake_contract(*plans)
     event    = ServiceContracts::ServiceContractPlanChangedEvent.create(
       contract, User.last
     )
@@ -110,11 +110,7 @@ class MailPreview < MailView
   end
 
   def cinstance_plan_changed
-    plans     = ServicePlan.last(2)
-    cinstance = FakeContract.new(plans.first, plans.second, Account.providers.last, Service.last, Account.last, '1')
-    event = Cinstances::CinstancePlanChangedEvent.create(cinstance, User.last)
-
-    NotificationMailer.cinstance_plan_changed(event, receiver)
+    NotificationMailer.cinstance_plan_changed(cinstance_plan_changed_event, receiver)
   end
 
   def message_received
@@ -157,5 +153,16 @@ class MailPreview < MailView
 
   def receiver
     @_receiver ||= User.last
+  end
+
+  def build_fake_contract(old_plan, new_plan)
+    FakeContract.new(1, old_plan, new_plan, Account.providers.last, Service.last, Account.last, '1')
+  end
+
+  def cinstance_plan_changed_event
+    plans = ApplicationPlan.last(2)
+    cinstance = build_fake_contract(*plans)
+
+    Cinstances::CinstancePlanChangedEvent.create(cinstance, User.last)
   end
 end
