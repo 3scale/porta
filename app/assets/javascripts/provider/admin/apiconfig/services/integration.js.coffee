@@ -86,6 +86,8 @@ $(document).on 'initialize', '#proxy', ->
     rule = rule.replace(/\{new_id_\w*\}/g, timestamp)
     rule = $("<tr>").append(rule)
     rule.find("input:not(.destroyer),select").removeAttr "disabled"
+    rule.find("a.ui-sortable-handler").click (event) ->
+      event.preventDefault()
     newIndex = $mappingRuleList.children().length
     rule.find("input.position").val(newIndex)
     $mappingRuleList.append rule
