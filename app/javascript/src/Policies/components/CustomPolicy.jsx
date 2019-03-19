@@ -32,7 +32,7 @@ const POLICY_TEMPLATE: Policy = {
   id: 0
 }
 
-function CSRFToken ({win = window}: {win?: any}): React.Node {
+function CSRFToken ({win = window}: {win?: any}) {
   const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
   const props = {
     name: getMetaContent('csrf-param'),
@@ -44,7 +44,7 @@ function CSRFToken ({win = window}: {win?: any}): React.Node {
   )
 }
 
-function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}): React.Node {
+function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}) {
   const isNewPolicy = !(policy.id && policy.id !== 0)
   const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.id}`
   return (
@@ -62,31 +62,42 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
   )
 }
 
-function Form ({initialPolicy}: {initialPolicy: Policy}): React.Node {
+function CustomPolicyEditor ({initialPolicy}: {initialPolicy: Policy}) {
   const [policy, setPolicy] = useState(initialPolicy)
-  const onSchemaEdited = (schema: Object) => setPolicy(prevPolicy => ({ ...prevPolicy, ...{ schema } }))
+  const onSchemaEdited = (schema: Schema) => setPolicy(prevPolicy => ({ ...prevPolicy, ...{ schema } }))
   const handleChange = (ev: InputEvent) => {
     ev.persist()
     return setPolicy(prevPolicy => ({ ...prevPolicy, ...{ [ev.target.name]: ev.target.value } }))
   }
 
+  const schema = policy.schema
+
   return (
-    <div>
-      <div className="CustomPolicy-editor">
-        <SchemaEditor className="CustomPolicy-code" schema={policy.schema} onChange={onSchemaEdited} />
-        <div>
-          <h3>Form Preview</h3>
-          <SchemaForm className="CustomPolicy-form" schema={policy.schema.configuration}>
+    <div className="CustomPolicyEditor-container">
+      <div className="CustomPolicyEditor">
+        <SchemaEditor className="SchemaEditor" schema={schema} onChange={onSchemaEdited} />
+        <section className="PolicyConfiguration">
+          <header className="PolicyConfiguration-header">
+            <h2 className="PolicyConfiguration-title">Form Preview</h2>
+          </header>
+          <h2 className="PolicyConfiguration-name">{schema.name}</h2>
+          <p className="PolicyConfiguration-version-and-summary">
+            <span className="PolicyConfiguration-version">{schema.version}</span>
+            {' - '}
+            <span className="PolicyConfiguration-summary">{schema.summary}</span>
+          </p>
+          <p className="PolicyConfiguration-description">{schema.description}</p>
+          <SchemaForm className="SchemaForm" schema={policy.schema.configuration}>
             <button type="submit" className="is-hidden">Submit</button>
           </SchemaForm>
-        </div>
+        </section>
       </div>
       <CustomPolicyForm policy={policy} onChange={handleChange} />
     </div>
   )
 }
 
-function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node {
+function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}) {
   const CANCEL_POLICY_HREF = '/p/admin/registry/policies'
   return (
     <section className="CustomPolicy">
@@ -96,7 +107,7 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node
           <i className="fa fa-times-circle" /> Cancel
         </a>
       </header>
-      <Form initialPolicy={policy} />
+      <CustomPolicyEditor initialPolicy={policy} />
     </section>
   )
 }
@@ -105,5 +116,6 @@ export {
   CustomPolicy,
   CustomPolicyForm,
   CSRFToken,
+  CustomPolicyEditor,
   POLICY_TEMPLATE
 }

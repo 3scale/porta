@@ -5,6 +5,7 @@ import {JSDOM} from 'jsdom'
 
 import {
   CustomPolicy,
+  CustomPolicyEditor,
   CustomPolicyForm,
   CSRFToken,
   POLICY_TEMPLATE
@@ -19,7 +20,19 @@ describe('CustomPolicy', () => {
     expect(wrapper.find('header').hasClass('CustomPolicy-header')).toBe(true)
     expect(wrapper.find('h2').hasClass('CustomPolicy-title')).toBe(true)
     expect(wrapper.find('a').hasClass('CustomPolicy-cancel')).toBe(true)
-    expect(wrapper.find('Form').prop('initialPolicy')).toBe(POLICY_TEMPLATE)
+    expect(wrapper.find('CustomPolicyEditor').prop('initialPolicy')).toBe(POLICY_TEMPLATE)
+  })
+})
+
+describe('CustomPolicyEditor', () => {
+  it('should render itself correctly', () => {
+    const wrapper = shallow(<CustomPolicyEditor initialPolicy={POLICY_TEMPLATE} />)
+    expect(wrapper.find('SchemaEditor').exists()).toBe(true)
+    expect(wrapper.find('Form').exists()).toBe(true)
+    expect(wrapper.find('.PolicyConfiguration-name').text()).toBe('Name of the policy')
+    expect(wrapper.find('.PolicyConfiguration-version').text()).toBe('0.0.1')
+    expect(wrapper.find('.PolicyConfiguration-summary').text()).toBe('A one-line (less than 75 characters) summary of what this policy does.')
+    expect(wrapper.find('.PolicyConfiguration-description').text()).toBe('A complete description of what this policy does.')
   })
 })
 
