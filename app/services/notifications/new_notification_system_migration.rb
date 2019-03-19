@@ -1,12 +1,6 @@
 class Notifications::NewNotificationSystemMigration
   attr_reader :account
 
-  ENABLED_BY_DEFAULT = %i(cinstance_expired_trial invoices_to_review
-                          unsuccessfully_charged_invoice_provider
-                          unsuccessfully_charged_invoice_final_provider
-                          service_plan_change_requested
-                          application_plan_change_requested).freeze
-
   def self.run!(account)
     new(account).migrate!
   end
@@ -58,10 +52,10 @@ class Notifications::NewNotificationSystemMigration
                   when :new_contract
                     :service_contract_created
                   when :plan_change
-                    %i(service_contract_plan_changed cinstance_plan_changed
-                       cinstance_expired_trial).freeze
+                    %i[service_contract_plan_changed cinstance_plan_changed
+                       cinstance_expired_trial].freeze
                   when :limit_alerts
-                    %i(limit_alert_reached_provider limit_violation_reached_provider).freeze
+                    %i[limit_alert_reached_provider limit_violation_reached_provider].freeze
                   when :cinstance_cancellation
                     :cinstance_cancellation
                   when :contract_cancellation
