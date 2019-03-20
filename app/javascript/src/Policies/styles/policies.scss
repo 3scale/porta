@@ -1,5 +1,5 @@
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-.PolicyConfiguration, .CustomPolicy-form {
+.PolicyConfiguration, .SchemaForm {
   @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 }
 
@@ -334,14 +334,10 @@ $subtleColor: #ddd;
   color: $doColor;
 }
 
-.CustomPolicy-editor {
+.CustomPolicyEditor {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-
-  &-code, &-form {
-
-  }
 }
 
-.CustomPolicy-error { border: 5px solid red}
+.SchemaEditor-error { border: 5px solid red}

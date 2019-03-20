@@ -2,37 +2,22 @@
 
 import * as React from 'react'
 import { useState } from 'react'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
 import SchemaForm from 'react-jsonschema-form'
-import { fromJsonString, toJsonString } from 'Policies/util'
-import type { Policy } from 'Policies/types/Policies'
+import { SchemaEditor } from 'Policies/components/SchemaEditor'
+import type { Policy, Schema } from 'Policies/types/Policies'
 import type {InputEvent} from 'Policies/types'
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
 
 type OnChange = (InputEvent) => void
 
-const CM_OPTIONS = {
-  theme: 'default',
-  height: 'auto',
-  viewportMargin: Infinity,
-  mode: {
-    name: 'javascript',
-    json: true,
-    statementIndent: 2
-  },
-  lineNumbers: true,
-  lineWrapping: true,
-  indentWithTabs: false,
-  tabSize: 2
-}
-
 const POLICY_TEMPLATE: Policy = {
   schema: {
     '$schema': 'http://apicast.io/policy-v1/schema#manifest#',
-    'name': '[Name of the policy]',
-    'summary': '[A brief description of what it does.]',
-    'version': '[0.0.1]',
+    'name': 'Name of the policy',
+    'summary': 'A one-line (less than 75 characters) summary of what this policy does.',
+    'description': 'A complete description of what this policy does.',
+    'version': '0.0.1',
     'configuration': {
       'type': 'object',
       'properties': {
@@ -47,7 +32,7 @@ const POLICY_TEMPLATE: Policy = {
   id: 0
 }
 
-function CSRFToken ({win = window}: {win?: any}): React.Node {
+function CSRFToken ({win = window}: {win?: any}) {
   const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
   const props = {
     name: getMetaContent('csrf-param'),
@@ -59,47 +44,7 @@ function CSRFToken ({win = window}: {win?: any}): React.Node {
   )
 }
 
-function Editor ({onChange, code}: {onChange: (Object) => void, code: Object}): React.Node {
-  const [ state, setState ] = useState({valid: true, code: toJsonString(code)})
-
-  const checkConfiguration = (schema) => {
-    if (!schema.configuration) throw new Error('Policy configuration not found')
-  }
-
-  const onCodeChange = (editor, metadata, code) => {
-    try {
-      const schema = fromJsonString(code)
-      checkConfiguration(schema)
-      onChange(schema)
-      setState({ valid: true, code })
-    } catch (err) {
-      console.warn(err)
-      setState({ valid: false, code })
-    }
-  }
-
-  const [ icon, cls, hiddenClass, errorClass ] = state.valid
-    ? [ 'check', 'valid', 'is-hidden', '' ]
-    : [ 'times', 'invalid', '', 'CustomPolicy-error' ]
-
-  return (
-    <div className={`${errorClass} panel panel-default`}>
-      <div className="panel-heading">
-        <i className={`${cls} fa fa-${icon}`} />
-        {' JSON Schema'}
-      </div>
-      <CodeMirror
-        value={state.code}
-        onChange={onCodeChange}
-        autoCursor={false}
-        options={CM_OPTIONS}
-      />
-      <div className={hiddenClass}> There's an error in the JSON Schema</div>
-    </div>
-  )
-}
-
-function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}): React.Node {
+function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}) {
   const isNewPolicy = !(policy.id && policy.id !== 0)
   const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.id}`
   return (
@@ -117,31 +62,42 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
   )
 }
 
-function Form ({initialPolicy}: {initialPolicy: Policy}): React.Node {
+function CustomPolicyEditor ({initialPolicy}: {initialPolicy: Policy}) {
   const [policy, setPolicy] = useState(initialPolicy)
-  const onSchemaEdited = (schema: Object) => setPolicy(prevPolicy => ({ ...prevPolicy, ...{ schema } }))
+  const onSchemaEdited = (schema: Schema) => setPolicy(prevPolicy => ({ ...prevPolicy, ...{ schema } }))
   const handleChange = (ev: InputEvent) => {
     ev.persist()
     return setPolicy(prevPolicy => ({ ...prevPolicy, ...{ [ev.target.name]: ev.target.value } }))
   }
 
+  const schema = policy.schema
+
   return (
-    <div>
-      <div className="CustomPolicy-editor">
-        <Editor className="CustomPolicy-code" code={policy.schema} onChange={onSchemaEdited} />
-        <div>
-          <h3>Form Preview</h3>
-          <SchemaForm className="CustomPolicy-form" schema={policy.schema.configuration}>
+    <div className="CustomPolicyEditor-container">
+      <div className="CustomPolicyEditor">
+        <SchemaEditor className="SchemaEditor" schema={schema} onChange={onSchemaEdited} />
+        <section className="PolicyConfiguration">
+          <header className="PolicyConfiguration-header">
+            <h2 className="PolicyConfiguration-title">Form Preview</h2>
+          </header>
+          <h2 className="PolicyConfiguration-name">{schema.name}</h2>
+          <p className="PolicyConfiguration-version-and-summary">
+            <span className="PolicyConfiguration-version">{schema.version}</span>
+            {' - '}
+            <span className="PolicyConfiguration-summary">{schema.summary}</span>
+          </p>
+          <p className="PolicyConfiguration-description">{schema.description}</p>
+          <SchemaForm className="SchemaForm" schema={policy.schema.configuration}>
             <button type="submit" className="is-hidden">Submit</button>
           </SchemaForm>
-        </div>
+        </section>
       </div>
       <CustomPolicyForm policy={policy} onChange={handleChange} />
     </div>
   )
 }
 
-function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node {
+function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}) {
   const CANCEL_POLICY_HREF = '/p/admin/registry/policies'
   return (
     <section className="CustomPolicy">
@@ -151,7 +107,7 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node
           <i className="fa fa-times-circle" /> Cancel
         </a>
       </header>
-      <Form initialPolicy={policy} />
+      <CustomPolicyEditor initialPolicy={policy} />
     </section>
   )
 }
@@ -159,8 +115,7 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}): React.Node
 export {
   CustomPolicy,
   CustomPolicyForm,
-  Editor,
   CSRFToken,
-  CM_OPTIONS,
+  CustomPolicyEditor,
   POLICY_TEMPLATE
 }

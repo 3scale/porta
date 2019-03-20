@@ -2,14 +2,12 @@ import React from 'react'
 import Enzyme, { mount, shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import {JSDOM} from 'jsdom'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
 
 import {
   CustomPolicy,
+  CustomPolicyEditor,
   CustomPolicyForm,
-  Editor,
   CSRFToken,
-  CM_OPTIONS,
   POLICY_TEMPLATE
 } from 'Policies/components/CustomPolicy'
 
@@ -22,7 +20,19 @@ describe('CustomPolicy', () => {
     expect(wrapper.find('header').hasClass('CustomPolicy-header')).toBe(true)
     expect(wrapper.find('h2').hasClass('CustomPolicy-title')).toBe(true)
     expect(wrapper.find('a').hasClass('CustomPolicy-cancel')).toBe(true)
-    expect(wrapper.find('Form').prop('initialPolicy')).toBe(POLICY_TEMPLATE)
+    expect(wrapper.find('CustomPolicyEditor').prop('initialPolicy')).toBe(POLICY_TEMPLATE)
+  })
+})
+
+describe('CustomPolicyEditor', () => {
+  it('should render itself correctly', () => {
+    const wrapper = shallow(<CustomPolicyEditor initialPolicy={POLICY_TEMPLATE} />)
+    expect(wrapper.find('SchemaEditor').exists()).toBe(true)
+    expect(wrapper.find('Form').exists()).toBe(true)
+    expect(wrapper.find('.PolicyConfiguration-name').text()).toBe('Name of the policy')
+    expect(wrapper.find('.PolicyConfiguration-version').text()).toBe('0.0.1')
+    expect(wrapper.find('.PolicyConfiguration-summary').text()).toBe('A one-line (less than 75 characters) summary of what this policy does.')
+    expect(wrapper.find('.PolicyConfiguration-description').text()).toBe('A complete description of what this policy does.')
   })
 })
 
@@ -65,43 +75,6 @@ describe('CustomPolicyForm', () => {
     expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/')
     expect(wrapper.find('input[name="schema"]').prop('value')).toBe(JSON.stringify(POLICY_TEMPLATE.schema))
     expect(wrapper.find('input[name="_method"]').exists()).toBe(false)
-  })
-})
-
-describe('Editor', () => {
-  function setup () {
-    const onChange = jest.fn()
-    // Needed because of https://github.com/scniro/react-codemirror2/issues/23
-    global.document = new JSDOM('<!doctype html><html><body></body></html>')
-    global.document.body.createTextRange = function () {
-      return {
-        setEnd: jest.fn(),
-        setStart: jest.fn(),
-        getBoundingClientRect: jest.fn(),
-        getClientRects: () => jest.fn(() => {
-          return { length: 0, left: 0, right: 0 }
-        })
-      }
-    }
-
-    const props = {
-      onChange,
-      code: { type: 'epic' }
-    }
-
-    const wrapper = mount(<Editor {...props} />)
-
-    return {wrapper, props, onChange}
-  }
-
-  it('should render itself correctly', () => {
-    const {wrapper} = setup()
-    expect(wrapper.find(Editor).exists()).toBe(true)
-    const codeMirror = wrapper.find(CodeMirror)
-    expect(codeMirror.exists()).toBe(true)
-    expect(codeMirror.prop('value')).toBe('{\n  "type": "epic"\n}')
-    expect(codeMirror.prop('autoCursor')).toBe(false)
-    expect(codeMirror.prop('options')).toBe(CM_OPTIONS)
   })
 })
 
