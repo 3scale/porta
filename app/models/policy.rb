@@ -10,6 +10,10 @@ class Policy < ApplicationRecord
   validate :belongs_to_a_tenant
   validate :validate_schema_specification
   validate :validate_same_version
+  validate :validate_not_in_use, on: :update, if: :readonly_attributes_changed?
+  before_destroy :validate_not_in_use
+
+  READONLY_ATTRIBUTES = %i[name version schema].freeze
 
   serialize :schema, ActiveRecord::Coders::JSON
 
@@ -56,6 +60,18 @@ class Policy < ApplicationRecord
     schema&.dig('summary')
   end
 
+  def readonly_attributes_changed?
+    (changed_attributes.keys & READONLY_ATTRIBUTES.map(&:to_s)).any?
+  end
+
+  def in_use?
+    account.proxies.any? { |proxy| proxy.find_policy_config_by name: name_was, version: version_was }
+  end
+
+  def idle?
+    !in_use?
+  end
+
   private
 
   def belongs_to_a_tenant
@@ -76,6 +92,12 @@ class Policy < ApplicationRecord
     specification = ThreeScale::Policies::Specification.new(schema)
     return if specification.valid?
     specification.errors[:base].each { |error| errors.add(:schema, error) }
+  end
+
+  def validate_not_in_use
+    return true if idle?
+    errors.add(:base, :currently_in_use)
+    false
   end
 
   def set_identifier

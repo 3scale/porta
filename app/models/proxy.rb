@@ -116,6 +116,10 @@ class Proxy < ApplicationRecord
     super(attr_policies_config.is_a?(String) ? attr_policies_config : attr_policies_config.to_json)
   end
 
+  def find_policy_config_by(name:, version:)
+    policies_config.find { |config| config['name'] == name && config['version'] == version }
+  end
+
   def policy_chain
     return unless provider_can_use?(:policies)
     raw_config = policies_config
