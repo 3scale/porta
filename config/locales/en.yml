@@ -826,6 +826,8 @@ en:
               all_periods_used: "Metric cannot be disabled. Please contact support."
         policy:
           attributes:
+            base:
+              currently_in_use: 'This policy is currently being used in one of your APIs and cannot be modified.'
             account:
               not_tenant: 'must be a tenant'
             schema:
