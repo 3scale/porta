@@ -114,4 +114,67 @@ class PolicyTest < ActiveSupport::TestCase
     policy.save!
     assert_equal 'my-policy-1.2.0', policy.to_param
   end
+
+  test 'readonly attributes changed' do
+    policy = create_policy
+    refute policy.readonly_attributes_changed?
+
+    policy.name = 'new-name'
+    assert policy.readonly_attributes_changed?
+
+    policy.reload
+    policy.version = '1.1'
+    assert policy.readonly_attributes_changed?
+
+    policy.reload
+    policy.schema = '{}'
+    assert policy.readonly_attributes_changed?
+  end
+
+  test 'in use by any proxy' do
+    policy = create_policy
+    refute policy.in_use?
+    assert policy.idle?
+
+    FactoryBot.create(:service, account: policy.account)
+    Proxy.any_instance.expects(:find_policy_config_by).at_least_once.
+                       with({ name: policy.name, version: policy.version }).
+                       returns(policy.schema.slice('name', 'version', 'configuration'))
+
+    assert policy.reload.in_use?
+    refute policy.idle?
+  end
+
+  test 'forbids changes when in use' do
+    policy = create_policy
+    assert policy.valid?
+
+    policy.name = 'new-name'
+
+    policy.stubs(idle?: false)
+    refute policy.valid?
+    assert_match 'cannot be modified', policy.errors[:base].first
+
+    policy.stubs(idle?: true)
+    assert policy.valid?
+  end
+
+  test 'cannot be deleted when in use' do
+    policy = create_policy
+
+    policy.stubs(idle?: false)
+    refute policy.destroy
+    assert_match 'cannot be modified', policy.errors[:base].first
+
+    policy.stubs(idle?: true)
+    assert policy.destroy
+  end
+
+  private
+
+  def create_policy(attributes = {})
+    schema = JSON.parse(file_fixture('policies/apicast-policy.json').read)
+    policy_attributes = attributes.reverse_merge name: schema['name'], version: schema['version'], schema: schema.to_json
+    FactoryBot.create(:policy, policy_attributes)
+  end
 end

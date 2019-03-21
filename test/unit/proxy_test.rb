@@ -519,6 +519,21 @@ class ProxyTest < ActiveSupport::TestCase
     assert Proxy.find(@proxy.id).oidc_configuration.direct_access_grants_enabled
   end
 
+  test 'find policy config' do
+    refute @proxy.find_policy_config_by(name: 'my-policy', version: '1.0.0')
+    refute @proxy.find_policy_config_by(name: 'my-other-policy', version: '0.5.0')
+
+    policy_config1 = { name: 'my-policy', version: '1.0.0', configuration: {}, enabled: true }.stringify_keys
+    policy_config2 = { name: 'my-other-policy', version: '0.5.0', configuration: {}, enabled: false }.stringify_keys
+
+    @proxy.policies_config = [policy_config1, policy_config2].map { |attr| Proxy::PolicyConfig.new(attr) }
+    @proxy.save!
+    @proxy.reload
+
+    assert_equal policy_config1, @proxy.find_policy_config_by(name: 'my-policy', version: '1.0.0')
+    assert_equal policy_config2, @proxy.find_policy_config_by(name: 'my-other-policy', version: '0.5.0')
+  end
+
   def analytics
     ThreeScale::Analytics::UserTracking.any_instance
   end
