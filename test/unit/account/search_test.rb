@@ -114,6 +114,7 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search user_key without keyword with many records is always indexed and found' do
+    skip 'It randomly fails on CircleCI so it is skipped until we fix it in THREESCALE-2130'
     service = FactoryBot.create(:simple_service)
     buyer = FactoryBot.create(:simple_buyer)
     FactoryBot.create_list(:application_plan, 5, issuer: service).each_with_index do |plan, index|
