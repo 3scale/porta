@@ -114,7 +114,6 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search user_key without keyword with many records is always indexed and found' do
-    skip 'It randomly fails on CircleCI so it is skipped until we fix it in THREESCALE-2130'
     service = FactoryBot.create(:simple_service)
     buyer = FactoryBot.create(:simple_buyer)
     FactoryBot.create_list(:application_plan, 5, issuer: service).each_with_index do |plan, index|
@@ -122,10 +121,7 @@ class Account::SearchTest < ActiveSupport::TestCase
       contract.update_column(:user_key, (index.to_s * 256))
     end
 
-    ThinkingSphinx::Test.run do
-      ThinkingSphinx::Test.config
-      ThinkingSphinx::Test.index verbose: true
-
+    Indexer.run_after_index do
       buyer.bought_cinstances.pluck(:user_key).each do |user_key|
         assert_equal [buyer.id], Account.scope_search(query: user_key).pluck(:id)
       end
