@@ -155,6 +155,112 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     assert_empty response.body
   end
 
+  class PolicyInUseTest < ActionDispatch::IntegrationTest
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      policy_schema = JSON.parse(file_fixture('policies/apicast-policy.json').read)
+      @policy = FactoryBot.create(:policy, account: @provider,
+                                           name: policy_schema['name'],
+                                           version: policy_schema['version'],
+                                           schema: policy_schema)
+      host! @provider.admin_domain
+      @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry], permission: 'rw')
+      ::Account.any_instance.stubs(:provider_can_use?).returns(true)
+    end
+
+    attr_reader :provider, :policy, :access_token
+    delegate :schema, to: :policy, prefix: true
+    delegate :proxy, to: 'provider.default_service'
+
+    test 'can only update policy if not in use by any proxy' do
+      try_update_policy version: '1.1', schema: policy_schema.merge('version': '1.1').to_json
+      assert_response :success
+
+      policy.reload
+
+      add_policy_config_to(proxy)
+
+      try_update_policy version: '1.2', schema: policy_schema.merge('version': '1.2').to_json
+      assert_response :unprocessable_entity
+      assert_match 'cannot be modified', JSON.parse(response.body).dig('errors', 'base').first
+    end
+
+    test 'can only delete policy if not in use by any proxy' do
+      add_policy_config_to(proxy)
+
+      try_delete_policy
+      assert_response :forbidden
+      assert_match 'cannot be modified', JSON.parse(response.body).dig('errors', 'base').first
+
+      clear_policy_config_from(proxy)
+
+      try_delete_policy
+      assert_response :success
+    end
+
+    test 'one proxy using the policy is enough to forbid modifications' do
+      add_policy_config_to(proxy)
+
+      other_service = FactoryBot.create(:service, account: provider)
+      other_proxy = other_service.proxy
+      add_policy_config_to(other_proxy)
+
+      try_delete_policy
+      assert_response :forbidden
+      assert_match 'cannot be modified', JSON.parse(response.body).dig('errors', 'base').first
+
+      clear_policy_config_from(proxy)
+
+      try_delete_policy
+      assert_response :forbidden
+      assert_match 'cannot be modified', JSON.parse(response.body).dig('errors', 'base').first
+
+      clear_policy_config_from(other_proxy)
+
+      try_delete_policy
+      assert_response :success
+    end
+
+    test 'policies are not mixed up with other providers' do
+      add_policy_config_to(proxy)
+
+      other_provider = FactoryBot.create(:provider_account)
+      homonymous_policy = FactoryBot.create(:policy, account: other_provider, name: policy_schema['name'], version: policy_schema['version'], schema: policy_schema)
+      other_proxy = other_provider.default_service.proxy
+      add_policy_config_to(other_proxy, policy: homonymous_policy)
+
+      try_update_policy version: '1.1', schema: policy_schema.merge('version': '1.1').to_json
+      assert_response :unprocessable_entity
+      assert_match 'cannot be modified', JSON.parse(response.body).dig('errors', 'base').first
+
+      clear_policy_config_from(proxy)
+
+      try_update_policy version: '1.1', schema: policy_schema.merge('version': '1.1').to_json
+      assert_response :success
+    end
+
+    private
+
+    def try_update_policy(policy_params)
+      put admin_api_registry_policy_path(policy, policy: policy_params, access_token: access_token.value)
+    end
+
+    def try_delete_policy
+      delete admin_api_registry_policy_path(policy, access_token: access_token.value)
+    end
+
+    def add_policy_config_to(proxy, policy: self.policy)
+      policy_config = Proxy::PolicyConfig.new policy.schema.slice('name', 'version', 'configuration').merge(enabled: true)
+      proxy.policies_config = [policy_config]
+      proxy.save!
+    end
+
+    def clear_policy_config_from(proxy)
+      proxy.policies_config = []
+      proxy.save!
+    end
+  end
+
   def policy_params(token = @access_token.value)
     @policy_attributes ||= FactoryBot.build(:policy).attributes.symbolize_keys.slice(:name, :version, :schema)
     { policy: @policy_attributes, access_token: token }
