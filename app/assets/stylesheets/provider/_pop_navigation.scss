@@ -5,7 +5,7 @@
     float: left;
 
     .PopNavigation-list {
-      left: line-height-times(33 / 2);
+      left: line-height-times(21);
     }
   }
 
@@ -89,16 +89,15 @@
   }
 
   &-trigger {
-    color: $border-color;
+    color: $gallery;
     cursor: pointer;
     display: block;
-    padding: line-height-times(3 / 4);
     min-width: line-height-times(5 / 2, true);
+    padding: line-height-times(1.11) line-height-times(1);
 
     &:hover,
     &.is-toggled,
     &.is-current {
-      background-color: $header-link-background-hover-color;
       color: $link-color;
     }
   }

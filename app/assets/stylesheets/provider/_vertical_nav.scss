@@ -84,7 +84,7 @@
     left: 0;
     overflow-y: auto;
     position: fixed;
-    top: line-height-times(2.5);
+    top: line-height-times(3.15);
     width: line-height-times(9);
     z-index: 1030;
   }
@@ -105,7 +105,7 @@
     display: block;
     font-weight: 400;
     height: line-height-times(5 / 2, true);
-    padding: line-height-times(3 / 4) line-height-times(0.7);
+    padding: line-height-times(3 / 4) line-height-times(1);
     position: relative;
     white-space: nowrap;
   }
