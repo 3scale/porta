@@ -121,12 +121,7 @@ class Account::SearchTest < ActiveSupport::TestCase
       contract.update_column(:user_key, (index.to_s * 256))
     end
 
-    ThinkingSphinx::Test.run do
-      ThinkingSphinx::Test.config
-      ThinkingSphinx::Test.index verbose: true
-
-      wait_until_index_finished
-
+    Indexer.run_after_index do
       buyer.bought_cinstances.pluck(:user_key).each do |user_key|
         assert_equal [buyer.id], Account.scope_search(query: user_key).pluck(:id)
       end
@@ -153,21 +148,5 @@ class Account::SearchTest < ActiveSupport::TestCase
     buyers.first.update_attribute(:created_at, '2019-02-10'.to_time)
     result = provider.buyers.scope_search(created_within: ['2019-01-01', '2019-01-31'])
     assert_equal 2, result.size
-  end
-
-  private
-
-  def index_finished?
-    # From https://freelancing-gods.com/thinking-sphinx/v3/testing.html
-    Dir[Rails.root.join(ThinkingSphinx::Test.config.indices_location, '*.{new,tmp}*')].empty?
-  end
-
-  def wait_until_index_finished
-    count = 0
-    until index_finished? || count >= 100
-      puts 'sphinx index not finished yet...'
-      count += 1
-      sleep 0.25
-    end
   end
 end
