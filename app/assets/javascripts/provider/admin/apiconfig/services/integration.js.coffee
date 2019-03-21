@@ -4,6 +4,10 @@
 $(document).on 'initialize', '#proxy', ->
   toggledInputsInit()
 
+  # Disabling click in arrow icons (drag and drop mapping rules)
+  $('.ui-sortable-handler').click (event) ->
+    event.preventDefault()
+
   # tooltips
   $("input.error").tipsy
     trigger: "focus"
