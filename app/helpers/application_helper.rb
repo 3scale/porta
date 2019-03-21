@@ -338,18 +338,18 @@ module ApplicationHelper
     ThreeScale.tenant_mode.multitenant?
   end
 
-  def major_and_minor_version
+  def major_and_minor_version_path
     full_version = System::Deploy.info.release || '2.0.0'
     simple_version = /^(?:(\d+)\.)?(?:(\d+))/.match(full_version)
     if saas?
-      "#{simple_version[1]}-saas"
+      "red_hat_3scale/#{simple_version[1]}-saas"
     else
-      "#{simple_version[1]}.#{simple_version[2]}"
+      "red_hat_3scale_api_management/#{simple_version[1]}.#{simple_version[2]}"
     end
   end
 
   def docs_base_url
-    I18n.t('docs.base_url', major_and_minor_version: major_and_minor_version)
+    I18n.t('docs.base_url', major_and_minor_version_path: major_and_minor_version_path)
   end
 
   def call_to_action?
