@@ -23,7 +23,8 @@ table button.action {
   display: inline-block;
 }
 
-table a.ui-sortable-handler {
+.ui-sortable-handler { // scss-lint:disable SelectorFormat
+  color: $success-color;
   cursor: move;
 }
 
