@@ -114,7 +114,6 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search user_key without keyword with many records is always indexed and found' do
-    skip 'It randomly fails on CircleCI so it is skipped until we fix it in THREESCALE-2130'
     service = FactoryBot.create(:simple_service)
     buyer = FactoryBot.create(:simple_buyer)
     FactoryBot.create_list(:application_plan, 5, issuer: service).each_with_index do |plan, index|
@@ -125,6 +124,8 @@ class Account::SearchTest < ActiveSupport::TestCase
     ThinkingSphinx::Test.run do
       ThinkingSphinx::Test.config
       ThinkingSphinx::Test.index verbose: true
+
+      wait_until_index_finished
 
       buyer.bought_cinstances.pluck(:user_key).each do |user_key|
         assert_equal [buyer.id], Account.scope_search(query: user_key).pluck(:id)
@@ -152,5 +153,21 @@ class Account::SearchTest < ActiveSupport::TestCase
     buyers.first.update_attribute(:created_at, '2019-02-10'.to_time)
     result = provider.buyers.scope_search(created_within: ['2019-01-01', '2019-01-31'])
     assert_equal 2, result.size
+  end
+
+  private
+
+  def index_finished?
+    # From https://freelancing-gods.com/thinking-sphinx/v3/testing.html
+    Dir[Rails.root.join(ThinkingSphinx::Test.config.indices_location, '*.{new,tmp}*')].empty?
+  end
+
+  def wait_until_index_finished
+    count = 0
+    until index_finished? || count >= 100
+      puts 'sphinx index not finished yet...'
+      count += 1
+      sleep 0.25
+    end
   end
 end
