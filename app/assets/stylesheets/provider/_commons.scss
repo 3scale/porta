@@ -195,3 +195,8 @@ hr, {
 ::-moz-selection {
   background: $select-color;
 }
+
+.ui-sortable-handler { // scss-lint:disable SelectorFormat
+  color: $success-color;
+  cursor: move;
+}
