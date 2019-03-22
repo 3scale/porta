@@ -143,12 +143,6 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
     assert_equal timestamp, service.updated_at
   end
 
-  test 'first_admin should be testaccount' do
-    default_signup_provider
-    assert_equal 'testaccount', @provider.first_admin.username
-    assert_equal @provider.first_admin.id, @provider.first_admin_id
-  end
-
   test 'account should be classified' do
     ThreeScale::Analytics::UserClassifier.any_instance.stubs(has_3scale_email?: true)
     default_signup_provider do |_provider, user|

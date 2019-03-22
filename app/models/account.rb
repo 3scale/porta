@@ -3,10 +3,10 @@
 require_dependency 'backend_client'
 
 class Account < ApplicationRecord
-  # Hack to remove payment_gateway_type, payment_gateway_options and deleted_at from @attributes
+  # Hack to remove all the attributes with names matching the regex from @attributes
   # It is enough for rails not persisting them in actual columns.
   def self.columns
-    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at\Z/ =~ column.name }
+    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at|first_admin_id\Z/ =~ column.name }
   end
 
   # need to reset column information to clear column_names and such
@@ -59,8 +59,6 @@ class Account < ApplicationRecord
   include Gateway
   include States
   include Domains
-
-  alias_attribute :first_admin_id_on_account_signup, :first_admin_id
 
   #TODO: this needs testing?
   scope :providers, -> { where(provider: true) }
