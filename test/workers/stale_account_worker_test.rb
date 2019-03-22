@@ -6,7 +6,7 @@ class StaleAccountWorkerTest < ActiveSupport::TestCase
   setup do
     account_suspension = 30
     config = {'account_suspension' => account_suspension, 'account_inactivity' => 50, 'contract_unpaid_time' => 70}
-    AccountDeletionConfig.configure(config)
+    Features::AccountDeletionConfig.configure(config)
 
     @accounts = {to_delete: [], not_to_delete: []}
 
@@ -34,7 +34,7 @@ class StaleAccountWorkerTest < ActiveSupport::TestCase
   end
 
   test 'it does not perform for unless it has the valid configuration' do
-    AccountDeletionConfig.stubs(valid?: false)
+    Features::AccountDeletionConfig.stubs(valid?: false)
     StaleAccountWorker.new.perform
     (@accounts[:to_delete] + @accounts[:not_to_delete]).each { |account| refute account.reload.scheduled_for_deletion? }
   end

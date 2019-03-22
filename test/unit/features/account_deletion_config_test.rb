@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class AccountDeletionConfigTest < ActiveSupport::TestCase
+class Features::AccountDeletionConfigTest < ActiveSupport::TestCase
   def setup
     @valid_config = {'account_suspension' => 30, 'account_inactivity' => 50, 'contract_unpaid_time' => 70}
   end
@@ -27,6 +27,6 @@ class AccountDeletionConfigTest < ActiveSupport::TestCase
   private
 
   def account_deletion_config
-    AccountDeletionConfig.new(valid_config)
+    Features::AccountDeletionConfig.new(valid_config)
   end
 end
