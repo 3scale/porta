@@ -51,7 +51,6 @@ module Logic
         #
         self.class.transaction do
           provider.save!
-          provider.update!(first_admin_id: user.id)
 
           # trigger like this does not work in MySQL...
           provider.update_attribute :tenant_id, provider.id
