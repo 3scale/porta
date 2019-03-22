@@ -1,6 +1,6 @@
 .Header {
   background-color: $header-background-color;
-  height: line-height-times(3.15);
+  height: line-height-times(63 / 20);
   padding: 0;
   position: fixed;
   width: 100%;
@@ -9,7 +9,7 @@
 
   &--master {
     border-top: line-height-times(1) solid $header-border-color;
-    height: line-height-times(3.9);
+    height: line-height-times(39 / 10);
 
     &:before {
       content: 'Master';
@@ -29,7 +29,7 @@
 
     & + #wrapper .vertical-nav .nav-pf-vertical,
     & + #wrapper .vertical-nav .nav-pf-secondary-nav {
-      top: line-height-times(3.9);
+      top: line-height-times(39 / 10);
     }
   }
 
