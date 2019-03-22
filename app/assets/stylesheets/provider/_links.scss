@@ -23,11 +23,6 @@ table button.action {
   display: inline-block;
 }
 
-.ui-sortable-handler { // scss-lint:disable SelectorFormat
-  color: $success-color;
-  cursor: move;
-}
-
 @mixin iconic($content) {
   font-family: FontAwesome;
   font-weight: $font-weight-normal;
