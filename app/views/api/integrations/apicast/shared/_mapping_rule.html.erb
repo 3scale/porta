@@ -29,7 +29,7 @@
     </td>
     <td class="last_called_and_position">
       <%= p.check_box 'last', html_options %>
-      <%= link_to '', '#', :class => 'action ui-sortable-handler fa fa-sort' %>
+      <span class="action ui-sortable-handler fa fa-sort"></span>
       <%= p.hidden_field :position, {}.merge(:class => 'position', :value => index, :disabled => true) %>
     </td>
     <td class="actions">
