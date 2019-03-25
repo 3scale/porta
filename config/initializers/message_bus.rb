@@ -1,18 +1,29 @@
 # frozen_string_literal: true
 
-if Rails.env.test?
-  MessageBus.configure(backend: :memory)
-  MessageBus.keepalive_interval = 0
-  MessageBus.off
-else
-  MessageBus.redis_config = System::Application.config.redis.merge(db: 8)
-  MessageBus.timer.on_error do |error|
-    System::ErrorReporting.report_error(error)
+Class.new do
+  def initialize(message_bus_config = {})
+    @config = message_bus_config.dup
+
+    @enabled = config.delete(:enabled)
+    @redis_config = config.delete(:redis)
   end
-  MessageBus.on_middleware_error do |env, error|
-    System::ErrorReporting.report_error(error, rack_env: env)
+
+  attr_reader :config, :enabled, :redis_config
+
+  def configure_message_bus!
+    MessageBus.configure(config)
+    MessageBus.redis_config = redis_config if redis_config.present?
+
+    return MessageBus.off unless enabled
+
+    MessageBus.timer.on_error do |error|
+      System::ErrorReporting.report_error(error)
+    end
+    MessageBus.on_middleware_error do |env, error|
+      System::ErrorReporting.report_error(error, rack_env: env)
+    end
   end
-end
+end.new(Rails.configuration.three_scale.message_bus).configure_message_bus!
 
 authenticated_request = lambda do |env|
   ActiveRecord::Base.connection_pool.with_connection do

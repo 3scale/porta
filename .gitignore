@@ -60,6 +60,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/cubert.yml
 /config/segment.yml
 /config/core.yml
+/config/message_bus.yml
 /config/mixpanel.yml
 /config/settings.yml
 /config/sandbox_proxy.yml
