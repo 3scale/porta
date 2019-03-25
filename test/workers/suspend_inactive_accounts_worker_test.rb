@@ -5,7 +5,7 @@ require 'test_helper'
 class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
   setup do
     account_inactivity = 50
-    config = {'account_suspension' => 30, 'account_inactivity' => account_inactivity, 'contract_unpaid_time' => 70}
+    config = {'account_suspension' => 30, 'account_inactivity' => account_inactivity, 'contract_unpaid_time' => 70, disabled_for_app_plans: ['enterprise']}
     Features::AccountDeletionConfig.configure(config)
 
     @accounts = {to_suspend: [], not_to_suspend: []}
@@ -70,7 +70,7 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
   end
 
   test 'it does not perform for enterprise accounts' do
-    Account.stubs(not_enterprise: Account.none)
+    Account.stubs(without_application_plans_with_system_names: Account.none)
     SuspendInactiveAccountsWorker.new.perform
     (@accounts[:to_suspend] + @accounts[:not_to_suspend]).each { |account| refute account.reload.suspended? }
   end

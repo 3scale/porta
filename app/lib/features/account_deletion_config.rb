@@ -2,6 +2,11 @@
 
 module Features
   class AccountDeletionConfig
+    EXPECTED_VALUES = {
+      account_suspension: Integer, account_inactivity: Integer, contract_unpaid_time: Integer,
+      disabled_for_app_plans: Array
+    }.freeze
+
     def self.configure(config = {})
       @configuration = new(config)
     end
@@ -29,14 +34,14 @@ module Features
     private
 
     def format_config(config)
-      config = (config || {}).each_with_object({}) do |(key, value), collection|
-        collection[key.to_sym] = value if value.is_a?(Integer)
+      config = (config || {}).symbolize_keys.slice(*EXPECTED_VALUES.keys).each_with_object({}) do |(key, value), collection|
+        collection[key] = value if value.is_a?(EXPECTED_VALUES[key])
       end
       @config = ActiveSupport::OrderedOptions.new.merge(config)
     end
 
     def check_validity(initial_config)
-      @valid = %i[account_suspension account_inactivity contract_unpaid_time].all? { |key| config.key?(key) }
+      @valid = (EXPECTED_VALUES.keys.length == config.length)
       return if valid || initial_config.blank?
       Rails.logger.warn '[WARNING] Can\'t enable "automatic inactive tenant account deletion". Please revise your config"'
     end

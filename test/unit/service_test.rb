@@ -11,7 +11,7 @@ class ServiceTest < ActiveSupport::TestCase
     FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: 'example2')
     FactoryBot.create(:application_plan, service: service_with_enterprise_plan, system_name: '1_enterprise_2')
 
-    assert_equal [service_with_enterprise_plan.id], Service.with_enterprise_application_plans.pluck(:id)
+    assert_equal [service_with_enterprise_plan.id], Service.with_application_plans_with_system_names(['1_enterprise_2']).pluck(:id)
   end
 
   def test_create_default_proxy

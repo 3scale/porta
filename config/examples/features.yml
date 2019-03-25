@@ -3,6 +3,8 @@ features: &default
     account_inactivity: 365
     account_suspension: 90
     contract_unpaid_time: 183
+    disabled_for_app_plans:
+    - enterprise
 
 development:
   <<: *default
