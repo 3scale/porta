@@ -199,6 +199,9 @@ module System
     config.three_scale.prometheus = ActiveSupport::OrderedOptions.new
     config.three_scale.prometheus.merge!(try_config_for(:prometheus) || {})
 
+    config.three_scale.message_bus = ActiveSupport::OrderedOptions.new
+    config.three_scale.message_bus.merge!(try_config_for(:message_bus) || {})
+
     three_scale = config_for(:settings).symbolize_keys
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
@@ -228,7 +231,6 @@ module System
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
 
     config.unicorn  = ActiveSupport::OrderedOptions[after_fork: []]
-
     config.unicorn.after_fork << MessageBus.method(:after_fork)
 
     config.action_dispatch.cookies_serializer = :hybrid
