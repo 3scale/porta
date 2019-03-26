@@ -4,6 +4,17 @@ namespace :jobs do
   namespace :cancel do
     desc 'Cancel all scheduled deletion of objects in the database. WARNING, please purge the jobs before'
     task :delete_object_worker => :environment do
+      queue = Sidekiq::Queue.new('low')
+      queue.each do |job|
+        job_klass = job.klass
+        job.delete if %w[DeleteObjectHierarchyWorker DeleteAccountHierarchyWorker].include?(job_klass)
+      end
+
+      queue = Sidekiq::Queue.new('default')
+      queue.each do |job|
+        job.delete if job.klass == 'DeletePlainObjectWorker' && job.args[1].length > 2
+      end
+
       set = Sidekiq::BatchSet.new
       set.each do |status|
         batch = Sidekiq::Batch.new(status.bid)
