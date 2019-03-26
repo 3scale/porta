@@ -46,17 +46,30 @@ function CSRFToken ({win = window}: {win?: any}) {
 
 function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}) {
   const isNewPolicy = !(policy.id && policy.id !== 0)
-  const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.id}`
+  const initialState = () => {
+    return (isNewPolicy)
+      ? { action: '/p/admin/registry/policies/', method: 'post', submitText: 'Create Custom Policy' }
+      : { action: `/p/admin/registry/policies/${policy.id}`, method: 'put', submitText: 'Update Policy Schema' }
+  }
+  const [state, setState] = useState(initialState())
+
   return (
-    <form action={action} method="post">
+    <form action={state.action} method="post">
       <label>
         Directory:
         <input type="text" name="directory" value={policy.directory} onChange={onChange} disabled={!isNewPolicy} />
       </label>
       <input type="hidden" name="id" value={policy.id} disabled={true} />
       <input name="schema" type="hidden" value={JSON.stringify(policy.schema)} />
-      {(!isNewPolicy) ? <input name="_method" type="hidden" value='put' /> : ''}
-      <input type="submit" />
+      {(!isNewPolicy) &&
+        (
+          <div>
+            <input name="_method" type="hidden" value={state.method} />
+            <input type="submit" value="Delete Policy" onClick={() => setState({...state, ...{method: 'delete'}})} />
+          </div>
+        )
+      }
+      <input type="submit" value={state.submitText} />
       <CSRFToken />
     </form>
   )
