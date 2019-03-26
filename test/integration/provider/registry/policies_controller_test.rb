@@ -75,4 +75,21 @@ class Provider::Admin::Registry::PoliciesControllerTest < ActionDispatch::Integr
     policy.reload
     assert_equal schema, policy.schema
   end
+
+  test '#destroy' do
+    policy = FactoryBot.create(:policy, account: @provider)
+
+    proxy = @provider.default_service.proxy
+    proxy.update_column :policies_config, [{ name: policy.name, version: policy.version, configuration: {}, enabled: true }].to_json
+    delete provider_admin_registry_policy_path(policy)
+    assert_response :unprocessable_entity
+    assert policy.reload
+
+    proxy.update_column :policies_config, '[]'
+    delete provider_admin_registry_policy_path(policy)
+    assert_raise ActiveRecord::RecordNotFound do
+      policy.reload
+    end
+    assert_redirected_to provider_admin_registry_policies_path
+  end
 end
