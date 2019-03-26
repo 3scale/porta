@@ -22,6 +22,20 @@ namespace :sidekiq do
 
     exec(envs, 'sidekiq', *args.flatten)
   end
+
+  desc 'Delete all jobs belonging to DeleteObjectHierarchyWorker, DeleteAccountHierarchyWorker and those of DeletePlainObjectWorker that are deleted by association'
+  task :clear_delete_hierarchy_queue do
+    queue = Sidekiq::Queue.new('low')
+    queue.each do |job|
+      job_klass = job.klass
+      job.delete if %w[DeleteObjectHierarchyWorker DeleteAccountHierarchyWorker].include?(job_klass)
+    end
+
+    queue = Sidekiq::Queue.new('default')
+    queue.each do |job|
+      job.delete if job.klass == 'DeletePlainObjectWorker' && job.args[1].length > 2
+    end
+  end
 end
 
 task sidekiq: %w[sidekiq:worker]
