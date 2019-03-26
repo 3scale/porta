@@ -529,6 +529,8 @@ en:
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/response-codes-tracking'
         documentation_create_active_doc_spec: "%{docs_base_url}/using-developer-portal/create-activedocs-spec"
 
+        proxy_rule_catch_all_warning: |
+          "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
         proxy_rule_help_html: |
           <h4>Mapping Rules Syntax</h4>
 

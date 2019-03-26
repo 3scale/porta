@@ -510,6 +510,16 @@ form.proxy {
 
     td {
       padding-right: 12px;
+
+      &.pattern {
+        position: relative;
+      }
+    }
+
+    span.fa-exclamation-triangle {
+      position: absolute;
+      right: line-height-times(1);
+      top: line-height-times(9 / 10);
     }
 
     .action.add {

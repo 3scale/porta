@@ -8,6 +8,14 @@ $(document).on 'initialize', '#proxy', ->
   $("input.error").tipsy
     trigger: "focus"
 
+  # Warning for "catch-all" rules
+  setUpWarningForPattern = (pattern) ->
+    pattern.children('input').keyup (e) ->
+      warning = pattern.children('#catch-all-warning')
+      warning.css 'display', if e.currentTarget.value is '/' then 'block' else 'none'
+
+  $('td.pattern').each -> setUpWarningForPattern $(this)
+
   # API TEST REQUEST ------------------------------------------------
   $("form.proxy").on "change keyup", 'input, select', ->
     if $("#proxy_api_test_path").val()
@@ -90,6 +98,7 @@ $(document).on 'initialize', '#proxy', ->
     rule.find("input.position").val(newIndex)
     $mappingRuleList.append rule
     rule.find('.pattern input:first').focus()
+    setUpWarningForPattern rule.find('.pattern')
     false
 
   $("a[href=\"#delete-proxy-rule\"]").live "click", ->
