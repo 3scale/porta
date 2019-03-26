@@ -18,14 +18,18 @@ namespace :jobs do
     desc 'Cancel all scheduled deletion of objects in the database. WARNING, please purge the jobs before'
     task :delete_object_worker => :environment do
       queue = Sidekiq::Queue.new('low')
+      progress = ProgressBar.new(queue.size, 'Cancel all DeleteObjectHierarchyWorker, DeleteAccountHierarchyWorker')
       queue.each do |job|
         job_klass = job.klass
         job.delete if %w[DeleteObjectHierarchyWorker DeleteAccountHierarchyWorker].include?(job_klass)
+        progress.increment
       end
 
       queue = Sidekiq::Queue.new('default')
+      progress = ProgressBar.new(queue.size, 'Cancel all DeletePlainObjectWorker')
       queue.each do |job|
         job.delete if job.klass == 'DeletePlainObjectWorker' && job.args[1].length > 2
+        progress.increment
       end
 
       set = Sidekiq::BatchSet.new
