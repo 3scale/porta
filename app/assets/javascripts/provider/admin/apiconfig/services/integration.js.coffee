@@ -10,9 +10,13 @@ $(document).on 'initialize', '#proxy', ->
 
   # Warning for "catch-all" rules
   setUpWarningForPattern = (pattern) ->
-    pattern.children('input').keyup (e) ->
-      warning = pattern.children('#catch-all-warning')
-      warning.css 'display', if e.currentTarget.value is '/' then 'block' else 'none'
+    input = pattern.children "input"
+    warning = pattern.children "#catch-all-warning"
+
+    warning.toggleClass "disabled", input.is(":disabled")
+    warning.toggleClass "hidden", input.attr("value") isnt "/"
+    input.keyup (e) ->
+      warning.toggleClass "hidden", e.currentTarget.value isnt "/"
 
   $('td.pattern').each -> setUpWarningForPattern $(this)
 
@@ -110,12 +114,15 @@ $(document).on 'initialize', '#proxy', ->
       tr.addClass "deleted"
       tr.find("input, select").attr "disabled", "disabled"
       tr.find("input.proxy_rule_id, .destroyer").removeAttr "disabled"
+    tr.find("span.fa-exclamation-triangle").addClass "disabled"
     tr.find("input").trigger "proxy.rule.change"
     false
 
   $("a[href=\"#edit-proxy-rule\"]").live "click", ->
     tr = $(this).closest("tr")
-    tr.find("select,input:not(.destroyer)").removeAttr "disabled"  unless tr.hasClass("deleted")
+    return if tr.hasClass "deleted"
+    tr.find("select,input:not(.destroyer)").removeAttr "disabled"
+    tr.find("span.fa-exclamation-triangle").removeClass "disabled"
     false
   #---------------------------------------------------------------------
 
