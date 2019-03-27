@@ -12,7 +12,6 @@
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch",
-    "postshrinkwrap": "replace --silent 'http://' 'https://' ./package-lock.json",
     "postinstall": "npm rebuild node-sass"
   },
   "devDependencies": {
