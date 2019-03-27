@@ -32,7 +32,7 @@ const POLICY_TEMPLATE: Policy = {
   id: 0
 }
 
-function CSRFToken ({win = window}: {win?: any}) {
+function CSRFToken ({win = window}: {win?: Window}) {
   const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
   const props = {
     name: getMetaContent('csrf-param'),
@@ -44,7 +44,7 @@ function CSRFToken ({win = window}: {win?: any}) {
   )
 }
 
-function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChange}) {
+function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, onChange: OnChange, win?: Window}) {
   const isNewPolicy = !(policy.id && policy.id !== 0)
   const initialState = () => {
     return (isNewPolicy)
@@ -52,6 +52,12 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
       : { action: `/p/admin/registry/policies/${policy.id}`, method: 'put', submitText: 'Update Policy Schema' }
   }
   const [state, setState] = useState(initialState())
+
+  const deletePolicy = (e) => {
+    return win.confirm('Are you sure you want to delete this Policy?')
+      ? setState({...state, ...{method: 'delete'}})
+      : e.preventDefault()
+  }
 
   return (
     <form action={state.action} method="post">
@@ -65,7 +71,7 @@ function CustomPolicyForm ({policy, onChange}: {policy: Policy, onChange: OnChan
         (
           <div>
             <input name="_method" type="hidden" value={state.method} />
-            <input type="submit" value="Delete Policy" onClick={() => setState({...state, ...{method: 'delete'}})} />
+            <input type="submit" value="Delete Policy" onClick={deletePolicy} />
           </div>
         )
       }

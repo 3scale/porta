@@ -78,8 +78,9 @@ describe('CustomPolicyForm', () => {
   })
 
   // TODO: remove `skip` when this is merged: https://github.com/airbnb/enzyme/pull/2008
-  it.skip('should change submit method when clicking Delete Policy', () => {
-    const {wrapper} = setup()
+  it.skip('should change submit method when clicking Delete Policy before submitting the form', () => {
+    const mockedWindow = { confirm: jest.fn(() => true) }
+    const {wrapper} = setup({win: mockedWindow})
     const submitMethod = wrapper.find('input[name="_method"]')
 
     expect(submitMethod.prop('value')).toBe('put')
@@ -88,7 +89,7 @@ describe('CustomPolicyForm', () => {
     deleteButton.simulate('click')
 
     wrapper.update()
-
+    // TODO: assert before submission
     expect(wrapper.find('input[name="_method"]').prop('value')).toBe('delete')
   })
 })
