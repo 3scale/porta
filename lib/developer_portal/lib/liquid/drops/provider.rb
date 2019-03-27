@@ -191,7 +191,7 @@ module Liquid
 
       desc "Returns the logo URL."
       example %{
-        <img src={{ provider.logo_url }}"/>
+        <img src="{{ provider.logo_url }}"/>
       }
       def logo_url
         if logo = @model.try(:profile).try(:logo)
