@@ -37,7 +37,7 @@ describe('CustomPolicyEditor', () => {
 })
 
 describe('CustomPolicyForm', () => {
-  function setup (customProps) {
+  function setup (customProps = {}) {
     const policy = {
       schema: {
         $schema: 'http://someswonderfulschemaspec.com/v2#7',
@@ -64,7 +64,7 @@ describe('CustomPolicyForm', () => {
   }
 
   it('should render correct the edit policy form', () => {
-    const {wrapper, props} = setup({})
+    const {wrapper, props} = setup()
     expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/42')
     expect(wrapper.find('input[name="schema"]').prop('value')).toBe(JSON.stringify(props.policy.schema))
     expect(wrapper.find('input[name="_method"]').exists()).toBe(true)
@@ -75,6 +75,22 @@ describe('CustomPolicyForm', () => {
     expect(wrapper.find('form').prop('action')).toBe('/p/admin/registry/policies/')
     expect(wrapper.find('input[name="schema"]').prop('value')).toBe(JSON.stringify(POLICY_TEMPLATE.schema))
     expect(wrapper.find('input[name="_method"]').exists()).toBe(false)
+  })
+
+  // TODO: remove `skip` when this is merged: https://github.com/airbnb/enzyme/pull/2008
+  it.skip('should change submit method when clicking Delete Policy before submitting the form', () => {
+    const mockedWindow = { confirm: jest.fn(() => true) }
+    const {wrapper} = setup({win: mockedWindow})
+    const submitMethod = wrapper.find('input[name="_method"]')
+
+    expect(submitMethod.prop('value')).toBe('put')
+
+    const deleteButton = wrapper.find('input[value="Delete Policy"]')
+    deleteButton.simulate('click')
+
+    wrapper.update()
+    // TODO: assert before submission
+    expect(wrapper.find('input[name="_method"]').prop('value')).toBe('delete')
   })
 })
 

@@ -17,11 +17,11 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
           }
         }
       }
-    }.as_json
+    }.as_json.freeze
 
   before_action :authorize_policies
 
-  before_action :policy, only: [:edit, :update]
+  before_action :policy, only: %i[edit update destroy]
 
   layout 'provider'
 
@@ -43,11 +43,21 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
     end
   end
 
+  def edit; end
+
   def update
     if policy.update_attributes(policy_params)
       redirect_to action: :index
     else
-      render :edit, status: 422
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if policy.destroy
+      redirect_to action: :index
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
