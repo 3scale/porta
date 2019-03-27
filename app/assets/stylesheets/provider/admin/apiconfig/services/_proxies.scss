@@ -520,6 +520,15 @@ form.proxy {
       position: absolute;
       right: line-height-times(1);
       top: line-height-times(9 / 10);
+      color: $warning-color;
+
+      &.disabled {
+        color: unset;
+      }
+
+      &.hidden {
+        display: none;
+      }
     }
 
     .action.add {
