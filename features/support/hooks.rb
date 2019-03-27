@@ -70,6 +70,10 @@ Before '@recaptcha' do
   skip_recaptcha(false)
 end
 
+After '@recaptcha' do
+  skip_recaptcha(true)
+end
+
 AfterStep do
   page.raise_server_error!
 end
