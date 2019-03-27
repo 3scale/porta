@@ -51,7 +51,10 @@ javascript:
         },
         stop: function () {
           $('tr:not(#new-proxy-rule-template)', this).each(function (index, mappingRule) {
-            if (!$(mappingRule).hasClass('deleted')) $(mappingRule).find('select,input:not(.destroyer)').removeAttr('disabled')
+            if (!$(mappingRule).hasClass('deleted')) {
+              $(mappingRule).find('select,input:not(.destroyer)').removeAttr('disabled')
+              $(mappingRule).find('span.fa-exclamation-triangle').removeClass('disabled')
+            }
             $(mappingRule).find('.position').val(index + 1)
           })
         }
