@@ -7,6 +7,7 @@ production:
     url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
     pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
     pool_timeout: 5
+    namespace: system-mbus
 
 preview:
   <<: *default
@@ -14,6 +15,7 @@ preview:
     url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
     pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
     pool_timeout: 5
+    namespace: system-mbus
 
 development:
   <<: *default
@@ -21,6 +23,7 @@ development:
     url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
     pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
     pool_timeout: 5
+    namespace: system-mbus
 
 test:
   enabled: false

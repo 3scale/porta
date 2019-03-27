@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# Monkey patching message_bus to enforce redis namespace
+require 'message_bus/backends/redis'
+
+class MessageBus::Redis::ReliablePubSub
+  def new_redis_connection
+    namespace = Rails.configuration.three_scale.message_bus.deep_symbolize_keys.dig(:redis, :namespace)
+    redis = ::Redis.new(@redis_config)
+    namespace ? Redis::Namespace.new(namespace, redis: redis) : redis
+  end
+end
+
 Class.new do
   def initialize(message_bus_config = {})
     @config = message_bus_config.dup
