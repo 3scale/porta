@@ -54,7 +54,7 @@ function SchemaEditor ({onChange, schema}: {onChange: (Schema) => void, schema: 
     : [ 'times', 'invalid', '', 'SchemaEditor-error' ]
 
   return (
-    <div className={`${errorClass} panel panel-default`}>
+    <div className={`${errorClass} panel panel-default PolicySchema`}>
       <div className="panel-heading">
         <i className={`${cls} fa fa-${icon}`} />
         {' JSON Schema'}
