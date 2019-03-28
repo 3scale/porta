@@ -9,7 +9,11 @@ module System
     def initialize(config={})
       config = config.dup
       pool_config = config.extract!(:pool_size, :pool_timeout)
-      @pool = ConnectionPool.new(size: pool_config[:pool_size] || 5, timeout: pool_config[:pool_timeout] || 5 ) { Redis.new(config) }
+      @pool = ConnectionPool.new(size: pool_config[:pool_size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
+        namespace = config[:namespace]
+        redis = Redis.new(config)
+        namespace ? Redis::Namespace.new(namespace, redis: redis) : redis
+      end
     end
 
     # This class only respond to public methods of Redis
