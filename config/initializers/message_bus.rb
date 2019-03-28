@@ -5,9 +5,7 @@ require 'message_bus/backends/redis'
 
 class MessageBus::Redis::ReliablePubSub
   def new_redis_connection
-    namespace = Rails.configuration.three_scale.message_bus.deep_symbolize_keys.dig(:redis, :namespace)
-    redis = ::Redis.new(@redis_config)
-    namespace ? Redis::Namespace.new(namespace, redis: redis) : redis
+    ::Redis.new_with_namespace(@redis_config.merge(namespace: namespace))
   end
 end
 
