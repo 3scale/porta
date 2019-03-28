@@ -1,12 +1,12 @@
 #frozen_string_literal: true
 
 class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseController
-  activate_menu :account, :integrate, :policies
+  activate_menu :account, :integrate, :custom_policies
   EXAMPLE_SCHEMA = {
       '$schema': 'http://apicast.io/policy-v1/schema#manifest#',
       name: 'Name of the policy',
       summary: 'A one-line (less than 75 characters) summary of what this policy does.',
-      descriptoin: 'A complete description of what this policy does.',
+      description: 'A complete description of what this policy does.',
       version: '0.0.1',
       configuration: {
         type: 'object',
