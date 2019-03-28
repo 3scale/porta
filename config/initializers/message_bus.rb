@@ -5,7 +5,7 @@ require 'message_bus/backends/redis'
 
 class MessageBus::Redis::ReliablePubSub
   def new_redis_connection
-    ::Redis.new_with_namespace(@redis_config)
+    ::Redis.new_with_namespace(@redis_config.symbolize_keys)
   end
 end
 
