@@ -1,29 +1,19 @@
 base: &default
   enabled: true
+  redis:
+    url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
+    pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+    pool_timeout: 5
+    namespace: <%= ENV['MESSAGE_BUS_REDIS_NAMESPACE'] %>
 
 production:
   <<: *default
-  redis:
-    url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
-    pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
-    pool_timeout: 5
-    namespace:
 
 preview:
   <<: *default
-  redis:
-    url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
-    pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
-    pool_timeout: 5
-    namespace:
 
 development:
   <<: *default
-  redis:
-    url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://localhost/8') %>
-    pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
-    pool_timeout: 5
-    namespace:
 
 test:
   enabled: false
