@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Liquid
   module Drops
     class Provider < Drops::Base
 
-      example %{
+      example %(
         <div>Domain {{ provider.domain }}</div>
 
         {% if provider.multiple_applications_allowed? %}
@@ -20,7 +22,7 @@ module Liquid
 
         For general questions contact us at {{ provider.support_email }}.
         For invoice or payment related questions contact us at {{ provider.finance_support_email }}.
-      }
+      )
 
       allowed_name :provider
       deprecated_name :user_account, :provider_account, :sender, :site_account, :account
@@ -91,7 +93,7 @@ module Liquid
       desc """*True* if developers can have more separate applications with
               their own keys, stats, etc. __Depends on your 3scale plan__.
            """
-      example %{
+      example %(
         {% if provider.multiple_applications_allowed? %}
            <div>
              <p>Applications</p>
@@ -104,11 +106,10 @@ module Liquid
         {% else %}
            <div>Application {{ account.applications.first.name }}</div>
         {% endif %}
-      }
+      )
       def multiple_applications_allowed?
         @model.settings.multiple_applications.visible?
       end
-
 
       def logo_url
         if logo = @model.profile.logo
@@ -119,13 +120,13 @@ module Liquid
       desc """*True* if your 3scale plan allows you to manage multiple APIs
                as separate [services][support-terminology-service].
            """
-      example %{
+      example %(
         {% if provider.multiple_services_allowed? %}
           {% for service in provider.services %}
              Service {{ service.name }} is available.
           {% endfor %}
         {% endif %}
-      }
+      )
       def multiple_services_allowed?
         @model.multiservice? && @model.has_visible_services_with_plans?
       end
@@ -138,7 +139,7 @@ module Liquid
               associated with them (__depends on your 3scale plan__)
               and its visibility has been turned on for your develoeper
               portal in the [settings][cms-feature-visibility]."""
-      example %{
+      example %(
         {% if provider.multiple_users_allowed? %}
           <ul id="subsubmenu">
             <li>
@@ -149,32 +150,32 @@ module Liquid
             </li>
           </ul>
         {% endif %}
-      }
+      )
       def multiple_users_allowed?
         @model.settings.multiple_users.visible?
       end
 
       desc "Returns all published account plans."
-      example %{
+      example %(
         <p>We offer following account plans:</p>
         <ul>
         {% for plan in model.account_plans %}
           <li>{{ plan.name }} <input type="radio" name="plans[id]" value="{{ plan.id }}"/></li>
         {% endfor %}
         </ul>
-      }
+      )
       def account_plans
         Drops::AccountPlan.wrap(@model.account_plans.published)
       end
 
       desc "Returns all defined services."
-      example %{
+      example %(
         <p>You can sign up to any of our services!</p>
         <ul>
         {% for service in provider.services %}
           <li>{{ service.name }} <a href="/signup/service/{{ service.system_name }}">Signup!</a></li>
         {% endfor %}
-      }
+      )
       def services
         Drops::Service.wrap(@model.services)
       end
@@ -190,9 +191,9 @@ module Liquid
       end
 
       desc "Returns the logo URL."
-      example %{
+      example %(
         <img src="{{ provider.logo_url }}"/>
-      }
+      )
       def logo_url
         if logo = @model.try(:profile).try(:logo)
           logo.url(:large)
