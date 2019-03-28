@@ -13,6 +13,10 @@
       <%= p.select 'http_method', ProxyRule::ALLOWED_HTTP_METHODS, {}, html_options %>
     </td>
     <td class="pattern">
+      <span
+        id="catch-all-warning"
+        class="fa fa-exclamation-triangle disabled <%= 'hidden' if rule.pattern != '/' %>"
+        title="<%= t('api.integrations.proxy.proxy_rule_catch_all_warning') %>"></span>
       <%= p.text_field_with_errors :pattern, html_options %>
     </td>
 
