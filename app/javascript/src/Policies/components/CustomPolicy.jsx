@@ -57,24 +57,24 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
   }
 
   return (
-    <form action={action} method="post" class="formtastic">
+    <form action={action} method="post" className="formtastic">
       <br/>
-      <fieldset class="inputs">
+      <fieldset className="inputs">
         <legend>Pointer to Custom Policy in APIcast</legend>
         <ol>
           <li>
             <label>Path to the Policy on APIcast</label>
             <input placeholder="policy-name/1.0.0/" type="text" name="directory" value={policy.directory} onChange={onChange} disabled={!isNewPolicy} />
-            <p class="inline-hints">The path to your custom policy relative to <code>APICAST_DIR/policies/</code></p>
+            <p className="inline-hints">The path to your custom policy relative to <code>APICAST_DIR/policies/</code></p>
           </li>
         </ol>
       </fieldset>
       <input type="hidden" name="id" value={policy.id} disabled={true} />
       <input name="schema" type="hidden" value={JSON.stringify(policy.schema)} />
-      <fieldset class="buttons">
+      <fieldset className="buttons">
         <ol>
-          <li class="commit">
-            <input type="submit" class="important-button update" value={submitText} />
+          <li className="commit">
+            <input type="submit" className="important-button update" value={submitText} />
             <CSRFToken />
           </li>
           {(!isNewPolicy) &&
@@ -82,7 +82,7 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
               <li>
                 <div>
                   <input name="_method" type="hidden" value={method} />
-                  <a class="button-to action delete" href="" value="Delete Policy" onClick={deletePolicy}>Delete</a>
+                  <input type="submit" className="button-to action delete" value="Delete" onClick={deletePolicy} />
                 </div>
               </li>
             )
