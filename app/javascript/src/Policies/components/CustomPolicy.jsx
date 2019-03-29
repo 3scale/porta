@@ -64,7 +64,7 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
         <ol>
           <li>
             <label>Path to the Policy on APIcast</label>
-            <input placeholder="policy-name/1.0.0/" type="text" name="directory" value={policy.directory} onChange={onChange} disabled={!isNewPolicy} />
+            <input placeholder="policy-name/1.0.0/" type="text" name="directory" value={policy.directory} onChange={onChange} />
             <p className="inline-hints">The path to your custom policy relative to <code>APICAST_DIR/policies/</code></p>
           </li>
         </ol>
