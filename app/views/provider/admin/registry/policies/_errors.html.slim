@@ -1,0 +1,6 @@
+- if @policy.errors.present?
+  div class="PolicyIntegrationErrors"
+    h3 There were some errors:
+    ul
+      - @policy.errors.full_messages.each do |error|
+        li class="error"= error
