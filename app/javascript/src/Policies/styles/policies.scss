@@ -8,6 +8,7 @@ $goColor: #4a90e2;
 $doColor: #54b45d;
 $dontColor: #ca4a4b;
 $subtleColor: #ddd;
+$error-color: #cc0000;
 
 .PoliciesWidget {
   position: relative;
@@ -60,6 +61,25 @@ $subtleColor: #ddd;
 
     .list-group {
       margin-bottom: 0;
+    }
+  }
+
+  .PolicyConfiguration--preview {
+    overflow: hidden;
+    position: relative;
+
+    &:after {
+      transform: rotate(35deg);
+      opacity: 0.5;
+      content: "Preview";
+      top: -0.5rem;
+      left: 4.5rem;
+      text-align: center;
+      font-size: 10rem;
+      color: $subtleColor; //$label-color;
+      position: absolute;
+      z-index: -1;
+      transform-origin: 0 0;
     }
   }
 
@@ -341,8 +361,33 @@ $subtleColor: #ddd;
   justify-content: space-around;
 }
 
-.SchemaEditor-error { border: 5px solid red}
+.SchemaEditor-error {
+  border: 1px solid $error-color;
+  padding: 1rem;
+}
+
+.SchemaEditor-errors {
+  list-style-position: inside;
+  padding: 1rem;
+  color: $error-color;
+
+  li {
+    padding-bottom: 1rem;
+  }
+}
 
 .PolicySchema {
   margin-right: 2rem;
+
+  .cm-s-default .cm-string {
+    color: #0088ce;
+  }
+}
+
+.PolicyIntegrationErrors {
+  color: $error-color;
+
+  ul {
+    list-style-position: inside;
+  }
 }

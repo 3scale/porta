@@ -60,10 +60,10 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
     <form action={action} method="post" className="formtastic">
       <br/>
       <fieldset className="inputs">
-        <legend>Pointer to Custom Policy in APIcast</legend>
+        <legend>Place of the Custom Policy Code</legend>
         <ol>
           <li>
-            <label>Path to the Policy on APIcast</label>
+            <label>Path to where the Policy is located in your APIcast installation</label>
             <input placeholder="policy-name/1.0.0/" type="text" name="directory" value={policy.directory} onChange={onChange} />
             <p className="inline-hints">The path to your custom policy relative to <code>APICAST_DIR/policies/</code></p>
           </li>
@@ -107,9 +107,9 @@ function CustomPolicyEditor ({initialPolicy}: {initialPolicy: Policy}) {
     <div className="CustomPolicyEditor-container">
       <div className="CustomPolicyEditor">
         <SchemaEditor className="SchemaEditor" schema={schema} onChange={onSchemaEdited} />
-        <section className="PolicyConfiguration">
+        <section className="PolicyConfiguration PolicyConfiguration--preview">
           <header className="PolicyConfiguration-header">
-            <h2 className="PolicyConfiguration-title">Generated Form Preview</h2>
+            <h2 className="PolicyConfiguration-title">Preview of the Policy Configuration Form</h2>
           </header>
           <h2 className="PolicyConfiguration-name">{schema.name}</h2>
           <p className="PolicyConfiguration-version-and-summary">

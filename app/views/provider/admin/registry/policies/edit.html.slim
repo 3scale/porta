@@ -5,12 +5,7 @@ h1
 - content_for :javascripts do
   = javascript_pack_tag 'custom_policy'
 
-- if @policy.errors.present?
-  div class="errors"
-    h1 There were some errors:
-    ul class="error"
-      - @policy.errors.full_messages.each do |error|
-        li class="error"= error
+= render 'errors'
 
 
 = content_tag :div, class: 'PoliciesWidget', id: 'custom-policy-container', data: { policy: @policy.as_json }  do end
