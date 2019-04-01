@@ -6,7 +6,8 @@ ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
     BUNDLE_GEMFILE=gemfiles/prod/Gemfile \
-    BUNDLE_WITHOUT=development:test
+    BUNDLE_WITHOUT=development:test \
+    NODEJS_SCL=rh-nodejs8
 
 WORKDIR /opt/system
 
@@ -15,11 +16,13 @@ ARG SPHINX_VERSION=2.2.11-1
 ADD openshift/system/sphinx-${SPHINX_VERSION}.rhel7.x86_64.rpm /tmp/sphinxsearch.rpm
 
 RUN yum -y update \
-    && yum -y install ImageMagick \
+    && yum -y install centos-release-scl-rh \
+                      ImageMagick \
                       ImageMagick-devel \
                       unixODBC-devel \
                       mysql \
                       file \
+                      rh-nodejs8 \
     && rpm -i /tmp/sphinxsearch.rpm \
     && rm /tmp/*.rpm \
     && yum install -y epel-release \
