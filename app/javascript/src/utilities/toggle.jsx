@@ -1,12 +1,6 @@
 // @flow
 
 'use strict'
-import 'core-js/fn/string/includes'
-import 'core-js/fn/symbol'
-import 'core-js/fn/array/find'
-import 'core-js/fn/array/iterator'
-import 'core-js/fn/array/from'
-import 'core-js/fn/object/assign' // make Object.assign on IE 11
 
 const store = window.localStorage
 const key = ident => `toggle:${ident}`

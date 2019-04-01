@@ -1,5 +1,3 @@
-import 'core-js/fn/object/assign' // make Object.assign work on IE 11
-import 'core-js/modules/es6.map' // make Maps work on IE 11
 import moment from 'moment'
 import 'moment-range'
 

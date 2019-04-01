@@ -1,5 +1,4 @@
 /** @jsx StatsUI.dom */
-import 'core-js/fn/array/find'
 import moment from 'moment'
 
 import {StatsUI} from 'Stats/lib/ui'

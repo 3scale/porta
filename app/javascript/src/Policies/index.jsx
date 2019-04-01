@@ -1,9 +1,5 @@
 // @flow
 
-import 'core-js/modules/es6.set'
-import 'core-js/modules/es6.map'
-import 'core-js/es7/array'
-import 'core-js/es7/object'
 import 'whatwg-fetch'
 
 import React from 'react'

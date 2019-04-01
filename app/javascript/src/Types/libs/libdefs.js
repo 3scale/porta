@@ -12,8 +12,4 @@ declare module 'whatwg-fetch' {
 
 }
 
-declare module 'core-js/fn/symbol' {
-
-}
-
 export type Window = any

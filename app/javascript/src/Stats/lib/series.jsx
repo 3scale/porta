@@ -1,6 +1,3 @@
-import 'core-js/fn/object/assign' // make Object.assign on IE 11
-import 'core-js/fn/array/find-index' // make Object.findIndex on IE 11
-import 'core-js/fn/array/find'
 import moment from 'moment-timezone'
 import 'moment-range'
 

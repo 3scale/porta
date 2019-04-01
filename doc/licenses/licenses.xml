@@ -762,16 +762,6 @@
                       </licenses>
         </dependency>
             <dependency>
-          <packageName>core-js</packageName>
-          <version>2.4.1</version>
-          <licenses>
-                          <license>
-                <name>MIT</name>
-                <url>http://opensource.org/licenses/mit-license</url>
-              </license>
-                      </licenses>
-        </dependency>
-            <dependency>
           <packageName>core-util-is</packageName>
           <version>1.0.2</version>
           <licenses>

@@ -1,4 +1,3 @@
-import 'core-js/fn/symbol/index' // make Symbol work on IE 11
 import $ from 'jquery'
 import {StatsSeries} from 'Stats/lib/series'
 
