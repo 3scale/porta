@@ -14,15 +14,15 @@ type OnChange = (InputEvent) => void
 const POLICY_TEMPLATE: Policy = {
   schema: {
     '$schema': 'http://apicast.io/policy-v1/schema#manifest#',
-    'name': 'Name of the policy',
-    'summary': 'A one-line (less than 75 characters) summary of what this policy does.',
-    'description': 'A complete description of what this policy does.',
+    'name': 'Name of the custom policy',
+    'summary': 'A one-line (less than 75 characters) summary of what this custom policy does.',
+    'description': 'A complete description of what this custom policy does.',
     'version': '0.0.1',
     'configuration': {
       'type': 'object',
       'properties': {
         'property': {
-          'description': 'A description of your property',
+          'description': 'A description of this property',
           'type': 'string'
         }
       }
@@ -57,23 +57,38 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
   }
 
   return (
-    <form action={action} method="post">
-      <label>
-        Directory:
-        <input type="text" name="directory" value={policy.directory} onChange={onChange} disabled={!isNewPolicy} />
-      </label>
+    <form action={action} method="post" className="formtastic">
+      <br/>
+      <fieldset className="inputs">
+        <legend>Place of the Custom Policy Code</legend>
+        <ol>
+          <li>
+            <label>Path to where the Policy is located in your APIcast installation</label>
+            <input placeholder="policy-name/1.0.0/" type="text" name="directory" value={policy.directory} onChange={onChange} />
+            <p className="inline-hints">The path to your custom policy relative to <code>APICAST_DIR/policies/</code></p>
+          </li>
+        </ol>
+      </fieldset>
       <input type="hidden" name="id" value={policy.id} disabled={true} />
       <input name="schema" type="hidden" value={JSON.stringify(policy.schema)} />
-      {(!isNewPolicy) &&
-        (
-          <div>
-            <input name="_method" type="hidden" value={method} />
-            <input type="submit" value="Delete Policy" onClick={deletePolicy} />
-          </div>
-        )
-      }
-      <input type="submit" value={submitText} />
-      <CSRFToken />
+      <fieldset className="buttons">
+        <ol>
+          <li className="commit">
+            <input type="submit" className="important-button update" value={submitText} />
+            <CSRFToken />
+          </li>
+          {(!isNewPolicy) &&
+            (
+              <li>
+                <div>
+                  <input name="_method" type="hidden" value={method} />
+                  <button type="submit" className="button-to action delete btn-link" onClick={deletePolicy}>Delete</button>
+                </div>
+              </li>
+            )
+          }
+        </ol>
+      </fieldset>
     </form>
   )
 }
@@ -92,9 +107,9 @@ function CustomPolicyEditor ({initialPolicy}: {initialPolicy: Policy}) {
     <div className="CustomPolicyEditor-container">
       <div className="CustomPolicyEditor">
         <SchemaEditor className="SchemaEditor" schema={schema} onChange={onSchemaEdited} />
-        <section className="PolicyConfiguration">
+        <section className="PolicyConfiguration PolicyConfiguration--preview">
           <header className="PolicyConfiguration-header">
-            <h2 className="PolicyConfiguration-title">Form Preview</h2>
+            <h2 className="PolicyConfiguration-title">Preview of the Policy Configuration Form</h2>
           </header>
           <h2 className="PolicyConfiguration-name">{schema.name}</h2>
           <p className="PolicyConfiguration-version-and-summary">
@@ -118,7 +133,6 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}) {
   return (
     <section className="CustomPolicy">
       <header className='CustomPolicy-header'>
-        <h2 className="CustomPolicy-title">Custom Policy</h2>
         <a className="CustomPolicy-cancel" href={CANCEL_POLICY_HREF} >
           <i className="fa fa-times-circle" /> Cancel
         </a>

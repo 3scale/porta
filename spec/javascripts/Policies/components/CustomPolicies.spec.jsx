@@ -12,6 +12,6 @@ describe('CustomPolicies', () => {
     expect(wrapper.find('section').hasClass('CustomPolicies')).toBe(true)
     expect(wrapper.find('header').hasClass('CustomPolicies-header')).toBe(true)
     expect(wrapper.find('h2').hasClass('CustomPolicies-title')).toBe(true)
-    expect(wrapper.find('a.CustomPolicies-addPolicy').text()).toBe(' Add new policy')
+    expect(wrapper.find('a.CustomPolicies-addPolicy').text()).toBe(' New Custom Policy Integration')
   })
 })

@@ -8,6 +8,7 @@ $goColor: #4a90e2;
 $doColor: #54b45d;
 $dontColor: #ca4a4b;
 $subtleColor: #ddd;
+$error-color: #c00;
 
 .PoliciesWidget {
   position: relative;
@@ -60,6 +61,25 @@ $subtleColor: #ddd;
 
     .list-group {
       margin-bottom: 0;
+    }
+  }
+
+  .PolicyConfiguration--preview {
+    overflow: hidden;
+    position: relative;
+
+    &::after {
+      color: $subtleColor; //$label-color;
+      content: 'Preview';
+      font-size: 10rem;
+      left: 4.5rem;
+      opacity: .5;
+      position: absolute;
+      text-align: center;
+      top: -.5rem;
+      transform: rotate(35deg);
+      transform-origin: 0 0;
+      z-index: -1;
     }
   }
 
@@ -148,9 +168,11 @@ $subtleColor: #ddd;
     }
 
     button[type=submit] {
-      background-color: $PolicyConfiguration-goColor;
-      border-color: $PolicyConfiguration-goColor;
       margin-bottom: 2rem;
+    }
+
+    button.action.delete {
+      margin: 0;
     }
 
     .error-detail {
@@ -340,4 +362,34 @@ $subtleColor: #ddd;
   justify-content: space-around;
 }
 
-.SchemaEditor-error { border: 5px solid red}
+.SchemaEditor-error {
+  border: 1px solid $error-color;
+  padding: 1rem;
+}
+
+.SchemaEditor-errors {
+  color: $error-color;
+  list-style-position: inside;
+  padding: 1rem;
+
+  li {
+    padding-bottom: 1rem;
+  }
+}
+
+.PolicySchema {
+  $PolicySchema-color: #0088ce;
+  margin-right: 2rem;
+
+  .cm-s-default .cm-string {
+    color: $PolicySchema-color;
+  }
+}
+
+.PolicyIntegrationErrors {
+  color: $error-color;
+
+  ul {
+    list-style-position: inside;
+  }
+}
