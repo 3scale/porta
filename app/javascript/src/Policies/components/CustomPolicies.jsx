@@ -12,7 +12,7 @@ const CustomPolicies = ({policies = []}: {policies: Array<ShallowPolicy>}): Reac
       <header className='CustomPolicies-header'>
         <h2 className="CustomPolicies-title">Custom Policies</h2>
         <a className="CustomPolicies-addPolicy" href={ADD_POLICY_HREF} >
-          <i className="fa fa-plus-circle" /> Add new policy
+          <i className="fa fa-plus-circle" /> New Custom Policy Integration
         </a>
       </header>
       <PolicyList policies={policies} />

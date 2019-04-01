@@ -54,10 +54,10 @@ function SchemaEditor ({onChange, schema}: {onChange: (Schema) => void, schema: 
     : [ 'times', 'invalid', '', 'SchemaEditor-error' ]
 
   return (
-    <div className={`${errorClass} panel panel-default`}>
+    <div className={`${errorClass} panel panel-default PolicySchema`}>
       <div className="panel-heading">
         <i className={`${cls} fa fa-${icon}`} />
-        {' JSON Schema'}
+        {' JSON Schema that describes the Policy Configuration Form'}
       </div>
       <CodeMirror
         value={state.code}
@@ -65,7 +65,7 @@ function SchemaEditor ({onChange, schema}: {onChange: (Schema) => void, schema: 
         autoCursor={false}
         options={CM_OPTIONS}
       />
-      <ul className={hiddenClass}>
+      <ul className={`${hiddenClass} SchemaEditor-errors`}>
         {errors.map((error, index) => <li key={index}>{error.message}</li>)}
       </ul>
     </div>
