@@ -8,7 +8,7 @@ $goColor: #4a90e2;
 $doColor: #54b45d;
 $dontColor: #ca4a4b;
 $subtleColor: #ddd;
-$error-color: #cc0000;
+$error-color: #c00;
 
 .PoliciesWidget {
   position: relative;
@@ -68,18 +68,18 @@ $error-color: #cc0000;
     overflow: hidden;
     position: relative;
 
-    &:after {
-      transform: rotate(35deg);
-      opacity: 0.5;
-      content: "Preview";
-      top: -0.5rem;
-      left: 4.5rem;
-      text-align: center;
-      font-size: 10rem;
+    &::after {
       color: $subtleColor; //$label-color;
+      content: 'Preview';
+      font-size: 10rem;
+      left: 4.5rem;
+      opacity: .5;
       position: absolute;
-      z-index: -1;
+      text-align: center;
+      top: -.5rem;
+      transform: rotate(35deg);
       transform-origin: 0 0;
+      z-index: -1;
     }
   }
 
@@ -368,9 +368,9 @@ $error-color: #cc0000;
 }
 
 .SchemaEditor-errors {
+  color: $error-color;
   list-style-position: inside;
   padding: 1rem;
-  color: $error-color;
 
   li {
     padding-bottom: 1rem;
@@ -378,10 +378,11 @@ $error-color: #cc0000;
 }
 
 .PolicySchema {
+  $PolicySchema-color: #0088ce;
   margin-right: 2rem;
 
   .cm-s-default .cm-string {
-    color: #0088ce;
+    color: $PolicySchema-color;
   }
 }
 
