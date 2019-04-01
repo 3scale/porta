@@ -82,7 +82,7 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
               <li>
                 <div>
                   <input name="_method" type="hidden" value={method} />
-                  <input type="submit" className="button-to action delete" value="Delete" onClick={deletePolicy} />
+                  <button type="submit" className="button-to action delete btn-link" onClick={deletePolicy}>Delete</button>
                 </div>
               </li>
             )

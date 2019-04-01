@@ -168,10 +168,11 @@ $error-color: #cc0000;
     }
 
     button[type=submit] {
-      background-color: $PolicyConfiguration-goColor;
-      border-color: $PolicyConfiguration-goColor;
       margin-bottom: 2rem;
-      color: $subtleColor;
+    }
+
+    button.action.delete {
+      margin: 0;
     }
 
     .error-detail {
