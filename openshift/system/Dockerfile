@@ -58,6 +58,8 @@ RUN export ${BUNDLER_ENV} >/dev/null \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \
     && cd /opt/system \
+    && rm -rf /opt/system/node_modules \
+    && npm cache clean --force \
     && npm install --no-progress \
     && bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
