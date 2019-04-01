@@ -27,6 +27,7 @@ module ThreeScale
     ].freeze
 
     DAILY = %w[
+      FindAndDeleteScheduledAccountsWorker.perform_async
       Audited.audit_class.delete_old
       LogEntry.delete_old
       Cinstance.notify_about_expired_trial_periods
