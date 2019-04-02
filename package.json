@@ -11,8 +11,7 @@
     "lint": "flow && eslint .eslintrc app/javascript spec/javascripts",
     "test": "karma start --single-run",
     "jest": "jest",
-    "jest:watch": "npm run-script jest -- --watch",
-    "postinstall": "npm rebuild node-sass"
+    "jest:watch": "npm run-script jest -- --watch"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
