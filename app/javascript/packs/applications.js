@@ -3,7 +3,7 @@ import 'core-js/es6/set'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ApplicationForm } from '../src/Applications/ApplicationForm'
+import { ApplicationForm } from 'Applications/ApplicationForm'
 
 document.addEventListener('DOMContentLoaded', () => {
   var dataset = document.getElementById('metadata-form').dataset
