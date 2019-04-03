@@ -69,7 +69,7 @@ class SearchableSelect extends React.Component {
           onBlur={this.onBlur}
         />
         {showOptions && this.renderOptions()}
-        {hint && <p class="inline-hints">{hint}</p>}
+        {hint && <p className="inline-hints">{hint}</p>}
       </div>
     )
   }
