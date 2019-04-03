@@ -65,6 +65,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     %i[success complete].each { |name| batch.on(name, self.class, callback_options) }
     yield
     bid = batch.bid
+    
     if Sidekiq::Batch::Status.new(bid).total.zero?
       on_complete(bid, callback_options)
     else
@@ -74,9 +75,13 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   def delete_associations(object)
-    associations_to_destroy_for(object).each do |reflection|
+    object_associations = associations_to_destroy_for(object)
+    association_names = object_associations.map { |a| a.name }
+    preloaded_object = association_names.any? ? object.class.eager_load(*association_names).find(object.id) : object
+
+    object_associations.each do |reflection|
       worker = association_delete_worker(reflection)
-      delete_objects_of_association(object, reflection.name, worker)
+      delete_objects_of_association(preloaded_object, reflection.name, worker)
     end
   end
 
