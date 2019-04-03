@@ -18,12 +18,6 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     end
   end
 
-  test '.with_system_names' do
-    plans = FactoryBot.create_list(:application_plan, 3)
-    plans = plans[1..2]
-    assert_same_elements plans.map(&:id), ApplicationPlan.with_system_names(plans.map(&:system_name)).pluck(:id)
-  end
-
   should 'not allow setting of end_user_required' do
     plan = FactoryBot.create(:application_plan)
     plan.end_user_required = true

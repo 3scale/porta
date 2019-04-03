@@ -111,9 +111,9 @@ class Account < ApplicationRecord
 
   scope :free, ->(free_date) { where.has { not_exists Contract.have_paid_on(free_date).by_account(BabySqueel[:accounts].id).select(:id) } }
 
-  scope :without_application_plans_with_system_names, lambda { |system_names|
+  scope :without_bought_application_plans_with_system_names, lambda { |system_names|
     where.has do
-      not_exists Service.of_account(BabySqueel[:accounts].id).with_application_plans_with_system_names(system_names).select(:id)
+      not_exists Cinstance.by_account(BabySqueel[:accounts].id).with_application_plans_with_system_names(system_names).select(:id)
     end
   }
 
@@ -288,7 +288,7 @@ class Account < ApplicationRecord
     tenants.without_suspended.without_deleted
       .free(config[:contract_unpaid_time].days.ago)
       .inactive_since(config[:account_inactivity].days.ago)
-      .without_application_plans_with_system_names(config[:disabled_for_app_plans])
+      .without_bought_application_plans_with_system_names(config[:disabled_for_app_plans])
   end
 
   def self.should_be_automatically_scheduled_for_deletion
@@ -297,7 +297,7 @@ class Account < ApplicationRecord
     tenants
       .free(config[:contract_unpaid_time].days.ago)
       .suspended_since(config[:account_suspension].days.ago)
-      .without_application_plans_with_system_names(config[:disabled_for_app_plans])
+      .without_bought_application_plans_with_system_names(config[:disabled_for_app_plans])
   end
 
   def self.attributes_for_destroy_list

@@ -10,8 +10,6 @@ class ApplicationPlan < Plan
   belongs_to :partner
   belongs_to :service, :foreign_key => :issuer_id, :inverse_of => :application_plans
 
-  scope :with_system_names, ->(system_names) { where(system_name: system_names) }
-
   validate :end_users_switch
 
   scope :provided_by, lambda { |provider|

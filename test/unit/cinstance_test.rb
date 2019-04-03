@@ -971,4 +971,17 @@ class CinstanceTest < ActiveSupport::TestCase
     expected_cinstance_ids = Cinstance.where.has { user_account_id != Account.master.id }.pluck(:id)
     assert_same_elements expected_cinstance_ids, Cinstance.not_bought_by(master_account).pluck(:id)
   end
+
+  test '.with_application_plans_with_system_names' do
+    id_cinstance_with_pro_plan               = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'pro')).id
+    id_cinstance_with_enterprise_plan        = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'enterprise')).id
+    id_cinstance_with_another_plan           = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'system_name_1')).id
+    id_service_contract_with_enterprise_plan = FactoryBot.create(:service_contract,     plan: FactoryBot.create(:service_plan, system_name: 'system_name_2')).id
+
+    enterprise_ids = Cinstance.with_application_plans_with_system_names(%w[enterprise pro]).pluck(:id)
+    assert_includes     enterprise_ids, id_cinstance_with_pro_plan
+    assert_includes     enterprise_ids, id_cinstance_with_enterprise_plan
+    assert_not_includes enterprise_ids, id_cinstance_with_another_plan
+    assert_not_includes enterprise_ids, id_service_contract_with_enterprise_plan
+  end
 end

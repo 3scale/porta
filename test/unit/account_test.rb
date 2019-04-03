@@ -48,20 +48,18 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_includes free_tenant_ids, paid_tenant.id
   end
 
-  def test_class_method_without_application_plans_with_system_names
+  def test_class_method_without_bought_application_plans_with_system_names
     enterprise_tenant = FactoryBot.create(:simple_provider)
-    FactoryBot.create(:simple_service, account: enterprise_tenant)
-    FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: enterprise_tenant.default_service)
+    FactoryBot.create(:cinstance, user_account: enterprise_tenant, plan: FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: master_account.default_service))
 
     non_enterprise_tenant = FactoryBot.create(:simple_provider)
-    FactoryBot.create(:simple_service, account: non_enterprise_tenant)
-    FactoryBot.create(:application_plan, system_name: '2017-pro-500k', issuer: non_enterprise_tenant.default_service)
+    FactoryBot.create(:cinstance, user_account: non_enterprise_tenant, plan: FactoryBot.create(:application_plan, system_name: '2017-pro-500k', issuer: master_account.default_service))
 
     another_non_enterprise_tenant = FactoryBot.create(:simple_provider)
 
-    assert_includes Account.without_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), non_enterprise_tenant.id
-    assert_includes Account.without_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), another_non_enterprise_tenant.id
-    assert_not_includes Account.without_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), enterprise_tenant.id
+    assert_includes Account.without_bought_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), non_enterprise_tenant.id
+    assert_includes Account.without_bought_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), another_non_enterprise_tenant.id
+    assert_not_includes Account.without_bought_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), enterprise_tenant.id
   end
 
   def test_not_master
@@ -802,10 +800,9 @@ class AccountTest < ActiveSupport::TestCase
       @accounts[:to_suspend] << old_tenant_with_old_traffic.id
 
       old_tenant_with_old_traffic_but_enterprise = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: old_tenant_with_old_traffic_but_enterprise)
       old_tenant_with_old_traffic_but_enterprise.update_attribute(:created_at, (account_inactivity + 1).days.ago)
-      plan = FactoryBot.create(:application_plan, system_name: 'enterprise', issuer: service)
-      FactoryBot.create(:cinstance, user_account: old_tenant_with_old_traffic_but_enterprise, first_daily_traffic_at: (account_inactivity + 1).days.ago)
+      plan = FactoryBot.create(:application_plan, system_name: 'enterprise', issuer: master_account.default_service)
+      FactoryBot.create(:cinstance, user_account: old_tenant_with_old_traffic_but_enterprise, first_daily_traffic_at: (account_inactivity + 1).days.ago, plan: plan)
       @accounts[:not_to_suspend] << old_tenant_with_old_traffic_but_enterprise.id
 
       old_tenant_with_old_traffic_but_paid = FactoryBot.create(:simple_provider)
@@ -875,9 +872,8 @@ class AccountTest < ActiveSupport::TestCase
 
       tenant_suspended_long_ago_but_enterprise = FactoryBot.create(:simple_provider, state: 'suspended')
       tenant_suspended_long_ago_but_enterprise.update_attribute(:state_changed_at, account_suspension.days.ago)
-      service = FactoryBot.create(:simple_service, account: tenant_suspended_long_ago_but_enterprise)
-      FactoryBot.create(:application_plan, system_name: 'enterprise', issuer: service)
-      FactoryBot.create(:cinstance, user_account: tenant_suspended_long_ago_but_enterprise)
+      plan = FactoryBot.create(:application_plan, system_name: 'enterprise', issuer: master_account.default_service)
+      FactoryBot.create(:cinstance, user_account: tenant_suspended_long_ago_but_enterprise, plan: plan)
       @accounts[:not_to_delete] << tenant_suspended_long_ago_but_enterprise.id
 
       tenant_suspended_long_ago_but_paid = FactoryBot.create(:simple_provider, state: 'suspended')

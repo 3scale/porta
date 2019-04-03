@@ -48,12 +48,6 @@ class Service < ApplicationRecord
 
   scope :of_account, ->(account) { where.has { account_id == account } }
 
-  scope :with_application_plans_with_system_names, lambda { |system_names|
-    where.has do
-      exists ApplicationPlan.where.has { issuer_id == BabySqueel[:services].id }.with_system_names(system_names)
-    end
-  }
-
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
 
   belongs_to :default_service_plan, class_name: 'ServicePlan'
