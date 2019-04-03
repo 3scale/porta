@@ -1054,10 +1054,8 @@ en:
 
       # Service attributes
       service:
-        admin_support_email: Administrative support email address
         credit_card_support_email: "Who should be emailed, to change credit card details?"
         friendly_id: URL
-        tech_support_email: Technical support email address
         txt_support: Contact and Support Information
 
       proxy:

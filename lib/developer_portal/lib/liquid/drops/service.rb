@@ -181,7 +181,7 @@ module Liquid
         Drops::Metric.wrap(@service.metrics.top_level)
       end
 
-      # TODO: remove this and remove all references, views, controllers
+      # NOTE: keeping in case somebody already using 'admin_support_email' liquid
       hidden
       deprecated "Use **support_email** instead."
       def admin_support_email
