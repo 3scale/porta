@@ -99,16 +99,13 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'update the support email' do
     put(admin_api_service_path(@service), provider_key: @provider.api_key, :format => :xml,
-                                          support_email: 'supp@topo.com', tech_support_email: 'techtopo@topo.com',
-                                          admin_support_email: 'admintopo@topo.com')
+                                          support_email: 'supp@topo.com')
 
     assert_response :success
 
     @service.reload
 
     assert_equal 'supp@topo.com', @service.support_email
-    assert_equal 'techtopo@topo.com', @service.tech_support_email
-    assert_equal 'admintopo@topo.com',  @service.admin_support_email
   end
 
   pending_test 'update with wrong id' do

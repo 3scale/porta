@@ -42,6 +42,24 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     expected_signup_and_use.each { |attr_name, attr_value| assert_equal attr_value, service.public_send(attr_name) }
   end
 
+  # This test can be removed once used deprecated attributes have been removed from the schema
+  test 'deprecated attributes should not be updated' do
+    new_tech_support_email = 'foo.tech.support@example.com'
+    new_admin_support_email = 'foo.admin.support@example.com'
+
+    deprecated_update_params = { service:
+                                 { tech_support_email: new_tech_support_email,
+                                   admin_support_email: new_admin_support_email }
+                               }
+
+    put admin_service_path(service), deprecated_update_params
+
+    service.reload
+
+    assert_not_equal service.tech_support_email, new_tech_support_email
+    assert_not_equal service.admin_support_email, new_admin_support_email
+  end
+
   private
 
   def update_params

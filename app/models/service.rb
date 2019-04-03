@@ -15,7 +15,7 @@ class Service < ApplicationRecord
 
   has_system_name uniqueness_scope: :account_id
 
-  attr_readonly :system_name
+  attr_readonly :system_name, :admin_support_email, :tech_support_email
 
   validates :backend_version, inclusion: { in: ->(service) { BackendVersion.usable_versions(service: service) }}
 
@@ -43,7 +43,7 @@ class Service < ApplicationRecord
   end
 
   def self.columns
-    super.reject { |column| column.name == 'buyer_can_see_log_requests'}
+    super.reject { |column| %w[buyer_can_see_log_requests tech_support_email admin_support_email].include?(column.name) }
   end
 
   scope :of_account, ->(account) { where.has { account_id == account } }
@@ -108,13 +108,13 @@ class Service < ApplicationRecord
     end
   end)
 
-  validates :tech_support_email, :admin_support_email, :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
+  validates :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
 
   validates :name, presence: true
 
   validates :default_end_user_plan, presence: { unless: :end_user_registration_required? }
   validates :name, :logo_file_name, :logo_content_type, :state, :draft_name,
-            :tech_support_email, :admin_support_email, :credit_card_support_email,
+            :credit_card_support_email,
             :buyer_plan_change_permission, :system_name, :backend_version, :support_email, :deployment_option,
             length: { maximum: 255 }
   validates :infobar, :terms, :notification_settings, :oneline_description, :description,
@@ -368,8 +368,6 @@ class Service < ApplicationRecord
 
       xml.deployment_option deployment_option
       xml.support_email support_email
-      xml.tech_support_email tech_support_email
-      xml.admin_support_email admin_support_email
 
       xml.end_user_registration_required end_user_registration_required
 
