@@ -282,24 +282,6 @@ class Account < ApplicationRecord
   scope :created_before, ->(date) { where(['created_at <= ?', date]) }
   scope :created_after,  ->(date) { where(['created_at >= ?', date]) }
 
-  def self.should_be_automatically_suspended
-    return none unless Features::AccountDeletionConfig.enabled?
-    config = Features::AccountDeletionConfig.config.to_h.slice(:account_inactivity, :contract_unpaid_time, :disabled_for_app_plans)
-    tenants.without_suspended.without_deleted
-      .free(config[:contract_unpaid_time].days.ago)
-      .inactive_since(config[:account_inactivity].days.ago)
-      .without_bought_application_plans_with_system_names(config[:disabled_for_app_plans])
-  end
-
-  def self.should_be_automatically_scheduled_for_deletion
-    return none unless Features::AccountDeletionConfig.enabled?
-    config = Features::AccountDeletionConfig.config.to_h.slice(:account_suspension, :contract_unpaid_time, :disabled_for_app_plans)
-    tenants
-      .free(config[:contract_unpaid_time].days.ago)
-      .suspended_since(config[:account_suspension].days.ago)
-      .without_bought_application_plans_with_system_names(config[:disabled_for_app_plans])
-  end
-
   def self.attributes_for_destroy_list
     %w[id org_name state org_legaladdress org_legaladdress_cont city state_region telephone_number vat_code vat_rate extra_fields created_at]
   end
