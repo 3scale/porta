@@ -48,19 +48,6 @@ function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
   return { ...policy, name: key, humanName: policy.name, data: {} }
 }
 
-const toJsonString = (val: Object): string => JSON.stringify(val, null, 2)
-
-const fromJsonString = (json: string) => JSON.parse(json)
-
-const safeFromJsonString = (json: string) => {
-  try {
-    return fromJsonString(json)
-  } catch (err) {
-    console.warn('That doesn\'t look like a valid json!', err)
-    return undefined
-  }
-}
-
 export {
   updateObject,
   updateArray,
@@ -68,8 +55,5 @@ export {
   updateError,
   generateGuid,
   parsePolicies,
-  parsePolicy,
-  toJsonString,
-  fromJsonString,
-  safeFromJsonString
+  parsePolicy
 }
