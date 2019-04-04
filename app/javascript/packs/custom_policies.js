@@ -1,7 +1,7 @@
 import {render} from 'react-dom'
 import React from 'react'
 import {CustomPolicies} from 'Policies/components/CustomPolicies'
-import {safeFromJsonString} from 'Policies/util'
+import {safeFromJsonString} from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('custom-policies-container')
