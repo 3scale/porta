@@ -851,8 +851,8 @@ class AccountTest < ActiveSupport::TestCase
       assert_not_includes result_ids, already_deleted.id
     end
 
-    test 'it returns empty if the config is not valid' do
-      Features::AccountDeletionConfig.stubs(valid?: false)
+    test 'it returns empty if the feature is disabled' do
+      Features::AccountDeletionConfig.stubs(enabled?: false)
       assert_empty Account.should_be_automatically_suspended.pluck(:id)
     end
   end
@@ -902,8 +902,8 @@ class AccountTest < ActiveSupport::TestCase
       @accounts[:not_to_delete].each { |account_id| assert_not_includes(result_ids, account_id) }
     end
 
-    test 'it returns empty if the config is not valid' do
-      Features::AccountDeletionConfig.stubs(valid?: false)
+    test 'it returns empty if the feature is disabled' do
+      Features::AccountDeletionConfig.stubs(enabled?: false)
       assert_empty Account.should_be_automatically_scheduled_for_deletion.pluck(:id)
     end
   end

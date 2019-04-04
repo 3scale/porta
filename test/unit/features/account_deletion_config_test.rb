@@ -11,30 +11,11 @@ class Features::AccountDeletionConfigTest < ActiveSupport::TestCase
 
   test 'loads and fetches all the values' do
     valid_config.each { |key, value| assert_equal value, account_deletion_config.config.public_send(key) }
-    assert account_deletion_config.valid?
+    assert account_deletion_config.enabled?
   end
 
-  test 'marks as invalid if any value of the expected integers is not an integer' do
-    integer_values = %w[account_suspension account_inactivity contract_unpaid_time]
-    valid_config.slice(*integer_values).each_key do |k|
-      config = valid_config.dup
-      config[k] = 'foo'
-      refute account_deletion_config(config).valid?
-    end
-  end
-
-  test 'marks as invalid if the disabled_for_app_plans is not an array' do
-    config = valid_config.dup
-    config['disabled_for_app_plans'] = 1
-    refute account_deletion_config(config).valid?
-  end
-
-  test 'marks as invalid if any value is missing' do
-    valid_config.each_key do |k|
-      config = valid_config.dup
-      config.delete(k)
-      refute account_deletion_config(config).valid?
-    end
+  test 'it is not enabled if the config is not provided' do
+    refute account_deletion_config('').enabled?
   end
 
   private
