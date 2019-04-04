@@ -283,7 +283,7 @@ class Account < ApplicationRecord
   scope :created_after,  ->(date) { where(['created_at >= ?', date]) }
 
   def self.should_be_automatically_suspended
-    return none unless Features::AccountDeletionConfig.valid?
+    return none unless Features::AccountDeletionConfig.enabled?
     config = Features::AccountDeletionConfig.config.to_h.slice(:account_inactivity, :contract_unpaid_time, :disabled_for_app_plans)
     tenants.without_suspended.without_deleted
       .free(config[:contract_unpaid_time].days.ago)
@@ -292,7 +292,7 @@ class Account < ApplicationRecord
   end
 
   def self.should_be_automatically_scheduled_for_deletion
-    return none unless Features::AccountDeletionConfig.valid?
+    return none unless Features::AccountDeletionConfig.enabled?
     config = Features::AccountDeletionConfig.config.to_h.slice(:account_suspension, :contract_unpaid_time, :disabled_for_app_plans)
     tenants
       .free(config[:contract_unpaid_time].days.ago)
