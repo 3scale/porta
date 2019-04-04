@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { fromJsonString, toJsonString } from 'Policies/util'
+import { fromJsonString, toJsonString } from 'utilities/json-utils'
 import 'codemirror/mode/javascript/javascript'
 import ApicastManifest from 'Policies/apicast-manifest'
 import Ajv from 'ajv'
