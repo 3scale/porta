@@ -25,6 +25,7 @@ class Tasks::Multitenant::TenantsTest < ActiveSupport::TestCase
     setup do
       config = {'account_suspension' => 2, 'account_inactivity' => 3, 'contract_unpaid_time' => 4, disabled_for_app_plans: ['enterprise']}
       Features::AccountDeletionConfig.configure(config)
+      Features::AccountDeletionConfig.stubs(enabled?: true)
 
       enterprise_plan = FactoryBot.create(:application_plan, system_name: 'enterprise', issuer: master_account.default_service)
       pro_plan = FactoryBot.create(:application_plan, system_name: 'pro', issuer: master_account.default_service)
