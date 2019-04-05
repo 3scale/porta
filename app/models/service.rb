@@ -47,7 +47,6 @@ class Service < ApplicationRecord
   end
 
   scope :of_account, ->(account) { where.has { account_id == account } }
-  scope :with_enterprise_application_plans, -> { joins(:application_plans).where('plans.system_name LIKE ?', '%enterprise%') }
 
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
 

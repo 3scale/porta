@@ -48,20 +48,18 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_includes free_tenant_ids, paid_tenant.id
   end
 
-  def test_class_method_non_enterprise
+  def test_class_method_lacks_cinstance_with_plan_system_name
     enterprise_tenant = FactoryBot.create(:simple_provider)
-    FactoryBot.create(:simple_service, account: enterprise_tenant)
-    FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: enterprise_tenant.default_service)
+    FactoryBot.create(:cinstance, user_account: enterprise_tenant, plan: FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: master_account.default_service))
 
     non_enterprise_tenant = FactoryBot.create(:simple_provider)
-    FactoryBot.create(:simple_service, account: non_enterprise_tenant)
-    FactoryBot.create(:application_plan, system_name: '2017-pro-500k', issuer: non_enterprise_tenant.default_service)
+    FactoryBot.create(:cinstance, user_account: non_enterprise_tenant, plan: FactoryBot.create(:application_plan, system_name: '2017-pro-500k', issuer: master_account.default_service))
 
     another_non_enterprise_tenant = FactoryBot.create(:simple_provider)
 
-    assert_includes Account.not_enterprise.pluck(:id), non_enterprise_tenant.id
-    assert_includes Account.not_enterprise.pluck(:id), another_non_enterprise_tenant.id
-    assert_not_includes Account.not_enterprise.pluck(:id), enterprise_tenant.id
+    assert_includes Account.lacks_cinstance_with_plan_system_name(['2014_enterprise_3M']).pluck(:id), non_enterprise_tenant.id
+    assert_includes Account.lacks_cinstance_with_plan_system_name('2014_enterprise_3M').pluck(:id), another_non_enterprise_tenant.id
+    assert_not_includes Account.lacks_cinstance_with_plan_system_name(['2014_enterprise_3M']).pluck(:id), enterprise_tenant.id
   end
 
   def test_not_master
