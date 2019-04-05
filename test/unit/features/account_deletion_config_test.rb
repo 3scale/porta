@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Features::AccountDeletionConfigTest < ActiveSupport::TestCase
   def setup
-    @valid_config = {'account_suspension' => 30, 'account_inactivity' => 50, 'contract_unpaid_time' => 70, 'disabled_for_app_plans' => %w[foo bar]}
+    @valid_config = {'enabled' => true, 'account_suspension' => 30, 'account_inactivity' => 50, 'contract_unpaid_time' => 70, 'disabled_for_app_plans' => %w[foo bar]}
   end
 
   attr_reader :valid_config
@@ -14,8 +14,9 @@ class Features::AccountDeletionConfigTest < ActiveSupport::TestCase
     assert account_deletion_config.enabled?
   end
 
-  test 'it is not enabled if the config is not provided' do
+  test 'it is not enabled if the config is not provided or if enabled is false' do
     refute account_deletion_config('').enabled?
+    refute account_deletion_config(valid_config.merge('enabled' => false)).enabled?
   end
 
   private

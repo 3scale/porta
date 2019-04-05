@@ -26,7 +26,7 @@ module Features
     attr_reader :config
 
     def enabled?
-      config.any?
+      config[:enabled]
     end
   end
 end
