@@ -48,7 +48,7 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_includes free_tenant_ids, paid_tenant.id
   end
 
-  def test_class_method_without_bought_application_plans_with_system_names
+  def test_class_method_lacks_cinstance_with_plan_system_name
     enterprise_tenant = FactoryBot.create(:simple_provider)
     FactoryBot.create(:cinstance, user_account: enterprise_tenant, plan: FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: master_account.default_service))
 
@@ -57,9 +57,9 @@ class AccountTest < ActiveSupport::TestCase
 
     another_non_enterprise_tenant = FactoryBot.create(:simple_provider)
 
-    assert_includes Account.without_bought_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), non_enterprise_tenant.id
-    assert_includes Account.without_bought_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), another_non_enterprise_tenant.id
-    assert_not_includes Account.without_bought_application_plans_with_system_names(['2014_enterprise_3M']).pluck(:id), enterprise_tenant.id
+    assert_includes Account.lacks_cinstance_with_plan_system_name(['2014_enterprise_3M']).pluck(:id), non_enterprise_tenant.id
+    assert_includes Account.lacks_cinstance_with_plan_system_name('2014_enterprise_3M').pluck(:id), another_non_enterprise_tenant.id
+    assert_not_includes Account.lacks_cinstance_with_plan_system_name(['2014_enterprise_3M']).pluck(:id), enterprise_tenant.id
   end
 
   def test_not_master

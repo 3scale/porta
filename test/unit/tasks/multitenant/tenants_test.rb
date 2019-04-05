@@ -56,5 +56,14 @@ class Tasks::Multitenant::TenantsTest < ActiveSupport::TestCase
       assert @tenant_without_any_cinstance.reload.scheduled_for_deletion?
       assert @developer_with_enterprise.reload.scheduled_for_deletion?
     end
+
+    test 'it does nothing with the config is disabled' do
+      Features::AccountDeletionConfig.stubs(enabled?: false)
+      assert @tenant_with_enterprise.reload.scheduled_for_deletion?
+      assert @tenant_with_enterprise_and_pro.reload.scheduled_for_deletion?
+      assert @tenant_with_pro.reload.scheduled_for_deletion?
+      assert @tenant_without_any_cinstance.reload.scheduled_for_deletion?
+      assert @developer_with_enterprise.reload.scheduled_for_deletion?
+    end
   end
 end

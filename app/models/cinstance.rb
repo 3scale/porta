@@ -182,7 +182,7 @@ class Cinstance < Contract
   scope :by_active_since, lambda {|date| where('first_daily_traffic_at >= ?', date) }
   scope :by_inactive_since, lambda {|date| where('first_daily_traffic_at <= ?', date) }
 
-  scope :with_application_plans_with_system_names, ->(system_names) { joins(:plan).where.has { plan.system_name.in system_names } }
+  scope :by_plan_system_name, ->(system_names) { joins(:plan).where.has { plan.system_name.in system_names } }
 
   ##
   #  Instance Methods
