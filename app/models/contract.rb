@@ -50,7 +50,6 @@ class Contract < ApplicationRecord
 
   attr_protected :plan_id, :state, :provider_public_key, :paid_until, :trial_period_expires_at, :setup_fee, :type, :variable_cost_paid_until, :application_id, :user_key, :user_account_id, :tenant_id, :audit_ids
 
-
   # TODO: unit test this scope
   def self.provided_by(account)
     where.has do
