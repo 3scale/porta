@@ -972,16 +972,22 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_same_elements expected_cinstance_ids, Cinstance.not_bought_by(master_account).pluck(:id)
   end
 
-  test '.with_application_plans_with_system_names' do
+  test '.by_plan_system_name' do
     id_cinstance_with_pro_plan               = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'pro')).id
     id_cinstance_with_enterprise_plan        = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'enterprise')).id
     id_cinstance_with_another_plan           = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'system_name_1')).id
     id_service_contract_with_enterprise_plan = FactoryBot.create(:service_contract,     plan: FactoryBot.create(:service_plan, system_name: 'system_name_2')).id
 
-    enterprise_ids = Cinstance.with_application_plans_with_system_names(%w[enterprise pro]).pluck(:id)
-    assert_includes     enterprise_ids, id_cinstance_with_pro_plan
-    assert_includes     enterprise_ids, id_cinstance_with_enterprise_plan
-    assert_not_includes enterprise_ids, id_cinstance_with_another_plan
-    assert_not_includes enterprise_ids, id_service_contract_with_enterprise_plan
+    ids_cinstances_by_plan_system_name = Cinstance.by_plan_system_name(%w[enterprise pro]).pluck(:id)
+    assert_includes     ids_cinstances_by_plan_system_name, id_cinstance_with_enterprise_plan
+    assert_includes     ids_cinstances_by_plan_system_name, id_cinstance_with_pro_plan
+    assert_not_includes ids_cinstances_by_plan_system_name, id_cinstance_with_another_plan
+    assert_not_includes ids_cinstances_by_plan_system_name, id_service_contract_with_enterprise_plan
+
+    ids_cinstances_enterprise = Cinstance.by_plan_system_name('enterprise').pluck(:id)
+    assert_includes     ids_cinstances_enterprise, id_cinstance_with_enterprise_plan
+    assert_not_includes ids_cinstances_enterprise, id_cinstance_with_pro_plan
+    assert_not_includes ids_cinstances_enterprise, id_cinstance_with_another_plan
+    assert_not_includes ids_cinstances_enterprise, id_service_contract_with_enterprise_plan
   end
 end
