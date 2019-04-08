@@ -93,19 +93,20 @@ fieldset ol li input[type='text'] + a {
 }
 
 select {
-  max-width: calc(100% - #{$border-width}) !important;
-  margin: 0 line-height-times(1/4) 0 0;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  background-repeat: no-repeat;
-  background-size: line-height-times(1/3) auto;
-  background-position: right line-height-times(1/3) center;
-  padding-right: line-height-times(1/2);
   background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
         <polygon points='0,0 60,0 30,40' style='fill:#{$border-color};'/> \
       </svg>");
+  background-position: right line-height-times(1/3) center;
+  background-repeat: no-repeat;
+  background-size: line-height-times(1/3) auto;
+  box-shadow: 0px 0px 0px rgba(255,255,255, 0);
+  margin: 0 line-height-times(1/4) 0 0;
+  max-width: calc(100% - #{$border-width}) !important;
+  padding-right: line-height-times(1/2);
 
   &::-ms-expand {
     border: 0;
