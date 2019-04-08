@@ -8,6 +8,10 @@ module System
     module_function
 
     def configuration_specification
+      @configuration_specification ||= read_configuration_specification
+    end
+
+    def read_configuration_specification
       configurations = Rails.application.config.database_configuration
       resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(configurations)
       spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call.to_sym
