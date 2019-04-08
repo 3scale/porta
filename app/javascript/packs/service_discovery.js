@@ -1,4 +1,4 @@
-import 'whatwg-fetch'
+import {fetch as fetchPolyfill} from 'whatwg-fetch'
 
 document.addEventListener('DOMContentLoaded', () => {
   const BASE_URL = '/p/admin/service_discovery/'
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fetchData = (url, type) => {
-    fetch(url, { credentials: 'same-origin' })
+    fetchPolyfill(url)
       .then(response => {
         if (!response.ok) {
           throw Error(response.statusText)
@@ -83,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
       addOptionToSelect(formDiscover.service_namespace, project.metadata.name)
     })
     if (projects.length > 0) {
-      // TODO: It fails when only 1 service
-      // formDiscover.service_namespace.selectedIndex = 1
       changeClusterNamespace()
     }
   }
@@ -95,9 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
     services.forEach(
       service => addOptionToSelect(formDiscover.service_name, service.metadata.name)
     )
-    if (services.length > 0) {
-      // formDiscover.service_name.selectedIndex = 1
-    }
   }
 
   const fetchServices = () => {
