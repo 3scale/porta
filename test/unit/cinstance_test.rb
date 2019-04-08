@@ -976,7 +976,13 @@ class CinstanceTest < ActiveSupport::TestCase
     id_cinstance_with_pro_plan               = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'pro')).id
     id_cinstance_with_enterprise_plan        = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'enterprise')).id
     id_cinstance_with_another_plan           = FactoryBot.create(:application_contract, plan: FactoryBot.create(:application_plan, system_name: 'system_name_1')).id
-    id_service_contract_with_enterprise_plan = FactoryBot.create(:service_contract,     plan: FactoryBot.create(:service_plan, system_name: 'system_name_2')).id
+    id_service_contract_with_enterprise_plan = FactoryBot.create(:service_contract,     plan: FactoryBot.create(:service_plan, system_name: 'enterprise')).id
+
+    ids_cinstances_enterprise = Cinstance.by_plan_system_name('enterprise').pluck(:id)
+    assert_includes     ids_cinstances_enterprise, id_cinstance_with_enterprise_plan
+    assert_not_includes ids_cinstances_enterprise, id_cinstance_with_pro_plan
+    assert_not_includes ids_cinstances_enterprise, id_cinstance_with_another_plan
+    assert_not_includes ids_cinstances_enterprise, id_service_contract_with_enterprise_plan
 
     ids_cinstances_by_plan_system_name = Cinstance.by_plan_system_name(%w[enterprise pro]).pluck(:id)
     assert_includes     ids_cinstances_by_plan_system_name, id_cinstance_with_enterprise_plan
@@ -984,10 +990,16 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_not_includes ids_cinstances_by_plan_system_name, id_cinstance_with_another_plan
     assert_not_includes ids_cinstances_by_plan_system_name, id_service_contract_with_enterprise_plan
 
-    ids_cinstances_enterprise = Cinstance.by_plan_system_name('enterprise').pluck(:id)
-    assert_includes     ids_cinstances_enterprise, id_cinstance_with_enterprise_plan
-    assert_not_includes ids_cinstances_enterprise, id_cinstance_with_pro_plan
-    assert_not_includes ids_cinstances_enterprise, id_cinstance_with_another_plan
-    assert_not_includes ids_cinstances_enterprise, id_service_contract_with_enterprise_plan
+    ids_cinstances_enterprise_like = Cinstance.by_plan_system_name('%rpris%').pluck(:id)
+    assert_includes     ids_cinstances_enterprise_like, id_cinstance_with_enterprise_plan
+    assert_not_includes ids_cinstances_enterprise_like, id_cinstance_with_pro_plan
+    assert_not_includes ids_cinstances_enterprise_like, id_cinstance_with_another_plan
+    assert_not_includes ids_cinstances_enterprise_like, id_service_contract_with_enterprise_plan
+
+    ids_cinstances_like_list = Cinstance.by_plan_system_name(%w[%terpr% %pr%]).pluck(:id)
+    assert_includes     ids_cinstances_like_list, id_cinstance_with_enterprise_plan
+    assert_includes     ids_cinstances_like_list, id_cinstance_with_pro_plan
+    assert_not_includes ids_cinstances_like_list, id_cinstance_with_another_plan
+    assert_not_includes ids_cinstances_like_list, id_service_contract_with_enterprise_plan
   end
 end
