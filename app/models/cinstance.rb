@@ -182,7 +182,14 @@ class Cinstance < Contract
   scope :by_active_since, lambda {|date| where('first_daily_traffic_at >= ?', date) }
   scope :by_inactive_since, lambda {|date| where('first_daily_traffic_at <= ?', date) }
 
-  scope :by_plan_system_name, ->(system_names) { joins(:plan).where.has { plan.system_name.in system_names } }
+  scope :by_plan_system_name, lambda { |system_names|
+    names = [system_names].flatten
+
+    proc_like_system_name = proc { |cinstance, name| cinstance.plan.system_name.like(name) }
+    proc_query_chain = proc { |cinstance| names.map { |name| proc_like_system_name.call(cinstance, name)}.inject(:or) }
+
+    joins(:plan).where.has { |cinstance| proc_query_chain.call(cinstance) }
+  }
 
   ##
   #  Instance Methods

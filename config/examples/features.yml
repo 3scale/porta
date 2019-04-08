@@ -5,7 +5,7 @@ features: &default
     account_suspension: 90
     contract_unpaid_time: 183
     disabled_for_app_plans:
-    - enterprise
+    - '%enterprise%'
 
 development:
   <<: *default
