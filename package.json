@@ -14,16 +14,16 @@
     "jest:watch": "npm run-script jest -- --watch"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-env": "^7.4.3",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.5.0",
+    "babel-jest": "^24.7.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
     "empty": "^0.10.1",
@@ -67,12 +67,12 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "swagger-tools": "0.9.7",
-    "webpack": "^4.28.1",
-    "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.1.14"
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.4.0",
+    "@babel/polyfill": "^7.4.3",
     "@rails/webpacker": "^4.0.2",
     "ajv": "^6.9.2",
     "bootstrap-sass": "3",
