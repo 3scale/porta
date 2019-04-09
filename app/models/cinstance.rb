@@ -82,7 +82,7 @@ class Cinstance < Contract
   validates :description, presence: { :if => :description_required? }
 
   after_commit :push_webhook_key_updated, :on => :update, :if => :user_key_updated?
-  after_save :push_application_updated_event, on: :update
+  after_commit :push_application_updated_event, on: :update, unless: :only_traffic_updated?
 
   #this method marks that a human edition of the app is happening, thus description presence will be validated
   # this is done so e.g. to avoid change_plan to fail when the app misses description or name
@@ -403,6 +403,10 @@ class Cinstance < Contract
   end
 
   private
+
+  def only_traffic_updated?
+    (previous_changes.keys - %w[first_traffic_at first_daily_traffic_at updated_at]).empty?
+  end
 
   # It calls to `create_key_after_create` to check if it's possible to add
   # an application key.
