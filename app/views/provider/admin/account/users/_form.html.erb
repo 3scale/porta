@@ -8,7 +8,11 @@
 <% end -%>
 
 <% if can? :update_role, @user %>
-  <div id="user-permissions-widget">
+  <%= content_tag :div, id: 'user-permissions-form',
+                        data: { state: @user.as_json(root: false, only: [:role], methods: [:admin_sections, :member_permission_service_ids]),
+                                services: @services.as_json(root: false, only: [:id, :name, :description]),
+                                features: AdminSection.permissions_for_account(current_account) 
+                            } do %>
 <%= form.inputs :name => 'Administrative' do %>
   <%= form.input :role, :as => :radio, :collection => roles_collection_for_form_helpers(@user), :input_html => { :class => 'roles_ids' } %>
 
@@ -54,21 +58,11 @@
         <% content_for :javascripts do %>
             <% javascript_pack_tag 'permissions' %>
         <% end %>
-        <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            renderPermissionsWidget({
-              el: document.getElementById('user-permissions-widget'),
-              state: <%= json @user.as_json(root: false, only: [:role], methods: [:admin_sections, :member_permission_service_ids]) %>,
-              services: <%= json @services.as_json(root: false, only: [:id, :name, :description]) %>,
-              features: <%= json AdminSection.permissions_for_account(current_account) %>
-            })
-          })
-        </script>
     <%- end -%>
   <% end %>
 <% end %>
 
-  </div>
+  <% end %>
 <% end %>
 
 <%= form.buttons do %>
