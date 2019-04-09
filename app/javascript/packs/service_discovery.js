@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const addOptionToSelect = (selectElem, val) => {
-    var opt = document.createElement('option')
+    const opt = document.createElement('option')
     opt.text = val
     return selectElem.appendChild(opt)
   }
@@ -70,26 +70,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const populateOptions = (type, data) => {
     switch (type) {
       case 'namespaces':
-        populateNamespaces(data)
+        populateNamespaces(data.projects)
         break
       case 'services':
-        populateServices(data)
+        populateServices(data.services)
         break
     }
   }
 
-  const populateNamespaces = ({projects}) => {
-    projects.forEach(function (project, index, array) {
-      addOptionToSelect(formDiscover.service_namespace, project.metadata.name)
-    })
+  const populateNamespaces = projects => {
     if (projects.length > 0) {
+      projects.forEach(
+        project => addOptionToSelect(formDiscover.service_namespace, project.metadata.name)
+      )
       changeClusterNamespace()
     }
   }
 
-  const fetchNamespaces = () => fetchData(BASE_URL + 'projects.json', 'namespaces')
+  const fetchNamespaces = () => fetchData(`${BASE_URL}projects.json`, 'namespaces')
 
-  const populateServices = ({services}) => {
+  const populateServices = services => {
     services.forEach(
       service => addOptionToSelect(formDiscover.service_name, service.metadata.name)
     )
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fetchServices = () => {
     const selectedNamespace = formDiscover.service_namespace.dataset.selectedValue
     if (selectedNamespace !== '') {
-      const URLServices = BASE_URL + 'namespaces/' + selectedNamespace + '/services.json'
+      const URLServices = `${BASE_URL}namespaces/${selectedNamespace}/services.json`
       fetchData(URLServices, 'services')
     }
   }
