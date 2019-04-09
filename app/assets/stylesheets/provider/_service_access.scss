@@ -1,4 +1,4 @@
-#user-permissions-widget {
+#user-permissions-form {
   overflow: hidden;
 }
 
@@ -72,7 +72,7 @@ form.formtastic fieldset > ol > li fieldset {
     position: relative;
     z-index: 1000;
 
-    &--noServicePermissionsGranted {
+    &--noServicePermissionsGranted, &--services {
       display: none;
     }
 
