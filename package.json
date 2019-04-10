@@ -58,7 +58,7 @@
     "karma-jasmine-jquery": "^0.1.1",
     "karma-jquery": "^0.2.3",
     "karma-junit-reporter": "^1.1.0",
-    "karma-webpack": "^3.0.5",
+    "karma-webpack": "^4.0.0-rc.6",
     "postcss-loader": "^3.0.0",
     "postcss-smart-import": "^0.7.6",
     "raf": "^3.4.1",
