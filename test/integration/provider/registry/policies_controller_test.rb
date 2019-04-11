@@ -8,7 +8,7 @@ class Provider::Admin::Registry::PoliciesControllerTest < ActionDispatch::Integr
     @provider = FactoryBot.create(:provider_account)
     login! @provider
     rolling_updates_off
-    rolling_update(:policy_registry, enabled: true)
+    rolling_update(:policy_registry_ui, enabled: true)
   end
 
   class NoAccessTest < ActionDispatch::IntegrationTest
