@@ -10,7 +10,6 @@
 //= require extra_fields
 //= require vendor/underscore.min.js
 //= require provider
-//= require provider/admin/apiconfig/services/service_discovery
 //= require application
 //= require vendor/jquery.iframe-post-form.js
 //= require vendor/colorbox/jquery.colorbox.js
