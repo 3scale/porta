@@ -40,7 +40,7 @@ $ bundle exec rake integrate # Runs the test suite
 $ APICAST_REGISTRY_URL=https://apicast-staging.proda.3sca.net/policies UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
 
-## Setting up your Development Environment on Mac OS X (10.13)
+## Manual setup on Mac OS X (10.13)
 
 ### Prerequisites
 
@@ -173,3 +173,10 @@ You may need to set the database up from scratch again, in that case use `db:res
 ```bash
 bundle exec rake db:reset # This will drop and setup the database
 ```
+
+### Run Porta
+Start up the rails server by running the following command:
+```bash
+$ UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
+```
+> The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
