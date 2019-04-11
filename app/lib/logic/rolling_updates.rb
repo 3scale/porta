@@ -287,6 +287,12 @@ module Logic
         end
       end
 
+      class PolicyRegistryUi < PolicyRegistry
+        def enabled?
+          super && provider_can_use?(:policy_registry)
+        end
+      end
+
       class Unknown < Base
         def missing_config
           false

@@ -7,6 +7,7 @@
     title: '3scale API Docs',
     path: provider_admin_api_docs_path
 
-= render vertical_nav_item,
-        title: 'Custom Policies',
-        path: provider_admin_registry_policies_path if can?(:manage, :policy_registry)
+- if provider_can_use?(:policy_registry_ui)
+  = render vertical_nav_item,
+          title: 'Custom Policies',
+          path: provider_admin_registry_policies_path if can?(:manage, :policy_registry)
