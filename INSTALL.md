@@ -34,11 +34,7 @@ Download and build all the images and start a shell session inside the container
 make bash
 ```
 
-All the source and dependencies for this project will be in place, allowing you to run the server and the tests from inside the container:
-```bash
-$ bundle exec rake integrate # Runs the test suite
-$ APICAST_REGISTRY_URL=https://apicast-staging.proda.3sca.net/policies UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
-```
+All the source and dependencies for this project will be in place, making possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
 
 ## Manual setup on Mac OS X (10.13)
 
