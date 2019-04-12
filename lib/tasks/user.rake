@@ -10,4 +10,12 @@ namespace :user do
     end
     puts 'The accounts\' first_admin_id have been updated.'
   end
+
+  task :obfuscate_buyer_private_data_and_repair_tenant_id, [:user_ids] => [:environment] do |_task, args|
+    User.where(id: args[:user_ids]).find_each do |user|
+      tenant_id = user.account.provider_account_id
+      user.update!({username: "someone#{user.id}", email: "someone#{user.id}@example.com", tenant_id: tenant_id}, without_protection: true)
+      user.account.update!({tenant_id: tenant_id}, without_protection: true)
+    end
+  end
 end
