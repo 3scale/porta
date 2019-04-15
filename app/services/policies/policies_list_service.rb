@@ -4,16 +4,20 @@ require 'jsonclient'
 require 'set'
 
 class Policies::PoliciesListService
+
+  class PoliciesListServiceError < RuntimeError; end
+
   def self.call(account, builtin: true)
     list = PolicyList.new
-    if builtin
-      response = ::JSONClient.get(ThreeScale.config.sandbox_proxy.apicast_registry_url)
-      return unless response.ok?
-
-      list.merge!(PolicyList.from_hash(response.body['policies']))
-    end
-    list.merge!(PolicyList.new(account.policies)) if account.provider_can_use?(:policy_registry)
+    list.merge! fetch_policies_from_apicast if builtin
+    list.merge! account.policies if provider_can_use_policies
     list.to_h
+  rescue PoliciesListServiceError => error
+    Rails.logger.error { error } and return
+  end
+
+  def self.provider_can_use_policies
+    account.provider_can_use?(:policy_registry)
   end
 
   class PolicyList
@@ -61,4 +65,20 @@ class Policies::PoliciesListService
       @sets.transform_values(&:to_a).as_json
     end
   end
+
+  HTTP_ERRORS = [HTTPClient::BadResponseError, HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError, HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError].freeze
+  private_constant :HTTP_ERRORS
+
+  def self.fetch_policies_from_apicast
+    apicast_registry_url = ThreeScale.config.sandbox_proxy.apicast_registry_url
+    begin
+      response = ::JSONClient.get(apicast_registry_url)
+      return response.body['policies'] if response.ok?
+      raise PoliciesListServiceError, "APIcast could not be found at url: '#{apicast_registry_url}'. Error: #{response.content}"
+    rescue *HTTP_ERRORS => error
+      raise PoliciesListServiceError, "APIcast could not be found at url: '#{apicast_registry_url}'. Error: #{error}"
+    end
+  end
+
+  private_class_method :fetch_policies_from_apicast
 end
