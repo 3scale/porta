@@ -71,13 +71,11 @@ class Policies::PoliciesListService
 
   def self.fetch_policies_from_apicast
     apicast_registry_url = ThreeScale.config.sandbox_proxy.apicast_registry_url
-    begin
-      response = ::JSONClient.get(apicast_registry_url)
-      return response.body['policies'] if response.ok?
-      raise PoliciesListServiceError, "APIcast could not be found at url: '#{apicast_registry_url}'. Error: #{response.content}"
-    rescue *HTTP_ERRORS => error
-      raise PoliciesListServiceError, "APIcast could not be found at url: '#{apicast_registry_url}'. Error: #{error}"
-    end
+    response = ::JSONClient.get(apicast_registry_url)
+    return response.body['policies'] if response.ok?
+    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: response.content)
+  rescue *HTTP_ERRORS => error
+    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: error)
   end
 
   private_class_method :fetch_policies_from_apicast
