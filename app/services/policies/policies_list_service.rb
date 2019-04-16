@@ -15,7 +15,7 @@ class Policies::PoliciesListService
     list.merge! fetch_policies_from_apicast if builtin
     list.merge! policies_from_account(account)
     list.to_h
-  rescue *HTTP_ERROR, PoliciesListServiceError => error
+  rescue *HTTP_ERRORS, PoliciesListServiceError => error
     Rails.logger.error { error } and return
   end
 
