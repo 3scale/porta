@@ -67,7 +67,7 @@
     "regenerator-runtime": "^0.13.1",
     "sass-loader": "^7.1.0",
     "swagger-tools": "0.9.7",
-    "webpack-dev-server": "2.11.2"
+    "webpack-dev-server": "3.1.11"
   },
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
