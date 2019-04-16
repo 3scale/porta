@@ -5,6 +5,9 @@ require 'set'
 
 class Policies::PoliciesListService
 
+  HTTP_ERRORS = [HTTPClient::BadResponseError, HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError, HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError].freeze
+  private_constant :HTTP_ERRORS
+
   class PoliciesListServiceError < RuntimeError; end
 
   def self.call(account, builtin: true)
@@ -12,12 +15,23 @@ class Policies::PoliciesListService
     list.merge! fetch_policies_from_apicast if builtin
     list.merge! policies_from_account(account)
     list.to_h
-  rescue PoliciesListServiceError => error
+  rescue *HTTP_ERROR, PoliciesListServiceError => error
     Rails.logger.error { error } and return
   end
 
+  def self.fetch_policies_from_apicast
+    response = ::JSONClient.get(apicast_registry_url)
+    raise_policies_list_error(response.content) unless response.ok?
+    response.body['policies']
+  end
+
+  def self.raise_policies_list_error(error)
+    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: error)
+  end
+
   def self.policies_from_account(account)
-    return PolicyList.new(account.policies) if account.provider_can_use?(:policy_registry)
+    return unless account.provider_can_use?(:policy_registry)
+    PolicyList.new(account.policies)
   end
 
   class PolicyList
@@ -66,24 +80,11 @@ class Policies::PoliciesListService
     end
   end
 
-  HTTP_ERRORS = [HTTPClient::BadResponseError, HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError, HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError].freeze
-  private_constant :HTTP_ERRORS
-
   def self.apicast_registry_url
     ThreeScale.config.sandbox_proxy.apicast_registry_url
   end
 
-  def self.fetch_policies_from_apicast
-    response = ::JSONClient.get(apicast_registry_url)
-    response.body['policies'] if response.ok? or raise_policies_list_error(response.content)
-  rescue *HTTP_ERRORS => error
-    raise_policies_list_error(error)
-  end
-
-  def self.raise_policies_list_error(error)
-    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: error)
-  end
-
   private_class_method :fetch_policies_from_apicast
   private_class_method :raise_policies_list_error
+  private_class_method :policies_from_account
 end
