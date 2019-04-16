@@ -69,14 +69,21 @@ class Policies::PoliciesListService
   HTTP_ERRORS = [HTTPClient::BadResponseError, HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError, HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError].freeze
   private_constant :HTTP_ERRORS
 
+  def self.apicast_registry_url
+    ThreeScale.config.sandbox_proxy.apicast_registry_url
+  end
+
   def self.fetch_policies_from_apicast
-    apicast_registry_url = ThreeScale.config.sandbox_proxy.apicast_registry_url
     response = ::JSONClient.get(apicast_registry_url)
-    return response.body['policies'] if response.ok?
-    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: response.content)
+    response.body['policies'] if response.ok? or raise_policies_list_error(response.content)
   rescue *HTTP_ERRORS => error
+    raise_policies_list_error(error)
+  end
+
+  def self.raise_policies_list_error(error)
     raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: error)
   end
 
   private_class_method :fetch_policies_from_apicast
+  private_class_method :raise_policies_list_error
 end
