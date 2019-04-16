@@ -10,14 +10,14 @@ class Policies::PoliciesListService
   def self.call(account, builtin: true)
     list = PolicyList.new
     list.merge! fetch_policies_from_apicast if builtin
-    list.merge! account.policies if provider_can_use_policies
+    list.merge! policies_from_account(account)
     list.to_h
   rescue PoliciesListServiceError => error
     Rails.logger.error { error } and return
   end
 
-  def self.provider_can_use_policies
-    account.provider_can_use?(:policy_registry)
+  def self.policies_from_account(account)
+    return account.policies if account.provider_can_use?(:policy_registry)
   end
 
   class PolicyList
