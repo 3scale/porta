@@ -17,7 +17,7 @@ class Policies::PoliciesListService
   end
 
   def self.policies_from_account(account)
-    return account.policies if account.provider_can_use?(:policy_registry)
+    return PolicyList.new(account.policies) if account.provider_can_use?(:policy_registry)
   end
 
   class PolicyList
