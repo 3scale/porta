@@ -768,7 +768,7 @@ en:
       invitation_not_found: "Invitation token did not exist."
       invitation_already_accepted: "Invitation token has already been accepted."
       protected_domain: "Sorry, this domain is protected"
-      apicast_not_found: "APIcast could not be found at url: '%{url}'. Error: %{error}"
+      apicast_not_found: "Failed to fetch APIcast policies from '%{url}'. Error: %{error}"
       oauth:
         code_incorrect_or_expired: "The code is incorrect or expired."
         token_incorrect_or_expired: "The token is incorrect or expired."
