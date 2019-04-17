@@ -3,6 +3,7 @@ class Buyers::ApplicationsController < FrontendController
 
   include ThreeScale::Search::Helpers
   include DisplayViewPortion
+  include Buyers::ApplicationsHelper
   helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
@@ -58,7 +59,8 @@ class Buyers::ApplicationsController < FrontendController
   def new
     @cinstance = @buyer.bought_cinstances.build
     extend_cinstance_for_new_plan
-    @plans = @provider.application_plans.stock
+    @app_plans = @provider.application_plans.stock
+    @service_plans = service_plans_grouped_collection_with_app_plans @app_plans
 
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
@@ -68,9 +70,9 @@ class Buyers::ApplicationsController < FrontendController
 
   # TODO: this should be done by buy! method
   def create
-    service_plan = if service_plan_id = params[:cinstance].delete(:service_plan_id)
-                     @application_plan.service.service_plans.find(service_plan_id)
-                   end
+    if service_plan_id = params[:cinstance].delete(:service_plan_id)
+      service_plan = @application_plan.service.service_plans.find(service_plan_id)
+    end
 
     @cinstance = current_account.provider_builds_application_for(@buyer, @application_plan, params[:cinstance], service_plan)
     @cinstance.validate_human_edition!
@@ -80,7 +82,8 @@ class Buyers::ApplicationsController < FrontendController
       redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
-      @plans = @provider.application_plans
+      @app_plans = @provider.application_plans.stock
+      @service_plans = service_plans_grouped_collection_with_app_plans @app_plans
       render :action => :new
     end
   end
@@ -110,7 +113,7 @@ class Buyers::ApplicationsController < FrontendController
 
   def reject
     # TODO: use change_state('reject','The application has been rejected. params[:reason])
-    @cinstance.reject!(params[:reason])
+    @cinstance.reject!([:reason])
     flash[:notice] = 'The application has been rejected.'
     redirect_to admin_buyers_account_url(@cinstance.buyer_account)
   end

@@ -2490,16 +2490,6 @@
                       </licenses>
         </dependency>
             <dependency>
-          <packageName>select2</packageName>
-          <version>4.0.5</version>
-          <licenses>
-                          <license>
-                <name>MIT</name>
-                <url>http://opensource.org/licenses/mit-license</url>
-              </license>
-                      </licenses>
-        </dependency>
-            <dependency>
           <packageName>sha.js</packageName>
           <version>2.4.5</version>
           <licenses>

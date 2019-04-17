@@ -3,10 +3,11 @@ module Buyers::ApplicationsHelper
   def metadata_new_app(buyer, provider)
 
     "<div id='metadata-form'
-      data-services_contracted='#{ services_contracted(buyer) }'
-      data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
-      data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
-      data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
+      data-services_contracted='#{services_contracted(buyer)}'
+      data-service_plan_contracted_for_service='#{service_plan_contracted_for_service(buyer)}'
+      data-relation_service_and_service_plans='#{relation_service_and_service_plans(provider)}'
+      data-application-plans='#{application_plans_with_services(provider)}'
+      data-relation_plans_services= '#{relation_plans_services(provider)}' >".html_safe
 
   end
 
@@ -24,6 +25,22 @@ module Buyers::ApplicationsHelper
       hash[service_plan.service.id] = {id: service_plan.id, name: name}
       hash
     end.to_json
+  end
+
+  def application_plans_with_services(provider)
+    provider.application_plans.stock.includes(:service).map do |app_plan|
+      {
+        id: app_plan.id,
+        name: app_plan.name,
+        servicePlans: app_plan.service.service_plans.select(:id, :name)
+      }
+    end.to_json(root: false)
+  end
+
+  def service_plans_grouped_collection_with_app_plans(app_plans)
+    app_plans.includes(:service).each_with_object({}) do |app_plan, service_plans|
+      service_plans[app_plan.name] = app_plan.service.service_plans.pluck(:name, :id)
+    end
   end
 
   def relation_service_and_service_plans(provider)

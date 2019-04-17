@@ -1,0 +1,43 @@
+$item-height: line-height-times(3/2);
+
+.SearchableSelect {
+  position: relative;
+
+  .HiddenForm {
+    height: 0;
+    left: -5000em;
+    overflow: hidden;
+    position: absolute;
+  }
+
+  .OptionsList {
+    background-color: $form-background-color;
+    border-color: $border-color;
+    border-radius: .1875rem;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    left: 0;
+    max-height: calc(#{$item-height} * 6);
+    overflow: auto;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 1051;
+
+    li {
+      border: 0;
+      cursor: pointer;
+      height: $item-height;
+      padding: line-height-times(1/4);
+
+      &:hover {
+        color: $highlight-color;
+      }
+
+      &.Disabled {
+        color: $disabled-color;
+        pointer-events: none;
+      }
+    }
+  }
+}
