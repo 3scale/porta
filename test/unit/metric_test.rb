@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'test_helper'
 
 class MetricTest < ActiveSupport::TestCase
   should belong_to :service
@@ -12,6 +12,15 @@ class MetricTest < ActiveSupport::TestCase
 
   should_not allow_value('hellow world').for(:system_name)
   should_not allow_value('hello!').for(:system_name)
+
+  test 'validate length of strings' do
+    metric = FactoryBot.create(:metric)
+    Metric.columns.each do |column|
+      next unless column.type == :string
+      refute metric.update({column.name => ('a' * 256)})
+      assert_match /too long/, metric.errors[column.name].to_sentence
+    end
+  end
 
   def test_destroyable?
     service = FactoryBot.create(:simple_service)
