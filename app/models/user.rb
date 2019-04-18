@@ -121,6 +121,7 @@ class User < ApplicationRecord
   # after_validation :reset_lost_password_token
 
   after_save :nullify_authentication_id, if: :any_sso_authorizations?
+  after_commit :notify_deletion, on: :destroy
 
   def self.search_states
     %w(pending active)
@@ -412,6 +413,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def notify_deletion
+    Users::UserDeletedEvent.create_and_publish!(self)
+  end
 
   def destroyable?
     return true if destroyed_by_association
