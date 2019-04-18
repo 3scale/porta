@@ -5,7 +5,6 @@ module Segment
     module_function
 
     def call(request_body:, custom_headers: {})
-      return unless Features::SegmentDeletionConfig.enabled?
       connection = Faraday.new(Features::SegmentDeletionConfig.config.uri) do |faraday|
         faraday.use ResponseMiddleware
         faraday.use Faraday::Adapter::NetHttp

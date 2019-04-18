@@ -17,15 +17,6 @@ class Segment::AuthenticatorServiceTest < ActiveSupport::TestCase
       assert_equal 'example-token', Segment::AuthenticatorService.request_token
       assert_requested request
     end
-
-    test '#request_token does nothing and returns true when the feature is disabled' do
-      request = token_request(status: 200)
-
-      Features::SegmentDeletionConfig.stubs(enabled?: false)
-
-      Segment::AuthenticatorService.request_token
-      assert_not_requested request
-    end
   end
 
   class WrongResponseTest < Segment::AuthenticatorServiceTest

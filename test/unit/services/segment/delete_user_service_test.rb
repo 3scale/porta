@@ -21,15 +21,6 @@ class Segment::DeleteUserServiceTest < ActiveSupport::TestCase
       assert delete_user_service.call
       assert_requested request
     end
-
-    test '#call does nothing when the feature is disabled' do
-      request = delete_request(status: 200)
-
-      Features::SegmentDeletionConfig.stubs(enabled?: false)
-
-      delete_user_service.call
-      assert_not_requested request
-    end
   end
 
   class WrongResponseTest < Segment::DeleteUserServiceTest

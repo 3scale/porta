@@ -5,7 +5,6 @@ module Segment
     module_function
 
     def request_token
-      return unless Features::SegmentDeletionConfig.enabled?
       response = GBPRApiRequestService.call(request_body: request_body)
       JSON.parse(response.body).dig('data', 'login', 'access_token')
     end

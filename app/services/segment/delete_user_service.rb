@@ -10,7 +10,6 @@ module Segment
     attr_reader :user_id, :token
 
     def call
-      return unless Features::SegmentDeletionConfig.enabled?
       response = GBPRApiRequestService.call(request_body: request_body, custom_headers: {'Authorization' => "Bearer #{token}"})
       response.body
     end
