@@ -6,6 +6,12 @@ features: &default
     contract_unpaid_time: 183
     disabled_for_app_plans:
     - '%enterprise%'
+  segment_deletion:
+    enabled: false
+    email: 'email@example.com'
+    password: 'example-password'
+    uri: 'https://gdpr.segment.com/graphql'
+    workspace: 'example-workspace'
 
 development:
   <<: *default
