@@ -68,7 +68,7 @@ class Provider::Admin::Registry::PoliciesController < Provider::Admin::BaseContr
   end
 
   def authorize_policies
-    authorize! :manage, :policy_registry
+    authorize! :manage, :policy_registry_ui
   end
 
   def policy
