@@ -15,7 +15,8 @@ type AppPlan = {
 }
 
 type Props = {
-  applicationPlans: AppPlan[]
+  applicationPlans: AppPlan[],
+  servicePlansAllowed: boolean
 }
 
 const ApplicationForm = ({ applicationPlans }: Props) => {
@@ -31,7 +32,7 @@ const ApplicationForm = ({ applicationPlans }: Props) => {
     <fieldset className='inputs'>
       <ol>
         <PlanSelect plan={plan} applicationPlans={applicationPlans} onChange={setPlan} />
-        <ServicePlanSelect servicePlan={servicePlan} servicePlans={plan.servicePlans} onChange={setServicePlan}/>
+        {servicePlansAllowed && <ServicePlanSelect servicePlan={servicePlan} servicePlans={plan && plan.servicePlans} onChange={setServicePlan}/>}
         <NameInput name={name} onChange={onInputChange} />
         <DescriptionTextarea description={description} onChange={onDescriptionChange} />
       </ol>

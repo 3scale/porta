@@ -1,14 +1,13 @@
 module Buyers::ApplicationsHelper
 
   def metadata_new_app(buyer, provider)
-
     "<div id='metadata-form'
       data-services_contracted='#{services_contracted(buyer)}'
       data-service_plan_contracted_for_service='#{service_plan_contracted_for_service(buyer)}'
       data-relation_service_and_service_plans='#{relation_service_and_service_plans(provider)}'
       data-application-plans='#{application_plans_with_services(provider)}'
+      data-service-plans-allowed='#{current_account.settings.service_plans.allowed?}'
       data-relation_plans_services= '#{relation_plans_services(provider)}' >".html_safe
-
   end
 
   def services_contracted(buyer)
