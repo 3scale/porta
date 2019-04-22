@@ -19,9 +19,12 @@ type Props = {
   servicePlansAllowed: boolean
 }
 
-const ApplicationForm = ({ applicationPlans }: Props) => {
-  const [plan, setPlan] = useState(applicationPlans[0])
-  const [servicePlan, setServicePlan] = useState(applicationPlans[0].servicePlans[0])
+const ApplicationForm = ({ applicationPlans, servicePlansAllowed }: Props) => {
+  const defApplicationPlan = (applicationPlans && applicationPlans.length && applicationPlans[0]) || undefined
+  const defServicePlan = (defApplicationPlan && defApplicationPlan.servicePlans && applicationPlans[0].servicePlans[0]) || undefined
+
+  const [plan, setPlan] = useState(defApplicationPlan)
+  const [servicePlan, setServicePlan] = useState(defServicePlan)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
 
@@ -40,8 +43,8 @@ const ApplicationForm = ({ applicationPlans }: Props) => {
   )
 }
 
-const PlanSelect = ({ plan, applicationPlans, onChange }: {
-  plan: AppPlan,
+const PlanSelect = ({ plan = {}, applicationPlans, onChange }: {
+  plan?: AppPlan,
   applicationPlans: Array<AppPlan>,
   onChange: AppPlan => void
 }) => {
@@ -55,9 +58,9 @@ const PlanSelect = ({ plan, applicationPlans, onChange }: {
   )
 }
 
-const ServicePlanSelect = ({ servicePlan, servicePlans, onChange }: {
-  servicePlan: ServicePlan,
-  servicePlans: Array<ServicePlan>,
+const ServicePlanSelect = ({ servicePlan = {}, servicePlans = [], onChange }: {
+  servicePlan?: ServicePlan,
+  servicePlans?: Array<ServicePlan>,
   onChange: ServicePlan => void
 }) => {
   const formId = 'cinstance_service_plan_id'
