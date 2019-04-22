@@ -9,25 +9,21 @@ export interface Option {
   name: string
 }
 
-type Props = {
-  options: $ReadOnlyArray<Option>,
-  defaultOption?: Option,
-  onOptionSelected?: Option => void,
-  label: string,
-  formId: string,
-  formName: string,
+type Props<T> = {
+  options: $ReadOnlyArray<T>,
+  onOptionSelected: T => void,
+  defaultOption?: T,
+  formName?: string,
   hint?: string
 }
 
-const SearchableSelect = ({
+const SearchableSelect = <T: Option>({
   options,
-  defaultOption = options[0],
   onOptionSelected,
-  label,
-  formId,
+  defaultOption = options[0],
   formName,
   hint
-}: Props) => {
+}: Props<T>) => {
   const [term, setTerm] = useState(defaultOption ? defaultOption.name : '')
   const [showOptions, setShowOptions] = useState(false)
   const [filteredOptions, setFilteredOptions] = useState(options)
@@ -58,8 +54,6 @@ const SearchableSelect = ({
 
   return (
     <div className='SearchableSelect'>
-      <label htmlFor={formId}>{label}</label>
-      <input id={formId} name={formName} className='HiddenForm' value={selectedOption.id} readOnly />
       <input
         type='text'
         aria-label={formName}
@@ -75,7 +69,7 @@ const SearchableSelect = ({
   )
 }
 
-const OptionsList = ({ options, onClick }: {options: $ReadOnlyArray<Option>, onClick: Option => void}) => (
+const OptionsList = <T: Option>({ options, onClick }: { options: $ReadOnlyArray<T>, onClick: T => void }) => (
   <ul className='OptionsList'>
     {options.length
       ? options.map(o => <li key={o.id} onMouseDown={() => onClick(o)}>{o.name}</li>)

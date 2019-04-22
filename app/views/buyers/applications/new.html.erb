@@ -13,7 +13,7 @@
                                   :builder => Fields::FormBuilder do |form| %>
   <%= form.semantic_errors %>
 
-  <%= content_tag :div, id: 'applications-form' do -%>
+  <%= content_tag :div, id: 'application-form' do -%>
     <%= form.inputs do %>
       <%= form.input :plan, :as => :select,
                             :label => ApplicationPlan.model_name.human,

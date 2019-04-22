@@ -11,7 +11,7 @@ Enzyme.configure({ adapter: new Adapter() })
 let wrapper
 
 function getWrapper () {
-  const props = { options: [], label: '', formId: '', formName: '' }
+  const props = { options: [], onOptionSelected: jest.fn(), label: '', formId: '', formName: '' }
 
   wrapper = mount(<SearchableSelect {...props} />)
 }
