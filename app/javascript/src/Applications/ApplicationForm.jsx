@@ -52,7 +52,7 @@ const PlanSelect = ({ plan = {}, applicationPlans, onChange }: {
   return (
     <li id='cinstance_plan_input' className='select required'>
       <label htmlFor={formId}>Application plan</label>
-      <input id={formId} name='cinstance[plan_id]' className='HiddenForm' value={plan.id} readOnly />
+      <input id={formId} name='cinstance[plan_id]' type='hidden' value={plan.id} readOnly />
       <SearchableSelect options={applicationPlans} onOptionSelected={onChange} formName='cinstance[plan_id]' />
     </li>
   )
@@ -67,7 +67,7 @@ const ServicePlanSelect = ({ servicePlan = {}, servicePlans = [], onChange }: {
   return (
     <li id='cinstance_service_plan_id_input' className='select optional'>
       <label htmlFor={formId}>Service plan</label>
-      <input id={formId} name='cinstance[service_plan_id]' className='HiddenForm' value={servicePlan.id} readOnly />
+      <input id={formId} name='cinstance[service_plan_id]' type='hidden' value={servicePlan.id} readOnly />
       <SearchableSelect options={servicePlans} onOptionSelected={onChange} formName='cinstance[service_plan_id]' />
     </li>
   )

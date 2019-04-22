@@ -3,13 +3,6 @@ $item-height: line-height-times(3/2);
 .SearchableSelect {
   position: relative;
 
-  .HiddenForm {
-    height: 0;
-    left: -5000em;
-    overflow: hidden;
-    position: absolute;
-  }
-
   .OptionsList {
     background-color: $form-background-color;
     border-color: $border-color;
