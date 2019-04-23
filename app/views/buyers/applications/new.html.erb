@@ -13,23 +13,21 @@
                                   :builder => Fields::FormBuilder do |form| %>
   <%= form.semantic_errors %>
 
-  <%= content_tag :div, id: 'application-form' do -%>
-    <%= form.inputs do %>
-      <%= form.input :plan, :as => :select,
-                            :label => ApplicationPlan.model_name.human,
-                            :collection => @app_plans,
-                            :include_blank => false,
-                            :default_plan => @app_plans.respond_to?(:default) ? @app_plans.default : @app_plans.first %>
+  <%= form.inputs do %>
+    <%= form.input :plan, :as => :select,
+                          :label => ApplicationPlan.model_name.human,
+                          :collection => @app_plans,
+                          :include_blank => false,
+                          :default_plan => @app_plans.respond_to?(:default) ? @app_plans.default : @app_plans.first %>
 
-      <% if current_account.settings.service_plans.allowed? %>
-        <%= form.input :service_plan_id, :as => :select,
-                                        :label => ServicePlan.model_name.human,
-                                        :collection => @service_plans,
-                                        :hint => link_to('Create a service plan', admin_services_path, id: 'link-help-new-application-service') %>
-      <% end %>
-
-      <%= form.user_defined_form %>
+    <% if current_account.settings.service_plans.allowed? %>
+      <%= form.input :service_plan_id, :as => :select,
+                                      :label => ServicePlan.model_name.human,
+                                      :collection => @service_plans,
+                                      :hint => link_to('Create a service plan', admin_services_path, id: 'link-help-new-application-service') %>
     <% end %>
+
+    <%= form.user_defined_form %>
   <% end -%>
 
   <%= form.buttons do %>

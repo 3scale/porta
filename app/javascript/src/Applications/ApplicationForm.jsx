@@ -25,66 +25,66 @@ const ApplicationForm = ({ applicationPlans, servicePlansAllowed }: Props) => {
 
   const [plan, setPlan] = useState(defApplicationPlan)
   const [servicePlan, setServicePlan] = useState(defServicePlan)
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
 
-  const onInputChange = (event: SyntheticEvent<HTMLInputElement>) => setName(event.currentTarget.value)
-  const onDescriptionChange = (event: SyntheticEvent<HTMLInputElement>) => setDescription(event.currentTarget.value)
+  const servicePlans = plan ? plan.servicePlans : []
+  const disabled = servicePlans.length === 0
+  const placeholder = disabled ? 'No service plan for the application plan' : undefined
 
   return (
-    <fieldset className='inputs'>
-      <ol>
-        <PlanSelect plan={plan} applicationPlans={applicationPlans} onChange={setPlan} />
-        {servicePlansAllowed && <ServicePlanSelect servicePlan={servicePlan} servicePlans={plan && plan.servicePlans} onChange={setServicePlan}/>}
-        <NameInput name={name} onChange={onInputChange} />
-        <DescriptionTextarea description={description} onChange={onDescriptionChange} />
-      </ol>
-    </fieldset>
+    <React.Fragment>
+      <CustomSelect
+        selected={plan}
+        options={applicationPlans}
+        onChange={setPlan}
+        inputId='cinstance_plan_input'
+        formId='cinstance_plan_id'
+        formName='cinstance[plan_id]'
+      />
+      {servicePlansAllowed &&
+        <CustomSelect
+          selected={servicePlan}
+          options={servicePlans}
+          onChange={setServicePlan}
+          inputId='cinstance_service_plan_id_input'
+          formId='cinstance_service_plan_id'
+          formName='cinstance[service_plan_id]'
+          placeholder={placeholder}
+          disabled={servicePlans.length === 0}
+        />
+      }
+    </React.Fragment>
   )
 }
 
-const PlanSelect = ({ plan = {}, applicationPlans, onChange }: {
-  plan?: AppPlan,
-  applicationPlans: Array<AppPlan>,
-  onChange: AppPlan => void
-}) => {
-  const formId = 'cinstance_plan_id'
-  return (
-    <li id='cinstance_plan_input' className='select required'>
+type CustomSelectProps<T> = {
+  selected?: T,
+  options: $ReadOnlyArray<T>,
+  onChange: T => void,
+  inputId: string,
+  formId: string,
+  formName: string,
+  disabled?: boolean,
+  placeholder?: string
+}
+
+const CustomSelect = <T: {id: string, name: string}>({
+  selected = {},
+  options,
+  onChange,
+  inputId,
+  formId,
+  formName,
+  disabled,
+  placeholder
+}: CustomSelectProps<T>
+) => (
+    <li id={inputId} className='select required'>
       <label htmlFor={formId}>Application plan</label>
-      <input id={formId} name='cinstance[plan_id]' type='hidden' value={plan.id} readOnly />
-      <SearchableSelect options={applicationPlans} onOptionSelected={onChange} formName='cinstance[plan_id]' />
+      <select id={formId} name={formName} className='hidden'>
+        {options.map(({ id, name }) => <option value={id} selected={selected.id === id}>{name}</option>)}
+      </select>
+      <SearchableSelect options={options} onOptionSelected={onChange} formName={formName} placeholder={placeholder} />
     </li>
   )
-}
-
-const ServicePlanSelect = ({ servicePlan = {}, servicePlans = [], onChange }: {
-  servicePlan?: ServicePlan,
-  servicePlans?: Array<ServicePlan>,
-  onChange: ServicePlan => void
-}) => {
-  const formId = 'cinstance_service_plan_id'
-  return (
-    <li id='cinstance_service_plan_id_input' className='select optional'>
-      <label htmlFor={formId}>Service plan</label>
-      <input id={formId} name='cinstance[service_plan_id]' type='hidden' value={servicePlan.id} readOnly />
-      <SearchableSelect options={servicePlans} onOptionSelected={onChange} formName='cinstance[service_plan_id]' />
-    </li>
-  )
-}
-
-const NameInput = ({ name, onChange }) => (
-  <li id='cinstance_name_input' className='string required'>
-    <label htmlFor="cinstance_name">Name</label>
-    <input maxLength="255" id="cinstance_name" type="text" name="cinstance[name]" value={name} onChange={onChange} />
-  </li>
-)
-
-const DescriptionTextarea = ({ description, onChange }) => (
-  <li id='cinstance_description_input' className='text required'>
-    <label htmlFor="cinstance_description">Description</label>
-    <textarea rows="20" id="cinstance_description" name="cinstance[description]" value={description} onChange={onChange} />
-  </li>
-)
 
 export { ApplicationForm }

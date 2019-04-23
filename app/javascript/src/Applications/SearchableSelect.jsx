@@ -14,7 +14,9 @@ type Props<T> = {
   onOptionSelected: T => void,
   defaultOption?: T,
   formName?: string,
-  hint?: string
+  hint?: string,
+  disabled?: boolean,
+  placeholder?: string
 }
 
 const SearchableSelect = <T: Option>({
@@ -22,7 +24,9 @@ const SearchableSelect = <T: Option>({
   onOptionSelected,
   defaultOption = options[0],
   formName,
-  hint
+  hint,
+  disabled,
+  placeholder = 'Select one...'
 }: Props<T>) => {
   const [term, setTerm] = useState(defaultOption ? defaultOption.name : '')
   const [showOptions, setShowOptions] = useState(false)
@@ -57,11 +61,12 @@ const SearchableSelect = <T: Option>({
       <input
         type='text'
         aria-label={formName}
-        placeholder='Select one...'
+        placeholder={placeholder}
         value={term}
         onChange={onTextChanged}
         onFocus={onFocus}
         onBlur={onBlur}
+        disabled={disabled}
       />
       {showOptions && <OptionsList options={filteredOptions} onClick={onOptionClick} />}
       {hint && <p className="inline-hints">{hint}</p>}
