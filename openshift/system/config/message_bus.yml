@@ -1,7 +1,7 @@
 base: &default
   enabled: true
   redis:
-    url: <%= ENV.fetch('MESSAGE_BUS_REDIS_URL', 'redis://system-redis/8') %>
+    url: <%= ENV['MESSAGE_BUS_REDIS_URL'] %>
     pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
     pool_timeout: 5
     namespace: <%= ENV['MESSAGE_BUS_REDIS_NAMESPACE'] %>
