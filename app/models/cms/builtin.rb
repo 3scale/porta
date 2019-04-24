@@ -102,7 +102,7 @@ class CMS::Builtin < CMS::BasePage
   end
 
   def i18n_scope
-    self.class.to_s.underscore.split('/') + system_name.split('/')
+    self.class.to_s.underscore.split('/') + (system_name || '').split('/')
   end
 
   # CMS::Builtin::StaticPage
@@ -248,7 +248,7 @@ class CMS::Builtin < CMS::BasePage
     end
 
     def title
-      I18n.t("#{system_name}.title", scope: 'builtin_partials', default: system_name.humanize)
+      I18n.t("#{system_name}.title", scope: 'builtin_partials', default: (system_name || '').humanize)
     end
 
     def to_xml(options = {})

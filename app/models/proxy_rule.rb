@@ -74,7 +74,7 @@ class ProxyRule < ApplicationRecord
   validates :pattern, format: { with: PatternParser.new, allow_blank: true }
   # a valid pattern is: slash alone or a path => maybe a dollar sign => maybe a query string
 
-  validates :pattern, length: { maximum: 256 }
+  validates :pattern, length: { maximum: 255 }
   validates :http_method, inclusion: { in: ALLOWED_HTTP_METHODS }
   validate :non_repeated_parameters
   validate :no_vars_in_keys
@@ -102,7 +102,7 @@ class ProxyRule < ApplicationRecord
   end
 
   def pattern_uri
-    Addressable::URI.parse(pattern)
+    Addressable::URI.parse(pattern || '')
   rescue Addressable::URI::InvalidURIError
     Addressable::URI.new
   end

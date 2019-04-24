@@ -59,8 +59,8 @@ class Proxy < ApplicationRecord
                       format: { with: HTTP_HEADER }
 
   validates :api_test_path, length: { maximum: 8192 }
-  validates :endpoint, :api_backend, :auth_app_key, :auth_app_id, :auth_user_key,
-            :credentials_location, :error_auth_failed, :error_auth_missing,
+  validates :endpoint, :api_backend, :auth_app_key, :auth_app_id, :auth_user_key, :oidc_issuer_endpoint,
+            :credentials_location, :error_auth_failed, :error_auth_missing, :authentication_method,
             :error_headers_auth_failed, :error_headers_auth_missing, :error_no_match,
             :error_headers_no_match, :secret_token, :hostname_rewrite, :sandbox_endpoint,
             length: { maximum: 255 }
@@ -90,8 +90,9 @@ class Proxy < ApplicationRecord
   delegate :account, to: :service, allow_nil: true
   delegate :provider_can_use?, to: :account, allow_nil: true
 
+  # This smells of :reek:NilCheck
   def authentication_method
-    super.presence || service.read_attribute(:backend_version)
+    super.presence || service&.read_attribute(:backend_version)
   end
 
   def deployment_option
