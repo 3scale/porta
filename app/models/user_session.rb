@@ -7,6 +7,7 @@ class UserSession < ApplicationRecord
   has_one :account, through: :user
 
   validates :user_id, :key, presence: true
+  validates :ip, length: {maximum: 255}
 
   before_validation :set_unique_key, :on => :create
 

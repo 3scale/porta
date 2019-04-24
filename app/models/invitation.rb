@@ -44,6 +44,7 @@ class Invitation < ApplicationRecord
   private
 
   def email_is_not_taken
+    return unless account
     return if account.users.by_email(email).empty?
     errors.add(:email, 'has been taken by another user')
   end

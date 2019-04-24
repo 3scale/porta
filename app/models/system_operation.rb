@@ -3,6 +3,7 @@ class SystemOperation < ApplicationRecord
   has_many :mail_dispatch_rules, :dependent => :destroy
 
   validates :ref, uniqueness: true
+  validates :ref, :name, length: {maximum: 255}
 
   DEFAULTS = {'user_signup'            => 'New user signup',
               "new_app"                => "New application created",
