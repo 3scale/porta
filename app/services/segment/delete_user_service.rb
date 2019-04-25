@@ -9,8 +9,8 @@ module Segment
 
     attr_reader :user_id, :token
 
-    def call
-      response = GBPRApiRequestService.call(request_body: request_body, custom_headers: {'Authorization' => "Bearer #{token}"})
+    def call(requester = GBPRApiRequest.new)
+      response = requester.call(request_body: request_body, custom_headers: {'Authorization' => "Bearer #{token}"})
       response.body
     end
 
