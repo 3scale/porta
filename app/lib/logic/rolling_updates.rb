@@ -293,6 +293,12 @@ module Logic
         end
       end
 
+      class ApiAsProduct < Base
+        def missing_config
+          false
+        end
+      end
+
       class Unknown < Base
         def missing_config
           false
