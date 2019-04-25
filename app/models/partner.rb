@@ -7,8 +7,8 @@ class Partner < ApplicationRecord
   has_many :providers, class_name: "Account"
   has_many :application_plans
 
-  validates :name, presence: true
-  validates :api_key, presence: true
+  validates :name, :api_key, presence: true
+  validates :name, :api_key, :system_name, :logout_url, length: { maximum: 255 }
 
   def signup_type
     "partner:#{system_name}"

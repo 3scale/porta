@@ -5,7 +5,7 @@ class TopicCategory < ApplicationRecord
 
   attr_protected :forum_id, :tenant_id
 
-  validates :name, presence: true
+  validates :name, presence: true, length: {maximum: 255}
   validates :name, uniqueness: { :scope => :forum_id }
 
   default_scope -> { order('name ASC') }

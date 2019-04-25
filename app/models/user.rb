@@ -85,7 +85,7 @@ class User < ApplicationRecord
             length: { maximum: 40 }
   validates :state, :role, :lost_password_token, :first_name, :last_name, :signup_type,
             :job_role, :last_login_ip, :email_verification_code, :title, :cas_identifier,
-            :authentication_id, :open_id,
+            :authentication_id, :open_id, :password_digest,
             length: { maximum: 255 }
 
   # strong passwords

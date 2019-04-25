@@ -27,6 +27,7 @@ class Policy < ApplicationRecord
 
   before_validation :set_identifier
   validates :identifier, uniqueness: { scope: :account_id }
+  validates :name, :version, length: { maximum: 255 }
 
   def self.find_by_id_or_name_version(id_or_name_version)
     where.has { (id == id_or_name_version) | (identifier == id_or_name_version) }.first

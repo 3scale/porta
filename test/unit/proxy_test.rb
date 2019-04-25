@@ -79,6 +79,8 @@ class ProxyTest < ActiveSupport::TestCase
 
       proxy_2 = Proxy.new(service: Service.new(backend_version: 'ouath'))
       assert_equal 'ouath', proxy_2.authentication_method
+
+      assert_nil Proxy.new.authentication_method
     end
 
     def test_set_sandbox_endpoint_callback

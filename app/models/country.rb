@@ -1,6 +1,7 @@
 class Country < ApplicationRecord
   validates :name, :code, presence: true
   validates :code, uniqueness: true
+  validates :name, :code, :currency, length: {maximum: 255}
 
   # Cuba, Iran, North Korea, Sudan, Syria
   T5_COUNTRIES_CODE = %w(CU IR KP SD SY).freeze

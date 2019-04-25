@@ -17,7 +17,8 @@ class PaymentDetail < ApplicationRecord
   validates :credit_card_partial_number, length: { :maximum => 4,
                                                    :allow_blank => true,
                                                    :message => "must be the final 4 digits only" }
-  validates :credit_card_auth_code, :credit_card_authorize_net_payment_profile_token, length: {maximum: 255}
+  validates :buyer_reference, :payment_service_reference, :credit_card_partial_number, :credit_card_auth_code,
+            :credit_card_authorize_net_payment_profile_token, length: {maximum: 255}
 
   alias_attribute :credit_card_auth_code, :buyer_reference
   alias_attribute :credit_card_authorize_net_payment_profile_token, :payment_service_reference

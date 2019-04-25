@@ -7,6 +7,7 @@ class SSOAuthorization < ApplicationRecord
 
   validates :uid, :authentication_provider, :user, presence: true
   validates :uid, uniqueness: { scope: :authentication_provider_id }
+  validates :uid, length: { maximum: 255 }
 
   scope :newest, -> { order(updated_at: :desc).first }
 

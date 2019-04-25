@@ -17,6 +17,7 @@ class EndUserPlan < ApplicationRecord
   validates :service, :name, presence: true
   # TODO: this scope might be just :service_id, depends on how it is implemented in backend
   validates :name, uniqueness: { :scope => [:service_id] }
+  validates :name, length: { maximum: 255 }
 
   after_create :mark_as_default_if_needed
   after_update :update_service_if_needed

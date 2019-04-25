@@ -24,6 +24,7 @@ class Feature < ApplicationRecord
   attr_protected :featurable_id, :featurable_type, :tenant_id, :audit_ids
 
   validates :system_name, uniqueness: { :scope => [:featurable_id, :featurable_type] }
+  validates :system_name, :name, length: { maximum: 255 }
 
   def hide!
     update_attribute(:visible, false)

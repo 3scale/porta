@@ -49,6 +49,11 @@ class Invoice < ApplicationRecord
                                     if: :friendly_id_changed?
                                   }
 
+  validates :from_address_name, :from_address_line1, :from_address_line2, :from_address_city, :from_address_region,
+            :from_address_state, :from_address_country, :from_address_zip, :from_address_phone, :to_address_name,
+            :to_address_line1, :to_address_line2, :to_address_city, :to_address_region, :to_address_state,
+            :to_address_country, :to_address_zip, :to_address_phone, length: {maximum: 255}
+
   default_scope -> { order('invoices.created_at DESC') }
 
   # 'conditions' is a simple convenience method defined here ... see below
