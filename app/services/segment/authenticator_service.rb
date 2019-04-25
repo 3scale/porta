@@ -4,8 +4,8 @@ module Segment
   module AuthenticatorService
     module_function
 
-    def request_token
-      response = GBPRApiRequestService.call(request_body: request_body)
+    def request_token(requester = GBPRApiRequest.new)
+      response = requester.call(request_body: request_body)
       JSON.parse(response.body).dig('data', 'login', 'access_token')
     end
 

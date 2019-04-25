@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Features
-  class FeatureBase
+  class Config
     def self.configure(config = {})
       @configuration = new(config)
     end
@@ -18,13 +18,11 @@ module Features
       configuration.enabled?
     end
 
-    def initialize(*)
-      raise NoMethodError, "#{__method__} not implemented in #{self.class}"
+    def initialize(config = {})
+      @config = ActiveSupport::OrderedOptions.new.merge((config.presence || {}).symbolize_keys)
     end
 
-    def config
-      raise NoMethodError, "#{__method__} not implemented in #{self.class}"
-    end
+    attr_reader :config
 
     def enabled?
       config[:enabled]
