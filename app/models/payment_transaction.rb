@@ -13,6 +13,8 @@ class PaymentTransaction < ApplicationRecord
   has_money :amount
 
   validates :amount, presence: true
+  validates :currency, length: {maximum: 4}
+  validates :message, :reference, :action, length: {maximum: 255}
 
   attr_protected :account_id, :invoice_id, :success, :test, :tenant_id
 

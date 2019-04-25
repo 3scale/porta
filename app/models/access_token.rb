@@ -1,6 +1,8 @@
 class AccessToken < ApplicationRecord
   belongs_to :owner, class_name: 'User', inverse_of: :access_tokens
 
+  validates :name, length: { maximum: 255 }
+
   serialize :scopes, Array
 
   def self.options_to_hash(options)

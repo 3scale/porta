@@ -23,6 +23,8 @@ class Service < ApplicationRecord
   validates :support_email, format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
                                       allow_blank: true }
 
+  validates :kubernetes_service_link, length: {maximum: 255}
+
   after_create :create_default_metrics, :create_default_service_plan, :create_default_proxy
   after_commit :update_notification_settings
 

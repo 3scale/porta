@@ -4,6 +4,8 @@ class GoLiveState < ApplicationRecord
   serialize :steps, OpenStruct
   alias_attribute :closed, :finished
 
+  validates :recent, length: {maximum: 255}
+
   def advance(step, final_step=false)
     unless self.closed?
       step = step.to_s

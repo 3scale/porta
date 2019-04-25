@@ -97,13 +97,10 @@ class ProxyRuleTest < ActiveSupport::TestCase
     assert_equal({"foo" => "bar=lol"}, proxy_rule.querystring_parameters)
   end
 
-  test '256 is the max length' do
-    proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
-    proxy_rule.pattern = '/'+ ("a" * 255)
-    assert_valid proxy_rule
-
-    proxy_rule.pattern = '/'+ ("a" * 256)
-    refute_valid proxy_rule
+  test 'when pattern is nil, path_pattern and query_pattern return empty values instead of raising errors' do
+    proxy_rule = ProxyRule.new
+    assert_equal '', proxy_rule.path_pattern
+    assert_nil proxy_rule.query_pattern
   end
 
   test 'redirect_url' do

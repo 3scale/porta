@@ -4,6 +4,8 @@ class Profile < ApplicationRecord
   serialize :customers_type
   validates :company_size, presence: true
   validates :company_type, presence: { :if => :company_profile? }
+  validates :oneline_description, :company_url, :company_type, :customers_type, :company_size, :blog_url, :rssfeed_url,
+  :email_sales, :email_techsupport, :email_press, :products_delivered, length: {maximum: 255}
 
   # this validation should be out of the 'validates_presence_of' because
   # signup_without_plan_with_account_profile makes use of the
