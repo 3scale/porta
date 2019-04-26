@@ -203,6 +203,8 @@ without fake Core server your after commit callbacks will crash and you might ge
     get 'admin', to: 'admin#show'
 
     namespace :admin do
+      resources :backend_apis
+
       resource :sudo, only: [:new, :show, :create]
 
       resources :accounts, :only => [:new, :create]
