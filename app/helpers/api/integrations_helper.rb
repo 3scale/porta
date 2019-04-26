@@ -42,6 +42,10 @@ module Api::IntegrationsHelper
     end
   end
 
+  def api_backend_hint(api_backend)
+    scheme = is_https?(api_backend) ? 'https' : 'http'
+    t("formtastic.hints.proxy.api_backend_#{scheme}")
+  end
 
   def different_from_current?
     true #TODO: implement method
