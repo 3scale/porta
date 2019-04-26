@@ -4,9 +4,15 @@ require 'test_helper'
 
 class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
 
+  APICAST_REGISTRY_URL = 'https://apicast-staging.proda.example.com/policies'
+
   def setup
     @service = Policies::PoliciesListService
-    ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'https://apicast-staging.proda.example.com/policies')
+    ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: APICAST_REGISTRY_URL)
+  end
+
+  def stub_apicast_request(status: 200, response_body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json, headers: { 'Content-Type' => 'application/json' })
+    stub_request(:get, APICAST_REGISTRY_URL).to_return(status: status, response_body: response_body, headers: headers)
   end
 
   GATEWAY_API_MANAGEMENT_RESPONSE = {
@@ -23,18 +29,24 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
   }.freeze
 
   test 'call with error response on gateway side' do
-    stub_request(:get, "https://apicast-staging.proda.example.com/policies")
-      .to_return(status: 502, body: '{"error":"A server error occured"}',
-                 headers: { 'Content-Type' => 'application/json' })
+    stub_apicast_request(status: 502, body: '{"error":"A server error occured"}')
+    assert_nil @service.call(Account.new)
+  end
 
-    account = FactoryBot.build_stubbed(:simple_provider)
-    assert_nil @service.call(account)
+  test 'call with no apicast registry url' do
+    ThreeScale.config.sandbox_proxy.expects(:apicast_registry_url).returns(nil)
+    JSONClient.expects(:get).with(nil).raises(SocketError)
+
+    assert_nil @service.call(Account.new)
+  end
+  
+  test 'call with no ok response' do
+    stub_apicast_request(status: 500)
+    assert_nil @service.call(Account.new)
   end
 
   test 'call with no access to registry' do
-    stub_request(:get, "https://apicast-staging.proda.example.com/policies")
-      .to_return(status: 200, body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json,
-                 headers: { 'Content-Type' => 'application/json' })
+    stub_apicast_request
 
     account = FactoryBot.build_stubbed(:simple_provider)
     account.expects(:provider_can_use?).with(:policy_registry).returns(false)
@@ -45,9 +57,7 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
   end
 
   test 'call with custom policies' do
-    stub_request(:get, "https://apicast-staging.proda.example.com/policies")
-      .to_return(status: 200, body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json,
-                 headers: { 'Content-Type' => 'application/json' })
+    stub_apicast_request
 
     account = FactoryBot.build_stubbed(:simple_provider)
 
