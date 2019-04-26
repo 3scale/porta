@@ -42,3 +42,10 @@ Feature: API Settings
     Then I should see "Service information updated"
     And I go to the provider side "MegaWidget" application page
     Then I should see "User Key"
+
+  Scenario: API settings don't crash when APICAST_REGISTRY_URL is undefined
+    Given apicast registry is undefined
+    When I log in as provider "foo.example.com"
+    And I go to the integration show page for service "API" of provider "foo.example.com"
+    And I follow "add the base URL of your API and save the configuration."
+    Then I should see "Integration"

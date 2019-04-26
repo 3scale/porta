@@ -17,7 +17,7 @@ base: &default
   apicast_staging_endpoint: 'http://%{system_name}-%{account_id}.staging.%{env}apicast.dev:8080'
   apicast_production_endpoint: 'http://%{system_name}-%{account_id}.%{env}apicast.dev:8080'
   skip_deploy: false
-  apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://localhost:8090/policies') %>
+  apicast_registry_url: <%= ENV['APICAST_REGISTRY_URL'] %>
 
 development:
   <<: *default
@@ -42,7 +42,7 @@ test:
   apicast_staging_endpoint: 'http://%{system_name}-%{account_id}.staging.%{env}apicast.dev:8080'
   apicast_production_endpoint: 'http://%{system_name}-%{account_id}.%{env}apicast.dev:8080'
   skip_deploy: false
-  apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://localhost:8090/policies') %>
+  apicast_registry_url: <%= ENV['APICAST_REGISTRY_URL'] %>
 
 preview:
   <<: *default
