@@ -20,6 +20,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   end
 
   def edit
+    @service = ServicePresenter.new(@service)
     @plan = collection.includes(:plan_metrics, :usage_limits, :pricing_rules, service: :top_level_metrics).find(params[:id])
   end
 
