@@ -11,8 +11,8 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
     ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: APICAST_REGISTRY_URL)
   end
 
-  def stub_apicast_request(status: 200, response_body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json, headers: { 'Content-Type' => 'application/json' })
-    stub_request(:get, APICAST_REGISTRY_URL).to_return(status: status, response_body: response_body, headers: headers)
+  def stub_apicast_request(status: 200, body: GATEWAY_API_MANAGEMENT_RESPONSE.to_json)
+    stub_request(:get, APICAST_REGISTRY_URL).to_return(status: status, body: body, headers: { 'Content-Type' => 'application/json' })
   end
 
   GATEWAY_API_MANAGEMENT_RESPONSE = {
