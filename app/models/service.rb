@@ -333,6 +333,21 @@ class Service < ApplicationRecord
     metrics.find_by(system_name: 'hits')&.parent?
   end
 
+  # TODO: Replace with a database attribute of the service
+  def product
+    true
+  end
+
+  alias_method :product?, :product
+
+  def acts_as_product?
+    account&.provider_can_use?(:api_as_product) && product?
+  end
+
+  def acts_as_traditional_service?
+    !acts_as_product?
+  end
+
   def create_default_metrics
     metrics.create_default!(:hits, service_id: id)
   end
