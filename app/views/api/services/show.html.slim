@@ -160,10 +160,16 @@ section class="service-widget"
             strong
               = service.system_name
 
-
           - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
             li.item
               = setting
+          li.item
+            | Backends used in this product:
+            ul
+              li
+                = link_to '#' do
+                  => @service.name
+                  | Backend API
 
 = render 'shared/service_access'
 
