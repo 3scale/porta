@@ -473,6 +473,8 @@ ul,
 ol {
   margin-top: 0;
   margin-bottom: 10px;
+  list-style: none;
+  
 }
 ul ul,
 ol ul,
@@ -1283,7 +1285,8 @@ table {
   max-width: 100%;
   background-color: transparent;
 }
-th {
+th, td{
+  padding: 10px;
   text-align: left;
 }
 .table {
