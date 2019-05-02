@@ -1,5 +1,0 @@
-"messages,web_hooks,*": 1
-"heroku_sync,signup,*": 1
-"audited,events,report_traffic,*": 1
-"billing": 4
-"backend_sync,heroku_sync,signup,web_hooks,messages,events,audited,report_traffic": 1
