@@ -19,7 +19,7 @@ System::Application.routes.draw do
         ActiveSupport::SecurityUtils.variable_size_secure_compare(ThreeScale.config.prometheus.username.to_s, username.to_s) &&
           ActiveSupport::SecurityUtils.variable_size_secure_compare(ThreeScale.config.prometheus.password.to_s, password.to_s)
       end
-      run Sidekiq::Prometheus::Exporter
+      run Yabeda::Prometheus::Exporter
     end
     mount prometheus, at: '/system/metrics'
   end

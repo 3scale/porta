@@ -22,6 +22,11 @@ Sidekiq.configure_server do |config|
   if File.exist?(schedule_file) && Sidekiq.server?
     Sidekiq::Cron::Job.load_from_hash YAML.load_file(schedule_file)
   end
+  # This will start a webrick server in another thread
+  # where the Sidekiq processes are spawned
+  # So if we have multiple processes, then they should listen to different ports
+  # Use PROMETHEUS_EXPORTER_BIND and PROMETHEUS_EXPORTER_PORT
+  Yabeda::Prometheus::Exporter.start_metrics_server!
 end
 
 Sidekiq.configure_client do |config|
