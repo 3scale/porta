@@ -9,7 +9,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
-  queue_as :low
+  queue_as :deletion
 
   before_perform do |job|
     @object, workers_hierarchy = job.arguments
