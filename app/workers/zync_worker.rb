@@ -9,7 +9,7 @@ class ZyncWorker
   class_attribute :publisher
   self.publisher = ->(*args) { Rails.application.config.event_store.publish_event(*args) }
 
-  sidekiq_options retry: 3, dead: false, queue: :low
+  sidekiq_options retry: 3, dead: false, queue: :zync
 
   def self.config
     Rails.configuration.zync
