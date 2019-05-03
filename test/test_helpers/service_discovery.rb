@@ -63,7 +63,7 @@ module TestHelpers
           resourceVersion: '40582387',
           creationTimestamp: '2018-07-17T14:18:55Z',
           labels: { app: 'fake-api', template: 'fake-template' },
-          annotations: { :"prometheus.io/path" => '/system/metrics', :"prometheus.io/scrape" => 'true'}
+          annotations: { :"prometheus.io/port" => "9394", :"prometheus.io/path" => '/metrics', :"prometheus.io/scrape" => 'true'}
         },
         spec: {
           ports: [{ name: 'http', protocol: 'TCP', port: 8080, targetPort: 8080 }],
