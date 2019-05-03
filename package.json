@@ -68,6 +68,7 @@
     "redux-immutable-state-invariant": "^2.1.0",
     "sass-loader": "^7.1.0",
     "swagger-tools": "0.9.7",
+    "typescript": "^3.4.5",
     "webpack": "^4.30.0",
     "webpack-dev-server": "^3.3.1"
   },
