@@ -314,6 +314,7 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
+    dry-initializer (3.0.1)
     dynamic_form (1.1.4)
     email_spec (1.5.0)
       launchy (~> 2.1)
@@ -504,6 +505,7 @@ GEM
     prawn-format (0.2.1)
       prawn-core
     prawn-layout (0.2.1)
+    prometheus-client-mmap (0.9.5)
     protected_attributes (1.1.4)
       activemodel (>= 4.0.1, < 5.0)
     pry (0.10.4)
@@ -685,8 +687,6 @@ GEM
     sidekiq-lock (0.3.1)
       redis (>= 3.0.5)
       sidekiq (>= 2.14.0)
-    sidekiq-prometheus-exporter (0.1.6)
-      sidekiq (>= 3.3.1)
     signet (0.5.1)
       addressable (>= 2.2.3)
       faraday (>= 0.9.0.rc5)
@@ -806,6 +806,14 @@ GEM
     xml-simple (1.1.5)
     xpath (2.1.0)
       nokogiri (~> 1.3)
+    yabeda (0.1.3)
+      concurrent-ruby
+      dry-initializer
+    yabeda-prometheus (0.1.4)
+      yabeda
+    yabeda-sidekiq (0.1.3)
+      sidekiq
+      yabeda
     yard (0.9.18)
     zip-zip (0.3)
       rubyzip (>= 1.0.0)
@@ -906,6 +914,7 @@ DEPENDENCIES
   prawn-core!
   prawn-format (= 0.2.1)
   prawn-layout (= 0.2.1)
+  prometheus-client-mmap
   protected_attributes (~> 1.1.4)
   pry-doc (>= 0.8)
   pry-rails
@@ -943,7 +952,6 @@ DEPENDENCIES
   sidekiq-batch (~> 0.1.1)
   sidekiq-cron
   sidekiq-lock
-  sidekiq-prometheus-exporter
   simplecov (~> 0.10.0)
   sinatra
   slim-rails (~> 3.0)
@@ -975,6 +983,8 @@ DEPENDENCIES
   whenever (~> 0.9.7)
   will_paginate (~> 3.1.0)
   xpath (~> 2.1)
+  yabeda-prometheus
+  yabeda-sidekiq
   yard
   zip-zip
 
