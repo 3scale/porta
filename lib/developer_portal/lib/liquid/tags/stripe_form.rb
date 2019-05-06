@@ -5,7 +5,9 @@ module Liquid
 
       desc "Renders the stripe form"
       def render(context)
-        render_erb context, "payment_gateways/stripe", text: @text
+        account = context.registers[:site_account]
+        template = account.provider_can_use?(:stripe_elements) ? 'payment_gateways/stripe_elements' : 'payment_gateways/stripe'
+        render_erb context, template, text: @text
       end
     end
   end
