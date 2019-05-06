@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Error>
+  <Code>OfflineForMaintenance</Code>
+  <Message>
+    The server is undergoing maintenance right now. Please check back later.
+  </Message>
+</Error>
