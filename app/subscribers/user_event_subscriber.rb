@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserEventSubscriber
-  def after_commit(event)
+  def call(event)
     case event
     when Users::UserDeletedEvent
       return unless Features::SegmentDeletionConfig.enabled?

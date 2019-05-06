@@ -10,7 +10,7 @@ class UserEventSegmentSubscriberTest < ActiveSupport::TestCase
 
     SegmentDeleteUserWorker.expects(:perform_later).with(event.event_id)
 
-    UserEventSubscriber.new.after_commit(event)
+    UserEventSubscriber.new.call(event)
   end
 
   test 'when UserDeletedEvent, but SegmentDeletionConfig is disabled, it does not enqueue SegmentDeleteUserWorker' do
@@ -20,6 +20,6 @@ class UserEventSegmentSubscriberTest < ActiveSupport::TestCase
 
     SegmentDeleteUserWorker.expects(:perform_later).never
 
-    UserEventSubscriber.new.after_commit(event)
+    UserEventSubscriber.new.call(event)
   end
 end
