@@ -52,6 +52,8 @@ gem 'sidekiq', '< 6', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-cron', require: %w(sidekiq/cron sidekiq/cron/web)
 gem 'sidekiq-lock'
 
+gem 'sidekiq-prometheus-exporter'
+
 # Yabeda metrics
 gem 'yabeda-sidekiq'
 gem 'prometheus-client-mmap'
