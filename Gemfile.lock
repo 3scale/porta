@@ -741,6 +741,8 @@ GEM
       json (~> 1.8.1)
       mime-types (>= 1.25, < 3.0)
       rest-client (~> 1.4)
+    strong_migrations (0.3.1)
+      activerecord (>= 3.2.0)
     symbolize (4.5.2)
       activemodel (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
@@ -968,6 +970,7 @@ DEPENDENCIES
   state_machines-activerecord (~> 0.5.0)
   statsd-ruby
   stripe
+  strong_migrations
   swagger-ui_rails!
   swagger-ui_rails2!
   symbolize (~> 4.5)
