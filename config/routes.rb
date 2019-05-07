@@ -13,6 +13,17 @@ end
 
 System::Application.routes.draw do
 
+  constraints MasterDomainConstraint do
+    prometheus = Rack::Builder.app do
+      use Rack::Auth::Basic, 'Prometheus' do |username, password|
+        ActiveSupport::SecurityUtils.variable_size_secure_compare(ThreeScale.config.prometheus.username.to_s, username.to_s) &&
+          ActiveSupport::SecurityUtils.variable_size_secure_compare(ThreeScale.config.prometheus.password.to_s, password.to_s)
+      end
+      run Sidekiq::Prometheus::Exporter
+    end
+    mount prometheus, at: '/system/metrics'
+  end
+
   mount CdnAssets.new => '/_cdn_assets_' unless Rails.configuration.three_scale.assets_cdn_host
 
   resource :openid
