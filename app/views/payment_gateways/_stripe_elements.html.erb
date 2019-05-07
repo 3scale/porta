@@ -48,7 +48,6 @@
             base: {
                 iconColor: '#8898AA',
                 color: 'black',
-                lineHeight: '36px',
                 fontWeight: 300,
                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
                 fontSize: '19px',
@@ -133,12 +132,12 @@
     document.getElementById('stripe-form').addEventListener('submit', function(e) {
         e.preventDefault();
         var extraDetails = {
-            address_line1: '<%= current_account.billing_address.address1 %>',
-            address_line2: '<%= current_account.billing_address.address2 %>',
-            address_city: '<%= current_account.billing_address.city %>',
-            address_state: '<%= current_account.billing_address.state %>',
-            address_zip: '<%= current_account.billing_address.zip %>',
-            address_country: '<%= current_account.billing_address.country %>',
+            address_line1: "<%= j current_account.billing_address.address1 %>",
+            address_line2: "<%= j current_account.billing_address.address2 %>",
+            address_city: "<%= j current_account.billing_address.city %>",
+            address_state: "<%= j current_account.billing_address.state %>",
+            address_zip: "<%= j current_account.billing_address.zip %>",
+            address_country: "<%= j current_account.billing_address.country %>"
         };
         stripe.createToken(card, extraDetails).then(setOutcome);
     });

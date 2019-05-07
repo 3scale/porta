@@ -23,6 +23,7 @@ Feature: Credit card details
 
   Scenario: Entering cc details allowed after billing address provided
     Given the current domain is foo.example.com
+      And I have stripe_elements feature disabled
       And provider "foo.example.com" manages payments with "stripe"
     When I log in as "kenny" on foo.example.com
      And I go to the stripe credit card details page
