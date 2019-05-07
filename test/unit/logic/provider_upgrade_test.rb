@@ -18,7 +18,8 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     @pro.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 3, max_users: 5))
     @pro.plan_rule.stubs(:rank).returns(19)
     @enterprise = FactoryBot.create(:published_plan, :system_name => 'super_enterprise2020xl', :issuer => service)
-    @enterprise.plan_rule.stubs(:metadata).returns({cannot_automatically_be_upgraded_to: true})
+    @enterprise.plan_rule.stubs(:rank).returns(28)
+    @enterprise.plan_rule.metadata = {cannot_automatically_be_upgraded_to: true}
     @enterprise.plan_rule.stubs(:switches).returns(
         %i[finance multiple_applications branding require_cc_on_signup account_plans multiple_users groups end_users
         multiple_services service_plans skip_email_engagement_footer web_hooks iam_tools]
@@ -62,8 +63,9 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
   end
 
-  test 'raises if trying to upgrade to enterprise' do
+  test 'raises if trying to upgrade to enterprise for the cannot_automatically_be_upgraded_to' do
     @provider.stubs(:credit_card_stored?).returns(true)
+
     assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@enterprise) }
   end
 
