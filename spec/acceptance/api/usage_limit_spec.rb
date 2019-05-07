@@ -59,7 +59,7 @@ resource "UsageLimit" do
 
     json(:resource) do
       let(:root) { 'limit' }
-      it { should have_properties('id', 'value', 'period', 'metric_id').from(resource) }
+      it { should have_properties('id', 'value', 'period', 'metric_id', 'plan_id').from(resource) }
       it { should have_links('self', 'metric', 'plan') }
     end
 

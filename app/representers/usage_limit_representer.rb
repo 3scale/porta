@@ -7,6 +7,7 @@ module UsageLimitRepresenter
   property :period
   property :value
   property :metric_id
+  property :plan_id
 
   property :created_at
   property :updated_at
