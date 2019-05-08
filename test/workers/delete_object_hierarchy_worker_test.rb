@@ -173,4 +173,39 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
     end
   end
+
+  class DeleteProviderQueryCounterTest < ActiveSupport::TestCase
+
+    def save_queries(&block)
+      queries = []
+
+      counter_f = ->(name, started, finished, unique_id, payload) {
+        unless %w[ CACHE SCHEMA ].include?(payload[:name])
+          queries << payload
+        end
+      }
+
+      ActiveSupport::Notifications.subscribed(
+        counter_f,
+        "sql.active_record",
+        &block
+      )
+
+      queries
+    end
+
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      @provider.schedule_for_deletion!
+
+      SystemOperation::DEFAULTS.keys.each do |name|
+        @provider.mail_dispatch_rules.create!(system_operation: SystemOperation.for(name))
+      end
+    end
+
+    def test_queries
+      queries = save_queries{ DeleteObjectHierarchyWorker.perform_now(@provider) }
+      assert_equal 2, queries.count
+    end
+  end
 end
