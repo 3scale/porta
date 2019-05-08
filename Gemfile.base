@@ -18,6 +18,8 @@ gem 'protected_attributes', '~> 1.1.4'
 #gem 'protected_attributes_continued', '~> 1.3.0'
 gem 'rails-observers'
 
+gem 'strong_migrations'
+
 group :assets do
   gem 'coffee-rails', '~> 4.2'
   gem 'sprockets-rails'
