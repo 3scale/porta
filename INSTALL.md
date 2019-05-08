@@ -185,15 +185,4 @@ $ UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at loca
 ```
 > The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
 
-Set the domain for the Master, Provider & Developer portals via the rails console. Whichever hostname being used for the local machine should be the value set for each attribute (the following domain names are just examples and updating the */etc/hosts* file is also required):
-
-```bash
-bundle exec rails console
-m = Account.find('1')
-m.self_domain = "master-admin-localhost"
-m.save!
-p = Account.find('2')
-p.self_domain = "provider-admin-localhost"
-p.domain = "provider-localhost"
-p.save!
-```
+**NOTE:** 3scale porta will resolve all subdomains locally through use of `.lvh.me` domain extension.
