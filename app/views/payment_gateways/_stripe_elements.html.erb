@@ -1,0 +1,142 @@
+<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+<div class="well">
+
+  <a id="toggle-stripe-form" class="<%= current_account.credit_card_stored? ? 'card-on-file' : 'hidden' %> pull-right" href="#">
+    <i class="fa fa-pencil"></i>
+    <span>Edit Credit Card Details</span>
+  </a>
+  <br/>
+
+  <%= semantic_form_for 'stripe',
+                        url: hosted_success_admin_account_stripe_path,
+                        method: 'POST',
+                        html: { id: 'stripe-form',
+                                class: "#{current_account.credit_card_stored? ? 'hidden' : 'card-missing'} form-horizontal",
+                                data: {stripe_publishable_key: @stripe_publishable_key}
+                        } do |form| %>
+
+    <fieldset>
+      <legend>Credit card details </legend>
+      <div id="card-element">
+        <!-- a Stripe Element will be inserted here. -->
+      </div>
+
+      <!-- Used to display form errors -->
+      <div id="card-errors" role="alert"></div>
+
+      <%= render partial: 'payment_gateways/stripe_billing_address', object: current_account.billing_address %>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-10 operations">
+          <%= form.submit 'Save details', class: "btn btn-primary pull-right"%>
+        </div>
+      </div>
+    </fieldset>
+  <% end %>
+</div>
+<% billing_address = current_account.billing_address %>
+<script type="text/javascript" charset="utf-8">
+    var stripe = Stripe('<%= @stripe_publishable_key %>');
+    var elements = stripe.elements();
+
+    var card = elements.create('card', {
+        iconStyle: 'solid',
+        style: {
+            base: {
+                iconColor: '#8898AA',
+                color: 'black',
+                fontWeight: 300,
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSize: '19px',
+                '::placeholder': {
+                    color: '#3f454c',
+                },
+            },
+            invalid: {
+                iconColor: '#e85746',
+                color: '#e85746',
+            }
+        },
+        classes: {
+            focus: 'is-focused',
+            empty: 'is-empty',
+        },
+    });
+    card.mount('#card-element');
+
+    var inputs = document.querySelectorAll('input.field');
+    Array.prototype.forEach.call(inputs, function(input) {
+        input.addEventListener('focus', function() {
+            input.classList.add('is-focused');
+        });
+        input.addEventListener('blur', function() {
+            input.classList.remove('is-focused');
+        });
+        input.addEventListener('keyup', function() {
+            input.classList.toggle('is-empty', input.value.length === 0);
+        });
+    });
+
+    function setOutcome(result) {
+        var errorElement = document.getElementById('card-errors');
+        if (result.token) {
+
+            var token = result.token;
+            var card = token.card;
+
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('stripe-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripe[token]');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            var expiresOnMonth = document.createElement('input');
+            expiresOnMonth.setAttribute('type', 'hidden');
+            expiresOnMonth.setAttribute('name', 'stripe[expires_on_month]');
+            expiresOnMonth.setAttribute('value', card.exp_month);
+            form.appendChild(expiresOnMonth);
+
+            var expiresOnYear = document.createElement('input');
+            expiresOnYear.setAttribute('type', 'hidden');
+            expiresOnYear.setAttribute('name', 'stripe[expires_on_year]');
+            expiresOnYear.setAttribute('value', card.exp_year);
+            form.appendChild(expiresOnYear);
+
+            var partialNumber  = document.createElement('input');
+            partialNumber.setAttribute('type', 'hidden');
+            partialNumber.setAttribute('name', 'stripe[partial_number]');
+            partialNumber.setAttribute('value', card.last4);
+            form.appendChild(partialNumber);
+
+            // Submit the form
+            form.submit();
+        } else if (result.error) {
+            errorElement.textContent = result.error.message;
+            errorElement.classList.add('visible');
+        }
+    }
+
+    card.on('change', function(event) {
+        setOutcome(event);
+    });
+
+    document.getElementById('stripe-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var extraDetails = {
+            address_line1: "<%= j billing_address.address1 %>",
+            address_line2: "<%= j billing_address.address2 %>",
+            address_city: "<%= j billing_address.city %>",
+            address_state: "<%= j billing_address.state %>",
+            address_zip: "<%= j billing_address.zip %>",
+            address_country: "<%= j billing_address.country %>"
+        };
+        stripe.createToken(card, extraDetails).then(setOutcome);
+    });
+
+</script>
+
