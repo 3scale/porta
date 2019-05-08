@@ -37,7 +37,7 @@
     </fieldset>
   <% end %>
 </div>
-
+<% billing_address = current_account.billing_address %>
 <script type="text/javascript" charset="utf-8">
     var stripe = Stripe('<%= @stripe_publishable_key %>');
     var elements = stripe.elements();
@@ -76,11 +76,7 @@
             input.classList.remove('is-focused');
         });
         input.addEventListener('keyup', function() {
-            if (input.value.length === 0) {
-                input.classList.add('is-empty');
-            } else {
-                input.classList.remove('is-empty');
-            }
+            input.classList.toggle('is-empty', input.value.length === 0);
         });
     });
 
@@ -132,12 +128,12 @@
     document.getElementById('stripe-form').addEventListener('submit', function(e) {
         e.preventDefault();
         var extraDetails = {
-            address_line1: "<%= j current_account.billing_address.address1 %>",
-            address_line2: "<%= j current_account.billing_address.address2 %>",
-            address_city: "<%= j current_account.billing_address.city %>",
-            address_state: "<%= j current_account.billing_address.state %>",
-            address_zip: "<%= j current_account.billing_address.zip %>",
-            address_country: "<%= j current_account.billing_address.country %>"
+            address_line1: "<%= j billing_address.address1 %>",
+            address_line2: "<%= j billing_address.address2 %>",
+            address_city: "<%= j billing_address.city %>",
+            address_state: "<%= j billing_address.state %>",
+            address_zip: "<%= j billing_address.zip %>",
+            address_country: "<%= j billing_address.country %>"
         };
         stripe.createToken(card, extraDetails).then(setOutcome);
     });
