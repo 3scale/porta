@@ -687,6 +687,8 @@ GEM
     sidekiq-lock (0.3.1)
       redis (>= 3.0.5)
       sidekiq (>= 2.14.0)
+    sidekiq-prometheus-exporter (0.1.11)
+      sidekiq (>= 3.3.1)
     signet (0.5.1)
       addressable (>= 2.2.3)
       faraday (>= 0.9.0.rc5)
@@ -952,6 +954,7 @@ DEPENDENCIES
   sidekiq-batch (~> 0.1.1)
   sidekiq-cron
   sidekiq-lock
+  sidekiq-prometheus-exporter
   simplecov (~> 0.10.0)
   sinatra
   slim-rails (~> 3.0)
