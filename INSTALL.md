@@ -77,7 +77,7 @@ brew install node@8
 #### Xcode
 
 Install Xcode from the App Store.
-You can download all Xcode versions from the [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
+You can download all Xcode versions from [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
 
 #### Dependencies
 
@@ -156,6 +156,14 @@ Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 bundle install
 ```
 
+#### NPM
+
+Run [NPM](https://www.npmjs.com/) to install all the required Node modules:
+
+```bash
+npm install
+```
+
 #### Setup Database
 
 Finally initialize the database with some seed data by running:
@@ -176,3 +184,16 @@ Start up the rails server by running the following command:
 $ UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
 > The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
+
+Set the domain for the Master, Provider & Developer portals via the rails console. Whichever hostname being used for the local machine should be the value set for each attribute (the following domain names are just examples and updating the */etc/hosts* file is also required):
+
+```bash
+bundle exec rails console
+m = Account.find('1')
+m.self_domain = "master-admin-localhost"
+m.save!
+p = Account.find('2')
+p.self_domain = "provider-admin-localhost"
+p.domain = "provider-localhost"
+p.save!
+```
