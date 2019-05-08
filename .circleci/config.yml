@@ -729,8 +729,8 @@ workflows:
           <<: *only-master-filter
       - dependencies_bundler
       - dependencies_npm
-      - docker-build:
-          context: org-global
+      #- docker-build:
+      #    context: org-global
       - assets_precompile:
           requires:
             - dependencies_bundler
@@ -782,10 +782,10 @@ workflows:
       - dependencies_npm:
           requires:
             - manual_approval
-      - docker-build:
-          context: org-global
-          requires:
-            - manual_approval
+      #- docker-build:
+      #    context: org-global
+      #    requires:
+      #      - manual_approval
       - assets_precompile:
           requires:
             - deps_bundler_postgres
@@ -837,10 +837,10 @@ workflows:
       - dependencies_npm:
           requires:
             - manual_approval
-      - docker-build:
-          context: org-global
-          requires:
-            - manual_approval
+      #- docker-build:
+      #    context: org-global
+      #    requires:
+      #      - manual_approval
       - assets_precompile:
           requires:
             - deps_bundler_oracle
