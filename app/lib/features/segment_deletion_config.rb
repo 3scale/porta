@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Features
-  class AccountDeletionConfig < Config; end
+  class SegmentDeletionConfig < Config; end
 end
