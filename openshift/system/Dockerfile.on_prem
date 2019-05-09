@@ -41,7 +41,8 @@ COPY openshift/system/contrib/scl_enable ./etc/
 ENV BASH_ENV=/opt/system/etc/scl_enable \
     ENV=/opt/system/etc/scl_enable \
     PROMPT_COMMAND=". /opt/system/etc/scl_enable" \
-    RAILS_ENV=production
+    RAILS_ENV=production \
+    SAFETY_ASSURED=1
 
 RUN export ${BUNDLER_ENV} >/dev/null\
     && source /opt/system/etc/scl_enable \
