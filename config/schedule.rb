@@ -35,15 +35,15 @@ every :hour, roles: [:cron] do
   ThreeScale::Jobs::HOUR.each { |task| instance_exec(task, &job_proc) }
 end
 
-# ThreeScale::Jobs::DAILY.each_with_index do |task, index|
-#   every :day, at: "#{8+index}:00", roles: [:cron] do
-#     instance_exec(task, &job_proc)
-#   end
-# end
+ThreeScale::Jobs::DAILY.each_with_index do |task, index|
+  every :day, at: "#{8+index}:00", roles: [:cron] do
+    instance_exec(task, &job_proc)
+  end
+end
 
-# every :day, :at => '08:00', roles: [:cron] do
-#   ThreeScale::Jobs::BILLING.each { |task| instance_exec(task, &job_proc) }
-# end
+every :day, :at => '08:00', roles: [:cron] do
+  ThreeScale::Jobs::BILLING.each { |task| instance_exec(task, &job_proc) }
+end
 
 ThreeScale::Jobs::CUSTOM.each_pair do |interval, task|
   every interval, roles: [:cron] do
