@@ -17,13 +17,6 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     )
     @pro.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 3, max_users: 5))
     @pro.plan_rule.stubs(:rank).returns(19)
-    @enterprise = FactoryBot.create(:published_plan, :system_name => 'super_enterprise2020xl', :issuer => service)
-    @enterprise.plan_rule.stubs(:metadata).returns({cannot_automatically_be_upgraded_to: true})
-    @enterprise.plan_rule.stubs(:switches).returns(
-        %i[finance multiple_applications branding require_cc_on_signup account_plans multiple_users groups end_users
-        multiple_services service_plans skip_email_engagement_footer web_hooks iam_tools]
-    )
-    @enterprise.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: nil, max_users: nil))
     @base = FactoryBot.create(:published_plan, :system_name => 'base', :issuer => service)
     @base.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 1, max_users: 1))
   end
@@ -49,31 +42,25 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     assert @provider.settings.finance.visible?, 'Finance should be visible on Power1M'
   end
 
-  test 'upgrade from base to enterprise' do
+  test 'upgrade through force_upgrade_to_provider_plan! bypasses can_upgrade?' do
     @provider.stubs(:credit_card_stored?).returns(true)
-    @provider.force_upgrade_to_provider_plan!(@enterprise)
-
-    assert_equal 'super_enterprise2020xl', @provider.reload.bought_cinstance.plan.system_name
-    assert_equal 'enterprise', @provider.settings.product
+    PlanRulesCollection.stubs(can_upgrade?: false) do
+      @provider.force_upgrade_to_provider_plan!(@power1M)
+    end
   end
 
   test 'raises if not credit_card_stored?' do
     @provider.stubs(:credit_card_stored?).returns(false)
-    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
+    PlanRulesCollection.stubs(can_upgrade?: true) do
+      assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
+    end
   end
 
-  test 'raises if trying to upgrade to enterprise' do
+  test 'raises unless can_upgrade?' do
     @provider.stubs(:credit_card_stored?).returns(true)
-    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@enterprise) }
-  end
-
-  test 'upgrade to inferior plans fails' do
-    @provider.stubs(:credit_card_stored?).returns(true)
-
-    @app = @provider.bought_cinstance
-    @app.plan.update_attribute(:system_name, 'power1M')
-
-    assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@base) }
+    PlanRulesCollection.stubs(can_upgrade?: false) do
+      assert_raises(RuntimeError) { @provider.upgrade_to_provider_plan!(@power1M) }
+    end
   end
 
   test 'can call force_upgrade_to_provider_plan! with a master plan system_name' do
