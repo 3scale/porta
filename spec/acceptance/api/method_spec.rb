@@ -8,7 +8,7 @@ resource "Metric" do
   let(:service_id) { service.id }
   let(:metric_id) { service.metrics.hits.id }
 
-  let(:resource) { FactoryBot.build(:metric, service: service, parent: hits) }
+  let(:resource) { FactoryBot.build(:metric, service: service, parent: hits, description: 'metric description') }
 
   let(:resource_representer) { 'MethodRepresenter' }
   let(:collection_representer) { 'MethodsRepresenter' }
@@ -44,7 +44,7 @@ resource "Metric" do
 
   json(:resource) do
     let(:root) { 'method' }
-    it { should have_properties('id', 'name', 'system_name', 'friendly_name') }
+    it { should have_properties('id', 'name', 'system_name', 'friendly_name', 'description') }
     it { should_not include('unit')}
     it { should have_links('self', 'parent') }
   end
