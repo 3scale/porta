@@ -37,7 +37,8 @@ ENV PATH="./node_modules/.bin:$PATH:/usr/local/nginx/sbin/" \
     TZ=:/etc/localtime \
     LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/ \
     ORACLE_HOME=/opt/oracle/instantclient_12_2/ \
-    DB=$DB
+    DB=$DB \
+    SAFETY_ASSURED=1
 
 WORKDIR /opt/system/
 
