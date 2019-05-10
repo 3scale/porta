@@ -34,7 +34,7 @@ Download and build all the images and start a shell session inside the container
 make bash
 ```
 
-All the source and dependencies for this project will be in place, making possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
+All the source and dependencies for this project will be in place, making it possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
 
 ## Manual setup on Mac OS X (10.13)
 
@@ -49,7 +49,7 @@ Verify you have a proper version by running on your terminal:
 ruby -v
 ```
 
-> Mac OS X 10.13 comes with 2.3.7 but you might also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
+> Mac OS X 10.13 comes with 2.3.7 but you can also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
 
 #### Node version
 
@@ -77,7 +77,7 @@ brew install node@8
 #### Xcode
 
 Install Xcode from the App Store.
-You can download all Xcode versions from the [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
+You can download all Xcode versions from [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
 
 #### Dependencies
 
@@ -156,6 +156,14 @@ Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 bundle install
 ```
 
+#### NPM
+
+Run [NPM](https://www.npmjs.com/) to install all the required Node modules:
+
+```bash
+npm install
+```
+
 #### Setup Database
 
 Finally initialize the database with some seed data by running:
@@ -164,11 +172,13 @@ Finally initialize the database with some seed data by running:
 bundle exec rake db:setup
 ```
 
-You may need to set the database up from scratch again, in that case use `db:reset` to drop it first too:
+You may need to set up the database from scratch again, in that case use `db:reset` to drop it first too:
 
 ```bash
 bundle exec rake db:reset # This will drop and setup the database
 ```
+
+**NOTE:** This will seed the application and creates the Master, Provider & Developer accounts which are accessible through: `http://master-account.example.com.lvh.me:3000`, `http://provider-admin.example.com.lvh.me:3000`, `http://provider.example.com.lvh.me:3000` respectively. Please take note of the credentials generated at this moment also so that you can log into each of these portals.
 
 ### Run Porta
 Start up the rails server by running the following command:
