@@ -50,7 +50,8 @@ class BackendClient::ConnectionTest < ActiveSupport::TestCase
     @connection.post('/stuff.xml', :type => 'warpdrive')
 
     assert_equal 'POST',           FakeWeb.last_request.method
-    assert_equal 'type=warpdrive', FakeWeb.last_request.body.to_s
+    stream = FakeWeb.last_request.body_stream.instance_variable_get :@stream
+    assert_equal 'type=warpdrive', stream.string
   end
 
   test 'loads configuration from a file' do
