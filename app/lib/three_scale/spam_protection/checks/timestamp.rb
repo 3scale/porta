@@ -2,7 +2,7 @@ module ThreeScale::SpamProtection
   module Checks
 
     class Timestamp < Base
-      DEFAULT_SECRET_KEY = -> { Rails.application.key_generator.generate_key('spam-protection-checks-timestamp') }
+      DEFAULT_SECRET_KEY = -> { Rails.application.key_generator.generate_key('spam-protection-checks-timestamp', 32) }
 
       def initialize(config)
         super
