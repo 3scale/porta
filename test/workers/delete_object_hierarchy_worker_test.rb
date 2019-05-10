@@ -173,4 +173,20 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
     end
   end
+
+  class DeleteMemberPermissionTest < DeleteObjectHierarchyWorkerTest
+
+    def test_member_permission
+      provider = FactoryBot.create(:provider_account)
+      permission = FactoryBot.create(:member_permission, admin_section: :plans)
+      member = FactoryBot.create(:member, account: @provider)
+      member.member_permissions << permission
+
+      DeletePlainObjectWorker.stubs(:perform_later)
+      DeleteObjectHierarchyWorker.stubs(:perform_later)
+      provider.schedule_for_deletion!
+
+      DeleteObjectHierarchyWorker.perform_now(provider)
+    end
+  end
 end

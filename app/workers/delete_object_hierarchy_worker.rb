@@ -76,12 +76,9 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
 
   def delete_associations(object)
     object_associations = associations_to_destroy_for(object)
-    association_names = object_associations.map(&:name)
-    preloaded_object = association_names.any? ? object.class.eager_load(*association_names).find(object.id) : object
 
     object_associations.each do |reflection|
-      worker = association_delete_worker(reflection)
-      delete_objects_of_association(preloaded_object, reflection.name, worker)
+      delete_objects_of_association(object, reflection)
     end
   end
 
@@ -91,13 +88,29 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
   end
 
-  def delete_objects_of_association(main_object, association_name, worker)
-    return unless (associated_objects = main_object.public_send(association_name))
-    if associated_objects.respond_to?(:each)
-      associated_objects.each { |associated_object| delete_association_perform_later(worker, associated_object) }
+  def delete_objects_of_association(main_object, reflection)
+    deletion_worker = association_delete_worker(reflection)
+
+    if reflection.macro == :has_many
+      associated_object_ids = main_object.public_send(reflection.name).ids
+      associated_object_ids.each do |associated_object_id|
+        build_object_and_schedule_deletion(reflection, associated_object_id, deletion_worker)
+      end
     else
-      delete_association_perform_later(worker, associated_objects)
+      if main_object.respond_to?(reflection.foreign_key)
+        associated_object_id = main_object.public_send(reflection.foreign_key)
+        build_object_and_schedule_deletion(reflection, associated_object_id, deletion_worker)
+      else
+        associated_object = main_object.public_send(reflection.name)
+        delete_association_perform_later(deletion_worker, associated_object) if associated_object&.persisted?
+      end
     end
+  end
+
+  def build_object_and_schedule_deletion(reflection, associated_object_id, deletion_worker)
+    return if associated_object_id.blank?
+    associated_object = reflection.class_name.constantize.new({ id: associated_object_id }, without_protection: true)
+    delete_association_perform_later(deletion_worker, associated_object)
   end
 
   def associations_to_destroy_for(record)
