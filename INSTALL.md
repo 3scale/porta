@@ -34,7 +34,7 @@ Download and build all the images and start a shell session inside the container
 make bash
 ```
 
-All the source and dependencies for this project will be in place, making possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
+All the source and dependencies for this project will be in place, making it possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
 
 ## Manual setup on Mac OS X (10.13)
 
@@ -49,7 +49,7 @@ Verify you have a proper version by running on your terminal:
 ruby -v
 ```
 
-> Mac OS X 10.13 comes with 2.3.7 but you might also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
+> Mac OS X 10.13 comes with 2.3.7 but you can also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
 
 #### Node version
 
@@ -172,7 +172,7 @@ Finally initialize the database with some seed data by running:
 bundle exec rake db:setup
 ```
 
-You may need to set the database up from scratch again, in that case use `db:reset` to drop it first too:
+You may need to set up the database from scratch again, in that case use `db:reset` to drop it first too:
 
 ```bash
 bundle exec rake db:reset # This will drop and setup the database
