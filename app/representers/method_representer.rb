@@ -7,6 +7,7 @@ module MethodRepresenter
   property :name
   property :system_name
   property :friendly_name
+  property :description
 
   property :created_at
   property :updated_at
