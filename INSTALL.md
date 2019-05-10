@@ -178,11 +178,11 @@ You may need to set the database up from scratch again, in that case use `db:res
 bundle exec rake db:reset # This will drop and setup the database
 ```
 
+**NOTE:** This will seed the application and creates the Master, Provider & Developer accounts which are accessible through: `http://master-account.example.com.lvh.me:3000`, `http://provider-admin.example.com.lvh.me:3000`, `http://provider.example.com.lvh.me:3000` respectively. Please take note of the credentials generated at this moment also so that you can log into each of these portals.
+
 ### Run Porta
 Start up the rails server by running the following command:
 ```bash
 $ UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
 > The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
-
-**NOTE:** 3scale porta will resolve all subdomains locally through use of `.lvh.me` domain extension.
