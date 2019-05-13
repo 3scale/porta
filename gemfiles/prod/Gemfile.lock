@@ -337,10 +337,10 @@ GEM
       factory_bot (~> 4.11.1)
       railties (>= 3.0.0)
     fakefs (0.18.0)
-    faraday (0.9.2)
+    faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.9.1)
-      faraday (>= 0.7.4, < 0.10)
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
     ffi (1.10.0)
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
@@ -458,7 +458,7 @@ GEM
     multi_json (1.13.1)
     multi_test (0.1.2)
     multi_xml (0.5.5)
-    multipart-post (2.0.0)
+    multipart-post (2.1.0)
     mustache (1.1.0)
     mysql2 (0.3.18)
     net-http-digest_auth (1.4)
@@ -876,7 +876,8 @@ DEPENDENCIES
   factory_bot_rails (~> 4.11.1)
   fakefs (~> 0.18.0)
   fakeweb!
-  faraday_middleware
+  faraday (~> 0.12.0)
+  faraday_middleware (~> 0.12.0)
   font-awesome-rails (~> 4.7.0.4)
   font_assets!
   formtastic (~> 1.2.4)
