@@ -303,7 +303,7 @@ GEM
       representable (>= 2.2.3, < 2.4.0)
       uber
     docile (1.1.5)
-    domain_name (0.5.20160310)
+    domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
@@ -374,7 +374,7 @@ GEM
       http-cookie (~> 1.0)
       http-form_data (~> 1.0.1)
       http_parser.rb (~> 0.6.0)
-    http-cookie (1.0.2)
+    http-cookie (1.0.3)
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
@@ -593,10 +593,10 @@ GEM
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
-    rest-client (1.8.0)
+    rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     retriable (2.0.2)
     riddle (1.5.12)
     rinku (1.7.3)
@@ -739,10 +739,8 @@ GEM
       activerecord (>= 4.1, < 5.2)
       state_machines-activemodel (>= 0.5.0)
     statsd-ruby (1.4.0)
-    stripe (1.16.0)
-      json (~> 1.8.1)
-      mime-types (>= 1.25, < 3.0)
-      rest-client (~> 1.4)
+    stripe (1.58.0)
+      rest-client (>= 1.4, < 4.0)
     strong_migrations (0.3.1)
       activerecord (>= 3.2.0)
     symbolize (4.5.2)
@@ -782,7 +780,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.2)
+    unf_ext (0.0.7.6)
     unicode-display_width (1.3.0)
     unicorn (5.1.0)
       kgio (~> 2.6)
@@ -934,7 +932,7 @@ DEPENDENCIES
   redis (~> 3.3.5)
   redis-namespace (~> 1.5.2)
   reform (~> 2.0.3)
-  rest-client (~> 1.6)
+  rest-client (~> 2.0.2)
   rmagick (~> 2.15.3)
   roar-rails
   rspec-html-matchers!
@@ -972,7 +970,7 @@ DEPENDENCIES
   state_machines (~> 0.5.0)
   state_machines-activerecord (~> 0.5.0)
   statsd-ruby
-  stripe
+  stripe (~> 1.58.0)
   strong_migrations
   swagger-ui_rails!
   swagger-ui_rails2!
