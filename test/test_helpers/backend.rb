@@ -85,7 +85,7 @@ module TestHelpers
     MockCore.mock_core!
 
     def stub_core_integration_errors(service_id: )
-      MockCore.stubs.get("/internal/services/#{service_id}/errors/", {'User-Agent' => 'Faraday v0.9.2'}) do
+      MockCore.stubs.get("/internal/services/#{service_id}/errors/") do
         [ 200, {'content-type'=>'application/json'}, { errors: [] }.to_json ]
       end
     end
