@@ -105,8 +105,7 @@ end
 gem 'nokogiri', '>= 1.6.8'
 gem 'dalli', '~> 2.7'
 gem 'secure_headers', '~> 2.2'
-gem 'faraday', '~> 0.12.0'
-gem 'faraday_middleware', '~> 0.12.0'
+gem 'faraday_middleware'
 
 gem 'rails_event_store', '~> 0.9.0'
 gem 'paperclip', '~> 5.3.0'
