@@ -465,7 +465,7 @@ GEM
     net-http-persistent (2.9.4)
     netrc (0.11.0)
     newrelic_rpm (5.7.0.350)
-    nokogiri (1.9.1)
+    nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
