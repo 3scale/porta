@@ -984,7 +984,7 @@ DEPENDENCIES
   unicorn
   unicorn-rails
   webmock (~> 2.3.2)
-  webpacker (~> 3.3)
+  webpacker (~> 4.x)
   whenever (~> 0.9.7)
   will_paginate (~> 3.1.0)
   xpath (~> 2.1)
