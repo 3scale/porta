@@ -264,7 +264,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc', '>= 0.8', require: false
 
-  gem 'license_finder', '~> 5.7.1'
+  gem 'license_finder', '~> 5.5.2'
 
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
