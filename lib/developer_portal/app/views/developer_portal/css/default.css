@@ -202,6 +202,11 @@ fieldset:first-of-type {
 }
 
 /* tables & table panels */
+th, td{
+  padding: 10px;
+  text-align: left;
+}
+
 .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
   border-top: none;
   border-bottom: none;
@@ -582,6 +587,12 @@ pre.message {
 
 dl + dl {
   margin-top: 60px;
+}
+
+ul, ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+  list-style: none;
 }
 
 /* SSO */
