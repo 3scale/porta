@@ -1,41 +1,55 @@
+// @flow
+
 import $ from 'jquery'
 
+type ServicePlan = {
+  id: string,
+  name: string,
+  default: boolean
+}
+
 export class CreateApplication {
+  previewsService: ?number
+  metadata: JQuery
+
   constructor () {
     this.previewsService = undefined
     this.metadata = $('#metadata-form')
+
     this.checkSelectedPlan()
   }
 
-  servicePlanNames = () => this.metadata.data('service_plans_names')
-
-  get contractedServices () {
+  get contractedServices (): number[] {
     return this.metadata.data('services_contracted')
   }
 
-  get relationServiceAndServicePlans () {
+  get relationServiceAndServicePlans (): {[number]: ServicePlan[]} {
     return this.metadata.data('relation_service_and_service_plans')
   }
 
-  get relationPlansServices () {
+  getServicePlansForService (serviceId: number): ServicePlan[] {
+    return this.relationServiceAndServicePlans[serviceId]
+  }
+
+  get relationPlansServices (): {[number]: number} {
     return this.metadata.data('relation_plans_services')
   }
 
-  getContractedServicePlanForService (service) {
-    return this.metadata.data('service_plan_contracted_for_service')[service]
+  getContractedServicePlanForService (serviceId: number): ServicePlan {
+    return this.metadata.data('service_plan_contracted_for_service')[serviceId]
   }
 
-  get selectedPlan () {
-    return $('#cinstance_plan_id').val()
+  get selectedPlan (): number {
+    return ($('#cinstance_plan_id').val(): any) // eslint-disable-line flowtype/no-weak-types, casting to number
   }
 
-  get serviceOfSelectedPlan () {
+  get serviceOfSelectedPlan (): number {
     return this.relationPlansServices[this.selectedPlan]
   }
 
   checkSelectedPlan () {
     const service = this.serviceOfSelectedPlan
-    const servicePlans = this.relationServiceAndServicePlans[service]
+    const servicePlans = this.getServicePlansForService(service)
 
     if (this.previewsService !== service) {
       this.previewsService = service
@@ -61,23 +75,23 @@ export class CreateApplication {
     this.enableField('#cinstance_service_plan_id')
   }
 
-  disableForm (disable) {
+  disableForm () {
     $('#link-help-new-application-service').toggle(true)
     this.disableField('#submit-new-app')
     this.disableField('#cinstance_service_plan_id')
   }
 
-  enableField (field) {
+  enableField (field: string) {
     $(field).removeAttr('disabled')
   }
 
-  disableField (field) {
+  disableField (field: string) {
     $(field).attr('disabled', 'disabled')
   }
 
-  setSelectOptions (servicePlans) {
+  setSelectOptions (servicePlans: ServicePlan[]) {
     let options = ''
-    $(servicePlans).each((index, plan) => {
+    servicePlans.forEach((plan, index) => {
       const selected = plan.default ? 'selected="selected"' : ''
       options += `<option value="${plan.id}" ${selected}>${plan.name}</option>`
     })
