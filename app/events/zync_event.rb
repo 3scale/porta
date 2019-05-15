@@ -4,22 +4,22 @@ class ZyncEvent < BaseEventStoreEvent
 
   # Create Zync Event
 
-  def self.create(event, model = event)
-    metadata = event.metadata
-    provider_id = metadata.fetch(:provider_id) { model.tenant_id }
+  def self.create(parent_event, model = parent_event, metadata: {})
+    parent_metadata = parent_event.metadata
+    provider_id = parent_metadata.fetch(:provider_id) { model.tenant_id }
 
     attributes = {
       type: type_for(model),
       id: model.id,
-      parent_event_id: event.event_id,
-      parent_event_type: event.class.name,
+      parent_event_id: parent_event.event_id,
+      parent_event_type: parent_event.class.name,
       tenant_id: provider_id,
-    }.merge(metadata.fetch(:zync, {}))
+    }.merge(parent_metadata.fetch(:zync, {}))
 
     new(
       metadata: {
         provider_id: provider_id,
-      },
+      }.merge(metadata),
       **attributes
     )
   end
@@ -50,6 +50,10 @@ class ZyncEvent < BaseEventStoreEvent
     else
       NONE
     end
+  end
+
+  def skip_background_sync?
+    metadata[:skip_background_sync]
   end
 
   def self.type_for(model)
