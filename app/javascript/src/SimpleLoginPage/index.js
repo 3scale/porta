@@ -14,8 +14,6 @@ import {ExclamationCircleIcon} from '@patternfly/react-icons'
  * Note: When using background-filter.svg, you must also include #image_overlay as the fragment identifier
  */
 
-
-
 class SimpleLoginPage extends React.Component {
   constructor (props) {
     super(props)
@@ -57,29 +55,15 @@ class SimpleLoginPage extends React.Component {
   }
 
   render () {
-    const helperText = (<React.Fragment>
-      <ExclamationCircleIcon/>
-      &nbsp;Invalid login credentials.
-    </React.Fragment>)
+    const helperText = (<React.Fragment><ExclamationCircleIcon/>&nbsp;Invalid login credentials.</React.Fragment>)
 
-    const signUpForAccountMessage = (<LoginMainFooterBandItem>
-      Need an account?
-      <a href="#">Sign up.</a>
-    </LoginMainFooterBandItem>)
-    const forgotCredentials = (<LoginMainFooterBandItem>
-      <a href="#">Forgot username or password?</a>
-    </LoginMainFooterBandItem>)
+    const signUpForAccountMessage = (<LoginMainFooterBandItem>Need an account?<a href="#">Sign up.</a></LoginMainFooterBandItem>)
+    const forgotCredentials = (<LoginMainFooterBandItem><a href="#">Forgot username or password?</a></LoginMainFooterBandItem>)
 
     const listItem = (<React.Fragment>
       <ListItem>
         <LoginFooterItem href="#">Terms of Use
         </LoginFooterItem>
-      </ListItem>
-      <ListItem>
-        <LoginFooterItem href="#">Help</LoginFooterItem>
-      </ListItem>
-      <ListItem>
-        <LoginFooterItem href="#">Privacy Policy</LoginFooterItem>
       </ListItem>
     </React.Fragment>)
 
