@@ -71,7 +71,11 @@ module System
 
         def sql_for_readiness
           if oracle?
-            "SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'"
+            <<~SQL
+              SELECT 1 FROM v$database WHERE cdb = 'NO' AND open_mode = 'READ WRITE'
+              UNION ALL
+              SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'
+            SQL
           elsif mysql?
             'SELECT 1'
           else
