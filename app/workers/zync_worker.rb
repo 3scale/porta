@@ -253,8 +253,7 @@ class ZyncWorker
   end
 
   def create_dependency_events(event_id)
-    event = EventStore::Repository.find_event!(event_id)
-    event.dependencies.map { |dependency| ZyncEvent.create(event, dependency) }
+    EventStore::Repository.find_event!(event_id).create_dependencies
   end
 
   def publish_dependency_events(dependency_events)

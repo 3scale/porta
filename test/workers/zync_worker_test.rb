@@ -82,17 +82,13 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     test '#create_dependency_events' do
       EventStore::Repository.expects(:find_event!).returns(event)
-
-      dependencies = [service = application.service, service.proxy]
-      event.expects(:dependencies).returns(dependencies)
-      dependencies.each { |dependency| ZyncEvent.expects(:create).with(anything, dependency) }
-
+      event.expects(:create_dependencies)
       worker.create_dependency_events(event.event_id)
     end
 
     test '#sync_dependencies publishes events and enqueues jobs' do
       event_id = event.event_id
-      dependency_events = worker.create_dependency_events(event_id)
+      dependency_events = event.create_dependencies
 
       worker.expects(:create_dependency_events).with(event_id).returns(dependency_events)
       worker.expects(:publish_dependency_events).with(dependency_events)
@@ -102,7 +98,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     test '#publish_dependency_events enqueues the jobs' do
       event_id = event.event_id
-      dependency_events = worker.create_dependency_events(event_id)
+      dependency_events = event.create_dependencies
 
       %w[Proxy Service].each { |dependent_type| ZyncWorker.expects(:perform_async).with(anything, has_entry(:type, dependent_type)) }
       worker.publish_dependency_events(dependency_events)
@@ -118,17 +114,16 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     test 'number of attempts' do
       ZyncWorker::MessageBusPublisher.any_instance.stubs(enabled?: false)
 
-      event_id = event.event_id
       retry_limit = worker.retry_limit
 
       dependency_events = {}
-      retry_limit.times { |i| dependency_events[i] = worker.create_dependency_events(event.event_id) }
+      retry_limit.times { |i| dependency_events[i] = event.create_dependencies }
 
       dependency_events.values.flatten.each do |dependent_event|
         stub_request(:put, 'http://example.com/notification').to_return(status: 200).with(body: dependent_event.data.to_json)
       end
 
-      worker.expects(:create_dependency_events).with(event_id).times(3)
+      worker.expects(:create_dependency_events).with(event.event_id).times(3)
             .returns(dependency_events[0])
             .then.returns(dependency_events[1])
             .then.returns(dependency_events[2])
