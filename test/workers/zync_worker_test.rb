@@ -51,13 +51,13 @@ class ZyncWorkerTest < ActiveSupport::TestCase
   class UnprocessableEntityRetryTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    attr_reader :worker, :event
+    attr_reader :worker, :event, :application
 
     setup do
       EventStore::Repository.stubs(raise_errors: true)
 
       @worker = ZyncWorker.new
-      application = FactoryBot.create(:simple_cinstance).reload # reload to get tenant_id
+      @application = FactoryBot.create(:simple_cinstance).reload # reload to get tenant_id
       FactoryBot.create(:simple_admin, account: application.provider_account) # for the access token
       @event = ZyncEvent.create(RailsEventStore::Event.new, application)
 
@@ -82,35 +82,30 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     test '#create_dependency_events' do
       EventStore::Repository.expects(:find_event!).returns(event)
-      event.expects(:dependencies).returns([])
+
+      dependencies = [service = application.service, service.proxy]
+      event.expects(:dependencies).returns(dependencies)
+      dependencies.each { |dependency| ZyncEvent.expects(:create).with(anything, dependency) }
+
       worker.create_dependency_events(event.event_id)
     end
 
     test '#sync_dependencies publishes events and enqueues jobs' do
       event_id = event.event_id
-      dependency_events = event.dependencies.map { |dependency| ZyncEvent.create(event, dependency, metadata: { skip_sync: true }) }
-      worker.expects(:create_dependency_events).with(event_id).returns(dependency_events)
+      dependency_events = worker.create_dependency_events(event_id)
 
+      worker.expects(:create_dependency_events).with(event_id).returns(dependency_events)
       worker.expects(:publish_dependency_events).with(dependency_events)
-      worker.expects(:enqueue_dependency_batch).with(event_id, dependency_events)
 
       worker.sync_dependencies(event_id)
     end
 
-    test '#publish_dependency_events does not enqueue jobs' do
-      dependency_events = worker.create_dependency_events(event.event_id)
-      dependency_events.each do |dependent_event|
-        ZyncWorker.expects(:perform_async).with(dependent_event.event_id, anything).never
-      end
-      worker.publish_dependency_events(dependency_events)
-    end
+    test '#publish_dependency_events enqueues the jobs' do
+      event_id = event.event_id
+      dependency_events = worker.create_dependency_events(event_id)
 
-    test '#enqueue_dependency_batch enqueues dependency jobs' do
-      dependency_events = worker.create_dependency_events(event.event_id)
-      dependency_events.each do |dependent_event|
-        ZyncWorker.expects(:perform_async).with(dependent_event.event_id, dependent_event.data)
-      end
-      worker.enqueue_dependency_batch(event.event_id, dependency_events)
+      %w[Proxy Service].each { |dependent_type| ZyncWorker.expects(:perform_async).with(anything, has_entry(:type, dependent_type)) }
+      worker.publish_dependency_events(dependency_events)
     end
 
     test 'on batch complete' do
@@ -166,9 +161,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     zync_event = EventStore::Event.where(event_type: ZyncEvent).last!
     assert_difference(EventStore::Event.where(event_type: ZyncEvent).method(:count), +1) do
-      assert_raises ZyncWorker::UnprocessableEntityError do
-        Sidekiq::Testing.inline! { ZyncWorker.perform_async(zync_event.event_id, zync_event.data) }
-      end
+      Sidekiq::Testing.inline! { ZyncWorker.perform_async(zync_event.event_id, zync_event.data) }
     end
 
     stub_request(:put, 'http://example.com/notification').to_return(status: 200)

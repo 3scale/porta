@@ -235,15 +235,26 @@ class ZyncWorker
   end
 
   def sync_dependencies(event_id)
-    dependency_events = create_dependency_events(event_id)
+    dependency_events = []
 
-    publish_dependency_events(dependency_events)
-    enqueue_dependency_batch(event_id, dependency_events)
+    enqueue_dependency_batch(event_id) do
+      dependency_events = create_dependency_events(event_id)
+      publish_dependency_events(dependency_events)
+    end
+
+    dependency_events
+  end
+
+  def enqueue_dependency_batch(event_id, &block)
+    batch = Sidekiq::Batch.new
+    batch.description = "[ZyncWorker] Syncing dependencies first"
+    batch.on(:complete, self.class, { 'event_id' => event_id })
+    batch.jobs &block
   end
 
   def create_dependency_events(event_id)
     event = EventStore::Repository.find_event!(event_id)
-    event.dependencies.map { |dependency| ZyncEvent.create(event, dependency, metadata: { skip_background_sync: true }) }
+    event.dependencies.map { |dependency| ZyncEvent.create(event, dependency) }
   end
 
   def publish_dependency_events(dependency_events)
@@ -252,22 +263,12 @@ class ZyncWorker
     end
   end
 
-  def enqueue_dependency_batch(event_id, dependency_events)
-    batch = Sidekiq::Batch.new
-    batch.description = "[ZyncWorker] Syncing dependencies first"
-    batch.on(:complete, self.class, { 'event_id' => event_id })
-    batch.jobs { enqueue_dependency_jobs(dependency_events) }
-  end
-
-  def enqueue_dependency_jobs(dependency_events)
-    dependency_events.each do |dependent_event|
-      perform_async(dependent_event.event_id, dependent_event.data)
-    end
-  end
-
   def on_complete(_bid, options)
     event = EventStore::Repository.find_event!(options['event_id'])
-    perform_async(event.event_id, event.data) if event
+
+    # A batch is only created after a UnprocessableEntityError has been raised, so retry the same event
+    # The number of retries is controlled at the origin of the failure using ThreeScale::SidekiqRetrySupport::Worker#last_attempt?
+    perform_async(event.event_id, event.data)
   end
 
   delegate :perform_async, to: :class
