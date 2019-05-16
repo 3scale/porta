@@ -11,6 +11,6 @@ class ZyncSubscriber < AfterCommitSubscriber
 
   # @param [ZyncEvent] event
   def after_commit(event)
-    job.perform_async(event.event_id, event.data) unless event.skip_background_sync?
+    job.perform_async(event.event_id, event.data)
   end
 end
