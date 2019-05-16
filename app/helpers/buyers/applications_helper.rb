@@ -3,11 +3,21 @@ module Buyers::ApplicationsHelper
   def metadata_new_app(buyer, provider)
 
     "<div id='metadata-form'
+      data-application_plans='#{ application_plans(provider) }'
       data-services_contracted='#{ services_contracted(buyer) }'
       data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
       data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
       data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
 
+  end
+
+  def application_plans(provider)
+    provider.application_plans.stock.map do |app_plan|
+      {
+        id: app_plan.id,
+        name: app_plan.name
+      }
+    end.to_json(root: false)
   end
 
   def services_contracted(buyer)
