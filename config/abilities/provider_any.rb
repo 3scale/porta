@@ -28,12 +28,18 @@ Ability.define do |user|
     if user.has_permission?(:finance)
       can [:show], BillingRelatedEvent
     end
+
     if user.has_permission?(:partners)
-      can [:show], AccountRelatedEvent
+      can [:show], AccountRelatedEvent do |event|
+        service_id = event.try(:service)&.id || event.try(:service_id)
+        !service_id || user.has_access_to_service?(service_id)
+      end
+
       can [:show], ServiceRelatedEvent do |event|
         user.has_access_to_service?(event.try(:service) || event.service_id)
       end
     end
+
     if user.has_permission?(:monitoring)
       can [:show], AlertRelatedEvent
     end

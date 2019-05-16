@@ -6,6 +6,7 @@ class Applications::ApplicationPlanChangeRequestedEvent < ApplicationRelatedEven
       account:        application.account,
       user:           user,
       current_plan:   application.plan,
+      service:        application.service,
       requested_plan: requested_plan,
       provider:       application.provider_account,
       metadata: {
