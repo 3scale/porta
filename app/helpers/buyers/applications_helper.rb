@@ -4,6 +4,7 @@ module Buyers::ApplicationsHelper
 
     "<div id='metadata-form'
       data-application_plans='#{ application_plans(provider) }'
+      data-default_plan='#{ default_plan(provider) }'
       data-services_contracted='#{ services_contracted(buyer) }'
       data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
       data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
@@ -18,6 +19,11 @@ module Buyers::ApplicationsHelper
         name: app_plan.name
       }
     end.to_json(root: false)
+  end
+
+  def default_plan(provider)
+    plans = provider.application_plans.stock
+    plans.try(:default) || plans.first
   end
 
   def services_contracted(buyer)

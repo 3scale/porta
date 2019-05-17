@@ -1,31 +1,117 @@
 // @flow
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type ApplicationPlan = {
   id: number,
-  name: string
+  name: string,
+}
+
+type ServicePlan = {
+  id: number,
+  name: string,
+  default: boolean
 }
 
 type Props = {
   plans: ApplicationPlan[],
-  onChange: () => void
+  servicesContracted: number[],
+  relationServiceAndServicePlans: {[number]: ServicePlan[]},
+  relationPlansServices: {[number]: number},
+  servicePlanContractedForService: {[number]: ServicePlan}
 }
 
-const ApplicationForm = ({ plans, onChange }: Props) => (
-  <React.Fragment>
-    <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
-    <select
-      name="cinstance[plan_id]"
-      id="cinstance_plan_id"
-      aria-hidden="true"
-      onChange={onChange}
-    >
-      {plans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
-    </select>
-  </React.Fragment>
-)
+const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServicePlans, relationPlansServices, servicePlanContractedForService }: Props) => {
+  const [selectedPlan, setSelectedPlan] = useState(plans[0])
+
+  function checkSelectedPlan () {
+    const serviceId = getServiceIdOfPlanId(selectedPlan.id)
+    const servicePlans = getServicePlansForService(serviceId)
+
+    enableForm()
+
+    if (servicesContracted.indexOf(serviceId) > -1) {
+      const { id, name } = getContractedServicePlanForService(serviceId)
+      $('#cinstance_service_plan_id').html(`<option value="${id}"> ${name} </option>`)
+      $('#cinstance_service_plan_id').attr('disabled', 'disabled')
+    } else if (servicePlans.length !== 0) {
+      setServicePlansSelectOptions(servicePlans)
+    } else {
+      $('#cinstance_service_plan_id').html('<option> No service plan for the application plan </option>')
+      disableForm()
+    }
+  }
+
+  function getServiceIdOfPlanId (id: number): number {
+    return relationPlansServices[id]
+  }
+
+  function getServicePlansForService (serviceId: number): ServicePlan[] {
+    return relationServiceAndServicePlans[serviceId]
+  }
+
+  function getContractedServicePlanForService (serviceId: number): ServicePlan {
+    return servicePlanContractedForService[serviceId]
+  }
+
+  function enableForm () {
+    $('#link-help-new-application-service').toggle(false)
+    enableField('#submit-new-app')
+    enableField('#cinstance_service_plan_id')
+  }
+
+  function disableForm () {
+    $('#link-help-new-application-service').toggle(true)
+    disableField('#submit-new-app')
+    disableField('#cinstance_service_plan_id')
+  }
+
+  function enableField (field: string) {
+    $(field).removeAttr('disabled')
+  }
+
+  function disableField (field: string) {
+    $(field).attr('disabled', 'disabled')
+  }
+
+  function setServicePlansSelectOptions (servicePlans: ServicePlan[]) {
+    let options = ''
+    servicePlans.forEach((plan, index) => {
+      const selected = plan.default ? 'selected="selected"' : ''
+      options += `<option value="${plan.id}" ${selected}>${plan.name}</option>`
+    })
+    $('#cinstance_service_plan_id').html(options)
+    $('#cinstance_service_plan_id').removeAttr('disabled')
+  }
+
+  function onChange (ev: SyntheticInputEvent<HTMLSelectElement>) {
+    const id = Number(ev.currentTarget.value)
+    const plan = plans.find(p => p.id === id)
+
+    if (!plan) {
+      return
+    }
+
+    setSelectedPlan(plan)
+  }
+
+  useEffect(() => checkSelectedPlan(), [selectedPlan])
+
+  return (
+    <React.Fragment>
+      <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
+      <select
+        name="cinstance[plan_id]"
+        id="cinstance_plan_id"
+        aria-hidden="true"
+        onChange={onChange}
+      >
+        {plans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
+      </select>
+    </React.Fragment>
+  )
+}
 
 const ApplicationFormWrapper = (props: Props, containerId: string) => createReactWrapper(<ApplicationForm {...props} />, containerId)
 
