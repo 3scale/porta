@@ -24,6 +24,7 @@ type Props = {
 
 const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServicePlans, relationPlansServices, servicePlanContractedForService }: Props) => {
   const [selectedPlan, setSelectedPlan] = useState(plans[0])
+  const [term, setTerm] = useState(selectedPlan.name)
 
   function checkSelectedPlan () {
     const serviceId = getServiceIdOfPlanId(selectedPlan.id)
@@ -85,30 +86,42 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
     $('#cinstance_service_plan_id').removeAttr('disabled')
   }
 
-  function onChange (ev: SyntheticInputEvent<HTMLSelectElement>) {
-    const id = Number(ev.currentTarget.value)
-    const plan = plans.find(p => p.id === id)
-
-    if (!plan) {
-      return
-    }
-
-    setSelectedPlan(plan)
+  function onFocus () {
+    setTerm('')
   }
 
-  useEffect(() => checkSelectedPlan(), [selectedPlan])
+  function onChange (ev: SyntheticEvent<HTMLInputElement>) {
+    setTerm(ev.currentTarget.value)
+  }
+
+  function onBlur () {
+    const plan = plans.find(p => p.name === term)
+
+    if (plan) {
+      return setSelectedPlan(plan)
+    }
+
+    setTerm(selectedPlan.name)
+  }
+
+  useEffect(checkSelectedPlan, [selectedPlan])
 
   return (
     <React.Fragment>
       <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
-      <select
-        name="cinstance[plan_id]"
-        id="cinstance_plan_id"
-        aria-hidden="true"
+      <input type="hidden" name="cinstance[plan_id]" value={selectedPlan.id} />
+      <input
+        type="text"
+        list="plans"
+        value={term}
+        onFocus={onFocus}
         onChange={onChange}
-      >
-        {plans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
-      </select>
+        onBlur={onBlur}
+        placeholder='Find an Application plan...'
+      />
+      <datalist id="plans">
+        {plans.map(({id, name}) => <option key={id} onClick={() => console.log('clicked', id)}>{name}</option>)}
+      </datalist>
     </React.Fragment>
   )
 }
