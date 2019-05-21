@@ -1,4 +1,4 @@
-FROM centos/ruby-23-centos7
+FROM centos/ruby-24-centos7
 
 USER root
 
