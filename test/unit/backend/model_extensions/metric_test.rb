@@ -57,7 +57,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     metric.destroy
   end
 
-  test 'sync backend metric data only once when metric destroyed multiple times' do
+  test 'sync backend metric data multiple times under race condition' do
     class MetricWithFiber < ::Metric
       def destroy
         super
@@ -69,7 +69,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     metric = MetricWithFiber.create(service: service, friendly_name: 'My metric', unit: 'hits')
     metric_id = metric.id
 
-    ::BackendMetricWorker.expects(:sync).with(service.backend_id, metric_id, metric.system_name).once
+    ::BackendMetricWorker.expects(:sync).with(service.backend_id, metric_id, metric.system_name).twice
 
     metric_f1 = MetricWithFiber.find(metric_id)
     metric_f2 = MetricWithFiber.find(metric_id)
