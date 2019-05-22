@@ -59,9 +59,9 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
   test 'sync backend metric data only once when metric destroyed multiple times' do
     class MetricWithFiber < ::Metric
-      def destroy_row
-        Fiber.yield
+      def destroy
         super
+        Fiber.yield
       end
     end
 
@@ -71,13 +71,11 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
     ::BackendMetricWorker.expects(:sync).with(service.backend_id, metric_id, metric.system_name).once
 
-    deletion = ->() do
-      metric = MetricWithFiber.find(metric_id)
-      metric.destroy
-    end
+    metric_f1 = MetricWithFiber.find(metric_id)
+    metric_f2 = MetricWithFiber.find(metric_id)
 
-    f1 = Fiber.new(&deletion)
-    f2 = Fiber.new(&deletion)
+    f1 = Fiber.new { metric_f1.destroy }
+    f2 = Fiber.new { metric_f2.destroy }
 
     f1.resume
     f2.resume
