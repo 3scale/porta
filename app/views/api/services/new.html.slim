@@ -1,9 +1,6 @@
-h2 New API
-
-- if service_discovery_accessible?
-  = render :partial => 'api/services/forms/service_discovery', :locals => { :service => @service }
-
-= semantic_form_for @service, :url => admin_services_path do |form|
-  = render :partial => 'api/services/forms/naming', :locals => { :form => form }
-  = form.buttons do
-    = form.commit_button 'Add API'
+= javascript_pack_tag 'new_service'
+#new_service_wrapper data-new-service-data={isServiceDiscoveryAccesible: service_discovery_accessible?,
+isServiceDiscoveryUsable: service_discovery_usable?,
+serviceDiscoveryAuthenticateUrl: service_discovery_presenter.authorize_url,
+providerAdminServiceDiscoveryServicesPath: provider_admin_service_discovery_services_path,
+adminServicesPath: admin_services_path}.to_json
