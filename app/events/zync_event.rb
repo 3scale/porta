@@ -52,6 +52,10 @@ class ZyncEvent < BaseEventStoreEvent
     end
   end
 
+  def create_dependencies
+    dependencies.map { |dependency| ZyncEvent.create(self, dependency) }
+  end
+
   def self.type_for(model)
     case model
     when Cinstance, ApplicationRelatedEvent then 'Application'

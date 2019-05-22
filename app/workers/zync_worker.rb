@@ -4,6 +4,8 @@ require 'httpclient/include_client'
 
 class ZyncWorker
   include Sidekiq::Worker
+  include ThreeScale::SidekiqRetrySupport::Worker
+
   extend ::HTTPClient::IncludeClient
 
   class_attribute :publisher
@@ -220,8 +222,7 @@ class ZyncWorker
       http_put(notification_url, notification, event_id)
     end
   rescue UnprocessableEntityError
-    publish_dependencies_events(event_id)
-    raise
+    raise if last_attempt? || sync_dependencies(event_id).blank?
   end
 
   def valid?(event_id)
@@ -233,15 +234,43 @@ class ZyncWorker
     true
   end
 
-  def publish_dependencies_events(event_id)
-    event = EventStore::Repository.find_event!(event_id)
+  def sync_dependencies(event_id)
+    dependency_events = []
 
-    dependencies = event.dependencies.map do |dependency|
-      ZyncEvent.create(event, dependency)
+    enqueue_dependency_batch(event_id) do
+      dependency_events = create_dependency_events(event_id)
+      publish_dependency_events(dependency_events)
     end
 
-    dependencies.each { |dependency| publisher.call(dependency, 'zync') }
+    dependency_events
   end
+
+  def enqueue_dependency_batch(event_id, &block)
+    batch = Sidekiq::Batch.new
+    batch.description = "[ZyncWorker] Syncing dependencies first"
+    batch.on(:complete, self.class, { 'event_id' => event_id })
+    batch.jobs &block
+  end
+
+  def create_dependency_events(event_id)
+    EventStore::Repository.find_event!(event_id).create_dependencies
+  end
+
+  def publish_dependency_events(dependency_events)
+    dependency_events.each do |dependent_event|
+      publisher.call(dependent_event, 'zync')
+    end
+  end
+
+  def on_complete(_bid, options)
+    event = EventStore::Repository.find_event!(options['event_id'])
+
+    # A batch is only created after a UnprocessableEntityError has been raised, so retry the same event
+    # The number of retries is controlled at the origin of the failure using ThreeScale::SidekiqRetrySupport::Worker#last_attempt?
+    perform_async(event.event_id, event.data)
+  end
+
+  delegate :perform_async, to: :class
 
   def update_tenant(event_id)
     event = EventStore::Repository.find_event!(event_id)
