@@ -117,6 +117,11 @@ class UserTest < ActiveSupport::TestCase
     member.stubs(:member_permission_service_ids).returns([])
 
     assert_equal 0, member.accessible_services.count
+
+
+    member.stubs(:has_access_to_all_services?).returns(true)
+    member.stubs(:member_permission_service_ids).returns(nil)
+    assert_equal [service.id], member.accessible_services.map(&:id)
   end
 
   test '#multiple_accessible_services?' do
