@@ -22,6 +22,7 @@ Feature: Services switch
       And I follow "New API"
     Then I should be on the new service page
 
+  @javascript
   Scenario: In allowed state (hidden and visible), I should be able to access the page by url
     Given provider "foo.example.com" has "multiple_services" switch allowed
       And I go to the new service page
