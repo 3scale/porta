@@ -8,6 +8,9 @@ class Master::Providers::PlansController < Master::Providers::BaseController
   end
 
   def update
+    authorize! :update, :provider_plans
+    raise CanCan::AccessDenied unless current_user.has_access_to_service?(@new_plan.issuer_id)
+
     @provider.force_upgrade_to_provider_plan!(@new_plan)
   end
 
