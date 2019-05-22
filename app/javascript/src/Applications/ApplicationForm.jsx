@@ -96,7 +96,7 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
     setTerm(ev.currentTarget.value)
   }
 
-  function onBlur () {
+  function selectPlanByName () {
     const plan = plans.find(p => p.name === term)
 
     if (plan) {
@@ -104,6 +104,12 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
     }
 
     setTerm(selectedPlan.name)
+  }
+
+  function onKeyDown (ev: SyntheticKeyboardEvent<HTMLInputElement>) {
+    if (ev.key === 'Enter') {
+      selectPlanByName()
+    }
   }
 
   useEffect(checkSelectedPlan, [selectedPlan])
@@ -120,7 +126,8 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
           value={term}
           onFocus={onFocus}
           onChange={onChange}
-          onBlur={onBlur}
+          onBlur={selectPlanByName}
+          onKeyDown={onKeyDown}
           placeholder='Find an Application plan...'
         />
       </div>
