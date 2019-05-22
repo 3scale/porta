@@ -27,10 +27,27 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
     BackendMetricWorker.new.perform('foo', 'bar', 'lol')
   end
 
-  test 'lock prevents concurrent workers for the same service and metric' do
+  test 'concurrent job is retried if locked on same service and metric' do
     args = ['foo', 'bar']
     lock = set_sidekiq_lock(BackendMetricWorker, args)
     lock.expects(:acquire!).returns(false)
-    assert_raises(BackendMetricWorker::LockError) { BackendMetricWorker.new.perform(*args) }
+    worker = BackendMetricWorker.new
+    worker.expects(:retry_job).with(*args)
+    worker.perform(*args)
+  end
+
+  test '#retry_job reenqueues the job' do
+    args = ['foo', 'bar']
+    worker = BackendMetricWorker.new
+    BackendMetricWorker.expects(:sync).with(*args)
+    worker.send(:retry_job, *args)
+  end
+
+  test '#retry_job raises LockError if last attempt' do
+    args = ['foo', 'bar']
+    worker = BackendMetricWorker.new
+    worker.expects(:last_attempt?).returns(true)
+    BackendMetricWorker.expects(:sync).with(*args).never
+    assert_raises(BackendMetricWorker::LockError) { worker.send(:retry_job, *args) }
   end
 end

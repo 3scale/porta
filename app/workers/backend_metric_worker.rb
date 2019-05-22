@@ -5,6 +5,7 @@ class BackendMetricWorker
 
   include Sidekiq::Worker
   include ThreeScale::SidekiqLockWorker
+  include ThreeScale::SidekiqRetrySupport::Worker
 
   sidekiq_options queue: :backend_sync,
                   retry: 3,
@@ -24,8 +25,8 @@ class BackendMetricWorker
     perform_async(backend_id, metric_id, metric_system_name)
   end
 
-  def perform(backend_id, metric_id, *)
-    raise LockError unless lock(backend_id, metric_id).acquire!
+  def perform(backend_id, metric_id, *args)
+    retry_job(backend_id, metric_id, *args) unless lock(backend_id, metric_id).acquire!
 
     begin
       if (metric = Metric.find_by(id: metric_id))
@@ -40,5 +41,12 @@ class BackendMetricWorker
     ensure
       lock.release!
     end
+  end
+
+  protected
+
+  def retry_job(backend_id, metric_id, *args)
+    raise LockError if last_attempt?
+    self.class.sync(backend_id, metric_id, *args)
   end
 end
