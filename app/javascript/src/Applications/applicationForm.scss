@@ -1,0 +1,15 @@
+.datalist-wrapper {
+
+  input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+
+  i {
+    margin-right: 1rem;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(5%);
+  }
+}

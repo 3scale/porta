@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
+import './applicationForm.scss'
+
 type ApplicationPlan = {
   id: number,
   name: string,
@@ -110,15 +112,18 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
     <React.Fragment>
       <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
       <input type="hidden" name="cinstance[plan_id]" value={selectedPlan.id} />
-      <input
-        type="text"
-        list="plans"
-        value={term}
-        onFocus={onFocus}
-        onChange={onChange}
-        onBlur={onBlur}
-        placeholder='Find an Application plan...'
-      />
+      <div className='datalist-wrapper'>
+        <i className='fa fa-sort-desc' />
+        <input
+          type="text"
+          list="plans"
+          value={term}
+          onFocus={onFocus}
+          onChange={onChange}
+          onBlur={onBlur}
+          placeholder='Find an Application plan...'
+        />
+      </div>
       <datalist id="plans">
         {plans.map(({id, name}) => <option key={id} onClick={() => console.log('clicked', id)}>{name}</option>)}
       </datalist>
