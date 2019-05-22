@@ -1,13 +1,11 @@
 import React from 'react'
-import Enzyme, { mount, shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import {JSDOM} from 'jsdom'
 
 import {
   CustomPolicy,
   CustomPolicyEditor,
   CustomPolicyForm,
-  CSRFToken,
   POLICY_TEMPLATE
 } from 'Policies/components/CustomPolicy'
 
@@ -90,25 +88,5 @@ describe('CustomPolicyForm', () => {
     wrapper.update()
     // TODO: assert before submission
     expect(wrapper.find('input[name="_method"]').prop('value')).toBe('delete')
-  })
-})
-
-describe('CSRFToken', () => {
-  function setup () {
-    const jsdom = new JSDOM(
-      `<!doctype html><html>
-         <head><meta name="csrf-param" content="authenticity_token"><meta name="csrf-token" content="=42="></head>
-         <body></body>
-       </html>`
-    )
-    const { window } = jsdom
-    return mount(<CSRFToken win={window} />)
-  }
-
-  it('should render itself correctly', () => {
-    const wrapper = setup()
-    expect(wrapper.find(CSRFToken).exists()).toBe(true)
-    expect(wrapper.find('input').prop('name')).toBe('authenticity_token')
-    expect(wrapper.find('input').prop('value')).toBe('=42=')
   })
 })

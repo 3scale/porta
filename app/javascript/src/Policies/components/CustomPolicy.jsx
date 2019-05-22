@@ -8,6 +8,7 @@ import type { Policy, Schema } from 'Policies/types/Policies'
 import type {InputEvent} from 'Policies/types'
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
+import {CSRFToken} from 'utilities/utils'
 
 type OnChange = (InputEvent) => void
 
@@ -30,18 +31,6 @@ const POLICY_TEMPLATE: Policy = {
   },
   directory: '',
   id: 0
-}
-
-function CSRFToken ({win = window}: {win?: Window}) {
-  const getMetaContent = meta => win.document.head.querySelector(`meta[name~=${meta}][content]`).content
-  const props = {
-    name: getMetaContent('csrf-param'),
-    value: getMetaContent('csrf-token'),
-    type: 'hidden'
-  }
-  return (
-    <input {...props} />
-  )
 }
 
 function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, onChange: OnChange, win?: Window}) {
@@ -145,7 +134,6 @@ function CustomPolicy ({policy = POLICY_TEMPLATE}: {policy: Policy}) {
 export {
   CustomPolicy,
   CustomPolicyForm,
-  CSRFToken,
   CustomPolicyEditor,
   POLICY_TEMPLATE
 }
