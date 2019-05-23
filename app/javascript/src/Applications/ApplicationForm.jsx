@@ -121,6 +121,7 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
       <div className='datalist-wrapper'>
         <i className='fa fa-sort-desc' />
         <input
+          id="cinstance_plan_id"
           type="text"
           list="plans"
           value={term}

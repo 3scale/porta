@@ -72,11 +72,17 @@ end
 
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
-    select = find(:xpath, XPath::HTML.select(field))
-    if select.native.is_a?(Nokogiri::XML::Element) || select.native.is_a?(String) # a String means capybara-webkit
-      select.find(:xpath, XPath::HTML.option(value)).select_option
-    else # this is selenium, needs slightly different treatment
-      select.find(:xpath, XPath::HTML.option(value)).click
+    select = find_field(field)
+    if select.tag_name == 'select'
+      if select.native.is_a?(Nokogiri::XML::Element) || select.native.is_a?(String) # a String means capybara-webkit
+        select.find(:xpath, XPath::HTML.option(value)).select_option
+      else # this is selenium, needs slightly different treatment
+        select.find(:xpath, XPath::HTML.option(value)).click
+      end
+    elsif select.tag_name == 'input' # In case it's a dataset
+      option = find(:xpath, XPath::HTML.option(value))
+      fill_in(field, :with => option.value, visible: true)
+      select.send_keys(:tab) # In order to trigger onBlur
     end
   end
 end

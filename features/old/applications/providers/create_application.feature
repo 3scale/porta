@@ -108,6 +108,7 @@ Feature: Create application
      And should see "Application was successfully created"
      And  buyer "bob" should have 1 cinstance
 
+  @javascript
   Scenario: Create an application should validate the fields
     When I go to the provider side create application page for "bob"
     Then I should see "New Application"
