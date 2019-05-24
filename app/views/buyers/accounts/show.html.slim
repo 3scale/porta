@@ -74,7 +74,7 @@ h1 data-hook="account-show"
                                method: :post,
                                data: { confirm: 'Are you sure?', disable_with: 'resuming…' },
                                class: 'action resume'
-    - if can?(:update, :provider_plans)
+    - if can?(:update, :provider_plans) && can?(:update, @account.bought_cinstance.service)
       = render 'master/providers/plans/widget', provider: @account
     - if can?(:manage, :finance)
       .dashboard_bubble.round

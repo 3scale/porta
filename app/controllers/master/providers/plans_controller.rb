@@ -8,6 +8,9 @@ class Master::Providers::PlansController < Master::Providers::BaseController
   end
 
   def update
+    authorize! :update, :provider_plans
+    authorize! :update, @new_plan.issuer
+
     @provider.force_upgrade_to_provider_plan!(@new_plan)
   end
 
