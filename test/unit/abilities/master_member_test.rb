@@ -53,6 +53,22 @@ class Abilities::MasterMemberTest < ActiveSupport::TestCase
     assert_can ability, :create, Account
   end
 
+  def test_provider_plans
+    @member.stubs(:has_permission?)
+
+    ThreeScale.config.stubs(onpremises: false)
+
+    @member.expects(:has_permission?).with(:partners).returns(true)
+    assert_can ability, :manage, :provider_plans
+
+    @member.expects(:has_permission?).with(:partners).returns(false)
+    assert_cannot ability, :manage, :provider_plans
+
+    ThreeScale.config.stubs(onpremises: true)
+    @member.expects(:has_permission?).with(:partners).returns(true)
+    assert_cannot ability, :manage, :provider_plans
+  end
+
   private
 
   def ability
