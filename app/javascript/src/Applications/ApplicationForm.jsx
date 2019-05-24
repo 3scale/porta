@@ -21,10 +21,14 @@ type Props = {
   servicesContracted: number[],
   relationServiceAndServicePlans: {[number]: ServicePlan[]},
   relationPlansServices: {[number]: number},
-  servicePlanContractedForService: {[number]: ServicePlan}
+  servicePlanContractedForService: {[number]: ServicePlan},
+  servicePlansAllowed: boolean
 }
 
-const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServicePlans, relationPlansServices, servicePlanContractedForService }: Props) => {
+const ApplicationForm = ({
+  plans, servicesContracted, relationServiceAndServicePlans,
+  relationPlansServices, servicePlanContractedForService, servicePlansAllowed
+}: Props) => {
   const [selectedPlan, setSelectedPlan] = useState(plans[0])
   const [term, setTerm] = useState(selectedPlan.name)
 
@@ -37,7 +41,7 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
     if (servicesContracted.indexOf(serviceId) > -1) {
       const { id, name } = getContractedServicePlanForService(serviceId)
       $('#cinstance_service_plan_id').html(`<option value="${id}"> ${name} </option>`)
-      $('#cinstance_service_plan_id').attr('disabled', 'disabled')
+      disableField('#cinstance_service_plan_id')
     } else if (servicePlans.length !== 0) {
       setServicePlansSelectOptions(servicePlans)
     } else {
@@ -85,7 +89,7 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
       options += `<option value="${plan.id}" ${selected}>${plan.name}</option>`
     })
     $('#cinstance_service_plan_id').html(options)
-    $('#cinstance_service_plan_id').removeAttr('disabled')
+    enableField('#cinstance_service_plan_id')
   }
 
   function onFocus () {
@@ -116,25 +120,38 @@ const ApplicationForm = ({ plans, servicesContracted, relationServiceAndServiceP
 
   return (
     <React.Fragment>
-      <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
-      <input type="hidden" name="cinstance[plan_id]" value={selectedPlan.id} />
-      <div className='datalist-wrapper'>
-        <i className='fa fa-sort-desc' />
-        <input
-          id="cinstance_plan_id"
-          type="text"
-          list="plans"
-          value={term}
-          onFocus={onFocus}
-          onChange={onChange}
-          onBlur={selectPlanByName}
-          onKeyDown={onKeyDown}
-          placeholder='Find an Application plan...'
-        />
-      </div>
-      <datalist id="plans">
-        {plans.map(({id, name}) => <option key={id} onClick={() => console.log('clicked', id)}>{name}</option>)}
-      </datalist>
+      <li id="cinstance_plan_input" class="plan_selector required">
+        <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
+        <input type="hidden" name="cinstance[plan_id]" value={selectedPlan.id} />
+        <div className='datalist-wrapper'>
+          <i className='fa fa-sort-desc' />
+          <input
+            id="cinstance_plan_id"
+            type="text"
+            list="plans"
+            value={term}
+            onFocus={onFocus}
+            onChange={onChange}
+            onBlur={selectPlanByName}
+            onKeyDown={onKeyDown}
+            placeholder='Find an Application plan...'
+          />
+        </div>
+        <datalist id="plans">
+          {plans.map(({id, name}) => <option key={id} onClick={() => console.log('clicked', id)}>{name}</option>)}
+        </datalist>
+      </li>
+
+      { servicePlansAllowed &&
+        <li id="cinstance_service_plan_id_input" className="select optional">
+          <label htmlFor="cinstance_service_plan_id">Service plan</label>
+          <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]">
+          </select>
+          <p className="inline-hints">
+            <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
+          </p>
+        </li>
+      }
     </React.Fragment>
   )
 }

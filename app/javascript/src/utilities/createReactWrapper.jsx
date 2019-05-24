@@ -2,11 +2,17 @@
 
 import { render } from 'react-dom'
 
-export function createReactWrapper <ElementType: React$ElementType> (element: React$Element<ElementType>, containerId: string) {
-  const container = document.getElementById(containerId)
+export function createReactWrapper <ElementType: React$ElementType> (element: React$Element<ElementType>, target: string | Element) {
+  let container: ?Element
 
-  if (container == null) {
-    throw new Error(`${containerId} is not part of the DOM`)
+  if (typeof target === 'string') {
+    container = document.getElementById(target)
+
+    if (container == null) {
+      throw new Error(`${target} is not part of the DOM`)
+    }
+  } else {
+    container = target
   }
 
   render(element, container)

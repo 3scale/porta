@@ -2,6 +2,14 @@ import { ApplicationFormWrapper as renderApplicationForm } from 'Applications/Ap
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Remove formtastic forms
+  document.getElementById('cinstance_service_plan_id_input').remove()
+  document.getElementById('cinstance_plan_input').remove()
+
+  const form = document.querySelector('.inputs > ol')
+  const tempDiv = document.createElement('div')
+  form.prepend(tempDiv)
+
   const { dataset } = document.getElementById('metadata-form')
 
   const plans = safeFromJsonString(dataset.application_plans)
@@ -9,12 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const relationServiceAndServicePlans = safeFromJsonString(dataset.relation_service_and_service_plans)
   const relationPlansServices = safeFromJsonString(dataset.relation_plans_services)
   const servicePlanContractedForService = safeFromJsonString(dataset.service_plan_contracted_for_service)
+  const servicePlansAllowed = safeFromJsonString(dataset.service_plans_allowed)
 
   renderApplicationForm({
     plans,
     servicesContracted,
     relationServiceAndServicePlans,
     relationPlansServices,
-    servicePlanContractedForService
-  }, 'cinstance_plan_input')
+    servicePlanContractedForService,
+    servicePlansAllowed
+  }, tempDiv)
+
+  form.prepend(document.getElementById('cinstance_service_plan_id_input'))
+  form.prepend(document.getElementById('cinstance_plan_input'))
+  tempDiv.remove()
 })
