@@ -38,19 +38,23 @@ it.skip('should render new Service Discovery form when click on input', () => {
   expect(wrapper.find('#service_discovery').exists()).toEqual(true)
 })
 
-it('should render `Import from OpenShift` input not disabled when `isServiceDiscoveryUsable` is true', () => {
+it('should render `Import from OpenShift` input enabled when Service Discovery is usable', () => {
   const wrapper = mount(<NewServiceForm {...props}/>)
+  expect(wrapper.props().isServiceDiscoveryUsable).toEqual(true)
   expect(wrapper.find('#source_discover').props().disabled).toEqual(false)
+  expect(wrapper.find('#source_discover + span').text()).toEqual('Import from OpenShift')
 })
 
-it('should render `Import from OpenShift` input disabled when `isServiceDiscoveryUsable` is false', () => {
+it('should render `Import from OpenShift` input disabled when Service Discovery is not usable', () => {
   const wrapper = mount(<NewServiceForm {...discoveryNotUsableProps}/>)
+  expect(wrapper.props().isServiceDiscoveryUsable).toEqual(false)
   expect(wrapper.find('#source_discover').props().disabled).toEqual(true)
 })
 
-it('should render `(Authenticate to enable this option)` link when `isServiceDiscoveryUsable` is false', () => {
+it('should render `(Authenticate to enable this option)` link when Service Discovery is not usable', () => {
   const wrapper = mount(<NewServiceForm {...discoveryNotUsableProps}/>)
   const link = wrapper.find(`label[htmlFor='source_discover'] a`)
   expect(link.exists()).toEqual(true)
+  expect(link.text()).toEqual(' (Authenticate to enable this option)')
   expect(link.props().href).toEqual('authenticate-url')
 })

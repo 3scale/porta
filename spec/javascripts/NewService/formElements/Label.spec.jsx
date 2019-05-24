@@ -19,7 +19,7 @@ it('should render itself properly', () => {
   expect(wrapper.find('abbr').exists()).toEqual(true)
 })
 
-it('should not render <abbr> tag when required is false', () => {
+it('should not render <abbr> tag when not required', () => {
   const propsNotRequired = {...props, required: false}
   const wrapper = mount(<Label {...propsNotRequired}/>)
   expect(wrapper.find('abbr').exists()).toEqual(false)
