@@ -87,7 +87,7 @@ system-builder-latest: &system-builder-latest
 
 system-builder-ruby24: &system-builder-ruby24
   <<: *system-builder-latest
-  image: quay.io/3scale/system-builder:ruby2.4
+  image: quay.io/3scale/system-builder:ruby24
 
 mysql-container: &mysql-container
   image: circleci/mysql:5.7-ram
