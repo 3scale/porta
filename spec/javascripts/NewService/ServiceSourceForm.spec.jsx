@@ -23,8 +23,9 @@ it('should call `handleFormsVisibility`', () => {
   expect(props.handleFormsVisibility).toHaveBeenCalled()
 })
 
-it('should render with service discovery input disabled when `isServiceDiscoveryUsable` is false', () => {
+it('should render `Import from OpenShift` input disabled when Service Discovery is not usable', () => {
   const propsNotUsable = {...props, isServiceDiscoveryUsable: false}
   const wrapper = shallow(<ServiceSourceForm {...propsNotUsable}/>)
+  expect(wrapper.find('#source_discover + span').text()).toEqual('Import from OpenShift')
   expect(wrapper.find('#source_discover').props().disabled).toEqual(true)
 })

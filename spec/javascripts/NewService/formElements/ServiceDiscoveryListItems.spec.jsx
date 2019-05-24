@@ -13,7 +13,6 @@ const props = {
   services: ['three', 'four']
 }
 
-
 it('should render itself', () => {
   const wrapper = shallow(<ServiceDiscoveryListItems {...props}/>)
   expect(wrapper.find('#service_name_input').exists()).toEqual(true)
