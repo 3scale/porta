@@ -179,10 +179,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     def save_queries(&block)
       queries = []
 
-      counter_f = ->(name, started, finished, unique_id, payload) {
-        unless %w[ CACHE SCHEMA ].include?(payload[:name])
-          queries << payload
-        end
+      counter_f = ->(_name, _start, _finish, _id, payload) {
+        queries << payload if payload[:name].eql?('SQL')
       }
 
       ActiveSupport::Notifications.subscribed(
