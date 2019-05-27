@@ -33,6 +33,7 @@ const ApplicationForm = ({
   const [term, setTerm] = useState(selectedPlan.name)
   const [servicePlans, setServicePlans] = useState([])
   const [servicePlansDisabled, setServicePlansDisabled] = useState(false)
+  const [showHint, setShowHint] = useState(false)
 
   function checkSelectedPlan () {
     const serviceId = getServiceIdOfPlanId(selectedPlan.id)
@@ -65,13 +66,13 @@ const ApplicationForm = ({
   }
 
   function enableForm () {
-    $('#link-help-new-application-service').toggle(false)
+    setShowHint(false)
     enableField('#submit-new-app')
     setServicePlansDisabled(false)
   }
 
   function disableForm () {
-    $('#link-help-new-application-service').toggle(true)
+    setShowHint(true)
     disableField('#submit-new-app')
     setServicePlansDisabled(true)
   }
@@ -146,7 +147,9 @@ const ApplicationForm = ({
             {servicePlans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
           </select>
           <p className="inline-hints">
-            <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
+            { showHint &&
+              <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
+            }
           </p>
         </li>
       }

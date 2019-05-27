@@ -84,7 +84,8 @@ Feature: Create application
        And I fill in "Name" with "UltimateWidget"
        And I fill in "Description" with "Awesome ultimate super widget"
        And I select "second_app_plan" from "Application plan"
-      Then I should see "Create a service plan"
+      # TODO: waiting for fix in master: the link has always display: none but still the test passes.
+      # Then I should see "Create a service plan"
 
   @javascript
   Scenario: Create an application with extra field
