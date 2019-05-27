@@ -31,6 +31,7 @@ const ApplicationForm = ({
 }: Props) => {
   const [selectedPlan, setSelectedPlan] = useState(plans[0])
   const [term, setTerm] = useState(selectedPlan.name)
+  const [servicePlans, setServicePlans] = useState([])
 
   function checkSelectedPlan () {
     const serviceId = getServiceIdOfPlanId(selectedPlan.id)
@@ -39,13 +40,13 @@ const ApplicationForm = ({
     enableForm()
 
     if (servicesContracted.indexOf(serviceId) > -1) {
-      const { id, name } = getContractedServicePlanForService(serviceId)
-      $('#cinstance_service_plan_id').html(`<option value="${id}"> ${name} </option>`)
+      const contractedPlan = getContractedServicePlanForService(serviceId)
+      setServicePlans([ contractedPlan ])
       disableField('#cinstance_service_plan_id')
     } else if (servicePlans.length !== 0) {
       setServicePlansSelectOptions(servicePlans)
     } else {
-      $('#cinstance_service_plan_id').html('<option> No service plan for the application plan </option>')
+      setServicePlans([{ id: -1, name: 'No service plan for the application plan' }])
       disableForm()
     }
   }
@@ -83,12 +84,7 @@ const ApplicationForm = ({
   }
 
   function setServicePlansSelectOptions (servicePlans: ServicePlan[]) {
-    let options = ''
-    servicePlans.forEach((plan, index) => {
-      const selected = plan.default ? 'selected="selected"' : ''
-      options += `<option value="${plan.id}" ${selected}>${plan.name}</option>`
-    })
-    $('#cinstance_service_plan_id').html(options)
+    setServicePlans(servicePlans)
     enableField('#cinstance_service_plan_id')
   }
 
@@ -146,6 +142,7 @@ const ApplicationForm = ({
         <li id="cinstance_service_plan_id_input" className="select optional">
           <label htmlFor="cinstance_service_plan_id">Service plan</label>
           <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]">
+            {servicePlans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
           </select>
           <p className="inline-hints">
             <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
