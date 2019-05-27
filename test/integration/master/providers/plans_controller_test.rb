@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Master::Api::PlansControllerTest < ActionDispatch::IntegrationTest
+class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
   def setup
     @master_member = FactoryBot.create(:member, account: master_account, state: 'active')
     @service = master_account.default_service
@@ -19,7 +19,7 @@ class Master::Api::PlansControllerTest < ActionDispatch::IntegrationTest
     put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
 
     assert_response :redirect
-    assert_equal [old_plan.id], tenant.bought_application_plans.pluck(:id)
+    assert_equal [old_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
   end
 
   test '#update for an admin' do
@@ -28,7 +28,7 @@ class Master::Api::PlansControllerTest < ActionDispatch::IntegrationTest
     put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
 
     assert_response :success
-    assert_equal [new_plan.id], tenant.bought_application_plans.pluck(:id)
+    assert_equal [new_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
   end
 
   test '#update for a member with permission partners and the service' do
@@ -38,7 +38,7 @@ class Master::Api::PlansControllerTest < ActionDispatch::IntegrationTest
     put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
 
     assert_response :success
-    assert_equal [new_plan.id], tenant.bought_application_plans.pluck(:id)
+    assert_equal [new_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
   end
 
   test '#update for a member without permission partners but with the service' do
@@ -48,7 +48,7 @@ class Master::Api::PlansControllerTest < ActionDispatch::IntegrationTest
     put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
 
     assert_response :forbidden
-    assert_equal [old_plan.id], tenant.bought_application_plans.pluck(:id)
+    assert_equal [old_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
   end
 
   test '#update for a member with permission partners but without the service' do
@@ -58,6 +58,6 @@ class Master::Api::PlansControllerTest < ActionDispatch::IntegrationTest
     put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
 
     assert_response :forbidden
-    assert_equal [old_plan.id], tenant.bought_application_plans.pluck(:id)
+    assert_equal [old_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
   end
 end
