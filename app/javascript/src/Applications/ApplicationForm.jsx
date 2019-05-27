@@ -32,6 +32,7 @@ const ApplicationForm = ({
   const [selectedPlan, setSelectedPlan] = useState(plans[0])
   const [term, setTerm] = useState(selectedPlan.name)
   const [servicePlans, setServicePlans] = useState([])
+  const [servicePlansDisabled, setServicePlansDisabled] = useState(false)
 
   function checkSelectedPlan () {
     const serviceId = getServiceIdOfPlanId(selectedPlan.id)
@@ -42,7 +43,7 @@ const ApplicationForm = ({
     if (servicesContracted.indexOf(serviceId) > -1) {
       const contractedPlan = getContractedServicePlanForService(serviceId)
       setServicePlans([ contractedPlan ])
-      disableField('#cinstance_service_plan_id')
+      setServicePlansDisabled(true)
     } else if (servicePlans.length !== 0) {
       setServicePlansSelectOptions(servicePlans)
     } else {
@@ -66,13 +67,13 @@ const ApplicationForm = ({
   function enableForm () {
     $('#link-help-new-application-service').toggle(false)
     enableField('#submit-new-app')
-    enableField('#cinstance_service_plan_id')
+    setServicePlansDisabled(false)
   }
 
   function disableForm () {
     $('#link-help-new-application-service').toggle(true)
     disableField('#submit-new-app')
-    disableField('#cinstance_service_plan_id')
+    setServicePlansDisabled(true)
   }
 
   function enableField (field: string) {
@@ -85,7 +86,7 @@ const ApplicationForm = ({
 
   function setServicePlansSelectOptions (servicePlans: ServicePlan[]) {
     setServicePlans(servicePlans)
-    enableField('#cinstance_service_plan_id')
+    setServicePlansDisabled(false)
   }
 
   function onFocus () {
@@ -141,7 +142,7 @@ const ApplicationForm = ({
       { servicePlansAllowed &&
         <li id="cinstance_service_plan_id_input" className="select optional">
           <label htmlFor="cinstance_service_plan_id">Service plan</label>
-          <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]">
+          <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]" disabled={servicePlansDisabled}>
             {servicePlans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
           </select>
           <p className="inline-hints">
