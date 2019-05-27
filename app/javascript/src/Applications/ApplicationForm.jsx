@@ -22,11 +22,12 @@ type Props = {
   relationServiceAndServicePlans: {[number]: ServicePlan[]},
   relationPlansServices: {[number]: number},
   servicePlanContractedForService: {[number]: ServicePlan},
+  setSubmitButtonDisabled: (boolean) => void,
   servicePlansAllowed: boolean
 }
 
 const ApplicationForm = ({
-  plans, servicesContracted, relationServiceAndServicePlans,
+  plans, servicesContracted, relationServiceAndServicePlans, setSubmitButtonDisabled,
   relationPlansServices, servicePlanContractedForService, servicePlansAllowed
 }: Props) => {
   const [selectedPlan, setSelectedPlan] = useState(plans[0])
@@ -67,22 +68,14 @@ const ApplicationForm = ({
 
   function enableForm () {
     setShowHint(false)
-    enableField('#submit-new-app')
+    setSubmitButtonDisabled(false)
     setServicePlansDisabled(false)
   }
 
   function disableForm () {
     setShowHint(true)
-    disableField('#submit-new-app')
+    setSubmitButtonDisabled(true)
     setServicePlansDisabled(true)
-  }
-
-  function enableField (field: string) {
-    $(field).removeAttr('disabled')
-  }
-
-  function disableField (field: string) {
-    $(field).attr('disabled', 'disabled')
   }
 
   function setServicePlansSelectOptions (servicePlans: ServicePlan[]) {

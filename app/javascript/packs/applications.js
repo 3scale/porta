@@ -19,12 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const servicePlanContractedForService = safeFromJsonString(dataset.service_plan_contracted_for_service)
   const servicePlansAllowed = safeFromJsonString(dataset.service_plans_allowed)
 
+  function setSubmitButtonDisabled (disabled) {
+    if (disabled) {
+      $('#submit-new-app').attr('disabled', 'disabled')
+    } else {
+      $('#submit-new-app').removeAttr('disabled')
+    }
+  }
+
   renderApplicationForm({
     plans,
     servicesContracted,
     relationServiceAndServicePlans,
     relationPlansServices,
     servicePlanContractedForService,
+    setSubmitButtonDisabled,
     servicePlansAllowed
   }, tempDiv)
 
