@@ -120,7 +120,7 @@ const ApplicationForm = ({
 
   return (
     <React.Fragment>
-      <li id="cinstance_plan_input" class="plan_selector required">
+      <li id="cinstance_plan_input" className="plan_selector required">
         <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
         <input type="hidden" name="cinstance[plan_id]" value={selectedPlan.id} />
         <div className='datalist-wrapper'>
