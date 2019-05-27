@@ -8,7 +8,6 @@ html[lang="en"]
     = csrf_meta_tag
     = render 'provider/theme'
     = render 'provider/analytics'
-    = javascript_include_tag 'provider/layout/provider'
     - if Rails.env.production? or Rails.env.preview?
       script[src="https://support.3scale.net/api_docs/track.json?callback=$.noop" async="true"]
     = yield :javascripts
