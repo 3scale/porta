@@ -5,11 +5,10 @@ html lang="en"
     title 3scale Login
     = csrf_meta_tag
 
-    / = render 'provider/theme'
-    / = render 'provider/analytics'
+    = render 'provider/analytics'
 
-    / = javascript_include_tag 'vendor/jquery-1.8.2.min.js', 'vendor/rails.js'
-    / = javascript_include_tag 'flash'
+    = javascript_include_tag 'vendor/jquery-1.8.2.min.js', 'vendor/rails.js'
+    = javascript_include_tag 'flash'
     = javascript_pack_tag 'LoginPage'
 
   //
@@ -18,12 +17,7 @@ html lang="en"
     #   invitee_signup POST /signup/:invitation_token(.:format) accounts/invitee_signups#create
     # are split Provider/Buyer side
 
-  body
+  body class="login-layout" data-barretina-id=(@provider.id rescue nil) data-barretina-redirect-url=(session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
     div#login-page-wrapper
-    / div.red-hat-logo
-    / div id="wrapper"
-    /   div.login-logo
-    /     | Red Hat 3scale API Management
-    /   div id='border' class="self_clear"
-    /     = yield
-    /     = render "shared/provider/flash", flash: flash
+    # TODO: Move error messages to React
+    = render "shared/provider/flash", flash: flash
