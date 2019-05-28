@@ -15,7 +15,7 @@ class Service < ApplicationRecord
 
   has_system_name uniqueness_scope: :account_id
 
-  attr_readonly :system_name, :admin_support_email, :tech_support_email
+  attr_readonly :system_name
 
   validates :backend_version, inclusion: { in: ->(service) { BackendVersion.usable_versions(service: service) }}
 
@@ -42,10 +42,6 @@ class Service < ApplicationRecord
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :end_user_plans, &DefaultPlanProxy
     service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
-  end
-
-  def self.columns
-    super.reject { |column| %w[tech_support_email admin_support_email].include?(column.name) }
   end
 
   scope :of_account, ->(account) { where.has { account_id == account } }

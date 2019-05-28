@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190527104222) do
+ActiveRecord::Schema.define(version: 20190528133015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1173,8 +1173,6 @@ ActiveRecord::Schema.define(version: 20190527104222) do
     t.text     "infobar"
     t.text     "terms"
     t.boolean  "display_provider_keys",                      default: false
-    t.string   "tech_support_email",             limit: 255
-    t.string   "admin_support_email",            limit: 255
     t.string   "credit_card_support_email",      limit: 255
     t.boolean  "buyers_manage_apps",                         default: true
     t.boolean  "buyers_manage_keys",                         default: true
