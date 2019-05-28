@@ -13,6 +13,11 @@ class Api::IntegrationsController < Api::BaseController
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
 
   def edit
+    begin
+      @registry_policies = Policies::PoliciesListService.call!(current_account)
+    rescue RuntimeError, Errno::ECONNREFUSED => error
+      @error = error
+    end
     @latest_lua = current_account.proxy_logs.first
     @deploying =  ThreeScale::TimedValue.get(deploying_hosted_proxy_key)
     @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
