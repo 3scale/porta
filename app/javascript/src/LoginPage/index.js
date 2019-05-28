@@ -1,34 +1,31 @@
 import React from 'react'
 
-import brandImg from 'LoginPage/3scale-logo.png'
+import {
+  LoginFooterItem,
+  LoginMainFooterBandItem,
+  LoginPage,
+  BackgroundImageSrc,
+  ListItem
+} from '@patternfly/react-core'
+
+// import {CSRFToken} from 'utilities/utils'
+import {Login3scaleForm} from 'LoginPage/loginForm/Login3scaleForm'
+
+import 'LoginPage/assets/styles/loginPage.scss'
+
+import brandImg from 'LoginPage/assets/images/3scale-logo.png'
 import pfbg1200 from 'LoginPage/assets/images/pfbg_1200.jpg'
 import pfbg768 from 'LoginPage/assets/images/pfbg_768.jpg'
 import pfbg7682x from 'LoginPage/assets/images/pfbg_768@2x.jpg'
 import pfbg576 from 'LoginPage/assets/images/pfbg_576.jpg'
 import pfbg5762x from 'LoginPage/assets/images/pfbg_576@2x.jpg'
 
-import {
-  LoginFooterItem,
-  LoginForm,
-  LoginMainFooterBandItem,
-  LoginPage,
-  BackgroundImageSrc,
-  ListItem
-} from '@patternfly/react-core'
-import { ExclamationCircleIcon } from '@patternfly/react-icons'
-
-import 'LoginPage/assets/styles/loginPage.scss'
-/**
- * Note: When using background-filter.svg, you must also include #image_overlay as the fragment identifier
- */
-
 const images = {
   [BackgroundImageSrc.lg]: pfbg1200,
   [BackgroundImageSrc.sm]: pfbg768,
   [BackgroundImageSrc.sm2x]: pfbg7682x,
   [BackgroundImageSrc.xs]: pfbg576,
-  [BackgroundImageSrc.xs2x]: pfbg5762x,
-  [BackgroundImageSrc.filter]: 'none'
+  [BackgroundImageSrc.xs2x]: pfbg5762x
 }
 
 class SimpleLoginPage extends React.Component {
@@ -64,13 +61,6 @@ class SimpleLoginPage extends React.Component {
   }
 
   render () {
-    const helperText = (
-      <React.Fragment>
-        <ExclamationCircleIcon />
-        &nbspInvalid login credentials.
-      </React.Fragment>
-    )
-
     const forgotCredentials = (
       <LoginMainFooterBandItem>
         <a href="#">Forgot password?</a>
@@ -91,25 +81,6 @@ class SimpleLoginPage extends React.Component {
       </React.Fragment>
     )
 
-    const loginForm = (
-      <LoginForm
-        showHelperText={this.state.showHelperText}
-        helperText={helperText}
-        usernameLabel="Email or Username"
-        usernameValue={this.state.usernameValue}
-        onChangeUsername={this.handleUsernameChange}
-        isValidUsername={this.state.isValidUsername}
-        passwordLabel="Password"
-        passwordValue={this.state.passwordValue}
-        onChangePassword={this.handlePasswordChange}
-        isValidPassword={this.state.isValidPassword}
-        isRememberMeChecked={this.state.isRememberMeChecked}
-        onChangeRememberMe={this.onRememberMeClick}
-        rememberMeAriaLabel="Remember me Checkbox"
-        onLoginButtonClick={this.onLoginButtonClick}
-      />
-    )
-
     return (
       <LoginPage
         footerListVariants="inline"
@@ -122,7 +93,9 @@ class SimpleLoginPage extends React.Component {
         loginTitle="Log in to your account"
         forgotCredentials={forgotCredentials}
       >
-        {loginForm}
+        <input name="utf8" type="hidden" value="✓"/>
+        {/* <CSRFToken/> */}
+        <Login3scaleForm/>
       </LoginPage>
     )
   }
