@@ -45,7 +45,7 @@ class Service < ApplicationRecord
   end
 
   def self.columns
-    super.reject { |column| %w[buyer_can_see_log_requests tech_support_email admin_support_email].include?(column.name) }
+    super.reject { |column| %w[tech_support_email admin_support_email].include?(column.name) }
   end
 
   scope :of_account, ->(account) { where.has { account_id == account } }
