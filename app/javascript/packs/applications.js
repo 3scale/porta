@@ -2,13 +2,7 @@ import { ApplicationFormWrapper as renderApplicationForm } from 'Applications/Ap
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Remove formtastic forms
-  document.getElementById('cinstance_service_plan_id_input').remove()
-  document.getElementById('cinstance_plan_input').remove()
-
-  const form = document.querySelector('.inputs > ol')
-  const tempDiv = document.createElement('div')
-  form.prepend(tempDiv)
+  const form = document.querySelector('.inputs')
 
   const { dataset } = document.getElementById('metadata-form')
 
@@ -18,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const relationPlansServices = safeFromJsonString(dataset.relation_plans_services)
   const servicePlanContractedForService = safeFromJsonString(dataset.service_plan_contracted_for_service)
   const servicePlansAllowed = safeFromJsonString(dataset.service_plans_allowed)
+  const userDefinedFields = safeFromJsonString(dataset.user_defined_fields)
 
   function setSubmitButtonDisabled (disabled) {
     if (disabled) {
@@ -34,10 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     relationPlansServices,
     servicePlanContractedForService,
     setSubmitButtonDisabled,
+    userDefinedFields,
     servicePlansAllowed
-  }, tempDiv)
-
-  form.prepend(document.getElementById('cinstance_service_plan_id_input'))
-  form.prepend(document.getElementById('cinstance_plan_input'))
-  tempDiv.remove()
+  }, form)
 })

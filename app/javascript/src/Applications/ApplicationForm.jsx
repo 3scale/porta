@@ -16,6 +16,13 @@ type ServicePlan = {
   default: boolean
 }
 
+type UserDefinedField = {
+  name: string,
+  label: string,
+  hidden: boolean,
+  required: boolean
+}
+
 type Props = {
   plans: ApplicationPlan[],
   servicesContracted: number[],
@@ -23,10 +30,12 @@ type Props = {
   relationPlansServices: { [number]: number },
   servicePlanContractedForService: { [number]: ServicePlan },
   setSubmitButtonDisabled: (boolean) => void,
+  userDefinedFields: UserDefinedField[],
   servicePlansAllowed: boolean
 }
 
 const ApplicationForm = ({
+  userDefinedFields,
   plans, servicesContracted, relationServiceAndServicePlans, setSubmitButtonDisabled,
   relationPlansServices, servicePlanContractedForService, servicePlansAllowed
 }: Props) => {
@@ -110,7 +119,7 @@ const ApplicationForm = ({
   useEffect(checkSelectedPlan, [selectedPlan])
 
   return (
-    <React.Fragment>
+    <ol>
       <li id="cinstance_plan_input" className="plan_selector required">
         <label htmlFor="cinstance_plan_id">Application plan<abbr title="required">*</abbr></label>
         <input type="hidden" name="cinstance[plan_id]" value={selectedPlan.id} />
@@ -146,7 +155,27 @@ const ApplicationForm = ({
           </p>
         </li>
       }
-    </React.Fragment>
+
+      {userDefinedFields.map(({name, label, required, hidden}) => {
+        return hidden || (
+          <li
+            key={name}
+            id={`cinstance_${name}_input`}
+            className={`string ${required ? 'required' : ''}`}
+          >
+            <label htmlFor={`cinstance_${name}`}>{label}
+              {required && <abbr title="required">*</abbr>}
+            </label>
+            <input
+              maxLength="255"
+              id={`cinstance_${name}`}
+              type="text"
+              name={`cinstance[${name}]`}
+            />
+          </li>
+        )
+      })}
+    </ol>
   )
 }
 

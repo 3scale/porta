@@ -9,8 +9,20 @@ module Buyers::ApplicationsHelper
       data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
       data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
       data-service_plans_allowed='#{ current_account.settings.service_plans.allowed? }'
+      data-user_defined_fields='#{ user_defined_fields }'
       data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
 
+  end
+
+  def user_defined_fields
+    @cinstance.defined_fields.map do |f|
+      {
+        name: f.name,
+        hidden: f.hidden,
+        required: f.required,
+        label: f.label
+      }
+    end.to_json
   end
 
   def application_plans(provider)
