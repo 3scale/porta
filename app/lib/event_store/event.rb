@@ -59,6 +59,7 @@ module EventStore
     TTL = 1.week
 
     scope :stale, -> { where.has { created_at <= TTL.ago } }
+    scope :payment_setting_deleted, -> { where(event_type: 'Accounts::PaymentSettingDeletedEvent') }
 
     private
 

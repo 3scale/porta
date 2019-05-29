@@ -100,8 +100,10 @@ module Account::CreditCard
   end
 
   def unstore_credit_card!
-    response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
-    log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+    if provider_account&.payment_gateway_setting_exists?
+      response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
+      log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+    end
 
     return if payment_detail.destroyed?
 

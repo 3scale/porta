@@ -61,6 +61,7 @@ class Account::BillingTest < ActiveSupport::TestCase
     buyer = FactoryBot.create(:account, :provider_account => provider,
                     :credit_card_auth_code => 'SOMESTRING')
 
+    buyer.stubs(:payment_gateway_configured?).returns(true)
     provider.payment_gateway.expects(:threescale_unstore).with('SOMESTRING')
     buyer.destroy
   end

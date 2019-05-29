@@ -9,17 +9,33 @@ module Account::Gateway
     after_commit :update_payment_gateway, :if => :payment_gateway_changed
 
     attr_accessor :payment_gateway_changed
-
-
   end
 
   # Payment gateway this account accepts payments through.
   def payment_gateway
-    @payment_gateway ||=
-      if payment_gateway_type.present?
-        gateway_class = PaymentGateway.implementation(payment_gateway_type)
-        gateway_class.new(payment_gateway_options || {})
+    @payment_gateway ||= begin
+      case
+      when payment_gateway_type.present?
+        build_payment_geteway(payment_gateway_type, payment_gateway_options)
+      when events.payment_setting_deleted.any?
+        build_payment_geteway_from_event
       end
+    end
+  end
+
+  def build_payment_geteway(gateway_type, gateway_options)
+    gateway_class = PaymentGateway.implementation(gateway_type)
+    gateway_class.new(gateway_options || {})
+  end
+
+  def build_payment_geteway_from_event
+    event = events.payment_setting_deleted.last
+    deleted_setting = PaymentGatewaySetting.new(event.metadata[:object_attributes], without_protection: true)
+    build_payment_geteway(deleted_setting.gateway_type, deleted_setting.symbolized_settings)
+  end
+
+  def payment_gateway_setting_exists?
+    payment_gateway_configured? || events.payment_setting_deleted.any?
   end
 
   def payment_gateway_configured?
@@ -87,5 +103,4 @@ module Account::Gateway
     Rails.logger.info("[Notification][Payment Gateway Change]: Account #{org_name} has" +
                       "changed payment gateway to #{payment_gateway_type}")
   end
-
 end

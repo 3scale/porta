@@ -2,6 +2,24 @@ require 'test_helper'
 
 class Account::CreditCardTest < ActiveSupport::TestCase
 
+  test 'unstore credit card' do
+    provider_account = FactoryBot.create(:simple_provider)
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account, credit_card_auth_code: 'example')
+
+    provider_account.stubs(:payment_gateway_configured?).returns(true)
+    provider_account.payment_gateway.expects(:threescale_unstore).with('example').once
+    buyer_account.destroy
+  end
+
+  test 'it does not unstore credit card' do
+    provider_account = FactoryBot.create(:simple_provider)
+    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account, credit_card_auth_code: 'example')
+
+    provider_account.stubs(:payment_gateway_configured?).returns(false)
+    provider_account.payment_gateway.expects(:threescale_unstore).with('example').never
+    buyer_account.destroy
+  end
+
   test 'credit_card_stored? return false by default' do
     refute Account.new.credit_card_stored?
   end
@@ -144,6 +162,18 @@ class Account::CreditCardTest < ActiveSupport::TestCase
 
   class CallbacksTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
+
+    test 'unstore credit card even if the payment settings are gone' do
+      provider_account = FactoryBot.create(:simple_provider, payment_gateway_setting: FactoryBot.create(:payment_gateway_setting))
+      buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account, credit_card_auth_code: 'example')
+
+      provider_account.schedule_for_deletion
+      provider_account.payment_gateway_setting = nil
+      provider_account.save!
+
+      ActiveMerchant::Billing::BogusGateway.any_instance.expects(:threescale_unstore).with('example').once
+      buyer_account.destroy!
+    end
 
     def test_add_credit_card_details
       account = FactoryBot.create(:provider_account)

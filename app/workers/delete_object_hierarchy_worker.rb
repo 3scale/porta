@@ -90,20 +90,18 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
 
   def delete_objects_of_association(main_object, reflection)
     deletion_worker = association_delete_worker(reflection)
+    reflection_name = reflection.name
+    foreign_key = reflection.foreign_key
 
     if reflection.macro == :has_many
-      associated_object_ids = main_object.public_send(reflection.name).ids
-      associated_object_ids.each do |associated_object_id|
-        build_object_and_schedule_deletion(reflection, associated_object_id, deletion_worker)
-      end
+      associated_object_ids = main_object.public_send(reflection_name).ids
+      associated_object_ids.each { |id| build_object_and_schedule_deletion(reflection, id, deletion_worker) }
+    elsif main_object.respond_to?(foreign_key)
+      associated_object_id = main_object.public_send(foreign_key)
+      build_object_and_schedule_deletion(reflection, associated_object_id, deletion_worker)
     else
-      if main_object.respond_to?(reflection.foreign_key)
-        associated_object_id = main_object.public_send(reflection.foreign_key)
-        build_object_and_schedule_deletion(reflection, associated_object_id, deletion_worker)
-      else
-        associated_object = main_object.public_send(reflection.name)
-        delete_association_perform_later(deletion_worker, associated_object) if associated_object&.persisted?
-      end
+      associated_object = main_object.public_send(reflection_name)
+      delete_association_perform_later(deletion_worker, associated_object) if associated_object&.persisted?
     end
   end
 

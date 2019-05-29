@@ -127,7 +127,9 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
       end
       buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything) }
-      contracts.each { |contract| DeleteObjectHierarchyWorker.expects(:perform_later).with(contract, anything) }
+      contracts.each do |contract|
+        DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
+      end
       DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything)
     end
 
@@ -154,7 +156,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     def perform_expectations
       DeletePlainObjectWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      [contract, customized_plan].each { |association| DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything) }
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything)
     end
 
     class AccountPlanTest < DeletePlanTest
