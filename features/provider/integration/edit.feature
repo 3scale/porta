@@ -6,6 +6,7 @@ Feature: Edit Integration
   Background:
     Given a provider is logged in
      And all the rolling updates features are off
+     And apicast registry is stubbed
 
   Scenario: Edit a tested integration has a link to the analytics usage
     Given the service has been successfully tested
