@@ -6,6 +6,8 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
     @provider = FactoryBot.create(:provider_account)
     @provider.default_service.service_tokens.create!(value: 'token')
 
+    stub_apicast_registry
+
     host! @provider.admin_domain
     login_provider @provider
   end
