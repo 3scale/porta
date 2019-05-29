@@ -19,9 +19,9 @@ type ServicePlan = {
 type Props = {
   plans: ApplicationPlan[],
   servicesContracted: number[],
-  relationServiceAndServicePlans: {[number]: ServicePlan[]},
-  relationPlansServices: {[number]: number},
-  servicePlanContractedForService: {[number]: ServicePlan},
+  relationServiceAndServicePlans: { [number]: ServicePlan[] },
+  relationPlansServices: { [number]: number },
+  servicePlanContractedForService: { [number]: ServicePlan },
   setSubmitButtonDisabled: (boolean) => void,
   servicePlansAllowed: boolean
 }
@@ -44,7 +44,7 @@ const ApplicationForm = ({
 
     if (servicesContracted.indexOf(serviceId) > -1) {
       const contractedPlan = getContractedServicePlanForService(serviceId)
-      setServicePlans([ contractedPlan ])
+      setServicePlans([contractedPlan])
       setServicePlansDisabled(true)
     } else if (servicePlans.length !== 0) {
       setServicePlansSelectOptions(servicePlans)
@@ -133,14 +133,14 @@ const ApplicationForm = ({
         </datalist>
       </li>
 
-      { servicePlansAllowed &&
+      {servicePlansAllowed &&
         <li id="cinstance_service_plan_id_input" className="select optional">
           <label htmlFor="cinstance_service_plan_id">Service plan</label>
           <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]" disabled={servicePlansDisabled}>
-            {servicePlans.map(({id, name}) => <option key={id} value={id}>{name}</option>)}
+            {servicePlans.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
           </select>
           <p className="inline-hints">
-            { showHint &&
+            {showHint &&
               <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
             }
           </p>
