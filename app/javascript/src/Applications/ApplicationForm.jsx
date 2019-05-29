@@ -129,7 +129,7 @@ const ApplicationForm = ({
           />
         </div>
         <datalist id="plans">
-          {plans.map(({id, name}) => <option key={id} onClick={() => console.log('clicked', id)}>{name}</option>)}
+          {plans.map(({ id, name }) => <option key={id}>{name}</option>)}
         </datalist>
       </li>
 
