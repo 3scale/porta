@@ -529,3 +529,11 @@ form.formtastic fieldset > ol > li fieldset legend.label label {
 li.hidden {
   display: none;
 }
+
+.errorMessage {
+  color: $error-color;
+}
+
+.new-service-source-input {
+  padding-left: line-height-times(5 / 10);
+}

@@ -15,6 +15,7 @@ Feature: Multiservice feature
     When I am on the provider dashboard
     Then I should see "New API"
 
+  @javascript
   Scenario: Create new service
     Given I am logged in as provider "foo.example.com"
       And provider "foo.example.com" has "multiple_services" switch allowed
