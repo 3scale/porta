@@ -1,6 +1,6 @@
 .box
   - if domain_account.heroku?
-    ' Sign in with Heroku
+    ' Sign in with Heroku 
     = link_to( image_tag('heroku-logo.png', alt: 'Login with heroku'), Heroku.sso_url(domain_account))
   - if @authentication_providers.any?
     - @authentication_providers.each do |auth|
