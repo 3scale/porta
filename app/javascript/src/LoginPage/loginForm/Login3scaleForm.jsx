@@ -19,8 +19,8 @@ const Login3scaleForm = () => {
         </label>
         <input
           className='pf-c-form-control'
-          name='username'
           id='session_username'
+          name='username'
           type='text'
           tabIndex='1'
           autoFocus
@@ -36,11 +36,12 @@ const Login3scaleForm = () => {
         </label>
         <input
           className='pf-c-form-control'
+          id='session_password'
           name='password'
           tabIndex='2'
-          id='session_password'
           type='password'
-          required
+          aria-invalid='false'
+          required=''
         />
       </div>
       <div className='pf-c-form__group pf-m-action'>
