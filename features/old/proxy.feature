@@ -13,6 +13,7 @@ Feature: Proxy integration
     And the service "one" of provider "foo.example.com" has deployment option "self_managed"
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
+    And apicast registry is stubbed
     And I go to the integration show page for service "one"
     And I press "Revert to the old APIcast"
 
@@ -71,7 +72,6 @@ Feature: Proxy integration
     And I go to the integration show page for service "one"
     And I press "Start using the latest APIcast"
     When I have policies feature enabled
-    And apicast registry is stubbed
     And I go to the integration page for service "one"
     Then I should see the Policy Chain
 
