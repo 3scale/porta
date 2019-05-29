@@ -17,7 +17,24 @@ html lang="en"
     #   invitee_signup POST /signup/:invitation_token(.:format) accounts/invitee_signups#create
     # are split Provider/Buyer side
 
+  - barretina_id = (@provider.id rescue nil)
+  - redirect_url = (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
+
+  - has_heroku_login = domain_account.heroku?
+  - hasAuthenticationProviders = @authentication_providers.any?
+  - authentication_providers = hasAuthenticationProviders ? @authentication_providers : nil
+  - show_3scale_login_form = @presenter.show_username_password_related_content?
+
   body class="login-layout" data-barretina-id=(@provider.id rescue nil) data-barretina-redirect-url=(session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
-    div#login-page-wrapper
-    # TODO: Move error messages to React
-    = render "shared/provider/flash", flash: flash
+
+    div#login-page-wrapper data-login-props={barretinaId: barretina_id,
+    redirectUrl: redirect_url,
+    hasHerokuLogin: has_heroku_login,
+    authenticationProviders: authentication_providers,
+    show3scaleLoginForm: show_3scale_login_form,
+    providerSessionsPath: provider_sessions_path,
+    providerLoginPath: provider_login_path}.to_json
+
+    //
+      # TODO: Move error messages to React
+      = render "shared/provider/flash", flash: flash
