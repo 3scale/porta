@@ -39,15 +39,14 @@ class SimpleLoginPage extends React.Component {
   }
 
   getURL () {
-    let url
     try {
-      url = new URL(window.location.href)
+      const url = new URL(window.location.href)
+      const formMode = url.search === '?request_password_reset=true' ? 'password-reset' : 'login'
+      const loginTitle = formMode === 'login' ? 'Log in to your account' : 'Request a password reset link by email'
+      this.setState({formMode, loginTitle})
     } catch (e) {
       console.error(e)
     }
-    const formMode = url.search === '?request_password_reset=true' ? 'password-reset' : 'login'
-    const loginTitle = formMode === 'login' ? 'Log in to your account' : 'Request a password reset link by email'
-    this.setState({formMode, loginTitle})
   }
 
   componentDidMount () {
