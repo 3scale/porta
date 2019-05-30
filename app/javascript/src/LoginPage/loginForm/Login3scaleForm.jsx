@@ -1,4 +1,5 @@
 import React from 'react'
+import {CSRFToken} from 'utilities/utils'
 
 const Login3scaleForm = () => {
   return (
@@ -9,6 +10,9 @@ const Login3scaleForm = () => {
       acceptCharset='UTF-8'
       method='post'
     >
+      <input name="utf8" type="hidden" value="✓"/>
+      <input type="hidden" name="_method" value="delete"/>
+      <CSRFToken/>
       <div className='pf-c-form__group'>
         <label
           className='pf-c-form__label'
