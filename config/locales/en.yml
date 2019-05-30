@@ -1072,6 +1072,7 @@ en:
         hosted_proxy_endpoint: "Public Base URL"
         production_endpoint: "Public Base URL"
         oidc_issuer_endpoint: "OpenID Connect Issuer"
+        oidc_issuer_type: "OpenID Connect Issuer Type"
 
       profile:
         company_url: URL
@@ -1124,7 +1125,9 @@ en:
       headers: "As HTTP Headers"
       query: "As query parameters (GET) or body parameters (POST/PUT/DELETE)"
       authorization: "As HTTP Basic Authentication"
-
+    oidc_issuer_type:
+      keycloak: 'Red Hat Single Sign-On'
+      rest: 'REST API'
   formtastic:
     hints:
       user:
