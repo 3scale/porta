@@ -33,8 +33,9 @@ html lang="en"
     authenticationProviders: authentication_providers,
     show3scaleLoginForm: show_3scale_login_form,
     providerSessionsPath: provider_sessions_path,
-    providerLoginPath: provider_login_path}.to_json
+    providerLoginPath: provider_login_path,
+    providerPasswordPath: provider_password_path,
+    providerAdminDashboardPath: provider_admin_dashboard_path}.to_json
 
-    //
-      # TODO: Move error messages to React
-      = render "shared/provider/flash", flash: flash
+    / TODO: Move error messages to React
+    = render "shared/provider/flash", flash: flash
