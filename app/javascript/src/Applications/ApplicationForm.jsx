@@ -43,23 +43,28 @@ const ApplicationForm = ({
   const [term, setTerm] = useState(selectedPlan.name)
   const [servicePlans, setServicePlans] = useState([])
   const [servicePlansDisabled, setServicePlansDisabled] = useState(false)
-  const [showHint, setShowHint] = useState(false)
 
   function checkSelectedPlan () {
     const serviceId = getServiceIdOfPlanId(selectedPlan.id)
-    const servicePlans = getServicePlansForService(serviceId)
-
-    enableForm()
 
     if (servicesContracted.indexOf(serviceId) > -1) {
       const contractedPlan = getContractedServicePlanForService(serviceId)
       setServicePlans([contractedPlan])
+
+      setSubmitButtonDisabled(false)
       setServicePlansDisabled(true)
-    } else if (servicePlans.length !== 0) {
-      setServicePlansSelectOptions(servicePlans)
+      return
+    }
+
+    const servicePlans = getServicePlansForService(serviceId)
+    setServicePlans(servicePlans)
+
+    if (servicePlans.length > 0) {
+      setSubmitButtonDisabled(false)
+      setServicePlansDisabled(false)
     } else {
-      setServicePlans([{ id: -1, name: 'No service plan for the application plan' }])
-      disableForm()
+      setSubmitButtonDisabled(true)
+      setServicePlansDisabled(true)
     }
   }
 
@@ -73,23 +78,6 @@ const ApplicationForm = ({
 
   function getContractedServicePlanForService (serviceId: number): ServicePlan {
     return servicePlanContractedForService[serviceId]
-  }
-
-  function enableForm () {
-    setShowHint(false)
-    setSubmitButtonDisabled(false)
-    setServicePlansDisabled(false)
-  }
-
-  function disableForm () {
-    setShowHint(true)
-    setSubmitButtonDisabled(true)
-    setServicePlansDisabled(true)
-  }
-
-  function setServicePlansSelectOptions (servicePlans: ServicePlan[]) {
-    setServicePlans(servicePlans)
-    setServicePlansDisabled(false)
   }
 
   function onFocus () {
@@ -146,17 +134,20 @@ const ApplicationForm = ({
         <li id="cinstance_service_plan_id_input" className="select optional">
           <label htmlFor="cinstance_service_plan_id">Service plan</label>
           <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]" disabled={servicePlansDisabled}>
-            {servicePlans.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-          </select>
-          <p className="inline-hints">
-            {showHint &&
-              <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
+            {servicePlans.length
+              ? servicePlans.map(({ id, name }) => <option key={id} value={id}>{name}</option>)
+              : <option>No service plan for the application plan</option>
             }
-          </p>
+          </select>
+          {servicePlans.length === 0 &&
+            <p className="inline-hints">
+              <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
+            </p>
+          }
         </li>
       }
 
-      {userDefinedFields.map(({name, label, required, hidden}) => {
+      {userDefinedFields.map(({ name, label, required, hidden }) => {
         return hidden || (
           <li
             key={name}
