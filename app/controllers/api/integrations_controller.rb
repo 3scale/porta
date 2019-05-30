@@ -233,7 +233,10 @@ class Api::IntegrationsController < Api::BaseController
 
     basic_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
 
-    basic_fields << :oidc_issuer_endpoint if provider_can_use?(:apicast_oidc)
+    if provider_can_use?(:apicast_oidc)
+      basic_fields << :oidc_issuer_endpoint
+      basic_fields << :oidc_issuer_type
+    end
 
     params.require(:proxy).permit(*basic_fields)
   end

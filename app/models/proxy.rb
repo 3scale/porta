@@ -31,6 +31,11 @@ class Proxy < ApplicationRecord
 
   HTTP_HEADER =  /\A[{}\[\]\d,.;@#~%&()?\w_"= \/\\:-]+\Z/
 
+  OIDC_ISSUER_TYPES = {
+    keycloak: I18n.t(:keycloak, scope: 'proxy.oidc_issuer_type').freeze,
+    rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
+  }.freeze
+
   validates :api_backend, uri: { path: proc { provider_can_use?(:proxy_private_base_path) } },
                           non_localhost: { message: :protected_domain }
 
@@ -59,12 +64,14 @@ class Proxy < ApplicationRecord
                       format: { with: HTTP_HEADER }
 
   validates :api_test_path, length: { maximum: 8192 }
-  validates :endpoint, :api_backend, :auth_app_key, :auth_app_id, :auth_user_key, :oidc_issuer_endpoint,
+  validates :endpoint, :api_backend, :auth_app_key, :auth_app_id, :auth_user_key,
+            :oidc_issuer_endpoint, :oidc_issuer_type,
             :credentials_location, :error_auth_failed, :error_auth_missing, :authentication_method,
             :error_headers_auth_failed, :error_headers_auth_missing, :error_no_match,
             :error_headers_no_match, :secret_token, :hostname_rewrite, :sandbox_endpoint,
             length: { maximum: 255 }
 
+  validates :oidc_issuer_type, inclusion: { in: OIDC_ISSUER_TYPES.keys.map(&:to_s), allow_blank: true }, presence: { if: ->(proxy) { proxy.oidc_issuer_endpoint.present? } }
   validate :policies_config_structure
 
   accepts_nested_attributes_for :proxy_rules, allow_destroy: true
@@ -140,6 +147,10 @@ class Proxy < ApplicationRecord
 
   def oidc_configuration
     super || build_oidc_configuration(standard_flow_enabled: true)
+  end
+
+  def self.oidc_issuer_types
+    OIDC_ISSUER_TYPES.invert
   end
 
   class DeploymentStrategy

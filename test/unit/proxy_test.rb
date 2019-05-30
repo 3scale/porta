@@ -505,6 +505,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     assert_difference proxy_changed_events.method(:count) do
       @proxy.oidc_issuer_endpoint = 'http://example.com'
+      @proxy.oidc_issuer_type = 'keycloak'
       @proxy.save!
     end
   end

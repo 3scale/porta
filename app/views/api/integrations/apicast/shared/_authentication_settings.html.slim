@@ -1,5 +1,7 @@
 = f.toggled_inputs 'Authentication Settings' do
   - if @service.oidc?
+    = f.input :oidc_issuer_type, hint: true, as: :select,
+        collection: Proxy.oidc_issuer_types, selected: @proxy.oidc_issuer_type || Proxy.column_defaults['oidc_issuer_type']
     = f.input :oidc_issuer_endpoint, hint: true, input_html: { placeholder: "https://sso.example.com/auth/realms/gateway" }
     = f.inputs "OIDC Authorization flow" do
       = f.semantic_fields_for :oidc_configuration do |config|
