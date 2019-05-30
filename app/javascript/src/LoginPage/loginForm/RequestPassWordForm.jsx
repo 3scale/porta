@@ -1,6 +1,5 @@
 import React from 'react'
 import {CSRFToken} from 'utilities/utils'
-import {LoginMainFooterBandItem} from '@patternfly/react-core'
 
 const RequestPasswordForm = ({providerPasswordPath, providerLoginPath}) => {
   return (
@@ -10,8 +9,8 @@ const RequestPasswordForm = ({providerPasswordPath, providerLoginPath}) => {
       acceptCharset='UTF-8'
       method='post'
     >
-      <input name="utf8" type="hidden" value="✓"/>
-      <input type="hidden" name="_method" value="delete"/>
+      <input name='utf8' type='hidden' value='✓'/>
+      <input type='hidden' name='_method' value='delete'/>
       <CSRFToken/>
       <div className='pf-c-form__group'>
         <label
@@ -19,13 +18,12 @@ const RequestPasswordForm = ({providerPasswordPath, providerLoginPath}) => {
           htmlFor='email'
         >
         Email address
-
         </label>
         <input
           className='pf-c-form-control'
-          id="email"
-          type="email"
-          name="email"
+          id='email'
+          type='email'
+          name='email'
           autoFocus/>
         <p>
           Please enter the email address you used to sign up to this site.
