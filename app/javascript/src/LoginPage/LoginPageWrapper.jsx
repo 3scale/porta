@@ -7,9 +7,11 @@ import {
   BackgroundImageSrc
 } from '@patternfly/react-core'
 
-import {ForgotCredentials} from 'LoginPage/loginForm/ForgotCredentials'
-import {RequestPasswordForm} from 'LoginPage/loginForm/RequestPasswordForm'
-import {Login3scaleForm} from 'LoginPage/loginForm/Login3scaleForm'
+import {
+  ForgotCredentials,
+  Login3scaleForm,
+  RequestPasswordForm
+} from 'LoginPage'
 
 import 'LoginPage/assets/styles/loginPage.scss'
 
