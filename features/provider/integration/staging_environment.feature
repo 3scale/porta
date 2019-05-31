@@ -6,6 +6,7 @@ Feature: Staging Environment
   Background:
     Given a provider is logged in
     And all the rolling updates features are off
+    And apicast registry is stubbed
 
   @javascript
   Scenario: Save staging environment with errors

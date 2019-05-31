@@ -5,7 +5,9 @@ require 'set'
 
 class Policies::PoliciesListService
 
-  HTTP_ERRORS = [HTTPClient::BadResponseError, HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError, HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError].freeze
+  HTTP_ERRORS = [HTTPClient::BadResponseError,HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError,
+                 HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError,
+                 Errno::ECONNREFUSED].freeze
   private_constant :HTTP_ERRORS
 
   class PoliciesListServiceError < RuntimeError; end
@@ -20,6 +22,10 @@ class Policies::PoliciesListService
     new(*args).call
   end
 
+  def self.call!(*args)
+    new(*args).call!
+  end
+
   def initialize(account, builtin: true)
     @account = account
     @builtin = builtin
@@ -29,18 +35,26 @@ class Policies::PoliciesListService
   alias builtin? builtin
 
   def call
+    call!
+  rescue *HTTP_ERRORS, PoliciesListServiceError => error
+    Rails.logger.error { error } and return
+  end
+
+  def call!
     list = PolicyList.new
     list.merge! fetch_policies_from_apicast if builtin?
     list.merge! policies_from_account
     list.to_h
-  rescue *HTTP_ERRORS, PoliciesListServiceError => error
-    Rails.logger.error { error } and return
   end
 
   private
 
   def fetch_policies_from_apicast
-    response = ::JSONClient.get(apicast_registry_url)
+    begin
+      response = ::JSONClient.get(apicast_registry_url)
+    rescue *HTTP_ERRORS => error
+      raise_policies_list_error(error.message)
+    end
     raise_policies_list_error(response.content) unless response.ok?
     response.body['policies']
   end
