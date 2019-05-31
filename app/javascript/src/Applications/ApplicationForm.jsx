@@ -3,82 +3,32 @@
 import React, { useState, useEffect } from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
+import type { ApplicationPlan, UserDefinedField } from 'Applications/types'
+
 import './applicationForm.scss'
-
-type ApplicationPlan = {
-  id: number,
-  name: string,
-}
-
-type ServicePlan = {
-  id: number,
-  name: string,
-  default: boolean
-}
-
-type UserDefinedField = {
-  name: string,
-  label: string,
-  hidden: boolean,
-  required: boolean
-}
 
 type Props = {
   plans: ApplicationPlan[],
-  servicesContracted: number[],
-  relationServiceAndServicePlans: { [number]: ServicePlan[] },
-  relationPlansServices: { [number]: number },
-  servicePlanContractedForService: { [number]: ServicePlan },
-  setSubmitButtonDisabled: (boolean) => void,
+  defaultPlan: ApplicationPlan,
   userDefinedFields: UserDefinedField[],
-  servicePlansAllowed: boolean
+  servicePlansAllowed: boolean,
+  setSubmitButtonDisabled: (?boolean) => void
 }
 
 const ApplicationForm = ({
+  plans,
+  defaultPlan,
   userDefinedFields,
-  plans, servicesContracted, relationServiceAndServicePlans, setSubmitButtonDisabled,
-  relationPlansServices, servicePlanContractedForService, servicePlansAllowed
+  servicePlansAllowed,
+  setSubmitButtonDisabled
 }: Props) => {
-  const [selectedPlan, setSelectedPlan] = useState(plans[0])
+  const [selectedPlan, setApplicationPlan] = useState(defaultPlan)
   const [term, setTerm] = useState(selectedPlan.name)
-  const [servicePlans, setServicePlans] = useState([])
-  const [servicePlansDisabled, setServicePlansDisabled] = useState(false)
 
-  function checkSelectedPlan () {
-    const serviceId = getServiceIdOfPlanId(selectedPlan.id)
-
-    if (servicesContracted.indexOf(serviceId) > -1) {
-      const contractedPlan = getContractedServicePlanForService(serviceId)
-      setServicePlans([contractedPlan])
-
-      setSubmitButtonDisabled(false)
-      setServicePlansDisabled(true)
-      return
-    }
-
-    const servicePlans = getServicePlansForService(serviceId)
-    setServicePlans(servicePlans)
-
-    if (servicePlans.length > 0) {
-      setSubmitButtonDisabled(false)
-      setServicePlansDisabled(false)
-    } else {
-      setSubmitButtonDisabled(true)
-      setServicePlansDisabled(true)
-    }
-  }
-
-  function getServiceIdOfPlanId (id: number): number {
-    return relationPlansServices[id]
-  }
-
-  function getServicePlansForService (serviceId: number): ServicePlan[] {
-    return relationServiceAndServicePlans[serviceId]
-  }
-
-  function getContractedServicePlanForService (serviceId: number): ServicePlan {
-    return servicePlanContractedForService[serviceId]
-  }
+  useEffect(() => {
+    const { servicePlans } = selectedPlan
+    setSubmitButtonDisabled(servicePlans && servicePlans.length === 0)
+  }, [selectedPlan])
 
   function onFocus () {
     setTerm('')
@@ -89,10 +39,10 @@ const ApplicationForm = ({
   }
 
   function selectPlanByName () {
-    const plan = plans.find(p => p.name === term)
+    const newPlan = plans.find(p => p.name === term)
 
-    if (plan) {
-      return setSelectedPlan(plan)
+    if (newPlan) {
+      return setApplicationPlan(newPlan)
     }
 
     setTerm(selectedPlan.name)
@@ -104,7 +54,21 @@ const ApplicationForm = ({
     }
   }
 
-  useEffect(checkSelectedPlan, [selectedPlan])
+  const { contractedServicePlan, servicePlans } = selectedPlan
+  const noServicePlans = servicePlans && servicePlans.length === 0
+  const disabled = contractedServicePlan || noServicePlans
+
+  function Options () {
+    if (contractedServicePlan) {
+      return <option>{contractedServicePlan.name}</option>
+    }
+
+    if (servicePlans) {
+      return servicePlans.map(({ id, name }) => <option key={id} value={id}>{name}</option>)
+    }
+
+    return <option>No service plan for the application plan</option>
+  }
 
   return (
     <ol>
@@ -133,13 +97,10 @@ const ApplicationForm = ({
       {servicePlansAllowed &&
         <li id="cinstance_service_plan_id_input" className="select optional">
           <label htmlFor="cinstance_service_plan_id">Service plan</label>
-          <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]" disabled={servicePlansDisabled}>
-            {servicePlans.length
-              ? servicePlans.map(({ id, name }) => <option key={id} value={id}>{name}</option>)
-              : <option>No service plan for the application plan</option>
-            }
+          <select id="cinstance_service_plan_id" name="cinstance[service_plan_id]" disabled={disabled}>
+            <Options />
           </select>
-          {servicePlans.length === 0 &&
+          {noServicePlans &&
             <p className="inline-hints">
               <a id="link-help-new-application-service" href="/apiconfig/services">Create a service plan</a>
             </p>
