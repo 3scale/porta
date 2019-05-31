@@ -51,14 +51,18 @@ namespace :multitenant do
       update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, args.to_hash.merge({table_name: 'AccessToken'}))
     end
 
-    desc 'Restore all tenant_id in alerts'
-    task :restore_all_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, false, args.to_hash.merge({table_name: 'Alert'}))
+    desc 'Restore existing tenant_id in alerts'
+    task :restore_existing_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, args.to_hash.merge({table_name: 'Alert'}))
+    end
+
+    desc 'Restore empty tenant_id in alerts'
+    task :restore_empty_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({table_name: 'Alert'}))
     end
 
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
-      query = args[:table_name].constantize.joining(&association_block)
-      query = query.where.has(&condition) if condition
+      query = args[:table_name].constantize.joining(&association_block).where.has(&condition)
       puts "------ Updating #{args[:table_name]} ------"
       find_each_with_sleep(query, *args.slice(:batch_size, :sleep_time).values) do |record|
         tenant_id = tenant_id_block.call(record)
