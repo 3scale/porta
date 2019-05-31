@@ -7,6 +7,8 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
 
     login_provider @provider
 
+    stub_apicast_registry
+
     host! @provider.admin_domain
   end
 

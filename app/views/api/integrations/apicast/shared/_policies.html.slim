@@ -1,13 +1,18 @@
-- content_for :javascripts do
-  = javascript_pack_tag 'policies'
-
-= f.toggled_inputs 'policies', cookie_name: 'policies-rules' , legend: "Policies", id: "policies-container" do
+= f.toggled_inputs 'policies', cookie_name: 'policies-rules', legend: "Policies", id: "policies-container" do
   div#policies
 
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    var registry = #{json Policies::PoliciesListService.call(current_account)}
-    var chain = #{json @proxy.policies_config}
-    var serviceId = #{json @service.id}
-    initPolicies({element: 'policies', registry: registry, chain: chain, serviceId: serviceId})
-  })
+  - if @error.nil?
+    - content_for :javascripts do
+      = javascript_pack_tag 'policies'
+
+    javascript:
+      document.addEventListener('DOMContentLoaded', function () {
+        var registry = #{json @registry_policies}
+        var chain = #{json @proxy.policies_config}
+        var serviceId = #{json @service.id}
+        initPolicies({element: 'policies', registry: registry, chain: chain, serviceId: serviceId})
+      })
+  - else
+    div
+      h3 A valid APIcast Policies endpoint must be provided
+      p = @error.message
