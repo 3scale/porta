@@ -1,29 +1,57 @@
 import React from 'react'
-import {CSRFToken} from 'utilities/utils'
 
-const RequestPasswordForm = ({providerPasswordPath, providerLoginPath}) => {
-  return (<form className='pf-c-form' action={providerPasswordPath} acceptCharset='UTF-8' method='post'>
-    <input name='utf8' type='hidden' value='✓'/>
-    <input type='hidden' name='_method' value='delete'/>
-    <CSRFToken/>
-    <div className='pf-c-form__group'>
-      <label className='pf-c-form__label' htmlFor='email'>
-        Email address
-      </label>
-      <input className='pf-c-form-control' id='email' type='email' name='email' autoFocus="autoFocus"/>
-      <p>
-        Please enter the email address you used to sign up to this site. Instructions on how to reset your password will be sent by email.
-      </p>
-    </div>
-    <div className='pf-c-form__group pf-m-action'>
-      <div className='pf-c-form__actions'>
-        <button className='pf-c-button pf-m-primary pf-m-block' type='submit'>
-          Reset password
-        </button>
-      </div>
-    </div>
-    <a href={providerLoginPath}>Sign in</a>
-  </form>)
+import {HiddenInputs} from 'LoginPage'
+
+import {
+  Form,
+  FormGroup,
+  TextInput,
+  ActionGroup,
+  Button
+} from '@patternfly/react-core'
+
+class RequestPasswordForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      emailAddress: ''
+    }
+    this.handleTextInputEmail = emailAddress => {
+      this.setState({ emailAddress })
+    }
+  }
+
+  render () {
+    const {emailAddress} = this.state
+    return (
+      <Form
+        noValidate={false}
+        action={this.props.providerPasswordPath}
+        acceptCharset='UTF-8'
+        method='post'
+      >
+        <HiddenInputs isPasswordReset/>
+        <FormGroup label="Email address" isRequired fieldId="email">
+          <TextInput
+            isRequired
+            type="email"
+            id="email"
+            name="email"
+            value={emailAddress}
+            onChange={this.handleTextInputEmail}
+            autoFocus="autoFocus"
+          />
+        </FormGroup>
+        <ActionGroup>
+          <Button
+            className='pf-c-button pf-m-primary pf-m-block'
+            type='submit'
+          >Reset password</Button>
+          <a href={this.props.providerLoginPath}>Sign in</a>
+        </ActionGroup>
+      </Form>
+    )
+  }
 }
 
 export {
