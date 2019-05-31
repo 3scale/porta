@@ -38,85 +38,6 @@ namespace :multitenant do
     puts "Recreated #{triggers.size} triggers"
   end
 
-  desc 'Fix empty or corrupted tenant_id in accounts'
-  task :fix_corrupted_tenant_id_accounts, %i[batch_size sleep_time] => :environment do |_task, args|
-    batch_size = (args[:batch_size] || 100).to_i
-    sleep_time = (args[:sleep_time] || 1).to_i
-
-    ids = (Rails.application.simple_try_config_for(ENV['FILE']) || [])
-
-    ids.in_groups_of(batch_size).each do |group|
-      puts "Executing update for a batch of size: #{group.size}"
-      Account.buyers.where(id: group).update_all('tenant_id = provider_account_id') # rubocop:disable Rails/SkipsModelValidations
-      Account.providers.where(id: group).update_all('tenant_id = id') # rubocop:disable Rails/SkipsModelValidations
-      puts "Sleeping #{sleep_time} seconds"
-      sleep(sleep_time)
-    end
-  end
-
-  desc 'Fix empty or corrupted tenant_id for a table associated to account'
-  task :fix_corrupted_tenant_id_for_table_associated_to_account, %i[table_name time_start time_end batch_size sleep_time] => :environment do |_task, args|
-    sleep_time = args[:sleep_time]
-    master_id = Account.master.id
-
-    puts "------ Updating #{args[:table_name]} ------"
-    condition = condition_update_tenant_id(args[:time_start], args[:time_end])
-    args[:table_name].constantize.joining { account }.where.has(&condition).find_in_batches(batch_size: args[:batch_size].to_i) do |group|
-      puts "Executing update for a batch of size: #{group.size}"
-      group.each { |user| user.update_column(:tenant_id, user.account.tenant_id) if user.account_id != master_id } # rubocop:disable Rails/SkipsModelValidations
-      puts "Sleeping #{sleep_time} seconds"
-      sleep(sleep_time.to_i)
-    end
-  end
-
-  desc 'Fix empty or corrupted tenant_id for a table associated to user'
-  task :fix_corrupted_tenant_id_for_table_associated_to_user, %i[table_name time_start time_end batch_size sleep_time] => :environment do |_task, args|
-    sleep_time = args[:sleep_time]
-    master_id = Account.master.id
-
-    puts "------ Updating #{args[:table_name]} ------"
-    condition = condition_update_tenant_id(args[:time_start], args[:time_end])
-    args[:table_name].constantize.joining { user }.where.has(&condition).find_in_batches(batch_size: args[:batch_size].to_i) do |group|
-      puts "Executing update for a batch of size: #{group.size}"
-      group.each { |user| user.update_column(:tenant_id, user.account.tenant_id) if user.account_id != master_id } # rubocop:disable Rails/SkipsModelValidations
-      puts "Sleeping #{sleep_time} seconds"
-      sleep(sleep_time.to_i)
-    end
-  end
-
-  desc 'Fix empty tenant_id in access_tokens'
-  task :fix_empty_tenant_id_access_tokens, %i[batch_size sleep_time] => :environment do |_task, args|
-    batch_size = (args[:batch_size] || 100).to_i
-    sleep_time = (args[:sleep_time] || 1).to_i
-    master_id = Account.master.id
-
-    puts '------ Updating "access_tokens" ------'
-    AccessToken.joining { owner }.where.has { tenant_id == nil }.find_in_batches(batch_size: batch_size) do |group|
-      puts "Executing update for a batch of size: #{group.size}"
-      group.each do |access_token|
-        tenant_id = access_token.owner.tenant_id
-        access_token.update_column(:tenant_id, tenant_id) if tenant_id != master_id # rubocop:disable Rails/SkipsModelValidations
-      end
-      puts "Sleeping #{sleep_time} seconds"
-      sleep(sleep_time)
-    end
-  end
-
-  desc 'Restore all tenant_id in alerts'
-  task :restore_all_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-    batch_size = (args[:batch_size] || 100).to_i
-    sleep_time = (args[:sleep_time] || 1).to_i
-    master_id = Account.master.id
-
-    puts '------ Updating "alerts" ------'
-    Alert.joining { account }.find_in_batches(batch_size: batch_size) do |group|
-      puts "Executing update for a batch of size: #{group.size}"
-      group.each { |alert| alert.update_column(:tenant_id, alert.account.tenant_id) if alert.account_id != master_id } # rubocop:disable Rails/SkipsModelValidations
-      puts "Sleeping #{sleep_time} seconds"
-      sleep(sleep_time)
-    end
-  end
-
   desc 'Sets the tenant id on all relevant tables'
   task :set_tenant_id => :environment do
 
@@ -190,10 +111,6 @@ namespace :multitenant do
 
     # FIXME: This will not work when we have more than 1 oidc_configurable_type
     OIDConfiguration.update_all "tenant_id = (SELECT tenant_id FROM proxies WHERE id = oidc_configurable_id AND tenant_id <> #{MASTER_ID})"
-  end
-
-  def condition_update_tenant_id(time_start, time_end)
-    proc { |object| (object.tenant_id == nil) | ((object.created_at >= Time.strptime(time_start, '%m/%d/%Y %H:%M %Z')) & (object.created_at <= Time.strptime(time_end, '%m/%d/%Y %H:%M %Z'))) }
   end
 end
 
