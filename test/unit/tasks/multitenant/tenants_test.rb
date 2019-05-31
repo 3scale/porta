@@ -68,16 +68,32 @@ class Tasks::Multitenant::TenantsTest < ActiveSupport::TestCase
       access_tokens.each { |access_token| assert_equal user.reload.tenant_id, access_token.reload.tenant_id }
     end
 
-    test 'restore_all_tenant_id_alerts' do
+    test 'restore_existing_tenant_id_alerts' do
       account = FactoryBot.create(:simple_provider)
-      alerts = FactoryBot.create_list(:limit_alert, 4, account: account)
+      alerts_empty = FactoryBot.create_list(:limit_alert, 2, account: account)
+      alerts_with_tenant_id = FactoryBot.create_list(:limit_alert, 2, account: account)
       account.update_column(:tenant_id, account.id)
-      Alert.where(id: alerts[0..1].map(&:id)).update_all(tenant_id: nil)
-      Alert.where(id: alerts[2..3].map(&:id)).update_all(tenant_id: -1)
+      Alert.where(id: alerts_empty.map(&:id)).update_all(tenant_id: nil)
+      Alert.where(id: alerts_with_tenant_id.map(&:id)).update_all(tenant_id: -1)
 
-      execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:restore_all_tenant_id_alerts', '3', '1'
+      execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:restore_existing_tenant_id_alerts', '3', '1'
 
-      alerts.each { |alert| assert_equal account.reload.tenant_id, alert.reload.tenant_id }
+      alerts_with_tenant_id.each { |alert| assert_equal account.reload.tenant_id, alert.reload.tenant_id }
+      alerts_empty.each { |alert| assert_nil alert.reload.tenant_id }
+    end
+
+    test 'restore_empty_tenant_id_alerts' do
+      account = FactoryBot.create(:simple_provider)
+      alerts_empty = FactoryBot.create_list(:limit_alert, 2, account: account)
+      alerts_with_tenant_id = FactoryBot.create_list(:limit_alert, 2, account: account)
+      account.update_column(:tenant_id, account.id)
+      Alert.where(id: alerts_empty.map(&:id)).update_all(tenant_id: nil)
+      Alert.where(id: alerts_with_tenant_id.map(&:id)).update_all(tenant_id: -1)
+
+      execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:restore_empty_tenant_id_alerts', '3', '1'
+
+      alerts_empty.each { |alert| assert_equal account.reload.tenant_id, alert.reload.tenant_id }
+      alerts_with_tenant_id.each { |alert| assert_equal -1, alert.reload.tenant_id }
     end
   end
 
