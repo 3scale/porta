@@ -43,6 +43,10 @@ table [type='submit']:not(.action) {
 
 table.data .important-button, .important-button, .formtastic .important-button {
   @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
+
+  &:disabled {
+    @include internal-potato-button($disabled-button-color, $disabled-button-bg-color, $disabled-button-border-color);
+  }
 }
 
 table.data .disabled-button, .disabled-button {
