@@ -15,21 +15,8 @@ import {
 
 import 'LoginPage/assets/styles/loginPage.scss'
 
-import brandImg from 'LoginPage/assets/images/3scale-logo.png'
-
-import pfbg1200 from 'LoginPage/assets/images/pfbg_1200.jpg'
-import pfbg768 from 'LoginPage/assets/images/pfbg_768.jpg'
-import pfbg7682x from 'LoginPage/assets/images/pfbg_768@2x.jpg'
-import pfbg576 from 'LoginPage/assets/images/pfbg_576.jpg'
-import pfbg5762x from 'LoginPage/assets/images/pfbg_576@2x.jpg'
-
-const images = {
-  [BackgroundImageSrc.lg]: pfbg1200,
-  [BackgroundImageSrc.sm]: pfbg768,
-  [BackgroundImageSrc.sm2x]: pfbg7682x,
-  [BackgroundImageSrc.xs]: pfbg576,
-  [BackgroundImageSrc.xs2x]: pfbg5762x
-}
+import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
+import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
 class SimpleLoginPage extends React.Component {
   constructor (props) {
@@ -62,7 +49,7 @@ class SimpleLoginPage extends React.Component {
         footerListVariants='inline'
         brandImgSrc={brandImg}
         brandImgAlt='Red Hat 3scale API Management'
-        backgroundImgSrc={images}
+        backgroundImgSrc={PF4DownstreamBG}
         backgroundImgAlt='Red Hat 3scale API Management'
         loginTitle={this.state.loginTitle}
         forgotCredentials={
