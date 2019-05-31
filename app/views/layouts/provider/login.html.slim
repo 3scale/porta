@@ -21,8 +21,7 @@ html lang="en"
   - redirect_url = (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
 
   - has_heroku_login = domain_account.heroku?
-  - hasAuthenticationProviders = @authentication_providers.any?
-  - authentication_providers = hasAuthenticationProviders ? @authentication_providers : nil
+  - authentication_providers = @authentication_providers.presence
   - show_3scale_login_form = @presenter.show_username_password_related_content?
 
   body class="login-layout" data-barretina-id=(@provider.id rescue nil) data-barretina-redirect-url=(session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
