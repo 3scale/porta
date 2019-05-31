@@ -64,16 +64,16 @@ class SimpleLoginPage extends React.Component {
         brandImgAlt='Red Hat 3scale API Management'
         backgroundImgSrc={images}
         backgroundImgAlt='Red Hat 3scale API Management'
-        textContent='This is placeholder text only. Use this area to place any information or introductory message about your application that may be relevant to users.'
         loginTitle={this.state.loginTitle}
         forgotCredentials={
           showForgotCredentials &&
           <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
         }
       >
-        <input name='utf8' type='hidden' value='✓'/>
         {this.state.formMode === 'login' &&
-          <Login3scaleForm/>
+          <Login3scaleForm
+            providerSessionsPath={this.props.providerSessionsPath}
+          />
         }
         {this.state.formMode === 'password-reset' &&
           <RequestPasswordForm
