@@ -68,6 +68,5 @@ Feature: Forum searching
     When I log in as "bob" on foo.example.com
     And I go to the forum page
     And I search for "plutonium"
-    Then I should get 503
-    And I should see "Search is temporarily offline. Please try again in few minutes."
+    Then I should see "Search is temporarily offline. Please try again in few minutes."
 

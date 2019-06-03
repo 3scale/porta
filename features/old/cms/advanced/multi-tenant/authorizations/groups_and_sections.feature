@@ -42,7 +42,7 @@ Feature: Groups and permissions
   Scenario: Restricted sections are restricted even when there is another one public with same path that is public
     Given the current domain is "one.example.com"
     When I request the url "/first"
-    Then I should get 404
+    Then I should see "Not found"
 
   # logged users
   Scenario: sections are accessible to permitted buyers even when another provider has a restricted section with same path
@@ -54,7 +54,7 @@ Feature: Groups and permissions
   Scenario: sections are restricted to buyers even when another provider has a public section with same path
     Given I am logged in as "one_buyer" on one.example.com
     When I request the url "/first"
-    Then I should get 404
+    Then I should see "Not found"
 
   Scenario: Each one sees its contents
     Given I am logged in as "one_buyer" on two.example.com

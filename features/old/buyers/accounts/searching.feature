@@ -203,6 +203,5 @@ Feature: Searching buyer accounts
     And I search for:
       | Group/Org. |
       | gorillas   |
-    Then I should get 503
-    And I should see "Search is temporarily offline. Please try again in few minutes."
+    Then I should see "Search is temporarily offline. Please try again in few minutes."
 
