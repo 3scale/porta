@@ -31,12 +31,3 @@ end
 When /^I request the url of users of "([^\"]*)"$/ do |provider|
   visit "http://#{provider}/account/users"
 end
-
-When /^I do a HTTP request to delete (user "[^"]*")$/ do |user|
-  page.driver.browser.process :delete, provider_admin_account_user_path(user)
-end
-
-When /^I do a HTTP request to change role of (user "[^"]*") to "([^"]*)"$/ do |user, role|
-  page.driver.put provider_admin_account_user_path(user), :user => {:role => role}
-  page.driver.browser.follow_redirect!
-end
