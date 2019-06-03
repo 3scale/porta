@@ -47,7 +47,6 @@ log/*
 !.eslintrc
 !.flowconfig
 !.babelrc
-!.ruby-version
 !Gemfile*
 !config.ru
 README.md
