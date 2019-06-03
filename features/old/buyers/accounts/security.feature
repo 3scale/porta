@@ -78,13 +78,13 @@ Feature: Buyer accounts management security
     Then I should not see "bob"
 
     When I go to the buyer account edit page for "bob"
-    Then I should get 404
+    Then I should see "Not found"
 
     When I do a HTTP request to update buyer "bob" changing the organization name to "mike"
-    Then I should get 404
+    Then I should see "Not found"
     And there should be no buyer "mike"
     But there should be a buyer "bob"
 
     When I do a HTTP request to delete buyer "bob"
-    Then I should get 404
+    Then I should see "Not found"
     And there should be a buyer "bob"

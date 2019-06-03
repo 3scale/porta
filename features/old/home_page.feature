@@ -22,4 +22,4 @@ Feature: Home page
     Given there is no provider with domain "bar.example.com"
     When the current domain is "bar.example.com"
     And I go to the homepage
-    Then I should get 404
+    Then I should see "Not found"
