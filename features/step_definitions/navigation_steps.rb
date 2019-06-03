@@ -20,6 +20,7 @@ end
 
 When /^I navigate to the forum admin page$/ do
   click_link 'Messages'
+  click_link 'Forum'
   click_link 'Threads'
 end
 
