@@ -103,9 +103,6 @@ Feature: User management
     And I go to the provider users page
     Then I should not see "delete" for user "foo.example.com"
 
-    When I do a HTTP request to delete user "foo.example.com"
-    Then I should be denied the access
-
   Scenario: Admin cannot edit his/her own role
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -113,9 +110,6 @@ Feature: User management
     And I follow "foo.example.com"
     Then I should see "Personal details"
     Then I should not see "Role"
-
-    When I do a HTTP request to change role of user "foo.example.com" to "member"
-    Then user "foo.example.com" should have role "admin"
 
   @security
   Scenario: User management requires login
