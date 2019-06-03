@@ -26,7 +26,7 @@ html lang="en"
 
   body class="login-layout" data-barretina-id=(@provider.id rescue nil) data-barretina-redirect-url=(session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
 
-    div#login-page-wrapper data-login-props={barretinaId: barretina_id,
+    div#login-page-container data-login-props={barretinaId: barretina_id,
     redirectUrl: redirect_url,
     hasHerokuLogin: has_heroku_login,
     authenticationProviders: authentication_providers,

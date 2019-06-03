@@ -31,15 +31,15 @@ class RequestPasswordForm extends React.Component {
         method='post'
       >
         <HiddenInputs isPasswordReset/>
-        <FormGroup label="Email address" isRequired fieldId="email">
+        <FormGroup label='Email address' isRequired fieldId='email'>
           <TextInput
             isRequired
-            type="email"
-            id="email"
-            name="email"
+            type='email'
+            id='email'
+            name='email'
             value={emailAddress}
             onChange={this.handleTextInputEmail}
-            autoFocus="autoFocus"
+            autoFocus='autoFocus'
           />
         </FormGroup>
         <ActionGroup>
