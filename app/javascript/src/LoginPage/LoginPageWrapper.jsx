@@ -41,8 +41,12 @@ class SimpleLoginPage extends React.Component {
     this.getURL()
   }
 
-  render () {
+  showForgotCredentials () {
     const showForgotCredentials = this.state.formMode === 'login'
+    return showForgotCredentials && <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
+  }
+
+  render () {
     return (
       <LoginPage
         footerListVariants='inline'
@@ -51,10 +55,7 @@ class SimpleLoginPage extends React.Component {
         backgroundImgSrc={PF4DownstreamBG}
         backgroundImgAlt='Red Hat 3scale API Management'
         loginTitle={this.state.loginTitle}
-        forgotCredentials={
-          showForgotCredentials &&
-          <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
-        }
+        forgotCredentials={this.showForgotCredentials()}
       >
         {this.state.formMode === 'login' &&
           <Login3scaleForm

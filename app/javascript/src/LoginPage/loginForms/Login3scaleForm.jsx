@@ -36,28 +36,28 @@ class Login3scaleForm extends React.Component {
         method='post'
       >
         <HiddenInputs/>
-        <FormGroup label="Email or Username" isRequired fieldId="session_username">
+        <FormGroup label='Email or Username' isRequired fieldId='session_username'>
           <TextInput
             isRequired
-            type="text"
-            id="session_username"
-            name="username"
-            tabIndex="1"
+            type='text'
+            id='session_username'
+            name='username'
+            tabIndex='1'
             value={username}
             onChange={this.handleTextInputUsername}
-            autoFocus="autoFocus"
+            autoFocus='autoFocus'
           />
         </FormGroup>
-        <FormGroup label="Password" isRequired fieldId="session_password">
+        <FormGroup label='Password' isRequired fieldId='session_password'>
           <TextInput
             isRequired
-            type="password"
-            id="session_password"
-            name="password"
-            tabIndex="2"
+            type='password'
+            id='session_password'
+            name='password'
+            tabIndex='2'
             value={password}
             onChange={this.handleTextInputPassword}
-            aria-invalid="false"
+            aria-invalid='false'
           />
         </FormGroup>
         <ActionGroup>
