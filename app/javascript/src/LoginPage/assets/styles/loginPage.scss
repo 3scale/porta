@@ -1,3 +1,9 @@
-.pf-c-login {
-  font-family: 'Open Sans';
+#login-page-container {
+  .pf-c-background-image::before {
+    filter: none;
+  }
+
+  .pf-c-login {
+    font-family: 'Open Sans';
+  }
 }
