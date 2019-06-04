@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react'
+import type { Node } from 'react'
 
 import {HiddenInputs} from 'LoginPage'
 
@@ -10,22 +13,34 @@ import {
   Button
 } from '@patternfly/react-core'
 
-class Login3scaleForm extends React.Component {
-  constructor (props) {
+type Props = {
+  providerSessionsPath: string
+}
+
+type State = {
+  username: string,
+  password: string
+}
+
+class Login3scaleForm extends React.Component<Props, State> {
+  constructor (props: Props) {
     super(props)
     this.state = {
       username: '',
       password: ''
     }
-    this.handleTextInputUsername = username => {
-      this.setState({ username })
-    }
-    this.handleTextInputPassword = password => {
-      this.setState({ password })
-    }
+    this.handleTextInputUsername = this.handleTextInputUsername.bind(this)
+    this.handleTextInputPassword = this.handleTextInputPassword.bind(this)
   }
 
-  render () {
+  handleTextInputUsername = (username: string) => {
+    this.setState({ username })
+  }
+  handleTextInputPassword = (password: string) => {
+    this.setState({ password })
+  }
+
+  render (): Node {
     const {username, password} = this.state
     return (
       <Form
