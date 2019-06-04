@@ -9,7 +9,6 @@ html lang="en"
     = javascript_pack_tag 'pf4BaseStyles'
     = javascript_include_tag 'vendor/jquery-1.8.2.min.js', 'vendor/rails.js'
     = javascript_include_tag 'flash'
-    = javascript_pack_tag 'LoginPage'
 
   //
     # this rescue nil is a temporary hack that should be removed once
@@ -17,22 +16,12 @@ html lang="en"
     #   invitee_signup POST /signup/:invitation_token(.:format) accounts/invitee_signups#create
     # are split Provider/Buyer side
 
-  - barretina_id = (@provider.id rescue nil)
-  - redirect_url = (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
-
-  - authentication_providers = @authentication_providers.presence
-  - show_3scale_login_form = @presenter.show_username_password_related_content?
-
-  body class="login-layout" data-barretina-id=(@provider.id rescue nil) data-barretina-redirect-url=(session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
-
-    div#login-page-container data-login-props={barretinaId: barretina_id,
-    redirectUrl: redirect_url,
-    authenticationProviders: authentication_providers,
-    show3scaleLoginForm: show_3scale_login_form,
-    providerSessionsPath: provider_sessions_path,
-    providerLoginPath: provider_login_path,
-    providerPasswordPath: provider_password_path,
-    providerAdminDashboardPath: provider_admin_dashboard_path}.to_json
-
-    / TODO: Move error messages to React
-    = render "shared/provider/flash", flash: flash
+  body class="login-layout"
+    div.red-hat-logo
+    div id="wrapper"
+      div.login-logo
+        | Red Hat 3scale API Management
+      div id='border' class="self_clear"
+        = yield
+        / TODO: Move error messages to React
+        = render "shared/provider/flash", flash: flash
