@@ -20,7 +20,6 @@ html lang="en"
   - barretina_id = (@provider.id rescue nil)
   - redirect_url = (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to]))
 
-  - has_heroku_login = domain_account.heroku?
   - authentication_providers = @authentication_providers.presence
   - show_3scale_login_form = @presenter.show_username_password_related_content?
 
@@ -28,7 +27,6 @@ html lang="en"
 
     div#login-page-container data-login-props={barretinaId: barretina_id,
     redirectUrl: redirect_url,
-    hasHerokuLogin: has_heroku_login,
     authenticationProviders: authentication_providers,
     show3scaleLoginForm: show_3scale_login_form,
     providerSessionsPath: provider_sessions_path,
