@@ -9,8 +9,6 @@
     <%= form.input :password_confirmation, :required => true %>
   <% end %>
 
-  <%= render '/application/signup_licence' %>
-
   <%= form.buttons do %>
     <%= form.commit_button 'Sign up', :button_html => {:class => 'user-signup important-button'} %>
   <% end %>
