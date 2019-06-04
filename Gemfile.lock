@@ -528,7 +528,7 @@ GEM
       ruby-openid (>= 2.1.8)
     rack-protection (1.5.5)
       rack
-    rack-proxy (0.6.4)
+    rack-proxy (0.6.5)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -796,7 +796,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
-    webpacker (3.3.1)
+    webpacker (4.0.7)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -984,7 +984,7 @@ DEPENDENCIES
   unicorn
   unicorn-rails
   webmock (~> 2.3.2)
-  webpacker (~> 3.3)
+  webpacker (~> 4.x)
   whenever (~> 0.9.7)
   will_paginate (~> 3.1.0)
   xpath (~> 2.1)

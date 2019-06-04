@@ -273,7 +273,7 @@ group :development, :test do
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
 end
 
-gem 'webpacker', '~> 3.3'
+gem 'webpacker', '~> 4.x'
 
 gem 'unicorn', require: false, group: [:production, :preview]
 gem 'developer_portal', path: 'lib/developer_portal'
