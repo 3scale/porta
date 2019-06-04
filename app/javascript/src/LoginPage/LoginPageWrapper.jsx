@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react'
+import type { Node } from 'react'
 import {createReactWrapper} from 'utilities/createReactWrapper'
 import 'url-polyfill'
 
@@ -17,8 +20,24 @@ import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
-class SimpleLoginPage extends React.Component {
-  constructor (props) {
+type Props = {
+  authenticationProviders: string,
+  barretinaId: number,
+  providerAdminDashboardPath: string,
+  providerLoginPath: string,
+  providerPasswordPath: string,
+  providerSessionsPath: string,
+  redirectUrl: string,
+  show3scaleLoginForm: boolean
+}
+
+type State = {
+  formMode: string,
+  loginTitle: string
+}
+
+class SimpleLoginPage extends React.Component<Props, State> {
+  constructor (props: Props) {
     super(props)
     this.state = {
       formMode: 'login',
@@ -46,7 +65,7 @@ class SimpleLoginPage extends React.Component {
     return showForgotCredentials && <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
   }
 
-  render () {
+  render (): Node {
     return (
       <LoginPage
         footerListVariants='inline'
@@ -73,7 +92,7 @@ class SimpleLoginPage extends React.Component {
   }
 }
 
-const LoginPageWrapper = (props, containerId) =>
+const LoginPageWrapper = (props: Props, containerId: string) =>
   createReactWrapper(<SimpleLoginPage {...props} />, containerId)
 
 export {SimpleLoginPage, LoginPageWrapper}
