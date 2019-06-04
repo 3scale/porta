@@ -12,6 +12,8 @@ features: &default
     password: 'example-password'
     uri: 'https://gdpr.segment.com/graphql'
     workspace: 'example-workspace'
+  logging:
+    audits_to_stdout: true
 
 development:
   <<: *default
