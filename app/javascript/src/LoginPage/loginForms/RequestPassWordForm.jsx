@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react'
+import type { Node } from 'react'
 
 import {HiddenInputs} from 'LoginPage'
 
@@ -10,18 +13,29 @@ import {
   Button
 } from '@patternfly/react-core'
 
-class RequestPasswordForm extends React.Component {
-  constructor (props) {
+type Props = {
+  providerLoginPath: string,
+  providerPasswordPath: string
+}
+
+type State = {
+  emailAddress: string
+}
+
+class RequestPasswordForm extends React.Component<Props, State> {
+  constructor (props: Props) {
     super(props)
     this.state = {
       emailAddress: ''
     }
-    this.handleTextInputEmail = emailAddress => {
-      this.setState({ emailAddress })
-    }
+    this.handleTextInputEmail = this.handleTextInputEmail.bind(this)
   }
 
-  render () {
+  handleTextInputEmail = (emailAddress: string) => {
+    this.setState({ emailAddress })
+  }
+
+  render (): Node {
     const {emailAddress} = this.state
     return (
       <Form
