@@ -17,11 +17,6 @@ html lang="en"
     # are split Provider/Buyer side
 
   body class="login-layout"
-    div.red-hat-logo
-    div id="wrapper"
-      div.login-logo
-        | Red Hat 3scale API Management
-      div id='border' class="self_clear"
-        = yield
-        / TODO: Move error messages to React
-        = render "shared/provider/flash", flash: flash
+    = yield
+    / TODO: Move error messages to React
+    = render "shared/provider/flash", flash: flash

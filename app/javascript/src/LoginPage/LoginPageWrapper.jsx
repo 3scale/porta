@@ -22,7 +22,6 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
 type Props = {
   authenticationProviders: string,
-  barretinaId: number,
   providerAdminDashboardPath: string,
   providerLoginPath: string,
   providerPasswordPath: string,
