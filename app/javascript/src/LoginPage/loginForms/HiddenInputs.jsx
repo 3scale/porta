@@ -1,7 +1,9 @@
+// @flow
+
 import React from 'react'
 import {CSRFToken} from 'utilities/utils'
 
-const HiddenInputs = ({isPasswordReset = false}) => {
+const HiddenInputs = ({isPasswordReset = false}: {isPasswordReset: boolean}) => {
   return (
     <React.Fragment>
       <input name="utf8" type="hidden" value="✓"/>
