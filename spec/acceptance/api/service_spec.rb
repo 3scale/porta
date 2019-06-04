@@ -1,8 +1,21 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 resource "Service" do
 
-  let(:resource) { FactoryBot.build(:service, account: provider, system_name: 'foobar') }
+  let(:resource) { FactoryBot.build(:service,
+    account: provider,
+    system_name: 'foobar',
+    buyer_plan_change_permission: 'request_credit_card',
+    notification_settings: {
+      web_provider: ['', '50', '100', '300'],
+      email_provider: ['', '50', '100', '150'],
+      web_buyer: ['', '50', '100', '150'],
+      email_buyer: ['', '50', '100', '300']
+    }
+  )}
+  let(:attributes) { %w[id system_name intentions_required buyers_manage_apps buyers_manage_keys referrer_filters_required custom_keys_enabled buyer_key_regenerate_enabled mandatory_app_key buyer_can_select_plan buyer_plan_change_permission] }
 
   before do
     provider.settings.allow_multiple_services!
@@ -40,7 +53,11 @@ resource "Service" do
 
     context 'service' do
       subject(:service) { Hash.from_xml(serialized).fetch(root) }
-      it { should include('id' => resource.id.to_s, 'system_name' => resource.system_name) }
+      it { should include(attributes.map do |attr_name|
+        next if (attr_value = resource.public_send(attr_name)).blank?
+        [attr_name, attr_value.to_s]
+      end.compact.to_h)}
+      it { should include('notification_settings' => resource.notification_settings.stringify_keys.transform_values(&:to_s)) }
     end
   end
 
@@ -49,7 +66,8 @@ resource "Service" do
 
     let(:root) { 'service' }
 
-    it { should include('id' => resource.id, 'system_name' => resource.system_name) }
+    it { should include(attributes.map { |attr_name| [attr_name, resource.public_send(attr_name)] }.to_h.delete_if { |k, v| v.nil? })}
+    it { should include('notification_settings' => resource.notification_settings.stringify_keys) }
     it { should have_links(%w|self end_user_plans service_plans application_plans features metrics|)}
   end
 
