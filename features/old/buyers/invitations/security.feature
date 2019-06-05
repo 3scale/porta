@@ -17,4 +17,4 @@ Feature: Security constraints to invite partners
   Scenario: Invitation interface on partners is restricted to users not admins of the provider account
     When I log in as "lolycat" on foo.example.com
     When I request the url of the invitations of the partner "lol cats"
-    Then I should get 404
+    Then I should see "Not found"

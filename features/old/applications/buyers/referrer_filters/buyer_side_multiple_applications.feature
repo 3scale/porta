@@ -98,7 +98,7 @@ Feature: Buyer's application referrer filters (multiple applications mode)
 
     When I log in as "alice"
     And I do POST to the referrer filters url for application "MegaWidget"
-    Then I should get 404
+    Then I should see "Not found"
 
   @security @allow-rescue
   Scenario: Deleting referrer filter is forbidden if not buyer of the application
@@ -109,4 +109,4 @@ Feature: Buyer's application referrer filters (multiple applications mode)
 
     When I log in as "alice"
     And I do DELETE to the "foo.example.org" referrer filter url for application "MegaWidget"
-    Then I should get 404
+    Then I should see "Not found"

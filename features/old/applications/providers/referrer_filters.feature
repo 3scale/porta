@@ -53,7 +53,7 @@ Feature: Providers's application referrer filters
      And current domain is the admin domain of provider "xyz.example.com"
     When I log in as provider "xyz.example.com"
      And I do POST to the referrer filters url for application "SpookyWidget"
-    Then I should get 404
+    Then I should see "Not found"
 
   @security @allow-rescue
   Scenario: Deleting referrer filter is forbidden if not provider of the application
@@ -65,4 +65,4 @@ Feature: Providers's application referrer filters
      And I log in as provider "bar.example.com"
 
     And I do DELETE to the "foo.example.org" referrer filter url for application "SpookyWidget"
-    Then I should get 404
+    Then I should see "Not found"

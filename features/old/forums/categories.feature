@@ -79,9 +79,6 @@ Feature: Forum categories
     When I log in as "alice" on foo.example.com
     And I go to the forum page
     Then I should not see button "New category"
-    When I do a HTTP request to create new category "Fake"
-    Then I should get 404
-    And the forum of "foo.example.com" should not have category "Fake"
 
   @security @allow-rescue
   Scenario: User can't edit a category
@@ -91,16 +88,9 @@ Feature: Forum categories
     And I go to the forum page
     Then I should not see link "Edit" for category "Security"
 
-    When I do a HTTP request to update category "Security"
-    Then I should get 404
-
   @security @allow-rescue
   Scenario: User can't delete a category
     Given the forum of "foo.example.com" has category "Security"
-
     When I log in as "alice" on foo.example.com
     And I go to the forum page
     Then I should not see button "Delete" for category "Security"
-
-    When I do a HTTP request to delete category "Security"
-    Then I should get 404

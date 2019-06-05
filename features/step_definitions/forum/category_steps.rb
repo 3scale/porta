@@ -39,15 +39,3 @@ When /^I should not see (link|button) "([^"]*)" for category "([^"]*)"$/ do |wid
 
   assert has_no_css?(%(#categories td:contains("#{name}") ~ td #{element}:contains("#{label}")))
 end
-
-When /^I do a HTTP request to create new category "([^"]*)"$/ do |name|
-  page.driver.post admin_forum_categories_path, :topic_category => {:name => name}
-end
-
-When /^I do a HTTP request to update (category "[^"]*")$/ do |category|
-  page.driver.put admin_forum_category_path(category)
-end
-
-When /^I do a HTTP request to delete (category "[^"]*")$/ do |category|
-  page.driver.delete admin_forum_category_path(category)
-end
