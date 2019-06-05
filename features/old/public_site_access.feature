@@ -20,7 +20,7 @@ Feature: Public site access
     When I follow "Admin" in the user widget
     Then the current domain should be the master domain
 
-  #@javascript
+  @javascript
   Scenario: View Site takes to the public side
     Given I log in as "foo.example.com" on the admin domain of provider "foo.example.com"
     When I navigate to the accounts page
@@ -38,6 +38,7 @@ Feature: Public site access
     Then the current domain should be foo.example.com
       And the current port should not be 80
 
+  @javascript
   Scenario: View site when site access code is set
     Given provider "foo.example.com" has site access code "foobar"
       And current domain is the admin domain of provider "foo.example.com"

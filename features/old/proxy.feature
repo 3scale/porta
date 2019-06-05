@@ -1,3 +1,4 @@
+@javascript
 Feature: Proxy integration
   In order to integrate with 3scale via a on-premise proxy
   As a provider

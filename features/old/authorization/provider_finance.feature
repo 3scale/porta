@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider finance authorization
   In order to manage my finance
   As a provider

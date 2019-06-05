@@ -1,3 +1,4 @@
+@javascript
 Feature: Service subscriptions - providers
   In order to subscribe/unsubscribe my customers from services
   As a provider

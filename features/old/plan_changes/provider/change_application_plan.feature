@@ -1,3 +1,4 @@
+@javascript
 Feature: Change Application Plan
   In order to fullfill special requirements of my clients
   As a provider

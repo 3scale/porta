@@ -1,3 +1,4 @@
+@javascript
 Feature: Account Plan Change
   In order to fullfill special requirements of my clients
   As a provider

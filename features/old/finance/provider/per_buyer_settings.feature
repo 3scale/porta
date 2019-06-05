@@ -1,4 +1,4 @@
-@ignore-backend
+@ignore-backend @javascript
 Feature: Enabling billing and charging per buyer
   In order to allow special treatment of some buyers
   As a provider
@@ -20,7 +20,6 @@ Feature: Enabling billing and charging per buyer
       And I go to the buyer account page for "bob's"
      Then I should not see "Monthly charging is enabled"
 
-  @javascript
   Scenario: Monthly charging toggle
       And buyer "bob's" has "monthly charging" enabled
       And I go to the buyer account page for "bob's"
@@ -28,7 +27,6 @@ Feature: Enabling billing and charging per buyer
      When I press "Disable charging" and I confirm dialog box
      Then I should see "Monthly charging is disabled"
 
-  @javascript
   Scenario: Monthly billing toggle
       And buyer "bob's" has "monthly billing" enabled
       And I go to the buyer account page for "bob's"

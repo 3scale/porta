@@ -1,3 +1,4 @@
+@javascript
 Feature: Audience menu
   In order to manage my audience
   As a provider
@@ -17,7 +18,6 @@ Feature: Audience menu
     | Messages                  |
     | Forum                     |
 
-  @javascript
   Scenario: Accounts sub menu structure
     When I follow "Accounts" within the main menu
     Then I should see menu items
@@ -25,7 +25,6 @@ Feature: Audience menu
     | Usage Rules               |
     | Fields Definitions        |
 
-  @javascript
   Scenario: Portal sub menu structure
     When I follow "Portal" within the main menu
     Then I should see menu items
@@ -42,7 +41,6 @@ Feature: Audience menu
     | Spam Protection           |
     | SSO Integrations          |
 
-  @javascript
   Scenario: Messages sub menu structure
     When I follow "Messages" within the main menu
     Then I should see menu items
@@ -52,7 +50,6 @@ Feature: Audience menu
     | Support Emails            |
     | Email Templates           |
 
-  @javascript
   Scenario: Forum sub menu structure
     When I follow "Forum" within the main menu
     Then I should see menu items
@@ -61,7 +58,6 @@ Feature: Audience menu
     | My Threads                |
     | Preferences               |
 
-  @javascript
   Scenario: Accounts sub menu structure with account plans enabled
     When provider "foo.example.com" has "account_plans" visible
     And I go to the accounts admin page
@@ -69,7 +65,6 @@ Feature: Audience menu
     Then I should see menu items
     | Account Plans              |
 
-  @javascript
   Scenario: Accounts sub menu structure with service plans enabled
     When provider "foo.example.com" has "service_plans" visible
     And I go to the accounts admin page
@@ -80,7 +75,6 @@ Feature: Audience menu
     | Usage Rules               |
     | Fields Definitions        |
 
-  @javascript
   Scenario: Portal sub menu structure with groups enabled
     When provider "foo.example.com" has "groups" switch allowed
     And I go to the provider dashboard

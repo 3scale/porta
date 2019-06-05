@@ -1,4 +1,4 @@
-@saas-only
+@saas-only @javascript
 Feature: Posting in the forum
   In order to ask question or spread opinions
   As a provider

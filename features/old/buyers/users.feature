@@ -1,3 +1,4 @@
+@javascript
 Feature: Buyer users management
   In order to have control over the users of my buyers
   As a provider
