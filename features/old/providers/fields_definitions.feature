@@ -1,3 +1,4 @@
+@javascript
 Feature: Fields Definitions
   In order to store more data about my users
   As a provider

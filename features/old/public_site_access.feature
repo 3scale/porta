@@ -29,6 +29,7 @@ Feature: Public site access
     Then the current domain should be foo.example.com
       And the current port should not be 80
 
+  @javascript
   Scenario: View site when site access code is set
     Given provider "foo.example.com" has site access code "foobar"
       And current domain is the admin domain of provider "foo.example.com"

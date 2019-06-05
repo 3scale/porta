@@ -1,3 +1,4 @@
+@javascript
 Feature: API Docs Management
   In order to enlighten our developers
   I want to provide interactive API documentation

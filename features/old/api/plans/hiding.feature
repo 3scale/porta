@@ -16,6 +16,7 @@ Feature: Plan hiding
     Then I should see there are no plans available
 
   #TODO test it for other plan types
+  @javascript
   Scenario: Hide a plan
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"

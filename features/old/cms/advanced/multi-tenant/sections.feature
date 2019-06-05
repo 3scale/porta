@@ -1,3 +1,4 @@
+@javascript
 Feature: Section
   In order to have multi tenant working
   as a Provider

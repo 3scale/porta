@@ -1,3 +1,4 @@
+@javascript
 Feature: Invoices of deleted account
   In order to check old invoices
   As a provider

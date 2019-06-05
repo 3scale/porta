@@ -1,4 +1,4 @@
-@stats
+@stats @javascript
 Feature: Variable cost on automatic billing
   As a provider I want to bill for variable cost
 

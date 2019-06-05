@@ -1,4 +1,4 @@
-@backend @fakeweb @ignore-backend
+@backend @fakeweb @ignore-backend @javascript
 Feature: Providers's application referrer filters
   In order specify where applications of my buyers can be used from
   As a provider
@@ -31,7 +31,7 @@ Feature: Providers's application referrer filters
     And I submit the new referrer filter form with "foo.example.org"
     Then I should see "Referrer filter has been created."
 
-  @javascript @evil @wip
+  @evil @wip
   Scenario: Delete a referrer filter
     Given application "SpookyWidget" has the following referrer filters:
       | foo.example.org |

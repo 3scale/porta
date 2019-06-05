@@ -1,4 +1,4 @@
-@stats
+@stats @javascript
 Feature: Change plan
   In order to adapt to my changing requirements
   As a buyer

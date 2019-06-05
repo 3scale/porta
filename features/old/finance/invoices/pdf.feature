@@ -12,7 +12,7 @@ Feature: Invoice PDFs
     And an issued invoice of buyer "bob" for August, 2011
     And current domain is the admin domain of provider "foo.example.com"
 
-  @commit-transactions
+  @commit-transactions @javascript
   Scenario: Provider side links on the invoice index and details
   Given current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"

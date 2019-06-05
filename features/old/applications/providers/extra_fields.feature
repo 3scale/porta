@@ -1,4 +1,4 @@
-@ignore-backend
+@ignore-backend @javascript
 Feature: Applications details
   In order to have a cool interface of applications
   As a provider

@@ -1,4 +1,4 @@
-@ignore-backend
+@ignore-backend @javascript
 Feature: Metric visibility
   In order to configure how metrics and methods show
   As a provider

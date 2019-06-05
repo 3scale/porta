@@ -1,3 +1,4 @@
+@javascript
 Feature: Plan deletion
   In order to get rid of a plan that I don't like any more
   As a provider
