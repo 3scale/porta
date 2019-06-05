@@ -4,7 +4,7 @@
   <p>Please choose a service and plan you which to subscribe to.</p>
 
   <fieldset class="inputs" name="">
-    <ol>
+    <ul>
       <li class="plan_selector required" id="service_contract_plan_input">
         <label for="service_contract_plan_id">Plan<abbr title="required">*</abbr></label>
         <select id="service_contract_plan_id" name="service_contract[plan_id]">
@@ -26,17 +26,17 @@
         </select>
         <p class="inline-hints">Choose a plan you want to subscribe to.</p>
       </li>
-    </ol>
+    </ul>
   </fieldset>
 
   {% include 'service_subscription_licence' %}
 
   <fieldset class="buttons">
-    <ol>
+    <ul>
       <li class="commit">
         <input class="important-button create" name="commit" type="submit" value="Subscribe">
       </li>
-    </ol>
+    </ul>
   </fieldset>
 
 {% endform %}
