@@ -5,7 +5,11 @@
   width: 100%;
   white-space: nowrap;
   margin: line-height-times(4) 0 line-height-times(0) 0;
-  padding-top: line-height-times(1/2);
+  // Padding should be eventually taken care by PF
+  padding-top: var(--pf-c-page__main-section--PaddingTop);
+  padding-right: var(--pf-c-page__main-section--PaddingRight);
+  padding-bottom: var(--pf-c-page__main-section--PaddingBottom);
+  padding-left: var(--pf-c-page__main-section--PaddingLeft);
   border-top: $border-width solid $border-color;
   font-size: $font-size-sm;
 
