@@ -58,6 +58,7 @@ class Account < ApplicationRecord
   include CreditCard
   include Gateway
   include States
+  require_dependency 'account/domains'
   include Domains
 
   #TODO: this needs testing?

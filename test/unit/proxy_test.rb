@@ -537,6 +537,38 @@ class ProxyTest < ActiveSupport::TestCase
     assert_equal policy_config2, @proxy.find_policy_config_by(name: 'my-other-policy', version: '0.5.0')
   end
 
+  test 'domain changes events on update of hosted proxy' do
+    @proxy.service.deployment_option = 'hosted'
+
+    Domains::ProxyDomainsChangedEvent.expects(:create).with(@proxy).once
+
+    @proxy.update_attributes(staging_endpoint: 'http://example.com')
+  end
+
+  test 'domain changes events on update of self managed proxy' do
+    @proxy.service.deployment_option = 'self_managed'
+
+    Domains::ProxyDomainsChangedEvent.expects(:create).with(@proxy).once
+
+    @proxy.update_attributes(staging_endpoint: 'http://example.com')
+  end
+
+  test 'domain changes events on destroy of hosted proxy' do
+    @proxy.service.deployment_option = 'hosted'
+
+    Domains::ProxyDomainsChangedEvent.expects(:create).with(@proxy).once
+
+    @proxy.destroy
+  end
+
+  test 'domain changes events on destroy of self managed' do
+    @proxy.service.deployment_option = 'self_managed'
+
+    Domains::ProxyDomainsChangedEvent.expects(:create).with(@proxy).once
+
+    @proxy.destroy
+  end
+
   def analytics
     ThreeScale::Analytics::UserTracking.any_instance
   end

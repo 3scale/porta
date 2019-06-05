@@ -54,6 +54,9 @@ module EventStore
       class InvalidEventError < StandardError
         include Bugsnag::MetaData
 
+        attr_accessor :record
+        delegate :errors, to: :record
+
         def initialize(event)
           return super unless event
 
@@ -93,10 +96,15 @@ module EventStore
       def create_event!(event, stream_name)
         data = event.to_h.merge!(stream: stream_name, event_type: event.class.name)
 
-        if repository.adapter.create(data).valid?
+        record = repository.adapter.create(data)
+
+        if record.valid?
           event
         else
-          raise InvalidEventError, event
+          error = InvalidEventError.new(event)
+          error.record = record
+
+          raise error
         end
       end
     end
@@ -148,7 +156,9 @@ module EventStore
                       Applications::ApplicationDeletedEvent,
                       Applications::ApplicationEnabledChangedEvent,
                       OIDC::ProxyChangedEvent,
-                      OIDC::ServiceChangedEvent
+                      OIDC::ServiceChangedEvent,
+                      Domains::ProviderDomainsChangedEvent,
+                      Domains::ProxyDomainsChangedEvent
                      )
       subscribe_event(ServiceTokenEventSubscriber.new, ServiceTokenDeletedEvent)
       subscribe_event(UserEventSubscriber.new, Users::UserDeletedEvent)
