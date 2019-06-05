@@ -40,12 +40,14 @@ Feature: Dashboards
       And I request the url "/admin"
     Then I should be on the dashboard
 
+  @javascript
   Scenario: '/admin' on provider domain redirects to '/p/admin'
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
     When I request the url "/admin"
     Then I should be on the provider dashboard
 
+  @javascript
   Scenario: '/p/admin' on provider domain sees provider dashboard
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"

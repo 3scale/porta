@@ -1,3 +1,4 @@
+@javascript
 Feature: API Service Plans
   To have different service plans
   As a provider

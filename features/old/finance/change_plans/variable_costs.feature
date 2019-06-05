@@ -62,6 +62,7 @@ Feature: Change plan
      Then I should see "EUR 10.00"
       And I should see "EUR 1.00"
 
+  @javascript
   Scenario: Change plan with variable costs in both plans in the same month. Provider sees it the day after. Buyer end of month (PREPAID)
     Given the time is 1st May 2009
       And provider "foo.example.com" has prepaid billing enabled

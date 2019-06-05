@@ -9,6 +9,7 @@ Feature: Invitations
     And provider "foo.example.com" has multiple applications enabled
     And provider "foo.example.com" has "multiple_users" switch allowed
 
+  @javascript
   Scenario: Sending an invitation as provider
     Given the admin domain of provider "foo.example.com" is "admin.foo.example.com"
       And current domain is the admin domain of provider "foo.example.com"

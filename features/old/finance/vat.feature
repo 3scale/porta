@@ -51,6 +51,7 @@ Background:
     | Total VAT Amount             |          |    0 |
     | Total cost (VAT 5% included) |          |  100 |
 
+  @javascript
   Scenario: Sums on dashboard are VAT sensitive
    Given a buyer "europe" signed up to application plan "best"
      And VAT rate of buyer "europe" is 5%

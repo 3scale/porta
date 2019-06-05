@@ -1,3 +1,4 @@
+@javascript
 Feature: Application Keys management
   In order to control the way providers are using my API
   As master

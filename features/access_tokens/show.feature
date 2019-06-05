@@ -2,6 +2,7 @@ Feature: Access tokens
   As a admin
   I'd like to see the access tokens page correctly
 
+  @javascript
   Scenario: I should be able to see all scopes
     Given a provider "foo.example.com"
     And an active admin "alex" of account "foo.example.com"

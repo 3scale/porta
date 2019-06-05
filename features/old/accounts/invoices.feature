@@ -1,4 +1,4 @@
-@ignore-backend
+@ignore-backend @javascript
 Feature: Show invoices from account's page (#16015909)
   In order to check and edit buyer's invoices quickly
   As a provider

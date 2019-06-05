@@ -1,3 +1,4 @@
+@javascript
 Feature: Invitations on partner accounts for admins
   In order to allow provider account admins to administer their partner accounts
   As an admin I want to manage the invitations of users to the partner accounts

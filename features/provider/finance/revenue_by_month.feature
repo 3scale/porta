@@ -1,3 +1,4 @@
+@javascript
 Feature: Group earnings by month
   In order to see me earnings
   As a provider

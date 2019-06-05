@@ -1,3 +1,4 @@
+@javascript
 Feature: Paid plan
   In order to charge my users and get rich
   As a provider

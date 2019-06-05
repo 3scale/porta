@@ -3,6 +3,7 @@ Feature: Password change
   As an user
   I want to change my password from time to time
 
+  @javascript
   Scenario: Provider password change
     Given a provider "foo.example.com"
 

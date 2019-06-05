@@ -1,3 +1,4 @@
+@javascript
 Feature: Approving buyer account
   In order to allow my new buyers to use the site when they seem allright
   As a provider

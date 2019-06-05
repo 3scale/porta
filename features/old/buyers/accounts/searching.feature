@@ -1,4 +1,4 @@
-@search @no-txn
+@search @no-txn @javascript
 Feature: Searching buyer accounts
   In order to find a buyer account I'm looking for
   As a provider

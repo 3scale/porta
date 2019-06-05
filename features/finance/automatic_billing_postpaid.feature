@@ -1,4 +1,4 @@
-@stats
+@stats @javascript
 Feature: Automatic billing with plan changes on POSTPAID
   As a provider I want to differentiate costs added by the automatic
   billing job and my manually created invoices

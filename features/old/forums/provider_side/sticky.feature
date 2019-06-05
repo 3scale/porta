@@ -1,4 +1,4 @@
-@saas-only
+@saas-only @javascript
 Feature: Sticky Topics
   In order to let a topic stay on top of other topics so it is surely noticed by the users
   As a provider

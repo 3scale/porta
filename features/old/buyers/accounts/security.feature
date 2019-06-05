@@ -36,7 +36,7 @@ Feature: Buyer accounts management security
     Then I should be on the provider login page
     And there should be a buyer "bob"
 
-  @allow-rescue
+  @allow-rescue @javascript
   Scenario: Non-admins can't manage buyer accounts
     Given an active user "daniel" of account "foo.example.com"
     When I log in as provider "daniel"
@@ -68,7 +68,7 @@ Feature: Buyer accounts management security
 
     # TODO: approve and reject
 
-  @allow-rescue
+  @allow-rescue @javascript
   Scenario: Providers can't manage buyer's of other providers
     Given a provider "xyz.example.com"
     And current domain is the admin domain of provider "xyz.example.com"
