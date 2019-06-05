@@ -43,12 +43,11 @@ module Liquid
       end
 
       desc "Javascript includes tag."
-      def javascript_include_tag(name)
+      def javascript_include_tag(name, options = {})
         js = RailsHelpers.replace_googleapis(name)
-
         case
         when name == 'stats.js' # TODO: This is an intermediate step in order to tackle stats bundle in dev portal. Needs a final solution including updating of templates.
-          view.javascript_pack_tag(name)
+          view.javascript_pack_tag(name, options)
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           view.javascript_include_tag(js)
         else
