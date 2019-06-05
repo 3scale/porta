@@ -15,9 +15,9 @@ html[lang="en"]
 
   body
     = render partial: '/shared/provider/header'
-    #wrapper
+    #wrapper.pf-c-page
       = render partial: 'shared/provider/navigation/vertical_nav' unless active_menu == :dashboard
-
+      / main#border.self_clear role='main' class='pf-c-page__main'
       #border.self_clear
         = render 'shared/provider/flash', flash: flash
         main.Main#content class=('Main--callToAction' if call_to_action?)

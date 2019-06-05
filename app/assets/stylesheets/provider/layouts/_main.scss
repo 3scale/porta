@@ -2,35 +2,44 @@
   height: 100%;
   margin: 0 auto;
   min-width: $layout-wrapper-min-width;
-  padding-left: line-height-times(1);
-  padding-right: line-height-times(1);
+  // padding-left: line-height-times(1); This is added by Patternfly, value: var(--pf-c-nav__list-link--PaddingTop) var(--pf-c-nav__list-link--PaddingRight) var(--pf-c-nav__list-link--PaddingBottom) var(--pf-c-nav__list-link--PaddingLeft)
+  // padding-right: line-height-times(1); TODO: this should be delegated to Patternfly or at least use the same measures as PF.
   position: relative;
 }
 
+#wrapper.pf-c-page {
+  margin-top: line-height-times(63 / 20); // This is needed since our Header is not integrated in the same "page" component.
+}
+
 #border {
-  margin-top: line-height-times(63 / 20);
-  min-height: 80vh;
-  padding: line-height-times(1) 0 0 0;
+  // min-height: 80vh;
+  // padding: line-height-times(1) 0 0 0;
   position: relative;
   text-align: left;
-  z-index: 1;
+  // z-index: 1;
 }
 
 #nav {
   height: auto;
 }
 
-.vertical-nav {
-  height: 100%;
-  text-align: left;
-  z-index: 1000;
-}
+// .vertical-nav {
+//   height: 100%;
+//   text-align: left;
+//   z-index: 1000;
+// }
 
-.vertical-nav + #border {
-  margin-left: line-height-times(9);
-}
+// .vertical-nav + #border {
+//   margin-left: line-height-times(9);
+// }
 
 .Main {
+  // This should be eventually done by PF
+  padding-top: var(--pf-c-page__main-section--PaddingTop);
+  padding-right: var(--pf-c-page__main-section--PaddingRight);
+  padding-bottom: var(--pf-c-page__main-section--PaddingBottom);
+  padding-left: var(--pf-c-page__main-section--PaddingLeft);
+
   min-height: calc(100vh - #{line-height-times(10)});
 
   &--callToAction {
