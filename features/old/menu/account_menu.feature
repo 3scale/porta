@@ -1,3 +1,4 @@
+@javascript
 Feature: Menu of the Account screen
   In order to edit my account details
   As a provider

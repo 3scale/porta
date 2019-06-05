@@ -1,3 +1,4 @@
+@javascript
 Feature: Branding switch
   The value of the branding switch
   Controls the Branding feature
@@ -14,7 +15,6 @@ Feature: Branding switch
      And I follow "Change"
     Then I should see the invitation to upgrade my plan
 
-  @javascript
   Scenario: Dns link works if enabled
     Given provider "foo.example.com" has "branding" switch allowed
     When I log in as provider "foo.example.com"

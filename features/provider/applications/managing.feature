@@ -1,3 +1,4 @@
+@javascript
 Feature: Applications management
   In order to control the way my buyers are using my API
   As a provider

@@ -1,3 +1,4 @@
+@javascript
 Feature: Impersonate
   In order to get the same user experience and posibilities as other users of the site
   As a master account admin

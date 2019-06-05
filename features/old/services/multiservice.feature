@@ -1,3 +1,4 @@
+@javascript
 Feature: Multiservice feature
   In order to provide various APIs
   As a provider
@@ -26,7 +27,6 @@ Feature: Multiservice feature
      And I press "Add API"
     Then I should see "Less fancy API"
 
-  @javascript
   Scenario: Edit service
     Given I am logged in as provider "foo.example.com"
       And I am on the edit page for service "Fancy API" of provider "foo.example.com"

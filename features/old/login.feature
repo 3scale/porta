@@ -18,6 +18,7 @@ Feature: Login feature
     When I go to the provider login page
     Then I should see "Sign in with Heroku"
 
+  @javascript
   Scenario: Provider lands in dashboard when login in master domain
     When I log in as "foo.example.com" on the admin domain of provider "foo.example.com"
     Then I should be on the provider dashboard
@@ -30,6 +31,7 @@ Feature: Login feature
     Then I should be on the dashboard
     And the current domain should be the master domain
 
+  @javascript
   Scenario: Provider lands in admin dashboard when he requests public login page
    Given current domain is the admin domain of provider "foo.example.com"
      And I am logged in as provider "foo.example.com"
@@ -42,7 +44,7 @@ Feature: Login feature
      And I go to the login page
     Then I should be on the dashboard
 
-  @security
+  @security @javascript
   Scenario: Buyer cannot login in admin domain
     And current domain is the admin domain of provider "foo.example.com"
     When I try to log in as provider "bob" with password "supersecret"

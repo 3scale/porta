@@ -1,3 +1,4 @@
+@javascript
 Feature: Logo
   In order to present my company identity on my admin portal
   As a provider
@@ -7,7 +8,6 @@ Feature: Logo
     Given a provider "foo.example.com"
     And the provider has "branding" switch allowed
 
-  @javascript
   Scenario: Upload logo
     Given current domain is the admin domain of provider "foo.example.com"
      And I log in as provider "foo.example.com"

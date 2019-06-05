@@ -13,6 +13,7 @@ Feature: Invitations
         | lol cats |
 
 
+  @javascript
   Scenario: Invitations sign up pages are accessible without being logged in
      And current domain is the admin domain of provider "foo.example.com"
     When current domain is the admin domain of provider "foo.example.com"
@@ -20,6 +21,7 @@ Feature: Invitations
     When I follow the link to signup in the invitation sent to "bob@foo.example.com"
     Then I should see the invitation sign up page
 
+  @javascript
   Scenario: Invitations signup process (uses extra fields)
       And current domain is the admin domain of provider "foo.example.com"
     Given master provider has the following fields defined for "User":

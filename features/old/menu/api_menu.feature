@@ -1,3 +1,4 @@
+@javascript
 Feature: API menu
   In order to manage my API
   As a provider

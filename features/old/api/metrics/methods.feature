@@ -9,6 +9,7 @@ Feature: Methods
     Given a provider "foo.example.com" signed up to plan "Pro"
     And current domain is the admin domain of provider "foo.example.com"
 
+  @javascript
   Scenario: Create a method from the service definition page
     When I log in as provider "foo.example.com"
     And I go to the service definition page

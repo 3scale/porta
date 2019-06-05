@@ -1,3 +1,4 @@
+@javascript
 Feature: Edit Integration
   In order to integrate with 3scale
   As a provider
@@ -15,7 +16,6 @@ Feature: Edit Integration
     Then I should be on the provider stats usage page
 
   # TODO: remove it when the Coffeescript is migrated to React
-  @javascript
   Scenario: Changing the Authentication method should display the right curl command
     Given the service uses app_id/app_key as authentication method
     And I go to the service integration page
