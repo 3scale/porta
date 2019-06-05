@@ -12,7 +12,8 @@ import {
 import {
   ForgotCredentials,
   Login3scaleForm,
-  RequestPasswordForm
+  RequestPasswordForm,
+  AuthenticationProviders
 } from 'LoginPage'
 
 import 'LoginPage/assets/styles/loginPage.scss'
@@ -73,8 +74,14 @@ class SimpleLoginPage extends React.Component<Props, State> {
         backgroundImgSrc={PF4DownstreamBG}
         backgroundImgAlt='Red Hat 3scale API Management'
         loginTitle={this.state.loginTitle}
+        loginSubtitle='Please use your single sign-on LDAP credentials'
         forgotCredentials={this.showForgotCredentials()}
       >
+        { this.props.authenticationProviders &&
+          <AuthenticationProviders
+            authenticationProviders={this.props.authenticationProviders}
+          />
+        }
         {this.state.formMode === 'login' &&
           <Login3scaleForm
             providerSessionsPath={this.props.providerSessionsPath}
