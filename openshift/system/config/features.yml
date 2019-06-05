@@ -1,0 +1,6 @@
+features: &default
+  logging:
+    audits_to_stdout: true
+
+production:
+  <<: *default
