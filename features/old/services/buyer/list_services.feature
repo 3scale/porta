@@ -30,7 +30,7 @@ Feature: Buyer's service subscription
       Then I should see "Frutas"
        And I should see "Verduras"
 
-      When I follow "Subscribe to Verduras"
+      When I follow "Verduras"
        And I select "Tomato" from "Plan"
        And I press "Subscribe"
       Then I should see "You have successfully subscribed to a service."

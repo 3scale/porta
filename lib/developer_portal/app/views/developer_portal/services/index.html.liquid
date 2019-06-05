@@ -10,7 +10,7 @@
                   <th style="width:20%">Name</th>
                   <th>Description</th>
                   <th>Plan</th>
-                  <th></th>
+                  <th>Subscribe</th>
                 </tr>
               </thead>
               <tbody>
@@ -65,7 +65,7 @@
 
                             {% endif %}
                        {% else %}
-                         {{ "Subscribe to " | append: service.name | link_to: service.subscribe_url }}
+                          {{ service.name | link_to: service.subscribe_url }}
                        {% endif %}
                       </td>
                       {% endif %}
