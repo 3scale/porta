@@ -31,7 +31,7 @@ Feature: Groups and Sections
     Given the current domain is "foo.example.com"
       And the section "Docs" of provider "foo.example.com" is access restricted
      When I request the url "/docs/first"
-     Then I should get 404
+     Then I should see "Not found"
 
 
   @allow-rescue
@@ -39,7 +39,7 @@ Feature: Groups and Sections
     Given the section "Docs" of provider "foo.example.com" is access restricted
       And I am logged in as "alice" on "foo.example.com"
      When I request the url "/docs/first"
-     Then I should get 404
+     Then I should see "Not found"
 
   Scenario: Access restricted sections are access granted to allowed users
     Given the section "Docs" of provider "foo.example.com" is access restricted

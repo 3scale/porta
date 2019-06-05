@@ -38,7 +38,7 @@ Feature: Signup with invitation
   Scenario: Attempting to sign up with invalid invitation token
     When current domain is the admin domain of provider "foo.example.com"
     When I go to the provider user signup page with invalid invitation token
-    Then I should get 404
+    Then I should see "Not found"
 
   # buyer
   Scenario: Attempting to sign up with invalid invitation token
