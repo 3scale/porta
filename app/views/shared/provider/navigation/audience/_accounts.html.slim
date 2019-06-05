@@ -4,7 +4,7 @@
          path:  admin_buyers_accounts_path
 
 - if can?(:manage, :plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
-  = render vertical_nav_item,
+  =  vertical_nav_item,
        title: 'Account Plans',
        path:   admin_buyers_account_plans_path
 

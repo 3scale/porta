@@ -9,11 +9,16 @@ type Item = {
   path: string
 }
 
-type Props = {
-  itemGroups: { [string]: Item[]}
+type Section = {
+  title: string,
+  items: Item[]
 }
 
-const VerticalNav = ({ itemGroups }: Props) => {
+type Props = {
+  sections: Section[]
+}
+
+const VerticalNav = ({ sections }: Props) => {
   const [activeItem, setActiveItem] = useState()
   const [activeGroup, setActiveGroup] = useState()
 
@@ -28,8 +33,6 @@ const VerticalNav = ({ itemGroups }: Props) => {
         <Nav onSelect={onSelect}>
           <NavList>
             <NavItem
-              id="simple-link1"
-              preventDefault
               to="#simple-link1"
               itemId='overview'
               isActive={activeItem === 'overview'}
@@ -37,20 +40,19 @@ const VerticalNav = ({ itemGroups }: Props) => {
               Overview
             </NavItem>
 
-            {Object.keys(itemGroups).map(groupId => (
+            {sections.map(section => (
               <NavExpandable
-                title={groupId}
+                title={section.title}
                 // srText={groupId}
-                groupId={groupId}
-                isActive={activeGroup === groupId}
+                groupId={section.title}
+                isActive={activeGroup === section.title}
                 // isExpanded
               >
-                {itemGroups[groupId].map(item => (
+                {section.items.map(item => (
                   <NavGroup title="">
                     <NavItem
-                      preventDefault
                       to={item.path}
-                      groupId={groupId}
+                      groupId={section.title}
                       itemId={item.title}
                       isActive={activeItem === item.title}
                     >
