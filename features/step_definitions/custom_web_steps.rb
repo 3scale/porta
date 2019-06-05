@@ -216,7 +216,7 @@ end
 #     </tr>
 #   </table>
 Then /^(.*) within the "([^"]*)" row$/ do |action, content|
-  within(%(tr:contains("#{content}"))) do
+  within(:xpath, "//*[text()[contains(.,'#{content}')]]/ancestor::tr") do
     step action
   end
 end

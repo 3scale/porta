@@ -17,7 +17,7 @@ When /^I check "([^"]*)" in the user permission field$/ do |permission|
 end
 
 Then /^I should not see the user role field$/ do
-  assert has_no_css?('fieldset:contains("Role")')
+  refute has_xpath?("//fieldset[text()[contains(.,'Role')]]")
 end
 
 Then /^I should see "([^\"]*)" for (user "[^\"]*")$/ do |text, user|
