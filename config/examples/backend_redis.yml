@@ -9,9 +9,11 @@
 # password
 # thread_safe
 base: &base
-  url: <%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/0') %>
+  url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/0') %>"
   pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
+  sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
+  role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
 
 production:
   <<: *base
