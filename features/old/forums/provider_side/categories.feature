@@ -1,4 +1,4 @@
-@saas-only
+@saas-only @javascript
 Feature: Forum categories administration
   In order to better organise forum topics
   As a provider

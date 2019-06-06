@@ -1,4 +1,4 @@
-@saas-only
+@saas-only @javascript
 Feature: Forum administration on the provider side
   In order to manage my forum
   As a provider

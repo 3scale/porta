@@ -1,4 +1,4 @@
-@stats
+@stats @javascript
 Feature: All kind of contracts are billed
   In order to have flexibility in billing operations
   As a provider

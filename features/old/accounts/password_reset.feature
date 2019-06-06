@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider password reset
   In order to sign in even if I forgot my password
   As a user
@@ -69,7 +70,6 @@ Feature: Provider password reset
     Then I should see "The password has been changed"
     And I follow the link found in the provider password reset email send to "zed@example.com"
     Then I should see "The password reset token is invalid"
-
 
   Scenario: Attempt to login with invalid credentials, then reset password
     And I fill in "Username" with "zed@example.com"

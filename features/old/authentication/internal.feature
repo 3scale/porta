@@ -29,6 +29,7 @@ Feature: Internal authentication
     When I follow "Logout"
     Then I should see "You have been logged out"
 
+  @javascript
   Scenario: Redirects and keeps full url
     # legal terms's  url url has query_string
     Given the admin of account "foo.example.com" has password "foobar"
@@ -41,6 +42,7 @@ Feature: Internal authentication
     | system_name | signup_licence|
 
 
+  @javascript
   Scenario: Failed attempt to sign in as provider with invalid password
     Given the admin of account "foo.example.com" has password "foobar"
     When current domain is the admin domain of provider "foo.example.com"

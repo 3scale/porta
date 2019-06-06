@@ -1,4 +1,4 @@
-@emails
+@emails @javascript
 Feature: Invitations
   In order to allow more people to be users of my account
   As an account admin
@@ -60,7 +60,6 @@ Feature: Invitations
     And I press "Send"
     Then I should see "This invitation has already been sent."
 
-  @javascript
   Scenario: Deleted user from invitation with changed email
     Given an invitation from account "foo.example.com" sent to "ubuntu@foo.example.com"
     When I follow the link to signup provider "foo.example.com" in the invitation sent to "ubuntu@foo.example.com"

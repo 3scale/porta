@@ -1,3 +1,4 @@
+@javascript
 Feature: CMS groups
   As a provider I want to be able to manage buyer groups and their permissions
 

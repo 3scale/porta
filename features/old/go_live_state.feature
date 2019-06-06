@@ -1,3 +1,4 @@
+@javascript
 Feature: Dashboards
   Background:
     Given a provider "foo.example.com"

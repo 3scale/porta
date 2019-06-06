@@ -37,6 +37,7 @@ Feature: Change plan
       And I navigate to Invoices issued for me on 3rd June 2009
       Then I should see "EUR 11.00"
 
+  @javascript
   Scenario: Hit and change plan the next day bills hit on the old plan
     Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
@@ -54,6 +55,7 @@ Feature: Change plan
       And I navigate to my earnings on 3rd June 2009
       Then I should have an invoice of "11.0 EUR"
 
+  @javascript
   Scenario: Hit and change plan the same day bills hit on the new plan
     Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
@@ -68,6 +70,7 @@ Feature: Change plan
       Then I log in as provider "foo.example.com"
      Then I should have an invoice of "20.0 EUR"
 
+  @javascript
   Scenario: Change plan. Provider sees the invoice the day after. (POSTPAID)
     Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:

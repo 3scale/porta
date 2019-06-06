@@ -17,6 +17,7 @@ Feature: Plan publishing
 
   #TODO test it for other plan types
   # TODO navigate instead of go to - uses default_service
+  @javascript
   Scenario: Publish a plan
     Given a hidden plan "Awesome" of provider "foo.example.com"
 

@@ -8,12 +8,14 @@ Feature: Finance switch
       And current domain is the admin domain of provider "foo.example.com"
       And provider "foo.example.com" has prepaid billing enabled
 
+  @javascript
   Scenario: Finance tab works if enabled
     Given provider "foo.example.com" has "finance" switch allowed
     When I log in as provider "foo.example.com"
       And I follow "Billing"
     Then I should be on the finance page
 
+  @javascript
   Scenario: Finance tab unavailable if disabled
     Given provider "foo.example.com" has "finance" switch denied
     When I log in as provider "foo.example.com"
@@ -21,6 +23,7 @@ Feature: Finance switch
     When I follow "Accounts"
     Then I should not see "Billing" in the main menu
 
+  @javascript
   Scenario: Finance page forbidden if finance not enabled
     Given provider "foo.example.com" has "finance" switch denied
     When I log in as provider "foo.example.com"

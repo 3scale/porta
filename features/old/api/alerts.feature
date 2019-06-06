@@ -1,3 +1,4 @@
+@javascript
 Feature: API Usage alerts
   In order to contact my users if they violated usage limits
   As a provider
@@ -39,7 +40,6 @@ Feature: API Usage alerts
       | bob     | Bobget      | bars: 20 of 10 | ≥ 200 % | 13 Sep 2010 15:04:00 UTC | unread |
       | bob     | Bobget      | foos: 2 of 4   | ≥ 50 %  | 13 Sep 2010 12:20:00 UTC | unread |
 
-  @javascript
   Scenario: Reading alerts
     When I go to the API alerts page of service "API" of provider "foo.example.com"
      And I follow "Read" for the 1st API alert
@@ -61,7 +61,6 @@ Feature: API Usage alerts
       | bob     | Bobget      | bars: 20 of 10 | ≥ 200 % | 13 Sep 2010 15:04:00 UTC | read   |
       | bob     | Bobget      | foos: 2 of 4   | ≥ 50 %  | 13 Sep 2010 12:20:00 UTC | unread |
 
-  @javascript
   Scenario: Deleting alerts
     When I go to the API alerts page
      And I press "Delete" for the 1st API alert and I confirm dialog box
@@ -75,7 +74,6 @@ Feature: API Usage alerts
       | alice   | Aliget      | foos: 18 of 20 | ≥ 90 % | 14 Oct 2010 11:11:00 UTC | unread |
       | bob     | Bobget      | foos: 2 of 4   | ≥ 50 % | 13 Sep 2010 12:20:00 UTC | unread |
 
-  @javascript
   Scenario: Marking all alerts as read
     When I go to the API alerts page of service "API" of provider "foo.example.com"
       And I follow "Mark All As Read"
@@ -83,7 +81,6 @@ Feature: API Usage alerts
     Then I should be on the API alerts page of service "API" of provider "foo.example.com"
     Then I should not see any unread API alerts
 
-  @javascript
   Scenario: Deleting all alerts
     When I go to the API alerts page
       And I follow "Delete All" and I confirm dialog box

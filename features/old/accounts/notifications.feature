@@ -1,3 +1,4 @@
+@javascript
 Feature: Notifications
   In order to get notified by email only about the event I'm interested in
   As admin of an account
@@ -31,8 +32,7 @@ Feature: Notifications
       And the "Daily aggregate report" checkbox should not be checked
 
   # This scenario was unDRYed from an Outline due to performance reasons, it went from ~2 minutes to 20 seconds
-  @javascript @ajax
-
+  @ajax
   Scenario: Enable notification
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"

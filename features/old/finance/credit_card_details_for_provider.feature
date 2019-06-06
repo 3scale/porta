@@ -1,3 +1,4 @@
+@javascript
 Feature: Credit card details
   In order to pay for the service
   As a provider

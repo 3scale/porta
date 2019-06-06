@@ -1,3 +1,4 @@
+@javascript
 Feature: Personal Details
   In order to keep the information about myself up to date
   As a registered user
