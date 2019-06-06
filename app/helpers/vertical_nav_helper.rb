@@ -67,7 +67,7 @@ module VerticalNavHelper
     if can? :manage, User
       items << {id: :listing, title: 'Listing', path: provider_admin_account_users_path}
 
-      if can? :manage, :multiple_users && !current_account.settings.enforce_sso?
+      if can?(:manage, :multiple_users) && !current_account.settings.enforce_sso?
         items << {id: :invitations, title: 'Invitations', path: provider_admin_account_invitations_path}
       end
     end
@@ -110,21 +110,21 @@ module VerticalNavHelper
     if can?(:manage, :partners) || can?(:manage, :settings)
       sections << {id: :accounts, title: 'Accounts', items: audience_accounts_items}
     end
-  
+
     if can? :manage, :applications
       sections << {id: :applications, title: 'Applications', items: audience_applications_items}
     end
-    
+
     if can?(:see, :finance) && (can?(:manage, :finance) || can?(:manage, :settings))
       sections << {id: :finance, title: 'Billing', items: audience_billing_items}
     end
-    
+
     if (can?(:manage, :portal) || can?(:manage, :settings) || can?(:manage, :plans)) && !master_on_premises?
       sections << {id: :cms, title: 'Developer Portal', items: audience_portal_items}
     end
-    
+
     sections << {id: :messages, title: 'Messages', items: audience_messages_items}
-    
+
     if can?(:manage, :portal) && current_account.forum_enabled?
       sections << {id: :forum, title: 'Forum', items: audience_forum_items}
     end
@@ -138,15 +138,15 @@ module VerticalNavHelper
     if can? :manage, :partners
       items << {id: :listing, title: 'Listing', path: admin_buyers_accounts_path}
     end
-  
+
     if can?(:manage, :plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
       items << {id: :acount_plans, title: 'Account Plans', path: admin_buyers_account_plans_path}
     end
-    
+
     if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
       items << {id: :subscriptions, title: 'Subscriptions', path: admin_buyers_service_contracts_path}
     end
-    
+
     if can?(:manage, :settings)
       items << {title: 'Settings'}
       items << {id: :usage_rules, title: 'Usage Rules', path: edit_admin_site_usage_rules_path}
@@ -163,7 +163,7 @@ module VerticalNavHelper
     if can? :manage, :partners
       items << {id: :listing, title: 'Listing', path: admin_buyers_applications_path}
     end
-  
+
     if can?(:manage, :monitoring)
       items << {id: :alerts, title: 'Alerts', path: admin_alerts_path}
     end
@@ -177,12 +177,12 @@ module VerticalNavHelper
     if can?(:manage, :finance)
       items << {id: :earnings, title: 'Earnings by Month', path: admin_finance_root_path}
       items << {id: :invoices, title: 'Invoices', path: admin_finance_invoices_path}
-  
+
       if current_user.username == ThreeScale.config.impersonation_admin['username']
         items << {id: :finance, title: 'Finance Log', path: admin_finance_log_entries_path}
       end
     end
-  
+
     if can?(:manage, :settings)
       items << {title: 'Settings'}
 
@@ -204,18 +204,18 @@ module VerticalNavHelper
       items << {id: :content, title: 'Content', path: provider_admin_cms_templates_path}
       items << {id: :changes, title: 'Drafts', path: provider_admin_cms_changes_path}
       items << {id: :redirects, title: 'Redirects', path: provider_admin_cms_redirects_path}
-    
+
       if can?(:see, :groups)
         items << {id: :groups, title: 'Groups', path: provider_admin_cms_groups_path}
       end
-    
+
       if can? :update, :logo
         items << {id: :logo, title: 'Logo', path: edit_provider_admin_account_logo_path}
       end
 
       # FIXME: active_sidebar returns undefined, it should return feature_visibility. Sidebar is not highlighted.
       items << {id: :feature_visibility, title: 'Feature Visibility', path: provider_admin_cms_switches_path}
-    
+
       if can? :manage, :plans
         # FIXME: should be a link not a href
         items << {id: :ActiveDocs, title: 'ActiveDocs', path: admin_api_docs_services_path}
@@ -224,7 +224,7 @@ module VerticalNavHelper
 
     items << {title: ' '} # Blank space
     items << {title: 'Visit Portal', path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!)}
-    
+
     if can?(:manage, :portal)
       items << {title: 'Legal Terms'}
       # FIXME: active_sidebar is always 'legal' so no way to highlight items individually
@@ -232,24 +232,24 @@ module VerticalNavHelper
       items << {id: :service_subscriptions, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)}
       items << {id: :new_application, title: 'New Application', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
     end
-    
+
     if can?(:manage, :settings)
       items << {title: 'Settings'}
       # FIXME: active_sidebar returns undefined, it should return :domain. Sidebar is not highlighted.
       items << {id: :domain, title: 'Domains & Access', path: admin_site_dns_path}
       # FIXME: active_sidebar returns undefined, it should return :spam_protection. Sidebar is not highlighted.
       items << {id: :spam_protection, title: 'Spam Protection', path: edit_admin_site_spam_protection_path}
-    
+
       if current_account.show_xss_protection_options?
         items << {id: :xss_protection, title: 'XSS Protection', path: edit_admin_site_developer_portal_path}
         items << {id: sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
       end
-    
+
       if !current_account.forum_enabled? && provider_can_use?(:forum)
         items << {id: :forum_settings, title: 'Forum Settings', path: edit_admin_site_forum_path}
       end
     end
-    
+
     items << {title: 'Docs'}
     items << {id: :liquid_reference, title: 'Liquid Reference', path: provider_admin_liquid_docs_path}
   end
@@ -261,7 +261,7 @@ module VerticalNavHelper
     items << {id: :sent_messages, title: 'Sent messages', path: provider_admin_messages_outbox_index_path}
     # FIXME: active_sidebar returns undefined, it should return :trash. Sidebar is not highlighted.
     items << {id: :trash, title: 'Trash', path: provider_admin_messages_trash_index_path}
-    
+
     if can?(:manage, :settings) && !master_on_premises?
       items << {title: 'Settings'}
       items << {id: :email, title: 'Support Emails', path: edit_admin_site_emails_path}
@@ -276,15 +276,15 @@ module VerticalNavHelper
     items << {id: :threads, title: 'Threads', path: admin_forum_path}
     # FIXME: active_sidebar returns undefined, it should return :categories. Sidebar is not highlighted.
     items << {id: :categories, title: 'Categories', path: forum_categories_path}
-    
+
     if logged_in?
       items << {id: :my_threads, title: 'My Threads', path: my_admin_forum_topics_path}
     end
-    
+
     if user_has_subscriptions?
       items << {id: :my_subscriptions, title: 'My subscriptions', path: forum_subscriptions_path}
     end
-    
+
     if can?(:manage, :settings)
       items << {title: ' '} # Blank space
       items << {id: :settings, title: 'Preferences', path: edit_admin_site_forum_path}
@@ -300,23 +300,23 @@ module VerticalNavHelper
     if can? :manage, :plans
       sections << {id: :overview, title: 'Overview', path: admin_service_path(@service)}
     end
-    
+
     if can? :manage, :monitoring
       sections << {id: :monitoring, title: 'Analytics', items: service_analytics}
     end
-    
+
     if can? :manage, :applications
       sections << {id: :applications, title: 'Applications', items: service_applications}
     end
 
-    if can? :manage, :service_plans && current_account.settings.service_plans_ui_visible?
+    if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
       sections << {id: :subscriptions, title: 'Subscription', items: service_subscriptions}
     end
 
-    if can? :manage, :end_users && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
+    if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
       sections << {id: :end_users, title: 'End-users', items: service_end_users}
     end
-    
+
     if can? :manage, :plans
       sections << {id: :ActiveDocs, title: 'ActiveDocs', path: admin_service_api_docs_path(@service)}
       sections << {id: :integration, title: 'Integration', items: service_integration_items}
@@ -378,10 +378,10 @@ module VerticalNavHelper
     sections = []
 
     if can? :manage, :partners
-        sections << {id: :activedocs, title: 'ActiveDocs', path: admin_api_docs_services_path}
+      sections << {id: :activedocs, title: 'ActiveDocs', path: admin_api_docs_services_path}
     end
 
-    if can? :manage, :monitoring && current_user.multiple_accessible_services?
+    if can?(:manage, :monitoring) && current_user.multiple_accessible_services?
       sections << {id: :alerts, title: 'Alerts', path: admin_alerts_path }
     end
 
