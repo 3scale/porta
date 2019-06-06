@@ -22,5 +22,5 @@ Feature: CMS groups
       Then I should be on the groups page
        And I should see "le java enterprisers"
 
-      When I follow "Delete"
+      When I follow "Delete" and I confirm dialog box
       Then I should see "Group deleted"
