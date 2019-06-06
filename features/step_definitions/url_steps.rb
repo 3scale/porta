@@ -24,6 +24,7 @@ When /^current domain is the admin domain of (provider "[^"]*")$/ do |provider|
 end
 
 Then /^the current domain should(?: still)? be ([^\s]+)$/ do |domain|
+  page.driver.browser.switch_to.window(page.driver.browser.window_handles.last)
   uri = URI.parse(current_url)
   assert_equal domain, uri.host
 end
