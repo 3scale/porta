@@ -712,18 +712,6 @@ GEM
       railties (>= 3.1)
       slim (~> 3.0)
     slop (3.6.0)
-    spring (2.0.0)
-      activesupport (>= 4.2)
-    spring-commands-cucumber (1.0.1)
-      spring (>= 0.9.1)
-    spring-commands-m (1.0.1)
-      spring (>= 0.91)
-    spring-commands-rspec (1.0.4)
-      spring (>= 0.9.1)
-    spring-commands-rubocop (0.2.0)
-      spring (>= 1.0, < 3.0)
-    spring-commands-testunit (1.0.1)
-      spring (>= 0.9.1)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -961,12 +949,6 @@ DEPENDENCIES
   slim-rails (~> 3.0)
   sour!
   source2swagger!
-  spring (= 2.0.0)
-  spring-commands-cucumber
-  spring-commands-m
-  spring-commands-rspec
-  spring-commands-rubocop
-  spring-commands-testunit
   sprockets-rails
   state_machines (~> 0.5.0)
   state_machines-activerecord (~> 0.5.0)
