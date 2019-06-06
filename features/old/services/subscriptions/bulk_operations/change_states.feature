@@ -29,8 +29,7 @@ Feature: Bulk operations
 
     Then I should see "Accept, suspend or resume selected subscriptions"
 
-    When I select "Accept" from "Action"
-     And I will confirm dialog box
+    When I select "Accept" from "Action" and I confirm dialog box
      And I press "Change state" within fancybox
 
     Then I should see "Action completed successfully"
@@ -52,8 +51,7 @@ Feature: Bulk operations
 
     Then I should see "Accept, suspend or resume selected subscriptions"
 
-    When I select "Suspend" from "Action"
-     And I will confirm dialog box
+    When I select "Suspend" from "Action" and I confirm dialog box
      And I press "Change state" within fancybox
 
     Then I should see "Action completed successfully"
@@ -75,8 +73,7 @@ Feature: Bulk operations
 
     Then I should see "Accept, suspend or resume selected subscriptions"
 
-    When I select "Resume" from "Action"
-     And I will confirm dialog box
+    When I select "Resume" from "Action" and I confirm dialog box
      And I press "Change state" within fancybox
 
     Then I should see "Action completed successfully"

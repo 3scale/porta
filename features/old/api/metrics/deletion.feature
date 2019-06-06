@@ -13,7 +13,7 @@ Feature: Metric deletion
     When I log in as provider "foo.example.com"
     And I go to the service definition page
     And I follow "transfer"
-    And I press "Delete"
+    And I press "Delete" and I confirm dialog box
     Then I should not see metric "transfer"
     And provider "foo.example.com" should not have metric "transfer"
 

@@ -37,11 +37,6 @@ When(/^I press "([^"]*)" for an invitation from (account "[^"]*") for "([^"]*)"$
   step %(I follow "#{label}" within "##{dom_id(invitation)}")
 end
 
-When(/^I delete the invitation for "([^\"]*)"$/) do |address|
-  invitation = Invitation.find_by_email!(address)
-  step %(I follow "Delete" within "##{dom_id(invitation)}")
-end
-
 When(/^I resend the invitation to "([^\"]*)"$/) do |email|
   # these ivars are preparing for the expectation steps that follow
   invitation = Invitation.find_by_email email
