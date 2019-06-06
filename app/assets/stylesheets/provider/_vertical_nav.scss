@@ -1,7 +1,15 @@
 .pf-c-page__sidebar {
-  height: 100%; // TODO: PF should do this.
+  height: 100%; // FIXME: PF should do this.
 }
 
 .pf-c-nav__toggle {
-  margin-left: auto !important; // HACK: for some reason PF4 styles do not apply properly and margin gets overridden
+  margin-left: auto !important; // FIXME: for some reason PF4 styles do not apply properly and margin gets overridden
+}
+
+.vertical-nav-label {
+  // FIXME: for some reason PF4 styles do not apply properly and margin gets overridden
+  padding-top: var(--pf-c-nav__section-title--PaddingTop) !important;
+  padding-right: var(--pf-c-nav__section-title--PaddingRight) !important;
+  padding-left: var(--pf-c-nav__simple-list-link--nested--PaddingLeft) !important;
+  padding-bottom: var(--pf-c-nav__section-title--PaddingBottom) !important;
 }
