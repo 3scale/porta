@@ -122,7 +122,7 @@ en:
           update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
 
   admin_sections:
-    partners: Developer Accounts -- Applications
+    partners: Accounts -- Applications
     monitoring: Analytics
     portal: Developer Portal
     finance: Billing
