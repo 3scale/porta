@@ -1,3 +1,5 @@
+$osloGray:       #8b8d8f; // pf-black-500
+
 #login-page-container {
   .pf-c-background-image::before {
     filter: none;
@@ -5,5 +7,16 @@
 
   .pf-c-login {
     font-family: 'Open Sans';
+  }
+
+  a.authentication-link:hover {
+    text-decoration: none;
+  }
+
+  .providers-separator {
+    color: $osloGray;
+    border-bottom: 1px solid $osloGray;
+    margin: 2rem 0;
+    text-align: center;
   }
 }

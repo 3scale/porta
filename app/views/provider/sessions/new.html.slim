@@ -1,7 +1,8 @@
 = javascript_pack_tag 'LoginPage'
-
+- authentication_providers = (@authentication_providers || []).map { |ap| {authorize_url: ap.authorize_url, human_kind: ap.human_kind} }
 div#login-page-container data-login-props={redirectUrl: (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to])),
-  authenticationProviders: @authentication_providers.presence,
+  enforceSSO: false,
+  authenticationProviders: authentication_providers,
   show3scaleLoginForm: @presenter.show_username_password_related_content?,
   providerSessionsPath: provider_sessions_path,
   providerLoginPath: provider_login_path,
