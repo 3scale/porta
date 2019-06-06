@@ -6,18 +6,6 @@ Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
   end
 end
 
-Given /^I am logged in as heroku provider "([^\"]*)"$/ do |domain|
-  account = Account.where(domain: domain).first
-  user = account.users.admins.first
-
-  sso_token = SSOToken.new user_id: user.id
-  sso_token.protocol = 'http'
-  sso_token.account = account
-  sso_url = sso_token.sso_url!(account.admin_domain)
-
-  visit sso_url
-end
-
 Given /^I am logged in as provider "([^\"]*)" on its admin domain$/ do |username|
   step %{current domain is the admin domain of provider "#{username}"}
   step %{I am logged in as provider "#{username}"}
