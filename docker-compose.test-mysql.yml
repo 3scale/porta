@@ -19,7 +19,6 @@ services:
       - SYS_PTRACE
     environment:
       DB_HOST: ${PROJECT:-system}-database
-      DISABLE_SPRING: "true"
     volumes_from:
       - cache
     depends_on:
