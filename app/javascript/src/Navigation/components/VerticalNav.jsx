@@ -32,9 +32,9 @@ const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
             ? (
               <NavExpandable title={title} isActive={activeSection === id} isExpanded={activeSection === id}>
                 {items.map(({id, title, path}) => (
-                  <NavGroup key={title} title="">
-                    <NavItem to={path} isActive={activeItem === id}>{title}</NavItem>
-                  </NavGroup>
+                  path
+                    ? <NavItem to={path} isActive={activeItem === id}>{title}</NavItem>
+                    : <NavGroup title={title} className='vertical-nav-label'></NavGroup>
                 ))}
               </NavExpandable>
             ) : (
