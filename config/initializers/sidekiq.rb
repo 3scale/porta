@@ -5,7 +5,7 @@ Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 Sidekiq.configure_server do |config|
   config.try(:reliable!)
 
-  config.redis = System::Application.config.sidekiq
+  config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
   config.error_handlers << System::ErrorReporting.method(:report_error)
 
   config.server_middleware do |chain|
@@ -34,7 +34,7 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = System::Application.config.sidekiq
+  config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
 
   config.client_middleware do |chain|
     chain.add ThreeScale::SidekiqLoggingMiddleware

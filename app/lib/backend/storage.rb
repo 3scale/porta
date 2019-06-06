@@ -8,13 +8,11 @@ module Backend
       config = ERB.new(config).result(binding)
       config = YAML.load(config)
       config = config.fetch(Rails.env).symbolize_keys
-      config.reverse_merge(
-        :logger => Rails.logger
-      )
+      config.reverse_merge(logger: Rails.logger)
     end
 
     def initialize
-      config = self.class.parse_config
+      config = ThreeScale::RedisConfig.new(self.class.parse_config).config
       super(config)
     end
 
