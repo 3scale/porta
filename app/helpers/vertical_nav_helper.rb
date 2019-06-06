@@ -165,11 +165,7 @@ module VerticalNavHelper
     end
     
     if can?(:manage, :settings)
-      #TODO: subtitle
-      # - if can? :manage, :partners
-      #   li.list-group-item
-      #     span.list-group-item-value.label Settings
-    
+      items << {title: 'Settings'}
       items << {id: :usage_rules, title: 'Usage Rules', path: edit_admin_site_usage_rules_path}
       items << {id: :fields_definition, title: 'Fields Definitions', path: admin_fields_definitions_path}
     end
@@ -204,10 +200,8 @@ module VerticalNavHelper
     end
   
     if can?(:manage, :settings)
-      # TODO: subtitle
-      # li.list-group-item
-      #   span.list-group-item-value.label Settings
-    
+      items << {title: 'Settings'}
+
       # this setting needs more than just editing auth, as such it's not a setting
       if can?(:manage, :finance)
         items << {id: :charging, title: 'Charging & Gateway', path: admin_finance_settings_path}
@@ -241,35 +235,19 @@ module VerticalNavHelper
         items << {id: :activedocs, title: 'ActiveDocs', path: admin_api_docs_services_path}
       end
     end
-    
-    # TODO subtitle
-    # li.list-group-item
-    #   span.list-group-item-value.label
 
-    # TODO subtitle
-    # li.list-group-item
-    #   = link_to access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!,
-    #             access_code: current_account.site_access_code).html_safe,
-    #             target: "_blank" do
-    #     span.fa.fa-external-link style="margin: 0 .3rem;"
-    #     span.list-group-item-value
-    #       | Visit Portal
+    items << {title: ' '} # Blank space
+    items << {title: 'Visit Portal', path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!)}
     
     if can?(:manage, :portal)
-      # TODO subtitle
-      # li.list-group-item
-      # span.list-group-item-value.label Legal Terms
-    
+      items << {title: 'Legal Terms'}
       items << {id: :signup, title: 'Signup', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)}
       items << {id: :service_subscriptions, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)}
       items << {id: :new_application, title: 'New Application', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
     end
     
     if can?(:manage, :settings)
-      # Subtitle
-      # li.list-group-item
-      # span.list-group-item-value.label Settings
-    
+      items << {title: 'Settings'}
       items << {id: :domain, title: 'Domains & Access', path: admin_site_dns_path}
       items << {id: :spam_protection, title: 'Spam Protection', path: edit_admin_site_spam_protection_path}
     
@@ -283,10 +261,7 @@ module VerticalNavHelper
       end
     end
     
-    # TODO subtitle
-    # li.list-group-item
-    #   span.list-group-item-value.label Docs
-    
+    items << {title: 'Docs'}
     items << {id: :liquid_reference, title: 'Liquid Reference', path: provider_admin_liquid_docs_path}
 
     items
@@ -294,16 +269,12 @@ module VerticalNavHelper
 
   def audience_messages_items
     items = []
-
     items << {id: :inbox, title: 'Inbox', path: provider_admin_messages_root_path}
     items << {id: :sent_messages, title: 'Sent messages', path: provider_admin_messages_outbox_index_path}
     items << {id: :trash, title: 'Trash', path: provider_admin_messages_trash_index_path}
     
     if can?(:manage, :settings) && !master_on_premises?
-      # TODO subtitle
-      # li.list-group-item
-      #   span.list-group-item-value.label Settings
-    
+      items << {title: 'Settings'}
       items << {id: :support_emails, title: 'Support Emails', path: edit_admin_site_emails_path}
       items << {id: :email_templates, title: 'Email Templates', path: provider_admin_cms_email_templates_path}
     end
@@ -313,7 +284,6 @@ module VerticalNavHelper
 
   def audience_forum_items
     items = []
-
     items << {id: :threads, title: 'Threads', path: admin_forum_path}
     items << {id: :categories, title: 'Categories', path: forum_categories_path}
     
@@ -326,10 +296,7 @@ module VerticalNavHelper
     end
     
     if can?(:manage, :settings)
-      # TODO subtitle
-      # li.list-group-item
-      #   span.list-group-item-value.label
-    
+      items << {title: ' '} # Blank space
       items << {id: :preferences, title: 'Preferences', path: edit_admin_site_forum_path}
     end
 
