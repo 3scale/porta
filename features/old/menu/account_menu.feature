@@ -16,7 +16,7 @@ Feature: Menu of the Account screen
     | Overview                  |
     | Export                    |
     | 3scale Invoices           |
-    | Payment Details       |
+    | Payment Details           |
     | Users                     |
 
   Scenario: Account menu structure with multiple users enabled

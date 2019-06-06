@@ -93,6 +93,7 @@ Feature: Account management
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
     And I follow "Account Settings"
+    And I follow "Personal"
     And I follow "Personal Details"
     When I fill in "Email" with ""
      And I fill in "Current password" with "supersecret"
