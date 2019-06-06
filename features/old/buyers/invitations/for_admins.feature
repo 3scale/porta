@@ -51,7 +51,7 @@ Feature: Invitations on partner accounts for admins
   Scenario: Destroying invitations
     Given an invitation sent to "alice@lolcats.com" to join account "lol cats"
     When I navigate to the page of the invitations of the partner "lol cats"
-      And I delete the invitation for "alice@lolcats.com"
+    And I press "Delete" for an invitation from account "lol cats" for "alice@lolcats.com" and I confirm dialog box
     Then I should not see invitation for "alice@lolcats.com"
 
 
