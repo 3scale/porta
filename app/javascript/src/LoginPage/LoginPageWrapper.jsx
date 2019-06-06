@@ -12,7 +12,8 @@ import {
 import {
   ForgotCredentials,
   Login3scaleForm,
-  RequestPasswordForm
+  RequestPasswordForm,
+  AuthenticationProviders
 } from 'LoginPage'
 
 import 'LoginPage/assets/styles/loginPage.scss'
@@ -21,7 +22,8 @@ import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
 type Props = {
-  authenticationProviders: string,
+  enforceSSO: boolean,
+  authenticationProviders: Array<mixed>,
   providerAdminDashboardPath: string,
   providerLoginPath: string,
   providerPasswordPath: string,
@@ -64,6 +66,30 @@ class SimpleLoginPage extends React.Component<Props, State> {
     return showForgotCredentials && <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
   }
 
+  loginForms () {
+    const hasAuthenticationProviders = this.props.authenticationProviders
+    const enforceSSO = this.props.enforceSSO
+    return (
+      <React.Fragment>
+        { hasAuthenticationProviders &&
+          <AuthenticationProviders
+            authenticationProviders={this.props.authenticationProviders}
+          />
+        }
+        { (hasAuthenticationProviders && !enforceSSO) &&
+          <div className='providers-separator'>
+            {'or sign in with your 3scale credentials:'}
+          </div>
+        }
+        { !enforceSSO &&
+            <Login3scaleForm
+              providerSessionsPath={this.props.providerSessionsPath}
+            />
+        }
+      </React.Fragment>
+    )
+  }
+
   render (): Node {
     return (
       <LoginPage
@@ -76,9 +102,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
         forgotCredentials={this.showForgotCredentials()}
       >
         {this.state.formMode === 'login' &&
-          <Login3scaleForm
-            providerSessionsPath={this.props.providerSessionsPath}
-          />
+          this.loginForms()
         }
         {this.state.formMode === 'password-reset' &&
           <RequestPasswordForm
