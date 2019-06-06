@@ -12,12 +12,6 @@ When(/^the file is deleted$/) do
   }
 end
 
-Then(/^the file should be the same as uploaded$/) do
-  steps %q{
-    And the page should be the file "test/fixtures/hypnotoad.jpg"
-  }
-end
-
 When(/^I access the file on developer portal$/) do
   click_on('Visit Portal')
   file = URI(current_url).merge('/image')
@@ -36,25 +30,12 @@ When(/^I update the file with different image$/) do
    }
 end
 
-Then(/^the file should be updated$/) do
-  visit image_source
-  steps %q{
-    And the page should be the file "test/fixtures/tinnytim.jpg"
-  }
-end
-
 And(/^the original file should be gone$/) do
   assert @previous_file
 
   assert_raise ActionController::RoutingError do
     visit @previous_file
   end
-end
-
-And(/^the page should be the file "([^"]*)"$/) do |file_name|
-  file = File.read(File.expand_path(file_name), binmode: true)
-
-  assert_equal file, page.source, "#{file_name} does not equal the page source"
 end
 
 Then(/^there is (not )?an image preview of that file$/) do |negative|

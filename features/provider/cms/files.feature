@@ -22,14 +22,3 @@ Feature: CMS files
     Given there is a downloadable cms file
     When I access the file on developer portal
     Then the file should be downloaded
-
-  Scenario: Files accessible from the Developer Portal
-    Given there is a cms file
-    When I access the file on developer portal
-    Then the file should be the same as uploaded
-
-  Scenario: Updating existing file
-    Given there is a cms file
-    When I update the file with different image
-    Then the file should be updated
-      And the original file should be gone
