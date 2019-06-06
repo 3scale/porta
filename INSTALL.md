@@ -98,14 +98,6 @@ Optionally, depending on your needs you can launch memcached and postgresql serv
 brew services start memcached postgresql
 ```
 
-#### Spring (Optional)
-[Spring](https://github.com/rails/spring) is a Rails application preloader. It speeds up development by keeping your application running in the background so you don't need to boot it every time you run a test, rake task or migration.
-
-This is not required but still recommended. Install it via gem:
-```shell
-gem install spring -v 2.0.0
-```
-
 #### Sphinx Search
 
 [Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7**:

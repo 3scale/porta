@@ -176,13 +176,6 @@ gem 'draper', '~> 2.0'
 # TODO: gem 'draper', '~> 3.0'
 
 group :development do
-  gem 'spring', '2.0.0', require: false
-  gem 'spring-commands-rubocop'
-  gem 'spring-commands-cucumber'
-  gem 'spring-commands-rspec'
-  gem 'spring-commands-m' # To be removed in Rails 5
-  gem 'spring-commands-testunit' # this is what RubyMine does
-
   gem 'colorize'
   gem 'bullet', '~> 4.2'
 

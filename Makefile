@@ -166,11 +166,11 @@ bundle: gemfiles/prod/Gemfile Gemfile
 
 oracle-db-setup: ## Creates databases in Oracle
 oracle-db-setup: oracle-database
-	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DISABLE_SPRING=true DB=oracle bundle exec rake db:drop db:create db:setup
+	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DB=oracle bundle exec rake db:drop db:create db:setup
 
 schema: ## Runs db schema migrations. Run this when you have changes to your database schema that you have added as new migrations.
 	bundle exec rake db:migrate db:schema:dump
-	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DISABLE_SPRING=true DB=oracle bundle exec rake db:migrate db:schema:dump
+	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DB=oracle bundle exec rake db:migrate db:schema:dump
 
 oracle-database: ## Starts Oracle database container
 oracle-database: ORACLE_DATA_DIR ?= $(HOME)
