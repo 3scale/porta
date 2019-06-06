@@ -6,7 +6,7 @@ const FEATURE_NAMES: { [feature: Feature]: string } = {
   portal: 'Developer Portal',
   finance: 'Billing',
   settings: 'Settings',
-  partners: 'Developer Accounts -- Applications',
+  partners: 'Accounts -- Applications',
   monitoring: 'Analytics',
   plans: 'Integration & Application Plans',
   policy_registry: 'Policy Registry'
