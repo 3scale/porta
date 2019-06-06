@@ -13,6 +13,7 @@ Feature: Personal Details
     And I log in as provider "foo.example.com"
 
    When I follow "Account Settings"
+    And I follow "Personal"
     And I follow "Personal Details"
     And I fill in "Email" with "john.doe@foo.example.com"
     And I fill in "Current password" with "supersecret"
@@ -24,6 +25,7 @@ Feature: Personal Details
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
     When I follow "Account"
+      And I follow "Users"
       And I follow "Listing"
       And I follow "foo.example.com" within "#users"
     Then I should be on the provider personal details page

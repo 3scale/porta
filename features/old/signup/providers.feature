@@ -1,4 +1,4 @@
-@javascript @audit
+@audit @javascript
 Feature: Signup
   In order to use Red Hat 3scale API management infrastructure
   As a wanna-be API provider
@@ -54,8 +54,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I should see "Unlimited"
 
   # --- impersonation admin user cannot log in ---
-  When I follow "Session"
-  Then I follow "Sign Out"
+  When I log out
    And I fill in the following:
     | Email or Username | impersonationadmin |
     | Password          | wrong_pwd   |
