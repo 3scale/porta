@@ -72,7 +72,7 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "^2.12.4",
-    "@patternfly/react-core": "^3.34.2",
+    "@patternfly/react-core": "^3.36.0",
     "@patternfly/react-icons": "^3.9.3",
     "@rails/webpacker": "^3.5.5",
     "ajv": "^6.9.2",
