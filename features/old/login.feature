@@ -11,13 +11,6 @@ Feature: Login feature
      When I log in as "bob" on foo.example.com
      Then I should be on the homepage
 
-  Scenario: Provider lands as heroku account
-    Given a partner "heroku" with application plan "developer_50k"
-    And a provider "heroku.example.com" signed up to plan "developer_50k" with partner "heroku"
-    And current domain is the admin domain of provider "heroku.example.com"
-    When I go to the provider login page
-    Then I should see "Sign in with Heroku"
-
   @javascript
   Scenario: Provider lands in dashboard when login in master domain
     When I log in as "foo.example.com" on the admin domain of provider "foo.example.com"
