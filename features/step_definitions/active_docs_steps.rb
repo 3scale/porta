@@ -10,7 +10,10 @@ When /^I try to (create|update) the active docs( of the service)? with (in)?vali
   step "I go to the #{action_page} active docs page#{scope}"
   fill_in('Name', with: 'ActiveDocsName')
   api_spec = invalid ? 'invalid' : FactoryBot.build(:api_docs_service).body
-  fill_in('API JSON Spec', with: api_spec)
+  # binding.pry
+  # fill_in('API JSON Spec', with: api_spec)
+  # find(:xpath, '//*[@id="api_docs_service_body"]', visible: true).set(api_spec)
+  find(:xpath, '//*[@id="api_docs_service_body"]').set(api_spec)
   click_on "#{action.capitalize!} Service"
 end
 
