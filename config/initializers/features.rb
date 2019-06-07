@@ -1,4 +1,6 @@
 # frozen_string_literal: true
 
-Features::AccountDeletionConfig.configure(Rails.configuration.three_scale.features.account_deletion)
-Features::SegmentDeletionConfig.configure(Rails.configuration.three_scale.features.segment_deletion)
+Rails.configuration.three_scale.features.each_key do |feature_name|
+  feature = "Features::#{feature_name.to_s.camelize}Config".constantize
+  feature.configure Rails.configuration.three_scale.features.public_send(feature_name)
+end
