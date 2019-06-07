@@ -310,7 +310,7 @@ module VerticalNavHelper
     end
 
     if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
-      sections << {id: :subscriptions, title: 'Subscription', items: service_subscriptions}
+      sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}
     end
 
     if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
