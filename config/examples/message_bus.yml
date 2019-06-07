@@ -14,6 +14,7 @@ preview:
 
 development:
   <<: *default
+  keepalive_interval: 0
 
 test:
   enabled: false
