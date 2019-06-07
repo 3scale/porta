@@ -1,6 +1,7 @@
-$osloGray:       #8b8d8f; // pf-black-500
+$pf-black-500:  #8b8d8f; // $osloGray
 
 #login-page-container {
+
   .pf-c-background-image::before {
     filter: none;
   }
@@ -14,8 +15,8 @@ $osloGray:       #8b8d8f; // pf-black-500
   }
 
   .providers-separator {
-    color: $osloGray;
-    border-bottom: 1px solid $osloGray;
+    color: $pf-black-500;
+    border-bottom: 1px solid $pf-black-500;
     margin: 2rem 0;
     text-align: center;
   }
