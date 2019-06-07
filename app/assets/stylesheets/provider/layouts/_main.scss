@@ -12,6 +12,7 @@
 }
 
 #border {
+  background-color: var(--pf-c-page__sidebar--BackgroundColor); // HACK: this won't be necessary once PF4 is implemented in Main content
   // min-height: 80vh;
   // padding: line-height-times(1) 0 0 0;
   position: relative;
