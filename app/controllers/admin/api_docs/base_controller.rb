@@ -90,7 +90,7 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   def api_docs_params(*extra_params)
     permit_params = %i[name body description published skip_swagger_validations service_id] + extra_params
-    params.require(:api_docs_service).permit(*permit_params)
+    pp params.require(:api_docs_service).permit(*permit_params)
   end
 
   def find_api_docs

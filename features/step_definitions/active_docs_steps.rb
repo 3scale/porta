@@ -12,8 +12,10 @@ When /^I try to (create|update) the active docs( of the service)? with (in)?vali
   api_spec = invalid ? 'invalid' : FactoryBot.build(:api_docs_service).body
   # binding.pry
   # fill_in('API JSON Spec', with: api_spec)
+  # find(:xpath, '//*[@id="api_docs_service_body"]/ancestor::fieldset').set(api_spec)
   # find(:xpath, '//*[@id="api_docs_service_body"]', visible: true).set(api_spec)
-  find(:xpath, '//*[@id="api_docs_service_body"]').set(api_spec)
+  # find(:xpath, '//*[@id="api_docs_service_body"]').set(api_spec)
+  find(:xpath, '//textarea').set(api_spec)
   click_on "#{action.capitalize!} Service"
 end
 
@@ -22,6 +24,7 @@ When /^I select a service from the service selector$/ do
 end
 
 Then 'I should see the active docs errors in the page' do
+  # assert has_xpath?('//*[text()[contains(.,"JSON Spec is invalid")]]')
   step 'I should see "JSON Spec is invalid"'
 end
 
