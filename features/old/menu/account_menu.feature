@@ -8,6 +8,7 @@ Feature: Menu of the Account screen
       And current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
 
+  @javascript
   Scenario: Account menu structure
     When I go to the provider account page
     Then I should see "foo.example.com"
@@ -15,9 +16,10 @@ Feature: Menu of the Account screen
     | Overview                  |
     | Export                    |
     | 3scale Invoices           |
-    | Payment Details       |
+    | Payment Details           |
     | Users                     |
 
+  @javascript
   Scenario: Account menu structure with multiple users enabled
     Given the provider has "branding" switch allowed
     Given the provider has "multiple_users" switch allowed
@@ -57,6 +59,7 @@ Feature: Menu of the Account screen
     When I go to the provider account page
     Then I should not see "Invitations"
 
+  @javascript
   Scenario: Personal menu structure
     When I go to the provider personal page
     Then I should see "foo.example.com"

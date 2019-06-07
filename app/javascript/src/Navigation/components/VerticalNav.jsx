@@ -26,23 +26,25 @@ type Props = {
 const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
   <div className="pf-c-page__sidebar">
     <div className="pf-c-page__sidebar-body">
-      <Nav>
+      <Nav id='mainmenu'>
         <NavList>
-          {sections.map(({ id, title, path, items }) => items
-            ? (
-              <NavExpandable title={title} isActive={activeSection === id} isExpanded={activeSection === id}>
-                {items.map(({id, title, path}) => (
-                  path
-                    ? <NavItem to={path} isActive={activeItem === id}>{title}</NavItem>
-                    : <NavGroup title={title} className='vertical-nav-label'></NavGroup>
-                ))}
-              </NavExpandable>
-            ) : (
-              <NavItem to={path} isActive={activeSection === id}>
-                {title}
-              </NavItem>
-            )
-          )}
+          {sections.map(({ id, title, path, items }) => {
+            const sId = id
+            return items
+              ? (
+                <NavExpandable title={title} isActive={activeSection === sId} isExpanded={activeSection === sId}>
+                  {items.map(({id, title, path}) => (
+                    path
+                      ? <NavItem to={path} isActive={activeSection === sId && activeItem === id}>{title}</NavItem>
+                      : <NavGroup title={title} className='vertical-nav-label'></NavGroup>
+                  ))}
+                </NavExpandable>
+              ) : (
+                <NavItem to={path} isActive={activeSection === sId}>
+                  {title}
+                </NavItem>
+              )
+          })}
         </NavList>
       </Nav>
     </div>
