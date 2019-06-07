@@ -367,6 +367,22 @@ class Service < ApplicationRecord
       xml.backend_version proxy&.authentication_method
       xml.description description
 
+      xml.intentions_required intentions_required
+      xml.buyers_manage_apps buyers_manage_apps
+      xml.buyers_manage_keys buyers_manage_keys
+      xml.referrer_filters_required referrer_filters_required
+      xml.custom_keys_enabled custom_keys_enabled
+      xml.buyer_key_regenerate_enabled buyer_key_regenerate_enabled
+      xml.mandatory_app_key mandatory_app_key
+      xml.buyer_can_select_plan buyer_can_select_plan
+      xml.buyer_plan_change_permission buyer_plan_change_permission
+
+      if notification_settings
+        xml.notification_settings do |xml|
+          notification_settings.each { |notification, values| xml.tag! notification, values }
+        end
+      end
+
       xml.deployment_option deployment_option
       xml.support_email support_email
 
