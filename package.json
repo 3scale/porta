@@ -42,7 +42,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "file-loader": "^1.1.6",
     "flow-bin": "^0.93.0",
-    "flow-typed": "^2.5.2",
+    "flow-typed": "=2.5.1",
     "hosted-git-info": "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.1.5.tgz",
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.3.0",
@@ -71,9 +71,9 @@
     "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
-    "@patternfly/patternfly": "^2.6.6",
-    "@patternfly/react-core": "^3.21.0",
-    "@patternfly/react-icons": "^3.8.1",
+    "@patternfly/patternfly": "^2.12.4",
+    "@patternfly/react-core": "^3.34.2",
+    "@patternfly/react-icons": "^3.9.3",
     "@rails/webpacker": "^3.5.5",
     "ajv": "^6.9.2",
     "bootstrap-sass": "3",
