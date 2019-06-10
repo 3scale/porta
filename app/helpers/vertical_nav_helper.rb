@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module VerticalNavHelper
   def vertical_nav_sections
     case active_menu
@@ -164,9 +166,7 @@ module VerticalNavHelper
       items << {id: :listing, title: 'Listing', path: admin_buyers_applications_path}
     end
 
-    if can?(:manage, :monitoring)
-      items << {id: :alerts, title: 'Alerts', path: admin_alerts_path}
-    end
+    items << {id: :alerts, title: 'Alerts', path: admin_alerts_path} if can?(:manage, :monitoring)
 
     items
   end
@@ -190,7 +190,7 @@ module VerticalNavHelper
       if can?(:manage, :finance)
         items << {id: :charging_and_gateway, title: 'Charging & Gateway', path: admin_finance_settings_path}
       end
-    
+
       items << {id: :credit_card_policies, title: 'Credit Card Policies', path: edit_admin_site_settings_path}
     end
 
@@ -277,9 +277,7 @@ module VerticalNavHelper
     # FIXME: active_sidebar returns undefined, it should return :categories. Sidebar is not highlighted.
     items << {id: :categories, title: 'Categories', path: forum_categories_path}
 
-    if logged_in?
-      items << {id: :my_threads, title: 'My Threads', path: my_admin_forum_topics_path}
-    end
+    items << {id: :my_threads, title: 'My Threads', path: my_admin_forum_topics_path} if logged_in?
 
     if user_has_subscriptions?
       items << {id: :my_subscriptions, title: 'My subscriptions', path: forum_subscriptions_path}
