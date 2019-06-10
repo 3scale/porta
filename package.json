@@ -71,7 +71,6 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "^2.8.3",
-    "@patternfly/react-core": "^3.16.10",
     "@rails/webpacker": "^3.5.5",
     "ajv": "^6.9.2",
     "bootstrap-sass": "3",
