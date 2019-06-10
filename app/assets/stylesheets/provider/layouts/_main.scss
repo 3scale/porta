@@ -7,10 +7,6 @@
   position: relative;
 }
 
-#wrapper.pf-c-page {
-  margin-top: line-height-times(63 / 20); // This is needed since our Header is not integrated in the same "page" component.
-}
-
 #border {
   background-color: var(--pf-c-page__sidebar--BackgroundColor); // HACK: this won't be necessary once PF4 is implemented in Main content
   // min-height: 80vh;
@@ -41,8 +37,6 @@
   // padding-right: var(--pf-c-page__main-section--PaddingRight);
   // padding-bottom: var(--pf-c-page__main-section--PaddingBottom);
   // padding-left: var(--pf-c-page__main-section--PaddingLeft);
-
-  min-height: calc(100vh - #{line-height-times(10)});
 
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
