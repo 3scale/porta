@@ -1,4 +1,4 @@
-import '@patternfly/react-core/dist/styles/base.css'
+import '@patternfly/patternfly/patternfly.css'
 
 import { VerticalNavWrapper as VerticalNav } from 'Navigation/components/VerticalNav'
 import { safeFromJsonString } from 'utilities/json-utils'
