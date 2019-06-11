@@ -3,6 +3,9 @@
 ENV["RAILS_ENV"] ||= ENV["RACK_ENV"] || "development"
 ENV["NODE_ENV"]  ||= "development"
 
+# ENV needed for webpacker to use npm bin instead of Yarn
+ENV['WEBPACKER_NODE_MODULES_BIN_PATH'] = `npm bin`.chomp
+
 require "pathname"
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile",
   Pathname.new(__FILE__).realpath)
