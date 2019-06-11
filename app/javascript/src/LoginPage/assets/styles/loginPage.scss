@@ -1,4 +1,6 @@
 $pf-black-500:  #8b8d8f; // $osloGray
+$--pf-global--danger-color--100: #c9190b;
+$--pf-global--info-color--200:	#004368;
 
 #login-page-container {
 
@@ -19,5 +21,19 @@ $pf-black-500:  #8b8d8f; // $osloGray
     border-bottom: 1px solid $pf-black-500;
     margin: 2rem 0;
     text-align: center;
+  }
+
+  .pf-c-form__helper-text {
+    margin: 1rem 0;
+    svg {
+      margin-right: 0.3rem;
+    }
+  }
+  .pf-m-error {
+    color: $--pf-global--danger-color--100;
+  }
+
+  .pf-m-notice {
+    color: $--pf-global--info-color--200;
   }
 }

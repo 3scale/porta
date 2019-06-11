@@ -13,7 +13,8 @@ import {
   ForgotCredentials,
   Login3scaleForm,
   RequestPasswordForm,
-  AuthenticationProviders
+  AuthenticationProviders,
+  FlashMessages
 } from 'LoginPage'
 
 import 'LoginPage/assets/styles/loginPage.scss'
@@ -21,9 +22,15 @@ import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
+type FlashMessage = {
+  type: string,
+  message: string
+}
+
 type Props = {
   enforceSSO: boolean,
   authenticationProviders: Array<mixed>,
+  flashMessages: Array<FlashMessage>,
   providerAdminDashboardPath: string,
   providerLoginPath: string,
   providerPasswordPath: string,
@@ -101,6 +108,10 @@ class SimpleLoginPage extends React.Component<Props, State> {
         loginTitle={this.state.loginTitle}
         forgotCredentials={this.showForgotCredentials()}
       >
+        {
+          this.props.flashMessages &&
+          <FlashMessages flashMessages={this.props.flashMessages}/>
+        }
         {this.state.formMode === 'login' &&
           this.loginForms()
         }
