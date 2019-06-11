@@ -78,20 +78,17 @@ class SimpleLoginPage extends React.Component<Props, State> {
     const enforceSSO = this.props.enforceSSO
     return (
       <React.Fragment>
-        { hasAuthenticationProviders &&
-          <AuthenticationProviders
-            authenticationProviders={this.props.authenticationProviders}
-          />
-        }
-        { (hasAuthenticationProviders && !enforceSSO) &&
-          <div className='providers-separator'>
-            {'or sign in with your 3scale credentials:'}
-          </div>
-        }
         { !enforceSSO &&
             <Login3scaleForm
               providerSessionsPath={this.props.providerSessionsPath}
             />
+        }
+        { hasAuthenticationProviders &&
+          <div className='providers-separator'>
+            <AuthenticationProviders
+              authenticationProviders={this.props.authenticationProviders}
+            />
+          </div>
         }
       </React.Fragment>
     )
