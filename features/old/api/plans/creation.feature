@@ -57,6 +57,7 @@ Feature: Plan creation
     And a default published service plan "Pocoyo service plan" of service "Pocoyo" of provider "foo.example.com"
 
     When I am on the edit page for service "Pocoyo" of provider "foo.example.com"
+    And I follow "Subscriptions"
     And I follow "Service Plans"
     And I follow "Pocoyo service plan"
 

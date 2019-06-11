@@ -11,8 +11,9 @@ Feature: Plans management
       And I am logged in as provider "foo.example.com"
 
     When I follow "Dashboard"
-      And I follow "Overview"
-      And I follow "0 application plans"
+     And I follow "Overview"
+     And I follow "0 application plans"
     Then I should be on the application plans admin page
-    When I follow "Service Plans"
+    When I follow "Subscriptions"
+     And I follow "Service Plans"
     Then I should be on the service plans admin page
