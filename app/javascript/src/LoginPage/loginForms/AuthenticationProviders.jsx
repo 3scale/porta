@@ -1,8 +1,6 @@
 // @flow
 
 import React from 'react'
-
-import { Card, CardBody } from '@patternfly/react-core'
 import { KeyIcon, LessThanIcon, GreaterThanIcon } from '@patternfly/react-icons'
 
 type ProvidersProps = {
@@ -16,14 +14,12 @@ type Props = {
 
 const Provider = ({authorizeURL, humanKind}: {authorizeURL: string, humanKind: string}) => {
   return (
-    <Card>
-      <CardBody>
-        <a className='authentication-link' href={authorizeURL}>
-          <KeyIcon/>{' Authenticate through '}
-          <LessThanIcon/><GreaterThanIcon/>{humanKind}
-        </a>
-      </CardBody>
-    </Card>
+    <p className='login-provider'>
+      <a className='login-provider-link' href={authorizeURL}>
+        <KeyIcon/>{' Authenticate through '}
+        <LessThanIcon/><GreaterThanIcon/>{humanKind}
+      </a>
+    </p>
   )
 }
 
@@ -35,7 +31,6 @@ const AuthenticationProviders = (props: Props) => {
 
   return (
     <React.Fragment>
-      <h3>Please use your single sign-on LDAP credentials</h3>
       <div className='providers-list'>
         {providersList}
       </div>
