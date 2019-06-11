@@ -1,4 +1,4 @@
-@backend @fakeweb @ignore-backend @javascript
+@backend @ignore-backend @javascript
 Feature: Providers's application referrer filters
   In order specify where applications of my buyers can be used from
   As a provider
