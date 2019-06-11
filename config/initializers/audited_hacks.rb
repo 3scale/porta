@@ -19,8 +19,36 @@ module AuditHacks
     alias_attribute :association_id, :associated_id
     alias_attribute :association_type, :associated_type
 
+    after_commit :log_to_stdout, on: :create, if: :logging_to_stdout?
+
     def self.delete_old
       where('created_at < ?', TTL.ago).delete_all
+    end
+
+    def self.logging_to_stdout?
+      Features::LoggingConfig.config.audits_to_stdout
+    end
+
+    delegate :logging_to_stdout?, to: :class
+
+    def log_to_stdout
+      logger.tagged('audit', kind, action) { logger.info log_trail }
+    end
+
+    protected
+
+    def log_trail
+      to_h_safe.to_json
+    end
+
+    alias_method :to_s, :log_trail
+
+    def to_h_safe
+      hash = attributes.slice(*%w[auditable_type auditable_id action version provider_id user_id user_type request_uuid remote_address created_at])
+      hash['user_role'] = user&.role
+      hash['audit_id'] = id
+      hash['changed_attributes'] = audited_changes.keys if action != 'create'
+      hash
     end
   end
 

@@ -14,6 +14,17 @@ module ServiceRepresenter
   property :support_email
   property :description
 
+  property :intentions_required
+  property :buyers_manage_apps
+  property :buyers_manage_keys
+  property :referrer_filters_required
+  property :custom_keys_enabled
+  property :buyer_key_regenerate_enabled
+  property :mandatory_app_key
+  property :buyer_can_select_plan
+  property :buyer_plan_change_permission
+  property :notification_settings
+
   property :created_at
   property :updated_at
 
@@ -43,5 +54,9 @@ module ServiceRepresenter
 
   def backend_version
     proxy&.authentication_method
+  end
+
+  def notification_settings
+    attributes['notification_settings']&.stringify_keys
   end
 end

@@ -36,6 +36,7 @@ class ProxyRepresenter < ThreeScale::Representer
   property :lock_version
 
   property :oidc_issuer_endpoint, if: ->(*) {  oidc?   }
+  property :oidc_issuer_type, if: ->(*) {  oidc?   }
 
   class JSON < ProxyRepresenter
     include Roar::JSON
