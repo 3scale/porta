@@ -38,6 +38,7 @@ Scenario: Create line item
 
 Scenario: Delete line item
    When I press "Delete"
+    And I wait a moment
    Then I should see line items
       | name       | cost |
       | Total cost |    0 |
