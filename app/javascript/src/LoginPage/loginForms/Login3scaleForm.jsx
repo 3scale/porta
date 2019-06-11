@@ -19,7 +19,9 @@ type Props = {
 
 type State = {
   username: string,
-  password: string
+  password: string,
+  isValidUsername: ?boolean,
+  isValidPassword: ?boolean
 }
 
 class Login3scaleForm extends React.Component<Props, State> {
@@ -27,31 +29,60 @@ class Login3scaleForm extends React.Component<Props, State> {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      isValidUsername: undefined,
+      isValidPassword: undefined
     }
     this.handleTextInputUsername = this.handleTextInputUsername.bind(this)
     this.handleTextInputPassword = this.handleTextInputPassword.bind(this)
+    this.validateForm = this.validateForm.bind(this)
+  }
+
+  setIsValidUsername = () => {
+    this.setState({isValidUsername: this.state.username !== ''})
   }
 
   handleTextInputUsername = (username: string) => {
-    this.setState({ username })
+    this.setState({ username }, this.setIsValidUsername)
   }
+
+  setIsValidPassword = () => {
+    this.setState({isValidPassword: this.state.password !== ''})
+  }
+
   handleTextInputPassword = (password: string) => {
-    this.setState({ password })
+    this.setState({ password }, this.setIsValidPassword)
+  }
+
+  validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
+    this.setIsValidUsername()
+    this.setIsValidPassword()
+    const isFormDisabled = this.state.username === '' ||
+      this.state.password === '' ||
+      this.state.isValidUsername === false ||
+      this.state.isValidPassword === false
+    if (isFormDisabled) {
+      event.preventDefault()
+    }
   }
 
   render (): Node {
-    const {username, password} = this.state
+    const {username, password, isValidUsername, isValidPassword} = this.state
     return (
       <Form
-        noValidate={false}
         action={this.props.providerSessionsPath}
         id='new_session'
         acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs/>
-        <FormGroup label='Email or Username' isRequired fieldId='session_username'>
+        <FormGroup
+          label='Email or Username'
+          isRequired
+          fieldId='session_username'
+          helperTextInvalid='Email or username is mandatory'
+          isValid={isValidUsername}
+        >
           <TextInput
             isRequired
             type='text'
@@ -61,9 +92,16 @@ class Login3scaleForm extends React.Component<Props, State> {
             value={username}
             onChange={this.handleTextInputUsername}
             autoFocus='autoFocus'
+            isValid={isValidUsername}
           />
         </FormGroup>
-        <FormGroup label='Password' isRequired fieldId='session_password'>
+        <FormGroup
+          label='Password'
+          isRequired
+          fieldId='session_password'
+          helperTextInvalid='Password is mandatory'
+          isValid={isValidPassword}
+        >
           <TextInput
             isRequired
             type='password'
@@ -73,12 +111,14 @@ class Login3scaleForm extends React.Component<Props, State> {
             value={password}
             onChange={this.handleTextInputPassword}
             aria-invalid='false'
+            isValid={isValidPassword}
           />
         </FormGroup>
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
+            onClick={this.validateForm}
           > Sign in</Button>
         </ActionGroup>
       </Form>
