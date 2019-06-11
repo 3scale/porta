@@ -6270,6 +6270,13 @@
               "required": false
             },
             {
+              "name": "oidc_issuer_type",
+              "description": "Type of your OpenID Provider.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false
+            },
+            {
               "name": "sandbox_endpoint",
               "description": "Sandbox endpoint.",
               "dataType": "string",
