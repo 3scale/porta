@@ -22,9 +22,12 @@ const props = {
 it('should render itself', () => {
   const wrapper = mount(<AuthenticationProviders {...props} />)
   expect(wrapper.find('.providers-list').exists()).toEqual(true)
-  expect(wrapper.find('.authentication-link').length).toEqual(2)
-  expect(wrapper.find('.authentication-link').first().props().href).toEqual('fake-provider-1')
-  expect(wrapper.find('.authentication-link').first().contains('Fake human kind 1')).toEqual(true)
-  expect(wrapper.find('.authentication-link').last().props().href).toEqual('fake-provider-2')
-  expect(wrapper.find('.authentication-link').last().contains('Fake human kind 2')).toEqual(true)
+  expect(wrapper.find('.login-provider').length).toEqual(2)
+  expect(wrapper.find('.login-provider-link').length).toEqual(2)
+
+  expect(wrapper.find('.login-provider-link').first().props().href).toEqual('fake-provider-1')
+  expect(wrapper.find('.login-provider-link').first().contains('Fake human kind 1')).toEqual(true)
+
+  expect(wrapper.find('.login-provider-link').last().props().href).toEqual('fake-provider-2')
+  expect(wrapper.find('.login-provider-link').last().contains('Fake human kind 2')).toEqual(true)
 })

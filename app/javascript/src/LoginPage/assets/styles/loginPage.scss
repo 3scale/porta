@@ -12,14 +12,17 @@ $--pf-global--info-color--200:	#004368;
     font-family: 'Open Sans';
   }
 
-  a.authentication-link:hover {
-    text-decoration: none;
+  .login-provider {
+    padding: 0.3rem 0;
+
+    .login-provider-link:hover {
+      text-decoration: none;
+    }
   }
 
+
   .providers-separator {
-    color: $pf-black-500;
-    border-bottom: 1px solid $pf-black-500;
-    margin: 2rem 0;
+    margin-top: 1rem;
     text-align: center;
   }
 
