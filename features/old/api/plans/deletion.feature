@@ -13,7 +13,7 @@ Feature: Plan deletion
     When I log in as provider "foo.example.com"
 
       And I go to the application plans admin page
-      And I follow "Delete"
+      And I follow "Delete" and I confirm dialog box
     Then I should see "The plan was deleted"
       And I should not see plan "PlanName"
 
@@ -27,5 +27,5 @@ Feature: Plan deletion
     When I log in as provider "foo.example.com"
 
       And I go to the application plans admin page
-      And I follow "Delete"
+      And I follow "Delete" and I confirm dialog box
     Then I should see "This Application plan cannot be deleted"
