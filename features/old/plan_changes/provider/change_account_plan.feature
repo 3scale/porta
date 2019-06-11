@@ -22,5 +22,5 @@ Feature: Account Plan Change
      And I go to the buyer account page for "bob"
     Then I should see "Change Plan"
     When I select "Advanced" from "account_contract_plan_id"
-      And I press "Change"
+      And I press "Change" and I confirm dialog box
     Then I should see "Plan changed to 'Advanced'"
