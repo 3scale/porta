@@ -13,6 +13,7 @@ Feature: End User Plan creation
 
   Scenario: Navigate to End User Plans
     When I am on the edit page for service "API" of provider "foo.example.com"
+     And I follow "End-users"
      And I follow "End-user Plans"
     Then I should be on the end user plans of service "API" page of provider "foo.example.com"
 
@@ -25,7 +26,7 @@ Feature: End User Plan creation
     When I am on the end user plans of service "API" page of provider "foo.example.com"
      And I follow "New"
      And I fill in "Name" with "First end user Plan"
-     And I press "Create EndUser plan"
+     And I press "Create EndUser plan" and I confirm dialog box
     Then I should see "First end user Plan"
      And I should be on the end user plans of service "API" page of provider "foo.example.com"
 
