@@ -23,10 +23,14 @@ When /^current domain is the admin domain of (provider "[^"]*")$/ do |provider|
   @provider = provider
 end
 
-Then /^the current domain should(?: still)? be ([^\s]+)$/ do |domain|
-  page.driver.browser.switch_to.window(page.driver.browser.window_handles.last)
+Then /^the current domain should be ([^\s]+)$/ do |domain|
   uri = URI.parse(current_url)
   assert_equal domain, uri.host
+end
+
+Then /^the current domain in a new window should be ([^\s]+)$/ do |domain|
+  page.driver.browser.switch_to.window(page.driver.browser.window_handles.last)
+  step "the current domain should be #{domain}"
 end
 
 Then /^the current domain should be the master domain$/ do
