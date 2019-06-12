@@ -49,7 +49,7 @@ Given /^(provider "[^"]*") manages payments with "([^"]*)"$/ do |provider, payme
 end
 
 Given /^the provider has unconfigured payment gateway$/ do
-  @provider.payment_gateway_type = 'adyen12'
+  @provider.payment_gateway_type = 'stripe'
   @provider.payment_gateway_options = { login: '3Scale'}
   @provider.save!
 end
