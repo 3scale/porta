@@ -83,6 +83,7 @@ When /^I submit the new referrer filter form with "([^"]*)"$/ do |value|
     fill_in 'referrer_filter', :with => value
     click_button 'Add'
   end
+  block_and_wait_for_requests_complete
 end
 
 When /^I press "([^"]*)" for referrer filter "([^"]*)"$/ do |label, filter|
