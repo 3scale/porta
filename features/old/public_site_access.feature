@@ -36,7 +36,7 @@ Feature: Public site access
      When I log in as provider "foo.example.com"
       And I follow "Developer Portal"
       And I follow "Visit Portal"
-     Then the current domain should be foo.example.com
+     Then the current domain in a new window should be foo.example.com
       And I should not see field "Access code"
 
   # Scenario: Master account has neither "view site" nor "admin" links
