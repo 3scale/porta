@@ -5,7 +5,7 @@ end
 
 When(/^the file is deleted$/) do
   find('a[href]', text: 'Download')[:href]
-  click_on 'Delete', match: :one
+  step 'I follow "Delete" and I confirm dialog box'
   steps %q{
     Then I should see "deleted"
     Then there is not an image preview of that file
