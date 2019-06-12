@@ -2,14 +2,12 @@
 
   &--master {
     border-top: line-height-times(1) solid $header-border-color;
-    height: line-height-times(39 / 10);
 
     &:before {
       content: 'Master';
       position: absolute;
-      top: line-height-times(-1);
+      top: 0;
       left: 50%;
-      font-family: $font-family-monospace;
     }
 
     & + #wrapper {
