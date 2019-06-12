@@ -55,7 +55,7 @@ Feature: Applications management
     Given buyer "bob" has application "MegaWidget"
     And I go to the provider side "MegaWidget" application page
     Then I should see that application "MegaWidget" is live
-    When I follow "Suspend"
+    When I follow "Suspend" and I confirm dialog box
     Then I should see that application "MegaWidget" is suspended
     And application "MegaWidget" should be suspended
 
