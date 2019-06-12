@@ -78,6 +78,7 @@ Given(/^a provider signs up and activates his account$/) do
     click_on 'Sign up'
   end
 
+  step 'I wait a moment'
   page.should have_content('Thank you for signing up.')
 
   step 'current domain is the admin domain of provider "provider"'
@@ -91,6 +92,7 @@ Given(/^a provider signs up and activates his account$/) do
     click_on 'Sign in'
   end
 
+  step 'I wait a moment'
   page.should have_content('Signed in successfully')
 
   @provider = Account.find_by_self_domain!(@domain)
