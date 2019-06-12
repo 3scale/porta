@@ -168,12 +168,15 @@ Then /^I should see the following table:$/ do |table|
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" column and "([^"]*)" row$/ do |text, column, row|
-  index = all('th').to_a.index { |node| node.text == column } + 1
+  row_element = find(:xpath, "//td/a[text()=\"#{row}\"]/ancestor::tr")
+  column_element = find(:xpath, "//th[text()='#{column}']")
 
-  row  = find(%(tr:has(td:contains("#{row}"), th:contains("#{row}"))))
-  cell = row.find(%(td:nth-child(#{index})))
+  row_index = row_element.path.match(/^.*(\d)\]$/)[1]&.to_i
+  column_index = column_element.path.match(/^.*(\d)\]$/)[1]&.to_i
 
-  assert cell.has_content?(text), "Expected #{text}, was #{cell.text}"
+  actual_text = find(:xpath, "//table/descendant::*/tr[#{row_index}]/td[#{column_index}]").text() if row_index && column_index
+
+  assert_equal text, actual_text, "Expected #{text}, was #{actual_text}"
 end
 
 Then /^I should see the following definition list:$/ do |table|
