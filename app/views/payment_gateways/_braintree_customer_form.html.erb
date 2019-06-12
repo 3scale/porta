@@ -11,12 +11,9 @@
 <% end %>
 
 <%= semantic_form_for :customer,
-  :url => @form_url,
-  html: { class: "form-horizontal" } do |form|
+                      url: developer_portal.hosted_success_admin_account_braintree_blue_path,
+                      html: { class: "form-horizontal", id: 'customer_form' } do |form|
 %>
-
-    <%= hidden_field_tag 'tr_data', ERB::Util.html_escape(@tr_data) %>
-    <%= hidden_field_tag 'customer[credit_card][billing_address][options][update_existing]', true %>
 
   <fieldset>
       <ol class="list-unstyled">
@@ -45,28 +42,21 @@
           <fieldset>
             <legend>Credit Card</legend>
             <ol class="list-unstyled">
-              <%= cc.input :number ,
-                input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
-                wrapper_html: {class: "form-group"},
-                label_html: {class: "col-md-4 control-label" },
-                required: false
-              %>
 
-              <%= cc.input :cvv ,
-                input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
-                wrapper_html: {class: "form-group"},
-                label: 'CVV',
-                label_html: {class: "col-md-4 control-label" },
-                required: false
-              %>
+              <li class="string optional form-group" id="customer_credit_card_number_input">
+                <label class="col-md-4 control-label" for="customer_credit_card_number">Number</label>
+                <div class="form-control col-md-6" style="width:50%;" id="customer_credit_card_number" data-name="customer[credit_card][number]"></div>
+              </li>
 
-              <%= cc.input :expiration_date ,
-                input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
-                wrapper_html: {class: "form-group"},
-                label: 'Expiration Date (MM/YY)',
-                label_html: {class: "col-md-4 control-label" },
-                required: false
-              %>
+              <li class="string optional form-group" id="customer_credit_card_cvv_input">
+                <label class="col-md-4 control-label" for="customer_credit_card_cvv">CVV</label>
+                <div class="form-control col-md-6" style="width:50%;" id="customer_credit_card_cvv" data-name="customer[credit_card][cvv]"></div>
+              </li>
+
+              <li class="string optional form-group" id="customer_credit_card_expiration_date_input">
+                <label class="col-md-4 control-label" for="customer_credit_card_expiration_date">Expiration Date (MM/YY)</label>
+                <div class="form-control col-md-6" style="width:50%;" id="customer_credit_card_expiration_date" data-name="customer[credit_card][expiration_date]"></div>
+              </li>
             </ol>
           </fieldset>
 
@@ -74,6 +64,7 @@
               <fieldset>
                 <legend>Billing address</legend>
                 <ol class="list-unstyled">
+
                   <%= billing_address.input :company,
                     input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;"},
                     wrapper_html: {class: "form-group"},
@@ -133,4 +124,75 @@
         </div>
       </div>
     </fieldset>
+    <%= hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce' %>
 <% end %>
+
+<script src="https://js.braintreegateway.com/web/3.46.0/js/client.min.js"></script>
+<script src="https://js.braintreegateway.com/web/3.46.0/js/hosted-fields.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var $form = $('#customer_form');
+    var submit = document.querySelector('input[type="submit"]');
+
+    if(typeof braintree !== 'undefined') {
+        braintree.client.create({
+            authorization: '<%= j @braintree_authorization %>'
+        }, function (clientErr, clientInstance) {
+            if (clientErr) {
+                console.error(clientErr);
+                return;
+            }
+
+            // This example shows Hosted Fields, but you can also use this
+            // client instance to create additional components here, such as:qa
+            // PayPal or Data Collector.
+
+            braintree.hostedFields.create({
+                client: clientInstance,
+                styles: {
+                    'input': {
+                        'font-size': '14px'
+                    },
+                    'input.invalid': {
+                        'color': 'red'
+                    },
+                    'input.valid': {
+                        'color': 'green'
+                    }
+                },
+                fields: {
+                    number: {
+                        selector: '#customer_credit_card_number',
+                        placeholder: '4111 1111 1111 1111'
+                    },
+                    cvv: {
+                        selector: '#customer_credit_card_cvv',
+                        placeholder: '123'
+                    },
+                    expirationDate: {
+                        selector: '#customer_credit_card_expiration_date',
+                        placeholder: 'MM/YY'
+                    }
+                }
+            }, function (hostedFieldsErr, hostedFieldsInstance) {
+                if (hostedFieldsErr) {
+                    console.error(hostedFieldsErr);
+                    return;
+                }
+
+                submit.removeAttribute('disabled');
+
+                $form.on('submit', function (event) {
+                    event.preventDefault();
+                    hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+                        if (tokenizeErr) {
+                            console.error(tokenizeErr);
+                            return;
+                        }
+                        $('#braintree_nonce').val(payload['nonce']);
+                        $form.get(0).submit();
+                    });
+                });
+            });
+        });
+    }
+</script>

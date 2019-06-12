@@ -7,9 +7,9 @@ module DeveloperPortal::Admin::Account
 
     def edit
       begin
-        @form_url = braintree_blue_crypt.form_url
-        @tr_data = braintree_blue_crypt.create_customer_data(
-            redirect_url: hosted_success_admin_account_braintree_blue_url)
+        braintree_blue_crypt.create_customer_data
+        @braintree_authorization = braintree_blue_crypt.authorization
+
         render template: "accounts/payment_gateways/edit"
       rescue Braintree::ConfigurationError, Braintree::AuthenticationError
         flash[:error] = 'Invalid merchant id'
@@ -19,7 +19,9 @@ module DeveloperPortal::Admin::Account
     end
 
     def hosted_success
-      result = braintree_blue_crypt.confirm(request)
+      customer_info = params.require(:customer)
+      result = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
+
       if result && result.success?
         update_user_and_perform_action!(result)
       else
