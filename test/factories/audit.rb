@@ -12,7 +12,7 @@ FactoryBot.define do
     kind { auditable_type }
 
     action { 'create' }
-    audited_changes { { 'org_name' => ['Previous', 'Current'] } }
+    audited_changes { { 'org_name' => 'Some Org Name' } }
     version { 1 }
     request_uuid { SecureRandom.uuid }
 

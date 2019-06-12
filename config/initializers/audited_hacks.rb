@@ -35,6 +35,18 @@ module AuditHacks
       logger.tagged('audit', kind, action) { logger.info log_trail }
     end
 
+    FILTERED = '[FILTERED]'.to_sym
+
+    def obfuscated
+      sentitive_attributes = kind.constantize.sensitive_attributes.map(&:to_s) & audited_changes.keys
+      filtered_hash = sentitive_attributes.map { |attr_name| [attr_name, FILTERED] }.to_h
+      copy = dup
+      copy.send(:write_attribute, :id, id)
+      copy.send(:write_attribute, :created_at, created_at)
+      copy.audited_changes.merge! filtered_hash
+      copy
+    end
+
     protected
 
     def log_trail
@@ -44,10 +56,10 @@ module AuditHacks
     alias_method :to_s, :log_trail
 
     def to_h_safe
-      hash = attributes.slice(*%w[auditable_type auditable_id action version provider_id user_id user_type request_uuid remote_address created_at])
+      attrs = %w[auditable_type auditable_id action audited_changes version provider_id user_id user_type request_uuid remote_address created_at]
+      hash = obfuscated.attributes.slice(*attrs)
       hash['user_role'] = user&.role
       hash['audit_id'] = id
-      hash['changed_attributes'] = audited_changes.keys if action != 'create'
       hash
     end
   end
@@ -88,14 +100,17 @@ Audited.audit_class.class_eval do
 end
 
 module AuditedHacks
+  extend ActiveSupport::Concern
 
-  def self.included klass
-    klass.extend ClassMethods
+  included do
+    class_attribute :sensitive_attributes
+    extend ClassMethods
   end
 
   module ClassMethods
-
     def audited(options = {})
+      self.sensitive_attributes = options.delete(:sensitive_attributes) || []
+
       super
 
       self.disable_auditing if Rails.env.test?
