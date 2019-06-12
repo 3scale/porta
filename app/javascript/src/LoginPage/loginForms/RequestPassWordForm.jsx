@@ -30,13 +30,10 @@ class RequestPasswordForm extends React.Component<Props, State> {
       emailAddress: '',
       isValidEmail: undefined
     }
-    this.handleTextInputEmail = this.handleTextInputEmail.bind(this)
-    this.validateForm = this.validateForm.bind(this)
   }
 
   setIsValidEmail = () => {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    const isValidEmail = re.test(this.state.emailAddress)
+    const isValidEmail = this.state.emailAddress !== ''
     this.setState({isValidEmail})
   }
 
