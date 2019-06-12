@@ -31,7 +31,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
     setup do
       @provider = FactoryBot.create(:simple_provider)
       User.current = FactoryBot.create(:admin, account: provider)
-      
+
       @audit_class = Audited.audit_class
       @audit = FactoryBot.build(:audit, provider_id: provider.id)
 
@@ -78,23 +78,11 @@ class AuditedHacksTest < ActiveSupport::TestCase
       audit.log_to_stdout
     end
 
-    test 'safe hash for create action' do
-      assert_equal expected_hash_new_record, audit.send(:to_h_safe)
-
+    test 'safe hash' do
+      audit = FactoryBot.build(:audit, provider_id: provider.id)
+      assert_equal expected_hash(audit), audit.send(:to_h_safe)
       audit.save!
-
-      assert_equal expected_hash_persisted, audit.send(:to_h_safe)
-    end
-
-    test 'sahe hash for update action' do
-      audit = FactoryBot.build(:audit, action: 'update', provider_id: provider.id)
-      changed_attributes = { action: 'update', changed_attributes: ['org_name'] }.stringify_keys
-
-      assert_equal expected_hash_new_record(audit).merge(changed_attributes), audit.send(:to_h_safe)
-
-      audit.save!
-
-      assert_equal expected_hash_persisted(audit).merge(changed_attributes), audit.send(:to_h_safe)
+      assert_equal expected_hash_persisted(audit), audit.send(:to_h_safe)
     end
 
     test 'log trail' do
@@ -108,31 +96,41 @@ class AuditedHacksTest < ActiveSupport::TestCase
       assert_equal expected_hash_persisted(audit).to_json, audit.send(:log_trail)
     end
 
+    test 'obfuscated audit' do
+      provider_id = provider.id
+      Settings.stubs(sensitive_attributes: %i[sso_key])
+      settings = Settings.new(account_id: provider_id)
+      audit = FactoryBot.build(:audit, auditable_type: settings.class.name, auditable_id: 123, provider_id: provider_id, audited_changes: { 'welcome_text' => 'hello', 'sso_key' => 'sensitive' })
+      audit_obfuscated = audit.obfuscated
+      assert_not_equal audit.object_id, audit_obfuscated.object_id
+      assert_equal({ 'welcome_text' => 'hello', 'sso_key' => 'sensitive' }, audit.audited_changes)
+      assert_equal({ 'welcome_text' => 'hello', 'sso_key' => '[FILTERED]'.to_sym }, audit_obfuscated.audited_changes)
+    end
+
     protected
 
-    def expected_hash_new_record(audit = @audit)
+    def expected_hash(audit = @audit)
       provider_id = audit.provider_id
-      expected_hash = {
+      user = User.current
+      {
         auditable_type: 'Account',
         auditable_id: provider_id,
         action: 'create',
+        audited_changes: { 'org_name' => 'Some Org Name' },
         version: 1,
         provider_id: provider_id,
-        user_id: nil,
-        user_type: nil,
+        user_id: user&.id,
+        user_type: user&.class.to_s.presence,
         request_uuid: audit.request_uuid,
         remote_address: nil,
         created_at: nil,
-        user_role: nil,
+        user_role: user&.role,
         audit_id: nil
-      }
-      user = User.current
-      expected_hash.merge!(user_id: user.id, user_type: 'User', user_role: user.role) if user
-      expected_hash.stringify_keys
+      }.stringify_keys
     end
 
     def expected_hash_persisted(audit = @audit)
-      expected_hash_new_record(audit).merge({ created_at: audit.created_at, audit_id: audit.id }.stringify_keys)
+      expected_hash(audit).merge({ created_at: audit.created_at, audit_id: audit.id }.stringify_keys)
     end
   end
 end

@@ -3,7 +3,7 @@ require 'simple_layout'
 class Settings < ApplicationRecord
   belongs_to :account, inverse_of: :settings
 
-  audited allow_mass_assignment: true
+  audited allow_mass_assignment: true, sensitive_attributes: %i[janrain_api_key cms_token sso_key]
 
   attr_protected :account_id, :tenant_id, :product, :audit_ids, :sso_key, :heroku_id, :heroku_name
 

@@ -22,7 +22,7 @@ class User < ApplicationRecord
   include Permissions
   include ProvidedAccessTokens
 
-  audited
+  audited sensitive_attributes: %i[crypted_password salt activation_code lost_password_token password_digest]
 
   before_validation :trim_white_space_from_username
   before_destroy :can_be_destroyed?
