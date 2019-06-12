@@ -13,7 +13,8 @@ Feature: Different account plans
   Scenario: In allowed state, I should be able to do everything
     Given provider "foo.example.com" has "account_plans" switch allowed
       And I am on the provider site page
-    When I follow "Account Plans"
+    When I follow "Accounts"
+     And I follow "Account Plans"
     Then I should see the copy button
 
     When I follow "Create Account Plan"
@@ -25,4 +26,5 @@ Feature: Different account plans
     Given provider "foo.example.com" has "account_plans" switch allowed
       And provider has account plans hidden from the ui
       And I am on the provider site page
-      Then there should not be any mention of account plans
+    When I follow "Accounts"
+    Then there should not be any mention of account plans
