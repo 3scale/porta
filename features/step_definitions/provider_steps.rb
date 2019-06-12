@@ -1,10 +1,3 @@
-Given(/^a partner "([^"]*)" with application plan "([^"]*)"$/) do |partner_name, application_plan|
-  partner = Partner.create(name: partner_name, api_key: 'foo')
-  service = Account.master.default_service
-  service.application_plans.create(name: application_plan, partner: partner)
-end
-
-
 def import_simple_layout(provider)
   simple_layout = SimpleLayout.new(provider)
 
@@ -14,26 +7,6 @@ def import_simple_layout(provider)
     simple_layout.import_pages!
     simple_layout.import_js_and_css! if @javascript
   end
-end
-
-Given(/^a provider "([^"]*)" signed up to (plan "[^"]*") with partner "(.*?)"$/) do |name, plan, partner_name|
-  partner = Partner.find_or_create_by(name: partner_name) do |p|
-    p.api_key = 'foo'
-  end
-  partner.application_plans << plan
-  partner.save
-  provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan,
-                     org_name: name,
-                     domain: name,
-                     self_domain: "admin.#{name}",
-                     partner: partner)
-  provider.application_contracts.delete_all
-
-  unless provider.bought?(plan)
-    provider.buy!(plan, name: 'Default', description: 'Default')
-  end
-
-  import_simple_layout(provider)
 end
 
 Given(/^a provider "([^"]*)" signed up to (plan "[^"]*")$/) do |name, plan|
@@ -73,20 +46,6 @@ Given(/^the current provider is (.+?)$/) do |name|
   @provider = Account.providers.find_by_org_name!(name)
 end
 
-
-Given(/^a provider "([^\"]*)" with the following users:$/) do |provider_name, users|
-  step %(a provider "#{provider_name}")
-
-  # TODO: turn this into a Given
-  users.hashes.each do |hash|
-    step %(an user "#{hash['username']}" of account "#{provider_name}")
-    step %(the user "#{hash['username']}" is activated)
-    user = User.find(:first, conditions: { username: hash['username'], account_id: Account.find_by_org_name(provider_name).id })
-    user.role = hash['role']
-    user.save!
-  end
-end
-
 Given(/^a provider "(.*?)" with impersonation_admin admin$/) do |provider_name|
   step %(a provider "#{provider_name}")
   provider = Account.find_by_org_name(provider_name)
@@ -97,10 +56,6 @@ end
 
 Given(/^there is no provider with domain "([^"]*)"$/) do |domain|
   Account.find_by_domain(domain).try!(&:destroy)
-end
-
-Given(/^there is a provider$/) do
-  step %(a provider "GenericName" signed up to plan "Free")
 end
 
 When(/^(provider ".+?") creates sample data$/) do |provider|
