@@ -17,23 +17,16 @@ const props = {
   show3scaleLoginForm: true
 }
 
-it('should render itself with right props', () => {
+it('should render itself', () => {
   const wrapper = mount(<SimpleLoginPage {...props}/>)
   expect(wrapper.find('.pf-c-login').exists()).toEqual(true)
-  expect(wrapper.props().authenticationProviders).toEqual(null)
-  expect(wrapper.props().providerAdminDashboardPath).toEqual('provider-admin-path')
-  expect(wrapper.props().providerLoginPath).toEqual('provider-login-path')
-  expect(wrapper.props().providerPasswordPath).toEqual('password-path')
-  expect(wrapper.props().providerSessionsPath).toEqual('sessions-path')
-  expect(wrapper.props().redirectUrl).toEqual('redirect-url')
-  expect(wrapper.props().show3scaleLoginForm).toEqual(true)
 })
 
-it('should call getURL method on mount', () => {
+it('should call setFormMode method on mount', () => {
   const wrapper = mount(<SimpleLoginPage {...props}/>)
-  wrapper.instance().getURL = jest.fn()
+  wrapper.instance().setFormMode = jest.fn()
   wrapper.instance().componentDidMount()
-  expect(wrapper.instance().getURL).toHaveBeenCalled()
+  expect(wrapper.instance().setFormMode).toHaveBeenCalled()
 })
 
 it('should render <Login3scaleForm/> Component on mount', () => {
@@ -51,7 +44,7 @@ it('should render <RequestPasswordForm/> component when formMode state is set to
 it('should render Login form and Authentication providers when available', () => {
   const propsWithProviders = {
     ...props,
-    authenticationProviders: [{authorize_url: 'url-1'}, {authorize_url: 'url-2'}]
+    authenticationProviders: [{authorizeURL: 'url-1', humanKind: 'Human 1'}, {authorizeURL: 'url-2', humanKind: 'Human 2'}]
   }
   const wrapper = mount(<SimpleLoginPage {...propsWithProviders}/>)
   expect(wrapper.find('.providers-list').exists()).toEqual(true)
@@ -62,7 +55,7 @@ it('should render only Authenticaction providers when enforce SSO is enabled', (
   const propsEnforceSSO = {
     ...props,
     enforceSSO: true,
-    authenticationProviders: [{authorize_url: 'url-1'}, {authorize_url: 'url-2'}]
+    authenticationProviders: [{authorizeURL: 'url-1', humanKind: 'Human 1'}, {authorizeURL: 'url-2', humanKind: 'Human 2'}]
   }
   const wrapper = mount(<SimpleLoginPage {...propsEnforceSSO}/>)
   expect(wrapper.find('.providers-list').exists()).toEqual(true)

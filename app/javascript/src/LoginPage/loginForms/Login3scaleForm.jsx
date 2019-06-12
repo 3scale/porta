@@ -33,9 +33,6 @@ class Login3scaleForm extends React.Component<Props, State> {
       isValidUsername: undefined,
       isValidPassword: undefined
     }
-    this.handleTextInputUsername = this.handleTextInputUsername.bind(this)
-    this.handleTextInputPassword = this.handleTextInputPassword.bind(this)
-    this.validateForm = this.validateForm.bind(this)
   }
 
   setIsValidUsername = () => {

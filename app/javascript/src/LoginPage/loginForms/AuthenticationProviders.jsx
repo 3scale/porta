@@ -4,8 +4,8 @@ import React from 'react'
 import { KeyIcon, LessThanIcon, GreaterThanIcon } from '@patternfly/react-icons'
 
 type ProvidersProps = {
-  authorize_url: string,
-  human_kind: string
+  authorizeURL: string,
+  humanKind: string
 }
 
 type Props = {
@@ -26,7 +26,7 @@ const Provider = ({authorizeURL, humanKind}: {authorizeURL: string, humanKind: s
 const AuthenticationProviders = (props: Props) => {
   const {authenticationProviders} = props
   const providersList = authenticationProviders.map(
-    provider => <Provider authorizeURL={provider.authorize_url} humanKind={provider.human_kind} key={provider.human_kind}/>
+    provider => <Provider authorizeURL={provider.authorizeURL} humanKind={provider.humanKind} key={provider.humanKind}/>
   )
 
   return (

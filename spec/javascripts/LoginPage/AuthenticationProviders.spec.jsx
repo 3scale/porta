@@ -9,12 +9,12 @@ import {AuthenticationProviders} from 'LoginPage'
 const props = {
   authenticationProviders: [
     {
-      authorize_url: 'fake-provider-1',
-      human_kind: 'Fake human kind 1'
+      authorizeURL: 'fake-provider-1',
+      humanKind: 'Fake human kind 1'
 
     }, {
-      authorize_url: 'fake-provider-2',
-      human_kind: 'Fake human kind 2'
+      authorizeURL: 'fake-provider-2',
+      humanKind: 'Fake human kind 2'
     }
   ]
 }

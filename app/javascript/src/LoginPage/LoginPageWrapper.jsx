@@ -39,6 +39,8 @@ type Props = {
   show3scaleLoginForm: boolean
 }
 
+const formModeTuple: [string, string] = ['login', 'password-reset']
+
 type State = {
   formMode: string,
   loginTitle: string
@@ -53,10 +55,10 @@ class SimpleLoginPage extends React.Component<Props, State> {
     }
   }
 
-  getURL () {
+  setFormMode ({win = window}: {win?: Window}) {
     try {
-      const url = new URL(window.location.href)
-      const formMode = url.search === '?request_password_reset=true' ? 'password-reset' : 'login'
+      const url = new URL(win.location.href)
+      const formMode = url.search === '?request_password_reset=true' ? formModeTuple[1] : formModeTuple[0]
       const loginTitle = formMode === 'login' ? 'Log in to your account' : 'Request a password reset link by email'
       this.setState({formMode, loginTitle})
     } catch (e) {
@@ -65,15 +67,15 @@ class SimpleLoginPage extends React.Component<Props, State> {
   }
 
   componentDidMount () {
-    this.getURL()
+    this.setFormMode(window)
   }
 
   showForgotCredentials () {
-    const showForgotCredentials = this.state.formMode === 'login'
+    const showForgotCredentials = this.state.formMode === formModeTuple[0]
     return showForgotCredentials && <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
   }
 
-  loginForms () {
+  loginForm () {
     const hasAuthenticationProviders = this.props.authenticationProviders
     const enforceSSO = this.props.enforceSSO
     return (
@@ -109,10 +111,10 @@ class SimpleLoginPage extends React.Component<Props, State> {
           this.props.flashMessages &&
           <FlashMessages flashMessages={this.props.flashMessages}/>
         }
-        {this.state.formMode === 'login' &&
-          this.loginForms()
+        {this.state.formMode === formModeTuple[0] &&
+          this.loginForm()
         }
-        {this.state.formMode === 'password-reset' &&
+        {this.state.formMode === formModeTuple[1] &&
           <RequestPasswordForm
             providerPasswordPath={this.props.providerPasswordPath}
             providerLoginPath={this.props.providerLoginPath}
