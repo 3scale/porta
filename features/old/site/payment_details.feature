@@ -18,8 +18,7 @@ Feature: Provider Payment Details
 
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
-    When I follow "Account"
-      And I follow "Payment Details"
+    When I go to the provider braintree credit card details page
     Then I should be on the provider braintree credit card details page
       And I follow "Add Payment Details"
 

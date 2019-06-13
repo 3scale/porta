@@ -6,13 +6,10 @@ helper = Module.new do
   def current_user
     # HACK: I can't access session variables easily, but there are other ways how to get what I want :)
     begin
-      # provider side
-      username = find(:css, '#user_widget .username').text(:all).strip
-    rescue Capybara::ElementNotFound
-      # buyer side
       username = find('#sign-out-button')[:title].gsub('Sign Out','').strip
+    rescue Capybara::ElementNotFound
+      username = find('div.Header')['data-account-name']
     end
-
     assert username, "could not find username in the ui"
 
     current_domain = URI.parse(current_url).host

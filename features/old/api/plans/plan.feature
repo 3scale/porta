@@ -9,7 +9,7 @@ Feature: Plans management
       And provider "foo.example.com" has "service_plans" visible
       And I am logged in as provider "foo.example.com"
 
-    When I follow "Dashboard"
+    When go to the dashboard page
       And I follow "Overview"
       And I follow "0 application plans"
     Then I should be on the application plans admin page

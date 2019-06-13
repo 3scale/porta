@@ -13,8 +13,7 @@ Feature: Invitations
     Given current domain is the admin domain of provider "foo.example.com"
       And provider "foo.example.com" has "multiple_users" switch denied
     When I log in as provider "foo.example.com"
-     And I follow "Account"
-     And I follow "Users"
+     And I go to the provider sent invitations page
     Then I should not see "Invite a New Team Member"
 
     When I want to go to the provider new invitation page

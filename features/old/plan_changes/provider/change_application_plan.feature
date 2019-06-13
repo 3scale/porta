@@ -25,9 +25,7 @@ Feature: Change Application Plan
     When I select "Advanced" from "cinstance_plan_id"
      And I press "Change"
     Then I should see "Plan changed to 'Advanced'"
-     And I log out
+     And I go to provider logout
 
     When I act as "bob"
     Then I should receive an email with subject "Application plan changed to 'Advanced'"
-
-

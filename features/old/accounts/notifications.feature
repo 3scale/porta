@@ -12,7 +12,7 @@ Feature: Notifications
     When I log in as provider "foo.example.com"
 
     And I follow "Account"
-    And I follow "Notifications"
+    And go to the notifications page
     Then I should see "Email Notifications" in a header
 
 
@@ -92,4 +92,3 @@ Feature: Notifications
     Then I should have the notification "Daily aggregate reports" enabled
     When I uncheck "Daily aggregate reports"
     Then I should have the notification "Daily aggregate reports" disabled
-

@@ -11,8 +11,7 @@ Feature: Personal Details
    Given current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
 
-   When I follow "Account Settings"
-    And I follow "Personal Details"
+   When I go to the provider personal details page
     And I fill in "Email" with "john.doe@foo.example.com"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
@@ -22,8 +21,7 @@ Feature: Personal Details
   Scenario: Personal details redirects back to users list if originated there
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
-    When I follow "Account"
-      And I follow "Listing"
+    When I go to the provider users page
       And I follow "foo.example.com" within "#users"
     Then I should be on the provider personal details page
     When I fill in "Email" with "john.doe@foo.example.com"

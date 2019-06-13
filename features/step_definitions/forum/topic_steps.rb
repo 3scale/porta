@@ -100,7 +100,7 @@ end
 
 Then /^I should see the first topic is "([^"]*)"$/ do |topic|
   topics = all('table tr.topic')
-  assert topics.first.has_css?(%(td:contains("#{topic}")))
+  assert topics.first.text.include?(topic)
 end
 
 

@@ -21,7 +21,7 @@ Feature: Sticky Topics
     And I press "Create thread"
     Then the forum of "foo.example.com" should have sticky topic "Read this first"
 
-    When I log out
+    When I go to provider logout
     And I log in as "bob" on foo.example.com
     And I create a new topic "Please help!"
     And I create a new topic "Please help again!"
@@ -39,7 +39,7 @@ Feature: Sticky Topics
     And I go to the forum page
     Then I should see the first topic is "Third topic"
 
-    When I log out
+    When I go to provider logout
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
 
@@ -48,7 +48,7 @@ Feature: Sticky Topics
     And I press "Update thread"
     Then the forum of "foo.example.com" should have sticky topic "Second topic"
 
-    When I log out
+    When I go to provider logout
     And I log in as "bob" on foo.example.com
     And I go to the forum page
     Then I should see the first topic is "Second topic"
@@ -62,7 +62,7 @@ Feature: Sticky Topics
     When I log in as "bob" on foo.example.com
     And I go to the forum page
     Then I should see the first topic is "Second topic"
-    When I log out
+    When I go to provider logout
 
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
@@ -72,7 +72,7 @@ Feature: Sticky Topics
     And I press "Update thread"
     Then the forum of "foo.example.com" should have non-sticky topic "Second topic"
 
-    When I log out
+    When I go to provider logout
     And I log in as "bob" on foo.example.com
     And I go to the forum page
     Then I should see the first topic is "First topic"
