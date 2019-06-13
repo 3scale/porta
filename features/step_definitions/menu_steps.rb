@@ -1,5 +1,5 @@
 Then /^I should see the partners submenu$/ do
-  step 'I should see the "links" in the submenu:', table(%{
+  step 'I should see the "links":', table(%{
    | link     |
    | Accounts      |
    | Subscriptions |
