@@ -1,3 +1,13 @@
 = javascript_pack_tag 'vertical_nav'
 
-#vertical-nav-wrapper class='pf-c-page__sidebar' data-sections=vertical_nav_sections data-active_section=active_submenu data-active_item=active_sidebar
+- sections = vertical_nav_sections
+- active_section = active_submenu
+- active_item = active_sidebar
+
+#vertical-nav-wrapper class='pf-c-page__sidebar' data-sections=sections.to_json data-active_section=active_section data-active_item=active_item
+
+  div.pf-c-page__sidebar-body
+    nav#mainmenu class='pf-c-nav'
+      ul.pf-c-nav__list
+        - sections.each do |section|
+          = render 'shared/provider/navigation/vertical_nav_item', :section => section, :active_section => active_section, :active_item => active_item
