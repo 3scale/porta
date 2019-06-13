@@ -20,7 +20,6 @@ Feature: Public site access
     When I follow "Admin" in the user widget
     Then the current domain should be the master domain
 
-  #@javascript
   Scenario: View Site takes to the public side
     Given I log in as "foo.example.com" on the admin domain of provider "foo.example.com"
     When I navigate to the accounts page
