@@ -1,4 +1,3 @@
-@javascript
 Feature: On paid plans
   In order to charge my customers
   As a provider

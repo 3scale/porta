@@ -26,7 +26,6 @@ Feature: Signup with invitation
       And I press "Sign in"
     Then I should be logged in as "bob"
 
-  @javascript
   Scenario: Provider invitation is in his admin domain
     Given the admin domain of provider "foo.example.com" is "admin.foo.example.com"
     When an invitation from account "foo.example.com" sent to "bob@foo.example.com"
@@ -44,5 +43,5 @@ Feature: Signup with invitation
   Scenario: Attempting to sign up with invalid invitation token
     When the current domain is "foo.example.com"
     When I go to the account signup page with invalid invitation token
-    
+
     Then I should see "Invitation token did not exist."

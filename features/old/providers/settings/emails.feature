@@ -1,4 +1,3 @@
-@javascript
 Feature: Support emails settings management
   In order to control the support email settings
   As a provider

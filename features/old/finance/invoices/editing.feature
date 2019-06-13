@@ -1,4 +1,4 @@
-@javascript @commit-transactions
+@commit-transactions
 Feature: Edit Invoice
   In order to make invoices work with my accounting
   As a provider

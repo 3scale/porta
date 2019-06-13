@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider stats section authorization
   In order to manage my stats
   As a provider

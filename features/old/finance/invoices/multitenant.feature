@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider lists all invoices
   In order to manage all my invoices
   As a provider

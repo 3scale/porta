@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider invoices for 3scale
   In order to pay to 3scale
   As a provider

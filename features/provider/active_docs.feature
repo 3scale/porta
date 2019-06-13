@@ -1,4 +1,3 @@
-@javascript
 Feature: ActiveDocs pages
   As a provider
   I want to manage my ActiveDocs

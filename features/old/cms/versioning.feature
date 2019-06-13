@@ -1,4 +1,3 @@
-@javascript
 Feature: CMS Templates versioning
   As a provider
   I want to see history of my content changes

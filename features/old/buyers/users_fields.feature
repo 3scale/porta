@@ -1,4 +1,3 @@
-@javascript
 Feature: Buyer users fields management
   In order to have an awesome UI
   As a provider
