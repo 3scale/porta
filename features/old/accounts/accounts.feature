@@ -1,4 +1,3 @@
-@javascript
 Feature: Account management
   In order to keep the information about my company or group up to date
   As a registered user

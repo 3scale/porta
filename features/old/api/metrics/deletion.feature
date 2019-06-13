@@ -1,4 +1,3 @@
-@javascript
 Feature: Metric deletion
   In Order to change a plan
   As a provider
