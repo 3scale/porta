@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 
 import 'Navigation/styles/PF4NavProxy.scss'
 
-const Nav = ({children}) => (
-  <nav className="pf-c-nav" aria-label="Global">
-    <ul className="pf-c-nav__list">
-      {children}
-    </ul>
+const Nav = ({id, children}) => (
+  <nav id={id} className="pf-c-nav" aria-label="Global">
+    {children}
   </nav>
 )
 
