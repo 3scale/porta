@@ -1,4 +1,4 @@
-@ignore-backend @javascript
+@ignore-backend
 Feature: Create application
   In order to control the way my buyers are using my API
   As a provider
@@ -18,6 +18,7 @@ Feature: Create application
 
 
   #TODO move single_app mode examples to separate feature?
+  @javascript
   Scenario: Create a single application in single application mode
     Given plan "Basic" is customized
     Given provider "foo.example.com" has multiple applications disabled
@@ -36,6 +37,7 @@ Feature: Create application
     And I follow "1 Application"
     Then I should see "Create Application"
 
+  @javascript
   Scenario: Create a new application
     Given plan "Basic" is customized
     Given buyer "bob" has no applications
@@ -51,6 +53,7 @@ Feature: Create application
      And should see "Application was successfully created"
      And buyer "bob" should have 1 cinstance
 
+  @javascript
   Scenario: Create a new application without having a service subscription
     Given a service "second" of provider "foo.example.com"
       And provider has "service_plans_ui_visible" hidden
@@ -71,6 +74,7 @@ Feature: Create application
      And I should be on the provider side "UltimateWidget" application page
      And should see "Application was successfully created"
 
+  @javascript
    Scenario: The service of the selected application plans hasn´t service plan
      Given a service "second" of provider "foo.example.com"
        And a published application plan "second_app_plan" of service "second" of provider "foo.example.com"
@@ -82,6 +86,7 @@ Feature: Create application
        And I select "second_app_plan" from "Application plan"
       Then I should see "Create a service plan"
 
+  @javascript
   Scenario: Create an application with extra field
     Given provider "foo.example.com" has the following fields defined for "Cinstance":
       | name | required | read_only | hidden |
@@ -113,7 +118,7 @@ Feature: Create application
    Then I should see "can´t be blank" in the "Name" field
      And I should see "can´t be blank" in the "Description" field
 
-
+  @javascript
   Scenario: Create an application with a pending contract
     Given buyer "bob" is subscribed with state "pending" to the default service of provider "foo.example.com"
     And  I go to the provider side create application page for "bob"

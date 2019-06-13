@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider Payment Details
   In order to pay to our master
 

@@ -1,4 +1,4 @@
-@ignore-backend @javascript
+@ignore-backend
 Feature: Applications plan
   In order to control the plan of applications
   As a provider

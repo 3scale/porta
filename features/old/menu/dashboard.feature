@@ -1,4 +1,3 @@
-@javascript
 Feature: Dashboard
   In order to navigate easily
   As a provider

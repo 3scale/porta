@@ -1,4 +1,3 @@
-@javascript
 Feature: Wizard Billing information
   In order to provider my billing information
   As a provider

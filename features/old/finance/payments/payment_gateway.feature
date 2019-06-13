@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider's payment gateway
   In order to accept payments from my users
   As a provider

@@ -1,4 +1,3 @@
-@javascript
 Feature: Providers's applications searching, sorting and filtering
   In order to quickly find specific set of appplications
   As a provider

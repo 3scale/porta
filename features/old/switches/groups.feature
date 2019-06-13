@@ -1,4 +1,3 @@
-@javascript
 Feature: Groups switch
   The value of the groups switch
   Controls the Groups and Sections access restricting feature

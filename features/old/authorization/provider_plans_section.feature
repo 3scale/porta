@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider plans section authorization
   In order to manage my plans
   As a provider

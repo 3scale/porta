@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider portal section authorization
   In order to manage my portal
   As a provider

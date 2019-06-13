@@ -1,4 +1,3 @@
-@javascript
 Feature: Groups
   In order to have multi tenant working
   as a Provider

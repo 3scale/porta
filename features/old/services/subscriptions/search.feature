@@ -1,4 +1,4 @@
-@search @javascript
+@search
 Feature: Providers's subscription searching, sorting and filtering
   In order to quickly find specific set of subscriptions
   As a provider

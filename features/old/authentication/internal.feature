@@ -29,7 +29,6 @@ Feature: Internal authentication
     When I follow "Logout"
     Then I should see "You have been logged out"
 
-  @javascript
   Scenario: Redirects and keeps full url
     # legal terms's  url url has query_string
     Given the admin of account "foo.example.com" has password "foobar"

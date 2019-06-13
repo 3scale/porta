@@ -1,4 +1,3 @@
-@javascript
 Feature: Plans management
   In order to have control over my plans
   As a provider

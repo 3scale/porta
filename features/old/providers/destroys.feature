@@ -1,4 +1,4 @@
-@audit @javascript
+@audit
 Feature: Accessing Destroys
   I want to be find deleted stuff in trash
 

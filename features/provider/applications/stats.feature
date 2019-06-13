@@ -1,4 +1,3 @@
-@javascript
 Feature: Application Stats
 
   Background:
