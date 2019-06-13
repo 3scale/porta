@@ -161,7 +161,6 @@ module VerticalNavHelper
   def audience_applications_items
     items = []
 
-    # FIXME: active_sidebar returns undefined, it should return listing. Sidebar is not highlighted.
     if can? :manage, :partners
       items << {id: :listing, title: 'Listing', path: admin_buyers_applications_path}
     end
