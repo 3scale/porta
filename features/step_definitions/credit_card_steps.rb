@@ -71,16 +71,16 @@ end
 Given(/^Braintree is stubbed to (not )?accept credit card$/) do |failed|
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(customer_id_mismatch?: false)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:create_customer_data).returns(nil)
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:authorization).returns(nil)
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
 
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:form_url).returns(hosted_success_provider_admin_account_braintree_blue_path)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:confirm).returns(failed ? failed_braintree_result : successful_braintree_result)
 end
 
 Given /^Braintree is stubbed to accept credit card for buyer$/ do
+  step 'Braintree is stubbed to accept credit card'
   step 'Braintree returns successful stubbed credit card'
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(customer_id_mismatch?: false)
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:form_url).returns(hosted_success_admin_account_braintree_blue_path)
 end
 
 Given /^Braintree returns successful stubbed credit card$/ do
@@ -92,15 +92,23 @@ When(/^I fill in the braintree credit card form$/) do
   | First name                | Pepe                    |
   | Last name                 | Ventura                 |
   | Phone                     | +2342342342             |
-  | Number                    | 4111111111111111        |
-  | CVV                       | 123                     |
-  | Expiration Date (MM/YY)   | 12/22                   |
   | Company                   | comp                    |
   | Street address            | Calle Simpecado         |
   | ZIP / Postal Code         | 4242                    |
   | City                      | Sevilla                 |
   | State/Region              | Andalusia               |
   TABLE
+  step 'I fill in the braintree credit card iframe'
   step 'I fill in the following:', table(data)
   step 'I select "Spain" from "Country"'
+end
+
+# This will mock filling in the braintree hidden parameters
+When(/^I fill in the braintree credit card iframe$/) do
+  # TODO: Would be better to not rely on this kind of variables
+  if @javascript
+    page.evaluate_script("document.querySelector('#braintree_nonce').value = 'some_braintree_nonce'")
+  else
+    find(:css, '#braintree_nonce').set('some_braintree_nonce')
+  end
 end
