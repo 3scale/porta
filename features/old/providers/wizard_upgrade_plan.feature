@@ -21,7 +21,6 @@ Feature: Wizard Billing information
       | zip               |         | ZIP Code       | false    | false     | false  |
       | vat               |         | VAT Code       | false    | false     | false  |
 
-
   Scenario: Steps of the wizard
     When I go to the billing information wizard page
     And I fill in the following:
@@ -37,14 +36,12 @@ Feature: Wizard Billing information
     When I fill in the following:
       | First Name                | Pepe                    |
       | Last Name                 | Ventura                 |
-      | Number                    | 4111111111111111        |
-      | Cvv                       | 123                     |
-      | Expiration Date (MM/YY)   | 12/22                   |
       | Company                   | comp                    |
       | Street Address            | Calle Simpecado         |
       | City                      | Sevilla                 |
       | ZIP / Postal Code         | 4242                    |
       | Phone                     | +2342342342             |
+    And I fill in the braintree credit card iframe
     And I select "Spain" from "Country"
     And I press "Save credit card"
    Then the current domain should be admin.foo.example.com
