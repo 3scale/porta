@@ -11,7 +11,7 @@ module VerticalNavHelper
       random_sections # TODO: find better name
     when :serviceadmin, :monitoring
       service_nav_sections
-    end.to_json
+    end
   end
 
   # Account
