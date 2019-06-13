@@ -1,0 +1,20 @@
+- title = section[:title]
+- path = section[:path]
+- items = section[:items]
+
+/ TODO: highlight items when active
+- if items == nil
+  li.pf-c-nav__item
+    = link_to path, class: 'pf-c-nav__link' do
+      = title
+
+- else
+  li.pf-c-nav__item class='pf-m-expandable pf-m-expanded'
+    a.pf-c-nav__link
+      = title
+    section.pf-c-nav__subnav
+      ul.pf-c-nav__simple-list
+        - items.each do |item|
+          li.pf-c-nav__item
+            = link_to item[:path], class: 'pf-c-nav__link' do
+              = item[:title]
