@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentGateways
   class BrainTreeBlueCrypt < PaymentGatewayCrypt
     attr_reader :gateway_client, :gateway, :customer_gateway
@@ -21,15 +23,16 @@ module PaymentGateways
       false
     end
 
-    def authorization(options={})
+    def authorization(options = {})
       @gateway.generate(options)
     end
 
+    # This smells of :reek:NilCheck
     def current_token
-      find_customer.credit_cards.first.try!(:token)
+      find_customer.credit_cards.first&.token
     end
 
-    def create_customer_data(options={})
+    def create_customer_data(options = {})
       customer = find_customer
       if customer
         remote_update_credit_card(customer, options)
