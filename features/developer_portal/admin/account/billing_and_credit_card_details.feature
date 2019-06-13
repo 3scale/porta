@@ -25,19 +25,21 @@ Feature: Billing and Credit card details
     And I press "Save details"
     Then I should see "Credit card details were successfully stored."
 
-  @javascript @selenium
-  Scenario: Update credit card details with CVV equals to "000"
-    # TODO: DRY
-    Given the buyer has valid credit card with lots of money
-
-    When the buyer logs in to the provider
-    And go to the braintree edit credit card details page
-    Then I should be at url for the braintree edit credit card details page
-
-    When I fill in the braintree credit card form
-    And I fill in "CVV" with "000"
-    And I press "Save details"
-    Then I should see "Credit card details were successfully stored."
+    # Commenting this test as it does not make any sense.
+    # What are we trying to test?
+#  @javascript @selenium
+#  Scenario: Update credit card details with CVV equals to "000"
+#    # TODO: DRY
+#    Given the buyer has valid credit card with lots of money
+#
+#    When the buyer logs in to the provider
+#    And go to the braintree edit credit card details page
+#    Then I should be at url for the braintree edit credit card details page
+#
+#    When I fill in the braintree credit card form
+#    And I fill in "CVV" with "000"
+#    And I press "Save details"
+#    Then I should see "Credit card details were successfully stored."
 
   @javascript @selenium
   Scenario: Update billing address with Postal Code equals to "00000"
