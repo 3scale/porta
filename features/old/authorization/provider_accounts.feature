@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider accounts authorization
   In order to manage my accounts
   As a provider

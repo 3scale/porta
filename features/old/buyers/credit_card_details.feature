@@ -1,4 +1,4 @@
-@ignore-backend @javascript
+@ignore-backend
 Feature: Provider sees buyer's credit card details
   In order to know as much as I can about my clients
   As a provider

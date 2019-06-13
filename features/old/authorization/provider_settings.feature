@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider settings authorization
   In order to manage my settings
   As a provider

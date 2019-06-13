@@ -1,4 +1,3 @@
-@javascript
 Feature: Application Plan customization
   In order to fullfill special requirements of my clients
   As a provider
@@ -16,7 +15,7 @@ Feature: Application Plan customization
 
     And a buyer "bob" signed up to application plan "Basic"
 
-  @ignore-backend @ajax
+  @ignore-backend @ajax @javascript
   Scenario: Customize the same plan twice (to check duplicate handling)
     Given current domain is the admin domain of provider "foo.example.com"
     When I am logged in as provider "foo.example.com"

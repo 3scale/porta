@@ -1,4 +1,3 @@
-@javascript
 Feature: Buyer accounts management
   In order to have control over the accounts of my buyers
   As a provider

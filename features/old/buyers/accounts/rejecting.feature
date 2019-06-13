@@ -1,4 +1,3 @@
-@javascript
 Feature: Rejecting buyer account
   In order to let know my new buyers that I don't like them
   As a provider

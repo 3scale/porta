@@ -1,4 +1,3 @@
-@javascript
 Feature: Liquid drops
   In order to be able to edit CMS template efficiently
   as a Provider

@@ -1,4 +1,3 @@
-@javascript
 Feature: Menu of the Account screen
   In order to browse the help pages
   As a provider

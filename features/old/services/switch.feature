@@ -1,4 +1,3 @@
-@javascript
 Feature: Services switch
   To have different provider plans
   As a member or admin

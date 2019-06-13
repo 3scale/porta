@@ -1,4 +1,3 @@
-@javascript
 Feature: Billing settings
   In order to have control over the billing settings
   As a provider or master
