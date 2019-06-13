@@ -1,4 +1,3 @@
-@javascript
 Feature: Metric update
   In order to change my metrics for whatever reason
   As a provider

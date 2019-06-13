@@ -1,4 +1,3 @@
-@javascript
 Feature: Activation
   In order to allow only users with valid emails to sign in
   They have to activate themselves first

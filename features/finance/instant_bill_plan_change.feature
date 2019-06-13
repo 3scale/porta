@@ -1,4 +1,4 @@
-@stats @javascript
+@stats
 Feature: Instant biling plan change feature
   As a provider I want to charge the variable cost on plan change
 

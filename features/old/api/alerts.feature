@@ -1,4 +1,3 @@
-@javascript
 Feature: API Usage alerts
   In order to contact my users if they violated usage limits
   As a provider

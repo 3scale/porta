@@ -1,4 +1,3 @@
-@javascript
 Feature: Metric creation
   In order to track various metrics of my API
   As a provider
