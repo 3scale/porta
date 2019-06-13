@@ -34,6 +34,9 @@ Before '@javascript' do
   Capybara.current_driver = DEFAULT_JS_DRIVER
 end
 
+Before '@chrome' do
+  Capybara.current_driver = :chrome
+end
 
 # monkeypatch to fix
 # not opened for reading (IOError)
@@ -66,7 +69,9 @@ Capybara.register_driver :headless_firefox do |app|
 end
 
 Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--auto-open-devtools-for-tabs')
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_driver :headless_chrome do |app|
