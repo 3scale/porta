@@ -53,7 +53,7 @@ module VerticalNavHelper
 
   def account_billing_items
     items = []
-    items << {id: :invoices, title: '3scale Invoices', path: provider_admin_account_invoices_path}              if can?(:read, Invoice) && !ThreeScale.config.onpremises
+    items << {id: :invoices,        title: '3scale Invoices', path: provider_admin_account_invoices_path}       if can?(:read, Invoice) && !ThreeScale.config.onpremises
     items << {id: :payment_details, title: 'Payment Details', path: provider_admin_account_braintree_blue_path} if can?(:manage, :credit_card) && !ThreeScale.config.onpremises
     items
   end
@@ -137,11 +137,10 @@ module VerticalNavHelper
     items << {title: 'Visit Portal', path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
 
     if can?(:manage, :portal)
-      items << {                            title: 'Legal Terms'}
-      # FIXME: active_sidebar is always 'legal' so no way to highlight items individually
-      items << {id: :signup,                title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)}
-      items << {id: :service_subscriptions, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)}
-      items << {id: :new_application,       title: 'New Application',      path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
+      items << {                                   title: 'Legal Terms'}
+      items << {id: :signup_licence,               title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)}
+      items << {id: :service_subscription_licence, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)}
+      items << {id: :new_application_licence,      title: 'New Application',      path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
     end
 
     if can?(:manage, :settings)
