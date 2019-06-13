@@ -21,7 +21,7 @@ class Buyers::ApplicationsController < FrontendController
   def index
     # TODO: Editing this action may require editing Api::ApplicationsController
 
-    activate_menu :audience, :applications
+    activate_menu :audience, :applications, :listing
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
     accessible_services = current_account.accessible_services
