@@ -17,5 +17,5 @@
         - items.each do |item|
           - is_item_active = is_section_active && active_item == item[:id]
           li.pf-c-nav__item class=('pf-m-current' if is_item_active)
-            = link_to item[:path], class: 'pf-c-nav__link' do
+            = link_to item[:path], class: 'pf-c-nav__link', target: item[:target] do
               = item[:title]

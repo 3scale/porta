@@ -7,7 +7,8 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 type Item = {
   id: string,
   title: string,
-  path: string
+  path: string,
+  target: ?string
 }
 
 type Section = {
@@ -32,9 +33,9 @@ const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
           return items
             ? (
               <NavExpandable title={title} isActive={activeSection === sId} isExpanded={activeSection === sId}>
-                {items.map(({id, title, path}) => (
+                {items.map(({id, title, path, target}) => (
                   path
-                    ? <NavItem to={path} isActive={activeSection === sId && activeItem === id}>{title}</NavItem>
+                    ? <NavItem to={path} isActive={activeSection === sId && activeItem === id} target={target}>{title}</NavItem>
                     : <NavGroup title={title} className='vertical-nav-label'></NavGroup>
                 ))}
               </NavExpandable>
