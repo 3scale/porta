@@ -96,7 +96,6 @@ When /^I try to log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |pr
   visit path
 
   if provider
-    ensure_javascript
     fill_in('Email or Username', :with => username)
   else
     fill_in('Username or Email', :with => username)
