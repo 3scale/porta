@@ -26,7 +26,7 @@ Feature: Account service plans management
     Given I am logged in as provider "foo.example.com"
     When I am on the buyer account page for "bob"
      And I follow "Portal" in the main menu
-    Then I should see "Service Subscription" in the submenu
+    Then I should see "Service Subscription"
 
   @javascript
   Scenario: Subscribe to service with selected service plan
