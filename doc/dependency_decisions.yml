@@ -1,87 +1,87 @@
 ---
 - - :whitelist
   - MIT
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-08-15 10:59:07.210221000 Z
 - - :whitelist
   - Apache 2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-08-15 10:59:32.297032000 Z
 - - :whitelist
   - ruby
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-08-15 11:00:00.919892000 Z
 - - :whitelist
   - Ruby 1.8
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-08-15 11:03:11.357434000 Z
 - - :whitelist
   - BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-08-15 11:03:40.069678000 Z
 - - :whitelist
   - New BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-08-15 11:03:46.628014000 Z
 - - :whitelist
   - Simplified BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 12:29:52.630868000 Z
 - - :whitelist
   - 2-clause BSDL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 12:30:06.838026000 Z
 - - :whitelist
   - LGPL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 12:30:22.623646000 Z
 - - :whitelist
   - LGPL-2.1+
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 12:30:35.642108000 Z
 - - :whitelist
   - Apache
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 12:31:29.289170000 Z
 - - :approve
   - sidekiq-pro
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 13:43:07.881188000 Z
 - - :approve
   - 3scale_core
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-23 13:45:13.849013000 Z
 - - :approve
   - aggregate_root
   - &1
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-25 14:27:38.086122000 Z
 - - :approve
@@ -90,8 +90,8 @@
 - - :approve
   - rails_event_store
   - &2
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-25 14:28:24.607854000 Z
 - - :approve
@@ -100,8 +100,8 @@
 - - :approve
   - ruby_event_store
   - &3
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-25 14:28:38.695549000 Z
 - - :approve
@@ -110,8 +110,8 @@
 - - :approve
   - json
   - &4
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-25 14:29:20.780929000 Z
 - - :approve
@@ -120,8 +120,8 @@
 - - :approve
   - paperclip-meta
   - &5
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-25 14:29:35.052570000 Z
 - - :approve
@@ -129,27 +129,27 @@
   - *5
 - - :whitelist
   - GPL-2
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-29 11:24:05.225924000 Z
 - - :whitelist
   - ISC
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-29 11:24:15.693203000 Z
 - - :whitelist
   - GPL-2.0+
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2016-11-29 11:24:31.743236000 Z
 - - :approve
   - test_xml
   - &6
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-29 11:44:47.439484000 Z
 - - :approve
@@ -158,8 +158,8 @@
 - - :approve
   - ntlm-http
   - &7
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2016-11-29 14:20:40.333313000 Z
 - - :approve
@@ -251,8 +251,8 @@
     :when: 2017-01-27 12:04:39.120613000 Z
 - - :whitelist
   - Unlicense
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2017-01-31 15:59:29.601169000 Z
 - - :approve
@@ -293,112 +293,112 @@
     :when: 2017-02-20 18:32:50.064445000 Z
 - - :unapprove
   - newrelic-redis
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2017-02-27 17:39:13.158889000 Z
 - - :unapprove
   - rpm_contrib
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2017-02-27 17:39:13.158889000 Z
 - - :unapprove
   - newrelic_rpm
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2017-02-27 17:39:13.158889000 Z
 - - :license
   - deadlock_retry
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/mperham/deadlock_retry/blob/v1.1.1/LICENSE
     :versions: []
     :when: 2017-06-29 17:33:41.303492000 Z
 - - :license
   - innertube
   - Apache License 2.0
-  - :who:
+  - :who: 
     :why: Marked as Apache License 2.0 in https://github.com/basho/innertube/blob/v1.1.0/LICENSE
     :versions: []
     :when: 2017-06-29 17:37:23.808970000 Z
 - - :license
   - mail_view
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/basecamp/mail_view/blob/master/LICENSE
     :versions: []
     :when: 2017-06-29 17:38:33.409503000 Z
 - - :license
   - systemjs-plugin-css
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/systemjs/plugin-css/blob/0.1.35/LICENSE
     :versions: []
     :when: 2017-06-29 17:55:05.517693000 Z
 - - :license
   - test_xml
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/alovak/test_xml/blob/v0.1.8/LICENSE
     :versions: []
     :when: 2017-06-29 17:55:54.487338000 Z
 - - :license
   - unicorn-rails
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/samuelkadolph/unicorn-rails/blob/v2.2.1/LICENSE
     :versions: []
     :when: 2017-06-29 17:57:05.944164000 Z
 - - :license
   - xpath
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/teamcapybara/xpath/blob/master/LICENSE
     :versions: []
     :when: 2017-06-29 17:58:46.338628000 Z
 - - :license
   - github-markdown
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://rubygems.org/gems/github-markdown
     :versions: []
     :when: 2017-06-29 18:03:50.819949000 Z
 - - :ignore_group
   - development
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2017-06-30 10:35:05.121437000 Z
 - - :ignore_group
   - test
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2017-06-30 10:35:11.531275000 Z
 - - :ignore
   - developer_portal
-  - :who:
+  - :who: 
     :why: Internal code used as rails engine, not a real dependency
     :versions: []
     :when: 2017-07-10 14:53:19.261366000 Z
 - - :ignore
   - active-docs
-  - :who:
+  - :who: 
     :why: Internal code used as rails engine, not a real dependency
     :versions: []
     :when: 2017-07-10 14:54:16.828385000 Z
 - - :license
   - gemoji
   - MIT
-  - :who:
+  - :who: 
     :why: Marked as MIT in https://github.com/github/gemoji/blob/master/gemoji.gemspec
     :versions: []
     :when: 2017-07-10 15:29:48.374694000 Z
 - - :ignore
   - 3scale_time_range
-  - :who:
+  - :who: 
     :why: Private dependency, licensed under Red Hat, Inc
     :versions: []
     :when: 2017-07-10 15:33:22.337608000 Z
@@ -425,68 +425,68 @@
     :when: 2018-01-17 12:06:07.468492000 Z
 - - :whitelist
   - MIT/X11
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:41:10.872704000 Z
 - - :whitelist
   - BSD-like
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:41:20.655159000 Z
 - - :whitelist
   - CC-BY-4.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:41:28.474576000 Z
 - - :whitelist
   - WTFPL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:41:53.058253000 Z
 - - :whitelist
   - CC0-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:42:01.551501000 Z
 - - :whitelist
   - BSD-new
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:42:59.682695000 Z
 - - :whitelist
   - CC-BY-3.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-08 14:43:09.580575000 Z
 - - :whitelist
   - MIT*
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-15 13:27:14.491103000 Z
 - - :whitelist
   - Apache*
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-15 13:27:45.971658000 Z
 - - :whitelist
   - BSD*
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-15 13:27:55.011933000 Z
 - - :ignore_group
   - devDependencies
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2018-10-29 13:46:19.444904000 Z
 - - :approve
@@ -534,8 +534,8 @@
 - - :approve
   - fsevents
   - &8
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2018-11-06 14:58:21.177952000 Z
 - - :approve
@@ -547,8 +547,8 @@
 - - :approve
   - atob
   - &9
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2018-11-06 14:59:01.104111000 Z
 - - :approve
@@ -560,8 +560,8 @@
 - - :approve
   - mdn-data
   - &10
-    :who:
-    :why:
+    :who: 
+    :why: 
     :versions: []
     :when: 2019-06-04 15:08:40.824322000 Z
 - - :approve
@@ -570,3 +570,29 @@
 - - :approve
   - WHY=CC0 1.0 Universal
   - *10
+- - :approve
+  - abab
+  - &11
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2019-06-13 16:11:00.786570000 Z
+- - :approve
+  - WHO=Damian Peralta
+  - *11
+- - :approve
+  - WHY=W3C 3-clause BSD License
+  - *11
+- - :approve
+  - "@fortawesome/free-brands-svg-icons"
+  - &12
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2019-06-13 16:11:48.634810000 Z
+- - :approve
+  - WHO=Damian Peralta
+  - *12
+- - :approve
+  - WHY=CC-BY-4.0 AND MIT
+  - *12
