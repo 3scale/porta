@@ -1,4 +1,3 @@
-@javascript
 Feature: Notification preferences
   As a member
   I'd like to see the notification preferences page correctly

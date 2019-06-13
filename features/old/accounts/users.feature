@@ -1,4 +1,3 @@
-@javascript
 Feature: User management
   In order to manage users in my organization
   As an account admin

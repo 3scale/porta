@@ -1,4 +1,3 @@
-@javascript
 Feature: End User Plan creation
   In order to offer my client different usage conditions for end users
   As a provider
@@ -36,6 +35,7 @@ Feature: End User Plan creation
       And I am on the edit page for service "API" of provider "foo.example.com"
       Then there should not be any mention of end user plans
 
+  @javascript
   Scenario: Selecting default End User Plan
     Given an end user plan "First" of provider "foo.example.com"
     Given an end user plan "Second" of provider "foo.example.com"

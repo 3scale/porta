@@ -1,4 +1,3 @@
-@javascript
 Feature: Different account plans
   To have different account plans
   As a provider

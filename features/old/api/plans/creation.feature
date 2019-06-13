@@ -1,4 +1,3 @@
-@javascript
 Feature: Plan creation
   In order to offer my client different features and usage conditions
   As a provider

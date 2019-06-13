@@ -1,4 +1,4 @@
-@backend @javascript
+@backend
 Feature: End User management
   In order to manage end users
   As a provider

@@ -1,4 +1,4 @@
-@emails @javascript
+@emails
 Feature: Invitations
   In order to allow more people to be users of my account
   As an account admin
