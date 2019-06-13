@@ -2,15 +2,13 @@
   color: $content-background;
 
   &--context {
+    align-items: center;
+    display: flex;
     float: left;
-
-    .PopNavigation-list {
-      left: line-height-times(21);
-    }
+    height: 100%;
   }
 
   &--session {
-    float: right;
 
     .PopNavigation-list {
       right: line-height-times(1 / 2);
@@ -45,7 +43,7 @@
     overflow: hidden;
     position: absolute;
     text-align: left;
-    width: 20%;
+    top: line-height-times(6.3 / 2);
     z-index: 1000;
 
     &.is-toggled,
@@ -89,16 +87,16 @@
   }
 
   &-trigger {
-    color: $gallery;
+    color: var(--pf-c-button--m-plain--Color);
     cursor: pointer;
     display: block;
+    padding: line-height-times(3 / 4);
     min-width: line-height-times(5 / 2, true);
-    padding: line-height-times(117 / 100) line-height-times(1) line-height-times(1);
 
     &:hover,
     &.is-toggled,
     &.is-current {
-      color: $link-color;
+      color: var(--pf-c-button--m-plain--hover--Color);
     }
   }
 }

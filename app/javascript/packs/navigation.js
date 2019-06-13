@@ -3,8 +3,7 @@ import { ContextSelectorWrapper } from 'Navigation/components/ContextSelector'
 
 document.addEventListener('DOMContentLoaded', () => {
   const apiSelector = 'api_selector'
-  const apiSelectorNode = document.getElementById(apiSelector)
-  const apiSelectorData = JSON.parse(apiSelectorNode.dataset.api)
+  const apiSelectorData = JSON.parse(document.getElementById('user_widget').dataset.contextSwitcherData)
 
   ContextSelectorWrapper({...apiSelectorData}, apiSelector)
 
