@@ -203,10 +203,6 @@ World(Module.new do
       new_admin_account_invitation_path
     when 'the sent invitations page'
       admin_account_invitations_path
-    when 'the account signup page with invalid invitation token'
-      invitee_signup_path(:invitation_token => 'invalid')
-    when 'the provider user signup page with invalid invitation token'
-      provider_invitee_signup_path(:invitation_token => 'invalid')
     when 'the provider new invitation page'
       new_provider_admin_account_invitation_path
     when 'the provider sent invitations page'
