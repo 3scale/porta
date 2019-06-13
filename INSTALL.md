@@ -148,6 +148,20 @@ Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 bundle install
 ```
 
+If the `mysql2` gem installation fail with the error:
+
+```
+ld: library not found for -lssl
+```
+
+you can fix it setting the flags:
+
+```shell
+bundle config --local build.mysql2 "--with-ldflags=-L/usr/local/opt/openssl/lib --with-cppflags=-I/usr/local/opt/openssl/include"
+```
+
+and run `bundle install` again.
+
 #### NPM
 
 Run [NPM](https://www.npmjs.com/) to install all the required Node modules:
@@ -175,6 +189,6 @@ bundle exec rake db:reset # This will drop and setup the database
 ### Run Porta
 Start up the rails server by running the following command:
 ```bash
-$ UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
+$ env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
 > The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
