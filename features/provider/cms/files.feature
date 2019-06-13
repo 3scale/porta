@@ -1,4 +1,3 @@
-@javascript
 Feature: CMS files
   As a provider I want to be able to upload files to portal
 
