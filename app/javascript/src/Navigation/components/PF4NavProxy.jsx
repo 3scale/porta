@@ -34,9 +34,9 @@ const NavExpandable = ({id, title, isExpanded, isActive, children}) => {
   )
 }
 
-const NavItem = ({to, isActive, children}) => (
+const NavItem = ({to, isActive, target, children}) => (
   <li className="pf-c-nav__item">
-    <a href={to} className={`pf-c-nav__link ${isActive ? 'pf-m-current' : ''}`} aria-current="page">
+    <a href={to} className={`pf-c-nav__link ${isActive ? 'pf-m-current' : ''}`} aria-current="page" target={target}>
       {children}
     </a>
   </li>
