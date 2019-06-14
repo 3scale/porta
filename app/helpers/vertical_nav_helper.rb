@@ -79,7 +79,7 @@ module VerticalNavHelper
   def audience_accounts_items
     items = []
     items << {id: :listing,       title: 'Listing',       path: admin_buyers_accounts_path}           if can?(:manage, :partners)
-    items << {id: :acount_plans,  title: 'Account Plans', path: admin_buyers_account_plans_path}      if can?(:manage, :plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
+    items << {id: :account_plans,  title: 'Account Plans', path: admin_buyers_account_plans_path}      if can?(:manage, :plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
     items << {id: :subscriptions, title: 'Subscriptions', path: admin_buyers_service_contracts_path}  if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
 
     if can?(:manage, :settings)
@@ -126,8 +126,6 @@ module VerticalNavHelper
       items << {id: :redirects,          title: 'Redirects',          path: provider_admin_cms_redirects_path}
       items << {id: :groups,             title: 'Groups',             path: provider_admin_cms_groups_path}        if can?(:see, :groups)
       items << {id: :logo,               title: 'Logo',               path: edit_provider_admin_account_logo_path} if can?(:update, :logo)
-
-      # FIXME: active_sidebar returns undefined, it should return feature_visibility. Sidebar is not highlighted.
       items << {id: :feature_visibility, title: 'Feature Visibility', path: provider_admin_cms_switches_path}
       # FIXME: should be a link not a href
       items << {id: :ActiveDocs,         title: 'ActiveDocs',         path: admin_api_docs_services_path}          if can?(:manage, :plans)
@@ -145,9 +143,7 @@ module VerticalNavHelper
 
     if can?(:manage, :settings)
       items << {                       title: 'Settings'}
-      # FIXME: active_sidebar returns undefined, it should return :domain. Sidebar is not highlighted.
-      items << {id: :domain,           title: 'Domains & Access', path: admin_site_dns_path}
-      # FIXME: active_sidebar returns undefined, it should return :spam_protection. Sidebar is not highlighted.
+      items << {id: :admin_site_dns,   title: 'Domains & Access', path: admin_site_dns_path}
       items << {id: :spam_protection,  title: 'Spam Protection',  path: edit_admin_site_spam_protection_path}
       items << {id: :xss_protection,   title: 'XSS Protection',   path: edit_admin_site_developer_portal_path} if current_account.show_xss_protection_options?
       items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
@@ -160,10 +156,8 @@ module VerticalNavHelper
 
   def audience_messages_items
     items = []
-    # FIXME: active_sidebar returns undefined, it should return :inbox. Sidebar is not highlighted.
     items << {id: :inbox,         title: 'Inbox',         path: provider_admin_messages_root_path}
     items << {id: :sent_messages, title: 'Sent messages', path: provider_admin_messages_outbox_index_path}
-    # FIXME: active_sidebar returns undefined, it should return :trash. Sidebar is not highlighted.
     items << {id: :trash,         title: 'Trash',         path: provider_admin_messages_trash_index_path}
 
     if can?(:manage, :settings) && !master_on_premises?
@@ -178,7 +172,6 @@ module VerticalNavHelper
   def audience_forum_items
     items = []
     items << {id: :threads,          title: 'Threads',          path: admin_forum_path}
-    # FIXME: active_sidebar returns undefined, it should return :categories. Sidebar is not highlighted.
     items << {id: :categories,       title: 'Categories',       path: forum_categories_path}
 
     items << {id: :my_threads,       title: 'My Threads',       path: my_admin_forum_topics_path} if logged_in?
@@ -217,8 +210,7 @@ module VerticalNavHelper
     items << {id: :top_applications,   title: 'Top Applications',   path: admin_service_stats_top_applications_path(@service)}
     items << {id: :response_codes,     title: 'Response Codes',     path:   admin_service_stats_response_codes_path(@service)}
     items << {id: :alerts,             title: 'Alerts',             path: admin_service_alerts_path(@service)}
-    # FIXME: this throws an error, verify condition is met and item highlight works
-    items << {id: :integration_errors, title: 'Integration Errors', path: admin_service_errors_path(@service)} if can? :manage, :plans
+    items << {id: :errors,             title: 'Integration Errors', path: admin_service_errors_path(@service)} if can? :manage, :plans
     items
   end
 
