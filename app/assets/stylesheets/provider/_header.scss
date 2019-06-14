@@ -1,9 +1,12 @@
+$master-ribbon-height: line-height-times(1);
+
 .Header {
 
   height: 76px; // HACK: hardcoded value of PF4 Header hight.
 
   &--master {
-    border-top: line-height-times(1) solid $header-border-color;
+    height: calc(76px + $master-ribbon-height); // HACK: hardcoded value of PF4 Header hight.
+    border-top: $master-ribbon-height solid $header-border-color;
 
     &:before {
       content: 'Master';
