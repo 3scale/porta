@@ -10,7 +10,7 @@ class PaymentDetail < ApplicationRecord
 
   belongs_to :account
 
-  audited :allow_mass_assignment => true
+  audited allow_mass_assignment: true, sensitive_attributes: %i[payment_service_reference credit_card_partial_number credit_card_expires_on]
 
   attr_protected :account_id, :audit_ids
 
