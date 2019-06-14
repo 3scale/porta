@@ -65,7 +65,6 @@ Feature: User management
     And I press "Update User"
     Then I should see "should look like an email address" within "#user_email_input"
 
-  @javascript
   Scenario: Delete an user
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
