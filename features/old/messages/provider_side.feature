@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider side messages
   In order to facilitate communication between me and my buyers
   As a provider
@@ -16,7 +17,6 @@ Feature: Provider side messages
     And I follow "Messages"
     Then I should see link "Compose Message"
 
-  @javascript
   Scenario: Sending a message
     Given account "bob" has no messages
 
@@ -51,7 +51,6 @@ Feature: Provider side messages
     When I follow "Inbox"
     Then I should see read message from "bob" with subject "I want out!"
 
-  @javascript
   Scenario: Bulk operations
     Given account "foo.example.com" has no messages
     And 40 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
@@ -84,7 +83,6 @@ Feature: Provider side messages
     When I uncheck the first select in table body
       Then "(select all 40 messages)" should not be visible
 
-  @javascript
   Scenario: Availability of select all messages action
     Given account "foo.example.com" has no messages
 
@@ -104,7 +102,6 @@ Feature: Provider side messages
     When I check select in table header
       Then I should see "(select all 40 messages)"
 
-  @javascript
   Scenario: Deleting a message with bulk operations
     Given a message sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "Into the wild!"
     Given a message sent from buyer "bob" to provider "foo.example.com" with subject "Alaska" and body "Into the wild!"
@@ -123,7 +120,6 @@ Feature: Provider side messages
       And I should not see "Wildness"
       And I should see "Alaska"
 
-  @javascript
   Scenario: Deleting all messages with bulk operations
     Given account "foo.example.com" has no messages
 

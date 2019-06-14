@@ -17,7 +17,7 @@ Then /^I should see following table:$/ do |expected|
 
   begin
     expected.diff! table
-  rescue Cucumber::Ast::Table::Different, IndexError => error
+  rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
     if ENV['CI']
       puts error.message
       puts expected.to_s

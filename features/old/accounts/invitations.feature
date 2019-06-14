@@ -60,7 +60,6 @@ Feature: Invitations
     And I press "Send"
     Then I should see "This invitation has already been sent."
 
-  @javascript
   Scenario: Deleted user from invitation with changed email
     Given an invitation from account "foo.example.com" sent to "ubuntu@foo.example.com"
     When I follow the link to signup provider "foo.example.com" in the invitation sent to "ubuntu@foo.example.com"
@@ -104,7 +103,7 @@ Feature: Invitations
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
     And I go to the provider sent invitations page
-    And I press "Delete" for an invitation from account "foo.example.com" for "alice@foo.example.com"
+    And I press "Delete" for an invitation from account "foo.example.com" for "alice@foo.example.com" and I confirm dialog box
     Then I should not see invitation for "alice@foo.example.com"
 
   Scenario: Managing sent invitations disabled when multiple_users switch denied

@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider stats
   In order to know the usage of my service
   As an admin of provider account
@@ -21,7 +22,7 @@ Feature: Provider stats
     And I follow "Analytics"
     Then I should see "Usage"
 
-  @javascript @selenium
+  @selenium
   Scenario: Top applications (multiple applications mode)
     Given a buyer "bob" signed up to provider "foo.example.com"
     When I log in as provider "foo.example.com"

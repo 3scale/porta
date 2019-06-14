@@ -570,3 +570,29 @@
 - - :approve
   - WHY=CC0 1.0 Universal
   - *10
+- - :approve
+  - abab
+  - &11
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2019-06-14 14:20:56.029757000 Z
+- - :approve
+  - WHO=Damian Peralta
+  - *11
+- - :approve
+  - WHY=W3C 3-clause BSD License
+  - *11
+- - :approve
+  - "@fortawesome/free-brands-svg-icons"
+  - &12
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2019-06-14 14:21:45.869171000 Z
+- - :approve
+  - WHO=Damian Peralta
+  - *12
+- - :approve
+  - WHY=CC-BY-4.0 AND MIT
+  - *12
