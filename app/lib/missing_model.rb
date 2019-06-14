@@ -21,4 +21,5 @@ class MissingModel
   end
 
   class MissingApplication < MissingModel; end
+  class MissingProvider < MissingModel; end
 end

@@ -31,6 +31,7 @@ class ZyncEvent < BaseEventStoreEvent
   def model
     case type
     when 'Application' then Cinstance
+    when 'Provider' then Account.providers
     else type.constantize
     end
   end
@@ -55,6 +56,7 @@ class ZyncEvent < BaseEventStoreEvent
   def self.type_for(model)
     case model
     when Cinstance, ApplicationRelatedEvent then 'Application'
+    when ->(object) { object.is_a?(Account) && object.provider? } then 'Provider'
     else model.model_name.name
     end
   end

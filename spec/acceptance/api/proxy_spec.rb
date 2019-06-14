@@ -19,6 +19,7 @@ resource 'Proxy' do
   json(:resource) do
     let(:root) { 'proxy' }
     it { should include('credentials_location' => resource.credentials_location) }
+    it { should include('deployment_option' => resource.deployment_option.to_s) }
     it { should have_links('mapping_rules', 'service', 'self') }
   end
 end

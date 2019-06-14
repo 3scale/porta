@@ -80,6 +80,7 @@ master_service.update_attribute(:default_application_plan, application_plan)
 range = [0] | Alert::ALERT_LEVELS
 master_service.notification_settings = { web_buyer: range, email_buyer: range, web_provider: range, email_provider: range}
 master_service.save!
+
 application_plan.create_contract_with! master
 
 # Setting the default account plan for master (plan to which provider will subscribe)
@@ -91,6 +92,7 @@ master.save!
 provider_plan = ENV.fetch('PROVIDER_PLAN', 'enterprise')
 plan = ApplicationPlan.create!(issuer: master_service, name: provider_plan)
 master_service.application_plans.default!(plan)
+master_service.update_columns(deployment_option: 'self_managed')
 
 # Enable account_plans / service_plans and end_users plans for Master
 %i(end_users account_plans service_plans).each do |setting|

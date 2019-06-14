@@ -37,6 +37,9 @@ module Account::Domains
       .joins(:provider_account)
       .readonly(false)
     }
+
+    after_save :publish_domain_events, if: :domains_changed?
+    before_destroy :publish_domain_events, if: :provider?
   end
 
   module ClassMethods
@@ -69,6 +72,15 @@ module Account::Domains
       # TODO: case insensitive
       where(["(domain = :domain OR self_domain = :domain)", {:domain => domain}])
     end
+  end
+
+  def domains_changed?
+    attribute_changed?(:domain) || attribute_changed?(:self_domain)
+  end
+
+  def publish_domain_events
+    ::Domains::ProviderDomainsChangedEvent.create_and_publish!(self)
+    nil
   end
 
   def generate_domains
