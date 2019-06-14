@@ -3,12 +3,10 @@
 import React from 'react'
 import type { Node } from 'react'
 
-import {HiddenInputs} from 'LoginPage'
+import {HiddenInputs, FormGroup} from 'LoginPage'
 
 import {
   Form,
-  FormGroup,
-  TextInput,
   ActionGroup,
   Button
 } from '@patternfly/react-core'
@@ -52,6 +50,12 @@ class RequestPasswordForm extends React.Component<Props, State> {
 
   render (): Node {
     const {emailAddress, isValidEmail} = this.state
+    const emailInputProps = {
+      value: emailAddress,
+      onChange: this.handleTextInputEmail,
+      autoFocus: 'autoFocus',
+      inputIsValid: isValidEmail
+    }
     return (
       <Form
         action={this.props.providerPasswordPath}
@@ -59,24 +63,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
         method='post'
       >
         <HiddenInputs isPasswordReset/>
-        <FormGroup
-          label='Email address'
-          isRequired
-          fieldId='email'
-          helperTextInvalid='A valid email address is mandatory'
-          isValid={isValidEmail}
-        >
-          <TextInput
-            isRequired
-            type='email'
-            id='email'
-            name='email'
-            value={emailAddress}
-            onChange={this.handleTextInputEmail}
-            autoFocus='autoFocus'
-            isValid={isValidEmail}
-          />
-        </FormGroup>
+        <FormGroup type='email' labelIsValid={isValidEmail} inputProps={emailInputProps} />
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'
