@@ -8,7 +8,7 @@ module VerticalNavHelper
     when :buyers, :finance, :cms, :site, :settings, :audience
       audience_nav_sections
     when :apis, :applications, :active_docs
-      random_sections # TODO: find better name
+      active_docs_and_alerts_nav_sections
     when :serviceadmin, :monitoring
       service_nav_sections
     end
@@ -249,7 +249,7 @@ module VerticalNavHelper
   end
 
   # Others
-  def random_sections
+  def active_docs_and_alerts_nav_sections
     sections = []
     sections << {id: :activedocs, title: 'ActiveDocs', path: admin_api_docs_services_path} if can? :manage, :partners
     sections << {id: :alerts,     title: 'Alerts',     path: admin_alerts_path }           if can?(:manage, :monitoring) && current_user.multiple_accessible_services?
