@@ -50,6 +50,7 @@
     "jasmine-core": "^3.3.0",
     "jasmine-jquery": "^2.1.1",
     "jest": "^24.8.0",
+    "jest-transform-stub": "^2.0.0",
     "jsdom": "^13.2.0",
     "karma": "^4.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -75,6 +76,9 @@
     "webpack-dev-server": "^3.5.1"
   },
   "dependencies": {
+    "@patternfly/patternfly": "^2.12.4",
+    "@patternfly/react-core": "^3.36.0",
+    "@patternfly/react-icons": "^3.9.3",
     "@rails/webpacker": "^4.0.0-rc.8",
     "ajv": "^6.9.2",
     "babel-loader": "^8.0.6",
