@@ -16,7 +16,7 @@ module HtmlSelectorsHelper
     when 'the first api dashboard widget'
       "#service_#{provider_first_service!.id}"
     when 'the subsubmenu'
-      '.secondary-nav-item-pf.active'
+      '.subsubmenu'
     when 'the user widget'
       '#user_widget'
     when 'the footer'
