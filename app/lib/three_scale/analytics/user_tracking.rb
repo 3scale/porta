@@ -146,7 +146,7 @@ module ThreeScale
       end
 
       def flush
-        Segment.flush
+        Segment.flush if can_send?
       end
 
       def experiment(name, variation)
@@ -211,7 +211,7 @@ module ThreeScale
       end
 
       def can_send?
-        user_id && @account.try!(:provider?) && user_type != 'impersonation_admin'
+        Features::SegmentConfig.enabled? && user_id && @account.try!(:provider?) && user_type != 'impersonation_admin'
       end
 
       def with_segment_options(options)
@@ -231,7 +231,7 @@ module ThreeScale
 
       def segment_client(options = {})
         merged_options = segment_options.deep_merge(options)
-        Segment.with_options(merged_options) { |segment| return segment }
+        Segment.with_options(merged_options) { |segment| segment }
       end
 
       def segment_options
