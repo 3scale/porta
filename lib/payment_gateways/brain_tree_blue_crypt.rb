@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module PaymentGateways
   class BrainTreeBlueCrypt < PaymentGatewayCrypt
-    attr_reader :gateway_client, :gateway
+    attr_reader :gateway_client, :gateway, :customer_gateway
 
     def initialize(user)
       super
@@ -10,27 +12,34 @@ module PaymentGateways
         public_key: payment_gateway_options[:public_key],
         private_key: payment_gateway_options[:private_key]
       )
-      @gateway = @gateway_client.transparent_redirect
+      @gateway = @gateway_client.client_token
+      @customer_gateway = @gateway_client.customer
     end
 
-    def confirm(request)
-      gateway.confirm(request.query_string)
+    def confirm(options, nonce)
+      customer_gateway.update(buyer_reference_for_update, options.deep_merge({payment_method_nonce: nonce, credit_card: { options: {make_default: true, update_existing_token: current_token } }}))
     rescue Braintree::BraintreeError => e
-      notify_exception(e, request.query_string)
+      notify_exception(e, {buyer_reference: buyer_reference_for_update})
       false
     end
 
-    def form_url
-      gateway.url
+    def authorization(options = {})
+      @gateway.generate(options)
     end
 
-    def create_customer_data(options)
+    # This smells of :reek:NilCheck
+    def current_token
+      find_customer.credit_cards.first&.token
+    end
+
+    def create_customer_data(options = {})
       customer = find_customer
       if customer
         remote_update_credit_card(customer, options)
       else
-        gateway.create_customer_data(options.merge(customer: { id: buyer_reference_for_update }))
+        customer = customer_gateway.create(options.merge(id: buyer_reference_for_update))
       end
+      customer
     end
 
     def find_customer
@@ -40,16 +49,15 @@ module PaymentGateways
     # This will update the last saved credit card if it exists
     # :reek:FeatureEnvy {enabled: false}
     def remote_update_credit_card(customer, options)
-      token = customer.credit_cards.first.try!(:token)
-      credit_card_options = token ? { customer: { credit_card: { options: { update_existing_token: token } } } } : {}
-      gateway.update_customer_data(options.merge(customer_id: customer.id).merge(credit_card_options))
+      credit_card_options = current_token ? {credit_card: { options: { update_existing_token: current_token } } } : {}
+      customer_gateway.update(customer.id, options.deep_merge(credit_card_options))
     end
 
     # Try to find a customer that matches the customer_id
     # if found returns the provided customer result otherwise nil
     def try_find_customer(customer_id)
       return if customer_id.blank?
-      gateway_client.customer.find customer_id
+      customer_gateway.find customer_id
     rescue Braintree::NotFoundError
       nil
     end

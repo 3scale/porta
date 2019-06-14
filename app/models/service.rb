@@ -211,7 +211,7 @@ class Service < ApplicationRecord
 
   def publish_events
     OIDC::ServiceChangedEvent.create_and_publish!(self)
-    OIDC::ProxyChangedEvent.create_and_publish!(proxy) if backend_version_change&.include?('oauth')
+    OIDC::ProxyChangedEvent.create_and_publish!(proxy)
   end
 
   def backend_authentication_type

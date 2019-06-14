@@ -58,6 +58,7 @@ class Account < ApplicationRecord
   include CreditCard
   include Gateway
   include States
+  require_dependency 'account/domains'
   include Domains
 
   #TODO: this needs testing?
@@ -72,7 +73,7 @@ class Account < ApplicationRecord
 
   scope :not_master, -> { where(master: [false, nil]) }
 
-  audited allow_mass_assignment: true
+  audited allow_mass_assignment: true, sensitive_attributes: %i[site_access_code credit_card_partial_number credit_card_expires_on credit_card_auth_code payment_gateway_options credit_card_authorize_net_payment_profile_token]
 
   # this is done in a callback because we want to do this AFTER the account is deleted
   # otherwise the before_destroy admin check in the user will stop the deletion

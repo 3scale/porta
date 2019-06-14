@@ -74,7 +74,7 @@ Feature: Create application
      And I should be on the provider side "UltimateWidget" application page
      And should see "Application was successfully created"
 
-   @javascript
+  @javascript
    Scenario: The service of the selected application plans hasn´t service plan
      Given a service "second" of provider "foo.example.com"
        And a published application plan "second_app_plan" of service "second" of provider "foo.example.com"
@@ -117,7 +117,6 @@ Feature: Create application
      And I press "Create"
    Then I should see "can´t be blank" in the "Name" field
      And I should see "can´t be blank" in the "Description" field
-
 
   @javascript
   Scenario: Create an application with a pending contract

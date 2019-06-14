@@ -32,6 +32,8 @@ class ProxyRepresenter < ThreeScale::Representer
   property :created_at
   property :updated_at
 
+  property :deployment_option
+
   # By sending the lock_version with the update call the record is updated only when matching that version.
   property :lock_version
 

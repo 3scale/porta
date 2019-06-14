@@ -88,6 +88,7 @@ class Proxy < ApplicationRecord
 
   before_save :set_correct_endpoints, if: :set_correct_endpoints?
   after_save :publish_events
+  before_destroy :publish_events
 
   after_save :track_apicast_version_change, if: :apicast_configuration_driven_changed?
 
@@ -257,6 +258,8 @@ class Proxy < ApplicationRecord
 
   def publish_events
     OIDC::ProxyChangedEvent.create_and_publish!(self)
+    Domains::ProxyDomainsChangedEvent.create_and_publish!(self)
+    nil
   end
 
   DEPLOYMENT_OPTION_CHANGED = ->(record) { record.changed_attributes.key?(:deployment_option) }
