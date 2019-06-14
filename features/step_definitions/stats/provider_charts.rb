@@ -36,5 +36,6 @@ When(/^I select today from the stats menu$/) do
   page.should_not have_css('.StatsChart-container.is-loading')
   page.should have_css('.StatsMenu')
   find('.StatsMenu-customLink--since').click
+  step 'show me the page'
   find('.ui-datepicker-today').click
 end
