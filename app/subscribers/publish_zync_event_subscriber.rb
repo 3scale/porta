@@ -16,8 +16,9 @@ class PublishZyncEventSubscriber
            # When the app is deleted the event caries all the needed information
            when Cinstances::CinstanceCancellationEvent then ZyncEvent.create(event)
            when ApplicationRelatedEvent then ZyncEvent.create(event, event.application)
-           when OIDC::ProxyChangedEvent then ZyncEvent.create(event, event.proxy)
+           when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent then ZyncEvent.create(event, event.proxy)
            when OIDC::ServiceChangedEvent then ZyncEvent.create(event, event.service)
+           when Domains::ProviderDomainsChangedEvent then  ZyncEvent.create(event, event.provider)
            else raise "Unknown event type #{event.class}"
            end
 

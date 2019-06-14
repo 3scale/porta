@@ -214,10 +214,16 @@ class ZyncWorker
 
     tenant, provider = update_tenant(event_id)
 
-    client = message_bus_client(tenant)
-
-    MessageBusPublisher.new(notification).call(client, provider) do
+    publish_notification = -> {
       http_put(notification_url, notification, event_id)
+    }
+
+    if provider # tenant is still there
+      client = message_bus_client(tenant)
+
+      MessageBusPublisher.new(notification).call(client, provider, &publish_notification)
+    else
+      publish_notification.call
     end
   rescue UnprocessableEntityError
     publish_dependencies_events(event_id)
@@ -256,6 +262,8 @@ class ZyncWorker
     http_put(tenant_url, tenant, event_id)
 
     [ tenant, provider ]
+  rescue ActiveRecord::RecordNotFound
+    [ { id: event.tenant_id }, nil ]
   end
 
   def provider_endpoint(provider)
