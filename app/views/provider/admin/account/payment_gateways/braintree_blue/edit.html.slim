@@ -1,39 +1,44 @@
 css:
   .form-control:- moz -placeholder {
     color: #999999;
-      }
-      .form-control::-moz-placeholder {
-        color: #999999;
-          }
-          .form-control:- ms - input -placeholder {
-            color: #999999;
-              }
-              .form-control::-webkit-input-placeholder {
-                color: #999999;
-                  }
-                  .form-control {
-                    display: block;
-                      width: 100%;
-                        height: 34px;
-                          padding: 6px 12px;
-                            font-size: 14px;
-                              line-height: 1.428571429;
-                                color: #555555;
-                                  vertical-align: middle;
-                                    background-color: #ffffff;
-                                      border: 1px solid #cccccc;
-                                        border-radius: 4px;
-                                          - webkit - box - shadow : inset 0 1px 1px rgba(0, 0, 0, 0.075);
-                                          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-                                        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-                                        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-                                          }
-                                          .form-control:focus {
-                                            border-color: #66afe9;
-                                              outline: 0;
-                                                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
-                                                box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
-                                                  }
+  }
+
+  .form-control::-moz-placeholder {
+    color: #999999;
+  }
+
+  .form-control:- ms - input -placeholder {
+    color: #999999;
+  }
+
+  .form-control::-webkit-input-placeholder {
+    color: #999999;
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    vertical-align: middle;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    - webkit - box - shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  }
+
+  .form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+  }
 
 h2
   = site_account.org_name
@@ -96,13 +101,13 @@ javascript:
   var $form = $('#new_customer');
   var submit = document.querySelector('input[type="submit"]');
 
-  if (typeof braintree !== 'undefined'){
+  if (typeof braintree !== 'undefined') {
     braintree.client.create({
-          authorization: '#{j @braintree_authorization}'
-    }, function (clientErr, clientInstance) {
+      authorization: '#{j @braintree_authorization}'
+    }, function(clientErr, clientInstance) {
       if (clientErr) {
-              console.error(clientErr);
-              return;
+        console.error(clientErr);
+        return;
       }
 
       // This example shows Hosted Fields, but you can also use this
@@ -110,50 +115,50 @@ javascript:
       // PayPal or Data Collector.
 
       braintree.hostedFields.create({
-              client: clientInstance,
-              styles: {
-                  'input': {
-                      'font-size': '14px'
-                  },
-                  'input.invalid': {
-                      'color': 'red'
-                  },
-                  'input.valid': {
-                      'color': 'green'
-                  }
-              },
-              fields: {
-                  number: {
-                      selector: '#customer_credit_card_number',
-                      placeholder: '4111 1111 1111 1111'
-                  },
-                  cvv: {
-                      selector: '#customer_credit_card_cvv',
-                      placeholder: '123'
-                  },
-                  expirationDate: {
-                      selector: '#customer_credit_card_expiration_date',
-                      placeholder: 'MM/YY'
-                  }
-              }
-      }, function (hostedFieldsErr, hostedFieldsInstance) {
+        client: clientInstance,
+        styles: {
+          'input': {
+            'font-size': '14px'
+          },
+          'input.invalid': {
+            'color': 'red'
+          },
+          'input.valid': {
+            'color': 'green'
+          }
+        },
+        fields: {
+          number: {
+            selector: '#customer_credit_card_number',
+            placeholder: '4111 1111 1111 1111'
+          },
+          cvv: {
+            selector: '#customer_credit_card_cvv',
+            placeholder: '123'
+          },
+          expirationDate: {
+            selector: '#customer_credit_card_expiration_date',
+            placeholder: 'MM/YY'
+          }
+        }
+      }, function(hostedFieldsErr, hostedFieldsInstance) {
         if (hostedFieldsErr) {
-                  console.error(hostedFieldsErr);
-                  return;
+          console.error(hostedFieldsErr);
+          return;
         }
 
         submit.removeAttribute('disabled');
 
-        $form.on('submit', function (event) {
+        $form.on('submit', function(event) {
           event.preventDefault();
-          hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
-                      if (tokenizeErr) {
-                          console.error(tokenizeErr);
-                          return;
-                      }
+          hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
+            if (tokenizeErr) {
+              console.error(tokenizeErr);
+              return;
+            }
 
-                      $('#braintree_nonce').val(payload['nonce']);
-                      $form.get(0).submit();
+            $('#braintree_nonce').val(payload['nonce']);
+            $form.get(0).submit();
           });
         });
       });
