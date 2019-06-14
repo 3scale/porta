@@ -1,7 +1,10 @@
+body {
+  min-width: $layout-wrapper-min-width;
+}
+
 .wrapper, #layout-header, #wrapper {
   height: 100%;
   margin: 0 auto;
-  min-width: $layout-wrapper-min-width;
   // padding-left: line-height-times(1); This is added by Patternfly, value: var(--pf-c-nav__list-link--PaddingTop) var(--pf-c-nav__list-link--PaddingRight) var(--pf-c-nav__list-link--PaddingBottom) var(--pf-c-nav__list-link--PaddingLeft)
   // padding-right: line-height-times(1); TODO: this should be delegated to Patternfly or at least use the same measures as PF.
   position: relative;
