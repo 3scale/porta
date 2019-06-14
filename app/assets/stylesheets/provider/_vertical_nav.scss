@@ -9,4 +9,6 @@
 .pf-c-nav__section-title {
   // Give nested label more padding
   padding-left: var(--pf-c-nav__simple-list-link--nested--PaddingLeft) !important;
+  // Give artificial margin-top of pf-c-nav__section
+  margin-top: 2rem;
 }

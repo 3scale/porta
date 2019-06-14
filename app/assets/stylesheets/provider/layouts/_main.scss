@@ -37,10 +37,6 @@ body {
 .Main {
   // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
   padding: 25px !important;
-  // padding-top: var(--pf-c-page__main-section--PaddingTop);
-  // padding-right: var(--pf-c-page__main-section--PaddingRight);
-  // padding-bottom: var(--pf-c-page__main-section--PaddingBottom);
-  // padding-left: var(--pf-c-page__main-section--PaddingLeft);
 
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
