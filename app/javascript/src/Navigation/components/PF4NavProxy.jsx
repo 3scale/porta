@@ -20,9 +20,7 @@ const NavExpandable = ({id, title, isExpanded, isActive, children}) => {
       <a href="#" className="pf-c-nav__link" id={id} aria-expanded="true" onClick={onItemClick}>
         {title}
         <span className="pf-c-nav__toggle">
-          <svg style={{ verticalAlign: '-0.125em' }} fill="currentColor" height="1em" width="1em" viewBox="0 0 256 512" aria-hidden="true" role="img">
-            <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z" transform=""></path>
-          </svg>
+          {Caret}
         </span>
       </a>
       <section className="pf-c-nav__subnav" aria-labelledby={id}>
@@ -33,6 +31,12 @@ const NavExpandable = ({id, title, isExpanded, isActive, children}) => {
     </li>
   )
 }
+
+const Caret = (
+  <svg style={{ verticalAlign: '-0.125em' }} fill="currentColor" height="1em" width="1em" viewBox="0 0 256 512" aria-hidden="true" role="img">
+    <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z" transform=""></path>
+  </svg>
+)
 
 const NavItem = ({to, isActive, target, children}) => (
   <li className="pf-c-nav__item">
