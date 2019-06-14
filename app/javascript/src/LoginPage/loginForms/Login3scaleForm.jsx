@@ -3,12 +3,10 @@
 import React from 'react'
 import type { Node } from 'react'
 
-import {HiddenInputs} from 'LoginPage'
+import {HiddenInputs, FormGroup} from 'LoginPage'
 
 import {
   Form,
-  FormGroup,
-  TextInput,
   ActionGroup,
   Button
 } from '@patternfly/react-core'
@@ -65,6 +63,18 @@ class Login3scaleForm extends React.Component<Props, State> {
 
   render (): Node {
     const {username, password, isValidUsername, isValidPassword} = this.state
+    const usernameInputProps = {
+      value: username,
+      onChange: this.handleTextInputUsername,
+      autoFocus: 'autoFocus',
+      inputIsValid: isValidUsername
+    }
+    const passwordInputProps = {
+      value: password,
+      onChange: this.handleTextInputPassword,
+      ariaInvalid: 'false',
+      isValid: isValidPassword
+    }
     return (
       <Form
         action={this.props.providerSessionsPath}
@@ -73,44 +83,8 @@ class Login3scaleForm extends React.Component<Props, State> {
         method='post'
       >
         <HiddenInputs/>
-        <FormGroup
-          label='Email or Username'
-          isRequired
-          fieldId='session_username'
-          helperTextInvalid='Email or username is mandatory'
-          isValid={isValidUsername}
-        >
-          <TextInput
-            isRequired
-            type='text'
-            id='session_username'
-            name='username'
-            tabIndex='1'
-            value={username}
-            onChange={this.handleTextInputUsername}
-            autoFocus='autoFocus'
-            isValid={isValidUsername}
-          />
-        </FormGroup>
-        <FormGroup
-          label='Password'
-          isRequired
-          fieldId='session_password'
-          helperTextInvalid='Password is mandatory'
-          isValid={isValidPassword}
-        >
-          <TextInput
-            isRequired
-            type='password'
-            id='session_password'
-            name='password'
-            tabIndex='2'
-            value={password}
-            onChange={this.handleTextInputPassword}
-            aria-invalid='false'
-            isValid={isValidPassword}
-          />
-        </FormGroup>
+        <FormGroup type='username' labelIsValid={isValidUsername} inputProps={usernameInputProps} />
+        <FormGroup type='password' labelIsValid={isValidPassword} inputProps={passwordInputProps} />
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'
