@@ -8,41 +8,6 @@ module ThreeScale
       System::Application.config.stubs(redis: { url: 'redis://my-redis/1' })
     end
 
-    test '#redis_db_in' do
-      assert_equal 4, MessageBusConfig.redis_db_in(db: 4)
-      assert_equal 3, MessageBusConfig.redis_db_in(url: 'redis://my-redis/3')
-      assert_equal 0, MessageBusConfig.redis_db_in(url: 'redis://my-redis')
-    end
-
-    test '#next_db' do
-      assert_equal 1, MessageBusConfig.next_db(0)
-      assert_equal 0, MessageBusConfig.next_db(15)
-    end
-
-    test '#key_collision_prone?' do
-      different_db_configs = [
-        [{ url: 'redis://my-redis/0' }, { url: 'redis://my-redis/1' }],
-        [{ url: 'redis://my-redis/0' }, { host: 'my-redis', db: '1' }],
-        [{ host: 'my-redis', db: '0' }, { url: 'redis://my-redis/1' }],
-        [{ host: 'my-redis', db: '0' }, { host: 'my-redis', db: '1' }]
-      ]
-      different_db_configs.each { |(config1, config2)| refute MessageBusConfig.key_collision_prone?(config1, config2) }
-
-      same_db_configs = [
-        [{ url: 'redis://my-redis/0' }, { url: 'redis://my-redis/0' }],
-        [{ url: 'redis://my-redis/0' }, { host: 'my-redis', db: '0' }],
-        [{ host: 'my-redis', db: '0' }, { url: 'redis://my-redis/0' }],
-        [{ host: 'my-redis', db: '0' }, { host: 'my-redis', db: '0' }]
-      ]
-      same_db_configs.each do |(config1, config2)|
-        assert MessageBusConfig.key_collision_prone?(config1, config2)
-        refute MessageBusConfig.key_collision_prone?(config1.merge(namespace: 'ns'), config2)
-        refute MessageBusConfig.key_collision_prone?(config1, config2.merge(namespace: 'ns'))
-        refute MessageBusConfig.key_collision_prone?(config1.merge(namespace: 'ns'), config2.merge(namespace: 'other-ns'))
-        assert MessageBusConfig.key_collision_prone?(config1.merge(namespace: 'ns'), config2.merge(namespace: 'ns'))
-      end
-    end
-
     test 'uses own config if url is present' do
       config = MessageBusConfig.new(redis: { 'url' => 'redis://my-redis/5' })
       assert_equal 'redis://my-redis/5', config.redis_config[:url]
