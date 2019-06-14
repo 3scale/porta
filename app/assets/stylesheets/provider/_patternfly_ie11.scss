@@ -118,19 +118,21 @@ body {
   text-align: left;
   background-color: #fff; }
 
-a {
-  color: #06c;
-  -webkit-text-decoration: none;
-          text-decoration: none; }
+  // Moved under pf-c-nav to not to mess with existing styles
+  // a {
+//   color: #06c;
+//   -webkit-text-decoration: none;
+//           text-decoration: none; }
 
-a:hover{
-  text-decoration: underline; }
+// a:hover{
+//   text-decoration: underline; }
 
-a:hover{
-  -webkit-text-decoration: underline; }
+// a:hover{
+//   -webkit-text-decoration: underline; }
 
-a:hover{
-  color: #004080; }
+// a:hover{
+//   // color: #004080; } wrong?
+//   color: #06c; }
 
 button,
 a {
@@ -683,7 +685,24 @@ readers do not read off random characters that represent icons */ }
 /* stylelint-disable */
 /* stylelint-enable */
 .pf-c-nav {
-  position: relative; }
+  position: relative;
+
+  // HACK: this should affect the whole page
+  a {
+    color: #06c;
+    -webkit-text-decoration: none;
+            text-decoration: none; }
+  
+  a:hover{
+    text-decoration: underline; }
+  
+  a:hover{
+    -webkit-text-decoration: underline; }
+  
+  a:hover{
+    // color: #004080; } wrong?
+    color: #06c; }
+}
   .pf-c-nav .pf-c-nav__scroll-button {
     display: none;
     visibility: hidden; }
@@ -732,10 +751,12 @@ readers do not read off random characters that represent icons */ }
 //   color: #004080; }
 
 .pf-c-nav__list .pf-c-nav__link:active{
-  color: #004080; }
+  // color: #004080; }
+  color: #06c; }
 
 .pf-c-nav__list .pf-c-nav__link:hover{
-  color: #004080; }
+  // color: #004080; }
+  color: #06c; }
 
 // .pf-c-nav__list .pf-c-nav__link:focus{
 //   font-weight: 400; }
@@ -743,25 +764,34 @@ readers do not read off random characters that represent icons */ }
 .pf-c-nav__list .pf-c-nav__link:active{
   font-weight: 400; }
 .pf-c-nav__list .pf-m-current.pf-c-nav__link {
-  color: #004080; }
+  // color: #004080; }
+  color: #06c; }
 .pf-c-nav__list .pf-m-current > .pf-c-nav__link {
-  color: #004080; }
+  // color: #004080; }
+  color: #06c; }
 .pf-c-nav__list .pf-c-nav__link.pf-m-hover::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 .pf-c-nav__list .pf-c-nav__link:hover::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 .pf-c-nav__list .pf-c-nav__link.pf-m-active::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 .pf-c-nav__list .pf-c-nav__link:active::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 .pf-c-nav__list .pf-c-nav__link.pf-m-focus::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 // .pf-c-nav__list .pf-c-nav__link:focus::after {
 //   background-color: #004080; }
 .pf-c-nav__list .pf-m-current.pf-c-nav__link::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 .pf-c-nav__list .pf-m-current > .pf-c-nav__link::after {
-  background-color: #004080; }
+  // background-color: #004080; }
+  background-color: #06c; }
 
 .pf-c-nav__separator {
   height: 1px;
@@ -793,13 +823,15 @@ readers do not read off random characters that represent icons */ }
   color: #131313; }
 
 .pf-c-nav__simple-list .pf-c-nav__link:active{
-  color: #004080; }
+  // color: #004080; }
+  color: #06c; }
 
 // .pf-c-nav__simple-list .pf-c-nav__link:focus{
 //   color: #0A84FF; }
 
 .pf-c-nav__simple-list .pf-c-nav__link:hover{
-  color: #004080; }
+  // color: #004080; }
+  color: #06c; }
 
 .pf-c-nav__simple-list .pf-c-nav__link:active{
   font-weight: 500; }
