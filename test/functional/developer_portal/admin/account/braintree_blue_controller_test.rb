@@ -18,7 +18,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
 
     @controller.stubs(current_account: @account)
 
-    get :hosted_success
+    post :hosted_success, form_params
 
     @account.reload
 
@@ -35,8 +35,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     assert_nil @account.credit_card_auth_code
 
     @controller.stubs(current_account: @account)
-
-    get :hosted_success
+    post :hosted_success, form_params
 
     @account.reload
 
@@ -54,7 +53,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     @controller.stubs(current_account: @account)
     session[:plan_changes] = {1 => 2}
 
-    get :hosted_success
+    post :hosted_success, form_params
 
     @account.reload
 
@@ -73,7 +72,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     @controller.stubs(current_account: @account)
     session[:plan_changes] = {1 => 2}
 
-    get :hosted_success
+    post :hosted_success, form_params
 
     @account.reload
 
@@ -92,7 +91,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     @controller.stubs(current_account: @account)
     session[:plan_changes] = {1 => 2}
 
-    get :hosted_success
+    post :hosted_success, form_params
 
     @account.reload
 
@@ -105,5 +104,29 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
 
   def successful_result(user = nil)
     super(user || @buyer.admins.first)
+  end
+
+  def form_params
+    {
+      customer: {
+        first_name: 'John',
+        last_name: 'Doe',
+        phone: '123456789',
+        credit_card: {
+          billing_address: {
+            company: 'Invisible Inc.',
+            street_address: '123 Main Street',
+            postal_code: '12345',
+            locality: 'Anytown',
+            region: 'Nowhere',
+            country_name: 'US'
+          }
+        }
+      },
+      braintree: {
+        nonce: 'a_nonce',
+        last_four: '7654'
+      }
+    }
   end
 end
