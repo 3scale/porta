@@ -5,6 +5,7 @@ Feature: Provider Payment Details
     Given a provider "foo.example.com"
     And provider "master" manages payments with "braintree_blue"
     And provider "master" has testing credentials for braintree
+    And Braintree is stubbed to accept credit card for buyer
 
   Scenario: Upload logo
     Given master provider has the following fields defined for "Account":

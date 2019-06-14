@@ -43,31 +43,19 @@ module PaymentGateways
     end
 
     test '#confirm' do
-      query_string = 'a=1&b=2'
-      request = mock do
-        expects(:query_string).returns(query_string)
-      end
-      @braintree.gateway.expects(:confirm).with(query_string)
-      @braintree.confirm(request)
+      @braintree.expects(:current_token).returns('token')
+      @braintree.customer_gateway.expects(:update).with(@braintree.buyer_reference_for_update, {payment_method_nonce: 'nonce', credit_card: { options: {make_default: true, update_existing_token: 'token'}}})
+      @braintree.confirm({}, 'nonce')
     end
 
     test '#confirm with error caught' do
-      query_string = 'a=1&b=2'
-
-      request = mock do
-        expects(:query_string).twice.returns(query_string)
-      end
-
+      @braintree.expects(:current_token).returns('token')
       exception = Braintree::BraintreeError.new('a braintree exception')
-      @braintree.gateway.expects(:confirm).raises(exception)
-      @braintree.expects(:notify_exception).with(exception, query_string)
+      @braintree.customer_gateway.expects(:update).raises(exception)
+      @braintree.expects(:notify_exception).with(exception, {buyer_reference: @braintree.buyer_reference_for_update} )
       assert_nothing_raised do
-        @braintree.confirm(request)
+        @braintree.confirm({}, 'nonce')
       end
-    end
-
-    test '#form_url returns gateway url' do
-      assert_equal 'https://api.sandbox.braintreegateway.com:443/merchants/aMerchant/transparent_redirect_requests', @braintree.form_url
     end
 
     test '#buyer_reference' do
@@ -85,29 +73,20 @@ module PaymentGateways
     test '#create_customer_data when there is already one stored in Braintree' do
       found_response = mock
       credit_card = mock
-      credit_card.stubs(token: 'hello')
-      found_response.expects(id: 'customer_id', credit_cards: [credit_card])
-      customer_client = mock
-      customer_client.expects(:find).returns(found_response)
-      data = {
-        redirect_url: 'http://example.com/payments/callbacks/braintree',
-        customer_id: 'customer_id',
-        customer: { credit_card: { options: { update_existing_token: 'hello' } }
-        }
-      }
+      credit_card.stubs(token: 'a_token')
+      found_response.stubs(id: 'customer_id', credit_cards: [credit_card])
 
-      @braintree.gateway_client.stubs(customer: customer_client)
-      @braintree.gateway.expects(:update_customer_data).with(data)
+      data = { billing_address: { firstname: 'John', lastname: 'Doe' } }
+
+      @braintree.expects(:find_customer).returns(found_response).at_least_once
+      @braintree.customer_gateway.expects(:update).with('customer_id', data.merge({credit_card: { options: { update_existing_token: 'a_token' } } }))
       @braintree.create_customer_data(data)
     end
 
     test '#create_customer_data when there is none stored in Braintree' do
-      data = { redirect_url: 'http://example.com/payments/callbacks/braintree', customer: { id: @braintree.buyer_reference_for_update } }
-      @braintree.gateway.expects(:create_customer_data).with(data)
-
-      customer_client = mock
-      customer_client.expects(:find).returns(nil)
-      @braintree.gateway_client.stubs(customer: customer_client)
+      data = { billing_address: { firstname: 'John', lastname: 'Doe' } }
+      @braintree.stubs(:find_customer).returns(nil)
+      @braintree.customer_gateway.expects(:create).with(data.merge(id: @braintree.buyer_reference_for_update))
 
       @braintree.create_customer_data(data)
     end
