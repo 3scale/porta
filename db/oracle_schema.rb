@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190527104222) do
+ActiveRecord::Schema.define(version: 20190530065503) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -1080,6 +1080,7 @@ ActiveRecord::Schema.define(version: 20190527104222) do
     t.string   "authentication_method"
     t.integer  "lock_version",                              precision: 38, default: 0,                                   null: false
     t.text     "policies_config"
+    t.string   "oidc_issuer_type",                                         default: "keycloak"
   end
 
   add_index "proxies", ["service_id"], name: "index_proxies_on_service_id"
