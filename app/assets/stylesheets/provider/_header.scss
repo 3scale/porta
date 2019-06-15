@@ -1,22 +1,18 @@
+$master-ribbon-height: line-height-times(1);
+
 .Header {
-  background-color: $header-background-color;
-  height: line-height-times(63 / 20);
-  padding: 0;
-  position: fixed;
-  width: 100%;
-  z-index: 1052; // select2 dropdown has z-index of 1051
-  top: 0;
+
+  height: 76px; // HACK: hardcoded value of PF4 Header hight.
 
   &--master {
-    border-top: line-height-times(1) solid $header-border-color;
-    height: line-height-times(39 / 10);
+    height: calc(76px + $master-ribbon-height); // HACK: hardcoded value of PF4 Header hight.
+    border-top: $master-ribbon-height solid $header-border-color;
 
     &:before {
       content: 'Master';
       position: absolute;
-      top: line-height-times(-1);
+      top: 0;
       left: 50%;
-      font-family: $font-family-monospace;
     }
 
     & + #wrapper {
@@ -27,10 +23,10 @@
       }
     }
 
-    & + #wrapper .vertical-nav .nav-pf-vertical,
-    & + #wrapper .vertical-nav .nav-pf-secondary-nav {
-      top: line-height-times(39 / 10);
-    }
+    // & + #wrapper .vertical-nav .nav-pf-vertical,
+    // & + #wrapper .vertical-nav .nav-pf-secondary-nav {
+    //   top: line-height-times(39 / 10);
+    // }
   }
 
   .Header-link {
@@ -53,5 +49,9 @@
     @include inline-block-list;
     float: left;
     list-style: none;
+  }
+
+  .pf-c-page__header-nav {
+    align-self: center;
   }
 }

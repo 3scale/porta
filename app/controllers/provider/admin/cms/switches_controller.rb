@@ -1,6 +1,6 @@
 class Provider::Admin::CMS::SwitchesController < Provider::Admin::CMS::BaseController
 
-  activate_menu :cms, :features_visibility
+  activate_menu :cms, :features_visibility, :feature_visibility
   sublayout nil
 
   before_action :find_switch, only: [ :update, :destroy ]
