@@ -1,4 +1,3 @@
-@javascript
 Feature: Audience menu
   In order to manage my audience
   As a provider

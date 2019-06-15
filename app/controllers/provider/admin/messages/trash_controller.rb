@@ -1,6 +1,6 @@
 class Provider::Admin::Messages::TrashController < FrontendController
   before_action :find_message, only: [:show, :destroy]
-  activate_menu :buyers, :messages
+  activate_menu :buyers, :messages, :trash
 
   def index
     @messages = current_account.trashed_messages

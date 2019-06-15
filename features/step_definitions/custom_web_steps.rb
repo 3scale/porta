@@ -232,7 +232,7 @@ end
 
 [ 'the audience dashboard widget', 'the apis dashboard widget',
   'the first api dashboard widget',
-  'the main menu', 'the submenu',
+  'the main menu',
   'the subsubmenu','the user widget',
   'the footer', 'the account details box' ].each do |scope|
   When /^(.*) in (#{scope})$/ do |lstep, scope|
