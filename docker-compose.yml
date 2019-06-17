@@ -1,44 +1,100 @@
-version: '2.1'
+version: '3.4'
+
+x-system_environment:
+  &system_environment
+  links:
+    - apisonator
+    - mailhog
+    - memcached
+    - mysql
+    - redis
+  environment:
+    - DATABASE_URL=mysql2://root@mysql/3scale_system_development
+    - REDIS_URL=redis://redis/1
+    - MEMCACHE_SERVERS=memcached:11211
+    - BACKEND_HOST=apisonator:3001
+    - BACKEND_REDIS_URL=redis://redis/3
+    - SECRET_KEY_BASE=secret
+    - THREESCALE_CORE_INTERNAL_API=http://apisonator:3001/internal/
+    - CONFIG_INTERNAL_API_USER=system_app
+    - CONFIG_INTERNAL_API_PASSWORD=password
+    - SMTP_ADDRESS=mailhog
+    - SMTP_PORT=1025
+    - UNICORN_WORKERS=2
+    - FORCE_SSL=false
+    - RAILS_ENV=development
+
 services:
-  keycloak:
-    image: jboss/keycloak:3.0.0.Final
-    environment:
-      KEYCLOAK_USER: keycloak
-      KEYCLOAK_PASSWORD: development
-      KEYCLOAK_LOGLEVEL: DEBUG
+  system:
+    <<: *system_environment
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
+    container_name: system_compose
+    depends_on:
+      - apisonator
+      - mailhog
+      - memcached
+      - redis
+      - mysql
     ports:
-      - "8080"
-      - "9990"
-  backend:
-    image: quay.io/3scale/amp:backend-2.1.0-ER1
-    environment:
-      RACK_ENV: preview
-      CONFIG_REDIS_PROXY: redis:6379
-      CONFIG_QUEUES_MASTER_NAME: redis:6379
-      CONFIG_WORKERS_LOG_FILE: /dev/stdout
-  backend-listener:
-    extends: backend
-    command: rackup --host 0.0.0.0 --port 3000
-    container_name: backend
+      - "3000:3000"
+
+  sidekiq:
+    <<: *system_environment
+    image: porta_system
+    command: bash -c "rake sidekiq"
+    container_name: sidekiq_compose
+    depends_on:
+      - system
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_compose
     ports:
-      - "3001:3000"
+      - "3306:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  memcached:
+    image: memcached
+    container_name: memcached_compose
+    ports:
+      - "11211:11211"
+
+  apisonator:
+    image: quay.io/3scale/apisonator:latest
+    container_name: apisonator_compose
+    ports:
+      - "3001:3001"
+    command: "3scale_backend start -p 3001"
     depends_on:
       - redis
-      - backend-worker
-  backend-worker:
-    extends: backend
-    command: 3scale_backend_worker run
-    depends_on:
-      - redis
+    environment:
+      - CONFIG_REDIS_PROXY=redis:6379/3
+      - CONFIG_QUEUES_MASTER_NAME=redis:6379/3
+      - CONFIG_WORKERS_LOG_FILE=/dev/stdout
+      - CONFIG_INTERNAL_API_USER=system_app
+      - CONFIG_INTERNAL_API_PASSWORD=password
+      - RACK_ENV=production
+
   redis:
-    image: redis:3.2.5-alpine
-    container_name: redis
+    image: redis:alpine
+    container_name: redis_compose
     ports:
       - "6379:6379"
-  apicast:
-    image: quay.io/3scale/apicast:3.3-stable
-    env_file: .env.apicast
-    depends_on:
-      - backend-listener
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog_compose
     ports:
-      - "8091:8080"
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  mysql-data:
