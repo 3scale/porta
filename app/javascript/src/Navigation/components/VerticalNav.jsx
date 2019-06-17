@@ -27,8 +27,8 @@ const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
       <NavList>
         {sections.map(({ id, title, path, items }) => {
           return items
-            ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} />
-            : <NavItem to={path} isActive={activeSection === id}>{title}</NavItem>
+            ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title}/>
+            : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
         })}
       </NavList>
     </Nav>
@@ -40,8 +40,8 @@ const NavSection = ({title, isSectionActive, activeItem, items}) => {
     <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive}>
       {items.map(({id, title, path, target}) => (
         path
-          ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target}>{title}</NavItem>
-          : <NavGroup title={title} className='vertical-nav-label'></NavGroup>
+          ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target} key={title} >{title}</NavItem>
+          : <NavGroup title={title} className='vertical-nav-label' key={title}></NavGroup>
       ))}
     </NavExpandable>
   )
