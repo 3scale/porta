@@ -32,6 +32,12 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
     assert_equal '', @email.render(context)
   end
 
+  test "do_not_send within control flow blocks" do
+    context = stub(:registers => {})
+    subject.parse('email', '', ['{% if true %}', '{% do_not_send %}', '{% endif %}', @end], {})
+    assert_equal '', @email.render(context)
+  end
+
   test "assign all tags to message" do
     message = stub_everything('message')
     headers = stub_everything('headers')

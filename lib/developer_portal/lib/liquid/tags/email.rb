@@ -68,31 +68,6 @@ module Liquid::Tags
 
     private
 
-    def unknown_tag(name, params, tokens)
-      if name == 'do_not_send'
-        @do_not_send = true
-      else
-        case params =~ AssignSyntax && name
-          # when there are two arguments - $1 is first and $2 is second
-          # when there is just one - it is $2
-        when 'subject'
-          @subject = unquote($2)
-        when 'header'
-          @headers[unquote($1)] = unquote($2)
-        when 'bcc'
-          @bcc = unquote_array( params.scan(AssignSyntax) )
-        when 'cc'
-          @cc = unquote_array( params.scan(AssignSyntax) )
-        when 'reply_to', 'reply-to'
-          @reply_to = unquote($2)
-        when 'from'
-          @from = unquote($2)
-        else
-          super
-        end
-      end
-    end
-
     # removes leading and trailing ' or "
     def unquote(content)
       content =~ QuotedFragmentContent and $1
@@ -143,5 +118,33 @@ module Liquid::Tags
       mail.headers @headers
     end
 
+    module UnknownEmailTag
+      def unknown_tag(tag, params, tokens)
+        if tag == 'do_not_send'
+          @do_not_send = true
+        else
+          case params =~ AssignSyntax && tag
+            # when there are two arguments - $1 is first and $2 is second
+            # when there is just one - it is $2
+          when 'subject'
+            @subject = unquote($2)
+          when 'header'
+            @headers[unquote($1)] = unquote($2)
+          when 'bcc'
+            @bcc = unquote_array( params.scan(AssignSyntax) )
+          when 'cc'
+            @cc = unquote_array( params.scan(AssignSyntax) )
+          when 'reply_to', 'reply-to'
+            @reply_to = unquote($2)
+          when 'from'
+            @from = unquote($2)
+          else
+            super
+          end
+        end
+      end
+    end
+
+    self.superclass.prepend Liquid::Tags::Email::UnknownEmailTag
   end
 end
