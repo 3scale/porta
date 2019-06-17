@@ -4,19 +4,13 @@ require 'jsonclient'
 require 'set'
 
 class Policies::PoliciesListService
+  class PoliciesListServiceError < StandardError; end
 
   HTTP_ERRORS = [HTTPClient::BadResponseError,HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError,
                  HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError,
                  Errno::ECONNREFUSED].freeze
-  private_constant :HTTP_ERRORS
-
-  class PoliciesListServiceError < RuntimeError; end
-
-  def self.apicast_registry_url
-    ThreeScale.config.sandbox_proxy.apicast_registry_url
-  end
-
-  delegate :apicast_registry_url, to: 'self.class'
+  SERVICE_CALL_ERRORS = [*HTTP_ERRORS, PoliciesListServiceError].freeze
+  private_constant :HTTP_ERRORS, :SERVICE_CALL_ERRORS
 
   def self.call(*args)
     new(*args).call
@@ -26,17 +20,28 @@ class Policies::PoliciesListService
     new(*args).call!
   end
 
-  def initialize(account, builtin: true)
+  attr_reader :account, :proxy, :builtin
+  alias builtin? builtin
+
+  delegate :self_managed?, to: :proxy, allow_nil: true
+  delegate :provider_can_use?, :policies, to: :account, allow_nil: true
+
+
+  # This smells :reek:BooleanParameter
+  def initialize(account, builtin: true, proxy: nil)
     @account = account
+    @proxy = proxy
     @builtin = builtin
   end
 
-  attr_reader :account, :builtin
-  alias builtin? builtin
+  def apicast_registry_url
+    url = self_managed? ? :self_managed_apicast_registry_url : :apicast_registry_url
+    ThreeScale.config.sandbox_proxy.public_send(url)
+  end
 
   def call
     call!
-  rescue *HTTP_ERRORS, PoliciesListServiceError => error
+  rescue *SERVICE_CALL_ERRORS => error
     Rails.logger.error { error } and return
   end
 
@@ -64,8 +69,8 @@ class Policies::PoliciesListService
   end
 
   def policies_from_account
-    return unless account.provider_can_use?(:policy_registry)
-    PolicyList.new(account.policies)
+    return unless provider_can_use?(:policy_registry)
+    PolicyList.new(policies)
   end
 
   class PolicyList

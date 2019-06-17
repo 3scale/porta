@@ -14,7 +14,7 @@ class Api::IntegrationsController < Api::BaseController
 
   def edit
     begin
-      @registry_policies = Policies::PoliciesListService.call!(current_account)
+      @registry_policies = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
     rescue RuntimeError, Errno::ECONNREFUSED => error
       @error = error
     end
