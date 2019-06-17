@@ -99,13 +99,13 @@ class SimpleLoginPage extends React.Component<Props, State> {
   render (): Node {
     return (
       <LoginPage
-        footerListVariants='inline'
         brandImgSrc={brandImg}
         brandImgAlt='Red Hat 3scale API Management'
         backgroundImgSrc={PF4DownstreamBG}
         backgroundImgAlt='Red Hat 3scale API Management'
         loginTitle={this.state.loginTitle}
         forgotCredentials={this.showForgotCredentials()}
+        footer={null}
       >
         {
           this.props.flashMessages &&
