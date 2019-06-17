@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190530065503) do
+ActiveRecord::Schema.define(version: 20190620092211) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -1049,38 +1049,41 @@ ActiveRecord::Schema.define(version: 20190530065503) do
   add_index "provider_constraints", ["provider_id"], name: "index_provider_constraints_on_provider_id", unique: true
 
   create_table "proxies", force: :cascade do |t|
-    t.integer  "tenant_id",                                 precision: 38
-    t.integer  "service_id",                                precision: 38
+    t.integer  "tenant_id",                                  precision: 38
+    t.integer  "service_id",                                 precision: 38
     t.string   "endpoint"
     t.datetime "deployed_at"
     t.string   "api_backend"
-    t.string   "auth_app_key",                                             default: "app_key"
-    t.string   "auth_app_id",                                              default: "app_id"
-    t.string   "auth_user_key",                                            default: "user_key"
-    t.string   "credentials_location",                                     default: "query",                             null: false
-    t.string   "error_auth_failed",                                        default: "Authentication failed"
-    t.string   "error_auth_missing",                                       default: "Authentication parameters missing"
+    t.string   "auth_app_key",                                              default: "app_key"
+    t.string   "auth_app_id",                                               default: "app_id"
+    t.string   "auth_user_key",                                             default: "user_key"
+    t.string   "credentials_location",                                      default: "query",                             null: false
+    t.string   "error_auth_failed",                                         default: "Authentication failed"
+    t.string   "error_auth_missing",                                        default: "Authentication parameters missing"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "error_status_auth_failed",                  precision: 38, default: 403,                                 null: false
-    t.string   "error_headers_auth_failed",                                default: "text/plain; charset=us-ascii",      null: false
-    t.integer  "error_status_auth_missing",                 precision: 38, default: 403,                                 null: false
-    t.string   "error_headers_auth_missing",                               default: "text/plain; charset=us-ascii",      null: false
-    t.string   "error_no_match",                                           default: "No Mapping Rule matched",           null: false
-    t.integer  "error_status_no_match",                     precision: 38, default: 404,                                 null: false
-    t.string   "error_headers_no_match",                                   default: "text/plain; charset=us-ascii",      null: false
-    t.string   "secret_token",                                                                                           null: false
+    t.integer  "error_status_auth_failed",                   precision: 38, default: 403,                                 null: false
+    t.string   "error_headers_auth_failed",                                 default: "text/plain; charset=us-ascii",      null: false
+    t.integer  "error_status_auth_missing",                  precision: 38, default: 403,                                 null: false
+    t.string   "error_headers_auth_missing",                                default: "text/plain; charset=us-ascii",      null: false
+    t.string   "error_no_match",                                            default: "No Mapping Rule matched",           null: false
+    t.integer  "error_status_no_match",                      precision: 38, default: 404,                                 null: false
+    t.string   "error_headers_no_match",                                    default: "text/plain; charset=us-ascii",      null: false
+    t.string   "secret_token",                                                                                            null: false
     t.string   "hostname_rewrite"
     t.string   "oauth_login_url"
     t.string   "sandbox_endpoint"
-    t.string   "api_test_path",                limit: 8192
-    t.boolean  "api_test_success",             limit: nil
-    t.boolean  "apicast_configuration_driven", limit: nil,                 default: true,                                null: false
+    t.string   "api_test_path",                 limit: 8192
+    t.boolean  "api_test_success",              limit: nil
+    t.boolean  "apicast_configuration_driven",  limit: nil,                 default: true,                                null: false
     t.string   "oidc_issuer_endpoint"
     t.string   "authentication_method"
-    t.integer  "lock_version",                              precision: 38, default: 0,                                   null: false
+    t.integer  "lock_version",                               precision: 38, default: 0,                                   null: false
     t.text     "policies_config"
-    t.string   "oidc_issuer_type",                                         default: "keycloak"
+    t.string   "oidc_issuer_type",                                          default: "keycloak"
+    t.string   "error_headers_limits_exceeded",                             default: "text/plain; charset=us-ascii"
+    t.integer  "error_status_limits_exceeded",               precision: 38, default: 429
+    t.string   "error_limits_exceeded",                                     default: "Usage limit exceeded"
   end
 
   add_index "proxies", ["service_id"], name: "index_proxies_on_service_id"
