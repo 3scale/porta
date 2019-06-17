@@ -14,7 +14,7 @@ module ThreeScale
 
       class TrackingAdapter
         DELEGATED_METHODS = %i(flush track identify group).freeze
-        delegate(*DELEGATED_METHODS, to: :@adapter)
+        delegate(*DELEGATED_METHODS, to: :adapter)
 
         class NullAdapter
           def with_options(*)
@@ -31,11 +31,19 @@ module ThreeScale
         end
 
         def segment_configured?
-          defined?(::Segment) && Features::SegmentConfig.enabled?
+          Features::SegmentConfig.enabled? && defined?(::Segment)
         end
 
         def initialize(config = {})
-          @adapter = segment_configured? ? ::Segment::Analytics.new(config) : NullAdapter.new
+          @config = config
+        end
+
+        private
+
+        attr_reader :config
+
+        def adapter
+          segment_configured? ? ::Segment::Analytics.new(config) : NullAdapter.new
         end
       end
 

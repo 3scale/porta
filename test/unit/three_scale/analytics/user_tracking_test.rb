@@ -9,6 +9,11 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
   end
 
   class SegmentEnabled < UserTrackingTest
+    def setup
+      super
+      Features::SegmentConfig.stubs(enabled?: true)
+    end
+
     def test_track_uses_segment
       UserTracking::Segment.expects(:track).once
       UserTracking.new(@user).track('foo')
@@ -139,24 +144,35 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
     end
 
     def test_does_not_track
-      ThreeScale::Analytics::UserTracking::TrackingAdapter::NullAdapter.any_instance.expects(:track).once
-      # ThreeScale::Analytics::UserTracking::TrackingAdapter::NullAdapter.any_instance.expects(:track).once
+      expect_not_contact_segment(:track)
+
       UserTracking.new(@user).track('foo')
     end
 
-    # def test_does_not_identify
-    #   UserTracking::Segment.expects(:identify).never
-    #   UserTracking.new(@user).identify(trait: 'value')
-    # end
-    #
-    # def test_does_not_flush
-    #   UserTracking::Segment.expects(:flush).never
-    #   UserTracking.new(@user).flush
-    # end
-    #
-    # def test_does_not_group
-    #   UserTracking::Segment.expects(:group).never
-    #   UserTracking.new(@user).group
-    # end
+    def test_does_not_flush
+      expect_not_contact_segment(:flush)
+
+      UserTracking.new(@user).flush
+    end
+
+    def test_does_not_identify
+      expect_not_contact_segment(:identify)
+
+      UserTracking.new(@user).identify
+    end
+
+    def test_does_not_group
+      expect_not_contact_segment(:group)
+
+      UserTracking.new(@user).group
+    end
+
+    private
+
+    def expect_not_contact_segment(action_name)
+      UserTracking::TrackingAdapter::NullAdapter.any_instance.expects(action_name).once
+      ::Segment.expects(action_name).never
+    end
+
   end
 end
