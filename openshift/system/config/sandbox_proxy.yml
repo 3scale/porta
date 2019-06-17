@@ -11,6 +11,7 @@ base: &default
   apicast_production_endpoint: 'https://%{system_name}-%{tenant_name}-apicast-production.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
   skip_deploy: true
   apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://apicast-staging:8090/policies') %>
+  self_managed_apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://apicast-staging:8090/policies') %>
 
 preview:
   <<: *default
