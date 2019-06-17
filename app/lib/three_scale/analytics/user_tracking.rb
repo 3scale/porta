@@ -31,7 +31,7 @@ module ThreeScale
         end
 
         def segment_configured?
-          defined?(::Segment)
+          defined?(::Segment) && Features::SegmentConfig.enabled?
         end
 
         def initialize(config = {})
@@ -211,7 +211,7 @@ module ThreeScale
       end
 
       def can_send?
-        Features::SegmentConfig.enabled? && user_id && @account.try!(:provider?) && user_type != 'impersonation_admin'
+        user_id && @account.try!(:provider?) && user_type != 'impersonation_admin'
       end
 
       def with_segment_options(options)
