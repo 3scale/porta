@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Liquid::Tags
   class Email < Liquid::Block
     extend Liquid::Docs::DSL::Tags
@@ -49,7 +51,7 @@ module Liquid::Tags
     AssignSyntax = /(#{Liquid::QuotedFragment}+)?\s*=?\s*(#{Liquid::QuotedFragment}+)/
     QuotedFragmentContent = /^['"](.+?)['"]$/
 
-    attr_accessor :headers
+    attr_accessor :do_not_send, :headers, :subject, :bcc, :cc, :reply_to, :from
 
     def initialize(name, params, tokens)
       @headers = {}
@@ -79,69 +81,81 @@ module Liquid::Tags
     end
 
     def assign_to_headers(hash)
-      hash[:subject] = @subject if @subject
+      hash[:subject] = subject if subject
 
-      hash[:bcc] = @bcc if @bcc
-      hash[:bcc] = @cc if @cc
+      hash[:bcc] = bcc if bcc
+      hash[:bcc] = cc if cc
 
-      hash[:from] = @from if @from
-      hash[:reply_to] = @reply_to if @reply_to
+      hash[:from] = from if from
+      hash[:reply_to] = reply_to if reply_to
     end
 
     # assigns existing variables to given message
     def assign_to_message(message)
-      message.subject = @subject if @subject
+      message.subject = subject if subject
 
-      message.headers['bcc'] = @bcc if @bcc
-      message.headers['cc'] = @cc if @cc
+      message.headers['bcc'] = bcc if bcc
+      message.headers['cc'] = cc if cc
 
-      message.headers['from'] = @from if @from
-      message.headers['reply-to'] = @reply_to if @reply_to
+      message.headers['from'] = from if from
+      message.headers['reply-to'] = reply_to if reply_to
 
-      message.headers[::Message::DO_NOT_SEND_HEADER] = true if @do_not_send
+      message.headers[::Message::DO_NOT_SEND_HEADER] = true if do_not_send
 
-      @headers.each_pair do |name, value|
+      headers.each_pair do |name, value|
         message.headers[name] = value
       end
     end
 
     # assigns existing variables to given mailer
     def assign_to_mail(mail)
-      mail[:subject] = @subject if @subject
-      mail[:bcc] = @bcc if @bcc
-      mail[:cc] = @cc if @cc
-      mail[:from] = @from if @from
-      mail[:reply_to] = @reply_to if @reply_to
+      mail[:subject] = subject if subject
+      mail[:bcc] = bcc if bcc
+      mail[:cc] = cc if cc
+      mail[:from] = from if from
+      mail[:reply_to] = reply_to if reply_to
 
-      @headers[::Message::DO_NOT_SEND_HEADER] = true if @do_not_send
+      @headers[::Message::DO_NOT_SEND_HEADER] = true if do_not_send
 
       mail.headers @headers
     end
 
     module UnknownEmailTag
+      EMAIL_TAGS = %w[do_not_send subject header bcc cc reply_to reply-to from].freeze
+
       def unknown_tag(tag, params, tokens)
+        return super unless EMAIL_TAGS.include?(tag)
+        return unless (email_tag = backtrack_email_tag)
+
         if tag == 'do_not_send'
-          @do_not_send = true
+          email_tag.do_not_send = true
         else
-          case params =~ AssignSyntax && tag
-            # when there are two arguments - $1 is first and $2 is second
-            # when there is just one - it is $2
+          param_list = unquote_array(params.scan(AssignSyntax))
+
+          case tag
           when 'subject'
-            @subject = unquote($2)
+            email_tag.subject = param_list.first
           when 'header'
-            @headers[unquote($1)] = unquote($2)
+            email_tag.headers[param_list.first] = param_list.last
           when 'bcc'
-            @bcc = unquote_array( params.scan(AssignSyntax) )
+            email_tag.bcc = param_list
           when 'cc'
-            @cc = unquote_array( params.scan(AssignSyntax) )
+            email_tag.cc = param_list
           when 'reply_to', 'reply-to'
-            @reply_to = unquote($2)
+            email_tag.reply_to = param_list.first
           when 'from'
-            @from = unquote($2)
-          else
-            super
+            email_tag.from = param_list.first
           end
         end
+      end
+
+      protected
+
+      EMAIL_TAG_NAME = 'liquid::tags::email'
+
+      def backtrack_email_tag
+        return self if name == EMAIL_TAG_NAME
+        previous_tag&.name == EMAIL_TAG_NAME ? previous_tag : previous_tag&.backtrack_email_tag
       end
     end
 

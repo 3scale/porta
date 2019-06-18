@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'liquid'
 require 'liquid/url_helper_hacks'
+require 'liquid/backtracking_liquid_parsing'
 
 
 # allow calling present? in {% if %}

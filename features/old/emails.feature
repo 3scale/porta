@@ -45,3 +45,26 @@ Scenario: Disable 'Waiting list confirmation' notification
 
     When I act as "Kirill"
     Then I should receive no email with subject "Waiting list confirmation"
+
+  Scenario: Conditionally disable 'Waiting list confirmation' notification
+      Given a provider "foo.example.com" with default plans
+      And provider "foo.example.com" requires accounts to be approved
+      And provider "foo.example.com" has multiple applications enabled
+      And provider "foo.example.com" has email template "account_confirmed"
+      """
+      {% email %}{% if true %}{% do_not_send %}{% endif %}{% endemail %}
+      Dear More Things,
+
+      This email is to let you know that you own even more things.
+      """
+
+      When the current domain is foo.example.com
+      And I go to the sign up page
+      And I fill in the signup fields as "Kirill"
+      Then I should see the registration succeeded
+
+      When I follow the activation link in an email sent to "Kirill@example.com"
+      Then I should see "once your account is approved"
+
+      When I act as "Kirill"
+      Then I should receive no email with subject "Waiting list confirmation"
