@@ -22,7 +22,7 @@ header.pf-c-page__header id="user_widget" class='Header' class=('Header--master'
 
     .PopNavigation.PopNavigation--docs
       a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
-        => icon('question-circle')
+        => icon('question-circle-o')
       ul#documentation-menu.PopNavigation-list.u-toggleable
         li.PopNavigation-listItem
           = fixed_width_icon_link_to 'Customer Portal', 'external-link', '//access.redhat.com/products/red-hat-3scale', class: 'PopNavigation-link', target: '_blank'
