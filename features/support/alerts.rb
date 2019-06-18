@@ -29,7 +29,7 @@ module Alerts
 
     data = Cucumber::Core::Ast::DataTable.new(table, nil)
 
-    table = Cucumber::Ast::Table.new data
+    table = Cucumber::MultilineArgument::DataTable.new data
 
     # two byte non breaking space :/
     nbsp = ' '

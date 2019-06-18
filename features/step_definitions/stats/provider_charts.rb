@@ -7,7 +7,7 @@ Then(/^there should be a c3 chart with the following data:$/) do |table|
 
   table.map_column!('total', &:to_i)
   page.document.synchronize(Capybara.default_max_wait_time,
-                            errors: [Cucumber::Ast::Table::Different, Selenium::WebDriver::Error::JavascriptError]) do
+                            errors: [Cucumber::MultilineArgument::DataTable::Different, Selenium::WebDriver::Error::JavascriptError]) do
     values = page.evaluate_script <<-JS
       (function(){
         var $chart = $("#{chart_selector}")
@@ -25,7 +25,7 @@ Then(/^there should be a c3 chart with the following data:$/) do |table|
     raise Selenium::WebDriver::Error::JavascriptError, 'Could not get values from c3' if values.blank?
 
     data = Cucumber::Core::Ast::DataTable.new(values, table.location)
-    series = Cucumber::Ast::Table.new(data)
+    series = Cucumber::MultilineArgument::DataTable.new(data)
     series.map_column!('start', false) { |start| Time.at(start/1000) if start }
 
     table.dup.diff!(series)
