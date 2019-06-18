@@ -73,7 +73,7 @@ class Login3scaleForm extends React.Component<Props, State> {
       value: password,
       onChange: this.handleTextInputPassword,
       ariaInvalid: 'false',
-      isValid: isValidPassword
+      inputIsValid: isValidPassword
     }
     return (
       <Form
