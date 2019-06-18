@@ -1,3 +1,5 @@
+$link-padding: line-height-times(1 / 2);
+
 .PopNavigation {
   color: $content-background;
 
@@ -35,7 +37,8 @@
     border: $border-width solid $border-color;
     border-radius: $border-radius;
     display: none;
-    margin: line-height-times(1 / 2, true) 0 0 0;
+    margin-top: line-height-times(3 / 2, true);
+    margin-left: calc(-#{$link-padding} + -#{$border-width});
     max-width: line-height-times(10);
     min-width: line-height-times(4);
     overflow: hidden;
@@ -77,7 +80,7 @@
   &-link {
     color: $font-color;
     display: block;
-    padding: line-height-times(1 / 2);
+    padding: $link-padding;
 
     &:hover {
       color: $link-color;
