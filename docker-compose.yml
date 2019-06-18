@@ -1,48 +1,3 @@
-# version: '2.1'
-# services:
-#   keycloak:
-#     image: jboss/keycloak:3.0.0.Final
-#     environment:
-#       KEYCLOAK_USER: keycloak
-#       KEYCLOAK_PASSWORD: development
-#       KEYCLOAK_LOGLEVEL: DEBUG
-#     ports:
-#       - "8080"
-#       - "9990"
-#   backend:
-#     image: quay.io/3scale/amp:backend-2.1.0-ER1
-#     environment:
-#       RACK_ENV: preview
-#       CONFIG_REDIS_PROXY: redis:6379
-#       CONFIG_QUEUES_MASTER_NAME: redis:6379
-#       CONFIG_WORKERS_LOG_FILE: /dev/stdout
-#   backend-listener:
-#     extends: backend
-#     command: rackup --host 0.0.0.0 --port 3000
-#     container_name: backend
-#     ports:
-#       - "3001:3000"
-#     depends_on:
-#       - redis
-#       - backend-worker
-#   backend-worker:
-#     extends: backend
-#     command: 3scale_backend_worker run
-#     depends_on:
-#       - redis
-#   redis:
-#     image: redis:3.2.5-alpine
-#     container_name: redis
-#     ports:
-#       - "6379:6379"
-#   apicast:
-#     image: quay.io/3scale/apicast:3.3-stable
-#     env_file: .env.apicast
-#     depends_on:
-#       - backend-listener
-#     ports:
-#       - "8091:8080"
-
 version: '3'
 services:
   system:
@@ -50,6 +5,29 @@ services:
     command: bash -c "UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
     ports:
       - "3000:3000"
+    depends_on:
+      - apisonator
+      - mailhog
+      - mysql
+      - redis
+    links:
+      - apisonator
+      - mailhog
+      - mysql
+      - redis
+    environment:
+      - DATABASE_URL=mysql2://root@mysql/3scale_system_development
+      - REDIS_URL=redis://redis/1
+      - BACKEND_HOST=apisonator:3001
+      - SECRET_KEY_BASE=secret
+      - THREESCALE_CORE_INTERNAL_API=http://apisonator:3001/internal/
+      - CONFIG_INTERNAL_API_USER=system_app
+      - CONFIG_INTERNAL_API_PASSWORD=password
+      - SMTP_ADDRESS=mailhog
+      - SMTP_PORT=1025
+      - UNICORN_WORKERS=2
+      - FORCE_SSL=false
+
   mysql:
     image: mysql:5.7
     container_name: mysql
@@ -71,7 +49,16 @@ services:
     container_name: apisonator
     ports:
       - "3001:3001"
-    command: "3scale_backend_start -p 3001"
+    command: "3scale_backend start -p 3001"
+    depends_on:
+      - backend_redis
+    environment:
+      - CONFIG_REDIS_PROXY=backend_redis:6379
+      - CONFIG_QUEUES_MASTER_NAME=backend_redis:6379
+      - CONFIG_WORKERS_LOG_FILE=/dev/stdout
+      - CONFIG_INTERNAL_API_USER=system_app
+      - CONFIG_INTERNAL_API_PASSWORD=password
+      - RACK_ENV=production
 
   redis:
     image: redis

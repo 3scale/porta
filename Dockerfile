@@ -1,58 +1,77 @@
-FROM quay.io/3scale/system-builder:ruby24
+FROM centos/ruby-24-centos7
 
-ARG SPHINX_VERSION=2.2.11
-ARG BUNDLER_VERSION=1.17.3
-ARG DB=mysql
-ARG MASTER_PASSWORD=p
-ARG USER_PASSWORD=p
+USER root
 
-ENV BUNDLE_FROZEN="true" \
-    BUNDLE_PATH="vendor/bundle" \
-    DISABLE_SPRING="true" \
-    ORACLE_SYSTEM_PASSWORD="threescalepass" \
-    NLS_LANG="AMERICAN_AMERICA.UTF8" \
-    TZ="UTC" \
-    MASTER_PASSWORD="${MASTER_PASSWORD}" \
-    USER_PASSWORD="${USER_PASSWORD}" \
-    LC_ALL="en_US.UTF-8"
-
-
-ENV PATH="./node_modules/.bin:$PATH:/usr/local/nginx/sbin/" \
-    SKIP_ASSETS="1" \
-    DNSMASQ="#" \
-    RAILS_ENV=test \
-    CODECLIMATE_REPO_TOKEN=ba3a56916aa6040ae614ffa6b3d87f6ea07d3c0c512e8099cec4e68b27b676fc \
-    GITHUB_REPOSITORY_TOKEN=b2N0b2JvdDo0YWUwYjYzOTgzYWE5YzYyZTIyOWYxZWNmZGZiNDY2YjI1YzcyZWEy \
-    BUNDLE_FROZEN=1 \
+ARG BUNDLER_ENV
+ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
-    LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/ \
-    ORACLE_HOME=/opt/oracle/instantclient_12_2/ \
-    DB=$DB \
+    BUNDLE_GEMFILE=Gemfile \
+    BUNDLE_JOBS=5 \
+    BUNDLE_WITHOUT=development:test \
+    NODEJS_SCL=rh-nodejs8
+
+WORKDIR /opt/system
+
+ARG SPHINX_VERSION=2.2.11-1
+
+ADD openshift/system/sphinx-${SPHINX_VERSION}.rhel7.x86_64.rpm /tmp/sphinxsearch.rpm
+
+RUN yum -y update \
+    && yum -y install centos-release-scl-rh \
+              ImageMagick \
+              ImageMagick-devel \
+              unixODBC-devel \
+              mysql \
+              file \
+              rh-nodejs8 \
+    && rpm -i /tmp/sphinxsearch.rpm \
+    && rm /tmp/*.rpm \
+    && yum install -y epel-release \
+    && yum -y clean all
+
+# We don't want to redo the bundle install step every time a file has changed:
+# copying only the gemspec files and copying all the other files after the build
+ADD lib/developer_portal/*.gemspec lib/developer_portal/
+ADD vendor/active-docs/*.gemspec vendor/active-docs/
+ADD Gemfile* ./
+ADD Rakefile ./
+
+COPY openshift/system/contrib/scl_enable ./etc/
+
+ENV BASH_ENV=/opt/system/etc/scl_enable \
+    ENV=/opt/system/etc/scl_enable \
+    PROMPT_COMMAND=". /opt/system/etc/scl_enable" \
+    RAILS_ENV=production \
     SAFETY_ASSURED=1
 
-WORKDIR /opt/system/
+RUN export ${BUNDLER_ENV} >/dev/null\
+    && source /opt/system/etc/scl_enable \
+    && gem install bundler --version 1.17.3 \
+    && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
-VOLUME [ "/opt/system/tmp/cache/", \
-         "/opt/system/vendor/bundle", \
-         "/opt/system/node_modules", \
-         "/opt/system/public/assets", \
-         "/opt/system/public/packs-test", \
-         "/home/ruby/.luarocks" ]
+RUN chgrp root /opt/system/
 
 ADD . ./
-ADD config/examples/*.yml config/
-# Needed for Sphinx ODBC
-ADD config/oracle/odbc*.ini /etc/
+ADD config/docker/* ./config/
+ADD package*.json ./
 
-
-# Oracle special, this needs Oracle to be present in vendor/oracle
-ADD vendor/oracle/* /opt/oracle/
-RUN if [ "${DB}" = "oracle" ]; then unzip /opt/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle/ \
- && unzip /opt/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle/ \
- && unzip /opt/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle/ \
- && (cd /opt/oracle/instantclient_12_2/ && ln -s libclntsh.so.12.1 libclntsh.so) \
- && rm -rf /opt/system/vendor/oracle \
- && rm -rf /opt/oracle/*.zip; fi
+RUN export ${BUNDLER_ENV} >/dev/null \
+    && source /opt/system/etc/scl_enable \
+    && bundle exec rake tmp:create \
+    && mkdir -p public/assets db/sphinx \
+    && chmod g+w -vfR log tmp public/assets db/sphinx \
+    && umask 0002 \
+    && cd /opt/system \
+    && npm install --no-progress \
+    && bundle exec rake assets:precompile tmp:clear \
+    && rm log/*.log \
+    && chmod g+w /opt/system/config
 
 USER 1001
-RUN bash -c "bundle install && npm install"
+ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
+EXPOSE 3000 9306
+# TODO: dumb-init!
+ENTRYPOINT ["/opt/system/entrypoint.sh"]
+CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
+
+# vim: set ft=dockerfile:
