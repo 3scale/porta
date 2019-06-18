@@ -55,4 +55,12 @@ $master-ribbon-height: line-height-times(1);
   .pf-c-page__header-nav {
     align-self: center;
   }
+
+  .pf-c-page__header-tools {
+    text-align: center;
+    
+    i {
+      padding: line-height-times(1 / 2);
+    }
+  }
 }
