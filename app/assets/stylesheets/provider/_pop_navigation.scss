@@ -37,7 +37,7 @@ $link-padding: line-height-times(1 / 2);
     border: $border-width solid $border-color;
     border-radius: $border-radius;
     display: none;
-    margin-top: line-height-times(3 / 2, true);
+    margin-top: line-height-times(1 / 2, true);
     margin-left: calc(-#{$link-padding} + -#{$border-width});
     max-width: line-height-times(10);
     min-width: line-height-times(4);
@@ -97,6 +97,10 @@ $link-padding: line-height-times(1 / 2);
     &.is-toggled,
     &.is-current {
       color: $link-color;
+    }
+
+    i {
+      padding: line-height-times(1) 0;
     }
   }
 }
