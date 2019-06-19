@@ -59,11 +59,11 @@ SMTP header for the message.
 
 __Example:__ Conditional blind carbon copy
 ```liquid
-{% email %}
-  {% if plan.system_name == 'enterprise' %}
+{% if plan.system_name == 'enterprise' %}
+  {% email %}
      {% bcc 'marketing@world-domination.org' %}
-  {% endif%}
-{% endemail %}
+  {% endemail %}
+{% endif%}
 ```
 
 __Example:__ Disabling emails at all
@@ -75,14 +75,16 @@ __Example:__ Disabling emails at all
 
 __Example:__ Signup email filter
 ```liquid
-{% email %}
-  {% if plan.system == 'enterprise' %}
+{% if plan.system == 'enterprise' %}
+  {% email %}
     {% subject = 'Greetings from Example company!' %}
     {% reply-to = 'support@example.com' %}
-  {% else %}
+  {% endemail %}
+{% else %}
+  {% email %}
     {% do_not_send %}
-  {% endif %}
-{% endemail %}
+  {% endemail %}
+{% endif %}
 ```
 # Tag 'flash'
 
