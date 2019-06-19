@@ -1144,7 +1144,7 @@ readers do not read off random characters that represent icons */ }
   grid-column: 2 / 3;
   align-items: center;
   margin-top: 0.5rem;
-  margin-right: -1.25rem; //last item in our header should sit at the right
+  margin-right: 0; //1.5rem; //last item in our header should sit at the right
   margin-bottom: 0.5rem;
   margin-left: auto;
 }
