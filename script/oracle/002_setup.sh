@@ -9,6 +9,7 @@ sqlplus / as sysdba << EOF
   ALTER SYSTEM SET compatible='12.2.0.1' SCOPE=SPFILE;
   ALTER SYSTEM SET archive_lag_target=0 SCOPE=BOTH;
   ALTER SESSION SET CONTAINER=systempdb;
+  ALTER PROFILE "DEFAULT" LIMIT PASSWORD_VERIFY_FUNCTION NULL;
   CREATE USER rails IDENTIFIED BY railspass;
   GRANT PDB_DBA TO rails WITH ADMIN OPTION;
   ALTER SESSION SET CONTAINER=CDB\$ROOT;
@@ -34,17 +35,27 @@ EOF
 echo "::::::::::::::::: Creating other PDBS :::::::::::::::::"
 
 sqlplus / as sysdba << EOF
+  ALTER PLUGGABLE DATABASE systempdb OPEN READ ONLY;
   DECLARE
     sql_stmt          VARCHAR2(1000);
+    type array_t is varray(2) of varchar2(10);
+    array array_t := array_t('test', 'production');
+
     BEGIN
-      FOR i IN 1..8 LOOP
-        sql_stmt :=  'CREATE PLUGGABLE DATABASE systempdb' || i ||
+      FOR i IN 1..array.count LOOP
+        sql_stmt :=  'CREATE PLUGGABLE DATABASE systempdb' || array(i) ||
                       q'[ ADMIN USER rails IDENTIFIED BY railspass  FILE_NAME_CONVERT=('/opt/oracle/oradata/threescale/pdbseed',]' ||
-                      q'['/opt/oracle/oradata/threescale/systempdb]' || i || q'[')]';
+                      q'['/opt/oracle/oradata/threescale/systempdb]' || array(i) || q'[')]';
         EXECUTE IMMEDIATE sql_stmt;
+
     END LOOP;
   END;
   /
+  ALTER SESSION SET CONTAINER=systempdbtest;
+  ALTER PROFILE "DEFAULT" LIMIT PASSWORD_VERIFY_FUNCTION NULL;
+  ALTER SESSION SET CONTAINER=systempdbproduction;
+  ALTER PROFILE "DEFAULT" LIMIT PASSWORD_VERIFY_FUNCTION NULL;
+  ALTER SESSION SET CONTAINER=CDB\$ROOT;
   ALTER PLUGGABLE DATABASE ALL OPEN READ WRITE;
   ALTER PLUGGABLE DATABASE ALL SAVE STATE;
   EXIT;

@@ -8,13 +8,14 @@ default: &DEFAULT
 
 production:
   <<: *DEFAULT
+  url: <%= "#{ENV['DATABASE_URL']}production" %>
 
 development:
   <<: *DEFAULT
 
 test:
   <<: *DEFAULT
-  url: <%= "#{ENV['DATABASE_URL']}#{ENV['TEST_ENV_NUMBER']}" %>
+  url: <%= "#{ENV['DATABASE_URL']}test" %>
 <% when /^postgresql/ %>
 default: &DEFAULT
   adapter: postgresql
