@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DeveloperPortal::Admin::Account::Adyen12ControllerTest < DeveloperPortal::AbstractPaymentGatewaysControllerTest
+class DeveloperPortal::Admin::Account::Adyen12ControllerTest < DeveloperPortal::DeprecatedPaymentGatewaysControllerTest
   include ActiveMerchantTestHelpers
   include ActiveMerchantTestHelpers::Adyen12
 
