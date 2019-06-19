@@ -1,36 +1,52 @@
-version: '3'
+version: '3.4'
+
+x-system_environment:
+  &system_environment
+  links:
+    - apisonator
+    - mailhog
+    - memcached
+    - mysql
+    - redis
+  environment:
+    - DATABASE_URL=mysql2://root@mysql/3scale_system_development
+    - REDIS_URL=redis://redis/1
+    - MEMCACHE_SERVERS=memcached:11211
+    - BACKEND_HOST=apisonator:3001
+    - SECRET_KEY_BASE=secret
+    - THREESCALE_CORE_INTERNAL_API=http://apisonator:3001/internal/
+    - CONFIG_INTERNAL_API_USER=system_app
+    - CONFIG_INTERNAL_API_PASSWORD=password
+    - SMTP_ADDRESS=mailhog
+    - SMTP_PORT=1025
+    - UNICORN_WORKERS=2
+    - FORCE_SSL=false
+    - RAILS_ENV=development
+
 services:
   system:
+    <<: *system_environment
     build: .
     command: bash -c "UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
-    ports:
-      - "3000:3000"
     depends_on:
       - apisonator
       - mailhog
+      - memcached
       - mysql
       - redis
-    links:
-      - apisonator
-      - mailhog
-      - mysql
-      - redis
-    environment:
-      - DATABASE_URL=mysql2://root@mysql/3scale_system_development
-      - REDIS_URL=redis://redis/1
-      - BACKEND_HOST=apisonator:3001
-      - SECRET_KEY_BASE=secret
-      - THREESCALE_CORE_INTERNAL_API=http://apisonator:3001/internal/
-      - CONFIG_INTERNAL_API_USER=system_app
-      - CONFIG_INTERNAL_API_PASSWORD=password
-      - SMTP_ADDRESS=mailhog
-      - SMTP_PORT=1025
-      - UNICORN_WORKERS=2
-      - FORCE_SSL=false
+    ports:
+      - "3000:3000"
+
+  sidekiq:
+    <<: *system_environment
+    image: porta_system
+    command: bash -c "rake sidekiq"
+    depends_on:
+      - system
 
   mysql:
     image: mysql:5.7
-    container_name: mysql
+    container_name: mysql_compose
     ports:
       - "3306:3306"
     environment:
@@ -40,13 +56,13 @@ services:
 
   memcached:
     image: memcached
-    container_name: memcached
+    container_name: memcached_compose
     ports:
       - "11211:11211"
 
   apisonator:
     image: quay.io/3scale/apisonator:latest
-    container_name: apisonator
+    container_name: apisonator_compose
     ports:
       - "3001:3001"
     command: "3scale_backend start -p 3001"
@@ -62,19 +78,19 @@ services:
 
   redis:
     image: redis
-    container_name: redis
+    container_name: redis_compose
     ports:
       - "6379:6379"
 
   backend_redis:
     image: redis
-    container_name: backend_redis
+    container_name: backend_redis_compose
     ports:
       - "6380:6379"
 
   mailhog:
     image: mailhog/mailhog
-    container_name: mailhog
+    container_name: mailhog_compose
     ports:
       - "1025:1025"
       - "8025:8025"
