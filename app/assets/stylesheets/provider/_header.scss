@@ -57,10 +57,12 @@ $master-ribbon-height: line-height-times(1);
   }
 
   .pf-c-page__header-tools {
-    text-align: center;
-    
-    i {
-      padding: line-height-times(1 / 2);
+    .PopNavigation-trigger {
+      padding: 0 line-height-times(1);
     }
+
+    .fa .fa-bolt {
+      margin-right: 0.75rem;
+    } 
   }
 }
