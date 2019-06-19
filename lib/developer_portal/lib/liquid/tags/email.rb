@@ -22,11 +22,11 @@ module Liquid::Tags
     }
 
     example 'Conditional blind carbon copy', %{
-       {% email %}
-         {% if plan.system_name == 'enterprise' %}
+       {% if plan.system_name == 'enterprise' %}
+         {% email %}
             {% bcc 'marketing@world-domination.org' %}
-         {% endif%}
-       {% endemail %}
+         {% endemail %}
+       {% endif%}
      }
 
     example 'Disabling emails at all', %{
@@ -36,14 +36,16 @@ module Liquid::Tags
     }
 
     example 'Signup email filter', %{
-        {% email %}
-          {% if plan.system == 'enterprise' %}
+        {% if plan.system == 'enterprise' %}
+          {% email %}
             {% subject = 'Greetings from Example company!' %}
             {% reply-to = 'support@example.com' %}
-          {% else %}
+          {% endemail %}
+        {% else %}
+          {% email %}
             {% do_not_send %}
-          {% endif %}
-        {% endemail %}
+          {% endemail %}
+        {% endif %}
      }
 
     AssignSyntax = /(#{Liquid::QuotedFragment}+)?\s*=?\s*(#{Liquid::QuotedFragment}+)/

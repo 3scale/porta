@@ -45,3 +45,147 @@ Scenario: Disable 'Waiting list confirmation' notification
 
     When I act as "Kirill"
     Then I should receive no email with subject "Waiting list confirmation"
+
+Scenario: Disable 'Waiting list confirmation' notification with truthy condition
+    Given a provider "foo.example.com" with default plans
+    And provider "foo.example.com" requires accounts to be approved
+    And provider "foo.example.com" has multiple applications enabled
+    And provider "foo.example.com" has email template "account_confirmed"
+    """
+    {% if true %}{% email %}{% do_not_send %}{% endemail %}{% endif %}
+    Dear More Things,
+
+    This email is to let you know that you own even more things.
+    """
+
+    When the current domain is foo.example.com
+    And I go to the sign up page
+    And I fill in the signup fields as "Kirill"
+    Then I should see the registration succeeded
+
+    When I follow the activation link in an email sent to "Kirill@example.com"
+    Then I should see "once your account is approved"
+
+    When I act as "Kirill"
+    Then I should receive no email with subject "Waiting list confirmation"
+
+Scenario: Disable 'Waiting list confirmation' notification with falsy condition
+    Given a provider "foo.example.com" with default plans
+    And provider "foo.example.com" requires accounts to be approved
+    And provider "foo.example.com" has multiple applications enabled
+    And provider "foo.example.com" has email template "account_confirmed"
+    """
+    {% if false %}{% email %}{% do_not_send %}{% endemail %}{% endif %}
+    Dear More Things,
+
+    This email is to let you know that you own even more things.
+    """
+
+    When the current domain is foo.example.com
+    And I go to the sign up page
+    And I fill in the signup fields as "Kirill"
+    Then I should see the registration succeeded
+
+    When I follow the activation link in an email sent to "Kirill@example.com"
+    Then I should see "once your account is approved"
+
+    When I act as "Kirill"
+    Then I should receive 1 email with subject "Waiting list confirmation"
+
+Scenario: Custom email subject with truthy condition
+    Given a provider "foo.example.com" with default plans
+    And provider "foo.example.com" requires accounts to be approved
+    And provider "foo.example.com" has multiple applications enabled
+    And provider "foo.example.com" has email template "account_confirmed"
+    """
+    {% if true %}
+      {% email %}
+        {% subject 'Your account has been confirmed' %}
+      {% endemail %}
+    {% else %}
+      {% email %}
+        {% subject 'Other custom subject' %}
+      {% endemail %}
+    {% endif %}
+    Dear More Things,
+
+    This email is to let you know that you own even more things.
+    """
+
+    When the current domain is foo.example.com
+    And I go to the sign up page
+    And I fill in the signup fields as "Kirill"
+    Then I should see the registration succeeded
+
+    When I follow the activation link in an email sent to "Kirill@example.com"
+    Then I should see "once your account is approved"
+
+    When I act as "Kirill"
+    Then I should receive no email with subject "Waiting list confirmation"
+    And I should receive no email with subject "Other custom subject"
+    Then I should receive 1 email with subject "Your account has been confirmed"
+
+Scenario: Custom email subject with falsy condition
+    Given a provider "foo.example.com" with default plans
+    And provider "foo.example.com" requires accounts to be approved
+    And provider "foo.example.com" has multiple applications enabled
+    And provider "foo.example.com" has email template "account_confirmed"
+    """
+    {% if false %}
+      {% email %}
+        {% subject 'Your account has been confirmed' %}
+      {% endemail %}
+    {% else %}
+      {% email %}
+        {% subject 'Other custom subject' %}
+      {% endemail %}
+    {% endif %}
+    Dear More Things,
+
+    This email is to let you know that you own even more things.
+    """
+
+    When the current domain is foo.example.com
+    And I go to the sign up page
+    And I fill in the signup fields as "Kirill"
+    Then I should see the registration succeeded
+
+    When I follow the activation link in an email sent to "Kirill@example.com"
+    Then I should see "once your account is approved"
+
+    When I act as "Kirill"
+    Then I should receive no email with subject "Waiting list confirmation"
+    And I should receive no email with subject "Your account has been confirmed"
+    Then I should receive 1 email with subject "Other custom subject"
+
+Scenario: Do not disable 'Waiting list confirmation' notification due to falsy condition but still change the subject
+    Given a provider "foo.example.com" with default plans
+    And provider "foo.example.com" requires accounts to be approved
+    And provider "foo.example.com" has multiple applications enabled
+    And provider "foo.example.com" has email template "account_confirmed"
+    """
+    {% if false %}
+      {% email %}
+        {% do_not_send %}
+      {% endemail %}
+    {% else %}
+      {% email %}
+        {% subject 'Your account has been confirmed' %}
+      {% endemail %}
+    {% endif %}
+    Dear More Things,
+
+    This email is to let you know that you own even more things.
+    """
+
+    When the current domain is foo.example.com
+    And I go to the sign up page
+    And I fill in the signup fields as "Kirill"
+    Then I should see the registration succeeded
+
+    When I follow the activation link in an email sent to "Kirill@example.com"
+    Then I should see "once your account is approved"
+
+    When I act as "Kirill"
+    Then I should receive no email with subject "Waiting list confirmation"
+    And I should receive 1 email with subject "Your account has been confirmed"
