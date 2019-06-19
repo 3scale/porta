@@ -15,7 +15,7 @@ class PaymentGateway
     PaymentGateway.new(:braintree_blue, public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key'),
     PaymentGateway.new(:ogone, deprecated: true, login: 'PSPID', password: 'Password', user: 'User Id', signature: "SHA-IN Pass phrase", signature_out: "SHA-OUT Pass phrase"),
     PaymentGateway.new(:stripe, login: "Secret Key", publishable_key: "Publishable Key"),
-    PaymentGateway.new(:adyen12, login: 'Login', password: 'Secret Password', public_key: "Client Encryption Public Key", merchantAccount: 'Merchant ID', encryption_js_url: "Library location")
+    PaymentGateway.new(:adyen12, deprecated: true, login: 'Login', password: 'Secret Password', public_key: "Client Encryption Public Key", merchantAccount: 'Merchant ID', encryption_js_url: "Library location")
   ].freeze
 
   def self.bogus_enabled?
