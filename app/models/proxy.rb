@@ -15,7 +15,7 @@ class Proxy < ApplicationRecord
   has_one :oidc_configuration, dependent: :delete, inverse_of: :oidc_configurable, as: :oidc_configurable
   accepts_nested_attributes_for :oidc_configuration
 
-  validates :api_backend, :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, presence: true
+  validates :api_backend, :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
   uri_pattern = URI::DEFAULT_PARSER.pattern
 
@@ -51,7 +51,7 @@ class Proxy < ApplicationRecord
 
   validates :credentials_location, inclusion: { in: %w[headers query authorization], allow_nil: false }
 
-  validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed,
+  validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded,
                             numericality: { greater_than_or_equal_to: 200, less_than: 600 }
 
   validates :auth_app_id, :auth_app_key, :auth_user_key, :secret_token,
@@ -59,16 +59,16 @@ class Proxy < ApplicationRecord
 
   validates :error_headers_auth_failed,
                       :error_headers_auth_missing, :error_headers_no_match,
-                      :error_auth_failed,
-                      :error_auth_missing, :error_no_match,
+                      :error_auth_failed, :error_auth_missing, :error_no_match,
+                      :error_headers_limits_exceeded, :error_limits_exceeded,
                       format: { with: HTTP_HEADER }
 
   validates :api_test_path, length: { maximum: 8192 }
   validates :endpoint, :api_backend, :auth_app_key, :auth_app_id, :auth_user_key,
             :oidc_issuer_endpoint, :oidc_issuer_type,
             :credentials_location, :error_auth_failed, :error_auth_missing, :authentication_method,
-            :error_headers_auth_failed, :error_headers_auth_missing, :error_no_match,
-            :error_headers_no_match, :secret_token, :hostname_rewrite, :sandbox_endpoint,
+            :error_headers_auth_failed, :error_headers_auth_missing, :error_headers_limits_exceeded, :error_limits_exceeded,
+            :error_no_match, :error_headers_no_match, :secret_token, :hostname_rewrite, :sandbox_endpoint,
             length: { maximum: 255 }
 
   validates :oidc_issuer_type, inclusion: { in: OIDC_ISSUER_TYPES.keys.map(&:to_s), allow_blank: true }, presence: { if: ->(proxy) { proxy.oidc_issuer_endpoint.present? } }

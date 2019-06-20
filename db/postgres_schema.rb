@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190530065503) do
+ActiveRecord::Schema.define(version: 20190620092211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1050,38 +1050,41 @@ ActiveRecord::Schema.define(version: 20190530065503) do
   add_index "provider_constraints", ["provider_id"], name: "index_provider_constraints_on_provider_id", unique: true, using: :btree
 
   create_table "proxies", force: :cascade do |t|
-    t.integer  "tenant_id",                    limit: 8
-    t.integer  "service_id",                   limit: 8
-    t.string   "endpoint",                     limit: 255
+    t.integer  "tenant_id",                     limit: 8
+    t.integer  "service_id",                    limit: 8
+    t.string   "endpoint",                      limit: 255
     t.datetime "deployed_at"
-    t.string   "api_backend",                  limit: 255
-    t.string   "auth_app_key",                 limit: 255,  default: "app_key"
-    t.string   "auth_app_id",                  limit: 255,  default: "app_id"
-    t.string   "auth_user_key",                limit: 255,  default: "user_key"
-    t.string   "credentials_location",         limit: 255,  default: "query",                             null: false
-    t.string   "error_auth_failed",            limit: 255,  default: "Authentication failed"
-    t.string   "error_auth_missing",           limit: 255,  default: "Authentication parameters missing"
+    t.string   "api_backend",                   limit: 255
+    t.string   "auth_app_key",                  limit: 255,  default: "app_key"
+    t.string   "auth_app_id",                   limit: 255,  default: "app_id"
+    t.string   "auth_user_key",                 limit: 255,  default: "user_key"
+    t.string   "credentials_location",          limit: 255,  default: "query",                             null: false
+    t.string   "error_auth_failed",             limit: 255,  default: "Authentication failed"
+    t.string   "error_auth_missing",            limit: 255,  default: "Authentication parameters missing"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "error_status_auth_failed",                  default: 403,                                 null: false
-    t.string   "error_headers_auth_failed",    limit: 255,  default: "text/plain; charset=us-ascii",      null: false
-    t.integer  "error_status_auth_missing",                 default: 403,                                 null: false
-    t.string   "error_headers_auth_missing",   limit: 255,  default: "text/plain; charset=us-ascii",      null: false
-    t.string   "error_no_match",               limit: 255,  default: "No Mapping Rule matched",           null: false
-    t.integer  "error_status_no_match",                     default: 404,                                 null: false
-    t.string   "error_headers_no_match",       limit: 255,  default: "text/plain; charset=us-ascii",      null: false
-    t.string   "secret_token",                 limit: 255,                                                null: false
-    t.string   "hostname_rewrite",             limit: 255
-    t.string   "oauth_login_url",              limit: 255
-    t.string   "sandbox_endpoint",             limit: 255
-    t.string   "api_test_path",                limit: 8192
+    t.integer  "error_status_auth_failed",                   default: 403,                                 null: false
+    t.string   "error_headers_auth_failed",     limit: 255,  default: "text/plain; charset=us-ascii",      null: false
+    t.integer  "error_status_auth_missing",                  default: 403,                                 null: false
+    t.string   "error_headers_auth_missing",    limit: 255,  default: "text/plain; charset=us-ascii",      null: false
+    t.string   "error_no_match",                limit: 255,  default: "No Mapping Rule matched",           null: false
+    t.integer  "error_status_no_match",                      default: 404,                                 null: false
+    t.string   "error_headers_no_match",        limit: 255,  default: "text/plain; charset=us-ascii",      null: false
+    t.string   "secret_token",                  limit: 255,                                                null: false
+    t.string   "hostname_rewrite",              limit: 255
+    t.string   "oauth_login_url",               limit: 255
+    t.string   "sandbox_endpoint",              limit: 255
+    t.string   "api_test_path",                 limit: 8192
     t.boolean  "api_test_success"
-    t.boolean  "apicast_configuration_driven",              default: true,                                null: false
-    t.string   "oidc_issuer_endpoint",         limit: 255
-    t.integer  "lock_version",                 limit: 8,    default: 0,                                   null: false
-    t.string   "authentication_method",        limit: 255
+    t.boolean  "apicast_configuration_driven",               default: true,                                null: false
+    t.string   "oidc_issuer_endpoint",          limit: 255
+    t.integer  "lock_version",                  limit: 8,    default: 0,                                   null: false
+    t.string   "authentication_method",         limit: 255
     t.text     "policies_config"
-    t.string   "oidc_issuer_type",                          default: "keycloak"
+    t.string   "oidc_issuer_type",                           default: "keycloak"
+    t.string   "error_headers_limits_exceeded",              default: "text/plain; charset=us-ascii"
+    t.integer  "error_status_limits_exceeded",               default: 429
+    t.string   "error_limits_exceeded",                      default: "Usage limit exceeded"
   end
 
   add_index "proxies", ["service_id"], name: "index_proxies_on_service_id", using: :btree
