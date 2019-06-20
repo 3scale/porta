@@ -141,10 +141,6 @@ module ThreeScale
 
       add_three_scale_method_tracer :extended_traits, 'Custom/ThreeScale::Analytics::UserTracking#extended_traits'
 
-      def all_traits
-        basic_traits.merge(extended_traits)
-      end
-
       def flush
         Segment.flush
       end
