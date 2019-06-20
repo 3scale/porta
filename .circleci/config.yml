@@ -577,7 +577,7 @@ jobs:
       - run:
           name: Jest specs
           command: |
-            npm run-script jest
+            npm run-script jest --maxWorkers=2
       - *upload-coverage
 
   unit:

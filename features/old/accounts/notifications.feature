@@ -31,8 +31,7 @@ Feature: Notifications
       And the "Daily aggregate report" checkbox should not be checked
 
   # This scenario was unDRYed from an Outline due to performance reasons, it went from ~2 minutes to 20 seconds
-  @javascript @ajax
-
+  @ajax @javascript
   Scenario: Enable notification
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"

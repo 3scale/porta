@@ -49,7 +49,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
 
       values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
-      assert_equal(['', 'braintree_blue', 'stripe', 'adyen12', 'bogus'], values)
+      assert_equal(['', 'braintree_blue', 'stripe', 'bogus'], values)
     end
 
     should 'contain deprectaed gateway if in use' do
@@ -64,7 +64,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
 
       values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
-      assert_same_elements(['', 'braintree_blue', 'ogone', 'stripe', 'adyen12', 'bogus'], values)
+      assert_same_elements(['', 'braintree_blue', 'ogone', 'stripe', 'bogus'], values)
     end
   end # gateway options
 end

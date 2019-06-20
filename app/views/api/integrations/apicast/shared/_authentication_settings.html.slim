@@ -24,7 +24,7 @@
     = f.input :auth_app_id
     = f.input :auth_app_key
 
-  legend Errors  
+= f.toggled_inputs 'Gateway Response' do
   = f.inputs "Authentication Failed Error" do
     = f.input :error_status_auth_failed, label: :status
     = f.input :error_headers_auth_failed, label: :headers
@@ -37,3 +37,7 @@
     = f.input :error_status_no_match, label: :status
     = f.input :error_headers_no_match, label: :headers
     = f.input :error_no_match, label: :message
+  = f.inputs "Usage limit exceeded error" do
+    = f.input :error_status_limits_exceeded, label: :status
+    = f.input :error_headers_limits_exceeded, label: :headers
+    = f.input :error_limits_exceeded, label: :message

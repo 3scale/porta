@@ -30,8 +30,8 @@ end
 When /^I (follow|press) "([^"]*)" for category "([^"]*)"$/ do |action, label, name|
   element = action == 'follow' ? 'a' : 'button'
 
-  widget = find(%(#categories td:contains("#{name}") ~ td #{element}:contains("#{label}")))
-  widget.click
+  xpath_widget = "//table[@id='categories']/descendant::*[text()[contains(.,'#{name}')]]/ancestor::tr/descendant::#{element}[text()[contains(.,'#{label}')]]"
+  find(:xpath, xpath_widget).click
 end
 
 When /^I should not see (link|button) "([^"]*)" for category "([^"]*)"$/ do |widget, label, name|

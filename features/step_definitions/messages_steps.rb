@@ -116,7 +116,7 @@ Then /^I should see message to "([^"]*)" with subject "([^"]*)"$/ do |to, subjec
 end
 
 Then /^I should see (read|unread) message from "([^"]*)" with subject "([^"]*)"$/ do |state, from, subject|
-  should have_css("tr.#{state} td:contains(#{subject.inspect}) ~ td:contains(#{from.inspect})")
+  assert page.has_xpath?("//tr[@class='#{state}']/descendant::*[text()[contains(.,#{subject.inspect})]]/ancestor::tr/descendant::*[text()[contains(.,#{from.inspect})]]")
 end
 
 Then /^I should see a message from "([^"]*)" with subject "([^"]*)"$/ do |from, subject|

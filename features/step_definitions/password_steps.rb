@@ -1,5 +1,5 @@
 When /^(.*) in the request password reset form$/ do |action|
-  within '#request_password_reset_panel' do
+  within "form[action='#{provider_password_path}']" do
     step action
   end
 end

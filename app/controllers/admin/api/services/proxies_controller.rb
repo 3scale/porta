@@ -53,6 +53,9 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   ##~ op.parameters.add name: "error_no_match", description: "Error message when no mapping rule is matched.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "error_status_no_match", description: "Status code when no mapping rule is matched.", dataType: "int", paramType: "query", required: false
   ##~ op.parameters.add name: "error_headers_no_match", description: "Content-Type header when no mapping rule is matched.", dataType: "string", paramType: "query", required: false
+  ##~ op.parameters.add name: "error_status_limits_exceeded", description: "Status code when usage limit exceeded.", dataType: "int", paramType: "query", required: false
+  ##~ op.parameters.add name: "error_headers_limits_exceeded", description: "Content-Type header when usage limit exceeded.", dataType: "string", paramType: "query", required: false
+  ##~ op.parameters.add name: "error_limits_exceeded", description: "Error message on usage limit exceeded.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "oidc_issuer_endpoint", description: "Location of your OpenID Provider.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "oidc_issuer_type", description: "Type of your OpenID Provider.", dataType: "string", paramType: "query", required: false
   ##~ op.parameters.add name: "sandbox_endpoint", description: "Sandbox endpoint.", dataType: "string", paramType: "query", required: false
@@ -77,7 +80,9 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
                           error_status_auth_failed error_status_auth_failed error_headers_auth_failed
                           error_status_auth_missing error_headers_auth_missing error_no_match
                           error_status_no_match error_headers_no_match secret_token hostname_rewrite
-                          oauth_login_url api_test_path oidc_issuer_endpoint oidc_issuer_type]
+                          oauth_login_url api_test_path oidc_issuer_endpoint oidc_issuer_type error_status_limits_exceeded
+                          error_headers_limits_exceeded error_limits_exceeded]
+
     params.require(:proxy).permit(permitted_params)
   end
 

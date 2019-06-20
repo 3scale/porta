@@ -6263,6 +6263,27 @@
               "required": false
             },
             {
+              "name": "error_status_limits_exceeded",
+              "description": "Status code when usage limit exceeded.",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "error_headers_limits_exceeded",
+              "description": "Content-Type header when usage limit exceeded.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "error_limits_exceeded",
+              "description": "Error message on usage limit exceeded.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false
+            },
+            {
               "name": "oidc_issuer_endpoint",
               "description": "Location of your OpenID Provider.",
               "dataType": "string",

@@ -1,5 +1,5 @@
 Then /^I should see the partners submenu$/ do
-  step 'I should see the "links" in the submenu:', table(%{
+  step 'I should see the "links":', table(%{
    | link     |
    | Accounts      |
    | Subscriptions |
@@ -41,7 +41,7 @@ end
 
 # TODO: replace this with with more generic step?!
 Then %r{^I should still be in the "(.+?)"$} do |menu_item|
-  assert has_css?('li.active a', :text => menu_item)
+  assert has_css?('li.pf-m-current a', :text => menu_item)
 end
 
 Then /^I should( not)? see the provider menu$/ do |negative|

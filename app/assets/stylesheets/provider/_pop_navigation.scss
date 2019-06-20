@@ -1,12 +1,10 @@
+$link-padding: line-height-times(1 / 2);
+
 .PopNavigation {
   color: $content-background;
 
   &--context {
     float: left;
-
-    .PopNavigation-list {
-      left: line-height-times(21);
-    }
   }
 
   &--session {
@@ -39,7 +37,8 @@
     border: $border-width solid $border-color;
     border-radius: $border-radius;
     display: none;
-    margin: line-height-times(1 / 2, true) 0 0 0;
+    margin-top: line-height-times(1 / 2, true);
+    margin-left: calc(-#{$link-padding} + -#{$border-width});
     max-width: line-height-times(10);
     min-width: line-height-times(4);
     overflow: hidden;
@@ -81,7 +80,7 @@
   &-link {
     color: $font-color;
     display: block;
-    padding: line-height-times(1 / 2);
+    padding: $link-padding;
 
     &:hover {
       color: $link-color;
@@ -93,12 +92,15 @@
     cursor: pointer;
     display: block;
     min-width: line-height-times(5 / 2, true);
-    padding: line-height-times(117 / 100) line-height-times(1) line-height-times(1);
 
     &:hover,
     &.is-toggled,
     &.is-current {
       color: $link-color;
+    }
+
+    i {
+      padding: line-height-times(1) 0;
     }
   }
 }

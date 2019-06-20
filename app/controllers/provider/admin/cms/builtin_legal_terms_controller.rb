@@ -1,9 +1,8 @@
 class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
 
-  activate_menu :audience, :cms, :legal
   sublayout 'sites/legal_terms'
 
-  before_action :find_legal_term
+  before_action :activate_menu_for_legal, :find_legal_term
 
   def new
   end
@@ -27,6 +26,15 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
     else
       render :new
     end
+  end
+
+  def activate_menu_for_legal
+    system_name = if params[:id].present?
+                    templates.find(params[:id])[:system_name]
+                  else 
+                    params[:system_name] || params[:cms_template].try!(:fetch,:system_name)
+                  end
+    self.activate_menu :audience, :cms, system_name
   end
 
   private
