@@ -1,5 +1,5 @@
 Given /^the following buyers with service subscriptions signed up to (provider "[^"]*"):$/ do |provider, table|
-  # table is a Cucumber::Ast::Table
+  # table is a Cucumber::MultilineArgument::DataTable
   table.map_column!(:plans) { |plans| plans.from_sentence.map{ |plan| Plan.find_by_name!(plan) } }
   table.map_column!(:name) { |name| FactoryBot.create :buyer_account, :provider_account => provider, :org_name => name }
   table.map_headers! { |header| header.to_sym }

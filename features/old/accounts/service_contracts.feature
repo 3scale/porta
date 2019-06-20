@@ -21,7 +21,6 @@ Feature: Account service plans management
     Given a buyer "bob" signed up to provider "foo.example.com"
     Given current domain is the admin domain of provider "foo.example.com"
 
-  @javascript
   Scenario: Link to service contracts on account page in enterprise
     Given I am logged in as provider "foo.example.com"
     When I am on the buyer account page for "bob"
