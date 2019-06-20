@@ -14,9 +14,8 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
     redirect_to edit_provider_admin_account_path(next_step: 'credit_card') and return false unless current_account.valid?
 
     begin
-      @form_url = braintree_blue_crypt.form_url
-      @tr_data = braintree_blue_crypt.create_customer_data(
-        :redirect_url => hosted_success_provider_admin_account_braintree_blue_url(next_step: params[:next_step]))
+      braintree_blue_crypt.create_customer_data
+      @braintree_authorization = braintree_blue_crypt.authorization
     rescue Braintree::ConfigurationError, Braintree::AuthenticationError
       flash[:error] = 'Invalid merchant id'
       redirect_to action: 'show'
@@ -35,7 +34,9 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
   end
 
   def hosted_success
-    result = braintree_blue_crypt.confirm(request)
+    customer_info = params.require(:customer)
+
+    result = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
 
     if result && result.success?
 

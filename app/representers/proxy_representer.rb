@@ -21,6 +21,10 @@ class ProxyRepresenter < ThreeScale::Representer
   property  :error_no_match
   property  :error_status_no_match
   property  :error_headers_no_match
+  property  :error_limits_exceeded
+  property  :error_status_limits_exceeded
+  property  :error_headers_limits_exceeded
+
   property  :secret_token
   property  :hostname_rewrite
   property  :oauth_login_url

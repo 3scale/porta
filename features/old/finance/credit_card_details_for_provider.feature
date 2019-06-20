@@ -33,9 +33,7 @@ Feature: Credit card details
 
     When I fill in "First Name" with "Bender"
      And I fill in "Last Name" with "Rodriguez"
-     And I fill in "Number" with "4111111111111111"
-     And I fill in "Expiration Date (MM/YY)" with "12/22"
-     And I fill in "Cvv" with "123"
+     And I fill in the braintree credit card iframe
      And I fill in "Company" with "comp"
      And I fill in "Street Address" with "C/LLacuna 162"
      And I fill in "City" with "Barcelona"
@@ -58,9 +56,7 @@ Feature: Credit card details
 
     When I fill in "First Name" with "Bender"
      And I fill in "Last Name" with "Rodriguez"
-     And I fill in "Number" with "4111111111111112"
-     And I fill in "Expiration Date (MM/YY)" with "12/13"
-     And I fill in "Cvv" with "123"
+    And I fill in the braintree credit card iframe
      And I fill in "Company" with "comp"
      And I fill in "Street Address" with "C/LLacuna 162"
      And I fill in "City" with "Barcelona"

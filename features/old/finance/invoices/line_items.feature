@@ -1,9 +1,9 @@
+@javascript
 Feature: Provider manages line items
   In order to have full control over amounts billed
   As a provider
   I want to add/delete/edit line items on my customer's invoices
 
-# TODO: add JS tag!
 # TODO: create the invoice artificially and not by billing mechanism
 Background:
   Given a provider "foo.example.com" with billing enabled
@@ -38,6 +38,7 @@ Scenario: Create line item
 
 Scenario: Delete line item
    When I press "Delete"
+    And I wait a moment
    Then I should see line items
       | name       | cost |
       | Total cost |    0 |

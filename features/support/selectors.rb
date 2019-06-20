@@ -15,10 +15,8 @@ module HtmlSelectorsHelper
       '#apis'
     when 'the first api dashboard widget'
       "#service_#{provider_first_service!.id}"
-    when 'the submenu', :submenu
-      '.secondary-nav-item-pf.is-hover'
     when 'the subsubmenu'
-      '.secondary-nav-item-pf.active'
+      '.subsubmenu'
     when 'the user widget'
       '#user_widget'
     when 'the footer'

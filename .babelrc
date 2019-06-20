@@ -1,28 +1,27 @@
 {
   "plugins": [
-    "syntax-dynamic-import",
-    "transform-runtime",
-    "transform-object-rest-spread",
-    "transform-class-properties",
-    "transform-es2015-destructuring"
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-template-literals",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-destructuring"
   ],
   "presets": [
-    "es2015",
-    "react",
-    "stage-0"
-  ],
-  "env": {
-    "start": {
-      "presets": [
-        "react-hmre"
-      ]
-    },
-    "test": {
-      "presets": [
-        "es2015",
-        "react",
-        "stage-0"
-      ]
-    }
-  }
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "targets": {
+          "node": "current",
+          "ie": "11",
+          "firefox": "67",
+          "chrome": "75",
+          "edge": "44"
+        }
+      }
+    ],
+    "@babel/react",
+    "@babel/flow"
+  ]
 }

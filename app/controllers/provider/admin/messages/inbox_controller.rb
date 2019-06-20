@@ -1,6 +1,6 @@
 class Provider::Admin::Messages::InboxController < FrontendController
   before_action :find_message, :only => [:show, :destroy, :reply]
-  activate_menu :buyers, :messages
+  activate_menu :buyers, :messages, :inbox
 
   def index
     @messages = current_account.received_messages.not_system.latest_first.paginate(page: params[:page])

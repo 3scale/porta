@@ -1,10 +1,21 @@
-- title = title
-- path ||= '#'
-- icon ||= nil
+- title = section[:title]
+- path = section[:path]
+- items = section[:items]
+- is_section_active = active_section == section[:id]
 
-li.list-group-item class=( active_menu?(:sidebar, title) || active_menu?(:submenu, title) || active_menu?(:main_menu, title) || current_page?(path) ? 'active' : '')
-  = link_to path, class: "list-group-item-link-#{title.parameterize}" do
-    - if icon
-      span.fa.fa-fw class="fa-#{icon}"
-    span.list-group-item-value
+- if items == nil
+  li.pf-c-nav__item class=('pf-m-current' if is_section_active)
+    = link_to path, class: 'pf-c-nav__link' do
       = title
+
+- else
+  li.pf-c-nav__item class='pf-m-expandable pf-m-expanded' class=('pf-m-current' if is_section_active)
+    a.pf-c-nav__link href='#!'
+      = title
+    section.pf-c-nav__subnav
+      ul.pf-c-nav__simple-list
+        - items.each do |item|
+          - is_item_active = is_section_active && active_item == item[:id]
+          li.pf-c-nav__item class=('pf-m-current' if is_item_active)
+            = link_to item[:path], class: 'pf-c-nav__link', target: item[:target] do
+              = item[:title]

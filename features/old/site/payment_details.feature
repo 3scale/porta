@@ -5,6 +5,7 @@ Feature: Provider Payment Details
     Given a provider "foo.example.com"
     And provider "master" manages payments with "braintree_blue"
     And provider "master" has testing credentials for braintree
+    And Braintree is stubbed to accept credit card for buyer
 
   Scenario: Upload logo
     Given master provider has the following fields defined for "Account":
@@ -19,6 +20,7 @@ Feature: Provider Payment Details
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
     When I follow "Account"
+      And I follow "Billing"
       And I follow "Payment Details"
     Then I should be on the provider braintree credit card details page
       And I follow "Add Payment Details"

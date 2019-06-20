@@ -215,6 +215,9 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
         "error_auth_missing"=>"ooooh Authentication parameters missing",
         "error_status_no_match"=>504,
         "error_headers_no_match"=>"text/html; charset=us-ascii",
+        "error_status_limits_exceeded"=>499,
+        "error_headers_limits_exceeded"=>"text/html; charset=us-ascii",
+        "error_limits_exceeded"=>"Limit exceeeeeded",
         "error_no_match"=>"Nooooo rule matched",
         "api_test_path"=>"/getstatus",
         "policies_config"=>"[{\"name\":\"alaska\",\"version\":\"1\",\"configuration\":{}}]"},
@@ -231,7 +234,6 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
     proxy_attributes.delete("proxy_rules_attributes")
 
     proxy.reload
-
     # puts diff(proxy.attributes.slice(*proxy_attributes.keys), proxy_attributes)
     assert_equal proxy.attributes.slice(*proxy_attributes.keys), proxy_attributes
 

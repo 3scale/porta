@@ -88,6 +88,7 @@ end
 
 When /^I navigate to my personal details page$/ do
   click_link 'Account'
+  click_link 'Personal'
   click_link 'Personal Details'
 end
 
