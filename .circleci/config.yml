@@ -565,6 +565,7 @@ jobs:
       - *upload-coverage
 
   jest:
+    resource_class: medium+
     parameters:
       executor:
         type: string
