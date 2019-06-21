@@ -565,6 +565,7 @@ jobs:
       - *upload-coverage
 
   jest:
+    resource_class: medium+
     parameters:
       executor:
         type: string
@@ -577,7 +578,7 @@ jobs:
       - run:
           name: Jest specs
           command: |
-            npm run-script jest --maxWorkers=2
+            npm run-script jest --maxWorkers=3
       - *upload-coverage
 
   unit:
