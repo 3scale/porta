@@ -501,11 +501,14 @@ jobs:
             cp config/examples/*.yml config/
             bundle exec rake assets:precompile RAILS_ENV=test
             bundle exec rake assets:precompile RAILS_ENV=production
+            bundle exec rake webpack:compile NODE_ENV=test RAILS_ENV=test
           environment:
             RAILS_GROUPS: assets
       - persist_to_workspace:
           root: .
           paths:
+            - ./public/packs
+            - ./public/packs-test
             - ./public/assets
             - ./config/*.yml
 
