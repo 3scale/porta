@@ -352,12 +352,15 @@ html {
   overflow: hidden;
   opacity: 0;
   transition: all 250ms cubic-bezier(0.42, 0, 0.58, 1);
-}
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
 
-.pf-c-nav__subnav::-webkit-scrollbar {
+  &::-webkit-scrollbar {
   display: none;
   visibility: hidden;
 }
+}
+
 
 .pf-c-nav__item.pf-m-expanded .pf-c-nav__subnav {
   max-height: 37.5rem;
