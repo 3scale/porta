@@ -15,7 +15,7 @@ module ThreeScale
           when Integer
             retry_option
           when true
-            Sidekiq::JobRetry::DEFAULT_MAX_RETRY_ATTEMPTS
+            Sidekiq::Middleware::Server::RetryJobs::DEFAULT_MAX_RETRY_ATTEMPTS
           else
             0
           end
