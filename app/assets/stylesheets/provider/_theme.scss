@@ -15,6 +15,7 @@
 
 @import 'highlight/styles/github';
 @import 'provider/inline_helper';
+@import 'provider/patternfly_ie11';
 
 // TODO: remove this crap
 // but be aware that you have to remove all div.right and similar shit
@@ -105,5 +106,4 @@
 @import 'provider/access_tokens';
 @import 'provider/print';
 
-@import 'provider/patternfly_ie11';
 @import 'provider/vertical_nav';
