@@ -1,4 +1,3 @@
-@javascript
 Feature: Provider manages line items
   In order to have full control over amounts billed
   As a provider
