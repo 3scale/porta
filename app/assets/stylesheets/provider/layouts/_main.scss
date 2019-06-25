@@ -5,8 +5,6 @@ body {
 .wrapper, #layout-header, #wrapper {
   height: 100%;
   margin: 0 auto;
-  // padding-left: line-height-times(1); This is added by Patternfly, value: var(--pf-c-nav__list-link--PaddingTop) var(--pf-c-nav__list-link--PaddingRight) var(--pf-c-nav__list-link--PaddingBottom) var(--pf-c-nav__list-link--PaddingLeft)
-  // padding-right: line-height-times(1); TODO: this should be delegated to Patternfly or at least use the same measures as PF.
   position: relative;
   overflow: hidden;
 }
@@ -14,25 +12,13 @@ body {
 #border {
   background-color: #fff; // HACK: this will be taken care by PF4
   min-height: calc(100vh - 92px); // Header's height
-  // padding: line-height-times(1) 0 0 0;
   position: relative;
   text-align: left;
-  // z-index: 1;
 }
 
 #nav {
   height: auto;
 }
-
-// .vertical-nav {
-//   height: 100%;
-//   text-align: left;
-//   z-index: 1000;
-// }
-
-// .vertical-nav + #border {
-//   margin-left: line-height-times(9);
-// }
 
 .Main {
   // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
