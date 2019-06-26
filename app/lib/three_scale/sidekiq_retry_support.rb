@@ -15,7 +15,7 @@ module ThreeScale
           when Integer
             retry_option
           when true
-            Sidekiq::JobRetry::DEFAULT_MAX_RETRY_ATTEMPTS
+            Sidekiq::Middleware::Server::RetryJobs::DEFAULT_MAX_RETRY_ATTEMPTS
           else
             0
           end
@@ -32,14 +32,14 @@ module ThreeScale
         retry_attempt.to_i >= retry_limit
       end
 
-      def with_retry_count
-        logger.info { "Running #{retry_identifier} (#{retry_attempt}/#{retry_limit})" }
+      def with_retry_log
+        logger.info "Running #{retry_identifier} (#{retry_attempt}/#{retry_limit})"
 
         yield
       rescue => exception
-        logger.info { "#{retry_identifier} attempt ##{retry_attempt} failed with #{exception}" }
+        logger.info "#{retry_identifier} attempt ##{retry_attempt} failed with #{exception}"
 
-        logger.info { "Retrying #{retry_identifier}" } unless last_attempt?
+        logger.info "Retrying #{retry_identifier}" unless last_attempt?
         raise exception
       end
 
