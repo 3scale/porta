@@ -44,7 +44,7 @@ class WebHookWorker
   def perform(webhook_id, options)
     @webhook_id = webhook_id
 
-    with_retry_count do
+    with_retry_log do
       push(options.symbolize_keys.slice(:url, :xml, :content_type))
     end
   end
