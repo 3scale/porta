@@ -1,21 +1,9 @@
 .pf-c-page__sidebar {
-  height: 100%; // FIXME: PF should do this.
-}
+  text-align: left;
+  text-decoration: none;
 
-.pf-c-nav__toggle {
-  margin-left: auto !important; // FIXME: for some reason PF4 styles do not apply properly and margin gets overridden
-}
-
-.pf-c-nav__section-title {
-  // Give nested label more padding
-  padding-left: var(--pf-c-nav__simple-list-link--nested--PaddingLeft) !important;
-  // Give artificial margin-top of pf-c-nav__section
-  margin-top: 2rem;
-}
-
-.vertical-nav-label {
-  // FIXME: for some reason PF4 styles do not apply properly and margin gets overridden
-  padding-top: var(--pf-c-nav__section-title--PaddingTop) !important;
-  padding-right: var(--pf-c-nav__section-title--PaddingRight) !important;
-  padding-left: var(--pf-c-nav__simple-list-link--nested--PaddingLeft) !important;
+  .pf-c-nav__section-title {
+    // Give artificial margin-top of pf-c-nav__section
+    margin-top: 2rem;
+  }
 }
