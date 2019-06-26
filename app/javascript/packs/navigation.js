@@ -1,3 +1,5 @@
+import '@babel/polyfill'
+
 import { toggleNavigation, hideAllToggleable } from 'Navigation/utils/toggle_navigation'
 import { ContextSelectorWrapper } from 'Navigation/components/ContextSelector'
 
