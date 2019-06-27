@@ -1,10 +1,16 @@
 $link-padding: line-height-times(1 / 2);
+$pf4-sidebar-width: 18.125rem;
 
 .PopNavigation {
   color: $content-background;
 
   &--context {
     float: left;
+
+    .PopNavigation-list {
+      left: $pf4-sidebar-width;
+      margin-left: line-height-times(1 / 2);
+    }
   }
 
   &--session {
@@ -38,7 +44,6 @@ $link-padding: line-height-times(1 / 2);
     border-radius: $border-radius;
     display: none;
     margin-top: line-height-times(1 / 2, true);
-    margin-left: calc(-#{$link-padding} + -#{$border-width});
     max-width: line-height-times(10);
     min-width: line-height-times(4);
     overflow: hidden;
