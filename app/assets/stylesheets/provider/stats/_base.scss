@@ -138,19 +138,12 @@ $stats-chart-tooltip-color: $label-color;
 
 .StatsChart-container {
   &.is-loading {
+    background-image: image-url('spinner.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    content: '';
+    height: 320px; // Fixed value, comes from stats package
     opacity: .5;
-
-    &::before {
-      background-image: image-url('spinner.svg');
-      background-position: center;
-      background-repeat: no-repeat;
-      bottom: 50%;
-      content: '';
-      height: line-height-times(2);
-      left: 50%;
-      position: absolute;
-      width: line-height-times(2);
-    }
   }
 
   .c3 svg {
