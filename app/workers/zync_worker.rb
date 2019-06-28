@@ -54,6 +54,8 @@ class ZyncWorker
 
   class UnprocessableEntityError < InvalidResponseError; end
 
+  Bugsnag::Middleware::ClassifyError::INFO_CLASSES << UnprocessableEntityError.to_s
+
   module MessageBusInstrumentation
     def publish(channel, data, options = {})
       id = super
