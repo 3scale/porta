@@ -4,6 +4,10 @@ $master-ribbon-height: line-height-times(1);
 .Header {
   height: $header-height;
 
+  .PopNavigation-list {
+    top: $header-height;
+  }
+
   &--master {
     height: $header-height + $master-ribbon-height;
     border-top: $master-ribbon-height solid $header-border-color;
@@ -13,6 +17,10 @@ $master-ribbon-height: line-height-times(1);
       position: absolute;
       top: 0;
       left: 50%;
+    }
+
+    .PopNavigation-list {
+      top: $header-height + $master-ribbon-height;
     }
   }
 
