@@ -110,7 +110,7 @@ oracle-db-container: &oracle-db-container
   environment:
     ORACLE_CHARACTERSET: 'AL32UTF8'
     ORACLE_SID: 'threescale'
-    ORACLE_PDB: 'systempdb'
+    ORACLE_PDB: 'systempdbtest'
     ORACLE_PWD: 'threescalepass'
   command: |
     bash -c "sed -i.bak 's|2048|6144|g' /opt/oracle/dbca.rsp.tmpl && exec /opt/oracle/runOracle.sh"
