@@ -13,25 +13,7 @@ module Account::Gateway
 
   # Payment gateway this account accepts payments through.
   def payment_gateway
-    @payment_gateway ||= begin
-      case
-      when payment_gateway_type.present?
-        build_payment_geteway(payment_gateway_type, payment_gateway_options)
-      when events.payment_setting_deleted.any?
-        build_payment_geteway_from_event
-      end
-    end
-  end
-
-  def build_payment_geteway(gateway_type, gateway_options)
-    gateway_class = PaymentGateway.implementation(gateway_type)
-    gateway_class.new(gateway_options || {})
-  end
-
-  def build_payment_geteway_from_event
-    event = events.payment_setting_deleted.last
-    deleted_setting = PaymentGatewaySetting.new(event.metadata[:object_attributes], without_protection: true)
-    build_payment_geteway(deleted_setting.gateway_type, deleted_setting.symbolized_settings)
+    @payment_gateway ||= build_payment_gateway
   end
 
   def payment_gateway_setting_exists?
@@ -102,5 +84,15 @@ module Account::Gateway
   def log_payment_gateway_change
     Rails.logger.info("[Notification][Payment Gateway Change]: Account #{org_name} has" +
                       "changed payment gateway to #{payment_gateway_type}")
+  end
+
+  private
+
+  def build_payment_gateway
+    PaymentGateway.implementation(payment_gateway_type).new(payment_gateway_options)
+  rescue ArgumentError
+    return unless (event = events.payment_setting_deleted.last)
+    attributes = event.metadata[:object_attributes]
+    PaymentGateway.implementation(attributes[:gateway_type]).new(attributes[:gateway_settings])
   end
 end

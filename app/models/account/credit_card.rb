@@ -100,16 +100,11 @@ module Account::CreditCard
   end
 
   def unstore_credit_card!
-    if provider_account&.payment_gateway_setting_exists?
-      response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
-      log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
-    end
+    threescale_unstore_payment_gateway
 
     return if payment_detail.destroyed?
 
-    self.credit_card_auth_code = nil
-    self.credit_card_expires_on = nil
-    self.credit_card_partial_number = nil
+    delete_cc_details
   end
 
   def notify_credit_card_change
@@ -136,6 +131,8 @@ module Account::CreditCard
 
   private
 
+  delegate :payment_gateway_setting_exists?, to: :provider_account, prefix: true, allow_nil: true
+
   # voids the transaction with the +authorization+ code
   def void_transaction!(authorization)
     response = provider_payment_gateway.void(authorization)
@@ -143,11 +140,17 @@ module Account::CreditCard
     response.success?
   end
 
+  def threescale_unstore_payment_gateway
+    return unless provider_account_payment_gateway_setting_exists?
+
+    response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
+    log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+  end
+
   def log_gateway_response(response, action)
-    if response
-      logger.info "----------"
-      logger.info "~> [#{provider_payment_gateway.try!(:display_name)} / #{credit_card_partial_number.inspect}] #{action} response: #{response.inspect}"
-      logger.info "----------"
-    end
+    return unless response
+    logger.info "----------"
+    logger.info "~> [#{provider_payment_gateway.try!(:display_name)} / #{credit_card_partial_number.inspect}] #{action} response: #{response.inspect}"
+    logger.info "----------"
   end
 end
