@@ -1,4 +1,5 @@
 import '@babel/polyfill'
+import './pf4BaseStyles.js'
 
 import { toggleNavigation, hideAllToggleable } from 'Navigation/utils/toggle_navigation'
 import { ContextSelectorWrapper } from 'Navigation/components/ContextSelector'
