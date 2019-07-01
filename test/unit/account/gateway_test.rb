@@ -88,13 +88,10 @@ class Account::GatewayTest  < ActiveSupport::TestCase
     account.gateway_setting.stubs(configured?: false)
 
     refute account.payment_gateway_configured?
-    assert account.payment_gateway_unconfigured?
 
     account.gateway_setting.stubs(configured?: true)
 
     assert account.payment_gateway_configured?
-    refute account.payment_gateway_unconfigured?
-
   end
 
 end

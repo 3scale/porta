@@ -26,10 +26,6 @@ module Account::Gateway
     gateway_setting.persisted? && gateway_setting.configured?
   end
 
-  def payment_gateway_unconfigured?
-    !payment_gateway_configured?
-  end
-
   # MIGRATION use separate table over columns in same table
   # Accessors for backward compatibility
   # There is an issue, build_association will automatically save the association on parent save
