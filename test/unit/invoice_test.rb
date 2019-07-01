@@ -476,7 +476,8 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test '#charge! failed if provider payment_gateway is unconfigured' do
     @buyer.expects(:charge!).never
-    @provider.stubs(:payment_gateway_unconfigured?).returns(true)
+    @provider.stubs(:payment_gateway_configured?).returns(false)
+    @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
     @invoice.update_attribute(:state, 'pending')
 
     refute @invoice.charge!, 'Invoice should not charge!'
