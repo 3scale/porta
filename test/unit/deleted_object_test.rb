@@ -23,46 +23,62 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_same_elements contracts.map(&:id), DeletedObject.contracts.pluck(:object_id)
   end
 
-  test '.service_owner' do
+  test '.owned_by_service' do
     with_service_owner    = DeletedObject.create(object: metric, owner: service).id
     without_service_owner = DeletedObject.create(object: service, owner: service.account).id
 
-    result_service_owner = DeletedObject.service_owner.pluck(:id)
+    result_service_owner = DeletedObject.owned_by_service.pluck(:id)
     assert_includes result_service_owner, with_service_owner
     assert_not_includes result_service_owner, without_service_owner
   end
 
-  test '.service_owner_not_exists' do
-    deleted_object_service_owner_exists = DeletedObject.create(object: metric, owner: service).id
+  test '.missing_owner' do
+    deleted_object_ids = {}
 
-    metric = FactoryBot.create(:metric)
-    deleted_object_event_service_owner_deleted = DeletedObject.create(object: metric, owner: metric.service).id
-    metric.service.delete
+    deleted_object_ids[:service_owner_exists] = DeletedObject.create(object: metric, owner: service).id
 
-    service = FactoryBot.create(:simple_service)
-    deleted_object_non_service_owner_deleted = DeletedObject.create(object: service, owner: service.account).id
-    service.account.delete
+    other_metric = FactoryBot.create(:metric)
+    deleted_object_ids[:service_owner_deleted] = DeletedObject.create(object: other_metric, owner: other_metric.service).id
+    other_metric.service.delete
 
-    result_service_owner_not_exists = DeletedObject.service_owner_not_exists.pluck(:id)
-    assert_includes result_service_owner_not_exists, deleted_object_event_service_owner_deleted
-    assert_not_includes result_service_owner_not_exists, deleted_object_service_owner_exists
-    assert_not_includes result_service_owner_not_exists, deleted_object_non_service_owner_deleted
+    other_service = FactoryBot.create(:simple_service)
+    deleted_object_ids[:account_owner_exists] = DeletedObject.create(object: other_service, owner: other_service.account).id
+
+    other_other_service = FactoryBot.create(:simple_service)
+    deleted_object_ids[:account_owner_deleted] = DeletedObject.create(object: other_other_service, owner: other_other_service.account).id
+    other_other_service.account.delete
+
+    other_other_other_service = FactoryBot.create(:simple_service)
+    deleted_object_ids[:object_deleted_but_account_owner_exists] = DeletedObject.create(object: other_other_other_service, owner: other_other_other_service.account).id
+    other_other_other_service.delete
+
+    expected_missing_owner_ids = deleted_object_ids.values_at(:service_owner_deleted, :account_owner_deleted).flatten
+    expected_not_missing_owner_ids = deleted_object_ids.values_at(:service_owner_exists, :account_owner_exists, :object_deleted_but_account_owner_exists).flatten
+    actual_missing_owner_ids = DeletedObject.missing_owner.pluck(:id)
+
+    assert_same_elements (actual_missing_owner_ids & expected_missing_owner_ids), expected_missing_owner_ids
+    assert (actual_missing_owner_ids & expected_not_missing_owner_ids).empty?
   end
 
-  test '.service_owner_event_not_exists' do
-    deleted_object_event_event_not_exists = DeletedObject.create(object: metric, owner: service).id
+  test '.missing_owner_event' do
+    service_owner_missing_event = DeletedObject.create(object: metric, owner: service).id
 
     metric = FactoryBot.create(:metric)
-    deleted_object__event_exists = DeletedObject.create(object: metric, owner: metric.service).id
+    service_owner_persisted_event = DeletedObject.create(object: metric, owner: metric.service).id
     Services::ServiceDeletedEvent.create_and_publish!(metric.service)
 
     service = FactoryBot.create(:simple_service)
-    deleted_object_event_not_exists_and_owner_account = DeletedObject.create(object: service, owner: service.account).id
+    non_service_owner_missing_event = DeletedObject.create(object: service, owner: service.account).id
 
-    result_service_owner_event_not_exists = DeletedObject.service_owner_event_not_exists.pluck(:id)
-    assert_includes result_service_owner_event_not_exists, deleted_object_event_event_not_exists
-    assert_not_includes result_service_owner_event_not_exists, deleted_object__event_exists
-    assert_not_includes result_service_owner_event_not_exists, deleted_object_event_not_exists_and_owner_account
+    service = FactoryBot.create(:simple_service)
+    non_service_owner_persisted_event = DeletedObject.create(object: service, owner: service.account).id
+    Accounts::AccountDeletedEvent.create_and_publish!(service.account)
+
+    results = DeletedObject.missing_owner_event.pluck(:id)
+    assert_includes results, service_owner_missing_event
+    assert_not_includes results, service_owner_persisted_event
+    assert_includes results, non_service_owner_missing_event
+    assert_includes results, non_service_owner_persisted_event
   end
 
   test '.stale' do

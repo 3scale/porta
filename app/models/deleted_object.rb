@@ -8,10 +8,24 @@ class DeletedObject < ApplicationRecord
     scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
   end
 
-  scope :service_owner, -> { where.has { owner_type == Service } }
-  scope :service_owner_not_exists, -> { service_owner.joining { owner.of(Service).outer }.where('services.id IS NULL') }
-  scope :service_owner_event_not_exists, lambda {
-    service_owner.where.has { not_exists EventStore::Services::ServiceDeletedEvent.by_service_id('deleted_objects.owner_id') }
+  scope :owned_by_service, -> { where.has { owner_type == Service } }
+
+  scope :missing_owner, lambda {
+    associations = distinct(:owner_type).pluck(:owner_type).map(&:constantize).map do |association|
+      -> { joining { owner.of(association).outer }.where("#{association.table_name}.id IS NULL") }
+    end
+    associations.inject(all) { |chain, association| chain.merge!(association) }
   }
-  scope :stale, -> { service_owner_not_exists.service_owner_event_not_exists }
+
+  scope :missing_owner_event, lambda {
+    associations = distinct(:owner_type).pluck(:owner_type).map(&:constantize).map do |association|
+      -> {
+        joins("LEFT OUTER JOIN event_store_events AS #{association.table_name}_events ON #{association.table_name}_events.event_type = '#{h = Hash.new(nil).merge(Service.table_name => Services::ServiceDeletedEvent); h[association.table_name]}' AND #{association.table_name}_events.data LIKE CONCAT('%\nservice_id: ',  owner_id, '\n%')")
+          .where("#{association.table_name}_events.event_id IS NULL")
+       }
+    end
+    associations.inject(all) { |chain, association| chain.merge!(association) }
+  }
+
+  scope :stale, -> { owned_by_service.missing_owner.missing_owner_event }
 end

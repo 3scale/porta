@@ -12,12 +12,12 @@ class EventStore::Services::ServiceDeletedEventTest < ActiveSupport::TestCase
     assert_equal expected_service_events, result_service_events
   end
 
-  test '.by_service_id' do
-    [1, 2].each { |service_id| create_publish_service_deleted_event(service_id) }
+  test '.by_object_id' do
+    [9, 90].each { |service_id| create_publish_service_deleted_event(service_id) }
 
-    result_events = EventStore::Services::ServiceDeletedEvent.by_service_id(1).all
-    assert_equal 1, result_events.size
-    assert_equal 1, result_events[0].data[:service_id]
+    EventStore::Services::ServiceDeletedEvent.by_object_id(9).each do |event_result|
+      assert_equal 9, event_result.data[:service_id]
+    end
   end
 
   private
