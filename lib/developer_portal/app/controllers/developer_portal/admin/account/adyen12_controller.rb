@@ -22,7 +22,7 @@ module DeveloperPortal::Admin::Account
 
     # Catch exception from ActiveMerchant::AdyenGateway Argument error
     # This is likely because the provider has chosen adyen
-    # but did not fill in required fields aka payment_gateway_unconfigured?
+    # but did not fill in required fields aka payment_gateway_configured? is false
     def authorize_recurring_and_store_card_details
       gateway_client.authorize_recurring_and_store_card_details(params['adyen-encrypted-data'], ip: request.remote_ip)
     rescue ArgumentError => e
