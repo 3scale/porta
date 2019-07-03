@@ -23,15 +23,6 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_same_elements contracts.map(&:id), DeletedObject.contracts.pluck(:object_id)
   end
 
-  test '.owned_by_service' do
-    with_service_owner    = DeletedObject.create(object: metric, owner: service).id
-    without_service_owner = DeletedObject.create(object: service, owner: service.account).id
-
-    result_service_owner = DeletedObject.owned_by_service.pluck(:id)
-    assert_includes result_service_owner, with_service_owner
-    assert_not_includes result_service_owner, without_service_owner
-  end
-
   test '.missing_owner' do
     deleted_object_ids = {}
 
@@ -101,6 +92,6 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_includes result_stale, deleted_object_event_service_owner_deleted_and_event_not_exists
     assert_not_includes result_stale, deleted_object_service_owner_exists
     assert_not_includes result_stale, deleted_object_service_owner_deleted_and_event_exists
-    assert_not_includes result_stale, deleted_object_non_service_owner_deleted_and_event_not_exists
+    assert_includes result_stale, deleted_object_non_service_owner_deleted_and_event_not_exists
   end
 end

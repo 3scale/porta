@@ -8,8 +8,6 @@ class DeletedObject < ApplicationRecord
     scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
   end
 
-  scope :owned_by_service, -> { where.has { owner_type == Service } }
-
   scope :missing_owner, lambda {
     associations = distinct(:owner_type).pluck(:owner_type).map(&:constantize).map do |association|
       -> { joining { owner.of(association).outer }.where("#{association.table_name}.id IS NULL") }
@@ -17,6 +15,7 @@ class DeletedObject < ApplicationRecord
     associations.inject(all) { |chain, association| chain.merge!(association) }
   }
 
+  # TODO: This is really bad :) It is just a 1st step :)
   scope :missing_owner_event, lambda {
     associations = distinct(:owner_type).pluck(:owner_type).map(&:constantize).map do |association|
       -> {
@@ -27,5 +26,5 @@ class DeletedObject < ApplicationRecord
     associations.inject(all) { |chain, association| chain.merge!(association) }
   }
 
-  scope :stale, -> { owned_by_service.missing_owner.missing_owner_event }
+  scope :stale, -> { missing_owner.missing_owner_event }
 end
