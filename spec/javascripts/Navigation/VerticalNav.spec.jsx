@@ -56,3 +56,19 @@ it('should render right markup without submenus', () => {
   expect(links.length).toBe(2)
   expect(subLink.exists()).toBe(false)
 })
+
+it('should open/collapse a submenu', () => {
+  const propsSubmenu = {...props,
+    activeSection: 'Foo',
+    activeItem: null
+  }
+  const wrapper = mount(<VerticalNav {...propsSubmenu} />)
+  const link = wrapper.find('.pf-c-nav__item').at(2).find('a').at(0)
+  expect(wrapper.find('li.pf-c-nav__item').at(2).hasClass('pf-m-expanded')).toEqual(false)
+
+  link.simulate('click')
+  expect(wrapper.find('li.pf-c-nav__item').at(2).hasClass('pf-m-expanded')).toEqual(true)
+
+  link.simulate('click')
+  expect(wrapper.find('li.pf-c-nav__item').at(2).hasClass('pf-m-expanded')).toEqual(false)
+})
