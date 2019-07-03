@@ -19,13 +19,13 @@ type Props = {
 }
 
 const getFormGroupProps = (type: string) => {
-  const types = ['username', 'password', 'email']
+  const types = ['username', 'password', 'email', 'user[username]', 'user[email]', 'user[password]', 'user[password_confirmation]']
   const typeIndex = types.indexOf(type)
-  const inputTypes = ['text', 'password', 'email']
-  const labels = ['Email or Username', 'Password', 'Email address']
-  const fieldIDs = ['session_username', 'session_password', 'email']
-  const helperTextInvalids = ['Email or username is mandatory', 'Password is mandatory', 'A valid email address is mandatory']
-  const tabIndexs = ['1', '2', '1']
+  const inputTypes = ['text', 'password', 'email', 'text', 'email', 'password', 'password']
+  const labels = ['Email or Username', 'Password', 'Email address', 'Username', 'Email', 'Password', 'Password confirmation']
+  const fieldIDs = ['session_username', 'session_password', 'email', 'user_username', 'user_email', 'user_password', 'user_password_confirmation']
+  const helperTextInvalids = ['Email or username is mandatory', 'Password is mandatory', 'A valid email address is mandatory', 'Username is mandatory', 'A valid email is mandatory', 'Password is mandatory', 'Password and Password confirmation must match']
+  const tabIndexs = ['1', '2', '1', null, null, null, null]
   return {
     label: labels[typeIndex],
     inputType: inputTypes[typeIndex],
