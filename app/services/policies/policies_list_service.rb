@@ -9,7 +9,7 @@ class Policies::PoliciesListService
   HTTP_ERRORS = [HTTPClient::BadResponseError,HTTPClient::TimeoutError, HTTPClient::ConnectTimeoutError,
                  HTTPClient::SendTimeoutError, HTTPClient::ReceiveTimeoutError, SocketError,
                  Errno::ECONNREFUSED].freeze
-  SERVICE_CALL_ERRORS = [*HTTP_ERRORS, PoliciesListServiceError].freeze
+  SERVICE_CALL_ERRORS = [PoliciesListServiceError, *HTTP_ERRORS].freeze
   private_constant :HTTP_ERRORS, :SERVICE_CALL_ERRORS
 
   def self.call(*args)

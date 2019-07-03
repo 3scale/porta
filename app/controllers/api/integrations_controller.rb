@@ -15,7 +15,7 @@ class Api::IntegrationsController < Api::BaseController
   def edit
     begin
       @registry_policies = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
-    rescue RuntimeError, Errno::ECONNREFUSED => error
+    rescue StandardError => error
       @error = error
     end
     @latest_lua = current_account.proxy_logs.first
