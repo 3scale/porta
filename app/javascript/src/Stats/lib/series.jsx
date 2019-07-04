@@ -1,8 +1,10 @@
 import 'core-js/fn/object/assign' // make Object.assign on IE 11
 import 'core-js/fn/array/find-index' // make Object.findIndex on IE 11
 import 'core-js/fn/array/find'
-import moment from 'moment-timezone'
-import 'moment-range'
+import Moment from 'moment-timezone'
+import { extendMoment } from 'moment-range'
+
+const moment = extendMoment(Moment)
 
 const CHART_TIMESTAMP_FORMAT = 'YYYY-MM-DDTHH:mm:ss'
 
@@ -59,13 +61,10 @@ export class StatsSeries {
   }
 
   _parseTimePeriod (period) {
-    let range = []
-    let granularity = period.granularity
-    let timeInterval = `${period.since}/${period.until}`
-    moment.range(timeInterval).by(granularity, moment => {
-      range.push(moment.utc().tz(period.timezone).format(CHART_TIMESTAMP_FORMAT))
-    })
-    return range
+    const granularity = period.granularity
+    const timeInterval = `${period.since}/${period.until}`
+    const range = Array.from(moment.range(timeInterval).by(granularity))
+    return range.map(m => m.tz(period.timezone).format(CHART_TIMESTAMP_FORMAT))
   }
 
   _sortResponses (responses) {
