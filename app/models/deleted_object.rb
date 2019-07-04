@@ -8,22 +8,34 @@ class DeletedObject < ApplicationRecord
     scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
   end
 
+  # Using this in scopes is dangerous as it's not thread-safe https://github.com/3scale/porta/pull/941/files#r299878052
+  def self.owner_types
+    unscoped.distinct(:owner_type).pluck(:owner_type)
+  end
+
   scope :missing_owner, lambda {
-    associations = distinct(:owner_type).pluck(:owner_type).map(&:constantize).map do |association|
-      -> { joining { owner.of(association).outer }.where("#{association.table_name}.id IS NULL") }
-    end
-    associations.inject(all) { |chain, association| chain.merge!(association) }
+    all.where.has { DeletedObject.owner_types.map(&:constantize).map { |association| not_exists(association.where("#{association.table_name}.id = deleted_objects.owner_id")).to_sql }.join(' AND ') }
   }
 
-  # TODO: This is really bad :) It is just a 1st step :)
+  OWNER_TYPES = {
+    'Service': { event_class: Services::ServiceDeletedEvent, event_selector: -> { data =~ sift(:concat, sql("'%\nservice_id: '"), BabySqueel[:deleted_objects].owner_id, sql("'\n%'")) } }, # cannot use BabySqueel::DSL#quoted with the escape character ('\'). It's actually ActiveRecord::ConnectionAdapters::Quoting's fault
+    'Account': { event_class: Accounts::AccountDeletedEvent, event_selector: -> { data =~ sift(:concat, sql("'%\naccount_id: '"), BabySqueel[:deleted_objects].owner_id, sql("'\n%'")) } }
+  }.with_indifferent_access.freeze
+
+  private_constant :OWNER_TYPES
+
   scope :missing_owner_event, lambda {
-    associations = distinct(:owner_type).pluck(:owner_type).map(&:constantize).map do |association|
-      -> {
-        joins("LEFT OUTER JOIN event_store_events AS #{association.table_name}_events ON #{association.table_name}_events.event_type = '#{h = Hash.new(nil).merge(Service.table_name => Services::ServiceDeletedEvent); h[association.table_name]}' AND #{association.table_name}_events.data LIKE CONCAT('%\nservice_id: ',  owner_id, '\n%')")
-          .where("#{association.table_name}_events.event_id IS NULL")
-       }
+    all.where.has do
+      DeletedObject.owner_types.map do |klass|
+        if OWNER_TYPES.key?(klass)
+          event_class = [*OWNER_TYPES.dig(klass, :event_class)]
+          event_selector = OWNER_TYPES.dig(klass, :event_selector)
+          not_exists(EventStore::EventRecordBase.where.has { event_type.in(event_class) & instance_exec(&event_selector) }).to_sql
+        else
+          (owner_type != klass).to_sql
+        end
+      end.join(' AND ')
     end
-    associations.inject(all) { |chain, association| chain.merge!(association) }
   }
 
   scope :stale, -> { missing_owner.missing_owner_event }

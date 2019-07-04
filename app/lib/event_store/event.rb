@@ -3,7 +3,7 @@
 require 'active_job/arguments'
 
 module EventStore
-  class Event < RailsEventStoreActiveRecord::Event
+  class Event < EventRecordBase
     module WithGlobalId
       module_function
 

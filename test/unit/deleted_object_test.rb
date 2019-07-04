@@ -69,7 +69,7 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_includes results, service_owner_missing_event
     assert_not_includes results, service_owner_persisted_event
     assert_includes results, non_service_owner_missing_event
-    assert_includes results, non_service_owner_persisted_event
+    assert_not_includes results, non_service_owner_persisted_event
   end
 
   test '.stale' do
