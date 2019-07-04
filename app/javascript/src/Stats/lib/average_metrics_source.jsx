@@ -1,9 +1,10 @@
 import 'core-js/fn/object/assign' // make Object.assign work on IE 11
 import 'core-js/modules/es6.map' // make Maps work on IE 11
-import moment from 'moment'
-import 'moment-range'
-
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
 import {StatsMetricsSource} from 'Stats/lib/metrics_source'
+
+const moment = extendMoment(Moment)
 
 export class StatsAverageMetricsSource extends StatsMetricsSource {
   get url () {
@@ -15,11 +16,11 @@ export class StatsAverageMetricsSource extends StatsMetricsSource {
   }
 
   _average (responseValues, stateOptions) {
-    let period = stateOptions.dateRange
-    let range = moment.range(period.since, period.until)
+    const period = stateOptions.dateRange
+    const range = moment.range(period.since, period.until)
     let dataMap = new Map()
     let i = 0
-    range.by(period.granularity, (current) => {
+    Array.from(range.by(period.granularity)).forEach(current => {
       let key = current[period.granularity]()
       let storedValue = dataMap.get(key) || 0
       let value = storedValue + ((responseValues.length > i) ? responseValues[i] : 0)
