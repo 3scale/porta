@@ -242,11 +242,11 @@ SMTP header for the message.</p>
 
 <p><strong>Example:</strong> Conditional blind carbon copy</p>
 
-<pre lang="liquid"><code>{% email %}
-  {% if plan.system_name == 'enterprise' %}
+<pre lang="liquid"><code>{% if plan.system_name == 'enterprise' %}
+  {% email %}
      {% bcc 'marketing@world-domination.org' %}
-  {% endif%}
-{% endemail %}
+  {% endemail %}
+{% endif%}
 </code></pre>
 
 <p><strong>Example:</strong> Disabling emails at all</p>
@@ -258,14 +258,16 @@ SMTP header for the message.</p>
 
 <p><strong>Example:</strong> Signup email filter</p>
 
-<pre lang="liquid"><code>{% email %}
-  {% if plan.system == 'enterprise' %}
+<pre lang="liquid"><code>{% if plan.system == 'enterprise' %}
+  {% email %}
     {% subject = 'Greetings from Example company!' %}
     {% reply-to = 'support@example.com' %}
-  {% else %}
+  {% endemail %}
+{% else %}
+  {% email %}
     {% do_not_send %}
-  {% endif %}
-{% endemail %}
+  {% endemail %}
+{% endif %}
 </code></pre>
 
 <h1>
