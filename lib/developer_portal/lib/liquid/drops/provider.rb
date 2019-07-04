@@ -111,12 +111,6 @@ module Liquid
         @model.settings.multiple_applications.visible?
       end
 
-      def logo_url
-        if logo = @model.profile.logo
-          logo.url(:large)
-        end
-      end
-
       desc """*True* if your 3scale plan allows you to manage multiple APIs
                as separate [services][support-terminology-service].
            """
