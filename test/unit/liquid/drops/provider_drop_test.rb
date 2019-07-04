@@ -55,6 +55,26 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
     assert @drop.multiple_services_allowed?
   end
 
+  test 'account_plans_allowed?' do
+    plans = FactoryBot.create_list(:account_plan, 2, issuer: @provider)
+
+    plans.map(&:publish!)
+    @provider.settings.update_attribute(:account_plans_switch, 'visible')
+    assert @drop.account_plans_allowed?
+
+    plans.map(&:hide!)
+    @provider.settings.update_attribute(:account_plans_switch, 'visible')
+    refute @drop.account_plans_allowed?
+
+    plans.map(&:publish!)
+    @provider.settings.update_attribute(:account_plans_switch, 'hidden')
+    refute @drop.account_plans_allowed?
+
+    plans.map(&:hide!)
+    @provider.settings.update_attribute(:account_plans_switch, 'hidden')
+    refute @drop.account_plans_allowed?
+  end
+
   test 'api_specs' do
     valid_attributes = {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
     services = FactoryBot.create_list(:service, 2, account: @provider)

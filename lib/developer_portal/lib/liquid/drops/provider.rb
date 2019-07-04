@@ -155,6 +155,10 @@ module Liquid
         @model.settings.multiple_users.visible?
       end
 
+      def account_plans_allowed?
+        @model.settings.account_plans.visible? && account_plans.size > 1
+      end
+
       desc "Returns all published account plans."
       example %(
         <p>We offer following account plans:</p>
