@@ -338,8 +338,8 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.10.0)
-    font-awesome-rails (4.7.0.4)
-      railties (>= 3.2, < 6.0)
+    font-awesome-rails (4.7.0.5)
+      railties (>= 3.2, < 6.1)
     formtastic (1.2.4)
       actionpack (>= 2.3.7)
       activesupport (>= 2.3.7)
@@ -861,7 +861,7 @@ DEPENDENCIES
   fakeweb!
   faraday (~> 0.12.0)
   faraday_middleware (~> 0.12.0)
-  font-awesome-rails (~> 4.7.0.4)
+  font-awesome-rails (~> 4.7.0.5)
   font_assets!
   formtastic (~> 1.2.4)
   github-markdown
