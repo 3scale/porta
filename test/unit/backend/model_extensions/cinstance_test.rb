@@ -23,25 +23,6 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
     assert_equal 'custom_app_id', cinstance.application_id
   end
 
-  test 'application_id is properly validated' do
-    cinstance = Cinstance.new(:plan => FactoryBot.create(:application_plan), :user_account   => FactoryBot.create(:buyer_account))
-
-    cinstance.application_id = "1"
-    assert !cinstance.valid?
-
-    cinstance.application_id = "asd"
-    assert !cinstance.valid?
-
-    cinstance.application_id = "6f76704d-14fc-40ab-bd2a-1a1442dc6b91"
-    assert cinstance.valid?
-
-    cinstance.application_id = "sdfsd-*"
-    assert !cinstance.valid?
-
-    cinstance.application_id = "valid"
-    assert cinstance.valid?
-  end
-
   test 'application_id is immutable' do
     cinstance = FactoryBot.create(:simple_cinstance)
 
