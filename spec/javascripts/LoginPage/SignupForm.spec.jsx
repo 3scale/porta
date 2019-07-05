@@ -1,0 +1,114 @@
+import React from 'react'
+import Enzyme, { mount } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+
+import { SignupForm } from 'LoginPage'
+
+Enzyme.configure({ adapter: new Adapter() })
+
+const props = {
+  path: 'bikini-bottom'
+}
+
+it('should render itself', () => {
+  const wrapper = mount(<SignupForm {...props} />)
+  expect(wrapper.find('#signup_form').exists()).toEqual(true)
+})
+
+it('should render four Form Groups', () => {
+  const wrapper = mount(<SignupForm {...props} />)
+  expect(wrapper.find('.pf-c-form__group > label').length).toEqual(4)
+})
+
+describe('Username', () => {
+  it('should render Username Form Group', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    expect(wrapper.find('input#user_username').length).toEqual(1)
+  })
+  it('should set username state', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
+    wrapper.instance().handleTextInputUsername('Bob')
+    expect(wrapper.instance().handleTextInputUsername).toHaveBeenCalled()
+    expect(wrapper.state().username).toEqual('Bob')
+  })
+})
+
+describe('Email', () => {
+  it('should render Email Form Group', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    expect(wrapper.find('input#user_email').length).toEqual(1)
+  })
+  it('should set emailAddress state', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
+    wrapper.instance().handleTextInputEmail('bob@sponge.com')
+    expect(wrapper.instance().handleTextInputEmail).toHaveBeenCalled()
+    expect(wrapper.state().emailAddress).toEqual('bob@sponge.com')
+  })
+})
+
+describe('Password', () => {
+  it('should render Password Form Group', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    expect(wrapper.find('input#user_password').length).toEqual(1)
+  })
+  it('should set password state', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
+    wrapper.instance().handleTextInputPassword('gary1234')
+    expect(wrapper.instance().handleTextInputPassword).toHaveBeenCalled()
+    expect(wrapper.state().password).toEqual('gary1234')
+  })
+})
+
+describe('Password confirmation', () => {
+  it('should render Password confirmation Form Group', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    expect(wrapper.find('input#user_password_confirmation').length).toEqual(1)
+  })
+  it('should set passwordConfirmation state', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+    jest.spyOn(wrapper.instance(), 'handleTextInputPasswordConfirmation')
+    wrapper.instance().handleTextInputPasswordConfirmation('gary1234')
+    expect(wrapper.instance().handleTextInputPasswordConfirmation).toHaveBeenCalled()
+    expect(wrapper.state().passwordConfirmation).toEqual('gary1234')
+  })
+})
+
+describe('Validate form', () => {
+  it('should prevent form submission when inputs are not valid', () => {
+    const event = { preventDefault: () => { } }
+    jest.spyOn(event, 'preventDefault')
+    const wrapper = mount(<SignupForm {...props} />)
+    jest.spyOn(wrapper.instance(), 'validateForm')
+    wrapper.instance().validateForm(event)
+    expect(wrapper.instance().validateForm).toHaveBeenCalledWith(event)
+    expect(event.preventDefault).toHaveBeenCalled()
+  })
+
+  it('should not prevent form submission when inputs are valid', () => {
+    const wrapper = mount(<SignupForm {...props} />)
+
+    jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
+    wrapper.instance().handleTextInputUsername('Bob')
+
+    jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
+    wrapper.instance().handleTextInputEmail('bob@sponge.com')
+
+    jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
+    wrapper.instance().handleTextInputPassword('gary1234')
+
+    jest.spyOn(wrapper.instance(), 'handleTextInputPasswordConfirmation')
+    wrapper.instance().handleTextInputPasswordConfirmation('gary1234')
+
+    const event = { preventDefault: () => { } }
+    jest.spyOn(event, 'preventDefault')
+    jest.spyOn(wrapper.instance(), 'validateForm')
+    wrapper.instance().validateForm(event)
+
+    expect(wrapper.instance().validateForm).toHaveBeenCalledWith(event)
+    expect(event.preventDefault).not.toHaveBeenCalled()
+  })
+})
+
