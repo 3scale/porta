@@ -66,7 +66,7 @@ module AuthenticatedSystem
   def destroy_user_session!
     logger.info "Destroying user session #{user_session.to_param}"
     user_session.try!(:revoke!)
-    cookies.delete :user_session
+    cookies.delete :user_session, httponly: true
     @user_session = nil
   end
 
