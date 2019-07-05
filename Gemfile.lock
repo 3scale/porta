@@ -335,7 +335,7 @@ GEM
     fakefs (0.18.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.12.2)
+    faraday_middleware (0.13.1)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.10.0)
     font-awesome-rails (4.7.0.5)
@@ -454,7 +454,7 @@ GEM
     multi_json (1.13.1)
     multi_test (0.1.2)
     multi_xml (0.5.5)
-    multipart-post (2.1.0)
+    multipart-post (2.1.1)
     mustache (1.1.0)
     mysql2 (0.3.18)
     net-http-digest_auth (1.4)
@@ -860,8 +860,8 @@ DEPENDENCIES
   fakefs (~> 0.18.0)
   fakeweb!
   faraday (~> 0.12.0)
-  faraday_middleware (~> 0.12.0)
   font-awesome-rails (~> 4.7.0.5)
+  faraday_middleware (~> 0.13.1)
   font_assets!
   formtastic (~> 1.2.4)
   github-markdown
