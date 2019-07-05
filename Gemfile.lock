@@ -442,7 +442,7 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     minitest-stub-const (0.5)
-    mocha (1.1.0)
+    mocha (1.9.0)
       metaclass (~> 0.0.1)
     money (6.7.1)
       i18n (>= 0.6.4, <= 0.7.0)
@@ -885,7 +885,7 @@ DEPENDENCIES
   minitest
   minitest-reporters
   minitest-stub-const
-  mocha (~> 1.1.0)
+  mocha (~> 1.9.0)
   money (= 6.7.1)
   multi_fetch_fragments!
   mysql2 (~> 0.3.11)
