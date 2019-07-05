@@ -3,8 +3,7 @@
 import React, { Component } from 'react'
 import {
   Form,
-  ActionGroup,
-  Button
+  ActionGroup
 } from '@patternfly/react-core'
 import {
   HiddenInputs,
@@ -153,7 +152,7 @@ class SignupForm extends Component<Props, State> {
         <HiddenInputs />
         <FormGroups state={this.state} handlers={formGroupHandlers}/>
         <ActionGroup>
-          <input 
+          <input
             type="submit"
             name="commit"
             value="Sign up"
