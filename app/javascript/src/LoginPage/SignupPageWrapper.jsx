@@ -12,12 +12,17 @@ import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
 type Props = {
-  email: string,
+  user: {
+    email: string,
+    firstname: string,
+    lastname: string,
+    username: string
+  },
   name: string,
   path: string
 }
 
-const SignupPage = ({email, name, path}: Props) => (
+const SignupPage = ({user, name, path}: Props) => (
   <LoginPage
     brandImgSrc={brandImg}
     brandImgAlt='Red Hat 3scale API Management'
@@ -26,7 +31,7 @@ const SignupPage = ({email, name, path}: Props) => (
     loginTitle={`Signup to ${name}`}
     footer={null}
   >
-    <SignupForm path={path} email={email}/>
+    <SignupForm path={path} user={user}/>
   </LoginPage>
 )
 
