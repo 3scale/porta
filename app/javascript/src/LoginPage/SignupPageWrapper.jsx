@@ -5,9 +5,11 @@ import {createReactWrapper} from 'utilities/createReactWrapper'
 
 import {LoginPage} from '@patternfly/react-core'
 import {SignupForm} from 'LoginPage'
+
+import 'LoginPage/assets/styles/loginPage.scss'
+
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
-import 'LoginPage/assets/styles/loginPage.scss'
 
 type Props = {
   name: string,
