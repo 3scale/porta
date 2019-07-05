@@ -8,7 +8,13 @@ Enzyme.configure({adapter: new Adapter()})
 
 const props = {
   name: 'Bob Sponge',
-  path: 'bikini-bottom'
+  path: 'bikini-bottom',
+  user: {
+    email: 'bob@sponge.com',
+    firstname: 'Bob',
+    lastname: 'Sponge',
+    username: 'bobsponge'
+  }
 }
 
 it('should render itself', () => {
