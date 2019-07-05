@@ -162,4 +162,12 @@ class ApplicationKeysTest < ActiveSupport::TestCase
 
   end
 
+  test 'Value can include special characters as defined in the RFC 6749' do
+    generate_random_key_with_all_chars_of_rfc_6749 = -> { ("\x20".."\x7e").to_a.shuffle.join }
+    app_key = FactoryBot.build(:application_key, value: (value = generate_random_key_with_all_chars_of_rfc_6749.call))
+
+    assert app_key.save
+    assert value, app_key.reload.value
+  end
+
 end

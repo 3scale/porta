@@ -110,7 +110,6 @@ class Cinstance < Contract
 
   validate :same_service, on: :update, if: :plan_id_changed?
 
-  APP_ID_FORMAT = /[\w-]+/.freeze
   # letter, number, underscore (_), hyphen-minus (-), dot (.), base64 format
   # In base64 encoding, the character set is [A-Z,a-z,0-9,and + /], if rest length is less than 4, fill of '=' character.
   # ^([A-Za-z0-9+/]{4})* means the String start with 0 time or more base64 group.
@@ -118,8 +117,7 @@ class Cinstance < Contract
   # matches also the non 64B case with (\A[\w\-\.]+\Z)
   USER_KEY_FORMAT = /(([\w\-\.]+)|([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==))/
 
-  # Arbitrary limit, increase don't broke anything.
-  validates :application_id, format: { with: /\A#{APP_ID_FORMAT}\Z/ }, length: { in: 4..140 }
+  validates :application_id, format: { with: /\A[\x20-\x7E]+\Z/ }, length: { in: 4..255 }
 
 
   validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 },

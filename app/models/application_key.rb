@@ -2,8 +2,6 @@ class ApplicationKey < ApplicationRecord
 
   KEYS_LIMIT = 5
 
-  APP_KEY_FORMAT = /[a-z\d][a-z\d\-\_]*[a-z\d]/i.freeze
-
 
   belongs_to :application, :class_name => 'Cinstance', :inverse_of => :application_keys
 
@@ -11,7 +9,7 @@ class ApplicationKey < ApplicationRecord
 
   validates :application, presence: true
   # letters, numbers, dash, cannot stat with dash, case insensitive
-  validates :value, format: { with: /\A#{APP_KEY_FORMAT}\Z/ },
+  validates :value, format: { with: /\A[\x20-\x7E]+\Z/ },
                     length: { within: 5..255 },
                     uniqueness: { scope: :application_id }
 
