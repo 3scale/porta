@@ -59,6 +59,10 @@ class ThreeScale::OAuth2::KeycloakClientTest < ActiveSupport::TestCase
     assert_equal expected_data, @oauth2.user_data.to_h
   end
 
+  test '#scopes' do
+    assert_equal 'openid', @oauth2.scopes
+  end
+
   class RedirectUriTest < ActiveSupport::TestCase
 
     RedirectUri = ThreeScale::OAuth2::KeycloakClient::RedirectUri
