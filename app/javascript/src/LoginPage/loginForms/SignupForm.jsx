@@ -11,7 +11,8 @@ import {
 } from 'LoginPage'
 
 type Props = {
-  path: string
+  path: string,
+  email: string
 }
 
 type State = {
@@ -46,7 +47,7 @@ class SignupForm extends Component<Props, State> {
     super(props)
     this.state = {
       username: '',
-      emailAddress: '',
+      emailAddress: this.props.email,
       password: '',
       passwordConfirmation: '',
       isValidUsername: undefined,
