@@ -1038,4 +1038,28 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_not_includes ids_cinstances_like_list, id_cinstance_with_another_plan
     assert_not_includes ids_cinstances_like_list, id_service_contract_with_enterprise_plan
   end
+
+  test 'App ID can include special characters as defined in the RFC 6749' do
+    generate_random_key_with_all_chars_of_rfc_6749 = -> { ("\x20".."\x7e").to_a.shuffle.join }
+    cinstance = FactoryBot.build(:cinstance, application_id: (app_id = generate_random_key_with_all_chars_of_rfc_6749.call))
+
+    assert cinstance.save
+    assert app_id, cinstance.reload.application_id
+  end
+
+  test 'App ID length is validated to be between 4 and 255 characters' do
+    cinstance = FactoryBot.build(:cinstance)
+
+    cinstance.application_id = ''
+    refute cinstance.valid?
+
+    cinstance.application_id = 'a' * 3
+    refute cinstance.valid?
+
+    cinstance.application_id = 'a' * 4
+    assert cinstance.valid?
+
+    cinstance.application_id = 'a' * 255
+    assert cinstance.valid?
+  end
 end
