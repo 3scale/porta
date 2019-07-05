@@ -43,6 +43,10 @@ module ThreeScale
         }
       end
 
+      def scopes
+        'openid'
+      end
+
       private
 
       class RedirectUri
