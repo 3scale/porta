@@ -39,11 +39,12 @@ it('should render right markup with submenus', () => {
 })
 
 it('should render right markup without submenus', () => {
+  const sections = [
+    { id: 'Foo', title: 'Foo', path: '/foo' },
+    { id: 'Bar', title: 'Bar', path: '/bar' },
+  ]
   const propsNoSubmenus = {
-    sections: [
-      { id: 'Foo', title: 'Foo', path: '/foo' },
-      { id: 'Bar', title: 'Bar', path: '/bar' },
-    ],
+    sections,
     activeSection: 'Foo',
     activeItem: null
   }
@@ -52,8 +53,8 @@ it('should render right markup without submenus', () => {
   const items = wrapper.find('.pf-c-nav__item')
   const links = wrapper.find('.pf-c-nav__link')
   const subLink = wrapper.find('section .pf-c-nav__link')
-  expect(items.length).toBe(2)
-  expect(links.length).toBe(2)
+  expect(items.length).toBe(sections.length)
+  expect(links.length).toBe(sections.length)
   expect(subLink.exists()).toBe(false)
 })
 
@@ -63,12 +64,12 @@ it('should open/collapse a submenu', () => {
     activeItem: null
   }
   const wrapper = mount(<VerticalNav {...propsSubmenu} />)
-  const link = wrapper.find('.pf-c-nav__item').at(2).find('a').at(0)
-  expect(wrapper.find('li.pf-c-nav__item').at(2).hasClass('pf-m-expanded')).toEqual(false)
+  const link = wrapper.find('NavExpandable').find('a').first()
+  expect(wrapper.find('NavExpandable').find('.pf-c-nav__item.pf-m-expanded').exists()).toEqual(false)
 
   link.simulate('click')
-  expect(wrapper.find('li.pf-c-nav__item').at(2).hasClass('pf-m-expanded')).toEqual(true)
+  expect(wrapper.find('NavExpandable').find('.pf-c-nav__item.pf-m-expanded').exists()).toEqual(true)
 
   link.simulate('click')
-  expect(wrapper.find('li.pf-c-nav__item').at(2).hasClass('pf-m-expanded')).toEqual(false)
+  expect(wrapper.find('NavExpandable').find('.pf-c-nav__item.pf-m-expanded').exists()).toEqual(false)
 })
