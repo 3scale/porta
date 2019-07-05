@@ -24,65 +24,20 @@ type State = {
   isValidPassword: ?boolean,
   isValidPasswordConfirmation: ?boolean
 }
-type HandlersProps = {
-  handleTextInputUsername: (username: string) => void,
-  handleTextInputEmail: (emailAddress: string) => void,
-  handleTextInputPassword: (password: string) => void,
-  handleTextInputPasswordConfirmation: (passwordConfirmation: string) => void
-}
 
-const FormGroups = ({state, handlers}: {state: State, handlers: HandlersProps}) => {
-  const {username, isValidUsername, emailAddress, isValidEmailAddress, password, isValidPassword, passwordConfirmation, isValidPasswordConfirmation} = state
-  const {handleTextInputUsername, handleTextInputEmail, handleTextInputPassword, handleTextInputPasswordConfirmation} = handlers
-
-  const usernameInputProps = {
-    value: username,
-    onChange: handleTextInputUsername,
-    autoFocus: 'autoFocus',
-    inputIsValid: isValidUsername
+const InputFormGroup = (props) => {
+  const {type, value, onChange, isValid} = props
+  const inputProps = {
+    value,
+    onChange,
+    isValid
   }
-  const emailInputProps = {
-    value: emailAddress,
-    onChange: handleTextInputEmail,
-    autoFocus: 'autoFocus',
-    inputIsValid: isValidEmailAddress
-  }
-  const passwordInputProps = {
-    value: password,
-    onChange: handleTextInputPassword,
-    ariaInvalid: 'false',
-    inputIsValid: isValidPassword
-  }
-  const passwordConfirmationInputProps = {
-    value: passwordConfirmation,
-    onChange: handleTextInputPasswordConfirmation,
-    ariaInvalid: 'false',
-    inputIsValid: isValidPasswordConfirmation
-  }
-
   return (
-    <React.Fragment>
-      <FormGroup
-        type='user[username]'
-        labelIsValid={isValidUsername}
-        inputProps={usernameInputProps}
-      />
-      <FormGroup
-        type='user[email]'
-        labelIsValid={isValidEmailAddress}
-        inputProps={emailInputProps}
-      />
-      <FormGroup
-        type='user[password]'
-        labelIsValid={isValidPassword}
-        inputProps={passwordInputProps}
-      />
-      <FormGroup
-        type='user[password_confirmation]'
-        labelIsValid={isValidPasswordConfirmation}
-        inputProps={passwordConfirmationInputProps}
-      />
-    </React.Fragment>
+    <FormGroup
+      type={type}
+      labelIsValid={isValid}
+      inputProps={inputProps}
+    />
   )
 }
 
@@ -136,21 +91,20 @@ class SignupForm extends Component<Props, State> {
   }
 
   render () {
-    const formGroupHandlers = {
-      handleTextInputUsername: this.handleTextInputUsername,
-      handleTextInputEmail: this.handleTextInputEmail,
-      handleTextInputPassword: this.handleTextInputPassword,
-      handleTextInputPasswordConfirmation: this.handleTextInputPasswordConfirmation
-    }
+    const { username, isValidUsername, emailAddress, isValidEmailAddress, password, isValidPassword, passwordConfirmation, isValidPasswordConfirmation } = this.state
     return (
       <Form
+        noValidate={false}
         action={this.props.path}
         id='signup_form'
         acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs />
-        <FormGroups state={this.state} handlers={formGroupHandlers}/>
+        <InputFormGroup type='user[username]' value={username} isValid={isValidUsername} onChange={this.handleTextInputUsername} />
+        <InputFormGroup type='user[email]' value={emailAddress} isValid={isValidEmailAddress} onChange={this.handleTextInputEmail} />
+        <InputFormGroup type='user[password]' value={password} isValid={isValidPassword} onChange={this.handleTextInputPassword} />
+        <InputFormGroup type='user[password_confirmation]' value={passwordConfirmation} isValid={isValidPasswordConfirmation} onChange={this.handleTextInputPasswordConfirmation} />
         <ActionGroup>
           <input
             type="submit"
