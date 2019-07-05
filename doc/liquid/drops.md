@@ -1770,18 +1770,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Returns the title of the page.
-```liquid
-<title>{{ page.title }}</title>
-```
 
-### system_name
-Returns system name of the page.
-```liquid
-{% if page.system_name == 'my_page' %}
-  {% include 'custom_header' %}
-{% endif %}
-```
+### kind
+
+### url
+
+### description
 
 -----------
 
@@ -1804,12 +1798,18 @@ this returns the errors that occurred.
 ```
 
 ### title
+Returns the title of the page.
+```liquid
+<title>{{ page.title }}</title>
+```
 
-### kind
-
-### url
-
-### description
+### system_name
+Returns system name of the page.
+```liquid
+{% if page.system_name == 'my_page' %}
+  {% include 'custom_header' %}
+{% endif %}
+```
 
 -----------
 
@@ -2302,6 +2302,16 @@ Returns the logo URL.
       {{ 'Sent invitations' | link_to: urls.invitations }}
     </li>
   </ul>
+{% endif %}
+```
+
+### account_plans_allowed?
+*True* if the developer accounts are allowed to see published account plans.
+```liquid
+{% if provider.account_plans_allowed? %}
+  {% for plan in account_plans %}
+     {{ plan.name }}
+  {% endfor %}
 {% endif %}
 ```
 
@@ -2871,9 +2881,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 
@@ -2896,12 +2909,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 

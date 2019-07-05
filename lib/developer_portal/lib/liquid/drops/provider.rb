@@ -155,6 +155,18 @@ module Liquid
         @model.settings.multiple_users.visible?
       end
 
+      desc '*True* if the developer accounts are allowed to see published account plans.'
+      example %(
+        {% if provider.account_plans_allowed? %}
+          {% for plan in account_plans %}
+             {{ plan.name }}
+          {% endfor %}
+        {% endif %}
+      )
+      def account_plans_allowed?
+        @model.settings.account_plans.visible? && account_plans.size > 1
+      end
+
       desc "Returns all published account plans."
       example %(
         <p>We offer following account plans:</p>

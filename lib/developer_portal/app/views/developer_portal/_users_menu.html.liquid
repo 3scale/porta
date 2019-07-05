@@ -13,7 +13,7 @@
     {% endif %}
 
 
-    {% if provider.account_plans.size > 1 %}
+    {% if provider.account_plans_allowed? %}
       {% include 'menu_item' with urls.account_plans %}
     {% endif %}
   {%  endunless %}
