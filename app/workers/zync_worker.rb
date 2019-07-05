@@ -4,6 +4,8 @@ require 'httpclient/include_client'
 
 class ZyncWorker
   include Sidekiq::Worker
+  include ThreeScale::SidekiqRetrySupport::Worker
+
   extend ::HTTPClient::IncludeClient
 
   class_attribute :publisher
@@ -34,6 +36,10 @@ class ZyncWorker
     end
   end
 
+  class UnprocessableEntityError < InvalidResponseError; end
+
+  Bugsnag::Middleware::ClassifyError::INFO_CLASSES << UnprocessableEntityError.to_s
+
   module Locator
     module_function
 
@@ -51,10 +57,6 @@ class ZyncWorker
 
     GlobalID::Locator.use(:zync, Locator)
   end
-
-  class UnprocessableEntityError < InvalidResponseError; end
-
-  Bugsnag::Middleware::ClassifyError::INFO_CLASSES << UnprocessableEntityError.to_s
 
   module MessageBusInstrumentation
     def publish(channel, data, options = {})
@@ -211,25 +213,37 @@ class ZyncWorker
     MessageBusClient.new(uri)
   end
 
-  def perform(event_id, notification)
+  def perform(event_id, notification, manual_retry_count = nil)
     return false unless valid?(event_id)
 
-    tenant, provider = update_tenant(event_id)
+    with_manual_retry_count(event_id, manual_retry_count) do
+      tenant, provider = update_tenant(event_id)
 
-    publish_notification = -> {
-      http_put(notification_url, notification, event_id)
-    }
+      publish_notification = -> { http_put(notification_url, notification, event_id) }
 
-    if provider # tenant is still there
-      client = message_bus_client(tenant)
-
-      MessageBusPublisher.new(notification).call(client, provider, &publish_notification)
-    else
-      publish_notification.call
+      if provider # tenant is still there
+        client = message_bus_client(tenant)
+        MessageBusPublisher.new(notification).call(client, provider, &publish_notification)
+      else
+        publish_notification.call
+      end
     end
   rescue UnprocessableEntityError
-    publish_dependencies_events(event_id)
-    raise
+    raise if last_attempt? || sync_dependencies(event_id).blank?
+  end
+
+  attr_reader :manual_retry_count, :event_id
+
+  def with_manual_retry_count(event_id, manual_retry_count)
+    @event_id = event_id
+    set_retry_count(manual_retry_count)
+    with_retry_log { yield }
+  end
+
+  def set_retry_count(manual_retry_count)
+    return unless manual_retry_count
+    self.retry_attempt += manual_retry_count # Retries can be Sidekiq retries or manual retries
+    @manual_retry_count = manual_retry_count
   end
 
   def valid?(event_id)
@@ -241,15 +255,45 @@ class ZyncWorker
     true
   end
 
-  def publish_dependencies_events(event_id)
-    event = EventStore::Repository.find_event!(event_id)
+  def sync_dependencies(event_id)
+    dependency_events = []
 
-    dependencies = event.dependencies.map do |dependency|
-      ZyncEvent.create(event, dependency)
+    enqueue_dependency_batch(event_id) do
+      dependency_events = create_dependency_events(event_id)
+      publish_dependency_events(dependency_events)
     end
 
-    dependencies.each { |dependency| publisher.call(dependency, 'zync') }
+    dependency_events
   end
+
+  def enqueue_dependency_batch(event_id, &block)
+    batch = Sidekiq::Batch.new
+    batch.description = "[ZyncWorker] Syncing dependencies first"
+    batch.on(:complete, self.class, { 'event_id' => event_id, 'manual_retry_count' => manual_retry_count })
+    batch.jobs &block
+  end
+
+  def create_dependency_events(event_id)
+    EventStore::Repository.find_event!(event_id).create_dependencies
+  end
+
+  def publish_dependency_events(dependency_events)
+    dependency_events.each do |dependent_event|
+      publisher.call(dependent_event, 'zync')
+    end
+  end
+
+  def on_complete(_bid, options)
+    event = EventStore::Repository.find_event!(options['event_id'])
+
+    # A batch is only created after a UnprocessableEntityError has been raised, so retry the same event
+    # The number of retries is usually controlled at the origin of the failure using ThreeScale::SidekiqRetrySupport::Worker#last_attempt?,
+    # but in this case we are not really using Sidekiq retries, but rather re-enqueueing the job manually here
+    manual_retry_count = options['manual_retry_count'].to_i + 1
+    perform_async(event.event_id, event.data, manual_retry_count)
+  end
+
+  delegate :perform_async, to: :class
 
   def update_tenant(event_id)
     event = EventStore::Repository.find_event!(event_id)
@@ -324,4 +368,8 @@ class ZyncWorker
   delegate :authentication, to: :config
 
   JSON_REQUEST = { 'Content-Type' => 'application/json' }.freeze
+
+  def retry_identifier
+    "#{self.class.name} for event_id #{event_id}"
+  end
 end

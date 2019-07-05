@@ -18,6 +18,17 @@ class ZyncEventTest < ActiveSupport::TestCase
     assert_equal [ service = application.service, service.proxy ], event.dependencies
   end
 
+  def test_create_dependencies
+    application = FactoryBot.create(:simple_cinstance)
+    event = ZyncEvent.create(RailsEventStore::Event.new, application)
+
+    dependencies = [service = application.service, service.proxy]
+    event.expects(:dependencies).returns(dependencies)
+    dependencies.each { |dependency| ZyncEvent.expects(:create).with(event, dependency) }
+
+    event.create_dependencies
+  end
+
   def test_non_persisted_dependencies_for_application
     application = FactoryBot.build(:simple_cinstance, service: FactoryBot.create(:simple_service))
     assert event = ZyncEvent.create(Applications::ApplicationDeletedEvent.create(application), application)
