@@ -22,6 +22,7 @@
 
 <%= tag("div", :id => "signup-page-container", :data => {
   :props => {
+    :email => @user.email,
     :path => provider_invitee_signup_path(@invitation.token),
     :name => @invitation.account.name
   }
