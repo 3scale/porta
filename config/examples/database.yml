@@ -16,6 +16,10 @@ development:
 test:
   <<: *DEFAULT
   url: <%= "#{ENV['DATABASE_URL']}test" %>
+
+test_seed:
+  <<: *DEFAULT
+  url: <%= "#{ENV['DATABASE_URL']}test_seed" %>
 <% when /^postgresql/ %>
 default: &DEFAULT
   adapter: postgresql
@@ -32,6 +36,10 @@ development:
   <<: *DEFAULT
 
 test:
+  <<: *DEFAULT
+  url: <%= "#{ENV['DATABASE_URL']}#{ENV['TEST_ENV_NUMBER']}" %>
+
+test_seed:
   <<: *DEFAULT
   url: <%= "#{ENV['DATABASE_URL']}#{ENV['TEST_ENV_NUMBER']}" %>
 <% else; db_host = ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
@@ -51,4 +59,8 @@ development:
 test:
   <<: *DEFAULT
   url: <%= ENV.fetch('DATABASE_URL', "mysql2://root:@#{db_host}:3306/3scale_system_test") %><%=ENV['TEST_ENV_NUMBER']%>
+
+test_seed:
+  <<: *DEFAULT
+  url: <%= ENV.fetch('DATABASE_URL', "mysql2://root:@#{db_host}:3306/3scale_system_test_seed") %><%=ENV['TEST_ENV_NUMBER']%>
 <% end %>
