@@ -40,7 +40,7 @@ export class CreateApplication {
   }
 
   get selectedPlan (): number {
-    return ($('#cinstance_plan_id').val(): any) // eslint-disable-line flowtype/no-weak-types, casting to number
+    return ($('#cinstance_plan_id').val(): any) // eslint-disable-line flowtype/no-weak-types
   }
 
   get serviceOfSelectedPlan (): number {
