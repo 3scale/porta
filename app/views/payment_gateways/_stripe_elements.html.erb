@@ -39,6 +39,14 @@
 </div>
 <% billing_address = current_account.billing_address %>
 <script type="text/javascript" charset="utf-8">
+  stripeForm = $( "#stripe-form" )
+  $("#toggle-stripe-form").click(function() {
+    stripeForm.toggleClass('hidden');
+    var linkText = stripeForm.is(':visible') ? 'cancel' : 'Edit Credit Card Details';
+    $(this).find('span').text(linkText);
+    return false;
+  });
+
     var stripe = Stripe('<%= @stripe_publishable_key %>');
     var elements = stripe.elements();
 
