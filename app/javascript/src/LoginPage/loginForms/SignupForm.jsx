@@ -27,16 +27,16 @@ type State = {
   lastname: string,
   password: string,
   passwordConfirmation: string,
-  isValidUsername: ?boolean,
-  isValidEmailAddress: ?boolean,
-  isValidFirstname: boolean,
-  isValidLastname: boolean,
-  isValidPassword: ?boolean,
-  isValidPasswordConfirmation: ?boolean
+  isFilledUsername: ?boolean,
+  isFilledEmailAddress: ?boolean,
+  isFilledFirstname: boolean,
+  isFilledLastname: boolean,
+  isFilledPassword: ?boolean,
+  isFilledPasswordConfirmation: ?boolean
 }
 
 const InputFormGroup = (props) => {
-  const {isRequired, type, value, onChange, isValid} = props
+  const { isRequired, type, value, onChange, isValid } = props
   const inputProps = {
     value,
     onChange,
@@ -62,55 +62,40 @@ class SignupForm extends Component<Props, State> {
       lastname: this.props.user.lastname,
       password: '',
       passwordConfirmation: '',
-      isValidUsername: undefined,
-      isValidEmailAddress: undefined,
-      isValidFirstname: true,
-      isValidLastname: true,
-      isValidPassword: undefined,
-      isValidPasswordConfirmation: undefined
+      isFilledUsername: undefined,
+      isFilledEmailAddress: undefined,
+      isFilledFirstname: true,
+      isFilledLastname: true,
+      isFilledPassword: undefined,
+      isFilledPasswordConfirmation: undefined
     }
   }
 
-  setIsValidUsername = () => this.setState({ isValidUsername: this.state.username !== '' })
+  handleTextInputUsername = (username: string) =>
+    this.setState({ username, isFilledUsername: username !== '' })
 
-  handleTextInputUsername = (username: string) => this.setState({ username }, this.setIsValidUsername)
-
-  setIsValidEmail = () => this.setState({ isValidEmailAddress: this.state.emailAddress !== '' })
-
-  handleTextInputEmail = (emailAddress: string) => this.setState({ emailAddress }, this.setIsValidEmail)
+  handleTextInputEmail = (emailAddress: string) =>
+    this.setState({ emailAddress, isFilledEmailAddress: emailAddress !== '' })
 
   handleTextInputFirstname = (firstname: string) => this.setState({ firstname })
 
   handleTextInputLastname = (lastname: string) => this.setState({ lastname })
 
-  setIsValidPassword = () => this.setState({ isValidPassword: this.state.password !== '' })
+  handleTextInputPassword = (password: string) =>
+    this.setState({
+      password,
+      isFilledPassword: password !== '',
+      isFilledPasswordConfirmation: this.state.passwordConfirmation === password
+    })
 
-  handleTextInputPassword = (password: string) => this.setState({ password }, this.setIsValidPassword)
-
-  setIsValidPasswordConfirmation = () => this.setState({ isValidPasswordConfirmation: this.state.passwordConfirmation !== '' })
-
-  handleTextInputPasswordConfirmation = (passwordConfirmation: string) => this.setState({ passwordConfirmation }, this.setIsValidPasswordConfirmation)
-
-  validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
-    this.setIsValidUsername()
-    this.setIsValidPassword()
-    const isFormDisabled =
-      this.state.username === '' ||
-      this.state.emailAddress === '' ||
-      this.state.password === '' ||
-      this.state.passwordConfirmation === '' ||
-      this.state.passwordConfirmation !== this.state.password ||
-      this.state.isValidUsername === false ||
-      this.state.isValidEmailAddress === false ||
-      this.state.isValidPassword === false ||
-      this.state.isValidPasswordConfirmation === false
-    if (isFormDisabled) {
-      event.preventDefault()
-    }
-  }
+  handleTextInputPasswordConfirmation = (passwordConfirmation: string) =>
+    this.setState({
+      passwordConfirmation,
+      isFilledPasswordConfirmation: passwordConfirmation !== '' && passwordConfirmation === this.state.password
+    })
 
   render () {
-    const { username, isValidUsername, emailAddress, isValidEmailAddress, firstname, isValidFirstname, lastname, isValidLastname, password, isValidPassword, passwordConfirmation, isValidPasswordConfirmation } = this.state
+    const { username, isFilledUsername, emailAddress, isFilledEmailAddress, firstname, isFilledFirstname, lastname, isFilledLastname, password, isFilledPassword, passwordConfirmation, isFilledPasswordConfirmation } = this.state
     return (
       <Form noValidate={false}
         action={this.props.path}
@@ -119,12 +104,12 @@ class SignupForm extends Component<Props, State> {
         method='post'
       >
         <HiddenInputs />
-        <InputFormGroup isRequired type='user[username]' value={username} isValid={isValidUsername} onChange={this.handleTextInputUsername} />
-        <InputFormGroup isRequired type='user[email]' value={emailAddress} isValid={isValidEmailAddress} onChange={this.handleTextInputEmail} />
-        <InputFormGroup isRequired={false} type='user[first_name]' value={firstname} isValid={isValidFirstname} onChange={this.handleTextInputFirstname} />
-        <InputFormGroup isRequired={false} type='user[last_name]' value={lastname} isValid={isValidLastname} onChange={this.handleTextInputLastname} />
-        <InputFormGroup isRequired type='user[password]' value={password} isValid={isValidPassword} onChange={this.handleTextInputPassword} />
-        <InputFormGroup isRequired type='user[password_confirmation]' value={passwordConfirmation} isValid={isValidPasswordConfirmation} onChange={this.handleTextInputPasswordConfirmation} />
+        <InputFormGroup isRequired type='user[username]' value={username} isValid={isFilledUsername} onChange={this.handleTextInputUsername} />
+        <InputFormGroup isRequired type='user[email]' value={emailAddress} isValid={isFilledEmailAddress} onChange={this.handleTextInputEmail} />
+        <InputFormGroup isRequired={false} type='user[first_name]' value={firstname} isValid={isFilledFirstname} onChange={this.handleTextInputFirstname} />
+        <InputFormGroup isRequired={false} type='user[last_name]' value={lastname} isValid={isFilledLastname} onChange={this.handleTextInputLastname} />
+        <InputFormGroup isRequired type='user[password]' value={password} isValid={isFilledPassword} onChange={this.handleTextInputPassword} />
+        <InputFormGroup isRequired type='user[password_confirmation]' value={passwordConfirmation} isValid={isFilledPasswordConfirmation} onChange={this.handleTextInputPasswordConfirmation} />
         <ActionGroup>
           <input type="submit"
             name="commit"
