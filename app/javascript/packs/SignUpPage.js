@@ -14,10 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isIE11) {
     signupPageContainer.classList.add('isIe11', 'pf-c-page')
   }
-
-  const loginLayout = document.querySelector('.login-layout')
-  loginLayout.removeChild(document.getElementById('old-signup-page-wrapper'))
-
   const signupPageProps = safeFromJsonString(signupPageContainer.dataset.props)
   SignupPageWrapper(signupPageProps, 'signup-page-container')
 })
