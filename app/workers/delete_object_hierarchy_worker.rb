@@ -75,13 +75,9 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   def delete_associations(object)
-    object_associations = associations_to_destroy_for(object)
-    association_names = object_associations.map(&:name)
-    preloaded_object = association_names.any? ? object.class.eager_load(*association_names).find(object.id) : object
-
-    object_associations.each do |reflection|
-      worker = association_delete_worker(reflection)
-      delete_objects_of_association(preloaded_object, reflection.name, worker)
+    object.class.reflect_on_all_associations.each do |reflection|
+      next unless reflection.options[:dependent] == :destroy
+      ReflectionDestroyer.new(object, reflection, caller_worker_hierarchy).destroy_later
     end
   end
 
@@ -91,25 +87,43 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
   end
 
-  def delete_objects_of_association(main_object, association_name, worker)
-    return unless (associated_objects = main_object.public_send(association_name))
-    if associated_objects.respond_to?(:each)
-      associated_objects.each { |associated_object| delete_association_perform_later(worker, associated_object) }
-    else
-      delete_association_perform_later(worker, associated_objects)
+  class ReflectionDestroyer
+    def initialize(main_object, reflection, caller_worker_hierarchy)
+      @main_object = main_object
+      @reflection = reflection
+      @caller_worker_hierarchy = caller_worker_hierarchy
+    end
+
+    def destroy_later
+      reflection.macro == :has_many ? destroy_has_many_association : destroy_has_one_association
+    end
+
+    attr_reader :main_object, :reflection, :caller_worker_hierarchy
+
+    private
+
+    def destroy_has_many_association
+      main_object.public_send("#{reflection.name.to_s.singularize}_ids").each do |associated_object_id|
+        associated_object = reflection.class_name.constantize.new
+        associated_object.id = associated_object_id
+        delete_associated_object_later(associated_object)
+      end
+    end
+
+    def destroy_has_one_association
+      associated_object = main_object.public_send(reflection.name)
+      delete_associated_object_later(associated_object) if associated_object
+    end
+
+    def delete_associated_object_later(associated_object)
+      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy)
+    end
+
+    def association_delete_worker
+      return DeleteAccountHierarchyWorker if reflection.options[:class_name] == Account.name
+      DeleteObjectHierarchyWorker
     end
   end
 
-  def associations_to_destroy_for(record)
-    record.class.reflect_on_all_associations.select { |reflection| reflection.options[:dependent] == :destroy }
-  end
-
-  def delete_association_perform_later(worker, object)
-    worker.perform_later(object, caller_worker_hierarchy)
-  end
-
-  def association_delete_worker(reflection)
-    delete_hierarchy_workers = Hash.new(DeleteObjectHierarchyWorker).merge('Account' => DeleteAccountHierarchyWorker)
-    delete_hierarchy_workers[reflection.options[:class_name]]
-  end
+  private_constant :ReflectionDestroyer
 end
