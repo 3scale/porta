@@ -14,12 +14,12 @@ class CMS::File < ApplicationRecord
 
   has_attached_file :attachment,
                     url: Rails.application.config.cms_files_path,
-                    s3_url_options: ->(file) { file.s3_url_options }
+                    s3_url_options: ->(file) { file.s3_url_options },
+                    validate_media_type: false
 
   verify_path_format :path
   validates :path, :section, :provider, presence: true
 
-  validates_attachment :attachment, presence: true
   do_not_validate_attachment_file_type :attachment
 
   validates :path, uniqueness: { :scope => :provider_id }, length: { maximum: 255 }

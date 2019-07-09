@@ -39,6 +39,9 @@ class CMS::FileTest < ActiveSupport::TestCase
     file.attachment = Rails.root.join('test', 'fixtures', 'test.css').open
 
     assert_equal 'text/css', file.attachment_content_type
+
+    file.valid?
+    assert_empty file.errors[:attachment]
   end
 
   def test_attachment_path_is_utc
