@@ -1,6 +1,16 @@
 <%= javascript_pack_tag 'SignUpPage' %>
 
-<div id="old-signup-page-wrapper">
+<%= tag("div", :id => "login-page-container", :"data-signup-props" => {:path => provider_invitee_signup_path(@invitation.token),
+  :name => @invitation.account.name,
+  :user => {
+      :email => @user.email || "",
+      :username => @user.username || "",
+      :firstname => @user.first_name || "",
+      :lastname => @user.last_name || ""
+    }
+}.to_json) %>
+
+<div id="old-login-page-wrapper">
   <h2>Sign Up to <%= @invitation.account.name %></h2>
 
  
@@ -20,15 +30,4 @@
  <% end %>
 </div>
 
-<%= tag("div", :id => "signup-page-container", :data => {
-  :props => {
-    :user => {
-      :email => @user.email || "",
-      :username => @user.username || "",
-      :firstname => @user.first_name || "",
-      :lastname => @user.last_name || ""
-    },
-    :path => provider_invitee_signup_path(@invitation.token),
-    :name => @invitation.account.name
-  }
-}) %>
+

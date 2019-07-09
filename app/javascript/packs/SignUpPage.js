@@ -10,14 +10,16 @@ if (isIE11) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const signupPageContainer = document.getElementById('signup-page-container')
+  const loginPageContainer = document.getElementById('login-page-container')
   if (isIE11) {
-    signupPageContainer.classList.add('isIe11', 'pf-c-page')
+    loginPageContainer.classList.add('isIe11', 'pf-c-page')
   }
 
-  const loginLayout = document.querySelector('.login-layout')
-  loginLayout.removeChild(document.getElementById('old-signup-page-wrapper'))
+  let oldLoginWrapper = document.getElementById('old-login-page-wrapper')
+  if (oldLoginWrapper.parentNode) {
+    oldLoginWrapper.parentNode.removeChild(oldLoginWrapper)
+  }
 
-  const signupPageProps = safeFromJsonString(signupPageContainer.dataset.props)
-  SignupPageWrapper(signupPageProps, 'signup-page-container')
+  const signupPageProps = safeFromJsonString(loginPageContainer.dataset.signupProps)
+  SignupPageWrapper(signupPageProps, 'login-page-container')
 })
