@@ -11,7 +11,7 @@ class PaymentGatewaySetting < ApplicationRecord
   }, length: { maximum: 255 }
   validate :active_gateway_type
 
-  before_destroy :publish_events
+  after_commit :publish_events, on: :destroy
 
   # By default AM::Gateway defines a #test? method
   # See https://github.com/activemerchant/active_merchant/blob/v1.44.1/lib/active_merchant/billing/gateway.rb#L146
@@ -44,6 +44,5 @@ class PaymentGatewaySetting < ApplicationRecord
 
   def publish_events
     Accounts::PaymentSettingDeletedEvent.create_and_publish!(self)
-    true # object has to be destroyed, no matter if the event has been published
   end
 end

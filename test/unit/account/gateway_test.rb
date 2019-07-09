@@ -94,22 +94,26 @@ class Account::GatewayTest  < ActiveSupport::TestCase
     assert account.payment_gateway_configured?
   end
 
-  def test_build_payment_geteway
-    # build from payment gateway setting
-    account = FactoryBot.create(:simple_provider, payment_gateway_setting: FactoryBot.create(:payment_gateway_setting))
-    payment_gateway_setting = account.payment_gateway_setting
-    assert Account.find(account.id).payment_gateway
+  class SavingGatewayEventTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
 
-    # not build, there's no gateway type, no event
-    payment_gateway_setting.gateway_type = nil
-    payment_gateway_setting.save!
-    refute Account.find(account.id).payment_gateway
+    def test_build_payment_geteway
+      # build from payment gateway setting
+      account = FactoryBot.create(:simple_provider, payment_gateway_setting: FactoryBot.create(:payment_gateway_setting))
+      payment_gateway_setting = account.payment_gateway_setting
+      assert Account.find(account.id).payment_gateway
 
-    # build from event
-    account.schedule_for_deletion
-    payment_gateway_setting.gateway_type = :bogus
-    payment_gateway_setting.save!
-    payment_gateway_setting.destroy!
-    assert Account.find(account.id).payment_gateway
+      # not build, there's no gateway type, no event
+      payment_gateway_setting.gateway_type = nil
+      payment_gateway_setting.save!
+      refute Account.find(account.id).payment_gateway
+
+      # build from event
+      account.schedule_for_deletion!
+      payment_gateway_setting.gateway_type = :bogus
+      payment_gateway_setting.save!
+      payment_gateway_setting.destroy!
+      assert Account.find(account.id).payment_gateway
+    end
   end
 end

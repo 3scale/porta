@@ -18,7 +18,7 @@ class Accounts::PaymentSettingDeletedEvent < BillingRelatedEvent
 
     def valid?(payment_setting)
       account = payment_setting.account
-      account.provider? && account.payment_gateway_configured? && account.scheduled_for_deletion?
+      account.provider? && payment_setting.configured? && account.scheduled_for_deletion?
     end
   end
 end

@@ -108,4 +108,20 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     assert gateway_setting.valid?
     refute gateway_setting.errors.added?(:gateway_type, :invalid)
   end
+
+  class PaymentGatewaySettingAfterCommitTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'publishes event after destroyed' do
+      gateway_setting = FactoryBot.create(:payment_gateway_setting)
+      Accounts::PaymentSettingDeletedEvent.stubs(valid?: true)
+
+      assert_difference(EventStore::Event.where(event_type: Accounts::PaymentSettingDeletedEvent).method(:count)) do
+        gateway_setting.destroy!
+      end
+
+      event = EventStore::Event.where(event_type: Accounts::PaymentSettingDeletedEvent).last!
+      assert_equal gateway_setting.id, event.id
+    end
+  end
 end

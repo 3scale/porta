@@ -167,9 +167,8 @@ class Account::CreditCardTest < ActiveSupport::TestCase
       provider_account = FactoryBot.create(:simple_provider, payment_gateway_setting: FactoryBot.create(:payment_gateway_setting))
       buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account, credit_card_auth_code: 'example')
 
-      provider_account.schedule_for_deletion
-      provider_account.payment_gateway_setting = nil
-      provider_account.save!
+      provider_account.schedule_for_deletion!
+      provider_account.payment_gateway_setting.destroy!
 
       ActiveMerchant::Billing::BogusGateway.any_instance.expects(:threescale_unstore).with('example').once
       buyer_account.destroy!

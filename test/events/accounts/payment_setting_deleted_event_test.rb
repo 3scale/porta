@@ -23,7 +23,7 @@ class Accounts::PaymentSettingDeletedEventTest < ActiveSupport::TestCase
 	refute Accounts::PaymentSettingDeletedEvent.valid?(payment_gateway_setting)
 	account.stubs(:scheduled_for_deletion?).returns(true)
 	assert Accounts::PaymentSettingDeletedEvent.valid?(payment_gateway_setting)
-	account.stubs(:payment_gateway_configured?).returns(false)
+  payment_gateway_setting.stubs(:configured?).returns(false)
 	refute Accounts::PaymentSettingDeletedEvent.valid?(payment_gateway_setting)
   end
 end
