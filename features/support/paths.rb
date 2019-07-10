@@ -641,6 +641,10 @@ World(Module.new do
     when 'the 404 page'
       '/the-404-page'
 
+    # Backend API
+    when /^the backend api overview/
+      provider_admin_backend_api_path(provider_first_service!.backend_api)
+
     #
     # Help
     #

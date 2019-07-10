@@ -3,11 +3,15 @@ module TestHelpers
     module_function
 
     def rolling_updates_off
+      ::Logic::RollingUpdates.unstub(:skipped?)
+      ::Account.any_instance.unstub(:provider_can_use?)
+
       ::Logic::RollingUpdates.stubs(skipped?: true)
       ::Account.any_instance.stubs(:provider_can_use?).returns(false)
     end
 
     def rolling_updates_on
+      ::Logic::RollingUpdates.unstub(:enabled?)
       ::Logic::RollingUpdates.stubs(enabled?: false)
     end
 
