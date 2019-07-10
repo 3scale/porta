@@ -6,6 +6,7 @@ Feature: API menu
   Background:
     Given a provider "foo.example.com"
       And current domain is the admin domain of provider "foo.example.com"
+      And all the rolling updates features are off
       And I log in as provider "foo.example.com"
       And I go to the provider dashboard
       And I follow "Overview"
@@ -36,6 +37,14 @@ Feature: API menu
     | Application Plans         |
 
   Scenario: Integration sub menu structure
+    When I follow "Integration" within the main menu
+    Then I should see menu items
+    | Configuration             |
+    | Methods & Metrics         |
+    | Settings                  |
+
+  Scenario: Integration sub menu structure for API as Product
+    Given all the rolling updates features are on
     When I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
