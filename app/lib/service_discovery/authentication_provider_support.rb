@@ -6,7 +6,7 @@ module ServiceDiscovery::AuthenticationProviderSupport
 
   def self.included(base)
     base.class_eval do
-      has_many :provided_access_tokens, through: :user
+      has_many :provided_access_tokens, through: :users
     end
   end
 
