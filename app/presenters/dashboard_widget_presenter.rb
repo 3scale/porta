@@ -18,7 +18,7 @@ class DashboardWidgetPresenter
 
   def render
     content = h.render(partial: template_name, locals: locals)
-    content << h.render(partial: ajax_load, locals: locals) unless loaded? # trigger ajax refresh
+    content << h.render(partial: ajax_load, locals: locals) unless loaded? # trigger ajax refresh when not toggled
     content
   end
 
