@@ -127,7 +127,9 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
       end
       buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything) }
-      contracts.each { |contract| DeleteObjectHierarchyWorker.expects(:perform_later).with(contract, anything) }
+      contracts.each do |contract|
+        DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
+      end
       DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything)
     end
 
@@ -154,7 +156,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     def perform_expectations
       DeletePlainObjectWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      [contract, customized_plan].each { |association| DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything) }
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything)
     end
 
     class AccountPlanTest < DeletePlanTest
@@ -171,6 +174,22 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         @contract = FactoryBot.create(:service_contract, plan: @plan)
         @customized_plan = FactoryBot.create(:service_plan, original_id: @plan.id)
       end
+    end
+  end
+
+  class DeleteMemberPermissionTest < DeleteObjectHierarchyWorkerTest
+
+    def test_member_permission
+      provider = FactoryBot.create(:provider_account)
+      permission = FactoryBot.create(:member_permission, admin_section: :plans)
+      member = FactoryBot.create(:member, account: @provider)
+      member.member_permissions << permission
+
+      DeletePlainObjectWorker.stubs(:perform_later)
+      DeleteObjectHierarchyWorker.stubs(:perform_later)
+      provider.schedule_for_deletion!
+
+      DeleteObjectHierarchyWorker.perform_now(provider)
     end
   end
 end
