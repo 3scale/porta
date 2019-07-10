@@ -7,6 +7,7 @@ Feature: Metric creation
     Given a provider "foo.example.com"
     And an application plan "Basic" of provider "foo.example.com"
     When current domain is the admin domain of provider "foo.example.com"
+    And all the rolling updates features are off
     And I log in as provider "foo.example.com"
 
   Scenario: Create a metric from the service definition page
