@@ -4,6 +4,7 @@ import React from 'react'
 import type { Node } from 'react'
 
 import {HiddenInputs, FormGroup} from 'LoginPage'
+import { validateFormFields } from 'utilities/formValidation'
 
 import {
   Form,
@@ -33,30 +34,22 @@ class Login3scaleForm extends React.Component<Props, State> {
     }
   }
 
-  setIsValidUsername = () => {
-    this.setState({isValidUsername: this.state.username !== ''})
-  }
-
   handleTextInputUsername = (username: string) => {
-    this.setState({ username }, this.setIsValidUsername)
-  }
-
-  setIsValidPassword = () => {
-    this.setState({isValidPassword: this.state.password !== ''})
+    this.setState({ username })
   }
 
   handleTextInputPassword = (password: string) => {
-    this.setState({ password }, this.setIsValidPassword)
+    this.setState({ password })
   }
 
-  validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
-    this.setIsValidUsername()
-    this.setIsValidPassword()
-    const isFormDisabled = this.state.username === '' ||
-      this.state.password === '' ||
-      this.state.isValidUsername === false ||
-      this.state.isValidPassword === false
-    if (isFormDisabled) {
+  validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
+    const formFields = ['#session_username', '#session_password']
+    const formValidated = validateFormFields(formFields)
+
+    const newState = {...this.state, ...formValidated.elementsValidity}
+    this.setState({ ...newState })
+
+    if (!formValidated.isValid) {
       event.preventDefault()
     }
   }
@@ -76,15 +69,15 @@ class Login3scaleForm extends React.Component<Props, State> {
       inputIsValid: isValidPassword
     }
     return (
-      <Form
+      <Form noValidate
         action={this.props.providerSessionsPath}
         id='new_session'
         acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs/>
-        <FormGroup type='username' labelIsValid={isValidUsername} inputProps={usernameInputProps} />
-        <FormGroup type='password' labelIsValid={isValidPassword} inputProps={passwordInputProps} />
+        <FormGroup isRequired type='username' labelIsValid={isValidUsername} inputProps={usernameInputProps} />
+        <FormGroup isRequired type='password' labelIsValid={isValidPassword} inputProps={passwordInputProps} />
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'

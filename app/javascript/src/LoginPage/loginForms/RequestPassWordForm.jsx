@@ -4,6 +4,7 @@ import React from 'react'
 import type { Node } from 'react'
 
 import {HiddenInputs, FormGroup} from 'LoginPage'
+import { validateFormFields } from 'utilities/formValidation'
 
 import {
   Form,
@@ -30,26 +31,24 @@ class RequestPasswordForm extends React.Component<Props, State> {
     }
   }
 
-  setIsValidEmail = () => {
-    const isValidEmail = this.state.emailAddress !== ''
-    this.setState({isValidEmail})
-  }
-
   handleTextInputEmail = (emailAddress: string) => {
-    this.setState({ emailAddress }, this.setIsValidEmail)
+    this.setState({ emailAddress })
   }
 
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
-    this.setIsValidEmail()
-    const isFormDisabled = this.state.isValidEmail === false ||
-      this.state.emailAddress === ''
-    if (isFormDisabled) {
+    const formFields = ['#email']
+    const formValidated = validateFormFields(formFields)
+
+    const newState = {...this.state, ...formValidated.elementsValidity}
+    this.setState({ ...newState })
+
+    if (!formValidated.isValid) {
       event.preventDefault()
     }
   }
 
   render (): Node {
-    const {emailAddress, isValidEmail} = this.state
+    const { emailAddress, isValidEmail } = this.state
     const emailInputProps = {
       value: emailAddress,
       onChange: this.handleTextInputEmail,
@@ -57,16 +56,15 @@ class RequestPasswordForm extends React.Component<Props, State> {
       inputIsValid: isValidEmail
     }
     return (
-      <Form
+      <Form noValidate
         action={this.props.providerPasswordPath}
         acceptCharset='UTF-8'
         method='post'
       >
-        <HiddenInputs isPasswordReset/>
-        <FormGroup type='email' labelIsValid={isValidEmail} inputProps={emailInputProps} />
+        <HiddenInputs isPasswordReset />
+        <FormGroup isRequired type='email' labelIsValid={isValidEmail} inputProps={emailInputProps} />
         <ActionGroup>
-          <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+          <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
             onClick={this.validateForm}
           >Reset password</Button>
