@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: Email templates management
   In order to have really good CRM
   As a provider

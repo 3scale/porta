@@ -1,4 +1,4 @@
-@javascript
+@javascript @ajax
 Feature: Bulk operations
   In order to transfer applications from one plan to another
   As a provider
@@ -38,7 +38,6 @@ Feature: Bulk operations
     When I check select for "bob"
      And I press "Change account plan"
     Then I should see "Transfer these accounts to different account plan"
-    And wait for ajax
 
     When I select "Bronze" from "Plan"
      And I press "Change plan" and I confirm dialog box
@@ -59,7 +58,6 @@ Feature: Bulk operations
      And I press "Change account plan"
 
     Then I should see "Transfer these accounts to different account plan"
-    And wait for ajax
 
     When I select "Gold" from "Plan"
      And I press "Change plan" and I confirm dialog box

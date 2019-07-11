@@ -24,7 +24,6 @@ Feature: ActiveDocs
 
     And the current domain is "foo.example.com"
     When I visit "/version-10"
-    And wait for ajax
     Then I should see "Echo"
 
   Scenario: Loading Swagger UI
@@ -43,7 +42,6 @@ Feature: ActiveDocs
 
     And the current domain is "foo.example.com"
     When I visit "/version-20"
-    And wait for ajax
     Then I should see "A sample echo API"
 
   Scenario: Loading new Swagger template with new cdn_asset tag
@@ -67,6 +65,4 @@ Feature: ActiveDocs
 
     And the current domain is "foo.example.com"
     When I visit "/version-22"
-    And wait for ajax
     Then I should see "A sample echo API"
-
