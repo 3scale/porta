@@ -282,8 +282,8 @@ button:-moz-focusring,
   -ms-grid-row-span: 1;
   grid-row: 2 / 3;
   min-width: 0;
-  padding-left: 0;
-  background-color: transparent;
+  padding-left: 0 !important; // Need to override styles introduced by PF React
+  background-color: transparent !important; // Need to override styles introduced by PF React
 }
 
 .pf-c-page__header-nav > .pf-c-nav {
