@@ -55,6 +55,7 @@ ul.login-form-links {
 
       &:hover {
         color: $menu-hover-color;
+        text-decoration: underline;
       }
     }
   }
@@ -92,6 +93,7 @@ ul.login-form-links {
 
     &:hover {
       color: $menu-hover-color;
+      text-decoration: underline;
     }
   }
 }

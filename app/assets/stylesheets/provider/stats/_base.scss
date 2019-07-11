@@ -57,6 +57,7 @@ $stats-menu-help-color: $label-color;
     &:hover,
     &.is-selected {
       color: $stats-menu-link-color-selected;
+      text-decoration: underline;
     }
   }
 

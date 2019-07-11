@@ -5,3 +5,5 @@
 /* selective pf4 base styles */
 import '@patternfly/patternfly/patternfly-variables.css'
 import '@patternfly/patternfly/patternfly-globals.css'
+
+import 'utilities/override-pf-styles.scss'

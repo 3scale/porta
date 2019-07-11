@@ -19,6 +19,7 @@
 
     &:hover {
       color: $link-hover-color;
+      text-decoration: underline;
     }
 
     &--inline {

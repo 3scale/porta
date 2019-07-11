@@ -104,11 +104,12 @@
       }
 
       a {
-        text-decoration: underline;
         color: $link-hover-color;
+        text-decoration: underline;
 
         &:hover {
-          color: $link-color
+          color: $link-color;
+          text-decoration: underline;
         }
       }
     }

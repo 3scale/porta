@@ -1,9 +1,10 @@
 p a {
-  text-decoration: underline;
   color: $font-color;
+  text-decoration: underline;
 
   &:hover {
     color: $link-color;
+    text-decoration: underline;
   }
 }
 
