@@ -1,4 +1,3 @@
-@javascript @ajax
 Feature: CMS Redirects
   As a provider
   I want to CRUD redirects

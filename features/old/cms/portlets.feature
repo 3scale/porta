@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: CMS Portlets
   As a provider
   I want to manage CMS data objects

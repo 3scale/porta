@@ -1,4 +1,4 @@
-@javascript
+@javascript @ajax
 Feature: Bulk operations
   In order to control a lot of applications
   As a provider
@@ -20,13 +20,11 @@ Feature: Bulk operations
   Scenario: Show and hide bulk operations controls
     When I navigate to the accounts page
     When I check select for "bob"
-      And I wait until all animations have finished
     Then "Bulk operations" should be visible
       And I should see "Send email"
       And I should see "Change account plan"
       And I should see "Change state"
     When I uncheck select for "bob"
-      And I wait until all animations have finished
     Then "Bulk operations" should not be visible
 
   Scenario: Check all accounts with main checkbox
@@ -38,6 +36,5 @@ Feature: Bulk operations
       And "Bulk operations" should be visible
 
     When I uncheck select in table header
-      And I wait until all animations have finished
     Then none selects should be checked
       And "Bulk operations" should not be visible

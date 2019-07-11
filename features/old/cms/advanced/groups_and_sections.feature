@@ -16,7 +16,7 @@ Feature: Groups and Sections
     When I request the url "/docs/first"
     Then I should see "First"
 
-  @javascript @ajax
+  @javascript
   Scenario: Mark a section as Access Restricted
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com" on its admin domain

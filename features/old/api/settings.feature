@@ -16,7 +16,6 @@ Feature: API Settings
      And I press "Update Service"
     Then I should see "Service information updated"
 
-  @ajax @javascript
   Scenario: Changing the backend version including OIDC option
     Given provider "foo.example.com" uses backend v2 in his default service
     And provider "foo.example.com" has multiple applications enabled

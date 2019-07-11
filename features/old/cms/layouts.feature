@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: Creating layout for CMS pages
   As a provider
   I want to manage CMS data objects

@@ -91,7 +91,7 @@ AfterStep '@javascript', '@alert', '~@selenium' do
 end
 
 AfterStep '@javascript', '@ajax' do
-  step 'wait for ajax'
+  wait_for_requests
 end
 
 Before '@javascript' do
