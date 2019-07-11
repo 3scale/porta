@@ -1,4 +1,4 @@
-@javascript
+@javascript @ajax
 Feature: Bulk operations
   In order to control a lot of subscibed services
   As a provider
@@ -25,14 +25,12 @@ Feature: Bulk operations
      And provider "foo.example.com" has "service_plans" visible
      When I go to the subscriptions admin page
     When I check select for "bob"
-      And I wait until all animations have finished
     Then "Bulk operations" should be visible
       And I should see "Send email"
       And I should see "Change service plan"
       And I should see "Change state"
       #And I should see "Delete"
     When I uncheck select for "bob"
-      And I wait until all animations have finished
     Then "Bulk operations" should not be visible
 
   Scenario: Check all applications with main checkbox
@@ -43,6 +41,5 @@ Feature: Bulk operations
       And "Bulk operations" should be visible
 
     When I uncheck select in table header
-      And I wait until all animations have finished
     Then none selects should be checked
       And "Bulk operations" should not be visible

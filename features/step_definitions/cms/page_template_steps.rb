@@ -8,7 +8,7 @@ end
 
 def fill_draft(text)
   if @javascript
-    wait_for_ajax
+    wait_for_requests
     page.execute_script <<-JS
       $('#cms_template_draft').data('codemirror').setValue(#{text.inspect});
     JS

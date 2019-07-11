@@ -1,4 +1,3 @@
-@javascript @ajax
 Feature: CMS Changes
   As a provider
   I want to manage all not published CMS changes on one place
@@ -13,6 +12,7 @@ Feature: CMS Changes
       And I go to the CMS changes
      Then I should see 2 CMS changes
 
+  @javascript @ajax
   Scenario: Revert page
     Given I have changed CMS page "page"
      When I go to the CMS changes

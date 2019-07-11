@@ -35,16 +35,14 @@ Feature: End User Plan creation
       And I am on the edit page for service "API" of provider "foo.example.com"
       Then there should not be any mention of end user plans
 
-  @javascript
+  @javascript @ajax
   Scenario: Selecting default End User Plan
     Given an end user plan "First" of provider "foo.example.com"
     Given an end user plan "Second" of provider "foo.example.com"
     When I am on the end user plans of service "API" page of provider "foo.example.com"
 
     When I select "First" as default end user plan
-      And I wait until all animations have finished
     Then "First" should be default end user plan for service "API"
 
     When I select "Second" as default end user plan
-      And I wait until all animations have finished
     Then "Second" should be default end user plan for service "API"

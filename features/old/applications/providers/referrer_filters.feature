@@ -1,4 +1,4 @@
-@backend @ignore-backend @javascript
+@backend @ignore-backend
 Feature: Providers's application referrer filters
   In order specify where applications of my buyers can be used from
   As a provider
@@ -23,7 +23,6 @@ Feature: Providers's application referrer filters
     Then I should see referrer filter "foo.example.org"
     And I should see referrer filter "bar.example.org"
 
-  @ajax
   Scenario: Create a referrer filter
     Given application "SpookyWidget" has no referrer filters
     And the backend will create referrer filter "foo.example.org" for application "SpookyWidget"
