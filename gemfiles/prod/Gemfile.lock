@@ -247,8 +247,8 @@ GEM
       json
       simplecov
       url
-    codemirror-rails (5.6)
-      railties (>= 3.0, < 5)
+    codemirror-rails (5.16.0)
+      railties (>= 3.0, < 6.0)
     coderay (1.1.1)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -649,7 +649,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-oci8 (2.2.5.1)
-    ruby-openid (2.6.0)
+    ruby-openid (2.7.0)
     ruby-prof (0.15.8)
     ruby-progressbar (1.10.0)
     ruby_event_store (0.9.0)
