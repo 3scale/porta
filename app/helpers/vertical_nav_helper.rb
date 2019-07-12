@@ -250,7 +250,7 @@ module VerticalNavHelper
     return sections unless @backend_api
     sections << {id: :overview,         title: 'Overview',           path: provider_admin_backend_api_path(@backend_api)}
     sections << {id: :methods_metrics,  title: 'Methods & Metrics',  path: admin_service_metrics_path(@backend_api.service)}
-    sections << {id: :mapping_rules,    title: 'Mapping Rules',      path: "#"}
+    sections << {id: :mapping_rules,    title: 'Mapping Rules',      path: provider_admin_backend_api_mapping_rules_path(@backend_api)}
   end
 
   # Others
