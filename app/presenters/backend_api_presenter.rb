@@ -18,10 +18,6 @@ class BackendApiPresenter
     "Backend API of #{service.name}"
   end
 
-  def default_product_slug
-    nil
-  end
-
   alias_method :to_param, :system_name
 
   delegate :proxy, to: :service
