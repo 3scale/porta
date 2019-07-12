@@ -14,8 +14,8 @@
             Product Level
           <% else -%>
             Metric or method
+            (<%= link_to 'Define method or metric', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service' %>)
           <% end -%>
-          (<%= link_to 'Define method or metric', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service' %>)
         </th>
         <th class="operations">
           Enabled

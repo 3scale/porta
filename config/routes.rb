@@ -205,6 +205,9 @@ without fake Core server your after commit callbacks will crash and you might ge
     namespace :admin do
       resources :backend_apis do
         scope module: :backend_apis do
+          resources :metrics, :except => [:show] do
+            resources :children, :controller => 'metrics', :only => [:new, :create]
+          end
           resources :mapping_rules
         end
       end
