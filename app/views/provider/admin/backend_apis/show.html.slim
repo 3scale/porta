@@ -30,4 +30,4 @@ section class="service-widget"
         li.item
           = link_to pluralize(@backend_api.method_metrics.size, 'method'), admin_service_metrics_path(@backend_api.service)
         li.item
-          = pluralize(@backend_api.mapping_rules.size, 'mapping rule')
+          = link_to pluralize(@backend_api.mapping_rules.size, 'mapping rule'), provider_admin_backend_api_mapping_rules_path(@backend_api)
