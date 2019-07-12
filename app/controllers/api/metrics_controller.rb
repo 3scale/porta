@@ -5,13 +5,9 @@ class Api::MetricsController < Api::BaseController
   before_action :find_plan_and_service, only: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
   before_action :find_metric, except: [:new, :create, :index]
   before_action :build_metric, only: [:new, :create]
-  before_action :activate_menu
 
+  activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
-
-  def activate_menu(*args)
-    super (@service&.acts_as_product? ? %i[backend_api] : %i[serviceadmin integration]) << :methods_metrics
-  end
 
   def index
     respond_to do |format|
