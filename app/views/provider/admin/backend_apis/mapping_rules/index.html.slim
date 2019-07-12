@@ -1,0 +1,46 @@
+h1 Mapping Rules
+
+section.Section
+  .SettingsBox
+
+    = semantic_form_for @backend_api.proxy,
+            url: admin_service_integration_path(@backend_api.service, anchor: 'proxy'),
+            remote: current_account.provider_can_use?(:async_apicast_deploy),
+            html: { \
+              data: { gid: @backend_api.proxy.to_gid_param, version: @backend_api.proxy.lock_version },
+              class: css_class('staging-settings proxy-settings',
+                      oauth: @backend_api.backend_version.oauth?,
+                      oidc: current_account.provider_can_use?(:apicast_oidc)) \
+            } do |f|
+
+      = help_bubble( 'proxy_rule_bubble', t('api.integrations.proxy.proxy_rule_help_html'))
+
+      table#proxy-rules
+        thead
+          tr
+            th Verb
+            th Pattern
+            th title="increment" +
+            th
+              ' Metric or Method
+              | (
+              = link_to 'Define', admin_service_metrics_path(@backend_api.service), title: 'Define Methods & Metrics for this service'
+              | )
+            th colspan="2"
+              ' Last?
+
+        tbody#sortable.ui-sortable
+          - metrics = options_from_collection_for_select(@backend_api.metrics, 'id', 'name')
+
+          - @backend_api.proxy_rules.ordered.each_with_index do |rule, i|
+            tr.ui-sortable-item
+              = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: (i + 1)
+          tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
+            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @backend_api.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
+        tfoot
+          tr
+            th colspan="6"
+              = link_to "Add Mapping Rule", '#add-proxy-rule', class: 'action add', id: 'add-proxy-rule'
+
+  - content_for :javascripts do
+    = javascript_include_tag 'mapping_rules'
