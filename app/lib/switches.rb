@@ -3,12 +3,12 @@
 module Switches
   extend ActiveSupport::Concern
 
-  SWITCHES = %i[end_users account_plans service_plans finance require_cc_on_signup
+  SWITCHES = %i[account_plans service_plans finance require_cc_on_signup
                 multiple_services multiple_applications multiple_users skip_email_engagement_footer
                 groups branding web_hooks iam_tools].freeze
 
   THREESCALE_VISIBLE_SWITCHES = %i[
-    finance branding end_users groups skip_email_engagement_footer web_hooks require_cc_on_signup
+    finance branding groups skip_email_engagement_footer web_hooks require_cc_on_signup
   ].freeze
 
   class Switch
@@ -288,7 +288,7 @@ module Switches
   def globally_denied_switches
     [
       account.master_on_premises? ? :finance : nil,
-      ThreeScale.config.onpremises ? :end_users : nil
+      :end_users
     ].compact
   end
 

@@ -28,14 +28,6 @@
                       vertical_nav_item: vertical_nav_item,
                       submenu: :subscriptions }
 
-- if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
-  = render partial: 'shared/provider/navigation/service/end_users.html.slim',
-           layout: layout_secondary_nav,
-           locals: { title: 'End-users',
-                     icon: 'cubes',
-                     vertical_nav_item: vertical_nav_item,
-                     submenu: :end_users }
-
 - if can?(:manage, :plans)
   = render vertical_nav_item,
        title: 'ActiveDocs',
