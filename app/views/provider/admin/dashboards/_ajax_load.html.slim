@@ -4,19 +4,26 @@ javascript:
   }
 
   function loadServiceWidget (serviceId, widgetPath) {
+    let container = document.getElementById('service_' + serviceId)
+    let toggleableTitle = container.querySelector('.DashboardSection-toggle')
+
+    if (!toggleableTitle) {
+      dashboardWidget(widgetPath)
+      return
+    }
+
     let value = window.localStorage['toggle:service_' + serviceId]
-      if (value && !JSON.parse(value)['is-closed']) {
+    if (value && !JSON.parse(value)['is-closed']) {
+      dashboardWidget(widgetPath)
+      return
+    }
+
+    toggleableTitle.addEventListener('click', function () {
+      let isCurrentlyClosed = container.classList.contains('is-closed')
+      if (isCurrentlyClosed) {
         dashboardWidget(widgetPath)
       }
-
-      let container = document.getElementById('service_' + serviceId)
-      let title = container.querySelector('.DashboardSection-toggle')
-      title.addEventListener('click', function () {
-        let isCurrentlyClosed = container.classList.contains('is-closed')
-        if (isCurrentlyClosed) {
-          dashboardWidget(widgetPath)
-        }
-      })
+    })
   }
 
   document.addEventListener('DOMContentLoaded', function () {
