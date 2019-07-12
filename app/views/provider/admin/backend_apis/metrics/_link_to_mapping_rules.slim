@@ -1,0 +1,5 @@
+= link_to provider_admin_backend_api_mapping_rules_path(@backend_api) do
+  - if metric.proxy_rules.any?
+    i.fa.fa-check
+  - else
+    | Add a mapping rule
