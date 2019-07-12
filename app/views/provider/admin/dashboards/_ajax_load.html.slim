@@ -1,12 +1,10 @@
 javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    let widgetPath = #{json widget.path}
-    let serviceId = #{json widget.params[:service_id]}
+  function loadAudienceWidget (widgetPath) {
+    dashboardWidget(widgetPath)
+  }
 
-    if (serviceId === null) { // Audience Widget
-      dashboardWidget(widgetPath)
-    } else {
-      let value = window.localStorage['toggle:service_' + serviceId]
+  function loadServiceWidget (serviceId, widgetPath) {
+    let value = window.localStorage['toggle:service_' + serviceId]
       if (value && !JSON.parse(value)['is-closed']) {
         dashboardWidget(widgetPath)
       }
@@ -19,5 +17,15 @@ javascript:
           dashboardWidget(widgetPath)
         }
       })
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    let widgetPath = #{json widget.path}
+    let serviceId = #{json widget.params[:service_id]}
+
+    if (serviceId === null) {
+      loadAudienceWidget(widgetPath)
+    } else {
+      loadServiceWidget(serviceId, widgetPath)
     }
   })
