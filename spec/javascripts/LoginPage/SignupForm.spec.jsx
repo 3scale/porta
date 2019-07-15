@@ -33,8 +33,13 @@ describe('Username', () => {
   })
   it('should set username state', () => {
     const wrapper = mount(<SignupForm {...props} />)
+    const event = {
+      currentTarget: {
+        id: 'user_username'
+      }
+    }
     jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
-    wrapper.instance().handleTextInputUsername('Bob')
+    wrapper.instance().handleTextInputUsername('Bob', event)
     expect(wrapper.instance().handleTextInputUsername).toHaveBeenCalled()
     expect(wrapper.state().username).toEqual('Bob')
   })
@@ -47,8 +52,13 @@ describe('Email', () => {
   })
   it('should set emailAddress state', () => {
     const wrapper = mount(<SignupForm {...props} />)
+    const event = {
+      currentTarget: {
+        id: 'user_email'
+      }
+    }
     jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
-    wrapper.instance().handleTextInputEmail('bob@sponge.com')
+    wrapper.instance().handleTextInputEmail('bob@sponge.com', event)
     expect(wrapper.instance().handleTextInputEmail).toHaveBeenCalled()
     expect(wrapper.state().emailAddress).toEqual('bob@sponge.com')
   })
@@ -89,8 +99,13 @@ describe('Password', () => {
   })
   it('should set password state', () => {
     const wrapper = mount(<SignupForm {...props} />)
+    const event = {
+      currentTarget: {
+        id: 'user_password'
+      }
+    }
     jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
-    wrapper.instance().handleTextInputPassword('gary1234')
+    wrapper.instance().handleTextInputPassword('gary1234', event)
     expect(wrapper.instance().handleTextInputPassword).toHaveBeenCalled()
     expect(wrapper.state().password).toEqual('gary1234')
   })
@@ -103,8 +118,13 @@ describe('Password confirmation', () => {
   })
   it('should set passwordConfirmation state', () => {
     const wrapper = mount(<SignupForm {...props} />)
+    const event = {
+      currentTarget: {
+        id: 'user_password_confirmation'
+      }
+    }
     jest.spyOn(wrapper.instance(), 'handleTextInputPasswordConfirmation')
-    wrapper.instance().handleTextInputPasswordConfirmation('gary1234')
+    wrapper.instance().handleTextInputPasswordConfirmation('gary1234', event)
     expect(wrapper.instance().handleTextInputPasswordConfirmation).toHaveBeenCalled()
     expect(wrapper.state().passwordConfirmation).toEqual('gary1234')
   })

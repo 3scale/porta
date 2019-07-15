@@ -29,16 +29,26 @@ it('should render HiddenInputs component', () => {
 
 it('should set username state', () => {
   const wrapper = mount(<Login3scaleForm {...props}/>)
+  const event = {
+    currentTarget: {
+      id: 'session_username'
+    }
+  }
   jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
-  wrapper.instance().handleTextInputUsername('foo')
+  wrapper.instance().handleTextInputUsername('foo', event)
   expect(wrapper.instance().handleTextInputUsername).toHaveBeenCalled()
   expect(wrapper.state().username).toEqual('foo')
 })
 
 it('should set password state', () => {
   const wrapper = mount(<Login3scaleForm {...props}/>)
+  const event = {
+    currentTarget: {
+      id: 'session_password'
+    }
+  }
   jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
-  wrapper.instance().handleTextInputPassword('bar')
+  wrapper.instance().handleTextInputPassword('bar', event)
   expect(wrapper.instance().handleTextInputPassword).toHaveBeenCalled()
   expect(wrapper.state().password).toEqual('bar')
 })

@@ -25,7 +25,7 @@ const getFormGroupProps = (type: string) => {
   const inputTypes = ['text', 'password', 'email', 'text', 'email', 'text', 'text', 'password', 'password']
   const labels = ['Email or Username', 'Password', 'Email address', 'Username', 'Email', 'First name', 'Last name', 'Password', 'Password confirmation']
   const fieldIDs = ['session_username', 'session_password', 'email', 'user_username', 'user_email', 'user_first_name', 'user_last_name', 'user_password', 'user_password_confirmation']
-  const helperTextInvalids = ['Email or username is mandatory', 'Password is mandatory', 'A valid email address is mandatory', 'Username is mandatory', 'A valid email is mandatory', '', '', 'Password is mandatory', 'Password and Password confirmation must match']
+  const helperTextInvalids = ['Email or username is mandatory', 'Password is mandatory', 'A valid email address is mandatory', 'Username is mandatory', 'A valid email is mandatory', '', '', 'Password is mandatory', 'Password confirmation is mandatory']
   const tabIndexs = ['1', '2', '1', null, null, null, null, null, null]
   return {
     label: labels[typeIndex],
