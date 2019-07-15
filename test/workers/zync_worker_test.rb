@@ -5,6 +5,29 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     EventStore::Repository.stubs(raise_errors: true)
   end
 
+  test 'perform raises ActiveRecord::RecordNotFound when the event does not exist' do
+    ZyncWorker.any_instance.stubs(valid?: true)
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      ZyncWorker.new.perform('fake_event_id', 'fake notification')
+    end
+  end
+
+  test 'perform does not crash when the event exists but the provider is destroyed' do
+    worker = ZyncWorker.new
+    application = FactoryBot.create(:simple_cinstance)
+    app_event = Applications::ApplicationDeletedEvent.create(application)
+    Rails.application.config.event_store.publish_event(app_event)
+    zync_event = ZyncEvent.create(app_event, application)
+    Rails.application.config.event_store.publish_event(zync_event)
+    worker.stubs(valid?: true)
+    worker.stubs(endpoint: 'http://example.com')
+    stub_request(:put, "http://example.com/notification").to_return(status: 200)
+
+    application.provider_account.delete
+    refute ZyncWorker.new.perform(zync_event.event_id, 'notification')
+  end
+
   test 'http put got unprocessable entity' do
     worker = ZyncWorker.new
 
