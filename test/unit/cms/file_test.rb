@@ -34,13 +34,13 @@ class CMS::FileTest < ActiveSupport::TestCase
   end
 
   test 'detects correct content type for css' do
-    file = CMS::File.new
+    file = FactoryBot.build(:cms_file)
 
     file.attachment = Rails.root.join('test', 'fixtures', 'test.css').open
 
     assert_equal 'text/css', file.attachment_content_type
 
-    file.valid?
+    assert file.valid?
     assert_empty file.errors[:attachment]
   end
 
