@@ -12,15 +12,8 @@ Feature: Dashboards
     And the service of provider "foo.example.com" has traffic
     When I log in as provider "foo.example.com"
     Then I should be on the provider dashboard
-    # And I should see "Last 30 Days"
-    # And I should see a sparkline for "hits"
-
-  @javascript
-  Scenario: Provider dashboard
-    Given current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
-    Then I should be on the provider dashboard
-    # And I should see "There are two ways how to integrate"
+    And I should see "Last 30 Days"
+    And I should see a sparkline for "hits"
 
   #FIXME this buyer sees a provider submenu, which is not what happens in the app
   # CHECK THIS OUT!
