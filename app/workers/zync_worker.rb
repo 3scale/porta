@@ -13,6 +13,15 @@ class ZyncWorker
 
   sidekiq_options queue: :zync
 
+  # It is used as the delay, in seconds.
+  # The default variable is the same as sidekiq's default, as you can see in https://github.com/mperham/sidekiq/wiki/Error-Handling#automatic-job-retry
+  # the default would last up 20 days and some hours, and we need it to last less than 7 days for the event to still exist,
+  # so it goes 3 times faster to last maximum 6 days and some hours (1/3 = 7/21)
+  sidekiq_retry_in do |count, _exception|
+    default = (count ** 4) + 15 + (rand(30) * (count + 1))
+    default / 3
+  end
+
   def self.config
     Rails.configuration.zync
   end
@@ -215,9 +224,10 @@ class ZyncWorker
 
   def perform(event_id, notification, manual_retry_count = nil)
     return false unless valid?(event_id)
+    event = EventStore::Repository.find_event!(event_id)
 
     with_manual_retry_count(event_id, manual_retry_count) do
-      tenant, provider = update_tenant(event_id)
+      tenant, provider = update_tenant(event)
 
       publish_notification = -> { http_put(notification_url, notification, event_id) }
 
@@ -295,8 +305,7 @@ class ZyncWorker
 
   delegate :perform_async, to: :class
 
-  def update_tenant(event_id)
-    event = EventStore::Repository.find_event!(event_id)
+  def update_tenant(event)
     provider = Provider.find(event.tenant_id)
 
     tenant = {
