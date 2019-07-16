@@ -110,7 +110,7 @@ class ProxyTest < ActiveSupport::TestCase
     end
 
     def test_sandbox_endpoint_validation
-      service = Service.new(deployment_option: 'self_managed')
+      service = FactoryBot.create(:simple_service, deployment_option: 'self_managed')
       proxy = Proxy.new(service: service, apicast_configuration_driven: true)
 
       assert proxy.valid?
@@ -121,7 +121,7 @@ class ProxyTest < ActiveSupport::TestCase
     end
 
     def test_endpoints_on_create
-      service = Service.new(deployment_option: 'hosted')
+      service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
       proxy = Proxy.create!(service: service, apicast_configuration_driven: true)
 
       assert proxy.staging_endpoint
@@ -223,13 +223,14 @@ class ProxyTest < ActiveSupport::TestCase
   test 'proxy api backend with base path' do
     @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
     @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
-
-    @account.expects(:provider_can_use?).with(:proxy_private_base_path).returns(false)
+    @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(false)
+    backend_api = @proxy.backend_api
+    backend_api.stubs(account: @account)
     @proxy.api_backend = 'https://example.org:3/path'
     refute @proxy.valid?
     assert_equal [@proxy.errors.generate_message(:api_backend, :invalid)], @proxy.errors.messages[:api_backend]
 
-    @account.expects(:provider_can_use?).with(:proxy_private_base_path).returns(true)
+    @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(true)
     @proxy.api_backend = 'https://example.org:3/path'
     assert @proxy.valid?
   end

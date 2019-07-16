@@ -11,6 +11,7 @@ module BackendApiLogic
       alias_method :api_backend, :backend_api_private_endpoint
       alias_method :api_backend=, :backend_api_private_endpoint=
 
+      validates :backend_api, nested_association: {report: {private_endpoint: :api_backend}}, associated: true
       before_save :save_backend_api
     end
 
