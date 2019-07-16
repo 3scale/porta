@@ -25,7 +25,7 @@ class Settings < ApplicationRecord
   alias provider account
 
   def self.columns
-    super.reject { |column| column.name == 'log_requests_switch'}
+    super.reject { |column| ['log_requests_switch', 'end_users_switch'].include?(column.name) }
   end
 
   def approval_required_editable?

@@ -60,22 +60,3 @@ Feature: API menu
     Then I should see menu items
     | Service Subscriptions     |
     | Service Plans             |
-
-  Scenario: API menu structure with end user plans enabled
-    When provider "foo.example.com" has "end_users" switch allowed
-    When I go to the API dashboard page
-    Then I should see menu items
-    | Overview                  |
-    | Analytics                 |
-    | Applications              |
-    | End-users                 |
-    | ActiveDocs                |
-    | Integration               |
-
-  Scenario: End-users sub menu structure
-    When provider "foo.example.com" has "end_users" switch allowed
-    When I go to the API dashboard page
-    When I follow "End-users" within the main menu
-    Then I should see menu items
-    | Search                    |
-    | End-user Plans            |

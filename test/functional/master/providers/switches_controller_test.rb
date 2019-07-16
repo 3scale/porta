@@ -42,20 +42,6 @@ class Master::Providers::SwitchesControllerTest < ActionController::TestCase
     assert_response :found
   end
 
-  test 'should not change when the same' do
-    switch = allowed_switch(:end_users)
-    put :update, provider_id: provider.id, id: switch.name
-    assert_response :not_modified
-  end
-
-  test 'should require current user' do
-    login_as nil
-    switch = settings.switches.fetch(:end_users)
-
-    delete :update, provider_id: provider.id, id: switch.name
-    assert_response :forbidden
-  end
-
   # @return [Account]
   def provider
     @_provider ||= FactoryBot.create(:simple_provider)

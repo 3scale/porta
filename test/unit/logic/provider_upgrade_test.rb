@@ -13,7 +13,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     @power1M.plan_rule.stubs(:rank).returns(10)
     @pro = FactoryBot.create(:published_plan, :system_name => 'pro3M', :issuer => service)
     @pro.plan_rule.stubs(:switches).returns(%i[finance multiple_applications branding require_cc_on_signup account_plans
-      multiple_users groups end_users multiple_services service_plans]
+      multiple_users groups multiple_services service_plans]
     )
     @pro.plan_rule.stubs(:limits).returns(PlanRule::Limit.new(max_services: 3, max_users: 5))
     @pro.plan_rule.stubs(:rank).returns(19)

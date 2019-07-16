@@ -75,7 +75,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       @object = @service = FactoryBot.create(:service)
       @service_plan = service.service_plans.first
       @application_plan = FactoryBot.create(:application_plan, :issuer => service)
-      @end_user_plan = FactoryBot.create(:end_user_plan, service: service)
       @metrics = service.metrics
       service.update_attribute :default_service_plan, @service_plan
       service.update_attribute :default_application_plan, @application_plan
@@ -83,11 +82,11 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     private
 
-    attr_reader :service, :service_plan, :application_plan, :end_user_plan, :metrics
+    attr_reader :service, :service_plan, :application_plan, :metrics
 
     def perform_expectations
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      [service_plan, application_plan, end_user_plan].each do |association|
+      [service_plan, application_plan].each do |association|
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
       end
       metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything) }

@@ -152,19 +152,6 @@ class ServiceTest < ActiveSupport::TestCase
     assert_equal 'URL', Service.human_attribute_name('friendly_id')
   end
 
-  should 'not be able to disable end user registration' do
-    @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
-    @service.end_user_registration_required = false
-
-    assert @service.invalid?
-    assert @service.errors[:end_user_registration_required].presence
-
-    @service.account.settings.allow_end_users!
-    @service.reload
-
-    assert @service.valid?
-  end
-
   should 'be in incomplete state' do
     @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
     assert @service.incomplete?

@@ -12,7 +12,7 @@ class Admin::UpgradeNoticesControllerTest < ActionController::TestCase
     Account.any_instance.stubs(:first_plan_with_switch).returns(@provider.bought_plan)
   end
 
-  [ :end_users, :account_plans, :service_plans, :finance,
+  [ :account_plans, :service_plans, :finance,
     :multiple_services, :multiple_applications, :multiple_users,
     :groups, :branding ].map(&:to_s).each do |switch|
       test switch do

@@ -18,7 +18,7 @@ And /^provider has "(.*?)" hidden$/ do |field|
   current_account.settings.toggle!(field)
 end
 
-And /^provider has (account|service|end_user) plans hidden from the ui$/ do |type_of_plan|
+And /^provider has (account|service) plans hidden from the ui$/ do |type_of_plan|
   current_account.settings.update_attribute("#{type_of_plan}_plans_ui_visible", false)
 end
 

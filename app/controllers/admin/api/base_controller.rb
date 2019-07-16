@@ -108,10 +108,6 @@ class Admin::Api::BaseController < ApplicationController
   ##~ @parameter_service_plan_id_by_id = {:name => "id", :description => "ID of the service plan.", :dataType => "int", :required => true, :paramType => "path" , :threescale_name => "service_plan_ids"}
   ##~ @parameter_service_plan_id_by_id_name = {:name => "service_plan_id", :description => "ID of the service plan.", :dataType => "int", :required => true, :paramType => "path" , :threescale_name => "service_plan_ids"}
   #
-  ##~ @parameter_end_user_plan_id_by_name = {:name => "end_user_plan_id", :description => "ID of the end user plan (if not assigned default will be used instead).", :dataType => "int", :required => false, :paramType => "query", :threescale_name => "end_user_plan_ids"}
-  ##~ @parameter_end_user_plan_id_by_id_name = {:name => "end_user_plan_id", :description => "ID of the end user plan.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "end_user_plan_ids"}
-  ##~ @parameter_end_user_plan_id_by_id = {:name => "id", :description => "ID of the end user plan.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "end_user_plan_ids"}
-
 
   ## Users
 
@@ -159,11 +155,6 @@ class Admin::Api::BaseController < ApplicationController
   ##~ @parameter_application_id_by_id = {:name => "id", :description => "ID of the application.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "application_ids"}
   ##~ @parameter_application_id_by_id_name = {:name => "application_id", :description => "ID of the application.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "application_ids"}
   ##~ @parameter_application_id_by_name = {:name => "application_id", :description => "ID of the application.", :dataType => "int", :required => false, :paramType => "query", :threescale_name => "application_ids"}
-
-  ## End Users
-
-  ##~ @parameter_end_user_username_by_id = {:name => "username", :description => "Username (unique identifier) of the end user.", :dataType => "string", :required => true, :paramType => "path"}
-  ##~ @parameter_end_user_username_by_name = {:name => "username", :description => "Username (unique identifier) of the end user.", :dataType => "string", :required => true, :paramType => "query"}
 
   ## ActiveDocs
 

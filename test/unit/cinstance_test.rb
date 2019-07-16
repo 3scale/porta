@@ -90,19 +90,6 @@ class CinstanceTest < ActiveSupport::TestCase
       end # service requires intentions
     end #description
 
-    should 'not allow setting of end_user_required' do
-      cinstance = FactoryBot.create(:cinstance)
-      cinstance.end_user_required = true
-
-      assert cinstance.invalid?
-      assert cinstance.errors[:end_user_required].presence
-
-      cinstance.plan.issuer.account.settings.allow_end_users!
-      cinstance.reload
-
-      assert cinstance.valid?
-    end
-
     context 'plan class validation' do
 
       should 'be valid with an application plan' do

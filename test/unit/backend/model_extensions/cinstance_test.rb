@@ -88,17 +88,6 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
     cinstance.suspend!
   end
 
-  test 'updates backend application when cinstance changes end_user_required' do
-    cinstance = FactoryBot.create(:cinstance)
-
-    ThreeScale::Core::Application.expects(:save)
-      .with(has_entries(service_id: cinstance.service.backend_id,
-                       id: cinstance.application_id,
-                       user_required: true))
-
-    cinstance.update_attribute :end_user_required, true
-  end
-
   test 'updates backend application when cinstance changes plan' do
     cinstance = FactoryBot.create(:cinstance)
     new_plan  = FactoryBot.create(:application_plan, :service => cinstance.service)

@@ -105,12 +105,6 @@ class SettingsTest < ActiveSupport::TestCase
     refute @provider.account_plans.first.approval_required
   end
 
-  def test_end_users_invisible_ui_switch
-    assert @settings.has_attribute?(:end_users_switch)
-    assert @settings.visible_ui?(:end_users)
-    refute @settings.has_attribute?(:end_users_ui_visible)
-  end
-
   def test_service_plans_visible_ui_switch
    assert @settings.has_attribute?(:service_plans_switch)
    assert @settings.has_attribute?(:service_plans_ui_visible)
@@ -204,15 +198,9 @@ class SettingsTest < ActiveSupport::TestCase
       ThreeScale.config.stubs(onpremises: false)
       assert_equal [], @provider.settings.globally_denied_switches
 
-      ThreeScale.config.stubs(onpremises: true)
-      assert_equal [:finance, :end_users], @provider.settings.globally_denied_switches
-
       @provider.unstub(:master?)
       ThreeScale.config.stubs(onpremises: false)
       assert_equal [], @provider.settings.globally_denied_switches
-
-      ThreeScale.config.stubs(onpremises: true)
-      assert_equal [:end_users], @provider.settings.globally_denied_switches
     end
   end
 end

@@ -18,20 +18,6 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     end
   end
 
-  should 'not allow setting of end_user_required' do
-    plan = FactoryBot.create(:application_plan)
-    plan.end_user_required = true
-
-    assert plan.invalid?
-    assert !plan.errors[:end_user_required].blank?
-
-    plan.issuer.account.settings.allow_end_users!
-    plan.reload
-
-    assert plan.valid?
-  end
-
-
   context '#customize' do
     setup do
       @app_plan = FactoryBot.create(:application_plan)
