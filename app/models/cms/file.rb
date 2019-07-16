@@ -20,6 +20,7 @@ class CMS::File < ApplicationRecord
   verify_path_format :path
   validates :path, :section, :provider, presence: true
 
+  validates_attachment :attachment, presence: true
   do_not_validate_attachment_file_type :attachment
 
   validates :path, uniqueness: { :scope => :provider_id }, length: { maximum: 255 }
