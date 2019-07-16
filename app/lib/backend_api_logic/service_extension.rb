@@ -16,7 +16,7 @@ module BackendApiLogic
     end
 
     def find_or_create_first_backend_api!
-      return unless proxy && account
+      return unless account
       config = backend_api_configs.first || create_first_backend_api_config!
       config.backend_api
     end
@@ -28,11 +28,11 @@ module BackendApiLogic
         system_name: system_name,
         name: "#{name} Backend API",
         description: "Backend API of #{name}",
-        private_endpoint: proxy['api_backend']
+        private_endpoint: proxy&.[]('api_backend')
       )
       constructor = new_record? ? :build : :create!
       attrs = {backend_api: backend_api, path: ''}
-      backend_api_configs.public_send(constructor,attrs)
+      backend_api_configs.public_send(constructor, attrs)
     end
   end
 end
