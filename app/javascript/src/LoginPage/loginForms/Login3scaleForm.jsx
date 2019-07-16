@@ -4,6 +4,7 @@ import React from 'react'
 import type { Node } from 'react'
 
 import {HiddenInputs, FormGroup} from 'LoginPage'
+import validate from 'validate.js'
 
 import {
   Form,
@@ -22,6 +23,19 @@ type State = {
   isValidPassword: ?boolean
 }
 
+const constraints = {
+  username: {
+    presence: true
+  },
+  password: {
+    presence: true
+  }
+}
+const namesToStateKeys = {
+  'username': 'isValidUsername',
+  'password': 'isValidPassword'
+}
+
 class Login3scaleForm extends React.Component<Props, State> {
   constructor (props: Props) {
     super(props)
@@ -33,31 +47,26 @@ class Login3scaleForm extends React.Component<Props, State> {
     }
   }
 
-  setIsValidUsername = () => {
-    this.setState({isValidUsername: this.state.username !== ''})
-  }
-
   handleTextInputUsername = (username: string) => {
-    this.setState({ username }, this.setIsValidUsername)
-  }
-
-  setIsValidPassword = () => {
-    this.setState({isValidPassword: this.state.password !== ''})
+    const usernameError = validate.single(username, {presence: true, length: {minimum: 1}})
+    const isValidUsername = !usernameError
+    this.setState({ username, isValidUsername })
   }
 
   handleTextInputPassword = (password: string) => {
-    this.setState({ password }, this.setIsValidPassword)
+    const passwordError = validate.single(password, {presence: true, length: {minimum: 1}})
+    const isValidPassword = !passwordError
+    this.setState({ password, isValidPassword })
   }
 
   validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
-    this.setIsValidUsername()
-    this.setIsValidPassword()
-    const isFormDisabled = this.state.username === '' ||
-      this.state.password === '' ||
-      this.state.isValidUsername === false ||
-      this.state.isValidPassword === false
-    if (isFormDisabled) {
+    const errors = validate(event.currentTarget.form, constraints)
+    if (errors) {
       event.preventDefault()
+      //$FlowFixMe: Needed due to a flow issue with Object values/keys: https://github.com/facebook/flow/issues/2221
+      for (const errorId in errors) {
+        this.setState({[namesToStateKeys[errorId]]: false})
+      }
     }
   }
 
