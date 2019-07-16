@@ -2,12 +2,6 @@ $header-height: line-height-times(63 / 20);
 $master-ribbon-height: line-height-times(1);
 
 .Header {
-  /* HACK: Next line is needed to align the context selector
-  * This should be removed when the PF4/React components are used in the Header
-  */
-  grid-template-columns: auto 1fr auto !important; // scss-lint:disable SelectorFormat, ImportantRule, PropertyUnits
-  /* End of HACK*/
-  
   height: $header-height;
 
   .PopNavigation-list {
@@ -47,22 +41,6 @@ $master-ribbon-height: line-height-times(1);
   .pf-c-page__header-nav {
     align-self: center;
   }
-  
-  /* HACK: Next lines are needed to align the context selector
-  * This should be removed when the PF4/React components are used in the Header
-  */
-  @media screen and (max-width: 992px) {
-    .pf-c-page__header-nav {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-    }
-    .pf-c-page__header-tools {
-      grid-column: 3 / 4;
-      grid-row: 1 / 2;
-    }
-  }
-  /* End of HACK*/
-  
 
   .pf-c-page__header-tools {
     .PopNavigation-trigger {
