@@ -232,10 +232,11 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
 
     proxy_attributes = attrs["proxy"]
     proxy_attributes.delete("proxy_rules_attributes")
-
+    api_backend = proxy_attributes.delete 'api_backend'
     proxy.reload
-    # puts diff(proxy.attributes.slice(*proxy_attributes.keys), proxy_attributes)
+
     assert_equal proxy.attributes.slice(*proxy_attributes.keys), proxy_attributes
+    assert_equal "http://bye-world-api.3scale.net:80", proxy.api_backend
 
     assert_equal 1, proxy.proxy_rules.count
 

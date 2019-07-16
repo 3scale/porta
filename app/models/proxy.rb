@@ -38,8 +38,8 @@ class Proxy < ApplicationRecord
   }.freeze
 
   # Remove api_backend
-  def self.column_names
-    super.reject{ |c| c == 'api_backend' }
+  def self.columns
+    super.reject {|column| /\Aapi_backend\Z/ =~ column.name }
   end
   reset_column_information
 

@@ -76,15 +76,14 @@ class Apicast::ProviderNginxGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_upstream_service
-    service = Service.new
+    service = FactoryBot.create(:simple_service)
     service.proxy = proxy = Proxy.new
-    service.id = 42
     service.name = 'APIs for everyone'
     proxy.api_backend = 'https://echo-api.3scale.net'
 
     subject = @generator.upstream_service(service)
 
-    assert_equal 42, subject.id
+    assert_equal service.id, subject.id
     assert_equal 'APIs for everyone', subject.name
     assert_equal 443, subject.port
     assert_equal 'echo-api.3scale.net', subject.host
