@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+class PathValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    record.errors.add(attribute, :not_a_path) unless path?(value)
+  end
+
+  protected
+
+  def path?(value)
+    uri = URI.parse(value)
+    uri.path == value
+  rescue
+    false
+  end
+end
