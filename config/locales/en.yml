@@ -851,6 +851,10 @@ en:
               invalid: |
                 a Mapping Rule has to start with '/' and can only contain valid URL characters and
                 'wildcards' - words inside curly brackets ('{}')
+        backend_api:
+          attributes:
+            private_endpoint:
+              invalid: "the accepted format is 'http(s)://address(:port)(/path)'"
         proxy:
           attributes:
             api_backend:
