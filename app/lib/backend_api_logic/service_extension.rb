@@ -24,14 +24,15 @@ module BackendApiLogic
     private
 
     def create_first_backend_api_config!
-      return unless proxy && account
       backend_api = account.backend_apis.create!(
         system_name: system_name,
         name: "#{name} Backend API",
         description: "Backend API of #{name}",
-        private_endpoint: proxy['api_backend'].presence
+        private_endpoint: proxy['api_backend']
       )
-      backend_api_configs.create!(backend_api: backend_api, path: '')
+      constructor = new_record? ? :build : :create!
+      attrs = {backend_api: backend_api, path: ''}
+      backend_api_configs.public_send(constructor,attrs)
     end
   end
 end

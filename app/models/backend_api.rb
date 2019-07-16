@@ -16,8 +16,9 @@ class BackendApi < ApplicationRecord
     uri: { path: proc { provider_can_use?(:proxy_private_base_path) } },
     non_localhost: { message: :protected_domain }
 
+  alias_attribute :api_backend, :private_endpoint
 
-  before_validation :set_private_endpoint
+  before_validation :set_private_endpoint, :set_port_private_endpoint
 
   has_system_name(uniqueness_scope: [:account_id])
 
