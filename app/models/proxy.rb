@@ -3,7 +3,8 @@ require 'resolv'
 
 class Proxy < ApplicationRecord
   include AfterCommitQueue
-  ECHO_API_HOST = 'echo-api.3scale.net'.freeze
+  include BackendApiLogic::ProxyExtension
+
   DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
                      'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
 
@@ -15,7 +16,7 @@ class Proxy < ApplicationRecord
   has_one :oidc_configuration, dependent: :delete, inverse_of: :oidc_configurable, as: :oidc_configurable
   accepts_nested_attributes_for :oidc_configuration
 
-  validates :api_backend, :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
+  validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
   uri_pattern = URI::DEFAULT_PARSER.pattern
 
@@ -36,8 +37,11 @@ class Proxy < ApplicationRecord
     rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
   }.freeze
 
-  validates :api_backend, uri: { path: proc { provider_can_use?(:proxy_private_base_path) } },
-                          non_localhost: { message: :protected_domain }
+  # Remove api_backend
+  def self.column_names
+    super.reject{ |c| c == 'api_backend' }
+  end
+  reset_column_information
 
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
   validates :endpoint,         format: { with: URI_OPTIONAL_PORT,  allow_nil: true, allow_blank: true }
@@ -64,7 +68,7 @@ class Proxy < ApplicationRecord
                       format: { with: HTTP_HEADER }
 
   validates :api_test_path, length: { maximum: 8192 }
-  validates :endpoint, :api_backend, :auth_app_key, :auth_app_id, :auth_user_key,
+  validates :endpoint, :auth_app_key, :auth_app_id, :auth_user_key,
             :oidc_issuer_endpoint, :oidc_issuer_type,
             :credentials_location, :error_auth_failed, :error_auth_missing, :authentication_method,
             :error_headers_auth_failed, :error_headers_auth_missing, :error_headers_limits_exceeded, :error_limits_exceeded,
@@ -76,7 +80,7 @@ class Proxy < ApplicationRecord
 
   accepts_nested_attributes_for :proxy_rules, allow_destroy: true
 
-  before_validation :set_api_test_path, :set_api_backend, :create_default_secret_token, :set_port_api_backend,  :set_port_sandbox_endpoint, :set_port_endpoint
+  before_validation :set_api_test_path, :create_default_secret_token,  :set_port_sandbox_endpoint, :set_port_endpoint
   after_create :create_default_proxy_rule
 
   before_create :force_apicast_version
@@ -460,9 +464,7 @@ class Proxy < ApplicationRecord
 
   delegate :backend_version, to: :service, prefix: true
 
-  def default_api_backend
-    "https://#{ECHO_API_HOST}:443"
-  end
+
 
   delegate :provider_key, to: :provider
 
@@ -605,10 +607,6 @@ class Proxy < ApplicationRecord
     success
   end
 
-  def set_api_backend
-    self.api_backend ||= self.default_api_backend
-  end
-
   def set_api_test_path
     self.api_test_path ||= '/'
   end
@@ -625,10 +623,6 @@ class Proxy < ApplicationRecord
     self.endpoint = url
   end
 
-  def set_port_api_backend
-    generate_port(:api_backend)
-  end
-
   def set_port_sandbox_endpoint
     generate_port(:sandbox_endpoint)
   end
@@ -637,16 +631,26 @@ class Proxy < ApplicationRecord
     generate_port(:endpoint)
   end
 
-  def generate_port(proxy_attribute)
-    proxy_attribute_value = self[proxy_attribute]
-    return if proxy_attribute_value.blank?
-
-    begin
-      uri = URI.parse(proxy_attribute_value)
-      value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, uri.registry, uri.path, uri.opaque, uri.query, uri.fragment).to_s
-      self[proxy_attribute] = value
-    rescue URI::InvalidURIError => e
-      errors.add(proxy_attribute, "Invalid domain")
+  class PortGenerator
+    def initialize(model)
+      @model = model
     end
+
+    def call(proxy_attribute)
+      proxy_attribute_value = @model[proxy_attribute]
+      return if proxy_attribute_value.blank?
+
+      begin
+        uri = URI.parse(proxy_attribute_value)
+        value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, uri.registry, uri.path, uri.opaque, uri.query, uri.fragment).to_s
+        @model[proxy_attribute] = value
+      rescue URI::InvalidURIError => e
+        @model.errors.add(proxy_attribute, "Invalid domain")
+      end
+    end
+  end
+
+  def generate_port(proxy_attribute)
+    PortGenerator.new(self).call(proxy_attribute)
   end
 end

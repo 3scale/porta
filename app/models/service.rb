@@ -7,6 +7,7 @@ class Service < ApplicationRecord
   include Logic::EndUsers::Service
   include Logic::Authentication::Service
   include Logic::RollingUpdates::Service
+  include BackendApiLogic::ServiceExtension
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
   include ServiceDiscovery::ModelExtensions::Service

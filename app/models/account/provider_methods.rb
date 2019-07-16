@@ -44,6 +44,8 @@ module Account::ProviderMethods
       end
     end
 
+    has_many :backend_apis, inverse_of: :account, dependent: :destroy
+
     has_attached_file :proxy_configs, storage: :s3, path: '.sandbox_proxy/sandbox_proxy_:id.lua'
     do_not_validate_attachment_file_type :proxy_configs
 

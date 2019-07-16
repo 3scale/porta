@@ -94,7 +94,8 @@ class ProxyTest < ActiveSupport::TestCase
     end
 
     def test_endpoint_validation
-      proxy = Proxy.new(service: service = Service.new, apicast_configuration_driven: true)
+      service = FactoryBot.create(:simple_service)
+      proxy = Proxy.new(service: service, apicast_configuration_driven: true)
       assert_equal proxy, service.proxy
       assert proxy.save!
 
