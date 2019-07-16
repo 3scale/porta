@@ -4,6 +4,7 @@ import React from 'react'
 import type { Node } from 'react'
 
 import {HiddenInputs, FormGroup} from 'LoginPage'
+import validate from 'validate.js'
 
 import {
   Form,
@@ -21,6 +22,16 @@ type State = {
   isValidEmail: ?boolean
 }
 
+const constraints = {
+  email: {
+    presence: true,
+    email: true
+  }
+}
+const namesToStateKeys = {
+  'email': 'isValidEmail'
+}
+
 class RequestPasswordForm extends React.Component<Props, State> {
   constructor (props: Props) {
     super(props)
@@ -30,21 +41,20 @@ class RequestPasswordForm extends React.Component<Props, State> {
     }
   }
 
-  setIsValidEmail = () => {
-    const isValidEmail = this.state.emailAddress !== ''
-    this.setState({isValidEmail})
-  }
-
   handleTextInputEmail = (emailAddress: string) => {
-    this.setState({ emailAddress }, this.setIsValidEmail)
+    const emailError = validate.single(emailAddress, {presence: true, email: true})
+    const isValidEmail = !emailError
+    this.setState({ emailAddress, isValidEmail })
   }
 
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
-    this.setIsValidEmail()
-    const isFormDisabled = this.state.isValidEmail === false ||
-      this.state.emailAddress === ''
-    if (isFormDisabled) {
+    const errors = validate(event.currentTarget.form, constraints)
+    if (errors) {
       event.preventDefault()
+      //$FlowFixMe: Needed due to a flow issue with Object values/keys: https://github.com/facebook/flow/issues/2221
+      for (const errorId in Object.keys(errors)) {
+        this.setState({[namesToStateKeys[errorId]]: false})
+      }  
     }
   }
 
@@ -57,8 +67,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
       inputIsValid: isValidEmail
     }
     return (
-      <Form
-        action={this.props.providerPasswordPath}
+      <Form action={this.props.providerPasswordPath}
         acceptCharset='UTF-8'
         method='post'
       >
