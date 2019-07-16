@@ -44,11 +44,11 @@ class Profile < ApplicationRecord
 
   # Profile has attached logo.
   has_attached_file :logo,
-    :styles => { large: '300x300>'.freeze, medium: '150x150>'.freeze, thumb: '100x100>'.freeze, invoice: ['200x50>'.freeze, :png].freeze }.freeze,
+    styles: { large: '300x300>'.freeze, medium: '150x150>'.freeze, thumb: '100x100>'.freeze, invoice: ['200x50>'.freeze, :png].freeze }.freeze,
     :url => ':url_root/:account_id/:class/:attachment/:style/:basename.:extension'.freeze,
     :s3_permissions => 'public-read'.freeze,
     :default_url => '/assets/3scale-logo.png'.freeze
-  do_not_validate_attachment_file_type :logo
+  validates_attachment_content_type :logo, content_type: %r{^image\/(png|gif|jpeg)}
 
 
   # Find only published profiles.
