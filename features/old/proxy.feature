@@ -55,6 +55,7 @@ Feature: Proxy integration
     And I go to the integration page for service "one"
     Then I should see "Redirect"
 
+  @javascript
   Scenario: Edit endpoint with proxy_pro
     Given all the rolling updates features are off
     When I have proxy_pro feature enabled
