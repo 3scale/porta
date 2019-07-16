@@ -2,7 +2,7 @@ class Onboarding::ApiForm < Reform::Form
   include ThreeScale::Reform
   include Composition
 
-  ECHO_API_BACKEND = "https://#{Proxy::ECHO_API_HOST}".freeze
+  ECHO_API_BACKEND = "https://#{BackendApi::ECHO_API_HOST}".freeze
 
   model :service
 
