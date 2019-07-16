@@ -55,14 +55,6 @@ rescue CMS::S3::NoConfigError
 end
 
 module Paperclip
-  class MediaTypeSpoofDetector
-    # TODO: Nice to have
-    # delete this method, check validations,
-    # maybe redefine only in some models
-    def spoofed?
-      false
-    end
-  end
 
   # Security Warning: this basically turns off the content type detection
   # based on the file contents. Not sure what we else we can do.

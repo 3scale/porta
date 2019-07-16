@@ -8,6 +8,10 @@ class ProfileTest < ActiveSupport::TestCase
 
   should validate_presence_of :company_size
 
+  should validate_attachment_content_type(:logo)
+             .allowing('image/png', 'image/gif', 'image/jpeg')
+             .rejecting('image/svg', 'text/plain', 'text/xml', 'image/abc', 'some_image/png')
+
   context '#account attribute validation' do
     setup do
       @invalid_profile = FactoryBot.build(:profile, :account_id => nil)
@@ -149,6 +153,15 @@ class ProfileTest < ActiveSupport::TestCase
       profile.save!
 
       assert profile.logo
+    end
+
+    test 'does not accept a fake image' do
+      profile = FactoryBot.build(:profile)
+
+      profile.logo = Rails.root.join('test', 'fixtures', 'fake_image.jpg').open
+
+      refute profile.valid?
+      assert_includes profile.errors[:logo], 'has contents that are not what they are reported to be'
     end
   end
 end
