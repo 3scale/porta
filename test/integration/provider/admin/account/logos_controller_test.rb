@@ -21,7 +21,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'Logo was successfully created.', flash[:notice]
+    assert_equal 'The logo was successfully uploaded.', flash[:notice]
     assert_nil flash[:error]
   end
 
@@ -53,7 +53,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'Your logo was successfully deleted.', flash[:notice]
+    assert_equal 'The logo was successfully deleted.', flash[:notice]
     assert_nil flash[:error]
   end
 
