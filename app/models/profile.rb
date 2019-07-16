@@ -48,7 +48,7 @@ class Profile < ApplicationRecord
     :url => ':url_root/:account_id/:class/:attachment/:style/:basename.:extension'.freeze,
     :s3_permissions => 'public-read'.freeze,
     :default_url => '/assets/3scale-logo.png'.freeze
-  validates_attachment_content_type :logo, content_type: %r{^image\/(png|gif|jpeg|svg)}
+  validates_attachment_content_type :logo, content_type: %r{^image\/(png|gif|jpeg)}
 
 
   # Find only published profiles.

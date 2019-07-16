@@ -9,8 +9,8 @@ class ProfileTest < ActiveSupport::TestCase
   should validate_presence_of :company_size
 
   should validate_attachment_content_type(:logo)
-             .allowing('image/png', 'image/gif', 'image/jpeg', 'image/svg')
-             .rejecting('text/plain', 'text/xml', 'image/abc', 'some_image/png')
+             .allowing('image/png', 'image/gif', 'image/jpeg')
+             .rejecting('image/svg', 'text/plain', 'text/xml', 'image/abc', 'some_image/png')
 
   context '#account attribute validation' do
     setup do
