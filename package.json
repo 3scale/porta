@@ -6,7 +6,8 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "clear": "rm -rf node_modules/",
+    "clean": "rm -rf node_modules/ && npm cache clean --force",
+    "update-lock": "npm run clean && npm i --no-progress",
     "flow:install": "flow-typed install",
     "lint": "flow && eslint .eslintrc app/javascript spec/javascripts",
     "test": "karma start --single-run",
