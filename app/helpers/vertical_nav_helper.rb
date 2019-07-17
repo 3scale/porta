@@ -11,6 +11,8 @@ module VerticalNavHelper
       active_docs_and_alerts_nav_sections
     when :serviceadmin, :monitoring
       service_nav_sections
+    when :backend_api
+      backend_api_nav_sections
     end
   end
 
@@ -237,8 +239,17 @@ module VerticalNavHelper
   def service_integration_items
     items = []
     items << {id: :configuration,   title: 'Configuration',     path: path_to_service(@service)}
-    items << {id: :methods_metrics, title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
+    items << {id: :methods_metrics, title: 'Methods & Metrics', path: admin_service_metrics_path(@service)} if @service.acts_as_traditional_service?
     items << {id: :settings,        title: 'Settings',          path: settings_admin_service_path(@service)}
+  end
+
+  # Backend APIs
+  def backend_api_nav_sections
+    sections = []
+    return sections unless @backend_api
+    sections << {id: :overview,         title: 'Overview',           path: provider_admin_backend_api_path(@backend_api)}
+    sections << {id: :methods_metrics,  title: 'Methods & Metrics',  path: admin_service_metrics_path(@backend_api.service)}
+    sections << {id: :mapping_rules,    title: 'Mapping Rules',      path: "#"}
   end
 
   # Others
@@ -248,5 +259,4 @@ module VerticalNavHelper
     sections << {id: :alerts,     title: 'Alerts',     path: admin_alerts_path }           if can?(:manage, :monitoring) && current_user.multiple_accessible_services?
     sections
   end
-
 end
