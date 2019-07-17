@@ -5,8 +5,9 @@ module BackendApiLogic
     extend ActiveSupport::Concern
 
     included do
-      delegate :backend_api, to: :service
+      delegate :backend_api, to: :service, allow_nil: true
       delegate :private_endpoint, :private_endpoint=, to: :backend_api, allow_nil: true, prefix: true
+      delegate :default_api_backend, to: 'BackendApi'
 
       alias_method :api_backend, :backend_api_private_endpoint
       alias_method :api_backend=, :backend_api_private_endpoint=
