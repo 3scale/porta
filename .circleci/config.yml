@@ -478,7 +478,7 @@ jobs:
           name: Install NPM dependencies
           command: |
             npm --version
-            npm install
+            npm run check-dependencies
       - *save-npm-cache
       - persist_to_workspace:
           root: .
