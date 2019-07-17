@@ -12,8 +12,8 @@ class BackendApi < ApplicationRecord
   delegate :provider_can_use?, to: :account, allow_nil: true
   delegate :default_api_backend, to: :class
 
-  validates :name, :system_name, length: { maximum: 511 },
-    presence: true
+  validates :name,        length: { maximum: 511 }, presence: true
+  validates :system_name, length: { maximum: 255 }, presence: true
 
   validates :private_endpoint, length: { maximum: 255 },
     presence: true,
