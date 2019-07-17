@@ -14,7 +14,6 @@ class Api::IntegrationsController < Api::BaseController
 
   def edit
     begin
-      @service = ServicePresenter.new(@service)
       @registry_policies = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
     rescue StandardError => error
       @error = error

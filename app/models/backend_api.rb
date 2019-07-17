@@ -34,6 +34,8 @@ class BackendApi < ApplicationRecord
     backend_api_configs.first&.service
   end
 
+  alias_method :service, :first_service
+
   private
 
   def set_private_endpoint
@@ -43,4 +45,11 @@ class BackendApi < ApplicationRecord
   def set_port_private_endpoint
     Proxy::PortGenerator.new(self).call(:private_endpoint)
   end
+
+  # FIXME: Migrate Metrics and Mapping Rules from the Service to the Backend API
+
+  delegate :metrics, :top_level_metrics, :method_metrics, :proxy, to: :service
+  delegate :proxy_rules, to: :proxy
+
+  alias_method :mapping_rules, :proxy_rules
 end
