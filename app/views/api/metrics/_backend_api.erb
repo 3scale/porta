@@ -3,4 +3,4 @@
     <%= backend_api.name %>
   </th>
 </tr>
-<%= render partial: 'api/metrics/top_level', as: :metric, collection: backend_api.metrics, locals: { include_children: true } %>
+<%= render partial: 'api/metrics/top_level', as: :metric, collection: backend_api.top_level_metrics, locals: { include_children: true } %>
