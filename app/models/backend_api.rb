@@ -10,6 +10,7 @@ class BackendApi < ApplicationRecord
   belongs_to :account, inverse_of: :backend_apis
 
   delegate :provider_can_use?, to: :account
+  delegate :default_api_backend, to: :class
 
   validates :private_endpoint, length: { maximum: 255 },
     presence: true,
@@ -22,9 +23,11 @@ class BackendApi < ApplicationRecord
 
   has_system_name(uniqueness_scope: [:account_id])
 
-  def default_api_backend
+  def self.default_api_backend
     "https://#{ECHO_API_HOST}:443"
   end
+
+  private
 
   def set_private_endpoint
     self.private_endpoint ||= default_api_backend

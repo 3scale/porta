@@ -190,7 +190,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def find_proxy
-    @proxy = ProxyPresenter.new(@service.proxy)
+    @proxy = @service.proxy
 
     @last_message_bus_id = params.fetch(:last_id) { last_message_bus_id(@proxy) } if message_bus?(@proxy)
   end

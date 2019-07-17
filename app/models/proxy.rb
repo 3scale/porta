@@ -636,16 +636,16 @@ class Proxy < ApplicationRecord
       @model = model
     end
 
-    def call(proxy_attribute)
-      proxy_attribute_value = @model[proxy_attribute]
-      return if proxy_attribute_value.blank?
+    def call(attribute)
+      attribute_value = @model[attribute]
+      return if attribute_value.blank?
 
       begin
-        uri = URI.parse(proxy_attribute_value)
+        uri = URI.parse(attribute_value)
         value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, uri.registry, uri.path, uri.opaque, uri.query, uri.fragment).to_s
-        @model[proxy_attribute] = value
+        @model[attribute] = value
       rescue URI::InvalidURIError => e
-        @model.errors.add(proxy_attribute, "Invalid domain")
+        @model.errors.add(attribute, "Invalid domain")
       end
     end
   end

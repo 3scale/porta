@@ -2,7 +2,7 @@
 
 class PathValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    record.errors.add(attribute, :not_a_path) unless path?(value)
+    record.errors.add(attribute, :not_path_format) unless path?(value)
   end
 
   protected
