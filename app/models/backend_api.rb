@@ -27,6 +27,11 @@ class BackendApi < ApplicationRecord
     "https://#{ECHO_API_HOST}:443"
   end
 
+  # FIME: Mocking one service relationship until metrics and mapping rules are both migrated to the backend API
+  def service
+    services.first
+  end
+
   private
 
   def set_private_endpoint
@@ -36,4 +41,11 @@ class BackendApi < ApplicationRecord
   def set_port_private_endpoint
     Proxy::PortGenerator.new(self).call(:private_endpoint)
   end
+
+  # FIXME: Migrate Metrics and Mapping Rules from the Service to the Backend API
+
+  delegate :metrics, :top_level_metrics, :method_metrics, :proxy, to: :service
+  delegate :proxy_rules, to: :proxy
+
+  alias_method :mapping_rules, :proxy_rules
 end
