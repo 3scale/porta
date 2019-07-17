@@ -30,6 +30,10 @@ class BackendApi < ApplicationRecord
     "https://#{ECHO_API_HOST}:443"
   end
 
+  def first_service
+    backend_api_configs.first&.service
+  end
+
   private
 
   def set_private_endpoint
