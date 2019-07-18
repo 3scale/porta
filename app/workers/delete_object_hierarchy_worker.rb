@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# TODO: Rails 5 --> class DeleteObjectHierarchyWorker < ApplicationJob
-class DeleteObjectHierarchyWorker < ActiveJob::Base
+class DeleteObjectHierarchyWorker < ApplicationJob
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
   # No need of ActiveRecord::RecordNotFound because that can only happen in the callbacks and those callbacks don't use this rescue_from but its own rescue
@@ -86,14 +85,17 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     @destroy_method.presence || 'destroy'
   end
 
-  def destroyable_associations
-    object.class.reflect_on_all_associations.select do |reflection|
-      destroyable_association?(reflection.options[:dependent])
-    end
+  def called_from_provider_hierarchy?
+    return unless (tenant_id = object.tenant_id)
+    caller_worker_hierarchy.include?("Hierarchy-Account-#{tenant_id}")
   end
 
-  def destroyable_association?(dependent_option)
-    %i[destroy delete_all].include?(dependent_option)
+  def destroyable_associations
+    object.class.reflect_on_all_associations.select { |reflection| destroyable_association?(reflection) }
+  end
+
+  def destroyable_association?(reflection)
+    %i[destroy delete_all].include?(reflection.options[:dependent])
   end
 
   def callback_options
@@ -140,6 +142,8 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
         DeleteAccountHierarchyWorker
       when Service.name
         DeleteServiceHierarchyWorker
+      when PaymentGatewaySetting.name
+        DeletePaymentSettingHierarchyWorker
       else
         DeleteObjectHierarchyWorker
       end
