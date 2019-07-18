@@ -11,7 +11,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     Sidekiq::Testing.inline! do
       perform_expectations
 
-      hierarchy_worker.perform_now(object)
+      hierarchy_worker.perform_now(object, caller_hierarchy)
     end
   end
 
@@ -35,6 +35,10 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   def hierarchy_worker
     DeleteObjectHierarchyWorker
+  end
+
+  def caller_hierarchy
+    []
   end
 
   class DeleteObjectHierarchyWorkerWhenDoesNotHaveAssociationsTest < ActiveSupport::TestCase
@@ -70,6 +74,39 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
+  class DeletePaymentSettingTest < DeleteObjectHierarchyWorkerTest
+    def setup
+      tenant = FactoryBot.create(:simple_provider)
+      @object = FactoryBot.create(:payment_gateway_setting, account: tenant)
+      @buyers = FactoryBot.create_list(:simple_buyer, 2, provider_account: tenant)
+    end
+
+    attr_reader :buyers
+
+    def perform_expectations
+      DeletePlainObjectWorker.stubs(:perform_later)
+      DeleteObjectHierarchyWorker.stubs(:perform_later)
+
+      buyers.each { |buyer| DeleteObjectHierarchyWorker.stubs(:perform_later).with(buyer, anything) }
+    end
+
+    def hierarchy_worker
+      DeletePaymentSettingHierarchyWorker
+    end
+
+    def caller_hierarchy
+      ["Hierarchy-Account-#{object.account_id}"]
+    end
+
+    test 'it does not perform for the buyers if it is not destroyed by the provider association' do
+      DeleteAccountHierarchyWorker.expects(:perform_later).never
+
+      Sidekiq::Testing.inline! { DeletePaymentSettingHierarchyWorker.perform_now(object, []) }
+
+      @buyers.each { |buyer| assert buyer.reload }
+    end
+  end
+
   class DeleteAccountHierarchyTest < DeleteObjectHierarchyWorkerTest
     setup do
       @object = @provider = FactoryBot.create(:provider_account)
@@ -87,11 +124,12 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
       @buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
       @users = provider.users
+      @payment_setting = FactoryBot.create(:payment_gateway_setting, account: provider)
     end
 
     private
 
-    attr_reader :provider, :services, :account_plan, :buyers, :contracts, :users
+    attr_reader :provider, :services, :account_plan, :buyers, :contracts, :users, :payment_setting
 
     def hierarchy_worker
       DeleteAccountHierarchyWorker
@@ -106,6 +144,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
       end
       DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything)
+      DeletePaymentSettingHierarchyWorker.expects(:perform_later).with(payment_setting, anything)
     end
 
     test 'does not perform if wrong state' do

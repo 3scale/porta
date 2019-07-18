@@ -130,6 +130,8 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
         DeleteAccountHierarchyWorker
       when Service.name
         DeleteServiceHierarchyWorker
+      when PaymentGatewaySetting.name
+        DeletePaymentSettingHierarchyWorker
       else
         DeleteObjectHierarchyWorker
       end
