@@ -9,16 +9,16 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
 
   def index
     @metrics = @backend_api.metrics.top_level.includes(:proxy_rules)
-    @service = @backend_api.service # FIXME: This is needed because the page is still using a helper shared with the old metrics page (app/helpers/services_helper.rb:26)
+    @service = @backend_api.first_service # FIXME: This is needed because the page is still using a helper shared with the old metrics page (app/helpers/services_helper.rb:26)
   end
 
   def new
-    @service = @backend_api.service # FIXME: This is needed because the page is still pointing the form to the old metrics controller
+    @service = @backend_api.first_service # FIXME: This is needed because the page is still pointing the form to the old metrics controller
     render template: '/api/metrics/new'
   end
 
   def edit
-    @service = @backend_api.service # FIXME: This is needed because the page is still pointing the form to the old metrics controller
+    @service = @backend_api.first_service # FIXME: This is needed because the page is still pointing the form to the old metrics controller
     render template: '/api/metrics/edit'
   end
 
