@@ -3,7 +3,7 @@ require 'uri'
 class Domains::ProxyDomainsChangedEvent < BaseEventStoreEvent
   def self.create(proxy)
     new(
-      proxy:    proxy,
+      proxy: MissingModel::MissingProxy.new(id: proxy.id),
       staging_domains: extract_domain(proxy.sandbox_endpoint),
       production_domains: extract_domain(proxy.endpoint),
 

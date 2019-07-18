@@ -22,4 +22,5 @@ class MissingModel
 
   class MissingApplication < MissingModel; end
   class MissingProvider < MissingModel; end
+  class MissingProxy < MissingModel; end
 end
