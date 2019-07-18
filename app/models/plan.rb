@@ -437,6 +437,10 @@ class Plan < ApplicationRecord
     plan_rule ? plan_rule.switches : []
   end
 
+  def plan_rule
+    @plan_rule ||= PlanRulesCollection.find_for_plan(self)
+  end
+
   protected
 
   def xml_builder(options, attrs = {}, extra_nodes = {})
@@ -472,10 +476,6 @@ class Plan < ApplicationRecord
   end
 
   private
-
-  def plan_rule
-    @plan_rule ||= PlanRulesCollection.find_for_plan(self)
-  end
 
   def generate_copy_system_name
     separator = '_copy_'.freeze
