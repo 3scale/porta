@@ -48,8 +48,8 @@ class BackendApi < ApplicationRecord
 
   # FIXME: Migrate Metrics and Mapping Rules from the Service to the Backend API
 
-  delegate :metrics, :top_level_metrics, :method_metrics, :proxy, :backend_version, to: :service
-  delegate :proxy_rules, to: :proxy
+  delegate :metrics, :top_level_metrics, :method_metrics, :proxy, :backend_version, to: :service, allow_nil: true
+  delegate :proxy_rules, to: :proxy, allow_nil: true
 
   alias_method :mapping_rules, :proxy_rules
 end
