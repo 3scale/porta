@@ -76,6 +76,10 @@ Ability.define do |user|
       service.account_id == user.account_id && can?(:manage, :multiple_services) and not service.default_or_last?
     end
 
+    if account.provider_can_use?(:api_as_product)
+      can :edit, BackendApi
+    end
+
     # TODO: there should be user.accessible_cinstances.where_values_hash, but that query is impossible
     # we have to wait until we denormalize Cinstance and add provider_account_id there
 
