@@ -1,27 +1,25 @@
 h2 Mapping Rules
 
-table#proxy-rules
+table#mapping_rules.data
   thead
     tr
-      th Verb
-      th Pattern
+      th = sortable('proxy_rules.http_method', 'Verb')
+      th = sortable('proxy_rules.pattern', 'Pattern')
       th title="increment" +
       th
-        ' Metric or Method
-        | (
+        = sortable('metrics.friendly_name', "Metric or Method")
+        |  (
         = link_to 'Define', provider_admin_backend_api_metrics_path(@backend_api), title: 'Define Methods & Metrics for this service'
         | )
-      th colspan="2"
-        ' Last?
+      th = sortable('proxy_rules.last', 'Last?')
+      th title="position" = sortable('proxy_rules.position', 'P')
       th.actions
         = link_to 'New Mapping Rule',
                   new_provider_admin_backend_api_mapping_rule_path(@backend_api),
                   class:'action add'
 
   tbody
-    - metrics = options_from_collection_for_select(@backend_api.metrics, 'id', 'name')
-
-    - @backend_api.proxy_rules.ordered.each do |rule|
+    - @mapping_rules.each do |rule|
       tr
         td
           = rule.http_method
@@ -30,8 +28,14 @@ table#proxy-rules
         td
           = rule.delta
         td
-          = rule.metric.name
+          = rule.metric.friendly_name
         td
           - if rule.last
             i.fa.fa-check
+        td
+          = rule.position
         td.actions
+          = link_to '', edit_provider_admin_backend_api_mapping_rule_path(@backend_api, rule), class: 'action edit'
+          = link_to '', provider_admin_backend_api_mapping_rule_path(@backend_api, rule), class: 'action delete', method: :destroy, remote: true, data: { confirm: 'Are you sure?' }
+
+= will_paginate @mapping_rules
