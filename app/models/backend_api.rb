@@ -37,7 +37,13 @@ class BackendApi < ApplicationRecord
     backend_api_configs.first&.service
   end
 
-  alias_method :service, :first_service
+  # FIXME: Migrate Metrics and Mapping Rules from the Service to the Backend API
+  delegate :metrics, :top_level_metrics, :proxy_rules, to: :account, allow_nil: true
+  alias mapping_rules proxy_rules
+
+  def method_metrics
+    metrics.where(parent: metrics.where(system_name: 'hits'))
+  end
 
   private
 
@@ -48,11 +54,4 @@ class BackendApi < ApplicationRecord
   def set_port_private_endpoint
     Proxy::PortGenerator.new(self).call(:private_endpoint)
   end
-
-  # FIXME: Migrate Metrics and Mapping Rules from the Service to the Backend API
-
-  delegate :metrics, :top_level_metrics, :method_metrics, :proxy, :backend_version, to: :service, allow_nil: true
-  delegate :proxy_rules, to: :proxy, allow_nil: true
-
-  alias_method :mapping_rules, :proxy_rules
 end
