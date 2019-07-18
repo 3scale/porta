@@ -9,3 +9,5 @@ export {FormGroup} from 'LoginPage/loginForms/FormGroup'
 
 export {SignupPage, SignupPageWrapper} from 'LoginPage/SignupPageWrapper'
 export {SignupForm} from 'LoginPage/loginForms/SignupForm'
+
+export {validateAllFields, namesToStateKeys, validateSingleField} from 'LoginPage/utils/formValidation'

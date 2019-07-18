@@ -3,8 +3,13 @@
 import React from 'react'
 import type { Node } from 'react'
 
-import {HiddenInputs, FormGroup} from 'LoginPage'
-import validate from 'validate.js'
+import {
+  HiddenInputs,
+  FormGroup,
+  namesToStateKeys,
+  validateAllFields,
+  validateSingleField
+} from 'LoginPage'
 
 import {
   Form,
@@ -23,19 +28,6 @@ type State = {
   isValidPassword: ?boolean
 }
 
-const constraints = {
-  username: {
-    presence: true
-  },
-  password: {
-    presence: true
-  }
-}
-const namesToStateKeys = {
-  'username': 'isValidUsername',
-  'password': 'isValidPassword'
-}
-
 class Login3scaleForm extends React.Component<Props, State> {
   constructor (props: Props) {
     super(props)
@@ -47,26 +39,21 @@ class Login3scaleForm extends React.Component<Props, State> {
     }
   }
 
-  handleTextInputUsername = (username: string) => {
-    const usernameError = validate.single(username, {presence: true, length: {minimum: 1}})
-    const isValidUsername = !usernameError
-    this.setState({ username, isValidUsername })
+  handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
+    const isValid = validateSingleField(event)
+    this.setState({
+      [namesToStateKeys[event.currentTarget.name].name]: value,
+      [namesToStateKeys[event.currentTarget.name].isValid]: isValid
+    })
   }
 
-  handleTextInputPassword = (password: string) => {
-    const passwordError = validate.single(password, {presence: true, length: {minimum: 1}})
-    const isValidPassword = !passwordError
-    this.setState({ password, isValidPassword })
-  }
-
-  validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
-    const errors = validate(event.currentTarget.form, constraints)
+  validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
+    const errors = validateAllFields(event.currentTarget.form)
     if (errors) {
       event.preventDefault()
-      //$FlowFixMe: Needed due to a flow issue with Object values/keys: https://github.com/facebook/flow/issues/2221
-      for (const errorId in errors) {
-        this.setState({[namesToStateKeys[errorId]]: false})
-      }
+      errors.forEach(
+        (error) => this.setState({[namesToStateKeys[error].isValid]: false})
+      )
     }
   }
 
@@ -74,18 +61,18 @@ class Login3scaleForm extends React.Component<Props, State> {
     const {username, password, isValidUsername, isValidPassword} = this.state
     const usernameInputProps = {
       value: username,
-      onChange: this.handleTextInputUsername,
+      onChange: this.handleInputChange,
       autoFocus: 'autoFocus',
       inputIsValid: isValidUsername
     }
     const passwordInputProps = {
       value: password,
-      onChange: this.handleTextInputPassword,
+      onChange: this.handleInputChange,
       ariaInvalid: 'false',
       inputIsValid: isValidPassword
     }
     return (
-      <Form
+      <Form noValidate
         action={this.props.providerSessionsPath}
         id='new_session'
         acceptCharset='UTF-8'

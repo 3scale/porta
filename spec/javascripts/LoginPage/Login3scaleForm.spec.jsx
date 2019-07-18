@@ -28,17 +28,31 @@ it('should render HiddenInputs component', () => {
 })
 
 it('should set username state', () => {
+  const event = {
+    currentTarget: {
+      name: 'username',
+      value: 'Bob',
+      type: 'text'
+    }
+  }
   const wrapper = mount(<Login3scaleForm {...props}/>)
-  jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
-  wrapper.instance().handleTextInputUsername('foo')
-  expect(wrapper.instance().handleTextInputUsername).toHaveBeenCalled()
-  expect(wrapper.state().username).toEqual('foo')
+  jest.spyOn(wrapper.instance(), 'handleInputChange')
+  wrapper.instance().handleInputChange('Bob', event)
+  expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
+  expect(wrapper.state().username).toEqual('Bob')
 })
 
 it('should set password state', () => {
+  const event = {
+    currentTarget: {
+      name: 'password',
+      value: 'gary1234',
+      type: 'password'
+    }
+  }
   const wrapper = mount(<Login3scaleForm {...props}/>)
-  jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
-  wrapper.instance().handleTextInputPassword('bar')
-  expect(wrapper.instance().handleTextInputPassword).toHaveBeenCalled()
-  expect(wrapper.state().password).toEqual('bar')
+  jest.spyOn(wrapper.instance(), 'handleInputChange')
+  wrapper.instance().handleInputChange('gary1234', event)
+  expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
+  expect(wrapper.state().password).toEqual('gary1234')
 })
