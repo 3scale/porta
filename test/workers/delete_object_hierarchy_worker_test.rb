@@ -177,19 +177,20 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class DeleteMemberPermissionTest < DeleteObjectHierarchyWorkerTest
+  class DeleteMemberPermissionThroughUserTest < ActiveSupport::TestCase
+    def setup
+      tenant = FactoryBot.create(:simple_provider)
+      @member = FactoryBot.create(:member, account: tenant)
+      @member_permission = FactoryBot.create(:member_permission, user: member)
+    end
 
-    def test_member_permission
-      provider = FactoryBot.create(:provider_account)
-      permission = FactoryBot.create(:member_permission, admin_section: :plans)
-      member = FactoryBot.create(:member, account: @provider)
-      member.member_permissions << permission
+    attr_reader :member, :member_permission
 
-      DeletePlainObjectWorker.stubs(:perform_later)
-      DeleteObjectHierarchyWorker.stubs(:perform_later)
-      provider.schedule_for_deletion!
+    def test_perform
+      Sidekiq::Testing.inline! { DeleteObjectHierarchyWorker.perform_now(member) }
 
-      DeleteObjectHierarchyWorker.perform_now(provider)
+      assert_raises(ActiveRecord::RecordNotFound) { member_permission.reload }
+      assert_raises(ActiveRecord::RecordNotFound) { member.reload }
     end
   end
 end
