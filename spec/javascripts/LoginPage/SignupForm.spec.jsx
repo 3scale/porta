@@ -27,85 +27,127 @@ it('should render six Form Groups', () => {
 })
 
 describe('Username', () => {
+  const event = {
+    currentTarget: {
+      name: 'username',
+      value: 'Bob',
+      type: 'text'
+    }
+  }
   it('should render Username Form Group', () => {
     const wrapper = mount(<SignupForm {...props} />)
     expect(wrapper.find('input#user_username').length).toEqual(1)
   })
   it('should set username state', () => {
     const wrapper = mount(<SignupForm {...props} />)
-    jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
-    wrapper.instance().handleTextInputUsername('Bob')
-    expect(wrapper.instance().handleTextInputUsername).toHaveBeenCalled()
+    jest.spyOn(wrapper.instance(), 'handleInputChange')
+    wrapper.instance().handleInputChange('Bob', event)
+    expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
     expect(wrapper.state().username).toEqual('Bob')
   })
 })
 
 describe('Email', () => {
+  const event2 = {
+    currentTarget: {
+      name: 'user[email]',
+      value: 'bob@sponge.com',
+      type: 'email'
+    }
+  }
   it('should render Email Form Group', () => {
     const wrapper = mount(<SignupForm {...props} />)
     expect(wrapper.find('input#user_email').length).toEqual(1)
   })
   it('should set emailAddress state', () => {
     const wrapper = mount(<SignupForm {...props} />)
-    jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
-    wrapper.instance().handleTextInputEmail('bob@sponge.com')
-    expect(wrapper.instance().handleTextInputEmail).toHaveBeenCalled()
+    jest.spyOn(wrapper.instance(), 'handleInputChange')
+    wrapper.instance().handleInputChange('bob@sponge.com', event2)
+    expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
     expect(wrapper.state().emailAddress).toEqual('bob@sponge.com')
   })
 })
 
 describe('First name', () => {
+  const event = {
+    currentTarget: {
+      name: 'user[first_name]',
+      value: 'Patrick',
+      type: 'text'
+    }
+  }
   it('should render First name Form Group', () => {
     const wrapper = mount(<SignupForm {...props} />)
     expect(wrapper.find('input#user_first_name').length).toEqual(1)
   })
   it('should set firstname state', () => {
     const wrapper = mount(<SignupForm {...props} />)
-    jest.spyOn(wrapper.instance(), 'handleTextInputFirstname')
-    wrapper.instance().handleTextInputFirstname('Patrick')
-    expect(wrapper.instance().handleTextInputFirstname).toHaveBeenCalled()
+    jest.spyOn(wrapper.instance(), 'handleInputChange')
+    wrapper.instance().handleInputChange('Patrick', event)
+    expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
     expect(wrapper.state().firstname).toEqual('Patrick')
   })
 })
 
 describe('Last name', () => {
+  const event = {
+    currentTarget: {
+      name: 'user[last_name]',
+      value: 'Patrick',
+      type: 'text'
+    }
+  }
   it('should render Last name Form Group', () => {
     const wrapper = mount(<SignupForm {...props} />)
     expect(wrapper.find('input#user_last_name').length).toEqual(1)
   })
   it('should set lastname state', () => {
     const wrapper = mount(<SignupForm {...props} />)
-    jest.spyOn(wrapper.instance(), 'handleTextInputLastname')
-    wrapper.instance().handleTextInputLastname('Star')
-    expect(wrapper.instance().handleTextInputLastname).toHaveBeenCalled()
+    jest.spyOn(wrapper.instance(), 'handleInputChange')
+    wrapper.instance().handleInputChange('Star', event)
+    expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
     expect(wrapper.state().lastname).toEqual('Star')
   })
 })
 
 describe('Password', () => {
+  const event = {
+    currentTarget: {
+      name: 'user[password]',
+      value: 'gary1234',
+      type: 'password'
+    }
+  }
   it('should render Password Form Group', () => {
     const wrapper = mount(<SignupForm {...props} />)
     expect(wrapper.find('input#user_password').length).toEqual(1)
   })
   it('should set password state', () => {
     const wrapper = mount(<SignupForm {...props} />)
-    jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
-    wrapper.instance().handleTextInputPassword('gary1234')
-    expect(wrapper.instance().handleTextInputPassword).toHaveBeenCalled()
+    jest.spyOn(wrapper.instance(), 'handleInputChange')
+    wrapper.instance().handleInputChange('gary1234', event)
+    expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
     expect(wrapper.state().password).toEqual('gary1234')
   })
 })
 
 describe('Password confirmation', () => {
+  const event = {
+    currentTarget: {
+      name: 'user[password_confirmation]',
+      value: 'gary1234',
+      type: 'password'
+    }
+  }
   it('should render Password confirmation Form Group', () => {
     const wrapper = mount(<SignupForm {...props} />)
     expect(wrapper.find('input#user_password_confirmation').length).toEqual(1)
   })
   it('should set passwordConfirmation state', () => {
     const wrapper = mount(<SignupForm {...props} />)
-    jest.spyOn(wrapper.instance(), 'handleTextInputPasswordConfirmation')
-    wrapper.instance().handleTextInputPasswordConfirmation('gary1234')
-    expect(wrapper.instance().handleTextInputPasswordConfirmation).toHaveBeenCalled()
+    jest.spyOn(wrapper.instance(), 'handleInputChange')
+    wrapper.instance().handleInputChange('gary1234', event)
+    expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
     expect(wrapper.state().passwordConfirmation).toEqual('gary1234')
   })
 })

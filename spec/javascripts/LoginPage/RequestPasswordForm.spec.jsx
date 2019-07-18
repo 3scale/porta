@@ -30,9 +30,15 @@ it('should render HiddenInputs component', () => {
 })
 
 it('should set emailAddress state', () => {
+  const event = {
+    currentTarget: {
+      value: 'bob@sponge.com',
+      type: 'email'
+    }
+  }
   const wrapper = mount(<RequestPasswordForm {...props}/>)
   jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
-  wrapper.instance().handleTextInputEmail('foo')
+  wrapper.instance().handleTextInputEmail('bob@sponge.com', event)
   expect(wrapper.instance().handleTextInputEmail).toHaveBeenCalled()
-  expect(wrapper.state().emailAddress).toEqual('foo')
+  expect(wrapper.state().emailAddress).toEqual('bob@sponge.com')
 })

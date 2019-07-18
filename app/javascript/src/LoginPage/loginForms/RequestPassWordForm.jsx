@@ -3,8 +3,13 @@
 import React from 'react'
 import type { Node } from 'react'
 
-import {HiddenInputs, FormGroup} from 'LoginPage'
-import validate from 'validate.js'
+import {
+  HiddenInputs,
+  FormGroup,
+  namesToStateKeys,
+  validateAllFields,
+  validateSingleField
+} from 'LoginPage'
 
 import {
   Form,
@@ -22,16 +27,6 @@ type State = {
   isValidEmail: ?boolean
 }
 
-const constraints = {
-  email: {
-    presence: true,
-    email: true
-  }
-}
-const namesToStateKeys = {
-  'email': 'isValidEmail'
-}
-
 class RequestPasswordForm extends React.Component<Props, State> {
   constructor (props: Props) {
     super(props)
@@ -41,20 +36,18 @@ class RequestPasswordForm extends React.Component<Props, State> {
     }
   }
 
-  handleTextInputEmail = (emailAddress: string) => {
-    const emailError = validate.single(emailAddress, {presence: true, email: true})
-    const isValidEmail = !emailError
+  handleTextInputEmail = (emailAddress: string, event: SyntheticEvent<HTMLInputElement>) => {
+    const isValidEmail = validateSingleField(event)
     this.setState({ emailAddress, isValidEmail })
   }
 
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
-    const errors = validate(event.currentTarget.form, constraints)
+    const errors = validateAllFields(event.currentTarget.form)
     if (errors) {
       event.preventDefault()
-      //$FlowFixMe: Needed due to a flow issue with Object values/keys: https://github.com/facebook/flow/issues/2221
-      for (const errorId in Object.keys(errors)) {
-        this.setState({[namesToStateKeys[errorId]]: false})
-      }  
+      errors.forEach(
+        (error) => this.setState({[namesToStateKeys[error].isValid]: false})
+      )
     }
   }
 
@@ -67,15 +60,16 @@ class RequestPasswordForm extends React.Component<Props, State> {
       inputIsValid: isValidEmail
     }
     return (
-      <Form action={this.props.providerPasswordPath}
+      <Form noValidate
+        action={this.props.providerPasswordPath}
+        id='request_password'
         acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs isPasswordReset/>
         <FormGroup type='email' labelIsValid={isValidEmail} inputProps={emailInputProps} />
         <ActionGroup>
-          <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+          <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
             onClick={this.validateForm}
           >Reset password</Button>
