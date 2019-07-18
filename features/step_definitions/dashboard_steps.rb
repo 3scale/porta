@@ -24,27 +24,20 @@ When(/^service "([^"]*)" is (folded|unfolded)$/) do |service_name, state|
   assert_not service[:class].include? 'is-closed' if state == 'unfolded'
 end
 
-When(/^data of "([^"]*)" is loading$/) do |service_name|
+Then(/^I should not see "([^"]*)" overview data$/) do |service_name|
   hits = hits_for_name(service_name)
   top_traffic = top_traffic_for_name(service_name)
 
-  assert hits.has_css? '.DashboardWidget-spinner'
-  assert top_traffic.has_css? '.DashboardWidget-spinner'
+  assert_not hits.visible?
+  assert_not top_traffic.visible?
 end
 
-When(/^data of "([^"]*)" should be empty$/) do |service_name|
-  step %{data of "#{service_name}" is loading}
-end
-
-When(/^data of "([^"]*)" is displayed$/) do |service_name|
+When(/^overview data of "([^"]*)" is displayed$/) do |service_name|
   hits = hits_for_name(service_name)
   top_traffic = top_traffic_for_name(service_name)
-
-  assert_not hits.has_css? '.DashboardWidget-spinner'
-  assert_not top_traffic.has_css? '.DashboardWidget-spinner'
 
   assert hits.has_css? '.Dashboard-chart'
-  assert top_traffic.text.include? "In order to show Top Applications you need to have at least one application sending traffic to the #{service_name}."
+  assert top_traffic.has_css? '.Dashboard-chart'
 end
 
 When(/^I (fold|unfold) service "([^"]*)"$/) do |action, service_name|

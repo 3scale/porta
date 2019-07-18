@@ -57,6 +57,7 @@ Feature: Multiservice feature
     When I follow "I understand the consequences, proceed to delete 'Second service' service" and I confirm dialog box
     Then I should see "Service 'Second service' will be deleted shortly."
 
+  @javascript
   Scenario: Folded services have no overview data
     Given I am logged in as provider "foo.example.com"
     And provider "foo.example.com" has "multiple_services" switch allowed
