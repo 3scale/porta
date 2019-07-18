@@ -10,6 +10,12 @@ class ProxyRule < ApplicationRecord
   belongs_to :proxy, touch: true
   belongs_to :metric
 
+  include ThreeScale::Search::Scopes
+
+  self.allowed_sort_columns = %w{ proxy_rules.http_method proxy_rules.pattern proxy_rules.last proxy_rules.position metrics.friendly_name }
+  self.default_sort_column = :position
+  self.default_sort_direction = :asc
+
   validates :http_method, :pattern, :proxy, :metric_id, presence: true
   validates :delta, numericality: { :only_integer => true, :greater_than => 0 }
 
