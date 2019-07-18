@@ -53,7 +53,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   def build_batch
     batch = Sidekiq::Batch.new
     batch.description = batch_description
-    batch_callbacks(batch) { batch.jobs { delete_associations(object) } }
+    batch_callbacks(batch) { batch.jobs { delete_associations } }
     batch
   end
 
@@ -74,7 +74,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     end
   end
 
-  def delete_associations(object)
+  def delete_associations
     object.class.reflect_on_all_associations.each do |reflection|
       next unless reflection.options[:dependent] == :destroy
       ReflectionDestroyer.new(object, reflection, caller_worker_hierarchy).destroy_later
