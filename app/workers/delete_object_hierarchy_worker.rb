@@ -106,13 +106,13 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
       main_object.public_send("#{reflection.name.to_s.singularize}_ids").each do |associated_object_id|
         associated_object = reflection.class_name.constantize.new
         associated_object.id = associated_object_id
-        delete_associated_object_later(associated_object)
+        delete_associated_object_later(associated_object) if associated_object.id
       end
     end
 
     def destroy_has_one_association
       associated_object = main_object.public_send(reflection.name)
-      delete_associated_object_later(associated_object) if associated_object
+      delete_associated_object_later(associated_object) if associated_object.try(:id)
     end
 
     def delete_associated_object_later(associated_object)
