@@ -443,6 +443,10 @@ class Plan < ApplicationRecord
     plan_rule ? plan_rule.switches : []
   end
 
+  def plan_rule
+    @plan_rule ||= PlanRulesCollection.find_for_plan(self)
+  end
+
   protected
 
   def xml_builder(options, attrs = {}, extra_nodes = {})
@@ -489,10 +493,6 @@ class Plan < ApplicationRecord
   # because it is an 'after' callback and by the time it is executed, destroyed_by_association is already 'nil'
   def act_as_list_no_update?
     super || scheduled_for_deletion?
-  end
-
-  def plan_rule
-    @plan_rule ||= PlanRulesCollection.find_for_plan(self)
   end
 
   def generate_copy_system_name
