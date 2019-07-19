@@ -14,6 +14,9 @@ module BackendApiLogic
 
       validates :backend_api, nested_association: {report: {private_endpoint: :api_backend}}, associated: true
       before_save :save_backend_api
+
+      has_many :backend_api_configs, through: :service
+      accepts_nested_attributes_for :backend_api_configs
     end
 
     protected
