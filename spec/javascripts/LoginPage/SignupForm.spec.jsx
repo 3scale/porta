@@ -29,8 +29,8 @@ it('should render six Form Groups', () => {
 describe('Username', () => {
   const event = {
     currentTarget: {
-      name: 'username',
-      value: 'Bob',
+      name: 'user[username]',
+      value: 'Sandy',
       type: 'text'
     }
   }
@@ -41,14 +41,14 @@ describe('Username', () => {
   it('should set username state', () => {
     const wrapper = mount(<SignupForm {...props} />)
     jest.spyOn(wrapper.instance(), 'handleInputChange')
-    wrapper.instance().handleInputChange('Bob', event)
+    wrapper.instance().handleInputChange('Sandy', event)
     expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
-    expect(wrapper.state().username).toEqual('Bob')
+    expect(wrapper.state().username).toEqual('Sandy')
   })
 })
 
 describe('Email', () => {
-  const event2 = {
+  const event = {
     currentTarget: {
       name: 'user[email]',
       value: 'bob@sponge.com',
@@ -62,9 +62,9 @@ describe('Email', () => {
   it('should set emailAddress state', () => {
     const wrapper = mount(<SignupForm {...props} />)
     jest.spyOn(wrapper.instance(), 'handleInputChange')
-    wrapper.instance().handleInputChange('bob@sponge.com', event2)
+    wrapper.instance().handleInputChange('bob@sponge.com', event)
     expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
-    expect(wrapper.state().emailAddress).toEqual('bob@sponge.com')
+    expect(wrapper.state().email).toEqual('bob@sponge.com')
   })
 })
 
@@ -85,7 +85,7 @@ describe('First name', () => {
     jest.spyOn(wrapper.instance(), 'handleInputChange')
     wrapper.instance().handleInputChange('Patrick', event)
     expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
-    expect(wrapper.state().firstname).toEqual('Patrick')
+    expect(wrapper.state().firstName).toEqual('Patrick')
   })
 })
 
@@ -106,7 +106,7 @@ describe('Last name', () => {
     jest.spyOn(wrapper.instance(), 'handleInputChange')
     wrapper.instance().handleInputChange('Star', event)
     expect(wrapper.instance().handleInputChange).toHaveBeenCalled()
-    expect(wrapper.state().lastname).toEqual('Star')
+    expect(wrapper.state().lastName).toEqual('Star')
   })
 })
 

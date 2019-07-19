@@ -6,7 +6,6 @@ import type { Node } from 'react'
 import {
   HiddenInputs,
   FormGroup,
-  namesToStateKeys,
   validateAllFields,
   validateSingleField
 } from 'LoginPage'
@@ -23,41 +22,41 @@ type Props = {
 }
 
 type State = {
-  emailAddress: string,
-  isValidEmail: ?boolean
+  email: string,
+  validation: {
+    email: ?boolean
+  }
 }
 
 class RequestPasswordForm extends React.Component<Props, State> {
-  constructor (props: Props) {
-    super(props)
-    this.state = {
-      emailAddress: '',
-      isValidEmail: undefined
+  state = {
+    email: '',
+    validation: {
+      email: undefined
     }
   }
 
-  handleTextInputEmail = (emailAddress: string, event: SyntheticEvent<HTMLInputElement>) => {
-    const isValidEmail = validateSingleField(event)
-    this.setState({ emailAddress, isValidEmail })
+  handleTextInputEmail = (email: string, event: SyntheticEvent<HTMLInputElement>) => {
+    const isValid = validateSingleField(event)
+    this.setState({ email, validation: {email: isValid} })
   }
 
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
-    const errors = validateAllFields(event.currentTarget.form)
-    if (errors) {
+    const invalidFields = validateAllFields(event.currentTarget.form)
+
+    if (invalidFields) {
       event.preventDefault()
-      errors.forEach(
-        (error) => this.setState({[namesToStateKeys[error].isValid]: false})
-      )
+      this.setState({validation: invalidFields})
     }
   }
 
   render (): Node {
-    const {emailAddress, isValidEmail} = this.state
+    const {email, validation} = this.state
     const emailInputProps = {
-      value: emailAddress,
+      value: email,
       onChange: this.handleTextInputEmail,
       autoFocus: 'autoFocus',
-      inputIsValid: isValidEmail
+      inputIsValid: validation.email
     }
     return (
       <Form noValidate
@@ -67,7 +66,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
         method='post'
       >
         <HiddenInputs isPasswordReset/>
-        <FormGroup type='email' labelIsValid={isValidEmail} inputProps={emailInputProps} />
+        <FormGroup type='email' labelIsValid={validation.email} inputProps={emailInputProps} />
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'

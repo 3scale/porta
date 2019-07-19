@@ -39,48 +39,15 @@ const constraints = {
   }
 }
 
-const namesToStateKeys = {
-  'username': {
-    'name': 'username',
-    'isValid': 'isValidUsername'
-  },
-  'password': {
-    'name': 'password',
-    'isValid': 'isValidPassword'
-  },
-  'email': {
-    'name': 'email',
-    'isValid': 'isValidEmail'
-  },
-  'user[username]': {
-    'name': 'username',
-    'isValid': 'isValidUsername'
-  },
-  'user[email]': {
-    'name': 'emailAddress',
-    'isValid': 'isValidEmailAddress'
-  },
-  'user[first_name]': {
-    'name': 'firstname',
-    'isValid': 'isValidFirstname'
-  },
-  'user[last_name]': {
-    'name': 'lastname',
-    'isValid': 'isValidLastname'
-  },
-  'user[password]': {
-    'name': 'password',
-    'isValid': 'isValidPassword'
-  },
-  'user[password_confirmation]': {
-    'name': 'passwordConfirmation',
-    'isValid': 'isValidPasswordConfirmation'
-  }
-}
-
 const validateAllFields = (form) => {
   const errors = validate(form, constraints[form.id])
-  return errors ? Array.from(Object.keys(errors)) : undefined
+
+  const fieldsWithErrors = Object.keys(errors).reduce((obj, item) => {
+    obj[item] = false
+    return obj
+  }, {})
+
+  return errors ? fieldsWithErrors : undefined
 }
 
 const validateSingleField = (event) => {
@@ -91,6 +58,5 @@ const validateSingleField = (event) => {
 
 export {
   validateAllFields,
-  namesToStateKeys,
   validateSingleField
 }
