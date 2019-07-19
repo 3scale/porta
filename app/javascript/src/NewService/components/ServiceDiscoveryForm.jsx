@@ -20,6 +20,7 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
   const [projects, setProjects] = useState([])
   const [services, setServices] = useState([])
   const [fetchErrorMessage, setFetchErrorMessage] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const fetchProjects = async () => {
     setLoadingProjects(true)
@@ -35,15 +36,19 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
   }
 
   const fetchServices = async (namespace: string) => {
+    setLoading(true)
+    setServices([])
     try {
       const data = await fetchData(`${BASE_PATH}/namespaces/${namespace}/services.json`)
       setServices(data['services'])
     } catch (error) {
       setFetchErrorMessage(error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const listItemsProps = {fetchServices, projects, services}
+  const listItemsProps = {fetchServices, projects, services, loading}
 
   useEffect(() => {
     fetchProjects()
