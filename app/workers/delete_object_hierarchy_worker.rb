@@ -53,7 +53,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   def build_batch
     batch = Sidekiq::Batch.new
     batch.description = batch_description
-    batch_callbacks(batch) { batch.jobs { delete_associations(object) } }
+    batch_callbacks(batch) { batch.jobs { delete_associations } }
     batch
   end
 
@@ -74,7 +74,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     end
   end
 
-  def delete_associations(object)
+  def delete_associations
     object.class.reflect_on_all_associations.each do |reflection|
       next unless reflection.options[:dependent] == :destroy
       ReflectionDestroyer.new(object, reflection, caller_worker_hierarchy).destroy_later
@@ -112,11 +112,11 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
 
     def destroy_has_one_association
       associated_object = main_object.public_send(reflection.name)
-      delete_associated_object_later(associated_object) if associated_object
+      delete_associated_object_later(associated_object)
     end
 
     def delete_associated_object_later(associated_object)
-      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy)
+      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy) if associated_object.try(:id)
     end
 
     def association_delete_worker
