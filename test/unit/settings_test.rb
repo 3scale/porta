@@ -107,7 +107,7 @@ class SettingsTest < ActiveSupport::TestCase
 
   def test_end_users_invisible_ui_switch
     assert @settings.has_attribute?(:end_users_switch)
-    assert @settings.visible_ui?(:end_users)
+    refute @settings.visible_ui?(:end_users)
     refute @settings.has_attribute?(:end_users_ui_visible)
   end
 
