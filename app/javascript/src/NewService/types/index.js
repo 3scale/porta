@@ -9,3 +9,9 @@ export type FormProps = {
   submitText: string,
   children?: React.Node
 }
+
+export type Option = {
+  metadata: {
+    name: string
+  }
+}

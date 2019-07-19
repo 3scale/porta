@@ -3,6 +3,8 @@
 import React from 'react'
 import {Label, Select} from 'NewService/components/FormElements'
 
+import type { Option } from 'NewService/types'
+
 type Props = {
   fetchServices: (namespace: string) => Promise<void>,
   loading: boolean,

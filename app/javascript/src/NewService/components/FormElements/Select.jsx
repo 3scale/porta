@@ -2,11 +2,7 @@
 
 import React from 'react'
 
-type Option = {
-  metadata: {
-    name: string
-  }
-}
+import type { Option } from 'NewService/types'
 
 type Props = {
   name: string,
