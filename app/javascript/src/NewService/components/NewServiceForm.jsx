@@ -20,7 +20,7 @@ const NewServiceForm = (props: Props) => {
   const [formMode, setFormMode] = useState('manual')
   const [loadingProjects, setLoadingProjects] = useState(false)
 
-  const handleFormsVisibility = (event: SyntheticEvent<HTMLSelectElement>) => {
+  const handleFormsVisibility = (event: SyntheticEvent<HTMLInputElement>) => {
     setFormMode(event.currentTarget.value)
   }
 
