@@ -40,5 +40,5 @@ it('should set emailAddress state', () => {
   jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
   wrapper.instance().handleTextInputEmail('bob@sponge.com', event)
   expect(wrapper.instance().handleTextInputEmail).toHaveBeenCalled()
-  expect(wrapper.state().emailAddress).toEqual('bob@sponge.com')
+  expect(wrapper.state().email).toEqual('bob@sponge.com')
 })

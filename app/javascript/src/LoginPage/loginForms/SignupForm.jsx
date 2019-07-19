@@ -8,7 +8,6 @@ import {
 import {
   HiddenInputs,
   FormGroup,
-  namesToStateKeys,
   validateAllFields,
   validateSingleField
 } from 'LoginPage'
@@ -25,17 +24,36 @@ type Props = {
 
 type State = {
   username: string,
-  emailAddress: string,
-  firstname: string,
-  lastname: string,
+  email: string,
+  firstName: string,
+  lastName: string,
   password: string,
   passwordConfirmation: string,
-  isValidUsername: ?boolean,
-  isValidEmailAddress: ?boolean,
-  isValidFirstname: boolean,
-  isValidLastname: boolean,
-  isValidPassword: ?boolean,
-  isValidPasswordConfirmation: ?boolean
+  validation: {
+    username: ?boolean,
+    email: ?boolean,
+    firstName: boolean,
+    lastName: boolean,
+    password: ?boolean,
+    passwordConfirmation: ?boolean
+  }
+}
+
+type NamesToKeys = {
+  [string]: string
+}
+
+type InvalidFields = {
+  [string]: boolean
+}
+
+const namesToStateKeys = {
+  'user[username]': 'username',
+  'user[email]': 'email',
+  'user[first_name]': 'firstName',
+  'user[last_name]': 'lastName',
+  'user[password]': 'password',
+  'user[password_confirmation]': 'passwordConfirmation'
 }
 
 const InputFormGroup = (props) => {
@@ -56,44 +74,55 @@ const InputFormGroup = (props) => {
 }
 
 class SignupForm extends Component<Props, State> {
-  constructor (props: Props) {
-    super(props)
-    this.state = {
-      username: this.props.user.username,
-      emailAddress: this.props.user.email,
-      firstname: this.props.user.firstname,
-      lastname: this.props.user.lastname,
-      password: '',
-      passwordConfirmation: '',
-      isValidUsername: undefined,
-      isValidEmailAddress: undefined,
-      isValidFirstname: true,
-      isValidLastname: true,
-      isValidPassword: undefined,
-      isValidPasswordConfirmation: undefined
+  state = {
+    username: this.props.user.username,
+    email: this.props.user.email,
+    firstName: this.props.user.firstname,
+    lastName: this.props.user.lastname,
+    password: '',
+    passwordConfirmation: '',
+    validation: {
+      username: undefined,
+      email: undefined,
+      firstName: true,
+      lastName: true,
+      password: undefined,
+      passwordConfirmation: undefined
     }
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
     const isValid = validateSingleField(event)
+    const validation = {
+      ...this.state.validation,
+      [namesToStateKeys[event.currentTarget.name]]: isValid
+    }
+
     this.setState({
-      [namesToStateKeys[event.currentTarget.name].name]: value,
-      [namesToStateKeys[event.currentTarget.name].isValid]: isValid
+      [namesToStateKeys[event.currentTarget.name]]: value,
+      validation
     })
   }
 
+  renameValidation = (namesToStateKeys: NamesToKeys, invalidFields: InvalidFields) => Object.keys(invalidFields)
+    .reduce((obj, item) => {
+      obj[namesToStateKeys[item]] = invalidFields[item]
+      return obj
+    }, {})
+
   validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
-    const errors = validateAllFields(event.currentTarget.form)
-    if (errors) {
+    const invalidFields = validateAllFields(event.currentTarget.form)
+
+    if (invalidFields) {
       event.preventDefault()
-      errors.forEach(
-        (error) => this.setState({[namesToStateKeys[error].isValid]: false})
-      )
+      const validation = this.renameValidation(namesToStateKeys, invalidFields)
+      this.setState({validation})
     }
   }
 
   render () {
-    const { username, isValidUsername, emailAddress, isValidEmailAddress, firstname, isValidFirstname, lastname, isValidLastname, password, isValidPassword, passwordConfirmation, isValidPasswordConfirmation } = this.state
+    const {username, email, firstName, lastName, password, passwordConfirmation, validation} = this.state
+
     return (
       <Form noValidate
         action={this.props.path}
@@ -102,12 +131,12 @@ class SignupForm extends Component<Props, State> {
         method='post'
       >
         <HiddenInputs />
-        <InputFormGroup isRequired type='user[username]' value={username} isValid={isValidUsername} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired type='user[email]' value={emailAddress} isValid={isValidEmailAddress} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired={false} type='user[first_name]' value={firstname} isValid={isValidFirstname} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired={false} type='user[last_name]' value={lastname} isValid={isValidLastname} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired type='user[password]' value={password} isValid={isValidPassword} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired type='user[password_confirmation]' value={passwordConfirmation} isValid={isValidPasswordConfirmation} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired type='user[username]' value={username} isValid={validation.username} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired type='user[email]' value={email} isValid={validation.email} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired={false} type='user[first_name]' value={firstName} isValid={validation.firstName} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired={false} type='user[last_name]' value={lastName} isValid={validation.lastName} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired type='user[password]' value={password} isValid={validation.password} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired type='user[password_confirmation]' value={passwordConfirmation} isValid={validation.passwordConfirmation} onChange={this.handleInputChange} />
         <ActionGroup>
           <input type="submit"
             name="commit"

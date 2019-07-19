@@ -6,7 +6,6 @@ import type { Node } from 'react'
 import {
   HiddenInputs,
   FormGroup,
-  namesToStateKeys,
   validateAllFields,
   validateSingleField
 } from 'LoginPage'
@@ -24,52 +23,56 @@ type Props = {
 type State = {
   username: string,
   password: string,
-  isValidUsername: ?boolean,
-  isValidPassword: ?boolean
+  validation: {
+    username: ?boolean,
+    password: ?boolean
+  }
 }
 
 class Login3scaleForm extends React.Component<Props, State> {
-  constructor (props: Props) {
-    super(props)
-    this.state = {
-      username: '',
-      password: '',
-      isValidUsername: undefined,
-      isValidPassword: undefined
+  state = {
+    username: '',
+    password: '',
+    validation: {
+      username: undefined,
+      password: undefined
     }
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
     const isValid = validateSingleField(event)
+    const validation = {
+      ...this.state.validation,
+      [event.currentTarget.name]: isValid
+    }
     this.setState({
-      [namesToStateKeys[event.currentTarget.name].name]: value,
-      [namesToStateKeys[event.currentTarget.name].isValid]: isValid
+      [event.currentTarget.name]: value,
+      validation
     })
   }
 
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
-    const errors = validateAllFields(event.currentTarget.form)
-    if (errors) {
+    const invalidFields = validateAllFields(event.currentTarget.form)
+
+    if (invalidFields) {
       event.preventDefault()
-      errors.forEach(
-        (error) => this.setState({[namesToStateKeys[error].isValid]: false})
-      )
+      this.setState({validation: invalidFields})
     }
   }
 
   render (): Node {
-    const {username, password, isValidUsername, isValidPassword} = this.state
+    const {username, password, validation} = this.state
     const usernameInputProps = {
       value: username,
       onChange: this.handleInputChange,
       autoFocus: 'autoFocus',
-      inputIsValid: isValidUsername
+      inputIsValid: validation.username
     }
     const passwordInputProps = {
       value: password,
       onChange: this.handleInputChange,
       ariaInvalid: 'false',
-      inputIsValid: isValidPassword
+      inputIsValid: validation.password
     }
     return (
       <Form noValidate
@@ -79,8 +82,8 @@ class Login3scaleForm extends React.Component<Props, State> {
         method='post'
       >
         <HiddenInputs/>
-        <FormGroup type='username' labelIsValid={isValidUsername} inputProps={usernameInputProps} />
-        <FormGroup type='password' labelIsValid={isValidPassword} inputProps={passwordInputProps} />
+        <FormGroup type='username' labelIsValid={validation.username} inputProps={usernameInputProps} />
+        <FormGroup type='password' labelIsValid={validation.password} inputProps={passwordInputProps} />
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'
