@@ -11,18 +11,26 @@ import type {FormProps} from 'NewService/types'
 const BASE_PATH = '/p/admin/service_discovery'
 const PROJECTS_PATH = `${BASE_PATH}/projects.json`
 
-const ServiceDiscoveryForm = ({formActionPath}: {formActionPath: string}) => {
+type Props = {
+  formActionPath: string,
+  setLoadingProjects: boolean => void
+}
+
+const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
   const [projects, setProjects] = useState([])
   const [services, setServices] = useState([])
   const [fetchErrorMessage, setFetchErrorMessage] = useState('')
 
   const fetchProjects = async () => {
+    setLoadingProjects(true)
     try {
       const data = await fetchData(PROJECTS_PATH)
       setProjects(data['projects'])
       fetchServices(data.projects[0].metadata.name)
     } catch (error) {
       setFetchErrorMessage(error.message)
+    } finally {
+      setLoadingProjects(false)
     }
   }
 
