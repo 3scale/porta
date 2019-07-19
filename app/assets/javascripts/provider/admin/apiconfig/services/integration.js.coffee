@@ -105,6 +105,16 @@ $(document).on 'initialize', '#proxy', ->
     setUpWarningForPattern rule.find('.pattern')
     false
 
+  $("a[href=\"#delete-backend-api-config\"]").live "click", ->
+    tr = $(this).closest("tr")
+    if tr.hasClass("deleted")
+      tr.removeClass "deleted"
+      tr.find(".destroyer").attr "disabled", "disabled"
+    else
+      tr.addClass "deleted"
+      tr.find(".destroyer").removeAttr "disabled"
+    false
+
   $("a[href=\"#delete-proxy-rule\"]").live "click", ->
     tr = $(this).closest("tr")
     if tr.hasClass("deleted")
