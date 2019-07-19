@@ -23,20 +23,33 @@
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
       - if @service.acts_as_product?
-        h2 Backends
-        table
-          thead
-            tr
-              th Name
-              th Private Base URL
-          tbody
-            - @service.backend_apis.each do |backend_api|
+        = f.inputs 'Backends' do
+          table#backend_apis
+            thead
               tr
-                td
-                  = link_to provider_admin_backend_api_path(backend_api) do
-                    => backend_api.name
-                td
-                  = backend_api.private_endpoint
+                th Name
+                th Production Public Base URL
+                th
+                th Private Base URL
+                th
+            tbody
+              = f.fields_for :backend_api_configs do |backend|
+                - backend_api = backend.object.backend_api
+                tr
+                  td
+                    = link_to provider_admin_backend_api_path(backend_api) do
+                      => backend_api.name
+                  td
+                    = @proxy.default_production_endpoint
+                    | /
+                    = backend.text_field :path, class: 'backend_api_config_path'
+                  td
+                    i.fa.fa-caret-right
+                  td
+                    = backend_api.private_endpoint
+                  td.actions
+                    = link_to '', '#delete-backend-api-config', class: 'action delete'
+                    = backend.hidden_field :_destroy, class: 'destroyer', value: 1, disabled: true
 
       - else
         = f.inputs "API" do
