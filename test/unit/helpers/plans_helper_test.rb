@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class PlansHelperTest < ActionView::TestCase
+  include PlansHelper
 
   def test_can_create_plan
     stubs(:can?).with(:create, :account_plans).returns(true)
@@ -17,4 +18,28 @@ class PlansHelperTest < ActionView::TestCase
     assert can_create_plan?(AccountPlan)
   end
 
+  test 'account_plans_management_visible?' do
+    tenant = FactoryBot.create(:simple_provider)
+    stubs(current_account: tenant)
+
+    stubs(:can?).with(:manage, :account_plans).returns(true)
+    tenant.settings.allow_account_plans
+    tenant.settings.update_column(:account_plans_ui_visible, true)
+    assert account_plans_management_visible?
+
+    stubs(:can?).with(:manage, :account_plans).returns(false)
+    tenant.settings.allow_account_plans
+    tenant.settings.update_column(:account_plans_ui_visible, true)
+    refute account_plans_management_visible?
+
+    stubs(:can?).with(:manage, :account_plans).returns(true)
+    tenant.settings.deny_account_plans
+    tenant.settings.update_column(:account_plans_ui_visible, true)
+    refute account_plans_management_visible?
+
+    stubs(:can?).with(:manage, :account_plans).returns(true)
+    tenant.settings.allow_account_plans
+    tenant.settings.update_column(:account_plans_ui_visible, false)
+    refute account_plans_management_visible?
+  end
 end

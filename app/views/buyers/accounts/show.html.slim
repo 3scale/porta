@@ -81,7 +81,7 @@ h1 data-hook="account-show"
         = render 'monthly_charging', account: @account
 
   .right_narrow
-    - if can?(:manage, :account_plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
+    - if account_plans_management_visible?
       = render partial: 'account_plan',
                locals: { \
                  plan: @account.bought_account_plan,
