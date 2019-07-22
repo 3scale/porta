@@ -32,14 +32,18 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   private
 
   def find_metric
-    @metric = @backend_api.metrics.find(params[:id])
+    @metric = find_backend_api_metric_by(params[:id])
   end
 
   def build_metric
-    @metric = if params[:metric_id]
-                @backend_api.metrics.find(params[:metric_id]).children
+    @metric = if (metric_id = params[:metric_id])
+                find_backend_api_metric_by(metric_id).children
               else
-                @backend_api.metrics
+                @backend_api.first_service.metrics # FIXME: The metric should belong to the backend API directly
               end.build(params[:metric] || {})
+  end
+
+  def find_backend_api_metric_by(id)
+    @backend_api.metrics.find(id)
   end
 end

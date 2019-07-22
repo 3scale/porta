@@ -8,7 +8,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     @service = @provider.first_service
     @backend_api = @service.backend_api
 
-    @hits = @provider.metrics.hits
+    @hits = @service.metrics.hits
     @meth = FactoryBot.create(:metric, service: @service, system_name: 'meth', parent: @hits)
     @ads = FactoryBot.create(:metric, service: @service, system_name: 'ads')
 
