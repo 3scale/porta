@@ -92,7 +92,7 @@ class SignupForm extends Component<Props, State> {
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
-    const isValid = validateSingleField(event)
+    const isValid = event.currentTarget.required ? validateSingleField(event) : true
     const validation = {
       ...this.state.validation,
       [namesToStateKeys[event.currentTarget.name]]: isValid
