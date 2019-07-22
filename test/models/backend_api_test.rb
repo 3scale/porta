@@ -24,31 +24,50 @@ class BackendApiTest < ActiveSupport::TestCase
     assert @backend_api.valid?
   end
 
-  test 'gather methods and metrics from all services of the account' do
-    first_service = FactoryBot.create(:simple_service, account: @account)
-    FactoryBot.create_list(:metric, 2, service: first_service, parent: first_service.metrics.hits) # 2 methods of 1st service's Hits metric
+  test 'gather methods and metrics from all services using the backend' do
+    services_using_backend = FactoryBot.create_list(:simple_service, 2, account: @account)
+    service_not_using_backend = FactoryBot.create(:simple_service, account: @account) # service of the same account not using the backend
 
-    second_service = FactoryBot.create(:simple_service, account: @account)
-    FactoryBot.create(:metric, service: second_service, system_name: 'ads', friendly_name: 'Ads') # another top level metric of the new service
+    create_metrics_for = ->(service, quantity = 1, attributes = {}) do
+      FactoryBot.create_list(:metric, quantity, attributes.merge(service: service))
+      FactoryBot.create(:backend_api_config, service: service, backend_api: @backend_api)
+    end
+
+    create_metrics_for.call(services_using_backend.first, 2, parent: services_using_backend.first.metrics.hits) # 2 methods of 1st service's Hits metric
+    create_metrics_for.call(services_using_backend.last,  1, system_name: 'ads', friendly_name: 'Ads') # 2 methods of 1st service's Hits metric
 
     assert_equal 5, @backend_api.metrics.count
     assert_equal 3, @backend_api.top_level_metrics.count
     assert_equal 2, @backend_api.method_metrics.count
 
-    assert_same_elements @account.metrics.ids, @backend_api.metrics.ids
-    assert_same_elements @account.top_level_metrics.ids, @backend_api.top_level_metrics.ids
-    assert_same_elements @account.metrics.where.not(parent_id: nil).ids, @backend_api.method_metrics.ids
+    metrics_in_backend = @account.metrics.where(service: services_using_backend)
+    top_level_metrics_in_backend = metrics_in_backend.where(parent_id: nil)
+    methods_in_backend = metrics_in_backend.where.not(parent_id: nil)
+
+    assert_same_elements metrics_in_backend, @backend_api.metrics
+    assert_same_elements top_level_metrics_in_backend, @backend_api.top_level_metrics
+    assert_same_elements methods_in_backend.where.not(parent_id: nil), @backend_api.method_metrics
+    assert_not_includes @backend_api.metrics, service_not_using_backend.metrics.hits
   end
 
-  test 'gather mapping rules from all proxies of the account' do
-    first_service = FactoryBot.create(:service, account: @account)
-    FactoryBot.create_list(:proxy_rule, 2, proxy: first_service.proxy) # 2 more mapping rules to the first proxy/service
+  test 'gather mapping rules from all proxies of services using the backend' do
+    services_using_backend = FactoryBot.create_list(:simple_service, 2, account: @account)
+    service_not_using_backend = FactoryBot.create(:simple_service, account: @account) # service of the same account not using the backend
 
-    second_service = FactoryBot.create(:service, account: @account)
-    FactoryBot.create(:proxy_rule, proxy: second_service.proxy) # another extra mapping rule of a different proxy/service
+    create_rules_for = ->(service, quantity = 1) do
+      FactoryBot.create_list(:proxy_rule, quantity, proxy: service.proxy)
+      FactoryBot.create(:backend_api_config, service: service, backend_api: @backend_api)
+    end
+
+    create_rules_for.call(services_using_backend.first, 2) # 2 more mapping rules to the first proxy/service
+    create_rules_for.call(services_using_backend.last) # another extra mapping rule of a different proxy/service
 
     assert_equal 5, @backend_api.mapping_rules.count
-    assert_same_elements @account.proxy_rules.ids, @backend_api.proxy_rules.ids
-    assert_equal @backend_api.method(:mapping_rules), @backend_api.method(:proxy_rules)
+
+    proxy_rules_in_backend = @account.proxy_rules.where(proxies: { service_id: services_using_backend.map(&:id) })
+    proxy_rules_not_in_backend = service_not_using_backend.proxy.proxy_rules
+
+    assert_same_elements proxy_rules_in_backend, @backend_api.proxy_rules
+    assert_not_includes @backend_api.proxy_rules, proxy_rules_not_in_backend
   end
 end
