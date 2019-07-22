@@ -7,9 +7,7 @@ import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 import {fetchData} from 'utilities/utils'
 import type {Option} from 'NewService/types'
-
-const BASE_PATH = '/p/admin/service_discovery'
-const PROJECTS_PATH = `${BASE_PATH}/projects.json`
+import {PROJECTS_PATH} from 'NewService'
 
 type Props = {
   formActionPath: string,
@@ -18,9 +16,7 @@ type Props = {
 
 const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
   const [projects, setProjects] = useState([])
-  const [services, setServices] = useState([])
   const [fetchErrorMessage, setFetchErrorMessage] = useState('')
-  const [loading, setLoading] = useState(true)
 
   const fetchProjects = async () => {
     setLoadingProjects(true)
@@ -35,21 +31,7 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
     }
   }
 
-  const fetchServices = async (namespace: string) => {
-    setLoading(true)
-    setServices([])
-
-    try {
-      const { services } = await fetchData<{services: Option[]}>(`${BASE_PATH}/namespaces/${namespace}/services.json`)
-      setServices(services)
-    } catch (error) {
-      setFetchErrorMessage(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const listItemsProps = {fetchServices, projects, services, loading}
+  const listItemsProps = {projects, onError: setFetchErrorMessage}
 
   useEffect(() => {
     fetchProjects()
