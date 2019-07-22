@@ -15,6 +15,14 @@ Then /^I should see menu items$/ do |items|
   end
 end
 
+Then /^I should not see menu items$/ do |items|
+  items.rows.each do |item|
+    within '#mainmenu' do
+      assert has_no_css? 'li', :text => item[0]
+    end
+  end
+end
+
 
 Then /^there should be submenu items$/ do |items|
   items.rows.each do |item|
