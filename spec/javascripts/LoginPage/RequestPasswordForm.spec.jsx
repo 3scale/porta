@@ -29,7 +29,7 @@ it('should render HiddenInputs component', () => {
   expect(wrapper.find(HiddenInputs).exists()).toEqual(true)
 })
 
-it('should set emailAddress state', () => {
+it('should set email and validation state to true', () => {
   const event = {
     currentTarget: {
       value: 'bob@sponge.com',
@@ -37,8 +37,20 @@ it('should set emailAddress state', () => {
     }
   }
   const wrapper = mount(<RequestPasswordForm {...props}/>)
-  jest.spyOn(wrapper.instance(), 'handleTextInputEmail')
-  wrapper.instance().handleTextInputEmail('bob@sponge.com', event)
-  expect(wrapper.instance().handleTextInputEmail).toHaveBeenCalled()
+  wrapper.find('input#email').props().onChange(event)
   expect(wrapper.state().email).toEqual('bob@sponge.com')
+  expect(wrapper.state('validation').email).toEqual(true)
+})
+
+it('should set validation state to false when email is invalid', () => {
+  const event = {
+    currentTarget: {
+      value: 'bobspongecom', 
+      type: 'email'
+    }
+  }
+  const wrapper = mount(<RequestPasswordForm {...props}/>)
+  wrapper.find('input#email').props().onChange(event)
+  expect(wrapper.state().email).toEqual('bobspongecom')
+  expect(wrapper.state('validation').email).toEqual(false)
 })
