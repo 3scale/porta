@@ -5,15 +5,14 @@ require 'test_helper'
 class Provider::Admin::BackendApis::MappingRulesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @provider = FactoryBot.create(:provider_account)
-    @service = @provider.first_service
-    @backend_api = @service.backend_api
+    @backend_api = @provider.first_service.backend_api
 
-    FactoryBot.create(:proxy_rule, proxy: @service.proxy)
+    FactoryBot.create(:proxy_rule, proxy: nil, owner: @backend_api)
 
     login_provider @provider
   end
 
-  attr_reader :provider, :service, :backend_api
+  attr_reader :provider, :backend_api
 
   test '#index' do
     get provider_admin_backend_api_mapping_rules_path(backend_api)
