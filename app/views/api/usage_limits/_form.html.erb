@@ -1,18 +1,3 @@
-<script type="text/javascript">
-  var usage_limit_disabled = true;
-  form_usage_limit = $('form.remote.usage_limit');
-
-  form_usage_limit.on('keyup change', function() {
-    input_value = $('#usage_limit_value')[0].value;
-    usage_limit_disabled = (/^\d+$/.test($.trim(input_value)) == false);
-    $('#usage_limit_submit').attr('disabled', usage_limit_disabled);
-  });
-
-form_usage_limit.submit(function(e){
-    return !usage_limit_disabled;
-   });
-</script>
-
 <table class='plan-edit-popup'>
 <tr>
   <td><%= form.label :period %></td>
@@ -20,13 +5,13 @@ form_usage_limit.submit(function(e){
 </tr>
 <tr>
   <td><%= form.label :value %></td>
-  <td><%= form.text_field :value, :class => 'text' %></td>
+  <td><%= form.number_field :value, min: 0 %></td>
 </tr>
 <tr>
   <td></td>
   <td>
     <div class="errors"></div>
-    <%= form.submit "#{@usage_limit.new_record? ? 'Create usage limit' : 'Update usage limit'}", :id => "usage_limit_submit", :disabled => 'true' %>
+    <%= form.submit "#{@usage_limit.new_record? ? 'Create usage limit' : 'Update usage limit'}", id: 'usage_limit_submit' %>
 
     <%= link_to 'Cancel', '', :class => 'fancybox-close' %>
   </td>
