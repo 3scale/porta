@@ -6,7 +6,7 @@ import {useState, useEffect} from 'react'
 import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 import {fetchData} from 'utilities/utils'
-import type {FormProps} from 'NewService/types'
+import type {Option} from 'NewService/types'
 
 const BASE_PATH = '/p/admin/service_discovery'
 const PROJECTS_PATH = `${BASE_PATH}/projects.json`
@@ -24,10 +24,10 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
 
   const fetchProjects = async () => {
     setLoadingProjects(true)
+
     try {
-      const data = await fetchData(PROJECTS_PATH)
-      setProjects(data['projects'])
-      fetchServices(data.projects[0].metadata.name)
+      const { projects } = await fetchData<{projects: Option[]}>(PROJECTS_PATH)
+      setProjects(projects)
     } catch (error) {
       setFetchErrorMessage(error.message)
     } finally {
@@ -38,9 +38,10 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
   const fetchServices = async (namespace: string) => {
     setLoading(true)
     setServices([])
+
     try {
-      const data = await fetchData(`${BASE_PATH}/namespaces/${namespace}/services.json`)
-      setServices(data['services'])
+      const { services } = await fetchData<{services: Option[]}>(`${BASE_PATH}/namespaces/${namespace}/services.json`)
+      setServices(services)
     } catch (error) {
       setFetchErrorMessage(error.message)
     } finally {
@@ -54,7 +55,7 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
     fetchProjects()
   }, [])
 
-  const formProps: FormProps = {
+  const formProps = {
     id: 'service_source',
     formActionPath,
     hasHiddenServiceDiscoveryInput: true,

@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Label, Select} from 'NewService/components/FormElements'
 
 import type { Option } from 'NewService/types'
@@ -14,6 +14,13 @@ type Props = {
 
 const ServiceDiscoveryListItems = (props: Props) => {
   const {fetchServices, loading, projects, services} = props
+
+  useEffect(() => {
+    if (projects && projects.length) {
+      fetchServices(projects[0].metadata.name)
+    }
+  }, [projects])
+
   return (
     <React.Fragment>
       <li id="service_name_input" className="string required">
@@ -25,7 +32,7 @@ const ServiceDiscoveryListItems = (props: Props) => {
           disabled={loading}
           name='service[namespace]'
           id='service_namespace'
-          onChange={(e) => fetchServices(e.currentTarget.value)}
+          onChange={e => { fetchServices(e.currentTarget.value) }}
           options={projects}
         />
       </li>
