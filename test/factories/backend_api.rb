@@ -8,4 +8,10 @@ FactoryBot.define do
     private_endpoint { 'http://api.example.net:80' }
     association(:account, factory: :simple_provider)
   end
+
+  factory :backend_api_config do
+    sequence(:path) { |n| "path#{n}" }
+    association :service
+    association :backend_api
+  end
 end
