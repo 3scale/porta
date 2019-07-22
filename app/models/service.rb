@@ -137,8 +137,7 @@ class Service < ApplicationRecord
     end
 
     def self.gateways
-      gateways = APICAST - (ThreeScale.config.apicast_custom_url ? %i(self_managed) : [])
-      gateways.map { |gateway| gateway.to_s.freeze }
+      APICAST.map { |gateway| gateway.to_s.freeze }
     end
 
     def self.service_mesh
