@@ -1,5 +1,10 @@
 module PlansHelper
 
+  def account_plans_management_visible?
+    settings = current_account.settings
+    can?(:manage, :account_plans) && settings.account_plans.allowed? && settings.account_plans_ui_visible?
+  end
+
   def can_create_plan?(plan)
     case plan.new
     when AccountPlan
