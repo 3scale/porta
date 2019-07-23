@@ -5,10 +5,8 @@ import {Label, Select} from 'NewService/components/FormElements'
 import {fetchData} from 'utilities/utils'
 import {BASE_PATH} from 'NewService'
 
-import type { Option } from 'NewService/types'
-
 type Props = {
-  projects: Option[],
+  projects: string[],
   onError: (err: string) => void
 }
 
@@ -20,7 +18,7 @@ const ServiceDiscoveryListItems = (props: Props) => {
 
   useEffect(() => {
     if (projects && projects.length) {
-      fetchServices(projects[0].metadata.name)
+      fetchServices(projects[0])
     }
   }, [projects])
 
@@ -29,7 +27,7 @@ const ServiceDiscoveryListItems = (props: Props) => {
     setServices([])
 
     try {
-      const { services } = await fetchData<{services: Option[]}>(`${BASE_PATH}/namespaces/${namespace}/services.json`)
+      const services = await fetchData<string[]>(`${BASE_PATH}/namespaces/${namespace}/services.json`)
       setServices(services)
     } catch (error) {
       onError(error.message)

@@ -2,20 +2,17 @@
 
 import React from 'react'
 
-import type { Option } from 'NewService/types'
-
 type Props = {
   name: string,
   id: string,
   disabled?: boolean,
   onChange?: (event: SyntheticEvent<HTMLSelectElement>) => void,
-  options: Array<Option>
+  options: Array<string>
 }
 
 const Options = ({options}) => {
-  return options.map(option => {
-    const { name } = option.metadata
-    return <option key={name} value={name}>{name}</option>
+  return options.map((option) => {
+    return <option key={option} value={option}>{option}</option>
   })
 }
 
