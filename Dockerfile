@@ -13,10 +13,9 @@ ENV DISABLE_SPRING="true" \
     MASTER_PASSWORD="${MASTER_PASSWORD}" \
     USER_PASSWORD="${USER_PASSWORD}" \
     LC_ALL="en_US.UTF-8" \
-    PATH="./node_modules/.bin:$PATH" \
+    PATH="./node_modules/.bin:/opt/rh/rh-nodejs8/root/usr/bin:$PATH" \
     SKIP_ASSETS="1" \
     DNSMASQ="#" \
-    RAILS_ENV=test \
     CODECLIMATE_REPO_TOKEN=ba3a56916aa6040ae614ffa6b3d87f6ea07d3c0c512e8099cec4e68b27b676fc \
     GITHUB_REPOSITORY_TOKEN=b2N0b2JvdDo0YWUwYjYzOTgzYWE5YzYyZTIyOWYxZWNmZGZiNDY2YjI1YzcyZWEy \
     BUNDLE_FROZEN=1 \
@@ -46,4 +45,4 @@ RUN if [ "${DB}" = "oracle" ]; then unzip /opt/oracle/instantclient-basiclite-li
 
 USER root
 
-RUN bash -c "bundle install && npm install && bundle exec rake tmp:create"
+RUN bash -c "bundle install && bundle exec rake tmp:create"

@@ -69,7 +69,6 @@ COMPOSE_TEST_FILE := docker-compose.test-$(DB).yml
 ORACLE_DB_IMAGE := quay.io/3scale/oracle:12.2.0.1-ee
 
 include wget.mk
-include docker-compose.mk
 include openshift.mk
 
 .PHONY: default all clean build test info jenkins-env docker test-run tmp-export run test-bash clean-cache clean-tmp compose help
@@ -124,16 +123,19 @@ clean-tmp: ## Removes temporary files
 	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
 
 run: ## Starts containers and runs command $(CMD) inside the container in a non-interactive shell
-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-run: $(DOCKER_COMPOSE)
+run:
 	@echo
 	@echo "======= Run ======="
 	@echo
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "$(CMD)"
+	@docker-compose run --rm system -c "$(CMD)"
 
-bash: ## Opens up shell to environment where tests can be ran
-bash: CMD = script/docker.sh && bundle exec rake db:create db:test:load && bundle exec bash
-bash: run
+# bash: ## Opens up shell on the container
+bash:
+	@echo
+	@echo "======= Bash ======="
+	@echo
+	@docker-compose up -d
+	@docker-compose exec system /bin/bash
 
 build: ## Build the container image using one of the docker-compose file set by $(COMPOSE_FILE) env var
 build: COMPOSE_FILE = $(COMPOSE_TEST_FILE)

@@ -27,20 +27,36 @@ services:
   system:
     <<: *system_environment
     build: .
-    command: bash -c "UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
+    command: bash -c "rm -f tmp/pids/server.pid && UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
+    container_name: system_compose
     depends_on:
       - apisonator
       - mailhog
       - memcached
       - mysql
       - redis
+    volumes:
+      - ./node_modules:/opt/system/node_modules
     ports:
       - "3000:3000"
+
+  webpacker:
+    <<: *system_environment
+    image: porta_system
+    command: bin/webpack-dev-server
+    container_name: webpacker_compose
+    volumes:
+      - ./node_modules:/opt/system/node_modules
+    depends_on:
+      - system
+    ports:
+      - 3035:3035
 
   sidekiq:
     <<: *system_environment
     image: porta_system
     command: bash -c "rake sidekiq"
+    container_name: sidekiq_compose
     depends_on:
       - system
 
@@ -67,26 +83,20 @@ services:
       - "3001:3001"
     command: "3scale_backend start -p 3001"
     depends_on:
-      - backend_redis
+      - redis
     environment:
-      - CONFIG_REDIS_PROXY=backend_redis:6379
-      - CONFIG_QUEUES_MASTER_NAME=backend_redis:6379
+      - CONFIG_REDIS_PROXY=redis:6379/2
+      - CONFIG_QUEUES_MASTER_NAME=redis:6379/2
       - CONFIG_WORKERS_LOG_FILE=/dev/stdout
       - CONFIG_INTERNAL_API_USER=system_app
       - CONFIG_INTERNAL_API_PASSWORD=password
       - RACK_ENV=production
 
   redis:
-    image: redis
+    image: redis:alpine
     container_name: redis_compose
     ports:
       - "6379:6379"
-
-  backend_redis:
-    image: redis
-    container_name: backend_redis_compose
-    ports:
-      - "6380:6379"
 
   mailhog:
     image: mailhog/mailhog
