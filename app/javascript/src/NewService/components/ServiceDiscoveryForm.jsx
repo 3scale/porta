@@ -6,7 +6,7 @@ import {useState, useEffect} from 'react'
 import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 import {fetchData} from 'utilities/utils'
-import type {Option} from 'NewService/types'
+
 import {PROJECTS_PATH} from 'NewService'
 
 type Props = {
@@ -22,7 +22,7 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
     setLoadingProjects(true)
 
     try {
-      const { projects } = await fetchData<{projects: Option[]}>(PROJECTS_PATH)
+      const projects = await fetchData<string[]>(PROJECTS_PATH)
       setProjects(projects)
     } catch (error) {
       setFetchErrorMessage(error.message)
