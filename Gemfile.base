@@ -76,7 +76,7 @@ gem 'cancancan', '~> 1.7.1'
 gem 'formtastic', '~> 1.2.4'
 gem 'rmagick', '~> 2.15.3', require: false
 gem 'gruff', '~>0.3', require: false
-gem 'bugsnag', '~> 6.0'
+gem 'bugsnag', '~> 6.11'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
 gem 'inherited_resources', '~> 1.7.2'
