@@ -69,6 +69,7 @@ class Proxy < ApplicationRecord
             :credentials_location, :error_auth_failed, :error_auth_missing, :authentication_method,
             :error_headers_auth_failed, :error_headers_auth_missing, :error_headers_limits_exceeded, :error_limits_exceeded,
             :error_no_match, :error_headers_no_match, :secret_token, :hostname_rewrite, :sandbox_endpoint,
+            :staging_domain, :production_domain,
             length: { maximum: 255 }
 
   validates :oidc_issuer_type, inclusion: { in: OIDC_ISSUER_TYPES.keys.map(&:to_s), allow_blank: true }, presence: { if: ->(proxy) { proxy.oidc_issuer_endpoint.present? } }
@@ -87,6 +88,7 @@ class Proxy < ApplicationRecord
   validates :endpoint, presence: true, on: :update, if: :require_production_endpoint?
 
   before_save :set_correct_endpoints, if: :set_correct_endpoints?
+  before_save :update_domains
   after_save :publish_events
   before_destroy :publish_events
 
@@ -471,6 +473,15 @@ class Proxy < ApplicationRecord
     URI(sandbox_endpoint || set_sandbox_endpoint).host
   end
 
+  def update_domains
+    domains = {
+      staging_domain: self.class.extract_domain(sandbox_endpoint.presence || default_staging_endpoint),
+      production_domain: self.class.extract_domain(endpoint.presence || default_production_endpoint),
+    }
+    assign_attributes(domains)
+    domains
+  end
+
   def provider
     @provider ||= self.service.account
   end
@@ -635,6 +646,12 @@ class Proxy < ApplicationRecord
 
   def set_port_endpoint
     generate_port(:endpoint)
+  end
+
+  def self.extract_domain(url)
+    URI(url.presence || '').host
+  rescue ArgumentError, URI::InvalidURIError
+    # nothing
   end
 
   def generate_port(proxy_attribute)
