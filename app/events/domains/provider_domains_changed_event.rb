@@ -1,9 +1,13 @@
 class Domains::ProviderDomainsChangedEvent < BaseEventStoreEvent
-  def self.create(provider)
+  def self.create(provider, parent_event = nil)
     new(
+      parent_event_id: parent_event&.event_id,
+      parent_event_type: parent_event&.class&.name,
+
       provider:    provider,
       admin_domains: [ provider.self_domain ],
       developer_domains: [ provider.domain ],
+
       metadata: {
         provider_id: provider.id,
         zync: {
@@ -11,6 +15,18 @@ class Domains::ProviderDomainsChangedEvent < BaseEventStoreEvent
         }
       }
     )
+  end
+
+  def domains
+    admin_domains + developer_domains
+  end
+
+  def parent_event?
+    parent_event_id && parent_event_type
+  end
+
+  def after_commit
+    ProcessDomainEventsWorker.enqueue(self)
   end
 
   def self.valid?(account)
