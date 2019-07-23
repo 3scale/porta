@@ -1,11 +1,14 @@
 require 'uri'
 
 class Domains::ProxyDomainsChangedEvent < BaseEventStoreEvent
-  def self.create(proxy)
+  def self.create(proxy, parent_event = nil)
     new(
+      parent_event_id: parent_event&.event_id,
+      parent_event_type: parent_event&.class&.name,
+
       proxy: MissingModel::MissingProxy.new(id: proxy.id),
-      staging_domains: extract_domain(proxy.sandbox_endpoint),
-      production_domains: extract_domain(proxy.endpoint),
+      staging_domains: [ proxy.staging_domain ],
+      production_domains: [ proxy.production_domain ],
 
       metadata: {
         provider_id: (provider_id = proxy.provider&.id),
@@ -17,13 +20,19 @@ class Domains::ProxyDomainsChangedEvent < BaseEventStoreEvent
     )
   end
 
-  def self.valid?(proxy)
-    !!proxy # TODO: check if deployment_option or domains actually changed
+  def domains
+    staging_domains + production_domains
   end
 
-  def self.extract_domain(url)
-    [ URI(url.presence || '').host ].compact
-  rescue ArgumentError, URI::InvalidURIError
-    # nothing
+  def parent_event?
+    parent_event_id && parent_event_type
+  end
+
+  def after_commit
+    ProcessDomainEventsWorker.enqueue(self)
+  end
+
+  def self.valid?(proxy)
+    !!proxy # TODO: check if deployment_option or domains actually changed
   end
 end
