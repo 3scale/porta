@@ -43,7 +43,7 @@ If you want to run the application using docker, you can use the docker compose 
 In the first time, you need to setup the database. To configure it, run: (the Master and User password will be `p`)
 
 ```
-docker-compose run -e MASTER_PASSWORD=p -e USER_PASSWORD=p --rm system rake db:create db:setup
+MASTER_PASSWORD=p USER_PASSWORD=p make dev-setup
 ```
 
 and to start the application and all dependencies:

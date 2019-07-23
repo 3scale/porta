@@ -117,13 +117,19 @@ clean-tmp: ## Removes temporary files
 	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
 
 run: ## Starts containers and runs command $(CMD) inside the container in a non-interactive shell
-	@echo
+run: MASTER_PASSWORD ?= "p"
+run: USER_PASSWORD ?= "p"
+run:
 	@echo "======= Run ======="
 	@echo
-	@docker-compose run --rm system -c "$(CMD)"
+	@docker-compose run -e MASTER_PASSWORD=$(MASTER_PASSWORD) -e USER_PASSWORD=$(USER_PASSWORD) --rm system $(CMD)
 
-up: # Starts the application with all dependencies using Docker
-up:
+dev-setup: ## Makes the initial setup for the application ##
+dev-setup: CMD=rake db:setup
+dev-setup: run
+
+dev-run: ## Starts the application with all dependencies using Docker ##
+dev-run:
 	@docker-compose up -d
 
 # bash: ## Opens up shell on the container
