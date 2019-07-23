@@ -40,17 +40,16 @@ All the source and dependencies for this project will be in place, making it pos
 
 If you want to run the application using docker, you can use the docker compose file to start all dependencies.
 
-In the first time, you need to setup the database and install the NPM dependencies. To configure it, run: (the Master and User password will be `p`)
+In the first time, you need to setup the database. To configure it, run: (the Master and User password will be `p`)
 
 ```
 docker-compose run -e MASTER_PASSWORD=p -e USER_PASSWORD=p --rm system rake db:create db:setup
-docker-compose run system npm install
 ```
 
 and to start the application and all dependencies:
 
 ```
-docker-compose up -d
+make up
 ```
 
 ## Manual setup on Mac OS X (10.13)

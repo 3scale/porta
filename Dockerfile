@@ -25,7 +25,8 @@ ENV DISABLE_SPRING="true" \
     ORACLE_HOME=/opt/oracle/instantclient_12_2/ \
     DB=$DB \
     SAFETY_ASSURED=1 \
-    UNICORN_WORKERS=2
+    UNICORN_WORKERS=2 \
+    RAILS_ENV=development
 
 WORKDIR /opt/system/
 
@@ -46,3 +47,4 @@ RUN if [ "${DB}" = "oracle" ]; then unzip /opt/oracle/instantclient-basiclite-li
 USER root
 
 RUN bash -c "bundle install && bundle exec rake tmp:create"
+RUN bash -c "npm install && rake assets:precompile && DATABASE_URL=nulldb://nohost rake webpacker:compile"

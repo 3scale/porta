@@ -35,22 +35,8 @@ services:
       - memcached
       - redis
       - mysql
-    volumes:
-      - ./node_modules:/opt/system/node_modules
     ports:
       - "3000:3000"
-
-  webpacker:
-    <<: *system_environment
-    image: porta_system
-    command: bin/webpack-dev-server
-    container_name: webpacker_compose
-    volumes:
-      - ./node_modules:/opt/system/node_modules
-    depends_on:
-      - system
-    ports:
-      - 3035:3035
 
   sidekiq:
     <<: *system_environment

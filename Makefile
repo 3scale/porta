@@ -103,12 +103,6 @@ test: $(DOCKER_COMPOSE) info
 	@echo
 	$(MAKE) test-run tmp-export --keep-going
 
-
-cache: ## Starts only cache service from docker-compose file
-cache: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-cache: $(DOCKER_COMPOSE)
-	$(DOCKER_COMPOSE) up --remove-orphans -d cache || $(MAKE) clean-cache $@
-
 test-run: ## Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 test-run: $(DOCKER_COMPOSE) clean-tmp cache
@@ -123,11 +117,14 @@ clean-tmp: ## Removes temporary files
 	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
 
 run: ## Starts containers and runs command $(CMD) inside the container in a non-interactive shell
-run:
 	@echo
 	@echo "======= Run ======="
 	@echo
 	@docker-compose run --rm system -c "$(CMD)"
+
+up: # Starts the application with all dependencies using Docker
+up:
+	@docker-compose up -d
 
 # bash: ## Opens up shell on the container
 bash:
