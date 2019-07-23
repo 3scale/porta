@@ -25,4 +25,10 @@ environment.loaders.append('style', {
   ]
 })
 
+environment.loaders.append('null', {
+  test: /\.css$/,
+  include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,
+  use: ['null-loader']
+})
+
 module.exports = environment
