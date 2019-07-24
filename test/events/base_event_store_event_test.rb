@@ -35,6 +35,11 @@ class BaseEventStoreEventTest < ActiveSupport::TestCase
     DummieEvent.create_and_publish!(provider, nil, 1)
   end
 
+  test 'create_and_publish returns the event if is persisted, otherwise nil' do
+    assert_instance_of DummieEvent, DummieEvent.create_and_publish!(provider, 'Alex', 1)
+    assert_nil DummieEvent.create_and_publish!(provider, nil, 1)
+  end
+
   def test_create
     assert_raise NotImplementedError do
       NoCreateMethodEvent.create_and_publish!('Alex')

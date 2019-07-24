@@ -15,7 +15,7 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
     refute OIDC::ProxyChangedEvent.create_and_publish!(proxy), 'service is not oauth'
 
     proxy.service.backend_version = 'oauth'
-    assert_equal :ok, OIDC::ProxyChangedEvent.create_and_publish!(proxy),'event should be created for OAuth service'
+    assert OIDC::ProxyChangedEvent.create_and_publish!(proxy),'event should be created for OAuth service'
   end
 
   def test_create
