@@ -22,6 +22,10 @@ type Props = {
   }
 }
 
+type Validation = {
+  [string]: ?boolean
+}
+
 type State = {
   username: string,
   email: string,
@@ -29,22 +33,11 @@ type State = {
   lastName: string,
   password: string,
   passwordConfirmation: string,
-  validation: {
-    username: ?boolean,
-    email: ?boolean,
-    firstName: boolean,
-    lastName: boolean,
-    password: ?boolean,
-    passwordConfirmation: ?boolean
-  }
+  validation: Validation
 }
 
 type NamesToKeys = {
   [string]: string
-}
-
-type InvalidFields = {
-  [string]: boolean
 }
 
 const namesToStateKeys = {
@@ -81,14 +74,7 @@ class SignupForm extends Component<Props, State> {
     lastName: this.props.user.lastname,
     password: '',
     passwordConfirmation: '',
-    validation: {
-      username: undefined,
-      email: undefined,
-      firstName: true,
-      lastName: true,
-      password: undefined,
-      passwordConfirmation: undefined
-    }
+    validation: {}
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
@@ -104,7 +90,7 @@ class SignupForm extends Component<Props, State> {
     })
   }
 
-  renameValidation = (namesToStateKeys: NamesToKeys, invalidFields: InvalidFields) => Object.keys(invalidFields)
+  renameValidation = (namesToStateKeys: NamesToKeys, invalidFields: Validation) => Object.keys(invalidFields)
     .reduce((obj, item) => {
       obj[namesToStateKeys[item]] = invalidFields[item]
       return obj

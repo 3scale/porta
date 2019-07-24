@@ -39,7 +39,7 @@ it('should set email and validation state to true', () => {
   const wrapper = mount(<RequestPasswordForm {...props}/>)
   wrapper.find('input#email').props().onChange(event)
   expect(wrapper.state().email).toEqual('bob@sponge.com')
-  expect(wrapper.state('validation').email).toEqual(true)
+  expect(wrapper.state().validation.email).toEqual(true)
 })
 
 it('should set validation state to false when email is invalid', () => {
@@ -52,5 +52,5 @@ it('should set validation state to false when email is invalid', () => {
   const wrapper = mount(<RequestPasswordForm {...props}/>)
   wrapper.find('input#email').props().onChange(event)
   expect(wrapper.state().email).toEqual('bobspongecom')
-  expect(wrapper.state('validation').email).toEqual(false)
+  expect(wrapper.state().validation.email).toEqual(false)
 })

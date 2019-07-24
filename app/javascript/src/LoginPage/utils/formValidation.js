@@ -12,7 +12,7 @@ const constraintsTypes = {
   },
   password: {
     presence: true,
-    length: {minimum: 1}
+    length: {minimum: 6}
   },
   password_confirmation: {
     presence: true,
@@ -42,12 +42,14 @@ const constraints = {
 const validateAllFields = (form) => {
   const errors = validate(form, constraints[form.id])
 
-  const fieldsWithErrors = Object.keys(errors).reduce((obj, item) => {
-    obj[item] = false
-    return obj
-  }, {})
-
-  return errors ? fieldsWithErrors : undefined
+  if (!errors) {
+    return undefined
+  } else {
+    return Object.keys(errors).reduce((obj, item) => {
+      obj[item] = false
+      return obj
+    }, {})
+  }
 }
 
 const validateSingleField = (event) => {

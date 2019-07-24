@@ -33,10 +33,7 @@ class Login3scaleForm extends React.Component<Props, State> {
   state = {
     username: '',
     password: '',
-    validation: {
-      username: undefined,
-      password: undefined
-    }
+    validation: {}
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {

@@ -39,7 +39,7 @@ describe('username', () => {
     const wrapper = mount(<Login3scaleForm {...props}/>)
     wrapper.find('input#session_username').props().onChange(event)
     expect(wrapper.state('username')).toEqual('Bob')
-    expect(wrapper.state('validation').username).toEqual(true)
+    expect(wrapper.state().validation.username).toEqual(true)
   })
   it('should set validation username state to false when input value is missing', () => {
     const event = {
@@ -52,7 +52,7 @@ describe('username', () => {
     const wrapper = mount(<Login3scaleForm {...props}/>)
     wrapper.find('input#session_username').props().onChange(event)
     expect(wrapper.state().username).toEqual('')
-    expect(wrapper.state('validation').username).toEqual(false)
+    expect(wrapper.state().validation.username).toEqual(false)
   })
 })
 
@@ -68,8 +68,7 @@ describe('password', () => {
     const wrapper = mount(<Login3scaleForm {...props}/>)
     wrapper.find('input#session_password').props().onChange(event)
     expect(wrapper.state().password).toEqual('gary1234')
-    expect(wrapper.state('validation').password).toEqual(true)
-
+    expect(wrapper.state().validation.password).toEqual(true)
   })
 
   it('should set validation.password state to false when input value is missing', () => {
@@ -83,6 +82,6 @@ describe('password', () => {
     const wrapper = mount(<Login3scaleForm {...props}/>)
     wrapper.find('input#session_password').props().onChange(event)
     expect(wrapper.state().password).toEqual('')
-    expect(wrapper.state('validation').password).toEqual(false)
+    expect(wrapper.state().validation.password).toEqual(false)
   })
 })
