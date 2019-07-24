@@ -75,8 +75,8 @@ services:
     depends_on:
       - redis
     environment:
-      - CONFIG_REDIS_PROXY=redis:6379/2
-      - CONFIG_QUEUES_MASTER_NAME=redis:6379/2
+      - CONFIG_REDIS_PROXY=redis:6379/3
+      - CONFIG_QUEUES_MASTER_NAME=redis:6379/3
       - CONFIG_WORKERS_LOG_FILE=/dev/stdout
       - CONFIG_INTERNAL_API_USER=system_app
       - CONFIG_INTERNAL_API_PASSWORD=password
