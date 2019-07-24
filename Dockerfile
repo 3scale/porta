@@ -32,6 +32,7 @@ WORKDIR /opt/system/
 
 ADD . ./
 ADD config/examples/*.yml config/
+ADD config/docker/webpacker.yml config/
 # Needed for Sphinx ODBC
 ADD config/oracle/odbc*.ini /etc/
 
