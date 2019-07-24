@@ -41,8 +41,7 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
     provider_id = provider.id
     provider.delete
 
-    event = Services::ServiceDeletedEvent.create(service.reload)
-    Rails.application.config.event_store.publish_event(event)
+    event = Services::ServiceDeletedEvent.create_and_publish!(service.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal provider_id, event_stored.metadata.fetch(:provider_id)

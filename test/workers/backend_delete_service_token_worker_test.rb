@@ -10,8 +10,7 @@ class BackendDeleteServiceTokenWorkerTest < ActiveSupport::TestCase
 
   test 'destroy service token' do
     service_token = FactoryBot.create(:service_token)
-    event = ServiceTokenDeletedEvent.create(service_token)
-    Rails.application.config.event_store.publish_event(event)
+    event = ServiceTokenDeletedEvent.create_and_publish!(service_token)
 
     Sidekiq::Testing.inline! do
       ThreeScale::Core::ServiceToken.expects(:delete).with([{ service_token: service_token.value, service_id: service_token.service_id }])

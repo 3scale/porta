@@ -15,8 +15,7 @@ class Users::UserDeletedEventTest < ActiveSupport::TestCase
     developer_account = FactoryBot.create(:simple_buyer, provider_account: tenant_account)
     developer_user = FactoryBot.create(:user, account: developer_account)
 
-    event = Users::UserDeletedEvent.create(developer_user.reload)
-    Rails.application.config.event_store.publish_event(event)
+    event = Users::UserDeletedEvent.create_and_publish!(developer_user.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal tenant_account.id, event_stored.metadata[:provider_id]
@@ -29,8 +28,7 @@ class Users::UserDeletedEventTest < ActiveSupport::TestCase
 
     tenant_account.delete
 
-    event = Users::UserDeletedEvent.create(developer_user.reload)
-    Rails.application.config.event_store.publish_event(event)
+    event = Users::UserDeletedEvent.create_and_publish!(developer_user.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal tenant_id, event_stored.metadata[:provider_id]
@@ -39,8 +37,7 @@ class Users::UserDeletedEventTest < ActiveSupport::TestCase
   test 'it is saved with the right data when user is a tenant and its account is still persisted' do
     tenant_user = FactoryBot.create(:user, account: tenant_account)
 
-    event = Users::UserDeletedEvent.create(tenant_user.reload)
-    Rails.application.config.event_store.publish_event(event)
+    event = Users::UserDeletedEvent.create_and_publish!(tenant_user.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal tenant_account.id, event_stored.metadata[:provider_id]
@@ -51,8 +48,7 @@ class Users::UserDeletedEventTest < ActiveSupport::TestCase
 
     tenant_account.delete
 
-    event = Users::UserDeletedEvent.create(tenant_user.reload)
-    Rails.application.config.event_store.publish_event(event)
+    event = Users::UserDeletedEvent.create_and_publish!(tenant_user.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal tenant_account.id, event_stored.metadata[:provider_id]

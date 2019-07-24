@@ -90,9 +90,7 @@ class SegmentDeleteUserWorkerTest < ActiveSupport::TestCase
   def user_deleted_event
     @user_deleted_event ||= begin
       user = FactoryBot.create(:admin, account: provider, tenant_id: provider.id)
-      event = Users::UserDeletedEvent.create(user)
-      Rails.application.config.event_store.publish_event(event)
-      event
+      Users::UserDeletedEvent.create_and_publish!(user)
     end
   end
 

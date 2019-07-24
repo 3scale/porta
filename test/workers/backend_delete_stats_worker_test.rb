@@ -10,8 +10,7 @@ class BackendDeleteStatsWorkerTest < ActiveSupport::TestCase
     @metrics = FactoryBot.create_list(:metric, 3)
     metrics.each { |metric| DeletedObject.create(owner: service, object: metric) }
 
-    @event = Services::ServiceDeletedEvent.create(service)
-    Rails.application.config.event_store.publish_event(event)
+    @event = Services::ServiceDeletedEvent.create_and_publish!(service)
   end
 
   attr_reader :service, :applications, :metrics, :event
