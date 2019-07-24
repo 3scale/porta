@@ -48,9 +48,6 @@
           = form.inputs "Service Plan Changing", class: "use-service-plans #{hide_class_unless_service_plans_visible(@settings)}" do
             = render 'shared/plan_change_settings', form: form, permission: :change_service_plan_permission, label: ''
 
-        - if can? :see, :end_users
-          = form.input :end_user_plans_ui_visible
-
     = form.buttons do
       = form.commit_button
 
