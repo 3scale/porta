@@ -40,7 +40,7 @@ const ServiceDiscoveryListItems = (props: Props) => {
     <React.Fragment>
       <li id="service_name_input" className="string required">
         <Label
-          htmlFor='namespace'
+          htmlFor='service_namespace'
           label='Namespace'
         />
         <Select
