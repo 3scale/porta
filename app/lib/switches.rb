@@ -299,7 +299,7 @@ module Switches
     elsif switch == :require_cc_on_signup # visible only for existing providers as of 2016-07-05
       account.provider_can_use?(switch)
     else
-      true
+      switch != :end_users
     end
   end
 end
