@@ -16,10 +16,8 @@ class ZyncWorkerTest < ActiveSupport::TestCase
   test 'perform does not crash when the event exists but the provider is destroyed' do
     worker = ZyncWorker.new
     application = FactoryBot.create(:simple_cinstance)
-    app_event = Applications::ApplicationDeletedEvent.create(application)
-    Rails.application.config.event_store.publish_event(app_event)
-    zync_event = ZyncEvent.create(app_event, application)
-    Rails.application.config.event_store.publish_event(zync_event)
+    app_event = Applications::ApplicationDeletedEvent.create_and_publish!(application)
+    zync_event = ZyncEvent.create_and_publish!(app_event, application)
     worker.stubs(valid?: true)
     worker.stubs(endpoint: 'http://example.com')
     stub_request(:put, "http://example.com/notification").to_return(status: 200)

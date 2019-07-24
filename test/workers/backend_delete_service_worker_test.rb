@@ -5,8 +5,7 @@ require 'test_helper'
 class BackendDeleteServiceWorkerTest < ActiveSupport::TestCase
   test 'perform' do
     service = FactoryBot.create(:simple_service)
-    event = Services::ServiceDeletedEvent.create(service)
-    Rails.application.config.event_store.publish_event(event)
+    event = Services::ServiceDeletedEvent.create_and_publish!(service)
 
     BackendDeleteEndUsersWorker.expects(:perform_async).with { |param| param == event.event_id }
     BackendDeleteStatsWorker.expects(:perform_async).with { |param| param == event.event_id }
