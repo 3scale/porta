@@ -31,9 +31,7 @@ type State = {
 class RequestPasswordForm extends React.Component<Props, State> {
   state = {
     email: '',
-    validation: {
-      email: undefined
-    }
+    validation: {}
   }
 
   handleTextInputEmail = (email: string, event: SyntheticEvent<HTMLInputElement>) => {
