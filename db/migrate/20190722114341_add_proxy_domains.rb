@@ -12,10 +12,8 @@ class AddProxyDomains < ActiveRecord::Migration
       dir.up do
         Proxy.reset_column_information
 
-        Proxy.select(:id, :sandbox_endpoint, :endpoint).find_in_batches(batch_size: 1000) do |batch|
-          batch.each do |proxy|
-            proxy.update_columns proxy.update_domains
-          end
+        Proxy.select(:id, :sandbox_endpoint, :endpoint).find_each do |proxy|
+          proxy.update_columns proxy.update_domains
         end
       end
     end
