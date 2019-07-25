@@ -13,13 +13,6 @@ GIT
       ci_reporter (~> 2.0)
 
 GIT
-  remote: https://github.com/3scale/fakeweb.git
-  revision: ad11ea7b290c85b572e0b30e8c6201460d8bf2d8
-  ref: ad11ea7b290c85b572e0b30e8c6201460d8bf2d8
-  specs:
-    fakeweb (1.3.0.3scale.pre.2)
-
-GIT
   remote: https://github.com/3scale/font_assets.git
   revision: da97b8601528ee189795cc94b953ec9a30f47e83
   ref: da97b8601528ee189795cc94b953ec9a30f47e83
@@ -866,7 +859,6 @@ DEPENDENCIES
   equivalent-xml
   factory_bot_rails (~> 4.11.1)
   fakefs (~> 0.18.0)
-  fakeweb!
   faraday (~> 0.12.0)
   faraday_middleware (~> 0.13.1)
   font-awesome-rails (~> 4.7.0.5)

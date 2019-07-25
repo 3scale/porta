@@ -30,8 +30,6 @@ else
   MiniTest::Reporters.use!([Minitest::Reporters::SpecReporter.new])
 end
 
-require 'fakeweb'
-
 require 'webmock/minitest'
 WebMock.enable!
 

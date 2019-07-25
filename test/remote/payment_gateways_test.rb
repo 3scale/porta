@@ -1,5 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'fakeweb'
+require 'test_helper'
 
 class PaymentGatewaysTest < ActiveSupport::TestCase
   def setup
@@ -7,7 +6,6 @@ class PaymentGatewaysTest < ActiveSupport::TestCase
     @provider_account.billing_strategy = FactoryBot.create(:postpaid_billing)
 
     @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
-    FakeWeb.allow_net_connect = true
 
     @billing_address= {
           :name     => 'John Doe',
@@ -32,10 +30,6 @@ class PaymentGatewaysTest < ActiveSupport::TestCase
 
     @cc = ActiveMerchant::Billing::CreditCard.new(@credit_card)
 
-  end
-
-  def teardown
-    FakeWeb.allow_net_connect = false
   end
 
   # test 'ogone gateway' do
