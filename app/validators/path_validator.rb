@@ -10,7 +10,7 @@ class PathValidator < ActiveModel::EachValidator
   def path?(value)
     uri = URI.parse(value)
     uri.path == value
-  rescue
+  rescue URI::InvalidURIError
     false
   end
 end
