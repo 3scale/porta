@@ -5,12 +5,27 @@ require 'test_helper'
 class SeedsTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
 
+  ENV_VARIABLES = {
+    'MASTER_NAME' => 'master name',
+    'MASTER_DOMAIN' => 'master-domain',
+    'MASTER_ACCESS_CODE' => 'my_access_code',
+    'MASTER_USER' => 'my-username',
+    'MASTER_PASSWORD' => 'my-password',
+    'MASTER_SERVICE' => 'the master service',
+    'MASTER_PLAN' => 'the master plan',
+
+    'PROVIDER_NAME' => 'tenant account name',
+    'TENANT_NAME' => 'provider-subdomain',
+    'SAMPLE_DATA' => '0',
+    'USER_LOGIN' => 'adminuser',
+    'USER_EMAIL' => 'myemail@example.com',
+    'USER_PASSWORD' => 'mypass',
+    'PROVIDER_PLAN' => 'pro-plan',
+    'CMS_TEMPLATES' => '1'
+  }
+
   def teardown
-    %w[
-      MASTER_NAME MASTER_DOMAIN MASTER_ACCESS_CODE MASTER_USER MASTER_PASSWORD MASTER_SERVICE MASTER_PLAN
-      PROVIDER_NAME TENANT_NAME SAMPLE_DATA USER_LOGIN USER_EMAIL USER_PASSWORD PROVIDER_PLAN
-      CMS_TEMPLATES
-    ].each { |env_name| ENV[env_name] = nil }
+    ENV_VARIABLES.each { |env_name, _env_value| ENV[env_name] = nil }
   end
 
   # TODO: Test the ENVs: APICAST_ACCESS_TOKEN MASTER_ACCESS_TOKEN ADMIN_ACCESS_TOKEN
@@ -123,22 +138,7 @@ class SeedsTest < ActiveSupport::TestCase
   end
 
   test 'with ENV as params' do
-    ENV['MASTER_NAME'] = 'master name'
-    ENV['MASTER_DOMAIN'] = 'master-domain'
-    ENV['MASTER_ACCESS_CODE'] = 'my_access_code'
-    ENV['MASTER_USER'] = 'my-username'
-    ENV['MASTER_PASSWORD'] = 'my-password'
-    ENV['MASTER_SERVICE'] = 'the master service'
-    ENV['MASTER_PLAN'] = 'the master plan'
-
-    ENV['PROVIDER_NAME'] = 'tenant account name'
-    ENV['TENANT_NAME'] = 'provider-subdomain'
-    ENV['SAMPLE_DATA'] = '0'
-    ENV['USER_LOGIN'] = 'adminuser'
-    ENV['USER_EMAIL'] = 'myemail@example.com'
-    ENV['USER_PASSWORD'] = 'mypass'
-    ENV['PROVIDER_PLAN'] = 'pro-plan'
-    ENV['CMS_TEMPLATES'] = '1'
+    ENV_VARIABLES.each { |env_name, env_value| ENV[env_name] = env_value }
 
 
     SignupWorker.expects(:enqueue).with(&:tenant?)
@@ -170,8 +170,7 @@ class SeedsTest < ActiveSupport::TestCase
   end
 
   test 'done in a transaction: if it fails somewhere, it rollbacks' do
-    ENV['CMS_TEMPLATES'] = '1'
-    SimpleLayout.any_instance.expects(:import!).raises(StandardError)
+    Account.any_instance.expects(:force_upgrade_to_provider_plan!).raises(StandardError) # the method and the type of error are arbitrary, it could be any :)
 
     assert_raises(StandardError) { Rails.application.load_seed }
 
