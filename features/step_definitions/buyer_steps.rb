@@ -93,7 +93,7 @@ Given /^an approved buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |acco
   step %(a pending buyer "#{account_name}" signed up to provider "#{provider_account_name}")
 
   @buyer = Account.find_by_org_name!(account_name)
-  @buyer.approve!
+  @buyer.approve! unless @buyer.approved?
 end
 
 Given /^a rejected buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
