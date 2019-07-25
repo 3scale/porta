@@ -23,9 +23,7 @@ class ServiceTokenDeletedEventTest < ActiveSupport::TestCase
     assert provider_id = service_token.service.account.id
     service_token.service.delete
 
-    event = ServiceTokenDeletedEvent.create(service_token.reload)
-
-    Rails.application.config.event_store.publish_event(event)
+    event = ServiceTokenDeletedEvent.create_and_publish!(service_token.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal provider_id, event_stored.metadata.fetch(:provider_id)

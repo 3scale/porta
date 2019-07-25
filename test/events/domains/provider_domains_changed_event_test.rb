@@ -5,8 +5,7 @@ require 'test_helper'
 class Domains::ProviderDomainsChangedEventTest < ActiveSupport::TestCase
   test 'can be persisted' do
     provider = FactoryBot.create(:simple_provider)
-    event = Domains::ProviderDomainsChangedEvent.create(provider)
-    Rails.application.config.event_store.publish_event(event)
+    event = Domains::ProviderDomainsChangedEvent.create_and_publish!(provider)
 
     assert EventStore::Repository.find_event(event.event_id)
   end

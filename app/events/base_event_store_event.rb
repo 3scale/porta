@@ -23,7 +23,7 @@ class BaseEventStoreEvent < RailsEventStore::Event
 
       event = create(*args)
 
-      PUBLISHER.call(event)
+      PUBLISHER.call(event) && event
     end
 
     protected
