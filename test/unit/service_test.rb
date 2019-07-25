@@ -650,6 +650,16 @@ class ServiceTest < ActiveSupport::TestCase
       refute_includes gateways, 'service_mesh_istio'
     end
 
+    def test_gateways_with_apicast_custom_url
+      ThreeScale.config.stubs(apicast_custom_url: true)
+      gateways = Service::DeploymentOption.gateways
+
+      assert_includes gateways, 'self_managed'
+      assert_includes gateways, 'hosted'
+      refute_includes gateways, 'plugin_ruby'
+      refute_includes gateways, 'service_mesh_istio'
+    end
+
     def test_plugins
       plugins = Service::DeploymentOption.plugins
 
