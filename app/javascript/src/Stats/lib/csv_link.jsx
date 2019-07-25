@@ -1,7 +1,6 @@
 /** @jsx StatsUI.dom */
 import 'core-js/fn/symbol/iterator' // make Symbol work on IE 11
-import moment from 'moment'
-import 'moment-timezone'
+import moment from 'moment-timezone'
 
 import {StatsUI} from 'Stats/lib/ui'
 
@@ -51,7 +50,7 @@ export class StatsCSVLink extends StatsUI {
   }
 
   _parseTimeColumn (columns) {
-    columns[0] = columns[0].map((value, key) => (key > 0) ? moment(value).utc().tz(this.data._period.timezone).format(TIMESTAMP_FORMAT) : 'datetime')
+    columns[0] = columns[0].map((value, key) => (key > 0) ? moment.tz(value, this.data._period.timezone).format(TIMESTAMP_FORMAT) : 'datetime')
     return columns
   }
 

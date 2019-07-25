@@ -64,7 +64,7 @@ export class StatsSeries {
     const granularity = period.granularity
     const timeInterval = `${period.since}/${period.until}`
     const range = Array.from(moment.range(timeInterval).by(granularity))
-    return range.map(m => m.tz(period.timezone).format(CHART_TIMESTAMP_FORMAT))
+    return range.map(m => moment.tz(m, period.timezone).format(CHART_TIMESTAMP_FORMAT))
   }
 
   _sortResponses (responses) {

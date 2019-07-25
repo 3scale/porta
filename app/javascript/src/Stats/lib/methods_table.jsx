@@ -1,7 +1,6 @@
 /** @jsx StatsUI.dom */
 import numeral from 'numeral'
-import moment from 'moment'
-import 'moment-timezone'
+import moment from 'moment-timezone'
 
 import {StatsUI} from 'Stats/lib/ui'
 
@@ -36,10 +35,10 @@ export class StatsMethodsTable extends StatsUI {
                     {methodDetails.name}
                   </td>
                   <td className="StatsMethodsTable-since">
-                    {moment(methodDetails.period.since).utc().tz(methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
+                    {moment.tz(methodDetails.period.since, methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
                   </td>
                   <td className="StatsMethodsTable-until">
-                    {moment(methodDetails.period.until).utc().tz(methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
+                    {moment.tz(methodDetails.period.until, methodDetails.period.timezone).format(TIMESTAMP_FORMAT)}
                   </td>
                   <td className="StatsMethodsTable-total u-amount u-tabular-number">
                     {numeral(methodDetails.total).format('0,0').toUpperCase()}
