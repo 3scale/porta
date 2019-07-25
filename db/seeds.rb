@@ -27,7 +27,7 @@ ActiveRecord::Base.transaction do
 
   master.update!(provider_account: master)
 
-  FieldsDefinition.create_defaults(master)
+  FieldsDefinition.create_defaults!(master)
 
   if Rails.env.development?
     FieldsDefinition.create!([

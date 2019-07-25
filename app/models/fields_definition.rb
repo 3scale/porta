@@ -52,14 +52,13 @@ class FieldsDefinition < ApplicationRecord
 
   alias_attribute :position, :pos
 
-  # this is tested in unit/account_test
-  def self.create_defaults(account)
+  # This smells of :reek:NestedIterators: FieldsDefinition#self.create_defaults! contains iterators nested 2 deep
+  def self.create_defaults!(account)
     targets.each do |target|
       klass = target.constantize
-      klass.required_fields.each do |f|
-        label = DEFAULT_LABELS[f] || f.humanize
-        account.fields_definitions.create!({ :target => target, :name => f,
-                                             :label => label, :required => true })
+      klass.required_fields.each do |field|
+        label = DEFAULT_LABELS[field] || field.humanize
+        account.fields_definitions.create!({target: target, name: field, label: label, required: true})
       end
     end
   end

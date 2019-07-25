@@ -9,7 +9,7 @@ resource "Account" do
   let(:payment_detail) { FactoryBot.create(:payment_detail, account: account) }
 
   let(:resource) do
-    FieldsDefinition.create_defaults(master)
+    FieldsDefinition.create_defaults!(master)
     provider.reload
     account
   end

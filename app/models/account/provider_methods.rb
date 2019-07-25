@@ -336,7 +336,7 @@ module Account::ProviderMethods
   def create_default_fields_definitions
     # we don't do this for master to avoid slow things more
     # reason of the unless : Account.master.provider? => true
-    FieldsDefinition.create_defaults(self) unless master?
+    FieldsDefinition.create_defaults!(self) unless master?
   end
 
   private
