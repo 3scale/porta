@@ -1,14 +1,11 @@
 class ProcessDomainEventsWorker
   include Sidekiq::Worker
 
-  class_attribute :publisher
-  self.publisher = ->(*args) { Rails.application.config.event_store.publish_event(*args) }
-
   def perform(event)
     events = find_providers(event).map { |provider| Domains::ProviderDomainsChangedEvent.create(provider, event) }
     events += find_proxies(event).map { |proxy| Domains::ProxyDomainsChangedEvent.create(proxy, event) }
 
-    events.each(&publisher.method(:call))
+    events.each(&:publish)
   end
 
 
