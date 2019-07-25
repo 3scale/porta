@@ -12,4 +12,12 @@ class Domains::ProxyDomainsChangedEventTest < ActiveSupport::TestCase
 
     assert EventStore::Repository.find_event(event.event_id)
   end
+
+  test 'can be persisted' do
+    proxy = FactoryBot.create(:simple_proxy)
+    event = Domains::ProxyDomainsChangedEvent.create(proxy)
+    Rails.application.config.event_store.publish_event(event)
+
+    assert EventStore::Repository.find_event(event.event_id)
+  end
 end
