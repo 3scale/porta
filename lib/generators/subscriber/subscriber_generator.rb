@@ -12,7 +12,7 @@ class SubscriberGenerator < Rails::Generators::NamedBase
   end
 
   def enable_subscribe
-    insert_into_file 'lib/event_store/repository.rb',
+    insert_into_file 'app/lib/event_store/repository.rb',
                      "  @client.subscribe(#{class_name}Subscriber.new, [#{class_name}Event])\n  ",
                      after: /@client.subscribe.+\n\s+(?=end)/
   end
