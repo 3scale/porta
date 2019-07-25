@@ -10,6 +10,10 @@ class BaseEventStoreEvent < RailsEventStore::Event
     end
   end
 
+  def publish
+    PUBLISHER.call(self)
+  end
+
   include Categorizable
 
   class << self
