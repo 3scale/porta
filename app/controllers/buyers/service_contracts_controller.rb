@@ -139,6 +139,6 @@ private
   end
 
   def service_plan(plan_id = params[:service_contract][:plan_id])
-    @service_plan ||= service.service_plans.find(plan_id)
+    @service_plan ||= service.service_plans.find_by(id: plan_id)
   end
 end
