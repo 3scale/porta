@@ -32,7 +32,6 @@ WORKDIR /opt/system/
 
 ADD . ./
 ADD config/examples/*.yml config/
-ADD config/docker/webpacker.yml config/
 # Needed for Sphinx ODBC
 ADD config/oracle/odbc*.ini /etc/
 
@@ -46,6 +45,9 @@ RUN if [ "${DB}" = "oracle" ]; then unzip /opt/oracle/instantclient-basiclite-li
  && rm -rf /opt/oracle/*.zip; fi
 
 USER root
+
+# Needed to disable webpack compiling
+RUN sed -i 's/compile: true/compile: false/' config/webpacker.yml
 
 RUN bash -c "bundle install && bundle exec rake tmp:create"
 RUN bash -c "npm install && rake assets:precompile && DATABASE_URL=nulldb://nohost rake webpacker:compile"
