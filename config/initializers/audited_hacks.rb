@@ -35,16 +35,12 @@ module AuditHacks
       logger.tagged('audit', kind, action) { logger.info log_trail }
     end
 
-    FILTERED = '[FILTERED]'.to_sym
-
     def obfuscated
-      sentitive_attributes = kind.constantize.sensitive_attributes.map(&:to_s) & audited_changes.keys
-      filtered_hash = sentitive_attributes.map { |attr_name| [attr_name, FILTERED] }.to_h
-      copy = dup
-      copy.send(:write_attribute, :id, id)
-      copy.send(:write_attribute, :created_at, created_at)
-      copy.audited_changes.merge! filtered_hash
-      copy
+      dup.tap do |copy|
+        copy.send(:write_attribute, :id, id)
+        copy.send(:write_attribute, :created_at, created_at)
+        copy.audited_changes = ThreeScale::FilterArguments.new(audited_changes).filter
+      end
     end
 
     protected
@@ -103,14 +99,11 @@ module AuditedHacks
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :sensitive_attributes
     extend ClassMethods
   end
 
   module ClassMethods
     def audited(options = {})
-      self.sensitive_attributes = options.delete(:sensitive_attributes) || []
-
       super
 
       self.disable_auditing if Rails.env.test?
