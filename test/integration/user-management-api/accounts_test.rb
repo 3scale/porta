@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
   include TestHelpers::ApiPagination
-  include TestHelpers::FakeWeb
 
   def setup
     @provider = FactoryBot.create :provider_account, domain: 'provider.example.com'
@@ -504,8 +503,8 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'stats aggregation in master' do
-    set_backend_host 'localhost:3001'
-    fake_transaction_post
+    stub_request(:post, 'http://example.org/transactions.xml')
+      .to_return(status: 202, body: '')
     Account.master.services.first.metrics.create! friendly_name: "Account Management API", system_name: "account", unit: "hit"
 
     Admin::Api::AccountsController.any_instance.expects(:report_traffic)
