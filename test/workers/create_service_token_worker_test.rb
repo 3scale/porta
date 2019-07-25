@@ -43,8 +43,7 @@ class CreateServiceTokenWorkerTest < ActiveSupport::TestCase
     def setup
       @service = FactoryBot.create(:simple_service)
       @user = FactoryBot.create(:simple_user)
-      @event = Services::ServiceCreatedEvent.create(service, user)
-      Rails.application.config.event_store.publish_event(event)
+      @event = Services::ServiceCreatedEvent.create_and_publish!(service, user)
     end
 
     attr_reader :service, :user, :event

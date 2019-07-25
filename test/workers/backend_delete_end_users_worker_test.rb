@@ -5,8 +5,7 @@ require 'test_helper'
 class BackendDeleteEndUsersWorkerTest < ActiveSupport::TestCase
   def setup
     @service = FactoryBot.create(:simple_service)
-    @event = Services::ServiceDeletedEvent.create(service)
-    Rails.application.config.event_store.publish_event(event)
+    @event = Services::ServiceDeletedEvent.create_and_publish!(service)
   end
 
   attr_reader :service, :event

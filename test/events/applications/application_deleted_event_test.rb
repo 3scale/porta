@@ -16,8 +16,7 @@ class Applications::ApplicationDeletedEventTest < ActiveSupport::TestCase
     application.service.delete
     application.provider_account.delete
 
-    event = Applications::ApplicationDeletedEvent.create(application.reload)
-    Rails.application.config.event_store.publish_event(event)
+    event = Applications::ApplicationDeletedEvent.create_and_publish!(application.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal provider_id, event_stored.metadata[:provider_id]
