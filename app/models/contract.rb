@@ -4,7 +4,7 @@ class Contract < ApplicationRecord
   # https://github.com/collectiveidea/audited/blob/f03c5b5d1717f2ebec64032d269316dc74476056/lib/audited/auditor.rb#L305-L311
   self.table_name = 'cinstances'
 
-  audited allow_mass_assignment: true, sensitive_attributes: %i[user_key]
+  audited allow_mass_assignment: true
   include ::ThreeScale::MethodTracing
 
   # FIXME: This class should be an abstract class I think, but doing so makes plenty of tests fail
