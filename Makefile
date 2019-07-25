@@ -169,7 +169,7 @@ oracle-db-setup: oracle-database
 	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" bundle exec rake db:drop db:create db:setup
 
 schema: ## Runs db schema migrations. Run this when you have changes to your database schema that you have added as new migrations.
-schema: POSTGRES_DATABASE_URL ?= "postgresql://postgres:@localhost:5433/3scale_system_development"
+schema: POSTGRES_DATABASE_URL ?= "postgresql://postgres:@localhost:5432/3scale_system_development"
 schema:
 	bundle exec rake db:migrate db:schema:dump
 	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" bundle exec rake db:migrate db:schema:dump
