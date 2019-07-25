@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190627103617) do
+ActiveRecord::Schema.define(version: 20190722114341) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -1084,9 +1084,12 @@ ActiveRecord::Schema.define(version: 20190627103617) do
     t.string   "error_headers_limits_exceeded",                             default: "text/plain; charset=us-ascii"
     t.integer  "error_status_limits_exceeded",               precision: 38, default: 429
     t.string   "error_limits_exceeded",                                     default: "Usage limit exceeded"
+    t.string   "staging_domain"
+    t.string   "production_domain"
   end
 
   add_index "proxies", ["service_id"], name: "index_proxies_on_service_id"
+  add_index "proxies", ["staging_domain", "production_domain"], name: "index_proxies_on_staging_domain_and_production_domain"
 
   create_table "proxy_configs", force: :cascade do |t|
     t.integer  "proxy_id",                 precision: 38,             null: false
