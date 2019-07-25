@@ -661,8 +661,8 @@ class Proxy < ApplicationRecord
         uri = URI.parse(attribute_value)
         value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, uri.registry, uri.path, uri.opaque, uri.query, uri.fragment).to_s
         @model[attribute] = value
-      rescue URI::InvalidURIError => e
-        @model.errors.add(attribute, "Invalid domain")
+      rescue URI::InvalidURIError
+        @model.errors.add(attribute, 'Invalid domain')
       end
     end
   end
