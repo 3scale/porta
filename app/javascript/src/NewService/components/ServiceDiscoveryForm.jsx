@@ -1,7 +1,6 @@
 // @flow
 
-import React from 'react'
-import {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 
 import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
@@ -15,8 +14,9 @@ type Props = {
 }
 
 const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
-  const [projects, setProjects] = useState([])
-  const [fetchErrorMessage, setFetchErrorMessage] = useState('')
+  // Don't use named imports so that useState can be mocked in specs
+  const [projects, setProjects] = React.useState([])
+  const [fetchErrorMessage, setFetchErrorMessage] = React.useState('')
 
   const fetchProjects = async () => {
     setLoadingProjects(true)

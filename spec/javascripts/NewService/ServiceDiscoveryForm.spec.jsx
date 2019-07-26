@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import Enzyme, {shallow, mount} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
@@ -6,10 +8,15 @@ import {ServiceDiscoveryForm} from 'NewService'
 import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 
+import * as utils from 'utilities/utils'
+jest.spyOn(utils, 'CSRFToken')
+  .mockImplementation(() => '')
+
 Enzyme.configure({adapter: new Adapter()})
 
 const props = {
-  formActionPath: 'action-path'
+  formActionPath: 'action-path',
+  setLoadingProjects: () => {}
 }
 
 it('should render itself', () => {
@@ -17,11 +24,6 @@ it('should render itself', () => {
   const form = wrapper.find('#service_source')
   expect(form.exists()).toEqual(true)
   expect(form.props().formActionPath).toEqual('action-path')
-})
-
-it('should not render `ErrorMessage` child by default', () => {
-  const wrapper = shallow(<ServiceDiscoveryForm {...props}/>)
-  expect(wrapper.find(ErrorMessage).exists()).toEqual(false)
 })
 
 it('should render `FormWrapper` child', () => {
@@ -32,4 +34,41 @@ it('should render `FormWrapper` child', () => {
 it('should render `ServiceDiscoveryListItems` child', () => {
   const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
   expect(wrapper.find(ServiceDiscoveryListItems).exists()).toEqual(true)
+})
+
+describe('fetchProjects', () => {
+  const fetch = jest.spyOn(utils, 'fetchData')
+
+  afterEach(() => {
+    fetch.mockClear()
+  })
+
+  it('should render an error when fetching projects is unsuccessful', done => {
+    const msg = 'Something went wrong'
+    fetch.mockImplementation(url => { throw new Error(msg) })
+
+    const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
+
+    expect(wrapper.find(ErrorMessage).exists()).toBe(true)
+    expect(wrapper.find(ErrorMessage).text()).toContain(msg)
+
+    setImmediate(done)
+  })
+
+  it('should fetch projects when first redendered', done => {
+    const projects = [{ name: 'project_00' }]
+    fetch.mockImplementation(url => projects)
+
+    const setState = jest.fn(val => {
+      expect(val).toEqual(projects)
+      done()
+    })
+    const useState = jest.spyOn(React, 'useState')
+      .mockImplementationOnce(init => [init, setState])
+
+    mount(<ServiceDiscoveryForm {...props}/>)
+
+    expect(useState).toHaveBeenCalled()
+    expect(fetch).toHaveBeenCalled()
+  })
 })
