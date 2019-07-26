@@ -7,18 +7,18 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 type Item = {
   id: string,
   title: string,
-  path: ?string,
-  target: ?string
+  path?: string,
+  target?: string
 }
 
 type Section = Item & {
-  items: ?Item[]
+  items?: Item[]
 }
 
 type Props = {
-  sections: Section[],
-  activeSection: ?string,
-  activeItem: ?string
+  sections: $ReadOnlyArray<Section>,
+  activeSection?: string,
+  activeItem?: string
 }
 
 const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
