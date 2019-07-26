@@ -42,10 +42,10 @@ It's also possible to run the application by using only Docker. Firstly, setup t
 MASTER_PASSWORD=<master_password> USER_PASSWORD=<user_password> make dev-setup
 ```
 
-Then install all depenendencies and run the application with `up`:
+Then install all depenendencies and run the application with `dev-start`:
 
 ```
-make up
+make dev-start
 ```
 
 ## Manual setup on Mac OS X (10.13)
