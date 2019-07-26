@@ -220,7 +220,7 @@ ActiveRecord::Schema.define(version: 20190722114341) do
   add_index "authentication_providers", ["account_id"], name: "index_authentication_providers_on_account_id", using: :btree
 
   create_table "backend_api_configs", force: :cascade do |t|
-    t.string   "path",           limit: 255, default: "", null: false
+    t.string   "path",           limit: 255, default: ""
     t.integer  "service_id",     limit: 8
     t.integer  "backend_api_id", limit: 8
     t.datetime "created_at",                              null: false
