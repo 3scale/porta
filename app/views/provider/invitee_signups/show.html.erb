@@ -6,7 +6,8 @@
       :email => @user.email || "",
       :username => @user.username || "",
       :firstname => @user.first_name || "",
-      :lastname => @user.last_name || ""
+      :lastname => @user.last_name || "",
+      :errors => @user.errors || {}
     }
 }.to_json) %>
 
