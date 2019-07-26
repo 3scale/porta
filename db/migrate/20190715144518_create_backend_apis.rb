@@ -18,7 +18,7 @@ class CreateBackendApis < ActiveRecord::Migration
     end
 
     create_table :backend_api_configs do |table|
-      table.string :path, null: false, default: ''
+      table.string :path, default: ''
 
       table.belongs_to :service, limit: 8
       table.belongs_to :backend_api, limit: 8

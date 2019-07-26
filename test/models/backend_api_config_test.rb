@@ -19,10 +19,9 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     assert_equal 'hello/my/name/is/john', @config.path
   end
 
-  def test_path
-    @config.save!
-    @config.update_columns(path: 'https://example.com/hello')
-    @config.reload
+  def test_path_field_must_be_a_path
+    @config.path = 'https://example.com/hello'
     refute @config.valid?
+    assert_match /must be a path/, @config.errors[:path].join('')
   end
 end
