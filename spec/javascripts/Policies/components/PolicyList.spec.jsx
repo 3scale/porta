@@ -38,6 +38,5 @@ it('should navigate to the edit link', () => {
   const url = '/p/admin/registry/policies/answer-42/edit'
   navigateToEditPolicy(url, mockedWindow)
   expect(mockedWindow.location.href).toBe(url)
-  console.log(JSON.stringify(mockedWindow.history))
   expect(mockedWindow.history.pushState.mock.calls[0][2]).toBe(url)
 })
