@@ -169,7 +169,7 @@ gem 'html-pipeline', github: 'ceritium/html-pipeline', branch: 'master'
 gem 'github-markdown'
 
 # templating
-gem 'slim-rails', '~> 3.0'
+gem 'slim-rails', '~> 3.2'
 gem 'ruby-openid'
 
 gem 'draper', '~> 2.0'
