@@ -12,9 +12,7 @@ git clone --recurse-submodules https://github.com/3scale/porta.git
 
 ## Quick Setup with Docker
 
-We provide a dockerized environment that you can use to run the test suite or to run this project
-locally on your machine, without needing to install anything on your host OS (e.g. if you are not
-planning to do long term development work).
+We provide a dockerized environment that you can use to run the test suite or to run this project locally on your machine, without needing to install anything on your host OS (e.g. if you are not planning to do long term development work).
 
 The project relies on a [`Makefile`](https://www.gnu.org/software/make/manual/html_node/Introduction.html) for its build process. Check a complete list of available tasks by running:
 
@@ -36,17 +34,15 @@ make bash
 
 All the source and dependencies for this project will be in place, making it possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
 
-#### Running the application
+##### Running the application
 
-If you want to run the application using docker, you can use the docker compose file to start all dependencies.
-
-In the first time, you need to setup the database. To configure it, run: (the Master and User password will be `p`)
+It's also possible to run the application by using only Docker. Firstly, setup the database by runnning `dev-setup` from your terminal:
 
 ```
-MASTER_PASSWORD=p USER_PASSWORD=p make dev-setup
+MASTER_PASSWORD=<master_password> USER_PASSWORD=<user_password> make dev-setup
 ```
 
-and to start the application and all dependencies:
+Then install all depenendencies and run the application with `up`:
 
 ```
 make up
