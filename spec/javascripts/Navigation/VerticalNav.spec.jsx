@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import Enzyme, { shallow, render, mount } from 'enzyme'
+import Enzyme, { render, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 import { VerticalNav } from 'Navigation/components/VerticalNav'
@@ -39,16 +39,16 @@ it('should render subnav items for sections with subitems', () => {
 })
 
 it('should expand/collapse sections on click', () => {
-  const wrapper = shallow(<VerticalNav sections={sectionsWithSubitems} />)
+  const wrapper = mount(<VerticalNav sections={sectionsWithSubitems} />)
 
   const link = wrapper.find('NavExpandable').find('a').first()
-  expect(wrapper.find('.pf-expanded').exists()).toBe(false)
+  expect(wrapper.find('NavExpandable').find('li.pf-c-nav__item').first().hasClass('pf-m-expanded')).toEqual(false)
 
   link.simulate('click')
-  expect(wrapper.find('.pf-expanded').exists()).toBe(true)
+  expect(wrapper.find('NavExpandable').find('li.pf-c-nav__item').first().hasClass('pf-m-expanded')).toEqual(true)
 
   link.simulate('click')
-  expect(wrapper.find('.pf-expanded').exists()).toBe(false)
+  expect(wrapper.find('NavExpandable').find('li.pf-c-nav__item').first().hasClass('pf-m-expanded')).toEqual(false)
 })
 
 it('should highlight the active section', () => {
