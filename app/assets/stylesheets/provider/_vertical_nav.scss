@@ -3,11 +3,6 @@
   text-decoration: none;
 
   .pf-c-nav__section-title {
-    // Give artificial margin-top of pf-c-nav__section
-    margin-top: 2rem;
-  }
-
-  .pf-c-nav__section-title {
-    padding: .5rem 1.5rem .5rem calc(1.5rem + 1rem) !important;
+    padding: .5rem 1.5rem .5rem calc(1.5rem + 1rem);
   }
 }
