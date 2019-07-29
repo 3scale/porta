@@ -164,23 +164,6 @@ module ServiceDiscovery
       assert_equal %w[project-2], cluster.projects_with_discoverables.map(&:name)
     end
 
-    test 'routes' do
-      cluster.stubs(get_routes: [
-        cluster_route(metadata: { name: 'my-api-staging-route',    uid: '220151f0-1918-4eca-808a-d4d07cea4b16', namespace: 'my-namespace' }, spec: { to: { kind: 'Service', name: 'my-api-staging' } }),
-        cluster_route(metadata: { name: 'my-api-production-route', uid: '97a926db-e104-44ac-a5dd-43a0cf5ec686', namespace: 'my-namespace' }, spec: { to: { kind: 'Service', name: 'my-api-production' } })
-      ])
-
-      assert_equal %w[my-api-staging-route my-api-production-route], cluster.routes(namespace: 'my-namespace').map(&:name)
-    end
-
-    test 'find route by name' do
-      cluster.expects(:get_route).with('my-api-staging-route', 'my-namespace').returns(
-        cluster_route(metadata: { name: 'my-api-staging-route', uid: '220151f0-1918-4eca-808a-d4d07cea4b16', namespace: 'my-namespace' }, spec: { to: { kind: 'Service', name: 'my-api-staging' } }),
-      )
-
-      assert_equal '220151f0-1918-4eca-808a-d4d07cea4b16', cluster.find_route_by(name: 'my-api-staging-route', namespace: 'my-namespace').uid
-    end
-
     test 'raises resource not found' do
       cluster.expects(:get_service).with('my-api-staging', 'my-namespace').returns(nil)
 
@@ -195,6 +178,39 @@ module ServiceDiscovery
 
       assert_raises(ServiceDiscovery::ClusterClient::ClusterClientError) do
         cluster.find_project_by(name: 'my-namespace')
+      end
+    end
+
+    class BuildClientTest < ActiveSupport::TestCase
+      setup do
+        @config = {
+          server_scheme: 'https',
+          server_host: 'my-cluster.com',
+          server_port: 8443,
+          bearer_token: 'secret-token'
+        }
+      end
+
+      test '.build_client' do
+        assert_equal client_endpoint, 'https://my-cluster.com:8443/api'
+        assert_equal client_endpoint(api_path: 'k8s'), 'https://my-cluster.com:8443/k8s'
+      end
+
+      test '.build_client_for_projects' do
+        assert_equal client_endpoint_for_projects, 'https://my-cluster.com:8443/apis/project.openshift.io'
+        assert_equal client_endpoint_for_projects(api_path_for_projects: 'projs'), 'https://my-cluster.com:8443/projs'
+        assert_equal client_endpoint_for_projects(api_path: 'k8s'), 'https://my-cluster.com:8443/apis/project.openshift.io'
+        assert_equal client_endpoint_for_projects(api_path: 'k8s', api_path_for_projects: 'projs'), 'https://my-cluster.com:8443/projs'
+      end
+
+      protected
+
+      def client_endpoint(options = {})
+        ClusterClient.build_client(@config.merge(options)).api_endpoint.to_s
+      end
+
+      def client_endpoint_for_projects(options = {})
+        ClusterClient.build_client_for_projects(@config.merge(options)).api_endpoint.to_s
       end
     end
   end
