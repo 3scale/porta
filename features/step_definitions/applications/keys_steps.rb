@@ -31,26 +31,22 @@ Given /^the application of (buyer "[^"]*") has (\d+) keys$/ do |buyer, number|
 end
 
 Given /^the backend will create key "([^"]*)" for (application "[^"]*")$/ do |key, application|
-  FakeWeb.register_uri(:post, backend_application_url(application, "/keys.xml"),
-                       :status => fake_status(201),
-                       :body => %(<key value="#{key}"/>))
+  stub_request(:post, backend_application_url(application, '/keys.xml'))
+    .to_return(status: fake_status(201), body: %(<key value="#{key}"/>))
   fake_application_keys(application, [key])
 end
 
 Given /^the backend will create key "([^"]*)" for an application$/ do |key|
-  FakeWeb.register_uri(:post, %r|/applications/(.*)/keys.xml(.*)|,
-                       :status => fake_status(201),
-                       :body => %(<key value="#{key}"/>))
+  stub_request(:post, %r{/applications/(.*)/keys.xml(.*)})
+    .to_return(status: fake_status(201), body: %(<key value="#{key}"/>))
 
-  FakeWeb.register_uri(:get, %r|/applications/(.*)/keys.xml(.*)|,
-                       :status => fake_status(200),
-                       :body => %(<keys><key value="#{key}"</key>))
+  stub_request(:get, %r{/applications/(.*)/keys.xml(.*)})
+    .to_return(status: fake_status(200), body: %(<keys><key value="#{key}"</key>))
 end
 
 Given /^the backend will delete key "([^"]*)" for (application "[^"]*")$/ do |key, application|
-  FakeWeb.register_uri(
-    :delete, backend_application_url(application, "/keys/#{key}.xml?provider_key=#{application.provider_account.api_key}&service_id=#{application.service.backend_id}"),
-    :status => fake_status(200),  :body => '')
+  stub_request(:delete, backend_application_url(application, "/keys/#{key}.xml?provider_key=#{application.provider_account.api_key}&service_id=#{application.service.backend_id}"))
+    .to_return(status: fake_status(200), body: '')
 end
 
 Given %r{^the backend will delete all keys for (application "[^"]*")$} do |application|
@@ -58,8 +54,6 @@ Given %r{^the backend will delete all keys for (application "[^"]*")$} do |appli
     step %{the backend will delete key "#{key}" for application "#{application.name}"}
   end
 end
-
-
 
 When /^I (press|follow) "([^"]*)" for application key "([^"]*)"$/ do |action, label, key|
   step %(I #{action} "#{label}" within "#application_key_#{key}")

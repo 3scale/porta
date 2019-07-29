@@ -1,8 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class BackendClient::ConnectionTest < ActiveSupport::TestCase
-  include TestHelpers::FakeWeb
-
   def setup
     @connection = BackendClient::Connection.new(:host => 'backend.example.org')
   end
@@ -10,48 +8,42 @@ class BackendClient::ConnectionTest < ActiveSupport::TestCase
   # TODO: test connection errors
 
   test 'sends get request without params to the backend' do
-    ::FakeWeb.register_uri(:get, 'http://backend.example.org/stuff.xml', :body => '<stuff/>')
+    stub_request(:get, 'http://backend.example.org/stuff.xml').to_return(body: '<stuff/>')
+
     @connection.get('/stuff.xml')
 
-    assert_equal 'GET',        FakeWeb.last_request.method
-    assert_equal '/stuff.xml', FakeWeb.last_request.path
+    assert_last_request(:get, path: '/stuff.xml')
   end
 
   test 'sends get request with one param to the backend' do
-    ::FakeWeb.register_uri(:get, 'http://backend.example.org/stuff.xml?type=widget', :body => '<stuff/>')
-    @connection.get('/stuff.xml', :type => 'widget')
+    stub_request(:get, 'http://backend.example.org/stuff.xml?type=widget').to_return(body: '<stuff/>')
 
-    assert_equal 'GET',                    FakeWeb.last_request.method
-    assert_equal '/stuff.xml?type=widget', FakeWeb.last_request.path
+    @connection.get('/stuff.xml', type: 'widget')
+
+    assert_last_request(:get, path: '/stuff.xml?type=widget')
   end
 
   test 'sends get request with many params to the backend' do
-    ::FakeWeb.register_uri(:get, 'http://backend.example.org/stuff.xml?quantity=lot&type=widget',
-                         :body => '<stuff/>')
+    stub_request(:get, 'http://backend.example.org/stuff.xml?quantity=lot&type=widget').to_return(body: '<stuff/>')
 
-    @connection.get('/stuff.xml', :type => 'widget', :quantity => 'lot')
+    @connection.get('/stuff.xml', type: 'widget', quantity: 'lot')
 
-    assert_equal 'GET',                                 FakeWeb.last_request.method
-    assert_equal '/stuff.xml?quantity=lot&type=widget', FakeWeb.last_request.path
+    assert_last_request(:get, path: '/stuff.xml?quantity=lot&type=widget')
   end
 
-  test 'escapes params in a requests' do
-    ::FakeWeb.register_uri(:get, 'http://backend.example.org/stuff.xml?type=atomic+bomb',
-                         :body => '<stuff/>')
+  test 'escapes params in a request' do
+    stub_request(:get, 'http://backend.example.org/stuff.xml?type=atomic+bomb').to_return(body: '<stuff/>')
 
-    @connection.get('/stuff.xml', :type => 'widget', :type => 'atomic bomb')
+    @connection.get('/stuff.xml', type: 'widget', type: 'atomic bomb')
 
-    assert_equal 'GET',                           FakeWeb.last_request.method
-    assert_equal '/stuff.xml?type=atomic+bomb', FakeWeb.last_request.path
+    assert_last_request(:get, path: '/stuff.xml?type=atomic%20bomb')
   end
 
   test 'sends post request to the backend' do
-    ::FakeWeb.register_uri(:post, 'http://backend.example.org/stuff.xml', :body => '')
-    @connection.post('/stuff.xml', :type => 'warpdrive')
+    stub_request(:post, 'http://backend.example.org/stuff.xml').to_return(body: '')
+    @connection.post('/stuff.xml', type: 'warpdrive')
 
-    assert_equal 'POST',           FakeWeb.last_request.method
-    stream = FakeWeb.last_request.body_stream.instance_variable_get :@stream
-    assert_equal 'type=warpdrive', stream.string
+    assert_last_request(:post, body: 'type=warpdrive')
   end
 
   test 'loads configuration from a file' do
@@ -62,30 +54,33 @@ class BackendClient::ConnectionTest < ActiveSupport::TestCase
   end
 
   test 'retries the calls' do
-    FakeWeb.register_uri(:post, 'http://backend.example.org/stuff.xml',
-                       [{:body => "Post not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff found.", :status => ["200", "OK"]}
-    ])
+    stub_request(:post, 'http://backend.example.org/stuff.xml')
+      .to_return(
+        { body: 'Post not found',  status: 404 },
+        { body: 'Stuff not found', status: 404 },
+        { body: 'Stuff found.',     status: 200 },
+      )
 
     BackendClient::Request.any_instance.expects(:failure).twice
-    assert_equal 'Stuff found.', @connection.post('/stuff.xml')
+
+    assert_equal 'Stuff found.', @connection.post('/stuff.xml').body
   end
 
-  test 'sends airbrake when of retries too much' do
-    FakeWeb.register_uri(:post, 'http://backend.example.org/stuff.xml',
-                       [{:body => "Post not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff not found",  :status => ["404", "Not Found"]},
-                        {:body => "Stuff found.", :status => ["200", "OK"]}
-    ])
+  test 'report error when retried too much' do
+    stub_request(:post, 'http://backend.example.org/stuff.xml')
+      .to_return(
+        { body: 'Post not found',  status: 404 },
+        { body: 'Stuff not found', status: 404 },
+        { body: 'Stuff not found', status: 404 },
+        { body: 'Stuff not found', status: 404 },
+        { body: 'Stuff not found', status: 404 },
+        { body: 'Stuff found.',     status: 200 },
+      )
 
     BackendClient::Request.any_instance.expects(:failure).times(5)
 
     System::ErrorReporting.expects(:report_error)
     assert_raise(RestClient::ResourceNotFound) { @connection.post('/stuff.xml') }
-    assert_equal 'Stuff found.', @connection.post('/stuff.xml')
+    assert_equal 'Stuff found.', @connection.post('/stuff.xml').body
   end
 end

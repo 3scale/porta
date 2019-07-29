@@ -132,21 +132,16 @@ def fake_application_referrer_filters(application, filters)
 end
 
 def fake_application_referrer_filter_creation(application, value)
-  FakeWeb.register_uri(
-    :post, backend_application_url(application, '/referrer_filters.xml'),
-    :status => fake_status(201),
-    :body   => %(<referrer_filter value="#{value}"/>))
+  stub_request(:post, backend_application_url(application, '/referrer_filters.xml'))
+    .to_return(status: 201, body: %(<referrer_filter value="#{value}"/>))
 end
 
 def fake_application_referrer_filter_creation_error(application)
-  FakeWeb.register_uri(
-    :post, backend_application_url(application, '/referrer_filters.xml'),
-    :status => fake_status(422),
-    :body   => %(<error>referrer filter can't be blank</error>))
+  stub_request(:post, backend_application_url(application, '/referrer_filters.xml'))
+    .to_return(status: 422, body: %(<error>referrer filter can't be blank</error>))
 end
 
 def fake_application_referrer_filter_deletion(application, value)
-  FakeWeb.register_uri(
-    :delete, backend_application_url(application, "/referrer_filters/#{value}.xml?provider_key=#{application.provider_account.api_key}&service_id=#{application.service.backend_id}"),
-    :status => fake_status(200), :body => '')
+  stub_request(:post, backend_application_url(application, "/referrer_filters/#{value}.xml?provider_key=#{application.provider_account.api_key}&service_id=#{application.service.backend_id}"))
+    .to_return(status: 200, body: '')
 end

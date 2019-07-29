@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class Tasks::SidekiqTest < ActiveSupport::TestCase
-  include TestHelpers::FakeWeb
-
   test 'sidekiq:worker' do
     Rails.application.eager_load!
     active_job_classes = ActiveJob::Base.descendants

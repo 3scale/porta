@@ -5,7 +5,6 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
   include FieldsDefinitionsHelpers
 
-  include TestHelpers::FakeWeb
   include TestHelpers::BackendClientStubs
 
   def setup
