@@ -1,15 +1,10 @@
 require 'test_helper'
 
 class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::TestCase
-
-  include TestHelpers::FakeWeb
-
   test 'recognizes alternative create route' do
     assert_recognizes({:controller => 'developer_portal/login', :action => 'create'},
                       {:method => :get, :path => 'session/create'})
   end
-
-  # {{{ CAS
 
   test 'cas is not displayed on login page' do
     provider_account = FactoryBot.create :provider_account

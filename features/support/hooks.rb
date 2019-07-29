@@ -1,16 +1,10 @@
 require 'color'
 
 Before '@fakeweb' do
-  require 'fakeweb'
-  FakeWeb.allow_net_connect = false
-
   WebMock.disable!
 end
 
 After '@fakeweb' do
-  FakeWeb.clean_registry
-  FakeWeb.allow_net_connect = true
-
   WebMock.enable!
 end
 

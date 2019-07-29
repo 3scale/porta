@@ -1,12 +1,7 @@
 require 'test_helper'
 
 class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
-
-  include TestHelpers::FakeWeb
-
   def setup
-    set_backend_host 'example.org'
-
     provider_account = FactoryBot.create(:provider_account)
     @provider_key    = provider_account.api_key
 
@@ -15,7 +10,7 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
     @application_id   = cinstance.application_id
     @service_id       = cinstance.service.backend_id
 
-    connection   = BackendClient::Connection.new(:host => backend_host)
+    connection   = BackendClient::Connection.new(host: 'example.org')
     provider     = connection.provider(provider_account)
     @application = provider.application(cinstance)
   end

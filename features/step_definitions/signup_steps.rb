@@ -109,16 +109,6 @@ Then /^I should see the registration succeeded$/ do
   assert has_content? "Thank you"
 end
 
-When /^I have a janrain token in my session$/ do
-  valid_json = '{"stat": "ok", "profile": {"identifier": "http://somegoogleprofile.com"}}'
-  FakeWeb.register_uri(
-    :get, "https://rpxnow.com/api/v2/auth_info?token=token&apiKey=",
-    :status => [200, 'OK'],
-    :body => valid_json)
-
-  page.driver.post '/session/janrain?token=token'
-end
-
 When /^I have a cas token in my session$/ do
   res = stub :body => "yes\nlaurie", :code => 200
   HTTPClient.expects(:get).with(anything).returns(res)

@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class Buyers::ApplicationsControllerTest < ActionController::TestCase
-  disable_transactional_fixtures!
   include WebHookTestHelpers
-  include TestHelpers::FakeWeb
+
+  disable_transactional_fixtures!
 
   setup do
     @plan = FactoryBot.create(:published_plan)
@@ -57,8 +57,6 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
 
     all_hooks_are_on(webhook)
     WebHookWorker.clear
-
-    self.backend_host = 'localhost:3001'
 
     ThreeScale::Core::Application.stubs(:save).with do |params|
       fake_backend_get_keys('key', params[:id], params[:service_id], @provider.api_key)
@@ -156,5 +154,16 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
 
     assert_response :redirect
     assert_equal app.reload.plan, new_plan
+  end
+
+  private
+
+  def fake_backend_get_keys(result, application_id, service_id, provider_key)
+    keys = Array(result).map do |k|
+      %(<key value="#{k}" href="http://example.org/applications/#{application_id}/keys.xml?provider_key=#{provider_key}&service_id=#{service_id}"/>)
+    end
+
+    stub_request(:get, "http://example.org/applications/#{application_id}/keys.xml?provider_key=#{provider_key}&service_id=#{service_id}")
+      .to_return(status: 200, body: "<keys>#{keys.join("\n")}</keys>")
   end
 end

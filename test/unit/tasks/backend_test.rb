@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Tasks::BackendTest < ActiveSupport::TestCase
-  include TestHelpers::FakeWeb
-
   test 'storage:rewrite' do
     provider = FactoryBot.create(:provider_account)
     buyer    = FactoryBot.create(:buyer_account, provider_account: provider)
