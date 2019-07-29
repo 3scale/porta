@@ -10,6 +10,12 @@ environment.loaders.delete('moduleCss')
 environment.loaders.delete('sass')
 environment.loaders.delete('moduleSass')
 
+environment.loaders.append('null', {
+  test: /\.css$/,
+  include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,
+  use: ['null-loader']
+})
+
 environment.loaders.append('style', {
   test: /(\.css|\.scss|\.sass)$/,
   use: [
@@ -24,12 +30,5 @@ environment.loaders.append('style', {
     }
   ]
 })
-
-const nullLoader = {
-  test: /\.css$/,
-  include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,
-  use: ['null-loader']
-}
-environment.loaders.insert('null', nullLoader, {before: 'style'})
 
 module.exports = environment
