@@ -98,13 +98,12 @@ class AuditedHacksTest < ActiveSupport::TestCase
 
     test 'obfuscated audit' do
       provider_id = provider.id
-      Settings.stubs(sensitive_attributes: %i[sso_key])
       settings = Settings.new(account_id: provider_id)
       audit = FactoryBot.build(:audit, auditable_type: settings.class.name, auditable_id: 123, provider_id: provider_id, audited_changes: { 'welcome_text' => 'hello', 'sso_key' => 'sensitive' })
       audit_obfuscated = audit.obfuscated
       assert_not_equal audit.object_id, audit_obfuscated.object_id
       assert_equal({ 'welcome_text' => 'hello', 'sso_key' => 'sensitive' }, audit.audited_changes)
-      assert_equal({ 'welcome_text' => 'hello', 'sso_key' => '[FILTERED]'.to_sym }, audit_obfuscated.audited_changes)
+      assert_equal({ 'welcome_text' => 'hello', 'sso_key' => '[FILTERED]' }, audit_obfuscated.audited_changes)
     end
 
     protected
