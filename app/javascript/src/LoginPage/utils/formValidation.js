@@ -1,3 +1,5 @@
+// @flow
+
 import validate from 'validate.js'
 
 const constraintsTypes = {
@@ -39,20 +41,22 @@ const constraints = {
   }
 }
 
-const validateAllFields = (form) => {
+const validateAllFields = (form: HTMLFormElement) => {
   const errors = validate(form, constraints[form.id])
 
-  if (!errors) {
-    return undefined
+  if (errors) {
+    if (typeof errors === 'object') {
+      return Object.keys(errors).reduce((obj, item) => {
+        obj[item] = false
+        return obj
+      }, {})
+    }
   } else {
-    return Object.keys(errors).reduce((obj, item) => {
-      obj[item] = false
-      return obj
-    }, {})
+    return {}
   }
 }
 
-const validateSingleField = (event) => {
+const validateSingleField = (event: SyntheticEvent<HTMLInputElement>) => {
   const type = event.currentTarget.type
   const fieldError = validate.single(event.currentTarget.value, constraintsTypes[type])
   return !fieldError

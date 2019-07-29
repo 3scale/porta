@@ -51,7 +51,7 @@ class Login3scaleForm extends React.Component<Props, State> {
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
     const invalidFields = validateAllFields(event.currentTarget.form)
 
-    if (invalidFields) {
+    if (!!Object.keys(invalidFields).length) {
       event.preventDefault()
       this.setState({validation: invalidFields})
     }
