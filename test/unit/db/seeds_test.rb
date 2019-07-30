@@ -10,7 +10,6 @@ class SeedsTest < ActiveSupport::TestCase
     'MASTER_DOMAIN' => 'master-domain',
     'MASTER_ACCESS_CODE' => 'my_access_code',
     'MASTER_USER' => 'my-username',
-    'MASTER_PASSWORD' => 'my-password',
     'MASTER_SERVICE' => 'the master service',
     'MASTER_PLAN' => 'the master plan',
 
@@ -19,7 +18,6 @@ class SeedsTest < ActiveSupport::TestCase
     'SAMPLE_DATA' => '0',
     'USER_LOGIN' => 'adminuser',
     'USER_EMAIL' => 'myemail@example.com',
-    'USER_PASSWORD' => 'mypass',
     'PROVIDER_PLAN' => 'pro-plan',
     'CMS_TEMPLATES' => '1'
   }
@@ -27,10 +25,6 @@ class SeedsTest < ActiveSupport::TestCase
   def teardown
     ENV_VARIABLES.each { |env_name, _env_value| ENV[env_name] = nil }
   end
-
-  # TODO: Test the ENVs: APICAST_ACCESS_TOKEN MASTER_ACCESS_TOKEN ADMIN_ACCESS_TOKEN
-  # TODO: test password?
-  # TODO: test provider.force_upgrade_to_provider_plan!(plan)
 
   test 'default values' do
     FieldsDefinition.expects(:create_defaults!).with(&:master?)
@@ -78,7 +72,8 @@ class SeedsTest < ActiveSupport::TestCase
     master_app_plan = master_service.default_application_plan
     assert_equal master_service.id, master_app_plan.issuer_id
     assert_equal 'enterprise', master_app_plan.name
-    # assert_equal [master_app_plan.id], master_account.bought_application_plans.pluck(:id) # TODO: test: application_plan.create_contract_with! master
+
+    assert_equal ApplicationPlan.where(name: 'Master Plan').pluck(:id), master_account.bought_application_plans.pluck(:id)
 
     master_account_plan = master_account.default_account_plan
     assert_equal master_account.id, master_account_plan.issuer_id
@@ -109,6 +104,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 'provider.example.com', tenant_account.domain
     assert_equal 'provider-admin.example.com', tenant_account.self_domain
     assert tenant_account.sample_data.presence
+    assert_equal ApplicationPlan.where(name: 'enterprise').pluck(:id), tenant_account.bought_application_plans.pluck(:id)
 
     assert_equal 2, tenant_account.users.count
     tenant_user = tenant_account.users.but_impersonation_admin.first!
@@ -142,31 +138,34 @@ class SeedsTest < ActiveSupport::TestCase
 
 
     SignupWorker.expects(:enqueue).with(&:tenant?)
-    SimpleLayout.any_instance.expects(:import!).once # TODO: test that the instance is the tenant
+    SimpleLayout.any_instance.expects(:import!) # This should test that it is for the tenant, but it is not easy.
 
 
     Rails.application.load_seed
 
 
     master_account = Account.master
-    assert_equal 'master name', master_account.name
-    assert_equal 'master-domain', master_account.subdomain
-    assert_equal 'master-domain.example.com', master_account.domain
-    assert_equal 'master-domain.example.com', master_account.self_domain
-    assert_equal 'my_access_code', master_account.site_access_code
-    assert_equal 'my-username', master_account.users.first!.username
-    assert_equal 'the master service', master_account.default_service.name
+    assert_equal ENV_VARIABLES['MASTER_NAME'], master_account.name
+    assert_equal ENV_VARIABLES['MASTER_DOMAIN'], master_account.subdomain
+    assert_equal "#{ENV_VARIABLES['MASTER_DOMAIN']}.example.com", master_account.domain
+    assert_equal "#{ENV_VARIABLES['MASTER_DOMAIN']}.example.com", master_account.self_domain
+    assert_equal ENV_VARIABLES['MASTER_ACCESS_CODE'], master_account.site_access_code
+    assert_equal ENV_VARIABLES['MASTER_USER'], master_account.users.first!.username
+    assert_equal ENV_VARIABLES['MASTER_SERVICE'], master_account.default_service.name
     assert(tenant_app_plan = master_account.default_service.application_plans.default)
-    assert_equal 'pro-plan', tenant_app_plan.name
+    assert_equal ENV_VARIABLES['PROVIDER_PLAN'], tenant_app_plan.name
+    assert_equal ApplicationPlan.where(name: ENV_VARIABLES['MASTER_PLAN']).pluck(:id), master_account.bought_application_plans.pluck(:id)
 
     tenant_account = Account.tenants.first!
-    assert_equal 'provider-subdomain', tenant_account.subdomain
-    assert_equal 'provider-subdomain.example.com', tenant_account.domain
-    assert_equal 'provider-subdomain-admin.example.com', tenant_account.self_domain
+    assert_equal ENV_VARIABLES['PROVIDER_NAME'], tenant_account.name
+    assert_equal ENV_VARIABLES['TENANT_NAME'], tenant_account.subdomain
+    assert_equal "#{ENV_VARIABLES['TENANT_NAME']}.example.com", tenant_account.domain
+    assert_equal "#{ENV_VARIABLES['TENANT_NAME']}-admin.example.com", tenant_account.self_domain
     assert_nil tenant_account.sample_data.presence
     tenant_user = tenant_account.users.but_impersonation_admin.first!
-    assert_equal 'adminuser', tenant_user.username
-    assert_equal 'myemail@example.com', tenant_user.email
+    assert_equal ENV_VARIABLES['USER_LOGIN'], tenant_user.username
+    assert_equal ENV_VARIABLES['USER_EMAIL'], tenant_user.email
+    assert_equal ApplicationPlan.where(name: ENV_VARIABLES['PROVIDER_PLAN']).pluck(:id), tenant_account.bought_application_plans.pluck(:id)
   end
 
   test 'done in a transaction: if it fails somewhere, it rollbacks' do
