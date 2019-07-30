@@ -22,7 +22,12 @@ class SeedsTest < ActiveSupport::TestCase
     'CMS_TEMPLATES' => '1'
   }
 
+  def setup
+    EventStore::Repository.stubs(raise_errors: true)
+  end
+
   def teardown
+    EventStore::Repository.stubs(raise_errors: false)
     ENV_VARIABLES.each { |env_name, _env_value| ENV[env_name] = nil }
   end
 
