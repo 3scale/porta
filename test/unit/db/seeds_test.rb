@@ -40,6 +40,7 @@ class SeedsTest < ActiveSupport::TestCase
 
     master_account = Account.master
     assert master_account.approved?
+    assert master_account.state_changed_at.present?
     assert_equal master_account.id, master_account.provider_account_id
     assert_equal 'Master Account', master_account.name
     assert_equal 'master-account', master_account.subdomain
@@ -59,6 +60,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert master_user.minimal_signup?
     assert master_user.admin?
     assert master_user.active?
+    assert master_user.activated_at.present?
 
     assert_equal 1, master_account.services.count
     master_service = master_account.default_service
@@ -104,6 +106,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 'provider.example.com', tenant_account.domain
     assert_equal 'provider-admin.example.com', tenant_account.self_domain
     assert tenant_account.sample_data.presence
+    assert tenant_account.approved?
+    assert tenant_account.state_changed_at.present?
     assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_account.bought_cinstance&.plan.id
 
     assert_equal 2, tenant_account.users.count
@@ -111,6 +115,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert tenant_user.minimal_signup?
     assert tenant_user.admin?
     assert tenant_user.active?
+    assert tenant_user.activated_at.present?
     assert_equal 'admin', tenant_user.username
     assert_equal 'admin@provider.example.com', tenant_user.email
 
@@ -119,6 +124,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert impersonation_user.minimal_signup?
     assert impersonation_user.admin?
     assert impersonation_user.active?
+    assert impersonation_user.activated_at.present?
     assert_equal impersonation_admin_config['username'], impersonation_user.username
     assert_equal "#{impersonation_admin_config['username']}+#{tenant_account.self_domain}@#{impersonation_admin_config['domain']}", impersonation_user.email
     assert_equal '3scale', impersonation_user.first_name

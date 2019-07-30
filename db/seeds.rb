@@ -21,9 +21,9 @@ ActiveRecord::Base.transaction do
   master = Account.create!(name: master_name) do |account|
     account.subdomain = master_domain
     account.master = true
-    account.state = 'approved'
     account.site_access_code = master_access_code
   end
+  master.approve!
 
   master.update!(provider_account: master)
 
@@ -66,8 +66,8 @@ ActiveRecord::Base.transaction do
   master_user = master.users.create!(username: master_login, password: master_password, password_confirmation: master_password) do |user|
     user.signup_type = 'minimal'
     user.role = :admin
-    user.state = 'active'
   end
+  master_user.activate!
 
   # Creating the master service
   master_service = Service.create!(account: master, name: master_service)
@@ -119,6 +119,7 @@ ActiveRecord::Base.transaction do
     account.provider = true
     account.sample_data = sample_data
   end
+  provider.approve!
 
   ###
   #  Creating Provider User
@@ -133,8 +134,8 @@ ActiveRecord::Base.transaction do
     user.account = provider
     user.role = :admin
     user.email = user_email
-    user.state = 'active'
   end
+  user.activate!
   provider.create_onboarding!
 
   ###
@@ -170,7 +171,6 @@ ActiveRecord::Base.transaction do
   impersonation_admin.account = provider
   impersonation_admin.role = :admin
   impersonation_admin.signup_type = :minimal
-  impersonation_admin.state = 'active'
 
   impersonation_admin_config = ThreeScale.config.impersonation_admin
   impersonation_admin_username = impersonation_admin_config['username']
@@ -182,6 +182,7 @@ ActiveRecord::Base.transaction do
   }
 
   impersonation_admin.save!
+  impersonation_admin.activate!
 
   ###
   #  Enabling Provider Switches
