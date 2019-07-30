@@ -2,7 +2,8 @@ require 'test_helper'
 
 class ApiDocs::ProviderUserDataTest < ActiveSupport::TestCase
   def setup
-    @admin = FactoryBot.build_stubbed(:simple_user, role: :admin)
+    account = FactoryBot.create(:simple_provider)
+    @admin = FactoryBot.build_stubbed(:simple_user, role: :admin, account: account)
   end
 
   def test_access_tokens_field_with_hint
@@ -39,7 +40,8 @@ class ApiDocs::ProviderUserDataTest < ActiveSupport::TestCase
 
   class MemberPermissions < ActiveSupport::TestCase
     def setup
-      @admin = FactoryBot.build_stubbed(:simple_user, role: :admin)
+      account = FactoryBot.create(:simple_provider)
+      @admin = FactoryBot.build_stubbed(:simple_user, role: :admin, account: account)
 
       @authorized_service = FactoryBot.create(:simple_service, account: @admin.account)
       @unauthorized_service = FactoryBot.create(:simple_service, account: @admin.account)

@@ -807,6 +807,7 @@ en:
         invalid: 'invalid'
         invalid_event: 'cannot transition when %{state}'
         invalid_transition: 'cannot transition via "%{event}"'
+        not_path_format: 'must be a path separated by "/". E.g. "" or "my/path"'
       models:
         authentication/by_access_token/access_token:
           attributes:
@@ -851,6 +852,10 @@ en:
               invalid: |
                 a Mapping Rule has to start with '/' and can only contain valid URL characters and
                 'wildcards' - words inside curly brackets ('{}')
+        backend_api:
+          attributes:
+            private_endpoint:
+              invalid: "the accepted format is 'http(s)://address(:port)(/path)'"
         proxy:
           attributes:
             api_backend:
