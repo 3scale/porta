@@ -202,17 +202,13 @@ ActiveRecord::Base.transaction do
   end
 
   # Import CMS templates
-  SimpleLayout.new(provider).import! if ENV.fetch('CMS_TEMPLATES', Rails.env.development?).presence
+  SimpleLayout.new(provider).import! if ENV['CMS_TEMPLATES'].present?
 
   ###
   #  Creating Sample Data
   ###
 
-  if Rails.env.development?
-    SignupWorker::SampleDataWorker.new.perform(provider.id)
-  else
-    SignupWorker.enqueue(provider)
-  end
+  SignupWorker.enqueue(provider)
 
 
   puts '='*80
