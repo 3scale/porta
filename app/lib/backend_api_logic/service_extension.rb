@@ -24,7 +24,7 @@ module BackendApiLogic
     private
 
     def create_first_backend_api_config!
-      backend_api = account.backend_apis.create!(
+      backend_api = account.backend_apis.build(
         system_name: system_name,
         name: "#{name} Backend API",
         description: "Backend API of #{name}",
