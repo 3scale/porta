@@ -453,6 +453,18 @@ System::Database::Postgres.define do
     SQL
   end
 
+  trigger 'backend_apis' do
+    <<~SQL
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND master <> TRUE;
+    SQL
+  end
+
+  trigger 'backend_api_configs' do
+    <<~SQL
+      SELECT tenant_id INTO NEW.tenant_id FROM backend_apis WHERE id = NEW.backend_api_id AND tenant_id <> master_id;
+    SQL
+  end
+
   trigger 'proxy_rules' do
     <<~SQL
       SELECT tenant_id INTO NEW.tenant_id FROM proxies WHERE id = NEW.proxy_id AND tenant_id <> master_id;
