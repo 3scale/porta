@@ -211,28 +211,34 @@ ActiveRecord::Base.transaction do
   SignupWorker.enqueue(provider)
 
 
-  puts '='*80
-  puts
-  puts 'Setup Completed'
-  puts
-  puts "Root Domain: #{ThreeScale.config.superdomain}"
+  puts <<~INFO
+    #{'='*80}
+    \n
+    Setup Completed
+    \n
+    Root Domain: #{ThreeScale.config.superdomain}
+  INFO
 
   if master_login && master_password
-    puts
-    puts "Master Domain: #{master.admin_domain}"
-    puts "Master User Login: #{master_login}"
-    puts "Master User Password: #{master_password}"
-    puts "Master RW access token: #{master_access_token}"
-    puts "Master Access Code: #{master_access_code}" if master_access_code.present?
-    puts
+    puts <<~INFO
+      \n
+      Master Domain: #{master.admin_domain}
+      Master User Login: #{master_login}
+      Master User Password: #{master_password}
+      Master RW access token: #{master_access_token}
+      \n
+    INFO
   end
 
-  puts "Provider Admin Domain: #{provider.admin_domain}"
-  puts "Provider Portal Domain: #{provider.domain}"
-  puts "Provider User Login: #{user_login}"
-  puts "Provider User Password: #{user_password}"
-  puts "APIcast Access Token: #{apicast_access_token}"
-  puts "Admin Access Token: #{admin_access_token}" if admin_access_token
-  puts
-  puts '='*80
+  puts <<~INFO
+    Provider Admin Domain: #{provider.admin_domain}
+    Provider Portal Domain: #{provider.domain}
+    Provider User Login: #{user_login}
+    Provider User Password: #{user_password}
+    APIcast Access Token: #{apicast_access_token}
+    #{'Admin Access Token: ' + admin_access_token if admin_access_token}
+    \n
+    #{'='*80}
+  INFO
+
 end
