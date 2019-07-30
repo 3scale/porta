@@ -8,7 +8,7 @@ class NonLocalhostValidatorTest < ActiveSupport::TestCase
 
     validator = NonLocalhostValidator.new(attributes: [:api_backend])
 
-    record = Proxy.new
+    record = FactoryBot.build_stubbed(:proxy)
 
     errors = validator.validate_each(record, :api_backend, 'http://other_word/')
     assert_nil errors
@@ -18,7 +18,7 @@ class NonLocalhostValidatorTest < ActiveSupport::TestCase
     assert_equal ["can't be localhost"], errors
     assert record.errors.present?
 
-    record = Proxy.new
+    record = FactoryBot.build_stubbed(:proxy)
     errors = validator.validate_each(record, :api_backend, 'http://mylocalhost/')
     assert_nil errors
     assert record.errors.empty?

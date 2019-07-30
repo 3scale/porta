@@ -453,6 +453,18 @@ System::Database::Oracle.define do
     SQL
   end
 
+  trigger 'backend_apis' do
+    <<~SQL
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND master <> 1;
+    SQL
+  end
+
+  trigger 'backend_api_configs' do
+    <<~SQL
+      SELECT tenant_id INTO :new.tenant_id FROM backend_apis WHERE id = :new.backend_api_id AND tenant_id <> master_id;
+    SQL
+  end
+
   trigger 'proxy_rules' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM proxies WHERE id = :new.proxy_id AND tenant_id <> master_id;
