@@ -78,7 +78,7 @@ resource "User" do
     let (:user) { FactoryBot.build(:user, account: buyer) }
 
     let(:resource) do
-      FieldsDefinition.create_defaults(master)
+      FieldsDefinition.create_defaults!(master)
       provider.reload
       user
     end
@@ -149,7 +149,7 @@ resource "User" do
 
     # creating new db records for fields that are in db is pathetic as it can get
     let(:resource) do
-      FieldsDefinition.create_defaults(master)
+      FieldsDefinition.create_defaults!(master)
       provider.reload
       user
     end
