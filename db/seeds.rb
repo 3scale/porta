@@ -213,20 +213,17 @@ ActiveRecord::Base.transaction do
 
   puts <<~INFO
     #{'='*80}
-    \n
     Setup Completed
-    \n
-    Root Domain: #{ThreeScale.config.superdomain}
+
+    Root Domain: #{ThreeScale.config.superdomain}\n
   INFO
 
   if master_login && master_password
     puts <<~INFO
-      \n
       Master Domain: #{master.admin_domain}
       Master User Login: #{master_login}
       Master User Password: #{master_password}
-      Master RW access token: #{master_access_token}
-      \n
+      Master RW access token: #{master_access_token}\n
     INFO
   end
 
@@ -237,7 +234,6 @@ ActiveRecord::Base.transaction do
     Provider User Password: #{user_password}
     APIcast Access Token: #{apicast_access_token}
     #{'Admin Access Token: ' + admin_access_token if admin_access_token}
-    \n
     #{'='*80}
   INFO
 
