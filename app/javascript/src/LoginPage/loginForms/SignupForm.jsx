@@ -99,7 +99,7 @@ class SignupForm extends Component<Props, State> {
   validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
     const invalidFields = validateAllFields(event.currentTarget.form)
 
-    if (!!Object.keys(invalidFields).length) {
+    if (invalidFields) {
       event.preventDefault()
       const validation = this.renameValidation(namesToStateKeys, invalidFields)
       this.setState({validation})
