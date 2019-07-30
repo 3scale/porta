@@ -42,8 +42,8 @@ describe('Username', () => {
   it('should set username and validation state to true', () => {
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_username').props().onChange(event)
-    expect(wrapper.state().username).toEqual('Sandy')
-    expect(wrapper.state('validation').username).toEqual(true)
+    expect(wrapper.state()['user[username]']).toEqual('Sandy')
+    expect(wrapper.state('validation')['user[username]']).toEqual(true)
   })
   it('should set validation state to false when username is invalid', () => {
     const event = {
@@ -56,8 +56,8 @@ describe('Username', () => {
     }
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_username').props().onChange(event)
-    expect(wrapper.state().username).toEqual('')
-    expect(wrapper.state('validation').username).toEqual(false)
+    expect(wrapper.state()['user[username]']).toEqual('')
+    expect(wrapper.state('validation')['user[username]']).toEqual(false)
   })
 })
 
@@ -77,8 +77,8 @@ describe('Email', () => {
   it('should set email and validation state to true', () => {
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_email').props().onChange(event)
-    expect(wrapper.state().email).toEqual('bob@sponge.com')
-    expect(wrapper.state('validation').email).toEqual(true)
+    expect(wrapper.state()['user[email]']).toEqual('bob@sponge.com')
+    expect(wrapper.state('validation')['user[email]']).toEqual(true)
   })
   it('should set validation state to false when email is invalid', () => {
     const event = {
@@ -91,8 +91,8 @@ describe('Email', () => {
     }
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_email').props().onChange(event)
-    expect(wrapper.state().email).toEqual('')
-    expect(wrapper.state('validation').email).toEqual(false)
+    expect(wrapper.state()['user[email]']).toEqual('')
+    expect(wrapper.state('validation')['user[email]']).toEqual(false)
   })
 })
 
@@ -111,8 +111,8 @@ describe('First name', () => {
   it('should set firstname and validation state to true', () => {
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_first_name').props().onChange(event)
-    expect(wrapper.state().firstName).toEqual('Patrick')
-    expect(wrapper.state('validation').firstName).toEqual(true)
+    expect(wrapper.state()['user[first_name]']).toEqual('Patrick')
+    expect(wrapper.state('validation')['user[first_name]']).toEqual(true)
   })
   it('should have validation state set to true even with no First name', () => {
     const event = {
@@ -124,8 +124,8 @@ describe('First name', () => {
     }
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_first_name').props().onChange(event)
-    expect(wrapper.state().firstName).toEqual('')
-    expect(wrapper.state('validation').firstName).toEqual(true)
+    expect(wrapper.state()['user[first_name]']).toEqual('')
+    expect(wrapper.state('validation')['user[first_name]']).toEqual(true)
   })
 })
 
@@ -144,8 +144,8 @@ describe('Last name', () => {
   it('should set lastname and validation state to true', () => {
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_last_name').props().onChange(event)
-    expect(wrapper.state().lastName).toEqual('Star')
-    expect(wrapper.state('validation').lastName).toEqual(true)
+    expect(wrapper.state()['user[last_name]']).toEqual('Star')
+    expect(wrapper.state('validation')['user[last_name]']).toEqual(true)
   })
   it('should have validation state true even with no Last name', () => {
     const event = {
@@ -157,8 +157,8 @@ describe('Last name', () => {
     }
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_first_name').props().onChange(event)
-    expect(wrapper.state().lastName).toEqual('')
-    expect(wrapper.state('validation').lastName).toEqual(true)
+    expect(wrapper.state()['user[last_name]']).toEqual('')
+    expect(wrapper.state('validation')['user[last_name]']).toEqual(true)
   })
 })
 
@@ -178,8 +178,8 @@ describe('Password', () => {
   it('should set password and validation state to true', () => {
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_password').props().onChange(event)
-    expect(wrapper.state().password).toEqual('gary1234')
-    expect(wrapper.state('validation').password).toEqual(true)
+    expect(wrapper.state()['user[password]']).toEqual('gary1234')
+    expect(wrapper.state('validation')['user[password]']).toEqual(true)
   })
   it('should set validation state to false when password is invalid', () => {
     const event = {
@@ -192,8 +192,8 @@ describe('Password', () => {
     }
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_password').props().onChange(event)
-    expect(wrapper.state().password).toEqual('')
-    expect(wrapper.state('validation').password).toEqual(false)
+    expect(wrapper.state()['user[password]']).toEqual('')
+    expect(wrapper.state('validation')['user[password]']).toEqual(false)
   })
 })
 
@@ -213,8 +213,8 @@ describe('Password confirmation', () => {
   it('should set passwordConfirmation and validation state to true', () => {
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_password_confirmation').props().onChange(event)
-    expect(wrapper.state().passwordConfirmation).toEqual('gary1234')
-    expect(wrapper.state('validation').passwordConfirmation).toEqual(true)
+    expect(wrapper.state()['user[password_confirmation]']).toEqual('gary1234')
+    expect(wrapper.state('validation')['user[password_confirmation]']).toEqual(true)
   })
   it('should set validation state to false when password confirmation is invalid', () => {
     const event = {
@@ -227,7 +227,7 @@ describe('Password confirmation', () => {
     }
     const wrapper = mount(<SignupForm {...props} />)
     wrapper.find('input#user_password_confirmation').props().onChange(event)
-    expect(wrapper.state().passwordConfirmation).toEqual('')
-    expect(wrapper.state('validation').passwordConfirmation).toEqual(false)
+    expect(wrapper.state()['user[password_confirmation]']).toEqual('')
+    expect(wrapper.state('validation')['user[password_confirmation]']).toEqual(false)
   })
 })

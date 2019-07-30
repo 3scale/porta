@@ -27,26 +27,13 @@ type Validation = {
 }
 
 type State = {
-  username: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  password: string,
-  passwordConfirmation: string,
+  'user[username]': string,
+  'user[email]': string,
+  'user[first_name]': string,
+  'user[last_name]': string,
+  'user[password]': string,
+  'user[password_confirmation]': string,
   validation: Validation
-}
-
-type NamesToKeys = {
-  [string]: string
-}
-
-const namesToStateKeys = {
-  'user[username]': 'username',
-  'user[email]': 'email',
-  'user[first_name]': 'firstName',
-  'user[last_name]': 'lastName',
-  'user[password]': 'password',
-  'user[password_confirmation]': 'passwordConfirmation'
 }
 
 const InputFormGroup = (props) => {
@@ -68,12 +55,12 @@ const InputFormGroup = (props) => {
 
 class SignupForm extends Component<Props, State> {
   state = {
-    username: this.props.user.username,
-    email: this.props.user.email,
-    firstName: this.props.user.firstname,
-    lastName: this.props.user.lastname,
-    password: '',
-    passwordConfirmation: '',
+    'user[username]': this.props.user.username,
+    'user[email]': this.props.user.email,
+    'user[first_name]': this.props.user.firstname,
+    'user[last_name]': this.props.user.lastname,
+    'user[password]': '',
+    'user[password_confirmation]': '',
     validation: {}
   }
 
@@ -81,33 +68,26 @@ class SignupForm extends Component<Props, State> {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
     const validation = {
       ...this.state.validation,
-      [namesToStateKeys[event.currentTarget.name]]: isValid
+      [event.currentTarget.name]: isValid
     }
 
     this.setState({
-      [namesToStateKeys[event.currentTarget.name]]: value,
+      [event.currentTarget.name]: value,
       validation
     })
   }
-
-  renameValidation = (namesToStateKeys: NamesToKeys, invalidFields: Validation) => Object.keys(invalidFields)
-    .reduce((obj, item) => {
-      obj[namesToStateKeys[item]] = invalidFields[item]
-      return obj
-    }, {})
 
   validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
     const invalidFields = validateAllFields(event.currentTarget.form)
 
     if (invalidFields) {
       event.preventDefault()
-      const validation = this.renameValidation(namesToStateKeys, invalidFields)
-      this.setState({validation})
+      this.setState({validation: invalidFields})
     }
   }
 
   render () {
-    const {username, email, firstName, lastName, password, passwordConfirmation, validation} = this.state
+    const {validation} = this.state
 
     return (
       <Form noValidate
@@ -117,12 +97,36 @@ class SignupForm extends Component<Props, State> {
         method='post'
       >
         <HiddenInputs />
-        <InputFormGroup isRequired type='user[username]' value={username} isValid={validation.username} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired type='user[email]' value={email} isValid={validation.email} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired={false} type='user[first_name]' value={firstName} isValid={validation.firstName} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired={false} type='user[last_name]' value={lastName} isValid={validation.lastName} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired type='user[password]' value={password} isValid={validation.password} onChange={this.handleInputChange} />
-        <InputFormGroup isRequired type='user[password_confirmation]' value={passwordConfirmation} isValid={validation.passwordConfirmation} onChange={this.handleInputChange} />
+        <InputFormGroup isRequired
+          type='user[username]'
+          value={this.state['user[username]']}
+          isValid={validation['user[username]']}
+          onChange={this.handleInputChange} />
+        <InputFormGroup isRequired
+          type='user[email]'
+          value={this.state['user[email]']}
+          isValid={validation['user[email]']}
+          onChange={this.handleInputChange} />
+        <InputFormGroup isRequired={false}
+          type='user[first_name]'
+          value={this.state['user[first_name]']}
+          isValid={validation['user[first_name]']}
+          onChange={this.handleInputChange} />
+        <InputFormGroup isRequired={false}
+          type='user[last_name]'
+          value={this.state['user[last_name]']}
+          isValid={validation['user[last_name]']}
+          onChange={this.handleInputChange} />
+        <InputFormGroup isRequired
+          type='user[password]'
+          value={this.state['user[password]']}
+          isValid={validation['user[password]']}
+          onChange={this.handleInputChange} />
+        <InputFormGroup isRequired
+          type='user[password_confirmation]'
+          value={this.state['user[password_confirmation]']}
+          isValid={validation['user[password_confirmation]']}
+          onChange={this.handleInputChange} />
         <ActionGroup>
           <input type="submit"
             name="commit"
