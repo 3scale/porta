@@ -73,7 +73,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal master_service.id, master_app_plan.issuer_id
     assert_equal 'enterprise', master_app_plan.name
 
-    assert_equal ApplicationPlan.where(name: 'Master Plan').pluck(:id), master_account.bought_application_plans.pluck(:id)
+    assert_equal ApplicationPlan.find_by(name: 'Master Plan').id, master_account.bought_cinstance&.plan.id
 
     master_account_plan = master_account.default_account_plan
     assert_equal master_account.id, master_account_plan.issuer_id
@@ -104,7 +104,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 'provider.example.com', tenant_account.domain
     assert_equal 'provider-admin.example.com', tenant_account.self_domain
     assert tenant_account.sample_data.presence
-    assert_equal ApplicationPlan.where(name: 'enterprise').pluck(:id), tenant_account.bought_application_plans.pluck(:id)
+    assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_account.bought_cinstance&.plan.id
 
     assert_equal 2, tenant_account.users.count
     tenant_user = tenant_account.users.but_impersonation_admin.first!
@@ -154,7 +154,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal ENV_VARIABLES['MASTER_SERVICE'], master_account.default_service.name
     assert(tenant_app_plan = master_account.default_service.application_plans.default)
     assert_equal ENV_VARIABLES['PROVIDER_PLAN'], tenant_app_plan.name
-    assert_equal ApplicationPlan.where(name: ENV_VARIABLES['MASTER_PLAN']).pluck(:id), master_account.bought_application_plans.pluck(:id)
+    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['MASTER_PLAN']).id, master_account.bought_cinstance&.plan.id
 
     tenant_account = Account.tenants.first!
     assert_equal ENV_VARIABLES['PROVIDER_NAME'], tenant_account.name
@@ -165,7 +165,7 @@ class SeedsTest < ActiveSupport::TestCase
     tenant_user = tenant_account.users.but_impersonation_admin.first!
     assert_equal ENV_VARIABLES['USER_LOGIN'], tenant_user.username
     assert_equal ENV_VARIABLES['USER_EMAIL'], tenant_user.email
-    assert_equal ApplicationPlan.where(name: ENV_VARIABLES['PROVIDER_PLAN']).pluck(:id), tenant_account.bought_application_plans.pluck(:id)
+    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['PROVIDER_PLAN']).id, tenant_account.bought_cinstance&.plan.id
   end
 
   test 'done in a transaction: if it fails somewhere, it rollbacks' do
