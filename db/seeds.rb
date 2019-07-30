@@ -23,9 +23,8 @@ ActiveRecord::Base.transaction do
     account.master = true
     account.site_access_code = master_access_code
   end
-  master.approve!
-
   master.update!(provider_account: master)
+  master.approve!
 
   FieldsDefinition.create_defaults!(master)
 
