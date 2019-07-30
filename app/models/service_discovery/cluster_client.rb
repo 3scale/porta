@@ -19,11 +19,13 @@ module ServiceDiscovery
       service_discovery_configs = ThreeScale.config.service_discovery.to_h
       options = opts.reverse_merge(service_discovery_configs.slice(:server_scheme, :server_host, :server_port, :bearer_token))
 
-      @k8s = self.class.build_k8s_client(options)
-      @ocp = self.class.build_ocp_client(options)
+      @clients = [
+        self.class.build_client(options),
+        self.class.build_client_for_projects(options)
+      ]
     end
 
-    attr_reader :k8s, :ocp
+    attr_reader :clients
 
     def method_missing(method_sym, *args, &block)
       client = client_that_responds_to(method_sym)
@@ -50,12 +52,6 @@ module ServiceDiscovery
       end
     end
 
-    def routes(namespace: nil, labels: {})
-      within_namespace(namespace, with_labels: labels) do |search_criteria|
-        get_routes(search_criteria).map { |resource| ClusterRoute.new(resource, self) }
-      end
-    end
-
     def find_namespace_by(name:)
       find_resource(:namespace, name)
     end
@@ -66,10 +62,6 @@ module ServiceDiscovery
 
     def find_service_by(name:, namespace:)
       find_resource(:service, name, namespace)
-    end
-
-    def find_route_by(name:, namespace:)
-      find_resource(:route, name, namespace)
     end
 
     def discoverable_services(namespace: nil, labels: {})
@@ -111,12 +103,14 @@ module ServiceDiscovery
       ]
     end
 
-    def self.build_ocp_client(options = {})
-      Kubeclient::Client.new(*build_client_options(options.merge(api_path: 'oapi')))
+    def self.build_client(options = {})
+      client_options = build_client_options(options.reverse_merge(api_path: 'api'))
+      Kubeclient::Client.new(*client_options)
     end
 
-    def self.build_k8s_client(options = {})
-      Kubeclient::Client.new(*build_client_options(options.merge(api_path: 'api')))
+    def self.build_client_for_projects(options = {})
+      api_path = options.fetch(:api_path_for_projects, 'apis/project.openshift.io')
+      build_client(options.merge(api_path: api_path))
     end
 
     protected
@@ -160,7 +154,7 @@ module ServiceDiscovery
     end
 
     def client_that_responds_to(method_sym)
-      [ocp, k8s].each do |client|
+      clients.each do |client|
         client_responds_to_method = client.respond_to?(method_sym)
         return client if client_responds_to_method
       end
