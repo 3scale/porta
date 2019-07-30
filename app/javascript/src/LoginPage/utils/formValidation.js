@@ -41,20 +41,17 @@ const constraints = {
   }
 }
 
-const validateAllFields = (form: HTMLFormElement) => {
-  const errors = validate(form, constraints[form.id])
-
-  if (errors) {
-    if (typeof errors === 'object') {
-      return Object.keys(errors).reduce((obj, item) => {
-        obj[item] = false
-        return obj
-      }, {})
-    }
-  } else {
-    return {}
-  }
+// validate.js has a libdef, but it's missing 'formatters'
+// See: https://github.com/flow-typed/flow-typed/blob/master/definitions/npm/validate.js_v0.x.x/flow_v0.25.x-/validate.js_v0.x.x.js
+// $FlowFixMe
+validate.formatters.customFormat = (errors) => {
+  return errors.reduce((obj, item) => {
+    obj[item.attribute] = false
+    return obj
+  }, {})
 }
+
+const validateAllFields = (form: HTMLFormElement) => validate(form, constraints[form.id], {format: 'customFormat'})
 
 const validateSingleField = (event: SyntheticEvent<HTMLInputElement>) => {
   const type = event.currentTarget.type

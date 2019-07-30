@@ -42,7 +42,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
   validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
     const invalidFields = validateAllFields(event.currentTarget.form)
 
-    if (!!Object.keys(invalidFields).length) {
+    if (invalidFields) {
       event.preventDefault()
       this.setState({validation: invalidFields})
     }
