@@ -36,22 +36,14 @@ type State = {
   validation: Validation
 }
 
-const InputFormGroup = (props) => {
-  const { isRequired, type, value, onChange, isValid } = props
-  const inputProps = {
-    value,
-    onChange,
-    autoFocus: null,
-    inputIsValid: isValid
-  }
-  return (
-    <FormGroup isRequired={isRequired}
-      type={type}
-      labelIsValid={isValid}
-      inputProps={inputProps}
-    />
-  )
-}
+const formFieldsList = [
+  {isRequired: true, type: 'user[username]'},
+  {isRequired: true, type: 'user[email]'},
+  {isRequired: false, type: 'user[first_name]'},
+  {isRequired: false, type: 'user[last_name]'},
+  {isRequired: true, type: 'user[password]'},
+  {isRequired: true, type: 'user[password_confirmation]'}
+]
 
 class SignupForm extends Component<Props, State> {
   state = {
@@ -86,9 +78,23 @@ class SignupForm extends Component<Props, State> {
     }
   }
 
-  render () {
-    const {validation} = this.state
+  renderInputFormGroups = (formFieldsList: Array<*>): Array<*> => {
+    return formFieldsList.map(formField => {
+      const inputProps = {
+        value: this.state[formField.type],
+        onChange: this.handleInputChange,
+        inputIsValid: this.state.validation[formField.type]
+      }
+      return (<FormGroup key={formField.type}
+        isRequired={formField.isRequired}
+        type={formField.type}
+        labelIsValid={this.state.validation[formField.type]}
+        inputProps={inputProps}
+      />)
+    })
+  }
 
+  render () {
     return (
       <Form noValidate
         action={this.props.path}
@@ -97,36 +103,7 @@ class SignupForm extends Component<Props, State> {
         method='post'
       >
         <HiddenInputs />
-        <InputFormGroup isRequired
-          type='user[username]'
-          value={this.state['user[username]']}
-          isValid={validation['user[username]']}
-          onChange={this.handleInputChange} />
-        <InputFormGroup isRequired
-          type='user[email]'
-          value={this.state['user[email]']}
-          isValid={validation['user[email]']}
-          onChange={this.handleInputChange} />
-        <InputFormGroup isRequired={false}
-          type='user[first_name]'
-          value={this.state['user[first_name]']}
-          isValid={validation['user[first_name]']}
-          onChange={this.handleInputChange} />
-        <InputFormGroup isRequired={false}
-          type='user[last_name]'
-          value={this.state['user[last_name]']}
-          isValid={validation['user[last_name]']}
-          onChange={this.handleInputChange} />
-        <InputFormGroup isRequired
-          type='user[password]'
-          value={this.state['user[password]']}
-          isValid={validation['user[password]']}
-          onChange={this.handleInputChange} />
-        <InputFormGroup isRequired
-          type='user[password_confirmation]'
-          value={this.state['user[password_confirmation]']}
-          isValid={validation['user[password_confirmation]']}
-          onChange={this.handleInputChange} />
+        { this.renderInputFormGroups(formFieldsList) }
         <ActionGroup>
           <input type="submit"
             name="commit"
