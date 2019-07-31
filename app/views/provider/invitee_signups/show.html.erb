@@ -7,7 +7,7 @@
       :username => @user.username || "",
       :firstname => @user.first_name || "",
       :lastname => @user.last_name || "",
-      :errors => @user.errors || {}
+      :errors => (@user.errors  || []).map { |key, value| {type: 'error', message: "#{key} #{value}"}}
     }
 }.to_json) %>
 

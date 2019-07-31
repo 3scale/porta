@@ -14,10 +14,10 @@ const props = {
     firstname: 'Bob',
     lastname: 'Sponge',
     username: 'bobsponge',
-    errors: {
-      username: ['has already been taken'],
-      password: ['is too short (minimum is 6 characters)']
-    }
+    errors: [
+      {type: 'error', message: 'username has already been taken'},
+      {type: 'error', message: 'password is too short (minimum is 6 characters)'}
+    ]
   }
 }
 
@@ -34,7 +34,7 @@ it('should render <SignupForm/> child component', () => {
 it('should render error messages', () => {
   const wrapper = mount(<SignupPage {...props}/>)
   expect(wrapper.find('.pf-m-error').length).toEqual(2)
-  expect(wrapper.find('.pf-m-error').at(0).text()).toContain('has already been taken')
-  expect(wrapper.find('.pf-m-error').at(1).text()).toContain('is too short (minimum is 6 characters)')
+  expect(wrapper.find('.pf-m-error').at(0).text()).toContain('username has already been taken')
+  expect(wrapper.find('.pf-m-error').at(1).text()).toContain('password is too short (minimum is 6 characters)')
 
 })
