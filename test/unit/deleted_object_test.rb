@@ -3,9 +3,6 @@
 require 'test_helper'
 
 class DeletedObjectTest < ActiveSupport::TestCase
-  should belong_to(:owner)
-  should belong_to(:object)
-
   test 'scopes metrics and contracts' do
     service = FactoryBot.create(:simple_service)
     metrics = FactoryBot.create_list(:metric, 2)
