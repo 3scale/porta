@@ -1,6 +1,6 @@
 export {ForgotCredentials} from 'LoginPage/loginForms/ForgotCredentials'
 export {Login3scaleForm} from 'LoginPage/loginForms/Login3scaleForm'
-export {RequestPasswordForm} from 'LoginPage/loginForms/RequestPassWordForm'
+export {RequestPasswordForm} from 'LoginPage/loginForms/RequestPasswordForm'
 export {HiddenInputs} from 'LoginPage/loginForms/HiddenInputs'
 export {SimpleLoginPage, LoginPageWrapper} from 'LoginPage/LoginPageWrapper'
 export {AuthenticationProviders} from 'LoginPage/loginForms/AuthenticationProviders'
