@@ -401,6 +401,23 @@ class ServiceTest < ActiveSupport::TestCase
     end
   end
 
+  class DestroyServiceTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'achieve as deleted' do
+      account = FactoryBot.create(:simple_provider)
+      service = FactoryBot.create(:simple_service, account: account)
+      FactoryBot.create(:simple_service, account: account) # To be able to destroy the other service
+
+      assert_difference(DeletedObject.where(object_type: Service).method(:count), +1) { service.destroy! }
+      deleted_object_entry = DeletedObject.where(object_type: Service).last!
+      assert_equal service.id, deleted_object_entry.object_id
+      assert_equal 'Service', deleted_object_entry.object_type
+      assert_equal account.id, deleted_object_entry.owner_id
+      assert_equal 'Account', deleted_object_entry.owner_type
+    end
+  end
+
   test 'reordering plans' do
     service = FactoryBot.create(:simple_service)
 
