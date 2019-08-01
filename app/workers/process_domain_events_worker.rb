@@ -1,7 +1,8 @@
 class ProcessDomainEventsWorker
   include Sidekiq::Worker
 
-  def perform(event)
+  def perform(event_id)
+    event = EventStore::Repository.find_event!(event_id)
     events = find_providers(event).map { |provider| Domains::ProviderDomainsChangedEvent.create(provider, event) }
     events += find_proxies(event).map { |proxy| Domains::ProxyDomainsChangedEvent.create(proxy, event) }
 
@@ -41,6 +42,6 @@ class ProcessDomainEventsWorker
     return unless ThreeScale.config.onpremises
     return if event.parent_event?
 
-    super
+    perform_async(event.event_id)
   end
 end
