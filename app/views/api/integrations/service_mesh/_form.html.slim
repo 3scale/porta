@@ -14,6 +14,11 @@
 
     = render 'api/integrations/apicast/shared/mapping_rules', f: f
 
+    - if @service.oidc?
+      = f.toggled_inputs 'Authentication Settings' do
+        div.help-button-constrainer
+          = render 'api/integrations/apicast/shared/oidc', f: f
+
   = f.buttons do
     = f.button 'Update', button_html: { class: 'important-button update' }
     = fixed_width_icon_link_to("Back to Integration & Configuration", "arrow-left", admin_service_integration_path(@service), class: 'next')
