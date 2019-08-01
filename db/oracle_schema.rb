@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190722114341) do
+ActiveRecord::Schema.define(version: 20190731092338) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -1226,6 +1226,7 @@ ActiveRecord::Schema.define(version: 20190722114341) do
     t.boolean  "referrer_filters_required",      limit: nil,                default: false
     t.string   "deployment_option",                                         default: "hosted"
     t.string   "kubernetes_service_link"
+    t.boolean  "act_as_product",                 limit: nil,                default: false
   end
 
   add_index "services", ["account_id"], name: "idx_account_id"
