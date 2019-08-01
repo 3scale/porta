@@ -38,6 +38,8 @@ class Service < ApplicationRecord
   before_destroy :stop_destroy_if_last_or_default
   after_destroy :update_account_default_service
 
+  after_commit :achieve_as_deleted, on: :destroy
+
   with_options(dependent: :destroy, inverse_of: :service) do |service|
     service.has_many :service_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
@@ -517,6 +519,10 @@ class Service < ApplicationRecord
   end
 
   private
+
+  def achieve_as_deleted
+    ::DeletedObject.create!(object: self, owner: account)
+  end
 
   def deleted_by_state_machine
     @deleted_by_state_machine = true
