@@ -239,7 +239,7 @@ module VerticalNavHelper
   def service_integration_items
     items = []
     items << {id: :configuration,   title: 'Configuration',     path: path_to_service(@service)}
-    items << {id: :methods_metrics, title: 'Methods & Metrics', path: admin_service_metrics_path(@service)} if @service.acts_as_traditional_service?
+    items << {id: :methods_metrics, title: 'Methods & Metrics', path: admin_service_metrics_path(@service)} if @service.act_as_traditional_service?
     items << {id: :mapping_rules,   title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if provider_can_use?(:independent_mapping_rules)
     items << {id: :settings,        title: 'Settings',          path: settings_admin_service_path(@service)}
   end

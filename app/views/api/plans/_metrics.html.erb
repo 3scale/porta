@@ -10,7 +10,7 @@
     <thead>
       <tr>
         <th colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
-          <% if @service.acts_as_product? -%>
+          <% if @service.act_as_product? -%>
             Product Level
           <% else -%>
             Metric or method
@@ -53,12 +53,12 @@
           </td>
         </tr>
       <% else -%>
-        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.service_level_metrics, locals: { include_children: @service.acts_as_traditional_service? } %>
+        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.service_level_metrics, locals: { include_children: @service.act_as_traditional_service? } %>
       <% end -%>
     </tbody>
   </table>
 
-  <% if @service.acts_as_product? -%>
+  <% if @service.act_as_product? -%>
   <table id="backend_api_metrics" class="contract_table">
     <thead>
       <tr>

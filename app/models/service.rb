@@ -335,23 +335,8 @@ class Service < ApplicationRecord
     metrics.find_by(system_name: 'hits')&.parent?
   end
 
-  # TODO: Replace with a database attribute of the service
-  def product
-    true
-  end
-
-  alias_method :product?, :product
-
-  def acts_as_product?
-    account&.provider_can_use?(:api_as_product) && product?
-  end
-
-  def acts_as_traditional_service?
-    !acts_as_product?
-  end
-
   def service_level_metrics
-    acts_as_product? ? metrics.where(system_name: 'hits') : top_level_metrics
+    act_as_product? ? metrics.where(system_name: 'hits') : top_level_metrics
   end
 
   def create_default_metrics

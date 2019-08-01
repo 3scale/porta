@@ -6,7 +6,7 @@ Feature: API menu
   Background:
     Given a provider "foo.example.com"
       And current domain is the admin domain of provider "foo.example.com"
-      And all the rolling updates features are off
+      And all the rolling updates features are on
       And I log in as provider "foo.example.com"
       And I go to the provider dashboard
       And I follow "Overview"
@@ -44,12 +44,31 @@ Feature: API menu
     | Mapping Rules             |
     | Settings                  |
 
-  Scenario: Integration sub menu structure for API as Product
-    Given all the rolling updates features are on
-    When I follow "Integration" within the main menu
+  Scenario: Integration sub menu structure without independent mapping rules
+    Given I have independent_mapping_rules feature disabled
+    When I follow "Overview"
+    And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
     | Methods & Metrics         |
+    | Settings                  |
+
+  Scenario: Integration sub menu structure for API as Product
+    Given the service acts as product
+    When I follow "Overview"
+    And I follow "Integration" within the main menu
+    Then I should see menu items
+    | Configuration             |
+    | Mapping Rules             |
+    | Settings                  |
+
+  Scenario: Integration sub menu structure for API as Product without independent mapping rules
+    Given the service acts as product
+    And I have independent_mapping_rules feature disabled
+    When I follow "Overview"
+    And I follow "Integration" within the main menu
+    Then I should see menu items
+    | Configuration             |
     | Settings                  |
 
   Scenario: API menu structure with service plans enabled
