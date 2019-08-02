@@ -11,8 +11,12 @@
 
   div class="feedback proxy no-test"
     i.fa.fa-hdd-o
-
     = render 'api/integrations/apicast/shared/mapping_rules', f: f
+
+    - if @service.oidc?
+      = f.toggled_inputs 'Authentication Settings' do
+        div.help-button-constrainer
+          = render 'api/integrations/apicast/shared/oidc', f: f
 
   = f.buttons do
     = f.button 'Update', button_html: { class: 'important-button update' }
