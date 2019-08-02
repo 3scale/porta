@@ -7,7 +7,7 @@ import {NewServiceForm} from 'NewService'
 Enzyme.configure({adapter: new Adapter()})
 
 const props = {
-  isServiceDiscoveryAccesible: true,
+  isServiceDiscoveryAccessible: true,
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl: 'authenticate-url',
   providerAdminServiceDiscoveryServicesPath: 'my-path',
@@ -62,7 +62,7 @@ it('should render `(Authenticate to enable this option)` link when Service Disco
 
 describe('when Service Discovery is not accessible', () => {
   beforeAll(() => {
-    props.isServiceDiscoveryAccesible = false
+    props.isServiceDiscoveryAccessible = false
   })
 
   it('should not render service source inputs', () => {
