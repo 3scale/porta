@@ -1,5 +1,3 @@
-require 'three_scale/error_reporting_ignore_enduser'
-
 module DeveloperPortal
   class ApplicationController < ::FrontendController
 

@@ -1,5 +1,3 @@
-require 'three_scale/error_reporting_ignore_enduser'
-
 class DeveloperPortal::AccessCodesController < ApplicationController
   include ::ThreeScale::ErrorReportingIgnoreEnduser
   error_reporting_ignore_enduser

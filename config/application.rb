@@ -54,10 +54,6 @@ module System
       simple_try_config_for(*args)&.symbolize_keys
     end
 
-    config.before_eager_load do
-      require 'three_scale'
-    end
-
     if ENV['RAILS_LOG_TO_STDOUT'].present?
       config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
     end
@@ -263,7 +259,7 @@ module System
     }.merge(try_config_for(:paperclip) || {})
 
     config.after_initialize do
-      require_or_load 'three_scale'
+      require 'three_scale'
       ThreeScale.validate_settings!
       require 'system/redis_pool'
       redis_config = ThreeScale::RedisConfig.new(config.redis)

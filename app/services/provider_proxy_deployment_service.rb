@@ -1,5 +1,3 @@
-require_dependency 'apicast/sandbox'
-
 class ProviderProxyDeploymentService
   SUCCESS_MESSAGE = 'Deployed successfully.'.freeze
   FAILURE_MESSAGE = 'Deploy failed.'.freeze
@@ -12,11 +10,11 @@ class ProviderProxyDeploymentService
 
   def initialize(provider)
     @provider = provider
-    @lua_generator = ::Apicast::ProviderLuaGenerator.new
+    @lua_generator = Apicast::ProviderLuaGenerator.new
     @source = Apicast::ProviderSource.new(@provider)
-    @conf_generator = ::Apicast::SandboxProviderConfGenerator.new(provider.id)
+    @conf_generator = Apicast::SandboxProviderConfGenerator.new(provider.id)
     @proxy_config = System::Application.config.three_scale.sandbox_proxy
-    @sandbox_proxy = ::Apicast::Sandbox.new(provider, @proxy_config)
+    @sandbox_proxy = Apicast::Sandbox.new(provider, @proxy_config)
   end
 
   def lua_content

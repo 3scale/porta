@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
-class Account::DomainsTest < ActiveSupport::TestCase
+class Account::DomainTest < ActiveSupport::TestCase
   test '#domain must be downcase' do
     account_one = FactoryBot.create(:simple_provider)
     account_one.subdomain = 'FOO'

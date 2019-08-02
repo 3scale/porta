@@ -1,5 +1,3 @@
-require_dependency 'stats'
-
 module LastTraffic
   module_function
 

@@ -1,5 +1,3 @@
-require_dependency 'events/importer'
-
 class ProxyDeploymentWorker
   include Sidekiq::Worker
 

@@ -3,9 +3,6 @@
 require 'roar/json/collection'
 require 'representable/hash/collection'
 
-require_dependency 'three_scale/representer'
-require_dependency 'three_scale/api/collection'
-
 class ThreeScale::CollectionRepresenter < ThreeScale::Representer
   include Representable::Hash::Collection
 

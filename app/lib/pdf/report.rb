@@ -1,10 +1,7 @@
 require 'prawn/core'
 require 'prawn/format'
-require "prawn/measurement_extensions"
+require 'prawn/measurement_extensions'
 require 'gruff'
-require 'pdf/format'
-require 'pdf/data'
-require 'pdf/styles/colored'
 
 # REFACTOR: extract abstract Report class, and DRY functionality with InvoiceReporter
 module Pdf

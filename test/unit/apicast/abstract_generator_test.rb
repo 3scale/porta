@@ -3,7 +3,6 @@ require 'test_helper'
 class Apicast::AbstractGeneratorTest < ActiveSupport::TestCase
 
   class SomeGenerator < AbstractGenerator
-
   end
 
   def setup
@@ -36,6 +35,6 @@ class Apicast::AbstractGeneratorTest < ActiveSupport::TestCase
   end
 
   def test_lookup_context_prefixes
-    assert_equal [Rails.root.join('lib', 'apicast').to_s], @generator.lookup_context.prefixes
+    assert_equal [Rails.root.join('app', 'lib', 'apicast').to_s], @generator.lookup_context.prefixes
   end
 end

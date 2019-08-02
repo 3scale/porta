@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-
-require 'pdf/format'
 require 'gruff'
 
 module Pdf

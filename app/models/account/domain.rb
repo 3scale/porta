@@ -1,4 +1,4 @@
-module Account::Domains
+module Account::Domain
   extend ActiveSupport::Concern
 
   included do
@@ -173,7 +173,7 @@ module Account::Domains
 
   def unique?(attr, val = self[attr])
     scope = new_record? ? Account.all : Account.where.not(id: id)
-    Account::Domains.unique?(attr: attr, val: val, scope: scope)
+    Account::Domain.unique?(attr: attr, val: val, scope: scope)
   end
 
   def domain_uniqueness

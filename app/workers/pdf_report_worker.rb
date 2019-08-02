@@ -38,7 +38,3 @@ class PdfReportWorker
 
   delegate :logger, to: :Rails
 end
-
-if Rails.application.config.three_scale.daily_weekly_reports_pref
-  require_dependency 'pdf/report'
-end

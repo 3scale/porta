@@ -1,4 +1,4 @@
-require_or_load 'three_scale'
+require 'three_scale'
 
 module ThreeScale
   module Analytics

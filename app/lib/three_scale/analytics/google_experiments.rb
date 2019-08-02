@@ -1,5 +1,4 @@
 require 'google/api_client'
-require_dependency 'three_scale/analytics/log_subscriber'
 
 module ThreeScale
   module Analytics

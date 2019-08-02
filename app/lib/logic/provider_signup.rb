@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_dependency 'simple_layout'
-require_dependency 'three_scale/analytics'
 
 module Logic
   module ProviderSignup
