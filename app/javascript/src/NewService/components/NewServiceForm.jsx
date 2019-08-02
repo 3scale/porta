@@ -6,6 +6,7 @@ import {ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm} from 'NewSer
 import {createReactWrapper} from 'utilities/createReactWrapper'
 
 type Props = {
+  isServiceDiscoveryAccessible: boolean,
   isServiceDiscoveryUsable: boolean,
   serviceDiscoveryAuthenticateUrl: string,
   providerAdminServiceDiscoveryServicesPath: string,
@@ -13,7 +14,7 @@ type Props = {
 }
 
 const NewServiceForm = (props: Props) => {
-  const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
+  const {isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
     providerAdminServiceDiscoveryServicesPath, adminServicesPath} = props
 
   const [formMode, setFormMode] = useState('manual')
@@ -22,18 +23,20 @@ const NewServiceForm = (props: Props) => {
     setFormMode(event.currentTarget.value)
   }
 
-  const formToRender = () => formMode === 'manual'
+  const formToRender = () => formMode === 'manual' || !isServiceDiscoveryAccessible
     ? <ServiceManualForm formActionPath={adminServicesPath}/>
     : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath}/>
 
   return (
     <React.Fragment>
       <h1>New API</h1>
-      <ServiceSourceForm
-        isServiceDiscoveryUsable={isServiceDiscoveryUsable}
-        serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
-        handleFormsVisibility={handleFormsVisibility}
-      />
+      {isServiceDiscoveryAccessible &&
+        <ServiceSourceForm
+          isServiceDiscoveryUsable={isServiceDiscoveryUsable}
+          serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
+          handleFormsVisibility={handleFormsVisibility}
+        />
+      }
       {formToRender()}
     </React.Fragment>
   )

@@ -7,6 +7,7 @@ import {NewServiceForm} from 'NewService'
 Enzyme.configure({adapter: new Adapter()})
 
 const props = {
+  isServiceDiscoveryAccessible: true,
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl: 'authenticate-url',
   providerAdminServiceDiscoveryServicesPath: 'my-path',
@@ -57,4 +58,24 @@ it('should render `(Authenticate to enable this option)` link when Service Disco
   expect(link.exists()).toEqual(true)
   expect(link.text()).toEqual(' (Authenticate to enable this option)')
   expect(link.props().href).toEqual('authenticate-url')
+})
+
+describe('when Service Discovery is not accessible', () => {
+  beforeAll(() => {
+    props.isServiceDiscoveryAccessible = false
+  })
+
+  it('should not render service source inputs', () => {
+    const wrapper = mount(<NewServiceForm {...props}/>)
+    expect(wrapper.find('ServiceSourceForm').exists()).toEqual(false)
+    expect(wrapper.find('input#source_manual').exists()).toEqual(false)
+    expect(wrapper.find('ipnut#source_discover').exists()).toEqual(false)
+  })
+
+  it('should render new Service Manual form', () => {
+    const wrapper = mount(<NewServiceForm {...props}/>)
+    expect(wrapper.find('ServiceManualForm').exists()).toEqual(true)
+    expect(wrapper.find('form#new_service').exists()).toEqual(true)
+    expect(wrapper.find('form#service_source').exists()).toEqual(false)
+  })
 })
