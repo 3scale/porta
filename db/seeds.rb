@@ -208,7 +208,12 @@ ActiveRecord::Base.transaction do
   #  Creating Sample Data
   ###
 
-  SignupWorker.enqueue(provider)
+  if Rails.env.development?
+    SignupWorker::SampleDataWorker.new.perform(provider.id)
+    SignupWorker::ImportSimpleLayoutWorker.new.perform(provider.id)
+  else
+    SignupWorker.enqueue(provider)
+  end
 
 
   puts <<~INFO
