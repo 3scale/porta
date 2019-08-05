@@ -46,6 +46,7 @@ module EventStore
     attr_readonly :provider_id
 
     validates :provider_id, presence: true
+    validates :stream, :event_type, :event_id, length: { maximum: 255 }
 
     before_validation :provider_id_from_metadata
 

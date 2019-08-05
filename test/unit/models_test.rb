@@ -6,7 +6,7 @@ class ModelsTest < ActiveSupport::TestCase
 
   test 'validate length of strings for all models to do not raise an error reaching DB' do
     exceptions = {
-      'ActiveRecord::SchemaMigration' => :all, 'Audited::Audit' => :all, 'RailsEventStoreActiveRecord::Event' => :all, 'EventStore::Event' => :all,
+      'ActiveRecord::SchemaMigration' => :all, 'Audited::Audit' => :all, 'RailsEventStoreActiveRecord::Event' => :all,
       'System::Database::ConnectionProbe' => :all, 'ActsAsTaggableOn::Tag' => :all, 'ActsAsTaggableOn::Tagging' => :all, 'ApplicationRecord' => :all,
       'FieldsDefinition' => %w[target], 'AuthenticationProvider' => %w[account_type], 'Feature' => %w[featurable_type scope], 'Message' => %w[state],
       'UsageLimit' => %w[period plan_type], 'Policy' => %w[identifier], 'ProxyRule' => %w[metric_system_name], 'ProxyConfig' => %w[hosts],
@@ -18,8 +18,8 @@ class ModelsTest < ActiveSupport::TestCase
       'Profile' => %w[logo_file_name logo_content_type state], 'UserSession' => %w[key user_agent], 'CMS::Partial' => %w[content_type],
       'CMS::EmailTemplate' => %w[content_type], 'CMS::Builtin' => %w[title], 'CMS::Builtin::StaticPage' => %w[title], 'CMS::Builtin::Page' => %w[title content_type],
       'CMS::Builtin::Partial' => %w[title content_type], 'CMS::Portlet' => %w[content_type], 'CMS::Builtin::LegalTerm' => %w[title content_type],
-      'CMS::Portlet::Base' => %w[content_type], 'ExternalRssFeedPortlet' => %w[content_type], 'LatestForumPostsPortlet' => %w[content_type],
-      'TableOfContentsPortlet' => %w[content_type], 'AuthenticationProvider::GitHub' => %w[branding_state account_type],
+      'CMS::PortletTest::CustomPortlet' => :all, 'CMS::Portlet::Base' => %w[content_type], 'ExternalRssFeedPortlet' => %w[content_type],
+      'LatestForumPostsPortlet' => %w[content_type], 'TableOfContentsPortlet' => %w[content_type], 'AuthenticationProvider::GitHub' => %w[branding_state account_type],
       'AuthenticationProvider::Keycloak' => %w[account_type], 'AuthenticationProvider::Auth0' => %w[account_type], 'AuthenticationProvider::Custom' => %w[account_type],
       'AuthenticationProvider::ServiceDiscoveryProvider' => %w[account_type], 'AuthenticationProvider::RedhatCustomerPortal' => %w[account_type],
       'Account' => %w[credit_card_auth_code credit_card_authorize_net_payment_profile_token credit_card_partial_number],
