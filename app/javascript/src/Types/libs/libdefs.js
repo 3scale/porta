@@ -16,4 +16,5 @@ declare module 'core-js/fn/symbol' {
 
 }
 
+// eslint-disable-next-line flowtype/no-weak-types
 export type Window = any
