@@ -2,7 +2,7 @@
 class Metric < ApplicationRecord
   include Backend::ModelExtensions::Metric
   include SystemName
-  include AchieveDeletionBelongingToService
+  include ArchiveDeletionBelongingToService
 
   before_destroy :destroyable?
   before_validation :associate_to_service_of_parent
