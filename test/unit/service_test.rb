@@ -404,7 +404,7 @@ class ServiceTest < ActiveSupport::TestCase
   class DestroyServiceTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    test 'achieve as deleted' do
+    test 'archive as deleted' do
       account = FactoryBot.create(:simple_provider)
       service = FactoryBot.create(:simple_service, account: account)
       FactoryBot.create(:simple_service, account: account) # To be able to destroy the other service
