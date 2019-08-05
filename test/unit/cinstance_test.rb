@@ -940,7 +940,7 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_same_elements [other_plan], application.available_application_plans.to_a
   end
 
-  test 'achieve as deleted' do
+  test 'archive as deleted' do
     plan = FactoryBot.create(:application_plan)
     Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:cinstance, plan: plan) }
     cinstance = plan.cinstances.last
