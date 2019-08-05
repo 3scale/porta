@@ -72,7 +72,7 @@ class MetricTest < ActiveSupport::TestCase
     assert metric_method.errors[:system_name].present?
   end
 
-  test 'achieve as deleted' do
+  test 'archive as deleted' do
     service = FactoryBot.create(:simple_service)
     Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:metric, service: service) }
     metric = service.metrics.last
