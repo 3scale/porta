@@ -7,6 +7,10 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   activate_menu :backend_api, :methods_metrics
   sublayout 'api/service'
 
+  def create
+    # TODO
+  end
+
   def index
     @metrics = @backend_api.metrics.top_level.includes(:proxy_rules)
     @service = @backend_api.first_service # FIXME: This is needed because the page is still using a helper shared with the old metrics page (app/helpers/services_helper.rb:26)
