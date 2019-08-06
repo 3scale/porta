@@ -6,7 +6,7 @@ module BackendApiLogic
 
     included do
       has_many :backend_api_configs, inverse_of: :service, dependent: :destroy
-      has_many :backend_apis, through: :backend_api_configs, dependent: :destroy
+      has_many :backend_apis, through: :backend_api_configs
 
       alias_method :backend_api, :first_backend_api
     end
