@@ -1,0 +1,31 @@
+/ TODO: get products and apis collections from backend
+- products = @services.first(1)
+- backends = @services.last(6)
+
+header.DashboardSection-header.DashboardSection-header--extended
+  h1.DashboardSection-title
+    | APIs
+  = render 'apiap_navigation'  
+
+div
+  div.DashboardNavigation-tabs--content
+    input#tab-products name='apiap-tabs' type='radio' checked=''
+    div#products
+      = render 'apiap_search_bar', collection: products, placeholder: 'Find a Product', id: 'products_search'
+      / TODO: make it work for products
+      = render 'new_api_button', text: 'New Product'
+      = render collection: products,
+               partial: 'provider/admin/dashboards/service',
+               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+               cache_options: { expires_in: 1.hour }
+
+  div.DashboardNavigation-tabs--content
+    input#tab-backends name='apiap-tabs' type='radio'
+    div#backends
+      = render 'apiap_search_bar', collection: backends, placeholder: 'Find a Backend', id: 'backends_search'
+      / TODO: make it work for backends
+      = render 'new_api_button', text: 'New Backend'
+      = render collection: backends,
+               partial: 'provider/admin/dashboards/service',
+               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+               cache_options: { expires_in: 1.hour }

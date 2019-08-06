@@ -1,0 +1,10 @@
+div id=id
+
+javascript:
+  document.addEventListener('DOMContentLoaded', function () {
+    var apis = #{json collection}
+    var placeholder = #{json placeholder}
+    var displayApis = () => {}
+
+    window.ApiFilter({ apis, placeholder, displayApis }, #{json id})
+  })

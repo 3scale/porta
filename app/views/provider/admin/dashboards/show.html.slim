@@ -27,20 +27,13 @@
       = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
     section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
-      - if current_user.accessible_services?
-        header.DashboardSection-header.DashboardSection-header--extended
-          = render 'services_filter'
-          = render 'services_navigation', api_docs: current_account.api_docs_services
-
-
-
-        // API Service Level
-        = render collection: @services,
-                 partial: 'provider/admin/dashboards/service',
-                 cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
-                 cache_options: { expires_in: 1.hour }
-
-      = render 'shared/service_access'
+      - unless current_user.accessible_services?
+        = render 'shared/service_access'
+      - else
+        - if current_account.provider_can_use?(:api_as_product)
+          = render 'section_products_and_backends'
+        - else
+          = render 'section_services'
 
   div.Dashboard-events
     section.DashboardStream

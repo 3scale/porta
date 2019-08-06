@@ -398,3 +398,30 @@
 a:hover .u-notice {
   color: $link-color;
 }
+
+.DashboardNavigation-tabs {
+  label {
+    cursor: pointer;
+  }
+
+  .current-tab {
+    color: $menu-hover-color;
+  }
+
+  &--content {
+    & > input, #products, #backends {
+      display: none;
+    }
+
+    & > input:checked ~ #products,
+    & > input:checked ~ #backends {
+      display: block
+    }
+
+    nav.DashboardNavigation--services {
+      float: left;
+      margin-left: line-height-times(2)
+    }
+  }
+
+}

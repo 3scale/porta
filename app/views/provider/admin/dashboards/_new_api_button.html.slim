@@ -1,8 +1,10 @@
+- button_text = text ? text : 'New API'
+
 nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
     - if can?(:manage, :service_contracts) && !current_account.master?
       li.DashboardNavigation-list-item
-        = fancy_link_to 'New API',
+        = fancy_link_to button_text,
           new_admin_service_path,
           :class => 'new DashboardNavigation-link',
           :switch => :multiple_services,

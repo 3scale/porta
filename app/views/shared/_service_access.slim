@@ -1,8 +1,7 @@
-- if current_user.accessible_services.empty?
-  - admin = current_account.first_admin
-  p
-    ' You don't have access to any API on the
-    => current_account.org_name
-    ' account. Please
-    => mail_to admin.email, "contact #{admin.display_name}"
-    | to request access.
+- admin = current_account.first_admin
+p
+  ' You don't have access to any API on the
+  => current_account.org_name
+  ' account. Please
+  => mail_to admin.email, "contact #{admin.display_name}"
+  | to request access.
