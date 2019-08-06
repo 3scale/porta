@@ -35,14 +35,21 @@ module Provider::Admin::DashboardsHelper
   def dashboard_secondary_link(link_text, path, options = {})
     safe_wrap_with_parenthesis(dashboard_navigation_link(link_text, path, options))
   end
-  
+
   def dashboard_collection_link(singular_name, collection, path, options = {})
     link_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
     dashboard_navigation_link(link_text, path, options)
   end
-  
+
   def dashboard_secondary_collection_link(singular_name, collection, path, options = {})
     safe_wrap_with_parenthesis(dashboard_collection_link(singular_name, collection, path, options))
+  end
+
+  def dashboard_apiap_tab_label(singular_name, collection, options = {})
+    name = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
+    icon_name = options.fetch(:icon_name, nil)
+    name = name.prepend "#{icon(icon_name)} " if icon_name
+    name.html_safe
   end
 
   def safe_wrap_with_parenthesis(html)

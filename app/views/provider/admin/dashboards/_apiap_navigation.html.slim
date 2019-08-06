@@ -1,0 +1,30 @@
+/ TODO: get products and apis collections from backend
+- products = @services.first(1)
+- backends = @services.last(6)
+
+- current_tab = 'current-tab'
+
+nav.DashboardNavigation.DashboardNavigation-tabs
+  ul.DashboardNavigation-list
+    li.DashboardNavigation-list-item
+      label.DashboardNavigation-link for='tab-products' class=current_tab
+        = dashboard_apiap_tab_label 'Product', products, icon_name: 'gift'
+    li.DashboardNavigation-list-item
+      label.DashboardNavigation-link for='tab-backends'
+        = dashboard_apiap_tab_label 'Backend', backends, icon_name: 'puzzle-piece'
+
+javascript:
+  var productsTab = document.querySelector('label[for="tab-products"]')
+  var backendsTab = document.querySelector('label[for="tab-backends"]')
+
+  var CURRENT_TAB = #{json current_tab}
+
+  productsTab.addEventListener('click', function () {
+    this.classList.add(CURRENT_TAB)
+    backendsTab.classList.remove(CURRENT_TAB)
+  })
+
+  backendsTab.addEventListener('click', function () {
+    this.classList.add(CURRENT_TAB)
+    productsTab.classList.remove(CURRENT_TAB)
+  })

@@ -1,0 +1,8 @@
+header.DashboardSection-header.DashboardSection-header--extended
+  = render 'services_filter'
+  = render 'new_api_button'
+
+= render collection: @services,
+         partial: 'provider/admin/dashboards/service',
+         cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+         cache_options: { expires_in: 1.hour }

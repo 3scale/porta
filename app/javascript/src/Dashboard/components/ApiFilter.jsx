@@ -15,10 +15,11 @@ import type { Api } from 'Types'
 
 type Props = {
   apis: Api[],
+  placeholder?: string,
   displayApis: Api[] => void
 }
 
-const ApiFilter = ({ apis, displayApis }: Props) => {
+const ApiFilter = ({ apis, placeholder = 'All APIs', displayApis }: Props) => {
   const onInputChange = event => {
     const filterQuery = event.target.value.toLowerCase()
     const displayedApis = apis.filter(api => api.name.toLowerCase().indexOf(filterQuery) !== -1)
@@ -31,7 +32,7 @@ const ApiFilter = ({ apis, displayApis }: Props) => {
       <input
         onChange={onInputChange}
         type="search"
-        placeholder="All APIs"
+        placeholder={placeholder}
       />
       <span className="fa fa-search" />
     </div>
