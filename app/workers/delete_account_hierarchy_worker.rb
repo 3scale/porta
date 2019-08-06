@@ -21,4 +21,8 @@ class DeleteAccountHierarchyWorker < DeleteObjectHierarchyWorker
     end
   end
 
+  def destroyable_associations
+    super.select { |reflection| reflection.class_name != Account.name }
+  end
+
 end

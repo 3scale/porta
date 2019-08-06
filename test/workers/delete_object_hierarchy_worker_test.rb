@@ -3,12 +3,14 @@
 require 'test_helper'
 
 class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   setup do
     @object = FactoryBot.create(:metric)
   end
 
   def test_perform
-    Sidekiq::Testing.inline! do
+    perform_enqueued_jobs do
       perform_expectations
 
       hierarchy_worker.perform_now(object, caller_hierarchy)
@@ -101,7 +103,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     test 'it does not perform for the buyers if it is not destroyed by the provider association' do
       DeleteAccountHierarchyWorker.expects(:perform_later).never
 
-      Sidekiq::Testing.inline! { DeletePaymentSettingHierarchyWorker.perform_now(object, []) }
+      perform_enqueued_jobs { DeletePaymentSettingHierarchyWorker.perform_now(object, []) }
 
       @buyers.each { |buyer| assert buyer.reload }
     end
@@ -145,6 +147,9 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
       DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything)
       DeletePaymentSettingHierarchyWorker.expects(:perform_later).with(payment_setting, anything)
+
+      # It should not be directly called because it is done from DeletePaymentSettingHierarchyWorker and here it is mocked and not executed
+      buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything).never }
     end
 
     test 'does not perform if wrong state' do
@@ -152,6 +157,16 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       DeleteObjectHierarchyWorker.expects(:perform_later).never
 
       DeleteAccountHierarchyWorker.perform_now(provider)
+    end
+
+    test 'the buyer is destroyed in parallel' do
+      buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, ["Hierarchy-Account-#{provider.id}", "Hierarchy-PaymentGatewaySetting-#{payment_setting.id}"]) }
+
+      perform_enqueued_jobs { DeleteAccountHierarchyWorker.perform_now(provider, caller_hierarchy) }
+
+      buyers.each { |buyer_account| assert_raise(ActiveRecord::RecordNotFound) { buyer_account.reload } }
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { payment_setting.reload }
     end
   end
 
