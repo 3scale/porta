@@ -1,21 +1,21 @@
-jQuery(document).ready(function(){
-  jQuery('#proxy-rules .metric select[data-selected]').each(function () {
-    jQuery(this).val(jQuery(this).data('selected'))
-  });
+$(document).ready(function () {
+  $('#proxy-rules .metric select[data-selected]').each(function () {
+    $(this).val($(this).data('selected'))
+  })
 
-  jQuery(function () {
+  $(function () {
     var PIXEL_CORRECTOR = 4
-    var tdWidths = jQuery.map(jQuery('.ui-sortable-item').first().children(), function (td, _i) {
+    var tdWidths = $.map($('.ui-sortable-item').first().children(), function (td, _i) {
       return td.offsetWidth + PIXEL_CORRECTOR
     })
-    jQuery(function () {
-      jQuery('#sortable').sortable({
+    $(function () {
+      $('#sortable').sortable({
         cursor: 'move',
         containment: '#mapping-rules',
         items: 'tr:not(#new-proxy-rule-template)',
         start: function (event, ui) {
-          jQuery.each(ui.item.children(), function (i, td) {
-            jQuery(td).css({ width: tdWidths[i] })
+          $.each(ui.item.children(), function (i, td) {
+            $(td).css({ width: tdWidths[i] })
           })
         },
         stop: function () {
@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
           })
         }
       })
-      jQuery('tr, td').disableSelection()
+      $('tr, td').disableSelection()
     })
   })
-});
+})

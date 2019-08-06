@@ -23,7 +23,7 @@ class ProxyRule < ApplicationRecord
   self.default_sort_column = :position
   self.default_sort_direction = :asc
 
-  ALLOWED_HTTP_METHODS = %w( GET POST DELETE PUT PATCH HEAD OPTIONS ).freeze
+  ALLOWED_HTTP_METHODS = %w[GET POST DELETE PUT PATCH HEAD OPTIONS].freeze
 
   class PatternParser
     REGEX_LITERAL = /[_\w]+/i
@@ -88,7 +88,7 @@ class ProxyRule < ApplicationRecord
   validates :http_method, inclusion: { in: ALLOWED_HTTP_METHODS }
   validate :non_repeated_parameters
   validate :no_vars_in_keys
-  validates :redirect_url, :format => URI.regexp(%w(http https)),  allow_blank: true, length: { maximum: 10000 }
+  validates :redirect_url, format: URI.regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
 
   def parameters
     Addressable::Template.new(path_pattern).variables
