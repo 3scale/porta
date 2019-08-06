@@ -8,7 +8,7 @@ Then /^I should see the partners submenu$/ do
 end
 
 Then /^I should see menu items$/ do |items|
-  items.rows.each do |item|
+  items.raw.each do |item|
     within '#mainmenu' do
       assert has_css? 'li', :text => item[0]
     end
