@@ -1,6 +1,6 @@
 / TODO: get products and apis collections from backend
 - products = @services.first(1)
-- backends = @services.last(6)
+- backends = current_account.backend_apis
 
 header.DashboardSection-header.DashboardSection-header--extended
   h1.DashboardSection-title
@@ -25,7 +25,4 @@ div
       = render 'apiap_search_bar', collection: backends, placeholder: 'Find a Backend', id: 'backends_search'
       / TODO: make it work for backends
       = render 'new_api_button', text: 'New Backend'
-      = render collection: backends,
-               partial: 'provider/admin/dashboards/service',
-               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
-               cache_options: { expires_in: 1.hour }
+      = render 'list_backends'
