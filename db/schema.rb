@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190802133303) do
+ActiveRecord::Schema.define(version: 20190805135829) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   limit: 8,                      null: false
@@ -823,8 +823,12 @@ ActiveRecord::Schema.define(version: 20190802133303) do
     t.string   "friendly_name", limit: 255
     t.integer  "parent_id",     limit: 8
     t.integer  "tenant_id",     limit: 8
+    t.integer  "owner_id",      limit: 8
+    t.string   "owner_type",    limit: 255
   end
 
+  add_index "metrics", ["owner_type", "owner_id", "system_name"], name: "index_metrics_on_owner_type_and_owner_id_and_system_name", unique: true, using: :btree
+  add_index "metrics", ["owner_type", "owner_id"], name: "index_metrics_on_owner_type_and_owner_id", using: :btree
   add_index "metrics", ["service_id", "system_name"], name: "index_metrics_on_service_id_and_system_name", unique: true, using: :btree
   add_index "metrics", ["service_id"], name: "index_metrics_on_service_id", using: :btree
 
