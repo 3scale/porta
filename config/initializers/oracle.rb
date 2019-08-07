@@ -25,6 +25,14 @@ if System::Database.oracle?
     const_set(:IDENTIFIER_MAX_LENGTH, 128)
 
     prepend(Module.new do
+      def add_column(table_name, column_name, type, options = {})
+        if type == :integer
+          super(table_name, column_name, type, options.except(:limit))
+        else
+          super
+        end
+      end
+
       # We need to patch Oracle Adapter quoting to actually serialize CLOB columns.
       # https://github.com/rsim/oracle-enhanced/issues/1588#issue-272289146
       # The default behaviour is to serialize them to 'empty_clob()' basically wiping out the data.
