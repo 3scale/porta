@@ -1155,8 +1155,11 @@ ActiveRecord::Schema.define(version: 20190802133303) do
     t.text     "redirect_url",       limit: 65535
     t.integer  "position",           limit: 4
     t.boolean  "last",                             default: false
+    t.integer  "owner_id",           limit: 8
+    t.string   "owner_type",         limit: 255
   end
 
+  add_index "proxy_rules", ["owner_type", "owner_id"], name: "index_proxy_rules_on_owner_type_and_owner_id", using: :btree
   add_index "proxy_rules", ["proxy_id"], name: "index_proxy_rules_on_proxy_id", using: :btree
 
   create_table "referrer_filters", force: :cascade do |t|
