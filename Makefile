@@ -69,14 +69,13 @@ COMPOSE_TEST_FILE := docker-compose.test-$(DB).yml
 ORACLE_DB_IMAGE := quay.io/3scale/oracle:12.2.0.1-ee
 
 include wget.mk
-include docker-compose.mk
 include openshift.mk
 
 .PHONY: default all clean build test info jenkins-env docker test-run tmp-export run test-bash clean-cache clean-tmp compose help
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
-all: clean clean-tmp build test ## Cleans environment, builds docker image and runs tests
+all: clean-tmp dev-setup dev-start
 
 info: docker jenkins-env # Prints relevant environment info
 
@@ -104,12 +103,6 @@ test: $(DOCKER_COMPOSE) info
 	@echo
 	$(MAKE) test-run tmp-export --keep-going
 
-
-cache: ## Starts only cache service from docker-compose file
-cache: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-cache: $(DOCKER_COMPOSE)
-	$(DOCKER_COMPOSE) up --remove-orphans -d cache || $(MAKE) clean-cache $@
-
 test-run: ## Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
 test-run: $(DOCKER_COMPOSE) clean-tmp cache
@@ -124,16 +117,32 @@ clean-tmp: ## Removes temporary files
 	-@ $(foreach dir,$(TMP),rm -rf $(dir);)
 
 run: ## Starts containers and runs command $(CMD) inside the container in a non-interactive shell
-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-run: $(DOCKER_COMPOSE)
-	@echo
+run: MASTER_PASSWORD ?= "p"
+run: USER_PASSWORD ?= "p"
+run:
 	@echo "======= Run ======="
 	@echo
-	$(DOCKER_COMPOSE) run --rm --name $(PROJECT)-build-run $(DOCKER_ENV) build bash -c "$(CMD)"
+	@docker-compose run -e MASTER_PASSWORD=$(MASTER_PASSWORD) -e USER_PASSWORD=$(USER_PASSWORD) --rm system $(CMD)
 
-bash: ## Opens up shell to environment where tests can be ran
-bash: CMD = script/docker.sh && bundle exec rake db:create db:test:load && bundle exec bash
-bash: run
+dev-setup: ## Makes the initial setup for the application ##
+dev-setup: CMD=rake db:setup
+dev-setup: run
+
+dev-start: ## Starts the application with all dependencies using Docker ##
+dev-start:
+	@docker-compose up -d
+
+dev-stop: ## Stops all started containers ##
+dev-stop:
+	@docker-compose stop
+
+# bash: ## Opens up shell on the container
+bash:
+	@echo
+	@echo "======= Bash ======="
+	@echo
+	@docker-compose up -d
+	@docker-compose exec system /bin/bash
 
 build: ## Build the container image using one of the docker-compose file set by $(COMPOSE_FILE) env var
 build: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
