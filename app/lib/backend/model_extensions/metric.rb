@@ -22,10 +22,12 @@ module Backend
       end
 
       def sync_backend
+        return unless service # FIXME: We also need to sync BackendApi metrics
         ::BackendMetricWorker.sync(service.backend_id, id, system_name)
       end
 
       def sync_backend!
+        return unless service # FIXME: We also need to sync BackendApi metrics
         ::BackendMetricWorker.new.perform(service.backend_id, id, system_name)
       end
     end

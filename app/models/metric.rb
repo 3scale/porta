@@ -5,10 +5,11 @@ class Metric < ApplicationRecord
   include ArchiveDeletionBelongingToService
 
   before_destroy :destroyable?
-  before_validation :associate_to_service_of_parent
+  before_validation :associate_to_service_of_parent, :fill_owner
 
   # update Service's updated_at when Metric caches for nicer cache keys
   belongs_to :service, touch: true
+  belongs_to :owner, polymorphic: true, touch: true
 
   has_many :line_items, inverse_of: :metric
   has_many :pricing_rules, :dependent => :destroy
@@ -18,14 +19,15 @@ class Metric < ApplicationRecord
   has_many :proxy_rules, :dependent => :destroy
 
   audited :allow_mass_assignment => true
-  has_system_name uniqueness_scope: :service_id, human_name: :friendly_name
+  has_system_name uniqueness_scope: %i[owner_type owner_id], human_name: :friendly_name
 
   acts_as_tree
 
   attr_protected :service_id, :parent_id, :tenant_id, :audit_ids
   validates :unit, presence: true, unless: :child?
-  validates :friendly_name, uniqueness: {scope: :service_id}, presence: true
-  validates :system_name, :unit, :friendly_name, length: { maximum: 255 }
+  validates :friendly_name, uniqueness: {scope: %i[owner_type owner_id]}, presence: true
+  validates :system_name, :unit, :friendly_name, :owner_type, length: { maximum: 255 }
+  validates :owner_id, :owner_type, presence: true
 
   validate :only_hits_has_children
 
@@ -234,4 +236,10 @@ class Metric < ApplicationRecord
   protected
 
   delegate :provider_id_for_audits, :to => :service, :allow_nil => true
+
+  def fill_owner
+    return true if owner_type?
+    self.owner_id = service_id
+    self.owner_type = 'Service'
+  end
 end

@@ -39,6 +39,18 @@ class MetricTest < ActiveSupport::TestCase
     end
   end
 
+  test 'index uniq of system_name in owner scope' do
+    service = FactoryBot.create(:service)
+    owners = [service, service.first_backend_api]
+    owners.each do |owner|
+      owner_attributes = { service: (owner.is_a?(Service) ? owner : nil), owner: owner }
+      metric_one = FactoryBot.create(:metric, **owner_attributes, system_name: 'frags')
+      metric_two = FactoryBot.create(:metric, owner_attributes)
+      refute metric_two.update_attributes(system_name: 'frags')
+      assert_match /already been taken/, metric_two.errors[:system_name].to_s
+    end
+  end
+
   test 'system_name is not case sensitive' do
     service = FactoryBot.create(:simple_service)
 
@@ -70,6 +82,19 @@ class MetricTest < ActiveSupport::TestCase
     metric_method = hits.children.build(system_name: "foo", friendly_name: "bar")
     refute metric_method.valid?
     assert metric_method.errors[:system_name].present?
+  end
+
+  test 'fill owner' do
+    service = FactoryBot.create(:simple_service)
+    service_metric = FactoryBot.build(:metric, service: service)
+    refute service_metric.owner
+    assert service_metric.valid?
+    assert_equal service, service_metric.owner
+
+    backend_api = BackendApi.create(name: 'API', system_name: 'api', account: service.provider)
+    backend_metric = FactoryBot.build(:metric, owner: backend_api)
+    assert_equal backend_api, backend_metric.owner
+    assert backend_metric.valid?
   end
 
   test 'archive as deleted' do
