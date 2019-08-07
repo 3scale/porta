@@ -1,61 +1,39 @@
-FROM quay.io/3scale/docker:ci-2.3.1-3
+FROM quay.io/3scale/system-builder:ruby24
 
 ARG SPHINX_VERSION=2.2.11
-ARG BUNDLER_VERSION=1.12.5
+ARG BUNDLER_VERSION=1.17.3
 ARG DB=mysql
+ARG MASTER_PASSWORD=p
+ARG USER_PASSWORD=p
 
-# Don't use ubuntu mirrors. Rather slow download, than failing build.
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse\n\
-deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse\n\
-deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse\n\
-deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse" > /etc/apt/sources.list
-
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 60C317803A41BA51845E371A1E9377A2BA9EF27F \
- && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D101F7899D41F3C3 \
- && apt-get update -y && apt-get install -y apt-transport-https \
- && echo 'deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main' > /etc/apt/sources.list.d/toolchain.list \
- && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
- && apt-install g++-4.8 nodejs squid3 libaio1 \
- && gem install bundler --version ${BUNDLER_VERSION} --no-document \
- && sed --in-place "s/databases 16/databases 32/" /etc/redis/redis.conf \
- && echo 'dns_nameservers 8.8.8.8 8.8.4.4' >> /etc/squid3/squid.conf \
- && cd /tmp && curl -o sphinxsearch.deb -J -L -O https://github.com/sphinxsearch/sphinx/releases/download/${SPHINX_VERSION}-release/sphinxsearch_${SPHINX_VERSION}-release-1.precise_amd64.deb \
- && curl -o unixODBC.deb -J -L -O https://github.com/3scale/unixODBC/releases/download/2.3.6-ubuntu-12.04/unixODBC_2.3.6_amd64.deb \
- && apt-install libodbc1 \
- && dpkg --install sphinxsearch.deb \
- && dpkg --install unixODBC.deb \
- && apt-get autoremove -y \
- && rm -f sphinxsearch_${SPHINX_VERSION}.deb unixODBC.deb
-
-ENV PATH="./node_modules/.bin:$PATH:/usr/local/nginx/sbin/" \
+ENV DISABLE_SPRING="true" \
+    ORACLE_SYSTEM_PASSWORD="threescalepass" \
+    NLS_LANG="AMERICAN_AMERICA.UTF8" \
+    TZ="UTC" \
+    MASTER_PASSWORD="${MASTER_PASSWORD}" \
+    USER_PASSWORD="${USER_PASSWORD}" \
+    LC_ALL="en_US.UTF-8" \
+    PATH="./node_modules/.bin:/opt/rh/rh-nodejs8/root/usr/bin:$PATH" \
     SKIP_ASSETS="1" \
     DNSMASQ="#" \
-    RAILS_ENV=test \
     CODECLIMATE_REPO_TOKEN=ba3a56916aa6040ae614ffa6b3d87f6ea07d3c0c512e8099cec4e68b27b676fc \
     GITHUB_REPOSITORY_TOKEN=b2N0b2JvdDo0YWUwYjYzOTgzYWE5YzYyZTIyOWYxZWNmZGZiNDY2YjI1YzcyZWEy \
     BUNDLE_FROZEN=1 \
+    BUNDLE_JOBS=5 \
     TZ=:/etc/localtime \
     LD_LIBRARY_PATH=/opt/oracle/instantclient_12_2/ \
     ORACLE_HOME=/opt/oracle/instantclient_12_2/ \
     DB=$DB \
-    SAFETY_ASSURED=1
+    SAFETY_ASSURED=1 \
+    UNICORN_WORKERS=2 \
+    RAILS_ENV=development
 
 WORKDIR /opt/system/
-
-VOLUME [ "/opt/system/tmp/cache/", \
-         "/opt/system/vendor/bundle", \
-         "/opt/system/node_modules", \
-         "/opt/system/public/assets", \
-         "/opt/system/public/packs-test", \
-         "/home/ruby/.luarocks" ]
 
 ADD . ./
 ADD config/examples/*.yml config/
 # Needed for Sphinx ODBC
 ADD config/oracle/odbc*.ini /etc/
-
-ENTRYPOINT ["xvfb-run", "--server-args", "-screen 0 1280x1024x24"]
-CMD ["script/jenkins.sh"]
 
 # Oracle special, this needs Oracle to be present in vendor/oracle
 ADD vendor/oracle/* /opt/oracle/
@@ -65,3 +43,11 @@ RUN if [ "${DB}" = "oracle" ]; then unzip /opt/oracle/instantclient-basiclite-li
  && (cd /opt/oracle/instantclient_12_2/ && ln -s libclntsh.so.12.1 libclntsh.so) \
  && rm -rf /opt/system/vendor/oracle \
  && rm -rf /opt/oracle/*.zip; fi
+
+USER root
+
+# Needed to disable webpack compiling
+RUN sed -i 's/compile: true/compile: false/' config/webpacker.yml
+
+RUN bash -c "bundle install && bundle exec rake tmp:create"
+RUN bash -c "npm install && rake assets:precompile && DATABASE_URL=nulldb://nohost rake webpacker:compile"
