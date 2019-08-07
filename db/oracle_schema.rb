@@ -1153,8 +1153,11 @@ ActiveRecord::Schema.define(version: 20190802133303) do
     t.text     "redirect_url"
     t.integer  "position",                       precision: 38
     t.boolean  "last",               limit: nil,                default: false
+    t.integer  "owner_id",                       precision: 38
+    t.string   "owner_type"
   end
 
+  add_index "proxy_rules", ["owner_type", "owner_id"], name: "index_proxy_rules_on_owner_type_and_owner_id"
   add_index "proxy_rules", ["proxy_id"], name: "index_proxy_rules_on_proxy_id"
 
   create_table "referrer_filters", force: :cascade do |t|
