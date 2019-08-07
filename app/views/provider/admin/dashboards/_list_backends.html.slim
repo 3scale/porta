@@ -1,0 +1,27 @@
+- backends = current_account.backend_apis
+- item_methods_path = '#'
+
+table class='data'
+  thead
+    tr
+      th Name
+      th In Use
+      th Default path
+      th Methods
+      th Mapping Rules
+      th Policies
+  tbody
+    - backends.each do |item|
+      tr
+        td
+          = link_to item.name, %"p/admin/backend_apis/#{item.id}"
+        td
+          i class='fa fa-check'
+        td
+          = '/TODO'
+        td
+          = link_to %"#{item.methods.length} Methods", %"p/admin/backend_apis/#{item.id}/metrics"
+        td
+          = link_to %"#{item.mapping_rules.length} Mapping Rules", %"p/admin/backend_apis/#{item.id}/mapping_rules"
+        td
+          = link_to 'TODO Policies', %"p/admin/backend_apis/#{item.id}/policies"
