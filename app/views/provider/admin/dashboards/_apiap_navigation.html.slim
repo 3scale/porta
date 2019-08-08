@@ -2,27 +2,30 @@
 - products = @services.first(1)
 - backends = current_account.backend_apis
 
-- current_tab = 'current-tab'
-
 nav.DashboardNavigation.DashboardNavigation-tabs
   ul.DashboardNavigation-list
     li.DashboardNavigation-list-item
-      = dashboard_apiap_tab_label 'tab-products', 'Product', products, icon_name: 'gift'
+      = dashboard_apiap_tab_label 'tab-products', 'Product', products, icon_name: 'gift', current_tab: true
     li.DashboardNavigation-list-item
       = dashboard_apiap_tab_label 'tab-backends', 'Backend', backends, icon_name: 'puzzle-piece'
 
 javascript:
-  var productsTab = document.querySelector('label[for="tab-products"]')
-  var backendsTab = document.querySelector('label[for="tab-backends"]')
+  document.addEventListener('DOMContentLoaded', function () {
+    var CURRENT_TAB_CLASS = 'current-tab'
 
-  var CURRENT_TAB = #{json current_tab}
+    var tabProducts = document.querySelector('label[for="tab-products"]')
+    var tabBackends = document.querySelector('label[for="tab-backends"]')
 
-  productsTab.addEventListener('click', function () {
-    this.classList.add(CURRENT_TAB)
-    backendsTab.classList.remove(CURRENT_TAB)
-  })
+    var inputProducts = document.querySelector('input#tab-products')
+    var inputBackends = document.querySelector('input#tab-backends')
 
-  backendsTab.addEventListener('click', function () {
-    this.classList.add(CURRENT_TAB)
-    productsTab.classList.remove(CURRENT_TAB)
+    inputProducts.addEventListener('change', function () {
+      tabProducts.classList.add(CURRENT_TAB_CLASS)
+      tabBackends.classList.remove(CURRENT_TAB_CLASS)
+    })
+
+    inputBackends.addEventListener('change', function () {
+      tabBackends.classList.add(CURRENT_TAB_CLASS)
+      tabProducts.classList.remove(CURRENT_TAB_CLASS)
+    })
   })

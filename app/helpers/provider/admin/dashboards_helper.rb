@@ -50,7 +50,10 @@ module Provider::Admin::DashboardsHelper
     icon_name = options.fetch(:icon_name, nil)
     label_text = label_text.prepend "#{icon(icon_name)} " if icon_name
 
-    label_tag html_for, label_text.html_safe, class: 'DashboardNavigation-link'
+    label_tag html_for, label_text.html_safe, class: css_class({
+      'DashboardNavigation-link': true,
+      'current-tab': options.fetch(:current_tab, false)
+    })
   end
 
   def safe_wrap_with_parenthesis(html)
