@@ -1,4 +1,10 @@
-= f.toggled_inputs 'mapping_rules', cookie_name: 'mapping-rules' , legend: "Mapping Rules", id: "mapping-rules" do
+- if current_account.provider_can_use?(:independent_mapping_rules)
+  fieldset.inputs.independent_mapping_rules
+    legend
+      span
+        = link_to 'Mapping Rules', admin_service_proxy_rules_path(@service), target: '_blank'
+- else
+  = f.toggled_inputs 'mapping_rules', cookie_name: 'mapping-rules' , legend: 'Mapping Rules', id: "mapping-rules" do
 
     = help_bubble( 'proxy_rule_bubble', t('api.integrations.proxy.proxy_rule_help_html'))
     table#proxy-rules
@@ -30,35 +36,35 @@
           th colspan=(@service.using_proxy_pro? ? '7' : '6')
             = link_to "Add Mapping Rule", '#add-proxy-rule', class: 'action add', id: 'add-proxy-rule'
 
-javascript:
-  jQuery('#proxy-rules .metric select[data-selected]').each(function () {
-    jQuery(this).val(jQuery(this).data('selected'))
-  })
-  jQuery(function () {
-    var PIXEL_CORRECTOR = 4
-    var tdWidths = jQuery.map(jQuery('.ui-sortable-item').first().children(), function (td, _i) {
-      return td.offsetWidth + PIXEL_CORRECTOR
+  javascript:
+    jQuery('#proxy-rules .metric select[data-selected]').each(function () {
+      jQuery(this).val(jQuery(this).data('selected'))
     })
     jQuery(function () {
-      jQuery('#sortable').sortable({
-        cursor: 'move',
-        containment: '#mapping-rules',
-        items: 'tr:not(#new-proxy-rule-template)',
-        start: function (event, ui) {
-          jQuery.each(ui.item.children(), function (i, td) {
-            jQuery(td).css({ width: tdWidths[i] })
-          })
-        },
-        stop: function () {
-          $('tr:not(#new-proxy-rule-template)', this).each(function (index, mappingRule) {
-            if (!$(mappingRule).hasClass('deleted')) {
-              $(mappingRule).find('select,input:not(.destroyer)').removeAttr('disabled')
-              $(mappingRule).find('span.fa-exclamation-triangle').removeClass('disabled')
-            }
-            $(mappingRule).find('.position').val(index + 1)
-          })
-        }
+      var PIXEL_CORRECTOR = 4
+      var tdWidths = jQuery.map(jQuery('.ui-sortable-item').first().children(), function (td, _i) {
+        return td.offsetWidth + PIXEL_CORRECTOR
       })
-      jQuery('tr, td').disableSelection()
+      jQuery(function () {
+        jQuery('#sortable').sortable({
+          cursor: 'move',
+          containment: '#mapping-rules',
+          items: 'tr:not(#new-proxy-rule-template)',
+          start: function (event, ui) {
+            jQuery.each(ui.item.children(), function (i, td) {
+              jQuery(td).css({ width: tdWidths[i] })
+            })
+          },
+          stop: function () {
+            $('tr:not(#new-proxy-rule-template)', this).each(function (index, mappingRule) {
+              if (!$(mappingRule).hasClass('deleted')) {
+                $(mappingRule).find('select,input:not(.destroyer)').removeAttr('disabled')
+                $(mappingRule).find('span.fa-exclamation-triangle').removeClass('disabled')
+              }
+              $(mappingRule).find('.position').val(index + 1)
+            })
+          }
+        })
+        jQuery('tr, td').disableSelection()
+      })
     })
-  })

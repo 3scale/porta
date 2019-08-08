@@ -6,6 +6,11 @@
          title: 'Methods & Metrics',
          path: admin_service_metrics_path(@service)
 
+- if current_account.provider_can_use?(:independent_mapping_rules)
+  = render vertical_nav_item,
+           title: 'Mapping Rules',
+           path: admin_service_proxy_rules_path(@service)
+
 = render vertical_nav_item,
      title: 'Settings',
      path: settings_admin_service_path(@service)
