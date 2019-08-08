@@ -42,7 +42,7 @@ It's also possible to run the application by using only Docker. Firstly, setup t
 MASTER_PASSWORD=<master_password> USER_PASSWORD=<user_password> make dev-setup
 ```
 
-then install all depenendencies and run the application with `dev-start`:
+then install all dependencies and run the application with `dev-start`:
 
 ```
 make dev-start
