@@ -1,13 +1,9 @@
-/ TODO: get products and apis collections from backend
-- products = @services.first(1)
-- backends = current_account.backend_apis
-
 nav.DashboardNavigation.DashboardNavigation-tabs
   ul.DashboardNavigation-list
     li.DashboardNavigation-list-item
-      = dashboard_apiap_tab_label 'tab-products', 'Product', products, icon_name: 'gift', current_tab: true
+      = dashboard_apiap_tab_label 'tab-products', 'Product', @services, icon_name: 'gift', current_tab: true
     li.DashboardNavigation-list-item
-      = dashboard_apiap_tab_label 'tab-backends', 'Backend', backends, icon_name: 'puzzle-piece'
+      = dashboard_apiap_tab_label 'tab-backends', 'Backend', current_account.backend_apis, icon_name: 'puzzle-piece'
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
