@@ -7,11 +7,9 @@
 nav.DashboardNavigation.DashboardNavigation-tabs
   ul.DashboardNavigation-list
     li.DashboardNavigation-list-item
-      label.DashboardNavigation-link for='tab-products' class=current_tab
-        = dashboard_apiap_tab_label 'Product', products, icon_name: 'gift'
+      = dashboard_apiap_tab_label 'tab-products', 'Product', products, icon_name: 'gift'
     li.DashboardNavigation-list-item
-      label.DashboardNavigation-link for='tab-backends'
-        = dashboard_apiap_tab_label 'Backend', backends, icon_name: 'puzzle-piece'
+      = dashboard_apiap_tab_label 'tab-backends', 'Backend', backends, icon_name: 'puzzle-piece'
 
 javascript:
   var productsTab = document.querySelector('label[for="tab-products"]')
