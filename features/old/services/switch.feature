@@ -13,13 +13,13 @@ Feature: Services switch
 
   Scenario: In denied state, I should see link to upgrade warning
     Given I am on the provider dashboard
-      And I follow "New API"
+      And I follow "New Product"
     Then I should be on the upgrade notice page for "multiple_services"
 
   Scenario: In allowed state (hidden and visible), I should have the functionality enabled
     Given provider "foo.example.com" has "multiple_services" switch allowed
       And I am on the provider dashboard
-      And I follow "New API"
+      And I follow "New Product"
     Then I should be on the new service page
 
   @javascript
