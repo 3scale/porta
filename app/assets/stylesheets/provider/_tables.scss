@@ -261,6 +261,15 @@ table#metrics {
   }
 }
 
+table#mapping_rules {
+  tr th a, tr td.actions a {
+    display: inline-block;
+  }
+  tr td.actions a {
+    margin-left: line-height-times(1/2);
+  }
+}
+
 td.thhead h3 {
   margin-top: 0;
   padding-right: line-height-times(2/3);

@@ -40,6 +40,7 @@ Feature: API menu
     Then I should see menu items
     | Configuration             |
     | Methods & Metrics         |
+    | Mapping Rules             |
     | Settings                  |
 
   Scenario: API menu structure with service plans enabled

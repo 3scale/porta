@@ -1,0 +1,4 @@
+= content_for :sublayout_title, 'New Mapping Rule'
+
+= semantic_form_for @proxy_rule, url: admin_service_proxy_rules_path(@service) do |form|
+  = render 'form', form: form, proxy_rule: @proxy_rule, service: @service

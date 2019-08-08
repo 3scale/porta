@@ -16,6 +16,7 @@ base: &default
   policy_registry: true
   proxy_private_base_path: true
   service_mesh_integration: false
+  independent_mapping_rules: false
 
 development:
   <<: *default
