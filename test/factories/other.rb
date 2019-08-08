@@ -27,7 +27,6 @@ FactoryBot.define do
 
   factory(:service) do
     mandatory_app_key { false }
-    #  association :proxy, :factory => :proxy
     sequence(:name) { |n| "service#{n}" }
     association(:account, :factory => :provider_account)
     after(:create) do |record|
