@@ -45,11 +45,12 @@ module Provider::Admin::DashboardsHelper
     safe_wrap_with_parenthesis(dashboard_collection_link(singular_name, collection, path, options))
   end
 
-  def dashboard_apiap_tab_label(singular_name, collection, options = {})
-    name = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
+  def dashboard_apiap_tab_label(html_for, singular_name, collection, options = {})
+    label_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
     icon_name = options.fetch(:icon_name, nil)
-    name = name.prepend "#{icon(icon_name)} " if icon_name
-    name.html_safe
+    label_text = label_text.prepend "#{icon(icon_name)} " if icon_name
+
+    label_tag html_for, label_text.html_safe, class: 'DashboardNavigation-link'
   end
 
   def safe_wrap_with_parenthesis(html)
