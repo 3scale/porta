@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
-  wrap_parameters Service
+  wrap_parameters Service, include: Service.attribute_names | %w[state_event]
   representer Service
 
   before_action :deny_on_premises_for_master
-  before_action  :can_create, only: :create
+  before_action :can_create, only: :create
 
 
   # swagger
@@ -111,7 +113,12 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   end
 
   def service_params
-    params.fetch(:service)
+    params.require(:service).permit(:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
+                                    :intentions_required, :buyers_manage_apps, :referrer_filters_required,
+                                    :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
+                                    :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
+                                    :txt_support, :terms,
+                                    notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []])
   end
 
   def service
