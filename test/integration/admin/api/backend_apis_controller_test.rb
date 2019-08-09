@@ -68,6 +68,14 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'index can be paginated' do
+    FactoryBot.create_list(:backend_api, 5, account: provider)
+    get admin_api_backend_apis_path(access_token: access_token_value, per_page: 3, page: 2)
+    assert_response :success
+    response_backend_api_ids = JSON.parse(response.body)['backend_apis'].map { |response_backend_api| response_backend_api.dig('backend_api', 'id') }
+    assert_same_elements provider.backend_apis.offset(3).limit(3).pluck(:id), response_backend_api_ids
+  end
+
   test 'with the rolling update disabled' do
     Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(false)
 

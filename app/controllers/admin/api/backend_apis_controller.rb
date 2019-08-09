@@ -13,9 +13,10 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   representer ::BackendApi
 
+  paginate only: :index
+
   def index
-    # TODO: paginate?
-    respond_with(current_account.backend_apis)
+    respond_with(current_account.backend_apis.paginate(pagination_params))
   end
 
   def create
