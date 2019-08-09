@@ -2435,6 +2435,193 @@
       ]
     },
     {
+      "path": "/admin/api/backend_apis.json",
+      "responseClass": "List[backend_api]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API List",
+          "description": "Returns the list of backend apis. The results can be paginated.",
+          "group": "backend_api",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis.json",
+      "responseClass": "backend_api",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Backend API Create",
+          "description": "Creates a Backend API.",
+          "group": "backend_api",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "name",
+              "description": "Name of the backend API",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the backend API",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "private_endpoint",
+              "description": "Private endpoint of the backend API",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{id}.json",
+      "responseClass": "backend_api",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Read",
+          "description": "Returns a backend API.",
+          "group": "backend_api",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{id}.json",
+      "responseClass": "backend_api",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Backend API Update",
+          "description": "Updates a backend API.",
+          "group": "backend_api",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "name",
+              "description": "Name of the backend API",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the backend API",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "private_endpoint",
+              "description": "Private endpoint of the backend API",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{id}.json",
+      "responseClass": "backend_api",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Backend API Delete",
+          "description": "Deletes a backend API.",
+          "group": "backend_api",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/accounts/{account_id}/plan.xml",
       "responseClass": "account_plan",
       "operations": [
