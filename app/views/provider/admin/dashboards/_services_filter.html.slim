@@ -3,15 +3,15 @@
 
     javascript:
       document.addEventListener('DOMContentLoaded', function () {
-        var allApis = #{json @services}
+        var allApis = #{ json @services.as_json(root: false, only: [:id, :name]) }
 
         var displayApis = function(filteredApis) {
           allApis.forEach(function(api) {
             var isFilteredApi = filteredApis.some(function(filteredApi) {
-              return filteredApi.service.id === api.service.id
+              return filteredApi.id === api.id
             });
 
-            document.getElementById("service_" + api.service.id).style.display = isFilteredApi ? "inline": "none";
+            document.getElementById("service_" + api.id).style.display = isFilteredApi ? "inline": "none";
           })
         }
 
