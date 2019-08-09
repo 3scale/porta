@@ -22,7 +22,6 @@ section.Section
           'OpenShift
           = refresh_service_link(@service, label: 'refresh')
 
-
 - service =  @service
 
 section class="service-widget"
@@ -164,12 +163,12 @@ section class="service-widget"
             li.item
               = setting
           li.item
-            | Backends used in this product:
+            strong> Backends
+            ' used in this product:
             ul
+              / TODO: render actual list of backends?
               li
-                = link_to '#' do
-                  => @service.name
-                  | Backend API
+                = link_to %"#{@service.name} Backend API", '#', class: 'name'
 
 = render 'shared/service_access'
 

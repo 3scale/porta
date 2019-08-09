@@ -59,10 +59,10 @@
     }
 
     li {
-      position: relative;
-      margin-left: 0;
       border-bottom: $border-width solid $border-color;
+      margin-left: 0;
       padding: line-height-times(1/2) 0;
+      position: relative;
 
       .name {
         font-weight: $font-weight-bold;
@@ -75,6 +75,15 @@
       &:last-child {
         border-bottom: none;
         padding-bottom: 0;
+      }
+
+      ul {
+        list-style: none;
+        padding: line-height-times(1) line-height-times(1/2);
+        li {
+          border-bottom: none;
+          padding: line-height-times(1/2) 0;
+        }
       }
     }
   }
