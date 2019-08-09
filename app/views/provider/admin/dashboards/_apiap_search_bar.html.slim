@@ -4,7 +4,7 @@ javascript:
   document.addEventListener('DOMContentLoaded', function () {
     var apis = #{ json collection.as_json(root: false, only: [:id, :name]) }
     var domClass =  "#{ dom_class collection }"
-    var placeholder = #{json placeholder}
+    var placeholder = "#{ placeholder }"
 
     var displayApis = function (filteredApis) {
       apis.forEach(function (api) {
@@ -16,5 +16,5 @@ javascript:
       })
     }
 
-    window.ApiFilter({ apis, placeholder, displayApis }, #{json id})
+    window.ApiFilter({ apis, placeholder, displayApis }, "#{id}")
   })
