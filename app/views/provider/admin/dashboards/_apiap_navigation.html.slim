@@ -4,24 +4,3 @@ nav.DashboardNavigation.DashboardNavigation-tabs
       = dashboard_apiap_tab_label 'tab-products', 'Product', @services, icon_name: 'gift', current_tab: true
     li.DashboardNavigation-list-item
       = dashboard_apiap_tab_label 'tab-backends', 'Backend', current_account.backend_apis, icon_name: 'puzzle-piece'
-
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    var CURRENT_TAB_CLASS = 'current-tab'
-
-    var tabProducts = document.querySelector('label[for="tab-products"]')
-    var tabBackends = document.querySelector('label[for="tab-backends"]')
-
-    var inputProducts = document.querySelector('input#tab-products')
-    var inputBackends = document.querySelector('input#tab-backends')
-
-    inputProducts.addEventListener('change', function () {
-      tabProducts.classList.add(CURRENT_TAB_CLASS)
-      tabBackends.classList.remove(CURRENT_TAB_CLASS)
-    })
-
-    inputBackends.addEventListener('change', function () {
-      tabBackends.classList.add(CURRENT_TAB_CLASS)
-      tabProducts.classList.remove(CURRENT_TAB_CLASS)
-    })
-  })
