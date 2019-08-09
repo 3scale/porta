@@ -32,6 +32,7 @@
       - else
         - if current_account.provider_can_use?(:api_as_product)
           = render 'section_products_and_backends'
+          = javascript_pack_tag 'api_as_product'
         - else
           = render 'section_services'
 
