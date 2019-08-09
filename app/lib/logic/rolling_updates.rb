@@ -129,6 +129,12 @@ module Logic
         end
       end
 
+      class IndependentMappingRules < Base
+        def missing_config
+          false
+        end
+      end
+
       class InstantBillPlanChange < Base
         def missing_config
           false

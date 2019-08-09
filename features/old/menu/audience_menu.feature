@@ -12,7 +12,6 @@ Feature: Audience menu
 
   Scenario: Audience menu structure
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Accounts                  |
     | Portal                    |
     | Messages                  |
@@ -21,7 +20,6 @@ Feature: Audience menu
   Scenario: Accounts sub menu structure
     When I follow "Accounts" within the main menu
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Listing                   |
     | Usage Rules               |
     | Fields Definitions        |
@@ -29,7 +27,6 @@ Feature: Audience menu
   Scenario: Portal sub menu structure
     When I follow "Portal" within the main menu
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Content                   |
     | Drafts                    |
     | Redirects                 |
@@ -46,7 +43,6 @@ Feature: Audience menu
   Scenario: Messages sub menu structure
     When I follow "Messages" within the main menu
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Inbox                     |
     | Sent messages             |
     | Trash                     |
@@ -56,7 +52,6 @@ Feature: Audience menu
   Scenario: Forum sub menu structure
     When I follow "Forum" within the main menu
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Threads                   |
     | Categories                |
     | My Threads                |
@@ -67,7 +62,6 @@ Feature: Audience menu
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
     Then I should see menu items
-      | Accounts Sub Menu        |
       | Account Plans            |
 
   Scenario: Accounts sub menu structure with account plans disabled
@@ -75,7 +69,6 @@ Feature: Audience menu
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
     Then I should not see menu items
-      | Accounts Sub Menu        |
       | Account Plans            |
 
   Scenario: Accounts sub menu structure with service plans enabled
@@ -83,7 +76,6 @@ Feature: Audience menu
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Listing                   |
     | Subscriptions             |
     | Usage Rules               |
@@ -95,5 +87,4 @@ Feature: Audience menu
     And I follow "Accounts"
     When I follow "Portal" within the main menu
     Then I should see menu items
-    | Accounts Sub Menu         |
     | Groups                    |
