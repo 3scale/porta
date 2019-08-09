@@ -8,6 +8,10 @@ $integration-tab-warning-color: darken($dirty-color, 60%);
   max-width: 100%;
 }
 
+#integration-tabs fieldset.independent_mapping_rules {
+  margin-left: 0;
+}
+
 #integration-tabs form.formtastic fieldset > ol > li.radio--iconic fieldset ol,
 form.formtastic fieldset > ol > li.radio--iconic fieldset ol {
   margin: line-height-times(4) 0;

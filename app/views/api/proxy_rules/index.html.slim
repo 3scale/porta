@@ -1,0 +1,46 @@
+- content_for :sublayout_title, 'Mapping Rules'
+
+table#mapping_rules.data
+  thead
+    tr
+      th = sortable('proxy_rules.http_method', 'Verb')
+      th = sortable('proxy_rules.pattern', 'Pattern')
+      - if @service.using_proxy_pro?
+        th Redirect
+      th title="increment" +
+      th
+        = sortable('metrics.friendly_name', 'Metric or Method')
+        |  (
+        = link_to 'Define', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service'
+        | )
+      th = sortable('proxy_rules.last', 'Last?')
+      th = sortable('proxy_rules.position', 'Position')
+      th.actions
+        = link_to 'Add Mapping Rule', new_admin_service_proxy_rule_path(@service), class: 'action add'
+  tbody
+    - @proxy_rules.each do |rule|
+      tr
+        td.http_method
+          = rule.http_method
+        td.pattern
+          = rule.pattern
+          - if rule.pattern == '/'
+            span.fa.fa-exclamation-triangle.disabled#catch-all-warning title=(t('api.integrations.proxy.proxy_rule_catch_all_warning'))
+        - if @service.using_proxy_pro?
+          td.redirect_url
+            = rule.redirect_url
+        td.delta
+          = rule.delta
+        td.metric
+          = rule.metric_system_name
+        td.last_called_and_position
+          = rule.last
+        td.position
+          = rule.position
+        td.actions
+          = link_to '', edit_admin_service_proxy_rule_path(@service, rule.id), class: 'action edit'
+          = link_to '', admin_service_proxy_rule_path(@service, rule.id), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
+
+  tfoot
+
+= will_paginate(@proxy_rules)
