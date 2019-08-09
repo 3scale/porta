@@ -26,7 +26,7 @@ module Provider::Admin::DashboardsHelper
         'DashboardNavigation-link': true,
         'u-notice': options.fetch(:notice, false)
       }) do
-        icon_name = options.fetch(:icon_name, nil)
+        icon_name = options[:icon_name]
         link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
         link_text.html_safe
     end
@@ -47,7 +47,7 @@ module Provider::Admin::DashboardsHelper
 
   def dashboard_apiap_tab_label(html_for, singular_name, collection, options = {})
     label_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
-    icon_name = options.fetch(:icon_name, nil)
+    icon_name = options[:icon_name]
     label_text = label_text.prepend "#{icon(icon_name)} " if icon_name
 
     label_tag html_for, label_text.html_safe, class: css_class({
