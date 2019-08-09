@@ -423,5 +423,16 @@ a:hover .u-notice {
       margin-left: line-height-times(2)
     }
   }
+}
 
+#products {
+  .hidden {
+    display: none;
+  }
+}
+
+#backends {
+  .hidden {
+    visibility: collapse;
+  }
 }
