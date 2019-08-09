@@ -11,7 +11,7 @@ class ProxyRule < ApplicationRecord
   belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
   belongs_to :metric
 
-  validates :http_method, :pattern, :proxy, :owner_id, :owner_type, :metric_id, presence: true
+  validates :http_method, :pattern, :owner_id, :owner_type, :metric_id, presence: true
   validates :owner_type, length: { maximum: 255 }
   validates :delta, numericality: { :only_integer => true, :greater_than => 0 }
 
