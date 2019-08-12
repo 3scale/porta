@@ -49,7 +49,6 @@ echo -e "Welcome to Docker testing and development environment\n\n" \
   "\t* Run zeus start (or use alias zs), check it all becomes green\n" \
   "\t* Use alias zt for testing specific files: zt test/unit/blablah\n" \
   "\t* Use alias bu to run bundler with proper arguments\n" \
-  "\t* Run $ LOGGING=1 script/jenkins.sh to run the full test suite as Jenkins (with logs)\n" \
   "\t* Run s3cmd --configure if you need Amazon S3 access and don't have a .s3cfg file\n" \
   "\t* Import a database, use rake [DB_FILE_PATH=s3://..|file.sql[.gz]] db:import\n" \
   "\t* Unlock passwords, use script/runner unlock\n" \
