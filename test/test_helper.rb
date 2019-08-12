@@ -22,13 +22,8 @@ require File.expand_path('../../lib/developer_portal/test/test_helper.rb', __FIL
 
 require 'minitest/reporters'
 
-# if not running on jenkins
-if ENV['CI']
-  junit = MiniTest::Reporters::JUnitReporter.new("tmp/junit/unit-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}")
-  MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
-else
-  MiniTest::Reporters.use!([Minitest::Reporters::SpecReporter.new])
-end
+junit = MiniTest::Reporters::JUnitReporter.new("tmp/junit/unit-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}")
+MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
 
 require 'webmock/minitest'
 WebMock.enable!
