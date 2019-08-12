@@ -6,6 +6,7 @@ class BackendApi < ApplicationRecord
   ECHO_API_HOST = 'echo-api.3scale.net'
 
   has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
+  has_many :metrics, as: :owner, dependent: :destroy, inverse_of: :owner
 
   has_many :backend_api_configs, inverse_of: :backend_api, dependent: :destroy
   has_many :services, through: :backend_api_configs

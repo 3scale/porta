@@ -22,11 +22,20 @@ module Backend
       end
 
       def sync_backend
-        ::BackendMetricWorker.sync(service.backend_id, id, system_name)
+        execute_per_service do |service|
+          ::BackendMetricWorker.sync(service.backend_id, id, system_name)
+        end
       end
 
       def sync_backend!
-        ::BackendMetricWorker.new.perform(service.backend_id, id, system_name)
+        execute_per_service do |service|
+          ::BackendMetricWorker.new.perform(service.backend_id, id, system_name)
+        end
+      end
+
+      def execute_per_service(&block)
+        services = [*owner.try(:services), service].compact
+        services.each(&block)
       end
     end
   end
