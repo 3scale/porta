@@ -8,16 +8,20 @@ class ProxyRule < ApplicationRecord
   scope :ordered, -> { order(position: :asc) }
 
   belongs_to :proxy, touch: true
+  belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
   belongs_to :metric
+
+  validates :http_method, :pattern, :owner_id, :owner_type, :metric_id, presence: true
+  validates :owner_type, length: { maximum: 255 }
+  validates :delta, numericality: { :only_integer => true, :greater_than => 0 }
+
+  before_validation :fill_owner
 
   include ThreeScale::Search::Scopes
 
   self.allowed_sort_columns = %w[proxy_rules.http_method proxy_rules.pattern proxy_rules.last proxy_rules.position metrics.friendly_name]
   self.default_sort_column = :position
   self.default_sort_direction = :asc
-
-  validates :http_method, :pattern, :proxy, :metric_id, presence: true
-  validates :delta, numericality: { :only_integer => true, :greater_than => 0 }
 
   ALLOWED_HTTP_METHODS = %w( GET POST DELETE PUT PATCH HEAD OPTIONS ).freeze
 
@@ -140,4 +144,9 @@ class ProxyRule < ApplicationRecord
     end
   end
 
+  def fill_owner
+    return true if owner_type?
+    self.owner_id = proxy_id
+    self.owner_type = 'Proxy'
+  end
 end
