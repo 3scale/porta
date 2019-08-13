@@ -58,4 +58,15 @@ class ZyncEventTest < ActiveSupport::TestCase
 
     assert_equal application.class, event.model
   end
+
+  def test_merges_metadata
+    application = FactoryBot.build_stubbed(:simple_cinstance, tenant_id: 123)
+    date = Date.parse('2019-09-01')
+    Timecop.freeze(date) do
+      parent_event = RailsEventStore::Event.new metadata: {foo: :bar}
+
+      event = ZyncEvent.create(parent_event, application)
+      assert_equal({provider_id: application.tenant_id, foo: :bar, timestamp: date }, event.metadata)
+    end
+  end
 end
