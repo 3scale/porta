@@ -22,7 +22,7 @@ section class="service-widget"
       ul.application-plans
         - list_items_or_empty @backend_api.services, 'No Product currently using this Backend API' do |service|
           li.item
-            = link_to service.name, edit_admin_service_integration_path(service)
+            = link_to service.name, admin_service_path(service)
 
     section[name="activity"]
       h2 Methods & Mapping Rules
