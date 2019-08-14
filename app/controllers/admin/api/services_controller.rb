@@ -83,7 +83,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_extra_short
   #
   def update
-    service.update_attributes(service_params)
+    service.update(service_params)
 
     respond_with(service)
   end
