@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module System
   module Deploy
     mattr_accessor :info
@@ -15,9 +17,31 @@ module System
 
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = ENV['AMP_RELEASE'].presence
+        @release = info.fetch('release') { '2.0.0' }
         @deployed_at = info.fetch('deployed_at') { Time.now }
         @error = info.fetch(:error) if info.key?(:error)
+      end
+
+      def minor_version
+        version.segments[1]
+      end
+
+      def major_version
+        version.segments[0]
+      end
+
+      private
+
+      class UnknownVersion
+        def segments
+          %w[unknown unknown]
+        end
+      end
+
+      def version
+        @version ||= Gem::Version.new(release)
+      rescue ArgumentError
+        UnknownVersion.new
       end
     end
 
