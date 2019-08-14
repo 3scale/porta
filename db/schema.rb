@@ -1235,6 +1235,7 @@ ActiveRecord::Schema.define(version: 20190805135829) do
     t.boolean  "referrer_filters_required",                    default: false
     t.string   "deployment_option",              limit: 255,   default: "hosted"
     t.string   "kubernetes_service_link",        limit: 255
+    t.boolean  "act_as_product",                               default: false
   end
 
   add_index "services", ["account_id"], name: "idx_account_id", using: :btree
