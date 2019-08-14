@@ -1233,6 +1233,7 @@ ActiveRecord::Schema.define(version: 20190805135829) do
     t.boolean  "referrer_filters_required",      limit: nil,                default: false
     t.string   "deployment_option",                                         default: "hosted"
     t.string   "kubernetes_service_link"
+    t.boolean  "act_as_product",                 limit: nil,                default: false
   end
 
   add_index "services", ["account_id"], name: "idx_account_id"
