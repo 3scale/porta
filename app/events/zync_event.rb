@@ -5,7 +5,7 @@ class ZyncEvent < BaseEventStoreEvent
   # Create Zync Event
 
   def self.create(event, model = event)
-    metadata = event.metadata
+    metadata = event.metadata || {}
     provider_id = metadata.fetch(:provider_id) { model.tenant_id }
 
     attributes = {
@@ -19,7 +19,7 @@ class ZyncEvent < BaseEventStoreEvent
     new(
       metadata: {
         provider_id: provider_id,
-      },
+      }.reverse_merge(metadata),
       **attributes
     )
   end
