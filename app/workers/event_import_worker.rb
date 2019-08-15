@@ -1,5 +1,3 @@
-require_dependency 'events/importer'
-
 class EventImportWorker
   include Sidekiq::Worker
 

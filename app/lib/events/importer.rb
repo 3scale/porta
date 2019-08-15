@@ -1,10 +1,3 @@
-require_dependency 'events/event'
-
-require_dependency 'events/importers/base_importer'
-require_dependency 'events/importers/first_traffic_importer'
-require_dependency 'events/importers/first_daily_traffic_importer'
-require_dependency 'events/importers/alert_importer'
-
 module Events
   module Importer
 

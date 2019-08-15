@@ -1,5 +1,3 @@
-require_dependency 'events/importers/base_importer'
-
 module Events
   module Importers
     class FirstDailyTrafficImporter < BaseImporter
