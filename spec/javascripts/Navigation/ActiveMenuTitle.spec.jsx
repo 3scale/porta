@@ -25,10 +25,10 @@ it('should return the proper title depending on the current menu', () => {
   expect(getWrapper('applications').text()).toEqual('All APIs')
   expect(getWrapper('active_docs').text()).toEqual('All APIs')
 
-  expect(getWrapper('serviceadmin', { service: { name: 'Test' } }).text())
-    .toEqual('API: Test')
-  expect(getWrapper('monitoring', { service: { name: 'Test' } }).text())
-    .toEqual('API: Test')
+  expect(getWrapper('serviceadmin', { name: 'Test' }).text())
+    .toEqual('Product: Test')
+  expect(getWrapper('backend_api', { name: 'Test' }).text())
+    .toEqual('Backend: Test')
 })
 
 it('should return a default title', () => {
