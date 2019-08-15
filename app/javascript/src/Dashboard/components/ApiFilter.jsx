@@ -21,7 +21,7 @@ type Props = {
 const ApiFilter = ({ apis, displayApis }: Props) => {
   const onInputChange = event => {
     const filterQuery = event.target.value.toLowerCase()
-    const displayedApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
+    const displayedApis = apis.filter(api => api.name.toLowerCase().indexOf(filterQuery) !== -1)
 
     displayApis(displayedApis)
   }

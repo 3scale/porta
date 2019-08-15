@@ -72,7 +72,7 @@ class ContextSelector extends React.Component<Props, State> {
     const { activeMenu, currentApi } = this.props
     let classNames = 'PopNavigation-link'
 
-    if (['serviceadmin', 'monitoring'].indexOf(activeMenu) !== -1 &&
+    if (['serviceadmin', 'monitoring', 'backend_api'].indexOf(activeMenu) !== -1 &&
       `${api.type}${api.id}` === `${currentApi.type}${currentApi.id}`) {
       classNames += ' current-context'
     }
