@@ -1,5 +1,3 @@
-require_dependency 'stats/client'
-
 module Finance
   # Mixin for Cinstance to get the variable costs calculations.
   module VariableCost

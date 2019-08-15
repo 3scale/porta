@@ -1,5 +1,3 @@
-require_dependency 'last_traffic'
-
 class LastTrafficWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low

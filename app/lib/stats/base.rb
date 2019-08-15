@@ -1,6 +1,3 @@
-
-require_dependency 'stats'
-
 module Stats
   class Base
     include ::Stats::KeyHelpers
