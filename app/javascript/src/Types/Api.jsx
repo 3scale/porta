@@ -1,7 +1,8 @@
 // @flow
 
-import type { Service } from 'Types'
-
 export type Api = {
-  service: Service
+  id: number,
+  name: string,
+  link: string,
+  type: string
 }
