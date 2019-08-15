@@ -13,7 +13,7 @@ import { ServicesFieldset } from 'Users/components/ServicesFieldset'
 import { canFeatureSetServicePermissions, toggleElementInCollection } from 'Users/utils'
 
 import type { Role, Feature, AdminSection } from 'Users/types'
-import type { Service } from 'Types'
+import type { Api } from 'Types'
 
 type Props = {
   initialState?: {
@@ -22,14 +22,14 @@ type Props = {
     member_permission_service_ids?: number[]
   },
   features: Feature[],
-  services: Service[]
+  services: Api[]
 }
 
 /**
  * Represents the user's permissions form, also known as Administrative. It handles the user's Role and their access to different Services.
  * @param {InitialState}  initialState  - The values of the user's current settings.
  * @param {Feature[]}     features      - The set of features or sections the user can have access to.
- * @param {Service[]}     services      - The list of services or APIs the user can have access to.
+ * @param {Api[]}         services      - The list of services or APIs the user can have access to.
  */
 const PermissionsForm = ({ initialState = {}, features, services }: Props) => {
   const [role, setRole] = useState(initialState.role || 'admin')
