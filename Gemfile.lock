@@ -127,7 +127,7 @@ GEM
     3scale_time_range (0.0.6)
       activesupport (>= 3.2.19)
     Ascii85 (1.0.2)
-    RedCloth (4.3.0)
+    RedCloth (4.3.2)
     actionmailer (4.2.11.1)
       actionpack (= 4.2.11.1)
       actionview (= 4.2.11.1)
