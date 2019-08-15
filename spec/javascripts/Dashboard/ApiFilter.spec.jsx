@@ -12,9 +12,9 @@ function getWrapper (apis = [], displayApis) {
 let apiFilter
 
 const apis = [
-  { service: { name: 'api 0' } },
-  { service: { name: 'api 1' } },
-  { service: { name: 'api 2' } }
+  { name: 'api 0' },
+  { name: 'api 1' },
+  { name: 'api 2' }
 ]
 
 beforeEach(() => {
@@ -40,6 +40,6 @@ it('should filter APIs passed in props by name', () => {
 
   expect(displayApis.mock.calls.length).toEqual(3)
   expect(displayApis.mock.calls[0][0]).toEqual(apis)
-  expect(displayApis.mock.calls[1][0]).toEqual([{ service: { name: 'api 1' } }])
+  expect(displayApis.mock.calls[1][0]).toEqual([{ name: 'api 1' }])
   expect(displayApis.mock.calls[2][0]).toEqual([])
 })

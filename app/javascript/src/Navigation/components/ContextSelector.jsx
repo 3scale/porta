@@ -11,7 +11,7 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import 'Navigation/styles/ContextSelector.scss'
 
-import type { Api, Service, Menu } from 'Types'
+import type { Api, Menu } from 'Types'
 
 type Props = {
   apis: Api[],
@@ -68,16 +68,16 @@ class ContextSelector extends React.Component<Props, State> {
     return 'PopNavigation-link'
   }
 
-  getClassNamesForService (service: Service): string {
+  getClassNamesForService (api: Api): string {
     const { activeMenu, currentApi } = this.props
     let classNames = 'PopNavigation-link'
 
     if (['serviceadmin', 'monitoring'].indexOf(activeMenu) !== -1 &&
-      service.id === currentApi.service.id) {
+      `${api.type}${api.id}` === `${currentApi.type}${currentApi.id}`) {
       classNames += ' current-context'
     }
 
-    if (!service.link) {
+    if (!api.link) {
       classNames += ' unauthorized'
     }
 
@@ -87,16 +87,16 @@ class ContextSelector extends React.Component<Props, State> {
   renderOptions () {
     const { apis } = this.props
     const { filterQuery } = this.state
-    const filteredApis = apis.filter(api => api.service.name.toLowerCase().indexOf(filterQuery) !== -1)
+    const filteredApis = apis.filter(api => api.name.toLowerCase().indexOf(filterQuery) !== -1)
 
     if (filteredApis.length === 0) {
       return null
     }
 
-    const displayedApis = filteredApis.map(({ service }) => (
-      <li key={service.id} className="PopNavigation-listItem">
-        <a className={this.getClassNamesForService(service)} href={service.link}>
-          <i className="fa fa-puzzle-piece" />{service.name}
+    const displayedApis = filteredApis.map(api => (
+      <li key={`${api.type}-${api.id}`} className="PopNavigation-listItem">
+        <a className={this.getClassNamesForService(api)} href={api.link}>
+          <i className={`fa ${api.type === 'backend' ? 'fa-puzzle-piece' : 'fa-gift'}`} />{api.name}
         </a>
       </li>
     ))

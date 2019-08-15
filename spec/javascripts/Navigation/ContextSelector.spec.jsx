@@ -12,9 +12,9 @@ function getWrapper (apis = [], audienceLink) {
 let contextSelector
 
 const apis = [
-  { service: { name: 'api 0', id: 0, link: 'foo.bar' } },
-  { service: { name: 'api 1', id: 1 } },
-  { service: { name: 'api 2', id: 2 } }
+  { name: 'api 0', id: 0, link: 'foo.bar', type: 'product' },
+  { name: 'api 1', id: 1, link: 'baz.bar', type: 'product' },
+  { name: 'api 2', id: 2, type: 'backend' }
 ]
 const audienceLink = 'foo.bar'
 
@@ -101,7 +101,7 @@ describe('When there is only 1 service', () => {
     contextSelector = getWrapper(apis.slice(0, 1), audienceLink)
     expect(contextSelector.find('.unauthorized')).toHaveLength(0)
 
-    contextSelector = getWrapper(apis.slice(1, 2), audienceLink)
+    contextSelector = getWrapper(apis.slice(2, 3), audienceLink)
     expect(contextSelector.find('.unauthorized')).toHaveLength(1)
   })
 })
@@ -131,7 +131,7 @@ describe('When there are many services', () => {
     const apiList = contextSelector.find('.PopNavigation-results').children()
     expect(apiList).toHaveLength(apis.length)
     expect(apiList.containsAllMatchingElements(
-      apis.map(api => <li><a><i />{api.service.name}</a></li>)
+      apis.map(api => <li><a><i />{api.name}</a></li>)
     )).toEqual(true)
   })
 
@@ -150,6 +150,11 @@ describe('When there are many services', () => {
 
   it('should mark apis as unauthorized when link is undefined', () => {
     const apiList = contextSelector.find('.PopNavigation-results').children()
-    expect(apiList.find('.unauthorized')).toHaveLength(2)
+    expect(apiList.find('.unauthorized')).toHaveLength(1)
+  })
+
+  it('should render the correct icons for backend and product APIs', () => {
+    const apiIconsClassNames = contextSelector.find('.PopNavigation-results .PopNavigation-link i').map(i => i.prop('className'))
+    expect(apiIconsClassNames).toEqual([ 'fa fa-gift', 'fa fa-gift', 'fa fa-puzzle-piece' ])
   })
 })
