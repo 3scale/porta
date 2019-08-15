@@ -1,5 +1,4 @@
 require 'minitest_helper'
-require 'notification_center'
 
 class NotificationCenterTest < MiniTest::Unit::TestCase
 

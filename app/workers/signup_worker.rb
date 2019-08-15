@@ -1,5 +1,3 @@
-require_dependency 'notification_center'
-
 class SignupWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical
