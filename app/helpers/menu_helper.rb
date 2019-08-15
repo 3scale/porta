@@ -85,7 +85,8 @@ module MenuHelper
   end
 
   def api_selector_services
-    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services.includes(:account) : Service.none).decorate
+    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services : Service.none).decorate
+                                   .concat(current_user.account.backend_apis.decorate)
   end
 
   def audience_link
@@ -100,4 +101,7 @@ module MenuHelper
     end
   end
 
+  def current_api
+    (@backend_api || @service || Service.none).decorate
+  end
 end

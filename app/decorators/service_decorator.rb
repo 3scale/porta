@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 class ServiceDecorator < ApplicationDecorator
+
+  self.include_root_in_json = false
 
   def link_to_application_plans
     stock_application_plans = application_plans.stock
@@ -32,7 +36,7 @@ class ServiceDecorator < ApplicationDecorator
     PlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
   end
 
-  def api_selector_services_links
+  def api_selector_api_link
     if h.can?(:manage, :plans)
       h.admin_service_path(object)
     elsif h.can?(:manage, :monitoring)
@@ -44,7 +48,6 @@ class ServiceDecorator < ApplicationDecorator
 
   def as_json(options = {})
     hash = super(options)
-    hash['service'][:link] = api_selector_services_links
-    hash
+    parse_api hash
   end
 end
