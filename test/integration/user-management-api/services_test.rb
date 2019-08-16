@@ -57,16 +57,6 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     assert @provider.services.find_by_name("service foo")
   end
 
-  test 'create with failed validation' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-
-    post(admin_api_services_path, :provider_key => @provider.api_key,
-         format: :xml, name: 'service foo', system_name: @service.system_name)
-
-    assert_response :unprocessable_entity
-    assert_match 'System name has already been taken', response.body
-  end
-
   test 'create with json body parameters' do
     @provider.settings.allow_multiple_services!
     @provider.provider_constraints.update_attributes!(max_services: 5)
