@@ -28,5 +28,4 @@ class Master::Api::BaseController < Master::BaseController
   ## Extra
 
   ##~ @parameter_extra = {:name => "additional_fields", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields."}
-  ##~ @parameter_extra_short = {:name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"}
 end
