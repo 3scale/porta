@@ -1,4 +1,4 @@
-require_dependency File.dirname(__FILE__) + '/money'
+require 'three_scale/money'
 
 module ThreeScale
   module HasMoney

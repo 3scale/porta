@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency 'simple_layout'
-
 module Logic
   module ProviderSignup
     module Master
