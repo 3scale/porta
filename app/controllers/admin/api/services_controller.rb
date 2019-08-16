@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
-  wrap_parameters Service
+  wrap_parameters Service, include: Service.attribute_names | %w[state_event]
   representer Service
 
   before_action :deny_on_premises_for_master
-  before_action  :can_create, only: :create
+  before_action :can_create, only: :create
 
 
   # swagger
@@ -41,7 +43,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "backend_version", :description => "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
-  ##~ op.parameters.add @parameter_extra_short
+  ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #
   def create
     service = current_account.create_service(service_params)
@@ -80,10 +82,10 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => "support_email", :description => "New support email.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self-managed' for APIcast Self-managed option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "backend_version", :description => "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add @parameter_extra_short
+  ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #
   def update
-    service.update_attributes(service_params)
+    service.update(service_params)
 
     respond_with(service)
   end
@@ -111,7 +113,12 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   end
 
   def service_params
-    params.fetch(:service)
+    params.require(:service).permit(:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
+                                    :intentions_required, :buyers_manage_apps, :referrer_filters_required,
+                                    :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
+                                    :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
+                                    :txt_support, :terms,
+                                    notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []])
   end
 
   def service
