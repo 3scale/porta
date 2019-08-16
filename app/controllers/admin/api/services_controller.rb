@@ -113,12 +113,14 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   end
 
   def service_params
-    params.require(:service).permit(:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
-                                    :intentions_required, :buyers_manage_apps, :referrer_filters_required,
-                                    :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
-                                    :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
-                                    :txt_support, :terms,
-                                    notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []])
+    permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
+                        :intentions_required, :buyers_manage_apps, :referrer_filters_required,
+                        :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
+                        :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
+                        :txt_support, :terms,
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
+    permitted_params += [:act_as_product] if provider_can_use?(:api_as_product)
+    params.require(:service).permit(*permitted_params)
   end
 
   def service
