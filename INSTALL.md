@@ -20,12 +20,6 @@ The project relies on a [`Makefile`](https://www.gnu.org/software/make/manual/ht
 make help
 ```
 
-##### Running Tests
-Download and build all the images and run the test suite in the container:
-```bash
-make test
-```
-
 ##### Entering a Running Container
 Download and build all the images and start a shell session inside the container:
 ```bash
