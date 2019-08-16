@@ -19,7 +19,7 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
     member = FactoryBot.create(:simple_admin, account: master_account)
     member.activate!
 
-    provider_login member
+    login! master_account, user: member
 
     get edit_admin_site_emails_path
 
