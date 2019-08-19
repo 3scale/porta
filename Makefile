@@ -55,13 +55,13 @@ docker: ## Prints docker version and info
 	@docker info
 	@echo
 
-test: ## Runs tests inside container build environment
-test: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
-test: $(DOCKER_COMPOSE) info
-	@echo
-	@echo "======= Tests ======="
-	@echo
-	$(MAKE) test-run tmp-export --keep-going
+#test: ## Runs tests inside container build environment
+#test: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
+#test: $(DOCKER_COMPOSE) info
+#	@echo
+#	@echo "======= Tests ======="
+#	@echo
+#	$(MAKE) test-run tmp-export --keep-going
 
 test-run: ## Runs test inside container
 test-run: COMPOSE_FILE = $(COMPOSE_TEST_FILE)
