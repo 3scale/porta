@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: This should be likewise splited to provider/buyer (developer_portal)
 #
 module Messenger
@@ -7,7 +9,7 @@ module Messenger
     include ActionView::Helpers::NumberHelper
     include ActionView::Helpers::UrlHelper
 
-    def initialize(method_name=nil, *args)
+    def initialize(method_name = nil, *args)
       @_message = Message.new
       @_template_name = method_name
       setup(*args)
@@ -40,9 +42,9 @@ module Messenger
       @_message.deliver!
     end
 
-    alias_method :deliver_now, :deliver
+    alias deliver_now deliver
 
-    def message(options={})
+    def message(options = {})
       m = @_message
 
       m.attributes = options
@@ -69,7 +71,7 @@ module Messenger
       # try - rpovider is sender, reciever is master
       # test - sender as provider, -
       if sender.provider?
-        if @_message.to == [ Account.master ]
+        if @_message.to == [Account.master]
           Account.master
         else
           sender
@@ -117,7 +119,7 @@ module Messenger
 
       def respond_to?(method)
         # in ruby 1.9 the elements of that array are symbols, not strings
-        instance_methods.any?{|m| m.to_s == method.to_s} or super
+        instance_methods.any? {|m| m.to_s == method.to_s} or super
       end
     end
   end
