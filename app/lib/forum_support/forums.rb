@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ForumSupport::Forums
   def self.included(base)
     base.class_eval do

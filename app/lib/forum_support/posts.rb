@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module ForumSupport
   module Posts
     def self.included(base)
       base.send :include, ThreeScale::SpamProtection::Integration::Controller
 
       base.before_action :find_topic
-      base.before_action :find_post, :only => [:edit, :update, :destroy]
+      base.before_action :find_post, :only => %i[edit update destroy]
       base.before_action :authorize_resources
 
       base.builtin_template_scope = 'forum/posts'
@@ -28,8 +30,7 @@ module ForumSupport
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       @post.attributes = params[:post]
@@ -51,15 +52,15 @@ module ForumSupport
     private
 
     def authorize_resources
-      unless @post
-        authorize! :reply, @topic
-      else
+      if @post
         authorize! params[:action].to_sym, @post
+      else
+        authorize! :reply, @topic
       end
     end
 
     def find_topic
-      @topic = @forum.topics.find_by_permalink!(params[:topic_id]) if params[:topic_id]
+      @topic = @forum.topics.find_by!(permalink: params[:topic_id]) if params[:topic_id]
     end
 
     def find_post

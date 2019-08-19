@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ForumSupport::Topics
   def self.included(base)
     base.send :include, ThreeScale::SpamProtection::Integration::Controller
 
-    base.before_action :find_topic, :only => [:show, :edit, :update, :destroy]
+    base.before_action :find_topic, :only => %i[show edit update destroy]
     base.before_action :authorize_topic
 
     base.builtin_template_scope = 'forum/topics'
@@ -84,7 +86,7 @@ module ForumSupport::Topics
   end
 
   def find_topic
-     @topic = @forum.topics.find_by_permalink!(params[:id])
+    @topic = @forum.topics.find_by!(permalink: params[:id])
   end
 
   def set_protected_attributes
@@ -100,9 +102,7 @@ module ForumSupport::Topics
   end
 
   def category(category_id = topic_params[:category_id])
-    if category_id
-      @forum.categories.find(category_id)
-    end
+    @forum.categories.find(category_id) if category_id
   end
 
   # def human_tested
