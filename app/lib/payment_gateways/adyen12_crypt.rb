@@ -46,7 +46,7 @@ module PaymentGateways
                        retrieve_card_details
                      end
 
-      return false unless card_details.present?
+      return false if card_details.blank?
 
       account.payment_detail.update_attributes(payment_detail_attributes(card_details))
     end
