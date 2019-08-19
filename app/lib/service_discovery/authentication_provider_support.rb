@@ -11,6 +11,6 @@ module ServiceDiscovery::AuthenticationProviderSupport
   end
 
   def service_discovery_authentication_provider
-    @service_discovery_authentication_provider ||= ::AuthenticationProvider::ServiceDiscoveryProvider.build(account: self)
+    @service_discovery_authentication_provider ||= ::AuthenticationProviders::ServiceDiscoveryProvider.build(account: self)
   end
 end

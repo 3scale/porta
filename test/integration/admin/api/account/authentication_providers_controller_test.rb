@@ -141,10 +141,10 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   private
-  
+
   def create_authentication_provider
-    AuthenticationProvider::Auth0.create!(client_id: 'firstClientId', client_secret: 'firstClientSecret',
-                                          site: 'http://example.net', account_type: AuthenticationProvider.account_types[:provider], account: @provider)
+    AuthenticationProviders::Auth0.create!(client_id: 'firstClientId', client_secret: 'firstClientSecret',
+                                           site: 'http://example.net', account_type: AuthenticationProvider.account_types[:provider], account: @provider)
   end
 
   def authentication_provider_params(different_attributes: {})

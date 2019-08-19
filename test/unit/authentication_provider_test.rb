@@ -56,7 +56,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test 'callback_account' do
       auth_provider = FactoryBot.build_stubbed(:authentication_provider)
-          .becomes(AuthenticationProvider::GitHub)
+          .becomes(AuthenticationProviders::GitHub)
       master = FactoryBot.build_stubbed(:master_account)
 
       auth_provider.branding_state = 'threescale_branded'
@@ -69,21 +69,21 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test 'find_kind' do
-    assert_equal AuthenticationProvider::Keycloak, AuthenticationProvider.find_kind('keycloak')
-    assert_equal AuthenticationProvider::Auth0, AuthenticationProvider.find_kind('auth0')
-    assert_equal AuthenticationProvider::GitHub, AuthenticationProvider.find_kind('github')
+    assert_equal AuthenticationProviders::Keycloak, AuthenticationProvider.find_kind('keycloak')
+    assert_equal AuthenticationProviders::Auth0, AuthenticationProvider.find_kind('auth0')
+    assert_equal AuthenticationProviders::GitHub, AuthenticationProvider.find_kind('github')
   end
 
   test 'self.kind' do
-    assert_equal 'github', AuthenticationProvider::GitHub.kind
-    assert_equal 'auth0', AuthenticationProvider::Auth0.kind
-    assert_equal 'keycloak', AuthenticationProvider::Keycloak.kind
+    assert_equal 'github', AuthenticationProviders::GitHub.kind
+    assert_equal 'auth0', AuthenticationProviders::Auth0.kind
+    assert_equal 'keycloak', AuthenticationProviders::Keycloak.kind
   end
 
   test 'kind' do
-    assert_equal 'github', AuthenticationProvider::GitHub.new.kind
-    assert_equal 'auth0', AuthenticationProvider::Auth0.new.kind
-    assert_equal 'keycloak', AuthenticationProvider::Keycloak.new.kind
+    assert_equal 'github', AuthenticationProviders::GitHub.new.kind
+    assert_equal 'auth0', AuthenticationProviders::Auth0.new.kind
+    assert_equal 'keycloak', AuthenticationProviders::Keycloak.new.kind
   end
 
   test 'branded_available?' do
@@ -102,11 +102,11 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test 'initial state github' do
     AuthenticationProvider.stubs(branded_available?: false)
-    github = AuthenticationProvider::GitHub.new
+    github = AuthenticationProviders::GitHub.new
     assert_equal github.branding_state, 'custom_branded'
 
     AuthenticationProvider.stubs(branded_available?: true)
-    github = AuthenticationProvider::GitHub.new
+    github = AuthenticationProviders::GitHub.new
     assert_equal github.branding_state, 'threescale_branded'
   end
 
@@ -129,20 +129,20 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test '#published: github not branded on new record' do
-    AuthenticationProvider::GitHub.stubs(:branded_available?).returns(false)
-    auth = AuthenticationProvider::GitHub.new(published: true)
+    AuthenticationProviders::GitHub.stubs(:branded_available?).returns(false)
+    auth = AuthenticationProviders::GitHub.new(published: true)
     assert auth.published
   end
 
   test '#published: github branded on new record' do
-    AuthenticationProvider::GitHub.stubs(:branded_available?).returns(true)
-    auth = AuthenticationProvider::GitHub.new(published: false)
+    AuthenticationProviders::GitHub.stubs(:branded_available?).returns(true)
+    auth = AuthenticationProviders::GitHub.new(published: false)
     assert auth.published
   end
 
   test '#published: github not branded on existing record can publish it' do
-    AuthenticationProvider::GitHub.stubs(:branded_available?).returns(false)
-    auth = AuthenticationProvider::GitHub.create!(published: false, client_id: '12345', client_secret: '12345')
+    AuthenticationProviders::GitHub.stubs(:branded_available?).returns(false)
+    auth = AuthenticationProviders::GitHub.create!(published: false, client_id: '12345', client_secret: '12345')
     refute auth.published
     auth.published = true
     auth.save!
@@ -151,8 +151,8 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test '#published: github branded on existing record can unpublish it' do
-    AuthenticationProvider::GitHub.stubs(:branded_available?).returns(true)
-    auth = AuthenticationProvider::GitHub.create!(client_id: '12345', client_secret: '12345')
+    AuthenticationProviders::GitHub.stubs(:branded_available?).returns(true)
+    auth = AuthenticationProviders::GitHub.create!(client_id: '12345', client_secret: '12345')
     assert auth.published
     auth.published = false
     auth.save!
