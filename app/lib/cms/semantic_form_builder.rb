@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CMS
   class SemanticFormBuilder < ::ThreeScale::SemanticFormBuilder
 
@@ -24,7 +26,7 @@ module CMS
     end
 
     def handler_input(method, options = {})
-      handlers = CMS::Handler.available.map{ |h| [h.to_s.humanize, h] }
+      handlers = CMS::Handler.available.map { |h| [h.to_s.humanize, h] }
       options.reverse_merge! :collection => handlers,
                              :include_blank => true
       select_input(method, options)
@@ -32,7 +34,7 @@ module CMS
 
     def select_input(method, options = {})
       if @object.send(method).nil? && @object.new_record?
-        options[:selected] ||= options.delete(:default).try!(:id)
+        options[:selected] ||= options.delete(:default)&.id
       end
 
       super
@@ -53,10 +55,9 @@ module CMS
         template.render('/provider/admin/cms/codemirror',
                         :html_id => "cms_template_#{method}",
                         :options => codemirror_options,
-                        :content_type => self.object.content_type,
-                        :liquid_enabled => self.object.liquid_enabled)
+                        :content_type => object.content_type,
+                        :liquid_enabled => object.liquid_enabled)
     end
-
 
     def delete_button(*args)
       icon = template.content_tag(:i, '', :class => 'fa fa-trash')

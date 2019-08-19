@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module CMS
   class Settings
-    DEFAULT_MODE = 'published'.freeze
+    DEFAULT_MODE = 'published'
 
     def initialize(settings, session)
       @settings = settings
@@ -33,12 +35,12 @@ module CMS
 
     private
 
-      def user_cms_token
-        @session[:cms_token]
-      end
+    def user_cms_token
+      @session[:cms_token]
+    end
 
-      def cms_session
-        ActiveSupport::StringInquirer.new(@session[:cms] || DEFAULT_MODE)
-      end
+    def cms_session
+      ActiveSupport::StringInquirer.new(@session[:cms] || DEFAULT_MODE)
+    end
   end
 end

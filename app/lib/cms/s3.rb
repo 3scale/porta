@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CMS
   module S3
     extend self

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CMS::Sidebar
   include Rails.application.routes.url_helpers
 
@@ -48,10 +50,10 @@ class CMS::Sidebar
 
   def last_update
     templates = [
-        @provider.templates,
-        @provider.files,
-        @provider.sections,
-        @provider.redirects,
+      @provider.templates,
+      @provider.files,
+      @provider.sections,
+      @provider.redirects
     ]
 
     latest = templates.map { |associaton| associaton.maximum(:updated_at) }
@@ -75,7 +77,7 @@ class CMS::Sidebar
   def array_as_json(array)
     array.map do |model|
       model
-        .as_json(except: :tenant_id, methods: [:search, :model], root: false)
+        .as_json(except: :tenant_id, methods: %i[search model], root: false)
         .merge(edit_path: polymorphic_path([:edit, :provider, :admin, model]))
     end
   end

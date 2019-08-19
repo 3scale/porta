@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CMS
   module BuiltinPagesSupport
     extend ActiveSupport::Concern
@@ -25,8 +27,8 @@ module CMS
     def find_builtin_static_page_layout
       system_name = [builtin_template_scope, action_name].compact.join('/')
 
-      page = site_account.builtin_static_pages.find_by_system_name(system_name)
-      layout = page.try!(:layout)
+      page = site_account.builtin_static_pages.find_by(system_name: system_name)
+      layout = page&.layout
 
       # TODO: return directly DEFAULT_LIQUID_LAYOUT when those
       # the views tested by these cukes don't rely on it:
