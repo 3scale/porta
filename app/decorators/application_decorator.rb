@@ -6,7 +6,7 @@ class ApplicationDecorator < Draper::Decorator
   self.include_root_in_json = true
 
   def api_selector_api_link
-    raise NotImplementedError
+    raise NoMethodError, __method__
   end
 
   private
@@ -28,6 +28,6 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def backend_api?
-    object.class == BackendApi
+    raise NoMethodError, __method__
   end
 end
