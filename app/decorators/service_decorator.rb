@@ -50,4 +50,10 @@ class ServiceDecorator < ApplicationDecorator
     hash = super(options)
     parse_api hash
   end
+
+  private
+
+  def backend_api?
+    false
+  end
 end

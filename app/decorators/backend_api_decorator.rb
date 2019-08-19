@@ -12,4 +12,10 @@ class BackendApiDecorator < ApplicationDecorator
     hash = super(options)
     parse_api hash
   end
+
+  private
+
+  def backend_api?
+    true
+  end
 end
