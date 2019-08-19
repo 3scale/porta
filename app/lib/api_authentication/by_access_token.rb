@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module ApiAuthentication
   module ByAccessToken
     extend ActiveSupport::Concern
 
     def current_user
-      @current_user ||= authenticated_token.try!(:owner) or defined?(super) && super
+      @current_user ||= authenticated_token&.owner or defined?(super) && super
     end
 
     included do
@@ -133,8 +135,8 @@ module ApiAuthentication
 
       extend self
 
-      READ_ONLY = 'ro'.freeze
-      READ_WRITE = 'rw'.freeze
+      READ_ONLY = 'ro'
+      READ_WRITE = 'rw'
 
       def set_transaction
         case level
@@ -154,7 +156,7 @@ module ApiAuthentication
       end
 
       def enforce(access_token)
-        self.level = access_token.try!(:permission)
+        self.level = access_token&.permission
 
         return yield unless requires_transaction?
 
@@ -168,7 +170,7 @@ module ApiAuthentication
         connection.transaction(requires_new: true, &Proc.new)
       rescue ActiveRecord::StatementInvalid => error
         if error.message =~ /read(-|\s)only transaction/i
-          fail PermissionError, error.message, caller
+          raise PermissionError, error.message, caller
         else
           raise
         end

@@ -74,8 +74,8 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
     Account.expects(:find_by_provider_key!).with(@provider.api_key)
       .returns(@provider)
 
-    @provider.buyer_users.expects(:find_by_username)
-      .with('fake').returns(nil).at_least_once
+    @provider.buyer_users.expects(:find_by)
+      .with(username: 'fake').returns(nil).at_least_once
 
     @request.host = @provider.admin_domain
     post :change, :format => 'xml', :id => '42',
