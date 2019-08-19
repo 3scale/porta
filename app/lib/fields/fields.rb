@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 #this is tested in unit/account_test
 module Fields::Fields
   extend ActiveSupport::Concern
 
   included do
-    validate  :optional_fields_valid?, :if => :validate_fields?
+    validate :optional_fields_valid?, :if => :validate_fields?
 
     # Used to manualy set source in special cases
     attr_writer :fields_definitions_source
@@ -55,7 +57,6 @@ module Fields::Fields
       @internal_fields = fields.flatten.map(&:to_s)
     end
 
-
     def set_fields_source(method)
       @fields_source_object = method
     end
@@ -102,7 +103,7 @@ module Fields::Fields
     # Fields definitions source has to be set before everything else
     # because fields needs source to validate attributes and handle dynamic ones when assigning
     def initialize(attributes = nil, *args)
-      @fields_definitions_source = attributes.try!(:delete, :fields_definitions_source)
+      @fields_definitions_source = attributes&.delete(:fields_definitions_source)
 
       super
     end
@@ -172,9 +173,9 @@ module Fields::Fields
     source = self.class.fields_source_object
 
     object = if source == :self
-      self
+               self
              else
-      send(source)
+               send(source)
              end
 
     object
@@ -204,8 +205,8 @@ module Fields::Fields
                 account.master? or account.provider?
               end
 
-       return account if valid
-    end while account = account.try!(:provider_account)
+      return account if valid
+    end while account = account&.provider_account
   end
 
   def fields_definitions_source_root!
@@ -216,7 +217,7 @@ module Fields::Fields
   # fields should be validated if account is buyer
   #
   def validate_fields?
-    (fields_definitions_object || fields_definitions_set_source).try!(:buyer?) and fields_validations?
+    (fields_definitions_object || fields_definitions_set_source)&.buyer? and fields_validations?
   end
 
   # Returns previously set source via instance variable or tries to find by method set in model
@@ -263,7 +264,7 @@ module Fields::Fields
   end
 
   def defined_fields_hash
-    @defined_fields_hash ||= Hash[defined_fields.map{ |f| [f.name.to_sym, f]}]
+    @defined_fields_hash ||= Hash[defined_fields.map { |f| [f.name.to_sym, f]}]
   end
 
   def clear_fields_cache
@@ -284,12 +285,12 @@ module Fields::Fields
   def optional_fields_valid?
     optional_fields.each do |field_name|
       field = field(field_name)
-      next unless field.try!(:required?)
+      next unless field&.required?
 
       if field_value(field.name).blank?
         errors.add(field_name, "can't be blank")
       elsif field.choices.present? &&
-          field.choices.exclude?(field_value(field.name))
+            field.choices.exclude?(field_value(field.name))
         errors.add(field_name, "illegal value")
       end
 
@@ -324,9 +325,9 @@ module Fields::Fields
 
   def field_value(name)
     if extra_field?(name)
-      self.extra_fields && self.extra_fields[name]
+      extra_fields && extra_fields[name]
     elsif respond_to?(name)
-      value = self.public_send(name)
+      value = public_send(name)
 
       if value.is_a? ActiveRecord::Base
         value.name # this should check for multiple methods like label, etc.
@@ -339,14 +340,13 @@ module Fields::Fields
 
   def fields_to_xml(xml)
     defined_builtin_fields.each do |field|
-      if field_value(field.name).present?
-        value = field_value(field.name)
+      next if field_value(field.name).blank?
+      value = field_value(field.name)
 
-        if value.respond_to?(:to_xml)
-          value.to_xml(builder: xml, root: field.name)
-        else
-          xml.__send__(:method_missing, field.name, value.to_s.strip)
-        end
+      if value.respond_to?(:to_xml)
+        value.to_xml(builder: xml, root: field.name)
+      else
+        xml.__send__(:method_missing, field.name, value.to_s.strip)
       end
     end
   end

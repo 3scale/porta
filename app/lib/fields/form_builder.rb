@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Inheriting because the ThreeScale::SemanticFormBuilder contains
 # some ready made input fields such as price_input or cancel_button.
 #
@@ -21,9 +23,7 @@ class Fields::FormBuilder < ThreeScale::SemanticFormBuilder
 
   def field(field_name, options = {})
     field = @object.field(field_name)
-    unless field.nil?
-      output_html(field, options).html_safe
-    end
+    output_html(field, options).html_safe unless field.nil?
   end
 
   def field_label(field_name)
