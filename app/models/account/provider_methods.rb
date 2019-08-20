@@ -29,7 +29,9 @@ module Account::ProviderMethods
 
     has_many :usage_limits, through: :services
     has_many :metrics, through: :services
+    has_many :top_level_metrics, through: :services
     has_many :proxies, through: :services
+    has_many :proxy_rules, through: :proxies
     has_many :proxy_logs, foreign_key: :provider_id
     has_many :authentication_providers, -> { developer }, dependent: :destroy, inverse_of: :account do
       def build_kind(kind:, **attributes)

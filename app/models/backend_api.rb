@@ -37,6 +37,16 @@ class BackendApi < ApplicationRecord
     backend_api_configs.first&.service
   end
 
+  alias mapping_rules proxy_rules
+
+  def top_level_metrics
+    metrics.top_level
+  end
+
+  def method_metrics
+    metrics.where(parent: metrics.where(system_name: 'hits'))
+  end
+
   private
 
   def set_private_endpoint

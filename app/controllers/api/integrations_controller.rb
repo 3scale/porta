@@ -243,6 +243,8 @@ class Api::IntegrationsController < Api::BaseController
       basic_fields << :oidc_issuer_type
     end
 
+    basic_fields << { backend_api_configs_attributes: %i[_destroy id path] } if @service.act_as_product?
+
     params.require(:proxy).permit(*basic_fields)
   end
 

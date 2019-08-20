@@ -22,9 +22,39 @@
 
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
-      = f.inputs "API" do
-        = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend }, autofocus: (@proxy.api_backend == @proxy.default_api_backend) }, hint: is_https?(@proxy.api_backend) ? t('formtastic.hints.proxy.api_backend_https') : t('formtastic.hints.proxy.api_backend_http')
-        = help_bubble( 'api_endpoint_bubble', t('api.integrations.proxy.api_endpoint_help_html'))
+      - if @service.act_as_product?
+        = f.inputs 'Backends' do
+          table#backend_apis
+            thead
+              tr
+                th Name
+                th Production Public Base URL
+                th
+                th Private Base URL
+                th
+            tbody
+              = f.fields_for :backend_api_configs do |backend|
+                - backend_api = backend.object.backend_api
+                tr
+                  td
+                    = link_to provider_admin_backend_api_path(backend_api) do
+                      => backend_api.name
+                  td
+                    = @proxy.default_production_endpoint
+                    | /
+                    = backend.text_field :path, class: 'backend_api_config_path'
+                  td
+                    i.fa.fa-caret-right
+                  td
+                    = backend_api.private_endpoint
+                  td.actions
+                    = link_to '', '#delete-backend-api-config', class: 'action delete'
+                    = backend.hidden_field :_destroy, class: 'destroyer', value: 1, disabled: true
+
+      - else
+        = f.inputs "API" do
+          = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend }, autofocus: (@proxy.api_backend == @proxy.default_api_backend) }, hint: api_backend_hint(@proxy.api_backend)
+          = help_bubble( 'api_endpoint_bubble', t('api.integrations.proxy.api_endpoint_help_html'))
 
     div class=("feedback proxy #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-hdd-o
@@ -42,8 +72,9 @@
                                 placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
                   hint: apicast_endpoint_input_hint(@service, environment: 'production')
         = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
-        div.help-button-constrainer
-          = render 'api/integrations/apicast/shared/mapping_rules', f: f
+        - if @service.act_as_traditional_service?
+          div.help-button-constrainer
+            = render 'api/integrations/apicast/shared/mapping_rules', f: f
         div.help-button-constrainer
           = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
         - if current_account.provider_can_use?(:policies)

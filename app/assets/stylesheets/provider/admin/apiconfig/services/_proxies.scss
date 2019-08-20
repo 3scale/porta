@@ -489,8 +489,14 @@ form.proxy {
       }
   }
 
+  table#backend_apis {
+    input.backend_api_config_path {
+      margin-left: line-height-times(1/2);
+      width: auto;
+    }
+  }
 
-  table#proxy-rules {
+  table#backend_apis, table#proxy-rules {
     width: 100%;
     border-spacing: 0;
     border-collapse: collapse;
