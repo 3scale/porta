@@ -48,12 +48,15 @@ module Provider::Admin::DashboardsHelper
   def dashboard_apiap_tab_label(html_for, singular_name, collection, options = {})
     label_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
     icon_name = options[:icon_name]
-    label_text = label_text.prepend "#{icon(icon_name)} " if icon_name
-
-    label_tag html_for, label_text.html_safe, class: css_class({
+    label_class = css_class(
       'DashboardNavigation-link': true,
       'current-tab': options.fetch(:current_tab, false)
-    })
+    )
+    label_tag html_for, class: label_class do
+      concat icon(icon_name) if icon_name
+      concat ' '
+      concat label_text
+    end
   end
 
   def safe_wrap_with_parenthesis(html)
