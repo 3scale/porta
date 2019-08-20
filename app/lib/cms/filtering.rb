@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CMS::Filtering
 
   extend ActiveSupport::Concern
@@ -14,7 +16,7 @@ module CMS::Filtering
 
   def search
     {
-        origin: search_origin,
+      origin: search_origin,
         type: search_type
     }
   end

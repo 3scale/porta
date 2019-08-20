@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A liquid template lookup for 3scale buyer side partial rendering.
 # That is, whenever you use the `{% include 'menu' %}`.
 #
@@ -13,9 +15,7 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
   end
 
   def read_template_file(template_path, context)
-    unless template_path
-      raise ArgumentError, "Cannot find partial without name."
-    end
+    raise ArgumentError, "Cannot find partial without name." unless template_path
 
     draft = context.registers[:draft]
     partial = find_partial(template_path)
@@ -23,11 +23,11 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
   end
 
   def find_portlet(path)
-    record @provider.portlets.find_by_system_name(path)
+    record @provider.portlets.find_by(system_name: path)
   end
 
   def find_partial(path)
-    record @provider.all_partials.find_by_system_name(path)
+    record @provider.all_partials.find_by(system_name: path)
   end
 
   def partial_from_filesystem(path, context)
