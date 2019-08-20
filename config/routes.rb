@@ -208,7 +208,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :metrics, :except => [:show] do
             resources :children, :controller => 'metrics', :only => [:new, :create]
           end
-          resources :mapping_rules
+          resources :mapping_rules, except: %i[show]
         end
       end
 

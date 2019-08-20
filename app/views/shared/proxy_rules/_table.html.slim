@@ -1,0 +1,38 @@
+table#mapping_rules.data
+  thead
+    tr
+      th = sortable('proxy_rules.http_method', 'Verb')
+      th = sortable('proxy_rules.pattern', 'Pattern')
+      - if owner.try(:using_proxy_pro?)
+        th Redirect
+      th title="increment" +
+      th = sortable('metrics.friendly_name', 'Metric or Method')
+      th = sortable('proxy_rules.last', 'Last?')
+      th = sortable('proxy_rules.position', 'Position')
+      th.actions
+        = link_to 'Add Mapping Rule', new_rule_path, class: 'action add'
+  tbody
+    - proxy_rules.each do |rule|
+      tr
+        td.http_method
+          = rule.http_method
+        td.pattern
+          = rule.pattern
+          - if rule.pattern == '/'
+            span.fa.fa-exclamation-triangle.disabled#catch-all-warning title=(t('api.integrations.proxy.proxy_rule_catch_all_warning'))
+        - if owner.try(:using_proxy_pro?)
+          td.redirect_url
+            = rule.redirect_url
+        td.delta
+          = rule.delta
+        td.metric
+          = rule.metric_system_name
+        td.last_called_and_position
+          = rule.last
+        td.position
+          = rule.position
+        td.actions
+          = link_to '', proxy_rule_path_for(rule, edit: true), class: 'action edit'
+          = link_to '', proxy_rule_path_for(rule), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
+
+= will_paginate(@proxy_rules)

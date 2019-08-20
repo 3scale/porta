@@ -2,36 +2,26 @@
 
 class Api::ProxyRulesController < Api::BaseController
   include ThreeScale::Search::Helpers
+  include ProxyRuleSharedController
 
-  before_action :authorize!, :find_service, :find_proxy
-  before_action :find_proxy_rule, only: %i[edit update destroy]
+  before_action :authorize!
+
+  delegate :proxy_rules, to: :proxy
 
   activate_menu :serviceadmin, :integration, :mapping_rules
 
   sublayout 'api/service'
 
-  def index
-    @proxy_rules = @proxy.proxy_rules.order_by(params[:sort], params[:direction])
-                                     .includes(:metric).ordered.paginate(page: params[:page])
-  end
-
-  def new
-    proxy_rules   = @proxy.proxy_rules
-    last_position = proxy_rules.maximum(:position) || 0
-    next_position = last_position + 1
-    @proxy_rule   = proxy_rules.build(position: next_position, delta: 1)
-  end
-
-  def edit; end
-
   def create
-    @proxy_rule = @proxy.proxy_rules.build(proxy_rule_params)
+    @proxy_rule = proxy_rules.build(proxy_rule_params)
     if @proxy_rule.save
       redirect_to admin_service_proxy_rules_path(@service), notice: 'Mapping rule was created.'
     else
       render :new
     end
   end
+
+  def edit; end
 
   def update
     if @proxy_rule.update_attributes(proxy_rule_params)
@@ -57,19 +47,11 @@ class Api::ProxyRulesController < Api::BaseController
     provider_can_use!(:independent_mapping_rules)
   end
 
-  def find_proxy
-    @proxy = @service.proxy
+  def proxy
+    @proxy ||= service.proxy
   end
 
-  def find_proxy_rule
-    @proxy_rule = @proxy.proxy_rules.find(params[:id])
-  end
-
-  def find_service
-    @service = current_user.accessible_services.find(params[:service_id])
-  end
-
-  def proxy_rule_params
-    params.require(:proxy_rule).permit(%i[http_method pattern delta metric_id position last redirect_url])
+  def service
+    @service ||= current_user.accessible_services.find(params[:service_id])
   end
 end
