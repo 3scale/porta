@@ -35,6 +35,12 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     assert_equal 'https://host.com:443/p', @provider.backend_apis.last.private_endpoint
   end
 
+  test '#edit' do
+    backend_api = @provider.backend_apis.last
+    get edit_provider_admin_backend_api_path(backend_api)
+    assert_response :success
+  end
+
   test '#update' do
     backend_api = @provider.backend_apis.last
     assert_equal 'http://api.example.net:80', backend_api.private_endpoint
