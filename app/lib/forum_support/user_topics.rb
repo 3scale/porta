@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ForumSupport
   module UserTopics
     def self.included(base)
@@ -21,12 +23,10 @@ module ForumSupport
       @user_topic = UserTopic.new :user => current_user
 
       # ensuring the topic belongs to the site_account forum
-      @user_topic.topic = @forum.topics.find_by_id(params[:user_topic][:topic_id])
+      @user_topic.topic = @forum.topics.find_by(id: params[:user_topic][:topic_id])
 
       respond_to do |format|
-        if @user_topic.save
-           flash[:notice] = 'You have successfully subscribed to the thread.'
-        end
+        flash[:notice] = 'You have successfully subscribed to the thread.' if @user_topic.save
         format.html { redirect_to :back }
       end
     end
@@ -34,7 +34,7 @@ module ForumSupport
     # beware that what's passed as params[:id] is the topic id
     def destroy
       topic = Topic.find params[:id]
-      user_topic = current_user.user_topics.find_by_topic_id!(topic.id)
+      user_topic = current_user.user_topics.find_by!(topic_id: topic.id)
       user_topic.destroy
 
       respond_to do |format|

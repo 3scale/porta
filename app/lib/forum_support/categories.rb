@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module ForumSupport
   module Categories
     def self.included(base)
-      base.before_action :find_category, :only => [:show, :edit, :update, :destroy]
+      base.before_action :find_category, :only => %i[show edit update destroy]
       base.authorize_resource :class => TopicCategory, :instance_name => :category
 
       base.builtin_template_scope = 'forum/categories'
@@ -31,8 +33,7 @@ module ForumSupport
       end
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       if @category.update_attributes(params[:topic_category])

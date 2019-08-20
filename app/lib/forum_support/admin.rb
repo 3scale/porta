@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ForumSupport
   # Mix in this module into admin-side controllers (forum, topic, post, ...)
   module Admin
