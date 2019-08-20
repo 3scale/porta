@@ -1,19 +1,12 @@
-const CURRENT_TAB_CLASS = 'current-tab'
+// @flow
 
 export function initialize () {
-  const tabProducts = document.querySelector('label[for="tab-products"]')
-  const tabBackends = document.querySelector('label[for="tab-backends"]')
+  const tabs = document.querySelectorAll('label[for^="tab-"]')
+  const inputs = document.querySelectorAll('input[name="apiap-tabs"]')
 
-  const inputProducts = document.querySelector('input#tab-products')
-  const inputBackends = document.querySelector('input#tab-backends')
+  inputs.forEach(i => i.addEventListener('change', toggleCurrentTab))
 
-  inputProducts.addEventListener('change', () => {
-    tabProducts.classList.add(CURRENT_TAB_CLASS)
-    tabBackends.classList.remove(CURRENT_TAB_CLASS)
-  })
-
-  inputBackends.addEventListener('change', () => {
-    tabBackends.classList.add(CURRENT_TAB_CLASS)
-    tabProducts.classList.remove(CURRENT_TAB_CLASS)
-  })
+  function toggleCurrentTab () {
+    tabs.forEach(tab => tab.classList.toggle('current-tab'))
+  }
 }
