@@ -1,5 +1,3 @@
-require_or_load 'three_scale'
-
 module ThreeScale
   module Analytics
     extend self
