@@ -1,6 +1,5 @@
 require 'roar/json'
 require 'roar/hypermedia'
-require_dependency 'three_scale/representer'
 
 module ThreeScale::JSONRepresenter
   extend ActiveSupport::Concern

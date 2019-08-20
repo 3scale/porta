@@ -227,10 +227,8 @@ module System
                                    password password_digest payment_gateway_options payment_service_reference salt
                                    site_access_code sso_key user_key]
 
-    require 'three_scale/middleware/multitenant'
-    require 'three_scale/middleware/dev_domain'
-    config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id
-    config.middleware.use ThreeScale::Middleware::DevDomain, config.three_scale.dev_domain_regexp, config.three_scale.dev_domain_replacement if config.three_scale.dev_domain
+    config.middleware.use 'ThreeScale::Middleware::Multitenant', :tenant_id
+    config.middleware.use 'ThreeScale::Middleware::DevDomain', config.three_scale.dev_domain_regexp, config.three_scale.dev_domain_replacement if config.three_scale.dev_domain
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
 
@@ -268,7 +266,7 @@ module System
     end
 
     config.after_initialize do
-      require_or_load 'three_scale'
+      require 'three_scale'
       ThreeScale.validate_settings!
       require 'system/redis_pool'
       redis_config = ThreeScale::RedisConfig.new(config.redis)
