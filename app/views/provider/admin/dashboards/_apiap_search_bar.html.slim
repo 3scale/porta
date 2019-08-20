@@ -1,20 +1,3 @@
-div id=id
+- apis = collection.as_json(root: false, only: [:id, :name]).to_json
 
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    var apis = #{ json collection.as_json(root: false, only: [:id, :name]) }
-    var domClass =  "#{ dom_class collection }"
-    var placeholder = "#{ placeholder }"
-
-    var displayApis = function (filteredApis) {
-      apis.forEach(function (api) {
-        var isFilteredApi = filteredApis.some(function (filteredApi) {
-          return filteredApi.id === api.id
-        });
-
-        document.getElementById(`${domClass}_${api.id}`).classList.toggle('hidden', !isFilteredApi)
-      })
-    }
-
-    window.ApiFilter({ apis, placeholder, displayApis }, "#{id}")
-  })
+div id=id data-apis=apis data-dom-class=(dom_class collection) data-placeholder=placeholder
