@@ -17,7 +17,8 @@ type Props = {
   apis: Api[],
   currentApi: Api,
   activeMenu: Menu,
-  audienceLink: string
+  audienceLink: string,
+  apiap?: boolean
 }
 
 type State = {
@@ -111,12 +112,12 @@ class ContextSelector extends React.Component<Props, State> {
   }
 
   render () {
-    const { currentApi, activeMenu, audienceLink } = this.props
+    const { currentApi, activeMenu, audienceLink, apiap } = this.props
 
     return (
       <div className="PopNavigation PopNavigation--context">
         <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Selector">
-          <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} />
+          <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} apiap={apiap}/>
         </a>
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
