@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module CMS
   class ContentForStore
 
     def initialize
-      @store = Hash.new{|hash,key| hash[key] = "" }
+      @store = Hash.new {|hash,key| hash[key] = "" }
     end
 
     def []=(key,value)
