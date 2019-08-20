@@ -409,18 +409,20 @@ a:hover .u-notice {
   }
 
   &--content {
-    & > input, #products, #backends {
+    & > input,
+    #products,
+    #backends {
       display: none;
     }
 
     & > input:checked ~ #products,
     & > input:checked ~ #backends {
-      display: block
+      display: block;
     }
 
     nav.DashboardNavigation--services {
       float: left;
-      margin-left: line-height-times(2)
+      margin-left: line-height-times(2);
     }
   }
 }
