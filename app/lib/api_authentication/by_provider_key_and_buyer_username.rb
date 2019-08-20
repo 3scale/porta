@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiAuthentication
   # Include this module into a controller if you want to enable authentication
   # with provider_key and buyer's username.
@@ -8,7 +10,7 @@ module ApiAuthentication
       super || if params[:provider_key] != site_account.api_key
                  nil
                else
-                 site_account.buyer_users.find_by_username(params[:username])
+                 site_account.buyer_users.find_by(username: params[:username])
                end
     end
 

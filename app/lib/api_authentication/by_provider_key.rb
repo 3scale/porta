@@ -10,6 +10,7 @@ module ApiAuthentication::ByProviderKey
     !current_account.nil?
   end
 
+  # rubocop:disable Rails/DynamicFindBy
   def current_account
     @current_account ||= if current_user
                            current_user.account
@@ -20,6 +21,7 @@ module ApiAuthentication::ByProviderKey
                                .find_by_provider_key(provider_key)
                          end
   end
+  # rubocop:enable Rails/DynamicFindBy
 
   private
 

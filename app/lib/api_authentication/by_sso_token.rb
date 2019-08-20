@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiAuthentication
   module BySsoToken
     extend ActiveSupport::Concern
@@ -33,7 +35,7 @@ module ApiAuthentication
     alias verified_sso_token verify_sso_token
 
     def show_sso_token_error
-      render_error 'Your token is invalid'.freeze, status: 403
+      render_error 'Your token is invalid', status: 403
     end
 
     def sso_token
