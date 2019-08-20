@@ -1,5 +1,3 @@
-require 'simple_layout'
-
 class Settings < ApplicationRecord
   belongs_to :account, inverse_of: :settings
 
