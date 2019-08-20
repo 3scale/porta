@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Forum::AdminPathsHelper
 
   def forum_home
@@ -5,11 +7,11 @@ module Forum::AdminPathsHelper
   end
 
   def forum_topic_posts(topic)
-   admin_forum_topic_posts_path(topic)
+    admin_forum_topic_posts_path(topic)
   end
 
   def edit_forum_topic(topic)
-   edit_admin_forum_topic_path(topic)
+    edit_admin_forum_topic_path(topic)
   end
 
   def new_forum_topic
@@ -26,7 +28,7 @@ module Forum::AdminPathsHelper
   end
 
   def show_forum_topic(topic, options)
-   admin_forum_topic_path(topic, options)
+    admin_forum_topic_path(topic, options)
   end
 
   def edit_forum_topic_post(topic, post)
@@ -42,4 +44,3 @@ module Forum::AdminPathsHelper
   end
 
 end
-
