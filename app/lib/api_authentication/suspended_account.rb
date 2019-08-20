@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiAuthentication
   module SuspendedAccount
     extend ActiveSupport::Concern
