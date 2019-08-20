@@ -2,6 +2,7 @@
 
 class Provider::Admin::ServiceDiscovery::ClusterProjectsController < Provider::Admin::ServiceDiscovery::ClusterBaseController
   def index
-    render json: { projects: cluster.projects_with_discoverables.map(&:to_json) }
+    render json: cluster.projects_with_discoverables.map(&:name)
+                                                    .to_json
   end
 end

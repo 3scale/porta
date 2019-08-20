@@ -1,27 +1,53 @@
 // @flow
 
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {Label, Select} from 'NewService/components/FormElements'
+import {fetchData} from 'utilities/utils'
+import {BASE_PATH} from 'NewService'
 
 type Props = {
-  fetchServices: (namespace: string) => Promise<void>,
   projects: string[],
-  services: string[]
+  onError: (err: string) => void
 }
 
 const ServiceDiscoveryListItems = (props: Props) => {
-  const {fetchServices, projects, services} = props
+  const { projects, onError } = props
+
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (projects && projects.length) {
+      fetchServices(projects[0])
+    }
+  }, [projects])
+
+  const fetchServices = async (namespace: string) => {
+    setLoading(true)
+    setServices([])
+
+    try {
+      const services = await fetchData<string[]>(`${BASE_PATH}/namespaces/${namespace}/services.json`)
+      setServices(services)
+    } catch (error) {
+      onError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <React.Fragment>
       <li id="service_name_input" className="string required">
         <Label
-          htmlFor='namespace'
+          htmlFor='service_namespace'
           label='Namespace'
         />
         <Select
+          disabled={loading}
           name='service[namespace]'
           id='service_namespace'
-          onChange={(e) => fetchServices(e.currentTarget.value)}
+          onChange={e => { fetchServices(e.currentTarget.value) }}
           options={projects}
         />
       </li>
@@ -31,6 +57,7 @@ const ServiceDiscoveryListItems = (props: Props) => {
           label='Name'
         />
         <Select
+          disabled={loading}
           name='service[name]'
           id='service_name'
           options={services}

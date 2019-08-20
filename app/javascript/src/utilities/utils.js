@@ -26,14 +26,14 @@ function CSRFToken ({win = window}: {win?: Window}) {
   }
 }
 
-const fetchData = (url: string) => {
+const fetchData = <T>(url: string): Promise<T> => {
   return fetchPolyfill(url)
-    .then((response) => {
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+
       return response.json()
-    })
-    .then(data => data)
-    .catch(error => {
-      console.error(error)
     })
 }
 

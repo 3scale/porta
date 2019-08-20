@@ -18,14 +18,15 @@ const NewServiceForm = (props: Props) => {
     providerAdminServiceDiscoveryServicesPath, adminServicesPath} = props
 
   const [formMode, setFormMode] = useState('manual')
+  const [loadingProjects, setLoadingProjects] = useState(false)
 
-  const handleFormsVisibility = (event: SyntheticEvent<HTMLSelectElement>) => {
+  const handleFormsVisibility = (event: SyntheticEvent<HTMLInputElement>) => {
     setFormMode(event.currentTarget.value)
   }
 
   const formToRender = () => formMode === 'manual' || !isServiceDiscoveryAccessible
     ? <ServiceManualForm formActionPath={adminServicesPath}/>
-    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath}/>
+    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
 
   return (
     <React.Fragment>
@@ -35,6 +36,7 @@ const NewServiceForm = (props: Props) => {
           isServiceDiscoveryUsable={isServiceDiscoveryUsable}
           serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
           handleFormsVisibility={handleFormsVisibility}
+          loadingProjects={loadingProjects}
         />
       }
       {formToRender()}
