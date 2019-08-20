@@ -1,47 +1,43 @@
 // @flow
 
-import React from 'react'
-import {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 
 import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 import {fetchData} from 'utilities/utils'
-import type {FormProps} from 'NewService/types'
 
-const BASE_PATH = '/p/admin/service_discovery'
-const PROJECTS_PATH = `${BASE_PATH}/projects.json`
+import {PROJECTS_PATH} from 'NewService'
 
-const ServiceDiscoveryForm = ({formActionPath}: {formActionPath: string}) => {
-  const [projects, setProjects] = useState([])
-  const [services, setServices] = useState([])
-  const [fetchErrorMessage, setFetchErrorMessage] = useState('')
+type Props = {
+  formActionPath: string,
+  setLoadingProjects: boolean => void
+}
+
+const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props) => {
+  // Don't use named imports so that useState can be mocked in specs
+  const [projects, setProjects] = React.useState([])
+  const [fetchErrorMessage, setFetchErrorMessage] = React.useState('')
 
   const fetchProjects = async () => {
+    setLoadingProjects(true)
+
     try {
-      const data = await fetchData(PROJECTS_PATH)
-      setProjects(data['projects'])
-      fetchServices(data.projects[0].metadata.name)
+      const projects = await fetchData<string[]>(PROJECTS_PATH)
+      setProjects(projects)
     } catch (error) {
       setFetchErrorMessage(error.message)
+    } finally {
+      setLoadingProjects(false)
     }
   }
 
-  const fetchServices = async (namespace: string) => {
-    try {
-      const data = await fetchData(`${BASE_PATH}/namespaces/${namespace}/services.json`)
-      setServices(data['services'])
-    } catch (error) {
-      setFetchErrorMessage(error.message)
-    }
-  }
-
-  const listItemsProps = {fetchServices, projects, services}
+  const listItemsProps = {projects, onError: setFetchErrorMessage}
 
   useEffect(() => {
     fetchProjects()
   }, [])
 
-  const formProps: FormProps = {
+  const formProps = {
     id: 'service_source',
     formActionPath,
     hasHiddenServiceDiscoveryInput: true,

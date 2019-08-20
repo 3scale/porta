@@ -1,32 +1,41 @@
+// @flow
+
 import React from 'react'
-import Enzyme, {mount} from 'enzyme'
+import Enzyme, {mount, shallow} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 import {Select} from 'NewService/components/FormElements'
 
 Enzyme.configure({adapter: new Adapter()})
 
+const options = ['project_01', 'project_02']
 const props = {
   name: 'my-select',
   id: 'select-id',
-  onChange: jest.fn(),
-  options: [
-    {metadata: {name: 'one'}},
-    {metadata: {name: 'two'}}
-  ]
+  options
 }
 
 it('should render itself properly', () => {
   const wrapper = mount(<Select {...props}/>)
-  expect(wrapper.find('select').exists()).toEqual(true)
-  expect(wrapper.find('select').props().name).toEqual('my-select')
-  expect(wrapper.find('select').props().id).toEqual('select-id')
-  expect(wrapper.find('select').props().onChange).toEqual(props.onChange)
+  expect(wrapper.find(Select).exists()).toEqual(true)
 })
 
-it('should render with proper options', () => {
+it('should render a select with options', () => {
   const wrapper = mount(<Select {...props}/>)
-  expect(wrapper.find('option').length).toEqual(2)
-  expect(wrapper.find('option').first().props().value).toEqual('one')
-  expect(wrapper.find('option').last().props().value).toEqual('two')
+  expect(wrapper.find('select').exists()).toEqual(true)
+
+  for (let option of options) {
+    expect(wrapper.exists(`option[value="${option}"]`)).toEqual(true)
+  }
+})
+
+it('should call onChange when an option is selected', () => {
+  const option = 'foo'
+  const onChange = jest.fn()
+  const wrapper = shallow(<Select {...props}/>)
+
+  wrapper.setProps({ onChange })
+  wrapper.find('select').simulate('change', option)
+
+  expect(onChange).toHaveBeenCalledWith(option)
 })

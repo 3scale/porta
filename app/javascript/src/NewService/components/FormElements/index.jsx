@@ -1,3 +1,5 @@
+// @flow
+
 export {FormWrapper} from 'NewService/components/FormElements/FormWrapper'
 export {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
 export {Label} from 'NewService/components/FormElements/Label'

@@ -12,6 +12,7 @@
 [lints]
 
 [options]
+module.system.node.resolve_dirname=node_modules
 module.name_mapper.extension='scss' -> 'empty/object'
 module.system=haste
 module.name_mapper='\(Applications\|Dashboard\|LoginPage\|Navigation\|Onboarding\|Policies\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'

@@ -1,3 +1,5 @@
+$fieldset-margin-bottom: line-height-times(1.5);
+
 form.formtastic ol, form.formtastic ul {
   list-style: none;
 }
@@ -310,7 +312,7 @@ form.formtastic {
     position: relative;
     padding: line-height-times(1) 0 0 0;
     border-top: $border-width solid $border-color;
-    margin-bottom: line-height-times(1.5);
+    margin-bottom: $fieldset-margin-bottom;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -533,10 +535,14 @@ li.hidden {
   display: none;
 }
 
-.errorMessage {
-  color: $error-color;
-}
+#new_service_wrapper {
+  .errorMessage {
+    color: $error-color;
+    margin-bottom: line-height-times(1/2);
+    margin-top: -#{$fieldset-margin-bottom};
+  }
 
-.new-service-source-input {
-  padding-left: line-height-times(5 / 10);
+  .new-service-source-input {
+    padding: 0 line-height-times(5 / 10);
+  }
 }
