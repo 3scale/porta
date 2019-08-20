@@ -22,8 +22,8 @@ class AuthenticationProvider < ApplicationRecord
             length: { maximum: 255 }
 
   validates :system_name, exclusion: [
-      RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME,
-      ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME
+    RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME,
+    ServiceDiscovery::AuthenticationProviderSupport::SERVICE_DISCOVERY_SYSTEM_NAME
   ]
 
   before_validation :set_defaults, on: :create
@@ -31,11 +31,11 @@ class AuthenticationProvider < ApplicationRecord
 
   validates :client_id, :client_secret, presence: true, if: :oauth_config_required?
 
-  with_options format: { with: URI.regexp(%w(http https)), allow_blank: true, message: :invalid_url } do |ops|
-    ops.validates :site
-    ops.validates :token_url
-    ops.validates :authorize_url
-    ops.validates :user_info_url
+  with_options format: { with: URI.regexp(%w[http https]), allow_blank: true, message: :invalid_url } do
+    validates :site
+    validates :token_url
+    validates :authorize_url
+    validates :user_info_url
   end
 
   attr_readonly :type, :kind
@@ -43,8 +43,8 @@ class AuthenticationProvider < ApplicationRecord
   scope(:published, -> { where(published: true) })
 
   AVAILABLE = {
-    account_types[:developer] => %w[Keycloak Auth0 GitHub],
-    account_types[:provider]  => %w[Keycloak Auth0]
+    account_types[:developer] => %w[AuthenticationProviders::Keycloak AuthenticationProviders::Auth0 AuthenticationProviders::GitHub],
+    account_types[:provider]  => %w[AuthenticationProviders::Keycloak AuthenticationProviders::Auth0]
   }.freeze
   private_constant :AVAILABLE
 
@@ -60,7 +60,7 @@ class AuthenticationProvider < ApplicationRecord
 
   def self.build_by_kind(kind:, account_type:, **attributes)
     kind_downcased = kind.to_s.downcase
-    kind_class = find_kind(kind_downcased, available(account_type)) || Custom
+    kind_class = find_kind(kind_downcased, available(account_type)) || AuthenticationProviders::Custom
     kind_class.new({kind: kind_downcased, account_type: account_type}.reverse_merge(attributes))
   end
 
@@ -100,16 +100,16 @@ class AuthenticationProvider < ApplicationRecord
   end
 
   def human_state_name
-    I18n.t(branding_state_name, scope: [:authentication_provider, :state])
+    I18n.t(branding_state_name, scope: %i[authentication_provider state])
   end
 
   def self.human_kind
-    I18n.t(kind, scope: [:authentication_provider, :kind], default: model_name.human)
+    I18n.t(kind, scope: %i[authentication_provider kind], default: model_name.human)
   end
 
   def allowed_state_transitions
     branding_state_transitions.map do |transition|
-      [I18n.t(transition.to_name, scope: [:authentication_provider, :state]), transition.event]
+      [I18n.t(transition.to_name, scope: %i[authentication_provider state]), transition.event]
     end
   end
 
@@ -150,10 +150,3 @@ class AuthenticationProvider < ApplicationRecord
     self.name ||= human_kind.to_s
   end
 end
-
-# to prevent warning: toplevel constant GitHub referenced by AuthenticationProvider::GitHub
-require_dependency 'authentication_provider/github'
-require_dependency 'authentication_provider/keycloak'
-require_dependency 'authentication_provider/auth0'
-require_dependency 'authentication_provider/custom'
-require_dependency 'authentication_provider/redhat_customer_portal'

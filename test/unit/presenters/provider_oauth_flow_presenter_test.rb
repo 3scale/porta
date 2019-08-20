@@ -4,7 +4,7 @@ class ProviderOAuthFlowPresenterTest < ActiveSupport::TestCase
 
   setup do
     provider = FactoryBot.build_stubbed(:simple_provider, self_domain: 'example.com')
-    authentication_provider = AuthenticationProvider::Auth0.new(account: provider, kind: 'auth0', system_name: 'auth0_abc123')
+    authentication_provider = AuthenticationProviders::Auth0.new(account: provider, kind: 'auth0', system_name: 'auth0_abc123')
 
     request = stubs(:request)
     request.stubs(scheme: 'http')

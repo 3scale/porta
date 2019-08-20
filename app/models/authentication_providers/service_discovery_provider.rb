@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AuthenticationProvider::ServiceDiscoveryProvider < AuthenticationProvider
+class AuthenticationProviders::ServiceDiscoveryProvider < AuthenticationProvider
   attr_accessible :account, :token_url, :authorize_url, :user_info_url, :client_id, :client_secret, :system_name,
                   :kind, :skip_ssl_certificate_verification
 
