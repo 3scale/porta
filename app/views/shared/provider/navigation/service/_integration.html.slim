@@ -2,7 +2,8 @@
       title: 'Configuration',
       path: path_to_service(@service)
 
-= render vertical_nav_item,
+- if @service.act_as_traditional_service?
+  = render vertical_nav_item,
          title: 'Methods & Metrics',
          path: admin_service_metrics_path(@service)
 
