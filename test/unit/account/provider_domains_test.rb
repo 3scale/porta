@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Account::ProviderDomainsTest < ActiveSupport::TestCase
@@ -63,7 +65,7 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
   test 'find_by_domain! raises an exception if domain is blank' do
     assert_raise ActiveRecord::RecordNotFound do
-      Account.find_by_domain!(nil)
+      Account.find_by_domain!(nil) # rubocop:disable Rails/DynamicFindBy
     end
   end
 
@@ -71,13 +73,13 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     Account.create!(:org_name => 'foo', :domain => '')
 
     assert_raise ActiveRecord::RecordNotFound do
-      Account.find_by_domain!(nil)
+      Account.find_by_domain!(nil) # rubocop:disable Rails/DynamicFindBy
     end
   end
 
   test 'find_by_domain! finds account by domain' do
     account = FactoryBot.create(:simple_account, :domain => 'example.net')
-    assert_equal account, Account.find_by_domain!('example.net')
+    assert_equal account, Account.find_by_domain!('example.net') # rubocop:disable Rails/DynamicFindBy
   end
 
   test '#generate_domains generates correctly default for provider' do
