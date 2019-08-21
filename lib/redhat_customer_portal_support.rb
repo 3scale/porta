@@ -10,7 +10,7 @@ module RedhatCustomerPortalSupport
   end
 
   def redhat_customer_authentication_provider
-    @redhat_customer_authentication_provider ||= AuthenticationProviders::RedhatCustomerPortal.build(account: self)
+    @redhat_customer_authentication_provider ||= AuthenticationProvider::RedhatCustomerPortal.build(account: self)
   end
 
   def redhat_account_recently_verified?
