@@ -6,10 +6,18 @@ const create = () => {
     { name: 'echo', configuration: {}, summary: 'ECHO', description: 'ECHO', humanName: 'ECHO', version: 'builtin' }
   ]
 
-  const chain = [
-    { name: 'cors', configuration: {}, summary: 'CORS', description: 'CORS', humanName: 'CORS', version: 'builtin',
-      data: {}, uuid: '007', enabled: true, removable: true }
-  ]
+  const chain = [{
+    name: 'cors',
+    configuration: {},
+    summary: 'CORS',
+    description: 'CORS',
+    humanName: 'CORS',
+    version: 'builtin',
+    data: {},
+    uuid: '007',
+    enabled: true,
+    removable: true
+  }]
 
   const store = {
     getState: jest.fn(() => ({registry, chain})),
@@ -52,8 +60,18 @@ describe('PolicyChain Middleware', () => {
   it('Dispatches the correct update when REMOVE_POLICY_FROM_CHAIN', () => {
     invoke({
       type: 'REMOVE_POLICY_FROM_CHAIN',
-      policy: { name: 'cors', configuration: {}, summary: 'CORS', description: 'CORS', humanName: 'CORS', version: 'builtin',
-        data: {}, uuid: '007', enabled: true, removable: true }
+      policy: {
+        name: 'cors',
+        configuration: {},
+        summary: 'CORS',
+        description: 'CORS',
+        humanName: 'CORS',
+        version: 'builtin',
+        data: {},
+        uuid: '007',
+        enabled: true,
+        removable: true
+      }
     })
 
     expect(store.dispatch).toHaveBeenCalledWith(updatePolicyChain([]))

@@ -46,10 +46,17 @@ describe('PolicyChain Components', () => {
   describe('SortableList', () => {
     function setup () {
       const props = {
-        items: policies.concat(
-          { id: '3', enabled: false, name: 'headers', humanName: 'Headers',
-            summary: 'Headers summary', description: 'Headers description',
-            version: 'builtin', configuration: {}, schema: {} }),
+        items: policies.concat({
+          id: '3',
+          enabled: false,
+          name: 'headers',
+          humanName: 'Headers',
+          summary: 'Headers summary',
+          description: 'Headers description',
+          version: 'builtin',
+          configuration: {},
+          schema: {}
+        }),
         visible: true,
         editPolicy: jest.fn()
       }
