@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiDocs
   class BuyerData < AccountData
 
@@ -6,7 +8,7 @@ module ApiDocs
     end
 
     def data_items
-      %w(app_keys app_ids user_keys client_ids client_secrets)
+      %w[app_keys app_ids user_keys client_ids client_secrets]
     end
 
   end

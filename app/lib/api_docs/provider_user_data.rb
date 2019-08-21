@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiDocs
   class ProviderUserData < ProviderData
     attr_reader :user, :account
@@ -19,7 +21,7 @@ module ApiDocs
     end
 
     def data_items
-      super + %w(access_token service_tokens)
+      super + %w[access_token service_tokens]
     end
 
     def apps

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiDocs
   class ProviderData < AccountData
 
@@ -80,14 +82,14 @@ module ApiDocs
 
     APP_NAME = ->(app) { [app.name, app.service&.name].compact.join(' | ') }
     def application_ids
-       apps.map do |app|
+      apps.map do |app|
         { :name  => APP_NAME.call(app),
           :value => app.id }
-       end
+      end
     end
 
     def data_items
-      %w(app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids service_ids admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets)
+      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids service_ids admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
     end
 
   end
