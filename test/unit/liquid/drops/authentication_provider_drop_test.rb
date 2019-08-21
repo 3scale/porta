@@ -23,7 +23,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
   test '#client_id' do
     assert_equal @authentication_provider.client_id, @drop.client_id
 
-    @authentication_provider = @authentication_provider.becomes(AuthenticationProvider::GitHub)
+    @authentication_provider = @authentication_provider.becomes(AuthenticationProviders::GitHub)
     @authentication_provider.brand_as_threescale(false)
 
     @drop = Drops::AuthenticationProvider.new(@authentication_provider)

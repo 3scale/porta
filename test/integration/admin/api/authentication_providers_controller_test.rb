@@ -68,7 +68,7 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
       post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'unknown'}))
       assert_response :created
       authentication_provider = provider.authentication_providers.find_by!(kind: 'unknown')
-      assert_equal AuthenticationProvider::Custom.name, authentication_provider.type
+      assert_equal AuthenticationProviders::Custom.name, authentication_provider.type
     end
   end
 

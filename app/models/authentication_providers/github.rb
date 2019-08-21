@@ -1,4 +1,6 @@
-class AuthenticationProvider::GitHub < AuthenticationProvider
+# frozen_string_literal: true
+
+class AuthenticationProviders::GitHub < AuthenticationProvider
   self.authorization_scope = :branding
 
   after_initialize :set_defaults, unless: :persisted?
@@ -50,11 +52,12 @@ class AuthenticationProvider::GitHub < AuthenticationProvider
   def credentials
     case branding_state.to_sym
     when :threescale_branded
-        config = ThreeScale::OAuth2.config.fetch(kind, {}).symbolize_keys
+      config = ThreeScale::OAuth2.config.fetch(kind, {}).symbolize_keys
 
-        AuthenticationProvider::Credentials.new(config.fetch(:client_id) { client_id.presence },
-                                                config.fetch(:client_secret) { client_secret.presence })
-    else super
+      AuthenticationProvider::Credentials.new(config.fetch(:client_id) { client_id.presence },
+                                              config.fetch(:client_secret) { client_secret.presence })
+    else
+      super
     end
   end
 end
