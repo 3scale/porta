@@ -14,7 +14,7 @@ class Account::ProviderTest < ActiveSupport::TestCase
     end
 
     should 'authentication_providers build_kind' do
-      (AuthenticationProvider.available(AuthenticationProvider.account_types[:developer]) + [AuthenticationProviders::Custom]).each do |authentication_provider_class|
+      (AuthenticationProvider.available(AuthenticationProvider.account_types[:developer]) + [AuthenticationProvider::Custom]).each do |authentication_provider_class|
         kind_name = authentication_provider_class.to_s.demodulize
         authentication_provider = @account.authentication_providers.build_kind(kind: kind_name, client_id: 'id', client_secret: 'secret', site: 'http://example.com')
         assert_equal authentication_provider_class, authentication_provider.class
