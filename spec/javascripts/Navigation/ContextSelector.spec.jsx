@@ -5,8 +5,8 @@ import { ContextSelector } from 'Navigation/components/ContextSelector'
 
 Enzyme.configure({ adapter: new Adapter() })
 
-function getWrapper (apis = [], audienceLink) {
-  return mount(<ContextSelector apis={apis} audienceLink={audienceLink} />)
+function getWrapper (apis = [], audienceLink, apiap = true) {
+  return mount(<ContextSelector apis={apis} audienceLink={audienceLink} apiap={apiap} />)
 }
 
 let contextSelector
@@ -154,7 +154,19 @@ describe('When there are many services', () => {
   })
 
   it('should render the correct icons for backend and product APIs', () => {
-    const apiIconsClassNames = contextSelector.find('.PopNavigation-results .PopNavigation-link i').map(i => i.prop('className'))
-    expect(apiIconsClassNames).toEqual([ 'fa fa-gift', 'fa fa-gift', 'fa fa-puzzle-piece' ])
+    const apiIconsClassNames = contextSelector.find('.PopNavigation-results .PopNavigation-link')
+      .map(link => [link.text(), link.find('i').prop('className')])
+    expect(apiIconsClassNames)
+      .toEqual([ ['api 0', 'fa fa-gift'], ['api 1', 'fa fa-gift'], ['api 2', 'fa fa-puzzle-piece'] ])
+  })
+
+  it('should render the correct icons when apiap is disabled', () => {
+    contextSelector.unmount()
+    contextSelector = getWrapper(apis, audienceLink, false)
+    const puzzleApiIcons = contextSelector.find('.PopNavigation-results .PopNavigation-link .fa-puzzle-piece')
+    expect(puzzleApiIcons.length).toEqual(3)
+
+    const giftApiIcons = contextSelector.find('.PopNavigation-results .PopNavigation-link .fa-gift')
+    expect(giftApiIcons.length).toEqual(0)
   })
 })
