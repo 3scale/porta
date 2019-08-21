@@ -10,23 +10,19 @@ section.Section.u-toggleableBySettingsBox data-state="open"
   p
     ' Add the methods of this Backend API to get data on their individual usage once part of a Product. Method calls trigger the built-in Hits-metric. Usage limits and pricing rules for individual methods are defined under context of a Product Application Plan.
     ' .
-    - if show_mappings?
-      ' A method needs to be mapped to one or more URL patterns in the
-      => link_to 'Mapping Rules', provider_admin_backend_api_mapping_rules_path(@backend_api)
-      ' of this Backend API.
-    - else
-      ' Make sure to call these methods from your code base so specific usage of your API up the count of specific methods.
+    ' A method can be mapped to one or more URL patterns in the
+    => link_to 'Mapping Rules', provider_admin_backend_api_mapping_rules_path(@backend_api)
+    ' of this Backend API.
 
   - cache ['v1', 'methods', @backend_api] do
-    table#methods.data class=(show_mappings? ? 'u-sixEqualColumns' : 'u-fiveEqualColumns')
+    table#methods.data class='u-sixEqualColumns'
       thead
         tr
           th Method
           th System Name
           th Unit
           th Description
-          - if show_mappings?
-            th Mapped
+          th Mapped
           th.actions
             = link_to 'New method',
                       new_provider_admin_backend_api_metric_child_path(@backend_api, @backend_api.metrics.hits),
@@ -42,9 +38,8 @@ section.Section.u-toggleableBySettingsBox data-state="open"
               td = method.system_name
               td = method.unit
               td = method.description
-              - if show_mappings?
-                td
-                  = render 'link_to_mapping_rules', metric: method
+              td
+                = render 'link_to_mapping_rules', metric: method
               td.actions
 
           javascript:
@@ -59,30 +54,26 @@ section.Section.u-toggleableBySettingsBox data-state="open"
 
         - else
           tr
-            td colspan=(show_mappings? ? '6' : '5')
+            td colspan='6'
               = t('provider.admin.messages.no_methods')
 
 section.Section.u-toggleableBySettingsBox data-state="open"
   h2 Metrics
   p
     ' <em>Hits</em> is the built-in metric to which all methods report. Additional top-level metrics can be added here in order to track other usage that shouldn't increase the hit count.
-    - if show_mappings?
-      ' A metric needs to be mapped to one or more URL patterns in the
-      => link_to 'Mapping Rules', provider_admin_backend_api_mapping_rules_path(@backend_api)
-      ' of this Backend API
-    - else
-      ' Make sure to call these metrics from your code base so specific calls to your API up the count of specific metrics.
+    ' A metric can be mapped to one or more URL patterns in the
+    => link_to 'Mapping Rules', provider_admin_backend_api_mapping_rules_path(@backend_api)
+    ' of this Backend API
 
   - cache ['v1', 'metrics', @backend_api] do
-    table#metrics.data class=(show_mappings? ? 'u-sixEqualColumns' : 'u-fiveEqualColumns')
+    table#metrics.data class='u-sixEqualColumns'
       thead
         tr
           th Metric
           th System Name
           th Unit
           th Description
-          - if show_mappings?
-            th Mapped
+          th Mapped
           th.actions
             = link_to 'New metric',
                       new_provider_admin_backend_api_metric_path(@backend_api),
@@ -97,12 +88,11 @@ section.Section.u-toggleableBySettingsBox data-state="open"
               td = metric.system_name
               td = metric.unit
               td = metric.description
-              - if show_mappings?
-                td
-                  = render 'link_to_mapping_rules', metric: metric
+              td
+                = render 'link_to_mapping_rules', metric: metric
               td.actions
 
         - else
           tr
-            td colspan=(show_mappings? ? '6' : '5')
+            td colspan='6'
               = t('provider.admin.messages.no_metrics')
