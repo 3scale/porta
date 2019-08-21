@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-class AuthenticationProviders::Keycloak < AuthenticationProvider
+class AuthenticationProvider::Keycloak < AuthenticationProvider
   self.authorization_scope = :iam_tools
   self.oauth_config_required = true
 
