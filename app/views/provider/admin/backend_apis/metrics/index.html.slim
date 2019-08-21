@@ -14,48 +14,47 @@ section.Section.u-toggleableBySettingsBox data-state="open"
     => link_to 'Mapping Rules', provider_admin_backend_api_mapping_rules_path(@backend_api)
     ' of this Backend API.
 
-  - cache ['v1', 'methods', @backend_api] do
-    table#methods.data class='u-sixEqualColumns'
-      thead
-        tr
-          th Method
-          th System Name
-          th Unit
-          th Description
-          th Mapped
-          th.actions
-            = link_to 'New method',
-                      new_provider_admin_backend_api_metric_child_path(@backend_api, @backend_api.metrics.hits),
-                      class:'action add' if @backend_api.metrics.hits
+  table#methods.data class='u-sixEqualColumns'
+    thead
+      tr
+        th Method
+        th System Name
+        th Unit
+        th Description
+        th Mapped
+        th.actions
+          = link_to 'New method',
+                    new_provider_admin_backend_api_metric_child_path(@backend_api, @backend_api.metrics.hits),
+                    class:'action add' if @backend_api.metrics.hits
 
-      tbody
-        - if @backend_api.method_metrics.any?
-          - @backend_api.method_metrics.each do |method|
-            tr
-              td
-                = link_to method.friendly_name,
-                  edit_provider_admin_backend_api_metric_path(@backend_api, method)
-              td = method.system_name
-              td = method.unit
-              td = method.description
-              td
-                = render 'link_to_mapping_rules', metric: method
-              td.actions
-
-          javascript:
-            document.addEventListener('DOMContentLoaded', function () {
-              showBubble(#{json bubbles.take(1).as_json})
-            })
-            $(document).on('click', 'a[data-behavior~=open-mapping-rules]', function(event){
-              // Unfold the mapping section of the integration page by
-              // setting the cookie value that controls it
-              $.cookie( 'mapping-rules', true, {expires: 30, path: '/'});
-            });
-
-        - else
+    tbody
+      - if @backend_api.method_metrics.any?
+        - @backend_api.method_metrics.each do |method|
           tr
-            td colspan='6'
-              = t('provider.admin.messages.no_methods')
+            td
+              = link_to method.friendly_name,
+                edit_provider_admin_backend_api_metric_path(@backend_api, method)
+            td = method.system_name
+            td = method.unit
+            td = method.description
+            td
+              = render 'link_to_mapping_rules', metric: method
+            td.actions
+
+        javascript:
+          document.addEventListener('DOMContentLoaded', function () {
+            showBubble(#{json bubbles.take(1).as_json})
+          })
+          $(document).on('click', 'a[data-behavior~=open-mapping-rules]', function(event){
+            // Unfold the mapping section of the integration page by
+            // setting the cookie value that controls it
+            $.cookie( 'mapping-rules', true, {expires: 30, path: '/'});
+          });
+
+      - else
+        tr
+          td colspan='6'
+            = t('provider.admin.messages.no_methods')
 
 section.Section.u-toggleableBySettingsBox data-state="open"
   h2 Metrics
@@ -65,34 +64,33 @@ section.Section.u-toggleableBySettingsBox data-state="open"
     => link_to 'Mapping Rules', provider_admin_backend_api_mapping_rules_path(@backend_api)
     ' of this Backend API
 
-  - cache ['v1', 'metrics', @backend_api] do
-    table#metrics.data class='u-sixEqualColumns'
-      thead
-        tr
-          th Metric
-          th System Name
-          th Unit
-          th Description
-          th Mapped
-          th.actions
-            = link_to 'New metric',
-                      new_provider_admin_backend_api_metric_path(@backend_api),
-                      class:'action add'
+  table#metrics.data class='u-sixEqualColumns'
+    thead
+      tr
+        th Metric
+        th System Name
+        th Unit
+        th Description
+        th Mapped
+        th.actions
+          = link_to 'New metric',
+                    new_provider_admin_backend_api_metric_path(@backend_api),
+                    class:'action add'
 
-      tbody
-        - if @backend_api.top_level_metrics.any?
-          - @backend_api.top_level_metrics.each do |metric|
-            tr
-              td
-                = link_to metric.friendly_name, edit_provider_admin_backend_api_metric_path(@backend_api, metric)
-              td = metric.system_name
-              td = metric.unit
-              td = metric.description
-              td
-                = render 'link_to_mapping_rules', metric: metric
-              td.actions
-
-        - else
+    tbody
+      - if @backend_api.top_level_metrics.any?
+        - @backend_api.top_level_metrics.each do |metric|
           tr
-            td colspan='6'
-              = t('provider.admin.messages.no_metrics')
+            td
+              = link_to metric.friendly_name, edit_provider_admin_backend_api_metric_path(@backend_api, metric)
+            td = metric.system_name
+            td = metric.unit
+            td = metric.description
+            td
+              = render 'link_to_mapping_rules', metric: metric
+            td.actions
+
+      - else
+        tr
+          td colspan='6'
+            = t('provider.admin.messages.no_metrics')
