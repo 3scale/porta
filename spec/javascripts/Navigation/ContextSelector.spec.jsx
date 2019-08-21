@@ -126,7 +126,7 @@ describe('When there are many services', () => {
 
   it('should render all APIs when input is empty', () => {
     const input = contextSelector.find('input')
-    expect(input.props().value).toBeUndefined
+    expect(input.props().value).toBeUndefined()
 
     const apiList = contextSelector.find('.PopNavigation-results').children()
     expect(apiList).toHaveLength(apis.length)

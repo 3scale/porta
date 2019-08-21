@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-use-before-define */
 
 import type { State } from 'Policies/types/State'
 import type {
