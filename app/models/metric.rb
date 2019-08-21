@@ -239,7 +239,12 @@ class Metric < ApplicationRecord
 
   def fill_owner
     return true if owner_type?
-    self.owner_id = service_id
-    self.owner_type = 'Service'
+
+    if new_record? && child?
+      self.owner = parent.owner
+    else
+      self.owner_id = service_id
+      self.owner_type = 'Service'
+    end
   end
 end
