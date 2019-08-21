@@ -13,18 +13,30 @@ Feature: Multiservice feature
     Given I am logged in as provider "foo.example.com"
      And provider "foo.example.com" has "can create service" set to "true"
     When I am on the provider dashboard
-    Then I should see "New API"
+    Then I should see "New Product"
+    Then I should see "New Backend"
 
   @javascript
-  Scenario: Create new service
+  Scenario: Create new product
     Given I am logged in as provider "foo.example.com"
       And provider "foo.example.com" has "multiple_services" switch allowed
       And service discovery is not enabled
     When I am on the provider dashboard
-     And I follow "New API"
+     And I follow "New Product"
      And I fill in "Name" with "Less fancy API"
      And I press "Add API"
     Then I should see "Less fancy API"
+
+  @wip
+  Scenario: Create new backend
+    Given I am logged in as provider "foo.example.com"
+      And provider "foo.example.com" has "multiple_services" switch allowed
+      And service discovery is not enabled
+    When I am on the provider dashboard
+     And I follow "New Backend"
+    #  And I fill in "Name" with "Less fancy Backend"
+    #  And I press "Add Backend"
+    # Then I should see "Less fancy Backend"
 
   @javascript
   Scenario: Edit service

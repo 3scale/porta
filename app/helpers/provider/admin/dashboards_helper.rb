@@ -26,7 +26,7 @@ module Provider::Admin::DashboardsHelper
         'DashboardNavigation-link': true,
         'u-notice': options.fetch(:notice, false)
       }) do
-        icon_name = options.fetch(:icon_name, nil)
+        icon_name = options[:icon_name]
         link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
         link_text.html_safe
     end
@@ -35,14 +35,28 @@ module Provider::Admin::DashboardsHelper
   def dashboard_secondary_link(link_text, path, options = {})
     safe_wrap_with_parenthesis(dashboard_navigation_link(link_text, path, options))
   end
-  
+
   def dashboard_collection_link(singular_name, collection, path, options = {})
     link_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
     dashboard_navigation_link(link_text, path, options)
   end
-  
+
   def dashboard_secondary_collection_link(singular_name, collection, path, options = {})
     safe_wrap_with_parenthesis(dashboard_collection_link(singular_name, collection, path, options))
+  end
+
+  def dashboard_apiap_tab_label(html_for, singular_name, collection, options = {})
+    label_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
+    icon_name = options[:icon_name]
+    label_class = css_class(
+      'DashboardNavigation-link': true,
+      'current-tab': options.fetch(:current_tab, false)
+    )
+    label_tag html_for, class: label_class do
+      concat icon(icon_name) if icon_name
+      concat ' '
+      concat label_text
+    end
   end
 
   def safe_wrap_with_parenthesis(html)

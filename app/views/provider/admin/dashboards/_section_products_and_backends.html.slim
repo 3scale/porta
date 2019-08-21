@@ -1,0 +1,25 @@
+/ TODO: workaround until backend_apis/new form is implemented
+- new_admin_backend_api_path = "backend_apis/new"
+
+header.DashboardSection-header.DashboardSection-header--extended
+  h1.DashboardSection-title
+    | APIs
+  = render 'apiap_navigation'  
+
+div
+  div.DashboardNavigation-tabs--content
+    input#tab-products name='apiap-tabs' type='radio' checked='checked' autocomplete='off'
+    div#products
+      = render 'apiap_search_bar', collection: @services, placeholder: 'Find a Product', id: 'products_search'
+      = render 'new_api_button', text: 'New Product', path: new_admin_service_path
+      = render collection: @services,
+               partial: 'provider/admin/dashboards/service',
+               cache: ->(service) { [ 'v1', 'dashboard', current_user, current_account, service, 'service' ] },
+               cache_options: { expires_in: 1.hour }
+
+  div.DashboardNavigation-tabs--content
+    input#tab-backends name='apiap-tabs' type='radio' autocomplete='off'
+    div#backends
+      = render 'apiap_search_bar', collection: current_account.backend_apis, placeholder: 'Find a Backend', id: 'backends_search'
+      = render 'new_api_button', text: 'New Backend', path: new_admin_backend_api_path
+      = render 'list_backends'
