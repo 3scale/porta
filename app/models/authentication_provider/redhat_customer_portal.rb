@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AuthenticationProviders::RedhatCustomerPortal < AuthenticationProviders::Keycloak
+class AuthenticationProvider::RedhatCustomerPortal < AuthenticationProvider::Keycloak
 
   CONFIG_ATTRIBUTES = %i[client_id client_secret realm system_name skip_ssl_certificate_verification].freeze
   private_constant :CONFIG_ATTRIBUTES

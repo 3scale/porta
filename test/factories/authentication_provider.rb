@@ -14,7 +14,7 @@ FactoryBot.define do
     account_type { AuthenticationProvider.account_types[:developer] }
   end
 
-  factory(:self_authentication_provider, class: AuthenticationProviders::Auth0) do
+  factory(:self_authentication_provider, class: AuthenticationProvider::Auth0) do
     sequence(:name) { |n| "self-name-#{n}" }
     sequence(:system_name) { |n| "self-system_name_#{n}" }
     association :account, factory: :simple_provider
@@ -30,23 +30,23 @@ FactoryBot.define do
 
   factory(:auth0_authentication_provider,
                     parent: :authentication_provider,
-                    class: AuthenticationProviders::Auth0)
+                    class: AuthenticationProvider::Auth0)
 
   factory(:github_authentication_provider,
                     parent: :authentication_provider,
-                    class: AuthenticationProviders::GitHub) do
+                    class: AuthenticationProvider::GitHub) do
     branding_state { 'threescale_branded' }
   end
 
   factory(:keycloak_authentication_provider,
                     parent: :authentication_provider,
-                    class: AuthenticationProviders::Keycloak) do
+                    class: AuthenticationProvider::Keycloak) do
     kind { 'keycloak' }
   end
 
   factory(:redhat_customer_portal_authentication_provider,
                     parent: :authentication_provider,
-                    class: AuthenticationProviders::RedhatCustomerPortal) do
+                    class: AuthenticationProvider::RedhatCustomerPortal) do
     kind { 'redhat_customer_portal' }
   end
 end

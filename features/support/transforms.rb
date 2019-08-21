@@ -254,6 +254,6 @@ Transform /^authentication provider "([^\"]+)"$/ do |authentication_provider_nam
               }
             )
 
-  authentication_provider_class = "AuthenticationProviders::#{authentication_provider_name}".constantize
+  authentication_provider_class = "AuthenticationProvider::#{authentication_provider_name}".constantize
   authentication_provider_class.create(options)
 end
