@@ -14,11 +14,12 @@ import 'Dashboard/styles/dashboard.scss'
 import type { Api } from 'Types'
 
 type Props = {
-  apis: Api[],
-  displayApis: Api[] => void
+  apis: $ReadOnlyArray<Api>,
+  domClass: string,
+  placeholder?: string
 }
 
-const ApiFilter = ({ apis, displayApis }: Props) => {
+const ApiFilter = ({ apis, domClass, placeholder = 'All APIs' }: Props) => {
   const onInputChange = event => {
     const filterQuery = event.target.value.toLowerCase()
     const displayedApis = apis.filter(api => api.name.toLowerCase().indexOf(filterQuery) !== -1)
@@ -26,12 +27,23 @@ const ApiFilter = ({ apis, displayApis }: Props) => {
     displayApis(displayedApis)
   }
 
+  const displayApis = (filteredApis: Api[]) => {
+    for (const {id} of apis) {
+      const isFilteredApi = filteredApis.some(filteredApi => filteredApi.id === id)
+
+      const el = document.getElementById(`${domClass}_${id}`)
+      if (el) {
+        el.classList.toggle('hidden', !isFilteredApi)
+      }
+    }
+  }
+
   return (
     <div className="ApiFilter">
       <input
         onChange={onInputChange}
         type="search"
-        placeholder="All APIs"
+        placeholder={placeholder}
       />
       <span className="fa fa-search" />
     </div>

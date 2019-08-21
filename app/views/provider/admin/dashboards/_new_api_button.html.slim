@@ -1,9 +1,12 @@
+- button_text = defined?(text) ? text : 'New API'
+- button_path = defined?(path) ? path : new_admin_service_path
+
 nav.DashboardNavigation.DashboardNavigation--services
   ul.DashboardNavigation-list
     - if can?(:manage, :service_contracts) && !current_account.master?
       li.DashboardNavigation-list-item
-        = fancy_link_to 'New API',
-          new_admin_service_path,
+        = fancy_link_to button_text,
+          button_path,
           :class => 'new DashboardNavigation-link',
           :switch => :multiple_services,
           :upgrade_notice => true
