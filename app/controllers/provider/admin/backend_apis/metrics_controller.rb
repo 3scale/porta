@@ -3,9 +3,6 @@
 class Provider::Admin::BackendApis::MetricsController < Provider::Admin::BackendApis::BaseController
   before_action :find_metric, except: %i[new create index]
 
-  # FIXME: This should be removed. It is still needed because some pages use a helper shared with the old metrics page (app/helpers/services_helper.rb:26) (index)
-  before_action :find_service
-
   activate_menu :backend_api, :methods_metrics
   sublayout 'api/service'
 
@@ -59,10 +56,6 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   end
 
   private
-
-  def find_service
-    @service = @backend_api.first_service
-  end
 
   def find_metric
     @metric = find_backend_api_metric_by(params[:id])
