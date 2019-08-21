@@ -2,18 +2,18 @@
 
 import React from 'react'
 
-import type { Service } from 'Types'
+import type { Api } from 'Types'
 import type { AdminSection } from 'Users/types'
 
 /**
  * Contains a set of services that can be checked by the user.
- * @param {Service[]}       services            - The list of services.
+ * @param {Api[]}           services            - The list of services.
  * @param {AdminSection[]}  selectedSections    - The Admin sections that are selected for the user.
  * @param {number[]}        selectedServicesIds - Ids of the services that are selected for the user.
  * @param {Function}        onServiceSelected   - A callback function triggered when any service is selected.
  */
 const ServicesFieldset = ({ services = [], selectedSections = [], selectedServicesIds = [], onServiceSelected }: {
-  services?: Service[],
+  services?: Api[],
   selectedSections?: AdminSection[],
   selectedServicesIds?: number[],
   onServiceSelected: number => void
@@ -40,14 +40,14 @@ const ServicesFieldset = ({ services = [], selectedSections = [], selectedServic
 
 /**
  * A checkbox representing a Service.
- * @param {Service}         service           - The service this checkbox represents.
+ * @param {Api}             service           - The service this checkbox represents.
  * @param {AdminSection[]}  selectedSections  - The Admin sections that are selected for the user.
  * @param {boolean}         checked           - Whether the checkbox is selected or not.
  * @param {boolean}         disabled          - Whether the checkbox is disabled or not.
  * @param {Function}        onChange          - A callback function triggered when the checkbox is selected.
  */
 const ServiceCheckbox = ({ service = {}, selectedSections, checked, disabled, onChange }: {
-  service: Service,
+  service: Api,
   selectedSections: AdminSection[],
   checked: boolean,
   disabled: boolean,
