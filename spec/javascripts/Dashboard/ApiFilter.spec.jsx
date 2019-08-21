@@ -22,7 +22,7 @@ it('should render itself', () => {
   expect(apiFilter.find('.ApiFilter').exists()).toBe(true)
 })
 
-it.skip('should filter APIs passed in props by name', () => {
+it('should filter APIs passed in props by name', () => {
   // TODO
   const input = apiFilter.find('input')
   input.simulate('change', { target: { value: 'api' } })
