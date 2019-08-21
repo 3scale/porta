@@ -5,16 +5,16 @@ import { ContextSelector } from 'Navigation/components/ContextSelector'
 
 Enzyme.configure({ adapter: new Adapter() })
 
-function getWrapper (apis = [], audienceLink) {
-  return mount(<ContextSelector apis={apis} audienceLink={audienceLink} />)
+function getWrapper (apis = [], audienceLink, apiap = true) {
+  return mount(<ContextSelector apis={apis} audienceLink={audienceLink} apiap={apiap} />)
 }
 
 let contextSelector
 
 const apis = [
-  { service: { name: 'api 0', id: 0, link: 'foo.bar' } },
-  { service: { name: 'api 1', id: 1 } },
-  { service: { name: 'api 2', id: 2 } }
+  { name: 'api 0', id: 0, link: 'foo.bar', type: 'product' },
+  { name: 'api 1', id: 1, link: 'baz.bar', type: 'product' },
+  { name: 'api 2', id: 2, type: 'backend' }
 ]
 const audienceLink = 'foo.bar'
 
@@ -101,7 +101,7 @@ describe('When there is only 1 service', () => {
     contextSelector = getWrapper(apis.slice(0, 1), audienceLink)
     expect(contextSelector.find('.unauthorized')).toHaveLength(0)
 
-    contextSelector = getWrapper(apis.slice(1, 2), audienceLink)
+    contextSelector = getWrapper(apis.slice(2, 3), audienceLink)
     expect(contextSelector.find('.unauthorized')).toHaveLength(1)
   })
 })
@@ -131,7 +131,7 @@ describe('When there are many services', () => {
     const apiList = contextSelector.find('.PopNavigation-results').children()
     expect(apiList).toHaveLength(apis.length)
     expect(apiList.containsAllMatchingElements(
-      apis.map(api => <li><a><i />{api.service.name}</a></li>)
+      apis.map(api => <li><a><i />{api.name}</a></li>)
     )).toEqual(true)
   })
 
@@ -150,6 +150,23 @@ describe('When there are many services', () => {
 
   it('should mark apis as unauthorized when link is undefined', () => {
     const apiList = contextSelector.find('.PopNavigation-results').children()
-    expect(apiList.find('.unauthorized')).toHaveLength(2)
+    expect(apiList.find('.unauthorized')).toHaveLength(1)
+  })
+
+  it('should render the correct icons for backend and product APIs', () => {
+    const apiIconsClassNames = contextSelector.find('.PopNavigation-results .PopNavigation-link')
+      .map(link => [link.text(), link.find('i').prop('className')])
+    expect(apiIconsClassNames)
+      .toEqual([ ['api 0', 'fa fa-gift'], ['api 1', 'fa fa-gift'], ['api 2', 'fa fa-puzzle-piece'] ])
+  })
+
+  it('should render the correct icons when apiap is disabled', () => {
+    contextSelector.unmount()
+    contextSelector = getWrapper(apis, audienceLink, false)
+    const puzzleApiIcons = contextSelector.find('.PopNavigation-results .PopNavigation-link .fa-puzzle-piece')
+    expect(puzzleApiIcons.length).toEqual(3)
+
+    const giftApiIcons = contextSelector.find('.PopNavigation-results .PopNavigation-link .fa-gift')
+    expect(giftApiIcons.length).toEqual(0)
   })
 })
