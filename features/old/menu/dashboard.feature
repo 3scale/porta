@@ -24,10 +24,8 @@ Feature: Dashboard
     And I should see the link "0 ActiveDocs" in the apis dashboard widget
     And I should see the link "New Backend" in the apis dashboard widget
     And I should see the link "API Backend API" in the apis dashboard widget
-    # TODO
-    # And I should see the link "0 methods" in the apis dashboard widget
-    # And I should see the link "0 policies" in the apis dashboard widget
-    # And I should see the link "0 mapping rules" in the apis dashboard widget
+    And I should see the link "0 Methods" in the apis dashboard widget
+    And I should see the link "0 Mapping Rules" in the apis dashboard widget
 
   Scenario: first API widget
     And I should see "API" in the first api dashboard widget
