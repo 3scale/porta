@@ -13,6 +13,6 @@ class BackendApiConfig < ApplicationRecord
   end
 
   def path=(value)
-    super(value.to_s.gsub(/(^\/+)|(\/+$)/,''))
+    super(StringUtils::StripSlash.strip_slash(value))
   end
 end

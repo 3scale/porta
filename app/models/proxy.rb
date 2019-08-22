@@ -4,6 +4,7 @@ require 'resolv'
 class Proxy < ApplicationRecord
   include AfterCommitQueue
   include BackendApiLogic::ProxyExtension
+  prepend BackendApiLogic::RoutingPolicy
 
   DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
                      'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
@@ -136,6 +137,7 @@ class Proxy < ApplicationRecord
   end
 
   def policy_chain
+    # TODO: We need to remove this rolling update as it should be available for everyone using APIcast V2
     return unless provider_can_use?(:policies)
     raw_config = policies_config
     return if raw_config.blank?
