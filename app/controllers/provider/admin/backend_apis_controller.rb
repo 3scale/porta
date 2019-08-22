@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 class Provider::Admin::BackendApisController < Provider::Admin::BaseController
-  before_action :find_backend_api, only: %i[show update]
-  before_action :authorize, only: %i[create update]
+  before_action :find_backend_api, except: %i[index new create]
+  before_action :authorize
 
-  activate_menu :backend_api
+  activate_menu :backend_api, :overview
   layout 'provider'
 
   def index
     @backend_apis = current_account.backend_apis
   end
 
-  def show
-    activate_menu :backend_api, :overview
+  def new
+    # TODO
   end
 
   def create
@@ -25,6 +25,10 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
     end
   end
 
+  def show; end
+
+  def edit; end
+
   def update
     if @backend_api.update_attributes(backend_api_params)
       redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend API updated'
@@ -32,6 +36,10 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
       flash.now[:error] = 'Backend API could not be updated'
       render :edit
     end
+  end
+
+  def destroy
+    # TODO
   end
 
   protected
@@ -45,6 +53,6 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def authorize
-    authorize! :edit, BackendApi
+    authorize! :manage, BackendApi
   end
 end
