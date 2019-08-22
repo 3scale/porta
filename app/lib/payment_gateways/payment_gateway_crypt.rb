@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module PaymentGateways
-  class CreditCardException < RuntimeError ; end
-  class PaymentGatewayDown < RuntimeError ; end
-  class IncorrectKeys < CreditCardException ; end
+  class CreditCardException < RuntimeError; end
+  class PaymentGatewayDown < RuntimeError; end
+  class IncorrectKeys < CreditCardException; end
 
   class CustomerIdMismatchError < StandardError
     include Bugsnag::MetaData
@@ -43,7 +45,7 @@ module PaymentGateways
 
     def log_gateway_action_explicit(gateway, action)
       Rails.logger.info "----------"
-      Rails.logger.info "~>[Payment gateway][#{gateway.try!(:display_name)}] #{action}"
+      Rails.logger.info "~>[Payment gateway][#{gateway&.display_name}] #{action}"
       Rails.logger.info "----------"
     end
 

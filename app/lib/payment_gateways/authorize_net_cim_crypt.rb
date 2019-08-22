@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentGateways
   class AuthorizeNetCimCrypt < PaymentGatewayCrypt
 
@@ -6,7 +8,7 @@ module PaymentGateways
     end
 
     def form_url
-      @form_url ||= "https://#{test? ? 'test' : 'secure'}.authorize.net/profile".freeze
+      @form_url ||= "https://#{test? ? 'test' : 'secure'}.authorize.net/profile"
     end
 
     def create_profile
@@ -38,29 +40,29 @@ module PaymentGateways
     end
 
     def get_token(args)
-      getHostedProfilePageRequest = <<-EOR
-<?xml version="1.0" encoding="utf-8"?>
-    <getHostedProfilePageRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
-    <merchantAuthentication>
-    <name>#{args[:login]}</name>
-    <transactionKey>#{args[:trans_key]}</transactionKey>
-    </merchantAuthentication>
-    <customerProfileId>#{args[:profile_id]}</customerProfileId>
-    <hostedProfileSettings>
-    <setting>
-    <settingName>hostedProfileReturnUrl</settingName>
-    <settingValue>#{args[:ok_url]}</settingValue>
-    </setting>
-    <setting>
-    <settingName>hostedProfileReturnUrlText</settingName>
-    <settingValue>Continue to settings</settingValue>
-    </setting>
-    <setting>
-    <settingName>hostedProfilePageBorderVisible</settingName>
-    <settingValue>true</settingValue>
-    </setting>
-    </hostedProfileSettings>
-  </getHostedProfilePageRequest>
+      getHostedProfilePageRequest = <<~EOR
+        <?xml version="1.0" encoding="utf-8"?>
+            <getHostedProfilePageRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+            <merchantAuthentication>
+            <name>#{args[:login]}</name>
+            <transactionKey>#{args[:trans_key]}</transactionKey>
+            </merchantAuthentication>
+            <customerProfileId>#{args[:profile_id]}</customerProfileId>
+            <hostedProfileSettings>
+            <setting>
+            <settingName>hostedProfileReturnUrl</settingName>
+            <settingValue>#{args[:ok_url]}</settingValue>
+            </setting>
+            <setting>
+            <settingName>hostedProfileReturnUrlText</settingName>
+            <settingValue>Continue to settings</settingValue>
+            </setting>
+            <setting>
+            <settingName>hostedProfilePageBorderVisible</settingName>
+            <settingValue>true</settingValue>
+            </setting>
+            </hostedProfileSettings>
+          </getHostedProfilePageRequest>
 EOR
 
       begin
@@ -75,12 +77,12 @@ EOR
         else
           notify_exception(IncorrectKeys.new(xml_reply))
           code=xml_reply.xpath("//api:code", 'api' => 'AnetApi/xml/v1/schema/AnetApiSchema.xsd').text
-          raise IncorrectKeys.new("code:#{code}.")
+          raise IncorrectKeys, "code:#{code}."
         end
         log_gateway_action("user #{user.id} token aquired")
       rescue SocketError => e
         notify_exception(e)
-        raise PaymentGatewayDown.new("Payment gateway offline. Try again in few minutes")
+        raise PaymentGatewayDown, "Payment gateway offline. Try again in few minutes"
       end
 
     end
@@ -123,7 +125,7 @@ EOR
         .create_customer_profile(profile: { email: user.email, description: buyer_reference })
 
       # this is a nice trick, where we raise IncorectKeys whatever the response was
-      raise IncorrectKeys.new(response) unless response.params['messages']['result_code'] == 'Ok'
+      raise IncorrectKeys, response unless response.params['messages']['result_code'] == 'Ok'
       response
     end
   end
