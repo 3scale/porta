@@ -13,6 +13,6 @@ class BackendApiConfig < ApplicationRecord
   end
 
   def path=(value)
-    super(value.to_s.reverse.chomp("/").reverse.chomp("/"))
+    super(value.to_s.gsub(/(^\/+)|(\/+$)/,''))
   end
 end
