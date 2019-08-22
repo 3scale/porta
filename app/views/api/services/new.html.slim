@@ -4,4 +4,6 @@
                                              isServiceDiscoveryUsable: service_discovery_usable?,
                                              serviceDiscoveryAuthenticateUrl: service_discovery_presenter.authorize_url,
                                              providerAdminServiceDiscoveryServicesPath: provider_admin_service_discovery_services_path,
-                                             adminServicesPath: admin_services_path }.to_json
+                                             adminServicesPath: admin_services_path,
+                                             apiap: current_account.provider_can_use?(:api_as_product),
+                                             backendApis: current_account.backend_apis.as_json(only: [:id, :name], root: false) }.to_json
