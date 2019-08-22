@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805135829) do
+ActiveRecord::Schema.define(version: 20190822141551) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -829,7 +829,7 @@ ActiveRecord::Schema.define(version: 20190805135829) do
 
   add_index "metrics", ["owner_type", "owner_id", "system_name"], name: "index_metrics_on_owner_type_and_owner_id_and_system_name", unique: true
   add_index "metrics", ["owner_type", "owner_id"], name: "index_metrics_on_owner_type_and_owner_id"
-  add_index "metrics", ["service_id", "system_name"], name: "index_metrics_on_service_id_and_system_name", unique: true
+  add_index "metrics", ["service_id", "system_name"], name: "index_metrics_on_service_id_and_system_name"
   add_index "metrics", ["service_id"], name: "index_metrics_on_service_id"
 
   create_table "moderatorships", force: :cascade do |t|
