@@ -1,24 +1,7 @@
 - if current_user.multiple_accessible_services?
-  #api_filter
+  - apis = @services.as_json(root: false, only: [:id, :name]).to_json
+  #api_filter data-apis=apis data-dom-class='service'
+    = javascript_pack_tag 'services_search_bar'
 
-    javascript:
-      document.addEventListener('DOMContentLoaded', function () {
-        var allApis = #{ json @services.as_json(root: false, only: [:id, :name]) }
-
-        var displayApis = function(filteredApis) {
-          allApis.forEach(function(api) {
-            var isFilteredApi = filteredApis.some(function(filteredApi) {
-              return filteredApi.id === api.id
-            });
-
-            document.getElementById("service_" + api.id).style.display = isFilteredApi ? "inline": "none";
-          })
-        }
-
-        window.ApiFilter({
-          apis: allApis,
-          displayApis: displayApis
-        }, 'api_filter')
-      })
 - else
   h1.DashboardSection-title APIs
