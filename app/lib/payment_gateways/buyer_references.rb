@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentGateways
 
   # BuyerReferences holds the references used on payment transactions.

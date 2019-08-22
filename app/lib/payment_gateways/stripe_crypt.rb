@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentGateways
   class StripeCrypt < PaymentGatewayCrypt
     attr_accessor :customer_id
