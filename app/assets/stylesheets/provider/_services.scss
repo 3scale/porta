@@ -89,10 +89,11 @@
         column-rule: $border-width solid $border-color;
         list-style: none;
         padding: line-height-times(2 / 3) line-height-times(1 / 2);
+
         li {
           border-bottom: none;
           display: inline-block;
-          padding: line-height-times(1 / 4) 0;
+          padding-top: 0;
           width: 100%;
         }
       }
