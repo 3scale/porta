@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiDocs
   class AccountData
 
@@ -10,7 +12,7 @@ module ApiDocs
     end
 
     def account_data
-      Hash[data_items.map{ |item| [item.to_sym, send(item)] }]
+      Hash[data_items.map { |item| [item.to_sym, send(item)] }]
     end
 
     private
@@ -70,4 +72,3 @@ module ApiDocs
 
   end
 end
-
