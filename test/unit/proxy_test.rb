@@ -62,7 +62,8 @@ class ProxyTest < ActiveSupport::TestCase
                       enabled: true,
                       id: '3'
                     }]
-      proxy = Proxy.new(policies_config: raw_config.to_json)
+      service = Service.new
+      proxy = Proxy.new(policies_config: raw_config.to_json, service: service)
       proxy.stubs(:account).returns(FactoryBot.build_stubbed(:simple_provider))
       policy_chain =  [
         {'name' => 'cors', 'version' => '0.0.1', 'configuration' => {'foo' => 'bar'}},
@@ -72,6 +73,36 @@ class ProxyTest < ActiveSupport::TestCase
 
       assert_equal policy_chain, proxy.policy_chain
     end
+
+
+    def test_policy_chain_with_backend_apis
+      rolling_updates_on
+
+      account = FactoryBot.create(:simple_provider)
+      service = FactoryBot.create(:simple_service, account: account, act_as_product: true)
+      null_backend_api = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://foo.baz')
+      null_backend_api.update_columns(private_endpoint: '')
+      backend_api1 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-1.example.com')
+      backend_api2 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-2.example.com')
+      FactoryBot.create(:backend_api_config, path: '/null', backend_api: null_backend_api, service: service)
+      FactoryBot.create(:backend_api_config, path: '/foo', backend_api: backend_api1, service: service)
+      FactoryBot.create(:backend_api_config, path: '/bar', backend_api: backend_api2, service: service)
+      policy_chain =  [
+        {"name"=>"routing", "version"=>"builtin", "enabled"=>true,
+          "configuration"=>{
+            "rules"=>[
+              {"url"=>"https://echo-api.3scale.net:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/.*"}]}},
+              {"url"=>"https://private-1.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/.*|/foo/?"}]}},
+              {"url"=>"https://private-2.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/bar/.*|/bar/?"}]}}
+            ]
+          }
+        },
+        {"name"=>"apicast", "version"=>"builtin", "configuration"=>{}}
+      ]
+
+      assert_equal policy_chain, service.proxy.policy_chain
+    end
+
 
     def test_authentication_method
       proxy = Proxy.new(authentication_method: 'oidc', service: Service.new)
