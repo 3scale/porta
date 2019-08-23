@@ -7,8 +7,19 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
 
     dl.u-dl
       - unless deployment_option_is_service_mesh?(@service)
-        dt.u-dl-term Private Base URL
-        dd.u-dl-definition = @proxy.api_backend
+        - if @service.act_as_traditional_service?
+          dt.u-dl-term Private Base URL
+          dd.u-dl-definition = @proxy.api_backend
+        - else
+          - backend_api_configs = @service.backend_api_configs
+          dt.u-dl-term Private Base #{'URL'.pluralize backend_api_configs.count}
+          dd.u-dl-definition
+            ul
+            - for backend_api_config in backend_api_configs
+              li
+                code
+                  ' /#{backend_api_config.path.presence} =>
+                = backend_api_config.backend_api.private_endpoint
       dt.u-dl-term Mapping rules
       dd.u-dl-definition
         - if (last_rule = @proxy.proxy_rules.last)
