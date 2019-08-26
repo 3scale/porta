@@ -10,6 +10,12 @@ th[data-collapsible="true"] {
       padding-right: 3px;
     }
   }
+
+  &.collapsed {
+    i {
+      transform: rotate(-90deg);
+    }
+  }
 }
 
 table.contract_table {
