@@ -6,7 +6,7 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   represents :json, entity: ::ProxyRepresenter::JSON
   represents :xml, entity: ::ProxyRepresenter::XML
 
-  wrap_parameters ::Proxy
+  wrap_parameters ::Proxy, include: Proxy.attribute_names + %w[api_backend]
 
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/services/{service_id}/proxy.xml"
