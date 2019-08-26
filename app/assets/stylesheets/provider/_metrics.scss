@@ -18,6 +18,20 @@ th[data-collapsible="true"] {
   }
 }
 
+table#metrics,
+table#backend_api_metrics {
+  table-layout: fixed;
+
+  thead {
+    th {
+      width: 70%;
+    }
+    th + th {
+      width: 10%;
+    }
+  }
+}
+
 table.contract_table {
 	width: 100%;
 	margin-bottom: line-height-times(1/2);
