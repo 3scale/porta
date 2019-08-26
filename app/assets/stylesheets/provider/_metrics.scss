@@ -14,6 +14,15 @@ table#backend_api_metrics {
       width: 10%;
     }
   }
+  
+  tbody {
+    tr {
+      &.hidden {
+        display: none;
+      }
+    }
+  } 
+}
 
 th[data-collapsible="true"] {
   span {
@@ -24,13 +33,11 @@ th[data-collapsible="true"] {
     }
   }
 
-  tbody {
-    tr {
-      &.hidden {
-        display: none;
-      }
+  &.collapsed {
+    i {
+      transform: rotate(-90deg);
     }
-  } 
+  }
 }
 
 table.contract_table {
