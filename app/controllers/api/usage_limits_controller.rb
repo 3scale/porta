@@ -70,7 +70,7 @@ class Api::UsageLimitsController < FrontendController
 
 
   def find_metric
-    @metric = @plan.metrics.find(params[:metric_id])
+    @metric = @plan.all_metrics.find(params[:metric_id])
   end
 
   def find_usage_limit
