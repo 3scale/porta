@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const span = th.querySelector('span')
         span.insertBefore(caret, span.firstChild)
         span.addEventListener('click', () => {
+          th.classList.toggle('collapsed')
           ids.forEach(id => document.getElementById(`metric_${id}`).classList.toggle('hidden'))
         })
       }
