@@ -1,7 +1,7 @@
 <tr>
   <th colspan="7" class="backend_api_metric_title"
                   data-collapsible="<%= backend_api.top_level_metrics.any? %>"
-                  data-metrics="<%= backend_api.top_level_metrics.map &:id %>">
+                  data-metrics="<%= backend_api.metrics.map &:id %>">
     <span><%= backend_api.name %></span>
     (<%= link_to 'Define method or metric', provider_admin_backend_api_metrics_path(backend_api), title: 'Define Methods & Metrics for this Backend API' %>)
   </th>
