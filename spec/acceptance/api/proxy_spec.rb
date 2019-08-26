@@ -11,8 +11,15 @@ resource 'Proxy' do
 
     put '/admin/api/services/:service_id/proxy.:format', action: :update do
       parameter :credentials_location, 'Credentials Location'
+      parameter :api_backend, 'Private endpoint'
 
       let(:credentials_location) { 'headers' }
+      let(:api_backend) { 'https://private.example.com:443' }
+
+      request 'should change api_backend' do
+        resource.reload
+        resource.api_backend.should eq(api_backend)
+      end
     end
   end
 
@@ -21,6 +28,7 @@ resource 'Proxy' do
     it { should include('credentials_location' => resource.credentials_location) }
     it { should include('deployment_option' => resource.deployment_option.to_s) }
     it { should have_links('mapping_rules', 'service', 'self') }
+    it { should include('api_backend' => resource.api_backend) }
   end
 end
 
