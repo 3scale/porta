@@ -57,7 +57,7 @@ module BackendApiLogic
           if path.empty?
             "/.*"
           else
-          "/#{path}/.*|/#{path}/?"
+            "/#{path}/.*|/#{path}/?"
           end
         end
       end
