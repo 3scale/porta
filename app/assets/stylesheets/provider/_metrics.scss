@@ -14,6 +14,23 @@ table#backend_api_metrics {
       width: 10%;
     }
   }
+
+th[data-collapsible="true"] {
+  span {
+    cursor: pointer;
+
+    i {
+      padding-right: 3px;
+    }
+  }
+
+  tbody {
+    tr {
+      &.hidden {
+        display: none;
+      }
+    }
+  } 
 }
 
 table.contract_table {
