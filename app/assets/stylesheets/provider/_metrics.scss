@@ -2,6 +2,16 @@
   margin-top: line-height-times(2);
 }
 
+th[data-collapsible="true"] {
+  span {
+    cursor: pointer;
+
+    i {
+      padding-right: 3px;
+    }
+  }
+}
+
 table.contract_table {
 	width: 100%;
 	margin-bottom: line-height-times(1/2);
