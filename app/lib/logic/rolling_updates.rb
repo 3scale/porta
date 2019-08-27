@@ -311,6 +311,12 @@ module Logic
         end
       end
 
+      class ModernBrowserCheck < Base
+        def missing_config
+          false
+        end
+      end
+
       class Unknown < Base
         def missing_config
           false

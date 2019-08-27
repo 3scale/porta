@@ -216,6 +216,7 @@ GEM
       msgpack (~> 1.0)
     braintree (2.89.0)
       builder (>= 2.0.0)
+    browser (2.6.1)
     bugsnag (6.11.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
@@ -834,6 +835,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap (~> 1.3)
   braintree (~> 2.89)
+  browser
   bugsnag (~> 6.11)
   bullet (~> 4.2)
   cancancan (~> 1.7.1)
