@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
 
   before_action :report_google_experiments, if: proc { ThreeScale::Analytics::GoogleExperiments.enabled? }
   before_action :enable_analytics
+  before_action :check_browser
 
   def status
     begin
@@ -87,6 +88,22 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def check_browser
+    request_format = request.format
+    return true if request_format.xml? || request_format.json?
+
+    if current_account&.provider_can_use?(:modern_browser_check) && browser_not_modern?
+      logout_keeping_session!
+      flash.now[:error] = 'To protect you, we cannot let you use the browser you are using. Please upgrade your browser and login again.'
+      redirect_to provider_admin_path
+    end
+  end
+
+  def browser_not_modern?
+    browser = Browser.new(request.env['HTTP_USER_AGENT'])
+    browser.known? && !browser.modern?
+  end
 
   def cors
     headers['Access-Control-Allow-Origin'.freeze] =
