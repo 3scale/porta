@@ -53,6 +53,10 @@ table.contract_table {
   th {
     padding-top: line-height-times(1/4);
     padding-bottom: line-height-times(1/4);
+    
+    &:first-child {
+      text-align: left;
+    }
   }
 
   td.selected strong {
