@@ -200,11 +200,3 @@ hr, {
   color: $success-color;
   cursor: move;
 }
-
-tbody {
-  tr {
-    &.hidden {
-      visibility: collapse;
-    }
-  }
-}
