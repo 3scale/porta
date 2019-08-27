@@ -21,7 +21,7 @@ type Props = {
     firstname: string,
     lastname: string,
     username: string,
-    errors: [Errors]
+    errors: Errors[]
   },
   name: string,
   path: string
