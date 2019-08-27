@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = safeFromJsonString(metrics)
 
     if (collapsible) {
+      th.classList.add('collapsible')
+
       const toggleBackendAPI = () => {
         th.classList.toggle('collapsed')
         ids.forEach(toggleMetricVisibility)
