@@ -6,8 +6,8 @@ import type { Node } from 'react'
 import {
   HiddenInputs,
   FormGroup,
-  validateAllFields,
-  validateSingleField
+  validateSingleField,
+  isFormDisabled
 } from 'LoginPage'
 
 import {
@@ -21,6 +21,7 @@ type Props = {
 }
 
 type State = {
+  formDisabled: boolean,
   username: string,
   password: string,
   validation: {
@@ -31,9 +32,13 @@ type State = {
 
 class Login3scaleForm extends React.Component<Props, State> {
   state = {
+    formDisabled: true,
     username: '',
     password: '',
-    validation: {}
+    validation: {
+      username: undefined,
+      password: undefined
+    }
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
@@ -45,17 +50,12 @@ class Login3scaleForm extends React.Component<Props, State> {
     this.setState({
       [event.currentTarget.name]: value,
       validation
-    })
+    }, this.validateForm)
   }
 
-  validateForm = (event: SyntheticEvent<HTMLButtonElement>) => {
-    const invalidFields = validateAllFields(event.currentTarget.form)
-
-    if (invalidFields) {
-      event.preventDefault()
-      this.setState({validation: invalidFields})
-    }
-  }
+  validateForm = () => this.setState({
+    formDisabled: isFormDisabled(Object.values(this.state.validation))
+  })
 
   render (): Node {
     const {username, password, validation} = this.state
@@ -85,6 +85,7 @@ class Login3scaleForm extends React.Component<Props, State> {
           <Button
             className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
+            isDisabled={this.state.formDisabled}
             onClick={this.validateForm}
           > Sign in</Button>
         </ActionGroup>
