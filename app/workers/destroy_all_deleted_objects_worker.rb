@@ -1,7 +1,7 @@
 class DestroyAllDeletedObjectsWorker
   include Sidekiq::Worker
 
-  def perform(class_name)
-    class_name.constantize.deleted.find_each(&DeleteObjectHierarchyWorker.method(:perform_later))
+  def perform(class_name, method = :deleted)
+    class_name.constantize.public_send(method).find_each(&DeleteObjectHierarchyWorker.method(:perform_later))
   end
 end

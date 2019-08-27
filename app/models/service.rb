@@ -198,6 +198,7 @@ class Service < ApplicationRecord
 
     before_transition to: [:deleted], do: :deleted_by_state_machine
     after_transition to: [:deleted], do: :notify_deletion
+    after_transition to: [:deleted], do: :destroy_related_backend_apis
   end
 
   def using_proxy_pro?
@@ -515,6 +516,11 @@ class Service < ApplicationRecord
 
   def archive_as_deleted
     ::DeletedObject.create!(object: self, owner: account)
+  end
+
+  def destroy_related_backend_apis
+    return if act_as_product?
+    backend_api&.destroy
   end
 
   def deleted_by_state_machine
