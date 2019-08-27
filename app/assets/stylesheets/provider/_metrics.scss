@@ -2,22 +2,6 @@
   margin-top: line-height-times(2);
 }
 
-th[data-collapsible="true"] {
-  span {
-    cursor: pointer;
-
-    i {
-      padding-right: 3px;
-    }
-  }
-
-  &.collapsed {
-    i {
-      transform: rotate(-90deg);
-    }
-  }
-}
-
 table#metrics,
 table#backend_api_metrics {
   table-layout: fixed;
