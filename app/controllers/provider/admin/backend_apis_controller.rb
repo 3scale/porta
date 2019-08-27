@@ -12,7 +12,8 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def new
-    # TODO
+    activate_menu :dashboard
+    @backend_api = collection.build params[:backend_api]
   end
 
   def create
@@ -54,5 +55,9 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
 
   def authorize
     authorize! :manage, BackendApi
+  end
+
+  def collection
+    current_account.backend_apis
   end
 end
