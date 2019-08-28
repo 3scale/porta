@@ -8,6 +8,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   layout 'provider'
 
   def index
+    activate_menu :dashboard
     @backend_apis = current_account.backend_apis
   end
 
