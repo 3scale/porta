@@ -91,11 +91,11 @@ class ApplicationController < ActionController::Base
 
   def check_browser
     request_format = request.format
-    return true if request_format.xml? || request_format.json?
+    return if request_format.xml? || request_format.json?
 
-    if current_account&.provider_can_use?(:modern_browser_check) && browser_not_modern?
+    if current_user && browser_not_modern?
       logout_keeping_session!
-      flash.now[:error] = 'To protect you, we cannot let you use the browser you are using. Please upgrade your browser and login again.'
+      flash.now[:error] = "The browser you are using doesn't seem to support the X-Frame-Options header. That means we can't protect you against Cross Frame Scripting and thus not guarantee the security of your session. Please upgrade your browser and sign in again."
       redirect_to provider_admin_path
     end
   end
