@@ -20,6 +20,11 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     end
   end
 
+  test '#new' do
+    get new_provider_admin_backend_api_path
+    assert_response :success
+  end
+
   test '#show' do
     backend_api = @provider.backend_apis.last
     get provider_admin_backend_api_path(backend_api)
