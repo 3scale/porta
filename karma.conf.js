@@ -27,7 +27,7 @@ module.exports = function (config) {
 
     plugins: [
       'karma-jasmine',
-      'karma-jasmine-jquery',
+      '@metahub/karma-jasmine-jquery',
       'karma-jquery',
       'karma-fixture',
       'karma-webpack',
