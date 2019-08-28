@@ -2,28 +2,6 @@
   margin-top: line-height-times(2);
 }
 
-table#metrics,
-table#backend_api_metrics {
-  table-layout: fixed;
-
-  thead {
-    th {
-      width: 70%;
-    }
-    th + th {
-      width: 10%;
-    }
-  }
-
-  tbody {
-    tr {
-      &.hidden {
-        display: none;
-      }
-    }
-  }
-}
-
 th.collapsible {
   span {
     cursor: pointer;
@@ -44,7 +22,48 @@ table.contract_table {
 	width: 100%;
 	margin-bottom: line-height-times(1/2);
 	border-collapse: collapse;
-	border-spacing: 0;
+  border-spacing: 0;
+
+  &#features {
+    table-layout: fixed;
+
+    thead {
+      th:first-child,
+      th:nth-child(2) {
+        width: 35%;
+      }
+
+      th:nth-child(3) {
+        width: 10%;
+      }
+
+      th:last-child {
+        width: 20%;
+      }
+    }
+  }
+  
+  &#metrics,
+  &#backend_api_metrics {
+    table-layout: fixed;
+
+    thead {
+      th {
+        width: 70%;
+      }
+      th + th {
+        width: 10%;
+      }
+    }
+
+    tbody {
+      tr {
+        &.hidden {
+          display: none;
+        }
+      }
+    }
+  }
 
   tr {
     border-bottom: $border-width solid $border-color;
@@ -63,7 +82,6 @@ table.contract_table {
     background: $light-background-color;
     padding: line-height-times(1/8);
   }
-
 
   table.usage_table {
     th, td {
