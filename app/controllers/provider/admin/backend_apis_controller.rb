@@ -12,16 +12,18 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def new
-    # TODO
+    activate_menu :dashboard
+    @backend_api = collection.build params[:backend_api]
   end
 
   def create
-    backend_api = current_account.backend_apis.build(backend_api_params)
-    if backend_api.save
-      redirect_to provider_admin_backend_api_path(backend_api), notice: 'Backend API created'
+    @backend_api = current_account.backend_apis.build(backend_api_params)
+    if @backend_api.save
+      redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend API created'
     else
       flash.now[:error] = 'Backend API could not be created'
-      render :edit
+      activate_menu :dashboard
+      render :new
     end
   end
 
@@ -54,5 +56,9 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
 
   def authorize
     authorize! :manage, BackendApi
+  end
+
+  def collection
+    current_account.backend_apis
   end
 end
