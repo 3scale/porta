@@ -44,7 +44,7 @@ class Api::ProxyRulesController < Api::BaseController
   private
 
   def authorize!
-    provider_can_use!(:independent_mapping_rules)
+    current_account.independent_mapping_rules_enabled? || raise(CanCan::AccessDenied)
   end
 
   def proxy
