@@ -13,6 +13,24 @@ import {
   isFormDisabled
 } from 'LoginPage'
 
+const INPUT_NAMES = {
+  username: 'user[username]',
+  email: 'user[email]',
+  firstName: 'user[first_name]',
+  lastName: 'user[last_name]',
+  password: 'user[password]',
+  passwordConfirmation: 'user[password_confirmation]'
+}
+
+const formFieldsList = [
+  {isRequired: true, type: INPUT_NAMES.username},
+  {isRequired: true, type: INPUT_NAMES.email},
+  {isRequired: false, type: INPUT_NAMES.firstName},
+  {isRequired: false, type: INPUT_NAMES.lastName},
+  {isRequired: true, type: INPUT_NAMES.password},
+  {isRequired: true, type: INPUT_NAMES.passwordConfirmation}
+]
+
 type User = {
     email: string,
     username: string,
@@ -37,34 +55,25 @@ type State = {
   'user[last_name]': string,
   'user[password]': string,
   'user[password_confirmation]': string,
-  validation: Validation
+  'validation': Validation
 }
-
-const formFieldsList = [
-  {isRequired: true, type: 'user[username]'},
-  {isRequired: true, type: 'user[email]'},
-  {isRequired: false, type: 'user[first_name]'},
-  {isRequired: false, type: 'user[last_name]'},
-  {isRequired: true, type: 'user[password]'},
-  {isRequired: true, type: 'user[password_confirmation]'}
-]
 
 class SignupForm extends Component<Props, State> {
   state = {
-    'formDisabled': true,
-    'user[username]': this.props.user.username,
-    'user[email]': this.props.user.email,
-    'user[first_name]': this.props.user.firstname,
-    'user[last_name]': this.props.user.lastname,
-    'user[password]': '',
-    'user[password_confirmation]': '',
+    formDisabled: true,
+    [INPUT_NAMES.username]: this.props.user.username,
+    [INPUT_NAMES.email]: this.props.user.email,
+    [INPUT_NAMES.firstName]: this.props.user.firstname,
+    [INPUT_NAMES.lastName]: this.props.user.lastname,
+    [INPUT_NAMES.password]: '',
+    [INPUT_NAMES.passwordConfirmation]: '',
     validation: {
-      'user[username]': this.props.user.username ? true : undefined,
-      'user[email]': this.props.user.email ? true : undefined,
-      'user[first_name]': true,
-      'user[last_name]': true,
-      'user[password]': undefined,
-      'user[password_confirmation]': undefined
+      [INPUT_NAMES.username]: this.props.user.username ? true : undefined,
+      [INPUT_NAMES.email]: this.props.user.email ? true : undefined,
+      [INPUT_NAMES.firstName]: true,
+      [INPUT_NAMES.lastName]: true,
+      [INPUT_NAMES.password]: undefined,
+      [INPUT_NAMES.passwordConfirmation]: undefined
     }
   }
 
@@ -100,10 +109,6 @@ class SignupForm extends Component<Props, State> {
       />)
     })
   }
-
-  // componentDidMount () {
-  //   this.validateUserPrefilledValues()
-  // }
 
   render () {
     return (

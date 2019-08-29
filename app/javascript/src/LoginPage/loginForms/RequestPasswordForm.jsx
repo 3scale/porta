@@ -46,12 +46,11 @@ class RequestPasswordForm extends React.Component<Props, State> {
   })
 
   render (): Node {
-    const {email, validation} = this.state
     const emailInputProps = {
-      value: email,
+      value: this.state.email,
       onChange: this.handleTextInputEmail,
       autoFocus: 'autoFocus',
-      inputIsValid: validation.email
+      inputIsValid: this.state.validation.email
     }
     return (
       <Form noValidate id='request_password'
@@ -60,8 +59,8 @@ class RequestPasswordForm extends React.Component<Props, State> {
         acceptCharset='UTF-8'
         method='post'
       >
-        <HiddenInputs isPasswordReset/>
-        <FormGroup type='email' labelIsValid={validation.email} inputProps={emailInputProps} />
+        <HiddenInputs isPasswordReset />
+        <FormGroup type='email' labelIsValid={this.state.validation.email} inputProps={emailInputProps} />
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'

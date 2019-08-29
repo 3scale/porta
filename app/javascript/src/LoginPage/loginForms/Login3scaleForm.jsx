@@ -82,8 +82,7 @@ class Login3scaleForm extends React.Component<Props, State> {
         <FormGroup type='username' labelIsValid={validation.username} inputProps={usernameInputProps} />
         <FormGroup type='password' labelIsValid={validation.password} inputProps={passwordInputProps} />
         <ActionGroup>
-          <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+          <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
             isDisabled={this.state.formDisabled}
             onClick={this.validateForm}
