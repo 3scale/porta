@@ -3,6 +3,7 @@ class Metric < ApplicationRecord
   include Backend::ModelExtensions::Metric
   include SystemName
   include ArchiveDeletionBelongingToService
+  include BackendApiLogic::MetricExtension
 
   before_destroy :destroyable?
   before_validation :associate_to_service_of_parent, :fill_owner
@@ -70,11 +71,13 @@ class Metric < ApplicationRecord
   end
 
   def self.hits
-    top_level.find_by_system_name('hits') || top_level.first
+    extended_system_name = self.hits_extended_system_name_as_sql
+    collection = top_level.where.has { system_name.eq('hits') | system_name.eq(extended_system_name) }.presence || top_level
+    collection.first
   end
 
   def self.hits!
-    self.find_by_system_name!('hits')
+    hits or raise ActiveRecord::RecordNotFound
   end
 
   # alias
@@ -88,7 +91,11 @@ class Metric < ApplicationRecord
   #
   # +type+:: Only :hits are supported right now.
   def default?(type)
-    system_name && system_name.to_sym == type.to_sym
+    if type == :hits
+      system_name.to_s =~ self.class.hits_extended_system_name_regex
+    else
+      system_name && system_name.to_sym == type.to_sym
+    end
   end
 
   def child?
@@ -100,9 +107,8 @@ class Metric < ApplicationRecord
   end
 
   def only_hits_has_children
-    if child? && parent.system_name != 'hits'
-      errors.add :parent_id, "You can only create methods under 'hits'"
-    end
+    return if !child? || parent.system_name =~ self.class.hits_extended_system_name_regex
+    errors.add :parent_id, "You can only create methods under 'hits'"
   end
 
   def unit
