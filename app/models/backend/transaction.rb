@@ -134,7 +134,7 @@ module Backend
     end
 
     def self.storage_key(service_id, id)
-      ::Service.find(service_id).preffix_key "transactions/#{id}"
+      ::Service.find(service_id).prefix_key "transactions/#{id}"
     end
 
     def to_param
@@ -163,7 +163,7 @@ module Backend
     end
 
     def generate_id
-      storage.incr(Service.find(@service_id).preffix_key('transactions/counter'))
+      storage.incr(Service.find(@service_id).prefix_key('transactions/counter'))
     end
 
     def cinstance_data
