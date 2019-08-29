@@ -59,28 +59,13 @@ class SignupForm extends Component<Props, State> {
     'user[password]': '',
     'user[password_confirmation]': '',
     validation: {
-      'user[username]': undefined,
-      'user[email]': undefined,
+      'user[username]': this.props.user.username ? true : undefined,
+      'user[email]': this.props.user.email ? true : undefined,
       'user[first_name]': true,
       'user[last_name]': true,
       'user[password]': undefined,
       'user[password_confirmation]': undefined
     }
-  }
-
-  validateUserPrefilledValues = () => {
-    const prefilledInputsIDs = ['#user_username', '#user_email', '#user_first_name', '#user_last_name']
-
-    prefilledInputsIDs.forEach(id => {
-      const input = document.querySelector(id)
-      if (input instanceof HTMLInputElement && input.value) {
-        const validation = {
-          ...this.state.validation,
-          [input.name]: true
-        }
-        this.setState({validation})
-      }
-    })
   }
 
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
@@ -116,9 +101,9 @@ class SignupForm extends Component<Props, State> {
     })
   }
 
-  componentDidMount () {
-    this.validateUserPrefilledValues()
-  }
+  // componentDidMount () {
+  //   this.validateUserPrefilledValues()
+  // }
 
   render () {
     return (
