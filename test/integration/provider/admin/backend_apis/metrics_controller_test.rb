@@ -46,7 +46,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     assert_difference backend_api.metrics.method(:count) do
       post provider_admin_backend_api_metrics_path(backend_api, metric: metric_params)
       assert_response :redirect
-      assert backend_api.metrics.find_by(system_name: 'foo')
+      assert backend_api.metrics.find_by(system_name: "foo.#{backend_api.id}")
     end
 
     assert_no_difference backend_api.metrics.method(:count) do
@@ -61,7 +61,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     assert_difference backend_api.metrics.method(:count) do
       post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: metric_params)
       assert_response :redirect
-      assert backend_api.metrics.find_by(system_name: 'foo')
+      assert backend_api.metrics.find_by(system_name: "foo.#{backend_api.id}")
     end
 
     assert_no_difference backend_api.metrics.method(:count) do
@@ -90,6 +90,6 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
   test '#destroy' do
     delete provider_admin_backend_api_metric_path(backend_api, ads)
-    refute backend_api.metrics.find_by(system_name: 'ads')
+    refute backend_api.metrics.find_by(system_name: "ads.#{backend_api.id}")
   end
 end

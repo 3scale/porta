@@ -44,7 +44,7 @@ class BackendApi < ApplicationRecord
   end
 
   def method_metrics
-    metrics.where(parent: metrics.where(system_name: 'hits'))
+    metrics.where(parent: metrics.hits)
   end
 
   private
