@@ -74,6 +74,12 @@ ul, p, ol, dl {
   padding: 0;
 }
 
+p + ul {
+  list-style: none;
+  margin-top: line-height-times(-2/3);
+  padding-left: line-height-times(2/3);
+}
+
 %dl {
   padding: 0;
   margin-top: line-height-times(1/2);
