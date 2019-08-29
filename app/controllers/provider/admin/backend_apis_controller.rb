@@ -42,7 +42,12 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def destroy
-    # TODO
+    if @backend_api.services.empty? && @backend_api.destroy
+      redirect_to provider_admin_dashboard_path, notice: 'Backend API deleted'
+    else
+      flash[:error] = 'Backend API could not be deleted'
+      render :edit
+    end
   end
 
   protected
