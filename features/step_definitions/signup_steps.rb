@@ -92,7 +92,7 @@ When /^(?:I|someone) (?:signup|signs up) with the email "([^"]*)"$/ do |email|
 end
 
 Then /^I should see the signup page$/ do
-  assert has_xpath?("//input[@value='Sign up']")
+  assert has_xpath?("//form[@id='signup_form']")
 end
 
 Then /^I should not see the signup page$/ do
