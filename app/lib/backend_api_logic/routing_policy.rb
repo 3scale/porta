@@ -17,7 +17,7 @@ module BackendApiLogic
       end
 
       def to_a
-        rules = backend_api_configs.each_with_object([]) do |config, rules|
+        rules = backend_api_configs.reorder(path: :desc).each_with_object([]) do |config, rules|
           rule = Rule.new(config).as_json
           rules << rule if rule
         end

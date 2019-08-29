@@ -86,14 +86,14 @@ class ProxyTest < ActiveSupport::TestCase
       backend_api2 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-2.example.com')
       FactoryBot.create(:backend_api_config, path: '/null', backend_api: null_backend_api, service: service)
       FactoryBot.create(:backend_api_config, path: '/foo', backend_api: backend_api1, service: service)
-      FactoryBot.create(:backend_api_config, path: '/bar', backend_api: backend_api2, service: service)
+      FactoryBot.create(:backend_api_config, path: '/foo/bar', backend_api: backend_api2, service: service)
       policy_chain =  [
         {"name"=>"routing", "version"=>"builtin", "enabled"=>true,
           "configuration"=>{
             "rules"=>[
-              {"url"=>"https://echo-api.3scale.net:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/.*"}]}},
+              {"url"=>"https://private-2.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/bar/.*|/foo/bar/?"}]}},
               {"url"=>"https://private-1.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/.*|/foo/?"}]}},
-              {"url"=>"https://private-2.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/bar/.*|/bar/?"}]}}
+              {"url"=>"https://echo-api.3scale.net:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/.*"}]}}
             ]
           }
         },
