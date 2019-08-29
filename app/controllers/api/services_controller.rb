@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ServicesController < Api::BaseController
   include ServiceDiscovery::ControllerMethods
 
@@ -34,8 +36,8 @@ class Api::ServicesController < Api::BaseController
 
   def create
     @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
-    @service.attributes = params[:service]
-    @service.system_name = params[:service][:system_name]
+    @service.attributes = service_params
+    @service.backend_api_configs = build_backend_api_configs
 
     if can_create? && @service.save
       flash[:notice] =  'Service created.'
@@ -65,8 +67,21 @@ class Api::ServicesController < Api::BaseController
     redirect_to provider_admin_dashboard_path
   end
 
-  protected
+  private
 
+  def build_backend_api_configs
+    return [] if !provider_can_use?(:api_as_product) || params[:service][:backend_api].blank?
+    backend_api = current_account.backend_apis.find(params[:service][:backend_api])
+    [BackendApiConfig.new(backend_api: backend_api)]
+  end
+
+  def service_params
+    allowed_params = %i[system_name name description]
+    allowed_params << :act_as_product if provider_can_use?(:api_as_product)
+    params.require(:service).permit(allowed_params)
+  end
+
+  protected
 
   def service_name_changed?
     @service.previous_changes['name']

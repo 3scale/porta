@@ -5,6 +5,7 @@ import Enzyme, {mount} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 import {NewServiceForm, ServiceManualForm, ServiceDiscoveryForm} from 'NewService'
+import {BackendApiSelect} from 'NewService/components/FormElements'
 
 import * as utils from 'utilities/utils'
 jest.spyOn(utils, 'CSRFToken')
@@ -17,7 +18,9 @@ const props = {
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl: 'authenticate-url',
   providerAdminServiceDiscoveryServicesPath: 'my-path',
-  adminServicesPath: 'my-other-path'
+  adminServicesPath: 'my-other-path',
+  apiap: false,
+  backendApis: []
 }
 
 it('should render itself', () => {
@@ -41,6 +44,11 @@ it('should render the correct form depending on which mode is selected', () => {
   expect(wrapper.find(ServiceDiscoveryForm).exists()).toEqual(false)
 })
 
+it('should not render BackendApiSelect by default', () => {
+  const wrapper = mount(<NewServiceForm {...props}/>)
+  expect(wrapper.find(BackendApiSelect).exists()).toEqual(false)
+})
+
 describe('when Service Discovery is not accessible', () => {
   beforeAll(() => {
     props.isServiceDiscoveryAccessible = false
@@ -58,5 +66,16 @@ describe('when Service Discovery is not accessible', () => {
     expect(wrapper.find('ServiceManualForm').exists()).toEqual(true)
     expect(wrapper.find('form#new_service').exists()).toEqual(true)
     expect(wrapper.find('form#service_source').exists()).toEqual(false)
+  })
+})
+
+describe('when Api as Product is enabled', () => {
+  beforeAll(() => {
+    props.apiap = true
+  })
+
+  it('should render BackendApiSelect', () => {
+    const wrapper = mount(<NewServiceForm {...props}/>)
+    expect(wrapper.find(BackendApiSelect).exists()).toEqual(true)
   })
 })
