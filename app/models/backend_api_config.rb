@@ -8,6 +8,10 @@ class BackendApiConfig < ApplicationRecord
 
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
 
+  after_create do
+    backend_api.metrics.each { |metric| metric.send(:sync_backend) }
+  end
+
   def path=(value)
     super(value.to_s.reverse.chomp("/").reverse.chomp("/"))
   end
