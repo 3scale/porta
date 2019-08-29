@@ -10,6 +10,20 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
   
   attr_reader :application_controller
 
+  def test_check_browser
+    provider = FactoryBot.create(:provider_account)
+    login! provider
+
+    ApplicationController.any_instance.stubs(:browser_not_modern?).returns(false)
+    assert_response :success
+    assert flash[:error].blank?
+
+    ApplicationController.any_instance.stubs(:browser_not_modern?).returns(true)
+    get admin_buyers_accounts_path
+    assert_response :redirect
+    assert_match 'Please upgrade your browser and sign in again', flash[:error]
+  end
+
   test '#save_return_to' do
     assert_equal '/foo', application_controller.send(:safe_return_to, '/foo')
     assert_equal '/foo?bar=42', application_controller.send(:safe_return_to, '/foo?bar=42')
