@@ -19,6 +19,18 @@
     .hidden {
       display: none;
     }
+
+    #backends > table {
+      table-layout: fixed;
+
+      th {
+        text-align: left;
+
+        &:first-child {
+          width: 60%;
+        }
+      }
+    }
   }
 
   &-title {
