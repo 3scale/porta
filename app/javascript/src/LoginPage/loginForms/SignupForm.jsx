@@ -9,9 +9,9 @@ import {
 import {
   HiddenInputs,
   FormGroup,
-  validateSingleField,
-  isFormDisabled
+  validateSingleField
 } from 'LoginPage'
+import type {SignupProps} from 'Types'
 
 const INPUT_NAMES = {
   username: 'user[username]',
@@ -31,24 +31,11 @@ const formFieldsList = [
   {isRequired: true, type: INPUT_NAMES.passwordConfirmation}
 ]
 
-type User = {
-    email: string,
-    username: string,
-    firstname: string,
-    lastname: string
-}
-
-type Props = {
-  path: string,
-  user: User
-}
-
 type Validation = {
   [string]: ?boolean
 }
 
 type State = {
-  'formDisabled': boolean,
   'user[username]': string,
   'user[email]': string,
   'user[first_name]': string,
@@ -58,9 +45,8 @@ type State = {
   'validation': Validation
 }
 
-class SignupForm extends Component<Props, State> {
+class SignupForm extends Component<SignupProps, State> {
   state = {
-    formDisabled: true,
     [INPUT_NAMES.username]: this.props.user.username,
     [INPUT_NAMES.email]: this.props.user.email,
     [INPUT_NAMES.firstName]: this.props.user.firstname,
@@ -87,12 +73,8 @@ class SignupForm extends Component<Props, State> {
     this.setState({
       [event.currentTarget.name]: value,
       validation
-    }, this.validateForm)
+    })
   }
-
-  validateForm = () => this.setState({
-    formDisabled: isFormDisabled(Object.values(this.state.validation))
-  })
 
   renderInputFormGroups = (formFieldsList: Array<*>): Array<*> => {
     return formFieldsList.map(formField => {
@@ -111,6 +93,7 @@ class SignupForm extends Component<Props, State> {
   }
 
   render () {
+    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
       <Form noValidate
         action={this.props.path}
@@ -124,8 +107,7 @@ class SignupForm extends Component<Props, State> {
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
             name="commit"
-            isDisabled={this.state.formDisabled}
-            onClick={this.validateForm}
+            isDisabled={formDisabled}
           >Sign up</Button>
         </ActionGroup>
       </Form>

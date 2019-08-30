@@ -2,11 +2,7 @@
 
 import React from 'react'
 import { ExclamationCircleIcon } from '@patternfly/react-icons'
-
-type FlashMessage = {
-  type: string,
-  message: string
-}
+import type {FlashMessage} from 'Types'
 
 const FlashMessages = ({flashMessages}: {flashMessages: Array<FlashMessage>}) => {
   const messagesList = flashMessages.map(message =>

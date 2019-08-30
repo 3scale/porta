@@ -6,8 +6,7 @@ import type { Node } from 'react'
 import {
   HiddenInputs,
   FormGroup,
-  validateSingleField,
-  isFormDisabled
+  validateSingleField
 } from 'LoginPage'
 
 import {
@@ -21,7 +20,6 @@ type Props = {
 }
 
 type State = {
-  formDisabled: boolean,
   username: string,
   password: string,
   validation: {
@@ -32,7 +30,6 @@ type State = {
 
 class Login3scaleForm extends React.Component<Props, State> {
   state = {
-    formDisabled: true,
     username: '',
     password: '',
     validation: {
@@ -50,12 +47,8 @@ class Login3scaleForm extends React.Component<Props, State> {
     this.setState({
       [event.currentTarget.name]: value,
       validation
-    }, this.validateForm)
+    })
   }
-
-  validateForm = () => this.setState({
-    formDisabled: isFormDisabled(Object.values(this.state.validation))
-  })
 
   render (): Node {
     const {username, password, validation} = this.state
@@ -71,6 +64,7 @@ class Login3scaleForm extends React.Component<Props, State> {
       ariaInvalid: 'false',
       inputIsValid: validation.password
     }
+    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
       <Form noValidate
         action={this.props.providerSessionsPath}
@@ -84,8 +78,7 @@ class Login3scaleForm extends React.Component<Props, State> {
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
-            isDisabled={this.state.formDisabled}
-            onClick={this.validateForm}
+            isDisabled={formDisabled}
           > Sign in</Button>
         </ActionGroup>
       </Form>

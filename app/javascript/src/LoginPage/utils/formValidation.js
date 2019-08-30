@@ -18,15 +18,12 @@ const constraintsTypes = {
   }
 }
 
-const isFormDisabled = (fields: Array<boolean>) => fields.some(value => value !== true)
-
 const validateSingleField = (event: SyntheticEvent<HTMLInputElement>) => {
-  const type = event.currentTarget.type
-  const fieldError = validate.single(event.currentTarget.value, constraintsTypes[type])
+  const {value, type} = event.currentTarget
+  const fieldError = validate.single(value, constraintsTypes[type])
   return !fieldError
 }
 
 export {
-  validateSingleField,
-  isFormDisabled
+  validateSingleField
 }
