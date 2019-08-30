@@ -59,6 +59,7 @@ Feature: API menu
     And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
+    | Methods & Metrics         |
     | Mapping Rules             |
     | Settings                  |
 
@@ -69,6 +70,7 @@ Feature: API menu
     And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
+    | Methods & Metrics         |
     | Settings                  |
 
   Scenario: API menu structure with service plans enabled
