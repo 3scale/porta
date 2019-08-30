@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale
   class SidekiqLoggingMiddleware
     def call(worker_class, msg, *)
