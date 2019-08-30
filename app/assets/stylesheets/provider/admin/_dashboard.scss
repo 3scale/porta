@@ -16,12 +16,8 @@
   &--services {
     margin-top: line-height-times(1.4);
 
-    section.hidden {
+    .hidden {
       display: none;
-    }
-
-    tr.hidden {
-      visibility: collapse;
     }
   }
 
