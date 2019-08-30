@@ -33,7 +33,12 @@ const ApiFilter = ({ apis, domClass, placeholder = 'All APIs' }: Props) => {
 
       const el = document.getElementById(`${domClass}_${id}`)
       if (el) {
-        el.classList.toggle('hidden', !isFilteredApi)
+        // Toggle method second argument not supported in IE11
+        if (isFilteredApi) {
+          el.classList.remove('hidden')
+        } else {
+          el.classList.add('hidden')
+        }
       }
     }
   }
