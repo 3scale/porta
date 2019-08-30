@@ -4,9 +4,14 @@ export function initialize () {
   const tabs = document.querySelectorAll('label[for^="tab-"]')
   const inputs = document.querySelectorAll('input[name="apiap-tabs"]')
 
-  inputs.forEach(i => i.addEventListener('change', toggleCurrentTab))
+  // NodeList.foreEach not supported in IE11
+  for (const i of inputs) {
+    i.addEventListener('change', toggleCurrentTab)
+  }
 
   function toggleCurrentTab () {
-    tabs.forEach(tab => tab.classList.toggle('current-tab'))
+    for (const t of tabs) {
+      t.classList.toggle('current-tab')
+    }
   }
 }
