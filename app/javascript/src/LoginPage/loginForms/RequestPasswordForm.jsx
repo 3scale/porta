@@ -6,8 +6,7 @@ import type { Node } from 'react'
 import {
   HiddenInputs,
   FormGroup,
-  validateSingleField,
-  isFormDisabled
+  validateSingleField
 } from 'LoginPage'
 
 import {
@@ -22,7 +21,6 @@ type Props = {
 }
 
 type State = {
-  formDisabled: boolean,
   email: string,
   validation: {
     email: ?boolean
@@ -31,19 +29,14 @@ type State = {
 
 class RequestPasswordForm extends React.Component<Props, State> {
   state = {
-    formDisabled: true,
     email: '',
     validation: {}
   }
 
   handleTextInputEmail = (email: string, event: SyntheticEvent<HTMLInputElement>) => {
     const isValid = validateSingleField(event)
-    this.setState({ email, validation: {email: isValid} }, this.validateForm)
+    this.setState({ email, validation: {email: isValid} })
   }
-
-  validateForm = () => this.setState({
-    formDisabled: isFormDisabled(Object.values(this.state.validation))
-  })
 
   render (): Node {
     const emailInputProps = {
@@ -52,6 +45,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
       autoFocus: 'autoFocus',
       inputIsValid: this.state.validation.email
     }
+    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
       <Form noValidate id='request_password'
         action={this.props.providerPasswordPath}
@@ -64,8 +58,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
-            isDisabled={this.state.formDisabled}
-            onClick={this.validateForm}
+            isDisabled={formDisabled}
           >Reset password</Button>
           <a href={this.props.providerLoginPath}>Sign in</a>
         </ActionGroup>

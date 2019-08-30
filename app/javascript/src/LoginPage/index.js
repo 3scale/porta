@@ -10,4 +10,4 @@ export {FormGroup} from 'LoginPage/loginForms/FormGroup'
 export {SignupPage, SignupPageWrapper} from 'LoginPage/SignupPageWrapper'
 export {SignupForm} from 'LoginPage/loginForms/SignupForm'
 
-export {validateSingleField, isFormDisabled} from 'LoginPage/utils/formValidation'
+export {validateSingleField} from 'LoginPage/utils/formValidation'
