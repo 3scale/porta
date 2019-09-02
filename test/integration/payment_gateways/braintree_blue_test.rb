@@ -45,7 +45,7 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
 
   test "invalid merchant id redirects to show" do
     PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:try_find_customer).raises(Braintree::AuthenticationError)
-    buyer_login @buyer_account.admins.first
+    login_buyer @buyer_account
     get developer_portal.edit_admin_account_braintree_blue_path
     assert_redirected_to developer_portal.admin_account_braintree_blue_path
     assert_equal 'Invalid merchant id', flash[:error]

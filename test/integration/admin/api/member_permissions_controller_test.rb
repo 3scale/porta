@@ -105,7 +105,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
   test "member user can't update his own permissions" do
     @user.update_attribute :role, 'member'
-    provider_login @user
+    login! @provider, user: @user
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: '' }
 
