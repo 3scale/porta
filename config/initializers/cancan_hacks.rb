@@ -13,7 +13,7 @@ module CanCan
         else
           positions = @rules_index.values_at(subject, *alternative_subjects(subject))
           positions.flatten!.sort!
-          positions.map { |i| @rules[i] }.compact
+          @rules.values_at(*positions).compact
         end
       end
     end
