@@ -127,7 +127,7 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
     end
 
     test 'can create jobs without an access token if logged in' do
-      provider_login @master_admin
+      login! master_account, user: @master_admin
       post master_api_provider_billing_jobs_path(@provider, date: '2018-02-08')
       assert_response :accepted
     end

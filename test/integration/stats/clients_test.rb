@@ -19,7 +19,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
   end
 
   test 'usage with invalid period' do
-    provider_login @provider_account.admins.first
+    login! @provider_account
     get "/stats/applications/#{@cinstance.id}/usage.json", :period => 'XSScript', :metric_name => @metric.system_name
     assert_response :bad_request
   end
@@ -35,7 +35,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
 
     Timecop.freeze(Time.utc(2009, 12, 13))
 
-    provider_login @provider_account.admins.first
+    login! @provider_account
     @provider_account.update_attribute(:timezone, 'Madrid')
 
     get "/stats/applications/#{@cinstance.id}/usage.json", period:'month', metric_name: @metric.system_name, skip_change: false
@@ -74,7 +74,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
 
     Timecop.freeze(Time.utc(2009, 12, 13))
 
-    provider_login @provider_account.admins.first
+    login! @provider_account
     @provider_account.update_attribute(:timezone, 'Madrid')
 
     get "/stats/applications/#{@cinstance.id}/usage_response_code.json", period:'month', response_code: 200
