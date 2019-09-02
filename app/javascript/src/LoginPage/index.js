@@ -5,9 +5,7 @@ export {HiddenInputs} from 'LoginPage/loginForms/HiddenInputs'
 export {SimpleLoginPage, LoginPageWrapper} from 'LoginPage/LoginPageWrapper'
 export {AuthenticationProviders} from 'LoginPage/loginForms/AuthenticationProviders'
 export {FlashMessages} from 'LoginPage/loginForms/FlashMessages'
-export {FormGroup} from 'LoginPage/loginForms/FormGroup'
-
+export {TextField, PasswordField, EmailField} from 'LoginPage/loginForms/FormGroups'
 export {SignupPage, SignupPageWrapper} from 'LoginPage/SignupPageWrapper'
 export {SignupForm} from 'LoginPage/loginForms/SignupForm'
-
 export {validateSingleField} from 'LoginPage/utils/formValidation'

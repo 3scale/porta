@@ -5,7 +5,7 @@ import type { Node } from 'react'
 
 import {
   HiddenInputs,
-  FormGroup,
+  EmailField,
   validateSingleField
 } from 'LoginPage'
 
@@ -40,10 +40,14 @@ class RequestPasswordForm extends React.Component<Props, State> {
 
   render (): Node {
     const emailInputProps = {
+      isRequired: true,
+      name: 'email',
+      fieldId: 'email',
+      label: 'Email address',
+      isValid: this.state.validation.email,
       value: this.state.email,
       onChange: this.handleTextInputEmail,
-      autoFocus: 'autoFocus',
-      inputIsValid: this.state.validation.email
+      autoFocus: 'autoFocus'
     }
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
@@ -54,7 +58,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
         method='post'
       >
         <HiddenInputs isPasswordReset />
-        <FormGroup type='email' labelIsValid={this.state.validation.email} inputProps={emailInputProps} />
+        <EmailField inputProps={emailInputProps}/>
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
