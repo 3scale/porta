@@ -62,6 +62,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       host! provider.admin_domain
       @service = FactoryBot.create(:service, account: provider)
       Account.any_instance.stubs(can_create_service?: true)
+      Logic::RollingUpdates.stubs(enabled?: true)
     end
 
     attr_reader :provider, :service
@@ -128,6 +129,40 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({state_event: 'publish'})
       assert_equal 'published', service.reload.state
+    end
+
+    test 'create accepts act_as_product when the rolling update is enabled' do
+      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(true)
+
+      assert_difference(provider.services.method(:count)) do
+        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({act_as_product: true})
+      end
+      assert provider.services.last!.act_as_product
+    end
+
+    test 'create does not accept act_as_product when the rolling update is disabled' do
+      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(false)
+
+      assert_difference(provider.services.method(:count)) do
+        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({act_as_product: true})
+      end
+      refute provider.services.last!.act_as_product
+    end
+
+    test 'update accepts act_as_product when the rolling update is enabled' do
+      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(true)
+
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({act_as_product: true})
+      assert_response :success
+      assert service.reload.act_as_product
+    end
+
+    test 'update does not accept act_as_product when the rolling update is disabled' do
+      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(false)
+
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({act_as_product: true})
+      assert_response :success
+      refute service.reload.act_as_product
     end
 
     private
