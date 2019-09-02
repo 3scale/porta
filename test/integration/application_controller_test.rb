@@ -15,6 +15,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     login! provider
 
     ApplicationController.any_instance.stubs(:browser_not_modern?).returns(false)
+    get admin_buyers_accounts_path
     assert_response :success
     assert flash[:error].blank?
 
