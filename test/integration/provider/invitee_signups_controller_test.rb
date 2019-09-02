@@ -56,7 +56,7 @@ class Provider::InviteeSignupsControllerTest < ActionDispatch::IntegrationTest
 
     get provider_invitee_signup_path(invitation_token: 'abc123')
 
-    assert_equal 'You are already signed up. Log out if you want to sign up again.', flash[:notice] # TODO: i18n, after the 2.6 ER1
+    assert_equal I18n.t('flash.signups.already_logged_in'), flash[:notice]
     assert_redirected_to provider_admin_dashboard_url
   end
 
