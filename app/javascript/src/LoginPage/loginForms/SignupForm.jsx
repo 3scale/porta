@@ -8,28 +8,12 @@ import {
 } from '@patternfly/react-core'
 import {
   HiddenInputs,
-  FormGroup,
+  TextField,
+  PasswordField,
+  EmailField,
   validateSingleField
 } from 'LoginPage'
 import type {SignupProps} from 'Types'
-
-const INPUT_NAMES = {
-  username: 'user[username]',
-  email: 'user[email]',
-  firstName: 'user[first_name]',
-  lastName: 'user[last_name]',
-  password: 'user[password]',
-  passwordConfirmation: 'user[password_confirmation]'
-}
-
-const formFieldsList = [
-  {isRequired: true, type: INPUT_NAMES.username},
-  {isRequired: true, type: INPUT_NAMES.email},
-  {isRequired: false, type: INPUT_NAMES.firstName},
-  {isRequired: false, type: INPUT_NAMES.lastName},
-  {isRequired: true, type: INPUT_NAMES.password},
-  {isRequired: true, type: INPUT_NAMES.passwordConfirmation}
-]
 
 type Validation = {
   [string]: ?boolean
@@ -43,6 +27,33 @@ type State = {
   'user[password]': string,
   'user[password_confirmation]': string,
   'validation': Validation
+}
+
+const INPUT_NAMES = {
+  username: 'user[username]',
+  email: 'user[email]',
+  firstName: 'user[first_name]',
+  lastName: 'user[last_name]',
+  password: 'user[password]',
+  passwordConfirmation: 'user[password_confirmation]'
+}
+
+const INPUT_IDS = {
+  username: 'user_username',
+  email: 'user_email',
+  firstName: 'user_first_name',
+  lastName: 'user_last_name',
+  password: 'user_password',
+  passwordConfirmation: 'user_password_confirmation'
+}
+
+const INPUT_LABELS = {
+  username: 'Username',
+  email: 'Email address',
+  firstName: 'First name',
+  lastName: 'Last name',
+  password: 'Password',
+  passwordConfirmation: 'Password confirmation'
 }
 
 class SignupForm extends Component<SignupProps, State> {
@@ -63,6 +74,18 @@ class SignupForm extends Component<SignupProps, State> {
     }
   }
 
+  getInputProps = (name: string, isRequired: boolean) => {
+    return {
+      isRequired,
+      name: INPUT_NAMES[name],
+      fieldId: INPUT_IDS[name],
+      label: INPUT_LABELS[name],
+      isValid: this.state.validation[INPUT_NAMES[name]],
+      value: this.state[INPUT_NAMES[name]],
+      onChange: this.handleInputChange
+    }
+  }
+
   handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
     const validation = {
@@ -76,24 +99,16 @@ class SignupForm extends Component<SignupProps, State> {
     })
   }
 
-  renderInputFormGroups = (formFieldsList: Array<*>): Array<*> => {
-    return formFieldsList.map(formField => {
-      const inputProps = {
-        value: this.state[formField.type],
-        onChange: this.handleInputChange,
-        inputIsValid: this.state.validation[formField.type]
-      }
-      return (<FormGroup key={formField.type}
-        isRequired={formField.isRequired}
-        type={formField.type}
-        labelIsValid={this.state.validation[formField.type]}
-        inputProps={inputProps}
-      />)
-    })
-  }
-
   render () {
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
+
+    const usernameInputProps = this.getInputProps('username', true)
+    const emailInputProps = this.getInputProps('email', true)
+    const firstNameInputProps = this.getInputProps('firstName', false)
+    const lastNameInputProps = this.getInputProps('lastName', false)
+    const passwordInputProps = this.getInputProps('password', true)
+    const passwordConfirmationInputProps = this.getInputProps('passwordConfirmation', true)
+
     return (
       <Form noValidate
         action={this.props.path}
@@ -102,7 +117,13 @@ class SignupForm extends Component<SignupProps, State> {
         method='post'
       >
         <HiddenInputs />
-        { this.renderInputFormGroups(formFieldsList) }
+        <TextField inputProps={usernameInputProps}/>
+        <EmailField inputProps={emailInputProps}/>
+        <TextField inputProps={firstNameInputProps}/>
+        <TextField inputProps={lastNameInputProps}/>
+        <PasswordField inputProps={passwordInputProps}/>
+        <PasswordField inputProps={passwordConfirmationInputProps}/>
+
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
