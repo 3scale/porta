@@ -3,30 +3,29 @@ require 'test_helper'
 module Abilities
   class FinanceTest < ActiveSupport::TestCase
     def setup
-      @provider = FactoryBot.create(:provider_account)
+      @provider = FactoryBot.create(:simple_provider)
     end
 
+    attr_reader :provider
+
     test "provider can see finance section if hidden or visible" do
-      admin = FactoryBot.create(:user, :account => @provider, :role => :admin)
-      ability = Ability.new(admin)
-
-      @provider.settings.allow_finance!
-      ability.reload!
-      assert_can ability, :see, :finance
-      assert_can ability, :admin, :finance
-
-      @provider.settings.show_finance!
+      provider.settings.allow_finance!
       ability.reload!
       assert_can ability, :see, :finance
       assert_can ability, :admin, :finance
     end
 
     test "if denied, provider can't see the finance section but can administrate it" do
-      admin = FactoryBot.create(:user, :account => @provider, :role => :admin)
-      ability = Ability.new(admin)
       assert_cannot ability, :see, :finance
       assert_can ability, :admin, :finance
     end
 
+    private
+
+    def ability
+      @ability ||= Ability.new(provider.admin_users.first!)
+    end
+
   end
+
 end

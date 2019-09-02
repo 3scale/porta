@@ -3,12 +3,7 @@
 Ability.define do |user|
   if user && (account = user.account)
 
-    provider = account.provider_account
-    settings = if account.buyer?
-                 provider.settings
-               else
-                 account.settings
-               end
+    settings = account.buyer? ? account.provider_account.settings : account.settings
 
     # :see means buyer can use it (see buyer_any.rb)
     # :admin means provider can see the upgrade notices (see provider_admin.rb)
@@ -18,12 +13,12 @@ Ability.define do |user|
     # multiple_services multiple_applications multiple_users skip_email_engagement_footer
     # groups branding web_hooks iam_tools
     settings.switches.each do |name, switch|
-      if can?(:admin, name) && switch.allowed?
-        if account.master_on_premises? && [:account_plans, :service_plans].include?(name)
-          cannot %i[see admin manage], name
-        else
-          can :manage, name
-        end
+      next if cannot?(:admin, name) || switch.denied?
+
+      if account.master_on_premises? && %i[account_plans service_plans].include?(name)
+        cannot %i[see admin manage], name
+      else
+        can :manage, name
       end
     end
   end
