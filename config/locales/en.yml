@@ -1130,6 +1130,7 @@ en:
     signups:
       create:
         notice: "Thanks for signing up! You can now sign in."
+      already_logged_in: 'You are already signed up. Log out if you want to sign up again.'
 
   proxy:
     credentials_location:

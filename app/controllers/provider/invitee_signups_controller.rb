@@ -36,10 +36,7 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def redirect_if_logged_in
-    if logged_in?
-      flash[:notice] = 'You are already signed up. Log out if you want to sign up again.'
-      redirect_to provider_admin_dashboard_url
-    end
+    redirect_to provider_admin_dashboard_url, notice: I18n.t('flash.signups.already_logged_in') if logged_in?
   end
 
   def find_invitation
