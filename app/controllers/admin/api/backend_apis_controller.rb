@@ -128,8 +128,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   private
 
   def authorize
-    provider_can_use!(:api_as_product)
-    # TODO: I guess it should authorize also that it has permission for the specific action :)
+    authorize! :manage, BackendApi
   end
 
   def backend_api
