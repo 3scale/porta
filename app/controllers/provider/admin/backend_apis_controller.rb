@@ -7,6 +7,11 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   activate_menu :backend_api, :overview
   layout 'provider'
 
+  def index
+    activate_menu :dashboard
+    @backend_apis = current_account.backend_apis.accessible
+  end
+
   def new
     activate_menu :dashboard
     @backend_api = collection.build params[:backend_api]
@@ -37,8 +42,8 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def destroy
-    if @backend_api.services.empty? && @backend_api.destroy
-      redirect_to provider_admin_dashboard_path, notice: 'Backend API deleted'
+    if @backend_api.services.empty? && @backend_api.mark_as_deleted
+      redirect_to provider_admin_dashboard_path, notice: 'Backend API will be deleted shortly.'
     else
       flash[:error] = 'Backend API could not be deleted'
       render :edit
@@ -51,7 +56,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   private_constant :DEFAULT_PARAMS
 
   def find_backend_api
-    @backend_api = current_account.backend_apis.find(params[:id])
+    @backend_api = current_account.backend_apis.accessible.find(params[:id])
   end
 
   def create_params
