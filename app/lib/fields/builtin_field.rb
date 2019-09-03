@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Fields::BuiltinField < Fields::BaseField
 
-  ALLOWED_ASSOCIATIONS = %w{country}
+  ALLOWED_ASSOCIATIONS = %w[country].freeze
 
   def name=(val)
     @name = convert_name(val)

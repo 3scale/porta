@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fields
   class SignupForm
     REQUIRED_FIELDS = %w{ account[user][email] account[user][password]
@@ -48,7 +50,6 @@ module Fields
           .map { |fd| SignupExtraField.new(fd.attributes.dup) }
       end
 
-
       def extra_field_names
         raise 'should be overriden in subclasses'
       end
@@ -65,7 +66,7 @@ module Fields
     class UserFormFields < FormFields
 
       def include?(name)
-         super "account[user][#{name}]"
+        super "account[user][#{name}]"
       end
 
       def extra_field_names

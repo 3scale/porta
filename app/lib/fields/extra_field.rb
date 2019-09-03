@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Fields::ExtraField < Fields::BaseField
 
   # this object is passed to form builder instead of owner of extra fields
@@ -35,7 +37,6 @@ class Fields::ExtraField < Fields::BaseField
     val ||= 'field_name_missing'
     @name = val
   end
-
 
   def input(builder)
     field = InputField.new(@name, builder.object)

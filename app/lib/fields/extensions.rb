@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fields::Extensions
 
   module AssociationCollectionExtension
@@ -21,7 +23,7 @@ module Fields::Extensions
     # skips modificatio when @owner is existing record
     # traversing to proper (existing) source root is handled by Fields#fields_definitions_source_root
     #
-    def modify_attributes_with_fields attributes
+    def modify_attributes_with_fields(attributes)
       attributes = attributes.nil? ? {} : attributes.dup
 
       # this is not possible, because when object is created by association,
