@@ -65,7 +65,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_backend_api_private_endpoint
   #
   def create
-    backend_api = current_account.backend_apis.create(backend_api_params)
+    backend_api = current_account.backend_apis.create(create_params)
     respond_with(backend_api)
   end
 
@@ -103,7 +103,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_backend_api_private_endpoint
   #
   def update
-    backend_api.update(backend_api_params)
+    backend_api.update(update_params)
     respond_with(backend_api)
   end
 
@@ -127,6 +127,9 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   private
 
+  DEFAULT_PARAMS = %i[name description private_endpoint].freeze
+  private_constant :DEFAULT_PARAMS
+
   def authorize
     authorize! :manage, BackendApi
   end
@@ -135,8 +138,11 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
     @backend_api ||= current_account.backend_apis.find(params[:id])
   end
 
-  def backend_api_params
-    # Not sure about :system_name but for Service it is readonly # TODO ?
-    params.require(:backend_api).permit(:name, :description, :private_endpoint)
+  def create_params
+    params.require(:backend_api).permit(DEFAULT_PARAMS | %i[system_name])
+  end
+
+  def update_params
+    params.require(:backend_api).permit(DEFAULT_PARAMS)
   end
 end
