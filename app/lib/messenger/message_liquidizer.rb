@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Messenger
 
   # This functionality is extracted to module because then also "normal"
@@ -29,7 +31,7 @@ module Messenger
       body = args.first
 
       template = find_liquid_template(full_template_name)
-      content_to_parse = body || template.try!(:content)
+      content_to_parse = body || template&.content
       parsed_content = Liquid::Template.parse(content_to_parse)
 
       if (message = registers[:message]) && template
