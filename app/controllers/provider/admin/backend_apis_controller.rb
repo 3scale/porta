@@ -18,7 +18,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def create
-    @backend_api = current_account.backend_apis.build(backend_api_params)
+    @backend_api = current_account.backend_apis.build(create_params)
     if @backend_api.save
       redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend API created'
     else
@@ -33,7 +33,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   def edit; end
 
   def update
-    if @backend_api.update_attributes(backend_api_params)
+    if @backend_api.update_attributes(update_params)
       redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend API updated'
     else
       flash.now[:error] = 'Backend API could not be updated'
@@ -52,12 +52,19 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
 
   protected
 
+  DEFAULT_PARAMS = %i[name description private_endpoint].freeze
+  private_constant :DEFAULT_PARAMS
+
   def find_backend_api
     @backend_api = current_account.backend_apis.find(params[:id])
   end
 
-  def backend_api_params
-    params.require(:backend_api).permit(:name, :system_name, :description, :private_endpoint)
+  def create_params
+    params.require(:backend_api).permit(DEFAULT_PARAMS | %i[system_name])
+  end
+
+  def update_params
+    params.require(:backend_api).permit(DEFAULT_PARAMS)
   end
 
   def authorize

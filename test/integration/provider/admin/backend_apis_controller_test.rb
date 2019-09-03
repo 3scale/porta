@@ -54,6 +54,15 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     assert_equal 'https://new-endpoint.com:443/p', backend_api.reload.private_endpoint
   end
 
+  test 'system_name can be created but not updated' do
+    post provider_admin_backend_apis_path, { backend_api: {name: 'My Backend API', system_name: 'first-system-name'} }
+    backend_api = provider.backend_apis.last!
+    assert_equal 'first-system-name', backend_api.system_name
+
+    put provider_admin_backend_api_path(backend_api, { backend_api: {name: 'My Backend API', system_name: 'my-new-backend-api'} })
+    assert_equal 'first-system-name', backend_api.reload.system_name
+  end
+
   test 'delete a backend api with products' do
     backend_api = @provider.backend_apis[0]
     assert backend_api.backend_api_configs.any?
