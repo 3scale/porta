@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Fields::BaseField
   #TODO: builtin and type look like they can be removed
   attr_accessor :name, :label, :type, :required, :choices, :hint, :hidden, :options

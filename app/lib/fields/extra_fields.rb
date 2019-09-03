@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #this is tested in unit/account_test and in cucumbers
 module Fields::ExtraFields
   extend ActiveSupport::Concern
@@ -45,9 +47,7 @@ module Fields::ExtraFields
     self[:extra_fields] ||= {}
 
     new_extra_fields.each_pair do |field, value|
-      if extra_field?(field)
-        self.extra_fields[field] = encode_extra_field(value)
-      end
+      extra_fields[field] = encode_extra_field(value) if extra_field?(field)
     end
   end
 
@@ -123,6 +123,6 @@ module Fields::ExtraFields
 
   def extra_fields_attribute?(key)
     respond_to?("#{key}=") &&
-        !(self.class.reflect_on_aggregation(key.to_sym) || self.class.reflect_on_association(key.to_sym))
+      !(self.class.reflect_on_aggregation(key.to_sym) || self.class.reflect_on_association(key.to_sym))
   end
 end

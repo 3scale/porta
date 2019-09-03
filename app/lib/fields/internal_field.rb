@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Fields::InternalField < Fields::BaseField
 
   def input(builder)
