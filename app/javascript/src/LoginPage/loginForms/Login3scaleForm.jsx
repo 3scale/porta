@@ -3,7 +3,12 @@
 import React from 'react'
 import type { Node } from 'react'
 
-import {HiddenInputs, FormGroup} from 'LoginPage'
+import {
+  HiddenInputs,
+  TextField,
+  PasswordField,
+  validateSingleField
+} from 'LoginPage'
 
 import {
   Form,
@@ -18,78 +23,81 @@ type Props = {
 type State = {
   username: string,
   password: string,
-  isValidUsername: ?boolean,
-  isValidPassword: ?boolean
+  validation: {
+    username: ?boolean,
+    password: ?boolean
+  }
+}
+
+const USERNAME_ATTRS = {
+  name: 'username',
+  fieldId: 'session_username',
+  label: 'Email or Username'
+}
+
+const PASSWORD_ATTRS = {
+  name: 'password',
+  fieldId: 'session_password',
+  label: 'Password'
 }
 
 class Login3scaleForm extends React.Component<Props, State> {
-  constructor (props: Props) {
-    super(props)
-    this.state = {
-      username: '',
-      password: '',
-      isValidUsername: undefined,
-      isValidPassword: undefined
+  state = {
+    username: '',
+    password: '',
+    validation: {
+      username: undefined,
+      password: undefined
     }
   }
 
-  setIsValidUsername = () => {
-    this.setState({isValidUsername: this.state.username !== ''})
-  }
-
-  handleTextInputUsername = (username: string) => {
-    this.setState({ username }, this.setIsValidUsername)
-  }
-
-  setIsValidPassword = () => {
-    this.setState({isValidPassword: this.state.password !== ''})
-  }
-
-  handleTextInputPassword = (password: string) => {
-    this.setState({ password }, this.setIsValidPassword)
-  }
-
-  validateForm = (event: SyntheticEvent<HTMLInputElement>) => {
-    this.setIsValidUsername()
-    this.setIsValidPassword()
-    const isFormDisabled = this.state.username === '' ||
-      this.state.password === '' ||
-      this.state.isValidUsername === false ||
-      this.state.isValidPassword === false
-    if (isFormDisabled) {
-      event.preventDefault()
+  handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
+    const isValid = validateSingleField(event)
+    const validation = {
+      ...this.state.validation,
+      [event.currentTarget.name]: isValid
     }
+    this.setState({
+      [event.currentTarget.name]: value,
+      validation
+    })
   }
 
   render (): Node {
-    const {username, password, isValidUsername, isValidPassword} = this.state
+    const {username, password, validation} = this.state
     const usernameInputProps = {
+      isRequired: true,
+      name: USERNAME_ATTRS.name,
+      fieldId: USERNAME_ATTRS.fieldId,
+      label: USERNAME_ATTRS.label,
+      isValid: validation.username,
       value: username,
-      onChange: this.handleTextInputUsername,
-      autoFocus: 'autoFocus',
-      inputIsValid: isValidUsername
+      onChange: this.handleInputChange
     }
     const passwordInputProps = {
+      isRequired: true,
+      name: PASSWORD_ATTRS.name,
+      fieldId: PASSWORD_ATTRS.fieldId,
+      label: PASSWORD_ATTRS.label,
+      isValid: validation.password,
       value: password,
-      onChange: this.handleTextInputPassword,
-      ariaInvalid: 'false',
-      inputIsValid: isValidPassword
+      onChange: this.handleInputChange
     }
+    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
-      <Form
+      <Form noValidate
         action={this.props.providerSessionsPath}
         id='new_session'
         acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs/>
-        <FormGroup type='username' labelIsValid={isValidUsername} inputProps={usernameInputProps} />
-        <FormGroup type='password' labelIsValid={isValidPassword} inputProps={passwordInputProps} />
+        <TextField inputProps={usernameInputProps}/>
+        <PasswordField inputProps={passwordInputProps} />
         <ActionGroup>
-          <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+          <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
-            onClick={this.validateForm}
+            isDisabled={formDisabled}
           > Sign in</Button>
         </ActionGroup>
       </Form>
