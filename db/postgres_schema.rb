@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805135829) do
+ActiveRecord::Schema.define(version: 20190904144307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,9 +239,11 @@ ActiveRecord::Schema.define(version: 20190805135829) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.integer  "tenant_id",        limit: 8
+    t.string   "state"
   end
 
   add_index "backend_apis", ["account_id", "system_name"], name: "index_backend_apis_on_account_id_and_system_name", unique: true, using: :btree
+  add_index "backend_apis", ["state"], name: "index_backend_apis_on_state", using: :btree
 
   create_table "backend_events", id: false, force: :cascade do |t|
     t.integer  "id",         limit: 8, null: false

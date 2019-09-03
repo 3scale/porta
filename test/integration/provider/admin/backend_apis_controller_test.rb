@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
   setup do
     @provider = FactoryBot.create(:provider_account)
     FactoryBot.create_list(:backend_api, 2, account: @provider)
@@ -10,6 +12,17 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
   end
 
   attr_reader :provider
+
+  test '#index does not list deleted backend apis' do
+    FactoryBot.create(:backend_api, account: @provider, state: BackendApi::DELETED_STATE)
+    get provider_admin_backend_apis_path
+    assert_response :success
+    expected_backend_apis = @provider.backend_apis.count - 1
+    assert_select '#backend_apis tr', count: expected_backend_apis + 1
+    @provider.backend_apis.accessible.each do |backend_api|
+      assert_select '#backend_apis td:first-child', text: backend_api.name
+    end
+  end
 
   test '#new' do
     get new_provider_admin_backend_api_path
@@ -62,14 +75,16 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     assert BackendApi.exists? backend_api.id
     assert_equal 'Backend API could not be deleted', flash[:error]
   end
-  
-  test 'delete a backend api without any products' do
+
+  test 'delete a backend api without any products will schedule to delete in background' do
     backend_api = @provider.backend_apis[1]
     assert_not backend_api.backend_api_configs.any?
-    
-    delete provider_admin_backend_api_path(backend_api)
-    assert_redirected_to provider_admin_dashboard_path
-    assert_not BackendApi.exists? backend_api.id
-    assert_equal 'Backend API deleted', flash[:notice]
+
+    perform_enqueued_jobs do
+      delete provider_admin_backend_api_path(backend_api)
+      assert_redirected_to provider_admin_dashboard_path
+      assert_not BackendApi.exists? backend_api.id
+      assert_equal 'Backend API will be deleted shortly.', flash[:notice]
+    end
   end
 end
