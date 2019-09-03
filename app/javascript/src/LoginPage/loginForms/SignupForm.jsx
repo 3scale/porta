@@ -3,119 +3,133 @@
 import React, { Component } from 'react'
 import {
   Form,
-  ActionGroup
+  ActionGroup,
+  Button
 } from '@patternfly/react-core'
 import {
   HiddenInputs,
-  FormGroup
+  TextField,
+  PasswordField,
+  EmailField,
+  validateSingleField
 } from 'LoginPage'
+import type {SignupProps} from 'Types'
 
-type Props = {
-  path: string,
-  user: {
-    email: string,
-    username: string,
-    firstname: string,
-    lastname: string
-  }
+type Validation = {
+  [string]: ?boolean
 }
 
 type State = {
-  username: string,
-  emailAddress: string,
-  firstname: string,
-  lastname: string,
-  password: string,
-  passwordConfirmation: string,
-  isFilledUsername: ?boolean,
-  isFilledEmailAddress: ?boolean,
-  isFilledFirstname: boolean,
-  isFilledLastname: boolean,
-  isFilledPassword: ?boolean,
-  isFilledPasswordConfirmation: ?boolean
+  'user[username]': string,
+  'user[email]': string,
+  'user[first_name]': string,
+  'user[last_name]': string,
+  'user[password]': string,
+  'user[password_confirmation]': string,
+  'validation': Validation
 }
 
-const InputFormGroup = (props) => {
-  const { isRequired, type, value, onChange, isValid } = props
-  const inputProps = {
-    value,
-    onChange,
-    autoFocus: null,
-    inputIsValid: isValid
-  }
-  return (
-    <FormGroup isRequired={isRequired}
-      type={type}
-      labelIsValid={isValid}
-      inputProps={inputProps}
-    />
-  )
+const INPUT_NAMES = {
+  username: 'user[username]',
+  email: 'user[email]',
+  firstName: 'user[first_name]',
+  lastName: 'user[last_name]',
+  password: 'user[password]',
+  passwordConfirmation: 'user[password_confirmation]'
 }
 
-class SignupForm extends Component<Props, State> {
-  constructor (props: Props) {
-    super(props)
-    this.state = {
-      username: this.props.user.username,
-      emailAddress: this.props.user.email,
-      firstname: this.props.user.firstname,
-      lastname: this.props.user.lastname,
-      password: '',
-      passwordConfirmation: '',
-      isFilledUsername: undefined,
-      isFilledEmailAddress: undefined,
-      isFilledFirstname: true,
-      isFilledLastname: true,
-      isFilledPassword: undefined,
-      isFilledPasswordConfirmation: undefined
+const INPUT_IDS = {
+  username: 'user_username',
+  email: 'user_email',
+  firstName: 'user_first_name',
+  lastName: 'user_last_name',
+  password: 'user_password',
+  passwordConfirmation: 'user_password_confirmation'
+}
+
+const INPUT_LABELS = {
+  username: 'Username',
+  email: 'Email address',
+  firstName: 'First name',
+  lastName: 'Last name',
+  password: 'Password',
+  passwordConfirmation: 'Password confirmation'
+}
+
+class SignupForm extends Component<SignupProps, State> {
+  state = {
+    [INPUT_NAMES.username]: this.props.user.username,
+    [INPUT_NAMES.email]: this.props.user.email,
+    [INPUT_NAMES.firstName]: this.props.user.firstname,
+    [INPUT_NAMES.lastName]: this.props.user.lastname,
+    [INPUT_NAMES.password]: '',
+    [INPUT_NAMES.passwordConfirmation]: '',
+    validation: {
+      [INPUT_NAMES.username]: this.props.user.username ? true : undefined,
+      [INPUT_NAMES.email]: this.props.user.email ? true : undefined,
+      [INPUT_NAMES.firstName]: true,
+      [INPUT_NAMES.lastName]: true,
+      [INPUT_NAMES.password]: undefined,
+      [INPUT_NAMES.passwordConfirmation]: undefined
     }
   }
 
-  handleTextInputUsername = (username: string) =>
-    this.setState({ username, isFilledUsername: username !== '' })
+  getInputProps = (name: string, isRequired: boolean) => {
+    return {
+      isRequired,
+      name: INPUT_NAMES[name],
+      fieldId: INPUT_IDS[name],
+      label: INPUT_LABELS[name],
+      isValid: this.state.validation[INPUT_NAMES[name]],
+      value: this.state[INPUT_NAMES[name]],
+      onChange: this.handleInputChange
+    }
+  }
 
-  handleTextInputEmail = (emailAddress: string) =>
-    this.setState({ emailAddress, isFilledEmailAddress: emailAddress !== '' })
+  handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
+    const isValid = event.currentTarget.required ? validateSingleField(event) : true
+    const validation = {
+      ...this.state.validation,
+      [event.currentTarget.name]: isValid
+    }
 
-  handleTextInputFirstname = (firstname: string) => this.setState({ firstname })
-
-  handleTextInputLastname = (lastname: string) => this.setState({ lastname })
-
-  handleTextInputPassword = (password: string) =>
     this.setState({
-      password,
-      isFilledPassword: password !== '',
-      isFilledPasswordConfirmation: this.state.passwordConfirmation === password
+      [event.currentTarget.name]: value,
+      validation
     })
-
-  handleTextInputPasswordConfirmation = (passwordConfirmation: string) =>
-    this.setState({
-      passwordConfirmation,
-      isFilledPasswordConfirmation: passwordConfirmation !== '' && passwordConfirmation === this.state.password
-    })
+  }
 
   render () {
-    const { username, isFilledUsername, emailAddress, isFilledEmailAddress, firstname, isFilledFirstname, lastname, isFilledLastname, password, isFilledPassword, passwordConfirmation, isFilledPasswordConfirmation } = this.state
+    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
+
+    const usernameInputProps = this.getInputProps('username', true)
+    const emailInputProps = this.getInputProps('email', true)
+    const firstNameInputProps = this.getInputProps('firstName', false)
+    const lastNameInputProps = this.getInputProps('lastName', false)
+    const passwordInputProps = this.getInputProps('password', true)
+    const passwordConfirmationInputProps = this.getInputProps('passwordConfirmation', true)
+
     return (
-      <Form noValidate={false}
+      <Form noValidate
         action={this.props.path}
         id='signup_form'
         acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs />
-        <InputFormGroup isRequired type='user[username]' value={username} isValid={isFilledUsername} onChange={this.handleTextInputUsername} />
-        <InputFormGroup isRequired type='user[email]' value={emailAddress} isValid={isFilledEmailAddress} onChange={this.handleTextInputEmail} />
-        <InputFormGroup isRequired={false} type='user[first_name]' value={firstname} isValid={isFilledFirstname} onChange={this.handleTextInputFirstname} />
-        <InputFormGroup isRequired={false} type='user[last_name]' value={lastname} isValid={isFilledLastname} onChange={this.handleTextInputLastname} />
-        <InputFormGroup isRequired type='user[password]' value={password} isValid={isFilledPassword} onChange={this.handleTextInputPassword} />
-        <InputFormGroup isRequired type='user[password_confirmation]' value={passwordConfirmation} isValid={isFilledPasswordConfirmation} onChange={this.handleTextInputPasswordConfirmation} />
+        <TextField inputProps={usernameInputProps}/>
+        <EmailField inputProps={emailInputProps}/>
+        <TextField inputProps={firstNameInputProps}/>
+        <TextField inputProps={lastNameInputProps}/>
+        <PasswordField inputProps={passwordInputProps}/>
+        <PasswordField inputProps={passwordConfirmationInputProps}/>
+
         <ActionGroup>
-          <input type="submit"
+          <Button className='pf-c-button pf-m-primary pf-m-block'
+            type='submit'
             name="commit"
-            value="Sign up"
-            className="pf-m-primary pf-c-button pf-m-primary pf-m-block"
-          />
+            isDisabled={formDisabled}
+          >Sign up</Button>
         </ActionGroup>
       </Form>
     )

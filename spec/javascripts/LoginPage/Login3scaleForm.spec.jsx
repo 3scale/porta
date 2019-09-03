@@ -27,18 +27,61 @@ it('should render HiddenInputs component', () => {
   expect(wrapper.find(HiddenInputs).exists()).toEqual(true)
 })
 
-it('should set username state', () => {
-  const wrapper = mount(<Login3scaleForm {...props}/>)
-  jest.spyOn(wrapper.instance(), 'handleTextInputUsername')
-  wrapper.instance().handleTextInputUsername('foo')
-  expect(wrapper.instance().handleTextInputUsername).toHaveBeenCalled()
-  expect(wrapper.state().username).toEqual('foo')
+describe('username', () => {
+  it('should set username and validation state to true', () => {
+    const event = {
+      currentTarget: {
+        name: 'username',
+        value: 'Bob',
+        type: 'text'
+      }
+    }
+    const wrapper = mount(<Login3scaleForm {...props}/>)
+    wrapper.find('input#session_username').props().onChange(event)
+    expect(wrapper.state('username')).toEqual('Bob')
+    expect(wrapper.state().validation.username).toEqual(true)
+  })
+  it('should set validation username state to false when input value is missing', () => {
+    const event = {
+      currentTarget: {
+        name: 'username',
+        value: '',
+        type: 'text'
+      }
+    }
+    const wrapper = mount(<Login3scaleForm {...props}/>)
+    wrapper.find('input#session_username').props().onChange(event)
+    expect(wrapper.state().username).toEqual('')
+    expect(wrapper.state().validation.username).toEqual(false)
+  })
 })
 
-it('should set password state', () => {
-  const wrapper = mount(<Login3scaleForm {...props}/>)
-  jest.spyOn(wrapper.instance(), 'handleTextInputPassword')
-  wrapper.instance().handleTextInputPassword('bar')
-  expect(wrapper.instance().handleTextInputPassword).toHaveBeenCalled()
-  expect(wrapper.state().password).toEqual('bar')
+describe('password', () => {
+  it('should set password and validation state to true', () => {
+    const event = {
+      currentTarget: {
+        name: 'password',
+        value: 'gary1234',
+        type: 'password'
+      }
+    }
+    const wrapper = mount(<Login3scaleForm {...props}/>)
+    wrapper.find('input#session_password').props().onChange(event)
+    expect(wrapper.state().password).toEqual('gary1234')
+    expect(wrapper.state().validation.password).toEqual(true)
+  })
+
+  it('should set validation.password state to false when input value is missing', () => {
+    const event = {
+      currentTarget: {
+        name: 'password',
+        value: '',
+        type: 'text'
+      }
+    }
+    const wrapper = mount(<Login3scaleForm {...props}/>)
+    wrapper.find('input#session_password').props().onChange(event)
+    expect(wrapper.state().password).toEqual('')
+    expect(wrapper.state().validation.password).toEqual(false)
+  })
 })
