@@ -85,7 +85,7 @@
     "@rails/webpacker": "^4.0.7",
     "ajv": "^6.9.2",
     "babel-loader": "^8.0.6",
-    "bootstrap-sass": "3",
+    "bootstrap-sass": "^3.4.1",
     "c3": "^0.4.11",
     "classnames": "^2.2.6",
     "codemirror": "^5.43.0",
