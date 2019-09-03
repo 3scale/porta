@@ -94,6 +94,15 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test 'system_name can be created but not updated' do
+    post admin_api_backend_apis_path(access_token: access_token_value), permitted_params.merge({system_name: 'first-system-name'})
+    backend_api = provider.backend_apis.last!
+    assert_equal 'first-system-name', backend_api.system_name
+
+    put admin_api_backend_api_path(backend_api, access_token: access_token_value), permitted_params.merge(forbidden_params).merge({system_name: 'updated-system-name'})
+    assert_equal 'first-system-name', backend_api.reload.system_name
+  end
+
   private
 
   def access_token_value
@@ -127,7 +136,6 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   def forbidden_params
     @forbidden_params ||= {
-      system_name: 'a-system-name',
       updated_at: 1.day.from_now,
       created_at: 1.day.from_now,
       account_id: @provider.id + 1
