@@ -6,9 +6,6 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
-    @access_token_value = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').value
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(true)
   end
 
   attr_reader :provider, :access_token_value
@@ -77,26 +74,35 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal provider.backend_apis.oldest_first.offset(3).limit(3).pluck(:id), response_backend_api_ids
   end
 
-  test 'with the rolling update disabled' do
-    Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(false)
+  test 'without permission' do
+    member = FactoryBot.create(:member, account: provider)
+    @access_token_value = create_access_token_value(member)
 
     get admin_api_backend_api_path(backend_api, access_token: access_token_value)
-    assert_response :not_found
+    assert_response :forbidden
 
     delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
-    assert_response :not_found
+    assert_response :forbidden
 
     put admin_api_backend_api_path(backend_api, access_token: access_token_value), permitted_params
-    assert_response :not_found
+    assert_response :forbidden
 
     post admin_api_backend_apis_path(access_token: access_token_value), permitted_params
-    assert_response :not_found
+    assert_response :forbidden
 
     get admin_api_backend_apis_path(access_token: access_token_value)
-    assert_response :not_found
+    assert_response :forbidden
   end
 
   private
+
+  def access_token_value
+    @access_token_value ||= create_access_token_value(@provider.admin_users.first!)
+  end
+
+  def create_access_token_value(user)
+    FactoryBot.create(:access_token, owner: user, scopes: %w[account_management], permission: 'rw').value
+  end
 
   def backend_api
     @backend_api ||= FactoryBot.create(:backend_api, account: provider)
