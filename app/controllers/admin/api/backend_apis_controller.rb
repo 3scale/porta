@@ -3,7 +3,6 @@
 class Admin::Api::BackendApisController < Admin::Api::BaseController
   self.access_token_scopes = :account_management
 
-  before_action :find_backend_api, only: %i[show update destroy]
   before_action :authorize
 
   clear_respond_to
@@ -47,7 +46,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##
   #
   def index
-    respond_with(current_account.backend_apis.paginate(pagination_params))
+    respond_with(current_account.backend_apis.oldest_first.paginate(pagination_params))
   end
 
   ##~ e = sapi.apis.add
@@ -128,15 +127,13 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   private
 
-  attr_reader :backend_api
-
   def authorize
     provider_can_use!(:api_as_product)
     # TODO: I guess it should authorize also that it has permission for the specific action :)
   end
 
-  def find_backend_api
-    @backend_api = current_account.backend_apis.find(params[:id])
+  def backend_api
+    @backend_api ||= current_account.backend_apis.find(params[:id])
   end
 
   def backend_api_params

@@ -29,6 +29,8 @@ class BackendApi < ApplicationRecord
 
   has_system_name(uniqueness_scope: [:account_id])
 
+  scope :oldest_first, -> { order(created_at: :asc) }
+
   def self.default_api_backend
     "https://#{ECHO_API_HOST}:443"
   end

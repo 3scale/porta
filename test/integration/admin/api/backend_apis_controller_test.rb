@@ -9,10 +9,9 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     @access_token_value = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').value
     Logic::RollingUpdates.stubs(enabled?: true)
     Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(true)
-    @backend_api = FactoryBot.create(:backend_api, account: provider)
   end
 
-  attr_reader :provider, :access_token_value, :backend_api
+  attr_reader :provider, :access_token_value
 
   test 'show' do
     get admin_api_backend_api_path(backend_api, access_token: access_token_value)
@@ -21,6 +20,7 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy' do
+    @backend_api = FactoryBot.create(:backend_api, account: provider)
     assert_difference(BackendApi.method(:count), -1) do
       delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
       assert_response :success
@@ -57,7 +57,7 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    FactoryBot.create(:backend_api, account: provider) # another backend_api of this provider
+    FactoryBot.create_list(:backend_api, 2, account: provider)
     FactoryBot.create(:backend_api) # belonging to another provider
     get admin_api_backend_apis_path(access_token: access_token_value)
     assert_response :success
@@ -70,10 +70,11 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test 'index can be paginated' do
     FactoryBot.create_list(:backend_api, 5, account: provider)
+    provider.backend_apis.each_with_index { |backend_api, index| backend_api.update_column(:created_at, Date.today - index.days) }
     get admin_api_backend_apis_path(access_token: access_token_value, per_page: 3, page: 2)
     assert_response :success
     response_backend_api_ids = JSON.parse(response.body)['backend_apis'].map { |response_backend_api| response_backend_api.dig('backend_api', 'id') }
-    assert_same_elements provider.backend_apis.offset(3).limit(3).pluck(:id), response_backend_api_ids
+    assert_equal provider.backend_apis.oldest_first.offset(3).limit(3).pluck(:id), response_backend_api_ids
   end
 
   test 'with the rolling update disabled' do
@@ -96,6 +97,10 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def backend_api
+    @backend_api ||= FactoryBot.create(:backend_api, account: provider)
+  end
 
   def assert_persists_right_params
     permitted_params.each do |attribute_name, value|
