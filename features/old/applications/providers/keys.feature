@@ -34,7 +34,6 @@ Feature: Applications details
      And I press "Set Custom Key"
     Then I should see "Invalid key"
 
-  @ajax
   Scenario: Remove and add keys
     Given provider "foo.example.com" uses backend v2 in his default service
       And I am logged in as provider "foo.example.com"
