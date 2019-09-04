@@ -1,77 +1,79 @@
 require 'test_helper'
 
-class Abilities::MasterMemberTest < ActiveSupport::TestCase
+module Abilities
+  class MasterMemberTest < ActiveSupport::TestCase
 
-  def setup
-    @provider = FactoryBot.build_stubbed(:simple_provider)
-    @member   = FactoryBot.build_stubbed(:member, account: @provider)
+    def setup
+      @provider = FactoryBot.build_stubbed(:simple_provider)
+      @member   = FactoryBot.build_stubbed(:member, account: @provider)
 
-    @provider.stubs(:master?).returns(true)
-  end
-
-  def test_finance_on_saas
-    ThreeScale.config.stubs(onpremises: false)
-    assert_cannot ability, :admin, :finance
-
-    @member.admin_sections = [:finance]
-    assert_can ability, :admin, :finance
-  end
-
-
-  def test_finance_on_premises
-    ThreeScale.config.stubs(onpremises: true)
-    assert_cannot ability, :admin, :finance
-
-    @member.admin_sections = [:finance]
-    assert_cannot ability, :admin, :finance
-  end
-
-  def test_portal
-    [true, false].each do |onpremises|
-      ThreeScale.config.stubs(onpremises: onpremises)
-      assert_cannot ability, :manage, :portal
+      @provider.stubs(:master?).returns(true)
     end
-  end
 
-  def test_provider_management
-    provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @account)
-    assert_cannot ability, :resume, provider
+    def test_finance_on_saas
+      ThreeScale.config.stubs(onpremises: false)
+      assert_cannot ability, :admin, :finance
 
-    assert_cannot ability, :update, provider
-    assert_cannot ability, :impersonate, provider
+      @member.admin_sections = [:finance]
+      assert_can ability, :admin, :finance
+    end
 
-    @member.admin_sections = [:partners]
-    assert_can ability, :update, provider
-    assert_cannot ability, :impersonate, provider
 
-    provider.state = 'scheduled_for_deletion'
-    assert_cannot ability, :update, provider
-    assert_can ability, :resume, provider
-  end
+    def test_finance_on_premises
+      ThreeScale.config.stubs(onpremises: true)
+      assert_cannot ability, :admin, :finance
 
-  def test_account
-    assert_can ability, :create, Account
-  end
+      @member.admin_sections = [:finance]
+      assert_cannot ability, :admin, :finance
+    end
 
-  def test_provider_plans
-    @member.stubs(:has_permission?)
+    def test_portal
+      [true, false].each do |onpremises|
+        ThreeScale.config.stubs(onpremises: onpremises)
+        assert_cannot ability, :manage, :portal
+      end
+    end
 
-    ThreeScale.config.stubs(onpremises: false)
+    def test_provider_management
+      provider = FactoryBot.build_stubbed(:simple_provider, provider_account: @account)
+      assert_cannot ability, :resume, provider
 
-    @member.expects(:has_permission?).with(:partners).returns(true)
-    assert_can ability, :manage, :provider_plans
+      assert_cannot ability, :update, provider
+      assert_cannot ability, :impersonate, provider
 
-    @member.expects(:has_permission?).with(:partners).returns(false)
-    assert_cannot ability, :manage, :provider_plans
+      @member.admin_sections = [:partners]
+      assert_can ability, :update, provider
+      assert_cannot ability, :impersonate, provider
 
-    ThreeScale.config.stubs(onpremises: true)
-    @member.expects(:has_permission?).with(:partners).returns(true)
-    assert_cannot ability, :manage, :provider_plans
-  end
+      provider.state = 'scheduled_for_deletion'
+      assert_cannot ability, :update, provider
+      assert_can ability, :resume, provider
+    end
 
-  private
+    def test_account
+      assert_can ability, :create, Account
+    end
 
-  def ability
-    Ability.new(@member)
+    def test_provider_plans
+      @member.stubs(:has_permission?)
+
+      ThreeScale.config.stubs(onpremises: false)
+
+      @member.expects(:has_permission?).with(:partners).returns(true)
+      assert_can ability, :manage, :provider_plans
+
+      @member.expects(:has_permission?).with(:partners).returns(false)
+      assert_cannot ability, :manage, :provider_plans
+
+      ThreeScale.config.stubs(onpremises: true)
+      @member.expects(:has_permission?).with(:partners).returns(true)
+      assert_cannot ability, :manage, :provider_plans
+    end
+
+    private
+
+    def ability
+      Ability.new(@member)
+    end
   end
 end
