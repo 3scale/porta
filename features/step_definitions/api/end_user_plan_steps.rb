@@ -4,6 +4,7 @@ Given /^an end user plan "(.+?)" of (provider ".+?")$/ do |name, provider|
 end
 
 Then /^"(.*?)" should be default end user plan for service "(.*?)"$/ do |plan_name, service_name|
+  wait_for_requests
   service = Service.where(name: service_name).first
   plan    = EndUserPlan.where(name: plan_name).first
   assert_equal service.default_end_user_plan, plan
