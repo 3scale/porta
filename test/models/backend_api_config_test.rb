@@ -15,7 +15,7 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     @config.path = 'hello/my/name/is/'
     assert_equal 'hello/my/name/is', @config.path
 
-    @config.path = '/hello/my/name/is/john/'
+    @config.path = '//hello/my/name/is/john//'
     assert_equal 'hello/my/name/is/john', @config.path
   end
 

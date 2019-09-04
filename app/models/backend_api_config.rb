@@ -12,7 +12,9 @@ class BackendApiConfig < ApplicationRecord
     backend_api.metrics.each { |metric| metric.send(:sync_backend) }
   end
 
+  delegate :private_endpoint, to: :backend_api
+
   def path=(value)
-    super(value.to_s.reverse.chomp("/").reverse.chomp("/"))
+    super(StringUtils::StripSlash.strip_slash(value))
   end
 end
