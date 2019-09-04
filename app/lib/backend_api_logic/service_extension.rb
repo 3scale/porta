@@ -22,7 +22,7 @@ module BackendApiLogic
     end
 
     def act_as_product?
-      act_as_product && account&.provider_can_use?(:api_as_product)
+      provider_can_use?(:api_as_product)
     end
 
     def act_as_traditional_service?
