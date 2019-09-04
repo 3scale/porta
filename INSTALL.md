@@ -20,13 +20,7 @@ The project relies on a [`Makefile`](https://www.gnu.org/software/make/manual/ht
 make help
 ```
 
-##### Running Tests
-Download and build all the images and run the test suite in the container:
-```bash
-make test
-```
-
-##### Entering a Running Container
+### Entering a Running Container
 Download and build all the images and start a shell session inside the container:
 ```bash
 make bash
@@ -34,7 +28,7 @@ make bash
 
 All the source and dependencies for this project will be in place, making it possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
 
-##### Running the application
+### Running the application
 
 It's also possible to run the application by using only Docker. Firstly, setup the database by runnning `dev-setup` from your terminal:
 
@@ -66,7 +60,7 @@ make dev-stop
 
 #### Ruby version
 
-The project supports **Ruby 2.3.x**.
+The project supports **Ruby 2.4.x**.
 
 Verify you have a proper version by running on your terminal:
 ```bash
@@ -194,7 +188,96 @@ Run [NPM](https://www.npmjs.com/) to install all the required Node modules:
 npm install
 ```
 
-#### Setup Database
+## Manual setup on Fedora (29)
+
+### Prerequisites
+
+#### Ruby version
+
+The project supports **Ruby 2.4.x**.
+
+Verify you have a proper version by running on your terminal:
+```bash
+ruby -v
+```
+
+> You can use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install ruby.
+
+#### Node version
+
+The project supports **Version: 8.X.X**.
+
+Install Node version 8 and ensure that the node is properly configured in `PATH` environment variable.
+
+#### Dependencies
+
+```shell
+sudo yum install patch autoconf automake bison libffi-devel libtool libyaml-devel readline-devel sqlite-devel zlib-devel openssl-devel ImageMagick ImageMagick-devel mysql-devel postgresql-devel chromedriver memcached
+
+sudo systemctl restart memcached
+```
+
+#### Database (Postgres / MySQL / Oracle)
+
+Postgres, MySQL or Orcacle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
+
+```shell
+docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=3scale_system_development --name postgres10 circleci/postgres:10.5-alpine
+```
+
+Alternatively you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
+
+#### Redis
+
+[Redis](https://redis.io) has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
+
+```shell
+docker run -d -p 6379:6379 redis
+```
+
+Alternatively you can run Redis directly on your machine by using `yum`:
+
+```shell
+sudo yum install redis
+
+sudo systemctl restart redis
+```
+
+### Setup
+
+#### Eventmachine
+
+Eventmachine has to be installed with `--with-cppflags=-I/usr/include/openssl/`. Simply run:
+
+```shell
+bundle config build.eventmachine --with-cppflags=-I/usr/include/openssl/
+```
+
+#### Config files
+
+Copy example config files from the examples folder:
+
+```shell
+cp config/examples/* config/
+```
+
+#### Bundle
+
+Run [Bundler](https://bundler.io/) to install all required Ruby gems:
+
+```shell
+bundle install
+```
+
+#### NPM
+
+Run [NPM](https://www.npmjs.com/) to install all the required Node modules:
+
+```bash
+npm install
+```
+
+## Setup Database
 
 Finally initialize the database with some seed data by running:
 
@@ -210,7 +293,7 @@ bundle exec rake db:reset # This will drop and setup the database
 
 **NOTE:** This will seed the application and creates the Master, Provider & Developer accounts which are accessible through: `http://master-account.example.com.lvh.me:3000`, `http://provider-admin.example.com.lvh.me:3000`, `http://provider.example.com.lvh.me:3000` respectively. Please take note of the credentials generated at this moment also so that you can log into each of these portals.
 
-### Run Porta
+## Run Porta
 Start up the rails server by running the following command:
 ```bash
 $ env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
