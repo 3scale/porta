@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: Usage limits
   In order to prevent my users to send uncontrolable amount of traffic to my API
   As a provider

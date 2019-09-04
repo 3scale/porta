@@ -35,7 +35,7 @@ Feature: End User Plan creation
       And I am on the edit page for service "API" of provider "foo.example.com"
       Then there should not be any mention of end user plans
 
-  @javascript @ajax
+  @javascript
   Scenario: Selecting default End User Plan
     Given an end user plan "First" of provider "foo.example.com"
     Given an end user plan "Second" of provider "foo.example.com"

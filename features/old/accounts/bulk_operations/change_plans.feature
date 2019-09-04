@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: Bulk operations
   In order to transfer applications from one plan to another
   As a provider
