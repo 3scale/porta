@@ -21,6 +21,7 @@ Then /^I should see (\d+) CMS changes$/ do |count|
 end
 
 Then /^the CMS page "(.*?)" should be reverted$/ do |name|
+  wait_for_requests
   page = CMS::Page.find_by_system_name!(name)
   page.draft.should be_nil
   cms_changes.should_not have_css("#cms_page_#{page.id}_change")
