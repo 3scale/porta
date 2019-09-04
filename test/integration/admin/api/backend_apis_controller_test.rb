@@ -71,7 +71,7 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
     get admin_api_backend_apis_path(access_token: access_token_value, per_page: 3, page: 2)
     assert_response :success
     response_backend_api_ids = JSON.parse(response.body)['backend_apis'].map { |response_backend_api| response_backend_api.dig('backend_api', 'id') }
-    assert_equal provider.backend_apis.oldest_first.offset(3).limit(3).pluck(:id), response_backend_api_ids
+    assert_equal provider.backend_apis.oldest_first.offset(3).limit(3).select(:id).map(&:id), response_backend_api_ids
   end
 
   test 'without permission' do
