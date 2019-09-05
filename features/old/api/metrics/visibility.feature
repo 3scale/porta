@@ -31,7 +31,7 @@ Feature: Metric visibility
   #     And I go to the "app" application page
   #   Then I should see the metric "visible" in the plan widget
 
-  @javascript @ajax
+  @javascript
   Scenario: Hide metric
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -65,7 +65,7 @@ Feature: Metric visibility
     #   And I go to the "app" application page
     # Then I should see the metric "visible" limits as text in the plan widget
 
-  @javascript @ajax
+  @javascript
   Scenario: Metric limits shown with icon and text
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -82,7 +82,7 @@ Feature: Metric visibility
     #   And I go to the "app" application page
     # Then I should see the metric "visible" limits as icons and text in the plan widget
 
-  @javascript @ajax
+  @javascript
   Scenario: Metric limits with value 0 only show icons in icons and text mode
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
@@ -100,7 +100,7 @@ Feature: Metric visibility
     #   And I go to the "app" application page
     # Then I should see the metric "zeroed" limits as icons only in the plan widget
 
-  @javascript @ajax
+  @javascript
   Scenario: Metrics enabling and disabling
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
@@ -115,7 +115,7 @@ Feature: Metric visibility
     Then I should see the metric "zeroed" is enabled
       But I should see the metric "visible" is disabled
 
-  @javascript @ajax
+  @javascript
     Scenario: Metric cannot be disabled
       Given current domain is the admin domain of provider "foo.example.com"
         And I log in as provider "foo.example.com"

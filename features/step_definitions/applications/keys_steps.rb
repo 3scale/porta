@@ -102,12 +102,14 @@ def limit_warning
 end
 
 Then /^I should see application keys limit reached error$/ do
+  wait_for_requests
   within '#application_keys' do
     limit_warning.should be_visible
   end
 end
 
 Then /^I should(?:n't| not) see application keys limit reached error$/ do
+  wait_for_requests
   within '#application_keys' do
     limit_warning.should_not be_visible
   end

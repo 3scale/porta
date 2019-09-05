@@ -22,7 +22,7 @@ Feature: Buyer's application management
       And I go to the "SomeApp" application page
     Then I should not see the application keys
 
-  @javascript @ajax
+  @javascript
   Scenario: Can select a plan when creating a new application
     Given a service "Travelling" of provider "foo.example.com"
       And service "Travelling" allows to choose plan on app creation

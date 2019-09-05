@@ -1,4 +1,4 @@
-@emails @javascript @ajax
+@emails @javascript
 Feature: Emails
   As a provider
   I want to control email notifications like a boss

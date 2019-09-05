@@ -27,7 +27,7 @@ Feature: Account service plans management
      And I follow "Portal" in the main menu
     Then I should see "Service Subscription"
 
-  @javascript @ajax
+  @javascript
   Scenario: Subscribe to service with selected service plan
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
