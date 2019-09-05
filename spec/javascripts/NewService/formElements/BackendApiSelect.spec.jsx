@@ -1,40 +1,32 @@
 // @flow
 
 import React from 'react'
-import {act} from 'react-dom/test-utils'
 import Enzyme, {shallow} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 import {BackendApiSelect} from 'NewService/components/FormElements'
-import { BASE_PATH } from 'NewService'
 
 Enzyme.configure({adapter: new Adapter()})
 
-const props = {
-  backendApis: []
-}
+const backendApis = [
+  { id: 1, name: 'backend 1', link: '', type: 'backend' },
+  { id: 2, name: 'backend 2', link: '', type: 'backend' }
+]
 
 it('should render itself', () => {
-  const wrapper = shallow(<BackendApiSelect {...props} />)
-  expect(wrapper.find('#service_act_as_product_input').exists()).toEqual(true)
+  const wrapper = shallow(<BackendApiSelect backendApis={backendApis} />)
+  expect(wrapper.exists()).toBe(true)
 })
 
-it('should render Act as Product checkbox', () => {
-  const wrapper = shallow(<BackendApiSelect {...props} />)
-  expect(wrapper.find('input[name="service[act_as_product]"]').exists()).toEqual(true)
-})
+it('should display a select to choose a backend API from, or create a new one', () => {
+  const wrapper = shallow(<BackendApiSelect backendApis={backendApis} />)
+  const select = wrapper.find('select[name="service[backend_api]"]')
 
-it('should not render select element when Act as Product checkbox is unchecked', () => {
-  const wrapper = shallow(<BackendApiSelect {...props} />)
-  expect(wrapper.find('select[name="service[backend_api]"]').exists()).toEqual(false)
-})
+  expect(select.containsAllMatchingElements(
+    backendApis.map(api => <option value={api.id}>{api.name}</option>)
+  )).toBe(true)
 
-it('should render select element when Act as Product checkbox is checked', () => {
-  const wrapper = shallow(<BackendApiSelect {...props} />)
-  expect(wrapper.find('select[name="service[backend_api]"]').exists()).toEqual(false)
-  const eventObj = {currentTarget: {checked: true}}
-  act(() => {
-    wrapper.find('input[name="service[act_as_product]"]').simulate('change', eventObj)
-  })
-  expect(wrapper.find('select[name="service[backend_api]"]').exists()).toEqual(true)
+  expect(select.containsMatchingElement(
+    <option value="">Create a new Backend API</option>
+  )).toBe(true)
 })
