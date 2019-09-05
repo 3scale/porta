@@ -7,6 +7,7 @@ import { fromJsonString, toJsonString } from 'utilities/json-utils'
 import 'codemirror/mode/javascript/javascript'
 import ApicastManifest from 'Policies/apicast-manifest'
 import Ajv from 'ajv'
+import type { ErrorObject } from 'ajv'
 import type { Schema } from 'Policies/types/Policies'
 
 const ajv = new Ajv().addSchema(ApicastManifest, 'ApicastManifest')
@@ -26,8 +27,9 @@ const CM_OPTIONS = {
   tabSize: 2
 }
 
-const validateSchema = (schema: Schema): Array<Error> => {
-  return (!ajv.validate('ApicastManifest', schema)) ? ajv.errors : []
+const validateSchema = (schema: Schema): Array<ErrorObject> => {
+  ajv.validate('ApicastManifest', schema)
+  return ajv.errors ? ajv.errors : []
 }
 
 const initialState = (schema: Schema) => {
