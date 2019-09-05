@@ -54,7 +54,7 @@ Feature: API menu
     | Settings                  |
 
   Scenario: Integration sub menu structure for API as Product
-    Given the service acts as product
+    Given the account has Service acting as Product
     When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items
@@ -64,7 +64,7 @@ Feature: API menu
     | Settings                  |
 
   Scenario: Integration sub menu structure for API as Product without independent mapping rules
-    Given the service acts as product
+    Given the account has Service acting as Product
     And I have independent_mapping_rules feature disabled
     When I follow "Overview"
     And I follow "Integration" within the main menu
