@@ -22,7 +22,7 @@
 
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
-      - if @service.act_as_product?
+      - if provider_can_use?(:api_as_product)
         = f.inputs 'Backends' do
           table#backend_apis
             thead
