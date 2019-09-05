@@ -349,8 +349,9 @@ module Logic
     module Service
       private
 
+      # This smells :reek:NilCheck
       def provider_can_use?(fresh_feature)
-        provider.provider_can_use?(fresh_feature)
+        provider&.provider_can_use?(fresh_feature)
       end
     end
 
