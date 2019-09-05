@@ -164,7 +164,7 @@ section class="service-widget"
           - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
             li.item
               = setting
-          - if service.act_as_product?
+          - if provider_can_use?(:api_as_product)
             li.item
               strong> Backends
               ' used in this product:
