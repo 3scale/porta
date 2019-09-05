@@ -12,7 +12,7 @@ Feature: CMS Changes
       And I go to the CMS changes
      Then I should see 2 CMS changes
 
-  @javascript @ajax
+  @javascript
   Scenario: Revert page
     Given I have changed CMS page "page"
      When I go to the CMS changes

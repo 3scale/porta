@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: Bulk operations
   In order to control a lot of subscibed services
   As a provider

@@ -58,6 +58,7 @@ Then /^I should not see hourly usage limit for (metric "[^"]*" on application pl
 end
 
 Then /^(.*?plan ".+?") should have a usage limit of (\d+) for metric "(.+?)" per "(.+?)"$/ do |plan, value, metric_name, period|
+  wait_for_requests
   metric = plan.service.metrics.find_by_system_name!(metric_name)
   assert_not_nil plan.usage_limits.find_by_metric_id_and_period_and_value(metric.id, period, value)
 end
