@@ -496,7 +496,7 @@ GEM
       addressable
       faraday (>= 0.9)
       httpclient (>= 2.6)
-    pisoni (1.26.0)
+    pisoni (1.27.0)
       faraday (>= 0.9.1)
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
