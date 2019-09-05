@@ -79,7 +79,7 @@ class ProxyTest < ActiveSupport::TestCase
       rolling_updates_on
 
       account = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: account, act_as_product: true)
+      service = FactoryBot.create(:simple_service, account: account)
       null_backend_api = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://foo.baz')
       null_backend_api.update_columns(private_endpoint: '')
       backend_api1 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-1.example.com')
