@@ -104,6 +104,7 @@ class Proxy < ApplicationRecord
 
   delegate :account, to: :service, allow_nil: true
   delegate :provider_can_use?, to: :account, allow_nil: true
+  delegate :backend_apis, :backend_api_configs, to: :service
 
   # This smells of :reek:NilCheck
   def authentication_method
