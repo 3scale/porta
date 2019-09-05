@@ -61,6 +61,10 @@ Given /^the service has been successfully tested$/ do
   @provider.default_service.proxy.update_column(:api_test_success, true)
 end
 
+Given(/^the service "([^"]*)" does not have service plan$/) do |name|
+  Service.find_by(name: name).service_plans.destroy_all
+end
+
 Given /^the service acts as product$/ do
   @provider.default_service.update_column(:act_as_product, true)
 end
