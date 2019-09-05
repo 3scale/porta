@@ -184,7 +184,7 @@ class Plan < ApplicationRecord
   end
 
   def reset_contracts_counter
-    self.class.reset_counters(id, :contracts)
+    Contract.counter_culture_fix_counts(where: { id: id })
   end
 
   def can_be_destroyed?

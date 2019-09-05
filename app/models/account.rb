@@ -116,6 +116,8 @@ class Account < ApplicationRecord
     end
   }
 
+  alias_method :deleted?, :scheduled_for_deletion?
+
   def destroy_features
     features.destroy_all
   end

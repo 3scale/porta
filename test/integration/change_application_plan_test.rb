@@ -17,8 +17,8 @@ class ChangeApplicationPlanTest < ActionDispatch::IntegrationTest
     app     = FactoryBot.create(:cinstance, service: service, plan: plan_1)
 
     assert_equal plan_1.id, app.plan_id
-    assert_equal 1, plan_1.contracts_count
-    assert_equal 0, plan_2.contracts_count
+    assert_equal 1, plan_1.reload.contracts_count
+    assert_equal 0, plan_2.reload.contracts_count
 
     put change_plan_admin_buyers_application_path(id: app, cinstance: { plan_id: plan_2.id })
     assert_response :redirect
