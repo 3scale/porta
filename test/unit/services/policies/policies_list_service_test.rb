@@ -70,7 +70,7 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
     assert_equal GATEWAY_API_MANAGEMENT_RESPONSE[:policies].as_json, policies
   end
 
-  test 'call with custom policies' do
+  test 'call when 3scale managed' do
     stub_apicast_request
 
     account = FactoryBot.build_stubbed(:simple_provider)
@@ -91,13 +91,10 @@ class Policies::PoliciesListServiceTest < ActiveSupport::TestCase
     ]
 
     account.expects(:provider_can_use?).with(:policy_registry).returns(true)
-    account.expects(:policies).returns(policies)
 
-    custom_policies = GATEWAY_API_MANAGEMENT_RESPONSE.deep_dup
-    custom_policies[:policies][:cors].push(cors_v2)
-    custom_policies[:policies][:header] = [header_v1]
-
-    assert_equal custom_policies[:policies].as_json, @service.call(account)
+    proxy = FactoryBot.build(:proxy)
+    proxy.expects(self_managed?: false).at_least_once
+    assert_equal GATEWAY_API_MANAGEMENT_RESPONSE[:policies].as_json, @service.call(account, proxy: proxy)
   end
 
   test 'call with custom policies when self managed' do
