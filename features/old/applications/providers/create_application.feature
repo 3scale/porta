@@ -78,6 +78,7 @@ Feature: Create application
    Scenario: The service of the selected application plans hasn´t service plan
      Given a service "second" of provider "foo.example.com"
        And a published application plan "second_app_plan" of service "second" of provider "foo.example.com"
+       And the service "second" does not have service plan
        And buyer "bob" is not subscribed to the default service of provider "foo.example.com"
        And I go to the provider side create application page for "bob"
       Then I should see "New Application"
