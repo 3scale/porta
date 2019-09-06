@@ -4,8 +4,12 @@ module BackendApiLogic
   module RoutingPolicy
     def policy_chain
       chain = super
-      return chain unless service.act_as_product?
+      return chain if using_one_regular_backend?
       Builder.new(service).to_a.concat(chain)
+    end
+
+    def using_one_regular_backend?
+      backend_api_configs.where{ path.not_in(['', '/']) }.count < 2
     end
 
     class Builder
