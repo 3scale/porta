@@ -31,19 +31,65 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
   test '#new' do
     get new_provider_admin_backend_api_metric_child_path(backend_api, hits)
     assert_response :success
-    action = admin_service_metric_children_path(service, hits) # FIXME: It should be provider_admin_backend_api_metric_children_path(backend_api, hits)
+    action = provider_admin_backend_api_metric_children_path(backend_api, hits)
     assert_select "form.metric[action='#{action}']"
 
     get new_provider_admin_backend_api_metric_path(backend_api)
     assert_response :success
-    action = admin_service_metrics_path(service) # FIXME: It should be provider_admin_backend_api_metrics_path(backend_api)
+    action = provider_admin_backend_api_metrics_path(backend_api)
     assert_select "form.metric[action='#{action}']"
+  end
+
+  test '#create metric' do
+    metric_params = { friendly_name: 'Foo', system_name: 'foo', unit: 'foo', description: 'Just a foo metric' }
+
+    assert_difference backend_api.metrics.method(:count) do
+      post provider_admin_backend_api_metrics_path(backend_api, metric: metric_params)
+      assert_response :redirect
+      assert backend_api.metrics.find_by(system_name: "foo.#{backend_api.id}")
+    end
+
+    assert_no_difference backend_api.metrics.method(:count) do
+      post provider_admin_backend_api_metrics_path(backend_api, metric: metric_params)
+      assert_equal 'Metric could not be created', flash[:error]
+    end
+  end
+
+  test '#create method' do
+    metric_params = { friendly_name: 'Foo', system_name: 'foo', unit: 'foo', description: 'Just a foo metric', metric_id: hits.id }
+
+    assert_difference backend_api.metrics.method(:count) do
+      post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: metric_params)
+      assert_response :redirect
+      assert backend_api.metrics.find_by(system_name: "foo.#{backend_api.id}")
+    end
+
+    assert_no_difference backend_api.metrics.method(:count) do
+      post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: metric_params)
+      assert_equal 'Method could not be created', flash[:error]
+    end
   end
 
   test '#edit' do
     get edit_provider_admin_backend_api_metric_path(backend_api, ads)
     assert_response :success
-    action = admin_service_metric_path(service, ads) # FIXME: It should be provider_admin_backend_api_metric_path(backend_api, ads)
+    action = provider_admin_backend_api_metric_path(backend_api, ads)
     assert_select "form.metric[action='#{action}']"
+  end
+
+  test '#update' do
+    new_description = "New description #{rand}"
+    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { description: new_description })
+    assert_response :redirect
+    assert_equal new_description, ads.reload.description
+
+    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { friendly_name: '' })
+    assert_equal 'Metric could not be updated', flash[:error]
+    assert_select '#metric_friendly_name_input.required.error'
+  end
+
+  test '#destroy' do
+    delete provider_admin_backend_api_metric_path(backend_api, ads)
+    refute backend_api.metrics.find_by(system_name: "ads.#{backend_api.id}")
   end
 end

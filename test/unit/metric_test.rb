@@ -97,6 +97,13 @@ class MetricTest < ActiveSupport::TestCase
     assert backend_metric.valid?
   end
 
+  test 'fill same owner as the parent' do
+    backend_api = FactoryBot.create(:backend_api)
+    hits = FactoryBot.create(:metric, owner: backend_api, system_name: 'hits')
+    method = hits.children.create(system_name: 'meth1')
+    assert_equal backend_api, method.owner
+  end
+
   test 'archive as deleted' do
     service = FactoryBot.create(:simple_service)
     Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:metric, service: service) }
