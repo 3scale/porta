@@ -18,7 +18,7 @@ module Backend
       private
 
       def cache_service_association
-        service.account # just call it to cache it
+        owner.account # just call it to cache it
       end
 
       def sync_backend
