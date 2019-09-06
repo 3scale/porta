@@ -124,7 +124,7 @@ class Api::MetricsController < Api::BaseController
   end
 
   def find_metric
-    @metric = @service.metrics.find(params[:id])
+    @metric = @service.all_metrics.find(params[:id])
   end
 
   def build_metric

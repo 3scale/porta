@@ -20,7 +20,7 @@ class ApplicationPlan < Plan
     end
   }
 
-  delegate :metrics, :to => :service
+  delegate :metrics, :all_metrics, :to => :service
 
   DEFAULT_CONTRACT_OPTIONS = { :name => '%s\'s App', :description => 'Default application created on signup.' }.freeze
 

@@ -43,4 +43,23 @@ class ServiceExtensionTest < ActiveSupport::TestCase
     assert_equal proxy.api_backend, backend_api.private_endpoint
     assert_not_equal BackendApi.default_api_backend, backend_api.private_endpoint
   end
+
+  test '#all_metrics' do
+    service = FactoryBot.create(:simple_service)
+    first_backend_api = service.first_backend_api
+    second_backend_api = FactoryBot.create(:backend_api, account: service.account)
+    third_backend_api = FactoryBot.create(:backend_api, account: service.account)
+    service.backend_api_configs.create(backend_api: second_backend_api, path: 'whatever')
+
+    related_metrics = [service.metrics.hits]
+    related_metrics << FactoryBot.create(:metric, service: service)
+    related_metrics << FactoryBot.create(:metric, service: nil, owner: first_backend_api)
+    related_metrics << FactoryBot.create(:metric, service: nil, owner: second_backend_api)
+    unrelated_metric = FactoryBot.create(:metric, service: nil, owner: third_backend_api)
+
+    service_all_metrics = service.all_metrics
+
+    assert_same_elements service_all_metrics, related_metrics
+    assert_not_includes service_all_metrics, unrelated_metric
+  end
 end
