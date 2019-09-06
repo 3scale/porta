@@ -6,7 +6,7 @@ class Account < ApplicationRecord
   # Hack to remove all the attributes with names matching the regex from @attributes
   # It is enough for rails not persisting them in actual columns.
   def self.columns
-    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at|first_admin_id\Z/ =~ column.name }
+    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at|service_preffix|first_admin_id\Z/ =~ column.name }
   end
 
   # need to reset column information to clear column_names and such
@@ -87,11 +87,9 @@ class Account < ApplicationRecord
   before_validation(on: :create, if: :provider?) { generate_domains }
   before_create :generate_site_access_code
 
-  attr_protected :master, :provider, :buyer, :from_email, :vat_rate, :sample_data,
-                 :default_service_id, :provider_account_id, :service_preffix, :s3_prefix,
-                 :paid_at, :paid, :signs_legal_terms, :tenant_id,
-                 :default_account_plan_id, :default_service_id,
-                 :domain, :subdomain, :self_subdomain, :self_domain, :audit_ids, :partner,
+  attr_protected :master, :provider, :buyer, :from_email, :vat_rate, :sample_data, :default_service_id, :s3_prefix,
+                 :provider_account_id, :paid_at, :paid, :signs_legal_terms, :tenant_id, :default_account_plan_id,
+                 :default_service_id, :domain, :subdomain, :self_subdomain, :self_domain,:audit_ids, :partner,
                  :hosted_proxy_deployed_at
 
   belongs_to :partner
@@ -254,9 +252,8 @@ class Account < ApplicationRecord
             :billing_address_name, :billing_address_address1, :billing_address_address2, :billing_address_city,
             :billing_address_state, :billing_address_country, :billing_address_zip, :billing_address_phone,
             :org_legaladdress_cont, :city, :state_region, :state, :timezone, :from_email, :primary_business,
-            :business_category, :zip, :self_domain,
-            :service_preffix, :s3_prefix, :proxy_configs_file_name, :support_email, :finance_support_email,
-            :billing_address_first_name, :billing_address_last_name, :proxy_configs_conf_file_name,
+            :business_category, :zip, :self_domain, :s3_prefix, :proxy_configs_file_name, :support_email,
+            :finance_support_email, :billing_address_first_name, :billing_address_last_name, :proxy_configs_conf_file_name,
             :proxy_configs_conf_content_type, :po_number, :vat_code, :fiscal_code, :proxy_configs_content_type,
             length: { maximum: 255 }
 

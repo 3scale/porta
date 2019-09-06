@@ -8,7 +8,7 @@ module Backend
       end
 
       def backend_id
-        preffix_key
+        prefix_key
       end
 
       def update_backend_service
