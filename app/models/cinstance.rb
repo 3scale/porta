@@ -517,7 +517,7 @@ class Cinstance < Contract
 
   def generate_key
     #FIXME: service is not accessible here yet
-    plan.issuer.preffix_key(SecureRandom.hex(16))
+    plan.issuer.prefix_key(SecureRandom.hex(16))
   end
 
   def end_users_switch
