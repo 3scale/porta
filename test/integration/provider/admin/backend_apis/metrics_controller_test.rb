@@ -6,6 +6,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
   setup do
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.first_service
+    @service.build_default_backend_api_config.save!
     @backend_api = @service.backend_api
 
     @hits = @backend_api.metrics.hits

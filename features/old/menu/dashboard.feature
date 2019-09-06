@@ -1,10 +1,10 @@
 Feature: Dashboard
   In order to navigate easily
-  As a provider
+  As a provider with backend api
   I want to have important links on the dashboard
 
   Background:
-    Given a provider "foo.example.com"
+    Given a provider "foo.example.com" with backend api
       And current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
 

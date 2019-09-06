@@ -40,7 +40,7 @@ class MetricTest < ActiveSupport::TestCase
   end
 
   test 'index uniq of system_name in owner scope' do
-    service = FactoryBot.create(:service)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
     owners = [service, service.first_backend_api]
     owners.each do |owner|
       owner_attributes = { service: (owner.is_a?(Service) ? owner : nil), owner: owner }

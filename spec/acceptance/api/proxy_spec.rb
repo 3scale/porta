@@ -6,6 +6,10 @@ resource 'Proxy' do
 
   let(:service_id) { service.id }
 
+  before do
+    service.build_default_backend_api_config.save!
+  end
+
   api 'proxy' do
     get '/admin/api/services/:service_id/proxy.:format', action: :show
 

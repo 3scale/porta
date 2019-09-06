@@ -36,7 +36,7 @@ class Api::IntegrationsController < Api::BaseController
 
       if @proxy.send_api_test_request!
         onboarding.bubble_update('api')
-        done_step(:api_sandbox_traffic) if ApiClassificationService.test(@proxy.api_backend).real_api?
+        done_step(:api_sandbox_traffic) if @proxy.api_backend && ApiClassificationService.test(@proxy.api_backend).real_api?
         return redirect_to edit_path
       end
       render :edit

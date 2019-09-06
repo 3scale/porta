@@ -4,6 +4,7 @@ class Provider::Admin::Onboarding::Wizard::RequestControllerTest < ActionControl
 
   def setup
     stub_request(:get, %r{http://test\.proxy/deploy}).to_return(status: 200)
+    master_account.first_service.build_default_backend_api_config.save!
 
     login_provider master_account
   end
@@ -31,7 +32,7 @@ class Provider::Admin::Onboarding::Wizard::RequestControllerTest < ActionControl
     assert_response :success
 
     # Not sure how to simulate this with new apicast (ApicastV2DeploymentService)
-    
+
     #Logic::RollingUpdates.stubs(skipped?: true)
     #ProviderProxyDeploymentService.any_instance.stubs(deploy: false)
 

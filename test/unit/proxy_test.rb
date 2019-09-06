@@ -79,7 +79,7 @@ class ProxyTest < ActiveSupport::TestCase
       rolling_updates_on
 
       account = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: account)
+      service = FactoryBot.create(:simple_service, :with_default_backend_api, account: account)
       null_backend_api = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://foo.baz')
       null_backend_api.update_columns(private_endpoint: '')
       backend_api1 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-1.example.com')
@@ -480,6 +480,8 @@ class ProxyTest < ActiveSupport::TestCase
                               api_backend: 'http://example.com',
                               api_test_path: '/path',
                               apicast_configuration_driven: false)
+    backend_api = FactoryBot.build(:backend_api, private_endpoint: 'http://example.com')
+    FactoryBot.create(:backend_api_config, service: proxy.service, backend_api: backend_api)
     ::ProviderProxyDeploymentService.any_instance.expects(:deploy).with(proxy).returns(true)
 
     analytics.expects(:track).with('Sandbox Proxy Deploy', success: true)

@@ -67,6 +67,7 @@ module ServiceDiscovery
     end
 
     test 'import cluster service endpoint' do
+      FactoryBot.create(:backend_api_config, service: @service)
       @import_service.stubs(cluster_service: @cluster_service)
 
       assert_equal 'http://api.example.net:80', @service.proxy.api_backend
@@ -75,7 +76,8 @@ module ServiceDiscovery
       assert_equal 'https://fake-api.fake-project.svc.cluster.local:8443/api', @service.proxy.api_backend
     end
 
-    test 'only import endpoint when it changes' do
+    test 'only import endpoint when it changes and when has backend api' do
+      FactoryBot.create(:backend_api_config, service: @service)
       @import_service.stubs(cluster_service: @cluster_service)
 
       @service.proxy.expects(:save_and_deploy).never
@@ -88,6 +90,7 @@ module ServiceDiscovery
     end
 
     test 'unsupported backend base path' do
+      FactoryBot.create(:backend_api_config, service: @service)
       @import_service.stubs(cluster_service: @cluster_service)
 
       @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)

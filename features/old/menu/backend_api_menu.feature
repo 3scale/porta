@@ -4,7 +4,7 @@ Feature: Backend API menu
   I want to see a menu that lets me do that
 
   Background:
-    Given a provider "foo.example.com"
+    Given a provider "foo.example.com" with backend api
       And current domain is the admin domain of provider "foo.example.com"
       And all the rolling updates features are on
       And I log in as provider "foo.example.com"

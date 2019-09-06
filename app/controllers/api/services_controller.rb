@@ -37,9 +37,9 @@ class Api::ServicesController < Api::BaseController
   def create
     @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
     @service.attributes = service_params
-    @service.backend_api_configs = build_backend_api_configs
+    create_service = CreateServiceWithBackendApi.new(service: @service, account: current_account, backend_api: params[:service][:backend_api].presence)
 
-    if can_create? && @service.save
+    if can_create? && create_service.call
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
@@ -69,15 +69,8 @@ class Api::ServicesController < Api::BaseController
 
   private
 
-  def build_backend_api_configs
-    return [] if !provider_can_use?(:api_as_product) || params[:service][:backend_api].blank?
-    backend_api = current_account.backend_apis.find(params[:service][:backend_api])
-    [BackendApiConfig.new(backend_api: backend_api)]
-  end
-
   def service_params
-    allowed_params = %i[system_name name description]
-    params.require(:service).permit(allowed_params)
+    params.require(:service).permit(%i[system_name name description])
   end
 
   protected

@@ -44,6 +44,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     Proxy.any_instance.stubs(:deploy).returns(true)
     Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
     service = @provider.services.first
+    service.build_default_backend_api_config.save!
     proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: service.proxy, last: false)
 
     refute proxy_rule_1.last
@@ -62,6 +63,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
 
     service = @provider.services.first
+    service.build_default_backend_api_config.save!
     service.proxy.proxy_rules.destroy_all
     proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: service.proxy)
     proxy_rule_2 = FactoryBot.create(:proxy_rule, proxy: service.proxy)
@@ -154,7 +156,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
 
   test 'update OIDC Authorization flows' do
     rolling_updates_off
-    service = FactoryBot.create(:simple_service, account: @provider)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @provider)
     ProxyTestService.any_instance.stubs(disabled?: true)
     patch admin_service_integration_path(service_id: service, proxy: {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true}})
     assert_response :redirect

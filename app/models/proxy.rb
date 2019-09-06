@@ -362,7 +362,7 @@ class Proxy < ApplicationRecord
   end
 
   def skip_test_request?
-    service.oauth? || saas_configuration_driven_apicast_self_managed?
+    !backend_api || service.oauth? || saas_configuration_driven_apicast_self_managed?
   end
 
   def send_api_test_request!

@@ -27,6 +27,11 @@ Given(/^a provider "([^"]*)"$/) do |account_name|
   step %(a provider "#{account_name}" signed up to plan "Free")
 end
 
+Given(/^a provider "([^"]*)" with backend api$/) do |account_name|
+  step %(a provider "#{account_name}" signed up to plan "Free")
+  @provider.default_service.build_default_backend_api_config.save!
+end
+
 Given(/^a provider "([^"]*)" with default plans$/) do |name|
   step %(a provider "#{name}")
   step %(a default service of provider "#{name}" has name "default")
@@ -145,13 +150,14 @@ Given('stub integration errors dashboard') do
   end
 end
 
-Given(/^a provider( is logged in)?$/) do |login|
+Given(/^a provider( with backend api)?( is logged in)?$/) do |backend_api, login|
   step 'a provider "foo.example.com"'
   step 'current domain is the admin domain of provider "foo.example.com"'
   step 'stub integration errors dashboard'
   step 'I log in as provider "foo.example.com"' if login
 
   @provider = Account.find_by_domain!('foo.example.com')
+  @provider.default_service.build_default_backend_api_config.save! if backend_api
 end
 
 Given(/^master admin( is logged in)?/) do |login|

@@ -5,7 +5,7 @@ Feature: Edit Integration
   I want to be able to edit the integration
 
   Background:
-    Given a provider is logged in
+    Given a provider with backend api is logged in
      And all the rolling updates features are off
      And apicast registry is stubbed
 
