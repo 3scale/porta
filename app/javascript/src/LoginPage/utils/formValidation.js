@@ -14,7 +14,7 @@ const constraintsTypes = {
   },
   password: {
     presence: true,
-    length: {minimum: 6}
+    length: {minimum: 1}
   }
 }
 
