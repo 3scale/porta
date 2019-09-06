@@ -4,12 +4,16 @@ module BackendApiLogic
   module RoutingPolicy
     def policy_chain
       chain = super
-      return chain unless with_subpaths?
+      return chain if using_one_regular_backend?
       Builder.new(service).to_a.concat(chain)
     end
 
-    def with_subpaths?
-      backend_api_configs.where { path.not_in(['', '/']) & (path != nil) }.any?
+    def using_one_regular_backend?
+<<<<<<< HEAD
+      backend_api_configs.where { path.not_in([nil, '', '/']) }.count < 2
+=======
+      backend_api_configs.where { path.not_in(['', '/']) }.count < 2
+>>>>>>> 53997e16... Fix codeclimate
     end
 
     class Builder
@@ -21,9 +25,13 @@ module BackendApiLogic
       end
 
       def to_a
+<<<<<<< HEAD
         rules = backend_api_configs.reordering { sift(:path_desc) }.each_with_object([]) do |config, collection|
+=======
+        rules = backend_api_configs.reorder(path: :desc).each_with_object([]) do |config, collection|
+>>>>>>> 53997e16... Fix codeclimate
           rule = Rule.new(config).as_json
-          rules << rule if rule
+          collection << rule if rule
         end
         return [] if rules.empty?
         [{
