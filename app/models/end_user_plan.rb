@@ -8,6 +8,7 @@ class EndUserPlan < ApplicationRecord
   alias_attribute :issuer_id, :service_id
 
   has_many :metrics, :through => :service
+  delegate :all_metrics, :to => :service
 
   with_options(as: :plan, dependent: :destroy, foreign_key: :plan_id) do |plan|
     plan.has_many :usage_limits, &Logic::MetricVisibility::OfMetricAssociationProxy

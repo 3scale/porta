@@ -72,7 +72,7 @@ class UsageLimit < ApplicationRecord
   end
 
   def provider_id_for_audits
-    metric.service.account.try!(:id)
+    metric.owner.account.try!(:id)
   end
 
   private

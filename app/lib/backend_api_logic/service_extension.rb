@@ -9,6 +9,12 @@ module BackendApiLogic
       has_many :backend_apis, through: :backend_api_configs
 
       alias_method :backend_api, :first_backend_api
+
+      has_many :backend_api_metrics, through: :backend_api_configs
+
+      has_many :all_metrics, ->(object) do
+        unscope(:where).where('(owner_type = ? AND owner_id = ?) OR (owner_type = ? AND owner_id IN (?))', 'Service', object.id, 'BackendApi', object.backend_apis.pluck(:id))
+      end, class_name: 'Metric'
     end
 
     def first_backend_api
