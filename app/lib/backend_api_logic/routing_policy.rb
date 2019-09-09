@@ -23,7 +23,7 @@ module BackendApiLogic
       def to_a
         rules = backend_api_configs.reordering { sift(:path_desc) }.each_with_object([]) do |config, collection|
           rule = Rule.new(config).as_json
-          rules << rule if rule
+          collection << rule if rule
         end
         return [] if rules.empty?
         [{
