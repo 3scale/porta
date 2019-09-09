@@ -52,7 +52,7 @@
           </td>
         </tr>
       <% else -%>
-        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.service_level_metrics, locals: { include_children: @service.act_as_traditional_service? } %>
+        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.top_level_metrics %>
       <% end -%>
     </tbody>
   </table>
