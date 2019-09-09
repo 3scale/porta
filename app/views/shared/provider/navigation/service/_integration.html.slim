@@ -2,7 +2,7 @@
       title: 'Configuration',
       path: path_to_service(@service)
 
-- if @service.act_as_traditional_service?
+- unless current_account.provider_can_use?(:api_as_product)
   = render vertical_nav_item,
          title: 'Methods & Metrics',
          path: admin_service_metrics_path(@service)
