@@ -99,7 +99,7 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'fill same owner as the parent' do
     backend_api = FactoryBot.create(:backend_api)
-    hits = FactoryBot.create(:metric, owner: backend_api, system_name: 'hits')
+    hits = backend_api.metrics.hits
     method = hits.children.create(system_name: 'meth1')
     assert_equal backend_api, method.owner
   end

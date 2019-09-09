@@ -51,7 +51,7 @@ class ServiceExtensionTest < ActiveSupport::TestCase
     third_backend_api = FactoryBot.create(:backend_api, account: service.account)
     service.backend_api_configs.create(backend_api: second_backend_api, path: 'whatever')
 
-    related_metrics = [service.metrics.hits]
+    related_metrics = [service.metrics.hits, first_backend_api.metrics.hits, second_backend_api.metrics.hits]
     related_metrics << FactoryBot.create(:metric, service: service)
     related_metrics << FactoryBot.create(:metric, service: nil, owner: first_backend_api)
     related_metrics << FactoryBot.create(:metric, service: nil, owner: second_backend_api)
