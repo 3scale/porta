@@ -1,4 +1,2 @@
 <%= render 'api/metrics/metric', :metric => metric %>
-<% if local_assigns[:include_children] %>
-  <%= render partial: 'api/metrics/metric', collection: metric.children %>
-<% end %>
+<%= render partial: 'api/metrics/metric', collection: metric.children %>

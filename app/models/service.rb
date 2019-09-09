@@ -328,10 +328,6 @@ class Service < ApplicationRecord
     metrics.find_by(system_name: 'hits')&.parent?
   end
 
-  def service_level_metrics
-    act_as_product? ? metrics.where(system_name: 'hits') : top_level_metrics
-  end
-
   def create_default_metrics
     metrics.create_default!(:hits, service_id: id)
   end
