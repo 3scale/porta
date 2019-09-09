@@ -11,15 +11,6 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
 
   attr_reader :provider
 
-  test '#index' do
-    get provider_admin_backend_apis_path
-    assert_response :success
-    assert_select '#backend_apis tr', count: @provider.backend_apis.count+1
-    @provider.backend_apis.each do |backend_api|
-      assert_select '#backend_apis td:first-child', text: backend_api.name
-    end
-  end
-
   test '#new' do
     get new_provider_admin_backend_api_path
     assert_response :success
