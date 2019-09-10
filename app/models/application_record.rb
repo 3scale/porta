@@ -82,4 +82,9 @@ class ApplicationRecord < ActiveRecord::Base
       func(:to_char, column, quoted(DatabaseUtilities.convert_to_oracle_date_format(format)))
     end
   end
+
+  sifter :desc do |field|
+    System::Database.oracle? ? "#{field} DESC NULLS LAST" : {path: :desc}
+  end
+
 end
