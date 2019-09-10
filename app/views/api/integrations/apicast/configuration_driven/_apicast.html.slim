@@ -7,7 +7,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
 
     dl.u-dl
       - unless deployment_option_is_service_mesh?(@service)
-        - if provider_can_use?(:api_as_product)
+        - if current_account.provider_can_use?(:api_as_product)
           - backend_api_configs = @service.backend_api_configs
           dt.u-dl-term Private Base #{'URL'.pluralize backend_api_configs.count}
           dd.u-dl-definition
