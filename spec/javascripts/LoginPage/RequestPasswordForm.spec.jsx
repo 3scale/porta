@@ -45,7 +45,7 @@ it('should set email and validation state to true', () => {
 it('should set validation state to false when email is invalid', () => {
   const event = {
     currentTarget: {
-      value: 'bobspongecom', 
+      value: 'bobspongecom',
       type: 'email'
     }
   }

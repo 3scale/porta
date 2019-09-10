@@ -99,4 +99,3 @@ describe('EmailField', () => {
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })
 })
-
