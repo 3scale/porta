@@ -9,7 +9,7 @@ module BackendApiLogic
     end
 
     def with_subpaths?
-      backend_api_configs.where { path.not_in(['', '/']) & (path != nil) }.any?
+      backend_api_configs.with_subpath.any?
     end
 
     class Builder
