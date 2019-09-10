@@ -14,6 +14,10 @@ class BackendApiConfig < ApplicationRecord
     backend_api.metrics.each { |metric| metric.send(:sync_backend) }
   end
 
+  sifter :path_desc do
+    System::Database.oracle? ? 'path DESC NULLS LAST' : {path: :desc}
+  end
+
   delegate :private_endpoint, to: :backend_api
 
   def path=(value)
