@@ -23,4 +23,10 @@ class BackendApiTest < ActiveSupport::TestCase
     @backend_api.private_endpoint = 'https://example.org:3/path'
     assert @backend_api.valid?
   end
+
+  test 'creates default metrics' do
+    backend_api = FactoryBot.create(:backend_api)
+    hits = backend_api.metrics.hits
+    assert hits.default? :hits
+  end
 end
