@@ -19,7 +19,7 @@ Given /^the provider has ("(?:.+?)"(?: switch)? visible)$/ do |sentence|
 end
 
 Then /^I should see the invitation to upgrade my plan$/ do
-  assert has_content?("Upgrade")
+  assert find(:css, 'a#change-plan.important-button')&.has_content?('Upgrade')
 end
 
 Then /^I should see upgrade notice for "(.+?)"$/ do |switch|
