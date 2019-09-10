@@ -90,36 +90,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       @provider.settings.allow_multiple_services!
     end
 
-    test 'should mark that service will act as product if feature is enabled' do
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
-
-      assert_change of: -> { Service.count } do
-        post admin_services_path, service: {
-          system_name: 'my_new_product',
-          name: 'My new Product',
-          description: 'This will act as product',
-          act_as_product: true
-        }
-      end
-      assert Service.last.act_as_product
-      assert_equal 1, Service.last.backend_api_configs.count
-    end
-
-    test 'should not mark that service will act as product if feature is not enabled' do
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
-
-      assert_change of: -> { Service.count } do
-        post admin_services_path, service: {
-          system_name: 'my_new_product',
-          name: 'My new Product',
-          description: 'This will act as product',
-          act_as_product: true
-        }
-      end
-      refute Service.last.act_as_product
-      assert_equal 1, Service.last.backend_api_configs.count
-    end
-
     test 'should create a new Backend API if none was selected' do
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
 
@@ -127,8 +97,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
         post admin_services_path, service: {
           system_name: 'my_new_product',
           name: 'My new Product',
-          description: 'This will act as product',
-          act_as_product: true
+          description: 'This will act as product'
         }
       end
 
@@ -144,7 +113,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
           system_name: 'my_new_product',
           name: 'My new Product',
           description: 'This will act as product',
-          act_as_product: true,
           backend_api: backend_api.id
         }
       end

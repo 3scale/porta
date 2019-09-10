@@ -4,8 +4,12 @@ module BackendApiLogic
   module RoutingPolicy
     def policy_chain
       chain = super
-      return chain unless service.act_as_product?
+      return chain unless with_subpaths?
       Builder.new(service).to_a.concat(chain)
+    end
+
+    def with_subpaths?
+      backend_api_configs.with_subpath.any?
     end
 
     class Builder
@@ -17,9 +21,9 @@ module BackendApiLogic
       end
 
       def to_a
-        rules = backend_api_configs.reordering { sift(:path_desc) }.each_with_object([]) do |config, rules|
+        rules = backend_api_configs.reordering { sift(:desc, :path) }.each_with_object([]) do |config, collection|
           rule = Rule.new(config).as_json
-          rules << rule if rule
+          collection << rule if rule
         end
         return [] if rules.empty?
         [{
