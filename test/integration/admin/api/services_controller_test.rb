@@ -75,7 +75,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'create' do
-      assert_difference(provider.services.method(:count)) do
+      assert_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge(forbidden_params)
         assert_response :created
       end
@@ -83,7 +83,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'create with errors in the model' do
-      assert_no_difference(provider.services.method(:count)) do
+      assert_no_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({backend_version: 'fake'})
         assert_response :unprocessable_entity
       end
@@ -106,7 +106,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'system_name can be created but not updated' do
       post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({system_name: 'first-system-name'})
-      service = provider.services.last!
+      service = provider_services.last!
       assert_equal 'first-system-name', service.system_name
 
       put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge(forbidden_params).merge({system_name: 'updated-system-name'})
@@ -115,7 +115,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'the state cannot be created or updated through the attribute' do
       post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({state: 'published'})
-      service = provider.services.last!
+      service = provider_services.last!
       refute_equal 'published', service.state
 
       put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({state: 'published'})
@@ -124,7 +124,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'the state can be created and updated through the state event of the action machine' do
       post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({state_event: 'publish'})
-      service = provider.services.last!
+      service = provider_services.last!
       assert_equal 'published', service.state
 
       put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({state_event: 'publish'})
@@ -134,19 +134,19 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'create accepts act_as_product when the rolling update is enabled' do
       Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(true)
 
-      assert_difference(provider.services.method(:count)) do
+      assert_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({act_as_product: true})
       end
-      assert provider.services.last!.act_as_product
+      assert provider_services.last!.act_as_product
     end
 
     test 'create does not accept act_as_product when the rolling update is disabled' do
       Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(:enabled?).returns(false)
 
-      assert_difference(provider.services.method(:count)) do
+      assert_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({act_as_product: true})
       end
-      refute provider.services.last!.act_as_product
+      refute provider_services.last!.act_as_product
     end
 
     test 'update accepts act_as_product when the rolling update is enabled' do
@@ -168,7 +168,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     private
 
     def assert_correct_params
-      service = provider.services.last!
+      service = provider_services.last!
       permitted_params.each do |attribute_name, param_value|
         assert check_equality_value(attribute_name, service.public_send(attribute_name), param_value), "#{attribute_name} does not have the expected value of #{param_value}"
       end
@@ -246,6 +246,11 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def access_token_value
       @access_token_value ||= FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').value
+    end
+
+    def provider_services
+      scope = provider.services
+      System::Database.postgres? ? scope.order(:id) : scope
     end
   end
 end
