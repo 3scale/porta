@@ -22,7 +22,7 @@
 
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
-      - if @service.act_as_product?
+      - if current_account.provider_can_use?(:api_as_product)
         = f.inputs 'Backends' do
           table#backend_apis
             thead
@@ -72,7 +72,7 @@
                                 placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
                   hint: apicast_endpoint_input_hint(@service, environment: 'production')
         = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
-        - if @service.act_as_traditional_service?
+        - unless current_account.provider_can_use?(:api_as_product)
           div.help-button-constrainer
             = render 'api/integrations/apicast/shared/mapping_rules', f: f
         div.help-button-constrainer

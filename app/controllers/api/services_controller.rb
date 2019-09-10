@@ -77,7 +77,6 @@ class Api::ServicesController < Api::BaseController
 
   def service_params
     allowed_params = %i[system_name name description]
-    allowed_params << :act_as_product if provider_can_use?(:api_as_product)
     params.require(:service).permit(allowed_params)
   end
 

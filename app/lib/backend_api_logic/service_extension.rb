@@ -27,14 +27,6 @@ module BackendApiLogic
       config.backend_api
     end
 
-    def act_as_product?
-      act_as_product && account&.provider_can_use?(:api_as_product)
-    end
-
-    def act_as_traditional_service?
-      !act_as_product?
-    end
-
     private
 
     def create_first_backend_api_config!

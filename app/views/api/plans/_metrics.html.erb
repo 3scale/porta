@@ -11,7 +11,7 @@
     <thead>
       <tr>
         <th colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
-          <% if @service.act_as_product? -%>
+          <% if provider_can_use?(:api_as_product) -%>
             Product Level
           <% else -%>
             Metric or method
@@ -57,7 +57,7 @@
     </tbody>
   </table>
 
-  <% if @service.act_as_product? -%>
+  <% if provider_can_use?(:api_as_product) -%>
   <table id="backend_api_metrics" class="contract_table">
     <thead>
       <tr>
