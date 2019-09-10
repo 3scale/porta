@@ -32,7 +32,7 @@ it('should return the proper title depending on the current menu', () => {
 })
 
 it('should return the right title and icon when APIAP is disabled', () => {
-  const wrapper = getWrapper('serviceadmin', { name: 'Test' }, false )
+  const wrapper = getWrapper('serviceadmin', { name: 'Test' }, false)
   expect(wrapper.text()).toEqual('Api: Test')
   expect(wrapper.find('i').first().prop('class')).toEqual('fa fa-puzzle-piece')
 })

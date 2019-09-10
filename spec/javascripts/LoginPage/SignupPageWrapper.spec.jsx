@@ -28,7 +28,7 @@ it('should render itself', () => {
 
 it('should render <SignupForm/> child component', () => {
   const wrapper = mount(<SignupPage {...props}/>)
-  expect(wrapper.find(SignupForm).exists()).toEqual(true)
+  expect(wrapper.find('SignupForm').exists()).toEqual(true)
 })
 
 it('should render error messages', () => {
@@ -36,5 +36,4 @@ it('should render error messages', () => {
   expect(wrapper.find('.pf-m-error').length).toEqual(2)
   expect(wrapper.find('.pf-m-error').at(0).text()).toContain('username has already been taken')
   expect(wrapper.find('.pf-m-error').at(1).text()).toContain('password is too short (minimum is 6 characters)')
-
 })
