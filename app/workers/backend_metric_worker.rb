@@ -17,27 +17,16 @@ class BackendMetricWorker
     5.minutes.to_i
   end
 
-  def self.lock_workers(service_id, metric_id, *)
-    "service:#{service_id}/metric:#{metric_id}"
+  def self.lock_workers(service_backend_id, metric_id, *)
+    "service:#{service_backend_id}/metric:#{metric_id}"
   end
 
-  def self.sync(backend_id, metric_id, metric_system_name)
-    perform_async(backend_id, metric_id, metric_system_name)
-  end
-
-  def perform(backend_id, metric_id, *args)
-    retry_job(backend_id, metric_id, *args) unless lock(backend_id, metric_id).acquire!
+  def perform(service_backend_id, metric_id, *args)
+    retry_job(service_backend_id, metric_id, *args) unless lock(service_backend_id, metric_id).acquire!
 
     begin
-      if (metric = Metric.find_by(id: metric_id))
-
-        ThreeScale::Core::Metric.save(service_id: backend_id,
-                                      id: metric_id,
-                                      name: metric.system_name,
-                                      parent_id: metric.parent_id)
-      else
-        ThreeScale::Core::Metric.delete(backend_id, metric_id)
-      end
+      metric_parent_id = args.size == 2 ? args.last : nil # TODO: Simplify this - We don't really need the system_name being passed among the args
+      save_or_delete_metric(service_backend_id, metric_id, metric_parent_id)
     ensure
       lock.release!
     end
@@ -45,8 +34,23 @@ class BackendMetricWorker
 
   protected
 
-  def retry_job(backend_id, metric_id, *args)
+  def retry_job(service_backend_id, metric_id, *args)
     raise LockError if last_attempt?
-    self.class.sync(backend_id, metric_id, *args)
+    self.class.perform_async(service_backend_id, metric_id, *args)
+  end
+
+  def save_or_delete_metric(service_backend_id, metric_id, metric_parent_id = nil)
+    metric = Metric.find_by(id: metric_id)
+    if metric
+      new_metric_attributes = {
+        service_id: service_backend_id,
+        id: metric_id,
+        name: metric.system_name,
+        parent_id: metric_parent_id || metric.parent_id
+      }
+      ThreeScale::Core::Metric.save(new_metric_attributes)
+    else
+      ThreeScale::Core::Metric.delete(service_backend_id, metric_id)
+    end
   end
 end

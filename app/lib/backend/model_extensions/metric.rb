@@ -23,19 +23,31 @@ module Backend
 
       def sync_backend
         execute_per_service do |service|
-          ::BackendMetricWorker.sync(service.backend_id, id, system_name)
+          ::BackendMetricWorker.perform_async(*args_to_backend_metric_worker(service))
         end
       end
 
       def sync_backend!
         execute_per_service do |service|
-          ::BackendMetricWorker.new.perform(service.backend_id, id, system_name)
+          ::BackendMetricWorker.new.perform(*args_to_backend_metric_worker(service))
         end
       end
 
       def execute_per_service(&block)
         services = [*owner.try(:services), service].compact
         services.each(&block)
+      end
+
+      def args_to_backend_metric_worker(service)
+        [service.backend_id, id, system_name, parent_id_for_service(service)]
+      end
+
+      def parent_id_for_service(service)
+        if backend_api_metric? && hits?
+          service.metrics.hits&.id
+        else
+          parent_id
+        end
       end
     end
   end
