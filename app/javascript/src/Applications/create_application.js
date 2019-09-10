@@ -47,6 +47,14 @@ export class CreateApplication {
     return this.relationPlansServices[this.selectedPlan]
   }
 
+  get createServicePlanPath (): string {
+    return this.metadata.data('create_service_plan_path')
+  }
+
+  getCreateServicePlanPathForService (serviceId: number): string {
+    return this.createServicePlanPath.replace(':service_id', String(serviceId))
+  }
+
   checkSelectedPlan () {
     const service = this.serviceOfSelectedPlan
     const servicePlans = this.getServicePlansForService(service)
@@ -64,6 +72,7 @@ export class CreateApplication {
         this.setSelectOptions(servicePlans)
       } else {
         $('#cinstance_service_plan_id').html('<option> No service plan for the application plan </option>')
+        $('#link-help-new-application-service').attr('href', this.getCreateServicePlanPathForService(service))
         this.disableForm()
       }
     }
