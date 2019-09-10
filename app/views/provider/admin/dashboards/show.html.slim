@@ -3,9 +3,13 @@
 
 = content_for :javascripts do
   = javascript_pack_tag 'dashboard'
+  / New PF4 Dashboard
+  = javascript_pack_tag 'PF4DashboardStyles'
+  = javascript_pack_tag 'PFDashboard'
 
 .Dashboard
   div.Dashboard-widgets
+    #pf-dashboard
     // account level
     section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
       header.DashboardSection-header
