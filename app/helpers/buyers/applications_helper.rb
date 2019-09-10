@@ -6,6 +6,7 @@ module Buyers::ApplicationsHelper
       data-services_contracted='#{ services_contracted(buyer) }'
       data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
       data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
+      data-create_service_plan_path='#{ create_service_plan_path }'
       data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
 
   end
@@ -39,6 +40,10 @@ module Buyers::ApplicationsHelper
     provider.application_plans.includes(:service).each_with_object({}) do |application_plan, hash|
       hash[application_plan.id] = application_plan.service.id
     end.to_json
+  end
+
+  def create_service_plan_path
+    admin_service_service_plans_path ':service_id'
   end
 
   def last_traffic(cinstance)
