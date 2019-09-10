@@ -10,7 +10,7 @@
     "update-dependencies": "npm run clean && npm i --no-progress",
     "check-dependencies": "npm ls --depth=0 || npm run update-dependencies",
     "flow:install": "flow-typed install",
-    "lint": "flow && eslint app/javascript spec/javascripts",
+    "lint": "flow && eslint --ext .js,.jsx app/javascript spec/javascripts",
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch"

@@ -28,7 +28,7 @@ it('should render itself', () => {
 
 it('should render <SignupForm/> child component', () => {
   const wrapper = mount(<SignupPage {...props}/>)
-  expect(wrapper.find(SignupPage).exists()).toEqual(true)
+  expect(wrapper.find(SignupForm).exists()).toEqual(true)
 })
 
 it('should render error messages', () => {
