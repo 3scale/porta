@@ -14,6 +14,8 @@ class BackendApiConfig < ApplicationRecord
     backend_api.metrics.each { |metric| metric.send(:sync_backend) }
   end
 
+  scope :with_subpath, -> { common_query = where.not(path: '/'); System::Database.oracle? ? common_query.where('path is NOT NULL') : common_query.where.not(path: '') }
+
   delegate :private_endpoint, to: :backend_api
 
   def path=(value)
