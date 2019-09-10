@@ -4,7 +4,7 @@ Feature: Branding switch
   Controls the Branding feature
 
   Background:
-    Given an application plan "plus" of provider "master"
+    Given a published application plan "plus" of provider "master"
     And a provider "foo.example.com"
       And current domain is the admin domain of provider "foo.example.com"
 
