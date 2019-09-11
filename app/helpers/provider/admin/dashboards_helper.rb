@@ -22,10 +22,12 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_navigation_link(link_text, path, options = {})
-    link_to path, class: css_class({
-        'DashboardNavigation-link': true,
+    link_to path, class: css_class(
+      {
+        'pf-c-nav__link': true,
         'u-notice': options.fetch(:notice, false)
-      }) do
+      }
+    ) do
         icon_name = options[:icon_name]
         link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
         link_text.html_safe

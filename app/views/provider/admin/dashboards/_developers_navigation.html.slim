@@ -1,8 +1,8 @@
-nav.DashboardNavigation
-  ul.DashboardNavigation-list
+nav.pf-c-nav
+  ul.DashboardNavigation-list.pf-c-nav__tertiary-list
     // Acounts, Pending Accounts & Account Plans
     - if can?(:manage, :partners)
-      li.DashboardNavigation-list-item
+      li.pf-c-nav__item
         // Accounts
         => dashboard_collection_link 'Account',
                                       buyers,
@@ -18,7 +18,7 @@ nav.DashboardNavigation
                                                   notice: true
 
     - if can? :manage, :partners
-      li.DashboardNavigation-list-item
+      li.pf-c-nav__item
         = dashboard_collection_link 'Application',
                                     applications,
                                     admin_buyers_applications_path,
@@ -32,14 +32,14 @@ nav.DashboardNavigation
 
     // Billing
     - if can?(:manage, :finance)
-      li.DashboardNavigation-list-item
+      li.pf-c-nav__item
         = dashboard_navigation_link 'Billing',
                                     admin_finance_root_path,
                                     icon_name: 'credit-card'
 
     // Dev Portal
     - if can?(:manage, :portal)
-      li.DashboardNavigation-list-item
+      li.pf-c-nav__item
         = dashboard_navigation_link 'Developer Portal',
                                     provider_admin_cms_root_path,
                                     icon_name: 'sitemap'
@@ -52,14 +52,14 @@ nav.DashboardNavigation
 
     // Forum
     - if show_forum_on_dashboard? && forum_topics.any?
-      li.DashboardNavigation-list-item
+      li.pf-c-nav__item
         = dashboard_collection_link 'Forum Topic',
                                     forum_topics,
                                     admin_forum_path,
                                     icon_name: 'comments'
 
     // Messages
-    li.DashboardNavigation-list-item
+    li.pf-c-nav__item
       = dashboard_collection_link 'Message',
                                   current_account.messages.where(sender: !current_account),
                                   provider_admin_messages_root_path,
