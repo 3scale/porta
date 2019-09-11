@@ -28,14 +28,15 @@
           = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
     section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
-      - unless current_user.accessible_services?
-        = render 'shared/service_access'
-      - else
-        - if current_account.provider_can_use?(:api_as_product)
-          = render 'section_products_and_backends'
-          = javascript_pack_tag 'api_as_product'
+      .pf-c-card
+        - unless current_user.accessible_services?
+          = render 'shared/service_access'
         - else
-          = render 'section_services'
+          - if current_account.provider_can_use?(:api_as_product)
+            = render 'section_products_and_backends'
+            = javascript_pack_tag 'api_as_product'
+          - else
+            = render 'section_services'
 
   div.Dashboard-events
     section.DashboardStream

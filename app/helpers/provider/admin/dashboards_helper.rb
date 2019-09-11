@@ -51,7 +51,7 @@ module Provider::Admin::DashboardsHelper
     label_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
     icon_name = options[:icon_name]
     label_class = css_class(
-      'DashboardNavigation-link': true,
+      'pf-c-nav__link': true,
       'current-tab': options.fetch(:current_tab, false)
     )
     label_tag html_for, class: label_class do

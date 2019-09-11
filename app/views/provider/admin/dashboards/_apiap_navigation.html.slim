@@ -1,6 +1,6 @@
-nav.DashboardNavigation.DashboardNavigation-tabs
-  ul.DashboardNavigation-list
-    li.DashboardNavigation-list-item
+nav.DashboardNavigation.DashboardNavigation-tabs.pf-c-nav
+  ul.DashboardNavigation-list.pf-c-nav__tertiary-list
+    li.pf-c-nav__item
       = dashboard_apiap_tab_label 'tab-products', 'Product', @services, icon_name: 'gift', current_tab: true
-    li.DashboardNavigation-list-item
+    li.pf-c-nav__item
       = dashboard_apiap_tab_label 'tab-backends', 'Backend', current_account.backend_apis, icon_name: 'puzzle-piece'
