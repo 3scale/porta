@@ -14,7 +14,6 @@ DEFAULT_JS_DRIVER = :headless_chrome
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = DEFAULT_JS_DRIVER
 Capybara.default_selector    = :css
-Capybara.ignore_hidden_elements = false
 
 # see http://www.elabs.se/blog/60-introducing-capybara-2-1
 Capybara.configure do |config|
@@ -22,7 +21,6 @@ Capybara.configure do |config|
   config.javascript_driver = DEFAULT_JS_DRIVER
   config.raise_server_errors = true
   config.match = :prefer_exact
-  config.ignore_hidden_elements = false
   config.always_include_port = true
   config.default_max_wait_time = 10
 end

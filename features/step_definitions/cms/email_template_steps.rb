@@ -27,6 +27,5 @@ Then /^I should see default content of email template "(.+?)"$/ do |name|
   t = CMS::EmailTemplate.dup.extend(CMS::EmailTemplate::ProviderAssociationExtension)
 
   content = t.find_default_by_name(name).published
-
-  page.find :xpath, XPath.descendant(:textarea)[XPath.text.is(content)]
+  page.find :xpath, XPath.descendant(:textarea)[XPath.text.is(content)], visible: :hidden
 end
