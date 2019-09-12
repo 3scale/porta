@@ -20,7 +20,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     metric.save!
 
     metric.system_name = 'bars'
-    BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.system_name, nil)
+    BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.system_name)
 
     metric.save!
   end
@@ -52,7 +52,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   test 'sync backend metric data when metric is destroyed' do
     metric = FactoryBot.create(:metric)
 
-    BackendMetricWorker.expects(:perform_async).with(metric.service.backend_id, metric.id, metric.system_name, nil)
+    BackendMetricWorker.expects(:perform_async).with(metric.service.backend_id, metric.id, metric.system_name)
 
     metric.destroy
   end
@@ -69,7 +69,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     metric = MetricWithFiber.create(service: service, friendly_name: 'My metric', unit: 'hits')
     metric_id = metric.id
 
-    ::BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric_id, metric.system_name, nil).twice
+    ::BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric_id, metric.system_name).twice
 
     metric_f1 = MetricWithFiber.find(metric_id)
     metric_f2 = MetricWithFiber.find(metric_id)
@@ -89,23 +89,10 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
     metric = FactoryBot.build(:metric, service: nil, owner: backend_api)
 
-    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.system_name, nil) }
+    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.system_name) }
     metric.send :sync_backend
 
-    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.system_name, nil) }
-    metric.send :sync_backend!
-  end
-
-  test 'sync backend api hits metric with backend' do
-    services = FactoryBot.create_list(:simple_service, 2)
-    backend_api = services.first.first_backend_api
-    services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
-    metric = backend_api.metrics.hits
-
-    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.system_name, service.metrics.hits.id) }
-    metric.send :sync_backend
-
-    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.system_name, service.metrics.hits.id) }
+    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.system_name) }
     metric.send :sync_backend!
   end
 end
