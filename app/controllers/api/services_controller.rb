@@ -35,23 +35,21 @@ class Api::ServicesController < Api::BaseController
   end
 
   def create
-    @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
-    @service.attributes = service_params
-    create_service = CreateServiceWithBackendApi.new(service: @service, account: current_account, backend_api: params[:service][:backend_api].presence)
+    @service = ServiceWithBackendApiBuilder.new(current_account).call(service_params: params.require(:service))
 
-    if can_create? && create_service.call
+    if can_create? && @service.save
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = 'Couldn\'t create service. Check your Plan limits' # TODO: this is not always true... there are other reasons of failure
+      flash.now[:error] = 'Couldn\'t create service. Check your Plan limits' # TODO: this is not always true... there are other reasons of failure # This has been like this for ages and will be fixed in THREESCALE-3394 but NOT FOR 2.7
       activate_menu :dashboard
       render :new
     end
   end
 
   def update
-    if @service.update_attributes(params[:service])
+    if @service.update_attributes(params[:service]) # TODO: WIP!!
       flash[:notice] =  'Service information updated.'
       onboarding.bubble_update('api') if service_name_changed?
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
@@ -65,12 +63,6 @@ class Api::ServicesController < Api::BaseController
     @service.mark_as_deleted!
     flash[:notice] = "Service '#{@service.name}' will be deleted shortly. You will receive a notification when it is done"
     redirect_to provider_admin_dashboard_path
-  end
-
-  private
-
-  def service_params
-    params.require(:service).permit(%i[system_name name description])
   end
 
   protected

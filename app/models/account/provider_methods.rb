@@ -317,12 +317,6 @@ module Account::ProviderMethods
     accessible_services.first!
   end
 
-  def create_service(attrs)
-    services.build do |service|
-      service.update_attributes(attrs)
-    end
-  end
-
   protected
 
   def create_first_service

@@ -46,8 +46,8 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #
   def create
-    service = current_account.create_service(service_params)
-    service.reload if service.persisted? # It has been touched
+    service = ServiceWithBackendApiBuilder.new(current_account).call(service_params: params.require(:service))
+    service.save
     respond_with(service)
   end
 
@@ -85,7 +85,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #
   def update
-    service.update(service_params)
+    service.update(params[:service]) # TODO: WIP!!
 
     respond_with(service)
   end
@@ -110,16 +110,6 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
 
   def can_create
     head :forbidden unless current_account.can_create_service?
-  end
-
-  def service_params
-    permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
-                        :intentions_required, :buyers_manage_apps, :referrer_filters_required,
-                        :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
-                        :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
-                        :txt_support, :terms,
-                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
-    params.require(:service).permit(*permitted_params)
   end
 
   def service

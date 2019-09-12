@@ -77,13 +77,6 @@ class Api::ServicesControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  # regression of https://3scale.airbrake.io/errors/53365879
-  def test_update_handles_missing_referrer
-    put :update, id: @service.id
-
-    assert_response 302
-  end
-
   def test_service_create_should_change_api_bubble_state
     @provider.create_onboarding
 

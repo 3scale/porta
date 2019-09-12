@@ -21,29 +21,6 @@ resource "Service" do
     provider.settings.allow_multiple_services!
   end
 
-  api 'service' do
-    parameter :name, 'Service Name'
-
-    get "/admin/api/services.:format", action: :index do
-      # reload resource because it has been touched
-      let(:serializable) { [provider.services.default, resource.reload] }
-    end
-
-    get "/admin/api/services/:id.:format", action: :show do
-      before { resource.reload }
-    end
-
-    post "/admin/api/services.:format", action: :create do
-      parameter :name, 'Service Name'
-      let(:name) { 'Example service' }
-    end
-
-    put "/admin/api/services/:id.:format", action: :update do
-      parameter :name, 'Service Name'
-      let(:name) { 'some name' }
-    end
-  end
-
   xml(:resource) do
     before { resource.save! }
 

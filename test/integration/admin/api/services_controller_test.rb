@@ -218,5 +218,46 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       scope = provider.services
       System::Database.postgres? ? scope.order(:id) : scope
     end
+
+
+    class ActAsProduct < TenantHostTest
+      def setup
+        super
+        Logic::RollingUpdates.stubs(enabled?: true)
+        Account.any_instance.stubs(:provider_can_use?).returns(false)
+        provider.settings.allow_multiple_services!
+      end
+
+      test 'should create a new Backend API if none was selected' do
+        Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
+
+        assert_change of: -> { BackendApi } do
+          post admin_api_services_path(access_token: access_token_value, format: :json), service: {
+              system_name: 'my_new_product',
+              name: 'My new Product',
+              description: 'This will act as product'
+          }
+        end
+
+        assert_equal 1, Service.last.backend_api_configs.count
+      end
+
+      test 'should reuse the same Backend API if it was selected' do
+        Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
+        backend_api = FactoryBot.create(:backend_api, account: @provider)
+
+        assert_change of: -> { BackendApi }, by: 0 do
+          post admin_api_services_path(access_token: access_token_value, format: :json), service: {
+              system_name: 'my_new_product',
+              name: 'My new Product',
+              description: 'This will act as product',
+              backend_api: backend_api.id
+          }
+        end
+
+        assert_equal backend_api, Service.last.backend_api
+        assert_equal 1, Service.last.backend_api_configs.count
+      end
+    end
   end
 end
