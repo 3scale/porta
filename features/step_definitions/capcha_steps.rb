@@ -7,7 +7,7 @@ Then /^I should not see the captcha$/ do
 end
 
 Then /^I should see the captcha$/ do
-  page.should have_selector(RECAPTCHA_SCRIPT)
+  page.should have_selector(RECAPTCHA_SCRIPT, visible: false)
 end
 
 When /^I leave the captcha empty$/ do

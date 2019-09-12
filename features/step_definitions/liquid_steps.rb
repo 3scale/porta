@@ -50,7 +50,7 @@ Then /^the html body should contain "(.*?)"$/ do |html|
 end
 
 Then /^the html head should contain "(.*?)"$/ do |html|
-  page.find('head').native.to_s.should match(html)
+  page.find('head', visible: :all).native.to_s.should match(html)
 end
 
 Then /^the html should contain the SSO data$/ do
