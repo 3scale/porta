@@ -6,6 +6,12 @@ class BackendApiTest < ActiveSupport::TestCase
     @backend_api = BackendApi.new(account: @account, name: 'My Backend API')
   end
 
+  def test_oldest_first
+    FactoryBot.create_list(:backend_api, 3)
+    BackendApi.all.each_with_index { |backend_api, index| backend_api.update_column(:created_at, Date.today - (index + 1).days) }
+    assert_equal BackendApi.order(created_at: :asc).pluck(:id), BackendApi.oldest_first.pluck(:id)
+  end
+
   def test_default_api_backend
     assert_equal "https://echo-api.3scale.net:443", @backend_api.default_api_backend
     assert_equal "https://echo-api.3scale.net:443", BackendApi.default_api_backend

@@ -73,6 +73,22 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       json = JSON.parse(response.body)
       assert_equal "https://#{backend_config[:host]}", json['basePath']
     end
+
+    test 'show backend_api endpoints only under rolling update enabled' do
+      Logic::RollingUpdates.stubs(enabled?: true)
+      select_endpoint_id = Proc.new { |api| api['path'] == '/admin/api/backend_apis/{id}.json' }
+      select_endpoint_collection = Proc.new { |api| api['path'] == '/admin/api/backend_apis.json' }
+
+      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(enabled?: true)
+      get '/api_docs/services/account_management_api.json'
+      assert_not_empty JSON.parse(response.body)['apis'].select(&select_endpoint_id)
+      assert_not_empty JSON.parse(response.body)['apis'].select(&select_endpoint_collection)
+
+      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(enabled?: false)
+      get '/api_docs/services/account_management_api.json'
+      assert_empty JSON.parse(response.body)['apis'].select(&select_endpoint_id)
+      assert_empty JSON.parse(response.body)['apis'].select(&select_endpoint_collection)
+    end
   end
 
   class MasterAccountServicesControllerTest < ApiDocs::ServicesControllerTest

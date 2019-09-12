@@ -4,7 +4,7 @@ class ApiDocs::ServicesController < FrontendController
 
   class ApiFileDoesNotExist < StandardError; end
 
-  delegate :api_files, :apis, :exclude_plan_endpoints, to: 'self.class'
+  delegate :api_files, :apis, to: 'self.class'
   delegate :master_on_premises?, to: :current_account, allow_nil: true
   delegate :master?, to: :current_account, allow_nil: true
 
@@ -27,10 +27,6 @@ class ApiDocs::ServicesController < FrontendController
         file_path = ApiFile.new(*api.values_at(:name, :system_name)).file_path
         raise(ApiFileDoesNotExist, "file #{file_path} does not exist") unless File.exist?(file_path)
       end
-    end
-
-    def exclude_plan_endpoints(apis)
-      apis.select { |api| api['path'].exclude?('plan') }
     end
   end
 
@@ -119,12 +115,19 @@ class ApiDocs::ServicesController < FrontendController
   def show
     system_name = params[:id].to_sym
     api_file = (api_files.fetch(system_name) { raise ActiveRecord::RecordNotFound }).dup
-    api_file['apis'] = exclude_plan_endpoints(api_file['apis']) if master_on_premises?
+    api_file['apis'] = exclude_forbidden_endpoints(api_file['apis'])
 
     render json: api_file
   end
 
   private
+
+  def exclude_forbidden_endpoints(apis)
+    apis.select do |api|
+      path = api['path']
+      (!master_on_premises? || path.exclude?('plan')) && (provider_can_use?(:api_as_product) || path.exclude?('backend_api'))
+    end
+  end
 
   def allowed_api?(api)
     case api[:system_name]
