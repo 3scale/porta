@@ -14,6 +14,19 @@ main >  h2,
   font-weight: $font-weight-light;
 }
 
+.subsubmenu + h1,
+.subsubmenu + h2,
+#subsubmenu + h1,
+#subsubmenu + h2,
+main > h1:first-child,
+main >  h2:first-child,
+#tab-content > h1:first-child,
+#tab-content > h2:first-child {
+  padding: line-height-times(1);
+  margin: line-height-times(-1);
+  margin-bottom: line-height-times(1);
+  background-color: $body-background;
+}
 
 h1 {
   font-size: $main-title-font-size;
@@ -30,13 +43,21 @@ h2, h3 {
   margin-bottom: line-height-times(1/2);
 }
 
+.subsubmenu {
+  padding: line-height-times(1);
+  margin: line-height-times(-1);
+  background-color: $body-background;
+}
+
 #tab-content > h2:first-child,
 #content > h2:first-child,
 #subsubmenu + h2 {
   font-size: $main-title-font-size;
-  padding-top: 0;
-  margin-bottom: line-height-times(1/2);
+  padding: line-height-times(1);
+  margin: line-height-times(-1);
+  margin-bottom: line-height-times(1);
   line-height: 1;
+  background-color: $body-background;
 }
 
 h2 {
@@ -55,7 +76,15 @@ h3 {
 
 p {
   margin: line-height-times(1/2) 0 line-height-times(1) 0;
-  max-width: line-height-times(36);
+  //max-width: line-height-times(36);
+}
+
+h1 + p,
+h2 + p {
+  padding: line-height-times(1);
+  margin: line-height-times(-1);
+  margin-bottom: line-height-times(1);
+  background-color: $body-background;
 }
 
 dd p {
@@ -143,7 +172,7 @@ a img {
 }
 
 .round, #page_templates, .alwaysontop {
-  @include border-radius($border-radius);
+  //@include border-radius($border-radius);
 }
 
 pre code {

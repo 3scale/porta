@@ -10,7 +10,7 @@ body {
 }
 
 #border {
-  background-color: #fff; // HACK: this will be taken care by PF4
+  background-color: $content-background; // HACK: this will be taken care by PF4
   min-height: calc(100vh - 92px); // Header's height
   position: relative;
   text-align: left;
