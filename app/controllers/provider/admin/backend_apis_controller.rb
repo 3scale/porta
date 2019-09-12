@@ -7,11 +7,6 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   activate_menu :backend_api, :overview
   layout 'provider'
 
-  def index
-    activate_menu :dashboard
-    @backend_apis = current_account.backend_apis.accessible
-  end
-
   def new
     activate_menu :dashboard
     @backend_api = collection.build params[:backend_api]
