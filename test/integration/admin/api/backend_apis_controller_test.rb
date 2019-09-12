@@ -2,13 +2,13 @@
 
 require 'test_helper'
 
-class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
+class Admin::API::BackendApisControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
   end
 
-  attr_reader :provider, :access_token_value
+  attr_reader :provider
 
   test 'show' do
     get admin_api_backend_api_path(backend_api, access_token: access_token_value)
@@ -17,12 +17,9 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy' do
-    @backend_api = FactoryBot.create(:backend_api, account: provider)
-    assert_difference(BackendApi.method(:count), -1) do
-      delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
-      assert_response :success
-    end
-    assert_raises(ActiveRecord::RecordNotFound) { backend_api.reload }
+    delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
+    assert_response :success
+    assert backend_api.reload.deleted?
   end
 
   test 'update' do
@@ -101,6 +98,24 @@ class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
 
     put admin_api_backend_api_path(backend_api, access_token: access_token_value), permitted_params.merge(forbidden_params).merge({system_name: 'updated-system-name'})
     assert_equal 'first-system-name', backend_api.reload.system_name
+  end
+
+  test 'backend api marked as deleted cannot be found' do
+    backend_api.mark_as_deleted!
+
+    get admin_api_backend_api_path(backend_api, access_token: access_token_value)
+    assert_response :not_found
+
+    delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
+    assert_response :not_found
+
+    put admin_api_backend_api_path(backend_api, access_token: access_token_value), permitted_params
+    assert_response :not_found
+
+    get admin_api_backend_apis_path(access_token: access_token_value)
+    assert_response :success
+    response_backend_api_ids = JSON.parse(response.body)['backend_apis'].map { |response_backend_api| response_backend_api.dig('backend_api', 'id') }
+    assert_not_includes response_backend_api_ids, backend_api.id
   end
 
   private
