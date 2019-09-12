@@ -70,7 +70,7 @@ class Policies::PoliciesListService
 
   def policies_from_account
     return unless provider_can_use?(:policy_registry)
-    PolicyList.new(policies)
+    PolicyList.new(policies) if self_managed?
   end
 
   class PolicyList
