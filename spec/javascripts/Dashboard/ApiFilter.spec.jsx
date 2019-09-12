@@ -1,11 +1,9 @@
 // @flow
 
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import { ApiFilter } from 'Dashboard/components/ApiFilter'
+import { mount } from 'enzyme'
 
-Enzyme.configure({ adapter: new Adapter() })
+import { ApiFilter } from 'Dashboard/components/ApiFilter'
 
 const apis = [
   { id: 0, name: 'api 0', link: '', type: 'backend' },

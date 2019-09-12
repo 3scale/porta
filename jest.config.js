@@ -10,6 +10,7 @@ module.exports = {
     'js'
   ],
   setupFiles: [
+    '<rootDir>/spec/javascripts/setupTests.js',
     '<rootDir>/spec/javascripts/__mocks__/global-mocks.js'
   ],
   moduleDirectories: [

@@ -1,15 +1,8 @@
 import React from 'react'
-import Enzyme, {shallow, mount} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {shallow, mount} from 'enzyme'
 
 import {ServiceManualForm} from 'NewService'
 import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
-
-import * as utils from 'utilities/utils'
-jest.spyOn(utils, 'CSRFToken')
-  .mockImplementation(() => '')
-
-Enzyme.configure({adapter: new Adapter()})
 
 const props = {
   formActionPath: 'action-path'

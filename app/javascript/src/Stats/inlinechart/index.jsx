@@ -3,7 +3,7 @@
 import React, {Component } from 'react'
 import type { Node } from 'react'
 import c3 from 'c3'
-import 'whatwg-fetch'
+import {fetchData} from 'utilities/utils'
 import 'core-js/es6/promise'
 import 'url-polyfill'
 import moment from 'moment'
@@ -35,11 +35,6 @@ type Data = {
     metric: DataMetric,
     total: number,
     values: Array<number>
-}
-
-type ResponseError = {
-  status: string,
-  statusText: string
 }
 
 class InlineChart extends Component<Props, State> {
@@ -123,13 +118,10 @@ class InlineChart extends Component<Props, State> {
     return url
   }
 
-  throwError (response: ResponseError) {
-    throw new Error(`${response.status} (${response.statusText})`)
-  }
-
   async componentDidMount () {
-    const response = await window.fetch(this.getURL())
-    response.ok ? this.updateState(await response.json()) : this.throwError({status: response.status, statusText: response.statusText})
+    const url = this.getURL().toString()
+    const response = await fetchData<Data>(url)
+    this.updateState(response)
   }
 
   render (): Node {

@@ -1,17 +1,17 @@
 // @flow
 
 import React from 'react'
-import Enzyme, {mount} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {act} from 'react-dom/test-utils'
+import {mount} from 'enzyme'
 
-import {NewServiceForm, ServiceManualForm, ServiceDiscoveryForm} from 'NewService'
-import {BackendApiSelect} from 'NewService/components/FormElements'
+import {NewServiceForm} from 'NewService'
 
-import * as utils from 'utilities/utils'
-jest.spyOn(utils, 'CSRFToken')
+// Children components that use hooks cause some nasty warnings in the log. Mocking them
+// prevents react-dom.development from complaining.
+import * as FOO from 'NewService/components/ServiceDiscoveryForm'
+jest.mock('NewService/components/ServiceDiscoveryForm')
+jest.spyOn(FOO, 'ServiceDiscoveryForm')
   .mockImplementation(() => '')
-
-Enzyme.configure({adapter: new Adapter()})
 
 const props = {
   isServiceDiscoveryAccessible: true,
@@ -30,23 +30,32 @@ it('should render itself', () => {
 })
 
 it('should render the correct form depending on which mode is selected', () => {
-  const wrapper = mount(<NewServiceForm {...props}/>)
   const clickEvent = value => ({ currentTarget: { value } })
+  const wrapper = mount(<NewServiceForm {...props}/>)
 
-  wrapper.find('input#source_discover').props().onChange(clickEvent(''))
-  wrapper.update()
-  expect(wrapper.find(ServiceManualForm).exists()).toEqual(false)
-  expect(wrapper.find(ServiceDiscoveryForm).exists()).toEqual(true)
+  expect(wrapper.find('ServiceManualForm').exists()).toEqual(true)
+  expect(wrapper.find('ServiceDiscoveryForm').exists()).toEqual(false)
 
-  wrapper.find('input#source_manual').props().onChange(clickEvent('manual'))
+  act(() => {
+    wrapper.find('input#source_discover').props().onChange(clickEvent(''))
+  })
+
   wrapper.update()
-  expect(wrapper.find(ServiceManualForm).exists()).toEqual(true)
-  expect(wrapper.find(ServiceDiscoveryForm).exists()).toEqual(false)
+  expect(wrapper.find('ServiceManualForm').exists()).toEqual(false)
+  expect(wrapper.find('ServiceDiscoveryForm').exists()).toEqual(true)
+
+  act(() => {
+    wrapper.find('input#source_manual').props().onChange(clickEvent('manual'))
+  })
+
+  wrapper.update()
+  expect(wrapper.find('ServiceManualForm').exists()).toEqual(true)
+  expect(wrapper.find('ServiceDiscoveryForm').exists()).toEqual(false)
 })
 
 it('should not render BackendApiSelect by default', () => {
   const wrapper = mount(<NewServiceForm {...props}/>)
-  expect(wrapper.find(BackendApiSelect).exists()).toEqual(false)
+  expect(wrapper.find('BackendApiSelect').exists()).toEqual(false)
 })
 
 describe('when Service Discovery is not accessible', () => {
@@ -76,6 +85,6 @@ describe('when Api as Product is enabled', () => {
 
   it('should render BackendApiSelect', () => {
     const wrapper = mount(<NewServiceForm {...props}/>)
-    expect(wrapper.find(BackendApiSelect).exists()).toEqual(true)
+    expect(wrapper.find('BackendApiSelect').exists()).toEqual(true)
   })
 })

@@ -1,10 +1,7 @@
 import React from 'react'
-import Enzyme, {mount, shallow} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {mount, shallow} from 'enzyme'
 
 import {ServiceManualListItems} from 'NewService/components/FormElements'
-
-Enzyme.configure({adapter: new Adapter()})
 
 it('should render itself', () => {
   const wrapper = mount(<ServiceManualListItems/>)

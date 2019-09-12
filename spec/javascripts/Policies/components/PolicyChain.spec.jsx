@@ -1,9 +1,6 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 import {PolicyChain, SortableList, SortableItem, DragHandle} from 'Policies/components/PolicyChain'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 const policies = [
   {id: '1', enabled: true, name: 'cors', humanName: 'CORS', summary: 'CORS', description: 'CORS headers', version: '1.0.0', configuration: {}, schema: {}},
