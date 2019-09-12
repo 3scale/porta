@@ -17,15 +17,15 @@ class BackendMetricWorker
     5.minutes.to_i
   end
 
-  def self.lock_workers(service_backend_id, metric_id, *)
-    "service:#{service_backend_id}/metric:#{metric_id}"
+  def self.lock_workers(service_id, metric_id, *)
+    "service:#{service_id}/metric:#{metric_id}"
   end
 
-  def perform(service_backend_id, metric_id, *args)
-    retry_job(service_backend_id, metric_id, *args) unless lock(service_backend_id, metric_id).acquire!
+  def perform(backend_id, metric_id, *args)
+    retry_job(backend_id, metric_id, *args) unless lock(backend_id, metric_id).acquire!
 
     begin
-      save_or_delete_metric(service_backend_id, metric_id)
+      save_or_delete_metric(backend_id, metric_id)
     ensure
       lock.release!
     end
@@ -33,9 +33,9 @@ class BackendMetricWorker
 
   protected
 
-  def retry_job(service_backend_id, metric_id, *args)
+  def retry_job(backend_id, metric_id, *args)
     raise LockError if last_attempt?
-    self.class.perform_async(service_backend_id, metric_id, *args)
+    self.class.perform_async(backend_id, metric_id, *args)
   end
 
   def save_or_delete_metric(service_backend_id, metric_id)
