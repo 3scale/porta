@@ -25,8 +25,7 @@ class BackendMetricWorker
     retry_job(service_backend_id, metric_id, *args) unless lock(service_backend_id, metric_id).acquire!
 
     begin
-      metric_parent_id = args.size == 2 ? args.last : nil # TODO: Simplify this - We don't really need the system_name being passed among the args
-      save_or_delete_metric(service_backend_id, metric_id, metric_parent_id)
+      save_or_delete_metric(service_backend_id, metric_id)
     ensure
       lock.release!
     end
@@ -39,14 +38,15 @@ class BackendMetricWorker
     self.class.perform_async(service_backend_id, metric_id, *args)
   end
 
-  def save_or_delete_metric(service_backend_id, metric_id, metric_parent_id = nil)
+  def save_or_delete_metric(service_backend_id, metric_id)
     metric = Metric.find_by(id: metric_id)
-    if metric
+    service = Service.find_by(id: service_backend_id)
+    if metric && service
       new_metric_attributes = {
         service_id: service_backend_id,
         id: metric_id,
         name: metric.system_name,
-        parent_id: metric_parent_id || metric.parent_id
+        parent_id: metric.parent_id_for_service(service)
       }
       ThreeScale::Core::Metric.save(new_metric_attributes)
     else
