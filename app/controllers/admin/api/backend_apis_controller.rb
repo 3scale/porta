@@ -46,7 +46,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##
   #
   def index
-    respond_with(current_account.backend_apis.oldest_first.paginate(pagination_params))
+    respond_with(current_account.backend_apis.accessible.oldest_first.paginate(pagination_params))
   end
 
   ##~ e = sapi.apis.add
@@ -121,7 +121,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_backend_api_id_by_id
   #
   def destroy
-    backend_api.destroy
+    backend_api.mark_as_deleted
     respond_with(backend_api)
   end
 
@@ -135,7 +135,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   end
 
   def backend_api
-    @backend_api ||= current_account.backend_apis.find(params[:id])
+    @backend_api ||= current_account.backend_apis.accessible.find(params[:id])
   end
 
   def create_params
