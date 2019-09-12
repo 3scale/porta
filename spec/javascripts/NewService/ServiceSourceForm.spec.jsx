@@ -2,12 +2,9 @@
 
 import React from 'react'
 import { act } from 'react-dom/test-utils'
-import Enzyme, {mount, shallow} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {mount, shallow} from 'enzyme'
 
 import {ServiceSourceForm} from 'NewService'
-
-Enzyme.configure({adapter: new Adapter()})
 
 const serviceDiscoveryAuthenticateUrl = 'my-url'
 const props = {

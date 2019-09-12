@@ -1,10 +1,7 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 
 import { ServicesFieldset } from 'Users/components/ServicesFieldset'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 let wrapper
 

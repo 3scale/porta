@@ -1,13 +1,10 @@
 // @flow
 
 import React from 'react'
-import Enzyme, {shallow} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {shallow} from 'enzyme'
 
 import {FormWrapper} from 'NewService/components/FormElements'
 import {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements'
-
-Enzyme.configure({adapter: new Adapter()})
 
 const submitText = 'Add API'
 const props = {

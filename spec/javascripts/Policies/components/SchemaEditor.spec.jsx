@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 import { JSDOM } from 'jsdom'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
 
@@ -8,8 +7,6 @@ import {
   SchemaEditor,
   CM_OPTIONS
 } from 'Policies/components/SchemaEditor'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('PolicyEditor', () => {
   function setup (customProps) {

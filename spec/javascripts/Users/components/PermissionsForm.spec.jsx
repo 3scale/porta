@@ -1,10 +1,7 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 
 import { PermissionsForm } from 'Users/components/PermissionsForm'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 function getWrapper (testProps) {
   const defaultProps = { features: [], services: [] }
