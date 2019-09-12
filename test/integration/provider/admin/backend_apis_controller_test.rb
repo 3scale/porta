@@ -13,17 +13,6 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
 
   attr_reader :provider
 
-  test '#index does not list deleted backend apis' do
-    FactoryBot.create(:backend_api, account: @provider, state: BackendApi::DELETED_STATE)
-    get provider_admin_backend_apis_path
-    assert_response :success
-    expected_backend_apis = @provider.backend_apis.count - 1
-    assert_select '#backend_apis tr', count: expected_backend_apis + 1
-    @provider.backend_apis.accessible.each do |backend_api|
-      assert_select '#backend_apis td:first-child', text: backend_api.name
-    end
-  end
-
   test '#new' do
     get new_provider_admin_backend_api_path
     assert_response :success
