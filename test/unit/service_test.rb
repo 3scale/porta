@@ -316,7 +316,7 @@ class ServiceTest < ActiveSupport::TestCase
     service.account.settings.service_plans_ui_visible = true
 
     service.save!
-    
+
     service_plan = service.service_plans.first!
     assert_equal 'hidden', service_plan.state
   end
