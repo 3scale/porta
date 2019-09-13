@@ -1,5 +1,6 @@
 / TODO: workaround until backend_apis/new form is implemented
 - new_admin_backend_api_path = "backend_apis/new"
+- current_tab = cookies[:dashboard_current_tab]
 
 header.DashboardSection-header.DashboardSection-header--extended
   h1.DashboardSection-title
@@ -8,7 +9,7 @@ header.DashboardSection-header.DashboardSection-header--extended
 
 div
   div.DashboardNavigation-tabs--content
-    input#tab-products name='apiap-tabs' type='radio' checked='checked' autocomplete='off'
+    input#tab-products name='apiap-tabs' type='radio' autocomplete='omff' checked=('checked' if current_tab == 'tab-products')
     div#products
       = render 'apiap_search_bar', collection: @services, placeholder: 'Find a Product', id: 'products_search'
       = render 'new_api_button', text: 'New Product', path: new_admin_service_path
@@ -18,7 +19,7 @@ div
                cache_options: { expires_in: 1.hour }
 
   div.DashboardNavigation-tabs--content
-    input#tab-backends name='apiap-tabs' type='radio' autocomplete='off'
+    input#tab-backends name='apiap-tabs' type='radio' autocomplete='off' checked=('checked' if current_tab == 'tab-backends')
     div#backends
       = render 'apiap_search_bar', collection: current_account.backend_apis, placeholder: 'Find a Backend', id: 'backends_search'
       = render 'new_api_button', text: 'New Backend', path: new_admin_backend_api_path
