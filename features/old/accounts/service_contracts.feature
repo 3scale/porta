@@ -39,14 +39,12 @@ Feature: Account service plans management
      And I should see "Fancy API"
 
     When I follow "Subscribe to Fancy API"
-     And I wait until all animations have finished
 
     Then I should see "New service subscription"
     #And I should see "Cheap one"
     #And I should see "Expensive one"
 
     When I press "Create subscription"
-     And I wait until all animations have finished
     Then I should see "Cheap one"
 
     When I follow "Change Fancy API subscription"
@@ -54,7 +52,6 @@ Feature: Account service plans management
 
     When I select "Expensive one" from "Plan"
      And I press "Change subscription" within fancybox
-     And I wait until all animations have finished
     Then I should see "Expensive one"
 
 

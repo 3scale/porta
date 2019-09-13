@@ -1,4 +1,4 @@
-@percy @javascript @selenium
+@javascript @selenium
 Feature: Visual Regressions
 
   Background:

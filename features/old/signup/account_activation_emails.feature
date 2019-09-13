@@ -20,7 +20,7 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       When someone signs up with the email "anotheruser@example.com"
       Then "anotheruser@example.com" should receive the default account activation email
 
-  @javascript @ajax
+  @javascript
   Scenario: Custom account activation email
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
@@ -34,7 +34,7 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       And "user@example.com" opens the account activation email
     Then they should see "provider custom account notification email" in the email body
 
-  @javascript @ajax
+  @javascript
   Scenario: Custom account activation email really versioned
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"

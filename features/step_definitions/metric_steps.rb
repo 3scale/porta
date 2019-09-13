@@ -65,6 +65,7 @@ When /^I (?:enable|disable) the (metric "[^\"]*")$/ do |metric|
 end
 
 Then /^I should see the (metric "[^"]*") is (visible|hidden)$/ do |metric, visible|
+  wait_for_requests
   assert find(:xpath, "//span[@id='metric_#{metric.id}_visible']")[:class] == visible
 end
 
@@ -141,6 +142,7 @@ Then /^I should see the (metric "[^\"]*") limits as text in the plan widget$/ do
 end
 
 Then /^I should see the (metric "[^\"]*") limits show as icons and text$/ do |metric|
+  wait_for_requests
   assert find(:xpath, "//span[@id='metric_#{metric.id}_icons']")[:class] == 'icon'
 end
 
@@ -149,11 +151,13 @@ Then /^I should see the (metric "[^\"]*") limits as icons and text in the plan w
 end
 
 Then /^I should see the (metric "[^\"]*") limits as icons only in the plan widget$/ do |metric|
+  wait_for_requests
   assert find(:xpath, "//tr[@id='metric_#{metric.id}_limits']/td").text.strip.empty?
   assert has_xpath?("//tr[@id='metric_#{metric.id}_limits']/td/img")
 end
 
 Then /^I should see the (metric "[^\"]*") is (enabled|disabled)$/ do |metric, status|
+  wait_for_requests
   assert find(:xpath, "//span[@id='metric_#{metric.id}_status']")[:class] == status
 end
 

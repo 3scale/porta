@@ -42,9 +42,7 @@ Feature: End User Plan creation
     When I am on the end user plans of service "API" page of provider "foo.example.com"
 
     When I select "First" as default end user plan
-      And I wait until all animations have finished
     Then "First" should be default end user plan for service "API"
 
     When I select "Second" as default end user plan
-      And I wait until all animations have finished
     Then "Second" should be default end user plan for service "API"

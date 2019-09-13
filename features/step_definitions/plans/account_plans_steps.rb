@@ -1,6 +1,6 @@
 When /^I customize the account plan$/ do
   click_link "Convert to a Custom Plan"
-  wait_for_ajax
+  wait_for_requests
 end
 
 When /^I decustomize the account plan$/ do

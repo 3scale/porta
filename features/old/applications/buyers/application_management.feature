@@ -39,10 +39,8 @@ Feature: Buyer's application management
       And I follow "Create new application"
       And I follow "Travelling"
       And I follow "Change"
-      And wait for ajax
       And I follow "Train"
       And I click on Select this plan for the "Train" plan
-      And wait for ajax
 
     When I fill in "Name" with "UltimateWidget"
      And I fill in "Description" with "Awesome ultimate super widget"

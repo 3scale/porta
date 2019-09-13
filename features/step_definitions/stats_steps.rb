@@ -8,8 +8,8 @@ end
 
 
 Then /^I should see a sparkline for "([^\"]*)"$/ do |metric|
-  within("div#mini-charts") do
-    assert_selector 'canvas'
+  within(".DashboardSection--audience") do
+    assert_selector 'div.Dashboard-chart'
   end
 end
 
