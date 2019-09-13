@@ -2435,6 +2435,230 @@
       ]
     },
     {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics.json",
+      "responseClass": "List[metric]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Metric List",
+          "description": "Returns the list of metrics of a backend api.",
+          "group": "metric",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json",
+      "responseClass": "metric",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Metric Read",
+          "description": "Returns the metric of a backend api.",
+          "group": "metric",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics.json",
+      "responseClass": "metric",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Backend API Metric Create",
+          "description": "Creates a metric on a backend api.",
+          "group": "metric",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "friendly_name",
+              "description": "Descriptive Name of the metric.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "system_name",
+              "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "unit",
+              "description": "Measure unit of the metric.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the metric.",
+              "dataType": "text",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json",
+      "responseClass": "metric",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Backend API Metric Update",
+          "description": "Updates the metric of a backend api.",
+          "group": "metric",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "friendly_name",
+              "description": "Name of the metric.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "unit",
+              "description": "Measure unit of the metric.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the metric.",
+              "dataType": "text",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Backend API Metric Delete",
+          "description": "Deletes the metric of a backend api. When you delete a metric or a method, it will also remove all the associated limits.",
+          "group": "metric",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/backend_apis.json",
       "responseClass": "List[backend_api]",
       "operations": [
@@ -4658,7 +4882,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Metric List",
+          "summary": "Service Metric List",
           "description": "Returns the list of metrics of a service.",
           "group": "metric",
           "parameters": [
@@ -4682,8 +4906,8 @@
         },
         {
           "httpMethod": "POST",
-          "summary": "Metric Create",
-          "description": "Creates a metric on a service. All metrics are scoped by service.",
+          "summary": "Service Metric Create",
+          "description": "Creates a metric on a service.",
           "group": "metric",
           "parameters": [
             {
@@ -4753,7 +4977,7 @@
         {
           "nickname": "service_metric",
           "httpMethod": "GET",
-          "summary": "Metric Read",
+          "summary": "Service Metric Read",
           "description": "Returns the metric of a service.",
           "group": "metric",
           "parameters": [
@@ -4785,7 +5009,7 @@
         },
         {
           "httpMethod": "PUT",
-          "summary": "Metric Update",
+          "summary": "Service Metric Update",
           "description": "Updates the metric of a service.",
           "group": "metric",
           "parameters": [
@@ -4841,7 +5065,7 @@
         },
         {
           "httpMethod": "DELETE",
-          "summary": "Metric Delete",
+          "summary": "Service Metric Delete",
           "description": "Deletes the metric of a service. When you delete a metric or a method, it will also remove all the associated limits across application plans.",
           "group": "metric",
           "parameters": [
