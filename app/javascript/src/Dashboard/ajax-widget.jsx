@@ -1,9 +1,9 @@
 // @flow
 
-import { widget } from 'Dashboard'
+import { widget as makeWidgetRequest } from 'Dashboard'
 
 export function loadAudienceWidget (widgetPath: string) {
-  widget(widgetPath)
+  makeWidgetRequest(widgetPath)
 }
 
 export function loadServiceWidget (serviceId: string, widgetPath: string) {
@@ -15,20 +15,20 @@ export function loadServiceWidget (serviceId: string, widgetPath: string) {
   const toggleableTitle = container.querySelector('.DashboardSection-toggle')
 
   if (!toggleableTitle) {
-    widget(widgetPath)
+    makeWidgetRequest(widgetPath)
     return
   }
 
   let value = window.localStorage[`toggle:service_${serviceId}`]
   if (value && !JSON.parse(value)['is-closed']) {
-    widget(widgetPath)
+    makeWidgetRequest(widgetPath)
     return
   }
 
   toggleableTitle.addEventListener('click', () => {
     const isCurrentlyClosed = container.classList.contains('is-closed')
     if (isCurrentlyClosed) {
-      widget(widgetPath)
+      makeWidgetRequest(widgetPath)
     }
   })
 }
