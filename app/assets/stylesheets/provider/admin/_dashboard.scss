@@ -439,6 +439,10 @@ a:hover .u-notice {
     nav.DashboardNavigation--services {
       float: left;
       margin-left: line-height-times(2);
+
+      .DashboardNavigation-list-item {
+        padding-top: line-height-times(1 / 5);
+      }
     }
   }
 }
