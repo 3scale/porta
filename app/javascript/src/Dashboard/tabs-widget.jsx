@@ -9,7 +9,8 @@ export function initialize () {
     i.addEventListener('change', toggleCurrentTab)
   }
 
-  function toggleCurrentTab () {
+  function toggleCurrentTab (e: any) {
+    document.cookie = `dashboard_current_tab=${e.currentTarget.id}`
     for (const t of tabs) {
       t.classList.toggle('current-tab')
     }

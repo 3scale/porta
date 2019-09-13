@@ -1,6 +1,8 @@
+- current_tab = cookies[:dashboard_current_tab]
+
 nav.DashboardNavigation.DashboardNavigation-tabs
   ul.DashboardNavigation-list
     li.DashboardNavigation-list-item
-      = dashboard_apiap_tab_label 'tab-products', 'Product', @services, icon_name: 'gift', current_tab: true
+      = dashboard_apiap_tab_label 'tab-products', 'Product', @services, icon_name: 'gift', current_tab: current_tab == 'tab-products'
     li.DashboardNavigation-list-item
-      = dashboard_apiap_tab_label 'tab-backends', 'Backend', current_account.backend_apis, icon_name: 'puzzle-piece'
+      = dashboard_apiap_tab_label 'tab-backends', 'Backend', current_account.backend_apis, icon_name: 'puzzle-piece', current_tab: current_tab == 'tab-backends'
