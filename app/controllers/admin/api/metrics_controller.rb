@@ -10,7 +10,7 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Metric List"
+  ##~ op.summary    = "Service Metric List"
   ##~ op.description = "Returns the list of metrics of a service."
   ##~ op.group = "metric"
   #
@@ -23,8 +23,8 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
 
   ##~ op = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Metric Create"
-  ##~ op.description = "Creates a metric on a service. All metrics are scoped by service."
+  ##~ op.summary    = "Service Metric Create"
+  ##~ op.description = "Creates a metric on a service."
   ##~ op.group = "metric"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -49,7 +49,7 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
   ##~ op = e.operations.add
   ##~ op.nickname   = "service_metric"
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Metric Read"
+  ##~ op.summary    = "Service Metric Read"
   ##~ op.description = "Returns the metric of a service."
   ##~ op.group = "metric"
   #
@@ -63,7 +63,7 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
 
   ##~ op = e.operations.add
   ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Metric Update"
+  ##~ op.summary    = "Service Metric Update"
   ##~ op.description = "Updates the metric of a service."
   ##~ op.group = "metric"
   #
@@ -82,7 +82,7 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
 
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Metric Delete"
+  ##~ op.summary    = "Service Metric Delete"
   ##~ op.description = "Deletes the metric of a service. When you delete a metric or a method, it will also remove all the associated limits across application plans."
   ##~ op.group = "metric"
   #
