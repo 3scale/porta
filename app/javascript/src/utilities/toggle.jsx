@@ -52,7 +52,12 @@ export function recoverState (ident: string, classList: DOMTokenList, className:
   let classState = typeof (storedState) === 'object' && storedState[className]
 
   if (typeof (classState) !== 'undefined') {
-    classList.toggle(className, classState)
+    // Toggle method second argument not supported in IE11
+    if (classState) {
+      classList.add(className)
+    } else {
+      classList.remove(className)
+    }
   }
 }
 
@@ -78,7 +83,14 @@ export function toggleState (ident: string, classList: DOMTokenList, className: 
 export function toggle (ident: string, classList: DOMTokenList, toggle: Element, className: string) {
   let handler = () => {
     toggleState(ident, classList, className)
-    window.dispatchEvent(new Event('resize'))
+    let event
+    if (typeof Event === 'function') {
+      event = new Event('resize')
+    } else {
+      event = document.createEvent('Event')
+      event.initEvent('resize', true, true)
+    }
+    window.dispatchEvent(event)
   }
 
   recoverState(ident, classList, className)

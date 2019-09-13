@@ -15,7 +15,6 @@ module Alerts
   end
 
   def limit_alerts_table(state = nil)
-    wait_for_ajax
     scope = 'tr'
     scope << "[data-state='#{state}']" if state.present?
     scope << "[id*='alert']"

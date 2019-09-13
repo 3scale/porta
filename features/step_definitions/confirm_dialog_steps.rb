@@ -3,6 +3,7 @@ Then /^(.+) and I confirm dialog box(?: "(.*)")?$/ do |original, text|
     accept_confirm(text) do
       step original
     end
+    wait_for_requests
   else # :rack_test but should not work if it relies on some JS
     step original
   end

@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: Usage limits visibility
   In order to present limits to my customers
   As a provider

@@ -1,4 +1,4 @@
-@javascript @ajax
+@javascript
 Feature: CMS Sections
   As a provider
   I want to manage the CMS sections

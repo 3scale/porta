@@ -1,4 +1,11 @@
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
-    dashboardWidget(#{json widget.path})
+    let widgetPath = #{json widget.path}
+    let serviceId = #{json widget.params[:service_id]}
+
+    if (serviceId === null) {
+      dashboardWidget.loadAudienceWidget(widgetPath)
+    } else {
+      dashboardWidget.loadServiceWidget(serviceId, widgetPath)
+    }
   })

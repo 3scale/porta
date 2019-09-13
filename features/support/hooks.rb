@@ -90,10 +90,6 @@ AfterStep '@javascript', '@alert', '~@selenium' do
   stub_javascript_alert
 end
 
-AfterStep '@javascript', '@ajax' do
-  step 'wait for ajax'
-end
-
 Before '@javascript' do
   @javascript = true
 end
