@@ -3,7 +3,6 @@
 default: &DEFAULT
   adapter: oracle_enhanced
   url: <%= ENV['DATABASE_URL'] %>
-  time_zone: 'UTC'
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
 
 production:
