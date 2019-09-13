@@ -1,7 +1,7 @@
 Then /^fields should be required:$/ do |table|
   table.rows.each do |row|
     field = row.first
-    assert page.has_xpath?("//label[normalize-space(text())='#{field}']/abbr[@title='required']"),
+    assert page.has_xpath?("//label[normalize-space(text())='#{field}']/abbr[@title='required']", visible: false),
            "Field #{field.first} is not required"
   end
 end

@@ -98,7 +98,7 @@ Then /^I should see all keys of the application of (buyer "[^"]*")$/ do |buyer|
 end
 
 def limit_warning
-  find("#app-keys-limit-warning")
+  find("#app-keys-limit-warning", visible: :any)
 end
 
 Then /^I should see application keys limit reached error$/ do
