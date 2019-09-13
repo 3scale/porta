@@ -90,19 +90,15 @@ describe('<InlineChart/>', () => {
     expect(wrapper.state().unitPluralized).toEqual(mockData.unitPluralized)
   })
 
-  it('calls updateState method with total of 1', () => {
-    wrapper.instance().generateC3Chart = jest.fn()
-    wrapper.update()
-    wrapper.instance().updateState(data)
-    expect(wrapper.instance().generateC3Chart).toHaveBeenCalled()
-  })
+  it('should print the correct lebel depending on the total of data', () => {
+    wrapper.instance().updateState({ ...data, total: 0 })
+    expect(wrapper.state('total')).toEqual('0 hits')
 
-  it('calls updateState method with total > 1', () => {
-    wrapper.instance().generateC3Chart = jest.fn()
-    wrapper.update()
+    wrapper.instance().updateState({ ...data, total: 1 })
+    expect(wrapper.state('total')).toEqual('1 hit')
 
-    wrapper.instance().updateState(data)
-    expect(wrapper.instance().generateC3Chart).toHaveBeenCalled()
+    wrapper.instance().updateState({ ...data, total: 10 })
+    expect(wrapper.state('total')).toEqual('10 hits')
   })
 
   it('should call c3.generate(), from generateC3Chart()', () => {
