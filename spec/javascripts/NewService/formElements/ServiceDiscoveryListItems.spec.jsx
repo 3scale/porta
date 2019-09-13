@@ -1,17 +1,13 @@
-// @flow
-
 import React from 'react'
 import {act} from 'react-dom/test-utils'
-import Enzyme, {mount, shallow, render} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {mount, shallow, render} from 'enzyme'
 
 import {ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 import * as utils from 'utilities/utils'
 import { BASE_PATH } from 'NewService'
 
-Enzyme.configure({adapter: new Adapter()})
-
 const projects = ['project_00', 'project_01']
+const fakeServices = ['service_00', 'service_01']
 const onError = jest.fn()
 const props = { projects, onError }
 
@@ -36,41 +32,56 @@ it('should render a field to select a service', () => {
 
 describe('fetchServices', () => {
   const fetch = jest.spyOn(utils, 'fetchData')
+    .mockImplementation(() => Promise.resolve(fakeServices))
 
   afterEach(() => {
     fetch.mockClear()
   })
 
-  it('should fetch services with a project is selected', () => {
+  it('should fetch services with a project is selected', async () => {
     const namespace = 'my-project'
-    const wrapper = mount(<ServiceDiscoveryListItems {...props}/>)
+    let wrapper
 
-    act(() => {
+    await act(async () => {
+      wrapper = mount(<ServiceDiscoveryListItems {...props}/>)
+    })
+
+    await act(async () => {
       wrapper.find('select#service_namespace').prop('onChange')({ currentTarget: { value: namespace } })
     })
+
     expect(fetch).toHaveBeenLastCalledWith(`${BASE_PATH}/namespaces/${namespace}/services.json`)
   })
 
-  it('should re fetch services when the list of projects is updated', () => {
-    const wrapper = mount(<ServiceDiscoveryListItems {...props}/>)
+  it('should re fetch services when the list of projects is updated', async () => {
+    let wrapper
+
+    await act(async () => {
+      wrapper = mount(<ServiceDiscoveryListItems {...props}/>)
+    })
 
     expect(fetch).toHaveBeenLastCalledWith(`${BASE_PATH}/namespaces/${projects[0]}/services.json`)
 
     const newProject = 'project_03'
-    wrapper.setProps({ projects: [newProject] })
+    await act(async () => {
+      wrapper.setProps({ projects: [newProject] })
+    })
 
     expect(fetch).toHaveBeenLastCalledWith(`${BASE_PATH}/namespaces/${newProject}/services.json`)
   })
 
-  it('should disable the inputs while fetching services', () => {
-    fetch.mockImplementation(() => {
-      expect(wrapper.find('select').every(n => n.prop('disabled'))).toBe(true)
+  it('should disable the inputs while fetching services', async () => {
+    let wrapper
+
+    await act(async () => {
+      wrapper = mount(<ServiceDiscoveryListItems {...props}/>)
+      // Assert selects are disabled right after fetch starts
+      wrapper.update()
+      expect(wrapper.find('select').everyWhere(n => n.prop('disabled') === true)).toBe(true)
     })
 
-    const wrapper = mount(<ServiceDiscoveryListItems {...props}/>)
-
-    act(() => {
-      wrapper.find('select#service_namespace').prop('onChange')({ currentTarget: { value: 'namespace' } })
-    })
+    // Assert selects are not disabled after fetched
+    wrapper.update()
+    expect(wrapper.find('select').everyWhere(n => n.prop('disabled') === false)).toBe(true)
   })
 })

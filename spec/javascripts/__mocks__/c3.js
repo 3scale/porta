@@ -1,1 +1,3 @@
-module.exports = () => 'c3'
+module.exports = {
+  generate: jest.fn()
+}

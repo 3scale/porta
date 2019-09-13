@@ -10,6 +10,7 @@ import type { ChainPolicy } from 'Policies/types/Policies'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
 class PolicyForm extends Form {
+  // TODO: this method will be renamed to UNSAFE_componentWillReceiveProps in 1.9 and eventually removed.
   componentWillReceiveProps (nextProps: Props) {
     if (nextProps.schema !== this.state.schema) {
       this.setState({...this.getStateFromProps(nextProps), ...{errors: []}})
