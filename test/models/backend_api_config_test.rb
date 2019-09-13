@@ -24,4 +24,19 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     refute @config.valid?
     assert_match /must be a path/, @config.errors[:path].join('')
   end
+
+  test 'scope with_subpath' do
+    bac_slash = FactoryBot.create(:backend_api_config, path: '/').id
+    bac_empty = FactoryBot.create(:backend_api_config, path: '').id
+    bac_path_foo = FactoryBot.create(:backend_api_config, path: '/foo').id
+    bac_path_null = FactoryBot.create(:backend_api_config, path: '/null').id
+    bac_path_longer = FactoryBot.create(:backend_api_config, path: '/hello/my/name/is/john').id
+
+    backend_api_config_ids_with_subpath = BackendApiConfig.with_subpath.pluck(:id)
+    assert_not_includes backend_api_config_ids_with_subpath, bac_slash
+    assert_not_includes backend_api_config_ids_with_subpath, bac_empty
+    assert_includes backend_api_config_ids_with_subpath, bac_path_foo
+    assert_includes backend_api_config_ids_with_subpath, bac_path_null
+    assert_includes backend_api_config_ids_with_subpath, bac_path_longer
+  end
 end

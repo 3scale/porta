@@ -37,7 +37,7 @@ Feature: API menu
     | Application Plans         |
 
   Scenario: Integration sub menu structure provider has api as product enabled
-    Given the account has Service acting as Product
+    Given the account has api_as_product rolling update enabled
     And I have api_as_product feature disabled
     When I follow "Overview"
     When I follow "Integration" within the main menu
@@ -57,7 +57,7 @@ Feature: API menu
     | Settings                  |
 
   Scenario: Integration sub menu structure for API as Product
-    Given the account has Service acting as Product
+    Given the account has api_as_product rolling update enabled
     And I have api_as_product feature disabled
     When I follow "Overview"
     And I follow "Integration" within the main menu
