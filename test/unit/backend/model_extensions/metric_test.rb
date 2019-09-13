@@ -83,7 +83,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     f2.resume
   end
 
-  test 'sync backend api metrics with backend' do
+  test 'sync backend api metric for multiple services' do
     services = FactoryBot.create_list(:simple_service, 2)
     backend_api = services.first.first_backend_api
     services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
@@ -94,5 +94,17 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
     services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.system_name) }
     metric.send :sync_backend!
+  end
+
+  test 'sync metric for single service' do
+    service = FactoryBot.create(:simple_service)
+    backend_api = FactoryBot.create(:backend_api, account: service.account)
+    metric = backend_api.metrics.hits
+
+    BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.attributes['system_name'])
+    metric.sync_backend_for_service(service)
+
+    BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.attributes['system_name'])
+    metric.sync_backend_for_service!(service)
   end
 end

@@ -23,14 +23,22 @@ module Backend
 
       def sync_backend
         execute_per_service do |service|
-          ::BackendMetricWorker.perform_async(service.backend_id, id, system_name)
+          sync_backend_for_service(service)
         end
       end
 
       def sync_backend!
         execute_per_service do |service|
-          ::BackendMetricWorker.new.perform(service.backend_id, id, system_name)
+          sync_backend_for_service!(service)
         end
+      end
+
+      def sync_backend_for_service(service)
+        ::BackendMetricWorker.perform_async(service.backend_id, id, attributes['system_name'])
+      end
+
+      def sync_backend_for_service!(service)
+        ::BackendMetricWorker.new.perform(service.backend_id, id, attributes['system_name'])
       end
 
       def execute_per_service(&block)
