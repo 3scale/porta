@@ -7,26 +7,26 @@ def service_for_name (name)
   page.find("#service_#{service_id}")
 end
 
-def hits_for_name (name)
+def hits_for_name(name, visible = true)
   service_id = service_id_for_name(name)
-  page.find_by_id("dashboard-widget-service_id-#{service_id}service_hits")
+  page.find_by_id("dashboard-widget-service_id-#{service_id}service_hits", visible: visible)
 end
 
-def top_traffic_for_name (name)
+def top_traffic_for_name(name, visible = true)
   service_id = service_id_for_name(name)
-  page.find_by_id("dashboard-widget-service_id-#{service_id}service_top_traffic")
+  page.find_by_id("dashboard-widget-service_id-#{service_id}service_top_traffic", visible: visible)
 end
 
 When(/^service "([^"]*)" is (folded|unfolded)$/) do |service_name, state|
-  service = service_for_name(service_name)
+  service = service_for_name(service_name.upcase)
 
   assert     service[:class].include? 'is-closed' if state == 'folded'
   assert_not service[:class].include? 'is-closed' if state == 'unfolded'
 end
 
 Then(/^I should not see "([^"]*)" overview data$/) do |service_name|
-  hits = hits_for_name(service_name)
-  top_traffic = top_traffic_for_name(service_name)
+  hits = hits_for_name(service_name.upcase, false)
+  top_traffic = top_traffic_for_name(service_name.upcase, false)
 
   assert_not hits.visible?
   assert_not top_traffic.visible?
