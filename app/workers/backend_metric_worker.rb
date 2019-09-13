@@ -21,23 +21,11 @@ class BackendMetricWorker
     "service:#{service_id}/metric:#{metric_id}"
   end
 
-  def self.sync(backend_id, metric_id, metric_system_name)
-    perform_async(backend_id, metric_id, metric_system_name)
-  end
-
   def perform(backend_id, metric_id, *args)
     retry_job(backend_id, metric_id, *args) unless lock(backend_id, metric_id).acquire!
 
     begin
-      if (metric = Metric.find_by(id: metric_id))
-
-        ThreeScale::Core::Metric.save(service_id: backend_id,
-                                      id: metric_id,
-                                      name: metric.system_name,
-                                      parent_id: metric.parent_id)
-      else
-        ThreeScale::Core::Metric.delete(backend_id, metric_id)
-      end
+      save_or_delete_metric(backend_id, metric_id)
     ensure
       lock.release!
     end
@@ -47,6 +35,22 @@ class BackendMetricWorker
 
   def retry_job(backend_id, metric_id, *args)
     raise LockError if last_attempt?
-    self.class.sync(backend_id, metric_id, *args)
+    self.class.perform_async(backend_id, metric_id, *args)
+  end
+
+  def save_or_delete_metric(service_backend_id, metric_id)
+    metric = Metric.find_by(id: metric_id)
+    service = Service.find_by(id: service_backend_id)
+    if metric && service
+      new_metric_attributes = {
+        service_id: service_backend_id,
+        id: metric_id,
+        name: metric.system_name,
+        parent_id: metric.parent_id_for_service(service)
+      }
+      ThreeScale::Core::Metric.save(new_metric_attributes)
+    else
+      ThreeScale::Core::Metric.delete(service_backend_id, metric_id)
+    end
   end
 end

@@ -39,7 +39,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
   test '#retry_job reenqueues the job' do
     args = ['foo', 'bar']
     worker = BackendMetricWorker.new
-    BackendMetricWorker.expects(:sync).with(*args)
+    BackendMetricWorker.expects(:perform_async).with(*args)
     worker.send(:retry_job, *args)
   end
 
@@ -47,7 +47,31 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
     args = ['foo', 'bar']
     worker = BackendMetricWorker.new
     worker.expects(:last_attempt?).returns(true)
-    BackendMetricWorker.expects(:sync).with(*args).never
+    BackendMetricWorker.expects(:perform_async).with(*args).never
     assert_raises(BackendMetricWorker::LockError) { worker.send(:retry_job, *args) }
+  end
+
+  test 'syncs metrics with the right parent_id' do
+    service = FactoryBot.create(:service)
+    service_hits = service.metrics.hits
+    service_other = FactoryBot.create(:metric, owner: service, system_name: 'other-metric-of-service')
+    service_backend_id = service.backend_id
+
+    backend_api = service.backend_apis.first
+    backend_hits = backend_api.metrics.hits
+    backend_other = FactoryBot.create(:metric, owner: backend_hits, system_name: 'other-metric-of-backend')
+
+    worker = BackendMetricWorker.new
+
+    metric_attributes = [
+      { id: service_hits.id, name: service_hits.system_name, parent_id: nil },
+      { id: service_other.id, name: service_other.system_name, parent_id: nil },
+      { id: backend_hits.id, name: backend_hits.system_name, parent_id: service_hits.id },
+      { id: backend_other.id, name: backend_other.system_name, parent_id: nil }
+    ]
+    metric_attributes.each do |attrs|
+      ThreeScale::Core::Metric.expects(:save).with(attrs.merge(service_id: service_backend_id))
+      worker.perform(service_backend_id, attrs[:id])
+    end
   end
 end
