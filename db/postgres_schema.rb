@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805135829) do
+ActiveRecord::Schema.define(version: 20190913002814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,7 +79,6 @@ ActiveRecord::Schema.define(version: 20190805135829) do
     t.string   "credit_card_authorize_net_payment_profile_token", limit: 255
     t.integer  "tenant_id",                                       limit: 8
     t.string   "self_domain",                                     limit: 255
-    t.string   "service_preffix",                                 limit: 255
     t.string   "s3_prefix",                                       limit: 255
     t.integer  "prepared_assets_version"
     t.boolean  "sample_data"
