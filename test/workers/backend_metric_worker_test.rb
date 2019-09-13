@@ -64,10 +64,10 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
     worker = BackendMetricWorker.new
 
     metric_attributes = [
-      { id: service_hits.id, name: service_hits.system_name, parent_id: nil },
-      { id: service_other.id, name: service_other.system_name, parent_id: nil },
-      { id: backend_hits.id, name: backend_hits.system_name, parent_id: service_hits.id },
-      { id: backend_other.id, name: backend_other.system_name, parent_id: nil }
+      { id: service_hits.id, name: service_hits.attributes['system_name'], parent_id: nil },
+      { id: service_other.id, name: service_other.attributes['system_name'], parent_id: nil },
+      { id: backend_hits.id, name: backend_hits.attributes['system_name'], parent_id: service_hits.id },
+      { id: backend_other.id, name: backend_other.attributes['system_name'], parent_id: nil }
     ]
     metric_attributes.each do |attrs|
       ThreeScale::Core::Metric.expects(:save).with(attrs.merge(service_id: service_backend_id))
