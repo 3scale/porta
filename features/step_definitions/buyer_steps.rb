@@ -214,7 +214,7 @@ Given('the provider has a buyer') do
     click_on 'Sign in'
   end
 
-  page.should have_content('Signed in successfully')
+  page.should have_content(/Signed in successfully/i)
 
   @buyer = @provider.buyers.last!
 end

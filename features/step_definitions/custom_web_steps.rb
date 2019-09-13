@@ -295,7 +295,7 @@ end
 toggled_input_selector = '[data-behavior="toggle-inputs"] legend'
 
 And(/^I toggle "([^"]*)"$/) do |name|
-  find(toggled_input_selector, text: name).click
+  find(toggled_input_selector, text: /#{name}/i).click
 end
 
 When(/^I toggle all inputs$/) do

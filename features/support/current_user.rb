@@ -7,7 +7,7 @@ helper = Module.new do
     # HACK: I can't access session variables easily, but there are other ways how to get what I want :)
     begin
       # provider side
-      username = find(:css, '#user_widget .username').text(:all).strip
+      username = find(:css, '#user_widget .username', visible: :all).text(:all).strip
     rescue Capybara::ElementNotFound
       # buyer side
       username = find('#sign-out-button')[:title].gsub('Sign Out','').strip

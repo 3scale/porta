@@ -39,8 +39,6 @@ Feature: Personal Details
     And I follow "Settings"
     Then I should not see "Personal Details"
 
-
-  @javascript
   Scenario: User Fields
     Given provider "foo.example.com" has the following fields defined for "User":
       | name                 | required | read_only | hidden |

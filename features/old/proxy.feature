@@ -66,15 +66,14 @@ Feature: Proxy integration
     Given I'm using a custom API Backend
     Then I should be able to switch back to using the default API Backend
 
-
-  @javascript
+  @javascript @selenium
   Scenario: Got some fancy policy chain
     And I go to the integration show page for service "one"
     And I press "Start using the latest APIcast"
     When I have policies feature enabled
     And I go to the integration page for service "one"
+    And I toggle "Policies"
     Then I should see the Policy Chain
-
 
   Scenario: Got error message when APIcast registry is not setup properly
     And apicast registry is undefined
@@ -96,6 +95,6 @@ Feature: Proxy integration
     And I save the proxy config
     Then the mapping rules should be in the following order:
       | http_method | pattern | delta | metric |
-      | PUT         | /mixers | 1     | hits   |
-      | GET         | /       | 1     | hits   |
       | POST        | /beers  | 2     | hits   |
+      | GET         | /       | 1     | hits   |
+      | PUT         | /mixers | 1     | hits   |

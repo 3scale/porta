@@ -109,6 +109,6 @@ When(/^I fill in the braintree credit card iframe$/) do
   if @javascript
     page.evaluate_script("document.querySelector('#braintree_nonce').value = 'some_braintree_nonce'")
   else
-    find(:css, '#braintree_nonce').set('some_braintree_nonce')
+    find(:css, '#braintree_nonce', visible: :hidden).set('some_braintree_nonce')
   end
 end

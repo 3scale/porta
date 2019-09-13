@@ -2,7 +2,7 @@ module MessagesHelpers
   def find_delete_button_in_row(label, *cells)
     forms = find(:xpath, selector_for_table_row_with_cells(*cells)).all('td form')
     forms = forms.select do |form|
-      form[:method] == 'post' && form.has_css?('input[name = "_method"][value = "delete"]')
+      form[:method] == 'post' && form.has_css?('input[name="_method"][value="delete"][type="hidden"]', visible: :hidden)
     end
 
     forms.first.find_button(label).tap do |button|

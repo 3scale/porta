@@ -1,5 +1,5 @@
 When /^I check hidden spam checkbox$/ do
-  id = find(".boolean.required[id*='confirmation_input'] input[name*='[confirmation]'][type=checkbox]")[:id]
+  id = find(".boolean.required[id*='confirmation_input'] input[name*='[confirmation]'][type=checkbox]", visible: :hidden)[:id]
   page.evaluate_script <<-JS
     document.getElementById("#{id}").checked = true
   JS
