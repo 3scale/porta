@@ -19,6 +19,14 @@ module BackendApiLogic
       owner_type == 'BackendApi'
     end
 
+    def parent_id_for_service(service)
+      if backend_api_metric? && hits?
+        service.metrics.hits&.id
+      else
+        parent_id
+      end
+    end
+
     module ClassMethods
       def hits_extended_system_name_as_sql
         Arel::Nodes::SqlLiteral.new("'hits#{SYSTEM_NAME_SUFFIX_SEPARATOR}' || #{quoted_table_name}.owner_id")

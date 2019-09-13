@@ -98,6 +98,10 @@ class Metric < ApplicationRecord
     end
   end
 
+  def hits?
+    default?(:hits)
+  end
+
   def child?
     parent_id.present?
   end

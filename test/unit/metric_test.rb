@@ -145,6 +145,16 @@ class MetricTest < ActiveSupport::TestCase
     refute metric.default?(:hits)
   end
 
+  test '#hits?' do
+    service = FactoryBot.create(:service)
+
+    hits_metric = service.metrics.hits
+    non_hits_metric = FactoryBot.create(:metric, owner: service, system_name: 'non-hits')
+
+    assert hits_metric.hits?
+    refute non_hits_metric.hits?
+  end
+
   context 'child metric' do
     setup do
       @service = FactoryBot.create(:service)
