@@ -36,7 +36,9 @@ Feature: API menu
     | Listing                   |
     | Application Plans         |
 
-  Scenario: Integration sub menu structure
+  Scenario: Integration sub menu structure provider has api as product enabled
+    Given the account has Service acting as Product
+    When I follow "Overview"
     When I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
@@ -44,8 +46,7 @@ Feature: API menu
     | Mapping Rules             |
     | Settings                  |
 
-  Scenario: Integration sub menu structure without independent mapping rules
-    Given I have independent_mapping_rules feature disabled
+  Scenario: Integration sub menu structure when provider does not have api as product enabled
     When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items
@@ -61,16 +62,6 @@ Feature: API menu
     | Configuration             |
     | Methods & Metrics         |
     | Mapping Rules             |
-    | Settings                  |
-
-  Scenario: Integration sub menu structure for API as Product without independent mapping rules
-    Given the account has Service acting as Product
-    And I have independent_mapping_rules feature disabled
-    When I follow "Overview"
-    And I follow "Integration" within the main menu
-    Then I should see menu items
-    | Configuration             |
-    | Methods & Metrics         |
     | Settings                  |
 
   Scenario: API menu structure with service plans enabled

@@ -240,7 +240,7 @@ module VerticalNavHelper
     items = []
     items << {id: :configuration,   title: 'Configuration',     path: path_to_service(@service)}
     items << {id: :methods_metrics, title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
-    items << {id: :mapping_rules,   title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if provider_can_use?(:independent_mapping_rules)
+    items << {id: :mapping_rules,   title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if current_account.independent_mapping_rules_enabled?
     items << {id: :settings,        title: 'Settings',          path: settings_admin_service_path(@service)}
   end
 
