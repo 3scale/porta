@@ -1,9 +1,6 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 import { ContextSelector } from 'Navigation/components/ContextSelector'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 function getWrapper (apis = [], audienceLink, apiap = true) {
   return mount(<ContextSelector apis={apis} audienceLink={audienceLink} apiap={apiap} />)

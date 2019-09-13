@@ -1,8 +1,5 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-
-Enzyme.configure({ adapter: new Adapter() })
+import { mount } from 'enzyme'
 
 import InlineChart from 'Stats/inlinechart/index'
 import c3 from 'c3'
@@ -19,6 +16,18 @@ jest.mock('moment', () => () => ({
   }
 }))
 
+const data = {
+  total: 10,
+  metric: {
+    unit: 'hit'
+  },
+  values: [1, 2, 3]
+}
+
+import * as utils from 'utilities/utils'
+const fetchMock = jest.spyOn(utils, 'fetchData')
+  .mockImplementation(() => Promise.resolve(data))
+
 describe('<InlineChart/>', () => {
   let wrapper
   const props = {
@@ -33,7 +42,7 @@ describe('<InlineChart/>', () => {
   })
 
   afterEach(() => {
-    wrapper.unmount()
+    fetchMock.mockClear()
   })
 
   it('should mount with right props', () => {
@@ -50,10 +59,9 @@ describe('<InlineChart/>', () => {
     expect(wrapper.find('.inline-chart-graph').length).toEqual(1)
   })
 
-  it('should fetch data from componentDidMount', async function () {
-    global.fetch = jest.fn()
+  it('should fetch data from componentDidMount', async () => {
     wrapper.instance().componentDidMount()
-    expect(global.fetch).toHaveBeenCalled()
+    expect(fetchMock).toHaveBeenCalled()
   })
 
   it('should get a valid URL', () => {
@@ -62,12 +70,6 @@ describe('<InlineChart/>', () => {
     expect(url.origin).toBe(global.window.location.origin)
     expect(url.pathname).toBe(wrapper.prop('endPoint'))
     expect(url.search).toBe(expectedSearch)
-  })
-
-  it('should fail when fetching data from componentDidMount', async function () {
-    global.fetch = jest.fn().mockImplementation(() => Promise.resolve({ok: false, status: '404', statusText: 'Not Found'}))
-    wrapper.instance().componentDidMount()
-    expect(wrapper.instance().throwError).toThrow()
   })
 
   it('should setState', () => {
@@ -88,32 +90,15 @@ describe('<InlineChart/>', () => {
     expect(wrapper.state().unitPluralized).toEqual(mockData.unitPluralized)
   })
 
-  it('calls updateState method with total of 1', () => {
-    const data = {
-      total: 1,
-      metric: {
-        unit: 'hit'
-      }
-    }
+  it('should print the correct lebel depending on the total of data', () => {
+    wrapper.instance().updateState({ ...data, total: 0 })
+    expect(wrapper.state('total')).toEqual('0 hits')
 
-    wrapper.instance().generateC3Chart = jest.fn()
-    wrapper.update()
-    wrapper.instance().updateState(data)
-    expect(wrapper.instance().generateC3Chart).toHaveBeenCalled()
-  })
+    wrapper.instance().updateState({ ...data, total: 1 })
+    expect(wrapper.state('total')).toEqual('1 hit')
 
-  it('calls updateState method with total > 1', () => {
-    const data = {
-      total: 10,
-      metric: {
-        unit: 'hit'
-      }
-    }
-    wrapper.instance().generateC3Chart = jest.fn()
-    wrapper.update()
-
-    wrapper.instance().updateState(data)
-    expect(wrapper.instance().generateC3Chart).toHaveBeenCalled()
+    wrapper.instance().updateState({ ...data, total: 10 })
+    expect(wrapper.state('total')).toEqual('10 hits')
   })
 
   it('should call c3.generate(), from generateC3Chart()', () => {

@@ -1,18 +1,11 @@
 // @flow
 
 import React from 'react'
-import Enzyme, {shallow, mount} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {shallow, mount} from 'enzyme'
 
 import {ServiceDiscoveryForm} from 'NewService'
-import {FormWrapper, ErrorMessage,
-  ServiceDiscoveryListItems} from 'NewService/components/FormElements'
-
+import {FormWrapper, ErrorMessage, ServiceDiscoveryListItems} from 'NewService/components/FormElements'
 import * as utils from 'utilities/utils'
-jest.spyOn(utils, 'CSRFToken')
-  .mockImplementation(() => '')
-
-Enzyme.configure({adapter: new Adapter()})
 
 const props = {
   formActionPath: 'action-path',
@@ -27,12 +20,12 @@ it('should render itself', () => {
 })
 
 it('should render `FormWrapper` child', () => {
-  const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
+  const wrapper = shallow(<ServiceDiscoveryForm {...props}/>)
   expect(wrapper.find(FormWrapper).exists()).toEqual(true)
 })
 
 it('should render `ServiceDiscoveryListItems` child', () => {
-  const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
+  const wrapper = shallow(<ServiceDiscoveryForm {...props}/>)
   expect(wrapper.find(ServiceDiscoveryListItems).exists()).toEqual(true)
 })
 

@@ -3,6 +3,8 @@ import { fromJsonString, safeFromJsonString } from 'utilities/json-utils'
 const goodOlJsonString = '{"answer": "42"}'
 const badOlJsonString = "{answer': '42'}"
 
+console.warn = jest.fn()
+
 describe('fromJsonString', () => {
   it('should successfully parse the json string', () => {
     expect(fromJsonString(goodOlJsonString)).toEqual({'answer': '42'})

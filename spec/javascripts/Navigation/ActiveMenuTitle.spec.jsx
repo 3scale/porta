@@ -1,9 +1,6 @@
 import React from 'react'
-import Enzyme, { render } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { render } from 'enzyme'
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 function getWrapper (activeMenu, currentApi, apiap = true) {
   return render(<ActiveMenuTitle activeMenu={activeMenu} currentApi={currentApi} apiap={apiap} />)

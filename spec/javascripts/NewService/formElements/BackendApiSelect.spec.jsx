@@ -1,12 +1,9 @@
 // @flow
 
 import React from 'react'
-import Enzyme, {shallow} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import {shallow} from 'enzyme'
 
 import {BackendApiSelect} from 'NewService/components/FormElements'
-
-Enzyme.configure({adapter: new Adapter()})
 
 const backendApis = [
   { id: 1, name: 'backend 1', link: '', type: 'backend' },

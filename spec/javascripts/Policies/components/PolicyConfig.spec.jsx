@@ -1,10 +1,8 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
+
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { PolicyForm } from 'Policies/components/PoliciesForm'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('PolicyConfig Component', () => {
   function setup () {
@@ -186,6 +184,7 @@ describe('PolicyForm', () => {
         },
         type: 'object'
       },
+      onError: jest.fn(),
       formData: {},
       onSubmit: jest.fn()
     }

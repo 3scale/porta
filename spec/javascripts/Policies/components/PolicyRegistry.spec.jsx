@@ -1,9 +1,7 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import { PolicyRegistry, PolicyRegistryItem } from 'Policies/components/PolicyRegistry'
+import { mount } from 'enzyme'
 
-Enzyme.configure({ adapter: new Adapter() })
+import { PolicyRegistry, PolicyRegistryItem } from 'Policies/components/PolicyRegistry'
 
 describe('PolicyRegistry Components', () => {
   describe('PolicyRegistry', () => {

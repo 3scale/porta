@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 
 import {
   CustomPolicy,
@@ -8,8 +7,6 @@ import {
   CustomPolicyForm,
   POLICY_TEMPLATE
 } from 'Policies/components/CustomPolicy'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('CustomPolicy', () => {
   it('should render itself correctly', () => {
@@ -74,19 +71,17 @@ describe('CustomPolicyForm', () => {
     expect(wrapper.find('input[name="_method"]').exists()).toBe(false)
   })
 
-  // TODO: remove `skip` when this is merged: https://github.com/airbnb/enzyme/pull/2008
-  it.skip('should change submit method when clicking Delete Policy before submitting the form', () => {
+  it('should change submit method when clicking Delete Policy before submitting the form', () => {
     const mockedWindow = { confirm: jest.fn(() => true) }
     const {wrapper} = setup({win: mockedWindow})
     const submitMethod = wrapper.find('input[name="_method"]')
 
     expect(submitMethod.prop('value')).toBe('put')
 
-    const deleteButton = wrapper.find('input[value="Delete Policy"]')
+    const deleteButton = wrapper.find('button.delete')
     deleteButton.simulate('click')
 
     wrapper.update()
-    // TODO: assert before submission
     expect(wrapper.find('input[name="_method"]').prop('value')).toBe('delete')
   })
 })
