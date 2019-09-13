@@ -89,11 +89,11 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
     metric = FactoryBot.build(:metric, service: nil, owner: backend_api)
 
-    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.system_name) }
-    metric.send :sync_backend
+    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.attributes['system_name']) }
+    metric.sync_backend
 
-    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.system_name) }
-    metric.send :sync_backend!
+    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.attributes['system_name']) }
+    metric.sync_backend!
   end
 
   test 'sync metric for single service' do

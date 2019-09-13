@@ -15,12 +15,6 @@ module Backend
         end
       end
 
-      private
-
-      def cache_service_association
-        owner.account # just call it to cache it
-      end
-
       def sync_backend
         execute_per_service do |service|
           sync_backend_for_service(service)
@@ -39,6 +33,12 @@ module Backend
 
       def sync_backend_for_service!(service)
         ::BackendMetricWorker.new.perform(service.backend_id, id, attributes['system_name'])
+      end
+
+      private
+
+      def cache_service_association
+        owner.account # just call it to cache it
       end
 
       def execute_per_service(&block)

@@ -38,7 +38,7 @@ module Backend
       end
 
       Metric.find_each do |metric|
-        metric.send(:sync_backend!)
+        metric.sync_backend!
         progress.call
       end
 
@@ -80,7 +80,7 @@ module Backend
       end
 
       metrics.find_each do |metric|
-        metric.send(:sync_backend!)
+        metric.sync_backend!
         progress.call
       end
 

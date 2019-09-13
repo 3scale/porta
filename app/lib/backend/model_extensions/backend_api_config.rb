@@ -9,7 +9,7 @@ module Backend
       end
 
       def sync_backend_api_metrics_with_backend
-        backend_api.metrics.each { |metric| metric.send(:sync_backend_for_service, service) }
+        backend_api.metrics.each { |metric| metric.sync_backend_for_service(service) }
       end
     end
   end
