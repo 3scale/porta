@@ -13,7 +13,10 @@ class BackendApiConfig < ApplicationRecord
 
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
 
-  scope :with_subpath, -> { common_query = where.not(path: '/'); System::Database.oracle? ? common_query.where('path is NOT NULL') : common_query.where.not(path: '') }
+  scope :with_subpath, (lambda do
+    common_query = where.not(path: '/')
+    System::Database.oracle? ? common_query.where('path is NOT NULL') : common_query.where.not(path: '')
+  end)
 
   delegate :private_endpoint, to: :backend_api
 
