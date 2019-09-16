@@ -1,5 +1,5 @@
 def service_id_for_name (name)
-  page.find_by_id('apis').find('section', :text => name)[:id][/\d+/]
+  page.find_by_id('apis').find('section', :text => %r{#{name}}i)[:id][/\d+/]
 end
 
 def service_for_name (name)
