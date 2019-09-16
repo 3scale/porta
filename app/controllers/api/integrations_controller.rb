@@ -13,21 +13,14 @@ class Api::IntegrationsController < Api::BaseController
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
 
   def edit
-    begin
-      @registry_policies = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
-    rescue StandardError => error
-      @error = error
-    end
-    @latest_lua = current_account.proxy_logs.first
-    @deploying =  ThreeScale::TimedValue.get(deploying_hosted_proxy_key)
-    @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
+    fetch_registry_policies
   end
 
   def settings; end
 
   def update
     if @service.using_proxy_pro? && !@proxy.apicast_configuration_driven
-      proxy_pro_update
+      return redirect_to(edit_path) if proxy_pro_update
     elsif @proxy.save_and_deploy(proxy_params)
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
       flash[:notice] = flash_message(:update_success, environment: environment)
@@ -40,8 +33,6 @@ class Api::IntegrationsController < Api::BaseController
         done_step(:api_sandbox_traffic) if api_backend.present? && ApiClassificationService.test(api_backend).real_api?
         return redirect_to edit_path
       end
-      render :edit
-
     else
       attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
@@ -51,14 +42,15 @@ class Api::IntegrationsController < Api::BaseController
 
       flash.now[:error] = flash_message(:update_error)
       @api_test_form_error = true
-
-      render :edit
     end
+
+    fetch_registry_policies
+    render :edit
   end
 
   def update_production
     @proxy.deploy_production
-    ThreeScale::TimedValue.set(deploying_hosted_proxy_key, true, 5*60 )
+    ThreeScale::TimedValue.set(current_account.deploying_hosted_proxy_key, true, 5*60 )
     ThreeScale::Analytics.track(current_user, 'Hosted Proxy deployed')
     flash[:notice] = flash_message(:update_production_success)
 
@@ -134,6 +126,12 @@ class Api::IntegrationsController < Api::BaseController
 
   protected
 
+  def fetch_registry_policies
+    @registry_policies ||= Policies::PoliciesListService.call!(current_account, proxy: @proxy)
+  rescue StandardError => error
+    @error = error
+  end
+
   def edit_stale
     flash.now[:error] = flash_message(:stale_object)
 
@@ -155,9 +153,7 @@ class Api::IntegrationsController < Api::BaseController
       onboarding.bubble_update('api')
       update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
-      redirect_to edit_path
-    else
-      render :edit
+      true
     end
   end
 
@@ -250,10 +246,6 @@ class Api::IntegrationsController < Api::BaseController
     basic_fields << { backend_api_configs_attributes: %i[_destroy id path] } if provider_can_use?(:api_as_product)
 
     params.require(:proxy).permit(*basic_fields)
-  end
-
-  def deploying_hosted_proxy_key
-    "#{current_account.id}/deploying_hosted"
   end
 
   def update_onboarding_mapping_bubble

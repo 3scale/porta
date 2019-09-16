@@ -124,13 +124,14 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     put "/apiconfig/services/#{@provider.services.first.id}/integration", proxy: {api_backend: '1'}
   end
 
-  test 'deploy is never called when saving proxy info for proxy pro users' do
+  test 'deploy is never called when saving proxy info for proxy pro users and it calls the PoliciesListService' do
     rolling_updates_on
 
     Proxy.any_instance.expects(:save_and_deploy).never
     Proxy.any_instance.expects(:update_attributes).once
     ProxyTestService.expects(:new).never
     ProxyTestService.any_instance.expects(:perform).never
+    Policies::PoliciesListService.expects(:call!).once
 
     service = @provider.services.default
     service.update_columns(deployment_option: 'self_managed')
@@ -162,5 +163,20 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     service.reload
     refute service.proxy.oidc_configuration.standard_flow_enabled
     assert service.proxy.oidc_configuration.direct_access_grants_enabled
+  end
+
+  test 'keeps deploy and registry policies variables even when it re-renders the page on error' do
+    service = FactoryBot.create(:simple_service, account: @provider)
+    Proxy.update_all(apicast_configuration_driven: false)
+    Account.any_instance.stubs(:hosted_proxy_deployed_at).returns(Time.now)
+    get "/apiconfig/services/#{service.id}/integration/edit"
+
+    assert_match /deployed/, response.body
+
+    put admin_service_integration_path(service_id: service), proxy: {credentials_location: 'wrong'}
+
+    assert_match /There seems to be an error in your Staging Configuration/, response.body
+    assert_match /deployed/, response.body
+    refute_nil assigns(:registry_policies)
   end
 end

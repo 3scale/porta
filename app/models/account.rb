@@ -167,6 +167,10 @@ class Account < ApplicationRecord
     users.admins.but_impersonation_admin
   end
 
+  def deploying_hosted_proxy_key
+    "#{id}/deploying_hosted"
+  end
+
   def first_admin
     @_first_admin ||= admins.first
   end

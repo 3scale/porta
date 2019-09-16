@@ -52,11 +52,11 @@ module Api::IntegrationsHelper
   end
 
   def currently_deploying?(proxy)
-    @deploying
+    deploying
   end
 
   def deployed?(proxy)
-    @ever_deployed_hosted
+    ever_deployed_hosted
   end
 
   def apicast_configuration_driven?
@@ -91,5 +91,15 @@ module Api::IntegrationsHelper
   def edit_deployment_option_title(service)
     title = deployment_option_is_service_mesh?(service) ? 'Service Mesh' : 'APIcast'
     t(:edit_deployment_configuration, scope: :api_integrations_controller, deployment: title )
+  end
+
+  private
+
+  def deploying
+    @deploying ||= ThreeScale::TimedValue.get(current_account.deploying_hosted_proxy_key)
+  end
+
+  def ever_deployed_hosted
+    @ever_deployed_hosted ||= current_account.hosted_proxy_deployed_at.present?
   end
 end
