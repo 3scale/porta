@@ -44,7 +44,7 @@ To sign your commits, you only need to follow these steps:
 
 #### **Do you have questions about the source code?**
 
-* Ask any question by [raising an issue](https://issues.jboss.org/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4. Maintainers could always use more help, so they'll be happy to assist you, no matter how silly you might think your question is. 
+* Ask any question by [raising an issue](https://issues.jboss.org/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4). Maintainers could always use more help, so they'll be happy to assist you, no matter how silly you might think your question is. 
 
 Thanks for reading this far!! 
 
