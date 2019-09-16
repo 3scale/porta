@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProxyRuleDecorator < ApplicationDecorator
-
   self.include_root_in_json = false
 
   def pattern
@@ -9,10 +8,14 @@ class ProxyRuleDecorator < ApplicationDecorator
     backend_api_path ? File.join('/', backend_api_path, pattern_value) : pattern_value
   end
 
+  def metric_system_name
+    object.metric.attributes['system_name']
+  end
+
   private
 
   def delegatable?(method)
-    return false if method.to_sym == :pattern
+    return false if self.class.instance_methods(false).include?(method.to_sym)
     object.respond_to?(method)
   end
 
