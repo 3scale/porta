@@ -184,7 +184,7 @@ GEM
     airbrake (4.3.8)
       builder
       multi_json
-    analytics-ruby (2.0.13)
+    analytics-ruby (2.2.7)
     ansi (1.5.0)
     arel (6.0.4)
     ast (2.4.0)
