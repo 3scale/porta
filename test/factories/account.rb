@@ -188,6 +188,13 @@ FactoryBot.define do
     end
   end
 
+  factory(:provider_account_with_default_backend_api, parent: :provider_account) do
+    after(:create) do |account|
+      backend_api = FactoryBot.build(:backend_api, account: account)
+      FactoryBot.create(:backend_api_config, service: account.default_service, backend_api: backend_api)
+    end
+  end
+
   factory(:master_account, :parent => :account) do
     master { true }
     org_name { 'Master account' }

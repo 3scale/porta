@@ -129,7 +129,9 @@ class ProxyTestService
   end
 
   def ignore_failures?
-    api_classifier.test(@proxy.api_backend).test_api?
+    api_backend = @proxy.api_backend
+    return false unless api_backend
+    api_classifier.test(api_backend).test_api?
   end
 
   module IgnoreFailures

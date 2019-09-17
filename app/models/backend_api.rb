@@ -25,7 +25,8 @@ class BackendApi < ApplicationRecord
 
   alias_attribute :api_backend, :private_endpoint
 
-  before_validation :set_private_endpoint, :set_port_private_endpoint
+  # before_validation :set_private_endpoint, :set_port_private_endpoint
+  before_validation :set_port_private_endpoint
   after_create :create_default_metrics
 
   has_system_name(uniqueness_scope: [:account_id])

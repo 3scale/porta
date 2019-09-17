@@ -362,7 +362,9 @@ class Proxy < ApplicationRecord
   end
 
   def skip_test_request?
-    service.oauth? || saas_configuration_driven_apicast_self_managed?
+    # service.oauth? || saas_configuration_driven_apicast_self_managed? This should be improved like
+    # pointed here: https://github.com/3scale/porta/pull/1168#discussion_r323736488
+    return true
   end
 
   def send_api_test_request!

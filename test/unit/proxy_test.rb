@@ -79,7 +79,7 @@ class ProxyTest < ActiveSupport::TestCase
       rolling_updates_on
 
       account = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: account)
+      service = FactoryBot.create(:simple_service, :with_default_backend_api, account: account)
       null_backend_api = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://foo.baz')
       null_backend_api.update_columns(private_endpoint: '')
       backend_api1 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-1.example.com')
@@ -240,8 +240,8 @@ class ProxyTest < ActiveSupport::TestCase
     assert_equal 1, @proxy.proxy_rules.size
   end
 
-  test 'api_backend defaults to echo API' do
-    assert_equal 'https://echo-api.3scale.net:443', @proxy.api_backend
+  test 'api_backend defaults to nil if there is no backend api' do
+    assert_nil @proxy.api_backend
   end
 
   test 'proxy api backend formats ok' do

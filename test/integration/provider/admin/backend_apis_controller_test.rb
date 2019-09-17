@@ -46,7 +46,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
   end
 
   test 'system_name can be created but not updated' do
-    post provider_admin_backend_apis_path, { backend_api: {name: 'My Backend API', system_name: 'first-system-name'} }
+    post provider_admin_backend_apis_path, { backend_api: {name: 'My Backend API', system_name: 'first-system-name', private_endpoint: 'https://endpoint.com/p'} }
     backend_api = provider.backend_apis.last!
     assert_equal 'first-system-name', backend_api.system_name
 
@@ -55,18 +55,19 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
   end
 
   test 'delete a backend api with products' do
-    backend_api = @provider.backend_apis[0]
+    backend_api = @provider.backend_apis.first
+    FactoryBot.create(:backend_api_config, service: @provider.first_service, backend_api: backend_api)
     assert backend_api.backend_api_configs.any?
 
     delete provider_admin_backend_api_path(backend_api)
     assert BackendApi.exists? backend_api.id
     assert_equal 'Backend API could not be deleted', flash[:error]
   end
-  
+
   test 'delete a backend api without any products' do
-    backend_api = @provider.backend_apis[1]
+    backend_api = @provider.backend_apis.second
     assert_not backend_api.backend_api_configs.any?
-    
+
     delete provider_admin_backend_api_path(backend_api)
     assert_redirected_to provider_admin_dashboard_path
     assert_not BackendApi.exists? backend_api.id

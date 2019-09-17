@@ -147,6 +147,7 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_record_query_trace (1.6.2)
     activejob (4.2.11.1)
       activesupport (= 4.2.11.1)
       globalid (>= 0.3.0)
@@ -219,6 +220,7 @@ GEM
     bullet (4.14.7)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
+    byebug (11.0.1)
     cancancan (1.7.1)
     capybara (2.18.0)
       addressable
@@ -509,6 +511,9 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-byebug (3.7.0)
+      byebug (~> 11.0)
+      pry (~> 0.10)
     pry-doc (0.9.0)
       pry (~> 0.9)
       yard (~> 0.8)
@@ -813,6 +818,7 @@ DEPENDENCIES
   RedCloth (~> 4.3)
   active-docs!
   active_merchant-adyen12!
+  active_record_query_trace
   activemerchant (~> 1.77.0)
   activerecord-oracle_enhanced-adapter (~> 1.6.0)
   acts-as-taggable-on (~> 4.0)
@@ -903,6 +909,7 @@ DEPENDENCIES
   prawn-layout (= 0.2.1)
   prometheus-client-mmap
   protected_attributes (~> 1.1.4)
+  pry-byebug
   pry-doc (>= 0.8)
   pry-rails
   pry-stack_explorer

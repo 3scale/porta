@@ -1,0 +1,1 @@
+ActiveRecordQueryTrace.enabled = true

@@ -78,6 +78,13 @@ FactoryBot.define do
     after(:create) do |record|
       record.service_tokens.first_or_create!(value: 'token')
     end
+
+    trait :with_default_backend_api do
+      before(:create) do |record|
+        backend_api = FactoryBot.build(:backend_api, private_endpoint: 'https://echo-api.3scale.net')
+        FactoryBot.create(:backend_api_config, path: '', service: record, backend_api: backend_api)
+      end
+    end
   end
 
   factory(:simple_cinstance, :class => Cinstance) do

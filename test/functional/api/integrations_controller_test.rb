@@ -3,7 +3,7 @@ require 'test_helper'
 class Api::IntegrationsControllerTest < ActionController::TestCase
 
   def setup
-    @provider = FactoryBot.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account_with_default_backend_api)
     @provider.default_service.service_tokens.create!(value: 'token')
 
     stub_apicast_registry
@@ -24,7 +24,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
 
   test 'should have access' do
     rolling_updates_off
-    
+
     member = FactoryBot.create(:member)
     member.member_permissions.create(admin_section: 'plans')
     @provider.users << member
