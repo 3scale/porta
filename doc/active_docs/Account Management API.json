@@ -2435,6 +2435,267 @@
       ]
     },
     {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json",
+      "responseClass": "List[methods]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Method List",
+          "description": "List the methods of a metric that belongs to a backend api. Methods are metrics that are children of a parent metric.",
+          "group": "metric_method",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "metric_id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json",
+      "responseClass": "method",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Backend API Method Create",
+          "description": "Creates a method under a metric that belongs to a backend api.",
+          "group": "metric_method",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "metric_id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "friendly_name",
+              "description": "Descriptive Name of the metric.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "system_name",
+              "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "unit",
+              "description": "Measure unit of the metric.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the metric.",
+              "dataType": "text",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json",
+      "responseClass": "method",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Method Read",
+          "description": "Returns the method of a metric that belongs to a backend api.",
+          "group": "metric_method",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "metric_id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the method.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json",
+      "responseClass": "method",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Backend API Method Update",
+          "description": "Updates a method of a metric that belongs to a backend api.",
+          "group": "metric_method",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "metric_id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the method.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "friendly_name",
+              "description": "Name of the method.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "unit",
+              "description": "Measure unit of the method.",
+              "dataType": "string",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the method.",
+              "dataType": "text",
+              "allowMultiple": false,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Backend API Method Delete",
+          "description": "Deletes the method of a metric that belongs to a backend api.",
+          "group": "metric_method",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "metric_id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the method.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/backend_apis/{backend_api_id}/metrics.json",
       "responseClass": "List[metric]",
       "operations": [
@@ -4616,8 +4877,8 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Method List",
-          "description": "List the methods of a metric. Methods are metrics that are children of a parent metric.",
+          "summary": "Service Method List",
+          "description": "List the methods of a metric that belongs to a service. Methods are metrics that are children of a parent metric.",
           "group": "metric_method",
           "parameters": [
             {
@@ -4654,8 +4915,8 @@
       "operations": [
         {
           "httpMethod": "POST",
-          "summary": "Method Create",
-          "description": "Creates a method under a metric.",
+          "summary": "Service Method Create",
+          "description": "Creates a method under a metric that belongs to a service.",
           "group": "metric_method",
           "parameters": [
             {
@@ -4724,8 +4985,8 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Method Read",
-          "description": "Returns the method of a metric.",
+          "summary": "Service Method Read",
+          "description": "Returns the method of a metric that belongs to a service.",
           "group": "metric_method",
           "parameters": [
             {
@@ -4769,8 +5030,8 @@
       "operations": [
         {
           "httpMethod": "PUT",
-          "summary": "Method Update",
-          "description": "Updates a method of a metric.",
+          "summary": "Service Method Update",
+          "description": "Updates a method of a metric that belongs to a service.",
           "group": "metric_method",
           "parameters": [
             {
@@ -4837,8 +5098,8 @@
       "operations": [
         {
           "httpMethod": "DELETE",
-          "summary": "Method Delete",
-          "description": "Deletes the method of a metric.",
+          "summary": "Service Method Delete",
+          "description": "Deletes the method of a metric that belongs to a service.",
           "group": "metric_method",
           "parameters": [
             {
