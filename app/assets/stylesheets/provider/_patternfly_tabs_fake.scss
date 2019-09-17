@@ -1,0 +1,88 @@
+/**
+ * This are styles to fake Tab component without using PF4 css.
+ *
+ * It is wrapped around pf-c-tabs to avoid possible issues with other
+ * styles in the project. Properties values are hardcoded to meet the exact
+ * ones from PF4.
+ *
+ * It is to be removed completely once using PF4 css files.
+ */
+.pf-c-tabs {
+  ul {
+    list-style: none;
+  }
+
+  button {
+    font-size: 100%;
+    line-height: 24px; //var(--pf-global--LineHeight--md);
+    height: unset;
+    cursor: pointer;
+  }
+
+  .pf-c-tabs__list {
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+    position: relative;
+
+    .pf-c-tabs__item {
+      .pf-c-tabs__button::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: "";
+        border-color: #d2d2d2; //var(--pf-c-tabs__item--BorderColor)
+        border-style: solid;
+        border-width: 1px 0 1px 1px; //var(--pf-c-tabs__item--BorderWidth) 0 var(--pf-c-tabs__item--BorderWidth) var(--pf-c-tabs__item--BorderWidth);
+      }
+
+      .pf-c-tabs__button {
+        background: transparent; //var(--pf-c-tabs__button--Background);
+        border: 0;
+        color: rgb(21, 21, 21); //var(--pf-c-tabs__item--m-current--Color);
+        display: inline-block;
+        font-weight: 400; //var(--pf-c-tabs__button--FontWeight)
+        outline-offset: calc(-1 * 0.25rem); //var(--pf-c-tabs__button--OutlineOffset);
+        padding: 8px; //var(--pf-c-tabs__button--PaddingTop) var(--pf-c-tabs__button--PaddingRight) var(--pf-c-tabs__button--PaddingBottom) var(--pf-c-tabs__button--PaddingLeft)
+        position: relative;
+        user-select: none;
+      }
+
+      &:not(.pf-m-current):hover {
+        // FIXME: after not working!
+        .pf-c-tabs__button::after {
+          border-top: 2px solid #737679; //var(--pf-c-tabs__item--m-current--BorderTopWidth) solid var(--pf-c-tabs__item--hover--Color);
+        }
+      }
+
+      &.pf-m-current {
+        .pf-c-tabs__button::before {
+          border-bottom-width: 0px;
+        }
+
+        .pf-c-tabs__button {
+          color: rgb(0, 102, 204); //var(--pf-c-tabs__item--m-current--Color);
+        }
+
+        .pf-c-tabs__button::after {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin-left: 1px; //var(--pf-c-tabs__item--BorderWidth);
+          content: "";
+          border-top: 2px solid #06c; //var(--pf-c-tabs__item--m-current--BorderTopWidth) solid var(--pf-c-tabs__item--m-current--Color);
+        }
+      }
+    }
+
+    .pf-c-tabs__item:last-of-type {
+      .pf-c-tabs__button::before {
+        border-right-width: 1px;
+      }
+    }
+  }
+}
