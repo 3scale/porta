@@ -12,9 +12,6 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
   respond_to :json
 
 
-  ##~ @parameter_backend_api_id_by_id_name = { :name => "backend_api_id", :description => "ID of the backend API.", :dataType => "int", :required => true, :paramType => "path" }
-
-
   ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/backend_apis/{backend_api_id}/metrics.json"

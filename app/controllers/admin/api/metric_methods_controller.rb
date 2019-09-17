@@ -11,8 +11,8 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Method List"
-  ##~ op.description = "List the methods of a metric. Methods are metrics that are children of a parent metric."
+  ##~ op.summary    = "Service Method List"
+  ##~ op.description = "List the methods of a metric that belongs to a service. Methods are metrics that are children of a parent metric."
   ##~ op.group = "metric_method"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -29,8 +29,8 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Method Create"
-  ##~ op.description = "Creates a method under a metric."
+  ##~ op.summary    = "Service Method Create"
+  ##~ op.description = "Creates a method under a metric that belongs to a service."
   ##~ op.group = "metric_method"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -52,8 +52,8 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Method Read"
-  ##~ op.description = "Returns the method of a metric."
+  ##~ op.summary    = "Service Method Read"
+  ##~ op.description = "Returns the method of a metric that belongs to a service."
   ##~ op.group = "metric_method"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -71,8 +71,8 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Method Update"
-  ##~ op.description = "Updates a method of a metric."
+  ##~ op.summary    = "Service Method Update"
+  ##~ op.description = "Updates a method of a metric that belongs to a service."
   ##~ op.group = "metric_method"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -95,8 +95,8 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Method Delete"
-  ##~ op.description = "Deletes the method of a metric."
+  ##~ op.summary    = "Service Method Delete"
+  ##~ op.description = "Deletes the method of a metric that belongs to a service."
   ##~ op.group = "metric_method"
   #
   ##~ op.parameters.add @parameter_access_token
