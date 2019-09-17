@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MetricRepresenter
   include ThreeScale::JSONRepresenter
 
@@ -15,10 +17,18 @@ module MetricRepresenter
   property :updated_at
 
   link :service do
-    admin_api_service_url(service_id) if service_id
+    admin_api_service_url(service_id) unless backend_api_metric?
+  end
+
+  link :backend_api do
+    admin_api_backend_api_url(owner_id) if backend_api_metric?
   end
 
   link :self do
-    admin_api_service_metric_url(service_id, id) if service_id && id
+    public_send("admin_api_#{owner_type.underscore}_metric_url", owner, id)
+  end
+
+  def system_name
+    backend_api_metric? ? attributes['system_name'] : super
   end
 end
