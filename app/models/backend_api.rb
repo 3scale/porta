@@ -30,6 +30,8 @@ class BackendApi < ApplicationRecord
 
   has_system_name(uniqueness_scope: [:account_id])
 
+  scope :orphans, -> { joining { services.outer }.where { BabySqueel[:backend_api_configs].backend_api_id == nil } }
+
   scope :oldest_first, -> { order(created_at: :asc) }
 
   def self.default_api_backend
