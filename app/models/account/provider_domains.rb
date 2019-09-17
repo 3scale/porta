@@ -1,4 +1,6 @@
-module Account::Domains
+# frozen_string_literal: true
+
+module Account::ProviderDomains
   extend ActiveSupport::Concern
 
   included do
@@ -28,10 +30,10 @@ module Account::Domains
 
     end
 
-    scope :by_domain, lambda { |domain| where(domain: domain) }
-    scope :by_self_domain, lambda { |domain| where(self_domain: domain) }
+    scope :by_domain, ->(domain) { where(domain: domain) }
+    scope :by_self_domain, ->(domain) { where(self_domain: domain) }
     scope :by_admin_domain, lambda { |domain|
-      table = self.table_name
+      table = table_name
       where("(#{table}.self_domain = :domain) OR (#{table}.self_domain IS NULL AND provider_accounts_accounts.domain = :domain)",
             { :domain => domain })
       .joins(:provider_account)
@@ -50,12 +52,12 @@ module Account::Domains
     end
 
     def find_by_domain!(domain)
-      find_by_domain(domain) ||
-      raise(ActiveRecord::RecordNotFound, "Couldn't find #{name} with domain=#{domain.inspect}")
+      find_by_domain(domain) || # rubocop:disable Rails/DynamicFindBy
+        raise(ActiveRecord::RecordNotFound, "Couldn't find #{name} with domain=#{domain.inspect}")
     end
 
     def is_domain?(domain)
-      return unless domain.present?
+      return if domain.blank?
       providers.where(:domain => domain).exists?
     end
 
@@ -96,11 +98,11 @@ module Account::Domains
     domain.present? && self_domain.present?
   end
 
-  def subdomain= name
+  def subdomain=(name)
     self.domain = if name.present?
-      [name, superdomain].join('.')
+                    [name, superdomain].join('.')
                   else
-      name
+                    name
                   end
   end
 
@@ -118,7 +120,7 @@ module Account::Domains
   end
 
   def dedicated_domain
-    superdomain = provider_account.try!(:superdomain)
+    superdomain = provider_account&.superdomain
 
     if superdomain && !domain.nil? && domain.ends_with?(superdomain)
       nil
@@ -129,11 +131,11 @@ module Account::Domains
 
   attr_writer :dedicated_domain
 
-  def self_subdomain= name
+  def self_subdomain=(name)
     self.self_domain = if name.present?
-      [name, superdomain].join('.')
+                         [name, superdomain].join('.')
                        else
-      name
+                         name
                        end
   end
 
@@ -155,7 +157,7 @@ module Account::Domains
   private
 
   def validate_domains?
-    provider? and not master?
+    provider? and !master?
   end
 
   def subdomain_from(domain)
@@ -173,7 +175,7 @@ module Account::Domains
 
   def unique?(attr, val = self[attr])
     scope = new_record? ? Account.all : Account.where.not(id: id)
-    Account::Domains.unique?(attr: attr, val: val, scope: scope)
+    Account::ProviderDomains.unique?(attr: attr, val: val, scope: scope)
   end
 
   def domain_uniqueness
