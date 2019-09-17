@@ -6,7 +6,7 @@ module MetricLinksRepresenter
     link :metric do
       return unless metric
 
-      if metric.is_a_method?
+      if metric.method_metric?
         admin_api_service_metric_method_url(metric.service, metric.parent, metric)
       else
         admin_api_service_metric_url(metric.service, metric)
