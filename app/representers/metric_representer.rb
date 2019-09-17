@@ -6,7 +6,7 @@ module MetricRepresenter
   wraps_resource
 
   property :id
-  property :name
+  property :name, if: ->(*) { !backend_api_metric? }
   property :system_name
   property :friendly_name
   property :description
