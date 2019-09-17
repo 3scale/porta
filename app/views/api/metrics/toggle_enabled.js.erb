@@ -13,7 +13,7 @@ if (jQuery(id_slot).length != 0){
   jQuery.flash.error("<%= j @metric.errors.full_messages.to_sentence %>");
 
 <% else %>
-  metric        = "<%= @metric.is_a_method? ? 'Method' : 'Metric' %>";
+  metric        = "<%= @metric.method_metric? ? 'Method' : 'Metric' %>";
   metric_option = "<%= escape_javascript (@metric.enabled_for_plan?(@plan) ? 'enabled' : 'disabled') %>";
 
   jQuery.flash.notice(metric + " has been "+ metric_option + ".");

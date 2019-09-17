@@ -123,18 +123,12 @@ class Metric < ApplicationRecord
     self[:unit] = value unless child?
   end
 
-  def is_a_method?
-    child?
-  end
+  alias method_metric? child?
 
   def to_xml(options = {})
     xml = options[:builder] || ThreeScale::XML::Builder.new
 
-    metric_or_method = if self.is_a_method?
-                         "method"
-                       else
-                         "metric"
-                       end
+    metric_or_method = method_metric? ? 'method' : 'metric'
 
     xml.__send__(:method_missing, metric_or_method) do |xml|
       xml.id_           id unless new_record?
@@ -143,10 +137,9 @@ class Metric < ApplicationRecord
       xml.friendly_name friendly_name
       xml.service_id    service_id
       xml.description   description
-      if self.is_a_method?
-        xml.metric_id self.parent_id
-      end
-      unless self.is_a_method?
+      if method_metric?
+        xml.metric_id parent_id
+      else
         xml.unit unit
       end
     end
