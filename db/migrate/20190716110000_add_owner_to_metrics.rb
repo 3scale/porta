@@ -2,6 +2,8 @@ class AddOwnerToMetrics < ActiveRecord::Migration
   disable_ddl_transaction!
 
    def change
+    return if ActiveRecord::SchemaMigration.find_by(version: 20190805135730) # this migration was repositioned back
+
     add_column :metrics, :owner_id, :integer, limit: 8
     add_column :metrics, :owner_type, :string
 
