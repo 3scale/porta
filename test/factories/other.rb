@@ -40,7 +40,7 @@ FactoryBot.define do
   end
 
   factory(:metric) do
-    association :service
+    association(:owner, factory: :service)
     sequence(:friendly_name) { |n| "Metric #{n}" }
     sequence(:unit) { |m| "metric_#{m}" }
   end
