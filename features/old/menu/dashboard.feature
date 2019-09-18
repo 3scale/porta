@@ -18,14 +18,15 @@ Feature: Dashboard
 
   Scenario: APIs widget
     When I go to the provider dashboard
-    Then I should see "APIs" in the apis dashboard widget
-    And I should see "1 Product" in the apis dashboard widget
-    And I should see "1 Backend" in the apis dashboard widget
-    And I should see the link "0 ActiveDocs" in the apis dashboard widget
-    And I should see the link "New Backend" in the apis dashboard widget
-    And I should see the link "API Backend API" in the apis dashboard widget
-    And I should see the link "0 Methods" in the apis dashboard widget
-    And I should see the link "0 Mapping Rules" in the apis dashboard widget
+    And I should see "Products" in the apis dashboard widget
+    And I should see "Backends" in the apis dashboard widget
+    And I should see "API" in the apis dashboard products tabs section
+    And I should see the link "New Product" in the apis dashboard products tabs section
+    And I should see the link "0 ActiveDocs" in the apis dashboard products tabs section
+    And I should see the link "New Backend" in the apis dashboard backends tabs section
+    And I should see the link "API Backend API" in the apis dashboard backends tabs section
+    And I should see the link "0 Methods" in the apis dashboard backends tabs section
+    And I should see the link "0 Mapping Rules" in the apis dashboard backends tabs section
 
   Scenario: first API widget
     And I should see "API" in the first api dashboard widget
