@@ -32,7 +32,13 @@ module System
 
       private
 
-      class UnknownVersion
+      class VersionParser
+         attr_reader :segments
+        
+        def initialize(release)
+          segments = release.to_s.split('.')
+          @segments = [segments.shift, segments.join('.')]
+        end
         def segments
           %w[unknown unknown]
         end
