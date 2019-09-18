@@ -524,7 +524,11 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
       end
 
-      resources :backend_apis, defaults: { format: :json }
+      resources :backend_apis, defaults: { format: :json } do
+        scope module: :backend_apis do
+          resources :metrics, except: %i[new edit]
+        end
+      end
 
       resources :accounts, :only => [:index, :show, :update, :destroy] do
         collection do
