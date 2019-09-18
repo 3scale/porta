@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module System
   module Deploy
     mattr_accessor :info
@@ -13,11 +15,35 @@ module System
       attr_reader :revision, :deployed_at
       attr_reader :release
 
+      delegate :minor_version, :major_version, to: :version
+
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = ENV['AMP_RELEASE'].presence
+        @release = info.fetch('release') { '2.x' }
         @deployed_at = info.fetch('deployed_at') { Time.now }
         @error = info.fetch(:error) if info.key?(:error)
+      end
+
+      private
+
+      class VersionParser
+        attr_reader :segments
+        
+        def initialize(release)
+          @segments = release.to_s.split('.')
+        end
+
+        def minor_version
+          segments[1]
+        end
+
+        def major_version
+          segments[0]
+        end
+      end
+
+      def version
+        @version ||= VersionParser.new(release)
       end
     end
 

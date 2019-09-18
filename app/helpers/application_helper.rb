@@ -339,12 +339,12 @@ module ApplicationHelper
   end
 
   def major_and_minor_version_path
-    full_version = System::Deploy.info.release || '2.0.0'
-    simple_version = /^(?:(\d+)\.)?(?:(\d+))/.match(full_version)
+    info = System::Deploy.info
+
     if saas?
-      "red_hat_3scale/#{simple_version[1]}-saas"
+      "red_hat_3scale/#{info.major_version}-saas"
     else
-      "red_hat_3scale_api_management/#{simple_version[1]}.#{simple_version[2]}"
+      "red_hat_3scale_api_management/#{info.major_version}.#{info.minor_version}"
     end
   end
 

@@ -2,26 +2,21 @@ require 'test_helper'
 
 class BasicInfoTest < ActiveSupport::TestCase
 
-  test 'env empty' do
-    ENV['AMP_RELEASE'] = nil
+  test 'default release is 2.x' do
     System::Deploy.load_info!
-    assert_nil System::Deploy.info.release
+    assert_equal '2.x', System::Deploy.info.release
+
   end
 
-  test 'env not empty' do
-    ENV['AMP_RELEASE'] = '2.0.0'
+  test 'minor and major version taken from default release' do
     System::Deploy.load_info!
-    assert_equal '2.0.0', System::Deploy.info.release
+    assert_equal '2', System::Deploy.info.major_version
+    assert_equal 'x', System::Deploy.info.minor_version
   end
 
-  test 'info is invalid' do
-    ENV['AMP_RELEASE'] = '2.0.0'
-    System::Deploy.load_info!
-    assert_equal '2.0.0', System::Deploy.info.release
-
-    System::Deploy.expects(:parse_deploy_info).raises(StandardError.new)
-    System::Deploy.load_info!
-    assert_equal '2.0.0', System::Deploy.info.release
+  test 'custom release' do
+    System::Deploy.info.expects(:release).returns('4.5.1-CR1')
+    assert_equal '4', System::Deploy.info.major_version
+    assert_equal '5', System::Deploy.info.minor_version
   end
-
 end
