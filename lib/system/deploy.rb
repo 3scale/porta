@@ -15,39 +15,35 @@ module System
       attr_reader :revision, :deployed_at
       attr_reader :release
 
+      delegate :minor_version, :major_version, to: :version
+
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = info.fetch('release') { '2.0.0' }
+        @release = info.fetch('release') { '2.x' }
         @deployed_at = info.fetch('deployed_at') { Time.now }
         @error = info.fetch(:error) if info.key?(:error)
-      end
-
-      def minor_version
-        version.segments[1]
-      end
-
-      def major_version
-        version.segments[0]
       end
 
       private
 
       class VersionParser
-         attr_reader :segments
+        attr_reader :segments
         
         def initialize(release)
-          segments = release.to_s.split('.')
-          @segments = [segments.shift, segments.join('.')]
+          @segments = release.to_s.split('.')
         end
-        def segments
-          %w[unknown unknown]
+
+        def minor_version
+          segments[1]
+        end
+
+        def major_version
+          segments[0]
         end
       end
 
       def version
-        @version ||= VersionParser new(release)
-      rescue ArgumentError
-        VersionParser.new(release)
+        @version ||= VersionParser.new(release)
       end
     end
 
