@@ -16,7 +16,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   def test_deploy_success
-    proxy = FactoryBot.create(:proxy, api_test_success: true)
+    proxy = FactoryBot.create(:proxy, service: @provider.first_service, api_test_success: true)
 
     stub_request(:get, "http://test.proxy/deploy/TEST?provider_id=#{@provider.id}")
         .to_return(status: 200)
@@ -34,13 +34,14 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
   end
 
   def test_deploy_failure
-    proxy = FactoryBot.create(:proxy, api_test_success: true)
+    proxy = FactoryBot.create(:proxy, service: @provider.first_service, api_test_success: true)
 
     stub_request(:get, "http://test.proxy/deploy/TEST?provider_id=#{@provider.id}")
         .to_return(status: 500)
 
     assert_empty @provider.proxy_logs
 
+    @service.deploy(proxy)
     refute @service.deploy(proxy)
     refute proxy.deployed_at, 'does not mark proxy as deployed'
 
