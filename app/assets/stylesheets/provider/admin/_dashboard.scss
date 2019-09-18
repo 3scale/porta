@@ -429,14 +429,17 @@ a:hover .u-notice {
   }
 
   &--content {
-    & > input,
-    #products,
-    #backends {
+    & > input {
       display: none;
     }
 
-    & > input:checked ~ #products,
-    & > input:checked ~ #backends {
+    & > #products,
+    & > #backends {
+      display: none;
+    }
+
+    & > #products.active,
+    & > #backends.active {
       display: block;
     }
 
