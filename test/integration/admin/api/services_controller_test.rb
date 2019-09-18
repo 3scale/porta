@@ -74,36 +74,12 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'create should create with success and not associate any backend api if none is informed' do
-      Account.any_instance.stubs(provider_can_use?: true)
+    test 'create' do
       assert_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge(forbidden_params)
         assert_response :created
       end
       assert_correct_params
-      assert_equal 0, Service.last.backend_api_configs.count
-    end
-
-    test 'create should create with success and reuse the backend api if it is informed' do
-      Account.any_instance.stubs(provider_can_use?: true)
-      backend_api_id = FactoryBot.create(:backend_api, account: @provider).id
-      assert_difference(provider_services.method(:count)) do
-        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge(**forbidden_params, **{ backend_api_id: backend_api_id } )
-        assert_response :created
-      end
-      assert_correct_params
-      assert_equal backend_api_id, Service.last.backend_api.id
-    end
-
-    test 'create should create with success and not reuse the backend api if it is informed but does not have api as product enabled' do
-      Account.any_instance.stubs(provider_can_use?: false)
-      backend_api_id = FactoryBot.create(:backend_api, account: @provider).id
-      assert_difference(provider_services.method(:count)) do
-        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge(**forbidden_params, **{ backend_api_id: backend_api_id } )
-        assert_response :created
-      end
-      assert_correct_params
-      assert_equal 0, Service.last.backend_api_configs.count
     end
 
     test 'create with errors in the model' do

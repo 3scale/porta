@@ -36,7 +36,7 @@ class Api::ServicesController < Api::BaseController
 
   def create
     @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
-    creator = ServiceCreator.new(service: @service, backend_api: find_backend_api)
+    creator = ServiceCreator.new(service: @service)
 
     if can_create? && creator.call!(service_params)
       flash[:notice] =  'Service created.'
@@ -74,11 +74,6 @@ class Api::ServicesController < Api::BaseController
   end
 
   private
-
-  def find_backend_api
-    return if !provider_can_use?(:api_as_product) || params[:service][:backend_api_id].blank?
-    current_account.backend_apis.find(params[:service][:backend_api_id])
-  end
 
   def service_params
     permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,

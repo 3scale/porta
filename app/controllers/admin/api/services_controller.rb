@@ -46,8 +46,8 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #
   def create
-    service = current_account.build_service
-    create_service = ServiceCreator.new(service: service, backend_api: find_backend_api)
+    service = current_account.services.build
+    create_service = ServiceCreator.new(service: service)
     create_service.call!(service_params)
     service.reload if service.persisted? # It has been touched
     respond_with(service)
@@ -106,13 +106,6 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
     service.mark_as_deleted!
 
     respond_with(service)
-  end
-
-  private
-
-  def find_backend_api
-    return if !provider_can_use?(:api_as_product) || params[:backend_api_id].blank?
-    current_account.backend_apis.find(params[:backend_api_id])
   end
 
   protected
