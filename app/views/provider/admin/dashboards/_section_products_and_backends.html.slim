@@ -2,7 +2,7 @@
 - new_admin_backend_api_path = "backend_apis/new"
 - tab_products_id = 'tab-products'
 - tab_backends_id = 'tab-backends'
-- current_tab = cookies[:dashboard_current_tab]
+- current_tab = cookies[:dashboard_current_tab] || tab_products_id
 
 div class='pf-c-tabs' id='primary'
   ul.pf-c-tabs__list
