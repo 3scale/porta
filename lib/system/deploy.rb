@@ -47,7 +47,7 @@ module System
       def version
         @version ||= VersionParser new(release)
       rescue ArgumentError
-        UnknownVersion.new
+        VersionParser.new(release)
       end
     end
 
