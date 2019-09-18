@@ -32,9 +32,7 @@ class Metric < ApplicationRecord
   validate :only_hits_has_children
 
   def service
-    service = super
-    service ||= owner if backend_api_metric?
-    service
+    Service.find_by(id: service_id)
   end
 
   def service_id
