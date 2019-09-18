@@ -344,7 +344,7 @@ module ApplicationHelper
     if saas?
       "red_hat_3scale/#{info.major_version}-saas"
     else
-      "red_hat_3scale_api_management/#{info.minor_version}"
+      "red_hat_3scale_api_management/#{info.major_version}.#{info.minor_version}"
     end
   end
 
