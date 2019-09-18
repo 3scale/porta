@@ -8,7 +8,7 @@ Feature: Audience menu
       And current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
       And I go to the provider dashboard
-      And I follow "Accounts"
+      And I follow "0 Accounts"
 
   Scenario: Audience menu structure
     Then I should see menu items
@@ -25,7 +25,7 @@ Feature: Audience menu
     | Fields Definitions        |
 
   Scenario: Portal sub menu structure
-    When I follow "Portal" within the main menu
+    When I follow "Developer Portal" within the main menu
     Then I should see menu items
     | Content                   |
     | Drafts                    |
@@ -84,7 +84,7 @@ Feature: Audience menu
   Scenario: Portal sub menu structure with groups enabled
     When provider "foo.example.com" has "groups" switch allowed
     And I go to the provider dashboard
-    And I follow "Accounts"
-    When I follow "Portal" within the main menu
+    And I follow "0 Accounts"
+    When I follow "Developer Portal" within the main menu
     Then I should see menu items
     | Groups                    |

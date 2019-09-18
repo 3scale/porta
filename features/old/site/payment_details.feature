@@ -19,7 +19,7 @@ Feature: Provider Payment Details
 
     Given current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
-    When I follow "Account"
+    When I go to the provider account page
       And I follow "Billing"
       And I follow "Payment Details"
     Then I should be on the provider braintree credit card details page

@@ -18,7 +18,7 @@ Feature: Finance switch
     Given provider "foo.example.com" has "finance" switch denied
     When I log in as provider "foo.example.com"
     Then I should not see "Billing" in the audience dashboard widget
-    When I follow "Accounts"
+    When I follow "0 Accounts"
     Then I should not see "Billing" in the main menu
 
   Scenario: Finance page forbidden if finance not enabled

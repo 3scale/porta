@@ -18,7 +18,7 @@ Background:
 
     And I navigate to my earnings
     And I follow "February, 2009"
-    And I follow "Show"
+    And I follow "2009-02-00000001"
 
 Scenario: Create line item
   When I follow "Add"

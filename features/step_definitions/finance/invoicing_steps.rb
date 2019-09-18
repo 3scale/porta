@@ -29,17 +29,6 @@ Given(/^I issue the invoice number "(.*?)"$/) do |number|
   end
 end
 
-Given(/^I pay the invoice number "(.*?)"$/) do |number|
-  invoice = Invoice.by_number(number).first
-  if invoice
-    invoice.finalize
-    invoice.issue
-    invoice.pay
-  else
-    raise "No invoice with number '#{number}' found"
-  end
-end
-
 Given(/^the buyer pays the invoice$/) do
   invoice = Invoice.last
   invoice.finalize

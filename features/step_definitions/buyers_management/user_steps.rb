@@ -54,7 +54,8 @@ end
 When /^I navigate to the edit page of user "([^\"]*)" of buyer "([^\"]*)"$/ do |user, buyer|
   step 'I navigate to the accounts page'
   step %(I follow "#{buyer}")
-  step %(I follow "Users")
+  number_of_users = @provider.buyers.where(org_name: buyer).first!.users.count
+  step %(I follow "#{number_of_users} Users")
   step %(I follow "Edit" within the "#{user}" row)
 end
 

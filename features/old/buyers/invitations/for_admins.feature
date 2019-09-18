@@ -17,12 +17,12 @@ Feature: Invitations on partner accounts for admins
   Scenario: Upgrade notice when provider does not have switch
     Given provider "foo.example.com" has "multiple_users" switch denied
     When I navigate to the page of the partner "lol cats"
-      And I follow "Invitations"
+      And I follow "0 Invitations"
     Then I should see upgrade notice for "multiple_users"
 
   Scenario: Navigation to the invitations page of a partner
     When I navigate to the page of the partner "lol cats"
-      And I follow "Invitations"
+      And I follow "0 Invitations"
     Then I should see the invitations page of the partner "lol cats"
 
   @emails

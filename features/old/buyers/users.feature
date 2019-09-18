@@ -17,7 +17,7 @@ Feature: Buyer users management
  Scenario: Navigating to page of users of a buyer
    When I navigate to the accounts page
      And I follow "SpaceWidgets"
-     And I follow "Users"
+     And I follow "3 Users"
    Then I should see "Users of SpaceWidgets"
 
  Scenario: Listing users
