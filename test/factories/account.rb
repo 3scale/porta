@@ -145,6 +145,8 @@ FactoryBot.define do
         service_plans_ui_visible: true,
         end_user_plans_ui_visible: true
       )
+      backend_api = FactoryBot.create(:backend_api, account: account, name: 'API Backend API')
+      FactoryBot.create(:backend_api_config, service: account.services.first, backend_api: backend_api)
     end
   end
 
