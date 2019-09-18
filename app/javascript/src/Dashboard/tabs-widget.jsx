@@ -1,10 +1,16 @@
 const TAB_PRODUCTS = 'tab-products'
 const TAB_BACKENDS = 'tab-backends'
 
+function updateActiveTab (activeTab, inactiveTab) {
+  activeTab.classList.add('active')
+  inactiveTab.classList.remove('active')
+}
+
 export function initialize () {
   const productsInput = document.querySelector(`.DashboardNavigation-tabs--content > input#${TAB_PRODUCTS}`)
   const backendsInput = document.querySelector(`.DashboardNavigation-tabs--content > input#${TAB_BACKENDS}`)
-
+  const productsContainer = document.querySelector(`.DashboardNavigation-tabs--content #products`)
+  const backendsContainer = document.querySelector(`.DashboardNavigation-tabs--content #backends`)
   const tabsBar = document.querySelector('.DashboardSection--services > .pf-c-tabs')
   const productsTab = tabsBar.querySelector(`button#${TAB_PRODUCTS}`)
   productsTab.addEventListener('click', () => {
@@ -15,6 +21,7 @@ export function initialize () {
     backendsInput.removeAttribute('checked')
 
     document.cookie = `dashboard_current_tab=${TAB_PRODUCTS}`
+    updateActiveTab(productsContainer, backendsContainer)
   })
 
   const backendsTab = tabsBar.querySelector(`button#${TAB_BACKENDS}`)
@@ -26,20 +33,6 @@ export function initialize () {
     productsInput.removeAttribute('checked')
 
     document.cookie = `dashboard_current_tab=${TAB_BACKENDS}`
+    updateActiveTab(backendsContainer, productsContainer)
   })
-
-  // const tabs = document.querySelectorAll('label[for^="tab-"]')
-  // const inputs = document.querySelectorAll('input[name="apiap-tabs"]')
-
-  // // NodeList.foreEach not supported in IE11
-  // for (const i of inputs) {
-  //   i.addEventListener('change', toggleCurrentTab)
-  // }
-
-  // function toggleCurrentTab (e: any) {
-  //   document.cookie = `dashboard_current_tab=${e.currentTarget.id}`
-  //   for (const t of tabs) {
-  //     t.classList.toggle('current-tab')
-  //   }
-  // }
 }
