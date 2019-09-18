@@ -11,14 +11,12 @@ type Props = {
   isServiceDiscoveryUsable: boolean,
   serviceDiscoveryAuthenticateUrl: string,
   providerAdminServiceDiscoveryServicesPath: string,
-  adminServicesPath: string,
-  apiap: boolean,
-  backendApis: Api[]
+  adminServicesPath: string
 }
 
 const NewServiceForm = (props: Props) => {
   const {isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    providerAdminServiceDiscoveryServicesPath, adminServicesPath, apiap, backendApis} = props
+    providerAdminServiceDiscoveryServicesPath, adminServicesPath} = props
 
   const [formMode, setFormMode] = useState('manual')
   const [loadingProjects, setLoadingProjects] = useState(false)
@@ -28,7 +26,7 @@ const NewServiceForm = (props: Props) => {
   }
 
   const formToRender = () => formMode === 'manual'
-    ? <ServiceManualForm formActionPath={adminServicesPath} apiap={apiap} backendApis={backendApis} />
+    ? <ServiceManualForm formActionPath={adminServicesPath} />
     : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
 
   return (
