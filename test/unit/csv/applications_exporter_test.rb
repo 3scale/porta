@@ -52,7 +52,7 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
 
   test 'to_csv' do
     Timecop.freeze(Time.utc(2011,1,1)) do
-      cinstance = @provider.services[1].cinstances.first!
+      cinstance = @provider.services.order(:id).second.cinstances.first!
       cinstance.update_attributes(first_daily_traffic_at: '2016-03-03 00:00:00 UTC')
       exporter = Csv::ApplicationsExporter.new(@provider, {data: 'applications'})
       lines = exporter.to_csv.lines.to_a
