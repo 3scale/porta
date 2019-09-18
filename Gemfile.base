@@ -264,6 +264,9 @@ group :development, :test do
 
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
+
+  # for creating model and controller UML diagrams
+  gem 'railroady'
 end
 
 gem 'webpacker', '~> 4.x'

@@ -532,6 +532,7 @@ GEM
     rack-utf8_sanitizer (1.6.0)
       rack (>= 1.0, < 3.0)
     rack-x_served_by (0.1.1)
+    railroady (1.5.3)
     rails (4.2.11.1)
       actionmailer (= 4.2.11.1)
       actionpack (= 4.2.11.1)
@@ -909,6 +910,7 @@ DEPENDENCIES
   rack-no_animations (~> 1.0.3)
   rack-utf8_sanitizer
   rack-x_served_by (~> 0.1.1)
+  railroady
   rails (= 4.2.11.1)
   rails-observers
   rails_event_store (~> 0.9.0)
