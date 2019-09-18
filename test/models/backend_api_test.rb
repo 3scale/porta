@@ -32,12 +32,12 @@ class BackendApiTest < ActiveSupport::TestCase
 
   test '.orphans should return backend apis that do not belongs to any service' do
     FactoryBot.create(:service)
-    service_to_delete = FactoryBot.create(:service)
+    service_to_delete = FactoryBot.create(:simple_service, :with_default_backend_api)
     orphan_backend_api = service_to_delete.backend_api_configs.first.backend_api
 
     assert_equal [], BackendApi.orphans
 
-    service_to_delete.destroy!
+    service_to_delete.destroy_default
 
     assert_equal [orphan_backend_api], BackendApi.orphans
   end
