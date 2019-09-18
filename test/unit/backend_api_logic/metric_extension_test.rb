@@ -5,7 +5,7 @@ require 'test_helper'
 class MetricExtensionTest < ActiveSupport::TestCase
   setup do
     @backend_api = FactoryBot.create(:backend_api)
-    @metric = FactoryBot.build(:metric, system_name: 'whatever', service_id: nil, owner: @backend_api)
+    @metric = FactoryBot.build(:metric, system_name: 'whatever', owner: @backend_api)
   end
 
   attr_reader :backend_api, :metric
@@ -28,7 +28,7 @@ class MetricExtensionTest < ActiveSupport::TestCase
 
   test '#parent_id_for_service' do
     backend_hits = backend_api.metrics.hits
-    backend_method = FactoryBot.build(:metric, system_name: 'bmeth', service_id: nil, owner: @backend_api, parent: backend_hits)
+    backend_method = FactoryBot.build(:metric, system_name: 'bmeth', owner: @backend_api, parent: backend_hits)
     backend_non_hits = metric
 
     service = FactoryBot.create(:service, account: backend_api.account)

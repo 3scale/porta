@@ -87,7 +87,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     services = FactoryBot.create_list(:simple_service, 2)
     backend_api = services.first.first_backend_api
     services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
-    metric = FactoryBot.build(:metric, service: nil, owner: backend_api)
+    metric = FactoryBot.build(:metric, owner: backend_api)
 
     services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.attributes['system_name']) }
     metric.sync_backend
