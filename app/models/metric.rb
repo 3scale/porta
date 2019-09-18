@@ -8,8 +8,7 @@ class Metric < ApplicationRecord
   before_destroy :destroyable?
   before_validation :associate_to_service_of_parent, :fill_owner
 
-  # update Service's updated_at when Metric caches for nicer cache keys
-  belongs_to :service, touch: true
+  # update Owner's updated_at when Metric caches for nicer cache keys
   belongs_to :owner, polymorphic: true, touch: true
 
   has_many :line_items, inverse_of: :metric
@@ -32,8 +31,17 @@ class Metric < ApplicationRecord
 
   validate :only_hits_has_children
 
-  # alias_attribute :name, :system_name
+  def service
+    service = super
+    service ||= owner if backend_api_metric?
+    service
+  end
 
+  def service_id
+    service_id = super
+    service_id ||= owner_id if backend_api_metric?
+    service_id
+  end
 
   # After add the index the results for .first changed.
   # http://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html
@@ -246,7 +254,7 @@ class Metric < ApplicationRecord
     if new_record? && child?
       self.owner = parent.owner
     else
-      self.owner_id = service_id
+      self.owner_id = attributes['service_id']
       self.owner_type = 'Service'
     end
   end
