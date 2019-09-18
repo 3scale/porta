@@ -45,7 +45,7 @@ module Account::ProviderMethods
     end
 
     def metrics
-      Metric.where(service_id: Service.where(account_id: id))
+      Metric.where(owner_id: Service.where(account_id: id), owner_type: Service.name)
     end
 
     def top_level_metrics
