@@ -14,7 +14,7 @@ Feature: Provider side messages
 
   Scenario: Compose link on the messages dashboard
     When I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
     Then I should see link "Compose Message"
 
   Scenario: Sending a message
@@ -32,7 +32,7 @@ Feature: Provider side messages
     And account "bob" should have 0 messages
     Then a message should be sent from provider "foo.example.com" to buyer "bob" with subject "Party tonite!" and body "You are invited to my party."
     When I follow "Dashboard"
-    And I follow "Messages"
+    And I follow "0 Messages"
     And I follow "Sent messages"
     Then I should see message to "bob" with subject "Party tonite!"
     When I follow "Party tonite!"
@@ -43,7 +43,7 @@ Feature: Provider side messages
     Given a message sent from buyer "bob" to provider "foo.example.com" with subject "I want out!" and body "I hate this system, delete my account ASAP!"
 
     And I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
     Then I should see unread message from "bob" with subject "I want out!"
     When I follow "I want out!"
     Then I should see "I want out!"
@@ -56,7 +56,7 @@ Feature: Provider side messages
     And 40 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
 
     And I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
 
     When I check the first select in table body
     Then "Bulk operations" should be visible
@@ -89,7 +89,7 @@ Feature: Provider side messages
     And 20 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
 
     And I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
 
     When I check select in table header
       Then I should not see "(select all 20 messages)"
@@ -97,7 +97,7 @@ Feature: Provider side messages
     And 20 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
 
     And I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
 
     When I check select in table header
       Then I should see "(select all 40 messages)"
@@ -107,7 +107,7 @@ Feature: Provider side messages
     Given a message sent from buyer "bob" to provider "foo.example.com" with subject "Alaska" and body "Into the wild!"
 
     And I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
       Then I should see "Wildness"
       Then I should see "Alaska"
 
@@ -126,7 +126,7 @@ Feature: Provider side messages
     And 40 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
 
     When I go to the provider dashboard
-    And I follow "Messages"
+    And I follow "0 Messages"
       Then I should see "Wildness"
       And should not see "You have no messages."
 

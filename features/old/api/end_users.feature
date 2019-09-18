@@ -19,7 +19,7 @@ Feature: End User management
   Scenario: Create new end user
     Given I am logged in as provider "foo.example.com"
     When I am on the end users of service "API" page of provider "foo.example.com"
-     And I follow "New"
+     And I follow "New End User"
      And I fill in "Username" with "uuid-of-the-end-user"
      And I press "Create End User"
     Then I should see "uuid-of-the-end-user"
