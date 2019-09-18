@@ -5,9 +5,9 @@ module BackendApiLogic
     extend ActiveSupport::Concern
 
     included do
-      delegate :api_backend,       to: :service
-      delegate :api_backend=,      to: :service
-      delegate :backend_api,       to: :service
+      delegate :api_backend,       to: :service, allow_nil: true
+      delegate :api_backend=,      to: :service, allow_nil: true
+      delegate :backend_api,       to: :service, allow_nil: true
       delegate :backend_api_proxy, to: :service
 
       delegate :private_endpoint, :private_endpoint=, to: :backend_api, prefix: true
@@ -32,7 +32,7 @@ module BackendApiLogic
     protected
 
     def validate_backend_api?
-      backend_api.private_endpoint && backend_api.changed?
+      backend_api&.private_endpoint && backend_api.changed?
     end
 
     def save_backend_api
