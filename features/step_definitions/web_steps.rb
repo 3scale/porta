@@ -31,7 +31,7 @@ end
 
 When /^(?:|I )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
-    click_link(link, visible: !invisible)
+    click_link(link, exact: true, visible: !invisible)
   end
 end
 
