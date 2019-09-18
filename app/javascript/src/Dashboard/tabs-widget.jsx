@@ -6,6 +6,13 @@ function updateActiveTab (activeTab, inactiveTab) {
   inactiveTab.classList.remove('active')
 }
 
+function setCurrentTab (currentTab, currentInput, notCurrentTab, notCurrentInput) {
+  currentTab.parentElement.classList.add('pf-m-current')
+  currentInput.setAttribute('checked', true)
+  notCurrentTab.parentElement.classList.remove('pf-m-current')
+  notCurrentInput.removeAttribute('checked')
+}
+
 export function initialize () {
   const productsInput = document.querySelector(`.DashboardNavigation-tabs--content > input#${TAB_PRODUCTS}`)
   const backendsInput = document.querySelector(`.DashboardNavigation-tabs--content > input#${TAB_BACKENDS}`)
@@ -13,25 +20,16 @@ export function initialize () {
   const backendsContainer = document.querySelector(`.DashboardNavigation-tabs--content #backends`)
   const tabsBar = document.querySelector('.DashboardSection--services > .pf-c-tabs')
   const productsTab = tabsBar.querySelector(`button#${TAB_PRODUCTS}`)
+
   productsTab.addEventListener('click', () => {
-    productsTab.parentElement.classList.add('pf-m-current')
-    productsInput.setAttribute('checked', true)
-
-    backendsTab.parentElement.classList.remove('pf-m-current')
-    backendsInput.removeAttribute('checked')
-
+    setCurrentTab(productsTab, productsInput, backendsTab, backendsInput)
     document.cookie = `dashboard_current_tab=${TAB_PRODUCTS}`
     updateActiveTab(productsContainer, backendsContainer)
   })
 
   const backendsTab = tabsBar.querySelector(`button#${TAB_BACKENDS}`)
   backendsTab.addEventListener('click', () => {
-    backendsTab.parentElement.classList.add('pf-m-current')
-    backendsInput.setAttribute('checked', true)
-
-    productsTab.parentElement.classList.remove('pf-m-current')
-    productsInput.removeAttribute('checked')
-
+    setCurrentTab(backendsTab, backendsInput, productsTab, productsInput)
     document.cookie = `dashboard_current_tab=${TAB_BACKENDS}`
     updateActiveTab(backendsContainer, productsContainer)
   })
