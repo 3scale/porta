@@ -4,7 +4,6 @@ import React, {useState} from 'react'
 
 import {ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm} from 'NewService'
 import {createReactWrapper} from 'utilities/createReactWrapper'
-import type {Api} from 'Types/Api'
 
 type Props = {
   isServiceDiscoveryAccessible: boolean,

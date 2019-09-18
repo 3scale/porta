@@ -3,7 +3,6 @@
 import React from 'react'
 import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
 import type {FormProps} from 'NewService/types'
-import type {Api} from 'Types/Api'
 
 type Props = {
   formActionPath: string
