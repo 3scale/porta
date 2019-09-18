@@ -45,7 +45,7 @@ module System
       end
 
       def version
-        @version ||= Gem::Version.new(release)
+        @version ||= VersionParser new(release)
       rescue ArgumentError
         UnknownVersion.new
       end
