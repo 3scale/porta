@@ -29,8 +29,22 @@ class Onboarding::ApiForm < Reform::Form
     ECHO_API_BACKEND
   end
 
+  # def save
+  #   # super do |params|
+  #   #   proxy   = Service.new(params[:proxy])
+  #   #   service = Service.new(params[:service])
+  #   #   binding.pry
+  #   # end
+  #   # sync
+  #   # binding.pry
+  # end
+
   def save
+    sync
     ServiceCreator.new(service: model[:service]).call!
+    proxy.save
+  ensure
+    merge_errors
   end
 
   protected
