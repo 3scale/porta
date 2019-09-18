@@ -22,10 +22,13 @@ class Contract < ApplicationRecord
   after_destroy :destroy_customized_plan
   after_commit :notify_plan_changed
 
-  belongs_to :plan, counter_cache: true
+  belongs_to :plan
   validate   :correct_plan_subclass?
   # this breaks nested saving of records, when validating there is no user_account yet, its new record
   # validates_presence_of :user_account
+
+  after_save :update_counter_cache
+  after_destroy :update_counter_cache
 
   validates :description, :redirect_url, :extra_fields,
             length: { maximum: 65535 }
@@ -290,6 +293,14 @@ class Contract < ApplicationRecord
   add_three_scale_method_tracer :change_plan_internal
 
   private
+
+  def update_counter_cache
+    plan&.reset_contracts_counter if update_counter_cache?
+  end
+
+  def update_counter_cache?
+    !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
+  end
 
   def notify_plan_changed
     if previously_changed?(:plan_id) && @old_plan

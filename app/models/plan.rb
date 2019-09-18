@@ -184,7 +184,7 @@ class Plan < ApplicationRecord
   end
 
   def reset_contracts_counter
-    self.class.reset_counters(id, :contracts)
+    update_column(:contracts_count, contracts.count) if persisted?
   end
 
   def can_be_destroyed?

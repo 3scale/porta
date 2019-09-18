@@ -5,7 +5,7 @@ class Cinstance < Contract
 
   delegate :backend_version, to: :service, allow_nil: true
 
-  belongs_to :plan, class_name: 'ApplicationPlan', foreign_key: :plan_id, inverse_of: :cinstances, counter_cache: :contracts_count
+  belongs_to :plan, class_name: 'ApplicationPlan', foreign_key: :plan_id, inverse_of: :cinstances
   alias application_plan plan
 
   # TODO: verify the comment is still true and we can't use inverse_of
