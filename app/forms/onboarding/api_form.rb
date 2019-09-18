@@ -29,6 +29,10 @@ class Onboarding::ApiForm < Reform::Form
     ECHO_API_BACKEND
   end
 
+  def save
+    ServiceCreator.new(service: model[:service]).call!
+  end
+
   protected
 
   def just_created?(model)
