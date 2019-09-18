@@ -5,7 +5,7 @@ module BackendApiLogic
     def policy_chain
       chain = super
       return chain unless with_subpaths?
-      Builder.new(service).to_a.concat(chain)
+      Builder.new(service).to_a.concat(chain || [])
     end
 
     def with_subpaths?
