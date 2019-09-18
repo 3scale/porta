@@ -25,7 +25,7 @@ module MetricRepresenter
   end
 
   link :self do
-    public_send("admin_api_#{owner_type.underscore}_metric_url", owner, id)
+    polymorphic_url([:admin, :api, owner, self])
   end
 
   def system_name
