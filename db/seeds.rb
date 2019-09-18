@@ -69,7 +69,11 @@ ActiveRecord::Base.transaction do
   master_user.activate!
 
   # Creating the master service
-  master_service = Service.create!(account: master, name: master_service)
+  # master_service = Service.create!(account: master, name: master_service)
+  master_service = Service.new(account: master, name: master_service)
+  # Todo: Remove the private_endpoint parameter when the ServiceCreator creates the default backend api if not in the
+  # rolling update
+  ServiceCreator.new(service: master_service).call!(private_endpoint: "https://#{BackendApi::ECHO_API_HOST}")
   master_service.service_plans.default!(ServicePlan.first!)
 
   # Master needs to be contracted with an ApplicationPlan
