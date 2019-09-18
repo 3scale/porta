@@ -28,8 +28,6 @@ module Account::ProviderMethods
     has_many :provider_audits, foreign_key: :provider_id, class_name: Audited.audit_class.name
 
     has_many :usage_limits, through: :services
-    has_many :metrics, through: :services
-    has_many :top_level_metrics, through: :services
     has_many :proxies, through: :services
     has_many :proxy_rules, through: :proxies
     has_many :proxy_logs, foreign_key: :provider_id
@@ -44,6 +42,14 @@ module Account::ProviderMethods
         complete_attributes = attributes.merge(account: build.account).reverse_merge(where_values_hash).symbolize_keys!
         build_by_kind(kind: kind, account_type: AuthenticationProvider.account_types[:provider], **complete_attributes)
       end
+    end
+
+    def metrics
+      Metric.where(service_id: Service.where(account_id: id))
+    end
+
+    def top_level_metrics
+      metrics.top_level
     end
 
     has_many :backend_apis, inverse_of: :account, dependent: :destroy

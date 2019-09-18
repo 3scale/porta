@@ -62,7 +62,7 @@ module ApiDocs
     end
 
     def metrics
-      @metrics ||= @account.metrics.includes(:service).top_level
+      @metrics ||= @account.top_level_metrics.includes(:owner)
     end
 
     METRIC_NAME = ->(metric) { "#{metric.friendly_name} | #{metric.service.name}" }
