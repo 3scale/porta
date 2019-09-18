@@ -21,14 +21,6 @@ module BackendApiLogic
       validates :backend_api, nested_association: {report: {private_endpoint: :api_backend}}, associated: true, if: :validate_backend_api?
     end
 
-    # def backend_api
-    #   service.backend_api
-    # end
-
-    # def backend_api_proxy
-    #   service.backend_api_proxy
-    # end
-
     protected
 
     def validate_backend_api?

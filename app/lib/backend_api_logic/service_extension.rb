@@ -42,7 +42,6 @@ module BackendApiLogic
           backend_api_config.path = attrs[:path] if attrs.key?(:path)
           backend_api_config.backend_api = backend_api
           backend_api.private_endpoint = attrs[:private_endpoint] if attrs.key?(:private_endpoint)
-          # binding.pry
           backend_api.save!
           backend_api_config.save!
         end
