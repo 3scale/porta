@@ -13,7 +13,7 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
   attr_reader :backend_api, :access_token_value, :tenant
 
   test 'index' do
-    FactoryBot.create(:metric, owner: backend_api, parent: backend_api.metrics.hits)
+    FactoryBot.create(:metric, owner: backend_api, parent: backend_api.metrics.hits, service_id: nil)
 
     FactoryBot.create(:metric, owner: FactoryBot.create(:backend_api, account: tenant), service_id: nil)
     FactoryBot.create(:metric, service: FactoryBot.create(:service, account: tenant))
@@ -68,7 +68,7 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
   end
 
   test 'destroy' do
-    @metric = FactoryBot.create(:metric, owner: backend_api)
+    @metric = FactoryBot.create(:metric, owner: backend_api, service_id: nil)
     assert_difference(Metric.method(:count), -1) do
       delete admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id)
       assert_response :success
@@ -108,6 +108,6 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
   private
 
   def metric
-    @metric ||= FactoryBot.create(:metric, owner: backend_api)
+    @metric ||= FactoryBot.create(:metric, owner: backend_api, service_id: nil)
   end
 end
