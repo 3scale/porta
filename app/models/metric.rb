@@ -31,6 +31,8 @@ class Metric < ApplicationRecord
 
   validate :only_hits_has_children
 
+  alias service= owner=
+
   def service
     Service.find_by(id: service_id)
   end
