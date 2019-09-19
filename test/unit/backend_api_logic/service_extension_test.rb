@@ -3,11 +3,6 @@
 require 'test_helper'
 
 class ServiceExtensionTest < ActiveSupport::TestCase
-  test 'backend_api is nil when the service does not have an account' do
-    service = FactoryBot.build(:simple_service, account: nil)
-    assert_nil service.backend_api
-  end
-
   test 'backend_api is not persisted if not informed' do
     service = FactoryBot.build(:simple_service)
     refute service.backend_api.persisted?
