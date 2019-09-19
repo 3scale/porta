@@ -2,13 +2,13 @@
 
 require 'test_helper'
 
-class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
+class Admin::API::BackendApisControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
   end
 
-  attr_reader :provider, :access_token_value
+  attr_reader :provider
 
   test 'show' do
     get admin_api_backend_api_path(backend_api, access_token: access_token_value)
