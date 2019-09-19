@@ -18,7 +18,7 @@ export function initialize () {
   const backendsInput = document.querySelector(`.DashboardNavigation-tabs--content > input#${TAB_BACKENDS}`)
   const productsContainer = document.querySelector(`.DashboardNavigation-tabs--content #products`)
   const backendsContainer = document.querySelector(`.DashboardNavigation-tabs--content #backends`)
-  const tabsBar = document.querySelector('.DashboardSection--services > .pf-c-tabs')
+  const tabsBar = document.querySelector('.DashboardSection-header .pf-c-tabs')
   const productsTab = tabsBar.querySelector(`button#${TAB_PRODUCTS}`)
 
   productsTab.addEventListener('click', () => {
