@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Provider::Admin::BackendApis::MappingRulesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @provider = FactoryBot.create(:provider_account_with_default_backend_api)
+    @provider = FactoryBot.create(:provider_account, :with_default_backend_api)
     @backend_api = @provider.first_service.backend_api
 
     FactoryBot.create(:proxy_rule, proxy: nil, owner: @backend_api)

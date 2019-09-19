@@ -178,8 +178,13 @@ FactoryBot.define do
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
         account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
       end
+    end
 
-      # account.admins.each(&:activate!)
+    trait(:with_default_backend_api) do
+      after(:create) do |account|
+        backend_api = FactoryBot.build(:backend_api, account: account)
+        FactoryBot.create(:backend_api_config, service: account.default_service, backend_api: backend_api)
+      end
     end
   end
 
@@ -187,13 +192,6 @@ FactoryBot.define do
     after(:create) do |a|
       a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly');
       a.save
-    end
-  end
-
-  factory(:provider_account_with_default_backend_api, parent: :provider_account) do
-    after(:create) do |account|
-      backend_api = FactoryBot.build(:backend_api, account: account)
-      FactoryBot.create(:backend_api_config, service: account.default_service, backend_api: backend_api)
     end
   end
 
