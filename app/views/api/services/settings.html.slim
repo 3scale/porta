@@ -1,4 +1,4 @@
-- content_for :sublayout_title, 'Settings'
+- content_for :sublayout_title, page_title
 
 - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
   = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), :method => :post, :class => 'service autosubmit formtastic', :remote => true do

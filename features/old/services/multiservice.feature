@@ -41,6 +41,7 @@ Feature: Multiservice feature
   @javascript
   Scenario: Edit service
     Given I am logged in as provider "foo.example.com"
+      And all the rolling updates features are off
       And I am on the edit page for service "Fancy API" of provider "foo.example.com"
     When I fill in "Name" with "Less fancy API"
      And I press "Update Service"

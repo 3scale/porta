@@ -221,6 +221,7 @@ module VerticalNavHelper
     items = []
     items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
+    items << {id: :usage_rules,       title: 'Usage Rules',       path: settings_admin_service_path(@service)} if current_account.provider_can_use?(:api_as_product)
     items
   end
 
@@ -241,7 +242,8 @@ module VerticalNavHelper
     items << {id: :configuration,   title: 'Configuration',     path: path_to_service(@service)}
     items << {id: :methods_metrics, title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
     items << {id: :mapping_rules,   title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if current_account.independent_mapping_rules_enabled?
-    items << {id: :settings,        title: 'Settings',          path: settings_admin_service_path(@service)}
+    items << {id: :settings,        title: 'Settings',          path: settings_admin_service_path(@service)} unless current_account.provider_can_use?(:api_as_product)
+    items
   end
 
   # Backend APIs
