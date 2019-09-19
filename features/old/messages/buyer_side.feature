@@ -28,7 +28,7 @@ Feature: Buyer side messages
   Scenario: Receiving a message
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "How are you doing?" and body "Just checking if everything is allright"
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     Then I should see unread message from "foo.example.com" with subject "How are you doing?"
     When I follow "How are you doing?"
     Then I should see "How are you doing?"
@@ -39,7 +39,7 @@ Feature: Buyer side messages
   Scenario: Receiving a message without subject
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "" and body "Just checking if everything is allright"
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     Then I should see unread message from "foo.example.com" with subject "Just checkin..."
     When I follow "Just checkin..."
     Then I should see "Just checking if everything is allright"
@@ -49,7 +49,7 @@ Feature: Buyer side messages
   Scenario: Receiving a message without subject nor body
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "" and body ""
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     Then I should see unread message from "foo.example.com" with subject "(no subject)"
     When I follow "(no subject)"
     When I follow "Inbox"
@@ -59,7 +59,7 @@ Feature: Buyer side messages
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
 
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     When I follow "Wassup?"
     Then I should see "Wassup?"
     When I fill in "message_body" with "Yep, all good."
@@ -69,7 +69,7 @@ Feature: Buyer side messages
   Scenario: Deleting a message
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     And follow "Delete message"
     Then I should not see a message from "foo.example.com" with subject "Wassup?"
     And the message from provider "foo.example.com" to buyer "bob" with subject "Wassup?" should be hidden
@@ -82,7 +82,7 @@ Feature: Buyer side messages
   Scenario: Restoring a deleted message
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     And I follow "Delete message"
     And I follow "Trash"
     And I press a button to restore the message from "foo.example.com" with subject "Wassup?"
@@ -92,7 +92,7 @@ Feature: Buyer side messages
   Scenario: Empting the trash
     Given a message sent from provider "foo.example.com" to buyer "bob" with subject "Hello" and body "Some stuff"
     When I go to the dashboard
-    And I follow "Messages"
+    And I follow "Messages 1"
     And I follow "Delete message"
     And I follow "Trash"
     And I press "Empty the trash"

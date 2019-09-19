@@ -9,18 +9,13 @@ Feature: Show invoices from account's page (#16015909)
       And an application plan "Fixed" of provider "xyz.example.com" for 0 monthly
       And a buyer "zoidberg" signed up to application plan "Fixed"
       And an invoice of buyer "zoidberg" for January, 2011
-
       And current domain is the admin domain of provider "xyz.example.com"
       And I log in as provider "xyz.example.com"
-      And I go to the buyer account page for "zoidberg"
-
-    Then I should see "1 Invoice"
-
-    When I follow "1 Invoice"
-    Then I should see 1 invoice
-
-    When I follow "Show"
-    Then I should see "Invoice for January 2011"
+     When I go to the buyer account page for "zoidberg"
+      And I follow "1 Invoice"
+     Then I should see 1 invoice
+     When I follow "2011-01-00000001"
+     Then I should see "Invoice for January 2011"
       And I should still be in the "Accounts" in the main menu
 
   Scenario: Don't show invoices when billing is not enabled
@@ -44,7 +39,7 @@ Feature: Show invoices from account's page (#16015909)
         And I log in as provider "xyz.example.com"
         And I go to the buyer account page for "zoidberg"
         And I follow "1 Invoice"
-        And I follow "Show" within opened order
+        And I follow "2011-01-00000001"
 
       # TODO: Properly check if order is opened
 

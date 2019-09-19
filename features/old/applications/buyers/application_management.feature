@@ -38,7 +38,7 @@ Feature: Buyer's application management
       And I follow "Applications"
       And I follow "Create new application"
       And I follow "Travelling"
-      And I follow "Change"
+      And I follow "Review/Change"
       And I follow "Train"
       And I click on Select this plan for the "Train" plan
 
@@ -76,7 +76,7 @@ Feature: Buyer's application management
     And I follow "UltraWidget"
     And I follow "Edit UltraWidget"
     Then I should see "Default › Review/Change"
-    When I follow "Change"
+    When I follow "Review/Change"
     Then I should see a list of available plans
     | plan      | state  |
     | Default   | active |

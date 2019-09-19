@@ -12,7 +12,7 @@ Feature: Edit Integration
   Scenario: Edit a tested integration has a link to the analytics usage
     Given the service has been successfully tested
     When I go to the service integration page
-     And I follow "the analytics section"
+     And I follow "reflected in the analytics section"
     Then I should be on the provider stats usage page
 
   # TODO: remove it when the Coffeescript is migrated to React

@@ -47,7 +47,7 @@ Feature: API Usage alerts
         | Who   | How | Levels |
         | buyer | web | 50, 90 |
      When I go to the alerts page of application "Aliget"
-      And I follow "Delete" for the 2nd API alert
+      And I follow "Delete alert" for the 2nd API alert
 
     Then I should see 1 API alert
     Then I should see only the following API alert:

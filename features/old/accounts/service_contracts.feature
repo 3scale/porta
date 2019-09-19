@@ -24,7 +24,7 @@ Feature: Account service plans management
   Scenario: Link to service contracts on account page in enterprise
     Given I am logged in as provider "foo.example.com"
     When I am on the buyer account page for "bob"
-     And I follow "Portal" in the main menu
+     And I follow "Developer Portal" in the main menu
     Then I should see "Service Subscription"
 
   @javascript

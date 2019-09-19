@@ -39,7 +39,7 @@ Feature: Providers's applications searching, sorting and filtering
       | BobApp  | bob     |
 
   Scenario: Search scoped by service
-    When I follow "Applications"
+    When I follow "2 Applications"
     Then I should see following table:
       | Name    | Account |
       | JaneApp | jane    |
