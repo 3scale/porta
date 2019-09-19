@@ -12,7 +12,7 @@ class Api::ServicesController < Api::BaseController
   load_and_authorize_resource :service, through: :current_user,
     through_association: :accessible_services, except: [:create]
 
-  with_options only: %i[edit update settings] do |actions|
+  with_options only: %i[edit update settings usage_rules] do |actions|
     actions.sublayout 'api/service'
   end
 
@@ -30,8 +30,13 @@ class Api::ServicesController < Api::BaseController
   end
 
   def settings
-    activate_menu_args = current_account.provider_can_use?(:api_as_product) ? %i[serviceadmin applications usage_rules] : %i[serviceadmin integration settings]
-    activate_menu activate_menu_args
+    activate_menu :serviceadmin, :integration, :settings
+    @alert_limits = Alert::ALERT_LEVELS
+  end
+
+  def usage_rules
+    raise ActiveRecord::RecordNotFound unless provider_can_use?(:api_as_product)
+    activate_menu :serviceadmin, :applications, :usage_rules
     @alert_limits = Alert::ALERT_LEVELS
   end
 
