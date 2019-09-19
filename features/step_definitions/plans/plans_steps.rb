@@ -103,7 +103,7 @@ Given(/^I want to change the plan of my application to paid$/) do
     Given the buyer logs in to the provider
     And I go to my application page
     And I follow "Edit #{@application.name}"
-    And I follow "Change"
+    And I follow "Review/Change"
     And I follow "#{@paid_application_plan.name}"
   )
 end

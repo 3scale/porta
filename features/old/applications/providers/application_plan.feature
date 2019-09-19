@@ -56,14 +56,13 @@ Feature: Applications plan
      And a buyer "foo" signed up to application plan "Other"
      And a buyer "bar" signed up to application plan "Other"
      And I am on the application plans admin page
-
     And I follow "Applications" within table header
     Then I should see following table:
       | Name   | Applications ▲ | State     |
       | Basic  | 1              | hidden    |
       | Other  | 2              | published |
 
-    And I follow "Applications" within table header
+    And I follow "Applications ▲" within table header
     Then I should see following table:
       | Name   | Applications ▼ | State     |
       | Other  | 2              | published |
@@ -75,7 +74,7 @@ Feature: Applications plan
       | Basic  | 1            | hidden    |
       | Other  | 2            | published |
 
-    And I follow "State" within table header
+    And I follow "State ▲" within table header
     Then I should see following table:
       | Name   | Applications | State ▼   |
       | Other  | 2            | published |
@@ -87,7 +86,7 @@ Feature: Applications plan
       | Basic  | 1            | hidden    |
       | Other  | 2            | published |
 
-    And I follow "Name" within table header
+    And I follow "Name ▲" within table header
     Then I should see following table:
       | Name ▼ | Applications | State     |
       | Other  | 2            | published |

@@ -9,15 +9,12 @@ Feature: Provider settings authorization
       And provider "foo.example.com" has billing enabled
 
   Scenario Outline: Provider admin can access settings
-     And current domain is the admin domain of provider "foo.example.com"
-     When I log in as provider "foo.example.com"
-
-    When I go to the provider dashboard
-
-    Then I should see the link "<link>" in the audience dashboard widget
-    And I follow "<link>"
-    When I go to the <page> page
-    Then I should be on the <page> page
+    Given current domain is the admin domain of provider "foo.example.com"
+      And I log in as provider "foo.example.com"
+     When I go to the provider dashboard
+      And I follow "<link>" within the audience dashboard widget
+      And I go to the <page> page
+     Then I should be on the <page> page
 
     # not testing | Forum                | forum settings           |
     # as it doesn't appear on dashboard if 0 threads
@@ -26,10 +23,10 @@ Feature: Provider settings authorization
       | link                 | page                     |
       | Billing              | edit site settings       |
       | Billing              | finance settings         |
-      | Accounts             | usage rules settings     |
-      | Accounts             | fields definitions index |
-      | Messages             | emails settings          |
-      | Messages             | email templates          |
+      | 0 Accounts           | usage rules settings     |
+      | 0 Accounts           | fields definitions index |
+      | 0 Messages           | emails settings          |
+      | 0 Messages           | email templates          |
       | Developer Portal     | dns settings             |
       | Developer Portal     | spam protection          |
       | Developer Portal     | xss protection           |
@@ -48,13 +45,13 @@ Feature: Provider settings authorization
 
     Examples:
       | link                 | page                     |
-      | Accounts             | usage rules settings     |
-      | Accounts             | fields definitions index |
+      | 0 Accounts           | usage rules settings     |
+      | 0 Accounts           | fields definitions index |
       | Billing              | edit site settings       |
       | Billing              | finance settings         |
       | Forum                | forum settings           |
-      | Messages             | emails settings          |
-      | Messages             | email templates          |
+      | 0 Messages           | emails settings          |
+      | 0 Messages           | email templates          |
       | Developer Portal     | site settings            |
       | Developer Portal     | dns settings             |
       | Developer Portal     | spam protection          |
@@ -67,23 +64,21 @@ Feature: Provider settings authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
-
-    Then I should see the link "Messages"
-    And I follow "Messages"
-    When I go to the <page> page
-    Then I should be on the <page> page
+      And I follow "0 Messages"
+      And I go to the <page> page
+     Then I should be on the <page> page
 
     # not testing | Forum                | forum settings           |
     # as it doesn't appear on dashboard if 0 threads
 
     Examples:
       | link                 | page                     |
-      | Accounts             | usage rules settings     |
-      | Accounts             | fields definitions index |
+      | 0 Accounts           | usage rules settings     |
+      | 0 Accounts           | fields definitions index |
       | Billing              | edit site settings       |
       | Billing              | finance settings         |
-      | Messages             | emails settings          |
-      | Messages             | email templates          |
+      | 0 Messages           | emails settings          |
+      | 0 Messages           | email templates          |
       | Developer Portal     | site settings            |
       | Developer Portal     | feature visibility       |
       | Developer Portal     | dns settings             |

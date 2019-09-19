@@ -32,23 +32,20 @@ Feature: Menu of the Account screen
 
   Scenario: finance disabled should not disable 3scale invoices
     Given provider "foo.example.com" has "finance" switch denied
-    When I go to the provider dashboard
-     And I follow "Account"
+    When I go to the provider account page
      And I follow "Billing"
      And I follow "3scale Invoices"
     Then I should be on my invoices from 3scale page
 
   Scenario: Account menu when master is billing
     Given master is billing tenants
-    When I go to the provider dashboard
-     And I follow "Account"
+    When I go to the provider account page
      And I follow "Billing"
     Then I should see "3scale Invoices"
 
   Scenario: Account menu when master is not billing
     Given master is not billing tenants
-    When I go to the provider dashboard
-     And I follow "Account"
+    When I go to the provider account page
     Then I should not see "3scale Invoices"
 
   Scenario: Account menu structure with sso enforced

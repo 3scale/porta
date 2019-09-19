@@ -192,8 +192,7 @@ Feature: Searching buyer accounts
 
     When I go to the buyer accounts page with 10 records per page
     Then I should see only 10 buyers in the buyer accounts table
-
-    When I follow "Next"
+    When I follow "Next →"
     Then I should see 2 buyers in the buyer accounts table
 
   @allow-rescue

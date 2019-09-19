@@ -10,8 +10,7 @@ Feature: Notifications
   Scenario: Navigate to notifications page
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-
-    And I follow "Account"
+    And I go to the provider account page
     And I follow "Notifications"
     Then I should see "Email Notifications" in a header
 

@@ -40,14 +40,14 @@ Feature: Account management
     And user "bob" activates himself
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "bob"
-    And I follow "Account"
+    And I go to the provider account page
     # FIXME: as the Edit button now resides elsewhere, this does not assert anything
     Then I should not see link "Edit" within "#account_details"
 
   Scenario: Providers see their provider key on the account details page
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-    And I follow "Account"
+    And I go to the provider account page
     Then I should see "API Key"
     Then I should see the provider key of provider "foo.example.com"
 
@@ -63,7 +63,7 @@ Feature: Account management
   Scenario: For admins the account overview is a page to change account details
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-      And I follow "Account"
+      And I go to the provider account page
     Then I should see the page to change account details
 
   @wip
@@ -85,7 +85,7 @@ Feature: Account management
   Scenario: Provider Admins cannot edit Profiles fields on account
     And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
-      And I follow "Account"
+      And I go to the provider account page
     Then I should not be able to edit the value of the customers type field
 
   Scenario: Edit personal details with invalid data
