@@ -29,14 +29,6 @@ class Onboarding::ApiForm < Reform::Form
     ECHO_API_BACKEND
   end
 
-  def save
-    sync
-    ServiceCreator.new(service: model[:service]).call!
-    proxy.save
-  ensure
-    merge_errors
-  end
-
   protected
 
   def just_created?(model)
