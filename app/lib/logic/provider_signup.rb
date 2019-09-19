@@ -64,7 +64,7 @@ module Logic
           service_plan.create_contract_with! provider
           application_plan.create_contract_with! provider
 
-          provider.services.create! name: 'API'
+          ServiceCreator.new(service: provider.services.build(name: 'API')).call!
         end
 
         if ThreeScale.config.onpremises
