@@ -18,6 +18,7 @@ Feature: Dashboard
 
   Scenario: APIs widget
     When I go to the provider dashboard
+    Then I should see "APIs" in the apis dashboard widget
     And I should see "Products" in the apis dashboard widget
     And I should see "Backends" in the apis dashboard widget
     And I should see "API" in the apis dashboard products tabs section

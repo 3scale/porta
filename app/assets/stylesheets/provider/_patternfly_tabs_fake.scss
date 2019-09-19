@@ -11,6 +11,7 @@
  */
 
 .pf-c-tabs {
+
   ul {
     list-style: none;
   }
@@ -19,7 +20,7 @@
     cursor: pointer;
     font-size: 100%;
     height: unset;
-    line-height: 24px; //var(--pf-global--LineHeight--md);
+    line-height: line-height-times(1); //var(--pf-global--LineHeight--md);
   }
 
   .pf-c-tabs__list {
@@ -48,7 +49,7 @@
         display: inline-block;
         font-weight: 400; //var(--pf-c-tabs__button--FontWeight)
         outline-offset: calc(-1 * .25rem); //var(--pf-c-tabs__button--OutlineOffset);
-        padding: 8px; //var(--pf-c-tabs__button--PaddingTop) var(--pf-c-tabs__button--PaddingRight) var(--pf-c-tabs__button--PaddingBottom) var(--pf-c-tabs__button--PaddingLeft)
+        padding: line-height-times(1 / 4) line-height-times(1); //var(--pf-c-tabs__button--PaddingTop) var(--pf-c-tabs__button--PaddingRight) var(--pf-c-tabs__button--PaddingBottom) var(--pf-c-tabs__button--PaddingLeft)
         position: relative;
         user-select: none;
       }
@@ -92,4 +93,38 @@
       }
     }
   }
+}
+
+/**
+ * Overrides
+ *
+ * This styles are not PF4 compatibe, were added to make tabs match our dashboard design
+ */
+
+ .DashboardSection--tabs-title {
+    color: #393f44;
+    cursor: pointer;
+    float: left;
+    font-size: 100%;
+    font-weight: 700;
+    line-height: line-height-times(1);
+    margin-right: 0.75rem;
+    margin: 0 0 0 0;
+    padding-top: 8px;
+ }
+
+.pf-tabs-header {
+  border-bottom: 1px solid white;
+  float: right;
+  line-height: line-height-times(1);
+  position: relative;
+  top: 2px;
+}
+
+.pf-c-tabs .pf-c-tabs__list .pf-c-tabs__item .pf-c-tabs__button {
+  text-transform: uppercase;
+}
+
+.pf-c-tabs .pf-c-tabs__list .pf-c-tabs__item.pf-m-current .pf-c-tabs__button::before {
+  border-bottom: 1px solid white;
 }

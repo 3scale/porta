@@ -4,14 +4,19 @@
 - tab_backends_id = 'tab-backends'
 - current_tab = cookies[:dashboard_current_tab] || tab_products_id
 
-div class='pf-c-tabs' id='primary'
-  ul.pf-c-tabs__list
-    li.pf-c-tabs__item class=('pf-m-current' if current_tab == tab_products_id)
-      button.pf-c-tabs__button id=tab_products_id
-        |Products
-    li.pf-c-tabs__item class=('pf-m-current' if current_tab == tab_backends_id)
-      button.pf-c-tabs__button id=tab_backends_id
-        |Backends
+header.DashboardSection-header.DashboardSection-header--extended
+  h1.DashboardSection--tabs-title
+    | APIs
+  div class='pf-c-tabs pf-tabs-header' id='primary'
+    ul.pf-c-tabs__list
+      li.pf-c-tabs__item class=('pf-m-current' if current_tab == tab_products_id)
+        button.pf-c-tabs__button id=tab_products_id
+          i.fa.fa-gift 
+          |&nbsp; Products
+      li.pf-c-tabs__item class=('pf-m-current' if current_tab == tab_backends_id)
+        button.pf-c-tabs__button id=tab_backends_id
+          i.fa.fa-puzzle-piece 
+          |&nbsp; Backends
 
 div
   div.DashboardNavigation-tabs--content

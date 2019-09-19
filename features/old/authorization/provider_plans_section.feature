@@ -20,6 +20,7 @@ Feature: Provider plans section authorization
     Given current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "foo.example.com"
      When I go to the provider dashboard
+     Then I should see "APIs" in the apis dashboard widget
      Then I should see "Products" in the apis dashboard widget
      Then I should see "Backends" in the apis dashboard widget
 
@@ -42,6 +43,7 @@ Feature: Provider plans section authorization
      And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
+    Then I should see "APIs" in the apis dashboard widget
     Then I should see "Products" in the apis dashboard widget
     Then I should see "Backends" in the apis dashboard widget
 
@@ -66,6 +68,7 @@ Feature: Provider plans section authorization
       And current domain is the admin domain of provider "foo.example.com"
      When I log in as provider "member"
       And I go to the provider dashboard
+     Then I should see "APIs" in the apis dashboard widget
      Then I should see "Products" in the apis dashboard widget
      Then I should see "Backends" in the apis dashboard widget
 
