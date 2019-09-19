@@ -30,7 +30,8 @@ class Api::ServicesController < Api::BaseController
   end
 
   def settings
-    activate_menu :serviceadmin, :integration, :settings
+    activate_menu_args = current_account.provider_can_use?(:api_as_product) ? %i[serviceadmin applications usage_rules] : %i[serviceadmin integration settings]
+    activate_menu activate_menu_args
     @alert_limits = Alert::ALERT_LEVELS
   end
 
