@@ -12,9 +12,6 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
   respond_to :json
 
 
-  ##~ @parameter_backend_api_id_by_id_name = { :name => "backend_api_id", :description => "ID of the backend API.", :dataType => "int", :required => true, :paramType => "path" }
-
-
   ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/backend_apis/{backend_api_id}/metrics.json"
@@ -30,7 +27,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_backend_api_id_by_id_name
   #
   def index
-    respond_with(backend_api.metrics)
+    respond_with(metrics_collection)
   end
 
   ##~ e = sapi.apis.add
@@ -69,7 +66,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "description", :description => "Description of the metric.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def create
-    metric = backend_api.metrics.create(create_params)
+    metric = metrics_collection.create(create_params)
     respond_with(metric)
   end
 
@@ -119,7 +116,11 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
   private_constant :DEFAULT_PARAMS
 
   def metric
-    @metric ||= backend_api.metrics.find(params[:id])
+    @metric ||= metrics_collection.find(params[:id])
+  end
+
+  def metrics_collection
+    @metrics_collection ||= backend_api.metrics
   end
 
   def backend_api
