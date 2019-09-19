@@ -11,6 +11,21 @@ class ServiceTest < ActiveSupport::TestCase
     assert_not_nil service.proxy
   end
 
+  def test_create_with_default_private_endpoint
+    ::Account.any_instance.stubs(:provider_can_use?).returns(false)
+    rolling_update :api_as_product, enabled: false
+    account = FactoryBot.build(:provider_account)
+    account.save!
+    service = account.default_service
+    assert_equal BackendApi.default_api_backend, service.api_backend
+
+    rolling_update :api_as_product, enabled: true
+    account = FactoryBot.build(:provider_account)
+    account.save!
+    service = account.default_service
+    assert_nil service.api_backend
+  end
+
   def test_backend_version=
     service = FactoryBot.build_stubbed(:simple_service)
     service.backend_version = 'oauth'
