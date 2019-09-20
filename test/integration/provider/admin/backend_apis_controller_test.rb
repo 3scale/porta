@@ -55,7 +55,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
   end
 
   test 'delete a backend api with products' do
-    backend_api = @provider.backend_apis.first
+    backend_api = @provider.backend_apis.order(:id).first
     FactoryBot.create(:backend_api_config, service: @provider.first_service, backend_api: backend_api)
     assert backend_api.backend_api_configs.any?
 
@@ -65,7 +65,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
   end
 
   test 'delete a backend api without any products' do
-    backend_api = @provider.backend_apis.second
+    backend_api = @provider.backend_apis.order(:id).second
     assert_not backend_api.backend_api_configs.any?
 
     delete provider_admin_backend_api_path(backend_api)
