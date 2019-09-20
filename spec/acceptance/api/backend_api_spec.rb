@@ -10,7 +10,7 @@ resource 'BackendApi' do
     let(:root) { 'backend_api' }
 
     it { subject.should have_properties(expected_properties).from(resource) }
-    it { should have_links('metrics') }
+    it { should have_links('metrics', 'mapping_rules') }
   end
 
   json(:collection) do

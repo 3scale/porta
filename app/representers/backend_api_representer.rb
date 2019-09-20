@@ -18,5 +18,7 @@ module BackendApiRepresenter
     admin_api_backend_api_metrics_path(backend_api_id: id)
   end
 
-  # TODO: links of proxy rules as part of https://issues.jboss.org/browse/THREESCALE-3208
+  link :mapping_rules do
+    admin_api_backend_api_mapping_rules_path(backend_api_id: id)
+  end
 end

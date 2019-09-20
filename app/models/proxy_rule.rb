@@ -117,6 +117,10 @@ class ProxyRule < ApplicationRecord
     Addressable::URI.new
   end
 
+  def backend_api_owner?
+    owner_type == 'BackendApi'
+  end
+
   protected
 
   def querystring_parameter_keys
