@@ -21,6 +21,7 @@ class BackendApiTest < ActiveSupport::TestCase
     @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
     @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
     @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(false)
+    @account.expects(:provider_can_use?).with(:api_as_product).at_least_once.returns(false)
     @backend_api.private_endpoint = 'https://example.org:3/path'
     @backend_api.valid?
     assert_equal [@backend_api.errors.generate_message(:private_endpoint, :invalid)], @backend_api.errors.messages[:private_endpoint]
@@ -31,8 +32,9 @@ class BackendApiTest < ActiveSupport::TestCase
   end
 
   test '.orphans should return backend apis that do not belongs to any service' do
-    FactoryBot.create(:service)
-    service_to_delete = FactoryBot.create(:service)
+    account = FactoryBot.create(:account)
+    FactoryBot.create(:service, account: account)
+    service_to_delete = FactoryBot.create(:simple_service, :with_default_backend_api, system_name: 'orphan_system', account: account)
     orphan_backend_api = service_to_delete.backend_api_configs.first.backend_api
 
     assert_equal [], BackendApi.orphans

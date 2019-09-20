@@ -52,7 +52,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
   end
 
   test 'syncs metrics with the right parent_id' do
-    service = FactoryBot.create(:service)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
     service_hits = service.metrics.hits
     service_other = FactoryBot.create(:metric, owner: service, system_name: 'other-metric-of-service')
     service_backend_id = service.backend_id
