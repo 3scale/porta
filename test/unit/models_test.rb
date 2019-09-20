@@ -27,11 +27,11 @@ class ModelsTest < ActiveSupport::TestCase
     }
 
     Rails.application.eager_load!
-    ActiveRecord::Base.descendants.each do |model|
+    models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy]
 
+    validate_columns_for = lambda do |model, options = {}|
       exception_attributes = exceptions.fetch(model.name, [])
       next if exception_attributes == :all
-
       model.columns.each do |column|
         column_name = column.name
         next if column.type != :string || exception_attributes.include?(column_name)
@@ -40,16 +40,22 @@ class ModelsTest < ActiveSupport::TestCase
         next if column_sql_type.match(/\Acharacter varying\Z/)
         length = column_sql_type.match(/\(([\d]+)\)/)[1].to_i
 
-        object = model.new({column_name => ('a' * (length + 1))}, without_protection: true)
+        object = model.new({column_name => ('a' * (length + 1))}.merge(options), without_protection: true)
         object.valid?
 
         column_errors = object.errors[column_name].to_sentence
         next if column_errors.match(/is not included in the list/)
         assert_match /too long/, column_errors, "#{model} is not validating the max length of #{length} for string '#{column_name}'"
       end
-
     end
 
+    models.each do |model|
+      validate_columns_for[model]
+    end
+
+    validate_columns_for.call(Proxy, service: Service.new(account: Account.new))
+    validate_columns_for.call(Service, account: Account.new)
+    validate_columns_for.call(BackendApi, account: Account.new)
   end
 
 end

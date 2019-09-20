@@ -84,8 +84,8 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   end
 
   test 'sync backend api metric for multiple services' do
-    services = FactoryBot.create_list(:simple_service, 2)
-    backend_api = services.first.first_backend_api
+    services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api)
+    backend_api = services.first.backend_api
     services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
     metric = FactoryBot.build(:metric, service: nil, owner: backend_api)
 

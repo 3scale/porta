@@ -69,7 +69,8 @@ ActiveRecord::Base.transaction do
   master_user.activate!
 
   # Creating the master service
-  master_service = Service.create!(account: master, name: master_service)
+  master_service = Service.new(account: master, name: master_service)
+  ServiceCreator.new(service: master_service).call!(private_endpoint: BackendApi.default_api_backend)
   master_service.service_plans.default!(ServicePlan.first!)
 
   # Master needs to be contracted with an ApplicationPlan
