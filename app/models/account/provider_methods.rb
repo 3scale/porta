@@ -334,7 +334,7 @@ module Account::ProviderMethods
       plan.create_contract_with!(self)
     end
 
-    services.create! name: "API"
+    ServiceCreator.new(service: services.build(name: 'API')).call
   end
 
   def create_default_fields_definitions

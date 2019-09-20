@@ -779,6 +779,37 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal 0, ApplicationPlan.where(id: aps).count
   end
 
+  test '#signup provider with api_as_product' do
+    master_account.account_plans.default!(master_account.account_plans.first)
+    master_account.signup_provider(master_account.application_plans.first) do |provider, user|
+      provider.stubs(:provider_can_use?).returns(false)
+      provider.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
+      @provider, @user = provider, user
+      provider.subdomain = "foo"
+      provider.org_name = "bar"
+      provider.sample_data = false
+      user.password = user.password_confirmation = "foobar"
+      user.email = "foo@example.com"
+    end
+    assert_nil @provider.first_service.api_backend
+  end
+
+
+  test '#signup provider without api_as_product' do
+    master_account.account_plans.default!(master_account.account_plans.first)
+    master_account.signup_provider(master_account.application_plans.first) do |provider, user|
+      @provider, @user = provider, user
+      provider.stubs(:provider_can_use?).returns(false)
+      provider.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+      provider.subdomain = "foo"
+      provider.org_name = "bar"
+      provider.sample_data = false
+      user.password = user.password_confirmation = "foobar"
+      user.email = "foo@example.com"
+    end
+    assert_equal BackendApi.default_api_backend, @provider.first_service.api_backend
+  end
+
   test 'onboarding builds object if not already created' do
     account = FactoryBot.build(:account)
 
