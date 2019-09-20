@@ -93,7 +93,7 @@ FactoryBot.define do
   end
 
 #TODO: rename this, it is actually buying plans!
-  factory(:provider_account_with_pending_users_signed_up_to_no_plan, :parent => :account) do
+  factory(:provider_account_with_pending_users_signed_up_to_no_plan, parent: :account) do
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
     site_access_code { '' }
     payment_gateway_type { :bogus }
@@ -145,6 +145,8 @@ FactoryBot.define do
         service_plans_ui_visible: true,
         end_user_plans_ui_visible: true
       )
+      backend_api = FactoryBot.create(:backend_api, account: account, name: 'API Backend API')
+      FactoryBot.create(:backend_api_config, service: account.services.first, backend_api: backend_api)
     end
   end
 
@@ -176,8 +178,13 @@ FactoryBot.define do
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
         account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
       end
+    end
 
-      # account.admins.each(&:activate!)
+    trait(:with_default_backend_api) do
+      after(:create) do |account|
+        backend_api = FactoryBot.build(:backend_api, account: account)
+        FactoryBot.create(:backend_api_config, service: account.default_service, backend_api: backend_api)
+      end
     end
   end
 

@@ -28,7 +28,7 @@ class Signup::ProviderAccountManager < Signup::AccountManager
 
   def contract_plans_and_create_service(account, plans, defaults)
     create_contract_plans_for_account!(account, plans, defaults)
-    account.services.create! name: 'API'
+    ServiceCreator.new(service: account.services.build(name: 'API')).call
     set_switches_and_limits(account, plans.application_plan)
   end
 

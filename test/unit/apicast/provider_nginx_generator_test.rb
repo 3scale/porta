@@ -50,12 +50,9 @@ class Apicast::ProviderNginxGeneratorTest < ActiveSupport::TestCase
 
   def test_service_conf
     provider_key = 'foobar'
-    service = Service.new
-    service.account_id = 42
-    service.id = 21
-    service.proxy = proxy = Proxy.new
-    service.backend_version = 2
-    proxy.oauth_login_url = 'http://example.com/login'
+    account = FactoryBot.build(:account, id: 42)
+    proxy   = FactoryBot.build(:proxy, oauth_login_url: 'http://example.com/login')
+    service = FactoryBot.build(:service, id: 21, account: account, proxy: proxy, backend_version: 2)
 
     subject = @generator.service_conf(service, provider_key)
 

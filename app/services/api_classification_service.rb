@@ -11,6 +11,7 @@ class ApiClassificationService
   # @return [Symbol] either `:real` or `:test`
 
   def test(url)
+    return Category.new(uri: nil, test_api: false) unless url
     uri = URI(url)
 
     host = uri.host

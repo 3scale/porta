@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class ProviderTest < ActiveSupport::TestCase
-  def setup
-    FactoryBot.create(:simple_master)
-  end
-
   def test_find
     provider = FactoryBot.create(:simple_provider)
 

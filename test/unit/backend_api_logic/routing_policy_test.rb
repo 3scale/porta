@@ -6,8 +6,9 @@ module BackendApiLogic
   class RoutingPolicyTest < ActiveSupport::TestCase
     setup do
       @service = FactoryBot.create(:simple_service)
+      first_backend_api = FactoryBot.create(:backend_api_config, path: '', service: @service).backend_api
       other_backend_api = FactoryBot.create(:backend_api, system_name: 'foo')
-      @backend_apis = [service.first_backend_api, other_backend_api]
+      @backend_apis = [first_backend_api, other_backend_api]
       @service.backend_api_configs.create(backend_api: other_backend_api, path: 'foo')
     end
 
