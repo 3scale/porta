@@ -54,7 +54,7 @@ module BackendApiLogic
                 value: path_to_regex
               ]
             }
-          }
+          }.merge(replace_path)
         end
 
         def path_to_regex
@@ -63,6 +63,13 @@ module BackendApiLogic
           else
             "/#{path}/.*|/#{path}/?"
           end
+        end
+
+        def replace_path
+          return {} if path.blank?
+
+          private_base_path = StringUtils::StripSlash.strip_slash(URI.parse(private_endpoint).path)
+          { replace_path: "{{original_request.path | replace: '/#{path}', '/#{private_base_path}'}}" }
         end
       end
       private_constant :Rule
