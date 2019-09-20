@@ -70,4 +70,19 @@ class ServiceExtensionTest < ActiveSupport::TestCase
     assert_same_elements service_all_metrics, related_metrics
     assert_not_includes service_all_metrics, unrelated_metric
   end
+
+  class BackendApiProxy < ActiveSupport::TestCase
+    test '#backend_api_config builds a new backend api config if does not exist' do
+      service = FactoryBot.create(:simple_service)
+
+      refute service.backend_api_proxy.backend_api_config.persisted?
+    end
+
+    test '#backend_api_config returns the already existent backend api config for the service' do
+      service = FactoryBot.create(:simple_service)
+      backend_api_config = FactoryBot.create(:backend_api_config, service: service)
+
+      assert_equal backend_api_config, service.backend_api_proxy.backend_api_config
+    end
+  end
 end
