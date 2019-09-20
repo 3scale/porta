@@ -48,7 +48,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   def create
     service = current_account.services.build
     create_service = ServiceCreator.new(service: service)
-    create_service.call!(service_params)
+    create_service.call(service_params)
     service.reload if service.persisted? # It has been touched
     respond_with(service)
   end
