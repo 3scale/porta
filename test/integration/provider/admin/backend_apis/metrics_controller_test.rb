@@ -92,4 +92,31 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     delete provider_admin_backend_api_metric_path(backend_api, ads)
     refute backend_api.metrics.find_by(system_name: "ads.#{backend_api.id}")
   end
+
+  test 'it cannot operate for metrics under a non-accessible backend api' do
+    backend_api = FactoryBot.create(:backend_api, account: @provider, state: :deleted)
+    hits = backend_api.metrics.hits
+    metric_method = FactoryBot.create(:metric, owner: backend_api, service_id: nil, parent: hits)
+
+    get provider_admin_backend_api_metrics_path(backend_api)
+    assert_response :not_found
+
+    get new_provider_admin_backend_api_metric_child_path(backend_api, hits)
+    assert_response :not_found
+
+    delete provider_admin_backend_api_metric_path(backend_api, ads)
+    assert_response :not_found
+
+    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { friendly_name: '' })
+    assert_response :not_found
+
+    get edit_provider_admin_backend_api_metric_path(backend_api, ads)
+    assert_response :not_found
+
+    post provider_admin_backend_api_metrics_path(backend_api, metric: { friendly_name: 'Foo', unit: 'foo' })
+    assert_response :not_found
+
+    post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: { friendly_name: 'Foo', unit: 'foo', metric_id: hits.id })
+    assert_response :not_found
+  end
 end

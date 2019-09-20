@@ -115,6 +115,26 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     assert_equal backend_api.metrics.order(:id).offset(3).limit(3).select(:id).map(&:id), response_ids
   end
 
+  test 'it cannot operate for metrics under a non-accessible backend api' do
+    backend_api = FactoryBot.create(:backend_api, account: tenant, state: :deleted)
+    metric = FactoryBot.create(:metric, owner: backend_api, service_id: nil)
+
+    get admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id)
+    assert_response :not_found
+
+    delete admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id)
+    assert_response :not_found
+
+    put admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id), { friendly_name: 'metric friendly name', unit: 'hit' }
+    assert_response :not_found
+
+    post admin_api_backend_api_metrics_path(backend_api_id: backend_api.id, access_token: access_token_value), { friendly_name: 'metric friendly name', unit: 'hit' }
+    assert_response :not_found
+
+    get admin_api_backend_api_metrics_path(backend_api_id: backend_api.id, access_token: access_token_value)
+    assert_response :not_found
+  end
+
   private
 
   def metric
