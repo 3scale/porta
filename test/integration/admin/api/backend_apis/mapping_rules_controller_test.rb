@@ -84,6 +84,26 @@ class Admin::API::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     assert_equal backend_api.mapping_rules.order(:id).offset(3).limit(3).select(:id).map(&:id), response_ids
   end
 
+  test 'it cannot operate under a non-accessible backend api' do
+    backend_api = FactoryBot.create(:backend_api, account: tenant, state: :deleted)
+    mapping_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil)
+
+    get admin_api_backend_api_mapping_rules_path(backend_api_id: backend_api.id, access_token: access_token_value)
+    assert_response :not_found
+
+    get admin_api_backend_api_mapping_rule_path(backend_api_id: backend_api.id, access_token: access_token_value, id: mapping_rule.id)
+    assert_response :not_found
+
+    post admin_api_backend_api_mapping_rules_path(backend_api_id: backend_api.id, access_token: access_token_value), mapping_rule_params
+    assert_response :not_found
+
+    put admin_api_backend_api_mapping_rule_path(backend_api_id: backend_api.id, access_token: access_token_value, id: mapping_rule.id), mapping_rule_params
+    assert_response :not_found
+
+    delete admin_api_backend_api_mapping_rule_path(backend_api_id: backend_api.id, access_token: access_token_value, id: mapping_rule.id)
+    assert_response :not_found
+  end
+
   private
 
   def mapping_rule

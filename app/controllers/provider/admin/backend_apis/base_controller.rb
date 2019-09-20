@@ -9,6 +9,6 @@ class Provider::Admin::BackendApis::BaseController < Provider::Admin::BaseContro
   protected
 
   def find_backend_api
-    @backend_api = current_account.backend_apis.find(params[:backend_api_id])
+    @backend_api = current_account.backend_apis.accessible.find(params[:backend_api_id])
   end
 end
