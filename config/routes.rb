@@ -775,6 +775,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resources :services, except: :index do
           member do
             get :settings
+            get :usage_rules
           end
           resource :support, :only => [:edit, :update]
           resource :content, :only => [:edit, :update]
