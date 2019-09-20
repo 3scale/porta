@@ -15,7 +15,7 @@ class Api::ProxyRulesControllerTest < ActionDispatch::IntegrationTest
       @service = FactoryBot.create(:service, account: @provider)
     end
 
-    test 'index page list all proxy rules' do
+    test '#index page list all proxy rules' do
       proxy_rules = FactoryBot.create_list(:proxy_rule, 2, proxy: @service.proxy)
 
       get admin_service_proxy_rules_path(@service)
@@ -27,6 +27,37 @@ class Api::ProxyRulesControllerTest < ActionDispatch::IntegrationTest
         patterns.include?(pattern)
       end
     end
+
+    test '#index page should not return the Redirect header when not using proxy pro' do
+      Service.any_instance.stubs(:using_proxy_pro?).returns(false)
+      proxy_rules = FactoryBot.create(:proxy_rule, proxy: @service.proxy)
+
+      get admin_service_proxy_rules_path(@service)
+      refute_match /Redirect/, response.body
+    end
+
+    test '#index page should return the Redirect header when using proxy pro' do
+      Service.any_instance.stubs(:using_proxy_pro?).returns(true)
+      proxy_rules = FactoryBot.create(:proxy_rule, proxy: @service.proxy)
+
+      get admin_service_proxy_rules_path(@service)
+      assert_match /Redirect/, response.body
+    end
+
+    test '#new should not return the Redirect Url field when not using proxy pro' do
+      Service.any_instance.stubs(:using_proxy_pro?).returns(false)
+
+      get new_admin_service_proxy_rule_path(@service)
+      assert_select '#proxy_rule_redirect_url', false
+    end
+
+    test '#new should return the Redirect Url field when using proxy pro' do
+      Service.any_instance.stubs(:using_proxy_pro?).returns(true)
+
+      get new_admin_service_proxy_rule_path(@service)
+      assert_select '#proxy_rule_redirect_url'
+    end
+
 
     test '#create persists a new proxy rule' do
       proxy_rule_params = FactoryBot.attributes_for(:proxy_rule, proxy: @service.proxy, metric_id: @service.metrics.last.id)
