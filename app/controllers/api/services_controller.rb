@@ -37,10 +37,9 @@ class Api::ServicesController < Api::BaseController
 
   def create
     @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
-    @service.attributes = service_params
-    @service.backend_api_configs = build_backend_api_configs
+    creator = ServiceCreator.new(service: @service)
 
-    if can_create? && @service.save
+    if can_create? && creator.call(service_params)
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
@@ -70,15 +69,14 @@ class Api::ServicesController < Api::BaseController
 
   private
 
-  def build_backend_api_configs
-    return [] if !provider_can_use?(:api_as_product) || params[:service][:backend_api].blank?
-    backend_api = current_account.backend_apis.find(params[:service][:backend_api])
-    [BackendApiConfig.new(backend_api: backend_api)]
-  end
-
   def service_params
-    allowed_params = %i[system_name name description]
-    params.require(:service).permit(allowed_params)
+    permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
+                        :intentions_required, :buyers_manage_apps, :referrer_filters_required,
+                        :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
+                        :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
+                        :txt_support, :terms,
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
+    params.require(:service).permit(permitted_params)
   end
 
   protected

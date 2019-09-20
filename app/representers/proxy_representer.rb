@@ -4,7 +4,7 @@ class ProxyRepresenter < ThreeScale::Representer
   property :service_id
   property :endpoint
   property :deployed_at
-  property :api_backend
+  property :api_backend, render_nil: true
   property :credentials_location
   property :auth_app_key
   property :auth_app_id

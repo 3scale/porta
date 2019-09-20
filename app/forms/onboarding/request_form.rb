@@ -33,6 +33,7 @@ class Onboarding::RequestForm < Reform::Form
   end
 
   def uri
+    return unless model.api_backend
     URI.join(api_base_url, path || SLASH).to_s
   end
 
