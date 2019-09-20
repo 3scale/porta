@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @provider = FactoryBot.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account, :with_default_backend_api)
     @service = @provider.first_service
     @backend_api = @service.backend_api
 
