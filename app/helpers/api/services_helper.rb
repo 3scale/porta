@@ -56,8 +56,4 @@ module Api::ServicesHelper
     msg = t('api.services.forms.definition_settings.refresh_confirmation', name: h(service.name))
     action_link_to(:refresh, url, {data: { confirm: msg }, method: :put}.merge(options) )
   end
-
-  def page_title
-    current_account.provider_can_use?(:api_as_product) ? 'Usage Rules' : 'Settings'
-  end
 end
