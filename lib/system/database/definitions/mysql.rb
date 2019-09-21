@@ -546,6 +546,12 @@ System::Database::MySQL.define do
     SQL
   end
 
+  trigger 'gateway_configurations' do
+    <<~SQL
+      SET NEW.tenant_id = (SELECT tenant_id FROM proxies WHERE id = NEW.proxy_id AND tenant_id <> master_id);
+    SQL
+  end
+
   procedure 'sp_invoices_friendly_id', invoice_id: 'bigint' do
     <<~SQL
       BEGIN
