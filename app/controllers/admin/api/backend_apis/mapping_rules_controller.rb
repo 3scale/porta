@@ -1,15 +1,8 @@
 # frozen_string_literal: true
 
-class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BaseController
+class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis::BaseController
   represents :json, entity: ::ProxyRuleRepresenter::JSON, collection: ::ProxyRulesRepresenter::JSON
   wrap_parameters ProxyRule, name: :mapping_rule
-
-  self.access_token_scopes = :account_management
-
-  before_action :authorize
-
-  clear_respond_to
-  respond_to :json
 
   def index
     respond_with(backend_api.mapping_rules)
@@ -44,19 +37,12 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BaseControll
     @backend_api ||= current_account.backend_apis.find(params[:backend_api_id])
   end
 
-  def authorize
-    authorize! :manage, BackendApi
-  end
-
-  PERMITTED_PARAMS = %i[http_method pattern delta last position].freeze
-
   def mapping_rule_params
-    params.require(:mapping_rule).permit(PERMITTED_PARAMS).merge(metric_params)
+    params.require(:mapping_rule).permit(%i[http_method pattern delta last position]).merge(metric_params)
   end
 
   def metric_params
     return {} unless (metric_id = params.require(:mapping_rule).fetch(:metric_id, nil))
     { metric: backend_api.metrics.find(metric_id) }
   end
-
  end
