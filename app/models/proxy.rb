@@ -5,6 +5,7 @@ class Proxy < ApplicationRecord
   include AfterCommitQueue
   include BackendApiLogic::ProxyExtension
   prepend BackendApiLogic::RoutingPolicy
+  include GatewaySettings::ProxyExtension
 
   DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
                      'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
