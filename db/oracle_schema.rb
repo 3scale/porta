@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190904144307) do
+ActiveRecord::Schema.define(version: 20190805135829) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -240,11 +240,9 @@ ActiveRecord::Schema.define(version: 20190904144307) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
     t.integer  "tenant_id",                    precision: 38
-    t.string   "state"
   end
 
   add_index "backend_apis", ["account_id", "system_name"], name: "index_backend_apis_on_account_id_and_system_name", unique: true
-  add_index "backend_apis", ["state"], name: "index_backend_apis_on_state"
 
   create_table "backend_events", id: false, force: :cascade do |t|
     t.integer  "id",         precision: 38, null: false
