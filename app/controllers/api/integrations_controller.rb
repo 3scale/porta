@@ -223,6 +223,7 @@ class Api::IntegrationsController < Api::BaseController
   def proxy_params
     basic_fields = [
       :lock_version,
+
       :auth_app_id, :auth_app_key, :api_backend, :hostname_rewrite, :oauth_login_url,
       :secret_token, :credentials_location, :auth_user_key, :error_status_auth_failed,
       :error_headers_auth_failed, :error_auth_failed, :error_status_auth_missing,
@@ -242,6 +243,8 @@ class Api::IntegrationsController < Api::BaseController
     if provider_can_use?(:apicast_oidc)
       basic_fields << :oidc_issuer_endpoint
       basic_fields << :oidc_issuer_type
+      basic_fields << :jwt_claim_with_client_id
+      basic_fields << :jwt_claim_with_client_id_type
     end
 
     basic_fields << { backend_api_configs_attributes: %i[_destroy id path] } if provider_can_use?(:api_as_product)
