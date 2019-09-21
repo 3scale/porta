@@ -1246,6 +1246,8 @@ en:
         secret_token: |
           Enables you to block any direct developer requests to your API backend; each 3scale API gateway call to your API backend contains a request header called <code>X-3scale-proxy-secret-token</code>.
           The value of this header can be set by you here. It's up to you ensure your backend only allows calls with this secret header.
+        jwt_claim_with_client_id: |
+          Location of the ClientID in the JWT token. Example: azp
 
 
       service:
