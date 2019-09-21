@@ -17,9 +17,11 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_backend_api_id_by_id_name
+  ##~ op.parameters.add @parameter_page
+  ##~ op.parameters.add @parameter_per_page
   #
   def index
-    respond_with(backend_api.mapping_rules)
+    respond_with(backend_api.mapping_rules.order(:id).paginate(pagination_params))
   end
 
   ##~ e = sapi.apis.add

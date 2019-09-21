@@ -2458,6 +2458,20 @@
               "dataType": "int",
               "required": true,
               "paramType": "path"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
             }
           ]
         }
@@ -2710,6 +2724,20 @@
               "required": true,
               "paramType": "path",
               "threescale_name": "metric_ids"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
             }
           ]
         }
@@ -2963,6 +2991,20 @@
               "dataType": "int",
               "required": true,
               "paramType": "path"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
             }
           ]
         }

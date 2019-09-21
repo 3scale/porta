@@ -8,6 +8,8 @@ class Admin::Api::BackendApis::BaseController < Admin::Api::BaseController
   clear_respond_to
   respond_to :json
 
+  paginate only: :index
+
   private
 
   def backend_api
