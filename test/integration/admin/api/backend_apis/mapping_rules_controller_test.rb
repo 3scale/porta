@@ -74,6 +74,16 @@ class Admin::API::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     assert_raises(ActiveRecord::RecordNotFound) { mapping_rule.reload }
   end
 
+  test 'index can be paginated' do
+    FactoryBot.create_list(:proxy_rule, 5, owner: backend_api, proxy_id: nil)
+
+    get admin_api_backend_api_mapping_rules_path(backend_api_id: backend_api.id, access_token: access_token_value, per_page: 3, page: 2)
+
+    assert_response :success
+    response_ids = JSON.parse(response.body)['mapping_rules'].map { |response| response.dig('mapping_rule', 'id') }
+    assert_equal backend_api.mapping_rules.order(:id).offset(3).limit(3).select(:id).map(&:id), response_ids
+  end
+
   private
 
   def mapping_rule
