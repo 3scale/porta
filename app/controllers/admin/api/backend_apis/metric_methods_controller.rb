@@ -18,6 +18,8 @@ class Admin::Api::BackendApis::MetricMethodsController < Admin::Api::BackendApis
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_backend_api_id_by_id_name
   ##~ op.parameters.add @parameter_metric_id_by_id_name
+  ##~ op.parameters.add @parameter_page
+  ##~ op.parameters.add @parameter_per_page
   #
 
   ### CREATE
