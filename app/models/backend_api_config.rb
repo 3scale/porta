@@ -7,6 +7,8 @@ class BackendApiConfig < ApplicationRecord
   belongs_to :service, inverse_of: :backend_api_configs
   belongs_to :backend_api, inverse_of: :backend_api_configs
 
+  attribute :path, Type::String.new
+
   has_many :backend_api_metrics, through: :backend_api, source: :metrics
 
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
