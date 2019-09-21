@@ -105,6 +105,16 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     assert_equal "first-system-name.#{backend_api.id}", metric.reload.attributes['system_name']
   end
 
+  test 'index can be paginated' do
+    FactoryBot.create_list(:metric, 5, owner: backend_api, service_id: nil)
+
+    get admin_api_backend_api_metrics_path(backend_api_id: backend_api.id, access_token: access_token_value, per_page: 3, page: 2)
+
+    assert_response :success
+    response_ids = JSON.parse(response.body)['metrics'].map { |response| response.dig('metric', 'id') }
+    assert_equal backend_api.metrics.order(:id).offset(3).limit(3).select(:id).map(&:id), response_ids
+  end
+
   private
 
   def metric

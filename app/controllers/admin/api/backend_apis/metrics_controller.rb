@@ -1,16 +1,8 @@
 # frozen_string_literal: true
 
-class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
+class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::BaseController
   wrap_parameters Metric
   representer Metric
-
-  self.access_token_scopes = :account_management
-
-  before_action :authorize
-
-  clear_respond_to
-  respond_to :json
-
 
   ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e = sapi.apis.add
@@ -25,9 +17,11 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_backend_api_id_by_id_name
+  ##~ op.parameters.add @parameter_page
+  ##~ op.parameters.add @parameter_per_page
   #
   def index
-    respond_with(metrics_collection)
+    respond_with(metrics_collection.order(:id).paginate(pagination_params))
   end
 
   ##~ e = sapi.apis.add
@@ -121,14 +115,6 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BaseController
 
   def metrics_collection
     @metrics_collection ||= backend_api.metrics
-  end
-
-  def backend_api
-    @backend_api ||= current_account.backend_apis.find(params[:backend_api_id])
-  end
-
-  def authorize
-    authorize! :manage, BackendApi
   end
 
   def create_params

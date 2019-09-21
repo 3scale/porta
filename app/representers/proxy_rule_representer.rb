@@ -9,7 +9,7 @@ class ProxyRuleRepresenter < ThreeScale::Representer
   property :position
   property :last
 
-  with_options(if: ->(*) { proxy.service.using_proxy_pro? }, render_nil: true) do |proxy_pro|
+  with_options(if: ->(*) { !backend_api_owner? && proxy.service.using_proxy_pro? }, render_nil: true) do |proxy_pro|
     proxy_pro.property :redirect_url
   end
 
@@ -20,16 +20,27 @@ class ProxyRuleRepresenter < ThreeScale::Representer
     include Roar::JSON
     include Roar::Hypermedia
 
+    delegate :backend_api_owner?, :owner, :owner_id, :id, to: :represented
+    delegate :service_id, to: :owner
+
     link :self do
-      admin_api_service_proxy_mapping_rule_path(represented.proxy.service_id, represented.id)
+      if backend_api_owner?
+        admin_api_backend_api_mapping_rule_path(owner_id, id)
+      else
+        admin_api_service_proxy_mapping_rule_path(service_id, id)
+      end
+    end
+
+    link :backend_api do
+      admin_api_backend_api_url(owner_id) if backend_api_owner?
     end
 
     link :service do
-      admin_api_service_path(represented.proxy.service_id)
+      admin_api_service_path(service_id) unless backend_api_owner?
     end
 
     link :proxy do
-      admin_api_service_proxy_path(represented.proxy.service_id)
+      admin_api_service_proxy_path(service_id) unless backend_api_owner?
     end
   end
 
