@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190904144157) do
+ActiveRecord::Schema.define(version: 20190920123906) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -585,6 +585,16 @@ ActiveRecord::Schema.define(version: 20190904144157) do
 
   add_index "forums", ["permalink"], name: "index_forums_on_site_id_and_permalink"
   add_index "forums", ["position"], name: "index_forums_on_position_and_site_id"
+
+  create_table "gateway_configurations", force: :cascade do |t|
+    t.text     "settings"
+    t.integer  "proxy_id",   precision: 38
+    t.integer  "tenant_id",  precision: 38
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "gateway_configurations", ["proxy_id"], name: "index_gateway_configurations_on_proxy_id", unique: true
 
   create_table "go_live_states", force: :cascade do |t|
     t.integer  "account_id",             precision: 38
