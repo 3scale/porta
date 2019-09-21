@@ -10,11 +10,11 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
 
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/services/{service_id}/proxy/mapping_rules.xml"
-  ##~ e.responseClass = "mapping_rule"
+  ##~ e.responseClass = "List[mapping_rule]"
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Mapping Rules List"
+  ##~ op.summary    = "Proxy Mapping Rules List"
   ##~ op.description = "Returns the Mapping Rules of a Proxy."
   ##~ op.group = "mapping_rule"
   #
@@ -31,13 +31,13 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Mapping Rules Show"
+  ##~ op.summary    = "Proxy Mapping Rules Show"
   ##~ op.description = "Returns the Mapping Rule."
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add name: "id", description: "Mapping Rule ID.", dataType: "int", paramType: "path", required: true
+  ##~ op.parameters.add @parameter_mapping_rule_id_by_id
   #
   def show
     respond_with(proxy_rule)
@@ -49,7 +49,7 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Mapping Rule Create"
+  ##~ op.summary    = "Proxy Mapping Rule Create"
   ##~ op.description = "Creates a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is added to apply the change to the APIcast configuration. If adding multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all mapping rules have been created."
   ##~ op.group = "mapping_rule"
   #
@@ -74,13 +74,13 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "PATCH"
-  ##~ op.summary    = "Mapping Rule Update"
+  ##~ op.summary    = "Proxy Mapping Rule Update"
   ##~ op.description = "Updates a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is updated to apply the change to the APIcast configuration. If updating multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all mapping rules have been updated."
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add name: "id", description: "Mapping Rule ID.", dataType: "int", paramType: "path", required: true
+  ##~ op.parameters.add @parameter_mapping_rule_id_by_id
   ##~ op.parameters.add name: "http_method", description: "HTTP method.", dataType: "string", paramType: "query"
   ##~ op.parameters.add name: "pattern", description: "Mapping Rule pattern.", dataType: "string", paramType: "query"
   ##~ op.parameters.add name: "delta", description: "Increase the metric by this delta.", dataType: "int", paramType: "query"
@@ -99,14 +99,14 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Mapping Rule Delete"
+  ##~ op.summary    = "Proxy Mapping Rule Delete"
   ##~ op.description = "Deletes a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is deleted to apply the change to the APIcast configuration. If deleting multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all desired mapping rules have been deleted."
 
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add name: "id", description: "Mapping Rule ID.", dataType: "int", paramType: "path", required: true
+  ##~ op.parameters.add @parameter_mapping_rule_id_by_id
   #
   def destroy
     proxy_rule.destroy

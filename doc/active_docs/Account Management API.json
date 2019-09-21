@@ -2435,6 +2435,250 @@
       ]
     },
     {
+      "path": "/admin/api/backend_apis/{backend_api_id}/mapping_rules.json",
+      "responseClass": "List[mapping_rule]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Mapping Rules List",
+          "description": "Returns the Mapping Rules of a Backend API.",
+          "group": "mapping_rule",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/mapping_rules/{id}.json",
+      "responseClass": "mapping_rule",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API Mapping Rules Read",
+          "description": "Returns the Mapping Rule of a Backend API.",
+          "group": "mapping_rule",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "Mapping Rule ID.",
+              "dataType": "int",
+              "paramType": "path",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/mapping_rules.json",
+      "responseClass": "mapping_rule",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Backend API Mapping Rule Create",
+          "description": "Creates a Mapping Rule of a Backend API.",
+          "group": "mapping_rule",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "http_method",
+              "description": "HTTP method.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "name": "pattern",
+              "description": "Mapping Rule pattern.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "name": "delta",
+              "description": "Increase the metric by this delta.",
+              "dataType": "int",
+              "paramType": "query",
+              "required": true
+            },
+            {
+              "name": "metric_id",
+              "description": "Metric ID.",
+              "dataType": "int",
+              "paramType": "query",
+              "required": true,
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "position",
+              "description": "Mapping Rule position",
+              "dataType": "int",
+              "paramType": "query"
+            },
+            {
+              "name": "last",
+              "description": "Last matched Mapping Rule to process",
+              "dataType": "bool",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/mapping_rules/{id}.json",
+      "responseClass": "mapping_rule",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Backend API Mapping Rule Update",
+          "description": "Updates a Mapping Rule of a Backend API.",
+          "group": "mapping_rule",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "Mapping Rule ID.",
+              "dataType": "int",
+              "paramType": "path",
+              "required": true
+            },
+            {
+              "name": "http_method",
+              "description": "HTTP method.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "pattern",
+              "description": "Mapping Rule pattern.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "delta",
+              "description": "Increase the metric by this delta.",
+              "dataType": "int",
+              "paramType": "query"
+            },
+            {
+              "name": "metric_id",
+              "description": "Metric ID.",
+              "dataType": "int",
+              "paramType": "query",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "position",
+              "description": "Mapping Rule position",
+              "dataType": "int",
+              "paramType": "query"
+            },
+            {
+              "name": "last",
+              "description": "Last matched Mapping Rule to process",
+              "dataType": "bool",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/mapping_rules/{id}.json",
+      "responseClass": "mapping_rule",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Backend API Mapping Rule Delete",
+          "description": "Deletes a Mapping Rule of a Backend API.",
+          "group": "mapping_rule",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "ID of the backend API.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "id",
+              "description": "Mapping Rule ID.",
+              "dataType": "int",
+              "paramType": "path",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json",
       "responseClass": "List[methods]",
       "operations": [
@@ -6526,11 +6770,11 @@
     },
     {
       "path": "/admin/api/services/{service_id}/proxy/mapping_rules.xml",
-      "responseClass": "mapping_rule",
+      "responseClass": "List[mapping_rule]",
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Mapping Rules List",
+          "summary": "Proxy Mapping Rules List",
           "description": "Returns the Mapping Rules of a Proxy.",
           "group": "mapping_rule",
           "parameters": [
@@ -6560,7 +6804,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Mapping Rules Show",
+          "summary": "Proxy Mapping Rules Show",
           "description": "Returns the Mapping Rule.",
           "group": "mapping_rule",
           "parameters": [
@@ -6597,7 +6841,7 @@
       "operations": [
         {
           "httpMethod": "POST",
-          "summary": "Mapping Rule Create",
+          "summary": "Proxy Mapping Rule Create",
           "description": "Creates a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is added to apply the change to the APIcast configuration. If adding multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all mapping rules have been created.",
           "group": "mapping_rule",
           "parameters": [
@@ -6668,7 +6912,7 @@
       "operations": [
         {
           "httpMethod": "PATCH",
-          "summary": "Mapping Rule Update",
+          "summary": "Proxy Mapping Rule Update",
           "description": "Updates a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is updated to apply the change to the APIcast configuration. If updating multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all mapping rules have been updated.",
           "group": "mapping_rule",
           "parameters": [
@@ -6742,7 +6986,7 @@
       "operations": [
         {
           "httpMethod": "DELETE",
-          "summary": "Mapping Rule Delete",
+          "summary": "Proxy Mapping Rule Delete",
           "description": "Deletes a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is deleted to apply the change to the APIcast configuration. If deleting multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all desired mapping rules have been deleted.",
           "group": "mapping_rule",
           "parameters": [
