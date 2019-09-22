@@ -52,7 +52,7 @@ gem 'statsd-ruby', require: false
 gem 'sinatra', require: false # for sidekiq web
 
 # Sidekiq
-gem 'sidekiq', '< 6', require: %w(sidekiq sidekiq/web)
+gem 'sidekiq', '~> 4.2', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-cron', require: %w(sidekiq/cron sidekiq/cron/web)
 gem 'sidekiq-lock'
 gem 'sidekiq-throttled'
