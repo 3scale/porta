@@ -29,7 +29,7 @@ class OIDCConfiguration < ApplicationRecord
       define_method "#{attr}=" do |value|
         # Always set to `true` or `false`
         # TODO: Rails 5.0 `#type_cast_from_database` will be replaced by `#cast`
-        instance_variable_set :"@#{attr}", !!ActiveRecord::Type::Boolean.new.type_cast_from_database(value) #rubocop:disable Style/DoubleNegation
+        instance_variable_set :"@#{attr}", !!ActiveModel::Type::Boolean.new.deserialize(value) #rubocop:disable Style/DoubleNegation
       end
     end
 
