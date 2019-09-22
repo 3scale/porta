@@ -3,7 +3,7 @@ table#mapping_rules.data
     tr
       th = sortable('proxy_rules.http_method', 'Verb')
       th = sortable('proxy_rules.pattern', 'Pattern')
-      - if owner.try(:using_proxy_pro?)
+      - if local_assigns[:include_redirect]
         th Redirect
       th title="increment" +
       th = sortable('metrics.friendly_name', 'Metric or Method')
@@ -20,7 +20,7 @@ table#mapping_rules.data
           = rule.pattern
           - if rule.pattern == '/'
             span.fa.fa-exclamation-triangle.disabled#catch-all-warning title=(t('api.integrations.proxy.proxy_rule_catch_all_warning'))
-        - if owner.try(:using_proxy_pro?)
+        - if local_assigns[:include_redirect]
           td.redirect_url
             = rule.redirect_url
         td.delta
