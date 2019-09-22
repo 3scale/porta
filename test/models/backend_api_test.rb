@@ -49,4 +49,13 @@ class BackendApiTest < ActiveSupport::TestCase
     hits = backend_api.metrics.hits
     assert hits.default? :hits
   end
+
+  test '#accessible does not return deleted backend apis' do
+    backend_api_published = FactoryBot.create(:backend_api)
+    backend_api_deleted = FactoryBot.create(:backend_api, state: :deleted)
+
+    accessible_backend_apis = BackendApi.accessible.pluck(:id)
+    assert_includes accessible_backend_apis, backend_api_published.id
+    assert_not_includes accessible_backend_apis, backend_api_deleted.id
+  end
 end

@@ -115,6 +115,27 @@ class Admin::API::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     assert_equal hits.children.order(:id).offset(3).limit(3).select(:id).map(&:id), response_ids
   end
 
+  test 'it cannot operate for metrics under a non-accessible backend api' do
+    backend_api = FactoryBot.create(:backend_api, account: tenant, state: :deleted)
+    hits = backend_api.metrics.hits
+    metric_method = FactoryBot.create(:metric, owner: backend_api, service_id: nil, parent: hits)
+
+    get admin_api_backend_api_metric_method_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value, id: metric_method.id)
+    assert_response :not_found
+
+    delete admin_api_backend_api_metric_method_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value, id: metric_method.id)
+    assert_response :not_found
+
+    put admin_api_backend_api_metric_method_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value, id: metric_method.id), { friendly_name: 'my friendly name', unit: 'hit' }
+    assert_response :not_found
+
+    post admin_api_backend_api_metric_methods_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value), { friendly_name: 'my friendly name', unit: 'hit' }
+    assert_response :not_found
+
+    get admin_api_backend_api_metric_methods_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value)
+    assert_response :not_found
+  end
+
   private
 
   def metric_method

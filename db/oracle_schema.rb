@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805135829) do
+ActiveRecord::Schema.define(version: 20190904144157) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id",   precision: 38,                  null: false
@@ -232,17 +232,19 @@ ActiveRecord::Schema.define(version: 20190805135829) do
   add_index "backend_api_configs", ["service_id"], name: "index_backend_api_configs_on_service_id"
 
   create_table "backend_apis", force: :cascade do |t|
-    t.string   "name",             limit: 511,                null: false
-    t.string   "system_name",                                 null: false
+    t.string   "name",             limit: 511,                                      null: false
+    t.string   "system_name",                                                       null: false
     t.text     "description"
     t.string   "private_endpoint"
     t.integer  "account_id",                   precision: 38
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
     t.integer  "tenant_id",                    precision: 38
+    t.string   "state",                                       default: "published", null: false
   end
 
   add_index "backend_apis", ["account_id", "system_name"], name: "index_backend_apis_on_account_id_and_system_name", unique: true
+  add_index "backend_apis", ["state"], name: "index_backend_apis_on_state"
 
   create_table "backend_events", id: false, force: :cascade do |t|
     t.integer  "id",         precision: 38, null: false

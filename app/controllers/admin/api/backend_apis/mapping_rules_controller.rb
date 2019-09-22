@@ -117,10 +117,6 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
     @mapping_rule ||= backend_api.mapping_rules.find(params[:id])
   end
 
-  def backend_api
-    @backend_api ||= current_account.backend_apis.find(params[:backend_api_id])
-  end
-
   def mapping_rule_params
     params.require(:mapping_rule).permit(%i[http_method pattern delta last position]).merge(metric_params)
   end
