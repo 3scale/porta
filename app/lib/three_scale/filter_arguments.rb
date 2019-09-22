@@ -16,7 +16,16 @@ module ThreeScale
     def filter
       return FILTER.filter(@arguments) if @arguments.is_a?(Hash)
 
-      @arguments.map { |argument| argument.is_a?(Enumerable) ? FILTER.filter(argument) : argument }
+      @arguments.map do |argument|
+        case argument
+        when Struct
+          FILTER.filter(argument.to_h)
+        when Enumerable
+          FILTER.filter(argument)
+        else
+          argument
+        end
+      end
     end
   end
 end
