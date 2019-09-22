@@ -7261,6 +7261,20 @@
               "dataType": "string",
               "paramType": "query",
               "required": false
+            },
+            {
+              "name": "jwt_claim_with_client_id",
+              "description": "JWT Claim With ClientId Location.",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "jwt_claim_with_client_id_type",
+              "description": "JWT Claim With ClientId Type. Either `plain` or `liquid`",
+              "dataType": "string",
+              "paramType": "query",
+              "required": false
             }
           ]
         }
