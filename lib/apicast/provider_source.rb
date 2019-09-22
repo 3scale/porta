@@ -22,7 +22,7 @@ module Apicast
           except: [:policies_config],
           methods: [
             :oauth_login_url, :hostname_rewrite_for_sandbox, :endpoint_port, :api_backend, :valid?, :service_backend_version,
-            :hosts, :backend, :policy_chain
+            :hosts, :backend, :policy_chain, *GatewayConfiguration::ATTRIBUTES
           ],
           include: [
             proxy_rules: {

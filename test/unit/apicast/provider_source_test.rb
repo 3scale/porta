@@ -22,6 +22,7 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
 
   def test_services
     proxy = FactoryBot.build_stubbed(:proxy)
+    proxy.stubs(jwt_claim_with_client_id_type: 'plain', jwt_claim_with_client_id: 'azp')
     service = FactoryBot.build_stubbed(:simple_service, proxy: proxy)
 
     @account.stubs(services: [ service ])
@@ -30,11 +31,14 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
     assert_equal @account.services.size, services.size
 
     service.stubs(updated_at: Time.now)
-    assert_equal service.updated_at, @source.attributes_for_proxy['services'][0]['updated_at']
+    service_attributes =  @source.attributes_for_proxy['services'][0]
+    assert_equal service.updated_at, service_attributes['updated_at']
 
     assert proxy_attributes = services.first.proxy
 
     assert_equal proxy.hosts, proxy_attributes.hosts
+    assert_equal 'azp', service_attributes['proxy']['jwt_claim_with_client_id']
+    assert_equal 'plain', service_attributes['proxy']['jwt_claim_with_client_id_type']
   end
 
   def test_policies_with_default_apicast_policy
