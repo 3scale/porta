@@ -530,6 +530,7 @@ without fake Core server your after commit callbacks will crash and you might ge
             resources :methods, controller: 'metric_methods', except: %i[new edit]
           end
           resources :mapping_rules, except: %i[new edit]
+          resources :services, except: %i[new edit]
         end
       end
 
