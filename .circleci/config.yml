@@ -270,8 +270,8 @@ commands: # reusable commands with parameters
       - run:
           name: Run Rails tests
           command: |
-            shopt -s extglob
-            TEST=$(bundle exec rake "test:files:${CIRCLE_JOB%-@(postgres|oracle)}" | circleci tests split --split-by=timings)
+            taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
+            TEST=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
             bundle exec rake test:run TEST="$TEST" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
 
