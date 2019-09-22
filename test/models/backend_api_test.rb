@@ -44,6 +44,27 @@ class BackendApiTest < ActiveSupport::TestCase
     assert_equal [orphan_backend_api], BackendApi.orphans
   end
 
+  test '.of_product returns the backend apis that are associated to that product' do
+    # service 1 <-> 1 backend api
+    # service 2 <-> 1 backend api
+    # service 1 <-> 2 backend api
+    # service 1 <-> 0 backend api
+    account = FactoryBot.create(:simple_provider)
+    services = FactoryBot.create_list(:service, 5, account: account)
+    backend_apis = FactoryBot.create_list(:backend_api, 4, account: account)
+    FactoryBot.create(:backend_api_config, service: services[0], backend_api: backend_apis[0])
+    FactoryBot.create(:backend_api_config, service: services[1], backend_api: backend_apis[1])
+    FactoryBot.create(:backend_api_config, service: services[2], backend_api: backend_apis[1])
+    FactoryBot.create(:backend_api_config, service: services[3], backend_api: backend_apis[2])
+    FactoryBot.create(:backend_api_config, service: services[3], backend_api: backend_apis[3])
+
+    assert_equal [backend_apis[0].id], BackendApi.of_product(services[0]).pluck(:id)
+    assert_equal [backend_apis[1].id], BackendApi.of_product(services[1]).pluck(:id)
+    assert_equal [backend_apis[1].id], BackendApi.of_product(services[2]).pluck(:id)
+    assert_same_elements backend_apis[2..3].map(&:id), BackendApi.of_product(services[3]).pluck(:id)
+    assert_empty BackendApi.of_product(services[4]).pluck(:id)
+  end
+
   test 'creates default metrics' do
     backend_api = FactoryBot.create(:backend_api)
     hits = backend_api.metrics.hits
