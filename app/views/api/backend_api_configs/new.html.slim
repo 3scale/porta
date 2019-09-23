@@ -1,0 +1,12 @@
+= content_for :sublayout_title, 'Add Backend API'
+
+= semantic_form_for @backend_api_config, url: admin_service_backend_api_configs_path(@service) do |form|
+  = form.inputs do
+    = form.input :backend_api_id, hint: true, as: :select,
+                  collection: current_account.backend_apis,
+                  include_blank: false,
+                  prompt: 'Select a Backend API',
+                  label: 'Backend API'
+    = form.input :path
+  = form.buttons do
+    = form.commit_button 'Add'
