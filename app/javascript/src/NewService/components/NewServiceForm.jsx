@@ -23,13 +23,12 @@ const NewServiceForm = (props: Props) => {
   const [formMode, setFormMode] = useState('manual')
   const [loadingProjects, setLoadingProjects] = useState(false)
 
-  const handleFormsVisibility = (event: SyntheticEvent<HTMLInputElement>) => {
+  const handleFormsVisibility = (event: SyntheticEvent<HTMLInputElement>) =>
     setFormMode(event.currentTarget.value)
-  }
 
   const formToRender = () => formMode === 'manual'
     ? <ServiceManualForm formActionPath={adminServicesPath} apiap={apiap} backendApis={backendApis} />
-    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
+    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} apiap={apiap} setLoadingProjects={setLoadingProjects} />
 
   const title = apiap ? 'New Product' : 'New API'
 
@@ -42,6 +41,7 @@ const NewServiceForm = (props: Props) => {
           serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
           handleFormsVisibility={handleFormsVisibility}
           loadingProjects={loadingProjects}
+          apiap={apiap}
         />
       }
       {formToRender()}
