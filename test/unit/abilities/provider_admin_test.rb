@@ -82,6 +82,22 @@ module Abilities
       assert_can ability, :show, service_3
     end
 
+    test 'backend apis' do
+      assert_can ability, :manage, BackendApi
+
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+      assert_cannot ability, :manage, BackendApi
+    end
+
+    test 'backend api configs' do
+      assert_can ability, :manage, BackendApiConfig
+
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+      assert_cannot ability, :manage, BackendApiConfig
+    end
+
     def test_destroy_services
       service_1 = FactoryBot.create(:simple_service)
       account = service_1.account
