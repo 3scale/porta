@@ -78,6 +78,7 @@ Ability.define do |user|
 
     if account.provider_can_use?(:api_as_product)
       can :manage, BackendApi
+      can :manage, BackendApiConfig
     end
 
     # TODO: there should be user.accessible_cinstances.where_values_hash, but that query is impossible

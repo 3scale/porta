@@ -63,10 +63,11 @@ module BackendApiLogic
 
       def update!(attrs = {})
         BackendApi.transaction do
-          backend_api_config.path = attrs[:path] if attrs.key?(:path)
-          backend_api_config.backend_api = backend_api
           backend_api.private_endpoint = attrs[:private_endpoint] if attrs.key?(:private_endpoint)
           backend_api.save!
+
+          backend_api_config.path = attrs[:path] if attrs.key?(:path)
+          backend_api_config.backend_api = backend_api
           backend_api_config.save!
         end
       end
