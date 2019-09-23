@@ -70,30 +70,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class DeleteServiceHierarchyTest < DeleteObjectHierarchyWorkerTest
-    setup do
-      @object = @service = FactoryBot.create(:service)
-      @service_plan = service.service_plans.first
-      @application_plan = FactoryBot.create(:application_plan, :issuer => service)
-      @end_user_plan = FactoryBot.create(:end_user_plan, service: service)
-      @metrics = service.metrics
-      service.update_attribute :default_service_plan, @service_plan
-      service.update_attribute :default_application_plan, @application_plan
-    end
-
-    private
-
-    attr_reader :service, :service_plan, :application_plan, :end_user_plan, :metrics
-
-    def perform_expectations
-      DeleteObjectHierarchyWorker.stubs(:perform_later)
-      [service_plan, application_plan, end_user_plan].each do |association|
-        DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
-      end
-      metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything) }
-    end
-  end
-
   class DeleteAccountHierarchyTest < DeleteObjectHierarchyWorkerTest
     setup do
       @object = @provider = FactoryBot.create(:provider_account)
@@ -123,9 +99,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     def perform_expectations
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      (users + services).each do |association|
-        DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
-      end
+      users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything) }
+      services.each { |service| DeleteServiceHierarchyWorker.expects(:perform_later).with(service, anything) }
       buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything) }
       contracts.each do |contract|
         DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)

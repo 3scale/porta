@@ -120,8 +120,14 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     end
 
     def association_delete_worker
-      return DeleteAccountHierarchyWorker if reflection.options[:class_name] == Account.name
-      DeleteObjectHierarchyWorker
+      case reflection.class_name
+      when Account.name
+        DeleteAccountHierarchyWorker
+      when Service.name
+        DeleteServiceHierarchyWorker
+      else
+        DeleteObjectHierarchyWorker
+      end
     end
   end
 
