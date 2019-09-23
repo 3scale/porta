@@ -182,7 +182,7 @@ FactoryBot.define do
 
     trait(:with_default_backend_api) do
       after(:create) do |account|
-        backend_api = FactoryBot.build(:backend_api, account: account)
+        backend_api = FactoryBot.create(:backend_api, account: account)
         FactoryBot.create(:backend_api_config, service: account.default_service, backend_api: backend_api)
       end
     end
