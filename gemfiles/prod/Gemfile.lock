@@ -305,10 +305,10 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.2.1)
-    dotenv-rails (2.2.1)
-      dotenv (= 2.2.1)
-      railties (>= 3.2, < 5.2)
+    dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     draper (2.1.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
@@ -557,7 +557,7 @@ GEM
       activesupport (>= 4.2.0, < 5.0)
       nokogiri (~> 1.6)
       rails-deprecated_sanitizer (>= 1.0.1)
-    rails-html-sanitizer (1.0.4)
+    rails-html-sanitizer (1.2.0)
       loofah (~> 2.2, >= 2.2.2)
     rails-observers (0.1.5)
       activemodel (>= 4.0)
@@ -857,7 +857,7 @@ DEPENDENCIES
   deadlock_retry
   developer_portal!
   diff-lcs (~> 1.2)
-  dotenv-rails (~> 2.0)
+  dotenv-rails (~> 2.7)
   draper (~> 2.0)
   dynamic_form
   email_spec
