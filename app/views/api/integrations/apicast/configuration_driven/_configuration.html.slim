@@ -31,7 +31,8 @@
                 th Production Public Base URL
                 th
                 th Private Base URL
-                th
+                th.actions
+                  = action_link_to :add, new_admin_service_backend_api_configs_path(@service), label: 'Add Backend API'
             tbody
               = f.fields_for :backend_api_configs do |backend|
                 - backend_api = backend.object.backend_api

@@ -834,6 +834,8 @@ without fake Core server your after commit callbacks will crash and you might ge
             end
           end
 
+          resource :backend_api_configs, only: %i[new create]
+
           resource :integration, :except => [ :create, :destroy ] do
             member do
               patch 'update_production'
