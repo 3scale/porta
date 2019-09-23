@@ -1,0 +1,20 @@
+#settings
+  = form.inputs "Deployment" do
+
+    - if @service.deployment_option == nil
+      - @service.deployment_option = 'hosted'
+
+    = form.input :deployment_option,
+            as: :radio,
+            collection: deployment_options,
+            value_as_class: true,
+            label: false
+
+  = form.inputs "Authentication" do
+    = form.input :proxy_authentication_method,
+            name: 'service[backend_version]',
+            as: :radio,
+            required: false,
+            collection: BackendVersion.visible_versions(service: @service),
+            value_as_class: true,
+            label: false
