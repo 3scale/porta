@@ -57,15 +57,14 @@ Feature: API menu
     | Settings                  |
 
   Scenario: Integration sub menu structure for API as Product
-    Given the account has api_as_product rolling update enabled
-    And I have api_as_product feature disabled
+    Given I have api_as_product feature enabled
     When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
     | Methods & Metrics         |
     | Mapping Rules             |
-    | Settings                  |
+    | Backends                  |
 
   Scenario: API menu structure with service plans enabled
     When provider "foo.example.com" has "service_plans" switch allowed
