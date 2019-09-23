@@ -588,9 +588,9 @@ en:
       plugin_csharp: .NET Plugin
       service_mesh_istio: Istio Service Mesh
 
-    self_managed: APIcast self-managed<span>Manage your own NGINX based API gateway for ultimate flexibility and customization.</span>
-    hosted: APIcast<span>a 3scale managed NGINX based API gateway for quick and reliable integrations</span>
-    apicast: APIcast<span>Nginx reverse proxy server.</span>
+    self_managed: APIcast self-managed <span>Manage your own NGINX based API gateway for ultimate flexibility and customization.</span>
+    hosted: APIcast <span>a 3scale managed NGINX based API gateway for quick and reliable integrations</span>
+    apicast: APIcast <span>Nginx reverse proxy server.</span>
 
     service_mesh_istio: |
       Istio
