@@ -1,22 +1,23 @@
 = f.toggled_inputs 'Authentication Settings' do
+  //= f.inputs "Specific for the Authentication Type" do
   - if @service.oidc?
     = render 'api/integrations/apicast/shared/oidc', f: f
-
   - elsif @service.oauth?
     = f.input :oauth_login_url, label: "OAuth Authorization Endpoint", input_html: { placeholder: "https://#{parameterized_org_name_of_the_current_account}.com/authorize" },  hint: t("formtastic.hints.proxy.#{oauth_hint}")
-
-  = f.input :hostname_rewrite, label: "Host Header"
-  = f.input :secret_token, label: "Secret Token"
-
-  = f.input :credentials_location, as: :radio,
-    collection: Proxy.credentials_collection
-
   - case @service.backend_version
   - when '1'
-    = f.input :auth_user_key
+    = f.inputs "API Key (user_key) Basics" do
+      = f.input :auth_user_key
   - when '2'
-    = f.input :auth_app_id
-    = f.input :auth_app_key
+    = f.inputs "App_ID and App_key Pair Basics" do
+      = f.input :auth_app_id
+      = f.input :auth_app_key
+  = f.inputs "Credentials Location" do
+    = f.input :credentials_location, as: :radio,
+      collection: Proxy.credentials_collection
+  = f.inputs "Security" do
+    = f.input :hostname_rewrite, label: "Host Header"
+    = f.input :secret_token, label: "Secret Token"
 
 = f.toggled_inputs 'Gateway Response' do
   = f.inputs "Authentication Failed Error" do
