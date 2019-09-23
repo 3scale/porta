@@ -46,7 +46,7 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     refute @config.valid?
     assert @config.errors[:service_id].include? "can't be blank"
 
-    @config.service = FactoryBot.build_stubbed(:simple_service)
+    @config.service = FactoryBot.build_stubbed(:simple_service, account: @config.backend_api.account)
     assert @config.valid?
   end
 
@@ -56,7 +56,7 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     refute @config.valid?
     assert @config.errors[:backend_api_id].include? "can't be blank"
 
-    @config.backend_api = FactoryBot.build_stubbed(:backend_api)
+    @config.backend_api = FactoryBot.build_stubbed(:backend_api, account: @config.service.account)
     assert @config.valid?
   end
 
@@ -72,5 +72,19 @@ class BackendApiConfigTest < ActiveSupport::TestCase
 
     @config.path = 'bar'
     assert @config.valid?
+  end
+
+  test 'validates service and backend api belong to the same tenant' do
+    service = FactoryBot.create(:simple_service)
+    backend_api_same_tenant = FactoryBot.create(:backend_api, account: service.account)
+    backend_api_different_tenant = FactoryBot.create(:backend_api, account: FactoryBot.create(:simple_provider))
+
+    backend_api_config = FactoryBot.build(:backend_api_config, service: service, backend_api: backend_api_same_tenant)
+    assert backend_api_config.valid?
+    assert_empty backend_api_config.errors.full_messages
+
+    backend_api_config = FactoryBot.build(:backend_api_config, service: service, backend_api: backend_api_different_tenant)
+    refute backend_api_config.valid?
+    assert_includes backend_api_config.errors[:service], 'must belong to the same tenant as the backend api'
   end
 end

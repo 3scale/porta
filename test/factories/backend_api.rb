@@ -11,7 +11,7 @@ FactoryBot.define do
 
   factory :backend_api_config do
     sequence(:path) { |n| "path#{n}" }
-    association :service
     association :backend_api
+    service { create(:service, account: backend_api.account) }
   end
 end

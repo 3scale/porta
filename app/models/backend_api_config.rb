@@ -14,6 +14,7 @@ class BackendApiConfig < ApplicationRecord
   validates :service_id, :backend_api_id, presence: true
   validates :path, uniqueness: { scope: :service_id, case_sensitive: false }
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
+  validate :validate_service_and_backend_api_belong_to_the_same_tenant
 
   scope :with_subpath, (lambda do
     common_query = where.not(path: '/')
@@ -24,5 +25,13 @@ class BackendApiConfig < ApplicationRecord
 
   def path=(value)
     super(StringUtils::StripSlash.strip_slash(value))
+  end
+
+  private
+
+  def validate_service_and_backend_api_belong_to_the_same_tenant
+    return if service.blank? || backend_api.blank?
+    return if service.account_id == backend_api.account_id
+    errors.add(:service, 'must belong to the same tenant as the backend api')
   end
 end
