@@ -1,0 +1,4 @@
+= content_for :sublayout_title, 'Edit Backend'
+
+= semantic_form_for @backend_api_config, url: admin_service_backend_api_config_path(@service, @backend_api_config) do |form|
+  = render 'form', form: form
