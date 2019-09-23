@@ -14,6 +14,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   class SettingsTest < Api::ServicesControllerTest
     test 'settings renders the right template and contains the right sections' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false | true)
+      rolling_update(:api_as_product, enabled: false)
+
       get settings_admin_service_path(service)
       assert_response :success
       page = Nokogiri::HTML::Document.parse(response.body)
