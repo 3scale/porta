@@ -24,7 +24,7 @@ Feature: Multiservice feature
     When I am on the provider dashboard
      And I follow "New Product"
      And I fill in "Name" with "Less fancy API"
-     And I press "Add API"
+     And I press "Create Product"
     Then I should see "Less fancy API"
 
   @wip
