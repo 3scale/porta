@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
+class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
   def setup
     @service = FactoryBot.create(:simple_service)
   end
