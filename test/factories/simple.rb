@@ -80,8 +80,8 @@ FactoryBot.define do
     end
 
     trait :with_default_backend_api do
-      before(:create) do |record|
-        backend_api = FactoryBot.build(:backend_api, private_endpoint: 'https://echo-api.3scale.net')
+      after(:create) do |record|
+        backend_api = FactoryBot.create(:backend_api, private_endpoint: 'https://echo-api.3scale.net')
         FactoryBot.create(:backend_api_config, path: '', service: record, backend_api: backend_api)
       end
     end

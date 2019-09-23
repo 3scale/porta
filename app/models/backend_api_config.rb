@@ -11,6 +11,8 @@ class BackendApiConfig < ApplicationRecord
 
   has_many :backend_api_metrics, through: :backend_api, source: :metrics
 
+  validates :service_id, :backend_api_id, presence: true
+  validates :path, uniqueness: { scope: :service_id, case_sensitive: false }
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
 
   scope :with_subpath, (lambda do

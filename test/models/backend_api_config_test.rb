@@ -39,4 +39,38 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     assert_includes backend_api_config_ids_with_subpath, bac_path_null
     assert_includes backend_api_config_ids_with_subpath, bac_path_longer
   end
+
+  test 'validates presence of service' do
+    @config.backend_api = FactoryBot.build_stubbed(:backend_api)
+
+    refute @config.valid?
+    assert @config.errors[:service_id].include? "can't be blank"
+
+    @config.service = FactoryBot.build_stubbed(:simple_service)
+    assert @config.valid?
+  end
+
+  test 'validates presence of backend_api' do
+    @config.service = FactoryBot.build_stubbed(:simple_service)
+
+    refute @config.valid?
+    assert @config.errors[:backend_api_id].include? "can't be blank"
+
+    @config.backend_api = FactoryBot.build_stubbed(:backend_api)
+    assert @config.valid?
+  end
+
+  test 'validates uniqueness of path' do
+    service = FactoryBot.create(:simple_service)
+    service.backend_api_configs.create backend_api: FactoryBot.create(:backend_api, account: service.account), path: 'foo'
+
+    @config.service = service
+    @config.backend_api = FactoryBot.create(:backend_api, account: service.account)
+    @config.path = 'foo'
+    refute @config.valid?
+    assert @config.errors[:path].include? 'has already been taken'
+
+    @config.path = 'bar'
+    assert @config.valid?
+  end
 end
