@@ -26,4 +26,4 @@ Feature: Services switch
   Scenario: In allowed state (hidden and visible), I should be able to access the page by url
     Given provider "foo.example.com" has "multiple_services" switch allowed
       And I go to the new service page
-    Then I should see "New API"
+    Then I should see "New Product"

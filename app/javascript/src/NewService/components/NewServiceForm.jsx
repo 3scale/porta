@@ -31,9 +31,11 @@ const NewServiceForm = (props: Props) => {
     ? <ServiceManualForm formActionPath={adminServicesPath} apiap={apiap} backendApis={backendApis} />
     : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
 
+  const title = apiap ? 'New Product' : 'New API'
+
   return (
     <React.Fragment>
-      <h1>New API</h1>
+      <h1>{title}</h1>
       {isServiceDiscoveryAccessible &&
         <ServiceSourceForm
           isServiceDiscoveryUsable={isServiceDiscoveryUsable}
