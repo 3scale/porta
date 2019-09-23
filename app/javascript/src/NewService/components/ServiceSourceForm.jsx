@@ -6,12 +6,13 @@ type Props = {
   isServiceDiscoveryUsable: boolean,
   serviceDiscoveryAuthenticateUrl: string,
   handleFormsVisibility: (event: SyntheticEvent<HTMLInputElement>) => void,
-  loadingProjects: boolean
+  loadingProjects: boolean,
+  apiap: boolean
 }
 
 const ServiceSourceForm = (props: Props) => {
   const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    handleFormsVisibility, loadingProjects} = props
+    handleFormsVisibility, loadingProjects, apiap} = props
   const classNameDisabled = isServiceDiscoveryUsable ? '' : 'disabled'
   return (
     <form className="formtastic" id="new_service_source">
@@ -49,6 +50,7 @@ const ServiceSourceForm = (props: Props) => {
                 </a>
               }
             </label>
+            { apiap && <p className="inline-hints">Choosing this option will also create a Backend API</p> }
           </li>
         </ol>
       </fieldset>
