@@ -849,6 +849,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :proxy_logs, :only => [:index, :show ]
           resources :proxy_configs, only: %i(index show)
           resources :proxy_rules, except: %i[show], defaults: { owner_type: 'Proxy' }
+          resource :policies, except: [:show, :destroy]
         end
 
         resources :alerts, :only => [:index, :destroy] do
