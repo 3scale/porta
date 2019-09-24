@@ -81,6 +81,10 @@ button:-moz-focusring,
     padding: 1rem 1.5rem 0.5rem 1.5rem;
     font-weight: 500;
     color: #151515;
+
+    i.fa {
+      padding-left: line-height-times(1 / 2);
+    }
   }
 
   .pf-c-nav__link:active,
