@@ -37,3 +37,12 @@
   padding: 0;
   float: none;
 }
+
+#logo_container {
+  background-color: $white;
+  padding: line-height-times(1);
+
+  .delete {
+    float: right;
+  }
+}

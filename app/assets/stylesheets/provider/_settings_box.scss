@@ -1,10 +1,9 @@
 .SettingsBox,
 .IntegrationSettingsBox {
-  background-color: $content-background;
+  background-color: $white;
   position: relative;
 
   &-toggle {
-    background-color: $content-background;
     color: $link-color;
     cursor: pointer;
     display: block !important;
@@ -14,7 +13,6 @@
     padding: line-height-times(1/4) line-height-times(1/4);
     position: relative;
     text-decoration: underline;
-    top: line-height-times(-3/4);
     z-index: 10;
 
     &:hover {

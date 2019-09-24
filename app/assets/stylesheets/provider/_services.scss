@@ -49,6 +49,7 @@
   ul.listing {
     clear: left;
     list-style: none;
+    background-color: $white;
     border-radius: $border-radius;
     padding: line-height-times(1);
     border: $border-width solid $border-color;

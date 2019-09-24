@@ -156,7 +156,7 @@ form.formtastic fieldset.inputs > ol > li.select select {
 form.formtastic fieldset.buttons {
   border-top: $border-width solid $border-color;
   margin: line-height-times(2) 0;
-  padding: line-height-times(1/2) 0 0 0;
+  padding: line-height-times(1/2) 0 line-height-times(1) 0;
   text-align: right;
 
   li {
@@ -242,6 +242,9 @@ form.formtastic {
   text-align: left; /* overriding legacy_theme text-align: center*/
   min-width: line-height-times(20);
   width: 100%;
+
+  padding: line-height-times(1);
+  background-color: $body-background;
 
   fieldset.inputs[data-behavior~=toggle-inputs] {
     border: $border-width $border-color solid;
