@@ -186,6 +186,8 @@ class Plan < ApplicationRecord
   def reset_contracts_counter
     update_column(:contracts_count, contracts.count) if persisted?
   end
+  alias reset_counter_cache reset_contracts_counter
+
 
   def can_be_destroyed?
     return true if destroyed_by_association

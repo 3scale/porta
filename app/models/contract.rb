@@ -13,6 +13,7 @@ class Contract < ApplicationRecord
   include States
   include Billing
   include Trial
+  include CounterCacheCallbacks
 
   include Finance::FixedFee
   include Finance::SetupFee
@@ -26,9 +27,6 @@ class Contract < ApplicationRecord
   validate   :correct_plan_subclass?
   # this breaks nested saving of records, when validating there is no user_account yet, its new record
   # validates_presence_of :user_account
-
-  after_save :update_counter_cache
-  after_destroy :update_counter_cache
 
   validates :description, :redirect_url, :extra_fields,
             length: { maximum: 65535 }
@@ -249,6 +247,15 @@ class Contract < ApplicationRecord
 
   protected
 
+  def update_counter_cache?(association_name)
+    case association_name
+    when :plan
+      !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
+    else
+      true
+    end
+  end
+
   def correct_plan_subclass?
     if plan && (not plan.is_a?(Plan))
       errors.add(:plan, 'wrong plan subclass')
@@ -294,12 +301,17 @@ class Contract < ApplicationRecord
 
   private
 
-  def update_counter_cache
-    plan&.reset_contracts_counter if update_counter_cache?
+  def reset_counter_cache_for
+    [:plan].freeze
   end
 
-  def update_counter_cache?
-    !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
+  def update_counter_cache?(association_name)
+    case association_name
+    when :plan
+      !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
+    else
+      true
+    end
   end
 
   def notify_plan_changed
