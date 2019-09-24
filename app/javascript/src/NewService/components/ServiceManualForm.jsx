@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import {BackendApiSelect, FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
+import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
 import type {FormProps} from 'NewService/types'
 import type {Api} from 'Types/Api'
 
@@ -12,18 +12,17 @@ type Props = {
 }
 
 const ServiceManualForm = (props: Props) => {
-  const {formActionPath, apiap, backendApis} = props
+  const {formActionPath, apiap} = props
 
   const formProps: FormProps = {
     id: 'new_service',
     formActionPath,
-    submitText: 'Add API'
+    submitText: apiap ? 'Create Product' : 'Add API'
   }
 
   return (
     <FormWrapper {...formProps}>
       <ServiceManualListItems/>
-      {apiap && <BackendApiSelect backendApis={backendApis} />}
     </FormWrapper>
   )
 }
