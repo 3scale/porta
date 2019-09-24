@@ -5,6 +5,5 @@ export {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements/Hi
 export {Label} from 'NewService/components/FormElements/Label'
 export {Select} from 'NewService/components/FormElements/Select'
 export {ErrorMessage} from 'NewService/components/FormElements/ErrorMessage'
-export {BackendApiSelect} from 'NewService/components/FormElements/BackendApiSelect'
 export {ServiceDiscoveryListItems} from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 export {ServiceManualListItems} from 'NewService/components/FormElements/ServiceManualListItems'
