@@ -14,13 +14,14 @@
 
 #colorbox {
   box-shadow: 0 0 line-height-times(1/2) $box-shadow-color;
-  background: rgba($content-background, .99);
+  background: rgba($body-background, .99);
   border: $border-width solid $border-color;
   text-align: left;
   border-radius: $border-radius;
 
   form.formtastic {
     width: 100%;
+    padding: 0;
 
     fieldset.inputs {
       border-top: 0;

@@ -10,7 +10,6 @@ body {
 }
 
 #border {
-  background-color: #fff; // HACK: this will be taken care by PF4
   min-height: calc(100vh - 92px); // Header's height
   position: relative;
   text-align: left;
@@ -24,7 +23,12 @@ body {
   // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
   padding: line-height-times(1);
 
+
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }
+}
+
+.pf-c-page__main {
+  background-color: $gallery;
 }

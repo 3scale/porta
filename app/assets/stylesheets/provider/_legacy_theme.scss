@@ -2,6 +2,9 @@ div.dashboard_bubble, div.wide_dashboard_bubble, div.narrow_dashboard_bubble {
   border: $border-width solid  $border-color;
   padding: line-height-times(1);
   margin-bottom: line-height-times(1);
+  background-color: $body-background;
+  box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 2px 0px;
+  border: none;
 
   &> table.list:first-child {
     margin-top: line-height-times(-1/2);
@@ -10,7 +13,7 @@ div.dashboard_bubble, div.wide_dashboard_bubble, div.narrow_dashboard_bubble {
   &> table.list:last-child {
     margin-bottom: line-height-times(-1/2);
 
-    tr:last-child th,    
+    tr:last-child th,
     tr:last-child td {
       border-bottom: 0;
     }
