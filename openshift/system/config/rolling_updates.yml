@@ -1,4 +1,5 @@
 base: &default
+  old_charts: false
   new_provider_documentation: false
   proxy_pro: false
   instant_bill_plan_change: false
@@ -14,6 +15,7 @@ base: &default
   apicast_v2: true
   forum: false
   published_service_plan_signup: true
+  apicast_oidc: true
   policies: true
   policy_registry: true
   proxy_private_base_path: true
