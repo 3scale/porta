@@ -32,7 +32,7 @@ class BackendApi < ApplicationRecord
 
   has_system_name(uniqueness_scope: [:account_id])
 
-  scope :orphans, -> { joining { services.outer }.where { BabySqueel[:backend_api_configs].backend_api_id == nil } }
+  scope :orphans, -> { where.has { id.not_in(BackendApiConfig.selecting { :backend_api_id }) } }
 
   scope :oldest_first, -> { order(created_at: :asc) }
   scope :accessible, -> { where.not(state: DELETED_STATE) }
