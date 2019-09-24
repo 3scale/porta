@@ -8,7 +8,12 @@ const Nav = ({id, children}) => (
   </nav>
 )
 
-const NavExpandable = ({id, title, isExpanded, isActive, children}) => {
+const OutdatedIcon = ({title}) => {
+  const isVisibleIcon = title === 'Integration'
+  return isVisibleIcon ? <i className='fa fa-exclamation-triangle' title='The Integration is out of date, promote!'></i> : null
+}
+
+const NavExpandable = ({id, title, isExpanded, isActive, children, outOfDateConfig}) => {
   const [expanded, setExpanded] = useState(isExpanded)
 
   function onItemClick () {
@@ -19,6 +24,7 @@ const NavExpandable = ({id, title, isExpanded, isActive, children}) => {
     <li className={`pf-c-nav__item pf-m-expandable ${expanded ? 'pf-m-expanded' : ''} ${isActive ? 'pf-m-current' : ''}`}>
       <a href="#" className="pf-c-nav__link" id={id} aria-expanded="true" onClick={onItemClick}>
         {title}
+        { outOfDateConfig && <OutdatedIcon title={title} /> }
         <span className="pf-c-nav__toggle">
           {Caret}
         </span>
