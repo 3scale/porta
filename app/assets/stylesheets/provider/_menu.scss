@@ -39,6 +39,9 @@ ul.login-form-links {
   height: line-height-times(1);
   padding: 0 0 line-height-times(1.5) 0;
   font-size: $font-size-sm;
+  padding: line-height-times(1);
+  margin: line-height-times(-1);
+  background-color: $body-background;
 
   .active {
     color: $subsubmenu-active-color;

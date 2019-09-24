@@ -119,6 +119,10 @@ form.formtastic .button-bar, .button-bar {
   }
 }
 
+.formtastic.cms_template .button-bar {
+  height: line-height-times(1.5);
+}
+
 @mixin outline-button($color: $font-color, $border-color: $border-color) {
   color: $color;
   display: inline-block;

@@ -18,8 +18,9 @@
 }
 
 .helpButton {
-  position: absolute;
+  position: relative;
   margin-left: line-height-times(1/4);
+  top: line-height-times(1/4);
 }
 
 .formtastic .helpButton {

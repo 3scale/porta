@@ -14,6 +14,7 @@
   }
 
   &--services {
+    border-top: 0;
     margin-top: line-height-times(1.4);
 
     .hidden {
@@ -21,6 +22,7 @@
     }
 
     #backends > table {
+      box-shadow: none;
       table-layout: fixed;
 
       th {
@@ -74,12 +76,13 @@
 }
 
 .DashboardWidget {
+  background-color: $body-background;
   width: 50%;
   float: left;
   position: relative;
   height: line-height-times(10);
   overflow: hidden;
-  border: $border-width solid $border-color;
+  box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 2px 0px;
   padding: line-height-times(1/2);
 
   .Dashboard-chart {
@@ -346,6 +349,7 @@
   float: left;
 
   &--extended {
+    background-color: $gallery;
     border-bottom: $border-width solid $border-color;
     margin-bottom: line-height-times(1);
   }
@@ -425,8 +429,16 @@ a:hover .u-notice {
   }
 
   &--content {
+    background-color: $white;
+    border: 1px solid #d2d2d2;
+    border-top: none;
+
     & > input {
       display: none;
+    }
+
+    & > #products {
+      padding: 0 line-height-times(1 / 2);
     }
 
     & > #products,
@@ -437,6 +449,19 @@ a:hover .u-notice {
     & > #products.active,
     & > #backends.active {
       display: block;
+      border-top: 0;
+    }
+
+    & > #products.active {
+      .DashboardSection--service {
+        display: table;
+        float: none;
+        padding-top: line-height-times(1);
+      }
+    }
+
+    & > #backends.active .ApiFilter {
+      margin-left: line-height-times(1 / 2);
     }
 
     nav.DashboardNavigation--services {
@@ -449,4 +474,3 @@ a:hover .u-notice {
     }
   }
 }
-
