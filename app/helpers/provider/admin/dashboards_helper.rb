@@ -22,12 +22,13 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_navigation_link(link_text, path, options = {})
-    link_to path, class: css_class({
+    link_to path, title: options[:title], class: css_class({
         'DashboardNavigation-link': true,
         'u-notice': options.fetch(:notice, false)
       }) do
         icon_name = options[:icon_name]
-        link_text = link_text.prepend "#{icon(icon_name)} " if icon_name
+        icon_append_name = options[:icon_append_name]
+        link_text = link_text.concat " #{icon(icon_append_name)}" if icon_append_name
         link_text.html_safe
     end
   end
