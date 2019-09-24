@@ -106,21 +106,9 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     provider.expects(:provider_can_use?).returns(false).once
     buyer.send(:provider_can_use?, :whatever)
   end
-
-  test "Controller: provider_can_use? return true if it is the impersonation admin user" do
-    controller_instance = mocked_controller
-
-    user = User.new(username: ThreeScale.config.impersonation_admin['username'])
-    controller_instance.expects(:current_user).returns(user).once
-
-    assert controller_instance.send(:provider_can_use?, :whatever)
-  end
-
+  
   test "Controller: provider_can_use? delegate to current_account" do
     controller_instance = mocked_controller
-
-    user = User.new
-    controller_instance.expects(:current_user).returns(user).once
 
     provider = Account.new
     provider.expects(:provider_can_use?).with(:whatever)
@@ -188,6 +176,10 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     controller_class = Class.new do
       def self.helper_method(*); end
       include Logic::RollingUpdates::Controller
+
+      def current_account
+        Account.new
+      end
     end
 
     controller_class.new

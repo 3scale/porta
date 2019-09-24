@@ -347,30 +347,23 @@ module Logic
     end
 
     module Service
-      private
-
-      # This smells :reek:NilCheck
-      def provider_can_use?(fresh_feature)
-        provider&.provider_can_use?(fresh_feature)
-      end
+      delegate :provider_can_use?, to: :provider
+      private :provider_can_use?
     end
 
     module Controller
-      def self.included(klass)
-        klass.helper_method :provider_can_use?
+      extend ActiveSupport::Concern
+
+      included do
+        delegate :provider_can_use?, to: :current_account
+        helper_method :provider_can_use?
+        private :provider_can_use?
       end
 
-      protected
+      private
 
       def provider_can_use!(feature)
         raise ActiveRecord::RecordNotFound unless provider_can_use?(feature)
-      end
-
-      def provider_can_use?(fresh_feature)
-        return false if Logic::RollingUpdates.skipped?
-        return true if Logic::RollingUpdates.disabled?
-
-        current_user&.impersonation_admin? || current_account.provider_can_use?(fresh_feature)
       end
     end
   end
