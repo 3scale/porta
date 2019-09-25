@@ -240,11 +240,11 @@ Load this stylesheet after formtastic.css in your layouts to override the CSS to
 
 form.formtastic {
   text-align: left; /* overriding legacy_theme text-align: center*/
+  margin: line-height-times(1) 0;
   min-width: line-height-times(20);
   width: 100%;
-
   padding: line-height-times(1);
-  background-color: $body-background;
+  @include white-box-shadow;
 
   fieldset.inputs[data-behavior~=toggle-inputs] {
     border: $border-width $border-color solid;

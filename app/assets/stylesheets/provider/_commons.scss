@@ -1,3 +1,5 @@
+@import 'provider/layouts/_main.scss';
+
 html {
   @include typography-base();
 }
@@ -83,6 +85,17 @@ h2 + p {
   padding: line-height-times(1);
   margin-bottom: line-height-times(1);
   background-color: $body-background;
+}
+
+main > p:not(:first-child) {
+  padding: line-height-times(1);
+  @include white-box-shadow;
+}
+
+main > h1:first-child + p,
+main > h2:first-child + p {
+  box-shadow: none;
+  margin: line-height-times(-1) line-height-times(-1) line-height-times(1) line-height-times(-1);
 }
 
 dd p {
@@ -227,4 +240,16 @@ hr, {
 .ui-sortable-handler { // scss-lint:disable SelectorFormat
   color: $success-color;
   cursor: move;
+}
+
+#forum {
+  .u-dl, .post {
+    padding: line-height-times(1);
+    @include white-box-shadow;
+  }
+}
+
+.operations {
+  padding: line-height-times(1 / 3);
+  @include white-box-shadow;
 }

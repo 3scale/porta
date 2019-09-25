@@ -1,3 +1,12 @@
 .Section {
   margin-bottom: line-height-times(2);
+
+  &.u-toggleableBySettingsBox p {
+    @include white-box-shadow;
+  }
+
+  &#access-tokens p,
+  &#service-tokens p {
+    @include white-box-shadow;
+  }
 }

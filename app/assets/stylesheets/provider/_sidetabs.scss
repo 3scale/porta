@@ -66,9 +66,9 @@ $tab-min-height: line-height-times(21, true);
   float: left;
   width: $tab-content-width;
   margin-left: -$border-width;
-  background-color: $tab-content-color;
   border-left: $border-width solid $border-color;
   border-right: none;
   min-height: $tab-min-height;
   padding: 0 0 line-height-times(1) line-height-times(1);
+  @include white-box-shadow;
 }

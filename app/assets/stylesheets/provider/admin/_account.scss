@@ -14,10 +14,26 @@
   #plan-overview {
     @extend div.right;
   }
+
+  .overview-box {
+    table.list, p {
+      @include white-box-shadow;
+    }
+
+    table.list th,
+    table.list td {
+      padding: line-height-times(1);
+    }
+  }
+
 }
 
 #key-overview {
   margin-bottom: line-height-times(2);
+
+  .info {
+    @include white-box-shadow;
+  }
 
   .key {
       background-repeat: no-repeat;

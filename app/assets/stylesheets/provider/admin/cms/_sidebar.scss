@@ -1,10 +1,10 @@
 #cms-sidebar {
-  background-color: $white;
   font-size: $caption-font-size;
   float: left;
   //overflow-x: hidden;
   //width: 16%;
   width: 20%;
+  @include white-box-shadow;
 
   .collapse-button {
     margin-left: -3px;
@@ -15,12 +15,13 @@
   }
 
   li {
+    padding-left: line-height-times(1 / 4);
     white-space: nowrap;
   }
 
   & + #tab-content {
     background-color: $white;
-    padding: line-height-times(1);
+    padding-top: line-height-times(1);
     @include border-bottom-left-radius(0);
 
     h1 {
@@ -35,8 +36,6 @@
 }
 
 .cms-sidebar-listing {
-  border-bottom: $border-width solid $border-color;
-  border-right: $border-width solid $border-color;
 
   h3 {
     margin: 0;
@@ -139,6 +138,10 @@
       }
     }
   }
+}
+
+.cms-sidebar-listing:not(#cms-sidebar-content) {
+  padding-left: line-height-times(1 / 4);
 }
 
 @import 'provider/admin/cms/sidebar/filter';

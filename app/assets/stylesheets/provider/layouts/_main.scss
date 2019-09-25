@@ -32,3 +32,8 @@ body {
 .pf-c-page__main {
   background-color: $gallery;
 }
+
+@mixin white-box-shadow {
+  background-color: white;
+  box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 2px 0px;
+}

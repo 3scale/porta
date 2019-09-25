@@ -23,6 +23,8 @@
 
     #backends > table {
       box-shadow: none;
+      border: solid $white 0.75rem;
+      margin: 0;
       table-layout: fixed;
 
       th {
@@ -76,14 +78,13 @@
 }
 
 .DashboardWidget {
-  background-color: $body-background;
   width: 50%;
   float: left;
   position: relative;
   height: line-height-times(10);
   overflow: hidden;
-  box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 2px 0px;
   padding: line-height-times(1/2);
+  @include white-box-shadow;
 
   .Dashboard-chart {
     position: absolute !important;
