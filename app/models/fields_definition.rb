@@ -20,9 +20,9 @@ class FieldsDefinition < ApplicationRecord
   belongs_to :account, :inverse_of => :fields_definitions
   acts_as_list :scope => :account, :column => :pos
 
-  scope :by_provider,  lambda {|provider| where(['account_id = ?', provider.id]) }
-  scope :by_target, lambda { |class_name| where(['target = ?', class_name])}
-  scope :by_name, lambda { |name| where(['name = ?', name])}
+  scope :by_provider,  ->(provider) { where(['account_id = ?', provider.id]) }
+  scope :by_target, ->(class_name) { where(['target = ?', class_name])}
+  scope :by_name, ->(name) { where(['name = ?', name])}
   scope :required, -> { where({ :required => true })}
 
   def self.editable_by(user)

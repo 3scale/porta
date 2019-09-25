@@ -49,7 +49,7 @@ class MessageRecipient < ApplicationRecord
   scope :deleted,      -> { where.not(deleted_at: nil) }
   scope :hidden,       -> { not_deleted.where.not(hidden_at: nil) }
   scope :of_account,   ->(account) { where(receiver: account) }
-  scope :not_system,   lambda {
+  scope :not_system,   -> {
     includes(:message).where(messages: { system_operation_id: nil }).references(:message)
   }
 

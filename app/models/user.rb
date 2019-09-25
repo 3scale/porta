@@ -78,7 +78,7 @@ class User < ApplicationRecord
 
   #TODO: this needs tests
   validates :password, length: { :minimum => 6, :allow_blank => true,
-                      :if => lambda{ |u| u.validate_password? and not u.send(:provider_requires_strong_passwords?) } }
+                      :if => ->(u){ u.validate_password? and not u.send(:provider_requires_strong_passwords?) } }
 
   validates :extra_fields, length: { maximum: 65535 }
   validates :crypted_password, :salt, :remember_token, :activation_code,
@@ -127,9 +127,9 @@ class User < ApplicationRecord
     %w(pending active)
   end
 
-  scope :without_ids, lambda { |id| id ? where(['users.id <> ?', id]) : where({}) }
+  scope :without_ids, ->(id) { id ? where(['users.id <> ?', id]) : where({}) }
 
-  scope :by_email, lambda { |email| where(:email => email) }
+  scope :by_email, ->(email) { where(:email => email) }
 
   scope :latest, -> {limit(5).order(created_at: :desc)}
 

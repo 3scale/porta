@@ -289,7 +289,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test "create sends no email" do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    assert_no_change :of => lambda { ActionMailer::Base.deliveries.count } do
+    assert_no_change :of => -> { ActionMailer::Base.deliveries.count } do
       post(admin_api_users_path(:format => :xml),
                 :username => 'chuck',
                 :email => 'chuck@norris.us',
@@ -351,7 +351,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test "create forbidden if multiple_users is not allowed" do
-    assert_no_change :of => lambda { ActionMailer::Base.deliveries.count } do
+    assert_no_change :of => -> { ActionMailer::Base.deliveries.count } do
       post(admin_api_users_path(:format => :xml),
                 :username => 'chuck',
                 :email => 'chuck@norris.us',
@@ -547,7 +547,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'activate sends no email' do
     chuck = FactoryBot.create :user, :account => @provider
-    assert_no_change :of => lambda { ActionMailer::Base.deliveries.count } do
+    assert_no_change :of => -> { ActionMailer::Base.deliveries.count } do
       put "/admin/api/users/#{chuck.id}/activate.xml?provider_key=#{@provider.api_key}"
     end
     assert_response :success

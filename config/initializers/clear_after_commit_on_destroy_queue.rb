@@ -1,1 +1,1 @@
-ActionDispatch::Callbacks.after(lambda{ThreeScale::AfterCommitOnDestroy.clear!})
+ActionDispatch::Callbacks.after(->{ThreeScale::AfterCommitOnDestroy.clear!})

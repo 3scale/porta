@@ -9,7 +9,7 @@ module Account::CreditCard
 
     before_destroy :unstore_credit_card!
 
-    scope :expired_credit_card, lambda { |time|
+    scope :expired_credit_card, ->(time) {
       expired_credit_card = joins(:payment_detail).where.has do
         (credit_card_expires_on == time) | (payment_detail.credit_card_expires_on == time)
       end

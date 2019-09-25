@@ -308,7 +308,7 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'by_active_since returns cinstances based on first_daily_traffic_at' do
-    days_to_time_format = lambda{ |x| x.days.ago.to_time.strftime("%Y-%m-%d") }
+    days_to_time_format = ->(x){ x.days.ago.to_time.strftime("%Y-%m-%d") }
 
     app1 = FactoryBot.create(:cinstance, first_daily_traffic_at: 3.days.ago.to_time)
     app2 = FactoryBot.create(:cinstance, first_daily_traffic_at: 1.day.ago.to_time)

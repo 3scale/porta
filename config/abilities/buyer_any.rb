@@ -39,7 +39,7 @@ Ability.define do |user|
       can :manage, :applications
     end
 
-    new_app_condition = lambda do
+    new_app_condition = -> do
       (provider.settings.multiple_applications_visible? ||
           !provider.settings.multiple_applications_visible? &&
               account.bought_cinstances.count.zero?)

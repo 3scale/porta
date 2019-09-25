@@ -3,9 +3,9 @@ class CMS::Template < ApplicationRecord
   include CMS::Filtering
 
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
-  scope :for_rails_view, lambda { |path| where(rails_view_path: path.to_s) }
+  scope :for_rails_view, ->(path) { where(rails_view_path: path.to_s) }
 
-  scope :but, lambda { | *klasses | where{ type.not_in klasses.map(&:to_s) } }
+  scope :but, ->(*klasses) { where{ type.not_in klasses.map(&:to_s) } }
   scope :recents, -> { order(updated_at: :desc).where.has { updated_at != created_at } }
   attr_accessible :provider, :draft, :liquid_enabled, :handler
 
