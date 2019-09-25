@@ -32,10 +32,11 @@ class Api::ServicesController < Api::BaseController
   def settings
     activate_menu :serviceadmin, :integration, :settings
     @alert_limits = Alert::ALERT_LEVELS
+    settings_apiap if apiap?
   end
 
   def usage_rules
-    raise ActiveRecord::RecordNotFound unless provider_can_use?(:api_as_product)
+    raise ActiveRecord::RecordNotFound unless apiap?
     activate_menu :serviceadmin, :applications, :usage_rules
     @alert_limits = Alert::ALERT_LEVELS
   end
@@ -82,6 +83,11 @@ class Api::ServicesController < Api::BaseController
                         :txt_support, :terms,
                         {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
     params.require(:service).permit(permitted_params)
+  end
+
+  # This will be the default 'settings' when apiap is live
+  def settings_apiap
+    render :settings_apiap
   end
 
   protected

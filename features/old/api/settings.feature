@@ -10,6 +10,7 @@ Feature: API Settings
 
   Scenario: Referrer filtering on backend v2
     Given provider "foo.example.com" uses backend v2 in his default service
+      And I have rolling update api_as_product disabled
       And I log in as provider "foo.example.com"
       And I go to the settings page for service "API" of provider "foo.example.com"
      And I check "Require referrer filtering"
