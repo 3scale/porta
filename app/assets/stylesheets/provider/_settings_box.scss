@@ -107,5 +107,6 @@
 
   &--is-erroneous {
     border-color: $error-color;
+    @include white-box-shadow;
   }
 }

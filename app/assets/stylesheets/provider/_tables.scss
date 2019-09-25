@@ -57,8 +57,8 @@ table.data {
   border: solid $body-background line-height-times(1);
   margin-bottom: line-height-times(1);
   margin-top: line-height-times(1/2);
-  box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 2px 0px;
   width: 100%;
+  @include white-box-shadow;
 
   a.is-inline {
     display: inline;

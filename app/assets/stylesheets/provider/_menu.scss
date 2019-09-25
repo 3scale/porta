@@ -41,6 +41,7 @@ ul.login-form-links {
   font-size: $font-size-sm;
   padding: line-height-times(1);
   margin: line-height-times(-1);
+  margin-bottom: line-height-times(1);
   background-color: $body-background;
 
   .active {
