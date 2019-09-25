@@ -29,6 +29,10 @@ class FrontendController < ApplicationController
 
   private
 
+  def apiap?
+    current_account.provider_can_use?(:api_as_product)
+  end
+
   def do_nothing_if_head
     render head: :success, nothing: true if request.head?
   end

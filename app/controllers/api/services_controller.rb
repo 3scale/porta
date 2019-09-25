@@ -90,10 +90,6 @@ class Api::ServicesController < Api::BaseController
     render :settings_apiap
   end
 
-  def apiap?
-    current_account.provider_can_use?(:api_as_product)
-  end
-
   protected
 
   def service_name_changed?
