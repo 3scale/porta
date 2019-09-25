@@ -100,7 +100,7 @@ class Service < ApplicationRecord
   scope :accessible, -> { where.not(state: DELETE_STATE) }
   scope :deleted, -> { where(state: DELETE_STATE) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
-  scope(:permitted_for_user, ->(user) do
+  scope :permitted_for_user, ->(user) do
     # TODO: this is probably wrong...
     # how come if it does not have access_to_all_services but it can not use service_permissions,
     # then we allow them all?!!
@@ -110,7 +110,7 @@ class Service < ApplicationRecord
     else
       all
     end
-  end)
+  end
 
   validates :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
 
