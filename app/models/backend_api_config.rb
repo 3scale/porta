@@ -30,6 +30,12 @@ class BackendApiConfig < ApplicationRecord
     System::Database.oracle? ? common_query.where('path is NOT NULL') : common_query.where.not(path: '')
   end
 
+  scope :accessible, -> do
+    joining { [service, backend_api] }.where.has do
+      (service.state != ::Service::DELETE_STATE) & (backend_api.state != ::BackendApi::DELETED_STATE)
+    end
+  end
+
   delegate :private_endpoint, to: :backend_api
 
   def path=(value)

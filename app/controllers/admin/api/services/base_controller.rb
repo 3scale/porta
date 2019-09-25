@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Api::Services::BaseController < Admin::Api::BaseController
 
   private
