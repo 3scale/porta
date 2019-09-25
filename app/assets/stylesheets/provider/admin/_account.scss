@@ -16,7 +16,20 @@
   }
 
   .overview-box {
-    table.list, p {
+    & > table.list {
+      margin: 1px;
+      @include white-box-shadow;
+
+      tr:last-child {
+        th, td {
+          border-bottom: 2px solid transparent;
+        }
+      }
+    }
+
+    #account-redhat-connect p,
+    #account-cancellation p {
+      margin: 1px;
       @include white-box-shadow;
     }
 

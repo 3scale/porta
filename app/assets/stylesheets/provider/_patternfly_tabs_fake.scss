@@ -56,7 +56,7 @@
 
       &.pf-m-current {
         .pf-c-tabs__button::before {
-          border-bottom-width: 0;
+          border-bottom-color: $white;
         }
 
         .pf-c-tabs__button {
@@ -88,11 +88,6 @@
       top: 0;
     }
 
-    .pf-c-tabs__item:last-of-type {
-      .pf-c-tabs__button::before {
-        border-right-width: 1px;
-      }
-    }
   }
 }
 
