@@ -1,3 +1,5 @@
+@import 'provider/layouts/_main.scss';
+
 .logo-3scale {
   position: relative;
   float: left;
@@ -39,8 +41,8 @@
 }
 
 #logo_container {
-  background-color: $white;
   padding: line-height-times(1);
+  @include white-box-shadow;
 
   .delete {
     float: right;

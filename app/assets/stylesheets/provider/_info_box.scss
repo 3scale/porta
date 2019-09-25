@@ -4,6 +4,7 @@
   display: block;
   margin: line-height-times(1/2) 0;
   padding: line-height-times(1);
+  @include white-box-shadow;
 
   &--notice {
     background: $dirty-color;

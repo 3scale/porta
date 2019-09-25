@@ -1,8 +1,8 @@
 @import 'provider/typography'; // needed for dev portals that include this stylesheet directly
 
 .Stats {
-  background-color: $white;
-  padding: line-height-times(1)
+  padding: line-height-times(1);
+  @include white-box-shadow;
 }
 
 .StatsMenu-container,
