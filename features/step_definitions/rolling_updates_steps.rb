@@ -14,3 +14,9 @@ end
 When(/^I have (\w+) feature (enabled|disabled)$/) do |feature, enabled|
   TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
 end
+
+Given(/^I have rolling update (\w+) (enabled|disabled)$/) do |feature, enabled|
+  Account.any_instance.stubs(:provider_can_use?).returns(true)
+  Account.any_instance.stubs(:provider_can_use?).with(feature).returns(false | true)
+  TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
+end
