@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190925133159) do
+ActiveRecord::Schema.define(version: 20190925152107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1133,6 +1133,14 @@ ActiveRecord::Schema.define(version: 20190925133159) do
 
   add_index "proxies", ["service_id"], name: "index_proxies_on_service_id", using: :btree
   add_index "proxies", ["staging_domain", "production_domain"], name: "index_proxies_on_staging_domain_and_production_domain", using: :btree
+
+  create_table "proxy_config_affecting_changes", force: :cascade do |t|
+    t.integer  "proxy_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "proxy_config_affecting_changes", ["proxy_id"], name: "index_proxy_config_affecting_changes_on_proxy_id", unique: true, using: :btree
 
   create_table "proxy_configs", force: :cascade do |t|
     t.integer  "proxy_id",    limit: 8,                null: false
