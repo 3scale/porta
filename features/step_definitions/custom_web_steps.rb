@@ -182,7 +182,7 @@ end
 Then /^I should see the following definition list:$/ do |table|
   # Not quite sure why single #next is not enought, possibly because
   # the first next sibling is just a text node?
-  table.diff!(extract_table('dl', 'dt', lambda { |dt| [dt, dt.next.next] }))
+  table.diff!(extract_table('dl', 'dt', ->(dt) { [dt, dt.next.next] }))
 end
 
 Then /^I should not see "([^"]*)" column$/ do |text|

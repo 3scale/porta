@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Signup::DeveloperAccountManager < Signup::AccountManager
-  self.account_builder = lambda do |account|
+  self.account_builder = ->(account) do
     account.buyer = true
     account
   end

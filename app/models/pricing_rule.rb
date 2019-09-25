@@ -21,7 +21,7 @@ class PricingRule < ApplicationRecord
   validates :cost_per_unit, numericality: true
   validates :cost_per_unit, format: { with: /\A\d+\.?\d{0,#{DECIMALS}}\z/, message: "maximum decimals is #{DECIMALS}." }
 
-  scope :for_metric, lambda { |metric| where(:metric_id => metric.to_param) }
+  scope :for_metric, ->(metric) { where(:metric_id => metric.to_param) }
 
   delegate :service, :to => :plan
 

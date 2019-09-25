@@ -7,11 +7,11 @@ module Account::MasterMethods
     has_many :provider_accounts, -> { providers }, :class_name  => 'Account', :foreign_key => 'provider_account_id'
     alias_method :providers, :provider_accounts
 
-    scope :by_provider_key, lambda { |provider_key|
+    scope :by_provider_key, ->(provider_key) {
       includes(:bought_cinstances).references(:bought_cinstances).merge(Cinstance.by_user_key(provider_key))
     }
 
-    scope :by_service_token, lambda { |service_token|
+    scope :by_service_token, ->(service_token) {
       includes(:service_tokens).where(service_tokens: { value: service_token })
     }
 

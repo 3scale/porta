@@ -112,9 +112,9 @@ class Plan < ApplicationRecord
 
   scope :latest, -> { limit(5).order(created_at: :desc) }
 
-  scope :by_state, lambda { |state|  where({:state => state.to_s})}
+  scope :by_state, ->(state) {  where({:state => state.to_s})}
 
-  scope :by_type, lambda { |type| where({ :type => type.to_s })}
+  scope :by_type, ->(type) { where({ :type => type.to_s })}
 
   # Customzied plans
   scope :customized, -> { where("#{table_name}.original_id <> 0") }

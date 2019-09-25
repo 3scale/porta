@@ -135,7 +135,7 @@ module TestHelpers
                        :since  => options[:since]}
 
       change_options = options.slice(:from, :to, :by)
-      change_options[:of] = lambda { stats.total(stats_options) }
+      change_options[:of] = -> { stats.total(stats_options) }
 
       assert_change change_options, &block
     end

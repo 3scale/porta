@@ -12,7 +12,7 @@ namespace :fields_definitions do
     diff = (provider_fields.keys - master_fields.keys).group_by{|tuple| tuple.shift}
     diff.values.each{|arr| arr.flatten! }
 
-    reduce = lambda do |objects|
+    reduce = ->(objects) do
       objects.map do |object|
         existing = object.class.builtin_fields.map do |field|
           field if object.send(field).present?

@@ -388,7 +388,7 @@ class AccountTest < ActiveSupport::TestCase
   test 'forum is lazily created for providers' do
     account = nil
 
-    assert_no_change :of => lambda { Forum.count } do
+    assert_no_change :of => -> { Forum.count } do
       account = FactoryBot.create(:simple_provider)
     end
 
@@ -606,7 +606,7 @@ class AccountTest < ActiveSupport::TestCase
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
     buyer_account.buy!(plan)
 
-    assert_change :of => lambda { Account.providers.count }, :by => -1 do
+    assert_change :of => -> { Account.providers.count }, :by => -1 do
       provider_account.destroy
     end
   end

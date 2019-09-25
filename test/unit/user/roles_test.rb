@@ -105,7 +105,7 @@ class User::RolesTest < ActiveSupport::TestCase
   test 'role is not mass assignable' do
     user = FactoryBot.create(:user)
 
-    assert_no_change :of => lambda { user.role } do
+    assert_no_change :of => -> { user.role } do
       user.update_attributes(:role => :admin)
     end
   end

@@ -291,7 +291,7 @@ namespace :fixes do
 
     logger = ActiveSupport::Logger.new('log/fixes_account_contract_states.log')
 
-    exec_batch = lambda do |label, scope, states|
+    exec_batch = ->(label, scope, states) do
       total = scope.count
       counter = 0
       scope.find_in_batches do |records|

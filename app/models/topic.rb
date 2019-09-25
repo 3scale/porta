@@ -39,11 +39,11 @@ class Topic < ApplicationRecord
   validates :body, presence: { :on => :create }
   validates :title, :permalink, length: { maximum: 255 }
 
-  scope :order_by, lambda {|param|
+  scope :order_by, ->(param) {
                      joins('INNER JOIN posts ON topics.last_post_id = posts.id')
                                    .order((param && ['hits', 'posts_count'].include?(param)) ? "#{param} desc" : 'posts.created_at desc')
                    }
-  scope :for_category, lambda { |*args| where(['topic_category_id = ?', args.first || nil]) }
+  scope :for_category, ->(*args) { where(['topic_category_id = ?', args.first || nil]) }
 
   scope :with_latest_post, -> { joins('INNER JOIN posts ON topics.last_post_id = posts.id')}
 

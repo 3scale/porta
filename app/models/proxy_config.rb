@@ -2,7 +2,7 @@ class ProxyConfig < ApplicationRecord
   class InvalidEnvironmentError < StandardError; end
   ENVIRONMENTS = %w(sandbox production).freeze
 
-  ENVIRONMENT_CHECK = lambda do |env|
+  ENVIRONMENT_CHECK = ->(env) do
     ENVIRONMENTS.include?(env) ? env : raise(InvalidEnvironmentError, env)
   end
 

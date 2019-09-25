@@ -21,7 +21,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
     key = "stats/{service:#{@service.backend_id}}/metric:#{@metric.id}/day:20091122"
     @storage.set(key, 1024)
 
-    assert_change :of => lambda { @storage.get(key) }, :from => '1024', :to => '1025' do
+    assert_change :of => -> { @storage.get(key) }, :from => '1024', :to => '1025' do
       Aggregation.aggregate(transaction)
     end
   end
@@ -32,7 +32,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
     key = "stats/{service:#{@service.backend_id}}/metric:#{@metric.id}/hour:2009112218"
     @storage.set(key, 7)
 
-    assert_change :of => lambda { @storage.get(key) }, :from => '7', :to => '8' do
+    assert_change :of => -> { @storage.get(key) }, :from => '7', :to => '8' do
       Aggregation.aggregate(transaction)
     end
   end
@@ -40,7 +40,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
   test 'Aggregation.aggregate does not update set of services' do
     transaction = build_transaction_at(Time.zone.now)
 
-    assert_no_change :of => lambda { @storage.smembers('stats/services') } do
+    assert_no_change :of => -> { @storage.smembers('stats/services') } do
       Aggregation.aggregate(transaction)
     end
   end
@@ -51,7 +51,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
     key = "stats/{service:#{@service.backend_id}}/cinstance:#{@cinstance.id}/metric:#{@metric.id}/day:20091122"
     @storage.set(key, 19)
 
-    assert_change :of => lambda { @storage.get(key) }, :from => '19', :to => '20' do
+    assert_change :of => -> { @storage.get(key) }, :from => '19', :to => '20' do
       Aggregation.aggregate(transaction)
     end
   end
@@ -62,7 +62,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
     key = "stats/{service:#{@service.backend_id}}/cinstance:#{@cinstance.id}/metric:#{@metric.id}/month:20091101"
     @storage.set(key, 243)
 
-    assert_change :of => lambda { @storage.get(key) }, :from => '243', :to => '244' do
+    assert_change :of => -> { @storage.get(key) }, :from => '243', :to => '244' do
       Aggregation.aggregate(transaction)
     end
   end
@@ -73,7 +73,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
     key = "stats/{service:#{@service.backend_id}}/cinstance:#{@cinstance.id}/metric:#{@metric.id}/year:20090101"
     @storage.set(key, 4981)
 
-    assert_change :of => lambda { @storage.get(key) }, :from => '4981', :to => '4982' do
+    assert_change :of => -> { @storage.get(key) }, :from => '4981', :to => '4982' do
       Aggregation.aggregate(transaction)
     end
   end
@@ -84,7 +84,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
     key = "stats/{service:#{@service.backend_id}}/cinstance:#{@cinstance.id}/metric:#{@metric.id}/eternity"
     @storage.set(key, 7008)
 
-    assert_change :of => lambda { @storage.get(key) }, :from => '7008', :to => '7009' do
+    assert_change :of => -> { @storage.get(key) }, :from => '7008', :to => '7009' do
       Aggregation.aggregate(transaction)
     end
   end
@@ -95,7 +95,7 @@ class Stats::AggregationTest < ActiveSupport::TestCase
 
     key = "stats/{service:#{@service.backend_id}}/cinstances"
 
-    assert_change :of => lambda { @storage.smembers(key) },
+    assert_change :of => -> { @storage.smembers(key) },
                   :from => [], :to => [@cinstance.id.to_s] do
       Aggregation.aggregate(transaction)
     end

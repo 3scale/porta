@@ -11,7 +11,7 @@ module Logic
 
         # Has to have default or published application plan
         # so this method should be called only in this scope
-        scope :can_create_application_contract, lambda {
+        scope :can_create_application_contract, -> {
           query = joining { application_plans.outer }.uniq
           .where.has {
             default_application_plan_id.not_eq(nil) |

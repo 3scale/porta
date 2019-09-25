@@ -5,7 +5,7 @@ module CMS::PageRepresenter
 
   property :id
 
-  with_options(if: lambda {|options| options[:short] == false }) do |p|
+  with_options(if: ->(options) { options[:short] == false }) do |p|
     p.property :draft, render_nil: true
     p.property :published, render_nil: true
   end

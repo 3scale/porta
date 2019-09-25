@@ -138,7 +138,7 @@ class Cinstance < Contract
 
   # Return only cinstances live at given time. The time can be single time or
   # period (Range object) (from..to).
-  scope :live_at, lambda { |period|
+  scope :live_at, ->(period) {
     period = period..period unless period.is_a?(Range)
 
     where(['cinstances.created_at <= ?', period.end])
@@ -150,20 +150,20 @@ class Cinstance < Contract
 
   scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }
 
-  scope :can_be_managed, lambda {
+  scope :can_be_managed, -> {
                            includes(plan: :service)
                               .where(['services.buyers_manage_apps = ?', true])
                               .references(:services)
   }
   scope :latest, -> (count = 5) { reorder(created_at: :desc).limit(count)}
-  scope :by_user_key, lambda { |user_key| where({:user_key => user_key}) }
+  scope :by_user_key, ->(user_key) { where({:user_key => user_key}) }
   scope :by_name, ->(query) do
     case query.strip
     when /\Auser_key:\s*#{Cinstance::USER_KEY_FORMAT}\z/ then by_user_key($1)
     else all.merge(Contract.by_name(query))
     end
   end
-  scope :by_application_id, lambda { |app_id| where({:application_id => app_id}) }
+  scope :by_application_id, ->(app_id) { where({:application_id => app_id}) }
 
   def self.by_service(service)
     if service == :all || service.blank?
@@ -173,14 +173,14 @@ class Cinstance < Contract
     end
   end
 
-  scope :by_service_id, lambda { |service_id|
+  scope :by_service_id, ->(service_id) {
     where(service_id: service_id)
   }
 
-  scope :by_active_since, lambda {|date| where('first_daily_traffic_at >= ?', date) }
-  scope :by_inactive_since, lambda {|date| where('first_daily_traffic_at <= ?', date) }
+  scope :by_active_since, ->(date) { where('first_daily_traffic_at >= ?', date) }
+  scope :by_inactive_since, ->(date) { where('first_daily_traffic_at <= ?', date) }
 
-  scope :by_plan_system_name, lambda { |system_names|
+  scope :by_plan_system_name, ->(system_names) {
     names = [system_names].flatten
 
     proc_like_system_name = proc { |cinstance, name| cinstance.plan.system_name.like(name) }
@@ -494,7 +494,7 @@ class Cinstance < Contract
     end
   end
 
-  scope :without_ids, lambda { |id| where(["#{table_name}.id <> ?", id]) }
+  scope :without_ids, ->(id) { where(["#{table_name}.id <> ?", id]) }
 
   def set_end_user_required_from_plan
     if end_user_required.nil?
