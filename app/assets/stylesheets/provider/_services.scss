@@ -50,7 +50,6 @@
     clear: left;
     list-style: none;
     background-color: $white;
-    border-radius: $border-radius;
     padding: line-height-times(1);
     border: $border-width solid $border-color;
     position: relative;
@@ -150,6 +149,8 @@
 
   .latest-alerts, .latest-apps, .service-settings, .service-plans, .application-plans, #mini-charts {
     @extend ul.listing;
+    border: none;
+    @include white-box-shadow;
   }
 
   p {

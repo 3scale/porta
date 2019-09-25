@@ -21,7 +21,7 @@
 
   & + #tab-content {
     background-color: $white;
-    padding-top: line-height-times(1);
+    padding: line-height-times(1);
     @include border-bottom-left-radius(0);
 
     h1 {

@@ -23,9 +23,9 @@
 
     #backends > table {
       box-shadow: none;
-      border: solid $white 0.75rem;
-      margin: 0;
+      border-width: 0;
       table-layout: fixed;
+      width: 100%;
 
       th {
         text-align: left;
@@ -430,9 +430,6 @@ a:hover .u-notice {
   }
 
   &--content {
-    background-color: $white;
-    border: 1px solid #d2d2d2;
-    border-top: none;
 
     & > input {
       display: none;
@@ -451,6 +448,9 @@ a:hover .u-notice {
     & > #backends.active {
       display: block;
       border-top: 0;
+      margin: 1px 0 0 1px;
+      padding: line-height-times(1);
+      @include white-box-shadow;
     }
 
     & > #products.active {
@@ -461,8 +461,10 @@ a:hover .u-notice {
       }
     }
 
+    & > #products.active .ApiFilter,
     & > #backends.active .ApiFilter {
-      margin-left: line-height-times(1 / 2);
+      margin-left: 0;
+      padding: 1px;
     }
 
     nav.DashboardNavigation--services {

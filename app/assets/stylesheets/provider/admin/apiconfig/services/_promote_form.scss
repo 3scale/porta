@@ -1,5 +1,6 @@
 // again overiding formtastic, it's horrible.
 .PromoteForm {
+
   margin-top: line-height-times(-3) !important;
   text-align: right !important;
 
@@ -15,4 +16,10 @@
       padding-bottom: 0 !important;
     }
   }
+
+  &.formtastic {
+    box-shadow: none;
+  }
 }
+
+

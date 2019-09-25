@@ -21,8 +21,9 @@ th.collapsible {
 table.contract_table {
 	width: 100%;
 	margin-bottom: line-height-times(1/2);
-	border-collapse: collapse;
   border-spacing: 0;
+  border: line-height-times(1) solid $white;
+  @include white-box-shadow;
 
   &#features {
     table-layout: fixed;
