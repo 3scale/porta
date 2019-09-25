@@ -8,7 +8,7 @@ module ThreeScale
   module Analytics
     class UserTracking
 
-      error_handler = lambda do |status, error|
+      error_handler = ->(status, error) do
         System::ErrorReporting.report_error(error_message: error, parameters: { status: status })
       end
 

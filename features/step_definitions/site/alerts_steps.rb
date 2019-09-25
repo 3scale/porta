@@ -23,7 +23,7 @@ When /^default service of (provider ".+?") has allowed following alerts:$/ do |p
 end
 
 Then /^I should see alert settings:$/ do |table|
-  body = extract_table 'table#notification-settings-table',  'tbody tr', lambda { |tr|
+  body = extract_table 'table#notification-settings-table',  'tbody tr', ->(tr) {
     [tr.text, tr.all(:xpath, '*').map{ |td| td.all(:xpath, '*').map{|input| input['value'] }.join } ].flatten
   }
   table.diff! body

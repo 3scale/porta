@@ -8,7 +8,7 @@ class DeletedObject < ApplicationRecord
     scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
   end
 
-  scope(:deleted_owner, lambda do
+  scope(:deleted_owner, -> do
     join_sql = <<-SQL
       INNER JOIN deleted_objects deleted_owner
         ON deleted_objects.owner_type = deleted_owner.object_type

@@ -17,7 +17,7 @@ rescue
   warn "WARNING: Caught exception: #{$!}"
 end
 
-detect_unicorn_workers = lambda do
+detect_unicorn_workers = -> do
   workers = ENV['UNICORN_WORKERS']
   return Integer(workers) if workers.to_i.positive?
 

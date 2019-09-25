@@ -26,7 +26,7 @@ module System
   module AssociationExtension
     def self.included(base)
       base.define_singleton_method(:to_proc) do
-        lambda { |_| include base }
+        ->(_) { include base }
       end
     end
   end

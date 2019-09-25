@@ -6,7 +6,7 @@ if ENV['DEBUG']
     end
 
     def debug_callback(callback)
-      lambda do |target, *args, &block|
+      ->(target, *args, &block) do
         begin
           result = callback.call(target, *args, &block)
         rescue => e

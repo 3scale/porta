@@ -95,7 +95,7 @@ END
     # FIXME: delete non-existing keys too
     #
 
-    rewrite_progress = lambda do |percent|
+    rewrite_progress = ->(percent) do
       puts "#{percent.round(2)}% completed"
     end
 
@@ -131,7 +131,7 @@ END
       cinstances = accounts.flat_map{|p| p.bought_cinstances }
       total_count = cinstances.size
       index = 0
-      progress = lambda do
+      progress = -> do
         percent = ((index + 1) / total_count.to_f) * 100.0
         puts "#{percent.round(2)}% completed"
         index += 1
@@ -148,7 +148,7 @@ END
       cinstances = Cinstance.find(:all, :conditions => "user_key like 'clean-%'")
       total_count = cinstances.size
       index = 0
-      progress = lambda do
+      progress = -> do
         percent = ((index + 1) / total_count.to_f) * 100.0
         puts "#{percent.round(2)}% completed"
         index += 1

@@ -58,7 +58,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   test 'approve! transitions from pending to approved' do
     account = FactoryBot.create(:pending_account)
 
-    assert_change :of   => lambda { account.state },
+    assert_change :of   => -> { account.state },
                   :from => "pending",
                   :to   => "approved" do
       account.approve!
@@ -69,7 +69,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     account = FactoryBot.create(:pending_account)
     account.reject!
 
-    assert_change :of   => lambda { account.state },
+    assert_change :of   => -> { account.state },
                   :from => "rejected",
                   :to   => "approved" do
       account.approve!

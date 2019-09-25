@@ -57,10 +57,10 @@ class Invoice < ApplicationRecord
   default_scope -> { order('invoices.created_at DESC') }
 
   # 'conditions' is a simple convenience method defined here ... see below
-  scope :before, lambda { |month| where('period < ?', month.beginning_of_month.to_date ) }
-  scope :due, lambda { |time| where(:due_on => time.to_date) }
-  scope :due_on_or_before, lambda { |date| where('due_on <= ?', date ) }
-  scope :finalized_before, lambda { |date| where("state='finalized' AND finalized_at <= ?", date) }
+  scope :before, ->(month) { where('period < ?', month.beginning_of_month.to_date ) }
+  scope :due, ->(time) { where(:due_on => time.to_date) }
+  scope :due_on_or_before, ->(date) { where('due_on <= ?', date ) }
+  scope :finalized_before, ->(date) { where("state='finalized' AND finalized_at <= ?", date) }
 
   # The month should be a YYYY-MM formated string.
   scope :by_month, ->(month) { where(:period => ::Month.parse_month(month)) }
@@ -68,7 +68,7 @@ class Invoice < ApplicationRecord
   scope :by_month_number, ->(month) {  where.has { sift(:month_number, period) == month } }
 
   # Can use * as wildcard in friendly id
-  scope :by_number, lambda { |number|
+  scope :by_number, ->(number) {
     number = number.dup
     if number.tr!('*', '%')
       where('friendly_id LIKE ?', number)
@@ -77,15 +77,15 @@ class Invoice < ApplicationRecord
     end
   }
 
-  scope :without_ids, lambda { |invoice| where('id <> ?', invoice.id) }
-  scope :by_state, lambda { |state| where(:state => state.to_s) }
-  scope :by_buyer, lambda { |buyer| where(:buyer_account_id => buyer.id) }
-  scope :by_buyer_query, lambda { |query| where(:buyer_account_id => Account.buyers.search_ids(query)) }
-  scope :by_provider, lambda { |provider| where(:provider_account_id => provider.id) }
+  scope :without_ids, ->(invoice) { where('id <> ?', invoice.id) }
+  scope :by_state, ->(state) { where(:state => state.to_s) }
+  scope :by_buyer, ->(buyer) { where(:buyer_account_id => buyer.id) }
+  scope :by_buyer_query, ->(query) { where(:buyer_account_id => Account.buyers.search_ids(query)) }
+  scope :by_provider, ->(provider) { where(:provider_account_id => provider.id) }
 
   # the invoice has to be due and at least 3 days later than the last
   # automatic charging date to be automatically chargeable
-  scope :chargeable, lambda { |now|
+  scope :chargeable, ->(now) {
                        where("(state = 'unpaid' OR state = 'pending') AND due_on <= ? AND
                                       (last_charging_retry IS NULL OR last_charging_retry <= ?)", now, now - 3.days)
   }
@@ -98,7 +98,7 @@ class Invoice < ApplicationRecord
   scope :visible_for_buyer, -> { where(state: ["pending", "unpaid", "paid", "failed"]) }
   scope :by_creation_type, ->(creation_type) { where(creation_type: Invoice.creation_types[creation_type]) }
 
-  scope :with_normalized_friendly_id, lambda { |numbering_period, month|
+  scope :with_normalized_friendly_id, ->(numbering_period, month) {
     case numbering_period
     when 'monthly'
       by_year(month.begin.year).by_month_number(month.begin.month).where.has { func(:length, friendly_id) == 16 }

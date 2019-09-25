@@ -4,7 +4,7 @@ module System
   module ErrorReporting
     module_function
 
-    OPTIONS = lambda do |parameters, rack_env = nil|
+    OPTIONS = ->(parameters, rack_env = nil) do
       options = parameters.present? ? { parameters: parameters } : {}
 
       options[:rack_env] = rack_env if rack_env

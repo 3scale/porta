@@ -74,7 +74,7 @@ class Alert < ApplicationRecord
     end
   end
 
-  scope :by_application, lambda { |cinstance|
+  scope :by_application, ->(cinstance) {
     return all if cinstance == :all || cinstance.nil?
 
     where(:cinstance_id => cinstance.id)

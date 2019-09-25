@@ -12,7 +12,7 @@ class ApplicationPlan < Plan
 
   validate :end_users_switch
 
-  scope :provided_by, lambda { |provider|
+  scope :provided_by, ->(provider) {
     if provider == :all || provider.blank?
       {}
     else
