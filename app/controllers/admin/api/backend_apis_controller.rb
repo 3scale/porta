@@ -8,7 +8,8 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   clear_respond_to
   respond_to :json
 
-  representer ::BackendApi
+  wrap_parameters BackendApi
+  representer BackendApi
 
   paginate only: :index
 
