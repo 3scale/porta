@@ -19,6 +19,7 @@ Feature: API Settings
 
   Scenario: Changing the backend version including OIDC option
     Given provider "foo.example.com" uses backend v2 in his default service
+    And I have rolling update api_as_product disabled
     And provider "foo.example.com" has multiple applications enabled
     And a default application plan of provider "foo.example.com"
     And a buyer "bob" signed up to provider "foo.example.com"
