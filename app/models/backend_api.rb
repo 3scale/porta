@@ -34,6 +34,16 @@ class BackendApi < ApplicationRecord
 
   scope :orphans, -> { where.has { id.not_in(BackendApiConfig.selecting { :backend_api_id }) } }
 
+  scope :without_service, -> do |service_id|
+    where.has do
+      not_exists(
+        BackendApiConfig
+        .by_service(service_id)
+        .by_backend_api(BabySqueel[:backend_apis].id)
+      )
+    end
+  end
+
   scope :oldest_first, -> { order(created_at: :asc) }
   scope :accessible, -> { where.not(state: DELETED_STATE) }
 

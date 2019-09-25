@@ -89,4 +89,34 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     assert @config.valid?
     assert_empty @config.errors[:backend_api_id]
   end
+
+  test '.by_service returns the configs related to that service' do
+    account = FactoryBot.create(:simple_account)
+    services = FactoryBot.create_list(:service, 3, account: account)
+    backend_apis = FactoryBot.create_list(:backend_api, 3, account: account)
+
+    configs = 2.times.map do |index|
+      FactoryBot.create(:backend_api_config, backend_api: backend_apis[index], service: services[index])
+    end
+    configs << FactoryBot.create(:backend_api_config, service: services[0])
+
+    assert_same_elements configs.values_at(0, -1).map(&:id), BackendApiConfig.by_service(services[0]).pluck(:id)
+    assert_equal [configs[1].id], BackendApiConfig.by_service(services[1]).pluck(:id)
+    assert_empty BackendApiConfig.by_service(services[2]).pluck(:id)
+  end
+
+  test '.by_backend_api returns the configs related to that backend_api' do
+    account = FactoryBot.create(:simple_account)
+    services = FactoryBot.create_list(:service, 3, account: account)
+    backend_apis = FactoryBot.create_list(:backend_api, 3, account: account)
+
+    configs = 2.times.map do |index|
+      FactoryBot.create(:backend_api_config, backend_api: backend_apis[index], service: services[index])
+    end
+    configs << FactoryBot.create(:backend_api_config, backend_api: backend_apis[0])
+
+    assert_same_elements configs.values_at(0, -1).map(&:id), BackendApiConfig.by_backend_api(backend_apis[0]).pluck(:id)
+    assert_equal [configs[1].id], BackendApiConfig.by_backend_api(backend_apis[1]).pluck(:id)
+    assert_empty BackendApiConfig.by_backend_api(backend_apis[2]).pluck(:id)
+  end
 end
