@@ -87,6 +87,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def show
+    @apiap = apiap?
     respond_to do |format|
       format.html do
         @show_presenter = Api::IntegrationsShowPresenter.new(@proxy)
