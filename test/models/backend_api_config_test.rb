@@ -73,4 +73,20 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     @config.path = 'bar'
     assert @config.valid?
   end
+
+  test 'validates uniqueness of backend_api within service' do
+    service = FactoryBot.create(:simple_service)
+    backend_api = FactoryBot.create(:backend_api, account: service.account)
+    FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
+
+    @config.service = service
+    @config.backend_api = backend_api
+    @config.path = 'another_path'
+    refute @config.valid?
+    assert_includes @config.errors[:backend_api_id], 'has already been taken'
+
+    @config.backend_api = FactoryBot.create(:backend_api, account: service.account)
+    assert @config.valid?
+    assert_empty @config.errors[:backend_api_id]
+  end
 end
