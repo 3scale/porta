@@ -1,6 +1,6 @@
 .SettingsBox,
 .IntegrationSettingsBox {
-  background-color: $white;
+  @include white-box-shadow;
   position: relative;
 
   &-toggle {
@@ -25,8 +25,6 @@
   }
 
   &-summary {
-    border: $border-width solid $border-color;
-    border-radius: $border-radius;
     min-height: line-height-times(2);
     padding: line-height-times(1);
     position: relative;
@@ -90,10 +88,9 @@
   }
 
   &-summary {
-    border: $border-width-lg solid $border-color;
+    border: $border-width-lg solid transparent;
     min-height: line-height-times(2);
     padding: line-height-times(1);
-    border-radius: $border-radius;
     position: relative;
   }
 
