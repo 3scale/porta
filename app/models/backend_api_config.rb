@@ -7,6 +7,12 @@ class BackendApiConfig < ApplicationRecord
   belongs_to :service, inverse_of: :backend_api_configs
   belongs_to :backend_api, inverse_of: :backend_api_configs
 
+  include ThreeScale::Search::Scopes
+
+  self.allowed_sort_columns = %w[backend_apis.name backend_apis.private_endpoint backend_api_config.path]
+  self.default_sort_column = 'backend_apis.name'
+  self.default_sort_direction = :asc
+
   attribute :path, ActiveRecord::Type::StringNotNil.new
 
   has_many :backend_api_metrics, through: :backend_api, source: :metrics

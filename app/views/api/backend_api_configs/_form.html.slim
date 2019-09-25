@@ -1,0 +1,13 @@
+= form.inputs do
+  - persisted = @backend_api_config.persisted?
+  = form.input :backend_api_id,
+                as: :select,
+                collection: current_account.backend_apis,
+                include_blank: false,
+                prompt: 'Select a Backend',
+                label: 'Backend',
+                input_html: { disabled: persisted }
+  = form.input :path, hint: persisted ? 'Changing this path will only affect the behaviour of this Backend within the context of this Product' : ''
+
+= form.buttons do
+  = form.commit_button @backend_api_config.new_record? ? 'Add' : 'Update'

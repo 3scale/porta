@@ -262,7 +262,7 @@ table#metrics {
   }
 }
 
-table#mapping_rules {
+table#backend_api_configs,table#mapping_rules {
   tr th a, tr td.actions a {
     display: inline-block;
   }
