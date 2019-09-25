@@ -118,11 +118,11 @@ brew services start memcached postgresql
 
 #### Sphinx Search
 
-[Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7**:
+[Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7** and compiled from source:
 
 ```shell
 sed -i '' -e 's|depends_on "mysql"|depends_on "mysql@5.7"|g' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb
-brew install sphinx
+brew install --build-from-source sphinx
 ```
 
 #### Redis
