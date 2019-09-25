@@ -22,8 +22,8 @@ class BackendApiConfig < ApplicationRecord
   validates :path, uniqueness: { scope: :service_id, case_sensitive: false }
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
 
-  scope :by_service,     ->(param_service_id)     { where.has { service_id     == param_service_id     } }
-  scope :by_backend_api, ->(param_backend_api_id) { where.has { backend_api_id == param_backend_api_id } }
+  scope :by_service,     ->(service_id)     { where.has { self.service_id     == service_id     } }
+  scope :by_backend_api, ->(backend_api_id) { where.has { self.backend_api_id == backend_api_id } }
 
   scope :with_subpath, -> do
     common_query = where.not(path: '/')
