@@ -9,7 +9,7 @@ module User::Roles
     symbolize :role
     before_save :set_role
 
-    scope :by_role, lambda { |role| where({:role => role.to_s})}
+    scope :by_role, ->(role) { where({:role => role.to_s})}
 
     ROLES.each do |role|
       #adds method admin? to check whether user role is admin (other roles too)

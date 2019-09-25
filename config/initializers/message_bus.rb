@@ -11,7 +11,7 @@ end
 
 ThreeScale::MessageBusConfig.new(Rails.configuration.three_scale.message_bus).configure_message_bus!
 
-authenticated_request = lambda do |env|
+authenticated_request = ->(env) do
   ActiveRecord::Base.connection_pool.with_connection do
     (env['authenticated_request'] ||= AuthenticatedSystem::Request.new(ActionDispatch::Request.new(env)))
   end

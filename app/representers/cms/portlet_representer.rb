@@ -10,7 +10,7 @@ module CMS::PortletRepresenter
   property :name
   property :description
 
-  with_options(if: lambda {|options| options[:short] == false }) do |p|
+  with_options(if: ->(options) { options[:short] == false }) do |p|
     p.property :draft
     p.property :published
   end

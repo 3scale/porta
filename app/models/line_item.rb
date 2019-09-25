@@ -21,7 +21,7 @@ class LineItem < ApplicationRecord
   end
 
   # REFACTOR: REMOVE!
-  scope :by_period_including, lambda { |time|
+  scope :by_period_including, ->(time) {
       where(["#{table_name}.created_at <= ? AND #{table_name}.finished_at >= ?", time, time])
   }
 

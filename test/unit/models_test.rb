@@ -29,7 +29,7 @@ class ModelsTest < ActiveSupport::TestCase
     Rails.application.eager_load!
     models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy]
 
-    validate_columns_for = lambda do |model, options = {}|
+    validate_columns_for = ->(model, options = {}) do
       exception_attributes = exceptions.fetch(model.name, [])
       next if exception_attributes == :all
       model.columns.each do |column|

@@ -32,7 +32,7 @@ module Account::ProviderDomains
 
     scope :by_domain, ->(domain) { where(domain: domain) }
     scope :by_self_domain, ->(domain) { where(self_domain: domain) }
-    scope :by_admin_domain, lambda { |domain|
+    scope :by_admin_domain, ->(domain) {
       table = table_name
       where("(#{table}.self_domain = :domain) OR (#{table}.self_domain IS NULL AND provider_accounts_accounts.domain = :domain)",
             { :domain => domain })

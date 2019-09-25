@@ -71,7 +71,7 @@ end
 
 Then /^going to the page "([^\"]*)" should raise "([^"]*)"$/ do |title, e|
   path = Page.find_by_title(title).path
-  lambda { visit(path) }.should raise_error(e.constantize)
+  -> { visit(path) }.should raise_error(e.constantize)
 end
 
 Then /^the page "([^"]*)" should exist$/ do |name|

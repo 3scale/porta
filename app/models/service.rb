@@ -100,7 +100,7 @@ class Service < ApplicationRecord
   scope :accessible, -> { where.not(state: DELETE_STATE) }
   scope :deleted, -> { where(state: DELETE_STATE) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
-  scope(:permitted_for_user, lambda do |user|
+  scope(:permitted_for_user, ->(user) do
     # TODO: this is probably wrong...
     # how come if it does not have access_to_all_services but it can not use service_permissions,
     # then we allow them all?!!
@@ -466,7 +466,7 @@ class Service < ApplicationRecord
     system_name.to_s.parameterize.tr('_','-')
   end
 
-  APPLY_I18N = lambda do |args|
+  APPLY_I18N = ->(args) do
     args.map do |opt|
       [
         I18n.t(opt, scope: :deployment_options, raise: ActionView::Base.raise_on_missing_translations),

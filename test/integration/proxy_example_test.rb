@@ -124,7 +124,7 @@ class ProxyExampleTest < ActiveSupport::TestCase
   end
 
   def wait_for(port, seconds = 10)
-    opened = lambda do
+    opened = -> do
       begin
         TCPSocket.new('127.0.0.1', port)
       rescue Errno::ETIMEDOUT, Errno::ECONNREFUSED

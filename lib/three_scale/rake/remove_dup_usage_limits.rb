@@ -33,7 +33,7 @@ module ThreeScale
 
       def run!
         index = 0
-        progress = lambda do
+        progress = -> do
           index += 1
           break unless (index % PROGRESS_EACH) == 0
           percent = (index / @total_count.to_f) * 100.0

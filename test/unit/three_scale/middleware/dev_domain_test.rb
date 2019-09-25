@@ -6,7 +6,7 @@ class ThreeScale::Middleware::DevDomainTest < ActiveSupport::TestCase
     env = {}
     res = [200, {}, [Object.new.freeze]]
 
-    app = lambda do |e|
+    app = ->(e) do
       assert_equal env, e
       assert_equal env.object_id, e.object_id
 
@@ -24,7 +24,7 @@ class ThreeScale::Middleware::DevDomainTest < ActiveSupport::TestCase
       'HTTP_X_FORWARDED_HOST' => 'foobar.example.com'
     }
     res = [200, {}, [Object.new.freeze]]
-    app = lambda do |e|
+    app = ->(e) do
       assert_equal({
                      'HTTP_HOST' => 'api.example.net',
                      'HTTP_X_FORWARDED_HOST' => 'foobar.example.com,api.example.net',
@@ -41,7 +41,7 @@ class ThreeScale::Middleware::DevDomainTest < ActiveSupport::TestCase
   end
 
   def test_redirect
-    app = lambda do |env|
+    app = ->(env) do
       [ 301, {'Location' => 'http://api.foo.example.com/path' }, [] ]
     end
     middleware = ThreeScale::Middleware::DevDomain.new(app, /\.foo\./)

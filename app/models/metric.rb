@@ -42,7 +42,7 @@ class Metric < ApplicationRecord
   # depend on the database implementation. In order to ensure that behavior, use User.order(:id).first instead.
   #
   default_scope -> { order(:id) }
-  scope :top_level, lambda { where(parent_id: nil) }
+  scope :top_level, -> { where(parent_id: nil) }
   scope :order_by_unit, -> { order('unit') }
 
   # Create one of the predefined, default metrics.

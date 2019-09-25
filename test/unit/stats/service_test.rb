@@ -126,7 +126,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
     cinstance2 = FactoryBot.create(:cinstance, :plan => plan, :name => 'cinstance2')
     cinstance3 = FactoryBot.create(:cinstance, :plan => plan)
 
-    key = lambda do |cinstance|
+    key = ->(cinstance) do
       "stats/{service:#{@service.backend_id}}/cinstance:#{cinstance.application_id}/metric:#{@metric.id}/month:20091201"
     end
 
@@ -234,7 +234,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
     gb = Country.find_or_create_by!(:code => 'GB', :name => 'United Kingdom')
     es = Country.find_or_create_by!(:code => 'ES', :name => 'Spain')
 
-    key = lambda do |code|
+    key = ->(code) do
       "stats/{service:#{@service.backend_id}}/country:#{code}/metric:#{@metric.id}/month:20091201"
     end
 

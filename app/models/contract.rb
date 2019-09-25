@@ -63,22 +63,22 @@ class Contract < ApplicationRecord
   end
 
   # Return contracts bought by given account.
-  scope :bought_by, lambda { |account|
+  scope :bought_by, ->(account) {
     where({:user_account_id => account.id})
   }
 
   scope :with_account, -> { includes([:user_account])}
 
-  scope :by_type, lambda { |contract_type|
+  scope :by_type, ->(contract_type) {
     where({ :type => contract_type.to_s })
   }
 
   # SEARCH SCOPES
-  scope :by_plan_id, lambda { |plan_id|
+  scope :by_plan_id, ->(plan_id) {
     where(plan_id: plan_id.to_i)
   }
 
-  scope :by_name, lambda { |text|
+  scope :by_name, ->(text) {
     # replace start and end of string with % unless already has %
     pattern = text.sub(/(^[^%])/, '%\\1').sub( /([^%]$)/, '\\1%')
     collate = { oracle: 'GENERIC_M_CI', postgres: '"und-x-icu"', mysql: 'UTF8_GENERAL_CI' }.fetch(System::Database.adapter.to_sym)
@@ -86,7 +86,7 @@ class Contract < ApplicationRecord
   }
 
   scope :by_account, ->(account) { where.has { user_account_id == account } }
-  scope :by_account_query, lambda { |query| where( { :user_account_id => Account.buyers.search_ids(query) } ) }
+  scope :by_account_query, ->(query) { where( { :user_account_id => Account.buyers.search_ids(query) } ) }
 
   scope :have_paid_on, ->(paid_date) { where.has { (paid_until >= paid_date) | (variable_cost_paid_until >= paid_date) } }
 

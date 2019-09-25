@@ -12,7 +12,7 @@ namespace :integrate do
 
   orchestration_helpers = Module.new do
     def self.print_banner_around
-      lambda do |line|
+      ->(line) do
         puts
         puts "=" * 40
         puts "== #{Color::BOLD}#{line}#{Color::CLEAR}"

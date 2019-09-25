@@ -20,14 +20,14 @@ end
 
 #OPTIMIZE: remove exception from step signature and make it less code aware
 When /^I request the url of the '([^\']*)' page then I should see a "([^"]*)" exception$/ do |page, e|
-  lambda { visit path_to("the #{page} page") }
+  -> { visit path_to("the #{page} page") }
     .should raise_error(e.constantize)
 end
 
 
 #TODO: dry this with the other steps
 Then /^I request the url of the (page "[^\"]*") an exception should be raised$/ do |page|
-  lambda { visit page.path }
+  -> { visit page.path }
     .should raise_error(ActiveRecord::RecordNotFound)
 end
 

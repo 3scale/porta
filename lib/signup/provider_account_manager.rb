@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Signup::ProviderAccountManager < Signup::AccountManager
-  self.account_builder = lambda do |account|
+  self.account_builder = ->(account) do
     account.provider = true
     account.sample_data = true
     account.email_all_users = true
