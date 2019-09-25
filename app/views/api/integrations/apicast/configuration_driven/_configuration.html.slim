@@ -22,37 +22,7 @@
 
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
-      - if current_account.provider_can_use?(:api_as_product)
-        = f.inputs 'Backends' do
-          table#backend_apis
-            thead
-              tr
-                th Name
-                th Production Public Base URL
-                th
-                th Private Base URL
-                th.actions
-                  = action_link_to :add, new_admin_service_backend_api_configs_path(@service), label: 'Add Backend API'
-            tbody
-              = f.fields_for :backend_api_configs do |backend|
-                - backend_api = backend.object.backend_api
-                tr
-                  td
-                    = link_to provider_admin_backend_api_path(backend_api) do
-                      => backend_api.name
-                  td
-                    = @proxy.default_production_endpoint
-                    | /
-                    = backend.text_field :path, class: 'backend_api_config_path'
-                  td
-                    i.fa.fa-caret-right
-                  td
-                    = backend_api.private_endpoint
-                  td.actions
-                    = link_to '', '#delete-backend-api-config', class: 'action delete'
-                    = backend.hidden_field :_destroy, class: 'destroyer', value: 1, disabled: true
-
-      - else
+      - unless current_account.provider_can_use?(:api_as_product)
         = f.inputs "API" do
           = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend }, autofocus: (@proxy.api_backend == @proxy.default_api_backend) }, hint: api_backend_hint(@proxy.api_backend)
           = help_bubble( 'api_endpoint_bubble', t('api.integrations.proxy.api_endpoint_help_html'))
