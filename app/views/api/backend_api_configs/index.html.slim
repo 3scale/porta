@@ -10,16 +10,15 @@ table#backend_api_configs.data
         = action_link_to :add, new_admin_service_backend_api_config_path(@service), label: 'Add Backend'
   tbody
     - @backend_api_configs.each do |config|
-      - edit_url = edit_admin_service_backend_api_config_path(@service, config)
       tr
         td
-          = link_to config.backend_api.name, edit_url
+          = link_to config.backend_api.name, provider_admin_backend_api_path(config.backend_api)
         td.pattern
           = config.backend_api.private_endpoint
         td.position
           = config.path
         td.actions
-          = link_to '', edit_url, class: 'action edit'
+          = link_to '', edit_admin_service_backend_api_config_path(@service, config), class: 'action edit'
           = link_to '', admin_service_backend_api_config_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
 
 = will_paginate(@backend_api_configs)
