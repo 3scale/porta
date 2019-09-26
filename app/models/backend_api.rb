@@ -34,7 +34,7 @@ class BackendApi < ApplicationRecord
 
   scope :orphans, -> { where.has { id.not_in(BackendApiConfig.selecting { :backend_api_id }) } }
 
-  scope :without_service, -> do |service_id|
+  scope :not_used_by, -> do |service_id|
     where.has do
       not_exists(
         BackendApiConfig
