@@ -127,13 +127,14 @@ javascript:
               value_as_class: true,
               hint: t('formtastic.hints.deployment_option_service_mesh')
 
-    = form.input :deployment_option,
-      as: :radio,
-      collection: Service.deployment_options(current_account)['Plugin'],
-      label: 'Or Plugin',
-      wrapper_html: { class: "radio--iconic plugin" },
-      value_as_class: true,
-      hint: t("formtastic.hints.deployment_option_plugin")
+    - if current_account.provider_can_use?(:plugin_deployment_option)
+      = form.input :deployment_option,
+        as: :radio,
+        collection: Service.deployment_options(current_account)['Plugin'],
+        label: 'Or Plugin',
+        wrapper_html: { class: "radio--iconic plugin" },
+        value_as_class: true,
+        hint: t("formtastic.hints.deployment_option_plugin")
 
   = form.inputs "Authentication" do
     = form.input :proxy_authentication_method,

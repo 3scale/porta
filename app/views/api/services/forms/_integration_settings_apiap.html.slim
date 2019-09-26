@@ -1,6 +1,5 @@
 = javascript_pack_tag 'settings'
-
-- @service.deployment_option ||= 'hosted'
+- @service.deployment_option = 'hosted' if @service.deployment_option.blank?
 
 #settings
   = form.inputs 'Deployment', id: 'integration-wrapper' do

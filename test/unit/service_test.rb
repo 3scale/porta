@@ -75,11 +75,31 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_deployment_options
-    deployment_options = Service.deployment_options
+    account = Account.new
+
+    # All
+    account.stubs(:provider_can_use?).with(:plugin_deployment_option).returns(true)
+    account.stubs(:provider_can_use?).with(:service_mesh_integration).returns(true)
+
+    deployment_options = Service.deployment_options(account)
 
     assert_includes deployment_options, 'Gateway'
     assert_includes deployment_options, 'Plugin'
     assert_includes deployment_options, 'Service Mesh'
+
+    # Service Mesh
+    account.stubs(:provider_can_use?).with(:service_mesh_integration).returns(false)
+
+    deployment_options = Service.deployment_options(account)
+
+    refute_includes deployment_options, 'Service Mesh'
+
+    # Plugin
+    account.stubs(:provider_can_use?).with(:plugin_deployment_option).returns(false)
+
+    deployment_options = Service.deployment_options(account)
+
+    refute_includes deployment_options, 'Plugin'
   end
 
   # Now the last remaining service cannot be destroyed

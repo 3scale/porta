@@ -315,6 +315,13 @@ module Logic
         end
       end
 
+      # Plugins are deprecated
+      # This is to make the transition easier
+      class PluginDeploymentOption < Base
+        def missing_config
+          true
+        end
+      end
       class Unknown < Base
         def missing_config
           false

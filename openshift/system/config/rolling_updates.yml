@@ -21,6 +21,7 @@ base: &default
   proxy_private_base_path: true
   service_mesh_integration: true
   api_as_product: true
+  plugin_deployment_option: false
 
 production:
   <<: *default

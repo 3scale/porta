@@ -152,6 +152,18 @@ class Service < ApplicationRecord
     def self.all
       plugins + gateways + service_mesh
     end
+
+    def self.gateway_active?(_account)
+      true
+    end
+
+    def self.service_mesh_active?(account)
+      account.provider_can_use?(:service_mesh_integration)
+    end
+
+    def self.plugin_active?(account)
+      account.provider_can_use?(:plugin_deployment_option)
+    end
   end
 
   validates :deployment_option, inclusion: { in: DeploymentOption.all }, presence: true
@@ -476,6 +488,7 @@ class Service < ApplicationRecord
       ]
     end.to_h.freeze
   end
+
   private_constant :APPLY_I18N
 
   PLUGINS = APPLY_I18N.call(DeploymentOption.plugins)
@@ -484,10 +497,16 @@ class Service < ApplicationRecord
   SERVICE_MESH = APPLY_I18N.call(DeploymentOption.service_mesh)
   private_constant :SERVICE_MESH
 
-  def self.deployment_options(_ = nil)
+  DEPLOYMENT_OPTIONS_FILTER = ->(account) do
+    ->(key, _value) do
+      DeploymentOption.public_send "#{key.to_s.underscore.gsub(/ +/, '_')}_active?", account
+    end
+  end.freeze
+
+  def self.deployment_options(account = nil)
     gateway = APPLY_I18N.call(DeploymentOption.gateways)
 
-    { 'Gateway' => gateway, 'Plugin'  => PLUGINS, 'Service Mesh'  => SERVICE_MESH }
+    { 'Gateway' => gateway, 'Plugin'  => PLUGINS, 'Service Mesh'  => SERVICE_MESH }.select(&DEPLOYMENT_OPTIONS_FILTER[account])
   end
 
   def deployment_option=(value)
