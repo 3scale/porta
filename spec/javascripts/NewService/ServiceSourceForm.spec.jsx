@@ -70,5 +70,5 @@ it('should render a link to authenticate when Service Discovery is not usable', 
 it('should render a text hint when APIAP is on', () => {
   props.apiap = true
   const wrapper = mount(<ServiceSourceForm {...props} />)
-  expect(wrapper.find('.inline-hints').text()).toEqual('Choosing this option will also create a Backend API')
+  expect(wrapper.find('.inline-hints').text()).toEqual('Choosing this option will also create a Backend')
 })

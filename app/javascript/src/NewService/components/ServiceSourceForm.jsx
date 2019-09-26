@@ -50,7 +50,7 @@ const ServiceSourceForm = (props: Props) => {
                 </a>
               }
             </label>
-            { apiap && <p className="inline-hints">Choosing this option will also create a Backend API</p> }
+            { apiap && <p className="inline-hints">Choosing this option will also create a Backend</p> }
           </li>
         </ol>
       </fieldset>

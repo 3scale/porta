@@ -2440,8 +2440,8 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Mapping Rules List",
-          "description": "Returns the Mapping Rules of a Backend API.",
+          "summary": "Backend Mapping Rules List",
+          "description": "Returns the Mapping Rules of a Backend.",
           "group": "mapping_rule",
           "parameters": [
             {
@@ -2454,7 +2454,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2483,8 +2483,8 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Mapping Rules Read",
-          "description": "Returns the Mapping Rule of a Backend API.",
+          "summary": "Backend Mapping Rules Read",
+          "description": "Returns the Mapping Rule of a Backend.",
           "group": "mapping_rule",
           "parameters": [
             {
@@ -2497,7 +2497,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2519,8 +2519,8 @@
       "operations": [
         {
           "httpMethod": "POST",
-          "summary": "Backend API Mapping Rule Create",
-          "description": "Creates a Mapping Rule of a Backend API.",
+          "summary": "Backend Mapping Rule Create",
+          "description": "Creates a Mapping Rule of a Backend.",
           "group": "mapping_rule",
           "parameters": [
             {
@@ -2533,7 +2533,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2589,8 +2589,8 @@
       "operations": [
         {
           "httpMethod": "PUT",
-          "summary": "Backend API Mapping Rule Update",
-          "description": "Updates a Mapping Rule of a Backend API.",
+          "summary": "Backend Mapping Rule Update",
+          "description": "Updates a Mapping Rule of a Backend.",
           "group": "mapping_rule",
           "parameters": [
             {
@@ -2603,7 +2603,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2662,8 +2662,8 @@
       "operations": [
         {
           "httpMethod": "DELETE",
-          "summary": "Backend API Mapping Rule Delete",
-          "description": "Deletes a Mapping Rule of a Backend API.",
+          "summary": "Backend Mapping Rule Delete",
+          "description": "Deletes a Mapping Rule of a Backend.",
           "group": "mapping_rule",
           "parameters": [
             {
@@ -2676,7 +2676,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2698,7 +2698,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Method List",
+          "summary": "Backend Method List",
           "description": "List the methods of a metric that belongs to a backend api. Methods are metrics that are children of a parent metric.",
           "group": "metric_method",
           "parameters": [
@@ -2712,7 +2712,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2749,7 +2749,7 @@
       "operations": [
         {
           "httpMethod": "POST",
-          "summary": "Backend API Method Create",
+          "summary": "Backend Method Create",
           "description": "Creates a method under a metric that belongs to a backend api.",
           "group": "metric_method",
           "parameters": [
@@ -2763,7 +2763,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2818,7 +2818,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Method Read",
+          "summary": "Backend Method Read",
           "description": "Returns the method of a metric that belongs to a backend api.",
           "group": "metric_method",
           "parameters": [
@@ -2832,7 +2832,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2862,7 +2862,7 @@
       "operations": [
         {
           "httpMethod": "PUT",
-          "summary": "Backend API Method Update",
+          "summary": "Backend Method Update",
           "description": "Updates a method of a metric that belongs to a backend api.",
           "group": "metric_method",
           "parameters": [
@@ -2876,7 +2876,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2929,7 +2929,7 @@
       "operations": [
         {
           "httpMethod": "DELETE",
-          "summary": "Backend API Method Delete",
+          "summary": "Backend Method Delete",
           "description": "Deletes the method of a metric that belongs to a backend api.",
           "group": "metric_method",
           "parameters": [
@@ -2943,7 +2943,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2973,7 +2973,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Metric List",
+          "summary": "Backend Metric List",
           "description": "Returns the list of metrics of a backend api.",
           "group": "metric",
           "parameters": [
@@ -2987,7 +2987,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3016,7 +3016,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Metric Read",
+          "summary": "Backend Metric Read",
           "description": "Returns the metric of a backend api.",
           "group": "metric",
           "parameters": [
@@ -3030,7 +3030,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3053,7 +3053,7 @@
       "operations": [
         {
           "httpMethod": "POST",
-          "summary": "Backend API Metric Create",
+          "summary": "Backend Metric Create",
           "description": "Creates a metric on a backend api.",
           "group": "metric",
           "parameters": [
@@ -3067,7 +3067,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3114,7 +3114,7 @@
       "operations": [
         {
           "httpMethod": "PUT",
-          "summary": "Backend API Metric Update",
+          "summary": "Backend Metric Update",
           "description": "Updates the metric of a backend api.",
           "group": "metric",
           "parameters": [
@@ -3128,7 +3128,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3174,7 +3174,7 @@
       "operations": [
         {
           "httpMethod": "DELETE",
-          "summary": "Backend API Metric Delete",
+          "summary": "Backend Metric Delete",
           "description": "Deletes the metric of a backend api. When you delete a metric or a method, it will also remove all the associated limits.",
           "group": "metric",
           "parameters": [
@@ -3188,7 +3188,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3211,7 +3211,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API List",
+          "summary": "Backend List",
           "description": "Returns the list of backend apis. The results can be paginated.",
           "group": "backend_api",
           "parameters": [
@@ -3247,8 +3247,8 @@
       "operations": [
         {
           "httpMethod": "POST",
-          "summary": "Backend API Create",
-          "description": "Creates a Backend API.",
+          "summary": "Backend Create",
+          "description": "Creates a Backend.",
           "group": "backend_api",
           "parameters": [
             {
@@ -3261,21 +3261,21 @@
             },
             {
               "name": "name",
-              "description": "Name of the backend API",
+              "description": "Name of the backend",
               "dataType": "string",
               "required": true,
               "paramType": "query"
             },
             {
               "name": "description",
-              "description": "Description of the backend API",
+              "description": "Description of the backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
             },
             {
               "name": "private_endpoint",
-              "description": "Private endpoint of the backend API",
+              "description": "Private endpoint of the backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
@@ -3290,8 +3290,8 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Backend API Read",
-          "description": "Returns a backend API.",
+          "summary": "Backend Read",
+          "description": "Returns a backend.",
           "group": "backend_api",
           "parameters": [
             {
@@ -3304,7 +3304,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3319,8 +3319,8 @@
       "operations": [
         {
           "httpMethod": "PUT",
-          "summary": "Backend API Update",
-          "description": "Updates a backend API.",
+          "summary": "Backend Update",
+          "description": "Updates a backend.",
           "group": "backend_api",
           "parameters": [
             {
@@ -3333,28 +3333,28 @@
             },
             {
               "name": "id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
             },
             {
               "name": "name",
-              "description": "Name of the backend API",
+              "description": "Name of the backend",
               "dataType": "string",
               "required": true,
               "paramType": "query"
             },
             {
               "name": "description",
-              "description": "Description of the backend API",
+              "description": "Description of the backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
             },
             {
               "name": "private_endpoint",
-              "description": "Private endpoint of the backend API",
+              "description": "Private endpoint of the backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
@@ -3369,8 +3369,8 @@
       "operations": [
         {
           "httpMethod": "DELETE",
-          "summary": "Backend API Delete",
-          "description": "Deletes a backend API.",
+          "summary": "Backend Delete",
+          "description": "Deletes a backend.",
           "group": "backend_api",
           "parameters": [
             {
@@ -3383,7 +3383,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the backend API.",
+              "description": "ID of the backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"

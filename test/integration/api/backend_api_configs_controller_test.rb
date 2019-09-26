@@ -47,7 +47,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
         path: 'foo'
       }
       assert_redirected_to admin_service_backend_api_configs_path(service)
-      assert_equal 'Backend API added to product.', flash[:notice]
+      assert_equal 'Backend added to product.', flash[:notice]
       assert_equal backend_api, service.backend_api_configs.find_by(path: 'foo').backend_api
     end
   end
@@ -61,7 +61,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
         backend_api_id: other_backend_api_id,
         path: 'foo'
       }
-      assert_equal "Couldn't add Backend API to product", flash[:error]
+      assert_equal "Couldn't add Backend to product", flash[:error]
       refute service.backend_api_configs.find_by(backend_api_id: other_backend_api_id)
     end
   end
@@ -90,7 +90,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
     config = service.backend_api_configs.create(backend_api: backend_api, path: 'foo')
     put admin_service_backend_api_config_path(service, config), backend_api_config: { path: 'bar' }
     assert_redirected_to admin_service_backend_api_configs_path(service)
-    assert_equal 'Backend API config was updated.', flash[:notice]
+    assert_equal 'Backend usage was updated.', flash[:notice]
     assert_equal 'bar', config.reload.path
   end
 
@@ -107,7 +107,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
     assert_change of: -> { service.backend_api_configs.count }, by: -1 do
       delete admin_service_backend_api_config_path(service, config)
       assert_redirected_to admin_service_backend_api_configs_path(service)
-      assert_equal 'The Backend API was removed from the product', flash[:notice]
+      assert_equal 'The Backend was removed from the product', flash[:notice]
       refute service.backend_api_configs.find_by(path: 'foo')
     end
   end

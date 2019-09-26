@@ -12,11 +12,11 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   paginate only: :index
 
-  ##~ @parameter_backend_api_id_by_id = { :name => "id", :description => "ID of the backend API.", :dataType => "int", :required => true, :paramType => "path" }
+  ##~ @parameter_backend_api_id_by_id = { :name => "id", :description => "ID of the backend.", :dataType => "int", :required => true, :paramType => "path" }
 
-  ##~ @parameter_backend_api_name = {:name => "name", :description => "Name of the backend API", :dataType => "string", :required => true, :paramType => "query"}
-  ##~ @parameter_backend_api_description = {:name => "description", :description => "Description of the backend API", :dataType => "string", :required => false, :paramType => "query"}
-  ##~ @parameter_backend_api_private_endpoint = {:name => "private_endpoint", :description => "Private endpoint of the backend API", :dataType => "string", :required => false, :paramType => "query"}
+  ##~ @parameter_backend_api_name = {:name => "name", :description => "Name of the backend", :dataType => "string", :required => true, :paramType => "query"}
+  ##~ @parameter_backend_api_description = {:name => "description", :description => "Description of the backend", :dataType => "string", :required => false, :paramType => "query"}
+  ##~ @parameter_backend_api_private_endpoint = {:name => "private_endpoint", :description => "Private endpoint of the backend", :dataType => "string", :required => false, :paramType => "query"}
 
 
   # swagger
@@ -33,7 +33,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary = "Backend API List"
+  ##~ op.summary = "Backend List"
   ##~ op.description = "Returns the list of backend apis. The results can be paginated."
   ##~ op.group = "backend_api"
   #
@@ -55,8 +55,8 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Backend API Create"
-  ##~ op.description = "Creates a Backend API."
+  ##~ op.summary    = "Backend Create"
+  ##~ op.description = "Creates a Backend."
   ##~ op.group = "backend_api"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -75,8 +75,8 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary = "Backend API Read"
-  ##~ op.description = "Returns a backend API."
+  ##~ op.summary = "Backend Read"
+  ##~ op.description = "Returns a backend."
   ##~ op.group = "backend_api"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -92,8 +92,8 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Backend API Update"
-  ##~ op.description = "Updates a backend API."
+  ##~ op.summary    = "Backend Update"
+  ##~ op.description = "Updates a backend."
   ##~ op.group = "backend_api"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -113,8 +113,8 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Backend API Delete"
-  ##~ op.description = "Deletes a backend API."
+  ##~ op.summary    = "Backend Delete"
+  ##~ op.description = "Deletes a backend."
   ##~ op.group = "backend_api"
   #
   ##~ op.parameters.add @parameter_access_token

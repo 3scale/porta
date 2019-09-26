@@ -1,27 +1,27 @@
 - if can?(:destroy, backend_api)
   hr
   h3
-    ' Backend API deletion
+    ' Backend deletion
 
   p
-    ' Deleting this backend API will
+    ' Deleting this backend will
     strong> irreversibly
-    ' destroy all methods & metrics and mapping rules of this backend API.
-    ' It will also delete in the the application plans all limits and pricing rules set on methods & metrics of this backend API.
+    ' destroy all methods & metrics and mapping rules of this backend.
+    ' It will also delete in the the application plans all limits and pricing rules set on methods & metrics of this backend.
 
   p
     strong> Important!
-    ' Proxy configurations of products using this backend API (staging and production) will not update automatically after deleting the backend API.
+    ' Proxy configurations of products using this backend (staging and production) will not update automatically after deleting the backend.
     ' You need to perform this action on each product using the backend, manually via UI or 3scale API.
 
   - if backend_api.backend_api_configs.any?
-    p The following products are using this backend API:
+    p The following products are using this backend:
     ul
       - for service in backend_api.services
         li = link_to service.name, admin_service_path(service)
 
     p
-      ' Before deleting this backend API, make sure none of the products above is using it.
+      ' Before deleting this backend, make sure none of the products above is using it.
 
   - else
     p
