@@ -28,6 +28,18 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test '#new only for backend_apis not used by the product' do
+    backend_apis = [backend_api, *FactoryBot.create_list(:backend_api, 2, account: backend_api.account)]
+
+    backend_apis_not_in_use = backend_apis.take(2)
+    backend_api_in_use = backend_apis.last
+    service.backend_api_configs.create(backend_api: backend_api_in_use)
+
+    get new_admin_service_backend_api_config_path(service)
+    backend_apis_not_in_use.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id }
+    assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api_in_use.id, count: 0
+  end
+
   test '#create' do
     assert_change of: -> { service.backend_api_configs.count }, by: 1 do
       post admin_service_backend_api_configs_path(service), backend_api_config: {
@@ -71,7 +83,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
     config = service.backend_api_configs.create(backend_api: backend_api)
     get edit_admin_service_backend_api_config_path(service, config)
     assert_response :success
-    assert_select 'form.backend_api_config select#backend_api_config_backend_api_id[disabled=disabled]'
+    assert_select 'form.backend_api_config input#backend_api_config_backend_api_id[disabled=disabled][value=?]', backend_api.name
   end
 
   test '#update' do

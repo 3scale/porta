@@ -1,4 +1,12 @@
-= content_for :sublayout_title, 'Edit Backend'
+= content_for :sublayout_title, 'Edit Backend usage'
 
 = semantic_form_for @backend_api_config, url: admin_service_backend_api_config_path(@service, @backend_api_config) do |form|
-  = render 'form', form: form
+  = form.inputs do
+    li
+      = form.label :backend_api_id, 'Backend'
+      = form.text_field :backend_api_id, class: 'text', value: @backend_api_config.backend_api.name, disabled: true
+    = form.input :path, hint: 'Changing this path will only affect the behaviour of this Backend within the context of this Product'
+
+  = form.buttons do
+    = form.commit_button 'Update'
+
