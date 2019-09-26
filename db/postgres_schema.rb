@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190920123906) do
+ActiveRecord::Schema.define(version: 20190925133159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,6 +227,7 @@ ActiveRecord::Schema.define(version: 20190920123906) do
     t.integer  "tenant_id",      limit: 8
   end
 
+  add_index "backend_api_configs", ["backend_api_id", "service_id"], name: "index_backend_api_configs_on_backend_api_id_and_service_id", unique: true, using: :btree
   add_index "backend_api_configs", ["path", "service_id"], name: "index_backend_api_configs_on_path_and_service_id", unique: true, using: :btree
   add_index "backend_api_configs", ["service_id"], name: "index_backend_api_configs_on_service_id", using: :btree
 
