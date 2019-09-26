@@ -13,11 +13,9 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   paginate only: :index
 
-  ##~ @parameter_backend_api_id_by_id = { :name => "id", :description => "ID of the backend.", :dataType => "int", :required => true, :paramType => "path" }
-
-  ##~ @parameter_backend_api_name = {:name => "name", :description => "Name of the backend", :dataType => "string", :required => true, :paramType => "query"}
-  ##~ @parameter_backend_api_description = {:name => "description", :description => "Description of the backend", :dataType => "string", :required => false, :paramType => "query"}
-  ##~ @parameter_backend_api_private_endpoint = {:name => "private_endpoint", :description => "Private endpoint of the backend", :dataType => "string", :required => false, :paramType => "query"}
+  ##~ @parameter_backend_api_name = {:name => "name", :description => "Name of the Backend", :dataType => "string", :required => true, :paramType => "query"}
+  ##~ @parameter_backend_api_description = {:name => "description", :description => "Description of the Backend", :dataType => "string", :required => false, :paramType => "query"}
+  ##~ @parameter_backend_api_private_endpoint = {:name => "private_endpoint", :description => "Private endpoint of the Backend", :dataType => "string", :required => false, :paramType => "query"}
 
 
   # swagger
