@@ -1,0 +1,40 @@
+= f.inputs class: 'auth-settings-wrapper' do
+  - # oidc
+  - is_oidc = @service.backend_version === 'oidc'
+  = f.inputs id: 'service_proxy_authentication_method_oidc_settings', disabled: !is_oidc, class: "auth-settings #{'hidden' unless is_oidc}"
+    = render 'api/services/forms/oidc', f: f, proxy: @service.proxy
+
+  - # auth user key (1)
+  - is_auth_user = @service.backend_version === '1'
+  = f.inputs id: 'service_proxy_authentication_method_1_settings',  disabled: !is_auth_user, class: "auth-settings #{'hidden' unless is_auth_user}"
+    = f.input :auth_user_key
+
+  - # App_ID and App_Key Pair (2)
+  - is_auth_app_key = @service.backend_version === '2'
+  = f.inputs id: 'service_proxy_authentication_method_2_settings',  disabled: !is_auth_app_key, class: "auth-settings #{'hidden' unless is_auth_app_key}"
+    = f.input :auth_app_id
+    = f.input :auth_app_key
+
+  = f.input :hostname_rewrite, label: 'Host Header'
+  = f.input :secret_token, label: 'Secret Token'
+
+  = f.input :credentials_location, as: :radio,
+          collection: Proxy.credentials_collection
+
+= f.inputs 'Gateway Response' do
+  = f.inputs 'Authentication Failed Error' do
+    = f.input :error_status_auth_failed, label: :status
+    = f.input :error_headers_auth_failed, label: :headers
+    = f.input :error_auth_failed, label: :message
+  = f.inputs 'Authentication Missing Error' do
+    = f.input :error_status_auth_missing, label: :status
+    = f.input :error_headers_auth_missing, label: :headers
+    = f.input :error_auth_missing, label: :message
+  = f.inputs 'No Match Error' do
+    = f.input :error_status_no_match, label: :status
+    = f.input :error_headers_no_match, label: :headers
+    = f.input :error_no_match, label: :message
+  = f.inputs 'Usage limit exceeded error' do
+    = f.input :error_status_limits_exceeded, label: :status
+    = f.input :error_headers_limits_exceeded, label: :headers
+    = f.input :error_limits_exceeded, label: :message

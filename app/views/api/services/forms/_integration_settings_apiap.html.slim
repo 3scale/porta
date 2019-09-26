@@ -1,5 +1,7 @@
+= javascript_pack_tag 'settings'
+
 #settings
-  = form.inputs "Deployment" do
+  = form.inputs 'Deployment' do
 
     - if @service.deployment_option == nil
       - @service.deployment_option = 'hosted'
@@ -10,11 +12,15 @@
             value_as_class: true,
             label: false
 
-  = form.inputs "Authentication" do
+  = form.inputs 'Authentication', id: 'auth-wrapper' do
     = form.input :proxy_authentication_method,
             name: 'service[backend_version]',
             as: :radio,
             required: false,
             collection: BackendVersion.visible_versions(service: @service),
             value_as_class: true,
-            label: false
+            label: false,
+            input_html: {class: 'auth-method'}
+
+    = form.semantic_fields_for :proxy do |f|
+      = render 'api/services/forms/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
