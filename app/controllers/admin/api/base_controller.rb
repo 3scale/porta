@@ -131,7 +131,8 @@ class Admin::Api::BaseController < ApplicationController
 
   ## BackendAPIs
 
-  ##~ @parameter_backend_api_id_by_id_name = { :name => "backend_api_id", :description => "ID of the backend.", :dataType => "int", :required => true, :paramType => "path" }
+  ##~ @parameter_backend_api_id_by_id = { :name => "id", :description => "ID of the Backend.", :dataType => "int", :required => true, :paramType => "path" }
+  ##~ @parameter_backend_api_id_by_id_name = { :name => "backend_api_id", :description => "ID of the Backend.", :dataType => "int", :required => true, :paramType => "path" }
 
   ## Features
 
