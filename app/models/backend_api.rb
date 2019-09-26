@@ -36,11 +36,7 @@ class BackendApi < ApplicationRecord
 
   scope :not_used_by, -> do |service_id|
     where.has do
-      not_exists(
-        BackendApiConfig
-        .by_service(service_id)
-        .by_backend_api(BabySqueel[:backend_apis].id)
-      )
+      not_exists BackendApiConfig.by_service(service_id).by_backend_api(BabySqueel[:backend_apis].id).select(:id)
     end
   end
 
