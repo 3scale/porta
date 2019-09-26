@@ -34,25 +34,6 @@ class BackendApi < ApplicationRecord
 
   scope :orphans, -> { where.has { id.not_in(BackendApiConfig.selecting { :backend_api_id }) } }
 
-  scope :not_used_by, ->(service_id) {
-    # TODO: Baby Squeel
-    # It used to be:
-    # where.has do
-    #   not_exists BackendApiConfig.by_service(service_id).by_backend_api(BabySqueel[:backend_apis].id).select(:id)
-    # end
-    # And that works for MySQL and Postgres but not Oracle
-    sql_query = <<~SQL
-      (
-        NOT EXISTS (
-          SELECT id
-          FROM backend_api_configs
-          WHERE service_id = ? AND backend_api_configs.backend_api_id = backend_apis.id
-        )
-      )
-    SQL
-    where(sql_query, service_id)
-  }
-
   scope :oldest_first, -> { order(created_at: :asc) }
   scope :accessible, -> { where.not(state: DELETED_STATE) }
 
@@ -65,6 +46,12 @@ class BackendApi < ApplicationRecord
     end
 
     after_transition to: [DELETED_STATE], do: :schedule_deletion
+  end
+
+  def self.not_used_by(service_id)
+    where.has do
+      not_exists BackendApiConfig.by_service(service_id).by_backend_api(BabySqueel[:backend_apis].id).select(:id)
+    end
   end
 
   def self.default_api_backend
