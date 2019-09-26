@@ -632,4 +632,20 @@ class ProxyTest < ActiveSupport::TestCase
       assert proxy.pending_affecting_changes?
     end
   end
+
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'proxy config affecting changes' do
+      proxy = FactoryBot.build(:proxy)
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, instance_of(ProxyRule))
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy)
+      proxy.save! # it should not trigger the event
+      proxy.update_attributes(policies_config: [{ name: '1', version: 'b', configuration: {} }])
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).never
+      proxy.update_attributes(deployed_at: Time.utc(2019, 9, 26, 12, 20))
+    end
+  end
 end
