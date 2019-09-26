@@ -76,15 +76,13 @@ class EventStore::EventTest < ActiveSupport::TestCase
   end
 
   def test_stale
-    Timecop.freeze(EventStore::Event::TTL.ago)
-    FactoryBot.create(:service_token)
-    events_number = EventStore::Event.count
-    assert events_number.positive?
+    Timecop.freeze((EventStore::Event::TTL + 1.second).ago) do
+      FactoryBot.create(:service_token)
+    end
 
-    Timecop.return
     FactoryBot.create(:service_token)
-    assert EventStore::Event.count > events_number
 
-    assert_equal events_number, EventStore::Event.stale.count
+    expected_stale_events_count = EventStore::Event.where('created_at <= ?', EventStore::Event::TTL.ago).count
+    assert_equal expected_stale_events_count, EventStore::Event.stale.count
   end
 end
