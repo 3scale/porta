@@ -4,6 +4,10 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
 
+  def self.user_attribute_names
+    attribute_names
+  end
+
   sifter(:month_number) do |column|
     case System::Database.adapter.to_sym
     when :mysql
