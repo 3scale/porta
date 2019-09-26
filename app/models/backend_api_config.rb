@@ -18,8 +18,12 @@ class BackendApiConfig < ApplicationRecord
   has_many :backend_api_metrics, through: :backend_api, source: :metrics
 
   validates :service_id, :backend_api_id, presence: true
+  validates :backend_api_id, uniqueness: { scope: :service_id }
   validates :path, uniqueness: { scope: :service_id, case_sensitive: false }
   validates :path, length: { in: 0..255, allow_nil: false }, path: true
+
+  scope :by_service,     ->(service_id)     { where.has { self.service_id     == service_id     } }
+  scope :by_backend_api, ->(backend_api_id) { where.has { self.backend_api_id == backend_api_id } }
 
   scope :with_subpath, -> do
     common_query = where.not(path: '/')

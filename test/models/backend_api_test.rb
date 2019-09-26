@@ -44,6 +44,25 @@ class BackendApiTest < ActiveSupport::TestCase
     assert_equal [orphan_backend_api], BackendApi.orphans
   end
 
+  test '.not_used_by returns the backend apis that are not related to that service' do
+    account = FactoryBot.create(:simple_provider)
+    backend_api_not_used_by_any_service = FactoryBot.create(:backend_api, account: account)
+    backend_api_using_one_service = FactoryBot.create(:backend_api, account: account)
+    backend_api_using_two_services = FactoryBot.create(:backend_api, account: account)
+
+    services = FactoryBot.create_list(:service, 4, account: account)
+
+    configs = []
+    configs << services[0].backend_api_configs.create!(backend_api: backend_api_using_one_service, path: 'foo')
+    configs << services[1].backend_api_configs.create!(backend_api: backend_api_using_two_services, path: 'foo')
+    configs << services[2].backend_api_configs.create!(backend_api: backend_api_using_two_services, path: 'bar')
+
+    assert_same_elements [backend_api_not_used_by_any_service, backend_api_using_two_services].map(&:id), BackendApi.not_used_by(services[0].id).pluck(:id)
+    assert_same_elements [backend_api_not_used_by_any_service, backend_api_using_one_service].map(&:id), BackendApi.not_used_by(services[1].id).pluck(:id)
+    assert_same_elements [backend_api_not_used_by_any_service, backend_api_using_one_service].map(&:id), BackendApi.not_used_by(services[2].id).pluck(:id)
+    assert_same_elements [backend_api_not_used_by_any_service, backend_api_using_one_service, backend_api_using_two_services].map(&:id), BackendApi.not_used_by(services[3].id).pluck(:id)
+  end
+
   test 'creates default metrics' do
     backend_api = FactoryBot.create(:backend_api)
     hits = backend_api.metrics.hits
