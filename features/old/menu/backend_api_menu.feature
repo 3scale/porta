@@ -1,5 +1,5 @@
-Feature: Backend API menu
-  In order to manage my Backend API
+Feature: Backend menu
+  In order to manage my Backend
   As a provider
   I want to see a menu that lets me do that
 

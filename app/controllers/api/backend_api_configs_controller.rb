@@ -26,10 +26,10 @@ class Api::BackendApiConfigsController < Api::BaseController
     @backend_api_config = service.backend_api_configs.build(backend_api_config_params)
 
     if @backend_api_config.save
-      flash[:notice] = 'Backend API added to product.'
+      flash[:notice] = 'Backend added to product.'
       redirect_to admin_service_backend_api_configs_path(@service)
     else
-      flash[:error] = "Couldn't add Backend API to product"
+      flash[:error] = "Couldn't add Backend to product"
       render 'new'
     end
   end
@@ -38,7 +38,7 @@ class Api::BackendApiConfigsController < Api::BaseController
 
   def update
     if @backend_api_config.update_attributes(backend_api_config_params.slice(:path))
-      redirect_to admin_service_backend_api_configs_path(@service), notice: 'Backend API config was updated.'
+      redirect_to admin_service_backend_api_configs_path(@service), notice: 'Backend usage was updated.'
     else
       render :edit
     end
@@ -46,9 +46,9 @@ class Api::BackendApiConfigsController < Api::BaseController
 
   def destroy
     if @backend_api_config.destroy
-      flash[:notice] = 'The Backend API was removed from the product'
+      flash[:notice] = 'The Backend was removed from the product'
     else
-      flash[:error] = 'The Backend API cannot be removed from the product'
+      flash[:error] = 'The Backend cannot be removed from the product'
     end
 
     redirect_to admin_service_backend_api_configs_path(@service)

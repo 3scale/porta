@@ -25,7 +25,7 @@ Feature: Dashboard
     And I should see the link "New Product" in the apis dashboard products tabs section
     And I should see the link "0 ActiveDocs" in the apis dashboard products tabs section
     And I should see the link "New Backend" in the apis dashboard backends tabs section
-    And I should see the link "API Backend API" in the apis dashboard backends tabs section
+    And I should see the link "API Backend" in the apis dashboard backends tabs section
     And I should see the link "0 Methods" in the apis dashboard backends tabs section
     And I should see the link "0 Mapping Rules" in the apis dashboard backends tabs section
 

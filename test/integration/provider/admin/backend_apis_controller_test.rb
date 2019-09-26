@@ -26,7 +26,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
 
   test '#create' do
     assert_difference @provider.backend_apis.method(:count) do
-      backend_api_attributes = { name: 'My Backend API', system_name: 'my-new-backend-api', private_endpoint: 'https://host.com/p' }
+      backend_api_attributes = { name: 'My Backend', system_name: 'my-new-backend-api', private_endpoint: 'https://host.com/p' }
       post provider_admin_backend_apis_path(backend_api: backend_api_attributes)
     end
     assert_response :redirect
@@ -48,11 +48,11 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
   end
 
   test 'system_name can be created but not updated' do
-    post provider_admin_backend_apis_path, { backend_api: {name: 'My Backend API', system_name: 'first-system-name', private_endpoint: 'https://endpoint.com/p'} }
+    post provider_admin_backend_apis_path, { backend_api: {name: 'My Backend', system_name: 'first-system-name', private_endpoint: 'https://endpoint.com/p'} }
     backend_api = provider.backend_apis.last!
     assert_equal 'first-system-name', backend_api.system_name
 
-    put provider_admin_backend_api_path(backend_api, { backend_api: {name: 'My Backend API', system_name: 'my-new-backend-api'} })
+    put provider_admin_backend_api_path(backend_api, { backend_api: {name: 'My Backend', system_name: 'my-new-backend-api'} })
     assert_equal 'first-system-name', backend_api.reload.system_name
   end
 
@@ -63,7 +63,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
 
     delete provider_admin_backend_api_path(backend_api)
     assert BackendApi.exists? backend_api.id
-    assert_equal 'Backend API could not be deleted', flash[:error]
+    assert_equal 'Backend could not be deleted', flash[:error]
   end
 
   test 'delete a backend api without any products will schedule to delete in background' do
@@ -74,7 +74,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
       delete provider_admin_backend_api_path(backend_api)
       assert_redirected_to provider_admin_dashboard_path
       assert_not BackendApi.exists? backend_api.id
-      assert_equal 'Backend API will be deleted shortly.', flash[:notice]
+      assert_equal 'Backend will be deleted shortly.', flash[:notice]
     end
   end
 end

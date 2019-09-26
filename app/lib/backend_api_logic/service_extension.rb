@@ -34,8 +34,8 @@ module BackendApiLogic
     def create_first_backend_api_config!
       backend_api = account.backend_apis.build(
         system_name: system_name,
-        name: "#{name} Backend API",
-        description: "Backend API of #{name}",
+        name: "#{name} Backend",
+        description: "Backend of #{name}",
         private_endpoint: proxy&.[]('api_backend')
       )
       constructor = new_record? ? :build : :create!
@@ -58,7 +58,7 @@ module BackendApiLogic
       end
 
       def backend_api
-        @backend_api ||= backend_api_configs.first&.backend_api || account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend API", description: "Backend API of #{service_name}")
+        @backend_api ||= backend_api_configs.first&.backend_api || account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend", description: "Backend of #{service_name}")
       end
 
       def update!(attrs = {})
