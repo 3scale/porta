@@ -7,6 +7,7 @@ export type UIState = {
   +chain: boolean,
   +policyConfig: boolean,
   +requests: number,
+  +submitButtonEnabled: boolean,
   +error: {}
 }
 
