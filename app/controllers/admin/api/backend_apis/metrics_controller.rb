@@ -11,7 +11,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend API Metric List"
+  ##~ op.summary    = "Backend Metric List"
   ##~ op.description = "Returns the list of metrics of a backend api."
   ##~ op.group = "metric"
   #
@@ -30,7 +30,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend API Metric Read"
+  ##~ op.summary    = "Backend Metric Read"
   ##~ op.description = "Returns the metric of a backend api."
   ##~ op.group = "metric"
   #
@@ -48,7 +48,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Backend API Metric Create"
+  ##~ op.summary    = "Backend Metric Create"
   ##~ op.description = "Creates a metric on a backend api."
   ##~ op.group = "metric"
   #
@@ -70,7 +70,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Backend API Metric Update"
+  ##~ op.summary    = "Backend Metric Update"
   ##~ op.description = "Updates the metric of a backend api."
   ##~ op.group = "metric"
   #
@@ -91,7 +91,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Backend API Metric Delete"
+  ##~ op.summary    = "Backend Metric Delete"
   ##~ op.description = "Deletes the metric of a backend api. When you delete a metric or a method, it will also remove all the associated limits."
   ##~ op.group = "metric"
   #

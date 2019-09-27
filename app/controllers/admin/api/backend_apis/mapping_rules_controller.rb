@@ -11,8 +11,8 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend API Mapping Rules List"
-  ##~ op.description = "Returns the Mapping Rules of a Backend API."
+  ##~ op.summary    = "Backend Mapping Rules List"
+  ##~ op.description = "Returns the Mapping Rules of a Backend."
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -30,8 +30,8 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend API Mapping Rules Read"
-  ##~ op.description = "Returns the Mapping Rule of a Backend API."
+  ##~ op.summary    = "Backend Mapping Rules Read"
+  ##~ op.description = "Returns the Mapping Rule of a Backend."
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -48,8 +48,8 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Backend API Mapping Rule Create"
-  ##~ op.description = "Creates a Mapping Rule of a Backend API."
+  ##~ op.summary    = "Backend Mapping Rule Create"
+  ##~ op.description = "Creates a Mapping Rule of a Backend."
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -72,8 +72,8 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Backend API Mapping Rule Update"
-  ##~ op.description = "Updates a Mapping Rule of a Backend API."
+  ##~ op.summary    = "Backend Mapping Rule Update"
+  ##~ op.description = "Updates a Mapping Rule of a Backend."
   ##~ op.group = "mapping_rule"
   #
   ##~ op.parameters.add @parameter_access_token
@@ -97,8 +97,8 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Backend API Mapping Rule Delete"
-  ##~ op.description = "Deletes a Mapping Rule of a Backend API."
+  ##~ op.summary    = "Backend Mapping Rule Delete"
+  ##~ op.description = "Deletes a Mapping Rule of a Backend."
 
   ##~ op.group = "mapping_rule"
   #

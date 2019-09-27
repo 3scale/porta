@@ -11,7 +11,7 @@ class Admin::Api::BackendApis::MetricMethodsController < Admin::Api::BackendApis
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend API Method List"
+  ##~ op.summary    = "Backend Method List"
   ##~ op.description = "List the methods of a metric that belongs to a backend api. Methods are metrics that are children of a parent metric."
   ##~ op.group = "metric_method"
   #
@@ -29,7 +29,7 @@ class Admin::Api::BackendApis::MetricMethodsController < Admin::Api::BackendApis
   #
   ##~ op = e.operations.add
   ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Backend API Method Create"
+  ##~ op.summary    = "Backend Method Create"
   ##~ op.description = "Creates a method under a metric that belongs to a backend api."
   ##~ op.group = "metric_method"
   #
@@ -49,7 +49,7 @@ class Admin::Api::BackendApis::MetricMethodsController < Admin::Api::BackendApis
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend API Method Read"
+  ##~ op.summary    = "Backend Method Read"
   ##~ op.description = "Returns the method of a metric that belongs to a backend api."
   ##~ op.group = "metric_method"
   #
@@ -66,7 +66,7 @@ class Admin::Api::BackendApis::MetricMethodsController < Admin::Api::BackendApis
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Backend API Method Update"
+  ##~ op.summary    = "Backend Method Update"
   ##~ op.description = "Updates a method of a metric that belongs to a backend api."
   ##~ op.group = "metric_method"
   #
@@ -85,7 +85,7 @@ class Admin::Api::BackendApis::MetricMethodsController < Admin::Api::BackendApis
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Backend API Method Delete"
+  ##~ op.summary    = "Backend Method Delete"
   ##~ op.description = "Deletes the method of a metric that belongs to a backend api."
   ##~ op.group = "metric_method"
   #

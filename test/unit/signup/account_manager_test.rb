@@ -126,14 +126,14 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
       assert_equal 'API', account.first_service!.name
     end
 
-    test 'creating a provider will create default Backend API if api_as_product is disabled' do
+    test 'creating a provider will create default Backend if api_as_product is disabled' do
       Account.any_instance.stubs(:provider_can_use?).returns(false)
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false)
       account = signup_account_manager.create(signup_params).account
       assert_equal BackendApi.default_api_backend, account.default_service.api_backend
     end
 
-    test 'creating a provider will not create default Backend API if api_as_product is enabled' do
+    test 'creating a provider will not create default Backend if api_as_product is enabled' do
       Account.any_instance.stubs(:provider_can_use?).returns(false)
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true)
       account = signup_account_manager.create(signup_params).account

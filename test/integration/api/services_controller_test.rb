@@ -94,7 +94,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       @provider.settings.allow_multiple_services!
     end
 
-    test 'should not create the default Backend API if API as Product is enabled' do
+    test 'should not create the default Backend if API as Product is enabled' do
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
 
       assert_no_change of: -> { BackendApi.count } do
@@ -108,7 +108,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 0, Service.last.backend_api_configs.count
     end
 
-    test 'should create the default Backend API if API as Product is disabled' do
+    test 'should create the default Backend if API as Product is disabled' do
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
 
       assert_change of: -> { BackendApi.count }, by: 1 do
