@@ -2454,7 +2454,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2497,7 +2497,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2533,7 +2533,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2603,7 +2603,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2676,7 +2676,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2712,7 +2712,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2763,7 +2763,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2832,7 +2832,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2876,7 +2876,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2943,7 +2943,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -2987,7 +2987,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3030,7 +3030,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3067,7 +3067,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3128,7 +3128,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3188,7 +3188,7 @@
             },
             {
               "name": "backend_api_id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3261,21 +3261,21 @@
             },
             {
               "name": "name",
-              "description": "Name of the backend",
+              "description": "Name of the Backend",
               "dataType": "string",
               "required": true,
               "paramType": "query"
             },
             {
               "name": "description",
-              "description": "Description of the backend",
+              "description": "Description of the Backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
             },
             {
               "name": "private_endpoint",
-              "description": "Private endpoint of the backend",
+              "description": "Private endpoint of the Backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
@@ -3304,7 +3304,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -3333,28 +3333,28 @@
             },
             {
               "name": "id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
             },
             {
               "name": "name",
-              "description": "Name of the backend",
+              "description": "Name of the Backend",
               "dataType": "string",
               "required": true,
               "paramType": "query"
             },
             {
               "name": "description",
-              "description": "Description of the backend",
+              "description": "Description of the Backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
             },
             {
               "name": "private_endpoint",
-              "description": "Private endpoint of the backend",
+              "description": "Private endpoint of the Backend",
               "dataType": "string",
               "required": false,
               "paramType": "query"
@@ -3383,7 +3383,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the backend.",
+              "description": "ID of the Backend.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -6468,6 +6468,160 @@
               "required": true,
               "paramType": "path",
               "threescale_name": "service_plan_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/services/{service_id}/backend_apis.json",
+      "responseClass": "List[backend_api_config]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend Usage List",
+          "description": "Returns the list of all Backend being used by a Service (Product) with the corresponding path.",
+          "group": "backend_api_config",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/services/{service_id}/backend_apis.json",
+      "responseClass": "backend_api_config",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Backend Usage Create",
+          "description": "Adds a Backend to a Service (Product).",
+          "group": "backend_api_config",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "Backend to be added to the Service (Product).",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "path",
+              "description": "Path of the Backend for this product.",
+              "dataType": "int",
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/services/{service_id}/backend_apis/{id}.json",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Backend Usage Delete",
+          "description": "Removes the backend from a Service (Product).",
+          "group": "backend_api_config",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Backend.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/services/{service_id}/backend_apis/{id}.json",
+      "responseClass": "backend_api_config",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Backend Usage Update",
+          "description": "Updates the path of a Backend within the scope of the Service (Product).",
+          "group": "backend_api_config",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Backend.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "path",
+              "description": "Path of the Backend for this product.",
+              "dataType": "int",
+              "required": false,
+              "paramType": "query"
             }
           ]
         }
