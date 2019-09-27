@@ -13,6 +13,7 @@ class Contract < ApplicationRecord
   include States
   include Billing
   include Trial
+  include CounterCacheCallbacks
 
   include Finance::FixedFee
   include Finance::SetupFee
@@ -22,7 +23,7 @@ class Contract < ApplicationRecord
   after_destroy :destroy_customized_plan
   after_commit :notify_plan_changed
 
-  belongs_to :plan, counter_cache: true
+  belongs_to :plan
   validate   :correct_plan_subclass?
   # this breaks nested saving of records, when validating there is no user_account yet, its new record
   # validates_presence_of :user_account
@@ -246,6 +247,15 @@ class Contract < ApplicationRecord
 
   protected
 
+  def update_counter_cache?(association_name)
+    case association_name
+    when :plan
+      !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
+    else
+      true
+    end
+  end
+
   def correct_plan_subclass?
     if plan && (not plan.is_a?(Plan))
       errors.add(:plan, 'wrong plan subclass')
@@ -290,6 +300,19 @@ class Contract < ApplicationRecord
   add_three_scale_method_tracer :change_plan_internal
 
   private
+
+  def reset_counter_cache_for
+    [:plan].freeze
+  end
+
+  def update_counter_cache?(association_name)
+    case association_name
+    when :plan
+      !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
+    else
+      true
+    end
+  end
 
   def notify_plan_changed
     if previously_changed?(:plan_id) && @old_plan
