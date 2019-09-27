@@ -70,16 +70,6 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     assert_equal 'first-system-name', backend_api.reload.system_name
   end
 
-  test 'delete a backend api with products' do
-    backend_api = @provider.backend_apis.order(:id).first
-    FactoryBot.create(:backend_api_config, backend_api: backend_api)
-    assert backend_api.backend_api_configs.any?
-
-    delete provider_admin_backend_api_path(backend_api)
-    assert BackendApi.exists? backend_api.id
-    assert_equal 'Backend could not be deleted', flash[:error]
-  end
-
   test 'delete a backend api without any products will schedule to delete in background' do
     backend_api = @provider.backend_apis.order(:id).second
     assert_not backend_api.backend_api_configs.any?

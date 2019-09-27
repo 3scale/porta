@@ -37,7 +37,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def destroy
-    if @backend_api.services.empty? && @backend_api.mark_as_deleted
+    if @backend_api.mark_as_deleted
       redirect_to provider_admin_dashboard_path, notice: 'Backend will be deleted shortly.'
     else
       flash[:error] = 'Backend could not be deleted'
