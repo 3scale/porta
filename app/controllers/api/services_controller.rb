@@ -57,7 +57,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def update
-    if @service.update_attributes(params[:service])
+    if @service.update_attributes(service_params)
       flash[:notice] =  'Service information updated.'
       onboarding.bubble_update('api') if service_name_changed?
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
@@ -81,7 +81,8 @@ class Api::ServicesController < Api::BaseController
                         :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
                         :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
                         :txt_support, :terms,
-                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []], proxy: Proxy.user_attribute_names}
+    ]
     params.require(:service).permit(permitted_params)
   end
 

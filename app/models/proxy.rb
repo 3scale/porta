@@ -107,6 +107,10 @@ class Proxy < ApplicationRecord
   delegate :provider_can_use?, to: :account
   delegate :backend_apis, :backend_api_configs, to: :service
 
+  def self.user_attribute_names
+    super + %w[api_backend] + GatewayConfiguration::ATTRIBUTES
+  end
+
   # This smells of :reek:NilCheck
   def authentication_method
     super.presence || service&.read_attribute(:backend_version)
