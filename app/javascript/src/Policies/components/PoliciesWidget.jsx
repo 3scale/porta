@@ -60,6 +60,19 @@ const PolicyList = ({ registry, chain, policyConfig, ui, boundActionCreators }: 
     }
   }
 
+  // HACK: enable the submit button after any change is made
+  const submitButton = document.querySelector('input#policies-button-sav.disabled-button')
+  if (submitButton) {
+    // classList.toggle second argument is not supported in IE11
+    if (ui.submitButtonEnabled) {
+      submitButton.classList.remove('disabled-button')
+      submitButton.classList.add('important-button')
+    } else {
+      submitButton.classList.add('disabled-button')
+      submitButton.classList.remove('important-button')
+    }
+  }
+
   return (
     <div className="PoliciesWidget">
       <PolicyChain

@@ -26,3 +26,8 @@ export type APIRequestStopAction = { type: string }
 export function apiRequestStop (): APIRequestStopAction {
   return { type: 'API_REQUEST_STOP' }
 }
+
+export type EnableSubmitButtonAction = { type: 'ENABLE_SUBMIT_BUTTON', enabled: boolean }
+export function enableSubmitButton (enabled: boolean): EnableSubmitButtonAction {
+  return { type: 'ENABLE_SUBMIT_BUTTON', enabled }
+}
