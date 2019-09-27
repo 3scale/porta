@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::IntegrationsShowPresenter
 
   def initialize(proxy)
@@ -41,13 +43,15 @@ class Api::IntegrationsShowPresenter
   end
 
   def test_state_modifier
+    return 'is-untested' if @proxy.account.provider_can_use?(:api_as_product)
+
     case @proxy.api_test_success
     when true
-      'is-successful'.freeze
+      'is-successful'
     when false
-      'is-erroneous'.freeze
+      'is-erroneous'
     else
-      'is-untested'.freeze
+      'is-untested'
     end
   end
 
