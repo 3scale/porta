@@ -25,8 +25,8 @@ class ServiceExtensionTest < ActiveSupport::TestCase
     test 'first_backend_api default values' do
       service = FactoryBot.build(:simple_service, system_name: nil)
       assert(backend_api = service.first_backend_api)
-      assert_equal "#{service.name} Backend API", backend_api.name
-      assert_equal  "Backend API of #{service.name}", backend_api.description
+      assert_equal "#{service.name} Backend", backend_api.name
+      assert_equal  "Backend of #{service.name}", backend_api.description
     end
 
     test 'first_backend_api when the service its own system_name' do

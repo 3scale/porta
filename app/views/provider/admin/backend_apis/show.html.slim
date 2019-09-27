@@ -14,19 +14,19 @@ section.Section
       dt.u-dl-term Private Base URL
       dd.u-dl-definition == @backend_api.private_endpoint
 
-section class="service-widget"
-  div.content-service
+section class="overview-widget"
+  div
 
-    section[name="settings"]
-      h2 Products Using this Backend API
-      ul.application-plans
-        - list_items_or_empty @backend_api.services, 'No Product currently using this Backend API' do |service|
+    div.left
+      h2 Products Using this Backend
+      ul.listing#products_using_backend
+        - list_items_or_empty @backend_api.services.accessible, 'No Product currently using this Backend' do |service|
           li.item
             = link_to service.name, admin_service_path(service)
 
-    section[name="activity"]
+    div.right
       h2 Methods & Mapping Rules
-      ul.application-plans
+      ul.listing#backend_metrics_and_mapping_rules
         li.item
           = link_to pluralize(@backend_api.method_metrics.size, 'method'), provider_admin_backend_api_metrics_path(@backend_api)
         li.item
