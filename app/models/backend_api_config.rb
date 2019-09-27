@@ -31,9 +31,7 @@ class BackendApiConfig < ApplicationRecord
   end
 
   scope :accessible, -> do
-    joining { [service, backend_api] }.where.has do
-      (service.state != ::Service::DELETE_STATE) & (backend_api.state != ::BackendApi::DELETED_STATE)
-    end
+    joining { service }.where.has { (service.state != ::Service::DELETE_STATE) }
   end
 
   delegate :private_endpoint, to: :backend_api
