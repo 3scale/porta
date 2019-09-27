@@ -24,6 +24,7 @@ export const initialState: State = {
     chain: true,
     policyConfig: false,
     requests: 0,
+    submitButtonEnabled: false,
     error: {}
   }
 }
