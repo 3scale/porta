@@ -6,7 +6,6 @@ import type { Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/t
 import { generateGuid } from 'Policies/util'
 import { loadChainSuccess, loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
 import { setOriginalPolicyChain } from 'Policies/actions/OriginalPolicyChain'
-import { enableSubmitButton } from 'Policies/actions/UISettings'
 
 function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: StoredChainPolicy): RegistryPolicy | typeof undefined {
   return registry.find(policy => (policy.name === storedPolicy.name && policy.version === storedPolicy.version))
@@ -57,11 +56,9 @@ const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, get
       loadChain({registry: state.registry, storedChain: action.storedChain, dispatch})
       break
     case 'REMOVE_POLICY_FROM_CHAIN':
-      dispatch(enableSubmitButton(true))
       dispatch(updatePolicyChain(removePolicy(state.chain, action.policy)))
       break
     case 'UPDATE_POLICY_IN_CHAIN':
-      dispatch(enableSubmitButton(true))
       dispatch(updatePolicyChain(updatePolicy(state.chain, action.policyConfig)))
       break
     default:

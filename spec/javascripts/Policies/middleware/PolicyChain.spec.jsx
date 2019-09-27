@@ -117,22 +117,4 @@ describe('PolicyChain Middleware', () => {
       }]
     ))
   })
-
-  it('Dispatches ENABLE_SUBMIT_BUTTON action when updating policies', () => {
-    invoke({
-      type: 'UPDATE_POLICY_IN_CHAIN',
-      policyConfig: {}
-    })
-
-    expect(store.dispatch.mock.calls[0][0].type).toBe('ENABLE_SUBMIT_BUTTON')
-  })
-
-  it('Dispatches ENABLE_SUBMIT_BUTTON action when removing policies', () => {
-    invoke({
-      type: 'REMOVE_POLICY_FROM_CHAIN',
-      policy: {}
-    })
-
-    expect(store.dispatch.mock.calls[0][0].type).toBe('ENABLE_SUBMIT_BUTTON')
-  })
 })
