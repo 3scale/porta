@@ -125,6 +125,8 @@ class Service < ApplicationRecord
             :txt_api, :txt_support, :txt_features,
             length: { maximum: 65535 }
 
+  accepts_nested_attributes_for :proxy
+
   class DeploymentOption
     PLUGINS = %i(ruby java python nodejs php rest csharp).freeze
     private_constant :PLUGINS
