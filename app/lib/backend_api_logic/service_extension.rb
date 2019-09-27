@@ -18,31 +18,6 @@ module BackendApiLogic
       end, class_name: 'Metric'
     end
 
-    # TODO: This is used by db/migrate/20190716110520_create_the_backend_apis_of_services.rb
-    # We should Remove this after 2.7 is released
-    # https://issues.jboss.org/browse/THREESCALE-3517
-    def first_backend_api
-      @backend_api ||= find_or_create_first_backend_api!
-    end
-
-    def find_or_create_first_backend_api!
-      return unless account
-      config = backend_api_configs.first || create_first_backend_api_config!
-      config.backend_api
-    end
-
-    def create_first_backend_api_config!
-      backend_api = account.backend_apis.build(
-        system_name: system_name,
-        name: "#{name} Backend",
-        description: "Backend of #{name}",
-        private_endpoint: proxy&.[]('api_backend')
-      )
-      constructor = new_record? ? :build : :create!
-      attrs = {backend_api: backend_api, path: ''}
-      backend_api_configs.public_send(constructor, attrs)
-    end
-
     class BackendApiProxy
       attr_reader :service
       delegate :account, :backend_apis, :backend_api_configs, to: :service
