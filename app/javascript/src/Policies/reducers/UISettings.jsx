@@ -4,7 +4,7 @@ import { initialState } from 'Policies/reducers/initialState'
 import { createReducer, updateError, updateObject } from 'Policies/util'
 
 import type { State } from 'Policies/types/State'
-import type { UIComponentTransitionAction, EnableSubmitButtonAction } from 'Policies/actions/UISettings'
+import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 
 function updateComponentTransition (state: State, action: UIComponentTransitionAction): State {
   return updateObject(state, {[action.hide]: false, [action.show]: true})
@@ -16,10 +16,6 @@ function updateRequestsCounter (number: number) {
   }
 }
 
-function enableSubmitButton (state: State, action: EnableSubmitButtonAction): State {
-  return updateObject(state, {submitButtonEnabled: action.enabled})
-}
-
 // eslint-disable-next-line space-infix-ops
 // const UISettingsReducer = createReducer<UIState>(initialState.ui, {
 // $FlowFixMe TODO: in order to fully type createReducer, set UIState and re-enable flow. (use lines above)
@@ -28,8 +24,7 @@ const UISettingsReducer = createReducer(initialState.ui, {
   'FETCH_CHAIN_ERROR': updateError,
   'FETCH_REGISTRY_ERROR': updateError,
   'API_REQUEST_START': updateRequestsCounter(1),
-  'API_REQUEST_STOP': updateRequestsCounter(-1),
-  'ENABLE_SUBMIT_BUTTON': enableSubmitButton
+  'API_REQUEST_STOP': updateRequestsCounter(-1)
 })
 
 export default UISettingsReducer
