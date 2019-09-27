@@ -87,15 +87,14 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
   end
 
   test 'index can be paginated, skips unaccessible and the response has the right format' do
-    FactoryBot.create_list(:backend_api_config, 6, service: service)
-    service.backend_api_configs.order(:id).last!.backend_api.mark_as_deleted!
+    FactoryBot.create_list(:backend_api_config, 5, service: service)
 
     get admin_api_service_backend_apis_path(service_id: service.id, access_token: access_token_value, per_page: 3, page: 2)
 
     assert_response :success
 
     response_backend_api_configs = JSON.parse(response.body)
-    expected_backend_api_configs = service.backend_api_configs.accessible.order(:id).offset(3).limit(3)
+    expected_backend_api_configs = service.backend_api_configs.order(:id).offset(3).limit(3)
     assert_equal expected_backend_api_configs.size, response_backend_api_configs.length
     expected_backend_api_configs.each_with_index do |backend_api_config, index|
       response_item = response_backend_api_configs[index]
@@ -125,18 +124,10 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
     assert_response :not_found
   end
 
-  test 'it cannot perform any action for a deleted backend_api' do
+  test 'it cannot create for a deleted backend_api' do
     backend_api.mark_as_deleted!
 
     post admin_api_service_backend_apis_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
-    assert_response :not_found
-
-    backend_api_config = BackendApiConfig.create!(service: service, backend_api: backend_api, path: 'foo/bar')
-
-    put admin_api_service_backend_api_path(service_id: service.id, id: backend_api.id, access_token: access_token_value), {path: 'foo/bar/updated'}
-    assert_response :not_found
-
-    delete admin_api_service_backend_api_path(service_id: service.id, id: backend_api.id, access_token: access_token_value)
     assert_response :not_found
   end
 
