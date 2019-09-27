@@ -1270,7 +1270,7 @@ en:
       proxy:
         update: "%{action} Staging Environment"
       policies:
-        update: "Update"
+        update: "Update Policy Chain"
     labels:
       service:
         intentions_required: "Signup requires a description of intended use"
