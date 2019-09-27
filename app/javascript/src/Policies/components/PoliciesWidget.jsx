@@ -50,6 +50,16 @@ const PolicyList = ({ registry, chain, policyConfig, ui, boundActionCreators }: 
     closePolicyRegistry: boundActionCreators.closePolicyRegistry
   }
 
+  const buttonsFieldset = document.querySelector('fieldset.buttons')
+  if (buttonsFieldset) {
+    // classList.toggle second argument is not supported in IE11
+    if (ui.chain) {
+      buttonsFieldset.classList.remove('is-hidden')
+    } else {
+      buttonsFieldset.classList.add('is-hidden')
+    }
+  }
+
   return (
     <div className="PoliciesWidget">
       <PolicyChain
