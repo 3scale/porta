@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class ProxyRuleTest < ActiveSupport::TestCase
 
+class ProxyRuleTest < ActiveSupport::TestCase
   test 'patterns' do
     proxy_rule = FactoryBot.build_stubbed(:proxy_rule)
 

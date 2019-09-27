@@ -121,7 +121,7 @@ gem 'redis', '~> 3.3.5', require: ['redis', 'redis/connection/hiredis']
 gem 'redis-namespace', '~> 1.5.2'
 gem 'rest-client', '~> 2.0.2'
 gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
-gem 'thinking-sphinx', '~> 3.2.0'
+gem 'thinking-sphinx', '~> 3.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'diff-lcs', '~> 1.2'
 gem 'acts-as-taggable-on', '~> 4.0'
