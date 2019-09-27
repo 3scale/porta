@@ -5,6 +5,7 @@ import type { Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/t
 
 import { generateGuid } from 'Policies/util'
 import { loadChainSuccess, loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
+import { setOriginalPolicyChain } from 'Policies/actions/OriginalPolicyChain'
 import { enableSubmitButton } from 'Policies/actions/UISettings'
 
 function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: StoredChainPolicy): RegistryPolicy | typeof undefined {
@@ -41,7 +42,12 @@ const loadChain = ({registry, storedChain, dispatch}: {registry: Array<RegistryP
       ? updatedChain.push(convertToChainPolicy(foundRegistryPolicy, storedPolicy))
       : errors++
   })
-  errors > 0 ? dispatch(loadChainError({})) : dispatch(loadChainSuccess(updatedChain)) // TODO: Define what to do with errors (unlikely now, just undefined path returned by Array.find)
+  if (errors > 0) {
+    dispatch(loadChainError({})) // TODO: Define what to do with errors (unlikely now, just undefined path returned by Array.find)
+  } else {
+    dispatch(setOriginalPolicyChain(updatedChain))
+    dispatch(loadChainSuccess(updatedChain))
+  }
 }
 
 const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: any) => (action: PolicyChainMiddlewareAction) => {
