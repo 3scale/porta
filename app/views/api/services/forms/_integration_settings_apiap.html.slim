@@ -1,7 +1,7 @@
 = javascript_pack_tag 'settings'
 
 #settings
-  = form.inputs 'Deployment' do
+  = form.inputs 'Deployment', id: 'integration-wrapper' do
 
     - if @service.deployment_option == nil
       - @service.deployment_option = 'hosted'
@@ -10,7 +10,8 @@
             as: :radio,
             collection: deployment_options,
             value_as_class: true,
-            label: false
+            label: false,
+            input_html: {class: 'integration-method'}
 
   = form.inputs 'Authentication', id: 'auth-wrapper' do
     = form.input :proxy_authentication_method,
