@@ -13,6 +13,7 @@ import type {
   LoadChainErrorAction,
   UpdatePolicyChainAction
 } from 'Policies/actions/PolicyChain'
+import type { SetOriginalPolicyChainAction } from 'Policies/actions/OriginalPolicyChain'
 import type { UIComponentTransitionAction, EnableSubmitButtonAction } from 'Policies/actions/UISettings'
 import type {
   FetchRegistrySuccessAction,
@@ -49,7 +50,7 @@ export interface IAction {
 
 export type Action = PolicyConfigAction | PolicyRegistryAction
   | PolicyChainAction | UIComponentTransitionAction | PolicyChainMiddlewareAction
-  | EnableSubmitButtonAction
+  | EnableSubmitButtonAction | SetOriginalPolicyChainAction
 
 export type PromiseAction = Promise<Action>
 export type GetState = () => State

@@ -5,6 +5,7 @@ import type {State} from 'Policies/types/State'
 export const initialState: State = {
   registry: [],
   chain: [],
+  originalChain: [],
   policyConfig: {
     $schema: '',
     schema: {},
