@@ -4,7 +4,7 @@
   = form.inputs do
     = form.input :backend_api_id,
                   as: :select,
-                  collection: current_account.backend_apis.not_used_by(@backend_api_config.service_id),
+                  collection: current_account.backend_apis.accessible.not_used_by(@backend_api_config.service_id),
                   include_blank: false,
                   prompt: 'Select a Backend',
                   label: 'Backend'

@@ -40,6 +40,17 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
     assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api_in_use.id, count: 0
   end
 
+  test '#new only for accessible backend_apis' do
+    backend_apis = [backend_api, *FactoryBot.create_list(:backend_api, 2, account: backend_api.account)]
+    accessible_backend_apis = backend_apis.take(2)
+    non_accessible_backend_api = backend_apis.last
+    non_accessible_backend_api.update_column(:state, 'deleted')
+
+    get new_admin_service_backend_api_config_path(service)
+    accessible_backend_apis.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id }
+    assert_select 'select#backend_api_config_backend_api_id option[value=?]', non_accessible_backend_api.id, count: 0
+  end
+
   test '#create' do
     assert_change of: -> { service.backend_api_configs.count }, by: 1 do
       post admin_service_backend_api_configs_path(service), backend_api_config: {
