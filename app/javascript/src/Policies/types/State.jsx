@@ -17,6 +17,7 @@ export type ChainState = Array<ChainPolicy>
 export type State = {
   +registry: RegistryState,
   +chain: ChainState,
+  +originalChain: ChainState,
   +policyConfig: ChainPolicy,
   +ui: UIState
 }
