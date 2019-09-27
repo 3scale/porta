@@ -33,6 +33,10 @@ class Admin::Api::BaseController < ApplicationController
 
   rescue_from ::Account::BillingAddress::AddressFormatError, with: :handle_billing_address_error
 
+  def accessible_services
+    (current_user || current_account).accessible_services
+  end
+
   protected
 
   def notification_center
@@ -70,10 +74,6 @@ class Admin::Api::BaseController < ApplicationController
   end
 
   private
-
-  def accessible_services
-    (current_user || current_account).accessible_services
-  end
 
   def accessible_application_plans
     current_account.application_plans.where(issuer: accessible_services)

@@ -360,11 +360,11 @@ module Logic
         klass.helper_method :provider_can_use?
       end
 
-      protected
-
       def provider_can_use!(feature)
         raise ActiveRecord::RecordNotFound unless provider_can_use?(feature)
       end
+
+      protected
 
       def provider_can_use?(fresh_feature)
         return false if Logic::RollingUpdates.skipped?
