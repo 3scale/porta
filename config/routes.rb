@@ -208,7 +208,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :metrics, :except => [:show] do
             resources :children, :controller => 'metrics', :only => [:new, :create]
           end
-          resources :mapping_rules, except: %i[show]
+          resources :mapping_rules, except: %i[show], defaults: { owner_type: 'BackendApi' }
         end
       end
 
@@ -846,7 +846,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
           resources :proxy_logs, :only => [:index, :show ]
           resources :proxy_configs, only: %i(index show)
-          resources :proxy_rules, except: %i[show]
+          resources :proxy_rules, except: %i[show], defaults: { owner_type: 'Proxy' }
         end
 
         resources :alerts, :only => [:index, :destroy] do
