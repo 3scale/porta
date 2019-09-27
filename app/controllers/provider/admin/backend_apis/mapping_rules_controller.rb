@@ -36,4 +36,10 @@ class Provider::Admin::BackendApis::MappingRulesController < Provider::Admin::Ba
 
     redirect_to provider_admin_backend_api_mapping_rules_path(@backend_api)
   end
+
+  private
+
+  def owner_id
+    @backend_api.id
+  end
 end

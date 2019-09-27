@@ -3,7 +3,6 @@
 require 'addressable/template'
 
 class ProxyRule < ApplicationRecord
-
   acts_as_list scope: :proxy, add_new_at: :bottom
   scope :ordered, -> { order(position: :asc) }
 
@@ -16,6 +15,8 @@ class ProxyRule < ApplicationRecord
   validates :delta, numericality: { :only_integer => true, :greater_than => 0 }
 
   before_validation :fill_owner
+
+  after_commit { IndexProxyRuleWorker.perform_later(id) }
 
   include ThreeScale::Search::Scopes
 
