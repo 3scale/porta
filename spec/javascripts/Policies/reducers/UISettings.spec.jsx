@@ -8,6 +8,7 @@ describe('UISettingsReducer', () => {
       'error': {},
       'policyConfig': false,
       'registry': false,
+      'submitButtonEnabled': false,
       'requests': 0
     })
   })
@@ -18,6 +19,7 @@ describe('UISettingsReducer', () => {
       policyConfig: false,
       registry: true,
       requests: 0,
+      submitButtonEnabled: false,
       error: {}
     })
   })

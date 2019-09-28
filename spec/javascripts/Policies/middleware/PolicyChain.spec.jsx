@@ -31,6 +31,11 @@ const create = () => {
 
 describe('PolicyChain Middleware', () => {
   const { invoke, store, next } = create()
+
+  beforeEach(() => {
+    store.dispatch.mockClear()
+  })
+
   it('Passes through non of middleware actions', () => {
     const action = {type: 'TEST'}
     invoke(action)
@@ -38,14 +43,17 @@ describe('PolicyChain Middleware', () => {
     expect(next).toHaveBeenCalledWith(action)
   })
 
-  it('Dispatches LOAD_CHAIN_SUCCESS action', () => {
+  it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action', () => {
     invoke({
       type: 'LOAD_CHAIN',
       storedChain: [{name: 'echo', version: 'builtin', configuration: {config: 'bond'}, enabled: true}]
     })
 
-    expect(store.dispatch.mock.calls[0][0].type).toBe('LOAD_CHAIN_SUCCESS')
+    expect(store.dispatch.mock.calls[0][0].type).toBe('SET_ORIGINAL_POLICY_CHAIN')
     expect(store.dispatch.mock.calls[0][0].payload[0].data).toEqual({config: 'bond'})
+
+    expect(store.dispatch.mock.calls[1][0].type).toBe('LOAD_CHAIN_SUCCESS')
+    expect(store.dispatch.mock.calls[1][0].payload[0].data).toEqual({config: 'bond'})
   })
 
   it('Dispatches LOAD_CHAIN_ERROR action', () => {
