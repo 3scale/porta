@@ -34,6 +34,8 @@ class Api::IntegrationsController < Api::BaseController
       update_onboarding_mapping_bubble
       update_mapping_rules_position
 
+      return redirect_to admin_service_integration_path(@service) if apiap?
+
       if @proxy.send_api_test_request!
         api_backend = @proxy.api_backend
         onboarding.bubble_update('api')
@@ -41,7 +43,6 @@ class Api::IntegrationsController < Api::BaseController
         return redirect_to edit_path
       end
       render :edit
-
     else
       attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
