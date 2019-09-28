@@ -2,6 +2,8 @@ require 'progress_counter'
 
 class BackfillMetricOwners < ActiveRecord::Migration
   def up
+    return puts "Nothing to do, this migration should not be executed" # Moved to lib/tasks/service.rake:update_metric_owners
+
     say_with_time 'Updating metric owners...' do
       Metric.reset_column_information
       progress = ProgressCounter.new(Metric.count)
