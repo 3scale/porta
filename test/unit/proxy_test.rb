@@ -606,4 +606,46 @@ class ProxyTest < ActiveSupport::TestCase
   def analytics
     ThreeScale::Analytics::UserTracking.any_instance
   end
+
+  test 'affecting change' do
+    refute ProxyConfigAffectingChange.find_by(proxy_id: @proxy.id)
+    @proxy.affecting_change_history
+    assert ProxyConfigAffectingChange.find_by(proxy_id: @proxy.id)
+  end
+
+  test '#pending_affecting_changes?' do
+    proxy = FactoryBot.create(:simple_proxy, api_backend: nil)
+    proxy.affecting_change_history.touch
+
+    # no existing config for staging (sandbox)
+    refute proxy.pending_affecting_changes?
+
+    Timecop.travel(1.second.from_now) do
+      FactoryBot.create(:proxy_config, proxy: proxy, environment: :sandbox)
+
+      # latest config is ahead of affecting change record
+      refute proxy.pending_affecting_changes?
+
+      proxy.affecting_change_history.touch
+
+      # latest config is behind of affecting change record
+      assert proxy.pending_affecting_changes?
+    end
+  end
+
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'proxy config affecting changes' do
+      proxy = FactoryBot.build(:proxy)
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, instance_of(ProxyRule))
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy)
+      proxy.save! # it should not trigger the event
+      proxy.update_attributes(policies_config: [{ name: '1', version: 'b', configuration: {} }])
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).never
+      proxy.update_attributes(deployed_at: Time.utc(2019, 9, 26, 12, 20))
+    end
+  end
 end

@@ -156,4 +156,26 @@ class ProxyRuleTest < ActiveSupport::TestCase
     assert_equal backend_api, backend_proxy_rule.owner
     assert backend_proxy_rule.valid?
   end
+
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'proxy config affecting changes of object owner by proxy' do
+      proxy = FactoryBot.create(:proxy)
+      proxy_rule = FactoryBot.build(:proxy_rule, owner: proxy)
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy_rule).twice
+      proxy_rule.save!
+      proxy_rule.update_attributes(pattern: '/new-pattern')
+    end
+
+    test 'proxy config affecting changes of object owner by backend_api' do
+      backend_api = FactoryBot.create(:backend_api)
+      products = FactoryBot.create_list(:simple_service, 2)
+      proxy_rule = FactoryBot.build(:proxy_rule, owner: backend_api)
+      products.each { |product| product.backend_api_configs.create(backend_api: backend_api) }
+      products.each { |product| ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, proxy_rule).twice }
+      proxy_rule.save!
+      proxy_rule.update_attributes(pattern: '/new-pattern')
+    end
+  end
 end
