@@ -34,6 +34,13 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
         dt.u-dl-term Secret Token
         dd.u-dl-definition = @proxy.secret_token
 
+    div
+      = semantic_form_for @proxy, url: admin_service_integration_path(@service) do |f|
+        = f.buttons class: "buttons buttons-inline" do
+          = f.hidden_field :lock_version
+          = f.button "Promote v. #{@show_presenter.last_sandbox_config.version+1} to Staging",
+            button_html: {class: 'important-button PromoteButton', data: { disable_with: 'promoting…' }}
+
 - unless deployment_option_is_service_mesh?(@service)
   section style="margin-top: 48px;"
     h2 Environments
