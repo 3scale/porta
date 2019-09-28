@@ -6,6 +6,7 @@ class Proxy < ApplicationRecord
   include BackendApiLogic::ProxyExtension
   prepend BackendApiLogic::RoutingPolicy
   include GatewaySettings::ProxyExtension
+  include ProxyConfigAffectingChanges::ProxyExtension
 
   DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
                      'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
@@ -19,6 +20,9 @@ class Proxy < ApplicationRecord
   accepts_nested_attributes_for :oidc_configuration
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
+
+  has_one :proxy_config_affecting_change, dependent: :delete
+  private :proxy_config_affecting_change
 
   uri_pattern = URI::DEFAULT_PARSER.pattern
 
@@ -513,6 +517,19 @@ class Proxy < ApplicationRecord
 
   def service_mesh_integration?
     Service::DeploymentOption.service_mesh.include?(deployment_option)
+  end
+
+  def find_or_create_proxy_config_affecting_change
+    proxy_config_affecting_change || create_proxy_config_affecting_change
+  end
+  alias affecting_change_history find_or_create_proxy_config_affecting_change
+  private :find_or_create_proxy_config_affecting_change
+
+  def pending_affecting_changes?
+    return unless apicast_configuration_driven?
+    config = proxy_configs.sandbox.newest_first.first
+    return false unless config
+    config.created_at < affecting_change_history.updated_at
   end
 
   protected
