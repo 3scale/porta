@@ -367,6 +367,6 @@ module ApplicationHelper
   end
 
   def has_out_of_date_configuration?(service)
-    true
+    service.pending_affecting_changes?
   end
 end
