@@ -13,8 +13,8 @@ class Provider::Admin::DashboardsHelperTest < ActionView::TestCase
   end
   
   test 'dashboard_navigation_link can add an icon using options' do
-    assert_equal '<a class="DashboardNavigation-link" href="/path"><i></i> Link</a>',
-      dashboard_navigation_link('Link', '/path', { icon_name: 'foo' })
+    assert_equal '<a class="DashboardNavigation-link" href="/path">Link <i></i></a>',
+      dashboard_navigation_link('Link', '/path', { icon_name: 'foo', icon_append_name: true })
   end
 
   test 'dashboard_navigation_link can highlight link using options' do

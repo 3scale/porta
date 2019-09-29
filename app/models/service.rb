@@ -612,7 +612,7 @@ class Service < ApplicationRecord
   delegate :oauth?, to: :authentication_scheme?
 
   delegate :authentication_method, to: :proxy, prefix: true, allow_nil: true
-  delegate :oidc?, to: :proxy, allow_nil: true
+  delegate :oidc?, :pending_affecting_changes?, to: :proxy, allow_nil: true
 
   def authentication_scheme?
     backend_version.to_s.inquiry

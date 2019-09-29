@@ -365,4 +365,8 @@ module ApplicationHelper
   def unlinked_paid_account?
     !current_account.field_value('red_hat_account_verified_by').presence && current_account.paid?
   end
+
+  def has_out_of_date_configuration?(service)
+    service.pending_affecting_changes?
+  end
 end
