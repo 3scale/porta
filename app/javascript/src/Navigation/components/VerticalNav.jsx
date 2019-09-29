@@ -18,16 +18,17 @@ type Section = Item & {
 type Props = {
   sections: Section[],
   activeSection: ?string,
-  activeItem: ?string
+  activeItem: ?string,
+  outOfDateConfig: boolean
 }
 
-const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
+const VerticalNav = ({ sections, activeSection, activeItem, outOfDateConfig }: Props) => (
   <div className="pf-c-page__sidebar-body">
     <Nav id='mainmenu'>
       <NavList>
         {sections.map(({ id, title, path, items }) => {
           return items
-            ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title}/>
+            ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig} />
             : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
         })}
       </NavList>
@@ -35,9 +36,9 @@ const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
   </div>
 )
 
-const NavSection = ({title, isSectionActive, activeItem, items}) => {
+const NavSection = ({title, isSectionActive, activeItem, items, outOfDateConfig}) => {
   return (
-    <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive}>
+    <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive} outOfDateConfig={outOfDateConfig}>
       {items.map(({id, title, path, target}) => (
         path
           ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target} key={title} >{title}</NavItem>
