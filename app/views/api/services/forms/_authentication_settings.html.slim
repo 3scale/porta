@@ -1,4 +1,5 @@
-= f.inputs class: 'auth-settings-wrapper' do
+= f.inputs 'Authentication Settings', class: 'auth-settings-wrapper' do
+  - is_service_mesh = @service.proxy.deployment_option === 'service_mesh_istio'
   - # oidc
   - is_oidc = @service.backend_version === 'oidc'
   = f.inputs id: 'service_proxy_authentication_method_oidc_settings', disabled: !is_oidc, class: "auth-settings #{'hidden' unless is_oidc}"
@@ -6,20 +7,24 @@
 
   - # auth user key (1)
   - is_auth_user = @service.backend_version === '1'
-  = f.inputs id: 'service_proxy_authentication_method_1_settings',  disabled: !is_auth_user, class: "auth-settings #{'hidden' unless is_auth_user}"
+  = f.inputs 'API Key (user_key) Basics', id: 'service_proxy_authentication_method_1_settings',  disabled: !is_auth_user, class: "auth-settings #{'hidden' unless is_auth_user}"
     = f.input :auth_user_key
 
   - # App_ID and App_Key Pair (2)
   - is_auth_app_key = @service.backend_version === '2'
-  = f.inputs id: 'service_proxy_authentication_method_2_settings',  disabled: !is_auth_app_key, class: "auth-settings #{'hidden' unless is_auth_app_key}"
+  = f.inputs 'App_ID and App_key Pair Basics', id: 'service_proxy_authentication_method_2_settings',  disabled: !is_auth_app_key, class: "auth-settings #{'hidden' unless is_auth_app_key}"
     = f.input :auth_app_id
     = f.input :auth_app_key
 
-  = f.input :hostname_rewrite, label: 'Host Header'
-  = f.input :secret_token, label: 'Secret Token'
+  - # Commons
+  = f.inputs disabled: is_service_mesh, class: "apicast-only-settings #{'hidden' if is_service_mesh}" do
+    = f.inputs 'Credentials Location' do
+      = f.input :credentials_location, as: :radio,
+              collection: Proxy.credentials_collection
 
-  = f.input :credentials_location, as: :radio,
-          collection: Proxy.credentials_collection
+    = f.inputs 'Security' do
+      = f.input :hostname_rewrite, label: 'Host Header'
+      = f.input :secret_token, label: 'Secret Token'
 
 = f.inputs 'Gateway Response' do
   = f.inputs 'Authentication Failed Error' do
