@@ -30,6 +30,7 @@ class Api::PoliciesController < Api::BaseController
   def check_permission
     provider_can_use! :api_as_product
     authorize! :edit, service
+    raise Cancan::AccessDenied unless service.can_use_policies?
   end
 
   def proxy
