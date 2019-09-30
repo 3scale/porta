@@ -160,22 +160,28 @@ class ProxyRuleTest < ActiveSupport::TestCase
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    test 'proxy config affecting changes of object owner by proxy' do
+    test 'proxy config affecting changes of object owned by proxy' do
       proxy = FactoryBot.create(:proxy)
-      proxy_rule = FactoryBot.build(:proxy_rule, owner: proxy)
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy_rule).twice
+      proxy_rule = FactoryBot.build(:proxy_rule, owner: proxy, pattern: '/some-pattern')
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy_rule).times(3)
+
       proxy_rule.save!
       proxy_rule.update_attributes(pattern: '/new-pattern')
+      proxy_rule.destroy!
     end
 
-    test 'proxy config affecting changes of object owner by backend_api' do
+    test 'proxy config affecting changes of object owned by backend_api' do
       backend_api = FactoryBot.create(:backend_api)
       products = FactoryBot.create_list(:simple_service, 2)
-      proxy_rule = FactoryBot.build(:proxy_rule, owner: backend_api)
+      proxy_rule = FactoryBot.build(:proxy_rule, owner: backend_api, pattern: '/some-pattern')
       products.each { |product| product.backend_api_configs.create(backend_api: backend_api) }
-      products.each { |product| ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, proxy_rule).twice }
+
+      products.each { |product| ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, proxy_rule).times(3) }
+
       proxy_rule.save!
       proxy_rule.update_attributes(pattern: '/new-pattern')
+      proxy_rule.destroy!
     end
   end
 end

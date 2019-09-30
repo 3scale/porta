@@ -129,4 +129,20 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     assert_includes     accessible_backend_api_config_ids, backend_api_configs[1].id
     assert_not_includes accessible_backend_api_config_ids, backend_api_configs[0].id
   end
+
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'proxy config affecting changes' do
+      backend_api = FactoryBot.create(:backend_api)
+      product = FactoryBot.create(:simple_service, account: backend_api.account)
+      backend_api_config = product.backend_api_configs.build(backend_api: backend_api)
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, backend_api_config).times(3)
+
+      backend_api_config.save!
+      backend_api_config.update_attributes(path: '/a-path')
+      backend_api_config.destroy!
+    end
+  end
 end
