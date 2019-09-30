@@ -1,7 +1,7 @@
-= f.inputs 'Authentication Settings', class: 'auth-settings-wrapper' do
-  - is_service_mesh = @service.proxy.deployment_option === 'service_mesh_istio'
-  - # oidc
-  - is_oidc = @service.backend_version === 'oidc'
+- # oidc
+- is_oidc = @service.backend_version === 'oidc'
+- is_service_mesh = @service.proxy.deployment_option === 'service_mesh_istio'
+= f.inputs 'Authentication Settings', disabled: is_oidc && is_service_mesh, id: 'auth-settings-wrapper', class: "#{'hidden' if is_oidc && is_service_mesh}" do
   = f.inputs id: 'service_proxy_authentication_method_oidc_settings', disabled: !is_oidc, class: "auth-settings #{'hidden' unless is_oidc}"
     = render 'api/services/forms/oidc', f: f, proxy: @service.proxy
 
@@ -26,7 +26,8 @@
       = f.input :hostname_rewrite, label: 'Host Header'
       = f.input :secret_token, label: 'Secret Token'
 
-= f.inputs 'Gateway Response' do
+
+= f.inputs 'Gateway Response', class: "apicast-only-settings #{'hidden' if is_service_mesh}" do
   = f.inputs 'Authentication Failed Error' do
     = f.input :error_status_auth_failed, label: :status
     = f.input :error_headers_auth_failed, label: :headers
