@@ -135,6 +135,16 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     assert_response :not_found
   end
 
+  test 'when no params are sent, the error message is the same as in the other metrics endpoint' do
+    post admin_api_backend_api_metrics_path(backend_api_id: backend_api.id, access_token: access_token_value), {}
+    assert_response :unprocessable_entity
+    assert_contains JSON.parse(response.body).dig('errors', 'friendly_name'), 'can\'t be blank'
+    assert_contains JSON.parse(response.body).dig('errors', 'unit'), 'can\'t be blank'
+
+    put admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id), {}
+    assert_response :success
+  end
+
   private
 
   def metric
