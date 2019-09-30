@@ -513,6 +513,14 @@ class Service < ApplicationRecord
     proxy&.oidc_configuration || OIDCConfiguration.new
   end
 
+  def can_use_policies?
+    proxy.apicast_configuration_driven && !proxy.service_mesh_integration?
+  end
+
+  def can_use_backends?
+    proxy.apicast_configuration_driven && !proxy.service_mesh_integration?
+  end
+
   private
 
   def archive_as_deleted
