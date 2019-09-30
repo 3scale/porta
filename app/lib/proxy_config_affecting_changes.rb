@@ -26,6 +26,9 @@ module ProxyConfigAffectingChanges
     PROXY_CONFIG_AFFECTING_ATTRIBUTES = %w[policies_config].freeze # TODO: add more attributes here
 
     included do
+      has_one :proxy_config_affecting_change, dependent: :delete
+      private :proxy_config_affecting_change
+
       include ProxyConfigAffectingChanges
 
       after_commit :issue_proxy_affecting_change_events, on: :update
@@ -34,6 +37,19 @@ module ProxyConfigAffectingChanges
         changes_attributes = previous_changes.keys
         return if changes_attributes.include?('created_at') || (changes_attributes & PROXY_CONFIG_AFFECTING_ATTRIBUTES).empty?
         issue_proxy_affecting_change_event(self)
+      end
+
+      def find_or_create_proxy_config_affecting_change
+        proxy_config_affecting_change || create_proxy_config_affecting_change
+      end
+      alias affecting_change_history find_or_create_proxy_config_affecting_change
+      private :find_or_create_proxy_config_affecting_change
+
+      def pending_affecting_changes?
+        return unless apicast_configuration_driven?
+        config = proxy_configs.sandbox.newest_first.first
+        return false unless config
+        config.created_at < affecting_change_history.updated_at
       end
     end
   end
