@@ -10,11 +10,13 @@ module ProxyConfigAffectingChanges
       after_commit :issue_proxy_affecting_change_events
 
       def issue_proxy_affecting_change_events
+        return unless owner
+
         case owner
         when Proxy
           issue_proxy_affecting_change_event(owner)
         when BackendApi
-          owner.proxies.each(&method(:issue_proxy_affecting_change_event))
+          owner.proxies.find_each(&method(:issue_proxy_affecting_change_event))
         end
       end
     end
@@ -34,8 +36,8 @@ module ProxyConfigAffectingChanges
       after_commit :issue_proxy_affecting_change_events, on: :update
 
       def issue_proxy_affecting_change_events
-        changes_attributes = previous_changes.keys
-        return if changes_attributes.include?('created_at') || (changes_attributes & PROXY_CONFIG_AFFECTING_ATTRIBUTES).empty?
+        return if previously_changed?(:created_at) || (previous_changes.keys & PROXY_CONFIG_AFFECTING_ATTRIBUTES).empty?
+
         issue_proxy_affecting_change_event(self)
       end
 
@@ -50,6 +52,22 @@ module ProxyConfigAffectingChanges
         config = proxy_configs.sandbox.newest_first.first
         return false unless config
         config.created_at < affecting_change_history.updated_at
+      end
+    end
+  end
+
+  module BackendApiConfigExtension
+    extend ActiveSupport::Concern
+
+    included do
+      include ProxyConfigAffectingChanges
+
+      after_commit :issue_proxy_affecting_change_events
+
+      def issue_proxy_affecting_change_events
+        return unless service
+
+        issue_proxy_affecting_change_event(service.proxy)
       end
     end
   end
