@@ -199,7 +199,7 @@ module VerticalNavHelper
 
     if can? :manage, :plans
       sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)}
-      sections << {id: :integration, title: 'Integration', items: service_integration_items}
+      sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: has_out_of_date_configuration?(@service)}
     end
 
     sections
