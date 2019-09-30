@@ -636,14 +636,25 @@ class ProxyTest < ActiveSupport::TestCase
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    test 'proxy config affecting changes' do
-      proxy = FactoryBot.build(:proxy)
-
+    test 'proxy config affecting changes on create' do
+      proxy = FactoryBot.build(:simple_proxy, api_backend: nil)
+      # Proxy creation itself is not an affecting change...
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).never
+      # ...but creation of first default proxy rule ('/') is
       ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, instance_of(ProxyRule))
+      proxy.save!
+    end
+
+    test 'proxy config affecting changes on update' do
+      provider = FactoryBot.create(:simple_provider)
+      service = FactoryBot.create(:simple_service, account: provider)
+      proxy = service.proxy
+
+      # Updating policies_config is an affecting change
       ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy)
-      proxy.save! # it should not trigger the event
       proxy.update_attributes(policies_config: [{ name: '1', version: 'b', configuration: {} }])
 
+      # Not all attributes of Proxy are considered potential affecting changes
       ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).never
       proxy.update_attributes(deployed_at: Time.utc(2019, 9, 26, 12, 20))
     end

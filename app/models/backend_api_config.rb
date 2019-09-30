@@ -2,6 +2,7 @@
 
 class BackendApiConfig < ApplicationRecord
   include Backend::ModelExtensions::BackendApiConfig
+  include ProxyConfigAffectingChanges::BackendApiConfigExtension
 
   default_scope -> { order(id: :asc) }
   belongs_to :service, inverse_of: :backend_api_configs
