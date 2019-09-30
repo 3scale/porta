@@ -3,7 +3,7 @@
 - sections = vertical_nav_sections || []
 - active_section = active_submenu
 - active_item = active_sidebar
-- out_of_date_config = has_out_of_date_configuration?(service)
+- out_of_date_config = service ? has_out_of_date_configuration?(service) : false
 
 #vertical-nav-wrapper class='pf-c-page__sidebar' data-sections=sections.to_json data-active_section=active_section data-active_item=active_item data-out_of_date_config=out_of_date_config.to_s
 
@@ -11,4 +11,4 @@
     nav#mainmenu class='pf-c-nav'
       ul.pf-c-nav__list
         - sections.each do |section|
-          = render 'shared/provider/navigation/vertical_nav_item', :section => section, :active_section => active_section, :active_item => active_item
+          = render 'shared/provider/navigation/vertical_nav_item', :section => section, :active_section => active_section, :active_item => active_item, :out_of_date_config => out_of_date_config
