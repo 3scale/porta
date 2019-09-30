@@ -119,4 +119,14 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     assert_equal [configs[1].id], BackendApiConfig.by_backend_api(backend_apis[1]).pluck(:id)
     assert_empty BackendApiConfig.by_backend_api(backend_apis[2]).pluck(:id)
   end
+
+  test 'accessible' do
+    backend_api_configs = FactoryBot.create_list(:backend_api_config, 2)
+    services = backend_api_configs.map(&:service)
+    services[0].mark_as_deleted!
+
+    accessible_backend_api_config_ids = BackendApiConfig.accessible.pluck(:id)
+    assert_includes     accessible_backend_api_config_ids, backend_api_configs[1].id
+    assert_not_includes accessible_backend_api_config_ids, backend_api_configs[0].id
+  end
 end

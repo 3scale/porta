@@ -6,6 +6,8 @@ class BackendApi < ApplicationRecord
   DELETED_STATE = :deleted
   ECHO_API_HOST = 'echo-api.3scale.net'
 
+  before_destroy :validate_destroyed_by_association_or_not_used_by_services
+
   has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
   has_many :metrics, as: :owner, dependent: :destroy, inverse_of: :owner
 
@@ -60,7 +62,9 @@ class BackendApi < ApplicationRecord
 
   state_machine initial: :published do
     state :published
-    state DELETED_STATE
+    state DELETED_STATE do
+      validate :validate_destroyed_by_association_or_not_used_by_services
+    end
 
     event :mark_as_deleted do
       transition [:published] => DELETED_STATE
@@ -104,5 +108,10 @@ class BackendApi < ApplicationRecord
 
   def set_port_private_endpoint
     Proxy::PortGenerator.new(self).call(:private_endpoint)
+  end
+
+  def validate_destroyed_by_association_or_not_used_by_services
+    return true if destroyed_by_association || backend_api_configs.empty?
+    errors.add(:base, :cannot_be_destroyed_with_products) and return false
   end
 end
