@@ -38,6 +38,14 @@ class Admin::API::BackendApisControllerTest < ActionDispatch::IntegrationTest
     assert backend_api.reload.deleted?
   end
 
+  test 'destroy with errors' do
+    BackendApiConfig.create!(service: provider.default_service, backend_api: backend_api)
+
+    delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
+    refute backend_api.reload.deleted?
+    assert_contains JSON.parse(response.body).dig('errors', 'base'), 'cannot be deleted because it is used by at least one Product'
+  end
+
   test 'update' do
     put admin_api_backend_api_path(backend_api, access_token: access_token_value), permitted_params.merge(forbidden_params)
     assert_response :success
