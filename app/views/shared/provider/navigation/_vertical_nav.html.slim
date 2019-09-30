@@ -3,8 +3,9 @@
 - sections = vertical_nav_sections || []
 - active_section = active_submenu
 - active_item = active_sidebar
+- out_of_date_config = has_out_of_date_configuration?(service)
 
-#vertical-nav-wrapper class='pf-c-page__sidebar' data-sections=sections.to_json data-active_section=active_section data-active_item=active_item
+#vertical-nav-wrapper class='pf-c-page__sidebar' data-sections=sections.to_json data-active_section=active_section data-active_item=active_item data-out_of_date_config=out_of_date_config.to_s
 
   div.pf-c-page__sidebar-body
     nav#mainmenu class='pf-c-nav'
