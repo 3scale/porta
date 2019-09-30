@@ -81,4 +81,15 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
       assert_equal 'Backend will be deleted shortly.', flash[:notice]
     end
   end
+
+  test 'delete a backend api with products shows the correct error message' do
+    backend_api = @provider.backend_apis.order(:id).first!
+    assert backend_api.backend_api_configs.any?
+
+    perform_enqueued_jobs do
+      delete provider_admin_backend_api_path(backend_api)
+      assert backend_api.reload.published?
+      assert_equal 'cannot be deleted because it is used by at least one Product', flash[:error]
+    end
+  end
 end
