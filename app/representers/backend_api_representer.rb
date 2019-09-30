@@ -13,6 +13,7 @@ module BackendApiRepresenter
   property :account_id
   property :created_at
   property :updated_at
+  property :usage, decorator: BackendApiConfigsRepresenter
 
   link :metrics do
     admin_api_backend_api_metrics_path(backend_api_id: id)
@@ -20,5 +21,9 @@ module BackendApiRepresenter
 
   link :mapping_rules do
     admin_api_backend_api_mapping_rules_path(backend_api_id: id)
+  end
+
+  def usage
+    backend_api_configs.accessible.order(:id)
   end
 end

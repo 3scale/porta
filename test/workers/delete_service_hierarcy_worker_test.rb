@@ -5,6 +5,7 @@ require 'test_helper'
 class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
   def setup
     @service = FactoryBot.create(:simple_service)
+    DeleteObjectHierarchyWorker.stubs(:perform_later)
   end
 
   attr_reader :service
@@ -30,7 +31,6 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     service.update_attribute :default_application_plan, application_plan
 
     Sidekiq::Testing.inline! do
-      DeleteObjectHierarchyWorker.stubs(:perform_later)
       [service_plan, application_plan, end_user_plan].each do |association|
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
       end
@@ -40,28 +40,29 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  test 'perform does not mark as deleted the backend api for a provider with the RU api as product' do
+  test 'does not destroy the backend apis for a provider with the RU api as product' do
     Account.any_instance.stubs(provider_can_use?: true)
     Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true)
     backend_api = FactoryBot.create(:backend_api, account: service.account)
     FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
 
-    DeleteServiceHierarchyWorker.perform_now(service)
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything).once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything).never
 
-    refute backend_api.reload.deleted?
+    Sidekiq::Testing.inline! { DeleteServiceHierarchyWorker.perform_now(service) }
+
+    assert BackendApi.exists?(backend_api.id)
   end
 
-  test 'perform marks as deleted the backend api for a provider without the RU api as product' do
+  test 'destroys backend apis for a provider without the RU api as product' do
     Account.any_instance.stubs(provider_can_use?: false)
     Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false)
     backend_api = FactoryBot.create(:backend_api, account: service.account)
-    deleted_backend_api = FactoryBot.create(:backend_api, account: service.account, state: :deleted)
     FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
-    FactoryBot.create(:backend_api_config, service: service, backend_api: deleted_backend_api)
 
-    DeleteServiceHierarchyWorker.perform_now(service)
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything).once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything).once
 
-    assert backend_api.reload.deleted?
-    assert deleted_backend_api.reload.deleted?
+    Sidekiq::Testing.inline! { DeleteServiceHierarchyWorker.perform_now(service) }
   end
 end

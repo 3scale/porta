@@ -75,13 +75,18 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   def delete_associations
-    object.class.reflect_on_all_associations.each do |reflection|
-      next unless reflection.options[:dependent] == :destroy
+    destroyable_associations.each do |reflection|
       ReflectionDestroyer.new(object, reflection, caller_worker_hierarchy).destroy_later
     end
   end
 
   private
+
+  def destroyable_associations
+    object.class.reflect_on_all_associations.select do |reflection|
+      reflection.options[:dependent] == :destroy
+    end
+  end
 
   def callback_options
     { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
