@@ -58,7 +58,7 @@ class ApiBubble extends Bubble {
     super()
     this.name = 'api'
     this.selector = 'a[data-bubble=integration]'
-    this.description = 'Add an API to 3scale though the wizard.'
+    this.description = 'Add an API to 3scale through the wizard.'
   }
 
   html () {
