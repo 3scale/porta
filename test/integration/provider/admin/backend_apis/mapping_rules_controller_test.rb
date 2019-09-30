@@ -7,7 +7,7 @@ class Provider::Admin::BackendApis::MappingRulesControllerTest < ActionDispatch:
     @provider = FactoryBot.create(:provider_account, :with_default_backend_api)
     @backend_api = @provider.first_service.backend_api
 
-    FactoryBot.create(:proxy_rule, proxy: nil, owner: @backend_api)
+    FactoryBot.create(:proxy_rule, owner: @backend_api)
 
     login_provider @provider
   end

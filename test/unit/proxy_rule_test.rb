@@ -146,13 +146,18 @@ class ProxyRuleTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_provider)
 
     proxy = FactoryBot.create(:service, account: provider).proxy
-    proxy_proxy_rule = FactoryBot.build(:proxy_rule, proxy: proxy)
+    proxy_proxy_rule = FactoryBot.create(:proxy_rule)
+    proxy_proxy_rule.update_column(:owner_id, nil)
+    proxy_proxy_rule.update_column(:owner_type, nil)
+    proxy_proxy_rule.update_column(:proxy_id, proxy.id)
+    proxy_proxy_rule.reload
+
     refute proxy_proxy_rule.owner
     assert proxy_proxy_rule.valid?
     assert_equal proxy, proxy_proxy_rule.owner
 
     backend_api = FactoryBot.create(:backend_api, name: 'API', system_name: 'api', account: provider)
-    backend_proxy_rule = FactoryBot.build(:proxy_rule, proxy: nil, owner: backend_api)
+    backend_proxy_rule = FactoryBot.build(:proxy_rule, owner: backend_api)
     assert_equal backend_api, backend_proxy_rule.owner
     assert backend_proxy_rule.valid?
   end

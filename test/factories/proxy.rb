@@ -17,7 +17,7 @@ FactoryBot.define do
     pattern { '/foo/bar' }
     delta { 1 }
     association :metric
-    association :proxy
+    association(:owner, factory: :proxy)
   end
 
   factory(:proxy_config) do

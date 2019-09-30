@@ -13,8 +13,8 @@ class Admin::API::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
   attr_reader :backend_api, :access_token_value, :tenant
 
   test 'index' do
-    FactoryBot.create_list(:proxy_rule, 2, owner: backend_api, proxy: nil)
-    FactoryBot.create(:proxy_rule, owner: FactoryBot.create(:backend_api, account: tenant), proxy: nil)
+    FactoryBot.create_list(:proxy_rule, 2, owner: backend_api)
+    FactoryBot.create(:proxy_rule, owner: FactoryBot.create(:backend_api, account: tenant))
     FactoryBot.create(:proxy_rule, proxy: tenant.default_service.proxy)
 
     get admin_api_backend_api_mapping_rules_path(backend_api_id: backend_api.id, access_token: access_token_value)
@@ -75,7 +75,7 @@ class Admin::API::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
   end
 
   test 'index can be paginated' do
-    FactoryBot.create_list(:proxy_rule, 5, owner: backend_api, proxy_id: nil)
+    FactoryBot.create_list(:proxy_rule, 5, owner: backend_api)
 
     get admin_api_backend_api_mapping_rules_path(backend_api_id: backend_api.id, access_token: access_token_value, per_page: 3, page: 2)
 
@@ -86,7 +86,7 @@ class Admin::API::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
 
   test 'it cannot operate under a non-accessible backend api' do
     backend_api = FactoryBot.create(:backend_api, account: tenant, state: :deleted)
-    mapping_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil)
+    mapping_rule = FactoryBot.create(:proxy_rule, owner: backend_api)
 
     get admin_api_backend_api_mapping_rules_path(backend_api_id: backend_api.id, access_token: access_token_value)
     assert_response :not_found
@@ -107,7 +107,7 @@ class Admin::API::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
   private
 
   def mapping_rule
-    @mapping_rule ||= FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil)
+    @mapping_rule ||= FactoryBot.create(:proxy_rule, owner: backend_api)
   end
 
   def mapping_rule_params
