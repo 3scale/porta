@@ -6,7 +6,7 @@ class ProxyRule < ApplicationRecord
   acts_as_list scope: %i[owner_id owner_type], add_new_at: :bottom
   scope :ordered, -> { order(position: :asc) }
 
-  belongs_to :proxy, touch: true
+  belongs_to :proxy
   belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
   belongs_to :metric
 
