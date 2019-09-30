@@ -118,10 +118,10 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   end
 
   def create_params
-    params.require(:metric).permit(DEFAULT_PARAMS | %i[system_name])
+    params.fetch(:metric).permit(DEFAULT_PARAMS | %i[system_name])
   end
 
   def update_params
-    params.require(:metric).permit(DEFAULT_PARAMS)
+    params.fetch(:metric).permit(DEFAULT_PARAMS)
   end
 end
