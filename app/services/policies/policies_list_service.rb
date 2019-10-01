@@ -58,14 +58,15 @@ class Policies::PoliciesListService
     begin
       response = ::JSONClient.get(apicast_registry_url)
     rescue *HTTP_ERRORS => error
-      raise_policies_list_error(error.message)
+      error_message = 'Please provide an apicast registry url in your configuration.' if apicast_registry_url.blank?
+      raise_policies_list_error(error_message || error.message)
     end
     raise_policies_list_error(response.content) unless response.ok?
     response.body['policies']
   end
 
   def raise_policies_list_error(error)
-    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url, error: error)
+    raise PoliciesListServiceError, I18n.t('errors.messages.apicast_not_found', url: apicast_registry_url.presence || ' ', error: error)
   end
 
   def policies_from_account
