@@ -5650,7 +5650,7 @@
         {
           "httpMethod": "GET",
           "summary": "Object deletion status for objects that are deleted asynchronously",
-          "description": "Returns an object status. (200/404). Useful for those objects that deleted asynchronously in order to know if the deletion has been completed(404) or not(200)",
+          "description": "Returns an object status (200/404). Useful for those objects that deleted asynchronously in order to know if the deletion has been completed(404) or not(200)",
           "group": "objects",
           "parameters": [
             {
