@@ -17,11 +17,12 @@
 
   .overview-box {
     & > table.list {
-      margin: 1px;
       @include white-box-shadow;
+      margin: 1px;
 
       tr:last-child {
-        th, td {
+        th,
+        td {
           border-bottom: 2px solid transparent;
         }
       }
@@ -29,8 +30,8 @@
 
     #account-redhat-connect p,
     #account-cancellation p {
-      margin: 1px;
       @include white-box-shadow;
+      margin: 1px;
     }
 
     table.list th,

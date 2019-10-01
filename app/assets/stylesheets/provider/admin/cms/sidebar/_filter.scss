@@ -54,8 +54,8 @@
 }
 
 #cms-sidebar-filter-origin {
-  border-bottom: $border-width solid $border-color;
   @include cms-sidebar-toolbar;
+  border-bottom: $border-width solid $border-color;
 
   li {
    box-sizing: border-box;

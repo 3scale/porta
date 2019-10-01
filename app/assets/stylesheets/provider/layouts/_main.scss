@@ -23,7 +23,6 @@ body {
   // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
   padding: line-height-times(1);
 
-
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }
@@ -34,11 +33,11 @@ body {
 }
 
 @mixin white-box-shadow {
-  background-color: white;
-  box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 2px 0px;
+  background-color: $white;
+  box-shadow: $whiteBoxShadowColor;
 
   // IE 11
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    box-shadow: rgba(3, 3, 3, 0.2) 0px 1px 3px 1px;
+    box-shadow: $whiteBoxShadowColorIE11;
   }
 }

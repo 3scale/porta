@@ -149,8 +149,8 @@
 
   .latest-alerts, .latest-apps, .service-settings, .service-plans, .application-plans, #mini-charts {
     @extend ul.listing;
-    border: none;
     @include white-box-shadow;
+    border: 0;
   }
 
   p {

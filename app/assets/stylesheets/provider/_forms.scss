@@ -156,7 +156,7 @@ form.formtastic fieldset.inputs > ol > li.select select {
 form.formtastic fieldset.buttons {
   border-top: $border-width solid $border-color;
   margin: line-height-times(2) 0;
-  padding: line-height-times(1/2) 0 line-height-times(1) 0;
+  padding: line-height-times(1/2) 0 line-height-times(1);
   text-align: right;
 
   li {
@@ -239,12 +239,12 @@ Load this stylesheet after formtastic.css in your layouts to override the CSS to
 --------------------------------------------------------------------------------------------------*/
 
 form.formtastic {
-  text-align: left; /* overriding legacy_theme text-align: center*/
+  @include white-box-shadow;
   margin: line-height-times(1) 0;
   min-width: line-height-times(20);
-  width: 100%;
   padding: line-height-times(1);
-  @include white-box-shadow;
+  text-align: left; /* overriding legacy_theme text-align: center*/
+  width: 100%;
 
   fieldset.inputs[data-behavior~=toggle-inputs] {
     border: $border-width $border-color solid;

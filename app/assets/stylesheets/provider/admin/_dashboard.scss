@@ -22,8 +22,8 @@
     }
 
     #backends > table {
-      box-shadow: none;
       border-width: 0;
+      box-shadow: none;
       table-layout: fixed;
       width: 100%;
 
@@ -78,13 +78,13 @@
 }
 
 .DashboardWidget {
-  width: 50%;
+  @include white-box-shadow;
   float: left;
-  position: relative;
   height: line-height-times(10);
   overflow: hidden;
   padding: line-height-times(1/2);
-  @include white-box-shadow;
+  position: relative;
+  width: 50%;
 
   .Dashboard-chart {
     position: absolute !important;
@@ -446,11 +446,11 @@ a:hover .u-notice {
 
     & > #products.active,
     & > #backends.active {
-      display: block;
+      @include white-box-shadow;
       border-top: 0;
+      display: block;
       margin: 1px 0 0 1px;
       padding: line-height-times(1);
-      @include white-box-shadow;
     }
 
     & > #products.active {
