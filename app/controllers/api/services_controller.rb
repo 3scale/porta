@@ -81,7 +81,7 @@ class Api::ServicesController < Api::BaseController
                         :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
                         :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
                         :txt_support, :terms,
-                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []], proxy: Proxy.user_attribute_names}
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []], proxy_attributes: Proxy.user_attribute_names}
     ]
     params.require(:service).permit(permitted_params)
   end
