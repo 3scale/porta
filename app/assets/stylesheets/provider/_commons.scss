@@ -102,7 +102,7 @@ p + ul {
 }
 
 %dd {
-  min-height: line-height-times(1);
+  min-height: line-height-times(2);
   padding: line-height-times(1/2) 0 line-height-times(1/2) 40%;
   border-bottom: $border-width solid $border-color;
   list-style: none;
