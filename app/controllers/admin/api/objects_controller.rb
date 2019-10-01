@@ -57,7 +57,7 @@ class Admin::Api::ObjectsController < Admin::Api::BaseController
   ##~ op = e.operations.add
   ##~ op.httpMethod = "GET"
   ##~ op.summary = "Object deletion status for objects that are deleted asynchronously"
-  ##~ op.description = "Returns an object status. (200/404). Useful for those objects that deleted asynchronously in order to know if the deletion has been completed(404) or not(200)"
+  ##~ op.description = "Returns an object status (200/404). Useful for those objects that are deleted asynchronously in order to know if the deletion has been completed(404) or not(200)."
   ##~ op.group = "objects"
   #
   ##~ op.parameters.add @parameter_access_token
