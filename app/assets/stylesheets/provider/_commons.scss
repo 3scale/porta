@@ -1,4 +1,4 @@
-@import 'provider/layouts/_main.scss';
+@import 'provider/layouts/main';
 
 html {
   @include typography-base();
@@ -24,10 +24,10 @@ main > h1:first-child,
 main >  h2:first-child,
 #tab-content > h1:first-child,
 #tab-content > h2:first-child {
-  padding: line-height-times(1);
+  background-color: $body-background;
   margin: line-height-times(-1);
   margin-bottom: line-height-times(1);
-  background-color: $body-background;
+  padding: line-height-times(1);
 }
 
 h1 {
@@ -46,20 +46,20 @@ h2, h3 {
 }
 
 .subsubmenu {
-  padding: line-height-times(1);
-  margin: line-height-times(-1);
   background-color: $body-background;
+  margin: line-height-times(-1);
+  padding: line-height-times(1);
 }
 
 #tab-content > h2:first-child,
 #content > h2:first-child,
 #subsubmenu + h2 {
+  background-color: $body-background;
   font-size: $main-title-font-size;
-  padding: line-height-times(1);
+  line-height: 1;
   margin: line-height-times(-1);
   margin-bottom: line-height-times(1);
-  line-height: 1;
-  background-color: $body-background;
+  padding: line-height-times(1);
 }
 
 h2 {
@@ -82,9 +82,9 @@ p {
 
 h1 + p,
 h2 + p {
-  padding: line-height-times(1);
-  margin-bottom: line-height-times(1);
   background-color: $body-background;
+  margin-bottom: line-height-times(1);
+  padding: line-height-times(1);
 }
 
 main > p:not(:first-child) {
@@ -95,7 +95,7 @@ main > p:not(:first-child) {
 main > h1:first-child + p,
 main > h2:first-child + p {
   box-shadow: none;
-  margin: line-height-times(-1) line-height-times(-1) line-height-times(1) line-height-times(-1);
+  margin: line-height-times(-1) line-height-times(-1) line-height-times(1);
 }
 
 dd p {
@@ -243,9 +243,10 @@ hr, {
 }
 
 #forum {
-  .u-dl, .post {
-    padding: line-height-times(1);
+  .u-dl,
+  .post {
     @include white-box-shadow;
+    padding: line-height-times(1);
   }
 }
 

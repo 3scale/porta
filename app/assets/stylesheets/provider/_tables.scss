@@ -13,8 +13,8 @@ $search-header-width: line-height-times(4);
 }
 
 table {
-  width: 100%;
   background-color: $body-background;
+  width: 100%;
 
   .search th {
     height: line-height-times(3);
@@ -54,11 +54,11 @@ th.header {
 }
 
 table.data {
+  @include white-box-shadow;
   border: solid $body-background line-height-times(1);
   margin-bottom: line-height-times(1);
   margin-top: line-height-times(1/2);
   width: 100%;
-  @include white-box-shadow;
 
   a.is-inline {
     display: inline;
