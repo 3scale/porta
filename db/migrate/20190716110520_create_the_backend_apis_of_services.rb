@@ -4,6 +4,8 @@ require 'progress_counter'
 
 class CreateTheBackendApisOfServices < ActiveRecord::Migration
   def change
+    return puts "Nothing to do, this migration should not be executed" # Moved to lib/tasks/services.rake:create_backend_apis
+
     say_with_time 'Migrating proxies api_backend to slugs...' do
       reversible do |dir|
         dir.up do

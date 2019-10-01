@@ -77,4 +77,19 @@ class BackendApiTest < ActiveSupport::TestCase
     assert_includes accessible_backend_apis, backend_api_published.id
     assert_not_includes accessible_backend_apis, backend_api_deleted.id
   end
+
+  test 'can be destroyed or marked as deleted only if it is destroyed by association or does not have backend api configs' do
+    backend_api = FactoryBot.create(:backend_api)
+    assert backend_api.mark_as_deleted
+    backend_api.destroy
+    refute BackendApi.exists? backend_api.id
+
+    backend_api = FactoryBot.create(:backend_api_config).backend_api
+    refute backend_api.mark_as_deleted
+    backend_api.destroy
+    assert BackendApi.exists? backend_api.id
+
+    assert backend_api.account.destroy
+    refute BackendApi.exists? backend_api.id
+  end
 end

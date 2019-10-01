@@ -8,6 +8,7 @@ import { PolicyChain } from 'Policies/components/PolicyChain'
 import { PolicyRegistry } from 'Policies/components/PolicyRegistry'
 import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
 import { connect } from 'react-redux'
+import { isPolicyChainChanged } from 'Policies/util'
 
 import type { ChainPolicy } from 'Policies/types/Policies'
 import type { State, RegistryState, ChainState, UIState } from 'Policies/types/State'
@@ -17,6 +18,7 @@ import type { IPoliciesActions } from 'Policies/actions'
 type Props = {
   registry: RegistryState,
   chain: ChainState,
+  originalChain: ChainState,
   policyConfig: ChainPolicy,
   ui: UIState,
   boundActionCreators: IPoliciesActions
@@ -25,6 +27,7 @@ type Props = {
 const mapStateToProps = (state: State) => ({
   registry: state.registry,
   chain: state.chain,
+  originalChain: state.originalChain,
   policyConfig: state.policyConfig,
   ui: state.ui
 })
@@ -33,7 +36,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   boundActionCreators: bindActionCreators(actions, dispatch)
 })
 
-const PolicyList = ({ registry, chain, policyConfig, ui, boundActionCreators }: Props) => {
+const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundActionCreators }: Props) => {
   const chainActions = {
     openPolicyRegistry: boundActionCreators.openPolicyRegistry,
     editPolicy: boundActionCreators.editPolicy,
@@ -48,6 +51,31 @@ const PolicyList = ({ registry, chain, policyConfig, ui, boundActionCreators }: 
   const policyRegistryActions = {
     addPolicy: boundActionCreators.addPolicy,
     closePolicyRegistry: boundActionCreators.closePolicyRegistry
+  }
+
+  const buttonsFieldset = document.querySelector('fieldset.buttons')
+  if (buttonsFieldset) {
+    // classList.toggle second argument is not supported in IE11
+    if (ui.chain) {
+      buttonsFieldset.classList.remove('is-hidden')
+    } else {
+      buttonsFieldset.classList.add('is-hidden')
+    }
+  }
+
+  // HACK: enable the submit button after any change is made
+  const submitButton = document.querySelector('input#policies-button-sav')
+  if (submitButton) {
+    // classList.toggle second argument is not supported in IE11
+    if (isPolicyChainChanged(chain, originalChain)) {
+      submitButton.removeAttribute('disabled')
+      submitButton.classList.remove('disabled-button')
+      submitButton.classList.add('important-button')
+    } else {
+      submitButton.setAttribute('disabled', '')
+      submitButton.classList.add('disabled-button')
+      submitButton.classList.remove('important-button')
+    }
   }
 
   return (

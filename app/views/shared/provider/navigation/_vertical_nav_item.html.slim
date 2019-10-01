@@ -2,6 +2,7 @@
 - path = section[:path]
 - items = section[:items]
 - is_section_active = active_section == section[:id]
+- integration_out_of_date = section[:outOfDateConfig]
 
 - if items == nil
   li.pf-c-nav__item class=('pf-m-current' if is_section_active)
@@ -12,6 +13,8 @@
   li.pf-c-nav__item class='pf-m-expandable pf-m-expanded' class=('pf-m-current' if is_section_active)
     a.pf-c-nav__link href='#!'
       = title
+      - if integration_out_of_date
+        i.fa.fa-exclamation-triangle
     section.pf-c-nav__subnav
       ul.pf-c-nav__simple-list
         - items.each do |item|

@@ -2,7 +2,7 @@
 
 import type { UIState } from 'Policies/types/State'
 import type { FetchErrorAction, Reducer } from 'Policies/types/index'
-import type { RawPolicy, RawRegistry, RegistryPolicy } from 'Policies/types/Policies'
+import type { RawPolicy, RawRegistry, RegistryPolicy, ChainPolicy } from 'Policies/types/Policies'
 
 function updateObject (oldObject: Object, newValues: Object): Object {
   return {...oldObject, ...newValues}
@@ -48,6 +48,21 @@ function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
   return { ...policy, name: key, humanName: policy.name, data: {} }
 }
 
+function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[]) {
+  if (originalChain.length !== chain.length) {
+    return true
+  }
+
+  for (const policy of chain) {
+    const originalPolicy = originalChain.find(p => p.uuid === policy.uuid)
+    if (JSON.stringify(policy) !== JSON.stringify(originalPolicy)) {
+      return true
+    }
+  }
+
+  return false
+}
+
 export {
   updateObject,
   updateArray,
@@ -55,5 +70,6 @@ export {
   updateError,
   generateGuid,
   parsePolicies,
-  parsePolicy
+  parsePolicy,
+  isPolicyChainChanged
 }

@@ -567,7 +567,7 @@ en:
           /foo/bar/baz requests.</p>
         curl:
           no_application_plan:
-            Start with creating an application plan.
+            Start by creating an application plan.
           no_application:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
 
@@ -857,6 +857,8 @@ en:
                 'wildcards' - words inside curly brackets ('{}')
         backend_api:
           attributes:
+            base:
+              cannot_be_destroyed_with_products: cannot be deleted because it is used by at least one Product
             private_endpoint:
               invalid: "the accepted format is 'http(s)://address(:port)(/path)'"
         proxy:
@@ -1247,7 +1249,7 @@ en:
           Enables you to block any direct developer requests to your API backend; each 3scale API gateway call to your API backend contains a request header called <code>X-3scale-proxy-secret-token</code>.
           The value of this header can be set by you here. It's up to you ensure your backend only allows calls with this secret header.
         jwt_claim_with_client_id_type: |
-          Process the ClientID Token Claim value as a string or as a liquid template. When set to 'Liquid' you can define more complex rules. e.g. If 'some_claim' is an array you can select the first value this like {{ some_claim | first }}. 
+          Process the ClientID Token Claim value as a string or as a liquid template. When set to 'Liquid' you can define more complex rules. e.g. If 'some_claim' is an array you can select the first value this like {{ some_claim | first }}.
         jwt_claim_with_client_id: |
           The Token Claim that contains the clientID. Defaults to 'azp'.
 
@@ -1269,6 +1271,8 @@ en:
 
       proxy:
         update: "%{action} Staging Environment"
+      policies:
+        update: "Update Policy Chain"
     labels:
       service:
         intentions_required: "Signup requires a description of intended use"

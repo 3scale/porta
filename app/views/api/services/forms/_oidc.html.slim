@@ -1,7 +1,14 @@
-= f.input :oidc_issuer_type, hint: true, as: :select,
+- is_service_mesh = @service.proxy.deployment_option === 'service_mesh_istio'
+= f.inputs 'OpenID Connect (OIDC) Basics' do
+  = f.input :oidc_issuer_type, hint: true, as: :select,
         collection: Proxy.oidc_issuer_types, selected: proxy.oidc_issuer_type || Proxy.column_defaults['oidc_issuer_type']
-= f.input :oidc_issuer_endpoint, hint: true, input_html: { placeholder: "https://sso.example.com/auth/realms/gateway" }
-= f.inputs "OIDC Authorization flow" do
+  = f.input :oidc_issuer_endpoint, hint: true, input_html: { placeholder: "https://sso.example.com/auth/realms/gateway" }
+
+= f.inputs 'OIDC Authorization flow' do
   = f.semantic_fields_for :oidc_configuration do |config|
     - OIDCConfiguration::Config::FLOWS.each do |flow|
       = config.input flow, :as => :boolean
+
+= f.inputs 'JSON Web Token (JWT) Claim with ClientID', disabled: is_service_mesh, class: "apicast-only-settings #{'hidden' if is_service_mesh}" do |config|
+  = f.input :jwt_claim_with_client_id_type, include_blank: false, label: 'ClientID Token Claim Type', collection: GatewayConfiguration::JWT_CLAIM_WITH_CLIENT_ID_TYPES, as: :select, hint: true
+  = f.input :jwt_claim_with_client_id, input_html: {placeholder: 'azp', value: f.object.jwt_claim_with_client_id.presence || 'azp'}, hint: true, label: 'ClientID Token Claim'

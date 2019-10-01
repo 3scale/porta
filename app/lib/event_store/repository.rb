@@ -164,6 +164,7 @@ module EventStore
       subscribe_event(UserEventSubscriber.new, Users::UserDeletedEvent)
       subscribe_event(ServiceDeletionSubscriber.new, Services::ServiceScheduledForDeletionEvent)
       subscribe_event(ServiceDeletedSubscriber.new, Services::ServiceDeletedEvent)
+      subscribe_event(ProxyConfigEventSubscriber.new, ProxyConfigs::AffectingObjectChangedEvent)
       subscribe_event(ZyncSubscriber.new, ZyncEvent)
     end
 

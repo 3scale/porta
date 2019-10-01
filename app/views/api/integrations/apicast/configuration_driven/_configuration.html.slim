@@ -50,7 +50,8 @@
           = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
         - if current_account.provider_can_use?(:policies)
           div.help-button-constrainer
-            = render 'api/integrations/apicast/shared/policies', f: f
+            - unless current_account.provider_can_use?(:api_as_product)
+              = render 'api/integrations/apicast/shared/policies', f: f
 
     = render 'api/integrations/apicast/shared/client', f: f unless @proxy.service.oauth?
 

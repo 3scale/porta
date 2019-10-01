@@ -199,7 +199,7 @@ module VerticalNavHelper
 
     if can? :manage, :plans
       sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)}
-      sections << {id: :integration, title: 'Integration', items: service_integration_items}
+      sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: has_out_of_date_configuration?(@service)}
     end
 
     sections
@@ -245,7 +245,10 @@ module VerticalNavHelper
     items << {id: :configuration,       title: 'Configuration',     path: path_to_service(@service)}
     items << {id: :methods_metrics,     title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
     items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if current_account.independent_mapping_rules_enabled?
-    items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_api_configs_path(@service)} if current_account.provider_can_use?(:api_as_product)
+    if current_account.provider_can_use?(:api_as_product) && !@service.proxy.service_mesh_integration?
+      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)}
+      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_api_configs_path(@service)}
+    end
     items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
   end
 

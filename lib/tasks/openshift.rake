@@ -24,7 +24,7 @@ DESC
     end
 
     raise <<-ERROR_MESSAGE.strip_heredoc if paths.any?
-      Writable paths check failed: 
+      Writable paths check failed:
         #{paths.map{|p| p.to_s.prepend('- ')}.join("\n")}
 ERROR_MESSAGE
   end
@@ -37,7 +37,8 @@ ERROR_MESSAGE
     desc 'Start Thinking Sphinx engine with background index refreshing'
     task start: %i(environment) do
       interface = ThinkingSphinx::RakeInterface.new
-      interface.stop
+      daemon = interface.daemon
+      daemon.stop
       interface.configure
 
       require 'thread'
@@ -49,7 +50,7 @@ ERROR_MESSAGE
       reindex_thread = Thread.new do
         loop do
           warn 'Index starting'
-          queue << interface.index(false)
+          queue << interface.sql.index(false)
           warn 'Index finished'
           sleep reindex_interval
         end
@@ -70,8 +71,8 @@ ERROR_MESSAGE
 
       queue.pop # wait for first delta index
 
-      interface.start(nodetach: false)
-      at_exit { interface.stop }
+      daemon.start
+      at_exit { daemon.stop }
 
       begin
         delta_thread.join
@@ -79,7 +80,7 @@ ERROR_MESSAGE
       rescue Interrupt, SignalException
         delta_thread.kill
         reindex_thread.kill
-        interface.stop
+        daemon.stop
       end
     end
   end

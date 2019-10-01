@@ -2,6 +2,7 @@
 
 class BackendApiConfig < ApplicationRecord
   include Backend::ModelExtensions::BackendApiConfig
+  include ProxyConfigAffectingChanges::BackendApiConfigExtension
 
   default_scope -> { order(id: :asc) }
   belongs_to :service, inverse_of: :backend_api_configs
@@ -31,9 +32,7 @@ class BackendApiConfig < ApplicationRecord
   end
 
   scope :accessible, -> do
-    joining { [service, backend_api] }.where.has do
-      (service.state != ::Service::DELETE_STATE) & (backend_api.state != ::BackendApi::DELETED_STATE)
-    end
+    joining { service }.where.has { (service.state != ::Service::DELETE_STATE) }
   end
 
   delegate :private_endpoint, to: :backend_api

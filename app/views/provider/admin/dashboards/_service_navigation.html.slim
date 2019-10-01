@@ -52,9 +52,18 @@ nav.DashboardNavigation
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
         - if service.has_traffic?
-          = dashboard_navigation_link 'Integration',
-                                      path_to_service(service),
-                                      icon_name: 'wrench'
+          - if has_out_of_date_configuration?(service)
+            = dashboard_navigation_link 'Integration',
+                                        path_to_service(service),
+                                        icon_name: 'wrench',
+                                        notice: true,
+                                        title: 'The Integration is out of date, promote!',
+                                        icon_append_name: 'exclamation-triangle'
+          - else
+            = dashboard_navigation_link 'Integration',
+                                        path_to_service(service),
+                                        icon_name: 'wrench'
+
         - else
           = dashboard_navigation_link 'Integrate this API',
                                       path_to_service(service),
