@@ -26,6 +26,7 @@ table {
     height: line-height-times(2);
     padding: line-height-times(1/2, true) line-height-times(1/2) line-height-times(1/2) 0;
     vertical-align: top;
+    word-break: break-word;
 
     &.u-underline {
       border-bottom: $border-width solid $border-color;
@@ -289,6 +290,18 @@ td.thhead h3 {
 
 table.list.list-checkmarks tr th {
   word-break: break-word;
+}
+
+// Overrides
+table#mapping_rules .actions a.action.add {
+  margin: line-height-times(-1/4) line-height-times(1 / 2);
+}
+
+table.data {
+  &.notification-settings,
+  &.StatsMethodsTable {
+    box-shadow: none;
+  }
 }
 
 // IE 11 hack

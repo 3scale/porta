@@ -71,4 +71,8 @@ $tab-min-height: line-height-times(21, true);
   padding: 0 0 line-height-times(1) line-height-times(1);
   position: relative;
   width: $tab-content-width;
+
+  .formtastic {
+    box-shadow: none;
+  }
 }

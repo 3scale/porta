@@ -40,7 +40,7 @@ $pf4-sidebar-width: 18.125rem;
 
   &-list {
     @include box-shadow(0 0 line-height-times(1 / 2) $box-shadow-color);
-    background: rgba($content-background, .99);
+    background-color: $white;
     border: $border-width solid $border-color;
     border-radius: $border-radius;
     display: none;

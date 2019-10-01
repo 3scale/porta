@@ -1,15 +1,14 @@
 $subsection-bg-color: rgba(0,0,0,0.05);
 
 #subsections-container {
-  @include border-radius(3px);
-
+  box-shadow: none;
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 5px;
   width: 100%;
   min-height: 40px;
   background-color: transparent;
-  border: 3px dashed transparent;
+  border: 1px solid $altoGray;
 
   &.subsection-hover {
      border-color: $border-color;
@@ -25,6 +24,9 @@ $subsection-bg-color: rgba(0,0,0,0.05);
   @extend table.data;
 
   tbody {
+    tr td {
+      padding-left: line-height-times(1 / 2);  
+    }
    tr:nth-child(2n-1) {
      background-color: rgb(243, 243, 243);
    }

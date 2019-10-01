@@ -1,5 +1,7 @@
 .Section {
-  margin-bottom: line-height-times(2);
+  h2 {
+    margin: line-height-times(1) 0 0;
+  }
 
   &.u-toggleableBySettingsBox p {
     @include white-box-shadow;
@@ -9,4 +11,9 @@
   &#service-tokens p {
     @include white-box-shadow;
   }
+}
+
+.swagger-section {
+  @include white-box-shadow;
+  padding: line-height-times(1);
 }

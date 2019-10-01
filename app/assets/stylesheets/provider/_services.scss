@@ -103,6 +103,11 @@
 
 .overview-widget {
   @include overview-widget;
+
+  .left > h2,
+  .right > h2 {
+    margin: line-height-times(1) 0 0;
+  }
 }
 
 .service-widget {
@@ -114,6 +119,7 @@
 
     h2 {
       margin-top: line-height-times(2);
+      position: relative;
       font-weight: $font-weight-normal;
 
       &:first-of-type {
@@ -165,7 +171,6 @@
 }
 
 table.data.notification-settings {
-  margin-bottom: line-height-times(2);
 
   .spacer {
     padding-top: line-height-times(1);

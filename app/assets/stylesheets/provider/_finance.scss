@@ -1,9 +1,10 @@
 table.invoice,
 table.finance_data {
-  width: 100%;
+  @include white-box-shadow;
   border-collapse: collapse;
   color: $font-color;
   margin-bottom: line-height-times(1);
+  width: 100%;
 }
 
 table.invoice thead,
@@ -15,14 +16,25 @@ table.finance_data thead {
 table.invoice tr td,
 table.invoice tr th {
   border-bottom: 1px solid $border-color;
-  padding: line-height-times(1/4);
+  padding: line-height-times(1);
+}
+
+table.finance_data tbody tr td {
+  padding: line-height-times(1);
 }
 
 table.invoice caption,
 table.finance_data caption {
   background-color: $light-background-color;
+  box-shadow: $whiteBoxShadow;
   font-weight: $font-weight-bold;
   text-align: left;
-  padding: line-height-times(1/2);
-  border: $border-width solid $border-color;
+  padding: line-height-times(1);
+  border-bottom: 0;
+}
+
+#actions form.button-to.remote {
+  @include white-box-shadow;
+  display:block;
+  padding: line-height-times(1);
 }
