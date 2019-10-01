@@ -64,7 +64,9 @@ Feature: API menu
     | Configuration             |
     | Methods & Metrics         |
     | Mapping Rules             |
+    | Policies                  |
     | Backends                  |
+    | Settings                  |
 
   Scenario: API menu structure with service plans enabled
     When provider "foo.example.com" has "service_plans" switch allowed

@@ -58,6 +58,7 @@ class Api::BackendApiConfigsController < Api::BaseController
 
   def authorize
     authorize! :manage, BackendApiConfig
+    raise Cancan::AccessDenied unless service.can_use_backends?
   end
 
   attr_reader :service
