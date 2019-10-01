@@ -245,9 +245,9 @@ module VerticalNavHelper
     items << {id: :configuration,       title: 'Configuration',     path: path_to_service(@service)}
     items << {id: :methods_metrics,     title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
     items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if current_account.independent_mapping_rules_enabled?
-    if current_account.provider_can_use?(:api_as_product) && !@service.proxy.service_mesh_integration?
-      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)}
-      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_api_configs_path(@service)}
+    if current_account.provider_can_use?(:api_as_product)
+      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
+      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_api_configs_path(@service)} if @service.can_use_backends?
     end
     items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
   end
