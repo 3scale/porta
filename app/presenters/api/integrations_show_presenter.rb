@@ -22,6 +22,10 @@ class Api::IntegrationsShowPresenter
     @last_production_config ||= proxy_configs.production.last!
   end
 
+  def next_sandbox_config_version
+    proxy_configs.sandbox.maximum(:version).to_i + 1
+  end
+
   def any_sandbox_configs?
     return @any_sandbox_configs if defined?(@any_sandbox_configs)
 
