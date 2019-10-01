@@ -3,7 +3,6 @@ body {
 }
 
 .wrapper, #layout-header, #wrapper {
-  height: 100%;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
@@ -34,10 +33,10 @@ body {
 
 @mixin white-box-shadow {
   background-color: $white;
-  box-shadow: $whiteBoxShadowColor;
+  box-shadow: $whiteBoxShadow;
 
   // IE 11
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    box-shadow: $whiteBoxShadowColorIE11;
+    box-shadow: $whiteBoxShadowIE11;
   }
 }

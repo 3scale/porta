@@ -3,6 +3,7 @@
 .Stats {
   @include white-box-shadow;
   padding: line-height-times(1);
+  margin-bottom: line-height-times(1);
 }
 
 .StatsMenu-container,
@@ -117,6 +118,11 @@ $stats-menu-help-color: $label-color;
 }
 
 /* StatsCVSLink */
+
+.StatsCSVLink-container {
+  padding-bottom: line-height-times(1);
+}
+
 .StatsCSVLink {
   color: $link-color;
   cursor: pointer;
@@ -253,4 +259,9 @@ $stats-chart-tooltip-color: $label-color;
 
 .ui-datepicker {
   z-index: 10;
+}
+
+div[id^="transaction_errors_container_"] {
+  @include white-box-shadow;
+  padding: line-height-times(1);
 }

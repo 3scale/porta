@@ -26,7 +26,7 @@
 
   &-summary {
     min-height: line-height-times(2);
-    padding: line-height-times(1);
+    padding: line-height-times(1) line-height-times(1) line-height-times(2);
     position: relative;
     top: -$border-width;
 
@@ -88,6 +88,7 @@
   }
 
   &-summary {
+    @include white-box-shadow; 
     border: $border-width-lg solid transparent;
     min-height: line-height-times(2);
     padding: line-height-times(1);

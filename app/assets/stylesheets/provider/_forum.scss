@@ -1,4 +1,5 @@
 #forum {
+
   .topic-link {
     display: inline;
   }
@@ -20,4 +21,13 @@
     clear: left;
     border-top: $border-width solid $border-color;
   }
+
+  .delete {
+    background: none;
+  }
+
+  h1 + p {
+    @include white-box-shadow;
+  }
+
 }

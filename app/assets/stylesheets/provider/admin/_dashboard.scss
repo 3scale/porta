@@ -78,7 +78,8 @@
 }
 
 .DashboardWidget {
-  @include white-box-shadow;
+  background-color: $white;
+  border: $border-width solid $border-color;
   float: left;
   height: line-height-times(10);
   overflow: hidden;

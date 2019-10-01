@@ -19,5 +19,11 @@
   .u-dl-definition:last-child {
     margin-bottom: line-height-times(-1);
     border-bottom: 0;
-  }  
+  }
 }
+
+.api-docs-wrap {
+  @include white-box-shadow;
+  padding: line-height-times(1);
+}
+

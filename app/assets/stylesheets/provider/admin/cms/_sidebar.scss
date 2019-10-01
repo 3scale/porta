@@ -136,6 +136,10 @@
       }
     }
   }
+
+  &:last-child {
+    padding-bottom: line-height-times(1);
+  }
 }
 
 #cms-sidebar-error-empty {
