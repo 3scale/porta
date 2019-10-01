@@ -2,4 +2,4 @@
 = semantic_form_for @service, :url => admin_service_path(@service) do |form|
   = render :partial => 'api/services/forms/integration_settings_apiap', :locals => {:form => form}
   = form.buttons do
-    = form.commit_button
+    = form.commit_button(button_html: { name: 'update_settings' })

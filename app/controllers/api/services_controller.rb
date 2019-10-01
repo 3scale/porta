@@ -31,14 +31,12 @@ class Api::ServicesController < Api::BaseController
 
   def settings
     activate_menu :serviceadmin, :integration, :settings
-    @alert_limits = Alert::ALERT_LEVELS
-    settings_apiap if apiap?
+    render settings_page
   end
 
   def usage_rules
     raise ActiveRecord::RecordNotFound unless apiap?
     activate_menu :serviceadmin, :applications, :usage_rules
-    @alert_limits = Alert::ALERT_LEVELS
   end
 
   def create
@@ -63,7 +61,7 @@ class Api::ServicesController < Api::BaseController
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
       redirect_back_or_to :action => :settings
     else
-      render :action => :edit # edit page is only page with free form fields. other forms are less probable to have errors
+      render action: params[:update_settings].present? ? settings_page : :edit # edit page is only page with free form fields. other forms are less probable to have errors
     end
   end
 
@@ -87,8 +85,8 @@ class Api::ServicesController < Api::BaseController
   end
 
   # This will be the default 'settings' when apiap is live
-  def settings_apiap
-    render :settings_apiap
+  def settings_page
+    apiap? ? :settings_apiap : :settings
   end
 
   protected
