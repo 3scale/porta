@@ -650,13 +650,13 @@ class ProxyTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service, account: provider)
       proxy = service.proxy
 
-      # Updating policies_config is an affecting change
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy)
-      proxy.update_attributes(policies_config: [{ name: '1', version: 'b', configuration: {} }])
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).twice
 
-      # Not all attributes of Proxy are considered potential affecting changes
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).never
+      proxy.update_attributes(policies_config: [{ name: '1', version: 'b', configuration: {} }])
       proxy.update_attributes(deployed_at: Time.utc(2019, 9, 26, 12, 20))
+
+      # A stale update is not an affecting change
+      proxy.update_attributes(updated_at: Time.utc(2019, 9, 26, 12, 20))
     end
   end
 end
