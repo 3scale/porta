@@ -1,5 +1,5 @@
 section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service)) class="Configuration--#{@show_presenter.test_state_modifier}"
-  - unless @apiap
+  - unless apiap?
     = link_to edit_deployment_option_title(@service), edit_admin_service_integration_path(@service), class: 'SettingsBox-toggle'
 
   article.Configuration-summary data-state="open" class=("Environment--#{@show_presenter.test_state_modifier}" unless deployment_option_is_service_mesh?(@service))
@@ -34,12 +34,12 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
         dt.u-dl-term Secret Token
         dd.u-dl-definition = @proxy.secret_token
 
-    div
-      = semantic_form_for @proxy, url: admin_service_integration_path(@service) do |f|
-        = f.buttons class: "buttons buttons-inline" do
-          = f.hidden_field :lock_version
-          = f.button "Promote v. #{@show_presenter.last_sandbox_config.version+1} to Staging",
-            button_html: {class: 'important-button PromoteButton', data: { disable_with: 'promoting…' }}
+    - if apiap?
+      div
+        = semantic_form_for @proxy, url: admin_service_integration_path(@service) do |f|
+          = f.buttons class: "buttons buttons-inline" do
+            = f.hidden_field :lock_version
+            = f.button *promote_to_staging_button_options(@show_presenter)
 
 - unless deployment_option_is_service_mesh?(@service)
   section style="margin-top: 48px;"
@@ -54,11 +54,11 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
           .ConfigurationVersion
             ' v.
             = @show_presenter.last_sandbox_config.version
-        - unless @show_presenter.environments_have_same_config?
           = semantic_form_for @proxy, url: promote_to_production_admin_service_integration_path(@service, anchor: 'production'), html: { class: 'PromoteForm' } do |f|
             = f.buttons class: "buttons buttons-inline" do
-              = f.button "Promote v. #{@show_presenter.last_sandbox_config.version} to Production",
-                button_html: {class: 'important-button PromoteButton', data: { disable_with: 'promoting…' }}
+              = f.button *promote_to_production_button_options(@show_presenter)
+        - else
+          | no configuration has been saved for the staging environment yet
 
     .SettingsBox.Environment
       - if @show_presenter.any_production_configs?
@@ -67,9 +67,8 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
         h3.Environment-title Production Environment
         - if @show_presenter.any_production_configs?
           = @show_presenter.production_proxy_endpoint
-        - else
-          | no configuration has been saved for the production environment yet
-        .ConfigurationVersion
-          - if @show_presenter.any_production_configs?
+          .ConfigurationVersion
             ' v.
             = @show_presenter.last_production_config.version
+        - else
+          | no configuration has been saved for the production environment yet

@@ -65,7 +65,7 @@ nav.DashboardNavigation
                                         icon_name: 'wrench'
 
         - else
-          = dashboard_navigation_link 'Integrate this API',
+          = dashboard_navigation_link "Integrate this #{apiap? ? 'Product' : 'API'}",
                                       path_to_service(service),
                                       icon_name: 'wrench',
                                       notice: true
