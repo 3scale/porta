@@ -567,7 +567,7 @@ en:
           /foo/bar/baz requests.</p>
         curl:
           no_application_plan:
-            Start with creating an application plan.
+            Start by creating an application plan.
           no_application:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
 
