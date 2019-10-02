@@ -68,8 +68,7 @@ module BackendApiLogic
         def replace_path
           return {} if path.blank?
 
-          private_base_path = StringUtils::StripSlash.strip_slash(URI.parse(private_endpoint).path)
-          { replace_path: "{{original_request.path | replace: '/#{path}', '/#{private_base_path}'}}" }
+          { replace_path: "{{original_request.path | remove_first: '/#{path}'}}" }
         end
       end
       private_constant :Rule
