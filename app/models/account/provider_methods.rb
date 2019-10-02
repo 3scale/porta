@@ -334,7 +334,7 @@ module Account::ProviderMethods
       plan.create_contract_with!(self)
     end
 
-    ServiceCreator.new(service: services.build(name: 'API')).call
+    ServiceCreator.new(service: services.build(name: 'API')).call(private_endpoint: BackendApi.default_api_backend)
   end
 
   def create_default_fields_definitions

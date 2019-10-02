@@ -72,6 +72,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
 
   test 'delete a backend api without any products will schedule to delete in background' do
     backend_api = @provider.backend_apis.order(:id).second
+    backend_api.backend_api_configs.delete_all
     assert_not backend_api.backend_api_configs.any?
 
     perform_enqueued_jobs do
