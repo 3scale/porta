@@ -13,8 +13,8 @@ const APICAST_SETTINGS_CLASS = 'apicast-only-settings'
 const OIDC_ID = 'service_proxy_authentication_method_oidc'
 
 const toggleActive = (setting, active) => {
-  setting.classList.toggle('hidden', active)
-  setting.toggleAttribute('disabled', active)
+  active ? setting.classList.add('hidden') : setting.classList.remove('hidden')
+  active ? setting.setAttribute('disabled', true) : setting.removeAttribute('disabled')
 }
 
 export function initialize () {
