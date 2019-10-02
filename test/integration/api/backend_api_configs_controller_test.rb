@@ -91,7 +91,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#edit' do
-    config = service.backend_api_configs.create(backend_api: backend_api)
+    config = service.backend_api_configs.create(backend_api: backend_api, path: 'whatever')
     get edit_admin_service_backend_api_config_path(service, config)
     assert_response :success
     assert_select 'form.backend_api_config input#backend_api_config_backend_api_id[disabled=disabled][value=?]', backend_api.name
@@ -106,7 +106,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot change backend_api' do
-    config = service.backend_api_configs.create(backend_api: backend_api)
+    config = service.backend_api_configs.create(backend_api: backend_api, path: 'whatever')
     other_backend_api = FactoryBot.create(:backend_api, account: service.account)
     put admin_service_backend_api_config_path(service, config), backend_api_config: { backend_api_id: other_backend_api.id }
     assert_redirected_to admin_service_backend_api_configs_path(service)
