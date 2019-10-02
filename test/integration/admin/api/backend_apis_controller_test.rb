@@ -39,7 +39,7 @@ class Admin::API::BackendApisControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy with errors' do
-    BackendApiConfig.create!(service: provider.default_service, backend_api: backend_api)
+    provider.default_service.backend_api_configs.create!(backend_api: backend_api, path: 'whatever')
 
     delete admin_api_backend_api_path(backend_api, access_token: access_token_value)
     refute backend_api.reload.deleted?

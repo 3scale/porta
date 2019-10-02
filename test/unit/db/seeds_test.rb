@@ -114,6 +114,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert tenant_account.approved?
     assert tenant_account.state_changed_at.present?
     assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_account.bought_cinstance&.plan.id
+    assert_equal 'API', tenant_account.default_service&.name
 
     assert_equal 2, tenant_account.users.count
     tenant_user = tenant_account.users.but_impersonation_admin.first!
@@ -142,6 +143,22 @@ class SeedsTest < ActiveSupport::TestCase
     Settings.basic_disabled_switches.each do |switch_name|
       assert provider.settings.public_send(switch_name).hidden?
     end
+  end
+
+  test 'creates the backend api for the first tenant if has RU api_as_product enabled' do
+    Account.any_instance.stubs(provider_can_use?: true)
+
+    Rails.application.load_seed
+
+    assert_expected_backend_api
+  end
+
+  test 'creates the backend api for the first tenant if has RU api_as_product disabled' do
+    Account.any_instance.stubs(provider_can_use?: false)
+
+    Rails.application.load_seed
+
+    assert_expected_backend_api
   end
 
   test 'with ENV as params' do
@@ -187,5 +204,18 @@ class SeedsTest < ActiveSupport::TestCase
     [Account, User, Service, Plan, AccessToken, Metric, CMS::Template].each do |model|
       assert_equal 0, model.count, "#{model} did not rollback"
     end
+  end
+
+  private
+
+  def assert_expected_backend_api
+    assert (service = Account.tenants.first!.default_service)
+    assert_equal 1, service.backend_apis.count
+    assert (backend_api = service.backend_apis.accessible.first)
+    assert_equal BackendApi.default_api_backend, backend_api.private_endpoint
+    assert_equal service.system_name, backend_api.system_name
+    assert_equal "#{service.name} Backend", backend_api.name
+    assert_equal "Backend of #{service.name}", backend_api.description
+    assert_equal service.account_id, backend_api.account_id
   end
 end
