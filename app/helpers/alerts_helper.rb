@@ -19,7 +19,7 @@ module AlertsHelper
 
   def row_for_alert_levels(label, key, hash = nil, levels = nil)
     hash ||= @service.notification_settings
-    levels ||= @alert_limits
+    levels ||= alert_limits
 
     content_tag :tr, id: key do
       hidden_field_tag("service[notification_settings][#{key}][]", "") +
@@ -28,6 +28,10 @@ module AlertsHelper
           content_tag(:td, check_box_tag("service[notification_settings][#{key}][]", level, checked, title: "#{label} at #{level}% usage"))
         end.join.html_safe
     end
+  end
+
+  def alert_limits
+    @alert_limits ||= Alert::ALERT_LEVELS
   end
 
 end
