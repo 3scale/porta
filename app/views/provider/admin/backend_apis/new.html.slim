@@ -3,4 +3,4 @@ h2 New Backend
 = semantic_form_for @backend_api, url: provider_admin_backend_apis_path do |form|
   = render partial: 'provider/admin/backend_apis/forms/naming', locals: { form: form }
   = form.buttons do
-    = form.commit_button
+    = form.commit_button 'Create Backend'

@@ -25,8 +25,6 @@ module ProxyConfigAffectingChanges
   module ProxyExtension
     extend ActiveSupport::Concern
 
-    PROXY_CONFIG_AFFECTING_ATTRIBUTES = %w[policies_config].freeze # TODO: add more attributes here
-
     included do
       has_one :proxy_config_affecting_change, dependent: :delete
       private :proxy_config_affecting_change
@@ -36,7 +34,7 @@ module ProxyConfigAffectingChanges
       after_commit :issue_proxy_affecting_change_events, on: :update
 
       def issue_proxy_affecting_change_events
-        return if previously_changed?(:created_at) || (previous_changes.keys & PROXY_CONFIG_AFFECTING_ATTRIBUTES).empty?
+        return if previously_changed?(:created_at) || (previous_changes.keys - %w[updated_at lock_version]).empty?
 
         issue_proxy_affecting_change_event(self)
       end

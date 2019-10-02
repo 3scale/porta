@@ -51,7 +51,7 @@ nav.DashboardNavigation
     // Integration
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-        - if service.has_traffic?
+        - if service.has_traffic? || (apiap? && service.proxy.proxy_configs.sandbox.any?)
           - if has_out_of_date_configuration?(service)
             = dashboard_navigation_link 'Integration',
                                         path_to_service(service),
@@ -65,7 +65,7 @@ nav.DashboardNavigation
                                         icon_name: 'wrench'
 
         - else
-          = dashboard_navigation_link 'Integrate this API',
+          = dashboard_navigation_link "Integrate this #{apiap? ? 'Product' : 'API'}",
                                       path_to_service(service),
                                       icon_name: 'wrench',
                                       notice: true

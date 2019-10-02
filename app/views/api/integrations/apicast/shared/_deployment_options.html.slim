@@ -1,5 +1,5 @@
 .SettingsBox
-  - unless @apiap
+  - unless apiap?
     a href="" class="IntegrationSettingsBox-toggle" data-state="open" edit integration settings
     article.IntegrationSettingsBox-summary data-state="open"
       - if can_toggle_apicast_version?
