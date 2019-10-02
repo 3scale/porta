@@ -34,6 +34,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Service information updated.', flash[:notice]
 
       update_service_params = update_params[:service]
+      update_proxy_params = update_service_params.delete(:proxy_attributes)
       expected_notification_settings = update_service_params[:notification_settings].transform_values { |notifications| notifications.map(&:to_i) }
       expected_buyer_plan_change_permission = update_service_params[:buyer_plan_change_permission]
       expected_signup_and_use = update_service_params
@@ -45,6 +46,11 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal expected_notification_settings, service.notification_settings
       assert_equal expected_buyer_plan_change_permission, service.buyer_plan_change_permission
       expected_signup_and_use.each { |attr_name, attr_value| assert_equal attr_value, service.public_send(attr_name) }
+
+      proxy = service.proxy
+      update_proxy_params.each do |field_name, expected_value|
+        assert_equal expected_value, proxy.public_send(field_name)
+      end
     end
 
     # This test can be removed once used deprecated attributes have been removed from the schema
@@ -80,6 +86,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
             email_provider: ['', '50', '100', '150'],
             web_buyer: ['', '50', '100', '150'],
             email_buyer: ['', '50', '100', '300']
+          },
+          proxy_attributes: {
+            endpoint: 'http://api.example.com:8080',
+            sandbox_endpoint: 'http://api.staging.example.com:8080'
           }
         }
       }
