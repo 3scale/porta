@@ -72,8 +72,8 @@ attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
-system-builder-latest: &system-builder-latest
-  image: quay.io/3scale/system-builder:latest
+system-builder-ruby24: &system-builder-ruby24
+  image: quay.io/3scale/system-builder:ruby24
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -84,10 +84,6 @@ system-builder-latest: &system-builder-latest
     MASTER_PASSWORD: p
     USER_PASSWORD: p
     LC_ALL: en_US.UTF-8
-
-system-builder-ruby24: &system-builder-ruby24
-  <<: *system-builder-latest
-  image: quay.io/3scale/system-builder:ruby24
 
 mysql-container: &mysql-container
   image: circleci/mysql:5.7-ram
@@ -308,7 +304,7 @@ executors:
         type: string
         default: mysql
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
     environment:
       DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
@@ -316,7 +312,7 @@ executors:
   builder-with-mysql-latest: &builder-with-mysql-latest
     resource_class: small
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - *mysql-container
       - *memcached-container
       - *redis-container
@@ -326,7 +322,7 @@ executors:
   builder-with-postgres-latest: &builder-with-postgres-latest
     resource_class: small
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - *postgres-container
       - *memcached-container
       - *redis-container
@@ -336,7 +332,7 @@ executors:
   builder-with-oracle-latest: &builder-with-oracle-latest
     resource_class: large
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - *oracle-db-container
       - *memcached-container
       - *redis-container
@@ -376,7 +372,7 @@ executors:
   cucumber-with-mysql-latest: &cucumber-with-mysql-latest
     resource_class: small
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - *dnsmasq-container
       - *mysql-container
       - *memcached-container
@@ -385,7 +381,7 @@ executors:
   cucumber-with-postgres-latest: &cucumber-with-postgres-latest
     resource_class: small
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - *dnsmasq-container
       - *postgres-container
       - *memcached-container
@@ -394,7 +390,7 @@ executors:
   cucumber-with-oracle-latest: &cucumber-with-oracle-latest
     resource_class: large
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - *dnsmasq-container
       - *oracle-db-container
       - *memcached-container
@@ -885,7 +881,7 @@ jobs:
     parallelism: 1
     resource_class: small
     docker:
-      - *system-builder-latest
+      - *system-builder-ruby24
       - image: quay.io/mikz/dnsmasq
         command:
           - --no-poll
