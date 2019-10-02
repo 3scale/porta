@@ -23,7 +23,7 @@ module BackendApiLogic
 
     test '#policy_chain' do
       injected_rules = [
-        { url: backend_apis.last.private_endpoint,  condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | replace: '/foo', '/'}}" },
+        { url: backend_apis.last.private_endpoint,  condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | remove_first: '/foo'}}" },
         { url: backend_apis.first.private_endpoint, condition: { operations: [match: :path, op: :matches, value: '/.*'] } }
       ]
       apicast_policy = { name: 'apicast', 'version': 'builtin', 'configuration': {} }
@@ -48,9 +48,9 @@ module BackendApiLogic
           [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '' }, nil],
           [{ private_endpoint: 'https://safe-second-api.io', path: '' }, nil],
           [{ private_endpoint: 'https://safe-second-api.io/v2', path: '' }, nil],
-          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: 'hey' }, "{{original_request.path | replace: '/hey', '/ns'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io', path: 'ho' }, "{{original_request.path | replace: '/ho', '/'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io/v2', path: 'lets-go' }, "{{original_request.path | replace: '/lets-go', '/v2'}}"]
+          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: 'hey' }, "{{original_request.path | remove_first: '/hey'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io', path: 'ho' }, "{{original_request.path | remove_first: '/ho'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io/v2', path: 'lets-go' }, "{{original_request.path | remove_first: '/lets-go'}}"]
         ].each do |config, replace_path_value|
           expected_replace_path = replace_path_value ? { replace_path: replace_path_value } : {}
           assert_equal expected_replace_path, rule_class.new(stub(config)).replace_path
