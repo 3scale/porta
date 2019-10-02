@@ -97,7 +97,7 @@ class ContextSelector extends React.Component<Props, State> {
     const displayedApis = filteredApis.map(api => (
       <li key={`${api.type}-${api.id}`} className="PopNavigation-listItem">
         <a className={this.getClassNamesForService(api)} href={api.link}>
-          <i className={`fa ${api.type === 'product' && apiap ? 'fa-gift' : 'fa-puzzle-piece'}`} />{api.name}
+          <Icon apiap={apiap} apiType={api.type} />{api.name}
         </a>
       </li>
     ))
@@ -138,6 +138,16 @@ class ContextSelector extends React.Component<Props, State> {
       </div >
     )
   }
+}
+
+const Icon = ({ apiType, apiap }: {apiType: string, apiap: ?boolean}) => {
+  const iconClassName = apiap
+    ? (apiType === 'product' ? 'fa-cubes' : 'fa-cube')
+    : 'fa-puzzle-piece'
+
+  return (
+    <i className={`fa ${iconClassName}`} />
+  )
 }
 
 const ContextSelectorWrapper = (props: Props, containerId: string) => createReactWrapper(<ContextSelector {...props} />, containerId)

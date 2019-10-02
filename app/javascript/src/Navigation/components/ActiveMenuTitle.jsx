@@ -39,10 +39,10 @@ const ActiveMenuTitle = ({ activeMenu, currentApi, apiap = false }: Props) => {
 
       case 'serviceadmin':
       case 'monitoring':
-        return apiap ? ['fa-gift', `Product: ${currentApi.name}`] : ['fa-puzzle-piece', `Api: ${currentApi.name}`]
+        return apiap ? ['fa-cubes', `Product: ${currentApi.name}`] : ['fa-puzzle-piece', `Api: ${currentApi.name}`]
 
       case 'backend_api':
-        return ['fa-puzzle-piece', `Backend: ${currentApi.name}`]
+        return ['fa-cube', `Backend: ${currentApi.name}`]
 
       default:
         return ['fa-puzzle-piece', 'Choose an API']
