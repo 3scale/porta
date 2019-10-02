@@ -53,7 +53,7 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
     closePolicyRegistry: boundActionCreators.closePolicyRegistry
   }
 
-  const buttonsFieldset = document.querySelector('fieldset.buttons')
+  const buttonsFieldset = document.querySelector('[id^="edit_proxy_"] > fieldset.buttons')
   if (buttonsFieldset) {
     // classList.toggle second argument is not supported in IE11
     if (ui.chain) {
@@ -64,7 +64,7 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
   }
 
   // HACK: enable the submit button after any change is made
-  const submitButton = document.querySelector('input#policies-button-sav')
+  const submitButton = document.querySelector('#policies-button-sav')
   if (submitButton) {
     // classList.toggle second argument is not supported in IE11
     if (isPolicyChainChanged(chain, originalChain)) {
