@@ -1,18 +1,18 @@
 - # oidc
-- is_oidc = @service.backend_version === 'oidc'
-- is_service_mesh = @service.proxy.deployment_option === 'service_mesh_istio'
-= f.inputs 'Authentication Settings', disabled: is_oidc && is_service_mesh, id: 'auth-settings-wrapper', class: "#{'hidden' if is_oidc && is_service_mesh}" do
+- is_oidc = @service.oidc?
+- is_service_mesh = @service.proxy.service_mesh_integration?
+= f.inputs 'Authentication Settings', disabled: is_service_mesh && !is_oidc , id: 'auth-settings-wrapper', class: "#{'hidden' if is_service_mesh && !is_oidc}" do
   = f.inputs id: 'service_proxy_authentication_method_oidc_settings', disabled: !is_oidc, class: "auth-settings #{'hidden' unless is_oidc}"
     = render 'api/services/forms/oidc', f: f, proxy: @service.proxy
 
   - # auth user key (1)
   - is_auth_user = @service.backend_version === '1'
-  = f.inputs 'API Key (user_key) Basics', id: 'service_proxy_authentication_method_1_settings',  disabled: !is_auth_user, class: "auth-settings #{'hidden' unless is_auth_user}"
+  = f.inputs 'API Key (user_key) Basics', id: 'service_proxy_authentication_method_1_settings',  disabled: !is_auth_user || is_service_mesh, class: "auth-settings #{'hidden' if is_service_mesh || !is_auth_user}"
     = f.input :auth_user_key
 
   - # App_ID and App_Key Pair (2)
   - is_auth_app_key = @service.backend_version === '2'
-  = f.inputs 'App_ID and App_key Pair Basics', id: 'service_proxy_authentication_method_2_settings',  disabled: !is_auth_app_key, class: "auth-settings #{'hidden' unless is_auth_app_key}"
+  = f.inputs 'App_ID and App_key Pair Basics', id: 'service_proxy_authentication_method_2_settings',  disabled: !is_auth_app_key || is_service_mesh, class: "auth-settings #{'hidden' if is_service_mesh || !is_auth_app_key}"
     = f.input :auth_app_id
     = f.input :auth_app_key
 

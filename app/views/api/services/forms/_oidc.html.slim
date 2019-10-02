@@ -1,4 +1,4 @@
-- is_service_mesh = @service.proxy.deployment_option === 'service_mesh_istio'
+- is_service_mesh = @service.proxy.service_mesh_integration?
 = f.inputs 'OpenID Connect (OIDC) Basics' do
   = f.input :oidc_issuer_type, hint: true, as: :select,
         collection: Proxy.oidc_issuer_types, selected: proxy.oidc_issuer_type || Proxy.column_defaults['oidc_issuer_type']
