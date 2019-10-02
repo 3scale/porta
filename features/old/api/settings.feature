@@ -46,6 +46,7 @@ Feature: API Settings
 
   Scenario: API settings don't crash when APICAST_REGISTRY_URL is undefined
     Given apicast registry is undefined
+    And I have rolling update api_as_product disabled
     When I log in as provider "foo.example.com"
     And I go to the integration show page for service "API" of provider "foo.example.com"
     And I follow "add the base URL of your API and save the configuration."

@@ -92,4 +92,30 @@ module Api::IntegrationsHelper
     title = deployment_option_is_service_mesh?(service) ? 'Service Mesh' : 'APIcast'
     t(:edit_deployment_configuration, scope: :api_integrations_controller, deployment: title )
   end
+
+  def promote_to_staging_button_options(proxy)
+    return disabled_promote_button_options if proxy.any_sandbox_configs? && !proxy.pending_affecting_changes?
+
+    label = deployment_option_is_service_mesh?(proxy.service) ? 'Update Configuration' : "Promote v. #{proxy.next_sandbox_config_version} to Staging"
+    promote_button_options(label)
+  end
+
+  def promote_to_production_button_options(proxy)
+    return disabled_promote_button_options if proxy.environments_have_same_config?
+
+    label = "Promote v. #{proxy.next_production_config_version} to Production"
+    promote_button_options(label)
+  end
+
+  PROMOTE_BUTTON_COMMON_OPTIONS = { button_html: { class: 'PromoteButton', data: { disable_with: 'promoting…' } } }.freeze
+
+  def promote_button_options(label = 'Promote')
+    options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge(button_html: { class: 'PromoteButton important-button' })
+    [label, options]
+  end
+
+  def disabled_promote_button_options
+    options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge(button_html: { class: 'PromoteButton disabled-button', disabled: true })
+    ['Nothing to promote', options]
+  end
 end
