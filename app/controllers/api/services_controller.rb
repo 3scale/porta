@@ -43,7 +43,7 @@ class Api::ServicesController < Api::BaseController
     @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
     creator = ServiceCreator.new(service: @service)
 
-    if can_create? && creator.call(service_params)
+    if can_create? && creator.call(create_params)
       flash[:notice] =  'Service created.'
       onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
@@ -55,7 +55,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def update
-    if @service.update_attributes(service_params)
+    if integration_settings_result.update(service_attributes: service_params, proxy_attributes: proxy_params)
       flash[:notice] =  'Service information updated.'
       onboarding.bubble_update('api') if service_name_changed?
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
@@ -73,23 +73,40 @@ class Api::ServicesController < Api::BaseController
 
   private
 
+  attr_reader :service
+
+  def integration_settings_result
+    ApiIntegration::SettingsResult.new(service: service, proxy: service.proxy)
+  end
+
+  def create_params
+    permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
+                        :intentions_required, :buyers_manage_apps, :referrer_filters_required,
+                        :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
+                        :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
+                        :txt_support, :terms, {proxy_attributes: Proxy.user_attribute_names},
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
+    params.require(:service).permit(permitted_params)
+  end
+
   def service_params
     permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
                         :intentions_required, :buyers_manage_apps, :referrer_filters_required,
                         :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
                         :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
                         :txt_support, :terms,
-                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []], proxy_attributes: Proxy.user_attribute_names}
-    ]
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
     params.require(:service).permit(permitted_params)
+  end
+
+  def proxy_params
+    params.require(:service).fetch(:proxy_attributes, {}).permit(:sandbox_endpoint, :endpoint)
   end
 
   # This will be the default 'settings' when apiap is live
   def settings_page
     apiap? ? :settings_apiap : :settings
   end
-
-  protected
 
   def service_name_changed?
     @service.previous_changes['name']

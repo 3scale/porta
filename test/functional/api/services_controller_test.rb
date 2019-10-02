@@ -116,6 +116,6 @@ class Api::ServicesControllerTest < ActionController::TestCase
 
     put :update, id: @service.id, service: { name: 'Supetramp' }
 
-    assert_response 200
+    assert_response 302
   end
 end
