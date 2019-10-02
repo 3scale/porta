@@ -1,4 +1,5 @@
-= f.inputs "API gateway" do
+- is_service_mesh = proxy.service_mesh_integration?
+= f.inputs "API gateway", class: "apicast-only-settings #{'hidden' if is_service_mesh}", disabled: is_service_mesh do
   = f.input :sandbox_endpoint, label: "Staging Public Base URL",
             input_html: { data: { default: (proxy.default_staging_endpoint unless proxy.self_managed?) },
                           readonly: !apicast_custom_urls?,
