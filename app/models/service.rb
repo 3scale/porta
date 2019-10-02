@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'backend_client'
 
 class Service < ApplicationRecord
@@ -12,7 +14,9 @@ class Service < ApplicationRecord
   extend System::Database::Scopes::IdOrSystemName
   include ServiceDiscovery::ModelExtensions::Service
 
-  DELETE_STATE = 'deleted'.freeze
+  DEFAULT_SERVICE_NAME = 'API'
+
+  DELETE_STATE = 'deleted'
 
   has_system_name uniqueness_scope: :account_id
 
@@ -128,17 +132,17 @@ class Service < ApplicationRecord
   accepts_nested_attributes_for :proxy
 
   class DeploymentOption
-    PLUGINS = %i(ruby java python nodejs php rest csharp).freeze
+    PLUGINS = %i(ruby java python nodejs php rest csharp)
     private_constant :PLUGINS
 
-    APICAST = %i(hosted self_managed).freeze
+    APICAST = %i(hosted self_managed)
     private_constant :APICAST
 
-    SERVICE_MESH = %i[istio].freeze
+    SERVICE_MESH = %i[istio]
     private_constant :SERVICE_MESH
 
     def self.plugins
-      PLUGINS.map { |lang| "plugin_#{lang}".freeze }
+      PLUGINS.map { |lang| "plugin_#{lang}" }
     end
 
     def self.gateways
@@ -146,7 +150,7 @@ class Service < ApplicationRecord
     end
 
     def self.service_mesh
-      SERVICE_MESH.map { |name| "service_mesh_#{name}".freeze }
+      SERVICE_MESH.map { |name| "service_mesh_#{name}" }
     end
 
     def self.all
@@ -501,7 +505,7 @@ class Service < ApplicationRecord
     (proxy || build_proxy).authentication_method = backend_version
 
     if oidc?
-      super('oauth'.freeze)
+      super('oauth')
     else
       super(backend_version)
     end
@@ -552,7 +556,7 @@ class Service < ApplicationRecord
 
   def default_service_plan_state
     return unless account.try(:provider_can_use?, :published_service_plan_signup)
-    account.settings.service_plans_ui_visible? ? 'hidden'.freeze : 'published'.freeze
+    account.settings.service_plans_ui_visible? ? 'hidden' : 'published'
   end
 
   def update_notification_settings

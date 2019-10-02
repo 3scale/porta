@@ -28,8 +28,22 @@ class Signup::ProviderAccountManager < Signup::AccountManager
 
   def contract_plans_and_create_service(account, plans, defaults)
     create_contract_plans_for_account!(account, plans, defaults)
-    ServiceCreator.new(service: account.services.build(name: 'API')).call
+    create_first_service_and_backend_api(account)
     set_switches_and_limits(account, plans.application_plan)
+  end
+
+  def create_first_service_and_backend_api(account)
+    service_name = Service::DEFAULT_SERVICE_NAME
+    service = account.services.build(name: service_name)
+    options = { service: service }
+
+    if account.provider_can_use?(:api_as_product) && account.backend_apis.empty?
+      backend_api = service.backend_api
+      backend_api.private_endpoint = BackendApi.default_api_backend
+      options[:backend_api] = backend_api
+    end
+
+    ServiceCreator.new(options).call
   end
 
   def set_switches_and_limits(account, application_plan)
