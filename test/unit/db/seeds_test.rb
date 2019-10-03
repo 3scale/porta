@@ -197,7 +197,7 @@ class SeedsTest < ActiveSupport::TestCase
     tenant_user = tenant_account.users.but_impersonation_admin.first!
     assert_equal ENV_VARIABLES['USER_LOGIN'], tenant_user.username
     assert_equal ENV_VARIABLES['USER_EMAIL'], tenant_user.email
-    assert(tenant_bought_cinstance = enant_account.bought_cinstance)
+    assert(tenant_bought_cinstance = tenant_account.bought_cinstance)
     assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['PROVIDER_PLAN']).id, tenant_bought_cinstance.plan_id
   end
 
