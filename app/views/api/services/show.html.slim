@@ -99,7 +99,8 @@ section class="service-widget"
             '  published) with a total of
             = pluralize service.contracts.service.size, 'contract'
             | .
-          
+
+    - if current_user.accessible_services.empty?
       = render 'shared/service_access'
 
     section[name="activity"]
