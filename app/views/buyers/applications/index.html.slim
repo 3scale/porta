@@ -10,6 +10,8 @@
       ' on service
       = @service.name
 
-= render 'listing'
-= render 'shared/service_access'
+- if current_user.accessible_services.empty?
+  = render 'shared/service_access'
+- else
+  = render 'listing'
 
