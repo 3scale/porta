@@ -80,7 +80,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal master_service.id, master_app_plan.issuer_id
     assert_equal 'enterprise', master_app_plan.name
 
-    assert_equal ApplicationPlan.find_by(name: 'Master Plan').id, master_account.bought_cinstance&.plan.id
+    assert_equal ApplicationPlan.find_by(name: 'Master Plan').id, master_account.bought_cinstance.plan_id
 
     master_account_plan = master_account.default_account_plan
     assert_equal master_account.id, master_account_plan.issuer_id
@@ -90,14 +90,14 @@ class SeedsTest < ActiveSupport::TestCase
       assert master_service.metrics.find_by(system_name: system_name, unit: 'hit', friendly_name: description)
     end
 
-    assert(tenant_app_plan = master_service.application_plans.default)
+    tenant_app_plan = master_service.application_plans.default
     assert_equal 'enterprise', tenant_app_plan.name
     assert_equal master_service.id, tenant_app_plan.issuer_id
 
-    assert(apicast = master_account.access_tokens.find_by(name: 'APIcast'))
+    apicast = master_account.access_tokens.find_by(name: 'APIcast')
     assert_equal 'ro', apicast.permission
     assert_equal %w[account_management], apicast.scopes
-    assert(master_token = master_account.access_tokens.find_by(name: 'Master Token'))
+    master_token = master_account.access_tokens.find_by(name: 'Master Token')
     assert_equal 'rw', master_token.permission
     assert_equal %w[account_management], master_token.scopes
 
@@ -113,8 +113,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert tenant_account.sample_data.presence
     assert tenant_account.approved?
     assert tenant_account.state_changed_at.present?
-    assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_account.bought_cinstance&.plan.id
-    assert_equal 'API', tenant_account.default_service&.name
+    assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_account.bought_cinstance.plan_id
+    assert_equal 'API', tenant_account.default_service.name
 
     assert_equal 2, tenant_account.users.count
     tenant_user = tenant_account.users.but_impersonation_admin.first!
@@ -180,9 +180,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal ENV_VARIABLES['MASTER_ACCESS_CODE'], master_account.site_access_code
     assert_equal ENV_VARIABLES['MASTER_USER'], master_account.users.first!.username
     assert_equal ENV_VARIABLES['MASTER_SERVICE'], master_account.default_service.name
-    assert(tenant_app_plan = master_account.default_service.application_plans.default)
-    assert_equal ENV_VARIABLES['PROVIDER_PLAN'], tenant_app_plan.name
-    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['MASTER_PLAN']).id, master_account.bought_cinstance&.plan.id
+    assert_equal ENV_VARIABLES['PROVIDER_PLAN'], master_account.default_service.application_plans.default.name
+    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['MASTER_PLAN']).id, master_account.bought_cinstance.plan_id
 
     tenant_account = Account.tenants.first!
     assert_equal ENV_VARIABLES['PROVIDER_NAME'], tenant_account.name
@@ -193,7 +192,7 @@ class SeedsTest < ActiveSupport::TestCase
     tenant_user = tenant_account.users.but_impersonation_admin.first!
     assert_equal ENV_VARIABLES['USER_LOGIN'], tenant_user.username
     assert_equal ENV_VARIABLES['USER_EMAIL'], tenant_user.email
-    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['PROVIDER_PLAN']).id, tenant_account.bought_cinstance&.plan.id
+    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['PROVIDER_PLAN']).id, tenant_account.bought_cinstance.plan_id
   end
 
   test 'done in a transaction: if it fails somewhere, it rollbacks' do
@@ -209,9 +208,9 @@ class SeedsTest < ActiveSupport::TestCase
   private
 
   def assert_expected_backend_api
-    assert (service = Account.tenants.first!.default_service)
+    service = Account.tenants.first!.default_service
     assert_equal 1, service.backend_apis.count
-    assert (backend_api = service.backend_apis.accessible.first)
+    backend_api = service.backend_apis.accessible.first
     assert_equal BackendApi.default_api_backend, backend_api.private_endpoint
     assert_equal service.system_name, backend_api.system_name
     assert_equal "#{service.name} Backend", backend_api.name

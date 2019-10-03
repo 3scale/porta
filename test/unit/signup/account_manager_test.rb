@@ -126,19 +126,29 @@ class Signup::AccountManagerTest < ActiveSupport::TestCase
       assert_equal 'API', account.first_service!.name
     end
 
-    test 'creating a provider will create default Backend if api_as_product is disabled' do
+    test 'first service has a private endpoint in order to be functional for non-APIAP accounts' do
       Account.any_instance.stubs(:provider_can_use?).returns(false)
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false)
+
       account = signup_account_manager.create(signup_params).account
-      assert_equal BackendApi.default_api_backend, account.default_service.api_backend
+      assert_equal 1, account.first_service!.backend_apis.count
+      assert_equal BackendApi.default_api_backend, account.first_service!.backend_apis.first!.private_endpoint
     end
 
-    test 'creating a provider will create default Backend if api_as_product is enabled' do
+    test 'first service has a complete backend api for APIAP accounts' do
       Account.any_instance.stubs(:provider_can_use?).returns(false)
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true)
+
       account = signup_account_manager.create(signup_params).account
-      assert account.backend_apis.first
-      assert_equal BackendApi.default_api_backend, account.default_service.api_backend
+      assert_equal 1, account.backend_apis.count
+      assert (service = account.default_service)
+      assert_equal 1, service.backend_apis.count
+      assert (backend_api = service.backend_apis.accessible.first)
+      assert_equal BackendApi.default_api_backend, backend_api.private_endpoint
+      assert_equal service.system_name, backend_api.system_name
+      assert_equal "#{service.name} Backend", backend_api.name
+      assert_equal "Backend of #{service.name}", backend_api.description
+      assert_equal service.account_id, backend_api.account_id
     end
 
     private
