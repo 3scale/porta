@@ -1,0 +1,9 @@
+{
+  "revision": "a1b2c3d",
+  "release": "4.5.1-CR1",
+  "deployed_at": "2019-09-25 10:45:09 UTC",
+  "rails": "4.2.11.1",
+  "env": {
+    "PATH": "/home/user/production/porta"
+  }
+}

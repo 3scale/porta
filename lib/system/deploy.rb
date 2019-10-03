@@ -28,7 +28,7 @@ module System
 
       class VersionParser
         attr_reader :segments
-        
+
         def initialize(release)
           @segments = release.to_s.split('.')
         end
@@ -69,9 +69,9 @@ module System
       [200, {'Content-Type' => 'application/json'}, [info.to_json]]
     end
 
-    def self.load_info!
-      self.info = Info.new(parse_deploy_info)
-    rescue => error
+    def self.load_info!(deploy_info = parse_deploy_info)
+      self.info = Info.new(deploy_info)
+    rescue StandardError => error
       self.info = InvalidInfo.new(error)
     end
   end
