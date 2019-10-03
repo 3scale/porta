@@ -80,8 +80,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal master_service.id, master_app_plan.issuer_id
     assert_equal 'enterprise', master_app_plan.name
 
-    assert (master_bought_cinstance = master_account.bought_cinstance)
-    assert_equal ApplicationPlan.find_by(name: 'Master Plan').id, master_bought_cinstance.plan_id
+    assert_equal ApplicationPlan.find_by(name: 'Master Plan').id, master_account.bought_cinstance.plan_id
 
     master_account_plan = master_account.default_account_plan
     assert_equal master_account.id, master_account_plan.issuer_id
@@ -114,10 +113,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert tenant_account.sample_data.presence
     assert tenant_account.approved?
     assert tenant_account.state_changed_at.present?
-    assert (tenant_bought_cinstance = tenant_account.bought_cinstance)
-    assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_bought_cinstance.plan_id
-    assert (tenant_service = tenant_account.default_service)
-    assert_equal 'API', tenant_service.name
+    assert_equal ApplicationPlan.find_by(name: 'enterprise').id, tenant_account.bought_cinstance.plan_id
+    assert_equal 'API', tenant_account.default_service.name
 
     assert_equal 2, tenant_account.users.count
     tenant_user = tenant_account.users.but_impersonation_admin.first!
@@ -183,10 +180,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal ENV_VARIABLES['MASTER_ACCESS_CODE'], master_account.site_access_code
     assert_equal ENV_VARIABLES['MASTER_USER'], master_account.users.first!.username
     assert_equal ENV_VARIABLES['MASTER_SERVICE'], master_account.default_service.name
-    assert (tenant_app_plan = master_account.default_service.application_plans.default)
-    assert_equal ENV_VARIABLES['PROVIDER_PLAN'], tenant_app_plan.name
-    assert (master_bought_cinstance = master_account.bought_cinstance)
-    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['MASTER_PLAN']).id, master_bought_cinstance.plan_id
+    assert_equal ENV_VARIABLES['PROVIDER_PLAN'], master_account.default_service.application_plans.default.name
+    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['MASTER_PLAN']).id, master_account.bought_cinstance.plan_id
 
     tenant_account = Account.tenants.first!
     assert_equal ENV_VARIABLES['PROVIDER_NAME'], tenant_account.name
@@ -197,8 +192,7 @@ class SeedsTest < ActiveSupport::TestCase
     tenant_user = tenant_account.users.but_impersonation_admin.first!
     assert_equal ENV_VARIABLES['USER_LOGIN'], tenant_user.username
     assert_equal ENV_VARIABLES['USER_EMAIL'], tenant_user.email
-    assert (tenant_bought_cinstance = tenant_account.bought_cinstance)
-    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['PROVIDER_PLAN']).id, tenant_bought_cinstance.plan_id
+    assert_equal ApplicationPlan.find_by(name: ENV_VARIABLES['PROVIDER_PLAN']).id, tenant_account.bought_cinstance.plan_id
   end
 
   test 'done in a transaction: if it fails somewhere, it rollbacks' do
