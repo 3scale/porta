@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
 class MetricHelperTest < ActionView::TestCase
   test 'metric_name returns the friendly name of the metric' do
