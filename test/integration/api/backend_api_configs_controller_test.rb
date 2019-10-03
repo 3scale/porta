@@ -17,10 +17,10 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
   attr_reader :service, :backend_api
 
   test '#index' do
-    service.backend_api_configs.create(backend_api: backend_api)
+    service.backend_api_configs.create!(backend_api: backend_api, path: 'whatever')
     get admin_service_backend_api_configs_path(service)
     assert_response :success
-    assert_select 'table#backend_api_configs tbody tr', count: 2
+    assert_select 'table#backend_api_configs tbody tr', count: service.backend_apis.count
   end
 
   test '#new' do
@@ -33,7 +33,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
 
     backend_apis_not_in_use = backend_apis.take(2)
     backend_api_in_use = backend_apis.last
-    service.backend_api_configs.create(backend_api: backend_api_in_use)
+    service.backend_api_configs.create!(backend_api: backend_api_in_use, path: 'whatever')
 
     get new_admin_service_backend_api_config_path(service)
     backend_apis_not_in_use.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id }
