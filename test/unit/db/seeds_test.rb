@@ -90,14 +90,14 @@ class SeedsTest < ActiveSupport::TestCase
       assert master_service.metrics.find_by(system_name: system_name, unit: 'hit', friendly_name: description)
     end
 
-    assert (tenant_app_plan = master_service.application_plans.default)
+    tenant_app_plan = master_service.application_plans.default
     assert_equal 'enterprise', tenant_app_plan.name
     assert_equal master_service.id, tenant_app_plan.issuer_id
 
-    assert (apicast = master_account.access_tokens.find_by(name: 'APIcast'))
+    apicast = master_account.access_tokens.find_by(name: 'APIcast')
     assert_equal 'ro', apicast.permission
     assert_equal %w[account_management], apicast.scopes
-    assert (master_token = master_account.access_tokens.find_by(name: 'Master Token'))
+    master_token = master_account.access_tokens.find_by(name: 'Master Token')
     assert_equal 'rw', master_token.permission
     assert_equal %w[account_management], master_token.scopes
 
@@ -208,9 +208,9 @@ class SeedsTest < ActiveSupport::TestCase
   private
 
   def assert_expected_backend_api
-    assert (service = Account.tenants.first!.default_service)
+    service = Account.tenants.first!.default_service
     assert_equal 1, service.backend_apis.count
-    assert (backend_api = service.backend_apis.accessible.first)
+    backend_api = service.backend_apis.accessible.first
     assert_equal BackendApi.default_api_backend, backend_api.private_endpoint
     assert_equal service.system_name, backend_api.system_name
     assert_equal "#{service.name} Backend", backend_api.name
