@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
 # REFACTOR: totally remove that and place Cinstance::Billing to some
 # separate class/module
