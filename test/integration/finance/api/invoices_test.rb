@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
+require 'test_helper'
 
 module Finance::Api
   class InvoicesTest < ActionDispatch::IntegrationTest
