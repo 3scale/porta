@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
 class SwitchHelperTest < ActionView::TestCase
   test 'enabled content is visible and disabled invisible if enabled' do

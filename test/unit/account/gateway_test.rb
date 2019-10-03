@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
 # TODO: will become a CreditCard model by itself soon
 class Account::GatewayTest  < ActiveSupport::TestCase

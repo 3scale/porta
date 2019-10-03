@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
+require 'test_helper'
 
 class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
   def setup
