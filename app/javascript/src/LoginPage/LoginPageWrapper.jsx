@@ -36,7 +36,10 @@ type Props = {
   providerPasswordPath: string,
   providerSessionsPath: string,
   redirectUrl: string,
-  show3scaleLoginForm: boolean
+  show3scaleLoginForm: boolean,
+  session: {
+    username: ?string
+  }
 }
 
 const formModeTuple: [string, string] = ['login', 'password-reset']
@@ -83,6 +86,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
         { !enforceSSO &&
             <Login3scaleForm
               providerSessionsPath={this.props.providerSessionsPath}
+              session={this.props.session}
             />
         }
         { hasAuthenticationProviders &&

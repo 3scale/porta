@@ -9,7 +9,8 @@ div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].
   providerSessionsPath: provider_sessions_path,
   providerLoginPath: provider_login_path,
   providerPasswordPath: provider_password_path,
-  providerAdminDashboardPath: provider_admin_dashboard_path}.to_json
+  providerAdminDashboardPath: provider_admin_dashboard_path,
+  session: {username: params[:username]} }.to_json
 
 #old-login-page-wrapper
   .box#old-login-page
