@@ -55,7 +55,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def update
-    if integration_settings_result.update(service_attributes: service_params, proxy_attributes: proxy_params)
+    if integration_settings_updater_service.call(service_attributes: service_params, proxy_attributes: proxy_params)
       flash[:notice] =  'Service information updated.'
       onboarding.bubble_update('api') if service_name_changed?
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
@@ -75,8 +75,8 @@ class Api::ServicesController < Api::BaseController
 
   attr_reader :service
 
-  def integration_settings_result
-    ApiIntegration::SettingsResult.new(service: service, proxy: service.proxy)
+  def integration_settings_updater_service
+    ApiIntegration::SettingsUpdaterService.new(service: service, proxy: service.proxy)
   end
 
   def create_params
