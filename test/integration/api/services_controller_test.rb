@@ -15,7 +15,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   class SettingsTest < Api::ServicesControllerTest
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false | true)
       rolling_update(:api_as_product, enabled: false)
 
       get settings_admin_service_path(service)
@@ -30,6 +29,9 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'update the settings' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: false)
+
       service.update!(deployment_option: 'self_managed')
       put admin_service_path(service), update_params
       assert_equal 'Service information updated.', flash[:notice]
@@ -70,6 +72,81 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       assert_not_equal service.tech_support_email, new_tech_support_email
       assert_not_equal service.admin_support_email, new_admin_support_email
+    end
+
+    test 'update endpoint and sandbox endpoint with apicast custom url enabled' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: false)
+
+      ThreeScale.config.stubs(:apicast_custom_url).returns(true)
+
+      proxy = service.proxy
+      proxy.update_columns(endpoint: 'http://old-api.example.com:8080',
+                           sandbox_endpoint: 'http://old-api.staging.example.com:8080')
+
+      put admin_service_path(service), update_params
+      proxy.reload
+      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'http://api.example.com:8080', proxy.endpoint
+      assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
+    end
+
+    test 'update endpoint and sandbox endpoint with apicast custom url disabled' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: false)
+
+      ThreeScale.config.stubs(:apicast_custom_url).returns(false)
+
+      proxy = service.proxy
+      proxy.update_columns(endpoint: 'http://old-api.example.com:8080',
+                           sandbox_endpoint: 'http://old-api.staging.example.com:8080')
+
+      # hosted apicast
+      put admin_service_path(service), update_params
+      proxy.reload
+      assert_equal 'http://old-api.example.com:8080', proxy.endpoint
+      assert_equal 'http://old-api.staging.example.com:8080', proxy.sandbox_endpoint
+
+      # self-menaged apicast
+      service.update!(deployment_option: 'self_managed')
+      put admin_service_path(service), update_params
+      proxy.reload
+      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'http://api.example.com:8080', proxy.endpoint
+      assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
+    end
+
+    test 'update settings with apiap' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: true)
+
+      put admin_service_path(service), update_params
+      assert_equal 'Product information updated.', flash[:notice]
+    end
+
+    test 'update api_backend with apiap' do
+      proxy = service.proxy
+      proxy.api_backend = 'http://old.backend'
+      proxy.save!
+
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: true)
+
+      put admin_service_path(service), update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
+      assert_equal 'http://old.backend:80', proxy.reload.api_backend
+    end
+
+    test 'update api_backend without' do
+      proxy = service.proxy
+      proxy.api_backend = 'http://old.backend'
+      proxy.save!
+
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: false)
+
+      put admin_service_path(service), update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
+      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
 
     private
