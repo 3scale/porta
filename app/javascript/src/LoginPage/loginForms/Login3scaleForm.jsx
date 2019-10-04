@@ -17,7 +17,10 @@ import {
 } from '@patternfly/react-core'
 
 type Props = {
-  providerSessionsPath: string
+  providerSessionsPath: string,
+  session: {
+    username: ?string
+  }
 }
 
 type State = {
@@ -43,10 +46,10 @@ const PASSWORD_ATTRS = {
 
 class Login3scaleForm extends React.Component<Props, State> {
   state = {
-    username: '',
+    username: this.props.session.username || '',
     password: '',
     validation: {
-      username: undefined,
+      username: this.props.session.username ? true : undefined,
       password: undefined
     }
   }
@@ -72,7 +75,8 @@ class Login3scaleForm extends React.Component<Props, State> {
       label: USERNAME_ATTRS.label,
       isValid: validation.username,
       value: username,
-      onChange: this.handleInputChange
+      onChange: this.handleInputChange,
+      autoFocus: username ? false : 'autoFocus'
     }
     const passwordInputProps = {
       isRequired: true,
@@ -81,7 +85,8 @@ class Login3scaleForm extends React.Component<Props, State> {
       label: PASSWORD_ATTRS.label,
       isValid: validation.password,
       value: password,
-      onChange: this.handleInputChange
+      onChange: this.handleInputChange,
+      autoFocus: username ? 'autoFocus' : false
     }
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
