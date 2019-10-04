@@ -11,7 +11,8 @@ const props = {
   providerPasswordPath: 'password-path',
   providerSessionsPath: 'sessions-path',
   redirectUrl: 'redirect-url',
-  show3scaleLoginForm: true
+  show3scaleLoginForm: true,
+  session: {username: ''}
 }
 
 it('should render itself', () => {

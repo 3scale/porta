@@ -4,7 +4,8 @@ import {mount} from 'enzyme'
 import {Login3scaleForm, HiddenInputs} from 'LoginPage'
 
 const props = {
-  providerSessionsPath: 'sessions-path'
+  providerSessionsPath: 'sessions-path',
+  session: {username: ''}
 }
 
 it('should render itself with right props', () => {
@@ -51,6 +52,12 @@ describe('username', () => {
     expect(wrapper.state().username).toEqual('')
     expect(wrapper.state().validation.username).toEqual(false)
   })
+
+  it('should autofocus username input when username is not passed as param', () => {
+    const wrapper = mount(<Login3scaleForm {...props}/>)
+    expect(wrapper.find('input#session_username').props().autoFocus).toEqual('autoFocus')
+    expect(wrapper.find('input#session_password').props().autoFocus).toEqual(false)
+  })
 })
 
 describe('password', () => {
@@ -80,5 +87,12 @@ describe('password', () => {
     wrapper.find('input#session_password').props().onChange(event)
     expect(wrapper.state().password).toEqual('')
     expect(wrapper.state().validation.password).toEqual(false)
+  })
+
+  it('should autofocus password input when username is passed as param', () => {
+    const propsUsernameParams = {...props, session: {username: 'bob'}}
+    const wrapper = mount(<Login3scaleForm {...propsUsernameParams}/>)
+    expect(wrapper.find('input#session_password').props().autoFocus).toEqual('autoFocus')
+    expect(wrapper.find('input#session_username').props().autoFocus).toEqual(false)
   })
 })
