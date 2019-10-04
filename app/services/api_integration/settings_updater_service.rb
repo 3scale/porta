@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApiIntegration::SettingsResult
+class ApiIntegration::SettingsUpdaterService
   extend ActiveModel::Naming
   extend ActiveModel::Translation
   class ServiceMismatchError < ActiveRecord::ActiveRecordError; end
@@ -18,7 +18,7 @@ class ApiIntegration::SettingsResult
     [service.valid?, proxy.valid?].all?
   end
 
-  def update!(service_attributes: {}, proxy_attributes: {})
+  def call!(service_attributes: {}, proxy_attributes: {})
     ActiveRecord::Base.transaction do
       service.update!(service_attributes)
       proxy.update!(proxy_attributes) unless service.deployment_option == 'hosted'
@@ -26,8 +26,8 @@ class ApiIntegration::SettingsResult
     true
   end
 
-  def update(service_attributes: {}, proxy_attributes: {})
-    update!(service_attributes: service_attributes, proxy_attributes: proxy_attributes)
+  def call(service_attributes: {}, proxy_attributes: {})
+    call!(service_attributes: service_attributes, proxy_attributes: proxy_attributes)
     # Done this way so it does the rollback
   rescue ActiveRecord::RecordInvalid
     false
