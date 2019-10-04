@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class BasicInfoTest < ActiveSupport::TestCase
-
   test 'default release is 2.x' do
     System::Deploy.load_info!
     assert_equal '2.x', System::Deploy.info.release
-
   end
 
   test 'minor and major version taken from default release' do
@@ -15,7 +15,9 @@ class BasicInfoTest < ActiveSupport::TestCase
   end
 
   test 'custom release' do
-    System::Deploy.info.expects(:release).returns('4.5.1-CR1')
+    path = Rails.root.join('test', 'fixtures', 'deploy_info').expand_path
+    System::Deploy.load_info! ActiveSupport::JSON.decode(path.read)
+
     assert_equal '4', System::Deploy.info.major_version
     assert_equal '5', System::Deploy.info.minor_version
   end
