@@ -44,11 +44,11 @@ class Api::ServicesController < Api::BaseController
     creator = ServiceCreator.new(service: @service)
 
     if can_create? && creator.call(create_params)
-      flash[:notice] =  'Service created.'
+      flash[:notice] = t('flash.services.create.notice', resource_type: product_or_service_type)
       onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = 'Couldn\'t create service. Check your Plan limits' # TODO: this is not always true... there are other reasons of failure
+      flash.now[:error] = t('flash.services.create.error', resource_type: product_or_service_type)
       activate_menu :dashboard
       render :new
     end
@@ -56,18 +56,19 @@ class Api::ServicesController < Api::BaseController
 
   def update
     if integration_settings_updater_service.call(service_attributes: service_params, proxy_attributes: proxy_params)
-      flash[:notice] =  'Service information updated.'
+      flash[:notice] =  t('flash.services.update.notice', resource_type: product_or_service_type)
       onboarding.bubble_update('api') if service_name_changed?
       onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
       redirect_back_or_to :action => :settings
     else
+      flash.now[:error] = t('flash.services.update.error', resource_type: product_or_service_type)
       render action: params[:update_settings].present? ? settings_page : :edit # edit page is only page with free form fields. other forms are less probable to have errors
     end
   end
 
   def destroy
     @service.mark_as_deleted!
-    flash[:notice] = "Service '#{@service.name}' will be deleted shortly. You will receive a notification when it is done"
+    flash[:notice] = t('flash.services.destroy.notice', resource_type: product_or_service_type, resource_name: @service.name)
     redirect_to provider_admin_dashboard_path
   end
 
@@ -100,12 +101,30 @@ class Api::ServicesController < Api::BaseController
   end
 
   def proxy_params
-    params.require(:service).fetch(:proxy_attributes, {}).permit(:sandbox_endpoint, :endpoint)
+    oidc_params = %i[oidc_issuer_type oidc_issuer_endpoint jwt_claim_with_client_id jwt_claim_with_client_id_type] + OIDCConfiguration::Config::FLOWS
+    permitted_params = oidc_params + %i[
+      auth_user_key auth_app_id auth_app_key credentials_location hostname_rewrite secret_token
+      error_status_auth_failed error_headers_auth_failed error_auth_failed
+      error_status_auth_missing error_headers_auth_missing error_auth_missing
+      error_status_no_match error_headers_no_match error_no_match
+      error_status_limits_exceeded error_headers_limits_exceeded error_limits_exceeded
+    ]
+    permitted_params << :api_backend unless apiap?
+    permitted_params += %i[endpoint sandbox_endpoint] if can_edit_endpoints?
+    params.require(:service).fetch(:proxy_attributes, {}).permit(permitted_params)
+  end
+
+  def can_edit_endpoints?
+    Rails.application.config.three_scale.apicast_custom_url || service.proxy.saas_configuration_driven_apicast_self_managed?
   end
 
   # This will be the default 'settings' when apiap is live
   def settings_page
     apiap? ? :settings_apiap : :settings
+  end
+
+  def product_or_service_type
+    apiap? ? 'Product' : 'Service'
   end
 
   def service_name_changed?
