@@ -91,6 +91,24 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
     respond_with(backend_api_config)
   end
 
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/services/{service_id}/backend_apis/{id}.json"
+  ##~ e.responseClass = "backend_api_config"
+  #
+  ##~ op            = e.operations.add
+  ##~ op.httpMethod = "GET"
+  ##~ op.summary    = "Backend Usage Read"
+  ##~ op.description = "Show the usage of a Backend within the scope of the Service (Product)."
+  ##~ op.group = "backend_api_config"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_service_id_by_id_name
+  ##~ op.parameters.add @parameter_backend_api_id_by_id
+  #
+  def show
+    respond_with(backend_api_config)
+  end
+
   private
 
   def backend_api_config
