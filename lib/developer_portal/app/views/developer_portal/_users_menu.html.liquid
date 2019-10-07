@@ -5,10 +5,14 @@
     </li>
 
     {% if provider.account_management_enabled? %}
-      {% include 'menu_item' with urls.users %}
+      {% if current_user.admin? %}
+        {% include 'menu_item' with urls.users %}
+      {% endif %}
 
       {% if provider.multiple_users_allowed? %}
-        {% include 'menu_item' with urls.invitations %}
+        {% if current_user.admin? %}
+          {% include 'menu_item' with urls.invitations %}
+        {% endif %}
       {% endif %}
     {% endif %}
 
