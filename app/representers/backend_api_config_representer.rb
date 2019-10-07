@@ -4,6 +4,8 @@ module BackendApiConfigRepresenter
   include ThreeScale::JSONRepresenter
 
   property :path
+  property :service_id
+  property :backend_api_id, as: :id
 
   link :service do
     admin_api_service_url(service_id)
