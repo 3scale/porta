@@ -1,15 +1,13 @@
 require 'test_helper'
 
-class IntegrationsTest < ActionDispatch::IntegrationTest
+class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account)
 
-    login_provider @provider
-
     stub_apicast_registry
 
-    host! @provider.admin_domain
+    login! @provider
   end
 
   def test_index
