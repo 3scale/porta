@@ -85,17 +85,6 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
     assert_empty settings_result.errors[:proxy]
   end
 
-  test '#call and #call! for deployment_option "hosted"' do
-    service.update!(deployment_option: 'self_managed') unless service.deployment_option == 'self_managed'
-    proxy.update!(endpoint: 'http://prod.example.com:80', staging_endpoint: 'http://staging.example.com:80')
-
-    service_attributes[:deployment_option] = 'hosted'
-    assert settings_result.call(attributes)
-    assert_equal 'hosted', service.deployment_option
-    assert_equal "http://#{service.system_name}-#{service.account_id}.apicast.dev:8080", proxy.endpoint
-    assert_equal "http://#{service.system_name}-#{service.account_id}.staging.apicast.dev:8080", proxy.staging_endpoint
-  end
-
   private
 
   def proxy
@@ -103,7 +92,7 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
   end
 
   def service
-    @service ||= FactoryBot.create(:simple_service, deployment_option: 'self_managed')
+    @service ||= FactoryBot.create(:simple_service)
   end
 
   def settings_result

@@ -1134,6 +1134,16 @@ en:
         notice: "Thanks for signing up! You can now sign in."
       already_logged_in: 'You are already signed up. Log out if you want to sign up again.'
 
+    services:
+      create:
+        notice: "%{resource_type} created."
+        error: "Couldn't create %{resource_type}. Check your Plan limits" # TODO: this is not always true... there are other reasons of failure
+      update:
+        notice: "%{resource_type} information updated."
+        error: "Couldn't update %{resource_type}."
+      destroy:
+        notice: "%{resource_type} '%{resource_name}' will be deleted shortly. You will receive a notification when it is done"
+
   proxy:
     credentials_location:
       headers: "As HTTP Headers"
