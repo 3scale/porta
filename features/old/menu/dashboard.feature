@@ -39,7 +39,7 @@ Feature: Dashboard
     And I should see the link "0 ActiveDocs" in the first api dashboard widget
 
   Scenario: first API widget without APIAP
-    Given I have rolling update api_as_product disabled
+    Given I have rolling updates "api_as_product" disabled
     When I log in as provider "foo.example.com"
     And I should see "API" in the first api dashboard widget
     And I should see the link "Overview" in the first api dashboard widget
