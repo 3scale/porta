@@ -21,7 +21,7 @@ class ApiIntegration::SettingsUpdaterService
   def call!(service_attributes: {}, proxy_attributes: {})
     ActiveRecord::Base.transaction do
       service.update!(service_attributes)
-      proxy.update!(proxy_attributes) unless service.deployment_option == 'hosted'
+      proxy.update!(proxy_attributes)
     end
     true
   end

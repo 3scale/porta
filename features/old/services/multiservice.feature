@@ -56,6 +56,14 @@ Feature: Multiservice feature
     And provider "foo.example.com" has "multiple_services" switch allowed
     And I am on the edit page for service "Second service" of provider "foo.example.com"
     When I follow "I understand the consequences, proceed to delete 'Second service' service" and I confirm dialog box
+    Then I should see "Product 'Second service' will be deleted shortly."
+
+  Scenario: Delete Service without apiap
+    Given I am logged in as provider "foo.example.com"
+    And provider "foo.example.com" has "multiple_services" switch allowed
+    And I have rolling updates "api_as_product" disabled
+    And I am on the edit page for service "Second service" of provider "foo.example.com"
+    When I follow "I understand the consequences, proceed to delete 'Second service' service" and I confirm dialog box
     Then I should see "Service 'Second service' will be deleted shortly."
 
   @javascript
