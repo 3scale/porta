@@ -15,7 +15,6 @@ Then /^fields (.*) should be required$/ do |fields|
   end
 end
 
-
 Then /^I should see link to (.+)$/ do |page_name|
   path = path_to(page_name)
   assert page.all('a').any? { |node| matches_path?(node[:href], path) }
@@ -38,6 +37,14 @@ end
 Then /^I should be redirected to "([^\"]*)"$/ do |url|
   response.should redirect_to(url)
   follow_redirect!
+end
+
+Then(/^I should see within "([^"]*)" the following:$/) do |selector, table|
+  within selector do
+    table.rows.flatten.each do |item|
+      step %(I should see "#{item}")
+    end
+  end
 end
 
 # Then I should see "foo" and "bar"

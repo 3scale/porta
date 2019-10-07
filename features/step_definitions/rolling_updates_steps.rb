@@ -15,8 +15,10 @@ When(/^I have (\w+) feature (enabled|disabled)$/) do |feature, enabled|
   TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
 end
 
-Given(/^I have rolling update (\w+) (enabled|disabled)$/) do |feature, enabled|
+Given(/^I have rolling updates "([^"]*)" (enabled|disabled)$/) do |features, enabled|
   Account.any_instance.stubs(:provider_can_use?).returns(true)
-  Account.any_instance.stubs(:provider_can_use?).with(feature).returns(false | true)
-  TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
+  features.split(',').each do |feature|
+    Account.any_instance.stubs(:provider_can_use?).with(feature).returns(enabled == 'enabled')
+    TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
+  end
 end
