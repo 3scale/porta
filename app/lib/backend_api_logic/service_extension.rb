@@ -29,7 +29,7 @@ module BackendApiLogic
 
       def backend_api_config
         @backend_api_config ||= backend_api_configs.first ||
-                                backend_api_configs.build(path: '', backend_api: backend_api)
+                                backend_api_configs.build(path: '/', backend_api: backend_api)
       end
 
       def backend_api

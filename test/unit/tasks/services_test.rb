@@ -15,7 +15,7 @@ class Tasks::ServicesTest < ActiveSupport::TestCase
     services.each { |service| service.proxy.update_column(:api_backend, 'https://api.example.com') }
 
     # 1st service already has backend api
-    services.first.backend_api_configs.create(backend_api: FactoryBot.create(:backend_api, account: provider))
+    services.first.backend_api_configs.create(backend_api: FactoryBot.create(:backend_api, account: provider), path: '/')
 
     # 2nd and 3rd services don't have backend_api but neither their proxy have a private_endpoint
     services[1..2].each { |service| service.proxy.update_column(:api_backend, nil) }
