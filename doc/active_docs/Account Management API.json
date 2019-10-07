@@ -6663,6 +6663,43 @@
       ]
     },
     {
+      "path": "/admin/api/services/{service_id}/backend_apis/{id}.json",
+      "responseClass": "backend_api_config",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend Usage Read",
+          "description": "Show the usage of a Backend within the scope of the Service (Product).",
+          "group": "backend_api_config",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the Backend.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/services/{service_id}/end_user_plans.xml",
       "responseClass": "List[end_user_plan]",
       "operations": [

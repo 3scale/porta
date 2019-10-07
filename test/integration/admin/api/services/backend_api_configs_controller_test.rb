@@ -84,6 +84,9 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
 
     put admin_api_service_backend_api_path(service_id: service.id, id: backend_api.id, access_token: access_token_value), {path: 'foo/bar/updated'}
     assert_response :forbidden
+
+    get admin_api_service_backend_api_path(service_id: service.id, id: backend_api.id, access_token: access_token_value)
+    assert_response :forbidden
   end
 
   test 'index can be paginated, skips unaccessible and the response has the right format' do
@@ -99,12 +102,37 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
     expected_backend_api_configs.each_with_index do |backend_api_config, index|
       response_item = response_backend_api_configs[index]
       assert_equal backend_api_config.path, response_item['path']
+      assert_equal backend_api_config.service.id, response_item['service_id']
+      assert_equal backend_api_config.backend_api.id, response_item['id']
       links = response_item.fetch('links', {})
       assert_equal 'service', links[0]['rel']
       assert_equal admin_api_service_url(backend_api_config.service), links[0]['href']
       assert_equal 'backend_api', links[1]['rel']
       assert_equal admin_api_backend_api_url(backend_api_config.backend_api), links[1]['href']
     end
+  end
+
+  test 'show' do
+    backend_api_config = BackendApiConfig.create!(service: service, backend_api: backend_api, path: 'foo/bar')
+
+    get admin_api_service_backend_api_path(service_id: service.id, id: backend_api.id, access_token: access_token_value)
+
+    assert_response :success
+    response_item = JSON.parse(response.body)
+    assert_equal service.id, response_item['service_id']
+    assert_equal backend_api.id, response_item['id']
+    assert_equal backend_api_config.path, response_item['path']
+    links = response_item.fetch('links', {})
+    assert_equal 'service', links[0]['rel']
+    assert_equal admin_api_service_url(backend_api_config.service), links[0]['href']
+    assert_equal 'backend_api', links[1]['rel']
+    assert_equal admin_api_backend_api_url(backend_api_config.backend_api), links[1]['href']
+  end
+
+  test 'show responds not found if the backend api does not use that service' do
+    get admin_api_service_backend_api_path(service_id: service.id, id: backend_api.id, access_token: access_token_value)
+
+    assert_response :not_found
   end
 
   test 'it cannot operate under a deleted service' do
