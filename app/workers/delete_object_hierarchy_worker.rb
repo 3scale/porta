@@ -12,7 +12,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   queue_as :deletion
 
   before_perform do |job|
-    @object, workers_hierarchy = job.arguments
+    @object, workers_hierarchy, @destroy_method = job.arguments
     id = "Hierarchy-#{object.class.name}-#{object.id}"
     @caller_worker_hierarchy = Array(workers_hierarchy) + [id]
     info "Starting #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
@@ -22,7 +22,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     info "Finished #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
   end
 
-  def perform(_object, _caller_worker_hierarchy = [])
+  def perform(_object, _caller_worker_hierarchy = [], _destroy_method = 'destroy')
     build_batch
   end
 
@@ -38,7 +38,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     workers_hierarchy = options['caller_worker_hierarchy']
     info "Starting DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
     object = GlobalID::Locator.locate(options['object_global_id'])
-    DeletePlainObjectWorker.perform_later(object, workers_hierarchy)
+    DeletePlainObjectWorker.perform_later(object, workers_hierarchy, destroy_method)
     info "Finished DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
   rescue ActiveRecord::RecordNotFound => exception
     info "DeleteObjectHierarchyWorker##{method_name} raised #{exception.class} with message #{exception.message}"
@@ -75,17 +75,25 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   def delete_associations
-    destroyable_associations.each do |reflection|
-      ReflectionDestroyer.new(object, reflection, caller_worker_hierarchy).destroy_later
+    destroyable_associations.each do |association|
+      ReflectionDestroyer.new(object, association, caller_worker_hierarchy).destroy_later
     end
   end
 
   private
 
+  def destroy_method
+    @destroy_method.presence || 'destroy'
+  end
+
   def destroyable_associations
     object.class.reflect_on_all_associations.select do |reflection|
-      reflection.options[:dependent] == :destroy
+      destroyable_association?(reflection.options[:dependent])
     end
+  end
+
+  def destroyable_association?(dependent_option)
+    %i[destroy delete_all].include?(dependent_option)
   end
 
   def callback_options
@@ -93,9 +101,11 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
   end
 
   class ReflectionDestroyer
+
     def initialize(main_object, reflection, caller_worker_hierarchy)
       @main_object = main_object
       @reflection = reflection
+      @destroy_method = reflection.options[:dependent].to_s.gsub('_all', '')
       @caller_worker_hierarchy = caller_worker_hierarchy
     end
 
@@ -103,7 +113,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
       reflection.macro == :has_many ? destroy_has_many_association : destroy_has_one_association
     end
 
-    attr_reader :main_object, :reflection, :caller_worker_hierarchy
+    attr_reader :main_object, :reflection, :caller_worker_hierarchy, :destroy_method
 
     private
 
@@ -121,7 +131,7 @@ class DeleteObjectHierarchyWorker < ActiveJob::Base
     end
 
     def delete_associated_object_later(associated_object)
-      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy) if associated_object.try(:id)
+      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy, destroy_method) if associated_object.try(:id)
     end
 
     def association_delete_worker
