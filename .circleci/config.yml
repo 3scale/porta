@@ -73,7 +73,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby24: &system-builder-ruby24
-  image: quay.io/3scale/system-builder:ruby24
+  image: quay.io/3scale/system-builder:latest
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -1080,10 +1080,11 @@ workflows:
             - assets_precompile
           <<: *only-master-filter
 
-######## Nightly workflows
+
+  ######## Nightly workflows
 
 
-  mysql_build_ruby24:
+  mysql_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1136,7 +1137,7 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  postgres_build_ruby24:
+  postgres_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1189,7 +1190,7 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  oracle_build_ruby24:
+  oracle_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1244,7 +1245,7 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_tests_ruby24:
+  javascript_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1280,5 +1281,23 @@ workflows:
             - lint
             - karma
             - jest
+          <<: *only-master-filter
+    <<: *nightly-trigger
+
+  visual_test_nightly_ruby24:
+    jobs:
+      - dependencies_bundler:
+          <<: *only-master-filter
+      - dependencies_npm:
+          <<: *only-master-filter
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+          <<: *only-master-filter
+      - visual:
+          context: percy
+          requires:
+            - assets_precompile
           <<: *only-master-filter
     <<: *nightly-trigger
