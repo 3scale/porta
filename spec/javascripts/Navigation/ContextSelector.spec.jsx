@@ -127,9 +127,6 @@ describe('When there are many services', () => {
 
     const apiList = contextSelector.find('.PopNavigation-results').children()
     expect(apiList).toHaveLength(apis.length)
-    expect(apiList.containsAllMatchingElements(
-      apis.map(api => <li><a><i />{api.name}</a></li>)
-    )).toEqual(true)
   })
 
   it('should filter APIs by name', () => {
@@ -154,7 +151,7 @@ describe('When there are many services', () => {
     const apiIconsClassNames = contextSelector.find('.PopNavigation-results .PopNavigation-link')
       .map(link => [link.text(), link.find('i').prop('className')])
     expect(apiIconsClassNames)
-      .toEqual([ ['api 0', 'fa fa-gift'], ['api 1', 'fa fa-gift'], ['api 2', 'fa fa-puzzle-piece'] ])
+      .toEqual([ ['api 0', 'fa fa-cubes'], ['api 1', 'fa fa-cubes'], ['api 2', 'fa fa-cube'] ])
   })
 
   it('should render the correct icons when apiap is disabled', () => {
