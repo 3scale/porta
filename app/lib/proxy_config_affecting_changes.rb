@@ -51,6 +51,14 @@ module ProxyConfigAffectingChanges
         return false unless config
         config.created_at < affecting_change_history.updated_at
       end
+
+      private
+
+      def create_proxy_config_affecting_change(*)
+        super
+      rescue ActiveRecord::RecordNotUnique
+        reload.send(:proxy_config_affecting_change)
+      end
     end
   end
 
