@@ -24,7 +24,7 @@ class DeletePlainObjectWorker < ActiveJob::Base
   queue_as :default
 
   before_perform do |job|
-    @object, workers_hierarchy = job.arguments
+    @object, workers_hierarchy, @destroy_method = job.arguments
     @id = "Plain-#{object.class.name}-#{object.id}"
     @caller_worker_hierarchy = Array(workers_hierarchy) + [@id]
     info "Starting #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
@@ -34,8 +34,8 @@ class DeletePlainObjectWorker < ActiveJob::Base
     info "Finished #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
   end
 
-  def perform(_object, _caller_worker_hierarchy = [])
-    should_destroy_by_association? ? destroy_by_association : object.destroy!
+  def perform(_object, _caller_worker_hierarchy = [], _destroy_method = 'destroy')
+    should_destroy_by_association? ? destroy_by_association : object.public_send(destroy_method(bang_if_possible: true))
   end
 
   private
@@ -43,6 +43,12 @@ class DeletePlainObjectWorker < ActiveJob::Base
   delegate :info, to: 'Rails.logger'
 
   attr_reader :caller_worker_hierarchy, :id, :object
+
+  def destroy_method(bang_if_possible: false)
+    object_destroy_method = @destroy_method.presence || 'destroy'
+
+    (bang_if_possible && object_destroy_method == 'destroy') ? 'destroy!' : object_destroy_method
+  end
 
   def should_destroy_by_association?
     # If there is 1 only it means caller_worker_hierarchy argument to perform was an empty array and that 1 element is this DeletePlainObjectWorker instance itself
@@ -56,7 +62,7 @@ class DeletePlainObjectWorker < ActiveJob::Base
 
   def destroy_by_association
     object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(id)
-    object.destroy
+    object.public_send(destroy_method)
   end
 
   class DummyDestroyedByAssociationReflection

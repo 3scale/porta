@@ -34,6 +34,28 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
         DeletePlainObjectWorker.perform_now(object, %w[HTestClass123])
       end
     end
+
+    def test_destroy_method_destroy
+      object_1 = objects.first
+      object_2 = objects.second
+
+      object_1.expects(:destroy).once
+      DeletePlainObjectWorker.perform_now(object_1, %w[HTestClass123 HTestClass1123], 'destroy')
+
+      object_1.expects(:destroy!).once
+      DeletePlainObjectWorker.perform_now(object_1, [], 'destroy')
+    end
+
+    def test_destroy_method_delete
+      object_1 = objects.first
+      object_2 = objects.second
+
+      object_1.expects(:delete).once
+      DeletePlainObjectWorker.perform_now(object_1, %w[HTestClass123 HTestClass1123], 'delete')
+
+      object_1.expects(:delete).once
+      DeletePlainObjectWorker.perform_now(object_1, [], 'delete')
+    end
   end
 
   class UndestroyableObjectsTest < DeletePlainObjectWorkerTest
