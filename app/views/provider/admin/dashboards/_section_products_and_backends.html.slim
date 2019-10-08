@@ -6,16 +6,17 @@
 
 header.DashboardSection-header.DashboardSection-header--extended
   h1.DashboardSection--tabs-title
-    | APIs
+    i.fa.fa-puzzle-piece
+    |&nbsp; APIs
   div class='pf-c-tabs pf-tabs-header' id='primary'
     ul.pf-c-tabs__list
       li.pf-c-tabs__item class=('pf-m-current' if current_tab == tab_products_id)
         button.pf-c-tabs__button id=tab_products_id
-          i.fa.fa-gift 
+          i.fa.fa-cubes
           |&nbsp; Products
       li.pf-c-tabs__item class=('pf-m-current' if current_tab == tab_backends_id)
         button.pf-c-tabs__button id=tab_backends_id
-          i.fa.fa-puzzle-piece 
+          i.fa.fa-cube
           |&nbsp; Backends
 
 div
