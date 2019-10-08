@@ -633,6 +633,29 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
+  test '#affecting_change_history with fibers' do
+    class ProxyWithFiber < ::Proxy
+      def create_proxy_config_affecting_change(*)
+        Fiber.yield
+        super
+      end
+    end
+
+    service = FactoryBot.create(:simple_service)
+    proxy = ProxyWithFiber.find(service.proxy.id)
+
+    f1 = Fiber.new { proxy.affecting_change_history }
+    f2 = Fiber.new { proxy.affecting_change_history }
+
+    f1.resume
+    assert_nothing_raised(ActiveRecord::RecordNotUnique) do
+      f2.resume
+      f1.resume
+      f2.resume
+    end
+    assert_equal 1, ProxyConfigAffectingChange.where(proxy: proxy).count
+  end
+
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
