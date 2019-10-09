@@ -44,4 +44,10 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
 
     Sidekiq::Testing.inline! { DeleteAccountHierarchyWorker.perform_now(provider) }
   end
+
+  test 'the account ends up destroyed after the hierarchy' do
+    Sidekiq::Testing.inline! { DeleteAccountHierarchyWorker.perform_now(provider) }
+
+    assert_raises(ActiveRecord::RecordNotFound) { provider.reload }
+  end
 end
