@@ -70,52 +70,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class DeleteAccountHierarchyTest < DeleteObjectHierarchyWorkerTest
-    setup do
-      @object = @provider = FactoryBot.create(:provider_account)
-      @provider.schedule_for_deletion!
-
-      non_default_service = FactoryBot.create(:service, account: provider)
-      non_default_service.stubs(:default?).returns(false)
-      @services = [provider.services.default, non_default_service]
-      @account_plan = provider.account_plans.default
-
-      FactoryBot.create(:service_contract, user_account: provider)
-      FactoryBot.create(:account_contract, user_account: provider)
-      FactoryBot.create(:application_contract, user_account: provider)
-      @contracts = provider.reload.contracts
-
-      @buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
-      @users = provider.users
-    end
-
-    private
-
-    attr_reader :provider, :services, :account_plan, :buyers, :contracts, :users
-
-    def hierarchy_worker
-      DeleteAccountHierarchyWorker
-    end
-
-    def perform_expectations
-      DeleteObjectHierarchyWorker.stubs(:perform_later)
-      users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything) }
-      services.each { |service| DeleteServiceHierarchyWorker.expects(:perform_later).with(service, anything) }
-      buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything) }
-      contracts.each do |contract|
-        DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
-      end
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything)
-    end
-
-    test 'does not perform if wrong state' do
-      provider.update_column(:state, 'approved')
-      DeleteObjectHierarchyWorker.expects(:perform_later).never
-
-      DeleteAccountHierarchyWorker.perform_now(provider)
-    end
-  end
-
   class DeletePlanTest < DeleteObjectHierarchyWorkerTest
     setup do
       # ApplicationPlan setup
