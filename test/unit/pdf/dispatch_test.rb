@@ -28,8 +28,9 @@ class Pdf::DispatchTest < ActiveSupport::TestCase
   end
 
   test 'not enqueue report for non approved accounts' do
-    account = FactoryBot.create(:simple_provider, state: 'suspended')
+    account = FactoryBot.create(:simple_provider)
     FactoryBot.create(:simple_service, account: account)
+    account.suspend!
 
     # Only master is reported
     assert_difference PdfReportWorker.jobs.method(:count), 1 do
