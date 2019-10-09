@@ -137,11 +137,6 @@ table.list {
   th {
     border-bottom: $border-width solid $border-color;
     font-weight: $font-weight-normal;
-    word-break: break-all;
-
-    &:nth-child(3) {
-      word-break: normal;
-    }
   }
 }
 
