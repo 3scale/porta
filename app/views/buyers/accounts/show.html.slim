@@ -39,7 +39,7 @@ h1 data-hook="account-show"
                   | (#{mail_to admin.email})
         tr
           th Signed up on
-          td = @account.created_at.to_s(:long)
+          td = @account.created_at.to_s
         = fields_definitions_rows @account,
                                   %w{org_name org_legaladdress org_legaladdress_cont city state_region}
         - unless @account.org_legaladdress.blank? \

@@ -50,13 +50,13 @@ module Buyers::ApplicationsHelper
     if cinstance.first_daily_traffic_at?
       date = cinstance.first_daily_traffic_at
       title = time_ago_in_words(date) + ' ago'
-      time_tag(date, date.strftime("%B %e, %Y"), :title => title)
+      time_tag(date, date.strftime("%Y-%m-%d"), :title => title)
     end
   end
 
   def time_tag_with_title(date_or_time, *args)
     options =  args.extract_options!
-    title = args.first || I18n.l(date_or_time, :format => :long)
+    title = args.first || date_or_time.to_s
     args << options.reverse_merge!(:title => title)
     time_tag date_or_time.to_date, *args
   end

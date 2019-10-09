@@ -1,6 +1,6 @@
 module InvitationsHelper
   def invitation_sent_date(invitation)
-    (invitation.sent_at.presence || invitation.created_at).to_s(:long)
+    (invitation.sent_at.presence || invitation.created_at).to_s
   end
 
   def invitation_status(invitation)

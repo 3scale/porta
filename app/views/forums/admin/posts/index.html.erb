@@ -12,7 +12,7 @@
         <div class="topicAuthor">
           <p class="avatar"><%= avatar_for post.user %></p>
           <p class='detail'  id="<%= "#post-#{post.id}-publish-date" %>">
-  	        <strong>Posted:</strong> <%= post.created_at.to_s(:long) %>
+  	        <strong>Posted:</strong> <%= post.created_at.to_s %>
   	      </p>
           <p class='detail'  id="<%= "#post-#{post.id}-publish-date" %>">
   	        <strong>Thread:</strong> <%= link_to_forum_topic(post.topic, {:anchor => "post-#{post.id}"}) %>

@@ -54,7 +54,7 @@ class Month < Range
     if format == :db
       self.begin.to_s
     else
-      "#{self.begin.to_date.to_s(:long)} - #{self.end.to_date.to_s(:long)}"
+      "#{self.begin.to_date.to_s} - #{self.end.to_date.to_s}"
     end
   end
 

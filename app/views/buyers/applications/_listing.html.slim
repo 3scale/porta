@@ -106,7 +106,7 @@ table class="data"
           td class="plan" = link_to_plan_edit cinstance.plan
         - if current_account.settings.finance.allowed?
           td class="free_or_paid" = plan_free_or_paid cinstance.plan
-        td = time_tag_with_title cinstance.created_at
+        td = time_tag_with_title cinstance.created_at, format: :default
         td = last_traffic(cinstance)
         td
     - if @cinstances.empty?

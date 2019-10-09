@@ -21,7 +21,7 @@
         <td><%= link_to account.org_name, buyer_account_path(account), :class => 'action view' %></td>
         <td><%= link_to((accounts.first.human_or_display_name), buyer_account_user_path(account, account.admin), :title => "View Details") %></td>
         <td><%= account.admins.first.email %></td>
-        <td><%= account.created_at.to_date.to_s(:long) %></td>
+        <td><%= account.created_at.to_date.to_s %></td>
         <td><%= link_to_edit_partner_account account %>	|
         <%= link_to('Destroy', partner_path(account),
                     data: {:confirm => 'Are you sure?'}, :method => :delete, :id => "destroy-account-#{account.id}")
@@ -36,4 +36,3 @@
 <%= submit_tag "Approve Selected", :class => 'action' %> | <%= submit_tag "Reject Selected", :class => 'action' %>
 
 <% end %>
-

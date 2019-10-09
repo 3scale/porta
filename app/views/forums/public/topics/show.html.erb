@@ -34,7 +34,7 @@
     <div class="topicHeader">
       <div class="topicAuthor">
         <%= content_tag(:p, avatar_for(post.user), :class => 'avatar') unless post.user.nil? %>
-        <p class="detail"><%= post.created_at.to_time.to_s(:long) %></p>
+        <p class="detail"><%= post.created_at.to_time.to_s %></p>
         <p class="detail">
           <%= display_author_name(post) %>
           <% if post.user %>

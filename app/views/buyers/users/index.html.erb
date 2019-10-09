@@ -20,7 +20,7 @@
           <%= link_to h(user.display_name), resource_path(user) %>
         </td>
         <td><%= h user.email %></td>
-        <td><%= user.created_at.to_date.to_s(:long) %></td>
+        <td><%= user.created_at.to_date.to_s %></td>
         <td><%=h user.role.to_s %></td>
         <td><%=h user.state %></td>
         <td class="operations">

@@ -45,7 +45,7 @@ table class="data" id="buyer_accounts"
         td class="select" =  bulk_select_one account
         td = link_to (account.org_name), admin_buyers_account_path(account)
         td = account.admins.first.try(:display_name)
-        td = account.created_at.strftime("%e %b, %Y")
+        td = account.created_at.strftime("%Y-%m-%d")
         - if @account_plans.size > 1
           td class="plan" = h account.bought_account_plan.try(:name)
 

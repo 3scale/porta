@@ -14,13 +14,13 @@
 
   <tr>
     <th>Created on</th>
-    <td colspan="2"><%= h @user.created_at.to_s(:long) %></td>
+    <td colspan="2"><%= h @user.created_at.to_s %></td>
   </tr>
 
   <% unless @user.last_login_at.blank? -%>
     <tr>
       <th>Last logged in on</th>
-      <td><%= h @user.last_login_at.to_s(:long) %></td>
+      <td><%= h @user.last_login_at.to_s %></td>
     </tr>
   <% end -%>
 

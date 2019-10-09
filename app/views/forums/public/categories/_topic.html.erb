@@ -3,7 +3,7 @@
   <td class="posts" title="Number of posts"><%= number_with_delimiter(topic.posts.size) %></td>
   <td class="views" title="Number of views"><%= number_with_delimiter(topic.hits) %></td>
   <td>
-    <%= topic.last_updated_at.to_s(:long) %>
+    <%= topic.last_updated_at.to_s %>
 
     <% if topic.last_user -%>
       by <%= display_author_name(topic.recent_post)     %>

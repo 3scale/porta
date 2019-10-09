@@ -23,7 +23,7 @@ h2 Trash
         tr class=cycle('odd', 'even', name: 'messages')
           td = link_to message.subject, provider_admin_messages_trash_path(message)
           td = link_to message_sender(message), provider_admin_messages_trash_path(message)
-          td = message.created_at.to_s(:long)
+          td = message.created_at.to_s
           td.operations = fancy_button_to 'Restore', provider_admin_messages_trash_path(message), :method => :delete, :class => 'undelete action'
 
   = will_paginate(@messages)

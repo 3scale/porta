@@ -101,7 +101,7 @@ table.data
         td.paid_or_free
           = plan_free_or_paid contract.plan
         td
-          = time_tag_with_title contract.created_at
+          = time_tag_with_title contract.created_at, format: :default
         td.action
           - if contract
             - if contract.pending?

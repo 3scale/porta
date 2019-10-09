@@ -32,7 +32,7 @@ end
 
 Then /^I should see post dates in the right date format$/ do
   @topic.posts.each do |post|
-    response.should have_tag("p", /#{post.updated_at.to_s(:long)}/)
+    response.should have_tag("p", /#{post.updated_at.to_s}/)
   end
 end
 
