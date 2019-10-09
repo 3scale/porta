@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
-class IntegrationsControllerTest < ActionDispatch::IntegrationTest
-
+class IntegrationsTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
 
     stub_apicast_registry
 
     login! @provider
+
+    rolling_updates_off
   end
 
   def test_index
@@ -115,50 +118,55 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'deploy is called when saving proxy info' do
-    Account.any_instance.stubs(:provider_can_use?).returns(false)
-
     Proxy.any_instance.expects(:save_and_deploy).once
 
-    put "/apiconfig/services/#{@provider.services.first.id}/integration", proxy: {api_backend: '1'}
+    put admin_service_integration_path(service_id: @provider.default_service.id), proxy: {api_backend: '1'}
   end
 
   test 'deploy is never called when saving proxy info for proxy pro users' do
     rolling_updates_on
+    Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false)
+    Account.any_instance.stubs(:provider_can_use?).with(:proxy_pro).returns(true)
 
     Proxy.any_instance.expects(:save_and_deploy).never
     Proxy.any_instance.expects(:update_attributes).once
     ProxyTestService.expects(:new).never
     ProxyTestService.any_instance.expects(:perform).never
 
-    service = @provider.services.default
-    service.update_columns(deployment_option: 'self_managed')
-    service.proxy.update_columns(apicast_configuration_driven: false)
+    service = @provider.default_service
+    service.update_column(:deployment_option, 'self_managed')
+    service.proxy.update_column(:apicast_configuration_driven, false)
 
-    put "/apiconfig/services/#{service.id}/integration", proxy: {api_backend: '1'}
+    put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
   end
 
   def test_edit
-    rolling_updates_off
-
-    service_id = 'no-such-service'
-    get "/apiconfig/services/#{service_id}/integration/edit"
+    get edit_admin_service_integration_path(service_id: 'no-such-service')
     assert_response :not_found
 
     service = FactoryBot.create(:simple_service, account: @provider)
-    get "/apiconfig/services/#{service.id}/integration/edit"
+    get edit_admin_service_integration_path(service_id: service.id)
     assert_response :success
   end
 
 
   test 'update OIDC Authorization flows' do
-    rolling_updates_off
     service = FactoryBot.create(:simple_service, account: @provider)
     ProxyTestService.any_instance.stubs(disabled?: true)
-    patch admin_service_integration_path(service_id: service, proxy: {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true}})
+    put admin_service_integration_path(service_id: service.id, proxy: {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true}})
     assert_response :redirect
 
     service.reload
     refute service.proxy.oidc_configuration.standard_flow_enabled
     assert service.proxy.oidc_configuration.direct_access_grants_enabled
+  end
+
+  test 'edit not found for apiap' do
+    rolling_updates_on
+    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true)
+
+    service = FactoryBot.create(:simple_service, account: @provider)
+    get edit_admin_service_integration_path(service_id: service.id)
+    assert_response :not_found
   end
 end
