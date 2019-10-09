@@ -123,6 +123,8 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
   end
 
   test 'update custom public endpoint with proxy_pro enabled' do
+    rolling_updates_off
+    
     Proxy.any_instance.stubs(deploy: true)
     ProxyTestService.any_instance.stubs(:disabled?).returns(true)
 
@@ -136,6 +138,8 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
   end
 
   test 'create proxy config with proxy_pro enabled' do
+    rolling_updates_off
+
     proxy = @provider.default_service.proxy
     proxy.update_column(:apicast_configuration_driven, true)
 

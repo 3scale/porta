@@ -4,6 +4,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
+  before_action :hide_for_apiap, only: :edit
 
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
@@ -203,6 +204,10 @@ class Api::IntegrationsController < Api::BaseController
 
   def message_bus?(proxy)
     proxy.oidc? && ZyncWorker.config.message_bus
+  end
+
+  def hide_for_apiap
+    raise ActiveRecord::RecordNotFound if apiap?
   end
 
   def authorize
