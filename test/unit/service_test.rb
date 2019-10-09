@@ -318,41 +318,6 @@ class ServiceTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) { service.reload }
   end
 
-  def test_default_service_plan
-    service = FactoryBot.build(:simple_service)
-    service.account.settings.service_plans_ui_visible = true
-
-    service.save!
-
-    service_plan = service.service_plans.first!
-    assert_equal 'hidden', service_plan.state
-  end
-
-  def test_default_published_service_plan
-    Logic::RollingUpdates.stubs(skipped?: true)
-
-    service = FactoryBot.build(:simple_service)
-    service.account.settings.service_plans_ui_visible = false
-
-    service.save!
-
-    service_plan = service.service_plans.first!
-    assert_equal 'hidden', service_plan.state
-  end
-
-  def test_default_published_service_plan_with_rolling_update
-    Logic::RollingUpdates.stubs(enabled?: true, skipped?: false)
-
-    service = FactoryBot.build(:simple_service)
-    service.account.settings.service_plans_ui_visible = false
-
-    Logic::RollingUpdates.feature(:published_service_plan_signup).any_instance.expects(:missing_config).returns(true)
-    service.save!
-
-    service_plan = service.service_plans.first!
-    assert_equal 'published', service_plan.state
-  end
-
   class DestroyingServiceTest < ActiveSupport::TestCase
 
     disable_transactional_fixtures!

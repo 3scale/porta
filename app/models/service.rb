@@ -552,7 +552,7 @@ class Service < ApplicationRecord
 
   def default_service_plan_state
     return unless account.try(:provider_can_use?, :published_service_plan_signup)
-    account.settings.service_plans_ui_visible? ? 'hidden'.freeze : 'published'.freeze
+    account.settings.service_plans_ui_visible? ? 'published'.freeze : 'hidden'.freeze
   end
 
   def update_notification_settings
