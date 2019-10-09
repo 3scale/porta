@@ -5,6 +5,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_proxy
   before_action :authorize
   before_action :hide_for_apiap, only: :edit
+  before_action :find_registry_policies, only: %i[edit update]
 
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
@@ -14,11 +15,6 @@ class Api::IntegrationsController < Api::BaseController
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
 
   def edit
-    begin
-      @registry_policies = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
-    rescue StandardError => error
-      @error = error
-    end
     @latest_lua = current_account.proxy_logs.first
     @deploying =  ThreeScale::TimedValue.get(deploying_hosted_proxy_key)
     @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
@@ -135,6 +131,12 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   protected
+
+  def find_registry_policies
+    @registry_policies ||= Policies::PoliciesListService.call!(current_account, proxy: @proxy)
+  rescue StandardError => error
+    @error = error
+  end
 
   def edit_stale
     flash.now[:error] = flash_message(:stale_object)
