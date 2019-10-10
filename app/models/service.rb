@@ -551,8 +551,9 @@ class Service < ApplicationRecord
   end
 
   def default_service_plan_state
-    return if !account || !account.provider_can_use?(:published_service_plan_signup) || !(settings = account.settings)
-    settings.service_plans_ui_visible? ? 'hidden'.freeze : 'published'.freeze
+    return unless account && account.provider_can_use?(:published_service_plan_signup)
+    return if account.should_be_deleted?
+    account.settings.service_plans_ui_visible? ? 'hidden'.freeze : 'published'.freeze
   end
 
   def update_notification_settings
