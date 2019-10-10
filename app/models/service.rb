@@ -551,7 +551,8 @@ class Service < ApplicationRecord
   end
 
   def default_service_plan_state
-    return unless account.try(:provider_can_use?, :published_service_plan_signup)
+    return unless account && account.provider_can_use?(:published_service_plan_signup)
+    return if account.should_be_deleted?
     account.settings.service_plans_ui_visible? ? 'hidden'.freeze : 'published'.freeze
   end
 

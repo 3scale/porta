@@ -65,6 +65,5 @@ module AccountRepresenter
     credit_card_stored?
   end
 
-  delegate :monthly_charging_enabled, to: :settings
-  delegate :monthly_billing_enabled, to: :settings
+  delegate :monthly_charging_enabled, :monthly_billing_enabled, to: :settings, allow_nil: true
 end

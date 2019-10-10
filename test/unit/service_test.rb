@@ -608,8 +608,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'of_approved_account' do
-    account = FactoryBot.create(:simple_provider, state: 'suspended')
+    account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:simple_service, account: account)
+    account.suspend!
     assert_not_includes Service.of_approved_accounts, service
   end
 
