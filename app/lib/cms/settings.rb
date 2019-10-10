@@ -5,7 +5,7 @@ module CMS
     DEFAULT_MODE = 'published'
 
     def initialize(settings, session)
-      @settings = settings
+      @settings = settings || ::Settings.new
       @session  = session
     end
 

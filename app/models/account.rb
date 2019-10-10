@@ -207,7 +207,7 @@ class Account < ApplicationRecord
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
   has_one :settings, dependent: :destroy, inverse_of: :account, autosave: true
-  lazy_initialization_for :profile, :settings
+  lazy_initialization_for :profile, :settings, if: :should_not_be_deleted?
   accepts_nested_attributes_for :profile
 
   belongs_to :country
@@ -495,8 +495,10 @@ class Account < ApplicationRecord
         fields_to_xml(xml)
         extra_fields_to_xml(xml)
 
-        xml.monthly_billing_enabled settings.monthly_billing_enabled
-        xml.monthly_charging_enabled settings.monthly_charging_enabled
+        unless should_be_deleted?
+          xml.monthly_billing_enabled settings.monthly_billing_enabled
+          xml.monthly_charging_enabled settings.monthly_charging_enabled
+        end
 
         xml.credit_card_stored credit_card_stored?
 

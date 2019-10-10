@@ -129,6 +129,10 @@ module Account::States
     def should_be_deleted?
       scheduled_for_deletion? || suspended? || (buyer? && provider_account.try(:should_be_deleted?))
     end
+
+    def should_not_be_deleted?
+      !should_be_deleted?
+    end
   end
 
   module ClassMethods
