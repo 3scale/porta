@@ -8,13 +8,13 @@ const Nav = ({id, children}) => (
   </nav>
 )
 
-const OutdatedIcon = ({title}) => {
-  const isVisibleIcon = title === 'Integration'
-  return isVisibleIcon ? <i className='fa fa-exclamation-triangle' title='The Integration is out of date, promote!'></i> : null
-}
+const OutdatedIcon = () => (
+  <i className='fa fa-exclamation-triangle' title='The Integration is out of date, promote!'></i>
+)
 
 const NavExpandable = ({id, title, isExpanded, isActive, children, outOfDateConfig}) => {
   const [expanded, setExpanded] = useState(isExpanded)
+  const integrationOutOfDateConfig = !expanded && outOfDateConfig
 
   function onItemClick () {
     setExpanded(expanded => !expanded)
@@ -24,7 +24,7 @@ const NavExpandable = ({id, title, isExpanded, isActive, children, outOfDateConf
     <li className={`pf-c-nav__item pf-m-expandable ${expanded ? 'pf-m-expanded' : ''} ${isActive ? 'pf-m-current' : ''}`}>
       <a href="#" className="pf-c-nav__link" id={id} aria-expanded="true" onClick={onItemClick}>
         {title}
-        { outOfDateConfig && <OutdatedIcon title={title} /> }
+        { integrationOutOfDateConfig && <OutdatedIcon /> }
         <span className="pf-c-nav__toggle">
           {Caret}
         </span>
@@ -44,10 +44,11 @@ const Caret = (
   </svg>
 )
 
-const NavItem = ({to, isActive, target, children}) => (
+const NavItem = ({to, isActive, target, children, outOfDateConfig}) => (
   <li className="pf-c-nav__item">
     <a href={to} className={`pf-c-nav__link ${isActive ? 'pf-m-current' : ''}`} aria-current="page" target={target}>
       {children}
+      { outOfDateConfig && <OutdatedIcon /> }
     </a>
   </li>
 )
