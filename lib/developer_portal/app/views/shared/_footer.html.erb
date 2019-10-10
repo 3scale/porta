@@ -7,14 +7,16 @@
     </li>
     <% end %>
 
-    <% settings = site_account.settings %>
+    <% unless site_account.should_be_deleted? %>
+      <% settings = site_account.settings %>
 
-    <% if settings&.privacy_policy.present? %>
-      <li><%= link_to 'Privacy policy', settings_privacy_path %></li>
-    <% end %>
+      <% if settings.privacy_policy.present? %>
+        <li><%= link_to 'Privacy policy', settings_privacy_path %></li>
+      <% end %>
 
-    <% if settings&.refund_policy.present? %>
-      <li><%= link_to 'Refund policy', settings_refunds_path %></li>
+      <% if settings.refund_policy.present? %>
+        <li><%= link_to 'Refund policy', settings_refunds_path %></li>
+      <% end %>
     <% end %>
 
     <li class="last">

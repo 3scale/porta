@@ -495,8 +495,10 @@ class Account < ApplicationRecord
         fields_to_xml(xml)
         extra_fields_to_xml(xml)
 
-        xml.monthly_billing_enabled settings&.monthly_billing_enabled
-        xml.monthly_charging_enabled settings&.monthly_charging_enabled
+        unless should_be_deleted?
+          xml.monthly_billing_enabled settings.monthly_billing_enabled
+          xml.monthly_charging_enabled settings.monthly_charging_enabled
+        end
 
         xml.credit_card_stored credit_card_stored?
 
