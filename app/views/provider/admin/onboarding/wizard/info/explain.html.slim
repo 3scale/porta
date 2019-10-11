@@ -20,9 +20,10 @@ ol.explain.fa-ul
       span.code-example__path method
 
   li.feedback.explain__step.explain__step--3
-    i.icon.fa-li.fa.fa-puzzle-piece
+    i.icon.fa-li.fa.fa-cubes
     .text.is-transparent
       strong> Your API
       ' returns the response to the customer  through the gateway.
 
-= link_to "Got it! Lets add my API", new_provider_admin_onboarding_wizard_api_path, class: "button button--next"
+- next_path = apiap? ? new_provider_admin_onboarding_wizard_product_path : new_provider_admin_onboarding_wizard_api_path
+= link_to "Got it! Lets add my API", next_path, class: "button button--next"
