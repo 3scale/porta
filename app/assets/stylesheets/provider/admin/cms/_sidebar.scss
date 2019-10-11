@@ -73,12 +73,11 @@
   .fa-folder-open-o {
     color: $brand-blue;
 
-
     &:hover {
       color: $brand-blue;
     }
 
-    &+ a {
+    & + a {
       //text-indent: line-height-times(1);
       //vertical-align: top;
     }
@@ -91,7 +90,8 @@
     vertical-align: middle;
     width: 100%;
 
-    &:hover,  &.current {
+    &:hover,
+    &.current {
       color: $link-color;
     }
   }
@@ -131,6 +131,11 @@
       }
     }
   }
+}
+
+#cms-sidebar-error-empty {
+  display: none;
+  margin: line-height-times(1/2);
 }
 
 @import 'provider/admin/cms/sidebar/filter';

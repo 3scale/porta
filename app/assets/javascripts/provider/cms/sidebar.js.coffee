@@ -125,10 +125,12 @@ class Sidebar
       .on 'mouseenter mouseleave', '.cms-sidebar-listing li > a', (event) ->
         $(this).parent().toggleClass('ui-state-hover')
 
-
   highlight: (path) ->
     @element.find("a.#{HIGHLIGHT_CLASS}").removeClass(HIGHLIGHT_CLASS)
     @element.find("a[href='#{path}']").addClass(HIGHLIGHT_CLASS)
+
+  error_empty: ->
+    @element.find('#cms-sidebar-error-empty')
 
   content: ->
     @element.find('#cms-sidebar-content')
@@ -150,6 +152,9 @@ class Sidebar
     if filter? then items.filter(filter) else items
 
   update: (json) ->
+    unless json
+      @error_empty().show()
+      return
     @groups = @group(json)
     @json = json
 
@@ -159,7 +164,6 @@ class Sidebar
     portlets = @render_portlets(@json.portlets)
 
     $ =>
-
       @content().html(content)
       @layouts().html(layouts)
       @partials().html(partials)
@@ -199,7 +203,6 @@ class Sidebar
       partials: @json.partials
 
     @template.partials(data)
-
 
   render_content: (section) =>
     section_id = section.id
@@ -280,7 +283,6 @@ class SidebarToolbar
         element.removeClass(ACTIVE)
         all.addClass(ACTIVE)
 
-
   process_origin: (event) =>
     element = $(event.currentTarget)
     origin = element.data('filter-origin')
@@ -313,7 +315,6 @@ class SidebarFilter
 
     if query = @status.query
       $ => $(INPUT).val(query)
-
 
   save: ->
     SidebarFilter.save(@status)
@@ -488,7 +489,6 @@ class SidebarTemplates
   layouts: @template(@layouts)
   portlets: @template(@portlets)
   partials: @template(@partials)
-
 
 ## Exporting variables
 window.ThreeScale.Sidebar = Sidebar
