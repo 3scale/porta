@@ -55,8 +55,7 @@ type InitPolicies = {
 
 const initPolicies = ({element, registry, chain, serviceId}: InitPolicies) => {
   const store = configureStore(initialState)
-  const policies = {chain, registry}
-  store.dispatch(actions.populatePolicies(serviceId, policies))
+  store.dispatch(actions.populatePolicies(serviceId, chain, registry))
   return Policies(store, element)
 }
 
