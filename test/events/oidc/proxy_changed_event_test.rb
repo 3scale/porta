@@ -28,4 +28,13 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
     assert_equal 'http://example.com/auth/realm', zync[:oidc_endpoint]
     assert_equal proxy.service.id, zync[:service_id]
   end
+
+  test '#valid? when service has been deleted' do
+    proxy = FactoryBot.create(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
+    proxy.service.backend_version = 'oauth'
+    assert OIDC::ProxyChangedEvent.valid?(proxy)
+
+    proxy.stubs(service: nil)
+    refute OIDC::ProxyChangedEvent.valid?(proxy)
+  end
 end
