@@ -32,7 +32,7 @@
             <p>Sets whether the metric or method will be displayed in the plan's widget.</p>
           <% end %>
         </th>
-        <th class="operations">
+        <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
           <%= help_bubble do %>
             <h3>Text only</h3>
@@ -78,7 +78,7 @@
             <p>Sets whether the metric or method will be displayed in the plan's widget.</p>
           <% end %>
         </th>
-        <th class="operations">
+        <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
           <%= help_bubble do %>
             <h3>Text only</h3>

@@ -11,8 +11,9 @@ $osloGray:       #8b8d8f; // pf-black-500
 $outerSpaceGray: #393f44; // pf-black-800
 $gallery:        #ededed; // pf-black-200
 $white:          #fff;
-$whiteBoxShadow: rgba(3, 3, 3, .2) 0 1px 2px 0;
-$whiteBoxShadowIE11: rgba(3, 3, 3, .2) 0 1px 3px 1px;
+$whiteBoxShadowColor: rgba(3, 3, 3, .2);
+$whiteBoxShadow: $whiteBoxShadowColor 0 1px 2px 0;
+$whiteBoxShadowIE11: $whiteBoxShadowColor 0 1px 3px 1px;
 $wildSandGray:   #f5f5f5; // pf-black-150
 
 // colors
