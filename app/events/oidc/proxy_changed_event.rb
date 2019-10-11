@@ -19,10 +19,8 @@ class OIDC::ProxyChangedEvent < BaseEventStoreEvent
 
   # :reek:NilCheck but backend_version_change just can be nil
   def self.valid?(proxy)
-    return unless proxy
-
-    service = proxy.service
-
+    service = proxy.try(:service)
+    return unless service
     service.backend_version.oauth? || service.backend_version_change&.include?('oauth')
   end
 end
