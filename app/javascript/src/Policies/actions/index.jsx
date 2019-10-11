@@ -25,17 +25,17 @@ const registryComponent: UIComponent = 'registry'
 const policyConfigComponent: UIComponent = 'policyConfig'
 
 // Policies action creators
-function loadSavedPolicies (policies: {chain: Array<StoredChainPolicy>, registry: RawRegistry}): ThunkAction {
+function loadSavedPolicies (chain: Array<StoredChainPolicy>, registry: RawRegistry): ThunkAction {
   return function (dispatch: Dispatch) {
-    dispatch(loadRegistrySuccess(policies.registry))
-    dispatch(loadChain(policies.chain))
+    dispatch(loadRegistrySuccess(registry))
+    dispatch(loadChain(chain))
   }
 }
 
-function populatePolicies (serviceId: string, policies?: {chain: Array<StoredChainPolicy>, registry: RawRegistry}): ThunkAction {
+function populatePolicies (serviceId: string, chain?: Array<StoredChainPolicy>, registry?: RawRegistry): ThunkAction {
   return function (dispatch: Dispatch) {
-    if (policies) {
-      dispatch(loadSavedPolicies(policies))
+    if (registry && chain) {
+      dispatch(loadSavedPolicies(chain, registry))
     } else {
       dispatch(fetchRegistry())
       dispatch(fetchChain(serviceId))
@@ -102,7 +102,7 @@ export interface IPoliciesActions {
   closePolicyConfig: () => ThunkAction,
   addPolicy: RegistryPolicy => ThunkAction,
   closePolicyRegistry: () => ThunkAction,
-  populatePolicies: (serviceId: string, policies?: { chain: Array<StoredChainPolicy>, registry: RawRegistry }) => ThunkAction,
+  populatePolicies: (serviceId: string, chain?: Array<StoredChainPolicy>, registry?: RawRegistry) => ThunkAction,
   updatePolicyConfig: (ChainPolicy) => UpdatePolicyConfigAction
 }
 
