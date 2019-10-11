@@ -1,0 +1,25 @@
+h1 Connect Backend and Product
+
+ol.explain.fa-ul
+  li.feedback.feedback--active.feedback--connect
+    i.icon.fa-li.fa.fa-cube.icon--focus
+    p.text.text--up
+      ' Finally, in order to connect your Backend with the Product using a
+      strong path.
+    p.text.text--up
+      ' You can connect multiple Backends to a single product by using different paths.
+      ' An
+      strong empty path
+      '  means the Backend will be used by default.
+    .text.text--up
+      ' Choose a path for your current Backend:
+
+  li.feedback.feedback--connect
+    i.icon.fa-li.fa.fa-cubes.icon--focus
+
+= semantic_form_for @config, url: provider_admin_onboarding_wizard_connect_path, html: { id: :connect_form } do |f|
+  = f.inputs
+    = f.input :path, label: 'Path', input_html: { placeholder: '/', autofocus: true }
+
+  button type="submit" class="button button--next"
+    = 'Connect to this Path'

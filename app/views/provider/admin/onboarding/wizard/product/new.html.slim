@@ -1,0 +1,20 @@
+h1 Add a Product
+
+ol.explain.fa-ul
+  li.feedback
+    i.icon.fa-li.fa.fa-cubes.icon--focus
+    p.text.text--up
+      ' To integrate your API you first need to create a
+      strong Product.
+    .text.text--up
+      ' Each
+      strong Product
+      '  defines its own rules and make a set of endpoints available. Provide a name
+      ' for your first Product:
+
+= semantic_form_for @service, url: provider_admin_onboarding_wizard_product_path, html: { id: :product_form } do |f|
+  = f.inputs
+    = f.input :name, label: 'Product Name', input_html: { placeholder: 'My API Product', autofocus: true }
+
+  button type="submit" class="button button--next"
+    = 'Add this Product'

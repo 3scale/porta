@@ -21,6 +21,6 @@ class  Provider::Admin::Onboarding::Wizard::InfoController < Provider::Admin::On
   protected
 
   def proxy
-    current_account.first_service!.proxy
+    service.proxy
   end
 end

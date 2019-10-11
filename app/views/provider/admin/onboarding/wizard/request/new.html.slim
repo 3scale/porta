@@ -31,7 +31,7 @@ p
         span.code-example__path = @request.path_without_slash
 
     li.feedback.feedback--sec
-      i.icon.fa-li.fa.fa-puzzle-piece.icon
+      i.icon.fa-li.fa.icon class=(apiap? ? 'fa-cubes' : 'fa-puzzle-piece')
       .text
         strong> = link_to @request.api_name, edit_provider_admin_onboarding_wizard_api_path
         ' will return a response to the customer through the gateway.
