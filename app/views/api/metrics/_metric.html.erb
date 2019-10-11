@@ -62,6 +62,6 @@
     <% end %>
   </span>
 </td>
-<td class="operations" <%= @plan.pricing_enabled? ? "" : "colspan='2'"  %>
+<td class="operations" colspan="<%= @plan.pricing_enabled? ? 1 : 2  %>">
 </td>
 <% end %>
