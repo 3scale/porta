@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'heroku'
 
 class Heroku::ResourcesControllerTest < ActionController::TestCase
   include Heroku::ControllerMethods

@@ -176,6 +176,7 @@ module System
         require 'system/database/mysql'
         MySQL
       else
+        require "system/database/#{adapter}"
         "System::Database::#{adapter.camelize}".constantize
       end
     end

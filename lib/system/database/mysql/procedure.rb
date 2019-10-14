@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'system/database/procedure'
+
 module System
   module Database
     module MySQL

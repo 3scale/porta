@@ -1,3 +1,5 @@
+require 'heroku'
+
 class Heroku::BaseController < ApplicationController
 
   include SiteAccountSupport

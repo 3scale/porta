@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'system/database/mysql'
+
 System::Database::MySQL.define do
   trigger 'accounts' do
     <<~SQL

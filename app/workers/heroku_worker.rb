@@ -1,3 +1,5 @@
+require 'heroku'
+
 class HerokuWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical

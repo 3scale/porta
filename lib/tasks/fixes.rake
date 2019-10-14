@@ -1,3 +1,5 @@
+require 'three_scale/rake/remove_dup_usage_limits'
+
 desc "This namespace is for ad-hoc fixes so that we don't misuse migrations."
 namespace :fixes do
 

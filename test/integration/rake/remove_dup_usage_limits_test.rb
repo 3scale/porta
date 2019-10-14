@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'three_scale/rake/remove_dup_usage_limits'
 
 class RemoveDupUsageLimitsTest < ActiveSupport::TestCase
 
