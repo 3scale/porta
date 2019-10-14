@@ -22,9 +22,11 @@ module BackendApiLogic
     end
 
     test '#policy_chain' do
+      backend_api1 = backend_apis.first
+      backend_api2 = backend_apis.last
       injected_rules = [
-        { url: backend_apis.last.private_endpoint,  condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | remove_first: '/foo'}}" },
-        { url: backend_apis.first.private_endpoint, condition: { operations: [match: :path, op: :matches, value: '/.*'] } }
+        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | remove_first: '/foo'}}" },
+        { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/.*'] } }
       ]
       apicast_policy = { name: 'apicast', 'version': 'builtin', 'configuration': {} }
       injected_policy = {
@@ -58,8 +60,8 @@ module BackendApiLogic
       end
 
       test 'replace_path config only included when the config has a path' do
-        refute rule_class.new(stub(private_endpoint: 'http://whatever', path: '/')).as_json.has_key?(:replace_path)
-        assert rule_class.new(stub(private_endpoint: 'http://whatever', path: 'foo')).as_json.has_key?(:replace_path)
+        refute rule_class.new(stub(backend_api_id: 1, private_endpoint: 'http://whatever', path: '/')).as_json.has_key?(:replace_path)
+        assert rule_class.new(stub(backend_api_id: 2, private_endpoint: 'http://whatever', path: 'foo')).as_json.has_key?(:replace_path)
       end
     end
   end
