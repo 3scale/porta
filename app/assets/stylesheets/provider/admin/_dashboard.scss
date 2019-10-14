@@ -78,8 +78,7 @@
 }
 
 .DashboardWidget {
-  background-color: $white;
-  border: $border-width solid $border-color;
+  @include white-box-shadow;
   float: left;
   height: line-height-times(10);
   overflow: hidden;
@@ -353,6 +352,7 @@
   &--extended {
     background-color: $gallery;
     border-bottom: $border-width solid $border-color;
+    box-shadow: $gallery -1px -1px 2px 0;
     margin-bottom: line-height-times(1);
   }
 }
@@ -466,6 +466,12 @@ a:hover .u-notice {
     & > #backends.active .ApiFilter {
       margin-left: 0;
       padding: 1px;
+    }
+
+    .DashboardWidget {
+      background-color: $white;
+      border: $border-width solid $border-color;
+      box-shadow: none;
     }
 
     nav.DashboardNavigation--services {
