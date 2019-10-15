@@ -26,15 +26,15 @@ table.finance_data tbody tr td {
 table.invoice caption,
 table.finance_data caption {
   background-color: $light-background-color;
+  border-bottom: 0;
   box-shadow: $whiteBoxShadow;
   font-weight: $font-weight-bold;
-  text-align: left;
   padding: line-height-times(1);
-  border-bottom: 0;
+  text-align: left;
 }
 
 #actions form.button-to.remote {
   @include white-box-shadow;
-  display:block;
+  display: block;
   padding: line-height-times(1);
 }

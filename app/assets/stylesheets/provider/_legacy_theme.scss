@@ -2,7 +2,7 @@
 
 div.dashboard_bubble, div.wide_dashboard_bubble, div.narrow_dashboard_bubble {
   @include white-box-shadow;
-  border: none;
+  border: 0;
   margin-bottom: line-height-times(1);
   padding: line-height-times(1);
   overflow: hidden;
