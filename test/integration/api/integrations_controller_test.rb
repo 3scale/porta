@@ -132,6 +132,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     Proxy.any_instance.expects(:update_attributes).once
     ProxyTestService.expects(:new).never
     ProxyTestService.any_instance.expects(:perform).never
+    Policies::PoliciesListService.expects(:call!)
 
     service = @provider.default_service
     service.update_column(:deployment_option, 'self_managed')
