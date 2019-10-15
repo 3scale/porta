@@ -155,8 +155,6 @@ form.formtastic fieldset.inputs > ol > li.select select {
 
 form.formtastic fieldset.buttons {
   border-top: $border-width solid $border-color;
-  margin: line-height-times(2) 0;
-  padding: line-height-times(1/2) 0 0 0;
   text-align: right;
 
   li {
@@ -197,8 +195,9 @@ form.formtastic fieldset.buttons ol {
 
 form + form .action.delete {
   display: inline-block;
+  left: line-height-times(1);
   position: relative;
-  top: line-height-times(-7/2);
+  top: line-height-times(-7 / 2);
   z-index: 1000;
 }
 
@@ -239,8 +238,11 @@ Load this stylesheet after formtastic.css in your layouts to override the CSS to
 --------------------------------------------------------------------------------------------------*/
 
 form.formtastic {
-  text-align: left; /* overriding legacy_theme text-align: center*/
+  @include white-box-shadow;
+  margin: line-height-times(1) 0;
   min-width: line-height-times(20);
+  padding: line-height-times(1);
+  text-align: left; /* overriding legacy_theme text-align: center*/
   width: 100%;
 
   fieldset.inputs[data-behavior~=toggle-inputs] {
@@ -546,3 +548,26 @@ li.hidden {
     padding: 0 line-height-times(5 / 10);
   }
 }
+
+// Overrides
+.dashboard_bubble form.formtastic {
+  box-shadow: none;
+  margin: 0;
+  padding: line-height-times(1) 0 0;
+}
+
+#integration-tabs {
+  form.formtastic {
+    box-shadow: none;
+  }
+
+  form.formtastic.u-inline {
+    display: inline-block;
+  }
+}
+
+form#liquid-settings > fieldset {
+  border-top: 0;
+}
+
+

@@ -4,12 +4,11 @@
   list-style: none inside;
 
   li {
+    @include white-box-shadow;
     background: $background-color-base no-repeat line-height-times(1/2) center image-url("drag-icon.png");
-    border: $border-width solid $border-color;
     margin-bottom: line-height-times(1/2);
-    padding: line-height-times(1/2) 0 line-height-times(1/2) line-height-times(1);
-    border-radius: $border-radius;
     overflow: visible !important;
+    padding: line-height-times(1/2) 0 line-height-times(1/2) line-height-times(1);
 
     &.ui-sortable-helper {
       @include box-shadow(0 0 line-height-times(1/2) $box-shadow-color);
