@@ -47,7 +47,7 @@ class ServiceCreator
 
   def save_assigned_backend_api(attrs)
     config = backend_api_configs.find_by(backend_api_id: @backend_api.id) ||
-      backend_api_configs.build(backend_api: @backend_api)
+             backend_api_configs.build(backend_api: @backend_api, path: '/')
     config.path = path.to_s if attrs.key?(:path)
     config.save!
   end

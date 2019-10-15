@@ -1,0 +1,7 @@
+empty_path:
+  id: 1
+  path: ''
+
+with_path:
+  id: 2
+  path: '/some/path'

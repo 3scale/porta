@@ -175,7 +175,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       backend_api = FactoryBot.create(:backend_api)
       products = FactoryBot.create_list(:simple_service, 2)
       proxy_rule = FactoryBot.build(:proxy_rule, owner: backend_api, pattern: '/some-pattern')
-      products.each { |product| product.backend_api_configs.create(backend_api: backend_api) }
+      products.each { |product| product.backend_api_configs.create(backend_api: backend_api, path: '/') }
 
       products.each { |product| ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, proxy_rule).times(3) }
 
