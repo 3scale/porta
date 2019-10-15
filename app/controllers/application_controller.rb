@@ -296,4 +296,8 @@ class ApplicationController < ActionController::Base
       res
     end
   end
+
+  def apiap?
+    current_account.provider_can_use?(:api_as_product)
+  end
 end
