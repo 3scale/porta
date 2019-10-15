@@ -2,8 +2,8 @@
 
 .Stats {
   @include white-box-shadow;
-  padding: line-height-times(1);
   margin-bottom: line-height-times(1);
+  padding: line-height-times(1);
 }
 
 .StatsMenu-container,

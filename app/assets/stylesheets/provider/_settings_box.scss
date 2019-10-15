@@ -88,7 +88,7 @@
   }
 
   &-summary {
-    @include white-box-shadow; 
+    @include white-box-shadow;
     border: $border-width-lg solid transparent;
     min-height: line-height-times(2);
     padding: line-height-times(1);
@@ -104,7 +104,7 @@
   }
 
   &--is-erroneous {
-    border-color: $error-color;
     @include white-box-shadow;
+    border-color: $error-color;
   }
 }

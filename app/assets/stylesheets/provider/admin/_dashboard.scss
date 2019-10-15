@@ -438,6 +438,14 @@ a:hover .u-notice {
 
     & > #products {
       padding: 0 line-height-times(1 / 2);
+
+      &.active {
+        .DashboardSection--service {
+          display: table;
+          float: none;
+          padding-top: line-height-times(1);
+        }
+      }
     }
 
     & > #products,
@@ -452,14 +460,6 @@ a:hover .u-notice {
       display: block;
       margin: 1px 0 0 1px;
       padding: line-height-times(1);
-    }
-
-    & > #products.active {
-      .DashboardSection--service {
-        display: table;
-        float: none;
-        padding-top: line-height-times(1);
-      }
     }
 
     & > #products.active .ApiFilter,

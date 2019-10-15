@@ -88,8 +88,8 @@ h2 + p {
 }
 
 main > p:not(:first-child) {
-  padding: line-height-times(1);
   @include white-box-shadow;
+  padding: line-height-times(1);
 }
 
 main > h1:first-child + p,
