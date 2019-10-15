@@ -20,6 +20,7 @@ module BackendApiLogic
     protected
 
     def validate_backend_api?
+      return unless account # TODO: remove this line when we remove the Rolling Update :)
       !account.provider_can_use?(:api_as_product) || backend_api.private_endpoint_changed?
     end
 

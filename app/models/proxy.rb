@@ -104,7 +104,7 @@ class Proxy < ApplicationRecord
   alias_attribute :production_endpoint, :endpoint
   alias_attribute :staging_endpoint, :sandbox_endpoint
 
-  delegate :account, to: :service
+  delegate :account, to: :service, allow_nil: true
   delegate :provider_can_use?, to: :account
   delegate :backend_apis, :backend_api_configs, to: :service
 

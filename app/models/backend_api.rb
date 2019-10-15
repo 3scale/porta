@@ -102,7 +102,7 @@ class BackendApi < ApplicationRecord
   end
 
   def set_private_endpoint
-    return if account.provider_can_use?(:api_as_product)
+    return if account&.provider_can_use?(:api_as_product)
     self.private_endpoint ||= default_api_backend
   end
 
