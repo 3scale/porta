@@ -11,7 +11,6 @@ resource 'BackendApi' do
 
     it { should have_properties(expected_properties).from(resource) }
     it { should have_links('metrics', 'mapping_rules') }
-    it { should have_properties('usage') }
   end
 
   json(:collection) do

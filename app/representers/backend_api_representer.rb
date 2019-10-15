@@ -22,8 +22,4 @@ module BackendApiRepresenter
   link :mapping_rules do
     admin_api_backend_api_mapping_rules_path(backend_api_id: id)
   end
-
-  def usage
-    backend_api_configs.accessible.order(:id)
-  end
 end
