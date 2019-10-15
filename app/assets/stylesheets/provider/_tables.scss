@@ -13,6 +13,7 @@ $search-header-width: line-height-times(4);
 }
 
 table {
+  background-color: $body-background;
   width: 100%;
 
   .search th {
@@ -25,6 +26,7 @@ table {
     height: line-height-times(2);
     padding: line-height-times(1/2, true) line-height-times(1/2) line-height-times(1/2) 0;
     vertical-align: top;
+    word-break: break-word;
 
     &.u-underline {
       border-bottom: $border-width solid $border-color;
@@ -53,6 +55,8 @@ th.header {
 }
 
 table.data {
+  @include white-box-shadow;
+  border: solid $body-background line-height-times(1);
   margin-bottom: line-height-times(1);
   margin-top: line-height-times(1/2);
   width: 100%;
@@ -175,7 +179,9 @@ table.list {
   }
 }
 
-
+table.mini {
+  border: line-height-times(1) solid $white;
+}
 
 table.mini td {
   padding-right: line-height-times(1);
@@ -189,6 +195,7 @@ table.mini, table#configs {
 
 table.list, table.data {
   border-collapse: collapse;
+  border-color: transparent;
   margin-bottom: 0;
   margin-top: 0;
   width: 100%;
@@ -283,4 +290,23 @@ td.thhead h3 {
 
 table.list.list-checkmarks tr th {
   word-break: break-word;
+}
+
+// Overrides
+table#mapping_rules .actions a.action.add {
+  margin: line-height-times(-1/4) line-height-times(1 / 2);
+}
+
+table.data {
+  &.notification-settings,
+  &.StatsMethodsTable {
+    box-shadow: none;
+  }
+}
+
+// IE 11 hack
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  #results_list {
+    @include white-box-shadow;
+  }
 }

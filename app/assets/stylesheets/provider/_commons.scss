@@ -1,3 +1,5 @@
+@import 'provider/layouts/main';
+
 html {
   @include typography-base();
 }
@@ -14,6 +16,19 @@ main >  h2,
   font-weight: $font-weight-light;
 }
 
+.subsubmenu + h1,
+.subsubmenu + h2,
+#subsubmenu + h1,
+#subsubmenu + h2,
+main > h1:first-child,
+main >  h2:first-child,
+#tab-content > h1:first-child,
+#tab-content > h2:first-child {
+  background-color: $body-background;
+  margin: line-height-times(-1);
+  margin-bottom: line-height-times(1);
+  padding: line-height-times(1);
+}
 
 h1 {
   font-size: $main-title-font-size;
@@ -30,13 +45,21 @@ h2, h3 {
   margin-bottom: line-height-times(1/2);
 }
 
+.subsubmenu {
+  background-color: $body-background;
+  margin: line-height-times(-1);
+  padding: line-height-times(1);
+}
+
 #tab-content > h2:first-child,
 #content > h2:first-child,
 #subsubmenu + h2 {
+  background-color: $body-background;
   font-size: $main-title-font-size;
-  padding-top: 0;
-  margin-bottom: line-height-times(1/2);
   line-height: 1;
+  margin: line-height-times(-1);
+  margin-bottom: line-height-times(1);
+  padding: line-height-times(1);
 }
 
 h2 {
@@ -55,7 +78,24 @@ h3 {
 
 p {
   margin: line-height-times(1/2) 0 line-height-times(1) 0;
-  max-width: line-height-times(36);
+}
+
+h1 + p,
+h2 + p {
+  background-color: $body-background;
+  margin-bottom: line-height-times(1);
+  padding: line-height-times(1);
+}
+
+main > p:not(:first-child) {
+  @include white-box-shadow;
+  padding: line-height-times(1);
+}
+
+main > h1:first-child + p,
+main > h2:first-child + p {
+  box-shadow: none;
+  margin: line-height-times(-1) line-height-times(-1) line-height-times(1);
 }
 
 dd p {
@@ -76,7 +116,6 @@ ul, p, ol, dl {
 
 p + ul {
   list-style: none;
-  margin-top: line-height-times(-2/3);
   padding-left: line-height-times(2/3);
 }
 
@@ -142,10 +181,6 @@ a img {
   border: none;
 }
 
-.round, #page_templates, .alwaysontop {
-  @include border-radius($border-radius);
-}
-
 pre code {
   border-radius: $border-radius;
   margin: line-height-times(1/2) 0 line-height-times(1);
@@ -206,3 +241,12 @@ hr, {
   color: $success-color;
   cursor: move;
 }
+
+#forum {
+  .u-dl,
+  .post {
+    @include white-box-shadow;
+    padding: line-height-times(1);
+  }
+}
+

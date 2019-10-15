@@ -55,7 +55,6 @@
 
 #cms-sidebar-filter-origin {
   @include cms-sidebar-toolbar;
-  border-top: $border-width solid $border-color;
   border-bottom: $border-width solid $border-color;
 
   li {

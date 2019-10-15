@@ -62,13 +62,17 @@ $tab-min-height: line-height-times(21, true);
 }
 
 #tab-content {
-  position: relative;
-  float: left;
-  width: $tab-content-width;
-  margin-left: -$border-width;
-  background-color: $tab-content-color;
+  @include white-box-shadow;
   border-left: $border-width solid $border-color;
   border-right: none;
+  float: left;
+  margin-left: -$border-width;
   min-height: $tab-min-height;
   padding: 0 0 line-height-times(1) line-height-times(1);
+  position: relative;
+  width: $tab-content-width;
+
+  .formtastic {
+    box-shadow: none;
+  }
 }
