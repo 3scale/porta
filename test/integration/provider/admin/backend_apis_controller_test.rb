@@ -28,7 +28,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     backend_api = @provider.backend_apis.last
 
     services = FactoryBot.create_list(:simple_service, 3, account: @provider)
-    services.each { |service| service.backend_api_configs.create(backend_api: backend_api) }
+    services.each { |service| service.backend_api_configs.create(backend_api: backend_api, path: '/') }
     accessible_services = services.take(2)
     non_accessible_service = services.last
     non_accessible_service.update_column(:state, 'deleted')

@@ -14,22 +14,17 @@ class BackendApiConfig < ApplicationRecord
   self.default_sort_column = 'backend_apis.name'
   self.default_sort_direction = :asc
 
-  attribute :path, ActiveRecord::Type::StringNotNil.new
-
   has_many :backend_api_metrics, through: :backend_api, source: :metrics
 
   validates :service_id, :backend_api_id, presence: true
   validates :backend_api_id, uniqueness: { scope: :service_id }
   validates :path, uniqueness: { scope: :service_id, case_sensitive: false }
-  validates :path, length: { in: 0..255, allow_nil: false }, path: true
+  validates :path, length: { in: 1..255, allow_nil: false }, path: true
 
   scope :by_service,     ->(service_id)     { where.has { self.service_id     == service_id     } }
   scope :by_backend_api, ->(backend_api_id) { where.has { self.backend_api_id == backend_api_id } }
 
-  scope :with_subpath, -> do
-    common_query = where.not(path: '/')
-    System::Database.oracle? ? common_query.where('path is NOT NULL') : common_query.where.not(path: '')
-  end
+  scope :with_subpath, -> { where.not(path: ConfigPath::EMPTY_PATH) }
 
   scope :accessible, -> do
     joining { service }.where.has { (service.state != ::Service::DELETE_STATE) }
@@ -38,6 +33,6 @@ class BackendApiConfig < ApplicationRecord
   delegate :private_endpoint, to: :backend_api
 
   def path=(value)
-    super(StringUtils::StripSlash.strip_slash(value))
+    super(ConfigPath.new(value).path)
   end
 end
