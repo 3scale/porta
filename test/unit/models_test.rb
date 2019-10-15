@@ -27,7 +27,6 @@ class ModelsTest < ActiveSupport::TestCase
     }
 
     Rails.application.eager_load!
-    models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy]
 
     validate_columns_for = ->(model, options = {}) do
       exception_attributes = exceptions.fetch(model.name, [])
@@ -49,13 +48,7 @@ class ModelsTest < ActiveSupport::TestCase
       end
     end
 
-    models.each do |model|
-      validate_columns_for[model]
-    end
-
-    validate_columns_for.call(Proxy, service: Service.new(account: Account.new))
-    validate_columns_for.call(Service, account: Account.new)
-    validate_columns_for.call(BackendApi, account: Account.new)
+    ActiveRecord::Base.descendants.each { |model| validate_columns_for[model] }
   end
 
 end
