@@ -75,15 +75,17 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'show backend_api endpoints only under rolling update enabled' do
+      name_or_path_regex = /\A\/?admin[\/|_]api.*backend_(api|usage).*\z/
+
       Logic::RollingUpdates.stubs(enabled?: true)
       select_endpoints = Proc.new do |api, collection_paths|
         path = api['path']
-        collection_paths << path if path.match(/\A\/admin\/api\/.*backend_apis.*\.json\z/)
+        collection_paths << path if path.match(name_or_path_regex)
       end
 
       Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(enabled?: true)
       get '/api_docs/services/account_management_api.json'
-      actual_backed_api_routes = Rails.application.routes.named_routes.select { |name, route| name.to_s.match(/\Aadmin_api_.*backend_api.*\z/) }
+      actual_backed_api_routes = Rails.application.routes.named_routes.select { |name, route| name.to_s.match(name_or_path_regex) }
       assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['apis'].each_with_object(Set.new, &select_endpoints).length
 
       Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(enabled?: false)
