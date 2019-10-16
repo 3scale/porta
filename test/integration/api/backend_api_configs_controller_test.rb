@@ -59,7 +59,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
       }
       assert_redirected_to admin_service_backend_api_configs_path(service)
       assert_equal 'Backend added to Product.', flash[:notice]
-      assert_equal backend_api, service.backend_api_configs.find_by(path: 'foo').backend_api
+      assert_equal backend_api, service.backend_api_configs.find_by(path: '/foo').backend_api
     end
   end
 
@@ -102,7 +102,7 @@ class Api::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
     put admin_service_backend_api_config_path(service, config), backend_api_config: { path: 'bar' }
     assert_redirected_to admin_service_backend_api_configs_path(service)
     assert_equal 'Backend usage was updated.', flash[:notice]
-    assert_equal 'bar', config.reload.path
+    assert_equal '/bar', config.reload.path
   end
 
   test 'cannot change backend_api' do

@@ -18,7 +18,7 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
       assert_response :created
     end
     backend_api_config = service.backend_api_configs.order(:id).last!
-    assert_equal 'foo/bar', backend_api_config.path
+    assert_equal '/foo/bar', backend_api_config.path
     assert_equal service.id, backend_api_config.service_id
     assert_equal backend_api.id, backend_api_config.backend_api_id
   end
@@ -51,7 +51,7 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
 
     assert_response :success
     backend_api_config.reload
-    assert_equal 'foo/bar/updated', backend_api_config.path
+    assert_equal '/foo/bar/updated', backend_api_config.path
     assert_equal backend_api.id, backend_api_config.backend_api_id
   end
 

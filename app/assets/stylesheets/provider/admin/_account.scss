@@ -14,10 +14,45 @@
   #plan-overview {
     @extend div.right;
   }
+
+  .overview-box {
+
+    table.data {
+      border-top-width: line-height-times(1 / 2);
+    }
+
+    table.list {
+      @include white-box-shadow;
+      margin: 1px;
+
+      tr:last-child {
+        th,
+        td {
+          border-bottom: 2px solid transparent;
+        }
+      }
+    }
+
+    #account-redhat-connect p,
+    #account-cancellation p {
+      @include white-box-shadow;
+      margin: 1px;
+    }
+
+    table.list th,
+    table.list td {
+      padding: line-height-times(1);
+    }
+  }
+
 }
 
 #key-overview {
   margin-bottom: line-height-times(2);
+
+  .info {
+    @include white-box-shadow;
+  }
 
   .key {
       background-repeat: no-repeat;

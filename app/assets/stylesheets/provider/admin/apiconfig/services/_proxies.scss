@@ -401,7 +401,6 @@ form.formtastic fieldset > ol > li.radio--iconic {
     }
 
     fieldset {
-      position: static !important;
       max-width: 100%;
     }
 
@@ -428,7 +427,7 @@ form.formtastic fieldset > ol > li.radio--iconic {
 
     &>[class^="fa fa-"] {
       font-size: 40px;
-      background-color: $content-background;
+      background-color: $white;
       margin-left: -60px;
       padding: line-height-times(1/4);
       position: absolute;
@@ -469,7 +468,6 @@ form.formtastic fieldset > ol > li.radio--iconic {
 }
 
 form.proxy {
-  background-color: $integration-tab-bg-color;
 
   .pending-changes-warning {
     // hackish positioning trick
