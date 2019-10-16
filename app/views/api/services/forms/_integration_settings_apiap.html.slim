@@ -12,6 +12,9 @@
             label: false,
             input_html: {class: 'integration-method'}
 
+    = form.semantic_fields_for :proxy do |f|
+      = render 'api/integrations/apicast/shared/proxy_endpoints', f: f, service: @service, proxy: @service.proxy
+
   = form.inputs 'Authentication', id: 'auth-wrapper' do
     = form.input :proxy_authentication_method,
             name: 'service[backend_version]',
@@ -24,4 +27,3 @@
 
     = form.semantic_fields_for :proxy do |f|
       = render 'api/services/forms/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
-      = render 'api/integrations/apicast/shared/proxy_endpoints', f: f, service: @service, proxy: @service.proxy
