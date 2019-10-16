@@ -1,7 +1,6 @@
 #flashWrapper {
   position: absolute;
   right: line-height-times(1);
-  top: line-height-times(1);
   text-align: right;
   @include animation(fadeInLeft 0.5s ease-in-out);
 }
