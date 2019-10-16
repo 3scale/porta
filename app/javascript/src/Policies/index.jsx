@@ -8,7 +8,6 @@ import 'whatwg-fetch'
 
 import React from 'react'
 import { render } from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
 import Root from 'Policies/components/Root'
 import configureStore from 'Policies/store/configureStore'
 import { initialState } from 'Policies/reducers/initialState'
@@ -26,24 +25,7 @@ const Policies = (store, elementId) => {
     return
   }
 
-  render(
-    <AppContainer>
-      <Root store={store} />
-    </AppContainer>,
-    element
-  )
-
-  if (module.hot) {
-    module.hot.accept('./components/Root', () => {
-      const NewRoot = require('./components/Root').default
-      render(
-        <AppContainer>
-          <NewRoot store={store} />
-        </AppContainer>,
-        element
-      )
-    })
-  }
+  render(<Root store={store} />, element)
 }
 
 type InitPolicies = {
