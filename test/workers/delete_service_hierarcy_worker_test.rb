@@ -12,13 +12,13 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
 
   test 'complete success method' do
     caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(service, caller_worker_hierarchy)
+    DeletePlainObjectWorker.expects(:perform_later).with(service, caller_worker_hierarchy, 'destroy')
     DeleteServiceHierarchyWorker.new.on_success(1, {'object_global_id' => service.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
   test 'complete callback method' do
     caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(service, caller_worker_hierarchy)
+    DeletePlainObjectWorker.expects(:perform_later).with(service, caller_worker_hierarchy, 'destroy')
     DeleteServiceHierarchyWorker.new.on_complete(1, {'object_global_id' => service.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
@@ -32,9 +32,9 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
 
     Sidekiq::Testing.inline! do
       [service_plan, application_plan, end_user_plan].each do |association|
-        DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything)
+        DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything, 'destroy')
       end
-      metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything) }
+      metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything, 'destroy') }
 
       DeleteServiceHierarchyWorker.perform_now(service)
     end
@@ -46,8 +46,8 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     backend_api = FactoryBot.create(:backend_api, account: service.account)
     FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
 
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything).once
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything).never
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything, 'destroy').once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').never
 
     Sidekiq::Testing.inline! { DeleteServiceHierarchyWorker.perform_now(service) }
 
@@ -60,8 +60,8 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     backend_api = FactoryBot.create(:backend_api, account: service.account)
     FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
 
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything).once
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything).once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything, 'destroy').once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, '').once
 
     Sidekiq::Testing.inline! { DeleteServiceHierarchyWorker.perform_now(service) }
   end

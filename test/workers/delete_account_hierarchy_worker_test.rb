@@ -3,9 +3,10 @@
 require 'test_helper'
 
 class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
+
   def setup
     @provider = FactoryBot.create(:provider_account)
-    provider.schedule_for_deletion!
+    @provider.schedule_for_deletion!
   end
 
   attr_reader :provider
@@ -25,15 +26,19 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
 
     buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
     users = provider.users
+    cms_sections = provider.sections
 
     DeleteObjectHierarchyWorker.stubs(:perform_later)
-    users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything) }
-    services.each { |service| DeleteServiceHierarchyWorker.expects(:perform_later).with(service, anything) }
-    buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything).once }
+    users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy') }
+    services.each { |service| DeleteServiceHierarchyWorker.expects(:perform_later).with(service, anything, 'destroy') }
+    buyers.each { |buyer| DeleteAccountHierarchyWorker.expects(:perform_later).with(buyer, anything, 'destroy').once }
     contracts.each do |contract|
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
     end
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything)
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything, 'destroy')
+    cms_sections.each do |cms_section|
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(CMS::Section.new({ id: cms_section.id }, without_protection: true), anything, 'delete')
+    end
 
     Sidekiq::Testing.inline! { DeleteAccountHierarchyWorker.perform_now(provider) }
   end

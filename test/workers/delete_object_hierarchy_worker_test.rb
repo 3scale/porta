@@ -17,13 +17,13 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   def test_success_callback_method
     caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy)
+    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy, 'destroy')
     hierarchy_worker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
   def test_complete_callback_method
     caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy)
+    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy, 'destroy')
     hierarchy_worker.new.on_complete(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
@@ -69,7 +69,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       DeleteObjectHierarchyWorker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
     end
   end
-
+  
   class DeletePlanTest < DeleteObjectHierarchyWorkerTest
     setup do
       # ApplicationPlan setup
@@ -85,8 +85,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     def perform_expectations
       DeletePlainObjectWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything)
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything)
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything, 'destroy')
     end
 
     class AccountPlanTest < DeletePlanTest
