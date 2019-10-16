@@ -11,7 +11,7 @@ $dropdown-bg-color: lighten(black, 85%);
   &.expanded {
     display: block !important;
     @include box-shadow(0 0 6px $box-shadow-color);
-    background: rgba($content-background, .99);
+    background-color: $white;
     border: $border-width solid $border-color;
     border-radius: $border-radius;
     top: line-height-times(2);

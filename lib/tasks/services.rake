@@ -31,7 +31,7 @@ namespace :services do
               private_endpoint: service.proxy&.[]('api_backend')
             )
 
-            service.backend_api_configs.create(backend_api: backend_api, path: '')
+            service.backend_api_configs.create(backend_api: backend_api, path: '/')
           end
         end
       end

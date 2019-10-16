@@ -8,6 +8,7 @@ class PathValidator < ActiveModel::EachValidator
   protected
 
   def path?(value)
+    value = StringUtils::StripSlash.strip_slash(value)
     uri = URI.parse(value)
     uri.path == value
   rescue URI::InvalidURIError

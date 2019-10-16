@@ -10,7 +10,7 @@ FactoryBot.define do
   end
 
   factory :backend_api_config do
-    sequence(:path) { |n| "path#{n}" }
+    sequence(:path) { |n| "/path#{n}" }
     association :service
     association :backend_api
   end

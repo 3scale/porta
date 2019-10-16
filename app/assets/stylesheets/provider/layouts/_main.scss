@@ -3,14 +3,12 @@ body {
 }
 
 .wrapper, #layout-header, #wrapper {
-  height: 100%;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
 }
 
 #border {
-  background-color: #fff; // HACK: this will be taken care by PF4
   min-height: calc(100vh - 92px); // Header's height
   position: relative;
   text-align: left;
@@ -26,5 +24,19 @@ body {
 
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
+  }
+}
+
+.pf-c-page__main {
+  background-color: $gallery;
+}
+
+@mixin white-box-shadow {
+  background-color: $white;
+  box-shadow: $whiteBoxShadow;
+
+  // IE 11
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    box-shadow: $whiteBoxShadowIE11;
   }
 }

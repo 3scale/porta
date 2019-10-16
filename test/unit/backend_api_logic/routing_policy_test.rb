@@ -45,12 +45,12 @@ module BackendApiLogic
 
       test '#replace_path' do
         [
-          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '' }, nil],
-          [{ private_endpoint: 'https://safe-second-api.io', path: '' }, nil],
-          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '' }, nil],
-          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: 'hey' }, "{{original_request.path | remove_first: '/hey'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io', path: 'ho' }, "{{original_request.path | remove_first: '/ho'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io/v2', path: 'lets-go' }, "{{original_request.path | remove_first: '/lets-go'}}"]
+          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '/' }, nil],
+          [{ private_endpoint: 'https://safe-second-api.io', path: '/' }, nil],
+          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/' }, nil],
+          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '/hey' }, "{{original_request.path | remove_first: '/hey'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io', path: '/ho' }, "{{original_request.path | remove_first: '/ho'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/lets-go' }, "{{original_request.path | remove_first: '/lets-go'}}"]
         ].each do |config, replace_path_value|
           expected_replace_path = replace_path_value ? { replace_path: replace_path_value } : {}
           assert_equal expected_replace_path, rule_class.new(stub(config)).replace_path
@@ -58,7 +58,7 @@ module BackendApiLogic
       end
 
       test 'replace_path config only included when the config has a path' do
-        refute rule_class.new(stub(private_endpoint: 'http://whatever', path: '')).as_json.has_key?(:replace_path)
+        refute rule_class.new(stub(private_endpoint: 'http://whatever', path: '/')).as_json.has_key?(:replace_path)
         assert rule_class.new(stub(private_endpoint: 'http://whatever', path: 'foo')).as_json.has_key?(:replace_path)
       end
     end
