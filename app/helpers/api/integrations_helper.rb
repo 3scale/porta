@@ -1,36 +1,132 @@
 module Api::IntegrationsHelper
 
-  def api_test_curl(proxy, production=false)
-    credentials = proxy.authentication_params_for_proxy
-    credentials_3scale = proxy.authentication_params_for_proxy(original_names: true)
-    extheaders = ''
-    query = ''
+  class CurlCommandBuilder
+    def initialize(proxy)
+      @proxy = proxy
+    end
 
-    endpoint = "#{production ? proxy.default_production_endpoint : proxy.sandbox_endpoint}#{proxy.api_test_path}"
+    attr_reader :proxy
 
-    case proxy.credentials_location
-    when 'headers'
-      credentials.each { |k, v| extheaders += " -H'#{k}: #{v}'" }
-    when 'query'
-      test_path = proxy.api_test_path
-      if test_path
-        query = "#{(test_path.index('?') ? '&' : '?')}#{credentials.to_query}"
-      else
-        query = "?#{credentials.to_query}"
+    def command
+      return unless base_endpoint
+
+      credentials = proxy.authentication_params_for_proxy
+      extheaders = ''
+
+      uri = Addressable::URI.parse(base_endpoint)
+      uri.path, uri.query = path_and_query
+
+      case proxy.credentials_location
+      when 'headers'
+        credentials.each { |k, v| extheaders += " -H'#{k}: #{v}'" }
+      when 'query'
+        uri.query_values = (uri.query_values || {}).merge(credentials)
+      when 'authorization'
+        uri.user, uri.password = proxy.authorization_credentials
       end
-    when 'authorization'
-      uri = URI(endpoint)
 
-      uri.user, uri.password = proxy.authorization_credentials
-
-      endpoint = uri.to_s
+      "curl \"#{uri}\" #{extheaders}"
     end
 
-    content_tag :code,
-                id: (production ? 'api-production-curl' : 'api-test-curl'),
-                'data-credentials' => credentials_3scale.to_json do
-      %(curl "#{endpoint}#{query}" #{extheaders})
+    def base_endpoint
+      raise NoMethodError, __method__
     end
+
+    def path_and_query
+      return api_test_path_and_query unless apiap?
+
+      proxy_rules = proxy.proxy_rules
+      proxy_rules.any? ? proxy_rules.first[:pattern] : '/'
+    end
+
+    def api_test_path_and_query
+      uri = URI.parse(proxy.api_test_path)
+      [uri.path, uri.query]
+    end
+
+    def apiap?
+      proxy.provider_can_use?(:api_as_product)
+    end
+
+    class Staging < self
+      def base_endpoint
+        proxy.sandbox_endpoint
+      end
+    end
+
+    class Production < self
+      def base_endpoint
+        proxy.default_production_endpoint
+      end
+    end
+
+    # It quacks like a Proxy but it's actually a json proxy config
+    class ProxyFromConfig
+      def initialize(config)
+        @config = config
+      end
+
+      attr_reader :config
+
+      delegate :sandbox_endpoint, :credentials_location, :api_test_path, :proxy_rules, to: :proxy
+
+      def default_production_endpoint
+        proxy.endpoint
+      end
+
+      def authentication_params_for_proxy(opts = {})
+        params = service.plugin_authentication_params
+        keys_to_proxy_args = { app_key: :auth_app_key, app_id: :auth_app_id, user_key: :auth_user_key }
+        params.keys.map do |key|
+          param_name = opts[:original_names] ? key.to_s : proxy.send(keys_to_proxy_args[key])
+          [param_name, params[key]]
+        end.to_h
+      end
+
+      def authorization_credentials
+        params = authentication_params_for_proxy.symbolize_keys
+        params.values_at(:user_key).compact.presence || params.values_at(:app_id, :app_key)
+      end
+
+      delegate :provider_can_use?, to: 'service.account'
+
+      protected
+
+      def proxy
+        @proxy ||= ActiveSupport::OrderedOptions.new.merge(config[:proxy])
+      end
+
+      def service
+        @service ||= Service.find(proxy.service_id)
+      end
+    end
+  end
+
+  def api_test_curl(proxy, production = false, config_based: false)
+    method_sym = config_based ? :config_based_test_curl_command : :test_curl_command
+    command = public_send(method_sym, proxy, enviroment: production ? :production : :staging)
+    credentials = proxy.authentication_params_for_proxy(original_names: true)
+    tag_id = production ? 'api-production-curl' : 'api-test-curl'
+    content_tag :code, id: tag_id, 'data-credentials' => credentials.to_json do
+      command
+    end
+  end
+
+  def test_curl_command(proxy, enviroment: :staging)
+    builder = case enviroment
+              when :staging, :sandbox
+                CurlCommandBuilder::Staging
+              when :production
+                CurlCommandBuilder::Production
+              end.new(proxy)
+    builder.command
+  end
+
+  def config_based_test_curl_command(proxy, enviroment: :staging)
+    proxy_configs = proxy.proxy_configs.by_environment(enviroment.to_s).current_versions.to_a
+    return if proxy_configs.empty?
+    proxy_from_config = CurlCommandBuilder::ProxyFromConfig.new(proxy_configs.first.send(:parsed_content))
+    test_curl_command(proxy_from_config, enviroment: :staging)
   end
 
   def is_https?(url)
