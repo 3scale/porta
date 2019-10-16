@@ -29,16 +29,15 @@ const Policies = (store, elementId) => {
 }
 
 type InitPolicies = {
-  element: string,
   registry: RawRegistry,
   chain: StoredChainPolicy[],
   serviceId: string
 }
 
-const initPolicies = ({element, registry, chain, serviceId}: InitPolicies) => {
+const initPolicies = ({registry, chain, serviceId}: InitPolicies, element: string) => {
   const store = configureStore(initialState)
   store.dispatch(actions.populatePolicies(serviceId, chain, registry))
   return Policies(store, element)
 }
 
-export default initPolicies
+export { initPolicies }
