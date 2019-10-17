@@ -23,7 +23,6 @@ class ApiIntegration::SettingsUpdaterService
       service.update!(service_attributes)
       proxy.update!(proxy_attributes)
     end
-    true
   end
 
   def call(service_attributes: {}, proxy_attributes: {})
