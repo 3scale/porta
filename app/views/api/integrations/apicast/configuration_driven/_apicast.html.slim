@@ -56,9 +56,17 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
             dd.u-dl-definition
               ' v.
               = @show_presenter.last_sandbox_config.version
-            dt.u-dl-term Test Curl
+            dt.u-dl-term Example curl for testing
             dd.u-dl-definition
               code id="api-test-curl" curl "https://api.webtypes.com:443/hello?user_key=95ef7514b278849ec8ec64933bfabedc"
+              - unless @service.cinstances.any?
+                br
+                br
+                hr
+                em
+                  => t('api.integrations.proxy.curl.no_application')
+                  - unless @service.application_plans.any?
+                    = link_to t('api.integrations.proxy.curl.no_application_plan'), admin_service_application_plans_path(@service)
             dt.u-dl-term Promote
             dd.u-dl-definition
               = semantic_form_for @proxy, url: promote_to_production_admin_service_integration_path(@service, anchor: 'production') do |f|
