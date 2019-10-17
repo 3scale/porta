@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormLegend 1`] = `
+<legend
+  className="pf-c-form__legend "
+>
+  I am Legendary
+</legend>
+`;
+
+exports[`FormLegend with additional class name 1`] = `
+<legend
+  className="pf-c-form__legend first-class"
+>
+  I am Legendary
+</legend>
+`;
+
+exports[`FormLegend with additional class name and props 1`] = `
+<legend
+  className="pf-c-form__legend first-class"
+  data-label-name="Legendary"
+  id="legendary"
+>
+  I am Legendary
+</legend>
+`;
