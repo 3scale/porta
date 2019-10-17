@@ -13,7 +13,7 @@ section.Section.u-toggleableBySettingsBox data-state="open"
     ' .
     - if show_mappings?
       ' A method needs to be mapped to one or more URL patterns in the
-      => link_to 'Mapping Rules', edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules' }
+      => link_to_mapping_rules(service: @service)
       ' section of the integration page so specific calls to your API up the count of specific methods.
     - else
       ' Make sure to call these methods from your code base so specific usage of your API up the count of specific methods.
