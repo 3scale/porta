@@ -2,8 +2,8 @@
 
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer, generateGuid, updateArray } from 'Policies/util'
-import type { ChainState } from 'Policies/types/State'
-import type { ChainPolicy, RegistryPolicy } from 'Policies/types/Policies'
+
+import type { ChainState, ChainPolicy, RegistryPolicy } from 'Policies/types'
 import type {
   AddPolicyToChainAction,
   FetchChainSuccessAction,
@@ -29,10 +29,8 @@ function updatePolicies (state: ChainState, action: UpdateChainPolicies): ChainS
   return updateArray(state, action.payload)
 }
 
-// eslint-disable-next-line space-infix-ops
-// const ChainReducer = createReducer<ChainState>(initialState.chain, {
-// $FlowFixMe TODO: in order to fully type createReducer, set UIState and re-enable flow. (use lines above)
-const ChainReducer = createReducer(initialState.chain, {
+// TODO: use combineReducers instead of createReducer
+const ChainReducer = createReducer<ChainState>(initialState.chain, {
   'ADD_POLICY_TO_CHAIN': addPolicy,
   'SORT_POLICY_CHAIN': updatePolicies,
   'LOAD_CHAIN_SUCCESS': updatePolicies,

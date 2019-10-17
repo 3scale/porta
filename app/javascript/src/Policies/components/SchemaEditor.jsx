@@ -3,12 +3,15 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { fromJsonString, toJsonString } from 'utilities/json-utils'
-import 'codemirror/mode/javascript/javascript'
-import ApicastManifest from 'Policies/apicast-manifest'
 import Ajv from 'ajv'
+
+import { fromJsonString, toJsonString } from 'utilities/json-utils'
+import ApicastManifest from 'Policies/apicast-manifest'
+
+import 'codemirror/mode/javascript/javascript'
+
 import type { ErrorObject } from 'ajv'
-import type { Schema } from 'Policies/types/Policies'
+import type { Schema } from 'Policies/types'
 
 const ajv = new Ajv().addSchema(ApicastManifest, 'ApicastManifest')
 

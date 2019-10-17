@@ -1,6 +1,6 @@
 // @flow
 
-import type {State} from 'Policies/types/State'
+import type { State } from 'Policies/types'
 
 export const initialState: State = {
   registry: [],

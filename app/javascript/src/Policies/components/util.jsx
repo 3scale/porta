@@ -1,6 +1,7 @@
 // @flow
 
-import type { RegistryPolicy, ChainPolicy } from 'Policies/types/Policies'
+import type { RegistryPolicy, ChainPolicy } from 'Policies/types'
+
 type Policy = RegistryPolicy | ChainPolicy
 
 function isNotApicastPolicy (policy: Policy): boolean {

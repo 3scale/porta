@@ -10,10 +10,7 @@ import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInp
 import { connect } from 'react-redux'
 import { isPolicyChainChanged } from 'Policies/util'
 
-import type { ChainPolicy } from 'Policies/types/Policies'
-import type { State, RegistryState, ChainState, UIState } from 'Policies/types/State'
-import type { Dispatch } from 'Policies/types/index'
-import type { IPoliciesActions } from 'Policies/actions'
+import type { ChainPolicy, State, RegistryState, ChainState, UIState, Dispatch, IPoliciesActions } from 'Policies/types'
 
 type Props = {
   registry: RegistryState,

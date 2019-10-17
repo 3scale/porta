@@ -1,5 +1,8 @@
+// @flow
+
 import React from 'react'
-import type { ChainPolicy, StoredChainPolicy } from 'Policies/types/Policies'
+
+import type { ChainPolicy, StoredChainPolicy } from 'Policies/types'
 
 const filteredPolicyKeys = ['configuration', 'name', 'version', 'enabled']
 
@@ -7,6 +10,7 @@ function filterPolicyKeys (policy: ChainPolicy): StoredChainPolicy {
   return Object.keys(policy)
     .filter(policyKey => filteredPolicyKeys.includes(policyKey))
     .reduce((filteredPolicy, key) => {
+      // $FlowFixMe: refactor this method
       filteredPolicy[key] = policy[key]
       return filteredPolicy
     }, {})
