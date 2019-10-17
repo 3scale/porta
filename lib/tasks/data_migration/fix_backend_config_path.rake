@@ -2,7 +2,7 @@
 
 namespace :data_migration do
   desc 'Backfill Paths for Backend Api Configs'
-  task :fix_backend_config_path do
+  task fix_backend_config_path: :environment do
     query = System::Database.oracle? ? BackendApiConfig.where('path is NULL') : BackendApiConfig.where(path: '')
     progress = ProgressCounter.new(query.count)
     BackendApiConfig.transaction do

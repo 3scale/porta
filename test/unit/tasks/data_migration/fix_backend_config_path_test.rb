@@ -12,7 +12,7 @@ class Tasks::FixBackendConfigPathTest < ActiveSupport::TestCase
     assert @config_without_path.path.blank?
     assert_equal '/some/path', @config_with_path.path
 
-    execute_rake_task 'data_migration/fix_backend_config_path.rb', 'data_migration:fix_backend_config_path'
+    execute_rake_task 'data_migration/fix_backend_config_path.rake', 'data_migration:fix_backend_config_path'
 
     assert_equal '/', @config_without_path.reload.path
     assert_equal '/some/path', @config_with_path.reload.path
