@@ -83,17 +83,21 @@ module Abilities
     end
 
     test 'backend apis' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
       assert_can ability, :manage, BackendApi
 
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
       Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
       assert_cannot ability, :manage, BackendApi
     end
 
     test 'backend api configs' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
       assert_can ability, :manage, BackendApiConfig
 
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
       Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
       assert_cannot ability, :manage, BackendApiConfig
     end
