@@ -49,15 +49,13 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     params = provider_key_params.merge(proxy: { endpoint: 'https://alaska.wild' })
 
     Proxy.update_all(apicast_configuration_driven: false)
-    Proxy.any_instance.expects(:deploy_v2).never
-    assert_difference @service.proxy.proxy_configs.production.method(:count), 0 do
+    assert_no_difference @service.proxy.proxy_configs.sandbox.method(:count) do
       put(admin_api_service_proxy_path(params))
     end
     assert_response :success
 
     Proxy.update_all(apicast_configuration_driven: true)
-    Proxy.any_instance.expects(:deploy_v2).once
-    assert_difference @service.proxy.proxy_configs.production.method(:count), 1 do
+    assert_difference @service.proxy.proxy_configs.sandbox.method(:count), 1 do
       put(admin_api_service_proxy_path(params))
     end
     assert_response :success
@@ -70,15 +68,13 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     params = provider_key_params.merge(proxy: { endpoint: 'https://alaska.wild' })
 
     Proxy.update_all(apicast_configuration_driven: false)
-    Proxy.any_instance.expects(:deploy_v2).never
-    assert_difference @service.proxy.proxy_configs.production.method(:count), 0 do
+    assert_no_difference @service.proxy.proxy_configs.sandbox.method(:count) do
       put(admin_api_service_proxy_path(params))
     end
     assert_response :success
 
     Proxy.update_all(apicast_configuration_driven: true)
-    Proxy.any_instance.expects(:deploy_v2).once
-    assert_difference @service.proxy.proxy_configs.production.method(:count), 0 do
+    assert_no_difference @service.proxy.proxy_configs.sandbox.method(:count) do
       put(admin_api_service_proxy_path(params))
     end
     assert_response :success
@@ -87,16 +83,18 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
   def test_update_for_service_mesh
     rolling_updates_on
     rolling_update(:api_as_product, enabled: false)
-    
+
     params = provider_key_params.merge(proxy: { credentials_location: 'headers' })
     @service.update_column :deployment_option, 'service_mesh_istio'
-    
-    assert_difference @service.proxy.proxy_configs.production.method(:count), 1 do
-      put(admin_api_service_proxy_path(params))
+
+    assert_difference @service.proxy.proxy_configs.sandbox.method(:count), 1 do
+      assert_difference @service.proxy.proxy_configs.production.method(:count), 1 do
+        put(admin_api_service_proxy_path(params))
+      end
     end
     assert_response :success
   end
-  
+
   def test_update_for_service_mesh_with_apiap
     rolling_updates_on
     rolling_update(:api_as_product, enabled: true)
@@ -104,8 +102,10 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     params = provider_key_params.merge(proxy: { credentials_location: 'headers' })
     @service.update_column :deployment_option, 'service_mesh_istio'
 
-    assert_difference @service.proxy.proxy_configs.production.method(:count), 0 do
-      put(admin_api_service_proxy_path(params))
+    assert_no_difference @service.proxy.proxy_configs.sandbox.method(:count) do
+      assert_no_difference @service.proxy.proxy_configs.production.method(:count) do
+        put(admin_api_service_proxy_path(params))
+      end
     end
     assert_response :success
   end
