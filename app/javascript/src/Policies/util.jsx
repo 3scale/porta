@@ -1,8 +1,6 @@
 // @flow
 
-import type { UIState } from 'Policies/types/State'
-import type { FetchErrorAction, Reducer } from 'Policies/types/index'
-import type { RawPolicy, RawRegistry, RegistryPolicy, ChainPolicy } from 'Policies/types/Policies'
+import type { Reducer, UIState, FetchErrorAction, RawPolicy, RawRegistry, RegistryPolicy, ChainPolicy, IAction } from 'Policies/types'
 
 function updateObject (oldObject: Object, newValues: Object): Object {
   return {...oldObject, ...newValues}
@@ -13,7 +11,7 @@ function updateArray (oldArray: any, newValues: any): Array<any> {
 }
 
 function createReducer<S> (initialState: S, handlers: any): Reducer<S> {
-  return function reducer (state = initialState, action) {
+  return function reducer (state: S = initialState, action: IAction) {
     if (handlers.hasOwnProperty(action.type)) {
       return handlers[action.type](state, action)
     } else {

@@ -2,8 +2,10 @@
 
 import * as React from 'react'
 import {PolicyList} from 'Policies/components/PolicyList'
+
 import 'Policies/styles/policies.scss'
-import type {ShallowPolicy} from 'Policies/types/Policies'
+
+import type {ShallowPolicy} from 'Policies/types'
 
 const CustomPolicies = ({policies = []}: {policies: Array<ShallowPolicy>}): React.Node => {
   const ADD_POLICY_HREF = '/p/admin/registry/policies/new'

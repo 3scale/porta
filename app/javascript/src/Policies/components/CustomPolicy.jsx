@@ -4,13 +4,12 @@ import * as React from 'react'
 import { useState } from 'react'
 import SchemaForm from 'react-jsonschema-form'
 import { SchemaEditor } from 'Policies/components/SchemaEditor'
-import type { Policy, Schema } from 'Policies/types/Policies'
-import type {InputEvent} from 'Policies/types'
+import { CSRFToken } from 'utilities/utils'
+
 import 'codemirror/mode/javascript/javascript'
 import 'Policies/styles/policies.scss'
-import {CSRFToken} from 'utilities/utils'
 
-type OnChange = (InputEvent) => void
+import type { Policy, Schema } from 'Policies/types'
 
 const POLICY_TEMPLATE: Policy = {
   schema: {
@@ -33,7 +32,13 @@ const POLICY_TEMPLATE: Policy = {
   id: 0
 }
 
-function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, onChange: OnChange, win?: Window}) {
+type CustomPolicyFormProps = {
+  policy: Policy,
+  onChange: SyntheticInputEvent<> => void,
+  win?: Window
+}
+
+function CustomPolicyForm ({ policy, onChange, win = window }: CustomPolicyFormProps) {
   const isNewPolicy = !policy.id
   const [method, setMethod] = useState(isNewPolicy ? 'post' : 'put')
   const action = (isNewPolicy) ? '/p/admin/registry/policies/' : `/p/admin/registry/policies/${policy.id}`
@@ -85,7 +90,7 @@ function CustomPolicyForm ({policy, onChange, win = window}: {policy: Policy, on
 function CustomPolicyEditor ({initialPolicy}: {initialPolicy: Policy}) {
   const [policy, setPolicy] = useState(initialPolicy)
   const onSchemaEdited = (schema: Schema) => setPolicy(prevPolicy => ({ ...prevPolicy, ...{ schema } }))
-  const handleChange = (ev: InputEvent) => {
+  const handleChange = (ev: SyntheticInputEvent<>) => {
     ev.persist()
     return setPolicy(prevPolicy => ({ ...prevPolicy, ...{ [ev.target.name]: ev.target.value } }))
   }

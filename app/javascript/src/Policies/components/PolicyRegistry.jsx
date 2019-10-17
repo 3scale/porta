@@ -2,10 +2,10 @@
 
 import React from 'react'
 
-import type { RegistryPolicy } from 'Policies/types/Policies'
-import type { ThunkAction } from 'Policies/types/index'
 import { isNotApicastPolicy } from 'Policies/components/util'
 import { PolicyTile } from 'Policies/components/PolicyTile'
+
+import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 
 type Props = {
   visible: boolean,
@@ -23,7 +23,7 @@ const CloseRegistryButton = ({closePolicyRegistry}) => {
 }
 
 const PolicyRegistryItem = ({value, addPolicy}: {value: RegistryPolicy, addPolicy: (RegistryPolicy) => ThunkAction}) => {
-  const addToChain = () => addPolicy(value)
+  const addToChain = () => void addPolicy(value)
   return (
     <li className="Policy">
       <PolicyTile policy={value} onClick={addToChain} title='Add this Policy.'/>

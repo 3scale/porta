@@ -2,8 +2,7 @@
 
 import { RSAA } from 'redux-api-middleware'
 
-import type { RSSAAction } from 'Policies/types/index'
-import type { RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types/Policies'
+import type { RSSAAction, RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types'
 
 export type AddPolicyToChainAction = { type: 'ADD_POLICY_TO_CHAIN', policy: RegistryPolicy }
 export function addPolicyToChain (policy: RegistryPolicy): AddPolicyToChainAction {
