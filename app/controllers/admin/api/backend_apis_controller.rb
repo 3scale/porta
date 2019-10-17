@@ -13,9 +13,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   paginate only: :index
 
-  ##~ @parameter_backend_api_name = {:name => "name", :description => "Name of the Backend", :dataType => "string", :required => true, :paramType => "query"}
   ##~ @parameter_backend_api_description = {:name => "description", :description => "Description of the Backend", :dataType => "string", :required => false, :paramType => "query"}
-  ##~ @parameter_backend_api_private_endpoint = {:name => "private_endpoint", :description => "Private endpoint of the Backend", :dataType => "string", :required => false, :paramType => "query"}
 
 
   # swagger
@@ -59,9 +57,9 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##~ op.group = "backend_api"
   #
   ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_backend_api_name
+  ##~ op.parameters.add :name => "name", :description => "Name of the Backend", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add @parameter_backend_api_description
-  ##~ op.parameters.add @parameter_backend_api_private_endpoint
+  ##~ op.parameters.add :name => "private_endpoint", :description => "Private endpoint of the Backend", :dataType => "string", :required => true, :paramType => "query"
   #
   def create
     backend_api = current_account.backend_apis.create(create_params)
@@ -97,9 +95,9 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_backend_api_id_by_id
-  ##~ op.parameters.add @parameter_backend_api_name
+  ##~ op.parameters.add :name => "name", :description => "Name of the Backend", :dataType => "string", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_backend_api_description
-  ##~ op.parameters.add @parameter_backend_api_private_endpoint
+  ##~ op.parameters.add :name => "private_endpoint", :description => "Private endpoint of the Backend", :dataType => "string", :required => false, :paramType => "query"
   #
   def update
     backend_api.update(update_params)
