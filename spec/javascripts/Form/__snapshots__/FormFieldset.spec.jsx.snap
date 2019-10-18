@@ -1,0 +1,174 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormFieldset should render default form fieldset variant 1`] = `
+<FormFieldset
+  fieldId="label-id"
+>
+  <fieldset
+    className="pf-c-form__fieldset"
+  >
+    <input
+      id="input-id"
+    />
+  </fieldset>
+</FormFieldset>
+`;
+
+exports[`FormFieldset should render form fieldset invalid variant 1`] = `
+<FormFieldset
+  fieldId="label-id"
+  helperTextInvalid="Invalid FormFieldset"
+  isValid={false}
+  label="label"
+>
+  <fieldset
+    className="pf-c-form__fieldset"
+  >
+    <label
+      className="pf-c-form__label"
+      htmlFor="label-id"
+    >
+      <span
+        className="pf-c-form__label-text"
+      >
+        label
+      </span>
+    </label>
+    <input
+      id="input-id"
+    />
+    <div
+      aria-live="polite"
+      className="pf-c-form__helper-text pf-m-error"
+      id="label-id-helper"
+    >
+      Invalid FormFieldset
+    </div>
+  </fieldset>
+</FormFieldset>
+`;
+
+exports[`FormFieldset should render form fieldset required variant 1`] = `
+<FormFieldset
+  fieldId="id"
+  isRequired={true}
+  label="label"
+>
+  <fieldset
+    className="pf-c-form__fieldset"
+  >
+    <label
+      className="pf-c-form__label"
+      htmlFor="id"
+    >
+      <span
+        className="pf-c-form__label-text"
+      >
+        label
+      </span>
+      <span
+        aria-hidden="true"
+        className="pf-c-form__label-required"
+      >
+        *
+      </span>
+    </label>
+    <input
+      id="input-id"
+    />
+  </fieldset>
+</FormFieldset>
+`;
+
+exports[`FormFieldset should render form fieldset variant with node helperText 1`] = `
+<FormFieldset
+  fieldId="label-id"
+  helperText={
+    <span>
+      Help text!
+    </span>
+  }
+  label="Label"
+>
+  <fieldset
+    className="pf-c-form__fieldset"
+  >
+    <label
+      className="pf-c-form__label"
+      htmlFor="label-id"
+    >
+      <span
+        className="pf-c-form__label-text"
+      >
+        Label
+      </span>
+    </label>
+    <input
+      id="input-id"
+    />
+    <div
+      aria-live="polite"
+      className="pf-c-form__helper-text"
+      id="label-id-helper"
+    >
+      <span>
+        Help text!
+      </span>
+    </div>
+  </fieldset>
+</FormFieldset>
+`;
+
+exports[`FormFieldset should render form fieldset variant with node label and help text 1`] = `
+<FormFieldset
+  fieldId="id"
+  helperText="this is helper text"
+  label={
+    <span>
+      Label
+    </span>
+  }
+>
+  <fieldset
+    className="pf-c-form__fieldset"
+  >
+    <label
+      className="pf-c-form__label"
+      htmlFor="id"
+    >
+      <span
+        className="pf-c-form__label-text"
+      >
+        <span>
+          Label
+        </span>
+      </span>
+    </label>
+    <input
+      aria-label="input"
+    />
+    <div
+      aria-live="polite"
+      className="pf-c-form__helper-text"
+      id="id-helper"
+    >
+      this is helper text
+    </div>
+  </fieldset>
+</FormFieldset>
+`;
+
+exports[`FormFieldset should render inline form fieldset variant 1`] = `
+<FormFieldset
+  fieldId="label-id"
+  isInline={true}
+>
+  <fieldset
+    className="pf-c-form__fieldset pf-m-inline"
+  >
+    <input
+      id="input-id"
+    />
+  </fieldset>
+</FormFieldset>
+`;
