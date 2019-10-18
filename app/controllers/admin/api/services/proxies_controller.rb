@@ -33,7 +33,7 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "PATCH"
   ##~ op.summary    = "Proxy Update"
-  ##~ op.description = "Changes the Proxy settings. This will create a new APIcast configuration version for the Staging environment with the updated settings."
+  ##~ op.description = "Changes the Proxy settings. This will create a new APIcast configuration version for the Staging environment with the updated settings. For servcice mesh, it will also create one for the Production environment"
   ##~ op.group = "proxy"
   #
   ##~ op.parameters.add @parameter_access_token
