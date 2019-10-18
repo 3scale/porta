@@ -37,7 +37,7 @@ module BackendApiLogic
       end
 
       class Rule
-        delegate :private_endpoint, :path, to: :@config
+        delegate :private_endpoint, :path, :backend_api_id, to: :@config
 
         def initialize(config)
           @config = config
@@ -51,6 +51,8 @@ module BackendApiLogic
           return if private_endpoint.blank?
           {
             url: private_endpoint,
+            owner_id: backend_api_id,
+            owner_type: BackendApi.name,
             condition: {
               operations: [
                 match: :path,
