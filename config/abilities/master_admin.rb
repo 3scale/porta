@@ -48,6 +48,11 @@ Ability.define do |user|
     can :manage, :authentication_providers
     can :manage, :web_hooks
 
+    if user.account.provider_can_use?(:api_as_product)
+      can :manage, BackendApi
+      can :manage, BackendApiConfig
+    end
+
     #COPY these come from forum.rb
     can :manage, TopicCategory do |category|
       category.forum.account = user.account
