@@ -24,9 +24,9 @@ article.DashboardWidget id = widget.id
       p
         ' In order to show Top Applications you need to have at least one application sending traffic to the #{friendly_service_name(service)}.
       p
-        ' Consider
-        => link_to 'making some test calls', edit_admin_service_integration_path(widget_service_id, :anchor => 'staging')
-        | from the Integration page to get a feel for what you'd see here.
+          ' Consider
+          => link_to 'making some test calls', (apiap? ? admin_service_integration_path(widget_service_id) : edit_admin_service_integration_path(widget_service_id, :anchor => 'staging'))
+          | to get a feel for what you’d see here.
 
   - else
     = widget.spinner
