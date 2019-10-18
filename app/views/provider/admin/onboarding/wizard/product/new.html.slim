@@ -1,16 +1,23 @@
-h1 Add a Product
+h1 Design a Product
 
 ol.explain.fa-ul
   li.feedback
     i.icon.fa-li.fa.fa-cubes.icon--focus
     p.text.text--up
-      ' To integrate your API you first need to create a
+      ' Your customers will use your API(s) through what we call a
       strong Product.
-    .text.text--up
-      ' Each
-      strong Product
-      '  defines its own rules and make a set of endpoints available. Provide a name
-      ' for your first Product:
+    p.text.text--up
+      ' A Product combines 1 or more Backends (your APIs) in a
+      strong> single protected interface
+      ' which your customers interact with.
+      ' A Product lets you define
+      strong> Plans
+      ' with different
+      strong> Usage Limits
+      ' and
+      strong> Pricing Rules.
+      p.text.text--up
+        ' Let's keep it simple for now; we just give the product a name and leave plan definitions for later.
 
 = semantic_form_for @service, url: provider_admin_onboarding_wizard_product_path, html: { id: :product_form } do |f|
   = f.inputs
