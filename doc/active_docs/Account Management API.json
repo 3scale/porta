@@ -3277,7 +3277,7 @@
               "name": "private_endpoint",
               "description": "Private endpoint of the Backend",
               "dataType": "string",
-              "required": false,
+              "required": true,
               "paramType": "query"
             }
           ]
@@ -3342,7 +3342,7 @@
               "name": "name",
               "description": "Name of the Backend",
               "dataType": "string",
-              "required": true,
+              "required": false,
               "paramType": "query"
             },
             {
