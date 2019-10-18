@@ -540,8 +540,8 @@ li.hidden {
 #new_service_wrapper {
   .errorMessage {
     color: $error-color;
-    margin-bottom: line-height-times(1/2);
-    margin-top: -#{$fieldset-margin-bottom};
+    margin: 0;
+    padding: 0 line-height-times(1);
   }
 
   .new-service-source-input {
@@ -550,6 +550,20 @@ li.hidden {
 }
 
 // Overrides
+.new-service-form {
+  @include white-box-shadow;
+
+  form.formtastic {
+    box-shadow: none;
+    margin: 0;
+
+    fieldset {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
 .dashboard_bubble form.formtastic {
   box-shadow: none;
   margin: 0;

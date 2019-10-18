@@ -35,16 +35,18 @@ const NewServiceForm = (props: Props) => {
   return (
     <React.Fragment>
       <h1>{title}</h1>
-      {isServiceDiscoveryAccessible &&
-        <ServiceSourceForm
-          isServiceDiscoveryUsable={isServiceDiscoveryUsable}
-          serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
-          handleFormsVisibility={handleFormsVisibility}
-          loadingProjects={loadingProjects}
-          apiap={apiap}
-        />
-      }
-      {formToRender()}
+      <div className="new-service-form">
+        {isServiceDiscoveryAccessible &&
+          <ServiceSourceForm
+            isServiceDiscoveryUsable={isServiceDiscoveryUsable}
+            serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
+            handleFormsVisibility={handleFormsVisibility}
+            loadingProjects={loadingProjects}
+            apiap={apiap}
+          />
+        }
+        {formToRender()}
+      </div>
     </React.Fragment>
   )
 }
