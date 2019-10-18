@@ -1,21 +1,23 @@
-h1 Add a Backend
+h1 Add your API(s)
 
 ol.explain.fa-ul
   li.feedback
     i.icon.fa-li.fa.fa-cube.icon--focus
     p.text.text--up
-      ' Once you have a Product, the next step is to create a
-      strong Backend.
-    p.text.text--up
-      ' A
+      ' In 3scale each of your APIs is represented by what we call a
       strong Backend
-      '  contains the endpoint to your API and it is used by 1 or more
-      ' of your Products. We can
-      a#use-example-api> href="#" title="Use Echo API" data-url=example_backend_url provide you with an&nbsp;Echo test-API
-      | if you don’t have a publicly accessible API yet.
+      | .
+    p.text.text--up
+      ' A Backend contains the
+      strong> Base URL
+      ' of your API and helps you to keep track of requests through
+      strong> Metrics, Methods and Mapping Rules.
+    p.text.text--up
+      ' Let's add your first Backend (If you don’t have a publicly accessible API yet, please
+      a#use-example-api> href="#" title="Use Echo API" data-url=example_backend_url use the Echo test-API
+      | ). We will add a catch-all Mapping Rule for you so all requests are allowed and each request will increase the default Metric 'Hits' .
 
-    p.text.text-up
-      | Provide a name for it and your API's public base URL:
+
 
 = semantic_form_for @backend, url: provider_admin_onboarding_wizard_backend_api_path, html: { id: :backend_api_form, method: :put } do |f|
   = f.inputs
