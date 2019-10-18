@@ -82,6 +82,7 @@ class ProxyTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service, :with_default_backend_api, account: account)
       null_backend_api = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://foo.baz')
       null_backend_api.update_columns(private_endpoint: '')
+      backend_api0 = service.backend_apis.first
       backend_api1 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-1.example.com')
       backend_api2 = FactoryBot.create(:backend_api, account: account, private_endpoint: 'https://private-2.example.com')
       FactoryBot.create(:backend_api_config, path: '/null', backend_api: null_backend_api, service: service)
@@ -91,9 +92,9 @@ class ProxyTest < ActiveSupport::TestCase
         {"name"=>"routing", "version"=>"builtin", "enabled"=>true,
           "configuration"=>{
             "rules"=>[
-              {"url"=>"https://private-2.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/bar/.*|/foo/bar/?"}]}, 'replace_path'=>"{{original_request.path | remove_first: '/foo/bar'}}"},
-              {"url"=>"https://private-1.example.com:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/.*|/foo/?"}]}, 'replace_path'=>"{{original_request.path | remove_first: '/foo'}}"},
-              {"url"=>"https://echo-api.3scale.net:443", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/.*"}]}}
+              {"url"=>"https://private-2.example.com:443", "owner_id"=>backend_api2.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/bar/.*|/foo/bar/?"}]}, 'replace_path'=>"{{original_request.path | remove_first: '/foo/bar'}}"},
+              {"url"=>"https://private-1.example.com:443", "owner_id"=>backend_api1.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/.*|/foo/?"}]}, 'replace_path'=>"{{original_request.path | remove_first: '/foo'}}"},
+              {"url"=>"https://echo-api.3scale.net:443", "owner_id"=>backend_api0.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/.*"}]}}
             ]
           }
         },
