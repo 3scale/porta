@@ -47,8 +47,6 @@ class Provider::SignupsController < Provider::BaseController
 
     return render :show unless signup
 
-    ServiceCreator.new(service: @provider.default_service).call(private_endpoint: BackendApi.default_api_backend)
-
     session[:success_data] = { first_name: @user.first_name, email: @user.email }
 
     tracking = ThreeScale::Analytics.user_tracking(@user)
