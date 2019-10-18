@@ -791,7 +791,7 @@ class AccountTest < ActiveSupport::TestCase
       user.password = user.password_confirmation = "foobar"
       user.email = "foo@example.com"
     end
-    assert_nil @provider.first_service.api_backend
+    assert_equal BackendApi.default_api_backend, @provider.first_service.api_backend
   end
 
 
