@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Abilities
@@ -64,7 +66,6 @@ module Abilities
       assert_cannot ability, :manage, :service_plans
     end
 
-
     def test_plans
       ThreeScale.config.stubs(onpremises: false)
       assert_can ability, :manage, :plans
@@ -93,6 +94,26 @@ module Abilities
         ThreeScale.config.stubs(onpremises: onpremises)
         assert_cannot ability, :manage, :portal
       end
+    end
+
+    test 'backend apis' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
+      assert_can ability, :manage, BackendApi
+
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+      assert_cannot ability, :manage, BackendApi
+    end
+
+    test 'backend api configs' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
+      assert_can ability, :manage, BackendApiConfig
+
+      Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+      assert_cannot ability, :manage, BackendApiConfig
     end
 
     private
