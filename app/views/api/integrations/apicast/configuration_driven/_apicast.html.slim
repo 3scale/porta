@@ -14,9 +14,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
             ul
             - for backend_api_config in backend_api_configs
               li
-                code
-                  ' /#{backend_api_config.path.presence} =>
-                = backend_api_config.backend_api.private_endpoint
+                = backend_routing_rule(backend_api_config)
         - else
           dt.u-dl-term Private Base URL
           dd.u-dl-definition = @proxy.api_backend

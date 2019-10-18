@@ -118,4 +118,13 @@ module Api::IntegrationsHelper
     options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge(button_html: { class: 'PromoteButton disabled-button', disabled: true })
     ['Nothing to promote', options]
   end
+
+  def backend_routing_rule(backend_api_config)
+    path = StringUtils::StripSlash.strip_slash(backend_api_config.path.presence)
+    code = content_tag :code do
+      "/#{path} => "
+    end
+    endpoint = backend_api_config.backend_api.private_endpoint
+    code + endpoint
+  end
 end
