@@ -122,16 +122,18 @@ section class="service-widget"
           - if service.deployment_option.present?
             - deployment_option_phrased = t(service.proxy.deployment_option, scope: "deployment_options.phrased")
           - unless service.has_traffic?
-            li.item.integration
+            li class=("item integration #{'is-hidden' if apiap?}")
               - case service.proxy.deployment_option.presence
               - when 'hosted'
-                p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, hit <strong>Deploy</strong> in the production box and you have completed a basic integration.
-                = important_icon_link "Configure #{deployment_option_phrased}",
-                  'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
+                - unless apiap?
+                  p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, hit <strong>Deploy</strong> in the production box and you have completed a basic integration.
+                  = important_icon_link "Configure #{deployment_option_phrased}",
+                    'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
               - when 'self_managed'
-                p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, proceed to download the NGINX config files for your On-premises NGINX reverse proxy server. Once you've added these config files to your Nginx server you have completed a basic integration.
-                = important_icon_link "Configure #{deployment_option_phrased}",
-                  'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
+                - unless apiap?
+                  p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, proceed to download the NGINX config files for your On-premises NGINX reverse proxy server. Once you've added these config files to your Nginx server you have completed a basic integration.
+                  = important_icon_link "Configure #{deployment_option_phrased}",
+                    'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
               - when 'plugin_rest'
                 p Follow the instructions on the #{link_to('Integration page', path_to_service(service))} to integrate your API using #{deployment_option_phrased} the against 3scale Service Management API endpoints.
                 = important_icon_link "Get started with #{deployment_option_phrased}",

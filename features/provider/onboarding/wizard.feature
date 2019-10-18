@@ -9,6 +9,7 @@ Feature: Onboarding Wizard
   @emails
   Scenario: Provider goes through the wizard
     Given a provider signs up and activates his account
+     And I have rolling updates "api_as_product" disabled
     When user starts the onboarding wizard
      And adds the echo api
      And sends the test request
