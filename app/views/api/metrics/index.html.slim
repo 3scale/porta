@@ -13,7 +13,7 @@ section.Section.u-toggleableBySettingsBox data-state="open"
     ' .
     - if show_mappings?
       ' A method needs to be mapped to one or more URL patterns in the
-      => link_to 'Mapping Rules', edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules' }
+      => link_to 'Mapping Rules', ( apiap? ? admin_service_proxy_rules_path : edit_admin_service_integration_path(@service, anchor: 'mapping-rules')), data: { behavior: 'open-mapping-rules' }
       ' section of the integration page so specific calls to your API up the count of specific methods.
     - else
       ' Make sure to call these methods from your code base so specific usage of your API up the count of specific methods.
@@ -69,7 +69,7 @@ section.Section.u-toggleableBySettingsBox data-state="open"
     ' <em>Hits</em> is the built-in metric to which all methods report. Additional top-level metrics can be added here in order to track other usage that shouldn't increase the hit count.
     - if show_mappings?
       ' A metric needs to be mapped to one or more URL patterns in the
-      => link_to 'Mapping Rules', edit_admin_service_integration_path(@service, anchor: 'mapping-rules'), data: { behavior: 'open-mapping-rules' }
+      => link_to 'Mapping Rules', ( apiap? ? admin_service_proxy_rules_path : edit_admin_service_integration_path(@service, anchor: 'mapping-rules')), data: { behavior: 'open-mapping-rules' }
       ' section of the integration page so specific calls to your API up the count of specific metrics.
     - else
       ' Make sure to call these metrics from your code base so specific calls to your API up the count of specific metrics.
