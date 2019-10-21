@@ -32,10 +32,6 @@ class  Provider::Admin::Onboarding::Wizard::ApiController < Provider::Admin::Onb
     ::Onboarding::ApiForm.new(service: service, proxy: proxy)
   end
 
-  def service
-    current_account.first_service!
-  end
-
   def proxy
     service.proxy
   end

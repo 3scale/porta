@@ -1,0 +1,27 @@
+h1 Design a Product
+
+ol.explain.fa-ul
+  li.feedback
+    i.icon.fa-li.fa.fa-cubes.icon--focus
+    p.text.text--up
+      ' Your customers will use your API(s) through what we call a
+      strong Product.
+    p.text.text--up
+      ' A Product combines 1 or more Backends (your APIs) in a
+      strong> single protected interface
+      ' which your customers interact with.
+      ' A Product lets you define
+      strong> Plans
+      ' with different
+      strong> Usage Limits
+      ' and
+      strong> Pricing Rules.
+      p.text.text--up
+        ' Let's keep it simple for now; we just give the product a name and leave plan definitions for later.
+
+= semantic_form_for @service, url: provider_admin_onboarding_wizard_product_path, html: { id: :product_form } do |f|
+  = f.inputs
+    = f.input :name, label: 'Product Name', input_html: { placeholder: 'My API Product', autofocus: true }
+
+  button type="submit" class="button button--next"
+    = 'Add this Product'

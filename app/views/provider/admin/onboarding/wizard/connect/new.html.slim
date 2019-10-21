@@ -1,0 +1,21 @@
+h1 Use your Backend in your Product
+
+ol.explain.fa-ul
+  li.feedback
+    i.icon.fa-li.fa.fa-puzzle-piece.icon--focus
+    p.text.text--up
+      ' Finally, we need to add the Backend to the Product we just created so it can be used by your customers.
+    p.text.text--up
+      ' You can
+      strong
+        ' connect multiple Backends to a single Product by using different paths
+      ' . Furthermore each Product can have one Backend with an empty Path ('/').
+    .text.text--up
+      ' Choose a path for your first Backend:
+
+= semantic_form_for @config, url: provider_admin_onboarding_wizard_connect_path, html: { id: :connect_form } do |f|
+  = f.inputs
+    = f.input :path, label: 'Path', input_html: { placeholder: '/', autofocus: true }
+
+  button type="submit" class="button button--next"
+    = 'Add the Backend to the Product'

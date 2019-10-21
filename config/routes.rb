@@ -253,8 +253,11 @@ without fake Core server your after commit callbacks will crash and you might ge
 
           get 'intro' => 'info#intro'
           get 'explain' => 'info#explain'
-          resource :api, only: [:new, :edit, :update], controller: :api
-          resource :request, only: [:new, :edit, :update, :show], controller: :request
+          resource :api,         only: [:new, :edit, :update],        controller: :api
+          resource :product,     only: [:new, :edit, :update],        controller: :product
+          resource :backend_api, only: [:new, :edit, :update],        controller: :backend_api
+          resource :connect,     only: [:new, :edit, :update],        controller: :connect
+          resource :request,     only: [:new, :edit, :update, :show], controller: :request
           get 'outro' => 'info#outro'
         end
       end

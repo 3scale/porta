@@ -25,4 +25,5 @@ ol.explain.fa-ul
       strong> Your API
       ' returns the response to the customer  through the gateway.
 
-= link_to "Got it! Lets add my API", new_provider_admin_onboarding_wizard_api_path, class: "button button--next"
+- next_path = apiap? ? new_provider_admin_onboarding_wizard_backend_api_path : new_provider_admin_onboarding_wizard_api_path
+= link_to "Got it! Lets add my API", next_path, class: "button button--next"
