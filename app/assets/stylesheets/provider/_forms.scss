@@ -573,10 +573,19 @@ li.hidden {
 #integration-tabs {
   form.formtastic {
     box-shadow: none;
+    margin: 0;
+    padding: 0;
   }
 
   form.formtastic.u-inline {
     display: inline-block;
+  }
+
+  .integration {
+    form.formtastic {
+      @include white-box-shadow;
+      padding: line-height-times(1);
+    }
   }
 }
 
