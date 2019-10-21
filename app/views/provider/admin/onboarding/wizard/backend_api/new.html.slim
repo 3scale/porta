@@ -15,9 +15,7 @@ ol.explain.fa-ul
     p.text.text--up
       ' Let's add your first Backend (If you don’t have a publicly accessible API yet, please
       a#use-example-api> href="#" title="Use Echo API" data-url=example_backend_url use the Echo test-API
-      | ). We will add a catch-all Mapping Rule for you so all requests are allowed and each request will increase the default Metric 'Hits' .
-
-
+      | ). We will add a catch-all Mapping Rule for you so all requests are allowed and each request will increase the default Metric 'Hits'.
 
 = semantic_form_for @backend, url: provider_admin_onboarding_wizard_backend_api_path, html: { id: :backend_api_form, method: :put } do |f|
   = f.inputs

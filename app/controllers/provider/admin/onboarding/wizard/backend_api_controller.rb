@@ -14,7 +14,7 @@ class  Provider::Admin::Onboarding::Wizard::BackendApiController < Provider::Adm
     @backend = backend_api
 
     if @backend.validate(backend_api_params) && @backend.update(backend_api_params) && @backend.save
-      redirect_to new_provider_admin_onboarding_wizard_connect_path
+      redirect_to new_provider_admin_onboarding_wizard_product_path
     else
       render :new
     end

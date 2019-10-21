@@ -17,7 +17,7 @@ class  Provider::Admin::Onboarding::Wizard::ProductController < Provider::Admin:
     @service = service
 
     if @service.validate(service_params) && @service.update(service_params) && @service.save
-      redirect_to new_provider_admin_onboarding_wizard_backend_api_path
+      redirect_to new_provider_admin_onboarding_wizard_connect_path
     else
       render :new
     end
