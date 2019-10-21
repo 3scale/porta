@@ -17,7 +17,7 @@
       - else
         - if apiap?
           ' To get started with this product on APIcast,
-          = link_to "add a Backend and promote the configuration.", new_admin_service_backend_api_config_path(@service), class: "important-button"
+          = link_to "add a Backend and promote the configuration.", new_admin_service_backend_usage_path(@service), class: "important-button"
         - else
           ' To get started with this service on APIcast,
           = link_to "add the base URL of your API and save the configuration.", edit_admin_service_integration_path(@service), class: "important-button"

@@ -129,10 +129,14 @@ class Admin::Api::BaseController < ApplicationController
   ##~ @parameter_service_id_by_id = {:name => "id", :description => "ID of the service.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "service_ids"}
   ##~ @parameter_service_id_by_id_name = {:name => "service_id", :description => "ID of the service.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "service_ids"}
 
-  ## BackendAPIs
+  ## Backend APIs
 
   ##~ @parameter_backend_api_id_by_id = { :name => "id", :description => "ID of the Backend.", :dataType => "int", :required => true, :paramType => "path" }
   ##~ @parameter_backend_api_id_by_id_name = { :name => "backend_api_id", :description => "ID of the Backend.", :dataType => "int", :required => true, :paramType => "path" }
+
+  ## Backend API Configs
+
+  ##~ @parameter_backend_api_config_id_by_id = { :name => "id", :description => "ID of the Backend Usage.", :dataType => "int", :required => true, :paramType => "path" }
 
   ## Features
 

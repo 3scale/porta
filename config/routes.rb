@@ -675,7 +675,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         scope module: :services do # this api has a knack for inconsistency
-          resources :backend_apis, controller: :backend_api_configs, except: %i[new edit], defaults: { format: :json }
+          resources :backend_usages, except: %i[new edit], defaults: { format: :json }
 
           resources :end_users, :only => [:show, :create, :destroy] do
             member do
@@ -841,7 +841,7 @@ without fake Core server your after commit callbacks will crash and you might ge
             end
           end
 
-          resources :backend_api_configs, except: :show
+          resources :backend_usages, except: :show
 
           resource :integration, :except => [ :create, :destroy ] do
             member do

@@ -6509,7 +6509,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_apis.json",
+      "path": "/admin/api/services/{service_id}/backend_usages.json",
       "responseClass": "List[backend_api_config]",
       "operations": [
         {
@@ -6539,7 +6539,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_apis.json",
+      "path": "/admin/api/services/{service_id}/backend_usages.json",
       "responseClass": "backend_api_config",
       "operations": [
         {
@@ -6568,7 +6568,7 @@
               "name": "backend_api_id",
               "description": "Backend to be added to the Service (Product).",
               "dataType": "string",
-              "required": false,
+              "required": true,
               "paramType": "query"
             },
             {
@@ -6583,7 +6583,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_apis/{id}.json",
+      "path": "/admin/api/services/{service_id}/backend_usages/{id}.json",
       "operations": [
         {
           "httpMethod": "DELETE",
@@ -6609,7 +6609,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the Backend.",
+              "description": "ID of the Backend Usage.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -6619,7 +6619,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_apis/{id}.json",
+      "path": "/admin/api/services/{service_id}/backend_usages/{id}.json",
       "responseClass": "backend_api_config",
       "operations": [
         {
@@ -6646,7 +6646,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the Backend.",
+              "description": "ID of the Backend Usage.",
               "dataType": "int",
               "required": true,
               "paramType": "path"
@@ -6663,7 +6663,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_apis/{id}.json",
+      "path": "/admin/api/services/{service_id}/backend_usages/{id}.json",
       "responseClass": "backend_api_config",
       "operations": [
         {
@@ -6690,7 +6690,7 @@
             },
             {
               "name": "id",
-              "description": "ID of the Backend.",
+              "description": "ID of the Backend Usage.",
               "dataType": "int",
               "required": true,
               "paramType": "path"

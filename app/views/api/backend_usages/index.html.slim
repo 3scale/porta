@@ -7,7 +7,7 @@ table#backend_api_configs.data
       th = sortable('backend_apis.private_endpoint', 'Private URL')
       th = sortable('backend_api_configs.path', 'Path')
       th.actions
-        = action_link_to :add, new_admin_service_backend_api_config_path(@service), label: 'Add Backend'
+        = action_link_to :add, new_admin_service_backend_usage_path(@service), label: 'Add Backend'
   tbody
     - @backend_api_configs.each do |config|
       tr
@@ -18,7 +18,7 @@ table#backend_api_configs.data
         td.position
           = config.path
         td.actions
-          = link_to '', edit_admin_service_backend_api_config_path(@service, config), class: 'action edit'
-          = link_to '', admin_service_backend_api_config_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
+          = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit'
+          = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
 
 = will_paginate(@backend_api_configs)

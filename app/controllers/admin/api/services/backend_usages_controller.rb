@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::BaseController
+class Admin::Api::Services::BackendUsagesController < Admin::Api::Services::BaseController
   self.access_token_scopes = :account_management
 
   before_action :authorize
@@ -16,7 +16,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   # swagger
   ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_apis.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages.json"
   ##~ e.responseClass = "List[backend_api_config]"
   #
   ##~ op            = e.operations.add
@@ -34,7 +34,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_apis.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages.json"
   ##~ e.responseClass = "backend_api_config"
   #
   ##~ op            = e.operations.add
@@ -45,7 +45,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add :name => "backend_api_id", :description => "Backend to be added to the Service (Product).", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "backend_api_id", :description => "Backend to be added to the Service (Product).", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add :name => "path", :description => "Path of the Backend for this product.", :dataType => "int", :required => false, :paramType => "query"
   #
   def create
@@ -54,7 +54,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_apis/{id}.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages/{id}.json"
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
@@ -64,7 +64,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_backend_api_id_by_id
+  ##~ op.parameters.add @parameter_backend_api_config_id_by_id
   #
   def destroy
     backend_api_config.destroy
@@ -72,7 +72,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_apis/{id}.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages/{id}.json"
   ##~ e.responseClass = "backend_api_config"
   #
   ##~ op            = e.operations.add
@@ -83,7 +83,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_backend_api_id_by_id
+  ##~ op.parameters.add @parameter_backend_api_config_id_by_id
   ##~ op.parameters.add :name => "path", :description => "Path of the Backend for this product.", :dataType => "int", :required => false, :paramType => "query"
   #
   def update
@@ -92,7 +92,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_apis/{id}.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages/{id}.json"
   ##~ e.responseClass = "backend_api_config"
   #
   ##~ op            = e.operations.add
@@ -103,7 +103,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_backend_api_id_by_id
+  ##~ op.parameters.add @parameter_backend_api_config_id_by_id
   #
   def show
     respond_with(backend_api_config)
@@ -112,7 +112,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   private
 
   def backend_api_config
-    @backend_api_config ||= service.backend_api_configs.accessible.find_by(backend_api_id: params[:id]) or raise ActiveRecord::RecordNotFound
+    @backend_api_config ||= service.backend_api_configs.accessible.find(params[:id])
   end
 
   def create_params
