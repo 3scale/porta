@@ -1,8 +1,9 @@
-<% content_for :sublayout_title, @metric.child? ? "Edit Method" : "Edit Metric" %>
+<% method_or_metric = @metric.child? ? "method" : "metric" %>
+<% content_for :sublayout_title, "Edit #{method_or_metric.capitalize}" %>
 
 <%= semantic_form_for @metric, :url => provider_admin_backend_api_metric_path(@backend_api, @metric) do |form| %>
   <%= render 'form', :form => form %>
 <% end %>
 <% unless @metric.default?(:hits) %>
-  <%= delete_button_for provider_admin_backend_api_metric_path(@backend_api, @metric), data: {:confirm => "Removing this metric will affect all plans that contain this metric. Are you sure? "} %>
+  <%= delete_button_for provider_admin_backend_api_metric_path(@backend_api, @metric), data: {:confirm => "Removing this #{method_or_metric} will affect all plans that contain this #{method_or_metric}, all associated mapping rules will be deleted too. Are you sure? "} %>
 <% end %>
