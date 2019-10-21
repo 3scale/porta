@@ -94,7 +94,8 @@ module Api::IntegrationsHelper
   end
 
   def promote_to_staging_button_options(proxy)
-    return disabled_promote_button_options if proxy.any_sandbox_configs? && !proxy.pending_affecting_changes?
+    # FIXME: Hot fix to https://issues.jboss.org/browse/THREESCALE-3760
+    # return disabled_promote_button_options if proxy.any_sandbox_configs? && !proxy.pending_affecting_changes?
 
     label = deployment_option_is_service_mesh?(proxy.service) ? 'Update Configuration' : "Promote v. #{proxy.next_sandbox_config_version} to Staging"
     promote_button_options(label)
