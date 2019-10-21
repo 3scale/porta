@@ -528,6 +528,10 @@ $feedback-color-inactive: $color-text-secondary;
     left: $line-height * -2;
   }
 
+  &.feedback--connect {
+    padding-bottom: 0;
+  }
+
   &.feedback--sec {
     @include padding-trailer(0);
     min-height: auto;

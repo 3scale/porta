@@ -6,7 +6,7 @@ And(/^adds the echo api$/) do
   click_on 'Got it! Lets add my API'
 
   within api_form do
-    fill_in 'Name', with: 'Echo API'
+    fill_in 'Name', with: api_name
     fill_in 'Base URL', with: 'https://echo-api.3scale.net'
 
     click_on 'Add this API'
@@ -27,6 +27,10 @@ def api_form
   find('#api_form')
 end
 
+def api_name
+  'Echo API'
+end
+
 And(/^goes to what's next$/) do
   click_on "Cool, what's next?"
   page.should have_content "What's next?"
@@ -34,5 +38,6 @@ end
 
 Then(/^goes to API page$/) do
   click_on 'Got it! Take me to my API on 3scale'
-  page.should have_content 'Configure APIcast'
+  page.should have_content 'Overview'
+  page.should have_content api_name
 end
