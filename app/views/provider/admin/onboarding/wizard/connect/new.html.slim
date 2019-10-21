@@ -13,7 +13,6 @@ ol.explain.fa-ul
     .text.text--up
       ' Choose a path for your first Backend:
 
-
 = semantic_form_for @config, url: provider_admin_onboarding_wizard_connect_path, html: { id: :connect_form } do |f|
   = f.inputs
     = f.input :path, label: 'Path', input_html: { placeholder: '/', autofocus: true }
