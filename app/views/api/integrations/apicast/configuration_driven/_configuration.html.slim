@@ -32,14 +32,14 @@
       = f.inputs "API gateway" do
         = f.input :sandbox_endpoint, label: "Staging Public Base URL",
                   input_html: { data: { default: (@proxy.default_staging_endpoint unless @proxy.self_managed?) },
-                                readonly: !apicast_custom_urls?,
+                                readonly: apicast_urls_readonly?,
                                 placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
                   hint: apicast_endpoint_input_hint(@service, environment: 'staging')
 
         = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
         = f.input :endpoint, label: "Production Public Base URL",
                   input_html: { data: { default: (@proxy.default_production_endpoint unless @proxy.self_managed?) },
-                                readonly: !apicast_custom_urls?,
+                                readonly: apicast_urls_readonly?,
                                 placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
                   hint: apicast_endpoint_input_hint(@service, environment: 'production')
         = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
