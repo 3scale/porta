@@ -13,51 +13,41 @@ And(/^adds the echo Backend$/) do
   end
 end
 
-And(/^adds adds a path$/) do
-  within backend_form do
+And(/^adds a path$/) do
+  within connect_form do
     fill_in 'Path', with: ''
   end
 end
 
-And(/^goes to Add a Product page$/) do
+And(/^goes to Add a Backend page$/) do
   click_on 'Got it! Lets add my API'
 
-  page.should have_content 'Add a Product' # This works
+  page.should have_content 'Add your API(s)'
 end
 
-And(/^goes to Add a Backend page$/) do
-  within product_form do
-    click_on 'Add this Product' # This does not work
-  end
-
-  page.should have_content 'Add a Backend'
-end
-
-And(/^goes to Connect page$/) do
+And(/^goes to Add a Product page$/) do
   within backend_form do
     click_on 'Add this Backend'
   end
 
-  page.should have_content 'Connect Backend and Product'
+  page.should have_content 'Design a Product'
+end
+
+And(/^goes to Connect page$/) do
+  within product_form do
+    click_on 'Add this Product'
+  end
+
+  page.should have_content 'Use your Backend in your Product'
 end
 
 And(/^goes to the request page$/) do
   within connect_form do
-    click_on 'Connect to this Path'
+    click_on 'Add the Backend to the Product'
   end
 
   page.should have_content 'Good. Next, make a test GET request'
 end
-
-# And(/^sends the test request$/) do
-#   stub_request(:get, %r{//test.proxy/deploy/}).to_return(status: 200)
-#   stub_request(:get, /staging.apicast.dev/).to_return(status: 200, body: response = 'Hey! successful request')
-
-#   click_on 'Send request'
-
-#   page.should have_content 'Congratulations, you are running on 3scale :-)'
-
-# end
 
 def product_form
   find('#product_form')
@@ -70,13 +60,3 @@ end
 def connect_form
   find('#connect_form')
 end
-
-# And(/^goes to what's next$/) do
-#   click_on "Cool, what's next?"
-#   page.should have_content "What's next?"
-# end
-
-# Then(/^goes to API page$/) do
-#   click_on 'Got it! Take me to my API on 3scale'
-#   page.should have_content 'Configure APIcast'
-# end

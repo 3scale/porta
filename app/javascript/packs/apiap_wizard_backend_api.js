@@ -16,13 +16,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.analytics.trackLink(useExampleLink, 'Clicked Example API Link')
 })
-
-/* Left TODO:
-  var test_path = $('#proxy_config_test_path');
-
-  var backend = $('#proxy_config_backend').change(function updateTestPath() {
-    test_path.val(backend.val() == example_api ? '/some-path' : null);
-  });
-
-  backend.trigger('change');
-*/
