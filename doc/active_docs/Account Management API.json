@@ -7507,6 +7507,36 @@
       ]
     },
     {
+      "path": "/admin/api/services/{service_id}/proxy/deploy.xml",
+      "responseClass": "proxy",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Proxy Deploy",
+          "description": "This will create a new APIcast configuration version for the Staging (and Production in case of Service Mesh) environment with the updated settings.",
+          "group": "proxy",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_id",
+              "description": "ID of the service.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/services/{service_id}/proxy/configs/{environment}.json",
       "responseClass": "proxy_config",
       "operations": [
