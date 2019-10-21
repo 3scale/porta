@@ -687,6 +687,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
 
           resource :proxy, only: %i[show update] do
+            post :deploy
             resources :mapping_rules, only: %i[index show update destroy create]
           end
 

@@ -35,6 +35,23 @@ resource 'Proxy' do
         resource.jwt_claim_with_client_id.should eq(jwt_claim_with_client_id)
       end
     end
+
+    post '/admin/api/services/:service_id/proxy/deploy.:format' do
+      let(:representer) { ProxyRepresenter.prepare(resource) }
+
+      before do
+        @last_size = resource.proxy_configs.count
+        resource.service.service_tokens.create(value: 'aaaaa')
+      end
+
+      request 'should deploy a staging proxy configuration' do
+        resource.reload
+        assert_equal @last_size + 1, resource.proxy_configs.count
+
+        config = resource.proxy_configs.last!
+        assert_equal 'sandbox', config.environment
+      end
+    end
   end
 
   json(:resource) do
