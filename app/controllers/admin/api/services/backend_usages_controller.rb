@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::BaseController
+class Admin::Api::Services::BackendUsagesController < Admin::Api::Services::BaseController
   self.access_token_scopes = :account_management
 
   before_action :authorize
@@ -16,7 +16,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   # swagger
   ##~ sapi = source2swagger.namespace("Account Management API")
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_usage.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages.json"
   ##~ e.responseClass = "List[backend_api_config]"
   #
   ##~ op            = e.operations.add
@@ -34,7 +34,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_usage.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages.json"
   ##~ e.responseClass = "backend_api_config"
   #
   ##~ op            = e.operations.add
@@ -54,7 +54,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_usage/{id}.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages/{id}.json"
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "DELETE"
@@ -72,7 +72,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_usage/{id}.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages/{id}.json"
   ##~ e.responseClass = "backend_api_config"
   #
   ##~ op            = e.operations.add
@@ -92,7 +92,7 @@ class Admin::Api::Services::BackendApiConfigsController < Admin::Api::Services::
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/backend_usage/{id}.json"
+  ##~ e.path = "/admin/api/services/{service_id}/backend_usages/{id}.json"
   ##~ e.responseClass = "backend_api_config"
   #
   ##~ op            = e.operations.add

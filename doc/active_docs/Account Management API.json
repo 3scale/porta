@@ -6509,7 +6509,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_usage.json",
+      "path": "/admin/api/services/{service_id}/backend_usages.json",
       "responseClass": "List[backend_api_config]",
       "operations": [
         {
@@ -6539,7 +6539,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_usage.json",
+      "path": "/admin/api/services/{service_id}/backend_usages.json",
       "responseClass": "backend_api_config",
       "operations": [
         {
@@ -6583,7 +6583,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_usage/{id}.json",
+      "path": "/admin/api/services/{service_id}/backend_usages/{id}.json",
       "operations": [
         {
           "httpMethod": "DELETE",
@@ -6619,7 +6619,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_usage/{id}.json",
+      "path": "/admin/api/services/{service_id}/backend_usages/{id}.json",
       "responseClass": "backend_api_config",
       "operations": [
         {
@@ -6663,7 +6663,7 @@
       ]
     },
     {
-      "path": "/admin/api/services/{service_id}/backend_usage/{id}.json",
+      "path": "/admin/api/services/{service_id}/backend_usages/{id}.json",
       "responseClass": "backend_api_config",
       "operations": [
         {

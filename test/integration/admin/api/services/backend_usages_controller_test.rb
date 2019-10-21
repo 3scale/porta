@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::IntegrationTest
+class Admin::API::Services::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @tenant = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:simple_service, account: @tenant)
@@ -14,7 +14,7 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
 
   test 'create' do
     assert_difference(service.backend_api_configs.method(:count)) do
-      post admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
+      post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
       assert_response :created
     end
     backend_api_config = service.backend_api_configs.order(:id).last!
@@ -27,13 +27,13 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
     backend_api_of_another_tenant = FactoryBot.create(:backend_api)
 
     assert_no_difference(service.backend_api_configs.method(:count)) do
-      post admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api_of_another_tenant.id}
+      post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api_of_another_tenant.id}
       assert_response :not_found
     end
   end
 
   test 'destroy' do
-    delete admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    delete admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
 
     assert_response :success
     assert_raises(ActiveRecord::RecordNotFound) { backend_api_config.reload }
@@ -44,7 +44,7 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
   test 'update' do
     another_backend_api = FactoryBot.create(:backend_api, account: tenant)
 
-    put admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated', backend_api_id: another_backend_api.id}
+    put admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated', backend_api_id: another_backend_api.id}
 
     assert_response :success
     backend_api_config.reload
@@ -54,12 +54,12 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
 
   test 'create or update with errors in the model' do
     assert_no_difference(service.backend_api_configs.method(:count)) do
-      post admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value), {path: ':)', backend_api_id: backend_api.id}
+      post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: ':)', backend_api_id: backend_api.id}
       assert_response :unprocessable_entity
     end
     assert_match /must be a path separated by/, (JSON.parse(response.body).dig('errors', 'path') || []).join
 
-    put admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: ':)'}
+    put admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: ':)'}
     assert_response :unprocessable_entity
     assert_match /must be a path separated by/, (JSON.parse(response.body).dig('errors', 'path') || []).join
   end
@@ -68,26 +68,26 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
     member = FactoryBot.create(:member, account: tenant)
     access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').value
 
-    post admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
+    post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
     assert_response :forbidden
 
-    get admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value)
+    get admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value)
     assert_response :forbidden
 
-    delete admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    delete admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
     assert_response :forbidden
 
-    put admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated'}
+    put admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated'}
     assert_response :forbidden
 
-    get admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    get admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
     assert_response :forbidden
   end
 
   test 'index can be paginated, skips unaccessible and the response has the right format' do
     FactoryBot.create_list(:backend_api_config, 5, service: service)
 
-    get admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value, per_page: 3, page: 2)
+    get admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value, per_page: 3, page: 2)
 
     assert_response :success
 
@@ -109,7 +109,7 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
   end
 
   test 'show' do
-    get admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    get admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
 
     assert_response :success
     response_item = JSON.parse(response.body)['backend_usage'] || {}
@@ -128,7 +128,7 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
     another_service = FactoryBot.create(:simple_service, account: tenant)
     backend_api_config = FactoryBot.create(:backend_api_config, service: another_service)
 
-    get admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    get admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
 
     assert_response :not_found
   end
@@ -137,23 +137,23 @@ class Admin::API::Services::BackendApiConfigsControllerTest < ActionDispatch::In
     service.mark_as_deleted!
     backend_api_config = FactoryBot.create(:backend_api_config, service: service)
 
-    get admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value, per_page: 3, page: 2)
+    get admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value, per_page: 3, page: 2)
     assert_response :not_found
 
-    post admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
+    post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
     assert_response :not_found
 
-    put admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated'}
+    put admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated'}
     assert_response :not_found
 
-    delete admin_api_service_backend_api_config_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    delete admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
     assert_response :not_found
   end
 
   test 'it cannot create for a deleted backend_api' do
     backend_api.mark_as_deleted!
 
-    post admin_api_service_backend_api_configs_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
+    post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
     assert_response :not_found
   end
 
