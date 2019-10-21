@@ -92,4 +92,21 @@ class BackendApiTest < ActiveSupport::TestCase
     assert backend_api.account.destroy
     refute BackendApi.exists? backend_api.id
   end
+
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'proxy config affecting changes on update' do
+      provider = FactoryBot.create(:simple_provider)
+      service = FactoryBot.create(:simple_service, account: provider)
+      proxy = service.proxy
+      backend_api = FactoryBot.create(:backend_api, account: provider, private_endpoint: 'https://old-endpoint', name: 'Backend')
+      service.backend_api_configs.create!(backend_api: backend_api, path: '/backend')
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, backend_api)
+
+      backend_api.update_attributes(private_endpoint: 'http://new-endpoint')
+      backend_api.update_attributes(name: 'New Backend Name')
+    end
+  end
 end
