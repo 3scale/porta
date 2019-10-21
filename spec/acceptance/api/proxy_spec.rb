@@ -37,14 +37,14 @@ resource 'Proxy' do
     end
 
     post '/admin/api/services/:service_id/proxy/deploy.:format' do
-      let(:representer) { ProxyRepresenter.prepare(resource) }
+      include_context "resource"
 
       before do
         @last_size = resource.proxy_configs.count
         resource.service.service_tokens.create(value: 'aaaaa')
       end
 
-      request 'should deploy a staging proxy configuration' do
+      request 'should deploy a staging proxy configuration', status: 201 do
         resource.reload
         assert_equal @last_size + 1, resource.proxy_configs.count
 

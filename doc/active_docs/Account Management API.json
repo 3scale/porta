@@ -7513,7 +7513,7 @@
         {
           "httpMethod": "POST",
           "summary": "Proxy Deploy",
-          "description": "This will create a new APIcast configuration version for the Staging (and Production in case of Service Mesh) environment with the updated settings.",
+          "description": "Promotes the APIcast configuration to the Staging Environment (Production Environment in case of Service Mesh).",
           "group": "proxy",
           "parameters": [
             {

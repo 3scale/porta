@@ -81,7 +81,7 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "POST"
   ##~ op.summary    = "Proxy Deploy"
-  ##~ op.description = "This will create a new APIcast configuration version for the Staging (and Production in case of Service Mesh) environment with the updated settings."
+  ##~ op.description = "Promotes the APIcast configuration to the Staging Environment (Production Environment in case of Service Mesh)."
   ##~ op.group = "proxy"
   #
   ##~ op.parameters.add @parameter_access_token
