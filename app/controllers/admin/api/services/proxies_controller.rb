@@ -74,6 +74,27 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
     respond_with(proxy)
   end
 
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/services/{service_id}/proxy/deploy.xml"
+  ##~ e.responseClass = "proxy"
+  #
+  ##~ op            = e.operations.add
+  ##~ op.httpMethod = "POST"
+  ##~ op.summary    = "Proxy Deploy"
+  ##~ op.description = "Promotes the APIcast configuration to the Staging Environment (Production Environment in case of Service Mesh)."
+  ##~ op.group = "proxy"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_service_id_by_id_name
+  def deploy
+    if proxy.service_mesh_integration?
+      proxy.deploy!
+    elsif proxy.apicast_configuration_driven
+      proxy.deploy_v2
+    end
+    respond_with(proxy)
+  end
+
   private
 
   def proxy_params
