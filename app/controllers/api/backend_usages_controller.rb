@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::BackendApiConfigsController < Api::BaseController
+class Api::BackendUsagesController < Api::BaseController
   include ThreeScale::Search::Helpers
 
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services
@@ -27,7 +27,7 @@ class Api::BackendApiConfigsController < Api::BaseController
 
     if @backend_api_config.save
       flash[:notice] = 'Backend added to Product.'
-      redirect_to admin_service_backend_api_configs_path(@service)
+      redirect_to admin_service_backend_usages_path(@service)
     else
       flash[:error] = "Couldn't add Backend to Product"
       render 'new'
@@ -38,7 +38,7 @@ class Api::BackendApiConfigsController < Api::BaseController
 
   def update
     if @backend_api_config.update_attributes(backend_api_config_params.slice(:path))
-      redirect_to admin_service_backend_api_configs_path(@service), notice: 'Backend usage was updated.'
+      redirect_to admin_service_backend_usages_path(@service), notice: 'Backend usage was updated.'
     else
       render :edit
     end
@@ -51,7 +51,7 @@ class Api::BackendApiConfigsController < Api::BaseController
       flash[:error] = 'The Backend cannot be removed from the Product'
     end
 
-    redirect_to admin_service_backend_api_configs_path(@service)
+    redirect_to admin_service_backend_usages_path(@service)
   end
 
   protected

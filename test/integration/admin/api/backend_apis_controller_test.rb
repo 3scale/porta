@@ -18,18 +18,6 @@ class Admin::API::BackendApisControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     backend_api_response = JSON.parse(response.body)
     assert_equal backend_api.id, backend_api_response.dig('backend_api', 'id')
-
-    usage_response = backend_api_response.dig('backend_api', 'usage') || []
-    assert_equal backend_api_configs.size, usage_response.length
-    backend_api_configs.each_with_index do |backend_api_config, index|
-      response_item = usage_response[index]
-      assert_equal backend_api_config.path, response_item['path']
-      links = response_item.fetch('links', {})
-      assert_equal 'service', links[0]['rel']
-      assert_equal admin_api_service_url(backend_api_config.service), links[0]['href']
-      assert_equal 'backend_api', links[1]['rel']
-      assert_equal admin_api_backend_api_url(backend_api), links[1]['href']
-    end
   end
 
   test 'destroy' do
