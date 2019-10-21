@@ -40,7 +40,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "name", :description => "Name of the service to be created.", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add :name => "description", :description => "Description of the service to be created.", :dataType => "string", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "backend_version", :description => "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
   ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
@@ -82,7 +82,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => "name", :description => "New name for the service.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "description", :description => "New description for the service.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "support_email", :description => "New support email.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self-managed' for APIcast Self-managed option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "deployment_option", :description => "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "backend_version", :description => "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #

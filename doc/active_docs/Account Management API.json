@@ -7892,7 +7892,7 @@
             },
             {
               "name": "deployment_option",
-              "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed option",
+              "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option",
               "dataType": "string",
               "allowMultiple": false,
               "required": false,
@@ -7999,7 +7999,7 @@
             },
             {
               "name": "deployment_option",
-              "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self-managed' for APIcast Self-managed option",
+              "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option",
               "dataType": "string",
               "allowMultiple": false,
               "required": false,
