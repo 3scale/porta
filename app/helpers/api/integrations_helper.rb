@@ -69,9 +69,13 @@ module Api::IntegrationsHelper
   end
 
   def apicast_custom_urls?
+    # the idea would be to keep this rolling update disabled for saas
+    Rails.application.config.three_scale.apicast_custom_url
+  end
+
+  def apicast_urls_readonly?
     # should always return true on prem (deployment option 'hosted') and only return true when self managed in saas (deployment option 'self_managed')
-    # so the idea would be to keep this rolling update disabled for saas
-    Rails.application.config.three_scale.apicast_custom_url || @service.proxy.self_managed?
+    !(apicast_custom_urls? || @service.proxy.self_managed?)
   end
 
   def custom_backend?
