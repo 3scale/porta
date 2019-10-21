@@ -78,6 +78,21 @@ module ProxyConfigAffectingChanges
     end
   end
 
+  module BackendApiExtension
+    extend ActiveSupport::Concern
+
+    included do
+      include ProxyConfigAffectingChanges
+
+      after_commit :issue_proxy_affecting_change_events, on: :update
+
+      def issue_proxy_affecting_change_events
+        return unless previously_changed?(:private_endpoint)
+        proxies.find_each(&method(:issue_proxy_affecting_change_event))
+      end
+    end
+  end
+
   def issue_proxy_affecting_change_event(proxy)
     ProxyConfigs::AffectingObjectChangedEvent.create_and_publish!(proxy, self)
   end
