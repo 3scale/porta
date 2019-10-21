@@ -8,7 +8,6 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
 
     stub_apicast_registry
 
-    host! @provider.admin_domain
     login_provider @provider
   end
 
@@ -124,7 +123,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
 
   test 'update custom public endpoint with proxy_pro enabled' do
     rolling_updates_off
-    
+
     Proxy.any_instance.stubs(deploy: true)
     ProxyTestService.any_instance.stubs(:disabled?).returns(true)
 
@@ -251,6 +250,9 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
   test 'show' do
     service = @provider.default_service
     config = FactoryBot.create(:proxy_config, proxy: service.proxy, version: 3, environment: 'sandbox')
+
+    Account.any_instance.stubs(:provider_can_use?).returns(true)
+    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
 
     get :show, service_id: service.id
 
