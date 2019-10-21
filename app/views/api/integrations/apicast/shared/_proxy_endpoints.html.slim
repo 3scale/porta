@@ -4,7 +4,7 @@
 = f.inputs "API gateway", id: 'proxy-endpoints', data: {apicast_custom_urls: apicast_custom_urls?}, class: "apicast-only-settings #{'hidden' if is_service_mesh}", disabled: is_service_mesh do
   = f.input :sandbox_endpoint, label: "Staging Public Base URL",
             input_html: { class: 'proxy-endpoint',
-                          data: { default: (proxy.default_staging_endpoint unless proxy.self_managed?) },
+                          data: { default: (proxy.default_staging_endpoint_apiap ) },
                           readonly: apicast_urls_readonly?,
                           placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
             hint: apicast_endpoint_input_hint(service, environment: 'staging')
@@ -12,7 +12,7 @@
   = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
   = f.input :endpoint, label: "Production Public Base URL",
             input_html: { class: 'proxy-endpoint',
-                          data: { default: (proxy.default_production_endpoint unless proxy.self_managed?) },
+                          data: { default: (proxy.default_production_endpoint_apiap ) },
                           readonly: apicast_urls_readonly?,
                           placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
             hint: apicast_endpoint_input_hint(service, environment: 'production')
