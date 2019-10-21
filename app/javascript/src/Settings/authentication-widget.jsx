@@ -31,6 +31,8 @@ const toggleDisabled = toggleAttrInSetting('disabled')
 
 const toggleReadOnly = toggleAttrInSetting('readonly')
 
+const resetValue = (isReadOnly) => isReadOnly ? toggleAttrInSetting('value')(false) : settings => settings
+
 export function initialize () {
   const authWrapper = document.getElementById(AUTH_WRAPPER_ID)
   const authSettingsWrapper = document.getElementById(AUTH_SETS_WRP_ID)
@@ -49,7 +51,7 @@ export function initialize () {
   }))
   integrations.forEach(i => i.addEventListener('click', () => {
     apicastSettings.forEach(s => toggle(toggleDisabled, toggleHiddenClass)(i.id === SERVICE_MESH_ID)(s))
-    proxyEndpoints.forEach(e => toggleReadOnly(!apicastCustomUrl && i.id !== SELF_MANAGED)(e))
+    proxyEndpoints.forEach(e => toggle(toggleReadOnly, resetValue)(!apicastCustomUrl && i.id !== SELF_MANAGED)(e))
     toggle(toggleDisabled, toggleHiddenClass)(i.id === SERVICE_MESH_ID && !oidc.checked)(authSettingsWrapper)
   }))
 }
