@@ -8,7 +8,7 @@ module Api::IntegrationsHelper
     attr_reader :proxy
 
     def command
-      return unless base_endpoint
+      return if base_endpoint.blank?
 
       credentials = proxy.authentication_params_for_proxy
       extheaders = ''
@@ -104,7 +104,7 @@ module Api::IntegrationsHelper
 
   def api_test_curl(proxy, production = false, config_based: false)
     method_sym = config_based ? :config_based_test_curl_command : :test_curl_command
-    command = public_send(method_sym, proxy, enviroment: production ? :production : :staging)
+    command = public_send(method_sym, proxy, environment: production ? :production : :staging)
     credentials = proxy.authentication_params_for_proxy(original_names: true)
     tag_id = production ? 'api-production-curl' : 'api-test-curl'
     content_tag :code, id: tag_id, 'data-credentials' => credentials.to_json do
@@ -112,8 +112,8 @@ module Api::IntegrationsHelper
     end
   end
 
-  def test_curl_command(proxy, enviroment: :staging)
-    builder = case enviroment
+  def test_curl_command(proxy, environment: :staging)
+    builder = case environment
               when :staging, :sandbox
                 CurlCommandBuilder::Staging
               when :production
@@ -122,11 +122,11 @@ module Api::IntegrationsHelper
     builder.command
   end
 
-  def config_based_test_curl_command(proxy, enviroment: :staging)
-    proxy_configs = proxy.proxy_configs.by_environment(enviroment.to_s).current_versions.to_a
+  def config_based_test_curl_command(proxy, environment: :staging)
+    proxy_configs = proxy.proxy_configs.by_environment(environment.to_s).current_versions.to_a
     return if proxy_configs.empty?
     proxy_from_config = CurlCommandBuilder::ProxyFromConfig.new(proxy_configs.first.send(:parsed_content))
-    test_curl_command(proxy_from_config, enviroment: :staging)
+    test_curl_command(proxy_from_config, environment: :staging)
   end
 
   def is_https?(url)
