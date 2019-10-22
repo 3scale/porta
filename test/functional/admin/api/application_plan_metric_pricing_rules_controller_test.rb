@@ -29,6 +29,25 @@ class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionContro
     assert_equal 1, xml_elements_by_key(@response.body, 'pricing_rule').count
   end
 
+  def test_returns_success_if_backend_is_used_by_the_product
+    backend = FactoryBot.create(:backend_api)
+    metric  = FactoryBot.create(:metric, owner: backend)
+    FactoryBot.create(:backend_api_config, backend_api: backend, service: @plan.service)
+
+    get :index, application_plan_id: @plan.id, metric_id: metric.id, format: :json
+
+    assert_response :success
+  end
+
+  def test_returns_not_found_if_backend_is_not_used_by_the_product
+    backend = FactoryBot.create(:backend_api)
+    metric  = FactoryBot.create(:metric, owner: backend)
+
+    get :index, application_plan_id: @plan.id, metric_id: metric.id, format: :json
+
+    assert_response :not_found
+  end
+
   def test_create_json
     post :create, application_plan_id: @plan.id, metric_id: @metric.id,
       pricing_rule: { min: 10, max: 20, cost_per_unit: 20.0553 }, format: :json

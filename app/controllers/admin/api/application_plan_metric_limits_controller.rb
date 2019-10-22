@@ -108,7 +108,7 @@ class Admin::Api::ApplicationPlanMetricLimitsController < Admin::Api::BaseContro
 
   def metric
     # if service_id were passed in the url service.metrics would be ok
-    @metric ||= application_plan.service.metrics.find(params[:metric_id])
+    @metric ||= application_plan.all_metrics.find(params[:metric_id])
   end
 
   def usage_limits
