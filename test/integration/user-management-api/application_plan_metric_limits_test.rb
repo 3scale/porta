@@ -60,6 +60,27 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
                           :metric_id => @metric.id })
   end
 
+  test 'application_plan_metric_limits_index with a backend api used by service returns success' do
+    backend = FactoryBot.create(:backend_api)
+    metric  = FactoryBot.create(:metric, owner: backend)
+    FactoryBot.create(:backend_api_config, backend_api: backend, service: @app_plan.service)
+
+    get(admin_api_application_plan_metric_limits_path(@app_plan, metric),
+             :provider_key => @provider.api_key, :format => :xml)
+
+    assert_response :success
+  end
+
+  test 'application_plan_metric_limits_index with a backend api not used by service returns not found' do
+    backend = FactoryBot.create(:backend_api)
+    metric  = FactoryBot.create(:metric, owner: backend)
+
+    get(admin_api_application_plan_metric_limits_path(@app_plan, metric),
+             :provider_key => @provider.api_key, :format => :xml)
+
+    assert_response :not_found
+  end
+
   test 'application_plan_metric_limit_show' do
     get(admin_api_application_plan_metric_limit_path(@app_plan, @metric, @limit),
              :provider_key => @provider.api_key, :format => :xml)
