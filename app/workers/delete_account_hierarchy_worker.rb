@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class DeleteAccountHierarchyWorker < DeleteObjectHierarchyWorker
-
   def perform(*)
     return unless account.should_be_deleted?
     super
@@ -21,4 +20,11 @@ class DeleteAccountHierarchyWorker < DeleteObjectHierarchyWorker
     end
   end
 
+  def destroyable_association?(reflection)
+    if called_from_provider_hierarchy? && account.gateway_setting.persisted?
+      super && reflection.class_name != Account.name
+    else
+      super
+    end
+  end
 end

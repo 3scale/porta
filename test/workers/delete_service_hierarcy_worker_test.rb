@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   def setup
     @service = FactoryBot.create(:simple_service)
     DeleteObjectHierarchyWorker.stubs(:perform_later)
@@ -30,7 +32,7 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     service.update_attribute :default_service_plan, service_plan
     service.update_attribute :default_application_plan, application_plan
 
-    Sidekiq::Testing.inline! do
+    perform_enqueued_jobs do
       [service_plan, application_plan, end_user_plan].each do |association|
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything, 'destroy')
       end
@@ -49,7 +51,7 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything, 'destroy').once
     DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').never
 
-    Sidekiq::Testing.inline! { DeleteServiceHierarchyWorker.perform_now(service) }
+    perform_enqueued_jobs { DeleteServiceHierarchyWorker.perform_now(service) }
 
     assert BackendApi.exists?(backend_api.id)
   end
@@ -63,6 +65,6 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything, 'destroy').once
     DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, '').once
 
-    Sidekiq::Testing.inline! { DeleteServiceHierarchyWorker.perform_now(service) }
+    perform_enqueued_jobs { DeleteServiceHierarchyWorker.perform_now(service) }
   end
 end
