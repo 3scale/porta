@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin::Onboarding::Wizard::BaseController
+  before_action :build_request_form
+
   def new
-    @request = build_request_form
     track_step('new request')
   end
 
   def update
-    @request = build_request_form
     saved = @request.validate(request_params) && @request.save
 
     unless saved
@@ -18,9 +20,7 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
     real_api = ApiClassificationService.test(@request.uri).real_api?
 
     if status
-      unless success
-        @error, @message = status.error
-      end
+      @error, @message = status.error unless success
     else
       @error = 'Server Error'
       @message = 'The gateway cannot be deployed at this moment, please try again in a couple of minutes.'
@@ -41,12 +41,10 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
   # success (also shows response)
   def show
     @response = params[:response]
-    @request = build_request_form
     track_step('show request')
   end
 
   def edit
-    @request = build_request_form
     track_step('edit request')
   end
 
@@ -57,7 +55,7 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
   end
 
   def build_request_form
-    ::Onboarding::RequestForm.new(proxy)
+    @request = ::Onboarding::RequestForm.new(proxy)
   end
 
   def proxy

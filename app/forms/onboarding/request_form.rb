@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Onboarding::RequestForm < Reform::Form
   include ThreeScale::Reform
 
-  SLASH = '/'.freeze
+  SLASH = '/'
 
   model :proxy
 
@@ -29,7 +31,10 @@ class Onboarding::RequestForm < Reform::Form
   end
 
   def proxy_base_url
-    URI model.sandbox_endpoint.to_s
+    path = model.backend_api_configs.first&.path || ''
+    base = model.sandbox_endpoint
+
+    URI.join(base, path).to_s
   end
 
   def uri
@@ -48,7 +53,7 @@ class Onboarding::RequestForm < Reform::Form
 
     status = proxy_test_service.perform
   ensure
-    model.update_column(:api_test_success, status.try!(:success?))
+    model.update_column(:api_test_success, status&.success?)
   end
 
   protected
