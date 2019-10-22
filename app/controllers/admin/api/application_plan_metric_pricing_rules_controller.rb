@@ -52,7 +52,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesController < Admin::Api::Base
   end
 
   def metric
-    @metric ||= application_plan.service.metrics.find(params[:metric_id])
+    @metric ||= application_plan.all_metrics.find(params[:metric_id])
   end
 
   def pricing_rules
