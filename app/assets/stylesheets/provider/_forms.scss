@@ -575,18 +575,17 @@ li.hidden {
     box-shadow: none;
     margin: 0;
     padding: 0;
+
+    &.staging-settings {
+      @include white-box-shadow;
+      padding: line-height-times(1);
+    }
   }
 
   form.formtastic.u-inline {
     display: inline-block;
   }
 
-  .integration {
-    form.formtastic {
-      @include white-box-shadow;
-      padding: line-height-times(1);
-    }
-  }
 }
 
 form#liquid-settings > fieldset {
