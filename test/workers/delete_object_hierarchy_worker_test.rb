@@ -3,12 +3,14 @@
 require 'test_helper'
 
 class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   setup do
     @object = FactoryBot.create(:metric)
   end
 
   def test_perform
-    Sidekiq::Testing.inline! do
+    perform_enqueued_jobs do
       perform_expectations
 
       hierarchy_worker.perform_now(object)
@@ -50,6 +52,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   end
 
   class DeleteObjectHierarchyWorkerWhenObjectDoesNotExistAnymoreTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     setup do
       @object = FactoryBot.create(:simple_account)
       Rails.logger.stubs(:info)
@@ -60,7 +64,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     def test_perform_deserialization_error
       object.destroy!
       Rails.logger.expects(:info).with { |message| message.match(/DeleteObjectHierarchyWorker#perform raised ActiveJob::DeserializationError/) }
-      Sidekiq::Testing.inline! { DeleteObjectHierarchyWorker.perform_later(object) }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later(object) }
     end
 
     def test_success_record_not_found
@@ -69,7 +73,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       DeleteObjectHierarchyWorker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
     end
   end
-  
+
   class DeletePlanTest < DeleteObjectHierarchyWorkerTest
     setup do
       # ApplicationPlan setup
@@ -107,6 +111,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   end
 
   class DeleteMemberPermissionThroughUserTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     def setup
       tenant = FactoryBot.create(:simple_provider)
       @member = FactoryBot.create(:member, account: tenant)
@@ -116,7 +122,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     attr_reader :member, :member_permission
 
     def test_perform
-      Sidekiq::Testing.inline! { DeleteObjectHierarchyWorker.perform_now(member) }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(member) }
 
       assert_raises(ActiveRecord::RecordNotFound) { member_permission.reload }
       assert_raises(ActiveRecord::RecordNotFound) { member.reload }

@@ -4,7 +4,7 @@ module Account::PaymentDetails
   extend ActiveSupport::Concern
 
   included do
-    has_one :payment_detail, -> { order id: :desc }, autosave: true
+    has_one :payment_detail, -> { order id: :desc }, autosave: true, dependent: :destroy
 
     CREDIT_CARD_ATTRIBUTES = [
       :credit_card_auth_code,

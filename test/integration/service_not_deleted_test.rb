@@ -3,7 +3,7 @@
 require 'test_helper'
 require 'sidekiq/testing'
 
-class ServiceNotDeletoedTest < ActionDispatch::IntegrationTest
+class ServiceNotDeletedTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
   disable_transactional_fixtures!
