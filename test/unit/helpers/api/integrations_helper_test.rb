@@ -177,6 +177,29 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
       assert_match(/p-a-s-s=APP_KEY/, res)
     end
 
+    test 'should not create the run command if endpoint is blank' do
+      proxy = FactoryBot.create(:proxy)
+      content = {
+        proxy: {
+          service_id: proxy.service_id,
+          endpoint: '',
+          sandbox_endpoint: '',
+          auth_app_key: 'app_key',
+          auth_app_id: 'app_id',
+          auth_user_key: 'user_key',
+          credentials_location: 'authorization',
+          api_test_path: '/test',
+          proxy_rules: [{ pattern: "/foo" }, { pattern: "/bar" }]
+        }
+      }
+      FactoryBot.create(:proxy_config, proxy: proxy, content: content.to_json)
+
+      assert_nothing_raised do
+        res = api_test_curl(proxy, config_based: true)
+        refute_match /curl http/, res
+      end
+    end
+
     protected
 
     def proxy_config_content
