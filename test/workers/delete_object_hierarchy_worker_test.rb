@@ -39,6 +39,22 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     DeleteObjectHierarchyWorker
   end
 
+  class AssociationUnknownPrimaryKeyTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    test 'the error is not raised and the object is removed' do
+      plan = FactoryBot.create(:application_plan)
+      feature = FactoryBot.create(:feature)
+      features_plan = plan.features_plans.create!(feature: feature)
+
+      assert_difference(plan.features_plans.method(:count), -1) do
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(feature) }
+      end
+
+      assert_raises(ActiveRecord::RecordNotFound) { feature.reload }
+    end
+  end
+
   class DeleteObjectHierarchyWorkerWhenDoesNotHaveAssociationsTest < ActiveSupport::TestCase
     def test_execute_success_when_empty_batch
       object = FactoryBot.create(:metric)
