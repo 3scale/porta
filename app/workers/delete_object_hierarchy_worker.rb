@@ -125,6 +125,8 @@ class DeleteObjectHierarchyWorker < ApplicationJob
         associated_object.id = associated_object_id
         delete_associated_object_later(associated_object)
       end
+    rescue ActiveRecord::UnknownPrimaryKey => exception
+      Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
     end
 
     def destroy_has_one_association
