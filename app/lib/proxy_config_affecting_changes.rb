@@ -94,6 +94,7 @@ module ProxyConfigAffectingChanges
   end
 
   def issue_proxy_affecting_change_event(proxy)
+    return unless proxy # sometimes invoked in the context of or concurrently to a hierarchy deletion and proxy is no longer available
     ProxyConfigs::AffectingObjectChangedEvent.create_and_publish!(proxy, self)
   end
 end
