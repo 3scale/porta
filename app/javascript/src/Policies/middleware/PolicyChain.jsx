@@ -43,10 +43,10 @@ const loadChain = ({registry, storedChain, dispatch}: {registry: Array<RegistryP
   })
   if (errors > 0) {
     dispatch(loadChainError({})) // TODO: Define what to do with errors (unlikely now, just undefined path returned by Array.find)
-  } else {
-    dispatch(setOriginalPolicyChain(updatedChain))
-    dispatch(loadChainSuccess(updatedChain))
   }
+
+  dispatch(setOriginalPolicyChain(updatedChain))
+  dispatch(loadChainSuccess(updatedChain))
 }
 
 const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: any) => (action: PolicyChainMiddlewareAction) => {
