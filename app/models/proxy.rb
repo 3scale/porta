@@ -194,7 +194,6 @@ class Proxy < ApplicationRecord
 
     def default_production_endpoint_apiap; end
 
-
     protected
 
     delegate :provider, to: :service
@@ -533,6 +532,11 @@ class Proxy < ApplicationRecord
 
   def service_mesh_integration?
     Service::DeploymentOption.service_mesh.include?(deployment_option)
+  end
+
+  def update_attributes(*)
+    reload # helps to prevent ActiveRecord::StaleObjectError. Using pessimistic locking wouldcould be an alternative.
+    super
   end
 
   protected
