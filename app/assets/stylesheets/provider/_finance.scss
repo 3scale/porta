@@ -17,6 +17,7 @@ table.invoice tr td,
 table.invoice tr th {
   border-bottom: 1px solid $border-color;
   padding: line-height-times(1);
+  word-break: normal;
 }
 
 table.finance_data tbody tr td {
