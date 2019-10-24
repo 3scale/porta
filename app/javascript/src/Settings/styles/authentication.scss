@@ -2,7 +2,8 @@
   display: none !important;
 }
 
-#service_deployment_option_input {
+#service_deployment_option_input,
+#service_proxy_authentication_method_input {
   label span,
   .inline-hints {
     display: none;
