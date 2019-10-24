@@ -685,7 +685,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   class StaleObjectErrorTest < ActiveSupport::TestCase
-    test 'proxy reloads before updating attributes' do
+    test 'proxy does not raise stale object error on concurrent touch' do
       class ProxyWithFiber < ::Proxy
         def update_attributes(*)
           Fiber.yield
