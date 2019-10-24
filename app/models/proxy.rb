@@ -194,7 +194,6 @@ class Proxy < ApplicationRecord
 
     def default_production_endpoint_apiap; end
 
-
     protected
 
     delegate :provider, to: :service
@@ -533,6 +532,19 @@ class Proxy < ApplicationRecord
 
   def service_mesh_integration?
     Service::DeploymentOption.service_mesh.include?(deployment_option)
+  end
+
+  # Ridiculously hacking Rails to skip lock increment on touch
+  def touch(*)
+    @instance_locking_enabled = false
+    super
+  ensure
+    remove_instance_variable(:@instance_locking_enabled)
+  end
+
+  def locking_enabled?
+    return @instance_locking_enabled if instance_variable_defined? :@instance_locking_enabled
+    super
   end
 
   protected

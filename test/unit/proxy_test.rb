@@ -683,4 +683,26 @@ class ProxyTest < ActiveSupport::TestCase
       proxy.update_attributes(updated_at: Time.utc(2019, 9, 26, 12, 20))
     end
   end
+
+  class StaleObjectErrorTest < ActiveSupport::TestCase
+    test 'proxy does not raise stale object error on concurrent touch' do
+      class ProxyWithFiber < ::Proxy
+        def update_attributes(*)
+          Fiber.yield
+          super
+        end
+      end
+
+      proxy_id = FactoryBot.create(:proxy).id
+
+      fiber_update = Fiber.new { ProxyWithFiber.find(proxy_id).update_attributes(error_auth_failed: 'new auth error msg') }
+      fiber_touch = Fiber.new { Proxy.find(proxy_id).touch }
+
+      fiber_update.resume
+      assert_nothing_raised(ActiveRecord::StaleObjectError) do
+        fiber_touch.resume
+        fiber_update.resume
+      end
+    end
+  end
 end
