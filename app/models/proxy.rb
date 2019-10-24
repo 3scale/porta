@@ -534,8 +534,16 @@ class Proxy < ApplicationRecord
     Service::DeploymentOption.service_mesh.include?(deployment_option)
   end
 
-  def update_attributes(*)
-    reload # helps to prevent ActiveRecord::StaleObjectError. Using pessimistic locking wouldcould be an alternative.
+  # Ridiculously hacking Rails to skip lock increment on touch
+  def touch(*)
+    @instance_locking_enabled = false
+    super
+  ensure
+    remove_instance_variable(:@instance_locking_enabled)
+  end
+
+  def locking_enabled?
+    return @instance_locking_enabled if instance_variable_defined? :@instance_locking_enabled
     super
   end
 
