@@ -6,36 +6,40 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
     h3.Configuration-title = deployment_option_is_service_mesh?(@service) ? 'Service mesh Configuration' : 'APIcast Configuration'
 
     dl.u-dl
-      - unless deployment_option_is_service_mesh?(@service)
-        - if current_account.provider_can_use?(:api_as_product)
-          - backend_api_configs = @service.backend_api_configs
-          dt.u-dl-term Private Base #{'URL'.pluralize backend_api_configs.count}
-          dd.u-dl-definition
-            ul
-            - for backend_api_config in backend_api_configs
-              li
-                = backend_routing_rule(backend_api_config)
-        - else
-          dt.u-dl-term Private Base URL
-          dd.u-dl-definition = @proxy.api_backend
+      - if apiap?
+        dt.u-dl-term
+          h4
+            => icon('cubes')
+            = @service.name
+        dd.u-dl-definition
+      - elsif !deployment_option_is_service_mesh?(@service)
+        dt.u-dl-term Private Base URL
+        dd.u-dl-definition = @proxy.api_backend
 
       dt.u-dl-term Mapping rules
-      dd.u-dl-definition
-        - if (last_rule = @proxy.proxy_rules.last)
-          code
-            ' #{last_rule.pattern} => #{last_rule.metric.name}
-        - if (rules_size = @proxy.proxy_rules.size) > 1
-          | and #{rules_size - 1} more.
+      dd.u-dl-definition = proxy_rules_preview(@proxy.proxy_rules)
+
       - unless deployment_option_is_service_mesh?(@service)
         dt.u-dl-term Credential Location
         dd.u-dl-definition = @proxy.credentials_location
         dt.u-dl-term Secret Token
         dd.u-dl-definition = @proxy.secret_token
 
-
       - if apiap?
+        - unless deployment_option_is_service_mesh?(@service)
+          - @service.backend_api_configs.sorted_for_proxy_config.includes(:backend_api).each do |backend_api_config|
+            - backend_api = backend_api_config.backend_api
+            div.Configuration-backend-summary
+              dt.u-dl-term
+                h4
+                  => icon('cube')
+                  = backend_api.name
+              dd.u-dl-definition = backend_routing_rule(backend_api_config)
+              dt.u-dl-term Mapping rules
+              dd.u-dl-definition = proxy_rules_preview(backend_api.proxy_rules, path: backend_api_config.path)
+
         dt.u-dl-term Promote
-        dd.u-dl-definition
+        dd.u-dl-definition.Configuration-promote-button
           = semantic_form_for @proxy, url: admin_service_integration_path(@service) do |f|
             = f.hidden_field :lock_version
             = f.button *promote_to_staging_button_options(@show_presenter)
