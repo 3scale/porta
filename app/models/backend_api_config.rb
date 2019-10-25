@@ -30,6 +30,8 @@ class BackendApiConfig < ApplicationRecord
     joining { service }.where.has { (service.state != ::Service::DELETE_STATE) }
   end
 
+  scope :sorted_for_proxy_config, -> { reordering { sift(:desc, :path) } }
+
   delegate :private_endpoint, to: :backend_api
 
   def path=(value)

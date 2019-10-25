@@ -95,6 +95,22 @@
     position: relative;
   }
 
+  &-backend-summary {
+    border-left: line-height-times(1/4) solid $border-color;
+    margin: line-height-times(1) 0 line-height-times(2);
+    padding-left: line-height-times(1);
+    dt.u-dl-term {
+      width: calc(40% - #{line-height-times(3/4)});
+    }
+    dd.u-dl-definition {
+      padding-left: calc(40% - #{line-height-times(3/4)});
+    }
+  }
+
+  &-promote-button {
+    border-top: $border-width solid $border-color;
+  }
+
   &-title {
     margin: 0 !important;
   }
