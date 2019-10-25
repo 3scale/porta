@@ -48,7 +48,7 @@ const loadChain = ({registry, storedChain, dispatch}: {registry: Array<RegistryP
   }
 }
 
-const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: any) => (action: PolicyChainMiddlewareAction) => {
+const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: Dispatch) => (action: PolicyChainMiddlewareAction) => {
   const state = getState()
   switch (action.type) {
     case 'LOAD_CHAIN':
