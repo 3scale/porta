@@ -1,0 +1,104 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "kind": "ImageStream",
+            "apiVersion": "image.openshift.io/v1",
+            "metadata": {
+                "name": "ruby-24-centos7",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "amp-system-master"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                },
+                "tags": [
+                    {
+                        "name": "latest",
+                        "annotations": {
+                            "openshift.io/imported-from": "centos/ruby-24-centos7"
+                        },
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "centos/ruby-24-centos7"
+                        },
+                        "generation": null,
+                        "importPolicy": {},
+                        "referencePolicy": {
+                            "type": ""
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "dockerImageRepository": ""
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "image.openshift.io/v1",
+            "metadata": {
+                "name": "amp-system-master",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "amp-system-master"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                }
+            },
+            "status": {
+                "dockerImageRepository": ""
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "build.openshift.io/v1",
+            "metadata": {
+                "name": "amp-system-master",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "amp-system-master"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "https://github.com/3scale/porta.git"
+                    }
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "contextDir": "/",
+                        "dockerfilePath": "openshift/system/Dockerfile.on_prem",
+                        "forcePull": true
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "amp-system-master:latest"
+                    }
+                }
+            }
+        }
+    ]
+}

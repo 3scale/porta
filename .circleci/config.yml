@@ -295,6 +295,42 @@ commands: # reusable commands with parameters
       - *store-log-artifacts
       - *upload-coverage
 
+  install-openshift:
+    steps:
+      - run:
+          name: Install OpenShift Client Tools
+          working_directory: /tmp
+          command: |
+            curl --fail -L  https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz | tar -xzf-
+            sudo mv /tmp/openshift-origin-client-tools-*-linux-64bit/oc /usr/local/bin/
+            sudo mv /tmp/openshift-origin-client-tools-*-linux-64bit/kubectl /usr/local/bin/
+      - run:
+          name: Configure Docker
+          command: |
+            echo '{"insecure-registries": ["172.30.0.0/16"]}' | sudo tee --append /etc/docker/daemon.json
+            sudo systemctl restart docker
+      - run:
+          name: Start and Configure OpenShift Cluster
+          working_directory: /tmp/openshift
+          command: |
+            DOCKER_HOST_IP=$(docker run --net=host codenvy/che-ip)
+            oc cluster up --public-hostname=${DOCKER_HOST_IP} --enable=persistent-volumes \
+              --enable=registry --enable=router
+            oc login https://${DOCKER_HOST_IP}:8443 -u system:admin --insecure-skip-tls-verify=true > /dev/null
+            oc adm policy add-cluster-role-to-user cluster-admin developer > /dev/null
+            oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
+            oc login https://${DOCKER_HOST_IP}:8443 -u developer --insecure-skip-tls-verify=true > /dev/null
+
+            oc wait --timeout=90s --for=condition=available dc/docker-registry --namespace=default || oc rollout retry dc/docker-registry --namespace=default
+
+  oc-observe:
+    steps:
+      - run:
+          name: Observe OpenShift Pod changes
+          command: |
+            oc observe pods --maximum-errors=-1 --no-headers --object-env-var=OBJECT --type-env-var=TYPE -- jq -n --raw-output 'env.OBJECT | fromjson | "\(env.TYPE) \(.kind) \(.metadata.name) started at \(.status.startTime) (\(.status.phase)) \(.status.conditions // [] | map("\(.type): \(.status) @ \(.lastTransitionTime)") | join(", "))"'
+          background: true
+
 ##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
@@ -905,10 +941,66 @@ jobs:
           path: tmp/capybara
           destination: capybara
 
+  simple-upgrade-test:
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
+    resource_class: large
+    parameters:
+      threescale_release_version:
+        type: string
+        default: "2.6"
+    steps:
+      - install-openshift
+      - run:
+          name: Change to migration-test namespace
+          command: |
+            oc new-project migration-test
+      - oc-observe
+      - run:
+          name: Watch deployment configs
+          command: |
+            while true; do oc describe dc; sleep 600; done
+
+          background: true
+      - run:
+          name: Watch imagestreams
+          command: |
+            while true; do oc describe is; sleep 600; done
+
+          background: true
+      - run:
+          name: Deploy 3scale << parameters.threescale_release_version >> from amp-eval template
+          command: |
+            oc create -f https://raw.githubusercontent.com/3scale/3scale-operator/<< parameters.threescale_release_version >>-stable/pkg/3scale/amp/auto-generated-templates/amp/amp-eval.yml
+            oc new-app 3scale-api-management-eval --param WILDCARD_DOMAIN=lvh.me
+            oc wait --for=condition=available --timeout=-1s $(oc get dc --output=name)
+          no_output_timeout: 30m
+      - checkout
+      - run:
+          name: Build system master image
+          command: |
+            oc create -f test/migration/build-system-master.json
+            oc start-build amp-system-master --wait --follow
+      - run:
+          name: Run upgrade from 3scale << parameters.threescale_release_version >> test
+          command: |
+            test/migration/run_migration_test.sh
+
 ##################################### CIRCLECI WORKFLOWS ############################################
 
 workflows:
   version: 2
+
+  upgrade_tests:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - simple-upgrade-test:
+          threescale_release_version: "2.6"
+          requires:
+            - manual_approval
 
   mysql_build:
     jobs:
@@ -1338,4 +1430,10 @@ workflows:
             - karma
             - jest
           <<: *only-master-filter
+    <<: *nightly-trigger
+
+  nightly_upgrade_tests:
+    jobs:
+      - simple-upgrade-test:
+          threescale_release_version: "2.6"
     <<: *nightly-trigger
