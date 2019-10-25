@@ -7,7 +7,7 @@ export type RawPolicy = {
   version: string,
   description?: string,
   summary?: string,
-  configuration: Object
+  configuration: {}
 }
 
 export type RawRegistry = {
@@ -16,7 +16,7 @@ export type RawRegistry = {
 
 export type RegistryPolicy = & RawPolicy & {
   humanName: string,
-  data?: Object
+  data?: {}
 }
 
 export type ChainPolicy = & RegistryPolicy & {
@@ -28,7 +28,7 @@ export type ChainPolicy = & RegistryPolicy & {
 export type StoredChainPolicy = {
   name: string,
   version: string,
-  configuration: Object,
+  configuration: {},
   enabled: boolean
 }
 
@@ -38,7 +38,13 @@ export type ShallowPolicy = {
   humanName: string,
   summary?: string
 }
-export type Schema = Object
+export type Schema = {
+  name: string,
+  version: string,
+  summary: string,
+  description: string,
+  configuration: {}
+}
 export type Policy = {
   id: number,
   schema: Schema,

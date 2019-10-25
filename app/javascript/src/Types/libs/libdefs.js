@@ -1,5 +1,8 @@
 // @flow
 
+// Disabling all weak-type checks since this file is a workaround for missing types
+/* eslint-disable flowtype/no-weak-types */
+
 // TODO: remove these module declarations when not failing
 declare module 'whatwg-fetch' {
   declare type Options = {
@@ -24,5 +27,4 @@ declare module 'core-js/fn/symbol' {
 
 }
 
-// eslint-disable-next-line flowtype/no-weak-types
 export type Window = any

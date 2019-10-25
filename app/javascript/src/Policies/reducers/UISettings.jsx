@@ -3,15 +3,15 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer, updateError, updateObject } from 'Policies/util'
 
-import type { State, UIState } from 'Policies/types'
+import type { UIState } from 'Policies/types'
 import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 
-function updateComponentTransition (state: State, action: UIComponentTransitionAction): State {
+function updateComponentTransition (state: UIState, action: UIComponentTransitionAction): UIState {
   return updateObject(state, {[action.hide]: false, [action.show]: true})
 }
 
 function updateRequestsCounter (number: number) {
-  return function (state) {
+  return function (state: UIState): UIState {
     return updateObject(state, {requests: state.requests + number})
   }
 }
