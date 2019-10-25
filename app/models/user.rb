@@ -22,6 +22,9 @@ class User < ApplicationRecord
   include Permissions
   include ProvidedAccessTokens
 
+  self.background_deletion = [:user_sessions, :access_tokens, [:sso_authorizations, { action: :delete }],
+                              [:moderatorships, { action: :delete }], [:notifications, { action: :delete }],
+                              [:notification_preferences, { action: :delete, has_many: false }]]
   audited
 
   before_validation :trim_white_space_from_username

@@ -8,6 +8,8 @@ class Proxy < ApplicationRecord
   include GatewaySettings::ProxyExtension
   include ProxyConfigAffectingChanges::ProxyExtension
 
+  self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
+
   DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
                      'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
 
