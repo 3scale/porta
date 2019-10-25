@@ -62,7 +62,7 @@ table class="data"
 
           - unless @account
             th class="small"
-              = s.text_field :account_query, size: 7, disabled: @account.present?, value: @account.try(:org_name)
+              = s.text_field :account_query, size: 7
 
           - if display_view_portion?(:service)
             th

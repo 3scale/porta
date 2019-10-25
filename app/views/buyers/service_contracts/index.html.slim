@@ -60,7 +60,7 @@ table.data
         = form_for @search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
           th
           th
-            = s.text_field :account_query, size: 15, value: @account.try(:org_name)
+            = s.text_field :account_query, size: 15
 
           - if current_account.multiservice?
             th
