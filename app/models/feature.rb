@@ -1,5 +1,7 @@
 class Feature < ApplicationRecord
 
+  self.background_deletion = [:features_plans]
+
   audited :allow_mass_assignment => true
 
   #TODO: these need tests

@@ -144,4 +144,46 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_raises(ActiveRecord::RecordNotFound) { member.reload }
     end
   end
+
+  class BackgroundAssociationListsTest < ActiveSupport::TestCase
+
+    class DoubleObject
+
+      def id
+        1
+      end
+
+      def to_global_id
+        'double/1'
+      end
+
+      def service
+        Service.new({ id: 1}, without_protection: true)
+      end
+    end
+
+    class DoubleWithBackgroundDestroyAssociation < DoubleObject
+
+      include BackgroundDeletion
+      self.background_deletion = { service: { action: :destroy, has_many: false } }
+    end
+
+    class DoubleWithBackgroundDeleteAssociation < DoubleObject
+
+      include BackgroundDeletion
+      self.background_deletion = { service: { action: :delete, has_many: false } }
+    end
+
+    def test_defined_background_destroy_associations
+      double_object = DoubleWithBackgroundDestroyAssociation.new
+      DeleteServiceHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'destroy').once
+      DeleteObjectHierarchyWorker.perform_now(double_object)
+    end
+
+    def test_defined_background_delete_associations
+      double_object = DoubleWithBackgroundDeleteAssociation.new
+      DeleteServiceHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'delete').once
+      DeleteObjectHierarchyWorker.perform_now(double_object)
+    end
+  end
 end
