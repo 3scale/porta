@@ -5,6 +5,8 @@ class Metric < ApplicationRecord
   include ArchiveDeletionBelongingToService
   include BackendApiLogic::MetricExtension
 
+  self.background_deletion = %i[pricing_rules usage_limits plan_metrics proxy_rules]
+
   before_destroy :destroyable?
   before_validation :associate_to_service_of_parent, :fill_owner
 
