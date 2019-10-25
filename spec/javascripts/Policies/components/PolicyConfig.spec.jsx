@@ -46,7 +46,6 @@ describe('PolicyConfig Component', () => {
     }
 
     const props = {
-      visible: true,
       policy: policyConfig,
       actions: {
         submitPolicyConfig: jest.fn(),
@@ -68,9 +67,6 @@ describe('PolicyConfig Component', () => {
   it('should render self', () => {
     const {policyConfigWrapper} = setup()
     expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toBe(true)
-
-    const registryProps = policyConfigWrapper.props()
-    expect(registryProps.visible).toBe(true)
     expect(policyConfigWrapper.find('.PolicyConfiguration-name').text()).toBe('Caching policy')
     expect(policyConfigWrapper.find('.PolicyConfiguration-version').text()).toBe('builtin')
     expect(policyConfigWrapper.find('.PolicyConfiguration-summary').text()).toBe('Caching')
@@ -135,7 +131,6 @@ describe('PolicyConfig APIcast policy', () => {
     }
 
     const props = {
-      visible: true,
       policy: policyConfig,
       actions: {
         submitPolicyConfig: jest.fn(),
@@ -157,9 +152,6 @@ describe('PolicyConfig APIcast policy', () => {
   it('should display the APIcast policy name and summary', () => {
     const {policyConfigWrapper} = setup()
     expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toBe(true)
-
-    const registryProps = policyConfigWrapper.props()
-    expect(registryProps.visible).toBe(true)
     expect(policyConfigWrapper.find('.PolicyConfiguration-name').text()).toBe('APIcast')
     expect(policyConfigWrapper.find('.PolicyConfiguration-summary').text()).toBe('Main function...')
   })
