@@ -3267,6 +3267,12 @@
               "paramType": "query"
             },
             {
+              "name": "system_name",
+              "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
               "name": "description",
               "description": "Description of the Backend",
               "dataType": "string",
