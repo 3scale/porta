@@ -226,12 +226,19 @@ module Api::IntegrationsHelper
     end
   end
 
-  def proxy_rules_preview(proxy_rules, path: nil)
+  def proxy_rules_preview(owner, path: nil)
+    proxy_rules = owner.proxy_rules
     last_rule = proxy_rules.last
     return 'None' unless last_rule
     code = content_tag(:code) { "#{path}#{last_rule.pattern} => #{last_rule.metric.name}" }
+    code + link_to_more_proxy_rules(proxy_rules, proxy_rules_path_for(owner))
+  end
+
+  protected
+
+  def link_to_more_proxy_rules(proxy_rules, url_to_more)
     rules_size = proxy_rules.size
-    more = rules_size > 1 ? " and #{rules_size - 1} more." : ''
-    code + more
+    return '' if rules_size <= 1
+    link_to(" and #{rules_size - 1} more.", url_to_more)
   end
 end
