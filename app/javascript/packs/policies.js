@@ -1,6 +1,6 @@
 // @flow
 
-import { initPolicies as PoliciesWidget } from 'Policies'
+import { PoliciesWrapper as PoliciesWidget } from 'Policies'
 
 document.addEventListener('DOMContentLoaded', () => {
   const policiesContainer = document.getElementById('policies')
