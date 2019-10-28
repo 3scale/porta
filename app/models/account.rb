@@ -400,7 +400,7 @@ class Account < ApplicationRecord
 
   # @param [SystemOperation] operation
   def fetch_dispatch_rule(operation)
-    MailDispatchRule.fetch_with_retry!(system_operation: operation, account: self) do |m|
+    MailDispatchRule.create_or_find_by!(system_operation: operation, account: self) do |m|
       m.dispatch = false if %w[weekly_reports daily_reports new_forum_post].include?(operation.ref)
       m.emails = emails.first
     end

@@ -6,18 +6,10 @@ class MailDispatchRule < ApplicationRecord
 
   scope :enabled, -> { where(dispatch: true) }
 
-  def self.fetch_with_retry!(options, &block)
-    retries = 0
-
-    begin
-      MailDispatchRule.find_or_create_by!(options, &block)
-    rescue ActiveRecord::RecordNotUnique
-      if retries > 10
-        raise
-      else
-        retries += 1
-        retry
-      end
-    end
+  # This is copied from Rails 6 source. We should remove it soon as we move to Rails 6.
+  def self.create_or_find_by!(options, &block)
+    transaction(requires_new: true) { create!(options, &block) }
+  rescue ActiveRecord::RecordNotUnique
+    find_by!(options, &block)
   end
 end
