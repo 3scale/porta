@@ -23,6 +23,8 @@ class Api::IntegrationsController < Api::BaseController
   def settings; end
 
   def update
+    @show_presenter = Api::IntegrationsShowPresenter.new(@proxy)
+
     if @service.using_proxy_pro? && !@proxy.apicast_configuration_driven
       proxy_pro_update
     elsif @proxy.save_and_deploy(proxy_params)
@@ -39,6 +41,7 @@ class Api::IntegrationsController < Api::BaseController
         done_step(:api_sandbox_traffic) if api_backend.present? && ApiClassificationService.test(api_backend).real_api?
         return redirect_to edit_path
       end
+
       render :edit
     else
       attrs = proxy_rules_attributes
@@ -50,7 +53,7 @@ class Api::IntegrationsController < Api::BaseController
       flash.now[:error] = flash_message(:update_error)
       @api_test_form_error = true
 
-      render :edit
+      render_edit_or_show
     end
   end
 
@@ -146,7 +149,7 @@ class Api::IntegrationsController < Api::BaseController
 
     @last_message_bus_id = nil # don't want MessageBus showing flash message
 
-    render :edit, status: :conflict
+    render_edit_or_show status: :conflict
   end
 
   def flash_message(key, opts = {})
@@ -159,17 +162,15 @@ class Api::IntegrationsController < Api::BaseController
       onboarding.bubble_update('api')
       update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
-      redirect_to edit_path
+      redirect_to_edit_or_show
     else
-      render :edit
+      render_edit_or_show
     end
   end
 
   def async_update
     if (@deploy_id = @proxy.save_and_async_deploy(proxy_params, current_user))
       flash.now[:notice] = flash_message(:async_update_success)
-
-      render :edit
     else
       attrs = params.fetch(:proxy, {}).fetch(:proxy_rules_attributes,{})
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
@@ -179,9 +180,9 @@ class Api::IntegrationsController < Api::BaseController
 
       flash.now[:error] = flash_message(:async_update_error)
       @api_test_form_error = true
-
-      render :edit
     end
+
+    render_edit_or_show
   end
 
   def edit_path
@@ -274,5 +275,13 @@ class Api::IntegrationsController < Api::BaseController
 
   def toggle_land_path
     @proxy.apicast_configuration_driven ? admin_service_integration_path(@service) : edit_admin_service_integration_path(@service)
+  end
+
+  def render_edit_or_show(opts = {})
+    render (apiap? ? :show : :edit), opts
+  end
+
+  def redirect_to_edit_or_show
+    redirect_to (apiap? ? :show : edit_path)
   end
 end
