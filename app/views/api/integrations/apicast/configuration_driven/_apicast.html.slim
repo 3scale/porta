@@ -17,7 +17,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
         dd.u-dl-definition = @proxy.api_backend
 
       dt.u-dl-term Mapping rules
-      dd.u-dl-definition = proxy_rules_preview(@proxy.proxy_rules)
+      dd.u-dl-definition = proxy_rules_preview(@proxy)
 
       - unless deployment_option_is_service_mesh?(@service)
         dt.u-dl-term Credential Location
@@ -36,7 +36,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
                   = backend_api.name
               dd.u-dl-definition = backend_routing_rule(backend_api_config)
               dt.u-dl-term Mapping rules
-              dd.u-dl-definition = proxy_rules_preview(backend_api.proxy_rules, path: backend_api_config.path)
+              dd.u-dl-definition = proxy_rules_preview(backend_api, path: backend_api_config.path)
 
         dt.u-dl-term Promote
         dd.u-dl-definition.Configuration-promote-button
