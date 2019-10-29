@@ -221,10 +221,17 @@ module Api::IntegrationsHelper
 
   def backend_routing_rule(backend_api_config)
     path = StringUtils::StripSlash.strip_slash(backend_api_config.path.presence)
-    code = content_tag :code do
-      "/#{path} => "
+    content_tag :code do
+      "/#{path} => #{backend_api_config.backend_api.private_endpoint}"
     end
-    endpoint = backend_api_config.backend_api.private_endpoint
-    code + endpoint
+  end
+
+  def proxy_rules_preview(proxy_rules, path: nil)
+    last_rule = proxy_rules.last
+    return 'None' unless last_rule
+    code = content_tag(:code) { "#{path}#{last_rule.pattern} => #{last_rule.metric.name}" }
+    rules_size = proxy_rules.size
+    more = rules_size > 1 ? " and #{rules_size - 1} more." : ''
+    code + more
   end
 end
