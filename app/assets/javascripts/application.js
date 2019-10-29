@@ -171,10 +171,15 @@
       $(this).on('ajax:complete', function(event, xhr, status){
         var form = $(this).closest('form');
         var width = form.data('width');
-        $.colorbox({ open:true, html: xhr.responseText, width: width });
+        $.colorbox({
+          open: true,
+          html: xhr.responseText,
+          width: width,
+          maxWidth: '85%',
+          maxHeight: '90%'
+        });
       })
     });
-
 
     $("a.fancybox, a.colorbox").live("click", function(e) {
       $(this).colorbox({ open:true });
