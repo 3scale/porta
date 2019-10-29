@@ -20,7 +20,6 @@ class PolicyForm extends Form {
 
 type Props = {
   schema?: string,
-  visible: boolean,
   policy: ChainPolicy,
   submitForm: (ChainPolicy) => ThunkAction,
   removePolicy: (ChainPolicy) => ThunkAction,
@@ -29,7 +28,7 @@ type Props = {
 }
 
 function PoliciesForm ({
-  visible, policy, submitForm, updatePolicy, removePolicy,
+  policy, submitForm, updatePolicy, removePolicy,
   closePolicyConfig}: Props) {
   const onSubmit = (policy) => {
     return ({formData, schema}) => {
@@ -43,7 +42,7 @@ function PoliciesForm ({
   const cancel = () => closePolicyConfig()
 
   return (
-    <section className={`PolicyConfiguration ${hiddenClass(visible)}`}>
+    <section className="PolicyConfiguration">
       <header className="PolicyConfiguration-header">
         <h2 className="PolicyConfiguration-title">Edit Policy</h2>
         <div onClick={cancel} className="PolicyConfiguration-cancel"><i className="fa fa-times-circle"></i> Cancel</div>
