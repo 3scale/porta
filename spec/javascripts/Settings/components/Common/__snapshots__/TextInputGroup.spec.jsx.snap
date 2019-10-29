@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+<FormGroup
+  fieldId="service_proxy_attributes_dooz_kawa_chanson_input"
+  helperText="Enter your favourite Dooz Kawa tune"
+>
+  <TextInput
+    aria-label={null}
+    className=""
+    id="service_proxy_attributes_dooz_kawa_chanson_input"
+    isDisabled={false}
+    isReadOnly={false}
+    isRequired={false}
+    isValid={true}
+    name="service[proxy_attributes][dooz_kawa_chanson]"
+    onChange={[Function]}
+    placeholder="You Favourite Dooz Kawa"
+    type="text"
+    value="Me Faire La Belle"
+  />
+</FormGroup>
+`;
