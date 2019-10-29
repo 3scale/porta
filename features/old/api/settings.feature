@@ -35,10 +35,10 @@ Feature: API Settings
     And I toggle "Authentication Settings"
     Then I should see "OpenID Connect Issuer"
     Then I should not see "OAuth Authorization Endpoint"
-    And I go to the integration show page for service "API" of provider "foo.example.com"
-    And I press "Revert to the old APIcast"
+    Given I toggle the apicast version
+    When I go to the integration show page for service "API" of provider "foo.example.com"
     And I follow "edit integration settings"
-    When I click on the label "API Key (user_key)"
+    And I click on the label "API Key (user_key)"
     And I press "Update Service" and I confirm dialog box
     Then I should see "Service information updated"
     And I go to the provider side "MegaWidget" application page

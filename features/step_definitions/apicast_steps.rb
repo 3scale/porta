@@ -16,3 +16,8 @@ Given(/^apicast registry is undefined$/) do
   ThreeScale.config.sandbox_proxy.stubs(:self_managed_apicast_registry_url).returns(nil)
   JSONClient.expects(:get).with(nil).raises(SocketError)
 end
+
+Given(/^I toggle the apicast version$/) do
+  proxy = @provider.default_service.proxy
+  proxy.toggle!(:apicast_configuration_driven) if !proxy.oidc? || !proxy.apicast_configuration_driven # rubocop:disable Rails/SkipsModelValidations
+end
