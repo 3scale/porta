@@ -5,7 +5,7 @@ import { FormFieldset } from 'Form/FormFieldset'
 describe('FormFieldset', () => {
   it('should render default form fieldset variant', () => {
     const view = mount(
-      <FormFieldset fieldId="label-id">
+      <FormFieldset>
         <input id="input-id" />
       </FormFieldset>
     )
@@ -14,43 +14,16 @@ describe('FormFieldset', () => {
 
   it('should render inline form fieldset variant', () => {
     const view = mount(
-      <FormFieldset isInline fieldId="label-id">
+      <FormFieldset isInline>
         <input id="input-id" />
       </FormFieldset>
     )
     expect(view).toMatchSnapshot()
   })
 
-  it('should render form fieldset variant with node label and help text', () => {
+  it('should render form fieldset with custom class names', () => {
     const view = mount(
-      <FormFieldset fieldId="id" label={<span>Label</span>} helperText="this is helper text" >
-        <input aria-label="input" />
-      </FormFieldset>
-    )
-    expect(view).toMatchSnapshot()
-  })
-
-  it('should render form fieldset variant with node helperText', () => {
-    const view = mount(
-      <FormFieldset label="Label" fieldId="label-id" helperText={<span>Help text!</span>}>
-        <input id="input-id" />
-      </FormFieldset>
-    )
-    expect(view).toMatchSnapshot()
-  })
-
-  it('should render form fieldset required variant', () => {
-    const view = mount(
-      <FormFieldset isRequired label="label" fieldId="id">
-        <input id="input-id" />
-      </FormFieldset>
-    )
-    expect(view).toMatchSnapshot()
-  })
-
-  it('should render form fieldset invalid variant', () => {
-    const view = mount(
-      <FormFieldset label="label" fieldId="label-id" isValid={false} helperTextInvalid="Invalid FormFieldset">
+      <FormFieldset className='extra-class another-class'>
         <input id="input-id" />
       </FormFieldset>
     )
