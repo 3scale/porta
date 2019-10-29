@@ -90,11 +90,12 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
         visible={ui.registry}
         actions={policyRegistryActions}
       />
-      <PolicyConfig
-        visible={ui.policyConfig}
-        policy={policyConfig}
-        actions={policyConfigActions}
-      />
+      {ui.policyConfig &&
+        <PolicyConfig
+          policy={policyConfig}
+          actions={policyConfigActions}
+        />
+      }
       <PolicyChainHiddenInput policies={chain} />
     </div>
   )

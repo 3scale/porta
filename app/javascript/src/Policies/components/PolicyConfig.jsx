@@ -9,7 +9,6 @@ import type { ChainPolicy } from 'Policies/types/Policies'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
 type Props = {
-  visible: boolean,
   policy: ChainPolicy,
   actions: {
     submitPolicyConfig: (ChainPolicy) => ThunkAction,
@@ -19,9 +18,8 @@ type Props = {
   }
 }
 
-const PolicyConfig = ({visible, policy, actions}: Props) => {
+const PolicyConfig = ({policy, actions}: Props) => {
   return (<PoliciesForm
-    visible={visible}
     policy={policy}
     submitForm={actions.submitPolicyConfig}
     removePolicy={actions.removePolicyFromChain}
