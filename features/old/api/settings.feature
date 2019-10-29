@@ -35,7 +35,7 @@ Feature: API Settings
     And I toggle "Authentication Settings"
     Then I should see "OpenID Connect Issuer"
     Then I should not see "OAuth Authorization Endpoint"
-    Given I toggle the apicast version
+    Given the default proxy uses apicast configuration driven
     When I go to the integration show page for service "API" of provider "foo.example.com"
     And I follow "edit integration settings"
     And I click on the label "API Key (user_key)"
