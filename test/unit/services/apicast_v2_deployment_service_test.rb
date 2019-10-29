@@ -64,6 +64,6 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
     json_content = JSON.parse(config.content, symbolize_names: true)
     api_backend = json_content.dig(:proxy, :api_backend)
 
-    assert_equal api_backend, nil
+    assert_nil api_backend
   end
 end
