@@ -14,7 +14,7 @@ Feature: Proxy integration
     And current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"
     And apicast registry is stubbed
-    And I toggle the apicast version
+    And the default proxy does not use apicast configuration driven
 
   Scenario: Download Nginx Config without public base URL
     When I go to the integration page for service "one"

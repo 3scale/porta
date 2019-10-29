@@ -17,7 +17,11 @@ Given(/^apicast registry is undefined$/) do
   JSONClient.expects(:get).with(nil).raises(SocketError)
 end
 
-Given(/^I toggle the apicast version$/) do
+Given(/^the default proxy does not use apicast configuration driven$/) do
   proxy = @provider.default_service.proxy
-  proxy.toggle!(:apicast_configuration_driven) if !proxy.oidc? || !proxy.apicast_configuration_driven # rubocop:disable Rails/SkipsModelValidations
+  proxy.update!(apicast_configuration_driven: false, sandbox_endpoint: 'https://api-2.staging.apicast.io:4443')
+end
+
+Given(/^the default proxy uses apicast configuration driven$/) do
+  @provider.default_service.proxy.update!(apicast_configuration_driven: true)
 end
