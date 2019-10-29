@@ -58,9 +58,11 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
   end
 
   test 'api_backend is nil when product has multiple backends' do
-    # Service has more than 1 backend
+    @proxy.stubs(with_subpaths?: true)
+
     config = Service.new(@proxy).call(environment: ProxyConfig::ENVIRONMENTS.first)
-    api_backend = JSON.parse(config.content, symbolize_names: true)[:proxy][:api_backend]
+    json_content = JSON.parse(config.content, symbolize_names: true)
+    api_backend = json_content.dig(:proxy, :api_backend)
 
     assert_equal api_backend, nil
   end
