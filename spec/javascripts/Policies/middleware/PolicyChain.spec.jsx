@@ -43,26 +43,40 @@ describe('PolicyChain Middleware', () => {
     expect(next).toHaveBeenCalledWith(action)
   })
 
+  const validPolicy = {name: 'echo', version: 'builtin', configuration: {config: 'bond'}, enabled: true}
+  const wrongPolicy = {name: 'foo', version: 'builtin', configuration: {}, enabled: true}
+
   it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action', () => {
     invoke({
       type: 'LOAD_CHAIN',
-      storedChain: [{name: 'echo', version: 'builtin', configuration: {config: 'bond'}, enabled: true}]
+      storedChain: [validPolicy]
     })
 
     expect(store.dispatch.mock.calls[0][0].type).toBe('SET_ORIGINAL_POLICY_CHAIN')
-    expect(store.dispatch.mock.calls[0][0].payload[0].data).toEqual({config: 'bond'})
+    expect(store.dispatch.mock.calls[0][0].payload[0].data).toEqual(validPolicy.configuration)
 
     expect(store.dispatch.mock.calls[1][0].type).toBe('LOAD_CHAIN_SUCCESS')
-    expect(store.dispatch.mock.calls[1][0].payload[0].data).toEqual({config: 'bond'})
+    expect(store.dispatch.mock.calls[1][0].payload[0].data).toEqual(validPolicy.configuration)
   })
 
   it('Dispatches LOAD_CHAIN_ERROR action', () => {
     invoke({
       type: 'LOAD_CHAIN',
-      storedChain: [{name: 'foo', version: 'builtin', configuration: {}, enabled: true}]
+      storedChain: [wrongPolicy]
     })
 
     expect(store.dispatch).toHaveBeenCalledWith(loadChainError({}))
+  })
+
+  it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action only with valid policies', () => {
+    invoke({
+      type: 'LOAD_CHAIN',
+      storedChain: [wrongPolicy, validPolicy]
+    })
+
+    expect(store.dispatch).toHaveBeenCalledWith(loadChainError({}))
+    expect(store.dispatch).toHaveBeenCalledWith({ type: 'SET_ORIGINAL_POLICY_CHAIN', payload: [expect.objectContaining({ name: 'echo' })] })
+    expect(store.dispatch).toHaveBeenCalledWith({ type: 'LOAD_CHAIN_SUCCESS', payload: [expect.objectContaining({ name: 'echo' })] })
   })
 
   it('Dispatches the correct update when REMOVE_POLICY_FROM_CHAIN', () => {
