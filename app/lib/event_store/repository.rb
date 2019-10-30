@@ -161,7 +161,6 @@ module EventStore
                       Domains::ProxyDomainsChangedEvent
                      )
       subscribe_event(ServiceTokenEventSubscriber.new, ServiceTokenDeletedEvent)
-      subscribe_event(UserEventSubscriber.new, Users::UserDeletedEvent)
       subscribe_event(ServiceDeletionSubscriber.new, Services::ServiceScheduledForDeletionEvent)
       subscribe_event(ServiceDeletedSubscriber.new, Services::ServiceDeletedEvent)
       subscribe_event(ProxyConfigEventSubscriber.new, ProxyConfigs::AffectingObjectChangedEvent)
