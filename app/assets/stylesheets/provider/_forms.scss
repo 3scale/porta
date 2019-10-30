@@ -586,6 +586,10 @@ li.hidden {
     display: inline-block;
   }
 
+  .SettingsBox form.formtastic {
+    padding: line-height-times(1);
+  }
+
 }
 
 form#liquid-settings > fieldset {
