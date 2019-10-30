@@ -63,13 +63,7 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
   ##~ op.parameters.add name: "jwt_claim_with_client_id_type", description: "JWT Claim With ClientId Type. Either `plain` or `liquid`", dataType: "string", paramType: "query", required: false
   #
   def update
-    if proxy.update_attributes(proxy_params)
-      if proxy.service_mesh_integration?
-        proxy.deploy!
-      elsif proxy.apicast_configuration_driven
-        proxy.deploy_v2
-      end
-    end
+    proxy.deploy_mesh_or_apicast if proxy.update_attributes(proxy_params)
 
     respond_with(proxy)
   end
