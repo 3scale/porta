@@ -1,6 +1,13 @@
+.SettingsBox {
+  @include white-box-shadow;
+}
+
+#integration-tabs .integration .SettingsBox {
+  box-shadow: none;
+}
+
 .SettingsBox,
 .IntegrationSettingsBox {
-  @include white-box-shadow;
   position: relative;
 
   &-toggle {
@@ -43,6 +50,7 @@
   & + .integration {
     @include white-box-shadow;
     margin-top: line-height-times(1);
+    overflow: hidden;
     padding: line-height-times(1);
   }
 
@@ -90,8 +98,7 @@
   }
 
   &-summary {
-    @include white-box-shadow;
-    border: $border-width-lg solid transparent;
+    border: $border-width-lg solid $border-color;
     min-height: line-height-times(2);
     padding: line-height-times(1);
     position: relative;
