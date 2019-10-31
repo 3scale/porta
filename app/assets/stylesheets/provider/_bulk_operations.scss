@@ -1,8 +1,10 @@
 #bulk-operations {
-  display: none;
+  @include white-box-shadow;
   clear: both;
-  padding: line-height-times(1) 0;
+  display: none;
   line-height: $line-height-lg;
+  margin: line-height-times(1) 0;
+  padding: line-height-times(1);
 
   button {
     @extend .outline-button-thin;
