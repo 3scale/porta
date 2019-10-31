@@ -521,6 +521,18 @@ class Service < ApplicationRecord
     proxy.apicast_configuration_driven && !proxy.service_mesh_integration?
   end
 
+  # TODO: Remove this when no one use plugins
+  def plugin_deployment?
+    deployment = self[:deployment_option]
+    DeploymentOption.plugins.include?(deployment)
+  end
+
+  # TODO: Remove this when no one use plugins
+  def deployment_option
+    return 'hosted' if plugin_deployment?
+    super
+  end
+
   private
 
   def archive_as_deleted
