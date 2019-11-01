@@ -4,8 +4,7 @@ import React from 'react'
 
 import { PoliciesForm } from 'Policies/components/PoliciesForm'
 
-import type { ThunkAction } from 'Policies/types/index'
-import type { ChainPolicy } from 'Policies/types/Policies'
+import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
 type Props = {

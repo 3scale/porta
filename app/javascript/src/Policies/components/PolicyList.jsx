@@ -2,12 +2,14 @@
 
 import * as React from 'react'
 import { PolicyTile } from 'Policies/components/PolicyTile'
+
+import type {ShallowPolicy} from 'Policies/types'
+
 import 'Policies/styles/policies.scss'
-import type {ShallowPolicy} from 'Policies/types/Policies'
 
 const policyEditLink = (id: number): string => `/p/admin/registry/policies/${id}/edit`
 
-const navigateToEditPolicy = (url: string, win: any = window) => {
+const navigateToEditPolicy = (url: string, win: Window = window) => {
   win.location.href = url
   win.history.pushState({}, '', url)
 }

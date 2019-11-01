@@ -1,13 +1,13 @@
 // @flow
 
 import * as React from 'react'
-import type { ShallowPolicy } from 'Policies/types/Policies'
-import type { Dispatch } from 'Policies/types'
+
+import type { ShallowPolicy } from 'Policies/types'
 
 type Props = {
   policy: ShallowPolicy,
   title?: string,
-  onClick: Dispatch | (number) => {}
+  onClick: () => void
 }
 
 const PolicyTile = function ({policy, onClick, title = 'Edit this Policy'}: Props): React.Node {

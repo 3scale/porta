@@ -9,8 +9,7 @@ import {
 } from 'react-sortable-hoc'
 import { PolicyTile } from 'Policies/components/PolicyTile'
 
-import type { ThunkAction } from 'Policies/types/index'
-import type { ChainPolicy } from 'Policies/types/Policies'
+import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
 
 type Props = {
