@@ -7,8 +7,7 @@ import { apiMiddleware } from 'redux-api-middleware'
 import { policyChainMiddleware } from 'Policies/middleware/PolicyChain'
 import rootReducer from 'Policies/reducers'
 
-import type {State} from 'Policies/types/State'
-import type {Store} from 'Policies/types'
+import type { State, Store } from 'Policies/types'
 
 function configureStoreProd (initialState: State): Store {
   const middlewares = [
@@ -43,7 +42,7 @@ function configureStoreDev (initialState: State): Store {
   ]
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // add support for Redux dev tools
-  // $FlowFixMe
+
   const store = createStore(rootReducer, initialState, composeEnhancers(
     // $FlowFixMe
     applyMiddleware(...middlewares)

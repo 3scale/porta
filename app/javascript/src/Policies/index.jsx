@@ -13,7 +13,7 @@ import configureStore from 'Policies/store/configureStore'
 import { initialState } from 'Policies/reducers/initialState'
 import { actions } from 'Policies/actions/index'
 
-import type { RawRegistry, StoredChainPolicy } from 'Policies/types/Policies'
+import type { RawRegistry, StoredChainPolicy } from 'Policies/types'
 
 import 'Policies/styles/policies.scss'
 

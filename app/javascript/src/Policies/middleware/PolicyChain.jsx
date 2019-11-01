@@ -1,11 +1,10 @@
 // @flow
 
-import type { RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types/Policies'
-import type { Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/types/index'
-
 import { generateGuid } from 'Policies/util'
 import { loadChainSuccess, loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
 import { setOriginalPolicyChain } from 'Policies/actions/OriginalPolicyChain'
+
+import type { RegistryPolicy, ChainPolicy, StoredChainPolicy, Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/types'
 
 function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: StoredChainPolicy): RegistryPolicy | typeof undefined {
   return registry.find(policy => (policy.name === storedPolicy.name && policy.version === storedPolicy.version))
@@ -49,7 +48,7 @@ const loadChain = ({registry, storedChain, dispatch}: {registry: Array<RegistryP
   dispatch(loadChainSuccess(updatedChain))
 }
 
-const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: any) => (action: PolicyChainMiddlewareAction) => {
+const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: Dispatch) => (action: PolicyChainMiddlewareAction) => {
   const state = getState()
   switch (action.type) {
     case 'LOAD_CHAIN':

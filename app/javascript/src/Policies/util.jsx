@@ -1,19 +1,22 @@
 // @flow
 
-import type { UIState } from 'Policies/types/State'
-import type { FetchErrorAction, Reducer } from 'Policies/types/index'
-import type { RawPolicy, RawRegistry, RegistryPolicy, ChainPolicy } from 'Policies/types/Policies'
+import type { Reducer, UIState, FetchErrorAction, RawPolicy, RawRegistry, RegistryPolicy, ChainPolicy, IAction } from 'Policies/types'
 
-function updateObject (oldObject: Object, newValues: Object): Object {
+// Needs to be any, since it's a subset of T
+// eslint-disable-next-line flowtype/no-weak-types
+function updateObject<T> (oldObject: T, newValues: any): T {
   return {...oldObject, ...newValues}
 }
 
-function updateArray (oldArray: any, newValues: any): Array<any> {
+function updateArray<T> (oldArray: Array<T>, newValues: Array<T>): Array<T> {
+  // $FlowFixMe: it does return an array, flow types are incorrect here
   return Object.assign([], oldArray, newValues)
 }
 
-function createReducer<S> (initialState: S, handlers: any): Reducer<S> {
-  return function reducer (state = initialState, action) {
+// TODO: refactor Action types, create a common interface and remove 'any' from here
+// eslint-disable-next-line flowtype/no-weak-types
+function createReducer<S> (initialState: S, handlers: {[string]: (S, any) => S}): Reducer<S> {
+  return function reducer (state: S = initialState, action: IAction) {
     if (handlers.hasOwnProperty(action.type)) {
       return handlers[action.type](state, action)
     } else {
