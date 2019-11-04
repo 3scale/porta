@@ -1,9 +1,7 @@
 - if @service&.plugin_deployment?
-  = semantic_form_for @service, :url => admin_service_path(@service) do |form|
+  = form_for @service, :url => admin_service_path(@service) do |form|
     .deprecated_plugin_message
       p.InfoBox--notice.InfoBox
-        'Your product currently uses plugin as deployment option. We no longer support plugins. Please update your settings.
-        = form.input :deployment_option,
-                as: :hidden
-        = form.buttons do
-          = form.commit_button 'Ok'
+        i This Product currently uses a plugin as the deployment option. Your integration will keep on working but we no longer support plugins.
+        = form.hidden_field :deployment_option
+        = form.submit 'Ok', class: 'button next outline-button-thin outline-button-thin--positive'
