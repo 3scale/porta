@@ -4,11 +4,9 @@ class ProxyRuleDecorator < ApplicationDecorator
   self.include_root_in_json = false
 
   def pattern
-    pattern_value = object.pattern
-    return pattern_value unless backend_api_path
-    parts = ['/', backend_api_path]
-    parts << pattern_value unless pattern_value == '/'
-    File.join(*parts)
+    path_joined_parts = ['/', backend_api_path, object.pattern].join('/')
+    path_without_duplicated_slashes = path_joined_parts.gsub(%r{\/{2,}}, '/')
+    path_without_duplicated_slashes.chomp('/').presence || '/'
   end
 
   def metric_system_name
