@@ -1,10 +1,10 @@
 en:
   docs:
     base_url: 'https://access.redhat.com/documentation/en-us/%{major_and_minor_version_path}/html'
-    hero_api_portal: '%{docs_base_url}-single/product/index#hero-api-portal'
+    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/hero-api-portal'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
-      liquid_reference: '%{docs_base_url}/liquid-reference'
+      liquid_reference: '%{docs_base_url}/liquid_reference/index'
     terminology: '%{docs_base_url}/terminology'
   api_integrations_controller:
     promote_to_production_success: 'Staging configuration promoted to production'
@@ -533,7 +533,7 @@ en:
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/response-codes-tracking'
-        documentation_create_active_doc_spec: "%{docs_base_url}/using-developer-portal/create-activedocs-spec"
+        documentation_create_active_doc_spec: "%{docs_base_url}/providing_apis_in_the_developer_portal/create-activedocs-spec"
 
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
