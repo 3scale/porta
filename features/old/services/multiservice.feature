@@ -27,6 +27,18 @@ Feature: Multiservice feature
      And I press "Create Product"
     Then I should see "Less fancy API"
 
+  @javascript
+  Scenario: Create new product: Fail scenario error message
+    Given I am logged in as provider "foo.example.com"
+    And provider "foo.example.com" has "multiple_services" switch allowed
+    And service discovery is not enabled
+    When I am on the provider dashboard
+    And I follow "New Product"
+    And I fill in "Name" with "Invalid API"
+    And I fill in "System name" with "I am using spaces"
+    And I press "Create Product"
+    Then I should see the flash message "System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed."
+
   @wip
   Scenario: Create new backend
     Given I am logged in as provider "foo.example.com"
