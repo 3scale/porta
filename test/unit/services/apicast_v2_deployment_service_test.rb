@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
@@ -16,7 +18,6 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
     Service.new(@proxy).call(environment: ProxyConfig::ENVIRONMENTS.first)
     assert_match policies.first.to_json, @proxy.proxy_configs.last.content
   end
-
 
   def test_save_proxy_rules_with_position
     @proxy.proxy_rules.destroy_all
@@ -56,6 +57,13 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
     end
   end
 
+  test 'api_backend is nil when product has multiple backends' do
+    @proxy.stubs(with_subpaths?: true)
 
+    config = Service.new(@proxy).call(environment: ProxyConfig::ENVIRONMENTS.first)
+    json_content = JSON.parse(config.content, symbolize_names: true)
+    api_backend = json_content.dig(:proxy, :api_backend)
+
+    assert_nil api_backend
+  end
 end
-
