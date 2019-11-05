@@ -20,19 +20,30 @@ if(typeof Help == 'undefined'){
         var layerTopPos  = 10,
             layerLeftPos = 10;
 
+        var textRight = $image.offset().left + $helperLayer.width();
 
         var offset = (function(i, l){
-            var top  = i.offset().top - (i.offset().top - i.position().top) + i.height() - 1,
-                left = i.offset().left - (i.offset().left - i.position().left);
+            var top  = i.offset().top - (i.offset().top - i.position().top) + i.height() - 1;
+            var left = i.offset().left - (i.offset().left - i.position().left);
 
+            if (textRight > $(window).width()) {
+             left = left - l.width();
+            }
             return {top:top, left:left};
         })($image, $helperLayer);
 
   			$helperLayer.css({zIndex:99999});
         $helperLayer.show();
-        $helperLayer.css({top: offset.top + 'px', left:offset.left + "px" });
+        $helperLayer.css({top: offset.top + 'px', left: offset.left + 'px' });
+        if (textRight > $(window).width()) {
+          $helperLayer.css({
+            borderTopRightRadius: 0,
+            borderTopLeftRadius: '0.1875rem'
+          })
+        }
         image.src = '<%= asset_path('provider/icons/questionClose.png') %>';
         image.style.zIndex = 100000;
+        
       }
     }
   };
