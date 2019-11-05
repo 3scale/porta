@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApicastV2DeploymentService
   attr_reader :proxy
 
@@ -22,6 +24,7 @@ class ApicastV2DeploymentService
   def json_source
     proxy_source = Apicast::ProxySource.new(proxy).to_hash
     proxy_source['proxy']['proxy_rules'] = Apicast::ProxyRulesSource.new(proxy).to_hash
+    proxy_source['proxy']['api_backend'] = nil if proxy.with_subpaths?
     proxy_source.to_json
   end
 end
