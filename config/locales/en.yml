@@ -1137,7 +1137,10 @@ en:
     services:
       create:
         notice: "%{resource_type} created."
-        error: "Couldn't create %{resource_type}. Check your Plan limits" # TODO: this is not always true... there are other reasons of failure
+        errors:
+          name: "Name can't be blank."
+          system_name: "System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed."
+          default: "Couldn't create %{resource_type}. Check your Plan limits"
       update:
         notice: "%{resource_type} information updated."
         error: "Couldn't update %{resource_type}."

@@ -48,7 +48,7 @@ class Api::ServicesController < Api::BaseController
       onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = t('flash.services.create.error', resource_type: product_or_service_type)
+      flash.now[:error] = flash_message(@service.errors.keys.first, {scope: %i[flash services create errors]})
       activate_menu :dashboard
       render :new
     end
@@ -153,5 +153,12 @@ class Api::ServicesController < Api::BaseController
 
   def authorize_admin_plans
     authorize! :admin, :plans
+  end
+
+  def flash_message(key, opts = {})
+    options = opts.reverse_merge(resource_type: product_or_service_type)
+    I18n.t!(key, options)
+  rescue I18n::MissingTranslationData
+    t(:default, options)
   end
 end
