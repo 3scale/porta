@@ -149,10 +149,6 @@ form.formtastic fieldset.inputs > ol > li.select select {
   border-radius: $border-radius;
 }
 
-form.formtastic fieldset.inputs > ol > li.select select {
-
-}
-
 form.formtastic fieldset.buttons {
   border-top: $border-width solid $border-color;
   text-align: right;
@@ -203,6 +199,15 @@ form + form .action.delete {
 
 form.formtastic ol > li#api_docs_service_body_input {
     max-width: 100%;
+}
+
+form.formtastic {
+  #settings,
+  #staging {
+    .inputs ol {
+      position: relative;
+    }
+  }
 }
 
 form.formtastic ol > li {
