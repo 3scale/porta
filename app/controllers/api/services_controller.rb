@@ -22,7 +22,7 @@ class Api::ServicesController < Api::BaseController
 
   def new
     activate_menu :dashboard
-    @service = collection.build params[:service]
+    @service = ServicePresenter.new(collection.build(params[:service]))
   end
 
   def edit
@@ -40,7 +40,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def create
-    @service = collection.new # this is done in 2 steps so that the account_id is in place as preffix_key relies on it
+    @service = ServicePresenter.new(collection.new)
     creator = ServiceCreator.new(service: @service)
 
     if can_create? && creator.call(create_params)
