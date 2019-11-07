@@ -121,6 +121,7 @@ class User < ApplicationRecord
   # after_validation :reset_lost_password_token
 
   after_save :nullify_authentication_id, if: :any_sso_authorizations?
+  after_destroy :archive_as_deleted
 
   def self.search_states
     %w(pending active)
@@ -412,6 +413,12 @@ class User < ApplicationRecord
   end
 
   private
+
+  def archive_as_deleted
+    return unless Features::SegmentDeletionConfig.enabled?
+    tenant_or_master = account.tenant? ? account : provider_account
+    ::DeletedObject.create!(object: self, owner: tenant_or_master)
+  end
 
   def destroyable?
     return true if destroyed_by_association
