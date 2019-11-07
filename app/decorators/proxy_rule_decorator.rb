@@ -4,9 +4,8 @@ class ProxyRuleDecorator < ApplicationDecorator
   self.include_root_in_json = false
 
   def pattern
-    path_joined_parts = ['/', backend_api_path, object.pattern].join('/')
-    path_without_duplicated_slashes = path_joined_parts.gsub(%r{\/{2,}}, '/')
-    path_without_duplicated_slashes.chomp('/').presence || '/'
+    parts = [backend_api_path, object.pattern].compact
+    '/' + parts.map { |part| StringUtils::StripSlash.strip_slash(part).presence }.compact.join('/')
   end
 
   def metric_system_name
