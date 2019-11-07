@@ -1,6 +1,6 @@
 features: &default
   account_deletion:
-    enabled: true
+    enabled: false
     account_inactivity: 365
     account_suspension: 90
     contract_unpaid_time: 183
@@ -8,10 +8,13 @@ features: &default
     - '%enterprise%'
   segment_deletion:
     enabled: false
-    email: 'email@example.com'
-    password: 'example-password'
-    uri: 'https://gdpr.segment.com/graphql'
-    workspace: 'example-workspace'
+    token: example-token
+    root_uri: https://platform.segmentapis.com/v1beta
+    workspace: example-workspace
+    source: example-source
+    api: regulations
+    request_size: 2000
+    wait_time: 0
   logging:
     audits_to_stdout: true
 
