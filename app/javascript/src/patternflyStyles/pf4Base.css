@@ -4,3 +4,6 @@
 @import '~@patternfly/patternfly/patternfly-common.css';
 @import '~@patternfly/patternfly/patternfly-globals.css';
 @import '~@patternfly/patternfly/patternfly-addons.css';
+
+@import '~@patternfly/patternfly/components/Page/page.css';
+@import '~@patternfly/patternfly/components/Nav/nav.css';

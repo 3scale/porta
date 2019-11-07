@@ -2,6 +2,12 @@
 $lochMaraBlue: #0088ce; //pf-blue-400
 $font-color: #393f44; // pf-black-800
 
+// scss-lint:disable SelectorFormat IdSelector
+#api_selector {
+  margin-bottom: 0.5rem; // var(--pf-c-page__header-tools--MarginTop)
+  margin-top: 0.5rem;
+}
+
 .current-context {
   color: $lochMaraBlue;
 }
