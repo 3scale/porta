@@ -20,6 +20,22 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
   end
 
+  test 'archive_as_deleted' do
+    Features::SegmentDeletionConfig.stubs(enabled?: false) do
+      user = FactoryBot.create(:simple_user)
+
+      assert_no_difference(DeletedObject.users.method(:count)) { user.reload.destroy! }
+    end
+
+    Features::SegmentDeletionConfig.stubs(enabled?: true) do
+      user = FactoryBot.create(:simple_user)
+
+      assert_difference(DeletedObject.users.method(:count)) { user.reload.destroy! }
+
+      assert_equal user.id, DeletedObject.users.last!.object_id
+    end
+  end
+
   def test_user_suspended_no_sessions
     user = FactoryBot.create(:simple_user)
     UserSession.create!(user: user)
