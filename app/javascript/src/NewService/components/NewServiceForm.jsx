@@ -5,8 +5,10 @@ import React, {useState} from 'react'
 import {ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm} from 'NewService'
 import {createReactWrapper} from 'utilities/createReactWrapper'
 import type {Api} from 'Types/Api'
+import type {ServiceFormTemplate} from 'NewService/types'
 
 type Props = {
+  template: ServiceFormTemplate,
   isServiceDiscoveryAccessible: boolean,
   isServiceDiscoveryUsable: boolean,
   serviceDiscoveryAuthenticateUrl: string,
@@ -17,7 +19,7 @@ type Props = {
 }
 
 const NewServiceForm = (props: Props) => {
-  const {isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
+  const {template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
     providerAdminServiceDiscoveryServicesPath, adminServicesPath, apiap, backendApis} = props
 
   const [formMode, setFormMode] = useState('manual')
@@ -27,7 +29,7 @@ const NewServiceForm = (props: Props) => {
     setFormMode(event.currentTarget.value)
 
   const formToRender = () => formMode === 'manual'
-    ? <ServiceManualForm formActionPath={adminServicesPath} apiap={apiap} backendApis={backendApis} />
+    ? <ServiceManualForm template={template} formActionPath={adminServicesPath} apiap={apiap} backendApis={backendApis} />
     : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} apiap={apiap} setLoadingProjects={setLoadingProjects} />
 
   const title = apiap ? 'New Product' : 'New API'
