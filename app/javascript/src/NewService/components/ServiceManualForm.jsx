@@ -2,17 +2,18 @@
 
 import React from 'react'
 import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
-import type {FormProps} from 'NewService/types'
+import type {FormProps, ServiceFormTemplate} from 'NewService/types'
 import type {Api} from 'Types/Api'
 
 type Props = {
+  template: ServiceFormTemplate,
   formActionPath: string,
   apiap: boolean,
   backendApis: Api[]
 }
 
 const ServiceManualForm = (props: Props) => {
-  const {formActionPath, apiap} = props
+  const {template, formActionPath, apiap} = props
 
   const formProps: FormProps = {
     id: 'new_service',
@@ -22,7 +23,7 @@ const ServiceManualForm = (props: Props) => {
 
   return (
     <FormWrapper {...formProps}>
-      <ServiceManualListItems/>
+      <ServiceManualListItems {...template} />
     </FormWrapper>
   )
 }

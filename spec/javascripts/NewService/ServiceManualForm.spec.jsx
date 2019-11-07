@@ -5,6 +5,14 @@ import {ServiceManualForm} from 'NewService'
 import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
 
 const props = {
+  template: {
+    service: {
+      name: 'New API',
+      system_name: 'new_api',
+      description: 'A brand new API'
+    },
+    errors: {}
+  },
   formActionPath: 'action-path'
 }
 
