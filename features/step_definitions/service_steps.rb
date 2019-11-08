@@ -2,6 +2,14 @@ Given /^a service "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
   provider.services.create! :name => name, :mandatory_app_key => false
 end
 
+Given /^a backend api "([^"]*)"$/ do |name|
+  @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
+end
+
+Given /^a service "([^"]*)"$/ do |name|
+  @provider.services.create!(name: name, mandatory_app_key: false)
+end
+
 Given /^(?:a )?default service of (provider "[^"]*") has name "([^"]*)"$/ do |provider, name|
   provider.first_service!.update_attribute(:name, name)
 end
