@@ -17,10 +17,6 @@
     border-top: 0;
     margin-top: line-height-times(1.4);
 
-    .hidden {
-      display: none;
-    }
-
     #backends > table {
       border-width: 0;
       box-shadow: none;
@@ -459,6 +455,7 @@ a:hover .u-notice {
       border-top: 0;
       display: block;
       margin: 1px 0 0 1px;
+      min-height: line-height-times(28 / 3);
       padding: line-height-times(1);
     }
 
@@ -466,6 +463,11 @@ a:hover .u-notice {
     & > #backends.active .ApiFilter {
       margin-left: 0;
       padding: 1px;
+    }
+
+    & > #products.active .hidden,
+    & > #backends.active .hidden {
+      display: none;
     }
 
     .DashboardWidget {
