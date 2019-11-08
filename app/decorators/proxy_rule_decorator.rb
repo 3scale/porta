@@ -6,9 +6,7 @@ class ProxyRuleDecorator < ApplicationDecorator
   def pattern
     pattern_value = object.pattern
     return pattern_value unless backend_api_path
-    parts = ['/', backend_api_path]
-    parts << pattern_value unless pattern_value == '/'
-    File.join(*parts)
+    File.join('/', backend_api_path, pattern_value)
   end
 
   def metric_system_name
