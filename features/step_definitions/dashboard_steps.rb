@@ -1,18 +1,20 @@
-def service_id_for_name (name)
-  page.find_by_id('apis').find('section', :text => %r{#{name}}i)[:id][/\d+/]
+# frozen_string_literal: true
+
+def service_id_for_name(name)
+  page.find_by_id('apis').find('section', text: /#{name}/i)[:id][/\d+/]
 end
 
-def service_for_name (name)
+def service_for_name(name)
   service_id = service_id_for_name(name)
   page.find("#service_#{service_id}")
 end
 
-def hits_for_name (name, opts = {})
+def hits_for_name(name, opts = {})
   service_id = service_id_for_name(name)
   page.find_by_id("dashboard-widget-service_id-#{service_id}service_hits", opts)
 end
 
-def top_traffic_for_name (name, opts = {})
+def top_traffic_for_name(name, opts = {})
   service_id = service_id_for_name(name)
   page.find_by_id("dashboard-widget-service_id-#{service_id}service_top_traffic", opts)
 end
@@ -41,8 +43,18 @@ When(/^overview data of "([^"]*)" is displayed$/) do |service_name|
 end
 
 When(/^I (fold|unfold) service "([^"]*)"$/) do |action, service_name|
-  step %{service "#{service_name}" is #{action == 'fold' ? 'unfolded' : 'folded'}}
+  step %(service "#{service_name}" is #{action == 'fold' ? 'unfolded' : 'folded'})
 
   service = service_for_name(service_name)
   service.find('.DashboardSection-toggle').click
+end
+
+When(/^I select the (products|backends) tab$/) do |tab|
+  find('button', id: "tab-#{tab}").click
+end
+
+
+When (/^I search for "([^"]*)" using the (products|backends) search bar/) do |query, tab|
+  search_bar = find("##{tab}_search").find('input[type="search"]')
+  search_bar.send_keys query
 end
