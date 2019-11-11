@@ -8,7 +8,6 @@ import { PolicyTile } from 'Policies/components/PolicyTile'
 import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 
 type Props = {
-  visible: boolean,
   items: Array<RegistryPolicy>,
   actions: {
     addPolicy: (RegistryPolicy) => ThunkAction,
@@ -31,9 +30,9 @@ const PolicyRegistryItem = ({value, addPolicy}: {value: RegistryPolicy, addPolic
   )
 }
 
-const PolicyRegistry = ({items, visible, actions}: Props) => {
+const PolicyRegistry = ({ items, actions }: Props) => {
   return (
-    <section className={(visible ? 'PolicyRegistryList' : 'PolicyRegistryList is-hidden')}>
+    <section className="PolicyRegistryList">
       <header className="PolicyRegistryList-header">
         <h2 className="PolicyRegistryList-title">Select a Policy</h2>
         <CloseRegistryButton closePolicyRegistry={actions.closePolicyRegistry} />
