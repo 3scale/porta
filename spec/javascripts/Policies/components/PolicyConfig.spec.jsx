@@ -159,7 +159,7 @@ describe('PolicyConfig APIcast policy', () => {
   it('should hide the APIcast policy form', () => {
     const {policyConfigWrapper} = setup()
 
-    expect(policyConfigWrapper.find(PolicyForm).hasClass('is-hidden')).toBe(true)
+    expect(policyConfigWrapper.find(PolicyForm).exists()).toBe(false)
   })
 })
 
