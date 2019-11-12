@@ -47,4 +47,14 @@ class Stats::BaseTest < ActiveSupport::TestCase
     end
   end
 
+  class Stats::BaseMetricsTest < ActiveSupport::TestCase
+    test 'Base#metrics includes backend metrics' do
+      service = FactoryBot.create(:simple_service)
+      backend_api = FactoryBot.create(:backend_api, account: service.account)
+      service.backend_api_configs.create(backend_api: backend_api, path: '/')
+      stats_base = Stats::Base.new(service)
+      all_metrics = [service.metrics.hits, backend_api.metrics.hits]
+      assert_same_elements all_metrics, stats_base.send(:metrics)
+    end
+  end
 end
