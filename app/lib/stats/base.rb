@@ -113,7 +113,7 @@ module Stats
     end
 
     def metrics
-      source.first.metrics
+      source.first.all_metrics
     end
   end
 end
