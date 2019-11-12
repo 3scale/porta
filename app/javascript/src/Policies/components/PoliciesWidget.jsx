@@ -77,22 +77,9 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
 
   return (
     <div className="PoliciesWidget">
-      <PolicyChain
-        chain={chain}
-        visible={ui.chain}
-        actions={chainActions}
-      />
-      <PolicyRegistry
-        items={registry}
-        visible={ui.registry}
-        actions={policyRegistryActions}
-      />
-      {ui.policyConfig &&
-        <PolicyConfig
-          policy={policyConfig}
-          actions={policyConfigActions}
-        />
-      }
+      {ui.chain && <PolicyChain chain={chain} actions={chainActions} />}
+      {ui.registry && <PolicyRegistry items={registry} actions={policyRegistryActions} />}
+      {ui.policyConfig && <PolicyConfig policy={policyConfig} actions={policyConfigActions} />}
       <PolicyChainHiddenInput policies={chain} />
     </div>
   )
