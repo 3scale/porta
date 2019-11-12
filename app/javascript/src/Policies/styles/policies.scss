@@ -1,5 +1,5 @@
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-.PolicyConfiguration, .SchemaForm {
+.PolicyConfiguration {
   @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 }
 
@@ -21,7 +21,7 @@ $error-color: #c00;
   }
 
 
-  .PolicyChain, .CustomPolicies {
+  .PolicyChain {
     $PolicyChain-color: #464646;
     $PolicyChain-goColor: #4a90e2;
     $PolicyChain-doColor: #54b45d;
@@ -64,26 +64,7 @@ $error-color: #c00;
     }
   }
 
-  .PolicyConfiguration--preview {
-    overflow: hidden;
-    position: relative;
-
-    &::after {
-      color: $subtleColor; //$label-color;
-      content: 'Preview';
-      font-size: 10rem;
-      left: 4.5rem;
-      opacity: .5;
-      position: absolute;
-      text-align: center;
-      top: -.5rem;
-      transform: rotate(35deg);
-      transform-origin: 0 0;
-      z-index: -1;
-    }
-  }
-
-  .PolicyConfiguration, .CustomPolicy {
+  .PolicyConfiguration {
     $PolicyConfiguration-color: #464646;
     $PolicyConfiguration-goColor: #4a90e2;
     $PolicyConfiguration-doColor: #54b45d;
@@ -354,27 +335,6 @@ $error-color: #c00;
 .u-do {
   @extend .u-link;
   color: $doColor;
-}
-
-.CustomPolicyEditor {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.SchemaEditor-error {
-  border: 1px solid $error-color;
-  padding: 1rem;
-}
-
-.SchemaEditor-errors {
-  color: $error-color;
-  list-style-position: inside;
-  padding: 1rem;
-
-  li {
-    padding-bottom: 1rem;
-  }
 }
 
 .PolicySchema {
