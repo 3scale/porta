@@ -72,7 +72,7 @@ attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
-system-builder-ruby24: &system-builder-ruby24
+system-builder: &system-builder
   image: quay.io/3scale/system-builder:ruby24
   environment:
     BUNDLE_FROZEN: true
@@ -304,7 +304,7 @@ executors:
         type: string
         default: mysql
     docker:
-      - *system-builder-ruby24
+      - *system-builder
     environment:
       DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
@@ -312,7 +312,7 @@ executors:
   builder-with-mysql-latest: &builder-with-mysql-latest
     resource_class: small
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - *mysql-container
       - *memcached-container
       - *redis-container
@@ -322,7 +322,7 @@ executors:
   builder-with-postgres-latest: &builder-with-postgres-latest
     resource_class: small
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - *postgres-container
       - *memcached-container
       - *redis-container
@@ -332,47 +332,17 @@ executors:
   builder-with-oracle-latest: &builder-with-oracle-latest
     resource_class: large
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - *oracle-db-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
     <<: *build-envs-oracle
 
-  builder-ruby24:
-    <<: *builder-latest
-    docker:
-      - *system-builder-ruby24
-
-  builder-with-mysql-ruby24:
-    <<: *builder-with-mysql-latest
-    docker:
-      - *system-builder-ruby24
-      - *mysql-container
-      - *memcached-container
-      - *redis-container
-
-
-  builder-with-postgres-ruby24:
-    <<: *builder-with-postgres-latest
-    docker:
-      - *system-builder-ruby24
-      - *postgres-container
-      - *memcached-container
-      - *redis-container
-
-  builder-with-oracle-ruby24:
-    <<: *builder-with-oracle-latest
-    docker:
-      - *system-builder-ruby24
-      - *oracle-db-container
-      - *memcached-container
-      - *redis-container
-
   cucumber-with-mysql-latest: &cucumber-with-mysql-latest
     resource_class: small
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - *dnsmasq-container
       - *mysql-container
       - *memcached-container
@@ -381,7 +351,7 @@ executors:
   cucumber-with-postgres-latest: &cucumber-with-postgres-latest
     resource_class: small
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - *dnsmasq-container
       - *postgres-container
       - *memcached-container
@@ -390,38 +360,12 @@ executors:
   cucumber-with-oracle-latest: &cucumber-with-oracle-latest
     resource_class: large
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - *dnsmasq-container
       - *oracle-db-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-mysql-ruby24:
-    <<: *cucumber-with-mysql-latest
-    docker:
-      - *system-builder-ruby24
-      - *dnsmasq-container
-      - *mysql-container
-      - *memcached-container
-      - *redis-container
-
-  cucumber-with-postgres-ruby24:
-    <<: *cucumber-with-postgres-latest
-    docker:
-      - *system-builder-ruby24
-      - *dnsmasq-container
-      - *postgres-container
-      - *memcached-container
-      - *redis-container
-
-  cucumber-with-oracle-ruby24:
-    <<: *cucumber-with-oracle-latest
-    docker:
-      - *system-builder-ruby24
-      - *dnsmasq-container
-      - *oracle-db-container
-      - *memcached-container
-      - *redis-container
 ##################################### CIRCLECI JOBS ############################################
 
 jobs:
@@ -881,7 +825,7 @@ jobs:
     parallelism: 1
     resource_class: small
     docker:
-      - *system-builder-ruby24
+      - *system-builder
       - image: quay.io/mikz/dnsmasq
         command:
           - --no-poll
@@ -1140,39 +1084,39 @@ workflows:
 ######## Nightly workflows
 
 
-  mysql_build_ruby24:
+  mysql_build_nightly:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby24
+          executor: builder-latest
       - dependencies_npm:
-          executor: builder-ruby24
+          executor: builder-latest
       - docker-build:
           context: org-global
       - assets_precompile:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - dependencies_bundler
             - dependencies_npm
       - unit:
-          executor: builder-with-mysql-ruby24
+          executor: builder-with-mysql-latest
           requires:
             - dependencies_bundler
       - functional:
-          executor: builder-with-mysql-ruby24
+          executor: builder-with-mysql-latest
           requires:
             - assets_precompile
       - integration:
-          executor: builder-with-mysql-ruby24
+          executor: builder-with-mysql-latest
           requires:
             - assets_precompile
       - rspec:
-          executor: builder-with-mysql-ruby24
+          executor: builder-with-mysql-latest
           requires:
             - dependencies_bundler
       - cucumber:
-          executor: cucumber-with-mysql-ruby24
+          executor: cucumber-with-mysql-latest
           requires:
             - assets_precompile
       - notify_success:
@@ -1193,39 +1137,39 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  postgres_build_ruby24:
+  postgres_build_nightly:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_postgres:
-          executor: builder-ruby24
+          executor: builder-latest
       - dependencies_npm:
-          executor: builder-ruby24
+          executor: builder-latest
       - docker-build:
           context: org-global
       - assets_precompile:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - deps_bundler_postgres
             - dependencies_npm
       - unit-postgres:
-          executor: builder-with-postgres-ruby24
+          executor: builder-with-postgres-latest
           requires:
             - deps_bundler_postgres
       - functional-postgres:
-          executor: builder-with-postgres-ruby24
+          executor: builder-with-postgres-latest
           requires:
             - assets_precompile
       - integration-postgres:
-          executor: builder-with-postgres-ruby24
+          executor: builder-with-postgres-latest
           requires:
             - assets_precompile
       - rspec-postgres:
-          executor: builder-with-postgres-ruby24
+          executor: builder-with-postgres-latest
           requires:
             - deps_bundler_postgres
       - cucumber-postgres:
-          executor: cucumber-with-postgres-ruby24
+          executor: cucumber-with-postgres-latest
           requires:
             - assets_precompile
       - notify_success:
@@ -1246,40 +1190,40 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  oracle_build_ruby24:
+  oracle_build_nightly:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_oracle:
-          executor: builder-ruby24
+          executor: builder-latest
       - dependencies_npm:
-          executor: builder-ruby24
+          executor: builder-latest
       - docker-build:
           context: org-global
       - assets_precompile:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - deps_bundler_oracle
             - dependencies_npm
 
       - unit-oracle:
-          executor: builder-with-oracle-ruby24
+          executor: builder-with-oracle-latest
           requires:
             - deps_bundler_oracle
       - functional-oracle:
-          executor: builder-with-oracle-ruby24
+          executor: builder-with-oracle-latest
           requires:
             - assets_precompile
       - integration-oracle:
-          executor: builder-with-oracle-ruby24
+          executor: builder-with-oracle-latest
           requires:
             - assets_precompile
       - rspec-oracle:
-          executor: builder-with-oracle-ruby24
+          executor: builder-with-oracle-latest
           requires:
             - deps_bundler_oracle
       - cucumber-oracle:
-          executor: cucumber-with-oracle-ruby24
+          executor: cucumber-with-oracle-latest
           requires:
             - assets_precompile
       - notify_success:
@@ -1301,29 +1245,29 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_tests_ruby24:
+  javascript_tests_nightly:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby24
+          executor: builder-latest
       - dependencies_npm:
-          executor: builder-ruby24
+          executor: builder-latest
       - assets_precompile:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - dependencies_bundler
             - dependencies_npm
       - lint:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - assets_precompile
       - karma:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - dependencies_npm
       - jest:
-          executor: builder-ruby24
+          executor: builder-latest
           requires:
             - dependencies_npm
       - notify_success:
