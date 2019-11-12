@@ -40,6 +40,8 @@ function PoliciesForm ({
   const remove = () => removePolicy(policy)
   const cancel = () => closePolicyConfig()
 
+  const isPolicyVisible = isNotApicastPolicy(policy)
+
   return (
     <section className="PolicyConfiguration">
       <header className="PolicyConfiguration-header">
@@ -53,33 +55,35 @@ function PoliciesForm ({
         <span className="PolicyConfiguration-summary">{policy.summary}</span>
       </p>
       <p className="PolicyConfiguration-description">{policy.description}</p>
-      <label className={`${hiddenClass(isNotApicastPolicy(policy))} Policy-status`} htmlFor="policy-enabled">
-        <input
-          id="policy-enabled" name="policy-enabled" type="checkbox"
-          checked={policy.enabled}
-          onChange={togglePolicy}
-        />
-        {' '} Enabled
-      </label>
-      <PolicyForm
-        className={`PolicyConfiguration-form ${hiddenClass(isNotApicastPolicy(policy))}`}
-        schema={policy.configuration}
-        formData={policy.data}
-        onSubmit={onSubmit(policy)}
-      >
-        <button className='btn btn-info' type="submit">Update Policy</button>
-      </PolicyForm>
-      <div
-        className={`PolicyConfiguration-remove btn btn-danger btn-sm ${hiddenClass(policy.removable)}`}
-        onClick={remove}>
-        <i className="fa fa-trash"></i> Remove
-      </div>
+      {isPolicyVisible &&
+        <label className="Policy-status" htmlFor="policy-enabled">
+          <input
+            id="policy-enabled" name="policy-enabled" type="checkbox"
+            checked={policy.enabled}
+            onChange={togglePolicy}
+          />
+          {' '} Enabled
+        </label>
+      }
+      {isPolicyVisible &&
+        <PolicyForm
+          className="PolicyConfiguration-form"
+          schema={policy.configuration}
+          formData={policy.data}
+          onSubmit={onSubmit(policy)}
+        >
+          <button className='btn btn-info' type="submit">Update Policy</button>
+        </PolicyForm>
+      }
+      {policy.removable &&
+        <div
+          className="PolicyConfiguration-remove btn btn-danger btn-sm"
+          onClick={remove}>
+          <i className="fa fa-trash"></i> Remove
+        </div>
+      }
     </section>
   )
-}
-
-function hiddenClass (bool?: boolean): string {
-  return bool ? '' : 'is-hidden'
 }
 
 export { PolicyForm, PoliciesForm }
