@@ -53,7 +53,7 @@ Then(/^I should see the Policy Chain$/) do
   page.should have_css(".PolicyChain")
   page.should have_css(".Policy")
   page.should have_text("APIcast policy")
-  page.should have_css(".PolicyRegistryList", visible: :hidden)
+  page.should_not have_css(".PolicyRegistryList")
 end
 
 
