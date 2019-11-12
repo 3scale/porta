@@ -8,6 +8,7 @@ import {
   arrayMove
 } from 'react-sortable-hoc'
 import { PolicyTile } from 'Policies/components/PolicyTile'
+import { HeaderButton } from 'Policies/components/HeaderButton'
 
 import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
@@ -48,14 +49,6 @@ const SortableList = SortableContainer(({ items, editPolicy }) => {
   )
 })
 
-const AddPolicyButton = ({openPolicyRegistry}: {openPolicyRegistry: () => ThunkAction}) => {
-  return (
-    <div className="PolicyChain-addPolicy" onClick={openPolicyRegistry}>
-      <i className="fa fa-plus-circle" /> Add Policy
-    </div>
-  )
-}
-
 const PolicyChain = ({chain, actions}: Props) => {
   const onSortEnd = ({oldIndex, newIndex}) => {
     const sortedChain = arrayMove(chain, oldIndex, newIndex)
@@ -64,9 +57,11 @@ const PolicyChain = ({chain, actions}: Props) => {
 
   return (
     <section className="PolicyChain">
-      <header className="PolicyChain-header">
-        <h2 className="PolicyChain-title">Policy Chain</h2>
-        <AddPolicyButton openPolicyRegistry={actions.openPolicyRegistry} />
+      <header>
+        <h2>Policy Chain</h2>
+        <HeaderButton type='add' onClick={actions.openPolicyRegistry}>
+          Add policy
+        </HeaderButton>
       </header>
       <SortableList
         items={chain}
@@ -82,6 +77,5 @@ export {
   PolicyChain,
   SortableList,
   SortableItem,
-  AddPolicyButton,
   DragHandle
 }
