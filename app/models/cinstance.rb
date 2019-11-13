@@ -242,7 +242,7 @@ class Cinstance < Contract
 
   # Shortcut for plan.service.metrics
   def metrics
-    service && service.metrics
+    service && service.all_metrics
   end
 
   # Is this cinstance bought by an account?
