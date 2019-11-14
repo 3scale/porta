@@ -483,8 +483,8 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
-    parallel (1.12.1)
-    parallel_tests (2.21.3)
+    parallel (1.19.0)
+    parallel_tests (2.29.2)
       parallel
     parser (2.5.1.0)
       ast (~> 2.4.0)
@@ -904,7 +904,7 @@ DEPENDENCIES
   oauth2 (~> 1.4)
   open_id_authentication
   paperclip (~> 5.3.0)
-  parallel_tests (~> 2.3)
+  parallel_tests (~> 2.29)
   percy-capybara (~> 2.5.1)
   pisoni (~> 1.26)
   prawn-core!

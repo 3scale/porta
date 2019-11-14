@@ -207,7 +207,7 @@ group :test do
   gem 'webmock', '~> 2.3.2'
   gem 'launchy'
   gem 'mechanize'
-  gem 'parallel_tests', '~> 2.3'
+  gem 'parallel_tests', '~> 2.29'
 
   gem 'childprocess'
 
