@@ -148,7 +148,7 @@ module Account::States
   end
 
   def publish_state_changed_event(previous_state)
-    Accounts::AccountStateChangedEvent.create_and_publish!(self, previous_state)
+    # Accounts::AccountStateChangedEvent.create_and_publish!(self, previous_state)
     PublishEnabledChangedEventForProviderApplicationsWorker.perform_later(self, previous_state)
   end
 
