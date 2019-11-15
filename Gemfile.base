@@ -141,7 +141,6 @@ gem 'reform', '~> 2.0.3', require: false
 # sanitize params passed to rack
 gem 'rack-utf8_sanitizer'
 
-gem 'google-api-client', require: false
 gem 'jwt', '~> 1.5.2', require: false
 
 group :assets do
