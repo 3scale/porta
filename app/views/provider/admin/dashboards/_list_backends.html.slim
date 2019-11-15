@@ -9,15 +9,16 @@ table class='data'
       th Mapping Rules
   tbody
     - backends.each do |backend|
-      tr id=(dom_id backend)
-        td
-          = link_to backend.name, provider_admin_backend_api_path(backend)
-        td
-          - if backend.services.any?
-            i class='fa fa-check'
-          - else
-            i class='fa fa-times'
-        td
-          = link_to pluralize(backend.method_metrics.size, 'Method'), provider_admin_backend_api_metrics_path(backend)
-        td
-          = link_to pluralize(backend.mapping_rules.size, 'Mapping Rule'), provider_admin_backend_api_mapping_rules_path(backend)
+      - cache ['v1', 'dashboard', current_user, current_account, backend, 'backend'] do
+        tr id=(dom_id backend)
+          td
+            = link_to backend.name, provider_admin_backend_api_path(backend)
+          td
+            - if backend.services.any?
+              i class='fa fa-check'
+            - else
+              i class='fa fa-times'
+          td
+            = link_to pluralize(backend.method_metrics.size, 'Method'), provider_admin_backend_api_metrics_path(backend)
+          td
+            = link_to pluralize(backend.mapping_rules.size, 'Mapping Rule'), provider_admin_backend_api_mapping_rules_path(backend)
