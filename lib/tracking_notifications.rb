@@ -12,7 +12,6 @@ module AppendExceptionPayload
 
       payload[:user_session] = cookies.signed[:user_session] if cookies
       payload[:flash] = flash || {}
-      payload[:google_experiments] = google_experiments if respond_to?(:google_experiments)
     end
   end
 end
@@ -54,10 +53,6 @@ class TrackingNotifications < Struct.new(:name, :start, :finish, :id, :payload)
     payload[:flash] || {}
   end
 
-  def google_experiments
-    payload[:google_experiments] || {}
-  end
-
   def controller_action_method
     "#{controller}##{action}"
   end
@@ -81,10 +76,7 @@ class TrackingNotifications < Struct.new(:name, :start, :finish, :id, :payload)
   def provider_request
     return unless provider?
 
-    hourly do |cached|
-      cached.identify(cached.extended_traits.merge(google_experiments))
-      cached.group
-    end
+    hourly(&:group)
 
     case controller_action_method
 
