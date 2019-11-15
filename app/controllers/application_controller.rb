@@ -25,7 +25,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_timezone
 
-  before_action :report_google_experiments, if: proc { ThreeScale::Analytics::GoogleExperiments.enabled? }
   before_action :enable_analytics
   before_action :check_browser
 
@@ -114,23 +113,6 @@ class ApplicationController < ActionController::Base
            X-CSRF-Token 3scale-Origin}.join(', ')
     headers['Access-Control-Allow-Credentials'] = 'true'
     head(:ok) if (request.method == 'OPTIONS')
-  end
-
-  def report_google_experiments
-    analytics_session.identify(google_experiments)
-    Rails.logger.debug { "Google Experiments: #{google_experiments}" }
-  rescue => error
-    System::ErrorReporting.report_error(error)
-  end
-
-  def google_experiments
-    return unless ThreeScale::Analytics::GoogleExperiments.enabled?
-
-    @__google_experiments ||= begin
-      utmx = cookies[:__utmx] || cookies[:__utmxx]
-      Rails.logger.debug {  "Google Experiment Cookie: #{utmx}" }
-      ThreeScale::Analytics::GoogleExperiments.from_cookie(utmx).to_hash
-    end
   end
 
   # This before filter enables AnalyticsJsHelper#analytics block to yield

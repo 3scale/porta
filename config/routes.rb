@@ -141,8 +141,6 @@ without fake Core server your after commit callbacks will crash and you might ge
   get '/stylesheets/theme.css' => 'cms/stylesheets#show', :as => :cms_stylesheet, :name => 'theme'
   get '/stylesheets/provider_customized.css' => 'cms/stylesheets#show', :as => :cms_stylesheet_provider, :name => 'provider_customized'
 
-  post '/experiments/report' => 'google_experiments#report'
-
   if ThreeScale.config.redhat_customer_portal.enabled
     constraints MasterDomainConstraint do
       get "/auth/#{RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME}/callback" => 'master/redhat/auth#show'
