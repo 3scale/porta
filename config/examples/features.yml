@@ -11,7 +11,6 @@ features: &default
     token: example-token
     root_uri: https://platform.segmentapis.com/v1beta
     workspace: example-workspace
-    source: example-source
     api: regulations
     request_size: 2000
     wait_time: 0
