@@ -38,7 +38,7 @@ class Segment::DeleteUsersServiceTest < ActiveSupport::TestCase
   private
 
   def delete_request(status:)
-    uri = "#{config.root_uri}/workspaces/#{config.workspace}/sources/#{config.source}/#{config.api}"
+    uri = "#{config.root_uri}/workspaces/#{config.workspace}/#{config.api}"
     stub_request(:post, uri).with(
         body: stubbed_request_body,
         headers: {'Authorization'=>"Bearer #{config.token}", 'Content-Type'=>'application/json; charset=utf-8'}).
@@ -67,7 +67,6 @@ class Segment::DeleteUsersServiceTest < ActiveSupport::TestCase
       token: 'TOKEN',
       root_uri: 'https://platform.segmentapis.com/v1beta',
       workspace: 'my-workspace',
-      source: 'my-source',
       api: 'regulations'
     }).config
   end
