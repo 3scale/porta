@@ -298,7 +298,7 @@ commands: # reusable commands with parameters
 ##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
-  builder-latest: &builder-latest
+  builder-ruby24: &builder-ruby24
     parameters:
       database:
         type: string
@@ -309,7 +309,7 @@ executors:
       DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
 
-  builder-with-mysql-latest: &builder-with-mysql-latest
+  builder-with-mysql-ruby24: &builder-with-mysql-ruby24
     resource_class: small
     docker:
       - *system-builder-ruby24
@@ -319,7 +319,7 @@ executors:
     working_directory: /opt/app-root/src/project
     <<: *build-envs-mysql
 
-  builder-with-postgres-latest: &builder-with-postgres-latest
+  builder-with-postgres-ruby24: &builder-with-postgres-ruby24
     resource_class: small
     docker:
       - *system-builder-ruby24
@@ -329,7 +329,7 @@ executors:
     working_directory: /opt/app-root/src/project
     <<: *build-envs-postgresql
 
-  builder-with-oracle-latest: &builder-with-oracle-latest
+  builder-with-oracle-ruby24: &builder-with-oracle-ruby24
     resource_class: large
     docker:
       - *system-builder-ruby24
@@ -339,37 +339,7 @@ executors:
     working_directory: /opt/app-root/src/project
     <<: *build-envs-oracle
 
-  builder-ruby24:
-    <<: *builder-latest
-    docker:
-      - *system-builder-ruby24
-
-  builder-with-mysql-ruby24:
-    <<: *builder-with-mysql-latest
-    docker:
-      - *system-builder-ruby24
-      - *mysql-container
-      - *memcached-container
-      - *redis-container
-
-
-  builder-with-postgres-ruby24:
-    <<: *builder-with-postgres-latest
-    docker:
-      - *system-builder-ruby24
-      - *postgres-container
-      - *memcached-container
-      - *redis-container
-
-  builder-with-oracle-ruby24:
-    <<: *builder-with-oracle-latest
-    docker:
-      - *system-builder-ruby24
-      - *oracle-db-container
-      - *memcached-container
-      - *redis-container
-
-  cucumber-with-mysql-latest: &cucumber-with-mysql-latest
+  cucumber-with-mysql-ruby24: &cucumber-with-mysql-ruby24
     resource_class: small
     docker:
       - *system-builder-ruby24
@@ -378,7 +348,7 @@ executors:
       - *memcached-container
       - *redis-container
 
-  cucumber-with-postgres-latest: &cucumber-with-postgres-latest
+  cucumber-with-postgres-ruby24: &cucumber-with-postgres-ruby24
     resource_class: small
     docker:
       - *system-builder-ruby24
@@ -387,7 +357,7 @@ executors:
       - *memcached-container
       - *redis-container
 
-  cucumber-with-oracle-latest: &cucumber-with-oracle-latest
+  cucumber-with-oracle-ruby24: &cucumber-with-oracle-ruby24
     resource_class: large
     docker:
       - *system-builder-ruby24
@@ -396,32 +366,6 @@ executors:
       - *memcached-container
       - *redis-container
 
-  cucumber-with-mysql-ruby24:
-    <<: *cucumber-with-mysql-latest
-    docker:
-      - *system-builder-ruby24
-      - *dnsmasq-container
-      - *mysql-container
-      - *memcached-container
-      - *redis-container
-
-  cucumber-with-postgres-ruby24:
-    <<: *cucumber-with-postgres-latest
-    docker:
-      - *system-builder-ruby24
-      - *dnsmasq-container
-      - *postgres-container
-      - *memcached-container
-      - *redis-container
-
-  cucumber-with-oracle-ruby24:
-    <<: *cucumber-with-oracle-latest
-    docker:
-      - *system-builder-ruby24
-      - *dnsmasq-container
-      - *oracle-db-container
-      - *memcached-container
-      - *redis-container
 ##################################### CIRCLECI JOBS ############################################
 
 jobs:
@@ -429,7 +373,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
       database: mysql
@@ -440,7 +384,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
       database: postgresql
@@ -451,7 +395,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
       database: oracle
@@ -464,7 +408,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -485,7 +429,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -512,7 +456,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -549,7 +493,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -568,7 +512,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-latest
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -585,7 +529,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-latest
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -596,7 +540,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-latest
+        default: builder-with-postgres-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -607,7 +551,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-latest
+        default: builder-with-oracle-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -620,7 +564,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-latest
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -631,7 +575,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-latest
+        default: builder-with-postgres-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -642,7 +586,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-latest
+        default: builder-with-oracle-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -655,7 +599,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-latest
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -666,7 +610,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-latest
+        default: builder-with-postgres-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -677,7 +621,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-latest
+        default: builder-with-oracle-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -690,7 +634,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-latest
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -701,7 +645,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-latest
+        default: builder-with-postgres-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -712,7 +656,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-latest
+        default: builder-with-oracle-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -726,7 +670,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-mysql-latest
+        default: cucumber-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -738,7 +682,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-postgres-latest
+        default: cucumber-with-postgres-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -750,7 +694,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-oracle-latest
+        default: cucumber-with-oracle-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -1137,10 +1081,10 @@ workflows:
           <<: *only-master-filter
 
 
-######## Nightly workflows
+  ######## Nightly workflows
 
 
-  mysql_build_ruby24:
+  mysql_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1193,7 +1137,7 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  postgres_build_ruby24:
+  postgres_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1246,7 +1190,7 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  oracle_build_ruby24:
+  oracle_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1301,7 +1245,7 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_tests_ruby24:
+  javascript_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
@@ -1337,5 +1281,23 @@ workflows:
             - lint
             - karma
             - jest
+          <<: *only-master-filter
+    <<: *nightly-trigger
+
+  visual_test_nightly_ruby24:
+    jobs:
+      - dependencies_bundler:
+          <<: *only-master-filter
+      - dependencies_npm:
+          <<: *only-master-filter
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+          <<: *only-master-filter
+      - visual:
+          context: percy
+          requires:
+            - assets_precompile
           <<: *only-master-filter
     <<: *nightly-trigger
