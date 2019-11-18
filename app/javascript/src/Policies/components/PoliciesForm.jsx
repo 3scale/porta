@@ -4,6 +4,7 @@ import React from 'react'
 import Form from 'react-jsonschema-form'
 
 import { isNotApicastPolicy } from 'Policies/components/util'
+import { HeaderButton } from 'Policies/components/HeaderButton'
 
 import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
@@ -44,9 +45,11 @@ function PoliciesForm ({
 
   return (
     <section className="PolicyConfiguration">
-      <header className="PolicyConfiguration-header">
-        <h2 className="PolicyConfiguration-title">Edit Policy</h2>
-        <div onClick={cancel} className="PolicyConfiguration-cancel"><i className="fa fa-times-circle"></i> Cancel</div>
+      <header>
+        <h2>Edit Policy</h2>
+        <HeaderButton type='cancel' onClick={cancel}>
+          Cancel
+        </HeaderButton>
       </header>
       <h2 className="PolicyConfiguration-name">{policy.humanName}</h2>
       <p className="PolicyConfiguration-version-and-summary">

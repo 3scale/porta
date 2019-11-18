@@ -55,8 +55,8 @@ describe('PolicyRegistry Components', () => {
 
     it('should have a close button', () => {
       const {registryWrapper, props} = setup()
-      const closeRegistryButton = registryWrapper.find('CloseRegistryButton div')
-      expect(closeRegistryButton.hasClass('PolicyChain-addPolicy--cancel')).toBe(true)
+      const closeRegistryButton = registryWrapper.find('HeaderButton')
+      expect(closeRegistryButton.find('.PolicyChain-addPolicy--cancel').exists()).toBe(true)
       closeRegistryButton.simulate('click')
       expect(props.actions.closePolicyRegistry.mock.calls.length).toBe(1)
     })

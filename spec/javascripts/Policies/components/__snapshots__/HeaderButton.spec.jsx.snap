@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should be able to render a "cancel" button variant 1`] = `
+<div
+  class="PolicyChain-addPolicy--cancel"
+>
+  <i
+    class="fa fa-times-circle"
+  />
+</div>
+`;
+
+exports[`should be able to render an "add" button variant 1`] = `
+<div
+  class="PolicyChain-addPolicy"
+>
+  <i
+    class="fa fa-plus-circle"
+  />
+</div>
+`;
