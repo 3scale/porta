@@ -5,6 +5,6 @@ class UserSessionSweeperWorker
   sidekiq_options queue: :low
 
   def perform(id)
-    UserSession.destroy(id)
+    UserSession.delete(id)
   end
 end
