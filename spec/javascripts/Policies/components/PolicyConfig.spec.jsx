@@ -84,11 +84,12 @@ describe('PolicyConfig Component', () => {
 
   it('should have a close button', () => {
     const {policyConfigWrapper, props} = setup()
-    const closeConfigButton = policyConfigWrapper.find('.PolicyConfiguration-cancel')
-    expect(closeConfigButton.text()).toBe(' Cancel')
+    const closeConfigButton = policyConfigWrapper.find('HeaderButton')
+    expect(closeConfigButton.find('.PolicyChain-addPolicy--cancel').exists()).toBe(true)
+    expect(closeConfigButton.text()).toBe('Cancel')
 
-    closeConfigButton.simulate('click')
-    expect(props.actions.closePolicyConfig.mock.calls.length).toBe(1)
+    closeConfigButton.props().onClick()
+    expect(props.actions.closePolicyConfig).toHaveBeenCalledTimes(1)
   })
 
   it('should have a remove button', () => {
@@ -97,7 +98,7 @@ describe('PolicyConfig Component', () => {
     expect(removePolicyButton.exists()).toBe(true)
 
     removePolicyButton.simulate('click')
-    expect(props.actions.removePolicyFromChain.mock.calls.length).toBe(1)
+    expect(props.actions.removePolicyFromChain).toHaveBeenCalledTimes(1)
   })
 
   it('should have a submit button', () => {
@@ -110,7 +111,7 @@ describe('PolicyConfig Component', () => {
     const {policyConfigWrapper, props} = setup()
     const policyConfigFormProps = policyConfigWrapper.find('.PolicyConfiguration-form').first().props()
     policyConfigFormProps.onSubmit({formData: {}, schema: {}})
-    expect(props.actions.submitPolicyConfig.mock.calls.length).toBe(1)
+    expect(props.actions.submitPolicyConfig).toHaveBeenCalledTimes(1)
   })
 })
 

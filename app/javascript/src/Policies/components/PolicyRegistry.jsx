@@ -4,6 +4,7 @@ import React from 'react'
 
 import { isNotApicastPolicy } from 'Policies/components/util'
 import { PolicyTile } from 'Policies/components/PolicyTile'
+import { HeaderButton } from 'Policies/components/HeaderButton'
 
 import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 
@@ -13,12 +14,6 @@ type Props = {
     addPolicy: (RegistryPolicy) => ThunkAction,
     closePolicyRegistry: () => ThunkAction
   }
-}
-
-const CloseRegistryButton = ({closePolicyRegistry}) => {
-  return (
-    <div className="PolicyChain-addPolicy--cancel" onClick={closePolicyRegistry}><i className="fa fa-times-circle"/> Cancel</div>
-  )
 }
 
 const PolicyRegistryItem = ({value, addPolicy}: {value: RegistryPolicy, addPolicy: (RegistryPolicy) => ThunkAction}) => {
@@ -33,9 +28,11 @@ const PolicyRegistryItem = ({value, addPolicy}: {value: RegistryPolicy, addPolic
 const PolicyRegistry = ({ items, actions }: Props) => {
   return (
     <section className="PolicyRegistryList">
-      <header className="PolicyRegistryList-header">
-        <h2 className="PolicyRegistryList-title">Select a Policy</h2>
-        <CloseRegistryButton closePolicyRegistry={actions.closePolicyRegistry} />
+      <header>
+        <h2>Select a Policy</h2>
+        <HeaderButton type='cancel' onClick={actions.closePolicyRegistry}>
+        Cancel
+        </HeaderButton>
       </header>
       <ul className="list-group">
         {items.filter(policy => isNotApicastPolicy(policy)).map((policy, index) => (

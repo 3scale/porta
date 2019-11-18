@@ -4,6 +4,7 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 }
 
 $color: #464646;
+$disabledColor: #8b8d8f;
 $goColor: #4a90e2;
 $doColor: #54b45d;
 $dontColor: #ca4a4b;
@@ -15,43 +16,37 @@ $error-color: #c00;
   line-height: 1.5;
   padding-bottom: 2rem;
 
-  .PolicyChain, .PolicyRegistryList, .PolicyConfiguration {
+  section {
     width: 510px;
     margin: 0 auto;
-  }
 
-
-  .PolicyChain {
-    $PolicyChain-color: #464646;
-    $PolicyChain-goColor: #4a90e2;
-    $PolicyChain-doColor: #54b45d;
-    $PolicyChain-dontColor: #ca4a4b;
-    $PolicyChain-subtleColor: #ddd;
-
-    display: flex;
-    flex-flow: column nowrap;
-
-    &-header {
+    header {
       display: flex;
       flex-flow: row nowrap;
       align-items: baseline;
       justify-content: flex-start;
       margin-bottom: 1rem;
-      border-bottom: 1px solid $PolicyChain-subtleColor;
+      border-bottom: 1px solid $subtleColor;
     }
 
-    &-title {
+    h2 {
       margin-top: 0;
       font-size: 1rem;
+      font-weight: bold; // Overrides Bootstrap's h2
     }
+  }
 
-    &-addPolicy {
+  .PolicyChain {
+    display: flex;
+    flex-flow: column nowrap;
+
+    &-addPolicy,
+    &-addPolicy--cancel {
       @extend .u-do;
       margin-left: auto;
 
-      &--cancel {
-        @extend .u-do;
-        margin-left: auto;
+      i {
+        padding-right: 3px;
       }
     }
 
@@ -61,26 +56,6 @@ $error-color: #c00;
   }
 
   .PolicyConfiguration {
-    $PolicyConfiguration-color: #464646;
-    $PolicyConfiguration-goColor: #4a90e2;
-    $PolicyConfiguration-doColor: #54b45d;
-    $PolicyConfiguration-dontColor: #ca4a4b;
-    $PolicyConfiguration-subtleColor: #ddd;
-
-    &-header {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: baseline;
-      justify-content: flex-start;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid $PolicyConfiguration-subtleColor;
-    }
-
-    &-title {
-      margin-top: 0;
-      font-size: 1rem;
-    }
-
     &-name {
       margin: 0 0 0 0;
       padding: 0.5rem 0 0 0;
@@ -100,8 +75,8 @@ $error-color: #c00;
 
     &-remove {
       background-color: white;
-      color: $PolicyConfiguration-dontColor;
-      border-color: $PolicyConfiguration-dontColor;
+      border-color: $dontColor;
+      color: $dontColor;
     }
 
     &-description {
@@ -110,8 +85,8 @@ $error-color: #c00;
     }
 
     .btn-info {
-      background-color: $PolicyConfiguration-doColor;
-      border-color: $PolicyConfiguration-doColor;
+      background-color: $doColor;
+      border-color: $doColor;
       width: 33.33%;
       float: right;
       padding-left: 6px;
@@ -125,7 +100,7 @@ $error-color: #c00;
     .array-item {
       clear: both;
       float: left;
-      border-bottom: 1px dashed $PolicyConfiguration-subtleColor;
+      border-bottom: 1px dashed $subtleColor;
       display: block;
       width: 100%;
       margin-bottom: 2rem;
@@ -134,9 +109,9 @@ $error-color: #c00;
     &-form {
       clear: both;
 
-      &> .form-group {
+      & > .form-group {
         padding-bottom: 2rem;
-        border-bottom: 1px dashed $PolicyConfiguration-subtleColor;
+        border-bottom: 1px dashed $subtleColor;
       }
     }
 
@@ -144,7 +119,7 @@ $error-color: #c00;
       justify-content: flex-end !important;
     }
 
-    button[type=submit] {
+    button[type="submit"] {
       margin-bottom: 2rem;
     }
 
@@ -167,50 +142,24 @@ $error-color: #c00;
       display: none;
     }
   }
-
-  .PolicyRegistryList {
-
-    &-header {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: baseline;
-      justify-content: flex-start;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid $subtleColor;
-    }
-
-    &-title {
-      margin-top: 0;
-      font-size: 1rem;
-    }
-  }
 }
 
 .PoliciesWidget .Policy,
 .Policy {
-  $Policy-color: #464646;
-  $Policy-disabledColor: #8b8d8f;
-  $Policy-goColor: #4a90e2;
-  $Policy-doColor: #54b45d;
-  $Policy-dontColor: #ca4a4b;
-  $Policy-subtleColor: #ddd;
-
-
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: baseline;
-  border-bottom: 1px solid $Policy-subtleColor;
+  border-bottom: 1px solid $subtleColor;
   padding: 0.5rem 0;
   user-select: none;
   text-align: left;
 
   &.Policy--disabled {
-
     .Policy-name,
     .Policy-summary,
     .Policy-version {
-      color: $Policy-disabledColor;
+      color: $disabledColor;
       text-decoration: line-through;
     }
   }
@@ -218,12 +167,12 @@ $error-color: #c00;
   &-sortHandle {
     order: 4;
     cursor: move;
-    color: $Policy-subtleColor;
+    color: $subtleColor;
     padding: 1rem;
     margin: -1rem -1rem 0 0;
 
     &:hover {
-      color: $Policy-doColor;
+      color: $doColor;
     }
   }
 
@@ -260,12 +209,12 @@ $error-color: #c00;
 
   &-summary {
     line-height: 1.5;
-    color: $Policy-color;
+    color: $color;
   }
 
   &-version {
     line-height: 1.5;
-    color: $Policy-color;
+    color: $color;
   }
 
   &:hover {
@@ -288,7 +237,7 @@ $error-color: #c00;
     border: none;
     background-color: transparent;
     font-weight: normal;
-    color: $Policy-dontColor;
+    color: $dontColor;
     opacity: 0.3;
     display: none;
 
@@ -301,8 +250,8 @@ $error-color: #c00;
     display: block;
     width: 100%;
     margin: 1rem 0;
-    border-bottom: 1px solid $Policy-subtleColor;
-    border-top: 1px solid $Policy-subtleColor;
+    border-bottom: 1px solid $subtleColor;
+    border-top: 1px solid $subtleColor;
   }
 }
 
