@@ -5,7 +5,7 @@ require_dependency 'csv'
 namespace :segment do
   desc 'Save as deleted objects the users from the imported segment csv'
   task :save_deleted_users, [:file_name] => [:environment] do |_task, args|
-    file_path =  Rails.root.join('config', args[:file_name])
+    file_path =  Rails.root.join(args[:file_name])
     CSV.foreach(file_path.to_s, headers: true) do |row|
       user_id = Integer(row['User ID'])
       next if User.where(id: user_id).any?

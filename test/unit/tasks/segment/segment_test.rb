@@ -16,7 +16,7 @@ module Tasks
     test 'save_deleted_users' do
       user_id = FactoryBot.create(:member).id
       given_segment_users_config(user_id) do
-        execute_rake_task 'segment/segment.rake', 'segment:save_deleted_users', 'segment_users.csv'
+        execute_rake_task 'segment/segment.rake', 'segment:save_deleted_users', 'config/segment_users.csv'
       end
       deleted_object_ids = DeletedObject.users.pluck(:object_id)
       assert_includes deleted_object_ids, 1
