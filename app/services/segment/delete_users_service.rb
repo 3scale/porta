@@ -28,15 +28,13 @@ module Segment
     end
 
     def request_body(user_ids)
-      <<~JSON
-        {
-          \"regulation_type\": \"Suppress_With_Delete\",
-          \"attributes\": {
-            \"name\": \"userId\",
-            \"values\": #{user_ids.map(&:to_s)}
-          }
+      {
+        regulation_type: 'Suppress_With_Delete',
+        attributes: {
+          name: 'userId',
+          values: user_ids.map(&:to_s)
         }
-      JSON
+      }.to_json
     end
 
     def request_headers
