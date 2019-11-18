@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import 'Navigation/styles/PF4NavProxy.scss'
 
 const Nav = ({id, children}) => (
-  <nav id={id} className="pf-c-nav" aria-label="Global">
+  <nav id={id} className="pf-c-nav pf-m-dark" aria-label="Global">
     {children}
   </nav>
 )
