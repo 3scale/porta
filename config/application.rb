@@ -173,10 +173,6 @@ module System
     config.three_scale.segment = ActiveSupport::OrderedOptions.new
     config.three_scale.segment.merge!(config_for(:segment).symbolize_keys)
 
-    config.three_scale.google_experiments = ActiveSupport::OrderedOptions.new
-    config.three_scale.google_experiments.enabled = false
-    config.three_scale.google_experiments.merge!(config_for(:google_experiments).symbolize_keys)
-
     config.three_scale.redhat_customer_portal = ActiveSupport::OrderedOptions.new
     config.three_scale.redhat_customer_portal.enabled = false
     config.three_scale.redhat_customer_portal.merge!(try_config_for(:redhat_customer_portal) || {})
