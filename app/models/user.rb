@@ -260,7 +260,8 @@ class User < ApplicationRecord
     sessions_to_destroy = user_sessions
     sessions_to_destroy = sessions_to_destroy.where.not(id: but.id) if but.persisted?
 
-    sessions_to_destroy.destroy_all
+    # Destroy all would try to load 25k objects to memory
+    sessions_to_destroy.delete_all
   end
 
   def signup
