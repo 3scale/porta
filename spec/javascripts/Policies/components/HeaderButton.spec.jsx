@@ -18,7 +18,7 @@ it('should handle clicks', () => {
   expect(spy).toHaveBeenCalled()
 })
 
-it('should have different stules for each type', () => {
+it('should have different styles for each type', () => {
   const wrapper = mount(<HeaderButton type='add' onClick={jest.fn()} />)
   expect(wrapper.find('.PolicyChain-addPolicy').exists()).toBe(true)
   expect(wrapper.find('.fa-plus-circle').exists()).toBe(true)
