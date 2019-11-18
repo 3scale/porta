@@ -1,15 +1,8 @@
-$header-height: line-height-times(63 / 20);
 $master-ribbon-height: line-height-times(1);
 
 .Header {
-  height: $header-height;
-
-  .PopNavigation-list {
-    top: $header-height;
-  }
 
   &--master {
-    height: $header-height + $master-ribbon-height;
     border-top: $master-ribbon-height solid $header-border-color;
 
     &:before {
@@ -18,10 +11,6 @@ $master-ribbon-height: line-height-times(1);
       top: 0;
       left: 50%;
     }
-
-    .PopNavigation-list {
-      top: $header-height + $master-ribbon-height;
-    }
   }
 
   .Header-logo {
@@ -29,26 +18,15 @@ $master-ribbon-height: line-height-times(1);
     background-position: left center;
     background-repeat: no-repeat;
     display: block;
-    text-indent: line-height-times(-400);
     height: 100%;
     width: line-height-times(9.5);
-  }
 
-  .pf-c-page__header-brand {
-    height: 100%;
-  }
-
-  .pf-c-page__header-nav {
-    align-self: center;
-  }
-
-  .pf-c-page__header-tools {
-    .PopNavigation-trigger {
-      padding: 0 line-height-times(1);
+    span {
+      visibility: hidden;
     }
-
-    .fa .fa-bolt {
-      margin-right: 0.75rem;
-    } 
   }
+
+  .fa .fa-bolt {
+    margin-right: 0.75rem;
+  } 
 }
