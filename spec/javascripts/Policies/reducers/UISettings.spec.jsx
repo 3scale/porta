@@ -1,16 +1,11 @@
+// @flow
+
 import UISettingsReducer from 'Policies/reducers/UISettings'
 import { initialState } from 'Policies/reducers/initialState'
 
 describe('UISettingsReducer', () => {
   it('should return the initial state', () => {
-    expect(UISettingsReducer(undefined, {})).toEqual({
-      'chain': true,
-      'error': {},
-      'policyConfig': false,
-      'registry': false,
-      'submitButtonEnabled': false,
-      'requests': 0
-    })
+    expect(UISettingsReducer(undefined, { type: 'FOO' })).toEqual(initialState.ui)
   })
 
   it('should return the updated state', () => {

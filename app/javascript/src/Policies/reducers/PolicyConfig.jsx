@@ -7,7 +7,7 @@ import type { ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
 function updatePolicyConfig (state: ChainPolicy, action: UpdatePolicyConfigAction): ChainPolicy {
-  return action.policyConfig
+  return action.policy
 }
 
 // TODO: use combineReducers instead of createReducer

@@ -2,7 +2,7 @@
 
 import { RSAA } from 'redux-api-middleware'
 
-import type { RSSAAction, RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types'
+import type { RSSAAction, RegistryPolicy, ChainPolicy, PolicyConfig } from 'Policies/types'
 
 export type AddPolicyToChainAction = { type: 'ADD_POLICY_TO_CHAIN', policy: RegistryPolicy }
 export function addPolicyToChain (policy: RegistryPolicy): AddPolicyToChainAction {
@@ -29,9 +29,9 @@ export function updatePolicyChain (payload: Array<ChainPolicy>): UpdatePolicyCha
   return { type: 'UPDATE_POLICY_CHAIN', payload }
 }
 
-export type LoadChainAction = { type: 'LOAD_CHAIN', storedChain: Array<StoredChainPolicy> }
-export function loadChain (storedChain: Array<StoredChainPolicy>): LoadChainAction {
-  return { type: 'LOAD_CHAIN', storedChain }
+export type LoadChainAction = { type: 'LOAD_CHAIN', policiesConfig: Array<PolicyConfig> }
+export function loadChain (policiesConfig: Array<PolicyConfig>): LoadChainAction {
+  return { type: 'LOAD_CHAIN', policiesConfig }
 }
 
 export type LoadChainSuccessAction = { type: 'LOAD_CHAIN_SUCCESS', payload: Array<ChainPolicy> }
