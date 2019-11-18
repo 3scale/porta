@@ -10,27 +10,19 @@ type Props = {
   children?: React.Node
 }
 
-const getIcon = type => {
-  switch (type) {
-    case 'add':
-      return 'fa fa-plus-circle'
-    case 'cancel':
-      return 'fa fa-times-circle'
-  }
+const classNames = {
+  add: 'PolicyChain-addPolicy',
+  cancel: 'PolicyChain-addPolicy--cancel'
 }
 
-const getClass = type => {
-  switch (type) {
-    case 'add':
-      return 'PolicyChain-addPolicy'
-    case 'cancel':
-      return 'PolicyChain-addPolicy--cancel'
-  }
+const icons = {
+  add: 'fa fa-plus-circle',
+  cancel: 'fa fa-times-circle'
 }
 
 const HeaderButton = ({ type, onClick, children }: Props) => (
-  <div className={getClass(type)} onClick={onClick}>
-    <i className={getIcon(type)} />{children}
+  <div className={classNames[type]} onClick={onClick}>
+    <i className={icons[type]} />{children}
   </div>
 )
 
