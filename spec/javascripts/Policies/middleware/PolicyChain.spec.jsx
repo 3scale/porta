@@ -49,7 +49,7 @@ describe('PolicyChain Middleware', () => {
   it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action', () => {
     invoke({
       type: 'LOAD_CHAIN',
-      storedChain: [validPolicy]
+      policiesConfig: [validPolicy]
     })
 
     expect(store.dispatch.mock.calls[0][0].type).toBe('SET_ORIGINAL_POLICY_CHAIN')
@@ -62,7 +62,7 @@ describe('PolicyChain Middleware', () => {
   it('Dispatches LOAD_CHAIN_ERROR action', () => {
     invoke({
       type: 'LOAD_CHAIN',
-      storedChain: [wrongPolicy]
+      policiesConfig: [wrongPolicy]
     })
 
     expect(store.dispatch).toHaveBeenCalledWith(loadChainError({}))
@@ -71,7 +71,7 @@ describe('PolicyChain Middleware', () => {
   it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action only with valid policies', () => {
     invoke({
       type: 'LOAD_CHAIN',
-      storedChain: [wrongPolicy, validPolicy]
+      policiesConfig: [wrongPolicy, validPolicy]
     })
 
     expect(store.dispatch).toHaveBeenCalledWith(loadChainError({}))

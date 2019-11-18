@@ -19,7 +19,7 @@ import type {
   LoadRegistrySuccessAction
 } from 'Policies/actions/PolicyRegistry'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
-import type { Dispatch, GetState, RawRegistry, RegistryPolicy, ChainPolicy, StoredChainPolicy } from 'Policies/types'
+import type { Dispatch, GetState, ChainPolicy, PolicyConfig, RegistryPolicy, RawRegistry } from 'Policies/types'
 
 export interface IAction {
   type: string
@@ -42,7 +42,7 @@ export interface IPoliciesActions {
   closePolicyConfig: () => ThunkAction,
   addPolicy: RegistryPolicy => ThunkAction,
   closePolicyRegistry: () => ThunkAction,
-  populatePolicies: (serviceId: string, chain?: Array<StoredChainPolicy>, registry?: RawRegistry) => ThunkAction,
+  populatePolicies: (serviceId: string, chain?: Array<PolicyConfig>, registry?: RawRegistry) => ThunkAction,
   updatePolicyConfig: (ChainPolicy) => UpdatePolicyConfigAction
 }
 

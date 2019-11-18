@@ -3,53 +3,37 @@
 // eslint-disable-next-line flowtype/no-weak-types
 export type Configuration = Object
 
-export type RawPolicy = {
-  $schema?: string,
-  id: number,
+// Represents the data stored for @proxy.policies_config
+export type PolicyConfig = {
   name: string,
-  version: string,
-  description?: string,
-  summary?: string,
-  configuration: Configuration
-}
-
-export type RawRegistry = {
-  [string]: Array<RawPolicy>
-}
-
-export type RegistryPolicy = & RawPolicy & {
-  humanName: string,
-  data?: Configuration
-}
-
-export type ChainPolicy = & RegistryPolicy & {
-  enabled: boolean,
-  removable?: boolean,
-  uuid?: string
-}
-
-export type StoredChainPolicy = {
-  name: string,
-  version: string,
   configuration: Configuration,
-  enabled: boolean
+  version: string,
+  enabled: boolean,
 }
 
-export type ShallowPolicy = {
-  id: number,
-  version: string,
-  humanName: string,
-  summary?: string
-}
-export type Schema = {
+// Represents each of the items contained in the registry object
+// returned by rails (@registry_policies)
+export type RawRegistryPolicy = {
+  $schema: string,
+  configuration: Configuration,
+  description: [string],
   name: string,
-  version: string,
   summary: string,
-  description: string,
-  configuration: Configuration
+  version: string
 }
-export type Policy = {
-  id: number,
-  schema: Schema,
-  directory: string
+
+// Represents the registry object returned by the server (@registry_policies)
+export type RawRegistry = { [string]: RawRegistryPolicy[] }
+
+// Represents policies of the Registry
+export type RegistryPolicy = RawRegistryPolicy & {
+  data?: Configuration,
+  humanName: string
+}
+
+// Represents policies stored in the Chain, once copied from the Registry
+export type ChainPolicy = RegistryPolicy & {
+  uuid: string,
+  enabled: boolean,
+  removable: boolean
 }

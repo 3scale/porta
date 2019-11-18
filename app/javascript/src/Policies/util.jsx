@@ -1,6 +1,6 @@
 // @flow
 
-import type { Reducer, UIState, FetchErrorAction, RawPolicy, RawRegistry, RegistryPolicy, ChainPolicy, IAction } from 'Policies/types'
+import type { Reducer, UIState, FetchErrorAction, RawRegistry, RawRegistryPolicy, RegistryPolicy, ChainPolicy, IAction } from 'Policies/types'
 
 // Needs to be any, since it's a subset of T
 // eslint-disable-next-line flowtype/no-weak-types
@@ -47,7 +47,7 @@ function parsePolicies (registry: RawRegistry): Array<RegistryPolicy> {
   return policies
 }
 
-function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
+function parsePolicy (key: string, policy: RawRegistryPolicy): RegistryPolicy {
   return { ...policy, name: key, humanName: policy.name, data: {} }
 }
 

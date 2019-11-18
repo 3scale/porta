@@ -11,15 +11,12 @@ export type UIState = {
   +error: {}
 }
 
-export type RegistryState = Array<RegistryPolicy>
-export type ChainState = Array<ChainPolicy>
-
 export type State = {
-  +registry: RegistryState,
-  +chain: ChainState,
-  +originalChain: ChainState,
+  +registry: RegistryPolicy[],
+  +chain: ChainPolicy[],
+  +originalChain: ChainPolicy[],
   +policyConfig: ChainPolicy,
   +ui: UIState
 }
 
-export type StateSlice = RegistryState | ChainPolicy | ChainState | UIState
+export type StateSlice = RegistryPolicy[] | ChainPolicy | ChainPolicy[] | UIState

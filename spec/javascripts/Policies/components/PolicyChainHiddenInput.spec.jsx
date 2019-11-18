@@ -8,8 +8,8 @@ import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInp
 import type { ChainPolicy } from 'Policies/types'
 
 const policies: ChainPolicy[] = [
-  { id: 1, enabled: true, name: 'cors', humanName: 'CORS', description: 'CORS headers', version: '1.0.0', configuration: {}, $schema: '', data: {} },
-  { id: 2, enabled: true, name: 'echo', humanName: 'Echo', description: 'Echoes the request', version: '1.0.0', configuration: {}, $schema: '', data: {} }
+  { id: 1, enabled: true, name: 'cors', humanName: 'CORS', description: ['CORS headers'], version: '1.0.0', configuration: {}, $schema: '', data: {}, removable: true, summary: '', uuid: '1' },
+  { id: 2, enabled: true, name: 'echo', humanName: 'Echo', description: ['Echoes the request'], version: '1.0.0', configuration: {}, $schema: '', data: {}, removable: true, summary: '', uuid: '2' }
 ]
 
 it('should render itself', () => {
