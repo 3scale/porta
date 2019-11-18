@@ -6,6 +6,7 @@ html[lang="en"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
+    = javascript_pack_tag 'PF4Styles/base'
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'

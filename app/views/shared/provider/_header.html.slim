@@ -1,10 +1,11 @@
 = javascript_pack_tag 'navigation'
+= javascript_pack_tag 'PF4Styles/header'
 
 header.pf-c-page__header id="user_widget" class='Header' class=('Header--master' if current_account.master?) role='banner'
 
   = link_to provider_admin_dashboard_path, class: 'pf-c-page__header-brand Header-link', title: 'Dashboard' do
       .Header-logo class=('Header-logo--withIcon' if active_menu?(:main_menu, :dashboard))
-        | Red Hat 3scale API Management
+        span Red Hat 3scale API Management
 
   .pf-c-page__header-nav
     = render 'shared/api_selector'
