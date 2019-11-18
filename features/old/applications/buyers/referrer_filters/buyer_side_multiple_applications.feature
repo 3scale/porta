@@ -35,7 +35,7 @@ Feature: Buyer's application referrer filters (multiple applications mode)
     And I submit the new referrer filter form with "foo.example.org"
     Then I should see referrer filter "foo.example.org"
 
-  @allow-rescue @fakeweb
+  @allow-rescue
   Scenario: Create invalid referrer filter
     Given the current domain is foo.example.com
     Given application "MegaWidget" has no referrer filters

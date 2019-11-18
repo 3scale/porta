@@ -22,7 +22,6 @@ Feature: Provider stats
     And I follow "Analytics"
     Then I should see "Usage"
 
-  @selenium
   Scenario: Top applications (multiple applications mode)
     Given a buyer "bob" signed up to provider "foo.example.com"
     When I log in as provider "foo.example.com"
