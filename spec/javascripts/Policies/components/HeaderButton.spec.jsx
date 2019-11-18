@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { mount } from 'enzyme'
+import { render, mount } from 'enzyme'
 
 import { HeaderButton } from 'Policies/components/HeaderButton'
 
@@ -18,12 +18,12 @@ it('should handle clicks', () => {
   expect(spy).toHaveBeenCalled()
 })
 
-it('should have different styles for each type', () => {
-  const wrapper = mount(<HeaderButton type='add' onClick={jest.fn()} />)
-  expect(wrapper.find('.PolicyChain-addPolicy').exists()).toBe(true)
-  expect(wrapper.find('.fa-plus-circle').exists()).toBe(true)
+it('should be able to render an "add" button variant', () => {
+  const wrapper = render(<HeaderButton type='add' onClick={jest.fn()} />)
+  expect(wrapper).toMatchSnapshot()
+})
 
-  wrapper.setProps({ type: 'cancel' })
-  expect(wrapper.find('.PolicyChain-addPolicy--cancel').exists()).toBe(true)
-  expect(wrapper.find('.fa-times-circle').exists()).toBe(true)
+it('should be able to render a "cancel" button variant', () => {
+  const wrapper = render(<HeaderButton type='cancel' onClick={jest.fn()} />)
+  expect(wrapper).toMatchSnapshot()
 })
