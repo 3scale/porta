@@ -46,15 +46,13 @@ class Segment::DeleteUsersServiceTest < ActiveSupport::TestCase
   end
 
   def stubbed_request_body
-    <<~JSON
-      {
-        \"regulation_type\": \"Suppress_With_Delete\",
-        \"attributes\": {
-          \"name\": \"userId\",
-          \"values\": #{user_ids.map(&:to_s)}
-        }
+    {
+      regulation_type: 'Suppress_With_Delete',
+      attributes: {
+        name: 'userId',
+        values: user_ids.map(&:to_s)
       }
-    JSON
+    }.to_json
   end
 
   def user_ids
