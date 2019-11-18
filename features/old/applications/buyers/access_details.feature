@@ -1,4 +1,3 @@
-@fakeweb
 Feature: Buyer's API Access Details
   In order to use a service provided by a 3scale client
   As a buyer

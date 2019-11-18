@@ -8,9 +8,6 @@ end
 
 System::Application.load_tasks
 
-# load parallel_tests rake tasks
-begin; require 'parallel_tests/tasks'; rescue LoadError; end
-
 
 begin
   require 'thinking_sphinx/deltas/datetime_delta/tasks'

@@ -13,7 +13,7 @@ Feature: Billing and Credit card details
     And Braintree is stubbed to accept credit card for buyer
     And a buyer signed up to the provider
 
-  @javascript @selenium
+  @javascript
   Scenario: Update credit card details
     Given the buyer has valid credit card with lots of money
 
@@ -27,7 +27,7 @@ Feature: Billing and Credit card details
 
     # Commenting this test as it does not make any sense.
     # What are we trying to test?
-#  @javascript @selenium
+#  @javascript
 #  Scenario: Update credit card details with CVV equals to "000"
 #    # TODO: DRY
 #    Given the buyer has valid credit card with lots of money
@@ -41,7 +41,7 @@ Feature: Billing and Credit card details
 #    And I press "Save details"
 #    Then I should see "Credit card details were successfully stored."
 
-  @javascript @selenium
+  @javascript
   Scenario: Update billing address with Postal Code equals to "00000"
     # TODO: DRY
     Given the buyer has valid credit card with lots of money

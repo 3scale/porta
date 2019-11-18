@@ -1,4 +1,4 @@
-@javascript @selenium
+@javascript
 Feature: ActiveDocs
   In order to rule the world
   As a provider

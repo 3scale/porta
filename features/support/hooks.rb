@@ -1,17 +1,5 @@
 require 'color'
 
-Before '@fakeweb' do
-  WebMock.disable!
-end
-
-After '@fakeweb' do
-  WebMock.enable!
-end
-
-Before '@fakeweb', '@selenium,@javascript' do
-  raise '@fakeweb and @selenium or @javascript is not allowed combination of tags. FakeWeb breaks things.'
-end
-
 Before '@ignore-backend' do
   stub_backend_get_keys
   stub_backend_change_provider_key
@@ -76,18 +64,8 @@ Before('@saas-only') do
   raise ::Cucumber::Core::Test::Result::Skipped, 'SaaS only features do not support OracleDB' if System::Database.oracle?
 end
 
-Before '@selenium', '~@javascript' do
-  abort 'Running with @selenium tag without @javascript is not supported'
-  exit!
-end
-
 Before '~@javascript' do
   Timecop.scale(100)
-end
-
-# run before javascript tests not tagged with selenium
-AfterStep '@javascript', '@alert', '~@selenium' do
-  stub_javascript_alert
 end
 
 Before '@javascript' do
@@ -154,18 +132,6 @@ After do |scenario|
   end
 
   console_log = folder.join("#{line_number}.log")
-
-  # # selenium 3 broke logs
-  # if (logs = page.driver.browser.try(:manage).try(:logs))
-  #     binding.pry
-  #   if (entries = logs.get(:browser).presence)
-  #     console_log.open('w') do |f|
-  #       f.puts *entries
-  #     end
-  #
-  #     print "Saved console log to #{console_log}\n"
-  #   end
-  # end
 
 
   if (logs = page.driver.browser.try(:console_messages)).present?
