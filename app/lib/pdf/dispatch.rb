@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pdf
   class Dispatch
     # For dispatching reports: daily and weekly. A cron job is required for each period.
@@ -12,7 +14,7 @@ module Pdf
       enqueue_reports('daily_reports', :day)
     end
 
-    private
+    private_class_method
 
     def self.enqueue_reports(reference, period)
       return unless (operation = SystemOperation.for(reference))
@@ -21,7 +23,7 @@ module Pdf
       batch.description = "PDF Report (period: #{period})"
 
       batch.jobs do
-        Service.accessible.of_approved_accounts.select([:id, :account_id]).find_each do |service|
+        Service.accessible.of_approved_accounts.select(%i[id account_id]).find_each do |service|
           PdfReportWorker.enqueue(service, period, operation)
         end
       end

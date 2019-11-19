@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'prawn/core'
 require 'prawn/format'
 require "prawn/measurement_extensions"
@@ -16,8 +18,8 @@ module Pdf
     METRIC_HEADINGS_DAY   = Format.prep_th ["Name", "Today's Total", "% Change"]
     METRIC_HEADINGS_WEEK  = Format.prep_th ["Name", "Week's Total",  "% Change"]
     SIGNUP_HEADINGS       = Format.prep_th ["Name", "Registered on", "Email", "Plan"]
-    TOP_USERS_HEADINGS    = Format.prep_th ["Name", "Hits"]
-    USERS_HEADINGS        = Format.prep_th ['Plan', "Users"]
+    TOP_USERS_HEADINGS    = Format.prep_th %w[Name Hits]
+    USERS_HEADINGS        = Format.prep_th %w[Plan Users]
 
     def initialize(account, service, options = {})
       @account = account
@@ -25,11 +27,11 @@ module Pdf
       @period = options[:period] || :day
       # TODO: accept as parameter
       @style = Pdf::Styles::Colored.new
-      @data = Pdf::Data.new(@account, @service, :period => @period)
+      @data = Pdf::Data.new(@account, @service, period: @period)
 
       @pdf = Prawn::Document.new(
-                                 :page_size => 'A4',
-                                 :page_layout => :portrait)
+        page_size: 'A4',
+        page_layout: :portrait)
 
       @pdf.tags(@style.tags)
       @pdf.font(@style.font)
@@ -51,7 +53,7 @@ module Pdf
       metrics
       move_down 3
 
-      @report = @pdf.render_file(Rails.root.join 'tmp', "#{@account.domain} #{@service.name}.pdf")
+      @report = @pdf.render_file(Rails.root.join('tmp', "#{@account.domain} #{@service.name}.pdf"))
 
       self
     end
@@ -95,11 +97,7 @@ module Pdf
     def header
       @pdf.text "<period>#{print_period}</period> (<domain>#{account.domain} - #{EscapeUtils.escape_html(@service.name)}</domain>)"
       @pdf.header @pdf.margin_box.top_left do
-        if @period == :day
-          @pdf.text "<date>#{1.day.ago.to_date}</date>", :align => :right
-        else
-          @pdf.text "<date>#{1.day.ago.to_date}</date> - <date>#{1.week.ago.to_date}</date>", :align => :right
-        end
+        @pdf.text header_text, align: :right
       end
     end
 
@@ -109,7 +107,7 @@ module Pdf
     end
 
     def traffic_and_users
-      two_columns([0.mm, 194.mm], :height => 40.mm) do |column|
+      two_columns([0.mm, 194.mm], height: 40.mm) do |column|
         case column
         when :left
           if (users = @data.top_users)
@@ -124,10 +122,10 @@ module Pdf
     end
 
     def traffic_graph
-      if (graph = @data.traffic_graph)
-        subtitle "Traffic"
-        @pdf.image graph, :position => :left, :width => 520
-      end
+      graph = @data.traffic_graph
+      return unless graph
+      subtitle "Traffic"
+      @pdf.image graph, position: :left, width: 520
     end
 
     def metrics
@@ -141,14 +139,22 @@ module Pdf
 
     private
 
+    def header_text
+      if @period == :day
+        "<date>#{1.day.ago.to_date}</date>"
+      else
+        "<date>#{1.day.ago.to_date}</date> - <date>#{1.week.ago.to_date}</date>"
+      end
+    end
+
     def three_scale_logo
       logo = File.dirname(__FILE__) + "/images/logo.png"
-      @pdf.image logo, :width => 100
+      @pdf.image logo, width: 100
     end
 
     def print_table(data, width, headings)
-      unless data.blank?
-        options = { :headers => headings, :width => width }
+      if data.present?
+        options = { headers: headings, width: width }
         @pdf.table data, @style.table_style.merge(options)
       else
         @pdf.text "<small>No current data</small>"
