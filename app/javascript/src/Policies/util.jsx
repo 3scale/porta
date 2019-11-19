@@ -1,6 +1,6 @@
 // @flow
 
-import type { Reducer, UIState, FetchErrorAction, RawRegistry, RawRegistryPolicy, RegistryPolicy, ChainPolicy, IAction } from 'Policies/types'
+import type { Reducer, UIState, FetchErrorAction, ChainPolicy, IAction } from 'Policies/types'
 
 // Needs to be any, since it's a subset of T
 // eslint-disable-next-line flowtype/no-weak-types
@@ -39,18 +39,6 @@ function generateGuid (): string {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 }
 
-function parsePolicies (registry: RawRegistry): Array<RegistryPolicy> {
-  let policies: Array<RegistryPolicy> = []
-  for (let key in registry) {
-    registry[key].forEach(policy => policies.push(parsePolicy(key, policy)))
-  }
-  return policies
-}
-
-function parsePolicy (key: string, policy: RawRegistryPolicy): RegistryPolicy {
-  return { ...policy, name: key, humanName: policy.name, data: {} }
-}
-
 function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[]) {
   const chainLength = chain.length
   if (originalChain.length !== chainLength) {
@@ -74,7 +62,5 @@ export {
   createReducer,
   updateError,
   generateGuid,
-  parsePolicies,
-  parsePolicy,
   isPolicyChainChanged
 }

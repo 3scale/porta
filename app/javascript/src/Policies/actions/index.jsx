@@ -15,21 +15,21 @@ import {
 import { updatePolicyConfig } from 'Policies/actions/PolicyConfig'
 
 import type { UIComponent } from 'Policies/actions/UISettings'
-import type { Dispatch, RawRegistry, RegistryPolicy, ChainPolicy, PolicyConfig, IPoliciesActions, ThunkAction } from 'Policies/types'
+import type { Dispatch, RegistryPolicy, ChainPolicy, PolicyConfig, IPoliciesActions, ThunkAction } from 'Policies/types'
 
 const chainComponent: UIComponent = 'chain'
 const registryComponent: UIComponent = 'registry'
 const policyConfigComponent: UIComponent = 'policyConfig'
 
 // Policies action creators
-function loadSavedPolicies (chain: Array<PolicyConfig>, registry: RawRegistry): ThunkAction {
+function loadSavedPolicies (chain: Array<PolicyConfig>, registry: Array<RegistryPolicy>): ThunkAction {
   return function (dispatch: Dispatch) {
     dispatch(loadRegistrySuccess(registry))
     dispatch(loadChain(chain))
   }
 }
 
-function populatePolicies (serviceId: string, chain?: Array<PolicyConfig>, registry?: RawRegistry): ThunkAction {
+function populatePolicies (serviceId: string, chain?: Array<PolicyConfig>, registry?: Array<RegistryPolicy>): ThunkAction {
   return function (dispatch: Dispatch) {
     if (registry && chain) {
       dispatch(loadSavedPolicies(chain, registry))

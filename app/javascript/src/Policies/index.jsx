@@ -14,12 +14,12 @@ import { initialState } from 'Policies/reducers/initialState'
 import { actions } from 'Policies/actions/index'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-import type { RawRegistry, PolicyConfig } from 'Policies/types'
+import type { RegistryPolicy, PolicyConfig } from 'Policies/types'
 
 import 'Policies/styles/policies.scss'
 
 type PoliciesProps = {
-  registry: RawRegistry,
+  registry: RegistryPolicy[],
   chain: PolicyConfig[],
   serviceId: string
 }
