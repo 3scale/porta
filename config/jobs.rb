@@ -28,6 +28,7 @@ module ThreeScale
 
     DAILY = %w[
       FindAndDeleteScheduledAccountsWorker.perform_async
+      SegmentDeleteUsersWorker.perform_later
       Audited.audit_class.delete_old
       LogEntry.delete_old
       Cinstance.notify_about_expired_trial_periods

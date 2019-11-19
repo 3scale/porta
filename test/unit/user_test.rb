@@ -20,15 +20,20 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
   end
 
-  test 'the user deleted event is created when the user is destroyed' do
-    account = FactoryBot.create(:simple_provider)
-    user = FactoryBot.create(:user, account: account)
+  test 'archive_as_deleted' do
+    Features::SegmentDeletionConfig.stubs(enabled?: false) do
+      user = FactoryBot.create(:simple_user)
 
-    assert_difference(EventStore::Event.where(event_type: Users::UserDeletedEvent).method(:count)) do
-      user.reload.destroy!
+      assert_no_difference(DeletedObject.users.method(:count)) { user.reload.destroy! }
     end
 
-    assert_equal user.id, EventStore::Event.where(event_type: Users::UserDeletedEvent).last!.data[:user_id]
+    Features::SegmentDeletionConfig.stubs(enabled?: true) do
+      user = FactoryBot.create(:simple_user)
+
+      assert_difference(DeletedObject.users.method(:count)) { user.reload.destroy! }
+
+      assert_equal user.id, DeletedObject.users.last!.object_id
+    end
   end
 
   def test_user_suspended_no_sessions
@@ -38,7 +43,7 @@ class UserTest < ActiveSupport::TestCase
     user.activate!
     assert user.user_sessions.present?
     assert user.can_login?
-    
+
     user.suspend!
     user.reload
     refute user.user_sessions.present?
@@ -51,7 +56,7 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil user.account.users.find_with_valid_password_token(token)
 
     user.expire_password_token
-    assert_nil user.account.users.find_with_valid_password_token(token)    
+    assert_nil user.account.users.find_with_valid_password_token(token)
   end
 
   def test_nullify_authentication_id
