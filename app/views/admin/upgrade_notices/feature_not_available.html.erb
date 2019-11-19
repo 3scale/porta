@@ -13,23 +13,13 @@
     </p>
   </div>
 
-  <% if current_account.heroku? %>
-  <div>
+  <div id="upgrade-image">
     <center>
-      Upgrade your plan from the Heroku dashboard or through the command line with:
-      </br>
-      heroku addons:upgrade <%= Heroku.addon_name %>:<%= @new_plan.name.downcase %>
+      <%= render 'provider_upgrade_button', plan: @new_plan %>
+      <br/>
+      <%= link_to '‹ No, thanks.', :back %>
     </center>
   </div>
-  <% else %>
-    <div id="upgrade-image">
-      <center>
-        <%= render 'provider_upgrade_button', plan: @new_plan %>
-        <br/>
-        <%= link_to '‹ No, thanks.', :back %>
-      </center>
-    </div>
-  <% end %>
 <% else %>
    <div id="upgrade-action-column">
     <p>

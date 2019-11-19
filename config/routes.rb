@@ -87,11 +87,6 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
     end
 
-    namespace :heroku do
-      resources :resources, only: [:create, :update, :destroy]
-      resource :sessions, only: [:create], path: 'sso'
-    end
-
     namespace :master, module: 'master' do
 
       namespace :devportal do
@@ -484,9 +479,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
     # api routes, be careful
     namespace :api, :defaults => { :format => 'xml' } do
-
-      # called from heroku deploy hook after heroku proxy deploy script
-      post 'heroku-proxy/deployed', to: 'heroku_proxy#deployed', as: :heroku_proxy_deployed
 
       get 'objects/status' => 'objects#status', as: :objects_status, controller: :objects, defaults: { format: :json }
 

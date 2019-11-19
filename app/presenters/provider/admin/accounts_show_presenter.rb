@@ -4,7 +4,7 @@ class Provider::Admin::AccountsShowPresenter
   attr_reader :account, :user
 
   delegate :can?, to: :ability
-  delegate :field_label, :field_value, :heroku?, :timezone, to: :account
+  delegate :field_label, :field_value, :timezone, to: :account
   delegate :features, :name, :id, to: :plan, prefix: true
 
   def initialize(account, user)
