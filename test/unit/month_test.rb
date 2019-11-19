@@ -44,8 +44,7 @@ class MonthTest < ActiveSupport::TestCase
     end
 
     should 'raise with wrong params' do
-      wrong = stub
-      assert_raises(ArgumentError) { Month.new(wrong) }
+      assert_raises(ArgumentError) { Month.new('abcd') }
       assert_raises(ArgumentError) { Month.new(2001,2,1) }
     end
 
@@ -67,5 +66,11 @@ class MonthTest < ActiveSupport::TestCase
     month = Month.new(2015, 06)
 
     assert_equal 'June 2015', I18n.localize(month, format: :month)
+  end
+
+  test '#to_s' do
+    month = Month.new(2015, 06)
+    assert_equal 'June  1, 2015 - June 30, 2015', month.to_s
+    assert_equal '2015-06-01', month.to_s(:db)
   end
 end
