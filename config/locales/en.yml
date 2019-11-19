@@ -1138,8 +1138,6 @@ en:
       create:
         notice: "%{resource_type} created."
         errors:
-          name: "Name can't be blank."
-          system_name: "System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed."
           default: "Couldn't create %{resource_type}. Check your Plan limits"
       update:
         notice: "%{resource_type} information updated."
