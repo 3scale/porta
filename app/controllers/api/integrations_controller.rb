@@ -136,7 +136,11 @@ class Api::IntegrationsController < Api::BaseController
   protected
 
   def find_registry_policies
-    @registry_policies ||= Policies::PoliciesListService.call!(current_account, proxy: @proxy)
+    policies_list = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
+    @registry_policies = policies_list.map do |key, value|
+      policy = value.first
+      policy.merge :name => key, :humanName => policy['name'], :data => {}
+    end
   rescue StandardError => error
     @error = error
   end
