@@ -35,15 +35,15 @@ export type Action = PolicyConfigAction | PolicyRegistryAction | PolicyChainActi
 
 export interface IPoliciesActions {
   openPolicyRegistry: () => ThunkAction,
-  editPolicy: ChainPolicy => ThunkAction,
-  sortPolicyChain: Array<ChainPolicy> => SortPolicyChainAction,
-  submitPolicyConfig: (ChainPolicy) => ThunkAction,
-  removePolicyFromChain: (ChainPolicy) => ThunkAction,
-  closePolicyConfig: () => ThunkAction,
-  addPolicy: RegistryPolicy => ThunkAction,
   closePolicyRegistry: () => ThunkAction,
-  populatePolicies: (serviceId: string, chain?: Array<PolicyConfig>, registry?: Array<RegistryPolicy>) => ThunkAction,
-  updatePolicyConfig: (ChainPolicy) => UpdatePolicyConfigAction
+  openPolicyForm: (ChainPolicy) => ThunkAction,
+  closePolicyForm: () => ThunkAction,
+  sortPolicyChain: (Array<ChainPolicy>) => SortPolicyChainAction,
+  submitPolicyForm: (ChainPolicy) => ThunkAction,
+  updatePolicyConfig: (ChainPolicy) => UpdatePolicyConfigAction,
+  removePolicyFromChain: (ChainPolicy) => ThunkAction,
+  addPolicyFromRegistry: (RegistryPolicy) => ThunkAction,
+  populateChainFromConfigs: (serviceId: string, configs?: Array<PolicyConfig>, registry?: Array<RegistryPolicy>) => ThunkAction,
 }
 
 export type RSSAAction = {
