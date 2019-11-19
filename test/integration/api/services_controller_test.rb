@@ -217,8 +217,12 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
 
       @provider.settings.allow_multiple_services!
+
       post admin_services_path, service: { name: '' }
       assert_equal 'Name can\'t be blank', flash[:error]
+
+      post admin_services_path, service: { name: 'example-service', system_name: '###' }
+      assert_equal 'System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed.', flash[:error]
     end
   end
 end
