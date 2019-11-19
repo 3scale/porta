@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pdf::Styles::Colored < Pdf::Styles::Base
 
   def tags
@@ -11,10 +13,9 @@ class Pdf::Styles::Colored < Pdf::Styles::Base
                 :green    => {:color => 'green'})
   end
 
-
   def table_style
     super.merge( :header_text_color => 'ffffff',
-                 :row_colors => ["d9e8f8", "e6f0fb"],
+                 :row_colors => %w[d9e8f8 e6f0fb],
                  :border_color => 'ffffff',
                  :header_color => '7e7e7f' )
   end
