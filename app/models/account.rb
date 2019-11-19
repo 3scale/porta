@@ -338,12 +338,6 @@ class Account < ApplicationRecord
   # def self.to_csv
   # end
 
-  def heroku?
-    # TODO: Move to other file?
-    #       Change logic?
-    partner.present? && partner.system_name == 'heroku'
-  end
-
   # Display name for account. Handy for situations where org_name is empty.
   def display_name
     org_name.empty? ? admins.first.username : org_name

@@ -145,11 +145,6 @@ module Abilities
       assert_cannot ability, :manage, Invitation
       assert_cannot ability, :manage, :multiple_users
 
-      partner.system_name = 'heroku'
-      assert_cannot ability, :manage, User
-      assert_cannot ability, :manage, Invitation
-      assert_cannot ability, :manage, :multiple_users
-
       partner.system_name = 'redhat'
       assert_can ability, :manage, User
       assert_can ability, :manage, Invitation

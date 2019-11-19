@@ -39,9 +39,6 @@ class PartnerTest < ActiveSupport::TestCase
   test 'can manage users?' do
     partner = FactoryBot.build_stubbed(:partner)
 
-    partner.system_name = 'heroku'
-    assert_equal false, partner.can_manage_users?
-
     partner.system_name = 'appdirect'
     assert_equal false, partner.can_manage_users?
 

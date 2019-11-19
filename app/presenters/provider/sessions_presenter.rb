@@ -6,6 +6,6 @@ class Provider::SessionsPresenter
   end
 
   def show_username_password_related_content?
-    !@domain_account.heroku? && !@domain_account.settings.enforce_sso?
+    !@domain_account.settings.enforce_sso?
   end
 end
