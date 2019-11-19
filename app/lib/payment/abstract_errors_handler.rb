@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Payment
   class AbstractErrorsHandler
     class NotFailedResultError < StandardError; end
