@@ -59,7 +59,7 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
   # for development purposes
   def see_in_file(content)
-    f = File.new('/home/jakub/Desktop/a.pdf','w')
+    f = File.new('/home/myusername/Desktop/a.pdf','w')
     f << content
     f.close
   end
