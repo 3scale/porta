@@ -31,7 +31,7 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
     context "with logo" do
       setup do
-        @data.stubs(:has_logo?).returns(true)
+        @data.stubs(:logo?).returns(true)
         @data.stubs(:logo).returns(LOGO_PICTURE)
         @data.stubs(:provider).returns(LONG_ADDRESS)
       end

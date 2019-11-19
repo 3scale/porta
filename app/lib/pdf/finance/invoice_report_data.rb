@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require "open-uri"
 
 # Wrapper for Invoice that supplies all the data needed for invoice.
 class Pdf::Finance::InvoiceReportData
 
-  LINE_ITEMS_HEADING = %w(Name Quantity Cost Charged).freeze
-  DATE_FORMAT = "%e %B, %Y".freeze
+  LINE_ITEMS_HEADING = %w[Name Quantity Cost Charged].freeze
+  DATE_FORMAT = "%e %B, %Y"
 
   delegate :name, :cost, :to => :@invoice
 
@@ -51,34 +53,23 @@ class Pdf::Finance::InvoiceReportData
 
   def logo
     @logo_stream ||= open(@invoice.provider_account.profile.logo.url(:invoice))
-  rescue => e
+  rescue StandardError => e
     # TODO: - uncomment complete exception!
     # rescue OpenURI::HTTPError => e
     Rails.logger.error "Failed to retrieve logo from: #{e.message}"
     nil
   end
 
-  def has_logo?
+  def logo?
     @invoice.provider_account.profile.logo.file? && logo
   end
 
   def line_items
     line_items = @invoice.line_items.map do |item|
-      [ CGI.escapeHTML(item.name || ""), item.quantity || '', item.cost.round(LineItem::DECIMALS), '' ]
+      [CGI.escapeHTML(item.name || ""), item.quantity || '', item.cost.round(LineItem::DECIMALS), '']
     end
 
-    if @invoice.vat_rate.nil?
-      total = [ 'Total cost', '', @invoice.exact_cost_without_vat, @invoice.charge_cost ]
-      line_items << total
-    else
-      vat_rate_label = @invoice.buyer_account.field_label('vat_rate')
-
-      total_without_vat = [ "Total cost (without #{vat_rate_label})", '', @invoice.exact_cost_without_vat, @invoice.charge_cost_without_vat ]
-      total_vat = [ "Total #{vat_rate_label} Amount", '', @invoice.vat_amount, @invoice.charge_cost_vat_amount ]
-      total = [ "Total cost (#{vat_rate_label} #{@invoice.vat_rate}% included)",     '', '', @invoice.charge_cost ]
-
-      line_items << total_without_vat << total_vat << total
-    end
+    line_items.push(*total_invoice_label)
   end
 
   def vat_rate
@@ -104,22 +95,38 @@ class Pdf::Finance::InvoiceReportData
   private
 
   def person_data(address, fiscal_code, vat_code, po_number)
-    location = []
-    location << [ address.line1, address.line2 ].compact.join(' ')
-    location << [ address.city, [address.state, address.zip ].compact.join(' ')].compact.join(', ')
-
-    pd = [ [ 'Name',    CGI.escapeHTML(address.name || '') ],
-           [ 'Address', CGI.escapeHTML(location.join("\n" || ''))],
-           [ 'Country', CGI.escapeHTML(address.country || '') ] ]
-
-    pd << [ 'Fiscal code', CGI.escapeHTML(fiscal_code) ] if fiscal_code.present?
-    pd << [ @invoice.buyer_account.field_label('vat_code'), CGI.escapeHTML(vat_code) ] if vat_code.present?
-    pd << [ 'PO num',    CGI.escapeHTML(po_number)    ] if po_number.present?
-
+    pd = [['Name',    CGI.escapeHTML(address.name || '')],
+          ['Address', CGI.escapeHTML(location_text(address))],
+          ['Country', CGI.escapeHTML(address.country || '')]]
+    pd << ['Fiscal code', CGI.escapeHTML(fiscal_code)] if fiscal_code.present?
+    pd << [@invoice.buyer_account.field_label('vat_code'), CGI.escapeHTML(vat_code)] if vat_code.present?
+    pd << ['PO num', CGI.escapeHTML(po_number)] if po_number.present?
     pd
+  end
+
+  def location_text(address)
+    location = []
+    location << [address.line1, address.line2].compact.join(' ')
+    location << [address.city, [address.state, address.zip].compact.join(' ')].compact.join(', ')
+    location.join("\n") || ''
   end
 
   def format_date(date)
     date ? date.strftime(DATE_FORMAT) : '-'
+  end
+
+  def total_invoice_label
+    if @invoice.vat_rate.nil?
+      total = ['Total cost', '', @invoice.exact_cost_without_vat, @invoice.charge_cost]
+      [total]
+    else
+      vat_rate_label = @invoice.buyer_account.field_label('vat_rate')
+
+      total_without_vat = ["Total cost (without #{vat_rate_label})", '', @invoice.exact_cost_without_vat, @invoice.charge_cost_without_vat]
+      total_vat = ["Total #{vat_rate_label} Amount", '', @invoice.vat_amount, @invoice.charge_cost_vat_amount]
+      total = ["Total cost (#{vat_rate_label} #{@invoice.vat_rate}% included)",     '', '', @invoice.charge_cost]
+
+      [total_without_vat, total_vat, total]
+    end
   end
 end

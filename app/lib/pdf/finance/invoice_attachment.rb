@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Envelope providing compatibility with Paperclip::Attachment
 module Pdf
   module Finance
