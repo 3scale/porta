@@ -39,7 +39,7 @@ class Month < Range
     Month.new(self.begin - 1.month)
   end
 
-  def is_same_month?(date)
+  def same_month?(date)
     date.beginning_of_month == self.begin
   end
 
