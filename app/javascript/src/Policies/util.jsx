@@ -52,12 +52,14 @@ function parsePolicy (key: string, policy: RawPolicy): RegistryPolicy {
 }
 
 function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[]) {
-  if (originalChain.length !== chain.length) {
+  const chainLength = chain.length
+  if (originalChain.length !== chainLength) {
     return true
   }
 
-  for (const policy of chain) {
-    const originalPolicy = originalChain.find(p => p.uuid === policy.uuid)
+  for (let i = 0; i < chainLength; i++) {
+    const policy = chain[i]
+    const originalPolicy = originalChain[i]
     if (JSON.stringify(policy) !== JSON.stringify(originalPolicy)) {
       return true
     }
