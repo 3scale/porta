@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Payment
   class Adyen12ErrorsHandler < AbstractErrorsHandler
     class Adyen12ResultError < StandardError
@@ -11,7 +13,7 @@ module Payment
       end
     end
 
-    ERRORS_FILE = Rails.root.join('config/adyen_errors.yml').freeze
+    ERRORS_FILE = Rails.root.join('config', 'adyen_errors.yml').freeze
     ERROR_MESSAGES = YAML.load_file(ERRORS_FILE).freeze
 
     def messages
@@ -33,16 +35,17 @@ module Payment
     # API request succeeded but authorization failed
     # See https://docs.adyen.com/developers/api-manual#authorisationrefusalreasons
     def collect_messages_from_refusal
-      reason = response.params['refusalReason']
-      if ERROR_MESSAGES[reason]
-        [ERROR_MESSAGES[reason]]
+      reason  = response.params['refusalReason']
+      message = ERROR_MESSAGES[reason]
+      if message
+        [message]
       else
-        notify_refusal_reason_not_handled!
+        notify_refusal_reason_not_handled
         []
       end
     end
 
-    def notify_refusal_reason_not_handled!
+    def notify_refusal_reason_not_handled
       error = Adyen12ResultError.new(response)
       System::ErrorReporting.report_error(error)
       nil

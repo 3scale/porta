@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Payment
   class BraintreeBlueErrorsHandler < AbstractErrorsHandler
     class BraintreeResultError < StandardError
@@ -14,7 +16,7 @@ module Payment
       end
     end
 
-    CREDIT_CARD_VERIFICATION_MESSAGE = 'A card verification has failed. Please contact your bank.'.freeze
+    CREDIT_CARD_VERIFICATION_MESSAGE = 'A card verification has failed. Please contact your bank.'
 
     def messages
       @messages ||= collect_messages.freeze
@@ -23,17 +25,17 @@ module Payment
     private
 
     def collect_messages
-      notify_no_errors_given!
-      messages = @result.errors.map(&:message)
-      messages << CREDIT_CARD_VERIFICATION_MESSAGE if @result.credit_card_verification
+      notify_no_errors_given
+      messages = result.errors.map(&:message)
+      messages << CREDIT_CARD_VERIFICATION_MESSAGE if result.credit_card_verification
       messages.compact!
       messages
     end
 
     # This will notify that some errors are not sent by Braintree
-    def notify_no_errors_given!
-      return if @result.errors.any?
-      error = BraintreeResultError.new @result
+    def notify_no_errors_given
+      return if result.errors.any?
+      error = BraintreeResultError.new result
       System::ErrorReporting.report_error(error)
     end
   end
