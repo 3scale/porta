@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FindEachMocker
   delegate :total_entries, :current_page, :total_pages, to: :collection
 
