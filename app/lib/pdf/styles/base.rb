@@ -25,7 +25,7 @@ module Pdf::Styles
     end
 
     def font
-      "#{Rails.root}/lib/pdf/fonts/arial.ttf"
+      Rails.root.join('app', 'lib', 'pdf', 'fonts', 'arial.ttf').to_s
     end
 
   end
