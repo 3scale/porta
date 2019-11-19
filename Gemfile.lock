@@ -570,6 +570,7 @@ GEM
     redis (3.3.5)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
+    redis-prescription (1.0.0)
     reform (2.0.5)
       disposable (~> 0.1.11)
       uber (~> 0.0.11)
@@ -674,6 +675,10 @@ GEM
       sidekiq (>= 2.14.0)
     sidekiq-prometheus-exporter (0.1.11)
       sidekiq (>= 3.3.1)
+    sidekiq-throttled (0.11.0)
+      concurrent-ruby
+      redis-prescription
+      sidekiq
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -922,6 +927,7 @@ DEPENDENCIES
   sidekiq-cron
   sidekiq-lock
   sidekiq-prometheus-exporter
+  sidekiq-throttled
   simplecov (~> 0.10.0)
   sinatra
   slim-rails (~> 3.2)
