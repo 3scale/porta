@@ -4,7 +4,7 @@ class DeletedObject < ApplicationRecord
   belongs_to :owner, polymorphic: true
   belongs_to :object, polymorphic: true
 
-  [Metric, Contract].each do |scoped_class|
+  [Metric, Contract, User].each do |scoped_class|
     scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
   end
 
@@ -17,5 +17,10 @@ class DeletedObject < ApplicationRecord
     joins(join_sql)
   end
 
-  scope :stale, -> { where.has { ((id.in DeletedObject.deleted_owner.select(:id)) | (object_type == Service.name)) & (created_at <= 1.week.ago) } }
+  scope :stale, -> do
+    where.has do
+      ((id.in DeletedObject.deleted_owner.select(:id)) | (object_type == Service.name)) \
+      & (created_at <= 1.week.ago)
+    end
+  end
 end
