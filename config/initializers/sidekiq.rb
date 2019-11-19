@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'three_scale/sidekiq_logging_middleware'
+require 'sidekiq/throttled'
+
+Sidekiq::Throttled.setup!
 
 Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 
