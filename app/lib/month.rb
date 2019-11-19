@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Month < Range
 
   PERIOD_STRING_FORMAT = '%Y-%m'
@@ -13,15 +15,13 @@ class Month < Range
   # Month.new(2009,1)
   #
   def initialize(*args)
-    if args.length == 2
-      year, month = args
-      # the weird .to_datetime.to_date is for 1.9 compatibility
-      first_day = Time.zone.local(year,month,1).to_datetime.to_date
-    elsif args.length == 1
-      raise ArgumentError.new(INVALID_DATE_ERROR) unless quacks_like_date?(args.first)
-      first_day = args.first.to_date
+    case args.length
+    when 1
+      first_day = first_day_from_date(args.first)
+    when 2
+      first_day = first_day_from_year_and_month(*args)
     else
-      raise ArgumentError.new('Wrong number of arguments')
+      raise ArgumentError, 'Wrong number of arguments'
     end
 
     super(first_day.beginning_of_month, first_day.end_of_month)
@@ -49,55 +49,54 @@ class Month < Range
 
   delegate :to_json, :to => :to_param
 
-  # TODO: DRY with the same method at TimeRange
-  def to_s(format = nil)
+  def to_s(format = :long)
+    begin_formatted = self.begin.to_s(format)
     if format == :db
-      self.begin.to_s
+      begin_formatted
     else
-      "#{self.begin.to_date.to_s(:long)} - #{self.end.to_date.to_s(:long)}"
+      "#{begin_formatted} - #{self.end.to_s(format)}"
     end
   end
 
   def self.current
-    Time.zone.now.beginning_of_month..Time.zone.now.end_of_month
+    time_now = Time.zone.now
+    time_now.beginning_of_month..time_now.end_of_month
   end
 
-  # TODO: replace implementation by strptime
   def self.parse_month(month)
-    return unless month || month.present?
+    return month if month.is_a?(Month)
 
-    date = if month.is_a?(String)
-             # Timecop overrides Date.striptime with:
-             # `Time.strptime(month, "%Y-%m").to_date`
-             # and that fails with '1022-05' as month
-             # try: `Time.strptime('1022-05', "%Y-%m").to_date`
-             # Wed, 25 Apr 1022
-             DateTime.strptime(month, "%Y-%m").to_date
-           else
-             month
-           end
-
-    Month.new(date.beginning_of_month)
-  rescue ArgumentError
-    # return nil
+    month_params = month.split('-').first(2)
+    Month.new(*month_params)
+  rescue ArgumentError, NoMethodError
+    nil
   end
 
   def to_time_range
     # This looks too convoluted, but can't really use begin.to_time / end.to_time, because
     # that returns the time in the system local time zone, but Time.zone.local returns
     # it in Rails' local time zone (which can be different apparently).
-    TimeRange.new(Time.zone.local(self.begin.year, self.begin.month, self.begin.day),
-                  Time.zone.local(self.end.year,   self.end.month,   self.end.day).end_of_day)
+    time_zone = Time.zone
+    my_begin = self.begin
+    my_end = self.end
+    TimeRange.new(time_zone.local(my_begin.year, my_begin.month, my_begin.day),
+                  time_zone.local(my_end.year,   my_end.month,   my_end.day).end_of_day)
   end
 
-  def as_json(options = {})
+  def as_json(*)
     { begin: self.begin, end: self.end }
   end
 
   private
 
-  def quacks_like_date?(date)
-    date.acts_like?(:date) || date.respond_to?(:to_date)
+  def first_day_from_year_and_month(year, month)
+    Time.zone.local(year,month,1).to_date
+  end
+
+  def first_day_from_date(date)
+    date.to_date
+  rescue ArgumentError
+    raise ArgumentError, INVALID_DATE_ERROR
   end
 
 end
