@@ -9,6 +9,5 @@ class AddOwnerToMetrics < ActiveRecord::Migration
 
     index_options = System::Database.postgres? ? { algorithm: :concurrently } : {}
     add_index :metrics, [:owner_type, :owner_id], index_options
-    add_index :metrics, [:owner_type, :owner_id, :system_name], index_options.merge(unique: true)
   end
 end
