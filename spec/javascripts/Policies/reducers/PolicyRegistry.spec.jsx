@@ -1,4 +1,7 @@
+// @flow
+
 import RegistryReducer from 'Policies/reducers/PolicyRegistry'
+import { initialState } from 'Policies/reducers/initialState'
 
 const rawRegistry = {
   cors: [{
@@ -13,7 +16,7 @@ const rawRegistry = {
 
 describe('RegistryReducer', () => {
   it('should return the initial state', () => {
-    expect(RegistryReducer(undefined, {})).toEqual([])
+    expect(RegistryReducer(undefined, { type: 'FOO' })).toEqual(initialState.registry)
   })
 
   it('should return the updated state', () => {
