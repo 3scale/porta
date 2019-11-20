@@ -14,7 +14,7 @@ export const initialState: State = {
     configuration: {},
     id: 0,
     version: '',
-    description: '',
+    description: [''],
     summary: '',
     enabled: true,
     removable: true,

@@ -2,10 +2,10 @@
 
 import * as React from 'react'
 
-import type { ShallowPolicy } from 'Policies/types'
+import type { RegistryPolicy } from 'Policies/types'
 
 type Props = {
-  policy: ShallowPolicy,
+  policy: RegistryPolicy,
   title?: string,
   onClick: () => void
 }

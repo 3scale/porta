@@ -3,7 +3,7 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer, generateGuid, updateArray } from 'Policies/util'
 
-import type { ChainState, ChainPolicy, RegistryPolicy } from 'Policies/types'
+import type { ChainPolicy, RegistryPolicy } from 'Policies/types'
 import type {
   AddPolicyToChainAction,
   FetchChainSuccessAction,
@@ -17,20 +17,20 @@ function createChainPolicy (policy: RegistryPolicy): ChainPolicy {
   return {...policy, ...{humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid()}}
 }
 
-function addPolicy (state: ChainState, action: AddPolicyToChainAction): ChainState {
+function addPolicy (state: Array<ChainPolicy>, action: AddPolicyToChainAction): Array<ChainPolicy> {
   return state.concat([createChainPolicy(action.policy)])
 }
 
-function updateChain (_state: ChainState, action: UpdatePolicyChainAction): ChainState {
+function updateChain (_state: Array<ChainPolicy>, action: UpdatePolicyChainAction): Array<ChainPolicy> {
   return action.payload
 }
 
-function updatePolicies (state: ChainState, action: UpdateChainPolicies): ChainState {
+function updatePolicies (state: Array<ChainPolicy>, action: UpdateChainPolicies): Array<ChainPolicy> {
   return updateArray(state, action.payload)
 }
 
 // TODO: use combineReducers instead of createReducer
-const ChainReducer = createReducer<ChainState>(initialState.chain, {
+const ChainReducer = createReducer<Array<ChainPolicy>>(initialState.chain, {
   'ADD_POLICY_TO_CHAIN': addPolicy,
   'SORT_POLICY_CHAIN': updatePolicies,
   'LOAD_CHAIN_SUCCESS': updatePolicies,
