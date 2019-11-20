@@ -7,8 +7,11 @@ class AddOwnerToMetrics < ActiveRecord::Migration
     add_column :metrics, :owner_id, :integer, limit: 8
     add_column :metrics, :owner_type, :string
 
-    index_options = System::Database.postgres? ? { algorithm: :concurrently } : {}
+    index_options = {}
+    index_options[:algorithm] = :concurrently if System::Database.postgres?
     add_index :metrics, [:owner_type, :owner_id], index_options
+
+    index_options[:ignore_nulls] = true if System::Database.oracle?
     add_index :metrics, [:owner_type, :owner_id, :system_name], index_options.merge(unique: true)
   end
 end

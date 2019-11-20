@@ -151,16 +151,24 @@ if System::Database.oracle?
     def add_index(table_name, column_name, options = {}) #:nodoc:
       # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
       # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
+      ignore_nulls = options.delete(:ignore_nulls)
       index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, options)
       quoted_table_name = quote_table_name(table_name)
-      quoted_column_name = quote_column_name(index_name)
-      execute "CREATE #{index_type} INDEX #{quoted_column_name} ON #{quoted_table_name} (#{quoted_column_names})#{tablespace} #{index_options}"
+      quoted_index_name = quote_column_name(index_name)
+      quoted_column_values = ignore_nulls ? unique_index_only_for_present_values(quoted_column_names) : quoted_column_names
+      execute "CREATE #{index_type} INDEX #{quoted_index_name} ON #{quoted_table_name} (#{quoted_column_values})#{tablespace} #{index_options}"
       if index_type == 'UNIQUE' && quoted_column_names !~ /\(.*\)/
-        execute "ALTER TABLE #{quoted_table_name} ADD CONSTRAINT #{quoted_column_name} #{index_type} (#{quoted_column_names}) USING INDEX #{quoted_column_name}"
+        execute "ALTER TABLE #{quoted_table_name} ADD CONSTRAINT #{quoted_index_name} #{index_type} (#{quoted_column_names}) USING INDEX #{quoted_index_name}"
       end
     ensure
       self.all_schema_indexes = nil
     end
-  end
 
+    def unique_index_only_for_present_values(quoted_column_names)
+      column_names = quoted_column_names.split(', ')
+      conditions = column_names.map { |column_name| "#{column_name} IS NOT NULL" }.join(' AND ')
+      unique_value = column_names.join(" || ',' || ")
+      "CASE WHEN #{conditions} THEN #{unique_value} END"
+    end
+  end
 end
