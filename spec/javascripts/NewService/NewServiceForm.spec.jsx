@@ -14,6 +14,14 @@ jest.spyOn(FOO, 'ServiceDiscoveryForm')
   .mockImplementation(() => '')
 
 const props = {
+  template: {
+    service: {
+      name: 'New API',
+      system_name: 'new_api',
+      description: 'A brand new API'
+    },
+    errors: {}
+  },
   isServiceDiscoveryAccessible: true,
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl: 'authenticate-url',

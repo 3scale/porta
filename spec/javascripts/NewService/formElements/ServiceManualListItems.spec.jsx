@@ -1,17 +1,35 @@
 import React from 'react'
-import {mount, shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
-import {ServiceManualListItems} from 'NewService/components/FormElements'
+import { ServiceManualListItems } from 'NewService/components/FormElements'
 
-it('should render itself', () => {
-  const wrapper = mount(<ServiceManualListItems/>)
-  expect(wrapper.find(ServiceManualListItems).exists()).toEqual(true)
+it('should render required form fields', () => {
+  const props = {
+    service: {
+      name: 'New API',
+      system_name: 'new_api',
+      description: 'A brand new API'
+    },
+    errors: {}
+  }
+  const view = shallow(<ServiceManualListItems {...props}/>)
+
+  expect(view).toMatchSnapshot()
 })
 
-it('should render all required forms', () => {
-  const wrapper = shallow(<ServiceManualListItems/>)
+it('should render required form fields with errors', () => {
+  const props = {
+    service: {
+      name: '',
+      system_name: 'new api',
+      description: 'A brand new API'
+    },
+    errors: {
+      name: "Can't be blank",
+      system_name: 'Only ASCII letters, numbers, dashes and underscores are allowed.'
+    }
+  }
+  const view = shallow(<ServiceManualListItems {...props}/>)
 
-  expect(wrapper.find('[id="service_name"][type="text"][name="service[name]"]').exists()).toBe(true)
-  expect(wrapper.find('[id="service_system_name"][type="text"][name="service[system_name]"]').exists()).toBe(true)
-  expect(wrapper.find('[id="service_description"][name="service[description]"]').exists()).toBe(true)
+  expect(view).toMatchSnapshot()
 })

@@ -174,7 +174,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  class BackendApiCreation < Api::ServicesControllerTest
+  class BackendApiCreationTest < Api::ServicesControllerTest
     def setup
       super
       Logic::RollingUpdates.stubs(enabled?: true)
@@ -208,6 +208,21 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_equal 1, Service.last.backend_api_configs.count
+    end
+  end
+
+  class ServiceCreateTest < Api::ServicesControllerTest
+    test 'create error shows the right flash message' do
+      post admin_services_path, service: { name: '' }
+      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+
+      @provider.settings.allow_multiple_services!
+
+      post admin_services_path, service: { name: '' }
+      assert_equal 'Name can\'t be blank', flash[:error]
+
+      post admin_services_path, service: { name: 'example-service', system_name: '###' }
+      assert_equal 'System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed.', flash[:error]
     end
   end
 end
