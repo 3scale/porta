@@ -392,7 +392,7 @@ class Invoice < ApplicationRecord
 
   # REFACTOR: remove this method and replace it by open?
   def current?
-    period.is_same_month?(Time.now.utc.to_date) && !buyer_account.try!(:destroyed?)
+    period.same_month?(Time.now.utc.to_date) && !buyer_account.try!(:destroyed?)
   end
 
   def editable?
