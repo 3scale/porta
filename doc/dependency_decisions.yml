@@ -596,3 +596,16 @@
 - - :approve
   - WHY=CC-BY-4.0 AND MIT
   - *12
+- - :approve
+  - canvas
+  - &13
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2019-11-19 14:53:06.256909000 Z
+- - :approve
+  - WHO=Damian Peralta
+  - *13
+- - :approve
+  - WHY=MIT License
+  - *13
