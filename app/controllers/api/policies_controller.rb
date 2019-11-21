@@ -42,7 +42,8 @@ class Api::PoliciesController < Api::BaseController
   end
 
   def find_resources
-    @registry_policies = Policies::PoliciesListService.call!(current_account, proxy: proxy)
+    policies_list = Policies::PoliciesListService.call!(current_account, proxy: proxy)
+    @registry_policies = PoliciesListPresenter.new(policies_list).registry
   rescue StandardError => error
     @error = error
   end
