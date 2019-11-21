@@ -22,10 +22,10 @@ class Signup::AccountManager
 
   class_attribute :account_builder, default: proc {}
 
-
+  # This method smells of :reek:TooManyStatements and :reek:DuplicateMethodCall
   def save_result_with_plans(result, params)
     plans = plans_with_defaults(result, params.plans)
-    return if plans.errors?
+    return if plans.errors.any?
     transaction do
       begin
         persist!(result, plans, params.defaults)
@@ -39,7 +39,7 @@ class Signup::AccountManager
     end
   end
 
-  def persist!(result, plans, defaults)
+  def persist!(*)
     raise NotImplementedError, 'persist! should be implemented in subclasses'
   end
 
