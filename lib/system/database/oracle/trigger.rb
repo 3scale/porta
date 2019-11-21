@@ -36,7 +36,7 @@ module System
         protected
 
         def set_master_id
-          "master_id := #{master_id}"
+          "master_id := #{master_id};"
         rescue ActiveRecord::RecordNotFound
           <<~SQL
             BEGIN
