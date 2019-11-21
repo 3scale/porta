@@ -1,118 +1,119 @@
 # frozen_string_literal: true
 
-class Signup::PlansWithDefaults
-  attr_reader :provider
+module Signup
+  class PlansWithDefaults
+    attr_reader :provider
 
-  def initialize(provider, plans = nil, &error_proc)
-    @provider = provider
-    @error_proc = error_proc
-    @plans = Hash.new { |hash, key| hash[key] = [] }
-    self.selected = plans if plans
-  end
-
-  def selected=(plans)
-    self.plans.update plans.group_by(&:class) if plans.present?
-    add_default(provider, provider.account_plans, AccountPlan)
-    provider.services.each { |service| add_default_plans_to_service(service) }
-  end
-
-  delegate :[], to: :plans
-
-  def errors
-    @errors ||= begin
-      errors = []
-
-      errors += account_plan_errors
-      errors += application_plan_errors
-      errors += service_plan_errors
-
-      errors.each(&error_proc)
-
-      errors
+    def initialize(provider, plans = nil, &error_proc)
+      @provider = provider
+      @error_proc = error_proc
+      @plans = Hash.new { |hash, key| hash[key] = [] }
+      self.selected = plans if plans
     end
-  end
 
-  def to_a
-    account_plans + service_plans + application_plans
-  end
+    def selected=(plans)
+      self.plans.update plans.group_by(&:class) if plans.present?
+      add_default(provider, provider.account_plans, AccountPlan)
+      provider.services.each { |service| add_default_plans_to_service(service) }
+    end
 
-  def application_plans
-    @application_plans ||= plans[ApplicationPlan]
-  end
+    delegate :[], to: :plans
 
-  delegate :each, to: :to_a
+    def errors
+      @errors ||= begin
+        errors = []
 
-  protected
+        errors += account_plan_errors
+        errors += application_plan_errors
+        errors += service_plan_errors
 
-  attr_reader :plans
+        errors.each(&error_proc)
 
-  private
+        errors
+      end
+    end
 
-  attr_reader :error_proc
+    def to_a
+      account_plans + service_plans + application_plans
+    end
 
-  def account_plans
-    @account_plans ||= plans[AccountPlan]
-  end
+    def application_plans
+      @application_plans ||= plans[ApplicationPlan]
+    end
 
-  def service_plans
-    @service_plans ||= plans[ServicePlan]
-  end
+    delegate :each, to: :to_a
 
-  def contract_first_published_service_plan?
-    !service_plans_enabled? && provider.provider_can_use?(:published_service_plan_signup)
-  end
+    protected
 
-  def service_plans_enabled?
-    provider.settings.service_plans_ui_visible?
-  end
+    attr_reader :plans
 
-  # CodeClimate says that this method smells very much, but it is hard and risky to change, to I just set it there as "won't fix"
-  def add_default_plans_to_service(service)
-    # returns nil when there is no default plan and no plan given
-    # that means that there is no service plan and cannot be application plan
-    unless (has_service_plan = add_default(service, service.service_plans, ServicePlan))
-      Rails.logger.debug("Skipping application plan in signup, because there is no service plan")
+    private
+
+    attr_reader :error_proc
+
+    def account_plans
+      @account_plans ||= plans[AccountPlan]
+    end
+
+    def service_plans
+      @service_plans ||= plans[ServicePlan]
+    end
+
+    def contract_first_published_service_plan?
+      !service_plans_enabled? && provider.provider_can_use?(:published_service_plan_signup)
+    end
+
+    def service_plans_enabled?
+      provider.settings.service_plans_ui_visible?
+    end
+
+    # CodeClimate says that this method smells very much, but it is hard and risky to change, to I just set it there as "won't fix"
+    def add_default_plans_to_service(service)
+      # returns nil when there is no default plan and no plan given
+      # that means that there is no service plan and cannot be application plan
+      unless (has_service_plan = add_default(service, service.service_plans, ServicePlan))
+        Rails.logger.debug("Skipping application plan in signup, because there is no service plan")
+        return unless contract_first_published_service_plan?
+      end
+
+      return unless add_default(service, service.application_plans, ApplicationPlan)
       return unless contract_first_published_service_plan?
+
+      return if has_service_plan || !(first_service_plan = service.service_plans.published.first)
+      service_plans << first_service_plan
     end
 
-    return unless add_default(service, service.application_plans, ApplicationPlan)
-    return unless contract_first_published_service_plan?
+    # returns true if there is already plan of same type and issuer
+    # or adds default plan to array and returns the array
+    def add_default(issuer, plans, type)
+      return true if any_plan_for?(issuer: issuer, plan_type: type)
 
-    return if has_service_plan || !(first_service_plan = service.service_plans.published.first)
-    service_plans << first_service_plan
-  end
+      default = plans.default_or_nil
+      self.plans[type] << default if default
+    end
 
-  # returns true if there is already plan of same type and issuer
-  # or adds default plan to array and returns the array
-  def add_default(issuer, plans, type)
-    return true if any_plan_for?(issuer: issuer, plan_type: type)
+    def account_plan_errors
+      account_plan = account_plans.first
+      human_model_name = AccountPlan.model_name.human
+      return ["#{human_model_name} is required"] unless account_plan
+      account_plan.issuer == provider ? [] : ["Issuer of #{human_model_name} must be #{provider.org_name}"]
+    end
 
-    default = plans.default_or_nil
-    self.plans[type] << default if default
-  end
+    def application_plan_errors
+      application_plans.group_by(&:issuer).keys.each_with_object([]) do |issuer, errors|
+        next if any_plan_for?(issuer: issuer, plan_type: ServicePlan)
+        errors << "Couldn't find a Service Plan for #{issuer.name}. Please contact the API administrator to fix this."
+      end
+    end
 
-  def account_plan_errors
-    account_plan = account_plans.first
-    human_model_name = AccountPlan.model_name.human
-    return ["#{human_model_name} is required"] unless account_plan
-    account_plan.issuer == provider ? [] : ["Issuer of #{human_model_name} must be #{provider.org_name}"]
-  end
+    def service_plan_errors
+      service_plans.group_by(&:issuer).values.each_with_object([]) do |plans, errors|
+        errors << "Can subscribe only one plan per service" if plans.size > 1
+      end
+    end
 
-  def application_plan_errors
-    application_plans.group_by(&:issuer).keys.each_with_object([]) do |issuer, errors|
-      next if any_plan_for?(issuer: issuer, plan_type: ServicePlan)
-      errors << "Couldn't find a Service Plan for #{issuer.name}. Please contact the API administrator to fix this."
+    def any_plan_for?(issuer:, plan_type:)
+      plans[plan_type].any? { |plan| plan.issuer == issuer }
     end
   end
-
-  def service_plan_errors
-    service_plans.group_by(&:issuer).values.each_with_object([]) do |plans, errors|
-      errors << "Can subscribe only one plan per service" if plans.size > 1
-    end
-  end
-
-  def any_plan_for?(issuer:, plan_type:)
-    plans[plan_type].any? { |plan| plan.issuer == issuer }
-  end
-
 end
