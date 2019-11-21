@@ -22,7 +22,8 @@ class Signup::Result
   delegate :activate, :activate!, :active?, :activate_on_minimal_signup?,          to: :user,    prefix: true
   delegate :id, to: :account
 
-  def valid? # It's done this way to get all the errors even if it is already known that is invalid
+  def valid?
+    # It's done this way to get all the errors even if it is already known that is invalid
     [account.valid?, user.valid?, @errors.empty?].all?
   end
 
@@ -60,7 +61,8 @@ class Signup::Result
 
   private
 
-  def read_attribute_for_validation(attr) # ActiveModel::Errors needs this method to read the errors correctly
+  # ActiveModel::Errors needs this method to read the errors correctly
+  def read_attribute_for_validation(attr)
     public_send(attr)
   end
 end

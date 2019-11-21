@@ -29,7 +29,7 @@ class Signup::ProviderAccountManager < Signup::AccountManager
   def contract_plans_and_create_service(account, plans, defaults)
     create_contract_plans_for_account!(account, plans, defaults)
     create_first_service(account)
-    set_switches_and_limits(account, plans.application_plan)
+    set_switches_and_limits(account, plans.application_plans.first)
   end
 
   def create_first_service(account)
@@ -46,7 +46,7 @@ class Signup::ProviderAccountManager < Signup::AccountManager
 
   def update_tenant_ids(account)
     account_id = account.id
-    account.users.scope.update_all(tenant_id: account_id)
-    account.fields_definitions.update_all "tenant_id = #{account_id}"
+    account.users.scope.update_all(tenant_id: account_id) # rubocop:disable Rails/SkipsModelValidations
+    account.fields_definitions.update_all(tenant_id: account_id) # rubocop:disable Rails/SkipsModelValidations
   end
 end
