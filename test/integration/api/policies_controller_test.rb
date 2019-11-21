@@ -7,7 +7,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
     login! @provider
-    Policies::PoliciesListService.expects(:call!)
+    Policies::PoliciesListService.expects(:call!).returns({})
   end
 
 

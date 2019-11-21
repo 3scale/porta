@@ -11,22 +11,14 @@ export type PolicyConfig = {
   enabled: boolean,
 }
 
-// Represents each of the items contained in the registry object
-// returned by rails (@registry_policies)
-export type RawRegistryPolicy = {
+// Represents policies of the Registry
+export type RegistryPolicy = {
   $schema: string,
   configuration: Configuration,
   description: [string],
   name: string,
   summary: string,
-  version: string
-}
-
-// Represents the registry object returned by the server (@registry_policies)
-export type RawRegistry = { [string]: RawRegistryPolicy[] }
-
-// Represents policies of the Registry
-export type RegistryPolicy = RawRegistryPolicy & {
+  version: string,
   data?: Configuration,
   humanName: string
 }

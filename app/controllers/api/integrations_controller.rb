@@ -136,7 +136,8 @@ class Api::IntegrationsController < Api::BaseController
   protected
 
   def find_registry_policies
-    @registry_policies ||= Policies::PoliciesListService.call!(current_account, proxy: @proxy)
+    policies_list = Policies::PoliciesListService.call!(current_account, proxy: @proxy)
+    @registry_policies = PoliciesListPresenter.new(policies_list).registry
   rescue StandardError => error
     @error = error
   end
