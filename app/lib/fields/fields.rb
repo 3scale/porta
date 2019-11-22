@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#this is tested in unit/account_test
 module Fields::Fields
   extend ActiveSupport::Concern
 
