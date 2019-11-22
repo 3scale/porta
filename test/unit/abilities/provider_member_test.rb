@@ -29,7 +29,7 @@ module Abilities
 
     def test_events_according_the_service
       # service has to be stored in database, because ability depends on scope user.accessible_services
-      service  = FactoryBot.create(:simple_service, id: 1, account: @account)
+      service  = FactoryBot.create(:simple_service, account: @account)
       plan     = FactoryBot.build_stubbed(:simple_service_plan, issuer: service)
       contract = FactoryBot.build_stubbed(:simple_service_contract, plan: plan)
       event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, @member)
@@ -78,9 +78,9 @@ module Abilities
     end
 
     def test_services
-      service_1 = FactoryBot.create(:simple_service, id: 1)
-      service_2 = FactoryBot.create(:simple_service, id: 2, account: @account)
-      service_3 = FactoryBot.create(:simple_service, id: 3, account: @account)
+      service_1 = FactoryBot.create(:simple_service)
+      service_2 = FactoryBot.create(:simple_service, account: @account)
+      service_3 = FactoryBot.create(:simple_service, account: @account)
 
       assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'all services allowed by default'
@@ -92,7 +92,7 @@ module Abilities
       assert_cannot ability, :show, service_2, 'none services allowed'
       assert_cannot ability, :show, service_3, 'none services allowed'
 
-      @member.member_permission_service_ids = [1, 2]
+      @member.member_permission_service_ids = [service_1.id, service_2.id]
       @member.save
 
       assert_cannot ability, :show, service_1, 'foreign service'
