@@ -8,6 +8,17 @@ class ApplicationRecord < ActiveRecord::Base
     attribute_names
   end
 
+  sifter(:regexp) do |column, matcher|
+    case System::Database.adapter.to_sym
+    when :mysql
+      ["#{column} REGEXP ?", matcher]
+    when :postgres
+      ["#{column} ~* ?", matcher]
+    when :oracle
+      ["REGEXP_LIKE(#{column}, ?)", matcher]
+    end
+  end
+
   sifter(:month_number) do |column|
     case System::Database.adapter.to_sym
     when :mysql

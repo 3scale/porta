@@ -1,4 +1,5 @@
 class Topic < ApplicationRecord
+  include PermalinkFu
 
   acts_as_taggable
 
@@ -64,7 +65,7 @@ class Topic < ApplicationRecord
 
   attr_readonly :posts_count, :hits
 
-  has_permalink :title, :scope => :forum_id
+  permalink :title, scope: :forum_id
 
   module Search
     def smart_search(*args)
