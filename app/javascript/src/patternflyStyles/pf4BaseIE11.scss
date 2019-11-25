@@ -102,7 +102,7 @@ button:-moz-focusring,
   .pf-m-current {
     &> .pf-c-nav__link,
     &.pf-c-nav__link {
-      color: #fff;
+      color: $white;
       font-weight: bold;
 
       &::after {
@@ -415,22 +415,25 @@ button:-moz-focusring,
 .pf-c-nav.pf-m-dark .pf-c-divider {
   background-color: #4f5255; }
 .pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-current {
-  /* stylelint-disable-next-line */ }
+  // scss-lint:disable SelectorFormat
+ }
   .pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-current .pf-c-divider {
     background-color: #212427; }
 .pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-expanded {
   padding-bottom: 0.5rem;
-  /* stylelint-disable-next-line */ }
+  // scss-lint:disable SelectorFormat
+ }
 .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item {
-  /* stylelint-disable-next-line */ }
+  // scss-lint:disable SelectorFormat
+}
   .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item.pf-m-current {
-    background-color: #3c3f42; }
+    background-color:#3c3f42; }
   .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link.pf-m-current {
-    background-color: #3c3f42; }
+    background-color:#3c3f42; }
     .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link {
       background-color: rgb(33, 36, 39); 
-      color: #fff}
+      color: $white}
 
 .pf-c-page__sidebar.pf-m-dark {
   background-color: rgb(33, 36, 39);;
-  color: #fff; }
+  color: $white; }
