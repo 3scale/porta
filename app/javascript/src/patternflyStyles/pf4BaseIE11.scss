@@ -43,13 +43,13 @@ button:-moz-focusring,
 
   // HACK: this should affect the whole page
   a {
-    color: #06c;
+    color: #2b9af3;
     -webkit-text-decoration: none;
             text-decoration: none;
   }
 
   a:hover {
-    color: #06c;
+    color: #2b9af3;
   }
 }
 
@@ -89,11 +89,11 @@ button:-moz-focusring,
 
   .pf-c-nav__link:active,
   .pf-c-nav__link:hover {
-    color: #06c;
+    color: #2b9af3;
     font-weight: bold;
 
     &::after {
-      background-color: #06c;
+      background-color: #2b9af3;
     }
   }
   .pf-c-nav__link:active {
@@ -106,18 +106,18 @@ button:-moz-focusring,
       font-weight: bold;
 
       &::after {
-        background-color: #06c;
+        background-color: #2b9af3;
       }
     }
   }
   .pf-c-nav__link.pf-m-hover::after {
-    background-color: #06c;
+    background-color: #2b9af3;
   }
   .pf-c-nav__list .pf-c-nav__link.pf-m-active::after {
-    background-color: #06c;
+    background-color: #2b9af3;
   }
   .pf-c-nav__link.pf-m-focus::after {
-    background-color: #06c;
+    background-color: #2b9af3;
   }
 }
 
@@ -145,11 +145,11 @@ button:-moz-focusring,
     display: block;
     padding: 0.5rem 1.5rem 0.5rem calc(1.5rem + 1rem);
     font-weight: 500;
-    color: #fff;
+    color: $white;
 
     &:hover,
     &:active {
-      color: #fff;
+      color: $white;
       font-weight: 16px;
       background-color: rgb(79, 82, 85);;
     }
@@ -233,7 +233,7 @@ button:-moz-focusring,
 .pf-c-page__header {
   -ms-grid-row: 1;
   -ms-grid-column: 1;
-  color: #fff;
+  color: $white;
   z-index: 300;
   -ms-grid-columns: auto auto;
   grid-template-columns: auto auto;
@@ -351,7 +351,7 @@ button:-moz-focusring,
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background-color: #fff;
+  background-color: $white;
   transition: all 250ms cubic-bezier(0.42, 0, 0.58, 1);
   transform: translate3d(0, 0, 0);
 }
