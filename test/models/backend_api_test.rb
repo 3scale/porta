@@ -31,19 +31,6 @@ class BackendApiTest < ActiveSupport::TestCase
     assert @backend_api.valid?
   end
 
-  test '.orphans should return backend apis that do not belongs to any service' do
-    account = FactoryBot.create(:account)
-    FactoryBot.create(:service, account: account)
-    service_to_delete = FactoryBot.create(:simple_service, :with_default_backend_api, system_name: 'orphan_system', account: account)
-    orphan_backend_api = service_to_delete.backend_api_configs.first.backend_api
-
-    assert_equal [], BackendApi.orphans
-
-    service_to_delete.destroy!
-
-    assert_equal [orphan_backend_api], BackendApi.orphans
-  end
-
   test '.not_used_by returns the backend apis that are not related to that service' do
     account = FactoryBot.create(:simple_provider)
     backend_api_not_used_by_any_service = FactoryBot.create(:backend_api, account: account)
@@ -93,7 +80,7 @@ class BackendApiTest < ActiveSupport::TestCase
     refute BackendApi.exists? backend_api.id
   end
 
-  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+  class DisableTransactionalFixturesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
     test 'proxy config affecting changes on update' do
@@ -107,6 +94,21 @@ class BackendApiTest < ActiveSupport::TestCase
 
       backend_api.update_attributes(private_endpoint: 'http://new-endpoint')
       backend_api.update_attributes(name: 'New Backend Name')
+    end
+
+    test '.orphans should return backend apis that do not belongs to any service' do
+      account = FactoryBot.create(:account)
+      FactoryBot.create(:service, account: account)
+      service_to_delete = FactoryBot.create(:simple_service, :with_default_backend_api, system_name: 'orphan_system', account: account)
+      orphan_backend_api = service_to_delete.backend_api_configs.first.backend_api
+
+      assert_equal [], BackendApi.orphans.pluck(:id)
+
+      service_to_delete.destroy!
+      assert_equal 0, orphan_backend_api.services.count
+      assert_equal 0, orphan_backend_api.backend_api_configs.count
+
+      assert_equal [orphan_backend_api.id], BackendApi.orphans.pluck(:id)
     end
   end
 end
