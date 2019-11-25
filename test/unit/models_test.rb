@@ -18,18 +18,18 @@ class ModelsTest < ActiveSupport::TestCase
       'Profile' => %w[logo_file_name logo_content_type state], 'UserSession' => %w[key user_agent], 'CMS::Partial' => %w[content_type],
       'CMS::EmailTemplate' => %w[content_type], 'CMS::Builtin' => %w[title], 'CMS::Builtin::StaticPage' => %w[title], 'CMS::Builtin::Page' => %w[title content_type],
       'CMS::Builtin::Partial' => %w[title content_type], 'CMS::Portlet' => %w[content_type], 'CMS::Builtin::LegalTerm' => %w[title content_type],
-      'CMS::PortletTest::CustomPortlet' => :all, 'CMS::Portlet::Base' => %w[content_type], 'ExternalRssFeedPortlet' => %w[content_type],
+      'CMS::Portlet::Base' => %w[content_type], 'ExternalRssFeedPortlet' => %w[content_type],
       'LatestForumPostsPortlet' => %w[content_type], 'TableOfContentsPortlet' => %w[content_type], 'AuthenticationProvider::GitHub' => %w[branding_state account_type],
       'AuthenticationProvider::Keycloak' => %w[account_type], 'AuthenticationProvider::Auth0' => %w[account_type], 'AuthenticationProvider::Custom' => %w[account_type],
       'AuthenticationProvider::ServiceDiscoveryProvider' => %w[account_type], 'AuthenticationProvider::RedhatCustomerPortal' => %w[account_type],
-      'Account' => %w[credit_card_auth_code credit_card_authorize_net_payment_profile_token credit_card_partial_number],
-      'DeadlockTest::Model' => :all, 'ThreeScale::SearchTest::Model' => :all
+      'Account' => %w[credit_card_auth_code credit_card_authorize_net_payment_profile_token credit_card_partial_number]
     }
 
     Rails.application.eager_load!
     models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy]
 
     validate_columns_for = ->(model, options = {}) do
+      next if model.name.match(/^.+Test::.+$/)
       exception_attributes = exceptions.fetch(model.name, [])
       next if exception_attributes == :all
       model.columns.each do |column|
