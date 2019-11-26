@@ -2,7 +2,6 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
-import { PolicyForm } from 'Policies/components/PoliciesForm'
 
 describe('PolicyConfig Component', () => {
   function setup () {
@@ -160,47 +159,6 @@ describe('PolicyConfig APIcast policy', () => {
   it('should hide the APIcast policy form', () => {
     const {policyConfigWrapper} = setup()
 
-    expect(policyConfigWrapper.find(PolicyForm).exists()).toBe(false)
-  })
-})
-
-describe('PolicyForm', () => {
-  function setup () {
-    const props = {
-      className: 'PolicyConfiguration-form',
-      schema: {
-        properties: {
-          status: {
-            type: 'integer',
-            description: 'HTTP status code to be returned'
-          }
-        },
-        type: 'object'
-      },
-      onError: jest.fn(),
-      formData: {},
-      onSubmit: jest.fn()
-    }
-
-    const policyFormWrapper = mount(<PolicyForm {...props} />)
-
-    return {
-      props,
-      policyFormWrapper
-    }
-  }
-
-  it('should clear the errors when loading a different schema', () => {
-    const {policyFormWrapper} = setup()
-    const statusInput = policyFormWrapper.find('input')
-    statusInput.simulate('change', { target: { value: 'NaN' } })
-    const instance = policyFormWrapper.instance()
-    const event = {preventDefault: jest.fn(), persist: jest.fn()}
-
-    instance.onSubmit(event)
-    expect(policyFormWrapper.state().errors.length).toBe(1)
-
-    policyFormWrapper.setProps({schema: {}})
-    expect(policyFormWrapper.state().errors.length).toBe(0)
+    expect(policyConfigWrapper.find('Form').exists()).toBe(false)
   })
 })
