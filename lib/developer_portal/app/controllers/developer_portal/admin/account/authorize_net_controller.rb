@@ -22,7 +22,8 @@ module DeveloperPortal::Admin::Account
     private
 
     def update_user_and_perform_action!(auth_response)
-      if authorize_net.has_credit_card?(auth_response)
+      @payment_result = authorize_net.has_credit_card?(auth_response)
+      if @payment_result
         authorize_net.update_user(auth_response)
         flash[:success] = 'Credit Card details were saved correctly'
       else

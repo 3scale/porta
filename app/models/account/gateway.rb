@@ -88,4 +88,5 @@ module Account::Gateway
                       "changed payment gateway to #{payment_gateway_type}")
   end
 
+  delegate :reset_payment_failure_count, to: :gateway_setting
 end

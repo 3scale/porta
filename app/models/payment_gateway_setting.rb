@@ -2,6 +2,8 @@
 # Option is meant for optional things
 # Setting is for setting things up. In our case it is setting up the payment gateway
 class PaymentGatewaySetting < ApplicationRecord
+  FAILURE_THRESHOLD = 10
+
   belongs_to :account, inverse_of: :payment_gateway_setting
   serialize :gateway_settings
   symbolize :gateway_type
@@ -36,5 +38,19 @@ class PaymentGatewaySetting < ApplicationRecord
     if gateway_type_changed? && PaymentGateway.find(gateway_type)&.deprecated?
       errors.add(:gateway_type, :invalid)
     end
+  end
+
+  def increment_failure_count
+    incremented_failure_count = failure_count + 1
+    self.gateway_settings = symbolized_settings.merge({failure_count:  incremented_failure_count})
+    save!
+  end
+
+  def failure_higher_than_threshold?
+    failure_count > FAILURE_THRESHOLD
+  end
+
+  def failure_count
+    symbolized_settings[:failure_count] || 0
   end
 end

@@ -109,4 +109,26 @@ class DeveloperPortal::Admin::Account::StripeControllerTest < DeveloperPortal::A
 
     assert_redirected_to '/admin/account/stripe'
   end
+
+  test '#hosted_success suspend account when failure count is higher than threshold' do
+    PaymentGateways::StripeCrypt.any_instance.expects(:update!).returns(false)
+    @account.gateway_setting.update(gateway_settings: { failure_count: 10} )
+
+    post :hosted_success
+
+    @account.reload
+
+    assert @account.suspended?
+  end
+
+  test '#hosted_success does not suspend account when failure count is below the threshold' do
+    PaymentGateways::StripeCrypt.any_instance.expects(:update!).returns(false)
+    @account.gateway_setting.update(gateway_settings: { failure_count: 9} )
+
+    post :hosted_success
+
+    @account.reload
+
+    refute @account.suspended?
+  end
 end

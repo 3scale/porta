@@ -58,6 +58,32 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
 
   end
 
+  test '#hosted_success suspend account when failure count is higher than threshold' do
+    gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
+    @provider.provider_account.update(payment_gateway_options: gateway_options)
+    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    @provider.gateway_setting.update(gateway_settings: { failure_count: 10} )
+
+    post hosted_success_provider_admin_account_braintree_blue_path, form_params
+
+    @provider.reload
+
+    assert @provider.suspended?
+  end
+
+  test '#hosted_success does not suspend account when failure count is below the threshold' do
+    gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
+    @provider.provider_account.update(payment_gateway_options: gateway_options)
+    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    @provider.gateway_setting.update(gateway_settings: { failure_count: 9} )
+
+    post hosted_success_provider_admin_account_braintree_blue_path, form_params
+
+    @provider.reload
+
+    refute @provider.suspended?
+  end
+
   test 'invalid credentials' do
     ThreeScale.config.stubs(onpremises: false)
 
@@ -84,5 +110,31 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     get edit_provider_admin_account_braintree_blue_path
     assert_redirected_to provider_admin_account_braintree_blue_path
     assert_equal 'Invalid merchant id', flash[:error]
+  end
+
+  private
+
+  def form_params
+    {
+      customer: {
+        first_name: 'John',
+        last_name: 'Doe',
+        phone: '123456789',
+        credit_card: {
+          billing_address: {
+            company: 'Invisible Inc.',
+            street_address: '123 Main Street',
+            postal_code: '12345',
+            locality: 'Anytown',
+            region: 'Nowhere',
+            country_name: 'US'
+          }
+        }
+      },
+      braintree: {
+        nonce: 'a_nonce',
+        last_four: '7654'
+      }
+    }
   end
 end

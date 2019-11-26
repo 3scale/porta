@@ -82,6 +82,10 @@ module Account::States
         transition all => :suspended, if: :tenant?
       end
 
+      event :force_suspend do
+        transition all => :suspended
+      end
+
       event :resume do
         transition :suspended => :approved, if: :provider?
         transition :scheduled_for_deletion => :approved
