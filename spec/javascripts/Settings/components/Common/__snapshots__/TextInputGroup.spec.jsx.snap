@@ -17,6 +17,7 @@ exports[`should render correctly 1`] = `
     onChange={[Function]}
     placeholder="You Favourite Dooz Kawa"
     type="text"
+    validated="default"
     value="Me Faire La Belle"
   />
 </FormGroup>
