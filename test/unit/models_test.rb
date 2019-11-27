@@ -29,7 +29,7 @@ class ModelsTest < ActiveSupport::TestCase
     models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy]
 
     validate_columns_for = ->(model, options = {}) do
-      next if model.name.match(/^.+Test::.+$/)
+      next if class_in_tests?(model.name)
       exception_attributes = exceptions.fetch(model.name, [])
       next if exception_attributes == :all
       model.columns.each do |column|
@@ -56,6 +56,12 @@ class ModelsTest < ActiveSupport::TestCase
     validate_columns_for.call(Proxy, service: Service.new(account: Account.new))
     validate_columns_for.call(Service, account: Account.new)
     validate_columns_for.call(BackendApi, account: Account.new)
+  end
+
+  def class_in_tests?(class_name)
+    @_binding_pry ||= Pry.new.tap { |pry| pry.binding_stack = [binding] }
+    code = Pry::CodeObject.lookup class_name, @_binding_pry
+    code.source_location[0].match(/^#{Rails.root.join('test')}.+/)
   end
 
 end
