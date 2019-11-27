@@ -116,7 +116,6 @@ export function submitPolicyForm (policyConfig: ChainPolicy): ThunkAction {
  */
 export function closePolicyForm (): ThunkAction {
   return function (dispatch: Dispatch) {
-    // TODO: dispatch(setSelectedPolicy(undefined))
     dispatch(uiComponentTransition({hide: policyConfig, show: chain}))
   }
 }
