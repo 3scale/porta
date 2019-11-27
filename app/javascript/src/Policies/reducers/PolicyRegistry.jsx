@@ -1,13 +1,13 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, updateArray } from 'Policies/util'
+import { createReducer } from 'Policies/util'
 
 import type { RegistryPolicy } from 'Policies/types'
 import type { FetchRegistrySuccessAction } from 'Policies/actions/PolicyRegistry'
 
 function updateRegistry (state: Array<RegistryPolicy>, action: FetchRegistrySuccessAction): Array<RegistryPolicy> {
-  return updateArray(state, action.payload)
+  return [...[], ...action.payload]
 }
 
 // TODO: use combineReducers instead of createReducer

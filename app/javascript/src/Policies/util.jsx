@@ -1,16 +1,9 @@
 // @flow
 
-import type { Reducer, UIState, FetchErrorAction, ChainPolicy, IAction } from 'Policies/types'
+import type { Reducer, ChainPolicy, IAction } from 'Policies/types'
 
-// Needs to be any, since it's a subset of T
-// eslint-disable-next-line flowtype/no-weak-types
-function updateObject<T> (oldObject: T, newValues: any): T {
-  return {...oldObject, ...newValues}
-}
-
-function updateArray<T> (oldArray: Array<T>, newValues: Array<T>): Array<T> {
-  // $FlowFixMe: it does return an array, flow types are incorrect here
-  return Object.assign([], oldArray, newValues)
+function isNotApicastPolicy (policy: { name: string }): boolean {
+  return policy.name !== 'apicast'
 }
 
 // TODO: refactor Action types, create a common interface and remove 'any' from here
@@ -19,15 +12,10 @@ function createReducer<S> (initialState: S, handlers: {[string]: (S, any) => S})
   return function reducer (state: S = initialState, action: IAction) {
     if (handlers.hasOwnProperty(action.type)) {
       return handlers[action.type](state, action)
-    } else {
-      return state
     }
-  }
-}
 
-// TODO: Work with Thomas on how showing the errors if any
-function updateError (state: UIState, action: FetchErrorAction) {
-  return updateObject(state, {error: action.payload})
+    return state
+  }
 }
 
 function generateGuid (): string {
@@ -36,7 +24,7 @@ function generateGuid (): string {
       .toString(16)
       .substring(1)
   }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
+  return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`
 }
 
 function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[]) {
@@ -57,10 +45,8 @@ function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[
 }
 
 export {
-  updateObject,
-  updateArray,
+  isNotApicastPolicy,
   createReducer,
-  updateError,
   generateGuid,
   isPolicyChainChanged
 }
