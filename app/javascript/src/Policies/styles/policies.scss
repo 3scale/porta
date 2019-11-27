@@ -3,6 +3,7 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
   @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 }
 
+$body-background: #fff;
 $color: #464646;
 $goColor: #4a90e2;
 $doColor: #54b45d;
@@ -339,6 +340,11 @@ $error-color: #c00;
     border-bottom: 1px solid $Policy-subtleColor;
     border-top: 1px solid $Policy-subtleColor;
   }
+}
+
+.Policy--sortable {
+  background-color: $body-background;
+  z-index: 100;
 }
 
 .u-link {
