@@ -68,6 +68,7 @@ const PolicyChain = ({chain, actions}: Props) => {
         onSortEnd={onSortEnd}
         useDragHandle={true}
         editPolicy={actions.editPolicy}
+        helperClass="Policy--sortable"
       />
     </section>
   )
