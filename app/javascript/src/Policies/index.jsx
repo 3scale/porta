@@ -11,7 +11,7 @@ import React from 'react'
 import Root from 'Policies/components/Root'
 import configureStore from 'Policies/store/configureStore'
 import { initialState } from 'Policies/reducers/initialState'
-import { actions } from 'Policies/actions/index'
+import { populateChainFromConfigs } from 'Policies/actions'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { RegistryPolicy, PolicyConfig } from 'Policies/types'
@@ -26,7 +26,7 @@ type PoliciesProps = {
 
 const PoliciesWrapper = ({registry, chain, serviceId}: PoliciesProps, elementId: string) => {
   const store = configureStore(initialState)
-  store.dispatch(actions.populatePolicies(serviceId, chain, registry))
+  store.dispatch(populateChainFromConfigs(serviceId, chain, registry))
 
   return createReactWrapper(<Root store={store} />, elementId)
 }
