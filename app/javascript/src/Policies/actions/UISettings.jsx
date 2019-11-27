@@ -16,13 +16,3 @@ export type UIComponentTransitionAction = { type: 'UI_COMPONENT_TRANSITION', hid
 export function uiComponentTransition ({hide, show}: {hide: UIComponent, show: UIComponent}): UIComponentTransitionAction {
   return { type: 'UI_COMPONENT_TRANSITION', hide, show }
 }
-
-export type APIRequestStartAction = { type: string }
-export function apiRequestStart (): APIRequestStartAction {
-  return { type: 'API_REQUEST_START' }
-}
-
-export type APIRequestStopAction = { type: string }
-export function apiRequestStop (): APIRequestStopAction {
-  return { type: 'API_REQUEST_STOP' }
-}

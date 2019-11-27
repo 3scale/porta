@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import { actions } from 'Policies/actions/index'
+import * as actions from 'Policies/actions'
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { PolicyChain } from 'Policies/components/PolicyChain'
 import { PolicyRegistry } from 'Policies/components/PolicyRegistry'
@@ -30,23 +30,24 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  // $FlowFixMe flow complaining because importing all actions at once
   boundActionCreators: bindActionCreators(actions, dispatch)
 })
 
 const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundActionCreators }: Props) => {
   const chainActions = {
     openPolicyRegistry: boundActionCreators.openPolicyRegistry,
-    editPolicy: boundActionCreators.editPolicy,
+    editPolicy: boundActionCreators.openPolicyForm,
     sortPolicyChain: boundActionCreators.sortPolicyChain
   }
   const policyConfigActions = {
-    submitPolicyConfig: boundActionCreators.submitPolicyConfig,
+    submitPolicyConfig: boundActionCreators.submitPolicyForm,
     removePolicyFromChain: boundActionCreators.removePolicyFromChain,
-    closePolicyConfig: boundActionCreators.closePolicyConfig,
+    closePolicyConfig: boundActionCreators.closePolicyForm,
     updatePolicyConfig: boundActionCreators.updatePolicyConfig
   }
   const policyRegistryActions = {
-    addPolicy: boundActionCreators.addPolicy,
+    addPolicy: boundActionCreators.addPolicyFromRegistry,
     closePolicyRegistry: boundActionCreators.closePolicyRegistry
   }
 
