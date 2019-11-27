@@ -71,7 +71,7 @@ module ProxyConfigAffectingChanges
       after_commit :issue_proxy_affecting_change_events
 
       def issue_proxy_affecting_change_events
-        return unless service
+        return unless service && previous_changes.present?
 
         issue_proxy_affecting_change_event(service.proxy)
       end
