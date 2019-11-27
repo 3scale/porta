@@ -157,9 +157,7 @@ $error-color: #c00;
   text-align: left;
 
   &.Policy--disabled {
-    .Policy-name,
-    .Policy-summary,
-    .Policy-version {
+    .Policy-name {
       color: $disabledColor;
       text-decoration: line-through;
     }
@@ -193,6 +191,11 @@ $error-color: #c00;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0 0 0 0;
+
+    span {
+      line-height: 1.5;
+      color: $color;
+    }
   }
 
   &-name {
@@ -206,16 +209,6 @@ $error-color: #c00;
     &--add {
       @extend .u-do;
     }
-  }
-
-  &-summary {
-    line-height: 1.5;
-    color: $color;
-  }
-
-  &-version {
-    line-height: 1.5;
-    color: $color;
   }
 
   &:hover {

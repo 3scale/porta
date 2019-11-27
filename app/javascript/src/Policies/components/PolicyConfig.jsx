@@ -2,8 +2,10 @@
 
 import React from 'react'
 import Form from 'react-jsonschema-form'
-import { isNotApicastPolicy } from 'Policies/components/util'
+
+import { isNotApicastPolicy } from 'Policies/util'
 import { HeaderButton } from 'Policies/components/HeaderButton'
+
 import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
@@ -44,9 +46,7 @@ const PolicyConfig = ({policy, actions}: Props) => {
       </header>
       <h2 className="PolicyConfiguration-name">{humanName}</h2>
       <p className="PolicyConfiguration-version-and-summary">
-        <span className="PolicyConfiguration-version">{version}</span>
-        {' - '}
-        <span className="PolicyConfiguration-summary">{summary}</span>
+        {`${version} - ${summary || ''}`}
       </p>
       <p className="PolicyConfiguration-description">{description}</p>
       { isPolicyVisible &&
@@ -58,7 +58,7 @@ const PolicyConfig = ({policy, actions}: Props) => {
             checked={enabled}
             onChange={togglePolicy}
           />
-          {' '} Enabled
+          Enabled
         </label>
       }
       { isPolicyVisible &&
