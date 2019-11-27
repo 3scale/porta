@@ -142,5 +142,18 @@ class BackendApiConfigTest < ActiveSupport::TestCase
       backend_api_config.update_attributes(path: '/a-path')
       backend_api_config.destroy!
     end
+
+    test 'don not issue affecting change on stale change' do
+      backend_api = FactoryBot.create(:backend_api)
+      product = FactoryBot.create(:simple_service, account: backend_api.account)
+      backend_api_config = product.backend_api_configs.build(backend_api: backend_api, path: '/')
+      backend_api_config.save!
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, backend_api_config).never
+      backend_api_config.update_attributes(path: '/')
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, backend_api_config).once
+      backend_api_config.update_attributes(path: '/a-path')
+    end
   end
 end
