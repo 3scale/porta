@@ -42,6 +42,18 @@ class PermalinkFuTest < ActiveSupport::TestCase
       assert_equal 'my-example', forum_1.permalink
       assert_equal 'my-example', forum_2.permalink
     end
+
+    test 'forum always auto-generates permalinks and it is never written from the outside' do
+      forum = FactoryBot.build(:forum, name: 'my example')
+
+      forum.permalink = 'permalink'
+      assert forum.valid?
+      assert_equal 'my-example', forum.permalink
+
+      forum.name = 'my name is 危険 foo'
+      assert forum.valid?
+      assert_equal 'my-name-is-foo', forum.permalink
+    end
   end
 
   class TopicPermalink < ActiveSupport::TestCase
@@ -81,6 +93,18 @@ class PermalinkFuTest < ActiveSupport::TestCase
       assert topic_2.valid?
       assert_equal 'my-example', topic_1.permalink
       assert_equal 'my-example', topic_2.permalink
+    end
+
+    test 'topic always auto-generates permalinks and it is never written from the outside' do
+      topic = FactoryBot.build(:topic, title: 'my example')
+
+      topic.permalink = 'permalink'
+      assert topic.valid?
+      assert_equal 'my-example', topic.permalink
+
+      topic.title = 'my name is 危険 foo'
+      assert topic.valid?
+      assert_equal 'my-name-is-foo', topic.permalink
     end
   end
 end
