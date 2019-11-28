@@ -18,6 +18,7 @@ module PermalinkFu
       @permalink_options    = options
       before_validation :create_unique_permalink
       validate :permalink_origin_attribute_must_contain_latin_characters
+      validates :permalink, length: { maximum: 255 }
     end
   end
 

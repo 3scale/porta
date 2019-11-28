@@ -3,7 +3,7 @@ class Forum < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :description_html, length: { maximum: 65535 }
-  validates :description, :state, :permalink,  length: { maximum: 255 }
+  validates :description, :state, length: { maximum: 255 }
 
   belongs_to :account
   permalink :name
