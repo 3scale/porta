@@ -31,9 +31,11 @@ module BackendClient
 
         # Cannot call #map! on a ThreeScale::Core::APIClient::Collection instance
         records = records.map do |record|
-          attributes = record.attributes.merge(metric: metrics_by_name[record.metric_name])
+          metric = metrics_by_name[record.metric_name]
+          next unless metric
+          attributes = record.attributes.merge(metric: metric)
           UtilizationRecord.new attributes
-        end
+        end.compact
 
         finite, infinite = records.partition(&:finite?)
         finite.sort_by!(&:percentage).reverse!
