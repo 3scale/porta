@@ -85,4 +85,23 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
     record = UtilizationRecord.new(attributes)
     assert record.frozen?
   end
+
+  test 'metrics not requested should be ignored' do
+    metrics = FactoryBot.create_list(:metric, 3, service: @application_plan.issuer)
+
+    utilization_records = ThreeScale::Core::APIClient::Collection.new([
+      { period: 'day', metric_name: metrics.first.name, max_value: 5000, current_value: 2500 },
+      { period: 'day', metric_name: metrics.second.name, max_value: 10000, current_value: 9000 },
+      { period: 'minute', metric_name: metrics.third.name, max_value: 0, current_value: 3000 }
+    ].map { |attr| ThreeScale::Core::Utilization.new(attr) })
+
+    ThreeScale::Core::Utilization.expects(:load).with(@service_id, @application_id).returns(utilization_records)
+
+    requested_metrics = [metrics.first, metrics.last]
+
+    utilization = @application.utilization(requested_metrics)
+
+    assert_equal 2, utilization.size
+    assert_same_elements requested_metrics, utilization.map(&:metric)
+  end
 end
