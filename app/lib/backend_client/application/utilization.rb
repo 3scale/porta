@@ -27,7 +27,7 @@ module BackendClient
       private
 
       def process_utilization(records, metrics_list)
-        metrics_by_name = metrics_list.index_by(&:system_name)
+        metrics_by_name = metrics_list.index_by(&:extended_system_name)
 
         # Cannot call #map! on a ThreeScale::Core::APIClient::Collection instance
         records = records.map do |record|

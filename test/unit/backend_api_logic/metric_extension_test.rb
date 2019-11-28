@@ -11,8 +11,10 @@ class MetricExtensionTest < ActiveSupport::TestCase
   attr_reader :backend_api, :metric
 
   test 'extends metric system_name with backend api id' do
+    extended_system_name = metric.extended_system_name
     assert metric.save
-    assert_equal "whatever.#{backend_api.id}", metric.reload.attributes['system_name']
+    assert_equal "whatever.#{backend_api.id}", extended_system_name
+    assert_equal extended_system_name, metric.reload.attributes['system_name']
   end
 
   test 'keeps showing system name without the suffix' do

@@ -33,7 +33,7 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
 
     assert_response :success
     assert_equal metric.id, JSON.parse(response.body).dig('metric', 'id')
-    assert_equal "#{metric.system_name}.#{backend_api.id}", metric.attributes['system_name']
+    assert_equal "#{metric.system_name}.#{backend_api.id}", metric.extended_system_name
   end
 
   test 'create' do
@@ -44,7 +44,7 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     assert(@metric = backend_api.metrics.find_by(id: JSON.parse(response.body).dig('metric', 'id')))
     assert_equal 'metric friendly name', metric.friendly_name
     assert_equal 'hit', metric.unit
-    assert_equal "metric_friendly_name.#{backend_api.id}", metric.attributes['system_name']
+    assert_equal "metric_friendly_name.#{backend_api.id}", metric.extended_system_name
   end
 
   test 'create with errors in the model' do
@@ -99,10 +99,10 @@ class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
   test 'system_name can be created but not updated' do
     post admin_api_backend_api_metrics_path(backend_api_id: backend_api.id, access_token: access_token_value), { friendly_name: 'metric friendly name', unit: 'hit', system_name: 'edited', system_name: 'first-system-name' }
     metric = backend_api.metrics.last!
-    assert_equal "first-system-name.#{backend_api.id}", metric.attributes['system_name']
+    assert_equal "first-system-name.#{backend_api.id}", metric.extended_system_name
 
     put admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id), { friendly_name: 'metric friendly name', unit: 'hit', system_name: 'edited' }
-    assert_equal "first-system-name.#{backend_api.id}", metric.reload.attributes['system_name']
+    assert_equal "first-system-name.#{backend_api.id}", metric.reload.extended_system_name
   end
 
   test 'index can be paginated' do
