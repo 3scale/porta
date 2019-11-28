@@ -54,6 +54,17 @@ class PermalinkFuTest < ActiveSupport::TestCase
       assert forum.valid?
       assert_equal 'my-name-is-foo', forum.permalink
     end
+
+    test 'forum permalink validates that it contains maximum 255 characters' do
+      forum = FactoryBot.build(:forum)
+
+      forum.name = 'a' * 255
+      assert forum.valid?
+
+      forum.name = 'a' * 256
+      refute forum.valid?
+      assert_match /too long/, forum.errors[:permalink].to_sentence
+    end
   end
 
   class TopicPermalink < ActiveSupport::TestCase
@@ -105,6 +116,17 @@ class PermalinkFuTest < ActiveSupport::TestCase
       topic.title = 'my name is 危険 foo'
       assert topic.valid?
       assert_equal 'my-name-is-foo', topic.permalink
+    end
+
+    test 'topic permalink validates that it contains maximum 255 characters' do
+      topic = FactoryBot.build(:topic)
+
+      topic.title = 'a' * 255
+      assert topic.valid?
+
+      topic.title = 'a' * 256
+      refute topic.valid?
+      assert_match /too long/, topic.errors[:permalink].to_sentence
     end
   end
 end
