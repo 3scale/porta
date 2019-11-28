@@ -10,9 +10,8 @@ module BackendApiLogic
       validate :unique_extended_system_name, if: :backend_api_metric?
       before_save :extend_system_name, if: :backend_api_metric?
 
-      def system_name
-        attributes['system_name'].to_s.gsub(/#{Regexp.escape(SYSTEM_NAME_SUFFIX_SEPARATOR)}\d+\z/, '')
-      end
+      alias_method :system_name, :system_name_without_suffix
+      public :system_name
     end
 
     def backend_api_metric?
@@ -37,14 +36,20 @@ module BackendApiLogic
       end
     end
 
+    def extended_system_name
+      parts = [system_name_without_suffix]
+      parts << owner_id if backend_api_metric?
+      parts.compact.join SYSTEM_NAME_SUFFIX_SEPARATOR
+    end
+
     protected
+
+    def system_name_without_suffix
+      attributes['system_name'].to_s.gsub(/#{Regexp.escape(SYSTEM_NAME_SUFFIX_SEPARATOR)}\d+\z/, '')
+    end
 
     def extend_system_name
       self.system_name = extended_system_name
-    end
-
-    def extended_system_name
-      [system_name, owner_id].join SYSTEM_NAME_SUFFIX_SEPARATOR
     end
 
     def unique_extended_system_name
