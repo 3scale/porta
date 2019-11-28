@@ -69,8 +69,7 @@ describe('PolicyChain Components', () => {
       expect(sortableListWrapper.find('ul').hasClass('list-group')).toBe(true)
 
       expect(firstSortableItem.find('li').hasClass('Policy')).toBe(true)
-      expect(firstSortableItem.find('.Policy-version').text()).toBe('1.0.0')
-      expect(firstSortableItem.find('.Policy-summary').text()).toBe('CORS')
+      expect(firstSortableItem.find('.Policy-version-and-summary').text()).toBe('1.0.0 - CORS')
       expect(firstSortableItem.find(DragHandle).exists()).toBe(true)
     })
 
