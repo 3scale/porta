@@ -105,8 +105,8 @@ class Finance::BillingStrategy < ApplicationRecord
 
         Rails.logger.error(message)
         report_error(:error_message => message,
-                 :error_class => 'BillingError',
-                 :exception => e)
+                     :error_class => 'BillingError',
+                     :exception => e)
 
         raise e
       end
@@ -410,17 +410,7 @@ class Finance::BillingStrategy < ApplicationRecord
     )
   end
 
-  module ErrorHandling
-    def report_error(*args)
-      if Rails.env.production? || Rails.env.preview?
-        System::ErrorReporting.report_error(*args)
-      end
-    end
-  end
-
-  # so that we have #report_error as instance AND class method
-  extend ErrorHandling
-  include ErrorHandling
+  delegate :report_error, to System::ErrorReporting
 
   module FindEachFix
     # HACK: to overcome find_each scoping, we reset the scope
