@@ -1,4 +1,3 @@
-@fakeweb
 Feature: Buyer side, account fields
   In order to have awesome accounts
   A buyer

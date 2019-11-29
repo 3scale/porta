@@ -19,7 +19,7 @@ Feature: Top applications stats
 
     And all the rolling updates features are off
 
-  @selenium @javascript
+  @javascript
   Scenario: With transactions
     And buyer "alice" makes 2 service transactions with:
       | Metric   | Value |

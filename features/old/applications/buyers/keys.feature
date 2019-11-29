@@ -1,4 +1,3 @@
-@fakeweb
 Feature: Application Keys
   In order to make the API usage secure
   As a buyer

@@ -8,7 +8,7 @@ Feature: Create invoice
     And an application plan "Fixed" of provider "foo.example.com" for 0 monthly
     And a buyer "zoidberg" signed up to application plan "Fixed"
 
- @javascript @alert
+ @javascript
  Scenario: Create and view the invoice
    When current domain is the admin domain of provider "foo.example.com"
     And I log in as provider "foo.example.com"

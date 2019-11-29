@@ -1,4 +1,4 @@
-@selenium @javascript
+@javascript
 Feature: For easier debugging
   Providers need to see the status of their API
   So we provide them charts with response codes
