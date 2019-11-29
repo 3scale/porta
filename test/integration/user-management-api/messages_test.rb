@@ -17,7 +17,6 @@ class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
     assert_equal 'sent', JSON.parse(@response.body)['message']['state']
   end
 
-  # regression for https://3scale.airbrake.io/groups/64809809
   test "create with string 'message' returns 422" do
     post(admin_api_account_messages_path(@buyer, format: :xml), message: "text-inline", provider_key: @provider.api_key)
 

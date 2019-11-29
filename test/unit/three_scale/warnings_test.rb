@@ -4,7 +4,7 @@ class ThreeScale::WarningsTest < ActiveSupport::TestCase
 
   subject { ThreeScale::Warnings }
 
-  test 'report to airbrake' do
+  test 'report an error' do
     System::ErrorReporting.expects(:report_error).with(instance_of(ThreeScale::Warnings::DeprecationError), any_parameters)
 
     subject.deprecated_method(:name)

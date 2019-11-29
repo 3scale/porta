@@ -91,8 +91,6 @@ class SettingsTest < ActiveSupport::TestCase
     refute plan.reload.approval_required
   end
 
-
-  # regression for https://3scale.airbrake.io/projects/14982/groups/70314326/notices/1098522869916472518
   test "accessing account_approval_required with hidden plan" do
     plan = @provider.account_plans.first
     @provider.update_attribute(:default_account_plan_id, nil)

@@ -25,7 +25,6 @@ class CMS::SectionTest < ActiveSupport::TestCase
     assert_equal 1, @provider.sections.size
   end
 
-  # regression for https://3scale.airbrake.io/groups/56435125
   test "root section can't be deleted" do
     assert !@root.respond_to?(:destroy), 'root must not respond to destroy'
   end

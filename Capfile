@@ -2,7 +2,6 @@ require 'capistrano/ext/multistage'
 
 require 'bundler/capistrano'
 
-require 'airbrake/capistrano'
 require 'new_relic/recipes'
 
 load 'deploy' if respond_to?(:namespace) # cap2 differentiator
