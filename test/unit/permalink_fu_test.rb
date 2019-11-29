@@ -1,113 +1,132 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 require 'test_helper'
 
-class BaseModel
-  extend ActiveModel::Naming
-  include ActiveModel::Validations
-  include ActiveModel::Validations::Callbacks
+class PermalinkFuTest < ActiveSupport::TestCase
+  DATA = [
+    {name: 'This IS a Tripped out title!!.!1  (well/ not really)',
+      expected_permalink: 'this-is-a-tripped-out-title-1-well-not-really'},
+    {name: '////// meph1sto r0x ! \\\\\\', expected_permalink: 'meph1sto-r0x'},
+    {name: 'āčēģīķļņū', expected_permalink: 'acegiklnu'},
+    {name: 'LatinзҖҨرقضعم龟绘乐only', expected_permalink: 'latin-only'},
+    {name: 'some-)()()-ExtRa!/// .data==?>    to \/\/test', expected_permalink: 'some-extra-data-to-test'}
+  ]
 
-  include PermalinkFu
-
-  attr_accessor :id
-  attr_accessor :title
-  attr_accessor :extra
-  attr_accessor :permalink
-  attr_accessor :foo
-  attr_reader :errors
-
-  def initialize
-    @errors = ActiveModel::Errors.new(self)
-  end
-
-  def new_record?
-    !id
-  end
-
-  def self.where(scope)
-    @scope = scope
-    @count = 0
-    self
-  end
-
-  def self.count
-    @count
-  ensure
-    @count += 1
-  end
-end
-
-class MockModel < BaseModel
-  has_permalink :title
-end
-
-class ScopedModel < BaseModel
-  has_permalink :title, :scope => :foo
-end
-
-class MockModelExtra < BaseModel
-  has_permalink [:title, :extra]
-end
-
-class PermalinkFuTest < MiniTest::Unit::TestCase
-  @@samples = {
-    'This IS a Tripped out title!!.!1  (well/ not really)' => 'this-is-a-tripped-out-title-1-well-not-really',
-    '////// meph1sto r0x ! \\\\\\' => 'meph1sto-r0x',
-    'āčēģīķļņū' => 'acegiklnu'
-  }
-
-  @@extra = { 'some-)()()-ExtRa!/// .data==?>    to \/\/test' => 'some-extra-data-to-test' }
-
-  def test_should_escape_permalinks
-    @@samples.each do |from, to|
-      assert_equal to, PermalinkFu.escape(from)
-    end
-  end
-
-  def test_should_escape_activerecord_model
-    @m = MockModel.new
-    @@samples.each do |from, to|
-      @m.title = from; @m.permalink = nil
-      assert @m.valid?
-      assert_equal to, @m.permalink
-    end
-  end
-
-  def test_multiple_attribute_permalink
-    @m = MockModelExtra.new
-    @@samples.each do |from, to|
-      @@extra.each do |from_extra, to_extra|
-        @m.title = from; @m.extra = from_extra; @m.permalink = nil
-        assert @m.valid?
-        assert_equal "#{to}-#{to_extra}", @m.permalink
+  class ForumPermalink < ActiveSupport::TestCase
+    test 'forum generates the permalink correctly' do
+      DATA.each do |forum_data|
+        forum = Forum.new(name: forum_data[:name])
+        assert forum.valid?
+        assert_equal forum_data[:expected_permalink], forum.permalink
       end
     end
+
+    test 'forum has the right error when permalink is generated empty for invalid characters' do
+      forum = Forum.new(name: 'зҖҨ')
+      refute forum.valid?
+      assert_equal '', forum.permalink
+      assert_match /Name must contain latin characters/, forum.errors.full_messages.to_sentence
+    end
+
+    test 'forum creates the permalink without repeating it' do
+      forum_1, forum_2, forum_3 = FactoryBot.create_list(:forum, 3, name: 'my example')
+      assert_equal 'my-example',   forum_1.permalink
+      assert_equal 'my-example-2', forum_2.permalink
+      assert_equal 'my-example-3', forum_3.permalink
+    end
+
+    test 'forum does not check itself for unique permalink' do
+      forum_1 = FactoryBot.create(:forum, name: 'my example')
+      forum_2 = FactoryBot.build(:forum, name: 'my example', id: forum_1.id)
+      assert forum_2.valid?
+      assert_equal 'my-example', forum_1.permalink
+      assert_equal 'my-example', forum_2.permalink
+    end
+
+    test 'forum always auto-generates permalinks and it is never written from the outside' do
+      forum = FactoryBot.build(:forum, name: 'my example')
+
+      forum.permalink = 'permalink'
+      assert forum.valid?
+      assert_equal 'my-example', forum.permalink
+
+      forum.name = 'my name is 危険 foo'
+      assert forum.valid?
+      assert_equal 'my-name-is-foo', forum.permalink
+    end
+
+    test 'forum permalink validates that it contains maximum 255 characters' do
+      forum = FactoryBot.build(:forum)
+
+      forum.name = 'a' * 255
+      assert forum.valid?
+
+      forum.name = 'a' * 256
+      refute forum.valid?
+      assert_match /too long/, forum.errors[:permalink].to_sentence
+    end
   end
 
-  def test_should_not_check_itself_for_unique_permalink
-    @m = MockModel.new
-    @m.id = 2
-    @m.permalink = 'bar-2'
-    assert @m.valid?
-    assert_equal 'bar-2', @m.permalink
-  end
+  class TopicPermalink < ActiveSupport::TestCase
+    test 'topic generates the permalink correctly' do
+      DATA.each do |topic_data|
+        topic = FactoryBot.build(:topic, title: topic_data[:name])
+        assert topic.valid?
+        assert_equal topic_data[:expected_permalink], topic.permalink
+      end
+    end
 
-  def test_validate_permalink
-    model = MockModelExtra.new
-    model.title = 'Морковковедение'
-    refute model.valid?
-    assert_equal ['title or extra must contain latin characters'], model.errors[:base]
-    assert model.permalink.blank?
+    test 'topic has the right error when permalink is generated empty for invalid characters' do
+      topic = FactoryBot.build(:topic, title:'зҖҨ')
+      refute topic.valid?
+      assert_equal '', topic.permalink
+      assert_match /Title must contain latin characters/, topic.errors.full_messages.to_sentence
+    end
 
-    model.title += ' monde féérique'
-    assert model.valid?
-    assert_equal 'monde-feerique', model.permalink
-  end
+    test 'topic creates the permalink without repeating it under the scope of the forum' do
+      forum = FactoryBot.create(:forum)
+      topic_1, topic_2, topic_3 = FactoryBot.create_list(:topic, 3, title: 'my example', forum: forum)
+      assert_equal 'my-example',   topic_1.permalink
+      assert_equal 'my-example-2', topic_2.permalink
+      assert_equal 'my-example-3', topic_3.permalink
+    end
 
-  def test_generate_empty_permalink
-    model = MockModelExtra.new
-    assert_nil model.title
-    assert_nil model.extra
-    refute model.valid?
-    assert '', model.permalink
+    test 'topic creates the same permalink if they belong to different forums' do
+      topic_1, topic_2 = FactoryBot.create_list(:topic, 2, title: 'my example')
+      assert_equal 'my-example', topic_1.permalink
+      assert_equal 'my-example', topic_2.permalink
+    end
+
+    test 'topic does not check itself for unique permalink' do
+      forum = FactoryBot.create(:forum)
+      topic_1 = FactoryBot.create(:topic, title: 'my example', forum: forum)
+      topic_2 = FactoryBot.build(:topic, title: 'my example', forum: forum, id: topic_1.id)
+      assert topic_2.valid?
+      assert_equal 'my-example', topic_1.permalink
+      assert_equal 'my-example', topic_2.permalink
+    end
+
+    test 'topic always auto-generates permalinks and it is never written from the outside' do
+      topic = FactoryBot.build(:topic, title: 'my example')
+
+      topic.permalink = 'permalink'
+      assert topic.valid?
+      assert_equal 'my-example', topic.permalink
+
+      topic.title = 'my name is 危険 foo'
+      assert topic.valid?
+      assert_equal 'my-name-is-foo', topic.permalink
+    end
+
+    test 'topic permalink validates that it contains maximum 255 characters' do
+      topic = FactoryBot.build(:topic)
+
+      topic.title = 'a' * 255
+      assert topic.valid?
+
+      topic.title = 'a' * 256
+      refute topic.valid?
+      assert_match /too long/, topic.errors[:permalink].to_sentence
+    end
   end
 end
