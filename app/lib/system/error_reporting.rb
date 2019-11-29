@@ -4,13 +4,6 @@ module System
   module ErrorReporting
     module_function
 
-    OPTIONS = ->(parameters, rack_env = nil) do
-      options = parameters.present? ? { parameters: parameters } : {}
-
-      options[:rack_env] = rack_env if rack_env
-      options
-    end
-
     def report_error(exception, logger: Rails.logger, **parameters)
       logger.error('Exception') { {exception: {class: exception.class, message: (exception.try(:message) || exception.to_s), backtrace: (exception.try(:backtrace) || [])[0..3]}, parameters: parameters} }
 
