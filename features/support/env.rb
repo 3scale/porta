@@ -14,15 +14,6 @@ end
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-## Cucumber 2.0 compatibility layer to support latest parallel_test, can be dropped on Cucumber 3.0+
-# https://github.com/grosser/parallel_tests/pull/604#issuecomment-343969394
-Cucumber::Configuration.default.constantize('ParallelTests::Cucumber::FailuresLogger').class_eval do
-  def initialize(a,b,c)
-    super
-    @io = prepare_io(b)
-  end
-end
-
 require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
 
 non_transactional = %w[

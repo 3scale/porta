@@ -21,26 +21,3 @@ When /^default service of (provider ".+?") has allowed following alerts:$/ do |p
 
   service.update_attribute :notification_settings, settings
 end
-
-Then /^I should see alert settings:$/ do |table|
-  body = extract_table 'table#notification-settings-table',  'tbody tr', ->(tr) {
-    [tr.text, tr.all(:xpath, '*').map{ |td| td.all(:xpath, '*').map{|input| input['value'] }.join } ].flatten
-  }
-  table.diff! body
-end
-
-Then /^I should see all alerts off$/ do
-  assert !all("input[@type='checkbox']").any? { |cb| cb.checked? }
-end
-
-Then /^I should see checked alert "(.*?)" in "(.*?)" row$/ do |value, row|
-  within :xpath, "//tbody/tr[ th[text() = '#{row}'] ]" do
-    assert find(:xpath, "//input[@value = '#{value}']").checked?
-  end
-end
-
-When /^I (check|uncheck) alert "(.*?)" in "(.*?)" row$/ do |tick, value, row|
-  within :xpath, "//tbody/tr[ th[text() = '#{row}'] ]" do
-    find(:xpath, "//input[@value = '#{value}']").set(tick == 'check')
-  end
-end

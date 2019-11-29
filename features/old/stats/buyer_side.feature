@@ -13,7 +13,7 @@ Feature: Buyer stats
       And I go to the dashboard
     Then I should not see the link "Statistics"
 
-  @selenium @javascript
+  @javascript
   Scenario: Access stats page
     Given a provider "foo.example.com"
       And an application plan "Pro" of provider "foo.example.com"

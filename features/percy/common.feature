@@ -1,4 +1,4 @@
-@percy @javascript @selenium
+@percy @javascript
 Feature: Visual Regressions
 
   @allow-rescue

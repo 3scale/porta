@@ -2,12 +2,16 @@
 
 ENV["RAILS_ENV"] ||= "test"
 
+junit_reporter_path = 'tmp/junit/unit'
+
 if ENV['CI']
   require 'simplecov'
   SimpleCov.start
 
   require 'codecov'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
+  junit_reporter_path = "#{junit_reporter_path}-#{ENV['CIRCLE_NODE_INDEX']}"
 end
 
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
@@ -22,7 +26,7 @@ require File.expand_path('../../lib/developer_portal/test/test_helper.rb', __FIL
 
 require 'minitest/reporters'
 
-junit = MiniTest::Reporters::JUnitReporter.new("tmp/junit/unit-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}")
+junit = MiniTest::Reporters::JUnitReporter.new("#{junit_reporter_path}, Process.pid].compact.join('-')}")
 MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
 
 require 'webmock/minitest'

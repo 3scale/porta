@@ -1,4 +1,3 @@
-@fakeweb
 Feature: Applications widget
   In order to see quick overview of my buyer's application
   As a provider

@@ -1,4 +1,4 @@
-@javascript @selenium
+@javascript
 Feature: Member permissions
   As a provider
   I want manage member's permissions

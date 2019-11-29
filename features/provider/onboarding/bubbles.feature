@@ -1,4 +1,4 @@
-@selenium @javascript
+@javascript
 Feature: As part of the onboarding process
   Providers are given a visual guidance
   marking the suggested steps with bubbles

@@ -1,6 +1,5 @@
 <% std_opts = "--strict --tags ~@wip #{ENV['CUCUMBER_OPTIONS']}" %>
 default: <%= std_opts %>
-parallel: --backtrace --format junit --out tmp/junit/cucumber-<%= [ENV['MULTIJOB_KIND'], Process.pid].compact.join('-') %>  --format ParallelTests::Cucumber::FailuresLogger --out tmp/junit/cucumber_<%= ENV['MULTIJOB_KIND'] %>_failures.log --strict --tags ~@wip -r features --format progress
 <% tags = %w[ @backend @emails @stats @search @no-txn ] %>
 list: --dry-run --format Cucumber::Formatter::List
 ci: --profile default --backtrace --strict --verbose --format junit --out tmp/junit/cucumber --format progress

@@ -118,7 +118,7 @@ RSpec.configure do |config|
   end
 
   if ENV['CI']
-    junit = "tmp/junit/spec-#{[ENV['MULTIJOB_KIND'], Process.pid].compact.join('-')}/spec.xml"
+    junit = "tmp/junit/spec-#{[ENV['CIRCLE_NODE_INDEX'], Process.pid].compact.join('-')}/spec.xml"
     config.add_formatter RspecJunitFormatter, junit
   end
 end
