@@ -26,7 +26,7 @@ class ModelsTest < ActiveSupport::TestCase
     }
 
     Rails.application.eager_load!
-    models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy]
+    models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy, Topic, Forum]
 
     validate_columns_for = ->(model, options = {}) do
       next if model.name.match(/^.+Test::.+$/)
