@@ -410,7 +410,7 @@ class Finance::BillingStrategy < ApplicationRecord
     )
   end
 
-  delegate :report_error, to System::ErrorReporting
+  delegate :report_error, to: 'System::ErrorReporting'
 
   module FindEachFix
     # HACK: to overcome find_each scoping, we reset the scope
