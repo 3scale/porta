@@ -38,6 +38,34 @@ module BackendApiLogic
       assert_equal [injected_policy, apicast_policy].as_json, proxy.policy_chain
     end
 
+    test 'other routing policies are merged' do
+      routing_rule = { url: 'https://echo-api.3scale.net:443', condition: { operations: [{ match: 'header', op: '==', value: 'echo', header_name: 'Redirect' }] } }
+      routing_policy = {
+        name: 'routing',
+        version: 'builtin',
+        enabled: true,
+        configuration: { rules: [routing_rule] }
+      }
+      apicast_policy = { name: 'apicast', version: 'builtin', enabled: true, configuration: {} }
+      proxy.stubs(:policies_config).returns([routing_policy, apicast_policy].as_json)
+
+      backend_api1 = backend_apis.first
+      backend_api2 = backend_apis.last
+      injected_rules = [
+        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | remove_first: '/foo'}}" },
+        { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/.*'] } },
+        routing_rule
+      ]
+      injected_routing_policy = {
+        name: "routing",
+        version: "builtin",
+        enabled: true,
+        configuration: { rules: injected_rules }
+      }
+
+      assert_equal [injected_routing_policy, apicast_policy.except(:enabled)].as_json, proxy.policy_chain
+    end
+
     class RuleTest < ActiveSupport::TestCase
       setup do
         @rule_class = RoutingPolicy.const_get(:Builder).const_get(:Rule)
