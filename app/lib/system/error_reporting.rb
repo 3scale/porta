@@ -11,12 +11,9 @@ module System
       options
     end
 
-    def report_error(exception, rack_env: nil, logger: Rails.logger, **parameters)
-      options = OPTIONS.call(parameters, rack_env)
-
+    def report_error(exception, logger: Rails.logger, **parameters)
       logger.error('Exception') { {exception: {class: exception.class, message: (exception.try(:message) || exception.to_s), backtrace: (exception.try(:backtrace) || [])[0..3]}, parameters: parameters} }
 
-      ::Airbrake.notify_or_ignore(exception, options) if defined?(Airbrake)
       ::Bugsnag.notify(exception) do |report|
         report.add_tab 'parameter', {parameters: parameters}
       end

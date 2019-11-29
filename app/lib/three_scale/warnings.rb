@@ -21,13 +21,10 @@ module ThreeScale::Warnings
   module ControllerExtension
     # 'expected' should be one of [ provider, buyer, master ]
     #
-    def notify_about_wrong_domain(url, expected, options = {})
+    def notify_about_wrong_domain(url, expected)
       # if there is no referer there is not a link leading there and
       # we don't care about it
       return unless request.referer
-
-      options[:error_message] = "URL '#{url}' is #{expected} only."
-      options[:error_class] = 'ThreeScale::Warnings::WrongDomain'
 
       Rails.logger.info("ThreeScale::Warnings::WrongDomain: URL '#{url}' is #{expected} only.")
     end

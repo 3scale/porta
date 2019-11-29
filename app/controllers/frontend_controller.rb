@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FrontendController < ApplicationController
   include SiteAccountSupport
   include AccessCodeProtection
@@ -145,7 +147,7 @@ class FrontendController < ApplicationController
 
   def ensure_buyer_domain
     if Account.is_admin_domain?(request.host) || site_account.master?
-      notify_about_wrong_domain(request.url, :buyer, error_request_data)
+      notify_about_wrong_domain(request.url, :buyer)
       render_wrong_domain_error
       false
     else
@@ -155,16 +157,12 @@ class FrontendController < ApplicationController
 
   def ensure_master_domain
     unless Account.is_master_domain?(request.host)
-      notify_about_wrong_domain(request.url, :master, error_request_data)
+      notify_about_wrong_domain(request.url, :master)
       render_wrong_domain_error
       false
     else
       true
     end
-  end
-
-  def error_request_data
-    defined?(Airbrake) ? airbrake_request_data : {}
   end
 
   def render_wrong_domain_error

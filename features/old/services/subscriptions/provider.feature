@@ -12,8 +12,6 @@ Feature: Service subscriptions - providers
       And current domain is the admin domain of provider "foo.example.com"
       And I log in as provider "foo.example.com"
 
-  # Regression test for https://3scale.airbrake.io/errors/23463933
-  #
   Scenario: Listing contracts by service
     When I go to the service subscriptions list for provider
      And I select "Elephant Taming" from "Service"

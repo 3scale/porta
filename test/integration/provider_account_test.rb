@@ -15,7 +15,6 @@ class ProviderAccountTest < ActionDispatch::IntegrationTest
     assert @provider.reload.signup_enabled?
   end
 
-  #  regression test for http://3scale.airbrake.io/errors/53380999
   test 'deleting provider with builtin pages does not fail' do
     page = @provider.builtin_pages.build
     page.system_name = 'something-unique'

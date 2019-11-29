@@ -5,9 +5,6 @@ source 'https://gems.contribsys.com/' do
 end
 
 # one of the license terms does not permit modifications and presents unclear risk to redhat
-gem 'airbrake', '~> 4.3.3'
-
-# one of the license terms does not permit modifications and presents unclear risk to redhat
 # NewRelic RPM
 # docs says it should be loaded latest as possible
 group :production, :preview, :development do
