@@ -15,7 +15,7 @@ module BackendClient
     rescue => exception
       # this exception is going to be catched by:
       # https://github.com/rails/rails/blob/83e42d52e37a33682fcac856330fd5d06e5a529c/activerecord/lib/active_record/connection_adapters/abstract/database_statements.rb#L371-L375
-      # thats why we need to fire an airbrake
+      # thats why we need to report an error
       logger.error { exception }
       System::ErrorReporting.report_error(exception, parameters: { method: http_method, url: url, params: params})
       raise(exception)

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ServicePlanTest < ActiveSupport::TestCase
 
-  test "airbrake 56114002" do
+  test "deleting a service should not crash in service_plan#master?" do
     service_plan = FactoryBot.create :service_plan
     service_plan.service.destroy
 

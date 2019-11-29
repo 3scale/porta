@@ -30,7 +30,6 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
       assert_template 'create'
     end
 
-    # regression test for https://3scale.airbrake.io/projects/14982/groups/71566877/notices/1105888258832983894
     test 'create with error' do
       ReferrerFilter.any_instance.stubs(persisted?: false)
 

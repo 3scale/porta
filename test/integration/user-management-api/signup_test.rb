@@ -303,8 +303,6 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     assert_xml_404
   end
 
-  ## Regression test for http://3scale.airbrake.io/errors/28558190
-  ## --
   test 'api signup on a plan with eternity limits' do
     UserMailer.expects(:deliver_signup_notification).never
 

@@ -22,7 +22,6 @@ module ApiSupport::Params
     #     /api/foo.xml?foo[bar]=1&foo=2      => 422
     #     /api/foo.xml?foo=5                 => 422
     #
-    # https://3scale.airbrake.io/projects/14982/groups/71345830/notices/1099701031757124010
     def wrap_parameters_check
       option_name = _wrapper_options[:name]
       param_name = params[option_name]

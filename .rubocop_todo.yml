@@ -765,7 +765,6 @@ Style/SpecialGlobalVars:
     - 'app/workers/web_hook_worker.rb'
     - 'lib/developer_portal/lib/liquid/tags/form.rb'
     - 'lib/developer_portal/test/dummy/config/boot.rb'
-    - 'lib/tasks/airbrake_tasks.rake'
     - 'lib/tasks/cms/cms.rake'
     - 'script/stress-test.rb'
     - 'test/minitest_helper.rb'

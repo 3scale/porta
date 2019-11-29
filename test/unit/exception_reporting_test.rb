@@ -43,7 +43,7 @@ class ExceptionReportingTest < ActiveSupport::TestCase
       report_and_supress_exceptions { raise_exception }
     end
 
-    should 'notify airbrake' do
+    should 'report an error' do
       System::ErrorReporting.expects(:report_error)
       report_and_supress_exceptions { raise_exception }
     end

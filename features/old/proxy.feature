@@ -21,7 +21,6 @@ Feature: Proxy integration
     And I follow "Download the NGINX Config files"
     Then I should be offered to download an "application/zip" file
 
-  # regression for http://3scale.airbrake.io/errors/54042831
   Scenario: Download Nginx Config
     When I go to the integration page for service "one"
     And I fill in "proxy_endpoint" with "http://public.example.com"

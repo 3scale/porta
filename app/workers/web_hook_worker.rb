@@ -61,7 +61,7 @@ class WebHookWorker
     # hard.
     #
     # Nonetheless, the exception is wrapped so that it can be
-    # ignored by Airbrake/Bugsnag.
+    # ignored by Bugsnag.
     raise WebHookWorker::ClientError.new($!)
   end
 

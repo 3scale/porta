@@ -104,9 +104,9 @@ class Finance::BillingStrategy < ApplicationRecord
         message = "BillingStrategy #{id}(#{name}) failed utterly"
 
         Rails.logger.error(message)
-        airbrake(:error_message => message,
-                 :error_class => 'BillingError',
-                 :exception => e)
+        report_error(:error_message => message,
+                     :error_class => 'BillingError',
+                     :exception => e)
 
         raise e
       end
@@ -350,15 +350,15 @@ class Finance::BillingStrategy < ApplicationRecord
   private
 
   # Yields a block for each buyer, passing it as a parameter. If an
-  # exception occurs meanwhile, catches it and reports by airbrake.
+  # exception occurs meanwhile, catches and reports it.
   #
   def bill_and_charge_each(options = {})
     buyer_ids = options[:buyer_ids]
     @failed_buyers = []
 
     if provider.nil?
-      airbrake(:error_message => "WARNING: tried to use billing strategy #{self.id} which has no account",
-               :error_class => 'InvalidData')
+      report_error(:error_message => "WARNING: tried to use billing strategy #{self.id} which has no account",
+                   :error_class => 'InvalidData')
       return
     end
 
@@ -374,10 +374,10 @@ class Finance::BillingStrategy < ApplicationRecord
 
         msg = "Failed to bill or charge #{name}(#{buyer_id}) of provider(#{provider_id}): #{exception.message}\n"
         error(msg, buyer)
-        airbrake(:error_message => msg,
-                 :error_class => 'BillingError',
-                 :parameters => { :buyer_id => buyer_id, :provider_id => provider_id },
-                 :exception => exception)
+        report_error(:error_message => msg,
+                     :error_class => 'BillingError',
+                     :parameters => { :buyer_id => buyer_id, :provider_id => provider_id },
+                     :exception => exception)
 
         @failed_buyers << buyer_id
         raise if Rails.env.test?
@@ -410,17 +410,7 @@ class Finance::BillingStrategy < ApplicationRecord
     )
   end
 
-  module ErrorHandling
-    def airbrake(*args)
-      if Rails.env.production? || Rails.env.preview?
-        System::ErrorReporting.report_error(*args)
-      end
-    end
-  end
-
-  # so that we have #airbrake as instance AND class method
-  extend ErrorHandling
-  include ErrorHandling
+  delegate :report_error, to: 'System::ErrorReporting'
 
   module FindEachFix
     # HACK: to overcome find_each scoping, we reset the scope
