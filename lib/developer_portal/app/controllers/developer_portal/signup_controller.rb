@@ -50,9 +50,6 @@ module DeveloperPortal
       # HACK: handles concurrency issues - it may happen that
       # @user.valid? but @user.save! fails because the same user was
       # already inserted before (double-click on signup button)
-      #
-      # https://3scale.airbrake.io/errors/25132810
-      #
 
       if Rails.env.development? || Rails.env.test?
         raise

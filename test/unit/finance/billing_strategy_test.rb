@@ -125,7 +125,6 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'currency cache returns string' do
-    # regression for https://3scale.airbrake.io/groups/55195006
     @bs.currency = 'USD'
     @bs.save
     assert_equal 'USD', ::Finance::BillingStrategy.account_currency(@provider.id)

@@ -5,8 +5,8 @@ module Liquid
     #
     # Purpose:
     #
-    # Usage of deprecated variables in liquid temlates will fire
-    # Airbrake warning in production of raise an exception in development/test
+    # Usage of deprecated variables in liquid temlates will report an
+    # error in production of raise an exception in development/test
     # environment.
     #
     # Example:

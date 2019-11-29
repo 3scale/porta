@@ -41,9 +41,6 @@ end
 # /cucumber-1.3.20/lib/cucumber/formatter/interceptor.rb:33:in `each'
 # /cucumber-1.3.20/lib/cucumber/formatter/interceptor.rb:33:in `collect'
 # /cucumber-1.3.20/lib/cucumber/formatter/interceptor.rb:33:in `method_missing'
-# /airbrake-4.3.0/lib/airbrake/utils/params_cleaner.rb:129:in `clean_unserializable_data'
-# /airbrake-4.3.0/lib/airbrake/utils/params_cleaner.rb:122:in `block in clean_unserializable_data'
-# /airbrake-4.3.0/lib/airbrake/utils/params_cleaner.rb:121:in `each'
 require 'cucumber/formatter/interceptor'
 class Cucumber::Formatter::Interceptor::Pipe
   def is_a?(klass)

@@ -38,7 +38,6 @@ class PostOffice < ActionMailer::Base
            :bcc => bcc, :cc => cc, :from => from, :reply_to => reply_to)
     end
   rescue ArgumentError => e
-    # More details for errors like: https://3scale.airbrake.io/projects/14982/groups/69448607
     new_message = "Message(#{message.id}),Recipient(#{recipient.id}): #{e.message}"
     raise ArgumentError.new(new_message)
   end

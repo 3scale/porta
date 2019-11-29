@@ -42,7 +42,6 @@ class Pdf::DataTest < ActiveSupport::TestCase
     data = Pdf::Data.new(@provider_account, service_two, :period => :day)
     assert data.latest_users(5).present?
 
-    # regression test for https://3scale.airbrake.io/projects/14982/groups/1653940878125329519/notices/1664087453881268542
     service_three.stubs(cinstances: apps = stub_everything('apps', latest: service_two.cinstances.latest))
     apps.stubs(reorder: apps)
 

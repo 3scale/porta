@@ -24,8 +24,8 @@ module ThreeScale
       MessageBus.timer.on_error do |error|
         System::ErrorReporting.report_error(error)
       end
-      MessageBus.on_middleware_error do |env, error|
-        System::ErrorReporting.report_error(error, rack_env: env)
+      MessageBus.on_middleware_error do |_, error|
+        System::ErrorReporting.report_error(error)
       end
     end
 

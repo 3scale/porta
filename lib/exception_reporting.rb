@@ -1,5 +1,5 @@
 module Kernel
-  # Call the given block, and if it raises an exception, log it, notify airbrake and supress it.
+  # Call the given block, and if it raises an exception, log it, report an error and supress it.
   def report_and_supress_exceptions
     if Rails.env.development? || Rails.env.test?
       yield

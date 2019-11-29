@@ -7,7 +7,6 @@ class Api::PlansControllerTest < ActionController::TestCase
     login_provider @provider
   end
 
-  # Airbrake: https://3scale.airbrake.io/groups/55535047
   # Github: https://github.com/3scale/system/issues/2179
   test "publishing a published application plan" do
     app_plan = FactoryBot.create :published_plan, :issuer => @provider.default_service
