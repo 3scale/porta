@@ -10,7 +10,7 @@ class ProxyRuleDecorator < ApplicationDecorator
   end
 
   def metric_system_name
-    object.metric.attributes['system_name']
+    object.metric.extended_system_name
   end
 
   private
