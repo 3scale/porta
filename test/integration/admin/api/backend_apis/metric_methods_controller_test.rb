@@ -33,7 +33,7 @@ class Admin::API::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
 
     assert_response :success
     assert_equal metric_method.id, JSON.parse(response.body).dig('method', 'id')
-    assert_equal "#{metric_method.system_name}.#{backend_api.id}", metric_method.attributes['system_name']
+    assert_equal "#{metric_method.system_name}.#{backend_api.id}", metric_method.extended_system_name
   end
 
   test 'create' do
@@ -44,7 +44,7 @@ class Admin::API::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     assert(@metric_method = hits.children.find_by(id: JSON.parse(response.body).dig('method', 'id')))
     assert_equal 'my friendly name', metric_method.friendly_name
     assert_equal 'hit', metric_method.unit
-    assert_equal "my_friendly_name.#{backend_api.id}", metric_method.attributes['system_name']
+    assert_equal "my_friendly_name.#{backend_api.id}", metric_method.extended_system_name
   end
 
   test 'create with errors in the model' do
@@ -99,10 +99,10 @@ class Admin::API::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
   test 'system_name can be created but not updated' do
     post admin_api_backend_api_metric_methods_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value), { friendly_name: 'my friendly name', unit: 'hit', system_name: 'first-system-name' }
     metric_method = hits.children.last!
-    assert_equal "first-system-name.#{backend_api.id}", metric_method.attributes['system_name']
+    assert_equal "first-system-name.#{backend_api.id}", metric_method.extended_system_name
 
     put admin_api_backend_api_metric_method_path(backend_api_id: backend_api.id, metric_id: hits.id, access_token: access_token_value, id: metric_method.id), { friendly_name: 'my friendly name', unit: 'hit', system_name: 'edited' }
-    assert_equal "first-system-name.#{backend_api.id}", metric_method.reload.attributes['system_name']
+    assert_equal "first-system-name.#{backend_api.id}", metric_method.reload.extended_system_name
   end
 
   test 'index can be paginated' do
