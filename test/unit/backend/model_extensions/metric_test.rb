@@ -89,10 +89,10 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     services.last.backend_api_configs.create(backend_api: backend_api, path: 'other') # other service using the same BackendApi
     metric = FactoryBot.build(:metric, service: nil, owner: backend_api)
 
-    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.attributes['system_name']) }
+    services.each { |service| BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.extended_system_name) }
     metric.sync_backend
 
-    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.attributes['system_name']) }
+    services.each { |service| BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.extended_system_name) }
     metric.sync_backend!
   end
 
@@ -101,10 +101,10 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     backend_api = FactoryBot.create(:backend_api, account: service.account)
     metric = backend_api.metrics.hits
 
-    BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.attributes['system_name'])
+    BackendMetricWorker.expects(:perform_async).with(service.backend_id, metric.id, metric.extended_system_name)
     metric.sync_backend_for_service(service)
 
-    BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.attributes['system_name'])
+    BackendMetricWorker.any_instance.expects(:perform).with(service.backend_id, metric.id, metric.extended_system_name)
     metric.sync_backend_for_service!(service)
   end
 end

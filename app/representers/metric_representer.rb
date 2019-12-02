@@ -29,6 +29,6 @@ module MetricRepresenter
   end
 
   def system_name
-    backend_api_metric? ? attributes['system_name'] : super
+    extended_system_name
   end
 end
