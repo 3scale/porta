@@ -54,6 +54,7 @@ module Liquid
       end
 
       def render(content)
+        # TODO: append captcha before button, not after
         content_tag(:form, metadata + content, form_options.stringify_keys.update(@html_attributes.except("class")))
       end
 
