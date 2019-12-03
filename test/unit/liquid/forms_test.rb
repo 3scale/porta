@@ -27,7 +27,9 @@ class Liquid::FormsTest < ActiveSupport::TestCase
   end
 
   test 'password_reset form' do
-    form = get('password_reset', "  ")
+    form = get('password_reset', 'site_account')
+    account = FactoryBot.create(:account)
+    form.context['site_account'] = Liquid::Drops::Message.new(account)
     content = form.render('content')
     assert_match %r{<form.*action="/admin/account/password".*</form>}, content
   end
