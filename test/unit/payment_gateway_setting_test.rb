@@ -108,38 +108,4 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     assert gateway_setting.valid?
     refute gateway_setting.errors.added?(:gateway_type, :invalid)
   end
-
-  test '#increment_failure_count should increment the total of failures' do
-    gateway_setting = FactoryBot.build(:payment_gateway_setting, gateway_settings: { failure_count: 5 })
-
-    gateway_setting.increment_failure_count
-
-    assert_equal 6, gateway_setting.failure_count
-  end
-
-  test '#increment_failure_count should increment the total of failures even if this setting is not configured yet' do
-    gateway_setting = FactoryBot.build(:payment_gateway_setting)
-
-    gateway_setting.increment_failure_count
-
-    assert_equal 1, gateway_setting.failure_count
-  end
-
-  test '#failure_count returns zero if not set yet' do
-    gateway_setting = FactoryBot.build(:payment_gateway_setting)
-
-    assert gateway_setting.failure_count.zero?
-  end
-
-  test '#failure_higher_than_threshold returns true if too much failures' do
-    gateway_setting = FactoryBot.build(:payment_gateway_setting, gateway_settings: { failure_count: PaymentGatewaySetting::FAILURE_THRESHOLD + 1 })
-
-    assert gateway_setting.failure_higher_than_threshold?
-  end
-
-  test '#failure_higher_than_threshold returns false if not too much failures' do
-    gateway_setting = FactoryBot.build(:payment_gateway_setting, gateway_settings: { failure_count: PaymentGatewaySetting::FAILURE_THRESHOLD - 1 })
-
-    refute gateway_setting.failure_higher_than_threshold?
-  end
 end

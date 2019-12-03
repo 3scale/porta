@@ -32,10 +32,10 @@ class ActionLimiter
   #   limiter.perform! 'signup' do
   #     UserSignup.create(user_params)
   #   end
-  def perform!(action)
+  def perform!(action, &block)
     @limiter.add(action)
     raise ActionLimitsExceededError if @limiter.exceeded?(action, threshold: @threshold, interval: @timespan)
-    yield
+    yield if block_given?
   end
 
   def perform(action, &block)

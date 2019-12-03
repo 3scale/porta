@@ -102,7 +102,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
 
   test '#hosted_success suspend account when failure count is higher than threshold' do
     PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 10} )
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post :hosted_success, form_params
 
@@ -113,21 +113,12 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
 
   test '#hosted_success does not suspend account when failure count is below the threshold' do
     PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 9} )
 
     post :hosted_success, form_params
 
     @account.reload
 
     refute @account.suspended?
-  end
-
-  test '#hosted_success responds with too many requests if user fired requests more than threshold in a period' do
-    Payment::SpamProtectionService.any_instance.expects(:spamming?).returns(true)
-
-    post :hosted_success, form_params
-
-    assert_response :too_many_requests
   end
 
   protected

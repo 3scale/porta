@@ -52,7 +52,7 @@ class DeveloperPortal::Admin::Account::AuthorizeNetControllerTest < DeveloperPor
     auth_response = failed_get_customer_profile_response
     ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:get_customer_profile).returns(auth_response)
     ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:delete_customer_profile)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 10} )
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post :hosted_success
 
@@ -66,7 +66,6 @@ class DeveloperPortal::Admin::Account::AuthorizeNetControllerTest < DeveloperPor
     auth_response = failed_get_customer_profile_response
     ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:get_customer_profile).returns(auth_response)
     ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:delete_customer_profile)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 9} )
 
     post :hosted_success
 

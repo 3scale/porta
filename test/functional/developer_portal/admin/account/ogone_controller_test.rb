@@ -40,7 +40,7 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
 
   test '#hosted_success suspend account when failure count is higher than threshold' do
     PaymentGateways::OgoneCrypt.any_instance.expects(:success?).returns(false)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 10} )
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post :hosted_success
 
@@ -51,7 +51,6 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
 
   test '#hosted_success does not suspend account when failure count is below the threshold' do
     PaymentGateways::OgoneCrypt.any_instance.expects(:success?).returns(false)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 9} )
 
     post :hosted_success
 

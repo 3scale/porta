@@ -174,7 +174,7 @@ class DeveloperPortal::Admin::Account::Adyen12ControllerTest < DeveloperPortal::
   test '#hosted_success suspend account when failure count is higher than threshold' do
     response = ActiveMerchant::Billing::Response.new(false, 'authorization failed')
     PaymentGateways::Adyen12Crypt.any_instance.stubs(:authorize_with_encrypted_card).returns(response)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 10} )
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post :hosted_success
 
@@ -186,7 +186,6 @@ class DeveloperPortal::Admin::Account::Adyen12ControllerTest < DeveloperPortal::
   test '#hosted_success does not suspend account when failure count is below the threshold' do
     response = ActiveMerchant::Billing::Response.new(false, 'authorization failed')
     PaymentGateways::Adyen12Crypt.any_instance.stubs(:authorize_with_encrypted_card).returns(response)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 9} )
 
     post :hosted_success
 

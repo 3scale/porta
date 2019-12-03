@@ -1,6 +1,6 @@
 class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provider::Admin::Account::BaseController
 
-  after_action :check_payment_spam_protection, only: [:hosted_success]
+  after_action :check_multiple_payment_failures, only: [:hosted_success]
   skip_before_action :protect_access
   before_action :authorize_finance
   before_action :find_account
@@ -64,8 +64,8 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
 
   private
 
-  def check_payment_spam_protection
-    Payment::SpamProtectionService.new(current_account, @payment_result, user_session).call
+  def check_multiple_payment_failures
+    Payment::MultipleFailureChecker.new(current_account, @payment_result, user_session).call
   end
 
   def braintree_blue_crypt

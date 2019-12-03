@@ -62,7 +62,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
     @provider.provider_account.update(payment_gateway_options: gateway_options)
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
-    @provider.gateway_setting.update(gateway_settings: { failure_count: 10} )
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post hosted_success_provider_admin_account_braintree_blue_path, form_params
 
@@ -75,7 +75,6 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
     @provider.provider_account.update(payment_gateway_options: gateway_options)
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
-    @provider.gateway_setting.update(gateway_settings: { failure_count: 9} )
 
     post hosted_success_provider_admin_account_braintree_blue_path, form_params
 

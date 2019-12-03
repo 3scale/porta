@@ -1,11 +1,8 @@
 class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperPortal::BaseController
-  TooManyRequestsError = Class.new(StandardError)
-
   layout 'main_layout'
   skip_before_action :protect_access
 
-  before_action :check_payment_spam_protection, only: [:hosted_success]
-  after_action  :suspend_user_if_spamming, only: [:hosted_success]
+  after_action  :check_multiple_payment_failures, only: [:hosted_success]
   before_action :ensure_buyer_domain
   before_action :authorize_finance
   before_action :check_correct_url , :except => :update
@@ -17,10 +14,6 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
 
   include ::DeveloperPortal::ControllerMethods::PaymentPathsMethods
   include ::DeveloperPortal::ControllerMethods::PlanChangesMethods
-
-  rescue_from(TooManyRequestsError) do
-    render_error 'Too many requests in a short period of time!', status: :too_many_requests
-  end
 
   def show
   end
@@ -47,16 +40,8 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
     authorize! :manage, :credit_card
   end
 
-  def suspend_user_if_spamming
-    spam_protection_service.call
-  end
-
-  def check_payment_spam_protection
-    raise(TooManyRequestsError) if spam_protection_service.spamming?
-  end
-
-  def spam_protection_service
-    Payment::SpamProtectionService.new(current_account, @payment_result, user_session)
+  def check_multiple_payment_failures
+    Payment::MultipleFailureChecker.new(current_account, @payment_result, user_session).call
   end
 
   def check_correct_url

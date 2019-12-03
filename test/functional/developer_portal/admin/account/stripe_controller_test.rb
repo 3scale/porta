@@ -112,7 +112,7 @@ class DeveloperPortal::Admin::Account::StripeControllerTest < DeveloperPortal::A
 
   test '#hosted_success suspend account when failure count is higher than threshold' do
     PaymentGateways::StripeCrypt.any_instance.expects(:update!).returns(false)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 10} )
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post :hosted_success
 
@@ -123,7 +123,6 @@ class DeveloperPortal::Admin::Account::StripeControllerTest < DeveloperPortal::A
 
   test '#hosted_success does not suspend account when failure count is below the threshold' do
     PaymentGateways::StripeCrypt.any_instance.expects(:update!).returns(false)
-    @account.gateway_setting.update(gateway_settings: { failure_count: 9} )
 
     post :hosted_success
 
