@@ -10,9 +10,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   before_action :find_user, :only => [:show, :update]
 
   def create
-    unless spam_check(@buyer)
-      return redirect_to new_admin_account_password_url
-    end
+    return redirect_to new_admin_account_password_url unless spam_check(buyer)
 
     if user = @provider.buyer_users.find_by_email(params[:email])
       user.generate_lost_password_token!
@@ -24,10 +22,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
     end
   end
 
-  def new
-    @buyer = @provider.buyers.build
-    assign_drops(account: Liquid::Drops::Account.new(@buyer))
-  end
+  def new; end
 
   def show
     assign_drops password_reset_token: @token
@@ -46,6 +41,10 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   end
 
   private
+
+  def buyer
+    @buyer ||= @provider.buyers.build
+  end
 
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
