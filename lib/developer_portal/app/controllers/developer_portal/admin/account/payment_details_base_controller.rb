@@ -1,8 +1,8 @@
 class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperPortal::BaseController
-
   layout 'main_layout'
   skip_before_action :protect_access
 
+  after_action  :check_multiple_payment_failures, only: [:hosted_success]
   before_action :ensure_buyer_domain
   before_action :authorize_finance
   before_action :check_correct_url , :except => :update
@@ -38,6 +38,10 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
 
   def authorize_finance
     authorize! :manage, :credit_card
+  end
+
+  def check_multiple_payment_failures
+    Payment::MultipleFailureChecker.new(current_account, @payment_result, user_session).call
   end
 
   def check_correct_url

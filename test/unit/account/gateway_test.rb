@@ -93,5 +93,4 @@ class Account::GatewayTest  < ActiveSupport::TestCase
 
     assert account.payment_gateway_configured?
   end
-
 end
