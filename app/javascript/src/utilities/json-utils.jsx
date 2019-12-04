@@ -5,7 +5,7 @@ const toJsonString = (val: Object): string => JSON.stringify(val, null, 2)
 
 const fromJsonString = (json: string) => JSON.parse(json)
 
-const safeFromJsonString = (json: string) => {
+const safeFromJsonString = <T>(json: string): (T | void) => {
   try {
     return fromJsonString(json)
   } catch (err) {

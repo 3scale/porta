@@ -12,7 +12,7 @@ const schema = {
   }
 }
 
-describe('PolicyConfig Reducer', () => {
+describe('PolicyConfigReducer', () => {
   it('should return the initial state', () => {
     expect(PolicyConfigReducer(undefined, { type: 'FOO' })).toEqual(initialState.policyConfig)
   })

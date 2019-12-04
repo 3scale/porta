@@ -1,19 +1,23 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, updateError, updateObject } from 'Policies/util'
+import { createReducer } from 'Policies/util'
 
-import type { UIState } from 'Policies/types'
+import type { UIState, FetchErrorAction } from 'Policies/types'
 import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 
 function updateComponentTransition (state: UIState, action: UIComponentTransitionAction): UIState {
-  return updateObject(state, {[action.hide]: false, [action.show]: true})
+  return { ...state, [action.hide]: false, [action.show]: true }
 }
 
 function updateRequestsCounter (number: number) {
   return function (state: UIState): UIState {
-    return updateObject(state, {requests: state.requests + number})
+    return { ...state, requests: state.requests + number }
   }
+}
+
+function updateError (state: UIState, action: FetchErrorAction) {
+  return { ...state, error: action.payload }
 }
 
 // TODO: use combineReducers instead of createReducer

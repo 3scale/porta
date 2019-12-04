@@ -1,13 +1,13 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, updateArray } from 'Policies/util'
+import { createReducer } from 'Policies/util'
 
 import type { ChainPolicy } from 'Policies/types'
 import type { SetOriginalPolicyChainAction } from 'Policies/actions/OriginalPolicyChain'
 
 function setOriginalPolicyChain (state: Array<ChainPolicy>, action: SetOriginalPolicyChainAction): Array<ChainPolicy> {
-  return updateArray(state, action.payload)
+  return [...[], ...action.payload]
 }
 
 // TODO: use combineReducers instead of createReducer

@@ -1,7 +1,7 @@
 // @flow
 
 import { initialState } from 'Policies/reducers/initialState'
-import { createReducer, generateGuid, updateArray } from 'Policies/util'
+import { createReducer, generateGuid } from 'Policies/util'
 
 import type { ChainPolicy, RegistryPolicy } from 'Policies/types'
 import type {
@@ -14,7 +14,7 @@ import type {
 export type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction
 
 function createChainPolicy (policy: RegistryPolicy): ChainPolicy {
-  return {...policy, ...{humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid()}}
+  return {...policy, humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid()}
 }
 
 function addPolicy (state: Array<ChainPolicy>, action: AddPolicyToChainAction): Array<ChainPolicy> {
@@ -26,7 +26,7 @@ function updateChain (_state: Array<ChainPolicy>, action: UpdatePolicyChainActio
 }
 
 function updatePolicies (state: Array<ChainPolicy>, action: UpdateChainPolicies): Array<ChainPolicy> {
-  return updateArray(state, action.payload)
+  return [...[], ...action.payload]
 }
 
 // TODO: use combineReducers instead of createReducer
