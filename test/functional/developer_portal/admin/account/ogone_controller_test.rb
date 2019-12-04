@@ -37,4 +37,25 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
     assert_equal '2018-07-01', @account.credit_card_expires_on.to_s
     assert_redirected_to admin_account_plan_changes_path
   end
+
+  test '#hosted_success suspend account when failure count is higher than threshold' do
+    PaymentGateways::OgoneCrypt.any_instance.expects(:success?).returns(false)
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
+
+    post :hosted_success
+
+    @account.reload
+
+    assert @account.suspended?
+  end
+
+  test '#hosted_success does not suspend account when failure count is below the threshold' do
+    PaymentGateways::OgoneCrypt.any_instance.expects(:success?).returns(false)
+
+    post :hosted_success
+
+    @account.reload
+
+    refute @account.suspended?
+  end
 end

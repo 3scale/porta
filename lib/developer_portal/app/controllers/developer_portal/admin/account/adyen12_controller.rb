@@ -10,7 +10,8 @@ module DeveloperPortal::Admin::Account
     end
 
     def hosted_success
-      if authorize_recurring_and_store_card_details
+      @payment_result = authorize_recurring_and_store_card_details
+      if @payment_result
         flash[:success] = 'Credit Card details were saved correctly'
       else
         flash[:error] = adyen_error_message

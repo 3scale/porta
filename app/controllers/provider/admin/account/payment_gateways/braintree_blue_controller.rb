@@ -1,5 +1,6 @@
 class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provider::Admin::Account::BaseController
 
+  after_action :check_multiple_payment_failures, only: [:hosted_success]
   skip_before_action :protect_access
   before_action :authorize_finance
   before_action :find_account
@@ -34,13 +35,12 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
   end
 
   def hosted_success
-    customer_info = params.require(:customer)
+    customer_info      = params.require(:customer)
+    braintree_response = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
+    @payment_result    = braintree_response&.success?
 
-    result = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
-
-    if result && result.success?
-
-      if braintree_blue_crypt.update_user(result)
+    if @payment_result
+      if braintree_blue_crypt.update_user(braintree_response)
         redirect_to_success
       else
         flash[:notice] = 'Credit Card details could not be stored.'
@@ -48,7 +48,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
       end
 
     else
-      @errors = result ? braintree_blue_crypt.errors(result) : ['Invalid Credentials']
+      @errors = braintree_response ? braintree_blue_crypt.errors(braintree_response) : ['Invalid Credentials']
       flash[:error] = 'Something went wrong and billing information could not be stored.'
       redirect_to action: 'edit', errors: @errors
     end
@@ -63,6 +63,10 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
   end
 
   private
+
+  def check_multiple_payment_failures
+    Payment::MultipleFailureChecker.new(current_account, @payment_result, user_session).call
+  end
 
   def braintree_blue_crypt
     @braintree_blue_crypt ||= ::PaymentGateways::BrainTreeBlueCrypt.new(current_user)

@@ -46,4 +46,31 @@ class DeveloperPortal::Admin::Account::AuthorizeNetControllerTest < DeveloperPor
     get :hosted_success
     assert_redirected_to admin_account_plan_changes_path
   end
+
+  test '#hosted_success suspend account when failure count is higher than threshold' do
+    @account.update_attribute(:credit_card_auth_code, 'authcode')
+    auth_response = failed_get_customer_profile_response
+    ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:get_customer_profile).returns(auth_response)
+    ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:delete_customer_profile)
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
+
+    post :hosted_success
+
+    @account.reload
+
+    assert @account.suspended?
+  end
+
+  test '#hosted_success does not suspend account when failure count is below the threshold' do
+    @account.update_attribute(:credit_card_auth_code, 'authcode')
+    auth_response = failed_get_customer_profile_response
+    ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:get_customer_profile).returns(auth_response)
+    ActiveMerchant::Billing::AuthorizeNetCimGateway.any_instance.stubs(:delete_customer_profile)
+
+    post :hosted_success
+
+    @account.reload
+
+    refute @account.suspended?
+  end
 end

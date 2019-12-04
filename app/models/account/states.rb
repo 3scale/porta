@@ -79,7 +79,7 @@ module Account::States
       end
 
       event :suspend do
-        transition all => :suspended, if: :tenant?
+        transition all => :suspended, if: :can_be_suspended?
       end
 
       event :resume do
@@ -133,6 +133,12 @@ module Account::States
     def should_not_be_deleted?
       !should_be_deleted?
     end
+
+    def can_be_suspended?
+      tenant? || marked_for_suspension
+    end
+
+    attr_accessor :marked_for_suspension
   end
 
   module ClassMethods

@@ -1,6 +1,5 @@
 module DeveloperPortal::Admin::Account
   class BraintreeBlueController < PaymentDetailsBaseController
-
     def show
       render template: "accounts/payment_gateways/show"
     end
@@ -19,13 +18,13 @@ module DeveloperPortal::Admin::Account
     end
 
     def hosted_success
-      customer_info = params.require(:customer)
-      result = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
-
-      if result && result.success?
-        update_user_and_perform_action!(result)
+      customer_info      = params.require(:customer)
+      braintree_response = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
+      @payment_result    = braintree_response&.success?
+      if @payment_result
+        update_user_and_perform_action!(braintree_response)
       else
-        @errors = result ? braintree_blue_crypt.errors(result) : ['Invalid Credentials']
+        @errors = braintree_response ? braintree_blue_crypt.errors(braintree_response) : ['Invalid Credentials']
         flash[:notice] = 'Credit card details could not be stored.'
         redirect_to action: 'edit', errors: @errors
       end

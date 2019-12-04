@@ -10,8 +10,9 @@ module DeveloperPortal::Admin::Account
     end
 
     def hosted_success
-      ogone_crypt = ::PaymentGateways::OgoneCrypt.new(current_user)
-      if ogone_crypt.success?(request.params)
+      ogone_crypt     = ::PaymentGateways::OgoneCrypt.new(current_user)
+      @payment_result = ogone_crypt.success?(request.params)
+      if @payment_result
         ogone_crypt.update_user(request.params)
         flash[:success] = 'Credit Card details were saved correctly'
       else

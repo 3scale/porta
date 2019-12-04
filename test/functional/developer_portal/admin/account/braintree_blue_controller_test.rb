@@ -100,6 +100,27 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     assert_redirected_to action: 'edit', errors: failed_result.errors.map(&:message)
   end
 
+  test '#hosted_success suspend account when failure count is higher than threshold' do
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
+
+    post :hosted_success, form_params
+
+    @account.reload
+
+    assert @account.suspended?
+  end
+
+  test '#hosted_success does not suspend account when failure count is below the threshold' do
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+
+    post :hosted_success, form_params
+
+    @account.reload
+
+    refute @account.suspended?
+  end
+
   protected
 
   def successful_result(user = nil)

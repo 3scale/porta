@@ -87,5 +87,4 @@ module Account::Gateway
     Rails.logger.info("[Notification][Payment Gateway Change]: Account #{org_name} has" +
                       "changed payment gateway to #{payment_gateway_type}")
   end
-
 end

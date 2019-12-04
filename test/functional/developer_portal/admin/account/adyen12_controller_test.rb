@@ -170,4 +170,27 @@ class DeveloperPortal::Admin::Account::Adyen12ControllerTest < DeveloperPortal::
     assert_equal '2017-02-01', @account.credit_card_expires_on.to_s
     assert_equal '0380', @account.credit_card_partial_number
   end
+
+  test '#hosted_success suspend account when failure count is higher than threshold' do
+    response = ActiveMerchant::Billing::Response.new(false, 'authorization failed')
+    PaymentGateways::Adyen12Crypt.any_instance.stubs(:authorize_with_encrypted_card).returns(response)
+    ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
+
+    post :hosted_success
+
+    @account.reload
+
+    assert @account.suspended?
+  end
+
+  test '#hosted_success does not suspend account when failure count is below the threshold' do
+    response = ActiveMerchant::Billing::Response.new(false, 'authorization failed')
+    PaymentGateways::Adyen12Crypt.any_instance.stubs(:authorize_with_encrypted_card).returns(response)
+
+    post :hosted_success
+
+    @account.reload
+
+    refute @account.suspended?
+  end
 end
