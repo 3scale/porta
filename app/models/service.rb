@@ -523,14 +523,7 @@ class Service < ApplicationRecord
 
   # TODO: Remove this when no one use plugins
   def plugin_deployment?
-    deployment = self[:deployment_option]
-    DeploymentOption.plugins.include?(deployment)
-  end
-
-  # TODO: Remove this when no one use plugins
-  def deployment_option
-    return 'hosted' if plugin_deployment?
-    super
+    DeploymentOption.plugins.include?(deployment_option)
   end
 
   private

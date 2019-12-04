@@ -1,7 +1,4 @@
 - if @service&.plugin_deployment?
-  = form_for @service, :url => admin_service_path(@service) do |form|
-    .deprecated_plugin_message
-      p.InfoBox--notice.InfoBox
-        i This Product currently uses a plugin as the deployment option. Your integration will keep on working but we no longer support plugins.
-        = form.hidden_field :deployment_option
-        = form.submit 'Ok', class: 'button next outline-button-thin outline-button-thin--positive'
+  .deprecated_plugin_message
+    p.InfoBox--notice.InfoBox
+      i This Product currently uses a plugin as the deployment option. Your integration will keep on working but we no longer support plugins.
