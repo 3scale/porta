@@ -100,35 +100,21 @@ describe('PolicyChain Middleware', () => {
   })
 
   it('Dispatches the correct update when UPDATE_POLICY_IN_CHAIN', () => {
-    invoke({
-      type: 'UPDATE_POLICY_IN_CHAIN',
-      policyConfig: {
-        name: 'cors',
-        configuration: {},
-        summary: 'CORS summary changed',
-        description: 'CORS description changed',
-        humanName: 'CORS changed',
-        version: 'builtin',
-        data: {},
-        enabled: true,
-        removable: true,
-        uuid: '007'
-      }
-    })
+    const policyConfig = {
+      name: 'cors',
+      configuration: {},
+      summary: 'CORS summary changed',
+      description: 'CORS description changed',
+      humanName: 'CORS changed',
+      version: 'builtin',
+      data: {},
+      enabled: true,
+      removable: true,
+      uuid: '007'
+    }
 
-    expect(store.dispatch).toHaveBeenCalledWith(updatePolicyChain(
-      [{
-        name: 'cors',
-        configuration: {},
-        summary: 'CORS summary changed',
-        description: 'CORS description changed',
-        humanName: 'CORS changed',
-        version: 'builtin',
-        data: {},
-        enabled: true,
-        removable: true,
-        uuid: '007'
-      }]
-    ))
+    invoke({ type: 'UPDATE_POLICY_IN_CHAIN', policyConfig })
+
+    expect(store.dispatch).toHaveBeenCalledWith(updatePolicyChain([policyConfig]))
   })
 })

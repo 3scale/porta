@@ -67,8 +67,7 @@ describe('PolicyConfig Component', () => {
     const {policyConfigWrapper} = setup()
     expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toBe(true)
     expect(policyConfigWrapper.find('.PolicyConfiguration-name').text()).toBe('Caching policy')
-    expect(policyConfigWrapper.find('.PolicyConfiguration-version').text()).toBe('builtin')
-    expect(policyConfigWrapper.find('.PolicyConfiguration-summary').text()).toBe('Caching')
+    expect(policyConfigWrapper.find('.PolicyConfiguration-version-and-summary').text()).toBe('builtin - Caching')
     expect(policyConfigWrapper.find('.PolicyConfiguration-description').text())
       .toBe('Configures a cache for the authentication calls against the 3scale')
     expect(policyConfigWrapper.find('#policy-enabled').prop('checked')).toBe(true)
@@ -153,7 +152,7 @@ describe('PolicyConfig APIcast policy', () => {
     const {policyConfigWrapper} = setup()
     expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toBe(true)
     expect(policyConfigWrapper.find('.PolicyConfiguration-name').text()).toBe('APIcast')
-    expect(policyConfigWrapper.find('.PolicyConfiguration-summary').text()).toBe('Main function...')
+    expect(policyConfigWrapper.find('.PolicyConfiguration-version-and-summary').text()).toBe('builtin - Main function...')
   })
 
   it('should hide the APIcast policy form', () => {

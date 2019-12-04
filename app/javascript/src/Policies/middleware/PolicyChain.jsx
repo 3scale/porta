@@ -14,12 +14,10 @@ function convertToChainPolicy (registryPolicy: RegistryPolicy, storedPolicy: Pol
   const removable = !(storedPolicy.name === 'apicast')
   return {
     ...registryPolicy,
-    ...{
-      enabled: storedPolicy.enabled,
-      data: storedPolicy.configuration,
-      removable,
-      uuid: generateGuid()
-    }
+    enabled: storedPolicy.enabled,
+    data: storedPolicy.configuration,
+    removable,
+    uuid: generateGuid()
   }
 }
 

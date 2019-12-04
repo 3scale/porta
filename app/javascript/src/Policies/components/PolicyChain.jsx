@@ -28,26 +28,24 @@ const SortableItem = SortableElement(({value, editPolicy, index}) => {
   const edit = () => editPolicy(value, index)
   return (
     <li className={ value.enabled ? 'Policy' : 'Policy Policy--disabled' }>
-      <PolicyTile policy={value} onClick={edit} />
+      <PolicyTile policy={value} onClick={edit} title="Edit this Policy" />
       <DragHandle/>
     </li>
   )
 })
 
-const SortableList = SortableContainer(({ items, editPolicy }) => {
-  return (
-    <ul className="list-group">
-      {items.map((policy, index) => (
-        <SortableItem
-          key={`item-${index}`}
-          index={index}
-          value={policy}
-          editPolicy={editPolicy}
-        />
-      ))}
-    </ul>
-  )
-})
+const SortableList = SortableContainer(({ items, editPolicy }) => (
+  <ul className="list-group">
+    {items.map((policy, index) => (
+      <SortableItem
+        key={`item-${index}`}
+        index={index}
+        value={policy}
+        editPolicy={editPolicy}
+      />
+    ))}
+  </ul>
+))
 
 const PolicyChain = ({chain, actions}: Props) => {
   const onSortEnd = ({oldIndex, newIndex}) => {
@@ -66,7 +64,7 @@ const PolicyChain = ({chain, actions}: Props) => {
       <SortableList
         items={chain}
         onSortEnd={onSortEnd}
-        useDragHandle={true}
+        useDragHandle
         editPolicy={actions.editPolicy}
         helperClass="Policy--sortable"
       />
