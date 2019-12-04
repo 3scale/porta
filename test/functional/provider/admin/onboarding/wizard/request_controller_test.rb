@@ -31,9 +31,9 @@ class Provider::Admin::Onboarding::Wizard::RequestControllerTest < ActionControl
     assert_response :success
 
     # Not sure how to simulate this with new apicast (ApicastV2DeploymentService)
-    
+
     #Logic::RollingUpdates.stubs(skipped?: true)
-    #ProviderProxyDeploymentService.any_instance.stubs(deploy: false)
+    #ProviderProxyDeploymentV1Service.any_instance.stubs(deploy: false)
 
     #post :update, { request: { path: '/path' } }
     #assert_response :success
