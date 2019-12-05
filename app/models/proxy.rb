@@ -326,7 +326,7 @@ class Proxy < ApplicationRecord
   end
 
   def async_deploy(user)
-    ProviderProxyDeploymentService.async_deploy(user, self)
+    ProxyDeploymentV1Service.async_deploy(user, self)
   end
 
   def hosts
@@ -422,7 +422,7 @@ class Proxy < ApplicationRecord
 
   def sandbox_deployed?
     proxy_log = provider.proxy_logs.latest_first.first or return sandbox_config_saved?
-    proxy_log.created_at > self.created_at && proxy_log.status == ProviderProxyDeploymentService::SUCCESS_MESSAGE
+    proxy_log.created_at > self.created_at && proxy_log.status == ProxyDeploymentV1Service::SUCCESS_MESSAGE
   end
 
   def sandbox_config_saved?
@@ -647,7 +647,7 @@ class Proxy < ApplicationRecord
   end
 
   def deploy_v1
-    deployment = ProviderProxyDeploymentService.new(provider)
+    deployment = ProxyDeploymentV1Service.new(provider)
 
     success = deployment.deploy(self)
 
