@@ -1,6 +1,6 @@
 require_dependency 'apicast/sandbox'
 
-class ProviderProxyDeploymentV1Service
+class ProxyDeploymentV1Service
   SUCCESS_MESSAGE = 'Deployed successfully.'.freeze
   FAILURE_MESSAGE = 'Deploy failed.'.freeze
 

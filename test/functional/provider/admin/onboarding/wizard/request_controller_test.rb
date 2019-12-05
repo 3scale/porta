@@ -33,7 +33,7 @@ class Provider::Admin::Onboarding::Wizard::RequestControllerTest < ActionControl
     # Not sure how to simulate this with new apicast (ApicastV2DeploymentService)
 
     #Logic::RollingUpdates.stubs(skipped?: true)
-    #ProviderProxyDeploymentV1Service.any_instance.stubs(deploy: false)
+    #ProxyDeploymentV1Service.any_instance.stubs(deploy: false)
 
     #post :update, { request: { path: '/path' } }
     #assert_response :success
