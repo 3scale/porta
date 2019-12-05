@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
+class ProxyDeploymentV1ServiceTest < ActiveSupport::TestCase
 
   class_attribute :rolling_updates
   self.rolling_updates = false
@@ -10,7 +10,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
 
     @provider = FactoryBot.create(:provider_account)
     @provider.proxies.update_all(apicast_configuration_driven: false)
-    @service = ProviderProxyDeploymentService.new(@provider)
+    @service = ProxyDeploymentV1Service.new(@provider)
 
     Logic::RollingUpdates.stubs(skipped?: true)
   end
@@ -63,7 +63,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
 
   test 'conf_content having services integrated via plugin' do
     FactoryBot.create(:service, account: @provider, deployment_option: 'plugin_ruby')
-    deployment_service = ProviderProxyDeploymentService.new(@provider)
+    deployment_service = ProxyDeploymentV1Service.new(@provider)
 
     assert_nothing_raised do
       host = URI(@provider.first_service!.proxy.sandbox_endpoint).host
@@ -81,7 +81,7 @@ class ProviderProxyDeploymentServiceTest < ActiveSupport::TestCase
     end
   end
 
-  class WithRollingUpdate < ProviderProxyDeploymentServiceTest
+  class WithRollingUpdate < ProxyDeploymentV1ServiceTest
     self.rolling_updates = true
   end
 end
