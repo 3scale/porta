@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class LastTrafficTest < ActiveSupport::TestCase
-  include LastTraffic
   delegate :storage, to: Stats::Client
 
   def test_sent_traffic_on
@@ -26,7 +25,7 @@ class LastTrafficTest < ActiveSupport::TestCase
         .with(has_entries(event: 'Month Traffic', properties: has_entries(date: today, value: 42*2)))
 
 
-    assert_equal 42, sent_traffic_on(provider, time)
+    assert_equal 42, LastTraffic.new(provider).sent_traffic_on(time)
   end
 
   def test_send_traffic_in_day
