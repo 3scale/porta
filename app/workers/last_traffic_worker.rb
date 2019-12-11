@@ -13,7 +13,7 @@ class LastTrafficWorker
       return # when provider was destroyed, just skip the job
     end
 
-    traffic = LastTraffic.sent_traffic_on(provider, Time.at(timestamp))
+    traffic = LastTraffic.new(provider).sent_traffic_on(Time.at(timestamp))
 
     if traffic && traffic > 0
       logger.info "Provider #{provider_id} had #{traffic} hits"

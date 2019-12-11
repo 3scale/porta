@@ -1,26 +1,26 @@
 require 'test_helper'
 
 class LastTrafficWorkerTest < MiniTest::Unit::TestCase
-
-  def setup
-  end
-
   def test_perform
     Timecop.freeze do
-      LastTraffic.expects(:sent_traffic_on).with(provider, Time.now).returns(Date.today)
+      last_traffic = LastTraffic.new(provider)
+      LastTraffic.stubs(new: last_traffic)
+      last_traffic.expects(:sent_traffic_on).with(Time.now).returns(Date.today)
       LastTrafficWorker.new.perform(provider.id)
     end
   end
 
   def test_perform_no_traffic
-    LastTraffic.expects(:sent_traffic_on)
+    LastTraffic.any_instance.expects(:sent_traffic_on)
     LastTrafficWorker.new.perform(provider.id)
   end
 
   def test_perform_yesterday
     date = Date.yesterday
     time = date.to_time
-    LastTraffic.expects(:sent_traffic_on).with(provider, time)
+    last_traffic = LastTraffic.new(provider)
+    LastTraffic.stubs(new: last_traffic)
+    last_traffic.expects(:sent_traffic_on).with(time)
     LastTrafficWorker.new.perform(provider.id, time.to_i)
   end
 
