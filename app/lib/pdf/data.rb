@@ -19,12 +19,11 @@ module Pdf
 
       @options = {
         :period => @period,
-        :metric_name => @hit_metric.try!(:name),
+        :metric_name => @hit_metric&.name,
         :since => 1.send(@period).ago.strftime("%Y-%m-%d"),
         :timezone => @account.timezone
       }
     end
-
 
     def latest_users(count)
       latest_cinstances = Cinstance.select(:user_account_id).distinct
@@ -40,14 +39,14 @@ module Pdf
         [
           sanitize_text(account.org_name),
           account.created_at,
-          account.users.first.try!(:email),
+          account.users.first&.email,
           cinstance.plan.name
-        ].map{|v| "<td>#{h v}</td>"}
+        ].map {|v| "<td>#{h v}</td>"}
       end.compact
     end
 
     def cinstances_change
-       @service.cinstances.where('`cinstances`.created_at > ?',1.send(@period).ago.beginning_of_day).count
+      @service.cinstances.where('`cinstances`.created_at > ?',1.send(@period).ago.beginning_of_day).count
     end
 
     def top_users
@@ -57,29 +56,26 @@ module Pdf
       options = {:metric => @hit_metric, :period => @period, :timezone => @account.timezone,
                  :since => 1.send(@period).ago, :limit => 5}
       apps = data_source.top_clients(options)[:applications] || []
-      apps.inject([]) do |memo, entry|
+      apps.each_with_object([]) do |entry, memo|
         next if entry[:id].nil? # there are some data inconsistencies in our dbs
         cinstance = @service.cinstances.find(entry[:id])
 
         memo << Format.prep_td([cinstance.user_account.org_name, entry[:value]])
-        memo
+
       end
     end
 
-
     def users
-      @service.published_plans.map{|p| Format.prep_td([p.name, p.cinstances.count])}
+      @service.published_plans.map { |plan| Format.prep_td([plan.name, plan.cinstances.count]) }
     end
 
     def metrics
-      data_source = Stats::Service.new(@service)
-
       data = @source.usage_progress_for_all_metrics(@options)[:metrics]
       data.inject([]) do |row, (metric, stats)|
-        row << Format.prep_td_with_negation([metric[:name], metric[:data][:total], "#{"%0.2f" % metric[:data][:change]} %"])
+        percentage = '%0.2f %' % metric[:data][:change]
+        row << Format.prep_td_with_negation([metric[:name], metric[:data][:total], percentage])
       end
     end
-
 
     def traffic_graph
       return if @hit_metric.nil?
@@ -92,7 +88,7 @@ module Pdf
         :colors => ['#9172EC', '#306EFF', '#000066', '#B4B4B4'],
         :font_color => '#555',
         :marker_color => '#eeeeee',
-        :background_colors => ['#ffffff', '#ffffff'],
+        :background_colors => ['#ffffff', '#ffffff']
       }
 
       g.legend_box_size = 10
@@ -117,7 +113,7 @@ module Pdf
       g.maximum_value = max + (max / 5)
 
       g.labels = send("#{@period}_labels")
-      graph_image = StringIO.new(g.to_blob("JPG"))
+      StringIO.new(g.to_blob("JPG"))
     end
 
     def week_labels
@@ -129,15 +125,14 @@ module Pdf
       labels= {}
       (0..27).each do |point|
         # Insert blanks except for every 4th data point (covering a 24hr period)
-        if point % 4 == 0
+        if (point % 4).zero?
           labels[point] = date.strftime("%d %b")
-          date = date + 1.day
+          date += 1.day
         end
       end
 
       labels
     end
-
 
     def day_labels
       # See week_labels
@@ -145,10 +140,8 @@ module Pdf
 
       labels = {}
       (0..23).each do |point|
-        if point % 4 == 0
-          labels[point] = date.strftime("%k:00")
-        end
-        date = date + 1.hour
+        labels[point] = date.strftime("%k:00") if (point % 4).zero?
+        date += 1.hour
       end
       labels
     end

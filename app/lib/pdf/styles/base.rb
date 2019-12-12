@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module Pdf::Styles
   class Base
-
     def tags
       { :domain   => { :color => "#999", :font_weight => :bold, :font_size => 14},
         :period   => {:font_size => 6.mm},
@@ -25,8 +26,7 @@ module Pdf::Styles
     end
 
     def font
-      "#{Rails.root}/lib/pdf/fonts/arial.ttf"
+      Rails.root.join('app', 'lib', 'pdf', 'fonts', 'arial.ttf').to_s
     end
-
   end
 end

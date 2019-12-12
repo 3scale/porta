@@ -31,7 +31,7 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
     context "with logo" do
       setup do
-        @data.stubs(:has_logo?).returns(true)
+        @data.stubs(:logo?).returns(true)
         @data.stubs(:logo).returns(LOGO_PICTURE)
         @data.stubs(:provider).returns(LONG_ADDRESS)
       end
@@ -48,20 +48,10 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
         should 'generate valid PDF content' do
           content = @generator.generate
-          # see_in_file(content)
           assert_not_nil content
         end
       end
     end
-  end
-
-  private
-
-  # for development purposes
-  def see_in_file(content)
-    f = File.new('/home/jakub/Desktop/a.pdf','w')
-    f << content
-    f.close
   end
 
 end
