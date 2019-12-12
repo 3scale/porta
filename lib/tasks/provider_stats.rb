@@ -1,4 +1,4 @@
-require_dependency 'csv'
+require 'csv'
 
 def days_since(time)
   return -1 if time.nil?
