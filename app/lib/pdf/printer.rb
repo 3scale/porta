@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pdf::Printer
 
   PAGE_WIDTH = 230.mm
