@@ -1,5 +1,4 @@
-BOLD  = "\033[1m"
-CLEAR = "\033[0m"
+# frozen_string_literal: true
 
 Before '@ignore-backend' do
   stub_backend_get_keys
@@ -189,13 +188,13 @@ current_step = ->(scenario) do
   [ steps[index], steps[index+1] ]
 end
 
-print_banner = -> (title, step) do
+print_banner = ->(title, step) do
   step_name = (step.try(:actual_keyword) || step.keyword) + step.name
-  Rails.logger.info <<-NEXT
+  Rails.logger.info <<~NEXT
 
-| #{title}: #{BOLD}#{step_name}#{CLEAR} |
-| #{'=' * (step_name.length + title.length + 2)} |
-#{step.multiline_arg}
+    | #{title}: #{step_name.bold} |
+    | #{'=' * (step_name.length + title.length + 2)} |
+    #{step.multiline_arg}
 NEXT
 end
 
