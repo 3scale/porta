@@ -359,11 +359,11 @@ class Proxy < ApplicationRecord
 
     analytics.track('Sandbox Proxy updated', analytics_attributes.merge(success: saved))
 
-    saved && deploy
-  end
+    return false unless saved
 
-  def deploy!
-    deploy
+    success = ProxyDeploymentService.call(self, v1_compatible: true)
+    analytics.track('Sandbox Proxy Deploy', success: success)
+    success
   end
 
   def authentication_params_for_proxy(opts = {})
@@ -444,28 +444,8 @@ class Proxy < ApplicationRecord
       (self.api_backend ? URI(self.api_backend).host : 'none')
   end
 
-  def deploy_production
-    if apicast_configuration_driven
-      deploy_production_v2
-    elsif ready_to_deploy?
-      provider.deploy_production_apicast
-    end
-  end
-
   def ready_to_deploy?
     api_test_success
-  end
-
-  def deploy_v2
-    deployment = ApicastV2DeploymentService.new(self)
-
-    deployment.call(environment: 'sandbox'.freeze)
-  end
-
-  def deploy_production_v2
-    newest_sandbox_config = proxy_configs.sandbox.newest_first.first
-
-    newest_sandbox_config.clone_to(environment: :production) if newest_sandbox_config
   end
 
   def set_correct_endpoints
@@ -631,33 +611,6 @@ class Proxy < ApplicationRecord
     if (hits = service.metrics.first)
       proxy_rules.create(http_method: 'GET', pattern: '/', delta: 1, metric: hits)
     end
-  end
-
-  def deploy
-    return true unless deployable?
-
-    if service_mesh_integration?
-      deploy_service_mesh_integration
-    elsif apicast_configuration_driven
-      deploy_v2
-    else
-      deploy_v1
-    end
-  end
-
-  def deploy_service_mesh_integration
-    return unless provider_can_use?(:service_mesh_integration)
-    deploy_v2 && deploy_production_v2
-  end
-
-  def deploy_v1
-    deployment = ProxyDeploymentV1Service.new(provider)
-
-    success = deployment.deploy(self)
-
-    analytics.track('Sandbox Proxy Deploy', success: success)
-
-    success
   end
 
   def set_api_test_path

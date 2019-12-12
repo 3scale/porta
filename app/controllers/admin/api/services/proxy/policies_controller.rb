@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::BaseController
-
   wrap_parameters ::Proxy
   representer Proxy::PoliciesConfig
 
@@ -41,7 +40,7 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   #
   def update
     if proxy.update_attributes(proxy_params)
-      proxy.deploy_v2 if proxy.apicast_configuration_driven
+      ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox) if proxy.apicast_configuration_driven
     end
 
     policies_config = Proxy::PoliciesConfig.new(proxy.policies_config)

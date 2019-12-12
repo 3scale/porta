@@ -35,7 +35,8 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
   def test_test_api!
     proxy = FactoryBot.create(:proxy)
     proxy.update! sandbox_endpoint: 'http://staging.apicast.io'
-    proxy.expects(:deploy!).returns(true)
+
+    ProxyDeploymentService.any_instance.expects(:deploy).returns(true)
 
     form = Onboarding::RequestForm.new(proxy)
 
