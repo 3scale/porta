@@ -74,24 +74,14 @@ module Liquid
     end
 
     def assigns_for_liquify
-      original = {}
-
       @_assigned_drops ||= {}
       @_template_assigns ||= {}
 
       report_and_supress_exceptions do
-        diff = original.keys - @_assigned_drops.keys
         overriden = @_template_assigns.keys & @_assigned_drops.keys
 
-        if diff.present?
-          Rails.logger.info "[LiquidTemplateSupport] Automatic assign would assign also #{diff.to_sentence}. Please assign them manually."
-        end
-
-        if overriden.present?
-          raise "Assigning #{overriden.to_sentence} would override variables in template."
-        end
+        raise "Assigning #{overriden.to_sentence} would override variables in template." if overriden.present?
       end
-
       @_assigned_drops
     end
 
