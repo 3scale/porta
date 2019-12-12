@@ -48,20 +48,10 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
         should 'generate valid PDF content' do
           content = @generator.generate
-          # see_in_file(content)
           assert_not_nil content
         end
       end
     end
-  end
-
-  private
-
-  # for development purposes
-  def see_in_file(content)
-    f = File.new('/home/myusername/Desktop/a.pdf','w')
-    f << content
-    f.close
   end
 
 end
