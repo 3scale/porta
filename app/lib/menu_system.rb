@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This module allows to control which menu item of the main menu is active
 # (highlighted) on current page. It can be done in two ways: using before_action
 # style class method or using instance method, both called +activate_menu+.
@@ -36,13 +38,12 @@
 #
 
 module MenuSystem
-  protected
-
   def self.included(base)
     base.helper_method(:active_menu, :active_submenu, :active_menu?, :active_sidebar)
     base.extend(ClassMethods)
   end
 
+  protected
 
   # Activate named menu or other levels of menus.
   #
@@ -58,7 +59,7 @@ module MenuSystem
     active_menus.merge! args.extract_options!.symbolize_keys
 
     # process arguments passed as array
-    [:main_menu, :submenu, :sidebar].each do |level|
+    %i[main_menu submenu sidebar].each do |level|
       value = args.shift and active_menus[level] = value
     end
   end
@@ -81,11 +82,11 @@ module MenuSystem
   end
 
   def active_menu?(level, title)
-    return unless title.present?
+    return if title.blank?
     # opposite of #humanize: "Developer Portal => :developer_portal
     # and also "EndUser Plans" => :end_user_plans
 
-    active_menus[level].try!(:to_s).try!(:underscore) == title.to_s.underscore.parameterize.underscore
+    active_menus[level].to_s.underscore == title.to_s.underscore.parameterize.underscore
   end
 
   private
@@ -122,7 +123,6 @@ module MenuSystem
         controller.send(:activate_menu, *args)
       end
     end
-
 
     # DEPRECATED:
     #
