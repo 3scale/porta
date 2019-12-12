@@ -72,7 +72,8 @@ module Pdf
     def metrics
       data = @source.usage_progress_for_all_metrics(@options)[:metrics]
       data.inject([]) do |row, (metric, stats)|
-        row << Format.prep_td_with_negation([metric[:name], metric[:data][:total], "#{format('%0.2f', metric[:data][:change])} %"])
+        percentage = '%0.2f %' % metric[:data][:change]
+        row << Format.prep_td_with_negation([metric[:name], metric[:data][:total], percentage])
       end
     end
 
