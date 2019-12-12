@@ -1,5 +1,5 @@
 require 'zip'
-require_dependency 'csv'
+require 'csv'
 
 class DataExportsWorker
   include Sidekiq::Worker

@@ -1,4 +1,4 @@
-require_dependency 'csv/exporter'
+require 'csv/exporter'
 
 module Stats
   module Views

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'csv'
+require 'csv'
 
 namespace :segment do
   desc 'Save as deleted objects the users from the imported segment csv'
