@@ -44,12 +44,12 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     params = provider_key_params.merge(proxy: { endpoint: 'https://alaska.wild' })
 
     Proxy.update_all(apicast_configuration_driven: false)
-    Proxy.any_instance.expects(:deploy_v2).never
+    ProxyDeploymentService.any_instance.expects(:deploy_v2).never
     put(admin_api_service_proxy_path(params))
     assert_response :success
 
     Proxy.update_all(apicast_configuration_driven: true)
-    Proxy.any_instance.expects(:deploy_v2).once
+    ProxyDeploymentService.any_instance.expects(:deploy_v2).once
     put(admin_api_service_proxy_path(params))
     assert_response :success
   end

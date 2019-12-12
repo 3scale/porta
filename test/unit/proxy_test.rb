@@ -184,27 +184,6 @@ class ProxyTest < ActiveSupport::TestCase
     assert @proxy.apicast_configuration_driven
   end
 
-
-  def test_deploy_service_mesh_integration
-    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
-    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
-    @proxy.provider.stubs(:provider_can_use?).with(:service_mesh_integration).returns(true)
-    @proxy.stubs(:deployment_option).returns('service_mesh_istio')
-    @proxy.expects(:deploy_v2).returns(true)
-    @proxy.expects(:deploy_production_v2).returns(true)
-    assert @proxy.deploy!
-  end
-
-  def test_deploy_production
-    @proxy.assign_attributes(apicast_configuration_driven: true)
-    @proxy.expects(:deploy_production_v2)
-    @proxy.deploy_production
-
-    @proxy.assign_attributes(apicast_configuration_driven: false, api_test_success: true)
-    @account.expects(:deploy_production_apicast)
-    @proxy.deploy_production
-  end
-
   test 'hosts' do
     @proxy.endpoint = 'http://foobar.example.com:3000/path'
     @proxy.sandbox_endpoint = 'http://example.com:8080'

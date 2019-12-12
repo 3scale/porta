@@ -40,7 +40,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
     host! @provider.admin_domain
     login_provider @provider
 
-    Proxy.any_instance.expects(:deploy_production).once
+    ProxyDeploymentService.any_instance.expects(:deploy_production).once
     patch :update_production, service_id: @provider.default_service.id
     assert_response :redirect
   end
