@@ -77,19 +77,19 @@ run:
 	@docker-compose run -e MASTER_PASSWORD=$(MASTER_PASSWORD) -e USER_PASSWORD=$(USER_PASSWORD) --rm system $(CMD)
 
 dev-setup: ## Makes the initial setup for the application ##
-dev-setup: CMD=rake db:setup
+dev-setup: CMD=rake db:deploy
 dev-setup: run
 
 dev-start: ## Starts the application with all dependencies using Docker ##
-dev-start:
+dev-start: dev-setup
 	@docker-compose up -d
 
 dev-stop: ## Stops all started containers ##
 dev-stop:
 	@docker-compose stop
 
-# bash: ## Opens up shell on the container
-bash:
+bash: ## Opens up shell on the container
+bash: dev-setup
 	@echo
 	@echo "======= Bash ======="
 	@echo
