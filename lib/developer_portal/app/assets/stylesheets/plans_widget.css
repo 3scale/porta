@@ -91,11 +91,11 @@
 }
 
 .plan-preview-box .features ul li.absent {
-	background: transparent url('/images/cross.png') no-repeat top left;
+	background: transparent url('cross.png') no-repeat top left;
 }
 
 .plan-preview-box .features ul li.present {
-	background: transparent url('/images/tick.png') no-repeat top left;
+	background: transparent url('tick.png') no-repeat top left;
 }
 
 .plan-preview-box .features ul li {
@@ -174,7 +174,7 @@
 	display: block;
 	width: 30px;
 	height: 30px;
-	background: transparent url('/images/img_close.png') no-repeat 0 0;
+	background: transparent url('img_close.png') no-repeat 0 0;
 	cursor: pointer;
 }
 

@@ -14,9 +14,9 @@
 
     {% csrf %}
     {{ '/css/bootstrap.css' | stylesheet_link_tag }}
-    {{ '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css' | stylesheet_link_tag }}
+    {% cdn_asset /font-awesome/4.3.0/css/font-awesome.css %}
 
-    {{ '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' | javascript_include_tag }}
+    {% cdn_asset /jquery/1.7.1/jquery.min.js %}
     {{ '/javascripts/bootstrap.min.js' | javascript_include_tag }}
     {{ '/javascripts/3scale.js' | javascript_include_tag }}
     {{ '/javascripts/excanvas.compiled.js' | javascript_include_tag }}
