@@ -1,4 +1,4 @@
-require 'color'
+# frozen_string_literal: true
 
 Before '@ignore-backend' do
   stub_backend_get_keys
@@ -188,13 +188,13 @@ current_step = ->(scenario) do
   [ steps[index], steps[index+1] ]
 end
 
-print_banner = -> (title, step) do
+print_banner = ->(title, step) do
   step_name = (step.try(:actual_keyword) || step.keyword) + step.name
-  Rails.logger.info <<-NEXT
+  Rails.logger.info <<~NEXT
 
-| #{title}: #{Color::BOLD}#{step_name}#{Color::CLEAR} |
-| #{'=' * (step_name.length + title.length + 2)} |
-#{step.multiline_arg}
+    | #{title}: #{step_name.bold} |
+    | #{'=' * (step_name.length + title.length + 2)} |
+    #{step.multiline_arg}
 NEXT
 end
 

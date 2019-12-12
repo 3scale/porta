@@ -171,7 +171,6 @@ gem 'draper', '~> 2.0'
 # TODO: gem 'draper', '~> 3.0'
 
 group :development do
-  gem 'colorize'
   gem 'bullet', '~> 4.2'
 
   gem 'letter_opener', require: false if ENV.fetch('LETTER_OPENER', '1') == '0'
@@ -244,6 +243,7 @@ group :test do
 end
 
 group :development, :test do
+  gem 'colorize'
   gem 'factory_bot_rails', '~> 4.11.1'
   gem 'unicorn-rails'
 
