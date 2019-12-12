@@ -1,4 +1,5 @@
-require 'color'
+BOLD  = "\033[1m"
+CLEAR = "\033[0m"
 
 Before '@ignore-backend' do
   stub_backend_get_keys
@@ -192,7 +193,7 @@ print_banner = -> (title, step) do
   step_name = (step.try(:actual_keyword) || step.keyword) + step.name
   Rails.logger.info <<-NEXT
 
-| #{title}: #{Color::BOLD}#{step_name}#{Color::CLEAR} |
+| #{title}: #{BOLD}#{step_name}#{CLEAR} |
 | #{'=' * (step_name.length + title.length + 2)} |
 #{step.multiline_arg}
 NEXT
