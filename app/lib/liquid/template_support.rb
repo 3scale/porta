@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Liquid
   module TemplateSupport
     extend ActiveSupport::Concern
@@ -27,7 +29,7 @@ module Liquid
 
     protected
 
-    def add_liquid_view_paths(options={})
+    def add_liquid_view_paths(options = {})
       # liquid from the database
       prepend_view_path(liquid_database_resolver)
 
@@ -87,6 +89,11 @@ module Liquid
 
     public :assigns_for_liquify
 
+    def self.fetch_drop(name)
+      # TODO: in Ruby 1.9 use get_const(name, false) so it really looks only in drop module scope
+      [Liquid::Drops, name.camelize].join("::").constantize
+    end
+
     private
 
     def rails_without_liquid_resolver
@@ -107,8 +114,6 @@ module Liquid
     def liquid_filesystem_resolver_no_prefix
       Liquid::Template::FallbackResolverNoPrefix.new
     end
-
-
 
     def current_liquid_templates
       site_account.templates
@@ -133,7 +138,6 @@ module Liquid
         :site    => Liquid::Drops::Site.new(site_account),
         :request => Liquid::Drops::Request.new(request),
         :urls    => Liquid::Drops::Urls.new(site_account, request),
-
         :site_account => Liquid::Drops::Provider.new(site_account),
         :provider     => Liquid::Drops::Provider.new(site_account),
         :forum        => Liquid::Drops::Forum.new(site_account),
@@ -146,7 +150,6 @@ module Liquid
         # underscore prefix means it is "private" api and can be changed without further notice
         :_menu => Liquid::Drops::Menu.new(active_menus),
         :menu => Liquid::Drops::Menu.new(active_menus)
-
       if logged_in?
         template_assigns template,
           :current_account => Liquid::Drops::Account.new(current_account),
@@ -161,11 +164,6 @@ module Liquid
     def template_assigns(template, assigns)
       @_template_assigns = template.assigns
       @_template_assigns.merge! assigns.stringify_keys
-    end
-
-    def self.fetch_drop(name)
-      # TODO: in Ruby 1.9 use get_const(name, false) so it really looks only in drop module scope
-      [Liquid::Drops, name.camelize].join("::").constantize
     end
   end
 end
