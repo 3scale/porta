@@ -318,6 +318,16 @@ class ServiceTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) { service.reload }
   end
 
+  test '#plugin_deployment? returns true when using a plugin as deployment option' do
+    service = FactoryBot.build(:service, deployment_option: 'plugin_ruby')
+
+    assert service.plugin_deployment?
+
+    service = FactoryBot.build(:service, deployment_option: 'hosted')
+
+    refute service.plugin_deployment?
+  end
+
   def test_default_service_plan
     service = FactoryBot.build(:simple_service)
     service.account.settings.service_plans_ui_visible = true

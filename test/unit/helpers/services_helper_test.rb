@@ -7,8 +7,5 @@ class ServicesHelperTest < ActionView::TestCase
 
     @service.deployment_option = 'hosted'
     assert show_mappings?
-
-    @service.deployment_option = 'plugin_java'
-    refute show_mappings?
   end
 end
