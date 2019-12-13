@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Filters::ProviderRequired
 
   def provider_required(options = {})
@@ -9,12 +11,10 @@ module Filters::ProviderRequired
     protected
 
     def provider_required
-      if current_account.nil? || !current_account.provider?
-        render_error 'Access denied', :status => :forbidden
-        false
-      else
-        true
-      end
+      return true if current_account&.provider?
+
+      render_error 'Access denied', status: :forbidden
+      false
     end
   end
 end
