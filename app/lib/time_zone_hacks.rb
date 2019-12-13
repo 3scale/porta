@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeZoneHacks
   def current_month_range
     (now.beginning_of_month..now.end_of_month).to_time_range
