@@ -3,7 +3,6 @@ require 'test_helper'
 class User::SignupTypeTest < ActiveSupport::TestCase
 
   def test_partner
-    assert signup_type(type: 'partner:heroku').partner?
     assert signup_type(type: 'partner').partner?
     refute signup_type(type: 'new_signup').partner?
   end
