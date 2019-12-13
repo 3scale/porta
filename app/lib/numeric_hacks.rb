@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module NumericHacks
   # What is the change (in percents) of this value from the other value.
   #
@@ -19,12 +21,12 @@ module NumericHacks
   #   5.percentage_ratio_of(10)   # 50.0
   #   0.1.percentage_ratio_of(10) # 1.0
   def percentage_ratio_of(other)
-    if self.zero? && other.zero?
+    if zero?
       0.0
     elsif other.zero?
       100.0
     else
-      (self.to_f / other) * 100.0
+      (to_f / other) * 100.0
     end
   end
 end
