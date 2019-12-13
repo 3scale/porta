@@ -22,14 +22,6 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   # Description:
   #
   # Allow set or unset a partner for a provider account.
-  # Could be used to move heroku providers to normal application plans
-  # and move to heroku again.
-  #
-  # For heroku accounts we save some data in account.settings, this data
-  # is not deleted.
-  #
-  # You should not move normal providers to heroku accounts because need
-  # some special data that is provider for heroku when create an account.
   def change_partner
     get_provider
     get_partner

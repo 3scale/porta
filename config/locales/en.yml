@@ -577,7 +577,6 @@ en:
     phrased:
       self_managed: Self-managed Gateway
       hosted: APIcast
-      on_heroku: Heroku Cloud Gateway
       on_amazon: Amazon Cloud Gateway
       plugin_ruby: Ruby Plugin
       plugin_java: Java Plugin
@@ -596,7 +595,6 @@ en:
       Istio
       <span>A uniform way to secure, connect, and monitor microservices.</span>
 
-    on_heroku: Heroku
     on_amazon: Amazon
     plugin_ruby: |
       Ruby Plugin

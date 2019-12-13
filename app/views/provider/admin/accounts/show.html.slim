@@ -58,12 +58,9 @@ div id="account-column-wrapper"
       div id="account-cancellation"
         h2 Account Cancellation
         p
-          - if @presenter.heroku?
-            | You can cancel your account from the Heroku dashboard.
-          - else
-            ' Please
-            => link_to 'open a Support Case', 'https://access.redhat.com/support/'
-            | if you would like to cancel your account.
+          ' Please
+          => link_to 'open a Support Case', 'https://access.redhat.com/support/'
+          | if you would like to cancel your account.
 
   - if @presenter.show_plan_section?
     div class="overview-box features" id="plan-overview"

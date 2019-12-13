@@ -16,7 +16,6 @@ class Partner < ApplicationRecord
 
   def can_manage_users?
     case system_name
-    when 'heroku' then false
     when 'appdirect' then false
     else true
     end
