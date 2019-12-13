@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ActiveMerchant monkey patches
 
 class ActiveMerchant::Billing::Gateway
