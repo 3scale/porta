@@ -16,7 +16,23 @@ module Liquid
         @file = File.join(cdn_host, file).strip # strip because we are allowing the path not enclosed between quotes
       end
 
-      desc 'Provides the desired asset file'
+      desc %{
+        Provides the desired asset file.
+   
+        The assets you can use here are limited to:
+        
+        Font Awesome:
+        - font-awesome/4.3.0/css/font-awesome.css
+        - font-awesome/4.3.0/css/font-awesome.min.css
+
+        jQuery 1.11.4:
+        - jquery-ui/1.11.4/jquery-ui.css 
+        - jquery-ui/1.11.4/jquery-ui.min.js
+
+        jQuery 1.7.1:
+        - jquery/1.7.1/jquery.min.js
+      }
+
       def render(context)
         action_view = context.registers[:controller].view_context
         case Pathname.new(@file).extname

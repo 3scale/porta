@@ -16,7 +16,22 @@ __Example:__ Using csrf tag in liquid
 ```
 # Tag 'cdn_asset'
 
-Provides the desired asset file
+
+Provides the desired asset file.
+   
+The assets you can use here are limited to:
+
+Font Awesome:
+- font-awesome/4.3.0/css/font-awesome.css
+- font-awesome/4.3.0/css/font-awesome.min.css
+
+jQuery 1.11.4:
+- jquery-ui/1.11.4/jquery-ui.css 
+- jquery-ui/1.11.4/jquery-ui.min.js
+
+jQuery 1.7.1:
+- jquery/1.7.1/jquery.min.js
+      
 
 __Example:__ Using cdn_asset tag in liquid
 ```liquid
