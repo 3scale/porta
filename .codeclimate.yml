@@ -84,6 +84,7 @@ exclude_paths:
   - 'lib/action_dispatch/rails5_ssl.rb'
   - "lib/developer_portal/app/views/developer_portal/javascripts/*"
   - "lib/developer_portal/app/views/developer_portal/css/*"
+  - "lib/developer_portal/app/assets/stylesheets/**/*"
   - "assets/bundles/*.js"
   - "spec/**/*"
   - "spec/**/**/*"
