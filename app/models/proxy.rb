@@ -330,7 +330,7 @@ class Proxy < ApplicationRecord
   end
 
   def async_deploy(user)
-    ProxyDeploymentV1Service.async_deploy(user, self)
+    ApicastV1DeploymentService.async_deploy(user, self)
   end
 
   def hosts
@@ -426,7 +426,7 @@ class Proxy < ApplicationRecord
 
   def sandbox_deployed?
     proxy_log = provider.proxy_logs.latest_first.first or return sandbox_config_saved?
-    proxy_log.created_at > self.created_at && proxy_log.status == ProxyDeploymentV1Service::SUCCESS_MESSAGE
+    proxy_log.created_at > self.created_at && proxy_log.status == ApicastV1DeploymentService::SUCCESS_MESSAGE
   end
 
   def sandbox_config_saved?

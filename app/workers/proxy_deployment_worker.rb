@@ -9,7 +9,7 @@ class ProxyDeploymentWorker
     proxy = provider.proxies.find(proxy_id)
     analytics = ThreeScale::Analytics.user_tracking(user)
 
-    deployment = ::ProxyDeploymentV1Service.new(provider)
+    deployment = ::ApicastV1DeploymentService.new(provider)
 
 
     MessageBus.with_site_id(provider.id) do |message_bus|

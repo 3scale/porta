@@ -55,7 +55,7 @@ class ProxyDeploymentService
 
   # Deprecated
   def deploy_v1
-    ProxyDeploymentV1Service.new(provider).deploy(@proxy)
+    ApicastV1DeploymentService.new(provider).deploy(@proxy)
   end
 
   def deploy_v2
