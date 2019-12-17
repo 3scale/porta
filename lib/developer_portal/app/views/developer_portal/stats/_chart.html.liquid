@@ -1,6 +1,6 @@
 {% content_for stylesheets %}
   {{ 'stats.css' | stylesheet_link_tag }}
-  {{ '//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/ui-lightness/jquery-ui.css' | stylesheet_link_tag }}
+  {% cdn_asset /jquery-ui/1.11.4/jquery-ui.css %}
 {% endcontent_for %}
 
 {% content_for javascripts %}
