@@ -504,7 +504,7 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     public_suffix (3.1.1)
-    rack (1.6.11)
+    rack (1.6.12)
     rack-no_animations (1.0.3)
     rack-openid (1.4.2)
       rack (>= 1.1.0)
