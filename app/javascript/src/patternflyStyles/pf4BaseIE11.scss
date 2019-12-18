@@ -151,20 +151,20 @@ button:-moz-focusring,
     &:active {
       color: #FFF;
       font-weight: 16px;
-      background-color: rgb(79, 82, 85);;
+      background-color: rgb(79, 82, 85);
     }
   
     &:focus,
     &:active {
       font-weight: 16px;
-      background-color: rgb(79, 82, 85);;
+      background-color: rgb(79, 82, 85);
     }
   
     &.pf-m-hover,
     &.pf-m-focus,
     &.pf-m-current,
     &.pf-m-active {
-      background-color: rgb(79, 82, 85);;
+      background-color: rgb(79, 82, 85);
     }
   }
 
@@ -276,8 +276,8 @@ button:-moz-focusring,
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   margin-right: 1rem;
   margin-left: calc(0.5rem * -1);
-  // font-size: 1.5rem;
-  line-height: 1; }
+  line-height: 1; 
+}
 
 .pf-c-page__header-nav {
   grid-column: 1 / -1;
@@ -343,9 +343,9 @@ button:-moz-focusring,
 .pf-c-page__sidebar {
   grid-area: nav;
   -ms-grid-row: 2;
-      grid-row-start: 2;
+  grid-row-start: 2;
   -ms-grid-column: 1;
-      grid-column-start: 1;
+  grid-column-start: 1;
   z-index: 200;
   width: 18.125rem;
   overflow-x: hidden;
@@ -413,27 +413,24 @@ button:-moz-focusring,
 }
 
 .pf-c-nav.pf-m-dark .pf-c-divider {
-  background-color: #4f5255; }
-.pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-current {
-  // scss-lint:disable SelectorFormat
- }
-  .pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-current .pf-c-divider {
+  background-color: #4f5255; 
+}
+
+.pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-current .pf-c-divider {
     background-color: #212427; }
 .pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-expanded {
   padding-bottom: 0.5rem;
-  // scss-lint:disable SelectorFormat
- }
-.pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item {
-  // scss-lint:disable SelectorFormat
 }
-  .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item.pf-m-current {
-    background-color:#3c3f42; }
-  .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link.pf-m-current {
-    background-color:#3c3f42; }
-    .pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link {
-      background-color: rgb(33, 36, 39); 
-      color: #FFF}
+
+.pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item.pf-m-current {
+    background-color:#3c3f42; 
+}
+.pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link {
+    background-color: rgb(33, 36, 39); 
+    color: #FFF
+}
 
 .pf-c-page__sidebar.pf-m-dark {
-  background-color: rgb(33, 36, 39);;
-  color: #FFF; }
+  background-color: rgb(33, 36, 39);
+  color: #FFF; 
+}
