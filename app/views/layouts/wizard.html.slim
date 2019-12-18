@@ -1,5 +1,5 @@
 doctype html
-html[lang="en"]
+html[lang="en" class="pf-m-redhat-font"]
   head
     meta[charset="utf-8"]
     title
@@ -10,6 +10,7 @@ html[lang="en"]
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
+    = javascript_pack_tag 'PF4Styles/base'
 
   body
     header
