@@ -83,3 +83,21 @@ Feature: Integration Settings
     And I should not see "CREDENTIALS LOCATION"
     And I should not see "SECURITY"
     And I should not see "GATEWAY RESPONSE"
+
+  @javascript
+  Scenario: Production and Staging URL are not grayed out when self-managed APIcast
+    Given I log in as provider "foo.example.com"
+    And I go to the settings page for service "API" of provider "foo.example.com"
+
+    When I click on the label "APIcast self-managed"
+    Then I should see field "Staging Public Base URL" enabled
+    And I should see field "Production Public Base URL" enabled
+
+  @javascript
+  Scenario: Production and Staging URL are grayed out when 3scale-managed APIcast
+    Given I log in as provider "foo.example.com"
+    And I go to the settings page for service "API" of provider "foo.example.com"
+
+    When I click on the label "APIcast"
+    Then I should see field "Staging Public Base URL" disabled
+    And I should see field "Production Public Base URL" disabled
