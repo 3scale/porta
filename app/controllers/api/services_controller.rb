@@ -101,7 +101,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def proxy_params
-    oidc_params = %i[oidc_issuer_type oidc_issuer_endpoint jwt_claim_with_client_id jwt_claim_with_client_id_type] + OIDCConfiguration::Config::FLOWS
+    oidc_params = [:oidc_issuer_type, :oidc_issuer_endpoint, :jwt_claim_with_client_id, :jwt_claim_with_client_id_type, oidc_configuration_attributes: OIDCConfiguration::Config::FLOWS]
     permitted_params = oidc_params + %i[
       auth_user_key auth_app_id auth_app_key credentials_location hostname_rewrite secret_token
       error_status_auth_failed error_headers_auth_failed error_auth_failed

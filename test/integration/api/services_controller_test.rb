@@ -149,6 +149,32 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
 
+    test 'updates oidc settings' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      rolling_update(:api_as_product, enabled: true)
+
+      oidc_params = {
+        oidc_issuer_type: 'keycloak',
+        oidc_issuer_endpoint: 'http://u:p@localhost:8080/auth/realms/my-realm',
+        oidc_configuration_attributes: {
+          standard_flow_enabled: '1',
+          implicit_flow_enabled: '1',
+          service_accounts_enabled: '0',
+          direct_access_grants_enabled: '0'
+        }
+      }
+
+      put admin_service_path(service), update_params.deep_merge(service: { proxy_attributes: oidc_params })
+
+      proxy = service.proxy.reload
+
+      assert_equal 'keycloak', proxy.oidc_issuer_type
+      assert_equal 'http://u:p@localhost:8080/auth/realms/my-realm', proxy.oidc_issuer_endpoint
+
+      oidc_expected_flows = oidc_params[:oidc_configuration_attributes].transform_values { |value| ActiveRecord::Type::Boolean.new.type_cast_from_user(value) }
+      assert_equal oidc_expected_flows, proxy.oidc_configuration.config.attributes.symbolize_keys
+    end
+
     private
 
     def update_params
