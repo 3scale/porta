@@ -37,25 +37,20 @@ class BackendApi < ApplicationRecord
 
   has_system_name(uniqueness_scope: [:account_id])
 
-  scope :orphans, -> { where.has { id.not_in(BackendApiConfig.selecting { :backend_api_id }) } }
+  scope :orphans, -> {
+    where.has do
+      not_exists(BackendApiConfig.except(:order).by_backend_api(BabySqueel[:backend_apis].id).select(:id))
+    end
+  }
 
   scope :not_used_by, ->(service_id) {
-    # TODO: Baby Squeel
-    # It should be:
-    # where.has do
-    #   not_exists BackendApiConfig.by_service(service_id).by_backend_api(BabySqueel[:backend_apis].id).select(:id)
-    # end
-    # And that works for MySQL and Postgres but not Oracle
-    sql_query = <<~SQL
-      (
-        NOT EXISTS (
-          SELECT id
-          FROM backend_api_configs
-          WHERE service_id = ? AND backend_api_configs.backend_api_id = backend_apis.id
-        )
+    where.has do
+      not_exists(
+        BackendApiConfig.except(:order).select(:id)
+          .by_service(service_id)
+          .by_backend_api(BabySqueel[:backend_apis].id)
       )
-    SQL
-    where(sql_query, service_id)
+    end
   }
 
   scope :oldest_first, -> { order(created_at: :asc) }
