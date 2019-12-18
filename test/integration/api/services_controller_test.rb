@@ -38,6 +38,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       update_service_params = update_params[:service]
       update_proxy_params = update_service_params.delete(:proxy_attributes)
+      oidc_configuration_params = update_proxy_params.delete(:oidc_configuration_attributes)
       expected_notification_settings = update_service_params[:notification_settings].transform_values { |notifications| notifications.map(&:to_i) }
       expected_buyer_plan_change_permission = update_service_params[:buyer_plan_change_permission]
       expected_signup_and_use = update_service_params
@@ -54,6 +55,13 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       update_proxy_params.each do |field_name, expected_value|
         assert_equal expected_value, proxy.public_send(field_name)
       end
+
+      oidc_configuration = proxy.oidc_configuration
+      oidc_configuration_params.each do |field_name, param_value|
+        expected_value = param_value == '1'
+        assert_equal expected_value, oidc_configuration.public_send(field_name)
+      end
+
     end
 
     # This test can be removed once used deprecated attributes have been removed from the schema
@@ -167,7 +175,15 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
           },
           proxy_attributes: {
             endpoint: 'http://api.example.com:8080',
-            sandbox_endpoint: 'http://api.staging.example.com:8080'
+            sandbox_endpoint: 'http://api.staging.example.com:8080',
+            oidc_issuer_type: 'keycloak',
+            oidc_issuer_endpoint: '',
+            oidc_configuration_attributes: {
+              standard_flow_enabled: '1',
+              implicit_flow_enabled: '1',
+              service_accounts_enabled: '0',
+              direct_access_grants_enabled: '0'
+            }
           }
         }
       }
