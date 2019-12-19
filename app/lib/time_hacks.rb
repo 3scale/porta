@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeHacks
   def beginning_of_cycle(cycle)
     if cycle.is_a?(Symbol)
@@ -24,7 +26,7 @@ module TimeHacks
   # Wrapper for all the beginning_of_X methods (beginning_of_day, beginning_of_month, ...)
   def beginning_of(period)
     case period
-    when :eternity                  then change(:year => 1970, :month => 1, :day => 1, :hour => 00, :min => 00, :sec => 00)
+    when :eternity                  then change(:year => 1970, :month => 1, :day => 1, :hour => 0, :min => 0, :sec => 0)
     when :day, :week, :month, :year, :hour, :minute then send("beginning_of_#{period}")
     else raise_invalid_period(period)
     end
