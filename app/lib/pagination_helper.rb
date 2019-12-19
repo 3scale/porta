@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaginationHelper
 
   def self.included(base)
