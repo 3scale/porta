@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # FIXME: remove that hack. use the api in the way it is intended to be
 # used (Aurelian)
 
@@ -10,18 +12,12 @@ module LayoutlessAjaxRendering
     self.layoutless_rendering = true
   end
 
-  PJAX = 'X-PJAX'.freeze
+  PJAX = 'X-PJAX'
 
   # this method is called by render to get options
   def _normalize_args(*)
-    options = super
-
-    if layoutless_rendering && !options.has_key?(:layout)
-      if request.xhr? || request.headers[PJAX]
-        options[:layout] = false
-      end
+    super.tap do |options|
+      options[:layout] ||= false if layoutless_rendering && (request.xhr? || request.headers[PJAX])
     end
-
-    options
   end
 end
