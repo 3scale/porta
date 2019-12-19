@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: Extract this into a gem.
 
 module StringHacks
