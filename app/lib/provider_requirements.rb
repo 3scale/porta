@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProviderRequirements
 
   def self.included(base)
@@ -5,7 +7,7 @@ module ProviderRequirements
   end
 
   def provider_user?
-    current_account and current_account.provider?
+    current_account&.provider?
   end
 
   def provider_admin?
@@ -14,13 +16,13 @@ module ProviderRequirements
 
   module ClassMethods
 
-    def require_provider_admin(options={})
+    def require_provider_admin(options = {})
       before_action(options) do | controller |
         controller.send(:provider_admin?) || unauthorized!
       end
     end
 
-    def require_provider_user(options={})
+    def require_provider_user(options = {})
       before_action(options) do | controller |
         controller.send(:provider_user?) || unauthorized!
       end
