@@ -41,3 +41,14 @@ end
 When /^I select backend version "([^"]*)"$/ do |version|
   find(:xpath, "//input[@id='service_backend_version_#{version}']").select_option
 end
+
+Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
+  label = find('label', text: field)
+  input = label.sibling('input')
+
+  if enabled == 'enabled'
+    assert_not input.readonly?
+  else
+    assert input.readonly?
+  end
+end
