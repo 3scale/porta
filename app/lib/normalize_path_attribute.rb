@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This module normalizes uri to valid format
 # the process is like this:
 #   * if url is invalid => add validation error and replace the value
@@ -25,10 +27,10 @@ module NormalizePathAttribute
           value = record.read_attribute(attr)
 
           # skip empty values
-          next unless value.present?
+          next if value.blank?
 
           begin
-            uri = URI.parse(value)
+            URI.parse(value)
           rescue URI::InvalidURIError
             # normalize url according to rfc
             normalized = normalize_path(value)
@@ -43,16 +45,16 @@ module NormalizePathAttribute
     end
   end
 
-  def normalize_path(value)
-    _value = value
-    if _value
-      _value.gsub!(/[^\/\w-]+/, '-') # only letters, digits, - and _ are allowed
-      _value.gsub!(/[-]+/, '-')      # no doble dashes
-      _value.gsub!(/\A[-]+/, '')     # no dashes at the beginning
-      _value.gsub!(/[-]+\Z/, '')     # no dashes at the end
-      _value.gsub!(/\/-/, '/')       # no dash after slashes
-      _value.gsub!(/-\//, '/')       # no dash before slashes
-     end
-    _value
+  def normalize_path(old_path)
+    path = old_path.dup
+    if path
+      path.gsub!(%r{[^/\w-]+}, '-') # only letters, digits, - and _ are allowed
+      path.gsub!(/[-]+/, '-')       # no doble dashes
+      path.gsub!(/\A[-]+/, '')      # no dashes at the beginning
+      path.gsub!(/[-]+\Z/, '')      # no dashes at the end
+      path.gsub!(%r{/-}, '/')       # no dash after slashes
+      path.gsub!(%r{-/}, '/')       # no dash before slashes
+    end
+    path
   end
 end
