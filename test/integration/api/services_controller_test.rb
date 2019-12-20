@@ -177,7 +177,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
             endpoint: 'http://api.example.com:8080',
             sandbox_endpoint: 'http://api.staging.example.com:8080',
             oidc_issuer_type: 'keycloak',
-            oidc_issuer_endpoint: '',
+            oidc_issuer_endpoint: 'http://u:p@localhost:8080/auth/realms/my-realm',
             oidc_configuration_attributes: {
               standard_flow_enabled: '1',
               implicit_flow_enabled: '1',
