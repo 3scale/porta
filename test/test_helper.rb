@@ -26,7 +26,7 @@ require File.expand_path('../../lib/developer_portal/test/test_helper.rb', __FIL
 
 require 'minitest/reporters'
 
-junit = MiniTest::Reporters::JUnitReporter.new("#{junit_reporter_path}, Process.pid].compact.join('-')}")
+junit = MiniTest::Reporters::JUnitReporter.new([junit_reporter_path, Process.pid].compact.join('-'))
 MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
 
 require 'webmock/minitest'
