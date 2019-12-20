@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Include this into controllers that implement searching via sphinx. This will handle
 # search server connection errors gracefully.
 module SearchSupport
@@ -10,10 +12,10 @@ module SearchSupport
 
   private
 
-    def search_error(exception)
-      System::ErrorReporting.report_error exception,
-        error_message: 'Sphinx is probably down', error_class: 'Search Error'
-      Rails.logger.error "--> Sphinx search failed (but rescued)\n #{exception.backtrace.join("\n")}"
-      render template: 'search/error', status: :service_unavailable
-    end
+  def search_error(exception)
+    System::ErrorReporting.report_error exception,
+      error_message: 'Sphinx is probably down', error_class: 'Search Error'
+    Rails.logger.error "--> Sphinx search failed (but rescued)\n #{exception.backtrace.join("\n")}"
+    render template: 'search/error', status: :service_unavailable
+  end
 end
