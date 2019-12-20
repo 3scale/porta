@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'three_scale/sidekiq_logging_middleware'
-
 Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 
 Sidekiq.configure_server do |config|
