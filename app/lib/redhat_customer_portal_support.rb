@@ -21,7 +21,7 @@ module RedhatCustomerPortalSupport
     verified_by_was = extra_fields_change.first['red_hat_account_verified_by']
     verified_by = extra_fields_change.last['red_hat_account_verified_by']
 
-    !verified_by_was.present? && verified_by.present?
+    verified_by_was.blank? && verified_by.present?
   end
 
   def recently_suspended?
