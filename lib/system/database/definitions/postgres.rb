@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'system/database/procedure'
 
 System::Database::Postgres.define do
   trigger 'accounts' do
