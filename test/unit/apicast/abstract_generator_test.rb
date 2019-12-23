@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Apicast::AbstractGeneratorTest < ActiveSupport::TestCase
 
-  class SomeGenerator < AbstractGenerator
+  class SomeGenerator < Apicast::AbstractGenerator
 
   end
 
