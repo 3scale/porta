@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale
   module Rake
     class RemoveDupUsageLimits
@@ -25,7 +27,7 @@ module ThreeScale
       end
 
       def find_dups(collection)
-        collection.select([:plan_id, :metric_id, :period])
+        collection.select(%i[plan_id metric_id period])
               .group(:metric_id, :plan_id,:period)
               .having("count(*) > 1")
               .count(:id)
