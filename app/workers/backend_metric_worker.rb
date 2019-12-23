@@ -9,7 +9,7 @@ class BackendMetricWorker < ApplicationJob
                      concurrency: {
                        limit: 1,
                        key_suffix: ->(service_id, metric_id, *) { "service:#{service_id}/metric:#{metric_id}" },
-                       ttl: 15.minutes.to_i
+                       ttl: 1.hour.to_i
                      }
                    })
 
