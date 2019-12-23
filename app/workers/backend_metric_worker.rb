@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'three_scale/sidekiq_lock_worker' # Temporary added until https://github.com/3scale/porta/pull/1498 is not merged
 
 class BackendMetricWorker < ApplicationJob
   include Sidekiq::Throttled::Worker

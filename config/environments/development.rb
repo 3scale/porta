@@ -3,6 +3,7 @@ System::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   config.eager_load = false
+  config.enable_dependency_loading = true
 
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development

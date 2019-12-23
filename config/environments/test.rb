@@ -4,7 +4,6 @@ System::Application.configure do
   # Disable css/jquery animations in tests, makes percy much happier
   config.middleware.use Rack::NoAnimations
 
-  config.eager_load = false # true if you use a tool to preload your test environment
   config.allow_concurrency = false
 
   # The test environment is used exclusively to run your application's
