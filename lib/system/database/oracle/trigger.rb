@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'system/database/trigger'
 
 module System
   module Database
