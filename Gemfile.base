@@ -53,6 +53,7 @@ gem 'sinatra', require: false # for sidekiq web
 gem 'sidekiq', '< 6', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-cron', require: %w(sidekiq/cron sidekiq/cron/web)
 gem 'sidekiq-lock'
+gem 'sidekiq-throttled'
 
 gem 'sidekiq-prometheus-exporter'
 

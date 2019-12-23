@@ -28,11 +28,11 @@ module Backend
       end
 
       def sync_backend_for_service(service)
-        ::BackendMetricWorker.perform_async(service.backend_id, id, extended_system_name)
+        ::BackendMetricWorker.perform_later(service.backend_id, id)
       end
 
       def sync_backend_for_service!(service)
-        ::BackendMetricWorker.new.perform(service.backend_id, id, extended_system_name)
+        ::BackendMetricWorker.perform_now(service.backend_id, id)
       end
 
       private
