@@ -888,6 +888,7 @@ en:
           attributes:
             system_name:
               invalid: invalid. Only ASCII letters, numbers, dashes and underscores are allowed.
+              invalid_for_proxy_endpoints: must be shorter.
 
         cinstance:
           attributes:
