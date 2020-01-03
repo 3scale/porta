@@ -245,7 +245,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       @provider.settings.allow_multiple_services!
 
       post admin_services_path, service: { name: 'My New Product', system_name: 'this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035' }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+      assert_equal 'System name must be shorter.', flash[:error]
 
       post admin_services_path, service: { name: 'My New Product', system_name: 'short-labels-are-ok' }
       refute flash[:error].presence
