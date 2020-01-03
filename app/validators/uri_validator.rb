@@ -8,7 +8,7 @@ class UriValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     valid = begin
               uri = URI.parse(value)
-              valid_scheme?(uri.scheme) && uri.host.present? && !forbidden_part?(record, uri)
+              valid_scheme?(uri.scheme) && valid_host?(uri.host) && !forbidden_part?(record, uri)
             rescue URI::InvalidURIError
               false
             end
@@ -24,6 +24,15 @@ class UriValidator < ActiveModel::EachValidator
     else
       [*accepted_scheme].include? scheme
     end
+  end
+
+  def valid_host?(host)
+    return false if host.blank?
+    (host.size <= 255) && valid_host_labels?(host)
+  end
+
+  def valid_host_labels?(host)
+    host.split('.').map(&:size).none?(&63.method(:'<'))
   end
 
   def forbidden_part?(record, uri)
