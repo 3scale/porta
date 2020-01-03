@@ -10,7 +10,7 @@ class ModelsTest < ActiveSupport::TestCase
       'System::Database::ConnectionProbe' => :all, 'ActsAsTaggableOn::Tag' => :all, 'ActsAsTaggableOn::Tagging' => :all, 'ApplicationRecord' => :all,
       'FieldsDefinition' => %w[target], 'AuthenticationProvider' => %w[account_type], 'Feature' => %w[featurable_type scope], 'Message' => %w[state],
       'UsageLimit' => %w[period plan_type], 'Policy' => %w[identifier], 'ProxyRule' => %w[metric_system_name], 'ProxyConfig' => %w[hosts],
-      'OIDCConfiguration' => %w[oidc_configurable_type], 'Invitation' => %w[token],
+      'Proxy' => %w[endpoint sandbox_endpoint], 'OIDCConfiguration' => %w[oidc_configurable_type], 'Invitation' => %w[token],
       'Settings' => Switches::SWITCHES.map { |switch| "#{switch}_switch" },
       'Invoice' => %w[pdf_file_name pdf_content_type state friendly_id fiscal_code vat_code currency creation_type], 'DeletedObject' => %w[owner_type object_type],
       'Onboarding' => %w[wizard_state bubble_api_state bubble_metric_state bubble_deployment_state bubble_mapping_state bubble_limit_state],

@@ -78,6 +78,26 @@ class UriValidatorTest < ActiveSupport::TestCase
     end
   end
 
+  test 'hostname with label longer than 63 chars' do
+    record = ModelWithURIValidation.new
+    record.uri = "http://#{long_hostname_label}.#{short_hostname_label}.test"
+    refute record.valid?
+  end
+
+  test 'hostname with labels up to 63 chars' do
+    record = ModelWithURIValidation.new
+    short_labels = (1..2).map { |count| "#{short_hostname_label}-#{count}" }
+    record.uri = "http://#{short_labels.join('.')}.test"
+    assert record.valid?
+  end
+
+  test 'hostname longer than 255 with labels up to 63 chars' do
+    record = ModelWithURIValidation.new
+    short_labels = (1..13).map { |count| "#{short_hostname_label}-#{count}" }
+    record.uri = "http://#{short_labels.join('.')}.test" # hostname with 268 chars
+    refute record.valid?
+  end
+
   test 'forbid optional parts' do
     record = ModelWithURIValidation.new
     record.uri = "http://domain.test:123"
@@ -98,5 +118,13 @@ class UriValidatorTest < ActiveSupport::TestCase
     klass.clear_validators!
     yield
     klass._validate_callbacks = validate_callbacks
+  end
+
+  def long_hostname_label
+    'this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035' # 86 chars
+  end
+
+  def short_hostname_label
+    'short-label-is-ok' # 17 chars
   end
 end
