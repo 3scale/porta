@@ -2,7 +2,7 @@
 
 class ServiceCreator
 
-  delegate :backend_api_configs, :backend_api_proxy, :account, to: :@service
+  delegate :backend_api_configs, :backend_api_proxy, :account, :proxy, to: :@service
   delegate :provider_can_use?, to: :account
 
   def initialize(service:, backend_api: nil)
@@ -22,6 +22,10 @@ class ServiceCreator
   def call(params = {})
     call!(params)
   rescue ActiveRecord::RecordInvalid
+    if proxy && proxy.errors[:endpoint].any? { |message| message =~ /the accepted format is/ }
+      @service.errors.add(:system_name, :invalid_for_proxy_endpoints)
+    end
+
     false
   end
 
