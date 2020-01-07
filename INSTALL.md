@@ -60,7 +60,7 @@ make dev-stop
 
 #### Ruby version
 
-The project supports **Ruby 2.4.x**.
+The project supports **Ruby 2.5.x**.
 
 Verify you have a proper version by running on your terminal:
 ```bash
@@ -194,7 +194,7 @@ npm install
 
 #### Ruby version
 
-The project supports **Ruby 2.4.x**.
+The project supports **Ruby 2.5.x**.
 
 Verify you have a proper version by running on your terminal:
 ```bash
