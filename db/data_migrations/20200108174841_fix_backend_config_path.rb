@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-namespace :data_migration do
-  desc 'Backfill Paths for Backend Api Configs'
-  task fix_backend_config_path: :environment do
+require 'progress_counter'
+
+class FixBackendConfigPath < ActiveRecord::DataMigration
+  def up
     query = System::Database.oracle? ? BackendApiConfig.where('path is NULL') : BackendApiConfig.where(path: '')
     progress = ProgressCounter.new(query.count)
     BackendApiConfig.transaction do

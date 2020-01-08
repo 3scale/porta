@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
-module Tasks
-  class FixBackendConfigPathTest < ActiveSupport::TestCase
+module DataMigrations
+  class FixBackendConfigPathTest < DataMigrationTest
     fixtures :backend_api_configs
 
     setup do
@@ -13,7 +15,7 @@ module Tasks
       assert @config_without_path.path.blank?
       assert_equal '/some/path', @config_with_path.path
 
-      execute_rake_task 'data_migration/fix_backend_config_path.rake', 'data_migration:fix_backend_config_path'
+      FixBackendConfigPath.new.up
 
       assert_equal '/', @config_without_path.reload.path
       assert_equal '/some/path', @config_with_path.reload.path
