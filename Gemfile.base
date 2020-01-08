@@ -19,6 +19,7 @@ gem 'protected_attributes', '~> 1.1.4'
 gem 'rails-observers'
 
 gem 'strong_migrations'
+gem 'rails-data-migrations'
 
 group :assets do
   gem 'coffee-rails', '~> 4.2'

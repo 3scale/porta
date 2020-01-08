@@ -6,7 +6,7 @@ class ModelsTest < ActiveSupport::TestCase
 
   test 'validate length of strings for all models to do not raise an error reaching DB' do
     exceptions = {
-      'ActiveRecord::SchemaMigration' => :all, 'Audited::Audit' => :all, 'RailsEventStoreActiveRecord::Event' => :all,
+      'ActiveRecord::SchemaMigration' => :all, 'RailsDataMigrations::LogEntry' => :all, 'Audited::Audit' => :all, 'RailsEventStoreActiveRecord::Event' => :all,
       'System::Database::ConnectionProbe' => :all, 'ActsAsTaggableOn::Tag' => :all, 'ActsAsTaggableOn::Tagging' => :all, 'ApplicationRecord' => :all,
       'FieldsDefinition' => %w[target], 'AuthenticationProvider' => %w[account_type], 'Feature' => %w[featurable_type scope], 'Message' => %w[state],
       'UsageLimit' => %w[period plan_type], 'Policy' => %w[identifier], 'ProxyRule' => %w[metric_system_name], 'ProxyConfig' => %w[hosts],
