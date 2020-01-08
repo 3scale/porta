@@ -267,6 +267,10 @@ commands: # reusable commands with parameters
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
+        name: "Ruby Version"
+        command: |
+          ruby -v
+      - run:
           name: Run Rails tests
           command: |
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\)//g')
