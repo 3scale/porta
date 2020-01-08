@@ -267,12 +267,10 @@ commands: # reusable commands with parameters
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
-        name: "Ruby Version"
-        command: |
-          ruby -v
-      - run:
           name: Run Rails tests
           command: |
+            echo "Ruby version ==="
+            ruby -v
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\)//g')
             TESTS=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
             bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
