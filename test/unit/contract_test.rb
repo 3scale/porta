@@ -9,7 +9,7 @@ class ContractTest < ActiveSupport::TestCase
     accounts.each { |account| FactoryBot.create_list(:application, 2, user_account: account) }
 
     assert_same_elements Contract.where(user_account: accounts[0].id).pluck(:id), Contract.by_account(accounts[0].id).pluck(:id)
-    assert_same_elements Contract.where(user_account: accounts[1].id).pluck(:id), Contract.by_account(accounts[1]).pluck(:id)
+    assert_same_elements Contract.where(user_account: accounts[1].id).pluck(:id), Contract.by_account(accounts[1].id).pluck(:id)
   end
 
   def test_have_paid_on
