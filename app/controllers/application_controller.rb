@@ -93,7 +93,8 @@ class ApplicationController < ActionController::Base
     return if request_format.xml? || request_format.json?
 
     if current_user && browser_not_modern?
-      logout_keeping_session!
+      logout_killing_session!
+
       flash.now[:error] = "The browser you are using doesn't seem to support the X-Frame-Options header. That means we can't protect you against Cross Frame Scripting and thus not guarantee the security of your session. Please upgrade your browser and sign in again."
       redirect_to provider_admin_path
     end
