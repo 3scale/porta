@@ -43,7 +43,7 @@ class Buyers::ApplicationsController < FrontendController
 
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
-      @search.account = @account
+      @search.account = @account.id
       activate_menu :buyers, :accounts, :listing
     end
 

@@ -29,7 +29,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
-      @search.account = @account
+      @search.account = @account.id
       activate_menu :audience, :accounts, :listing
     end
 
