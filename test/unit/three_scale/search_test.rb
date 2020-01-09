@@ -103,7 +103,7 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
       bcd = FactoryBot.create(:cinstance, :name => "bcd", :user_account => account)
       cde = FactoryBot.create(:cinstance, :name => "cde", :user_account => account)
 
-      options = {:account => account}
+      options = {:account => account.id}
       array = [abc, bcd, cde]
 
       assert_equal array, Cinstance.order_by(:name, :asc).scope_search(options).to_a
@@ -116,7 +116,7 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
       app = FactoryBot.create(:cinstance, :name => "test")
       plan = app.plan
 
-      options = {:account => app.user_account, :deleted_accounts => true, :plan_type => "free", :plan_id => plan.id, :type => "Cinstance"}
+      options = {:account => app.user_account_id, :deleted_accounts => true, :plan_type => "free", :plan_id => plan.id, :type => "Cinstance"}
 
       assert_equal [app], Cinstance.order_by(:name).scope_search(options)
     end
