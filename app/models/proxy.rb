@@ -23,7 +23,6 @@ class Proxy < ApplicationRecord
 
   uri_pattern = URI::DEFAULT_PARSER.pattern
 
-  URI_OPTIONAL_PORT = /\Ahttps?:\/\/[a-zA-Z0-9._-]*(:\d+)?\Z/
   URI_OR_LOCALHOST  = /\A(https?:\/\/([a-zA-Z0-9._:\/?-])+|.*localhost.*)\Z/
   OPTIONAL_QUERY_FORMAT = "(?:\\?(#{uri_pattern.fetch(:QUERY)}))?"
   URI_PATH_PART = Regexp.new('\A' + uri_pattern.fetch(:ABS_PATH) + OPTIONAL_QUERY_FORMAT + '\z')
@@ -47,8 +46,9 @@ class Proxy < ApplicationRecord
   reset_column_information
 
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
-  validates :endpoint,         format: { with: URI_OPTIONAL_PORT,  allow_nil: true, allow_blank: true }
-  validates :sandbox_endpoint, format: { with: URI_OPTIONAL_PORT , allow_nil: true, allow_blank: true }
+
+  validates :endpoint,         uri: true, allow_nil: true, allow_blank: true
+  validates :sandbox_endpoint, uri: true, allow_nil: true, allow_blank: true
 
   validates :hostname_rewrite, format: { with: HOSTNAME,           allow_nil: true, allow_blank: true }
 
@@ -88,8 +88,8 @@ class Proxy < ApplicationRecord
   after_create :create_default_proxy_rule
 
   before_create :force_apicast_version
-  before_create :set_sandbox_endpoint
-  before_create :set_production_endpoint
+  before_validation :set_sandbox_endpoint, on: :create
+  before_validation :set_production_endpoint, on: :create
 
   validates :sandbox_endpoint, presence: true, on: :update, if: :require_staging_endpoint?
   validates :endpoint, presence: true, on: :update, if: :require_production_endpoint?
@@ -231,6 +231,7 @@ class Proxy < ApplicationRecord
       production_endpoint = proxy.apicast_configuration_driven ? :apicast_production_endpoint : :hosted_proxy_endpoint
       generate(production_endpoint)
     end
+
     def default_staging_endpoint_apiap
       default_staging_endpoint
     end

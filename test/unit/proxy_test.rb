@@ -229,6 +229,14 @@ class ProxyTest < ActiveSupport::TestCase
     assert_equal %w(localhost example.com), @proxy.hosts
   end
 
+  test 'hosts comply with rfc 1035' do
+    @proxy.endpoint = 'http://this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035.com:3000/'
+    @proxy.sandbox_endpoint = 'http://short-labels-are-ok.com:8080'
+    refute @proxy.valid?
+    assert @proxy.errors[:endpoint].any?
+    refute @proxy.errors[:sandbox_endpoint].any?
+  end
+
   test 'backend' do
     proxy_config = System::Application.config.three_scale.sandbox_proxy
     proxy_config.stubs(backend_scheme: 'https', backend_host: 'example.net:4400')
