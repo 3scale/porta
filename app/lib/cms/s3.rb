@@ -30,6 +30,14 @@ module CMS
       options.slice(:access_key_id, :secret_access_key) if enabled?
     end
 
+    def hostname
+      options.fetch(:hostname).presence if enabled?
+    end
+
+    def protocol
+      options.fetch(:protocol).presence || 'https' if enabled?
+    end
+
     def stub!
       @options ||= { bucket: 'test', access_key_id: 'key', secret_access_key: 'secret', region: 'us-east-1' }
       Aws.config[:s3] = { stub_responses: true }
