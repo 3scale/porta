@@ -9,6 +9,35 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
     login! @provider
   end
 
+  # This simple test is because rails 5.0 upgrade.
+  # The issue was because the responder uses controller.stale?(resource)
+  # https://github.com/3scale/porta/blob/bdc91b894eac16fbd81afd4f05198eb5cb8beee9/app/lib/three_scale/api/responder.rb#L11
+  # Rails 5.0 `ActionController::Base#stale?` uses to_hash on the object and not Rails 4.x
+  # But the +representable+ gem is extending each items with the representer inside the `to_hash`
+  # https://github.com/trailblazer/representable/blob/v2.3.0/lib/representable/hash.rb#L32
+  #
+  # We implicitly extend those items with the JSON representer as to_json uses to_hash
+  # So it works but might also breaks in the future ...
+  def test_get
+    account_plans = @provider.account_plans.to_a
+    represented = AccountPlansRepresenter.prepare(account_plans)
+
+    # Uncommenting this will break the test :)
+    # represented.to_hash
+
+    xml = represented.to_xml
+    get admin_api_account_plans_path(format: :xml)
+
+    assert_response :success
+    assert_equal xml, response.body
+
+    represented.to_hash
+    json = represented.to_json
+    get admin_api_account_plans_path(format: :json)
+    assert_response :success
+    assert_equal json, response.body
+  end
+
   def test_create_valid_params_json
     assert_difference provider.account_plans.method(:count) do
       post admin_api_account_plans_path(account_plan_params)
