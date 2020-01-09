@@ -255,9 +255,10 @@ module System
         storage: :s3,
         s3_credentials: ->(*) { CMS::S3.credentials },
         bucket: ->(*) { CMS::S3.bucket },
-        s3_protocol: 'https'.freeze,
+        s3_protocol: ->(*) { CMS::S3.protocol },
         s3_permissions: 'private'.freeze,
         s3_region: ->(*) { CMS::S3.region },
+        s3_host_name: ->(*) { CMS::S3.hostname },
         url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension'.freeze,
         path: ':rails_root/public/system/:url'.freeze
     }.merge(try_config_for(:paperclip) || {})
