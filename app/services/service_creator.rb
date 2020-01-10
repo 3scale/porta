@@ -12,8 +12,8 @@ class ServiceCreator
 
   def call!(params = {})
     @service.transaction do
-      backend_api_proxy_params = params.dup
-      service_params = backend_api_proxy_params.slice!(:path, :private_endpoint)
+      service_params = params.dup
+      backend_api_proxy_params = service_params.extract!(:path, :private_endpoint)
       @service.attributes = service_params
       save!(backend_api_proxy_params)
     end
