@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class ModelsTest < ActiveSupport::TestCase
+  INHERITANCE_COLUMNS = %w[type].freeze
 
   test 'validate length of strings for all models to do not raise an error reaching DB' do
     exceptions = {
@@ -32,6 +33,7 @@ class ModelsTest < ActiveSupport::TestCase
       next if model.name.match(/^.+Test::.+$/)
       exception_attributes = exceptions.fetch(model.name, [])
       next if exception_attributes == :all
+      exception_attributes.concat INHERITANCE_COLUMNS
       model.columns.each do |column|
         column_name = column.name
         next if column.type != :string || exception_attributes.include?(column_name)

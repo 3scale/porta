@@ -16,18 +16,20 @@ class CreateServiceTokenWorkerTest < ActiveSupport::TestCase
 
   def test_perform
     Sidekiq::Testing.inline! do
-      token   = 'Alaska12345'
-      service = FactoryBot.create(:simple_service, id: 999)
-      service.service_tokens.delete_all
-      event   = FakeEvent.new('1235', service, token)
+      ThinkingSphinx::Test.run do
+        token   = 'Alaska12345'
+        service = FactoryBot.create(:simple_service, id: 999)
+        service.service_tokens.delete_all
+        event   = FakeEvent.new('1235', service, token)
 
-      EventStore::Repository.expects(:find_event!).returns(event).twice
-      ServiceTokenService.expects(:update_backend).with(instance_of(ServiceToken)).twice
+        EventStore::Repository.expects(:find_event!).returns(event).twice
+        ServiceTokenService.expects(:update_backend).with(instance_of(ServiceToken)).twice
 
-      assert_difference ServiceToken.method(:count), +1 do
-        CreateServiceTokenWorker.perform_async(event)
-        # for one event there should be only one service token
-        CreateServiceTokenWorker.perform_async(event)
+        assert_difference ServiceToken.method(:count), +1 do
+          CreateServiceTokenWorker.perform_async(event)
+          # for one event there should be only one service token
+          CreateServiceTokenWorker.perform_async(event)
+        end
       end
     end
   end

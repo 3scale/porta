@@ -14,7 +14,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     assert_equal({}, ApplicationPlan.provided_by(''))
     assert_equal({}, ApplicationPlan.provided_by(:all))
     tenants.each do |tenant|
-      assert_same_elements ApplicationPlan.where(issuer_id: tenant.services.first).pluck(:id), ApplicationPlan.provided_by(tenant.id).pluck(:id)
+      assert_same_elements ApplicationPlan.where(issuer_id: tenant.services.first).pluck(:id), ApplicationPlan.provided_by(tenant).pluck(:id)
     end
   end
 
