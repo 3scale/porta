@@ -192,7 +192,7 @@ module Liquid
       end
 
       def regenerate_oauth_secret_button(title, url)
-        button title, url, :put, class: 'delete', remote: true
+        update_button_ajax title, url, { 'class' => 'btn btn-danger', 'disable_with' => 'Generating...' }
       end
 
       desc "Create link from given text"
