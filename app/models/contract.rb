@@ -86,7 +86,7 @@ class Contract < ApplicationRecord
     where.has { name.op('COLLATE', sql(collate)).matches(pattern)}
   }
 
-  scope :by_account, ->(account) { where.has { user_account_id == account } }
+  scope :by_account, ->(account_id) { where.has { user_account_id == account_id } }
   scope :by_account_query, ->(query) { where( { :user_account_id => Account.buyers.search_ids(query) } ) }
 
   scope :have_paid_on, ->(paid_date) { where.has { (paid_until >= paid_date) | (variable_cost_paid_until >= paid_date) } }
