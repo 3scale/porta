@@ -14,7 +14,7 @@ module ThreeScale
     end
 
     def filter
-      return FILTER.filter(@arguments) if @arguments.is_a?(Hash)
+      return FILTER.filter(@arguments) if parameters_arguments?
 
       @arguments.map do |argument|
         case argument
@@ -25,6 +25,15 @@ module ThreeScale
         else
           argument
         end
+      end
+    end
+
+    def parameters_arguments?
+      case @arguments
+      when ActionController::Parameters, Hash
+        true
+      else
+        false
       end
     end
   end

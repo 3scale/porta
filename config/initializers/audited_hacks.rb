@@ -39,7 +39,7 @@ module AuditHacks
       dup.tap do |copy|
         copy.send(:write_attribute, :id, id)
         copy.send(:write_attribute, :created_at, created_at)
-        copy.audited_changes = ThreeScale::FilterArguments.new(audited_changes).filter
+        copy.audited_changes = ThreeScale::FilterArguments.new(audited_changes).filter if audited_changes
       end
     end
 
@@ -179,7 +179,8 @@ end
 
 # This fixes issues with overloading current_user in our controllers
 Audited::Sweeper.prepend(Module.new do
-                           def current_user
-                             User.current
-                           end
-                         end)
+  def current_user
+    User.current
+  end
+end)
+
