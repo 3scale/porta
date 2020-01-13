@@ -6,5 +6,5 @@ Bugsnag.configure do |config|
   config.notify_release_stages = stages if stages.present?
 
   # when WebHooks fails because the remote is down or similar - we don't mind
-  config.ignore_classes << WebHookWorker::ClientError
+  config.ignore_classes << ->(error) { WebHookWorker::ClientError === error }
 end
