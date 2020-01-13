@@ -3,8 +3,8 @@ require 'test_helper'
 class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    master = Account.master rescue FactoryBot.create(:simple_master)
-    provider_login FactoryBot.create(:simple_user, account: master, state: 'active')
+    host! master_account.self_domain
+    login! master_account
   end
 
   test 'should return 404 in case of wrong switch' do
