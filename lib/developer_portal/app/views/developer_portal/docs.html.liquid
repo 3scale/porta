@@ -2,8 +2,8 @@
 
 <p>Use our live documentation to learn about the Echo API</p>
 
-{% cdn_asset /swagger-ui/2.2.10/swagger-ui.js %}
-{% cdn_asset /swagger-ui/2.2.10/swagger-ui.css %}
+{% cdn_asset /swagger-ui/3.24.3/swagger-ui-bundle.js %}
+{% cdn_asset /swagger-ui/3.24.3/swagger-ui.css %}
 
 {% include 'shared/swagger_ui' %}
 
@@ -16,6 +16,5 @@
       // or even getting the swagger specification loaded from a different url
       window.swaggerUi.options['url'] = "http://petstore.swagger.wordnik.com/api/api-docs";
     {% endcomment %}
-    window.swaggerUi.load();
   }());
 </script>
