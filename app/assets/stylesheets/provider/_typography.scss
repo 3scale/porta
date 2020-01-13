@@ -1,5 +1,4 @@
 @import 'provider/colors';
-@import 'provider/fonts';
 
 $minScreen: 50rem;
 $maxScreen: 100rem;
@@ -32,10 +31,22 @@ $maxFont: 1rem;
 	@return $value / ($value * 0 + 1);
 }
 
-// fonts, we should be moving to Overpass but it still has issues
-$font-family-sans-serif:    'Open Sans', sans-serif; // Overpass,
+// For details on RedHatFont visit: https://github.com/RedHatOfficial/RedHatFont
+$font-family-sans-serif:    RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif;
 $font-family-base:          $font-family-sans-serif;
-$font-family-monospace:     'Overpass Mono', monospace;
+
+/****** HACK ******/
+/* Porta still is missing PF4 styles in most of the pages content, including h1 - h6
+Once we added PF4 styles to headings we can remove this */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family-sans-serif;
+}
+/****** END OF HACK ******/
 
 // font-sizes
 $fontSize:                   1rem;

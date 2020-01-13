@@ -1,11 +1,12 @@
 doctype html
-html[lang="en"]
+html[lang="en" class="pf-m-redhat-font"]
   head
     meta[charset="utf-8"]
     title
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
+    = javascript_pack_tag 'PF4Styles/base'
     = stylesheet_link_tag "provider/themes/wizard.css"
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'

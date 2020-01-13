@@ -212,7 +212,6 @@ iframe#developer-portal {
     border: 0;
     min-height: line-height-times(12);
     width: $theme-widget-width;
-    font-family: $font-family-monospace;
     font-weight: normal;
     @include colors-inverted-base;
     color: $highlight-color;
