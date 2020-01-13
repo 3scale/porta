@@ -36,8 +36,8 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     service.backend_api_configs.create!(backend_api: backend_api_in_use, path: 'whatever')
 
     get new_admin_service_backend_usage_path(service)
-    backend_apis_not_in_use.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id }
-    assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api_in_use.id, count: 0
+    backend_apis_not_in_use.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id.to_s }
+    assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api_in_use.id.to_s, count: 0
   end
 
   test '#new only for accessible backend_apis' do
@@ -47,8 +47,8 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     non_accessible_backend_api.update_column(:state, 'deleted')
 
     get new_admin_service_backend_usage_path(service)
-    accessible_backend_apis.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id }
-    assert_select 'select#backend_api_config_backend_api_id option[value=?]', non_accessible_backend_api.id, count: 0
+    accessible_backend_apis.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id.to_s }
+    assert_select 'select#backend_api_config_backend_api_id option[value=?]', non_accessible_backend_api.id.to_s, count: 0
   end
 
   test '#create' do
