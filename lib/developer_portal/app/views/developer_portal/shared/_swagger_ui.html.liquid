@@ -11,7 +11,7 @@
   (function () {
     var url = "{{provider.api_specs.first.url}}";
 
-    window.swaggerUi = new SwaggerUi({
+    SwaggerUIBundle({
       url: url,
       dom_id: 'swagger-ui-container',
       supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
@@ -22,7 +22,7 @@
       },
       docExpansion: 'list',
       transport: function (httpClient, obj) { ApiDocsProxy.execute(httpClient, obj) }
-      });
+    });
   }());
 
 </script>
