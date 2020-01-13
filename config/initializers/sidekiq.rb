@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'three_scale/sidekiq_retry_support'
 require 'three_scale/sidekiq_logging_middleware'
 require 'sidekiq/throttled'
 

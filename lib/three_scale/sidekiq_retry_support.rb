@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'sidekiq/middleware/server/retry_jobs'
 module ThreeScale
   module SidekiqRetrySupport
     module Worker
