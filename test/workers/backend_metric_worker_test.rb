@@ -41,7 +41,9 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
     backend_hits = backend_api.metrics.hits
     backend_other = FactoryBot.create(:metric, owner: backend_hits, system_name: 'other-metric-of-backend')
 
+
     worker = BackendMetricWorker.new
+
 
     metric_attributes = [
       { id: service_hits.id, name: service_hits.extended_system_name, parent_id: nil },
@@ -52,18 +54,6 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
     metric_attributes.each do |attrs|
       ThreeScale::Core::Metric.expects(:save).with(attrs.merge(service_id: service_backend_id))
       worker.perform(service_backend_id, attrs[:id])
-    end
-  end
-
-  test 'retry after 5 minutes' do
-    metric_attributes = { id: metric.id, service_id: service.backend_id, name: metric.system_name, parent_id: nil }
-    exception = ThreeScale::Core::APIClient::ConnectionError.new(mock(message: 'error'))
-    ThreeScale::Core::Metric.expects(:save).with(metric_attributes).raises(exception)
-
-    BackendMetricWorker.any_instance.expects(:retry_job).with(wait: 5.minutes)
-
-    perform_enqueued_jobs(only: BackendMetricWorker) do
-      BackendMetricWorker.perform_later(service.backend_id, metric.id)
     end
   end
 end
