@@ -4,6 +4,8 @@ class BackendApi < ApplicationRecord
   include SystemName
   include ProxyConfigAffectingChanges::BackendApiExtension
 
+  self.background_deletion = %i[proxy_rules metrics backend_api_configs]
+
   DELETED_STATE = :deleted
   ECHO_API_HOST = 'echo-api.3scale.net'
 

@@ -20,9 +20,9 @@ class DeleteAccountHierarchyWorker < DeleteObjectHierarchyWorker
     end
   end
 
-  def destroyable_association?(reflection)
+  def destroyable_association?(association)
     if called_from_provider_hierarchy? && account.gateway_setting.persisted?
-      super && reflection.class_name != Account.name
+      association != :buyer_accounts
     else
       super
     end
