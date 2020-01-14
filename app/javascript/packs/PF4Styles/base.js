@@ -1,8 +1,9 @@
 import '@babel/polyfill'
-import {isBrowserIE11} from 'utilities/ie11Utils'
 import 'patternflyStyles/pf4Base'
+import {isBrowserIE11} from 'utilities/ie11Utils'
 
 const isIE11 = isBrowserIE11(window)
 if (isIE11) {
+  // eslint-disable-next-line no-unused-expressions
   import('patternflyStyles/pf4BaseIE11.scss')
 }
