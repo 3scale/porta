@@ -31,6 +31,18 @@ class BackendApiTest < ActiveSupport::TestCase
     assert @backend_api.valid?
   end
 
+  test 'allows to use http or wss protocol in private_endpoint' do
+    @backend_api.private_endpoint = 'http://example.org:3/path'
+    assert @backend_api.valid?
+    @backend_api.private_endpoint = 'https://example.org:3/path'
+    assert @backend_api.valid?
+
+    @backend_api.private_endpoint = 'ws://example.org:3/path'
+    assert @backend_api.valid?
+    @backend_api.private_endpoint = 'wss://example.org:3/path'
+    assert @backend_api.valid?
+  end
+
   test '.not_used_by returns the backend apis that are not related to that service' do
     account = FactoryBot.create(:simple_provider)
     backend_api_not_used_by_any_service = FactoryBot.create(:backend_api, account: account)
