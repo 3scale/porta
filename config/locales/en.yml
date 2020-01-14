@@ -862,7 +862,7 @@ en:
         proxy:
           attributes:
             api_backend:
-              invalid: "the accepted format is 'http(s)://address(:port)(/path)'"
+              invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
             api_test_path:
               invalid: "only URI characters allowed"
             endpoint:
