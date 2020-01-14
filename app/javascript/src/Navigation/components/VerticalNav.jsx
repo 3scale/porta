@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Nav, NavExpandable, NavItem, NavList, NavGroup } from 'Navigation/components/PF4NavProxy'
+import { Nav, NavExpandable, NavItem, NavList, NavGroup } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Item = {
