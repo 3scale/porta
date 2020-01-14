@@ -94,7 +94,7 @@ group :development, :test do
   platform :mri_24, :mri_25 do
     gem 'pry-byebug', '>= 3.7.0', require: false
     gem 'pry-stack_explorer', require: false
-end
+  end
 end
 
 gem 'nokogiri', '>= 1.6.8'
