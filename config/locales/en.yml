@@ -858,7 +858,7 @@ en:
             base:
               cannot_be_destroyed_with_products: cannot be deleted because it is used by at least one Product
             private_endpoint:
-              invalid: "the accepted format is 'scheme://address(:port)(/path). Accepted schemes are http, https, ws and wss'"
+              invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
         proxy:
           attributes:
             api_backend:
