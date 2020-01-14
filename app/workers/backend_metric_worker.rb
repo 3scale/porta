@@ -13,10 +13,6 @@ class BackendMetricWorker < ApplicationJob
                      }
                    })
 
-  rescue_from StandardError do |_exception|
-    retry_job wait: 5.minutes
-  end
-
   def perform(service_backend_id, metric_id)
     metric = Metric.find_by(id: metric_id)
     service = Service.find_by(id: service_backend_id)
