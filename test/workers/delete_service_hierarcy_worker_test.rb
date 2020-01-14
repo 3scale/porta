@@ -63,7 +63,7 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
 
     DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything, 'destroy').once
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, '').once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').once
 
     perform_enqueued_jobs { DeleteServiceHierarchyWorker.perform_now(service) }
   end
