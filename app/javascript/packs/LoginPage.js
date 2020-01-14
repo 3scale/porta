@@ -4,7 +4,8 @@ import {isBrowserIE11} from 'utilities/ie11Utils'
 
 const isIE11 = isBrowserIE11(window)
 if (isIE11) {
-    import('LoginPage/assets/styles/ie11-pf4BaseStyles.css')
+  // eslint-disable-next-line no-unused-expressions
+  import('LoginPage/assets/styles/ie11-pf4BaseStyles.css')
 }
 
 import {LoginPageWrapper} from 'LoginPage'
