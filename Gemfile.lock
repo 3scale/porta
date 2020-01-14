@@ -378,7 +378,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.6)
     jwt (1.5.2)
-    kgio (2.10.0)
+    kgio (2.11.3)
     kubeclient (2.5.2)
       http (>= 0.98, < 3)
       recursive-open-struct (~> 1.0.0)
