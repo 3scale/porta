@@ -31,11 +31,11 @@ module CMS
     end
 
     def hostname
-      options.fetch(:hostname).presence if enabled?
+      options[:hostname].presence if enabled?
     end
 
     def protocol
-      options.fetch(:protocol).presence || 'https' if enabled?
+      options[:protocol].presence || 'https' if enabled?
     end
 
     def stub!
