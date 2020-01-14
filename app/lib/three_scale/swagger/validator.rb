@@ -1,12 +1,8 @@
 # Swagger validations by apigee: https://github.com/apigee-127/swagger-tools/blob/master/docs/Swagger_Validation.md
 #
 module ThreeScale
-
   module Swagger
-
     class Validator < ActiveModel::Validator
-
-
       def validate record
         valid_base_path?(record)
         validate_specification(record)
@@ -35,7 +31,7 @@ module ThreeScale
         # https://github.com/3scale/system/issues/4080
         return true if record.specification.base_path.blank?
         uri = self.class.parse_uri record.specification.base_path
-        return true if uri && ["https", "http"].include?(uri.scheme)
+        return true if uri && %w[https http wss ws].include?(uri.scheme)
         record.errors.add :base_path, :invalid
         false
       end
@@ -45,7 +41,6 @@ module ThreeScale
         uri if uri && uri.scheme && uri.host
       rescue URI::InvalidURIError, Addressable::URI::InvalidURIError, TypeError
       end
-
     end
   end
 end
