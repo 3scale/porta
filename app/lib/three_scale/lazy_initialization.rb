@@ -32,15 +32,16 @@ module ThreeScale
       def lazy_initialization_for(*names)
         options = names.extract_options!
 
+        mod = Module.new
         names.each do |name|
           options_for_lazy_initialization[name] = options
 
-          define_method("#{name}_with_lazy_initialization") do
-            send("#{name}_without_lazy_initialization") || lazily_initialize(name)
+          mod.define_method("#{name}") do
+            super() || lazily_initialize(name)
           end
-
-          alias_method_chain name, :lazy_initialization
         end
+
+        prepend mod
       end
     end
 

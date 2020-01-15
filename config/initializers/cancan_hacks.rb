@@ -6,20 +6,32 @@
 # TODO: Maybe this is no longer needed, as there is a new version of canca. Check it.
 module CanCanHacks
   def self.included(base)
-    base.extend(ClassMethods)
+    class << base
+      prepend(Module.new do
+        def authorize_resource(options = {})
+          if inherits_resources?
+            before_action :authorize_inherited_resource
+          else
+            super(options)
+          end
+        end
 
-     class << base
-      alias_method_chain :authorize_resource, :inherited_resources
+        private
+
+        def inherits_resources?
+          included_modules.include?(InheritedResources::BaseHelpers)
+        end
+      end)
     end
   end
 
-   private
+  private
 
-   def authorize_inherited_resource
+  def authorize_inherited_resource
     authorize! params[:action].to_sym, resource_for_authorization
   end
 
-   def resource_for_authorization
+  def resource_for_authorization
     case params[:action].to_sym
     when :index
       resource_class
@@ -29,22 +41,6 @@ module CanCanHacks
       resource || resource_class
     end
   end
-
-   module ClassMethods
-    def authorize_resource_with_inherited_resources(options = {})
-      if inherits_resources?
-        before_action :authorize_inherited_resource
-      else
-        authorize_resource_without_inherited_resources(options)
-      end
-    end
-
-     private
-
-     def inherits_resources?
-      included_modules.include?(InheritedResources::BaseHelpers)
-    end
-  end
 end
 
- ActionController::Base.send(:include, CanCanHacks)
+ActionController::Base.send(:include, CanCanHacks)

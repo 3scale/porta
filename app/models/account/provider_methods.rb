@@ -63,20 +63,19 @@ module Account::ProviderMethods
         def flush_writes; end
       end
 
-      def proxy_configs_with_rescue
-        proxy_configs_without_rescue
-      rescue LoadError
-        FakeAttachment.new(:proxy_configs, self)
-      end
+      prepend(Module.new do
+        def proxy_configs
+          super
+        rescue LoadError
+          FakeAttachment.new(:proxy_configs, self)
+        end
 
-      def proxy_configs_conf_with_rescue
-        proxy_configs_conf_without_rescue
-      rescue LoadError
-        FakeAttachment.new(:proxy_configs_conf, self)
-      end
-
-      alias_method_chain :proxy_configs, :rescue
-      alias_method_chain :proxy_configs_conf, :rescue
+        def proxy_configs_conf
+          super
+        rescue LoadError
+          FakeAttachment.new(:proxy_configs_conf, self)
+        end
+      end)
     end
 
 

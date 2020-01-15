@@ -75,16 +75,18 @@ class PaymentTransaction < ApplicationRecord
 
   # TODO: writable currency should be feature of the has_money plugin.
   # XXX: has_money plugin is a ghetoo
-  def amount_with_currency=(value)
-    if value.respond_to?(:currency)
-      self.amount_without_currency = value.amount
-      self.currency = value.currency
-    else
-      self.amount_without_currency = value
+  module AmountWithCurrency
+    def amount=(value)
+      if value.respond_to?(:currency)
+        super(value.amount)
+        self.currency = value.currency
+      else
+        super(value)
+      end
     end
   end
+  prepend AmountWithCurrency
 
-  alias_method_chain :amount=, :currency
 
   def self.to_xml(payment_transactions, options = {})
     builder = ThreeScale::XML::Builder.new
