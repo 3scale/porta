@@ -35,7 +35,7 @@ module ThreeScale
         # https://github.com/3scale/system/issues/4080
         return true if record.specification.base_path.blank?
         uri = self.class.parse_uri record.specification.base_path
-        return true if uri && ["https", "http"].include?(uri.scheme)
+        return true if uri && ['https', 'http', 'wss', 'ws'].include?(uri.scheme)
         record.errors.add :base_path, :invalid
         false
       end
