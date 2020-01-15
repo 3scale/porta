@@ -4,8 +4,6 @@ PROJECT = $(subst @,,$(notdir $(subst /workspace,,$(PROJECT_PATH))))
 
 export PROJECT
 
-BUNDLE_GEMFILE ?= Gemfile
-
 TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log
 
 DB ?= mysql
@@ -120,10 +118,8 @@ clean-cache:
 	$(MAKE) clean
 
 bundle: ## Installs dependencies using bundler. Run this after you make some changes to Gemfile.
-bundle: gemfiles/prod/Gemfile Gemfile
-	BUNDLE_GEMFILE=Gemfile bundle lock
-	cp Gemfile.lock gemfiles/prod/Gemfile.lock
-	BUNDLE_GEMFILE=gemfiles/prod/Gemfile bundle lock
+bundle:
+	bundle lock
 
 oracle-db-setup: ## Creates databases in Oracle
 oracle-db-setup: oracle-database
