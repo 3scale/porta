@@ -80,7 +80,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
   client = Selenium::WebDriver::Remote::Http::Default.new
-  client.timeout = 120 # default 60
+  client.read_timeout = client.open_timeout = 120 # default 60
 
   driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, http_client: client)
 
