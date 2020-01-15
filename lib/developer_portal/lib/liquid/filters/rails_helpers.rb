@@ -11,6 +11,7 @@ module Liquid
 
       THREESCALE_STYLESHEETS = %w[legacy/stats plans_widget.css active-docs/application.css stats.css].freeze
       THREESCALE_JAVASCRIPTS = %w[buyer/1/analytics plans_widget.js active-docs/application.js stats.js].freeze
+      THREESCALE_WEBPACK_PACKS = %w[stats.js active_docs.js].freeze
       THREESCALE_IMAGES      = %w[spinner.gif tick.png cross.png].freeze
 
       desc "Group collection by some key."
@@ -48,7 +49,7 @@ module Liquid
       def javascript_include_tag(name, options = {})
         js = RailsHelpers.replace_googleapis(name)
         case
-        when name == 'stats.js' # TODO: This is an intermediate step in order to tackle stats bundle in dev portal. Needs a final solution including updating of templates.
+        when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
           view.javascript_pack_tag(name, options)
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           view.javascript_include_tag(js)
