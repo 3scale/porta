@@ -35,10 +35,8 @@ module ThreeScale
 
       class V30 < VBase
         def base_path
-          server = @doc.fetch('servers', []).first&.fetch('url', '').presence
-          # FIXME: What about...?
-          # - simple base paths (missing host and scheme) (They are supported as valid servers in OAS 3.0.X.)
-          # - server "templates"
+          servers = ThreeScale::OpenApi::UrlResolver.new(@doc).servers
+          servers.first
         end
 
         JSON_SCHEMA = {'$ref' => 'https://spec.openapis.org/oas/3.0/schema/2019-04-02'}.freeze
