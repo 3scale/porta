@@ -2,7 +2,7 @@ module CMS
   module FormHelper
 
     def cms_form_for(template, options = {}, &block)
-      base_name = template.class.base_class.model_name.to_s.parameterize('_').to_sym
+      base_name = template.class.base_class.model_name.to_s.parameterize(separator: '_').to_sym
 
       options[:builder] ||= CMS::SemanticFormBuilder
       options[:url] ||= polymorphic_path([:provider, :admin, template])
