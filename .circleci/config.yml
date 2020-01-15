@@ -702,23 +702,6 @@ jobs:
           extra-deps:
             - clone-oracle-libraries
 
-  docker-build:
-    resource_class: small
-    docker:
-      - image: docker:stable
-        environment:
-          DOCKER_COMPOSE: /usr/bin/docker-compose
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build System Container Image for OpenShift
-          command: |
-            cd openshift/system
-            docker build --build-arg=BUNDLER_ENV="$(env | grep -e ^BUNDLE_)" --file Dockerfile ../..
-            docker build --file Dockerfile.on_prem --pull ../..
-
   notify_start:
     docker:
       - image: circleci/buildpack-deps
@@ -860,8 +843,6 @@ workflows:
           <<: *only-master-filter
       - dependencies_bundler
       - dependencies_npm
-      - docker-build:
-          context: org-global
       - assets_precompile:
           requires:
             - dependencies_bundler
@@ -913,10 +894,6 @@ workflows:
       - dependencies_npm:
           requires:
             - manual_approval
-      - docker-build:
-          context: org-global
-          requires:
-            - manual_approval
       - assets_precompile:
           requires:
             - deps_bundler_postgres
@@ -966,10 +943,6 @@ workflows:
           requires:
             - manual_approval
       - dependencies_npm:
-          requires:
-            - manual_approval
-      - docker-build:
-          context: org-global
           requires:
             - manual_approval
       - assets_precompile:
@@ -1092,8 +1065,6 @@ workflows:
           executor: builder-ruby25
       - dependencies_npm:
           executor: builder-ruby25
-      - docker-build:
-          context: org-global
       - assets_precompile:
           executor: builder-ruby25
           requires:
@@ -1145,8 +1116,6 @@ workflows:
           executor: builder-ruby25
       - dependencies_npm:
           executor: builder-ruby25
-      - docker-build:
-          context: org-global
       - assets_precompile:
           executor: builder-ruby25
           requires:
@@ -1198,8 +1167,6 @@ workflows:
           executor: builder-ruby25
       - dependencies_npm:
           executor: builder-ruby25
-      - docker-build:
-          context: org-global
       - assets_precompile:
           executor: builder-ruby25
           requires:
