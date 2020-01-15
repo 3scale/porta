@@ -86,7 +86,7 @@ module Pdf
     end
 
     def pdf_file_name
-      ['report', @account.id, @service.id].join('-') + '.pdf'
+      ['report', @account.domain, @service.id].join('-') + '.pdf'
     end
 
     def pdf_file_path

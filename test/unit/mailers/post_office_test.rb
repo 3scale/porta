@@ -169,8 +169,9 @@ class PostOfficeTest < ActionMailer::TestCase
   test 'report should verify email' do
     account = @provider
     service = account.first_service!
+    service_id = service.id
 
-    file = Rails.root.join("tmp", "report-#{account.id}-#{service.id}-internal.pdf")
+    file = Rails.root.join("tmp", "report-#{account.id}-#{service_id}-internal.pdf")
     report = Pdf::Report.new account, service
     file.stubs(:path).returns(file)
     report.stubs(:report).returns(file)
@@ -184,7 +185,7 @@ class PostOfficeTest < ActionMailer::TestCase
     assert_equal [account.admins.first.email], email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
     assert_match "Please find attached your API Usage Report from 3scale.", email.parts.first.body.to_s
-    assert_equal "report-#{account.id}-#{service.id}.pdf", email.attachments.first.filename
+    assert_equal "report-#{account.domain}-#{service_id}.pdf", email.attachments.first.filename
   end
 
   def url_helpers
