@@ -6,8 +6,10 @@ class RailsSqliTest < ActiveSupport::TestCase
     params = ActionController::Parameters.new('system_name' => {'0' => 'foo'})
     # This should fix # https://groups.google.com/forum/#!topic/rubyonrails-security/8CVoclw-Xkk
     # No error should be raised on that and the SQL
+
+    db_quote = System::Database.mysql? ? '`' : '"'
     CMS::Section.find_by(params)
-    assert_equal %(SELECT `cms_sections`.* FROM `cms_sections` WHERE `cms_sections`.`system_name` = '{\\\"0\\\"=>\\\"foo\\\"}') , CMS::Section.where(params).to_sql
+    assert_equal %(SELECT `cms_sections`.* FROM `cms_sections` WHERE `cms_sections`.`system_name` = '{\\\"0\\\"=>\\\"foo\\\"}').gsub('`', db_quote) , CMS::Section.where(params).to_sql
   end
 
   def test_quoting_acton_controller_parameters
