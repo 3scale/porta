@@ -33,6 +33,7 @@ class Domains::ProxyDomainsChangedEvent < BaseEventStoreEvent
   end
 
   def self.valid?(proxy)
-    !!proxy # TODO: check if deployment_option or domains actually changed
+    # TODO: check if deployment_option or domains actually changed
+    proxy && proxy.provider&.persisted? # Proxy's service or account may have been deleted
   end
 end
