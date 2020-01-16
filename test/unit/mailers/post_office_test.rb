@@ -167,22 +167,25 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'report should verify email' do
-    @account = @provider
-    file = Rails.root.join("tmp", "#{@account.domain}.pdf")
+    account = @provider
+    service = account.first_service!
+    service_id = service.id
 
-    report = Pdf::Report.new @account, @account.first_service!
+    file = Rails.root.join("tmp", "report-#{account.id}-#{service_id}-internal.pdf")
+    report = Pdf::Report.new account, service
     file.stubs(:path).returns(file)
     report.stubs(:report).returns(file)
 
     `touch #{file}`
 
     PostOffice.report(report, "December 2010").deliver_now
-    @email = ActionMailer::Base.deliveries.last
+    email = ActionMailer::Base.deliveries.last
 
-    assert_equal "3scale: #{@account.first_service!.name} - December 2010", @email.subject
-    assert_equal [@account.admins.first.email], @email.bcc
-    assert_equal [Rails.configuration.three_scale.noreply_email], @email.from
-    assert_match "Please find attached your API Usage Report from 3scale.", @email.parts.first.body.to_s
+    assert_equal "3scale: #{service.name} - December 2010", email.subject
+    assert_equal [account.admins.first.email], email.bcc
+    assert_equal [Rails.configuration.three_scale.noreply_email], email.from
+    assert_match "Please find attached your API Usage Report from 3scale.", email.parts.first.body.to_s
+    assert_equal "report-#{account.domain}-#{service_id}.pdf", email.attachments.first.filename
   end
 
   def url_helpers
