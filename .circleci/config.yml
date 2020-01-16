@@ -84,6 +84,7 @@ system-builder-ruby25: &system-builder-ruby25
     MASTER_PASSWORD: p
     USER_PASSWORD: p
     LC_ALL: en_US.UTF-8
+    RAILS_ENV: test
 
 mysql-container: &mysql-container
   image: circleci/mysql:5.7-ram

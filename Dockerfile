@@ -25,8 +25,7 @@ ENV DISABLE_SPRING="true" \
     ORACLE_HOME=/opt/oracle/instantclient_12_2/ \
     DB=$DB \
     SAFETY_ASSURED=1 \
-    UNICORN_WORKERS=2 \
-    RAILS_ENV=development
+    UNICORN_WORKERS=2
 
 WORKDIR /opt/system/
 
