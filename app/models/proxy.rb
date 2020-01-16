@@ -513,7 +513,7 @@ class Proxy < ApplicationRecord
   end
 
   def provider
-    @provider ||= self.service.account
+    @provider ||= self.service&.account
   end
 
   PROXY_ENV = {
