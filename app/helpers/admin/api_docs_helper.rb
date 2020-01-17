@@ -13,4 +13,8 @@ module Admin::ApiDocsHelper
     service = api_doc.service
     service.present? ? admin_service_api_doc_path(service, api_doc) : admin_api_docs_service_path(api_doc)
   end
+
+  def spec_url(api_docs_service)
+    base_url.gsub(%r{/$}, '').concat(admin_api_docs_service_path(api_docs_service, format: :json))
+  end
 end
