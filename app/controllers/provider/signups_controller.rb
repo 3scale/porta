@@ -26,26 +26,17 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def create
-    account_params = (params[:account] || {}) .dup
-    user_params    = account_params.try!(:delete, :user)
     @plan = plan
-
-    signup = master.signup_provider(plan, signup_options) do |provider, user|
-      @provider, @user = provider, user
-
-      @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
-
-      provider.attributes = account_params
-      provider.subdomain  = account_params[:subdomain]
-
-      user.attributes = user_params
-
-      user.signup_type = :new_signup
-
-      break unless spam_check(provider)
+    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
+    signup_result = Signup::ProviderAccountManager.new(master).create(signup_params) do |result|
+      account = result.account
+      account.signup_mode!
+      break unless spam_check(account)
     end
+    @provider = signup_result.account
+    @user = signup_result.user
 
-    return render :show unless signup
+    return render :show unless signup_result.persisted?
 
     session[:success_data] = { first_name: @user.first_name, email: @user.email }
 
@@ -61,6 +52,18 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   protected
+
+  def signup_params
+    Signup::SignupParams.new(plans: [plan], user_attributes: user_params, account_attributes: account_params, validate_fields: true)
+  end
+
+  def account_params
+    params.require(:account).except(:user).merge(sample_data: true)
+  end
+
+  def user_params
+    params.require(:account).fetch(:user, {}).merge(signup_type: :new_signup, username: 'admin')
+  end
 
   def handle_cache_response
     expires_in 1.hour, public: true
