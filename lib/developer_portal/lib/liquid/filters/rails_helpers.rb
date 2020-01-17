@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Liquid
   module Filters
     module RailsHelpers
@@ -7,12 +9,13 @@ module Liquid
 
       include Liquid::Filters::Base
 
-      THREESCALE_STYLESHEETS = %w{ legacy/stats plans_widget.css active-docs/application.css stats.css }
-      THREESCALE_JAVASCRIPTS = %w{ buyer/1/analytics plans_widget.js active-docs/application.js stats.js }
-      THREESCALE_IMAGES      = %w{ spinner.gif tick.png cross.png }
+      THREESCALE_STYLESHEETS = %w[legacy/stats plans_widget.css active-docs/application.css stats.css].freeze
+      THREESCALE_JAVASCRIPTS = %w[buyer/1/analytics plans_widget.js active-docs/application.js stats.js].freeze
+      THREESCALE_WEBPACK_PACKS = %w[stats.js active_docs.js].freeze
+      THREESCALE_IMAGES      = %w[spinner.gif tick.png cross.png].freeze
 
       desc "Group collection by some key."
-      example "Group applications by service.", %q{
+      example "Group applications by service.", %q(
         {% assign grouped = applications | group_by: 'service' %}
         {% for group in grouped %}
           Service: {{ group[0 }}
@@ -20,15 +23,15 @@ module Liquid
             Application: {{ app.name }}
           {% endfor %}
         {% endfor %}
-      }
+      )
       def group_by(collection, key)
         collection.group_by{|element| element.invoke_drop(key) } if collection.present?
       end
 
       desc "True if any string in the collection equals to the parameter."
-      example "Are there any pending apps of the current account?", %q{
+      example "Are there any pending apps of the current account?", %q(
          {% assign has_pending_apps = current_account.applications | map: 'state' | any: 'live' %}
-      }
+      )
       def any(collection, string)
         Array(collection).any? { |element| element.to_s == string.to_s }
       end
@@ -46,7 +49,7 @@ module Liquid
       def javascript_include_tag(name, options = {})
         js = RailsHelpers.replace_googleapis(name)
         case
-        when name == 'stats.js' # TODO: This is an intermediate step in order to tackle stats bundle in dev portal. Needs a final solution including updating of templates.
+        when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
           view.javascript_pack_tag(name, options)
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           view.javascript_include_tag(js)
@@ -56,10 +59,10 @@ module Liquid
       end
 
       desc "Outputs an <img> tag using the parameters as its `src` attribute."
-      example %{
+      example %(
         {{ 'http://example.com/cool.gif' | image_tag }}
         # => <img src="http://example.com/cool.gif" >
-      }
+      )
       def image_tag(name)
         if THREESCALE_IMAGES.include?(name)
           view.image_tag(name)
@@ -70,10 +73,10 @@ module Liquid
 
       # TODO: consider allowing more parameters
       desc "Converts email address to a 'mailto' link."
-      example %{
+      example %(
         {{ 'me@there.is' | mail_to }}
         # => <a href="mailto:me@there.is">me@there.is</a>
-      }
+      )
       def mail_to(mail)
         RailsHelpers.mail_to(mail.to_s)
       end
@@ -100,10 +103,10 @@ module Liquid
         To add a confirmation dialog, add a confirm attribute with a
         confirmation text
       """
-      example %{
+      example %(
         {{ 'Delete Message' | delete_button: message.url, class: 'my-button',
           confirm: 'are you sure?' }}
-      }
+      )
       def delete_button(title, url, html_options = {})
         button title, url, :delete, RailsHelpers.sanitize_options(html_options)
       end
@@ -115,9 +118,9 @@ module Liquid
         To add a confirmation dialog, add a confirm attribute with a
         confirmation text.
       """
-      example %{
+      example %(
         {{ 'Delete Message' | delete_button_ajax: message.url, confirm: 'are you sure?' }}
-      }
+      )
       def delete_button_ajax(title, url, html_options = {})
         # legacy compatibility
         html_options['class'] ||= 'action delete remote'
@@ -132,9 +135,9 @@ module Liquid
         To change the text of the submit button on submit, add a disable_with attribute with a
         the new button text.
       """
-      example %{
+      example %(
         {{ 'Resend' | update_button: message.url, class: 'my-button', disable_with: 'Resending…' }}
-      }
+      )
       def update_button(title, url, html_options = {})
         # legacy compatibility
         html_options['class'] ||= 'update'
@@ -149,9 +152,9 @@ module Liquid
         To change the button text on submit, add a disable_with attribute with a
         the new button text.
       """
-      example %{
+      example %(
         {{ 'Resend' | update_button: message.url, class: 'my-button', disable_with: 'Resending…' }}
-      }
+      )
       def update_button_ajax(title, url, html_options = {})
         # legacy compatibility
         html_options['class'] ||= 'update remote'
@@ -166,9 +169,9 @@ module Liquid
         To change the button text on submit, add a disable_with attribute with a
         the new button text.
       """
-      example %{
+      example %(
         {{ 'Create Message' | create_button: message.url, disable_with: 'Creating message…' }}
-      }
+      )
       def create_button(title, url, html_options = {})
         html_options['class'] ||= 'create_key'
         button title, url, :post, RailsHelpers.sanitize_options(html_options)
@@ -182,9 +185,9 @@ module Liquid
         To change the button text on submit, add a disable_with attribute with a
         the new button text.
       """
-      example %{
+      example %(
         {{ 'Create Message' | create_button: message.url, disable_with: 'Creating message…' }}
-      }
+      )
       def create_button_ajax(title, url, html_options = {})
         # legacy compatibility
         html_options['class'] ||= 'create'
@@ -196,9 +199,9 @@ module Liquid
       end
 
       desc "Create link from given text"
-      example %{
+      example %(
         {{ "See your App keys" | link_to:'/my-app-keys' }}
-      }
+      )
       def link_to(text, path, html_options = {})
         RailsHelpers.link_to(text, path.to_s, RailsHelpers.sanitize_options(html_options))
       end
@@ -213,7 +216,7 @@ module Liquid
         drop.instance_variable_get :@model
       end
 
-      DATA_ATTRIBUTES = %i(confirm disable_with).freeze
+      DATA_ATTRIBUTES = %i[confirm disable_with].freeze
 
       def self.sanitize_options(options)
         return {} unless options.present?
