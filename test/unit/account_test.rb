@@ -76,10 +76,10 @@ class AccountTest < ActiveSupport::TestCase
   def test_provider_but_not_master
     account = FactoryBot.build_stubbed(:simple_account, provider: false, master: false)
     refute account.tenant?
-    
+
     account.provider = true
     assert account.tenant?
-    
+
     account.master = true
     refute account.tenant?
   end
@@ -750,64 +750,27 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal provider.finance_support_email, "finance-support@acc.example.net"
   end
 
-  #
   # regression test for https://github.com/3scale/system/issues/2767
   test 'destroy should destroy all cinstances and application_plans' do
-    service = master_account.default_service
-    master_account.account_plans.default!(master_account.account_plans.first)
-    service.update_attribute(:default_service_plan, master_account.service_plans.first)
+    master_plan = master_account.default_application_plans.first!
 
-    master_account.signup_provider(master_account.application_plans.first) do |provider, user|
-      @provider, @user = provider, user
-      provider.subdomain = "foo"
-      provider.org_name = "bar"
-      provider.sample_data = false
-      user.password = user.password_confirmation = "foobar"
-      user.email = "foo@example.com"
-    end
+    provider = FactoryBot.create(:simple_provider, provider_account: master_account)
+    cinstance_tenant = FactoryBot.create(:cinstance, plan: master_plan, user_account: provider)
 
-    @user.activate
-    @provider.create_sample_data!
+    service = FactoryBot.create(:simple_service, account: provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+    tenant_plan = FactoryBot.create(:application_plan, issuer: service)
+    cinstance_buyer = FactoryBot.create(:cinstance, plan: tenant_plan, user_account: buyer)
 
-    cis = @provider.default_service.cinstances.map(&:id)
-    aps = @provider.default_service.application_plans.map(&:id)
+    assert_not_equal 0, provider.provided_cinstances.reload.count
+    assert_not_equal 0, provider.provided_plans.reload.count
+    assert_not_equal 0, provider.bought_plans.reload.count
 
-    @provider.expects(:destroy_all_contracts)
+    provider.destroy!
 
-    @provider.destroy
-    assert_equal 0, Cinstance.where(id: cis).count
-    assert_equal 0, ApplicationPlan.where(id: aps).count
-  end
-
-  test '#signup provider with api_as_product' do
-    master_account.account_plans.default!(master_account.account_plans.first)
-    master_account.signup_provider(master_account.application_plans.first) do |provider, user|
-      provider.stubs(:provider_can_use?).returns(false)
-      provider.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
-      @provider, @user = provider, user
-      provider.subdomain = "foo"
-      provider.org_name = "bar"
-      provider.sample_data = false
-      user.password = user.password_confirmation = "foobar"
-      user.email = "foo@example.com"
-    end
-    assert_equal BackendApi.default_api_backend, @provider.first_service.api_backend
-  end
-
-
-  test '#signup provider without api_as_product' do
-    master_account.account_plans.default!(master_account.account_plans.first)
-    master_account.signup_provider(master_account.application_plans.first) do |provider, user|
-      @provider, @user = provider, user
-      provider.stubs(:provider_can_use?).returns(false)
-      provider.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
-      provider.subdomain = "foo"
-      provider.org_name = "bar"
-      provider.sample_data = false
-      user.password = user.password_confirmation = "foobar"
-      user.email = "foo@example.com"
-    end
-    assert_equal BackendApi.default_api_backend, @provider.first_service.api_backend
+    assert_equal 0, provider.provided_cinstances.reload.count
+    assert_equal 0, provider.provided_plans.reload.count
+    assert_equal 0, provider.bought_plans.reload.count
   end
 
   test 'onboarding builds object if not already created' do
