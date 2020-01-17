@@ -87,10 +87,10 @@ build:
 	docker-compose build system
 
 bundle: ## Installs dependencies using bundler. Run this after you make some changes to Gemfile.
-bundle: gemfiles/prod/Gemfile Gemfile
+bundle: Gemfile.prod Gemfile
 	BUNDLE_GEMFILE=Gemfile bundle lock
-	cp Gemfile.lock gemfiles/prod/Gemfile.lock
-	BUNDLE_GEMFILE=gemfiles/prod/Gemfile bundle lock
+	cp Gemfile.lock Gemfile.prod.lock
+	BUNDLE_GEMFILE=Gemfile.prod bundle lock
 
 clean: ## Remove all components and volumes
 clean:
