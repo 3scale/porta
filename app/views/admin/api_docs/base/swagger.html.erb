@@ -3,7 +3,7 @@
 
 <div class="swagger-section">
   <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-  <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+  <div id="swagger-ui-container" class="swagger-ui-wrap" data-url="<%= spec_url(@api_docs_service) %>"></div>
 </div>
 
 <div class='apidocs-param-tips apidocs-signin-message' style='display:none;'>
@@ -11,7 +11,11 @@
 </div>
 
 <%# TODO: this is here until we get swagger-ui 2.1 to load swagger spec 1.2 and 2.0 %>
-<% if @api_docs_service.specification.swagger_2_0? -%>
+
+<% if @api_docs_service.specification.openapi_3_0? -%>
+ <%= javascript_pack_tag 'service_active_docs'%>
+
+<% elsif @api_docs_service.specification.swagger_2_0? -%>
 
   <% content_for :javascripts do -%>
     <%= javascript_include_tag "/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.js" -%>
