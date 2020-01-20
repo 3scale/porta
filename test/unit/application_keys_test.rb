@@ -196,8 +196,7 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     expected_audited_changes = {
       'application_id' => app_key.application.id,
       'value' => app_key.value,
-      'created_at' => app_key.created_at.utc,
-      'tenant_id' => app_key.tenant_id
+      'created_at' => app_key.created_at.utc
     }
     assert_equal expected_audited_changes, audit.audited_changes
   end
