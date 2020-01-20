@@ -609,3 +609,29 @@
 - - :approve
   - WHY=MIT License
   - *13
+- - :approve
+  - dompurify
+  - &14
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2020-01-20 15:25:04.043922000 Z
+- - :approve
+  - WHO=Didier Di Cesare
+  - *14
+- - :approve
+  - WHY=MPL-2.0 OR Apache-2.0
+  - *14
+- - :approve
+  - emitter-component
+  - &15
+    :who: 
+    :why: 
+    :versions: []
+    :when: 2020-01-20 15:26:46.368257000 Z
+- - :approve
+  - WHO=Didier Di Cesare
+  - *15
+- - :approve
+  - WHY=MIT
+  - *15
