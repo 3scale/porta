@@ -2,7 +2,7 @@ class ApplicationKey < ApplicationRecord
 
   KEYS_LIMIT = 5
 
-  audited
+  audited only: %i[application_id value created_at]
 
   belongs_to :application, :class_name => 'Cinstance', :inverse_of => :application_keys
 
