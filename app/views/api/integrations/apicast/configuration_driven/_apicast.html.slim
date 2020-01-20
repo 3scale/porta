@@ -46,12 +46,11 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
 
 - unless deployment_option_is_service_mesh?(@service)
   section style="margin-top: 48px;"
-    h2 Environments
 
     .SettingsBox.Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?) class="Environment--#{@show_presenter.test_state_modifier}"
       = link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'staging'), class: 'SettingsBox-toggle'
       article.Environment-summary data-state="open" class="Environment--#{@show_presenter.test_state_modifier}"
-        h3.Environment-title Staging Environment
+        h3.Environment-title APIcast Staging
         - if @show_presenter.any_sandbox_configs?
           dl.u-dl
             dt.u-dl-term URL
@@ -76,13 +75,13 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
               = semantic_form_for @proxy, url: promote_to_production_admin_service_integration_path(@service, anchor: 'production') do |f|
                 = f.button *promote_to_production_button_options(@show_presenter)
         - else
-          | no configuration has been saved for the staging environment yet
+          | no configuration has been saved for APIcast staging yet
 
     .SettingsBox.Environment
       - if @show_presenter.any_production_configs?
         = link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'production'), class: 'SettingsBox-toggle'
       article.Environment-summary class=("Environment--#{@show_presenter.test_state_modifier}" if @show_presenter.environments_have_same_config?) data-state="open" style="margin-top: 24px;"
-        h3.Environment-title Production Environment
+        h3.Environment-title APIcast Production
         - if @show_presenter.any_production_configs?
           dl.u-dl
             dt.u-dl-term URL
@@ -92,4 +91,4 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
               ' v.
               = @show_presenter.last_production_config.version
         - else
-          | no configuration has been saved for the production environment yet
+          | no configuration has been saved for APIcast production yet
