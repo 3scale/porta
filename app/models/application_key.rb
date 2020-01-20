@@ -2,6 +2,7 @@ class ApplicationKey < ApplicationRecord
 
   KEYS_LIMIT = 5
 
+  audited
 
   belongs_to :application, :class_name => 'Cinstance', :inverse_of => :application_keys
 
@@ -124,6 +125,8 @@ class ApplicationKey < ApplicationRecord
                                             application.application_id,
                                             value)
   end
+
+  delegate :provider_id_for_audits, to: :account, allow_nil: true
 
   protected
 

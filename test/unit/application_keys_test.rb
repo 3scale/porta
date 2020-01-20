@@ -170,4 +170,36 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     assert value, app_key.reload.value
   end
 
+  test 'is audited' do
+    app_key = FactoryBot.build(:application_key)
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      ApplicationKey.with_auditing do
+        app_key.save!
+      end
+    end
+
+    assert_app_key_audit_data(app_key, Audited.audit_class.last!)
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      ApplicationKey.with_auditing do
+        app_key.destroy!
+      end
+    end
+
+    assert_app_key_audit_data(app_key, Audited.audit_class.last!)
+  end
+
+  def assert_app_key_audit_data(app_key, audit)
+    assert_equal app_key.account.provider_account.id, audit.provider_id
+    assert_equal app_key.class.name, audit.kind
+    expected_audited_changes = {
+      'application_id' => app_key.application.id,
+      'value' => app_key.value,
+      'created_at' => app_key.created_at.utc,
+      'tenant_id' => app_key.tenant_id
+    }
+    assert_equal expected_audited_changes, audit.audited_changes
+  end
+
 end
