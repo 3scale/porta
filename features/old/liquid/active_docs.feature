@@ -53,7 +53,25 @@ Feature: ActiveDocs
 
     <h3>ActiveDocs version 2.2.10</h3>
 
-    {% include 'shared/swagger_ui' %}
+    <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+
+    <script type="text/javascript">
+      (function () {
+        var url = "{{provider.api_specs.first.url}}";
+        window.swaggerUi = new SwaggerUi({
+          url: url,
+          dom_id: 'swagger-ui-container',
+          supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+          apisSorter: 'alpha', // can also be a function
+          operationsSorter: 'method', // can also be 'alpha' or a function
+          onComplete: function(swaggerApi, swaggerUi) {
+            $(document.getElementById(swaggerUi.dom_id)).find('pre code').each(function(i, e) {hljs.highlightBlock(e)})
+          },
+          docExpansion: 'list',
+          transport: function (httpClient, obj) { ApiDocsProxy.execute(httpClient, obj) }
+          });
+      }());
+    </script>
 
     <script type="text/javascript">
       (function () {
