@@ -27,4 +27,8 @@ declare module 'core-js/fn/symbol' {
 
 }
 
+declare module 'swagger-ui-react' {
+  declare module.exports: any;
+}
+
 export type Window = any
