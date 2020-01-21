@@ -111,6 +111,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   protected
 
   def can_create
+    authorize!(:create, Service) if current_user
     head :forbidden unless current_account.can_create_service?
   end
 
