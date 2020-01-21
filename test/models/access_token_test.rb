@@ -108,6 +108,25 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) { AccessToken.find_from_id_or_value!('fake') }
   end
 
+  test 'timestamps filled' do
+    access_token = FactoryBot.build(:access_token)
+    expected_created_at = -1
+    expected_updated_at = -1
+
+    Timecop.freeze(5.months.ago) do
+      expected_created_at = Time.now.utc
+      access_token.save!
+    end
+
+    Timecop.freeze(5.hours.ago) do
+      expected_updated_at = Time.now.utc
+      access_token.update!(name: 'updated name')
+    end
+
+    assert_equal expected_created_at, access_token.created_at
+    assert_equal expected_updated_at, access_token.updated_at
+  end
+
   private
 
   def member
