@@ -127,7 +127,78 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_equal expected_updated_at, access_token.updated_at
   end
 
+  test 'creation is audited' do
+    account = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:admin, account: account)
+    access_token = FactoryBot.build(:access_token, owner: user)
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      AccessToken.with_auditing do
+        access_token.save!
+      end
+    end
+
+    audit = Audited.audit_class.last!
+    assert_access_token_audit_all_data(access_token, audit)
+    assert_equal 'create', audit.action
+  end
+
+  test 'deletion is audited' do
+    account = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:admin, account: account)
+    access_token = FactoryBot.create(:access_token, owner: user)
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      AccessToken.with_auditing do
+        access_token.destroy!
+      end
+    end
+
+    audit = Audited.audit_class.last!
+    assert_access_token_audit_all_data(access_token, audit)
+    assert_equal 'destroy', audit.action
+  end
+
+  test 'update is audited' do
+    account = FactoryBot.create(:simple_provider)
+    user = FactoryBot.create(:admin, account: account)
+    access_token = FactoryBot.create(:access_token, owner: user, name: 'initial-name')
+
+    initial_updated_at = access_token.updated_at.utc
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      AccessToken.with_auditing do
+        access_token.update!(name: 'updated-name')
+      end
+    end
+
+    audit = Audited.audit_class.last!
+
+    assert_equal 'update', audit.action
+    assert_equal access_token.owner.account.provider_id_for_audits, audit.provider_id, "expected provider_id #{access_token.owner.account.provider_id_for_audits}, found #{audit.provider_id.inspect}"
+    assert_equal access_token.class.name, audit.kind, "expected kind #{access_token.class.name}, but found #{audit.kind.inspect}"
+    expected_audited_changes = {
+      'name' => ['initial-name', 'updated-name'],
+      'updated_at' => [initial_updated_at, access_token.updated_at.utc]
+    }
+    assert_equal expected_audited_changes, audit.audited_changes
+  end
+
   private
+
+  def assert_access_token_audit_all_data(access_token, audit)
+    assert_equal access_token.owner.account.provider_id_for_audits, audit.provider_id, "expected provider_id #{access_token.owner.account.provider_id_for_audits}, found #{audit.provider_id.inspect}"
+    assert_equal access_token.class.name, audit.kind, "expected kind #{access_token.class.name}, but found #{audit.kind.inspect}"
+    expected_audited_changes = {
+      'owner_id' => access_token.owner.id,
+      'scopes' => access_token.scopes,
+      'name' => access_token.name,
+      'permission' => access_token.permission,
+      'created_at' => access_token.created_at.utc,
+      'updated_at' => access_token.updated_at.utc
+    }
+    assert_equal expected_audited_changes, audit.audited_changes
+  end
 
   def member
     @member ||= FactoryBot.build(:member, account: account)
