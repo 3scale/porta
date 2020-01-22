@@ -159,14 +159,15 @@ $(document).on 'initialize', '#proxy', ->
     host_header_warning.toggle(!valid)
 
   input_changed_from_default = (input) ->
-    !compareHttpHosts( input.val(), input.data('default') )
+    !compareHttpHosts(input)
 
   toggle_reset_buttons = ->
     $('form.proxy input[data-default]').each ->
       input = $(this)
       undo_button = input.siblings '.undo'
       undo_button.toggle( input_changed_from_default(input) )
-      input.siblings('.inline-hints').find('span').toggle( input_changed_from_default(input) )
+      protocolWarn = input.siblings('.inline-hints').find('.protocol-warn')
+      protocolWarn.toggle( !inputHasSameProtocols(input) )
 
   reset_proxy_input = (event) ->
     input = $(this).siblings('input')
@@ -181,16 +182,15 @@ $(document).on 'initialize', '#proxy', ->
     link.href = url
     link.hostname
 
-  compareHttpHosts = (a, b) ->
-    extractHost(a) == extractHost(b)
+  compareHttpHosts = (input) ->
+    extractHost(input.val()) == extractHost(input.data('default'))
 
-  extractHost = (url) ->
-    link = document.createElement('a')
-    link.href = url
-    link.hostname
-
-  compareHttpHosts = (a, b) ->
-    extractHost(a) == extractHost(b)
+  inputHasSameProtocols = (input) ->
+    actualValue = document.createElement('a')
+    actualValue.href = input.val()
+    defaultValue = document.createElement('a')
+    defaultValue.href = input.data('default')
+    actualValue.protocol == defaultValue.protocol
 
   toggle_reset_buttons()
   toggle_host_header_warning()
