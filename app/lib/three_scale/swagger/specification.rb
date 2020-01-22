@@ -1,7 +1,6 @@
 module ThreeScale
   module Swagger
     class Specification
-
       class VBase
         def initialize(spec)
           @doc = spec.doc
@@ -148,28 +147,22 @@ module ThreeScale
 
       # Check if this specification is swagger thus it can be displayed in swagger-ui
       def swagger_1_2?
-        @doc.fetch("swaggerVersion", 0).to_f >= 1.2
+        doc_version.to_f >= 1.2
       end
 
+      alias swagger_1_2_or_newer? swagger_1_2?
+
       def swagger_2_0?
-        @doc.fetch("swagger", 0).to_f >= 2.0
+        doc_version.to_f >= 2.0
       end
 
       def openapi_3_0?
-        @doc.fetch("openapi", 0).to_f >= 3.0
+        doc_version.to_f >= 3.0
       end
 
       # Falls back to "1.0" if version can"t be determined
       def swagger_version
-        if swagger_1_2?
-          @doc["swaggerVersion"]
-        elsif swagger_2_0?
-          @doc["swagger"]
-        elsif openapi_3_0?
-          @doc["openapi"].match(/(3\.0)\..+/)[1] #
-        else
-          "1.0"
-        end
+        swagger_1_2_or_newer? ? doc_version.scan(/\A(\d+\.\d+)(\..+)?\Z/).flatten.first : '1.0'
       end
 
       def as_json
@@ -183,21 +176,26 @@ module ThreeScale
         @errors.empty?
       end
 
+      protected
+
+      def version_attribute
+        %w[openapi swagger swaggerVersion].find(&@doc.method(:has_key?))
+      end
+
+      def doc_version
+        @doc[version_attribute]
+      end
+
       private
 
+      def spec_version_class
+        "ThreeScale::Swagger::Specification::V#{swagger_version.sub(/\./, '')}".constantize
+      rescue NameError
+        VInvalid
+      end
+
       def init_version
-        case swagger_version
-        when '3.0'
-          V30.new(self)
-        when '2.0'
-          V20.new(self)
-        when '1.2'
-          V12.new(self)
-        when '1.0'
-          V10.new(self)
-        else
-          VInvalid.new(self)
-        end
+        spec_version_class.new(self)
       end
     end
   end
