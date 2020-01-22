@@ -13,6 +13,10 @@ module ThreeScale
           @doc.fetch("basePath", nil).try(:downcase)
         end
 
+        def servers
+          [base_path]
+        end
+
         def validate!
           raise "#{self.class} should implement #{__method__}"
         end
@@ -34,7 +38,6 @@ module ThreeScale
 
       class V30 < VBase
         def base_path
-          servers = ThreeScale::OpenApi::UrlResolver.new(@doc).servers
           servers.first
         end
 
@@ -48,6 +51,10 @@ module ThreeScale
 
         def swagger?
           true # FIXME: Is it really!?
+        end
+
+        def servers
+          @servers ||= ThreeScale::OpenApi::UrlResolver.new(@doc).servers
         end
       end
 
@@ -143,7 +150,7 @@ module ThreeScale
         @version = init_version
       end
 
-      delegate :base_path, :validate!, :swagger?, to: :@version
+      delegate :base_path, :servers, :validate!, :swagger?, to: :@version
 
       # Check if this specification is swagger thus it can be displayed in swagger-ui
       def swagger_1_2?
