@@ -45,14 +45,6 @@ module TestHelpers
           :save!, :delete
         clear_method ThreeScale::Core::UsageLimit.singleton_class,
           :save, :load_value, :delete
-
-        clear_method ThreeScale::Core::AlertLimit.singleton_class,
-                     :save, :delete
-
-        clear_method ThreeScale::Core::AlertLimit.singleton_class, :load_all do |service_id|
-          []
-        end
-
         clear_method ThreeScale::Core::User.singleton_class,
           :load, :delete_all_for_service
         clear_method ThreeScale::Core::ApplicationKey.singleton_class,
