@@ -25,7 +25,7 @@ module RailsSQLiFix
     super sanitize_actioncontroller_parameters(attributes)
   end
 
-  # This checks only if the `attributes` or any of its value is an ActionCotroller::Parameters
+  # This checks only if the `attributes` or any of its value is an ActionController::Parameters
   def action_controller_parameters_in?(attributes)
     return false unless [Hash, ActionController::Parameters].include?(attributes.class)
     ActionController::Parameters === attributes || attributes.any?{|_k,v| ActionController::Parameters === v }

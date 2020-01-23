@@ -9,7 +9,8 @@ class RailsSqliTest < ActiveSupport::TestCase
 
     db_quote = System::Database.mysql? ? '`' : '"'
     CMS::Section.find_by(params)
-    assert_equal %(SELECT `cms_sections`.* FROM `cms_sections` WHERE `cms_sections`.`system_name` = '{\\\"0\\\"=>\\\"foo\\\"}').gsub('`', db_quote) , CMS::Section.where(params).to_sql
+    sanitized = ActiveRecord::Base.sanitize params['system_name'].to_s
+    assert_match sanitized, CMS::Section.where(params).to_sql
   end
 
   def test_quoting_acton_controller_parameters
