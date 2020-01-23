@@ -61,7 +61,7 @@ class Account < ApplicationRecord
   self.background_deletion = [
     :users,
     :mail_dispatch_rules,
-    :api_docs_services,
+    [:api_docs_services, class_name: 'ApiDocs::Service'],
     :services,
     :contracts,
     :account_plans,
@@ -77,7 +77,7 @@ class Account < ApplicationRecord
     [:files, { action: :delete }],
     [:builtin_pages, { action: :delete }],
     [:provided_groups, { action: :delete }]
-  ]
+  ].freeze
 
   #TODO: this needs testing?
   scope :providers, -> { where(provider: true) }
