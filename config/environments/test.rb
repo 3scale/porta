@@ -10,6 +10,8 @@ System::Application.configure do
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
 
+  config.eager_load = true
+
   # Show full error reports and disable caching
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = false
