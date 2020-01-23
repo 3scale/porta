@@ -93,6 +93,10 @@ class BackendApi < ApplicationRecord
     metrics.create_default!(:hits)
   end
 
+  def scheduled_for_deletion?
+    deleted? || !account || account.scheduled_for_deletion?
+  end
+
   private
 
   def schedule_deletion
