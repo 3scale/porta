@@ -109,6 +109,7 @@ class Proxy < ApplicationRecord
   delegate :account, to: :service
   delegate :provider_can_use?, to: :account
   delegate :backend_apis, :backend_api_configs, to: :service
+  delegate :scheduled_for_deletion?, to: :account, allow_nil: true
 
   def self.user_attribute_names
     super + %w[api_backend] + GatewayConfiguration::ATTRIBUTES
