@@ -94,7 +94,7 @@ end
 
 gem 'nokogiri', '>= 1.6.8'
 gem 'dalli', '~> 2.7'
-gem 'secure_headers', '~> 2.2'
+gem 'secure_headers', '~> 3.9'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 
