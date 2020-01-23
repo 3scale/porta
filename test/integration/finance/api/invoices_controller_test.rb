@@ -132,6 +132,24 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_equal invoice_new_values[:friendly_id], invoice.friendly_id
   end
 
+  test 'audit the invoice with the user when the authentication is by access token' do
+    admin = @provider.admin_users.first!
+    token = FactoryBot.create(:access_token, owner: admin, scopes: %w[finance])
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      Invoice.with_auditing do
+        assert_difference(Invoice.method(:count)) do
+          post api_invoices_path, invoice_params.merge!(access_token: token.value), accept: Mime[:json]
+          assert_response :created
+        end
+      end
+    end
+
+    audit = Audited.audit_class.last!
+    assert_equal 'Invoice', audit.auditable_type
+    assert_equal Invoice.last!.id, audit.auditable_id
+    assert_equal admin.id, audit.user_id
+  end
 
   test '#charge' do
     post charge_api_invoice_path(invoice), {}, accept: Mime[:json]
