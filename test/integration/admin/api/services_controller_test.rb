@@ -82,12 +82,46 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_correct_params
     end
 
+    test 'create with provider' do
+      assert_difference(provider_services.method(:count)) do
+        post admin_api_services_path(provider_key: @provider.provider_key, format: :json), permitted_params
+        assert_response :created
+      end
+      assert_correct_params
+    end
+
+    test 'create with unauthorize provider key' do
+      Account.any_instance.stubs(can_create_service?: false)
+      assert_no_difference(provider_services.method(:count)) do
+        post admin_api_services_path(provider_key: @provider.provider_key, format: :json), permitted_params
+        assert_response :forbidden
+      end
+    end
+
+    test 'create with unauthorize admin user' do
+      Account.any_instance.stubs(can_create_service?: false)
+      assert_no_difference(provider_services.method(:count)) do
+        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params
+        assert_response :forbidden
+      end
+    end
+
     test 'create with errors in the model' do
       assert_no_difference(provider_services.method(:count)) do
         post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({backend_version: 'fake'})
         assert_response :unprocessable_entity
       end
       assert_contains JSON.parse(response.body).dig('errors', 'backend_version'), 'is not included in the list'
+    end
+
+    test 'a member user cannot create a service' do
+      member = FactoryBot.create(:member, account: provider)
+      member_access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').value
+
+      assert_no_difference(provider_services.method(:count)) do
+        post admin_api_services_path(access_token: member_access_token_value, format: :json), permitted_params
+        assert_response :forbidden
+      end
     end
 
     test 'update' do
