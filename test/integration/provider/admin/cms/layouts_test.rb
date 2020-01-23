@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Provider::Admin::Cms::LayoutsTest < ActionDispatch::IntegrationTest
+class Provider::Admin::CMS::LayoutsTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
   def setup
