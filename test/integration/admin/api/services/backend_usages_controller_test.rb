@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Admin::API::Services::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
+class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @tenant = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:simple_service, account: @tenant)
