@@ -126,14 +126,12 @@ class ProxyRule < ApplicationRecord
 
   delegate :account, to: :owner, allow_nil: true
 
-  def destroy
-    if !owner || !account || owner.scheduled_for_deletion?
-      self.class.acts_as_list_no_update do
-        super
-      end
-    else
-      super
-    end
+  def scheduled_for_deletion?
+    !owner || !account || owner.scheduled_for_deletion?
+  end
+
+  def act_as_list_no_update?
+    super || scheduled_for_deletion?
   end
 
   protected
