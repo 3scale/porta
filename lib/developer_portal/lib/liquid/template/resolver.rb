@@ -22,7 +22,7 @@ module Liquid
         super()
       end
 
-      def find_templates(name, prefix, partial, _details, _outside_app_allowed)
+      def find_templates(name, prefix, partial, _details, _outside_app_allowed = false)
         path = Path.build(name, prefix, partial)
 
         @scope.templates.for_rails_view(path).map do |record|
