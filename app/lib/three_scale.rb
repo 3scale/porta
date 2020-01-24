@@ -16,7 +16,7 @@ module ThreeScale
   end
 
   def validate_settings!
-    raise ConfigurationError unless validate_settings
+    raise ConfigurationError, "invalid tenant_mode '#{tenant_mode}'" unless validate_settings
   end
 
   def validate_settings
