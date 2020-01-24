@@ -7,7 +7,6 @@ class RailsSqliTest < ActiveSupport::TestCase
     # This should fix # https://groups.google.com/forum/#!topic/rubyonrails-security/8CVoclw-Xkk
     # No error should be raised on that and the SQL
 
-    db_quote = System::Database.mysql? ? '`' : '"'
     CMS::Section.find_by(params)
     sanitized = ActiveRecord::Base.sanitize params['system_name'].to_s
     assert_match sanitized, CMS::Section.where(params).to_sql
