@@ -741,7 +741,7 @@ jobs:
                 ] \
               } \
               ] \
-            }" $SLACK_WEBHOOK_URL
+            }" $SLACK_WEBHOOK_SYSTEM
 
   notify_failure:
     docker:
@@ -771,7 +771,7 @@ jobs:
                 ] \
               } \
               ] \
-            }" $SLACK_WEBHOOK_URL
+            }" $SLACK_WEBHOOK_SYSTEM
           when: on_fail
 
   notify_success:
@@ -802,7 +802,7 @@ jobs:
                 ] \
               } \
               ] \
-            }" $SLACK_WEBHOOK_URL
+            }" $SLACK_WEBHOOK_SYSTEM
           when: on_success
 
   visual:
