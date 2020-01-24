@@ -4,6 +4,8 @@ class BackendApi < ApplicationRecord
   include SystemName
   include ProxyConfigAffectingChanges::BackendApiExtension
 
+  self.background_deletion = %i[proxy_rules metrics backend_api_configs]
+
   DELETED_STATE = :deleted
   ECHO_API_HOST = 'echo-api.3scale.net'
 
@@ -27,7 +29,7 @@ class BackendApi < ApplicationRecord
 
   validates :private_endpoint, length: { maximum: 255 },
     presence: true,
-    uri: { path: proc { provider_can_use?(:proxy_private_base_path) } },
+    uri: { path: proc { provider_can_use?(:proxy_private_base_path) }, scheme: %w[http https ws wss] },
     non_localhost: { message: :protected_domain }
 
   alias_attribute :api_backend, :private_endpoint
@@ -89,6 +91,10 @@ class BackendApi < ApplicationRecord
 
   def create_default_metrics
     metrics.create_default!(:hits)
+  end
+
+  def scheduled_for_deletion?
+    deleted? || !account || account.scheduled_for_deletion?
   end
 
   private

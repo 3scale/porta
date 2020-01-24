@@ -11,7 +11,7 @@ module CMS
     end
 
     def enable!
-      @enabled = true if options
+      @enabled = true if config
     end
 
     def disable!
@@ -19,27 +19,42 @@ module CMS
     end
 
     def bucket
-      options.fetch(:bucket) if enabled?
+      config.fetch(:bucket) if enabled?
     end
 
     def region
-      options.fetch(:region) if enabled?
+      config.fetch(:region) if enabled?
     end
 
     def credentials
-      options.slice(:access_key_id, :secret_access_key) if enabled?
+      config.slice(:access_key_id, :secret_access_key) if enabled?
+    end
+
+    def hostname
+      config[:hostname].presence if enabled?
+    end
+
+    def protocol
+      config[:protocol].presence || 'https' if enabled?
+    end
+
+    def options
+      return unless enabled?
+      opts = config.slice(:force_path_style)
+      opts[:endpoint] = [protocol, hostname].join('://') if protocol && hostname
+      opts
     end
 
     def stub!
-      @options ||= { bucket: 'test', access_key_id: 'key', secret_access_key: 'secret', region: 'us-east-1' }
+      @config ||= { bucket: 'test', access_key_id: 'key', secret_access_key: 'secret', region: 'us-east-1' }
       Aws.config[:s3] = { stub_responses: true }
       enable!
     end
 
     private
 
-    def options
-      @options ||= Rails.application.config.s3.try(:symbolize_keys)
+    def config
+      @config ||= Rails.application.config.s3.try(:symbolize_keys)
     rescue IndexError, KeyError
       raise NoConfigError, "No S3 config for #{Rails.env} environment"
     end

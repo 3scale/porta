@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { Nav, NavExpandable, NavItem, NavList, NavGroup } from 'Navigation/components/PF4NavProxy'
+import { Nav, NavExpandable, NavItem, NavList, NavGroup } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Item = {
@@ -25,7 +25,7 @@ type Props = {
 
 const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
   <div className="pf-c-page__sidebar-body">
-    <Nav id='mainmenu'>
+    <Nav id='mainmenu' theme='dark'>
       <NavList>
         {sections.map(({ id, title, path, items, outOfDateConfig }) => {
           return items

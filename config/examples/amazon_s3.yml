@@ -3,6 +3,7 @@ development:
   secret_access_key: secret_access_key
   bucket:            dev.my-s3-bucket.example.com
   region:            "us-east-1"
+  force_path_style:  true
 
 test: &test
   access_key_id: invalid

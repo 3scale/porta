@@ -12,6 +12,17 @@ class Service < ApplicationRecord
   extend System::Database::Scopes::IdOrSystemName
   include ServiceDiscovery::ModelExtensions::Service
 
+  self.background_deletion = [
+    :service_plans,
+    :application_plans,
+    :end_user_plans,
+    [:api_docs_services, class_name: 'ApiDocs::Service'],
+    :backend_apis,
+    :backend_api_configs,
+    :metrics,
+    [:proxy, { action: :destroy, has_many: false }]
+  ].freeze
+
   DELETE_STATE = 'deleted'.freeze
 
   has_system_name uniqueness_scope: :account_id

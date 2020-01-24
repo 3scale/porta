@@ -28,6 +28,8 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
     users = provider.users
     cms_sections = provider.sections
 
+    api_docs_service = FactoryBot.create(:api_docs_service, account: provider)
+
     DeleteObjectHierarchyWorker.stubs(:perform_later)
     users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy') }
     services.each { |service| DeleteServiceHierarchyWorker.expects(:perform_later).with(service, anything, 'destroy') }
@@ -39,6 +41,7 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
       DeleteObjectHierarchyWorker.expects(:perform_later).with(CMS::Section.new({ id: cms_section.id }, without_protection: true), anything, 'delete')
     end
     DeletePaymentSettingHierarchyWorker.expects(:perform_later).with(provider.payment_gateway_setting, anything, 'destroy')
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
 
     perform_enqueued_jobs { DeleteAccountHierarchyWorker.perform_now(provider) }
   end

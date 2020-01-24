@@ -58,6 +58,27 @@ class Account < ApplicationRecord
   include States
   include ProviderDomains
 
+  self.background_deletion = [
+    :users,
+    :mail_dispatch_rules,
+    [:api_docs_services, class_name: 'ApiDocs::Service'],
+    :services,
+    :contracts,
+    :account_plans,
+    [:settings, { action: :destroy, has_many: false }],
+    [:payment_detail, { action: :destroy, has_many: false }],
+    [:buyer_accounts, { action: :destroy, class_name: 'Account' }],
+    [:payment_gateway_setting, { action: :destroy, has_many: false }],
+    [:profile, { action: :delete, has_many: false }],
+    [:templates, { action: :delete }],
+    [:sections, { action: :delete, class_name: 'CMS::Section' }],
+    [:provided_sections, { action: :delete, class_name: 'CMS::Section' }],
+    [:redirects, { action: :delete }],
+    [:files, { action: :delete }],
+    [:builtin_pages, { action: :delete }],
+    [:provided_groups, { action: :delete }]
+  ].freeze
+
   #TODO: this needs testing?
   scope :providers, -> { where(provider: true) }
 

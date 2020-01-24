@@ -1,7 +1,6 @@
 module ThreeScale
   module Swagger
     class Specification
-
       class VBase
         def initialize(spec)
           @doc = spec.doc
@@ -12,6 +11,10 @@ module ThreeScale
         # The base path of the specification. This is needed to have it whitelisted on api_docs_proxy.
         def base_path
           @doc.fetch("basePath", nil).try(:downcase)
+        end
+
+        def servers
+          [base_path]
         end
 
         def validate!
@@ -33,9 +36,29 @@ module ThreeScale
         end
       end
 
+      class V30 < VBase
+        def base_path
+          servers.first
+        end
+
+        JSON_SCHEMA = {'$ref' => 'https://spec.openapis.org/oas/3.0/schema/2019-04-02'}.freeze
+
+        def validate!
+          @validator.fully_validate(JSON_SCHEMA).each do |error|
+            @errors.add(:base, error)
+          end
+        end
+
+        def swagger?
+          true # FIXME: Is it really!?
+        end
+
+        def servers
+          @servers ||= ThreeScale::OpenApi::UrlResolver.new(@doc).servers
+        end
+      end
 
       class V20 < VBase
-
         # NOTE:
         #   * "If the schemes is not included, the default scheme to be used is the one used to access the specification."
         #   * "If the host is not included, the host serving the documentation is to be used (including the port)."
@@ -48,7 +71,6 @@ module ThreeScale
           (schema && host)? [schema, host].join("://") : ""
         end
 
-
         JSON_SCHEMA = {'$ref' => 'http://swagger.io/v2/schema.json#'}.freeze
 
         def validate!
@@ -60,12 +82,9 @@ module ThreeScale
         def swagger?
           true
         end
-
       end
 
-
       class V12 < VBase
-
         JSON_SCHEMA = {'$ref' => 'http://swagger-api.github.io/schemas/v1.2/apiDeclaration.json#'}.freeze
 
         def validate!
@@ -78,7 +97,6 @@ module ThreeScale
           true
         end
       end
-
 
       class V10 < VBase
         # This validates an activedocs specification
@@ -110,7 +128,6 @@ module ThreeScale
         end
       end
 
-
       extend ActiveModel::Naming
       extend ActiveModel::Translation
 
@@ -133,27 +150,26 @@ module ThreeScale
         @version = init_version
       end
 
-      delegate :base_path, :validate!, :swagger?, to: :@version
-
+      delegate :base_path, :servers, :validate!, :swagger?, to: :@version
 
       # Check if this specification is swagger thus it can be displayed in swagger-ui
       def swagger_1_2?
-        @doc.fetch("swaggerVersion", 0).to_f >= 1.2
+        doc_version.to_f >= 1.2
       end
 
+      alias swagger_1_2_or_newer? swagger_1_2?
+
       def swagger_2_0?
-        @doc.fetch("swagger", 0).to_f >= 2.0
+        doc_version.to_f >= 2.0
+      end
+
+      def openapi_3_0?
+        doc_version.to_f >= 3.0
       end
 
       # Falls back to "1.0" if version can"t be determined
       def swagger_version
-        if swagger_1_2?
-          @doc["swaggerVersion"]
-        elsif swagger_2_0?
-          @doc["swagger"]
-        else
-          "1.0"
-        end
+        swagger_1_2_or_newer? ? doc_version.scan(/\A(\d+\.\d+)(\..+)?\Z/).flatten.first : '1.0'
       end
 
       def as_json
@@ -167,19 +183,26 @@ module ThreeScale
         @errors.empty?
       end
 
+      protected
+
+      def version_attribute
+        %w[openapi swagger swaggerVersion].find(&@doc.method(:has_key?))
+      end
+
+      def doc_version
+        @doc[version_attribute]
+      end
+
       private
 
+      def spec_version_class
+        "ThreeScale::Swagger::Specification::V#{swagger_version.sub(/\./, '')}".constantize
+      rescue NameError
+        VInvalid
+      end
+
       def init_version
-        case swagger_version
-        when '2.0'
-            V20.new(self)
-        when '1.2'
-            V12.new(self)
-        when '1.0'
-            V10.new(self)
-        else
-            VInvalid.new(self)
-        end
+        spec_version_class.new(self)
       end
     end
   end

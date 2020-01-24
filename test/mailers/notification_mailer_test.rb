@@ -476,7 +476,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     assert mail.attachments
     assert_equal mail.attachments.count, 1
-    assert_match "report-#{service.name}.pdf", mail.attachments.first.filename
+    assert_match "report-#{provider.domain}-#{service.id}.pdf", mail.attachments.first.filename
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Please find attached your API Usage Report', body.encoded
@@ -492,7 +492,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     assert mail.attachments
     assert_equal mail.attachments.count, 1
-    assert_match "report-#{service.name}.pdf", mail.attachments.first.filename
+    assert_match "report-#{provider.domain}-#{service.id}.pdf", mail.attachments.first.filename
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Please find attached your API Usage Report', body.encoded

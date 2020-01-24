@@ -3,6 +3,7 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
+  include BackgroundDeletion
 
   def self.user_attribute_names
     attribute_names
