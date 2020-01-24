@@ -119,11 +119,13 @@ clean-cache: export CACHE = true
 clean-cache:
 	$(MAKE) clean
 
+BUNDLER_VERSION ?= $(echo $(shell awk '/BUNDLED WITH/{getline;print}' Gemfile.lock))
+
 bundle: ## Installs dependencies using bundler. Run this after you make some changes to Gemfile.
 bundle: gemfiles/prod/Gemfile Gemfile
-	BUNDLE_GEMFILE=Gemfile bundle lock
+	BUNDLE_GEMFILE=Gemfile bundle _$(BUNDLER_VERSION)_ lock
 	cp Gemfile.lock gemfiles/prod/Gemfile.lock
-	BUNDLE_GEMFILE=gemfiles/prod/Gemfile bundle lock
+	BUNDLE_GEMFILE=gemfiles/prod/Gemfile bundle _$(BUNDLER_VERSION)_ lock
 
 oracle-db-setup: ## Creates databases in Oracle
 oracle-db-setup: oracle-database
