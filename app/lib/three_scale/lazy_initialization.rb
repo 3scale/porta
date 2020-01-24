@@ -13,7 +13,7 @@ module ThreeScale
       #
       # == Example
       #
-      # class User < ActiveRecord::Base
+      # class User < ApplicationRecord
       #   has_one :settings
       #   lazy_initialization_for :settings
       # end
