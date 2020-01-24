@@ -240,5 +240,16 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       post admin_services_path, service: { name: 'example-service', system_name: '###' }
       assert_equal 'System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed.', flash[:error]
     end
+
+    test 'chosen system name affects proxy endpoint validation' do
+      @provider.settings.allow_multiple_services!
+
+      post admin_services_path, service: { name: 'My New Product', system_name: 'this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035' }
+      assert_equal 'System name must be shorter.', flash[:error]
+
+      post admin_services_path, service: { name: 'My New Product', system_name: 'short-labels-are-ok' }
+      refute flash[:error].presence
+      assert_response :redirect
+    end
   end
 end

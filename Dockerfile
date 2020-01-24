@@ -1,4 +1,4 @@
-FROM quay.io/3scale/system-builder:ruby24
+FROM quay.io/3scale/system-builder:ruby25
 
 ARG SPHINX_VERSION=2.2.11
 ARG BUNDLER_VERSION=1.17.3
@@ -25,8 +25,7 @@ ENV DISABLE_SPRING="true" \
     ORACLE_HOME=/opt/oracle/instantclient_12_2/ \
     DB=$DB \
     SAFETY_ASSURED=1 \
-    UNICORN_WORKERS=2 \
-    RAILS_ENV=development
+    UNICORN_WORKERS=2
 
 WORKDIR /opt/system/
 

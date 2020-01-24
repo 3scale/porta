@@ -43,13 +43,13 @@ button:-moz-focusring,
 
   // HACK: this should affect the whole page
   a {
-    color: #06c;
+    color: #2b9af3;
     -webkit-text-decoration: none;
             text-decoration: none;
   }
 
   a:hover {
-    color: #06c;
+    color: #2b9af3;
   }
 }
 
@@ -89,10 +89,11 @@ button:-moz-focusring,
 
   .pf-c-nav__link:active,
   .pf-c-nav__link:hover {
-    color: #06c;
+    color: #2b9af3;
+    font-weight: bold;
 
     &::after {
-      background-color: #06c;
+      background-color: #2b9af3;
     }
   }
   .pf-c-nav__link:active {
@@ -101,21 +102,22 @@ button:-moz-focusring,
   .pf-m-current {
     &> .pf-c-nav__link,
     &.pf-c-nav__link {
-      color: #06c;
+      color: #2b9af3;
+      font-weight: bold;
 
       &::after {
-        background-color: #06c;
+        background-color: #2b9af3;
       }
     }
   }
   .pf-c-nav__link.pf-m-hover::after {
-    background-color: #06c;
+    background-color: #2b9af3;
   }
   .pf-c-nav__list .pf-c-nav__link.pf-m-active::after {
-    background-color: #06c;
+    background-color: #2b9af3;
   }
   .pf-c-nav__link.pf-m-focus::after {
-    background-color: #06c;
+    background-color: #2b9af3;
   }
 }
 
@@ -143,25 +145,26 @@ button:-moz-focusring,
     display: block;
     padding: 0.5rem 1.5rem 0.5rem calc(1.5rem + 1rem);
     font-weight: 500;
-    color: #131313;
+    color: #FFF;
 
     &:hover,
     &:active {
-      color: #06c;
-      background-color: #f5f5f5;
+      color: #FFF;
+      font-weight: 16px;
+      background-color: rgb(79, 82, 85);
     }
   
     &:focus,
     &:active {
-      font-weight: 500;
-      background-color: #f5f5f5;
+      font-weight: 16px;
+      background-color: rgb(79, 82, 85);
     }
   
     &.pf-m-hover,
     &.pf-m-focus,
     &.pf-m-current,
     &.pf-m-active {
-      background-color: #f5f5f5;
+      background-color: rgb(79, 82, 85);
     }
   }
 
@@ -230,7 +233,7 @@ button:-moz-focusring,
 .pf-c-page__header {
   -ms-grid-row: 1;
   -ms-grid-column: 1;
-  color: #fff;
+  color: #FFF;
   z-index: 300;
   -ms-grid-columns: auto auto;
   grid-template-columns: auto auto;
@@ -273,8 +276,8 @@ button:-moz-focusring,
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   margin-right: 1rem;
   margin-left: calc(0.5rem * -1);
-  // font-size: 1.5rem;
-  line-height: 1; }
+  line-height: 1; 
+}
 
 .pf-c-page__header-nav {
   grid-column: 1 / -1;
@@ -340,15 +343,15 @@ button:-moz-focusring,
 .pf-c-page__sidebar {
   grid-area: nav;
   -ms-grid-row: 2;
-      grid-row-start: 2;
+  grid-row-start: 2;
   -ms-grid-column: 1;
-      grid-column-start: 1;
+  grid-column-start: 1;
   z-index: 200;
   width: 18.125rem;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background-color: #fff;
+  background-color: #FFF;
   transition: all 250ms cubic-bezier(0.42, 0, 0.58, 1);
   transform: translate3d(0, 0, 0);
 }
@@ -407,4 +410,29 @@ button:-moz-focusring,
     -ms-grid-row: 2;
     -ms-grid-column: 2;
   }
+}
+
+.pf-c-nav.pf-m-dark .pf-c-divider {
+  background-color: #4f5255; 
+}
+
+.pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-current .pf-c-divider {
+  background-color: #212427;
+}
+
+.pf-c-nav.pf-m-dark .pf-c-nav__item.pf-m-expanded {
+  padding-bottom: 0.5rem;
+}
+
+.pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item.pf-m-current {
+    background-color:#3c3f42; 
+}
+.pf-c-nav.pf-m-dark .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link {
+    background-color: rgb(33, 36, 39); 
+    color: #FFF
+}
+
+.pf-c-page__sidebar.pf-m-dark {
+  background-color: rgb(33, 36, 39);
+  color: #FFF; 
 }

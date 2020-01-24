@@ -26,17 +26,19 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
 
   test 'perform destroys the associations in background' do
     service_plan = service.service_plans.first
-    application_plan = FactoryBot.create(:application_plan, :issuer => service)
+    application_plan = FactoryBot.create(:application_plan, issuer: service)
     end_user_plan = FactoryBot.create(:end_user_plan, service: service)
     metrics = service.metrics
     service.update_attribute :default_service_plan, service_plan
     service.update_attribute :default_application_plan, application_plan
+    api_docs_service = FactoryBot.create(:api_docs_service, service: service, account: service.account)
 
     perform_enqueued_jobs do
       [service_plan, application_plan, end_user_plan].each do |association|
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything, 'destroy')
       end
       metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything, 'destroy') }
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
 
       DeleteServiceHierarchyWorker.perform_now(service)
     end
@@ -63,7 +65,7 @@ class DeleteServiceHierarchyWorkerTest < ActiveSupport::TestCase
     FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
 
     DeleteObjectHierarchyWorker.expects(:perform_later).with(service.backend_api_configs.first!, anything, 'destroy').once
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, '').once
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').once
 
     perform_enqueued_jobs { DeleteServiceHierarchyWorker.perform_now(service) }
   end

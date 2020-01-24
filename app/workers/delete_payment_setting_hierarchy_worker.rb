@@ -5,12 +5,12 @@ class DeletePaymentSettingHierarchyWorker < DeleteObjectHierarchyWorker
 
   alias payment_setting object
 
-  def delete_associations
+  def destroy_and_delete_associations
     super
 
     return unless called_from_provider_hierarchy?
 
-    reflection_buyers_of_provider = Account.reflect_on_all_associations.find { |reflection| reflection.name == :buyer_accounts }
-    ReflectionDestroyer.new(payment_setting.account, reflection_buyers_of_provider, caller_worker_hierarchy).destroy_later
+    reflection = BackgroundDeletion::Reflection.new([:buyer_accounts, { action: :destroy, class_name: 'Account' }])
+    ReflectionDestroyer.new(object.account, reflection, caller_worker_hierarchy).destroy_later
   end
 end

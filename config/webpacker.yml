@@ -32,6 +32,7 @@ default: &default
 development:
   <<: *default
   compile: true
+  webpack_compile_output: true
 
   dev_server:
     host: localhost

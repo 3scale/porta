@@ -13,10 +13,9 @@
 }
 
 .CodeMirror{
-  font-family: $font-family-monospace;
   border: $border-width solid $border-color;
-  height: auto;
   border-radius: $border-radius;
+  height: auto;
 }
 
 .cm-s-neat {

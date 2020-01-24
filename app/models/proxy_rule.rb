@@ -124,6 +124,16 @@ class ProxyRule < ApplicationRecord
     owner_type == 'BackendApi'
   end
 
+  delegate :account, to: :owner, allow_nil: true
+
+  def scheduled_for_deletion?
+    !owner || !account || owner.scheduled_for_deletion?
+  end
+
+  def act_as_list_no_update?
+    super || scheduled_for_deletion?
+  end
+
   protected
 
   def querystring_parameter_keys

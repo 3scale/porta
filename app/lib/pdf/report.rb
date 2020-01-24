@@ -53,7 +53,7 @@ module Pdf
       metrics
       move_down 3
 
-      @report = @pdf.render_file(Rails.root.join('tmp', "#{@account.domain} #{@service.name}.pdf"))
+      @report = @pdf.render_file(pdf_file_path)
 
       self
     end
@@ -86,7 +86,11 @@ module Pdf
     end
 
     def pdf_file_name
-      [@account.id, @service.id, 'report.pdf'].join '_'
+      ['report', @account.domain, @service.id].join('-') + '.pdf'
+    end
+
+    def pdf_file_path
+      Rails.root.join('tmp', pdf_file_name)
     end
 
     def print_period

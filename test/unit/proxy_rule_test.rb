@@ -157,6 +157,46 @@ class ProxyRuleTest < ActiveSupport::TestCase
     assert backend_proxy_rule.valid?
   end
 
+  class PositionUpdateOnConcurrentDeletion < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    setup do
+      @provider = FactoryBot.create(:simple_provider)
+    end
+
+    attr_reader :provider
+
+    test 'position is not updated when account has been deleted' do
+      proxy = FactoryBot.create(:service, account: provider).proxy
+      proxy_rule = FactoryBot.create(:proxy_rule, proxy: proxy)
+
+      provider.delete
+
+      proxy_rule.expects(:decrement_positions_on_lower_items).never
+      proxy_rule.reload.destroy
+    end
+
+    test 'position is not updated when owner proxy has been deleted' do
+      proxy = FactoryBot.create(:service, account: provider).proxy
+      proxy_rule = FactoryBot.create(:proxy_rule, proxy: proxy)
+
+      proxy.delete
+
+      proxy_rule.expects(:decrement_positions_on_lower_items).never
+      proxy_rule.reload.destroy
+    end
+
+    test 'position is not updated when owner backend has been deleted' do
+      backend_api = FactoryBot.create(:backend_api, account: provider)
+      proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil)
+
+      backend_api.mark_as_deleted
+
+      proxy_rule.expects(:decrement_positions_on_lower_items).never
+      proxy_rule.reload.destroy
+    end
+  end
+
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
