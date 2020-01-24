@@ -5,6 +5,10 @@ class AccessToken < ApplicationRecord
 
   serialize :scopes, Array
 
+  audited only: %i[owner_id scopes name permission created_at updated_at]
+
+  delegate :provider_id_for_audits, to: :owner
+
   def self.options_to_hash(options)
     options.map do |key|
       [I18n.t(key, scope: :access_token_options), key]

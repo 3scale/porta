@@ -11,16 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191007101321) do
+ActiveRecord::Schema.define(version: 20200121142649) do
 
   create_table "access_tokens", force: :cascade do |t|
-    t.integer "owner_id",   precision: 38,                  null: false
-    t.string  "owner_type",                default: "User", null: false
-    t.text    "scopes"
-    t.string  "value",                                      null: false
-    t.string  "name",                                       null: false
-    t.string  "permission",                                 null: false
-    t.integer "tenant_id",  precision: 38
+    t.integer  "owner_id",   precision: 38,                  null: false
+    t.string   "owner_type",                default: "User", null: false
+    t.text     "scopes"
+    t.string   "value",                                      null: false
+    t.string   "name",                                       null: false
+    t.string   "permission",                                 null: false
+    t.integer  "tenant_id",  precision: 38
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "access_tokens", ["owner_id", "owner_type"], name: "idx_auth_tokens_of_user"

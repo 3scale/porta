@@ -27,6 +27,7 @@ class ApiAuthentication::ByAuthenticationTokenTest < MiniTest::Unit::TestCase
   def test_current_user
     _token = mock_token(owner: @user = mock('user'))
     assert_equal @user, current_user
+    assert_equal @user, User.current
   end
 
   def test_authenticated_token_correct_scope

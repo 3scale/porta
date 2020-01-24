@@ -416,6 +416,10 @@ class User < ApplicationRecord
     not scope.without_ids(self.id).exists?(condition)
   end
 
+  def provider_id_for_audits
+    account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
+  end
+
   private
 
   def archive_as_deleted
@@ -477,12 +481,6 @@ class User < ApplicationRecord
       sql = construct_finder_sql(options)
       self.connection.select_values(sql)
     end
-  end
-
-  protected
-
-  def provider_id_for_audits
-    account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
   end
 
   class SignupType
