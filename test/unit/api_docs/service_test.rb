@@ -5,9 +5,14 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
   setup do
     @account = FactoryBot.create(:simple_provider)
+    @notify = NotificationCenter.disabled.dup
+    NotificationCenter.disabled << ApiDocs::Service
   end
 
   attr_reader :account
+  def teardown
+    NotificationCenter.disabled = @notify
+  end
 
   test 'save and skip_swagger_validations' do
     service = account.api_docs_services.new(name: 'this is a random name', body: '{}', skip_swagger_validations: '0')
