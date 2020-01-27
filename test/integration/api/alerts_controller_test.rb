@@ -26,11 +26,8 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
     cinstance1, cinstance2 = [buyer1, buyer2].map { |buyer| FactoryBot.create(:simple_cinstance, plan: plan, user_account: buyer) }
     [cinstance1, cinstance2].each { |cinstance|FactoryBot.create(:limit_alert, account: provider, cinstance: cinstance) }
 
-
-
     get admin_alerts_path
     assert_equal 2, assigns(:alerts).count
-
 
     get admin_alerts_path, account_id: buyer1.id
 
@@ -38,14 +35,11 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, alerts.count
     assert_equal buyer1, alerts.first.cinstance.buyer_account
 
-
     get admin_alerts_path, cinstance_id: cinstance2.id
 
     alerts = assigns(:alerts)
     assert_equal 1, alerts.count
     assert_equal cinstance2, alerts.first.cinstance
-
-
 
     Account.expects(:search_ids).with(buyer1.name).returns([buyer1.id])
 
