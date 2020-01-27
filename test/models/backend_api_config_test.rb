@@ -98,9 +98,9 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     end
     configs << FactoryBot.create(:backend_api_config, service: services[0])
 
-    assert_same_elements configs.values_at(0, -1).map(&:id), BackendApiConfig.by_service(services[0]).pluck(:id)
-    assert_equal [configs[1].id], BackendApiConfig.by_service(services[1]).pluck(:id)
-    assert_empty BackendApiConfig.by_service(services[2]).pluck(:id)
+    assert_same_elements configs.values_at(0, -1).map(&:id), BackendApiConfig.by_service(services[0].id).pluck(:id)
+    assert_equal [configs[1].id], BackendApiConfig.by_service(services[1].id).pluck(:id)
+    assert_empty BackendApiConfig.by_service(services[2].id).pluck(:id)
   end
 
   test '.by_backend_api returns the configs related to that backend_api' do
@@ -113,9 +113,9 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     end
     configs << FactoryBot.create(:backend_api_config, backend_api: backend_apis[0])
 
-    assert_same_elements configs.values_at(0, -1).map(&:id), BackendApiConfig.by_backend_api(backend_apis[0]).pluck(:id)
-    assert_equal [configs[1].id], BackendApiConfig.by_backend_api(backend_apis[1]).pluck(:id)
-    assert_empty BackendApiConfig.by_backend_api(backend_apis[2]).pluck(:id)
+    assert_same_elements configs.values_at(0, -1).map(&:id), BackendApiConfig.by_backend_api(backend_apis[0].id).pluck(:id)
+    assert_equal [configs[1].id], BackendApiConfig.by_backend_api(backend_apis[1].id).pluck(:id)
+    assert_empty BackendApiConfig.by_backend_api(backend_apis[2].id).pluck(:id)
   end
 
   test 'accessible' do
