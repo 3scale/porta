@@ -74,8 +74,9 @@ Then('a message should be sent from buyer to provider with plan change details f
 end
 
 Then('a message should be sent from buyer to provider requesting to change plan to paid') do
-  messages = @provider.received_messages.where{ |t| t.message.sender_id == @buyer }
+  messages = @provider.received_messages.where.has { |t| t.message.sender_id == @buyer.id }
   assert msg = messages.to_a.select{|m| m.subject == 'API System: Plan change request' }.last
+
   assert_match %(#{@buyer.org_name} are requesting to have their plan changed to #{@paid_application_plan.name} for application #{@application.name}. You can do this from the application page), msg.body
 end
 

@@ -62,7 +62,7 @@ class Service < ApplicationRecord
     super.reject { |column| %w[act_as_product tech_support_email admin_support_email].include?(column.name) }
   end
 
-  scope :of_account, ->(account) { where.has { account_id == account } }
+  scope :of_account, ->(account) { where.has { account_id == account.id } }
 
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
 
