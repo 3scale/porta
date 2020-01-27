@@ -14,7 +14,7 @@ module Liquid
       THREESCALE_IMAGES      = %w[spinner.gif tick.png cross.png].freeze
 
       desc "Group collection by some key."
-      example "Group applications by service.", %q(
+      example "Group applications by service.", %(
         {% assign grouped = applications | group_by: 'service' %}
         {% for group in grouped %}
           Service: {{ group[0 }}
@@ -28,7 +28,7 @@ module Liquid
       end
 
       desc "True if any string in the collection equals to the parameter."
-      example "Are there any pending apps of the current account?", %q(
+      example "Are there any pending apps of the current account?", %(
          {% assign has_pending_apps = current_account.applications | map: 'state' | any: 'live' %}
       )
       def any(collection, string)
@@ -53,7 +53,7 @@ module Liquid
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           view.javascript_include_tag(js)
         else
-          RailsHelpers.content_tag(:script, ''.freeze, src: get_path(name))
+          RailsHelpers.content_tag(:script, '', src: get_path(name))
         end
       end
 
