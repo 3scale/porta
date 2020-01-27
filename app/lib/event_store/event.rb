@@ -4,6 +4,8 @@ require 'active_job/arguments'
 
 module EventStore
   class Event < RailsEventStoreActiveRecord::Event
+    include BackgroundDeletion
+
     module WithGlobalId
       module_function
 
