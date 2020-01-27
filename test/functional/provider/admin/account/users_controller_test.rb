@@ -13,7 +13,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
   def test_update_blank_member_permission_ids
     assert_equal @default_ids, @user.admin_sections.to_a
 
-    put provider_admin_account_user_path(@user.id), params: {user: { member_permission_ids: [] }}
+    put provider_admin_account_user_path(@user.id), params: {user: { member_permission_ids: [''] }}
 
     @user.reload
 
