@@ -32,7 +32,7 @@ class DeveloperPortal::AccessCodesController < ApplicationController
   private
 
   def cms_params
-    params.slice(:cms_token, :cms)
+    params.permit(:cms_token, :cms)
   end
 
   def return_url

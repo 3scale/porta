@@ -65,8 +65,9 @@ module Authentication
       end
 
       def signup_path(params)
+        permitted_params = params.respond_to?(:permit!) ? params.dup.permit! : params
         DeveloperPortal::Engine.routes.url_helpers
-            .signup_path(params.except(:action, :controller))
+            .signup_path(permitted_params.except(:action, :controller))
       end
 
       # This is the template rendered by sessions controller, usually the login form

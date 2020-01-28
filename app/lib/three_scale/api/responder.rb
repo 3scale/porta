@@ -30,6 +30,8 @@ class ThreeScale::Api::Responder < ActionController::Responder
       params.merge!(controller.request.query_parameters)
       params[:id] = resource.id
       params[:action] = :show
+      # Permitting all parameters here but it is not really secure
+      params.permit! if params.respond_to?(:permit!)
       controller.url_for(params)
     end
   end
