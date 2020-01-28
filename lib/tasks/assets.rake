@@ -31,4 +31,8 @@ namespace :assets do
   end
 
   Rake::Task['assets:environment'].enhance(%w(assets:environment:factory_bot assets:environment:observers))
+
+  task :precompile do
+    Rake::Task['webpack:compile'].execute
+  end
 end
