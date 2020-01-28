@@ -60,7 +60,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    get signup_path, plan_ids: []
+    get signup_path, params: {plan_ids: []}
 
     assert_response :success
 
