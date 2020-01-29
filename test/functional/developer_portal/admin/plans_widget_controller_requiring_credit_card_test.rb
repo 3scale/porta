@@ -67,7 +67,9 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
   end
 
   test 'show button to change plan when buyer CC details are stored' do
-    @buyer.update_attribute :credit_card_auth_code, 'code'
+    @buyer.credit_card_auth_code = 'code'
+    @buyer.save!
+    @buyer.reload
     assert @buyer.is_charged?
     assert @buyer.credit_card_stored?
 
