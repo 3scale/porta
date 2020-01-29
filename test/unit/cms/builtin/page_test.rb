@@ -32,11 +32,10 @@ class CMS::Builtin::PageTest < ActiveSupport::TestCase
 
   test 'always has liquid enabled' do
     # attribute ignored
-    page = FactoryBot.build(:cms_builtin_page, provider: @provider, liquid_enabled: false)
+    page = FactoryBot.create(:cms_builtin_page, provider: @provider, liquid_enabled: false)
     assert page.liquid_enabled?, 'liquid processing disabled for builtin page'
 
     # true even if the DB column is set
-    page.save!
     page.update_column(:liquid_enabled, false)
     assert page.liquid_enabled?, 'liquid processing disabled for builtin page'
   end
