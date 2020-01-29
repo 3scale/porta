@@ -44,7 +44,7 @@ services:
 
   sidekiq:
     <<: *system_environment
-    image: porta-system
+    image: porta_system
     command: bash -c "rake sidekiq"
     container_name: sidekiq-compose
     depends_on:
