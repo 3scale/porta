@@ -31,3 +31,4 @@ class Provider::Admin::Dashboard::Service::HitsController < Provider::Admin::Das
     TrafficService.new(stats_client)
   end
 end
+require_dependency 'stats/service'
