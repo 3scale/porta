@@ -9,7 +9,7 @@ namespace :webpack do
   task :compile do
     env = { 'WEBPACKER_NODE_MODULES_BIN_PATH' => `npm bin`.chomp }
     puts 'Compiling webpack assets...'
-    exec(env, './bin/webpack')
+    exec(env, 'bundle', 'exec', './bin/webpack')
   end
 
   desc 'Compile assets for production'
