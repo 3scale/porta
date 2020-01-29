@@ -1,10 +1,18 @@
 .pf-c-page__sidebar {
-  color: $white;
   text-align: left;
-  text-decoration: none;
 
   .pf-c-nav__section-title {
     // Give artificial margin-top of pf-c-nav__section
     margin-top: 2rem;
+  }
+
+  // scss-lint:disable SelectorFormat
+  .pf-c-nav__item.outdated-config::before {
+    content: '\f071';
+    font-family: FontAwesome;
+    font-weight: normal;
+    position: absolute;
+    right: line-height-times(3);
+    top: line-height-times(1 / 3);
   }
 }
