@@ -9,8 +9,9 @@ class ProviderInvitationMailerTest < ActionMailer::TestCase
   end
 
   test 'deliver' do
-    @provider_invitation_email.deliver_now
-    assert_equal 1, ActionMailer::Base.deliveries.count
+    assert_difference ActionMailer::Base.deliveries.method(:count) do
+      @provider_invitation_email.deliver_now
+    end
   end
 
   test 'is sent to the invited provider' do
