@@ -257,7 +257,7 @@ class Api::IntegrationsControllerTest < ActionController::TestCase
     get :show, service_id: service.id
 
     assert_response :success
-    assert_match "Promote v. #{config.version} to Production", response.body
+    assert_match "Promote v. #{config.version} to APIcast Production", response.body
   end
 
   test 'promote to production' do
