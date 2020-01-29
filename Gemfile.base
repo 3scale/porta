@@ -179,7 +179,7 @@ group :development do
   gem 'yard', require: false
 
   # Install rubocop only when using RubyMine (for the rubocop plugin)
-  gem 'rubocop', '0.52.1', install_if: ENV['TEAMCITY_RAKE_RUNNER_MODE'], require: false
+  gem 'rubocop', '0.59.1', install_if: ENV['TEAMCITY_RAKE_RUNNER_MODE'], require: false
 end
 
 gem 'message_bus', '~> 2.0.2'
@@ -223,7 +223,7 @@ group :test do
   gem 'shoulda-context', '~> 1.2.2'
   gem 'timecop', '~> 0.9'
 
-  gem 'minitest'
+  gem 'minitest', '5.10.3'
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
