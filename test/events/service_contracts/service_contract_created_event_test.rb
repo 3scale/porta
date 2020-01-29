@@ -4,6 +4,7 @@ class ServiceContracts::ServiceContractCreatedEventTest < ActiveSupport::TestCas
 
   def test_create
     contract = FactoryBot.build_stubbed(:simple_service_contract, id: 1)
+    contract.stubs(provider_account: Account.new)
     user     = FactoryBot.build_stubbed(:simple_user, id: 2)
     event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, user)
 
