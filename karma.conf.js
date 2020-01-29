@@ -1,5 +1,6 @@
-/* global module */
+const { resolve } = require('path')
 var webpackConfig = require('./config/webpack/test.js')
+
 module.exports = function (config) {
   'use strict'
 
@@ -20,9 +21,21 @@ module.exports = function (config) {
       'spec/javascripts/karma/index.spec.js'
     ],
 
-    webpack: webpackConfig,
+    webpack: {
+      mode: 'production',
+      output: {
+        path: resolve(__dirname, 'public/packs-test')
+      },
+      devtool: webpackConfig.devtool,
+      module: webpackConfig.module,
+      resolve: webpackConfig.resolve
+    },
 
     webpackMiddleware: {
+      quiet: true,
+      stats: {
+        colors: true
+      }
     },
 
     plugins: [
