@@ -54,6 +54,8 @@ assets run yarn:
 	@echo
 	@docker-compose run -e MASTER_PASSWORD=$(MASTER_PASSWORD) -e USER_PASSWORD=$(USER_PASSWORD) --rm system $(CMD)
 
+dev-setup: MASTER_PASSWORD ?= "p"
+dev-setup: USER_PASSWORD ?= "p"
 dev-setup: ## Makes the initial setup for the application ##
 dev-setup: CMD=rake db:create db:deploy
 dev-setup: run
@@ -86,8 +88,8 @@ bundle: gemfiles/prod/Gemfile Gemfile
 
 clean: ## Remove all components and volumes
 clean:
-	-docker-compose down &2> /dev/null
-	-docker volume rm $$(docker volume ls -q -f 'name=porta_') &2> /dev/null
+	-docker-compose down 2>/dev/null
+	-docker volume rm $$(docker volume ls -q -f 'name=porta_') 2> /dev/null
 
 
 oracle-db-setup: ## Creates databases in Oracle
