@@ -34,7 +34,7 @@ ORACLE_DB_IMAGE := quay.io/3scale/oracle:12.2.0.1-ee
 include wget.mk
 include openshift.mk
 
-.PHONY: assets bash build bundle dev-setup dev-start dev-stop help oracle-database oracle-db-setup run schema
+.PHONY: assets bash build bundle clean dev-setup dev-start dev-stop help oracle-database oracle-db-setup run schema yarn
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
@@ -59,7 +59,7 @@ dev-setup: CMD=rake db:create db:deploy
 dev-setup: run
 
 dev-start: ## Starts the application with all dependencies using Docker ##
-dev-start: dev-setup
+dev-start: dev-setup assets
 	@docker-compose up -d
 
 dev-stop: ## Stops all started containers ##
@@ -84,6 +84,10 @@ bundle: gemfiles/prod/Gemfile Gemfile
 	cp Gemfile.lock gemfiles/prod/Gemfile.lock
 	BUNDLE_GEMFILE=gemfiles/prod/Gemfile bundle lock
 
+clean: ## Remove all components and volumes
+clean:
+	-docker-compose down &2> /dev/null
+	-docker volume rm $$(docker volume ls -q -f 'name=porta_') &2> /dev/null
 
 
 oracle-db-setup: ## Creates databases in Oracle
