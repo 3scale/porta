@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class WebHookWorkerTest < ActiveSupport::TestCase
-  # disable_transactional_fixtures!
 
   setup do
     @worker = WebHookWorker.new
