@@ -584,6 +584,10 @@ li.hidden {
     &.staging-settings {
       @include white-box-shadow;
       padding: line-height-times(1);
+
+      .hint-error {
+        border: 1px solid $error-color;
+      }
     }
   }
 

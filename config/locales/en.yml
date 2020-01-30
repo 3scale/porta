@@ -1244,7 +1244,7 @@ en:
           Public address of your API gateway in the %{environment_name} environment.
         api_backend_https: |
           Private address of your API that will be called by the API gateway.
-          <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol.</span>
+          <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss).</span>
         api_backend_http: |
           Private address of your API that will be called by the API gateway.
         oauth_login_url: |
