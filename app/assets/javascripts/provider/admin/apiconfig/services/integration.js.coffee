@@ -166,12 +166,12 @@ $(document).on 'initialize', '#proxy', ->
       input = $(this)
       undo_button = input.siblings '.undo'
       undo_button.toggle( input_changed_from_default(input) )
+      toggle_secure_scheme_hint()
 
   toggle_secure_scheme_hint =  ->
-    input = $(this)
-    protocolWarn = input.siblings('.inline-hints').find('.protocol-warn')
-    protocolWarn.toggle( !inputHasSecureProtocol(input) )
-    input.toggleClass('hint-error', !inputHasSecureProtocol(input))
+    input = $('#proxy_api_backend')[0]
+    protocolWarn = $(input).siblings('.inline-hints').find('.protocol-warn')[0]
+    $(protocolWarn).toggle(!inputHasSecureProtocol(input))
 
   reset_proxy_input = (event) ->
     input = $(this).siblings('input')
@@ -191,10 +191,11 @@ $(document).on 'initialize', '#proxy', ->
 
   inputHasSecureProtocol = (input) ->
     link = document.createElement('a')
-    link.href = input.val()
+    link.href = $(input).val()
     link.protocol == 'https:' || link.protocol == 'wss:'
 
   toggle_reset_buttons()
+  toggle_secure_scheme_hint()
   toggle_host_header_warning()
 
   #---------------------------------------------------------------------
