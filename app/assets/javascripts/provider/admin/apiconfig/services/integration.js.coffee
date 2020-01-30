@@ -166,8 +166,12 @@ $(document).on 'initialize', '#proxy', ->
       input = $(this)
       undo_button = input.siblings '.undo'
       undo_button.toggle( input_changed_from_default(input) )
-      protocolWarn = input.siblings('.inline-hints').find('.protocol-warn')
-      protocolWarn.toggle( !inputHasSameProtocols(input) )
+
+  toggle_secure_scheme_hint =  ->
+    input = $(this)
+    protocolWarn = input.siblings('.inline-hints').find('.protocol-warn')
+    protocolWarn.toggle( !inputHasSecureProtocol(input) )
+    input.toggleClass('hint-error', !inputHasSecureProtocol(input))
 
   reset_proxy_input = (event) ->
     input = $(this).siblings('input')
@@ -185,12 +189,10 @@ $(document).on 'initialize', '#proxy', ->
   compareHttpHosts = (input) ->
     extractHost(input.val()) == extractHost(input.data('default'))
 
-  inputHasSameProtocols = (input) ->
-    actualValue = document.createElement('a')
-    actualValue.href = input.val()
-    defaultValue = document.createElement('a')
-    defaultValue.href = input.data('default')
-    actualValue.protocol == defaultValue.protocol
+  inputHasSecureProtocol = (input) ->
+    link = document.createElement('a')
+    link.href = input.val()
+    link.protocol == 'https:' || link.protocol == 'wss:'
 
   toggle_reset_buttons()
   toggle_host_header_warning()
@@ -229,6 +231,7 @@ $(document).on 'initialize', '#proxy', ->
   form = $("form.proxy")
   form.on "change keyup", "input, select", toggle_form_changed_ui
   form.on "click", ".undo", reset_proxy_input
+  form.on "change keyup", "#proxy_api_backend", toggle_secure_scheme_hint
 
   #---------------------------------------------------------------------
 
