@@ -196,14 +196,14 @@ module Api::IntegrationsHelper
   def promote_to_staging_button_options(proxy)
     return disabled_promote_button_options if proxy.any_sandbox_configs? && !proxy.pending_affecting_changes?
 
-    label = deployment_option_is_service_mesh?(proxy.service) ? 'Update Configuration' : "Promote v. #{proxy.next_sandbox_config_version} to Staging"
+    label = deployment_option_is_service_mesh?(proxy.service) ? 'Update Configuration' : "Promote to Staging APIcast"
     promote_button_options(label)
   end
 
   def promote_to_production_button_options(proxy)
     return disabled_promote_button_options if proxy.environments_have_same_config?
 
-    label = "Promote v. #{proxy.next_production_config_version} to Production"
+    label = "Promote to Production APIcast"
     promote_button_options(label)
   end
 
