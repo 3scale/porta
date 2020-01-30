@@ -129,6 +129,11 @@ only-master-filter: &only-master-filter
     branches:
       only: master
 
+ignore-dependabot-filter: &ignore-dependabot-filter
+  filters:
+    branches:
+      ignore: /dependabot\/.*/
+
 nightly-trigger: &nightly-trigger
   triggers:
     - schedule:
@@ -836,12 +841,65 @@ jobs:
 workflows:
   version: 2
 
-  mysql_build:
+  mysql_build_auto:
     jobs:
       - notify_start:
           <<: *only-master-filter
-      - dependencies_bundler
-      - dependencies_npm
+      - dependencies_bundler:
+          <<: *ignore-dependabot-filter
+      - dependencies_npm:
+          <<: *ignore-dependabot-filter
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+      - unit:
+          requires:
+            - dependencies_bundler
+      - functional:
+          requires:
+            - assets_precompile
+      - integration:
+          requires:
+            - assets_precompile
+      - rspec:
+          requires:
+            - dependencies_bundler
+      - cucumber:
+          requires:
+            - assets_precompile
+      - notify_success:
+          requires:
+            - rspec
+            - unit
+            - cucumber
+            - integration
+            - functional
+          <<: *only-master-filter
+      - notify_failure:
+          requires:
+            - rspec
+            - unit
+            - cucumber
+            - integration
+            - functional
+          <<: *only-master-filter
+
+  mysql_build:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - notify_start:
+          requires:
+            - manual_approval
+          <<: *only-master-filter
+      - dependencies_bundler:
+          requires:
+            - manual_approval
+      - dependencies_npm:
+          requires:
+            - manual_approval
       - assets_precompile:
           requires:
             - dependencies_bundler
@@ -948,7 +1006,6 @@ workflows:
           requires:
             - deps_bundler_oracle
             - dependencies_npm
-
       - unit-oracle:
           requires:
             - deps_bundler_oracle
@@ -972,7 +1029,6 @@ workflows:
             - integration-oracle
             - functional-oracle
           <<: *only-master-filter
-
       - notify_failure:
           requires:
             - rspec-oracle
@@ -1003,12 +1059,14 @@ workflows:
           requires:
             - assets_precompile
 
-  javascript_tests:
+  javascript_tests_auto:
     jobs:
       - notify_start:
           <<: *only-master-filter
-      - dependencies_bundler
-      - dependencies_npm
+      - dependencies_bundler:
+          <<: *ignore-dependabot-filter
+      - dependencies_npm:
+          <<: *ignore-dependabot-filter
       - assets_precompile:
           requires:
             - dependencies_bundler
@@ -1034,6 +1092,48 @@ workflows:
             - karma
             - jest
           <<: *only-master-filter
+
+  javascript_tests:
+    jobs:
+      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          # On approval of the `hold` job, any successive job that requires the `hold` job will run.
+      - notify_start:
+          requires:
+            - manual_approval
+          <<: *only-master-filter
+      - dependencies_bundler:
+          requires:
+            - manual_approval
+      - dependencies_npm:
+          requires:
+            - manual_approval
+      - assets_precompile:
+          requires:
+            - dependencies_bundler
+            - dependencies_npm
+      - lint:
+          requires:
+            - assets_precompile
+      - karma:
+          requires:
+            - dependencies_npm
+      - jest:
+          requires:
+            - dependencies_npm
+      - notify_success:
+          requires:
+            - lint
+            - karma
+            - jest
+          <<: *only-master-filter
+      - notify_failure:
+          requires:
+            - lint
+            - karma
+            - jest
+          <<: *only-master-filter
+
 
   visual_test-master:
     jobs:
