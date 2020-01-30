@@ -6,7 +6,7 @@ class Liquid::Drops::PlanChangeTest < ActiveSupport::TestCase
   def setup
     @contract = Contract.new(name: 'Awesome app')
     @contract.stubs(id: 'contract_id')
-    @plan = Plan.new(name: 'Free plan')
+    @plan = ApplicationPlan.new(name: 'Free plan')
     @plan.stubs(id: 'current_plan_id')
     @new_plan = Plan.new(name: 'Paid plan')
     @new_plan.stubs(id: 'new_plan_id')

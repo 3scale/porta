@@ -3,8 +3,13 @@
 require 'test_helper'
 
 class WebHookWorkerTest < ActiveSupport::TestCase
+
   setup do
     @worker = WebHookWorker.new
+  end
+
+  test 'heandled errors' do
+    assert_same_elements [SocketError, RestClient::Exception, Errno::ECONNREFUSED, Errno::ECONNRESET],  WebHookWorker::HANDLED_ERRORS
   end
 
   class TransactionalTest < ActiveSupport::TestCase
