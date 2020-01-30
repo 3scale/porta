@@ -34,11 +34,11 @@ ORACLE_DB_IMAGE := quay.io/3scale/oracle:12.2.0.1-ee
 include wget.mk
 include openshift.mk
 
-.PHONY: assets bash build bundle clean dev-setup dev-start dev-stop help oracle-database oracle-db-setup run schema yarn
+.PHONY: assets bash build bundle clean database dev-setup dev-start dev-stop help oracle-database oracle-db-setup run schema yarn
 .DEFAULT_GOAL := help
 
 # From here on, only phony targets to manage docker compose
-all: dev-setup dev-start
+all: clean dev-start
 
 assets: ## Create assets volumes
 assets: yarn
@@ -58,7 +58,7 @@ dev-setup: MASTER_PASSWORD ?= "p"
 dev-setup: USER_PASSWORD ?= "p"
 dev-setup: ## Makes the initial setup for the application ##
 dev-setup: CMD=rake db:create db:deploy
-dev-setup: run
+dev-setup: database run
 
 dev-start: ## Starts the application with all dependencies using Docker ##
 dev-start: dev-setup assets
@@ -67,6 +67,12 @@ dev-start: dev-setup assets
 dev-stop: ## Stops all started containers ##
 dev-stop:
 	@docker-compose stop
+
+database:
+	@docker-compose up --no-start
+	@docker-compose start mysql
+	@echo "===== Sleeping to wait for database readiness ====="
+	sleep 20
 
 bash: ## Opens up shell on the container
 bash: dev-setup assets

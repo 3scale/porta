@@ -58,7 +58,7 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        test: "mysql --user=root --execute 'SHOW DATABASES;'"
         timeout: 20s
         retries: 10
     volumes:
