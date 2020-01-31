@@ -11,9 +11,9 @@ module Finance
         @invoice.line_items.create(params, {without_protection: true})
       end
     rescue Invoice::InvalidInvoiceStateException
-      li = LineItem.new(params, {without_protection: true})
-      li.errors.add(:base, :invalid_invoice_state)
-      li
+      line_item_with_error(params, :invalid_invoice_state)
+    rescue ActiveRecord::SubclassNotFound
+      line_item_with_error(params.except(:type), :invalid_line_item_type)
     end
 
     def create_line_item!(params)
@@ -34,6 +34,12 @@ module Finance
 
     def bill
       raise NotImplementedError, '\'bill\' must be implemented in subclasses of Billing'
+    end
+
+    def line_item_with_error(params, error_type)
+      LineItem.new(params, {without_protection: true}).tap do |line_item|
+        line_item.errors.add(:base, error_type.to_sym)
+      end
     end
 
     attr_reader :invoice
