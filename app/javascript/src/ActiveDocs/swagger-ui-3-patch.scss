@@ -1,14 +1,18 @@
+$wrapper-bg: rgba(255, 255, 255, 0.2);
+$title-color: rgba(0, 0, 0, 0.6);
+$opblock-summary-bg: #e7f0f7;
+
 .swagger-section {
   section {
     background-color: unset;
   }
 
   .wrapper {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: $wrapper-bg;
     padding-bottom: 4em;
-    padding-top: 2em;
     padding-left: 30px;
     padding-right: 30px;
+    padding-top: 2em;
   }
 
   .information-container {
@@ -17,7 +21,7 @@
 
     .info {
       .title {
-        color: rgba(0, 0, 0, 0.6);
+        color: $title-color;
         font-family: Futura, "Trebuchet MS", Arial, sans-serif;
         font-size: 25px;
       }
@@ -33,9 +37,9 @@
   }
 
   .scheme-container {
-    padding: unset;
     background: unset;
     box-shadow: unset;
+    padding: unset;
 
     .wrapper {
       padding-bottom: 2em;
@@ -43,17 +47,11 @@
   }
 
   .opblock {
+    border: 0;
     margin: 0 0 10px;
-    border: none;
 
     .opblock-tag-section {
-      &.is-open {
-        .nostyle {
-          color: black;
-        }
-      }
       .nostyle {
-        color: #999;
         font-family: Droid Sans, sans-serif;
         font-size: 1.6rem;
         font-weight: 700;
@@ -61,32 +59,30 @@
     }
 
     .opblock-summary {
-      background-color: #e7f0f7;
-      border: 1px solid #c3d9ec;
+      background-color: $opblock-summary-bg;
       padding: 0;
     }
 
     .opblock-summary-method {
       border-radius: 0;
-      color: #fff;
       display: inline-block;
       font-size: 0.7em;
       line-height: 2em;
       padding: 7px 0 4px;
-      text-transform: uppercase;
-      text-decoration: none;
       text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
       width: 50px;
     }
 
     .opblock-summary-path {
       padding-left: 10px;
-    }
 
-    .opblock-summary-path span {
-      font-size: 1.4rem;
-      font-family: Futura, "Trebuchet MS", Arial, sans-serif;
-      font-weight: normal;
+      span {
+        font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+        font-size: 1.4rem;
+        font-weight: normal;
+      }
     }
 
     .opblock-tag {
