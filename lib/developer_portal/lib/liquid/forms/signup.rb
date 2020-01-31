@@ -1,6 +1,6 @@
 module Liquid
   module Forms
-    class Signup < Forms::Create
+    class Signup < Forms::SpamProtected
 
       def html_class_name
         'account formtastic'
@@ -23,7 +23,7 @@ module Liquid
       end
 
       def render(content)
-        super(content + spam_protection + selected_plans)
+        super(content + selected_plans)
       end
 
       def form_options
@@ -32,14 +32,6 @@ module Liquid
 
       def path
         signup_path
-      end
-
-      # methods needed for spam protection
-
-      delegate :input, :semantic_errors, to: :form_builder
-
-      def template
-        @context.registers[:view]
       end
 
       protected
@@ -54,30 +46,6 @@ module Liquid
         else
           ''
         end
-      end
-
-      def model
-        @model ||= object.instance_variable_get(:@model)
-      end
-
-      def spam_protection
-        protector = model.spam_protection.form(self).to_s
-
-        if protector.present?
-          form_builder.inputs do
-            template.concat(protector)
-          end
-        else
-          ''
-        end
-      end
-
-      def form_builder
-        @form_builder ||= begin
-                            object_name = ActiveModel::Naming.param_key(model)
-                            Formtastic::SemanticFormBuilder.new(object_name, model, template, {})
-                          end
-
       end
     end
   end

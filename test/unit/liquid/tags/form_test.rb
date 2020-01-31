@@ -29,14 +29,18 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   end
 
   test "signup form basics" do
-    @context['my_account'] = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
+    account = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
+    @context['my_account'] = account
+    @context['site_account'] = account
     @tag = Liquid::Tags::Form.parse('form', "'signup', my_account", ["CONTENT", '{% endform %}'], {})
     assert_match %r{<form.*id="signup_form".*>.*</form>}, @tag.render(@context)
   end
 
 
   test "signup form with plan_ids param" do
-    @context['my_account'] = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
+    account = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
+    @context['my_account'] = account
+    @context['site_account'] = account
     @context.registers[:request] = stub(params: { plan_ids: [ 1,2,42 ]})
 
     @tag = Liquid::Tags::Form.parse('form', "'signup', my_account", ["CONTENT", '{% endform %}'], {})

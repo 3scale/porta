@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::BaseController
+  include ThreeScale::SpamProtection::Integration::Controller
+
   liquify prefix: 'password'
 
   skip_before_action :login_required
@@ -6,6 +10,8 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   before_action :find_user, :only => [:show, :update]
 
   def create
+    return redirect_to new_admin_account_password_url unless spam_check(buyer)
+
     if user = @provider.buyer_users.find_by_email(params[:email])
       user.generate_lost_password_token!
       flash[:notice] = "A password reset link has been emailed to you."
@@ -35,6 +41,10 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   end
 
   private
+
+  def buyer
+    @buyer ||= @provider.buyers.build
+  end
 
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
