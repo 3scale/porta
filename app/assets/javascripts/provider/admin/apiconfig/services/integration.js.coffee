@@ -159,14 +159,19 @@ $(document).on 'initialize', '#proxy', ->
     host_header_warning.toggle(!valid)
 
   input_changed_from_default = (input) ->
-    !compareHttpHosts( input.val(), input.data('default') )
+    !compareHttpHosts(input)
 
   toggle_reset_buttons = ->
     $('form.proxy input[data-default]').each ->
       input = $(this)
       undo_button = input.siblings '.undo'
       undo_button.toggle( input_changed_from_default(input) )
-      input.siblings('.inline-hints').find('span').toggle( input_changed_from_default(input) )
+      toggle_secure_scheme_hint()
+
+  toggle_secure_scheme_hint =  ->
+    input = $('#proxy_api_backend')[0]
+    protocolWarn = $(input).siblings('.inline-hints').find('.protocol-warn')[0]
+    $(protocolWarn).toggle(!inputHasSecureProtocol(input))
 
   reset_proxy_input = (event) ->
     input = $(this).siblings('input')
@@ -181,18 +186,16 @@ $(document).on 'initialize', '#proxy', ->
     link.href = url
     link.hostname
 
-  compareHttpHosts = (a, b) ->
-    extractHost(a) == extractHost(b)
+  compareHttpHosts = (input) ->
+    extractHost(input.val()) == extractHost(input.data('default'))
 
-  extractHost = (url) ->
+  inputHasSecureProtocol = (input) ->
     link = document.createElement('a')
-    link.href = url
-    link.hostname
-
-  compareHttpHosts = (a, b) ->
-    extractHost(a) == extractHost(b)
+    link.href = $(input).val()
+    link.protocol == 'https:' || link.protocol == 'wss:'
 
   toggle_reset_buttons()
+  toggle_secure_scheme_hint()
   toggle_host_header_warning()
 
   #---------------------------------------------------------------------
@@ -229,6 +232,7 @@ $(document).on 'initialize', '#proxy', ->
   form = $("form.proxy")
   form.on "change keyup", "input, select", toggle_form_changed_ui
   form.on "click", ".undo", reset_proxy_input
+  form.on "change keyup", "#proxy_api_backend", toggle_secure_scheme_hint
 
   #---------------------------------------------------------------------
 
