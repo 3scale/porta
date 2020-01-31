@@ -45,7 +45,7 @@ class AuthenticationProvider < ApplicationRecord
   AVAILABLE = {
     account_types[:developer] => %w[Keycloak Auth0 GitHub],
     account_types[:provider]  => %w[Keycloak Auth0]
-  }.freeze
+  }.with_indifferent_access.freeze
   private_constant :AVAILABLE
 
   def self.available(account_type = account_types[:developer])
