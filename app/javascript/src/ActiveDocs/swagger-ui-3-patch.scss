@@ -1,0 +1,101 @@
+$wrapper-bg: rgba(255, 255, 255, 0.2);
+$title-color: rgba(0, 0, 0, 0.6);
+$opblock-summary-bg: #e7f0f7;
+
+.swagger-section {
+  section {
+    background-color: unset;
+  }
+
+  .wrapper {
+    background-color: $wrapper-bg;
+    padding-bottom: 4em;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 2em;
+  }
+
+  .information-container {
+    background-color: unset;
+    padding: 0;
+
+    .info {
+      .title {
+        color: $title-color;
+        font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+        font-size: 25px;
+      }
+      .main {
+        small,
+        pre,
+        a {
+          // Version and base URL
+          display: none;
+        }
+      }
+    }
+  }
+
+  .scheme-container {
+    background: unset;
+    box-shadow: unset;
+    padding: unset;
+
+    .wrapper {
+      padding-bottom: 2em;
+    }
+  }
+
+  .opblock {
+    border: 0;
+    margin: 0 0 10px;
+
+    .opblock-tag-section {
+      .nostyle {
+        font-family: Droid Sans, sans-serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+    }
+
+    .opblock-summary {
+      background-color: $opblock-summary-bg;
+      padding: 0;
+    }
+
+    .opblock-summary-method {
+      border-radius: 0;
+      display: inline-block;
+      font-size: 0.7em;
+      line-height: 2em;
+      padding: 7px 0 4px;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      width: 50px;
+    }
+
+    .opblock-summary-path {
+      padding-left: 10px;
+
+      span {
+        font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+        font-size: 1.4rem;
+        font-weight: normal;
+      }
+    }
+
+    .opblock-tag {
+      a,
+      small,
+      div {
+        display: inline-block;
+      }
+
+      button {
+        display: inline-block;
+        margin-left: 1rem;
+      }
+    }
+  }
+}
