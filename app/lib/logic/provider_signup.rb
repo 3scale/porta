@@ -16,7 +16,7 @@ module Logic
 
         # using the buyers (instead of providers) and users (instead of admins) as mass assignment with scope throws errors
         # either way, we're manually setting those fields
-        provider = self.buyers.build_with_fields
+        provider = buyers.build_with_fields
         provider.provider = true
         provider.validate_fields!
         provider.sample_data = true
@@ -41,7 +41,7 @@ module Logic
         return if [provider, user, impersonation_admin].any?(&:invalid?)
 
         case provider.classify
-        when 'Internal'.freeze
+        when 'Internal'
           provider.settings.assign_attributes(monthly_billing_enabled: false,
                                               monthly_charging_enabled: false)
         end
@@ -88,8 +88,7 @@ module Logic
         user_tracking = ThreeScale::Analytics.user_tracking(user)
         user_tracking.identify(properties)
         user_tracking.track('Signup', properties)
-
-      rescue => exception
+      rescue StandardError => exception
         System::ErrorReporting.report_error(exception,
                         error_message: "Error adding signup to third parties",
                         error_class: 'ProviderSignup')
@@ -101,7 +100,7 @@ module Logic
                :buyers, :api_docs_services, to: :@provider
       delegate :service_plans, :application_plans, to: :default_service
 
-      ECHO_SERVICE = <<-EOBODY.freeze
+      ECHO_SERVICE = <<-EOBODY
   {
       "swagger": "2.0",
       "info": {
@@ -245,6 +244,54 @@ module Logic
   }
       EOBODY
 
+      SIMPLE_API_OAS3 = <<-EOBODY
+      {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Simple API overview",
+          "version": "2.0.0"
+        },
+        "paths": {
+          "/": {
+            "get": {
+              "operationId": "listVersionsv2",
+              "summary": "List API versions",
+              "responses": {
+                "200": {
+                  "description": "200 response",
+                  "content": {
+                    "application/json": {
+                      "examples": {
+                        "foo": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/v2": {
+            "get": {
+              "operationId": "getVersionDetailsv2",
+              "summary": "Show API version details",
+              "responses": {
+                "200": {
+                  "description": "200 response",
+                  "content": {
+                    "application/json": {
+                      "examples": {
+                        "foo": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+  EOBODY
+
       alias service default_service
 
       def initialize(provider)
@@ -256,7 +303,7 @@ module Logic
       end
 
       def create_default_service_plan!
-        plan = service_plans.find_by_name('Default') || service_plans.create!(name: 'Default')
+        plan = service_plans.find_by(name: 'Default') || service_plans.create!(name: 'Default')
         service.service_plans.default! plan
       end
 
@@ -314,7 +361,7 @@ module Logic
       end
 
       def create_application_plan!(name, features: [])
-        plan = application_plans.find_by_name(name) || application_plans.create!(name: name)
+        plan = application_plans.find_by(name: name) || application_plans.create!(name: name)
         features.each {|feature| plan.features << feature unless plan.features.include?(feature) }
         plan
       end
