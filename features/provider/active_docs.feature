@@ -23,3 +23,5 @@ Feature: ActiveDocs pages
     When I select a service from the service selector
      And I try to create the active docs with valid data
     Then the api doc spec is saved with this service linked
+
+  # TODO: add here scenarios for OAS3 specs (instead of features/old?)
