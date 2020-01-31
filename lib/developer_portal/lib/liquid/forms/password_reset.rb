@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Liquid
   module Forms
-    class PasswordReset < Forms::Create
+    class PasswordReset < Forms::SpamProtected
 
       def html_class_name
         'formtastic'
