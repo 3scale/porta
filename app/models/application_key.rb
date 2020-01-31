@@ -30,7 +30,7 @@ class ApplicationKey < ApplicationRecord
 
   extend BackendClient::ToggleBackend
 
-  scope :without, -> (value) { where(['value <> ?', value])}
+  scope :without, ->(value) { where(['value <> ?', value])}
 
   module AssociationExtension
     include ReferrerFilter::AssociationExtension
