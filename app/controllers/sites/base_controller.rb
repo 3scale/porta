@@ -9,6 +9,4 @@ class Sites::BaseController < FrontendController
     authorize! :manage, :settings
   end
 
-
-
 end
