@@ -42,6 +42,7 @@ class Provider::SignupsController < Provider::BaseController
 
     tracking = ThreeScale::Analytics.user_tracking(@user)
     traits = tracking.identify(analytics_session.traits)
+    tracking.track('Signup', signup_options)
     analytics_session.delayed.identify(@user.id, traits)
 
     if request.xhr?

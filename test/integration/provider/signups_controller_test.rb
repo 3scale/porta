@@ -8,6 +8,8 @@ class Provider::SignupsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'POST creates a provider' do
+    ThreeScale::Analytics::UserTracking.any_instance.expects(:track).at_least_once.with('Signup', {mkt_cookie: nil, analytics: {}})
+
     assert_difference(master_account.buyer_accounts.method(:count)) do
       post provider_signup_path, create_params
     end
