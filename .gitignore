@@ -144,3 +144,12 @@ config/cable.yml
 .yarn/build-state.yml
 .pnp.*
 package-lock.json
+
+# PortaFly
+portafly/node_modules
+
+## production
+portafly/build
+
+## testing
+portafly/coverage

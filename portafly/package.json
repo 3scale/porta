@@ -1,0 +1,44 @@
+{
+  "name": "portafly",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@patternfly/react-core": "^3.124.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-router-last-location": "^2.0.1",
+    "react-scripts": "3.2.0",
+    "typescript": "3.7.2"
+  },
+  "devDependencies": {
+    "@types/jest": "24.0.23",
+    "@types/node": "12.12.14",
+    "@types/react": "16.9.13",
+    "@types/react-dom": "16.9.4",
+    "@types/react-router": "^5.1.3",
+    "@types/react-router-dom": "^5.1.3"
+  },
+  "scripts": {
+    "start": "PORT=3003 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
