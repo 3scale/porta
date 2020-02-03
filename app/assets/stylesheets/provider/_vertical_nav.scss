@@ -1,12 +1,3 @@
-@mixin outdatedIcon {
-  content: '\f071';
-  font-family: FontAwesome;
-  font-weight: normal;
-  position: absolute;
-  right: line-height-times(3);
-  top: line-height-times(1 / 3);
-}
-
 .pf-c-page__sidebar {
   text-align: left;
 
@@ -17,18 +8,13 @@
 
   // scss-lint:disable SelectorFormat
   .pf-c-nav__item {
-    &.outdated-config {
-      &:not(.pf-m-expanded)::before {
-        @include outdatedIcon;
-      }
-
-      .pf-c-nav__subnav {
-        // scss-lint:disable SelectorDepth
-        .pf-c-nav__item:first-child::before {
-          @include outdatedIcon;
-          top: line-height-times(2);
-        }
-      }
+    &.outdated-config:not(.pf-m-expanded) > a::before {
+      content: '\f071';
+      float: right;
+      font-family: FontAwesome;
+      font-weight: normal;
+      left: line-height-times(9);
+      position: absolute;
     }
   }
 }
