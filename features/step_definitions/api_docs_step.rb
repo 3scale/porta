@@ -73,28 +73,21 @@ Then(/^swagger v3 should escape properly the curl string$/) do
   section_id = "#operations-tag-#{id}"
 
   closed_section = find("#{section_id}[data-is-open='false']")
-  closed_section&.click
+  closed_section.click
 
-  within section_id do
-    method_id = "#operations-#{id}-get_"
-    closed_method = find(method_id)
-    closed_method&.click
+  method_id = "#operations-#{id}-get_"
+  closed_method = find(method_id)
+  closed_method.click
 
-    within method_id do
-      click_on 'Try it out'
-      input_name = 'user_key'
-      input = find("[data-param-name='#{input_name}'] input")
-      input.set 'Authorization: Oauth:"test"'
+  within method_id do
+    click_on 'Try it out'
+    input_name = 'user_key'
+    input = find("[data-param-name='#{input_name}'] input")
+    input.set 'Authorization: Oauth:"test"'
 
-      click_on 'Execute'
-      # TODO: inputs dont have id in swagger 3???
-      within '.block.curl' do
-        within 'pre' do
-          find('.curl').should have_content('Authorization: Oauth:"test"')
-          page.should have_content('Authorization: Oauth:"test"')
-        end
-      end
-    end
+    click_on 'Execute'
+
+    find('textarea.curl').should have_content('-H Authorization: Oauth:\"test\"')
   end
 end
 

@@ -41,28 +41,6 @@ Then(/^the swagger autocomplete should work for "(.*?)" with "(.*?)"$/) do |inpu
   assert_equal 1, evaluate_script("$('.apidocs-param-tips.#{autocomplete}:visible').length")
 end
 
-Then(/^the swagger v3 autocomplete should work for "(.*?)" with "(.*?)"$/) do |input_name, autocomplete|
-  id = 'default' # Could be passed as arg
-  section_id = "#operations-tag-#{id}"
-
-  closed_section = find("#{section_id}[data-is-open='false']")
-  closed_section&.click
-
-  within section_id do
-    method_id = "operations-#{id}-get_"
-    closed_method = find(method_id)
-    closed_method&.click
-
-    within method_id do
-      input = find("[data-param-name='#{input_name}'] input")
-      click_on 'Try it out'
-      # TODO: do the actual assertion
-      assert_equal 1, evaluate_script("$('[data-param-name='#{input_name}'] input').focus().length")
-      assert_equal 1, evaluate_script("$('.apidocs-param-tips.#{autocomplete}:visible').length")
-    end
-  end
-end
-
 Then 'I fill in the API JSON Spec with:' do |spec|
   selector = 'textarea#api_docs_service_body ~ .CodeMirror'
 

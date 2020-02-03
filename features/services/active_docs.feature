@@ -22,5 +22,3 @@ Feature: ActiveDocs pages
     When I try to create the active docs of the service with invalid data
     Then I should see the active docs errors in the page
      And the service selector is not in the form
-
-  # TODO: add here scenarios for OAS3 specs (instead of features/old?)
