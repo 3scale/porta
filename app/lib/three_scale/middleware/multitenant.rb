@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale
   module Middleware
 
@@ -11,7 +13,9 @@ module ThreeScale
 
         class TenantLeak < StandardError
           def initialize(object, attribute, original)
-            @object, @attribute, @original = object, attribute, original
+            @object = object
+            @attribute = attribute
+            @original = original
           end
 
           def to_s
@@ -28,7 +32,7 @@ module ThreeScale
 
         def verify!(object)
 
-	         # this controller shouldnt be checked
+          # this controller shouldnt be checked
           return true if @env["action_controller.request.path_parameters"]["controller"] == "provider/domains"
 
           unless object.respond_to?(attribute)
@@ -41,38 +45,31 @@ module ThreeScale
             current = object.send(attribute)
           rescue ActiveRecord::MissingAttributeError
             # Multitenant.log("#{object} is missing #{attribute}. Reloading and trying again")
-            fresh = object.class.send(:with_exclusive_scope){ object.class.find(object.id, :select => attribute) }
+            fresh = object.class.send(:with_exclusive_scope) { object.class.find(object.id, :select => attribute) }
             current = fresh.send(attribute)
           end
 
-          if current.nil?
-            # Multitenant.log "#{object} #{attribute} is nil. Skipping."
-            return true
-          else
-            @original ||= current
+          return true if current.nil?
 
-            if current == original
-              # Multitenant.log "verified object #{object} (#{attribute}: #{original} == #{current})"
+          @original ||= current
 
-            else
+          return if current == original
 
-              # we still need to check if it's master before raising a tenant leak
-              @cookie_store ||= find_cookie_store(@app)
-              @session ||= @cookie_store.send(:load_session, @env)
+          # we still need to check if it's master before raising a tenant leak
+          @cookie_store ||= find_cookie_store(@app)
+          @session ||= @cookie_store.send(:load_session, @env)
 
-              @master ||= Account.find_by_sql(["SELECT * FROM accounts WHERE master = ?", true]).first
+          @master ||= Account.find_by_sql(["SELECT * FROM accounts WHERE master = ?", true]).first
 
-              if user_id = @session.last[:user_id].presence
-                @users ||= {}
-                @users[user_id] ||= User.find_by_sql(["SELECT * FROM users WHERE id = ? AND account_id = ?", user_id, @master.id]).present?
-                return if @users[user_id]
-              end
-
-              return if @env["action_controller.request.query_parameters"]["provider_key"] == @master.api_key
-
-              raise TenantLeak.new(object, attribute, original)
-            end
+          if (user_id = @session.last[:user_id].presence)
+            @users ||= {}
+            @users[user_id] ||= User.find_by_sql(["SELECT * FROM users WHERE id = ? AND account_id = ?", user_id, @master.id]).present?
+            return if @users[user_id]
           end
+
+          return if @env["action_controller.request.query_parameters"]["provider_key"] == @master.api_key
+
+          raise TenantLeak.new(object, attribute, original)
         end
 
         private
@@ -97,7 +94,7 @@ module ThreeScale
         private
         def enforce_tenant!
           # Multitenant.log "initialized object #{self.class}:#{self.id}"
-          Thread.current[:multitenant].try!(:verify!, self)
+          Thread.current[:multitenant]&.verify!(self)
         end
       end
 

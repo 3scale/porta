@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 require 'set'
-require_dependency 'three_scale/after_commit_on_destroy'
 
 module BackendClient
   module ToggleBackend

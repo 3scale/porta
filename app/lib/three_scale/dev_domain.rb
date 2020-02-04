@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale::DevDomain
   def self.enabled?
     ThreeScale.config.dev_domain

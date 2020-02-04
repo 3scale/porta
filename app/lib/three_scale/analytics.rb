@@ -1,4 +1,4 @@
-require_or_load 'three_scale'
+# frozen_string_literal: true
 
 module ThreeScale
   module Analytics

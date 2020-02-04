@@ -1,4 +1,4 @@
-require 'three_scale/error_reporting_ignore_enduser'
+# frozen_string_literal: true
 
 module DeveloperPortal
   class ApplicationController < ::FrontendController
