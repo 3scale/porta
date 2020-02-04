@@ -148,6 +148,11 @@ package-lock.json
 # PortaFly
 portafly/node_modules
 
+## env
+!/portafly/.env
+!/portafly/.env.development
+/portafly/.env*local
+
 ## production
 portafly/build
 
