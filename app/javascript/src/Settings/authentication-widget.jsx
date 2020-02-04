@@ -50,7 +50,7 @@ export function initialize () {
   const serviceMesh = document.getElementById(SERVICE_MESH_ID)
 
   methods.forEach(m => m.addEventListener('click', () => {
-    toggle(toggleDisabled, toggleHiddenClass)(serviceMesh.checked && !oidc.checked)(authSettingsWrapper)
+    toggle(toggleDisabled, toggleHiddenClass)(serviceMesh && serviceMesh.checked && !oidc.checked)(authSettingsWrapper)
     settings.forEach(s => toggle(toggleDisabled, toggleHiddenClass)(s.id !== `${m.id}_settings`)(s))
   }))
   integrations.forEach(i => i.addEventListener('click', () => {
