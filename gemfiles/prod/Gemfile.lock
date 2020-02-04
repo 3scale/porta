@@ -36,7 +36,7 @@ GIT
 
 GIT
   remote: https://github.com/3scale/prawn.git
-  revision: 6b18589fab63fabef420c0ccb546af431ad46404
+  revision: 88aead0d97e230d08e9f51a18711d01317965bfe
   branch: 0.5.1-3scale
   specs:
     prawn-core (0.5.1.pre.3scale)
@@ -127,7 +127,7 @@ GEM
       nokogiri
     3scale_time_range (0.0.6)
       activesupport (>= 3.2.19)
-    Ascii85 (1.0.2)
+    Ascii85 (1.0.3)
     RedCloth (4.3.2)
     actionmailer (4.2.11.1)
       actionpack (= 4.2.11.1)
