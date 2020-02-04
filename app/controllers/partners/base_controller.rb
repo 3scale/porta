@@ -6,9 +6,10 @@ class Partners::BaseController < ApplicationController
 
   private
 
+  attr_reader :partner
+
   def authenticate!
-    unless @partner = Partner.find_by_api_key(params[:api_key])
-      render plain: 'unauthorized', status: 401
-    end
+    @partner = Partner.find_by_api_key(params[:api_key])
+    render(plain: 'unauthorized', status: 401) unless @partner
   end
 end
