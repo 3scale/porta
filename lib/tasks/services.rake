@@ -10,6 +10,6 @@ namespace :services do
   end
 
   task :destroy_marked_as_deleted => :environment do
-    DestroyAllDeletedObjectsWorker.perform_async(Service.to_s)
+    DestroyAllDeletedObjectsWorker.perform_later(Service.to_s)
   end
 end

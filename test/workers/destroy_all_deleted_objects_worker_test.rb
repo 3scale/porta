@@ -7,13 +7,11 @@ class DestroyAllDeletedObjectsWorkerTest < ActiveSupport::TestCase
 
   def test_perform_destroys_message_recipient
     message = FactoryBot.create(:received_message, deleted_at: DateTime.yesterday)
-    Sidekiq::Testing.inline! do
-      perform_enqueued_jobs do
-        assert_difference(MessageRecipient.method(:count), -1) do
-          DestroyAllDeletedObjectsWorker.perform_async('MessageRecipient')
-        end
-        assert_raise(ActiveRecord::RecordNotFound) { message.reload }
+    perform_enqueued_jobs do
+      assert_difference(MessageRecipient.method(:count), -1) do
+        DestroyAllDeletedObjectsWorker.perform_later('MessageRecipient')
       end
+      assert_raise(ActiveRecord::RecordNotFound) { message.reload }
     end
   end
 
@@ -26,8 +24,8 @@ class DestroyAllDeletedObjectsWorkerTest < ActiveSupport::TestCase
       object.id == services.first.id
     end
 
-    Sidekiq::Testing.inline! do
-      DestroyAllDeletedObjectsWorker.perform_async(Service.to_s)
+    perform_enqueued_jobs do
+      DestroyAllDeletedObjectsWorker.perform_later(Service.to_s)
     end
   end
 end

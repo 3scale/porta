@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# TODO: Rails 5 --> class DeletePlainObjectWorker < ApplicationJob
-class DeletePlainObjectWorker < ActiveJob::Base
+class DeletePlainObjectWorker < ApplicationJob
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError, ActiveRecord::RecordNotFound
   rescue_from(ActiveJob::DeserializationError, ActiveRecord::RecordNotFound) do |exception|
