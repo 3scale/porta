@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Admin::API::BackendApisControllerTest < ActionDispatch::IntegrationTest
+class Admin::Api::BackendApisControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     host! @provider.admin_domain
