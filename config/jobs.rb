@@ -34,7 +34,7 @@ module ThreeScale
       Cinstance.notify_about_expired_trial_periods
       Pdf::Dispatch.daily
       DeleteProvidedAccessTokensWorker.perform_async
-      DestroyAllDeletedObjectsWorker.perform_async(Service.to_s)
+      DestroyAllDeletedObjectsWorker.perform_later(Service.to_s)
     ].freeze
 
     BILLING = %w[

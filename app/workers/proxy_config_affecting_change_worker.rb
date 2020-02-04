@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ProxyConfigAffectingChangeWorker < ActiveJob::Base # rubocop:disable Rails/ApplicationJob
+class ProxyConfigAffectingChangeWorker < ApplicationJob
   def perform(event_id)
     event = EventStore::Repository.find_event!(event_id)
     proxy = Proxy.find(event.proxy_id)
