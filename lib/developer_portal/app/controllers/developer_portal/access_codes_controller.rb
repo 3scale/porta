@@ -1,4 +1,4 @@
-require 'three_scale/error_reporting_ignore_enduser'
+# frozen_string_literal: true
 
 class DeveloperPortal::AccessCodesController < ApplicationController
   include ::ThreeScale::ErrorReportingIgnoreEnduser

@@ -3,7 +3,6 @@ require 'test_helper'
 class ThreeScale::ErrorRerortingIgnoreEnduserTest < ActiveSupport::TestCase
 
   class Double
-    require 'three_scale/error_reporting_ignore_enduser'
     include ::ThreeScale::ErrorReportingIgnoreEnduser
   end
 

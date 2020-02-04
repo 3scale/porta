@@ -1,5 +1,4 @@
 require 'minitest_helper'
-require 'three_scale/analytics/user_classifier'
 
 class ThreeScale::Analytics::AccountClassifierTest < MiniTest::Unit::TestCase
 
