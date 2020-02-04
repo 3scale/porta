@@ -83,7 +83,7 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   # Regression test for https://3scale.hoptoadapp.com/errors/7206313
   #
   test 'not be vulnerable to XSS attack' do
-    @provider.org_name = '<ScRipT>alert("address1")</ScRipT>'
+    @provider.update_attribute(:org_name, '<ScRipT>alert("address1")</ScRipT>')
     assert_equal @data.provider[0][1], '&lt;ScRipT&gt;alert(&quot;address1&quot;)&lt;/ScRipT&gt;'
   end
 end
