@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale
   module LazyInitialization
 
@@ -36,7 +38,7 @@ module ThreeScale
         names.each do |name|
           options_for_lazy_initialization[name] = options
 
-          mod.define_method("#{name}") do
+          mod.define_method(name.to_s) do
             super() || lazily_initialize(name)
           end
         end
