@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ThreeScale
   module Middleware
     class DevDomain
       PREVIEW_HOST = /\.preview\d+\./
-      REPLACEMENT = '.'.freeze
+      REPLACEMENT = '.'
 
       attr_reader :pattern, :replacement
 
@@ -14,8 +16,8 @@ module ThreeScale
       end
 
       def call(env)
-        host = env['HTTP_HOST'.freeze]
-        env['HTTP_X_FORWARDED_FOR_DOMAIN'.freeze] = host
+        host = env['HTTP_HOST']
+        env['HTTP_X_FORWARDED_FOR_DOMAIN'] = host
 
         new_host = case host
                    when pattern then replace_host!(env, host)
@@ -36,11 +38,11 @@ module ThreeScale
       protected
 
       def replace_host!(env, host)
-        new_host = host.sub(pattern, @replacement).sub(/\.$/, '.'.freeze)
-        forwarded_for = env['HTTP_X_FORWARDED_HOST'.freeze]
+        new_host = host.sub(pattern, @replacement).sub(/\.$/, '.')
+        forwarded_for = env['HTTP_X_FORWARDED_HOST']
 
-        env['HTTP_HOST'.freeze] = new_host
-        env['HTTP_X_FORWARDED_HOST'.freeze] = [
+        env['HTTP_HOST'] = new_host
+        env['HTTP_X_FORWARDED_HOST'] = [
           forwarded_for,
           new_host
         ].compact.join(',')
