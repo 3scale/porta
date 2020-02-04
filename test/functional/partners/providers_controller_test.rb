@@ -25,12 +25,15 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'required api_key' do
     post :create
-    assert_response 401
+    assert_response :unauthorized
     assert_equal 'unauthorized', response.body
   end
 
   test 'post create should create a user with account' do
     prepare_master_account
+
+    ThreeScale::Analytics::UserTracking.any_instance.expects(:track).at_least_once.with('Signup', {})
+
     assert_difference('Account.providers.count', 1) do
       post :create, provider_params
     end
@@ -54,6 +57,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert_equal "troloro-#{@partner.system_name}-admin.#{ThreeScale.config.superdomain}", account.self_domain
     assert_equal "#{@partner.system_name}-#{provider_params[:org_name]}", account.org_name
     assert_equal @partner.application_plans.first, account.bought_cinstance.plan
+    assert_equal @partner.system_name, account.extra_fields['partner']
 
     assert_equal @partner, Account.find(account.id).partner
     assert account.default_service.present?
@@ -89,7 +93,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with a existing subdomain' do
     prepare_master_account
-    post :create, provider_params.merge(subdomain: 'taken')
+    FactoryBot.create(:simple_provider, provider_account: master_account, subdomain: "taken-#{@partner.system_name}", partner: @partner)
     post :create, provider_params.merge(subdomain: 'taken')
 
     body = JSON.parse(response.body)
@@ -108,8 +112,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'put update should change plan' do
     prepare_master_account
-    post :create, provider_params
-    account = assigns(:account)
+    account = FactoryBot.create(:provider_account, subdomain: 'troloro', org_name: 'foo-org', provider_account: master_account, partner: @partner)
 
     # upgrade
     put :update, id: account.id, application_plan: @partner.application_plans.last.system_name, api_key: @partner.api_key
@@ -126,10 +129,11 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'delete destroy should destroy the account and user' do
     prepare_master_account
-    post :create, provider_params
-    delete :destroy, id: assigns(:account).id, api_key: @partner.api_key
-    assert_raise(ActiveRecord::RecordNotFound){ assigns(:account).reload }
-    assert_raise(ActiveRecord::RecordNotFound){ assigns(:user).reload }
+    account = FactoryBot.create(:provider_account, provider_account: master_account, partner: @partner)
+    user = account.admin_users.first!
+    delete :destroy, id: account.id, api_key: @partner.api_key
+    assert_raise(ActiveRecord::RecordNotFound){ account.reload }
+    assert_raise(ActiveRecord::RecordNotFound){ user.reload }
     body = JSON.parse(response.body)
     assert_equal body['success'], true
   end
