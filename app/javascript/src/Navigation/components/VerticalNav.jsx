@@ -8,7 +8,8 @@ type Item = {
   id: string,
   title: string,
   path: ?string,
-  target: ?string
+  target: ?string,
+  itemOutOfDateConfig: ?boolean
 }
 
 type Section = Item & {
@@ -39,9 +40,9 @@ const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
 const NavSection = ({title, isSectionActive, activeItem, items, outOfDateConfig}) => {
   return (
     <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive} className={outOfDateConfig ? 'outdated-config' : ''}>
-      {items.map(({id, title, path, target}) => (
+      {items.map(({id, title, path, target, itemOutOfDateConfig}) => (
         path
-          ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target} key={title} >{title}</NavItem>
+          ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target} key={title} className={itemOutOfDateConfig ? 'outdated-config' : ''}>{title}</NavItem>
           : <NavGroup title={title} className='vertical-nav-label' key={title}></NavGroup>
       ))}
     </NavExpandable>
