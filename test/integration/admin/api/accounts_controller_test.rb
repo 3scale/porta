@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Admin::API::AccountsControllerTest < ActionDispatch::IntegrationTest
+class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   class MasterAccount < ActionDispatch::IntegrationTest
 

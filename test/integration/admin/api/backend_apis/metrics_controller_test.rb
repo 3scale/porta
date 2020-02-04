@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Admin::API::BackendApis::MetricsControllerTest < ActionDispatch::IntegrationTest
+class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @tenant = FactoryBot.create(:provider_account)
     host! @tenant.admin_domain
