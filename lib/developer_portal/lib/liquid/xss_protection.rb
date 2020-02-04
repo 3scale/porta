@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Liquid::XssProtection
 
   def to_s
@@ -12,23 +14,24 @@ module Liquid::XssProtection
     Liquid::Variable.class_eval do
       next if method_defined?(:render_with_html_escape)
 
-      def render_with_html_escape(context)
-        output = render_without_html_escape(context)
-        should_escape = context.registers[:escape_html] && !output.html_safe?
+      prepend(Module.new do
+        def render(context)
+          output = super(context)
+          should_escape = context.registers[:escape_html] && !output.html_safe?
 
-        if should_escape && output.respond_to?(:to_str)
-          output = output.dup.extend(Liquid::XssProtection)
-        end
+          if should_escape && output.respond_to?(:to_str)
+            output = output.dup.extend(Liquid::XssProtection)
+          end
 
-        case output
-        when String
+          case output
+          when String
             output.to_str
-        else
+          else
             output
+          end
         end
-      end
+      end)
 
-      alias_method_chain :render, :html_escape
     end
   end
 end
