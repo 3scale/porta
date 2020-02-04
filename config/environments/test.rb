@@ -4,8 +4,6 @@ System::Application.configure do
   # Disable css/jquery animations in tests, makes percy much happier
   config.middleware.use Rack::NoAnimations
 
-  config.allow_concurrency = false
-
   # The test environment is used exclusively to run your application's
   # test suite.  You never need to work with it otherwise.  Remember that
   # your test database is "scratch space" for the test suite and is wiped
