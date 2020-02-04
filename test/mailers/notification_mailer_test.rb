@@ -435,7 +435,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
 
     # anonymous user
-    post.user = nil
+    post.stubs(user: nil)
 
     no_user_event = Posts::PostCreatedEvent.create(post)
     not_user_mail = NotificationMailer.post_created(no_user_event, receiver)
