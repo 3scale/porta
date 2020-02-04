@@ -11,6 +11,7 @@ class Service < ApplicationRecord
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
   include ServiceDiscovery::ModelExtensions::Service
+  include ProxyConfigAffectingChanges::ServiceExtension
 
   self.background_deletion = [
     :service_plans,
