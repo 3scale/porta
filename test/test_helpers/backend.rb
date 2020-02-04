@@ -59,6 +59,9 @@ module TestHelpers
           :save, :delete
         clear_method ThreeScale::Core::ApplicationReferrerFilter.singleton_class,
           :save, :delete
+        clear_method ThreeScale::Core::ServiceError.singleton_class, :load_all do |*_|
+          ThreeScale::Core::APIClient::Collection.new([], 0)
+        end
 
         # these are required to return true for some cukes to be happy
         on_method ThreeScale::Core::User.singleton_class, :save!, :delete! do |*_|
