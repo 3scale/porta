@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale
   module Analytics
     extend self

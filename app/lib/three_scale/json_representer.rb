@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'roar/json'
 require 'roar/hypermedia'
 
