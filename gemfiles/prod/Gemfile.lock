@@ -925,7 +925,7 @@ DEPENDENCIES
   shoulda (~> 3.5.0)
   shoulda-context (~> 1.2.2)
   shoulda-matchers (~> 2.8.0)
-  sidekiq (< 6)
+  sidekiq (~> 4.2)
   sidekiq-cron
   sidekiq-lock
   sidekiq-pro (~> 3.4)!
