@@ -37,11 +37,6 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
               dd.u-dl-definition = backend_routing_rule(backend_api_config)
               dt.u-dl-term Mapping rules
               dd.u-dl-definition = proxy_rules_preview(backend_api, path: backend_api_config.path)
-
-        dt.u-dl-term Version
-        dd.u-dl-definition
-          ' v.
-          = @show_presenter.next_sandbox_config_version
         dt.u-dl-term Promote
         dd.u-dl-definition.Configuration-promote-button
           = semantic_form_for @proxy, url: admin_service_integration_path(@service) do |f|
