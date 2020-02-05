@@ -275,16 +275,18 @@ commands: # reusable commands with parameters
             bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
 
-save-npm-cache:
-  save_cache:
-    key: node-v10-{{ .Environment.DB }}-{{ checksum "package-lock.json" }}
-    paths:
-      - ./node_modules
-      - ./flow-typed
+  save-npm-cache:
+    steps:
+      - save_cache:
+          key: node-v10-{{ .Environment.DB }}-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+            - ./flow-typed
 
-restore-npm-cache:
-  restore_cache:
-    key: node-v10-{{ .Environment.DB }}-{{ checksum "package-lock.json" }}
+  restore-npm-cache:
+    steps:
+      - restore_cache:
+          key: node-v10-{{ .Environment.DB }}-{{ checksum "package-lock.json" }}
 
   save-gem-cache:
     steps:
