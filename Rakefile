@@ -55,8 +55,3 @@ Rake::Task['db:test:load'].enhance do
   Rake::Task['multitenant:test:triggers'].invoke
   Rake::Task['db:test:procedures'].invoke
 end
-
-# Remove yarn
-Rake::Task['yarn:install'].clear if Rake::Task.task_defined?('yarn:install')
-Rake::Task['webpacker:yarn_install'].clear
-Rake::Task['webpacker:check_yarn'].clear
