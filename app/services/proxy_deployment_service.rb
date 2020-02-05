@@ -13,6 +13,7 @@ class ProxyDeploymentService
     new(*args).call
   end
 
+  # TODO: remove v1_compatible when deploy_v1 is finally removed
   def initialize(proxy, environment: :staging, v1_compatible: false)
     @proxy = proxy
     @environment = environment
