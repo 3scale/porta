@@ -37,9 +37,10 @@ module ThreeScale
         mod = Module.new
         names.each do |name|
           options_for_lazy_initialization[name] = options
-
-          mod.define_method(name.to_s) do
-            super() || lazily_initialize(name)
+          mod.instance_eval do
+            define_method(name.to_s) do
+              super() || lazily_initialize(name)
+            end
           end
         end
 
