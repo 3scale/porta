@@ -113,13 +113,15 @@ class AccessTokenTest < ActiveSupport::TestCase
     expected_created_at = -1
     expected_updated_at = -1
 
-    Timecop.freeze(5.months.ago) do
-      expected_created_at = Time.now.utc
+    # Need to round it because database do not retain usec neither nsec
+    Timecop.freeze(5.months.ago.round) do
+      expected_created_at = Time.zone.now
       access_token.save!
     end
 
-    Timecop.freeze(5.hours.ago) do
-      expected_updated_at = Time.now.utc
+    # Need to round it because database do not retain usec neither nsec
+    Timecop.freeze(5.hours.ago.round) do
+      expected_updated_at = Time.zone.now
       access_token.update!(name: 'updated name')
     end
 
@@ -164,11 +166,13 @@ class AccessTokenTest < ActiveSupport::TestCase
     user = FactoryBot.create(:admin, account: account)
     access_token = FactoryBot.create(:access_token, owner: user, name: 'initial-name')
 
-    initial_updated_at = access_token.updated_at.utc
+    initial_updated_at = access_token.updated_at
 
-    assert_difference(Audited.audit_class.method(:count)) do
-      AccessToken.with_auditing do
-        access_token.update!(name: 'updated-name')
+    Timecop.travel(1.day.from_now) do
+      assert_difference(Audited.audit_class.method(:count)) do
+        AccessToken.with_auditing do
+          access_token.update!(name: 'updated-name')
+        end
       end
     end
 
@@ -179,7 +183,7 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_equal access_token.class.name, audit.kind, "expected kind #{access_token.class.name}, but found #{audit.kind.inspect}"
     expected_audited_changes = {
       'name' => ['initial-name', 'updated-name'],
-      'updated_at' => [initial_updated_at, access_token.updated_at.utc]
+      'updated_at' => [initial_updated_at, access_token.updated_at]
     }
     assert_equal expected_audited_changes, audit.audited_changes
   end
