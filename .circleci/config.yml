@@ -864,25 +864,33 @@ workflows:
     jobs:
       - notify_start:
           <<: *only-master-filter
-      - dependencies_bundler
-      - dependencies_npm
+      - dependencies_bundler:
+          executor: builder-ruby24
+      - dependencies_npm:
+          executor: builder-ruby24
       - assets_precompile:
+          executor: builder-ruby24
           requires:
             - dependencies_bundler
             - dependencies_npm
       - unit:
+          executor: builder-ruby24
           requires:
             - dependencies_bundler
       - functional:
+          executor: builder-ruby24
           requires:
             - assets_precompile
       - integration:
+          executor: builder-ruby24
           requires:
             - assets_precompile
       - rspec:
+          executor: builder-ruby24
           requires:
             - dependencies_bundler
       - cucumber:
+          executor: builder-ruby24
           requires:
             - assets_precompile
       - notify_success:
