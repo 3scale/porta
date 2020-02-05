@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PurgeStaleObjectsWorker < ActiveJob::Base
+class PurgeStaleObjectsWorker < ApplicationJob
 
   def perform(*classes_names)
     classes_names.each do |class_name|

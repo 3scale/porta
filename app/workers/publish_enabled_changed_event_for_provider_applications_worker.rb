@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# TODO: Rails 5 --> class PublishEnabledChangedEventForProviderApplicationsWorker < ApplicationJob
-class PublishEnabledChangedEventForProviderApplicationsWorker < ActiveJob::Base
+class PublishEnabledChangedEventForProviderApplicationsWorker < ApplicationJob
   rescue_from(ActiveJob::DeserializationError) do |exception|
     Rails.logger.info "PublishEnabledChangedEventForProviderApplicationsWorker#perform raised #{exception.class} with message #{exception.message}"
   end

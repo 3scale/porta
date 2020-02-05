@@ -1,5 +1,6 @@
-class Messages::DestroyAllService
+# frozen_string_literal: true
 
+class Messages::DestroyAllService
   def self.run!(account:, association_class:, scope:)
     association_class
       .of_account(account)
@@ -7,6 +8,6 @@ class Messages::DestroyAllService
       .update_all(deleted_at: DateTime.now)
 
     # hard destroy as background job
-    DestroyAllDeletedObjectsWorker.perform_async(association_class.to_s)
+    DestroyAllDeletedObjectsWorker.perform_later(association_class.to_s)
   end
 end
