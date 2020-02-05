@@ -30,11 +30,11 @@ store-log-artifacts: &store-log-artifacts
 
 save-flow-typed-cache: &save-flow-typed-cache
   save_cache:
-    key: flow-typed-{{ checksum "package-lock.json" }}
+    key: flow-typed-{{ checksum "yarn.lock" }}
     paths:
       - ./flow-typed
 
-npm-cache-key: &npm-cache-key node-v10-{{ checksum "package-lock.json" }}
+npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -49,7 +49,7 @@ save-npm-cache: &save-npm-cache
 
 restore-flow-typed-cache: &restore-flow-typed-cache
   restore_cache:
-    key: flow-typed-{{ checksum "package-lock.json" }}
+    key: flow-typed-{{ checksum "yarn.lock" }}
 
 use-example-config-files: &use-example-config-files
   run:
@@ -416,10 +416,10 @@ jobs:
       - checkout-with-submodules
       - *restore-npm-cache
       - run:
-          name: Install NPM dependencies
+          name: Install Node dependencies
           command: |
-            npm --version
-            npm run check-dependencies
+            yarn --version
+            yarn install:safe
       - *save-npm-cache
       - persist_to_workspace:
           root: .
@@ -463,11 +463,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Licences check
-          # `npm dedupe` fixes the errors raised by duplicated incompatible dependencies from different environments
-          # when license_finder invokes `npm list --json --long --production` prior have installed development deps
-          # needed to build webpack assets
           command: |
-            npm dedupe
             bundle exec rake ci:license_finder:run
       - run:
           name: Swagger validation
@@ -478,8 +474,8 @@ jobs:
       - run:
           name: Eslint & Flow
           command: |
-            npm run flow:install
-            npm run lint
+            yarn flow:install
+            yarn lint
       - *save-flow-typed-cache
       - store_artifacts:
           path: doc/licenses
@@ -501,7 +497,7 @@ jobs:
       - run:
           name: Karma tests
           command: |
-            npm test -- --reporters dots,junit --browsers ChromeHeadless
+            yarn test --reporters dots,junit --browsers ChromeHeadless
       - *store-junit-test-results
       - *store-test-artifacts
       - *upload-coverage
@@ -520,7 +516,7 @@ jobs:
       - run:
           name: Jest specs
           command: |
-            npm run-script jest --maxWorkers=3
+            yarn jest --maxWorkers=3
       - *upload-coverage
 
   unit:
