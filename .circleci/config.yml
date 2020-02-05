@@ -72,6 +72,19 @@ attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
+system-builder-ruby24: &system-builder-ruby24
+  image: quay.io/3scale/system-builder:ruby24
+  environment:
+    BUNDLE_FROZEN: true
+    BUNDLE_PATH: 'vendor/bundle'
+    DISABLE_SPRING: "true"
+    ORACLE_SYSTEM_PASSWORD: threescalepass
+    NLS_LANG: AMERICAN_AMERICA.UTF8
+    TZ: UTC
+    MASTER_PASSWORD: p
+    USER_PASSWORD: p
+    LC_ALL: en_US.UTF-8
+
 system-builder-ruby25: &system-builder-ruby25
   image: quay.io/3scale/system-builder:ruby25
   environment:
@@ -299,6 +312,17 @@ commands: # reusable commands with parameters
 ##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
+  builder-ruby24: &builder-ruby24
+    parameters:
+      database:
+        type: string
+        default: mysql
+    docker:
+      - *system-builder-ruby24
+    environment:
+      DB: << parameters.database >>
+    working_directory: /opt/app-root/src/project
+
   builder-ruby25: &builder-ruby25
     parameters:
       database:
@@ -310,10 +334,10 @@ executors:
       DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
 
-  builder-with-mysql-ruby25: &builder-with-mysql-ruby25
+  builder-with-mysql-ruby24: &builder-with-mysql-ruby24
     resource_class: small
     docker:
-      - *system-builder-ruby25
+      - *system-builder-ruby24
       - *mysql-container
       - *memcached-container
       - *redis-container
@@ -340,10 +364,10 @@ executors:
     working_directory: /opt/app-root/src/project
     <<: *build-envs-oracle
 
-  cucumber-with-mysql-ruby25: &cucumber-with-mysql-ruby25
+  cucumber-with-mysql-ruby24: &cucumber-with-mysql-ruby24
     resource_class: small
     docker:
-      - *system-builder-ruby25
+      - *system-builder-ruby24
       - *dnsmasq-container
       - *mysql-container
       - *memcached-container
@@ -374,7 +398,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby25
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
       database: mysql
@@ -430,7 +454,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby25
+        default: builder-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -528,7 +552,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby25
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -563,7 +587,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby25
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -598,7 +622,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby25
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -633,7 +657,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby25
+        default: builder-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -669,7 +693,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-mysql-ruby25
+        default: cucumber-with-mysql-ruby24
     executor:
       name: << parameters.executor >>
     steps:
@@ -1056,37 +1080,37 @@ workflows:
   ######## Nightly workflows
 
 
-  mysql_nightly_build_ruby25:
+  mysql_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby25
+          executor: builder-ruby24
       - dependencies_npm:
-          executor: builder-ruby25
+          executor: builder-ruby24
       - assets_precompile:
-          executor: builder-ruby25
+          executor: builder-ruby24
           requires:
             - dependencies_bundler
             - dependencies_npm
       - unit:
-          executor: builder-with-mysql-ruby25
+          executor: builder-with-mysql-ruby24
           requires:
             - dependencies_bundler
       - functional:
-          executor: builder-with-mysql-ruby25
+          executor: builder-with-mysql-ruby24
           requires:
             - assets_precompile
       - integration:
-          executor: builder-with-mysql-ruby25
+          executor: builder-with-mysql-ruby24
           requires:
             - assets_precompile
       - rspec:
-          executor: builder-with-mysql-ruby25
+          executor: builder-with-mysql-ruby24
           requires:
             - dependencies_bundler
       - cucumber:
-          executor: cucumber-with-mysql-ruby25
+          executor: cucumber-with-mysql-ruby24
           requires:
             - assets_precompile
       - notify_success:
@@ -1211,29 +1235,29 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_nightly_build_ruby25:
+  javascript_nightly_build_ruby24:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby25
+          executor: builder-ruby24
       - dependencies_npm:
-          executor: builder-ruby25
+          executor: builder-ruby24
       - assets_precompile:
-          executor: builder-ruby25
+          executor: builder-ruby24
           requires:
             - dependencies_bundler
             - dependencies_npm
       - lint:
-          executor: builder-ruby25
+          executor: builder-ruby24
           requires:
             - assets_precompile
       - karma:
-          executor: builder-ruby25
+          executor: builder-ruby24
           requires:
             - dependencies_npm
       - jest:
-          executor: builder-ruby25
+          executor: builder-ruby24
           requires:
             - dependencies_npm
       - notify_success:
