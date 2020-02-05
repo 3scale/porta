@@ -14201,7 +14201,7 @@ resolve@1.1.7:
     virtual-dom: ^2.1.1
     webpack: ^4.32.2
     webpack-cli: ^3.3.2
-    webpack-dev-server: ^3.5.1
+    webpack-dev-server: ^3.10.3
     whatwg-fetch: ^3.0.0
   languageName: unknown
   linkType: soft
@@ -16649,7 +16649,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^3.5.1":
+"webpack-dev-server@npm:^3.10.3":
   version: 3.10.3
   resolution: "webpack-dev-server@npm:3.10.3"
   dependencies:
