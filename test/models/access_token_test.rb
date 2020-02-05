@@ -195,6 +195,7 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_equal access_token.class.name, audit.kind, "expected kind #{access_token.class.name}, but found #{audit.kind.inspect}"
     expected_audited_changes = {
       'owner_id' => access_token.owner.id,
+      'owner_type' => access_token.owner.class.name,
       'scopes' => access_token.scopes,
       'name' => access_token.name,
       'permission' => access_token.permission,
