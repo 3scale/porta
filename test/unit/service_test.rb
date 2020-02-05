@@ -704,4 +704,23 @@ class ServiceTest < ActiveSupport::TestCase
       assert_includes plugins, 'plugin_ruby'
     end
   end
+
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    test 'proxy config affecting changes on update' do
+      provider = FactoryBot.create(:simple_provider)
+      service = FactoryBot.create(:simple_service, account: provider)
+      proxy = service.proxy
+
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, service).once
+      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).twice
+
+      service.update_attributes(backend_version: 'oauth')
+      service.update_attributes(backend_version: 'oidc') # it doesn't really change the service, only the proxy
+
+      # Attributes other than backend_version do not "affect" the proxy config
+      service.update_attributes(name: 'new name')
+    end
+  end
 end

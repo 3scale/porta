@@ -62,6 +62,21 @@ module ProxyConfigAffectingChanges
     end
   end
 
+  module ServiceExtension
+    extend ActiveSupport::Concern
+
+    included do
+      include ProxyConfigAffectingChanges
+
+      after_commit :issue_proxy_affecting_change_events, on: :update
+
+      def issue_proxy_affecting_change_events
+        return unless previously_changed?(:backend_version)
+        issue_proxy_affecting_change_event(proxy)
+      end
+    end
+  end
+
   module BackendApiConfigExtension
     extend ActiveSupport::Concern
 
