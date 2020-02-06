@@ -3,7 +3,7 @@ require 'test_helper'
 class ExtraFieldsTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
     @provider.reload
