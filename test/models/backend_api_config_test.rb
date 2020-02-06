@@ -131,29 +131,41 @@ class BackendApiConfigTest < ActiveSupport::TestCase
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    test 'proxy config affecting changes' do
-      backend_api = FactoryBot.create(:backend_api)
-      product = FactoryBot.create(:simple_service, account: backend_api.account)
-      backend_api_config = product.backend_api_configs.build(backend_api: backend_api, path: '/')
-
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, backend_api_config).times(3)
-
-      backend_api_config.save!
-      backend_api_config.update_attributes(path: '/a-path')
-      backend_api_config.destroy!
+    setup do
+      provider = FactoryBot.create(:provider_account)
+      @service = provider.first_service
+      @backend_api = FactoryBot.create(:backend_api, account: provider)
     end
 
-    test 'don not issue affecting change on stale change' do
-      backend_api = FactoryBot.create(:backend_api)
-      product = FactoryBot.create(:simple_service, account: backend_api.account)
-      backend_api_config = product.backend_api_configs.build(backend_api: backend_api, path: '/')
-      backend_api_config.save!
+    attr_reader :service, :backend_api
 
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, backend_api_config).never
-      backend_api_config.update_attributes(path: '/')
+    test 'tracks changes on create' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        backend_api_config = FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service, path: '/whatever')
+        assert tracker.tracking?(ProxyConfigAffectingChanges::TrackedObject.new(backend_api_config))
+      end
+    end
 
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(product.proxy, backend_api_config).once
-      backend_api_config.update_attributes(path: '/a-path')
+    test 'tracks changes on update' do
+      backend_api_config = FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service, path: '/whatever')
+      tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(backend_api_config)
+
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        refute tracker.tracking?(tracked_object)
+        backend_api_config.update(path: '/new-path')
+        assert tracker.tracking?(tracked_object)
+      end
+    end
+
+    test 'tracks changes on destroy' do
+      backend_api_config = FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service, path: '/whatever')
+      tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(backend_api_config)
+
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        refute tracker.tracking?(tracked_object)
+        backend_api_config.destroy
+        assert tracker.tracking?(tracked_object)
+      end
     end
   end
 end
