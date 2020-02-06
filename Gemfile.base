@@ -161,7 +161,9 @@ gem 'state_machines-activerecord', '~> 0.5.0'
 gem 'after_commit_queue', '~> 1.1.0'
 
 # for liquid docs on-fly generation
-gem 'html-pipeline', github: 'ceritium/html-pipeline', branch: 'master'
+gem 'commonmarker'
+gem 'escape_utils'
+gem 'html-pipeline'
 gem 'github-markdown'
 
 # templating
