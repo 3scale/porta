@@ -1,5 +1,4 @@
 class DeveloperPortal::ApiDocs::ServicesController < DeveloperPortal::BaseController
-  skip_before_action :set_x_content_type_options_header
   skip_before_action :login_required
 
   skip_before_action :verify_authenticity_token, if: -> { request.format.json? }

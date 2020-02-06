@@ -1,7 +1,6 @@
 class Provider::SignupsController < Provider::BaseController
   include ThreeScale::SpamProtection::Integration::Controller
 
-  skip_before_action :set_x_frame_options_header
   before_action :ensure_signup_possible
 
   skip_before_action :login_required
