@@ -265,8 +265,11 @@ module System
       Paperclip::Attachment.default_options.merge!(s3_options: CMS::S3.options) # Paperclip does not accept s3_options set as a Proc
     end
 
-    config.after_initialize do
+    config.before_initialize do
       require 'three_scale'
+    end
+
+    config.after_initialize do
       ThreeScale.validate_settings!
       require 'system/redis_pool'
       redis_config = ThreeScale::RedisConfig.new(config.redis)
