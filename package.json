@@ -6,12 +6,13 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "clean": "rm -rf node_modules/ && npm cache clean --force",
+    "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline --link-duplicates",
+    "clean": "rm -rf node_modules/ && yarn cache clean",
     "flow:install": "flow-typed install",
     "lint": "flow && eslint --ext .js,.jsx app/javascript spec/javascripts",
     "test": "karma start --single-run",
     "jest": "jest",
-    "jest:watch": "npm run-script jest -- --watch"
+    "jest:watch": "jest --watch"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
