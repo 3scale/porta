@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
 import { TextInputGroup } from 'Settings/components/Common'
 
@@ -12,7 +12,7 @@ const setup = (custom = {}) => {
     defaultValue: 'Le Monstre',
     ...custom
   }
-  const view = shallow(<TextInputGroup {...props} />)
+  const view = mount(<TextInputGroup {...props} />)
   return { props, view }
 }
 
@@ -23,5 +23,5 @@ it('should render correctly', () => {
 
 it('should default value when indicated', () => {
   const { view } = setup({isDefaultValue: true})
-  expect(view.find('TextInput').prop('value')).toBe('Le Monstre')
+  expect(view.find('input').prop('value')).toBe('Le Monstre')
 })
