@@ -9,7 +9,7 @@ x-system_environment:
     - mysql
     - redis
   environment:
-    - DATABASE_URL=mysql2://root@mysql/3scale_system_development
+    - DB_HOST=mysql
     - REDIS_URL=redis://redis/1
     - MEMCACHE_SERVERS=memcached:11211
     - BACKEND_HOST=apisonator:3001
@@ -22,14 +22,14 @@ x-system_environment:
     - SMTP_PORT=1025
     - UNICORN_WORKERS=2
     - FORCE_SSL=false
-    - RAILS_ENV=development
+    - DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true
 
 services:
   system:
     <<: *system_environment
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
-    container_name: system_compose
+    container_name: system-compose
     depends_on:
       - apisonator
       - mailhog
@@ -38,24 +38,27 @@ services:
       - mysql
     ports:
       - "3000:3000"
+    volumes:
+      - system-assets:/opt/system/public/assets
+      - system-node-modules:/opt/system/node_modules
 
   sidekiq:
     <<: *system_environment
     image: porta_system
     command: bash -c "rake sidekiq"
-    container_name: sidekiq_compose
+    container_name: sidekiq-compose
     depends_on:
       - system
 
   mysql:
     image: mysql:5.7
-    container_name: mysql_compose
+    container_name: mysql-compose
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        test: "mysql --user=root --execute 'SHOW DATABASES;'"
         timeout: 20s
         retries: 10
     volumes:
@@ -63,13 +66,13 @@ services:
 
   memcached:
     image: memcached
-    container_name: memcached_compose
+    container_name: memcached-compose
     ports:
       - "11211:11211"
 
   apisonator:
     image: quay.io/3scale/apisonator:latest
-    container_name: apisonator_compose
+    container_name: apisonator-compose
     ports:
       - "3001:3001"
     command: "3scale_backend start -p 3001"
@@ -85,16 +88,18 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: redis_compose
+    container_name: redis-compose
     ports:
       - "6379:6379"
 
   mailhog:
     image: mailhog/mailhog
-    container_name: mailhog_compose
+    container_name: mailhog-compose
     ports:
       - "1025:1025"
       - "8025:8025"
 
 volumes:
   mysql-data:
+  system-assets:
+  system-node-modules:
