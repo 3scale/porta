@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 if System::Database.oracle?
-  require 'arel/visitors/oracle12'
+  require 'arel/visitors/oracle12_hack'
   ENV['SCHEMA'] = 'db/oracle_schema.rb'
   Rails.configuration.active_record.schema_format = ActiveRecord::Base.schema_format = :ruby
 
@@ -39,14 +39,14 @@ if System::Database.oracle?
       # The team behind it believes `Table.update_all(column: 'text')`
       # should wipe all your data in that column: https://github.com/rsim/oracle-enhanced/issues/1588#issuecomment-343353756
       # So we try to convert the text to using `to_clob` function.
-      def quote(value, column = nil)
-        type = column&.type
-
-        case value && type
-        when :text, :binary
+      def _quote(value)
+        case value
+        when ActiveModel::Type::Binary::Data
           # I know this looks ugly, but that just modified copy paste of what the adapter does (minus the rescue).
           # It is a bit improved in next version due to ActiveRecord Attributes API.
-          %{to_#{(type_to_sql(type) || 'blob').downcase}(#{quote(value)})}
+          %{to_blob(#{quote(value.to_s)})}
+        when ActiveRecord::OracleEnhanced::Type::Text::Data
+          %{to_clob(#{quote(value.to_s)})}
         else
           super
         end
