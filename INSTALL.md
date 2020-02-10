@@ -183,12 +183,18 @@ bundle config --local build.mysql2 "--with-ldflags=-L/usr/local/opt/openssl/lib 
 
 and run `bundle install` again.
 
-#### NPM
+#### Yarn
 
-Run [NPM](https://www.npmjs.com/) to install all the required Node modules:
+Install [Yarn](https://yarnpkg.com/):
 
 ```bash
-npm install
+npm install -g yarn
+```
+
+Run [Yarn](https://yarnpkg.com/) to install all the required packages:
+
+```bash
+yarn install
 ```
 
 ## Manual setup on Fedora (29)
