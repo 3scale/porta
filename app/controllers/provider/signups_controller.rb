@@ -27,14 +27,14 @@ class Provider::SignupsController < Provider::BaseController
 
   def create
     @plan = plan
-    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
     signup_result = Signup::ProviderAccountManager.new(master).create(signup_params) do |result|
-      account = result.account
-      account.signup_mode!
-      break unless spam_check(account)
+      @provider = result.account
+      @user = result.user
+      @provider.signup_mode!
+      @provider.subdomain = account_params[:subdomain]
+      result.add_error(message: 'spam check failed') unless spam_check(@provider)
     end
-    @provider = signup_result.account
-    @user = signup_result.user
+    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
 
     return render :show unless signup_result.persisted?
 
@@ -63,7 +63,7 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def user_params
-    params.require(:account).fetch(:user, {}).merge(signup_type: :new_signup, username: 'admin')
+    params.require(:account).fetch(:user, {}).merge(signup_type: :new_signup, username: :admin)
   end
 
   def handle_cache_response
