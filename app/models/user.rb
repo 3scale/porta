@@ -26,7 +26,9 @@ class User < ApplicationRecord
   self.background_deletion = [:user_sessions, :access_tokens, [:sso_authorizations, { action: :delete }],
                               [:moderatorships, { action: :delete }], [:notifications, { action: :delete }],
                               [:notification_preferences, { action: :delete, has_many: false }]]
-  audited
+
+  audited except: %i[salt posts_count janrain_identifier cas_identifier password_digest
+                     authentication_id open_id last_login_at last_login_ip].freeze
 
   before_validation :trim_white_space_from_username
   before_destroy :can_be_destroyed?
