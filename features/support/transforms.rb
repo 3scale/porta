@@ -170,10 +170,6 @@ Transform /^application plan "(.+?)"$/ do |name|
   ApplicationPlan.find_by_name!(name)
 end
 
-Transform /^end user plan "(.+?)"$/ do |name|
-  EndUserPlan.find_by_name!(name)
-end
-
 Transform /^user "([^\"]*)"$/ do |name|
   User.find_by_username!(name)
 end

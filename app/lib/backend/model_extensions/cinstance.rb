@@ -39,8 +39,7 @@ module Backend
                                               :state      => state,
                                               :plan_id    => plan.id,
                                               :plan_name  => plan.name,
-                                              :redirect_url => redirect_url,
-                                              :user_required => end_user_required.nil? ? plan.end_user_required : end_user_required  )
+                                              :redirect_url => redirect_url )
         end
 
         true

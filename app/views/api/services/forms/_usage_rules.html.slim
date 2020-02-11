@@ -17,10 +17,6 @@
     = form.input :buyer_key_regenerate_enabled
     = form.input :mandatory_app_key
 
-- if can?(:see, :end_users) and @service.end_users_allowed?
-  = form.inputs 'End Users Requirements' do
-    = form.input :end_user_registration_required, input_html: { :disabled => @service.end_user_plans.default.nil? }
-
 = form.inputs "Application Plans" do
   = form.input  :buyer_can_select_plan
 

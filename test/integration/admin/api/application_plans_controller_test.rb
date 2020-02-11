@@ -33,18 +33,16 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_update_valid_params_json
-      application_plan = FactoryBot.create(:application_plan, name: 'firstname', state: 'hidden', service: service, end_user_required: false)
+      application_plan = FactoryBot.create(:application_plan, name: 'firstname', state: 'hidden', service: service)
       refute_equal 50.0, application_plan.cost_per_month.to_f
       refute_equal 20.0, application_plan.setup_fee.to_f
       refute_equal 30, application_plan.trial_period_days.to_i
-      refute application_plan.end_user_required
       put admin_api_service_application_plan_path(application_plan, application_plan_params)
       assert_response :success
       application_plan.reload
       assert_equal 50.0, application_plan.cost_per_month.to_f
       assert_equal 20.0, application_plan.setup_fee.to_f
       assert_equal 30, application_plan.trial_period_days.to_i
-      assert application_plan.end_user_required
       assert_equal application_plan_params[:application_plan][:name], application_plan.name
       assert_equal 'published', application_plan.state
     end
@@ -172,8 +170,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
           approval_required: approval_required,
           cost_per_month: 50,
           setup_fee: 20,
-          trial_period_days: 30,
-          end_user_required: true
+          trial_period_days: 30
         },
       format: :json
     }

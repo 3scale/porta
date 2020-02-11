@@ -22,7 +22,6 @@ Style/AndOr:
   Exclude:
     - 'app/controllers/admin/account/payment_gateways_controller.rb'
     - 'app/controllers/admin/api/base_controller.rb'
-    - 'app/controllers/api/end_users_controller.rb'
     - 'app/controllers/buyers/accounts/bulk/send_emails_controller.rb'
     - 'app/controllers/buyers/applications/bulk/send_emails_controller.rb'
     - 'app/controllers/buyers/service_contracts/bulk/send_emails_controller.rb'
@@ -144,7 +143,6 @@ Style/CommentIndentation:
     - 'app/lib/three_scale/middleware/multitenant.rb'
     - 'test/factories/other.rb'
     - 'test/unit/cinstance/trial_test.rb'
-    - 'test/unit/end_user_test.rb'
     - 'test/unit/user_test.rb'
 
 # Offense count: 24
@@ -673,7 +671,6 @@ Style/SpaceAfterNot:
     - 'test/integration/provider_account_test.rb'
     - 'test/unit/api/by_provider_key_test.rb'
     - 'test/unit/cms/page_test.rb'
-    - 'test/unit/end_user_plan_test.rb'
     - 'test/unit/web_hook_test.rb'
 
 # Offense count: 38

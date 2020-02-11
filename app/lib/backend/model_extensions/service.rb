@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Backend
   module ModelExtensions
     module Service
@@ -18,10 +20,7 @@ module Backend
             :provider_key               => account.api_key,
             :referrer_filters_required  => referrer_filters_required,
             :backend_version            => backend_version,
-            :default_user_plan_name     => default_end_user_plan.try!(:name),
-            :default_user_plan_id       => default_end_user_plan.try!(:backend_id),
-            :default_service            => (account.default_service_id == self.id),
-            :user_registration_required => self.end_user_registration_required
+            :default_service            => (account.default_service_id == id)
           }
           ThreeScale::Core::Service.save!(save_options)
         end

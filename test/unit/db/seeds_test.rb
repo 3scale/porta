@@ -55,7 +55,6 @@ class SeedsTest < ActiveSupport::TestCase
     assert_nil master_account.site_access_code.presence
 
     assert master_account.settings.branding.allowed?
-    assert master_account.settings.end_users.visible?
     assert master_account.settings.account_plans.visible?
     assert master_account.settings.service_plans.visible?
 

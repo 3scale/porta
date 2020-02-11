@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ServiceRepresenter
   include ThreeScale::JSONRepresenter
 
@@ -8,7 +10,6 @@ module ServiceRepresenter
   property :name
   property :state
   property :system_name
-  property :end_user_registration_required
   property :backend_version
   property :deployment_option
   property :support_email
@@ -30,10 +31,6 @@ module ServiceRepresenter
 
   link :metrics do
     admin_api_service_metrics_url(id) if id
-  end
-
-  link :end_user_plans do
-    admin_api_service_end_user_plans_url(id) if id
   end
 
   link :self do

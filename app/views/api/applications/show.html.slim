@@ -24,23 +24,6 @@ div#twoCol.equal-width
             td
               = link_to service.name, admin_service_path(service)
       = render '/buyers/applications/state'
-    - if can?(:see, :end_users) && @cinstance.end_users_allowed?
-      div.wide_dashboard_bubble.round
-        h3 EndUsers required?
-        div#cinstance_end_user_required
-          - if @cinstance.end_user_required?
-            strong yes
-            = action_link_to "don't require",
-                             admin_service_application_path(@cinstance.service, @cinstance, cinstance: { end_user_required: false }),
-                             method: :put,
-                             data: { confirm: "The application will stop rate limiting EndUsers, are you sure you want to do that?" }
-          - else
-            strong no
-            = action_link_to :require,
-                             admin_service_application_path(@cinstance.service, @cinstance, cinstance: { end_user_required: true }),
-                             method: :put,
-                             data: { confirm: "Requiring EndUsers implies changes on the integration with 3scale's backend (adding the user_id parameter), are you sure you want to do it?" }
-
     div.wide_dashboard_bubble.round#application_keys data-object="cinstance" data-url=(admin_service_application_path(@cinstance.service, @cinstance, format: :json))
       h3 API Credentials
       = render partial: 'provider/admin/keys/widget',
