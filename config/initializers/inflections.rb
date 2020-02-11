@@ -1,8 +1,9 @@
 # Be sure to restart your server when you modify this file.
 
-# Add new inflection rules using the following format
-# (all these examples are active by default):
-# ActiveSupport::Inflector.inflections do |inflect|
+# Add new inflection rules using the following format. Inflections
+# are locale specific, and you may define rules for as many different
+# locales as you wish. All of these examples are active by default:
+# ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.plural /^(ox)$/i, '\1en'
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
@@ -26,17 +27,7 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym 'OIDC' # OpenID Connect
 end
 
-
-# Backport from Rails 4.2 to properly underscore ThreeScale::OAuth into three_scale/oauth instead of three_scale/o_auth
-ActiveSupport::Inflector.singleton_class.prepend(Module.new do
-  def underscore(camel_cased_word)
-    return camel_cased_word unless camel_cased_word.to_s =~ /[A-Z-]|::/
-    word = camel_cased_word.to_s.gsub(/::/, '/')
-    word.gsub!(/(?:(?<=([A-Za-z\d]))|\b)(#{inflections.acronym_regex})(?=\b|[^a-z])/) { "#{$1 && '_'}#{$2.downcase}" }
-    word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
-    word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-    word.tr!("-", "_")
-    word.downcase!
-    word
-  end
-end)
+# These inflection rules are supported but not enabled by default:
+# ActiveSupport::Inflector.inflections(:en) do |inflect|
+#   inflect.acronym 'RESTful'
+# end

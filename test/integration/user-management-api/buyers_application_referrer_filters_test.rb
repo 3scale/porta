@@ -3,8 +3,6 @@ require 'test_helper'
 class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
-  disable_transactional_fixtures!
-
   def setup
     @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
     host! @provider.admin_domain

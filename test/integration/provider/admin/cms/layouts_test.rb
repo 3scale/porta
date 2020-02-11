@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Provider::Admin::CMS::LayoutsTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   def setup
     @provider = FactoryBot.create(:provider_account)
 

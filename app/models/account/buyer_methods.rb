@@ -33,7 +33,13 @@ module Account::BuyerMethods
       # The uniq has to be done in ruby. This module is included only when Oracle is used.
 
       def load
-        super.tap { @records&.uniq! }
+        super.tap do
+          if @records
+            @records = @records.dup
+            @records.uniq!
+            @records.freeze
+          end
+        end
       end
 
       class << self
@@ -124,7 +130,8 @@ module Account::BuyerMethods
   end
 
   def approval_required?
-    bought_account_plan(bought_account_plan.nil?).try!(:approval_required?)
+    reload_bought_account_plan if bought_account_plan.nil?
+    bought_account_plan.try!(:approval_required?)
   end
 
   def available_buyer_groups

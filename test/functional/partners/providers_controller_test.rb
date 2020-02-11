@@ -31,8 +31,9 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post create should create a user with account' do
     prepare_master_account
+    ThreeScale::Analytics::UserTracking.any_instance.expects(:track).once.with('Activated account', {})
 
-    ThreeScale::Analytics::UserTracking.any_instance.expects(:track).at_least_once.with('Signup', {})
+    ThreeScale::Analytics::UserTracking.any_instance.expects(:track).once.with('Signup', {})
 
     assert_difference('Account.providers.count', 1) do
       post :create, provider_params

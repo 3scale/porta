@@ -3,9 +3,6 @@
 require 'test_helper'
 
 class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
-
-  disable_transactional_fixtures!
-
   def setup
     @service_plan     = FactoryBot.create(:service_plan, issuer: service)
     @application_plan = FactoryBot.create(:application_plan, issuer: service)

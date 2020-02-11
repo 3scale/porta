@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class PostObserverTest < ActiveSupport::TestCase
-
-  disable_transactional_fixtures!
-
   def test_after_commit_on_create
     provider = FactoryBot.build_stubbed(:simple_provider)
     forum    = FactoryBot.build_stubbed(:forum, account: provider)

@@ -3,8 +3,6 @@ require 'test_helper'
 class Buyers::ApplicationsControllerTest < ActionController::TestCase
   include WebHookTestHelpers
 
-  disable_transactional_fixtures!
-
   setup do
     @plan = FactoryBot.create(:published_plan)
     @service = @plan.service

@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class GoLiveStateTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   should belong_to :account
 

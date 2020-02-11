@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class Applications::ApplicationDeletedEventTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
   def setup
     @application = FactoryBot.create(:cinstance)
   end

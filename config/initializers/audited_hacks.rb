@@ -73,7 +73,7 @@ module AuditHacks
     synchronous ? super : true
   end
 
-  def create_or_update
+  def create_or_update(*args)
     Audited.audit_class.as_user(User.current) do
       if synchronous
         super

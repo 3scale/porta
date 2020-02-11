@@ -4,9 +4,8 @@ require 'test_helper'
 
 class TypeStringNotNilTest < ActiveSupport::TestCase
   def test_type_cast_to_string_if_nil
-    type = ActiveRecord::Type::StringNotNil.new
-    assert_equal '', type.type_cast_from_database(nil)
-    assert_equal '', type.type_cast_from_user(nil)
-    assert_equal '', type.type_cast(nil)
+    type = ActiveModel::Type::StringNotNil.new
+    assert_equal '', type.cast(nil)
+    assert_equal '', type.deserialize(nil)
   end
 end

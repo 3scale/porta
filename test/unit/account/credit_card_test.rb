@@ -143,7 +143,6 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   class CallbacksTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def test_add_credit_card_details
       account = FactoryBot.create(:provider_account)

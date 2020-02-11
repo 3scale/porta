@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   include DeveloperPortal::Engine.routes.url_helpers
   include UserDataHelpers
 

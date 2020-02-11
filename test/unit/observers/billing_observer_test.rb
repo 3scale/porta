@@ -4,8 +4,6 @@ class BillingObserverTest < ActiveSupport::TestCase
 
   include FieldsDefinitionsHelpers
 
-  disable_transactional_fixtures!
-
   setup do
     @service = FactoryBot.create(:service, account: master_account)
     @plan = FactoryBot.create(:application_plan, issuer: @service)

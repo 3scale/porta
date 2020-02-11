@@ -70,7 +70,7 @@ class MonthTest < ActiveSupport::TestCase
 
   test '#to_s' do
     month = Month.new(2015, 06)
-    assert_equal 'June  1, 2015 - June 30, 2015', month.to_s
+    assert_equal 'June 01, 2015 - June 30, 2015', month.to_s
     assert_equal '2015-06-01', month.to_s(:db)
   end
 end
