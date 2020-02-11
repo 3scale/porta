@@ -41,36 +41,6 @@ namespace :test do
 
   test_groups[:unit] = FileList['test/**/*_test.rb'].exclude(*test_groups.values).exclude('test/{performance,remote,support}/**/*')
 
-  # test_task = Rake::Task['test:run']
-  # test_task.loader = :direct
-  #
-  # test_task = Class.new(Rake::TestTask) do
-  #   def file_list
-  #     if (tests = ENV['TESTS'])
-  #       FileList[tests.strip.split]
-  #     else
-  #       super
-  #     end
-  #   end
-  # end
-  #
-  # Rake::Task[:run].clear
-  #
-  # test_task.new(:run) do |t|
-  #   desc "Run test files, can use TESTS to pass a list of files"
-  #   task t.name do
-  #     puts
-  #     puts "TESTS='"
-  #     t.file_list.each do |file|
-  #       print "\t", file, "\n"
-  #     end
-  #     puts "'"
-  #   end
-  #
-  #   t.verbose = verbose
-  #   t.loader = :direct
-  # end
-
   namespace :files do
     test_groups.each do |name,file_list|
       desc "Print test files for #{name} test group"

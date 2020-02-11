@@ -158,10 +158,13 @@ class ApplicationKeysTest < ActiveSupport::TestCase
   def test_regenerate_key
     @application_keys.add(key = 'app-key')
     @application.reload
-    Timecop.travel(2.hours.from_now)
-    updated_at = @application.updated_at
-    @application_keys.regenerate(key)
-    assert_not_equal updated_at, @application.updated_at
+    expected_updated_at = @application.updated_at + 2.hours
+
+    Timecop.travel(2.hours.from_now) do
+      @application_keys.regenerate(key)
+    end
+    assert_in_delta expected_updated_at, @application.updated_at, 1.second
+
   end
 
   test 'Value can include special characters as defined in the RFC 6749' do
