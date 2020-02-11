@@ -628,13 +628,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :access_tokens, only: %i[create]
       end
-      resources :end_user_plans, :only => [:index] do
-        scope module: :end_user_plans do
-          resources :metrics, :only => [] do
-            resources :limits, :except => [:new, :edit]
-          end
-        end
-      end
 
       resources :service_plans, :only => [:index] do
         resources :features, :controller => 'service_plan_features', :only => [:index, :create, :destroy]
@@ -669,18 +662,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         scope module: :services do # this api has a knack for inconsistency
           resources :backend_usages, except: %i[new edit], defaults: { format: :json }
-
-          resources :end_users, :only => [:show, :create, :destroy] do
-            member do
-              put :change_plan
-            end
-          end
-
-          resources :end_user_plans, :except => [:new, :edit, :destroy] do
-            member do
-              put :default
-            end
-          end
 
           resource :proxy, only: %i[show update] do
             post :deploy
@@ -753,9 +734,8 @@ without fake Core server your after commit callbacks will crash and you might ge
         resources :plan_copies, :only => [:new, :create]
         resources :service_plans, :only => [:show, :edit, :update, :destroy]
         resources :application_plans, :only => [:show, :edit, :update, :destroy]
-        resources :end_user_plans, :only => [:show, :edit, :update, :destroy]
 
-        resources :application_plans, :end_user_plans, only: [] do
+        resources :application_plans, only: [] do
           resources :metrics, only: [] do
             member do
               put :toggle_visible
@@ -804,14 +784,6 @@ without fake Core server your after commit callbacks will crash and you might ge
             end
           end
 
-          resources :end_user_plans, :only => [:index, :new, :create] do
-            collection do
-              post :masterize
-            end
-          end
-
-          # id constraint to allow uuid style routes
-          resources :end_users, :constraints => { :id => /[^\/]+/ }
           resources :alerts, :only => [:index, :destroy] do
             collection do
               put :all_read

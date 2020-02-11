@@ -181,8 +181,6 @@ module TestHelpers
       assert xml.xpath('.//plan/cost_per_month').presence
       assert xml.xpath('.//plan/trial_period_days').presence
       assert xml.xpath('.//plan/cancellation_period').presence
-
-      assert_xpath(xml, '//plan/end_user_required')
     end
 
     def assert_all_features_of_service(xml, service)
@@ -451,7 +449,6 @@ module TestHelpers
       assert xml.xpath('.//application/updated_at').presence
       assert xml.xpath('.//application/state').presence
       assert xml.xpath('.//application/user_account_id').presence
-      assert_xpath xml, './/application/end_user_required'
 
       assert xml.xpath('.//application/plan').presence
 

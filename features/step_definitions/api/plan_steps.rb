@@ -21,10 +21,6 @@ When /^I follow "([^"]*)" for (plan "[^"]*")$/ do |label, plan|
   step %(I follow "#{label}" within "##{dom_id(plan)}")
 end
 
-When /^I select "(.*?)" as default (?:end user )?plan$/ do | plan |
-  select plan
-end
-
 Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
   within(default_plan) do
     page.should_not have_content(plan_name)

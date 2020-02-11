@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::MetricsController < Api::BaseController
   include ServiceDiscovery::ControllerMethods
 
@@ -136,17 +138,12 @@ class Api::MetricsController < Api::BaseController
   end
 
   def find_plan_and_service
-    @plan = find_application_plan || find_end_user_plan
+    @plan = find_application_plan
     @service = @plan.service if @plan
   end
 
   def find_application_plan
     id = params[:application_plan_id]
     current_account.application_plans.find(id) if id
-  end
-
-  def find_end_user_plan
-    id = params[:end_user_plan_id]
-    current_account.end_user_plans.find(id) if id
   end
 end

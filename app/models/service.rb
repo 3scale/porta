@@ -6,7 +6,6 @@ class Service < ApplicationRecord
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service
-  include Logic::EndUsers::Service
   include Logic::Authentication::Service
   include Logic::RollingUpdates::Service
   include BackendApiLogic::ServiceExtension
@@ -20,7 +19,6 @@ class Service < ApplicationRecord
   self.background_deletion = [
     :service_plans,
     :application_plans,
-    :end_user_plans,
     [:api_docs_services, class_name: 'ApiDocs::Service'],
     :backend_apis,
     :backend_api_configs,
@@ -59,7 +57,6 @@ class Service < ApplicationRecord
   with_options(dependent: :destroy, inverse_of: :service) do |service|
     service.has_many :service_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
-    service.has_many :end_user_plans, &DefaultPlanProxy
     service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
   end
 
@@ -73,7 +70,6 @@ class Service < ApplicationRecord
 
   belongs_to :default_service_plan, class_name: 'ServicePlan'
   belongs_to :default_application_plan, class_name: 'ApplicationPlan'
-  belongs_to :default_end_user_plan, class_name: 'EndUserPlan'
 
   attr_protected :account_id, :tenant_id, :audit_ids
 
@@ -132,7 +128,6 @@ class Service < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :default_end_user_plan, presence: { unless: :end_user_registration_required? }
   validates :name, :logo_file_name, :logo_content_type, :state, :draft_name,
             :credit_card_support_email,
             :buyer_plan_change_permission, :system_name, :backend_version, :support_email, :deployment_option,
@@ -173,7 +168,6 @@ class Service < ApplicationRecord
   validates :deployment_option, inclusion: { in: DeploymentOption.all }, presence: true
   scope :deployed_with_gateway, -> { where(deployment_option: DeploymentOption.gateways) }
 
-  validate :end_users_switch
   serialize :notification_settings
 
   audited allow_mass_assignment: true
@@ -399,8 +393,6 @@ class Service < ApplicationRecord
       xml.deployment_option deployment_option
       xml.support_email support_email
 
-      xml.end_user_registration_required end_user_registration_required
-
       metrics.to_xml(builder: xml, root: 'metrics')
     end
 
@@ -596,15 +588,6 @@ class Service < ApplicationRecord
 
   def notification_settings_levels
     (notification_settings || {}).map { |_key, values| values }.flatten.uniq
-  end
-
-  def end_users_switch
-    return unless account.try!(:settings)
-    switch = account.settings.end_users
-
-    if !end_user_registration_required && !switch.allowed?
-      errors.add(:end_user_registration_required, :not_allowed)
-    end
   end
 
   def alert_limits

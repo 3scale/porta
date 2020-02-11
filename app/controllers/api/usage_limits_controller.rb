@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::UsageLimitsController < FrontendController
   before_action :find_plan
   before_action :find_metric, :only => [:index, :new, :create]
@@ -55,19 +57,13 @@ class Api::UsageLimitsController < FrontendController
   private
 
   def find_plan
-    @plan = find_application_plan || find_end_user_plan
+    @plan = find_application_plan
   end
 
   def find_application_plan
     id = params[:application_plan_id]
     current_account.application_plans.find(id) if id
   end
-
-  def find_end_user_plan
-    id = params[:end_user_plan_id]
-    current_account.end_user_plans.find(id) if id
-  end
-
 
   def find_metric
     @metric = @plan.all_metrics.find(params[:metric_id])

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Provider::Admin::DashboardsHelper
 
   include ApplicationHelper
@@ -23,13 +25,13 @@ module Provider::Admin::DashboardsHelper
 
   def dashboard_navigation_link(link_text, path, options = {})
     link_to path, title: options[:title], class: css_class({
-        'DashboardNavigation-link': true,
+                                                             'DashboardNavigation-link': true,
         'u-notice': options.fetch(:notice, false)
-      }) do
-        icon_name = options[:icon_name]
-        icon_append_name = options[:icon_append_name]
-        link_text = link_text.concat " #{icon(icon_append_name)}" if icon_append_name
-        link_text.html_safe
+                                                           }) do
+      icon_name = options[:icon_name]
+      icon_append_name = options[:icon_append_name]
+      link_text = link_text.concat " #{icon(icon_append_name)}" if icon_append_name
+      link_text.html_safe
     end
   end
 
@@ -82,9 +84,5 @@ module Provider::Admin::DashboardsHelper
 
   def show_service_plans_on_dashboard?(service)
     can?(:manage, :service_plans) && service.service_plans.not_custom.size > 1
-  end
-
-  def show_end_users_on_dashboard?(service)
-    can?(:manage, :end_users) && service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
   end
 end

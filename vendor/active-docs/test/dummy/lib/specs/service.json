@@ -53,7 +53,7 @@
                 "name": "user_id",
                 "dataType": "string",
                 "paramType": "query",
-                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. ."
             },
             {
                 "name": "usage",
@@ -121,7 +121,7 @@
                 "name": "user_id",
                 "dataType": "string",
                 "paramType": "query",
-                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. ."
             },
             {
                 "name": "usage",
@@ -187,7 +187,7 @@
                 "name": "user_id",
                 "dataType": "string",
                 "paramType": "query",
-                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. ."
             },
             {
                 "name": "usage",
@@ -265,7 +265,7 @@
                 "name": "user_id",
                 "dataType": "string",
                 "paramType": "query",
-                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. ."
             },
             {
                 "name": "usage",
@@ -357,7 +357,7 @@
                 "name": "user_id",
                 "dataType": "string",
                 "paramType": "query",
-                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
+                "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. ."
             },
             {
                 "name": "usage",
@@ -450,7 +450,7 @@
                     "name": "user_id",
                     "dataType": "string",
                     "paramType": "query",
-                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
+                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. .",
                     "description_inline": true
                 },
                 {
@@ -553,7 +553,7 @@
                     "name": "user_id",
                     "dataType": "string",
                     "paramType": "query",
-                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
+                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. .",
                     "description_inline": true
                 },
                 {
@@ -656,7 +656,7 @@
                     "name": "user_id",
                     "dataType": "string",
                     "paramType": "query",
-                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
+                    "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. .",
                     "description_inline": true
                 },
                 {
