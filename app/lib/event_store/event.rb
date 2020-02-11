@@ -35,6 +35,7 @@ module EventStore
       end
 
       def load(str)
+        return {} unless str
         deserialize([YAML.load(str)]).first.symbolize_keys
       end
     end
