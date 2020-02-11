@@ -247,8 +247,8 @@ commands: # reusable commands with parameters
       - run:
           name: Run cucumber tests
           command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            bundle exec cucumber --profile ci ${TESTS}
+            TEST=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            bundle exec cucumber --profile ci ${TEST}
       - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
@@ -270,9 +270,9 @@ commands: # reusable commands with parameters
       - run:
           name: Run Rails tests
           command: |
-            taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\)//g')
-            TESTS=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TESTS="$TESTS" TESTOPTS=--verbose --verbose --trace
+            taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
+            TEST=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
+            bundle exec rake test:run TEST="$TEST" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
 
   save-gem-cache:

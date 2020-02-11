@@ -146,7 +146,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'service_token' do
     account = FactoryBot.create(:simple_account)
-    service = Service.new { |s| s.account_id = account.id; s.system_name = 'foo' }
+    service = Service.new { |s| s.account = account; s.system_name = 'foo' }
     service.save(validate: false)
 
     refute service.service_token
@@ -365,8 +365,6 @@ class ServiceTest < ActiveSupport::TestCase
 
   class DestroyingServiceTest < ActiveSupport::TestCase
 
-    disable_transactional_fixtures!
-
     test "destroying service destroys it's plans" do
       service          = FactoryBot.create(:service)
       service_plan     = FactoryBot.create(:application_plan, issuer: service)
@@ -563,8 +561,6 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   class AsynchronousDeletionOfService < ActiveSupport::TestCase
-    disable_transactional_fixtures!
-
     test 'schedule destruction of a service' do
       service = FactoryBot.create(:simple_service)
       service.stubs(last_accessible?: false)

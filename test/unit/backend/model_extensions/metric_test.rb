@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   test 'sync backend metric data when metric is created' do
     service = FactoryBot.create(:simple_service)
     metric = Metric.new(service: service, system_name: 'koos', friendly_name: 'Foos', unit: 'foo')

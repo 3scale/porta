@@ -55,7 +55,6 @@ module Finance::Api
       end
 
       context 'with existing invoices' do
-        disable_transactional_fixtures!
 
         setup do
           @buyer ||= FactoryBot.create(:buyer_account, :provider_account => @provider)

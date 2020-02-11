@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class UserObserverTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
   def buyer_user(attributes)
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: FactoryBot.create(:simple_provider))
     FactoryBot.build(:simple_user, attributes.merge(account: buyer_account))

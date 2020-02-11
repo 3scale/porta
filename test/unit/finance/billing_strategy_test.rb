@@ -6,8 +6,6 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   should belong_to :account
   should validate_presence_of :numbering_period
 
-  disable_transactional_fixtures!
-
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
 

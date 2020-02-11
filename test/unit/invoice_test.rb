@@ -118,7 +118,6 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   class AutoFriendlyIdTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def setup
       @provider = FactoryBot.create(:simple_provider)
@@ -171,7 +170,7 @@ class InvoiceTest < ActiveSupport::TestCase
     Timecop.freeze(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
 
     assert_equal @now.utc.to_date, @invoice.issued_on
-    assert_equal @now.round, @invoice.paid_at.round
+    assert_in_delta @now, @invoice.paid_at, 1.second
     assert_equal 'paid', @invoice.state
   end
 
@@ -473,6 +472,7 @@ class InvoiceTest < ActiveSupport::TestCase
     @provider.stubs(:payment_gateway_configured?).returns(true)
     @billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
     @invoice.update_attribute(:state, 'pending')
+    @invoice.expects(:notify_buyer_about_payment)
 
     assert @invoice.charge!, 'Invoice should charge!'
   end
@@ -524,7 +524,6 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   class CounterUpdateTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     def setup
       @provider = FactoryBot.create(:simple_provider)

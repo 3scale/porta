@@ -1,14 +1,12 @@
-require File.expand_path('../boot', __FILE__)
+# frozen_string_literal: true
+require_relative 'boot'
 
 require 'rails/all'
-# If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, or :production.
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require *Rails.groups(:assets => %w(development production preview test))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
+
+# If you precompile assets before deploying to production, use this line
+Bundler.require *Rails.groups(:assets => %w(development production preview test))
+# If you want your assets lazily compiled in production, use this line
+# Bundler.require(:default, :assets, Rails.env)
 
 ActiveSupport::XmlMini.backend = 'Nokogiri'
 
@@ -84,8 +82,6 @@ module System
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
-    config.active_record.raise_in_transactional_callbacks = true
-
     # Activate observers that should always be running.
     config.active_record.observers = :account_observer,
                                      :message_observer,
@@ -137,7 +133,7 @@ module System
     config.assets.version = '1437647386' # unix timestamp
 
 
-    config.serve_static_files = false
+    config.public_file_server.enabled = false
 
     # We don't want Rack::Cache to be used
     config.action_dispatch.rack_cache = false
@@ -220,12 +216,7 @@ module System
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += %i[activation_code cms_token credit_card credit_card_auth_code
-                                   credit_card_authorize_net_payment_profile_token credit_card_expires_on
-                                   credit_card_partial_number crypted_password janrain_api_key lost_password_token
-                                   password password_digest payment_gateway_options payment_service_reference salt
-                                   site_access_code sso_key user_key]
+
 
     config.middleware.use 'ThreeScale::Middleware::Multitenant', :tenant_id
     config.middleware.use 'ThreeScale::Middleware::DevDomain', config.three_scale.dev_domain_regexp, config.three_scale.dev_domain_replacement if config.three_scale.dev_domain

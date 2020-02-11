@@ -136,3 +136,4 @@ Gemfile.local
 
 # Typings
 flow-typed
+config/cable.yml

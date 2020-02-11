@@ -2,8 +2,6 @@ require 'test_helper'
 
 class KeyTest < ActiveSupport::TestCase
 
-  disable_transactional_fixtures!
-
   test 'destroy a buyer account should destroy the application keys in backend' do
     ak = application_key
     cinstance = ak.application

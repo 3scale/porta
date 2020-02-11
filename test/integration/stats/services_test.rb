@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class Stats::ServicesTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   def setup
     Stats::Base.storage.flushdb
     @provider_account = FactoryBot.create(:provider_account)

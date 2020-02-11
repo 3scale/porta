@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class ProviderPlanChangeObserverTest < ActionDispatch::IntegrationTest
-  disable_transactional_fixtures!
-
   def setup
     @observer = ProviderPlanChangeObserver.instance
   end

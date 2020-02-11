@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ApplicationKeysTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
 
   subject { @application_key ||= FactoryBot.create(:application_key) }
 
@@ -159,10 +158,12 @@ class ApplicationKeysTest < ActiveSupport::TestCase
   def test_regenerate_key
     @application_keys.add(key = 'app-key')
     @application.reload
-    updated_at = @application.updated_at
-    @application_keys.regenerate(key)
-    # @application.reload
-    assert_not_equal updated_at, @application.updated_at
+    expected_updated_at = @application.updated_at + 2.hours
+
+    Timecop.travel(2.hours.from_now) do
+      @application_keys.regenerate(key)
+    end
+    assert_in_delta expected_updated_at, @application.updated_at, 1.second
 
   end
 

@@ -27,7 +27,7 @@ module Backend
 
       def delete_backend_usage_limit
         if plan_and_service?
-          original_period = previously_changed?(:period) ? previous_changes[:period].compact.first : period
+          original_period = previously_changed?(:period) ? period_previous_change.compact.first : period
           ThreeScale::Core::UsageLimit.delete(service.backend_id, plan.backend_id, metric_id, original_period)
         end
 

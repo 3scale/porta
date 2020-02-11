@@ -17,7 +17,7 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
   # Using view context in the Tag .. so we need to setup a fake request
   test 'render' do
     controller = DeveloperPortal::Admin::Applications::AlertsController.new
-    request = ActionDispatch::TestRequest.new
+    request = ActionDispatch::TestRequest.create
     request.parameters[:controller] = controller.controller_path
     request.parameters[:application_id] = '1'
     controller.stubs(request: request)
@@ -35,7 +35,7 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
   # Using view context in the Tag .. so we need to setup a fake request
   test 'render when sortable is not defined' do
     controller = ApplicationController.new
-    request = ActionDispatch::TestRequest.new
+    request = ActionDispatch::TestRequest.create
     request.parameters[:controller] = controller.controller_path
     controller.stubs(request: request)
     _view = ActionView::Base.new('app/views', {}, controller)

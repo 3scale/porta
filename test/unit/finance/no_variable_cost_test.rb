@@ -10,6 +10,7 @@ class Finance::NoVariableCostClass < ActiveSupport::TestCase
     contract.stubs(:provider_account).returns(account)
     account.stubs(:provider_can_use?).returns(true)
 
+    contract.expects(:save).returns(true)
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
   end
 end

@@ -1,5 +1,8 @@
 require 'test_helper'
 
+# TODO: Please split this file. It is too huge and takes too long
+# Finished in 170.63189s
+# 87 tests, 160 assertions, 0 failures, 0 errors, 0 skips
 class CinstanceTest < ActiveSupport::TestCase
 
   subject { @cinstance || FactoryBot.create(:cinstance) }
@@ -405,7 +408,6 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   class SuspendTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     setup do
       @cinstance = FactoryBot.create(:cinstance)
@@ -705,7 +707,6 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   class WebHooksTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
     include WebHookTestHelpers
 
     subject { @cinstance || FactoryBot.create(:cinstance) }
@@ -857,7 +858,6 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   class KeysTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
 
     test 'creating keys in backend is fired only when app is created' do
       app = FactoryBot.build(:cinstance)

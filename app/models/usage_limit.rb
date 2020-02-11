@@ -1,4 +1,5 @@
 class UsageLimit < ApplicationRecord
+  include Symbolize
   attr_accessible :period, :value, :metric, :plan
 
   include Backend::ModelExtensions::UsageLimit

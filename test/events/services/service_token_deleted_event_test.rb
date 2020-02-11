@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ServiceTokenDeletedEventTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
   def setup
     @service_token = FactoryBot.create(:service_token)
   end

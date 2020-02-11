@@ -497,6 +497,7 @@ class ProxyTest < ActiveSupport::TestCase
                                    api_backend: 'http://example.com:80',
                                    api_test_path: '/path',
                                    success: true)
+    analytics.expects(:track).with('APIcast Hosted Version Change', {enabled: false, service_id: proxy.service_id, deployment_option: 'hosted'})
     Logic::RollingUpdates.stubs(skipped?: true)
 
     assert proxy.save_and_deploy
@@ -629,12 +630,12 @@ class ProxyTest < ActiveSupport::TestCase
     # no existing config for staging (sandbox)
     refute proxy.pending_affecting_changes?
 
+    FactoryBot.create(:proxy_config, proxy: proxy, environment: :sandbox)
+
+    # latest config is ahead of affecting change record
+    refute proxy.pending_affecting_changes?
+
     Timecop.travel(1.second.from_now) do
-      FactoryBot.create(:proxy_config, proxy: proxy, environment: :sandbox)
-
-      # latest config is ahead of affecting change record
-      refute proxy.pending_affecting_changes?
-
       proxy.affecting_change_history.touch
 
       # latest config is behind of affecting change record
