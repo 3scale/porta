@@ -121,7 +121,7 @@ DeveloperPortal::Engine.routes.draw do
       resources :outbox, :except => [:edit, :update], :path => 'sent'
       resources :trash, :only => ['index', 'show', 'destroy'] do
         collection do
-          delete 'empty', :path => '' # this is a delete on the index
+          delete '', action: :empty, as: :empty # this is a delete on the index
         end
       end
     end
