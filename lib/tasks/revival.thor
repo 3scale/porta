@@ -29,7 +29,6 @@ class Revival < Thor
   SERVICE_ASSOCIATIONS = [
     { service_plans: [:service_contracts] },
     :application_plans,
-    { end_user_plans: [:plan_limits]},
     { proxy: :proxy_rules },
     { issued_plans: [:cinstances, :contracts, :usage_limits, :pricing_rules, :plan_metrics, :features_plans, :customizations] },
     { cinstances: [:alerts, :line_items, :referer_filters, :application_keys] },

@@ -54,19 +54,6 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
     usage_limit.save!
   end
 
-  test 'stores usage_limit backend data when usage_limit is created for end user plan with right backend_id' do
-    service = FactoryBot.create(:service)
-    plan   = FactoryBot.create(:end_user_plan, :service => service)
-    metric = FactoryBot.create(:metric, :service => service)
-
-    usage_limit = metric.usage_limits.new(:period => :week, :value => 7000)
-    usage_limit.plan = plan
-
-    expect_save_for usage_limit, with: { service_id: service.backend_id, plan_id: plan.backend_id, metric_id: metric.id}
-
-    usage_limit.save!
-  end
-
   test 'updates usage_limit backend data when usage_limit changes period' do
     usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000)
 
@@ -90,8 +77,8 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
   end
 
   test 'updates usage_limit backend data when usage_limit changes value with right plan backend_id' do
-    service = FactoryBot.create(:service)
-    plan   = FactoryBot.create(:end_user_plan, :service => service)
+    plan = FactoryBot.create(:application_plan)
+    service = plan.service
 
     usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000, :plan => plan)
 

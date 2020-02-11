@@ -53,7 +53,6 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => "cost_per_month", :description => "Cost per month", :dataType => "decimal", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "setup_fee", :description => "Setup fee", :dataType => "decimal", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "trial_period_days", :description => "Trial period days", :dataType => "integer", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "end_user_required", :description => "End user required", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
   ##~ op.parameters.add @parameter_application_plan_state_event
   #
@@ -94,7 +93,6 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => "cost_per_month", :description => "Cost per month", :dataType => "decimal", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "setup_fee", :description => "Setup fee", :dataType => "decimal", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "trial_period_days", :description => "Trial period days", :dataType => "integer", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "end_user_required", :description => "End user required", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_application_plan_state_event
   #
   def update
@@ -141,7 +139,7 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   protected
 
   DEFAULT_PARAMS = %i[name state_event description approval_required trial_period_days
-                      cost_per_month setup_fee end_user_required].freeze
+                      cost_per_month setup_fee].freeze
 
   def application_plan_update_params
     params.require(:application_plan).permit(DEFAULT_PARAMS)

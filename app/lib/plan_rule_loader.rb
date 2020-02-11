@@ -13,7 +13,6 @@ module PlanRuleLoader
         account_plans
         multiple_users
         groups
-        end_users
         multiple_services
         service_plans
         skip_email_engagement_footer

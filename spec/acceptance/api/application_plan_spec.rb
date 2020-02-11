@@ -61,7 +61,7 @@ resource "ApplicationPlan" do
     it do
       should have_properties(%w|id name state system_name|).from(resource)
       should have_properties(%w|setup_fee cost_per_month|).from(resource)
-      should have_properties(%w|end_user_required trial_period_days cancellation_period|).from(resource)
+      should have_properties(%w|trial_period_days cancellation_period|).from(resource)
       should have_properties('approval_required').from(resource)
       should have_links('self', 'service')
     end

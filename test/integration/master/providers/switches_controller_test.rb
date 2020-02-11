@@ -41,14 +41,14 @@ class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTes
   end
 
   test 'should not change when the same' do
-    switch = allowed_switch(:end_users)
+    switch = allowed_switch(:finance)
     put master_provider_switch_path(provider.id, switch.name)
     assert_response :not_modified
   end
 
   test 'should require current user' do
     logout!
-    switch = settings.switches.fetch(:end_users)
+    switch = settings.switches.fetch(:finance)
 
     delete master_provider_switch_path(provider.id, switch.name)
     assert_response :forbidden
