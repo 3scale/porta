@@ -614,6 +614,14 @@ class PlanTest < ActiveSupport::TestCase
     plan.destroy
   end
 
+  def test_plan_not_locked_if_destroyed_by_association
+    plan = FactoryBot.create(:simple_application_plan)
+    plan.class.stubs(:exists?).with(plan.id).returns(true)
+    plan.class.stubs(:destroyed_by_association).with(plan.id).returns(true)
+    plan.expects(:lock!).never
+    plan.destroy
+  end
+
   def test_provided_by
     plan = FactoryBot.create(:application_plan)
     provider = plan.provider_account
