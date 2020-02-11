@@ -82,8 +82,6 @@ module System
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
-    config.active_record.raise_in_transactional_callbacks = true
-
     # Activate observers that should always be running.
     config.active_record.observers = :account_observer,
                                      :message_observer,
@@ -218,12 +216,7 @@ module System
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += %i[activation_code cms_token credit_card credit_card_auth_code
-                                   credit_card_authorize_net_payment_profile_token credit_card_expires_on
-                                   credit_card_partial_number crypted_password janrain_api_key lost_password_token
-                                   password password_digest payment_gateway_options payment_service_reference salt
-                                   site_access_code sso_key user_key]
+
 
     config.middleware.use 'ThreeScale::Middleware::Multitenant', :tenant_id
     config.middleware.use 'ThreeScale::Middleware::DevDomain', config.three_scale.dev_domain_regexp, config.three_scale.dev_domain_replacement if config.three_scale.dev_domain

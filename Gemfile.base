@@ -10,8 +10,7 @@ gem 'aws-sdk', '~> 2'
 gem 'aws-sdk-rails', '~> 1.0'
 
 gem 'dotenv-rails', '~> 2.7'
-#gem 'rails', '4.2.9'
-gem 'rails', '~> 5.0.6'
+gem 'rails', '~> 5.0.7'
 
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
@@ -35,10 +34,6 @@ gem 'oauth2', '~> 1.4'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'i18n'
-
-# This is in Rails 5:
-# http://blog.bigbinary.com/2016/03/09/rails-5-makes-partial-redering-from-cache-substantially-faster.html
-#gem 'multi_fetch_fragments', github: 'mikz/multi_fetch_fragments'
 
 # Apisonator client
 gem 'pisoni', '~> 1.26'
