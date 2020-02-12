@@ -50,7 +50,7 @@ class CMS::EmailTemplate < CMS::Template
   EMAIL_FORMAT = /(?:(#{EMAIL_ADDRESS_FORMAT})|#{EMAIL_WITH_NAME_FORMAT})\s*/i
   EMAILS_FORMAT = /\A#{EMAIL_FORMAT}(,\s*#{EMAIL_FORMAT})*\Z/i
 
-  serialize :options, Hash
+  serialize :options, HashOrActionParameter
 
   attr_accessor :file
 

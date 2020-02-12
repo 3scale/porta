@@ -39,6 +39,30 @@ class EmailTemplateTest < ActiveSupport::TestCase
     assert template.valid?
   end
 
+  test 'it deserialize correctly an ActionController::Parameter' do
+    class CMS::EmailTemplate < CMS::Template
+      serialize :options, ActionController::Parameters
+    end
+    template = FactoryBot.create(:cms_email_template, options: ActionController::Parameters.new({"subject"=>"Test", "bcc"=>"", "cc"=>"", "reply_to"=>"", "from"=>"AYLIEN"}))
+    class CMS::EmailTemplate < CMS::Template
+      serialize :options, HashOrActionParameter
+    end
+
+    assert template.valid?
+  end
+
+  test 'it deserialize correctly an Hash' do
+    class CMS::EmailTemplate < CMS::Template
+      serialize :options, Hash
+    end
+    template = FactoryBot.create(:cms_email_template, options: {"subject"=>"Test", "bcc"=>"", "cc"=>"", "reply_to"=>"", "from"=>"AYLIEN"})
+    class CMS::EmailTemplate < CMS::Template
+      serialize :options, HashOrActionParameter
+    end
+
+    assert template.valid?
+  end
+
   test 'validates email format' do
     template = FactoryBot.build(:cms_email_template)
     template.headers = {
