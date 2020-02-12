@@ -49,4 +49,4 @@ USER root
 RUN sed -i 's/compile: true/compile: false/' config/webpacker.yml
 
 RUN bash -c "bundle install && bundle exec rake tmp:create"
-RUN bash -c "npm install && rake assets:precompile"
+RUN bash -c "npm install -g yarn && yarn install:safe && rake assets:precompile"
