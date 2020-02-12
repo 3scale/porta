@@ -28,6 +28,38 @@ class EmailTemplateTest < ActiveSupport::TestCase
     assert_equal saved.headers.key, loaded.headers.key
   end
 
+  test 'serialize headers as Hash' do
+    headers = {"subject"=>"Text Analysis API - New key created", "bcc"=>"", "cc"=>"", "reply_to"=>"", "from"=>"AYLIEN"}
+    template = CMS::EmailTemplate.create! system_name: 'system_name', published: 'text',
+      provider: FactoryBot.create(:simple_account)
+    # Testing it does not raise if we do `update_column` with simple Hash
+    template.update_column :options, headers
+    assert_equal headers, template.options
+  end
+
+  test 'serialize headers as ActionController::Parameters' do
+    headers = {"subject"=>"Text Analysis API - New key created", "bcc"=>"", "cc"=>"", "reply_to"=>"", "from"=>"AYLIEN"}
+    params = ActionController::Parameters.new(headers)
+    template = CMS::EmailTemplate.create! system_name: 'system_name', published: 'text',
+      provider: FactoryBot.create(:simple_account)
+    # Testing it does not raise if we `update_column` with unpermitted parameters
+    template.update_column :options, params
+    template.reload
+    assert_equal headers, template.options
+  end
+
+  test 'serialized ActionController::Parameters `options` loads correctly' do
+    headers = {"subject"=>"Text Analysis API - New key created", "bcc"=>"", "cc"=>"", "reply_to"=>"", "from"=>"AYLIEN"}
+    params = ActionController::Parameters.new(headers)
+    template = CMS::EmailTemplate.create! system_name: 'system_name', published: 'text',
+      provider: FactoryBot.create(:simple_account)
+    # Testing it does not raise if we `update_column` with unpermitted parameters
+    yaml = YAML.dump(params)
+    template.update_column :options, yaml
+    template.reload
+    assert_equal yaml, template.options_before_type_cast
+  end
+
   test 'comma separated emails in headers are valid' do
     template = FactoryBot.build(:cms_email_template)
     template.headers = {
