@@ -56,7 +56,7 @@ to stop the application, run:
 make dev-stop
 ```
 
-## Manual setup on Mac OS X (10.13)
+## Manual setup on Mac OS X (10.13 - 10.15)
 
 ### Prerequisites
 
@@ -162,6 +162,11 @@ cp config/examples/* config/
 ```
 
 #### Bundle
+
+On MacOS 10.15 first configure the bundle config with:
+```shell
+bundle config --global build.mysql2 "--with-opt-dir=/usr/local/opt/openssl"
+```
 
 Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 
