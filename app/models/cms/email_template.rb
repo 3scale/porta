@@ -50,7 +50,25 @@ class CMS::EmailTemplate < CMS::Template
   EMAIL_FORMAT = /(?:(#{EMAIL_ADDRESS_FORMAT})|#{EMAIL_WITH_NAME_FORMAT})\s*/i
   EMAILS_FORMAT = /\A#{EMAIL_FORMAT}(,\s*#{EMAIL_FORMAT})*\Z/i
 
-  serialize :options, Hash
+  class HashOrParameters < ::ActiveRecord::Coders::YAMLColumn
+    def load(string)
+      obj = super(string)
+      obj.respond_to?(:to_unsafe_h) ? obj.to_unsafe_h : obj.to_h if obj
+    end
+
+    def dump(object)
+      return object if object.is_a?(String) && assert_valid_value(load(object))
+      obj = object.respond_to?(:to_unsafe_h) ? object.to_unsafe_h : object.to_h if object
+      super(obj)
+    end
+
+    def assert_valid_value(obj)
+      obj.is_a?(Hash) || obj.is_a?(ActionController::Parameters) || super
+    end
+  end
+
+  # TODO: On Rails 5.1+, change in argument contructor ::ActiveRecord::Coders::YAMLColumn.new(attr_name, class_or_coder)
+  serialize :options, HashOrParameters.new(Hash)
 
   attr_accessor :file
 
