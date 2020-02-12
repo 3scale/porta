@@ -1,4 +1,7 @@
 class Settings < ApplicationRecord
+  # todo: remove after migration 20200211154433_remove_end_user_plans.rb
+  self.ignored_columns = %w[end_users_switch end_user_plans_ui_visible]
+
   include Symbolize
   belongs_to :account, inverse_of: :settings
 
