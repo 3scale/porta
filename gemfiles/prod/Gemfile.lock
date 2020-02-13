@@ -448,7 +448,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (5.7.0.350)
     nio4r (2.5.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
