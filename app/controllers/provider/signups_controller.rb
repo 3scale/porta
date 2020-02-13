@@ -32,6 +32,7 @@ class Provider::SignupsController < Provider::BaseController
       @user = result.user
       @provider.signup_mode!
       @provider.subdomain = account_params[:subdomain]
+      @provider.self_subdomain = account_params[:self_subdomain]
       result.add_error(message: 'spam check failed') unless spam_check(@provider)
     end
     @fields = Fields::SignupForm.new(@provider, @user, params[:fields])

@@ -23,7 +23,8 @@ class Provider::SignupsControllerTest < ActionDispatch::IntegrationTest
       assert_equal expected_value, provider.public_send(field_name)
     end
     assert provider.sample_data
-    assert_match /^theorganization.*$/, provider.subdomain.to_s
+    assert_match /^theorganization(-\d+)?$/, provider.subdomain.to_s
+    assert_match /^theorganization(-\d+)?-admin$/, provider.self_subdomain.to_s
 
     create_params[:account][:user].except(:password).each do |field_name, expected_value|
       assert_equal expected_value, user.public_send(field_name)
@@ -60,13 +61,14 @@ class Provider::SignupsControllerTest < ActionDispatch::IntegrationTest
 
   test 'POST accepts the subdomain if given' do
     assert_difference(master_account.buyer_accounts.method(:count)) do
-      post provider_signup_path, create_params({account: {name: 'organization', subdomain: 'mysubdomain'}})
+      post provider_signup_path, create_params({account: {org_name: 'organization', subdomain: 'mysubdomain', self_subdomain: 'selfsubdomain-admin'}})
     end
 
     provider = master_account.buyer_accounts.order(:id).last!
 
     assert_equal 'organization', provider.name
     assert_equal 'mysubdomain', provider.subdomain
+    assert_equal 'selfsubdomain-admin', provider.self_subdomain
   end
 
   def create_params(extra_params = {})
