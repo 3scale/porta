@@ -89,10 +89,10 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def ensure_signup_possible
-    unless master.signup_provider_possible?
-      System::ErrorReporting.report_error("Provider signup not enabled. Check all master's plans are in place.")
-      render_error 'Provider signup not enabled.', :status => :not_found
-    end
+    return if master.signup_provider_possible?
+
+    System::ErrorReporting.report_error('Provider signup not enabled. Check all master\'s plans are in place.')
+    render_error 'Provider signup not enabled.', status: :not_found
   end
 
   def plan
