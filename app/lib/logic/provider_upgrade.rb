@@ -36,7 +36,8 @@ module Logic
       # intended to be called for partners stuff and console
       def force_to_change_plan!(new_plan)
         change_plan!(new_plan)
-        make_switches_on switches_for_plan(new_plan)
+        switches_on = switches_for_plan(new_plan)
+        make_switches_on(switches_on)
         make_switches_off(switches_on)
       end
 
