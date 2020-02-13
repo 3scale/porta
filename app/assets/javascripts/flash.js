@@ -9,15 +9,15 @@
 
       $.flash.current = message
 
-      var p = $('<p>')
+      var span = $('<span>')
       if (opts && opts.text) {
-        p.text(message)
+        span.text(message)
       } else {
-        p.html(message)
+        span.html(message)
       }
 
       $('.ajaxNoticeValid:first')
-      .html(p.wrap('<div/>').parent().html())
+      .html(span.wrap('<div/>').parent().html())
       .removeClass('flash-message--error')
       .removeClass('flash-message')
       .addClass(clazz)

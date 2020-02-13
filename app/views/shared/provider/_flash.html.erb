@@ -1,7 +1,7 @@
 <div id="flashWrapper" style="<%= flash.empty? ? "display:none;" : "" %>">
   <div class="ajaxNoticeValid">
     <% flash.each do |type, value| %>
-      <p class="flash-message flash-message--<%= type %>"><%= value %></p>
+      <span class="flash-message flash-message--<%= type %>"><%= value %></span>
       <% flash.discard(type) %>
     <%- end -%>
     <script>
