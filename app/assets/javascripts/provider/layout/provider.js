@@ -17,5 +17,4 @@
 //= require threescale
 //= require vendor/pluralize
 //= require master_application
-//= require docs
 //= require flash
