@@ -29,7 +29,7 @@ class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::Integration
     switch_name = provider.hideable_switches.keys.first
     put provider_admin_cms_switch_path(switch_name, format: :js)
     assert_response :success
-    assert provider.settings.switches[switch_name].visible?
+    assert provider.reload.settings.switches[switch_name].visible?
   end
 
   test "show a  switch" do
