@@ -427,6 +427,7 @@ jobs:
             - ./node_modules
 
   assets_precompile:
+    resource_class: large
     parameters:
       executor:
         type: string
