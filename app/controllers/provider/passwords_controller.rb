@@ -51,7 +51,7 @@ class Provider::PasswordsController < FrontendController
   # Can't be used for neither Buyer nor Master
   #
   def find_provider
-    unless @provider ||= Account.providers.find_by_self_domain(request.host.to_s)
+    unless @provider ||= Account.providers_with_master.find_by_self_domain(request.host.to_s)
       render_error "Wrong domain '#{request.host}' for path '#{request.path}'", status: 404
       false
     end

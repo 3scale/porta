@@ -40,5 +40,4 @@ class Provider::PasswordsControllerTest < ActionController::TestCase
 
     assert_redirected_to back
   end
-
 end
