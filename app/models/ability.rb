@@ -18,6 +18,7 @@ class Ability
   def reload!
     @user.try!(:reload)
     @rules = []
+    @rules_index = nil
     load_rules!
     self
   end

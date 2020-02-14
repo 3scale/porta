@@ -2,7 +2,7 @@ class DeveloperPortal::Admin::AccountsController < DeveloperPortal::BaseControll
 
   liquify prefix: 'account'
 
-  authorize_resource
+  authorize_resource class: Account
   activate_menu :account, :overview
 
   layout 'main_layout'
