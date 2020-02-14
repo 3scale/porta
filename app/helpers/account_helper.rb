@@ -58,7 +58,7 @@ module AccountHelper
       host = current_account.admin_domain + request.port_string
       edit_provider_admin_user_personal_details_url(host: host, protocol: 'https')
     else
-      DeveloperPortal::Engine.routes.url_helpers.admin_account_personal_details_url(host: current_account.domain)
+      developer_portal.admin_account_personal_details_url(host: current_account.domain)
     end
   end
 
