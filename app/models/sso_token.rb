@@ -70,7 +70,7 @@ class SSOToken
       expires_at: expires_at.to_i,
       redirect_url: redirect_url
     }.delete_if{|k,v| v.nil?}
-    host.nil? ? DeveloperPortal::Engine.routes.url_helpers.create_session_url(params) : provider_sso_url(params)
+    host.nil? ? developer_portal.create_session_url(params) : provider_sso_url(params)
   end
 
   protected

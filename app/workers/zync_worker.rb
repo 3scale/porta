@@ -5,6 +5,8 @@ require 'httpclient/include_client'
 class ZyncWorker
   include Sidekiq::Worker
   include ThreeScale::SidekiqRetrySupport::Worker
+  class_attribute :main_app, instance_writer: false
+  self.main_app = Rails.application.routes.url_helpers
 
   extend ::HTTPClient::IncludeClient
 
@@ -331,7 +333,7 @@ class ZyncWorker
               when 'development' then { host: "#{host}.#{ThreeScale.config.dev_gtld}", port: 3000 }
               else { host: host }.reverse_merge(ActionMailer::Base.default_url_options)
               end
-    Rails.application.routes.url_helpers.root_url(options)
+    main_app.root_url(options)
   end
 
   delegate :provider_access_token, to: :class

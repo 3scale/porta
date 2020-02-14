@@ -3,7 +3,6 @@ module Liquid
     class Base
       attr_reader :context
 
-      #include Rails.application.routes.url_helpers
       include DeveloperPortal::Engine.routes.url_helpers
 
       delegate :tag, :content_tag, to: 'Liquid::Filters::RailsHelpers'
