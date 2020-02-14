@@ -27,13 +27,8 @@ class Provider::SignupsController < Provider::BaseController
 
   def create
     @plan = plan
-    signup_result = Signup::ProviderAccountManager.new(master).create(signup_params) do |result|
-      @provider = result.account
-      @user = result.user
-      @provider.signup_mode!
-      @provider.subdomain = account_params[:subdomain]
-      result.add_error(message: 'spam check failed') unless spam_check(@provider)
-    end
+    provider_account_manager = Signup::ProviderAccountManager.new(master)
+    signup_result = provider_account_manager.create(signup_params, &method(:build_signup_result_custom_fields))
     @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
 
     return render :show unless signup_result.persisted?
@@ -88,10 +83,19 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def ensure_signup_possible
-    unless master.signup_provider_possible?
-      System::ErrorReporting.report_error("Provider signup not enabled. Check all master's plans are in place.")
-      render_error 'Provider signup not enabled.', :status => :not_found
-    end
+    return if master.signup_provider_possible?
+
+    System::ErrorReporting.report_error('Provider signup not enabled. Check all master\'s plans are in place.')
+    render_error 'Provider signup not enabled.', status: :not_found
+  end
+
+  def build_signup_result_custom_fields(result)
+    @provider = result.account
+    @user = result.user
+    @provider.signup_mode!
+    @provider.subdomain = account_params[:subdomain]
+    @provider.self_subdomain = account_params[:self_subdomain]
+    result.add_error(message: 'spam check failed') unless spam_check(@provider)
   end
 
   def plan
