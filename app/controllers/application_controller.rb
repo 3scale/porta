@@ -150,30 +150,6 @@ class ApplicationController < ActionController::Base
     ReportTrafficWorker.enqueue(current_account, metric_to_report, request, response)
   end
 
-  class CustomCanCanControllerResource < CanCan::ControllerResource
-
-    def authorization_action
-      action = @params[:action].to_sym
-
-      if @controller.request.get? && !%i(index edit).include?(action)
-        :show
-      else
-        super
-      end
-    end
-  end
-
-  # CanCanCan
-  # [default] custom controller [GET] methods are being authorized separately
-  # [custom] custom controller [GET] methods are being authorized as show method
-  def self.cancan_resource_class
-    if ancestors.map(&:to_s).include? 'InheritedResources::Actions'
-      CanCan::InheritedResource
-    else
-      CustomCanCanControllerResource
-    end
-  end
-
   private
 
   delegate :notify_about, :silent_about, :to => :NotificationCenter
