@@ -7,8 +7,8 @@
         <li>
           New
           <%= link_to 'post',
-            Rails.application.routes.url_helpers.forum_topic_path(post.topic, :anchor => "post_#{post.id}") %>
-          on topic <%= link_to post.topic.title, Rails.application.routes.url_helpers.forum_topic_path(post.topic) %>
+              main_app.forum_topic_path(post.topic, :anchor => "post_#{post.id}") %>
+          on topic <%= link_to post.topic.title, main_app.forum_topic_path(post.topic) %>
         </li>
       <%- end -%>
     </ul>

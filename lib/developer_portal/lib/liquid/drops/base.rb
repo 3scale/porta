@@ -5,6 +5,13 @@ module Liquid
     class Base < Liquid::Drop
       class_attribute :_deprecated_names, :_allowed_names, :instance_writer => false, :instance_reader => false
 
+      class_attribute :system_url_helpers, instance_writer: false
+      self.system_url_helpers = Rails.application.routes.url_helpers
+
+      class_attribute :cms_url_helpers, instance_writer: false
+      self.cms_url_helpers = DeveloperPortal::Engine.routes.url_helpers
+
+
       extend Liquid::Docs::DSL::Drops
 
       private
@@ -102,14 +109,6 @@ module Liquid
 
       def optimize_routes_generation?
         true
-      end
-
-      def system_url_helpers
-        Rails.application.routes.url_helpers
-      end
-
-      def cms_url_helpers
-        DeveloperPortal::Engine.routes.url_helpers
       end
     end
   end
