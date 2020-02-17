@@ -1,7 +1,7 @@
 import React from 'react'
 import {mount} from 'enzyme'
 
-import {SimpleLoginPage, Login3scaleForm, RequestPasswordForm} from 'LoginPage'
+import {SimpleLoginPage, Login3scaleForm, RequestPasswordForm, ForgotCredentials} from 'LoginPage'
 
 const props = {
   enforceSSO: false,
@@ -12,6 +12,7 @@ const props = {
   providerSessionsPath: 'sessions-path',
   redirectUrl: 'redirect-url',
   show3scaleLoginForm: true,
+  masterAccount: false,
   session: {username: ''}
 }
 
@@ -37,6 +38,20 @@ it('should render <RequestPasswordForm/> component when formMode state is set to
   const wrapper = mount(<SimpleLoginPage {...props}/>)
   wrapper.setState({formMode: 'password-reset'})
   expect(wrapper.find(RequestPasswordForm).exists()).toEqual(true)
+})
+
+it('should render <ForgotCredentials/> component when masterAccount is false', () => {
+  const wrapper = mount(<SimpleLoginPage {...props}/>)
+  expect(wrapper.find(ForgotCredentials).exists()).toEqual(true)
+})
+
+it('should not render <ForgotCredentials/> component when masterAccount is true', () => {
+  const propsWithoutMasterAccount = {
+    ...props,
+    masterAccount: true
+  }
+  const wrapper = mount(<SimpleLoginPage {...propsWithoutMasterAccount}/>)
+  expect(wrapper.find(ForgotCredentials).exists()).toEqual(false)
 })
 
 it('should render Login form and Authentication providers when available', () => {
