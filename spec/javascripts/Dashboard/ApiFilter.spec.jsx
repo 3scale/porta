@@ -33,7 +33,7 @@ it('should filter APIs passed in props by name', () => {
   const input = apiFilter.find('input')
 
   // Filter first all apis
-  input.simulate('change', { target: { value: 'api' } })
+  input.props().onChange({ target: { value: 'api' } })
 
   expect(remove).toHaveBeenCalledTimes(apis.length)
   expect(add).toHaveBeenCalledTimes(0)
@@ -42,7 +42,7 @@ it('should filter APIs passed in props by name', () => {
   add.mockReset()
 
   // Filter only last one
-  input.simulate('change', { target: { value: 'api 11' } })
+  input.props().onChange({ target: { value: 'api 11' } })
 
   expect(remove).toHaveBeenCalledTimes(1)
   expect(add).toHaveBeenCalledTimes(2)
