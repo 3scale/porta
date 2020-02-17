@@ -230,4 +230,18 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
       refute(is_https?(nil))
     end
   end
+
+  class ProxyRulesPreview < self
+    include ProxyRulesHelper
+
+    test 'print only 1 slash when backend_api path is "/"' do
+      pattern = '/foo'
+      backend_api = FactoryBot.create(:backend_api)
+      proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil, pattern: pattern)
+      backend_api_config = FactoryBot.create(:backend_api_config)
+      backend_api_config.stubs(:path).returns('/')
+
+      assert_equal "<code>#{pattern} =&gt; metric_1</code>", proxy_rules_preview(backend_api, path: backend_api_config.path)
+    end
+  end
 end

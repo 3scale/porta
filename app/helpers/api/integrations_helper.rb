@@ -230,7 +230,7 @@ module Api::IntegrationsHelper
     proxy_rules = owner.proxy_rules
     last_rule = proxy_rules.last
     return 'None' unless last_rule
-    code = content_tag(:code) { "#{path}#{last_rule.pattern} => #{last_rule.metric.name}" }
+    code = content_tag(:code) { "#{File.join(path.to_s, last_rule.pattern.to_s)} => #{last_rule.metric.name}" }
     code + link_to_more_proxy_rules(proxy_rules, proxy_rules_path_for(owner))
   end
 
