@@ -39,8 +39,8 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   ##~ op.parameters.add name: "policies_config", description: "Proxy policies chain", dataType: "string", paramType: "query", required: true
   #
   def update
-    if proxy.update_attributes(proxy_params)
-      ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox) if proxy.apicast_configuration_driven
+    if proxy.update_attributes(proxy_params) && proxy.apicast_configuration_driven
+      ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox)
     end
 
     policies_config = Proxy::PoliciesConfig.new(proxy.policies_config)
