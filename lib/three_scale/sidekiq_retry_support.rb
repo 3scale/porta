@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'sidekiq/middleware/server/retry_jobs'
 module ThreeScale
   module SidekiqRetrySupport
     module Worker
@@ -16,7 +15,7 @@ module ThreeScale
           when Integer
             retry_option
           when true
-            Sidekiq::Middleware::Server::RetryJobs::DEFAULT_MAX_RETRY_ATTEMPTS
+            Sidekiq::JobRetry::DEFAULT_MAX_RETRY_ATTEMPTS
           else
             0
           end
