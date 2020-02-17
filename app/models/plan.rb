@@ -5,7 +5,7 @@ class Plan < ApplicationRecord
   include Symbolize
 
   # todo: remove after migration 20200211154433_remove_end_user_plans.rb
-  self.ignored_columns = ['end_user_required']
+  self.ignored_columns = %w[end_user_required]
 
   self.allowed_sort_columns = %w[position name state contracts_count]
   self.default_sort_column = :position
