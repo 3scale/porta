@@ -23,11 +23,27 @@ it('should render itself', () => {
 })
 
 it('should filter APIs passed in props by name', () => {
-  // TODO
+  // remove / add mean class 'hidden' from DOM Element
+  const remove = jest.fn()
+  const add = jest.fn()
+  jest.spyOn(document, 'getElementById').mockReturnValue({
+    classList: { remove, add }
+  })
+
   const input = apiFilter.find('input')
+
+  // Filter first all apis
   input.simulate('change', { target: { value: 'api' } })
-  input.simulate('change', { target: { value: 'api 1' } })
+
+  expect(remove).toHaveBeenCalledTimes(apis.length)
+  expect(add).toHaveBeenCalledTimes(0)
+
+  remove.mockReset()
+  add.mockReset()
+
+  // Filter only last one
   input.simulate('change', { target: { value: 'api 11' } })
 
-  // expect...
+  expect(remove).toHaveBeenCalledTimes(1)
+  expect(add).toHaveBeenCalledTimes(2)
 })
