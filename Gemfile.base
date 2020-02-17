@@ -47,7 +47,7 @@ gem 'statsd-ruby', require: false
 gem 'sinatra', require: false # for sidekiq web
 
 # Sidekiq
-gem 'sidekiq', '~> 4.2', require: %w(sidekiq sidekiq/web)
+gem 'sidekiq', '< 6', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-cron', require: %w(sidekiq/cron sidekiq/cron/web)
 gem 'sidekiq-lock'
 gem 'sidekiq-throttled'
@@ -111,9 +111,9 @@ gem 'redcarpet', '~>3.4.0', require: false
 gem 'baby_squeel', '~> 1.3.1'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'hiredis', '~>0.6.0'
-gem 'redis', '~> 3.3.5', require: ['redis', 'redis/connection/hiredis']
+gem 'redis', '~> 4.1.3', require: ['redis', 'redis/connection/hiredis']
 gem 'ratelimit'
-gem 'redis-namespace', '~> 1.5.2'
+gem 'redis-namespace', '~> 1.7.0'
 gem 'rest-client', '~> 2.0.2'
 gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
 gem 'thinking-sphinx', '~> 3.0'
