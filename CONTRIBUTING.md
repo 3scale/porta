@@ -12,9 +12,9 @@ Please keep in mind that multiple types of contributions are possible, apart fro
 
 * **If you find a security vulnerability**. Please [contact us privately](https://access.redhat.com/security/team/contact).
 
-* **Ensure the bug was not already reported** by searching [here](https://issues.jboss.org/issues/?filter=12339079).
+* **Ensure the bug was not already reported** by searching [here](https://issues.redhat.com/issues/?filter=12339079).
 
-* If you're unable to find an issue addressing the problem, please [open a new one](https://issues.jboss.org/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4), filling-in all the necessary information in the Issue template. This requires a jira login. If you don't have one already, you can create one.
+* If you're unable to find an issue addressing the problem, please [open a new one](https://issues.redhat.com/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4), filling-in all the necessary information in the Issue template. This requires a jira login. If you don't have one already, you can create one.
 
 #### **Did you write a patch that fixes a bug?**
 
@@ -24,7 +24,7 @@ Please keep in mind that multiple types of contributions are possible, apart fro
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-* Suggest your change by **[opening an issue first](https://issues.jboss.org/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4)** with an explanation of the change, before writing any code.
+* Suggest your change by **[opening an issue first](https://issues.redhat.com/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4)** with an explanation of the change, before writing any code.
 
 * Please think twice about starting to work on code before having collected positive feedback about the proposed change. Maintainers may have already decided on a different improvement path, so your work may not be accepted.
 
@@ -44,7 +44,7 @@ To sign your commits, you only need to follow these steps:
 
 #### **Do you have questions about the source code?**
 
-* Ask any question by [raising an issue](https://issues.jboss.org/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4). Maintainers could always use more help, so they'll be happy to assist you, no matter how silly you might think your question is. 
+* Ask any question by [raising an issue](https://issues.redhat.com/secure/CreateIssueDetails!init.jspa?pid=12318224&issuetype=3&components=12325241&priority=4). Maintainers could always use more help, so they'll be happy to assist you, no matter how silly you might think your question is. 
 
 Thanks for reading this far!! 
 
