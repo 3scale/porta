@@ -9,7 +9,11 @@ environment.config.merge({
         parallel: 4
       })
     ]
-  }
+  },
+  output: {
+    pathinfo: false
+  },
+  devtool: 'cheap-module-eval-source-map'
 })
 
 module.exports = environment.toWebpackConfig()
