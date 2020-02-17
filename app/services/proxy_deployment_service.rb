@@ -7,6 +7,8 @@ class ProxyDeploymentService
            :provider,
            :proxy_configs, to: :@proxy
 
+  alias apicast_configuration_driven? apicast_configuration_driven
+
   class UnknownStageError < ArgumentError; end
 
   def self.call(*args)
@@ -38,16 +40,15 @@ class ProxyDeploymentService
 
     if service_mesh_integration?
       deploy_v2 && deploy_production_v2
-    elsif apicast_configuration_driven
+    elsif apicast_configuration_driven?
       deploy_v2
     elsif @v1_compatible
       deploy_v1
     end
   end
 
-  # TODO: in order to include this method into 'call', do I need another service?
   def deploy_production
-    if apicast_configuration_driven
+    if apicast_configuration_driven?
       deploy_production_v2
     elsif @proxy.ready_to_deploy?
       provider.deploy_production_apicast

@@ -19,7 +19,6 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
 
   test 'deploy with service mesh integration' do
     @proxy.expects(:service_mesh_integration?).returns(true)
-    @proxy.expects(:apicast_configuration_driven).never
 
     service = ProxyDeploymentService.new(@proxy)
     service.expects(:deploy_v2).returns(true)
@@ -32,7 +31,6 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
     @proxy.expects(:apicast_configuration_driven).returns(true)
 
     service = ProxyDeploymentService.new(@proxy, environment: :production)
-    service.expects(:deploy_v2).never
     service.expects(:deploy_production_v2).returns(true)
 
     assert service.call
@@ -43,8 +41,6 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
     @proxy.expects(:api_test_success).returns(true)
 
     service = ProxyDeploymentService.new(@proxy, environment: :production)
-    service.expects(:deploy_v2).never
-    service.expects(:deploy_production_v2).never
 
     @proxy.provider.expects(:deploy_production_apicast).returns(true)
 
@@ -56,8 +52,6 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
     @proxy.expects(:apicast_configuration_driven).returns(false)
 
     service = ProxyDeploymentService.new(@proxy)
-    service.expects(:deploy_v2).never
-    service.expects(:deploy_v1).never # Deprecated
 
     refute service.call
   end
@@ -68,7 +62,6 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
     @proxy.expects(:apicast_configuration_driven).returns(false)
 
     service = ProxyDeploymentService.new(@proxy, v1_compatible: true)
-    service.expects(:deploy_v2).never
     service.expects(:deploy_v1).returns(true).once
 
     assert service.call
