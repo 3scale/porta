@@ -40,8 +40,8 @@ module Concerns
     test 'all associations of the config can be constantized' do
       Rails.application.eager_load!
 
-      ActiveRecord::Base.descendants.each do |klass|
-        next if [DoubleObject, DoubleActiveRecordObject, SecondDoubleActiveRecordObject].include?(klass) || !klass.respond_to?(:background_deletion)
+      ApplicationRecord.descendants.each do |klass|
+        next if [DoubleObject, DoubleActiveRecordObject, SecondDoubleActiveRecordObject].include?(klass) || klass.background_deletion.blank?
 
         Array(klass.background_deletion).each do |config|
           reflection = BackgroundDeletion::Reflection.new(config)
