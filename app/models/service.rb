@@ -4,7 +4,7 @@ require 'backend_client'
 
 class Service < ApplicationRecord
   # todo: remove after migration 20200211154433_remove_end_user_plans.rb
-  self.ignored_columns = ['end_user_registration_required', 'default_end_user_plan_id']
+  self.ignored_columns = %w[end_user_registration_required default_end_user_plan_id]
 
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
