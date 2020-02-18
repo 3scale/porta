@@ -98,7 +98,7 @@ Feature: ActiveDocs
     When I delete the API Spec
     Then I should see "ActiveDocs Spec was successfully deleted."
 
-  # TODO: not sure if supported
+  # TODO: feature not supported. Wait for plugins.
   @wip
   Scenario: OAS 3 and autocomplete
     When I go to the new active docs page
@@ -144,7 +144,7 @@ Feature: ActiveDocs
     Then should see "ActiveDocs Spec was successfully saved."
     And the swagger v3 autocomplete should work for "user_key" with "user_keys"
 
-  # TODO: not sure what to assert
+  # TODO: feature not supported. Wait for plugins.
   @wip
   Scenario: OAS 3 and slashes generated curl command for header values
     When I go to the new active docs page
@@ -168,7 +168,7 @@ Feature: ActiveDocs
               {
                 "name": "user_key",
                 "x-data-threescale-name": "user_keys",
-                "in": "query",
+                "in": "header",
                 "description": "Your API access key",
                 "required": true,
                 "schema": {
