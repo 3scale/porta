@@ -18,6 +18,10 @@ const constraintsTypes = {
   }
 }
 
+const validateForm = (form: SyntheticEvent<HTMLFormElement>, constraints: {}) => {
+  return validate(form, constraints)
+}
+
 const validateSingleField = (event: SyntheticEvent<HTMLInputElement>) => {
   const {value, type} = event.currentTarget
   const fieldError = validate.single(value, constraintsTypes[type])
@@ -25,5 +29,6 @@ const validateSingleField = (event: SyntheticEvent<HTMLInputElement>) => {
 }
 
 export {
+  validateForm,
   validateSingleField
 }
