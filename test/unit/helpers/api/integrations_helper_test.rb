@@ -6,18 +6,6 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     @proxy = FactoryBot.create(:proxy, :service => FactoryBot.create(:service))
   end
 
-  class BasicTests < self
-    test 'print the proper preview' do
-      pattern = '/foo'
-      backend_api = FactoryBot.create(:backend_api)
-      FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil, pattern: pattern)
-      backend_api_config = FactoryBot.create(:backend_api_config)
-      backend_api_config.stubs(:path).returns('/')
-
-      assert_equal pattern, proxy_rule_uri(backend_api_config.path, backend_api.proxy_rules.last)
-    end
-  end
-
   class ModelBasedCurlCommandTest < self
     test 'auth in query' do
       @proxy.update_attributes(credentials_location:  'query')
