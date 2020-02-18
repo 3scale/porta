@@ -42,7 +42,9 @@ Feature: Provider password reset
     And I follow the link found in the provider password reset email send to "zed@example.com"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "donkey"
-    Then I should see button "Change Password" disabled
+    And I press "Change Password"
+    Then I should see the password confirmation error
+    And the password of user "zed" should not be "monkey"
 
   Scenario: Invalid token
     When I go to the provider password page with invalid password reset token
