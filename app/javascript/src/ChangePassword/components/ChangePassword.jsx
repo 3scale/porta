@@ -25,21 +25,16 @@ const validationConstraints = {
   },
   'user[password_confirmation]': {
     presence: true,
-    length: { minimum: 1 },
-    equality: 'user[password]'
+    length: { minimum: 1 }
   }
 }
 
 const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
   const [isFormDisabled, setIsFormDisabled] = useState(true)
-  const [passwordsMatch, setPasswordsMatch] = useState(true)
 
   const onChange = (event) => {
     const errors = validateForm(event.currentTarget, validationConstraints)
-    const passwordConfirmationError = (errors && errors['user[password_confirmation]']) ? errors['user[password_confirmation]'][0] : ''
-    const doesPasswordsMatch = !passwordConfirmationError.includes('is not equal to')
     setIsFormDisabled(!!errors)
-    setPasswordsMatch(doesPasswordsMatch)
   }
 
   return (
@@ -73,9 +68,6 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
           name='password_confirmation'
           label='Password confirmation'
         />
-        {!passwordsMatch &&
-          <div className="pf-c-form__helper-text pf-m-error" aria-live="polite">Password and password confirmation must match</div>
-        }
         {lostPasswordToken &&
           <input id='password_reset_token' type='hidden' name='password_reset_token' value={lostPasswordToken} />
         }
