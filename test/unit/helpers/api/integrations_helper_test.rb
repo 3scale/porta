@@ -6,6 +6,16 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     @proxy = FactoryBot.create(:proxy, :service => FactoryBot.create(:service))
   end
 
+  test 'print the proper preview' do
+    pattern = '/foo'
+    backend_api = FactoryBot.create(:backend_api)
+    FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil, pattern: pattern)
+    backend_api_config = FactoryBot.create(:backend_api_config)
+    backend_api_config.stubs(:path).returns('/')
+
+    assert_equal pattern, proxy_rule_uri(backend_api_config.path, backend_api.proxy_rules.last)
+  end
+
   class ModelBasedCurlCommandTest < self
     test 'auth in query' do
       @proxy.update_attributes(credentials_location:  'query')
@@ -228,20 +238,6 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
       refute(is_https?('foo'))
       refute(is_https?(1))
       refute(is_https?(nil))
-    end
-  end
-
-  class ProxyRulesPreview < self
-    include ProxyRulesHelper
-
-    test 'print only 1 slash when backend_api path is "/"' do
-      pattern = '/foo'
-      backend_api = FactoryBot.create(:backend_api)
-      proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil, pattern: pattern)
-      backend_api_config = FactoryBot.create(:backend_api_config)
-      backend_api_config.stubs(:path).returns('/')
-
-      assert_equal "<code>#{pattern} =&gt; metric_1</code>", proxy_rules_preview(backend_api, path: backend_api_config.path)
     end
   end
 end
