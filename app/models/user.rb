@@ -23,9 +23,14 @@ class User < ApplicationRecord
   include Permissions
   include ProvidedAccessTokens
 
-  self.background_deletion = [:user_sessions, :access_tokens, [:sso_authorizations, { action: :delete }],
-                              [:moderatorships, { action: :delete }], [:notifications, { action: :delete }],
-                              [:notification_preferences, { action: :delete, has_many: false }]]
+  self.background_deletion = [
+    :user_sessions,
+    :access_tokens,
+    [:sso_authorizations, { action: :delete }],
+    [:moderatorships, { action: :delete }],
+    [:notifications, { action: :delete }],
+    [:notification_preferences, { action: :delete, class_name: 'NotificationPreferences', has_many: false }]
+  ].freeze
 
   audited except: %i[salt posts_count janrain_identifier cas_identifier password_digest
                      authentication_id open_id last_login_at last_login_ip].freeze
