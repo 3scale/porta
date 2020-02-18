@@ -62,7 +62,7 @@ class BillingWorker
   private
 
   def store_summary(buyer_id, billing_result)
-    summary = BillingSummary.new(bid)
+    summary = BillingSummary.new(batch && bid)
     summary.store(buyer_id, billing_result)
   end
 
