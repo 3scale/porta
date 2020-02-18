@@ -36,5 +36,19 @@ module Concerns
       DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy').never
       DeleteObjectHierarchyWorker.perform_now(double_object)
     end
+
+    test 'all associations of the config can be constantized' do
+      Rails.application.eager_load!
+
+      ApplicationRecord.descendants.each do |klass|
+        next if [DoubleObject, DoubleActiveRecordObject, SecondDoubleActiveRecordObject].include?(klass) || klass.background_deletion.blank?
+
+        Array(klass.background_deletion).each do |config|
+          reflection = BackgroundDeletion::Reflection.new(config)
+          class_name = reflection.class_name
+          assert reflection.try(:class_name).safe_constantize, "expected #{class_name.inspect} of the model #{klass} to be instantiated"
+        end
+      end
+    end
   end
 end

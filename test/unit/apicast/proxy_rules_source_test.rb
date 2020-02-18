@@ -12,6 +12,8 @@ class Apicast::ProxyRulesSourceTest < ActiveSupport::TestCase
     metric = FactoryBot.create(:metric, owner: backend_api, description: 'My awesome metric', system_name: 'my-metric')
     rule_3 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/create')
     rule_4 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/delete', metric: metric)
+    rule_5 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/list?filter=a', metric: metric)
+    rule_6 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/users/{username}', metric: metric)
 
     source = Apicast::ProxyRulesSource.new(proxy).to_hash
 
@@ -20,11 +22,15 @@ class Apicast::ProxyRulesSourceTest < ActiveSupport::TestCase
 
     rule_hash_3 = find_by_id_in_hash(rule_3.id, source)
     rule_hash_4 = find_by_id_in_hash(rule_4.id, source)
+    rule_hash_5 = find_by_id_in_hash(rule_5.id, source)
+    rule_hash_6 = find_by_id_in_hash(rule_6.id, source)
 
     assert rule_hash_3 && rule_hash_4
     assert_equal '/test/path/create', rule_hash_3['pattern']
     assert_equal '/test/path/delete', rule_hash_4['pattern']
     assert_equal metric['system_name'], rule_hash_4['metric_system_name']
+    assert_equal({'filter' => 'a'}, rule_hash_5['querystring_parameters'])
+    assert_equal ['username'], rule_hash_6['parameters']
   end
 
   private

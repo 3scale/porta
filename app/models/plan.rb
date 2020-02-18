@@ -479,6 +479,18 @@ class Plan < ApplicationRecord
 
   private
 
+  def scheduled_for_deletion?
+    !issuer || issuer.deleted? || provider_account&.scheduled_for_deletion?
+  end
+
+  # act_as_list updates the position every time that a plan is destroyed.
+  # But we do not want to do that when its issuer is going to be deleted anyway.
+  # Additionally, we cannot do: skip_callback :destroy, :after, :decrement_positions_on_lower_items, if: -> { destroyed_by_association }
+  # because it is an 'after' callback and by the time it is executed, destroyed_by_association is already 'nil'
+  def act_as_list_no_update?
+    super || scheduled_for_deletion?
+  end
+
   def plan_rule
     @plan_rule ||= PlanRulesCollection.find_for_plan(self)
   end
