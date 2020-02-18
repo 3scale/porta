@@ -4,6 +4,8 @@ module Apicast
   class ProxyRulesSource
     attr_reader :proxy
 
+    METHODS =  %I[parameters querystring_parameters].freeze
+
     delegate :backend_api_configs, to: :proxy
 
     def initialize(proxy)
@@ -17,7 +19,7 @@ module Apicast
         config.backend_api.proxy_rules.decorate(context: { backend_api_path: config.path })
       end
 
-      api_proxy_rules.as_json(root: false)
+      api_proxy_rules.as_json(root: false, methods: METHODS)
     end
   end
 end
