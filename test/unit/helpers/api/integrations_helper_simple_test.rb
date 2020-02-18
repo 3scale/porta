@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class Api::IntegrationsHelperSimpleTest < ActionView::TestCase
+  include Api::IntegrationsHelper
 
   test 'print the proper preview' do
     pattern = '/foo'
