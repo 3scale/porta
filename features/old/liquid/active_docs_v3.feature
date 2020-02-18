@@ -7,8 +7,6 @@ Feature: ActiveDocs
     Given a provider "foo.example.com"
     And the current provider is foo.example.com
 
-  # FIXME packs are not loaded
-  @wip
   Scenario: Loading new Swagger template with javascript packs
     Given provider "foo.example.com" has the swagger example of signup
     And the provider has cms page "/swagger-ui-3" with:
@@ -18,6 +16,8 @@ Feature: ActiveDocs
     {% endcontent_for %}
 
     <h3>ActiveDocs version 3</h3>
+
+    <div id="swagger-ui-container">
 
     <script type="text/javascript">
       (function () {
