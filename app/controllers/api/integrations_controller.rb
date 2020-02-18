@@ -58,7 +58,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def update_production
-    @proxy.deploy_production
+    ProxyDeploymentService.call(@proxy, environment: :production)
     ThreeScale::TimedValue.set(deploying_hosted_proxy_key, true, 5*60 )
     ThreeScale::Analytics.track(current_user, 'Hosted Proxy deployed')
     flash[:notice] = flash_message(:update_production_success)
@@ -79,7 +79,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def promote_to_production
-    if @proxy.deploy_production
+    if ProxyDeploymentService.call(@proxy, environment: :production)
       flash[:notice] = flash_message(:promote_to_production_success)
     else
       flash[:error] = flash_message(:promote_to_production_error)

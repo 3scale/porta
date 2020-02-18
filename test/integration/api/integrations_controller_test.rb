@@ -24,7 +24,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   def test_promote_to_production_error
     service = FactoryBot.create(:simple_service, account: @provider)
 
-    Proxy.any_instance.expects(:deploy_production).returns(true).once
+    ProxyDeploymentService.any_instance.expects(:deploy_production).returns(true).once
     patch promote_to_production_admin_service_integration_path(service_id: service)
     assert_response :redirect
     assert_not_nil flash[:notice]
@@ -34,7 +34,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   def test_promote_to_production_success
     service = FactoryBot.create(:simple_service, account: @provider)
 
-    Proxy.any_instance.expects(:deploy_production).returns(false).once
+    ProxyDeploymentService.any_instance.expects(:deploy_production).returns(false).once
     patch promote_to_production_admin_service_integration_path(service_id: service)
     assert_response :redirect
     assert_nil flash[:notice]
@@ -42,7 +42,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_update
-    Proxy.any_instance.stubs(:deploy).returns(true)
+    ProxyDeploymentService.any_instance.stubs(:deploy).returns(true)
     Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
     service = @provider.services.first
     proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: service.proxy, last: false)
@@ -59,7 +59,7 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_update_proxy_rule_position
-    Proxy.any_instance.stubs(:deploy).returns(true)
+    ProxyDeploymentService.any_instance.expects(:deploy_v2).returns(true).times(3)
     Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
 
     service = @provider.services.first
