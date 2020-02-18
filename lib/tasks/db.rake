@@ -9,6 +9,18 @@ namespace :db do
   end
 
   namespace :deploy do
-    task setup: %w(db:setup countries:import countries:disable_t5)
+    task setup: %i[environment db:load_config] do
+      begin
+        ActiveRecord::Tasks::DatabaseTasks.create_current
+      rescue ActiveRecord::StatementInvalid => exception
+        raise unless exception.message =~ /PG::InsufficientPrivilege/
+      end
+
+      Rake::Task['db:schema:load'].invoke
+      Rake::Task['db:seed'].invoke
+
+      Rake::Task['countries:import'].invoke
+      Rake::Task['countries:disable_t5'].invoke
+    end
   end
 end
