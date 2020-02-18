@@ -60,7 +60,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "name", :description => "Name of the Backend", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add @parameter_system_name_by_name
   ##~ op.parameters.add @parameter_backend_api_description
-  ##~ op.parameters.add :name => "private_endpoint", :description => "Private endpoint of the Backend", :dataType => "string", :required => true, :paramType => "query"
+  ##~ op.parameters.add :name => "private_endpoint", :description => "Private Base URL (your API)", :dataType => "string", :required => true, :paramType => "query"
   #
   def create
     backend_api = current_account.backend_apis.create(create_params)
@@ -98,7 +98,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_backend_api_id_by_id
   ##~ op.parameters.add :name => "name", :description => "Name of the Backend", :dataType => "string", :required => false, :paramType => "query"
   ##~ op.parameters.add @parameter_backend_api_description
-  ##~ op.parameters.add :name => "private_endpoint", :description => "Private endpoint of the Backend", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "private_endpoint", :description => "Private Base URL (your API)", :dataType => "string", :required => false, :paramType => "query"
   #
   def update
     backend_api.update(update_params)
