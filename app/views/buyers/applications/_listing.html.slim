@@ -2,7 +2,7 @@ div id="bulk-operations" style="display: none;"
   h3 Bulk operations
   p
     ' You have selected
-    span class="count"
+    span.count>
     | applications and you can make following operations with them:
   dl
     = bulk_action 'Send email', new_admin_buyers_applications_bulk_send_email_path,
