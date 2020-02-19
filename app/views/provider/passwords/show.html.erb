@@ -1,16 +1,4 @@
-<h2>Change Password</h2>
+<%= javascript_pack_tag 'ChangePassword' %>
 
-<%= semantic_form_for @user, :url => provider_password_path, :method => :put do |form| %>
-  <%= form.inputs do %>
-    <%= form.input :password, required: true %>
-    <%= form.input :password_confirmation, required: true %>
-  <% end %>
-
-  <%= form.buttons do %>
-    <%= form.commit_button 'Change Password' %>
-  <% end %>
-
-  <% if @user.lost_password_token? %>
-    <%= hidden_field_tag :password_reset_token, @user.lost_password_token %>
-  <% end %>
-<% end %>
+<%= tag :div, id: 'pf-login-page-container',
+              data: { change_password_props: @password_presenter.change_password_props_json } %>
