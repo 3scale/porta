@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200121142649) do
+ActiveRecord::Schema.define(version: 20200211080911) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                                  null: false
@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(version: 20200121142649) do
     t.string   "request_uuid"
     t.index ["action"], name: "index_audits_on_action", using: :btree
     t.index ["associated_id", "associated_type"], name: "associated_index", using: :btree
+    t.index ["auditable_id", "auditable_type", "version"], name: "index_audits_on_auditable_id_and_auditable_type_and_version", using: :btree
     t.index ["auditable_id", "auditable_type"], name: "auditable_index", using: :btree
     t.index ["created_at"], name: "index_audits_on_created_at", using: :btree
     t.index ["kind"], name: "index_audits_on_kind", using: :btree

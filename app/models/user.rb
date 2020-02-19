@@ -32,7 +32,8 @@ class User < ApplicationRecord
     [:notification_preferences, { action: :delete, class_name: 'NotificationPreferences', has_many: false }]
   ].freeze
 
-  audited
+  audited except: %i[salt posts_count janrain_identifier cas_identifier password_digest
+                     authentication_id open_id last_login_at last_login_ip crypted_password].freeze
 
   before_validation :trim_white_space_from_username
   before_destroy :can_be_destroyed?
