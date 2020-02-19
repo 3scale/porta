@@ -5,7 +5,7 @@
     li
       = form.label :backend_api_id, 'Backend'
       = form.text_field :backend_api_id, class: 'text', value: @backend_api_config.backend_api.name, disabled: true
-    = form.input :path, hint: 'Changing the public path will only affect this product', label: 'Public Path'
+    = form.input :path, hint: 'Changing the Public Path will only affect this Product.', label: 'Public Path'
 
   = form.buttons do
     = form.commit_button 'Update'

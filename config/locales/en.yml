@@ -459,7 +459,7 @@ en:
     backend_apis:
       edit:
         delete_confirmation: "Are you sure you want to delete the backend '%{name}'?"
-      public_path_help_html: "The path where this backend and its methods are available within the context of this product."
+      public_path_help_html: "The path where this Backend API and its methods are available within the context of this Product."
     services:
       forms:
         definition_settings:
