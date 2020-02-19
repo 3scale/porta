@@ -3,11 +3,11 @@
 require 'test_helper'
 
 class ApplicationControllerTest < ActionDispatch::IntegrationTest
-  
+
   def setup
     @application_controller = ApplicationController.new
   end
-  
+
   attr_reader :application_controller
 
   def test_check_browser
@@ -48,5 +48,15 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     request_object.stubs(:raw_host_with_port).returns('master-admin.3scale.net')
     application_controller.stubs(:request).returns(request_object)
     assert_equal 'provider-admin.3scale.net', application_controller.send(:target_host, provider)
+  end
+
+  test 'tracks proxy config affecting changes' do
+    provider = FactoryBot.create(:provider_account)
+    login! provider
+
+    ApplicationController.any_instance.expects(:track_proxy_affecting_changes)
+    ApplicationController.any_instance.expects(:flush_proxy_affecting_changes)
+
+    get admin_buyers_accounts_path
   end
 end

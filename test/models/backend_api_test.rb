@@ -92,21 +92,40 @@ class BackendApiTest < ActiveSupport::TestCase
     refute BackendApi.exists? backend_api.id
   end
 
-  class DisableTransactionalFixturesTest < ActiveSupport::TestCase
+  class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    test 'proxy config affecting changes on update' do
-      provider = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: provider)
-      proxy = service.proxy
-      backend_api = FactoryBot.create(:backend_api, account: provider, private_endpoint: 'https://old-endpoint', name: 'Backend')
-      service.backend_api_configs.create!(backend_api: backend_api, path: '/backend')
-
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, backend_api)
-
-      backend_api.update_attributes(private_endpoint: 'http://new-endpoint')
-      backend_api.update_attributes(name: 'New Backend Name')
+    setup do
+      provider = FactoryBot.create(:provider_account)
+      @service = provider.first_service
+      @backend_api = FactoryBot.create(:backend_api, account: provider)
+      FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service, path: '/whatever')
+      @tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(backend_api)
     end
+
+    attr_reader :service, :backend_api, :tracked_object
+
+    test 'tracks changes on update of endpoint' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        refute tracker.tracking?(tracked_object)
+        backend_api.update(name: 'new-name')
+        refute tracker.tracking?(tracked_object)
+        backend_api.update(api_backend: 'https://new-endpoint.test')
+        assert tracker.tracking?(tracked_object)
+      end
+    end
+
+    test 'tracks changes on destroy' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        refute tracker.tracking?(tracked_object)
+        backend_api.destroy
+        assert tracker.tracking?(tracked_object)
+      end
+    end
+  end
+
+  class DisableTransactionalFixturesTest < ActiveSupport::TestCase
+    disable_transactional_fixtures!
 
     test '.orphans should return backend apis that do not belongs to any service' do
       account = FactoryBot.create(:account)

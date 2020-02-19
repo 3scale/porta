@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ipaddr'
 require 'resolv'
 
@@ -6,7 +8,9 @@ class Proxy < ApplicationRecord
   include BackendApiLogic::ProxyExtension
   prepend BackendApiLogic::RoutingPolicy
   include GatewaySettings::ProxyExtension
-  include ProxyConfigAffectingChanges::ProxyExtension
+  include ProxyConfigAffectingChanges::ModelExtension
+
+  define_proxy_config_affecting_attributes except: %i[updated_at lock_version]
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
 
@@ -20,6 +24,9 @@ class Proxy < ApplicationRecord
   has_many :proxy_configs, dependent: :delete_all, inverse_of: :proxy
   has_one :oidc_configuration, dependent: :delete, inverse_of: :oidc_configurable, as: :oidc_configurable
   accepts_nested_attributes_for :oidc_configuration
+
+  has_one :proxy_config_affecting_change, dependent: :delete
+  private :proxy_config_affecting_change
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
@@ -247,8 +254,8 @@ class Proxy < ApplicationRecord
   # @return DeploymentStrategy
   def deployment_strategy
     strategy = case deployment_option
-               when 'self_managed'.freeze then SelfManagedAPIcast
-               when 'hosted'.freeze then HostedAPIcast
+               when 'self_managed' then SelfManagedAPIcast
+               when 'hosted' then HostedAPIcast
                end
 
     strategy.try!(:new, self)
@@ -259,7 +266,7 @@ class Proxy < ApplicationRecord
   end
 
   def oidc?
-    provider&.provider_can_use?(:apicast_oidc) && authentication_method.to_s == 'oidc'.freeze
+    provider&.provider_can_use?(:apicast_oidc) && authentication_method.to_s == 'oidc'
   end
 
   # beware that in the on-prem product deployment option is 'hosted'
@@ -336,9 +343,9 @@ class Proxy < ApplicationRecord
   def hosts
     [endpoint, sandbox_endpoint].map do |endpoint|
       begin
-        URI(endpoint || ''.freeze).host
+        URI(endpoint || '').host
       rescue ArgumentError, URI::InvalidURIError
-        'localhost'.freeze
+        'localhost'
       end
     end.compact.uniq
   end
@@ -498,12 +505,12 @@ class Proxy < ApplicationRecord
   end
 
   PROXY_ENV = {
-    preview: 'pre.'.freeze,
-    production: ''.freeze
+    preview: 'pre.',
+    production: ''
   }.freeze
 
   def proxy_env
-    PROXY_ENV.fetch(Rails.env.to_sym, ''.freeze)
+    PROXY_ENV.fetch(Rails.env.to_sym, '')
   end
 
   def proxy_port
@@ -529,6 +536,23 @@ class Proxy < ApplicationRecord
   def locking_enabled?
     return @instance_locking_enabled if instance_variable_defined? :@instance_locking_enabled
     super
+  end
+
+  def find_or_create_proxy_config_affecting_change
+    proxy_config_affecting_change || create_proxy_config_affecting_change
+  end
+  alias affecting_change_history find_or_create_proxy_config_affecting_change
+  private :find_or_create_proxy_config_affecting_change
+
+  def pending_affecting_changes?
+    return unless apicast_configuration_driven?
+    config = proxy_configs.sandbox.newest_first.first
+    return false unless config
+    config.created_at < affecting_change_history.updated_at
+  end
+
+  def proxy
+    self
   end
 
   protected
@@ -611,6 +635,12 @@ class Proxy < ApplicationRecord
     if (hits = service.metrics.first)
       proxy_rules.create(http_method: 'GET', pattern: '/', delta: 1, metric: hits)
     end
+  end
+
+  def create_proxy_config_affecting_change(*)
+    super
+  rescue ActiveRecord::RecordNotUnique
+    reload.send(:proxy_config_affecting_change)
   end
 
   def set_api_test_path

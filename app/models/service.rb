@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'backend_client'
 
 class Service < ApplicationRecord
@@ -11,7 +13,9 @@ class Service < ApplicationRecord
   include SystemName
   extend System::Database::Scopes::IdOrSystemName
   include ServiceDiscovery::ModelExtensions::Service
-  include ProxyConfigAffectingChanges::ServiceExtension
+  include ProxyConfigAffectingChanges::ModelExtension
+
+  define_proxy_config_affecting_attributes :backend_version
 
   self.background_deletion = [
     :service_plans,
@@ -24,7 +28,7 @@ class Service < ApplicationRecord
     [:proxy, { action: :destroy, has_many: false }]
   ].freeze
 
-  DELETE_STATE = 'deleted'.freeze
+  DELETE_STATE = 'deleted'
 
   has_system_name uniqueness_scope: :account_id
 
@@ -150,7 +154,7 @@ class Service < ApplicationRecord
     private_constant :SERVICE_MESH
 
     def self.plugins
-      PLUGINS.map { |lang| "plugin_#{lang}".freeze }
+      PLUGINS.map { |lang| "plugin_#{lang}" }
     end
 
     def self.gateways
@@ -158,7 +162,7 @@ class Service < ApplicationRecord
     end
 
     def self.service_mesh
-      SERVICE_MESH.map { |name| "service_mesh_#{name}".freeze }
+      SERVICE_MESH.map { |name| "service_mesh_#{name}" }
     end
 
     def self.all
@@ -513,7 +517,7 @@ class Service < ApplicationRecord
     (proxy || build_proxy).authentication_method = backend_version
 
     if oidc?
-      super('oauth'.freeze)
+      super('oauth')
     else
       super(backend_version)
     end
@@ -570,7 +574,7 @@ class Service < ApplicationRecord
   def default_service_plan_state
     return unless account && account.provider_can_use?(:published_service_plan_signup)
     return if account.should_be_deleted?
-    account.settings.service_plans_ui_visible? ? 'hidden'.freeze : 'published'.freeze
+    account.settings.service_plans_ui_visible? ? 'hidden' : 'published'
   end
 
   def update_notification_settings

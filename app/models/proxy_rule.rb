@@ -6,11 +6,11 @@ class ProxyRule < ApplicationRecord
   acts_as_list scope: %i[owner_id owner_type], add_new_at: :bottom
   scope :ordered, -> { order(position: :asc) }
 
+  include ProxyConfigAffectingChanges::ModelExtension
+
   belongs_to :proxy
   belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
   belongs_to :metric
-
-  include ProxyConfigAffectingChanges::ProxyRuleExtension
 
   validates :http_method, :pattern, :owner_id, :owner_type, :metric_id, presence: true
   validates :owner_type, length: { maximum: 255 }
@@ -125,6 +125,10 @@ class ProxyRule < ApplicationRecord
   end
 
   delegate :account, to: :owner, allow_nil: true
+
+  def proxies
+    backend_api_owner? ? owner.proxies : [proxy]
+  end
 
   def scheduled_for_deletion?
     !owner || !account || owner.scheduled_for_deletion?

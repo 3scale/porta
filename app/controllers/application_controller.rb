@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 
   include ThreeScale::Analytics::SessionStoredAnalytics::Helper
   include ThreeScale::OnPremises
+  include ProxyConfigAffectingChanges::ControllerExtension
 
   before_action :set_newrelic_custom_params
 
