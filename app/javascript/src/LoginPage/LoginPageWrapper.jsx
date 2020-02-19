@@ -37,7 +37,7 @@ type Props = {
   providerSessionsPath: string,
   redirectUrl: string,
   show3scaleLoginForm: boolean,
-  masterAccount: boolean,
+  disablePasswordReset: boolean,
   session: {
     username: ?string
   }
@@ -75,7 +75,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
   }
 
   showForgotCredentials () {
-    const showForgotCredentials = this.state.formMode === formModeTuple[0] && !this.props.masterAccount
+    const showForgotCredentials = this.state.formMode === formModeTuple[0] && !this.props.disablePasswordReset
     return showForgotCredentials && <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
   }
 
