@@ -31,4 +31,8 @@ declare module 'swagger-ui-react' {
   declare module.exports: any;
 }
 
+declare module 'validate.js' {
+  declare module.exports: any;
+}
+
 export type Window = any
