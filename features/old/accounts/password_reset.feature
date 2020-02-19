@@ -28,6 +28,14 @@ Feature: Provider password reset
     And I press "Sign in"
     Then I should be logged in as "zed"
 
+  Scenario: Reset password not available for master domain
+    When current domain is the master domain of provider "foo.example.com"
+    And I go to the provider login page
+
+    Then I should see "Email"
+    Then I should see "Password"
+    Then I should not see "Forgot Password?"
+
   Scenario: Invalid email
     Given no user exists with an email of "bob@example.com"
     And I follow "Forgot password?"
