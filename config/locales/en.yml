@@ -655,6 +655,9 @@ en:
     python: Python
     rest: REST
 
+  oidc:
+    authorization_flow_warning: "Any changes to the authorization flow of this product will only be applied to new applications; existing applications will continue to use the original flow."
+
   time:
     formats:
       default: "%d %b %Y %H:%M:%S %Z"
