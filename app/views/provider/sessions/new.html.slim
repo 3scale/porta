@@ -1,6 +1,7 @@
 = javascript_pack_tag 'LoginPage'
 - authentication_providers = (@authentication_providers || []).map { |ap| {authorizeURL: ap.authorize_url, humanKind: ap.human_kind} }
 - flash_messages = (flash || []).map { |f| {type: f[0], message: f[1]}}
+- is_master_account = domain_account.master?
 div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to])),
   enforceSSO: false,
   authenticationProviders: authentication_providers,
@@ -10,6 +11,7 @@ div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].
   providerLoginPath: provider_login_path,
   providerPasswordPath: provider_password_path,
   providerAdminDashboardPath: provider_admin_dashboard_path,
+  disablePasswordReset: is_master_account,
   session: {username: params[:username]} }.to_json
 
 #old-login-page-wrapper
@@ -35,8 +37,9 @@ div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].
             = f.input :password, input_html: { name: 'password', tabindex: 2, autofocus: (params[:username] ? true : false) }
             = f.hidden_field :remember_me, value: 'true'
           = f.buttons do
-            li.forgot
-              = link_to 'Forgot password?', provider_login_path(request_password_reset: true), class: 'toggle-panel', data: { panel:  'request_password_reset_panel' }
+            - unless is_master_account
+              li.forgot
+                = link_to 'Forgot password?', provider_login_path(request_password_reset: true), class: 'toggle-panel', data: { panel:  'request_password_reset_panel' }
 
             li.commit
               = submit_tag 'Sign in', class: 'important-button'

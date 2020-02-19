@@ -51,12 +51,12 @@ class Provider::PasswordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   class WithMasterUserTest < Provider::PasswordsControllerTest
-    test '#destroy also works for master account' do
+    test '#destroy does not work for master account' do
       login_provider master_account
 
       delete provider_password_path, email: 'example@test.com'
 
-      assert_response :found
+      assert_response :not_found
     end
   end
 end
