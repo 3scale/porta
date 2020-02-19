@@ -20,19 +20,21 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification manage viral footer on email messages' do
-    message   = Message.create! sender: @provider, to: [@buyer], subject: 'a message', body: 'W0rmDr1nk'
+    subject = generate_message_subject
+    message   = Message.create! sender: @provider, to: [@buyer], subject: subject, body: 'W0rmDr1nk'
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
-    email = ActionMailer::Base.deliveries.last
+    email = find_message_by_subject(subject)
 
     assert_match email.body, /3scale API/
 
     @provider.settings.update_attribute :skip_email_engagement_footer_switch, 'visible'
 
     PostOffice.message_notification(message, recipient).deliver_now
-    assert email = ActionMailer::Base.deliveries.last
 
+    emails = ActionMailer::Base.deliveries.select { |message| message.subject == subject }
+    assert email = emails.last
     assert_equal email.body, 'W0rmDr1nk'
   end
 
@@ -40,12 +42,13 @@ class PostOfficeTest < ActionMailer::TestCase
     FactoryBot.create(:simple_user, account: @provider)
     @provider.reload
     Account.master.update_column(:email_all_users, false)
-    message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal @provider.admins.map(&:email), email.bcc
   end
 
@@ -53,12 +56,13 @@ class PostOfficeTest < ActionMailer::TestCase
     FactoryBot.create(:simple_user, account: @provider)
     @provider.reload
     Account.master.update_column(:email_all_users, true)
-    message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal @provider.users.map(&:email), email.bcc
   end
 
@@ -66,12 +70,13 @@ class PostOfficeTest < ActionMailer::TestCase
     FactoryBot.create(:simple_user, account: Account.master)
     Account.master.update_column(:email_all_users, true)
     @provider.reload
-    message   = Message.create!(:sender => @provider, :to => [Account.master], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => @provider, :to => [Account.master], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal Account.master.admins.map(&:email), email.bcc
   end
 
@@ -79,12 +84,13 @@ class PostOfficeTest < ActionMailer::TestCase
     FactoryBot.create(:simple_user, account: @buyer)
     @provider.update_column(:email_all_users, false)
     @provider.reload
-    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal @buyer.admins.map(&:email), email.bcc
   end
 
@@ -92,12 +98,13 @@ class PostOfficeTest < ActionMailer::TestCase
     FactoryBot.create(:simple_user, account: @buyer)
     @provider.update_column(:email_all_users, true)
     @provider.reload
-    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal @buyer.users.map(&:email), email.bcc
   end
 
@@ -105,48 +112,50 @@ class PostOfficeTest < ActionMailer::TestCase
     FactoryBot.create(:simple_user, account: @provider)
     @provider.update_column(:email_all_users, true)
     @provider.reload
-    message   = Message.create!(:sender => @buyer, :to => [@provider], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => @buyer, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal @provider.admins.map(&:email), email.bcc
   end
 
   test 'messages sent by the system verify email' do
-    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => 'message', :body => "message")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
+    assert email = find_message_by_subject(subject)
     assert_equal message.subject, email.subject
     assert_equal @buyer.admins.map(&:email), email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
   end
 
   test 'messages sent via web have link to buyer dashboard if sent to buyer' do
-    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => 'buyer', :body => "buyer", :origin => "web")
+    subject = generate_message_subject
+    message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "buyer", :origin => "web")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
-    assert_equal "[msg] #{message.subject}", email.subject
+    assert email = find_message_by_subject("[msg] #{subject}")
     assert_equal @buyer.admins.map(&:email), email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
     assert_match "http://#{@provider.domain}/admin/messages/received", email.body.to_s
   end
 
   test 'messages sent via web have link to provider dashboard if sent to provider' do
-    message   = Message.create!(sender: @buyer, to: [@provider], subject: 'provider', body: "provider", origin: "web")
+    subject = generate_message_subject
+    message   = Message.create!(sender: @buyer, to: [@provider], subject: subject, body: "provider", origin: "web")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
-    assert email = ActionMailer::Base.deliveries.last
-    assert_equal "[msg] #{message.subject}", email.subject
+    assert email = find_message_by_subject("[msg] #{subject}")
     assert_equal @provider.admins.map(&:email), email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
     assert_match url_helpers.provider_admin_messages_inbox_url(recipient, host: @provider.self_domain), email.body.to_s
@@ -179,9 +188,8 @@ class PostOfficeTest < ActionMailer::TestCase
     `touch #{file}`
 
     PostOffice.report(report, "December 2010").deliver_now
-    email = ActionMailer::Base.deliveries.last
 
-    assert_equal "3scale: #{service.name} - December 2010", email.subject
+    assert email = find_message_by_subject("3scale: #{service.name} - December 2010")
     assert_equal [account.admins.first.email], email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
     assert_match "Please find attached your API Usage Report from 3scale.", email.parts.first.body.to_s
@@ -190,5 +198,14 @@ class PostOfficeTest < ActionMailer::TestCase
 
   def url_helpers
     Rails.application.routes.url_helpers
+  end
+
+  def generate_message_subject
+    @message_count ||= 0
+    "message #{Thread.current.object_id}-#{@message_count += 1}"
+  end
+
+  def find_message_by_subject(subject)
+    ActionMailer::Base.deliveries.find { |message| message.subject == subject }
   end
 end
