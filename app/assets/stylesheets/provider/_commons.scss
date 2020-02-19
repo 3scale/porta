@@ -95,7 +95,7 @@ main > p:not(:first-child) {
 main > h1:first-child + p,
 main > h2:first-child + p {
   box-shadow: none;
-  margin: line-height-times(-1) line-height-times(-1) line-height-times(1);
+  margin: line-height-times(-2) line-height-times(-1) line-height-times(1);
 }
 
 dd p {
