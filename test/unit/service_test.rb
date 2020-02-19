@@ -702,21 +702,34 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
-    disable_transactional_fixtures!
+    test 'does not track changes on build' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        service = FactoryBot.build(:simple_service) # backend_version not touched
+        refute tracker.tracking?(ProxyConfigAffectingChanges::TrackedObject.new(service))
+      end
+    end
 
-    test 'proxy config affecting changes on update' do
-      provider = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: provider)
-      proxy = service.proxy
+    test 'tracks changes on backend_version' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        service = FactoryBot.create(:simple_service)
+        tracker.flush
 
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, service).once
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).twice
+        service.expects(:track_proxy_affecting_changes).never
+        service.update_attribute(:name, 'new name')
 
-      service.update_attributes(backend_version: 'oauth')
-      service.update_attributes(backend_version: 'oidc') # it doesn't really change the service, only the proxy
+        service.expects(:track_proxy_affecting_changes).once
+        service.update_attribute(:backend_version, 'oauth')
+      end
+    end
 
-      # Attributes other than backend_version do not "affect" the proxy config
-      service.update_attributes(name: 'new name')
+    test 'tracks changes on destroy' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        service = FactoryBot.create(:simple_service)
+        tracker.flush
+
+        service.expects(:track_proxy_affecting_changes).once
+        service.destroy
+      end
     end
   end
 end

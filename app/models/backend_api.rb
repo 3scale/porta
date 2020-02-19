@@ -2,7 +2,9 @@
 
 class BackendApi < ApplicationRecord
   include SystemName
-  include ProxyConfigAffectingChanges::BackendApiExtension
+  include ProxyConfigAffectingChanges::ModelExtension
+
+  define_proxy_config_affecting_attributes :private_endpoint
 
   self.background_deletion = %i[proxy_rules metrics backend_api_configs]
 

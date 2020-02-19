@@ -648,27 +648,87 @@ class ProxyTest < ActiveSupport::TestCase
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
-    test 'proxy config affecting changes on create' do
-      proxy = FactoryBot.build(:simple_proxy, api_backend: nil)
-      # Proxy creation itself is not an affecting change...
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).never
-      # ...but creation of first default proxy rule ('/') is
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, instance_of(ProxyRule))
-      proxy.save!
+    setup do
+      @provider = FactoryBot.create(:provider_account)
+      @service = @provider.first_service
     end
 
-    test 'proxy config affecting changes on update' do
-      provider = FactoryBot.create(:simple_provider)
-      service = FactoryBot.create(:simple_service, account: provider)
-      proxy = service.proxy
+    attr_reader :provider, :service
 
-      ProxyConfigs::AffectingObjectChangedEvent.expects(:create_and_publish!).with(proxy, proxy).twice
+    test 'does not track changes on build' do
+      service.proxy.delete
 
-      proxy.update_attributes(policies_config: [{ name: '1', version: 'b', configuration: {} }])
-      proxy.update_attributes(deployed_at: Time.utc(2019, 9, 26, 12, 20))
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        proxy = FactoryBot.build(:simple_proxy, service: service)
+        tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy)
+        assert tracker.tracking?(tracked_object)
+        tracker.expects(:issue_proxy_affecting_change_event).with(proxy).never
+        tracker.flush
+      end
+    end
 
-      # A stale update is not an affecting change
-      proxy.update_attributes(updated_at: Time.utc(2019, 9, 26, 12, 20))
+    test 'tracks changes on create' do
+      service.proxy.delete
+
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        proxy = FactoryBot.create(:simple_proxy, service: service)
+        tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy)
+        assert tracker.tracking?(tracked_object)
+        tracker.expects(:issue_proxy_affecting_change_event).with(proxy).once
+        tracker.flush
+      end
+    end
+
+    test 'tracks changes on all attributes except lock_version' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        proxy = FactoryBot.create(:simple_proxy)
+        tracker.flush
+        tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy)
+        refute tracker.tracking?(tracked_object)
+
+        proxy.update(
+          endpoint: 'https://new-endpoint.test',
+          sandbox_endpoint: '',
+          deployed_at: 10.minutes.ago,
+          auth_app_key: 'new-app-key',
+          auth_app_id: 'new-app-id',
+          auth_user_key: 'new-user-key',
+          credentials_location: 'headers',
+          error_status_auth_failed: 400,
+          error_auth_failed: 'Bad auth',
+          error_headers_auth_failed: 'text/html',
+          error_status_auth_missing: 400,
+          error_auth_missing: 'Missing params',
+          error_headers_auth_missing: 'text/html',
+          error_status_no_match: 400,
+          error_no_match: 'Not Found',
+          error_headers_no_match: 'text/html',
+          error_status_limits_exceeded: 400,
+          error_limits_exceeded: 'Out of limit',
+          error_headers_limits_exceeded: 'text/html',
+          secret_token: 'new-token',
+          hostname_rewrite: 'echo-api.3scale.net',
+          oauth_login_url: 'http://oidc-server/login',
+          oidc_issuer_endpoint: 'http://oidc-server/auth/realm',
+          authentication_method: 'oidc',
+          policies_config: '[{"name":"alaska","version":"1","configuration":{}}]')
+        assert tracker.tracking?(tracked_object)
+
+        tracker.flush
+
+        proxy.lock_version = 2
+        refute tracker.tracking?(tracked_object)
+      end
+    end
+
+    test 'tracks changes on destroy' do
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        proxy = FactoryBot.create(:simple_proxy)
+        tracker.flush
+
+        proxy.expects(:track_proxy_affecting_changes).once
+        proxy.destroy
+      end
     end
   end
 

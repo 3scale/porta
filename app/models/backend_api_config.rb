@@ -2,7 +2,7 @@
 
 class BackendApiConfig < ApplicationRecord
   include Backend::ModelExtensions::BackendApiConfig
-  include ProxyConfigAffectingChanges::BackendApiConfigExtension
+  include ProxyConfigAffectingChanges::ModelExtension
 
   default_scope -> { order(id: :asc) }
   belongs_to :service, inverse_of: :backend_api_configs
@@ -33,6 +33,8 @@ class BackendApiConfig < ApplicationRecord
   scope :sorted_for_proxy_config, -> { reordering { sift(:desc, :path) } }
 
   delegate :private_endpoint, to: :backend_api
+
+  delegate :proxy, to: :service, allow_nil: true
 
   def path=(value)
     super(ConfigPath.new(value).path)
