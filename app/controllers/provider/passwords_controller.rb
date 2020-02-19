@@ -5,6 +5,7 @@ class Provider::PasswordsController < FrontendController
   before_action :find_user, :only => [:show, :update]
   before_action :instantiate_sessions_presenter, only: [:show, :update]
   before_action :passwords_allowed?
+  before_action :instantiate_presenter, only: %i(show update)
 
   def new
     return redirect_to :back, error: t('.has_password') if current_user.using_password?
@@ -47,6 +48,10 @@ class Provider::PasswordsController < FrontendController
   end
 
   private
+
+  def instantiate_presenter
+    @password_presenter = PasswordPresenter.new(@user)
+  end
 
   # Can't be used for neither Buyer nor Master
   #
