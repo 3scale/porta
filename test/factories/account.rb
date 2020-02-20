@@ -218,6 +218,8 @@ FactoryBot.define do
       account.admins.each { |user| user.activate! if user.can_activate? }
       account.approve! if account.can_approve?
 
+      next account.reload if account.default_service
+
       #[multiservice] First service is the default
       service = FactoryBot.create(:service, :account => account)
 
@@ -233,10 +235,10 @@ FactoryBot.define do
 
       # TODO: add more master features here, if needed
       %w[prepaid_billing postpaid_billing anonymous_clients liquid].each do |feature|
-        account.default_service.features.create!(:system_name => feature, :name => feature.humanize)
+        service.features.create!(:system_name => feature, :name => feature.humanize)
       end
 
-      FactoryBot.create(:cinstance, :plan => account.default_service.application_plans.published.first,
+      FactoryBot.create(:cinstance, :plan => service.application_plans.published.first,
                         :user_account => account)
 
       account.reload
