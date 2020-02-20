@@ -1,18 +1,17 @@
 require 'test_helper'
 
 class Finance::VariableCostTest < ActiveSupport::TestCase
-
   test 'bill_variable_fee_for' do
     cinstance = FactoryBot.create(:cinstance)
-    fake_model = FactoryBot.create(:provider_with_billing)
+    provider = FactoryBot.create(:provider_with_billing)
     period = Month.new(Time.now)
-    invoice_proxy = Finance::InvoiceProxy.new(fake_model, period)
+    invoice_proxy = Finance::InvoiceProxy.new(provider, period)
 
     metric = FactoryBot.create(:metric)
     cinstance.stubs(:calculate_variable_cost).returns([{metric => 1},{metric => 10}])
     cinstance.send(:bill_variable_fee_for, period, invoice_proxy, cinstance.plan)
 
-    line_item = LineItem.last
+    line_item = invoice_proxy.line_items.last
     assert_equal 'LineItem::VariableCost', line_item.type
     assert_equal metric, line_item.metric
     assert_equal metric.friendly_name, line_item.name

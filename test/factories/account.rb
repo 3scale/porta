@@ -190,7 +190,7 @@ FactoryBot.define do
 
   factory(:provider_with_billing, :parent => :provider_account) do
     after(:create) do |a|
-      a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly');
+      a.billing_strategy = FactoryBot.create(:postpaid_billing, account: a, numbering_period: 'monthly');
       a.save
     end
   end

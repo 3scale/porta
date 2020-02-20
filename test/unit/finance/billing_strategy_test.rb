@@ -21,7 +21,8 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     # TODO: calling a private method is not nice.
     @bs.send(:add_cost, contract, 'foo', 'bar', 10)
 
-    assert line_item = LineItem::PlanCost.last, 'missing plan cost'
+    line_item = @provider.invoices.last.line_items.where(type: LineItem::PlanCost).last
+    assert line_item, 'missing plan cost'
 
     assert_equal 'foo', line_item.name
     assert_equal 'bar', line_item.description
