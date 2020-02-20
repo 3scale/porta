@@ -41,9 +41,9 @@ class PostOfficeTest < ActionMailer::TestCase
   test 'message_notification from master to provider test send only to admins' do
     FactoryBot.create(:simple_user, account: @provider)
     @provider.reload
-    Account.master.update_column(:email_all_users, false)
+    master_account.update_column(:email_all_users, false)
     subject = generate_message_subject
-    message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => subject, :body => "message")
+    message   = Message.create!(:sender => master_account, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
@@ -55,9 +55,9 @@ class PostOfficeTest < ActionMailer::TestCase
   test 'message_notification from master to provider should send to all users' do
     FactoryBot.create(:simple_user, account: @provider)
     @provider.reload
-    Account.master.update_column(:email_all_users, true)
+    master_account.update_column(:email_all_users, true)
     subject = generate_message_subject
-    message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => subject, :body => "message")
+    message   = Message.create!(:sender => master_account, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
@@ -67,17 +67,17 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification from provider to master should send only to admin' do
-    FactoryBot.create(:simple_user, account: Account.master)
-    Account.master.update_column(:email_all_users, true)
+    FactoryBot.create(:simple_user, account: master_account)
+    master_account.update_column(:email_all_users, true)
     @provider.reload
     subject = generate_message_subject
-    message   = Message.create!(:sender => @provider, :to => [Account.master], :subject => subject, :body => "message")
+    message   = Message.create!(:sender => @provider, :to => [master_account], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
     PostOffice.message_notification(message, recipient).deliver_now
 
     assert email = find_message_by_subject(subject)
-    assert_equal Account.master.admins.map(&:email), email.bcc
+    assert_equal master_account.admins.map(&:email), email.bcc
   end
 
   test 'message_notification from provider to buyer should send only to admin' do
