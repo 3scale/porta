@@ -143,7 +143,7 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
 
   # When the plan change happens before billing passes, i.e. the same day of the creation of the contract
   # We should be able to add all the entries
-  # See https://issues.jboss.org/browse/THREESCALE-436
+  # See https://issues.redhat.com/browse/THREESCALE-436
   def bill_plan_change_for_unbilled_contract(contract, period)
     # We bill the old plan for the previous period
     previous_period = TimeRange.new(contract.paid_until.utc, period.end.utc)
