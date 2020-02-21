@@ -6,7 +6,7 @@ import { LoginPage, Form, ActionGroup, Button } from '@patternfly/react-core'
 import { HiddenInputs, FlashMessages } from 'LoginPage'
 import { PasswordInput } from 'ChangePassword'
 import type { FlashMessage } from 'Types'
-import { validateForm } from 'LoginPage/utils/formValidation'
+import { validateForm, validateSingleField } from 'LoginPage/utils/formValidation'
 
 import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
@@ -18,22 +18,67 @@ type Props = {
   errors: (?FlashMessage)[]
 }
 
+const PASSWORD = 'user[password]'
+const PASSWORD_CONFIRMATION = 'user[password_confirmation]'
+
 const validationConstraints = {
-  'user[password]': {
+  [PASSWORD]: {
     presence: true,
     length: { minimum: 1 }
   },
-  'user[password_confirmation]': {
+  [PASSWORD_CONFIRMATION]: {
     presence: true,
-    length: { minimum: 1 }
+    length: { minimum: 1 },
+    equality: PASSWORD
   }
 }
 
-const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
-  const [isFormDisabled, setIsFormDisabled] = useState(true)
+const isValidForm = (form) => validateForm(form, validationConstraints)
 
-  const onChange = (event) => {
-    const errors = validateForm(event.currentTarget, validationConstraints)
+const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
+  const [passwordValue, setPasswordValue] = useState('')
+  const [isPasswordValid, setIsPasswordValid] = useState(undefined)
+  const [passwordConfirmationValue, setPasswordConfirmationValue] = useState('')
+  const [isPasswordConfirmationValid, setIsPasswordConfirmationValid] = useState(undefined)
+  const [isFormDisabled, setIsFormDisabled] = useState(true)
+  const [passwordDoesntMatch, setPasswordDoesntMatch] = useState(undefined)
+  const [startValidating, setStartValidating] = useState(false)
+
+  const onPasswordChange = (value, event) => {
+    setPasswordValue(value)
+    setIsPasswordValid(!!validateSingleField(event))
+  }
+
+  const onPasswordConfirmationChange = (value, event) => {
+    setPasswordConfirmationValue(value)
+
+    const errors = isValidForm(event.currentTarget.parentNode.parentNode)
+    const passwordConfirmationError = (errors && errors[PASSWORD_CONFIRMATION]) && errors[PASSWORD_CONFIRMATION][0]
+    const passwordsMatchError = passwordConfirmationError && passwordConfirmationError.includes('is not equal to')
+    setPasswordDoesntMatch(passwordsMatchError)
+
+    if (startValidating) {
+      setIsPasswordConfirmationValid(!passwordConfirmationError)
+    } else {
+      const passwordLength = event.currentTarget.parentNode.parentNode[PASSWORD].value.length
+      const initValidation = value.length >= passwordLength
+      setStartValidating(initValidation)
+      setIsPasswordConfirmationValid(initValidation ? !passwordConfirmationError : undefined)
+    }
+  }
+
+  const onPasswordBlur = (event) => {
+    const errors = validateSingleField(event)
+    setIsPasswordValid(!!errors)
+  }
+
+  const onPasswordConfirmationBlur = (event) => {
+    const errors = !!isValidForm(event.currentTarget.parentNode.parentNode)
+    setIsPasswordConfirmationValid(!errors)
+  }
+
+  const onFormChange = (event) => {
+    const errors = isValidForm(event.currentTarget)
     setIsFormDisabled(!!errors)
   }
 
@@ -53,7 +98,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
         id='edit_user_2'
         acceptCharset='UTF-8'
         method='post'
-        onChange={onChange}
+        onChange={onFormChange}
       >
         <input type='hidden' name='_method' value='put' />
         <HiddenInputs />
@@ -61,12 +106,22 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
           isRequired
           name='password'
           label='Password'
+          value={passwordValue}
+          isValid={isPasswordValid}
           autoFocus='autoFocus'
+          onBlur={onPasswordBlur}
+          onChange={onPasswordChange}
         />
         <PasswordInput
           isRequired
           name='password_confirmation'
           label='Password confirmation'
+          value={passwordConfirmationValue}
+          isValid={isPasswordConfirmationValid}
+          isPasswordConfirmation
+          passwordDoesntMatch={passwordDoesntMatch}
+          onBlur={onPasswordConfirmationBlur}
+          onChange={onPasswordConfirmationChange}
         />
         {lostPasswordToken &&
           <input id='password_reset_token' type='hidden' name='password_reset_token' value={lostPasswordToken} />
