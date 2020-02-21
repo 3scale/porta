@@ -12,7 +12,7 @@ class Services::ServiceDeletedEvent < ServiceRelatedEvent
         provider_id: provider.id
       }
     }
-    data[:provider] = provider if provider.persisted?
+    data[:provider] = provider if provider.persisted? && !provider.scheduled_for_deletion?
 
     new(data)
   end

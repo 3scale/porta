@@ -34,7 +34,7 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
     assert_can Ability.new(admin), :show, event
   end
 
-  def test_create_and_publish_when_provider_does_not_exists_anymore
+  def test_create_and_publish_when_provider_does_not_exist_anymore
     provider = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:simple_service, account: provider)
 
@@ -45,5 +45,32 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal provider_id, event_stored.metadata.fetch(:provider_id)
+    refute event_stored.data.has_key?(:provider)
+  end
+
+  test 'create saves the account when it is persisted and not scheduled for deletion' do
+    provider = FactoryBot.create(:simple_provider)
+    service = FactoryBot.create(:simple_service, account: provider)
+
+    assert provider.approved?
+
+    event = Services::ServiceDeletedEvent.create_and_publish!(service.reload)
+
+    event_stored = EventStore::Repository.find_event!(event.event_id)
+    assert_equal provider.id, event_stored.metadata.fetch(:provider_id)
+    assert event_stored.data[:provider]
+  end
+
+  test 'create does not save the account when it is not scheduled for deletion' do
+    provider = FactoryBot.create(:simple_provider)
+    service = FactoryBot.create(:simple_service, account: provider)
+
+    provider.schedule_for_deletion!
+
+    event = Services::ServiceDeletedEvent.create_and_publish!(service.reload)
+
+    event_stored = EventStore::Repository.find_event!(event.event_id)
+    assert_equal provider.id, event_stored.metadata.fetch(:provider_id)
+    refute event_stored.data.has_key?(:provider)
   end
 end
