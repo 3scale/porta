@@ -37,6 +37,10 @@ class FrontendController < ApplicationController
 
   helper_method :apiap?
 
+  def disable_x_frame
+    override_x_frame_options(SecureHeaders::OPT_OUT)
+  end
+
   def do_nothing_if_head
     render head: :success, nothing: true if request.head?
   end
