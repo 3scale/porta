@@ -3,6 +3,11 @@
 class DeleteAccountHierarchyWorker < DeleteObjectHierarchyWorker
   def perform(*)
     return unless account.should_be_deleted?
+
+    ApiDocs::Service.where(tenant_id: account.id).select(:id, :tenant_id).find_each do |api_docs_service|
+      DeleteObjectHierarchyWorker.perform_now(api_docs_service)
+    end
+
     super
   end
 

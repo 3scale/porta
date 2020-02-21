@@ -60,7 +60,7 @@ class Account < ApplicationRecord
   self.background_deletion = [
     :users,
     :mail_dispatch_rules,
-    [:api_docs_services, { class_name: 'ApiDocs::Service' }],
+    # [:api_docs_services, { class_name: 'ApiDocs::Service' }],
     :services,
     :contracts,
     :account_plans,
