@@ -9,7 +9,7 @@ module RedisHacks
     def connect(*args)
       super
     rescue RuntimeError => exception
-      if exception.message =~ /Name or service not known|nodename nor servname provided, or not known/
+      if exception.message =~ /(can't resolve)|(name or service not known)|(nodename nor servname provided, or not known)/i
         raise Redis::BaseConnectionError.new(exception.message)
       else
         raise
