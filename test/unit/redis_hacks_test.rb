@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class HiredisHacksTest < ActiveSupport::TestCase
+class RedisHacksTest < ActiveSupport::TestCase
   test 'Name or service not known' do
     redis_config = ThreeScale::RedisConfig.new(
       url: 'redis://mymaster',
