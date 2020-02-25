@@ -22,7 +22,6 @@ class Service < ApplicationRecord
     :application_plans,
     :end_user_plans,
     [:api_docs_services, class_name: 'ApiDocs::Service'],
-    :backend_apis,
     :backend_api_configs,
     :metrics,
     [:proxy, { action: :destroy, has_many: false }]
