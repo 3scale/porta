@@ -37,7 +37,7 @@ module Account::PaymentDetails
       read_only_transaction = ActiveRecord::Base.connection.read_only_transaction?
       any_payment_attributes = payment_detail_attributes.any? { |_, value| value.present? }
 
-      if persisted? && any_payment_attributes && !read_only_transaction
+      if persisted? && !will_be_deleted? && any_payment_attributes && !read_only_transaction
         create_payment_detail(payment_detail_attributes, &:do_not_notify)
       else
         build_payment_detail
