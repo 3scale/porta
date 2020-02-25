@@ -19,15 +19,9 @@ module Pdf
     def self.enqueue_reports(reference, period)
       return unless (operation = SystemOperation.for(reference))
 
-      batch = Sidekiq::Batch.new
-      batch.description = "PDF Report (period: #{period})"
-
-      batch.jobs do
-        Service.accessible.of_approved_accounts.select(%i[id account_id]).find_each do |service|
-          PdfReportWorker.enqueue(service, period, operation)
-        end
+      Service.accessible.of_approved_accounts.select(%i[id account_id]).find_each do |service|
+        PdfReportWorker.enqueue(service, period, operation)
       end
     end
-
   end
 end
