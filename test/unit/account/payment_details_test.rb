@@ -17,18 +17,6 @@ class PaymentDetailsTest < ActiveSupport::TestCase
     @account.reload
   end
 
-  test 'create payment detail if any credit card data exists in account' do
-    account = FactoryBot.create(:simple_account)
-    refute PaymentDetail.where(account_id: account.id).exists?
-
-    Account.where(id: account.id).update_all(@cc_attributes)
-    account.reload
-    refute PaymentDetail.where(account_id: account.id).exists?
-
-    # Auto create the payment detail
-    assert account.payment_detail.persisted?
-  end
-
   test 'build payment_detail on access' do
     account = FactoryBot.create(:simple_account)
     assert account.payment_detail.new_record?
@@ -112,6 +100,39 @@ class PaymentDetailsTest < ActiveSupport::TestCase
       audit = payment_detail.audits.last
       assert_equal 'update', audit.action
       assert_equal ['2222', nil], audit.audited_changes['credit_card_partial_number']
+    end
+  end
+
+  class PaymentDetailsPersistenceTest < ActiveSupport::TestCase
+    def setup
+      @tenant = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:simple_buyer, provider_account: tenant)
+
+      @buyer.update_columns(credit_card_auth_code: 'auth_code')
+      @tenant.update_columns(credit_card_auth_code: 'auth_code')
+    end
+
+    attr_reader :buyer, :tenant
+
+    test 'payment_detail is not persisted when the account is scheduled_for_deletion' do
+      buyer.schedule_for_deletion!
+
+      refute buyer.payment_detail.persisted?
+
+      tenant.schedule_for_deletion!
+
+      refute tenant.payment_detail.persisted?
+    end
+
+    test 'payment_detail is not persisted when the buyer is approved but its tenant is scheduled_for_deletion' do
+      tenant.schedule_for_deletion!
+
+      refute buyer.payment_detail.persisted?
+    end
+
+    test 'payment_detail is persisted when both the account and its provider are not scheduled for deletion' do
+      assert buyer.payment_detail.persisted?
+      assert tenant.payment_detail.persisted?
     end
   end
 end
