@@ -35,52 +35,91 @@ const validationConstraints = {
 
 const isValidForm = (form) => validateForm(form, validationConstraints)
 
-const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
-  const [passwordValue, setPasswordValue] = useState('')
-  const [isPasswordValid, setIsPasswordValid] = useState(undefined)
-  const [passwordConfirmationValue, setPasswordConfirmationValue] = useState('')
-  const [isPasswordConfirmationValid, setIsPasswordConfirmationValid] = useState(undefined)
-  const [isFormDisabled, setIsFormDisabled] = useState(true)
+const useFormState = () => {
+  const [isDisabled, setIsDisabled] = useState(true)
+
+  const onChange = (event) => {
+    const errors = isValidForm(event.currentTarget)
+    setIsDisabled(!!errors)
+  }
+
+  return {
+    isDisabled,
+    onChange
+  }
+}
+
+const usePasswordState = () => {
+  const [value, setValue] = useState('')
+  const [isValid, setIsValid] = useState(undefined)
+
+  const onChange = (value, event) => {
+    setValue(value)
+    setIsValid(!!validateSingleField(event))
+  }
+
+  const onBlur = (event) => {
+    const errors = validateSingleField(event)
+    setIsValid(!!errors)
+  }
+
+  return {
+    value,
+    isValid,
+    onChange,
+    onBlur
+  }
+}
+
+const getPasswordConfirmationErrors = (event) => {
+  const errors = isValidForm(event.currentTarget.parentNode.parentNode)
+  const passwordConfirmationError = (errors && errors[PASSWORD_CONFIRMATION]) && errors[PASSWORD_CONFIRMATION][0]
+  const passwordsMatchError = passwordConfirmationError && passwordConfirmationError.includes('is not equal to')
+  return {
+    passwordConfirmationError,
+    passwordsMatchError
+  }
+}
+
+const shouldInitValidation = (value, event) => {
+  const passwordLength = event.currentTarget.parentNode.parentNode[PASSWORD].value.length
+  return value.length >= passwordLength
+}
+
+const usePasswordConfirmationState = () => {
+  const [value, setValue] = useState('')
+  const [isValid, setIsValid] = useState(undefined)
   const [passwordDoesntMatch, setPasswordDoesntMatch] = useState(undefined)
   const [startValidating, setStartValidating] = useState(false)
 
-  const onPasswordChange = (value, event) => {
-    setPasswordValue(value)
-    setIsPasswordValid(!!validateSingleField(event))
-  }
-
-  const onPasswordConfirmationChange = (value, event) => {
-    setPasswordConfirmationValue(value)
-
-    const errors = isValidForm(event.currentTarget.parentNode.parentNode)
-    const passwordConfirmationError = (errors && errors[PASSWORD_CONFIRMATION]) && errors[PASSWORD_CONFIRMATION][0]
-    const passwordsMatchError = passwordConfirmationError && passwordConfirmationError.includes('is not equal to')
+  const onChange = (value, event) => {
+    setValue(value)
+    const { passwordConfirmationError, passwordsMatchError } = getPasswordConfirmationErrors(event)
     setPasswordDoesntMatch(passwordsMatchError)
-
-    if (startValidating) {
-      setIsPasswordConfirmationValid(!passwordConfirmationError)
-    } else {
-      const passwordLength = event.currentTarget.parentNode.parentNode[PASSWORD].value.length
-      const initValidation = value.length >= passwordLength
-      setStartValidating(initValidation)
-      setIsPasswordConfirmationValid(initValidation ? !passwordConfirmationError : undefined)
-    }
+    const initValidation = shouldInitValidation(value, event)
+    const validationStarted = startValidating || isValid !== undefined
+    setStartValidating(!validationStarted ? initValidation : undefined)
+    setIsValid((initValidation || validationStarted) ? !passwordConfirmationError : undefined)
   }
 
-  const onPasswordBlur = (event) => {
-    const errors = validateSingleField(event)
-    setIsPasswordValid(!!errors)
-  }
-
-  const onPasswordConfirmationBlur = (event) => {
+  const onBlur = (event) => {
     const errors = !!isValidForm(event.currentTarget.parentNode.parentNode)
-    setIsPasswordConfirmationValid(!errors)
+    setIsValid(!errors)
   }
 
-  const onFormChange = (event) => {
-    const errors = isValidForm(event.currentTarget)
-    setIsFormDisabled(!!errors)
+  return {
+    value,
+    isValid,
+    passwordDoesntMatch,
+    onChange,
+    onBlur
   }
+}
+
+const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
+  const form = useFormState()
+  const password = usePasswordState()
+  const passwordConfirmation = usePasswordConfirmationState()
 
   return (
     <LoginPage
@@ -98,7 +137,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
         id='edit_user_2'
         acceptCharset='UTF-8'
         method='post'
-        onChange={onFormChange}
+        onChange={form.onChange}
       >
         <input type='hidden' name='_method' value='put' />
         <HiddenInputs />
@@ -106,22 +145,22 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
           isRequired
           name='password'
           label='Password'
-          value={passwordValue}
-          isValid={isPasswordValid}
+          value={password.value}
+          isValid={password.isValid}
           autoFocus='autoFocus'
-          onBlur={onPasswordBlur}
-          onChange={onPasswordChange}
+          onBlur={password.onBlur}
+          onChange={password.onChange}
         />
         <PasswordInput
           isRequired
           name='password_confirmation'
           label='Password confirmation'
-          value={passwordConfirmationValue}
-          isValid={isPasswordConfirmationValid}
+          value={passwordConfirmation.value}
+          isValid={passwordConfirmation.isValid}
           isPasswordConfirmation
-          passwordDoesntMatch={passwordDoesntMatch}
-          onBlur={onPasswordConfirmationBlur}
-          onChange={onPasswordConfirmationChange}
+          passwordDoesntMatch={passwordConfirmation.passwordDoesntMatch}
+          onBlur={passwordConfirmation.onBlur}
+          onChange={passwordConfirmation.onChange}
         />
         {lostPasswordToken &&
           <input id='password_reset_token' type='hidden' name='password_reset_token' value={lostPasswordToken} />
@@ -131,7 +170,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
             className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
             name='commit'
-            isDisabled={isFormDisabled}
+            isDisabled={form.isDisabled}
           >
             Change Password
           </Button>
