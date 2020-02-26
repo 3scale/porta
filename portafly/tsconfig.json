@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "target": "es5",
     "lib": [
       "dom",
@@ -22,7 +23,7 @@
     "importHelpers": true
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "extends": "./tsconfig.paths.json"
 }
