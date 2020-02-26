@@ -26,7 +26,6 @@ table {
     height: line-height-times(2);
     padding: line-height-times(1/2, true) line-height-times(1/2) line-height-times(1/2) 0;
     vertical-align: top;
-    word-break: break-word;
 
     &.u-underline {
       border-bottom: $border-width solid $border-color;
@@ -298,6 +297,10 @@ table.data {
   &.StatsMethodsTable {
     box-shadow: none;
   }
+}
+
+td.metric {
+  word-break: break-word;
 }
 
 // IE 11 hack
