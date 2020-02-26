@@ -25,7 +25,7 @@ module BackendApiLogic
       backend_api1 = backend_apis.first
       backend_api2 = backend_apis.last
       injected_rules = [
-        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | remove_first: '/foo'}}" },
+        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
         { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/.*'] } }
       ]
       apicast_policy = { name: 'apicast', 'version': 'builtin', 'configuration': {} }
@@ -52,7 +52,7 @@ module BackendApiLogic
       backend_api1 = backend_apis.first
       backend_api2 = backend_apis.last
       injected_rules = [
-        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{original_request.path | remove_first: '/foo'}}" },
+        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
         { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/.*'] } },
         routing_rule
       ]
@@ -78,9 +78,9 @@ module BackendApiLogic
           [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '/' }, nil],
           [{ private_endpoint: 'https://safe-second-api.io', path: '/' }, nil],
           [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/' }, nil],
-          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '/hey' }, "{{original_request.path | remove_first: '/hey'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io', path: '/ho' }, "{{original_request.path | remove_first: '/ho'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/lets-go' }, "{{original_request.path | remove_first: '/lets-go'}}"]
+          [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '/hey' }, "{{uri | remove_first: '/hey'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io', path: '/ho' }, "{{uri | remove_first: '/ho'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/lets-go' }, "{{uri | remove_first: '/lets-go'}}"]
         ].each do |config, replace_path_value|
           expected_replace_path = replace_path_value ? { replace_path: replace_path_value } : {}
           assert_equal expected_replace_path, rule_class.new(stub(config)).replace_path
