@@ -1,6 +1,5 @@
 class Provider::Admin::DashboardsController < FrontendController
   before_action :ensure_provider_domain
-  before_action :disable_x_frame
 
   activate_menu :dashboard
   layout 'provider'
