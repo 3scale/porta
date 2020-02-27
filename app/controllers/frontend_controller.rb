@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class FrontendController < ApplicationController
+  SecureHeaders::Configuration.override(:disable_x_frame) do |config|
+    config.x_frame_options = SecureHeaders::OPT_OUT
+  end
+
   SecureHeaders::Configuration.override(:disable_x_content_type) do |config|
     config.x_content_type_options = SecureHeaders::OPT_OUT
   end
@@ -42,11 +46,11 @@ class FrontendController < ApplicationController
   helper_method :apiap?
 
   def disable_x_content_type
-    SecureHeaders.use_secure_headers_override(request, :disable_x_content_type)
+    use_secure_headers_override(:disable_x_content_type)
   end
 
   def disable_x_frame
-    override_x_frame_options(SecureHeaders::OPT_OUT)
+    use_secure_headers_override(:disable_x_frame)
   end
 
   def do_nothing_if_head
