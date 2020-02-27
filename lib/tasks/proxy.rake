@@ -37,4 +37,22 @@ namespace :proxy do
   task :set_correct_endpoint_hosted => :environment do
     Service.includes(:proxy).where(proxies: {endpoint: nil}, deployment_option: 'hosted').find_each(&:deployment_option_changed)
   end
+
+  desc 'Resets proxy config tracking object'
+  task :reset_config_change_history, [:account_id] => :environment do |_, args|
+    account_id = args[:account_id]
+    collection = account_id ? Account.providers_with_master.find_by(id: account_id)&.proxies : Proxy.all
+
+    return unless collection
+
+    reset_date = Time.utc(1900, 1, 1).freeze
+    progress = ProgressCounter.new(collection.count)
+
+    collection.find_each do |proxy|
+      tracking_object = proxy.affecting_change_history
+      progress.call
+      next if tracking_object.created_at != tracking_object.updated_at
+      tracking_object.update_column(:updated_at, reset_date)
+    end
+  end
 end
