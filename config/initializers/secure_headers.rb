@@ -10,6 +10,6 @@
   }
 
   # not sure what they do, so rather disabling them
-  config.x_download_options = nil
+  config.x_download_options = SecureHeaders::OPT_OUT
   config.x_permitted_cross_domain_policies = 'none'
 end
