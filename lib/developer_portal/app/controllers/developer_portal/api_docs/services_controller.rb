@@ -1,6 +1,6 @@
 class DeveloperPortal::ApiDocs::ServicesController < DeveloperPortal::BaseController
+  before_action :disable_x_content_type
   skip_before_action :login_required
-
   skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
 
   def index
