@@ -92,8 +92,8 @@ class ProxyTest < ActiveSupport::TestCase
         {"name"=>"routing", "version"=>"builtin", "enabled"=>true,
           "configuration"=>{
             "rules"=>[
-              {"url"=>"https://private-2.example.com:443", "owner_id"=>backend_api2.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/bar/.*|/foo/bar/?"}]}, 'replace_path'=>"{{original_request.path | remove_first: '/foo/bar'}}"},
-              {"url"=>"https://private-1.example.com:443", "owner_id"=>backend_api1.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/.*|/foo/?"}]}, 'replace_path'=>"{{original_request.path | remove_first: '/foo'}}"},
+              {"url"=>"https://private-2.example.com:443", "owner_id"=>backend_api2.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/bar/.*|/foo/bar/?"}]}, 'replace_path'=>"{{uri | remove_first: '/foo/bar'}}"},
+              {"url"=>"https://private-1.example.com:443", "owner_id"=>backend_api1.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/foo/.*|/foo/?"}]}, 'replace_path'=>"{{uri | remove_first: '/foo'}}"},
               {"url"=>"https://echo-api.3scale.net:443", "owner_id"=>backend_api0.id, "owner_type" => "BackendApi", "condition"=>{"operations"=>[{"match"=>"path", "op"=>"matches", "value"=>"/.*"}]}}
             ]
           }
