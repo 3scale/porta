@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DeletePlainObjectWorker < ApplicationJob
+  include Sidekiq::Throttled::Worker
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError, ActiveRecord::RecordNotFound
   rescue_from(ActiveJob::DeserializationError, ActiveRecord::RecordNotFound) do |exception|
@@ -21,6 +22,8 @@ class DeletePlainObjectWorker < ApplicationJob
   end
 
   queue_as :default
+
+  sidekiq_throttle({ concurrency: { limit: 10 } })
 
   before_perform do |job|
     @object, workers_hierarchy, @destroy_method = job.arguments
