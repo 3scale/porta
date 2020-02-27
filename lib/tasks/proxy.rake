@@ -48,11 +48,14 @@ namespace :proxy do
     reset_date = Time.utc(1900, 1, 1).freeze
     progress = ProgressCounter.new(collection.count)
 
-    collection.find_each do |proxy|
-      tracking_object = proxy.affecting_change_history
-      progress.call
-      next if tracking_object.created_at != tracking_object.updated_at
-      tracking_object.update_column(:updated_at, reset_date)
+    collection.find_in_batches do |proxies|
+      proxies.each do |proxy|
+        tracking_object = proxy.affecting_change_history
+        progress.call
+        next if tracking_object.created_at != tracking_object.updated_at
+        tracking_object.update_column(:updated_at, reset_date)
+      end
+      sleep(0.5) unless Rails.env.test?
     end
   end
 end
