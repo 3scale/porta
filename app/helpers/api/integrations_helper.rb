@@ -40,7 +40,7 @@ module Api::IntegrationsHelper
     end
 
     def api_test_path_and_query
-      uri = URI.parse(proxy.api_test_path)
+      uri = Addressable::URI.parse(proxy.api_test_path)
       [uri.path, uri.query]
     end
 
