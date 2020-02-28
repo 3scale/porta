@@ -75,6 +75,26 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
       assert_match(/\/bar\?/, res)
     end
 
+    test 'build path with parameters when api as product is disabled' do
+      account = @proxy.service.account
+      account.stubs(:provider_can_use?).returns(true)
+      account.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+
+      @proxy.update_attributes(api_test_path: '/{param}/path')
+      res = api_test_curl(@proxy)
+      assert_match(/\/{param}\/path/, res)
+    end
+
+    test 'build path with query string when api as product is disabled' do
+      account = @proxy.service.account
+      account.stubs(:provider_can_use?).returns(true)
+      account.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
+
+      @proxy.update_attributes(api_test_path: '/path?test=true')
+      res = api_test_curl(@proxy)
+      assert_match(/\/path\?test=true/, res)
+    end
+
     test 'auth mode app_id and app_key' do
       @proxy.service.update_attributes(backend_version: '2')
       @proxy.update_attributes(credentials_location:  'query')
