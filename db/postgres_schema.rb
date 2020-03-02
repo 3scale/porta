@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200211080911) do
+ActiveRecord::Schema.define(version: 20200224095152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -939,7 +939,7 @@ ActiveRecord::Schema.define(version: 20200211080911) do
     t.string   "issuer_type",           limit: 255,                                          null: false
     t.text     "description"
     t.boolean  "approval_required",                                          default: false, null: false
-    t.boolean  "end_user_required",                                          default: false, null: false
+    t.boolean  "end_user_required",                                          default: false
     t.bigint   "tenant_id"
     t.string   "system_name",           limit: 255,                                          null: false
     t.bigint   "partner_id"
@@ -1186,7 +1186,7 @@ ActiveRecord::Schema.define(version: 20200211080911) do
     t.bigint   "default_application_plan_id"
     t.bigint   "default_service_plan_id"
     t.bigint   "default_end_user_plan_id"
-    t.boolean  "end_user_registration_required",             default: true,      null: false
+    t.boolean  "end_user_registration_required",             default: true
     t.bigint   "tenant_id"
     t.string   "system_name",                    limit: 255,                     null: false
     t.string   "backend_version",                limit: 255, default: "1",       null: false
@@ -1241,7 +1241,7 @@ ActiveRecord::Schema.define(version: 20200211080911) do
     t.boolean  "can_create_service",                              default: false,             null: false
     t.string   "spam_protection_level",               limit: 255, default: "none",            null: false
     t.bigint   "tenant_id"
-    t.string   "end_users_switch",                    limit: 255,                             null: false
+    t.string   "end_users_switch",                    limit: 255
     t.string   "multiple_applications_switch",        limit: 255,                             null: false
     t.string   "multiple_users_switch",               limit: 255,                             null: false
     t.string   "finance_switch",                      limit: 255,                             null: false
