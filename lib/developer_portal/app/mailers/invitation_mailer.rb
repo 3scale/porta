@@ -1,7 +1,7 @@
 class InvitationMailer < ActionMailer::Base
 
   include Liquid::Assigns
-  include DeveloperPortal::Engine.routes.url_helpers
+  include System::UrlHelpers.cms_url_helpers
   include CMS::EmailTemplate::MailerExtension
 
   def invitation(invitation)

@@ -24,7 +24,7 @@ module Liquid
 
       desc "The URL of this post within its topic."
       def url
-        system_url_helpers.forum_topic_path(@model.topic, anchor: "post_#{@model.id}")
+        System::UrlHelpers.system_url_helpers.forum_topic_path(@model.topic, anchor: "post_#{@model.id}")
       end
     end
   end

@@ -6,7 +6,7 @@ module ThreeScale::DevDomain
   end
 
   extend ActiveSupport::Concern
-  include Rails.application.routes.url_helpers
+  include System::UrlHelpers.system_url_helpers
 
   included do
     helper URL

@@ -3,7 +3,7 @@ class PostObserver < ActiveRecord::Observer
 
   include AfterCommitOn
 
-  include Rails.application.routes.url_helpers
+  include System::UrlHelpers.system_url_helpers
 
   def after_commit_on_create(post)
     account = post.forum.account

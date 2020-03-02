@@ -386,8 +386,8 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         resource :personal_details, only: [] do
-          match '/', via: :any, to: redirect { Rails.application.routes.url_helpers.edit_provider_admin_user_personal_details_path }
-          get 'edit', action: 'edit', on: :member, to: redirect { Rails.application.routes.url_helpers.edit_provider_admin_user_personal_details_path }
+          match '/', via: :any, to: redirect { System::UrlHelpers.system_url_helpers.edit_provider_admin_user_personal_details_path }
+          get 'edit', action: 'edit', on: :member, to: redirect { System::UrlHelpers.system_url_helpers.edit_provider_admin_user_personal_details_path }
         end
 
         resource :change_plan, :only => [:show, :update] do

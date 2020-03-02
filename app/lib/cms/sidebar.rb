@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CMS::Sidebar
-  include Rails.application.routes.url_helpers
+  include System::UrlHelpers.system_url_helpers
 
   def initialize(provider)
     @provider = provider
