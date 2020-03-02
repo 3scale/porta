@@ -4,7 +4,7 @@ module Liquid
 
       extend Liquid::Docs::DSL::Tags
 
-      include Rails.application.routes.url_helpers
+      include System::UrlHelpers.system_url_helpers
 
       # list of allowed html attributes
       HTML_FORM_ATTRIBUTES = ["class", "id"]

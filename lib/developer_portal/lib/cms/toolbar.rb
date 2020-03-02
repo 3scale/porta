@@ -113,7 +113,7 @@ module CMS::Toolbar
   end
 
   class View < ActionView::Base
-    include ::Rails.application.routes.url_helpers
+    include System::UrlHelpers.system_url_helpers
     include ::DeveloperPortal::CMS::ToolbarHelper
   end
 end

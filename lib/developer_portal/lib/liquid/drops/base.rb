@@ -5,13 +5,6 @@ module Liquid
     class Base < Liquid::Drop
       class_attribute :_deprecated_names, :_allowed_names, :instance_writer => false, :instance_reader => false
 
-      class_attribute :system_url_helpers, instance_writer: false
-      self.system_url_helpers = Rails.application.routes.url_helpers
-
-      class_attribute :cms_url_helpers, instance_writer: false
-      self.cms_url_helpers = DeveloperPortal::Engine.routes.url_helpers
-
-
       extend Liquid::Docs::DSL::Drops
 
       private
@@ -99,7 +92,7 @@ module Liquid
       end
 
       privately_include  do
-        include DeveloperPortal::Engine.routes.url_helpers
+        include System::UrlHelpers.cms_url_helpers
       end
 
       def url_options
