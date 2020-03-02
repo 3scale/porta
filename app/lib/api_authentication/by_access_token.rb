@@ -112,7 +112,7 @@ module ApiAuthentication
     end
 
     def verify_access_token_scopes
-      return true unless params[:access_token]
+      return true unless access_token
 
       raise PermissionError if !authenticated_token || allowed_scopes.blank?
       raise ScopeError if (allowed_scopes & authenticated_token.scopes).blank?
@@ -121,7 +121,7 @@ module ApiAuthentication
     end
 
     def verify_write_permission
-      return true unless params[:access_token]
+      return true unless access_token
       raise PermissionError unless authenticated_token.try(:permission) == PermissionEnforcer::READ_WRITE
     end
 
