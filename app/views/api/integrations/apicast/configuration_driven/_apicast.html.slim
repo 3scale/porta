@@ -56,7 +56,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
             dd.u-dl-definition = @show_presenter.staging_proxy_endpoint
             dt.u-dl-term Example curl for testing
             dd.u-dl-definition
-              = api_test_curl(@proxy, config_based: apiap?)
+              = api_test_curl(@proxy)
               - unless @service.cinstances.any?
                 br
                 br
