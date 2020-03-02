@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Liquid::Drops::InvitationDropTest < ActiveSupport::TestCase
   include Liquid
-  include DeveloperPortal::Engine.routes.url_helpers
+  include System::UrlHelpers.cms_url_helpers
 
   def setup
     @invitation = FactoryBot.build_stubbed(:invitation)

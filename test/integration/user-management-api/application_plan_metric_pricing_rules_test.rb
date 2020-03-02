@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::IntegrationTest
 
-  include ThreeScale::PrivateModule(Rails.application.routes.url_helpers)
+  include ThreeScale::PrivateModule(System::UrlHelpers.system_url_helpers)
 
   def setup
     @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'

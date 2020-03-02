@@ -197,7 +197,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   def url_helpers
-    Rails.application.routes.url_helpers
+    System::UrlHelpers.system_url_helpers
   end
 
   def generate_message_subject
