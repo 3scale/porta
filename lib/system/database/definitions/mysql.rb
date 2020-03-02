@@ -63,12 +63,6 @@ System::Database::MySQL.define do
     SQL
   end
 
-  trigger 'end_user_plans' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM services WHERE id = NEW.service_id AND tenant_id <> master_id);
-    SQL
-  end
-
   trigger 'features' do
     <<~SQL
       IF NEW.featurable_type = 'Account' AND NEW.featurable_id <> master_id THEN
