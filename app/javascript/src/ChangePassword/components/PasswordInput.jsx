@@ -1,39 +1,32 @@
 // @flow
 
 import React from 'react'
-import { PasswordField } from 'LoginPage'
+import { PasswordField, PasswordConfirmationField } from 'LoginPage'
 
 type Props = {
-  isRequired?: boolean,
-  name: string,
-  label: string,
-  value: string,
-  isValid: boolean,
-  autoFocus?: string,
-  isPasswordConfirmation?: boolean,
-  passwordDoesntMatch?: boolean,
-  onChange: () => void,
-  onBlur: () => void
+    isRequired?: boolean,
+    name: string,
+    label: string,
+    value: string,
+    isValid: boolean,
+    autoFocus?: string,
+    errorMessage?: string,
+    onChange: () => void,
+    onBlur: () => void,
 }
 
-const PasswordInput = ({ isRequired, name, label, value, isValid, autoFocus, isPasswordConfirmation, passwordDoesntMatch, onChange, onBlur }: Props) => {
-  const inputProps = {
-    isRequired,
-    name: `user[${name}]`,
-    fieldId: `user_${name}`,
-    label,
-    value,
-    isValid,
-    onChange,
-    onBlur,
-    autoFocus,
-    isPasswordConfirmation,
-    passwordDoesntMatch
-  }
+const getInputProps = props => ({
+  ...props,
+  name: `user[${props.name}]`,
+  fieldId: `user_${props.name}`
+})
 
-  return (
-    <PasswordField inputProps={inputProps} />
-  )
-}
+const PasswordInput = (props: Props) => (
+  <PasswordField inputProps={getInputProps(props)} />
+)
 
-export { PasswordInput }
+const PasswordConfirmationInput = (props: Props) => (
+  <PasswordConfirmationField inputProps={getInputProps(props)} />
+)
+
+export { PasswordInput, PasswordConfirmationInput }

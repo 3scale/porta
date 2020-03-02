@@ -17,8 +17,7 @@ type InputProps = {
   onBlur?: () => void,
   autoFocus?: string,
   ariaInvalid?: boolean,
-  isPasswordConfirmation?: boolean,
-  passwordDoesntMatch?: boolean
+  errorMessage?: string
 }
 
 type Props = {
@@ -34,8 +33,10 @@ const helperTexts = {
   firstName: '',
   lastName: '',
   password: 'Password is mandatory',
-  passwordConfirmation: 'Password confirmation is mandatory',
-  passwordDoesntMatch: 'Password and Password confirmation must match'
+  passwordConfirmation: {
+    isMandatory: 'Password confirmation is mandatory',
+    mustMatch: 'Password and Password confirmation must match'
+  }
 }
 
 const FormGroup = ({type, helperTextInvalid, inputProps}: Props) => {
@@ -87,12 +88,7 @@ const EmailField = ({inputProps}: {inputProps: InputProps}) => {
 }
 
 const PasswordField = ({inputProps}: {inputProps: InputProps}) => {
-  const isPasswordConfirmation = inputProps.isPasswordConfirmation
   let helperText = helperTexts.password
-  if (isPasswordConfirmation) {
-    helperText = inputProps.passwordDoesntMatch ? helperTexts.passwordDoesntMatch : helperTexts.passwordConfirmation
-  }
-
   return (
     <FormGroup
       type='password'
@@ -102,4 +98,17 @@ const PasswordField = ({inputProps}: {inputProps: InputProps}) => {
   )
 }
 
-export {TextField, PasswordField, EmailField}
+const PasswordConfirmationField = ({inputProps}: {inputProps: InputProps}) => {
+  const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
+  const errorMessage = inputProps.errorMessage
+  let helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage
+  return (
+    <FormGroup
+      type='password'
+      inputProps={inputProps}
+      helperTextInvalid={helperText}
+    />
+  )
+}
+
+export { TextField, EmailField, PasswordField, PasswordConfirmationField }
