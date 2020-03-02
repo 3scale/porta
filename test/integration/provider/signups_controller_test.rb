@@ -7,6 +7,11 @@ class Provider::SignupsControllerTest < ActionDispatch::IntegrationTest
     login! master_account
   end
 
+  test 'disables x_frame_options header' do
+    get provider_signup_path
+    refute_includes response.headers, 'X-Frame-Options'
+  end
+
   test 'POST creates a provider' do
     ThreeScale::Analytics::UserTracking.any_instance.expects(:track).at_least_once.with('Signup', {mkt_cookie: nil, analytics: {}})
 
