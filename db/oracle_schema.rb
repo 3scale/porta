@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200211080911) do
+ActiveRecord::Schema.define(version: 20200224095152) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38,                  null: false
@@ -989,7 +989,7 @@ ActiveRecord::Schema.define(version: 20200211080911) do
     t.string   "issuer_type",                                                    null: false
     t.text     "description"
     t.boolean  "approval_required",                              default: false, null: false
-    t.boolean  "end_user_required",                              default: false, null: false
+    t.boolean  "end_user_required",                              default: false
     t.integer  "tenant_id",             precision: 38
     t.string   "system_name",                                                    null: false
     t.integer  "partner_id",            precision: 38
@@ -1247,7 +1247,7 @@ ActiveRecord::Schema.define(version: 20200211080911) do
     t.integer  "default_application_plan_id",    precision: 38
     t.integer  "default_service_plan_id",        precision: 38
     t.integer  "default_end_user_plan_id",       precision: 38
-    t.boolean  "end_user_registration_required",                default: true,      null: false
+    t.boolean  "end_user_registration_required",                default: true
     t.integer  "tenant_id",                      precision: 38
     t.string   "system_name",                                                       null: false
     t.string   "backend_version",                               default: "1",       null: false
@@ -1303,7 +1303,7 @@ ActiveRecord::Schema.define(version: 20200211080911) do
     t.boolean  "can_create_service",                                             default: false,             null: false
     t.string   "spam_protection_level",                                          default: "none",            null: false
     t.integer  "tenant_id",                                       precision: 38
-    t.string   "end_users_switch",                                                                           null: false
+    t.string   "end_users_switch"
     t.string   "multiple_applications_switch",                                                               null: false
     t.string   "multiple_users_switch",                                                                      null: false
     t.string   "finance_switch",                                                                             null: false
