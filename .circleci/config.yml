@@ -278,7 +278,7 @@ commands: # reusable commands with parameters
   save-gem-cache:
     steps:
       - save_cache:
-          key: v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "Gemfile.prod.lock" }}
+          key: v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - ./vendor/bundle
             - ./.bundle/
@@ -287,7 +287,7 @@ commands: # reusable commands with parameters
     steps:
       - restore_cache:
           keys:
-            - v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "Gemfile.prod.lock" }}
+            - v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
   upload-artifacts:
     steps:
