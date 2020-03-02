@@ -63,12 +63,6 @@ System::Database::Oracle.define do
     SQL
   end
 
-  trigger 'end_user_plans' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM services WHERE id = :new.service_id AND tenant_id <> master_id;
-    SQL
-  end
-
   trigger 'features' do
     <<~SQL
       IF :new.featurable_type = 'Account' AND :new.featurable_id <> master_id THEN
