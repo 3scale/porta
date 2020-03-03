@@ -1,12 +1,15 @@
 // @flow
 
-import React, { useState } from 'react'
+import React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage, Form, ActionGroup, Button } from '@patternfly/react-core'
 import { HiddenInputs, FlashMessages } from 'LoginPage'
-import { PasswordInput, PasswordConfirmationInput } from 'ChangePassword'
+import {
+  PasswordInput,
+  PasswordConfirmationInput,
+  useFormState
+} from 'ChangePassword'
 import type { FlashMessage } from 'Types'
-import { validateForm, validateSingleField } from 'LoginPage/utils/formValidation'
 
 import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
@@ -18,110 +21,14 @@ type Props = {
   errors: (?FlashMessage)[]
 }
 
-const PASSWORD = 'user[password]'
-const PASSWORD_CONFIRMATION = 'user[password_confirmation]'
-
-const validationConstraints = {
-  [PASSWORD]: {
-    presence: true,
-    length: { minimum: 1 }
-  },
-  [PASSWORD_CONFIRMATION]: {
-    presence: true,
-    length: { minimum: 1 },
-    equality: PASSWORD
-  }
-}
-
-const isFormValid = (formNode) => validateForm(formNode, validationConstraints)
-
-const useFormState = (formNode) => {
-  const [isDisabled, setIsDisabled] = useState(true)
-
-  const onChange = () => {
-    const errors = isFormValid(formNode)
-    setIsDisabled(!!errors)
-  }
-
-  return {
-    isDisabled,
-    onChange
-  }
-}
-
-const usePasswordState = () => {
-  const [value, setValue] = useState('')
-  const [isValid, setIsValid] = useState(undefined)
-
-  const onChange = (value, event) => {
-    setValue(value)
-    setIsValid(!!validateSingleField(event))
-  }
-
-  const onBlur = (event) => {
-    const errors = validateSingleField(event)
-    setIsValid(!!errors)
-  }
-
-  return {
-    value,
-    isValid,
-    onChange,
-    onBlur
-  }
-}
-
-const getPasswordConfirmationErrors = (formNode) => {
-  const errors = isFormValid(formNode)
-  const passwordConfirmationError = (errors && errors[PASSWORD_CONFIRMATION]) && errors[PASSWORD_CONFIRMATION][0]
-  const passwordsMatchError = passwordConfirmationError && passwordConfirmationError.includes('is not equal to')
-  return {
-    hasError: !!passwordConfirmationError,
-    errorMessage: passwordsMatchError ? 'mustMatch' : 'isMandatory'
-  }
-}
-
-const compareInputsLength = (value) => {
-  const passwordInput = document.querySelector('input#user_password')
-  const passwordLength = passwordInput instanceof HTMLInputElement ? passwordInput.value.length : 0
-  return value.length >= passwordLength
-}
-
-const usePasswordConfirmationState = (formNode) => {
-  const [value, setValue] = useState('')
-  const [isValid, setIsValid] = useState(undefined)
-  const [errorMessage, setErrorMessage] = useState('isMandatory')
-  const [startValidating, setStartValidating] = useState(false)
-
-  const onChange = (value, event) => {
-    setValue(value)
-    const { hasError, errorMessage } = getPasswordConfirmationErrors(formNode)
-    setErrorMessage(errorMessage)
-    const initValidation = compareInputsLength(value)
-    const validationStarted = startValidating || isValid !== undefined
-    setStartValidating(!validationStarted ? initValidation : undefined)
-    setIsValid((initValidation || validationStarted) ? !hasError : undefined)
-  }
-
-  const onBlur = () => {
-    const errors = !!isFormValid(formNode)
-    setIsValid(!errors)
-  }
-
-  return {
-    value,
-    isValid,
-    errorMessage,
-    onChange,
-    onBlur
-  }
-}
-
 const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
-  const formNode = document.querySelector('form')
-  const form = useFormState(formNode)
-  const password = usePasswordState()
-  const passwordConfirmation = usePasswordConfirmationState(formNode)
+  const {
+    isFormDisabled,
+    confirmationErrorMessage,
+    onFormChange,
+    password,
+    passwordConfirmation
+  } = useFormState()
 
   return (
     <LoginPage
@@ -139,7 +46,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
         id='edit_user_2'
         acceptCharset='UTF-8'
         method='post'
-        onChange={form.onChange}
+        onChange={onFormChange}
       >
         <input type='hidden' name='_method' value='put' />
         <HiddenInputs />
@@ -159,7 +66,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
           label='Password confirmation'
           value={passwordConfirmation.value}
           isValid={passwordConfirmation.isValid}
-          errorMessage={passwordConfirmation.errorMessage}
+          errorMessage={confirmationErrorMessage}
           onBlur={passwordConfirmation.onBlur}
           onChange={passwordConfirmation.onChange}
         />
@@ -171,7 +78,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
             className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
             name='commit'
-            isDisabled={form.isDisabled}
+            isDisabled={isFormDisabled}
           >
             Change Password
           </Button>
