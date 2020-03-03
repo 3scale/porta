@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   before_action :set_newrelic_custom_params
 
   protect_from_forgery with: :reset_session # See ActionController::RequestForgeryProtection for details
-  ensure_security_headers
 
   # Disable CSRF protection for non xml requests.
   skip_before_action :verify_authenticity_token, if: -> do

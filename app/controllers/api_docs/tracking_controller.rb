@@ -1,7 +1,6 @@
 class ApiDocs::TrackingController < FrontendController
-  skip_before_action :set_x_content_type_options_header
+  before_action :disable_x_content_type
   skip_before_action :login_required
-
   skip_before_action :verify_authenticity_token
 
   def update
