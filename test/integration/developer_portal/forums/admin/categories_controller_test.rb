@@ -4,7 +4,7 @@ require 'test_helper'
 
 module DeveloperPortal
   class Forums::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
-    include DeveloperPortal::Engine.routes.url_helpers
+    include System::UrlHelpers.cms_url_helpers
 
     def setup
       @provider = FactoryBot.create(:provider_account)

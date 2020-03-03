@@ -3,7 +3,7 @@ module Liquid
     # DEPRECATED
     module UrlHelpers
       include Liquid::Filters::Base
-      include Rails.application.routes.url_helpers
+      include System::UrlHelpers.system_url_helpers
 
       # TODO: consider allowing more parameters
       desc """

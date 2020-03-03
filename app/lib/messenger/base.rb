@@ -126,7 +126,7 @@ module Messenger
 
 
   class DeveloperPortalRoutes
-    include DeveloperPortal::Engine.routes.url_helpers
+    include System::UrlHelpers.cms_url_helpers
 
     private
 
@@ -137,7 +137,7 @@ module Messenger
   end
 
   class AppRoutes
-    include Rails.application.routes.url_helpers
+    include System::UrlHelpers.system_url_helpers
 
     private
 

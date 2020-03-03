@@ -10,7 +10,7 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
   end
 
   def test_url_helpers
-    routes      = Rails.application.routes.url_helpers
+    routes      = System::UrlHelpers.system_url_helpers
     account_url = routes.admin_buyers_account_url(@drop, host: 'foo.example.com')
 
     assert account_url

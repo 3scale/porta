@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Liquid::FormsTest < ActiveSupport::TestCase
-  include ThreeScale::PrivateModule(Rails.application.routes.url_helpers)
+  include ThreeScale::PrivateModule(System::UrlHelpers.system_url_helpers)
 
   test 'unknown form name' do
     assert_raises(Liquid::Forms::NotFoundError) do

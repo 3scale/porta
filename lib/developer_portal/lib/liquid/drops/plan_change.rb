@@ -76,7 +76,7 @@ module Liquid
 
       desc 'Returns the url to confirm the change. The request method must be POST'
       def confirm_path
-        cms_url_helpers.admin_contract_path(@contract.id, plan_id: @plan.id)
+        System::UrlHelpers.cms_url_helpers.admin_contract_path(@contract.id, plan_id: @plan.id)
       end
 
       desc 'Returns the url to cancel the change. The request method must be DELETE'

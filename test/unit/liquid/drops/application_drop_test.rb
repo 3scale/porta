@@ -18,7 +18,7 @@ class Liquid::Drops::ApplicationDropTest < ActiveSupport::TestCase
   end
 
   test 'admin_url' do
-    assert_match Rails.application.routes.url_helpers.admin_service_application_path(@app.service, @app), @drop.admin_url
+    assert_match System::UrlHelpers.system_url_helpers.admin_service_application_path(@app.service, @app), @drop.admin_url
   end
 
   test 'alerts' do

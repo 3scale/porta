@@ -51,7 +51,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "A new application subscribed to the #{application.plan.name} plan on the #{service.name} service of the #{application.account.name} account.", body.encoded
       assert_match 'Application details:', body.encoded
-      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(service, application,
+      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
                                                                                          host: service.account.admin_domain)
       assert_match cinstance_url, body.encoded
 
@@ -116,7 +116,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
-      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(service, application,
+      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
                                                                                          host: service.account.admin_domain)
       assert_match cinstance_url, body.encoded
     end
@@ -137,7 +137,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
-      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(service, application,
+      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
                                                                                          host: service.account.admin_domain)
       assert_match cinstance_url, body.encoded
     end
@@ -394,7 +394,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Previous plan: #{old_plan.name}", body.encoded
       assert_match "Current plan: #{cinstance.plan.name}", body.encoded
       assert_match "Application #{cinstance.name} has changed to plan #{cinstance.plan.name}.", body.encoded
-      cinstance_url = Rails.application.routes.url_helpers.admin_service_application_url(cinstance.service, cinstance,
+      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(cinstance.service, cinstance,
                                                                                          host: cinstance.service.account.admin_domain)
       assert_match cinstance_url, body.encoded
     end
@@ -558,7 +558,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def url_helpers
-    Rails.application.routes.url_helpers
+    System::UrlHelpers.system_url_helpers
   end
 
   def assert_html_email(delivery, &block)
