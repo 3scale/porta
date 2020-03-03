@@ -572,8 +572,8 @@ GEM
       ffi (~> 1.0)
     recaptcha (4.13.1)
       json
-    record_tag_helper (1.0.0)
-      actionview (~> 5.x)
+    record_tag_helper (1.0.1)
+      actionview (>= 5)
     recursive-open-struct (1.0.5)
     redcarpet (3.4.0)
     redis (4.1.3)
