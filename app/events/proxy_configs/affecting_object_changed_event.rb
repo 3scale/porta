@@ -14,6 +14,8 @@ class ProxyConfigs::AffectingObjectChangedEvent < ServiceRelatedEvent
   end
 
   def self.valid?(proxy, *_args)
-    proxy && proxy.account&.persisted? # Proxy's service or account may have been deleted
+    return unless proxy
+    account = proxy.account
+    account && !account.scheduled_for_deletion?
   end
 end
