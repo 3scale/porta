@@ -43,7 +43,7 @@ END
   end
 
   module ToLiquid
-    include DeveloperPortal::Engine.routes.url_helpers
+    include System::UrlHelpers.cms_url_helpers
     include ActionView::Helpers::DateHelper
 
     def self.included(base)

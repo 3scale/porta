@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::IntegrationTest
-  include DeveloperPortal::Engine.routes.url_helpers
+  include System::UrlHelpers.cms_url_helpers
 
   setup do
     @provider = FactoryBot.create(:provider_with_billing)

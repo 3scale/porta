@@ -10,12 +10,12 @@ class PlanDecoratorTest < Draper::TestCase
     plan.id = 42
 
     decorator = PlanDecorator.new(plan)
-    assert_equal "#{Rails.application.routes.url_helpers.admin_service_applications_path(service)}?search%5Bplan_id%5D=42", decorator.plan_path
+    assert_equal "#{System::UrlHelpers.system_url_helpers.admin_service_applications_path(service)}?search%5Bplan_id%5D=42", decorator.plan_path
 
     decorator = PlanDecorator.new(plan, context: { service: other = Service.new })
     other.id = 2
 
-    assert_equal "#{Rails.application.routes.url_helpers.admin_service_applications_path(other)}?search%5Bplan_id%5D=42", decorator.plan_path
+    assert_equal "#{System::UrlHelpers.system_url_helpers.admin_service_applications_path(other)}?search%5Bplan_id%5D=42", decorator.plan_path
   end
 
   def test_link_to_edit
@@ -39,7 +39,7 @@ class PlanDecoratorTest < Draper::TestCase
     assert_equal '0 applications', decorator.link_to_applications
 
     helpers.expects(:can?).with(:show, Cinstance).returns(true)
-    assert_equal "<a href=\"#{Rails.application.routes.url_helpers.admin_service_applications_path(service)}?search%5Bplan_id%5D=\">0 applications</a>",
+    assert_equal "<a href=\"#{System::UrlHelpers.system_url_helpers.admin_service_applications_path(service)}?search%5Bplan_id%5D=\">0 applications</a>",
                  decorator.link_to_applications
   end
 end

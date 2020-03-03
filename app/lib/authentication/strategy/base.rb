@@ -22,7 +22,7 @@ module Authentication
     end
 
     class Base
-      include DeveloperPortal::Engine.routes.url_helpers
+      include System::UrlHelpers.cms_url_helpers
 
       attr_reader :site_account, :admin_domain, :user_for_signup, :new_user_created
 
@@ -66,8 +66,7 @@ module Authentication
 
       def signup_path(params)
         permitted_params = params.respond_to?(:permit!) ? params.dup.permit! : params
-        DeveloperPortal::Engine.routes.url_helpers
-            .signup_path(permitted_params.except(:action, :controller))
+        System::UrlHelpers.cms_url_helpers.signup_path(permitted_params.except(:action, :controller))
       end
 
       # This is the template rendered by sessions controller, usually the login form
