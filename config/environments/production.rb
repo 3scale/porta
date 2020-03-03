@@ -114,7 +114,7 @@ Rails.application.configure do
   # https://github.com/3scale/puppet/blob/ac161671aee2019eefa87b51b150cb78fcb417e9/modules/logstash/templates/config/system-mt/filter.erb
   config.log_tags = [ :uuid, :host, :remote_ip ]
 
-  config.static_cache_control = "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}"
+  config.public_file_server.headers = { 'Cache-Control' => "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}" }
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.liquid.resolver_caching = true
