@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::IntegrationTest
-  include DeveloperPortal::Engine.routes.url_helpers
+  include System::UrlHelpers.cms_url_helpers
 
   def setup
     @buyer = FactoryBot.create(:buyer_account)

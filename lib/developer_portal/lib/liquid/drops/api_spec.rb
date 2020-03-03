@@ -8,7 +8,7 @@ module Liquid
 
       desc 'Returns the url of the API spec.'
       def url
-        cms_url_helpers.swagger_spec_path(system_name, format: :json)
+        System::UrlHelpers.cms_url_helpers.swagger_spec_path(system_name, format: :json)
       end
 
       desc 'Returns the name of the spec.'

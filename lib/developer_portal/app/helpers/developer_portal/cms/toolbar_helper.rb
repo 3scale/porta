@@ -43,7 +43,7 @@ module DeveloperPortal::CMS::ToolbarHelper
 
       # main_app is not available in the engine
       routes = Rails.application.routes
-      main_app = ActionDispatch::Routing::RoutesProxy.new(routes, self, routes.url_helpers)
+      main_app = ActionDispatch::Routing::RoutesProxy.new(routes, self, System::UrlHelpers.system_url_helpers)
 
       polymorphic_url([ main_app, :edit, :provider, :admin, template ], opts)
     end

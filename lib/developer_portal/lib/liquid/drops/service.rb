@@ -83,7 +83,7 @@ module Liquid
       end
 
       def subscribe_url
-        cms_url_helpers.new_admin_service_contract_path(service_id: @service)
+        System::UrlHelpers.cms_url_helpers.new_admin_service_contract_path(service_id: @service)
       end
 
       desc "Returns the **published** application plans of the service."
