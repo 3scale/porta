@@ -165,6 +165,14 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'published', service.reload.state
     end
 
+    test 'index works using the provider key via http authorization' do
+      auth_headers = {'Authorization' => "Basic #{Base64.encode64("#{@provider.provider_key}:")}"}
+
+      get admin_api_services_path(format: :json), headers: auth_headers
+
+      assert_response :ok
+    end
+
     private
 
     def assert_correct_params
