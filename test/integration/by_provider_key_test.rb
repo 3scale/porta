@@ -5,8 +5,6 @@ class ApiAuthentication::ByProviderKeyTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
 
-    login_provider @provider
-
     host! @provider.admin_domain
   end
 
