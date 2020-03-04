@@ -1,86 +1,83 @@
 import { useState } from 'react'
-import { validateForm, validateSingleField } from 'LoginPage/utils/formValidation'
+import validate from 'validate.js' // TODO: including this since validateSingleField and validateForm from LoginPage/utils/formValidation screams for a refactor
 
 const PASSWORD = 'user[password]'
 const PASSWORD_CONFIRMATION = 'user[password_confirmation]'
+
+// The following validation objects are tied to FormGroups helperTexts, very closed module, not open to change. TODO: REFACTOR those components
 const validationConstraints = {
   [PASSWORD]: {
-    presence: true,
-    length: { minimum: 1 }
+    presence: {
+      message: '^isMandatory'
+    },
+    length: {
+      minimum: 1,
+      message: '^password'
+    }
   },
   [PASSWORD_CONFIRMATION]: {
-    presence: true,
-    length: { minimum: 1 },
-    equality: PASSWORD
+    presence: {
+      message: '^isMandatory'
+    },
+    length: {
+      minimum: 1,
+      message: '^isMandatory'
+    },
+    equality: {
+      attribute: PASSWORD,
+      message: '^mustMatch'
+    }
   }
 }
 
-const isFormValid = (formNode) => validateForm(formNode, validationConstraints)
-
-const getPasswordConfirmationError = (errors) => {
-  const passwordConfirmationError = (errors && errors[PASSWORD_CONFIRMATION]) && errors[PASSWORD_CONFIRMATION][0]
-  const passwordsMatchError = passwordConfirmationError && passwordConfirmationError.includes('is not equal to')
-  return {
-    passwordConfirmationError: !!passwordConfirmationError,
-    errorMessage: passwordsMatchError ? 'mustMatch' : 'isMandatory'
-  }
+const fieldsTemplate = {
+  [PASSWORD]: '',
+  [PASSWORD_CONFIRMATION]: ''
 }
 
-const comparePasswordsLength = (event) => {
-  const passwordInput = event.currentTarget['user_password']
-  const passwordConfirmationInput = event.currentTarget['user_password_confirmation']
-  return passwordConfirmationInput.value.length >= passwordInput.value.length
-}
+const extractErrorMessage = errorMessageArray => errorMessageArray.slice(0, 1).pop()
+const checkFieldErrors = fieldErrors => fieldName => !(fieldErrors && !!fieldErrors[fieldName])
+const validateFields = fieldsNode => validate(fieldsNode, validationConstraints)
+const parseValidationErrors = validationErrors => (
+  validationErrors
+    ? Object.keys(validationErrors)
+      .reduce((acc, cur) => ({ ...acc, [cur]: extractErrorMessage(validationErrors[cur]) }), {})
+    : fieldsTemplate
+)
 
 const useFormState = () => {
+  const [fieldValues, setFieldValues] = useState(fieldsTemplate)
+  const [fieldErrors, setFieldErrors] = useState(fieldsTemplate)
   const [isFormDisabled, setIsFormDisabled] = useState(true)
-  const [passwordValue, setPasswordValue] = useState('')
-  const [isPasswordValid, setIsPasswordValid] = useState(undefined)
-  const [passwordConfirmationValue, setPasswordConfirmationValue] = useState('')
-  const [isPasswordConfirmationValid, setIsPasswordConfirmationValid] = useState(undefined)
-  const [confirmationErrorMessage, setConfirmationErrorMessage] = useState('isMandatory')
-  const [validationStarted, setValidationStarted] = useState(false)
 
-  const onFormChange = (event) => {
-    const errors = isFormValid(event.currentTarget)
-    const { passwordConfirmationError, errorMessage } = getPasswordConfirmationError(errors)
-    const initValidation = comparePasswordsLength(event)
-    if (initValidation && !validationStarted) {
-      setValidationStarted(initValidation)
-    }
-    if (initValidation || validationStarted) {
-      setIsPasswordConfirmationValid(!passwordConfirmationError)
-    }
-    setConfirmationErrorMessage(errorMessage)
+  const isFieldValid = checkFieldErrors(fieldErrors)
+  const updateForm = errors => {
+    setFieldErrors(parseValidationErrors(errors))
     setIsFormDisabled(!!errors)
   }
 
-  const onPasswordChange = (value, event) => {
-    setPasswordValue(value)
-    setIsPasswordValid(!!validateSingleField(event))
-  }
-
-  const onPasswordBlur = () => setIsPasswordValid(!!isPasswordValid)
-
-  const onPasswordConfirmationChange = (value) => setPasswordConfirmationValue(value)
-
-  const onPasswordConfirmationBlur = () => setIsPasswordConfirmationValid(!isFormDisabled)
+  const onFormChange = event => updateForm(validateFields(event.currentTarget))
+  const onFieldChange = fieldName => value => setFieldValues({...fieldValues, [fieldName]: value})
+  const onFieldBlur = fieldName => event => (
+    updateForm(validateFields({...fieldValues, [fieldName]: event.currentTarget.value}))
+  )
 
   return {
     isFormDisabled,
-    confirmationErrorMessage,
     onFormChange,
     password: {
-      value: passwordValue,
-      isValid: isPasswordValid,
-      onChange: onPasswordChange,
-      onBlur: onPasswordBlur
+      value: fieldValues[PASSWORD],
+      isValid: isFieldValid(PASSWORD),
+      errorMessage: fieldErrors[PASSWORD],
+      onChange: onFieldChange(PASSWORD),
+      onBlur: onFieldBlur(PASSWORD)
     },
     passwordConfirmation: {
-      value: passwordConfirmationValue,
-      isValid: isPasswordConfirmationValid,
-      onChange: onPasswordConfirmationChange,
-      onBlur: onPasswordConfirmationBlur
+      value: fieldValues[PASSWORD_CONFIRMATION],
+      isValid: isFieldValid(PASSWORD_CONFIRMATION),
+      errorMessage: fieldErrors[PASSWORD_CONFIRMATION],
+      onChange: onFieldChange(PASSWORD_CONFIRMATION),
+      onBlur: onFieldBlur(PASSWORD_CONFIRMATION)
     }
   }
 }
