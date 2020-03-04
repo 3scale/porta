@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@src": [
+        "src/root.ts"
+      ],
+      "@src/*": [
+        "src/*"
+      ],
+      "@test/*": [
+        "src/tests/*"
+      ],
+      "@assets/*": [
+        "node_modules/@patternfly/react-core/dist/styles/assets/*"
+      ]
+    }
+  }
+}

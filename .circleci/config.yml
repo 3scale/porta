@@ -828,6 +828,22 @@ jobs:
           path: tmp/capybara
           destination: capybara
 
+  portafly:
+    resource_class: small
+    docker:
+      - image: circleci/node:12
+    parameters:
+    steps:
+      - checkout-with-submodules
+      - run:
+          name: Run PortaFly tests
+          root: .
+          command: |
+            cd portafly
+            yarn --version
+            yarn install
+            yarn test --maxWorkers=3
+
 ##################################### CIRCLECI WORKFLOWS ############################################
 
 workflows:
@@ -1048,6 +1064,17 @@ workflows:
           requires:
             - assets_precompile
           <<: *only-master-filter
+
+  portafly_build:
+    jobs:
+      - manual_approval:
+          type: approval
+      - notify_start:
+          requires:
+            - manual_approval
+      - portafly:
+          requires:
+            - manual_approval
 
 
   ######## Nightly workflows
