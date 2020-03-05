@@ -104,6 +104,7 @@ module ApiAuthentication
 
     def authenticated_token
       return @authenticated_token if instance_variable_defined?(:@authenticated_token)
+
       @authenticated_token = domain_account.access_tokens.find_from_value(access_token) if access_token
     end
 
@@ -112,7 +113,7 @@ module ApiAuthentication
     end
 
     def verify_access_token_scopes
-      return true unless access_token
+      return true unless authenticated_token
 
       raise PermissionError if !authenticated_token || allowed_scopes.blank?
       raise ScopeError if (allowed_scopes & authenticated_token.scopes).blank?
@@ -121,7 +122,7 @@ module ApiAuthentication
     end
 
     def verify_write_permission
-      return true unless access_token
+      return true unless authenticated_token
       raise PermissionError unless authenticated_token.try(:permission) == PermissionEnforcer::READ_WRITE
     end
 
