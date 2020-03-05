@@ -68,7 +68,7 @@ resource "Service" do
 
     it { should include(attributes.map { |attr_name| [attr_name, resource.public_send(attr_name)] }.to_h.delete_if { |k, v| v.nil? })}
     it { should include('notification_settings' => resource.notification_settings.stringify_keys) }
-    it { should have_links(%w|self end_user_plans service_plans application_plans features metrics|)}
+    it { should have_links(%w|self service_plans application_plans features metrics|)}
   end
 
   json(:collection) do

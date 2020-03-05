@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Provider::Admin::DashboardsHelper
 
   include ApplicationHelper
@@ -82,9 +84,5 @@ module Provider::Admin::DashboardsHelper
 
   def show_service_plans_on_dashboard?(service)
     can?(:manage, :service_plans) && service.service_plans.not_custom.size > 1
-  end
-
-  def show_end_users_on_dashboard?(service)
-    can?(:manage, :end_users) && service.end_users_allowed? && current_account.settings.end_user_plans_ui_visible?
   end
 end

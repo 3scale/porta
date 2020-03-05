@@ -93,8 +93,8 @@ ActiveRecord::Base.transaction do
   master_service.application_plans.default!(plan)
   master_service.update!(deployment_option: 'self_managed')
 
-  # Enable account_plans / service_plans and end_users plans for Master
-  %i[end_users account_plans service_plans].each do |setting_name|
+  # Enable account_plans / service_plans for Master
+  %i[account_plans service_plans].each do |setting_name|
     master.settings.public_send("allow_#{setting_name}!")
     master.settings.public_send("show_#{setting_name}!")
   end

@@ -7,7 +7,6 @@ class BackendDeleteServiceWorkerTest < ActiveSupport::TestCase
     service = FactoryBot.create(:simple_service)
     event = Services::ServiceDeletedEvent.create_and_publish!(service)
 
-    BackendDeleteEndUsersWorker.expects(:perform_async).with { |param| param == event.event_id }
     BackendDeleteStatsWorker.expects(:perform_async).with { |param| param == event.event_id }
     Sidekiq::Testing.inline! { BackendDeleteServiceWorker.enqueue(event) }
   end

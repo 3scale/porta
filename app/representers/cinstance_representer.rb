@@ -11,7 +11,6 @@ module CinstanceRepresenter
 
   property :state
   property :enabled?, as: :enabled
-  property :end_user_required
 
   property :created_at
   property :updated_at

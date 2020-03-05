@@ -195,7 +195,6 @@ module VerticalNavHelper
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
     sections << {id: :applications,  title: 'Applications',  items: service_applications}        if can? :manage, :applications
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
-    sections << {id: :end_users,     title: 'End-users',     items: service_end_users}           if can?(:manage, :end_users) && current_account.settings.end_user_plans_ui_visible? && !master_on_premises?
 
     if can? :manage, :plans
       sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)}
@@ -232,12 +231,6 @@ module VerticalNavHelper
     items = []
     items << {id: :subscriptions, title: 'Service Subscriptions', path: admin_buyers_service_contracts_path(search: {service_id: @service.id})}
     items << {id: :service_plans, title: 'Service Plans',         path: admin_service_service_plans_path(@service)}
-  end
-
-  def service_end_users
-    items = []
-    items << {id: :search,         title: 'Search',         path: admin_service_end_users_path(@service)}
-    items << {id: :end_user_plans, title: 'End-user Plans', path: admin_service_end_user_plans_path(@service)}
   end
 
   def service_integration_items

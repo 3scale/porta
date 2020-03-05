@@ -53,12 +53,6 @@
               "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
             },
             {
-              "name": "user_id",
-              "dataType": "string",
-              "paramType": "query",
-              "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
-            },
-            {
               "name": "usage",
               "dataType": "hash",
               "required": false,
@@ -127,12 +121,6 @@
               "required": false,
               "paramType": "query",
               "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
-            },
-            {
-              "name": "user_id",
-              "dataType": "string",
-              "paramType": "query",
-              "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
             },
             {
               "name": "usage",
@@ -211,12 +199,6 @@
               "required": false,
               "paramType": "query",
               "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
-            },
-            {
-              "name": "user_id",
-              "dataType": "string",
-              "paramType": "query",
-              "description": "User id. String identifying an end user. Used only when the application is rate limiting end users and the specified token is not associated to a user. The End User plans feature is not available in all 3scale plans."
             },
             {
               "name": "usage",
@@ -305,12 +287,6 @@
               "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
             },
             {
-              "name": "user_id",
-              "dataType": "string",
-              "paramType": "query",
-              "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
-            },
-            {
               "name": "usage",
               "dataType": "hash",
               "required": false,
@@ -373,12 +349,6 @@
               "required": false,
               "paramType": "query",
               "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
-            },
-            {
-              "name": "user_id",
-              "dataType": "string",
-              "paramType": "query",
-              "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans."
             },
             {
               "name": "usage",
@@ -453,12 +423,6 @@
               "required": false,
               "paramType": "query",
               "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed."
-            },
-            {
-              "name": "user_id",
-              "dataType": "string",
-              "paramType": "query",
-              "description": "User id. String identifying an end user. Used only when the application is rate limiting end users and the specified token is not associated to a user. The End User plans feature is not available in all 3scale plans."
             },
             {
               "name": "usage",
@@ -541,13 +505,6 @@
                   "description_inline": true
                 },
                 {
-                  "name": "user_id",
-                  "dataType": "string",
-                  "paramType": "query",
-                  "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
-                  "description_inline": true
-                },
-                {
                   "name": "timestamp",
                   "dataType": "string",
                   "required": false,
@@ -624,13 +581,6 @@
                   "description_inline": true
                 },
                 {
-                  "name": "user_id",
-                  "dataType": "string",
-                  "paramType": "query",
-                  "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
-                  "description_inline": true
-                },
-                {
                   "name": "timestamp",
                   "dataType": "string",
                   "required": false,
@@ -704,13 +654,6 @@
                   "paramType": "query",
                   "threescale_name": "app_ids",
                   "description": "Client Id (identifier of the application if the auth. pattern is OAuth, note that client_id == app_id)",
-                  "description_inline": true
-                },
-                {
-                  "name": "user_id",
-                  "dataType": "string",
-                  "paramType": "query",
-                  "description": "User id. String identifying an end user. Required only when the application is rate limiting end users. The End User plans feature is not available in all 3scale plans.",
                   "description_inline": true
                 },
                 {

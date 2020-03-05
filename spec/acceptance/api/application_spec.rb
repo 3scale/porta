@@ -195,7 +195,7 @@ resource "Cinstance" do
       buyer.bought_cinstances.last
     end
 
-    it { should have_properties('id', 'state', 'name', 'plan_id', 'description', 'end_user_required', 
+    it { should have_properties('id', 'state', 'name', 'plan_id', 'description',
                       'service_id', 'first_traffic_at', 'first_daily_traffic_at').from(resource) }
     it { should have_links('self', 'account', 'plan', 'keys', 'referrer_filters', 'service') }
 
@@ -206,7 +206,7 @@ resource "Cinstance" do
     context "if first traffic is not nil" do
       include_context "first traffic is not nil"
 
-      it { should include('first_traffic_at' => first_traffic.as_json, 
+      it { should include('first_traffic_at' => first_traffic.as_json,
                           'first_daily_traffic_at' => first_daily_traffic.as_json) }
     end
 
@@ -219,9 +219,9 @@ resource "Cinstance" do
 
     context "in v1 mode" do
       before { resource.service.update_attribute(:backend_version, '1') }
-      it do 
+      it do
         should include('user_key' => resource.user_key,
-                          'provider_verification_key' => resource.provider_public_key) 
+                          'provider_verification_key' => resource.provider_public_key)
       end
     end
 
@@ -253,7 +253,6 @@ resource "Cinstance" do
       it { should have_tag('user_account_id') }
       it { should have_tag('first_traffic_at') }
       it { should have_tag('first_daily_traffic_at') }
-      it { should have_tag('end_user_required') }
       it { should have_tag('service_id') }
       it { should have_tag('plan') }
     end

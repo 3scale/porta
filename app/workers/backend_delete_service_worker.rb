@@ -14,7 +14,6 @@ class BackendDeleteServiceWorker
     batch.description = "Deleting in Backend the Service ##{service_id}"
     batch.on(:success, self.class, {'service_id' => service_id})
     batch.jobs do
-      BackendDeleteEndUsersWorker.perform_async(event_id)
       BackendDeleteStatsWorker.perform_async(event_id)
     end
   rescue ActiveRecord::RecordNotFound => exception

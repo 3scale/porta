@@ -32,28 +32,6 @@ resource "UsageLimit" do
     end
   end
 
-  api 'end user plan limits' do
-    before { provider.settings.allow_end_users! }
-
-    let(:plan) { FactoryBot.create(:end_user_plan, issuer: service) }
-
-    get '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits.:format', action: :index
-    get  '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits/:id.:format', action: :show
-    delete  '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits/:id.:format', action: :destroy
-
-    context do
-      parameter :period, 'Limit Period'
-
-      post '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits.:format', action: :create do
-        let(:period) { 'week' }
-      end
-
-      put  '/admin/api/end_user_plans/:plan_id/metrics/:metric_id/limits/:id.:format', action: :update do
-        let(:period) { 'eternity' }
-      end
-    end
-  end
-
   context do
     let(:plan) { FactoryBot.build(:application_plan, issuer: service) }
 
@@ -77,10 +55,3 @@ __END__
               admin_api_application_plan_metric_limit GET    /admin/api/application_plans/:application_plan_id/metrics/:metric_id/limits/:id(.:format)              admin/api/application_plan_metric_limits#show {:format=>"xml"}
                                                       PUT    /admin/api/application_plans/:application_plan_id/metrics/:metric_id/limits/:id(.:format)              admin/api/application_plan_metric_limits#update {:format=>"xml"}
                                                       DELETE /admin/api/application_plans/:application_plan_id/metrics/:metric_id/limits/:id(.:format)              admin/api/application_plan_metric_limits#destroy {:format=>"xml"}
-
-
-                admin_api_end_user_plan_metric_limits GET    /admin/api/end_user_plans/:end_user_plan_id/metrics/:metric_id/limits(.:format)                        admin/api/end_user_plans/limits#index {:format=>"xml"}
-                                                      POST   /admin/api/end_user_plans/:end_user_plan_id/metrics/:metric_id/limits(.:format)                        admin/api/end_user_plans/limits#create {:format=>"xml"}
-                 admin_api_end_user_plan_metric_limit GET    /admin/api/end_user_plans/:end_user_plan_id/metrics/:metric_id/limits/:id(.:format)                    admin/api/end_user_plans/limits#show {:format=>"xml"}
-                                                      PUT    /admin/api/end_user_plans/:end_user_plan_id/metrics/:metric_id/limits/:id(.:format)                    admin/api/end_user_plans/limits#update {:format=>"xml"}
-                                                      DELETE /admin/api/end_user_plans/:end_user_plan_id/metrics/:metric_id/limits/:id(.:format)                    admin/api/end_user_plans/limits#destroy {:format=>"xml"}

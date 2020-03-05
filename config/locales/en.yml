@@ -313,13 +313,6 @@ en:
         with multiple tiered pricing plans, fixed and variable billing
         and automated invoicing.</p>
 
-    end_users:
-      name: User Plans
-      description_html: |
-        <p>The <b>user plans</b> module allows you to rate limit individual end
-        user use of your API independently of the applications they are
-        using. This feature is particularly useful for mobile applications. </p>
-
     groups:
       name: Groups
       description_html: |
@@ -795,8 +788,6 @@ en:
         last_name: Last Name
       billing_address:
         street_address: Street Address
-    models:
-      end_user: 'EndUser'
     errors:
       models:
         sso_token:
@@ -1008,7 +999,6 @@ en:
       application_plan: Application plan
       service_plan: Service plan
       account_plan: Account plan
-      end_user_plan: EndUser plan
 
       cms/builtin:
       cms/builtin/page: Built-in page
@@ -1194,7 +1184,6 @@ en:
       settings:
         account_plans_ui_visible: "Only consider using Account Plans if Application Plans don't suit your use case - for example if you offer additional non-API services."
         service_plans_ui_visible: "Only consider using Service Plans for non-API features like additional support per Service instead of for the whole Account."
-        end_user_plans_ui_visible: "End User Plans make it possible to divide the rate limits of an Application Plan per end user. This way each end user of an application gets his/her fair share of the application rate limit."
         approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         change_account_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
@@ -1285,7 +1274,6 @@ en:
         buyers_manage_keys: "Makes applications Keys visible on the developer dashboard. This setting makes sense only when former one is checked."
         referrer_filters_required: "Developers with access to your API must indicate allowed domain / IP referrers."
         custom_keys_enabled: "Allows you to create custom keys for developers"
-        end_user_registration_required: "Requires End Users to be registered beforehand versus being created automatically"
         buyer_can_select_plan: "If left unchecked, the plan marked as 'default' will be selected."
         deployment_option: "At this moment the APIcast deployment option & OAuth authentication scheme are mutually exclusive."
     actions:
@@ -1307,7 +1295,6 @@ en:
         custom_keys_enabled: "Enable custom keys"
         buyer_key_regenerate_enabled: "Allow developers to regenerate access keys"
         mandatory_app_key: "Require at least 1 application key"
-        end_user_registration_required: "Manual End User registration"
         buyer_can_select_plan: "Developers can select a plan when creating a new application"
         backend_version: "Authentication: Parameters developers must send to the API in order to identify themselves:"
 
@@ -1327,7 +1314,6 @@ en:
       settings:
         account_plans_ui_visible: "Account Plans"
         service_plans_ui_visible: "Service Plans"
-        end_user_plans_ui_visible: "End User Plans"
         change_account_plan_permission: "For their account, a user can:"
         change_service_plan_permission: "For a service, a subscribed user can:"
         useraccountarea_enabled: 'Allow the user to edit their submitted details, change passwords, etc.'

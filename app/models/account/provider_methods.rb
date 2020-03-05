@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Account::ProviderMethods
   extend ActiveSupport::Concern
 
@@ -125,13 +127,11 @@ module Account::ProviderMethods
       end
     end
 
-    has_many :end_user_plans, through: :services
     has_many :account_plans, as: :issuer,  inverse_of: :provider, dependent: :destroy, &DefaultPlanProxy
     has_many :issued_plans, as: :issuer, class_name: 'Plan'
 
     has_many :default_service_plans, through: :services, class_name: 'ServicePlan'
     has_many :default_application_plans, through: :services, class_name: 'ApplicationPlan'
-    has_many :default_end_user_plans, through: :services, class_name: 'EndUserPlan'
     belongs_to :default_account_plan, class_name: 'AccountPlan'
 
     has_many :fields_definitions, -> { by_position }, inverse_of: :account do

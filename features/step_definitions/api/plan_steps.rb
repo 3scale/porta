@@ -21,7 +21,7 @@ When /^I follow "([^"]*)" for (plan "[^"]*")$/ do |label, plan|
   step %(I follow "#{label}" within "##{dom_id(plan)}")
 end
 
-When /^I select "(.*?)" as default (?:end user )?plan$/ do | plan |
+When /^I select "(.*?)" as default plan$/ do | plan |
   select plan
 end
 
