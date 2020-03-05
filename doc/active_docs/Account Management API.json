@@ -3267,7 +3267,7 @@
             },
             {
               "name": "private_endpoint",
-              "description": "Private endpoint of the Backend",
+              "description": "Private Base URL (your API)",
               "dataType": "string",
               "required": true,
               "paramType": "query"
@@ -3346,7 +3346,7 @@
             },
             {
               "name": "private_endpoint",
-              "description": "Private endpoint of the Backend",
+              "description": "Private Base URL (your API)",
               "dataType": "string",
               "required": false,
               "paramType": "query"
@@ -6733,7 +6733,7 @@
             },
             {
               "name": "api_backend",
-              "description": "Private Base URL.",
+              "description": "Private Base URL. Caution! Do not use it if the account has API as a Product enabled. It may cause API backend usages to be removed from the Product.",
               "dataType": "string",
               "paramType": "query",
               "required": false
