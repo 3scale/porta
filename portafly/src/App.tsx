@@ -4,7 +4,6 @@ import React from 'react'
 import {BrowserRouter as Router, Redirect, useHistory} from 'react-router-dom'
 import { AppLayout, SwitchWith404, LazyRoute } from './components'
 import { LastLocationProvider } from 'react-router-last-location'
-import './App.css'
 import logo from './assets/logo.svg'
 
 const Logo = <Brand src={logo} alt={'patternfly logo'}/>
