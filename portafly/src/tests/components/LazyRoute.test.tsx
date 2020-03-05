@@ -1,22 +1,21 @@
 import * as React from 'react'
-import { render, waitForElement } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { LazyRoute } from 'components'
+import { waitForElement } from '@testing-library/react'
 
-describe('LazyRoute tests', () => {
-  test('should render a spinner while waiting for a component module to be loaded', async () => {
-    expect.assertions(1)
-    const getComponent = () => {
-      expect(true).toBe(true)
-      return new Promise<{ default: React.ComponentType }>(() => {})
-    }
-    const { getByText } = render(<LazyRoute getComponent={getComponent} />)
-    await waitForElement(() => getByText('Loading'))
-  })
+const getComponent = () => Promise.resolve({
+  default: () => <div data-testid="async-component">Hello!</div>
+})
 
-  test('should render the async component', async () => {
-    const getComponent = () =>
-      Promise.resolve({ default: () => <div>content</div> })
-    const { getByText } = render(<LazyRoute getComponent={getComponent} />)
-    await waitForElement(() => getByText('content'))
-  })
+test('should render a spinner while waiting for a component module to be loaded', () => {
+  const { queryByTestId, getByText } = render(<LazyRoute getComponent={getComponent} />)
+  expect(getByText('Loading')).toBeInTheDocument()
+  expect(queryByTestId('async-component')).not.toBeInTheDocument()
+})
+
+test('should render the async component', async () => {
+  const { queryByTestId, getByTestId } = render(<LazyRoute getComponent={getComponent} />)
+
+  expect(queryByTestId('async-component')).not.toBeInTheDocument()
+  waitForElement(() => expect(getByTestId('async-component')).toBeInTheDocument())
 })

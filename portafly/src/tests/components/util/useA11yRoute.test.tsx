@@ -1,41 +1,39 @@
 import * as React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
-import { waitForElement } from '@testing-library/dom'
-import { render, fireEvent } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { useA11yRouteChange } from 'components'
+import { fireEvent } from '@testing-library/react'
+
 
 const SamplePage = () => {
-  useA11yRouteChange('test-focus')
+  const containerId = 'test-focus'
+  useA11yRouteChange(containerId)
   const [focused, setFocused] = React.useState(false)
-  const handleFocus = () => {
-    setFocused(true)
-  }
+
   return (
-    <div id={'test-focus'} tabIndex={-1} onFocus={handleFocus}>
-      {focused ? (
-        <div data-testid={'test-focused'}>I'm focused!</div>
-      ) : (
-        'Not in focus yet'
-      )}
+    <div id={containerId} tabIndex={-1} onFocus={() => setFocused(true)}>
+      {focused && <div data-testid="test-focused">Focused!</div>}
     </div>
   )
 }
 
-describe('useDocumentTitle tests', () => {
-  test('should change the document title', async () => {
-    const { getByTestId } = render(
-      <Switch>
-        <Route path={'/autofocus/:optionalParam?'}>
-          <SamplePage />
-        </Route>
-        <Route>
-          <Link to={'/autofocus'} data-testid={'link'}>
-            Go to page
-          </Link>
-        </Route>
-      </Switch>
-    )
-    fireEvent.click(getByTestId('link'))
-    await waitForElement(() => getByTestId('test-focused'))
-  })
+it('should focus', () => {
+  const { getByTestId, findByTestId, queryByTestId } = render(
+    <Switch>
+      <Route path="/autofocus/:optionalParam?">
+        <SamplePage />
+      </Route>
+      <Route>
+        <Link to="/autofocus" data-testid="link">
+          Go to page
+        </Link>
+      </Route>
+    </Switch>
+  )
+
+  expect(queryByTestId('test-focused')).toBeNull()
+
+  fireEvent.click(getByTestId('link'))
+  return findByTestId('test-focused')
+    .then((e) => expect(e).toBeInTheDocument())
 })

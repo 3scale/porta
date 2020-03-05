@@ -1,5 +1,5 @@
 import React from 'react'
-import {useA11yRouteChange, useDocumentTitle} from 'components'
+import { useA11yRouteChange, useDocumentTitle } from 'components'
 import {
   PageSection,
   TextContent,
@@ -9,16 +9,18 @@ import {
   CardBody
 } from '@patternfly/react-core'
 
-const Overview: React.FunctionComponent = ({children}) => {
+const Overview: React.FunctionComponent = () => {
   useA11yRouteChange()
   useDocumentTitle('Overview')
   return (
     <>
-      <PageSection variant={'light'}>
+      <PageSection variant="light">
         <TextContent>
-          <Title size={'3xl'}>Overview</Title>
+          <Title size="3xl">Overview</Title>
           <Text>
-            <b>PortaFly</b> the next gen UI for Porta API MGMT App
+            <b>PortaFly</b>
+            {' '}
+            the next gen UI for Porta API MGMT App
           </Text>
         </TextContent>
       </PageSection>
@@ -35,4 +37,6 @@ const Overview: React.FunctionComponent = ({children}) => {
   )
 }
 
+// Default export needed for React.lazy
+// eslint-disable-next-line import/no-default-export
 export default Overview

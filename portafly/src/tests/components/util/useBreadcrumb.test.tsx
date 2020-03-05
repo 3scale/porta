@@ -1,16 +1,17 @@
 import * as React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
-import { render, fireEvent } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { AppLayout, useBreadcrumb } from 'components'
+import { fireEvent } from '@testing-library/react'
 
-const SampleBreadcrumb = <div data-testid={'test-breadcrumb'}>breadcrumb</div>
+const SampleBreadcrumb = <div data-testid="test-breadcrumb">breadcrumb</div>
 
 const SamplePageWithBreadcrumb: React.FunctionComponent = () => {
   useBreadcrumb(SampleBreadcrumb)
 
   return (
     <div>
-      <Link to={'/no-breadcrumb'} data-testid={'go-to-page-without-breadcrumb'}>
+      <Link to="/no-breadcrumb" data-testid="go-to-page-without-breadcrumb">
         Go to page without breadcrumb
       </Link>
     </div>
@@ -22,10 +23,10 @@ describe('useBreadcrumb tests', () => {
     const { getByTestId, getByText, queryByTestId } = render(
       <AppLayout>
         <Switch>
-          <Route path={'/'} exact={true}>
+          <Route path="/" exact>
             <SamplePageWithBreadcrumb />
           </Route>
-          <Route path={'/no-breadcrumb'}>page with no breadcrumb</Route>
+          <Route path="/no-breadcrumb">page with no breadcrumb</Route>
         </Switch>
       </AppLayout>
     )

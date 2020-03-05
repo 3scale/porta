@@ -1,39 +1,39 @@
 import * as React from 'react'
-import { render, fireEvent } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { AppLayout, IAppLayoutProps } from 'components'
+import { fireEvent } from '@testing-library/react'
 
 function makeAppLayout(
-  props: Partial<React.PropsWithChildren<IAppLayoutProps>> = {}
+  args: Partial<React.PropsWithChildren<IAppLayoutProps>> = {}
 ) {
-  props = Object.assign(
-    {
-      logo: <div>App logo</div>,
-      avatar: <div>Avatar</div>,
-      toolbar: <div>Toolbar</div>,
-      navVariant: 'vertical',
-      navItems: [
-        {
-          title: 'Samples',
-          to: '/samples/',
-          items: [
-            { to: '/samples/foo', title: 'Foo' },
-            undefined,
-            { to: '/samples/bar', title: 'Bar' },
-            { to: '/samples/baz', title: 'Baz' },
-          ],
-        },
-        { to: '/support', title: 'Support' },
-        { to: '/something', title: 'Something' },
-      ],
-      navGroupsStyle: 'expandable',
-      startWithOpenNav: true,
-      theme: 'dark',
-      mainContainerId: 'test-main-container',
-      children: <div data-testid={'test-content'}>test</div>,
-    },
-    props
-  )
-  return <AppLayout {...(props as IAppLayoutProps)} />
+  const props: IAppLayoutProps = {
+    logo: <div>App logo</div>,
+    avatar: <div>Avatar</div>,
+    toolbar: <div>Toolbar</div>,
+    navVariant: 'vertical',
+    navItems: [
+      {
+        title: 'Samples',
+        to: '/samples/',
+        items: [
+          { to: '/samples/foo', title: 'Foo' },
+          undefined,
+          { to: '/samples/bar', title: 'Bar' },
+          { to: '/samples/baz', title: 'Baz' }
+        ]
+      },
+      { to: '/support', title: 'Support' },
+      { to: '/something', title: 'Something' }
+    ],
+    navGroupsStyle: 'expandable',
+    startWithOpenNav: true,
+    theme: 'dark',
+    mainContainerId: 'test-main-container',
+    children: <div data-testid="test-content">test</div>,
+    ...args
+  }
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <AppLayout {...props} />
 }
 
 function renderAppLayout(...args: Parameters<typeof makeAppLayout>) {
@@ -53,7 +53,7 @@ describe('AppLayout tests', () => {
 
   it('should render a nav-toggle button', async () => {
     const { getByLabelText } = renderAppLayout()
-    getByLabelText('Global navigation')
+    expect(getByLabelText('Global navigation')).toBeInTheDocument()
   })
 
   it('should hide the sidebar when clicking the nav-toggle button', async () => {

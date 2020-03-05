@@ -13,10 +13,11 @@ const customRender = (
   options?: ICustomRenderOptions
 ) => {
   const AllTheProviders: React.FunctionComponent<ICustomRenderOptions> = ({
-    children,
+    children
   }) => {
     const { router } = options || {}
     return (
+      // eslint-disable-next-line react/jsx-props-no-spreading
       <MemoryRouter {...router}>
         <LastLocationProvider>{children}</LastLocationProvider>
       </MemoryRouter>
@@ -25,8 +26,4 @@ const customRender = (
   return render(ui, { wrapper: AllTheProviders, ...options })
 }
 
-// re-export everything
-export * from '@testing-library/react'
-
-// override render method
 export { customRender as render }
