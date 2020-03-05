@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { render } from '@test/setup'
-import { AppNavGroup } from '@src'
+import { render } from 'tests/setup'
+import { AppNavGroup } from 'components'
 
 describe('AppNavGroup tests', () => {
   test('should render', async () => {

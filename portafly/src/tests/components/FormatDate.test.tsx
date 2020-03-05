@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { render } from '@test/setup'
-import { FormatDate } from '@src'
+import { render } from 'tests/setup'
+import { FormatDate } from 'components'
 import it from 'date-fns/locale/it'
 
 const dateISO = '2019-10-14T11:55:39.058Z'

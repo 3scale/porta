@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {NavGroup} from '@patternfly/react-core'
-import {AppNavItem, IAppNavItemProps} from './AppNavItem'
+import {AppNavItem, IAppNavItemProps} from 'components/AppNavItem'
 
 export interface IAppNavGroupProps {
   title: string
