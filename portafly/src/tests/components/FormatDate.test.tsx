@@ -1,26 +1,26 @@
 import * as React from 'react'
-import { render } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { FormatDate } from 'components'
 import it from 'date-fns/locale/it'
 
 const dateISO = '2019-10-14T11:55:39.058Z'
 
 // TODO: Fix tests to use TZ
-xdescribe('FormatDate tests', () => {
+describe('FormatDate tests', () => {
   test('should render the date string in an human readable way', async () => {
     const { getByText } = render(<FormatDate date={dateISO} />)
-    getByText('10/14/2019, 1:55 PM')
+    expect(getByText('10/14/2019, 1:55 PM')).not.toBeUndefined()
   })
 
   test('should render the date string accordingly to the passed format', async () => {
-    const { getByText } = render(<FormatDate date={dateISO} format={'dMy'} />)
-    getByText('14102019')
+    const { getByText } = render(<FormatDate date={dateISO} format="dMy" />)
+    expect(getByText('14102019')).not.toBeUndefined()
   })
 
   test('should render the date string respecting the date-fns config object', async () => {
     const { getByText } = render(
       <FormatDate date={dateISO} options={{ locale: it }} />
     )
-    getByText('14/10/2019 13:55')
+    expect(getByText('14/10/2019 13:55')).not.toBeUndefined()
   })
 })
