@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import { fireEvent } from '@testing-library/dom'
-import { render } from '@test/setup'
-import { SwitchWith404 } from '@src'
+import { render } from 'tests/setup'
+import { SwitchWith404 } from 'components'
 
 describe('SwitchWith404 tests', () => {
   test('should render the NotFound component for unmatched routes', async () => {

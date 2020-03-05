@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
-import { render, fireEvent } from '@test/setup'
-import { AppLayout, useBreadcrumb } from '@src'
+import { render, fireEvent } from 'tests/setup'
+import { AppLayout, useBreadcrumb } from 'components'
 
 const SampleBreadcrumb = <div data-testid={'test-breadcrumb'}>breadcrumb</div>
 
