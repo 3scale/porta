@@ -8,14 +8,16 @@ import {
 
 type InputProps = {
   isRequired: boolean,
-    label: string,
-    fieldId: 'string',
-    isValid: boolean,
-    name: string,
-    value: string,
-    onChange: () => void,
-    autoFocus?: string,
-    ariaInvalid?: boolean
+  label: string,
+  fieldId: 'string',
+  isValid: boolean,
+  name: string,
+  value: string,
+  onChange?: () => void,
+  onBlur?: () => void,
+  autoFocus?: string,
+  ariaInvalid?: boolean,
+  errorMessage?: string
 }
 
 type Props = {
@@ -31,11 +33,14 @@ const helperTexts = {
   firstName: '',
   lastName: '',
   password: 'Password is mandatory',
-  passwordConfirmation: 'Password confirmation is mandatory'
+  passwordConfirmation: {
+    isMandatory: 'Password confirmation is mandatory',
+    mustMatch: 'Password and Password confirmation must match'
+  }
 }
 
 const FormGroup = ({type, helperTextInvalid, inputProps}: Props) => {
-  const {isRequired, label, fieldId, isValid, name, value, onChange, autoFocus, ariaInvalid} = inputProps
+  const {isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid} = inputProps
   return (
     <React.Fragment>
       <PF4FormGroup
@@ -52,6 +57,7 @@ const FormGroup = ({type, helperTextInvalid, inputProps}: Props) => {
           id={fieldId}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           autoFocus={autoFocus}
           isValid={isValid}
           aria-invalid={ariaInvalid}
@@ -82,13 +88,27 @@ const EmailField = ({inputProps}: {inputProps: InputProps}) => {
 }
 
 const PasswordField = ({inputProps}: {inputProps: InputProps}) => {
+  let helperText = helperTexts.password
   return (
     <FormGroup
       type='password'
       inputProps={inputProps}
-      helperTextInvalid={helperTexts.password}
+      helperTextInvalid={helperText}
     />
   )
 }
 
-export {TextField, PasswordField, EmailField}
+const PasswordConfirmationField = ({inputProps}: {inputProps: InputProps}) => {
+  const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
+  const errorMessage = inputProps.errorMessage
+  let helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage
+  return (
+    <FormGroup
+      type='password'
+      inputProps={inputProps}
+      helperTextInvalid={helperText}
+    />
+  )
+}
+
+export { TextField, EmailField, PasswordField, PasswordConfirmationField }

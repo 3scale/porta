@@ -18,7 +18,9 @@ const constraintsTypes = {
   }
 }
 
-const validateForm = (form: SyntheticEvent<HTMLFormElement>, constraints: {}) => {
+type HTMLForm = HTMLFormElement | {} | null
+
+const validateForm = (form: HTMLForm, constraints: {}) => {
   return validate(form, constraints)
 }
 
