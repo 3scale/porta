@@ -1,21 +1,22 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { render, fireEvent } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { AppNavExpandable } from 'components'
+import { fireEvent } from '@testing-library/react'
 
 describe('AppNavExpandable tests', () => {
   test('should render', async () => {
     const { getByText, getByTestId } = render(
       <div>
         <AppNavExpandable
-          title={'Group title'}
-          to={'/group'}
+          title="Group title"
+          to="/group"
           items={[
             { to: '/group/foo', title: 'foo' },
-            { to: '/group/bar', title: 'bar' },
+            { to: '/group/bar', title: 'bar' }
           ]}
         />
-        <Link to={'/group/foo'} data-testid={'go-to-foo'}>
+        <Link to="/group/foo" data-testid="go-to-foo">
           Go to foo
         </Link>
       </div>

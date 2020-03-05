@@ -1,12 +1,12 @@
 import React from 'react'
 import { useFetch } from 'react-async'
-import {useDocumentTitle} from 'components'
+import { useDocumentTitle } from 'components'
 import {
   PageSection,
   PageSectionVariants,
   TextContent,
   Text,
-  TextVariants,
+  TextVariants
 } from '@patternfly/react-core'
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
 
@@ -23,32 +23,25 @@ const Applications: React.FunctionComponent = () => {
   let rows
 
   const { data, isPending } = useFetch<any>(
-    `/applications`,
+    '/applications',
     { headers: { Accept: 'application/json' } }
   )
 
-  const mapRowsData = (data: any) => {
-    if(!data) return
+  if (!isPending && data) {
     const applications = data.applications.application // TODO: Check the server side xml2json
-    const applicationsArray =  Array.isArray(applications) ? applications : [{...applications}]
+    const applicationsArray = Array.isArray(applications) ? applications : [{ ...applications }]
 
-    return applicationsArray.map(
-      (app: any) => {
-        return {
-          cells: [
-            app.name,
-            app.state,
-            'Developer',
-            app.plan.name,
-            app.created_at
-          ]
-        }
-      }
+    rows = applicationsArray.map(
+      (app: any) => ({
+        cells: [
+          app.name,
+          app.state,
+          'Developer',
+          app.plan.name,
+          app.created_at
+        ]
+      })
     )
-  }
-
-  if (!isPending) {
-    rows = mapRowsData(data)
   }
 
   return (
@@ -65,15 +58,18 @@ const Applications: React.FunctionComponent = () => {
       </PageSection>
 
       <PageSection>
-        {rows &&
+        {rows
+          && (
           <Table cells={columns} rows={rows}>
             <TableHeader />
             <TableBody />
           </Table>
-        }
+          )}
       </PageSection>
     </>
   )
 }
 
+// Default export needed for React.lazy
+// eslint-disable-next-line import/no-default-export
 export default Applications

@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { render } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { AppNavGroup } from 'components'
 
 describe('AppNavGroup tests', () => {
   test('should render', async () => {
     const { getByText } = render(
       <AppNavGroup
-        title={'Group title'}
+        title="Group title"
         items={[{ to: '/foo', title: 'foo' }, { to: '/bar', title: 'bar' }]}
       />
     )

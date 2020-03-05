@@ -1,9 +1,8 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { App } from 'App'
+import { render } from 'tests/custom-render'
 
 it('renders without crashing', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<App />, div)
-  ReactDOM.unmountComponentAtNode(div)
+  const wrapper = render(<App />)
+  expect(wrapper).not.toBeNull()
 })

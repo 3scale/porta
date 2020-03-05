@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { render } from 'tests/setup'
+import { render } from 'tests/custom-render'
 import { useDocumentTitle } from 'components'
 
 const SamplePage = () => {
