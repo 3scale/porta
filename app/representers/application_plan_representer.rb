@@ -6,7 +6,6 @@ module ApplicationPlanRepresenter
 
   property :custom
   property :system_name
-  property :end_user_required
 
   def custom
     customized?

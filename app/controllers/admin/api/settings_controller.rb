@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Api::SettingsController < Admin::Api::BaseController
 
   clear_respond_to
@@ -9,7 +11,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   ALLOWED_PARAMS = %i(
     useraccountarea_enabled hide_service signups_enabled account_approval_required strong_passwords_enabled
     public_search account_plans_ui_visible change_account_plan_permission service_plans_ui_visible
-    change_service_plan_permission end_user_plans_ui_visible
+    change_service_plan_permission
   ).freeze
 
   ##~ e = sapi.apis.add
@@ -50,7 +52,6 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "change_account_plan_permission", :description => "Account Plans changing", :dataType => "string", :paramType => "query"
   ##~ op.parameters.add :name => "service_plans_ui_visible", :description => "Enables visibility of Service Plans", :dataType => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "change_service_plan_permission", :description => "Service Plans changing", :dataType => "string", :paramType => "query"
-  ##~ op.parameters.add :name => "end_user_plans_ui_visible", :description => "Enables visibility of End User Plans", :dataType => "boolean", :paramType => "query"
   def update
     settings.update_attributes(settings_params)
     respond_with(settings)

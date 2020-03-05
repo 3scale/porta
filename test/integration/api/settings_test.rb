@@ -29,8 +29,7 @@ class Api::SettingsTest < ActionDispatch::IntegrationTest
           account_plans_ui_visible: true,
           change_account_plan_permission: 'request',
           service_plans_ui_visible: true,
-          change_service_plan_permission: 'request',
-          end_user_plans_ui_visible: true
+          change_service_plan_permission: 'request'
         }
     }.as_json
 

@@ -252,31 +252,6 @@ World(Module.new do
     when 'the new service page'
       new_admin_service_path
 
-    when /^the edit page for end user plan "(.+?)"$/
-      plan = EndUserPlan.find_by_name! $1
-      edit_admin_end_user_plan_path(plan)
-
-    when /^the end user plans of service "(.+?)" page of provider "(.+?)"$/
-      #OPTIMIZE: instead of doing 'of provider "..."' it is better to keep provider_account
-      # in @current_account in a session/login step
-      provider = Account.providers.find_by_org_name! $2
-      service = provider.services.find_by_name! $1
-      admin_service_end_user_plans_path(service)
-
-    when /^the end users of service "(.+?)" page of provider "(.+?)"$/
-      #OPTIMIZE: instead of doing 'of provider "..."' it is better to keep provider_account
-      # in @current_account in a session/login step
-      provider = Account.providers.find_by_org_name! $2
-      service = provider.services.find_by_name! $1
-      admin_service_end_users_path(service)
-
-    when /^the end user "(.+?)" of service "(.+?)" page of provider "(.+?)"$/
-      #OPTIMIZE: instead of doing 'of provider "..."' it is better to keep provider_account
-      # in @current_account in a session/login step
-      provider = Account.providers.find_by_org_name! $3
-      service = provider.services.find_by_name! $2
-      admin_service_end_user_path(service, $1)
-
     when 'the account plans admin page'
       admin_buyers_account_plans_path
 

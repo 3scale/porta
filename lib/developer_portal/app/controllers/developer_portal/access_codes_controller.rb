@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::AccessCodesController < ApplicationController
-  include ::ThreeScale::ErrorReportingIgnoreEnduser
-  error_reporting_ignore_enduser
 
   #TODO: if AccessCodeProtection would be splitted in more modules this wouldn't be needed
 

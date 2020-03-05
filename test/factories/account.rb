@@ -142,8 +142,7 @@ FactoryBot.define do
       account.services.first.update_attribute :mandatory_app_key, false
       account.settings.update_attributes!(
         account_plans_ui_visible: true,
-        service_plans_ui_visible: true,
-        end_user_plans_ui_visible: true
+        service_plans_ui_visible: true
       )
       backend_api = FactoryBot.create(:backend_api, account: account, name: 'API Backend')
       FactoryBot.create(:backend_api_config, service: account.services.first, backend_api: backend_api)

@@ -84,7 +84,6 @@ module MenuSystem
   def active_menu?(level, title)
     return if title.blank?
     # opposite of #humanize: "Developer Portal => :developer_portal
-    # and also "EndUser Plans" => :end_user_plans
 
     active_menus[level].to_s.underscore == title.to_s.underscore.parameterize.underscore
   end
