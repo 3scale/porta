@@ -1,12 +1,15 @@
 // @flow
 
-import React, { useState } from 'react'
+import React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage, Form, ActionGroup, Button } from '@patternfly/react-core'
 import { HiddenInputs, FlashMessages } from 'LoginPage'
-import { PasswordInput } from 'ChangePassword'
+import {
+  PasswordInput,
+  PasswordConfirmationInput,
+  useFormState
+} from 'ChangePassword'
 import type { FlashMessage } from 'Types'
-import { validateForm } from 'LoginPage/utils/formValidation'
 
 import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
@@ -18,24 +21,14 @@ type Props = {
   errors: (?FlashMessage)[]
 }
 
-const validationConstraints = {
-  'user[password]': {
-    presence: true,
-    length: { minimum: 1 }
-  },
-  'user[password_confirmation]': {
-    presence: true,
-    length: { minimum: 1 }
-  }
-}
-
 const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
-  const [isFormDisabled, setIsFormDisabled] = useState(true)
-
-  const onChange = (event) => {
-    const errors = validateForm(event.currentTarget, validationConstraints)
-    setIsFormDisabled(!!errors)
-  }
+  const {
+    isFormDisabled,
+    confirmationErrorMessage,
+    onFormChange,
+    password,
+    passwordConfirmation
+  } = useFormState()
 
   return (
     <LoginPage
@@ -53,7 +46,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
         id='edit_user_2'
         acceptCharset='UTF-8'
         method='post'
-        onChange={onChange}
+        onChange={onFormChange}
       >
         <input type='hidden' name='_method' value='put' />
         <HiddenInputs />
@@ -61,12 +54,21 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
           isRequired
           name='password'
           label='Password'
+          value={password.value}
+          isValid={password.isValid}
           autoFocus='autoFocus'
+          onBlur={password.onBlur}
+          onChange={password.onChange}
         />
-        <PasswordInput
+        <PasswordConfirmationInput
           isRequired
           name='password_confirmation'
           label='Password confirmation'
+          value={passwordConfirmation.value}
+          isValid={passwordConfirmation.isValid}
+          errorMessage={confirmationErrorMessage}
+          onBlur={passwordConfirmation.onBlur}
+          onChange={passwordConfirmation.onChange}
         />
         {lostPasswordToken &&
           <input id='password_reset_token' type='hidden' name='password_reset_token' value={lostPasswordToken} />

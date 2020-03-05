@@ -1,37 +1,32 @@
 // @flow
 
-import React, { useState } from 'react'
-import { PasswordField, validateSingleField } from 'LoginPage'
+import React from 'react'
+import { PasswordField, PasswordConfirmationField } from 'LoginPage'
 
 type Props = {
-  isRequired?: boolean,
-  name: string,
-  label: string,
-  autoFocus?: string
+    isRequired?: boolean,
+    name: string,
+    label: string,
+    value: string,
+    isValid: boolean,
+    autoFocus?: string,
+    errorMessage?: string,
+    onChange: () => void,
+    onBlur: () => void,
 }
 
-const PasswordInput = ({ isRequired, name, label, autoFocus }: Props) => {
-  const [value, setValue] = useState('')
-  const [isValid, setIsValid] = useState(undefined)
+const getInputProps = props => ({
+  ...props,
+  name: `user[${props.name}]`,
+  fieldId: `user_${props.name}`
+})
 
-  const inputProps = {
-    isRequired,
-    name: `user[${name}]`,
-    fieldId: `user_${name}`,
-    label,
-    value,
-    isValid,
-    onChange: (value, event) => {
-      const isValid = validateSingleField(event)
-      setValue(value)
-      setIsValid(isValid)
-    },
-    autoFocus
-  }
+const PasswordInput = (props: Props) => (
+  <PasswordField inputProps={getInputProps(props)} />
+)
 
-  return (
-    <PasswordField inputProps={inputProps} />
-  )
-}
+const PasswordConfirmationInput = (props: Props) => (
+  <PasswordConfirmationField inputProps={getInputProps(props)} />
+)
 
-export { PasswordInput }
+export { PasswordInput, PasswordConfirmationInput }
