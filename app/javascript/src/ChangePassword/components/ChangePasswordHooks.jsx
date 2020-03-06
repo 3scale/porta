@@ -1,11 +1,21 @@
+// @flow
+
 import { useState } from 'react'
 import validate from 'validate.js' // TODO: including this since validateSingleField and validateForm from LoginPage/utils/formValidation screams for a refactor
 
-const PASSWORD = 'user[password]'
-const PASSWORD_CONFIRMATION = 'user[password_confirmation]'
+type FieldName = string
+type ValidatorName = 'presence' | 'length' | 'equality'
+type ValidatorOption = {message: string, minimun?: number, attribute?: string}
+type Constraints = {[FieldName]: {[ValidatorName]: ValidatorOption}}
+type FieldState = {[FieldName]: string}
+type ValidationErrors = {[FieldName]: string[]}
+type FieldErrorsState = ValidationErrors
+
+const PASSWORD: string = 'user[password]'
+const PASSWORD_CONFIRMATION: string = 'user[password_confirmation]'
 
 // The following validation objects are tied to FormGroups helperTexts, very closed module, not open to change. TODO: REFACTOR those components
-const validationConstraints = {
+const validationConstraints: Constraints = {
   [PASSWORD]: {
     presence: {
       message: '^isMandatory'
@@ -30,55 +40,66 @@ const validationConstraints = {
   }
 }
 
-const fieldsTemplate = {
+const fieldsTemplate: FieldState = {
   [PASSWORD]: '',
   [PASSWORD_CONFIRMATION]: ''
 }
 
-const extractErrorMessage = errorMessageArray => errorMessageArray.slice(0, 1).pop()
-const checkFieldErrors = fieldErrors => fieldName => !(fieldErrors && !!fieldErrors[fieldName])
-const validateFields = fieldsNode => validate(fieldsNode, validationConstraints)
-const parseValidationErrors = validationErrors => (
-  validationErrors
-    ? Object.keys(validationErrors)
-      .reduce((acc, cur) => ({ ...acc, [cur]: extractErrorMessage(validationErrors[cur]) }), {})
-    : fieldsTemplate
-)
+const fieldErrorsTemplate: FieldErrorsState = {
+  [PASSWORD]: [],
+  [PASSWORD_CONFIRMATION]: []
+}
+
+const fieldsPristineTemplate: FieldErrorsState = {
+  [PASSWORD]: true,
+  [PASSWORD_CONFIRMATION]: true
+}
+const extractFirstErrorMessage = (errorMessageArray: string[]): string => errorMessageArray[0]
+const isFieldValid = (errorMessageArray: string[]): boolean => !errorMessageArray.length
 
 const useFormState = () => {
   const [fieldValues, setFieldValues] = useState(fieldsTemplate)
-  const [fieldErrors, setFieldErrors] = useState(fieldsTemplate)
+  const [fieldErrors, setFieldErrors] = useState(fieldErrorsTemplate)
   const [isFormDisabled, setIsFormDisabled] = useState(true)
+  const [areFieldsPristine, setAreFieldsPristine] = useState(fieldsPristineTemplate)
 
-  const isFieldValid = checkFieldErrors(fieldErrors)
-  const updateForm = errors => {
-    setFieldErrors(parseValidationErrors(errors))
-    setIsFormDisabled(!!errors)
+  const onFormChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
+    const validationErrors: ?ValidationErrors = validate(event.currentTarget, validationConstraints)
+    const visibleErrors: ValidationErrors | boolean = !!validationErrors && Object.keys(validationErrors)
+      .filter(key => !areFieldsPristine[key])
+      .reduce((errors, key) => ({[key]: validationErrors[key]}), {})
+    setFieldErrors(visibleErrors ? {...fieldErrorsTemplate, ...visibleErrors} : fieldErrorsTemplate)
+    setIsFormDisabled(!!validationErrors)
   }
 
-  const onFormChange = event => updateForm(validateFields(event.currentTarget))
-  const onFieldChange = fieldName => value => setFieldValues({...fieldValues, [fieldName]: value})
-  const onFieldBlur = fieldName => event => (
-    updateForm(validateFields({...fieldValues, [fieldName]: event.currentTarget.value}))
+  const onFieldChange = (fieldName: FieldName) => (value: string) => {
+    setFieldValues({ ...fieldValues, [fieldName]: value })
+    setAreFieldsPristine({ ...areFieldsPristine, [fieldName]: false })
+  }
+
+  const onFieldBlur = (fieldName: FieldName) => (event: SyntheticInputEvent<HTMLInputElement>) => {
+    const validationErrors: ?ValidationErrors = validate(
+      {...fieldValues, [fieldName]: event.currentTarget.value},
+      {[fieldName]: validationConstraints[fieldName]}
+    ) || {[fieldName]: []}
+    setFieldErrors(({...fieldErrors, ...validationErrors}))
+  }
+
+  const buildFieldProps = (fieldName: FieldName) => (
+    {
+      value: fieldValues[fieldName],
+      isValid: isFieldValid(fieldErrors[fieldName]),
+      errorMessage: extractFirstErrorMessage(fieldErrors[fieldName]),
+      onChange: onFieldChange(fieldName),
+      onBlur: onFieldBlur(fieldName)
+    }
   )
 
   return {
     isFormDisabled,
     onFormChange,
-    password: {
-      value: fieldValues[PASSWORD],
-      isValid: isFieldValid(PASSWORD),
-      errorMessage: fieldErrors[PASSWORD],
-      onChange: onFieldChange(PASSWORD),
-      onBlur: onFieldBlur(PASSWORD)
-    },
-    passwordConfirmation: {
-      value: fieldValues[PASSWORD_CONFIRMATION],
-      isValid: isFieldValid(PASSWORD_CONFIRMATION),
-      errorMessage: fieldErrors[PASSWORD_CONFIRMATION],
-      onChange: onFieldChange(PASSWORD_CONFIRMATION),
-      onBlur: onFieldBlur(PASSWORD_CONFIRMATION)
-    }
+    password: buildFieldProps(PASSWORD),
+    passwordConfirmation: buildFieldProps(PASSWORD_CONFIRMATION)
   }
 }
 
