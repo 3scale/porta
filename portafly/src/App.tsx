@@ -37,8 +37,8 @@ const navItems = [
   }
 ]
 
-const getOverviewPage = () => import('./pages/Overview')
-const getApplicationsPage = () => import('./pages/Applications')
+const getOverviewPage = () => import('pages/Overview')
+const getApplicationsPage = () => import('pages/Applications')
 
 const App = () => {
   return (
