@@ -12,7 +12,6 @@ import {
 import {
   ForgotCredentials,
   Login3scaleForm,
-  RequestPasswordForm,
   AuthenticationProviders,
   FlashMessages
 } from 'LoginPage'
@@ -33,8 +32,8 @@ type Props = {
   flashMessages: Array<FlashMessage>,
   providerAdminDashboardPath: string,
   providerLoginPath: string,
-  providerPasswordPath: string,
   providerSessionsPath: string,
+  providerRequestPasswordResetPath: string,
   redirectUrl: string,
   show3scaleLoginForm: boolean,
   disablePasswordReset: boolean,
@@ -43,10 +42,7 @@ type Props = {
   }
 }
 
-const formModeTuple: [string, string] = ['login', 'password-reset']
-
 type State = {
-  formMode: string,
   loginTitle: string
 }
 
@@ -59,24 +55,9 @@ class SimpleLoginPage extends React.Component<Props, State> {
     }
   }
 
-  setFormMode ({win = window}: {win?: Window}) {
-    try {
-      const url = new URL(win.location.href)
-      const formMode = url.search === '?request_password_reset=true' ? formModeTuple[1] : formModeTuple[0]
-      const loginTitle = formMode === 'login' ? 'Log in to your account' : 'Request a password reset link by email'
-      this.setState({formMode, loginTitle})
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  componentDidMount () {
-    this.setFormMode(window)
-  }
-
   showForgotCredentials () {
-    const showForgotCredentials = this.state.formMode === formModeTuple[0] && !this.props.disablePasswordReset
-    return showForgotCredentials && <ForgotCredentials providerLoginPath={this.props.providerLoginPath}/>
+    const showForgotCredentials = !this.props.disablePasswordReset
+    return showForgotCredentials && <ForgotCredentials requestPasswordResetPath={this.props.providerRequestPasswordResetPath}/>
   }
 
   loginForm () {
@@ -116,15 +97,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
           this.props.flashMessages &&
           <FlashMessages flashMessages={this.props.flashMessages}/>
         }
-        {this.state.formMode === formModeTuple[0] &&
-          this.loginForm()
-        }
-        {this.state.formMode === formModeTuple[1] &&
-          <RequestPasswordForm
-            providerPasswordPath={this.props.providerPasswordPath}
-            providerLoginPath={this.props.providerLoginPath}
-          />
-        }
+        { this.loginForm() }
       </LoginPage>
     )
   }

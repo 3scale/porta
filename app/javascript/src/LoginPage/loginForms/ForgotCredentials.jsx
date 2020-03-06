@@ -3,9 +3,9 @@
 import React from 'react'
 import {LoginMainFooterBandItem} from '@patternfly/react-core'
 
-const ForgotCredentials = ({providerLoginPath}: {providerLoginPath: string}) =>
+const ForgotCredentials = ({requestPasswordResetPath}: {requestPasswordResetPath: string}) =>
   <LoginMainFooterBandItem>
-    <a href={`${providerLoginPath}?request_password_reset=true`}>Forgot password?</a>
+    <a href={requestPasswordResetPath}>Forgot password?</a>
   </LoginMainFooterBandItem>
 
 export {ForgotCredentials}
