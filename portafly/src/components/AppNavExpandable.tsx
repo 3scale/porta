@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {useRouteMatch} from 'react-router-dom'
 import {NavExpandable} from '@patternfly/react-core'
-import {AppNavItem, IAppNavItemProps} from './AppNavItem'
+import {AppNavItem, IAppNavItemProps} from 'components/AppNavItem'
 
 export interface IAppNavExpandableProps {
   title: string

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { render } from '@test/setup'
-import { AppNavItem } from '@src'
+import { render } from 'tests/setup'
+import { AppNavItem } from 'components'
 
 describe('AppNavItem tests', () => {
   test('should render a separator if no title and link is passed', async () => {

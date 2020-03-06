@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { render, waitForElement } from '@test/setup'
-import { LazyRoute } from '@src'
+import { render, waitForElement } from 'tests/setup'
+import { LazyRoute } from 'components'
 
 describe('LazyRoute tests', () => {
   test('should render a spinner while waiting for a component module to be loaded', async () => {
