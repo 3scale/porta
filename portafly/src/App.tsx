@@ -2,9 +2,9 @@ import 'react-app-polyfill/ie11'
 import { Brand } from '@patternfly/react-core'
 import React from 'react'
 import {BrowserRouter as Router, Redirect, useHistory} from 'react-router-dom'
-import { AppLayout, SwitchWith404, LazyRoute } from './components'
+import { AppLayout, SwitchWith404, LazyRoute } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
-import logo from './assets/logo.svg'
+import logo from 'assets/logo.svg'
 
 const Logo = <Brand src={logo} alt={'patternfly logo'}/>
 const navItems = [

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {SwitchProps, Switch, Route, useRouteMatch} from 'react-router-dom'
-import {NotFound} from './NotFound'
+import {NotFound} from 'components/NotFound'
 
 export const SwitchWith404: React.FunctionComponent<SwitchProps> = ({
   children,

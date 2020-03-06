@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {RouteProps, Route} from 'react-router-dom'
-import {Loading} from './Loading'
+import {Loading} from 'components/Loading'
 
 export interface IDynamicImportProps extends RouteProps {
   getComponent: () => Promise<{ default: React.ComponentType }>

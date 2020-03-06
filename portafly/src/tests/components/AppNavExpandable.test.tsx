@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { render, fireEvent } from '@test/setup'
-import { AppNavExpandable } from '@src'
+import { render, fireEvent } from 'tests/setup'
+import { AppNavExpandable } from 'components'
 
 describe('AppNavExpandable tests', () => {
   test('should render', async () => {

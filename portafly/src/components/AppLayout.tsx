@@ -9,9 +9,9 @@ import {
   SkipToContent,
   PageHeaderProps,
 } from '@patternfly/react-core'
-import {AppNavExpandable, IAppNavExpandableProps} from './AppNavExpandable'
-import {AppNavGroup, IAppNavGroupProps} from './AppNavGroup'
-import {AppNavItem, IAppNavItemProps} from './AppNavItem'
+import {AppNavExpandable, IAppNavExpandableProps} from 'components/AppNavExpandable'
+import {AppNavGroup, IAppNavGroupProps} from 'components/AppNavGroup'
+import {AppNavItem, IAppNavItemProps} from 'components/AppNavItem'
 
 export interface IAppLayoutContext {
   setBreadcrumb: (breadcrumb: React.ReactNode) => void

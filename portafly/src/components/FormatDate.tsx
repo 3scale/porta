@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { format } from 'date-fns'
-import { ArgumentsType } from '../types'
+import { ArgumentsType } from 'types'
 
 // TODO: Fix component to use TZ
 export interface IFormatDateProps {

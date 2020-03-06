@@ -1,5 +1,5 @@
 import React from 'react'
-import {useA11yRouteChange, useDocumentTitle} from '../components'
+import {useA11yRouteChange, useDocumentTitle} from 'components'
 import {
   PageSection,
   TextContent,

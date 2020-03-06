@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFetch } from 'react-async'
-import {useDocumentTitle} from '../components'
+import {useDocumentTitle} from 'components'
 import {
   PageSection,
   PageSectionVariants,

@@ -1,8 +1,7 @@
 import * as React from 'react'
 import {NavLink} from 'react-router-dom'
 import {Alert, PageSection} from '@patternfly/react-core'
-import {useA11yRouteChange} from './util/useA11yRoute'
-import {useDocumentTitle} from './util/useDocumentTitle'
+import {useA11yRouteChange, useDocumentTitle} from 'components/util'
 
 export const NotFound: React.FunctionComponent = () => {
   useA11yRouteChange()

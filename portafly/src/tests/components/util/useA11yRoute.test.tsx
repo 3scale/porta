@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import { waitForElement } from '@testing-library/dom'
-import { render, fireEvent } from '@test/setup'
-import { useA11yRouteChange } from '@src'
+import { render, fireEvent } from 'tests/setup'
+import { useA11yRouteChange } from 'components'
 
 const SamplePage = () => {
   useA11yRouteChange('test-focus')
