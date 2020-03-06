@@ -299,7 +299,9 @@ table.data {
   }
 }
 
-td.metric {
+td.metric,
+td.pattern,
+td.StatsMethodsTable-name {
   word-break: break-word;
 }
 

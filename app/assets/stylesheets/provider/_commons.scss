@@ -164,6 +164,10 @@ p + ul {
   }
 }
 
+.u-dl-definition {
+  word-break: break-word;
+}
+
 .u-dl-definition,
 .u-dl-description {
   @extend %dd;
