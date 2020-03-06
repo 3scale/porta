@@ -1,6 +1,6 @@
 class Provider::DomainsController < Provider::BaseController
 
-  skip_before_action :set_x_frame_options_header
+  before_action :disable_x_frame
   skip_before_action :login_required
 
   layout 'provider/iframe'

@@ -53,12 +53,6 @@ class SSOToken
     end
   end
 
-  class_attribute :system_url_helpers, instance_writer: false
-  self.system_url_helpers = Rails.application.routes.url_helpers
-
-  class_attribute :cms_url_helpers, instance_writer: false
-  self.cms_url_helpers = DeveloperPortal::Engine.routes.url_helpers
-
   # It will save the object if new and will return the sso_url
   #
   # Default for a provider account is to create an url that works on its buyer side,
@@ -75,7 +69,7 @@ class SSOToken
       expires_at: expires_at.to_i,
       redirect_url: redirect_url
     }.delete_if{|k,v| v.nil?}
-    host.nil? ? cms_url_helpers.create_session_url(params) : system_url_helpers.provider_sso_url(params)
+    host.nil? ?  System::UrlHelpers.cms_url_helpers.create_session_url(params) : System::UrlHelpers.system_url_helpers.provider_sso_url(params)
   end
 
   protected

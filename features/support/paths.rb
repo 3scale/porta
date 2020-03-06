@@ -3,7 +3,7 @@
 World(Module.new do
   break unless defined?(DeveloperPortal)
 
-  include DeveloperPortal::Engine.routes.url_helpers
+  include System::UrlHelpers.cms_url_helpers
 
   def provider_first_service!
     @provider.first_service!

@@ -24,6 +24,6 @@ class RedhatCustomerOAuthFlowPresenterTest < ActiveSupport::TestCase
   end
 
   def url_helpers
-    Rails.application.routes.url_helpers
+    System::UrlHelpers.system_url_helpers
   end
 end
