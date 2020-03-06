@@ -1,0 +1,8 @@
+= javascript_pack_tag 'ResetPasswordPage'
+- authentication_providers = (@authentication_providers || []).map { |ap| {authorizeURL: ap.authorize_url, humanKind: ap.human_kind} }
+- flash_messages = (flash || []).map { |f| {type: f[0], message: f[1]}}
+- is_master_account = domain_account.master?
+
+div#pf-reset-page-container data-reset-props={flashMessages: flash_messages,
+  providerLoginPath: provider_login_path,
+  providerPasswordPath: provider_password_path }.to_json
