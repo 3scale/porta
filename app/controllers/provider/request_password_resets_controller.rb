@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Provider::RequestPasswordResetsController < FrontendController
   layout 'provider/login'
 
@@ -19,5 +20,4 @@ class Provider::RequestPasswordResetsController < FrontendController
   def find_provider
     @provider ||= site_account_request.find_provider
   end
-
 end

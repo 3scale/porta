@@ -26,7 +26,7 @@ module ProviderDomainConstraint
     request.extend(ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
 
     with_deleted = AuthenticatedSystem::Request.new(request).zync?
-    Account.without_deleted(!with_deleted).exists?(:self_domain => request.host)
+    Account.providers.without_deleted(!with_deleted).exists?(:self_domain => request.host)
   end
 end
 

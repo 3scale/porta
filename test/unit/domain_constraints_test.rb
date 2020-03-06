@@ -83,6 +83,13 @@ class DomainConstraintsTest < ActiveSupport::TestCase
       assert Account.exists?(self_domain: self_domain)
       assert ProviderDomainConstraint.matches?(request)
     end
+
+    test 'master domain' do
+      master = master_account
+      request = mock
+      request.expects(:host).returns(master.domain)
+      refute ProviderDomainConstraint.matches?(request)
+    end
   end
 
   class MasterDomainConstraintTest < DomainConstraintsTest
@@ -107,4 +114,3 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     end
   end
 end
-
