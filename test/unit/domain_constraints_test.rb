@@ -115,4 +115,3 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     end
   end
 end
-
