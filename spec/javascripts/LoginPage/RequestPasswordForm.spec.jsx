@@ -1,29 +1,26 @@
 import React from 'react'
 import {mount} from 'enzyme'
 
-import {RequestPasswordForm, HiddenInputs} from 'LoginPage'
+import { RequestPasswordForm } from 'LoginPage'
 
 const props = {
+  flashMessages: [],
   providerLoginPath: 'login-path',
   providerPasswordPath: 'password-path'
 }
 
 it('should render itself', () => {
   const wrapper = mount(<RequestPasswordForm {...props}/>)
-  expect(wrapper.find('form').exists()).toEqual(true)
-  expect(wrapper.props().providerLoginPath).toEqual('login-path')
-  expect(wrapper.props().providerPasswordPath).toEqual('password-path')
+  expect(wrapper).toMatchSnapshot()
 })
 
-it('should render HTML form markup', () => {
-  const wrapper = mount(<RequestPasswordForm {...props}/>)
-  expect(wrapper.find('input#email').exists()).toEqual(true)
-  expect(wrapper.find('button.pf-c-button').exists()).toEqual(true)
-})
-
-it('should render HiddenInputs component', () => {
-  const wrapper = mount(<RequestPasswordForm {...props}/>)
-  expect(wrapper.find(HiddenInputs).exists()).toEqual(true)
+it('should render flashMessages when present', () => {
+  const propsWithFlashMessages = {
+    ...props,
+    flashMessages: [{ message: 'Ooops', type: 'error' }]
+  }
+  const wrapper = mount(<RequestPasswordForm {...propsWithFlashMessages}/>)
+  expect(wrapper).toMatchSnapshot()
 })
 
 it('should set email and validation state to true', () => {
