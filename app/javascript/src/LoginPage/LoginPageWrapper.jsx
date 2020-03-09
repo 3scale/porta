@@ -21,10 +21,7 @@ import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
-type FlashMessage = {
-  type: string,
-  message: string
-}
+import type { FlashMessage } from 'Types'
 
 type Props = {
   enforceSSO: boolean,
@@ -50,7 +47,6 @@ class SimpleLoginPage extends React.Component<Props, State> {
   constructor (props: Props) {
     super(props)
     this.state = {
-      formMode: 'login',
       loginTitle: 'Log in to your account'
     }
   }
