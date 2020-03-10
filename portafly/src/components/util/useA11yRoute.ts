@@ -1,7 +1,7 @@
 import * as React from 'react'
-import {LastLocationType, useLastLocation} from 'react-router-last-location'
+import { LastLocationType, useLastLocation } from 'react-router-last-location'
 
-export function accessibleRouteChangeHandler(id: string, timeout = 50) {
+export function accessibleRouteChangeHandler (id: string, timeout = 50) {
   return window.setTimeout(() => {
     const mainContainer = document.getElementById(id)
     if (mainContainer) {

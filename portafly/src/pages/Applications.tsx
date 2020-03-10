@@ -1,14 +1,15 @@
 import React from 'react'
 import { useFetch } from 'react-async'
-import {useDocumentTitle} from 'components'
+import { useDocumentTitle } from 'components'
 import {
   PageSection,
   PageSectionVariants,
   TextContent,
   Text,
-  TextVariants,
+  TextVariants
 } from '@patternfly/react-core'
-import { Table, TableHeader, TableBody } from '@patternfly/react-table'
+import { Table,
+  TableHeader, TableBody } from '@patternfly/react-table'
 
 const Applications: React.FunctionComponent = () => {
   useDocumentTitle('Applications')
@@ -28,9 +29,10 @@ const Applications: React.FunctionComponent = () => {
   )
 
   const mapRowsData = (data: any) => {
-    if(!data) return
+    if (!data) return
     const applications = data.applications.application // TODO: Check the server side xml2json
-    const applicationsArray =  Array.isArray(applications) ? applications : [{...applications}]
+    const applicationsArray =
+    Array.isArray(applications) ? applications : [{ ...applications }]
 
     return applicationsArray.map(
       (app: any) => {
@@ -55,7 +57,8 @@ const Applications: React.FunctionComponent = () => {
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Text component="h1">Applications</Text>
+          <Text
+            component='h1'>Applications</Text>
         </TextContent>
         <TextContent>
           <Text component={TextVariants.p}>

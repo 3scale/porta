@@ -2,7 +2,7 @@ import * as React from 'react'
 import { render, fireEvent } from 'tests/setup'
 import { AppLayout, IAppLayoutProps } from 'components'
 
-function makeAppLayout(
+function makeAppLayout (
   props: Partial<React.PropsWithChildren<IAppLayoutProps>> = {}
 ) {
   props = Object.assign(
@@ -19,24 +19,24 @@ function makeAppLayout(
             { to: '/samples/foo', title: 'Foo' },
             undefined,
             { to: '/samples/bar', title: 'Bar' },
-            { to: '/samples/baz', title: 'Baz' },
-          ],
+            { to: '/samples/baz', title: 'Baz' }
+          ]
         },
         { to: '/support', title: 'Support' },
-        { to: '/something', title: 'Something' },
+        { to: '/something', title: 'Something' }
       ],
       navGroupsStyle: 'expandable',
       startWithOpenNav: true,
       theme: 'dark',
       mainContainerId: 'test-main-container',
-      children: <div data-testid={'test-content'}>test</div>,
+      children: <div data-testid={'test-content'}>test</div>
     },
     props
   )
   return <AppLayout {...(props as IAppLayoutProps)} />
 }
 
-function renderAppLayout(...args: Parameters<typeof makeAppLayout>) {
+function renderAppLayout (...args: Parameters<typeof makeAppLayout>) {
   return render(makeAppLayout(...args))
 }
 

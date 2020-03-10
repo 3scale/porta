@@ -22,7 +22,7 @@ describe('useBreadcrumb tests', () => {
     const { getByTestId, getByText, queryByTestId } = render(
       <AppLayout>
         <Switch>
-          <Route path={'/'} exact={true}>
+          <Route path={'/'} exact>
             <SamplePageWithBreadcrumb />
           </Route>
           <Route path={'/no-breadcrumb'}>page with no breadcrumb</Route>

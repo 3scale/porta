@@ -1,7 +1,7 @@
 import * as React from 'react'
-import {useRouteMatch} from 'react-router-dom'
-import {NavExpandable} from '@patternfly/react-core'
-import {AppNavItem, IAppNavItemProps} from 'components/AppNavItem'
+import { useRouteMatch } from 'react-router-dom'
+import { NavExpandable } from '@patternfly/react-core'
+import { AppNavItem, IAppNavItemProps } from 'components/AppNavItem'
 
 export interface IAppNavExpandableProps {
   title: string
@@ -9,15 +9,15 @@ export interface IAppNavExpandableProps {
   items: Array<IAppNavItemProps | undefined>
 }
 
-export const AppNavExpandable: React.FunctionComponent<IAppNavExpandableProps> = ({title, to, items}) => {
+export const AppNavExpandable: React.FunctionComponent<IAppNavExpandableProps> = ({ title, to, items }) => {
   const match = useRouteMatch({
-    path: to,
+    path: to
   })
   const isActive = !!match
   return (
     <NavExpandable title={title} isActive={isActive} isExpanded={isActive}>
       {items.map((subNavItem, jdx) => (
-        <AppNavItem {...subNavItem} key={jdx}/>
+        <AppNavItem {...subNavItem} key={jdx} />
       ))}
     </NavExpandable>
   )

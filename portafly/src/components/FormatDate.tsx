@@ -11,7 +11,7 @@ export interface IFormatDateProps {
 export const FormatDate: React.FunctionComponent<IFormatDateProps> = ({
   date,
   format: formatTpl = 'Pp',
-  options,
+  options
 }) => {
   date = typeof date === 'string' ? new Date(date) : date
   return <>{format(date, formatTpl, options)}</>

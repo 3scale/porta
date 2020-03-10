@@ -12,7 +12,7 @@ describe('AppNavExpandable tests', () => {
           to={'/group'}
           items={[
             { to: '/group/foo', title: 'foo' },
-            { to: '/group/bar', title: 'bar' },
+            { to: '/group/bar', title: 'bar' }
           ]}
         />
         <Link to={'/group/foo'} data-testid={'go-to-foo'}>

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import {SwitchProps, Switch, Route, useRouteMatch} from 'react-router-dom'
-import {NotFound} from 'components/NotFound'
+import { SwitchProps, Switch, Route, useRouteMatch } from 'react-router-dom'
+import { NotFound } from 'components/NotFound'
 
 export const SwitchWith404: React.FunctionComponent<SwitchProps> = ({
   children,
@@ -8,7 +8,7 @@ export const SwitchWith404: React.FunctionComponent<SwitchProps> = ({
 }) => {
   const match = useRouteMatch()
   const defaultMatch = React.useMemo(
-    () => match && <Route path={match.path} exact={true}/>,
+    () => match && <Route path={match.path} exact />,
     [match]
   )
   return (
@@ -20,7 +20,7 @@ export const SwitchWith404: React.FunctionComponent<SwitchProps> = ({
        */}
       {defaultMatch}
       <Route>
-        <NotFound/>
+        <NotFound />
       </Route>
     </Switch>
   )

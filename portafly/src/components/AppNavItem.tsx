@@ -1,7 +1,7 @@
 import * as H from 'history'
 import * as React from 'react'
-import {NavLink} from 'react-router-dom'
-import {NavItem, NavItemSeparator} from '@patternfly/react-core'
+import { NavLink } from 'react-router-dom'
+import { NavItem, NavItemSeparator } from '@patternfly/react-core'
 
 export interface IAppNavItemProps<S = {}> {
   title?: string
@@ -11,13 +11,13 @@ export interface IAppNavItemProps<S = {}> {
   exact?: boolean
 }
 
-export function AppNavItem<S>({title, to, exact}: IAppNavItemProps<S>) {
+export function AppNavItem<S> ({ title, to, exact }: IAppNavItemProps<S>) {
   if (!title || !to) {
-    return <NavItemSeparator data-testid="navitem-separator" />
+    return <NavItemSeparator data-testid='navitem-separator' />
   }
   return (
     <NavItem>
-      <NavLink to={to} exact={exact} activeClassName="pf-m-current">
+      <NavLink to={to} exact={exact} activeClassName='pf-m-current'>
         {title}
       </NavLink>
     </NavItem>

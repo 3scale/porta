@@ -1,5 +1,5 @@
 import React from 'react'
-import {useA11yRouteChange, useDocumentTitle} from 'components'
+import { useA11yRouteChange, useDocumentTitle } from 'components'
 import {
   PageSection,
   TextContent,
@@ -9,7 +9,7 @@ import {
   CardBody
 } from '@patternfly/react-core'
 
-const Overview: React.FunctionComponent = ({children}) => {
+const Overview: React.FunctionComponent = () => {
   useA11yRouteChange()
   useDocumentTitle('Overview')
   return (

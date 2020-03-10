@@ -13,7 +13,7 @@ const customRender = (
   options?: ICustomRenderOptions
 ) => {
   const AllTheProviders: React.FunctionComponent<ICustomRenderOptions> = ({
-    children,
+    children
   }) => {
     const { router } = options || {}
     return (
