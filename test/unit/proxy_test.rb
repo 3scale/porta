@@ -209,11 +209,21 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'hosts comply with rfc 1035' do
-    @proxy.endpoint = 'http://this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035.com:3000/'
+    @proxy.endpoint = 'http://this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035.com:3000'
     @proxy.sandbox_endpoint = 'http://short-labels-are-ok.com:8080'
     refute @proxy.valid?
     assert @proxy.errors[:endpoint].any?
+    assert_match /is too long for one or more labels of the host \(maximum is 63 characters\)/, @proxy.errors[:endpoint].to_sentence
+    assert_not_match /the accepted format is/, @proxy.errors[:endpoint].to_sentence
     refute @proxy.errors[:sandbox_endpoint].any?
+
+    @proxy.endpoint = 'http://short-labels-are-ok.com:8080'
+    @proxy.sandbox_endpoint = 'http://this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035.com:3000'
+    refute @proxy.valid?
+    assert @proxy.errors[:sandbox_endpoint].any?
+    assert_match /is too long for one or more labels of the host \(maximum is 63 characters\)/, @proxy.errors[:sandbox_endpoint].to_sentence
+    assert_not_match /the accepted format is/, @proxy.errors[:endpoint].to_sentence
+    refute @proxy.errors[:endpoint].any?
   end
 
   test 'backend' do
