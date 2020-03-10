@@ -40,12 +40,15 @@ class UriValidatorTest < ActiveSupport::TestCase
     record = ModelWithURIValidation.new
     record.uri = "http://domain.test/path"
     refute record.valid?
+    assert_equal 'is invalid', record.errors[:uri].to_sentence
 
     with_clean_validators ModelWithURIValidation do
-      klass = Class.new(ModelWithURIValidation) { validates :uri, uri: { path: true } }
-      record = klass.new
-      record.uri = "http://domain.test/path"
-      assert record.valid?
+      [true, false].each do |valid_path|
+        klass = Class.new(ModelWithURIValidation) { validates :uri, uri: { path: valid_path } }
+        record = klass.new
+        record.uri = "http://domain.test/path"
+        assert_equal valid_path, record.valid?
+      end
     end
   end
 
@@ -82,6 +85,9 @@ class UriValidatorTest < ActiveSupport::TestCase
     record = ModelWithURIValidation.new
     record.uri = "http://#{long_hostname_label}.#{short_hostname_label}.test"
     refute record.valid?
+    error_message = record.errors[:uri].to_sentence
+    assert_match /is too long for one or more labels of the host \(maximum is 63 characters\)/, error_message
+    assert_not_match /invalid/, error_message
   end
 
   test 'hostname with labels up to 63 chars' do
@@ -94,8 +100,18 @@ class UriValidatorTest < ActiveSupport::TestCase
   test 'hostname longer than 255 with labels up to 63 chars' do
     record = ModelWithURIValidation.new
     short_labels = (1..13).map { |count| "#{short_hostname_label}-#{count}" }
-    record.uri = "http://#{short_labels.join('.')}.test" # hostname with 268 chars
+    record.uri = "http://#{short_labels.join('.')}.test" # hostname with 275 chars
     refute record.valid?
+    error_message = record.errors[:uri].to_sentence
+    assert_match /is too long \(maximum is 255 characters\)/, error_message
+    assert_not_match /invalid/, error_message
+  end
+
+  test 'hostname up to 255 with labels up to 63 chars' do
+    record = ModelWithURIValidation.new
+    short_labels = (1..12).map { |count| "#{short_hostname_label}-#{count}" }
+    record.uri = "http://#{short_labels.join('.')}.test" # hostname with 254 chars
+    assert record.valid?
   end
 
   test 'forbid optional parts' do

@@ -45,4 +45,12 @@ class ServiceCreatorTest < ActiveSupport::TestCase
     assert backend_api.persisted?
     assert backend_api_config.persisted?
   end
+
+  test 'service with a too long system_name for its proxy' do
+    system_name = 'this-hostname-label-is-longer-than-63-chars-which-is-not-allowed-according-to-rfc-1035'
+    service = FactoryBot.build(:service, system_name: system_name)
+    creator = ServiceCreator.new(service: service)
+    creator.call
+    assert_includes service.errors[:system_name], 'must be shorter.'
+  end
 end

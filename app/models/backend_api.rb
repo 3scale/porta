@@ -31,7 +31,7 @@ class BackendApi < ApplicationRecord
 
   validates :private_endpoint, length: { maximum: 255 },
     presence: true,
-    uri: { path: proc { provider_can_use?(:proxy_private_base_path) }, scheme: %w[http https ws wss] },
+    uri: { path: ->(backend_api_object) { backend_api_object.provider_can_use?(:proxy_private_base_path) }, scheme: %w[http https ws wss] },
     non_localhost: { message: :protected_domain }
 
   alias_attribute :api_backend, :private_endpoint
