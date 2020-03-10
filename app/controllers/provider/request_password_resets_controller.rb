@@ -12,9 +12,6 @@ class Provider::RequestPasswordResetsController < FrontendController
     redirect_to provider_admin_dashboard_url if logged_in?
   end
 
-  def create
-  end
-
   private
 
   def find_provider
