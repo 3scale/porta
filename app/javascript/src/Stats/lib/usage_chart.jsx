@@ -1,4 +1,3 @@
-import 'core-js/fn/object/assign' // make Object.assign on IE 11
 import {StatsChart} from 'Stats/lib/chart'
 
 export class StatsUsageChart extends StatsChart {
