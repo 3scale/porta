@@ -22,11 +22,10 @@ type Props = {
 const RequestPassword = ({ flashMessages, providerLoginPath, providerPasswordPath }: Props) => (
   <LoginPage
     brandImgSrc={brandImg}
-    brandImgAlt="Red Hat 3scale API Management"
+    brandImgAlt='Red Hat 3scale API Management'
     backgroundImgSrc={PF4DownstreamBG}
-    backgroundImgAlt="Red Hat 3scale API Management"
-    loginTitle={`Request Password`}
-    footer={null}
+    backgroundImgAlt='Red Hat 3scale API Management'
+    loginTitle='Request Password'
   >
     {flashMessages && <FlashMessages flashMessages={flashMessages}/>}
     <RequestPasswordForm
