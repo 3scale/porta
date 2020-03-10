@@ -1,5 +1,6 @@
-# PortaFly
-A React SPA crafted with the ambitous purpose of replacing Porta UI, currently residing inside the Rails App.
+# PortaFly [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+A React SPA crafted with the ambitious purpose of replacing Porta's UI, currently residing inside the Rails App.
 
 ## Available Scripts
 
@@ -12,6 +13,13 @@ Open [http://localhost:3003](http://localhost:3003) to view it in the browser.
 
 The page will reload if you make edits.
 You will also see any lint errors in the console.
+
+### `yarn lint`
+
+Runs the linter on all the TS files. Append `--fix` in order to apply all automatic fixes:
+```
+$ yarn lint --fix
+```
 
 ### `yarn test`
 
@@ -31,7 +39,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## Environment Variables
 
 There are some environment variables that we need and we are not happy with Create React App resolution of including `.env` files in version control.
-One could decide to have a local `.env` / `.env.development` files or defining them in `.zshrc` / `.bashrc` or before  running the commands. 
+One could decide to have a local `.env` / `.env.development` files or defining them in `.zshrc` / `.bashrc` or before  running the commands.
 
 ### Playing along with Porta
 
