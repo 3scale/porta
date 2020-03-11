@@ -1,0 +1,22 @@
+{
+  "applications": [
+    {
+      "name": "My Free Application",
+      "state": "Active",
+      "account": "Account",
+      "plan": {
+        "name": "My Free Plan"
+      },
+      "created_at": "1576835114"
+    },
+    {
+      "name": "My Premium Application",
+      "state": "Active",
+      "account": "Account",
+      "plan": {
+        "name": "My Premium Plan"
+      },
+      "created_at": "1576835115"
+    }
+  ]
+}

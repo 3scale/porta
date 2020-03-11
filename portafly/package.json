@@ -24,15 +24,18 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router": "^5.1.3",
     "@types/react-router-dom": "^5.1.3",
-    "date-fns": "^2.9.0"
+    "date-fns": "^2.9.0",
+    "json-server": "^0.16.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "mock-server": "json-server --port 3001 --read-only --delay 500 --watch mock-server/db.json",
     "test": "react-scripts test",
     "test-with-coverage": "yarn test -- --coverage",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:3001",
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/src/tests/__mocks__/styleMock.js",
