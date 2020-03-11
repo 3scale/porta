@@ -56,7 +56,7 @@ class Provider::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
       delete provider_password_path, email: 'example@test.com'
 
-      assert_response :not_found
+      assert_raise(ActionController::RoutingError) { delete provider_password_path, email: 'example@test.com' }
     end
   end
 end
