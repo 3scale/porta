@@ -51,12 +51,7 @@ export function recoverState (ident: string, classList: DOMTokenList, className:
   let classState = typeof (storedState) === 'object' && storedState[className]
 
   if (typeof (classState) !== 'undefined') {
-    // Toggle method second argument not supported in IE11
-    if (classState) {
-      classList.add(className)
-    } else {
-      classList.remove(className)
-    }
+    classList.toggle(className, classState)
   }
 }
 
