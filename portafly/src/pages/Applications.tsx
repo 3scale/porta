@@ -1,55 +1,19 @@
 import React from 'react'
-import { useFetch } from 'react-async'
-import {useDocumentTitle} from 'components'
+import { useDocumentTitle, Loading, ApplicationsTable } from 'components'
 import {
+  Alert,
   PageSection,
   PageSectionVariants,
   TextContent,
   Text,
   TextVariants,
 } from '@patternfly/react-core'
-import { Table, TableHeader, TableBody } from '@patternfly/react-table'
+import { useGetApplications } from 'dal/Applications'
 
 const Applications: React.FunctionComponent = () => {
   useDocumentTitle('Applications')
 
-  const columns = [
-    'Name',
-    'State',
-    'Account',
-    'Plan',
-    'Created at'
-  ]
-  let rows
-
-  const { data, isPending } = useFetch<any>(
-    `/applications`,
-    { headers: { Accept: 'application/json' } }
-  )
-
-  const mapRowsData = (data: any) => {
-    if(!data) return
-    const applications = data.applications.application // TODO: Check the server side xml2json
-    const applicationsArray =  Array.isArray(applications) ? applications : [{...applications}]
-
-    return applicationsArray.map(
-      (app: any) => {
-        return {
-          cells: [
-            app.name,
-            app.state,
-            'Developer',
-            app.plan.name,
-            app.created_at
-          ]
-        }
-      }
-    )
-  }
-
-  if (!isPending) {
-    rows = mapRowsData(data)
-  }
+  const { applications, error, isPending } = useGetApplications()
 
   return (
     <>
@@ -65,12 +29,9 @@ const Applications: React.FunctionComponent = () => {
       </PageSection>
 
       <PageSection>
-        {rows &&
-          <Table cells={columns} rows={rows}>
-            <TableHeader />
-            <TableBody />
-          </Table>
-        }
+        {isPending && <Loading />}
+        {error && <Alert variant="danger" title={error.message} />}
+        {applications && <ApplicationsTable applications={applications} />}
       </PageSection>
     </>
   )
