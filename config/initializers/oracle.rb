@@ -125,7 +125,7 @@ if System::Database.oracle?
 
       if is_delta
         if adapter.class.name.downcase[/oracle/]
-          "((#{table_name}.#{column_name} - SYSDATE) * 60 * 60 * 24) + #{@threshold} > 0"
+          "EXTRACT( day from ((#{table_name}.#{column_name} - SYSDATE) * 60 * 60 * 24)) + #{@threshold} > 0"
         else
           super
         end
