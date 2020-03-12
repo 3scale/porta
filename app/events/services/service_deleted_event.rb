@@ -2,18 +2,13 @@
 
 class Services::ServiceDeletedEvent < ServiceRelatedEvent
   def self.create(service)
-    provider = service.account || Account.new({id: service.tenant_id}, without_protection: true)
-
-    data = {
-      service_id:   service.id,
+    new(
+      service_id: service.id,
       service_name: service.name,
       service_created_at: service.created_at.to_s,
       metadata: {
-        provider_id: provider.id
+        provider_id: service.account_id || service.tenant_id
       }
-    }
-    data[:provider] = provider if provider.persisted?
-
-    new(data)
+    )
   end
 end
