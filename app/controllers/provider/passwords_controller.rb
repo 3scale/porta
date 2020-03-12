@@ -1,6 +1,6 @@
 class Provider::PasswordsController < FrontendController
 
-  skip_before_action :login_required, only: %i(destroy show update request_password_reset)
+  skip_before_action :login_required, only: %i[destroy show update reset]
   before_action :find_provider
   before_action :find_user, :only => [:show, :update]
   before_action :instantiate_sessions_presenter, only: [:show, :update]
@@ -23,7 +23,7 @@ class Provider::PasswordsController < FrontendController
       redirect_to provider_login_path
     else
       flash[:error] = 'Email not found.'
-      redirect_to provider_login_path(:request_password_reset => true)
+      redirect_to reset_provider_password_path
     end
   end
 
@@ -47,7 +47,7 @@ class Provider::PasswordsController < FrontendController
     end
   end
 
-  def request_password_reset
+  def reset
     redirect_to provider_admin_dashboard_url if logged_in?
   end
 
