@@ -12,6 +12,9 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
     assert_equal service.name, event.service_name
     assert_equal service.id, event.service_id
     assert_equal service.created_at.utc.to_s, event.service_created_at
+
+    # If we ever want to fetch the provider from anywhere, we should do it from the provider_id
+    refute event.data.has_key?(:provider)
   end
 
   def test_ability
@@ -45,5 +48,17 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
     assert_equal provider_id, event_stored.metadata.fetch(:provider_id)
+  end
+
+  def test_create_publish_find_when_provider_scheduled_for_deletion
+    provider = FactoryBot.create(:simple_provider)
+    service = FactoryBot.create(:simple_service, account: provider)
+    provider.schedule_for_deletion!
+
+    event = Services::ServiceDeletedEvent.create_and_publish!(service.reload)
+
+    provider.delete
+
+    assert EventStore::Repository.find_event(event.event_id)
   end
 end
