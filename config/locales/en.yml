@@ -766,6 +766,7 @@ en:
 
   errors:
     messages:
+      host_label_too_long: is too long for one or more labels of the host (maximum is %{count} characters)
       duplicated_user_provider_side: "Duplicate user registration. Delete one of the duplicates in order to continue."
       duplicated_user_buyer_side: "For activating your account please contact support."
       activation_complete: "Signup complete. You can now sign in."
