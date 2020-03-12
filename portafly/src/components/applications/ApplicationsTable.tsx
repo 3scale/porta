@@ -14,7 +14,7 @@ const ApplicationsTable: React.FunctionComponent<IApplicationsTable> = ({ applic
 
   const COLUMNS = ['Name', 'State', 'Account', 'Plan', 'Created at']
 
-  const rows = applications.map(app => [app.name, app.state, app.account, app.plan.name, app.created_at])
+  const rows = applications.map(app => [app.name, app.state, app.account, app.plan.name, app.created_at.toString()])
 
   return (
     <Table aria-label="Applications list" cells={COLUMNS} rows={rows}>
