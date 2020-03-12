@@ -54,9 +54,7 @@ class Provider::PasswordsControllerTest < ActionDispatch::IntegrationTest
     test '#destroy does not work for master account' do
       login_provider master_account
 
-      delete provider_password_path, email: 'example@test.com'
-
-      assert_response :not_found
+      assert_raise(ActionController::RoutingError) { delete provider_password_path, email: 'example@test.com' }
     end
   end
 end
