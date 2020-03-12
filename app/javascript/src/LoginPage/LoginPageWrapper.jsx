@@ -52,7 +52,8 @@ class SimpleLoginPage extends React.Component<Props, State> {
   }
 
   showForgotCredentials () {
-    const showForgotCredentials = !this.props.disablePasswordReset
+    const { disablePasswordReset, providerLoginPath } = this.props
+    return !disablePasswordReset && <ForgotCredentials requestPasswordResetPath={providerLoginPath} />
     return showForgotCredentials && <ForgotCredentials requestPasswordResetPath={this.props.providerRequestPasswordResetPath}/>
   }
 
