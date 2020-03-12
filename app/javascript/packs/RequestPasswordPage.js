@@ -5,7 +5,8 @@ import { RequestPasswordWrapper as RequestPassword } from 'LoginPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('pf-request-page-container')
+  const containerId = 'pf-request-page-container'
+  const container = document.getElementById(containerId)
   const requestPageProps = safeFromJsonString(container.dataset.requestProps)
   RequestPassword(requestPageProps, 'pf-request-page-container')
 })
