@@ -164,7 +164,7 @@ without fake Core server your after commit callbacks will crash and you might ge
   get '/auth/:system_name/bounce' => 'provider/sessions#bounce', constraints: ProviderDomainConstraint, as: :authorization_provider_bounce
 
   namespace :provider, path: 'p', constraints: ProviderDomainConstraint do
-    resource :password, :only => %i(new show update destroy) do
+    resource :password, only: %i[new show update destroy] do
       get 'reset'
     end
   end
