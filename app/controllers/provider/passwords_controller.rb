@@ -1,6 +1,6 @@
 class Provider::PasswordsController < FrontendController
 
-  skip_before_action :login_required, only: %i(destroy show update)
+  skip_before_action :login_required, only: %i(destroy show update request_password_reset)
   before_action :find_provider
   before_action :find_user, :only => [:show, :update]
   before_action :instantiate_sessions_presenter, only: [:show, :update]
@@ -45,6 +45,10 @@ class Provider::PasswordsController < FrontendController
     else
       render :action => 'show'
     end
+  end
+
+  def request_password_reset
+    redirect_to provider_admin_dashboard_url if logged_in?
   end
 
   private

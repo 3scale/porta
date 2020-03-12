@@ -165,7 +165,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
   namespace :provider, path: 'p', constraints: ProviderDomainConstraint do
     resource :password, :only => %i(new show update destroy)
-    resource :request_password_reset, only: [:new]
+    get '/request_password_reset', to: 'passwords#request_password_reset'
   end
 
   namespace :provider, :path => 'p', constraints: MasterOrProviderDomainConstraint do
