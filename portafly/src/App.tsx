@@ -6,6 +6,8 @@ import { AppLayout, SwitchWith404, LazyRoute } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
 import logo from 'assets/logo.svg'
 
+import { I18nProvider } from 'i18n/I18nProvider'
+
 const Logo = <Brand src={logo} alt={'patternfly logo'}/>
 const navItems = [
   {
@@ -73,15 +75,17 @@ const Root = () => {
     [history]
   )
   return (
-    <AppLayout
-      logo={Logo}
-      logoProps={logoProps}
-      navVariant="vertical"
-      navItems={navItems}
-      navGroupsStyle="expandable"
-    >
-      <PagesSwitch />
-    </AppLayout>
+    <I18nProvider>
+      <AppLayout
+        logo={Logo}
+        logoProps={logoProps}
+        navVariant="vertical"
+        navItems={navItems}
+        navGroupsStyle="expandable"
+      >
+        <PagesSwitch />
+      </AppLayout>
+    </I18nProvider>
   )
 }
 
