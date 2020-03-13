@@ -25,8 +25,8 @@ module BackendApiLogic
       backend_api1 = backend_apis.first
       backend_api2 = backend_apis.last
       injected_rules = [
-        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
-        { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/.*'] } }
+        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '^(/foo/.*|/foo/?)'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
+        { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '^(/.*)'] } }
       ]
       apicast_policy = { name: 'apicast', 'version': 'builtin', 'configuration': {} }
       injected_policy = {
@@ -52,8 +52,8 @@ module BackendApiLogic
       backend_api1 = backend_apis.first
       backend_api2 = backend_apis.last
       injected_rules = [
-        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/foo/.*|/foo/?'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
-        { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '/.*'] } },
+        { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '^(/foo/.*|/foo/?)'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
+        { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '^(/.*)'] } },
         routing_rule
       ]
       injected_routing_policy = {
