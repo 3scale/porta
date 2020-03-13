@@ -27,8 +27,4 @@ module MetricRepresenter
   link :self do
     polymorphic_url([:admin, :api, owner, self])
   end
-
-  def system_name
-    extended_system_name
-  end
 end
