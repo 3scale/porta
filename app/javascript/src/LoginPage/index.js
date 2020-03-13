@@ -9,3 +9,4 @@ export { TextField, EmailField, PasswordField, PasswordConfirmationField } from 
 export { SignupPage, SignupPageWrapper } from 'LoginPage/SignupPageWrapper'
 export { SignupForm } from 'LoginPage/loginForms/SignupForm'
 export { validateSingleField } from 'LoginPage/utils/formValidation'
+export { RequestPassword, RequestPasswordWrapper } from 'LoginPage/RequestPasswordWrapper'
