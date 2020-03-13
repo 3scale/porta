@@ -20,7 +20,7 @@ class BackendMetricWorker < ApplicationJob
       new_metric_attributes = {
         service_id: service_backend_id,
         id: metric_id,
-        name: metric.extended_system_name,
+        name: metric.system_name,
         parent_id: metric.parent_id_for_service(service)
       }
       ThreeScale::Core::Metric.save(new_metric_attributes)

@@ -68,8 +68,8 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
     metrics = [service.metrics.hits, backend_api.metrics.hits]
 
     utilization_records = ThreeScale::Core::APIClient::Collection.new([
-      { period: 'minute', metric_name: metrics.first.extended_system_name, max_value: 0, current_value: 3000 },
-      { period: 'minute', metric_name: metrics.second.extended_system_name, max_value: 0, current_value: 150 }
+      { period: 'minute', metric_name: metrics.first.system_name, max_value: 0, current_value: 3000 },
+      { period: 'minute', metric_name: metrics.second.system_name, max_value: 0, current_value: 150 }
     ].map { |attr| ThreeScale::Core::Utilization.new(attr) })
 
     ThreeScale::Core::Utilization.expects(:load).with(@service_id, @application_id).returns(utilization_records)
