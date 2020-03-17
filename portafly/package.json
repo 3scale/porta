@@ -6,7 +6,7 @@
     "@patternfly/react-core": "^3.124.1",
     "@patternfly/react-table": "^2.25.6",
     "@types/node-polyglot": "^0.4.34",
-    "moment": "^2.24.0",
+    "currency.js": "^1.2.2",
     "node-polyglot": "^2.4.0",
     "react": "^16.12.0",
     "react-async": "^10.0.0",
