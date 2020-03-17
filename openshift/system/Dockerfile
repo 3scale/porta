@@ -5,7 +5,7 @@ USER root
 ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
-    BUNDLE_GEMFILE=gemfiles/prod/Gemfile \
+    BUNDLE_GEMFILE=Gemfile.prod \
     BUNDLE_WITHOUT=development:test \
     NODEJS_SCL=rh-nodejs10
 
@@ -33,7 +33,6 @@ RUN yum -y update \
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
 ADD Gemfile.base ./
-ADD gemfiles ./gemfiles
 ADD Rakefile ./
 
 COPY openshift/system/contrib/scl_enable /opt/system/etc/
