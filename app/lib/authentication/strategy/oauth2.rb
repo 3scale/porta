@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency 'authentication/strategy'
-
 module Authentication
   module Strategy
     class Oauth2 < Authentication::Strategy::Oauth2Base

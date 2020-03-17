@@ -1,5 +1,3 @@
-require_dependency 'authentication/strategy'
-
 module Authentication
   module Strategy
     class ProviderOauth2 < Authentication::Strategy::Oauth2Base
