@@ -6,7 +6,7 @@ import { AppLayout, SwitchWith404, LazyRoute } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
 import logo from 'assets/logo.svg'
 
-import { I18nProvider } from 'i18n/I18nProvider'
+import { I18nProvider } from 'i18n'
 
 const Logo = <Brand src={logo} alt={'patternfly logo'}/>
 const navItems = [
