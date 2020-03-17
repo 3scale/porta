@@ -56,6 +56,7 @@ const fieldsPristineTemplate: FieldErrorsState = {
 }
 const extractFirstErrorMessage = (errorMessageArray: string[]): string => errorMessageArray[0]
 const isFieldValid = (errorMessageArray: string[]): boolean => !errorMessageArray.length
+const isPassConfirmLongEnough = ({[PASSWORD]: pass, [PASSWORD_CONFIRMATION]: conf}: FieldState): boolean => (conf.length >= pass.length)
 
 const useFormState = () => {
   const [fieldValues, setFieldValues] = useState(fieldsTemplate)
@@ -65,9 +66,10 @@ const useFormState = () => {
 
   const onFormChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
     const validationErrors: ?ValidationErrors = validate(event.currentTarget, validationConstraints)
-    const visibleErrors: ValidationErrors | boolean = !!validationErrors && Object.keys(validationErrors)
+    const visibleErrors: ValidationErrors | false = !!validationErrors && Object.keys(validationErrors)
       .filter(key => !areFieldsPristine[key])
-      .reduce((errors, key) => ({[key]: validationErrors[key]}), {})
+      .filter(key => !key === PASSWORD_CONFIRMATION || isPassConfirmLongEnough(fieldValues))
+      .reduce((errors, key) => ({...errors, [key]: validationErrors[key]}), {})
     setFieldErrors(visibleErrors ? {...fieldErrorsTemplate, ...visibleErrors} : fieldErrorsTemplate)
     setIsFormDisabled(!!validationErrors)
   }
