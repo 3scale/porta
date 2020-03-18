@@ -14,6 +14,10 @@ nav_items:
   applications_listing_description: Title of Applications > Listing menu item
   applications_app_plans: Applications Plans
   applications_app_plans_description: Title of Applications > Applications Plans menu item
+  accounts: Accounts
+  accounts_description: Title of Accounts menu item
+  accounts_listing: Listing
+  accounts_listing_description: Title of Accounts > Listing menu item
   integration: Integration
   integration_description: Title of Integration menu item
   integration_configuration: Configuration
