@@ -26,6 +26,7 @@
   "devDependencies": {
     "@babel/core": "7.9.0",
     "@svgr/webpack": "4.3.3",
+    "@stoplight/prism-cli": "^3.3.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -93,10 +94,12 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "mock-server": "prism mock portafly_api.yml",
     "test": "node scripts/test.js",
     "test-with-coverage": "yarn test -- --coverage",
     "lint": "stylelint 'src/**/*.?css' --allow-empty-input && eslint src --ext .js,.jsx,.ts,.tsx"
   },
+  "proxy": "http://127.0.0.1:4010",
   "jest": {
     "roots": [
       "<rootDir>/src"
