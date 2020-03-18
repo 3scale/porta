@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Provider::Admin::BackendApis::MetricsController < Provider::Admin::BackendApis::BaseController
+  include MetricParams
+
   before_action :find_metric, except: %i[new create index]
 
   activate_menu :backend_api, :methods_metrics
@@ -15,7 +17,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   end
 
   def create
-    @metric = collection.build(metric_params)
+    @metric = collection.build(create_params)
     if @metric.save
       onboarding.bubble_update('metric')
       flash[:notice] = "The #{metric_type} was created"
@@ -29,7 +31,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   def edit; end
 
   def update
-    if @metric.update_attributes(metric_params)
+    if @metric.update_attributes(update_params)
       flash[:notice] = "The #{metric_type} was updated"
       redirect_to provider_admin_backend_api_metrics_path(@backend_api)
     else
@@ -63,10 +65,6 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
 
   def find_backend_api_metric_by(id)
     @backend_api.metrics.find(id)
-  end
-
-  def metric_params
-    params.require(:metric).permit(:friendly_name, :system_name, :unit, :description)
   end
 
   def metric_type

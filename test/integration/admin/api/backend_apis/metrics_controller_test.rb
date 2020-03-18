@@ -60,6 +60,13 @@ class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     assert_equal 'hit', metric.unit
   end
 
+  test 'cannot update system_name' do
+    old_system_name = metric.system_name
+    put admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id), { system_name: 'new_system_name' }
+    assert_response :success
+    assert_equal old_system_name, metric.reload.system_name
+  end
+
   test 'update with errors in the model' do
     put admin_api_backend_api_metric_path(backend_api_id: backend_api.id, access_token: access_token_value, id: metric.id), { friendly_name: '' }
     assert_response :unprocessable_entity

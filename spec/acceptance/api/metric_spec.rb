@@ -26,13 +26,13 @@ resource "Metric" do
       end
 
       put '/admin/api/services/:service_id/metrics/:id.:format', action: :update do
-        let(:system_name) { 'other_name' }
         let(:friendly_name) { 'Less Friendly Metric' }
         let(:unit) { 'diff' }
 
         request 'updates name' do
           resource.reload
-          resource.system_name.should eq(system_name)
+          resource.friendly_name.should eq(friendly_name)
+          resource.unit.should eq(unit)
         end
       end
     end
