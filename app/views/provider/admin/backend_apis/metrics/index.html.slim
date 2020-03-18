@@ -29,7 +29,7 @@ section.Section.u-toggleableBySettingsBox data-state="open"
 
     tbody
       - if @backend_api.method_metrics.any?
-        - @backend_api.method_metrics.each do |method|
+        - @backend_api.method_metrics.includes(:proxy_rules, :parent).each do |method|
           tr
             td
               = link_to method.friendly_name,
@@ -79,7 +79,7 @@ section.Section.u-toggleableBySettingsBox data-state="open"
 
     tbody
       - if @backend_api.top_level_metrics.any?
-        - @backend_api.top_level_metrics.each do |metric|
+        - @backend_api.top_level_metrics.includes(:proxy_rules).each do |metric|
           tr
             td
               = link_to metric.friendly_name, edit_provider_admin_backend_api_metric_path(@backend_api, metric)
