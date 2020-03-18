@@ -1,0 +1,10 @@
+---
+openapi: 3.0.2
+info:
+  title: PortaFly
+  version: 1.0.0
+  description: |
+    A tuned API for PortaFly, a Patternfly SPA consuming 3scale Porta API MGMT solution.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
