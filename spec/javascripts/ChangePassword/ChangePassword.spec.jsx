@@ -14,7 +14,7 @@ it('should render itself', () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-it('should render with errors when present', () => {
+it('should render with server side errors when present', () => {
   const props = {
     lostPasswordToken: 'foo',
     url: 'foo/bar',
@@ -23,3 +23,5 @@ it('should render with errors when present', () => {
   const wrapper = mount(<ChangePassword {...props} />)
   expect(wrapper).toMatchSnapshot()
 })
+
+// TODO: Test Form errors and interaction.
