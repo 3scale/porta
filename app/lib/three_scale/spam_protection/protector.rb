@@ -18,12 +18,11 @@ module ThreeScale::SpamProtection
       probability.to_f / enabled.count
     end
 
-    def is_spam?
+    def spam?
       probability = spam_probability
       Rails.logger.info { "[SpamProtection] probability is #{probability} and allowed level is #{spam_level}" }
       probability >= spam_level
     end
-    alias spam? is_spam?
 
     def spam_level
       config[:level]
@@ -36,7 +35,7 @@ module ThreeScale::SpamProtection
 
       delegate :template, to: :form
       delegate :logged_in?, to: :template, allow_nil: true
-      delegate :is_spam?, :checks, to: :protector
+      delegate :spam?, :checks, to: :protector
       delegate :captcha_configured?, to: Recaptcha
 
       def initialize(form, protector)
@@ -61,7 +60,7 @@ module ThreeScale::SpamProtection
       end
 
       def captcha_needed?
-        captcha_required? || (!http_method.get? && is_spam?)
+        captcha_required? || (!http_method.get? && spam?)
       end
 
       def enabled?

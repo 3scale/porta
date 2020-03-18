@@ -5,7 +5,7 @@ module ThreeScale::SpamProtection
       extend ActiveSupport::Concern
 
       included do
-        delegate :spam?, :is_spam?, :spam_probability, :to => :spam_protection
+        delegate :spam?, :spam_probability, to: :spam_protection
         class_attribute :_spam_protection, :instance_reader => false, :instance_writer => false
       end
 
