@@ -33,6 +33,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
                               "timezone"=>"Europe/Madrid"},
                   "total" => 0,
                   "values" => [0] * 25,
+                  "previous_total" => 0,
                   "change"=>0.0,
                   "response_code" => {'code' => '200'}
 
@@ -57,6 +58,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
                               "timezone"=>"Europe/Madrid"},
                   "total" => 0,
                   "values" => [0] * 25,
+                  "previous_total" => 0,
                   "change"=>0.0,
                   "metric" => { "name" => @metric.friendly_name,
                                 "id" => @metric.id,
@@ -137,6 +139,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
        "until"=>Time.parse("2009-12-11T19:59:59Z"),
        "timezone"=>"Etc/UTC"},
      "total"=>4,
+     "previous_total" => 0,
      "change"=>100.0,
      "values"=> [0] * 15 + [1] + [0] * 7 + [3] + [0],
      "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
@@ -171,6 +174,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
                     "until"=>Time.parse("2010-12-31T23:59:59+01:00"),
                     "timezone"=>"Europe/Madrid"},
                   "total"=>3,
+                  "previous_total" => 1,
                   "change"=>200.0,
                   "values"=>[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                   "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
@@ -205,6 +209,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
        "until"=>Time.parse("2010-12-31T23:59:59-01:00"),
        "timezone"=>"Atlantic/Azores"},
      "total"=>3,
+     "previous_total" => 1,
      "change"=>200.0,
      "values"=>[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
      "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
