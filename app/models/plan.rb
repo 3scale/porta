@@ -446,6 +446,10 @@ class Plan < ApplicationRecord
     plan_rule ? plan_rule.switches : []
   end
 
+  def scheduled_for_deletion?
+    !issuer || issuer.deleted? || provider_account&.scheduled_for_deletion?
+  end
+
   protected
 
   def xml_builder(options, attrs = {}, extra_nodes = {})
@@ -481,10 +485,6 @@ class Plan < ApplicationRecord
   end
 
   private
-
-  def scheduled_for_deletion?
-    !issuer || issuer.deleted? || provider_account&.scheduled_for_deletion?
-  end
 
   # act_as_list updates the position every time that a plan is destroyed.
   # But we do not want to do that when its issuer is going to be deleted anyway.

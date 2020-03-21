@@ -177,4 +177,18 @@ class ContractTest < ActiveSupport::TestCase
       refute contract.can_change_plan?(nil)
     end
   end
+
+  test 'destroy customized plan callback only runs when the plan is not scheduled for deletion' do
+    original_plan = FactoryBot.create(:simple_application_plan)
+    plan_async_deletion, plan_sync_deletion = FactoryBot.create_list(:simple_application_plan, 2, original: original_plan)
+    plan_async_deletion.service.update_column(:state, :deleted)
+    contract_async_deletion, contract_sync_deletion = [plan_async_deletion.reload, plan_sync_deletion].map do |plan|
+      FactoryBot.create(:simple_cinstance, plan: plan)
+    end
+
+    [contract_async_deletion, contract_sync_deletion].each(&:destroy!)
+
+    assert Plan.exists?(plan_async_deletion.id)
+    refute Plan.exists?(plan_sync_deletion.id)
+  end
 end
