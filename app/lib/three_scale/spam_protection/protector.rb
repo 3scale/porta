@@ -60,7 +60,7 @@ module ThreeScale::SpamProtection
       end
 
       def captcha_needed?
-        captcha_required? || (!http_method.get? && spam?)
+        captcha_required? || spam?
       end
 
       def enabled?

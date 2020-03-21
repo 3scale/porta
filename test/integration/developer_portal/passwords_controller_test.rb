@@ -64,12 +64,22 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
       assert body.include? 'g-recaptcha'
     end
 
-    test 'captcha is not present when spam security set to auto' do
+    test 'captcha is not present when spam security set to auto and it is not a spam object' do
       provider.settings.update_attributes(spam_protection_level: :auto)
+      ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: false)
 
       get developer_portal.new_admin_account_password_path
       assert_response :success
       assert_not body.include? 'g-recaptcha'
+    end
+
+    test 'captcha is present when spam security set to auto it is a spam object' do
+      provider.settings.update_attributes(spam_protection_level: :auto)
+      ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
+
+      get developer_portal.new_admin_account_password_path
+      assert_response :success
+      assert body.include? 'g-recaptcha'
     end
 
     test 'captcha is not present when spam security disabled' do
