@@ -106,7 +106,7 @@ module VerticalNavHelper
     if can?(:manage, :finance)
       items << {id: :earnings,  title: 'Earnings by Month',  path: admin_finance_root_path}
       items << {id: :invoices,  title: 'Invoices',           path: admin_finance_invoices_path}
-      items << {id: :finance,   title: 'Finance Log',        path: admin_finance_log_entries_path} if current_user.username == ThreeScale.config.impersonation_admin['username']
+      items << {id: :finance,   title: 'Finance Log',        path: admin_finance_log_entries_path} if current_user.impersonation_admin?
     end
 
     if can?(:manage, :settings)

@@ -7,7 +7,7 @@
     title: 'Invoices',
     path: admin_finance_invoices_path
 
-  - if current_user.username == ThreeScale.config.impersonation_admin['username']
+  - if current_user.impersonation_admin?
     = render vertical_nav_item,
       title: 'Finance Log',
       path: admin_finance_log_entries_path
