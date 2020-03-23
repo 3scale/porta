@@ -160,11 +160,11 @@ class User < ApplicationRecord
   end
 
   def self.impersonation_admin!
-    where(username: ThreeScale.config.impersonation_admin['username']).first!
+    impersonation_admins.first!
   end
 
   def self.impersonation_admin
-    where(username: ThreeScale.config.impersonation_admin['username']).first
+    impersonation_admins.first
   end
 
   def impersonation_admin?
