@@ -331,7 +331,8 @@ class Contract < ApplicationRecord
   end
 
   def destroy_customized_plan
-    plan.destroy if plan.try!(:customized?)
+    return if !plan || !plan.customized? || plan.scheduled_for_deletion?
+    plan.destroy
   end
 
   def accept_on_create
