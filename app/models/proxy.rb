@@ -608,15 +608,15 @@ class Proxy < ApplicationRecord
     end
   end
 
-  def read_and_parse_policies_config(raise_error: false)
-    attr_policies_config = read_attribute(:policies_config)
-    attr_policies_config.blank? ? [] : Array(JSON.parse(attr_policies_config))
-  rescue JSON::ParserError => error
-    raise_error ? raise(error) : []
+  def read_and_parse_policies_config
+    read_and_parse_policies_config!
+  rescue JSON::ParserError
+    []
   end
 
   def read_and_parse_policies_config!
-    read_and_parse_policies_config(raise_error: true)
+    attr_policies_config = read_attribute(:policies_config)
+    attr_policies_config.blank? ? [] : Array(JSON.parse(attr_policies_config))
   end
 
   def policies_config_structure
