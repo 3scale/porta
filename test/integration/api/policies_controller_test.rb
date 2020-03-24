@@ -28,6 +28,12 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_service_policies_path(@service)
   end
 
+  test 'invalid config - does not update policies' do
+    invalid_config = 'invalid-config'.to_json
+    put admin_service_policies_path(@service), proxy: { policies_config: invalid_config }
+    assert_equal 'The policies cannot be saved', flash[:error]
+    assert_response :unprocessable_entity
+  end
 
   test 'update policies config with errors' do
     invalid_config = [{ 'name' => 'foo' }].to_json

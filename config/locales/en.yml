@@ -861,6 +861,8 @@ en:
               invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
         proxy:
           attributes:
+            policies_config:
+              invalid_format: "has invalid format. The Correct format is: [{ \"name\": \"apicast\"... }]"
             api_backend:
               invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
             api_test_path:
