@@ -450,6 +450,11 @@ without fake Core server your after commit callbacks will crash and you might ge
           get 'summary'
         end
       end
+      resources :backend_apis, :path => 'backend_apis/:backend_api_id' do
+        collection do
+          get 'usage'
+        end
+      end
     end
   end
 
