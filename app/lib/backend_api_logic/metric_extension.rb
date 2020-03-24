@@ -32,18 +32,26 @@ module BackendApiLogic
       def hits_extended_system_name_regex
         /\Ahits(#{Regexp.escape(SYSTEM_NAME_SUFFIX_SEPARATOR)}\d+)?\z/
       end
+
+      def build_extended_system_name(system_name, owner_id:)
+        parts = [system_name_without_suffix(system_name, owner_id: owner_id), owner_id]
+        parts.compact.join SYSTEM_NAME_SUFFIX_SEPARATOR
+      end
+
+      def system_name_without_suffix(system_name, owner_id:)
+        system_name.to_s.gsub(/#{Regexp.escape(SYSTEM_NAME_SUFFIX_SEPARATOR)}#{owner_id}\z/, '')
+      end
     end
 
     protected
 
     def system_name_without_suffix
-      attributes['system_name'].to_s.gsub(/#{Regexp.escape(SYSTEM_NAME_SUFFIX_SEPARATOR)}#{owner_id}\z/, '')
+      self.class.system_name_without_suffix(attributes['system_name'], owner_id: owner_id)
     end
 
     def extended_system_name
-      parts = [system_name_without_suffix]
-      parts << owner_id if backend_api_metric?
-      parts.compact.join SYSTEM_NAME_SUFFIX_SEPARATOR
+      return system_name_without_suffix unless backend_api_metric?
+      self.class.build_extended_system_name(attributes['system_name'], owner_id: owner_id)
     end
 
     def extend_system_name
