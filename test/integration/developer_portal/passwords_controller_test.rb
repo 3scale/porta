@@ -43,12 +43,22 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert body.include? 'g-recaptcha'
   end
 
-  test 'captcha is not present when spam security set to auto' do
+  test 'captcha is not present when spam security set to auto and it is not a spam object' do
     provider.settings.update_attributes(spam_protection_level: :auto)
+    ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: false)
 
     get developer_portal.new_admin_account_password_path
     assert_response :success
     assert_not body.include? 'g-recaptcha'
+  end
+
+  test 'captcha is present when spam security set to auto it is a spam object' do
+    provider.settings.update_attributes(spam_protection_level: :auto)
+    ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
+
+    get developer_portal.new_admin_account_password_path
+    assert_response :success
+    assert body.include? 'g-recaptcha'
   end
 
   test 'captcha is not present when spam security disabled' do
@@ -57,6 +67,37 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
     get developer_portal.new_admin_account_password_path
     assert_response :success
     assert_not body.include? 'g-recaptcha'
+  end
+
+  test 'create responds with error message when detects spam' do
+    provider.settings.update_attributes(spam_protection_level: :auto)
+    ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
+    Recaptcha::Verify.stubs(skip?: false)
+
+    post developer_portal.admin_account_password_path(email: 'user@example.com')
+    assert_equal 'Spam protection failed.', flash[:error]
+    assert_redirected_to developer_portal.new_admin_account_password_path(request_password_reset: true)
+  end
+
+  test 'create sends the email when captcha passes and finds the email' do
+    provider.settings.update_attributes(spam_protection_level: :auto)
+    ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
+    Recaptcha::Verify.stubs(skip?: true)
+
+    post developer_portal.admin_account_password_path(email: user.email)
+    assert_equal 'A password reset link has been emailed to you.', flash[:notice]
+    assert_redirected_to developer_portal.login_path
+    assert user.reload.lost_password_token
+    assert user.reload.lost_password_token_generated_at
+  end
+
+  test 'create renders the right error message when the email is not found' do
+    provider.settings.update_attributes(spam_protection_level: :none)
+    Recaptcha::Verify.stubs(skip?: false)
+
+    post developer_portal.admin_account_password_path(email: 'fake@example.com')
+    assert_equal 'Email not found.', flash[:error]
+    assert_redirected_to developer_portal.new_admin_account_password_path(request_password_reset: true)
   end
 
   private

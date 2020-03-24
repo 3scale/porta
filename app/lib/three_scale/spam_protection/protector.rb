@@ -55,16 +55,20 @@ module ThreeScale::SpamProtection
         end
       end
 
+      def level_captcha?
+        level == :captcha || (level == :auto && spam?)
+      end
+
       def captcha_required?
-        (captcha_configured? && level == :captcha) && !logged_in?
+        captcha_configured? && enabled?
       end
 
       def captcha_needed?
-        captcha_required? || (!http_method.get? && spam?)
+        captcha_required? && (http_method.get? || spam?)
       end
 
       def enabled?
-        not logged_in? and level != :none
+        level_captcha? && !logged_in?
       end
 
       def to_str
