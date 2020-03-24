@@ -5,7 +5,7 @@
         "operations": [{
             "httpMethod": "GET",
             "group":"apps",
-            "summary": "Application Usage",
+            "summary": "Application Traffic",
             "description": "Returns usage data for all methods for an application.",
             "parameters": [
             {
@@ -151,7 +151,7 @@
         "path": "/stats/services/{service_id}/usage.{format}",
         "operations": [{
             "httpMethod": "GET",
-            "summary": "Service Usage",
+            "summary": "Service Traffic",
             "group":"cc",
             "description": "Returns usage data by metric for a specified period of time for a service.",
             "parameters": [

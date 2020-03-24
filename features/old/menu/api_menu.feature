@@ -22,7 +22,7 @@ Feature: API menu
   Scenario: Analytics sub menu structure
     When I follow "Analytics" within the main menu
     Then I should see menu items
-    | Usage                     |
+    | Traffic                   |
     | Daily Averages            |
     | Hourly Averages           |
     | Top Applications          |

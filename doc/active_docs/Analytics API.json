@@ -5,7 +5,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Application Usage by Metric",
+          "summary": "Application Traffic by Metric",
           "description": "Returns the usage data for a given metric (or method) of an application.",
           "group": "application_ops",
           "parameters": [
@@ -534,7 +534,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Service Usage by Metric",
+          "summary": "Service Traffic by Metric",
           "description": "Returns the usage data of a given metric (or method) of a service.",
           "group": "service_ops",
           "parameters": [
