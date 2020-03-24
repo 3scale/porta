@@ -28,7 +28,7 @@ Then /^I should see a list of metrics:$/ do |table|
 end
 
 Then(/^I should see that application stats$/) do
-  page.should have_content "Usage statistics for #{@application.name}"
+  page.should have_content "Traffic statistics for #{@application.name}"
 end
 
 

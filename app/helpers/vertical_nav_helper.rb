@@ -206,7 +206,7 @@ module VerticalNavHelper
 
   def service_analytics
     items = []
-    items << {id: :usage,              title: 'Usage',              path: admin_service_stats_usage_path(@service)}
+    items << {id: :usage,              title: 'Traffic',            path: admin_service_stats_usage_path(@service)}
     items << {id: :daily_averages,     title: 'Daily Averages',     path:   admin_service_stats_days_path(@service)}
     items << {id: :hourly,             title: 'Hourly Averages',    path: admin_service_stats_hours_path(@service)}
     items << {id: :top_applications,   title: 'Top Applications',   path: admin_service_stats_top_applications_path(@service)}
