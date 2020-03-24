@@ -25,6 +25,14 @@ class ProxyTest < ActiveSupport::TestCase
       assert_match 'configuration can\'t be blank', proxy.errors.full_messages.to_sentence
     end
 
+    def test_not_valid_json_policies_config
+      service = FactoryBot.create(:simple_service)
+      proxy = Proxy.new(policies_config: 'not-valid-json', service: service)
+      refute proxy.valid?
+
+      assert_match 'Policies config has invalid format. The Correct format is:', proxy.errors.full_messages.to_sentence
+    end
+
     def test_policies_config
       proxy = Proxy.new(policies_config: "[{\"data\":{\"request\":\"1\",\"config\":\"123\"}}]")
       assert_equal proxy.policies_config.first, { "data" => { "request" => "1", "config" => "123" }}

@@ -135,8 +135,7 @@ class Proxy < ApplicationRecord
   end
 
   def policies_config
-    attr_policies_config = read_attribute(:policies_config)
-    parsed_config = attr_policies_config.blank? ? [] : Array(JSON.parse(attr_policies_config))
+    parsed_config = read_and_parse_policies_config
 
     if parsed_config.detect { |c| c['name'] == DEFAULT_POLICY['name'] }
       parsed_config
@@ -609,12 +608,26 @@ class Proxy < ApplicationRecord
     end
   end
 
+  def read_and_parse_policies_config
+    read_and_parse_policies_config!
+  rescue JSON::ParserError
+    []
+  end
+
+  def read_and_parse_policies_config!
+    attr_policies_config = read_attribute(:policies_config)
+    attr_policies_config.blank? ? [] : Array(JSON.parse(attr_policies_config))
+  end
+
   def policies_config_structure
-    policies_object = PoliciesConfig.new(policies_config)
+    parsed_config = read_and_parse_policies_config!
+    policies_object = PoliciesConfig.new(parsed_config)
     return if policies_object.valid?
     policies_object.errors.each do |attribute, message|
       errors.add(:policies_config, errors.full_message(attribute, message).downcase)
     end
+  rescue JSON::ParserError
+    errors.add(:policies_config, :invalid_format)
   end
 
   def create_default_secret_token
