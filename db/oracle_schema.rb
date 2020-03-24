@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200224095152) do
+ActiveRecord::Schema.define(version: 20200324130825) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38,                  null: false
@@ -639,13 +639,13 @@ ActiveRecord::Schema.define(version: 20200224095152) do
     t.datetime "paid_at",                          precision: 6
     t.datetime "created_at",                       precision: 6
     t.datetime "updated_at",                       precision: 6
-    t.datetime "due_on",                           precision: 6
+    t.date     "due_on"
     t.string   "pdf_file_name"
     t.string   "pdf_content_type"
     t.integer  "pdf_file_size",                    precision: 38
     t.datetime "pdf_updated_at",                   precision: 6
-    t.datetime "period",                           precision: 6
-    t.datetime "issued_on",                        precision: 6
+    t.date     "period"
+    t.date     "issued_on"
     t.string   "state",                                                     default: "open",   null: false
     t.string   "friendly_id",                                               default: "fix",    null: false
     t.integer  "tenant_id",                        precision: 38
@@ -673,7 +673,7 @@ ActiveRecord::Schema.define(version: 20200224095152) do
     t.string   "to_address_zip"
     t.string   "to_address_phone"
     t.integer  "charging_retries_count",           precision: 38,           default: 0,        null: false
-    t.datetime "last_charging_retry",              precision: 6
+    t.date     "last_charging_retry"
     t.string   "creation_type",                                             default: "manual"
   end
 
@@ -753,7 +753,7 @@ ActiveRecord::Schema.define(version: 20200224095152) do
     t.integer  "metric_id",     precision: 38
     t.datetime "finished_at",   precision: 6
     t.integer  "quantity",      precision: 38
-    t.datetime "started_at",    precision: 6
+    t.date     "started_at"
     t.integer  "tenant_id",     precision: 38
     t.integer  "contract_id",   precision: 38
     t.string   "contract_type"
@@ -918,7 +918,7 @@ ActiveRecord::Schema.define(version: 20200224095152) do
     t.string   "buyer_reference"
     t.string   "payment_service_reference"
     t.string   "credit_card_partial_number"
-    t.datetime "credit_card_expires_on",     precision: 6
+    t.date     "credit_card_expires_on"
     t.datetime "created_at",                 precision: 6,  null: false
     t.datetime "updated_at",                 precision: 6,  null: false
     t.integer  "tenant_id",                  precision: 38
