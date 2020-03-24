@@ -88,7 +88,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "test-with-coverage": "yarn test -- --coverage",
-    "lint": "stylelint 'src/**/*.?css' --allow-empty-input && eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "stylelint 'src/**/*.?css' --allow-empty-input && eslint src --ext .js,.jsx,.ts,.tsx"
   },
   "jest": {
     "roots": [
