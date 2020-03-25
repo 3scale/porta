@@ -3,6 +3,7 @@ import 'core-js/fn/array/find-index' // make Object.findIndex on IE 11
 import 'core-js/fn/array/find'
 import Moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
+import {HITS_METRIC} from 'Stats/lib/metric'
 
 const moment = extendMoment(Moment)
 
@@ -80,10 +81,7 @@ export class StatsSeries {
   }
 
   _findMetricHits (response) {
-    if (response.metric) {
-      return response.metric.system_name === 'hits'
-    } else {
-      return null
-    }
+    const metric = response.metric
+    return metric ? metric.system_name.match(HITS_METRIC) : null
   }
 }

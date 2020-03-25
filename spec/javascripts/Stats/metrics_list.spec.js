@@ -14,7 +14,7 @@ describe('StatsMetrics', () => {
   it('should get the correct list of metrics', (done) => {
     StatsMetrics.getMetrics('/cool/url/').then(metrics => {
       expect(JSON.stringify(metrics)).toEqual(
-        '{"metrics":[{"id":1,"name":"Awesome Metric","serviceId":1,"systemName":"awesome_metric","isMethod":false},{"id":2,"serviceId":1,"systemName":"amazing_metric","isMethod":false}]}'
+        '{"metrics":[{"id":1,"name":"Awesome Metric","serviceId":1,"systemName":"awesome_metric","isMethod":false,"isHits":false},{"id":2,"serviceId":1,"systemName":"amazing_metric","isMethod":false,"isHits":false}]}'
       )
       done()
     })
@@ -22,10 +22,10 @@ describe('StatsMetrics', () => {
 
   it('should get the selected metrics', () => {
     let list = {metrics: [
-      {id: 1, serviceId: 1, name: 'Awesome Metric', systemName: 'awesome_metric', isMethod: false},
-      {id: 2, serviceId: 1, name: 'Amazing Metric', systemName: 'amazing_metric', isMethod: false}
+      {id: 1, serviceId: 1, name: 'Awesome Metric', systemName: 'awesome_metric', isMethod: false, isHits: false},
+      {id: 2, serviceId: 1, name: 'Amazing Metric', systemName: 'amazing_metric', isMethod: false, isHits: false}
     ]}
     let selectedMetrics = StatsMetrics.getSelectedMetrics({selectedMetricName: 'amazing_metric', list})
-    expect(JSON.stringify(selectedMetrics)).toEqual('[{"id":2,"serviceId":1,"name":"Amazing Metric","systemName":"amazing_metric","isMethod":false}]')
+    expect(JSON.stringify(selectedMetrics)).toEqual('[{"id":2,"serviceId":1,"name":"Amazing Metric","systemName":"amazing_metric","isMethod":false,"isHits":false}]')
   })
 })
