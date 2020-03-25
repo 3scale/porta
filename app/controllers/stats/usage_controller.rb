@@ -7,8 +7,7 @@ class Stats::UsageController < Stats::ServiceBaseController
   liquify if: :buyer_domain?
 
   def index
-    @methods = @service.method_metrics
-    @metrics = @service.metrics.top_level
+    @methods, @metrics = @service.all_metrics.partition(&:method_metric?)
 
     if ['api_sandbox_traffic', 'apicast_gateway_deployed'].include? current_account.go_live_state.recent
       done_step(:verify_api_sandbox_traffic)
@@ -22,8 +21,7 @@ class Stats::UsageController < Stats::ServiceBaseController
 
   def top_applications
     activate_menu :serviceadmin, :monitoring, :top_applications
-    @metrics = @service.metrics.top_level
-    @methods = @service.method_metrics
+    @methods, @metrics = @service.all_metrics.partition(&:method_metric?)
 
     respond_to do |format|
       format.html { render :top_applications }
