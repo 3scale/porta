@@ -8,8 +8,9 @@ export class StatsMetrics {
 
   static getSelectedMetrics ({selectedMetricName, list}) {
     let selectedMetric = list.metrics.find(metric => metric.systemName === selectedMetricName)
-    return (selectedMetricName === 'hits' && list.methods.length > 0)
-      ? [selectedMetric, ...list.methods]
+    let methodsOfSelectedMetric = (list.methods || []).filter(method => method.parentId === selectedMetric.id)
+    return (selectedMetric.isHits && methodsOfSelectedMetric.length > 0)
+      ? [selectedMetric, ...methodsOfSelectedMetric]
       : [selectedMetric]
   }
 

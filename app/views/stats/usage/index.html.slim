@@ -25,7 +25,10 @@ javascript:
         menuContainer: '.StatsMenu-container',
         selectorContainer: '.StatsSelector-container',
         methodsTableContainer: '.StatsMethodsTable-container',
-        csvLinkContainer: '.StatsCSVLink-container'
+        csvLinkContainer: '.StatsCSVLink-container',
+        usageMetricsUrl: '#{admin_service_stats_usage_path(@service, format: :json)}',
+        hitsMetricName: '#{@metrics.hits.system_name}',
+        sourceCollection: 'service'
       }
     )
   })

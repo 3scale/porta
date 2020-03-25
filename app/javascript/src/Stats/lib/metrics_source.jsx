@@ -1,6 +1,7 @@
 import $ from 'jquery'
 
 import {StatsSource} from 'Stats/lib/source'
+import {HITS_METRIC} from 'Stats/lib/metric'
 
 export class StatsMetricsSource extends StatsSource {
   constructor ({id, details = {}}) {
@@ -10,7 +11,7 @@ export class StatsMetricsSource extends StatsSource {
   }
 
   params ({dateRange, selectedMetricName = 'hits', timezone = undefined}) {
-    let metricName = (this.details.systemName && selectedMetricName === 'hits')
+    let metricName = (this.details.systemName && selectedMetricName.match(HITS_METRIC))
       ? this.details.systemName
       : selectedMetricName
     return {
