@@ -310,7 +310,8 @@
               "name": "metric_name",
               "dataType": "string",
               "required": true,
-              "paramType": "query"
+              "paramType": "query",
+              "threescale_name": "backend_api_metric_names"
             },
             {
               "name": "since",
