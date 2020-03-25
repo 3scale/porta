@@ -29,7 +29,7 @@ export class StatsMetricsSelector extends StatsUI {
     return (
       <div className={`StatsSelector ${this.open ? 'is-open' : ''}`}>
         <button onclick={ev => this._toggleOpen(!this.open)} className='StatsSelector-item StatsSelector-toggle'>
-          {numeral(total).format('0.0a').toUpperCase()} {selectedMetric.name}
+          {numeral(total).format('0.0a').toUpperCase()} {selectedMetric.name} <span className='StatsSelector-item-detail'>({selectedMetric.systemName})</span>
         </button>
         <ul className='StatsSelector-menu'>
           {
@@ -37,7 +37,7 @@ export class StatsMetricsSelector extends StatsUI {
               [
                 <li><a onclick={ ev => { this.selectMetric(metric); this._toggleOpen(false) }}
                   className={`StatsSelector-item ${metric.isMethod ? 'is-children' : ''} ${selectedMetric.name === metric.name ? 'is-selected' : ''}`}
-                >{metric.name}
+                >{metric.name} <span className='StatsSelector-item-detail'>({metric.systemName})</span>
                 </a></li>
               ]
             )

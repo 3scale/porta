@@ -20,7 +20,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template 'stats/usage/index'
-    assert_equal @service.metrics, assigns(:metrics)
+    assert_equal @service.all_metrics, assigns(:metrics)
   end
 
   test 'top_applications' do
