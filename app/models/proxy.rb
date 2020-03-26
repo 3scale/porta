@@ -650,8 +650,8 @@ class Proxy < ApplicationRecord
     end
   end
 
-  def create_proxy_config_affecting_change(attributes = {}, options = {}, &block)
-    super(attributes.merge(proxy_id: id), options, &block)
+  def create_proxy_config_affecting_change(*)
+    super
   rescue ActiveRecord::RecordNotUnique
     reload.send(:proxy_config_affecting_change)
   end
