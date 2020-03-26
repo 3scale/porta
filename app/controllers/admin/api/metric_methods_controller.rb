@@ -42,7 +42,7 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   ##~ op.parameters.add :name => "description", :description => "Description of the method.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def create
-    metric_method = metric_methods.create(metric_params)
+    metric_method = metric_methods.create(create_params)
     respond_with(metric_method)
   end
 
@@ -84,7 +84,7 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   ##~ op.parameters.add :name => "description", :description => "Description of the method.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def update
-    metric_method.update_attributes(metric_params)
+    metric_method.update_attributes(update_params)
 
     respond_with(metric_method)
   end

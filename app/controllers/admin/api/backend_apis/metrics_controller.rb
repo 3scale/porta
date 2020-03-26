@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::BaseController
+  include MetricParams
+
   wrap_parameters Metric
   representer Metric
 
@@ -106,22 +108,11 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
 
   private
 
-  DEFAULT_PARAMS = %i[friendly_name unit description].freeze
-  private_constant :DEFAULT_PARAMS
-
   def metric
     @metric ||= metrics_collection.find(params[:id])
   end
 
   def metrics_collection
     @metrics_collection ||= backend_api.metrics
-  end
-
-  def create_params
-    params.fetch(:metric).permit(DEFAULT_PARAMS | %i[system_name])
-  end
-
-  def update_params
-    params.fetch(:metric).permit(DEFAULT_PARAMS)
   end
 end

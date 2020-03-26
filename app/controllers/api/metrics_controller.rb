@@ -2,11 +2,11 @@
 
 class Api::MetricsController < Api::BaseController
   include ServiceDiscovery::ControllerMethods
+  include MetricParams
 
   before_action :find_service, except: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
   before_action :find_plan_and_service, only: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
   before_action :find_metric, except: [:new, :create, :index]
-  before_action :build_metric, only: [:new, :create]
 
   activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
@@ -22,12 +22,14 @@ class Api::MetricsController < Api::BaseController
   end
 
   def new
+    @metric = collection.build
     respond_to do |format|
       format.html
     end
   end
 
   def create
+    @metric = collection.build(create_params)
     respond_to do |format|
       if @metric.save
         flash.now[:notice] = 'Metric has been created.'
@@ -49,7 +51,7 @@ class Api::MetricsController < Api::BaseController
   end
 
   def update
-    if @metric.update_attributes(params[:metric])
+    if @metric.update_attributes(update_params)
       respond_to do |format|
         format.html do
           flash[:notice] = "The #{@metric.child? ? 'method' : 'metric'} was updated"
@@ -126,15 +128,16 @@ class Api::MetricsController < Api::BaseController
   end
 
   def find_metric
-    @metric = @service.all_metrics.find(params[:id])
+    @metric = find_metric_by(params[:id])
   end
 
-  def build_metric
-    @metric = if params[:metric_id]
-                @service.metrics.find(params[:metric_id]).children
-              else
-                @service.metrics
-              end.build(params[:metric] || {})
+  def find_metric_by(id)
+    @service.metrics.find(id)
+  end
+
+  def collection
+    metric_id = params[:metric_id]
+    metric_id ? find_metric_by(metric_id).children : @service.metrics
   end
 
   def find_plan_and_service
