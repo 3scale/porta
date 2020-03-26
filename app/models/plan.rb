@@ -61,8 +61,8 @@ class Plan < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :setup_fee, :cost_per_month, numericality: { allow_nil: false, allow_blank: false }
-
+  validates :setup_fee, :cost_per_month, numericality: { allow_nil: false, allow_blank: false, greater_than_or_equal_to: 0.00 }
+  validates :trial_period_days, numericality: { allow_nil: true, greater_than_or_equal_to: 0 }
   validates :system_name, length: { maximum: 255 }
   validates :name, :rights, :state, :cost_aggregation_rule, :type, :issuer_type,
             length: { maximum: 255 }
