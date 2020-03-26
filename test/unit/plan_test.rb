@@ -589,6 +589,33 @@ class PlanTest < ActiveSupport::TestCase
     end
   end
 
+  test 'setup_fee cannot be negative' do
+    plan = FactoryBot.build_stubbed(:application_plan)
+    plan.setup_fee = -10.00
+    refute plan.valid?
+    assert_equal ['must be greater than or equal to 0.0'], plan.errors[:setup_fee]
+    plan.setup_fee = 15.00
+    assert plan.valid?
+  end
+  
+  test 'cost_per_month cannot be negative' do
+    plan = FactoryBot.build_stubbed(:application_plan)
+    plan.cost_per_month = -10.00
+    refute plan.valid?
+    assert_equal ['must be greater than or equal to 0.0'], plan.errors[:cost_per_month]
+    plan.cost_per_month = 15.00
+    assert plan.valid?
+  end
+    
+   test 'trial_period_days cannot be negative' do
+    plan = FactoryBot.build_stubbed(:application_plan)
+    plan.trial_period_days = -1
+    refute plan.valid?
+    assert_equal ['must be greater than or equal to 0'], plan.errors[:trial_period_days]
+    plan.trial_period_days = 10
+    assert plan.valid?
+  end
+
   should 'let global finance setting prevail' do
     @plan = FactoryBot.create(:simple_application_plan)
     @plan.provider_account.billing_strategy = Finance::BillingStrategy.new
