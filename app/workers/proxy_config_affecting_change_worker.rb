@@ -7,8 +7,7 @@ class ProxyConfigAffectingChangeWorker < ApplicationJob
     proxy.affecting_change_history.touch
   rescue ActiveRecord::StatementInvalid => exception
     # logging to help us understand the problem
-    proxy.reload
-    proxy_config_affecting_change = proxy.send(:proxy_config_affecting_change)
+    proxy_config_affecting_change = proxy.reload.send(:proxy_config_affecting_change)
     parameters = {
       proxy_created_at: proxy.created_at,
       proxy_updated_at: proxy.updated_at,
