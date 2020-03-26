@@ -32,7 +32,7 @@ class Service < ApplicationRecord
 
   has_system_name uniqueness_scope: :account_id
 
-  attr_readonly :system_name, :admin_support_email, :tech_support_email
+  attr_readonly :system_name
 
   validates :backend_version, inclusion: { in: ->(service) { BackendVersion.usable_versions(service: service) }}
 

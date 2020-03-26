@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200224095152) do
+ActiveRecord::Schema.define(version: 20200326154943) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38,                  null: false
@@ -1235,8 +1235,6 @@ ActiveRecord::Schema.define(version: 20200224095152) do
     t.text     "infobar"
     t.text     "terms"
     t.boolean  "display_provider_keys",                         default: false
-    t.string   "tech_support_email"
-    t.string   "admin_support_email"
     t.string   "credit_card_support_email"
     t.boolean  "buyers_manage_apps",                            default: true
     t.boolean  "buyers_manage_keys",                            default: true
