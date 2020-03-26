@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200326160315) do
+ActiveRecord::Schema.define(version: 20200326164004) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                                  null: false
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 20200326160315) do
     t.string   "credit_card_authorize_net_payment_profile_token"
     t.bigint   "tenant_id"
     t.string   "self_domain"
-    t.string   "service_preffix"
     t.string   "s3_prefix"
     t.integer  "prepared_assets_version"
     t.boolean  "sample_data"
