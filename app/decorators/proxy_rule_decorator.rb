@@ -9,9 +9,8 @@ class ProxyRuleDecorator < ApplicationDecorator
     File.join('/', backend_api_path, pattern_value)
   end
 
-  def metric_system_name
-    object.metric.extended_system_name
-  end
+  delegate :metric, to: :object
+  delegate :system_name, to: :metric, prefix: true
 
   private
 

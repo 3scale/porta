@@ -68,15 +68,6 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
     assert_equal "Mb", metric.unit
   end
 
-  test 'create with deprecated api' do
-    post(admin_api_service_metrics_path(@service, :format => :json), :provider_key => @provider.api_key,
-         :name => 'meth', :friendly_name => 'Cooking Example', :unit => 'kilos')
-
-    assert_response :success
-
-    assert_equal 'meth', JSON.parse(@response.body)['metric']['system_name']
-  end
-
   test 'create errors xml' do
     post(admin_api_service_metrics_path(@service), :provider_key => @provider.api_key, :format => :xml, :unit => "pounds")
 
@@ -99,7 +90,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
     xml = Nokogiri::XML::Document.parse(@response.body)
 
     assert_equal xml.xpath('.//metric/id').children.first.to_s, metric.id.to_s
-    assert_equal "new_name", metric.system_name
+    assert_equal "old_name", metric.system_name # cannot update system_name
     assert_equal "new friendly", metric.friendly_name
     assert_equal "bucks", metric.unit
   end

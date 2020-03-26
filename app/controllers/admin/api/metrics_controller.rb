@@ -36,7 +36,7 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
   ##~ op.parameters.add :name => "description", :description => "Description of the metric.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def create
-    metric = metrics.create(metric_params)
+    metric = metrics.create(create_params)
 
     respond_with(metric)
   end
@@ -75,7 +75,7 @@ class Admin::Api::MetricsController < Admin::Api::MetricsBaseController
   ##~ op.parameters.add :name => "description", :description => "Description of the metric.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def update
-    metric.update_attributes(metric_params)
+    metric.update_attributes(update_params)
 
     respond_with(metric)
   end

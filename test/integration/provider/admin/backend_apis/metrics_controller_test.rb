@@ -88,6 +88,12 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     assert_select '#metric_friendly_name_input.required.error'
   end
 
+  test 'cannot update system_name' do
+    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { system_name: 'new_system_name' })
+    assert_response :redirect
+    assert_equal "ads.#{backend_api.id}", ads.reload.system_name
+  end
+
   test '#destroy' do
     delete provider_admin_backend_api_metric_path(backend_api, ads)
     refute backend_api.metrics.find_by(system_name: "ads.#{backend_api.id}")

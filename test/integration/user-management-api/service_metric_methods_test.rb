@@ -72,15 +72,6 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
     assert_equal "friendly example", metric_method.friendly_name
   end
 
-  test 'service api metric create with deprecated name parameter' do
-    post(admin_api_service_metric_methods_path(@service, @metric, :format => :json), :provider_key => @provider.api_key,
-         :name => 'meth', :friendly_name => 'Cooking Methods')
-
-    assert_response :success
-
-    assert_equal 'meth', JSON.parse(@response.body)['method']['system_name']
-  end
-
   test 'service api metric create errors xml' do
     post(admin_api_service_metric_methods_path(@service, @metric),
          :provider_key => @provider.api_key, :format => :xml)
@@ -102,24 +93,11 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
 
     assert_metric_method(@response.body,
                          {:service_id => @service.id, :metric_id => @metric.id,
-                          :system_name => "new_name", :friendly_name => "new friendly"})
+                          :system_name => "old_name", :friendly_name => "new friendly"}) # cannot update system_name
 
     metric_method.reload
-    assert_equal "new_name", metric_method.system_name
+    assert_equal "old_name", metric_method.system_name # cannot update system_name
     assert_equal "new friendly", metric_method.friendly_name
-  end
-
-  test 'service api metric update with deprecated api' do
-    metric_method = @metric.children.create!(:friendly_name => "Old Cooking Method")
-
-    put("/admin/api/services/#{@service.id}/metrics/#{@metric.id}/methods/#{metric_method.id}",
-        :provider_key => @provider.api_key, :format => :xml, :system_name => 'meth')
-
-    assert_response :success
-
-    metric_method.reload
-
-    assert_equal 'meth', metric_method.system_name
   end
 
   test 'service api metric update with wrong id' do
@@ -132,11 +110,11 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
   test 'service api metric update errors xml' do
     put("/admin/api/services/#{@service.id}/metrics/#{@metric.id}/methods/#{@metric_method.id}",
              :provider_key => @provider.api_key,
-             :format => :xml, :system_name => "",
+             :format => :xml,
              :friendly_name => "")
 
     assert_response :unprocessable_entity
-    assert_xml_error @response.body, "System name can't be blank"
+    assert_xml_error @response.body, "Friendly name can't be blank"
   end
 
   test 'service api metric destroy' do

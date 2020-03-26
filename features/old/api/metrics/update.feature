@@ -19,10 +19,9 @@ Feature: Metric update
     And I go to the service definition page
     And I follow "Nukes deployed"
     And I fill in "Friendly name" with "Number of atomic bombs dropped"
-    And I fill in "metric[system_name]" with "bombs"
     And I fill in "Unit" with "drops"
     And I press "Update Metric"
     Then I should see "Number of atomic bombs dropped"
-    And metric "bombs" should have the following:
+    And metric "nukes" should have the following:
       | Friendly name | Number of atomic bombs dropped |
       | Unit          | drops                          |
