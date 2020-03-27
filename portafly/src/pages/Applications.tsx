@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFetch } from 'react-async'
 import { useDocumentTitle } from 'components'
 import {
@@ -11,7 +12,8 @@ import {
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
 
 const Applications: React.FunctionComponent = () => {
-  useDocumentTitle('Applications')
+  const { t } = useTranslation('applications')
+  useDocumentTitle(t('page_title'))
 
   const columns = [
     'Name',
@@ -48,11 +50,11 @@ const Applications: React.FunctionComponent = () => {
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Text component="h1">Applications</Text>
+          <Text component="h1">{t('body_title')}</Text>
         </TextContent>
         <TextContent>
           <Text component={TextVariants.p}>
-            This is the applications screen.
+            {t('subtitle')}
           </Text>
         </TextContent>
       </PageSection>
@@ -60,10 +62,10 @@ const Applications: React.FunctionComponent = () => {
       <PageSection>
         {rows
           && (
-          <Table cells={columns} rows={rows}>
-            <TableHeader />
-            <TableBody />
-          </Table>
+            <Table cells={columns} rows={rows}>
+              <TableHeader />
+              <TableBody />
+            </Table>
           )}
       </PageSection>
     </>

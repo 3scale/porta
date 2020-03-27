@@ -10,10 +10,13 @@
     "dotenv-expand": "5.1.0",
     "fs-extra": "^8.1.0",
     "history": "^4.10.1",
+    "i18next": "^19.3.3",
+    "i18next-browser-languagedetector": "^4.0.2",
     "react": "^16.12.0",
     "react-app-polyfill": "^1.0.6",
     "react-async": "^10.0.0",
     "react-dom": "^16.12.0",
+    "react-i18next": "^11.3.3",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-router-last-location": "^2.0.1",
@@ -25,6 +28,8 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/i18next": "^13.0.0",
+    "@types/i18next-browser-languagedetector": "^3.0.0",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
@@ -126,7 +131,8 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/tests/__mocks__/fileMock.js",
       "@src": "<rootDir>/src/root.ts",
       "@src/(.*)": "<rootDir>/src/$1",
-      "@test/(.*)": "<rootDir>/src/tests/$1"
+      "@test/(.*)": "<rootDir>/src/tests/$1",
+      "i18next": "<rootDir>/src/tests/__mocks__/reacti18nextMock.js"
     },
     "moduleFileExtensions": [
       "web.js",
