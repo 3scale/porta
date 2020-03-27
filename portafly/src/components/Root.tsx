@@ -1,6 +1,6 @@
 import React from 'react'
 import { Brand } from '@patternfly/react-core'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'i18n'
 import { useHistory } from 'react-router-dom'
 import { AppLayout } from 'components'
 import logo from 'assets/logo.svg'
