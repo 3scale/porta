@@ -10,9 +10,9 @@ class ConfigPath
   end
 
   def to_regex
-    return '/.*' if empty?
+    return '^(/.*)' if empty?
 
-    "#{path}/.*|#{path}/?"
+    "^(#{path}/.*|#{path}/?)"
   end
 
   def empty?

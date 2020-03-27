@@ -17,11 +17,11 @@ class ConfigPathTest < ActiveSupport::TestCase
     refute ConfigPath.new('/somepath').empty?
   end
 
-  test '#to_regex returns "/.*" if path is not informed' do
-    assert_equal '/.*', ConfigPath.new('/').to_regex
+  test '#to_regex returns "^(/.*)" if path is not informed' do
+    assert_equal '^(/.*)', ConfigPath.new('/').to_regex
   end
 
   test '#to_regex returns the regex for the path if it is informed' do
-    assert_equal '/some/path/.*|/some/path/?', ConfigPath.new('/some/path').to_regex
+    assert_equal '^(/some/path/.*|/some/path/?)', ConfigPath.new('/some/path').to_regex
   end
 end
