@@ -88,8 +88,11 @@ class Invoice < ApplicationRecord
   # the invoice has to be due and at least 3 days later than the last
   # automatic charging date to be automatically chargeable
   scope :chargeable, ->(now) {
-                       where("(state = 'unpaid' OR state = 'pending') AND due_on <= ? AND
-                                      (last_charging_retry IS NULL OR last_charging_retry <= ?)", now, now - 3.days)
+    where.has do
+      ((state == 'unpaid') | (state == 'pending')) &
+        (due_on <= now) &
+        ((last_charging_retry == nil) | (last_charging_retry <= (now - 3.days)))
+    end
   }
 
   scope :opened, -> { where(:state => 'open') }
