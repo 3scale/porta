@@ -12,14 +12,14 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   def create
     if !spam_check(buyer)
       flash[:error] = 'Spam protection failed.'
-      redirect_to new_admin_account_password_url(request_password_reset: true)
+      redirect_to_password_reset_url
     elsif (user = @provider.buyer_users.find_by_email(params[:email]))
       user.generate_lost_password_token!
       flash[:notice] = 'A password reset link has been emailed to you.'
       redirect_to login_url
     else
       flash[:error] = 'Email not found.'
-      redirect_to new_admin_account_password_url(request_password_reset: true) # keep hash for retrocompatibility
+      redirect_to_password_reset_url
     end
   end
 
@@ -42,6 +42,10 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   end
 
   private
+
+  def redirect_to_password_reset_url
+    redirect_to new_admin_account_password_url(request_password_reset: true) # keep hash for retrocompatibility
+  end
 
   def buyer
     @buyer ||= @provider.buyers.build
