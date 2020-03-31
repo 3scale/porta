@@ -1,3 +1,3 @@
 module.exports = {
-  useTranslation: () => ({ t: key => key })
+  useTranslation: () => ({ t: (key) => key })
 }
