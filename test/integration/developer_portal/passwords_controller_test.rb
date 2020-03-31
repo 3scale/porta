@@ -84,11 +84,14 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
     ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
     Recaptcha::Verify.stubs(skip?: true)
 
-    post developer_portal.admin_account_password_path(email: user.email)
+    UserMailer.expects(:lost_password).returns(mock('mail', deliver_now: true)).once
+
+    assert_change of: lambda { user.reload.lost_password_token.present? }, from: false, to: true do
+      post developer_portal.admin_account_password_path(email: user.email)
+    end
+    assert_in_delta Time.now, user.reload.lost_password_token_generated_at, 2.seconds
     assert_equal 'A password reset link has been emailed to you.', flash[:notice]
     assert_redirected_to developer_portal.login_path
-    assert user.reload.lost_password_token
-    assert user.reload.lost_password_token_generated_at
   end
 
   test 'create renders the right error message when the email is not found' do
