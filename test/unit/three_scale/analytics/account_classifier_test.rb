@@ -1,6 +1,6 @@
 require 'minitest_helper'
 
-class ThreeScale::Analytics::AccountClassifierTest < MiniTest::Unit::TestCase
+class ThreeScale::Analytics::AccountClassifierTest < SimpleMiniTest
 
 
   def classifier(user_attributes = {})

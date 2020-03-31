@@ -1,6 +1,6 @@
 require 'base64'
 
-class ApiAuthentication::HttpAuthenticationTest < MiniTest::Unit::TestCase
+class ApiAuthentication::HttpAuthenticationTest < SimpleMiniTest
 
   include ApiAuthentication::HttpAuthentication
   include Base64

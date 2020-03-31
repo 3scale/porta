@@ -2,7 +2,7 @@ require 'minitest_helper'
 
 require 'events/importer'
 
-class Events::ImporterTest < MiniTest::Unit::TestCase
+class Events::ImporterTest < SimpleMiniTest
 
   def test_async_import_event
     Events::Importer.async_import_event!(object: {}, type: 'alert')

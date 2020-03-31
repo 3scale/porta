@@ -24,7 +24,7 @@ end
 
 require 'active_support/core_ext'
 
-require 'config/initializers/ruby1.9.rb'
+require 'test_helpers/simple_mini_test'
 
 unless defined?(Rails)
   module Rails extend self
