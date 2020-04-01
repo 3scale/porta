@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'i18n/useTranslation'
 import { useA11yRouteChange, useDocumentTitle } from 'components'
 import {
   PageSection,
@@ -10,17 +11,16 @@ import {
 } from '@patternfly/react-core'
 
 const Overview: React.FunctionComponent = () => {
+  const { t } = useTranslation('overview')
   useA11yRouteChange()
-  useDocumentTitle('Overview')
+  useDocumentTitle(t('page_title'))
   return (
     <>
       <PageSection variant="light">
         <TextContent>
-          <Title size="3xl">Overview</Title>
+          <Title size="3xl">{t('body_title')}</Title>
           <Text>
-            <b>PortaFly</b>
-            {' '}
-            the next gen UI for Porta API MGMT App
+            {t('subtitle')}
           </Text>
         </TextContent>
       </PageSection>
@@ -28,7 +28,7 @@ const Overview: React.FunctionComponent = () => {
         <Card>
           <CardBody>
             <TextContent>
-              <p>OHAI</p>
+              <p>{t('shared:format.uppercase', { text: 'Ohai' })}</p>
             </TextContent>
           </CardBody>
         </Card>
