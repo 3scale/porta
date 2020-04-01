@@ -1,15 +1,11 @@
-import shared from 'i18n/locales/en/shared.json'
-import overview from 'i18n/locales/en/overview.json'
-import analytics from 'i18n/locales/en/analytics.json'
-import applications from 'i18n/locales/en/applications.json'
-import integration from 'i18n/locales/en/integration.json'
+import { ISupportedLanguages } from 'i18n'
+import * as en from 'i18n/locales/en'
 
-const EN = {
-  SHARED: shared,
-  OVERVIEW: overview,
-  ANALYTICS: analytics,
-  APPLICATIONS: applications,
-  INTEGRATION: integration
+export type ITranslationsPages = keyof typeof en
+export type ITranslations = { [P in ITranslationsPages]: any }
+
+const Translations: Record<ISupportedLanguages, ITranslations> = {
+  en
 }
 
-export { EN }
+export { Translations }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'i18n/useTranslation'
 import { useFetch } from 'react-async'
 import { useDocumentTitle } from 'components'
 import {
