@@ -1,4 +1,4 @@
-class ApiAuthentication::SuspendedAccountTest < MiniTest::Unit::TestCase
+class ApiAuthentication::SuspendedAccountTest < SimpleMiniTest
   include ActiveSupport::Callbacks
   define_callbacks :action
 

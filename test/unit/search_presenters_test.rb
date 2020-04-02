@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'database_cleaner'
 
 class SearchPresentersTest < ActiveSupport::TestCase
   disable_transactional_fixtures!
