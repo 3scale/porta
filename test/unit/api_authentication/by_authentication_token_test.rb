@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ApiAuthentication::ByAuthenticationTokenTest < MiniTest::Unit::TestCase
+class ApiAuthentication::ByAuthenticationTokenTest < SimpleMiniTest
   include ActiveSupport::Callbacks
   define_callbacks :action
   include ActiveSupport::Rescuable

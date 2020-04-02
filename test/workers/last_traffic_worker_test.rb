@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class LastTrafficWorkerTest < MiniTest::Unit::TestCase
+class LastTrafficWorkerTest < SimpleMiniTest
   def test_perform
     Timecop.freeze do
       last_traffic = LastTraffic.new(provider)

@@ -1,5 +1,5 @@
 require 'test_helper'
-class UserSessionSweeperWorkerTest < MiniTest::Unit::TestCase
+class UserSessionSweeperWorkerTest < SimpleMiniTest
   def setup
     @session = UserSession.create!(user_id: 1, key: 'secret', revoked_at: 1.month.ago)
   end

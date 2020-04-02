@@ -40,24 +40,24 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
   end
 
   test 'tracks proxy config affecting changes on attribute write' do
-    Thread.new do
+    within_thread do
       tracker = ProxyConfigAffectingChanges::Tracker.new
       Thread.current[ProxyConfigAffectingChanges::TRACKER_NAME] = tracker
       CheapTrick = Class.new(Model)
       tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
       CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
-    end.join
+    end
   end
 
   test 'tracks proxy config affecting changes on destroy' do
-    Thread.new do
+    within_thread do
       tracker = ProxyConfigAffectingChanges::Tracker.new
       Thread.current[ProxyConfigAffectingChanges::TRACKER_NAME] = tracker
       CheapTrick = Class.new(Model)
       model = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
       tracker.expects(:track).with(instance_of(CheapTrick))
       model.destroy
-    end.join
+    end
   end
 
   class TrackerTest < ActiveSupport::TestCase

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class EventImportWorkerTest < MiniTest::Unit::TestCase
+class EventImportWorkerTest < SimpleMiniTest
 
   def test_perform
     attributes = {foo: 'foo', bar: 'bar'}
