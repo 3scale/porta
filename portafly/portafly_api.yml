@@ -1,0 +1,102 @@
+---
+openapi: 3.0.2
+info:
+  title: PortaFly
+  version: 1.0.0
+  description: |
+    A tuned API for PortaFly, a Patternfly SPA consuming 3scale Porta API MGMT solution.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+paths:
+  /developer/accounts:
+    summary: A list of developer accounts
+    description: A list of developer accounts.
+    get:
+      responses:
+        "200":
+          $ref: '#/components/responses/developerAccountList'
+      operationId: developerAccountList
+      summary: Get developer account list
+    parameters:
+    - name: page
+      description: Page in the paginated list. Defaults to 1.
+      schema:
+        type: integer
+      in: query
+      required: false
+    - name: per_page
+      description: Number of results per page. Default and max is 500.
+      schema:
+        type: integer
+      in: query
+      required: false
+    - name: state
+      description: Account state.
+      schema:
+        type: string
+      in: query
+components:
+  schemas:
+    DeveloperAccount:
+      title: Root Type for developerAccountData
+      description: A simplified format for a developer account data.
+      type: object
+      properties:
+        id:
+          description: The account ID number
+          type: integer
+        created_at:
+          format: date-time
+          description: When it was created
+          type: string
+        updated_at:
+          format: date-time
+          description: When it was last updated
+          type: string
+        state:
+          description: The current state of the account
+          type: string
+        org_name:
+          description: The organization name
+          type: string
+        admin_name:
+          description: The name of the admin user
+          type: string
+        apps_count:
+          description: The total amount of applications
+          type: integer
+      example:
+        id: 1
+        created_at: 2019-10-18T05:13:26Z
+        updated_at: 2019-10-18T05:13:27Z
+        state: approved
+        org_name: Umbrella Corp.
+        admin_name: Oswell E. Spencer
+        apps_count: 3
+  responses:
+    developerAccountList:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/DeveloperAccount'
+          examples:
+            developerAccountListExample:
+              value:
+              - id: 22
+                created_at: 2018-02-10T09:30Z
+                updated_at: 2018-02-10T09:30Z
+                state: approved
+                org_name: Capsule Corp
+                admin_name: Dr. Brief
+                apps_count: 4
+              - id: 72
+                created_at: 2018-02-10T09:30Z
+                updated_at: 2018-02-10T09:30Z
+                state: approved
+                org_name: FOXHOUND
+                admin_name: Big Boss
+                apps_count: 5
+      description: Developer accountlist
