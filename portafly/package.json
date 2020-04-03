@@ -8,6 +8,7 @@
     "date-fns": "^2.11.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
+    "fishery": "^0.3.0",
     "fs-extra": "^8.1.0",
     "history": "^4.10.1",
     "i18next": "^19.3.3",

@@ -4923,6 +4923,13 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
+fishery@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/fishery/-/fishery-0.3.0.tgz#8f1d24f69600e38e0707943e62300cad42ae1f16"
+  integrity sha512-hY2LTDq213KquLftAVgvQOcZmtx5Kr0JadWvNJgnT0NkjH0MB+Xvg6XIxbMFwkDed0CyYpcAUThgj0qWVigmbw==
+  dependencies:
+    lodash.merge "^4.6.2"
+
 flat-cache@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-2.0.1.tgz#5d296d6f04bda44a4630a301413bdbc2ec085ec0"
@@ -7057,6 +7064,11 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
+lodash.merge@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
