@@ -1,28 +1,28 @@
 ---
 logo_alt_text: Red Hat Integration logo
-logo_alt_text_desc: Alt attribute of the main logo
+logo_alt_text_description: Alt attribute of the main logo
 nav_items:
   overview: Overview
-  overview_desc: Title of Overview menu item
+  overview_description: Title of Overview menu item
   analytics: Analytics
-  analytics_desc: Title of Analytics menu item
+  analytics_description: Title of Analytics menu item
   analytics_usage: Usage
-  analytics_usage_desc: Title of Analytics > Usage menu item
+  analytics_usage_description: Title of Analytics > Usage menu item
   applications: Applications
-  applications_desc: Title of Applications menu item
+  applications_description: Title of Applications menu item
   applications_listing: Listing
-  applications_listing_desc: Title of Applications > Listing menu item
+  applications_listing_description: Title of Applications > Listing menu item
   applications_app_plans: Applications Plans
-  applications_app_plans_desc: Title of Applications > Applications Plans menu item
+  applications_app_plans_description: Title of Applications > Applications Plans menu item
   integration: Integration
-  integration_desc: Title of Integration menu item
+  integration_description: Title of Integration menu item
   integration_configuration: Configuration
-  integration_configuration_desc: Title of Integration > Configuration menu item
-  navigation_items_desc: Titles of navigation items
+  integration_configuration_description: Title of Integration > Configuration menu item
+  navigation_items_description: Titles of navigation items
 format:
   uppercase: "{{text, uppercase}}"
-  uppercase_desc: Formats a text as uppercase
+  uppercase_description: Formats a text as uppercase
   lowercase: "{{text, lowercase}}"
-  lowercase_desc: Formats a text as lowercase
-  format_desc: Utilities to format text
+  lowercase_description: Formats a text as lowercase
+  format_description: Utilities to format text
 
