@@ -189,7 +189,7 @@ commands: # reusable commands with parameters
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "36:6a:7a:93:88:52:12:dd:4c:84:3a:42:bf:8c:c3:58"
+            - "17:be:79:a1:a0:c5:38:84:a7:3c:f2:af:87:d7:f3:cf"
       - run:
           name: "Fetch oracle libraries"
           command: |
