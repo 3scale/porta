@@ -78,4 +78,19 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'The Hits metric cannot be deleted', flash[:error]
     end
   end
+
+  test 'toggle enabled' do
+    plan = FactoryBot.create(:application_plan, issuer: @service)
+    FactoryBot.create(:usage_limit, plan: plan, metric: @metric)
+    assert @metric.enabled_for_plan?(plan)
+
+    params = { application_plan_id: plan.id, id: @metric.id, format: :js }
+    put toggle_enabled_admin_application_plan_metric_path(params)
+    assert_response :success
+    refute @metric.enabled_for_plan?(plan)
+
+    put toggle_enabled_admin_application_plan_metric_path(params)
+    assert_response :success
+    assert @metric.enabled_for_plan?(plan)
+  end
 end
