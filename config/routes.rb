@@ -207,6 +207,10 @@ without fake Core server your after commit callbacks will crash and you might ge
             resources :children, :controller => 'metrics', :only => [:new, :create]
           end
           resources :mapping_rules, except: %i[show], defaults: { owner_type: 'BackendApi' }
+
+          namespace :stats do
+            get 'usage', to: 'usage#index', as: :usage
+          end
         end
       end
 
@@ -444,6 +448,11 @@ without fake Core server your after commit callbacks will crash and you might ge
           get 'usage'
           get 'usage_response_code'
           get 'summary'
+        end
+      end
+      resources :backend_apis, :path => 'backend_apis/:backend_api_id' do
+        collection do
+          get 'usage'
         end
       end
     end

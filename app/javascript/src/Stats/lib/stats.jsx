@@ -31,6 +31,12 @@ export const Stats = function ({ChartManager, Chart, Sources}) {
     }).render()
   }
 
+  function groupMetrics (list, settings) {
+    const sortedMetrics = list.metrics.sort((a, b) => (b.serviceId || 0) - (a.serviceId || 0))
+    const methodsByMetric = metric => [metric, ...list.methods.filter(method => method.parentId === metric.id)]
+    return settings.hasGroupedMethods ? sortedMetrics : sortedMetrics.flatMap(methodsByMetric)
+  }
+
   return {
     build: function ({ id, selectedState = {}, metrics, widgets = [], options = {} }) {
       const DEFAULTS = {
@@ -51,7 +57,7 @@ export const Stats = function ({ChartManager, Chart, Sources}) {
       let statsState = new StatsState(store, Object.assign({}, DEFAULT_STATE, selectedState))
 
       metrics.then(list => {
-        let groupedMetrics = settings.hasGroupedMethods ? list.metrics : [list.metrics[0], ...list.methods, ...list.metrics.slice(1)]
+        const groupedMetrics = groupMetrics(list, settings)
         let metricsSelector = new StatsMetricsSelector({statsState, metrics: groupedMetrics, container: settings.selectorContainer})
         widgets.forEach(widget => widget.render())
         let groupedMethods = settings.hasGroupedMethods ? list.methods.map(method => method.name) : null

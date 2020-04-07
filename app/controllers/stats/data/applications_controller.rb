@@ -10,7 +10,7 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application Usage by Metric"
+  ##~ op.summary    = "Application Traffic by Metric"
   ##~ op.description = "Returns the usage data for a given metric (or method) of an application."
   ##~ op.group = "application_ops"
   #

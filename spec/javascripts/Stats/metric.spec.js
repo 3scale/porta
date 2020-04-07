@@ -17,6 +17,7 @@ describe('StatsMetric', () => {
 
     expect(method).toEqual(jasmine.any(StatsMetric))
     expect(method.isMethod).toEqual(true)
+    expect(method.isHits).toEqual(false)
     expect(method.id).toEqual(42)
   })
 })

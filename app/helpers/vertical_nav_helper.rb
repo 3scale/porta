@@ -206,7 +206,7 @@ module VerticalNavHelper
 
   def service_analytics
     items = []
-    items << {id: :usage,              title: 'Usage',              path: admin_service_stats_usage_path(@service)}
+    items << {id: :usage,              title: 'Traffic',            path: admin_service_stats_usage_path(@service)}
     items << {id: :daily_averages,     title: 'Daily Averages',     path:   admin_service_stats_days_path(@service)}
     items << {id: :hourly,             title: 'Hourly Averages',    path: admin_service_stats_hours_path(@service)}
     items << {id: :top_applications,   title: 'Top Applications',   path: admin_service_stats_top_applications_path(@service)}
@@ -250,6 +250,7 @@ module VerticalNavHelper
     sections = []
     return sections unless @backend_api
     sections << {id: :overview,         title: 'Overview',           path: provider_admin_backend_api_path(@backend_api)}
+    sections << {id: :monitoring,       title: 'Analytics',          path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
     sections << {id: :methods_metrics,  title: 'Methods & Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
     sections << {id: :mapping_rules,    title: 'Mapping Rules',      path: provider_admin_backend_api_mapping_rules_path(@backend_api)}
   end

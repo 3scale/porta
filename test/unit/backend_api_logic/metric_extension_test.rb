@@ -55,4 +55,17 @@ class MetricExtensionTest < ActiveSupport::TestCase
     proxy_metric.system_name = "foo.123"
     refute proxy_metric.valid?
   end
+
+  class ClassMethodsTest < ActiveSupport::TestCase
+    test '.build_extended_system_name' do
+      assert_equal 'system_name.123', Metric.build_extended_system_name('system_name', owner_id: 123)
+      assert_equal 'system_name.123', Metric.build_extended_system_name('system_name.123', owner_id: 123)
+      assert_equal 'system_name.456.123', Metric.build_extended_system_name('system_name.456', owner_id: 123)
+    end
+
+    test '.system_name_without_suffix' do
+      assert_equal 'system_name', Metric.system_name_without_suffix('system_name', owner_id: 123)
+      assert_equal 'system_name', Metric.system_name_without_suffix('system_name.123', owner_id: 123)
+    end
+  end
 end

@@ -8,7 +8,7 @@ class Stats::Data::ServicesController < Stats::Data::BaseController
   #
   ##~ op            = e.operations.add
   ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Service Usage by Metric"
+  ##~ op.summary    = "Service Traffic by Metric"
   ##~ op.description = "Returns the usage data of a given metric (or method) of a service."
   ##~ op.group = "service_ops"
   #

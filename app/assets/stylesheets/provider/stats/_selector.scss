@@ -49,6 +49,10 @@ $zindex-dropdown: 1000 !default;
     &.is-selected {
       font-weight: $font-weight-bold;
     }
+
+    &-detail {
+      font-size: $font-size-sm;
+    }
   }
 
   &-toggle {
