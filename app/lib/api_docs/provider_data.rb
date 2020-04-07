@@ -61,12 +61,21 @@ module ApiDocs
       end
     end
 
-    def metrics
-      @metrics ||= @account.metrics.includes(:service).top_level
+    def service_metrics
+      @account.top_level_metrics.includes(:owner)
     end
 
-    METRIC_NAME = ->(metric) { "#{metric.friendly_name} | #{metric.service.name}" }
-    def metric_names
+    def backend_api_metrics
+      @account.backend_api_metrics.top_level.includes(:owner)
+    end
+
+    def metrics
+      @metrics ||= service_metrics + backend_api_metrics
+    end
+
+    METRIC_NAME = ->(metric) { "#{metric.friendly_name} | #{metric.owner.name}" }
+
+    def metric_names(metrics = self.metrics)
       metrics.map do |metric|
         { :name  => METRIC_NAME.call(metric),
           :value => metric.name }
@@ -80,6 +89,10 @@ module ApiDocs
       end
     end
 
+    def backend_api_metric_names
+      metric_names(backend_api_metrics)
+    end
+
     APP_NAME = ->(app) { [app.name, app.service&.name].compact.join(' | ') }
     def application_ids
       apps.map do |app|
@@ -89,8 +102,7 @@ module ApiDocs
     end
 
     def data_items
-      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids service_ids admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
+      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids backend_api_metric_names service_ids admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
     end
-
   end
 end

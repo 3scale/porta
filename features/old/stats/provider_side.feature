@@ -20,7 +20,7 @@ Feature: Provider stats
   Scenario: Usage stats
     When I log in as provider "foo.example.com"
     And I follow "Analytics"
-    Then I should see "Usage"
+    Then I should see "Traffic"
 
   Scenario: Top applications (multiple applications mode)
     Given a buyer "bob" signed up to provider "foo.example.com"

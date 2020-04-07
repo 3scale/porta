@@ -1,4 +1,5 @@
-- content_for :sublayout_title, "Usage"
+- content_for :title, 'Traffic analytics'
+- content_for :sublayout_title, "Traffic"
 
 - content_for :stylesheets do
   = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'
@@ -24,7 +25,10 @@ javascript:
         menuContainer: '.StatsMenu-container',
         selectorContainer: '.StatsSelector-container',
         methodsTableContainer: '.StatsMethodsTable-container',
-        csvLinkContainer: '.StatsCSVLink-container'
+        csvLinkContainer: '.StatsCSVLink-container',
+        usageMetricsUrl: '#{admin_service_stats_usage_path(@service, format: :json)}',
+        hitsMetricName: '#{@metrics.find(&:hits?).system_name}',
+        sourceCollection: 'service'
       }
     )
   })

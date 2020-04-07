@@ -6,6 +6,8 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
   def setup
     @provider = FactoryBot.create(:provider_account)
     @service = provider.default_service
+    @backend_api = provider.backend_apis.first
+
     provider.settings.allow_multiple_applications!
     provider.settings.show_multiple_applications!
     @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
@@ -19,12 +21,13 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
     @provider_admin = provider.admins.first
     @buyer_admin = buyer.admins.first!
     @metric = provider.metrics.first
+    @backend_api_metric = backend_api.metrics.first
     @application_plans = provider.application_plans.latest
     @account_plans = provider.account_plans.latest
     @service_plans = provider.service_plans.latest
   end
 
-  attr_reader :provider, :service, :buyer, :token, :provider_admin, :buyer_admin, :application, :metric, :application_plans, :account_plans, :service_plans
+  attr_reader :provider, :service, :backend_api, :buyer, :token, :provider_admin, :buyer_admin, :application, :metric, :backend_api_metric, :application_plans, :account_plans, :service_plans
 
   test 'JSON description of useful account data for provider' do
     login! provider
@@ -46,8 +49,9 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
         app_keys: [], app_ids: [], client_ids: [], client_secrets: [],
         user_keys: [{name: "#{application.name} - #{application.service.name}", value: application.user_key }],
         admin_ids: [{name: provider_admin.username, value: provider_admin.id}],
-        metric_names: [{name: "#{metric.friendly_name} | #{metric.service.name}", value: metric.name}],
-        metric_ids: [{name: "#{metric.friendly_name} | #{metric.service.name}", value: metric.id}],
+        metric_names: [service_metric_name, backend_api_metric_name],
+        metric_ids: [service_metric_id, backend_api_metric_id],
+        backend_api_metric_names: [backend_api_metric_name],
         service_ids: [{name: service.name, value: service.id}],
         application_ids: [{name: "#{application.name} | #{application.service.name}", value: application.id}],
         account_ids: [{name: buyer.name, value: buyer.id}],
@@ -60,5 +64,25 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
       },
       status: 200
     }
+  end
+
+  def metric_data(metric, value_attr: :name)
+    {name: "#{metric.friendly_name} | #{metric.owner.name}", value: metric.send(value_attr)}
+  end
+
+  def service_metric_id
+    metric_data(metric, value_attr: :id)
+  end
+
+  def service_metric_name
+    metric_data(metric, value_attr: :name)
+  end
+
+  def backend_api_metric_id
+    metric_data(backend_api_metric, value_attr: :id)
+  end
+
+  def backend_api_metric_name
+    metric_data(backend_api_metric, value_attr: :name)
   end
 end

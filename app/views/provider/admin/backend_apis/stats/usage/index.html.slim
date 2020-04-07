@@ -1,12 +1,11 @@
-= render 'api/applications/menu'
-
-h2 Traffic statistics for #{@cinstance.display_name} /  #{@cinstance.user_account.org_name}
+- content_for :title, 'Traffic analytics'
+- content_for :sublayout_title, "Traffic"
 
 - content_for :stylesheets do
   = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'
 
-- content_for :javascripts do
-  = javascript_pack_tag 'providerStats'
+  - content_for :javascripts do
+    = javascript_pack_tag 'providerStats'
 
 .Stats
   .StatsMenu-container
@@ -20,13 +19,16 @@ p.Stats-message--notice
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
-    statsApplication(#{json @cinstance.id},
+    statsUsage(#{json @backend_api.id},
       {
         chartContainer: '#chart',
         menuContainer: '.StatsMenu-container',
         selectorContainer: '.StatsSelector-container',
         methodsTableContainer: '.StatsMethodsTable-container',
-        csvLinkContainer: '.StatsCSVLink-container'
+        csvLinkContainer: '.StatsCSVLink-container',
+        usageMetricsUrl: '#{provider_admin_backend_api_stats_usage_path(@backend_api, format: :json)}',
+        hitsMetricName: '#{@metrics.hits.system_name}',
+        sourceCollection: 'backend_api'
       }
     )
   })

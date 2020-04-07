@@ -51,8 +51,9 @@ module Stats
         else
           previous_data = usage_values_in_range(range.previous, granularity, metric)
         end
-
-        result[:change] = total.percentage_change_from(previous_data.sum)
+        previous_total = previous_data.sum
+        result[:previous_total] = previous_total
+        result[:change] = total.percentage_change_from(previous_total)
 
         result
       end
@@ -60,7 +61,6 @@ module Stats
       add_three_scale_method_tracer :usage
 
       def usage_progress(options)
-
         range, granularity, metric = extract_range_and_granularity_and_metric(options)
 
         current_data  = usage_values_in_range(range, granularity, metric) # can be Metric or ResponseCode
@@ -68,13 +68,17 @@ module Stats
         previous_data = usage_values_in_range(previous_range, granularity, metric) unless options[:skip_change]
         # previous_data = usage_values_in_range(range.previous, granularity, metric) unless options[:skip_change]
         total = current_data.sum
+        previous_total = previous_data.sum
 
-        rslt = {:data => {
-                  :total       => total,
-                  :values      => current_data
-                  }
-                }.merge!(detail(metric))
-        rslt[:data][:change]= total.percentage_change_from(previous_data.sum) unless options[:skip_change]
+        rslt = {
+          data: {
+            total: total,
+            values: current_data,
+            previous_total: previous_total
+          }
+        }
+        rslt.merge!(detail(metric))
+        rslt.deep_merge!(data: { change: total.percentage_change_from(previous_total) }) unless options[:skip_change]
         rslt
       end
 
@@ -99,7 +103,6 @@ module Stats
       private
 
       def usage_for_all(items, options)
-
         metrics = items.inject([]) do |memo, item|
           memo << usage_progress(options.merge(:metric => item))
         end
