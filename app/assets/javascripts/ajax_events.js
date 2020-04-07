@@ -9,7 +9,5 @@
     .on('ajax:error', function(event, xhr, status, error){
       alert('Request failed - ' + status);
       console.error(error);
-      // report error to errorception in async manner
-      setTimeout(function(){ throw(error) }, 1);
     });
 }());
