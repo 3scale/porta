@@ -6,7 +6,9 @@ class Api::MetricsController < Api::BaseController
 
   before_action :find_service, except: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
   before_action :find_plan_and_service, only: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
-  before_action :find_metric, except: [:new, :create, :index]
+
+  before_action :find_metric, only: %i[edit update destroy]
+  before_action :find_metric_all, only: %i[toggle_visible toggle_limits_only_text toggle_enabled]
 
   activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
@@ -127,17 +129,20 @@ class Api::MetricsController < Api::BaseController
     @service   = current_user.accessible_services.find(service_id) if service_id
   end
 
+  attr_reader :service
+  delegate :metrics, to: :service, prefix: true
+
   def find_metric
-    @metric = find_metric_by(params[:id])
+    @metric = service_metrics.find(params[:id])
   end
 
-  def find_metric_by(id)
-    @service.metrics.find(id)
+  def find_metric_all
+    @metric = @service.all_metrics.find(params[:id])
   end
 
   def collection
     metric_id = params[:metric_id]
-    metric_id ? find_metric_by(metric_id).children : @service.metrics
+    metric_id ? service_metrics.find(metric_id).children : service_metrics
   end
 
   def find_plan_and_service
