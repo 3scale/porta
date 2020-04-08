@@ -18,7 +18,7 @@ div id="bulk-operations" style="display: none;"
     = javascript_include_tag 'bulk_operations.js'
     = javascript_include_tag 'vendor/jquery.tipsy.js'
 
-- show_application_plans = @stock_and_custom_application_plans > 1 && !master_on_premises?
+- show_application_plans = @application_plans.size > 1 && !master_on_premises?
 
 table class="data"
   thead
@@ -66,13 +66,13 @@ table class="data"
 
           - if display_view_portion?(:service)
             th
-              = s.collection_select :service_id, @services, :id, :name,
+              = s.collection_select :service_id, accessible_services, :id, :name,
                                       { include_blank: true },
                                       { disabled: @service }
 
           - if show_application_plans
-            - if @services
-              th = s.grouped_collection_select :plan_id, @services,
+            - if display_view_portion?(:service)
+              th = s.grouped_collection_select :plan_id, accessible_services,
                                               :application_plans, :name, :id, :name,
                                               { include_blank: true },
                                               { disabled: @plan }
