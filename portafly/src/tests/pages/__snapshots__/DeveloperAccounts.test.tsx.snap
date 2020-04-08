@@ -1,0 +1,700 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when backend returns a list of accounts should render a table with accounts 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <section
+        class="pf-c-page__main-section pf-m-light"
+      >
+        <div
+          class="pf-c-content"
+        >
+          <h1
+            class=""
+            data-pf-content="true"
+          >
+            body_title
+          </h1>
+        </div>
+      </section>
+      <section
+        class="pf-c-page__main-section"
+      >
+        <table
+          aria-label="accounts_table.aria_label"
+          class="pf-c-table pf-m-grid-md"
+          role="grid"
+        >
+          <thead
+            class=""
+          >
+            <tr>
+              <th
+                class=""
+                data-key="0"
+                data-label="accounts_table.col_group"
+                scope="col"
+              >
+                accounts_table.col_group
+              </th>
+              <th
+                class=""
+                data-key="1"
+                data-label="accounts_table.col_admin"
+                scope="col"
+              >
+                accounts_table.col_admin
+              </th>
+              <th
+                class=""
+                data-key="2"
+                data-label="accounts_table.col_signup"
+                scope="col"
+              >
+                accounts_table.col_signup
+              </th>
+              <th
+                class=""
+                data-key="3"
+                data-label="accounts_table.col_apps"
+                scope="col"
+              >
+                accounts_table.col_apps
+              </th>
+              <th
+                class=""
+                data-key="4"
+                data-label="accounts_table.col_state"
+                scope="col"
+              >
+                accounts_table.col_state
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class=""
+          >
+            <tr
+              class=""
+            >
+              <td
+                class=""
+                data-key="0"
+                data-label="accounts_table.col_group"
+              >
+                Josemi's Corp.
+              </td>
+              <td
+                class=""
+                data-key="1"
+                data-label="accounts_table.col_admin"
+              >
+                Josemi
+              </td>
+              <td
+                class=""
+                data-key="2"
+                data-label="accounts_table.col_signup"
+              >
+                2019-10-18T05:13:26Z
+              </td>
+              <td
+                class=""
+                data-key="3"
+                data-label="accounts_table.col_apps"
+              >
+                3
+              </td>
+              <td
+                class=""
+                data-key="4"
+                data-label="accounts_table.col_state"
+              >
+                approved
+              </td>
+            </tr>
+            <tr
+              class=""
+            >
+              <td
+                class=""
+                data-key="0"
+                data-label="accounts_table.col_group"
+              >
+                Damian's Corp.
+              </td>
+              <td
+                class=""
+                data-key="1"
+                data-label="accounts_table.col_admin"
+              >
+                Damian
+              </td>
+              <td
+                class=""
+                data-key="2"
+                data-label="accounts_table.col_signup"
+              >
+                2019-10-18T05:13:26Z
+              </td>
+              <td
+                class=""
+                data-key="3"
+                data-label="accounts_table.col_apps"
+              >
+                3
+              </td>
+              <td
+                class=""
+                data-key="4"
+                data-label="accounts_table.col_state"
+              >
+                approved
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <section
+      class="pf-c-page__main-section pf-m-light"
+    >
+      <div
+        class="pf-c-content"
+      >
+        <h1
+          class=""
+          data-pf-content="true"
+        >
+          body_title
+        </h1>
+      </div>
+    </section>
+    <section
+      class="pf-c-page__main-section"
+    >
+      <table
+        aria-label="accounts_table.aria_label"
+        class="pf-c-table pf-m-grid-md"
+        role="grid"
+      >
+        <thead
+          class=""
+        >
+          <tr>
+            <th
+              class=""
+              data-key="0"
+              data-label="accounts_table.col_group"
+              scope="col"
+            >
+              accounts_table.col_group
+            </th>
+            <th
+              class=""
+              data-key="1"
+              data-label="accounts_table.col_admin"
+              scope="col"
+            >
+              accounts_table.col_admin
+            </th>
+            <th
+              class=""
+              data-key="2"
+              data-label="accounts_table.col_signup"
+              scope="col"
+            >
+              accounts_table.col_signup
+            </th>
+            <th
+              class=""
+              data-key="3"
+              data-label="accounts_table.col_apps"
+              scope="col"
+            >
+              accounts_table.col_apps
+            </th>
+            <th
+              class=""
+              data-key="4"
+              data-label="accounts_table.col_state"
+              scope="col"
+            >
+              accounts_table.col_state
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class=""
+        >
+          <tr
+            class=""
+          >
+            <td
+              class=""
+              data-key="0"
+              data-label="accounts_table.col_group"
+            >
+              Josemi's Corp.
+            </td>
+            <td
+              class=""
+              data-key="1"
+              data-label="accounts_table.col_admin"
+            >
+              Josemi
+            </td>
+            <td
+              class=""
+              data-key="2"
+              data-label="accounts_table.col_signup"
+            >
+              2019-10-18T05:13:26Z
+            </td>
+            <td
+              class=""
+              data-key="3"
+              data-label="accounts_table.col_apps"
+            >
+              3
+            </td>
+            <td
+              class=""
+              data-key="4"
+              data-label="accounts_table.col_state"
+            >
+              approved
+            </td>
+          </tr>
+          <tr
+            class=""
+          >
+            <td
+              class=""
+              data-key="0"
+              data-label="accounts_table.col_group"
+            >
+              Damian's Corp.
+            </td>
+            <td
+              class=""
+              data-key="1"
+              data-label="accounts_table.col_admin"
+            >
+              Damian
+            </td>
+            <td
+              class=""
+              data-key="2"
+              data-label="accounts_table.col_signup"
+            >
+              2019-10-18T05:13:26Z
+            </td>
+            <td
+              class=""
+              data-key="3"
+              data-label="accounts_table.col_apps"
+            >
+              3
+            </td>
+            <td
+              class=""
+              data-key="4"
+              data-label="accounts_table.col_state"
+            >
+              approved
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`when backend returns an error should render an alert 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <section
+        class="pf-c-page__main-section pf-m-light"
+      >
+        <div
+          class="pf-c-content"
+        >
+          <h1
+            class=""
+            data-pf-content="true"
+          >
+            body_title
+          </h1>
+        </div>
+      </section>
+      <section
+        class="pf-c-page__main-section"
+      >
+        <div
+          aria-label="Danger Alert"
+          class="pf-c-alert pf-m-danger"
+        >
+          <div
+            class="pf-c-alert__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 0 512 512"
+              width="1em"
+            >
+              <path
+                d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+                transform=""
+              />
+            </svg>
+          </div>
+          <h4
+            class="pf-c-alert__title"
+          >
+            <span
+              class="pf-u-screen-reader"
+            >
+              Danger alert:
+            </span>
+            ERROR
+          </h4>
+          
+        </div>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <section
+      class="pf-c-page__main-section pf-m-light"
+    >
+      <div
+        class="pf-c-content"
+      >
+        <h1
+          class=""
+          data-pf-content="true"
+        >
+          body_title
+        </h1>
+      </div>
+    </section>
+    <section
+      class="pf-c-page__main-section"
+    >
+      <div
+        aria-label="Danger Alert"
+        class="pf-c-alert pf-m-danger"
+      >
+        <div
+          class="pf-c-alert__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 0 512 512"
+            width="1em"
+          >
+            <path
+              d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+              transform=""
+            />
+          </svg>
+        </div>
+        <h4
+          class="pf-c-alert__title"
+        >
+          <span
+            class="pf-u-screen-reader"
+          >
+            Danger alert:
+          </span>
+          ERROR
+        </h4>
+        
+      </div>
+    </section>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`when the request is pending should render spinner 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <section
+        class="pf-c-page__main-section pf-m-light"
+      >
+        <div
+          class="pf-c-content"
+        >
+          <h1
+            class=""
+            data-pf-content="true"
+          >
+            body_title
+          </h1>
+        </div>
+      </section>
+      <section
+        class="pf-c-page__main-section"
+      >
+        <section
+          aria-label="Loading Content Container"
+          class="pf-c-page__main-section"
+        >
+          <div
+            class="pf-c-empty-state"
+          >
+            <div
+              class="pf-c-empty-state__icon"
+            >
+              <span
+                aria-valuetext="Loading..."
+                class="pf-c-spinner pf-m-xl"
+                role="progressbar"
+              >
+                <span
+                  class="pf-c-spinner__clipper"
+                />
+                <span
+                  class="pf-c-spinner__lead-ball"
+                />
+                <span
+                  class="pf-c-spinner__tail-ball"
+                />
+              </span>
+            </div>
+            <h1
+              class="pf-c-title pf-m-lg"
+            >
+              Loading
+            </h1>
+          </div>
+        </section>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <section
+      class="pf-c-page__main-section pf-m-light"
+    >
+      <div
+        class="pf-c-content"
+      >
+        <h1
+          class=""
+          data-pf-content="true"
+        >
+          body_title
+        </h1>
+      </div>
+    </section>
+    <section
+      class="pf-c-page__main-section"
+    >
+      <section
+        aria-label="Loading Content Container"
+        class="pf-c-page__main-section"
+      >
+        <div
+          class="pf-c-empty-state"
+        >
+          <div
+            class="pf-c-empty-state__icon"
+          >
+            <span
+              aria-valuetext="Loading..."
+              class="pf-c-spinner pf-m-xl"
+              role="progressbar"
+            >
+              <span
+                class="pf-c-spinner__clipper"
+              />
+              <span
+                class="pf-c-spinner__lead-ball"
+              />
+              <span
+                class="pf-c-spinner__tail-ball"
+              />
+            </span>
+          </div>
+          <h1
+            class="pf-c-title pf-m-lg"
+          >
+            Loading
+          </h1>
+        </div>
+      </section>
+    </section>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

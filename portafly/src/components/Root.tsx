@@ -31,6 +31,13 @@ const Root: React.FunctionComponent = ({ children }) => {
       ]
     },
     {
+      title: t('nav_items.accounts'),
+      to: '/accounts',
+      items: [
+        { to: '/accounts', title: t('nav_items.accounts_listing') }
+      ]
+    },
+    {
       title: t('nav_items.integration'),
       to: '/integration',
       items: [

@@ -9,7 +9,7 @@ const formatFn: FormatFunction = (value, format) => {
   return value
 }
 
-const sections: Array<ITranslationsPages> = ['shared', 'overview', 'analytics', 'applications', 'integration']
+const sections: Array<ITranslationsPages> = ['shared', 'overview', 'analytics', 'applications', 'accounts', 'integration']
 
 const options = {
   lng: EN,
