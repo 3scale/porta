@@ -73,7 +73,7 @@ module BackendApiLogic
         def replace_path
           return {} if config_path.blank?
 
-          { replace_path: "{{uri | remove_first: '#{config_path.path}'}}" }
+          { replace_path: "{{uri | remove_first: '#{LuaUtility.escape(config_path.path)}'}}" }
         end
       end
       private_constant :Rule

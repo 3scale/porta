@@ -80,7 +80,10 @@ module BackendApiLogic
           [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/' }, nil],
           [{ private_endpoint: 'http://actual-api.behind.com/ns/', path: '/hey' }, "{{uri | remove_first: '/hey'}}"],
           [{ private_endpoint: 'https://safe-second-api.io', path: '/ho' }, "{{uri | remove_first: '/ho'}}"],
-          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/lets-go' }, "{{uri | remove_first: '/lets-go'}}"]
+          [{ private_endpoint: 'https://safe-second-api.io', path: '/foo/bar' }, "{{uri | remove_first: '/foo/bar'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/lets-go' }, "{{uri | remove_first: '/lets%-go'}}"],
+          [{ private_endpoint: 'https://safe-second-api.io/v2', path: '/let/us+go' }, "{{uri | remove_first: '/let/us%+go'}}"],
+          [{ private_endpoint: 'https://safe-api-api.io/', path: '/path%20with%20percent' }, "{{uri | remove_first: '/path%%20with%%20percent'}}"],
         ].each do |config, replace_path_value|
           expected_replace_path = replace_path_value ? { replace_path: replace_path_value } : {}
           assert_equal expected_replace_path, rule_class.new(stub(config)).replace_path
