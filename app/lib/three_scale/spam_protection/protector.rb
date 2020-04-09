@@ -35,7 +35,7 @@ module ThreeScale::SpamProtection
 
       delegate :template, to: :form
       delegate :logged_in?, to: :template, allow_nil: true
-      delegate :spam?, :checks, to: :protector
+      delegate :checks, to: :protector
       delegate :captcha_configured?, to: Recaptcha
 
       def initialize(form, protector)
@@ -60,11 +60,11 @@ module ThreeScale::SpamProtection
       end
 
       def captcha_needed?
-        captcha_required? || (!http_method.get? && spam?)
+        captcha_required? || possible_spam?
       end
 
       def enabled?
-        not logged_in? and level != :none
+        !logged_in? && level != :none
       end
 
       def to_str
@@ -89,6 +89,28 @@ module ThreeScale::SpamProtection
       end
 
       alias to_s to_str
+
+      private
+
+      def request_session
+        return {} if template.controller.blank?
+
+        template.controller.request.session
+      end
+
+      def possible_spam?
+        http_method.get? ? marked_as_possible_spam? : mark_possible_spam
+      end
+
+      def marked_as_possible_spam?
+        request_session[:marked_as_possible_spam_until].to_i > Time.now.utc.to_i
+      end
+
+      def mark_possible_spam
+        return false unless protector.spam?
+
+        request_session[:marked_as_possible_spam_until] = (Time.now.utc + 5.minutes).to_i
+      end
     end
 
     def form(form)
