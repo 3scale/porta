@@ -45,6 +45,23 @@ class Admin::Api::ApplicationPlanMetricPricingRulesController < Admin::Api::Base
     respond_with(pricing_rule)
   end
 
+  # swagger
+  ##~ sapi = source2swagger.namespace("Account Management API")
+  ##~ e = sapi.apis.add
+  ##~ e.path = "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules/{id}.json"
+  ##~ e.responseClass = "pricing_rule"
+  #
+  ##~ op = e.operations.add
+  ##~ op.httpMethod = "DELETE"
+  ##~ op.summary   = "Pricing Rule Delete"
+  ##~ op.description = "Deletes a pricing rule for a given application plan and metric."
+  ##~ op.group = "application_plan_pricing_rules"
+  #
+  ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
+  ##~ op.parameters.add @parameter_metric_id_by_id_name
+  ##~ op.parameters.add name: "id", description: "ID of the pricing rule.", dataType: "int", required: true, paramType: "path", threescale_name: "pricing_rule_ids"
+  #
   def destroy
     pricing_rule = pricing_rules.find(params[:id])
     pricing_rule.destroy
