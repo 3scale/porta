@@ -59,6 +59,18 @@ class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionDispat
     end
   end
 
+  def test_delete
+    rule = FactoryBot.create(:pricing_rule, metric: metric, plan: plan, min: 1, max: 2)
+
+    delete admin_api_application_plan_metric_pricing_rule_path(
+      application_plan_id: plan.id, metric_id: metric.id, id: rule.id,
+      format: :json, access_token: access_token_value
+    )
+
+    assert_response :success
+    assert_raise(ActiveRecord::RecordNotFound){ rule.reload }
+  end
+
   private
 
   def index_test(format:)

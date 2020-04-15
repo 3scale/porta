@@ -45,6 +45,12 @@ class Admin::Api::ApplicationPlanMetricPricingRulesController < Admin::Api::Base
     respond_with(pricing_rule)
   end
 
+  def destroy
+    pricing_rule = pricing_rules.find(params[:id])
+    pricing_rule.destroy
+    respond_with(pricing_rule)
+  end
+
   protected
 
   def application_plan
