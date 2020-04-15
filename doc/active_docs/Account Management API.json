@@ -1683,6 +1683,52 @@
       ]
     },
     {
+      "path": "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules/{id}.json",
+      "responseClass": "pricing_rule",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Pricing Rule Delete",
+          "description": "Deletes a pricing rule for a given application plan and metric.",
+          "group": "application_plan_pricing_rules",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "application_plan_id",
+              "description": "ID of the application plan.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "application_plan_ids"
+            },
+            {
+              "name": "metric_id",
+              "description": "ID of the metric.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "metric_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the pricing rule.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "pricing_rule_ids"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/application_plans/{application_plan_id}/pricing_rules.xml",
       "responseClass": "List[pricing_rule]",
       "operations": [

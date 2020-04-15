@@ -616,7 +616,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :metrics, :only => [] do
           resources :limits, :controller => 'application_plan_metric_limits', :except => [:new, :edit]
-          resources :pricing_rules, :controller => 'application_plan_metric_pricing_rules', only: [:index, :create]
+          resources :pricing_rules, controller: 'application_plan_metric_pricing_rules', only: %i[index create destroy]
         end
       end
 
