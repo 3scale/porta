@@ -17,7 +17,9 @@ module Apicast
         credentials = proxy.authentication_params_for_proxy
         extheaders = ''
 
-        uri = Addressable::URI.parse(base_endpoint)
+        uri = uri_base_endpoint
+        return unless uri
+
         uri.path, uri.query = path_and_query
 
         case proxy.credentials_location
@@ -33,6 +35,12 @@ module Apicast
       end
 
       protected
+
+      def uri_base_endpoint
+        Addressable::URI.parse(base_endpoint)
+      rescue Addressable::URI::InvalidURIError
+        nil
+      end
 
       def base_endpoint
         raise NoMethodError, __method__

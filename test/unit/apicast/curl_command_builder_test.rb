@@ -230,5 +230,15 @@ module Apicast
         assert_match %r(http://public-production.fake/\?user_key=), command.to_s
       end
     end
+
+    class InvalidEndpointTest < ActiveSupport::TestCase
+      test 'the command does not raise an error when the base_endpoint is invalid' do
+        proxy = FactoryBot.create(:proxy)
+        proxy.attributes = {sandbox_endpoint: ' https://invalid example.com'}
+        refute proxy.valid?
+
+        assert_nil Apicast::CurlCommandBuilder::StagingBuilder.new(proxy).command
+      end
+    end
   end
 end
