@@ -63,7 +63,7 @@ gem 'yabeda-prometheus'
 
 gem 'activemerchant', '~> 1.77.0'
 gem 'active_merchant-adyen12', github: '3scale/active_merchant-adyen12'
-gem 'stripe', '~> 3.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
+gem 'stripe', '~> 5.17.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 gem 'audited'
 
 gem 'acts_as_list', '~> 0.9.17'
