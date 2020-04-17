@@ -12,7 +12,7 @@ module Logic
         # Has to have default or published application plan
         # so this method should be called only in this scope
         scope :can_create_application_contract, -> {
-          query = joining { application_plans.outer }.uniq
+          query = joining { application_plans.outer }.distinct
           .where.has {
             default_application_plan_id.not_eq(nil) |
             ((application_plans.state.eq('published') & application_plans.id.not_eq(nil)))
