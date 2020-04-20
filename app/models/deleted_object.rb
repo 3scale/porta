@@ -4,6 +4,8 @@ class DeletedObject < ApplicationRecord
   belongs_to :owner, polymorphic: true
   belongs_to :object, polymorphic: true
 
+  serialize :metadata, Hash
+
   [Metric, Contract, User].each do |scoped_class|
     scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
   end
