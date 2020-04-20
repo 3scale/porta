@@ -7,14 +7,14 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     Logic::RollingUpdates.stubs(enabled?: true)
     Account.any_instance.stubs(:provider_can_use?).returns(true)
 
-    provider = FactoryBot.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @service = provider.default_service
     @backend_api = FactoryBot.create(:backend_api, account: provider)
 
     login! provider
   end
 
-  attr_reader :service, :backend_api
+  attr_reader :provider, :service, :backend_api
 
   test '#index' do
     service.backend_api_configs.create!(backend_api: backend_api, path: 'whatever')
@@ -131,5 +131,26 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
     get admin_service_backend_usages_path(service)
     assert_response :success
+  end
+
+  test 'member user' do
+    member = FactoryBot.create(:member,
+      account: provider,
+      admin_sections: %w[portal finance settings partners monitoring plans policy_registry],
+      member_permission_service_ids: [service.id]
+    )
+    member.activate!
+
+    logout!
+    login! provider, user: member
+
+    get admin_service_backend_usages_path(service)
+    assert_response :success
+
+    member.member_permission_service_ids = []
+    member.save!
+
+    get admin_service_backend_usages_path(service)
+    assert_response :forbidden
   end
 end

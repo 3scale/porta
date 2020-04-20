@@ -1,61 +1,70 @@
+# frozen_string_literal: true
+
 # here we define abilities for members of provider account
 Ability.define do |user|
+  next unless user
 
-  if user && user.member? && user.account.provider? && !user.account.master?
-    # if you update this block, update also provider_admin.rb :/
-    if user.has_permission?("finance")
-      can :admin, :finance
+  account = user.account
 
-      if user.account.settings.finance.allowed?
-        can [ :read, :update ], Finance::BillingStrategy, :account_id => user.account.id
-        can :manage, Invoice, :provider_account_id => user.account.id
+  next unless user.member? && account.tenant?
 
-        if user.account.billing_strategy.charging_enabled?
-          can :manage, :charging
-        end
+  # if you update this block, update also provider_admin.rb :/
+  if user.has_permission?('finance')
+    can :admin, :finance
+
+    if account.settings.finance.allowed?
+      can %i[read update], Finance::BillingStrategy, account_id: account.id
+      can :manage, Invoice, provider_account_id: account.id
+
+      if account.billing_strategy.charging_enabled?
+        can :manage, :charging
       end
     end
-
-    if user.has_permission?("partners")
-      can :manage, :partners
-      can :manage, :applications
-      can :admin, :multiple_users
-      can :admin, :multiple_applications
-
-      can :create, Account
-      can :update, Account if user.account.provider_can_use?(:service_permissions)
-
-      can [:read, :show, :edit, :update], Cinstance, user.accessible_cinstances.where_values_hash
-
-      # abilities for buyer users
-      can [:read, :update, :update_role, :destroy, :suspend, :unsuspend], User, account: { provider_account_id: user.account_id }
-    end
-
-    if user.has_permission?("plans")
-      can :manage, :plans
-      can :admin, :account_plans
-      can :admin, :service_plans
-      can :admin, :service_contracts
-    end
-
-    if user.has_permission?("settings")
-      can :manage, :settings
-    end
-
-    if user.has_permission?("monitoring")
-      can :manage, :monitoring
-      can :manage, :analytics
-    end
-
-    if user.has_permission?("portal")
-      can :manage, :portal
-    end
-
-    if user.has_permission?("legal")
-      can :manage, LegalTerm
-    end
-
-    # Member cannot manage permissions, neither his own, nor other members'
-    cannot :update_permissions, User
   end
+
+  if user.has_permission?('partners')
+    can :manage, :partners
+    can :manage, :applications
+    can :admin, :multiple_users
+    can :admin, :multiple_applications
+
+    can :create, Account
+    can :update, Account if account.provider_can_use?(:service_permissions)
+
+    can %i[read show edit update], Cinstance, user.accessible_cinstances.where_values_hash
+
+    # abilities for buyer users
+    can %i[read update update_role destroy suspend unsuspend], User, account: { provider_account_id: user.account_id }
+  end
+
+  if user.has_permission?('plans')
+    can :manage, :plans
+    can :admin, :account_plans
+    can :admin, :service_plans
+    can :admin, :service_contracts
+  end
+
+  if user.has_permission?('settings')
+    can :manage, :settings
+  end
+
+  if user.has_permission?('monitoring')
+    can :manage, :monitoring
+    can :manage, :analytics
+  end
+
+  if user.has_permission?('portal')
+    can :manage, :portal
+  end
+
+  if user.has_permission?('legal')
+    can :manage, LegalTerm
+  end
+
+  if user.has_permission?('services')
+    can :manage, BackendApiConfig if account.provider_can_use?(:api_as_product)
+  end
+
+  # Member cannot manage permissions, neither his own, nor other members'
+  cannot :update_permissions, User
 end
