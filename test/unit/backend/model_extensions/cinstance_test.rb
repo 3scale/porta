@@ -100,15 +100,6 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
     cinstance.save!
   end
 
-  test 'delete backend application when cinstance is destroyed' do
-    cinstance = FactoryBot.create(:cinstance)
-
-    ThreeScale::Core::Application.expects(:delete)
-      .with(cinstance.service.backend_id, cinstance.application_id)
-
-    cinstance.destroy
-  end
-
   test 'creates user_key to application_id mapping when provider cinstance is created' do
     service_id = user_key = app_id = nil
 
@@ -178,18 +169,6 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
       .with(plan.service.backend_id, old_user_key)
 
     cinstance.update_attribute(:user_key, '')
-  end
-
-
-  test 'deletes user_key to application_id mapping when cinstance is destroyed' do
-    plan      = FactoryBot.create(:application_plan)
-    buyer     = FactoryBot.create(:buyer_account)
-    cinstance = Cinstance.create!(:plan => plan, :user_account => buyer)
-
-    ThreeScale::Core::Application.expects(:delete_id_by_key)
-      .with(plan.service.backend_id, cinstance.user_key)
-
-    cinstance.destroy
   end
 
   test '#delete_backend_cinstance deletes application_keys, referrer_filters, user_key and application' do

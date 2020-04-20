@@ -89,16 +89,5 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
       expect_backend_delete_referrer_filter(@application, 'some-key')
       @referrer_filters.remove('some-key')
     end
-
-    should 'delete filters when app is deleted' do
-      @referrer_filters.add('some-key')
-
-      @application.reload
-
-      ReferrerFilter.enable_backend!
-      expect_backend_delete_referrer_filter(@application, 'some-key')
-
-      @application.destroy
-    end
   end
 end
