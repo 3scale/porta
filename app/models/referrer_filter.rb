@@ -14,11 +14,13 @@ class ReferrerFilter < ApplicationRecord
 
   attr_readonly :value
 
+  after_commit :destroy_backend_value, on: :destroy, unless: :destroyed_by_association
+
+  extend BackendClient::ToggleBackend
+
   before_destroy :cache_needed_associations
 
   delegate :account, to: :application
-
-  extend BackendClient::ToggleBackend
 
   module AssociationExtension
     include System::AssociationExtension
