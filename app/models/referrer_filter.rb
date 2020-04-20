@@ -1,4 +1,6 @@
 class ReferrerFilter < ApplicationRecord
+  include SaveDestroyForApplicationAssociation
+
   REFERRER_FILTERS_LIMIT = 5
 
   belongs_to :application, :class_name => 'Cinstance', :inverse_of => :referrer_filters
