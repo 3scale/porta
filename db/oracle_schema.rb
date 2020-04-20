@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200324130825) do
+ActiveRecord::Schema.define(version: 20200420104331) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38,                  null: false
@@ -499,6 +499,7 @@ ActiveRecord::Schema.define(version: 20200324130825) do
     t.integer  "object_id",   precision: 38
     t.string   "object_type"
     t.datetime "created_at",  precision: 6,  null: false
+    t.text     "metadata"
   end
 
   add_index "deleted_objects", ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id"

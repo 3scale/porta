@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200324130825) do
+ActiveRecord::Schema.define(version: 20200420104331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -474,6 +474,7 @@ ActiveRecord::Schema.define(version: 20200324130825) do
     t.bigint   "object_id"
     t.string   "object_type"
     t.datetime "created_at",  null: false
+    t.text     "metadata"
     t.index ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id", using: :btree
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id", using: :btree
   end
