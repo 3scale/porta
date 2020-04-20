@@ -64,23 +64,54 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
     assert_match /must be a path separated by/, (JSON.parse(response.body).dig('errors', 'path') || []).join
   end
 
-  test 'without permission' do
-    member = FactoryBot.create(:member, account: tenant)
+  test 'member user with permission' do
+    service_id = service.id
+
+    member = FactoryBot.create(:member, account: tenant, admin_sections: %w[partners], member_permission_service_ids: [service_id])
+    member.activate!
     access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').value
 
-    post admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value), {path: 'foo/bar', backend_api_id: backend_api.id}
+    collection_params = { service_id: service_id, access_token: access_token_value }
+
+    get admin_api_service_backend_usages_path(collection_params)
+    assert_response :success
+
+    post admin_api_service_backend_usages_path(collection_params), { path: 'foo', backend_api_id: backend_api.id }
+    assert_response :success
+
+    resource_params = collection_params.merge(id: JSON.parse(response.body).dig('backend_usage', 'id'))
+
+    get admin_api_service_backend_usage_path(resource_params)
+    assert_response :success
+
+    put admin_api_service_backend_usage_path(resource_params), { path: 'bar' }
+    assert_response :success
+
+    delete admin_api_service_backend_usage_path(resource_params)
+    assert_response :success
+  end
+
+  test 'member user without permission' do
+    member = FactoryBot.create(:member, account: tenant, admin_sections: %w[partners], member_permission_service_ids: [])
+    member.activate!
+    access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').value
+
+    collection_params = { service_id: service.id, access_token: access_token_value }
+    resource_params = collection_params.merge(id: backend_api_config.id)
+
+    get admin_api_service_backend_usage_path(resource_params)
     assert_response :forbidden
 
-    get admin_api_service_backend_usages_path(service_id: service.id, access_token: access_token_value)
+    put admin_api_service_backend_usage_path(resource_params), { path: 'bar' }
     assert_response :forbidden
 
-    delete admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    delete admin_api_service_backend_usage_path(resource_params)
     assert_response :forbidden
 
-    put admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value), {path: 'foo/bar/updated'}
+    get admin_api_service_backend_usages_path(collection_params)
     assert_response :forbidden
 
-    get admin_api_service_backend_usage_path(service_id: service.id, id: backend_api_config.id, access_token: access_token_value)
+    post admin_api_service_backend_usages_path(collection_params), { path: 'foo', backend_api_id: FactoryBot.create(:backend_api, account: tenant).id }
     assert_response :forbidden
   end
 
