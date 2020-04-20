@@ -10,13 +10,9 @@ module Backend
 
           after_commit :update_provider_backend_service_if_user_key_changed, :on => :update
 
-          after_commit :update_backend_user_key_to_application_id_mapping, :unless => :destroyed?
-          after_commit :delete_backend_user_key_to_application_id_mapping, :on => :destroy
+          after_commit :update_backend_user_key_to_application_id_mapping, unless: :destroyed?
 
-          after_commit :update_backend_application, :unless => :destroyed?
-          after_destroy { ThreeScale::AfterCommitOnDestroy.enqueue(method(:delete_backend_application))}
-          after_commit { ThreeScale::AfterCommitOnDestroy.run! }
-          after_rollback { ThreeScale::AfterCommitOnDestroy.clear! }
+          after_commit :update_backend_application, unless: :destroyed?
 
           attr_readonly :application_id
         end
@@ -71,7 +67,8 @@ module Backend
       end
 
       def delete_backend_user_key_to_application_id_mapping
-        ThreeScale::Core::Application.delete_id_by_key(service.backend_id, user_key) unless service.nil? || service.id.blank? || user_key.blank?
+        return true if !service || !service.id || user_key.blank?
+        ThreeScale::Core::Application.delete_id_by_key(service.backend_id, user_key)
         true
       end
 
