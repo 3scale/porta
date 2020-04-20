@@ -14,6 +14,18 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     ApplicationKey.enable_backend!
   end
 
+  test 'archive_as_deleted' do
+    application = FactoryBot.create(:simple_cinstance)
+
+    application_key = FactoryBot.create(:application_key, application: application)
+    assert_no_difference(DeletedObject.application_keys.method(:count)) { application_key.destroy! }
+
+    application_key = FactoryBot.create(:application_key, application: application)
+    application_key.stubs(destroyed_by_association: true)
+    assert_difference(DeletedObject.application_keys.method(:count)) { application_key.destroy! }
+    assert_equal application_key.id, DeletedObject.application_keys.last!.object_id
+  end
+
   test 'have immutable value' do
     assert_raise(ActiveRecord::ActiveRecordError) do
       subject.update_attribute :value, 'another'
