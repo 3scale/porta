@@ -32,10 +32,7 @@ class BackendDeleteApplicationWorker < ApplicationJob
   end
 
   def build_association_object(deleted_object)
-    obj_attrs = {id: deleted_object.object_id, value: deleted_object.metadata[:value]}
-    deleted_object.object_type.constantize.new(obj_attrs, without_protection: true).tap do |object|
-      object.application = application
-    end
+    deleted_object.object_instance { |object| object.application = application }
   end
 
   def delete_backend_associations(klass)
