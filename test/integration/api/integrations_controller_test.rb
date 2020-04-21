@@ -170,4 +170,22 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
     get edit_admin_service_integration_path(service_id: service.id)
     assert_response :not_found
   end
+
+  def test_example_curl
+    service = @provider.default_service
+    FactoryBot.create(:service_token, service: service)
+    FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'sandbox')
+    Api::IntegrationsShowPresenter.any_instance.expects(:apicast_config_ready?).returns(true).at_least_once
+    Api::IntegrationsShowPresenter.any_instance.expects(:any_sandbox_configs?).returns(true).at_least_once
+
+    Service.any_instance.expects(:oauth?).returns(true).at_least_once
+    get admin_service_integration_path(service_id: service.id)
+    assert_response :success
+    assert_not_match 'Example curl for testing', response.body
+
+    Service.any_instance.expects(:oauth?).returns(false).at_least_once
+    get admin_service_integration_path(service_id: service.id)
+    assert_response :success
+    assert_match 'Example curl for testing', response.body
+  end
 end

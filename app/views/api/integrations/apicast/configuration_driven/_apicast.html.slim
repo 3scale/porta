@@ -54,17 +54,18 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
           dl.u-dl
             dt.u-dl-term URL
             dd.u-dl-definition = @show_presenter.staging_proxy_endpoint
-            dt.u-dl-term Example curl for testing
-            dd.u-dl-definition
-              = api_test_curl(@proxy)
-              - unless @service.cinstances.any?
-                br
-                br
-                hr
-                em
-                  => t('api.integrations.proxy.curl.no_application')
-                  - unless @service.application_plans.any?
-                    = link_to t('api.integrations.proxy.curl.no_application_plan'), admin_service_application_plans_path(@service)
+            - unless @service.oauth?
+              dt.u-dl-term Example curl for testing
+              dd.u-dl-definition
+                = api_test_curl(@proxy)
+                - unless @service.cinstances.any?
+                  br
+                  br
+                  hr
+                  em
+                    => t('api.integrations.proxy.curl.no_application')
+                    - unless @service.application_plans.any?
+                      = link_to t('api.integrations.proxy.curl.no_application_plan'), admin_service_application_plans_path(@service)
             dt.u-dl-term Version
             dd.u-dl-definition
               ' v.
