@@ -172,7 +172,8 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_example_curl
-    service = FactoryBot.create(:simple_service, account: @provider)
+    service = @provider.default_service
+    FactoryBot.create(:service_token, service: service)
     FactoryBot.create(:proxy_config, proxy: service.proxy, environment: 'sandbox')
     Api::IntegrationsShowPresenter.any_instance.expects(:apicast_config_ready?).returns(true).at_least_once
     Api::IntegrationsShowPresenter.any_instance.expects(:any_sandbox_configs?).returns(true).at_least_once
