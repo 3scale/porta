@@ -5,6 +5,7 @@ import analytics from 'i18n/locales/en/analytics.yml'
 import applications from 'i18n/locales/en/applications.yml'
 import accounts from 'i18n/locales/en/accounts.yml'
 import integration from 'i18n/locales/en/integration.yml'
+import login from 'i18n/locales/en/login.yml'
 
 export {
   shared,
@@ -12,5 +13,6 @@ export {
   analytics,
   applications,
   accounts,
-  integration
+  integration,
+  login
 }

@@ -1,6 +1,10 @@
 ---
 logo_alt_text: Red Hat Integration logo
 logo_alt_text_description: Alt attribute of the main logo
+logout_text: Log out
+buttons:
+  submit: Submit
+  cancel: Cancel
 navigation_items:
   overview: Overview
   overview_description: Title of Overview menu item
