@@ -1,5 +1,5 @@
 class Cinstance < Contract
-  include ArchiveDeletionBelongingToService
+  include SaveDestroyForServiceAssociation
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 

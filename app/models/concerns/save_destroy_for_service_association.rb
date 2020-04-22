@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ArchiveDeletionBelongingToService
+module SaveDestroyForServiceAssociation
   extend ActiveSupport::Concern
   included do
     after_destroy :archive_as_deleted
