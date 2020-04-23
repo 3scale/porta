@@ -5,7 +5,6 @@ import { AuthProvider } from 'auth'
 import {
   SwitchWith404,
   LazyRoute,
-  PrivateRoute,
   Root
 } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
@@ -13,14 +12,12 @@ import { LastLocationProvider } from 'react-router-last-location'
 const getOverviewPage = () => import('pages/Overview')
 const getApplicationsPage = () => import('pages/Applications')
 const getAccountsPage = () => import('pages/DeveloperAccounts')
-const getLoginPage = () => import('pages/Login')
 
 const PagesSwitch = () => (
   <SwitchWith404>
     <LazyRoute path="/" exact getComponent={getOverviewPage} />
-    <LazyRoute path="/login" exact getComponent={getLoginPage} />
-    <PrivateRoute><LazyRoute path="/applications" exact getComponent={getApplicationsPage} /></PrivateRoute>
-    <PrivateRoute><LazyRoute path="/accounts" exact getComponent={getAccountsPage} /></PrivateRoute>
+    <LazyRoute path="/applications" exact getComponent={getApplicationsPage} />
+    <LazyRoute path="/accounts" exact getComponent={getAccountsPage} />
     <Redirect path="/overview" to="/" exact />
   </SwitchWith404>
 )
