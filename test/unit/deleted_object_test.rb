@@ -18,6 +18,17 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_same_elements users.map(&:id),     DeletedObject.users.pluck(:object_id)
   end
 
+  test 'scopes application_keys and referrer_filters' do
+    application = FactoryBot.build_stubbed(:simple_cinstance)
+    app_keys = FactoryBot.build_stubbed_list(:application_key, 2, application: application)
+    app_keys.each { |app_key| DeletedObject.create(owner: application, object: app_key) }
+    ref_filters = FactoryBot.build_stubbed_list(:referrer_filter, 2, application: application)
+    ref_filters.each { |ref_filter| DeletedObject.create(owner: application, object: ref_filter) }
+
+    assert_same_elements app_keys.map(&:id),    DeletedObject.application_keys.pluck(:object_id)
+    assert_same_elements ref_filters.map(&:id), DeletedObject.referrer_filters.pluck(:object_id)
+  end
+
   test 'deleted_owner' do
     service = FactoryBot.create(:simple_service)
     metric = FactoryBot.create(:metric, service: service)
