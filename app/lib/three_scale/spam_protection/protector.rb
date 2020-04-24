@@ -1,4 +1,21 @@
 module ThreeScale::SpamProtection
+
+  class SessionStore
+    attr_reader :session
+
+    def initialize(session)
+      @session = session
+    end
+
+    def marked_as_possible_spam?
+      session[:marked_as_possible_spam_until].to_i > Time.now.utc.to_i
+    end
+
+    def mark_possible_spam
+      session[:marked_as_possible_spam_until] = (Time.now.utc + 5.minutes).to_i
+    end
+  end
+
   class Protector
     attr_reader :config, :checks
     delegate :check, :to => :config
@@ -31,16 +48,18 @@ module ThreeScale::SpamProtection
     class FormProtector
       include Recaptcha::ClientHelper
 
-      attr_reader :form, :protector
+      attr_reader :form, :protector, :session_store
 
       delegate :template, to: :form
       delegate :logged_in?, to: :template, allow_nil: true
       delegate :checks, to: :protector
       delegate :captcha_configured?, to: Recaptcha
+      delegate :marked_as_possible_spam?, to: :session_store
 
       def initialize(form, protector)
         @form = form
         @protector = protector
+        @session_store = SessionStore.new(request_session)
       end
 
       def http_method
@@ -93,7 +112,7 @@ module ThreeScale::SpamProtection
       private
 
       def request_session
-        return {} if template.controller.blank?
+        return {} if template&.controller.blank?
 
         template.controller.request.session
       end
@@ -102,14 +121,10 @@ module ThreeScale::SpamProtection
         http_method.get? ? marked_as_possible_spam? : mark_possible_spam
       end
 
-      def marked_as_possible_spam?
-        request_session[:marked_as_possible_spam_until].to_i > Time.now.utc.to_i
-      end
-
       def mark_possible_spam
         return false unless protector.spam?
 
-        request_session[:marked_as_possible_spam_until] = (Time.now.utc + 5.minutes).to_i
+        session_store.mark_possible_spam
       end
     end
 

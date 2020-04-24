@@ -12,7 +12,7 @@ module ThreeScale::SpamProtection
         verify_recaptcha(model: object, attribute: :recaptcha)
       end
 
-      def spam_check(object)
+      def spam_check(object, session_store: ThreeScale::SpamProtection::SessionStore)
         return true if logged_in?
 
         case level = site_account.settings.spam_protection_level
@@ -21,6 +21,7 @@ module ThreeScale::SpamProtection
           true
         when :auto
           if object.spam?
+            session_store.new(request.session).mark_possible_spam
             Rails.logger.debug "[SpamProtection][Integration] Captcha filled and object is spam - verifying captcha"
             verify_captcha(object)
           else
