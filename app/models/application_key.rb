@@ -1,4 +1,5 @@
 class ApplicationKey < ApplicationRecord
+  include SaveDestroyForApplicationAssociation
 
   KEYS_LIMIT = 5
 
