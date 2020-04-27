@@ -8,7 +8,6 @@ class Applications::ApplicationDeletedEvent < ApplicationRelatedEvent
     new(
       application: MissingModel::MissingApplication.new(id: application.id),
       service_id: service_id,
-      user_key: application.user_key,
       application_id: application.application_id,
       metadata: {
         provider_id: application.provider_account_id || application.tenant_id,
