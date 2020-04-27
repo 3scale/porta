@@ -176,13 +176,6 @@ FactoryBot.define do
         account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
       end
     end
-
-    trait(:with_default_backend_api) do
-      after(:create) do |account|
-        backend_api = FactoryBot.create(:backend_api, account: account)
-        FactoryBot.create(:backend_api_config, service: account.default_service, backend_api: backend_api)
-      end
-    end
   end
 
   factory(:provider_with_billing, :parent => :provider_account) do
