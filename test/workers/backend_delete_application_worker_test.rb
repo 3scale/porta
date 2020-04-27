@@ -13,7 +13,9 @@ class BackendDeleteApplicationWorkerTest < ActiveSupport::TestCase
     ref_filters.each { |ref_filter| DeletedObject.create(owner: application, object: ref_filter, metadata: {value: ref_filter.value}) }
 
     app_key_of_another_application = FactoryBot.build_stubbed(:application_key)
+    ref_fil_of_another_application = FactoryBot.build_stubbed(:referrer_filter)
     DeletedObject.create(object: app_key_of_another_application, owner: app_key_of_another_application.application)
+    DeletedObject.create(object: ref_fil_of_another_application, owner: ref_fil_of_another_application.application)
 
     seq = sequence('destroy sequence')
     app_keys.each { |app_key| ThreeScale::Core::ApplicationKey.expects(:delete).with(service.id.to_s, application.application_id, app_key.value).in_sequence(seq) }
