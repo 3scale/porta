@@ -133,21 +133,6 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     end
   end
 
-  test 'delete keys when app is deleted' do
-    @application_keys.add('some-key')
-
-    ApplicationKey.enable_backend!
-
-    @application.reload
-
-    @application.expects(:web_hook_human_event).with(:event => 'deleted')
-    @application.expects(:web_hook_human_event).with(:event => 'key_deleted')
-    expect_backend_delete_key(@application, 'some-key')
-
-    @application.destroy
-  end
-
-
   def test_account_destroy_does_not_send_email
     account = subject.account.reload
     CinstanceMessenger.expects(:key_deleted).never # because we are destroying the account and application
