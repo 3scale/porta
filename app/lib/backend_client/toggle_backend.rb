@@ -41,11 +41,7 @@ module BackendClient
       base.instance_eval do
         class_attribute :backend_enabled, :instance_reader => false, :instance_writer => false
 
-        after_commit :update_backend_value, :on => :create, :if => proc { base.backend_enabled? }
-
-        after_destroy { ThreeScale::AfterCommitOnDestroy.enqueue(method(:destroy_backend_value)) if base.backend_enabled? }
-        after_commit { ThreeScale::AfterCommitOnDestroy.run! }
-        after_rollback { ThreeScale::AfterCommitOnDestroy.clear! }
+        after_commit :update_backend_value, on: :create, if: proc { base.backend_enabled? }
       end
 
       base.enable_backend!

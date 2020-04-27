@@ -31,6 +31,8 @@ class ApplicationKey < ApplicationRecord
 
   extend BackendClient::ToggleBackend
 
+  after_commit :destroy_backend_value, on: :destroy, unless: :destroyed_by_association
+
   scope :without, ->(value) { where(['value <> ?', value])}
 
   module AssociationExtension
