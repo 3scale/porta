@@ -57,13 +57,17 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
     ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
     Recaptcha::Verify.stubs(skip?: false)
 
+    get developer_portal.new_admin_account_password_path
+    assert_response :success
+    assert_not body.include? 'g-recaptcha'
+
     post developer_portal.admin_account_password_path(email: 'user@example.com')
     assert_equal 'Spam protection failed.', flash[:error]
     assert_redirected_to developer_portal.new_admin_account_password_path(request_password_reset: true)
 
     get developer_portal.new_admin_account_password_path
     assert_response :success
-    assert_not body.include? 'g-recaptcha'
+    assert body.include? 'g-recaptcha'
   end
 
   test 'captcha is not present when spam security disabled' do
