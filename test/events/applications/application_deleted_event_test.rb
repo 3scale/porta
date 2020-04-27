@@ -18,8 +18,11 @@ class Applications::ApplicationDeletedEventTest < ActiveSupport::TestCase
     event = Applications::ApplicationDeletedEvent.create_and_publish!(application.reload)
 
     event_stored = EventStore::Repository.find_event!(event.event_id)
+    assert_equal application.id, event_stored.application.id
+    assert_equal application.service_id, event_stored.service_id
+    assert_equal application.application_id, event_stored.application_id
     assert_equal provider_id, event_stored.metadata[:provider_id]
-    assert event_stored.metadata.dig(:zync, :service_id)
+    assert_equal application.service_id, event_stored.metadata.dig(:zync, :service_id)
     assert event_stored.metadata[:zync].has_key?(:proxy_id)
     assert_nil event_stored.metadata.dig(:zync, :proxy_id)
   end
