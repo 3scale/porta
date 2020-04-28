@@ -53,19 +53,12 @@ module TestHelpers
           []
         end
 
-        clear_method ThreeScale::Core::User.singleton_class,
-          :load, :delete_all_for_service
         clear_method ThreeScale::Core::ApplicationKey.singleton_class,
           :save, :delete
         clear_method ThreeScale::Core::ApplicationReferrerFilter.singleton_class,
           :save, :delete
         clear_method ThreeScale::Core::ServiceError.singleton_class, :load_all do |*_|
           ThreeScale::Core::APIClient::Collection.new([], 0)
-        end
-
-        # these are required to return true for some cukes to be happy
-        on_method ThreeScale::Core::User.singleton_class, :save!, :delete! do |*_|
-          true
         end
 
         clear_method ThreeScale::Core::AlertLimit.singleton_class, :save, :load_all do |*_|
