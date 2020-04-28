@@ -477,7 +477,7 @@ GEM
       addressable
       excon
       faraday (>= 0.9)
-    pisoni (1.27.0)
+    pisoni (1.29.0)
       faraday (>= 0.9.1)
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
@@ -887,7 +887,7 @@ DEPENDENCIES
   open_id_authentication
   paperclip (~> 5.3.0)
   percy-capybara (~> 2.5.1)
-  pisoni (~> 1.26)
+  pisoni (~> 1.29)
   prawn-core!
   prawn-format (= 0.2.1)
   prawn-layout (= 0.2.1)
