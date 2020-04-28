@@ -240,7 +240,7 @@ group :test do
   # performance tests
   gem 'ruby-prof'
 
-  gem 'percy-capybara', '~> 2.5.1', require: false
+  gem 'percy-capybara', '~> 4.2.0', require: false
 end
 
 group :development, :test do
