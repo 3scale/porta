@@ -17,24 +17,11 @@ class BackendDeleteStatsWorkerTest < ActiveSupport::TestCase
 
   test 'perform' do
     Timecop.freeze do
-      ThreeScale::Core::Service.expects(:delete_stats).with do |service_id, delete_job|
-        service_id == service.id && assert_delete_job_params(delete_job)
+      ThreeScale::Core::Service.expects(:delete_stats).with do |service_id|
+        service_id == service.id
       end
 
       Sidekiq::Testing.inline! { BackendDeleteStatsWorker.perform_async(event.event_id) }
     end
-  end
-
-  private
-
-  def assert_delete_job_params(delete_job)
-    deletejobdef = delete_job[:deletejobdef] || {}
-    [
-      -> { (deletejobdef[:applications] || []).sort == applications.map(&:id).sort },
-      -> { (deletejobdef[:metrics] || []).sort == metrics.map(&:id).sort },
-      -> { deletejobdef[:users] == [] },
-      -> { deletejobdef[:from] == service.created_at.utc.to_i },
-      -> { deletejobdef[:to] == Time.now.utc.to_i }
-    ].all?(&:call)
   end
 end
