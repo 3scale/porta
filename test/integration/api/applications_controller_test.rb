@@ -123,6 +123,15 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
         assert_match 'was a problem getting utilization', response.body
       end
 
+      test 'shows renders app and a message for utilization when backend result is nil' do
+        ThreeScale::Core::Utilization.expects(:load).with(application.service.backend_id, application.application_id).returns(nil)
+
+        get admin_service_application_path(application.service, application)
+
+        assert_response :success
+        assert_match 'This is an unmetered application, there are no limits defined', response.body
+      end
+
       test 'show renders application for the permitted services ids when there is no access to all services' do
         second_service = FactoryBot.create(:simple_service, account: provider)
         second_plan = FactoryBot.create(:application_plan, issuer: second_service)
