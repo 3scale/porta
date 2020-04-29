@@ -84,16 +84,11 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2222, plan_id
   end
 
-  test '#create' do
-    post api_invoice_line_items_path(@invoice.id), line_item_params, accept: Mime[:json]
-    assert_response :success
-  end
-
   test '#create with attributes saved correctly' do
     assert_difference LineItem.method(:count) do
       post api_invoice_line_items_path(@invoice.id), line_item_params, accept: Mime[:json]
     end
-    new_line_item = LineItem.reorder(:id).last
+    new_line_item = LineItem.reorder(:id).last!
     line_item_params.each do |field_name, field_value|
       assert_equal field_value, new_line_item.send(field_name)
     end
