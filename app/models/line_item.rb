@@ -44,6 +44,8 @@ class LineItem < ApplicationRecord
 
   def cost=(value)
     self[:cost] = BigDecimal((value || 0).to_s).round(DECIMALS)
+  rescue ArgumentError
+    self[:cost] = 0
   end
 
   def custom?
