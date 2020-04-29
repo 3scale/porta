@@ -101,6 +101,15 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response 422
   end
 
+  test 'does not raise an error if the cost cannot be converted to BigDecimal' do
+    assert_difference '@invoice.line_items.count', 1 do
+      post api_invoice_line_items_path(@invoice.id), line_item_params.merge(cost: '$5.50'), accept: Mime[:json]
+    end
+    assert_response :created
+    line_item = @invoice.line_items.order(:id).last!
+    assert_equal ThreeScale::Money.new(0, line_item.currency), line_item.cost 
+  end
+
   test '#destroy' do
     assert_difference( LineItem.method(:count), -1 ) do
       delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), nil, accept: Mime[:json]
