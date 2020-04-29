@@ -33,6 +33,10 @@ module ThreeScale
         raw_info['sub']
       end
 
+      def user_role
+        raw_info['user_role']
+      end
+
       def realm
         authentication.options.site || raise(MissingRealmError, authentication.options)
       end

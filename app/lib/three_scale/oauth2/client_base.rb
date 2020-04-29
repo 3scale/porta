@@ -154,6 +154,10 @@ module ThreeScale
         access_token.params['id_token']
       end
 
+      def admin_access
+        (raw_info['admin_sections'] || []).map { |str| str.parameterize.underscore.to_sym }
+      end
+
       private
 
       def scopes

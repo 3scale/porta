@@ -2,7 +2,7 @@ module ThreeScale
   module OAuth2
     class UserData
 
-      ATTRIBUTES = %i[email email_verified username uid org_name kind authentication_id id_token].freeze
+      ATTRIBUTES = %i[email email_verified username admin_access uid org_name kind authentication_id id_token].freeze
 
       # @param [ThreeScale::OAuth2::ClientBase] client
       def self.build(client)
@@ -10,6 +10,7 @@ module ThreeScale
           email: client.email,
           email_verified: client.email_verified?,
           username: client.username,
+          admin_access: client.admin_access,
           uid: client.uid,
           org_name: client.org_name,
           kind: client.kind,

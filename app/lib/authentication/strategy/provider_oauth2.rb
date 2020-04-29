@@ -8,7 +8,10 @@ module Authentication
 
         def call
           (active_user(find_user) || create_user(session)).tap do |user|
-            strategy.user_used_sso_authorization(user, ThreeScale::OAuth2::UserData.new(uid: uid)) if user
+            if user
+              assign_updatable_sso_attributes(user)
+              strategy.user_used_sso_authorization(user, ThreeScale::OAuth2::UserData.new(uid: uid))
+            end
           end
         end
 
@@ -50,6 +53,10 @@ module Authentication
 
         def site_account
           @site_account ||= users.proxy_association.owner
+        end
+
+        def assign_updatable_sso_attributes(user)
+          user.admin_sections = user_data.admin_access
         end
       end
 
