@@ -4,7 +4,7 @@
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/THREESCALE-4725)
 * [Parent JIRA ticket](https://issues.redhat.com/browse/THREESCALE-4724)
 
-##### Toolbar ([specs](toolbar.md))
+##### Toolbar ([specs](../../global_components/toolbar.md))
 * Bulk actions:
   * Send email
   * Change account
