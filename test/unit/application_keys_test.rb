@@ -135,8 +135,26 @@ class ApplicationKeysTest < ActiveSupport::TestCase
 
   def test_account_destroy_does_not_send_email
     account = subject.account.reload
-    CinstanceMessenger.expects(:key_deleted).never # because we are destroying the account and application
-    account.destroy
+    CinstanceMessenger.expects(:key_deleted).never # because we are destroying the account and application. hence destroying by association
+    account.destroy!
+  end
+
+  def test_destroy_sends_email
+    app_key = FactoryBot.create(:application_key)
+
+    cinstante_messenger_key_deleted = CinstanceMessenger.key_deleted(app_key.application, app_key.value)
+    CinstanceMessenger.expects(:key_deleted).with(app_key.application, app_key.value).returns(cinstante_messenger_key_deleted).once
+    cinstante_messenger_key_deleted.expects(:deliver)
+
+    app_key.destroy!
+  end
+
+  def test_destroyed_by_association_does_not_send_email
+    CinstanceMessenger.expects(:key_deleted).never
+
+    app_key = FactoryBot.create(:application_key)
+    app_key.stubs(destroyed_by_association: true)
+    app_key.destroy!
   end
 
   def test_format
