@@ -7,6 +7,7 @@ Object {
     <div>
       <section
         class="pf-c-page__main-section pf-m-light"
+        id="developer-accounts-title-section"
       >
         <div
           class="pf-c-content"
@@ -18,10 +19,396 @@ Object {
             body_title
           </h1>
         </div>
+        <button
+          class="pf-c-button pf-m-link"
+          type="button"
+        >
+          <span
+            class="pf-c-button__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 64 1024 1024"
+              width="1em"
+            >
+              <path
+                d="M980.293 278.754l-95.387-95.387-393.84 393.856c-5.285 5.262-11.353 7.909-18.203 7.911-6.862 0-12.935-2.649-18.222-7.911l-81.019-81.019c-5.262-5.285-7.909-11.353-7.909-18.219 0-6.85 2.649-12.914 7.909-18.203l393.856-393.84-95.381-95.381c-24.039-24.037-15.89-43.705 18.105-43.705h271.982c53.227 0 61.813 9.273 61.813 61.813v271.982c0.005 33.998-19.662 42.151-43.703 18.105zM146.286 793.143c0 3.312 1.077 6.048 3.232 8.203 2.151 2.151 4.889 3.227 8.199 3.225h708.661c3.287 0 5.998-1.067 8.137-3.202 2.135-2.137 3.202-4.848 3.202-8.135v-331.701c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h100.933c6.571-0.002 11.998 2.137 16.267 6.405 4.277 4.277 6.409 9.701 6.409 16.272v466.647c0.002 6.571-2.137 11.998-6.405 16.267-4.277 4.274-9.701 6.409-16.272 6.409h-978.649c-6.571 0.002-11.998-2.137-16.267-6.405-4.274-4.277-6.409-9.701-6.409-16.272v-978.647c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h466.647c6.571 0 11.995 2.135 16.272 6.411 4.267 4.267 6.407 9.696 6.405 16.265v100.933c0.002 6.569-2.137 11.998-6.405 16.265-4.277 4.277-9.701 6.411-16.272 6.411h-331.609c-3.312 0-6.048 1.077-8.203 3.232-2.151 2.149-3.227 4.889-3.225 8.197v708.571z"
+                transform="rotate(180 0 512) scale(-1 1)"
+              />
+            </svg>
+          </span>
+          header_buttons.export_accounts
+        </button>
+        <button
+          class="pf-c-button pf-m-link"
+          type="button"
+        >
+          <span
+            class="pf-c-button__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 0 512 512"
+              width="1em"
+            >
+              <path
+                d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+                transform=""
+              />
+            </svg>
+          </span>
+          header_buttons.create_account
+        </button>
       </section>
       <section
         class="pf-c-page__main-section"
       >
+        <div
+          class="pf-c-data-toolbar"
+          id="accounts-toolbar-top"
+        >
+          <div
+            class="pf-c-data-toolbar__content"
+          >
+            <div
+              class="pf-c-data-toolbar__item"
+            >
+              <div
+                class="pf-c-dropdown"
+              >
+                <div
+                  class="pf-c-dropdown__toggle pf-m-split-button"
+                >
+                  <label
+                    class="pf-c-dropdown__toggle-check"
+                    for="developer-accounts-bulk-checkbox"
+                  >
+                    <input
+                      aria-invalid="false"
+                      aria-label="Select all"
+                      data-testid="developer-accounts-bulk-checkbox"
+                      id="developer-accounts-bulk-checkbox"
+                      type="checkbox"
+                    />
+                  </label>
+                  <button
+                    aria-expanded="false"
+                    aria-label="Select"
+                    class="pf-c-dropdown__toggle-button"
+                    id=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class=""
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 320 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              class="pf-c-data-toolbar__item"
+            >
+              <div
+                class="pf-c-dropdown"
+              >
+                <button
+                  aria-expanded="false"
+                  class="pf-c-dropdown__toggle pf-m-primary"
+                  id=""
+                  type="button"
+                >
+                  <span
+                    class="pf-c-dropdown__toggle-text"
+                  >
+                    accounts_table.data_toolbar.bulk_actions.title
+                  </span>
+                  <svg
+                    aria-hidden="true"
+                    class="pf-c-dropdown__toggle-icon"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 320 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="pf-c-data-toolbar__item"
+            >
+              <div
+                class="pf-c-data-toolbar__group pf-m-filter-group"
+              >
+                <div
+                  class="pf-c-select"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="title-id pf-toggle-id-0"
+                    class="pf-c-select__toggle"
+                    id="pf-toggle-id-0"
+                    type="button"
+                  >
+                    <div
+                      class="pf-c-select__toggle-wrapper"
+                    >
+                      <span
+                        class="pf-c-select__toggle-icon"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          role="img"
+                          style="vertical-align: -0.125em;"
+                          viewBox="0 0 512 512"
+                          width="1em"
+                        >
+                          <path
+                            d="M487.976 0H24.028C2.71 0-8.047 25.866 7.058 40.971L192 225.941V432c0 7.831 3.821 15.17 10.237 19.662l80 55.98C298.02 518.69 320 507.493 320 487.98V225.941l184.947-184.97C520.021 25.896 509.338 0 487.976 0z"
+                            transform=""
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="pf-c-select__toggle-text"
+                      >
+                        accounts_table.col_group
+                      </span>
+                    </div>
+                    <svg
+                      aria-hidden="true"
+                      class="pf-c-select__toggle-arrow"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 320 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div
+                  class="pf-c-data-toolbar__item"
+                >
+                  <span />
+                </div>
+                <div
+                  class="pf-c-data-toolbar__item"
+                >
+                  <span />
+                </div>
+                <div
+                  class="pf-c-data-toolbar__item"
+                >
+                  <span />
+                </div>
+                <div
+                  class="pf-c-input-group"
+                >
+                  <input
+                    aria-invalid="false"
+                    aria-label="accounts_table.data_toolbar.search_widget.text_input_aria_label"
+                    class="pf-c-form-control"
+                    placeholder="accounts_table.data_toolbar.search_widget.placeholder"
+                    type="search"
+                    value=""
+                  />
+                  <button
+                    aria-label="accounts_table.data_toolbar.search_widget.button_aria_label"
+                    class="pf-c-button pf-m-control"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              class="pf-c-data-toolbar__item pf-m-pagination pf-m-align-right-on-md"
+            >
+              <div
+                class="pf-c-pagination pf-m-compact"
+                id="pagination-options-menu"
+              >
+                <div
+                  class="pf-c-pagination__total-items"
+                >
+                  <b>
+                    1
+                     - 
+                    2
+                  </b>
+                   
+                  of 
+                  <b>
+                    2
+                  </b>
+                   
+                  
+                </div>
+                <div
+                  class="pf-c-options-menu"
+                >
+                  <div
+                    class="pf-c-options-menu__toggle pf-m-plain pf-m-text"
+                  >
+                    <span
+                      class="pf-c-options-menu__toggle-text"
+                    >
+                      <b>
+                        1
+                         - 
+                        2
+                      </b>
+                       
+                      of 
+                      <b>
+                        2
+                      </b>
+                       
+                      
+                    </span>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Items per page"
+                      class="  pf-c-options-menu__toggle-button"
+                      id="pagination-options-menu-toggle"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class=""
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style="vertical-align: -0.125em;"
+                        viewBox="0 0 320 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                          transform=""
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <nav
+                  aria-label="Pagination"
+                  class="pf-c-pagination__nav"
+                >
+                  <button
+                    aria-label="Go to previous page"
+                    class="pf-c-button pf-m-plain"
+                    data-action="previous"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    aria-label="Go to next page"
+                    class="pf-c-button pf-m-plain"
+                    data-action="next"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </nav>
+              </div>
+            </div>
+            <div
+              class="pf-c-data-toolbar__expandable-content"
+              id="accounts-toolbar-top-expandable-content-4"
+            >
+              <div
+                class="pf-c-data-toolbar__group"
+              />
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__content pf-m-hidden"
+            hidden=""
+          >
+            <div
+              class="pf-c-data-toolbar__group"
+            />
+          </div>
+        </div>
         <table
           aria-label="accounts_table.aria_label"
           class="pf-c-table pf-m-grid-md"
@@ -34,42 +421,170 @@ Object {
               <th
                 class=""
                 data-key="0"
+                data-label=""
+              />
+              <th
+                aria-sort="none"
+                class="pf-c-table__sort"
+                data-key="1"
                 data-label="accounts_table.col_group"
                 scope="col"
               >
-                accounts_table.col_group
+                <button
+                  class="pf-c-button pf-m-plain"
+                >
+                  accounts_table.col_group
+                  <span
+                    class="pf-c-table__sort-indicator"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                        transform=""
+                      />
+                    </svg>
+                  </span>
+                </button>
               </th>
               <th
-                class=""
-                data-key="1"
+                aria-sort="none"
+                class="pf-c-table__sort"
+                data-key="2"
                 data-label="accounts_table.col_admin"
                 scope="col"
               >
-                accounts_table.col_admin
+                <button
+                  class="pf-c-button pf-m-plain"
+                >
+                  accounts_table.col_admin
+                  <span
+                    class="pf-c-table__sort-indicator"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                        transform=""
+                      />
+                    </svg>
+                  </span>
+                </button>
               </th>
               <th
-                class=""
-                data-key="2"
+                aria-sort="none"
+                class="pf-c-table__sort"
+                data-key="3"
                 data-label="accounts_table.col_signup"
                 scope="col"
               >
-                accounts_table.col_signup
+                <button
+                  class="pf-c-button pf-m-plain"
+                >
+                  accounts_table.col_signup
+                  <span
+                    class="pf-c-table__sort-indicator"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                        transform=""
+                      />
+                    </svg>
+                  </span>
+                </button>
               </th>
               <th
-                class=""
-                data-key="3"
+                aria-sort="none"
+                class="pf-c-table__sort"
+                data-key="4"
                 data-label="accounts_table.col_apps"
                 scope="col"
               >
-                accounts_table.col_apps
+                <button
+                  class="pf-c-button pf-m-plain"
+                >
+                  accounts_table.col_apps
+                  <span
+                    class="pf-c-table__sort-indicator"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                        transform=""
+                      />
+                    </svg>
+                  </span>
+                </button>
               </th>
               <th
-                class=""
-                data-key="4"
+                aria-sort="none"
+                class="pf-c-table__sort"
+                data-key="5"
                 data-label="accounts_table.col_state"
                 scope="col"
               >
-                accounts_table.col_state
+                <button
+                  class="pf-c-button pf-m-plain"
+                >
+                  accounts_table.col_state
+                  <span
+                    class="pf-c-table__sort-indicator"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                        transform=""
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </th>
+              <th
+                class=""
+                data-key="6"
+                data-label="accounts_table.col_actions"
+                scope="col"
+              >
+                accounts_table.col_actions
               </th>
             </tr>
           </thead>
@@ -80,88 +595,265 @@ Object {
               class=""
             >
               <td
-                class=""
+                class="pf-c-table__check"
                 data-key="0"
+              >
+                <input
+                  aria-labelledby="simple-node0"
+                  name="checkrow0"
+                  type="checkbox"
+                />
+              </td>
+              <td
+                class=""
+                data-key="1"
                 data-label="accounts_table.col_group"
               >
                 Josemi's Corp.
               </td>
               <td
                 class=""
-                data-key="1"
+                data-key="2"
                 data-label="accounts_table.col_admin"
               >
                 Josemi
               </td>
               <td
                 class=""
-                data-key="2"
+                data-key="3"
                 data-label="accounts_table.col_signup"
               >
                 2019-10-18T05:13:26Z
               </td>
               <td
                 class=""
-                data-key="3"
+                data-key="4"
                 data-label="accounts_table.col_apps"
               >
                 3
               </td>
               <td
                 class=""
-                data-key="4"
+                data-key="5"
                 data-label="accounts_table.col_state"
               >
                 approved
               </td>
+              <td
+                class=""
+                data-key="6"
+                data-label="accounts_table.col_actions"
+              />
             </tr>
             <tr
               class=""
             >
               <td
-                class=""
+                class="pf-c-table__check"
                 data-key="0"
+              >
+                <input
+                  aria-labelledby="simple-node1"
+                  name="checkrow1"
+                  type="checkbox"
+                />
+              </td>
+              <td
+                class=""
+                data-key="1"
                 data-label="accounts_table.col_group"
               >
                 Damian's Corp.
               </td>
               <td
                 class=""
-                data-key="1"
+                data-key="2"
                 data-label="accounts_table.col_admin"
               >
                 Damian
               </td>
               <td
                 class=""
-                data-key="2"
+                data-key="3"
                 data-label="accounts_table.col_signup"
               >
                 2019-10-18T05:13:26Z
               </td>
               <td
                 class=""
-                data-key="3"
+                data-key="4"
                 data-label="accounts_table.col_apps"
               >
                 3
               </td>
               <td
                 class=""
-                data-key="4"
+                data-key="5"
                 data-label="accounts_table.col_state"
               >
                 approved
               </td>
+              <td
+                class=""
+                data-key="6"
+                data-label="accounts_table.col_actions"
+              />
             </tr>
           </tbody>
         </table>
+        <div
+          class="pf-c-data-toolbar"
+          id="footer"
+        >
+          <div
+            class="pf-c-data-toolbar__content"
+          >
+            <div
+              class="pf-c-data-toolbar__item pf-m-pagination pf-m-align-right-on-md"
+            >
+              <div
+                class="pf-c-pagination pf-m-compact"
+                id="pagination-options-menu"
+              >
+                <div
+                  class="pf-c-pagination__total-items"
+                >
+                  <b>
+                    1
+                     - 
+                    2
+                  </b>
+                   
+                  of 
+                  <b>
+                    2
+                  </b>
+                   
+                  
+                </div>
+                <div
+                  class="pf-c-options-menu"
+                >
+                  <div
+                    class="pf-c-options-menu__toggle pf-m-plain pf-m-text"
+                  >
+                    <span
+                      class="pf-c-options-menu__toggle-text"
+                    >
+                      <b>
+                        1
+                         - 
+                        2
+                      </b>
+                       
+                      of 
+                      <b>
+                        2
+                      </b>
+                       
+                      
+                    </span>
+                    <button
+                      aria-expanded="false"
+                      aria-label="Items per page"
+                      class="  pf-c-options-menu__toggle-button"
+                      id="pagination-options-menu-toggle"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class=""
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style="vertical-align: -0.125em;"
+                        viewBox="0 0 320 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                          transform=""
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <nav
+                  aria-label="Pagination"
+                  class="pf-c-pagination__nav"
+                >
+                  <button
+                    aria-label="Go to previous page"
+                    class="pf-c-button pf-m-plain"
+                    data-action="previous"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    aria-label="Go to next page"
+                    class="pf-c-button pf-m-plain"
+                    data-action="next"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 256 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </nav>
+              </div>
+            </div>
+            <div
+              class="pf-c-data-toolbar__expandable-content"
+              id="footer-expandable-content-1"
+            >
+              <div
+                class="pf-c-data-toolbar__group"
+              />
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__content pf-m-hidden"
+            hidden=""
+          >
+            <div
+              class="pf-c-data-toolbar__group"
+            />
+          </div>
+        </div>
       </section>
     </div>
   </body>,
   "container": <div>
     <section
       class="pf-c-page__main-section pf-m-light"
+      id="developer-accounts-title-section"
     >
       <div
         class="pf-c-content"
@@ -173,10 +865,396 @@ Object {
           body_title
         </h1>
       </div>
+      <button
+        class="pf-c-button pf-m-link"
+        type="button"
+      >
+        <span
+          class="pf-c-button__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 64 1024 1024"
+            width="1em"
+          >
+            <path
+              d="M980.293 278.754l-95.387-95.387-393.84 393.856c-5.285 5.262-11.353 7.909-18.203 7.911-6.862 0-12.935-2.649-18.222-7.911l-81.019-81.019c-5.262-5.285-7.909-11.353-7.909-18.219 0-6.85 2.649-12.914 7.909-18.203l393.856-393.84-95.381-95.381c-24.039-24.037-15.89-43.705 18.105-43.705h271.982c53.227 0 61.813 9.273 61.813 61.813v271.982c0.005 33.998-19.662 42.151-43.703 18.105zM146.286 793.143c0 3.312 1.077 6.048 3.232 8.203 2.151 2.151 4.889 3.227 8.199 3.225h708.661c3.287 0 5.998-1.067 8.137-3.202 2.135-2.137 3.202-4.848 3.202-8.135v-331.701c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h100.933c6.571-0.002 11.998 2.137 16.267 6.405 4.277 4.277 6.409 9.701 6.409 16.272v466.647c0.002 6.571-2.137 11.998-6.405 16.267-4.277 4.274-9.701 6.409-16.272 6.409h-978.649c-6.571 0.002-11.998-2.137-16.267-6.405-4.274-4.277-6.409-9.701-6.409-16.272v-978.647c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h466.647c6.571 0 11.995 2.135 16.272 6.411 4.267 4.267 6.407 9.696 6.405 16.265v100.933c0.002 6.569-2.137 11.998-6.405 16.265-4.277 4.277-9.701 6.411-16.272 6.411h-331.609c-3.312 0-6.048 1.077-8.203 3.232-2.151 2.149-3.227 4.889-3.225 8.197v708.571z"
+              transform="rotate(180 0 512) scale(-1 1)"
+            />
+          </svg>
+        </span>
+        header_buttons.export_accounts
+      </button>
+      <button
+        class="pf-c-button pf-m-link"
+        type="button"
+      >
+        <span
+          class="pf-c-button__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 0 512 512"
+            width="1em"
+          >
+            <path
+              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+              transform=""
+            />
+          </svg>
+        </span>
+        header_buttons.create_account
+      </button>
     </section>
     <section
       class="pf-c-page__main-section"
     >
+      <div
+        class="pf-c-data-toolbar"
+        id="accounts-toolbar-top"
+      >
+        <div
+          class="pf-c-data-toolbar__content"
+        >
+          <div
+            class="pf-c-data-toolbar__item"
+          >
+            <div
+              class="pf-c-dropdown"
+            >
+              <div
+                class="pf-c-dropdown__toggle pf-m-split-button"
+              >
+                <label
+                  class="pf-c-dropdown__toggle-check"
+                  for="developer-accounts-bulk-checkbox"
+                >
+                  <input
+                    aria-invalid="false"
+                    aria-label="Select all"
+                    data-testid="developer-accounts-bulk-checkbox"
+                    id="developer-accounts-bulk-checkbox"
+                    type="checkbox"
+                  />
+                </label>
+                <button
+                  aria-expanded="false"
+                  aria-label="Select"
+                  class="pf-c-dropdown__toggle-button"
+                  id=""
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class=""
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 320 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__item"
+          >
+            <div
+              class="pf-c-dropdown"
+            >
+              <button
+                aria-expanded="false"
+                class="pf-c-dropdown__toggle pf-m-primary"
+                id=""
+                type="button"
+              >
+                <span
+                  class="pf-c-dropdown__toggle-text"
+                >
+                  accounts_table.data_toolbar.bulk_actions.title
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="pf-c-dropdown__toggle-icon"
+                  fill="currentColor"
+                  height="1em"
+                  role="img"
+                  style="vertical-align: -0.125em;"
+                  viewBox="0 0 320 512"
+                  width="1em"
+                >
+                  <path
+                    d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                    transform=""
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__item"
+          >
+            <div
+              class="pf-c-data-toolbar__group pf-m-filter-group"
+            >
+              <div
+                class="pf-c-select"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="title-id pf-toggle-id-0"
+                  class="pf-c-select__toggle"
+                  id="pf-toggle-id-0"
+                  type="button"
+                >
+                  <div
+                    class="pf-c-select__toggle-wrapper"
+                  >
+                    <span
+                      class="pf-c-select__toggle-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style="vertical-align: -0.125em;"
+                        viewBox="0 0 512 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M487.976 0H24.028C2.71 0-8.047 25.866 7.058 40.971L192 225.941V432c0 7.831 3.821 15.17 10.237 19.662l80 55.98C298.02 518.69 320 507.493 320 487.98V225.941l184.947-184.97C520.021 25.896 509.338 0 487.976 0z"
+                          transform=""
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      class="pf-c-select__toggle-text"
+                    >
+                      accounts_table.col_group
+                    </span>
+                  </div>
+                  <svg
+                    aria-hidden="true"
+                    class="pf-c-select__toggle-arrow"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 320 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="pf-c-data-toolbar__item"
+              >
+                <span />
+              </div>
+              <div
+                class="pf-c-data-toolbar__item"
+              >
+                <span />
+              </div>
+              <div
+                class="pf-c-data-toolbar__item"
+              >
+                <span />
+              </div>
+              <div
+                class="pf-c-input-group"
+              >
+                <input
+                  aria-invalid="false"
+                  aria-label="accounts_table.data_toolbar.search_widget.text_input_aria_label"
+                  class="pf-c-form-control"
+                  placeholder="accounts_table.data_toolbar.search_widget.placeholder"
+                  type="search"
+                  value=""
+                />
+                <button
+                  aria-label="accounts_table.data_toolbar.search_widget.button_aria_label"
+                  class="pf-c-button pf-m-control"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 512 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__item pf-m-pagination pf-m-align-right-on-md"
+          >
+            <div
+              class="pf-c-pagination pf-m-compact"
+              id="pagination-options-menu"
+            >
+              <div
+                class="pf-c-pagination__total-items"
+              >
+                <b>
+                  1
+                   - 
+                  2
+                </b>
+                 
+                of 
+                <b>
+                  2
+                </b>
+                 
+                
+              </div>
+              <div
+                class="pf-c-options-menu"
+              >
+                <div
+                  class="pf-c-options-menu__toggle pf-m-plain pf-m-text"
+                >
+                  <span
+                    class="pf-c-options-menu__toggle-text"
+                  >
+                    <b>
+                      1
+                       - 
+                      2
+                    </b>
+                     
+                    of 
+                    <b>
+                      2
+                    </b>
+                     
+                    
+                  </span>
+                  <button
+                    aria-expanded="false"
+                    aria-label="Items per page"
+                    class="  pf-c-options-menu__toggle-button"
+                    id="pagination-options-menu-toggle"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class=""
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 320 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <nav
+                aria-label="Pagination"
+                class="pf-c-pagination__nav"
+              >
+                <button
+                  aria-label="Go to previous page"
+                  class="pf-c-button pf-m-plain"
+                  data-action="previous"
+                  disabled=""
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+                <button
+                  aria-label="Go to next page"
+                  class="pf-c-button pf-m-plain"
+                  data-action="next"
+                  disabled=""
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+              </nav>
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__expandable-content"
+            id="accounts-toolbar-top-expandable-content-4"
+          >
+            <div
+              class="pf-c-data-toolbar__group"
+            />
+          </div>
+        </div>
+        <div
+          class="pf-c-data-toolbar__content pf-m-hidden"
+          hidden=""
+        >
+          <div
+            class="pf-c-data-toolbar__group"
+          />
+        </div>
+      </div>
       <table
         aria-label="accounts_table.aria_label"
         class="pf-c-table pf-m-grid-md"
@@ -189,42 +1267,170 @@ Object {
             <th
               class=""
               data-key="0"
+              data-label=""
+            />
+            <th
+              aria-sort="none"
+              class="pf-c-table__sort"
+              data-key="1"
               data-label="accounts_table.col_group"
               scope="col"
             >
-              accounts_table.col_group
+              <button
+                class="pf-c-button pf-m-plain"
+              >
+                accounts_table.col_group
+                <span
+                  class="pf-c-table__sort-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                      transform=""
+                    />
+                  </svg>
+                </span>
+              </button>
             </th>
             <th
-              class=""
-              data-key="1"
+              aria-sort="none"
+              class="pf-c-table__sort"
+              data-key="2"
               data-label="accounts_table.col_admin"
               scope="col"
             >
-              accounts_table.col_admin
+              <button
+                class="pf-c-button pf-m-plain"
+              >
+                accounts_table.col_admin
+                <span
+                  class="pf-c-table__sort-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                      transform=""
+                    />
+                  </svg>
+                </span>
+              </button>
             </th>
             <th
-              class=""
-              data-key="2"
+              aria-sort="none"
+              class="pf-c-table__sort"
+              data-key="3"
               data-label="accounts_table.col_signup"
               scope="col"
             >
-              accounts_table.col_signup
+              <button
+                class="pf-c-button pf-m-plain"
+              >
+                accounts_table.col_signup
+                <span
+                  class="pf-c-table__sort-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                      transform=""
+                    />
+                  </svg>
+                </span>
+              </button>
             </th>
             <th
-              class=""
-              data-key="3"
+              aria-sort="none"
+              class="pf-c-table__sort"
+              data-key="4"
               data-label="accounts_table.col_apps"
               scope="col"
             >
-              accounts_table.col_apps
+              <button
+                class="pf-c-button pf-m-plain"
+              >
+                accounts_table.col_apps
+                <span
+                  class="pf-c-table__sort-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                      transform=""
+                    />
+                  </svg>
+                </span>
+              </button>
             </th>
             <th
-              class=""
-              data-key="4"
+              aria-sort="none"
+              class="pf-c-table__sort"
+              data-key="5"
               data-label="accounts_table.col_state"
               scope="col"
             >
-              accounts_table.col_state
+              <button
+                class="pf-c-button pf-m-plain"
+              >
+                accounts_table.col_state
+                <span
+                  class="pf-c-table__sort-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M214.059 377.941H168V134.059h46.059c21.382 0 32.09-25.851 16.971-40.971L144.971 7.029c-9.373-9.373-24.568-9.373-33.941 0L24.971 93.088c-15.119 15.119-4.411 40.971 16.971 40.971H88v243.882H41.941c-21.382 0-32.09 25.851-16.971 40.971l86.059 86.059c9.373 9.373 24.568 9.373 33.941 0l86.059-86.059c15.12-15.119 4.412-40.971-16.97-40.971z"
+                      transform=""
+                    />
+                  </svg>
+                </span>
+              </button>
+            </th>
+            <th
+              class=""
+              data-key="6"
+              data-label="accounts_table.col_actions"
+              scope="col"
+            >
+              accounts_table.col_actions
             </th>
           </tr>
         </thead>
@@ -235,82 +1441,258 @@ Object {
             class=""
           >
             <td
-              class=""
+              class="pf-c-table__check"
               data-key="0"
+            >
+              <input
+                aria-labelledby="simple-node0"
+                name="checkrow0"
+                type="checkbox"
+              />
+            </td>
+            <td
+              class=""
+              data-key="1"
               data-label="accounts_table.col_group"
             >
               Josemi's Corp.
             </td>
             <td
               class=""
-              data-key="1"
+              data-key="2"
               data-label="accounts_table.col_admin"
             >
               Josemi
             </td>
             <td
               class=""
-              data-key="2"
+              data-key="3"
               data-label="accounts_table.col_signup"
             >
               2019-10-18T05:13:26Z
             </td>
             <td
               class=""
-              data-key="3"
+              data-key="4"
               data-label="accounts_table.col_apps"
             >
               3
             </td>
             <td
               class=""
-              data-key="4"
+              data-key="5"
               data-label="accounts_table.col_state"
             >
               approved
             </td>
+            <td
+              class=""
+              data-key="6"
+              data-label="accounts_table.col_actions"
+            />
           </tr>
           <tr
             class=""
           >
             <td
-              class=""
+              class="pf-c-table__check"
               data-key="0"
+            >
+              <input
+                aria-labelledby="simple-node1"
+                name="checkrow1"
+                type="checkbox"
+              />
+            </td>
+            <td
+              class=""
+              data-key="1"
               data-label="accounts_table.col_group"
             >
               Damian's Corp.
             </td>
             <td
               class=""
-              data-key="1"
+              data-key="2"
               data-label="accounts_table.col_admin"
             >
               Damian
             </td>
             <td
               class=""
-              data-key="2"
+              data-key="3"
               data-label="accounts_table.col_signup"
             >
               2019-10-18T05:13:26Z
             </td>
             <td
               class=""
-              data-key="3"
+              data-key="4"
               data-label="accounts_table.col_apps"
             >
               3
             </td>
             <td
               class=""
-              data-key="4"
+              data-key="5"
               data-label="accounts_table.col_state"
             >
               approved
             </td>
+            <td
+              class=""
+              data-key="6"
+              data-label="accounts_table.col_actions"
+            />
           </tr>
         </tbody>
       </table>
+      <div
+        class="pf-c-data-toolbar"
+        id="footer"
+      >
+        <div
+          class="pf-c-data-toolbar__content"
+        >
+          <div
+            class="pf-c-data-toolbar__item pf-m-pagination pf-m-align-right-on-md"
+          >
+            <div
+              class="pf-c-pagination pf-m-compact"
+              id="pagination-options-menu"
+            >
+              <div
+                class="pf-c-pagination__total-items"
+              >
+                <b>
+                  1
+                   - 
+                  2
+                </b>
+                 
+                of 
+                <b>
+                  2
+                </b>
+                 
+                
+              </div>
+              <div
+                class="pf-c-options-menu"
+              >
+                <div
+                  class="pf-c-options-menu__toggle pf-m-plain pf-m-text"
+                >
+                  <span
+                    class="pf-c-options-menu__toggle-text"
+                  >
+                    <b>
+                      1
+                       - 
+                      2
+                    </b>
+                     
+                    of 
+                    <b>
+                      2
+                    </b>
+                     
+                    
+                  </span>
+                  <button
+                    aria-expanded="false"
+                    aria-label="Items per page"
+                    class="  pf-c-options-menu__toggle-button"
+                    id="pagination-options-menu-toggle"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class=""
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 320 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <nav
+                aria-label="Pagination"
+                class="pf-c-pagination__nav"
+              >
+                <button
+                  aria-label="Go to previous page"
+                  class="pf-c-button pf-m-plain"
+                  data-action="previous"
+                  disabled=""
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+                <button
+                  aria-label="Go to next page"
+                  class="pf-c-button pf-m-plain"
+                  data-action="next"
+                  disabled=""
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                      transform=""
+                    />
+                  </svg>
+                </button>
+              </nav>
+            </div>
+          </div>
+          <div
+            class="pf-c-data-toolbar__expandable-content"
+            id="footer-expandable-content-1"
+          >
+            <div
+              class="pf-c-data-toolbar__group"
+            />
+          </div>
+        </div>
+        <div
+          class="pf-c-data-toolbar__content pf-m-hidden"
+          hidden=""
+        >
+          <div
+            class="pf-c-data-toolbar__group"
+          />
+        </div>
+      </div>
     </section>
   </div>,
   "debug": [Function],
@@ -374,6 +1756,7 @@ Object {
     <div>
       <section
         class="pf-c-page__main-section pf-m-light"
+        id="developer-accounts-title-section"
       >
         <div
           class="pf-c-content"
@@ -385,6 +1768,54 @@ Object {
             body_title
           </h1>
         </div>
+        <button
+          class="pf-c-button pf-m-link"
+          type="button"
+        >
+          <span
+            class="pf-c-button__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 64 1024 1024"
+              width="1em"
+            >
+              <path
+                d="M980.293 278.754l-95.387-95.387-393.84 393.856c-5.285 5.262-11.353 7.909-18.203 7.911-6.862 0-12.935-2.649-18.222-7.911l-81.019-81.019c-5.262-5.285-7.909-11.353-7.909-18.219 0-6.85 2.649-12.914 7.909-18.203l393.856-393.84-95.381-95.381c-24.039-24.037-15.89-43.705 18.105-43.705h271.982c53.227 0 61.813 9.273 61.813 61.813v271.982c0.005 33.998-19.662 42.151-43.703 18.105zM146.286 793.143c0 3.312 1.077 6.048 3.232 8.203 2.151 2.151 4.889 3.227 8.199 3.225h708.661c3.287 0 5.998-1.067 8.137-3.202 2.135-2.137 3.202-4.848 3.202-8.135v-331.701c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h100.933c6.571-0.002 11.998 2.137 16.267 6.405 4.277 4.277 6.409 9.701 6.409 16.272v466.647c0.002 6.571-2.137 11.998-6.405 16.267-4.277 4.274-9.701 6.409-16.272 6.409h-978.649c-6.571 0.002-11.998-2.137-16.267-6.405-4.274-4.277-6.409-9.701-6.409-16.272v-978.647c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h466.647c6.571 0 11.995 2.135 16.272 6.411 4.267 4.267 6.407 9.696 6.405 16.265v100.933c0.002 6.569-2.137 11.998-6.405 16.265-4.277 4.277-9.701 6.411-16.272 6.411h-331.609c-3.312 0-6.048 1.077-8.203 3.232-2.151 2.149-3.227 4.889-3.225 8.197v708.571z"
+                transform="rotate(180 0 512) scale(-1 1)"
+              />
+            </svg>
+          </span>
+          header_buttons.export_accounts
+        </button>
+        <button
+          class="pf-c-button pf-m-link"
+          type="button"
+        >
+          <span
+            class="pf-c-button__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 0 512 512"
+              width="1em"
+            >
+              <path
+                d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+                transform=""
+              />
+            </svg>
+          </span>
+          header_buttons.create_account
+        </button>
       </section>
       <section
         class="pf-c-page__main-section"
@@ -429,6 +1860,7 @@ Object {
   "container": <div>
     <section
       class="pf-c-page__main-section pf-m-light"
+      id="developer-accounts-title-section"
     >
       <div
         class="pf-c-content"
@@ -440,6 +1872,54 @@ Object {
           body_title
         </h1>
       </div>
+      <button
+        class="pf-c-button pf-m-link"
+        type="button"
+      >
+        <span
+          class="pf-c-button__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 64 1024 1024"
+            width="1em"
+          >
+            <path
+              d="M980.293 278.754l-95.387-95.387-393.84 393.856c-5.285 5.262-11.353 7.909-18.203 7.911-6.862 0-12.935-2.649-18.222-7.911l-81.019-81.019c-5.262-5.285-7.909-11.353-7.909-18.219 0-6.85 2.649-12.914 7.909-18.203l393.856-393.84-95.381-95.381c-24.039-24.037-15.89-43.705 18.105-43.705h271.982c53.227 0 61.813 9.273 61.813 61.813v271.982c0.005 33.998-19.662 42.151-43.703 18.105zM146.286 793.143c0 3.312 1.077 6.048 3.232 8.203 2.151 2.151 4.889 3.227 8.199 3.225h708.661c3.287 0 5.998-1.067 8.137-3.202 2.135-2.137 3.202-4.848 3.202-8.135v-331.701c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h100.933c6.571-0.002 11.998 2.137 16.267 6.405 4.277 4.277 6.409 9.701 6.409 16.272v466.647c0.002 6.571-2.137 11.998-6.405 16.267-4.277 4.274-9.701 6.409-16.272 6.409h-978.649c-6.571 0.002-11.998-2.137-16.267-6.405-4.274-4.277-6.409-9.701-6.409-16.272v-978.647c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h466.647c6.571 0 11.995 2.135 16.272 6.411 4.267 4.267 6.407 9.696 6.405 16.265v100.933c0.002 6.569-2.137 11.998-6.405 16.265-4.277 4.277-9.701 6.411-16.272 6.411h-331.609c-3.312 0-6.048 1.077-8.203 3.232-2.151 2.149-3.227 4.889-3.225 8.197v708.571z"
+              transform="rotate(180 0 512) scale(-1 1)"
+            />
+          </svg>
+        </span>
+        header_buttons.export_accounts
+      </button>
+      <button
+        class="pf-c-button pf-m-link"
+        type="button"
+      >
+        <span
+          class="pf-c-button__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 0 512 512"
+            width="1em"
+          >
+            <path
+              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+              transform=""
+            />
+          </svg>
+        </span>
+        header_buttons.create_account
+      </button>
     </section>
     <section
       class="pf-c-page__main-section"
@@ -541,6 +2021,7 @@ Object {
     <div>
       <section
         class="pf-c-page__main-section pf-m-light"
+        id="developer-accounts-title-section"
       >
         <div
           class="pf-c-content"
@@ -552,6 +2033,54 @@ Object {
             body_title
           </h1>
         </div>
+        <button
+          class="pf-c-button pf-m-link"
+          type="button"
+        >
+          <span
+            class="pf-c-button__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 64 1024 1024"
+              width="1em"
+            >
+              <path
+                d="M980.293 278.754l-95.387-95.387-393.84 393.856c-5.285 5.262-11.353 7.909-18.203 7.911-6.862 0-12.935-2.649-18.222-7.911l-81.019-81.019c-5.262-5.285-7.909-11.353-7.909-18.219 0-6.85 2.649-12.914 7.909-18.203l393.856-393.84-95.381-95.381c-24.039-24.037-15.89-43.705 18.105-43.705h271.982c53.227 0 61.813 9.273 61.813 61.813v271.982c0.005 33.998-19.662 42.151-43.703 18.105zM146.286 793.143c0 3.312 1.077 6.048 3.232 8.203 2.151 2.151 4.889 3.227 8.199 3.225h708.661c3.287 0 5.998-1.067 8.137-3.202 2.135-2.137 3.202-4.848 3.202-8.135v-331.701c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h100.933c6.571-0.002 11.998 2.137 16.267 6.405 4.277 4.277 6.409 9.701 6.409 16.272v466.647c0.002 6.571-2.137 11.998-6.405 16.267-4.277 4.274-9.701 6.409-16.272 6.409h-978.649c-6.571 0.002-11.998-2.137-16.267-6.405-4.274-4.277-6.409-9.701-6.409-16.272v-978.647c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h466.647c6.571 0 11.995 2.135 16.272 6.411 4.267 4.267 6.407 9.696 6.405 16.265v100.933c0.002 6.569-2.137 11.998-6.405 16.265-4.277 4.277-9.701 6.411-16.272 6.411h-331.609c-3.312 0-6.048 1.077-8.203 3.232-2.151 2.149-3.227 4.889-3.225 8.197v708.571z"
+                transform="rotate(180 0 512) scale(-1 1)"
+              />
+            </svg>
+          </span>
+          header_buttons.export_accounts
+        </button>
+        <button
+          class="pf-c-button pf-m-link"
+          type="button"
+        >
+          <span
+            class="pf-c-button__icon"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              role="img"
+              style="vertical-align: -0.125em;"
+              viewBox="0 0 512 512"
+              width="1em"
+            >
+              <path
+                d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+                transform=""
+              />
+            </svg>
+          </span>
+          header_buttons.create_account
+        </button>
       </section>
       <section
         class="pf-c-page__main-section"
@@ -595,6 +2124,7 @@ Object {
   "container": <div>
     <section
       class="pf-c-page__main-section pf-m-light"
+      id="developer-accounts-title-section"
     >
       <div
         class="pf-c-content"
@@ -606,6 +2136,54 @@ Object {
           body_title
         </h1>
       </div>
+      <button
+        class="pf-c-button pf-m-link"
+        type="button"
+      >
+        <span
+          class="pf-c-button__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 64 1024 1024"
+            width="1em"
+          >
+            <path
+              d="M980.293 278.754l-95.387-95.387-393.84 393.856c-5.285 5.262-11.353 7.909-18.203 7.911-6.862 0-12.935-2.649-18.222-7.911l-81.019-81.019c-5.262-5.285-7.909-11.353-7.909-18.219 0-6.85 2.649-12.914 7.909-18.203l393.856-393.84-95.381-95.381c-24.039-24.037-15.89-43.705 18.105-43.705h271.982c53.227 0 61.813 9.273 61.813 61.813v271.982c0.005 33.998-19.662 42.151-43.703 18.105zM146.286 793.143c0 3.312 1.077 6.048 3.232 8.203 2.151 2.151 4.889 3.227 8.199 3.225h708.661c3.287 0 5.998-1.067 8.137-3.202 2.135-2.137 3.202-4.848 3.202-8.135v-331.701c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h100.933c6.571-0.002 11.998 2.137 16.267 6.405 4.277 4.277 6.409 9.701 6.409 16.272v466.647c0.002 6.571-2.137 11.998-6.405 16.267-4.277 4.274-9.701 6.409-16.272 6.409h-978.649c-6.571 0.002-11.998-2.137-16.267-6.405-4.274-4.277-6.409-9.701-6.409-16.272v-978.647c0-6.571 2.135-11.995 6.409-16.272 4.27-4.267 9.696-6.407 16.267-6.405h466.647c6.571 0 11.995 2.135 16.272 6.411 4.267 4.267 6.407 9.696 6.405 16.265v100.933c0.002 6.569-2.137 11.998-6.405 16.265-4.277 4.277-9.701 6.411-16.272 6.411h-331.609c-3.312 0-6.048 1.077-8.203 3.232-2.151 2.149-3.227 4.889-3.225 8.197v708.571z"
+              transform="rotate(180 0 512) scale(-1 1)"
+            />
+          </svg>
+        </span>
+        header_buttons.export_accounts
+      </button>
+      <button
+        class="pf-c-button pf-m-link"
+        type="button"
+      >
+        <span
+          class="pf-c-button__icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 0 512 512"
+            width="1em"
+          >
+            <path
+              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+              transform=""
+            />
+          </svg>
+        </span>
+        header_buttons.create_account
+      </button>
     </section>
     <section
       class="pf-c-page__main-section"

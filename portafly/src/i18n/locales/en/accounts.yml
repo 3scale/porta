@@ -3,18 +3,120 @@ page_title: Accounts | Portafly
 page_title_description: Page title of the Accounts page
 body_title: Accounts
 body_title_description": Body title of the Accounts page
+header_buttons:
+  create_account: Create account
+  create_account_description: Title of Create action button
+  export_accounts: Export all accounts
+  export_accounts_description: Title of Export all accounts button
 accounts_table:
+  empty_state_title: No results found
+  empty_state_title_description: Title of the empty state of accounts table
+  empty_state_body: No results match the filter criteria. Remove all filters or clear all filters to show results.
+  empty_state_body_description: Body message of the empty state of accounts table
+  empty_state_button: Clear all filters
+  empty_state_button_description: Clear filters button of the empty state of accounts table
+  data_toolbar:
+    bulk_selector:
+      none: Select none (0 items)
+      none_description: Bulk Selector option for selecting no items
+      page: Select page ({{count}} item)
+      page_description: Bulk Selector option for selecting current page items
+      page_plural: Select page ({{count}} items)
+      page_plural_description: Bulk Selector option for selecting current page items (plural version)
+      all: Select all ({{count}} item)
+      all_description: Bulk Selector option for selecting all available items
+      all_plural: Select all ({{count}} items)
+      all_plural_description: Bulk Selector option for selecting all available items (plural version)
+      label: "{{selectedCount}} selected"
+      label_description: Label indicating how many items are currently selected
+    bulk_actions:
+      warning: Select accounts first to enable bulk actions
+      warning_description: Warning that displays inside the actions dropdown, when no items are selected
+      title: Actions
+      title_description: Title of the Actions dropdown
+      send_email: Send email
+      send_email_description: Bulk action for Send main
+      change_plan: Change account plan
+      change_plan_description: Bulk action for Change plan
+      change_state: Change state
+      change_state_description: Bulk action for Change state
+    search_widget:
+      select_aria_label: Filter-by select
+      select_aria_label_description: Aria label of the dropdown for filtering
+      text_input_aria_label: Filter term input
+      text_input_aria_label_description: Aria label of the text input for filtering
+      select_state_aria_label: Select state input
+      select_state_aria_label_description: Aria label of the select state input for filtering
+      button_aria_label: Search button for input
+      button_aria_label_description: Aria label of the button to filter
+      placeholder: Filter by {{option}}
+      placeholder_description: Placeholder for the text input
   aria_label: Accounts list
   aria_label_description: Aria label of the Accounts table component
   empty_state: There are no accounts
   empty_state_description: Message of the Accounts table empty state
-  col_group: Group/org.
-  col_group_description: Title of the Group/org. column
+  col_group: Group/organization
+  col_group_description: Title of the Group/organization column
   col_admin: Admin
   col_admin_description: Title of the Admin column
   col_signup: Signup date
   col_signup_description: Title of the Signup date column
-  col_apps: Apps
-  col_apps_description: Title of the Apps column
+  col_plan: Plan
+  col_plan_description: Title of the Plan column
+  col_apps: Applications
+  col_apps_description: Title of the Applications column
   col_state: State
   col_state_description: Title of the State column
+  col_actions: Actions
+  col_actions_description: Title of Actions column
+  actions:
+    impersonate: Act as
+    approve: Approve
+    activate: Activate
+modals:
+  send_email:
+    title: Send email to admins of selected accounts
+    to: To
+    subject: Subject
+    body: Body
+    send: Send
+    cancel: Cancel
+  change_plan:
+    title: Change plan for the selected accounts
+    to: Selected accounts
+    select_label: Select plan
+    send: Change plan
+    cancel: Cancel
+  change_state:
+    title: Change state for the selected accounts
+    to: Selected accounts
+    select_label: Select state
+    select_helper_text: Changing the state of a developer account does not imply changing the state of its applications.
+    send: Change state
+    cancel: Cancel
+  expand_list_button: "{{count}} more"
+  expand_list_button_description: Button to expand the list ot items selected for this modal
+toasts:
+  send_email_start: Sending email...
+  send_email_start_description: Alert message when email is being sent
+  send_email_success: Email sent
+  send_email_success_description: Alert message when email is sent
+  send_email_error: Email could not be sent
+  send_email_error_description: Alert message when email could not be sent
+  change_plan_start: Changing accounts plan...
+  change_plan_start_description: Alert message when plan is being changed
+  change_plan_success: Account plan changed
+  change_plan_success_description: Alert message when plan is changed
+  change_plan_error: Account plan could not be changed
+  change_plan_error_description: Alert message when plan could not be changed
+  change_state_start: Changing accounts state...
+  change_state_start_description: Alert message when state is being changed
+  change_state_success: Account state changed
+  change_state_success_description: Alert message when state is changed
+  change_state_error: Account state could not be changed
+  change_state_error_description: Alert message when state could not be changed
+state:
+  approved: Approved
+  pending: Pending
+  rejected: Rejected
+  suspended: Suspended

@@ -8,5 +8,6 @@ export interface IDeveloperAccount {
   id: number,
   org_name: string,
   state: string,
+  plan?: string,
   updated_at: string,
 }
