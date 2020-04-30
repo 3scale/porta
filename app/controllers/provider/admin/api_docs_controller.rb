@@ -4,7 +4,7 @@ class Provider::Admin::ApiDocsController < Provider::Admin::BaseController
   layout 'provider'
 
   def show
-    render current_account.provider_can_use?(:new_provider_documentation) ? 'show-v2' : action_name
+    render current_account.provider_can_use?(:new_provider_documentation) ? 'show-oas3' : action_name
   end
 
 end
