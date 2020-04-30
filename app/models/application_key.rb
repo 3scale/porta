@@ -23,7 +23,7 @@ class ApplicationKey < ApplicationRecord
   after_commit :push_webhook_key_destroyed, :on => :destroy
 
   after_commit :notify_after_create, :on => :create, :if => :should_notify?
-  after_commit :notify_after_destroy, :on => :destroy, :if => :should_notify?
+  after_commit :notify_after_destroy, on: :destroy, if: -> { should_notify? && !destroyed_by_association }
 
   delegate :account, to: :application, allow_nil: true
 
@@ -153,7 +153,7 @@ class ApplicationKey < ApplicationRecord
   end
 
   def notify_after_destroy
-    CinstanceMessenger.key_deleted(application, value).deliver unless application.destroyed?
+    CinstanceMessenger.key_deleted(application, value).deliver
   end
 
   def push_webhook_key_created
