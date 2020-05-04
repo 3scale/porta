@@ -7,7 +7,8 @@ class DeletedObject < ApplicationRecord
   serialize :metadata, Hash
 
   [Metric, Contract, User, ApplicationKey, ReferrerFilter].each do |scoped_class|
-    scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
+    scoped_class_string = scoped_class.to_s
+    scope scoped_class_string.underscore.pluralize.to_sym, -> { where(object_type: scoped_class_string) }
   end
 
   scope :deleted_owner, -> do
