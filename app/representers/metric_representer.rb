@@ -12,6 +12,7 @@ module MetricRepresenter
   property :description
 
   property :unit
+  property :parent_id, if: ->(*) { method_metric? }
 
   property :created_at
   property :updated_at
