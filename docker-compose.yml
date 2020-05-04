@@ -7,7 +7,9 @@ x-system_environment:
     - mailhog
     - memcached
     - mysql
+    - mysqlk
     - redis
+    - keycloak
   environment:
     - DATABASE_URL=mysql2://root@mysql/3scale_system_development
     - REDIS_URL=redis://redis/1
@@ -96,5 +98,35 @@ services:
       - "1025:1025"
       - "8025:8025"
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak_compose
+    ports:
+      - "8080:8080"
+    environment:
+      JDBC_PARAMS: "useSSL=false"
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysqlk
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    depends_on:
+      - mysqlk
+
+  mysqlk:
+    image: mysql:5.7
+    container_name: mysqlk_compose  
+    volumes:
+      - mysql-data-k:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+
 volumes:
   mysql-data:
+  mysql-data-k:
+    driver: local
