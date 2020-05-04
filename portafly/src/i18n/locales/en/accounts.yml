@@ -1,20 +1,95 @@
 ---
-page_title: Accounts | Portafly
-page_title_description: Page title of the Accounts page
-body_title: Accounts
-body_title_description": Body title of the Accounts page
-accounts_table:
-  aria_label: Accounts list
-  aria_label_description: Aria label of the Accounts table component
-  empty_state: There are no accounts
-  empty_state_description: Message of the Accounts table empty state
-  col_group: Group/org.
-  col_group_description: Title of the Group/org. column
-  col_admin: Admin
-  col_admin_description: Title of the Admin column
-  col_signup: Signup date
-  col_signup_description: Title of the Signup date column
-  col_apps: Apps
-  col_apps_description: Title of the Apps column
-  col_state: State
-  col_state_description: Title of the State column
+# Account settings > Users
+
+title_page: Accounts | Team members
+title_page_description: Title for the page to manage team members
+
+# Top area
+
+body_title: Team members
+body_title_description: Title for the main area to manage team members
+invite_new_member_button: Invite a new team member
+invite_new_member_button_description: Button link to send invitations to new team members
+
+# Main area
+
+## Tabs
+listing_tab: Listing
+listing_tab_description: Label for the tab that contains the list of all team members, selection criteria and actions that can be applied on them.
+invitations_tab: Invitations
+invitations_tab_description: Label for the tab that contains the list of all invitations, selection criteria and actions that can be applied on them.
+
+## Tab: Listing
+## Toolbar
+bulk_selector: {{number}} selected
+bulk_selector_description: Label for the bulk selector to indicate the number of chosen team members. This label is visible only when team members were selected.
+# Delete button: available in shared.yml
+team_members_filter: [Name]
+team_members_filter_description: List containing the criteria to filter team members
+[PROPOSED] team_members_typeahead: Filter by name
+team_members_typeahead_description: Filter by typing ahead the text
+
+team_members_table:
+  aria_label: Team members table
+  aria_label_description: Aria label of the table of team members
+  [PROPOSED] empty_state: Currently, there are no team members. Add team members.
+  empty_state_description: Message to show when there are no team members to show, and prompt the user to add members
+  name_header: Name
+  name_header_description: Column listing names of team members
+  email_header: Email
+  email_header_description: Column listing the email addresses of team members
+  sso_authentication_heaer: SSO authentication
+  sso_authentication_header_description: Column listing if SSO authentication has been configured for team members
+  [PROPOSED] sso_authentication_value: [Yes, Not yet]
+  role_header: Role
+  role_header_description: Column listing the roles associated to each team member
+  [PROPOSED] role_header_value: [Admin (you), Admin, Member]
+  permission_groups_header: Permission groups
+  permission_groups_header_description: Column listing the permisions mapped to each team member
+
+## Tab: Invitations
+## Toolbar
+bulk_selector: {{number}} selected
+bulk_selector_description: Label for the bulk selector to indicate the number of chosen invitations. This label is visible only when invitations were selected.
+#-------# Delete button: available in shared.yml
+[PROPOSED] invitations_filter: [Recipient, Acceptance]
+invitations_filter_description: List containing the criteria to filter invitations
+invitations_typeahead: [Filter by recipient, Filter by acceptance]
+invitations_typeahead_description: Filter by typing ahead the text.
+
+invitations_table:
+  aria_label: Invitations table
+  aria_label_description: Aria label of the table of invitations
+  [PROPOSED] empty_state: Currently, there are no invitations sent. Start sending invitations to your team members.
+  empty_state_description: Message to show when there are no invitations to show, and prompt the user to send some invites
+  recipient_header: Recipient
+  recipient_header_description: Column listing the email addresses of invitation recipients
+  [PROPOSED] sent_header: Sent on UTC time
+  sent_header_description: Column listing the date when invitations were sent
+  [PROPOSED] acceptance_header: Accepted on UTC time
+  acceptance_header_description: Column listing the date when the invitations were accepted
+  [PROPOSED] acceptance_values: [Yes - UTC time, Not yet]
+  actions_header: Actions
+  actions_header_description: Column listing the available actions to perform with each invitation
+
+# Modal: Invitation deletion
+invitation_deletion:
+  [PROPOSED] invitation_deletion_page: Delete selected invitations
+  invitation_deletion_page_description: Body title of modal dialog to delete the selected invitations from the table
+  [PROPOSED] admonition: This action will irreversibly delete the selected invitations. Please confirm below to proceed with the deletion.
+  admonition_description: Admonition text to explain that the removal of the selected invitations cannot be undone.
+  #-------# Delete button: available in shared.yml
+  #-------# Cancel button: available in shared.yml
+
+# Modal: Invitation to a new member
+invitation_sending:
+  invitation_sending_page: Invite a new team member
+  invitation_sending_page_description: Body title of modal dialog to send invitation to a new team member
+  invitation_sending_label: Send invitation to *
+  invitation_sending_label_description: Label prompting the user to specify the email address of the invitation recipient
+  [PROPOSED] invitation_sending_validation: Please indicate a valid email address of the colleague or friend you want to invite to your team.
+  invitation_sending_validation_description: Validation message to prompt user to specify a valid email address; to prevent an empty value, or bad format email address.
+  [PROPOSED] invitation_sending_helper: Email address of a colleague or friend you want to invite to your team
+  invitation_sending_helper_description: Text to prompt the user to specify an email address.
+  #-------# Send button: available in shared.yml
+  #-------# Cancel button: available in shared.yml
