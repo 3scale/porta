@@ -104,4 +104,10 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
     assert_equal 2, utilization.size
     assert_same_elements requested_metrics, utilization.map(&:metric)
   end
+
+  test 'nil result returns empty utilizations' do
+    ThreeScale::Core::Utilization.expects(:load).with(@service_id, @application_id).returns(nil)
+
+    assert_equal [], @application.utilization([])
+  end
 end

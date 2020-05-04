@@ -3,7 +3,7 @@ module BackendClient
     module Utilization
 
       def utilization(metrics_list)
-        utilization_records = ThreeScale::Core::Utilization.load(service_id, id)
+        utilization_records = ThreeScale::Core::Utilization.load(service_id, id) || []
         process_utilization(utilization_records, metrics_list)
       rescue
         System::ErrorReporting.report_error($!)
