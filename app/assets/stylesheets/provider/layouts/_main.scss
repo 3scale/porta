@@ -46,3 +46,192 @@ body {
     box-shadow: $whiteBoxShadowIE11;
   }
 }
+
+// Styles for the Cross Console Navigation
+.pf-c-page__header {
+  grid-template-columns: auto auto auto !important;
+
+  img.pf-c-brand {
+    height: 50px;
+  }
+
+  .pf-c-page__header-tools {
+    grid-column: 3 !important;
+    grid-row: 2;
+  }
+
+  .pf-c-page__header-brand-toggle {
+    display: flex;
+    justify-content: center;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .pf-c-page__header-brand-toggle .pf-c-button {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: var(--pf-global--spacer--md);
+    padding-right: var(--pf-global--spacer--md);
+  }
+  
+  .pf-c-page__header-brand-link {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+}
+
+.pf-c-page__header.pf-m-no-toggle {
+  grid-template-columns: minmax(auto, 72px) minmax(auto, 240px) auto auto !important;
+}
+
+.pf-c-page__header.pf-m-no-toggle .app-context-selector-wrapper {
+  grid-column: 1;
+}
+
+.pf-c-page__header.pf-m-no-toggle .pf-c-page__header-tools {
+  grid-row: 1;
+  grid-column: 4 !important;
+}
+
+.pf-c-page__header.pf-m-no-toggle .pf-c-page__header-brand-link {
+  padding-left: var(--pf-global--spacer--md);
+  padding-right: var(--pf-global--spacer--md);
+}
+
+.app-context-selector-wrapper {
+  height: 76px;
+  grid-column: 2;
+  grid-row: 2;
+
+  .pf-c-context-selector {
+    height: 100%;
+    width: 240px !important;
+  }
+  
+  .pf-c-context-selector__toggle {
+    height: 100%;
+    width: 100%;
+    padding-left: var(--pf-global--spacer--md) !important;
+    background-color: var(--pf-global--BackgroundColor--dark-200);
+
+    &::before {
+      border-top: 0 !important;
+      border-bottom: 0 !important;
+      border-right-color: var(--pf-global--BorderColor--200) !important;
+      border-left-color: var(--pf-global--BorderColor--200) !important;
+      border-bottom-width: 0px !important;
+    }
+  }
+}
+
+.pf-m-expanded.pf-c-context-selector__toggle::before,
+.pf-c-context-selector__toggle:hover::before,
+.pf-c-context-selector__toggle:focus::before {
+  border-top: var(--pf-global--BorderWidth--lg) solid var(--pf-global--active-color--100) !important;
+}
+
+@media screen and (min-width: 576px) {
+    .pf-c-page__header {
+      grid-template-columns: minmax(auto, 72px) minmax(auto, 218px) auto auto !important;
+    }
+
+    .pf-c-page__header.pf-m-no-toggle .app-context-selector-wrapper {
+      grid-column: 2;
+    }
+
+    .pf-c-page__header.pf-m-no-toggle .pf-c-page__header-brand-link {
+      grid-column: 1 !important;
+    }
+
+    .pf-c-page__header-tools {
+      grid-column: 4 !important;
+      grid-row: 1;
+    }
+  
+    .pf-c-page__header-brand-toggle {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  
+    .pf-c-page__header-brand-link {
+      display: flex;
+      justify-content: start;
+      grid-column: 2 !important;
+      grid-row: 1;
+    }
+
+  .app-context-selector-wrapper {
+    grid-column: 3;
+    grid-row: 1;
+
+    .pf-c-context-selector {
+      width: initial;
+    }
+
+    .pf-c-context-selector__toggle {
+      width: initial;
+      background-color: transparent;
+    }
+
+    .pf-c-page__header-tools {
+      grid-column: 4;
+      grid-row: 1;
+    }
+  }
+
+  .pf-c-page__header-nav {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .pf-c-page__header {
+    grid-template-rows: minmax(76px, auto) minmax(76px, auto);
+    min-height: 152px;
+  }
+
+  .pf-c-context-selector__toggle::before {
+    border: initial;
+  }
+
+  .pf-c-context-selector {
+    width: 100% !important;
+  }
+
+  .app-context-selector-wrapper {
+    height: 76px;
+  }
+
+  .pf-c-context-selector__toggle {
+    background-color: transparent;
+  }
+
+  .pf-c-page__header-brand-link {
+    padding-left: var(--pf-global--spacer--md);
+    padding-right: var(--pf-global--spacer--md);
+  }
+
+  .pf-c-page__header-tools {
+    display: flex;
+    justify-content: flex-end;
+    height: 76px;
+    border-top: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--200);
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    padding-top: var(--pf-global--spacer--sm);
+    padding-right: var(--pf-global--spacer--sm);
+    padding-bottom: var(--pf-global--spacer--sm);
+  }
+
+  .pf-c-page__header-brand-toggle {
+    height: 76px;
+  }
+
+  .pf-c-page__header-nav {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}

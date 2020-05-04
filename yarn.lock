@@ -1201,6 +1201,19 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-2.57.0.tgz#fc8a4ac5dd5fae17e519c3265e6ef2e6d865feb2"
   integrity sha512-HWLhzm1yMj7JqWLsdfeDXYwUmh7Puy8r6sAialg6wVllc/SRLwQUQ5UpLOGB9APYKTxXgDHxVuaxTfciSLrxwA==
 
+"@patternfly/react-core@3.129.3":
+  version "3.129.3"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-3.129.3.tgz#e54e135af9b15a3286ef17acd35997b8fdcf32b8"
+  integrity sha512-QiTTUqA0y55YbDtzjlzKmZ6pGQqxyCF14TBQFH3rXI2RV8Z4C6HyyILm09BD/D/ITQIhT82dp+6nRY/mQOqlkw==
+  dependencies:
+    "@patternfly/react-icons" "^3.14.28"
+    "@patternfly/react-styles" "^3.6.15"
+    "@patternfly/react-tokens" "^2.7.14"
+    emotion "^9.2.9"
+    exenv "^1.2.2"
+    focus-trap-react "^4.0.1"
+    tippy.js "5.1.2"
+
 "@patternfly/react-core@^3.120.5":
   version "3.134.2"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-3.134.2.tgz#872eda04c8224614137bdd5430aa20292fd5e4e0"
@@ -1214,12 +1227,37 @@
     focus-trap-react "^4.0.1"
     tippy.js "5.1.2"
 
+"@patternfly/react-icons@3.14.30":
+  version "3.14.30"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-3.14.30.tgz#86ee33f47cac6cab0b4ee39a29ab782f9dde6491"
+  integrity sha512-HGtdsht66XKExZ4ew5ZWMXEvDAxQwQxW6sjX8h1diya1VDPpeKU6S1jclDPciSForsNMtfsXoku/jE2N3rUCwg==
+  dependencies:
+    "@fortawesome/free-brands-svg-icons" "^5.8.1"
+
 "@patternfly/react-icons@^3.14.18", "@patternfly/react-icons@^3.14.39":
   version "3.14.39"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-3.14.39.tgz#38e43781ff2c4550814208c68a68681b807270aa"
   integrity sha512-/1hhKEFRtvBYNa8BFRurqHdlUYYzdovmllwtEWcxye5lffDC1Ghco1NGQzjm0FtzkxX1hPFvw04HRR2jBBG8xQ==
   dependencies:
     "@fortawesome/free-brands-svg-icons" "^5.8.1"
+
+"@patternfly/react-icons@^3.14.28":
+  version "3.15.16"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-3.15.16.tgz#dedb37e4f37ec8fd787abc1f1a4a9321a5047899"
+  integrity sha512-YOBED8rhkbBEHTQpjEns/OjgD1gDsW8e6rw6u0H0y6S9YwrmZXhgq/aiu2OG0ftmKWOvYvrrDgmNBkkWpEWlEA==
+  dependencies:
+    "@fortawesome/free-brands-svg-icons" "^5.8.1"
+
+"@patternfly/react-styles@^3.6.15":
+  version "3.7.13"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-3.7.13.tgz#94af9c3055f289f74c6c5b28a609b681ffe1dc58"
+  integrity sha512-rpyYJj9QzjhEXb1MqY+6/vRlaS3z3NTHSoANvy28n65ZRhBxTiCZd7BxQ+CyiUMIPuUBbebBbZw/6MaToqJakg==
+  dependencies:
+    camel-case "^3.0.0"
+    css "^2.2.3"
+    cssstyle "^0.3.1"
+    emotion "^9.2.9"
+    emotion-server "^9.2.9"
 
 "@patternfly/react-styles@^3.6.26":
   version "3.6.26"
@@ -1239,6 +1277,11 @@
     relative "^3.0.2"
     resolve-from "^4.0.0"
     typescript "3.4.5"
+
+"@patternfly/react-tokens@^2.7.14":
+  version "2.8.13"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-2.8.13.tgz#dbaa1b347253c9d5f72b65ea87f4656b12b265b8"
+  integrity sha512-k3r58ShieAiqHfn+tyMwhrk+/r1VP/ABy7S5no7mzgs1cOP9bJzCRk08X0KmEDzsZqHqTBM8dsffYlPT2OGCcQ==
 
 "@patternfly/react-tokens@^2.7.25":
   version "2.7.25"
@@ -1288,6 +1331,29 @@
     webpack-assets-manifest "^3.1.1"
     webpack-cli "^3.3.10"
     webpack-sources "^1.4.3"
+
+"@rh-uxd/integration-core@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@rh-uxd/integration-core/-/integration-core-0.1.1.tgz#59d98d0ea169e955fa09a2027759e0c96bf33ea7"
+  integrity sha512-IAOgEBtSq+lrzOY9AeC2pISAt6Car+4Qjw9LPGhs90OlvsyGxGeafJLfR/gSfImUEuSlLoOLbo/sUi8tpMFXOg==
+
+"@rh-uxd/integration-core@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@rh-uxd/integration-core/-/integration-core-0.1.5.tgz#59d085231a01618e138dc9db6ad0731d34c5181d"
+  integrity sha512-hNy/2OJrfJJI7BNexAeFinsevmJHUhI20648eTMswqUDRgDCokREd/1DxOqtiBU1Epwf056G0/Lw46DpD6W67A==
+  dependencies:
+    axios "0.19.2"
+
+"@rh-uxd/integration-react@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@rh-uxd/integration-react/-/integration-react-0.1.2.tgz#9f96900067fc89d6c79698ec2cac67460e641fb3"
+  integrity sha512-MyNqvZeASMfQNsyWkiyl9NMa0vfFU6om+weIglRLFZYNrCaB5Ifu3x0x7s7cdOofwMJHHpIexv9CyOq0TRDeBQ==
+  dependencies:
+    "@patternfly/react-core" "3.129.3"
+    "@patternfly/react-icons" "3.14.30"
+    "@rh-uxd/integration-core" "0.1.1"
+    react "16.13.0"
+    react-dom "16.13.0"
 
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
@@ -2037,6 +2103,13 @@ aws4@^1.8.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.1.tgz#7e33d8f7d449b3f673cd72deb9abdc552dbe528e"
   integrity sha512-wMHVg2EOHaMRxbzgFJ9gtjOOCrI80OHLG14rxi28XwOW8ux6IiEbRCGGGqCtdAIg4FQCbW20k9RsT4y3gJlFug==
+
+axios@0.19.2:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+  dependencies:
+    follow-redirects "1.5.10"
 
 axobject-query@^2.0.2:
   version "2.1.1"
@@ -4162,6 +4235,13 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
+debug@=3.1.0, debug@~3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
+  dependencies:
+    ms "2.0.0"
+
 debug@^3.0.0, debug@^3.1.0, debug@^3.1.1, debug@^3.2.5, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
@@ -4175,13 +4255,6 @@ debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
-
-debug@~3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
-  dependencies:
-    ms "2.0.0"
 
 decamelize@^1.1.1, decamelize@^1.1.2, decamelize@^1.2.0:
   version "1.2.0"
@@ -5635,6 +5708,13 @@ focus-trap@^3.0.0:
   dependencies:
     tabbable "^3.1.0"
     xtend "^4.0.1"
+
+follow-redirects@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
+  dependencies:
+    debug "=3.1.0"
 
 follow-redirects@^1.0.0:
   version "1.10.0"
@@ -10844,6 +10924,16 @@ react-debounce-input@^3.2.0:
     lodash.debounce "^4"
     prop-types "^15.7.2"
 
+react-dom@16.13.0:
+  version "16.13.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.0.tgz#cdde54b48eb9e8a0ca1b3dc9943d9bb409b81866"
+  integrity sha512-y09d2c4cG220DzdlFkPTnVvGTszVvNpC73v+AaLGLHbkpy3SSgvYq8x0rNwPJ/Rk/CicTNgk0hbHNw1gMEZAXg==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.0"
+
 react-dom@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
@@ -10961,6 +11051,15 @@ react-test-renderer@^16.0.0-0:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.18.0"
+
+react@16.13.0:
+  version "16.13.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.13.0.tgz#d046eabcdf64e457bbeed1e792e235e1b9934cf7"
+  integrity sha512-TSavZz2iSLkq5/oiE7gnFzmURKZMltmi193rm5HEoUDAXpzT9Kzw6oNZnGoai/4+fUnm7FqS5dwgUL34TujcWQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
 
 react@^15.6.2:
   version "15.6.2"
@@ -11568,6 +11667,14 @@ scheduler@^0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.18.0.tgz#5901ad6659bc1d8f3fdaf36eb7a67b0d6746b1c4"
   integrity sha512-agTSHR1Nbfi6ulI0kYNK0203joW2Y5W4po4l+v03tOoiJKpTBbxpNhWDvqc/4IcOw+KLmSiQLTasZ4cab2/UWQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.19.0:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
+  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

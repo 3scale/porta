@@ -1,14 +1,30 @@
 = javascript_pack_tag 'navigation'
 = javascript_pack_tag 'PF4Styles/header'
 
-header.pf-c-page__header id="user_widget" class='Header' class=('Header--master' if current_account.master?) role='banner'
+header.pf-c-page__header id="user_widget" class='app-page__header pf-m-no-toggle' class=('Header--master' if current_account.master?) role='banner'
 
-  = link_to provider_admin_dashboard_path, class: 'pf-c-page__header-brand Header-link', title: 'Dashboard' do
+  = link_to provider_admin_dashboard_path, class: 'pf-c-page__header-brand-link Header-link', title: 'Dashboard' do
       .Header-logo class=('Header-logo--withIcon' if active_menu?(:main_menu, :dashboard))
-        span Red Hat 3scale API Management
-
+        span Red Hat 3scale API Management-hello
+        img[src="Logo-Red_Hat-Integration-A-Reverse-RGB.png"]
+        
   .pf-c-page__header-nav
     = render 'shared/api_selector'
+
+  .app-context-selector-wrapper
+    .pf-c-context-selector
+      button#context-selector-collapsed-example-toggle.pf-c-context-selector__toggle[aria-labelledby="context-selector-collapsed-example-label"]
+        span.pf-c-context-selector__toggle-text
+          | 3scale API Management
+        i.fas.fa-caret-down.pf-c-context-selector__toggle-icon[aria-hidden="true"]
+      .pf-c-context-selector__menu
+        ul.pf-c-context-selector__menu-list[style="overflow-y: unset;"]
+          li
+            button.pf-c-context-selector__menu-list-item
+              | Solution Explorer
+          li
+            button.pf-c-context-selector__menu-list-item
+              | Red Hat Fuse Online
 
   .pf-c-page__header-tools
     .PopNavigation.PopNavigation--account
