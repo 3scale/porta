@@ -23,11 +23,10 @@ nav.DashboardNavigation
                                        admin_service_applications_path(service),
                                        icon_name: 'cubes'
 
-    - unread_alerts = current_account.buyer_alerts.by_service(service).unread
-    - if can?(:manage, :monitoring) && unread_alerts.any?
+    - if can?(:manage, :monitoring) && service.unread_alerts_count > 0
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'Alert',
-                                    unread_alerts,
+                                    service.unread_alerts_count,
                                     admin_service_alerts_path(service),
                                     icon_name: 'exclamation-triangle',
                                     notice: true
@@ -37,7 +36,7 @@ nav.DashboardNavigation
       li.DashboardNavigation-list-item
         // Subscriptions (would be nice to have API specific links)
         => dashboard_collection_link 'Subscription',
-                                     service.service_contracts,
+                                     service.service_contracts_count,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id}),
                                      icon_name: 'paperclip'
 
@@ -45,7 +44,7 @@ nav.DashboardNavigation
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
        = dashboard_collection_link 'ActiveDoc',
-                                    service.api_docs_services,
+                                    service.api_docs_services_count,
                                     admin_service_api_docs_path(service),
                                     icon_name: 'file-text'
     // Integration

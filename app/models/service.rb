@@ -110,6 +110,8 @@ class Service < ApplicationRecord
   has_many :top_level_metrics, -> { includes(:children).top_level }, class_name: 'Metric'
 
   has_many :service_tokens, inverse_of: :service, dependent: :destroy
+  has_many :alerts, inverse_of: :service
+  has_many :unread_alerts, -> { unread }, class_name: 'Alert', inverse_of: :service
 
   scope :accessible, -> { where.not(state: DELETE_STATE) }
   scope :deleted, -> { where(state: DELETE_STATE) }
