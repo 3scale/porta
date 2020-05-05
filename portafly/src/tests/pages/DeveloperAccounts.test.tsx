@@ -2,13 +2,13 @@ import React from 'react'
 
 import { render } from 'tests/custom-render'
 import { DeveloperAccounts } from 'pages'
-import { useGetDeveloperAccounts } from 'dal/accounts'
 import { developerAccounts } from 'tests/examples'
+import { useAsync } from 'react-async'
 
-jest.mock('dal/accounts')
+jest.mock('react-async')
 
 describe('when the request is pending', () => {
-  (useGetDeveloperAccounts as jest.Mock).mockReturnValueOnce({ isPending: true })
+  (useAsync as jest.Mock).mockReturnValueOnce({ isPending: true })
 
   it('should render spinner', () => {
     const wrapper = render(<DeveloperAccounts />)
@@ -17,7 +17,7 @@ describe('when the request is pending', () => {
 })
 
 describe('when backend returns an error', () => {
-  (useGetDeveloperAccounts as jest.Mock).mockReturnValueOnce({ error: { message: 'ERROR' } })
+  (useAsync as jest.Mock).mockReturnValueOnce({ error: { message: 'ERROR' } })
 
   it('should render an alert', () => {
     const wrapper = render(<DeveloperAccounts />)
@@ -26,7 +26,7 @@ describe('when backend returns an error', () => {
 })
 
 describe('when backend returns a list of accounts', () => {
-  (useGetDeveloperAccounts as jest.Mock).mockReturnValueOnce({ accounts: developerAccounts })
+  (useAsync as jest.Mock).mockReturnValueOnce({ data: developerAccounts })
 
   it('should render a table with accounts', () => {
     const wrapper = render(<DeveloperAccounts />)

@@ -8,4 +8,6 @@ const Translations: Record<ISupportedLanguages, ITranslations> = {
   en
 }
 
-export { Translations }
+const namespaces = Object.keys(en) as Array<ITranslationsPages>
+
+export { Translations, namespaces }
