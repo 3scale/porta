@@ -3,7 +3,7 @@ logo_alt_text: Red Hat Integration logo
 logo_alt_text_description: Alt attribute of the main logo
 buttons:
   submit: Submit
-  cancel: Cancel
+  cancel: Cancel  #-----duplicated string
   logout: Log Out
 navigation_items:
   overview: Overview
@@ -50,3 +50,81 @@ shared_elements:
   delete_button_tooltip_description: Tooltip shown upon hovering to explain that the deletion will be available upon selection of items.
   cancel_button: Cancel
   cancel_button_description: Label for a button to cancel an action
+alerts:
+  close_button: Close alert
+  close_button_description: Button for closing an alert
+bulk_selector:
+  none: Select none (0 items)
+  none_description: Bulk Selector option for selecting no items
+  page: Select page ({{count}} item)
+  page_description: Bulk Selector option for selecting current page items
+  page_plural: Select page ({{count}} items)
+  page_plural_description: Bulk Selector option for selecting current page items (plural version)
+  all: Select all ({{count}} item)
+  all_description: Bulk Selector option for selecting all available items
+  all_plural: Select all ({{count}} items)
+  all_plural_description: Bulk Selector option for selecting all available items (plural version)
+  label: "{{selectedCount}} selected"
+  label_description: Label indicating how many items are currently selected
+  toggle_checkbox_aria_label: Select All
+  toggle_checkbox_aria_label_description: Aria label for select all toggle button
+modals:
+  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
+  send_email:
+    title: Send email to admins of selected accounts
+    to: To
+    subject: Subject
+    body: Body
+    send: Send
+    cancel: Cancel  #-----duplicated string
+  change_state:
+    title: Change state for the selected accounts
+    to: Selected accounts
+    select_label: Select state
+    select_helper_text: Changing the state of a developer account does not imply changing the state of its applications.
+    send: Change state
+    cancel: Cancel  #-----duplicated string
+  # ------------- End of duplicated block: already included in Audience > Accounts > listing.yml -----·#
+  expand_list_button: "{{count}} more"
+  expand_list_button_description: Button to expand the list ot items selected for this modal
+  close_confirmation: Your content will be lost if you dismiss the dialog. Are you sure you want to dismiss the dialog?
+  close_confirmation_description: Alert message shown when closing a modal
+
+bulk_actions:
+  ## Toolbar
+  actions_empty_label: Select items first to enable actions
+  actions_empty_label_description: Admonition that displays inside the actions dropdown when no items are selected
+  actions_dropdownlist: Actions
+  actions_dropdownlist_description: String to list all the available actions.
+  # ------------- Duplicated block: above -----·#
+  warning: Select accounts first to enable bulk actions
+  warning_description: Warning that displays inside the actions dropdown, when no items are selected
+  title: Actions
+  title_description: Title of the Actions dropdown
+  # ------------- End of duplicated block: above -----·#
+  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
+  send_email: Send email
+  send_email_description: Bulk action for Send main
+  change_state: Change state
+  change_state_description: Bulk action for Change state
+  # ------------- End of duplicated block: already included in Audience > Accounts > listing.yml -----·#
+  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
+toasts:
+  send_email_start: Sending email
+  send_email_start_description: Alert message when email is being sent
+  send_email_success: Your message was sent.
+  send_email_success_description: Alert message when email is sent
+  send_email_error: Your message was not sent because of a network error.
+  send_email_error_description: Alert message when email could not be sent
+  change_state_start: Changing accounts state
+  change_state_start_description: Alert message when state is being changed
+  change_state_success: Account state changed
+  change_state_success_description: Alert message when state is changed
+  change_state_error: Account state could not be changed
+  change_state_error_description: Alert message when state could not be changed
+# ------------- End of Duplicated block: already included in Audience > Accounts > listing.yml -----·#
+loading:
+  title: Loading
+  title_description: Title displayed as part of the loading state
+  aria_label: Loading spinner  #-----TODO: revise this aria label
+  aria_label_description: Aria label for the Loading component

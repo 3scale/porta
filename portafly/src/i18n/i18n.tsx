@@ -1,15 +1,13 @@
 import i18n, { FormatFunction } from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
-import { ITranslationsPages, Translations, EN } from 'i18n'
+import { namespaces, Translations, EN } from 'i18n'
 
 const formatFn: FormatFunction = (value, format) => {
   if (format === 'uppercase') return value.toUpperCase()
   if (format === 'lowercase') return value.toLowerCase()
   return value
 }
-
-const sections: Array<ITranslationsPages> = ['shared', 'overview', 'analytics', 'applications', 'accounts', 'integration']
 
 const options = {
   lng: EN,
@@ -19,7 +17,7 @@ const options = {
     format: formatFn,
     escapeValue: false
   },
-  ns: sections,
+  ns: namespaces,
   defaultNS: 'shared',
   react: {
     transKeepBasicHtmlNodesFor: ['br', 'strong', 'i']

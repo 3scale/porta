@@ -1,24 +1,145 @@
 import React from 'react'
 import { useTranslation } from 'i18n/useTranslation'
-import { useA11yRouteChange, useDocumentTitle } from 'components'
+// @ts-ignore
+import { useA11yRouteChange, useDocumentTitle, useAlertsContext } from 'components'
+import {
+  Toolbar,
+  DataListProvider,
+  SearchWidget,
+  PaginationWidget,
+  useDataListPagination,
+  useDataListTable,
+  BulkSelectorWidget,
+  BulkActionsWidget,
+  ChangeStateModal,
+  SendEmailModal,
+  useDataListBulkActions,
+  filterRows,
+  useDataListFilters
+} from 'components/data-list'
 import {
   PageSection,
   TextContent,
   Title,
   Text,
   Card,
-  CardBody
+  CardBody,
+  Button,
+  ToolbarItem,
+  ToolbarContent
 } from '@patternfly/react-core'
+import { BellIcon } from '@patternfly/react-icons'
+import {
+  TableHeader, TableBody, Table, OnSort, sortable
+} from '@patternfly/react-table'
+
+const categories = [
+  {
+    name: 'admin',
+    humanName: 'Admin'
+  },
+  {
+    name: 'group',
+    humanName: 'Organization / Group'
+  },
+  {
+    name: 'state',
+    humanName: 'State',
+    options: [
+      {
+        name: 'active',
+        humanName: 'Active'
+      },
+      {
+        name: 'pending',
+        humanName: 'Pending'
+      }
+    ]
+  }
+]
+
+const tableData = {
+  columns: categories.map((c) => ({
+    categoryName: c.name,
+    title: c.humanName,
+    transforms: [sortable]
+  })),
+  rows: new Array(1000).fill(0).map((_, i) => ({
+    id: i,
+    cells: [
+      `Admin ${Math.random() * (i + 1)}`,
+      `Group ${Math.random() * (i + 1)}`,
+      (categories[2] as any).options[i % 2].humanName
+    ],
+    selected: false
+  }))
+}
+
+const DataListTable = () => {
+  const { startIdx, endIdx } = useDataListPagination()
+  const {
+    columns,
+    rows,
+    sortBy,
+    setSortBy,
+    selectOne,
+    selectAll
+  } = useDataListTable()
+  const { filters } = useDataListFilters()
+  const { modal } = useDataListBulkActions()
+
+  const onSort: OnSort = (event, index, direction) => {
+    setSortBy(index, direction, true)
+  }
+
+  const filteredRows = filterRows(rows, filters, columns)
+  const pageRows = filteredRows.slice(startIdx, endIdx)
+
+  return (
+    <>
+      <Table
+        aria-label="data-list-table"
+        cells={columns}
+        rows={pageRows}
+        onSelect={(_ev, selected, _rowIndex, rowData) => (_rowIndex === -1
+          ? selectAll(selected)
+          : selectOne(rowData.id, selected)
+        )}
+        canSelectAll
+        sortBy={sortBy}
+        onSort={onSort}
+      >
+        <TableHeader />
+        <TableBody />
+      </Table>
+      {modal === 'sendEmail' && <SendEmailModal items={['1', '2', '3', '4', '5', '6']} />}
+      {modal === 'changeState' && <ChangeStateModal items={['1', '2', '3', '4', '5', '6']} />}
+    </>
+  )
+}
 
 const Overview: React.FunctionComponent = () => {
   const { t } = useTranslation('overview')
+
   useA11yRouteChange()
   useDocumentTitle(t('page_title'))
+  const { addAlert } = useAlertsContext()
+
+  const actions = {
+    sendEmail: t('shared:bulk_actions.send_email'),
+    changeState: t('shared:bulk_actions.change_state')
+  }
+
+  const dataListInitialState = {
+    filters: {},
+    table: tableData
+  }
+
   return (
     <>
       <PageSection variant="light">
         <TextContent>
-          <Title size="3xl">{t('body_title')}</Title>
+          <Title headingLevel="h2" size="3xl">{t('body_title')}</Title>
           <Text>
             {t('subtitle')}
           </Text>
@@ -29,7 +150,40 @@ const Overview: React.FunctionComponent = () => {
           <CardBody>
             <TextContent>
               <p>{t('shared:format.uppercase', { text: 'Ohai' })}</p>
+              {/* This is just for testing, will be removed */}
+              <Button
+                icon={<BellIcon />}
+                onClick={() => {
+                  const id = Date.now().toString()
+                  addAlert({ id, variant: 'info', title: `Test Alert ${id}` })
+                }}
+              >
+                Add an Alert
+              </Button>
             </TextContent>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardBody>
+            <DataListProvider initialState={dataListInitialState}>
+              <Toolbar>
+                <ToolbarContent>
+                  <ToolbarItem>
+                    <BulkSelectorWidget />
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <BulkActionsWidget actions={actions} />
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <SearchWidget categories={categories} />
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <PaginationWidget itemCount={tableData.rows.length} />
+                  </ToolbarItem>
+                </ToolbarContent>
+              </Toolbar>
+              <DataListTable />
+            </DataListProvider>
           </CardBody>
         </Card>
       </PageSection>

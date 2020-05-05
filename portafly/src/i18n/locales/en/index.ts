@@ -1,13 +1,51 @@
 // @ts-nocheck // TODO: make tslint to recognize yml files
+
+// Shared files
 import shared from 'i18n/locales/en/shared.yml'
 import overview from 'i18n/locales/en/overview.yml'
-import analytics from 'i18n/locales/en/analytics.yml'
-import applications from 'i18n/locales/en/applications.yml'
-import accounts from 'i18n/locales/en/accounts.yml'
-import integration from 'i18n/locales/en/integration.yml'
 import login from 'i18n/locales/en/login.yml'
+// Audience
+import audienceAccountsListing from 'i18n/locales/en/audience/accounts/listing.yml'
+// Applications
+import applicationsListing from 'i18n/locales/en/applications/listing.yml'
+import applicationsPlans from 'i18n/locales/en/applications/applications_plans.yml'
+// Accounts
+import accountSettingsPersonal from 'i18n/locales/en/account_settings/personal/personal.yml'
+import accountSettingsPersonalTokens from 'i18n/locales/en/account_settings/personal/tokens.yml'
+import accountSettingsPersonalDetails from 'i18n/locales/en/account_settings/personal/personal_details.yml'
+import accountSettingsPersonalNotificationPreferences from 'i18n/locales/en/account_settings/personal/notification_preferences.yml'
+import accountSettingsUsersListing from 'i18n/locales/en/account_settings/users/listing-invitations.yml'
+// Analytics
+import analyticsUsage from 'i18n/locales/en/analytics/usage.yml'
+// Integration
+import integrationConfiguration from 'i18n/locales/en/integration/configuration.yml'
+
+const applications = {
+  listing: applicationsListing,
+  plans: applicationsPlans
+}
+
+const accounts = {
+  personal: {
+    ...accountSettingsPersonal,
+    tokens: accountSettingsPersonalTokens,
+    details: accountSettingsPersonalDetails,
+    notifications: accountSettingsPersonalNotificationPreferences
+  },
+  users: accountSettingsUsersListing
+}
+
+const analytics = {
+  analyticsUsage
+}
+
+const integration = {
+  integrationConfiguration
+}
+
 
 export {
+  audienceAccountsListing,
   shared,
   overview,
   analytics,

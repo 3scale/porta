@@ -9,8 +9,7 @@ import {
   Form,
   FormGroup,
   TextInput,
-  LoginPage,
-  BackgroundImageSrc
+  LoginPage
 } from '@patternfly/react-core'
 import brandImg from 'assets/logo.svg'
 import BackgroundImageSrcLg from 'assets/images/pfbg_1200.jpg'
@@ -19,27 +18,25 @@ import BackgroundImageSrcSm2x from 'assets/images/pfbg_768@2x.jpg'
 import BackgroundImageSrcXs from 'assets/images/pfbg_576.jpg'
 import BackgroundImageSrcXs2x from 'assets/images/pfbg_576@2x.jpg'
 
+const backgroundImages = {
+  lg: BackgroundImageSrcLg,
+  sm: BackgroundImageSrcSm,
+  sm2x: BackgroundImageSrcSm2x,
+  xs: BackgroundImageSrcXs,
+  xs2x: BackgroundImageSrcXs2x
+}
+
 interface ILoginForm {
   token: string
   onChange: (value: string) => void
   onClick: () => void
 }
 
-const backgroundImages = {
-  [BackgroundImageSrc.lg]: BackgroundImageSrcLg,
-  [BackgroundImageSrc.sm]: BackgroundImageSrcSm,
-  [BackgroundImageSrc.sm2x]: BackgroundImageSrcSm2x,
-  [BackgroundImageSrc.xs]: BackgroundImageSrcXs,
-  [BackgroundImageSrc.xs2x]: BackgroundImageSrcXs2x
-}
-
-const LoginForm: React.FunctionComponent<ILoginForm> = (
-  {
-    token,
-    onChange,
-    onClick
-  }: ILoginForm
-) => {
+const LoginForm: React.FunctionComponent<ILoginForm> = ({
+  token,
+  onChange,
+  onClick
+}) => {
   const { t } = useTranslation('login')
   return (
     <Form>
@@ -61,10 +58,14 @@ const LoginForm: React.FunctionComponent<ILoginForm> = (
   )
 }
 
-
 const Login: React.FunctionComponent = () => {
-  const [token, setToken] = useState('')
   const { authToken, setAuthToken } = useAuth()
+
+  if (authToken) {
+    return <Redirect to="/" />
+  }
+
+  const [token, setToken] = useState('')
   const { t } = useTranslation('login')
   useDocumentTitle(t('page_title'))
 
@@ -72,25 +73,23 @@ const Login: React.FunctionComponent = () => {
     setAuthToken(token)
   }
 
-  return authToken
-    ? <Redirect to="/" />
-    : (
-      <LoginPage
-        brandImgSrc={brandImg}
-        brandImgAlt={t('brand_img_alt')}
-        backgroundImgSrc={backgroundImages}
-        backgroundImgAlt={t('background_img_alt')}
-        loginTitle={t('login_title')}
-        loginSubtitle={t('login_subtitle')}
-        textContent={t('text_content')}
-      >
-        <LoginForm
-          token={token}
-          onChange={(value) => setToken(value)}
-          onClick={postLogin}
-        />
-      </LoginPage>
-    )
+  return (
+    <LoginPage
+      brandImgSrc={brandImg}
+      brandImgAlt={t('brand_img_alt')}
+      backgroundImgSrc={backgroundImages}
+      backgroundImgAlt={t('background_img_alt')}
+      loginTitle={t('login_title')}
+      loginSubtitle={t('login_subtitle')}
+      textContent={t('text_content')}
+    >
+      <LoginForm
+        token={token}
+        onChange={setToken}
+        onClick={postLogin}
+      />
+    </LoginPage>
+  )
 }
 
 // Default export needed for React.lazy
