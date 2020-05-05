@@ -89,7 +89,7 @@
     "classnames": "^2.2.6",
     "codemirror": "^5.43.0",
     "core-js": "^2.6.9",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "jquery-ui": "^1.12.1",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
