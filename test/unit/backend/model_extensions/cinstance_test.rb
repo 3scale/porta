@@ -59,13 +59,14 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
     plan = FactoryBot.create(:application_plan, :issuer => service)
     buyer_account = FactoryBot.create(:buyer_account, :provider_account => provider_account)
 
-    cinstance = Cinstance.new(:plan => plan, :user_account => buyer_account)
+    cinstance = Cinstance.new(plan: plan, user_account: buyer_account, user_key: 'my-user-key')
 
     app_id = nil
     ThreeScale::Core::Application.expects(:save)
         .with(has_entries(service_id: service.backend_id,
                          plan_id: plan.id,
                          plan_name: plan.name,
+                         user_key: cinstance.user_key,
                          state: :active)) do |params|
       app_id = params[:id]
     end

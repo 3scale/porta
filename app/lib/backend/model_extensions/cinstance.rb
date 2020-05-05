@@ -32,6 +32,7 @@ module Backend
                                               :state      => state,
                                               :plan_id    => plan.id,
                                               :plan_name  => plan.name,
+                                              :user_key   => user_key,
                                               :redirect_url => redirect_url )
         end
 
