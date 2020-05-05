@@ -100,77 +100,6 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
     cinstance.save!
   end
 
-  test 'creates user_key to application_id mapping when provider cinstance is created' do
-    service_id = user_key = app_id = nil
-
-    ThreeScale::Core::Application.expects(:save_id_by_key)
-        .at_least_once.with do |*params|
-      service_id, user_key, app_id = params
-    end
-
-    provider_account = FactoryBot.create(:provider_account)
-    cinstance        = provider_account.bought_cinstance
-    service          = Account.master.default_service
-
-    assert_equal service.backend_id, service_id
-    assert_equal cinstance.user_key, user_key
-    assert_equal cinstance.application_id, app_id
-  end
-
-  test 'creates user_key to application_id mapping when buyer cinstance is created' do
-    plan  = FactoryBot.create(:application_plan)
-    buyer = FactoryBot.create(:buyer_account)
-
-    user_key = app_id = nil
-
-    ThreeScale::Core::Application.expects(:save_id_by_key)
-        .with(plan.service.backend_id, anything, anything) do |*params|
-      _, user_key, app_id = params
-    end
-
-    cinstance = Cinstance.create!(:plan => plan, :user_account => buyer)
-
-    assert_equal cinstance.application_id, app_id
-    assert_equal cinstance.user_key, user_key
-  end
-
-  test 'updates user_key to application_id mapping when cinstance changes user_key' do
-    plan         = FactoryBot.create(:application_plan)
-    buyer        = FactoryBot.create(:buyer_account)
-    cinstance    = Cinstance.create!(:plan => plan, :user_account => buyer)
-    old_user_key = cinstance.user_key
-
-    ThreeScale::Core::Application.expects(:delete_id_by_key)
-      .with(plan.service.backend_id, old_user_key)
-
-    user_key = nil
-
-    ThreeScale::Core::Application.expects(:save_id_by_key)
-        .with(plan.service.backend_id, anything, cinstance.application_id) do |*params|
-      _, user_key, _ = params
-    end
-
-    cinstance.change_user_key!
-
-    assert_not_equal old_user_key, user_key
-    assert_equal cinstance.user_key, user_key
-  end
-
-  # Regression test for https://github.com/3scale/system/issues/2033
-  #
-  test 'does not save empty user_key' do
-    plan         = FactoryBot.create(:application_plan)
-    buyer        = FactoryBot.create(:buyer_account)
-    cinstance    = Cinstance.create!(:plan => plan, :user_account => buyer)
-    old_user_key = cinstance.user_key
-
-    ThreeScale::Core::Application.expects(:save_id_by_key).never
-    ThreeScale::Core::Application.expects(:delete_id_by_key)
-      .with(plan.service.backend_id, old_user_key)
-
-    cinstance.update_attribute(:user_key, '')
-  end
-
   test '#delete_backend_cinstance deletes application_keys, referrer_filters, user_key and application' do
     plan      = FactoryBot.create(:application_plan)
     service   = plan.service
@@ -186,7 +115,6 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
     cinstance.reload
     cinstance.application_keys.each { |app_key| ThreeScale::Core::ApplicationKey.expects(:delete).with(backend_id, app_id, app_key.value) }
     cinstance.referrer_filters.each { |referrer_filter| ThreeScale::Core::ApplicationReferrerFilter.expects(:delete).with(backend_id, app_id, referrer_filter.value) }
-    ThreeScale::Core::Application.expects(:delete_id_by_key).with(backend_id, user_key)
     ThreeScale::Core::Application.expects(:delete).with(backend_id, app_id)
 
     cinstance.delete_backend_cinstance

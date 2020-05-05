@@ -25,7 +25,7 @@ module Backend
 
       Cinstance.find_each do |cinstance|
         cinstance.send(:update_backend_application)
-        cinstance.send(:update_backend_user_key_to_application_id_mapping)
+        cinstance.send(:update_provider_backend_service_if_user_key_changed)
 
         # to ensure that there is a 'backend_object' - there are
         # invalid data floating around
@@ -91,7 +91,7 @@ module Backend
 
       update_cinstance = ->(cinstance) do
         cinstance.send(:update_backend_application)
-        cinstance.send(:update_backend_user_key_to_application_id_mapping)
+        cinstance.send(:update_provider_backend_service_if_user_key_changed)
         if cinstance.provider_account
           cinstance.application_keys.each { |k| k.send(:update_backend_value) }
           cinstance.referrer_filters.each { |f| f.send(:update_backend_value) }
