@@ -14,7 +14,7 @@ class Provider::Admin::DashboardsController < FrontendController
     #
     # but 'Cannot eagerly load the polymorphic association :sender'
     @services = current_user.accessible_services.includes(:proxy, :cinstances, :account)
-    ActiveRecord::Precounter.new(@services).precount(:unread_alerts, :api_docs_services)
+    ActiveRecord::Precounter.new(@services).precount(:unread_alerts, :api_docs_services, :cinstances_with_traffic, :sandbox_proxy_configs)
 
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
