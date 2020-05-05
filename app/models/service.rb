@@ -69,6 +69,8 @@ class Service < ApplicationRecord
   scope :of_account, ->(account) { where.has { account_id == account.id } }
 
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
+  has_many :proxy_configs, through: :proxy, inverse_of: :proxy
+  has_many :sandbox_proxy_configs, -> { sandbox }, class_name: 'ProxyConfig', inverse_of: :proxy
 
   belongs_to :default_service_plan, class_name: 'ServicePlan'
   belongs_to :default_application_plan, class_name: 'ApplicationPlan'
@@ -84,6 +86,7 @@ class Service < ApplicationRecord
   alias provided_plans issued_plans
 
   has_many :cinstances, inverse_of: :service
+  has_many :cinstances_with_traffic, -> { with_any_traffic }, inverse_of: :service, class_name: 'Cinstance'
   has_many :service_contracts, through: :service_plans #, :readonly => true
 
   has_many :contracts, through: :issued_plans do #, :readonly => true

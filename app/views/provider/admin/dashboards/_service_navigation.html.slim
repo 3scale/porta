@@ -50,7 +50,7 @@ nav.DashboardNavigation
     // Integration
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-        - if service.has_traffic? || (apiap? && service.proxy.proxy_configs.sandbox.any?)
+        - if service.cinstances_with_traffic_count > 0 || (apiap? && service.sandbox_proxy_configs_count > 0)
           - if has_out_of_date_configuration?(service)
             = dashboard_navigation_link 'Integration',
                                         path_to_service(service),
