@@ -84,7 +84,6 @@
     "@patternfly/react-icons": "^3.14.18",
     "@rails/webpacker": "^4.2.2",
     "@rh-uxd/integration-core": "^0.1.5",
-    "@rh-uxd/integration-react": "^0.1.2",
     "babel-loader": "^8.0.6",
     "bootstrap-sass": "^3.4.1",
     "c3": "^0.4.11",

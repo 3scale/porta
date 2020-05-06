@@ -2,9 +2,9 @@
 $link-color: #0088ce; // pf-blue-400
 
 .ActiveMenuTitle {
+  font-size: 14px !important;
 
   & > i:first-child {
-    color: $link-color;
     margin-right: 0.5rem;
   }
 
