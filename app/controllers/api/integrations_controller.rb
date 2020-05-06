@@ -240,7 +240,7 @@ class Api::IntegrationsController < Api::BaseController
       :error_headers_auth_missing, :error_auth_missing, :error_status_no_match,
       :error_headers_no_match, :error_no_match, :error_status_limits_exceeded, :error_headers_limits_exceeded, :error_limits_exceeded,
       :api_test_path, :policies_config, proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id
-                                                                   redirect_url position last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id]
+                                                                   redirect_url position last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES
     ]
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?

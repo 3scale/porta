@@ -154,28 +154,12 @@ class IntegrationsTest < ActionDispatch::IntegrationTest
   test 'update OIDC Authorization flows' do
     service = FactoryBot.create(:simple_service, account: @provider)
     ProxyTestService.any_instance.stubs(disabled?: true)
-    service.proxy.oidc_configuration.save!
-    oidc_params = {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true, id: service.proxy.oidc_configuration.id}}
-    assert_no_change of: -> { service.proxy.reload.oidc_configuration.id } do
-      put admin_service_integration_path(service_id: service.id, proxy: oidc_params)
-    end
+    put admin_service_integration_path(service_id: service.id, proxy: {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true}})
     assert_response :redirect
 
     service.reload
     refute service.proxy.oidc_configuration.standard_flow_enabled
     assert service.proxy.oidc_configuration.direct_access_grants_enabled
-  end
-
-  test 'cannot update OIDC of another proxy' do
-    service = FactoryBot.create(:simple_service, account: @provider)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-    service.proxy.oidc_configuration.save!
-    another_oidc_config = FactoryBot.create(:oidc_configuration)
-    oidc_params = {oidc_configuration_attributes: {standard_flow_enabled: false, direct_access_grants_enabled: true, id: another_oidc_config.id}}
-    assert_no_change of: -> { service.proxy.reload.oidc_configuration.id } do
-      put admin_service_integration_path(service_id: service.id, proxy: oidc_params)
-    end
-    assert_response :not_found
   end
 
   test 'edit not found for apiap' do
