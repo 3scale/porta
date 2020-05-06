@@ -13,6 +13,8 @@ module Stats
     attr_reader :services
 
     def usage(options)
+      return empty_result(options) if services.empty?
+
       results = services.map { |service| service.usage(options) }
       results_values = ->(attr) { results.map { |result| result[attr] } }
 
@@ -29,6 +31,19 @@ module Stats
       result[:change] = total.percentage_change_from(previous_total)
 
       result
+    end
+
+    protected
+
+    def empty_result(options)
+      metric = extract_metric(options.symbolize_keys)
+
+      {
+        metric.class.name.underscore.to_sym => detail(metric),
+        period: period_detail(options),
+        total: 0,
+        values: []
+      }
     end
   end
 end
