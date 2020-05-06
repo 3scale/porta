@@ -1,0 +1,11 @@
+.swagger-section {
+  .autocomplete-select {
+    &.show {
+      display: block;
+    }
+    &.hide {
+      display: none;
+    }
+  }
+}
+
