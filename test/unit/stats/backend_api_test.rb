@@ -36,6 +36,17 @@ class Stats::BackendApiTest < ActiveSupport::TestCase
     assert_equal 150.0, stats[:change]
   end
 
+  test 'backend api without products' do
+    backend_api.backend_api_configs.delete_all
+    client = Stats::BackendApi.new(backend_api.reload)
+
+    today = Time.utc(2020, 3, 19).to_date
+    range = (today - 1.day)..today
+    stats = client.usage(metric_name: backend_api.metrics.hits.system_name, since: range.begin, until: range.end, granularity: :day, timezone: ActiveSupport::TimeZone['UTC'].name)
+    assert_equal 0, stats[:total]
+    assert stats[:values].empty?
+  end
+
   protected
 
   def fake_storage_stats

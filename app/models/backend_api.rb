@@ -15,6 +15,7 @@ class BackendApi < ApplicationRecord
 
   has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
   has_many :metrics, as: :owner, dependent: :destroy, inverse_of: :owner
+  alias_method :all_metrics, :metrics
 
   has_many :backend_api_configs, inverse_of: :backend_api, dependent: :destroy
   has_many :services, through: :backend_api_configs
