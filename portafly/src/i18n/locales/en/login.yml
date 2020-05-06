@@ -1,0 +1,13 @@
+---
+page_title: Login | Portafly
+page_title_description: Page title of the Login page
+body_title: Body title of the Login page
+body_title_description: Body title description of the Login page
+subtitle: This is the Login page
+subtitle_description: Subtitle of the Login page
+brand_img_alt: Brand image alt text for 3scale Red Hat logo
+background_img_alt: Background images alt text
+login_title: Log in to your account
+login_subtitle: Please, use your access token in order to log in
+form_label_token: Token
+text_content: Log in page text. THIS IS A TEMPORARY LOG IN FLOW, NOT PRODUCTION READY!!!
