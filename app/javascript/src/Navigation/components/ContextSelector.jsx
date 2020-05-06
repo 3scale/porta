@@ -122,7 +122,7 @@ class ContextSelector extends React.Component<Props, State> {
         <ul id="context-menu" className="PopNavigation-list u-toggleable">
           <li className="PopNavigation-listItem">
             <a className={this.getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
-              <i className='fa fa-home' />Dashboard-react
+              <i className='fa fa-home' />Dashboard
             </a>
           </li>
           {audienceLink ? (
