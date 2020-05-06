@@ -31,12 +31,9 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'update the settings' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: false)
+
       service.update!(deployment_option: 'self_managed')
-      service.proxy.oidc_configuration.save!
-      previous_oidc_config_id = service.proxy.reload.oidc_configuration.id
-
-      put admin_service_path(service), update_params(oidc_id: previous_oidc_config_id)
-
+      put admin_service_path(service), update_params
       assert_equal 'Service information updated.', flash[:notice]
 
       update_service_params = update_params[:service]
@@ -60,21 +57,11 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
 
       oidc_configuration = proxy.oidc_configuration
-      oidc_configuration_params.except(:id).each do |field_name, param_value|
+      oidc_configuration_params.each do |field_name, param_value|
         expected_value = param_value == '1'
         assert_equal expected_value, oidc_configuration.public_send(field_name)
       end
-      assert_equal previous_oidc_config_id, proxy.reload.oidc_configuration.id
-    end
 
-    test 'cannot update OIDC of another proxy' do
-      service.proxy.oidc_configuration.save!
-      another_oidc_config = FactoryBot.create(:oidc_configuration)
-      oidc_params = {oidc_configuration_attributes: {direct_access_grants_enabled: true, id: another_oidc_config.id}}
-      assert_no_change of: -> { service.proxy.reload.oidc_configuration.id } do
-        put admin_service_path(service), {service: {proxy_attributes: oidc_params}}
-      end
-      assert_response :not_found
     end
 
     # This test can be removed once used deprecated attributes have been removed from the schema
@@ -172,7 +159,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     private
 
-    def update_params(oidc_id: nil)
+    def update_params
       @update_params ||= { service:
         { intentions_required: '0',
           buyers_manage_apps: '0',
@@ -195,8 +182,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
               standard_flow_enabled: '1',
               implicit_flow_enabled: '1',
               service_accounts_enabled: '0',
-              direct_access_grants_enabled: '0',
-              id: oidc_id
+              direct_access_grants_enabled: '0'
             }
           }
         }
