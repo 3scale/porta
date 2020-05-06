@@ -12,38 +12,88 @@ module Stats
 
     attr_reader :services
 
+    class UsageResults
+      def initialize(options)
+        @options = options
+      end
+
+      attr_reader :options
+
+      def changes
+        return {} if options.fetch(:skip_change, true)
+
+        { previous_total: previous_total, change: change }
+      end
+
+      def to_h
+        {
+          total: total,
+          values: values
+        }.merge(changes)
+      end
+    end
+
+    class AggregateUsageResults < UsageResults
+      def initialize(options, services)
+        super(options)
+        @results = services.map { |source| source.usage(options) }
+      end
+
+      attr_reader :results
+
+      def total
+        map_results(:total).sum
+      end
+
+      def previous_total
+        map_results(:previous_total).sum
+      end
+
+      def change
+        total.percentage_change_from(previous_total)
+      end
+
+      def values
+        map_results(:values).transpose.map(&:sum)
+      end
+
+      protected
+
+      def map_results(attr)
+        results.map { |result| result[attr] }
+      end
+    end
+
+    class EmptyResult < UsageResults
+      def total
+        0
+      end
+
+      def previous_total
+        0
+      end
+
+      def change
+        0.0
+      end
+
+      def values
+        []
+      end
+    end
+
     def usage(options)
-      return empty_result(options) if services.empty?
-
-      results = services.map { |service| service.usage(options) }
-      results_values = ->(attr) { results.map { |result| result[attr] } }
-
-      result = results.first.slice(:metric, :period)
-
-      total = results_values.call(:total).sum
-      result[:total] = total
-      result[:values] = results_values.call(:values).transpose.map(&:sum)
-
-      return result if options.fetch(:skip_change, true)
-
-      previous_total = results_values.call(:previous_total).sum
-      result[:previous_total] = previous_total
-      result[:change] = total.percentage_change_from(previous_total)
-
-      result
+      result = services.any? ? AggregateUsageResults.new(options, services) : EmptyResult.new(options)
+      result.to_h.merge(metric_and_period_details(options))
     end
 
     protected
 
-    def empty_result(options)
+    def metric_and_period_details(options)
       metric = extract_metric(options.symbolize_keys)
+      metric_name = metric.class.name.underscore.to_sym
 
-      {
-        metric.class.name.underscore.to_sym => detail(metric),
-        period: period_detail(options),
-        total: 0,
-        values: []
-      }
+      { metric_name => detail(metric), period: period_detail(options) }
     end
   end
 end
