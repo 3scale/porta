@@ -10,13 +10,10 @@ import 'swagger-ui-react/swagger-ui.css'
 
 type ActiveDocsSpecProps = {
   url: string,
-  service: {
-    service: {}
-  },
   plugins?: [()=>{}]
 }
 
-const ActiveDocsSpec = ({ url, service, plugins }: ActiveDocsSpecProps) => (
+const ActiveDocsSpec = ({ url, plugins }: ActiveDocsSpecProps) => (
   <SwaggerUI url={url} plugins={OAS3Plugins} />
 )
 

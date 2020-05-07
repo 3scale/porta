@@ -1,11 +1,20 @@
+// scss-lint:disable SelectorFormat
+
 .swagger-section {
   .autocomplete-select {
+    max-width: 340px;
+
     &.show {
       display: block;
     }
+
     &.hide {
       display: none;
     }
+
+    select {
+      position: relative;
+      top: -1.5rem;
+    }
   }
 }
-

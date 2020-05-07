@@ -1,8 +1,9 @@
-const { service } = document.getElementById('swagger-ui-container').dataset
 export const RootInjectsPlugin = (system) => {
   return {
     rootInjects: {
-      service: JSON.parse(service)
+      customParamsList: {
+        account_id: [1, 2, 3, 4, 5]
+      }
     }
   }
 }

@@ -1,11 +1,11 @@
 import {
-  ParameterRow as parameterRow
+  CustomParameterRow as parameterRow
 } from 'ActiveDocs/customize/wrappedComponents/Parameters'
 
 export const WrappedComponentsPlugin = (system) => {
   return {
     afterLoad (system) {
-      this.rootInjects.service = this.rootInjects.service.service || {}
+      this.rootInjects.customParamsList = this.rootInjects.customParamsList || {}
     },
     wrapComponents: {
       parameterRow

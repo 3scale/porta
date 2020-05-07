@@ -2,7 +2,7 @@ import { ActiveDocsSpecWrapper as ActiveDocsSpec } from 'ActiveDocs/components/A
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'
-  const { url, service } = document.getElementById(containerId).dataset
+  const { url } = document.getElementById(containerId).dataset
 
-  ActiveDocsSpec({ url, service }, containerId)
+  ActiveDocsSpec({ url }, containerId)
 })
