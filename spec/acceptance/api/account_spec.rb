@@ -14,7 +14,7 @@ resource "Account" do
     account
   end
 
-  let(:expected_provider_fields) { %w[admin_domain domain from_email support_email finance_support_email site_access_code] }
+  let(:expected_provider_fields) { %w[admin_domain domain admin_base_url base_url from_email support_email finance_support_email site_access_code] }
 
   shared_context "with billing address set up" do
     before do
