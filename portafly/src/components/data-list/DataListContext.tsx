@@ -1,31 +1,21 @@
 import React, { createContext, useContext, useReducer } from 'react'
+import { combineReducers, Action } from 'utils'
 import {
-  createReducer,
-  combineReducers,
-  ActionHandlers,
-  Action
-} from 'utils'
-
-type Filters = Record<string, string[]>
+  filtersReducer,
+  useFilters,
+  FiltersState
+} from 'components/data-list/reducers'
 
 type State = {
-  filters: Filters
+  filters: FiltersState
 }
-
 const initialState: State = {
   filters: {}
 }
 
-const filtersActions: ActionHandlers = {
-  SET_FILTERS: (filters, action) => ({ ...filters, ...action.payload }),
-  CLEAR_FILTERS: () => ({})
-}
-
-const filtersReducer = createReducer(filtersActions)
-
-interface IDataListContext {
+export interface IDataListContext {
   state: State,
-  dispatch: React.Dispatch<Action>
+  dispatch: React.Dispatch<Action<any>>
 }
 
 const DataListContext = createContext<IDataListContext>({ state: initialState, dispatch: () => {} })
@@ -35,22 +25,13 @@ const DataListProvider: React.FunctionComponent = ({ children }) => {
 
   return (
     <DataListContext.Provider
-      value={{ state, dispatch } as { state: State, dispatch: React.Dispatch<Action>}}
+      value={{ state, dispatch } as IDataListContext}
     >
       {children}
     </DataListContext.Provider>
   )
 }
 
-const useDataList = () => useContext(DataListContext)
-
-const useDataListFilters = () => {
-  const { state, dispatch } = useDataList()
-  return {
-    filters: state.filters,
-    setFilters: (filters: Filters) => dispatch({ type: 'SET_FILTERS', payload: filters }),
-    clearFilters: () => dispatch({ type: 'CLEAR_FILTERS' })
-  }
-}
+const useDataListFilters = () => useFilters(useContext(DataListContext))
 
 export { DataListProvider, useDataListFilters }
