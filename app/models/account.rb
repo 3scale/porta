@@ -499,6 +499,8 @@ class Account < ApplicationRecord
       if provider?
         xml.admin_domain admin_domain
         xml.domain domain
+        xml.admin_base_url admin_base_url
+        xml.base_url base_url
         xml.from_email from_email
         xml.support_email support_email
         xml.finance_support_email finance_support_email

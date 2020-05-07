@@ -253,6 +253,14 @@ module Account::ProviderMethods
     end
   end
 
+  def admin_base_url
+    build_base_url(admin_domain)
+  end
+
+  def base_url
+    build_base_url(domain)
+  end
+
   def require_billing_information!
     @require_billing_information = true
   end
@@ -345,6 +353,14 @@ module Account::ProviderMethods
     # we don't do this for master to avoid slow things more
     # reason of the unless : Account.master.provider? => true
     FieldsDefinition.create_defaults!(self) unless master?
+  end
+
+  def base_url_protocol
+    Rails.application.config.force_ssl ? 'https' : 'http'
+  end
+
+  def build_base_url(host)
+    [base_url_protocol, host.to_s.split('://').last].compact.join('://').presence
   end
 
   private
