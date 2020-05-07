@@ -30,6 +30,8 @@ format:
   lowercase_description: Formats a text as lowercase
   format_description: Utilities to format text
 shared_elements:
+  bulk_selector: {{number}} selected
+  bulk_selector_description: Label for the bulk selector to indicate the number of selected items. This label is visible only when items are selected.
   send_button: Send
   send_button_description: Label to perform the sending of items
   delete_button: Delete

@@ -21,9 +21,8 @@ invitations_tab_description: Label for the tab that contains the list of all inv
 
 ## Tab: Listing
 ## Toolbar
-bulk_selector: {{number}} selected
-bulk_selector_description: Label for the bulk selector to indicate the number of chosen team members. This label is visible only when team members were selected.
-# Delete button: available in shared.yml
+#-------# Bulk selector: available in shared.yml
+#-------# Delete button: available in shared.yml
 team_members_filter: [Name]
 team_members_filter_description: List containing the criteria to filter team members
 [PROPOSED] team_members_typeahead: Filter by name
@@ -49,13 +48,12 @@ team_members_table:
 
 ## Tab: Invitations
 ## Toolbar
-bulk_selector: {{number}} selected
-bulk_selector_description: Label for the bulk selector to indicate the number of chosen invitations. This label is visible only when invitations were selected.
+#-------# Bulk selector: available in shared.yml
 #-------# Delete button: available in shared.yml
 [PROPOSED] invitations_filter: [Recipient, Acceptance]
 invitations_filter_description: List containing the criteria to filter invitations
 invitations_typeahead: [Filter by recipient, Filter by acceptance]
-invitations_typeahead_description: Filter by typing ahead the text.
+invitations_typeahead_description: Filter by recipient or acceptance, as the user types the text.
 
 invitations_table:
   aria_label: Invitations table
