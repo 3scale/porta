@@ -5,7 +5,8 @@ import { AuthProvider } from 'auth'
 import {
   SwitchWith404,
   LazyRoute,
-  Root
+  Root,
+  AlertsProvider
 } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
 
@@ -26,9 +27,11 @@ const App = () => (
   <AuthProvider>
     <Router>
       <LastLocationProvider>
-        <Root>
-          <PagesSwitch />
-        </Root>
+        <AlertsProvider>
+          <Root>
+            <PagesSwitch />
+          </Root>
+        </AlertsProvider>
       </LastLocationProvider>
     </Router>
   </AuthProvider>

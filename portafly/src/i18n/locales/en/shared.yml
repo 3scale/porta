@@ -33,4 +33,6 @@ format:
   lowercase: "{{text, lowercase}}"
   lowercase_description: Formats a text as lowercase
   format_description: Utilities to format text
-
+alerts:
+  close_button: 'Close alert'
+  close_button_description: 'Button for closing an alert'
