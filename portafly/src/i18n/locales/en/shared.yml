@@ -50,3 +50,6 @@ shared_elements:
   delete_button_tooltip_description: Tooltip shown upon hovering to explain that the deletion will be available upon selection of items.
   cancel_button: Cancel
   cancel_button_description: Label for a button to cancel an action
+alerts:
+  close_button: 'Close alert'
+  close_button_description: 'Button for closing an alert'
