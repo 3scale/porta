@@ -18,13 +18,6 @@ module Backend
         end
       end
 
-      def delete_backend_cinstance
-        application_keys.each(&:destroy_backend_value)
-        referrer_filters.each(&:destroy_backend_value)
-        delete_backend_user_key_to_application_id_mapping
-        delete_backend_application
-      end
-
       def update_backend_application
         if plan && service
           state = self.state

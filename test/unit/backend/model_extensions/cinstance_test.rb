@@ -170,25 +170,4 @@ class Backend::ModelExtensions::CinstanceTest < ActiveSupport::TestCase
 
     cinstance.update_attribute(:user_key, '')
   end
-
-  test '#delete_backend_cinstance deletes application_keys, referrer_filters, user_key and application' do
-    plan      = FactoryBot.create(:application_plan)
-    service   = plan.service
-    buyer     = FactoryBot.create(:buyer_account)
-    cinstance = Cinstance.create!(plan: plan, user_account: buyer, service: service)
-    FactoryBot.create_list(:application_key, 2, application: cinstance)
-    FactoryBot.create_list(:referrer_filter, 2, application: cinstance)
-
-    backend_id = service.backend_id
-    app_id     = cinstance.application_id
-    user_key   = cinstance.user_key
-
-    cinstance.reload
-    cinstance.application_keys.each { |app_key| ThreeScale::Core::ApplicationKey.expects(:delete).with(backend_id, app_id, app_key.value) }
-    cinstance.referrer_filters.each { |referrer_filter| ThreeScale::Core::ApplicationReferrerFilter.expects(:delete).with(backend_id, app_id, referrer_filter.value) }
-    ThreeScale::Core::Application.expects(:delete_id_by_key).with(backend_id, user_key)
-    ThreeScale::Core::Application.expects(:delete).with(backend_id, app_id)
-
-    cinstance.delete_backend_cinstance
-  end
 end
