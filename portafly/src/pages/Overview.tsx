@@ -2,7 +2,11 @@ import React from 'react'
 import { useTranslation } from 'i18n/useTranslation'
 // @ts-ignore
 import { useA11yRouteChange, useDocumentTitle, useAlertsContext } from 'components'
-import { DataListProvider, SearchWidget, useDataListFilters } from 'components/data-list'
+import {
+  Toolbar,
+  DataListProvider,
+  SearchWidget
+} from 'components/data-list'
 import {
   PageSection,
   TextContent,
@@ -16,7 +20,6 @@ import {
 import { BellIcon } from '@patternfly/react-icons'
 
 import {
-  DataToolbar,
   DataToolbarItem,
   DataToolbarContent
 } from '@patternfly/react-core/dist/js/experimental'
@@ -33,16 +36,21 @@ const categories = [
   {
     name: 'state',
     humanName: 'State',
-    options: {
-      active: 'Active',
-      pending: 'Pending'
-    }
+    options: [
+      {
+        name: 'active',
+        humanName: 'Active'
+      },
+      {
+        name: 'pending',
+        humanName: 'Pending'
+      }
+    ]
   }
 ]
 
 const Overview: React.FunctionComponent = () => {
   const { t } = useTranslation('overview')
-  const { clearFilters } = useDataListFilters()
 
   useA11yRouteChange()
   useDocumentTitle(t('page_title'))
@@ -78,13 +86,13 @@ const Overview: React.FunctionComponent = () => {
         <Card>
           <CardBody>
             <DataListProvider>
-              <DataToolbar id="data-toolbar" className="DataToolbar-class" clearAllFilters={clearFilters}>
+              <Toolbar>
                 <DataToolbarContent>
                   <DataToolbarItem>
                     <SearchWidget categories={categories} />
                   </DataToolbarItem>
                 </DataToolbarContent>
-              </DataToolbar>
+              </Toolbar>
             </DataListProvider>
           </CardBody>
         </Card>

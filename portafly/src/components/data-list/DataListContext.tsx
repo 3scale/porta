@@ -22,7 +22,6 @@ const DataListContext = createContext<IDataListContext>({ state: initialState, d
 
 const DataListProvider: React.FunctionComponent = ({ children }) => {
   const [state, dispatch] = useReducer(combineReducers({ filters: filtersReducer }), initialState)
-
   return (
     <DataListContext.Provider
       value={{ state, dispatch } as IDataListContext}
