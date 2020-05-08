@@ -22,8 +22,7 @@ interface IUseFilters {
 }
 const useFilters = ({ state, dispatch }: IUseFilters) => ({
   filters: state.filters,
-  setFilters: (filters: FiltersState) => dispatch({ type: 'SET_FILTERS', payload: filters }),
-  clearFilters: () => dispatch({ type: 'SET_FILTERS', payload: {} })
+  setFilters: (filters: FiltersState) => dispatch({ type: 'SET_FILTERS', payload: filters })
 })
 
 export { filtersReducer, useFilters }
