@@ -6010,6 +6010,42 @@
       ]
     },
     {
+      "path": "/admin/api/service_plans/{service_plan_id}/features/{id}.xml",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Service Plan Features Delete",
+          "description": "Removes the association of a feature to a service plan.",
+          "group": "service_plan_feature",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "service_plan_id",
+              "description": "ID of the service plan.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_plan_ids"
+            },
+            {
+              "name": "id",
+              "description": "ID of the feature.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/service_plans.xml",
       "responseClass": "List[service_plan]",
       "description": "Returns a list of all your service plans.",
