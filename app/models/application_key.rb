@@ -126,15 +126,15 @@ class ApplicationKey < ApplicationRecord
                                           value)
   end
 
-  def destroy_backend_value
-    ThreeScale::Core::ApplicationKey.delete(application.service.backend_id,
-                                            application.application_id,
-                                            value)
-  end
-
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
   protected
+
+  def destroy_backend_value
+    ApplicationKeyBackendService.delete(service_backend_id: application.service.backend_id,
+                                        application_backend_id: application.application_id,
+                                        value: value)
+  end
 
   def publish_application_event
     Applications::ApplicationUpdatedEvent.create_and_publish!(application)
