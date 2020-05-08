@@ -31,7 +31,7 @@ class Admin::Api::ServicePlanFeaturesController < Admin::Api::FeaturingsBaseCont
   ##~ op.parameters.add @parameter_feature_id_by_name
   #
   #
-  ##~ e = sapi.apis.ad
+  ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/service_plans/{service_plan_id}/features/{id}.xml"
   #
   ##~ op = e.operations.add
