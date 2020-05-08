@@ -20,11 +20,14 @@ import { useDataListFilters } from 'components/data-list/'
 
 import './searchWidget.scss'
 
-type CategoryOptions = Record<string, string>
+type CategoryOption = {
+  name: string
+  humanName: string
+}
 type Category = {
   name: string
   humanName: string
-  options?: CategoryOptions
+  options?: CategoryOption[]
 }
 
 interface ICategorySelect {
@@ -33,15 +36,14 @@ interface ICategorySelect {
   onCategorySelect: (c: string) => void
 }
 
-// FIXME: PF Select is not quite open to change...
-interface SelectOptionProps extends SelectOptionObject {
-  key: string
-}
-
-const CategorySelect = ({ categories, selections, onCategorySelect }: ICategorySelect) => {
+const CategorySelect: React.FunctionComponent<ICategorySelect> = ({
+  categories,
+  selections,
+  onCategorySelect
+}) => {
   const [isExpanded, setIsExpanded] = useState(false)
-  const onSelect = (_: any, value: SelectOptionProps) => {
-    onCategorySelect(value.key)
+  const onSelect = (_: any, value: SelectOptionObject) => {
+    onCategorySelect((value as { name: string }).name)
     setIsExpanded(false)
   }
   return (
@@ -49,8 +51,6 @@ const CategorySelect = ({ categories, selections, onCategorySelect }: ICategoryS
       toggleIcon={<FilterIcon />}
       variant={SelectVariant.single}
       aria-label="category-select"
-      // FIXME: PF Select is not quite open to change... thus, ts-ignore.
-      // @ts-ignore
       onSelect={onSelect}
       selections={selections}
       isExpanded={isExpanded}
@@ -60,9 +60,7 @@ const CategorySelect = ({ categories, selections, onCategorySelect }: ICategoryS
       { categories.map((category) => (
         <SelectOption
           key={category.name}
-          // FIXME: PF Select does not contemplate the need of localized values or key: value pairs
-          // @ts-ignore
-          value={{ key: category.name, toString: () => category.humanName }}
+          value={{ name: category.name, toString: () => category.humanName } as SelectOptionObject}
         />
       ))}
     </Select>
@@ -71,14 +69,17 @@ const CategorySelect = ({ categories, selections, onCategorySelect }: ICategoryS
 
 interface ICollectionSelect {
   onCollectionSelect: (checked: boolean, selection: string) => void
-  collection: CategoryOptions
+  options: CategoryOption[]
   selections: string[]
   categoryName: string
 }
 
-const CollectionSelect = ({
-  onCollectionSelect, collection, selections, categoryName
-}: ICollectionSelect) => {
+const OptionsSelect: React.FunctionComponent<ICollectionSelect> = ({
+  onCollectionSelect,
+  options,
+  selections,
+  categoryName
+}) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const onSelect = (ev: React.SyntheticEvent, selection: string | SelectOptionObject) => {
     const { checked } = ev.currentTarget as HTMLInputElement
@@ -93,8 +94,8 @@ const CollectionSelect = ({
       onToggle={setIsExpanded}
       placeholderText={`Filter by ${categoryName}`}
     >
-      { Object.keys(collection).map((key) => (
-        <SelectOption key={key} value={collection[key]} />
+      { options.map(({ name, humanName }) => (
+        <SelectOption key={name} value={humanName} />
       )) }
     </Select>
   )
@@ -142,7 +143,6 @@ const SearchWidget: React.FunctionComponent<ISearchWidget> = ({ categories }) =>
   const [selectedCategory, setSelectedCategory] = useState(categories[0])
   const textInputRef = useRef<HTMLInputElement>(null)
   const { filters, setFilters } = useDataListFilters()
-
 
   const onCategorySelect = (name: string) => {
     setSelectedCategory(categories.find((category) => category.name === name) as Category)
@@ -201,8 +201,8 @@ const SearchWidget: React.FunctionComponent<ISearchWidget> = ({ categories }) =>
       { appliedFilters }
       { selectedCategory.options
         ? (
-          <CollectionSelect
-            collection={selectedCategory.options as CategoryOptions}
+          <OptionsSelect
+            options={selectedCategory.options}
             selections={filters[selectedCategory.name] || []}
             categoryName={selectedCategory.humanName}
             onCollectionSelect={onCollectionSelect(selectedCategory.name)}
