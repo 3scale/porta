@@ -5,7 +5,7 @@ import { render, fireEvent } from '@testing-library/react'
 
 describe('DataListContext: useDataFilters', () => {
   const FilterComponent = () => {
-    const { filters, setFilters, clearFilters } = useDataListFilters()
+    const { filters, setFilters } = useDataListFilters()
     const [bandName, setBandName] = useState('')
     const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => (
       setBandName(ev.currentTarget.value)
@@ -24,7 +24,7 @@ describe('DataListContext: useDataFilters', () => {
         {/* eslint-disable-next-line react/button-has-type */}
         <button data-testid="add" onClick={addBandsFilters}>Add</button>
         {/* eslint-disable-next-line react/button-has-type */}
-        <button data-testid="clear" onClick={clearFilters}>Clear</button>
+        <button data-testid="clear" onClick={() => setFilters({})}>Clear</button>
       </>
     )
   }
