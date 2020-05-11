@@ -83,8 +83,8 @@ invitations_table:
 
 # Modal: Invitation deletion
 invitation_deletion:
-  invitation_deletion_page: Delete selected invitations #----PROPOSED
-  invitation_deletion_page_description: Body title of modal dialog to delete the selected invitations from the table
+  page: Delete selected invitations #----PROPOSED
+  page_description: Body title of modal dialog to delete the selected invitations from the table
   admonition: This action will irreversibly delete the selected invitations. Please confirm below to proceed with the deletion. #----PROPOSED
   admonition_description: Admonition text to explain that the removal of the selected invitations cannot be undone.
   #-------# Delete button: available in shared.yml
@@ -92,13 +92,13 @@ invitation_deletion:
 
 # Modal: Invitation to a new member
 invitation_sending:
-  invitation_sending_page: Invite a new team member
-  invitation_sending_page_description: Body title of modal dialog to send invitation to a new team member
-  invitation_sending_label: Send invitation to *
-  invitation_sending_label_description: Label prompting the user to specify the email address of the invitation recipient
-  invitation_sending_validation: Please indicate a valid email address of the colleague or friend you want to invite to your team. #----PROPOSED
-  invitation_sending_validation_description: Validation message to prompt user to specify a valid email address; to prevent an empty value, or bad format email address.
-  invitation_sending_helper: Email address of a colleague or friend you want to invite to your team #----PROPOSED
-  invitation_sending_helper_description: Text to prompt the user to specify an email address.
+  page: Invite a new team member
+  page_description: Body title of modal dialog to send invitation to a new team member
+  label: Send invitation to *
+  label_description: Label prompting the user to specify the email address of the invitation recipient
+  validation: Please indicate a valid email address of the colleague or friend you want to invite to your team. #----PROPOSED
+  validation_description: Validation message to prompt user to specify a valid email address; to prevent an empty value, or bad format email address.
+  helper: Email address of a colleague or friend you want to invite to your team #----PROPOSED
+  helper_description: Text to prompt the user to specify an email address.
   #-------# Send button: available in shared.yml
   #-------# Cancel button: available in shared.yml
