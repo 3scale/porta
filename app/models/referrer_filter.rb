@@ -84,14 +84,14 @@ class ReferrerFilter < ApplicationRecord
                                                      value)
   end
 
+  protected
+
   def destroy_backend_value
-    ThreeScale::Core::ApplicationReferrerFilter.delete(application.service.backend_id,
-                                                       application.application_id,
-                                                       value)
+    ReferrerFilterBackendService.delete(service_backend_id: application.service.backend_id,
+                                        application_backend_id: application.application_id,
+                                        value: value)
 
   end
-
-  protected
 
   def cache_needed_associations
     self.application
