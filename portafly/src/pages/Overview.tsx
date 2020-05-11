@@ -5,7 +5,9 @@ import { useA11yRouteChange, useDocumentTitle, useAlertsContext } from 'componen
 import {
   Toolbar,
   DataListProvider,
-  SearchWidget
+  SearchWidget,
+  PaginationWidget,
+  useDataListPagination
 } from 'components/data-list'
 import {
   PageSection,
@@ -16,7 +18,6 @@ import {
   CardBody,
   Button
 } from '@patternfly/react-core'
-
 import { BellIcon } from '@patternfly/react-icons'
 
 import {
@@ -49,12 +50,23 @@ const categories = [
   }
 ]
 
+const List = ({ list }: any) => {
+  const { startIdx, endIdx } = useDataListPagination()
+  console.log(startIdx, endIdx)
+  return (
+    <ul>
+      {list.slice(startIdx, endIdx).map((item: any) => <li>{item}</li>)}
+    </ul>
+  )
+}
+
 const Overview: React.FunctionComponent = () => {
   const { t } = useTranslation('overview')
 
   useA11yRouteChange()
   useDocumentTitle(t('page_title'))
   const { addAlert } = useAlertsContext()
+  const list = new Array(1000).map((item, i) => i)
   return (
     <>
       <PageSection variant="light">
@@ -91,8 +103,12 @@ const Overview: React.FunctionComponent = () => {
                   <DataToolbarItem>
                     <SearchWidget categories={categories} />
                   </DataToolbarItem>
+                  <DataToolbarItem>
+                    <PaginationWidget itemCount={1000} />
+                  </DataToolbarItem>
                 </DataToolbarContent>
               </Toolbar>
+              <List list={list} />
             </DataListProvider>
           </CardBody>
         </Card>
