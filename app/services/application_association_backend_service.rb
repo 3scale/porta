@@ -2,7 +2,7 @@
 
 module ApplicationAssociationBackendService
   def delete_all(application_id:, service_backend_id:, application_backend_id:)
-    DeletedObject.public_send(reflection_name).where(owner_type: Contract, owner_id: application_id).order(:id).find_each do |deleted_object|
+    DeletedObject.public_send(reflection_name).where(owner_type: Contract.name, owner_id: application_id).order(id: :asc).find_each do |deleted_object|
       delete(service_backend_id: service_backend_id, application_backend_id: application_backend_id, value: deleted_object.metadata[:value])
     end
   end
