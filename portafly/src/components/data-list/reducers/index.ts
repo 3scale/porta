@@ -1,1 +1,2 @@
-export * from 'components/data-list/reducers/FiltersReducer'
+export * from './FiltersReducer'
+export * from './PaginationReducer'
