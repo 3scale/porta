@@ -86,17 +86,4 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_not_includes stale, deleted_object_service_but_owner_persisted_recent
     assert_not_includes stale, deleted_object_account_but_owner_persisted_recent
   end
-
-  test 'object_instance' do
-    app_key = FactoryBot.build_stubbed(:application_key)
-    deleted_object = DeletedObject.create(owner: app_key.application, object: app_key, metadata: {value: app_key.value})
-
-    object = deleted_object.object_instance { |obj| obj.application = app_key.application }
-
-    assert object.readonly?
-    assert_equal ApplicationKey, object.class
-    assert_equal app_key.id, object.id
-    assert_equal app_key.value, object.value
-    assert_equal app_key.application, object.application
-  end
 end

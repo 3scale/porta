@@ -4,21 +4,13 @@ require 'test_helper'
 
 class BackendDeleteApplicationWorkerTest < ActiveSupport::TestCase
   test 'perform' do
-    application = FactoryBot.create(:simple_cinstance)
-    service = application.plan.service
-
-    app_keys = FactoryBot.build_stubbed_list(:application_key, 2, application: application)
-    app_keys.each { |app_key| DeletedObject.create(owner: application, object: app_key, metadata: {value: app_key.value}) }
-    ref_filters = FactoryBot.build_stubbed_list(:referrer_filter, 2, application: application)
-    ref_filters.each { |ref_filter| DeletedObject.create(owner: application, object: ref_filter, metadata: {value: ref_filter.value}) }
-
-    app_key_of_another_application = FactoryBot.build_stubbed(:application_key)
-    DeletedObject.create(object: app_key_of_another_application, owner: app_key_of_another_application.application)
+    application = FactoryBot.create(:simple_cinstance, application_id: 'backend-app-id')
+    service = application.service
 
     seq = sequence('destroy sequence')
-    app_keys.each { |app_key| ThreeScale::Core::ApplicationKey.expects(:delete).with(service.id.to_s, application.application_id, app_key.value).in_sequence(seq) }
-    ref_filters.each { |ref_filter| ThreeScale::Core::ApplicationReferrerFilter.expects(:delete).with(service.id.to_s, application.application_id, ref_filter.value).in_sequence(seq) }
-    ThreeScale::Core::Application.expects(:delete).with(service.id.to_s, application.application_id).in_sequence(seq)
+    ApplicationKeyBackendService.expects(:delete_all).with(application_id: application.id, service_backend_id: service.backend_id, application_backend_id: application.application_id).in_sequence(seq)
+    ReferrerFilterBackendService.expects(:delete_all).with(application_id: application.id, service_backend_id: service.backend_id, application_backend_id: application.application_id).in_sequence(seq)
+    ThreeScale::Core::Application.expects(:delete).with(service.backend_id, application.application_id).in_sequence(seq)
 
     event = Applications::ApplicationDeletedEvent.create_and_publish!(application)
     Sidekiq::Testing.inline! { BackendDeleteApplicationWorker.perform_later(event.event_id) }

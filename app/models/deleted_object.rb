@@ -26,12 +26,4 @@ class DeletedObject < ApplicationRecord
       & (created_at <= 1.week.ago)
     end
   end
-
-  def object_instance
-    obj_attrs = {id: object_id}.merge(metadata)
-    object = object_type.constantize.new(obj_attrs, without_protection: true)
-    yield(object) if block_given?
-    object.readonly!
-    object.freeze
-  end
 end
