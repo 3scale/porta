@@ -134,6 +134,12 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     assert_nil waiting_list_confirmation_email('foo2@example.com')
   end
 
+  test 'create with invalid CSRF token' do
+    assert_raise ActionController::InvalidAuthenticityToken do
+      with_forgery_protection { post session_path(system_name: @auth.system_name, code: 'example') }
+    end
+  end
+
   private
 
   def waiting_list_confirmation_email(email_address)
