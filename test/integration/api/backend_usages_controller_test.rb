@@ -151,6 +151,13 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     member.save!
 
     get admin_service_backend_usages_path(service)
-    assert_response :forbidden
+    assert_response :success
+
+    other_service = FactoryBot.create(:simple_service, account: provider)
+    member.member_permission_service_ids = [other_service.id]
+    member.save!
+
+    get admin_service_backend_usages_path(service)
+    assert_response :not_found
   end
 end
