@@ -35,8 +35,8 @@ shared_elements:
   send_button: Send
   send_button_description: Label to perform the sending of items
   delete_button: Delete
-  delete_button_description: Label to perform the deletion of selected items
-  delete_button_tooltip: Select at least an item to enable the option to delete.
+  delete_button_description: Label to perform deletion of selected items
+  delete_button_tooltip: Select at least an item to enable the <strong>Delete</strong> button.
   delete_button_tooltip_description: Tooltip shown upon hovering to explain that the deletion will be available upon selection of items.
   cancel_button: Cancel
   cancel_button_description: Label for a button to cancel an action

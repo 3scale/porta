@@ -45,7 +45,7 @@ team_members_table:
   sso_authentication_value_description: Container of possible values about users having SSO configured
   role_header: Role
   role_header_description: Column listing the roles associated to each team member
-  role_header_value: #----PROPOSED
+  role_header_value: #----PROPOSED: Approved
     admin_you: Admin (you)
     admin: Admin
     member: Member
@@ -57,7 +57,7 @@ team_members_table:
 ## Toolbar
 #-------# Bulk selector: available in shared.yml
 #-------# Delete button: available in shared.yml
-invitations_filter:  #----PROPOSED
+invitations_filter:  #----PROPOSED: Approved
  by_recipient: Recipient
  by_acceptance: Acceptance
 invitations_filter_description: List containing the criteria to filter invitations
@@ -78,7 +78,7 @@ invitations_table:
   acceptance_header: Accepted on UTC time #----PROPOSED
   acceptance_header_description: Column listing the date when the invitations were accepted
   acceptance_values: #----PROPOSED
-    yes_with_time: Yes - {{utc_time}}
+    yes_with_time: Yes – {{utc_time}}
     not_yet: Not yet
   acceptance_values_description: Container with the possible responses to whether the invitation has been accepted or not.
   actions_header: Actions
@@ -86,9 +86,9 @@ invitations_table:
 
 # Modal: Invitation deletion
 invitation_deletion:
-  page: Delete selected invitations #----PROPOSED
+  page: Delete selected invitations #----PROPOSED: Approved
   page_description: Body title of modal dialog to delete the selected invitations from the table
-  admonition: This action will irreversibly delete the selected invitations. Please confirm below to proceed with the deletion. #----PROPOSED
+  admonition: This action will irreversibly delete the selected invitations. Please confirm below to proceed with deleting them. #----PROPOSED
   admonition_description: Admonition text to explain that the removal of the selected invitations cannot be undone.
   #-------# Delete button: available in shared.yml
   #-------# Cancel button: available in shared.yml
