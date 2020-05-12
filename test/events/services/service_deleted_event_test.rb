@@ -11,7 +11,6 @@ class Services::ServiceDeletedEventTest < ActiveSupport::TestCase
 
     assert_equal service.name, event.service_name
     assert_equal service.id, event.service_id
-    assert_equal service.created_at.utc.to_s, event.service_created_at
 
     # If we ever want to fetch the provider from anywhere, we should do it from the provider_id
     refute event.data.has_key?(:provider)
