@@ -50,9 +50,9 @@ const categories = [
   }
 ]
 
-const List = ({ list }: any) => {
+const List = () => {
   const { startIdx, endIdx } = useDataListPagination()
-  console.log(startIdx, endIdx)
+  const list = new Array(1000).fill(0).map((item, i) => i)
   return (
     <ul>
       {list.slice(startIdx, endIdx).map((item: any) => <li>{item}</li>)}
@@ -66,7 +66,6 @@ const Overview: React.FunctionComponent = () => {
   useA11yRouteChange()
   useDocumentTitle(t('page_title'))
   const { addAlert } = useAlertsContext()
-  const list = new Array(1000).map((item, i) => i)
   return (
     <>
       <PageSection variant="light">
@@ -108,7 +107,7 @@ const Overview: React.FunctionComponent = () => {
                   </DataToolbarItem>
                 </DataToolbarContent>
               </Toolbar>
-              <List list={list} />
+              <List />
             </DataListProvider>
           </CardBody>
         </Card>
