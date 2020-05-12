@@ -23,7 +23,23 @@ invitations_tab_description: Label for the tab that contains the list of all inv
 ## Toolbar
 #-------# Bulk selector: available in shared.yml
 #-------# Delete button: available in shared.yml
-team_members_filter: Name
+team_members_filter: #----PROPOSED
+  by_name: Name
+  by_email: Email
+  by_sso_authentication: SSO authentication
+   yes: Yes
+   no: Not yet
+  by_role: Role
+   admin: Admin
+   member: Member
+  by_permission_group: Permission group
+   developer_portal: Developer Portal
+   billing: Billing
+   settings: Settings
+   accounts_applications: Accounts – Applications
+   analytics: Analytics
+   configuration_application_plans: Configuration and application plans
+   policy_registry: Policy registry
 team_members_filter_description: List containing the name criterion to filter team members
 team_members_typeahead: Filter by name #----PROPOSED
 team_members_typeahead_description: Default text to show when the user wants to filter by typing the text
@@ -52,6 +68,19 @@ team_members_table:
   role_header_value_description: Container with possible values of the roles of each team member
   permission_groups_header: Permission groups
   permission_groups_header_description: Column listing the permisions mapped to each team member
+  #-------# Actions header plural: available in shared.yml
+  #-------# Edit button: available in shared.yml
+  #-------# Delete button: available in shared.yml
+
+# Modal: Team member deletion
+team_member_deletion:
+  page: Delete selected team members #----PROPOSED: Approved
+  page_description: Body title of modal dialog to delete the selected team members from the table
+  admonition: This action will irreversibly delete the selected team members. Please confirm below to proceed with deleting them. #----PROPOSED
+  admonition_description: Admonition text to explain that the removal of the selected team members cannot be undone.
+  #-------# Delete button: available in shared.yml
+  #-------# Cancel button: available in shared.yml
+
 
 ## Tab: Invitations
 ## Toolbar
@@ -69,7 +98,7 @@ invitations_typeahead_description: Default text to show when the user filters by
 invitations_table:
   aria_label: Invitations table
   aria_label_description: Aria label of the table of invitations
-  empty_state: Currently, there are no invitations sent. Start sending invitations to your team members. #----PROPOSED
+  empty_state: Currently, there are no invitations sent. Start sending invitations to your team members. #----PROPOSED: placeholder
   empty_state_description: Message to show when there are no invitations to show, and prompt the user to send some invites
   recipient_header: Recipient
   recipient_header_description: Column listing the email addresses of invitation recipients
@@ -81,8 +110,8 @@ invitations_table:
     yes_with_time: Yes – {{utc_time}}
     not_yet: Not yet
   acceptance_values_description: Container with the possible responses to whether the invitation has been accepted or not.
-  actions_header: Actions
-  actions_header_description: Column listing the available actions to perform with each invitation
+  #-------# Action header: available in shared.yml
+  #-------# Delete button: available in shared.yml
 
 # Modal: Invitation deletion
 invitation_deletion:

@@ -32,8 +32,14 @@ format:
 shared_elements:
   bulk_selector: {{number}} selected
   bulk_selector_description: Label for the bulk selector to indicate the number of selected items. This label is visible only when items are selected.
+  action_header: Action
+  actions_header_description: Column listing the only available action to perform with each item of a table
+  actions_header_plural: Actions
+  actions_header_plural_description: Column listing the various available actions to perform with each item of a table
   send_button: Send
   send_button_description: Label to perform the sending of items
+  edit_button: Edit
+  edit_button_description: Label to perform the edition of a selected item
   delete_button: Delete
   delete_button_description: Label to perform deletion of selected items
   delete_button_tooltip: Select at least an item to enable the <strong>Delete</strong> button.
