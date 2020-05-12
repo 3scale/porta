@@ -1,22 +1,39 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { PaginationWidget, DataListProvider } from 'components/data-list'
+import { PaginationWidget } from 'components/data-list'
+import { useDataListPagination } from 'components/data-list/DataListContext'
+import { fireEvent } from '@testing-library/react'
 
-const setup = ({ itemCount }: any) => render(
-  <DataListProvider>
-    <PaginationWidget itemCount={itemCount} />
-  </DataListProvider>
-)
+jest.mock('components/data-list/DataListContext')
+const useDataListPaginationMock = useDataListPagination as jest.Mock
 
 it('should render compacted when there are 1-2 pages only', () => {
-  const wrapper = setup({ itemCount: 1 })
-  expect(wrapper.container.querySelector('.pf-m-compact')).toBeInTheDocument()
-})
+  useDataListPaginationMock.mockReturnValue({ perPage: 1 })
 
-it('should render NOT compacted when there are 3 or more pages', () => {
-  const wrapper = setup({ itemCount: 150 })
+  const wrapper = render(<PaginationWidget itemCount={1} />)
+  expect(wrapper.container.querySelector('.pf-m-compact')).toBeInTheDocument()
+
+  wrapper.rerender(<PaginationWidget itemCount={2} />)
+  expect(wrapper.container.querySelector('.pf-m-compact')).toBeInTheDocument()
+
+  wrapper.rerender(<PaginationWidget itemCount={3} />)
   expect(wrapper.container.querySelector('.pf-m-compact')).not.toBeInTheDocument()
 })
 
-it.skip('should change list section when paginating')
+it('should change list section when paginating', () => {
+  const setPagination = jest.fn()
+  useDataListPaginationMock.mockReturnValue({
+    page: 1,
+    perPage: 5,
+    startIdx: 0,
+    endIdx: 5,
+    setPagination
+  })
+
+  const { container } = render(<PaginationWidget itemCount={10} />)
+  fireEvent.click(container.querySelector('button[data-action="next"]') as Element)
+
+  expect(setPagination)
+    .toHaveBeenCalledWith(expect.objectContaining({ page: 2, startIdx: 5, endIdx: 10 }))
+})
