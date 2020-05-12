@@ -42,12 +42,14 @@ team_members_table:
   sso_authentication_value:
     yes: Yes
     not_yet: Not yet
+  sso_authentication_value_description: Container of possible values about users having SSO configured
   role_header: Role
   role_header_description: Column listing the roles associated to each team member
   role_header_value: #----PROPOSED
     admin_you: Admin (you)
     admin: Admin
     member: Member
+  role_header_value_description: Container with possible values of the roles of each team member
   permission_groups_header: Permission groups
   permission_groups_header_description: Column listing the permisions mapped to each team member
 
@@ -62,7 +64,7 @@ invitations_filter_description: List containing the criteria to filter invitatio
 invitations_typeahead:
   filter_by_recipient: Filter by recipient
   filter_by_acceptance: Filter by acceptance
-invitations_typeahead_description: Default text to show when the user filters by recipient or acceptance.
+invitations_typeahead_description: Default text to show when the user filters by recipient or acceptance
 
 invitations_table:
   aria_label: Invitations table
@@ -76,8 +78,9 @@ invitations_table:
   acceptance_header: Accepted on UTC time #----PROPOSED
   acceptance_header_description: Column listing the date when the invitations were accepted
   acceptance_values: #----PROPOSED
-    yes_with_time: Yes - UTC time
+    yes_with_time: Yes - {{utc_time}}
     not_yet: Not yet
+  acceptance_values_description: Container with the possible responses to whether the invitation has been accepted or not.
   actions_header: Actions
   actions_header_description: Column listing the available actions to perform with each invitation
 
