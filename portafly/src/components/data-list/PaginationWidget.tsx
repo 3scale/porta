@@ -13,14 +13,8 @@ const perPageOptions = [
   { title: '30', value: 30 }
 ]
 
-const PaginationWidget: FunctionComponent<IPagination> = ({
-  itemCount
-}) => {
-  const {
-    page,
-    perPage,
-    setPagination
-  } = useDataListPagination()
+const PaginationWidget: FunctionComponent<IPagination> = ({ itemCount }) => {
+  const { page, perPage, setPagination } = useDataListPagination()
 
   // FIXME: onSetPage and onPerPageSelect are too similar
   const onSetPage: OnSetPage = (ev, newPage, _perPage, startIdx, endIdx) => {

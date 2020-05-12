@@ -13,7 +13,6 @@ export type PaginationState = {
 }
 
 // Action Handlers
-// TODO: Look for better type for any
 const paginationActionHandlers: ActionHandlers<PaginationState, PaginationState> = {
   SET_PAGINATION: (state, action) => ({ ...state, ...action.payload })
 }
@@ -26,6 +25,7 @@ interface IUsePagination {
   state: Record<'pagination', PaginationState>
   dispatch: React.Dispatch<Action<PaginationState>>
 }
+
 const usePagination = ({ state, dispatch }: IUsePagination) => ({
   page: state.pagination.page,
   perPage: state.pagination.perPage,
