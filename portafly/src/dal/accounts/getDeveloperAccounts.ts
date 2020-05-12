@@ -7,7 +7,7 @@ import { IDeveloperAccount } from 'types'
  */
 function useGetDeveloperAccounts() {
   const { data, error, isPending } = useFetch<[IDeveloperAccount]>(
-    '/developer/accounts',
+    'https://multitenant-admin.preview01.3scale.net/admin/api/accounts.json?access_token=[TOKEN]&page=1&per_page=500',
     { headers: { Accept: 'application/json' } }
   )
 
