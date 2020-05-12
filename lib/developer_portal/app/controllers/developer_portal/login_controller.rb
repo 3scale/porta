@@ -13,6 +13,7 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   activate_menu :root
 
   protect_from_forgery with: :exception
+  rescue_from ActionController::InvalidAuthenticityToken, with: :handle_forgery_protection
 
   liquify prefix: 'login'
 

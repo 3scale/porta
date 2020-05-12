@@ -135,9 +135,13 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'create with invalid CSRF token' do
-    assert_raise ActionController::InvalidAuthenticityToken do
-      with_forgery_protection { post session_path(system_name: @auth.system_name, code: 'example') }
+    System::ErrorReporting.expects(:report_error).once.with do |exception|
+      exception.is_a?(ActionController::InvalidAuthenticityToken)
     end
+
+    with_forgery_protection { post session_path(system_name: @auth.system_name, code: 'example') }
+
+    assert_response :forbidden
   end
 
   private
