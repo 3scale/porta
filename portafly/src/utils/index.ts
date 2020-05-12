@@ -3,9 +3,9 @@ export type Action<P> = {
   payload?: P
 }
 
-export type ActionHandlers<S> = Record<string, (state: S, action: Action<S>) => S>
+export type ActionHandlers<S, A> = Record<string, (state: S, action: Action<A>) => S>
 
-const createReducer = (handlers: ActionHandlers<any>) => (
+const createReducer = (handlers: ActionHandlers<any, any>) => (
   (state: any, action: Action<any>): any => (
     handlers.hasOwnProperty(action.type) ? handlers[action.type](state, action) : state
   )

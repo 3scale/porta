@@ -8,7 +8,7 @@ import {
 export type FiltersState = Record<string, string[]>
 
 // Action Handlers
-const filtersActionHandlers: ActionHandlers<FiltersState> = {
+const filtersActionHandlers: ActionHandlers<FiltersState, FiltersState> = {
   SET_FILTERS: (filtersState, action: Action<FiltersState>) => (action.payload as FiltersState)
 }
 
