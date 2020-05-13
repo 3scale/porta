@@ -66,22 +66,27 @@ interface Response<T> {
   isPending: boolean
 }
 
+const craftRequest = (path: string, params: URLSearchParams) => {
+  const { authToken } = useAuth()
+
+  params.append('access_token', authToken as string)
+
+  return {
+    resource: `${process.env.REACT_APP_API_HOST}${path}?${params.toString()}`,
+    init: { headers: { Accept: 'application/json' } }
+  }
+}
+
 /**
  * Get all Applications asynchronously
  * @returns An object containing: { accounts, error, isPending }
  */
 function useGetDeveloperAccounts(): Response<IDeveloperAccount[]> {
-  const { authToken } = useAuth()
-  const params = new URLSearchParams({
-    access_token: authToken as string,
+  const { resource, init } = craftRequest('/admin/api/accounts.json', new URLSearchParams({
     page: '1',
     perPage: '500'
-  })
-
-  const { data, error, isPending } = useFetch<{ accounts: BuyersAccount[] }>(
-    `${process.env.REACT_APP_API_HOST}/admin/api/accounts.json?${params.toString()}`,
-    { headers: { Accept: 'application/json' } }
-  )
+  }))
+  const { data, error, isPending } = useFetch<{ accounts: BuyersAccount[] }>(resource, init)
 
   const payload = data && parseAccounts(data.accounts)
 
