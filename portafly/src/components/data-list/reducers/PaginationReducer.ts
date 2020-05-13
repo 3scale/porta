@@ -20,8 +20,9 @@ const defaultPagination: PaginationState = {
 }
 
 // Action Handlers
+const SET_PAGINATION = 'SET_PAGINATION'
 const paginationActionHandlers: ActionHandlers<PaginationState, PaginationState> = {
-  SET_PAGINATION: (state, action) => ({ ...state, ...action.payload })
+  [SET_PAGINATION]: (state, action) => ({ ...state, ...action.payload })
 }
 
 // Reducer
@@ -38,8 +39,8 @@ const usePagination = ({ state, dispatch }: IUsePagination) => ({
   perPage: state.pagination.perPage,
   startIdx: state.pagination.startIdx,
   endIdx: state.pagination.endIdx,
-  resetPagination: () => dispatch({ type: 'SET_PAGINATION', payload: defaultPagination }),
-  setPagination: (pagination: PaginationState) => dispatch({ type: 'SET_PAGINATION', payload: pagination })
+  resetPagination: () => dispatch({ type: SET_PAGINATION, payload: defaultPagination }),
+  setPagination: (pagination: PaginationState) => dispatch({ type: SET_PAGINATION, payload: pagination })
 })
 
 export { paginationReducer, usePagination, defaultPagination }
