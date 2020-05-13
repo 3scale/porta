@@ -26,7 +26,7 @@ describe('when backend returns an error', () => {
 })
 
 describe('when backend returns a list of accounts', () => {
-  (useGetDeveloperAccounts as jest.Mock).mockReturnValueOnce({ accounts: developerAccounts })
+  (useGetDeveloperAccounts as jest.Mock).mockReturnValueOnce({ payload: developerAccounts })
 
   it('should render a table with accounts', () => {
     const wrapper = render(<DeveloperAccounts />)
