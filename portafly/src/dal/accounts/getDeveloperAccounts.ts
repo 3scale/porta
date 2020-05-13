@@ -54,7 +54,8 @@ const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) 
   created_at: account.created_at,
   updated_at: account.updated_at,
   org_name: account.org_name,
-  admin_name: account.billing_address.company,
+  // TODO: Porta should return admin_name (username of first user role admin)
+  admin_name: account.billing_address?.company,
   apps_count: 0, // TODO: this is not included in /admin/api/accounts
   state: account.state
 }))
@@ -77,9 +78,8 @@ function useGetDeveloperAccounts(): Response<IDeveloperAccount[]> {
     perPage: '500'
   })
 
-  console.log(process.env.DOMAIN)
   const { data, error, isPending } = useFetch<{ accounts: BuyersAccount[] }>(
-    `${process.env.DOMAIN}/admin/api/accounts.json?${params.toString()}`,
+    `${process.env.REACT_APP_API_HOST}/admin/api/accounts.json?${params.toString()}`,
     { headers: { Accept: 'application/json' } }
   )
 
