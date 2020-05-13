@@ -35,7 +35,7 @@ nav.DashboardNavigation
     - if show_subscriptions_on_dashboard?(service)
       li.DashboardNavigation-list-item
         // Subscriptions (would be nice to have API specific links)
-        => dashboard_collection_link 'Subscription',
+        => dashboard_collection_size_link 'Subscription',
                                      service.service_contracts_count,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id}),
                                      icon_name: 'paperclip'
@@ -43,7 +43,7 @@ nav.DashboardNavigation
     // Active docs
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-       = dashboard_collection_link 'ActiveDoc',
+       = dashboard_collection_size_link 'ActiveDoc',
                                     service.api_docs_services_count,
                                     admin_service_api_docs_path(service),
                                     icon_name: 'file-text'

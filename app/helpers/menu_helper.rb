@@ -85,11 +85,12 @@ module MenuHelper
   end
 
   def api_selector_services
-    return @api_selector_services if defined? @api_selector_services
-
-    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services : Service.none).decorate
-    @api_selector_services.concat(current_user.account.backend_apis.decorate) if current_account.provider_can_use?(:api_as_product)
-    @api_selector_services
+    @api_selector_services ||= if current_account && current_account.provider?
+      accessible_backend_apis = current_account.provider_can_use?(:api_as_product) ? current_user.account.backend_apis.accessible : BackendApi.none
+      current_user.accessible_services.decorate.concat(accessible_backend_apis.decorate)
+    else
+      Service.none.decorate
+    end
   end
 
   def audience_link
