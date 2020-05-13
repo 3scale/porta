@@ -48,8 +48,18 @@ type BuyersAccount = {
   }
 }
 
+const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) => ({
+  id: account.id,
+  created_at: account.created_at,
+  updated_at: account.updated_at,
+  org_name: account.org_name,
+  admin_name: account.billing_address.company,
+  apps_count: 0, // TODO: this is not included in /admin/api/accounts
+  state: account.state
+}))
+
 interface Response<T> {
-  accounts?: T,
+  payload?: T,
   error?: Error
   isPending: boolean
 }
@@ -70,17 +80,9 @@ function useGetDeveloperAccounts(): Response<IDeveloperAccount[]> {
     { headers: { Accept: 'application/json' } }
   )
 
-  const accounts = data && data.accounts.map(({ account }) => ({
-    id: account.id,
-    created_at: account.created_at,
-    updated_at: account.updated_at,
-    org_name: account.org_name,
-    admin_name: account.billing_address.company,
-    apps_count: 0, // TODO: this is not included in /admin/api/accounts
-    state: account.state
-  }))
+  const payload = data && parseAccounts(data.accounts)
 
-  return { accounts, error, isPending }
+  return { payload, error, isPending }
 }
 
 export { useGetDeveloperAccounts }
