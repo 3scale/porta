@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer } from 'react'
 import { combineReducers, Action } from 'utils'
 import {
+  defaultPagination,
   filtersReducer,
   paginationReducer,
   useFilters,
@@ -15,12 +16,7 @@ type State = {
 }
 const initialState: State = {
   filters: {},
-  pagination: {
-    page: 1,
-    perPage: 10,
-    startIdx: 0,
-    endIdx: 10
-  }
+  pagination: defaultPagination
 }
 
 export interface IDataListContext {
