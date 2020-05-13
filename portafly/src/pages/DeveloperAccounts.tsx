@@ -14,7 +14,7 @@ const DeveloperAccounts: React.FunctionComponent = () => {
   const { t } = useTranslation('accounts')
   useDocumentTitle(t('page_title'))
 
-  const { accounts, error, isPending } = useGetDeveloperAccounts()
+  const { payload: accounts, error, isPending } = useGetDeveloperAccounts()
 
   return (
     <>
