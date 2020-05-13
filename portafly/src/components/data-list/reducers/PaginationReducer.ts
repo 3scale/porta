@@ -12,6 +12,13 @@ export type PaginationState = {
   endIdx?: number
 }
 
+const defaultPagination: PaginationState = {
+  page: 1,
+  perPage: 10,
+  startIdx: 0,
+  endIdx: 10
+}
+
 // Action Handlers
 const paginationActionHandlers: ActionHandlers<PaginationState, PaginationState> = {
   SET_PAGINATION: (state, action) => ({ ...state, ...action.payload })
@@ -31,7 +38,8 @@ const usePagination = ({ state, dispatch }: IUsePagination) => ({
   perPage: state.pagination.perPage,
   startIdx: state.pagination.startIdx,
   endIdx: state.pagination.endIdx,
+  resetPagination: () => dispatch({ type: 'SET_PAGINATION', payload: defaultPagination }),
   setPagination: (pagination: PaginationState) => dispatch({ type: 'SET_PAGINATION', payload: pagination })
 })
 
-export { paginationReducer, usePagination }
+export { paginationReducer, usePagination, defaultPagination }
