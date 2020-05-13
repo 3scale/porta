@@ -1,5 +1,6 @@
 import { useFetch } from 'react-async'
 import { IDeveloperAccount } from 'types'
+import { useAuth } from 'auth'
 
 type User = {
   id: string
@@ -69,14 +70,16 @@ interface Response<T> {
  * @returns An object containing: { accounts, error, isPending }
  */
 function useGetDeveloperAccounts(): Response<IDeveloperAccount[]> {
+  const { authToken } = useAuth()
   const params = new URLSearchParams({
-    access_token: '[TOKEN]',
+    access_token: authToken as string,
     page: '1',
     perPage: '500'
   })
 
+  console.log(process.env.DOMAIN)
   const { data, error, isPending } = useFetch<{ accounts: BuyersAccount[] }>(
-    `https://multitenant-admin.preview01.3scale.net/admin/api/accounts.json?${params.toString()}`,
+    `${process.env.DOMAIN}/admin/api/accounts.json?${params.toString()}`,
     { headers: { Accept: 'application/json' } }
   )
 
