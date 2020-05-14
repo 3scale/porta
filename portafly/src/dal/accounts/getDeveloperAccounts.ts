@@ -1,6 +1,5 @@
-import { useFetch } from 'react-async'
+import { craftRequest, http } from 'utils'
 import { IDeveloperAccount } from 'types'
-import { useAuth } from 'auth'
 
 type User = {
   id: string
@@ -60,37 +59,13 @@ const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) 
   state: account.state
 }))
 
-interface Response<T> {
-  payload?: T,
-  error?: Error
-  isPending: boolean
-}
-
-const craftRequest = (path: string, params: URLSearchParams) => {
-  const { authToken } = useAuth()
-
-  params.append('access_token', authToken as string)
-
-  return {
-    resource: `${process.env.REACT_APP_API_HOST}${path}?${params.toString()}`,
-    init: { headers: { Accept: 'application/json' } }
-  }
-}
-
-/**
- * Get all Applications asynchronously
- * @returns An object containing: { accounts, error, isPending }
- */
-function useGetDeveloperAccounts(): Response<IDeveloperAccount[]> {
-  const { resource, init } = craftRequest('/admin/api/accounts.json', new URLSearchParams({
+const getDeveloperAccounts = async (): Promise<IDeveloperAccount[]> => {
+  const request = craftRequest('/admin/api/accounts.json', new URLSearchParams({
     page: '1',
     perPage: '500'
   }))
-  const { data, error, isPending } = useFetch<{ accounts: BuyersAccount[] }>(resource, init)
-
-  const payload = data && parseAccounts(data.accounts)
-
-  return { payload, error, isPending }
+  const data = await http<{ accounts: BuyersAccount[] }>(request)
+  return parseAccounts(data.accounts)
 }
 
-export { useGetDeveloperAccounts }
+export { getDeveloperAccounts }
