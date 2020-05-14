@@ -1,4 +1,4 @@
-import { craftRequest, http } from 'utils'
+import { craftRequest, fetchData } from 'utils'
 import { IDeveloperAccount } from 'types'
 
 type User = {
@@ -64,7 +64,7 @@ const getDeveloperAccounts = async (): Promise<IDeveloperAccount[]> => {
     page: '1',
     perPage: '500'
   }))
-  const data = await http<{ accounts: BuyersAccount[] }>(request)
+  const data = await fetchData<{ accounts: BuyersAccount[] }>(request)
   return parseAccounts(data.accounts)
 }
 
