@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
-
-type AuthToken = string | null
+import { getToken, setToken, AuthToken } from 'utils'
 
 interface IAuthContext {
   authToken: AuthToken,
@@ -13,15 +12,15 @@ const AuthContext = createContext<IAuthContext>({
 })
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
-  const existingToken = localStorage.getItem('token')
-  const [authToken, setAuthToken] = useState(existingToken && JSON.parse(existingToken))
+  const existingToken = getToken()
+  const [authToken, setAuthToken] = useState(existingToken)
 
-  const setToken = (token: AuthToken) => {
-    localStorage.setItem('token', JSON.stringify(token))
+  const saveToken = (token: AuthToken) => {
+    setToken(token)
     setAuthToken(token)
   }
   return (
-    <AuthContext.Provider value={{ authToken, setAuthToken: setToken }}>
+    <AuthContext.Provider value={{ authToken, setAuthToken: saveToken }}>
       {children}
     </AuthContext.Provider>
   )
