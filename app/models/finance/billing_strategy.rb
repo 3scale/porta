@@ -15,18 +15,7 @@ class Finance::BillingStrategy < ApplicationRecord
 
   attr_reader :failed_buyers
 
-  CURRENCIES = {
-    'USD - American Dollar' => 'USD',
-    'EUR - Euro'=> 'EUR',
-    'GBP - British Pound' => 'GBP',
-    'NZD - New Zealand dollar' => 'NZD',
-    'CNY - Chinese Yuan Renminbi' => 'CNY',
-    'CAD - Canadian Dollar' => 'CAD',
-    'AUD - Australian Dollar' => 'AUD',
-    'JPY - Japanese Yen' => 'JPY',
-    'CHF - Swiss Franc' => 'CHF',
-    'SAR - Saudi Riyal' => 'SAR'
-  }.freeze
+  CURRENCIES = CurrenciesLoader.load_config.freeze
 
   belongs_to :account
   alias_attribute :provider, :account
@@ -34,7 +23,7 @@ class Finance::BillingStrategy < ApplicationRecord
   attr_protected :account_id, :tenant_id, :audit_ids
 
   accepts_nested_attributes_for :account
-  validates :currency, inclusion: { :in => CURRENCIES.values }
+  validates :currency, inclusion: { in: CURRENCIES.values, message: :invalid }
 
   # TODO: uncomment when factories are fixed
   # validates_presence_of :account
