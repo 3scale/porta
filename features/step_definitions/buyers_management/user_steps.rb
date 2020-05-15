@@ -91,7 +91,3 @@ Then /^I should see the (user "[^\"]*") new role is "([^\"]*)"$/ do |user, role|
   user.role.should == role.to_sym
   response.should have_tag("td#user-#{user.id}-role", role)
 end
-
-When /^I do a HTTP request to impersonate (user "[^"]*")$/ do |user|
-  page.driver.browser.process :post, impersonate_admin_buyers_account_user_path(user.account, user)
-end

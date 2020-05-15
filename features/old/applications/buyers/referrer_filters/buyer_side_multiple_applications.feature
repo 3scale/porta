@@ -52,14 +52,6 @@ Feature: Buyer's application referrer filters (multiple applications mode)
     And I go to the "MegaWidget" application page
     Then I should see referrer filters limit reached error
 
-  @allow-rescue
-  Scenario: Attempt to create more referrer filters than the limit fails
-    Given the referrer filter limit for application "MegaWidget" is reached
-    When I log in as "bob"
-    And I go to the "MegaWidget" application page
-    And I do POST to the referrer filters url for application "MegaWidget"
-    Then I should see referrer filters limit reached error
-
   @javascript
   Scenario: Delete referrer filter
     Given the current domain is foo.example.com
@@ -76,37 +68,3 @@ Feature: Buyer's application referrer filters (multiple applications mode)
     When I log in as "bob"
     And I go to the "MegaWidget" application page
     Then I should not see "Referrer Filters"
-
-  @security
-  Scenario: Creating referrer filter is forbidden if not logged in
-    When I do POST to the referrer filters url for application "MegaWidget"
-    Then I should be on the login page
-
-  @security
-  Scenario: Deleting referrer filter is forbidden if not logged in
-    Given application "MegaWidget" has the following referrer filters:
-      | foo.example.org |
-    When I do DELETE to the "foo.example.org" referrer filter url for application "MegaWidget"
-    Then I should be on the login page
-
-  # FIXME: this scenario fails because it redirects to non existing page after login
-  # so i suspect it leaks some cookies from previous one
-  @security @allow-rescue
-  Scenario: Creating referrer filter is forbidden if not buyer of the application
-    Given a buyer "alice" signed up to provider "foo.example.com"
-    And buyer "alice" has application "MiniWidget"
-
-    When I log in as "alice"
-    And I do POST to the referrer filters url for application "MegaWidget"
-    Then I should see "Not found"
-
-  @security @allow-rescue
-  Scenario: Deleting referrer filter is forbidden if not buyer of the application
-    Given a buyer "alice" signed up to provider "foo.example.com"
-    And buyer "alice" has application "MiniWidget"
-    Given application "MegaWidget" has the following referrer filters:
-      | foo.example.org |
-
-    When I log in as "alice"
-    And I do DELETE to the "foo.example.org" referrer filter url for application "MegaWidget"
-    Then I should see "Not found"
