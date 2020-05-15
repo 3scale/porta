@@ -1,3 +1,4 @@
+export * from './BulkSelectorWidget'
 export * from './DataListContext'
 export * from './SearchWidget'
 export * from './Toolbar'

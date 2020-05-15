@@ -7,7 +7,9 @@ import {
   DataListProvider,
   SearchWidget,
   PaginationWidget,
-  useDataListPagination
+  useDataListPagination,
+  useDataListTable,
+  BulkSelectorWidget
 } from 'components/data-list'
 import {
   PageSection,
@@ -21,6 +23,7 @@ import {
   ToolbarContent
 } from '@patternfly/react-core'
 import { BellIcon } from '@patternfly/react-icons'
+import { TableHeader, TableBody, Table } from '@patternfly/react-table'
 
 const categories = [
   {
@@ -47,13 +50,41 @@ const categories = [
   }
 ]
 
-const List = () => {
+const tableData = {
+  columns: [
+    { title: 'Name' },
+    { title: 'Surname' }
+  ],
+  rows: new Array(1000).fill(0).map((_, i) => ({
+    id: i,
+    cells: [`Name ${i}`, `Surname ${i}`],
+    selected: false
+  }))
+}
+
+const DataListTable = () => {
   const { startIdx, endIdx } = useDataListPagination()
-  const list = new Array(1000).fill(0).map((item, i) => i)
+  const {
+    columns,
+    rows,
+    selectOne,
+    selectAll
+  } = useDataListTable()
+
   return (
-    <ul>
-      {list.slice(startIdx, endIdx).map((item: any) => <li>{item}</li>)}
-    </ul>
+    <Table
+      aria-label="data-list-table"
+      cells={columns}
+      rows={rows.slice(startIdx, endIdx)}
+      onSelect={(_ev, selected, _rowIndex, rowData) => (_rowIndex === -1
+        ? selectAll(selected)
+        : selectOne(rowData.id, selected)
+      )}
+      canSelectAll
+    >
+      <TableHeader />
+      <TableBody />
+    </Table>
   )
 }
 
@@ -93,9 +124,13 @@ const Overview: React.FunctionComponent = () => {
         </Card>
         <Card>
           <CardBody>
-            <DataListProvider>
+            <DataListProvider data={tableData}>
               <Toolbar>
                 <ToolbarContent>
+                  <ToolbarItem>
+                    {/* filteredRows should be inside the context? */}
+                    <BulkSelectorWidget filteredRows={tableData.rows} />
+                  </ToolbarItem>
                   <ToolbarItem>
                     <SearchWidget categories={categories} />
                   </ToolbarItem>
@@ -104,7 +139,7 @@ const Overview: React.FunctionComponent = () => {
                   </ToolbarItem>
                 </ToolbarContent>
               </Toolbar>
-              <List />
+              <DataListTable />
             </DataListProvider>
           </CardBody>
         </Card>

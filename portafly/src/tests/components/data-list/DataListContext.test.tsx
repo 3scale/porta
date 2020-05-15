@@ -29,7 +29,11 @@ describe('DataListContext: useDataFilters', () => {
     )
   }
 
-  const DataList = () => <DataListProvider><FilterComponent /></DataListProvider>
+  const DataList = () => (
+    <DataListProvider data={{ columns: [], rows: [] }}>
+      <FilterComponent />
+    </DataListProvider>
+  )
 
   it('should correctly update the state using reducer hook functions', () => {
     const { getByTestId } = render(<DataList />)
