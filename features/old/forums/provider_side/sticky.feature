@@ -82,6 +82,3 @@ Feature: Sticky Topics
     When I log in as "bob" on foo.example.com
     And I go to the new topic page
     Then I should not see field "Sticky"
-
-    When I do a HTTP request to create a sticky topic "In your face!"
-    Then the forum of "foo.example.com" should have non-sticky topic "In your face!"

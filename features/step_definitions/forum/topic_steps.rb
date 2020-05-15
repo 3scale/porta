@@ -142,21 +142,6 @@ Then /^the topic should be destroyed$/ do
   expect { @topic.reload }.to raise_error ActiveRecord::RecordNotFound
 end
 
-When /^I do a HTTP request to update (topic "[^"]*")$/ do |topic|
-  page.driver.browser.process :put, forum_topic_path(topic)
-end
-
-When /^I do a HTTP request to delete (topic "[^"]*")$/ do |topic|
-  page.driver.browser.process :delete, forum_topic_path(topic)
-end
-
-When /^I do a HTTP request to create a sticky topic "([^"]*)"$/ do |title|
-  page.driver.browser.process :post, forum_topics_path, :topic => {:title  => title,
-                                                 :body   => 'Blah blah',
-                                                 :sticky => 1}
-  # page.driver.browser.follow_redirects!
-end
-
 Then /^I should see the link to create new topic$/ do
   step 'I should see "Start new thread"'
 end

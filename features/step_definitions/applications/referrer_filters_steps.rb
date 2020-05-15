@@ -36,18 +36,6 @@ rescue Capybara::NotSupportedByDriverError
   false
 end
 
-def rack_test_http_request(method, path, args = nil)
-  touch_session
-  page.driver.browser.process_and_follow_redirects(method, path, args)
-end
-
-When /^I do POST to the referrer filters url for (application "[^"]*")$/ do |application|
-  rack_test_http_request :post, admin_application_referrer_filters_path(application)
-end
-
-When /^I do DELETE to the "([^"]*)" referrer filter url for (application "[^"]*")$/ do |filter, application|
-  rack_test_http_request :delete, admin_application_referrer_filter_path(application, ReferrerFilter.find_by_value(filter).id)
-end
 
 # single-app
 
@@ -71,9 +59,6 @@ Given /^the backend will delete referrer filter "([^"]*)" for the application of
   fake_application_referrer_filter_deletion(buyer.bought_cinstance, referrer_filter)
 end
 
-When /^I do POST to the referrer filters url for the application of (buyer "[^"]*")$/ do |buyer|
-  rack_test_http_request :post, application_referrer_filters_path(buyer.bought_cinstance)
-end
 
 
 # single/multi app

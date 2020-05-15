@@ -60,13 +60,15 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
   class MemberPermissionsTest < Buyers::AccountsControllerTest
     def setup
       @provider = FactoryBot.create(:provider_account)
-      user = FactoryBot.create(:active_user, account: @provider, role: :member, member_permission_ids: [:partners])
-      login! @provider, user: user
+      @user = FactoryBot.create(:active_user, account: provider, role: :member, member_permission_ids: [:partners])
+      login! provider, user: user
     end
 
+    attr_reader :user, :provider
+
     def test_show
-      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-      service = FactoryBot.create(:service, account: @provider)
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      service = FactoryBot.create(:service, account: provider)
       plan  = FactoryBot.create(:application_plan, issuer: service)
       plan.publish!
       buyer.buy! plan
@@ -88,11 +90,48 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_match 'Alaska Application App', response.body
     end
+
+    test 'can\'t manage buyer accounts' do
+      user.member_permission_ids = []
+      user.save!
+
+      get admin_buyers_accounts_path
+      assert_response :forbidden
+
+      get new_admin_buyers_account_path
+      assert_response :forbidden
+
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider, name: 'bob')
+
+      get admin_buyers_account_path(buyer)
+      assert_response :forbidden
+
+      get edit_admin_buyers_account_path(buyer)
+      assert_response :forbidden
+
+      put admin_buyers_account_path(buyer), params: {account: {name: 'carl'}}
+      assert_response :forbidden
+      assert_equal 'bob', buyer.reload.name
+
+      delete admin_buyers_account_path(buyer)
+      assert_response :forbidden
+      assert Account.exists?(buyer.id)
+
+      assert_no_difference(Account.method(:count)) do
+        post admin_buyers_accounts_path, params: {
+          account: {
+            name: 'secret agent',
+            user: { username: 'johndoe', email: 'user@example.org', password: 'secretpassword' }
+          }
+        }
+      end
+      assert_response :forbidden
+    end
   end
 
   class ProviderLoggedInTest < Buyers::AccountsControllerTest
     def setup
-      @buyer = FactoryBot.create :buyer_account
+      @buyer = FactoryBot.create(:buyer_account, name: 'bob')
       @provider = @buyer.provider_account
       login! @provider
     end
@@ -153,6 +192,29 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
         assert_response :redirect
       end
     end
+
+    test 'can\'t manage buyer\'s of other providers' do
+      another_provider = FactoryBot.create(:provider_account)
+      login! another_provider
+
+      get admin_buyers_accounts_path
+      assert assigns(:accounts)
+      assert_equal 0, assigns(:accounts).size
+
+      get admin_buyers_account_path(@buyer)
+      assert_response :not_found
+
+      get edit_admin_buyers_account_path(@buyer)
+      assert_response :not_found
+
+      put admin_buyers_account_path(@buyer), params: {account: {name: 'mike'}}
+      assert_response :not_found
+      assert_equal 'bob', @buyer.reload.name
+
+      delete admin_buyers_account_path(@buyer)
+      assert_response :not_found
+      assert Account.exists?(@buyer.id)
+    end
   end
 
   class MasterLoggedInTest < Buyers::AccountsControllerTest
@@ -174,6 +236,45 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_account_path(@provider)
       assert_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', 2)
       refute_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', /plan/i )
+    end
+  end
+
+  class NotLoggedInTest < ActionDispatch::IntegrationTest
+    test 'anonymous users can\'t manage buyer accounts' do
+      provider = FactoryBot.create(:provider_account)
+      host! provider.admin_domain
+
+      get admin_buyers_accounts_path
+      assert_redirected_to provider_login_path
+
+      get new_admin_buyers_account_path
+      assert_redirected_to provider_login_path
+
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider, name: 'bob')
+
+      get admin_buyers_account_path(buyer)
+      assert_redirected_to provider_login_path
+
+      get edit_admin_buyers_account_path(buyer)
+      assert_redirected_to provider_login_path
+
+      put admin_buyers_account_path(buyer), params: {account: {name: 'carl'}}
+      assert_redirected_to provider_login_path
+      assert_equal 'bob', buyer.reload.name
+
+      delete admin_buyers_account_path(buyer)
+      assert_redirected_to provider_login_path
+      assert Account.exists?(buyer.id)
+
+      assert_no_difference(Account.method(:count)) do
+        post admin_buyers_accounts_path, params: {
+          account: {
+            name: 'secret agent',
+            user: { username: 'johndoe', email: 'user@example.org', password: 'secretpassword' }
+          }
+        }
+      end
+      assert_redirected_to provider_login_path
     end
   end
 end
