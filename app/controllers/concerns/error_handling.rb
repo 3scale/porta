@@ -27,6 +27,11 @@ module ErrorHandling
       handle_error(exception, :forbidden)
     end
 
+    def handle_forgery_protection(exception)
+      System::ErrorReporting.report_error(exception)
+      handle_error(exception, :forbidden)
+    end
+
     def log_error(exception, status)
       logger.error "Handling Exception: #{exception} with status #{status}"
       logger.debug exception.backtrace.join("\n") if exception&.backtrace
