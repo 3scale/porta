@@ -27,4 +27,14 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
     get authorization_provider_bounce_path('fake-system-name')
     assert_response :not_found
   end
+
+  test 'logout of provider with partner and logout_url' do
+    partner = FactoryBot.create(:partner, logout_url: "http://example.net/?")
+    account = FactoryBot.create(:provider_account, partner: partner)
+    login! account
+
+    delete provider_sessions_path
+
+    assert_redirected_to "http://example.net/?provider_id=#{account.id}&user_id=#{account.admin_user.id}"
+  end
 end
