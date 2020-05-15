@@ -127,11 +127,3 @@ Then /^(.+) for (the last post under topic "[^"]*")$/ do |lstep, post|
     step lstep
   end
 end
-
-When /^I do a HTTP request to update (post "[^"]*")$/ do |post|
-  page.driver.browser.process :put, forum_post_path(post)
-end
-
-When /^I do a HTTP request to delete (post "[^"]*")$/ do |post|
-  page.driver.browser.process :delete, forum_post_path(post)
-end

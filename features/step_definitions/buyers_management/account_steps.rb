@@ -118,21 +118,6 @@ Then /^the following buyers should be (\w+):$/ do |state, table|
   end
 end
 
-When /^I do a HTTP request to create new buyer with name "([^"]*)"$/ do |name|
-  attributes = {:account => FactoryBot.attributes_for(:buyer_account, :org_name => name),
-                :user    => FactoryBot.attributes_for(:user)}
-
-  page.driver.browser.process_and_follow_redirects :post, admin_buyers_accounts_path, :signup => attributes
-end
-
-When /^I do a HTTP request to update (buyer "[^"]*") changing the organization name to "([^"]*)"$/ do |buyer, new_name|
-  page.driver.browser.process_and_follow_redirects :put, admin_buyers_account_path(buyer), :account => {:org_name => new_name}
-end
-
-When /^I do a HTTP request to delete (buyer "[^"]*")$/ do |buyer|
-  page.driver.browser.process_and_follow_redirects :delete, admin_buyers_account_path(buyer)
-end
-
 When /^I create new buyer account "([^\"]*)"$/ do |name|
   user = FactoryBot.attributes_for(:user)
 
