@@ -111,6 +111,8 @@ invitations_table:
     not_yet: Not yet
   acceptance_values_description: Container with the possible responses to whether the invitation has been accepted or not.
   #-------# Action header: available in shared.yml
+  resend_button: Resend
+  resend_button_description: Button link to send invitations again
   #-------# Delete button: available in shared.yml
 
 # Modal: Invitation deletion
