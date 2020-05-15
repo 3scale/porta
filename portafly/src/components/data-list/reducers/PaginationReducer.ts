@@ -40,7 +40,9 @@ const usePagination = ({ state, dispatch }: IUsePagination) => ({
   startIdx: state.pagination.startIdx,
   endIdx: state.pagination.endIdx,
   resetPagination: () => dispatch({ type: SET_PAGINATION, payload: defaultPagination }),
-  setPagination: (pagination: PaginationState) => dispatch({ type: SET_PAGINATION, payload: pagination })
+  setPagination: (pagination: PaginationState) => (
+    dispatch({ type: SET_PAGINATION, payload: pagination })
+  )
 })
 
 export { paginationReducer, usePagination, defaultPagination }
