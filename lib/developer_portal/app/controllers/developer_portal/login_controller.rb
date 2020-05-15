@@ -12,8 +12,8 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
 
   activate_menu :root
 
-  # you can't exploit CSRF if a user is not logged in
-  protect_from_forgery :except => :create
+  protect_from_forgery with: :exception
+  rescue_from ActionController::InvalidAuthenticityToken, with: :handle_forgery_protection
 
   liquify prefix: 'login'
 

@@ -36,6 +36,10 @@ Before '@chrome' do
   Capybara.current_driver = :chrome
 end
 
+Around '@security' do |scenario, block|
+  with_forgery_protection(&block)
+end
+
 # monkeypatch to fix
 # not opened for reading (IOError)
 # /cucumber-1.3.20/lib/cucumber/formatter/interceptor.rb:33:in `each'
