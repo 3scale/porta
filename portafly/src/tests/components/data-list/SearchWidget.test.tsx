@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'tests/custom-render'
 import { SearchWidget } from 'components/data-list'
 import { fireEvent } from '@testing-library/react'
-import { DataToolbar, DataToolbarContent, DataToolbarItem } from '@patternfly/react-core/dist/js/experimental'
+import { Toolbar, ToolbarContent, ToolbarItem } from '@patternfly/react-core'
 
 describe('SearchWidget', () => {
   const categories = [
@@ -32,13 +32,13 @@ describe('SearchWidget', () => {
 
   const setup = () => (
     render(
-      <DataToolbar id="data-toolbar">
-        <DataToolbarContent>
-          <DataToolbarItem data-testid="search-widget">
+      <Toolbar id="data-toolbar">
+        <ToolbarContent>
+          <ToolbarItem data-testid="search-widget">
             <SearchWidget categories={categories} />
-          </DataToolbarItem>
-        </DataToolbarContent>
-      </DataToolbar>
+          </ToolbarItem>
+        </ToolbarContent>
+      </Toolbar>
     )
   )
 

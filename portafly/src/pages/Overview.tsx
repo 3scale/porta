@@ -16,14 +16,11 @@ import {
   Text,
   Card,
   CardBody,
-  Button
+  Button,
+  ToolbarItem,
+  ToolbarContent
 } from '@patternfly/react-core'
 import { BellIcon } from '@patternfly/react-icons'
-
-import {
-  DataToolbarItem,
-  DataToolbarContent
-} from '@patternfly/react-core/dist/js/experimental'
 
 const categories = [
   {
@@ -70,7 +67,7 @@ const Overview: React.FunctionComponent = () => {
     <>
       <PageSection variant="light">
         <TextContent>
-          <Title size="3xl">{t('body_title')}</Title>
+          <Title headingLevel="h2" size="3xl">{t('body_title')}</Title>
           <Text>
             {t('subtitle')}
           </Text>
@@ -98,14 +95,14 @@ const Overview: React.FunctionComponent = () => {
           <CardBody>
             <DataListProvider>
               <Toolbar>
-                <DataToolbarContent>
-                  <DataToolbarItem>
+                <ToolbarContent>
+                  <ToolbarItem>
                     <SearchWidget categories={categories} />
-                  </DataToolbarItem>
-                  <DataToolbarItem>
+                  </ToolbarItem>
+                  <ToolbarItem>
                     <PaginationWidget itemCount={1000} />
-                  </DataToolbarItem>
-                </DataToolbarContent>
+                  </ToolbarItem>
+                </ToolbarContent>
               </Toolbar>
               <List />
             </DataListProvider>

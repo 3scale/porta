@@ -145,14 +145,17 @@ exports[`SearchWidget should be able to filter by admin 1`] = `
 
 exports[`SearchWidget should render correctly 1`] = `
 <div
-  class="pf-c-data-toolbar__item"
+  class="pf-c-toolbar__item"
   data-testid="search-widget"
 >
   <div
-    class="pf-c-data-toolbar__group pf-m-filter-group"
+    class="pf-c-toolbar__group pf-m-filter-group"
   >
     <div
       class="pf-c-select"
+      data-ouia-component-id="0"
+      data-ouia-component-type="PF4/Select"
+      data-ouia-safe="true"
     >
       <button
         aria-expanded="false"
@@ -189,35 +192,38 @@ exports[`SearchWidget should render correctly 1`] = `
             Admin
           </span>
         </div>
-        <svg
-          aria-hidden="true"
+        <span
           class="pf-c-select__toggle-arrow"
-          fill="currentColor"
-          height="1em"
-          role="img"
-          style="vertical-align: -0.125em;"
-          viewBox="0 0 320 512"
-          width="1em"
         >
-          <path
-            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-            transform=""
-          />
-        </svg>
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="1em"
+            role="img"
+            style="vertical-align: -0.125em;"
+            viewBox="0 0 320 512"
+            width="1em"
+          >
+            <path
+              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+              transform=""
+            />
+          </svg>
+        </span>
       </button>
     </div>
     <div
-      class="pf-c-data-toolbar__item"
+      class="pf-c-toolbar__item"
     >
       <span />
     </div>
     <div
-      class="pf-c-data-toolbar__item"
+      class="pf-c-toolbar__item"
     >
       <span />
     </div>
     <div
-      class="pf-c-data-toolbar__item"
+      class="pf-c-toolbar__item"
     >
       <span />
     </div>
@@ -235,6 +241,8 @@ exports[`SearchWidget should render correctly 1`] = `
       <button
         aria-label="Aria label for button"
         class="pf-c-button pf-m-control"
+        data-ouia-component-type="PF4/Button"
+        data-ouia-safe="true"
         type="button"
       >
         <svg

@@ -7,15 +7,13 @@ import {
   TextInput,
   Button,
   ButtonVariant,
-  SelectOptionObject
+  SelectOptionObject,
+  ToolbarFilter,
+  ToolbarGroup,
+  ToolbarChip,
+  ToolbarChipGroup
 } from '@patternfly/react-core'
 import { FilterIcon, SearchIcon } from '@patternfly/react-icons'
-import {
-  DataToolbarFilter,
-  DataToolbarGroup,
-  DataToolbarChip,
-  DataToolbarChipGroup
-} from '@patternfly/react-core/dist/js/experimental'
 import { useDataListFilters } from 'components/data-list/'
 
 import './searchWidget.scss'
@@ -41,10 +39,10 @@ const CategorySelect: React.FunctionComponent<ICategorySelect> = ({
   selections,
   onCategorySelect
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const onSelect = (_: any, value: SelectOptionObject) => {
     onCategorySelect((value as { name: string }).name)
-    setIsExpanded(false)
+    setIsOpen(false)
   }
   return (
     <Select
@@ -53,8 +51,8 @@ const CategorySelect: React.FunctionComponent<ICategorySelect> = ({
       aria-label="category-select"
       onSelect={onSelect}
       selections={selections}
-      isExpanded={isExpanded}
-      onToggle={setIsExpanded}
+      isOpen={isOpen}
+      onToggle={setIsOpen}
       isDisabled={false}
     >
       { categories.map((category) => (
@@ -80,7 +78,7 @@ const OptionsSelect: React.FunctionComponent<ICollectionSelect> = ({
   selections,
   categoryName
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const onSelect = (ev: React.SyntheticEvent, selection: string | SelectOptionObject) => {
     const { checked } = ev.currentTarget as HTMLInputElement
     onCollectionSelect(checked, selection as string)
@@ -90,8 +88,8 @@ const OptionsSelect: React.FunctionComponent<ICollectionSelect> = ({
       variant={SelectVariant.checkbox}
       onSelect={onSelect}
       selections={selections}
-      isExpanded={isExpanded}
-      onToggle={setIsExpanded}
+      isOpen={isOpen}
+      onToggle={setIsOpen}
       placeholderText={`Filter by ${categoryName}`}
     >
       { options.map(({ name, humanName }) => (
@@ -167,24 +165,24 @@ const SearchWidget: React.FunctionComponent<ISearchWidget> = ({ categories }) =>
   const onSearchClick = (value: string) => addFilter(selectedCategory.name, value)
 
   const deleteChip = (
-    categoryHumanName: string | DataToolbarChipGroup,
-    chip: string | DataToolbarChip
+    categoryHumanName: string | ToolbarChipGroup,
+    chip: string | ToolbarChip
   ) => {
-    // FIXME: PF DataToolbarFilter deleteChip passes the categoryName instead of category (key)
+    // FIXME: PF ToolbarFilter deleteChip passes the categoryName instead of category (key)
     // Otherwise we could just use the removeFilter fn directly
     const category = categories.find((cat) => cat.humanName === categoryHumanName) as Category
     removeFilter(category.name, chip as string)
   }
 
   const appliedFilters = useMemo(() => categories.map((category) => (
-    <DataToolbarFilter
+    <ToolbarFilter
       key={category.name}
       chips={filters[category.name]}
       deleteChip={deleteChip}
       categoryName={category.humanName}
     >
       <span />
-    </DataToolbarFilter>
+    </ToolbarFilter>
   )), [filters])
 
   const categorySelect = useMemo(() => (
@@ -196,7 +194,7 @@ const SearchWidget: React.FunctionComponent<ISearchWidget> = ({ categories }) =>
   ), [selectedCategory])
 
   return (
-    <DataToolbarGroup variant="filter-group">
+    <ToolbarGroup variant="filter-group">
       { categorySelect }
       { appliedFilters }
       { selectedCategory.options
@@ -215,7 +213,7 @@ const SearchWidget: React.FunctionComponent<ISearchWidget> = ({ categories }) =>
             onSearchClick={onSearchClick}
           />
         ) }
-    </DataToolbarGroup>
+    </ToolbarGroup>
   )
 }
 
