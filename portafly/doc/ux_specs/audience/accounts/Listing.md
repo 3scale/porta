@@ -51,6 +51,6 @@
 
 * Change state modal ([specs](../../global_components/modal.md))
   * Listed items:
-    * format fo the string: {{account_name}} ({{state}})
+    * format of the string: {{account_name}} ({{state}})
     * one item = one account
   * Select state input field includes helper text
