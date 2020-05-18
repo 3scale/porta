@@ -10,7 +10,7 @@ Please refer to the single page files together with mockups linked in each page 
 
 ### Pages
 ##### Audience
-* [Accounts > Listing](/audience/accounts/listing.md)
+* [Accounts > Listing](/portafly/doc/ux_specs/audience/accounts/listing.md)
 
 ##### Account settings
 * _coming soon_
