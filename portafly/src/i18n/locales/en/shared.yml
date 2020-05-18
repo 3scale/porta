@@ -1,7 +1,7 @@
 ---
 logo_alt_text: Red Hat Integration logo
 logo_alt_text_description: Alt attribute of the main logo
-nav_items:
+navigation_items:
   overview: Overview
   overview_description: Title of Overview menu item
   analytics: Analytics
@@ -29,4 +29,20 @@ format:
   lowercase: "{{text, lowercase}}"
   lowercase_description: Formats a text as lowercase
   format_description: Utilities to format text
-
+shared_elements:
+  bulk_selector: {{number}} selected
+  bulk_selector_description: Label for the bulk selector to indicate the number of selected items. This label is visible only when items are selected.
+  action_header: Action
+  actions_header_description: Column listing the only available action to perform with each item of a table
+  actions_header_plural: Actions
+  actions_header_plural_description: Column listing the various available actions to perform with each item of a table
+  send_button: Send
+  send_button_description: Label to perform the sending of items
+  edit_button: Edit
+  edit_button_description: Label to perform the edition of a selected item
+  delete_button: Delete
+  delete_button_description: Label to perform deletion of selected items
+  delete_button_tooltip: Select at least an item to enable the <strong>Delete</strong> button.
+  delete_button_tooltip_description: Tooltip shown upon hovering to explain that the deletion will be available upon selection of items.
+  cancel_button: Cancel
+  cancel_button_description: Label for a button to cancel an action
