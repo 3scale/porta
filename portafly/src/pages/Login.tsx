@@ -9,8 +9,7 @@ import {
   Form,
   FormGroup,
   TextInput,
-  LoginPage,
-  BackgroundImageSrc
+  LoginPage
 } from '@patternfly/react-core'
 import brandImg from 'assets/logo.svg'
 import BackgroundImageSrcLg from 'assets/images/pfbg_1200.jpg'
@@ -20,11 +19,11 @@ import BackgroundImageSrcXs from 'assets/images/pfbg_576.jpg'
 import BackgroundImageSrcXs2x from 'assets/images/pfbg_576@2x.jpg'
 
 const backgroundImages = {
-  [BackgroundImageSrc.lg]: BackgroundImageSrcLg,
-  [BackgroundImageSrc.sm]: BackgroundImageSrcSm,
-  [BackgroundImageSrc.sm2x]: BackgroundImageSrcSm2x,
-  [BackgroundImageSrc.xs]: BackgroundImageSrcXs,
-  [BackgroundImageSrc.xs2x]: BackgroundImageSrcXs2x
+  lg: BackgroundImageSrcLg,
+  sm: BackgroundImageSrcSm,
+  sm2x: BackgroundImageSrcSm2x,
+  xs: BackgroundImageSrcXs,
+  xs2x: BackgroundImageSrcXs2x
 }
 
 interface ILoginForm {

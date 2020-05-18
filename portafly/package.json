@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@patternfly/react-core": "^3.124.1",
-    "@patternfly/react-table": "^2.25.6",
+    "@patternfly/react-core": "^4.12.7",
+    "@patternfly/react-table": "^4.3.34",
     "date-fns": "^2.11.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",

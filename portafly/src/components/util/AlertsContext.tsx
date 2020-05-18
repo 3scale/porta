@@ -33,7 +33,7 @@ const AlertsProvider: React.FunctionComponent = ({ children }) => {
     setAlerts((prevAlerts) => [...prevAlerts, { ...alert, timeout }])
   }
 
-  const CloseButton = ({ id, timeout }: { id: string, timeout: NodeJS.Timeout}) => (
+  const CloseButton = ({ id, timeout }: { id: string, timeout: NodeJS.Timeout }) => (
     <AlertActionCloseButton
       title={t('alerts.close_button')}
       onClose={() => {
@@ -54,7 +54,7 @@ const AlertsProvider: React.FunctionComponent = ({ children }) => {
             isLiveRegion
             variant={variant}
             title={title}
-            action={<CloseButton id={id} timeout={timeout} />}
+            actionClose={<CloseButton id={id} timeout={timeout} />}
           />
         ))}
       </AlertGroup>

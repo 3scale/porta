@@ -1,17 +1,17 @@
 import React from 'react'
-import { DataToolbar } from '@patternfly/react-core/dist/js/experimental'
+import { Toolbar } from '@patternfly/react-core'
 import { useDataListFilters } from 'components/data-list'
 
 interface Props {
 }
 
-const Toolbar: React.FunctionComponent<Props> = ({ children }) => {
+const DataListToolbar: React.FunctionComponent<Props> = ({ children }) => {
   const { setFilters } = useDataListFilters()
   return (
-    <DataToolbar id="toolbar" clearAllFilters={() => setFilters({})}>
+    <Toolbar id="toolbar" clearAllFilters={() => setFilters({})}>
       {children}
-    </DataToolbar>
+    </Toolbar>
   )
 }
 
-export { Toolbar }
+export { DataListToolbar as Toolbar }
