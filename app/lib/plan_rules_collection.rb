@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module PlanRulesCollection
-  class PlanRulesNotLoaded < StandardError; end
-
   module_function
 
   PLAN_RULES_BY_NAME = PlanRuleLoader.load_config
