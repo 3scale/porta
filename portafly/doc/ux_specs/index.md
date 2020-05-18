@@ -1,7 +1,7 @@
 # PortaFly UX/UI specifications
 This documentation collects all UX/UI specifications as part of the Design deliverables for the PortaFly project.
 
-Please refer to the single page files together with mockups linked in each page file for a complete mapping of each screen's UI and states (validation errors, expanded menus etc).
+Please refer to the single page files together with mockups linked in each page file for a complete mapping of each screen's UI and states (validation errors, expanded menus, etc).
 
 ## Table of Contents
 
