@@ -1,5 +1,7 @@
 # Modals UX/UI specs
 
+[Back to index](../index.md)
+
 * [PatternFly Modal dialog design guidelines](https://www.patternfly.org/v4/design-guidelines/usage-and-behavior/modal)
 * [PatternFly-react Modal docs](https://www.patternfly.org/v4/documentation/react/components/modal)
 
