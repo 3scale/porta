@@ -46,7 +46,7 @@
 ##### Modals
 * Send email modal ([specs](../../global_components/modal.md))
   * Listed items:
-    * format fo the string: {{admin_name}} ({{account_name}})
+    * format of the string: {{admin_name}} ({{account_name}})
     * one item = one admin user
 
 * Change state modal ([specs](../../global_components/modal.md))
