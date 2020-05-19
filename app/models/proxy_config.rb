@@ -16,7 +16,7 @@ class ProxyConfig < ApplicationRecord
   belongs_to :user, required: false
 
   attr_readonly :proxy_id, :user_id, :version, :environment, :content
-  delegate :service_token, to: :proxy, allow_nil: true
+  delegate :service_token, :api_backend, to: :proxy, allow_nil: true
 
   validates :version,
             uniqueness: { scope: [ :proxy_id, :environment ] },
@@ -24,6 +24,7 @@ class ProxyConfig < ApplicationRecord
   validates :content, :version, :environment, presence: true
   validates :environment, inclusion: { in: ENVIRONMENTS }
   validate :service_token_exists
+  validate :api_backend_exists, on: :create
   validates :content, length: { maximum: MAX_CONTENT_LENGTH }
 
   after_create :update_version
@@ -110,6 +111,11 @@ class ProxyConfig < ApplicationRecord
   def service_token_exists
     return if service_token
     errors.add :service_token, :missing
+  end
+
+  def api_backend_exists
+    return if proxy&.api_backend_present?
+    errors.add :api_backend, :missing
   end
 
   private
