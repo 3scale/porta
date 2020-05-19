@@ -123,6 +123,50 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  class WebHooksTest < Admin::Api::AccountsControllerTest
+    disable_transactional_fixtures!
+
+    test 'update by access token fires webhooks' do
+      provider.settings.allow_web_hooks!
+      FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
+
+      assert_difference(WebHookWorker.jobs.method(:size)) do
+        put admin_api_account_path(buyer, format: :json), { monthly_billing_enabled: true, access_token: token.value }
+        assert_response :success
+      end
+    end
+
+    test 'update by provider key does not fire webhooks' do
+      provider.settings.allow_web_hooks!
+      FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
+
+      assert_no_difference(WebHookWorker.jobs.method(:size)) do
+        put admin_api_account_path(buyer, format: :json), { monthly_billing_enabled: true, provider_key: provider.provider_key }
+        assert_response :success
+      end
+    end
+
+    test 'delete by access token fires webhooks' do
+      provider.settings.allow_web_hooks!
+      FactoryBot.create(:webhook, account: provider, account_deleted_on: true, active: true)
+
+      assert_difference(WebHookWorker.jobs.method(:size)) do
+        delete admin_api_account_path(buyer, access_token: token.value)
+        assert_response :success
+      end
+    end
+
+    test 'delete by provider key does not fire webhooks' do
+      provider.settings.allow_web_hooks!
+      FactoryBot.create(:webhook, account: provider, account_deleted_on: true, active: true)
+
+      assert_no_difference(WebHookWorker.jobs.method(:size)) do
+        delete admin_api_account_path(buyer, provider_key: provider.provider_key)
+        assert_response :success
+      end
+    end
+  end
+
   private
 
   def buyer
