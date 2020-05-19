@@ -25,6 +25,9 @@ Object {
         <table
           aria-label="accounts_table.aria_label"
           class="pf-c-table pf-m-grid-md"
+          data-ouia-component-id="1"
+          data-ouia-component-type="PF4/Table"
+          data-ouia-safe="true"
           role="grid"
         >
           <thead
@@ -78,6 +81,9 @@ Object {
           >
             <tr
               class=""
+              data-ouia-component-id="2"
+              data-ouia-component-type="PF4/TableRow"
+              data-ouia-safe="true"
             >
               <td
                 class=""
@@ -117,6 +123,9 @@ Object {
             </tr>
             <tr
               class=""
+              data-ouia-component-id="3"
+              data-ouia-component-type="PF4/TableRow"
+              data-ouia-safe="true"
             >
               <td
                 class=""
@@ -180,6 +189,9 @@ Object {
       <table
         aria-label="accounts_table.aria_label"
         class="pf-c-table pf-m-grid-md"
+        data-ouia-component-id="1"
+        data-ouia-component-type="PF4/Table"
+        data-ouia-safe="true"
         role="grid"
       >
         <thead
@@ -233,6 +245,9 @@ Object {
         >
           <tr
             class=""
+            data-ouia-component-id="2"
+            data-ouia-component-type="PF4/TableRow"
+            data-ouia-safe="true"
           >
             <td
               class=""
@@ -272,6 +287,9 @@ Object {
           </tr>
           <tr
             class=""
+            data-ouia-component-id="3"
+            data-ouia-component-type="PF4/TableRow"
+            data-ouia-safe="true"
           >
             <td
               class=""
@@ -392,6 +410,9 @@ Object {
         <div
           aria-label="Danger Alert"
           class="pf-c-alert pf-m-danger"
+          data-ouia-component-id="0"
+          data-ouia-component-type="PF4/Alert"
+          data-ouia-safe="true"
         >
           <div
             class="pf-c-alert__icon"
@@ -447,6 +468,9 @@ Object {
       <div
         aria-label="Danger Alert"
         class="pf-c-alert pf-m-danger"
+        data-ouia-component-id="0"
+        data-ouia-component-type="PF4/Alert"
+        data-ouia-safe="true"
       >
         <div
           class="pf-c-alert__icon"
@@ -564,29 +588,33 @@ Object {
             class="pf-c-empty-state"
           >
             <div
-              class="pf-c-empty-state__icon"
+              class="pf-c-empty-state__content"
             >
-              <span
-                aria-valuetext="Loading..."
-                class="pf-c-spinner pf-m-xl"
-                role="progressbar"
+              <div
+                class="pf-c-empty-state__icon"
               >
                 <span
-                  class="pf-c-spinner__clipper"
-                />
-                <span
-                  class="pf-c-spinner__lead-ball"
-                />
-                <span
-                  class="pf-c-spinner__tail-ball"
-                />
-              </span>
+                  aria-valuetext="Loading..."
+                  class="pf-c-spinner pf-m-xl"
+                  role="progressbar"
+                >
+                  <span
+                    class="pf-c-spinner__clipper"
+                  />
+                  <span
+                    class="pf-c-spinner__lead-ball"
+                  />
+                  <span
+                    class="pf-c-spinner__tail-ball"
+                  />
+                </span>
+              </div>
+              <h2
+                class="pf-c-title pf-m-lg"
+              >
+                Loading
+              </h2>
             </div>
-            <h1
-              class="pf-c-title pf-m-lg"
-            >
-              Loading
-            </h1>
           </div>
         </section>
       </section>
@@ -618,29 +646,33 @@ Object {
           class="pf-c-empty-state"
         >
           <div
-            class="pf-c-empty-state__icon"
+            class="pf-c-empty-state__content"
           >
-            <span
-              aria-valuetext="Loading..."
-              class="pf-c-spinner pf-m-xl"
-              role="progressbar"
+            <div
+              class="pf-c-empty-state__icon"
             >
               <span
-                class="pf-c-spinner__clipper"
-              />
-              <span
-                class="pf-c-spinner__lead-ball"
-              />
-              <span
-                class="pf-c-spinner__tail-ball"
-              />
-            </span>
+                aria-valuetext="Loading..."
+                class="pf-c-spinner pf-m-xl"
+                role="progressbar"
+              >
+                <span
+                  class="pf-c-spinner__clipper"
+                />
+                <span
+                  class="pf-c-spinner__lead-ball"
+                />
+                <span
+                  class="pf-c-spinner__tail-ball"
+                />
+              </span>
+            </div>
+            <h2
+              class="pf-c-title pf-m-lg"
+            >
+              Loading
+            </h2>
           </div>
-          <h1
-            class="pf-c-title pf-m-lg"
-          >
-            Loading
-          </h1>
         </div>
       </section>
     </section>

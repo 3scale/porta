@@ -56,18 +56,13 @@ describe('AppLayout tests', () => {
     expect(getByLabelText('Global navigation')).toBeInTheDocument()
   })
 
-  it('should hide the sidebar when clicking the nav-toggle button', async () => {
+  it('should start with collapsed sidebar, then open when clicking the nav-toggle button', async () => {
     const { getByLabelText, getByTestId } = renderAppLayout()
     const navButton = getByLabelText('Global navigation')
     const sidebar = getByTestId('app-sidebar')
-    expect(sidebar).toHaveClass('pf-m-expanded')
-    fireEvent.click(navButton)
     expect(sidebar).toHaveClass('pf-m-collapsed')
+    fireEvent.click(navButton)
+    expect(sidebar).toHaveClass('pf-m-expanded')
   })
 
-  it('should start with an hidden sidebar', async () => {
-    const { getByTestId } = renderAppLayout({ startWithOpenNav: false })
-    const sidebar = getByTestId('app-sidebar')
-    expect(sidebar).toHaveClass('pf-m-collapsed')
-  })
 })

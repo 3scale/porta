@@ -5,7 +5,7 @@ exports[`should not render when there is an auth token already 1`] = `null`;
 exports[`should render the Login page 1`] = `
 <div
   alt="background_img_alt"
-  class="pf-c-background-image css-72krlk"
+  class="pf-c-background-image"
 >
   <svg
     class="pf-c-background-image__filter"
@@ -14,7 +14,7 @@ exports[`should render the Login page 1`] = `
     xmlns="http://www.w3.org/2000/svg"
   >
     <filter
-      id="image_overlay"
+      id="patternfly-background-image-filter-overlay0"
     >
       <fecolormatrix
         type="matrix"
