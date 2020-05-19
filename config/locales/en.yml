@@ -877,6 +877,8 @@ en:
           attributes:
             service_token:
               missing: 'is not created yet'
+            api_backend:
+              missing: 'is missing'
         account_plan:
           has_contracts: 'This account plan cannot be deleted! At least one account depends on it.'
           customizations_has_contracts: 'This account plan cannot be deleted!  At least one customized version of this account plan exists.'

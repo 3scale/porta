@@ -81,6 +81,7 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
 
   test 'deploy when deployable' do
     @proxy.expects(:deployable?).returns(true)
+    @proxy.expects(:api_backend_present?).returns(true)
 
     assert ProxyDeploymentService.call(@proxy)
   end

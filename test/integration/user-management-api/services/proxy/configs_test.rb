@@ -4,7 +4,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
 
   def setup
     account  = FactoryBot.create(:provider_account)
-    @service = FactoryBot.create(:simple_service, account: account)
+    @service = FactoryBot.create(:simple_service, :with_default_backend_api, account: account)
     @config  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
     admin    = FactoryBot.create(:admin, account: account)
     @token   = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')

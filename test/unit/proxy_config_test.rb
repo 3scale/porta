@@ -98,6 +98,26 @@ class ProxyConfigTest < ActiveSupport::TestCase
     assert_contains proxy_config.errors[:service_token], proxy_config.errors.generate_message(:service_token, :missing)
   end
 
+  test 'missing api backend' do
+    service = FactoryBot.create(:simple_service)
+    proxy = FactoryBot.create(:proxy, service: service)
+    proxy_config = FactoryBot.build(:proxy_config, environment: 'sandbox', proxy: proxy)
+
+    proxy.update_columns(api_backend: 'http://my-api.test')
+    proxy.backend_api_configs.delete_all
+    proxy.reload
+    assert proxy_config.valid?
+
+    proxy.update_columns(api_backend: nil)
+    proxy.reload
+    refute proxy_config.valid?
+    assert_equal :missing, proxy_config.errors.details[:api_backend].first[:error]
+
+    service.backend_api_configs.create!(backend_api: FactoryBot.create(:backend_api, account: service.account), path: '/')
+    proxy.reload
+    assert proxy_config.valid?
+  end
+
   def test_maximum_length
     proxy_config = FactoryBot.build(:proxy_config)
     content = proxy_config.content
