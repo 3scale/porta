@@ -64,5 +64,4 @@ describe('AppLayout tests', () => {
     fireEvent.click(navButton)
     expect(sidebar).toHaveClass('pf-m-expanded')
   })
-
 })
