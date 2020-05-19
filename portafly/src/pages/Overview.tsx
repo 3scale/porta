@@ -124,7 +124,7 @@ const Overview: React.FunctionComponent = () => {
         </Card>
         <Card>
           <CardBody>
-            <DataListProvider data={tableData}>
+            <DataListProvider initialState={{ table: tableData }}>
               <Toolbar>
                 <ToolbarContent>
                   <ToolbarItem>

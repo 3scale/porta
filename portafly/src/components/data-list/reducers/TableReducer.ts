@@ -7,9 +7,8 @@ import {
 import { DataListRow, DataListCol } from 'types'
 
 export type TableState = {
-  initialRows: Readonly<DataListRow[]>
-  columns: DataListCol[]
   rows: DataListRow[]
+  columns: DataListCol[]
 }
 
 // Action Handlers
@@ -24,9 +23,8 @@ const tableActionHandlers: ActionHandlers<TableState, any> = {
     return { ...state, rows: newRows }
   },
   [SELECT_PAGE]: (state, action: Action<DataListRow[]>) => {
-    // TODO: keep track of visibleRows in Context?
     const visibleRows = action.payload
-    const newRows = state.initialRows.map((r) => ({
+    const newRows = state.rows.map((r) => ({
       ...r,
       selected: visibleRows.some((vR) => vR.id === r.id)
     }))

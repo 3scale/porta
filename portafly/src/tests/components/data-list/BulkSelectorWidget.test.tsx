@@ -10,7 +10,7 @@ paginationMock.mockReturnValue({ startIdx: 0, endIdx: 5 })
 const useTableMock = useDataListTable as jest.Mock
 useTableMock.mockReturnValue({ selectedRows: [] })
 
-const filteredRows = [1, 2, 3, 4, 5]
+const filteredRows = new Array(5).map((_, i) => ({ id: i }))
 
 const renderWidget = () => {
   const wrapper = render(<BulkSelectorWidget filteredRows={filteredRows} />)
@@ -26,9 +26,9 @@ it('expands and collapses properly', () => {
   fireEvent.click(button)
 
   const withinMenu = within(queryByRole('menu') as HTMLElement)
-  expect(withinMenu.getByText('accounts_table.data_toolbar.bulk_selector.none')).toBeInTheDocument()
-  expect(withinMenu.getByText('accounts_table.data_toolbar.bulk_selector.page')).toBeInTheDocument()
-  expect(withinMenu.getByText('accounts_table.data_toolbar.bulk_selector.all')).toBeInTheDocument()
+  expect(withinMenu.getByText('bulk_selector.none')).toBeInTheDocument()
+  expect(withinMenu.getByText('bulk_selector.page')).toBeInTheDocument()
+  expect(withinMenu.getByText('bulk_selector.all')).toBeInTheDocument()
 
   fireEvent.click(button)
   expect(queryByRole('menu')).not.toBeInTheDocument()

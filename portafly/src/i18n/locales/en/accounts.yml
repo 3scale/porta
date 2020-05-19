@@ -18,19 +18,3 @@ accounts_table:
   col_apps_description: Title of the Apps column
   col_state: State
   col_state_description: Title of the State column
-  data_toolbar:
-    bulk_selector:
-      none: Select none (0 items)
-      none_description: Bulk Selector option for selecting no items
-      page: Select page ({{count}} item)
-      page_description: Bulk Selector option for selecting current page items
-      page_plural: Select page ({{count}} items)
-      page_plural_description: Bulk Selector option for selecting current page items (plural version)
-      all: Select all ({{count}} item)
-      all_description: Bulk Selector option for selecting all available items
-      all_plural: Select all ({{count}} items)
-      all_plural_description: Bulk Selector option for selecting all available items (plural version)
-      label: "{{selectedCount}} selected"
-      label_description: Label indicating how many items are currently selected
-      toggle_checkbox_aria_label: Select All
-      toggle_checkbox_aria_label_description: Aria label for select all toggle button

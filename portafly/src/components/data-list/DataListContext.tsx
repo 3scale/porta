@@ -20,9 +20,8 @@ type State = {
   pagination: PaginationState
 }
 
-const initialState: State = {
+const defaultState: State = {
   table: {
-    initialRows: [],
     rows: [],
     columns: []
   },
@@ -35,29 +34,25 @@ export interface IDataListContext {
   dispatch: React.Dispatch<Action<any>>
 }
 
-const DataListContext = createContext<IDataListContext>({ state: initialState, dispatch: () => {} })
+const DataListContext = createContext<IDataListContext>({ state: defaultState, dispatch: () => {} })
 
 type Props = {
-  data: {
-    columns: DataListCol[]
-    rows: DataListRow[]
+  initialState: {
+    table: {
+      columns: DataListCol[]
+      rows: DataListRow[]
+    }
   }
 }
 
-const DataListProvider: React.FunctionComponent<Props> = ({ data, children }) => {
-  const { columns, rows } = data
-
+const DataListProvider: React.FunctionComponent<Props> = ({ initialState, children }) => {
   const [state, dispatch] = useReducer(combineReducers({
     table: tableReducer,
     filters: filtersReducer,
     pagination: paginationReducer
   }), {
-    ...initialState,
-    table: {
-      initialRows: rows,
-      rows,
-      columns
-    }
+    ...defaultState,
+    ...initialState
   })
 
   return (

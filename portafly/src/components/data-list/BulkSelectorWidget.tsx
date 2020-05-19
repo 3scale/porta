@@ -9,13 +9,14 @@ import { useTranslation } from 'i18n/useTranslation'
 import { useDataListTable, useDataListPagination } from 'components/data-list'
 
 interface Props {
-  filteredRows: any[]
+  // TODO: try make it independent from table data
+  filteredRows: { id: number }[]
 }
 
 const BulkSelectorWidget: React.FunctionComponent<Props> = ({
   filteredRows
 }) => {
-  const { t } = useTranslation('accounts')
+  const { t } = useTranslation('shared')
   const { selectPage, selectAll, selectedRows } = useDataListTable()
   const { startIdx, endIdx } = useDataListPagination()
 
@@ -32,26 +33,18 @@ const BulkSelectorWidget: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-nested-ternary
   const isChecked = (selectedCount === 0) ? false
     : (selectedCount === allCount) ? true
+    // For the indeterminate state, PF React needs to be passed null
       : null
-  // OR
-  // let isChecked: boolean | null
-  // if (selectedCount === 0) {
-  //   isChecked = false
-  // } else if (selectedCount === allCount) {
-  //   isChecked = true
-  // } else {
-  //   isChecked = null
-  // }
 
   const dropdownItems = [
     <DropdownItem key="0" onClick={() => selectAll(false)}>
-      {t('accounts_table.data_toolbar.bulk_selector.none')}
+      {t('bulk_selector.none')}
     </DropdownItem>,
     <DropdownItem key="1" onClick={() => selectPage(visibleRows)}>
-      {t('accounts_table.data_toolbar.bulk_selector.page', { count: pageCount })}
+      {t('bulk_selector.page', { count: pageCount })}
     </DropdownItem>,
     <DropdownItem key="2" onClick={() => selectAll(true, filteredRows)}>
-      {t('accounts_table.data_toolbar.bulk_selector.all', { count: allCount })}
+      {t('bulk_selector.all', { count: allCount })}
     </DropdownItem>
   ]
 
@@ -69,11 +62,11 @@ const BulkSelectorWidget: React.FunctionComponent<Props> = ({
               id="developer-accounts-bulk-checkbox"
               isChecked={isChecked}
               onClick={() => selectAll(selectedCount === 0, filteredRows)}
-              aria-label={t('accounts_table.data_toolbar.bulk_selector.toggle_checkbox_aria_label')}
+              aria-label={t('bulk_selector.toggle_checkbox_aria_label')}
             />
           ]}
         >
-          {selectedCount > 0 ? t('accounts_table.data_toolbar.bulk_selector.label', { selectedCount }) : ''}
+          {selectedCount > 0 ? t('bulk_selector.label', { selectedCount }) : ''}
         </DropdownToggle>
       )}
     />
