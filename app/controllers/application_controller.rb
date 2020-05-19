@@ -118,7 +118,6 @@ class ApplicationController < ActionController::Base
 
   # This before filter enables AnalyticsJsHelper#analytics block to yield
   # which is then used in provider/_analytics.html.erb to load Analytics.js
-  # it can be disabled per action like for ::Provider::SignupsController#testab.
 
   def enable_analytics
     @_analytics_enabled = true
