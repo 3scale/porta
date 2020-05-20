@@ -51,3 +51,21 @@ bulk_selector:
   label_description: Label indicating how many items are currently selected
   toggle_checkbox_aria_label: Select All
   toggle_checkbox_aria_label_description: Aria label for select all toggle button
+modals:
+  send_email:
+    title: Send email to admins of selected accounts
+    to: To
+    subject: Subject
+    body: Body
+    send: Send
+    cancel: Cancel
+  change_state:
+    title: Change state for the selected accounts
+    to: Selected accounts
+    select_label: Select state
+    select_helper_text: Changing the state of a developer account does not imply changing the state of its applications.
+    send: Change state
+    cancel: Cancel
+  expand_list_button: "{{count}} more"
+  expand_list_button_description: Button to expand the list ot items selected for this modal
+
