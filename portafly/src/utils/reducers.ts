@@ -1,6 +1,6 @@
 export type Action<P> = {
   type: string,
-  payload?: P
+  payload: P
 }
 
 export type ActionHandlers<S, A> = Record<string, (state: S, action: Action<A>) => S>
