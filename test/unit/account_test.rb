@@ -99,21 +99,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) { metric.reload }
   end
 
-  def test_default_service_id
-    service = FactoryBot.create(:simple_service)
-    account = FactoryBot.create(:simple_account, services: [service], default_service_id: service.id)
-
-    assert service.default?
-    assert_equal service.id, account.default_service_id
-
-    service.destroy_default
-
-    account.reload
-
-    assert_raises(ActiveRecord::RecordNotFound) { service.reload }
-    assert_nil account.default_service_id
-  end
-
   test '#trashed_messages' do
     account  = FactoryBot.build_stubbed(:simple_account)
     other    = FactoryBot.build_stubbed(:simple_account)
