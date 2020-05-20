@@ -276,12 +276,6 @@ class Service < ApplicationRecord
     application_plans.published
   end
 
-  # use this method to destroy the default service with all callbacks firing
-  def destroy_default
-    @destroy_default_allowed = true
-    destroy
-  end
-
   def stop_destroy_if_last_or_default
     return if destroyable?
     errors.add :base, 'This service cannot be removed'
@@ -553,8 +547,7 @@ class Service < ApplicationRecord
   end
 
   def destroyable?
-    return true if destroyed_by_association
-    !default_or_last? || @destroy_default_allowed
+    destroyed_by_association || !default_or_last?
   end
 
   def create_default_proxy
