@@ -103,21 +103,7 @@ class MetricTest < ActiveSupport::TestCase
     method = hits.children.create(system_name: 'meth1')
     assert_equal backend_api, method.owner
   end
-
-  test 'archive as deleted' do
-    service = FactoryBot.create(:simple_service)
-    Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:metric, service: service) }
-    metric = service.metrics.last
-    metric_id = metric.id
-
-    assert_difference(DeletedObject.method(:count), +1) { metric.destroy! }
-    deleted_object_entry = DeletedObject.last!
-    assert_equal metric_id, deleted_object_entry.object_id
-    assert_equal 'Metric', deleted_object_entry.object_type
-    assert_equal service.id, deleted_object_entry.owner_id
-    assert_equal 'Service', deleted_object_entry.owner_type
-  end
-
+  
   context 'on :destroy' do
     should 'destroy pricing_rules'
     should 'destroy usage_limits'

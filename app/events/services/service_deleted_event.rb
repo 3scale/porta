@@ -5,7 +5,6 @@ class Services::ServiceDeletedEvent < ServiceRelatedEvent
     new(
       service_id: service.id,
       service_name: service.name,
-      service_created_at: service.created_at.to_s,
       metadata: {
         provider_id: service.account_id || service.tenant_id
       }

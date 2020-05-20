@@ -30,5 +30,22 @@ module Tasks
       end
       assert_raise(ActiveRecord::RecordNotFound) { object_with_service_owner_destroyed.reload }
     end
+
+    test 'destroy_objects_with_service_owner_or_service_objects' do
+      service = FactoryBot.create(:simple_service)
+      metric = FactoryBot.create(:metric, service: service)
+      delete_object_with_service_owner = DeletedObject.create!(object: metric, owner: service)
+
+      service = FactoryBot.create(:simple_service)
+      account = service.account
+      delete_object_with_service_object = DeletedObject.create(object: service, owner: account)
+
+
+      assert_difference(DeletedObject.method(:count), -2) do
+        execute_rake_task 'deleted_objects.rake', 'deleted_objects:destroy_objects_with_service_owner_or_service_objects'
+      end
+      assert_raise(ActiveRecord::RecordNotFound) { delete_object_with_service_owner.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { delete_object_with_service_object.reload }
+    end
   end
 end
