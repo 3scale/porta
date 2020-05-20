@@ -22,7 +22,7 @@ class DeletedObject < ApplicationRecord
 
   scope :stale, -> do
     where.has do
-      ((id.in DeletedObject.deleted_owner.select(:id)) | (object_type == Service.name)) \
+      ((id.in DeletedObject.deleted_owner.select(:id)) | (object_type == Contract.name)) \
       & (created_at <= 1.week.ago)
     end
   end
