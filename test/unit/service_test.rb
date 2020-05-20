@@ -99,29 +99,6 @@ class ServiceTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) { service.reload }
   end
 
-  def test_update_account_default_service
-    default_service = FactoryBot.create(:simple_service)
-    other_service   = FactoryBot.create(:simple_service)
-    account         = FactoryBot.create(:simple_account,
-                                         services: [default_service, other_service],
-                                         default_service_id: default_service.id)
-
-    assert_equal account.default_service_id, default_service.id
-
-    other_service.destroy
-
-    account.reload
-
-    assert_equal default_service.id, account.default_service_id
-
-    default_service.destroy_default
-    assert default_service.destroyed?
-
-    account.reload
-
-    assert_nil account.default_service_id
-  end
-
   test 'backend_authentication_type' do
     service = Service.new(account: account = Account.new)
 
@@ -297,14 +274,6 @@ class ServiceTest < ActiveSupport::TestCase
     assert service.errors.present?
   end
 
-  test "#destroy_default destroys a default service" do
-    provider = FactoryBot.create :provider_account
-    service  = provider.default_service
-
-    service.destroy_default
-    assert_raise(ActiveRecord::RecordNotFound) { service.reload }
-  end
-
   test '#plugin_deployment? returns true when using a plugin as deployment option' do
     service = FactoryBot.build(:service, deployment_option: 'plugin_ruby')
 
@@ -383,9 +352,10 @@ class ServiceTest < ActiveSupport::TestCase
 
     test 'destroying service creates a related event' do
       service = FactoryBot.create(:simple_service)
+      service.stubs(destroyed_by_association: true)
       service_id = service.id
       assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).method(:count)) do
-        assert service.destroy_default
+        service.destroy!
       end
       event = RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).last!
       assert_equal service_id, event.data['service_id']
