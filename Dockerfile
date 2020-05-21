@@ -16,7 +16,6 @@ ENV DISABLE_SPRING="true" \
     PATH="./node_modules/.bin:/opt/rh/rh-nodejs10/root/usr/bin:$PATH" \
     SKIP_ASSETS="1" \
     DNSMASQ="#" \
-    GITHUB_REPOSITORY_TOKEN=b2N0b2JvdDo0YWUwYjYzOTgzYWE5YzYyZTIyOWYxZWNmZGZiNDY2YjI1YzcyZWEy \
     BUNDLE_FROZEN=1 \
     BUNDLE_JOBS=5 \
     TZ=:/etc/localtime \
