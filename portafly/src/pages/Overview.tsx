@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'i18n/useTranslation'
 // @ts-ignore
 import { useA11yRouteChange, useDocumentTitle, useAlertsContext } from 'components'
@@ -10,8 +10,10 @@ import {
   useDataListPagination,
   useDataListTable,
   BulkSelectorWidget,
+  BulkActionsWidget,
   ChangeStateModal,
-  SendEmailModal
+  SendEmailModal,
+  useDataListBulkActions
 } from 'components/data-list'
 import {
   PageSection,
@@ -24,7 +26,7 @@ import {
   ToolbarItem,
   ToolbarContent
 } from '@patternfly/react-core'
-import { BellIcon, AnchorIcon } from '@patternfly/react-icons'
+import { BellIcon } from '@patternfly/react-icons'
 import { TableHeader, TableBody, Table } from '@patternfly/react-table'
 
 
@@ -74,20 +76,36 @@ const DataListTable = () => {
     selectAll
   } = useDataListTable()
 
+  const { modal, setModal } = useDataListBulkActions()
+
   return (
-    <Table
-      aria-label="data-list-table"
-      cells={columns}
-      rows={rows.slice(startIdx, endIdx)}
-      onSelect={(_ev, selected, _rowIndex, rowData) => (_rowIndex === -1
-        ? selectAll(selected)
-        : selectOne(rowData.id, selected)
+    <>
+      <Table
+        aria-label="data-list-table"
+        cells={columns}
+        rows={rows.slice(startIdx, endIdx)}
+        onSelect={(_ev, selected, _rowIndex, rowData) => (_rowIndex === -1
+          ? selectAll(selected)
+          : selectOne(rowData.id, selected)
+        )}
+        canSelectAll
+      >
+        <TableHeader />
+        <TableBody />
+      </Table>
+      {modal === 'sendEmail' && (
+        <SendEmailModal
+          items={['1', '2', '3', '4', '5', '6']}
+          onClose={() => setModal(undefined)}
+        />
       )}
-      canSelectAll
-    >
-      <TableHeader />
-      <TableBody />
-    </Table>
+      {modal === 'changeState' && (
+        <ChangeStateModal
+          items={['1', '2', '3', '4', '5', '6']}
+          onClose={() => setModal(undefined)}
+        />
+      )}
+    </>
   )
 }
 
@@ -98,7 +116,10 @@ const Overview: React.FunctionComponent = () => {
   useDocumentTitle(t('page_title'))
   const { addAlert } = useAlertsContext()
 
-  const [showModal, setShowModal] = useState('')
+  const actions = {
+    sendEmail: t('shared:bulk_actions.send_email'),
+    changeState: t('shared:bulk_actions.change_state')
+  }
 
   return (
     <>
@@ -125,18 +146,6 @@ const Overview: React.FunctionComponent = () => {
               >
                 Add an Alert
               </Button>
-              <Button
-                icon={<AnchorIcon />}
-                onClick={() => setShowModal('state')}
-              >
-                Change State Modal
-              </Button>
-              <Button
-                icon={<AnchorIcon />}
-                onClick={() => setShowModal('email')}
-              >
-                Send Email Modal
-              </Button>
             </TextContent>
           </CardBody>
         </Card>
@@ -148,6 +157,9 @@ const Overview: React.FunctionComponent = () => {
                   <ToolbarItem>
                     {/* filteredRows should be inside the context? */}
                     <BulkSelectorWidget filteredRows={tableData.rows} />
+                  </ToolbarItem>
+                  <ToolbarItem>
+                    <BulkActionsWidget actions={actions} />
                   </ToolbarItem>
                   <ToolbarItem>
                     <SearchWidget categories={categories} />
@@ -162,18 +174,6 @@ const Overview: React.FunctionComponent = () => {
           </CardBody>
         </Card>
       </PageSection>
-      {showModal === 'email' && (
-        <SendEmailModal
-          items={['1', '2', '3', '4', '5', '6']}
-          onClose={() => setShowModal('')}
-        />
-      )}
-      {showModal === 'state' && (
-        <ChangeStateModal
-          items={['1', '2', '3', '4', '5', '6']}
-          onClose={() => setShowModal('')}
-        />
-      )}
     </>
   )
 }

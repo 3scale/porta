@@ -10,14 +10,18 @@ import {
   PaginationState,
   tableReducer,
   useTable,
-  TableState
+  TableState,
+  useBulkActions,
+  BulkActionsState,
+  bulkActionsReducer
 } from 'components/data-list/reducers'
 import { DataListCol, DataListRow } from 'types'
 
 type State = {
-  table: TableState,
+  table: TableState
   filters: FiltersState
   pagination: PaginationState
+  bulkActions: BulkActionsState
 }
 
 const defaultState: State = {
@@ -26,7 +30,11 @@ const defaultState: State = {
     columns: []
   },
   filters: {},
-  pagination: defaultPagination
+  pagination: defaultPagination,
+  bulkActions: {
+    modal: undefined,
+    isLoading: false
+  }
 }
 
 export interface IDataListContext {
@@ -49,7 +57,8 @@ const DataListProvider: React.FunctionComponent<Props> = ({ initialState, childr
   const [state, dispatch] = useReducer(combineReducers({
     table: tableReducer,
     filters: filtersReducer,
-    pagination: paginationReducer
+    pagination: paginationReducer,
+    bulkActions: bulkActionsReducer
   }), {
     ...defaultState,
     ...initialState
@@ -67,10 +76,12 @@ const DataListProvider: React.FunctionComponent<Props> = ({ initialState, childr
 const useDataListTable = () => useTable(useContext(DataListContext))
 const useDataListFilters = () => useFilters(useContext(DataListContext))
 const useDataListPagination = () => usePagination(useContext(DataListContext))
+const useDataListBulkActions = () => useBulkActions(useContext(DataListContext))
 
 export {
   DataListProvider,
   useDataListTable,
   useDataListFilters,
-  useDataListPagination
+  useDataListPagination,
+  useDataListBulkActions
 }

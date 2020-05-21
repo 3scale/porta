@@ -7,7 +7,9 @@ import {
   FormGroup
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { DataListModal } from 'components/data-list'
+import { DataListModal, useDataListBulkActions } from 'components/data-list'
+import { changeState } from 'dal/accounts/bulkActions'
+import { useAlertsContext } from 'components'
 
 interface Props {
   onClose: () => void
@@ -19,11 +21,27 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
   items
 }) => {
   const { t } = useTranslation('shared')
+  const { addAlert } = useAlertsContext()
+  const {
+    isLoading,
+    actionStart,
+    actionSuccess,
+    actionFailed
+  } = useDataListBulkActions()
 
   const [value, setValue] = useState('')
 
   const onSubmit = () => {
-    onClose()
+    actionStart()
+    changeState()
+      .then(() => {
+        actionSuccess()
+        addAlert({ id: 'success', variant: 'success', title: t('toasts.change_state_start') })
+      })
+      .catch(() => {
+        actionFailed()
+        addAlert({ id: 'error', variant: 'danger', title: t('toasts.change_state_error') })
+      })
   }
 
   const actions = [
@@ -31,7 +49,7 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
       key="confirm"
       variant="primary"
       onClick={onSubmit}
-      isDisabled={value === ''}
+      isDisabled={value === '' || isLoading}
     >
       {t('modals.change_state.send')}
     </Button>,
