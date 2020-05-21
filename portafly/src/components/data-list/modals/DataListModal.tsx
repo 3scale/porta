@@ -5,7 +5,9 @@ import {
   Button,
   Modal,
   TextContent,
-  TextList
+  TextList,
+  Title,
+  BaseSizes
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
 
@@ -44,12 +46,17 @@ const DataListModal: React.FunctionComponent<Props> = ({
     </>
   ) : textListItems
 
+  const header = (
+    <Title headingLevel="h1" size={BaseSizes['2xl']}>
+      {title}
+    </Title>
+  )
 
   return (
     <Modal
       className="data-list-base-modal"
       width="44%"
-      title={title}
+      header={header}
       onClose={onClose}
       actions={actions}
       isOpen
