@@ -4,9 +4,6 @@ import {
 
 export const WrappedComponentsPlugin = (system) => {
   return {
-    afterLoad (system) {
-      this.rootInjects.customParamsList = this.rootInjects.customParamsList || {}
-    },
     wrapComponents: {
       parameterRow
     }

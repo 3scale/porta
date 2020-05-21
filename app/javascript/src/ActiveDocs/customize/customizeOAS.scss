@@ -1,7 +1,7 @@
 // scss-lint:disable SelectorFormat
 
 .swagger-section {
-  .autocomplete-select {
+  .autocomplete-list {
     max-width: 340px;
 
     &.show {
@@ -11,10 +11,26 @@
     &.hide {
       display: none;
     }
+  }
 
-    select {
-      position: relative;
-      top: -1.5rem;
+  .apidocs-param-tips {
+    border: 2px solid black;
+    padding: 10px;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    color: #333;
+    background: #F4F4F4;
+    border: 2px solid #E8EAC0;
+    border-right-color: #F5F7CE;
+    border-bottom-color: #F5F7CE;
+    border-color: white;
+    border-radius: 4px;
+
+    li:hover {
+      background: white;
+      cursor: pointer;
     }
   }
+
 }
