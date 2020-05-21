@@ -84,7 +84,7 @@ bash: dev-setup assets
 
 build: ## Build the container image using one of the docker-compose file set by $(COMPOSE_FILE) env var
 build:
-	docker-compose build system
+	@DB=$(DB) docker-compose build system
 
 bundle: ## Installs dependencies using bundler. Run this after you make some changes to Gemfile.
 bundle: Gemfile.prod Gemfile
