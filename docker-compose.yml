@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 x-system_environment:
   &system_environment
@@ -27,7 +27,10 @@ x-system_environment:
 services:
   system:
     <<: *system_environment
-    build: .
+    build:
+      context: .
+      args:
+        CUSTOM_DB: ${DB}
     command: bash -c "rm -f tmp/pids/server.pid && UNICORN_WORKERS=2 bin/rails server -b 0.0.0.0"
     container_name: system-compose
     depends_on:
