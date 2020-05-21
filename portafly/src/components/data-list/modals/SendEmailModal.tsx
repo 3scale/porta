@@ -7,7 +7,9 @@ import {
   TextArea
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { DataListModal } from 'components/data-list'
+import { DataListModal, useDataListBulkActions } from 'components/data-list'
+import { sendEmail } from 'dal/accounts/bulkActions'
+import { useAlertsContext } from 'components'
 
 interface Props {
   items: string[]
@@ -19,15 +21,29 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
   items
 }) => {
   const { t } = useTranslation('shared')
-
+  const { addAlert } = useAlertsContext()
+  const {
+    isLoading,
+    actionStart,
+    actionSuccess,
+    actionFailed
+  } = useDataListBulkActions()
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
 
   const isSendDisabled = subject.length === 0 || body.length === 0
 
   const onSubmit = () => {
-    onClose()
-    // TODO: Implement actual submit
+    actionStart()
+    sendEmail()
+      .then(() => {
+        actionSuccess()
+        addAlert({ id: 'success', variant: 'success', title: t('toasts.send_email_start') })
+      })
+      .catch(() => {
+        actionFailed()
+        addAlert({ id: 'error', variant: 'danger', title: t('toasts.send_email_error') })
+      })
   }
 
   const actions = [
@@ -35,7 +51,7 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
       key="0"
       variant="primary"
       onClick={onSubmit}
-      isDisabled={isSendDisabled}
+      isDisabled={isSendDisabled || isLoading}
     >
       {t('modals.send_email.send')}
     </Button>,
