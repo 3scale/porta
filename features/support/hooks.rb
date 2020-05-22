@@ -109,8 +109,8 @@ After do |scenario|
   end
 
   folder = folder.expand_path(root)
-  next
-  line_number = scenario.line.to_s
+
+  line_number = scenario.location.line.to_s
 
   if (ex = scenario.try(:exception)) # `try` so it does not raise on undefined method
     file = folder.join("#{line_number}.txt")
