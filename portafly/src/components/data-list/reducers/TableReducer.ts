@@ -5,18 +5,41 @@ import {
   createReducer
 } from 'utils'
 import { DataListRow, DataListCol } from 'types'
+import { SortByDirection } from '@patternfly/react-table'
 
 export type TableState = {
   rows: DataListRow[]
   columns: DataListCol[]
+  sortBy?: {
+    index: number
+    direction: SortByDirection
+  }
 }
 
 // Action Handlers
+const SORT_BY = 'SORT_BY'
 const SELECT_ONE = 'SELECT_ONE'
 const SELECT_PAGE = 'SELECT_PAGE'
 const SELECT_ALL = 'SELECT_ALL'
 
 const tableActionHandlers: ActionHandlers<TableState, any> = {
+  [SORT_BY]: (state, action: Action<{ index: number, direction: SortByDirection }>) => {
+    const { index, direction } = action.payload
+    const sortedRows = state.rows.sort((a, b) => {
+      // When table is selectable, index must be corrected because of the first row of checkboxes
+      const prev = a.cells[index - 1]
+      const next = b.cells[index - 1]
+      if (prev < next) return -1
+      if (prev > next) return 1
+      return 0
+    })
+
+    if (direction === SortByDirection.desc) {
+      sortedRows.reverse()
+    }
+
+    return { ...state, rows: sortedRows, sortBy: action.payload }
+  },
   [SELECT_ONE]: (state, action: Action<{ id: number, selected: boolean }>) => {
     const { id, selected } = action.payload
     const newRows = state.rows.map((r) => (r.id === id ? { ...r, selected } : r))
@@ -60,6 +83,10 @@ interface IUseTable {
 const useTable = ({ state, dispatch }: IUseTable) => ({
   columns: state.table.columns,
   rows: state.table.rows,
+  sortBy: state.table.sortBy,
+  setSortBy: (index: number, direction: SortByDirection) => (
+    dispatch({ type: SORT_BY, payload: { index, direction } })
+  ),
   selectedRows: state.table.rows.filter((r) => Boolean(r.selected)),
   selectOne: (id: number, selected: boolean) => (
     dispatch({ type: SELECT_ONE, payload: { id, selected } })

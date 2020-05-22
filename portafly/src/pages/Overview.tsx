@@ -27,7 +27,9 @@ import {
   ToolbarContent
 } from '@patternfly/react-core'
 import { BellIcon } from '@patternfly/react-icons'
-import { TableHeader, TableBody, Table } from '@patternfly/react-table'
+import {
+  TableHeader, TableBody, Table, OnSort, sortable
+} from '@patternfly/react-table'
 
 
 const categories = [
@@ -57,12 +59,12 @@ const categories = [
 
 const tableData = {
   columns: [
-    { title: 'Name' },
-    { title: 'Surname' }
+    { title: 'Name', transforms: [sortable] },
+    { title: 'Surname', transforms: [sortable] }
   ],
   rows: new Array(1000).fill(0).map((_, i) => ({
     id: i,
-    cells: [`Name ${i}`, `Surname ${i}`],
+    cells: [`Name ${Math.random() * (i + 1)}`, `Surname ${Math.random() * (i + 1)}`],
     selected: false
   }))
 }
@@ -72,11 +74,15 @@ const DataListTable = () => {
   const {
     columns,
     rows,
+    sortBy,
+    setSortBy,
     selectOne,
     selectAll
   } = useDataListTable()
 
   const { modal, setModal } = useDataListBulkActions()
+
+  const onSort: OnSort = (event, index, direction) => setSortBy(index, direction)
 
   return (
     <>
@@ -89,6 +95,8 @@ const DataListTable = () => {
           : selectOne(rowData.id, selected)
         )}
         canSelectAll
+        sortBy={sortBy}
+        onSort={onSort}
       >
         <TableHeader />
         <TableBody />
