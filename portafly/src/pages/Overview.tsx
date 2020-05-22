@@ -13,7 +13,9 @@ import {
   BulkActionsWidget,
   ChangeStateModal,
   SendEmailModal,
-  useDataListBulkActions
+  useDataListBulkActions,
+  filterRows,
+  useDataListFilters
 } from 'components/data-list'
 import {
   PageSection,
@@ -30,7 +32,6 @@ import { BellIcon } from '@patternfly/react-icons'
 import {
   TableHeader, TableBody, Table, OnSort, sortable
 } from '@patternfly/react-table'
-
 
 const categories = [
   {
@@ -58,13 +59,18 @@ const categories = [
 ]
 
 const tableData = {
-  columns: [
-    { title: 'Name', transforms: [sortable] },
-    { title: 'Surname', transforms: [sortable] }
-  ],
+  columns: categories.map((c) => ({
+    categoryName: c.name,
+    title: c.humanName,
+    transforms: [sortable]
+  })),
   rows: new Array(1000).fill(0).map((_, i) => ({
     id: i,
-    cells: [`Name ${Math.random() * (i + 1)}`, `Surname ${Math.random() * (i + 1)}`],
+    cells: [
+      `Admin ${Math.random() * (i + 1)}`,
+      `Group ${Math.random() * (i + 1)}`,
+      (categories[2] as any).options[i % 2].humanName
+    ],
     selected: false
   }))
 }
@@ -79,19 +85,22 @@ const DataListTable = () => {
     selectOne,
     selectAll
   } = useDataListTable()
-
+  const { filters } = useDataListFilters()
   const { modal } = useDataListBulkActions()
 
   const onSort: OnSort = (event, index, direction) => {
     setSortBy(index, direction, true)
   }
 
+  const filteredRows = filterRows(rows, filters, columns)
+  const pageRows = filteredRows.slice(startIdx, endIdx)
+
   return (
     <>
       <Table
         aria-label="data-list-table"
         cells={columns}
-        rows={rows.slice(startIdx, endIdx)}
+        rows={pageRows}
         onSelect={(_ev, selected, _rowIndex, rowData) => (_rowIndex === -1
           ? selectAll(selected)
           : selectOne(rowData.id, selected)
@@ -119,6 +128,11 @@ const Overview: React.FunctionComponent = () => {
   const actions = {
     sendEmail: t('shared:bulk_actions.send_email'),
     changeState: t('shared:bulk_actions.change_state')
+  }
+
+  const dataListInitialState = {
+    filters: {},
+    table: tableData
   }
 
   return (
@@ -151,12 +165,11 @@ const Overview: React.FunctionComponent = () => {
         </Card>
         <Card>
           <CardBody>
-            <DataListProvider initialState={{ table: tableData }}>
+            <DataListProvider initialState={dataListInitialState}>
               <Toolbar>
                 <ToolbarContent>
                   <ToolbarItem>
-                    {/* filteredRows should be inside the context? */}
-                    <BulkSelectorWidget filteredRows={tableData.rows} />
+                    <BulkSelectorWidget />
                   </ToolbarItem>
                   <ToolbarItem>
                     <BulkActionsWidget actions={actions} />
@@ -165,7 +178,7 @@ const Overview: React.FunctionComponent = () => {
                     <SearchWidget categories={categories} />
                   </ToolbarItem>
                   <ToolbarItem>
-                    <PaginationWidget itemCount={1000} />
+                    <PaginationWidget itemCount={tableData.rows.length} />
                   </ToolbarItem>
                 </ToolbarContent>
               </Toolbar>

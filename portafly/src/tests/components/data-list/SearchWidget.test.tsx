@@ -4,32 +4,32 @@ import { SearchWidget } from 'components/data-list'
 import { fireEvent } from '@testing-library/react'
 import { Toolbar, ToolbarContent, ToolbarItem } from '@patternfly/react-core'
 
-describe('SearchWidget', () => {
-  const categories = [
-    {
-      name: 'admin',
-      humanName: 'Admin'
-    },
-    {
-      name: 'group',
-      humanName: 'Organization / Group'
-    },
-    {
-      name: 'state',
-      humanName: 'State',
-      options: [
-        {
-          name: 'active',
-          humanName: 'Active'
-        },
-        {
-          name: 'pending',
-          humanName: 'Pending'
-        }
-      ]
-    }
-  ]
+const categories = [
+  {
+    name: 'admin',
+    humanName: 'Admin'
+  },
+  {
+    name: 'group',
+    humanName: 'Organization / Group'
+  },
+  {
+    name: 'state',
+    humanName: 'State',
+    options: [
+      {
+        name: 'active',
+        humanName: 'Active'
+      },
+      {
+        name: 'pending',
+        humanName: 'Pending'
+      }
+    ]
+  }
+]
 
+describe('SearchWidget', () => {
   const setup = () => (
     render(
       <Toolbar id="data-toolbar">
