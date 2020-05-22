@@ -21,14 +21,21 @@ class SiteAccountSupportTest < ActiveSupport::TestCase
     p2 = FactoryBot.create(:provider_account)
 
     object = Params.new
-    object.request = mock(host: p2.self_domain)
-    object.request.expects(:params).returns({ provider_key: p2.api_key }).at_least_once
+    mock_request = ActionDispatch::TestRequest.create(
+      "action_dispatch.request.parameters" => { provider_key: p2.api_key }
+    )
+    mock_request.host = p2.self_domain
+    object.request = mock_request
 
     assert_equal p2, object.site_account
 
     object = Params.new
-    object.request = mock(host: p2.self_domain)
-    object.request.expects(:params).returns({ provider_key: p1.api_key }).at_least_once
+    mock_request.set_header(
+      "action_dispatch.request.parameters",
+      provider_key: p1.api_key
+    )
+
+    object.request = mock_request
 
     assert_raise Backend::ProviderKeyInvalid do
       refute object.site_account
@@ -44,9 +51,10 @@ class SiteAccountSupportTest < ActiveSupport::TestCase
   test 'master on premises' do
     ThreeScale.config.stubs(onpremises: true)
     ThreeScale.config.stubs(tenant_mode: 'master')
-    mock_request = mock
-    mock_request.stubs(:host).returns('anything-works')
-    mock_request.stubs(:params).returns(provider_key: master_account.provider_key)
+    mock_request = ActionDispatch::TestRequest.create(
+      "action_dispatch.request.parameters" => { provider_key: master_account.provider_key }
+    )
+    mock_request.host = 'anything-works'
     request = SiteAccountSupport::Request.new(mock_request)
 
     assert_equal master_account, request.find_provider
