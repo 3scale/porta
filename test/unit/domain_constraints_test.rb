@@ -11,8 +11,8 @@ class DomainConstraintsTest < ActiveSupport::TestCase
       ThreeScale.config.stubs(tenant_mode: 'multitenant')
       @domain = 'domain.example.com'
 
-      @request = mock
-      @request.stubs(:host).returns(@domain)
+      @request = ActionDispatch::TestRequest.create
+      @request.host = @domain
     end
 
     attr_reader :domain, :request
@@ -48,8 +48,8 @@ class DomainConstraintsTest < ActiveSupport::TestCase
       ThreeScale.config.stubs(tenant_mode: 'multitenant')
       @self_domain = 'admin.example.com'
 
-      @request = mock
-      @request.stubs(:host).returns(@self_domain)
+      @request = ActionDispatch::TestRequest.create
+      @request.host = @self_domain
       AuthenticatedSystem::Request.any_instance.stubs(:zync?).returns(false)
     end
 
@@ -86,8 +86,8 @@ class DomainConstraintsTest < ActiveSupport::TestCase
 
     test 'master domain' do
       master = master_account
-      request = mock
-      request.expects(:host).returns(master.domain)
+      request = ActionDispatch::TestRequest.create
+      request.host = master.domain
 
       refute ProviderDomainConstraint.matches?(request)
     end
@@ -96,18 +96,19 @@ class DomainConstraintsTest < ActiveSupport::TestCase
   class MasterDomainConstraintTest < DomainConstraintsTest
     test 'master domain' do
       master = master_account
-      request = mock
-      request.expects(:host).returns(master.domain)
+      request = ActionDispatch::TestRequest.create
+      request.host = master.domain
       assert MasterDomainConstraint.matches?(request)
     end
 
     test 'accepts any domain on premises' do
       ThreeScale.config.stubs(onpremises: true)
       ThreeScale.config.stubs(tenant_mode: 'master')
-      master = master_account
-      request = mock
 
-      request.stubs(:host).returns(master.domain)
+      master = master_account
+      request = ActionDispatch::TestRequest.create
+      request.host = master.domain
+
       assert MasterDomainConstraint.matches?(request)
 
       request.stubs(:host).returns('different' + master.domain)
