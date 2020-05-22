@@ -15,7 +15,6 @@ import {
   BulkActionsState,
   bulkActionsReducer
 } from 'components/data-list/reducers'
-import { DataListCol, DataListRow } from 'types'
 
 type State = {
   table: TableState
@@ -45,12 +44,7 @@ export interface IDataListContext {
 const DataListContext = createContext<IDataListContext>({ state: defaultState, dispatch: () => {} })
 
 type Props = {
-  initialState: {
-    table: {
-      columns: DataListCol[]
-      rows: DataListRow[]
-    }
-  }
+  initialState: Partial<State>
 }
 
 const DataListProvider: React.FunctionComponent<Props> = ({ initialState, children }) => {

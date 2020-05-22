@@ -7,10 +7,11 @@ import {
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
 import { useDataListTable, useDataListPagination } from 'components/data-list'
+import { DataListRow } from 'types'
 
 interface Props {
   // TODO: try make it independent from table data
-  filteredRows: { id: number }[]
+  filteredRows: DataListRow[]
 }
 
 const BulkSelectorWidget: React.FunctionComponent<Props> = ({
