@@ -41,17 +41,17 @@ module SiteAccountSupport
   end
 
   def force_provider_or_master_domain
-    unless ThreeScale.tenant_mode.master? || Account.is_admin_domain?(request.host) || Account.is_master_domain?(request.host)
+    unless ThreeScale.tenant_mode.master? || Account.is_admin_domain?(request.internal_host) || Account.is_master_domain?(request.internal_host)
       render_error 'Access denied', :status => :forbidden
     end
   end
 
   def buyer_domain?
-    @_buyer_domain ||= !Account.is_admin_domain?(request.host)
+    @_buyer_domain ||= !Account.is_admin_domain?(request.internal_host)
   end
 
   def admin_domain?
-    current_account.self_domain == request.host
+    current_account.self_domain == request.internal_host
   end
 
   class Request

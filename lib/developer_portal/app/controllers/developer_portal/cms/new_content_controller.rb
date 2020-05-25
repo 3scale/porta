@@ -66,7 +66,7 @@ class DeveloperPortal::CMS::NewContentController < DeveloperPortal::BaseControll
 
   def redirect_to_dashboard
     # ignore buyer domains
-    return if Account.providers.find_by_domain(request.host)
+    return if Account.providers.find_by_domain(request.internal_host)
 
     if not current_account
       redirect_to(provider_login_path)

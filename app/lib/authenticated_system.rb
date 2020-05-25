@@ -124,7 +124,7 @@ module AuthenticatedSystem
     store_location
     flash.keep
 
-    if Account.is_admin_domain?(request.host) || site_account.master?
+    if Account.is_admin_domain?(request.internal_host) || site_account.master?
       redirect_to_login_for_providers
     else
       redirect_to_login_for_buyers

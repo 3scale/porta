@@ -149,20 +149,20 @@ class FrontendController < ApplicationController
   end
 
   def ensure_provider_domain
-    return if Account.is_admin_domain?(request.host) || site_account.master?
+    return if Account.is_admin_domain?(internal_host) || site_account.master?
     notify_about_wrong_domain(request.url, :provider, error_request_data)
     render_wrong_domain_error
     false
   end
 
   def ensure_buyer_domain
-    return unless Account.is_admin_domain?(request.host) || site_account.master?
+    return unless Account.is_admin_domain?(internal_host) || site_account.master?
     notify_about_wrong_domain(request.url, :buyer)
     render_wrong_domain_error
   end
 
   def ensure_master_domain
-    return if Account.is_master_domain?(request.host)
+    return if Account.is_master_domain?(internal_host)
     notify_about_wrong_domain(request.url, :master)
     render_wrong_domain_error
     false
