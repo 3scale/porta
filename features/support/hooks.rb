@@ -112,6 +112,18 @@ After do |scenario|
 
   line_number = scenario.location.line.to_s
 
+  logs = page.driver.browser.manage.logs.get(:performance)
+  array = logs.each_with_object([]) do |entry, messages|
+    message = JSON.parse(entry.message)
+    # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
+    messages << message
+  end
+
+  file = folder.join("#{line_number}.log")
+  file.open('w') do  |f|
+    f.puts JSON.dump(array)
+  end
+
   if (ex = scenario.try(:exception)) # `try` so it does not raise on undefined method
     file = folder.join("#{line_number}.txt")
     file.open('w') do  |f|
