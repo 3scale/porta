@@ -82,11 +82,16 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument('--window-size=1280,1024')
 
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+  options.add_option(:w3c, false)
+  options.add_option(:perfLoggingPrefs, {enableNetwork: true})
+  caps = Selenium::WebDriver::Remote::Capabilities.chrome(
+    loggingPrefs: {performance: 'ALL', browser: 'ALL'}
+  )
 
   client = Selenium::WebDriver::Remote::Http::Default.new
   client.read_timeout = client.open_timeout = 120 # default 60
 
-  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, http_client: client)
+  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, http_client: client, desired_capabilities: caps)
 
   driver
 end
