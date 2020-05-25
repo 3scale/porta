@@ -5,6 +5,12 @@
 * [PatternFly Modal dialog design guidelines](https://www.patternfly.org/v4/design-guidelines/usage-and-behavior/modal)
 * [PatternFly-react Modal docs](https://www.patternfly.org/v4/documentation/react/components/modal)
 
+### Global modal specs
+* Modal dialogs are placed in the exact centre of the page.
+* Modal dialogs feature a "X" icon in the top right corner. Clicking the icon will dismiss the modal.
+* Clicking on the foreground (everywhere on the page outside of the area covered by the modal), will dismiss the modal.
+* Typing "Esc" on a keyboard will dismiss the modal.
+
 ### _'Send email to selected items'_ modal
 * Form ([PF specs](https://www.patternfly.org/v4/documentation/react/components/form))
   * List of selected items > unordered list ([PF specs](https://www.patternfly.org/v4/documentation/react/components/list))
