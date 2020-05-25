@@ -4,7 +4,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
 
   def setup
     @account = FactoryBot.create(:provider_account)
-    @service = FactoryBot.create(:simple_service, account: @account)
+    @service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @account)
 
     host! @account.admin_domain
   end
@@ -52,7 +52,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
 
     Proxy.update_all(apicast_configuration_driven: true)
     ProxyDeploymentService.any_instance.expects(:deploy_v2).once
-    
+
     put(admin_api_service_proxy_path(params))
     assert_response :success
   end
