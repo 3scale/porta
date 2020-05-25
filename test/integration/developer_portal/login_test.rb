@@ -134,13 +134,14 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     assert_nil waiting_list_confirmation_email('foo2@example.com')
   end
 
-  test 'create with invalid CSRF token' do
+  test 'create with invalid or empty CSRF token' do
+    with_forgery_protection { post session_path(system_name: @auth.system_name, code: 'example') }
+    assert_response :forbidden
+
     System::ErrorReporting.expects(:report_error).once.with do |exception|
       exception.is_a?(ActionController::InvalidAuthenticityToken)
     end
-
-    with_forgery_protection { post session_path(system_name: @auth.system_name, code: 'example') }
-
+    with_forgery_protection { post session_path(system_name: @auth.system_name, code: 'example', authenticity_token: 'invalid') }
     assert_response :forbidden
   end
 
