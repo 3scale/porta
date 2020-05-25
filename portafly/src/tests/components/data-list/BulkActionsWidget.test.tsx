@@ -1,9 +1,10 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { BulkActionsWidget, BulkAction } from 'components/data-list'
+import { BulkActionsWidget } from 'components/data-list'
 import { fireEvent } from '@testing-library/react'
-import { useDataListTable } from 'components/data-list/DataListContext'
+import { useDataListTable, useDataListBulkActions } from 'components/data-list/DataListContext'
+import { BulkAction } from 'components/data-list/reducers'
 
 jest.mock('components/data-list/DataListContext')
 
@@ -12,10 +13,10 @@ const actions = {
   changeState: 'Change status'
 }
 
-const selectAction = jest.fn()
 const setup = (selectedRows: Array<any> = []) => {
-  (useDataListTable as jest.Mock).mockReturnValue({ selectedRows })
-  return render(<BulkActionsWidget actions={actions} selectAction={selectAction} />)
+  (useDataListTable as jest.Mock).mockReturnValue({ selectedRows });
+  (useDataListBulkActions as jest.Mock).mockReturnValue({})
+  return render(<BulkActionsWidget actions={actions} />)
 }
 
 it('should render properly when closed', () => {
@@ -51,7 +52,7 @@ describe('when it is enabled', () => {
     fireEvent.click(button)
 
     Object.keys(actions).forEach((key) => {
-      expect(wrapper.getByText(actions[key as BulkAction])).toBeInTheDocument()
+      expect(wrapper.getByText(actions[key as NonNullable<BulkAction>])).toBeInTheDocument()
     })
   })
 })
