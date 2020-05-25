@@ -8,7 +8,7 @@ import {
   TextContent,
   TextVariants
 } from '@patternfly/react-core'
-import { CaretDownIcon, WarningTriangleIcon } from '@patternfly/react-icons'
+import { WarningTriangleIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'i18n/useTranslation'
 import { BulkAction } from 'components/data-list/reducers'
 import { useDataListTable, useDataListBulkActions } from 'components/data-list'
@@ -29,7 +29,7 @@ const BulkActionsWidget: React.FunctionComponent<Props> = ({
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = (
-    <DropdownToggle onToggle={setIsOpen} icon={CaretDownIcon} isPrimary>
+    <DropdownToggle onToggle={setIsOpen} isPrimary>
       {t('bulk_actions.title')}
     </DropdownToggle>
   )
