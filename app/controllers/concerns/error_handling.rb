@@ -28,7 +28,7 @@ module ErrorHandling
     end
 
     def handle_forgery_protection(exception)
-      System::ErrorReporting.report_error(exception)
+      System::ErrorReporting.report_error(exception) if params[:authenticity_token].present?
       handle_error(exception, :forbidden)
     end
 
