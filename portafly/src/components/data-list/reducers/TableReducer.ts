@@ -17,18 +17,18 @@ export type TableState = {
 }
 
 // Action Handlers
-const SORT_BY = 'SORT_BY'
+const SET_SORT_BY = 'SET_SORT_BY'
 const SELECT_ONE = 'SELECT_ONE'
 const SELECT_PAGE = 'SELECT_PAGE'
 const SELECT_ALL = 'SELECT_ALL'
 
 const tableActionHandlers: ActionHandlers<TableState, any> = {
-  [SORT_BY]: (state, action: Action<{ index: number, direction: SortByDirection }>) => {
+  [SET_SORT_BY]: (state, action: Action<{ index: number, direction: SortByDirection }>) => {
     const { index, direction } = action.payload
-    const sortedRows = state.rows.sort((a, b) => {
-      // When table is selectable, index must be corrected because of the first row of checkboxes
-      const prev = a.cells[index - 1]
-      const next = b.cells[index - 1]
+    const sortedRows = [...state.rows]
+    sortedRows.sort((a, b) => {
+      const prev = a.cells[index]
+      const next = b.cells[index]
       if (prev < next) return -1
       if (prev > next) return 1
       return 0
@@ -85,7 +85,7 @@ const useTable = ({ state, dispatch }: IUseTable) => ({
   rows: state.table.rows,
   sortBy: state.table.sortBy,
   setSortBy: (index: number, direction: SortByDirection) => (
-    dispatch({ type: SORT_BY, payload: { index, direction } })
+    dispatch({ type: SET_SORT_BY, payload: { index, direction } })
   ),
   selectedRows: state.table.rows.filter((r) => Boolean(r.selected)),
   selectOne: (id: number, selected: boolean) => (

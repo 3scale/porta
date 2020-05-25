@@ -82,7 +82,10 @@ const DataListTable = () => {
 
   const { modal, setModal } = useDataListBulkActions()
 
-  const onSort: OnSort = (event, index, direction) => setSortBy(index, direction)
+  const onSort: OnSort = (event, index, direction) => {
+    // When table is selectable, index must be corrected because of the first row of checkboxes
+    setSortBy(index - 1, direction)
+  }
 
   return (
     <>
