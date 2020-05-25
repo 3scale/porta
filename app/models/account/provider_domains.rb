@@ -4,6 +4,7 @@ module Account::ProviderDomains
   extend ActiveSupport::Concern
 
   included do
+    include ThreeScale::DomainSubstitution::Account
 
     with_options :if => :validate_domains? do |provider|
       provider.validate :domain_uniqueness, :self_domain_uniqueness, :domain_not_self_domain
@@ -157,7 +158,6 @@ module Account::ProviderDomains
 
     !scope.exists?
   end
-
   private
 
   def validate_domains?

@@ -21,8 +21,7 @@ class RedhatCustomerOAuthFlowPresenter < OauthFlowPresenter
   attr_reader :redirect_uri
 
   def domain_parameters
-    host = request.try(:real_host).presence || request.host
-    { self_domain: host }
+    { self_domain: request.host }
   end
 
   def build_redirect_uri
