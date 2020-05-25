@@ -47,10 +47,11 @@ C:\\nppdf32Log\\debuglog.txt
 /coverage/
 
 /config/amazon_s3.yml
-/config/backend.yml
 /config/application.yml
-/config/database.yml
+/config/backend.yml
 /config/backend_redis.yml
+/config/database.yml
+/config/domain_substitution.yml
 /config/redis.yml
 /config/oauth2.yml
 /config/slave_redis.yml

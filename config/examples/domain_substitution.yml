@@ -1,0 +1,19 @@
+default: &default
+  enabled: false
+  request_pattern: "\\.stg-saas\\.localhost"
+  request_replacement: ".example.com"
+  response_pattern: "\\.example\\.com"
+  response_replacement: ".stg-saas.localhost"
+
+development:
+  <<: *default
+  enabled: true
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
+preview:
+  <<: *default
