@@ -49,7 +49,7 @@ module ErrorHandling
 
       respond_to do |format|
         format.html do
-          if Account.is_admin_domain?(request.host) || site_account.master?
+          if Account.is_admin_domain?(request.internal_host) || site_account.master?
             handle_provider_side(status, exception, title)
           else
             handle_buyer_side(status)

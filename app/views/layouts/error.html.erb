@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <title><%= yield(:title).try(:strip).try(:presence) || 'We are sorry, but something went wrong' %></title>
-    <%- admin_domain = Account.is_admin_domain?(request.host) -%>
-    <%- master_domain = Account.is_master_domain?(request.host) -%>
+    <%- admin_domain = Account.is_admin_domain?(request.internal_host) -%>
+    <%- master_domain = Account.is_master_domain?(request.internal_host) -%>
     <%- site_account ||= Account.master -%>
     <%= stylesheet_link_tag 'error' -%>
     <%= render 'provider/analytics' if admin_domain %>

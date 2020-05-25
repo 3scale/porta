@@ -8,6 +8,6 @@ class Master::BaseController < ApplicationController
   end
 
   def force_master_domain
-    head(403) unless Account.is_master_domain?(request.host)
+    head(403) unless Account.is_master_domain?(request.internal_host)
   end
 end
