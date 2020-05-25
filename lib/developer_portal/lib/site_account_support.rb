@@ -59,7 +59,7 @@ module SiteAccountSupport
     private :request
 
     delegate :tenant_mode, to: ThreeScale
-    delegate :host, to: :request, allow_nil: true
+    delegate :host, :internal_host, to: :request, allow_nil: true
 
     module MasterDomainWildcard
       def find_provider
@@ -92,11 +92,11 @@ module SiteAccountSupport
     end
 
     def find_provider
-      Account.providers_with_master.find_by!(self_domain: host)
+      Account.providers_with_master.find_by!(self_domain: internal_host)
     end
 
     def domain_account
-      Account.find_by(self_domain: host)
+      Account.find_by(self_domain: internal_host)
     end
 
     def site_account
@@ -105,15 +105,15 @@ module SiteAccountSupport
 
     def site_account_by_provider_key
       return unless (key = provider_key.presence)
-      Account.providers_with_master.by_self_domain(host).first_by_provider_key!(key)
+      Account.providers_with_master.by_self_domain(internal_host).first_by_provider_key!(key)
     end
 
     def site_account_by_domain
-      site = Account.find_by(self_domain: host)
+      site = Account.find_by(self_domain: internal_host)
       if site
         site.provider_account
       else
-        Account.find_by(domain: host)
+        Account.find_by(domain: internal_host)
       end
     end
 

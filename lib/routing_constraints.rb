@@ -4,8 +4,7 @@ module BuyerDomainConstraint
   module_function
 
   def matches?(request)
-    request.extend(ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
-    Account.without_deleted.exists?(:domain => request.host) && !MasterDomainConstraint.matches?(request)
+    Account.without_deleted.exists?(:domain => request.internal_host) && !MasterDomainConstraint.matches?(request)
   end
 end
 
@@ -15,7 +14,7 @@ class DomainConstraint
   end
 
   def matches?(request)
-    request.host == @domain
+    request.internal_host == @domain
   end
 end
 
@@ -26,7 +25,7 @@ module ProviderDomainConstraint
     request.extend(ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
 
     with_deleted = AuthenticatedSystem::Request.new(request).zync?
-    Account.tenants.without_deleted(!with_deleted).exists?(self_domain: request.host)
+    Account.tenants.without_deleted(!with_deleted).exists?(self_domain: request.internal_host)
   end
 end
 
@@ -38,7 +37,7 @@ module MasterDomainConstraint
     return true if ThreeScale.master_on_premises?
 
     master = Account.master
-    master.admin_domain == request.host or master.domain == request.host
+    master.admin_domain == request.internal_host or master.domain == request.internal_host
   end
 end
 

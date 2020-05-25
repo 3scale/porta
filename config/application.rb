@@ -198,6 +198,9 @@ module System
     config.three_scale.message_bus = ActiveSupport::OrderedOptions.new
     config.three_scale.message_bus.merge!(try_config_for(:message_bus) || {})
 
+    config.domain_substitution = ActiveSupport::OrderedOptions.new
+    config.domain_substitution.merge!(try_config_for(:domain_substitution) || {})
+
     three_scale = config_for(:settings).symbolize_keys
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
@@ -217,6 +220,7 @@ module System
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
     require 'three_scale/deprecation'
+    require 'three_scale/domain_substitution'
     require 'three_scale/middleware/multitenant'
     require 'three_scale/middleware/dev_domain'
 
