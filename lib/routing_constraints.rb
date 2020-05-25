@@ -37,7 +37,8 @@ module MasterDomainConstraint
     return true if ThreeScale.master_on_premises?
 
     master = Account.master
-    master.admin_domain == request.internal_host or master.domain == request.internal_host
+    host = request.internal_host
+    master.match_internal_admin_domain?(host) or master.match_internal_domain?(host)
   end
 end
 
