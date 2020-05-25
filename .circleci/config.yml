@@ -100,7 +100,7 @@ postgres-container: &postgres-container
     POSTGRES_DB: systemdb
 
 oracle-db-container: &oracle-db-container
-  image: quay.io/3scale/oracle:12.2.0.1-ee-scripted
+  image: quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
   auth:
     username: $DOCKER_USER
     password: $DOCKER_PASS
@@ -193,13 +193,18 @@ commands: # reusable commands with parameters
       - run:
           name: "Fetch oracle libraries"
           command: |
-            git clone git@github.com:3scale/system-libraries.git
-            cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
-            # using sudo due to `/opt/oracle/` set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
-            sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-            sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-            sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
-            sudo ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so
+            declare oracle_otn=https://download.oracle.com/otn_software/linux/instantclient/19600
+            declare oracle_version=linux.x64-19.6.0.0.0dbru
+            declare -a packages=(instantclient-basiclite instantclient-sdk instantclient-odbc)
+            for package in "${packages[@]}"; do
+              zip=${package}-${oracle_version}.zip
+              wget "${oracle_otn}/${zip}" -O "vendor/oracle/${zip}"
+              # using sudo due to `/opt/oracle/` set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
+              sudo unzip "vendor/oracle/${zip}" -d /opt/oracle
+            done
+
+            # hack for system-builder ENV
+            sudo ln -s /opt/oracle/instantclient_19_6/ /opt/oracle/instantclient_12_2
             sudo rm -rf /opt/system/vendor/oracle
             rm -rf vendor/oracle/*.zip
             sudo cp config/oracle/*.ini /etc/
