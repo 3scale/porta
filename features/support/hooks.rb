@@ -112,6 +112,7 @@ After do |scenario|
 
   line_number = scenario.location.line.to_s
 
+  # Network logs
   logs = page.driver.browser.manage.logs.get(:performance)
   array = logs.each_with_object([]) do |entry, messages|
     message = JSON.parse(entry.message)
@@ -119,7 +120,7 @@ After do |scenario|
     messages << message
   end
 
-  file = folder.join("#{line_number}.log")
+  file = folder.join("#{line_number}-network.json")
   file.open('w') do  |f|
     f.puts JSON.dump(array)
   end
@@ -145,9 +146,8 @@ After do |scenario|
 
   console_log = folder.join("#{line_number}.log")
 
-
-  if (logs = page.driver.browser.try(:console_messages)).present?
-    entries = logs.map{ |entry| "#{entry[:message]} (#{entry[:source]}:#{entry[:line_number]}" }
+  if (logs = page.driver.browser.manage.logs.get(:browser)).present?
+    entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
 
     puts *entries
     console_log.open('w') do |f|
