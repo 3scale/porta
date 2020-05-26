@@ -11,37 +11,37 @@ const Root: React.FunctionComponent = ({ children }) => {
 
   const navItems = [
     {
-      title: t('nav_items.overview'),
+      title: t('navigation_items.overview'),
       to: '/',
       exact: true
     },
     {
-      title: t('nav_items.analytics'),
+      title: t('navigation_items.analytics'),
       to: '/analytics',
       items: [
-        { to: '/analytics/usage', title: t('nav_items.analytics_usage') }
+        { to: '/analytics/usage', title: t('navigation_items.analytics_usage') }
       ]
     },
     {
-      title: t('nav_items.applications'),
+      title: t('navigation_items.applications'),
       to: '/applications',
       items: [
-        { to: '/applications', title: t('nav_items.applications_listing') },
-        { to: '/applications/plans', title: t('nav_items.applications_app_plans') }
+        { to: '/applications', title: t('navigation_items.applications_listing') },
+        { to: '/applications/plans', title: t('navigation_items.applications_app_plans') }
       ]
     },
     {
-      title: t('nav_items.accounts'),
+      title: t('navigation_items.accounts'),
       to: '/accounts',
       items: [
-        { to: '/accounts', title: t('nav_items.accounts_listing') }
+        { to: '/accounts', title: t('navigation_items.accounts_listing') }
       ]
     },
     {
-      title: t('nav_items.integration'),
+      title: t('navigation_items.integration'),
       to: '/integration',
       items: [
-        { to: '/integration/configuration', title: t('nav_items.integration_configuration') }
+        { to: '/integration/configuration', title: t('navigation_items.integration_configuration') }
       ]
     }
   ]
