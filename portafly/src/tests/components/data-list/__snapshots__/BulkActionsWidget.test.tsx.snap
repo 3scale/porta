@@ -15,9 +15,6 @@ exports[`should render properly when closed 1`] = `
     type="button"
   >
     <span
-      class="pf-c-dropdown__toggle-image"
-    />
-    <span
       class="pf-c-dropdown__toggle-text"
     >
       bulk_actions.title
