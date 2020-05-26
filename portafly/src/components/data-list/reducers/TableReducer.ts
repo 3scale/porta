@@ -16,23 +16,34 @@ export type TableState = {
   }
 }
 
+// Utils
+const sorter = (index: number) => (a: DataListRow, b: DataListRow) => {
+  const prev = a.cells[index]
+  const next = b.cells[index]
+  if (prev < next) return -1
+  if (prev > next) return 1
+  return 0
+}
+
 // Action Handlers
 const SET_SORT_BY = 'SET_SORT_BY'
 const SELECT_ONE = 'SELECT_ONE'
 const SELECT_PAGE = 'SELECT_PAGE'
 const SELECT_ALL = 'SELECT_ALL'
 
+// Action types
+type SetSortByAction = Action<{ index: number, direction: SortByDirection, isSelectable?: boolean }>
+type SelectOneAction = Action<{ id: number, selected: boolean }>
+type SelectPageAction = Action<DataListRow[]>
+type SelectAllAction = Action<{ selected: boolean, filteredRows?: DataListRow[] }>
+
 const tableActionHandlers: ActionHandlers<TableState, any> = {
-  [SET_SORT_BY]: (state, action: Action<{ index: number, direction: SortByDirection }>) => {
-    const { index, direction } = action.payload
+  [SET_SORT_BY]: (state, action: SetSortByAction) => {
+    const { index, direction, isSelectable } = action.payload
     const sortedRows = [...state.rows]
-    sortedRows.sort((a, b) => {
-      const prev = a.cells[index]
-      const next = b.cells[index]
-      if (prev < next) return -1
-      if (prev > next) return 1
-      return 0
-    })
+
+    // When table is selectable, index must be corrected because of the first row of checkboxes
+    sortedRows.sort(sorter(isSelectable ? (index - 1) : index))
 
     if (direction === SortByDirection.desc) {
       sortedRows.reverse()
@@ -40,12 +51,12 @@ const tableActionHandlers: ActionHandlers<TableState, any> = {
 
     return { ...state, rows: sortedRows, sortBy: action.payload }
   },
-  [SELECT_ONE]: (state, action: Action<{ id: number, selected: boolean }>) => {
+  [SELECT_ONE]: (state, action: SelectOneAction) => {
     const { id, selected } = action.payload
     const newRows = state.rows.map((r) => (r.id === id ? { ...r, selected } : r))
     return { ...state, rows: newRows }
   },
-  [SELECT_PAGE]: (state, action: Action<DataListRow[]>) => {
+  [SELECT_PAGE]: (state, action: SelectPageAction) => {
     const visibleRows = action.payload
     const newRows = state.rows.map((r) => ({
       ...r,
@@ -54,7 +65,7 @@ const tableActionHandlers: ActionHandlers<TableState, any> = {
 
     return { ...state, rows: newRows }
   },
-  [SELECT_ALL]: (state, action: Action<{ selected: boolean, filteredRows?: DataListRow[] }>) => {
+  [SELECT_ALL]: (state, action: SelectAllAction) => {
     const { selected, filteredRows } = action.payload
     const { rows } = state
 
@@ -84,8 +95,8 @@ const useTable = ({ state, dispatch }: IUseTable) => ({
   columns: state.table.columns,
   rows: state.table.rows,
   sortBy: state.table.sortBy,
-  setSortBy: (index: number, direction: SortByDirection) => (
-    dispatch({ type: SET_SORT_BY, payload: { index, direction } })
+  setSortBy: (index: number, direction: SortByDirection, isSelectable?: boolean) => (
+    dispatch({ type: SET_SORT_BY, payload: { index, direction, isSelectable } })
   ),
   selectedRows: state.table.rows.filter((r) => Boolean(r.selected)),
   selectOne: (id: number, selected: boolean) => (
