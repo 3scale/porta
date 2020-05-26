@@ -27,19 +27,28 @@ team_members_filter:
   by_name: Name
   by_email: Email
   by_sso_authentication: SSO authentication
-   yes: Yes
-   no: Not yet
+  by_sso_authentication_description: Label for the filter criterion based on SSO authentication
+  by_sso_authentication_options:
+    yes: Yes
+    no: Not yet
+  by_sso_authentication_options_description: Group name that contains the options of the SSO authentication criterion
   by_role: Role
-   admin: Admin
-   member: Member
+  by_role_description: Label for the filter criterion based on Role
+  by_role_options:
+    admin: Admin
+    member: Member
+  by_role_options_description: Group name that contains the options of the Role criterion
   by_permission_group: Permission group
-   developer_portal: Developer Portal
-   billing: Billing
-   settings: Settings
-   accounts_applications: Accounts – Applications
-   analytics: Analytics
-   configuration_application_plans: Configuration and application plans
-   policy_registry: Policy registry
+  by_permission_group_description: Label for the filter criterion based on Permission group
+  by_permission_group_options:
+    developer_portal: Developer Portal
+    billing: Billing
+    settings: Settings
+    accounts_applications: Accounts – Applications
+    analytics: Analytics
+    configuration_application_plans: Configuration and application plans
+    policy_registry: Policy registry
+  by_permission_group_options_description: Group name that contains the options of the Permission group criterion
 team_members_filter_description: List containing the name criterion to filter team members
 team_members_typeahead: Filter by name
 team_members_typeahead_description: Default text to show when the user wants to filter by typing the text
