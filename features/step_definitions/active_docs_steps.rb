@@ -37,6 +37,7 @@ end
 
 Then(/^the swagger autocomplete should work for "(.*?)" with "(.*?)"$/) do |input_name, autocomplete|
   click_on 'get'
+  wait_for_requests
   assert_equal 1, evaluate_script("$('input[name=#{input_name}]').focus().length")
   assert_equal 1, evaluate_script("$('.apidocs-param-tips.#{autocomplete}:visible').length")
 end
