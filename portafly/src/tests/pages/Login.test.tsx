@@ -3,21 +3,21 @@ import React from 'react'
 import { render } from 'tests/custom-render'
 import { Login } from 'pages'
 import { useAuth } from 'auth'
+import { AuthToken } from 'types/auth'
 
 jest.mock('auth')
 
-it('should render the Login page', () => {
-  (useAuth as jest.Mock).mockReturnValue({ authToken: null, setAuthToken: jest.fn() })
-  const wrapper = render(<Login />)
-  wrapper.debug()
+function setup(authToken: AuthToken = null) {
+  (useAuth as jest.Mock).mockReturnValue({ authToken, setAuthToken: jest.fn() })
+  return render(<Login />)
+}
 
-  expect(wrapper.container.firstChild).toMatchSnapshot()
+it('should render the Login page when there is no token', () => {
+  const { container } = setup()
+  expect(container.querySelector('.pf-c-login')).toBeInTheDocument()
 })
 
 it('should not render when there is an auth token already', () => {
-  (useAuth as jest.Mock).mockReturnValue({ authToken: 'le token', setAuthToken: jest.fn() })
-  const wrapper = render(<Login />)
-  wrapper.debug()
-
-  expect(wrapper.container.firstChild).toMatchSnapshot()
+  const { container } = setup('le token')
+  expect(container.querySelector('.pf-c-login')).not.toBeInTheDocument()
 })
