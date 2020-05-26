@@ -17,6 +17,17 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
+module JavascriptDriver
+  def scroll_to(element)
+    script = <<-JS
+      arguments[0].scrollIntoView(true);
+    JS
+
+    Capybara.current_session.driver.browser.execute_script(script, element.native)
+  end
+end
+World(JavascriptDriver)
+
 Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -27,7 +38,11 @@ end
 
 When /^(?:|I )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
   with_scope(selector) do
-    click_button(button, visible: !invisible)
+    if @javascript
+      scroll_to(find(button, visible: !invisible)).click
+    else
+      click_button(button, visible: !invisible)
+    end
   end
 end
 
