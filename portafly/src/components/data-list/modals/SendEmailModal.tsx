@@ -8,7 +8,7 @@ import {
 import { useTranslation } from 'i18n/useTranslation'
 import { DataListModal, useDataListBulkActions, SubmitButton } from 'components/data-list'
 import { sendEmail } from 'dal/accounts/bulkActions'
-import { useAlertsContext } from 'components'
+import { useAlertsContext } from 'components/util'
 
 interface Props {
   items: string[]
