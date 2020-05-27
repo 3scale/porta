@@ -66,15 +66,18 @@ module ThreeScale::DomainSubstitution
 
     # This methods should not be used
     # Use match_internal_admin_domain? instead
+    # It will work for provider and developer
     def match_internal_self_domain?(host)
       internal_self_domain == host
     end
-    deprecate :match_internal_self_domain?,
-      match_internal_self_domain?: "use match_internal_admin_domain?"
+    deprecate match_internal_self_domain?: "use #match_internal_admin_domain?"
 
     def match_internal_domain?(host)
       internal_domain == host
     end
+
+    deprecate domain: "use #internal_domain",
+      self_domain: "use #internal_admin_domain"
   end
 
   class Substitutor
