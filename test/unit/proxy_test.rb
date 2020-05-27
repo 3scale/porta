@@ -621,7 +621,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test '#pending_affecting_changes?' do
-    proxy = FactoryBot.create(:simple_proxy, api_backend: nil)
+    proxy = FactoryBot.create(:simple_proxy)
     proxy.affecting_change_history.touch
 
     # no existing config for staging (sandbox)

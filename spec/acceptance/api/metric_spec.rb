@@ -40,10 +40,23 @@ resource "Metric" do
     delete '/admin/api/services/:service_id/metrics/:id', action: :destroy
   end
 
+  api 'method_metric' do
+    let(:resource) { FactoryBot.build(:metric, parent: service.metrics.hits) }
+
+    get '/admin/api/services/:service_id/metrics/:id.:format', action: :show
+
+    json(:resource) do
+      let(:root) { 'metric' }
+
+      it { should have_properties('id', 'name', 'system_name', 'friendly_name', 'parent_id').from(resource) }
+    end
+  end
+
   json(:resource) do
     let(:root) { 'metric' }
 
-    it { should have_properties('id', 'name', 'system_name', 'friendly_name', 'unit') }
+    it { should have_properties('id', 'name', 'system_name', 'friendly_name', 'unit').from(resource) }
+    it { should_not have_properties('parent_id') }
     it { should have_links('service', 'self') }
     it { should_not have_links('parent') }
   end

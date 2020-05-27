@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAsync } from 'react-async'
 import { useDocumentTitle, Loading, DeveloperAccountsTable } from 'components'
 import {
   Alert,
@@ -7,14 +8,14 @@ import {
   TextContent,
   Text
 } from '@patternfly/react-core'
-import { useGetDeveloperAccounts } from 'dal/accounts'
+import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
 
 const DeveloperAccounts: React.FunctionComponent = () => {
+  const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
   const { t } = useTranslation('accounts')
-  useDocumentTitle(t('page_title'))
 
-  const { accounts, error, isPending } = useGetDeveloperAccounts()
+  useDocumentTitle(t('page_title'))
 
   return (
     <>

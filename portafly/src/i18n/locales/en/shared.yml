@@ -1,7 +1,11 @@
 ---
 logo_alt_text: Red Hat Integration logo
 logo_alt_text_description: Alt attribute of the main logo
-nav_items:
+buttons:
+  submit: Submit
+  cancel: Cancel
+  logout: Log Out
+navigation_items:
   overview: Overview
   overview_description: Title of Overview menu item
   analytics: Analytics
@@ -29,4 +33,77 @@ format:
   lowercase: "{{text, lowercase}}"
   lowercase_description: Formats a text as lowercase
   format_description: Utilities to format text
-
+shared_elements:
+  bulk_selector: "{{number}} selected"
+  bulk_selector_description: Label for the bulk selector to indicate the number of selected items. This label is visible only when items are selected.
+  action_header: Action
+  actions_header_description: Column listing the only available action to perform with each item of a table
+  actions_header_plural: Actions
+  actions_header_plural_description: Column listing the various available actions to perform with each item of a table
+  send_button: Send
+  send_button_description: Label to perform the sending of items
+  edit_button: Edit
+  edit_button_description: Label to perform the edition of a selected item
+  delete_button: Delete
+  delete_button_description: Label to perform deletion of selected items
+  delete_button_tooltip: Select at least an item to enable the <strong>Delete</strong> button.
+  delete_button_tooltip_description: Tooltip shown upon hovering to explain that the deletion will be available upon selection of items.
+  cancel_button: Cancel
+  cancel_button_description: Label for a button to cancel an action
+alerts:
+  close_button: 'Close alert'
+  close_button_description: 'Button for closing an alert'
+bulk_selector:
+  none: Select none (0 items)
+  none_description: Bulk Selector option for selecting no items
+  page: Select page ({{count}} item)
+  page_description: Bulk Selector option for selecting current page items
+  page_plural: Select page ({{count}} items)
+  page_plural_description: Bulk Selector option for selecting current page items (plural version)
+  all: Select all ({{count}} item)
+  all_description: Bulk Selector option for selecting all available items
+  all_plural: Select all ({{count}} items)
+  all_plural_description: Bulk Selector option for selecting all available items (plural version)
+  label: "{{selectedCount}} selected"
+  label_description: Label indicating how many items are currently selected
+  toggle_checkbox_aria_label: Select All
+  toggle_checkbox_aria_label_description: Aria label for select all toggle button
+modals:
+  send_email:
+    title: Send email to admins of selected accounts
+    to: To
+    subject: Subject
+    body: Body
+    send: Send
+    cancel: Cancel
+  change_state:
+    title: Change state for the selected accounts
+    to: Selected accounts
+    select_label: Select state
+    select_helper_text: Changing the state of a developer account does not imply changing the state of its applications.
+    send: Change state
+    cancel: Cancel
+  expand_list_button: "{{count}} more"
+  expand_list_button_description: Button to expand the list ot items selected for this modal
+bulk_actions:
+  warning: Select accounts first to enable bulk actions
+  warning_description: Warning that displays inside the actions dropdown, when no items are selected
+  title: Actions
+  title_description: Title of the Actions dropdown
+  send_email: Send email
+  send_email_description: Bulk action for Send main
+  change_state: Change state
+  change_state_description: Bulk action for Change state
+toasts:
+  send_email_start: Sending email...
+  send_email_start_description: Alert message when email is being sent
+  send_email_success: Email sent
+  send_email_success_description: Alert message when email is sent
+  send_email_error: Email could not be sent
+  send_email_error_description: Alert message when email could not be sent
+  change_state_start: Changing accounts state...
+  change_state_start_description: Alert message when state is being changed
+  change_state_success: Account state changed
+  change_state_success_description: Alert message when state is changed
+  change_state_error: Account state could not be changed
+  change_state_error_description: Alert message when state could not be changed

@@ -14,6 +14,18 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
     end
   end
 
+  test 'archive_as_deleted' do
+    application = FactoryBot.create(:simple_cinstance)
+
+    referrer_filter = FactoryBot.create(:referrer_filter, application: application)
+    assert_no_difference(DeletedObject.referrer_filters.method(:count)) { referrer_filter.destroy! }
+
+    referrer_filter = FactoryBot.create(:referrer_filter, application: application)
+    referrer_filter.stubs(destroyed_by_association: true)
+    assert_difference(DeletedObject.referrer_filters.method(:count)) { referrer_filter.destroy! }
+    assert_equal referrer_filter.id, DeletedObject.referrer_filters.last!.object_id
+  end
+
   context 'referrer_filters' do
 
     setup do
@@ -88,17 +100,6 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
 
       expect_backend_delete_referrer_filter(@application, 'some-key')
       @referrer_filters.remove('some-key')
-    end
-
-    should 'delete filters when app is deleted' do
-      @referrer_filters.add('some-key')
-
-      @application.reload
-
-      ReferrerFilter.enable_backend!
-      expect_backend_delete_referrer_filter(@application, 'some-key')
-
-      @application.destroy
     end
   end
 end

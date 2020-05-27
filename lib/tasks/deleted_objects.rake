@@ -11,4 +11,15 @@ namespace :deleted_objects do
       sleep(0.5) unless Rails.env.test?
     end
   end
+
+  desc 'Destroy all the objects whose owner is a Service OR whose object_type is a Service'
+  task :destroy_objects_with_service_owner_or_service_objects => :environment do
+    objects_with_service_owner_or_service_objects= DeletedObject.where.has do
+      ((owner_type == Service.name) | (object_type == Service.name))
+    end
+    objects_with_service_owner_or_service_objects.find_in_batches(batch_size: 500) do |records|
+      DeletedObject.where(id: records.map(&:id)).destroy_all
+      sleep(0.5) unless Rails.env.test?
+    end
+  end
 end

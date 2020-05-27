@@ -56,8 +56,9 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
 
   def proxy_params
     proxy_params = params.require(:proxy).dup
+
     proxy_params.permit(:policies_config).tap do |whitelisted|
-      whitelisted[:policies_config] = proxy_params[:policies_config].tap{|h| h.try(:each, &:permit!)}
+      whitelisted[:policies_config] = PoliciesConfigParams.new(proxy_params[:policies_config]).call
     end
   end
 

@@ -18,6 +18,17 @@ class DeletedObjectTest < ActiveSupport::TestCase
     assert_same_elements users.map(&:id),     DeletedObject.users.pluck(:object_id)
   end
 
+  test 'scopes application_keys and referrer_filters' do
+    application = FactoryBot.build_stubbed(:simple_cinstance)
+    app_keys = FactoryBot.build_stubbed_list(:application_key, 2, application: application)
+    app_keys.each { |app_key| DeletedObject.create(owner: application, object: app_key) }
+    ref_filters = FactoryBot.build_stubbed_list(:referrer_filter, 2, application: application)
+    ref_filters.each { |ref_filter| DeletedObject.create(owner: application, object: ref_filter) }
+
+    assert_same_elements app_keys.map(&:id),    DeletedObject.application_keys.pluck(:object_id)
+    assert_same_elements ref_filters.map(&:id), DeletedObject.referrer_filters.pluck(:object_id)
+  end
+
   test 'deleted_owner' do
     service = FactoryBot.create(:simple_service)
     metric = FactoryBot.create(:metric, service: service)
@@ -35,44 +46,44 @@ class DeletedObjectTest < ActiveSupport::TestCase
   end
 
   test 'stale' do
-    deleted_child_but_owner_persisted_old = deleted_child_and_owner_service_deleted_old = deleted_object_service_but_owner_persisted_old = nil
+    deleted_child_but_owner_persisted_old = deleted_child_and_owner_contract_deleted_old = deleted_object_contract_but_owner_persisted_old = nil
     Timecop.freeze((1.week + 1.day).ago) do
-      service = FactoryBot.create(:simple_service)
-      metric = FactoryBot.create(:metric, service: service)
-      deleted_child_but_owner_persisted_old = DeletedObject.create(object: metric, owner: service).id
+      contract = FactoryBot.create(:simple_cinstance)
+      app_key = FactoryBot.create(:application_key, application: contract)
+      deleted_child_but_owner_persisted_old = DeletedObject.create(object: app_key, owner: contract).id
 
-      service = FactoryBot.create(:simple_service)
-      account = service.account
-      metric = FactoryBot.create(:metric, service: service)
-      deleted_child_and_owner_service_deleted_old = DeletedObject.create(object: metric, owner: service).id
-      deleted_object_service_but_owner_persisted_old = DeletedObject.create(object: service, owner: account).id
+      contract = FactoryBot.create(:simple_cinstance)
+      service = contract.issuer
+      app_key = FactoryBot.create(:application_key, application: contract)
+      deleted_child_and_owner_contract_deleted_old = DeletedObject.create(object: app_key, owner: contract).id
+      deleted_object_contract_but_owner_persisted_old = DeletedObject.create(object: contract, owner: service).id
     end
 
-    deleted_child_but_owner_persisted_recent = deleted_child_and_owner_service_deleted_recent = deleted_child_and_owner_account_deleted_recent = nil
-    deleted_object_service_but_owner_persisted_recent = deleted_object_account_but_owner_persisted_recent = nil
+    deleted_child_but_owner_persisted_recent = deleted_child_and_owner_contract_deleted_recent = deleted_child_and_owner_account_deleted_recent = nil
+    deleted_object_contract_but_owner_persisted_recent = deleted_object_account_but_owner_persisted_recent = nil
     Timecop.freeze((1.week - 1.day).ago) do
-      service = FactoryBot.create(:simple_service)
-      metric = FactoryBot.create(:metric, service: service)
-      deleted_child_but_owner_persisted_recent = DeletedObject.create(object: metric, owner: service).id
+      contract = FactoryBot.create(:simple_cinstance)
+      app_key = FactoryBot.create(:application_key, application: contract)
+      deleted_child_but_owner_persisted_recent = DeletedObject.create(object: app_key, owner: contract).id
 
-      service = FactoryBot.create(:simple_service)
-      account = service.account
-      metric = FactoryBot.create(:metric, service: service)
-      deleted_child_and_owner_service_deleted_recent = DeletedObject.create(object: metric, owner: service).id
+      contract = FactoryBot.create(:simple_cinstance)
+      account = contract.account
+      app_key = FactoryBot.create(:application_key, application: contract)
+      deleted_child_and_owner_contract_deleted_recent = DeletedObject.create(object: app_key, owner: contract).id
       deleted_child_and_owner_account_deleted_recent = DeletedObject.create(object: account.admin_user, owner: account).id
-      deleted_object_service_but_owner_persisted_recent = DeletedObject.create(object: service, owner: account).id
+      deleted_object_contract_but_owner_persisted_recent = DeletedObject.create(object: contract, owner: account).id
       deleted_object_account_but_owner_persisted_recent = DeletedObject.create(object: account, owner: master_account).id
     end
 
 
     stale = DeletedObject.stale.pluck(:id)
-    assert_includes stale, deleted_child_and_owner_service_deleted_old
-    assert_includes stale, deleted_object_service_but_owner_persisted_old
+    assert_includes stale, deleted_child_and_owner_contract_deleted_old
+    assert_includes stale, deleted_object_contract_but_owner_persisted_old
     assert_not_includes stale, deleted_child_but_owner_persisted_old
     assert_not_includes stale, deleted_child_but_owner_persisted_recent
-    assert_not_includes stale, deleted_child_and_owner_service_deleted_recent
+    assert_not_includes stale, deleted_child_and_owner_contract_deleted_recent
     assert_not_includes stale, deleted_child_and_owner_account_deleted_recent
-    assert_not_includes stale, deleted_object_service_but_owner_persisted_recent
+    assert_not_includes stale, deleted_object_contract_but_owner_persisted_recent
     assert_not_includes stale, deleted_object_account_but_owner_persisted_recent
   end
 end

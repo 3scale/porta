@@ -61,9 +61,7 @@ Ability.define do |user|
     can :manage, LegalTerm
   end
 
-  if user.has_permission?('services')
-    can :manage, BackendApiConfig if account.provider_can_use?(:api_as_product)
-  end
+  can :manage, BackendApiConfig if account.provider_can_use?(:api_as_product)
 
   # Member cannot manage permissions, neither his own, nor other members'
   cannot :update_permissions, User

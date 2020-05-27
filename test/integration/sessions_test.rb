@@ -221,10 +221,8 @@ class SessionsTest < ActionDispatch::IntegrationTest
     provider_login_with user.username, 'supersecret'
     assert_equal 1, user.user_sessions.count
 
-    Provider::Admin::AccountsController.any_instance.expects(allow_forgery_protection: true)
-
     assert_no_difference '@provider.reload.updated_at' do
-      put provider_admin_account_path, {account: {org_name: 'jose'}}
+      with_forgery_protection { put provider_admin_account_path, {account: {org_name: 'jose'}} }
     end
 
     assert_redirected_to provider_login_url

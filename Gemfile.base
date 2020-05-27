@@ -38,7 +38,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'i18n'
 
 # Apisonator client
-gem 'pisoni', '~> 1.26'
+gem 'pisoni', '~> 1.29'
 
 # 3scale fork that allows OPTIONS passthrough
 gem 'font_assets', git: 'https://github.com/3scale/font_assets.git', ref: 'da97b8601528ee189795cc94b953ec9a30f47e83', groups: [:production, :preview]
@@ -260,7 +260,7 @@ group :development, :test do
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
 end
 
-gem 'webpacker', '~> 4.x'
+gem 'webpacker', '~> 4'
 
 gem 'unicorn', require: false, group: [:production, :preview]
 gem 'developer_portal', path: 'lib/developer_portal'

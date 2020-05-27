@@ -71,4 +71,11 @@ ActionDispatch::IntegrationTest.class_eval do
   def logout!
     get '/p/logout'
   end
+
+  def with_forgery_protection(enabled: true)
+    ActionController::Base.any_instance.stubs(allow_forgery_protection: enabled)
+    yield
+  ensure
+    ActionController::Base.any_instance.stubs(allow_forgery_protection: false)
+  end
 end

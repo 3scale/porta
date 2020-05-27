@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200324130825) do
+ActiveRecord::Schema.define(version: 20200420104331) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                                  null: false
@@ -474,7 +474,8 @@ ActiveRecord::Schema.define(version: 20200324130825) do
     t.string   "owner_type"
     t.bigint   "object_id"
     t.string   "object_type"
-    t.datetime "created_at",  null: false
+    t.datetime "created_at",                null: false
+    t.text     "metadata",        limit: 65535
     t.index ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id", using: :btree
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id", using: :btree
   end

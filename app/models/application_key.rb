@@ -1,4 +1,5 @@
 class ApplicationKey < ApplicationRecord
+  include SaveDestroyForApplicationAssociation
 
   KEYS_LIMIT = 5
 
@@ -22,13 +23,15 @@ class ApplicationKey < ApplicationRecord
   after_commit :push_webhook_key_destroyed, :on => :destroy
 
   after_commit :notify_after_create, :on => :create, :if => :should_notify?
-  after_commit :notify_after_destroy, :on => :destroy, :if => :should_notify?
+  after_commit :notify_after_destroy, on: :destroy, if: -> { should_notify? && !destroyed_by_association }
 
   delegate :account, to: :application, allow_nil: true
 
   attr_readonly :value
 
   extend BackendClient::ToggleBackend
+
+  after_commit :destroy_backend_value, on: :destroy, unless: :destroyed_by_association
 
   scope :without, ->(value) { where(['value <> ?', value])}
 
@@ -123,15 +126,15 @@ class ApplicationKey < ApplicationRecord
                                           value)
   end
 
-  def destroy_backend_value
-    ThreeScale::Core::ApplicationKey.delete(application.service.backend_id,
-                                            application.application_id,
-                                            value)
-  end
-
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
   protected
+
+  def destroy_backend_value
+    ApplicationKeyBackendService.delete(service_backend_id: application.service.backend_id,
+                                        application_backend_id: application.application_id,
+                                        value: value)
+  end
 
   def publish_application_event
     Applications::ApplicationUpdatedEvent.create_and_publish!(application)
@@ -150,7 +153,7 @@ class ApplicationKey < ApplicationRecord
   end
 
   def notify_after_destroy
-    CinstanceMessenger.key_deleted(application, value).deliver unless application.destroyed?
+    CinstanceMessenger.key_deleted(application, value).deliver
   end
 
   def push_webhook_key_created

@@ -864,7 +864,6 @@ class CinstanceTest < ActiveSupport::TestCase
       app.expects(:create_key_after_create?).never
       app.expects(:create_first_key).never
 
-      expect_backend_delete_key(app, app.application_keys.pluck_values.first)
       app.destroy
     end
   end

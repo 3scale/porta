@@ -2,7 +2,6 @@
 class Metric < ApplicationRecord
   include Backend::ModelExtensions::Metric
   include SystemName
-  include SaveDestroyForServiceAssociation
   include BackendApiLogic::MetricExtension
 
   self.background_deletion = %i[pricing_rules usage_limits plan_metrics proxy_rules]

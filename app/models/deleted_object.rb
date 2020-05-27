@@ -4,8 +4,11 @@ class DeletedObject < ApplicationRecord
   belongs_to :owner, polymorphic: true
   belongs_to :object, polymorphic: true
 
-  [Metric, Contract, User].each do |scoped_class|
-    scope scoped_class.to_s.underscore.pluralize.to_sym, -> { where(object_type: scoped_class) }
+  serialize :metadata, Hash
+
+  [Metric, Contract, User, ApplicationKey, ReferrerFilter].each do |scoped_class|
+    scoped_class_string = scoped_class.to_s
+    scope scoped_class_string.underscore.pluralize.to_sym, -> { where(object_type: scoped_class_string) }
   end
 
   scope :deleted_owner, -> do
@@ -19,7 +22,7 @@ class DeletedObject < ApplicationRecord
 
   scope :stale, -> do
     where.has do
-      ((id.in DeletedObject.deleted_owner.select(:id)) | (object_type == Service.name)) \
+      ((id.in DeletedObject.deleted_owner.select(:id)) | (object_type == Contract.name)) \
       & (created_at <= 1.week.ago)
     end
   end

@@ -44,7 +44,7 @@ resource "Metric" do
 
   json(:resource) do
     let(:root) { 'method' }
-    it { should have_properties('id', 'name', 'system_name', 'friendly_name', 'description') }
+    it { should have_properties('id', 'name', 'system_name', 'friendly_name', 'description', 'parent_id').from(resource) }
     it { should_not include('unit')}
     it { should have_links('self', 'parent') }
   end

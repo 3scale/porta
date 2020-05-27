@@ -16,6 +16,7 @@ module Apicast
     delegate :services, :provider_key, :id, to: :mash
 
     SERVICE_SERIALIZE_OPTIONS = {
+      except: Service.ignored_columns,
       methods: [:proxiable?, :backend_authentication_type, :backend_authentication_value, :updated_at],
       include: [
         proxy: {
