@@ -8,11 +8,11 @@ import login from 'i18n/locales/en/login.yml'
 import applicationsListing from 'i18n/locales/en/applications/listing.yml'
 import applicationsPlans from 'i18n/locales/en/applications/applications_plans.yml'
 // Accounts
-import accountPersonal from 'i18n/locales/en/account_settings/personal/personal.yml'
-import accountPersonalTokens from 'i18n/locales/en/account_settings/personal/tokens.yml'
-import accountPersonalDetails from 'i18n/locales/en/account_settings/personal/personal_details.yml'
-import accountPersonalNotificationPreferences from 'i18n/locales/en/account_settings/personal/notification_preferences.yml'
-import accountUsersListing from 'i18n/locales/en/account_settings/users/listing-invitations.yml'
+import accountSettingsPersonal from 'i18n/locales/en/account_settings/personal/personal.yml'
+import accountSettingsPersonalTokens from 'i18n/locales/en/account_settings/personal/tokens.yml'
+import accountSettingsPersonalDetails from 'i18n/locales/en/account_settings/personal/personal_details.yml'
+import accountSettingsPersonalNotificationPreferences from 'i18n/locales/en/account_settings/personal/notification_preferences.yml'
+import accountSettingsUsersListing from 'i18n/locales/en/account_settings/users/listing-invitations.yml'
 // Analytics
 import analyticsUsage from 'i18n/locales/en/analytics/usage.yml'
 // Integration
@@ -25,12 +25,12 @@ const applications = {
 
 const accounts = {
   personal: {
-    ...accountPersonal,
-    tokens: accountPersonalTokens,
-    details: accountPersonalDetails,
-    notifications: accountPersonalNotificationPreferences
+    ...accountSettingsPersonal,
+    tokens: accountSettingsPersonalTokens,
+    details: accountSettingsPersonalDetails,
+    notifications: accountSettingsPersonalNotificationPreferences
   },
-  users: accountUsersListing
+  users: accountSettingsUsersListing
 }
 
 const analytics = {
