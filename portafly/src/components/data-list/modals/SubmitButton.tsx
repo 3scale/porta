@@ -16,15 +16,22 @@ const SubmitButton: React.FunctionComponent<Props> = ({
   children
 }) => {
   const { isLoading } = useDataListBulkActions()
+
   return (
-    <Button
-      className="portafly-submit-button"
-      variant="primary"
-      onClick={onClick}
-      isDisabled={isDisabled}
-    >
-      {isLoading ? <Spinner size="md" /> : children}
-    </Button>
+    <div className="portafly-submit-button">
+      {isLoading
+        ? <Spinner size="lg" />
+        : (
+          <Button
+            className="pepe"
+            variant="primary"
+            onClick={onClick}
+            isDisabled={isDisabled}
+          >
+            {children}
+          </Button>
+        )}
+    </div>
   )
 }
 
