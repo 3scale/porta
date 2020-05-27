@@ -134,27 +134,19 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     assert_equal 'USD', ::Finance::BillingStrategy.account_currency(@provider.id)
   end
 
-  test 'allow EUR, USD but not blank currency' do
+  test 'allow Finance::BillingStrategy::CURRENCIES but not blank currency' do
     @bs.currency = 'giberrish'
     refute @bs.valid?
+    assert_equal 'invalid', @bs.errors[:currency].join('')
 
-    @bs.currency = 'USD'
-    assert @bs.valid?
-
-    @bs.currency = 'EUR'
-    assert @bs.valid?
+    Finance::BillingStrategy::CURRENCIES.each_value do |valid_currency|
+      @bs.currency = valid_currency
+      assert @bs.valid?
+    end
 
     @bs.currency = nil
     refute @bs.valid?, 'must have currency'
-    assert @bs.errors.has_key?(:currency)
-  end
-
-  test 'allow CHF and SAR' do
-    @bs.currency = 'CHF'
-    assert @bs.valid?
-
-    @bs.currency = 'SAR'
-    assert @bs.valid?
+    assert_equal 'invalid', @bs.errors[:currency].join('')
   end
 
   test 'default to highest number in month + 1' do

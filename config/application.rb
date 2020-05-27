@@ -186,6 +186,9 @@ module System
     config.three_scale.plan_rules = ActiveSupport::OrderedOptions.new
     config.three_scale.plan_rules.merge!(try_config_for(:plan_rules) || {})
 
+    config.three_scale.currencies = ActiveSupport::OrderedOptions.new
+    config.three_scale.currencies.merge!(try_config_for(:currencies) || {})
+
     config.three_scale.features = ActiveSupport::OrderedOptions.new
     config.three_scale.features.merge!(try_config_for(:features) || {})
 
