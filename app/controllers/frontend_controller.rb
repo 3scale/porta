@@ -143,42 +143,29 @@ class FrontendController < ApplicationController
   end
 
   def ensure_provider
-    unless current_account.provider?
-      render_error 'Not authorized', :status => :not_authorized
-      false
-    else
-      true
-    end
+    return if current_account.provider?
+    render_error 'Not authorized', :status => :not_authorized
+    false
   end
 
   def ensure_provider_domain
-    unless Account.is_admin_domain?(request.host) || site_account.master?
-      notify_about_wrong_domain(request.url, :provider, error_request_data)
-      render_wrong_domain_error
-      false
-    else
-      true
-    end
+    return if Account.is_admin_domain?(request.host) || site_account.master?
+    notify_about_wrong_domain(request.url, :provider, error_request_data)
+    render_wrong_domain_error
+    false
   end
 
   def ensure_buyer_domain
-    if Account.is_admin_domain?(request.host) || site_account.master?
-      notify_about_wrong_domain(request.url, :buyer)
-      render_wrong_domain_error
-      false
-    else
-      true
-    end
+    return unless Account.is_admin_domain?(request.host) || site_account.master?
+    notify_about_wrong_domain(request.url, :buyer)
+    render_wrong_domain_error
   end
 
   def ensure_master_domain
-    unless Account.is_master_domain?(request.host)
-      notify_about_wrong_domain(request.url, :master)
-      render_wrong_domain_error
-      false
-    else
-      true
-    end
+    return if Account.is_master_domain?(request.host)
+    notify_about_wrong_domain(request.url, :master)
+    render_wrong_domain_error
+    false
   end
 
   def render_wrong_domain_error
