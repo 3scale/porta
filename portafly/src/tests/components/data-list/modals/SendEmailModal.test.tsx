@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { SendEmailModal } from 'components/data-list/modals'
+import { SendEmailModal } from 'components/data-list'
 import { fireEvent } from '@testing-library/react'
 
 it('should disable its submit button when any field is empty', () => {
-  const { baseElement, getByText } = render(<SendEmailModal onClose={jest.fn()} items={['test']} />)
+  const { baseElement, getByText } = render(<SendEmailModal items={['test']} />)
   const subject = baseElement.querySelector('[name="subject"]') as HTMLElement
   const body = baseElement.querySelector('[name="body"]') as HTMLElement
   const submitButton = getByText('modals.send_email.send')

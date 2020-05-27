@@ -1,29 +1,27 @@
 import React, { useState } from 'react'
 import {
-  Button,
   Form,
   FormSelect,
   FormSelectOption,
   FormGroup
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { DataListModal, useDataListBulkActions } from 'components/data-list'
+import { DataListModal, useDataListBulkActions, SubmitButton } from 'components/data-list'
 import { changeState } from 'dal/accounts/bulkActions'
-import { useAlertsContext } from 'components'
+import { useAlertsContext } from 'components/util'
 
 interface Props {
-  onClose: () => void
   items: string[]
 }
 
 const ChangeStateModal: React.FunctionComponent<Props> = ({
-  onClose,
   items
 }) => {
   const { t } = useTranslation('shared')
   const { addAlert } = useAlertsContext()
   const {
     isLoading,
+    errorMsg,
     actionStart,
     actionSuccess,
     actionFailed
@@ -39,40 +37,38 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
         addAlert({ id: 'success', variant: 'success', title: t('toasts.change_state_start') })
       })
       .catch(() => {
-        actionFailed()
-        addAlert({ id: 'error', variant: 'danger', title: t('toasts.change_state_error') })
+        const error = t('toasts.change_state_error')
+        console.error(error)
+        actionFailed(error)
       })
   }
 
-  const actions = [
-    <Button
-      key="confirm"
-      variant="primary"
+  const submitButton = (
+    <SubmitButton
+      key="submit"
       onClick={onSubmit}
       isDisabled={value === '' || isLoading}
     >
       {t('modals.change_state.send')}
-    </Button>,
-    <Button key="cancel" variant="link" onClick={onClose}>
-      {t('modals.change_state.cancel')}
-    </Button>
-  ]
+    </SubmitButton>
+  )
 
   const options = [
     { value: '', label: '' },
-    { value: 'approved', label: t('state.approved') },
-    { value: 'pending', label: t('state.pending') },
-    { value: 'rejected', label: t('state.rejected') },
-    { value: 'suspended', label: t('state.suspended') }
+    { value: 'approved', label: t('states.approved') },
+    { value: 'pending', label: t('states.pending') },
+    { value: 'rejected', label: t('states.rejected') },
+    { value: 'suspended', label: t('states.suspended') }
   ]
 
   return (
     <DataListModal
       title={t('modals.change_state.title')}
-      onClose={onClose}
-      actions={actions}
+      submitButton={submitButton}
       items={items}
       to={t('modals.change_state.to')}
+      errorMsg={errorMsg}
+      shouldWarnClose={value !== ''}
     >
       <Form>
         <FormGroup
