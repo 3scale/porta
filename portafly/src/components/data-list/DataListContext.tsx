@@ -12,6 +12,7 @@ import {
   useTable,
   TableState,
   useBulkActions,
+  defaultBulkActions,
   BulkActionsState,
   bulkActionsReducer
 } from 'components/data-list/reducers'
@@ -30,10 +31,7 @@ const defaultState: State = {
   },
   filters: {},
   pagination: defaultPagination,
-  bulkActions: {
-    modal: undefined,
-    isLoading: false
-  }
+  bulkActions: defaultBulkActions
 }
 
 export interface IDataListContext {

@@ -12,12 +12,18 @@ export type BulkActionsState = {
   errorMsg?: string
 }
 
+const defaultBulkActions: BulkActionsState = {
+  modal: undefined,
+  isLoading: false,
+  errorMsg: undefined
+}
+
 // Action Handlers
 const BulkActionsActionHandlers: ActionHandlers<BulkActionsState, any> = {
   SET_MODAL: (state, action: Action<BulkAction>) => ({ ...state, modal: action.payload }),
   CLOSE_MODAL: (state) => ({ ...state, modal: undefined, errorMsg: undefined }),
   ACTION_START: (state) => ({ ...state, isLoading: true }),
-  ACTION_SUCCESS: (state) => ({ ...state, isLoading: false, modal: undefined }),
+  ACTION_SUCCESS: () => defaultBulkActions,
   ACTION_FAILED: (state, action: Action<string>) => (
     { ...state, isLoading: false, errorMsg: action.payload }
   )
@@ -42,4 +48,4 @@ const useBulkActions = ({ state, dispatch }: IUseBulkActions) => ({
   actionFailed: (errorMsg: string) => dispatch({ type: 'ACTION_FAILED', payload: errorMsg })
 })
 
-export { bulkActionsReducer, useBulkActions }
+export { bulkActionsReducer, useBulkActions, defaultBulkActions }
