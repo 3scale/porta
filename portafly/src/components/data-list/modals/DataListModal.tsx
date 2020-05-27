@@ -21,6 +21,7 @@ interface Props {
   submitButton: JSX.Element
   to: string
   errorMsg?: string
+  shouldWarnClose?: boolean
 }
 
 const DataListModal: React.FunctionComponent<Props> = ({
@@ -29,7 +30,8 @@ const DataListModal: React.FunctionComponent<Props> = ({
   title,
   submitButton,
   to,
-  errorMsg
+  errorMsg,
+  shouldWarnClose
 }) => {
   const { t } = useTranslation('shared')
   const { closeModal } = useDataListBulkActions()
@@ -38,7 +40,7 @@ const DataListModal: React.FunctionComponent<Props> = ({
 
   const onClose = () => {
     // eslint-disable-next-line no-alert
-    if (window.confirm(t('modals.close_confirmation'))) {
+    if (!shouldWarnClose || window.confirm(t('modals.close_confirmation'))) {
       closeModal()
     }
   }

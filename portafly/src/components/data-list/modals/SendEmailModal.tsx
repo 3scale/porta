@@ -61,6 +61,7 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
       items={items}
       to={t('modals.send_email.to')}
       errorMsg={errorMsg}
+      shouldWarnClose={subject !== '' || body !== ''}
     >
       <Form>
         <FormGroup

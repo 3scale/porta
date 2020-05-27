@@ -67,6 +67,7 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
       items={items}
       to={t('modals.change_state.to')}
       errorMsg={errorMsg}
+      shouldWarnClose={value !== ''}
     >
       <Form>
         <FormGroup
