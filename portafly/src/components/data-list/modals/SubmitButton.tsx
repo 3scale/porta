@@ -23,7 +23,6 @@ const SubmitButton: React.FunctionComponent<Props> = ({
         ? <Spinner size="lg" />
         : (
           <Button
-            className="pepe"
             variant="primary"
             onClick={onClick}
             isDisabled={isDisabled}
