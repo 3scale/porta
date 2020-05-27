@@ -770,16 +770,23 @@ class AccountTest < ActiveSupport::TestCase
     # just to make the serialization work
     def account.fields_definitions_source_root!; self; end
 
-    account.domain = 'some.example.com'
-    account.self_domain = 'admin.#{ThreeScale.config.superdomain}'
+    domain = 'some.example.com'
+    admin_domain = 'admin.#{ThreeScale.config.superdomain}'
 
-    domain_xml = '<domain>some.example.com</domain>'
-    admin_domain_xml = '<admin_domain>admin.#{ThreeScale.config.superdomain}</admin_domain>'
+    account.domain = domain
+    account.self_domain = admin_domain
+
+    domain_xml = "<domain>#{domain}</domain>"
+    admin_domain_xml = "<admin_domain>#{admin_domain}</admin_domain>"
+    base_url_xml = "<base_url>http://#{domain}</base_url>"
+    admin_base_url_xml = "<admin_base_url>http://#{admin_domain}</admin_base_url>"
 
     xml = account.to_xml
 
     refute_match domain_xml, xml
     refute_match admin_domain_xml, xml
+    refute_match base_url_xml, xml
+    refute_match admin_base_url_xml, xml
 
     account.provider = true
 
@@ -787,6 +794,8 @@ class AccountTest < ActiveSupport::TestCase
 
     assert_match domain_xml, xml
     assert_match admin_domain_xml, xml
+    assert_match base_url_xml, xml
+    assert_match admin_base_url_xml, xml
   end
 
   test 'settings' do
