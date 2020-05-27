@@ -15,7 +15,6 @@
 ##### Toolbar ([specs](../../global_components/toolbar.md))
 * Bulk actions:
   * Send email
-  * Change account
   * Change state
 * Filters:
   * Group/org > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
