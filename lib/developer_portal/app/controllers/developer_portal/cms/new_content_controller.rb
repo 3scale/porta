@@ -3,6 +3,7 @@ class DeveloperPortal::CMS::NewContentController < DeveloperPortal::BaseControll
   skip_before_action :login_required
 
   before_action :ensure_can_view_content, :if => :check_permissions?
+  append_before_action :ensure_buyer_domain, only: [:show]
 
   # Redirect to credit card details only for '/' and '/docs' path
   # Other pages will be normally accessible
@@ -22,9 +23,8 @@ class DeveloperPortal::CMS::NewContentController < DeveloperPortal::BaseControll
   activate_menu :portal
 
   PROTECTED_CONTENT_FROM_PAID_SIGNUP = Set.new(['/', '/docs']).freeze
-  def show
-    return unless ensure_buyer_domain
 
+  def show
     case
     when redirect # redirect
       head(:moved_permanently, :location => redirect.target)
