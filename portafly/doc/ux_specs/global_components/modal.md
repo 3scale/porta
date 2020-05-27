@@ -38,7 +38,7 @@
     * the modal won't auto dismiss
     * the spinner will be replaced by the submit button
     * the input fields will be enabled again (to allow user eventually copy paste their content)
-    * an inline error message will be displayed above the form buttons
+    * an inline warning message will be displayed above the form buttons
 
 
 ### _'Change plan for selected items'_ modal
