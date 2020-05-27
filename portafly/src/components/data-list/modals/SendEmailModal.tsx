@@ -40,6 +40,7 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
       })
       .catch(() => {
         const error = t('toasts.send_email_error')
+        console.error(error)
         actionFailed(error)
       })
   }

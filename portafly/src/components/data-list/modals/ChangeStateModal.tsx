@@ -38,6 +38,7 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
       })
       .catch(() => {
         const error = t('toasts.change_state_error')
+        console.error(error)
         actionFailed(error)
       })
   }
