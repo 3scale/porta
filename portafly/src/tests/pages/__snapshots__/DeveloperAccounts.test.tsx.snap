@@ -15,7 +15,7 @@ Object {
             class=""
             data-pf-content="true"
           >
-            body_title
+            users.body_title
           </h1>
         </div>
       </section>
@@ -179,7 +179,7 @@ Object {
           class=""
           data-pf-content="true"
         >
-          body_title
+          users.body_title
         </h1>
       </div>
     </section>
@@ -400,7 +400,7 @@ Object {
             class=""
             data-pf-content="true"
           >
-            body_title
+            users.body_title
           </h1>
         </div>
       </section>
@@ -458,7 +458,7 @@ Object {
           class=""
           data-pf-content="true"
         >
-          body_title
+          users.body_title
         </h1>
       </div>
     </section>
@@ -573,7 +573,7 @@ Object {
             class=""
             data-pf-content="true"
           >
-            body_title
+            users.body_title
           </h1>
         </div>
       </section>
@@ -631,7 +631,7 @@ Object {
           class=""
           data-pf-content="true"
         >
-          body_title
+          users.body_title
         </h1>
       </div>
     </section>
