@@ -35,8 +35,8 @@ nav.DashboardNavigation
     - if show_subscriptions_on_dashboard?(service)
       li.DashboardNavigation-list-item
         // Subscriptions (would be nice to have API specific links)
-        => dashboard_collection_size_link 'Subscription',
-                                     service.service_contracts_count,
+        => dashboard_collection_link 'Subscription',
+                                     service.service_contracts,
                                      admin_buyers_service_contracts_path(search: {service_id: service.id}),
                                      icon_name: 'paperclip'
 
