@@ -163,7 +163,7 @@ FactoryBot.define do
 
       account.stubs(:bought_cinstance).returns(bought_cinstance)
       account.stubs(:provider_account).returns(master_account)
-      Account.stubs(:find_by_provider_key).with(bought_cinstance.user_key).returns(account)
+      Account.stubs(:first_by_provider_key).with(bought_cinstance.user_key).returns(account)
     end
   end
 
