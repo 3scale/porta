@@ -109,3 +109,8 @@ toasts:
   change_state_success_description: Alert message when state is changed
   change_state_error: Account state could not be changed
   change_state_error_description: Alert message when state could not be changed
+states:
+  approved: Approved
+  pending: Pending
+  rejected: Rejected
+  suspended: Suspended

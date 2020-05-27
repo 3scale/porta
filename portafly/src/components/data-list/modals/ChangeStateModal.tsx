@@ -54,10 +54,10 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
 
   const options = [
     { value: '', label: '' },
-    { value: 'approved', label: t('state.approved') },
-    { value: 'pending', label: t('state.pending') },
-    { value: 'rejected', label: t('state.rejected') },
-    { value: 'suspended', label: t('state.suspended') }
+    { value: 'approved', label: t('states.approved') },
+    { value: 'pending', label: t('states.pending') },
+    { value: 'rejected', label: t('states.rejected') },
+    { value: 'suspended', label: t('states.suspended') }
   ]
 
   return (
