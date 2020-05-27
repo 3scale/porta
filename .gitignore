@@ -72,6 +72,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/web_hooks.yml
 /config/rolling_updates.yml
 /config/paperclip.yml
+/config/currencies.yml
 /config/plan_rules.yml
 /config/service_discovery.yml
 /config/smtp.yml
