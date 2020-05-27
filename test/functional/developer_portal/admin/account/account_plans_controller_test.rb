@@ -57,7 +57,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
   end
 
   test 'change via api with invalid provider_key' do
-    Account.expects(:find_by_provider_key!).with('fake')
+    Account.expects(:first_by_provider_key!).with('fake')
       .raises(Backend::ProviderKeyInvalid)
 
     @request.host = @provider.admin_domain
@@ -71,7 +71,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
   end
 
   test 'change via api with invalid username' do
-    Account.expects(:find_by_provider_key!).with(@provider.api_key)
+    Account.expects(:first_by_provider_key!).with(@provider.api_key)
       .returns(@provider)
 
     @provider.buyer_users.expects(:find_by)

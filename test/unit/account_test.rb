@@ -429,17 +429,17 @@ class AccountTest < ActiveSupport::TestCase
     assert_nil account.site_access_code
   end
 
-  test 'Account.find_by_provider_key! raises an exception if the key is invalid' do
+  test 'Account.first_by_provider_key! raises an exception if the key is invalid' do
     assert_raise Backend::ProviderKeyInvalid do
-      Account.find_by_provider_key!('boo')
+      Account.first_by_provider_key!('boo')
     end
   end
 
-  test "Account.find_by_provider_key! finds account by bought cinstance's user_key" do
+  test "Account.first_by_provider_key! finds account by bought cinstance's user_key" do
     account = FactoryBot.create(:simple_account, provider_account: master_account)
     cinstance = account.buy!(master_account.default_service.published_plans.first)
 
-    assert_equal account, Account.find_by_provider_key!(cinstance.user_key)
+    assert_equal account, Account.first_by_provider_key!(cinstance.user_key)
   end
 
   test 'Account.master raises and exception if there is no master account' do

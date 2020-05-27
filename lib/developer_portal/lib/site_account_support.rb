@@ -73,7 +73,7 @@ module SiteAccountSupport
       def site_account_by_provider_key
         return unless (key = provider_key.presence)
         if ThreeScale.master_on_premises?
-          Account.where(master: true).find_by_provider_key!(key) || super
+          Account.where(master: true).first_by_provider_key!(key) || super
         else
           super
         end
@@ -105,7 +105,7 @@ module SiteAccountSupport
 
     def site_account_by_provider_key
       return unless (key = provider_key.presence)
-      Account.providers_with_master.by_self_domain(host).find_by_provider_key!(key)
+      Account.providers_with_master.by_self_domain(host).first_by_provider_key!(key)
     end
 
     def site_account_by_domain

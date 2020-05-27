@@ -337,7 +337,7 @@ class Account < ApplicationRecord
   # database lookup if possible (uses cache), so it is super fast.
   def self.id_from_api_key(api_key)
     Rails.cache.fetch("account_ids/#{api_key}") do
-      Account.find_by_provider_key!(api_key).id # rubocop:disable Rails/DynamicFindBy
+      Account.first_by_provider_key!(api_key).id # rubocop:disable Rails/DynamicFindBy
     end
   end
 

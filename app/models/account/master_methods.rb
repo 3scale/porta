@@ -32,12 +32,12 @@ module Account::MasterMethods
       by_service_token(service_token).first || raise(error)
     end
 
-    def find_by_provider_key(provider_key)
+    def first_by_provider_key(provider_key)
       by_provider_key(provider_key).first
     end
 
-    def find_by_provider_key!(provider_key, error: Backend::ProviderKeyInvalid)
-      find_by_provider_key(provider_key) || raise(error)
+    def first_by_provider_key!(provider_key, error: Backend::ProviderKeyInvalid)
+      first_by_provider_key(provider_key) || raise(error)
     end
   end
 end
