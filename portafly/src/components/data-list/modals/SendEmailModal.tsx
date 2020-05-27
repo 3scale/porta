@@ -1,29 +1,27 @@
 import React, { useState } from 'react'
 import {
-  Button,
   Form,
   FormGroup,
   TextInput,
   TextArea
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { DataListModal, useDataListBulkActions } from 'components/data-list'
+import { DataListModal, useDataListBulkActions, SubmitButton } from 'components/data-list'
 import { sendEmail } from 'dal/accounts/bulkActions'
 import { useAlertsContext } from 'components'
 
 interface Props {
   items: string[]
-  onClose: () => void
 }
 
 const SendEmailModal: React.FunctionComponent<Props> = ({
-  onClose,
   items
 }) => {
   const { t } = useTranslation('shared')
   const { addAlert } = useAlertsContext()
   const {
     isLoading,
+    errorMsg,
     actionStart,
     actionSuccess,
     actionFailed
@@ -41,36 +39,28 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
         addAlert({ id: 'success', variant: 'success', title: t('toasts.send_email_start') })
       })
       .catch(() => {
-        actionFailed()
-        addAlert({ id: 'error', variant: 'danger', title: t('toasts.send_email_error') })
+        const error = t('toasts.send_email_error')
+        actionFailed(error)
       })
   }
 
-  const actions = [
-    <Button
-      key="0"
-      variant="primary"
+  const submitButton = (
+    <SubmitButton
+      key="submit"
       onClick={onSubmit}
       isDisabled={isSendDisabled || isLoading}
     >
       {t('modals.send_email.send')}
-    </Button>,
-    <Button
-      key="1"
-      variant="link"
-      onClick={onClose}
-    >
-      {t('modals.send_email.cancel')}
-    </Button>
-  ]
+    </SubmitButton>
+  )
 
   return (
     <DataListModal
       title={t('modals.send_email.title')}
-      onClose={onClose}
-      actions={actions}
+      submitButton={submitButton}
       items={items}
       to={t('modals.send_email.to')}
+      errorMsg={errorMsg}
     >
       <Form>
         <FormGroup
@@ -79,6 +69,7 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
           fieldId="subject"
         >
           <TextInput
+            isDisabled={isLoading}
             isRequired
             type="text"
             id="subject"
@@ -94,6 +85,7 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
           fieldId="body"
         >
           <TextArea
+            disabled={isLoading}
             isRequired
             id="body"
             name="body"

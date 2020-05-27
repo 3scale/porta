@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  Button,
   Form,
   FormSelect,
   FormSelectOption,
@@ -10,20 +9,20 @@ import { useTranslation } from 'i18n/useTranslation'
 import { DataListModal, useDataListBulkActions } from 'components/data-list'
 import { changeState } from 'dal/accounts/bulkActions'
 import { useAlertsContext } from 'components'
+import { SubmitButton } from './SubmitButton'
 
 interface Props {
-  onClose: () => void
   items: string[]
 }
 
 const ChangeStateModal: React.FunctionComponent<Props> = ({
-  onClose,
   items
 }) => {
   const { t } = useTranslation('shared')
   const { addAlert } = useAlertsContext()
   const {
     isLoading,
+    errorMsg,
     actionStart,
     actionSuccess,
     actionFailed
@@ -39,24 +38,20 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
         addAlert({ id: 'success', variant: 'success', title: t('toasts.change_state_start') })
       })
       .catch(() => {
-        actionFailed()
-        addAlert({ id: 'error', variant: 'danger', title: t('toasts.change_state_error') })
+        const error = t('toasts.change_state_error')
+        actionFailed(error)
       })
   }
 
-  const actions = [
-    <Button
-      key="confirm"
-      variant="primary"
+  const submitButton = (
+    <SubmitButton
+      key="submit"
       onClick={onSubmit}
       isDisabled={value === '' || isLoading}
     >
       {t('modals.change_state.send')}
-    </Button>,
-    <Button key="cancel" variant="link" onClick={onClose}>
-      {t('modals.change_state.cancel')}
-    </Button>
-  ]
+    </SubmitButton>
+  )
 
   const options = [
     { value: '', label: '' },
@@ -69,10 +64,10 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
   return (
     <DataListModal
       title={t('modals.change_state.title')}
-      onClose={onClose}
-      actions={actions}
+      submitButton={submitButton}
       items={items}
       to={t('modals.change_state.to')}
+      errorMsg={errorMsg}
     >
       <Form>
         <FormGroup

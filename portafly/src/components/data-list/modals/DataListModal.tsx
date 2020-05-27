@@ -7,30 +7,41 @@ import {
   TextContent,
   TextList,
   Title,
-  BaseSizes
+  BaseSizes,
+  Alert
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
+import { useDataListBulkActions } from 'components/data-list'
 
 import './dataListModal.scss'
 
 interface Props {
-  onClose: () => void
   items: string[]
   title: string
-  actions: any
+  submitButton: JSX.Element
   to: string
+  errorMsg?: string
 }
 
 const DataListModal: React.FunctionComponent<Props> = ({
   children,
-  onClose,
   items,
   title,
-  actions,
-  to
+  submitButton,
+  to,
+  errorMsg
 }) => {
   const { t } = useTranslation('shared')
+  const { closeModal } = useDataListBulkActions()
+
   const [isListCollapsed, setIsListCollapsed] = useState(items.length > 5)
+
+  const onClose = () => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm(t('modals.close_confirmation'))) {
+      closeModal()
+    }
+  }
 
   const textListItems = useMemo(
     () => items.map((a) => <TextListItem key={a}>{a}</TextListItem>),
@@ -52,6 +63,17 @@ const DataListModal: React.FunctionComponent<Props> = ({
     </Title>
   )
 
+  const actions = [
+    submitButton,
+    <Button
+      key="cancel"
+      variant="link"
+      onClick={onClose}
+    >
+      {t('modals.cancel')}
+    </Button>
+  ]
+
   return (
     <Modal
       className="data-list-base-modal"
@@ -68,6 +90,7 @@ const DataListModal: React.FunctionComponent<Props> = ({
         </TextList>
       </TextContent>
       {children}
+      {errorMsg && <Alert variant="warning" title={errorMsg} isInline />}
     </Modal>
   )
 }

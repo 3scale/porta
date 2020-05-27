@@ -75,16 +75,18 @@ modals:
     subject: Subject
     body: Body
     send: Send
-    cancel: Cancel
   change_state:
     title: Change state for the selected accounts
     to: Selected accounts
     select_label: Select state
     select_helper_text: Changing the state of a developer account does not imply changing the state of its applications.
     send: Change state
-    cancel: Cancel
   expand_list_button: "{{count}} more"
   expand_list_button_description: Button to expand the list ot items selected for this modal
+  close_confirmation: Your content will be lost if you dismiss the dialog. Are you sure you want to dismiss the dialog?
+  close_confirmation_description: Alert message shown when closing a modal
+  cancel: Cancel
+  cancel_description: Label for the cancel button
 bulk_actions:
   warning: Select accounts first to enable bulk actions
   warning_description: Warning that displays inside the actions dropdown, when no items are selected

@@ -80,7 +80,7 @@ const DataListTable = () => {
     selectAll
   } = useDataListTable()
 
-  const { modal, setModal } = useDataListBulkActions()
+  const { modal } = useDataListBulkActions()
 
   const onSort: OnSort = (event, index, direction) => {
     setSortBy(index, direction, true)
@@ -103,18 +103,8 @@ const DataListTable = () => {
         <TableHeader />
         <TableBody />
       </Table>
-      {modal === 'sendEmail' && (
-        <SendEmailModal
-          items={['1', '2', '3', '4', '5', '6']}
-          onClose={() => setModal(undefined)}
-        />
-      )}
-      {modal === 'changeState' && (
-        <ChangeStateModal
-          items={['1', '2', '3', '4', '5', '6']}
-          onClose={() => setModal(undefined)}
-        />
-      )}
+      {modal === 'sendEmail' && <SendEmailModal items={['1', '2', '3', '4', '5', '6']} />}
+      {modal === 'changeState' && <ChangeStateModal items={['1', '2', '3', '4', '5', '6']} />}
     </>
   )
 }
