@@ -19,12 +19,21 @@ const defaultBulkActions: BulkActionsState = {
 }
 
 // Action Handlers
+const SET_MODAL = 'SET_MODAL'
+const CLOSE_MODAL = 'CLOSE_MODAL'
+const ACTION_START = 'ACTION_START'
+const ACTION_SUCCESS = 'ACTION_SUCCESS'
+const ACTION_FAILED = 'ACTION_FAILED'
+
+type SetModalAction = Action<BulkAction>
+type ActionFailedAction = Action<string>
+
 const BulkActionsActionHandlers: ActionHandlers<BulkActionsState, any> = {
-  SET_MODAL: (state, action: Action<BulkAction>) => ({ ...state, modal: action.payload }),
-  CLOSE_MODAL: (state) => ({ ...state, modal: undefined, errorMsg: undefined }),
-  ACTION_START: (state) => ({ ...state, isLoading: true }),
-  ACTION_SUCCESS: () => defaultBulkActions,
-  ACTION_FAILED: (state, action: Action<string>) => (
+  [SET_MODAL]: (state, action: SetModalAction) => ({ ...state, modal: action.payload }),
+  [CLOSE_MODAL]: (state) => ({ ...state, modal: undefined, errorMsg: undefined }),
+  [ACTION_START]: (state) => ({ ...state, isLoading: true }),
+  [ACTION_SUCCESS]: () => defaultBulkActions,
+  [ACTION_FAILED]: (state, action: ActionFailedAction) => (
     { ...state, isLoading: false, errorMsg: action.payload }
   )
 }
@@ -41,11 +50,11 @@ const useBulkActions = ({ state, dispatch }: IUseBulkActions) => ({
   modal: state.bulkActions.modal,
   isLoading: state.bulkActions.isLoading,
   errorMsg: state.bulkActions.errorMsg,
-  setModal: (modal: BulkAction) => dispatch({ type: 'SET_MODAL', payload: modal }),
-  closeModal: () => dispatch({ type: 'CLOSE_MODAL', payload: undefined }),
-  actionStart: () => dispatch({ type: 'ACTION_START', payload: undefined }),
-  actionSuccess: () => dispatch({ type: 'ACTION_SUCCESS', payload: undefined }),
-  actionFailed: (errorMsg: string) => dispatch({ type: 'ACTION_FAILED', payload: errorMsg })
+  setModal: (modal: BulkAction) => dispatch({ type: SET_MODAL, payload: modal }),
+  closeModal: () => dispatch({ type: CLOSE_MODAL, payload: undefined }),
+  actionStart: () => dispatch({ type: ACTION_START, payload: undefined }),
+  actionSuccess: () => dispatch({ type: ACTION_SUCCESS, payload: undefined }),
+  actionFailed: (errorMsg: string) => dispatch({ type: ACTION_FAILED, payload: errorMsg })
 })
 
 export { bulkActionsReducer, useBulkActions, defaultBulkActions }
