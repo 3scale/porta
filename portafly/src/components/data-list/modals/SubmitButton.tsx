@@ -23,8 +23,7 @@ const SubmitButton: React.FunctionComponent<Props> = ({
       onClick={onClick}
       isDisabled={isDisabled}
     >
-      {children}
-      {isLoading && <Spinner size="md" />}
+      {isLoading ? <Spinner size="md" /> : children}
     </Button>
   )
 }
