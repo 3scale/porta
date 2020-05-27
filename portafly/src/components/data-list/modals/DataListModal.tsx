@@ -76,7 +76,7 @@ const DataListModal: React.FunctionComponent<Props> = ({
 
   return (
     <Modal
-      className="data-list-base-modal"
+      className="portafly-data-list-modal"
       width="44%"
       header={header}
       onClose={onClose}

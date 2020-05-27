@@ -1,4 +1,9 @@
-.data-list-base-modal {
+.portafly-data-list-modal {
+  div.pf-c-title {
+    /* stylelint-disable-line selector-no-qualifying-type */
+    padding: 1.5rem 0 0 1.5rem;
+  }
+
   ul {
     max-height: 220px;
     overflow-y: scroll;
