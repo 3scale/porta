@@ -14,14 +14,13 @@ import { useTranslation } from 'i18n/useTranslation'
 const DeveloperAccounts: React.FunctionComponent = () => {
   const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
   const { t } = useTranslation('accounts')
-
-  useDocumentTitle(t('page_title'))
+  useDocumentTitle(t('users.page_title'))
 
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Text component="h1">{t('body_title')}</Text>
+          <Text component="h1">{t('users.body_title')}</Text>
         </TextContent>
       </PageSection>
 
