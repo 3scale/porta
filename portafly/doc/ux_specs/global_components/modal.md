@@ -8,7 +8,6 @@
 ### Global modal specs
 * Modal dialogs are placed in the exact centre of the page.
 * Modal dialogs feature an "X" icon in the top right corner. Clicking the icon will dismiss the modal.
-* Clicking on the foreground (everywhere on the page outside of the area covered by the modal), will dismiss the modal.
 * Typing "Esc" on a keyboard will dismiss the modal.
 * When some content is added to an input field (if any) and user tries to dismiss the modal (with whatever method available), a native browser alert is triggered informing user about the eventuality of content loss, and asking to confirm dismissing the modal.
 
