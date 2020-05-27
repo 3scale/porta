@@ -111,6 +111,10 @@ toasts:
   change_state_error_description: Alert message when state could not be changed
 states:
   approved: Approved
+  approved_description: Human name for the state 'approved'
   pending: Pending
+  pending_description: Human name for the state 'pending'
   rejected: Rejected
+  rejected_description: Human name for the state 'rejected'
   suspended: Suspended
+  suspended_description: Human name for the state 'suspended'
