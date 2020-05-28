@@ -21,8 +21,11 @@ const defaultPagination: PaginationState = {
 
 // Action Handlers
 const SET_PAGINATION = 'SET_PAGINATION'
+
+type SetPaginationAction = Action<PaginationState>
+
 const paginationActionHandlers: ActionHandlers<PaginationState, PaginationState> = {
-  [SET_PAGINATION]: (state, action) => ({ ...state, ...action.payload })
+  [SET_PAGINATION]: (state, action: SetPaginationAction) => ({ ...state, ...action.payload })
 }
 
 // Reducer

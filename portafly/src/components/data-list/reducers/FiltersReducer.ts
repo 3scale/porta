@@ -8,8 +8,12 @@ import {
 export type FiltersState = Record<string, string[]>
 
 // Action Handlers
+const SET_FILTERS = 'SET_FILTERS'
+
+type SetFiltersAction = Action<FiltersState>
+
 const filtersActionHandlers: ActionHandlers<FiltersState, FiltersState> = {
-  SET_FILTERS: (filtersState, action: Action<FiltersState>) => (action.payload as FiltersState)
+  [SET_FILTERS]: (state, action: SetFiltersAction) => (action.payload as FiltersState)
 }
 
 // Reducer
@@ -22,7 +26,7 @@ interface IUseFilters {
 }
 const useFilters = ({ state, dispatch }: IUseFilters) => ({
   filters: state.filters,
-  setFilters: (filters: FiltersState) => dispatch({ type: 'SET_FILTERS', payload: filters })
+  setFilters: (filters: FiltersState) => dispatch({ type: SET_FILTERS, payload: filters })
 })
 
 export { filtersReducer, useFilters }

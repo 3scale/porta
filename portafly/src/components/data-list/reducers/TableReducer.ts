@@ -31,7 +31,6 @@ const SELECT_ONE = 'SELECT_ONE'
 const SELECT_PAGE = 'SELECT_PAGE'
 const SELECT_ALL = 'SELECT_ALL'
 
-// Action types
 type SetSortByAction = Action<{ index: number, direction: SortByDirection, isSelectable?: boolean }>
 type SelectOneAction = Action<{ id: number, selected: boolean }>
 type SelectPageAction = Action<DataListRow[]>
@@ -94,11 +93,11 @@ interface IUseTable {
 const useTable = ({ state, dispatch }: IUseTable) => ({
   columns: state.table.columns,
   rows: state.table.rows,
+  selectedRows: state.table.rows.filter((r) => Boolean(r.selected)),
   sortBy: state.table.sortBy,
   setSortBy: (index: number, direction: SortByDirection, isSelectable?: boolean) => (
     dispatch({ type: SET_SORT_BY, payload: { index, direction, isSelectable } })
   ),
-  selectedRows: state.table.rows.filter((r) => Boolean(r.selected)),
   selectOne: (id: number, selected: boolean) => (
     dispatch({ type: SELECT_ONE, payload: { id, selected } })
   ),
