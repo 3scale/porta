@@ -87,6 +87,8 @@ modals:
   # ------------- End of duplicated block: already included in Audience > Accounts > listing.yml -----·#
   expand_list_button: "{{count}} more"
   expand_list_button_description: Button to expand the list ot items selected for this modal
+  close_confirmation: Your content will be lost if you dismiss the dialog. Are you sure you want to dismiss the dialog?
+  close_confirmation_description: Alert message shown when closing a modal
 
 bulk_actions:
   ## Toolbar
@@ -94,11 +96,13 @@ bulk_actions:
   actions_empty_label_description: Admonition that displays inside the actions dropdown when no items are selected
   actions_dropdownlist: Actions
   actions_dropdownlist_description: String to list all the available actions.
-  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
+  # ------------- Duplicated block: above -----·#
   warning: Select accounts first to enable bulk actions
   warning_description: Warning that displays inside the actions dropdown, when no items are selected
   title: Actions
   title_description: Title of the Actions dropdown
+  # ------------- End of duplicated block: above -----·#
+  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
   send_email: Send email
   send_email_description: Bulk action for Send main
   change_state: Change state
