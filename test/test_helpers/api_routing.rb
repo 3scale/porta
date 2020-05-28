@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 module ApiRouting
-  class FooController < ApplicationController
-    def create
-      render json: {status: 'success'}, status: 201
-    end
-  end
-
   class FooApiController < ::Admin::Api::BaseController
     wrap_parameters :payload
 
@@ -42,7 +36,6 @@ module ApiRouting
   def with_api_routes
     Rails.application.routes.draw do
       constraints MasterOrProviderDomainConstraint do
-        post '/' => 'api_routing/foo#create'
         post '/api' => 'api_routing/foo_api#create'
         get '/api' => 'api_routing/foo_api#index'
         get '/api/version/:version' => 'api_routing/foo_api#show'
