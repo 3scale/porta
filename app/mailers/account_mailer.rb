@@ -88,7 +88,7 @@ class AccountMailer < ActionMailer::Base
   def assigns(account)
     {
       :user => Liquid::Drops::User.new(admin_of(account)),
-      :domain => account.provider_account.domain,
+      :domain => account.provider_account.external_domain,
       :account => Liquid::Drops::Account.new(account),
       :provider => Liquid::Drops::Provider.new(account.provider_account),
       :support_email => admin_of(account.provider_account).email
