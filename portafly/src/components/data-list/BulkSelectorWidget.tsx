@@ -6,26 +6,28 @@ import {
   DropdownItem
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { useDataListTable, useDataListPagination } from 'components/data-list'
-import { DataListRow } from 'types'
+import {
+  useDataListTable,
+  useDataListPagination,
+  useDataListFilters,
+  filterRows
+} from 'components/data-list'
 
-interface Props {
-  // TODO: try make it independent from table data
-  filteredRows: DataListRow[]
-}
-
-const BulkSelectorWidget: React.FunctionComponent<Props> = ({
-  filteredRows
-}) => {
+const BulkSelectorWidget: React.FunctionComponent = () => {
   const { t } = useTranslation('shared')
-  const { selectPage, selectAll, selectedRows } = useDataListTable()
+  const {
+    rows, columns,
+    selectPage, selectAll, selectedRows
+  } = useDataListTable()
   const { startIdx, endIdx } = useDataListPagination()
+  const { filters } = useDataListFilters()
 
   const [isOpen, setIsOpen] = useState(false)
 
   const selectedCount = selectedRows.length
-  const visibleRows = filteredRows.slice(startIdx, endIdx)
-  const pageCount = visibleRows.length
+  const filteredRows = filterRows(rows, filters, columns)
+  const pageRows = filteredRows.slice(startIdx, endIdx)
+  const pageCount = pageRows.length
   const allCount = filteredRows.length
 
   const onSelect = () => setIsOpen((current) => !current)
@@ -41,7 +43,7 @@ const BulkSelectorWidget: React.FunctionComponent<Props> = ({
     <DropdownItem key="0" onClick={() => selectAll(false)}>
       {t('bulk_selector.none')}
     </DropdownItem>,
-    <DropdownItem key="1" onClick={() => selectPage(visibleRows)}>
+    <DropdownItem key="1" onClick={() => selectPage(pageRows)}>
       {t('bulk_selector.page', { count: pageCount })}
     </DropdownItem>,
     <DropdownItem key="2" onClick={() => selectAll(true, filteredRows)}>

@@ -15,18 +15,9 @@ import {
 } from '@patternfly/react-core'
 import { FilterIcon, SearchIcon } from '@patternfly/react-icons'
 import { useDataListFilters } from 'components/data-list/'
+import { Category, CategoryOption } from 'types'
 
 import './searchWidget.scss'
-
-type CategoryOption = {
-  name: string
-  humanName: string
-}
-type Category = {
-  name: string
-  humanName: string
-  options?: CategoryOption[]
-}
 
 interface ICategorySelect {
   categories: Category[]
@@ -133,14 +124,14 @@ const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
   )
 }
 
-interface ISearchWidget {
+type SearchWidgetProps = {
   categories: Category[]
 }
 
-const SearchWidget: React.FunctionComponent<ISearchWidget> = ({ categories }) => {
+const SearchWidget: React.FunctionComponent<SearchWidgetProps> = ({ categories }) => {
+  const { filters, setFilters } = useDataListFilters()
   const [selectedCategory, setSelectedCategory] = useState(categories[0])
   const textInputRef = useRef<HTMLInputElement>(null)
-  const { filters, setFilters } = useDataListFilters()
 
   const onCategorySelect = (name: string) => {
     setSelectedCategory(categories.find((category) => category.name === name) as Category)

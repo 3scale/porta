@@ -30,7 +30,7 @@ describe('DataListContext: useDataFilters', () => {
   }
 
   const DataList = () => (
-    <DataListProvider data={{ columns: [], rows: [] }}>
+    <DataListProvider initialState={{ table: { columns: [], rows: [] } }}>
       <FilterComponent />
     </DataListProvider>
   )

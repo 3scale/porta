@@ -1,25 +1,28 @@
 import React from 'react'
 import { BulkSelectorWidget } from 'components/data-list'
-import { useDataListTable, useDataListPagination } from 'components/data-list/DataListContext'
+import { filterRows } from 'components/data-list/utils/filterRows'
+import { useDataListTable, useDataListPagination, useDataListFilters } from 'components/data-list/DataListContext'
 import { fireEvent, within } from '@testing-library/react'
 import { render } from 'tests/custom-render'
 
+const rows = new Array(5).fill({}).map((_, i) => ({ id: i }))
+
 jest.mock('components/data-list/DataListContext')
-const paginationMock = useDataListPagination as jest.Mock
-paginationMock.mockReturnValue({ startIdx: 0, endIdx: 5 })
-const useTableMock = useDataListTable as jest.Mock
-useTableMock.mockReturnValue({ selectedRows: [] })
+jest.mock('components/data-list/utils/filterRows')
 
-const filteredRows = new Array(5).map((_, i) => ({ id: i }))
+const setup = ({ selectedRows }: any) => {
+  (useDataListPagination as jest.Mock).mockReturnValue({ startIdx: 0, endIdx: 5 });
+  (useDataListTable as jest.Mock).mockReturnValue({ rows, selectedRows });
+  (useDataListFilters as jest.Mock).mockReturnValue({});
+  (filterRows as jest.Mock).mockReturnValue(rows)
 
-const renderWidget = () => {
-  const wrapper = render(<BulkSelectorWidget filteredRows={filteredRows} />)
+  const wrapper = render(<BulkSelectorWidget />)
   const dropdown = within(wrapper.container.querySelector('.pf-c-dropdown') as HTMLElement)
   return { ...wrapper, dropdown }
 }
 
 it('expands and collapses properly', () => {
-  const { dropdown, queryByRole } = renderWidget()
+  const { dropdown, queryByRole } = setup({ selectedRows: [] })
   expect(queryByRole('menu')).not.toBeInTheDocument()
 
   const button = dropdown.getByRole('button')
@@ -35,12 +38,8 @@ it('expands and collapses properly', () => {
 })
 
 describe('when no items are selected', () => {
-  beforeEach(() => {
-    useTableMock.mockReturnValueOnce({ selectedRows: [] })
-  })
-
+  const { dropdown } = setup({ selectedRows: [] })
   it('input should be unchecked', () => {
-    const { dropdown } = renderWidget()
     const checkbox = dropdown.queryByRole('checkbox') as HTMLInputElement
     expect(checkbox.indeterminate).toEqual(false)
     expect(checkbox.checked).toEqual(false)
@@ -48,12 +47,8 @@ describe('when no items are selected', () => {
 })
 
 describe('when some items are selected', () => {
-  beforeEach(() => {
-    useTableMock.mockReturnValueOnce({ selectedRows: filteredRows.slice(0, 2) })
-  })
-
+  const { dropdown } = setup({ selectedRows: rows.slice(0, 2) })
   it('input should be indeterminate', () => {
-    const { dropdown } = renderWidget()
     const checkbox = dropdown.queryByRole('checkbox') as HTMLInputElement
     expect(checkbox.indeterminate).toEqual(true)
     expect(checkbox.checked).toEqual(false)
@@ -61,12 +56,8 @@ describe('when some items are selected', () => {
 })
 
 describe('when all items are selected', () => {
-  beforeEach(() => {
-    useTableMock.mockReturnValueOnce({ selectedRows: filteredRows })
-  })
-
+  const { dropdown } = setup({ selectedRows: rows })
   it('input should be checked', () => {
-    const { dropdown } = renderWidget()
     const checkbox = dropdown.queryByRole('checkbox') as HTMLInputElement
     expect(checkbox.indeterminate).toEqual(false)
     expect(checkbox.checked).toEqual(true)
