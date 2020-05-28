@@ -52,7 +52,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "A new application subscribed to the #{application.plan.name} plan on the #{service.name} service of the #{application.account.name} account.", body.encoded
       assert_match 'Application details:', body.encoded
       cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
-                                                                                         host: service.account.admin_domain)
+                                                                                         host: service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
 
       assert_html_email(mail) do
@@ -117,7 +117,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
       cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
-                                                                                         host: service.account.admin_domain)
+                                                                                         host: service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
     end
   end
@@ -138,7 +138,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
       cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
-                                                                                         host: service.account.admin_domain)
+                                                                                         host: service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
     end
   end
@@ -197,7 +197,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "#{user.informal_name} from SimpleCompany has requested to change their Foo Service", body.encoded
       assert_match 'service subscription from Plan 1 to Plan 2.', body.encoded
-      assert_match url_helpers.admin_buyers_account_service_contracts_url(account, host: provider.admin_domain), body.encoded
+      assert_match url_helpers.admin_buyers_account_service_contracts_url(account, host: provider.external_admin_domain), body.encoded
     end
   end
 
@@ -301,7 +301,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Alex's trial of the LALA application on the planLALA has expired.", body.encoded
-      assert_match url_helpers.admin_service_application_url(service, cinstance, host: service.provider.admin_domain), body.encoded
+      assert_match url_helpers.admin_service_application_url(service, cinstance, host: service.provider.external_admin_domain), body.encoded
     end
   end
 
@@ -395,7 +395,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Current plan: #{cinstance.plan.name}", body.encoded
       assert_match "Application #{cinstance.name} has changed to plan #{cinstance.plan.name}.", body.encoded
       cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(cinstance.service, cinstance,
-                                                                                         host: cinstance.service.account.admin_domain)
+                                                                                         host: cinstance.service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
     end
   end
@@ -410,7 +410,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     assert_equal "New message from #{message.sender.name}", mail.subject
     assert_equal [receiver.email], mail.to
 
-    url = url_helpers.provider_admin_messages_inbox_url(recipient, host: provider.admin_domain)
+    url = url_helpers.provider_admin_messages_inbox_url(recipient, host: provider.external_admin_domain)
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match "You have a new message from #{message.sender.name}.", body.encoded
@@ -476,7 +476,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     assert mail.attachments
     assert_equal mail.attachments.count, 1
-    assert_match "report-#{provider.domain}-#{service.id}.pdf", mail.attachments.first.filename
+    assert_match "report-#{provider.external_domain}-#{service.id}.pdf", mail.attachments.first.filename
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Please find attached your API Usage Report', body.encoded
@@ -492,7 +492,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     assert mail.attachments
     assert_equal mail.attachments.count, 1
-    assert_match "report-#{provider.domain}-#{service.id}.pdf", mail.attachments.first.filename
+    assert_match "report-#{provider.external_domain}-#{service.id}.pdf", mail.attachments.first.filename
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Please find attached your API Usage Report', body.encoded
@@ -509,7 +509,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match "The service #{service.name} has been deleted.", body.encoded
-      assert_match url_helpers.provider_admin_dashboard_url(host: persisted_provider.admin_domain), body.encoded
+      assert_match url_helpers.provider_admin_dashboard_url(host: persisted_provider.external_admin_domain), body.encoded
     end
   end
 
@@ -535,7 +535,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Application: Boo App", body.encoded
       assert_match "Current plan: #{plan.name}", body.encoded
       assert_match "Requested plan: #{plan_2.name}", body.encoded
-      assert_match url_helpers.admin_service_application_url(application.service, application, host: application.service.provider.admin_domain), body.encoded
+      assert_match url_helpers.admin_service_application_url(application.service, application, host: application.service.provider.external_admin_domain), body.encoded
     end
   end
 

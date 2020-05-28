@@ -145,7 +145,7 @@ class PostOfficeTest < ActionMailer::TestCase
     assert email = find_message_by_subject("[msg] #{subject}")
     assert_equal @buyer.admins.map(&:email), email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
-    assert_match "http://#{@provider.domain}/admin/messages/received", email.body.to_s
+    assert_match "http://#{@provider.external_domain}/admin/messages/received", email.body.to_s
   end
 
   test 'messages sent via web have link to provider dashboard if sent to provider' do
@@ -158,14 +158,14 @@ class PostOfficeTest < ActionMailer::TestCase
     assert email = find_message_by_subject("[msg] #{subject}")
     assert_equal @provider.admins.map(&:email), email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
-    assert_match url_helpers.provider_admin_messages_inbox_url(recipient, host: @provider.self_domain), email.body.to_s
+    assert_match url_helpers.provider_admin_messages_inbox_url(recipient, host: @provider.external_self_domain), email.body.to_s
   end
 
   test 'messages sent via web throw better error when :host is missing' do
     message   = Message.create!(sender: @buyer, to: [@provider], subject: 'provider', body: "provider", origin: "web")
     recipient = message.recipients.first
 
-    recipient.receiver.stubs(:self_domain).returns(nil)
+    recipient.receiver.self_domain = nil
 
     begin
       PostOffice.message_notification(message, recipient).deliver_now
@@ -193,7 +193,7 @@ class PostOfficeTest < ActionMailer::TestCase
     assert_equal [account.admins.first.email], email.bcc
     assert_equal [Rails.configuration.three_scale.noreply_email], email.from
     assert_match "Please find attached your API Usage Report from 3scale.", email.parts.first.body.to_s
-    assert_equal "report-#{account.domain}-#{service_id}.pdf", email.attachments.first.filename
+    assert_equal "report-#{account.external_domain}-#{service_id}.pdf", email.attachments.first.filename
   end
 
   def url_helpers

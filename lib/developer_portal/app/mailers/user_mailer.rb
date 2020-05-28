@@ -74,18 +74,18 @@ class UserMailer < ActionMailer::Base
   private
 
   def admin_url(user)
-    developer_portal.admin_dashboard_url(:host => user.account.provider_account.domain)
+    developer_portal.admin_dashboard_url(:host => user.account.provider_account.external_domain)
   end
 
   def domain(user)
     account = user.account
 
     if account.master?
-      account.domain
+      account.external_domain
     elsif account.provider?
-      account.admin_domain
+      account.external_admin_domain
     else
-      account.provider_account.domain
+      account.provider_account.external_domain
     end
   end
 

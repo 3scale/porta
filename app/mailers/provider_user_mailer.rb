@@ -37,7 +37,7 @@ class ProviderUserMailer < ActionMailer::Base
 
   def domain(account)
     raise "Using ProviderUserMailer for buyer account #{account.name}(#{account.id})" unless account.master? || account.provider?
-    account.admin_domain
+    account.external_admin_domain
   end
 
 
@@ -82,7 +82,7 @@ class ProviderUserMailer < ActionMailer::Base
   # private
 
   # def admin_url(user)
-  #   admin_dashboard_url(:host => user.account.provider_account.domain)
+  #   admin_dashboard_url(:host => user.account.provider_account.external_admin_domain)
   # end
 
 
