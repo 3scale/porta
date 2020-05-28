@@ -216,7 +216,7 @@ module System
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
-
+    require 'three_scale/deprecation'
     require 'three_scale/middleware/multitenant'
     require 'three_scale/middleware/dev_domain'
 
