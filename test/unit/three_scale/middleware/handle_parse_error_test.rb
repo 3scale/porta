@@ -32,31 +32,4 @@ class ThreeScale::Middleware::HandleParseErrorTest < ActiveSupport::TestCase
     request = ActionDispatch::Request.new(env)
     request.POST
   end
-
-  class RequestIntegrationTest < ActionDispatch::IntegrationTest
-    include ApiRouting
-
-    def setup
-      provider = FactoryBot.create(:simple_provider) # TODO: We do not even need it to have users or services or anything
-      host! provider.admin_domain
-    end
-
-    test 'invalid request' do
-      with_api_routes do
-        post '/api', params: '{ org_name: "My organization", ', headers: { 'Content-Type' => 'application/json' }
-      end
-
-      assert_response :unprocessable_entity
-      assert_empty response.body
-    end
-
-    test 'valid request' do
-      with_api_routes do
-        post '/', params: '{"hello": "world"}', headers: { 'Content-Type' => 'application/json' }
-      end
-
-      assert_response :created
-      assert_equal 'success', JSON.parse(response.body)['status']
-    end
-  end
 end
