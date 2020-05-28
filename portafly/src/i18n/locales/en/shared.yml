@@ -3,7 +3,7 @@ logo_alt_text: Red Hat Integration logo
 logo_alt_text_description: Alt attribute of the main logo
 buttons:
   submit: Submit
-  cancel: Cancel #-----duplicated string
+  cancel: Cancel  #-----duplicated string
   logout: Log Out
 navigation_items:
   overview: Overview
@@ -51,8 +51,8 @@ shared_elements:
   cancel_button: Cancel
   cancel_button_description: Label for a button to cancel an action
 alerts:
-  close_button: "Close alert"
-  close_button_description: "Button for closing an alert"
+  close_button: Close alert
+  close_button_description: Button for closing an alert
 bulk_selector:
   none: Select none (0 items)
   none_description: Bulk Selector option for selecting no items
@@ -76,20 +76,25 @@ modals:
     subject: Subject
     body: Body
     send: Send
+    cancel: Cancel  #-----duplicated string
   change_state:
     title: Change state for the selected accounts
     to: Selected accounts
     select_label: Select state
     select_helper_text: Changing the state of a developer account does not imply changing the state of its applications.
     send: Change state
+    cancel: Cancel  #-----duplicated string
+  # ------------- End of duplicated block: already included in Audience > Accounts > listing.yml -----·#
   expand_list_button: "{{count}} more"
   expand_list_button_description: Button to expand the list ot items selected for this modal
-  close_confirmation: Your content will be lost if you dismiss the dialog. Are you sure you want to dismiss the dialog?
-  close_confirmation_description: Alert message shown when closing a modal
-  cancel: Cancel
-  cancel_description: Label for the cancel button
-# ------------- End of duplicated block: already included in Audience > Accounts > listing.yml -----·#
+
 bulk_actions:
+  ## Toolbar
+  actions_empty_label: Select items first to enable actions
+  actions_empty_label_description: Admonition that displays inside the actions dropdown when no items are selected
+  actions_dropdownlist: Actions
+  actions_dropdownlist_description: String to list all the available actions.
+  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
   warning: Select accounts first to enable bulk actions
   warning_description: Warning that displays inside the actions dropdown, when no items are selected
   title: Actions
@@ -98,6 +103,8 @@ bulk_actions:
   send_email_description: Bulk action for Send main
   change_state: Change state
   change_state_description: Bulk action for Change state
+  # ------------- End of duplicated block: already included in Audience > Accounts > listing.yml -----·#
+  # ------------- Duplicated block: already included in Audience > Accounts > listing.yml -----·#
 toasts:
   send_email_start: Sending email
   send_email_start_description: Alert message when email is being sent
@@ -112,12 +119,3 @@ toasts:
   change_state_error: Account state could not be changed
   change_state_error_description: Alert message when state could not be changed
 # ------------- End of Duplicated block: already included in Audience > Accounts > listing.yml -----·#
-states:
-  approved: Approved
-  approved_description: Human name for the state 'approved'
-  pending: Pending
-  pending_description: Human name for the state 'pending'
-  rejected: Rejected
-  rejected_description: Human name for the state 'rejected'
-  suspended: Suspended
-  suspended_description: Human name for the state 'suspended'
