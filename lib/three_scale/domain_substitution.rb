@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require 'three_scale/deprecation'
+
 module ThreeScale::DomainSubstitution
+
+
   module Request
     def internal_host
       Substitutor.to_internal(host)
@@ -31,10 +35,6 @@ module ThreeScale::DomainSubstitution
   #
   module Account
     extend ActiveSupport::Concern
-
-    # included do
-    #   deprecated_methods :domain, :self_domain, :admin_domain
-    # end
 
     def internal_domain
       self['domain']
@@ -70,14 +70,15 @@ module ThreeScale::DomainSubstitution
     def match_internal_self_domain?(host)
       internal_self_domain == host
     end
-    deprecate match_internal_self_domain?: "use #match_internal_admin_domain?"
 
     def match_internal_domain?(host)
       internal_domain == host
     end
 
     deprecate domain: "use #internal_domain",
-      self_domain: "use #internal_admin_domain"
+      self_domain: "use #internal_admin_domain",
+      match_internal_self_domain?: "use #match_internal_admin_domain?",
+      deprecator: ThreeScale::Deprecation::Deprecator.new
   end
 
   class Substitutor
