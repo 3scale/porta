@@ -14,7 +14,7 @@ module ThreeScale
       # TODO: In Rails 5.1, replace this error class for ActionDispatch::Http::Parameters::ParseError
       # https://github.com/rails/rails/blob/ce93740a5e4437dfc1cf9b0b13da1bad06a2a598/actionpack/lib/action_dispatch/http/parameters.rb#L125
       rescue ActionDispatch::ParamsParser::ParseError => error
-        status = 422
+        status = 400
         Rails.logger.error("Handling Exception: '#{error.class}' with status #{status}")
         [status, {}, [nil]]
       end
