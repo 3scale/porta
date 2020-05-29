@@ -128,7 +128,7 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_self_domain)
     #   # => "https://provider-admin.proxied-domain.com"
     def external_self_domain
-      ThreeScale::DomainSubstitution.to_external(self['self_domain'])
+      ThreeScale::DomainSubstitution::Substitutor.to_external(self['self_domain'])
     end
 
     # Use this method if you want to expose the domain to the view.
@@ -137,21 +137,19 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_domain)
     #   # => "https://provider.proxied-domain.com"
     def external_domain
-      ThreeScale::DomainSubstitution.to_external(self['domain'])
+      ThreeScale::DomainSubstitution::Substitutor.to_external(self['domain'])
     end
 
     # Use this method if you want to expose the domain to the view.
-    # Works for provider and developer accounts
     # @return [String] the mapped external admin domain to be used in views
     # @example
     #   root_url(host: account.external_admin_domain)
     #   # => "https://provider-admin.proxied-domain.com"
     def external_admin_domain
-      ThreeScale::DomainSubstitution.to_external(admin_domain)
+      ThreeScale::DomainSubstitution::Substitutor.to_external(admin_domain)
     end
 
     # Matches if the database value of _self_domain_ matches the host.
-    # Works for provider and developer accounts
     # @param host [String] the host to compare
     #   with the database value of _self_domain_
     # @return [Boolean]
