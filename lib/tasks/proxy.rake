@@ -58,4 +58,29 @@ namespace :proxy do
       sleep(0.5) unless Rails.env.test?
     end
   end
+
+  desc 'Migrate to services to configuration driven'
+  task :migrate_to_configuration_driven, %i[services_selector deploy_to update_endpoints] => :environment do |_, args|
+    to_arr = ->(arg) { args[arg].to_s.split(',') }
+
+    services_selectors = to_arr.call(:services_selector)   # <id>(,<id>)* | hosted | self_managed | nil
+    deployment_option = services_selectors.delete('hosted') || services_selectors.delete('self_managed') || Service::DeploymentOption.gateways
+    service_ids = services_selectors - %w[hosted self_managed]
+
+    deploy_to = to_arr.call(:deploy_to)                    # staging(,production)? | nil
+
+    update_endpoints = ActiveModel::Type::Boolean.new.deserialize(args[:update_endpoints].presence)
+    update_method = update_endpoints ? :update_attribute : :update_column
+
+    services = Service.accessible.where(deployment_option: deployment_option).where(service_ids.present? ? { id: service_ids } : {})
+    proxies = Proxy.where(apicast_configuration_driven: false, service: services)
+
+    proxies.find_each do |proxy|
+      Proxy.transaction do
+        proxy.public_send(update_method, :apicast_configuration_driven, true)
+        next unless proxy.enabled # proxy.enabled == true means the service was deployed to sandbox proxy before
+        deploy_to.each { |env| ProxyDeploymentService.call(proxy, environment: env) }
+      end
+    end
+  end
 end
