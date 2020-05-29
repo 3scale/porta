@@ -1,44 +1,32 @@
 import { DataListRow, DataListCol, Filters } from 'types/data-list'
 
-const getFilterCallbackFn = (colIdx: number, terms: string[]) => (r: DataListRow) => {
-  const value = (r.cells)[colIdx].toLowerCase()
-  return terms.some((f) => value.indexOf(f.toLowerCase()) > -1)
-}
+const filterByTerm = (colIdx: number, terms: string[]) => (row: DataListRow): boolean => (
+  terms.length
+    ? terms.some((f) => (row.cells)[colIdx].toLowerCase().indexOf(f.toLowerCase()) > -1)
+    : true
+)
 
+const findColIdx = (columns: DataListCol[]) => (categoryName: string): number => {
+  const index = columns.findIndex((c) => c.categoryName === categoryName)
+  // TODO: In the future we could show the error in a toast. Event driven approach maybe.
+  if (index === -1) throw new Error('You are trying to filter a category that doesn\'t correspond to any column in your DataList')
+  return index
+}
 /**
  * Returns a new array with the provided rows filtered.
  * @param rows DataListRow[] - The rows to be filtered
  * @param filters Filters - An object containing different categories and filtering terms
  * @param columns DataListCol[] - The columns of the Table being filtered
  */
-export function filterRows(
+
+const filterRows = (
   rows: DataListRow[],
   filters: Filters,
   columns: DataListCol[]
-) {
-  if (rows.length === 0) {
-    return []
-  }
+): DataListRow[] => (
+  Object.keys(filters).reduce((acc, categoryName) => (
+    acc.filter(filterByTerm(findColIdx(columns)(categoryName), filters[categoryName]))
+  ), rows)
+)
 
-  let newRows = [...rows]
-
-  Object.keys(filters).forEach((categoryName) => {
-    // Check category is valid
-    const colIdx = columns.findIndex((c) => c.categoryName === categoryName)
-
-    if (colIdx === -1) {
-      console.warn('Category "%s" doesn\'t exist in your DataList', categoryName)
-      return
-    }
-
-    // Check there are terms
-    const termsForCategory = filters[categoryName]
-
-    if (termsForCategory.length) {
-      const filterRowForCategory = getFilterCallbackFn(colIdx, termsForCategory)
-      newRows = newRows.filter(filterRowForCategory)
-    }
-  })
-
-  return newRows
-}
+export { filterRows }

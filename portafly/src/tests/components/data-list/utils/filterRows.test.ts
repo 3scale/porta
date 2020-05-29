@@ -55,10 +55,10 @@ it('filters from same category should be inclusive, but exclusive from different
   expect(filterRows(rows, filterExclusive, columns)).toEqual([])
 })
 
-it('should skip invalid categories', () => {
+it('should throw error when invalid categories', () => {
   const wrongFilterLast: Filters = { explorer: ['Indiana', 'Lara'], origin: ['movie'] }
-  expect(filterRows(rows, wrongFilterLast, columns)).toEqual([Lara, Indi])
+  expect(() => filterRows(rows, wrongFilterLast, columns)).toThrow(new Error('You are trying to filter a category that doesn\'t correspond to any column in your DataList'))
 
   const wrongFilterFirst: Filters = { items: ['whip'], explorer: ['Indiana', 'Lara'] }
-  expect(filterRows(rows, wrongFilterFirst, columns)).toEqual([Lara, Indi])
+  expect(() => filterRows(rows, wrongFilterFirst, columns)).toThrow(new Error('You are trying to filter a category that doesn\'t correspond to any column in your DataList'))
 })
