@@ -9,7 +9,7 @@ const getComponent = () => Promise.resolve({
 
 test('should render a spinner while waiting for a component module to be loaded', () => {
   const { queryByTestId, getByText } = render(<LazyRoute getComponent={getComponent} />)
-  expect(getByText('Loading')).toBeInTheDocument()
+  expect(getByText('loading.title')).toBeInTheDocument()
   expect(queryByTestId('async-component')).not.toBeInTheDocument()
 })
 

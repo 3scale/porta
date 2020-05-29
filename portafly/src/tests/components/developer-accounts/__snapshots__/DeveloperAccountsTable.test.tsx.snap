@@ -139,42 +139,42 @@ Object {
             <th
               class=""
               data-key="0"
-              data-label="accounts_table.col_group"
+              data-label="accounts_table.group_header"
               scope="col"
             >
-              accounts_table.col_group
+              accounts_table.group_header
             </th>
             <th
               class=""
               data-key="1"
-              data-label="accounts_table.col_admin"
+              data-label="accounts_table.admin_header"
               scope="col"
             >
-              accounts_table.col_admin
+              accounts_table.admin_header
             </th>
             <th
               class=""
               data-key="2"
-              data-label="accounts_table.col_signup"
+              data-label="accounts_table.signup_header"
               scope="col"
             >
-              accounts_table.col_signup
+              accounts_table.signup_header
             </th>
             <th
               class=""
               data-key="3"
-              data-label="accounts_table.col_apps"
+              data-label="accounts_table.applications_header"
               scope="col"
             >
-              accounts_table.col_apps
+              accounts_table.applications_header
             </th>
             <th
               class=""
               data-key="4"
-              data-label="accounts_table.col_state"
+              data-label="accounts_table.state_header"
               scope="col"
             >
-              accounts_table.col_state
+              accounts_table.state_header
             </th>
           </tr>
         </thead>
@@ -190,35 +190,35 @@ Object {
             <td
               class=""
               data-key="0"
-              data-label="accounts_table.col_group"
+              data-label="accounts_table.group_header"
             >
               Josemi's Corp.
             </td>
             <td
               class=""
               data-key="1"
-              data-label="accounts_table.col_admin"
+              data-label="accounts_table.admin_header"
             >
               Josemi
             </td>
             <td
               class=""
               data-key="2"
-              data-label="accounts_table.col_signup"
+              data-label="accounts_table.signup_header"
             >
               2019-10-18T05:13:26Z
             </td>
             <td
               class=""
               data-key="3"
-              data-label="accounts_table.col_apps"
+              data-label="accounts_table.applications_header"
             >
               3
             </td>
             <td
               class=""
               data-key="4"
-              data-label="accounts_table.col_state"
+              data-label="accounts_table.state_header"
             >
               approved
             </td>
@@ -232,35 +232,35 @@ Object {
             <td
               class=""
               data-key="0"
-              data-label="accounts_table.col_group"
+              data-label="accounts_table.group_header"
             >
               Damian's Corp.
             </td>
             <td
               class=""
               data-key="1"
-              data-label="accounts_table.col_admin"
+              data-label="accounts_table.admin_header"
             >
               Damian
             </td>
             <td
               class=""
               data-key="2"
-              data-label="accounts_table.col_signup"
+              data-label="accounts_table.signup_header"
             >
               2019-10-18T05:13:26Z
             </td>
             <td
               class=""
               data-key="3"
-              data-label="accounts_table.col_apps"
+              data-label="accounts_table.applications_header"
             >
               3
             </td>
             <td
               class=""
               data-key="4"
-              data-label="accounts_table.col_state"
+              data-label="accounts_table.state_header"
             >
               approved
             </td>
@@ -285,42 +285,42 @@ Object {
           <th
             class=""
             data-key="0"
-            data-label="accounts_table.col_group"
+            data-label="accounts_table.group_header"
             scope="col"
           >
-            accounts_table.col_group
+            accounts_table.group_header
           </th>
           <th
             class=""
             data-key="1"
-            data-label="accounts_table.col_admin"
+            data-label="accounts_table.admin_header"
             scope="col"
           >
-            accounts_table.col_admin
+            accounts_table.admin_header
           </th>
           <th
             class=""
             data-key="2"
-            data-label="accounts_table.col_signup"
+            data-label="accounts_table.signup_header"
             scope="col"
           >
-            accounts_table.col_signup
+            accounts_table.signup_header
           </th>
           <th
             class=""
             data-key="3"
-            data-label="accounts_table.col_apps"
+            data-label="accounts_table.applications_header"
             scope="col"
           >
-            accounts_table.col_apps
+            accounts_table.applications_header
           </th>
           <th
             class=""
             data-key="4"
-            data-label="accounts_table.col_state"
+            data-label="accounts_table.state_header"
             scope="col"
           >
-            accounts_table.col_state
+            accounts_table.state_header
           </th>
         </tr>
       </thead>
@@ -336,35 +336,35 @@ Object {
           <td
             class=""
             data-key="0"
-            data-label="accounts_table.col_group"
+            data-label="accounts_table.group_header"
           >
             Josemi's Corp.
           </td>
           <td
             class=""
             data-key="1"
-            data-label="accounts_table.col_admin"
+            data-label="accounts_table.admin_header"
           >
             Josemi
           </td>
           <td
             class=""
             data-key="2"
-            data-label="accounts_table.col_signup"
+            data-label="accounts_table.signup_header"
           >
             2019-10-18T05:13:26Z
           </td>
           <td
             class=""
             data-key="3"
-            data-label="accounts_table.col_apps"
+            data-label="accounts_table.applications_header"
           >
             3
           </td>
           <td
             class=""
             data-key="4"
-            data-label="accounts_table.col_state"
+            data-label="accounts_table.state_header"
           >
             approved
           </td>
@@ -378,35 +378,35 @@ Object {
           <td
             class=""
             data-key="0"
-            data-label="accounts_table.col_group"
+            data-label="accounts_table.group_header"
           >
             Damian's Corp.
           </td>
           <td
             class=""
             data-key="1"
-            data-label="accounts_table.col_admin"
+            data-label="accounts_table.admin_header"
           >
             Damian
           </td>
           <td
             class=""
             data-key="2"
-            data-label="accounts_table.col_signup"
+            data-label="accounts_table.signup_header"
           >
             2019-10-18T05:13:26Z
           </td>
           <td
             class=""
             data-key="3"
-            data-label="accounts_table.col_apps"
+            data-label="accounts_table.applications_header"
           >
             3
           </td>
           <td
             class=""
             data-key="4"
-            data-label="accounts_table.col_state"
+            data-label="accounts_table.state_header"
           >
             approved
           </td>

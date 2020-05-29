@@ -76,7 +76,8 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
             type="text"
             id="subject"
             name="subject"
-            aria-describedby="subject-helper"
+            // FIXME: missing translation string
+            aria-describedby={t('modas.send_email.subject_input_aria_label')}
             value={subject}
             onChange={setSubject}
           />
@@ -91,7 +92,8 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
             isRequired
             id="body"
             name="body"
-            aria-label="aria label"
+            // FIXME: missing translation string
+            aria-label={t('modals.send_email.body_textarea_aria_label')}
             value={body}
             onChange={setBody}
           />

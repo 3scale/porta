@@ -15,6 +15,7 @@ import {
 } from '@patternfly/react-core'
 import { FilterIcon, SearchIcon } from '@patternfly/react-icons'
 import { useDataListFilters } from 'components/data-list/'
+import { useTranslation } from 'i18n/useTranslation'
 import { Category, CategoryOption } from 'types'
 
 import './searchWidget.scss'
@@ -30,6 +31,7 @@ const CategorySelect: React.FunctionComponent<ICategorySelect> = ({
   selections,
   onCategorySelect
 }) => {
+  const { t } = useTranslation('shared')
   const [isOpen, setIsOpen] = useState(false)
   const onSelect = (_: any, value: SelectOptionObject) => {
     onCategorySelect((value as { name: string }).name)
@@ -39,7 +41,8 @@ const CategorySelect: React.FunctionComponent<ICategorySelect> = ({
     <Select
       toggleIcon={<FilterIcon />}
       variant={SelectVariant.single}
-      aria-label="category-select"
+      // FIXME: missing translation string
+      aria-label={t('category_select_aria_label')}
       onSelect={onSelect}
       selections={selections}
       isOpen={isOpen}
@@ -97,6 +100,7 @@ interface ISearchBar {
 }
 
 const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
+  const { t } = useTranslation('audienceAccountsListing')
   const onClick = () => {
     if (textInputRef.current?.value) {
       onSearchClick(textInputRef.current.value)
@@ -109,13 +113,14 @@ const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
       <TextInput
         ref={textInputRef}
         type="search"
-        aria-label="Aria label of the text input for filtering"
-        placeholder={`Filter by ${category.humanName}`}
+        // FIXME: missing translation string
+        aria-label={t('filter_aria_label')}
+        // FIXME: this should be moved to shared
+        placeholder={t('accounts_filter_typeahead', { filter_option: category.humanName })}
         onKeyUp={(ev) => ev.key === 'Enter' && onClick()}
       />
       <Button
         variant={ButtonVariant.control}
-        aria-label="Aria label for button"
         onClick={onClick}
       >
         <SearchIcon />

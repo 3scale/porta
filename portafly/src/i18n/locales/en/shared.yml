@@ -123,3 +123,8 @@ toasts:
   change_state_error: Account state could not be changed
   change_state_error_description: Alert message when state could not be changed
 # ------------- End of Duplicated block: already included in Audience > Accounts > listing.yml -----·#
+loading:
+  title: Loading
+  title_description: Title displayed as part of the loading state
+  aria_label: Loading spinner  #-----TODO: revise this aria label
+  aria_label_description: Aria label for the Loading component

@@ -72,7 +72,7 @@ const DataListModal: React.FunctionComponent<Props> = ({
       variant="link"
       onClick={onClose}
     >
-      {t('modals.cancel')}
+      {t('buttons.cancel')}
     </Button>
   ]
 

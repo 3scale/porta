@@ -232,14 +232,13 @@ exports[`SearchWidget should render correctly 1`] = `
     >
       <input
         aria-invalid="false"
-        aria-label="Aria label of the text input for filtering"
+        aria-label="filter_aria_label"
         class="pf-c-form-control"
-        placeholder="Filter by Admin"
+        placeholder="accounts_filter_typeahead"
         type="search"
         value=""
       />
       <button
-        aria-label="Aria label for button"
         class="pf-c-button pf-m-control"
         data-ouia-component-type="PF4/Button"
         data-ouia-safe="true"

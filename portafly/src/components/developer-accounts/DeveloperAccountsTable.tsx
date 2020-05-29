@@ -9,18 +9,18 @@ export interface IDeveloperAccountsTable {
 }
 
 const DeveloperAccountsTable: React.FunctionComponent<IDeveloperAccountsTable> = ({ accounts }) => {
-  const { t } = useTranslation('accounts')
+  const { t } = useTranslation('audienceAccountsListing')
 
   if (accounts.length === 0) {
     return <SimpleEmptyState msg={t('accounts_table.empty_state')} />
   }
 
   const COLUMNS = [
-    t('accounts_table.col_group'),
-    t('accounts_table.col_admin'),
-    t('accounts_table.col_signup'),
-    t('accounts_table.col_apps'),
-    t('accounts_table.col_state')
+    t('accounts_table.group_header'),
+    t('accounts_table.admin_header'),
+    t('accounts_table.signup_header'),
+    t('accounts_table.applications_header'),
+    t('accounts_table.state_header')
   ]
 
   const rows: string[][] = accounts.map((a) => [

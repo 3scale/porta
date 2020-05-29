@@ -81,7 +81,8 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
             id="state"
             value={value}
             onChange={setValue}
-            aria-label={t('aria-label-select')}
+            // FIXME: missing translation string
+            aria-label={t('modals.change_state.aria_label')}
           >
             {options.map((option) => (
               <FormSelectOption key={option.value} value={option.value} label={option.label} />
