@@ -67,7 +67,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
     @provider = site_account
 
     unless @provider.provider?
-      render_error "Wrong domain '#{request.host}' for path '#{request.path}'"
+      render_error "Wrong domain '#{request.internal_host}' for path '#{request.path}'"
       false
     end
   end

@@ -22,6 +22,7 @@ module SiteAccountSupport
   end
 
   delegate :site_account, :site_account_by_provider_key, to: :site_account_request
+  delegate :internal_host, to: :request
 
   def site_account_request
     @_site_account_request ||= SiteAccountSupport::Request.new(request)
@@ -41,17 +42,17 @@ module SiteAccountSupport
   end
 
   def force_provider_or_master_domain
-    unless ThreeScale.tenant_mode.master? || Account.is_admin_domain?(request.host) || Account.is_master_domain?(request.host)
+    unless ThreeScale.tenant_mode.master? || Account.is_admin_domain?(internal_host) || Account.is_master_domain?(internal_host)
       render_error 'Access denied', :status => :forbidden
     end
   end
 
   def buyer_domain?
-    @_buyer_domain ||= !Account.is_admin_domain?(request.host)
+    @_buyer_domain ||= !Account.is_admin_domain?(internal_host)
   end
 
   def admin_domain?
-    current_account.self_domain == request.host
+    current_account.internal_self_domain == internal_host
   end
 
   class Request
@@ -59,7 +60,7 @@ module SiteAccountSupport
     private :request
 
     delegate :tenant_mode, to: ThreeScale
-    delegate :host, to: :request, allow_nil: true
+    delegate :host, :internal_host, to: :request, allow_nil: true
 
     module MasterDomainWildcard
       def find_provider
@@ -92,11 +93,11 @@ module SiteAccountSupport
     end
 
     def find_provider
-      Account.providers_with_master.find_by!(self_domain: host)
+      Account.providers_with_master.find_by!(self_domain: internal_host)
     end
 
     def domain_account
-      Account.find_by(self_domain: host)
+      Account.find_by(self_domain: internal_host)
     end
 
     def site_account
@@ -105,15 +106,15 @@ module SiteAccountSupport
 
     def site_account_by_provider_key
       return unless (key = provider_key.presence)
-      Account.providers_with_master.by_self_domain(host).first_by_provider_key!(key)
+      Account.providers_with_master.by_self_domain(internal_host).first_by_provider_key!(key)
     end
 
     def site_account_by_domain
-      site = Account.find_by(self_domain: host)
+      site = Account.find_by(self_domain: internal_host)
       if site
         site.provider_account
       else
-        Account.find_by(domain: host)
+        Account.find_by(domain: internal_host)
       end
     end
 
