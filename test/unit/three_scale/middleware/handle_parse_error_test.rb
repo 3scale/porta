@@ -12,12 +12,12 @@ class ThreeScale::Middleware::HandleParseErrorTest < ActiveSupport::TestCase
   end
 
   test 'invalid request params' do
-    Rails.logger.expects(:error).with('Handling Exception: \'ActionDispatch::ParamsParser::ParseError\' with status 422')
+    Rails.logger.expects(:error).with('Handling Exception: \'ActionDispatch::ParamsParser::ParseError\' with status 400')
 
     app = proc { perform_post_request(raw_post_data: '{ wrong: "invalid", ') }
     middleware = ThreeScale::Middleware::HandleParseError.new(app)
 
-    assert_equal [422, {}, [nil]], middleware.call({})
+    assert_equal [400, {}, [nil]], middleware.call({})
   end
 
   private
