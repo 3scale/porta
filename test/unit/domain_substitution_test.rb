@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class DomainSubstitutionTest < ActiveSupport::TestCase
+  include ThreeScale::DomainSubstitution
 
   def setup
     Rails.application.config.stubs(:domain_substitution).returns(config)
@@ -42,8 +43,44 @@ class DomainSubstitutionTest < ActiveSupport::TestCase
     end
   end
 
+  class AccountModuleTest < DomainSubstitutionTest
+    def setup
+      @account = FactoryBot.build(:simple_account,
+        domain: 'foo.example.com',
+        self_domain: 'foo-admin.example.com',
+        provider: true
+      )
+    end
+
+    def test_internal_domain
+      assert_equal @account['domain'], @account.internal_domain
+    end
+
+    def test_internal_self_domain
+      assert_equal @account['self_domain'], @account.internal_self_domain
+    end
+
+    def test_internal_admin_domain
+      assert_equal @account.admin_domain, @account.internal_admin_domain
+    end
+
+    def test_external_domain
+      Substitutor.expects(:to_external).with(@account['domain'])
+      @account.external_domain
+    end
+
+    def test_external_self_domain
+      Substitutor.expects(:to_external).with(@account['self_domain'])
+      @account.external_self_domain
+    end
+
+    def test_external_admin_domain
+      Substitutor.expects(:to_external).with(@account['self_domain'])
+      @account.external_admin_domain
+    end
+  end
+
   class SubstitutorTest < DomainSubstitutionTest
-    include ThreeScale::DomainSubstitution
 
     def test_disabled
       config.enabled = false
