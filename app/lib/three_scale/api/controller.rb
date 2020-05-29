@@ -12,7 +12,7 @@ module ThreeScale::Api::Controller
   end
 
   def api_request?
-    request.path =~ /\A\/api/ &&  Account.is_admin_domain?(request.host)
+    request.path =~ /\A\/api/ &&  Account.is_admin_domain?(request.internal_host)
     # &&  [ :xml, :json ].include?(request.format.to_sym)
   end
 

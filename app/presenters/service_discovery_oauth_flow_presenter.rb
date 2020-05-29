@@ -15,7 +15,10 @@ class ServiceDiscoveryOAuthFlowPresenter < OauthFlowPresenter
   end
 
   def authorize_url
-    client.authorize_url(redirect_uri.base_url, redirect_uri.query_options.merge(referrer: request.fullpath))
+    client.authorize_url(
+      redirect_uri.base_url,
+      redirect_uri.query_options.merge(referrer: request.fullpath)
+    )
   end
 
   private
@@ -23,8 +26,7 @@ class ServiceDiscoveryOAuthFlowPresenter < OauthFlowPresenter
   attr_reader :redirect_uri
 
   def domain_parameters
-    host = request.try(:real_host).presence || request.host
-    { self_domain: host }
+    { self_domain: request.host }
   end
 
   def build_redirect_uri
