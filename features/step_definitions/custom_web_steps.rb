@@ -298,6 +298,7 @@ And(/^I press "([^"]*)" inside the dropdown$/) do |name|
 
   toggle.click
   find(:xpath, link).click
+  wait_for_requests
 end
 
 toggled_input_selector = '[data-behavior="toggle-inputs"] legend'
