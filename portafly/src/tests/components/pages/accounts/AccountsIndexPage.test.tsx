@@ -15,10 +15,9 @@ const setup = (asyncState: Partial<AsyncState<IDeveloperAccount[]>>) => {
 
 it('should have a button to create an account', () => {
   const { getByRole } = setup({})
-  const createAccountBtn = getByRole('button', { name: 'create_account_button_aria_label' })
+  const createAccountBtn = getByRole('link', { name: 'create_account_button_aria_label' })
   expect(createAccountBtn).toHaveTextContent('create_account_button')
-
-  // TODO: assert href attribute
+  expect(createAccountBtn.getAttribute('href')).toBe('/accounts/new')
 })
 
 it('should be able to export all accounts', () => {
