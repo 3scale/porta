@@ -20,6 +20,18 @@ const AccountsIndexPage: React.FunctionComponent = () => {
   const { t } = useTranslation('accountsIndex')
   useDocumentTitle(t('title_page'))
 
+  const CreateAccountButton = () => (
+    <Button
+      aria-label={t('create_account_button_aria_label')}
+      component="a"
+      variant="link"
+      icon={<PlusCircleIcon />}
+      href="/accounts/new"
+    >
+      {t('create_account_button')}
+    </Button>
+  )
+
   return (
     <>
       <PageSection variant="light">
@@ -30,13 +42,7 @@ const AccountsIndexPage: React.FunctionComponent = () => {
             </TextContent>
           </FlexItem>
           <FlexItem breakpointMods={[{ modifier: FlexModifiers['align-right'] }]}>
-            <Button
-              variant="link"
-              icon={<PlusCircleIcon />}
-              aria-label={t('create_account_button_aria_label')}
-            >
-              {t('create_account_button')}
-            </Button>
+            <CreateAccountButton />
             <Button
               variant="link"
               icon={<ExportIcon />}
