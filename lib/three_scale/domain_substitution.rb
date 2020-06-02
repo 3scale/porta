@@ -146,7 +146,9 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_admin_domain)
     #   # => "https://provider-admin.proxied-domain.com"
     def external_admin_domain
-      ThreeScale::DomainSubstitution::Substitutor.to_external(admin_domain)
+      ThreeScale::Deprecation.silence do
+        ThreeScale::DomainSubstitution::Substitutor.to_external(admin_domain)
+      end
     end
 
     # Matches if the database value of _self_domain_ matches the host.

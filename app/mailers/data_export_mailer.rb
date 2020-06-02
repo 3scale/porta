@@ -7,7 +7,7 @@ class DataExportMailer < ActionMailer::Base
     provider = recipient.account
     stash =  { report_name: report_type,
                name: recipient.first_name,
-               domain_name: provider.domain }
+               domain_name: provider.external_domain }
     assign_drops(stash)
 
 

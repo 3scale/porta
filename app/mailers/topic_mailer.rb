@@ -17,7 +17,7 @@ class TopicMailer < ActionMailer::Base
   private
 
   def domain(post)
-    post.forum.account.domain
+    post.forum.account.external_domain
   end
 
   def from_address(sender)
