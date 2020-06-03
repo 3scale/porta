@@ -68,7 +68,7 @@ namespace :proxy do
     update_endpoints = ActiveModel::Type::Boolean.new.deserialize(args[:update_endpoints].presence)
     update_method = update_endpoints ? :update_attribute : :update_column
 
-    services = Service.accessible.where(deployment_option: deployment_option).where(service_ids.present? ? { id: service_ids } : {})
+    services = Service.accessible.where(deployment_option: deployment_option, account: Account.providers.without_deleted).where(service_ids.present? ? { id: service_ids } : {})
     proxies = Proxy.where(apicast_configuration_driven: false, service: services)
 
     progress = ProgressCounter.new(proxies.count)
