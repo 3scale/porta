@@ -71,17 +71,23 @@ namespace :proxy do
     services = Service.accessible.where(deployment_option: deployment_option).where(service_ids.present? ? { id: service_ids } : {})
     proxies = Proxy.where(apicast_configuration_driven: false, service: services)
 
-    proxies.find_each do |proxy|
-      Proxy.transaction do
-        proxy.public_send(update_method, :apicast_configuration_driven, true)
+    progress = ProgressCounter.new(proxies.count)
 
-        next unless proxy.deployed_at
-        ProxyDeploymentService.call(proxy, environment: :staging)
+    proxies.find_in_batches do |group|
+      group.each do |proxy|
+        Proxy.transaction do
+          proxy.public_send(update_method, :apicast_configuration_driven, true)
+          progress.call
 
-        production_deployed_at = proxy.provider.hosted_proxy_deployed_at
-        next if production_deployed_at.blank? || production_deployed_at < proxy.created_at
-        ProxyDeploymentService.call(proxy, environment: :production)
+          next unless proxy.deployed_at
+          ProxyDeploymentService.call(proxy, environment: :staging)
+
+          production_deployed_at = proxy.provider.hosted_proxy_deployed_at
+          next if production_deployed_at.blank? || production_deployed_at < proxy.created_at
+          ProxyDeploymentService.call(proxy, environment: :production)
+        end
       end
+      sleep(0.2) unless Rails.env.test?
     end
   end
 end
