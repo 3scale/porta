@@ -18,7 +18,7 @@ const PagesSwitch = () => (
   <SwitchWith404>
     <LazyRoute path="/" exact getComponent={getOverviewPage} />
     <LazyRoute path="/applications" exact getComponent={getApplicationsPage} />
-    <LazyRoute path="/accounts" exact getComponent={getAccountsIndexPage} />
+    <LazyRoute path="/audience/accounts/listing" exact getComponent={getAccountsIndexPage} />
     <Redirect path="/overview" to="/" exact />
   </SwitchWith404>
 )

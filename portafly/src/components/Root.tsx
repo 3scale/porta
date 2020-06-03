@@ -35,9 +35,9 @@ const Root: React.FunctionComponent = ({ children }) => {
     },
     {
       title: t('navigation_items.accounts'),
-      to: '/accounts',
+      to: '/audience/accounts/listing',
       items: [
-        { to: '/accounts', title: t('navigation_items.accounts_listing') }
+        { to: '/audience/accounts/listing', title: t('navigation_items.accounts_listing') }
       ]
     },
     {
