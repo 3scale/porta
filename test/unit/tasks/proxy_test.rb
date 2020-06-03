@@ -120,11 +120,12 @@ module Tasks
       test 'deploy to staging' do
         hosted_apicast_v1_proxies.update_all(deployed_at: 1.day.ago)
         hosted_apicast_v1_proxies.each { |proxy| ProxyDeploymentService.expects(:call).with(proxy, environment: :staging) }
-        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', 'staging'
+        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted'
       end
 
       test 'deploy to staging and production' do
         hosted_apicast_v1_proxies.update_all(deployed_at: 1.day.ago)
+        Account.providers.where(id: hosted_apicast_v1_proxies.map(&:provider)).update_all(hosted_proxy_deployed_at: 1.second.from_now) # small trick to mock the proxy been deployed to production sandbox proxy already
         hosted_apicast_v1_proxies.each do |proxy|
           ProxyDeploymentService.expects(:call).with(proxy, environment: :staging)
           ProxyDeploymentService.expects(:call).with(proxy, environment: :production)
@@ -134,7 +135,7 @@ module Tasks
 
       test 'updating the proxy endpoints' do
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.io/ }
-        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', nil, true
+        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', true
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.dev/ }
       end
 
