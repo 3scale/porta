@@ -119,15 +119,15 @@ module Tasks
 
       test 'deploy to staging' do
         hosted_apicast_v1_proxies.update_all(deployed_at: 1.day.ago)
-        hosted_apicast_v1_proxies.each { |proxy| ProxyDeploymentService.expects(:call).with(proxy, environment: 'staging') }
+        hosted_apicast_v1_proxies.each { |proxy| ProxyDeploymentService.expects(:call).with(proxy, environment: :staging) }
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', 'staging'
       end
 
       test 'deploy to staging and production' do
         hosted_apicast_v1_proxies.update_all(deployed_at: 1.day.ago)
         hosted_apicast_v1_proxies.each do |proxy|
-          ProxyDeploymentService.expects(:call).with(proxy, environment: 'staging')
-          ProxyDeploymentService.expects(:call).with(proxy, environment: 'production')
+          ProxyDeploymentService.expects(:call).with(proxy, environment: :staging)
+          ProxyDeploymentService.expects(:call).with(proxy, environment: :production)
         end
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', 'staging,production'
       end
