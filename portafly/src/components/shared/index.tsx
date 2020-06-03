@@ -1,3 +1,3 @@
 export * from './data-list'
-export * from './EmptyState'
+export * from './empty-states'
 export * from './Loading'
