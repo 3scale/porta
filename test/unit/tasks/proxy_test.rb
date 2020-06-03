@@ -72,7 +72,7 @@ module Tasks
 
     class MigrateToConfigurationDriven < ActiveSupport::TestCase
       setup do
-        provider = FactoryBot.create(:simple_provider)
+        @provider = FactoryBot.create(:simple_provider)
 
         services = [
           @hosted_apicast_v1_service_1 = create_service(account: provider, deployment_option: 'hosted', proxy: { apicast_configuration_driven: false }),
@@ -84,7 +84,7 @@ module Tasks
         @services = Service.where(id: services)
       end
 
-      attr_reader :services, :hosted_apicast_v1_service_1, :hosted_apicast_v1_service_2, :self_managed_apicast_v1_service, :hosted_apicast_v2_service
+      attr_reader :provider, :services, :hosted_apicast_v1_service_1, :hosted_apicast_v1_service_2, :self_managed_apicast_v1_service, :hosted_apicast_v2_service
 
       test 'all services' do
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven'
@@ -143,6 +143,13 @@ module Tasks
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.io/ }
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted'
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.io/ }
+      end
+
+      test 'excludes accounts scheduled for deletion' do
+        hosted_apicast_v1_service_2.account.update_column(:state, 'scheduled_for_deletion')
+        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven'
+        assert Proxy.where(service: services.where(account: provider)).all?(&:apicast_configuration_driven)
+        refute hosted_apicast_v1_service_2.proxy.reload.apicast_configuration_driven
       end
 
       protected
