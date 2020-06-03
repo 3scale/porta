@@ -6,6 +6,7 @@ exports[`should render properly when closed 1`] = `
   data-ouia-component-id="0"
   data-ouia-component-type="PF4/Dropdown"
   data-ouia-safe="true"
+  id="data-list-bulk-actions-dropdown"
 >
   <button
     aria-expanded="false"
