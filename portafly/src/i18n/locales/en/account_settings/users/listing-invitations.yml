@@ -1,4 +1,8 @@
 ---
+#--------------------------Path: Account Settings > Users ------------------------------------#
+# Filename subject to change----------------------------- ------------------------------------#
+
+
 # Account settings > Users
 
 title_page: Accounts | Team members
@@ -141,7 +145,7 @@ invitation_sending:
   label_description: Label prompting the user to specify the email address of the invitation recipient
   validation: Please indicate a valid email address of the colleague or friend you want to invite to your team.
   validation_description: Validation message to prompt user to specify a valid email address; to prevent an empty value, or bad format email address.
-  helper: Email address of a colleague or friend you want to invite to your team 
+  helper: Email address of a colleague or friend you want to invite to your team
   helper_description: Text to prompt the user to specify an email address.
   #-------# Send button: available in shared.yml
   #-------# Cancel button: available in shared.yml

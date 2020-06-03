@@ -13,7 +13,7 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table'
 
 const Applications: React.FunctionComponent = () => {
   const { t } = useTranslation('applications')
-  useDocumentTitle(t('page_title'))
+  useDocumentTitle(t('listing.page_title'))
 
   const columns = [
     'Name',
@@ -50,11 +50,11 @@ const Applications: React.FunctionComponent = () => {
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Text component="h1">{t('body_title')}</Text>
+          <Text component="h1">{t('listing.body_title')}</Text>
         </TextContent>
         <TextContent>
           <Text component={TextVariants.p}>
-            {t('subtitle')}
+            {t('listing.subtitle')}
           </Text>
         </TextContent>
       </PageSection>

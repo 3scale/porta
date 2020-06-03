@@ -15,7 +15,7 @@ Object {
             class=""
             data-pf-content="true"
           >
-            body_title
+            title_page
           </h1>
         </div>
       </section>
@@ -25,6 +25,9 @@ Object {
         <table
           aria-label="accounts_table.aria_label"
           class="pf-c-table pf-m-grid-md"
+          data-ouia-component-id="1"
+          data-ouia-component-type="PF4/Table"
+          data-ouia-safe="true"
           role="grid"
         >
           <thead
@@ -34,42 +37,42 @@ Object {
               <th
                 class=""
                 data-key="0"
-                data-label="accounts_table.col_group"
+                data-label="accounts_table.group_header"
                 scope="col"
               >
-                accounts_table.col_group
+                accounts_table.group_header
               </th>
               <th
                 class=""
                 data-key="1"
-                data-label="accounts_table.col_admin"
+                data-label="accounts_table.admin_header"
                 scope="col"
               >
-                accounts_table.col_admin
+                accounts_table.admin_header
               </th>
               <th
                 class=""
                 data-key="2"
-                data-label="accounts_table.col_signup"
+                data-label="accounts_table.signup_header"
                 scope="col"
               >
-                accounts_table.col_signup
+                accounts_table.signup_header
               </th>
               <th
                 class=""
                 data-key="3"
-                data-label="accounts_table.col_apps"
+                data-label="accounts_table.applications_header"
                 scope="col"
               >
-                accounts_table.col_apps
+                accounts_table.applications_header
               </th>
               <th
                 class=""
                 data-key="4"
-                data-label="accounts_table.col_state"
+                data-label="accounts_table.state_header"
                 scope="col"
               >
-                accounts_table.col_state
+                accounts_table.state_header
               </th>
             </tr>
           </thead>
@@ -78,78 +81,84 @@ Object {
           >
             <tr
               class=""
+              data-ouia-component-id="2"
+              data-ouia-component-type="PF4/TableRow"
+              data-ouia-safe="true"
             >
               <td
                 class=""
                 data-key="0"
-                data-label="accounts_table.col_group"
+                data-label="accounts_table.group_header"
               >
                 Josemi's Corp.
               </td>
               <td
                 class=""
                 data-key="1"
-                data-label="accounts_table.col_admin"
+                data-label="accounts_table.admin_header"
               >
                 Josemi
               </td>
               <td
                 class=""
                 data-key="2"
-                data-label="accounts_table.col_signup"
+                data-label="accounts_table.signup_header"
               >
                 2019-10-18T05:13:26Z
               </td>
               <td
                 class=""
                 data-key="3"
-                data-label="accounts_table.col_apps"
+                data-label="accounts_table.applications_header"
               >
                 3
               </td>
               <td
                 class=""
                 data-key="4"
-                data-label="accounts_table.col_state"
+                data-label="accounts_table.state_header"
               >
                 approved
               </td>
             </tr>
             <tr
               class=""
+              data-ouia-component-id="3"
+              data-ouia-component-type="PF4/TableRow"
+              data-ouia-safe="true"
             >
               <td
                 class=""
                 data-key="0"
-                data-label="accounts_table.col_group"
+                data-label="accounts_table.group_header"
               >
                 Damian's Corp.
               </td>
               <td
                 class=""
                 data-key="1"
-                data-label="accounts_table.col_admin"
+                data-label="accounts_table.admin_header"
               >
                 Damian
               </td>
               <td
                 class=""
                 data-key="2"
-                data-label="accounts_table.col_signup"
+                data-label="accounts_table.signup_header"
               >
                 2019-10-18T05:13:26Z
               </td>
               <td
                 class=""
                 data-key="3"
-                data-label="accounts_table.col_apps"
+                data-label="accounts_table.applications_header"
               >
                 3
               </td>
               <td
                 class=""
                 data-key="4"
-                data-label="accounts_table.col_state"
+                data-label="accounts_table.state_header"
               >
                 approved
               </td>
@@ -170,7 +179,7 @@ Object {
           class=""
           data-pf-content="true"
         >
-          body_title
+          title_page
         </h1>
       </div>
     </section>
@@ -180,6 +189,9 @@ Object {
       <table
         aria-label="accounts_table.aria_label"
         class="pf-c-table pf-m-grid-md"
+        data-ouia-component-id="1"
+        data-ouia-component-type="PF4/Table"
+        data-ouia-safe="true"
         role="grid"
       >
         <thead
@@ -189,42 +201,42 @@ Object {
             <th
               class=""
               data-key="0"
-              data-label="accounts_table.col_group"
+              data-label="accounts_table.group_header"
               scope="col"
             >
-              accounts_table.col_group
+              accounts_table.group_header
             </th>
             <th
               class=""
               data-key="1"
-              data-label="accounts_table.col_admin"
+              data-label="accounts_table.admin_header"
               scope="col"
             >
-              accounts_table.col_admin
+              accounts_table.admin_header
             </th>
             <th
               class=""
               data-key="2"
-              data-label="accounts_table.col_signup"
+              data-label="accounts_table.signup_header"
               scope="col"
             >
-              accounts_table.col_signup
+              accounts_table.signup_header
             </th>
             <th
               class=""
               data-key="3"
-              data-label="accounts_table.col_apps"
+              data-label="accounts_table.applications_header"
               scope="col"
             >
-              accounts_table.col_apps
+              accounts_table.applications_header
             </th>
             <th
               class=""
               data-key="4"
-              data-label="accounts_table.col_state"
+              data-label="accounts_table.state_header"
               scope="col"
             >
-              accounts_table.col_state
+              accounts_table.state_header
             </th>
           </tr>
         </thead>
@@ -233,78 +245,84 @@ Object {
         >
           <tr
             class=""
+            data-ouia-component-id="2"
+            data-ouia-component-type="PF4/TableRow"
+            data-ouia-safe="true"
           >
             <td
               class=""
               data-key="0"
-              data-label="accounts_table.col_group"
+              data-label="accounts_table.group_header"
             >
               Josemi's Corp.
             </td>
             <td
               class=""
               data-key="1"
-              data-label="accounts_table.col_admin"
+              data-label="accounts_table.admin_header"
             >
               Josemi
             </td>
             <td
               class=""
               data-key="2"
-              data-label="accounts_table.col_signup"
+              data-label="accounts_table.signup_header"
             >
               2019-10-18T05:13:26Z
             </td>
             <td
               class=""
               data-key="3"
-              data-label="accounts_table.col_apps"
+              data-label="accounts_table.applications_header"
             >
               3
             </td>
             <td
               class=""
               data-key="4"
-              data-label="accounts_table.col_state"
+              data-label="accounts_table.state_header"
             >
               approved
             </td>
           </tr>
           <tr
             class=""
+            data-ouia-component-id="3"
+            data-ouia-component-type="PF4/TableRow"
+            data-ouia-safe="true"
           >
             <td
               class=""
               data-key="0"
-              data-label="accounts_table.col_group"
+              data-label="accounts_table.group_header"
             >
               Damian's Corp.
             </td>
             <td
               class=""
               data-key="1"
-              data-label="accounts_table.col_admin"
+              data-label="accounts_table.admin_header"
             >
               Damian
             </td>
             <td
               class=""
               data-key="2"
-              data-label="accounts_table.col_signup"
+              data-label="accounts_table.signup_header"
             >
               2019-10-18T05:13:26Z
             </td>
             <td
               class=""
               data-key="3"
-              data-label="accounts_table.col_apps"
+              data-label="accounts_table.applications_header"
             >
               3
             </td>
             <td
               class=""
               data-key="4"
-              data-label="accounts_table.col_state"
+              data-label="accounts_table.state_header"
             >
               approved
             </td>
@@ -382,7 +400,7 @@ Object {
             class=""
             data-pf-content="true"
           >
-            body_title
+            title_page
           </h1>
         </div>
       </section>
@@ -392,6 +410,9 @@ Object {
         <div
           aria-label="Danger Alert"
           class="pf-c-alert pf-m-danger"
+          data-ouia-component-id="0"
+          data-ouia-component-type="PF4/Alert"
+          data-ouia-safe="true"
         >
           <div
             class="pf-c-alert__icon"
@@ -437,7 +458,7 @@ Object {
           class=""
           data-pf-content="true"
         >
-          body_title
+          title_page
         </h1>
       </div>
     </section>
@@ -447,6 +468,9 @@ Object {
       <div
         aria-label="Danger Alert"
         class="pf-c-alert pf-m-danger"
+        data-ouia-component-id="0"
+        data-ouia-component-type="PF4/Alert"
+        data-ouia-safe="true"
       >
         <div
           class="pf-c-alert__icon"
@@ -549,7 +573,7 @@ Object {
             class=""
             data-pf-content="true"
           >
-            body_title
+            title_page
           </h1>
         </div>
       </section>
@@ -557,11 +581,72 @@ Object {
         class="pf-c-page__main-section"
       >
         <section
-          aria-label="Loading Content Container"
+          aria-label="loading.aria_label"
           class="pf-c-page__main-section"
         >
           <div
             class="pf-c-empty-state"
+          >
+            <div
+              class="pf-c-empty-state__content"
+            >
+              <div
+                class="pf-c-empty-state__icon"
+              >
+                <span
+                  aria-valuetext="Loading..."
+                  class="pf-c-spinner pf-m-xl"
+                  role="progressbar"
+                >
+                  <span
+                    class="pf-c-spinner__clipper"
+                  />
+                  <span
+                    class="pf-c-spinner__lead-ball"
+                  />
+                  <span
+                    class="pf-c-spinner__tail-ball"
+                  />
+                </span>
+              </div>
+              <h2
+                class="pf-c-title pf-m-lg"
+              >
+                loading.title
+              </h2>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <section
+      class="pf-c-page__main-section pf-m-light"
+    >
+      <div
+        class="pf-c-content"
+      >
+        <h1
+          class=""
+          data-pf-content="true"
+        >
+          title_page
+        </h1>
+      </div>
+    </section>
+    <section
+      class="pf-c-page__main-section"
+    >
+      <section
+        aria-label="loading.aria_label"
+        class="pf-c-page__main-section"
+      >
+        <div
+          class="pf-c-empty-state"
+        >
+          <div
+            class="pf-c-empty-state__content"
           >
             <div
               class="pf-c-empty-state__icon"
@@ -582,65 +667,12 @@ Object {
                 />
               </span>
             </div>
-            <h1
+            <h2
               class="pf-c-title pf-m-lg"
             >
-              Loading
-            </h1>
+              loading.title
+            </h2>
           </div>
-        </section>
-      </section>
-    </div>
-  </body>,
-  "container": <div>
-    <section
-      class="pf-c-page__main-section pf-m-light"
-    >
-      <div
-        class="pf-c-content"
-      >
-        <h1
-          class=""
-          data-pf-content="true"
-        >
-          body_title
-        </h1>
-      </div>
-    </section>
-    <section
-      class="pf-c-page__main-section"
-    >
-      <section
-        aria-label="Loading Content Container"
-        class="pf-c-page__main-section"
-      >
-        <div
-          class="pf-c-empty-state"
-        >
-          <div
-            class="pf-c-empty-state__icon"
-          >
-            <span
-              aria-valuetext="Loading..."
-              class="pf-c-spinner pf-m-xl"
-              role="progressbar"
-            >
-              <span
-                class="pf-c-spinner__clipper"
-              />
-              <span
-                class="pf-c-spinner__lead-ball"
-              />
-              <span
-                class="pf-c-spinner__tail-ball"
-              />
-            </span>
-          </div>
-          <h1
-            class="pf-c-title pf-m-lg"
-          >
-            Loading
-          </h1>
         </div>
       </section>
     </section>
