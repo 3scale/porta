@@ -79,7 +79,7 @@ namespace :proxy do
       Proxy.transaction do
         proxy.public_send(update_method, :apicast_configuration_driven, true)
         next unless proxy.enabled # proxy.enabled == true means the service was deployed to sandbox proxy before
-        deploy_to.each { |env| ProxyDeploymentService.call(proxy, environment: env) }
+        deploy_to.each { |env| ProxyDeploymentService.call(proxy, environment: env.to_sym) }
       end
     end
   end
