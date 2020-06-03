@@ -47,6 +47,26 @@ paths:
       summary: Get account users list
     parameters:
       - name: page
+        description: Current page for pagination
+        schema:
+          type: integer
+        in: query
+      - name: per_page
+        description: Number of results per page. Default and max is 500.
+        schema:
+          type: integer
+        in: query
+  /accounts/invitations:
+    summary: A list of sent invitations
+    description: List of invitations sent by an account
+    get:
+      responses:
+        '200':
+          $ref: '#/components/responses/invitationList'
+      operationId: invitationList
+      summary: Get sent invitations list
+    parameters:
+      - name: page
         description: Page in the paginated list. Defaults to 1.
         schema:
           type: integer
@@ -55,6 +75,43 @@ paths:
         description: Number of results per page. Default and max is 500.
         schema:
           type: integer
+        in: query
+      - name: account_id
+        description: Id of current account.
+        schema:
+          type: integer
+        in: query
+  /accounts/invitations/new:
+    summary: A new invitation request
+    description: A new invitation request
+    post:
+      responses:
+        '201':
+          $ref: '#/components/responses/invitationNew'
+      operationId: invitationNew
+      summary: Post a new invitation
+    parameters:
+      - name: email
+        description: Email the invitation will be sent to
+        schema:
+          type: string
+        in: query
+  /accounts/invitations/delete:
+    summary: A list of invitations to delete
+    description: Request the deletion of a list of invitations
+    post:
+      responses:
+        '202':
+          $ref: '#/components/responses/invitationDeleteList'
+      operationId: invitationDeleteList
+      summary: Post invitations to delete list
+    parameters:
+      - name: invitation_ids
+        description: List of ids of invitations to delete.
+        schema:
+          type: array
+          items:
+            type: integer
         in: query
 components:
   schemas:
@@ -117,7 +174,7 @@ components:
         can_see_users:
           description: Can the user see other users?
           type: boolean
-        authenticated_through_sso:
+        is_authenticated_through_sso:
           description: Is the user authenticated through SSO?
           type: boolean
         can_delete_user:
@@ -131,20 +188,74 @@ components:
           type: array
           items:
             type: string
+    Invitation:
+      title: Root Type for InvitationData
+      description: A simplified format for an invitation data.
+      type: object
+      properties:
+        id:
+          description: The invitation ID number
+          type: integer
+        email:
+          description: The email of the user invited
+          type: string
+        sent_at:
+          format: date-time
+          description: Date when the invitation was sent
+          type: string
+        is_accepted:
+          description: Is the invitation accepted?
+          type: boolean
+        accepted_at:
+          format: date-time
+          description: Date when the invitation was accepted
+          type: string
+      example:
+        id: 2
+        email: stan@southpark.com
+        sent_at: 2019-10-18T05:13:26Z
+        accepted: true
+        accepted_at: 2019-10-19T05:13:26Z
+    InvitationDelete:
+      title: Root Type for InvitationDeleteData
+      description: A simplified format for an invitation delete data.
+      type: object
+      properties:
+        id:
+          description: The invitation ID number
+          type: integer
+        email:
+          description: The email of the user invited
+          type: string
+        sent_at:
+          format: date-time
+          description: Date of invitation sent
+          type: string
+        accepted:
+          description: Is the invitation accepted ?
+          type: boolean
+        accepted_at:
+          format: date-time
+          description: Date of acceptation of invitation
+          type: string
+      example:
+        id: 2
+        email: stan@southpark.com
+        sent_at: 2019-10-18T05:13:26Z
+        accepted: true
+        accepted_at: 2019-10-19T05:13:26Z
+    InvitationNew:
+      title: Root Type for InvitationNewData
+      description: A simplified format for a new invitation Z data.
+      type: object
+      properties:
+        email:
+          description: The email of the user invited
+          type: string
       example:
         id: 1
-        name: Eric Cartman
-        email: eric@southpark.com
-        role: admin
-        permissions:
-          - Developer Portal
-          - Billing
-          - Settings
-        is_current_user: true
-        can_see_users: true
-        authenticated_through_sso: false
-        can_delete_user: true
-        can_invite_user: true
+        email: stan@southpark.com
+        sent_at: 2019-10-18T05:13:26Z
   responses:
     developerAccountList:
       content:
@@ -232,3 +343,59 @@ components:
                   can_delete_user: false
                   can_invite_user: false
       description: Account Users List
+    invitationList:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Invitation'
+          examples:
+            accountInvitationListExample:
+              value:
+                - id: 1
+                  email: kenny@southpark.com
+                  sent_at: 2019-10-18T05:13:26Z
+                  accepted: false
+                  accepted_at: null
+                - id: 2
+                  email: stan@southpark.com
+                  sent_at: 2019-10-18T05:13:26Z
+                  accepted: true
+                  accepted_at: 2019-10-19T05:13:26Z
+      description: Account Invitations List
+    invitationNew:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/InvitationNew'
+          examples:
+            invitationNewExample:
+              value:
+                - id: 1
+                  email: kenny@southpark.com
+                  sent_at: 2019-10-18T05:13:26Z
+      description: New Account Invitation
+    invitationDeleteList:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/InvitationDelete'
+          examples:
+            invitationDeleteListExample:
+              value:
+                - id: 1
+                  email: kenny@southpark.com
+                  sent_at: 2019-10-18T05:13:26Z
+                  accepted: false
+                  accepted_at: null
+                - id: 2
+                  email: stan@southpark.com
+                  sent_at: 2019-10-18T05:13:26Z
+                  accepted: true
+                  accepted_at: 2019-10-19T05:13:26Z
+      description: Account Invitations to Delete List
