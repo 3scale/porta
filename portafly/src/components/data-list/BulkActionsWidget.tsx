@@ -63,6 +63,7 @@ const BulkActionsWidget: React.FunctionComponent<Props> = ({
 
   return (
     <Dropdown
+      id="data-list-bulk-actions-dropdown"
       onSelect={() => setIsOpen(!isOpen)}
       toggle={toggle}
       isOpen={isOpen}

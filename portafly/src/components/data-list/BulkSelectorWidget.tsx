@@ -53,6 +53,7 @@ const BulkSelectorWidget: React.FunctionComponent = () => {
 
   return (
     <Dropdown
+      id="data-list-bulk-selector-dropdown"
       isOpen={isOpen}
       dropdownItems={dropdownItems}
       onSelect={onSelect}
@@ -61,8 +62,8 @@ const BulkSelectorWidget: React.FunctionComponent = () => {
           onToggle={setIsOpen}
           splitButtonItems={[
             <DropdownToggleCheckbox
-              key="developer-accounts-bulk-checkbox"
-              id="developer-accounts-bulk-checkbox"
+              key="data-list-bulk-selector-checkbox"
+              id="data-list-bulk-selector-checkbox"
               isChecked={isChecked}
               onClick={() => selectAll(selectedCount === 0, filteredRows)}
               aria-label={t('bulk_selector.toggle_checkbox_aria_label')}
