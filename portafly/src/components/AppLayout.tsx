@@ -2,7 +2,6 @@ import * as React from 'react'
 import {
   Nav,
   NavList,
-  NavVariants,
   Page,
   PageHeader,
   PageSidebar,
@@ -80,12 +79,12 @@ export const AppLayout: React.FunctionComponent<IAppLayoutProps> = ({
   }, [startWithOpenNav, setIsNavOpen])
 
   const isVertical = navVariant === 'vertical'
-  const variant = isVertical ? NavVariants.default : NavVariants.horizontal
+  const variant = isVertical ? 'default' : 'horizontal'
 
   const Navigation = React.useMemo(
     () => navItems.length > 0 && (
-    <Nav id="nav-primary-simple" theme={theme}>
-      <NavList id="nav-list-simple" variant={variant}>
+    <Nav id="nav-primary-simple" theme={theme} variant={variant}>
+      <NavList id="nav-list-simple">
         {navItems.map((navItem) => {
           if (navItem && navItem.hasOwnProperty('items') && isVertical) {
             if (navGroupsStyle === 'expandable') {

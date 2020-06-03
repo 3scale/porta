@@ -1,7 +1,13 @@
 import 'react-app-polyfill/ie11'
 import React from 'react'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom'
-import { SwitchWith404, LazyRoute, Root } from 'components'
+import { AuthProvider } from 'auth'
+import {
+  SwitchWith404,
+  LazyRoute,
+  Root,
+  AlertsProvider
+} from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
 
 const getOverviewPage = () => import('pages/Overview')
@@ -18,13 +24,17 @@ const PagesSwitch = () => (
 )
 
 const App = () => (
-  <Router>
-    <LastLocationProvider>
-      <Root>
-        <PagesSwitch />
-      </Root>
-    </LastLocationProvider>
-  </Router>
+  <AuthProvider>
+    <Router>
+      <LastLocationProvider>
+        <AlertsProvider>
+          <Root>
+            <PagesSwitch />
+          </Root>
+        </AlertsProvider>
+      </LastLocationProvider>
+    </Router>
+  </AuthProvider>
 )
 
 export { App }

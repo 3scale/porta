@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@patternfly/react-core": "^3.124.1",
-    "@patternfly/react-table": "^2.25.6",
+    "@patternfly/react-core": "^4.12.7",
+    "@patternfly/react-table": "^4.3.34",
     "date-fns": "^2.11.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
@@ -13,6 +13,7 @@
     "history": "^4.10.1",
     "i18next": "^19.3.3",
     "i18next-browser-languagedetector": "^4.0.2",
+    "node-sass": "^4.14.1",
     "react": "^16.12.0",
     "react-app-polyfill": "^1.0.6",
     "react-async": "^10.0.0",
