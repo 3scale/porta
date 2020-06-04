@@ -10,9 +10,9 @@ import {
 } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
 
-const getOverviewPage = () => import('pages/Overview')
-const getApplicationsPage = () => import('pages/Applications')
-const getAccountsPage = () => import('pages/DeveloperAccounts')
+const getOverviewPage = () => import('components/pages/Overview')
+const getApplicationsPage = () => import('components/pages/Applications')
+const getAccountsPage = () => import('components/pages/audience/accounts/listing/DeveloperAccounts')
 
 const PagesSwitch = () => (
   <SwitchWith404>

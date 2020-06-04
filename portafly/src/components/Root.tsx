@@ -3,7 +3,7 @@ import { Brand, Button } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
 import { useHistory } from 'react-router-dom'
 import { useAuth } from 'auth'
-import Login from 'pages/Login'
+import Login from 'components/pages/Login'
 import { AppLayout } from 'components'
 import logo from 'assets/logo.svg'
 
