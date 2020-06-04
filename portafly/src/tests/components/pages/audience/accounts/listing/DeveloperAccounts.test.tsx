@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { DeveloperAccounts } from 'components/pages'
+import { DeveloperAccounts } from 'components'
 import { developerAccounts } from 'tests/examples'
 import { useAsync } from 'react-async'
 

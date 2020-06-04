@@ -1,6 +1,5 @@
 export * from './pages'
 export * from './shared'
-export * from './developer-accounts/DeveloperAccountsTable'
 export * from './AppLayout'
 export * from './AppNavExpandable'
 export * from './AppNavGroup'

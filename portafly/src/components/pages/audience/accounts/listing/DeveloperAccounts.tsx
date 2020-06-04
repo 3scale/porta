@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAsync } from 'react-async'
-import { useDocumentTitle, Loading, DeveloperAccountsTable } from 'components'
+import { DeveloperAccountsTable, useDocumentTitle, Loading } from 'components'
 import {
   Alert,
   PageSection,
