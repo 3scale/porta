@@ -11,7 +11,7 @@ import {
   Alert
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { useDataListBulkActions } from 'components/data-list'
+import { useDataListBulkActions } from 'components'
 
 import './dataListModal.scss'
 

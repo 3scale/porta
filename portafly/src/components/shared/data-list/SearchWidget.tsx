@@ -14,7 +14,7 @@ import {
   ToolbarChipGroup
 } from '@patternfly/react-core'
 import { FilterIcon, SearchIcon } from '@patternfly/react-icons'
-import { useDataListFilters } from 'components/data-list/'
+import { useDataListFilters } from 'components'
 import { useTranslation } from 'i18n/useTranslation'
 import { Category, CategoryOption } from 'types'
 

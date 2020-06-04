@@ -6,9 +6,13 @@ import {
   FormGroup
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { DataListModal, useDataListBulkActions, SubmitButton } from 'components/data-list'
+import {
+  DataListModal,
+  useDataListBulkActions,
+  SubmitButton,
+  useAlertsContext
+} from 'components'
 import { changeState } from 'dal/accounts/bulkActions'
-import { useAlertsContext } from 'components/util'
 
 interface Props {
   items: string[]

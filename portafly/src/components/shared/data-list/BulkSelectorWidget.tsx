@@ -11,7 +11,7 @@ import {
   useDataListPagination,
   useDataListFilters,
   filterRows
-} from 'components/data-list'
+} from 'components'
 
 const BulkSelectorWidget: React.FunctionComponent = () => {
   const { t } = useTranslation('shared')

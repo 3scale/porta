@@ -1,8 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'i18n/useTranslation'
 // @ts-ignore
-import { useA11yRouteChange, useDocumentTitle, useAlertsContext } from 'components'
 import {
+  useA11yRouteChange,
+  useDocumentTitle,
+  useAlertsContext,
   Toolbar,
   DataListProvider,
   SearchWidget,
@@ -16,7 +18,7 @@ import {
   useDataListBulkActions,
   filterRows,
   useDataListFilters
-} from 'components/data-list'
+} from 'components'
 import {
   PageSection,
   TextContent,

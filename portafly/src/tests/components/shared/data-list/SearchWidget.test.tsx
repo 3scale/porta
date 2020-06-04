@@ -1,7 +1,8 @@
 import React from 'react'
+
 import { render } from 'tests/custom-render'
-import { SearchWidget } from 'components/data-list'
 import { fireEvent } from '@testing-library/react'
+import { SearchWidget } from 'components'
 import { Toolbar, ToolbarContent, ToolbarItem } from '@patternfly/react-core'
 
 const categories = [

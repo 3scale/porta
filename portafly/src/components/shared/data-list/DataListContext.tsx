@@ -15,7 +15,7 @@ import {
   defaultBulkActions,
   BulkActionsState,
   bulkActionsReducer
-} from 'components/data-list/reducers'
+} from 'components/shared/data-list/reducers'
 
 type State = {
   table: TableState
