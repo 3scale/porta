@@ -1,11 +1,10 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { PaginationWidget } from 'components/data-list'
-import { useDataListPagination } from 'components/data-list/DataListContext'
 import { fireEvent } from '@testing-library/react'
+import { PaginationWidget, useDataListPagination } from 'components'
 
-jest.mock('components/data-list/DataListContext')
+jest.mock('components/shared/data-list/DataListContext')
 const useDataListPaginationMock = useDataListPagination as jest.Mock
 
 it('should render compacted when there are 1-2 pages only', () => {

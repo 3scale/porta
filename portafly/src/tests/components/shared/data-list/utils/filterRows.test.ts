@@ -1,4 +1,4 @@
-import { filterRows } from 'components/data-list/utils'
+import { filterRows } from 'components'
 import { Filters } from 'types/data-list'
 
 const Lara = { id: 0, cells: ['Lara Croft', '1996'] }

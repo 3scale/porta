@@ -10,8 +10,7 @@ import {
 } from '@patternfly/react-core'
 import { WarningTriangleIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'i18n/useTranslation'
-import { BulkAction } from 'components/data-list/reducers'
-import { useDataListTable, useDataListBulkActions } from 'components/data-list'
+import { BulkAction, useDataListTable, useDataListBulkActions } from 'components'
 
 interface Props {
   // TODO: take a second look to BulkAction types

@@ -1,14 +1,19 @@
 import React from 'react'
-import { BulkSelectorWidget } from 'components/data-list'
-import { filterRows } from 'components/data-list/utils/filterRows'
-import { useDataListTable, useDataListPagination, useDataListFilters } from 'components/data-list/DataListContext'
+
 import { fireEvent, within } from '@testing-library/react'
 import { render } from 'tests/custom-render'
+import {
+  BulkSelectorWidget,
+  filterRows,
+  useDataListTable,
+  useDataListPagination,
+  useDataListFilters
+} from 'components'
 
 const rows = new Array(5).fill({}).map((_, i) => ({ id: i }))
 
-jest.mock('components/data-list/DataListContext')
-jest.mock('components/data-list/utils/filterRows')
+jest.mock('components/shared/data-list/DataListContext')
+jest.mock('components/shared/data-list/utils/filterRows')
 
 const setup = ({ selectedRows }: any) => {
   (useDataListPagination as jest.Mock).mockReturnValue({ startIdx: 0, endIdx: 5 });

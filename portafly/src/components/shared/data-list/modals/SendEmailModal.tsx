@@ -6,9 +6,13 @@ import {
   TextArea
 } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
-import { DataListModal, useDataListBulkActions, SubmitButton } from 'components/data-list'
+import {
+  DataListModal,
+  SubmitButton,
+  useAlertsContext,
+  useDataListBulkActions
+} from 'components'
 import { sendEmail } from 'dal/accounts/bulkActions'
-import { useAlertsContext } from 'components/util'
 
 interface Props {
   items: string[]

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Toolbar } from '@patternfly/react-core'
-import { useDataListFilters } from 'components/data-list'
+import { useDataListFilters } from 'components'
 
 interface Props {
 }

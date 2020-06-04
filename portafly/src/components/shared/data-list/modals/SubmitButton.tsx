@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Button, Spinner } from '@patternfly/react-core'
-import { useDataListBulkActions } from 'components/data-list'
+import { useDataListBulkActions } from 'components'
 
 import './submitButton.scss'
 

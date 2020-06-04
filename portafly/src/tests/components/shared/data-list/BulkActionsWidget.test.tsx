@@ -1,12 +1,15 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { BulkActionsWidget } from 'components/data-list'
 import { fireEvent } from '@testing-library/react'
-import { useDataListTable, useDataListBulkActions } from 'components/data-list/DataListContext'
-import { BulkAction } from 'components/data-list/reducers'
+import {
+  BulkActionsWidget,
+  useDataListTable,
+  useDataListBulkActions,
+  BulkAction
+} from 'components'
 
-jest.mock('components/data-list/DataListContext')
+jest.mock('components/shared/data-list/DataListContext')
 
 const actions = {
   sendEmail: 'Send email',

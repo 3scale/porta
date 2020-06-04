@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useMemo } from 'react'
 import { Pagination, OnSetPage, OnPerPageSelect } from '@patternfly/react-core'
-import { useDataListPagination } from 'components/data-list'
+import { useDataListPagination } from 'components'
 
 interface IPagination {
   itemCount: number
