@@ -1,3 +1,4 @@
+export * from './pages'
 export * from './developer-accounts/DeveloperAccountsTable'
 export * from './AppLayout'
 export * from './AppNavExpandable'

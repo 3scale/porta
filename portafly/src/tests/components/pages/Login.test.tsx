@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { Login } from 'pages'
+import { Login } from 'components/pages'
 import { useAuth } from 'auth'
 import { AuthToken } from 'types/auth'
 
