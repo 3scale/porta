@@ -72,7 +72,7 @@ module Tasks
 
     class MigrateToConfigurationDriven < ActiveSupport::TestCase
       setup do
-        provider = FactoryBot.create(:simple_provider)
+        @provider = FactoryBot.create(:simple_provider)
 
         services = [
           @hosted_apicast_v1_service_1 = create_service(account: provider, deployment_option: 'hosted', proxy: { apicast_configuration_driven: false }),
@@ -84,7 +84,7 @@ module Tasks
         @services = Service.where(id: services)
       end
 
-      attr_reader :services, :hosted_apicast_v1_service_1, :hosted_apicast_v1_service_2, :self_managed_apicast_v1_service, :hosted_apicast_v2_service
+      attr_reader :provider, :services, :hosted_apicast_v1_service_1, :hosted_apicast_v1_service_2, :self_managed_apicast_v1_service, :hosted_apicast_v2_service
 
       test 'all services' do
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven'
@@ -119,22 +119,23 @@ module Tasks
 
       test 'deploy to staging' do
         hosted_apicast_v1_proxies.update_all(deployed_at: 1.day.ago)
-        hosted_apicast_v1_proxies.each { |proxy| ProxyDeploymentService.expects(:call).with(proxy, environment: 'staging') }
-        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', 'staging'
+        hosted_apicast_v1_proxies.each { |proxy| ProxyDeploymentService.expects(:call).with(proxy, environment: :staging) }
+        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted'
       end
 
       test 'deploy to staging and production' do
         hosted_apicast_v1_proxies.update_all(deployed_at: 1.day.ago)
+        Account.providers.where(id: hosted_apicast_v1_proxies.map(&:provider)).update_all(hosted_proxy_deployed_at: 1.second.from_now) # small trick to mock the proxy been deployed to production sandbox proxy already
         hosted_apicast_v1_proxies.each do |proxy|
-          ProxyDeploymentService.expects(:call).with(proxy, environment: 'staging')
-          ProxyDeploymentService.expects(:call).with(proxy, environment: 'production')
+          ProxyDeploymentService.expects(:call).with(proxy, environment: :staging)
+          ProxyDeploymentService.expects(:call).with(proxy, environment: :production)
         end
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', 'staging,production'
       end
 
       test 'updating the proxy endpoints' do
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.io/ }
-        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', nil, true
+        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted', true
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.dev/ }
       end
 
@@ -142,6 +143,13 @@ module Tasks
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.io/ }
         execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven', 'hosted'
         assert hosted_apicast_v1_proxies.all? { |proxy| proxy.endpoint =~ /apicast\.io/ }
+      end
+
+      test 'excludes accounts scheduled for deletion' do
+        hosted_apicast_v1_service_2.account.update_column(:state, 'scheduled_for_deletion')
+        execute_rake_task 'proxy.rake', 'proxy:migrate_to_configuration_driven'
+        assert Proxy.where(service: services.where(account: provider)).all?(&:apicast_configuration_driven)
+        refute hosted_apicast_v1_service_2.proxy.reload.apicast_configuration_driven
       end
 
       protected
