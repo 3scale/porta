@@ -16,7 +16,5 @@ it('should render itself', () => {
 
 it('should render swagger-ui', () => {
   const wrapper = mount(<ActiveDocsSpec url={url} />)
-  console.log(wrapper.debug())
-
   expect(wrapper).toMatchSnapshot()
 })
