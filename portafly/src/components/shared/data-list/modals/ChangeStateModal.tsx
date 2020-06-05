@@ -13,12 +13,15 @@ import {
   useAlertsContext
 } from 'components'
 import { changeState } from 'dal/accounts/bulkActions'
+import { CategoryOption } from 'types'
 
 interface Props {
+  states: CategoryOption[],
   items: string[]
 }
 
 const ChangeStateModal: React.FunctionComponent<Props> = ({
+  states,
   items
 }) => {
   const { t } = useTranslation('shared')
@@ -57,13 +60,7 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
     </SubmitButton>
   )
 
-  const options = [
-    { value: '', label: '' },
-    { value: 'approved', label: t('states.approved') },
-    { value: 'pending', label: t('states.pending') },
-    { value: 'rejected', label: t('states.rejected') },
-    { value: 'suspended', label: t('states.suspended') }
-  ]
+  const options = [{ name: '', humanName: '' }, ...states]
 
   return (
     <DataListModal
@@ -89,7 +86,7 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
             aria-label={t('modals.change_state.aria_label')}
           >
             {options.map((option) => (
-              <FormSelectOption key={option.value} value={option.value} label={option.label} />
+              <FormSelectOption key={option.name} value={option.name} label={option.humanName} />
             ))}
           </FormSelect>
         </FormGroup>
