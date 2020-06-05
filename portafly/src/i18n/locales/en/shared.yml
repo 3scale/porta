@@ -50,6 +50,8 @@ shared_elements:
   delete_button_tooltip_description: Tooltip shown upon hovering to explain that the deletion will be available upon selection of items.
   cancel_button: Cancel
   cancel_button_description: Label for a button to cancel an action
+  confirm_button: Confirm
+  confirm_button_description: The user clicks this button to confirm the action described in the modal.
 alerts:
   close_button: Close alert
   close_button_description: Button for closing an alert
