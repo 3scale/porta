@@ -89,8 +89,8 @@ components:
           type: integer
       example:
         id: 1
-        created_at: 2019-10-18T05:13:26Z
-        updated_at: 2019-10-18T05:13:27Z
+        created_at: 2019-10-18T05:13:26.000Z
+        updated_at: 2019-10-18T05:13:27.000Z
         state: approved
         org_name: Umbrella Corp.
         admin_name: Oswell E. Spencer
