@@ -18,6 +18,27 @@ paths:
           $ref: '#/components/responses/developerAccountList'
       operationId: developerAccountList
       summary: Get developer account list
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeveloperAccount'
+            examples:
+              Patch the state of 2 Dev Accounts:
+                value:
+                - id: 37
+                  state: active
+                - id: 18
+                  state: active
+        required: true
+      responses:
+        "204":
+          description: Resource updated correctly
+      summary: Partially updates developer accounts
+      description: Applies partial modifications to the Developer Accounts collection
     parameters:
     - name: page
       description: Page in the paginated list. Defaults to 1.
