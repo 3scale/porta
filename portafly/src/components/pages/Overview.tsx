@@ -34,6 +34,7 @@ import { BellIcon } from '@patternfly/react-icons'
 import {
   TableHeader, TableBody, Table, OnSort, sortable
 } from '@patternfly/react-table'
+import { CategoryOption } from 'types'
 
 const categories = [
   {
@@ -96,6 +97,7 @@ const DataListTable = () => {
 
   const filteredRows = filterRows(rows, filters, columns)
   const pageRows = filteredRows.slice(startIdx, endIdx)
+  const states = categories[2].options as CategoryOption[]
 
   return (
     <>
@@ -115,7 +117,7 @@ const DataListTable = () => {
         <TableBody />
       </Table>
       {modal === 'sendEmail' && <SendEmailModal items={['1', '2', '3', '4', '5', '6']} />}
-      {modal === 'changeState' && <ChangeStateModal items={['1', '2', '3', '4', '5', '6']} />}
+      {modal === 'changeState' && <ChangeStateModal items={['1', '2', '3', '4', '5', '6']} states={states} />}
     </>
   )
 }
