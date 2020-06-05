@@ -14,9 +14,9 @@ body_title_description: Body title of the page for Personal details.
 # Tabs
 
 user_data_title: User data
-user_data_description: This is the title of the form containing the user's personal information.
+user_data_description: This is the title of the tab containing the user's personal information.
 change_password_title: Change password
-change_password_description: This is the title of the form containing the user's current password field and new password field.
+change_password_description: This is the title of the tab containing the user's current password field and new password field.
 
 # User data form
 
@@ -24,49 +24,50 @@ username_label: Username
 username_label_description: Label for the field that holds the current username.
 username_value: {{current_username}}
 username_value_description: This is the value contained in the username field.
-username_validation: {{username_validation}} is too short. Use a minimum of 3 characters. Do not use spaces. You can include letters, numbers, and the following special characters . - _ @ +
+username_validation: "{{username}} is too short. Use a minimum of 3 characters. Do not use spaces. You can include letters, numbers, and the following special characters . - _ @ +"
 username_validation_description: Input field that holds the current username, and validates the content.
 
 email_label: Email
 email_label_description: Label for the field that holds the valid user's email address.
 email_value: {{current_user_email}}
 email_value_description: By default, this is the email of the current user.
-email_validation: Use a valid email such as 'admin@domain.com'. The email can contain letters (both lower and upper case), numbers, and the following characters . - _ @ +
+email_validation: "Use a valid email such as <i>admin@domain.com</i>. The email can contain both lower and upper case letters, numbers, and the following characters . - _ @ +"
 email_validation_description: Input field that holds the valid user's email address.
 
 first_name_label: First name
 first_name_label_description: Label for the field that holds the user's first name.
-first_name_value: [User first name]
+first_name_value: {{user_first_name}}
 first_name_value_description: Input field that holds the user's first name.
 
 last_name_label: Last name
 last_name_label_description: Label for the field that holds the user's last name.
-last_name_value: [User last name]
+last_name_value: {{user_last_name}}
 last_name_value_description: Input field that holds the user's last name.
 update_details_button: Update details
-update_details_description: The user clicks this button to procede with updating their details.
+update_details_description: The user clicks this button to procede with updating the edited personal information.
 
 # Modal: Update details
 
 current_password_title: Provide your current password to update your personal details.
-current_password_title_description: Body title of modaldialog prompts the user to provide their current password to make the update.
+current_password_title_description: Body title of modal dialog which prompts the user to provide their current password to make the update.
 current_password_label: Current password
 current_password_label_description: Label for the field for the user to enter a new password.
-current_password_value: [User password]
+current_password_value: {{current_user_password}}
 current_password_value_description: Input field that holds the user's password.
 current_password_helper: When you update your personal details, all other active sessions for this user will end. This happens in order to confirm that it is you, and not somebody else trying to lock you out of your account.
-current_password_helper_description: Text to let the user know what happens when they update their personal details.
-confirm_button: Confirm
-confirm_button_discription: The user clicks this button to confirm that the current password is entered in the field currectly.
+current_password_helper_description: Text to let the user know when they updates their personal details, all other active session are ended for security reasons.
+#-------# Confirm button: available in shared.yml
 #-------# Cancel button: available in shared.yml
 
 # Change password tab
 
-current_password_validation: User was successfully updated. Current password is incorrect.
-current_password_validation_discription: Input field for the user to enter the current password.
+password_update_options:
+ success: You have successfully updated your user details
+ error: Your user details were not updated. Please review the password you provided
+current_password_validation_description: Input field for the user to enter the current password.
 new_password_label: New password
 new_password_label_description: Label that prompts the user to enter their new password in the given field.
-new_password_value: [New user password]
+new_password_value: {{new_user_password}}
 new_password_value_description: This is the input field for the user's new valid password.
 new_password_validation: Your new password is too short. Use a minimum of 6 characters.
 new_password_validation_description: This validation prompts the user to enter a valid new password.
