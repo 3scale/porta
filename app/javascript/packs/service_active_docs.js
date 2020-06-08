@@ -1,5 +1,4 @@
 import { ActiveDocsSpecWrapper as ActiveDocsSpec } from 'ActiveDocs/components/ActiveDocsSpec'
-import { fetchData } from 'utilities/utils'
 
 document.addEventListener('DOMContentLoaded', async () => {
   const containerId = 'swagger-ui-container'
@@ -10,10 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
   const { url, baseUrl, accountType } = document.getElementById(containerId).dataset
-  const dataUrl = accountType ? AUTOCOMPLETE_CONFIG.dataUrl[accountType] : 'buyer'
+  const dataUrl = accountType ? AUTOCOMPLETE_CONFIG.dataUrl[accountType] : AUTOCOMPLETE_CONFIG.dataUrl['buyer']
 
-  const data = await fetchData(`${baseUrl}${dataUrl}`)
-  const accountData = data.status === 200 ? data.results : null
+  const accountDataUrl = `${baseUrl}${dataUrl}`
 
-  ActiveDocsSpec({ url, accountData }, containerId)
+  ActiveDocsSpec({ url, accountDataUrl }, containerId)
 })

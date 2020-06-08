@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
+import { fetchData } from 'utilities/utils'
 import SwaggerUI from 'swagger-ui-react'
 import 'swagger-ui-react/swagger-ui.css'
 
@@ -33,7 +34,7 @@ type AccountData = {
 }
 
 type ActiveDocsSpecProps = {
-  accountData?: AccountData,
+  accountDataUrl: string,
   url: string,
 }
 
@@ -96,7 +97,9 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
     : param
 }
 
-const injectAccountDataToResponse = (response: SwaggerResponse, accountData: AccountData): SwaggerResponse => {
+const injectAccountDataToResponse = async (response: SwaggerResponse, accountDataUrl: string): Promise<SwaggerResponse> => {
+  const data = await fetchData(accountDataUrl)
+  const accountData = data.results
   const body = {
     ...response.body,
     paths: Object.keys(response.body.paths).reduce(
@@ -118,12 +121,10 @@ const injectAccountDataToResponse = (response: SwaggerResponse, accountData: Acc
   }
 }
 
-const ActiveDocsSpec = ({ url, accountData }: ActiveDocsSpecProps) => (
+const ActiveDocsSpec = ({ url, accountDataUrl }: ActiveDocsSpecProps) => (
   <SwaggerUI
     url={url}
-    responseInterceptor={(response) => (
-      accountData ? injectAccountDataToResponse(response, accountData) : response
-    )}
+    responseInterceptor={(response) => injectAccountDataToResponse(response, accountDataUrl)}
   />
 )
 
