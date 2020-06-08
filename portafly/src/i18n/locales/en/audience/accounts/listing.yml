@@ -33,8 +33,10 @@ actions_filter_options:
   pending: Pending
   rejected: Rejected
   suspended: Suspended
-accounts_filter_typeahead: "Filter by {{filter_option}}"
-accounts_filter_typeahead_description: Filter by typeahead a text input. This applies for filters by group/organization and admin
+accounts_filter_field: "Filter by {{filter_option}}"
+accounts_filter_field_description: Filter by typeahead a text input. This applies for filters by group/organization and admin
+accounts_filter_field_aria_label: Filter text input
+accounts_filter_field_aria_label_description: Aria label for the filter text input
 
 ## Header
 accounts_table:

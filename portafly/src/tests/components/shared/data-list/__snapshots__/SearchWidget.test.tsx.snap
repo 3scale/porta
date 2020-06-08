@@ -232,9 +232,9 @@ exports[`SearchWidget should render correctly 1`] = `
     >
       <input
         aria-invalid="false"
-        aria-label="filter_aria_label"
+        aria-label="audienceAccountsListing:accounts_filter_field_aria_label"
         class="pf-c-form-control"
-        placeholder="accounts_filter_typeahead"
+        placeholder="audienceAccountsListing:accounts_filter_field"
         type="search"
         value=""
       />
