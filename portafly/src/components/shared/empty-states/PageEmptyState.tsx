@@ -1,17 +1,17 @@
 import React from 'react'
 import {
-  Title,
   EmptyState,
-  EmptyStateVariant,
-  EmptyStateIcon
+  EmptyStateIcon,
+  Title,
+  EmptyStateVariant
 } from '@patternfly/react-core'
 import { CubesIcon } from '@patternfly/react-icons'
 
-export interface ISimpleEmptyStateProps {
+interface Props {
   msg: string
 }
 
-const SimpleEmptyState: React.FunctionComponent<ISimpleEmptyStateProps> = ({ msg }) => (
+const PageEmptyState: React.FunctionComponent<Props> = ({ msg }) => (
   <EmptyState variant={EmptyStateVariant.full}>
     <EmptyStateIcon icon={CubesIcon} />
     <Title headingLevel="h5" size="lg">
@@ -20,4 +20,4 @@ const SimpleEmptyState: React.FunctionComponent<ISimpleEmptyStateProps> = ({ msg
   </EmptyState>
 )
 
-export { SimpleEmptyState }
+export { PageEmptyState }

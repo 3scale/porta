@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
-import { SimpleEmptyState } from 'components'
+import { PageEmptyState } from 'components'
 import { IDeveloperAccount } from 'types'
 import { useTranslation } from 'i18n/useTranslation'
 
@@ -12,7 +12,7 @@ const DeveloperAccountsTable: React.FunctionComponent<IDeveloperAccountsTable> =
   const { t } = useTranslation('audienceAccountsListing')
 
   if (accounts.length === 0) {
-    return <SimpleEmptyState msg={t('accounts_table.empty_state')} />
+    return <PageEmptyState msg={t('accounts_table.empty_state')} />
   }
 
   const COLUMNS = [
