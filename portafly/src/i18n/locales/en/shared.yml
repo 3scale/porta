@@ -128,3 +128,9 @@ loading:
   title_description: Title displayed as part of the loading state
   aria_label: Loading spinner  #-----TODO: revise this aria label
   aria_label_description: Aria label for the Loading component
+
+data_list_filter:
+  category_select_aria_label: Select a filter category
+  category_select_aria_label_description: Aria label for the filter category select
+  state_select_aria_label: Select a state
+  state_select_aria_label_description: Aria label for the state select
