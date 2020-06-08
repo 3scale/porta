@@ -41,7 +41,7 @@ const ChangeStateModal: React.FunctionComponent<Props> = ({
     changeState()
       .then(() => {
         actionSuccess()
-        addAlert({ id: 'success', variant: 'success', title: t('toasts.change_state_start') })
+        addAlert({ id: 'success', variant: 'success', title: t('toasts.change_state_success') })
       })
       .catch(() => {
         const error = t('toasts.change_state_error')

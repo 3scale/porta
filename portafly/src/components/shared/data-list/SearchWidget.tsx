@@ -41,8 +41,7 @@ const CategorySelect: React.FunctionComponent<ICategorySelect> = ({
     <Select
       toggleIcon={<FilterIcon />}
       variant={SelectVariant.single}
-      // FIXME: missing translation string
-      aria-label={t('category_select_aria_label')}
+      aria-label={t('data_list_filter.category_select_aria_label')}
       onSelect={onSelect}
       selections={selections}
       isOpen={isOpen}
@@ -72,6 +71,7 @@ const OptionsSelect: React.FunctionComponent<ICollectionSelect> = ({
   selections,
   categoryName
 }) => {
+  const { t } = useTranslation('shared')
   const [isOpen, setIsOpen] = useState(false)
   const onSelect = (ev: React.SyntheticEvent, selection: string | SelectOptionObject) => {
     const { checked } = ev.currentTarget as HTMLInputElement
@@ -79,12 +79,13 @@ const OptionsSelect: React.FunctionComponent<ICollectionSelect> = ({
   }
   return (
     <Select
+      aria-label={t('data_list_filter.state_select_aria_label')}
       variant={SelectVariant.checkbox}
       onSelect={onSelect}
       selections={selections}
       isOpen={isOpen}
       onToggle={setIsOpen}
-      placeholderText={`Filter by ${categoryName}`}
+      placeholderText={t('audienceAccountsListing:accounts_filter_field', { filter_option: categoryName })}
     >
       { options.map(({ name, humanName }) => (
         <SelectOption key={name} value={humanName} />
@@ -100,7 +101,7 @@ interface ISearchBar {
 }
 
 const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
-  const { t } = useTranslation('audienceAccountsListing')
+  const { t } = useTranslation('shared')
   const onClick = () => {
     if (textInputRef.current?.value) {
       onSearchClick(textInputRef.current.value)
@@ -113,10 +114,8 @@ const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
       <TextInput
         ref={textInputRef}
         type="search"
-        // FIXME: missing translation string
-        aria-label={t('filter_aria_label')}
-        // FIXME: this should be moved to shared
-        placeholder={t('accounts_filter_typeahead', { filter_option: category.humanName })}
+        aria-label={t('audienceAccountsListing:accounts_filter_field_aria_label')}
+        placeholder={t('audienceAccountsListing:accounts_filter_field', { filter_option: category.humanName })}
         onKeyUp={(ev) => ev.key === 'Enter' && onClick()}
       />
       <Button
