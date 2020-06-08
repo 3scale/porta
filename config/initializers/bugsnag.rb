@@ -7,9 +7,7 @@ Bugsnag.configure do |config|
   stages = Rails.configuration.three_scale.error_reporting_stages
   config.notify_release_stages = stages if stages.present?
 
-  ignore_error_names = ActionDispatch::ExceptionWrapper.rescue_responses.each_with_object([]) do |(key, value), classes|
-    classes << key if value == :bad_request
-  end + ['WebHookWorker::ClientError']
+  ignore_error_names = ActionDispatch::ExceptionWrapper.rescue_responses.keys + ['WebHookWorker::ClientError']
 
   config.ignore_classes << ->(error) do
     ignore_error_names.include?(error.class.name)
