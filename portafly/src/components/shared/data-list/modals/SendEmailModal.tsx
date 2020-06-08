@@ -40,7 +40,7 @@ const SendEmailModal: React.FunctionComponent<Props> = ({
     sendEmail()
       .then(() => {
         actionSuccess()
-        addAlert({ id: 'success', variant: 'success', title: t('toasts.send_email_start') })
+        addAlert({ id: 'success', variant: 'success', title: t('toasts.send_email_success') })
       })
       .catch(() => {
         const error = t('toasts.send_email_error')
