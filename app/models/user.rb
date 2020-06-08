@@ -528,7 +528,7 @@ class User < ApplicationRecord
     end
 
     def machine?
-      minimal? || api? || created_by_provider? || open_id? || cas? || oauth2?
+      minimal? || api? || open_id? || cas? || oauth2?
     end
 
     def by_user?
