@@ -8,9 +8,6 @@ class Provider::Admin::Account::AuthenticationProviderFlowTestingController < Pr
     query['redirect_uri'] = auth_presenter.test_flow_callback_url
     auth_url.query = query.to_query
     redirect_to auth_url.to_s
-  rescue ::Faraday::ConnectionFailed => error
-    flash[:error] = 'Authentication flow could not be tested.'
-    redirect_to provider_admin_account_authentication_provider_path(authentication_provider)
   end
 
   def callback
