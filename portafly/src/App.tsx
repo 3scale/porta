@@ -12,13 +12,13 @@ import { LastLocationProvider } from 'react-router-last-location'
 
 const getOverviewPage = () => import('components/pages/Overview')
 const getApplicationsPage = () => import('components/pages/Applications')
-const getAccountsPage = () => import('components/pages/accounts/listing/AccountsListingPage')
+const getAccountsIndexPage = () => import('components/pages/accounts/AccountsIndexPage')
 
 const PagesSwitch = () => (
   <SwitchWith404>
     <LazyRoute path="/" exact getComponent={getOverviewPage} />
     <LazyRoute path="/applications" exact getComponent={getApplicationsPage} />
-    <LazyRoute path="/accounts" exact getComponent={getAccountsPage} />
+    <LazyRoute path="/accounts" exact getComponent={getAccountsIndexPage} />
     <Redirect path="/overview" to="/" exact />
   </SwitchWith404>
 )

@@ -28,27 +28,27 @@ const generateRows = (accounts: IDeveloperAccount[], isMultitenant = false) => {
 const generateColumns = (t: TFunction) => [
   {
     categoryName: 'group',
-    title: t('audienceAccountsListing:accounts_table.group_header'),
+    title: t('accountsIndex:accounts_table.group_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'admin',
-    title: t('audienceAccountsListing:accounts_table.admin_header'),
+    title: t('accountsIndex:accounts_table.admin_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'signup',
-    title: t('audienceAccountsListing:accounts_table.signup_header'),
+    title: t('accountsIndex:accounts_table.signup_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'apps',
-    title: t('audienceAccountsListing:accounts_table.applications_header'),
+    title: t('accountsIndex:accounts_table.applications_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'state',
-    title: t('audienceAccountsListing:accounts_table.state_header'),
+    title: t('accountsIndex:accounts_table.state_header'),
     transforms: [sortable]
   },
   {

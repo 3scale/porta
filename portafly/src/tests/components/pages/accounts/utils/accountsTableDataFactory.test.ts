@@ -1,4 +1,4 @@
-import { generateColumns, generateRows } from 'components/pages/accounts/listing'
+import { generateColumns, generateRows } from 'components/pages/accounts'
 import { developerAccounts } from 'tests/examples'
 
 it('should work', () => {

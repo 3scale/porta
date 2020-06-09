@@ -25,8 +25,8 @@ import { useTranslation } from 'i18n/useTranslation'
 import { ToolbarContent, ToolbarItem } from '@patternfly/react-core'
 import { DataListRow } from 'types'
 
-const AccountsListingTable: React.FunctionComponent = () => {
-  const { t } = useTranslation('audienceAccountsListing')
+const AccountsTable: React.FunctionComponent = () => {
+  const { t } = useTranslation('accountsIndex')
   const {
     columns,
     rows,
@@ -134,4 +134,4 @@ const AccountsListingTable: React.FunctionComponent = () => {
   )
 }
 
-export { AccountsListingTable }
+export { AccountsTable }
