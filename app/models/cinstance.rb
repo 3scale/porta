@@ -129,7 +129,7 @@ class Cinstance < Contract
   # intentional, because deprecated cinstances can still be used (so they are
   # "live", in a way).
   scope :live, -> { where(:state => ['live', 'deprecated'])}
-  scope :with_any_traffic, -> { where.not(first_traffic_at: nil) }
+
   scope :active_since, ->(activity_time) {
     where.has { first_daily_traffic_at >= activity_time }
   }

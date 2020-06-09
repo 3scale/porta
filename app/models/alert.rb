@@ -12,7 +12,6 @@ class Alert < ApplicationRecord
 
   belongs_to :cinstance
   belongs_to :account
-  belongs_to :service
 
   has_one :user_account, through: :cinstance
 
