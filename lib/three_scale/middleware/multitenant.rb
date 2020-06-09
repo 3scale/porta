@@ -111,10 +111,10 @@ module ThreeScale
       def _call(env)
         Thread.current[:multitenant] = TenantChecker.new(@attribute,@app,env)
         @app.call(env)
-      # rescue StandardError => error
-      #   Rails.logger.error "ERROR IN RACK MIDDLEWARE"
-      #   Rails.logger.error error.class.name
-      #   Rails.logger.error error.try(:backtrace)
+      rescue StandardError => error
+        Rails.logger.error "ERROR IN RACK MIDDLEWARE"
+        Rails.logger.error error.class.name
+        Rails.logger.error error.try(:backtrace)
       ensure
         Thread.current[:multitenant] = nil
       end

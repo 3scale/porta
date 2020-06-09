@@ -86,19 +86,19 @@ module ThreeScale
         i18n_error_data('connection_failed')
       rescue ::Faraday::ClientError => error
         i18n_error_data('client_error', message: error.message)
-      # rescue StandardError => error
-      #   logger.error { "[OAuth2] error #{error.class.name}" }
-      #   logger.error { "[OAuth2] error #{error.backtrace}" }
+      rescue StandardError => error
+        logger.error { "[OAuth2] error #{error.class.name}" }
+        logger.error { "[OAuth2] error #{error.backtrace}" }
       end
 
       def fetch_access_token(code, request)
         access_token_options = authenticate_options(request)
         logger.debug { "[OAuth2] Requesting Access Token for Code #{code} with options: #{access_token_options}" }
-        # logger.debug { "[OAuth2] client declared/implemented in #{method(:client).source_location}" }
-        # logger.debug { "[OAuth2] client is a #{client.class.name}" }
-        # logger.debug { "[OAuth2] auth_code declared/implemented in #{client.method(:auth_code).source_location}" }
-        # logger.debug { "[OAuth2] auth_code is a #{client.auth_code.class.name}" }
-        # logger.debug { "[OAuth2] get_token declared/implemented in #{client.auth_code.method(:get_token).source_location}" }
+        logger.debug { "[OAuth2] client declared/implemented in #{method(:client).source_location}" }
+        logger.debug { "[OAuth2] client is a #{client.class.name}" }
+        logger.debug { "[OAuth2] auth_code declared/implemented in #{client.method(:auth_code).source_location}" }
+        logger.debug { "[OAuth2] auth_code is a #{client.auth_code.class.name}" }
+        logger.debug { "[OAuth2] get_token declared/implemented in #{client.auth_code.method(:get_token).source_location}" }
         @access_token = client.auth_code.get_token(code, access_token_options)
         logger.debug { "[OAuth2] Got Access Token #{access_token.token} For Code #{code}" }
         access_token
