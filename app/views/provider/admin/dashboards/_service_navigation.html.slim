@@ -23,10 +23,11 @@ nav.DashboardNavigation
                                        admin_service_applications_path(service),
                                        icon_name: 'cubes'
 
-    - if can?(:manage, :monitoring) && service.unread_alerts_count > 0
+    - unread_alerts = current_account.buyer_alerts.by_service(service).unread
+    - if can?(:manage, :monitoring) && unread_alerts.any?
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'Alert',
-                                    service.unread_alerts_count,
+                                    unread_alerts,
                                     admin_service_alerts_path(service),
                                     icon_name: 'exclamation-triangle',
                                     notice: true
@@ -43,14 +44,14 @@ nav.DashboardNavigation
     // Active docs
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-       = dashboard_collection_size_link 'ActiveDoc',
-                                    service.api_docs_services_count,
+       = dashboard_collection_link 'ActiveDoc',
+                                    service.api_docs_services,
                                     admin_service_api_docs_path(service),
                                     icon_name: 'file-text'
     // Integration
     - if can?(:manage, :plans)
       li.DashboardNavigation-list-item
-        - if service.cinstances_with_traffic_count > 0 || (apiap? && service.sandbox_proxy_configs_count > 0)
+        - if service.has_traffic? || (apiap? && service.proxy.proxy_configs.sandbox.any?)
           - if has_out_of_date_configuration?(service)
             = dashboard_navigation_link 'Integration',
                                         path_to_service(service),

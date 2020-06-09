@@ -31,8 +31,7 @@ default: &default
 
 development:
   <<: *default
-  compile: false
-  check_yarn_integrity: false
+  compile: true
   webpack_compile_output: true
 
   dev_server:

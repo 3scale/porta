@@ -29,10 +29,8 @@ module Logic
     end
 
     def multiservice?
-      return @multiservice_flag if defined? @multiservice_flag
-
       account = buyer? ? provider_account : self
-      @multiservice_flag = account.multiple_accessible_services?
+      account.multiple_accessible_services?
     end
 
     def multiple_accessible_services?(scope = nil)
