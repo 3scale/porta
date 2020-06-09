@@ -153,6 +153,8 @@ GEM
       activerecord (~> 5.0.0)
       arel (~> 7.1.4)
       ruby-plsql (>= 0.5.0)
+    activerecord-precounter (0.3.3)
+      activerecord (>= 5)
     activesupport (5.0.7.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
@@ -807,6 +809,7 @@ DEPENDENCIES
   activemerchant (~> 1.77.0)
   activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 1.7.0)
+  activerecord-precounter
   acts-as-taggable-on (~> 4.0)
   acts_as_list (~> 0.9.17)
   acts_as_tree
