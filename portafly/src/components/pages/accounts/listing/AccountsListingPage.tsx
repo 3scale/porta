@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAsync } from 'react-async'
-import { useDocumentTitle, Loading, DataListProvider } from 'components'
-import { AccountsListingTable, generateColumns, generateRows } from 'components/pages/accounts/listing'
+import { useDocumentTitle, Loading, AccountsDataListTable } from 'components'
 import {
   Alert,
   PageSection,
@@ -15,29 +14,11 @@ import {
 import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
 import { PlusCircleIcon, ExportIcon } from '@patternfly/react-icons'
-import { IDeveloperAccount } from 'types'
 
 const AccountsListingPage: React.FunctionComponent = () => {
   const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
   const { t } = useTranslation('audienceAccountsListing')
   useDocumentTitle(t('title_page'))
-
-  const isMultitenant = false // TODO: get this somehow
-
-  const DataListTable = ({ accounts: _accounts }: { accounts: IDeveloperAccount[] }) => {
-    const columns = generateColumns(t)
-    const rows = generateRows(_accounts, isMultitenant)
-
-    const initialState = {
-      table: { columns, rows }
-    }
-
-    return (
-      <DataListProvider initialState={initialState}>
-        <AccountsListingTable />
-      </DataListProvider>
-    )
-  }
 
   return (
     <>
@@ -70,7 +51,7 @@ const AccountsListingPage: React.FunctionComponent = () => {
       <PageSection>
         {isPending && <Loading />}
         {error && <Alert variant="danger" title={error.message} />}
-        {accounts && <DataListTable accounts={accounts} />}
+        {accounts && <AccountsDataListTable accounts={accounts} />}
       </PageSection>
     </>
   )
