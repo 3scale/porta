@@ -35,6 +35,7 @@ type AccountData = {
 
 type ActiveDocsSpecProps = {
   accountDataUrl: string,
+  isRailsTestEnv?: boolean,
   url: string,
 }
 
@@ -121,10 +122,12 @@ const injectAccountDataToResponse = async (response: SwaggerResponse, accountDat
   }
 }
 
-const ActiveDocsSpec = ({ url, accountDataUrl }: ActiveDocsSpecProps) => (
+const ActiveDocsSpec = ({ url, accountDataUrl, isRailsTestEnv }: ActiveDocsSpecProps) => (
   <SwaggerUI
     url={url}
-    responseInterceptor={(response) => injectAccountDataToResponse(response, accountDataUrl)}
+    responseInterceptor={(response) => isRailsTestEnv // TODO: delete isRailsTestEnv hack
+      ? response
+      : injectAccountDataToResponse(response, accountDataUrl)}
   />
 )
 
