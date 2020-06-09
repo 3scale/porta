@@ -4,7 +4,7 @@ import { Button } from '@patternfly/react-core'
 import { BoltIcon } from '@patternfly/react-icons'
 
 const ActionButtonImpersonate = () => {
-  const { t } = useTranslation('audienceAccountsListing')
+  const { t } = useTranslation('accountsIndex')
 
   const onClick = () => {
     // TODO
