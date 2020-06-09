@@ -166,7 +166,6 @@ gem 'slim-rails', '~> 3.2'
 gem 'ruby-openid'
 
 gem 'draper', '~> 3.0'
-gem 'activerecord-precounter'
 
 group :development do
   gem 'listen'

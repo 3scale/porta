@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module MenuHelper
   def main_menu_item(id, label, path, options = {})
     fake_active = respond_to?(:active_upgrade_notice) && (id == active_upgrade_notice)
@@ -29,7 +27,9 @@ module MenuHelper
 
   def menu_link(level, title, path, options = {}, li_options = {}, &block)
     current_title = options.delete(:title) || title
-    li_options[:class] = :active if active_menu?(level, current_title) || current_page?(path)
+    if active_menu?(level, current_title) || current_page?(path)
+      li_options[:class] = :active
+    end
 
     # humanize only if it is NOT a string, otherwise it would destroy capitalization
     title = title.to_s.humanize.camelize unless title.is_a?(String)
@@ -67,7 +67,7 @@ module MenuHelper
       if can?(:see, switch)
         link_to(name, path, options)
       elsif upgrade
-        options[:class]&.gsub!(/(?: fancybox |^fancybox$)/, ' ')
+        options[:class].gsub!(/(?: fancybox |^fancybox$)/, ' ') if options[:class]
         upgrade_notice_link(switch, name, options)
       end
 
@@ -85,12 +85,9 @@ module MenuHelper
   end
 
   def api_selector_services
-    @api_selector_services ||= if current_account && current_account.provider?
-                                 accessible_backend_apis = current_account.provider_can_use?(:api_as_product) ? current_user.account.backend_apis.accessible : BackendApi.none
-                                 current_user.accessible_services.decorate.concat(accessible_backend_apis.decorate)
-                               else
-                                 Service.none.decorate
-    end
+    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services : Service.none).decorate
+    @api_selector_services.concat(current_user.account.backend_apis.decorate) if current_account.provider_can_use?(:api_as_product)
+    @api_selector_services
   end
 
   def audience_link
