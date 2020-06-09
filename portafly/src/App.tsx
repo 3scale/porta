@@ -12,7 +12,7 @@ import { LastLocationProvider } from 'react-router-last-location'
 
 const getOverviewPage = () => import('components/pages/Overview')
 const getApplicationsPage = () => import('components/pages/Applications')
-const getAccountsPage = () => import('components/pages/audience/accounts/listing/DeveloperAccounts')
+const getAccountsPage = () => import('components/pages/accounts/listing/AccountsListingPage')
 
 const PagesSwitch = () => (
   <SwitchWith404>
