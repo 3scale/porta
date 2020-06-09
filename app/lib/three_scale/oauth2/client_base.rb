@@ -87,9 +87,8 @@ module ThreeScale
       rescue ::Faraday::ClientError => error
         i18n_error_data('client_error', message: error.message)
       rescue StandardError => error
-        logger.debug { "[OAuth2] error #{error.class.name}" }
-        logger.debug { "[OAuth2] error #{error.backtrace}" }
-        raise error
+        logger.error { "[OAuth2] error #{error.class.name}" }
+        logger.error { "[OAuth2] error #{error.backtrace}" }
       end
 
       def fetch_access_token(code, request)

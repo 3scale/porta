@@ -19,6 +19,9 @@ class Provider::Admin::Account::AuthenticationProviderFlowTestingController < Pr
       flash[:error] = strategy.error_message || 'Authentication flow could not be tested.'
     end
     redirect_to provider_admin_account_authentication_provider_path(strategy.authentication_provider)
+  rescue StandardError => error
+    System::ErrorReporting.report_error(exception, :parameters => {params})
+    render plain: 'Authentication flow could not be tested.', status: 400
   end
 
   private
