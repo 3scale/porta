@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { IDeveloperAccount } from 'types'
-import { DataListProvider, AccountsListingTable } from 'components'
+import { DataListProvider, AccountsTable } from 'components'
 import { generateColumns, generateRows } from 'components/pages/accounts'
 import { useTranslation } from 'i18n/useTranslation'
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const AccountsDataListTable: React.FunctionComponent<Props> = ({ accounts }) => {
-  const { t } = useTranslation('audienceAccountsListing')
+  const { t } = useTranslation('accountsIndex')
   const columns = generateColumns(t)
   const rows = generateRows(accounts, isMultitenant)
 
@@ -22,7 +22,7 @@ const AccountsDataListTable: React.FunctionComponent<Props> = ({ accounts }) => 
 
   return (
     <DataListProvider initialState={initialState}>
-      <AccountsListingTable />
+      <AccountsTable />
     </DataListProvider>
   )
 }

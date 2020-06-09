@@ -5,7 +5,7 @@ import shared from 'i18n/locales/en/shared.yml'
 import overview from 'i18n/locales/en/overview.yml'
 import login from 'i18n/locales/en/login.yml'
 // Audience
-import audienceAccountsListing from 'i18n/locales/en/audience/accounts/listing.yml'
+import accountsIndex from 'i18n/locales/en/audience/accounts/listing.yml'
 // Applications
 import applicationsListing from 'i18n/locales/en/applications/listing.yml'
 import applicationsPlans from 'i18n/locales/en/applications/applications_plans.yml'
@@ -45,7 +45,7 @@ const integration = {
 
 
 export {
-  audienceAccountsListing,
+  accountsIndex,
   shared,
   overview,
   analytics,

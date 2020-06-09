@@ -85,7 +85,7 @@ const OptionsSelect: React.FunctionComponent<ICollectionSelect> = ({
       selections={selections}
       isOpen={isOpen}
       onToggle={setIsOpen}
-      placeholderText={t('audienceAccountsListing:accounts_filter_field', { filter_option: categoryName })}
+      placeholderText={t('accountsIndex:accounts_filter_field', { filter_option: categoryName })}
     >
       { options.map(({ name, humanName }) => (
         <SelectOption key={name} value={humanName} />
@@ -114,8 +114,8 @@ const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
       <TextInput
         ref={textInputRef}
         type="search"
-        aria-label={t('audienceAccountsListing:accounts_filter_field_aria_label')}
-        placeholder={t('audienceAccountsListing:accounts_filter_field', { filter_option: category.humanName })}
+        aria-label={t('accountsIndex:accounts_filter_field_aria_label')}
+        placeholder={t('accountsIndex:accounts_filter_field', { filter_option: category.humanName })}
         onKeyUp={(ev) => ev.key === 'Enter' && onClick()}
       />
       <Button
