@@ -17,7 +17,7 @@ import {
   bulkActionsReducer
 } from 'components/shared/data-list/reducers'
 
-type State = {
+export type State = {
   table: TableState
   filters: FiltersState
   pagination: PaginationState
