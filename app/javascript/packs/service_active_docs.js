@@ -8,11 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       buyer: '/api_docs/account_data.json'
     }
   }
-  // TODO: delete isRailsTestEnv
-  const { url, baseUrl, accountType, isRailsTestEnv } = document.getElementById(containerId).dataset
+  const { url, baseUrl, accountType } = document.getElementById(containerId).dataset
   const dataUrl = accountType ? AUTOCOMPLETE_CONFIG.dataUrl[accountType] : AUTOCOMPLETE_CONFIG.dataUrl['buyer']
 
   const accountDataUrl = `${baseUrl}${dataUrl}`
 
-  ActiveDocsSpec({ url, accountDataUrl, isRailsTestEnv }, containerId)
+  ActiveDocsSpec({ url, accountDataUrl }, containerId)
 })

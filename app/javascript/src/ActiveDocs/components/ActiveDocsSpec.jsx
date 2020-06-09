@@ -35,7 +35,6 @@ type AccountData = {
 
 type ActiveDocsSpecProps = {
   accountDataUrl: string,
-  isRailsTestEnv?: boolean,
   url: string,
 }
 
@@ -99,35 +98,37 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
 }
 
 const injectAccountDataToResponse = async (response: SwaggerResponse, accountDataUrl: string): Promise<SwaggerResponse> => {
-  const data = await fetchData(accountDataUrl)
-  const accountData = data.results
-  const body = {
-    ...response.body,
-    paths: Object.keys(response.body.paths).reduce(
-      (paths, key) => {
-        paths[key] = {
-          ...response.body.paths[key],
-          parameters: response.body.paths[key].parameters.map(param => addAutocompleteToParam(param, accountData))
+  return new Promise(async (resolve, reject) => {
+    const data = await fetchData(accountDataUrl)
+    const accountData = data.results
+    const body = {
+      ...response.body,
+      paths: Object.keys(response.body.paths).reduce(
+        (paths, key) => {
+          const pathParameters = response.body.paths[key].parameters
+          if (pathParameters) {
+            paths[key] = {
+              ...response.body.paths[key],
+              parameters: pathParameters.map(param => addAutocompleteToParam(param, accountData))
+            }
+          }
+          return paths
         }
-        return paths
-      }
-      , {})
-  }
-
-  return {
-    ...response,
-    body,
-    data: JSON.stringify(body),
-    text: JSON.stringify(body)
-  }
+        , {})
+    }
+    resolve({
+      ...response,
+      body,
+      data: JSON.stringify(body),
+      text: JSON.stringify(body)
+    })
+  })
 }
 
-const ActiveDocsSpec = ({ url, accountDataUrl, isRailsTestEnv }: ActiveDocsSpecProps) => (
+const ActiveDocsSpec = ({ url, accountDataUrl }: ActiveDocsSpecProps) => (
   <SwaggerUI
     url={url}
-    responseInterceptor={(response) => isRailsTestEnv // TODO: delete isRailsTestEnv hack
-      ? response
-      : injectAccountDataToResponse(response, accountDataUrl)}
+    responseInterceptor={(response) => injectAccountDataToResponse(response, accountDataUrl)}
   />
 )
 
