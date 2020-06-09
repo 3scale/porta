@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render } from 'tests/custom-render'
-import { AccountsListingPage } from 'components'
+import { AccountsIndexPage } from 'components'
 import { developerAccounts } from 'tests/examples'
 import { useAsync, AsyncState } from 'react-async'
 import { IDeveloperAccount } from 'types'
@@ -10,7 +10,7 @@ jest.mock('react-async')
 
 const setup = (asyncState: Partial<AsyncState<IDeveloperAccount[]>>) => {
   (useAsync as jest.Mock).mockReturnValueOnce(asyncState)
-  return render(<AccountsListingPage />)
+  return render(<AccountsIndexPage />)
 }
 
 it('should have a button to create an account', () => {

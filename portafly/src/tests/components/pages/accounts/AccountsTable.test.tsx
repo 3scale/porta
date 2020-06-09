@@ -7,7 +7,7 @@ import {
   useDataListFilters,
   useDataListBulkActions
 } from 'components'
-import { AccountsListingTable, generateColumns, generateRows } from 'components/pages/accounts/listing'
+import { AccountsTable, generateColumns, generateRows } from 'components/pages/accounts'
 import { developerAccounts } from 'tests/examples'
 import { fireEvent, within } from '@testing-library/react'
 import { IDeveloperAccount } from 'types'
@@ -47,7 +47,7 @@ beforeAll(resetMocks)
 afterEach(resetMocks)
 
 const setup = () => {
-  const wrapper = render(<AccountsListingTable />)
+  const wrapper = render(<AccountsTable />)
   const getRow = (account: IDeveloperAccount) => wrapper.getByText(account.org_name).closest('tr') as HTMLElement
   const bulkSelectorDropdown = within(wrapper.container.querySelector('#data-list-bulk-selector-dropdown') as HTMLElement)
   const bulkActionsDropdown = within(wrapper.container.querySelector('#data-list-bulk-actions-dropdown') as HTMLElement)

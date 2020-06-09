@@ -15,9 +15,9 @@ import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
 import { PlusCircleIcon, ExportIcon } from '@patternfly/react-icons'
 
-const AccountsListingPage: React.FunctionComponent = () => {
+const AccountsIndexPage: React.FunctionComponent = () => {
   const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
-  const { t } = useTranslation('audienceAccountsListing')
+  const { t } = useTranslation('accountsIndex')
   useDocumentTitle(t('title_page'))
 
   return (
@@ -59,4 +59,4 @@ const AccountsListingPage: React.FunctionComponent = () => {
 
 // Default export needed for React.lazy
 // eslint-disable-next-line import/no-default-export
-export default AccountsListingPage
+export default AccountsIndexPage
