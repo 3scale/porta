@@ -39,13 +39,9 @@ module Provider::Admin::DashboardsHelper
     safe_wrap_with_parenthesis(dashboard_navigation_link(link_text, path, options))
   end
 
-  def dashboard_collection_size_link(singular_name, size, path, options = {})
-    link_text = pluralize(number_to_human(size), singular_name, options.fetch(:plural, nil))
-    dashboard_navigation_link(link_text, path, options)
-  end
-
   def dashboard_collection_link(singular_name, collection, path, options = {})
-    dashboard_collection_size_link(singular_name, collection.size, path, options)
+    link_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
+    dashboard_navigation_link(link_text, path, options)
   end
 
   def dashboard_secondary_collection_link(singular_name, collection, path, options = {})

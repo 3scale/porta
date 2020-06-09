@@ -21,18 +21,13 @@ class Logic::ProviderSettingsTest < ActiveSupport::TestCase
     assert provider.has_visible_services_with_plans?
   end
 
-  test '#multiservice? true' do
+  test '#multiservice?' do
     provider = FactoryBot.build(:simple_provider)
     buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
 
     provider.stubs(multiple_accessible_services?: true)
     assert provider.multiservice?
     assert buyer.multiservice?
-  end
-
-  test '#multiservice? false' do
-    provider = FactoryBot.build(:simple_provider)
-    buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
 
     provider.stubs(multiple_accessible_services?: false)
     refute provider.multiservice?
