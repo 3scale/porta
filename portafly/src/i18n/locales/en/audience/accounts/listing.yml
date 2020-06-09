@@ -10,8 +10,12 @@ title_page_description: Body title for a page aimed to list all the accounts, as
 
 create_account_button: Create account
 create_account_button_description: Button link to create an account
+create_account_button_aria_label: Create account
+create_account_button_aria_label_description: Aria label for create account button
 export_accounts_button: Export all accounts
 export_accounts_button_description: Button link to export all the accounts.
+export_accounts_button_aria_label: Export all accounts
+export_accounts_button_aria_label_description: Aria label for export all accounts button
 
 # Main area
 
