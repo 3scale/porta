@@ -5,7 +5,7 @@ import { TFunction } from 'i18next'
 import { ActionButtonImpersonate } from 'components/pages/accounts'
 
 const generateRows = (accounts: IDeveloperAccount[]) => {
-  const isMultitenant = process.env.REACT_APP_MULTITENANT === 'true'
+  const isMultitenant = process.env.REACT_APP_MULTITENANT
   // Rows and Columns must have the same order
   const mapAccountToRowCell = (account: IDeveloperAccount) => [
     account.org_name,
