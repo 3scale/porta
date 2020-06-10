@@ -21,11 +21,22 @@ it('should have a button to create an account', () => {
 })
 
 it('should be able to export all accounts', () => {
-  const { getByRole } = setup({})
-  const exportAccountsBtn = getByRole('button', { name: 'export_accounts_button_aria_label' })
+  const { getByRole } = setup(
+    {
+      data: [{
+        id: 1,
+        admin_name: 'Root',
+        org_name: 'Linux',
+        state: 'active',
+        apps_count: 42,
+        created_at: '2019-10-18T05:13:26Z',
+        updated_at: '2019-10-18T05:13:27Z'
+      }]
+    }
+  )
+  const exportAccountsBtn = getByRole('link', { name: 'export_accounts_button_aria_label' })
   expect(exportAccountsBtn).toHaveTextContent('export_accounts_button')
-
-  // TODO: test export?
+  expect(exportAccountsBtn.getAttribute('href')).toContain('"ID","accounts_table.admin_header","accounts_table.group_header","accounts_table.state_header","accounts_table.applications_header","accounts_table.created_header","accounts_table.updated_header"\n"1","Root","Linux","active","42","2019-10-18T05:13:26Z",""')
 })
 
 describe('when the request is pending', () => {
