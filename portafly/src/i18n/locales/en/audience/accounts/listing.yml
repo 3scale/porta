@@ -58,6 +58,10 @@ accounts_table:
  applications_header_description: Column listing applications linked to accounts, on a 1:1 relationship
  state_header: State
  state_header_description: Column listing the state of the accounts
+ created_header: Created at
+ created_header_description: Column listing the creation date of the accounts
+ updated_header: Updated at
+ updated_header_description: Column listing the date an account was last updated
  #-------# actions_header_plural: available in shared.yml
  actions_column_options:
   approve: Approve
