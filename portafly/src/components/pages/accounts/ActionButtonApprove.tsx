@@ -1,13 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@patternfly/react-core'
 import { CheckIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'i18n/useTranslation'
+import { approveAccount } from 'dal/accounts'
+import { useAlertsContext } from 'components'
 
-const ActionButtonApprove = () => {
+interface Props {
+  id: string
+}
+
+const ActionButtonApprove: React.FunctionComponent<Props> = ({ id }) => {
   const { t } = useTranslation('accountsIndex')
+  const { addAlert } = useAlertsContext()
+
+  const [isDisabled, setIsDisabled] = useState(false)
 
   const onClick = () => {
-    // TODO
+    setIsDisabled(true)
+    approveAccount(id)
+      .then((res) => {
+        console.log(res)
+        addAlert({ id, title: 'Success', variant: 'success' })
+      })
+      .catch((err) => {
+        console.log(err)
+        addAlert({ id, title: 'Success', variant: 'danger' })
+      })
+      .finally(() => setIsDisabled(false))
   }
 
   return (
@@ -15,6 +34,7 @@ const ActionButtonApprove = () => {
       variant="link"
       icon={<CheckIcon />}
       onClick={onClick}
+      isDisabled={isDisabled}
     >
       {t('accounts_table.actions_column_options.approve')}
     </Button>

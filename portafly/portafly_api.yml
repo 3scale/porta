@@ -38,11 +38,13 @@ paths:
       in: query
   /developer/accounts/{id}/approve:
     summary: Approves an account.
-    description: Approves an account (changes its state to live). Accounts need to be approved explicitly via this API after creation.
+    description: Changes an account's state from pending to live. The account needs to be approved explicitly via this API after creation.
     put:
       responses:
         "204":
           description: No Content
+        "422":
+          description: Unprocessable Entity
       operationId: approveAccount
     parameters:
       - name: access_token

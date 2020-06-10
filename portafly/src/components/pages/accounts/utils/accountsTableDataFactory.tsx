@@ -5,8 +5,8 @@ import { IDeveloperAccount } from 'types'
 import { TFunction } from 'i18next'
 import { ActionButtonImpersonate, ActionButtonApprove, ActionButtonActivate } from 'components/pages/accounts'
 
-const getActionButtonForAccount = ({ state }: IDeveloperAccount) => {
-  if (state === 'pending') return <ActionButtonApprove />
+const getActionButtonForAccount = ({ id, state }: IDeveloperAccount) => {
+  if (state === 'pending') return <ActionButtonApprove id={String(id)} />
   if (state === 'suspended') return <ActionButtonActivate />
   return ''
 }
