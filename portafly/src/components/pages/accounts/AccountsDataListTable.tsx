@@ -5,8 +5,6 @@ import { DataListProvider, AccountsTable } from 'components'
 import { generateColumns, generateRows } from 'components/pages/accounts'
 import { useTranslation } from 'i18n/useTranslation'
 
-const isMultitenant = false // TODO: get this somehow
-
 interface Props {
   accounts: IDeveloperAccount[]
 }
@@ -14,7 +12,7 @@ interface Props {
 const AccountsDataListTable: React.FunctionComponent<Props> = ({ accounts }) => {
   const { t } = useTranslation('accountsIndex')
   const columns = generateColumns(t)
-  const rows = generateRows(accounts, isMultitenant)
+  const rows = generateRows(accounts)
 
   const initialState = {
     table: { columns, rows }
