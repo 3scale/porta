@@ -1,8 +1,15 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react'
 import { sortable } from '@patternfly/react-table'
 import { IDeveloperAccount } from 'types'
 import { TFunction } from 'i18next'
-import { ActionButtonImpersonate } from 'components/pages/accounts'
+import { ActionButtonImpersonate, ActionButtonApprove, ActionButtonActivate } from 'components/pages/accounts'
+
+const getActionButtonForAccount = ({ state }: IDeveloperAccount) => {
+  if (state === 'pending') return <ActionButtonApprove />
+  if (state === 'suspended') return <ActionButtonActivate />
+  return ''
+}
 
 const generateRows = (accounts: IDeveloperAccount[]) => {
   const isMultitenant = process.env.REACT_APP_MULTITENANT === 'true'
@@ -14,7 +21,7 @@ const generateRows = (accounts: IDeveloperAccount[]) => {
     account.apps_count.toString(),
     account.state,
     {
-      title: isMultitenant ? <ActionButtonImpersonate /> : ''
+      title: isMultitenant ? <ActionButtonImpersonate /> : getActionButtonForAccount(account)
     }
   ]
 
@@ -29,27 +36,27 @@ const generateRows = (accounts: IDeveloperAccount[]) => {
 const generateColumns = (t: TFunction) => [
   {
     categoryName: 'group',
-    title: t('accountsIndex:accounts_table.group_header'),
+    title: t('audienceAccountsListing:accounts_table.group_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'admin',
-    title: t('accountsIndex:accounts_table.admin_header'),
+    title: t('audienceAccountsListing:accounts_table.admin_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'signup',
-    title: t('accountsIndex:accounts_table.signup_header'),
+    title: t('audienceAccountsListing:accounts_table.signup_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'apps',
-    title: t('accountsIndex:accounts_table.applications_header'),
+    title: t('audienceAccountsListing:accounts_table.applications_header'),
     transforms: [sortable]
   },
   {
     categoryName: 'state',
-    title: t('accountsIndex:accounts_table.state_header'),
+    title: t('audienceAccountsListing:accounts_table.state_header'),
     transforms: [sortable]
   },
   {

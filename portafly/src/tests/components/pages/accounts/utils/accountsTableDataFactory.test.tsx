@@ -1,6 +1,12 @@
 import React from 'react'
 
-import { generateColumns, generateRows, ActionButtonImpersonate } from 'components/pages/accounts'
+import {
+  generateColumns,
+  generateRows,
+  ActionButtonImpersonate,
+  ActionButtonActivate,
+  ActionButtonApprove
+} from 'components/pages/accounts'
 import { developerAccounts } from 'tests/examples'
 
 it('should generate columns', () => {
@@ -8,9 +14,21 @@ it('should generate columns', () => {
   expect(columns).toMatchSnapshot()
 })
 
-describe.skip('when it is provider', () => {
+describe('when it is provider', () => {
   beforeAll(() => {
     process.env.REACT_APP_MULTITENANT = 'false'
+  })
+
+  it('should render an activate button when account is suspended', () => {
+    const suspendedAccount = { ...developerAccounts[0], state: 'suspended' }
+    expect(generateRows([suspendedAccount]))
+      .toMatchObject([{ cells: expect.arrayContaining([{ title: <ActionButtonActivate /> }]) }])
+  })
+
+  it('should render an approve button when account is pending', () => {
+    const pendingAccount = { ...developerAccounts[0], state: 'pending' }
+    expect(generateRows([pendingAccount]))
+      .toMatchObject([{ cells: expect.arrayContaining([{ title: <ActionButtonApprove /> }]) }])
   })
 })
 

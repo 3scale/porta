@@ -1,9 +1,9 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { Button } from '@patternfly/react-core'
-import { BoltIcon } from '@patternfly/react-icons'
+import { CheckIcon } from '@patternfly/react-icons'
+import { useTranslation } from 'i18n/useTranslation'
 
-const ActionButtonImpersonate = () => {
+const ActionButtonApprove = () => {
   const { t } = useTranslation('accountsIndex')
 
   const onClick = () => {
@@ -13,12 +13,12 @@ const ActionButtonImpersonate = () => {
   return (
     <Button
       variant="link"
-      icon={<BoltIcon />}
+      icon={<CheckIcon />}
       onClick={onClick}
     >
-      {t('accounts_table.actions_column_options.act_as')}
+      {t('accounts_table.actions_column_options.approve')}
     </Button>
   )
 }
 
-export { ActionButtonImpersonate }
+export { ActionButtonApprove }
