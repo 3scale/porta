@@ -36,6 +36,25 @@ paths:
       schema:
         type: string
       in: query
+  /developer/accounts/{id}/approve:
+    summary: Approves an account.
+    description: Approves an account (changes its state to live). Accounts need to be approved explicitly via this API after creation.
+    put:
+      responses:
+        "204":
+          description: No Content
+      operationId: approveAccount
+    parameters:
+      - name: access_token
+        description: An access token
+        schema:
+          type: string
+        in: query
+      - name: id
+        description: The ID of the account to be approved
+        schema:
+          type: string
+        in: query
 components:
   schemas:
     DeveloperAccount:
