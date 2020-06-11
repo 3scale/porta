@@ -113,16 +113,33 @@ After do |scenario|
   line_number = scenario.location.line.to_s
 
   # Network logs
-  logs = page.driver.browser.manage.logs.get(:performance)
-  array = logs.each_with_object([]) do |entry, messages|
-    message = JSON.parse(entry.message)
-    # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
-    messages << message
-  end
+  if page.driver.browser.respond_to?(:manage)
+    logs = page.driver.browser.manage.logs.get(:performance)
+    array = logs.each_with_object([]) do |entry, messages|
+      message = JSON.parse(entry.message)
+      # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
+      messages << message
+    end
 
-  file = folder.join("#{line_number}-network.json")
-  file.open('w') do  |f|
-    f.puts JSON.dump(array)
+    file = folder.join("#{line_number}-network.json")
+    file.open('w') do  |f|
+      f.puts JSON.dump(array)
+    end
+
+
+    console_log = folder.join("#{line_number}.log")
+
+    if (logs = page.driver.browser.manage.logs.get(:browser)).present?
+      entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
+
+      puts *entries
+      console_log.open('w') do |f|
+        f.puts *entries
+      end
+
+      print "Saved console log to #{console_log}\n"
+    end
+
   end
 
   if (ex = scenario.try(:exception)) # `try` so it does not raise on undefined method
@@ -142,19 +159,6 @@ After do |scenario|
     end
 
     print "Saved exception with backtrace to #{file}\n"
-  end
-
-  console_log = folder.join("#{line_number}.log")
-
-  if (logs = page.driver.browser.manage.logs.get(:browser)).present?
-    entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
-
-    puts *entries
-    console_log.open('w') do |f|
-      f.puts *entries
-    end
-
-    print "Saved console log to #{console_log}\n"
   end
 
   begin
