@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should generate columns 1`] = `
+Array [
+  Object {
+    "categoryName": "group",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "admin",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "signup",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "apps",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "state",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "actions",
+    "title": undefined,
+  },
+]
+`;
