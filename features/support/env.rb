@@ -20,16 +20,11 @@ non_transactional = %w[
   @backend
   @emails
   @stats
-  @search
   @audit
   @commit-transactions
 ].freeze
 
 transactional = non_transactional.map {|t| "~#{t}" }
-
-Before do
-  IndexProxyRuleWorker.stubs(:perform_later)
-end
 
 Before transactional.join(' or ') do
   Cucumber::Rails::Database.before_js if Cucumber::Rails::Database.autorun_database_cleaner
