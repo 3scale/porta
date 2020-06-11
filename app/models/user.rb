@@ -22,6 +22,7 @@ class User < ApplicationRecord
   include Invitations
   include Permissions
   include ProvidedAccessTokens
+  include AccountIndex::ForDependency
 
   self.background_deletion = [
     :user_sessions,
@@ -132,6 +133,9 @@ class User < ApplicationRecord
 
   after_save :nullify_authentication_id, if: :any_sso_authorizations?
   after_destroy :archive_as_deleted
+
+  alias account_for_sphinx account
+  protected :account_for_sphinx
 
   def self.search_states
     %w(pending active)

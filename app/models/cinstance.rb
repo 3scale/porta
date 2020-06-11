@@ -53,6 +53,7 @@ class Cinstance < Contract
   include Logic::Authentication::ApplicationContract
   include Logic::Keys::ApplicationContract
 
+  include AccountIndex::ForDependency
   include ThreeScale::Search::Scopes
 
   def self.attributes_for_destroy_list
@@ -388,6 +389,9 @@ class Cinstance < Contract
   def app_plan_change_should_request_credit_card?
     service.plan_change_permission(ApplicationPlan) == :request_credit_card
   end
+
+  alias account_for_sphinx user_account
+  protected :account_for_sphinx
 
   protected
 
