@@ -12,7 +12,6 @@ Feature: Search
       And the current domain is "foo.example.com"
       And an application plan "Basic" of provider "foo.example.com"
       And a buyer "bob" signed up to application plan "Basic"
-      And the Sphinx indexes are updated
       And I go to the search page
 
   Scenario: No pages match the search

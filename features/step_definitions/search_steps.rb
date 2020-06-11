@@ -1,8 +1,3 @@
-Given /^the Sphinx indexes are updated$/ do
-  ::ThinkingSphinx::Test.index
-  sleep(1.0) # Wait for Sphinx to catch up
-end
-
 Given /^Sphinx is offline$/ do
   ::ThinkingSphinx::Test.stop
 end

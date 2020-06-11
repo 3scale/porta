@@ -66,7 +66,7 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search_ids options' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       assert Account.buyers.search_ids('foo').populate
     end
 
