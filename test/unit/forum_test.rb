@@ -17,7 +17,7 @@ class ForumTest < ActiveSupport::TestCase
 
     forum = FactoryBot.create(:forum)
 
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       assert forum.topics.smart_search('fo/o').populate
     end
   end

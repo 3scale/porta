@@ -1,4 +1,4 @@
-@search @no-txn @saas-only
+@search @saas-only
 Feature: Forum searching
   In order to find stuff in the forum
   As an user
