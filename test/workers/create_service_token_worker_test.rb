@@ -16,7 +16,7 @@ class CreateServiceTokenWorkerTest < ActiveSupport::TestCase
 
   def test_perform
     Sidekiq::Testing.inline! do
-      ThinkingSphinx::Test.run do
+      ThinkingSphinx::Test.rt_run do
         token   = 'Alaska12345'
         service = FactoryBot.create(:simple_service, id: 999)
         service.service_tokens.delete_all

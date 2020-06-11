@@ -1,4 +1,4 @@
-@search @no-txn @saas-only
+@search @saas-only
 Feature: Search
   In order to search on pages
   Buyer will need to have a search form

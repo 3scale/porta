@@ -6,7 +6,8 @@ Before('@search') do
   raise ::Cucumber::Core::Test::Result::Skipped, 'Sphinx does not support OracleDB' if System::Database.oracle?
   ::ThinkingSphinx::Test.init
   ::ThinkingSphinx::Test.stop
-  output = ::ThinkingSphinx::Test.start_with_autostop
+  ::ThinkingSphinx::Test.autostop
+  output = ::ThinkingSphinx::Test.start index: false
   assert ::ThinkingSphinx::Test.config.controller.running?, "thinking sphinx should be running: #{output}"
 end
 
