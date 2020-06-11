@@ -9,6 +9,8 @@ class CMS::Page < CMS::BasePage
   include NormalizePathAttribute
   acts_as_taggable
 
+  include CMSPageIndex
+
   attr_accessible :title, :section, :path, :content_type, :tag_list, :system_name
 
   belongs_to :section, class_name: 'CMS::Section', touch: true

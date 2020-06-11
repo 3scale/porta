@@ -13,7 +13,7 @@ class SphinxIndexationWorker < ApplicationJob
   end
 
   def perform(model)
-    callback = ThinkingSphinx::RealTime.callback_for(model.model_name.singular)
+    callback = ThinkingSphinx::RealTime.callback_for(model.class.name.underscore)
     callback&.after_commit model
   end
 end
