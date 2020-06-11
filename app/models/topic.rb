@@ -6,6 +6,8 @@ class Topic < ApplicationRecord
   include ThreeScale::SpamProtection::Integration::Model
   has_spam_protection
 
+  include TopicIndex
+
   ORDER_BY = [['Newest post', ''], ["Most views", "hits"], ["Number of posts", "posts_count"]]
 
   before_validation(:on => :create) { set_default_attributes }

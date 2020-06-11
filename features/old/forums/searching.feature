@@ -12,7 +12,6 @@ Feature: Forum searching
 
   Scenario: Search by topic title
     Given the forum of "foo.example.com" has topics "Security", "Hacking" and "Off topic"
-    And the Sphinx indexes are updated
 
     When I log in as "bob" on foo.example.com
     And I go to the forum page
@@ -24,7 +23,6 @@ Feature: Forum searching
   
   Scenario: Search by substring of topic title
     Given the forum of "foo.example.com" has topics "Security" and "Hacking"
-    And the Sphinx indexes are updated
 
     When I log in as "bob" on foo.example.com
     And I go to the forum page
@@ -35,7 +33,6 @@ Feature: Forum searching
     Given the forum of "foo.example.com" has topics "Security" and "Hacking"
     And a post "Some security things" under topic "Security"
     And a post "How to hack stuff" under topic "Hacking"
-    And the Sphinx indexes are updated
 
     When I log in as "bob" on foo.example.com
     And I go to the forum page
@@ -46,7 +43,6 @@ Feature: Forum searching
   Scenario: Recently created topic is searchable
     When I log in as "bob" on foo.example.com
     And I create a new topic "Hacking"
-    And the Sphinx indexes are updated
     And I go to the forum page
     And I search for "hacking"
     Then I should see topic "Hacking"
@@ -57,7 +53,6 @@ Feature: Forum searching
     When I log in as "bob" on foo.example.com
     And I reply to topic "Hacking" with "That makes no sense at all"
 
-    And the Sphinx indexes are updated
     And I go to the forum page
     And I search for "sense"
     Then I should see topic "Hacking"
