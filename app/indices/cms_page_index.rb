@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 ThinkingSphinx::Index.define 'cms/page', with: :real_time do
   indexes :title
   has :tenant_id, type: :integer
 
   indexes :published
+  scope { CMS::Page.where(searchable: true) }
 end
 
 module CMSPageIndex
@@ -16,6 +19,7 @@ module CMSPageIndex
 
   def sphinx_index
     return unless searchable?
+
     SphinxIndexationWorker.perform_later(self)
   end
 end
