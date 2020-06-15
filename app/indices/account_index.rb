@@ -19,12 +19,7 @@ ThinkingSphinx::Index.define(:account, with: :real_time) do
   has :tenant_id, type: :integer
   has :state, type: :string
 
-  # if System::Database.oracle?
-  #   # Need to add the group by otherwise it will complain about ORA-00979 not a Group By function error
-  #   group_by "accounts.state"
-  # end
-
-  # where sanitize_sql(['COALESCE(accounts.master, ?) = ?', false, false])
+  scope { Account.where(master: false).includes(:users, :bought_cinstances) }
 end
 
 module AccountIndex
@@ -41,13 +36,11 @@ module AccountIndex
     end
 
     def sphinx_full_names
-      users.select(:first_name, :last_name)
-        .pluck(:first_name, :last_name)
-        .flatten.join(' ')
+      users.pluck(:first_name, :last_name).flatten.join(' ')
     end
 
     def sphinx_emails
-      users.select(:email).pluck(:email).join(' ')
+      users.pluck(:email).join(' ')
     end
 
     def sphinx_user_keys
@@ -89,6 +82,7 @@ module AccountIndex
 
     def index_account
       return unless account_for_sphinx&.persisted?
+
       SphinxIndexationWorker.perform_later(account_for_sphinx)
     end
   end
