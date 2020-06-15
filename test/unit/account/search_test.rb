@@ -66,7 +66,7 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search_ids options' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       assert Account.buyers.search_ids('foo').populate
     end
 
@@ -114,7 +114,7 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search user_key without keyword with many records is always indexed and found' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
         service = FactoryBot.create(:simple_service)
         buyer = FactoryBot.create(:simple_buyer)
