@@ -10,6 +10,8 @@ unless System::Database.oracle?
     has :forum_id, type: :integer
     has :sticky, type: :boolean
     has :last_updated_at, type: :timestamp
+
+    scope { Topic.includes(:posts) }
   end
 end
 
@@ -36,6 +38,7 @@ module TopicIndex
 
     def index_topic
       return if System::Database.oracle?
+
       SphinxIndexationWorker.perform_later(topic)
     end
   end
@@ -44,6 +47,7 @@ module TopicIndex
 
   def sphinx_index
     return if System::Database.oracle?
+
     SphinxIndexationWorker.perform_later(self)
   end
 end
