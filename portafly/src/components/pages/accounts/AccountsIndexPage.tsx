@@ -48,7 +48,7 @@ const AccountsIndexPage: React.FunctionComponent = () => {
           </FlexItem>
           <FlexItem breakpointMods={[{ modifier: FlexModifiers['align-right'] }]}>
             <CreateAccountButton />
-            {accounts && <ExportAccountsButton data={accounts} />}
+            <ExportAccountsButton data={accounts} />
           </FlexItem>
         </Flex>
       </PageSection>
