@@ -19,7 +19,7 @@ ThinkingSphinx::Index.define(:account, with: :real_time) do
   has :tenant_id, type: :integer
   has :state, type: :string
 
-  scope { Account.where(master: false).includes(:users, :bought_cinstances) }
+  scope { Account.not_master.includes(:users, :bought_cinstances) }
 end
 
 module AccountIndex
