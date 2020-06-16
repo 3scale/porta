@@ -27,16 +27,18 @@ export type Param = {
  examples?: Examples
 }
 
-export type SwaggerResponse = {
- body: {
-   paths: {
-     [string]: {
-       parameters: Array<Param>,
-       [string]: string | {}
-     }
-   },
-   [string]: string | {}
+export type ResponseBody = {
+ paths: {
+   [string]: {
+     parameters: Array<Param>,
+     [string]: string | {}
+   }
  },
+ [string]: string | {}
+}
+
+export type SwaggerResponse = {
+ body: ResponseBody,
  data: string,
  headers: {},
  obj: {},
