@@ -111,9 +111,19 @@ class ImportCountriesServiceTest < ActiveSupport::TestCase
     refute Country.find_by(code: 'XX')
   end
 
-  test 'falls back to local static file' do
+  test 'falls back to local static file on 404' do
     GeonamesLoader.unstub(:load_countries)
     stub_request(:get, 'http://download.geonames.org/export/dump/countryInfo.txt').to_return(status: 404) # Causes OpenURI::HTTPError to be raised
+    countries = [{ code: 'ES', name: 'Spain', currency: 'EUR' }, { code: 'JP', name: 'Japan', currency: 'JPY' }]
+    given_countries_file(countries: countries) do
+      service = ImportCountriesService.new
+      assert_equal countries, service.countries.map(&:to_h)
+    end
+  end
+
+  test 'falls back to local static file on timeout' do
+    GeonamesLoader.unstub(:load_countries)
+    stub_request(:get, 'http://download.geonames.org/export/dump/countryInfo.txt').to_raise(Net::OpenTimeout.new)
     countries = [{ code: 'ES', name: 'Spain', currency: 'EUR' }, { code: 'JP', name: 'Japan', currency: 'JPY' }]
     given_countries_file(countries: countries) do
       service = ImportCountriesService.new

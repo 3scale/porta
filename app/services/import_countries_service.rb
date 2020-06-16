@@ -81,7 +81,7 @@ class ImportCountriesService
   def load_countries
     info 'Downloading countries from geonames.org...'
     GeonamesLoader.load_countries
-  rescue OpenURI::HTTPError
+  rescue OpenURI::HTTPError, Timeout::Error
     error 'Download countries failed. Using local static source...'
     load_static_countries
   end
