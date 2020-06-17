@@ -3,7 +3,7 @@
 namespace :accounts do
 
   desc "Count bought cinstnaces for each account"
-  task count_bought_cinstances: :environment do
+  task reset_bought_cinstances_count: :environment do
     accounts = Account.select(:id)
     progress = ProgressCounter.new(accounts.count)
 
