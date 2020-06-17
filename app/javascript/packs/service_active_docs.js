@@ -1,7 +1,7 @@
 import { ActiveDocsSpecWrapper as ActiveDocsSpec } from 'ActiveDocs/components/ActiveDocsSpec'
 import { autocompleteOAS3 } from './OAS3Autocomplete'
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'
   const AUTOCOMPLETE_CONFIG = {
     dataUrl: {
@@ -14,5 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const accountDataUrl = `${baseUrl}${dataUrl}`
 
-  ActiveDocsSpec({ url, accountDataUrl, autocompleteOAS3 }, containerId)
+  const responseInterceptor = (response) => autocompleteOAS3(response, accountDataUrl)
+
+  ActiveDocsSpec({ url, responseInterceptor }, containerId)
 })

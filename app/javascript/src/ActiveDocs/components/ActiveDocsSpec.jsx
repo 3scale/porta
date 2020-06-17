@@ -7,15 +7,14 @@ import 'swagger-ui-react/swagger-ui.css'
 import type { SwaggerResponse } from 'Types/SwaggerTypes'
 
 type ActiveDocsSpecProps = {
- accountDataUrl: string,
- autocompleteOAS3: (response: SwaggerResponse, accountDataUrl: string) => Promise<SwaggerResponse>,
  url: string,
+ responseInterceptor: (response: SwaggerResponse) => (response: SwaggerResponse, accountDataUrl: string) => SwaggerResponse
 }
 
-const ActiveDocsSpec = ({ url, accountDataUrl, autocompleteOAS3 }: ActiveDocsSpecProps) => (
+const ActiveDocsSpec = ({ url, responseInterceptor }: ActiveDocsSpecProps) => (
   <SwaggerUI
     url={url}
-    responseInterceptor={(response) => autocompleteOAS3(response, accountDataUrl)}
+    responseInterceptor={responseInterceptor}
   />
 )
 

@@ -117,21 +117,19 @@ const updateResponseBody = (response: SwaggerResponse, accountData: AccountData)
   }
 )
 
-export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string): Promise<SwaggerResponse> => {
-  return new Promise(async (resolve, reject) => {
-    const data = await fetchData(accountDataUrl)
-    const accountData = data.results
-    if (!accountData) {
-      return resolve(response)
-    }
-
-    const body = updateResponseBody(response, accountData)
-
-    resolve({
-      ...response,
-      body,
-      data: JSON.stringify(body),
-      text: JSON.stringify(body)
+export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string): SwaggerResponse => (
+  fetchData(accountDataUrl)
+    .then(data => {
+      const accountData = data.results
+      if (!accountData) {
+        return response
+      }
+      const body = updateResponseBody(response, accountData)
+      return {
+        ...response,
+        body,
+        data: JSON.stringify(body),
+        text: JSON.stringify(body)
+      }
     })
-  })
-}
+)

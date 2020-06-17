@@ -2,12 +2,11 @@
 
 exports[`should render itself 1`] = `
 <ActiveDocsSpec
-  accountDataUrl="foo.example.com/foo.json"
-  autocompleteOAS3={[MockFunction]}
+  responseInterceptor={[MockFunction]}
   url="foo.example.com"
 >
   <SwaggerUI
-    responseInterceptor={[Function]}
+    responseInterceptor={[MockFunction]}
     url="foo.example.com"
   >
     <r>

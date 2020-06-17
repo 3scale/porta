@@ -1,7 +1,7 @@
 export type Primitive = string | number | boolean
 
 export type AccountData = {
- [string]: Array<{name: string, value: string}> | []
+ [string]: Array<{name: string, value: string}>
 }
 
 export type ParamArraySchema = {
