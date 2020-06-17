@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200420104331) do
+ActiveRecord::Schema.define(version: 20200617105046) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                                  null: false
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.datetime "deleted_at"
     t.datetime "state_changed_at"
     t.bigint   "first_admin_id"
+    t.integer  "bought_cinstances_count"
     t.index ["default_service_id"], name: "index_accounts_on_default_service_id", using: :btree
     t.index ["domain", "deleted_at"], name: "index_accounts_on_domain_and_deleted_at", using: :btree
     t.index ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at", using: :btree
