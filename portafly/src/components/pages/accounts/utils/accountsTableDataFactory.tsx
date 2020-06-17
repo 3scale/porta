@@ -11,7 +11,7 @@ const generateRows = (accounts: IDeveloperAccount[]) => {
     account.org_name,
     account.admin_name,
     account.created_at,
-    account.apps_count.toString(),
+    String(account.apps_count),
     account.state,
     {
       title: isMultitenant ? <ActionButtonImpersonate /> : ''

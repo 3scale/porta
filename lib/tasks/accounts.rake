@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :accounts do
 
   desc "Count bought cinstnaces for each account"
