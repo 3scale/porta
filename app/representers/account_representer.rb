@@ -54,6 +54,8 @@ module AccountRepresenter
   end
 
   property :state
+  property :bought_cinstances_count
+  property :admin_display_name
 
   link :self do
     admin_api_account_url(self) unless provider?
@@ -67,5 +69,8 @@ module AccountRepresenter
     credit_card_stored?
   end
 
+  delegate :display_name, to: :first_admin, allow_nil: true
   delegate :monthly_charging_enabled, :monthly_billing_enabled, to: :settings, allow_nil: true
+
+  alias admin_display_name display_name
 end
