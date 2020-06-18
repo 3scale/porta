@@ -1,6 +1,11 @@
 import React from 'react'
 import { useAsync } from 'react-async'
-import { useDocumentTitle, Loading, AccountsDataListTable } from 'components'
+import {
+  useDocumentTitle,
+  Loading,
+  AccountsDataListTable,
+  ExportAccountsButton
+} from 'components'
 import {
   Alert,
   PageSection,
@@ -13,7 +18,7 @@ import {
 } from '@patternfly/react-core'
 import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
-import { PlusCircleIcon, ExportIcon } from '@patternfly/react-icons'
+import { PlusCircleIcon } from '@patternfly/react-icons'
 
 const AccountsIndexPage: React.FunctionComponent = () => {
   const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
@@ -43,13 +48,7 @@ const AccountsIndexPage: React.FunctionComponent = () => {
           </FlexItem>
           <FlexItem breakpointMods={[{ modifier: FlexModifiers['align-right'] }]}>
             <CreateAccountButton />
-            <Button
-              variant="link"
-              icon={<ExportIcon />}
-              aria-label={t('export_accounts_button_aria_label')}
-            >
-              {t('export_accounts_button')}
-            </Button>
+            <ExportAccountsButton data={accounts} />
           </FlexItem>
         </Flex>
       </PageSection>
