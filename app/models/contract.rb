@@ -96,7 +96,7 @@ class Contract < ApplicationRecord
 
   def self.by_plan_type(type)
 
-    plans = Plan.unscoped.uniq.joins { pricing_rules.outer }
+    plans = Plan.unscoped.distinct.joins { pricing_rules.outer }
 
     plan_type = case type.to_s
                 when 'free'

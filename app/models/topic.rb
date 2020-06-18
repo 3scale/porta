@@ -30,7 +30,7 @@ class Topic < ApplicationRecord
   has_many :posts, -> { oldest_first }, :dependent => :delete_all
   has_one  :recent_post, -> { latest_first }, :class_name => 'Post'
 
-  has_many :voices, -> { uniq }, :through => :posts, :source => :user
+  has_many :voices, -> { distinct }, :through => :posts, :source => :user
 
   has_many :user_topics, :dependent => :destroy
   has_many :subscribers, :through => :user_topics, :source => :user
