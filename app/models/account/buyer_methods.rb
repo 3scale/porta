@@ -126,7 +126,7 @@ module Account::BuyerMethods
   end
 
   def has_bought_cinstance?
-    bought_cinstances.any?
+    bought_cinstances.exists?
   end
 
   def approval_required?
