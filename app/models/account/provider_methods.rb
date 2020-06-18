@@ -190,7 +190,7 @@ module Account::ProviderMethods
 
   def provider_key
     ensure_provider
-    self.bought_cinstances.first!.user_key
+    bought_cinstances.first!.user_key
   end
 
   def api_key?
@@ -340,13 +340,15 @@ module Account::ProviderMethods
   def create_first_service
     return if @signup_mode
 
-    unless self.bought_cinstances.exists?
-      application_plans = Account.master.accessible_services.default.application_plans
-      plan = application_plans.default || application_plans.first!
-      plan.create_contract_with!(self)
-    end
+    create_first_cinstance unless has_bought_cinstance?
 
     ServiceCreator.new(service: services.build(name: 'API')).call(private_endpoint: BackendApi.default_api_backend)
+  end
+
+  def create_first_cinstance
+    application_plans = Account.master.accessible_services.default.application_plans
+    plan = application_plans.default || application_plans.first!
+    plan.create_contract_with!(self)
   end
 
   def create_default_fields_definitions
