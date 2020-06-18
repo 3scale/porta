@@ -21,22 +21,28 @@ Transform /^#{QUOTED_LIST_PATTERN}$/ do |list|
   list.from_sentence.map { |item| item.delete('"') }
 end
 
-# unfortunately this transforms almost every string to array
-#Transform /^#{UNQUOTED_LIST_PATTERN}$/ do |list|
-#  list.from_sentence
-#end
+ParameterType(
+  name: 'list',
+  regexp: /#{QUOTED_LIST_PATTERN}/,
+  transformer: -> (list) { list.from_sentence.map { |item| item.delete('"') } }
+)
 
 # Accounts
 
 PROVIDER = /(provider ".+?"|master provider)/
 
-Transform /^account "(.+?)"$/ do |org_name|
-  Account.find_by_org_name!(org_name)
-end
+ParameterType(
+  name: 'org_name',
+  regexp: /account "(.+?)"/,
+  transformer: -> (org_name) {  Account.find_by_org_name!(org_name) }
 
-Transform /^the provider$/ do  |_|
-  @provider or raise ActiveRecord::RecordNotFound, "@provider does not exist"
-end
+)
+
+ParameterType(
+  name :the_provider,
+  regexp: /the provider/,
+  transformer: -> { @provider or raise ActiveRecord::RecordNotFound, "@provider does not exist" }
+)
 
 Transform /^provider "(.+?)"$/ do |name|
   # TODO: fix this hacky way of getting master
@@ -47,18 +53,39 @@ Transform /^provider "(.+?)"$/ do |name|
   end
 end
 
-Transform /^(master provider)$/ do |_|
-  Account.master
-end
+ParameterType(
+  name: :a_provider,
+  regexp: /provider "(.+?)"/,
+  transformer: -> (name) {
+    # TODO: fix this hacky way of getting master
+    if name == 'master'
+      Account.master rescue FactoryBot.create(:master_account)
+    else
+      Account.providers.readonly(false).find_by_org_name!(name)
+    end
+  }
+)
 
-Transform /^buyer "([^\"]*)"$/ do |org_name|
-  Account.buyers.find_by_org_name!(org_name)
-end
+ParameterType(
+  name: 'master_account',
+  regexp: /master provider/,
+  transformer: -> { Account.master }
+)
+
+ParameterType(
+  name: :buyer,
+  regexp: /buyer "([^\"]*)"/,
+  transformer: -> (name) { Account.buyers.find_by!(org_name: name) }
+)
+
+ParameterType(
+  name: 'user_key_of_buyer',
+  regexp: /the user key of buyer "([^"]*)"/,
+  transform: -> (name) { Account.buyers.find_by_org_name!(name).bought_cinstance.user_key }
+)
 
 # Cinstance / Application
-Transform /^the user key of buyer "([^"]*)"$/ do |name|
-  Account.buyers.find_by_org_name!(name).bought_cinstance.user_key
-end
+
 Transform /^the application id of buyer "([^"]*)"$/ do |name|
   Account.buyers.find_by_org_name!(name).bought_cinstance.application_id
 end
