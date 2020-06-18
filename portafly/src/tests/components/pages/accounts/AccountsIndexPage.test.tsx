@@ -5,6 +5,7 @@ import { AccountsIndexPage } from 'components'
 import { developerAccounts } from 'tests/examples'
 import { useAsync, AsyncState } from 'react-async'
 import { IDeveloperAccount } from 'types'
+import { factories } from 'tests/factories'
 
 jest.mock('react-async')
 
@@ -21,11 +22,15 @@ it('should have a button to create an account', () => {
 })
 
 it('should be able to export all accounts', () => {
-  const { getByRole } = setup({})
-  const exportAccountsBtn = getByRole('button', { name: 'export_accounts_button_aria_label' })
-  expect(exportAccountsBtn).toHaveTextContent('export_accounts_button')
+  const { getByText } = setup({ data: [factories.DeveloperAccount.build()] })
+  const exportAccountsLink = getByText('export_accounts_button')
+  expect(exportAccountsLink.getAttribute('href')).toContain('"ID","accounts_table.admin_header","accounts_table.group_header","accounts_table.state_header","accounts_table.applications_header","accounts_table.created_header","accounts_table.updated_header"\n"2","Oswell E. Spencer","Umbrella Corp.","approved","3","2019-10-18T05:13:26Z","2019-10-18T05:13:27Z"')
+})
 
-  // TODO: test export?
+it('should disable the export all button when no data is provided', () => {
+  const { getByRole } = setup({ data: undefined })
+  const exportAccountsLink = getByRole('link', { name: 'export_accounts_button_aria_label' })
+  expect(exportAccountsLink).toHaveClass('pf-m-disabled')
 })
 
 describe('when the request is pending', () => {
