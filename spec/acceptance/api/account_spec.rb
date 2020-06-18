@@ -14,7 +14,7 @@ resource "Account" do
     account
   end
 
-  let(:expected_provider_fields) { %w[admin_domain domain admin_base_url base_url from_email support_email finance_support_email site_access_code] }
+  let(:expected_provider_fields) { %w[admin_domain domain admin_base_url base_url from_email support_email finance_support_email site_access_code bought_cinstances_count admin_display_name] }
 
   shared_context "with billing address set up" do
     before do
@@ -135,6 +135,7 @@ resource "Account" do
       it do
         should have_properties('id', 'org_name').from(resource)
         should have_properties('state', 'credit_card_stored').from(resource)
+        should have_properties('admin_display_name', 'bought_cinstances_count').from(resource)
         should have_properties('created_at', 'updated_at')
         should have_links('self', 'users')
       end
