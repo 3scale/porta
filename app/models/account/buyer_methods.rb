@@ -44,7 +44,7 @@ module Account::BuyerMethods
 
       class << self
         def to_proc
-          -> { System::Database.oracle? ? extending(UniqueAssociation) : uniq }
+          -> { System::Database.oracle? ? extending(UniqueAssociation) : distinct }
         end
 
         delegate :arity, to: :to_proc
