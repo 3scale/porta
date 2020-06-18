@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'progress_counter'
+
 namespace :accounts do
 
   desc "Reset the counter of bought_cinstances for all accounts"
   task reset_bought_cinstances_count: :environment do
-    accounts = Account.select(:id)
+    accounts = Account.where.not(state: :scheduled_for_deletion)
     progress = ProgressCounter.new(accounts.count)
 
     accounts.find_each do |account|
