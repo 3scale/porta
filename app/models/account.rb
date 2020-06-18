@@ -102,7 +102,12 @@ class Account < ApplicationRecord
 
   before_validation(on: :create, if: :provider?) { generate_s3_prefix }
   before_validation(on: :create, if: :provider?) { generate_domains }
+  before_validation(on: :create) { default_bought_cinstances_count }
   before_create :generate_site_access_code
+
+  def default_bought_cinstances_count
+    self.bought_cinstances_count = 0
+  end
 
   attr_protected :master, :provider, :buyer, :from_email, :vat_rate, :sample_data, :default_service_id, :s3_prefix,
                  :provider_account_id, :paid_at, :paid, :signs_legal_terms, :tenant_id, :default_account_plan_id,
