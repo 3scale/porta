@@ -26,7 +26,7 @@ end
 shared_context "provider api", provider: true do
   let(:master) { provider && master_account }
   let(:provider) { FactoryBot.create(:provider_account, self_domain: 'example.org') }
-  let(:provider_key) { provider.provider_key }
+  let(:provider_key) { provider.api_key? ? provider.provider_key : provider.reload.provider_key }
 
   parameter :provider_key, 'Provider Key'
 end
