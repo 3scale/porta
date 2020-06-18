@@ -250,15 +250,6 @@ class Contract < ApplicationRecord
 
   protected
 
-  def update_counter_cache?(association_name)
-    case association_name
-    when :plan
-      !provider_account&.scheduled_for_deletion? && !issuer&.deleted?
-    else
-      true
-    end
-  end
-
   def correct_plan_subclass?
     if plan && (not plan.is_a?(Plan))
       errors.add(:plan, 'wrong plan subclass')
