@@ -7,23 +7,22 @@
 * [Parent JIRA ticket](https://issues.redhat.com/browse/THREESCALE-4724)
 
 ##### Page header
-* Create button
-  * Icon is `plus-circle`
 * Export button
-  * Icon is `pficon-save`
+  * Secondary button
+* Create button
+  * Primary button
 
 ##### Toolbar ([specs](../../global_components/toolbar.md))
-* Bulk actions:
+<!-- * Bulk actions:
   * Send email
-  * Change state
+  * Change state -->
 * Filters:
   * Group/org > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * Admin > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * State > Dropdown menu with multi-select checklist ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#checkbox-input))
-     * "Approved"
-     * "Pending"
-     * "Rejected"
-     * "Suspended"
+     * "Active"
+     * "Email unverified"
+     * "Suspended" [MASTER account only]
   <!-- * Plan > Dropdown menu with multi-select checklist ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#checkbox-input)) -- with filter when many options are available ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#grouped-checkbox-input-with-filtering))
      * list of current plans -->
 
@@ -34,17 +33,17 @@
   * Signup date [sortable]
   * Applications [sortable]
   * State [sortable]
-  * Actions
-* Table rows include a checkbox
-* Action column values:
+  <!-- * Actions -->
+<!-- * Table rows include a checkbox -->
+<!-- * Action column values:
   * Approve
     * Icon is `check`
   * Activate
     * Icon is `play-circle`
   * [MASTER] Act as
-    * Icon is `bolt`
+    * Icon is `bolt` -->
 
-##### Modals
+<!-- ##### Modals
 * Send email modal ([specs](../../global_components/modal.md))
   * Listed items:
     * format of the string: {{admin_name}} ({{account_name}})
@@ -54,4 +53,4 @@
   * Listed items:
     * format of the string: {{account_name}} ({{state}})
     * one item = one account
-  * Select state input field includes helper text
+  * Select state input field includes helper text -->
