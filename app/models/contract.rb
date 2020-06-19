@@ -296,7 +296,7 @@ class Contract < ApplicationRecord
   private
 
   def reset_counter_cache_for
-    [:plan, :account].freeze
+    %i[plan account].freeze
   end
 
   def update_counter_cache?(association_name)
