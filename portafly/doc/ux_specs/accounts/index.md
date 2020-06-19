@@ -44,13 +44,13 @@
   * [MASTER] Act as
     * Icon is `bolt` -->
 
-<!-- ##### Modals
-* Send email modal ([specs](../../global_components/modal.md))
+<!-- ##### Modals -->
+<!-- * Send email modal ([specs](../../global_components/modal.md))
   * Listed items:
     * format of the string: {{admin_name}} ({{account_name}})
-    * one item = one admin user
+    * one item = one admin user -->
 
-* Change state modal ([specs](../../global_components/modal.md))
+<!-- * Change state modal ([specs](../../global_components/modal.md))
   * Listed items:
     * format of the string: {{account_name}} ({{state}})
     * one item = one account
