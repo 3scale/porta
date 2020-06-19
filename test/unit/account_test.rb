@@ -883,4 +883,9 @@ class AccountTest < ActiveSupport::TestCase
       account.reload.bought_cinstances_count
     end
   end
+
+  test 'bought_cinstances_count default value is 0' do
+    account = FactoryBot.create(:simple_provider)
+    assert_equal 0, account.bought_cinstances_count
+  end
 end
