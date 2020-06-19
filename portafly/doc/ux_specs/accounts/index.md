@@ -20,9 +20,10 @@
   * Group/org > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * Admin > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * State > Dropdown menu with multi-select checklist ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#checkbox-input))
-     * "Active"
-     * "Email unverified"
-     * "Suspended" [MASTER account only]
+     * "Approved"
+     * "Pending"
+     * "Rejected"
+     * "Suspended"
   <!-- * Plan > Dropdown menu with multi-select checklist ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#checkbox-input)) -- with filter when many options are available ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#grouped-checkbox-input-with-filtering))
      * list of current plans -->
 
