@@ -6,7 +6,7 @@ namespace :accounts do
 
   desc "Reset the counter of bought_cinstances for all accounts"
   task reset_bought_cinstances_count: :environment do
-    accounts = Account.where.not(state: :scheduled_for_deletion)
+    accounts = Account.without_deleted
     progress = ProgressCounter.new(accounts.count)
 
     accounts.find_each do |account|

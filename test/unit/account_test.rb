@@ -866,17 +866,17 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'bought_cinstances_count when buying a cinstance' do
-    account = FactoryBot.create(:simple_buyer, provider_account: master_account)
+    account = FactoryBot.create(:simple_provider, provider_account: master_account)
 
     assert_difference -> { account.bought_cinstances_count }, 1 do
-      account.buy!(master_account.default_service.published_plans.first)
+      account.buy!(master_account.default_service.published_plans.first!)
       account.reload.bought_cinstances_count
     end
   end
 
   test 'bought_cinstances_count when deleting a cinstance' do
-    account = FactoryBot.create(:simple_buyer, provider_account: master_account)
-    cinstance = account.buy!(master_account.default_service.published_plans.first)
+    account = FactoryBot.create(:simple_provider, provider_account: master_account)
+    cinstance = account.buy!(master_account.default_service.published_plans.first!)
 
     assert_difference -> { account.reload.bought_cinstances_count }, -1 do
       cinstance.destroy
