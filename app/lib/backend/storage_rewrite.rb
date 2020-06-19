@@ -63,7 +63,7 @@ module Backend
       metrics = provider.metrics.includes(:service, :parent)
       usage_limits = provider.usage_limits.includes(plan: :service)
 
-      total_count = services.size + cinstances.size + metrics.size + usage_limits.size + bought_cinstances.size
+      total_count = services.size + cinstances.size + metrics.size + usage_limits.size + provider.bought_cinstances_count
 
       index = 0
       progress = -> do
