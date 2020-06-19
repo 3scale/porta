@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200617105046) do
+ActiveRecord::Schema.define(version: 20200420104331) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38,                  null: false
@@ -100,7 +100,6 @@ ActiveRecord::Schema.define(version: 20200617105046) do
     t.datetime "deleted_at",                                                precision: 6
     t.datetime "state_changed_at",                                          precision: 6
     t.integer  "first_admin_id",                                            precision: 38
-    t.integer  "bought_cinstances_count",                                   precision: 38
   end
 
   add_index "accounts", ["default_service_id"], name: "index_accounts_on_default_service_id"
