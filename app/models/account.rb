@@ -581,6 +581,10 @@ class Account < ApplicationRecord
 
   private
 
+  def reset_counter_cache
+    update_column(:bought_cinstances_count, bought_cinstances.size) if persisted?
+  end
+
   def validate_timezone
     tz = ActiveSupport::TimeZone.new(timezone)
 
@@ -613,6 +617,4 @@ class Account < ApplicationRecord
 
     errors.add :master, 'can be only one' if scope.exists?(master: true)
   end
-
-  protected
 end

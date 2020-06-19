@@ -39,7 +39,7 @@ class Contract < ApplicationRecord
   validates :user_key, length: { maximum: 256 }
 
   # TODO: rename to buyer_account and remove alias
-  belongs_to :user_account, class_name: 'Account', autosave: false, counter_cache: :bought_cinstances_count
+  belongs_to :user_account, class_name: 'Account', autosave: false
 
   alias buyer_account user_account
   alias buyer         user_account
@@ -296,7 +296,7 @@ class Contract < ApplicationRecord
   private
 
   def reset_counter_cache_for
-    [:plan].freeze
+    [:plan, :account].freeze
   end
 
   def update_counter_cache?(association_name)
