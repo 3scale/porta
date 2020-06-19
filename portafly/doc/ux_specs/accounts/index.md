@@ -1,4 +1,4 @@
-# Audience > Accounts > Listing
+# Accounts index
 
 [Back to index](../../index.md)
 
