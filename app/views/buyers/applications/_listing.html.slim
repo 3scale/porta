@@ -42,8 +42,7 @@ table class="data"
       th = sortable('cinstances.first_daily_traffic_at', 'Traffic On')
       th.actions
         - if @account
-          - cinstances = @account.bought_cinstances
-          - if cinstances.size.zero?
+          - if @account.bought_cinstances_count.zero?
             = link_to 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add'
           - else
             = switch_link 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add',

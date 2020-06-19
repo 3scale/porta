@@ -14,12 +14,12 @@ class PublishEnabledChangedEventForProviderApplicationsWorkerTest < ActiveSuppor
 
   def test_perform_when_current_state_scheduled_for_deletion
     provider.schedule_for_deletion!
-    Cinstance.any_instance.expects(:publish_enabled_changed_event).times(provider.buyer_applications.count + provider.bought_cinstances.count)
+    Cinstance.any_instance.expects(:publish_enabled_changed_event).times(provider.buyer_applications.count + provider.bought_cinstances_count)
     PublishEnabledChangedEventForProviderApplicationsWorker.new.perform(provider, 'approved')
   end
 
   def test_perform_when_previous_state_scheduled_for_deletion
-    Cinstance.any_instance.expects(:publish_enabled_changed_event).times(provider.buyer_applications.count + provider.bought_cinstances.count)
+    Cinstance.any_instance.expects(:publish_enabled_changed_event).times(provider.buyer_applications.count + provider.bought_cinstances_count)
     PublishEnabledChangedEventForProviderApplicationsWorker.new.perform(provider, 'scheduled_for_deletion')
   end
 

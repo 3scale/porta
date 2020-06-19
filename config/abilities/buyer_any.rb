@@ -42,7 +42,7 @@ Ability.define do |user|
     new_app_condition = -> do
       (provider.settings.multiple_applications_visible? ||
           !provider.settings.multiple_applications_visible? &&
-              account.bought_cinstances.count.zero?)
+              account.bought_cinstances_count.zero?)
     end
 
     can(:create_application, Service) do |service|

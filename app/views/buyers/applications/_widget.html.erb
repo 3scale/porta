@@ -1,5 +1,4 @@
-<%- cinstances = @account.bought_cinstances -%>
-<%- cinstance = cinstances.first! if cinstances.count == 1 -%>
+<%- cinstance = @account.bought_cinstances.first! if @account.bought_cinstances_count == 1 -%>
 
 <%- if cinstance && can?(:read, cinstance) -%>
   <div class="dashboard_bubble round">
