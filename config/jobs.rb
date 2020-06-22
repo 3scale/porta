@@ -44,6 +44,8 @@ module ThreeScale
 
     HOUR = %w[Rails.env].freeze # just a fake job to ensure cron works
 
+    SPHINX_INDEX_ALL = [{ 'rake' => 'sphinx:enqueue' }].freeze
+
     CUSTOM = {
     }.freeze
 
