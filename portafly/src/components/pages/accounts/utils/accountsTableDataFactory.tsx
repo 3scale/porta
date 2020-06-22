@@ -11,7 +11,6 @@ const generateRows = (accounts: IDeveloperAccount[]) => {
     account.org_name,
     account.admin_name,
     account.created_at,
-    account.apps_count.toString(),
     account.state,
     {
       title: isMultitenant ? <ActionButtonImpersonate /> : ''
@@ -40,11 +39,6 @@ const generateColumns = (t: TFunction) => [
   {
     categoryName: 'signup',
     title: t('accountsIndex:accounts_table.signup_header'),
-    transforms: [sortable]
-  },
-  {
-    categoryName: 'apps',
-    title: t('accountsIndex:accounts_table.applications_header'),
     transforms: [sortable]
   },
   {
