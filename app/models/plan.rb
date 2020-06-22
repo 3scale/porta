@@ -4,9 +4,6 @@ class Plan < ApplicationRecord
   class PeriodRangeCalculationError < StandardError; end
   include Symbolize
 
-  # todo: remove after migration 20200211154433_remove_end_user_plans.rb
-  self.ignored_columns = %w[end_user_required]
-
   self.allowed_sort_columns = %w[position name state contracts_count]
   self.default_sort_column = :position
   self.default_sort_direction = :asc
