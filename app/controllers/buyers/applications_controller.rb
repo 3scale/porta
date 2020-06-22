@@ -12,8 +12,6 @@ class Buyers::ApplicationsController < FrontendController
   before_action :find_cinstance, :except => [:index, :create, :new]
   before_action :find_provider,  only: %i[new create update]
 
-  before_action :find_application_plan,          :only => :create
-
   activate_menu :buyers
 
   layout 'provider'
@@ -24,11 +22,8 @@ class Buyers::ApplicationsController < FrontendController
     activate_menu :audience, :applications, :listing
 
     @states = Cinstance.allowed_states.collect(&:to_s).sort
-    accessible_services = current_account.accessible_services
-    @services = accessible_services.includes(:application_plans)
     @search = ThreeScale::Search.new(params[:search] || params)
-    @application_plans = current_account.application_plans.stock
-    @stock_and_custom_application_plans = current_account.application_plans.size
+    @application_plans = accessible_plans
 
     if params[:service_id]
       @service = accessible_services.find params[:service_id]
@@ -36,7 +31,7 @@ class Buyers::ApplicationsController < FrontendController
     end
 
     if params[:application_plan_id]
-      @plan = current_account.application_plans.find params[:application_plan_id]
+      @plan = @application_plans.find params[:application_plan_id]
       @search.plan_id = @plan.id
       @service ||= @plan.service
     end
@@ -58,7 +53,7 @@ class Buyers::ApplicationsController < FrontendController
   def new
     @cinstance = @buyer.bought_cinstances.build
     extend_cinstance_for_new_plan
-    @plans = @provider.application_plans.stock
+    @plans = accessible_plans.stock
 
     if params[:account_id]
       @account = current_account.buyers.find params[:account_id]
@@ -68,11 +63,13 @@ class Buyers::ApplicationsController < FrontendController
 
   # TODO: this should be done by buy! method
   def create
+    @plans = accessible_plans.stock
+    application_plan = @plans.find plan_id
     service_plan = if service_plan_id = params[:cinstance].delete(:service_plan_id)
-                     @application_plan.service.service_plans.find(service_plan_id)
+                     application_plan.service.service_plans.find(service_plan_id)
                    end
 
-    @cinstance = current_account.provider_builds_application_for(@buyer, @application_plan, params[:cinstance], service_plan)
+    @cinstance = current_account.provider_builds_application_for(@buyer, application_plan, params[:cinstance], service_plan)
     @cinstance.validate_human_edition!
 
     if @cinstance.save
@@ -80,7 +77,6 @@ class Buyers::ApplicationsController < FrontendController
       redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
-      @plans = @provider.application_plans
       render :action => :new
     end
   end
@@ -126,7 +122,7 @@ class Buyers::ApplicationsController < FrontendController
   def change_plan
     # there is no need to query available_application_plans as we already have a validation
     service = @cinstance.service
-    new_plan = service.application_plans.stock.find(params[:cinstance][:plan_id])
+    new_plan = accessible_plans.stock.find(plan_id)
     @cinstance.provider_changes_plan!(new_plan)
     flash[:notice] = "Plan changed to '#{new_plan.name}'."
     redirect_to admin_service_application_url(service, @cinstance)
@@ -191,8 +187,18 @@ class Buyers::ApplicationsController < FrontendController
     @provider = current_account
   end
 
-  def find_application_plan
-    @application_plan = @provider.application_plans.find params[:cinstance][:plan_id]
+  def accessible_services
+    @accessible_services ||= current_user.accessible_services.includes(:application_plans)
+  end
+
+  helper_method :accessible_services
+
+  def accessible_plans
+    current_account.application_plans.where(issuer: accessible_services)
+  end
+
+  def plan_id
+    @plan_id ||= params.require(:cinstance).permit(:plan_id).tap { |plan_params| plan_params.require(:plan_id) }[:plan_id]
   end
 
   def authorize_partners
