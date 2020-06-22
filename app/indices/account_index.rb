@@ -13,8 +13,6 @@ ThinkingSphinx::Index.define(:account, with: :real_time) do
 
   set_property field_weights: { name: 2 }
 
-  # set_property(group_concat_max_len: 32_000 - 1) if System::Database.mysql?
-
   has :provider_account_id, type: :integer
   has :tenant_id, type: :integer
   has :state, type: :string

@@ -45,6 +45,10 @@ every :day, :at => '08:00', roles: [:cron] do
   ThreeScale::Jobs::BILLING.each { |task| instance_exec(task, &job_proc) }
 end
 
+every 1.day, :at => '6:00 am', roles: [:sphinx_server] do
+  ThreeScale::Jobs::SPHINX_INDEX_ALL.each { |task| instance_exec(task, &job_proc) }
+end
+
 ThreeScale::Jobs::CUSTOM.each_pair do |interval, task|
   every interval, roles: [:cron] do
     instance_exec(task, &job_proc)

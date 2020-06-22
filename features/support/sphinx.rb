@@ -11,10 +11,6 @@ Before('@search') do
   assert ::ThinkingSphinx::Test.config.controller.running?, "thinking sphinx should be running: #{output}"
 end
 
-AfterStep '@search' do
-  # ::ThinkingSphinx::Test.index
-end
-
 After '@search' do
   ::ThinkingSphinx::Test.stop
 end
