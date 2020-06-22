@@ -3,8 +3,9 @@
 require 'backend_client'
 
 class Service < ApplicationRecord
-  # todo: remove after migration 20200211154433_remove_end_user_plans.rb
-  self.ignored_columns = %w[end_user_registration_required default_end_user_plan_id]
+  self.ignored_columns = %w[act_as_product end_user_registration_required default_end_user_plan_id
+                            oneline_description txt_api txt_features infobar draft_name display_provider_keys
+                            credit_card_support_email admin_support_email tech_support_email].freeze
 
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
@@ -32,7 +33,7 @@ class Service < ApplicationRecord
 
   has_system_name uniqueness_scope: :account_id
 
-  attr_readonly :system_name, :admin_support_email, :tech_support_email
+  attr_readonly :system_name
 
   validates :backend_version, inclusion: { in: ->(service) { BackendVersion.usable_versions(service: service) }}
 
@@ -60,10 +61,6 @@ class Service < ApplicationRecord
     service.has_many :service_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
-  end
-
-  def self.columns
-    super.reject { |column| %w[act_as_product tech_support_email admin_support_email].include?(column.name) }
   end
 
   scope :of_account, ->(account) { where.has { account_id == account.id } }
@@ -126,17 +123,12 @@ class Service < ApplicationRecord
     end
   end
 
-  validates :credit_card_support_email, format: { with: /.+@.+\..+/, allow_blank: true }
-
   validates :name, presence: true
 
-  validates :name, :logo_file_name, :logo_content_type, :state, :draft_name,
-            :credit_card_support_email,
+  validates :name, :logo_file_name, :logo_content_type, :state,
             :buyer_plan_change_permission, :system_name, :backend_version, :support_email, :deployment_option,
             length: { maximum: 255 }
-  validates :infobar, :terms, :notification_settings, :oneline_description, :description,
-            :txt_api, :txt_support, :txt_features,
-            length: { maximum: 65535 }
+  validates :terms, :notification_settings, :description, :txt_support, length: { maximum: 65535 }
 
   accepts_nested_attributes_for :proxy
 

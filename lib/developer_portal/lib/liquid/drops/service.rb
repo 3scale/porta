@@ -193,12 +193,6 @@ module Liquid
         @service.support_email
       end
 
-      # TODO: remove this and all references, views
-      hidden
-      def infobar
-        @service.infobar
-      end
-
       desc 'Returns API spec collection.'
       example %(
         <ul>
