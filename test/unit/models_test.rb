@@ -36,7 +36,7 @@ class ModelsTest < ActiveSupport::TestCase
       exception_attributes.concat INHERITANCE_COLUMNS
       model.columns.each do |column|
         column_name = column.name
-        next if column.type != :string || exception_attributes.include?(column_name)
+        next if column.type != :string || exception_attributes.include?(column_name) || model.ignored_columns.include?(column_name)
 
         column_sql_type = column.sql_type
         next if column_sql_type.match(/\Acharacter varying\Z/)
