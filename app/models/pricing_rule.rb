@@ -25,10 +25,6 @@ class PricingRule < ApplicationRecord
 
   delegate :service, :to => :plan
 
-  def self.columns
-    super.reject { |c| c.name == 'plan_type'.freeze }
-  end
-
   # What's the cost of usage when rules from this collection are applied.
   def self.cost_for_value(value)
     all.to_a.sum { |rule| rule.cost_for_value(value) }

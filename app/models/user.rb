@@ -3,10 +3,6 @@ require 'digest/sha1'
 class User < ApplicationRecord
   include Symbolize
 
-  def self.columns
-    super.reject { |c| c.name == "janrain_identifier" }
-  end
-
   include Fields::Fields
   required_fields_are :username, :email
   optional_fields_are :title, :first_name, :last_name, :job_role
