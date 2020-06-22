@@ -77,24 +77,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :not_found
     end
 
-    # This test can be removed once used deprecated attributes have been removed from the schema
-    test 'deprecated attributes should not be updated' do
-      new_tech_support_email = 'foo.tech.support@example.com'
-      new_admin_support_email = 'foo.admin.support@example.com'
-
-      deprecated_update_params = { service:
-                                   { tech_support_email: new_tech_support_email,
-                                     admin_support_email: new_admin_support_email }
-                                 }
-
-      put admin_service_path(service), params: deprecated_update_params
-
-      service.reload
-
-      assert_not_equal service.tech_support_email, new_tech_support_email
-      assert_not_equal service.admin_support_email, new_admin_support_email
-    end
-
     test 'update endpoint and sandbox endpoint with apicast custom url enabled' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: false)
