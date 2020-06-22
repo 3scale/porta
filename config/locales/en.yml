@@ -1076,7 +1076,6 @@ en:
 
       # Service attributes
       service:
-        credit_card_support_email: "Who should be emailed, to change credit card details?"
         friendly_id: URL
         txt_support: Contact and Support Information
 
