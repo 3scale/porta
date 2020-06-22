@@ -24,13 +24,6 @@ Array [
     ],
   },
   Object {
-    "categoryName": "apps",
-    "title": undefined,
-    "transforms": Array [
-      [Function],
-    ],
-  },
-  Object {
     "categoryName": "state",
     "title": undefined,
     "transforms": Array [
