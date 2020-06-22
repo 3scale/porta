@@ -3,10 +3,8 @@
 class ProxyRuleTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  disable_transactional_fixtures!
-
   test '#search_for uses sphinx if query given' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: IndexProxyRuleWorker) do
         proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test')
@@ -18,7 +16,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   end
 
   test '#search_for reuses the scope if given' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: IndexProxyRuleWorker) do
         proxy_rule   = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
@@ -32,7 +30,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   end
 
   test '#search_for order result if sort/direction parameters given' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: IndexProxyRuleWorker) do
         proxy_rule   = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
@@ -46,7 +44,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   end
 
   test '#search_for does not use sphinx if no query given' do
-    ThinkingSphinx::Test.run do
+    ThinkingSphinx::Test.rt_run do
       ThinkingSphinx::Search.expects(:new).never
       query = ProxyRuleQuery.new(owner_type: 'BackendApi', owner_id: 1)
 

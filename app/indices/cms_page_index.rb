@@ -1,16 +1,25 @@
-ThinkingSphinx::Index.define 'cms/page', with: :active_record do
-  indexes :title
-  has :tenant_id
-  where sanitize_sql(['searchable=?', true])
+# frozen_string_literal: true
 
-  # FIXME: not truncating the published character size to 32k
-  # Oracle limits the size of VARCHAR2 to 32k in extended mode
-  if System::Database.oracle?
-    indexes 'TO_CHAR("CMS_TEMPLATES"."PUBLISHED")', as: :published, type: :string
-    group_by 'TO_CHAR("CMS_TEMPLATES"."PUBLISHED")'
-  else
-    indexes :published
+ThinkingSphinx::Index.define 'cms/page', with: :real_time do
+  indexes :title
+  has :tenant_id, type: :integer
+
+  indexes :published
+  scope { CMS::Page.where(searchable: true) }
+end
+
+module CMSPageIndex
+  extend ActiveSupport::Concern
+
+  included do
+    after_save :sphinx_index
   end
 
-  set_property sql_range_step: 1_024
+  protected
+
+  def sphinx_index
+    return unless searchable?
+
+    SphinxIndexationWorker.perform_later(self)
+  end
 end

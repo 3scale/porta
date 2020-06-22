@@ -22,7 +22,7 @@ module Tasks
       ThreeScale::Core::Service.expects(:make_default).with(another_service.backend_id)
 
       assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent).method(:count)) do
-        perform_enqueued_jobs do
+        perform_enqueued_jobs(except: SphinxIndexationWorker) do
           execute_rake_task 'services.rake', 'services:destroy_service', account.id, default_service.id
         end
       end
