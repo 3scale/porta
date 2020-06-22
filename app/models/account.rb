@@ -56,6 +56,7 @@ class Account < ApplicationRecord
   include Gateway
   include States
   include ProviderDomains
+  include AccountIndex::ForAccount
 
   self.background_deletion = [
     :users,

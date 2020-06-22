@@ -39,13 +39,6 @@ billing_jobs:
 sphinx_index:
   cron: '0 6 * * *'
   class: CronJob::Enqueuer
-  args: ['SPHINX_INDEX']
-  queue: critical
-  status: enabled
-
-sphinx_delta:
-  cron: '42 * * * *'
-  class: CronJob::Enqueuer
-  args: ['SPHINX_DELTA']
+  args: ['SPHINX_INDEX_ALL']
   queue: critical
   status: enabled

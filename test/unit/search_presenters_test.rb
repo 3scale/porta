@@ -1,29 +1,26 @@
 require 'test_helper'
 
 class SearchPresentersTest < ActiveSupport::TestCase
-  disable_transactional_fixtures!
-
-  def setup
-    ::ThinkingSphinx::Test.init
-    ::ThinkingSphinx::Test.start_with_autostop
-  end
+  include ActiveJob::TestHelper
 
   test 'index presenter as json' do
+
     provider = FactoryBot.create(:simple_account)
     provider.sections << FactoryBot.create(:root_cms_section, :provider => provider)
 
-    page = FactoryBot.create(:cms_page, :published => 'my text whatever', :provider => provider).reload
-    request = stub('request')
-    params = {:q => '*text*'}
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs only: SphinxIndexationWorker do
+        page = FactoryBot.create(:cms_page, :published => 'my text whatever', :provider => provider).reload
+        request = stub('request')
+        params = {:q => '*text*'}
 
-    ThinkingSphinx::Test.run do
-      ThinkingSphinx::Test.index # quite idiotic, but otherwise they are not indexed
 
-      presenter = SearchPresenters::IndexPresenter.new(params, request, page.reload.tenant_id)
-      search_results = presenter.as_json
+        presenter = SearchPresenters::IndexPresenter.new(params, request, page.reload.tenant_id)
+        search_results = presenter.as_json
 
-      assert hash = search_results.first, "missing search result"
-      assert_equal page.title, hash[:title]
+        assert hash = search_results.first, "missing search result"
+        assert_equal page.title, hash[:title]
+      end
     end
   end
 
@@ -37,24 +34,25 @@ class SearchPresentersTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_account)
     provider.sections << section = FactoryBot.create(:root_cms_section, :provider => provider)
 
-    10.times do
-      FactoryBot.create(:cms_page, published: 'my text whatever', provider: provider, section: section)
-    end
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs only: SphinxIndexationWorker do
 
-    request = stub('request')
-    params = {:q => '*text*', per_page: 1, page: 2}
+        10.times do
+          FactoryBot.create(:cms_page, published: 'my text whatever', provider: provider, section: section)
+        end
 
-    ThinkingSphinx::Test.run do
-      ThinkingSphinx::Test.index # quite idiotic, but otherwise they are not indexed
+        request = stub('request')
+        params = {:q => '*text*', per_page: 1, page: 2}
 
-      presenter = SearchPresenters::IndexPresenter.new(params, request, provider.id)
-      search = presenter.search
+        presenter = SearchPresenters::IndexPresenter.new(params, request, provider.id)
+        search = presenter.search
 
-      assert_equal 10, search.total_entries
-      assert_equal 10, search.total_pages
-      assert_equal 10, presenter.total_found
-      assert_equal 1,  search.per_page
-      assert_equal 2,  search.current_page
+        assert_equal 10, search.total_entries
+        assert_equal 10, search.total_pages
+        assert_equal 10, presenter.total_found
+        assert_equal 1,  search.per_page
+        assert_equal 2,  search.current_page
+      end
     end
   end
 
