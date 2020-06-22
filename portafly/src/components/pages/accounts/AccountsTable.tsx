@@ -10,17 +10,13 @@ import {
   useDataListFilters,
   useDataListPagination,
   useDataListTable,
-  useDataListBulkActions,
   Toolbar,
   SearchWidget,
   PaginationWidget,
-  SendEmailModal,
-  ChangeStateModal,
   filterRows
 } from 'components'
 import { useTranslation } from 'i18n/useTranslation'
 import { ToolbarContent, ToolbarItem } from '@patternfly/react-core'
-import { DataListRow } from 'types'
 
 const AccountsTable: React.FunctionComponent = () => {
   const { t } = useTranslation('accountsIndex')
@@ -28,8 +24,7 @@ const AccountsTable: React.FunctionComponent = () => {
     columns,
     rows,
     sortBy,
-    setSortBy,
-    selectedRows
+    setSortBy
   } = useDataListTable()
 
   if (rows.length === 0) {
@@ -38,7 +33,6 @@ const AccountsTable: React.FunctionComponent = () => {
 
   const { startIdx, endIdx, resetPagination } = useDataListPagination()
   const { filters } = useDataListFilters()
-  const { modal } = useDataListBulkActions()
 
   const options = [
     { name: 'approved', humanName: t('actions_filter_options.by_state_options.approved') },
@@ -78,9 +72,6 @@ const AccountsTable: React.FunctionComponent = () => {
     </Toolbar>
   )
 
-  const extractSendEmailItemTitle = ({ cells }: DataListRow) => `${cells[1]} (${cells[0]})`
-  const extractChangeStateItemTitle = ({ cells } :DataListRow) => `${cells[0]} (${cells[4]})`
-
   return (
     <>
       <Table
@@ -102,14 +93,6 @@ const AccountsTable: React.FunctionComponent = () => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-
-      {modal === 'sendEmail' && (
-        <SendEmailModal items={selectedRows.map(extractSendEmailItemTitle)} />
-      )}
-
-      {modal === 'changeState' && (
-        <ChangeStateModal items={selectedRows.map(extractChangeStateItemTitle)} states={options} />
-      )}
     </>
   )
 }
