@@ -16,7 +16,6 @@ import {
   PaginationWidget,
   SendEmailModal,
   ChangeStateModal,
-  BulkActionsWidget,
   filterRows
 } from 'components'
 import { useTranslation } from 'i18n/useTranslation'
@@ -56,11 +55,6 @@ const AccountsTable: React.FunctionComponent = () => {
 
   useEffect(() => resetPagination, [filters])
 
-  const actions = {
-    sendEmail: t('shared:bulk_actions.send_email'),
-    changeState: t('shared:bulk_actions.change_state')
-  }
-
   const filteredRows = filterRows(rows, filters, columns)
 
   const visibleRows = filteredRows.slice(startIdx, endIdx)
@@ -74,9 +68,6 @@ const AccountsTable: React.FunctionComponent = () => {
   const Header = (
     <Toolbar>
       <ToolbarContent>
-        <ToolbarItem>
-          <BulkActionsWidget actions={actions} />
-        </ToolbarItem>
         <ToolbarItem>
           <SearchWidget categories={categories} />
         </ToolbarItem>
