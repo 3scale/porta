@@ -3,7 +3,6 @@ import {
   Table,
   TableHeader,
   TableBody,
-  OnSelect,
   OnSort
 } from '@patternfly/react-table'
 import {
@@ -15,7 +14,6 @@ import {
   Toolbar,
   SearchWidget,
   PaginationWidget,
-  BulkSelectorWidget,
   SendEmailModal,
   ChangeStateModal,
   BulkActionsWidget,
@@ -32,8 +30,7 @@ const AccountsTable: React.FunctionComponent = () => {
     rows,
     sortBy,
     setSortBy,
-    selectedRows,
-    selectOne
+    selectedRows
   } = useDataListTable()
 
   if (rows.length === 0) {
@@ -72,18 +69,11 @@ const AccountsTable: React.FunctionComponent = () => {
     setSortBy(index, direction, true)
   }
 
-  const onSelectOne: OnSelect = (_ev, selected, _rowIndex, rowData) => {
-    selectOne(rowData.id, selected)
-  }
-
   const pagination = <PaginationWidget itemCount={filteredRows.length} />
 
   const Header = (
     <Toolbar>
       <ToolbarContent>
-        <ToolbarItem>
-          <BulkSelectorWidget />
-        </ToolbarItem>
         <ToolbarItem>
           <BulkActionsWidget actions={actions} />
         </ToolbarItem>
@@ -107,7 +97,6 @@ const AccountsTable: React.FunctionComponent = () => {
         header={Header}
         cells={columns}
         rows={visibleRows}
-        onSelect={visibleRows.length ? onSelectOne : undefined}
         canSelectAll={false}
         sortBy={sortBy}
         onSort={onSort}
