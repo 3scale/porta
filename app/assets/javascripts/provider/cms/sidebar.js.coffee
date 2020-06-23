@@ -175,14 +175,11 @@ class Sidebar
     @items('[title]').tipsy(gravity: $.fn.tipsy.autoWE);
 
   group: (json) ->
-    section_id = (p) -> p.section_id
-    parent_id = (s) -> s.parent_id
-
     {
-      sections: _(json.sections).groupBy(parent_id),
-      pages: _(json.pages).groupBy(section_id),
-      files: _(json.files).groupBy(section_id),
-      builtins: _(json.builtins).groupBy(section_id)
+      sections: _.groupBy(json.sections, 'parent_id'),
+      pages: _.groupBy(json.pages, 'section_id'),
+      files: _.groupBy(json.files, 'section_id'),
+      builtins: _.groupBy(json.builtins, 'section_id')
     }
 
   render_layouts: (layouts) =>
