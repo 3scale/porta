@@ -1,5 +1,7 @@
 export type Primitive = string | number | boolean
 
+export type ServiceHosts = Array<{ name: string, value: string }>
+
 export type AccountData = {
  [string]: Array<{ name: string, value: string }>
 }
