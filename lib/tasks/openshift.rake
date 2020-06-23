@@ -36,12 +36,15 @@ ERROR_MESSAGE
 
     desc 'Start Thinking Sphinx engine with background index refreshing'
     task start: %i(environment) do
-      interface = ThinkingSphinx::RakeInterface.new
+      interface = ThinkingSphinx::RakeInterface.new nodetach: true
       daemon = interface.daemon
+      trap('INT') { daemon.stop }
+      trap('TERM') { daemon.stop }
+      at_exit { daemon.stop }
+
       interface.configure
 
       daemon.start
-      at_exit { daemon.stop }
     end
   end
 
