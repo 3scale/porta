@@ -38,7 +38,6 @@ ERROR_MESSAGE
     task start: %i(environment) do
       interface = ThinkingSphinx::RakeInterface.new
       daemon = interface.daemon
-      daemon.stop
       interface.configure
 
       daemon.start
