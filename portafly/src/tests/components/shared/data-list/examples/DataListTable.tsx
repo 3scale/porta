@@ -44,7 +44,7 @@ const DataListTable: React.FunctionComponent = () => {
 
   const options = [
     { name: 'alive', humanName: 'Alive' },
-    { name: 'dead', humanName: 'Dead' }
+    { name: 'deceased', humanName: 'Deceased' }
   ]
 
   const categories = [
