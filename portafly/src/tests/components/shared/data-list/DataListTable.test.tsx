@@ -45,7 +45,7 @@ const characters = [
     name: 'Calanthe',
     species: 'Human',
     nationality: 'Cintra',
-    state: 'Dead'
+    state: 'Deceased'
   },
   {
     id: 2,
@@ -103,7 +103,8 @@ afterEach(resetMocks)
 
 const setup = () => {
   const wrapper = render(<DataListTable />)
-  const getRow = (character) => wrapper.getByText(character.name).closest('tr') as HTMLElement
+  const table = within(wrapper.queryByRole('grid') as HTMLElement)
+  const getRow = (character) => table.getByText(character.name).closest('tr') as HTMLElement
   const bulkSelectorDropdown = within(wrapper.container.querySelector('#data-list-bulk-selector-dropdown') as HTMLElement)
   const bulkActionsDropdown = within(wrapper.container.querySelector('#data-list-bulk-actions-dropdown') as HTMLElement)
 
@@ -118,9 +119,11 @@ const setup = () => {
 it('should be able to sort columns', () => {
   const { container } = setup()
   const table = within(container.querySelector('table') as HTMLElement)
-  fireEvent.click(table.getByText(/Name/))
 
-  expect(defaultTable.setSortBy).toHaveBeenLastCalledWith(1, 'asc', true)
+  expect(defaultTable.setSortBy).not.toHaveBeenCalled()
+
+  fireEvent.click(table.getByText(/Name/))
+  expect(defaultTable.setSortBy).toHaveBeenCalled()
 })
 
 describe('when there are any records, but none selected', () => {
@@ -279,7 +282,7 @@ describe('when there are any filters', () => {
   beforeEach(() => {
     useFiltersMock.mockReturnValue({
       filters: {
-        state: ['dead']
+        state: ['deceased']
       }
     })
   })
