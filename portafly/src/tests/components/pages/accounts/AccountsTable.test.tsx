@@ -1,12 +1,6 @@
 import React from 'react'
-
 import { render } from 'tests/custom-render'
-import {
-  useDataListTable,
-  useDataListPagination,
-  useDataListFilters,
-  useDataListBulkActions
-} from 'components'
+import { useDataListTable, useDataListPagination, useDataListFilters } from 'components'
 import { AccountsTable, generateColumns, generateRows } from 'components/pages/accounts'
 import { within } from '@testing-library/react'
 import { IDeveloperAccount } from 'types'
@@ -16,7 +10,6 @@ jest.mock('components/shared/data-list/DataListContext')
 const useTableMock = useDataListTable as jest.Mock
 const usePaginationMock = useDataListPagination as jest.Mock
 const useFiltersMock = useDataListFilters as jest.Mock
-const useBulkActionsMock = useDataListBulkActions as jest.Mock
 const developerAccounts: IDeveloperAccount[] = [['Dandelion', 'Rosemary and Thyme'], ['Geralt', 'Wolf School']].map((account) => (
   factories.DeveloperAccount.build({
     admin_name: account[0],
@@ -30,23 +23,17 @@ const columns = generateColumns((s: string) => s)
 const defaultTable = {
   rows,
   columns,
-  selectedRows: [],
   sortBy: {},
-  setSortBy: jest.fn(),
-  selectOne: jest.fn(),
-  selectPage: jest.fn(),
-  selectAll: jest.fn()
+  setSortBy: jest.fn()
 }
 const resetPagination = jest.fn()
 const defaultPagination = { startIdx: 0, endIdx: 5, resetPagination }
 const defaultFilters = { filters: {} }
-const defaultBulkActions = {}
 
 const resetMocks = () => {
   useTableMock.mockReturnValue(defaultTable)
   usePaginationMock.mockReturnValue(defaultPagination)
   useFiltersMock.mockReturnValue(defaultFilters)
-  useBulkActionsMock.mockReturnValue(defaultBulkActions)
 }
 beforeAll(resetMocks)
 afterEach(resetMocks)
