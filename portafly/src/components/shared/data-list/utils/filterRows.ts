@@ -1,5 +1,19 @@
-import { DataListRow, DataListCol, Filters } from 'types/data-list'
+import {
+  DataListRow,
+  DataListCol,
+  Filters,
+  DataListRowCell
+} from 'types/data-list'
 
+const isTermInRowForColumn = (row: DataListRow, colIdx: number) => (term: string) => {
+  const cell = row.cells[colIdx]
+
+  const target = typeof cell === 'object'
+    ? (cell as DataListRowCell).filterableString
+    : cell
+
+  return target.toLowerCase().indexOf(term.toLowerCase()) > -1
+}
 /**
  * Filters a DataListRow given a colIdx and filtering terms.
  * @param colIdx number - The index of a categoryName column.
@@ -8,7 +22,7 @@ import { DataListRow, DataListCol, Filters } from 'types/data-list'
  */
 const filterRowByTerm = (colIdx: number, terms: string[]) => (row: DataListRow): boolean => (
   terms.length
-    ? terms.some((f) => (row.cells)[colIdx].toLowerCase().indexOf(f.toLowerCase()) > -1)
+    ? terms.some(isTermInRowForColumn(row, colIdx))
     : true
 )
 
