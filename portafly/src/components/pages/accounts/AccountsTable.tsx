@@ -54,7 +54,7 @@ const AccountsTable: React.FunctionComponent = () => {
   const visibleRows = filteredRows.slice(startIdx, endIdx)
 
   const onSort: OnSort = (_event, index, direction) => {
-    setSortBy(index, direction, true)
+    setSortBy(index, direction)
   }
 
   const pagination = <PaginationWidget itemCount={filteredRows.length} />
