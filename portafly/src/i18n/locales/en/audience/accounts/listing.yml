@@ -63,6 +63,8 @@ accounts_table:
  updated_header: Updated at
  updated_header_description: Column listing the date an account was last updated
  #-------# actions_header_plural: available in shared.yml
+ account_overview_link_aria_label: Go to account's overview
+ account_overview_link_aria_label_description: Aria label for the link to open each account's overview
  actions_column_options:
   approve: Approve
   approve_description: Button link to approve an account
