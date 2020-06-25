@@ -21,6 +21,11 @@ describe('when it is multitenant', () => {
 
   it('should render an impersonate button as action', () => {
     expect(generateRows(developerAccounts.slice(0, 1)))
-      .toMatchObject([{ cells: expect.arrayContaining([{ title: <ActionButtonImpersonate /> }]) }])
+      .toMatchObject([{
+        cells: expect.arrayContaining([{
+          filterableString: expect.any(String),
+          title: <ActionButtonImpersonate />
+        }])
+      }])
   })
 })
