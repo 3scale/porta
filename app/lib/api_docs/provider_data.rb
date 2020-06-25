@@ -102,7 +102,13 @@ module ApiDocs
     end
 
     def data_items
-      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids backend_api_metric_names service_ids admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
+      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids backend_api_metric_names service_ids service_hosts admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
+    end
+
+    protected
+
+    def accessible_services
+      @account.services
     end
   end
 end
