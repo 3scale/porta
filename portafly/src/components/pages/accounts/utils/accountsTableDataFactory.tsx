@@ -1,20 +1,21 @@
 import React from 'react'
 import { sortable } from '@patternfly/react-table'
-import { IDeveloperAccount } from 'types'
-import { TFunction } from 'i18next'
+import { IDeveloperAccount, DataListRowGenerator, DataListColumnGenerator } from 'types'
 import { ActionButtonImpersonate, AccountOverviewLink } from 'components/pages/accounts'
 
-const generateRows = (accounts: IDeveloperAccount[]) => {
+const generateRows: DataListRowGenerator = (accounts: IDeveloperAccount[]) => {
   const isMultitenant = process.env.REACT_APP_MULTITENANT
   // Rows and Columns must have the same order
   const mapAccountToRowCell = (account: IDeveloperAccount) => [
     {
+      filterableString: account.org_name,
       title: <AccountOverviewLink account={account} />
     },
     account.admin_name,
     account.created_at,
     account.state,
     {
+      filterableString: '',
       title: isMultitenant ? <ActionButtonImpersonate /> : ''
     }
   ]
@@ -27,7 +28,7 @@ const generateRows = (accounts: IDeveloperAccount[]) => {
 }
 
 // Filterable columns must have an id equal to its category name
-const generateColumns = (t: TFunction) => [
+const generateColumns: DataListColumnGenerator = (t) => [
   {
     categoryName: 'group',
     title: t('accountsIndex:accounts_table.group_header'),
