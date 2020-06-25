@@ -2,13 +2,15 @@ import React from 'react'
 import { sortable } from '@patternfly/react-table'
 import { IDeveloperAccount } from 'types'
 import { TFunction } from 'i18next'
-import { ActionButtonImpersonate } from 'components/pages/accounts'
+import { ActionButtonImpersonate, AccountOverviewLink } from 'components/pages/accounts'
 
 const generateRows = (accounts: IDeveloperAccount[]) => {
   const isMultitenant = process.env.REACT_APP_MULTITENANT
   // Rows and Columns must have the same order
   const mapAccountToRowCell = (account: IDeveloperAccount) => [
-    account.org_name,
+    {
+      title: <AccountOverviewLink account={account} />
+    },
     account.admin_name,
     account.created_at,
     account.state,
