@@ -1,9 +1,12 @@
+import React from 'react'
+
 import { filterRows } from 'components'
 import { Filters } from 'types/data-list'
+import { Button } from '@patternfly/react-core'
 
 const Lara = { id: 0, cells: ['Lara Croft', '1996'] }
 const Nate = { id: 1, cells: ['Nathan Drake', '2007'] }
-const Indi = { id: 2, cells: ['Indiana Jones', '1981'] }
+const Indi = { id: 2, cells: [{ title: <Button>Indiana Jones</Button> }, '1981'] }
 const rows = [Lara, Nate, Indi]
 const columns = [
   { categoryName: 'explorer', title: 'Explorer' },
