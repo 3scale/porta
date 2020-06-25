@@ -5,51 +5,21 @@ Given(/^provider "(.*?)" has a swagger 1.0$/) do | org_name |
 
   active_docs = provider.api_docs_services.build name: "Echo"
   active_docs.published = true
-  active_docs.body =<<~EOBODY
-    {
-     "basePath": "https://echo-api.3scale.net",
-     "apiVersion": "v1",
-     "swaggerVersion": "1.0",
-     "apis": [
-       {
-         "path": "/hello",
-         "operations": [
-           {
-             "httpMethod": "GET",
-             "summary": "Say Hello!",
-             "description": "This operation says hello.",
-             "nickname": "hello",
-             "group": "words",
-             "type": "string",
-             "parameters": [
-               {
-                 "name": "user_key",
-                 "description": "Your API access key",
-                 "type": "string",
-                 "paramType": "query",
-                 "threescale_name": "user_keys"
-               }
-             ]
-           }
-         ]
-       }
-     ]
-    }
-  EOBODY
+  active_docs.body = file_fixture('swagger/echo-api-1.0.json')
   assert active_docs.save
 end
 
 Given(/^provider "(.*?)" has the swagger example of signup$/) do |arg1|
   active_docs = @provider.api_docs_services.build name: "Echo"
   active_docs.published = true
-  active_docs.body = Logic::ProviderSignup::SampleData::ECHO_SERVICE
+  active_docs.body = file_fixture('swagger/echo-api-2.0.json')
   assert active_docs.save
 end
 
 Given(/^provider "(.*?)" has the oas3 simple example$/) do |arg1|
   active_docs = @provider.api_docs_services.build name: "Echo"
   active_docs.published = true
-  active_docs.body = Logic::ProviderSignup::SampleData::SIMPLE_API_OAS3
+  active_docs.body = file_fixture('swagger/echo-api-3.0.json')
   assert active_docs.save
 end
 
