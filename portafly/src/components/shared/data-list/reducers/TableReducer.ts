@@ -20,8 +20,16 @@ export type TableState = {
 const sorter = (index: number) => (a: DataListRow, b: DataListRow) => {
   const prev = a.cells[index]
   const next = b.cells[index]
-  if (prev < next) return -1
-  if (prev > next) return 1
+
+  const prevTarget = typeof prev === 'object'
+    ? prev.filterableString.replace(/<[^>]+>/g, '')
+    : prev
+  const nextTarget = typeof next === 'object'
+    ? next.filterableString.replace(/<[^>]+>/g, '')
+    : next
+
+  if (prevTarget < nextTarget) return -1
+  if (prevTarget > nextTarget) return 1
   return 0
 }
 
