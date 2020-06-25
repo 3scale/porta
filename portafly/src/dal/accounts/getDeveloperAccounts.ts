@@ -55,7 +55,6 @@ const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) 
   org_name: account.org_name,
   // TODO: Porta should return admin_name (username of first user role admin)
   admin_name: account.billing_address?.company,
-  apps_count: 0, // TODO: this is not included in /admin/api/accounts
   state: account.state
 }))
 

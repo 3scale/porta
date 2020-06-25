@@ -3,7 +3,6 @@ import {
   Table,
   TableHeader,
   TableBody,
-  OnSelect,
   OnSort
 } from '@patternfly/react-table'
 import {
@@ -11,19 +10,13 @@ import {
   useDataListFilters,
   useDataListPagination,
   useDataListTable,
-  useDataListBulkActions,
   Toolbar,
   SearchWidget,
   PaginationWidget,
-  BulkSelectorWidget,
-  SendEmailModal,
-  ChangeStateModal,
-  BulkActionsWidget,
   filterRows
 } from 'components'
 import { useTranslation } from 'i18n/useTranslation'
 import { ToolbarContent, ToolbarItem } from '@patternfly/react-core'
-import { DataListRow } from 'types'
 
 const AccountsTable: React.FunctionComponent = () => {
   const { t } = useTranslation('accountsIndex')
@@ -31,9 +24,7 @@ const AccountsTable: React.FunctionComponent = () => {
     columns,
     rows,
     sortBy,
-    setSortBy,
-    selectedRows,
-    selectOne
+    setSortBy
   } = useDataListTable()
 
   if (rows.length === 0) {
@@ -42,7 +33,6 @@ const AccountsTable: React.FunctionComponent = () => {
 
   const { startIdx, endIdx, resetPagination } = useDataListPagination()
   const { filters } = useDataListFilters()
-  const { modal } = useDataListBulkActions()
 
   const options = [
     { name: 'approved', humanName: t('actions_filter_options.by_state_options.approved') },
@@ -59,21 +49,12 @@ const AccountsTable: React.FunctionComponent = () => {
 
   useEffect(() => resetPagination, [filters])
 
-  const actions = {
-    sendEmail: t('shared:bulk_actions.send_email'),
-    changeState: t('shared:bulk_actions.change_state')
-  }
-
   const filteredRows = filterRows(rows, filters, columns)
 
   const visibleRows = filteredRows.slice(startIdx, endIdx)
 
   const onSort: OnSort = (_event, index, direction) => {
-    setSortBy(index, direction, true)
-  }
-
-  const onSelectOne: OnSelect = (_ev, selected, _rowIndex, rowData) => {
-    selectOne(rowData.id, selected)
+    setSortBy(index, direction)
   }
 
   const pagination = <PaginationWidget itemCount={filteredRows.length} />
@@ -81,12 +62,6 @@ const AccountsTable: React.FunctionComponent = () => {
   const Header = (
     <Toolbar>
       <ToolbarContent>
-        <ToolbarItem>
-          <BulkSelectorWidget />
-        </ToolbarItem>
-        <ToolbarItem>
-          <BulkActionsWidget actions={actions} />
-        </ToolbarItem>
         <ToolbarItem>
           <SearchWidget categories={categories} />
         </ToolbarItem>
@@ -97,9 +72,6 @@ const AccountsTable: React.FunctionComponent = () => {
     </Toolbar>
   )
 
-  const extractSendEmailItemTitle = ({ cells }: DataListRow) => `${cells[1]} (${cells[0]})`
-  const extractChangeStateItemTitle = ({ cells } :DataListRow) => `${cells[0]} (${cells[4]})`
-
   return (
     <>
       <Table
@@ -107,7 +79,6 @@ const AccountsTable: React.FunctionComponent = () => {
         header={Header}
         cells={columns}
         rows={visibleRows}
-        onSelect={visibleRows.length ? onSelectOne : undefined}
         canSelectAll={false}
         sortBy={sortBy}
         onSort={onSort}
@@ -122,14 +93,6 @@ const AccountsTable: React.FunctionComponent = () => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-
-      {modal === 'sendEmail' && (
-        <SendEmailModal items={selectedRows.map(extractSendEmailItemTitle)} />
-      )}
-
-      {modal === 'changeState' && (
-        <ChangeStateModal items={selectedRows.map(extractChangeStateItemTitle)} states={options} />
-      )}
     </>
   )
 }
