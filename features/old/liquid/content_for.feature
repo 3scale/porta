@@ -5,7 +5,7 @@ Feature: Content for and content of
     Given a provider "foo.example.com"
     And the current provider is foo.example.com
     And the current domain is foo.example.com
-    And the provider has cms page "/some-page" with:
+    And the provider has CMS Page "/some-page" with:
     """
       {% content_for something %}
         <something></something>
@@ -23,7 +23,7 @@ Feature: Content for and content of
       </body>
     </html>
     """
-    And the cms page "/some-page" has main layout
+    And the CMS Page "/some-page" has main layout
 
     And I visit "/some-page"
     Then the html body should contain "<content></content>"

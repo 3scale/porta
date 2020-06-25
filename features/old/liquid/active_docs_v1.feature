@@ -9,7 +9,7 @@ Feature: ActiveDocs
 
   Scenario: Loading ActiveDocs 1.0
     Given provider "foo.example.com" has a swagger 1.0
-    Given the provider has cms page "/version-10" with:
+    Given the provider has CMS Page "/version-10" with:
     """
     {% active_docs version: "1.0" %}
     <h3>ActiveDocs version 1.0</h3>
@@ -20,7 +20,7 @@ Feature: ActiveDocs
       });
     </script>
     """
-    And the cms page "/version-10" has main layout
+    And the CMS Page "/version-10" has main layout
 
     And the current domain is "foo.example.com"
     When I visit "/version-10"

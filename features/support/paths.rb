@@ -538,9 +538,6 @@ World(Module.new do
     when 'the CMS content library page', 'the portal area page'
       provider_admin_cms_templates_path
 
-    when /^the edit page of the html block "([^"]*)"$/
-      html_block = HtmlBlock.find_by_name($1)
-      edit_cms_html_block_path html_block
     #
     # Buyer
     #

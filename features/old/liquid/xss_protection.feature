@@ -5,7 +5,7 @@ Feature: XSS Protection
   Background:
     Given a provider "foo.example.com"
     And the current provider is foo.example.com
-    And the provider has cms page "/some-page" with:
+    And the provider has CMS Page "/some-page" with:
     """
       Hello {{ current_account.name }}
       Value {{ current_account.fields.org_name }}

@@ -6,7 +6,7 @@ Feature: CMS Templates versioning
     Given a provider "foo.example.com"
     And I am logged in as provider "foo.example.com" on its admin domain
     And the time flies to 2012-12-24 12:00:00
-    And I have cms page "/my-page" of provider "foo.example.com"
+    And I have CMS Page "/my-page" of provider "foo.example.com"
     And I go to the CMS Page "/my-page" page
 
   Scenario: Versioning

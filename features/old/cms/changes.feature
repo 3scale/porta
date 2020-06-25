@@ -7,14 +7,14 @@ Feature: CMS Changes
     And I am logged in as provider "foo.example.com" on its admin domain
 
   Scenario: Changes
-    Given I have changed CMS page "page"
-      And I have changed CMS partial "partial"
+    Given I have changed CMS Page "page"
+      And I have changed CMS Partial "partial"
       And I go to the CMS changes
      Then I should see 2 CMS changes
 
   @javascript
   Scenario: Revert page
-    Given I have changed CMS page "page"
+    Given I have changed CMS Page "page"
      When I go to the CMS changes
       And I follow "Revert"
-    Then the CMS page "page" should be reverted
+    Then the CMS Page "page" should be reverted

@@ -9,7 +9,7 @@ Feature: ActiveDocs
 
   Scenario: Loading Swagger UI v2
     Given provider "foo.example.com" has the swagger example of signup
-    And the provider has cms page "/version-20" with:
+    And the provider has CMS Page "/version-20" with:
     """
     {% active_docs version: "2.0" %}
     <h3>ActiveDocs version 2.0</h3>
@@ -19,7 +19,7 @@ Feature: ActiveDocs
       });
     </script>
     """
-    And the cms page "/version-20" has main layout
+    And the CMS Page "/version-20" has main layout
 
     And the current domain is "foo.example.com"
     When I visit "/version-20"
@@ -27,7 +27,7 @@ Feature: ActiveDocs
 
   Scenario: Loading new Swagger v2 template with new cdn_asset tag
     Given provider "foo.example.com" has the swagger example of signup
-    And the provider has cms page "/version-22" with:
+    And the provider has CMS Page "/version-22" with:
     """
     {% cdn_asset /swagger-ui/2.2.10/swagger-ui.js %}
     {% cdn_asset /swagger-ui/2.2.10/swagger-ui.css %}
@@ -42,7 +42,7 @@ Feature: ActiveDocs
       }());
     </script>
     """
-    And the cms page "/version-22" has main layout
+    And the CMS Page "/version-22" has main layout
 
     And the current domain is "foo.example.com"
     When I visit "/version-22"

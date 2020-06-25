@@ -76,7 +76,7 @@ Feature: CMS Pages
 
   @essential @allow-rescue
   Scenario: Bug, preview link should be updated
-    Given the provider has cms page "/pathbug" with:
+    Given the provider has CMS Page "/pathbug" with:
     """
     Hattori Hanzo
     """

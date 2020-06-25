@@ -9,7 +9,7 @@ Feature: ActiveDocs
 
   Scenario: Loading new Swagger template with javascript packs
     Given provider "foo.example.com" has the swagger example of signup
-    And the provider has cms page "/swagger-ui-3" with:
+    And the provider has CMS Page "/swagger-ui-3" with:
     """
     {% content_for javascripts %}
       {{ 'active_docs.js' | javascript_include_tag }}
@@ -34,7 +34,7 @@ Feature: ActiveDocs
       }());
     </script>
     """
-    And the cms page "/swagger-ui-3" has main layout
+    And the CMS Page "/swagger-ui-3" has main layout
 
     And the current domain is "foo.example.com"
     When I visit "/swagger-ui-3"

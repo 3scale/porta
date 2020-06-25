@@ -1,8 +1,8 @@
-Given /^I have(?: a)? cms page "(.+?)" of (provider ".+?")$/i do |path, provider|
+Given /^I have(?: a)? CMS Page "(.+?)" of (provider ".+?")$/i do |path, provider|
   FactoryBot.create(:cms_page, :path => path, :provider => provider)
 end
 
-Given /^I have(?: a)? cms page "(.+?)" of (provider ".+?") with markdown content$/i do |path, provider|
+Given /^I have(?: a)? CMS Page "(.+?)" of (provider ".+?") with markdown content$/i do |path, provider|
   FactoryBot.create(:cms_page, :path => path, :provider => provider, :handler => :markdown, :published => '# Markdown content')
 end
 

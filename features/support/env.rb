@@ -36,6 +36,14 @@ end
 
 require 'cucumber/rails'
 require 'cucumber/rails/rspec'
+require 'xpath/html'
+
+# Cucumber::Glue::Dsl.prepend(Module.new do
+#   def ParameterType(options)
+#     options[:prefer_for_regexp_match] = if_nil(options[:prefer_for_regexp_match], true)
+#     super(options)
+#   end
+# end)
 
 
 # require 'cucumber/rails/capybara_javascript_emulation' # Lets you click links with onclick javascript handlers without using @culerity or @javascript

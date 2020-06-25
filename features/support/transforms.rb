@@ -17,10 +17,6 @@ QUOTED_TWO_OR_MORE_PATTERN = "(#{quoted_list_subpattern}+)"
 QUOTED_LIST_PATTERN        = QUOTED_ONE_OR_MORE_PATTERN # 1 or more is the default
 #UNQUOTED_LIST_PATTERN      =  /((?:\w+(?:,| and| ) +)+(?:\w+))/
 
-Transform /^#{QUOTED_LIST_PATTERN}$/ do |list|
-  list.from_sentence.map { |item| item.delete('"') }
-end
-
 ParameterType(
   name: 'list',
   regexp: /#{QUOTED_LIST_PATTERN}/,
@@ -39,22 +35,13 @@ ParameterType(
 )
 
 ParameterType(
-  name :the_provider,
+  name: 'the_provider',
   regexp: /the provider/,
   transformer: -> { @provider or raise ActiveRecord::RecordNotFound, "@provider does not exist" }
 )
 
-Transform /^provider "(.+?)"$/ do |name|
-  # TODO: fix this hacky way of getting master
-  if name == 'master'
-    Account.master rescue FactoryBot.create(:master_account)
-  else
-    Account.providers.readonly(false).find_by_org_name!(name)
-  end
-end
-
 ParameterType(
-  name: :a_provider,
+  name: 'provider',
   regexp: /provider "(.+?)"/,
   transformer: -> (name) {
     # TODO: fix this hacky way of getting master
@@ -73,7 +60,7 @@ ParameterType(
 )
 
 ParameterType(
-  name: :buyer,
+  name: 'buyer',
   regexp: /buyer "([^\"]*)"/,
   transformer: -> (name) { Account.buyers.find_by!(org_name: name) }
 )
@@ -81,170 +68,228 @@ ParameterType(
 ParameterType(
   name: 'user_key_of_buyer',
   regexp: /the user key of buyer "([^"]*)"/,
-  transform: -> (name) { Account.buyers.find_by_org_name!(name).bought_cinstance.user_key }
+  transformer: -> (name) { Account.buyers.find_by_org_name!(name).bought_cinstance.user_key }
 )
 
 # Cinstance / Application
 
-Transform /^the application id of buyer "([^"]*)"$/ do |name|
-  Account.buyers.find_by_org_name!(name).bought_cinstance.application_id
-end
+ParameterType(
+  name: 'application_id_of_buyer',
+  regexp: /the application id of buyer "([^"]*)"/,
+  transformer: -> (name) { Account.buyers.find_by_org_name!(name).bought_cinstance.application_id }
+)
 
-Transform /^application "([^"]*)"$/ do |name|
-  Cinstance.find_by_name!(name)
-end
+ParameterType(
+  name: 'application',
+  regexp: /application "([^"]*)"/,
+  transformer: -> (name) { Cinstance.find_by_name!(name) }
+)
 
 # Potato CMS
 
-Transform /^CMS Page "(.+?)"$/i do |path|
-  CMS::Page.find_by_path!(path)
-end
+ParameterType(
+  name: 'cms_page',
+  regexp: /CMS Page "(.+?)"/,
+  transformer: -> (name) { CMS::Page.find_by_path!(path) }
+)
 
-Transform /^CMS Partial "(.+?)"$/i do |path|
-  CMS::Partial.find_by_system_name!(path)
-end
+ParameterType(
+  name: 'cms_partial',
+  regexp: /CMS Partial "(.+?)"/,
+  transformer: -> (path) { CMS::Partial.find_by_system_name!(path) }
+)
 
 # CMS
-Transform /^page "([^\"]*)"$/ do |title|
-  Page.find_by_title!(title)
-end
+ParameterType(
+  name: 'page',
+  regexp: /page "([^\"]*)"/,
+  transformer: -> (title) { Page.find_by_title!(title) }
+)
 
-Transform /^page "([^\"]*)" of provider "([^\"]*)"$/ do |title, provider_name|
-  provider = Account.providers.find_by_org_name!(provider_name)
-  Page.find_by_title_and_account_id!(title, provider.id)
-end
+ParameterType(
+  name: 'page_of_provider',
+  regexp: /page "([^\"]*)" of provider "([^\"]*)"/,
+  transformer: -> (title, provider_name) {
+    provider = Account.providers.find_by_org_name!(provider_name)
+    Page.find_by_title_and_account_id!(title, provider.id)
+  }
+)
 
-Transform /^page at (.*) of provider "([^\"]*)"$/ do |path, provider_name|
-  provider = Account.providers.find_by_org_name!(provider_name)
-  Page.find_by_path_and_account_id!(path, provider_id)
-end
+ParameterType(
+  name: 'page_at_of_provider',
+  regexp: /page at (.*) of provider "([^\"]*)"/,
+  transformer: -> (path, provider_name){
+    provider = Account.providers.find_by_org_name!(provider_name)
+    Page.find_by_path_and_account_id!(path, provider_id)
+  }
+)
 
-Transform /^section "([^\"]*)" of provider "([^\"]*)"$/ do |name, provider_name|
-  provider = Account.providers.readonly(false).find_by_org_name(provider_name)
-  provider.provided_sections.find_by_title!(name)
-end
+ParameterType(
+  name: 'section_of_provider',
+  regexp: /section "([^\"]*)" of provider "([^\"]*)"/,
+  transformer: -> (name, provider_name) {
+    provider = Account.providers.readonly(false).find_by_org_name(provider_name)
+    provider.provided_sections.find_by_title!(name)
+  }
+)
 
-Transform /^html block "([^\"]*)"$/ do |name|
-  HtmlBlock.find_by_name!(name)
-end
+ParameterType(
+  name: 'country',
+  regexp: /country "([^"]*)"/,
+  transformer: -> (name) { Country.find_by_name!(name) }
+)
 
-Transform /^country "([^"]*)"$/ do |name|
-  Country.find_by_name!(name)
-end
-
-Transform /^feature "([^"]*)"$/ do |name|
-  Feature.find_by_name!(name)
-end
+ParameterType(
+  name: 'feature',
+  regexp: /feature "([^"]*)"/,
+  transformer: -> (name) { Feature.find_by_name!(name) }
+)
 
 # Forum
-Transform /^the forum of "([^"]*)"$/ do |name|
-  Account.providers.find_by_org_name!(name).forum
-end
 
-Transform /^topic "([^\"]+)"$/ do |title|
-  Topic.find_by_title!(title)
-end
+ParameterType(
+  name: 'forum',
+  regexp: /the forum of "([^"]*)"/,
+  transformer: -> (name) { Account.providers.find_by_org_name!(name).forum }
+)
 
-Transform /^post "([^"]*)"$/ do |body|
-  post = Post.all.to_a.find { |p| p.body == body }
-  assert post
-  post
-end
+ParameterType(
+  name: 'topic',
+  regexp: /the topic "([^"]*)"/,
+  transformer: -> (title) { Topic.find_by_title!(title) }
+)
 
-Transform /^the last post under topic "([^"]*)"$/ do |topic_title|
-  Topic.find_by_title!(topic_title).posts.last
-end
+ParameterType(
+  name: 'post',
+  regexp: /post "([^"]*)"/,
+  transformer: -> (body) {
+    post = Post.all.to_a.find { |p| p.body == body }
+    assert post
+    post
+  }
+)
 
-Transform /^category "([^"]*)"$/ do |name|
-  TopicCategory.find_by_name!(name)
-end
+ParameterType(
+  name: 'last_post_under_topic',
+  regexp: /the last post under topic "([^"]*)"/,
+  transformer: -> (topic_title){
+    Topic.find_by_title!(topic_title).posts.last
+  }
+)
+
+ParameterType(
+  name: 'category',
+  regexp: /category "([^"]*)"/,
+  transformer: -> (mame) { TopicCategory.find_by_name!(name) }
+)
 
 # Metric
-Transform /^metric "([^"]*)" on application plan "([^"]*)"$/ do |name, plan_name|
-  ApplicationPlan.find_by_name!(plan_name).metrics.find_by!(system_name: name)
-end
+ParameterType(
+  name: 'metric_on_application_plan',
+  regexp: /metric "([^"]*)" on application plan "([^"]*)"/,
+  transformer: -> (name, plan_name) { ApplicationPlan.find_by_name!(plan_name).metrics.find_by!(system_name: name) }
+)
 
-Transform /^metric "([^"]*)"$/ do |name|
-  Metric.find_by!(system_name: name)
-end
+ParameterType(
+  name: 'metric',
+  regexp: /metric "([^"]*)"/,
+  transformer: -> (name) { Metric.find_by!(system_name: name) }
+)
 
-Transform /^method "([^"]*)"$/ do |name|
-  current_account.first_service!.metrics.hits.children.find_by!(system_name: name)
-end
+ParameterType(
+  name: 'method',
+  regexp: /method "([^"]*)"/,
+  transformer: -> (name) { current_account.first_service!.metrics.hits.children.find_by!(system_name: name) }
+)
 
-Transform /^metric "([^"]*)" of provider "([^"]*)$/ do |metric_name, provider_name|
-  provider = Account.find_by_org_name!(provider_name)
-  provider.first_service!.metrics.find_by!(system_name: name)
-end
+ParameterType(
+  name: 'metric_of_provider',
+  regexp: /metric "([^"]*)" of provider "([^"]*)/,
+  transformer: -> (metric_name, provider_name) {
+    provider = Account.find_by_org_name!(provider_name)
+    provider.first_service!.metrics.find_by!(system_name: name)
+  }
+)
 
-Transform /^plan "(.+?)"$/ do |name|
-  Plan.find_by_name!(name)
-end
+ParameterType(
+  name: 'plan',
+  regexp: /plan "(.+?)"/,
+  transformer: -> (name) { Plan.find_by_name!(name) }
+)
 
-Transform /^service "(.+?)"$/ do |name|
-  Service.find_by_name!(name)
-end
+ParameterType(
+  name: 'service',
+  regexp: /service "(.+?)"/,
+  transformer: -> (name) { Service.find_by_name!(name) }
+)
 
-Transform /^service plan "(.+?)"$/ do |name|
-  ServicePlan.find_by_name!(name)
-end
 
-Transform /^account plan "(.+?)"$/ do |name|
-  AccountPlan.find_by_name!(name)
-end
+ParameterType(
+  name: 'service_plan',
+  regexp: /service plan "(.+?)"/,
+  transformer: -> (name) { ServicePlan.find_by_name!(name) }
+)
 
-Transform /^application plan "(.+?)"$/ do |name|
-  ApplicationPlan.find_by_name!(name)
-end
+ParameterType(
+  name: 'account_plan',
+  regexp: /account plan "(.+?)"/,
+  transformer: -> (name) { AccountPlan.find_by_name!(name) }
+)
 
-Transform /^user "([^\"]*)"$/ do |name|
-  User.find_by_username!(name)
-end
+ParameterType(
+  name: 'application_plan',
+  regexp: /application plan "(.+?)"/,
+  transformer: -> (name) { ApplicationPlan.find_by_name!(name) }
+)
 
-Transform /^legal terms "([^\"]*)"$/ do |name|
-  CMS::LegalTerm.find_by_title!(name)
-end
+ParameterType(
+  name: 'user',
+  regexp: /user "([^\"]*)"/,
+  transformer: -> (name) { User.find_by_username!(name) }
+)
 
-Transform /^buyer group "([^\"]*)" of provider "([^\"]*)"$/ do |name, provider_name|
-  name
-end
+ParameterType(
+  name: 'legal_terms',
+  regexp: /legal terms "([^\"]*)"/,
+  transformer: -> (name) { CMS::LegalTerm.find_by_title!(name) }
+)
 
-Transform /^table:buyer,name,plan$/i do |table|
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
-  table.map_column!(:buyer) {|buyer| Account.buyers.find_by_org_name!(buyer) }
-  table.map_column!(:plan) {|plan| ApplicationPlan.find_by_name!(plan) }
-  table
-end
+ParameterType(
+  name: 'buyer_group_of_provider',
+  regexp: /buyer group "([^\"]*)" of provider "([^\"]*)"/,
+  transformer: -> (name, provider_name) { name }
+)
 
-Transform /^table:name,cost per month,setup fee$/i do |table|
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
-  table.map_column!(:cost_per_month) {|cost| cost.to_f }
-  table.map_column!(:setup_fee) {|setup| setup.to_f }
-  table
-end
+ParameterType(
+  name: 'email_template',
+  regexp: /email template "(.+?)"/,
+  transformer: -> (name) { CMS::EmailTemplate.find_by!(system_name: name) }
+)
 
-Transform /^table:code,name$/i do |table|
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
-  table
-end
 
-Transform /^email template "(.+?)"$/ do |name|
-  CMS::EmailTemplate.find_by!(system_name: name)
-end
-
-Transform /^service "([^\"]*)" of provider "([^\"]*)"$/ do |service_name, provider_name|
-  Account.providers.find_by_org_name!(provider_name)
-    .services.find_by_name!(service_name)
-end
+ParameterType(
+  name: 'service_of_provider',
+  regexp:/service "([^\"]*)" of provider "([^\"]*)"/,
+  transformer: -> (service_name, provider_name) {
+    Account.providers.find_by_org_name!(provider_name)
+      .services.find_by_name!(service_name)
+  }
+)
 
 # Finance
-Transform /^invoice "(.+?)"$/ do |id|
-  Invoice.find_by_id(id) or Invoice.find_by_friendly_id(id) or raise "Couldn't find Invoice with id #{id}"
-end
+ParameterType(
+  name: 'invoice',
+  regexp: /invoice "(.+?)"/,
+  transformer: -> (id) {
+    Invoice.find_by_id(id) or Invoice.find_by_friendly_id(id) or raise "Couldn't find Invoice with id #{id}"
+  }
+)
 
-Transform /^(on|off)$/ do |state|
-  state == 'on'
-end
+ParameterType(
+  name: 'on_off_toggle',
+  regexp: /(on|off)/,
+  transformer: -> (state) { state == 'on' }
+)
 
 
 # Authentication Providers
@@ -257,26 +302,30 @@ OAUTH_PROVIDER_OPTIONS = {
   }
 }.freeze
 
-Transform /^authentication provider "([^\"]+)"$/ do |authentication_provider_name|
-  authentication_provider = @provider.authentication_providers.find_by(name: authentication_provider_name)
-  return authentication_provider if authentication_provider
+ParameterType(
+  name: 'authentication_provider',
+  regexp: /authentication provider "([^\"]+)"/,
+  transformer: -> (authentication_provider_name) {
+    authentication_provider = @provider.authentication_providers.find_by(name: authentication_provider_name)
+    return authentication_provider if authentication_provider
 
-  ap_underscored_name = authentication_provider_name.underscore
-  options = OAUTH_PROVIDER_OPTIONS[ap_underscored_name.to_sym]
-            .merge(
-              {
-                system_name: "#{ap_underscored_name}_hex",
-                client_id: 'CLIENT_ID',
-                client_secret: 'CLIENT_SECRET',
-                kind: ap_underscored_name,
-                name: authentication_provider_name,
-                account_id: @provider.id,
-                identifier_key: 'id',
-                username_key: 'login',
-                trust_email: false
-              }
-            )
+    ap_underscored_name = authentication_provider_name.underscore
+    options = OAUTH_PROVIDER_OPTIONS[ap_underscored_name.to_sym]
+      .merge(
+        {
+          system_name: "#{ap_underscored_name}_hex",
+          client_id: 'CLIENT_ID',
+          client_secret: 'CLIENT_SECRET',
+          kind: ap_underscored_name,
+          name: authentication_provider_name,
+          account_id: @provider.id,
+          identifier_key: 'id',
+          username_key: 'login',
+          trust_email: false
+        }
+      )
 
-  authentication_provider_class = "AuthenticationProvider::#{authentication_provider_name}".constantize
-  authentication_provider_class.create(options)
-end
+    authentication_provider_class = "AuthenticationProvider::#{authentication_provider_name}".constantize
+    authentication_provider_class.create(options)
+  }
+)

@@ -1,11 +1,11 @@
-Given /^I have changed CMS page "(.*?)"$/ do |name|
+Given /^I have changed CMS Page "(.*?)"$/ do |name|
   assert @provider
   page = FactoryBot.create(:cms_page, :system_name => name, :provider => @provider)
   page.draft = "some draft content"
   page.save!
 end
 
-Given /^I have changed CMS partial "(.*?)"$/ do |name|
+Given /^I have changed CMS Partial "(.*?)"$/ do |name|
   assert @provider
   page = FactoryBot.create(:cms_partial, :system_name => name, :provider => @provider)
   page.draft = "some draft content"
@@ -20,7 +20,7 @@ Then /^I should see (\d+) CMS changes$/ do |count|
   cms_changes.should have_css("tr", count: count)
 end
 
-Then /^the CMS page "(.*?)" should be reverted$/ do |name|
+Then /^the CMS Page "(.*?)" should be reverted$/ do |name|
   wait_for_requests
   page = CMS::Page.find_by_system_name!(name)
   page.draft.should be_nil

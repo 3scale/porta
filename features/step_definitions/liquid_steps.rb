@@ -1,11 +1,11 @@
-Given /^the provider has cms page "(.*?)" with:$/ do |path, content|
+Given /^the provider has CMS Page "(.*?)" with:$/ do |path, content|
   FactoryBot.create(:cms_page, provider: @provider, path: path, published: content, liquid_enabled: true)
 end
 
 Given /^I visit a page showing the current user's SSO data$/ do
   steps <<-GHERKIN
     Then I should be logged in the Development Portal
-    Given the provider has cms page "/sso_authorizations" with:
+    Given the provider has CMS Page "/sso_authorizations" with:
       """
       {% for authorization in current_user.sso_authorizations %}
         <p><strong>{{ authorization.authentication_provider_system_name }}</strong>: {{ authorization.id_token }}</p>
@@ -36,7 +36,7 @@ def main_layout
   @provider.layouts.find_by_system_name!('main_layout')
 end
 
-Given /^the cms page "(.*?)" has main layout$/ do |path|
+Given /^the CMS Page "(.*?)" has main layout$/ do |path|
   page = @provider.pages.find_by_path!(path)
   page.update_attribute(:layout, main_layout)
 end
