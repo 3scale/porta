@@ -15,6 +15,15 @@ module ApiDocs
       Hash[data_items.map { |item| [item.to_sym, send(item)] }]
     end
 
+    protected
+
+    def service_hosts
+      accessible_services.map do |service|
+        { :name => service.proxy.sandbox_endpoint,
+          :value => service.id }
+      end
+    end
+
     private
 
     def return_account_data
@@ -69,6 +78,5 @@ module ApiDocs
     def apps_with_backend_version(*versions)
       apps.joins(:service).where.has { service.backend_version.in [*versions] }
     end
-
   end
 end
