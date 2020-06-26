@@ -21,6 +21,13 @@ module Liquid
         return unless (service = @spec.service)
         Drops::Service.new(service)
       end
+
+      desc 'Returns the public url of the service of the spec if it has any or `nil` otherwise'
+      def endpoint
+        service = @spec.service
+        return unless service
+        service.proxy.endpoint
+      end
     end
   end
 end
