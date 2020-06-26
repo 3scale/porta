@@ -71,13 +71,14 @@ export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl
   if (isSpecFetched(response)) {
     return response
   }
+
+  let body = injectServerToResponseBody(response.body, serviceEndpoint)
+
   const accountData = await fetchData(accountDataUrl).then(data => data)
-  if (!accountData.results) {
-    return response
+  if (accountData.results) {
+    body = injectAutocompleteToResponseBody(body, accountData.results)
   }
 
-  let body = injectAutocompleteToResponseBody(response.body, accountData.results)
-  body = injectServerToResponseBody(body, serviceEndpoint)
   return {
     ...response,
     body,
