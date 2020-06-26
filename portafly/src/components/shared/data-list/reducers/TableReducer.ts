@@ -4,7 +4,7 @@ import {
   Action,
   createReducer
 } from 'utils'
-import { DataListRow, DataListCol } from 'types'
+import { DataListRow, DataListCol, DataListRowCell } from 'types'
 import { SortByDirection } from '@patternfly/react-table'
 
 export type TableState = {
@@ -17,16 +17,16 @@ export type TableState = {
 }
 
 // Utils
-const sorter = (index: number) => (a: DataListRow, b: DataListRow) => {
-  const prev = a.cells[index]
-  const next = b.cells[index]
+const sorter = (index: number) => (prevRow: DataListRow, nextRow: DataListRow) => {
+  const prev = prevRow.cells[index]
+  const next = nextRow.cells[index]
 
-  const prevTarget = typeof prev === 'object'
-    ? prev.filterableString.replace(/<[^>]+>/g, '')
-    : prev
-  const nextTarget = typeof next === 'object'
-    ? next.filterableString.replace(/<[^>]+>/g, '')
-    : next
+  const buildTarget = (cell: string | DataListRowCell) => (typeof cell === 'object'
+    ? cell.filterableString.replace(/<[^>]+>/g, '')
+    : cell)
+
+  const prevTarget = buildTarget(prev)
+  const nextTarget = buildTarget(next)
 
   if (prevTarget < nextTarget) return -1
   if (prevTarget > nextTarget) return 1
