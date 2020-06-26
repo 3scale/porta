@@ -5,7 +5,6 @@ import type {
   AccountData,
   Param,
   ResponseBody,
-  ServiceHosts,
   SwaggerResponse
 } from 'Types/SwaggerTypes'
 
@@ -54,9 +53,9 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
   }
 )
 
-const injectServerToResponseBody = (responseBody: ResponseBody, serviceHosts: ServiceHosts): ResponseBody => {
-  const servers = responseBody.servers ? responseBody.servers : []
-  serviceHosts.forEach(host => servers.push({url: host.name}))
+const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint: string): ResponseBody => {
+  const originalServers = responseBody.servers ? responseBody.servers : []
+  const servers = serviceEndpoint ? [{url: serviceEndpoint}] : originalServers
 
   return {
     ...responseBody,
@@ -68,7 +67,7 @@ const injectServerToResponseBody = (responseBody: ResponseBody, serviceHosts: Se
 // is present when doing a request to one of the paths
 const isSpecFetched = (response: SwaggerResponse): boolean => !!response.body.method
 
-export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string): SwaggerResponse => {
+export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string, serviceEndpoint: string): SwaggerResponse => {
   if (isSpecFetched(response)) {
     return response
   }
@@ -78,7 +77,7 @@ export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl
   }
 
   let body = injectAutocompleteToResponseBody(response.body, accountData.results)
-  body = injectServerToResponseBody(body, accountData.results.service_hosts)
+  body = injectServerToResponseBody(body, serviceEndpoint)
   return {
     ...response,
     body,
