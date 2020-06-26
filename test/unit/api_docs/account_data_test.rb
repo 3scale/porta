@@ -105,18 +105,4 @@ class ApiDocs::AccountDataTest < ActiveSupport::TestCase
     end
   end
 
-  test 'service_hosts for provider' do
-    data = ApiDocs::ProviderData.new(@provider).as_json[:results]
-    assert_equal @services.map { |service| { name: service.proxy.sandbox_endpoint, value: service.id } }.sort_by(&SORT_PROC), data[:service_hosts].sort_by(&SORT_PROC)
-  end
-
-  test 'service_hosts for buyer' do
-    service4 = FactoryBot.create(:simple_service, name: 'service-4', account_id: @provider.id)
-    plan4 = FactoryBot.create(:simple_application_plan, issuer: service4)
-    unrelated_buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
-    unrelated_app = FactoryBot.create(:simple_cinstance, service: service4, application_id: 'UNRELATED_APP', name: 'Unrelated App', plan: plan4, user_account: unrelated_buyer)
-
-    data = ApiDocs::BuyerData.new(@buyer).as_json[:results]
-    assert_equal @services.map { |service| { name: service.proxy.sandbox_endpoint, value: service.id } }.sort_by(&SORT_PROC), data[:service_hosts].sort_by(&SORT_PROC)
-  end
 end
