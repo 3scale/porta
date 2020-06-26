@@ -242,15 +242,8 @@ module Account::ProviderMethods
   end
 
   def admin_domain
-    if provider?
-      if self_domain.present?
-        self_domain
-      else # connect case
-        Account.master.domain
-      end
-    else
-      raise ProviderOnlyMethodCalledError
-    end
+    raise ProviderOnlyMethodCalledError unless provider?
+    self_domain
   end
 
   def admin_base_url
