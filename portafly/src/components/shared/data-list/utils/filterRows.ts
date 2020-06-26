@@ -9,7 +9,7 @@ const isTermInRowForColumn = (row: DataListRow, colIdx: number) => (term: string
   const cell = row.cells[colIdx]
 
   const target = typeof cell === 'object'
-    ? (cell as DataListRowCell).filterableString
+    ? (cell as DataListRowCell).stringValue
     : cell
 
   return target.toLowerCase().indexOf(term.toLowerCase()) > -1

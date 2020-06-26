@@ -23,7 +23,7 @@ describe('when it is multitenant', () => {
     expect(generateRows(developerAccounts.slice(0, 1)))
       .toMatchObject([{
         cells: expect.arrayContaining([{
-          filterableString: expect.any(String),
+          stringValue: expect.any(String),
           title: <ActionButtonImpersonate />
         }])
       }])
