@@ -46,6 +46,13 @@ ERROR_MESSAGE
 
       daemon.start
     end
+
+    desc 'Cleanup pid and lock files from unclean shutdown'
+    task cleanup: %i[environment] do
+      indices_location = ThinkingSphinx::Configuration.instance.indices_location
+      files = Dir.glob(File.join(indices_location, '*.{lock,pid}'))
+      files.each(&FileUtils.method(:rm_f))
+    end
   end
 
 end
