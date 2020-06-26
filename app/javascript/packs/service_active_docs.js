@@ -1,8 +1,18 @@
-import { ActiveDocsSpecWrapper as ActiveDocsSpec } from 'ActiveDocs/components/ActiveDocsSpec'
+import SwaggerUI from 'swagger-ui'
+import { autocompleteOAS3 } from './OAS3Autocomplete'
+import 'swagger-ui/dist/swagger-ui.css'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'
-  const { url } = document.getElementById(containerId).dataset
+  const DATA_URL = 'p/admin/api_docs/account_data.json'
+  const { url, baseUrl } = document.getElementById(containerId).dataset
+  const accountDataUrl = `${baseUrl}${DATA_URL}`
 
-  ActiveDocsSpec({ url }, containerId)
+  const responseInterceptor = (response) => autocompleteOAS3(response, accountDataUrl)
+
+  SwaggerUI({
+    url,
+    dom_id: `#${containerId}`,
+    responseInterceptor
+  })
 })
