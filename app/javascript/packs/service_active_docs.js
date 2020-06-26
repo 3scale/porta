@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   SwaggerUI({
     url,
-    dom_id: '#swagger-ui-container',
+    dom_id: `#${containerId}`,
     responseInterceptor
   })
 })
