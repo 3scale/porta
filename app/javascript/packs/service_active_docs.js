@@ -1,5 +1,6 @@
-import { ActiveDocsSpecWrapper as ActiveDocsSpec } from 'ActiveDocs/components/ActiveDocsSpec'
+import SwaggerUI from 'swagger-ui'
 import { autocompleteOAS3 } from './OAS3Autocomplete'
+import 'swagger-ui/dist/swagger-ui.css'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'
@@ -9,5 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const responseInterceptor = (response) => autocompleteOAS3(response, accountDataUrl)
 
-  ActiveDocsSpec({ url, responseInterceptor }, containerId)
+  SwaggerUI({
+    url,
+    dom_id: '#swagger-ui-container',
+    responseInterceptor
+  })
 })
