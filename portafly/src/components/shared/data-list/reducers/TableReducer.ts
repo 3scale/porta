@@ -22,7 +22,7 @@ const sorter = (index: number) => (prevRow: DataListRow, nextRow: DataListRow) =
   const next = nextRow.cells[index]
 
   const buildTarget = (cell: string | DataListRowCell) => (typeof cell === 'object'
-    ? cell.filterableString.replace(/<[^>]+>/g, '')
+    ? cell.stringValue.replace(/<[^>]+>/g, '')
     : cell)
 
   const prevTarget = buildTarget(prev)

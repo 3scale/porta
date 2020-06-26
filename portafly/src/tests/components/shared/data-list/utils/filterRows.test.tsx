@@ -8,7 +8,7 @@ const Lara = { id: 0, cells: ['Lara Croft', '1996'] }
 const Nate = { id: 1, cells: ['Nathan Drake', '2007'] }
 const Indi: DataListRow = {
   id: 2,
-  cells: [{ title: <Button>Indiana Jones</Button>, filterableString: 'Indiana Jones' }, '1981']
+  cells: [{ title: <Button>Indiana Jones</Button>, stringValue: 'Indiana Jones' }, '1981']
 }
 const rows = [Lara, Nate, Indi]
 const columns = [
