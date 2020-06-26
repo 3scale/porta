@@ -365,6 +365,9 @@ Returns the name of the spec.
 ### service
 Returns the service of the spec if it has any or `nil` otherwise.
 
+### endpoint
+Returns the public url of the service of the spec if it has any or `nil` otherwise
+
 -----------
 
 # Application drop
@@ -701,19 +704,6 @@ OAuth callback url.
 
 
 ## Methods
-### login_url
-
-### user_identified?
-
------------
-
-# Base drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -736,6 +726,19 @@ Returns the resource URL of the result.
 
 ### description
 Returns a descriptive string for the result.
+
+-----------
+
+# Base drop
+
+
+
+
+
+## Methods
+### login_url
+
+### user_identified?
 
 -----------
 
@@ -777,6 +780,17 @@ Returns a descriptive string for the result.
 
 
 ## Methods
+### change_plan?
+
+-----------
+
+# Can drop
+
+
+
+
+
+## Methods
 ### be_updated?
 
 ### be_destroyed?
@@ -792,17 +806,6 @@ Returns a descriptive string for the result.
 ### manage_keys?
 
 ### delete_key?
-
------------
-
-# Can drop
-
-
-
-
-
-## Methods
-### change_plan?
 
 -----------
 
@@ -1612,27 +1615,6 @@ this returns the errors that occurred.
 
 
 ## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1672,6 +1654,27 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -1770,12 +1773,18 @@ this returns the errors that occurred.
 ```
 
 ### title
+Returns the title of the page.
+```liquid
+<title>{{ page.title }}</title>
+```
 
-### kind
-
-### url
-
-### description
+### system_name
+Returns system name of the page.
+```liquid
+{% if page.system_name == 'my_page' %}
+  {% include 'custom_header' %}
+{% endif %}
+```
 
 -----------
 
@@ -1798,18 +1807,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Returns the title of the page.
-```liquid
-<title>{{ page.title }}</title>
-```
 
-### system_name
-Returns system name of the page.
-```liquid
-{% if page.system_name == 'my_page' %}
-  {% include 'custom_header' %}
-{% endif %}
-```
+### kind
+
+### url
+
+### description
 
 -----------
 
@@ -2122,20 +2125,13 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### body
-Text of the post.
+### title
 
-### topic
-Every post belongs to a [topic](#topic-drop).
-
-### created_at
-Date when this post created.
-```liquid
-{{ post.created_at | date: i18n.short_date }}
-```
+### kind
 
 ### url
-The URL of this post within its topic.
+
+### description
 
 -----------
 
@@ -2157,13 +2153,20 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### title
+### body
+Text of the post.
 
-### kind
+### topic
+Every post belongs to a [topic](#topic-drop).
+
+### created_at
+Date when this post created.
+```liquid
+{{ post.created_at | date: i18n.short_date }}
+```
 
 ### url
-
-### description
+The URL of this post within its topic.
 
 -----------
 
@@ -2267,12 +2270,6 @@ Returns the telephone number of the account.
 {% endif %}
 ```
 
-### logo_url
-Returns the logo URL.
-```liquid
-<img src="{{ provider.logo_url }}"/>
-```
-
 ### multiple_services_allowed?
 *True* if your 3scale plan allows you to manage multiple APIs
                as separate [services][support-terminology-service].
@@ -2341,6 +2338,12 @@ You can enable or disable signups in the [usage rules section][usage-rules] of y
 
 ### account_management_enabled?
 You can enable or disable account management in the [usage rules section][usage-rules].
+
+### logo_url
+Returns the logo URL.
+```liquid
+<img src="{{ provider.logo_url }}"/>
+```
 
 ### api_specs
 Returns API spec collection.
@@ -2881,12 +2884,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 
@@ -2909,9 +2909,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 
