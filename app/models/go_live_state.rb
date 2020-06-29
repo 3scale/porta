@@ -7,15 +7,13 @@ class GoLiveState < ApplicationRecord
   validates :recent, length: {maximum: 255}
 
   def advance(step, final_step=false)
-    unless self.closed?
-      step = step.to_s
+    return if self.closed?
 
-      self.steps[step] = true
-      self.recent = step
-      save
-    end
+    step = step.to_s
 
-    GoLiveNotification.notice(self.account).deliver_now if final_step
+    self.steps[step] = true
+    self.recent = step
+    save
   end
 
   def can_advance_to?(step)
