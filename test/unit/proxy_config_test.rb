@@ -103,12 +103,7 @@ class ProxyConfigTest < ActiveSupport::TestCase
     proxy = FactoryBot.create(:proxy, service: service)
     proxy_config = FactoryBot.build(:proxy_config, environment: 'sandbox', proxy: proxy)
 
-    proxy.update_columns(api_backend: 'http://my-api.test')
     proxy.backend_api_configs.delete_all
-    proxy.reload
-    assert proxy_config.valid?
-
-    proxy.update_columns(api_backend: nil)
     proxy.reload
     refute proxy_config.valid?
     assert_equal :missing, proxy_config.errors.details[:api_backend].first[:error]
