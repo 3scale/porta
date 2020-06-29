@@ -1,21 +1,20 @@
+{% content_for javascripts %}
+    {{ 'active_docs.js' | javascript_include_tag }}
+{% endcontent_for %}
+
+{% assign spec = provider.api_specs.first %}
+
 <h1>Documentation</h1>
 
-<p>Use our live documentation to learn about the Echo API</p>
-
-{% cdn_asset /swagger-ui/2.2.10/swagger-ui.js %}
-{% cdn_asset /swagger-ui/2.2.10/swagger-ui.css %}
-
-{% include 'shared/swagger_ui' %}
+<div class="swagger-section">
+  <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+  <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</div>
 
 <script type="text/javascript">
-  $(function () {
-    {% comment %}
-      // you have access to swaggerUi.options object to customize its behaviour
-      // such as setting a different docExpansion mode
-      window.swaggerUi.options['docExpansion'] = 'none';
-      // or even getting the swagger specification loaded from a different url
-      window.swaggerUi.options['url'] = "http://petstore.swagger.wordnik.com/api/api-docs";
-    {% endcomment %}
-    window.swaggerUi.load();
-  });
+  (function () {
+    var url = "{{spec.url}}";
+    var endpoint = "{{spec.endpoint}}"
+    SwaggerUI({ url: url, dom_id: "#swagger-ui-container" }, endpoint);
+  }());
 </script>
