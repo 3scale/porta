@@ -327,9 +327,10 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
   test 'update production should change deployment bubble state to done' do
     provider.create_onboarding
     FactoryBot.create(:service_token, service: service)
+    backend_api = service.backend_apis.first!
 
     rolling_updates_on
-    proxy.update_column :api_backend, 'http://some-api.example.com'
+    backend_api.update_column(:private_endpoint, 'http://some-api.example.com')
 
     patch update_production_admin_service_integration_path(proxy: { api_backend: 'http://some-api.example.com:443'}, service_id: service.id)
     assert_response :redirect
