@@ -58,3 +58,7 @@ When (/^I search for "([^"]*)" using the (products|backends) search bar/) do |qu
   search_bar = find("##{tab}_search").find('input[type="search"]')
   search_bar.send_keys query
 end
+
+When 'All Dashboard widgets are loaded' do
+  DashboardWidgetPresenter.any_instance.stubs(:loaded?).returns(true)
+end
