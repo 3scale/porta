@@ -10,15 +10,15 @@ import {
 } from 'components'
 import { LastLocationProvider } from 'react-router-last-location'
 
-const getOverviewPage = () => import('components/pages/Overview')
-const getApplicationsPage = () => import('components/pages/Applications')
-const getAccountsIndexPage = () => import('components/pages/accounts/AccountsIndexPage')
+const OverviewPage = React.lazy(() => import('components/pages/Overview'))
+const ApplicationsPage = React.lazy(() => import('components/pages/Applications'))
+const AccountsIndexPage = React.lazy(() => import('components/pages/accounts/AccountsIndexPage'))
 
 const PagesSwitch = () => (
   <SwitchWith404>
-    <LazyRoute path="/" exact getComponent={getOverviewPage} />
-    <LazyRoute path="/applications" exact getComponent={getApplicationsPage} />
-    <LazyRoute path="/accounts" exact getComponent={getAccountsIndexPage} />
+    <LazyRoute path="/" exact render={() => <OverviewPage />} />
+    <LazyRoute path="/applications" exact render={() => <ApplicationsPage />} />
+    <LazyRoute path="/accounts" exact render={() => <AccountsIndexPage />} />
     <Redirect path="/overview" to="/" exact />
   </SwitchWith404>
 )
