@@ -6,6 +6,7 @@ Feature: Dashboard
   Background:
     Given a provider "foo.example.com"
     And current domain is the admin domain of provider "foo.example.com"
+    And All Dashboard widgets are loaded
 
   Scenario: Audience widget
     When I log in as provider "foo.example.com"
