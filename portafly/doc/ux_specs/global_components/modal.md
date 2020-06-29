@@ -44,7 +44,7 @@
       * Dismisses modal
 
 
-### ON HOLD -- _'Send email to selected items'_ modal
+<!-- ### _'Send email to selected items'_ modal
       * Form ([PF specs](https://www.patternfly.org/v4/documentation/react/components/form))
         * List of selected items > unordered list ([PF specs](https://www.patternfly.org/v4/documentation/react/components/list))
           * Items are displayed in alphabetical order
@@ -70,4 +70,4 @@
           * the modal won't auto dismiss
           * the spinner will be replaced by the submit button
           * the input fields will be enabled again (to allow user eventually copy paste their content)
-          * an inline warning message will be displayed above the form buttons
+          * an inline warning message will be displayed above the form buttons -->
