@@ -11,6 +11,7 @@ Feature: Provider stats
     And provider "foo.example.com" has multiple applications enabled
     And current domain is the admin domain of provider "foo.example.com"
     And all the rolling updates features are off
+    And All Dashboard widgets are loaded
 
   Scenario: Stats access
     When I log in as provider "foo.example.com"
