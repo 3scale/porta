@@ -6,8 +6,9 @@ module Provider::Admin::DashboardsHelper
 
   # @param name [Symbol]
   # @param params [Hash]
-  def dashboard_widget(name, params = {})
-    widget = DashboardWidgetPresenter.new(name, params)
+  # @param variables [Hash]
+  def dashboard_widget(name, params = {}, variables = {})
+    widget = DashboardWidgetPresenter.new(name, params, variables)
     widget.render
   end
 
