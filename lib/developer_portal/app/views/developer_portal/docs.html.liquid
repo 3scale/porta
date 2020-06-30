@@ -14,7 +14,7 @@
 <script type="text/javascript">
   (function () {
     var url = "{{spec.url}}";
-    var endpoint = "{{spec.endpoint}}"
-    SwaggerUI({ url: url, dom_id: "#swagger-ui-container" }, endpoint);
+    var serviceEndpoint = "{{spec.api_product_production_public_base_url}}"
+    SwaggerUI({ url: url, dom_id: "#swagger-ui-container" }, serviceEndpoint);
   }());
 </script>
