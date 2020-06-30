@@ -14,6 +14,7 @@ nav.DashboardNavigation
                                      admin_service_stats_usage_path(service),
                                      icon_name: 'bar-chart'
 
+  - if widget.loaded?
     - if service.cinstances.any?
       li.DashboardNavigation-list-item
         // Applications
