@@ -1,0 +1,141 @@
+{
+  "swagger": "2.0",
+  "info": {
+      "version": "1.0.0",
+      "title": "Echo API",
+      "description": "A sample echo API"
+  },
+  "host": "echo-api.3scale.net",
+  "basePath": "/",
+  "schemes": [
+      "http"
+  ],
+  "consumes": [
+      "application/json"
+  ],
+  "produces": [
+      "application/json"
+  ],
+  "paths": {
+      "/": {
+          "get": {
+              "description": "Echo API with no parameters",
+              "operationId": "echo_no_params",
+              "produces": [
+                  "application/json",
+                  "application/xml",
+                  "text/xml",
+                  "text/html"
+              ],
+              "parameters": [
+                  {
+                      "name": "user_key",
+                      "in": "query",
+                      "description": "Your API access key",
+                      "required": true,
+                      "x-data-threescale-name": "user_keys",
+                      "type": "string"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "response",
+                      "schema": {
+                          "$ref": "#/definitions/ResponseModel"
+                      }
+                  },
+                  "default": {
+                      "description": "unexpected error",
+                      "schema": {
+                          "$ref": "#/definitions/ErrorModel"
+                      }
+                  }
+              }
+          }
+      },
+      "/{echo}": {
+          "get": {
+              "description": "Echo API with parameters",
+              "operationId": "echo_with_params",
+              "produces": [
+                  "application/json",
+                  "application/xml",
+                  "text/xml",
+                  "text/html"
+              ],
+              "parameters": [
+                  {
+                      "name": "echo",
+                      "in": "path",
+                      "description": "The string to be echoed",
+                      "required": true,
+                      "type": "string"
+                  },
+                  {
+                      "name": "user_key",
+                      "in": "query",
+                      "description": "Your API access key",
+                      "required": true,
+                      "x-data-threescale-name": "user_keys",
+                      "type": "string"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "response",
+                      "schema": {
+                          "$ref": "#/definitions/ResponseModel"
+                      }
+                  },
+                  "default": {
+                      "description": "unexpected error",
+                      "schema": {
+                          "$ref": "#/definitions/ErrorModel"
+                      }
+                  }
+              }
+          }
+      }
+  },
+  "definitions": {
+      "ResponseModel": {
+          "type": "object",
+          "required": [
+              "method",
+              "path",
+              "args",
+              "headers"
+          ],
+          "properties": {
+              "method": {
+                  "type": "string"
+              },
+              "path": {
+                  "type": "string"
+              },
+              "args": {
+                  "type": "string"
+              },
+              "headers": {
+                  "type": "object"
+              }
+          }
+      },
+      "ErrorModel": {
+          "type": "object",
+          "required": [
+              "code",
+              "message"
+          ],
+          "properties": {
+              "code": {
+                  "type": "integer",
+                  "format": "int32"
+              },
+              "message": {
+                  "type": "string"
+              }
+          }
+      }
+  }
+}

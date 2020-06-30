@@ -365,6 +365,9 @@ Returns the name of the spec.
 ### service
 Returns the service of the spec if it has any or `nil` otherwise.
 
+### api_product_production_public_base_url
+Returns the production public base URL of the service (API product) of the spec if it has any or `nil` otherwise
+
 -----------
 
 # Application drop
@@ -1612,27 +1615,6 @@ this returns the errors that occurred.
 
 
 ## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1672,6 +1654,27 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -2267,12 +2270,6 @@ Returns the telephone number of the account.
 {% endif %}
 ```
 
-### logo_url
-Returns the logo URL.
-```liquid
-<img src="{{ provider.logo_url }}"/>
-```
-
 ### multiple_services_allowed?
 *True* if your 3scale plan allows you to manage multiple APIs
                as separate [services][support-terminology-service].
@@ -2341,6 +2338,12 @@ You can enable or disable signups in the [usage rules section][usage-rules] of y
 
 ### account_management_enabled?
 You can enable or disable account management in the [usage rules section][usage-rules].
+
+### logo_url
+Returns the logo URL.
+```liquid
+<img src="{{ provider.logo_url }}"/>
+```
 
 ### api_specs
 Returns API spec collection.
@@ -2881,12 +2884,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 
@@ -2909,9 +2909,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 

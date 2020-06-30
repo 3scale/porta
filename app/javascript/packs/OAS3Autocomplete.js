@@ -32,16 +32,16 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
     : param
 }
 
-const updateResponseBody = (response: SwaggerResponse, accountData: AccountData): ResponseBody => (
+const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
   {
-    ...response.body,
-    paths: Object.keys(response.body.paths).reduce(
+    ...responseBody,
+    paths: Object.keys(responseBody.paths).reduce(
       (paths, key) => {
-        const pathParameters = response.body.paths[key].get.parameters
+        const pathParameters = responseBody.paths[key].get.parameters
         if (pathParameters) {
           paths[key] = {
             get: {
-              ...response.body.paths[key].get,
+              ...responseBody.paths[key].get,
               parameters: pathParameters.map(param => {
                 return X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param
               })
@@ -53,25 +53,41 @@ const updateResponseBody = (response: SwaggerResponse, accountData: AccountData)
   }
 )
 
+const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint: string): ResponseBody => {
+  const originalServers = responseBody.servers || []
+  const servers = serviceEndpoint ? [{url: serviceEndpoint}] : originalServers
+
+  return {
+    ...responseBody,
+    servers
+  }
+}
+
 // response.body.method is not present when fetching the spec,
 // is present when doing a request to one of the paths
 const isSpecFetched = (response: SwaggerResponse): boolean => !!response.body.method
 
-export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string): SwaggerResponse => (
-  isSpecFetched(response)
-    ? response
-    : fetchData(accountDataUrl)
-      .then(data => {
-        const accountData = data.results
-        if (!accountData) {
-          return response
-        }
-        const body = updateResponseBody(response, accountData)
-        return {
-          ...response,
-          body,
-          data: JSON.stringify(body),
-          text: JSON.stringify(body)
-        }
-      })
-)
+export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string, serviceEndpoint: string): SwaggerResponse => {
+  if (isSpecFetched(response)) {
+    return response
+  }
+
+  const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
+  const body = await fetchData(accountDataUrl)
+    .then(data => (
+      data.results
+        ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
+        : bodyWithServer
+    ))
+    .catch(error => {
+      console.log(error)
+      return bodyWithServer
+    })
+
+  return {
+    ...response,
+    body,
+    data: JSON.stringify(body),
+    text: JSON.stringify(body)
+  }
+}
