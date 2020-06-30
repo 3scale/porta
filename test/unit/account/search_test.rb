@@ -65,6 +65,22 @@ class Account::SearchTest < ActiveSupport::TestCase
     assert_equal 'fo\/o', Account.search_ids('fo/o').query
   end
 
+  test 'search with query by email' do
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+        provider = FactoryBot.create(:simple_provider)
+        buyers = FactoryBot.create_list(:simple_buyer, 2, provider_account: provider)
+        ['foo@bar.co.example.com', 'foo@example.org'].each_with_index do |email, buyer_index|
+          FactoryBot.create(:admin, account: buyers[buyer_index], email: email)
+        end
+
+        buyers = provider.buyer_accounts.scope_search(:query => 'foo@bar.co.example.com')
+        expected_buyer = User.find_by!(email: 'foo@bar.co.example.com').account
+        assert_equal [expected_buyer], buyers
+      end
+    end
+  end
+
   test 'search_ids options' do
     ThinkingSphinx::Test.rt_run do
       assert Account.buyers.search_ids('foo').populate
