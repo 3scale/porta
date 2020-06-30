@@ -22,12 +22,8 @@ module Liquid
         Drops::Service.new(service)
       end
 
-      desc 'Returns the public url of the service of the spec if it has any or `nil` otherwise'
-      def endpoint
-        service = @spec.service
-        return unless service
-        service.proxy.endpoint
-      end
+      desc 'Returns the production public base URL of the service (API product) of the spec if it has any or `nil` otherwise'
+      delegate :api_product_production_public_base_url, to: :@spec
     end
   end
 end
