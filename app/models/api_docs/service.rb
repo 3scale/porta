@@ -101,6 +101,11 @@ class ApiDocs::Service < ApplicationRecord
     @_spec ||= ThreeScale::Swagger::Specification.new(self.body)
   end
 
+  def api_product_production_public_base_url
+    return unless service&.proxy
+    service.proxy.endpoint
+  end
+
   private
 
   def service_belongs_to_account

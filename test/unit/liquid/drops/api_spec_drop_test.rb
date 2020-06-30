@@ -26,6 +26,14 @@ class Liquid::Drops::ApiSpecDropTest < ActiveSupport::TestCase
     assert_nil api_spec.service
   end
 
+  test 'Returns the service endpoint' do
+    refute api_spec.api_product_production_public_base_url
+
+    @spec.service = @service
+    @spec.save!
+    assert_equal @service.proxy.endpoint, api_spec.api_product_production_public_base_url
+  end
+
   def api_spec
     Drops::ApiSpec.new(@spec)
   end
