@@ -161,7 +161,8 @@ class ApplicationKey < ApplicationRecord
   end
 
   def push_webhook_key_destroyed
-    application.push_web_hooks_later(:event => "key_deleted")
+    return if destroyed_by_association
+    application.push_web_hooks_later(event: 'key_deleted')
   end
 
   # same as in backend

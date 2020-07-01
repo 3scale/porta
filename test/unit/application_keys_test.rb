@@ -113,6 +113,13 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     @application_keys.remove('some-key')
   end
 
+  test 'does not push webhook when it is destroyed by association' do
+    app_key = FactoryBot.create(:application_key)
+    app_key.application.expects(:push_web_hooks_later).with(event: 'key_deleted').never
+    app_key.destroyed_by_association = true
+    app_key.destroy!
+  end
+
   test 'update backend' do
     ApplicationKey.enable_backend!
 
