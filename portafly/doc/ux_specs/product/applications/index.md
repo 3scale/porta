@@ -1,4 +1,4 @@
-# Applications index
+# Product > Applications index
 
 [Back to index](../../index.md)
 
