@@ -96,22 +96,20 @@ paths:
         schema:
           type: string
         in: query
-  /accounts/invitations/delete:
-    summary: A list of invitations to delete
-    description: Request the deletion of a list of invitations
-    post:
+  /accounts/invitations/delete/:id:
+    summary: Deletes an invitation
+    description: Deletes an invitation based on id
+    delete:
       responses:
-        '202':
-          $ref: '#/components/responses/invitationDeleteList'
-      operationId: invitationDeleteList
-      summary: Post invitations to delete list
+        '204':
+          description: Invitation deleted
+      operationId: invitationDelete
+      summary: Deletes an invitation
     parameters:
-      - name: invitation_ids
-        description: List of ids of invitations to delete.
+      - name: id
+        description: ID of invitation to delete.
         schema:
-          type: array
-          items:
-            type: integer
+          type: integer
         in: query
 components:
   schemas:
@@ -216,37 +214,9 @@ components:
         sent_at: 2019-10-18T05:13:26Z
         accepted: true
         accepted_at: 2019-10-19T05:13:26Z
-    InvitationDelete:
-      title: Root Type for InvitationDeleteData
-      description: A simplified format for an invitation delete data.
-      type: object
-      properties:
-        id:
-          description: The invitation ID number
-          type: integer
-        email:
-          description: The email of the user invited
-          type: string
-        sent_at:
-          format: date-time
-          description: Date of invitation sent
-          type: string
-        accepted:
-          description: Is the invitation accepted ?
-          type: boolean
-        accepted_at:
-          format: date-time
-          description: Date of acceptation of invitation
-          type: string
-      example:
-        id: 2
-        email: stan@southpark.com
-        sent_at: 2019-10-18T05:13:26Z
-        accepted: true
-        accepted_at: 2019-10-19T05:13:26Z
     InvitationNew:
       title: Root Type for InvitationNewData
-      description: A simplified format for a new invitation Z data.
+      description: A simplified format for a new invitation data.
       type: object
       properties:
         email:
@@ -378,24 +348,3 @@ components:
                   email: kenny@southpark.com
                   sent_at: 2019-10-18T05:13:26Z
       description: New Account Invitation
-    invitationDeleteList:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/InvitationDelete'
-          examples:
-            invitationDeleteListExample:
-              value:
-                - id: 1
-                  email: kenny@southpark.com
-                  sent_at: 2019-10-18T05:13:26Z
-                  accepted: false
-                  accepted_at: null
-                - id: 2
-                  email: stan@southpark.com
-                  sent_at: 2019-10-18T05:13:26Z
-                  accepted: true
-                  accepted_at: 2019-10-19T05:13:26Z
-      description: Account Invitations to Delete List
