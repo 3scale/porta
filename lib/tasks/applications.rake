@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "system/database/#{System::Database.adapter}"
+require 'benchmark'
 
 namespace :applications do
   desc 'Recreate cinstances table without the column end_user_required'
@@ -15,16 +16,34 @@ namespace :applications do
     def call(*undesired_columns)
       @undesired_columns = undesired_columns
 
+      Benchmark.bm(35) do |bm|  # The number is the width of the first column in the output.
+        bm.report("Create new table:") do
+          create_new_table
+        end
+
+        bm.report("Insert Cinstances into new table:") do
+          insert_cinstances_data_into_new_table
+        end
+
+        bm.report("Drop old table:") do
+          drop_old_table
+        end
+
+        bm.report("Rename new table:") do
+          rename_new_table
+        end
+
+        # bm.report("Recreate triggers:") do
+        #   recreate_triggers
+        # end
+        #
+        # bm.report("Rename new table:") do
+        #   recreate_indices
+        # end
+      end
+
       # TODO: in a transaction?
       # TODO: ensure that it works, with the right order :)
-      # TODO: monitor progress
-
-      create_new_table
-      insert_cinstances_data_into_new_table
-      drop_old_table
-      rename_new_table
-      # recreate_triggers
-      # recreate_indices
     end
 
     # def recreate_indices
