@@ -17,7 +17,6 @@
      * "Live"
      * "Pending"
      * "Suspended"
-     * "Rejected"
   * Account > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * Plan > Dropdown menu with multi-select checklist ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#checkbox-input))
      * dropdown menu content depends on users application plans
@@ -33,4 +32,3 @@
   * "Live" = 'blue'
   * "Pending" = 'orange'
   * "Suspended" = 'red'
-  * "Rejected" = 'grey'
