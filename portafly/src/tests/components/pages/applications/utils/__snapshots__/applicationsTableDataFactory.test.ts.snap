@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should generate columns 1`] = `
+Array [
+  Object {
+    "categoryName": "name",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "account",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "plan",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "created_on",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+  Object {
+    "categoryName": "state",
+    "title": undefined,
+    "transforms": Array [
+      [Function],
+    ],
+  },
+]
+`;
+
+exports[`should generate rows 1`] = `
+Array [
+  Object {
+    "cells": Array [
+      Object {
+        "stringValue": "Cool App 0",
+        "title": <ApplicationPageLink
+          application={
+            Object {
+              "account": Object {
+                "id": 0,
+                "org_name": "Ramdon Org 0",
+              },
+              "created_on": "2020-06-01T00:00:00Z",
+              "id": 0,
+              "name": "Cool App 0",
+              "plan": Object {
+                "id": 0,
+                "name": "Super Plan 0",
+              },
+              "state": "live",
+              "traffic_on": "2020-06-01T00:00:00Z",
+            }
+          }
+        />,
+      },
+      Object {
+        "stringValue": "Ramdon Org 0",
+        "title": <AccountOverviewLink
+          account={
+            Object {
+              "id": 0,
+              "org_name": "Ramdon Org 0",
+            }
+          }
+        />,
+      },
+      Object {
+        "stringValue": "Super Plan 0",
+        "title": <PlanOverviewLink
+          plan={
+            Object {
+              "id": 0,
+              "name": "Super Plan 0",
+            }
+          }
+        />,
+      },
+      "2020-06-01T00:00:00Z",
+      Object {
+        "stringValue": "live",
+        "title": <StateLabel
+          state="live"
+        />,
+      },
+    ],
+    "id": 0,
+    "selected": false,
+  },
+]
+`;

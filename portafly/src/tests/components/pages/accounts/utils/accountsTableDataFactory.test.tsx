@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { generateColumns, generateRows, ActionButtonImpersonate } from 'components/pages/accounts'
+import { generateColumns, generateRows } from 'components/pages/accounts/utils'
+import { ActionButtonImpersonate } from 'components/pages/accounts'
 import { developerAccounts } from 'tests/examples'
 
 it('should generate columns', () => {
