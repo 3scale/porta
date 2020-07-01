@@ -11,7 +11,7 @@ Please refer to the single page files together with mockups linked in each page 
 
 ### Pages
 ##### Audience
-* [Accounts index](./audience/accounts/index.md)
+* [Accounts index](./accounts/index.md)
 
 ##### Account settings
 * _coming soon_
