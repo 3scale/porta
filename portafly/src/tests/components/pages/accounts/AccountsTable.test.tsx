@@ -1,7 +1,12 @@
 import React from 'react'
 import { render } from 'tests/custom-render'
-import { useDataListTable, useDataListPagination, useDataListFilters } from 'components'
-import { AccountsTable, generateColumns, generateRows } from 'components/pages/accounts'
+import {
+  AccountsTable,
+  useDataListTable,
+  useDataListPagination,
+  useDataListFilters
+} from 'components'
+import { generateColumns, generateRows } from 'components/pages/accounts/utils'
 import { within } from '@testing-library/react'
 import { IDeveloperAccount } from 'types'
 import { factories } from 'tests/factories'
