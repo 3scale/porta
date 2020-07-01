@@ -17,15 +17,20 @@
      * "Live"
      * "Pending"
      * "Suspended"
+     * "Rejected"
   * Account > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * Plan > Dropdown menu with multi-select checklist ([PF specs](https://www.patternfly.org/v4/documentation/react/components/select#checkbox-input))
      * dropdown menu content depends on users application plans
 
 ##### Table ([PF specs](https://www.patternfly.org/v4/documentation/react/components/table))
 * Table header:
-  * Name [sortable]
-  * State [sortable]
+  * Application name [sortable]
   * Account [sortable]
   * Plan [sortable]
-  * Created on [sortable]
-  * Traffic on [sortable]
+  * Created on [sortable -- ordered descending by default]
+  * State [sortable]
+* State column labels:
+  * "Live" = 'blue'
+  * "Pending" = 'orange'
+  * "Suspended" = 'red'
+  * "Rejected" = 'grey'
