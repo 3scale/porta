@@ -1,10 +1,9 @@
 import React from 'react'
 import { sortable } from '@patternfly/react-table'
 import { IDeveloperAccount, DataListRowGenerator, DataListColumnGenerator } from 'types'
-import { ActionButtonImpersonate, AccountOverviewLink } from 'components/pages/accounts'
+import { AccountOverviewLink } from 'components/pages/accounts'
 
 const generateRows: DataListRowGenerator = (accounts: IDeveloperAccount[]) => {
-  const isMultitenant = process.env.REACT_APP_MULTITENANT
   // Rows and Columns must have the same order
   const mapAccountToRowCell = (account: IDeveloperAccount) => [
     {
@@ -13,11 +12,7 @@ const generateRows: DataListRowGenerator = (accounts: IDeveloperAccount[]) => {
     },
     account.adminName,
     account.createdAt,
-    account.state,
-    {
-      stringValue: '',
-      title: isMultitenant ? <ActionButtonImpersonate /> : ''
-    }
+    account.state
   ]
 
   return accounts.map((a) => ({
@@ -48,10 +43,6 @@ const generateColumns: DataListColumnGenerator = (t) => [
     categoryName: 'state',
     title: t('accountsIndex:accounts_table.state_header'),
     transforms: [sortable]
-  },
-  {
-    categoryName: 'actions',
-    title: t('shared:shared_elements.actions_header_plural')
   }
 ]
 
