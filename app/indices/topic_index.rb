@@ -5,9 +5,9 @@ unless System::Database.oracle?
     indexes :title
     indexes sphinx_post_bodies, as: :post
 
-    has :tenant_id, type: :integer
+    has :tenant_id, type: :bigint
 
-    has :forum_id, type: :integer
+    has :forum_id, type: :bigint
     has :sticky, type: :boolean
     has :last_updated_at, type: :timestamp
 
