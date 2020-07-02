@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "system/database/#{System::Database.adapter}"
+# require "system/database/#{System::Database.adapter}"
 require 'benchmark'
 
 namespace :applications do
   desc 'Recreate cinstances table without the column end_user_required'
   task :recreate_table_without_column_end_user_required => :environment do
-    return unless System::Database.mysql?
+    # return unless System::Database.mysql?
     CinstancesTableRecreator.new.call('end_user_required')
   end
 
