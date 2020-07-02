@@ -35,6 +35,7 @@ import {
   TableHeader, TableBody, Table, OnSort, sortable
 } from '@patternfly/react-table'
 import { CategoryOption } from 'types'
+import { StateLabel } from 'components/shared'
 
 const categories = [
   {
@@ -72,7 +73,10 @@ const tableData = {
     cells: [
       `Admin ${Math.random() * (i + 1)}`,
       `Group ${Math.random() * (i + 1)}`,
-      (categories[2] as any).options[i % 2].humanName
+      {
+        stringValue: (categories[2] as any).options[i % 2].humanName,
+        title: <StateLabel state={(categories[2] as any).options[i % 2].humanName} />
+      }
     ],
     selected: false
   }))
