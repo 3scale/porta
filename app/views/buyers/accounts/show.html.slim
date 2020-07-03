@@ -34,7 +34,7 @@ h1 data-hook="account-show"
             th Administrator
             td
               - @account.admins.first.tap do |admin|
-                => admin.display_name
+                => admin.decorate.display_name
                 - if admin.email.present?
                   | (#{mail_to admin.email})
         tr
