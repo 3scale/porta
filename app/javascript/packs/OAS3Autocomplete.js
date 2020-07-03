@@ -32,12 +32,17 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
     : param
 }
 
+const getPathParameters = (path) => {
+  const hasParamsInGet = path.get && path.get.parameters
+  return hasParamsInGet ? path.get.parameters : path.parameters
+}
+
 const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
   {
     ...responseBody,
     paths: Object.keys(responseBody.paths).reduce(
       (paths, key) => {
-        const pathParameters = responseBody.paths[key].get.parameters
+        const pathParameters = getPathParameters(responseBody.paths[key])
         if (pathParameters) {
           paths[key] = {
             get: {
