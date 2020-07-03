@@ -26,7 +26,7 @@ end
 And(/^the users should receive the account created notification email$/) do
   registered_buyer = @provider.buyers.last
   registered_user  = registered_buyer.users.last
-  subject          = "#{registered_user.informal_name} from #{registered_buyer.name} signed up"
+  subject          = "#{registered_user.decorate.informal_name} from #{registered_buyer.name} signed up"
 
   @provider.users.each do |user|
     step %("#{user.email}" should receive an email with subject "#{subject}")
