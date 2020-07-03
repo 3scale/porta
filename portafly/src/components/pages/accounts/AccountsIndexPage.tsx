@@ -13,8 +13,7 @@ import {
   Text,
   Button,
   Flex,
-  FlexItem,
-  FlexModifiers
+  FlexItem
 } from '@patternfly/react-core'
 import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
@@ -46,7 +45,7 @@ const AccountsIndexPage: React.FunctionComponent = () => {
               <Text component="h1">{t('title_page')}</Text>
             </TextContent>
           </FlexItem>
-          <FlexItem breakpointMods={[{ modifier: FlexModifiers['align-right'] }]}>
+          <FlexItem align={{ default: 'alignRight' }}>
             <CreateAccountButton />
             <ExportAccountsButton data={accounts} />
           </FlexItem>
