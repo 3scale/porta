@@ -239,7 +239,9 @@ exports[`SearchWidget should render correctly 1`] = `
         value=""
       />
       <button
+        aria-disabled="false"
         class="pf-c-button pf-m-control"
+        data-ouia-component-id="1"
         data-ouia-component-type="PF4/Button"
         data-ouia-safe="true"
         type="button"

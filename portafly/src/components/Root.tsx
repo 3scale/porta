@@ -69,7 +69,7 @@ const Root: React.FunctionComponent = ({ children }) => {
         navVariant="vertical"
         navItems={navItems}
         navGroupsStyle="expandable"
-        toolbar={<Toolbar />}
+        headerTools={<Toolbar />}
       >
         {children}
       </AppLayout>

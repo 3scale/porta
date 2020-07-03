@@ -83,6 +83,7 @@ const DataListModal: React.FunctionComponent<Props> = ({
       header={header}
       onClose={onClose}
       actions={actions}
+      aria-label={title}
       isOpen
     >
       <TextContent>

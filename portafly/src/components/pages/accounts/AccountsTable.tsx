@@ -65,7 +65,7 @@ const AccountsTable: React.FunctionComponent = () => {
         <ToolbarItem>
           <SearchWidget categories={categories} />
         </ToolbarItem>
-        <ToolbarItem variant="pagination" breakpointMods={[{ modifier: 'align-right', breakpoint: 'md' }]}>
+        <ToolbarItem variant="pagination">
           {pagination}
         </ToolbarItem>
       </ToolbarContent>
@@ -88,7 +88,7 @@ const AccountsTable: React.FunctionComponent = () => {
       </Table>
       <Toolbar>
         <ToolbarContent>
-          <ToolbarItem variant="pagination" breakpointMods={[{ modifier: 'align-right', breakpoint: 'md' }]}>
+          <ToolbarItem variant="pagination">
             {pagination}
           </ToolbarItem>
         </ToolbarContent>
