@@ -2,13 +2,13 @@
 
 [Back to index](../../index.md)
 
-* [Mockups -- coming soon](XXX)
+* [Mockups -- coming soon](https://marvelapp.com/prototype/55343de/screen/70807410)
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5421)
 * [Parent JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5420)
 
 ##### Page header
 * Tabs:
-  * Overview [default]
+  * Overview [selected by default]
   * Applications
 
 ##### Card ([PF specs](https://www.patternfly.org/v4/documentation/react/components/card))
