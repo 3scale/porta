@@ -1,4 +1,4 @@
-# Applications index
+# Product > Applications index
 
 [Back to index](../../index.md)
 
@@ -23,9 +23,12 @@
 
 ##### Table ([PF specs](https://www.patternfly.org/v4/documentation/react/components/table))
 * Table header:
-  * Name [sortable]
-  * State [sortable]
+  * Application name [sortable]
   * Account [sortable]
   * Plan [sortable]
-  * Created on [sortable]
-  * Traffic on [sortable]
+  * Created on [sortable -- ordered descending by default]
+  * State [sortable]
+* State column labels:
+  * "Live" = 'blue'
+  * "Pending" = 'orange'
+  * "Suspended" = 'red'
