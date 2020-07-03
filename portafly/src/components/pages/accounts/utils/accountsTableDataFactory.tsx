@@ -1,6 +1,7 @@
 import React from 'react'
 import { sortable } from '@patternfly/react-table'
 import { IDeveloperAccount, DataListRowGenerator, DataListColumnGenerator } from 'types'
+import { StateLabel } from 'components'
 import { AccountOverviewLink } from 'components/pages/accounts'
 
 const generateRows: DataListRowGenerator = (accounts: IDeveloperAccount[]) => {
@@ -12,7 +13,10 @@ const generateRows: DataListRowGenerator = (accounts: IDeveloperAccount[]) => {
     },
     account.adminName,
     account.createdAt,
-    account.state
+    {
+      stringValue: account.state,
+      title: <StateLabel state={account.state} />
+    }
   ]
 
   return accounts.map((a) => ({
