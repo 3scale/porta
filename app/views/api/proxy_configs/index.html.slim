@@ -3,7 +3,7 @@
 table class="data"
   thead
     tr
-      th Configuration file    
+      th Configuration file
       th Version
       th Date
       th Configured by
@@ -14,7 +14,8 @@ table class="data"
         td = link_to proxy_config.filename, admin_service_proxy_config_path(@service, proxy_config.id)
         td = proxy_config.version
         td = proxy_config.created_at
-        td = proxy_config.user.display_name if proxy_config.user
+        - user = proxy_config.user
+        td = user.decorate.display_name if user
 
 
 = will_paginate(@proxy_configs)
