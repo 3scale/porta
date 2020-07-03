@@ -39,6 +39,8 @@ base: &default
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
 
+  janitor_worker_enabled: true
+
   active_merchant_logging: false
   billing_canaries:
 
