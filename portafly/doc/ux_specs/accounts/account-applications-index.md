@@ -9,6 +9,9 @@
 ##### Page header
 * Create Application button
   * Primary button
+* Tabs:
+  * Overview
+  * Applications [selected]
 
 ##### Toolbar ([specs](../../global_components/toolbar.md))
 * Filters:
