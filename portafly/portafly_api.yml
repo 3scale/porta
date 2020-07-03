@@ -56,61 +56,6 @@ paths:
         schema:
           type: integer
         in: query
-  /accounts/invitations:
-    summary: A list of sent invitations
-    description: List of invitations sent by an account
-    get:
-      responses:
-        '200':
-          $ref: '#/components/responses/invitationList'
-      operationId: invitationList
-      summary: Get sent invitations list
-    parameters:
-      - name: page
-        description: Page in the paginated list. Defaults to 1.
-        schema:
-          type: integer
-        in: query
-      - name: per_page
-        description: Number of results per page. Default and max is 500.
-        schema:
-          type: integer
-        in: query
-      - name: account_id
-        description: Id of current account.
-        schema:
-          type: integer
-        in: query
-  /accounts/invitations/new:
-    summary: A new invitation request
-    description: A new invitation request
-    post:
-      responses:
-        '201':
-          $ref: '#/components/responses/invitationNew'
-      operationId: invitationNew
-      summary: Post a new invitation
-    parameters:
-      - name: email
-        description: Email the invitation will be sent to
-        schema:
-          type: string
-        in: query
-  /accounts/invitations/delete/:id:
-    summary: Deletes an invitation
-    description: Deletes an invitation based on id
-    delete:
-      responses:
-        '204':
-          description: Invitation deleted
-      operationId: invitationDelete
-      summary: Deletes an invitation
-    parameters:
-      - name: id
-        description: ID of invitation to delete.
-        schema:
-          type: integer
-        in: query
 components:
   schemas:
     DeveloperAccount:
@@ -186,46 +131,6 @@ components:
           type: array
           items:
             type: string
-    Invitation:
-      title: Root Type for InvitationData
-      description: A simplified format for an invitation data.
-      type: object
-      properties:
-        id:
-          description: The invitation ID number
-          type: integer
-        email:
-          description: The email of the user invited
-          type: string
-        sent_at:
-          format: date-time
-          description: Date when the invitation was sent
-          type: string
-        is_accepted:
-          description: Is the invitation accepted?
-          type: boolean
-        accepted_at:
-          format: date-time
-          description: Date when the invitation was accepted
-          type: string
-      example:
-        id: 2
-        email: stan@southpark.com
-        sent_at: 2019-10-18T05:13:26Z
-        accepted: true
-        accepted_at: 2019-10-19T05:13:26Z
-    InvitationNew:
-      title: Root Type for InvitationNewData
-      description: A simplified format for a new invitation data.
-      type: object
-      properties:
-        email:
-          description: The email of the user invited
-          type: string
-      example:
-        id: 1
-        email: stan@southpark.com
-        sent_at: 2019-10-18T05:13:26Z
   responses:
     developerAccountList:
       content:
@@ -313,38 +218,3 @@ components:
                   can_delete_user: false
                   can_invite_user: false
       description: Account Users List
-    invitationList:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Invitation'
-          examples:
-            accountInvitationListExample:
-              value:
-                - id: 1
-                  email: kenny@southpark.com
-                  sent_at: 2019-10-18T05:13:26Z
-                  accepted: false
-                  accepted_at: null
-                - id: 2
-                  email: stan@southpark.com
-                  sent_at: 2019-10-18T05:13:26Z
-                  accepted: true
-                  accepted_at: 2019-10-19T05:13:26Z
-      description: Account Invitations List
-    invitationNew:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/InvitationNew'
-          examples:
-            invitationNewExample:
-              value:
-                - id: 1
-                  email: kenny@southpark.com
-                  sent_at: 2019-10-18T05:13:26Z
-      description: New Account Invitation
