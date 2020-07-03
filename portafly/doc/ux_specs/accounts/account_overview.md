@@ -13,4 +13,5 @@
 
 ##### Card ([PF specs](https://www.patternfly.org/v4/documentation/react/components/card))
 * Email address will always be displayed in a new line
+* Email address link opens up email client
 * Date format is YYYY-MM-DD, hh:mm (am/pm NOT allowed)
