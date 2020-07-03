@@ -66,7 +66,7 @@ class UserMailerTest < ActionMailer::TestCase
         email = deliver_lost_password
         # assert_match "CUSTOM SUBJECT", email.subject
         assert_match "Lost password recovery", email.subject
-        assert_match "Dear #{@user.display_name},", email.body.to_s
+        assert_match "Dear #{user_decorator.display_name},", email.body.to_s
         assert_match "CUSTOM MESSAGE", email.body.to_s
         assert_match "http://#{@provider_account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
         assert_match "The API Team", email.body.to_s
@@ -107,7 +107,7 @@ class UserMailerTest < ActionMailer::TestCase
         with_default_url_options protocol: 'https' do
           email = deliver_signup_notification
 
-          assert_match "Dear #{@user.display_name},", email.body.to_s
+          assert_match "Dear #{user_decorator.display_name},", email.body.to_s
           assert_match "Thank you for signing up for access to the Monkey API", email.body.to_s
           assert_match "Your username is: #{@user.username}", email.body.to_s
           assert_match "https://api.monkey.com/activate/#{@user.activation_code}", email.body.to_s
@@ -129,7 +129,7 @@ Customized Template
         email = deliver_signup_notification
 
         assert_match "Customized Template", email.body.to_s
-        assert_match @user.display_name, email.body.to_s
+        assert_match user_decorator.display_name, email.body.to_s
         assert_match "Monkey", email.body.to_s
         assert_match "http://api.monkey.com/activate/#{@user.activation_code}", email.body.to_s
       end
@@ -191,7 +191,7 @@ Customized Template
             email = deliver_lost_password
             # assert_match "CUSTOM SUBJECT", email.subject
             assert_match "Lost password recovery", email.subject
-            assert_match "Dear #{@user.display_name},", email.body.to_s
+            assert_match "Dear #{user_decorator.display_name},", email.body.to_s
             assert_match "CUSTOM MESSAGE", email.body.to_s
             assert_match "http://#{@provider_account.external_domain}/admin/account/password?password_reset_token=abc123", email.body.to_s
             assert_match "The API Team", email.body.to_s
@@ -203,6 +203,10 @@ Customized Template
 
       end
     end
+  end
+
+  def user_decorator
+    @user_decorator ||= @user.decorate
   end
 
   def with_default_url_options(options)

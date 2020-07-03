@@ -23,7 +23,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal [@support_email_address], email.from
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
-        assert_match %r{Dear #{user.informal_name}}, email_body
+        assert_match %r{Dear #{user_decorator.informal_name}}, email_body
         assert_match %r{Thank you for signing up to Red Hat 3scale}, email_body
         assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
@@ -38,7 +38,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal [@support_email_address], email.from
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
-        assert_match %r{#{user.informal_name}}, email_body
+        assert_match %r{#{user_decorator.informal_name}}, email_body
         assert_match %r{A couple of days ago you signed up for Red Hat 3scale to manage your API}, email_body
         assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
@@ -68,7 +68,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal [@support_email_address], email.from
         assert_equal '{"category": "Lost password"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
-        assert_match %r{Dear #{user.display_name}}, email_body
+        assert_match %r{Dear #{user_decorator.display_name}}, email_body
         assert_match %r{You can reset your password by visiting the following link}, email_body
         assert_match %r{#{account.external_admin_domain}/p/password}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
@@ -90,7 +90,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal [@support_email_address], email.from
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
-        assert_match %r{Dear #{user.informal_name}}, email_body
+        assert_match %r{Dear #{user_decorator.informal_name}}, email_body
         assert_match %r{Thank you for signing up to #{master_account.org_name}}, email_body
         assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
@@ -106,7 +106,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal [@support_email_address], email.from
         assert_equal '{"category": "Signup Notification"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
-        assert_match %r{#{user.informal_name}}, email_body
+        assert_match %r{#{user_decorator.informal_name}}, email_body
         assert_match %r{A couple of days ago you signed up for #{master_account.org_name} to manage your API}, email_body
         assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
@@ -138,7 +138,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal [@support_email_address], email.from
         assert_equal '{"category": "Lost password"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
-        assert_match %r{Dear #{user.display_name}}, email_body
+        assert_match %r{Dear #{user_decorator.display_name}}, email_body
         assert_match %r{You can reset your password by visiting the following link}, email_body
         assert_match %r{#{account.external_admin_domain}/p/password}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
@@ -163,20 +163,16 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       ActionMailer::Base.unstub :default_url_options
     end
 
+    def user_decorator
+      @user_decorator ||= user.decorate
+    end
+
     def user
-      @user ||= create_user
+      @user ||= FactoryBot.create(:admin, account: account, first_name: 'Jolly Good', last_name: 'Fellow')
     end
 
     def account
-      @account ||= create_account
-    end
-
-    def create_user
-      FactoryBot.create(:admin, account: account, first_name: 'Jolly Good', last_name: 'Fellow')
-    end
-
-    def create_account
-      FactoryBot.create(:provider_account, provider_account: master_account, domain: 'api.monkey.com', org_name: 'Monkey', self_domain: 'monkey-admin.com', from_email: 'api@monkey.com', subdomain: 'monkey')
+      @account ||= FactoryBot.create(:provider_account, provider_account: master_account, domain: 'api.monkey.com', org_name: 'Monkey', self_domain: 'monkey-admin.com', from_email: 'api@monkey.com', subdomain: 'monkey')
     end
   end
 
@@ -196,7 +192,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
     private
 
     def user
-      @user ||= master_account.admin_users.first
+      @user ||= master_account.admin_user
     end
 
     def account
