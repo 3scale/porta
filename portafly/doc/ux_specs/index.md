@@ -12,7 +12,9 @@ Please refer to the single page files together with mockups linked in each page 
 ### Pages
 ##### Accounts
 * [Accounts index](./accounts/index.md)
-* [Account overview](./accounts/account_overview.md)
+* Account
+  * [Overview](./accounts/account_overview.md)
+  * [Applications index](./accounts/account_applications_index.md)
 
 ##### Account settings
 * _coming soon_
