@@ -33,10 +33,10 @@ h1 data-hook="account-show"
           tr
             th Administrator
             td
-              - @account.admins.first.tap do |admin|
-                => admin.decorate.display_name
-                - if admin.email.present?
-                  | (#{mail_to admin.email})
+              => @account.decorate.admin_user_display_name
+              - admin_user_email = @account.admin_user.email
+              - if admin_user_email.present?
+                | (#{mail_to admin_user_email})
         tr
           th Signed up on
           td = @account.created_at.to_s(:long)
