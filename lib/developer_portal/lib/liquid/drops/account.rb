@@ -45,9 +45,10 @@ A developer account. See `User` drop if you are looking for the email addresses 
         @model.name
       end
 
-      desc "Returns account's display name"
+      # TODO: Remove this eventually. It is redundant.
+      desc "Returns the organization name of the developer's account."
       def display_name
-        @model.display_name
+        @model.name
       end
 
       desc "Returns a text about a VAT zero."
