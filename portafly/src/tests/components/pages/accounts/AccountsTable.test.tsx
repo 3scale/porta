@@ -12,8 +12,8 @@ const usePaginationMock = useDataListPagination as jest.Mock
 const useFiltersMock = useDataListFilters as jest.Mock
 const developerAccounts: IDeveloperAccount[] = [['Dandelion', 'Rosemary and Thyme'], ['Geralt', 'Wolf School']].map((account) => (
   factories.DeveloperAccount.build({
-    admin_name: account[0],
-    org_name: account[1]
+    adminName: account[0],
+    orgName: account[1]
   })
 ))
 
@@ -41,7 +41,7 @@ afterEach(resetMocks)
 const setup = () => {
   const wrapper = render(<AccountsTable />)
   const table = within(wrapper.queryByRole('grid') as HTMLElement)
-  const getRow = (account: IDeveloperAccount) => table.getByText(account.org_name).closest('tr') as HTMLElement
+  const getRow = (account: IDeveloperAccount) => table.getByText(account.orgName).closest('tr') as HTMLElement
 
   return {
     ...wrapper,
