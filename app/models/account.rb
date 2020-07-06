@@ -359,11 +359,6 @@ class Account < ApplicationRecord
   # def self.to_csv
   # end
 
-  # Display name for account. Handy for situations where org_name is empty.
-  def display_name
-    org_name.empty? ? admins.first.username : org_name
-  end
-
   def emails
     admins.map(&:email).compact
   end
