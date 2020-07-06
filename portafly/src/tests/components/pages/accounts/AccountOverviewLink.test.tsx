@@ -7,7 +7,7 @@ const account = factories.DeveloperAccount.build()
 
 const setup = () => {
   const wrapper = render(<AccountOverviewLink account={account} />)
-  const row = wrapper.getByText(account.org_name).closest('a') as HTMLElement
+  const row = wrapper.getByText(account.orgName).closest('a') as HTMLElement
   return { ...wrapper, row }
 }
 
