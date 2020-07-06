@@ -18,7 +18,7 @@ class AccountMailer < ActionMailer::Base
 
     mail(:template_name => 'account_confirmed',
          :from     => from_address(account),
-         :to       => admin_of(account).email,
+         :to       => account.admin_user.email,
          :subject  => "Waiting list confirmation")
 
   end
@@ -33,7 +33,7 @@ class AccountMailer < ActionMailer::Base
 
     mail(:template_name => 'account_approved',
          :from     => from_address(account),
-         :to       => admin_of(account).email,
+         :to       => account.admin_user.email,
          :subject  => "Registration now active!")
 
   end
@@ -48,7 +48,7 @@ class AccountMailer < ActionMailer::Base
 
     mail(:template_name => 'account_rejected',
          :from     => from_address(account),
-         :to       => admin_of(account).email,
+         :to       => account.admin_user.email,
          :subject  => "Registration Denied")
   end
 
@@ -87,16 +87,12 @@ class AccountMailer < ActionMailer::Base
 
   def assigns(account)
     {
-      :user => Liquid::Drops::User.new(admin_of(account)),
+      :user => Liquid::Drops::User.new(account.admin_user),
       :domain => account.provider_account.external_domain,
       :account => Liquid::Drops::Account.new(account),
       :provider => Liquid::Drops::Provider.new(account.provider_account),
-      :support_email => admin_of(account.provider_account).email
+      :support_email => account.provider_account.admin_user.email
      }
-  end
-
-  def admin_of(account)
-    account.admins.first
   end
 
   def provider(account)
