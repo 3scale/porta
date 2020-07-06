@@ -53,7 +53,7 @@ describe('when backend returns a list of accounts', () => {
   it('should render a table with accounts', () => {
     const wrapper = setup({ data: developerAccounts })
     developerAccounts.forEach((account: IDeveloperAccount) => (
-      expect(wrapper.getByText(account.admin_name)).toBeInTheDocument()
+      expect(wrapper.getByText(account.adminName)).toBeInTheDocument()
     ))
   })
 })
