@@ -12,12 +12,12 @@ const ExportAccountsButton: React.FunctionComponent<Props> = ({ data }) => {
 
   const exportHeaders = [
     { label: 'ID', key: 'id' },
-    { label: t('accounts_table.admin_header'), key: 'admin_name' },
-    { label: t('accounts_table.group_header'), key: 'org_name' },
+    { label: t('accounts_table.admin_header'), key: 'adminName' },
+    { label: t('accounts_table.group_header'), key: 'orgName' },
     { label: t('accounts_table.state_header'), key: 'state' },
-    { label: t('accounts_table.applications_header'), key: 'apps_count' },
-    { label: t('accounts_table.created_header'), key: 'created_at' },
-    { label: t('accounts_table.updated_header'), key: 'updated_at' }
+    { label: t('accounts_table.applications_header'), key: 'appsCount' },
+    { label: t('accounts_table.created_header'), key: 'createdAt' },
+    { label: t('accounts_table.updated_header'), key: 'updatedAt' }
   ]
 
   const isDisabled = !(data && data.length)
