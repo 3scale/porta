@@ -125,6 +125,10 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
     test 'not return fields' do
       assert_nil @drop.extra_fields["org_name"]
     end
+
+    test '#display_name' do
+      assert_equal @buyer.name, @drop.display_name
+    end
   end
   # End fields tests
 end
