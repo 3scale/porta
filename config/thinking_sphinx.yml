@@ -7,6 +7,7 @@ common: &sphinx
   min_infix_len: 3
   enable_star: 1
   pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
+  binlog_path: ''
 
   # This is from TS FAQ - makes reindex MUCH faster.
   sql_range_step: 2000000000
