@@ -1,7 +1,52 @@
 ---
+# Page details
+
 page_title: Applications | Portafly
 page_title_description: Page title of the Applications page
 body_title: Applications
 body_title_description: Body title of the Applications page
 subtitle: This is the Applications page
 subtitle_description: Subtitle of the Applications page
+
+# Top area
+
+create_application_button: Create Application
+create_application_button_description: Label for the new application button
+create_application_button_aria_label: Create Application
+create_application_button_aria_label_description: Aria label for the new application button
+
+# Main area
+
+## Toolbar
+actions_filter_options:
+ by_name: Name
+ by_state: State
+ by_state_options:
+  live: Live
+  pending: Pending
+  approved: Approved
+applications_filter_field: "Filter by {{filter_option}}"
+applications_filter_field_description: Filter by typeahead a text input. This applies for filter by name
+applications_filter_field_aria_label: Filter text input
+applications_filter_field_aria_label_description: Aria label for the filter text input
+
+## Header
+applications_table:
+ aria_label: Applications table
+ aria_label_description: Aria label of the table of applications
+ empty_state: Currently, there are no applications to show. Add applications.
+ empty_state_description: Message to display when there are no applications to show, and prompt the user to add applications
+ name_header: Name
+ name_header_description: Column listing the application names
+ state_header: State
+ state_header_description: Column listing the state of the applications
+ account_header: Account
+ account_header_description: Column listing administrators
+ plan_header: Plan
+ plan_header_description: Column listing current plans
+ created_header: Created on
+ created_header_description: Column listing the creation date of the applications
+ traffic_header: Traffic on
+ traffic_header_description: Column listing the date an application was last used
+ application_overview_link_aria_label: Go to application's overview page
+ application_overview_link_aria_label_description: Aria label for the link to open each application's overview page

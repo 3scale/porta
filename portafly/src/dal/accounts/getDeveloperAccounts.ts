@@ -1,5 +1,5 @@
 import { craftRequest, fetchData } from 'utils'
-import { IDeveloperAccount } from 'types'
+import { IDeveloperAccount, State } from 'types'
 
 type User = {
   id: string
@@ -55,7 +55,7 @@ const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) 
   orgName: account.org_name,
   // TODO: Porta should return admin_name (username of first user role admin)
   adminName: account.billing_address?.company,
-  state: account.state
+  state: account.state as State
 }))
 
 const getDeveloperAccounts = async (): Promise<IDeveloperAccount[]> => {
