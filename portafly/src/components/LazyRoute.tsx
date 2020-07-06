@@ -2,19 +2,10 @@ import * as React from 'react'
 import { RouteProps, Route } from 'react-router-dom'
 import { Loading } from 'components'
 
-export interface IDynamicImportProps extends RouteProps {
-  getComponent: () => Promise<{ default: React.ComponentType }>
-}
-
-export function LazyRoute({ path, exact, getComponent }: IDynamicImportProps) {
-  const LazyComponent = React.useMemo(() => React.lazy(getComponent), [
-    getComponent
-  ])
+export function LazyRoute({ path, exact, render }: RouteProps) {
   return (
-    <Route path={path} exact={exact}>
-      <React.Suspense fallback={<Loading />}>
-        <LazyComponent />
-      </React.Suspense>
-    </Route>
+    <React.Suspense fallback={<Loading />}>
+      <Route path={path} exact={exact} render={render} />
+    </React.Suspense>
   )
 }
