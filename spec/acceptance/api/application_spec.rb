@@ -197,7 +197,7 @@ resource "Cinstance" do
 
     it { should have_properties('id', 'state', 'name', 'plan_id', 'description',
                       'service_id', 'first_traffic_at', 'first_daily_traffic_at',
-                      'plan_name', 'org_name').from(resource) }
+                      'plan_name', 'org_name', 'service_name').from(resource) }
     it { should have_links('self', 'account', 'plan', 'keys', 'referrer_filters', 'service') }
 
     it { should include('account_id' => resource.buyer.id )}
