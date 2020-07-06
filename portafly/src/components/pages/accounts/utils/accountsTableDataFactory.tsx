@@ -8,11 +8,11 @@ const generateRows: DataListRowGenerator = (accounts: IDeveloperAccount[]) => {
   // Rows and Columns must have the same order
   const mapAccountToRowCell = (account: IDeveloperAccount) => [
     {
-      stringValue: account.org_name,
+      stringValue: account.orgName,
       title: <AccountOverviewLink account={account} />
     },
-    account.admin_name,
-    account.created_at,
+    account.adminName,
+    account.createdAt,
     account.state,
     {
       stringValue: '',
