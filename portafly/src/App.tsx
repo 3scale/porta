@@ -11,7 +11,7 @@ import {
 import { LastLocationProvider } from 'react-router-last-location'
 
 const OverviewPage = React.lazy(() => import('components/pages/Overview'))
-const ApplicationsPage = React.lazy(() => import('components/pages/Applications'))
+const ApplicationsPage = React.lazy(() => import('components/pages/applications/ApplicationsIndexPage'))
 const AccountsIndexPage = React.lazy(() => import('components/pages/accounts/AccountsIndexPage'))
 
 const PagesSwitch = () => (
