@@ -1,15 +1,15 @@
 import React from 'react'
-import { Brand, Button } from '@patternfly/react-core'
+import { Brand } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
 import { useHistory } from 'react-router-dom'
 import { useAuth } from 'auth'
 import Login from 'components/pages/Login'
-import { AppLayout } from 'components'
+import { AppLayout, AppHeaderTools } from 'components'
 import logo from 'assets/logo.svg'
 
 const Root: React.FunctionComponent = ({ children }) => {
   const { t } = useTranslation('shared')
-  const { authToken, setAuthToken } = useAuth()
+  const { authToken } = useAuth()
   const Logo = <Brand src={logo} alt={t('logo_alt_text')} />
 
   const navItems = [
@@ -56,10 +56,6 @@ const Root: React.FunctionComponent = ({ children }) => {
     }),
     [history]
   )
-  const Toolbar: React.FunctionComponent = () => {
-    const logOut = () => setAuthToken(null)
-    return <Button variant="link" onClick={logOut}>{t('buttons.logout')}</Button>
-  }
 
   return authToken
     ? (
@@ -69,7 +65,7 @@ const Root: React.FunctionComponent = ({ children }) => {
         navVariant="vertical"
         navItems={navItems}
         navGroupsStyle="expandable"
-        headerTools={<Toolbar />}
+        headerTools={<AppHeaderTools />}
       >
         {children}
       </AppLayout>
