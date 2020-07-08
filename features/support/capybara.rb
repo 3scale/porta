@@ -36,6 +36,10 @@ Before '@chrome' do
   Capybara.current_driver = :chrome
 end
 
+Before '@firefox' do
+  Capybara.current_driver = :firefox
+end
+
 Around '@security' do |scenario, block|
   with_forgery_protection(&block)
 end
@@ -60,6 +64,16 @@ Capybara.register_driver :headless_firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
 
   options.add_argument('-headless')
+  options.add_argument('--window-size=1280,1024')
+
+  driver = Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
+
+  driver
+end
+
+Capybara.register_driver :firefox do |app|
+  options = Selenium::WebDriver::Firefox::Options.new
+
   options.add_argument('--window-size=1280,1024')
 
   driver = Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
