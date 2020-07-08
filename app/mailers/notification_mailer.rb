@@ -77,7 +77,7 @@ class NotificationMailer < ActionMailer::Base
     @event            = event
 
     mail to: @receiver.email,
-         subject: "#{@user.decorate.informal_name} from #{@account.name} signed up"
+         subject: "#{@user.informal_name} from #{@account.name} signed up"
   end
 
   # @param [Alerts::LimitAlertReachedProviderEvent] event
