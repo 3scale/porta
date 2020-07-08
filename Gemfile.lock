@@ -534,6 +534,8 @@ GEM
     public_suffix (4.0.6)
     raabro (1.4.0)
     rack (2.1.4)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-no_animations (1.0.3)
     rack-openid (1.4.2)
       rack (>= 1.1.0)
@@ -966,6 +968,7 @@ DEPENDENCIES
   pry-shell
   pry-stack_explorer
   rack (~> 2.1.4)
+  rack-cors
   rack-no_animations (~> 1.0.3)
   rack-utf8_sanitizer
   rack-x_served_by (~> 0.1.1)

@@ -124,6 +124,7 @@ gem 'acts_as_tree'
 gem 'addressable', require: false
 gem 'hashie', require: false
 gem 'rack-x_served_by', '~> 0.1.1'
+gem 'rack-cors'
 gem 'roar-rails'
 
 gem 'reform', '~> 2.0.3', require: false
