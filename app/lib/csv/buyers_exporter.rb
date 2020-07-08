@@ -16,7 +16,7 @@ class Csv::BuyersExporter < ::Csv::Exporter
   end
 
   def values_for_account(account)
-    user = (account.admin_user || User.new).decorate
+    user = account.admin_user
     [
       account.id,
       account.state,
@@ -25,10 +25,10 @@ class Csv::BuyersExporter < ::Csv::Exporter
       account.bought_account_plan.try!(:name),
       account.created_at.to_s(:db),
       account.bought_cinstances.count,
-      user.display_name,
-      user.email,
+      account.decorate.admin_user_display_name,
+      user&.email,
       account.extra_fields.to_json,
-      user.extra_fields.to_json
+      user&.extra_fields.to_json
     ]
   end
 
