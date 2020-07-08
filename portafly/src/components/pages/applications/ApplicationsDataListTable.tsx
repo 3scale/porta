@@ -14,6 +14,7 @@ const ApplicationsDataListTable: React.FunctionComponent<Props> = ({ application
   const rows = generateRows(applications)
 
   const initialState = {
+    data: applications,
     table: { columns, rows }
   }
 
