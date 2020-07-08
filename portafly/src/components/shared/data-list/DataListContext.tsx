@@ -14,10 +14,14 @@ import {
   useBulkActions,
   defaultBulkActions,
   BulkActionsState,
-  bulkActionsReducer
+  bulkActionsReducer,
+  useData,
+  DataState,
+  dataReducer
 } from 'components/shared/data-list/reducers'
 
 export type State = {
+  data: DataState
   table: TableState
   filters: FiltersState
   pagination: PaginationState
@@ -25,6 +29,8 @@ export type State = {
 }
 
 const defaultState: State = {
+  data: [],
+  // TODO: We should not store the table in our state, we should construct it out from data.
   table: {
     rows: [],
     columns: []
@@ -47,6 +53,7 @@ type Props = {
 
 const DataListProvider: React.FunctionComponent<Props> = ({ initialState, children }) => {
   const [state, dispatch] = useReducer(combineReducers({
+    data: dataReducer,
     table: tableReducer,
     filters: filtersReducer,
     pagination: paginationReducer,
@@ -69,11 +76,13 @@ const useDataListTable = () => useTable(useContext(DataListContext))
 const useDataListFilters = () => useFilters(useContext(DataListContext))
 const useDataListPagination = () => usePagination(useContext(DataListContext))
 const useDataListBulkActions = () => useBulkActions(useContext(DataListContext))
+const useDataListData = () => useData(useContext(DataListContext))
 
 export {
   DataListProvider,
   useDataListTable,
   useDataListFilters,
   useDataListPagination,
-  useDataListBulkActions
+  useDataListBulkActions,
+  useDataListData
 }
