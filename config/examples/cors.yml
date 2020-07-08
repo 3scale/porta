@@ -1,0 +1,17 @@
+cors: &default
+  enabled: false
+  origins: '*'
+
+development:
+  <<: *default
+  enabled: true
+  resources:
+    - '/admin/api/*'
+    - '/stats/*'
+
+test:
+  <<: *default
+
+production:
+
+preview:
