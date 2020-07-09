@@ -3,10 +3,8 @@ import {
   Action,
   createReducer
 } from 'utils'
-import { IDeveloperAccount, IApplication } from 'types'
 
-// Union Type of the different Data Types a DataListContext will hold
-export type DataState = IDeveloperAccount[] | IApplication[]
+export type DataState = { id: number }[]
 
 // Action Handlers
 const SET_DATA = 'SET_DATA'
@@ -21,13 +19,13 @@ const filtersActionHandlers: ActionHandlers<DataState, DataState> = {
 const dataReducer = createReducer(filtersActionHandlers)
 
 // Hook
-interface IUseData {
-  state: Record<'data', DataState>
-  dispatch: React.Dispatch<Action<DataState>>
+interface IUseData<T extends DataState> {
+  state: Record<'data', T>
+  dispatch: React.Dispatch<Action<T>>
 }
-const useData = ({ state, dispatch }: IUseData) => ({
+const useData = <T extends DataState>({ state, dispatch }: IUseData<T>) => ({
   data: state.data,
-  setData: (data: DataState) => dispatch({ type: SET_DATA, payload: data })
+  setData: (data: T) => dispatch({ type: SET_DATA, payload: data })
 })
 
 export { dataReducer, useData }
