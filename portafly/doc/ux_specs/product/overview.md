@@ -10,8 +10,16 @@
 * Edit button
   * Secondary button
 * Delete button
-  * Customized tertiary button
+  * Customized button (A secondary button to resemble a destructive button)
 
-##### Delete modal ([Global](../../global_components/modal.md))
-* [PatternFly Modal dialog design guidelines](https://www.patternfly.org/v4/design-guidelines/usage-and-behavior/modal)
-* [PatternFly-react Modal docs](https://www.patternfly.org/v4/documentation/react/components/modal)
+#### Delete modal ([specs](../../global_components/modal.md))
+* Modal's title will include the name of the current Product the user is trying to delete
+* Enter product name > text input field [required]
+  * Validation error:
+    * Wrong product name on _onblur_
+* Buttons
+  * Delete button [Disabled state until all conditions required to submit the form are met]
+    * Primary danger button variant
+    * Submits form
+  * Cancel button [Always enabled]
+    * Dismisses modal
