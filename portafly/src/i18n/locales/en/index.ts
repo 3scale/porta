@@ -19,6 +19,8 @@ import accountSettingsUsersListing from 'i18n/locales/en/account_settings/users/
 import analyticsUsage from 'i18n/locales/en/analytics/usage.yml'
 // Integration
 import integrationConfiguration from 'i18n/locales/en/integration/configuration.yml'
+// Products
+import product from 'i18n/locales/en/product.yml'
 
 const accounts = {
   personal: {
@@ -48,5 +50,6 @@ export {
   analytics,
   accounts,
   integration,
+  product,
   login
 }
