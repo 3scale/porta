@@ -35,7 +35,7 @@ import {
   TableHeader, TableBody, Table, OnSort, sortable
 } from '@patternfly/react-table'
 import { CategoryOption } from 'types'
-import { StateLabel } from 'components/shared'
+import { StateLabel, useDataListData } from 'components/shared'
 
 const categories = [
   {
@@ -51,7 +51,7 @@ const categories = [
     humanName: 'State',
     options: [
       {
-        name: 'active',
+        name: 'approved',
         humanName: 'Active'
       },
       {
@@ -62,20 +62,29 @@ const categories = [
   }
 ]
 
+const apiData = new Array(1000).fill(0).map((_, i) => ({
+  id: i,
+  adminName: `Admin ${Math.random() * (i + 1)}`,
+  createdAt: i,
+  updatedAt: i,
+  state: (categories[2] as any).options[i % 2].name,
+  orgName: `Group ${Math.random() * (i + 1)}`
+}))
+
 const tableData = {
   columns: categories.map((c) => ({
     categoryName: c.name,
     title: c.humanName,
     transforms: [sortable]
   })),
-  rows: new Array(1000).fill(0).map((_, i) => ({
-    id: i,
+  rows: apiData.map((account) => ({
+    id: account.id,
     cells: [
-      `Admin ${Math.random() * (i + 1)}`,
-      `Group ${Math.random() * (i + 1)}`,
+      account.adminName,
+      account.orgName,
       {
-        stringValue: (categories[2] as any).options[i % 2].humanName,
-        title: <StateLabel state={(categories[2] as any).options[i % 2].humanName} />
+        stringValue: account.state,
+        title: <StateLabel state={account.state} />
       }
     ],
     selected: false
@@ -93,8 +102,9 @@ const DataListTable = () => {
     selectAll
   } = useDataListTable()
   const { filters } = useDataListFilters()
+  const { data } = useDataListData()
   const { modal } = useDataListBulkActions()
-
+  console.log('FetchedData: ', data)
   const onSort: OnSort = (event, index, direction) => {
     setSortBy(index, direction, true)
   }
@@ -139,6 +149,7 @@ const Overview: React.FunctionComponent = () => {
   }
 
   const dataListInitialState = {
+    data: apiData,
     filters: {},
     table: tableData
   }
