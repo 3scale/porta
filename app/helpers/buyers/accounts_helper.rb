@@ -6,7 +6,7 @@ module Buyers::AccountsHelper
   end
 
   def account_title account
-    [ h(account.org_name), h(account.decorate.admin_user_display_name) ].compact.join(" &mdash; ").html_safe
+    [ h(account.org_name), h(account.admin_user_display_name) ].compact.join(" &mdash; ").html_safe
   end
 
   def link_to_buyer_or_deleted( buyer, path_method = :admin_buyers_account_path)
