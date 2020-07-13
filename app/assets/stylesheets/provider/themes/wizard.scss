@@ -472,8 +472,13 @@ $code-color-params: $color-brand-primary;
 
   .code-example--slash:after {
     content: '/';
+    color: $color-brand-secondary;
+  }
+
+  .feedback--inactive .code-example--slash:after {
     color: $color-text-secondary;
   }
+ 
   .code-example--optional {
 
     &:before {

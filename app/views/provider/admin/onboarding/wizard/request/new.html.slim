@@ -18,8 +18,8 @@ p
                     input_html: { placeholder: '/objects/list', autofocus: true },
                     wrapper_html: { class: 'slim' }
       code.code-example
-        span.code-example__base.code-example--slash = @request.proxy_base_url
-        span.code-example__path = @request.path_without_slash
+        span#proxy_base_url.code-example__base = @request.proxy_base_url
+        span.code-example__path = @request.path
         span.code-example__key.code-example__params = @request.proxy_auth_params
     li.feedback.feedback--inactive
       i.icon.fa-li.fa.fa-hdd-o.icon
@@ -27,8 +27,8 @@ p
         strong> 3scale
         ' will handle authentication and pass the request on to your API:
       code.code-example
-        span.code-example__base.code-example--slash = @request.api_base_url
-        span.code-example__path = @request.path_without_slash
+        span.code-example__base = @request.api_base_url
+        span.code-example__path = @request.path
 
     li.feedback.feedback--sec
       i.icon.fa-li.fa.icon class=(apiap? ? 'fa-cubes' : 'fa-puzzle-piece')
@@ -41,5 +41,5 @@ p
 coffee:
   $ ->
     $("#request_path").on "change, keyup", ->
-      path = $(this).val().replace(/^\//, '')
+      path = $(this).val()
       $(".code-example__path").html(path)
