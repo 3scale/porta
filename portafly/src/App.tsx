@@ -13,12 +13,18 @@ import { LastLocationProvider } from 'react-router-last-location'
 const OverviewPage = React.lazy(() => import('components/pages/Overview'))
 const ApplicationsPage = React.lazy(() => import('components/pages/applications/ApplicationsIndexPage'))
 const AccountsIndexPage = React.lazy(() => import('components/pages/accounts/AccountsIndexPage'))
+const ProductPage = React.lazy(() => import('components/pages/product/ProductPage'))
 
 const PagesSwitch = () => (
   <SwitchWith404>
     <LazyRoute path="/" exact render={() => <OverviewPage />} />
     <LazyRoute path="/applications" exact render={() => <ApplicationsPage />} />
     <LazyRoute path="/accounts" exact render={() => <AccountsIndexPage />} />
+    <LazyRoute
+      path="/products/:productId"
+      exact
+      render={({ match }) => <ProductPage productId={match.params.productId} />}
+    />
     <Redirect path="/overview" to="/" exact />
   </SwitchWith404>
 )

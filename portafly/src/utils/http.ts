@@ -40,6 +40,14 @@ const postData = async <T>(request: Request, formData: FormData): Promise<T | an
   throw new Error(response.statusText)
 }
 
+const deleteData = async (request: Request): Promise<void> => {
+  const response = await fetch(request, { method: 'DELETE' })
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+}
+
 const getStringUrl = (path: string, params: URLSearchParams) => {
   const host = process.env.REACT_APP_API_HOST
   // REACT_APP_API_HOST will be undefined in Openshift and URL is not compatible with relative paths
@@ -62,4 +70,9 @@ const craftRequest = (path: string, params = new URLSearchParams()) => {
   )
 }
 
-export { fetchData, postData, craftRequest }
+export {
+  fetchData,
+  postData,
+  deleteData,
+  craftRequest
+}

@@ -20,6 +20,7 @@ const options = {
   ns: namespaces,
   defaultNS: 'shared',
   react: {
+    transSupportBasicHtmlNodes: true,
     transKeepBasicHtmlNodesFor: ['br', 'strong', 'i']
   },
   resources: Translations

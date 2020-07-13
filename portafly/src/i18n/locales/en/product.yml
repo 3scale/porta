@@ -35,3 +35,13 @@ systemname_characters: System names can only use letters, numbers, dashes and un
 systemname_characters_description: Validation message to explain the allowed characters for a system name.
 duplicated_systemname: <i>{{system_name}}</i> already exists. Please use a different system name. #----PROPOSED
 duplicated_systemname_description: Validation message to request the change of the system name due to duplication.
+
+# This is all temporary, will be replaced by Docs team
+button_edit: Edit API product
+button_delete: Delete API product
+
+modal:
+  title: Confirm {{product}} deletion
+  body: Deleting this API product <strong>irreversibly destroys</strong> all applications, application plans, metrics, pricing rules, features, service plans and subscriptions. Upon deletion, all authorization and reporting calls for this API product will no longer be valid.
+  confirmation: Type <strong>{{product}}</strong> to confirm
+  confirmation_aria_label: Type the name to confirm

@@ -1,0 +1,6 @@
+// TODO: remove when PF releases secondary-danger button
+.pf-c-button.pf-m-secondary-danger {
+  --pf-c-button--after--BorderColor: var(--pf-global--danger-color--100);
+  background-color: var(--pf-c-button--m-secondary--BackgroundColor);
+  color: var(--pf-global--danger-color--100);
+}
