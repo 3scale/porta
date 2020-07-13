@@ -1,6 +1,31 @@
 # PortaFly
 A React SPA crafted with the ambitious purpose of replacing Porta UI, currently residing inside the Rails App.
 
+## Getting up and running
+1. Clone the `porta` repository to your local machine
+2. Create a `.env` file:
+  * Create a new file in the `/portafly` root folder, and name it `.env`
+  * Paste `REACT_APP_API_HOST="https://multitenant-admin.preview01.3scale.net"` into it, and Save
+3. Create an Access token:
+  * Access your local Porta build (or access [Preview](https://multitenant-admin.preview01.3scale.net/))
+  * Navigate to Settings > Personal > Tokens
+  * Click the "Add Access Token" button
+  * Give your access token a Name
+  * Select all scopes
+  * Set permissions to Read & Write
+  * Create the access token
+  * Copy the access token
+4. Allow CORS requests in your browser:
+  * Install the CORS browser extension ([Google Chrome extension](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf))
+  * Click on the extension icon in the browser  toolbar and activate it by clicking on its logo
+5. Run PortaFly: 
+  * Open a terminal session
+  * Navigate to `/portafly`
+  * Run `yarn install`
+  * Run `yarn start`
+  * Open [http://localhost:3003](http://localhost:3003) (if it hasn't opened automagically)
+  * Enter your access token in the input field
+
 ## Available Scripts
 
 Inside the `portafly` directory, you can run:
