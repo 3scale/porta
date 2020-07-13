@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class AccountDecorator < ApplicationDecorator
-  def admin_user_display_name
-    admin_user.decorate.display_name
-  end
+  delegate :display_name, to: :admin_user, prefix: true
 
   private
 
   def admin_user
-    @admin_user ||= (super || User.new)
+    @admin_user ||= (super || User.new).decorate
   end
 end
