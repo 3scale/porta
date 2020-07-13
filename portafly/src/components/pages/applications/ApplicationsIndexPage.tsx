@@ -4,8 +4,8 @@ import {
   Loading
 } from 'components'
 import {
-  ApplicationsDataListTable,
-  CreateApplicationButton
+  CreateApplicationButton,
+  ApplicationsTable
 } from 'components/pages/applications'
 import {
   Alert,
@@ -45,7 +45,7 @@ const ApplicationsIndexPage: React.FunctionComponent<Props> = () => {
       <PageSection>
         {isPending && <Loading />}
         {error && <Alert variant="danger" title={error.message} />}
-        {applications && <ApplicationsDataListTable applications={applications} />}
+        {applications && <ApplicationsTable applications={applications} />}
       </PageSection>
     </>
   )

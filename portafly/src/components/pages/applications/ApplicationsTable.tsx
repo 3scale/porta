@@ -9,15 +9,17 @@ import {
   PageEmptyState,
   useDataListFilters,
   useDataListPagination,
-  useDataListTable,
   Toolbar,
   SearchWidget,
   PaginationWidget,
-  filterRows
+  filterRows,
+  DataListProvider,
+  useDataListTable
 } from 'components'
 import { useTranslation } from 'i18n/useTranslation'
 import { ToolbarContent, ToolbarItem } from '@patternfly/react-core'
-import { IApplication, IPlan } from 'types'
+import { IPlan, IApplication } from 'types'
+import { generateColumns, generateRows } from 'components/pages/applications/utils'
 
 interface Props {
   applications: IApplication[]
@@ -30,7 +32,7 @@ const ApplicationsTable: React.FunctionComponent<Props> = ({ applications }) => 
     rows,
     sortBy,
     setSortBy
-  } = useDataListTable()
+  } = useDataListTable({ columns: generateColumns(t), rows: generateRows(applications) })
 
   if (rows.length === 0) {
     return <PageEmptyState msg={t('applications_table.empty_state')} />
@@ -87,7 +89,7 @@ const ApplicationsTable: React.FunctionComponent<Props> = ({ applications }) => 
   )
 
   return (
-    <>
+    <DataListProvider initialState={{ data: applications }}>
       <Table
         aria-label={t('applications_table.aria_label')}
         header={Header}
@@ -107,7 +109,7 @@ const ApplicationsTable: React.FunctionComponent<Props> = ({ applications }) => 
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-    </>
+    </DataListProvider>
   )
 }
 

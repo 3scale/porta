@@ -3,8 +3,8 @@ import { useAsync } from 'react-async'
 import {
   useDocumentTitle,
   Loading,
-  AccountsDataListTable,
-  ExportAccountsButton
+  ExportAccountsButton,
+  AccountsTable
 } from 'components'
 import {
   Alert,
@@ -55,7 +55,7 @@ const AccountsIndexPage: React.FunctionComponent = () => {
       <PageSection>
         {isPending && <Loading />}
         {error && <Alert variant="danger" title={error.message} />}
-        {accounts && <AccountsDataListTable accounts={accounts} />}
+        {accounts && <AccountsTable accounts={accounts} />}
       </PageSection>
     </>
   )

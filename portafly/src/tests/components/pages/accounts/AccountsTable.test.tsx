@@ -12,6 +12,7 @@ import { IDeveloperAccount } from 'types'
 import { factories } from 'tests/factories'
 
 jest.mock('components/shared/data-list/DataListContext')
+jest.mock('components/shared/data-list/hooks')
 const useTableMock = useDataListTable as jest.Mock
 const usePaginationMock = useDataListPagination as jest.Mock
 const useFiltersMock = useDataListFilters as jest.Mock
@@ -31,6 +32,7 @@ const defaultTable = {
   sortBy: {},
   setSortBy: jest.fn()
 }
+
 const resetPagination = jest.fn()
 const defaultPagination = { startIdx: 0, endIdx: 5, resetPagination }
 const defaultFilters = { filters: {} }
@@ -44,7 +46,7 @@ beforeAll(resetMocks)
 afterEach(resetMocks)
 
 const setup = () => {
-  const wrapper = render(<AccountsTable />)
+  const wrapper = render(<AccountsTable accounts={developerAccounts} />)
   const table = within(wrapper.queryByRole('grid') as HTMLElement)
   const getRow = (account: IDeveloperAccount) => table.getByText(account.orgName).closest('tr') as HTMLElement
 

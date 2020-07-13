@@ -9,23 +9,30 @@ import {
   PageEmptyState,
   useDataListFilters,
   useDataListPagination,
-  useDataListTable,
   Toolbar,
   SearchWidget,
   PaginationWidget,
-  filterRows
+  filterRows,
+  DataListProvider,
+  useDataListTable
 } from 'components'
 import { useTranslation } from 'i18n/useTranslation'
 import { ToolbarContent, ToolbarItem } from '@patternfly/react-core'
+import { generateColumns, generateRows } from 'components/pages/accounts/utils'
+import { IDeveloperAccount } from 'types'
 
-const AccountsTable: React.FunctionComponent = () => {
+interface Props {
+  accounts: IDeveloperAccount[]
+}
+
+const AccountsTable: React.FunctionComponent<Props> = ({ accounts }) => {
   const { t } = useTranslation('accountsIndex')
   const {
     columns,
     rows,
     sortBy,
     setSortBy
-  } = useDataListTable()
+  } = useDataListTable({ columns: generateColumns(t), rows: generateRows(accounts) })
 
   if (rows.length === 0) {
     return <PageEmptyState msg={t('accounts_table.empty_state')} />
@@ -73,7 +80,7 @@ const AccountsTable: React.FunctionComponent = () => {
   )
 
   return (
-    <>
+    <DataListProvider initialState={{ data: accounts }}>
       <Table
         aria-label={t('accounts_table.aria_label')}
         header={Header}
@@ -93,7 +100,7 @@ const AccountsTable: React.FunctionComponent = () => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-    </>
+    </DataListProvider>
   )
 }
 

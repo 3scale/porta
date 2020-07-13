@@ -8,36 +8,7 @@ import {
 } from 'components'
 import { DataListTable } from 'tests/components/shared/data-list/examples/DataListTable'
 import { fireEvent, within } from '@testing-library/react'
-import { sortable } from '@patternfly/react-table'
-
-jest.mock('components/shared/data-list/DataListContext')
-const useTableMock = useDataListTable as jest.Mock
-const usePaginationMock = useDataListPagination as jest.Mock
-const useFiltersMock = useDataListFilters as jest.Mock
-const useBulkActionsMock = useDataListBulkActions as jest.Mock
-
-const columns = [
-  {
-    categoryName: 'name',
-    title: 'Name',
-    transforms: [sortable]
-  },
-  {
-    categoryName: 'species',
-    title: 'Species / Race',
-    transforms: [sortable]
-  },
-  {
-    categoryName: 'nationality',
-    title: 'Nationality',
-    transforms: [sortable]
-  },
-  {
-    categoryName: 'state',
-    title: 'State',
-    transforms: [sortable]
-  }
-]
+import { generateRows, generateColumns } from './examples/dataListFactory'
 
 const characters = [
   {
@@ -70,17 +41,9 @@ const characters = [
   }
 ]
 
-const rows = characters.map((c) => ({
-  id: c.id,
-  cells: Object.keys(c).filter((k) => k !== 'id').map((k) => c[k]),
-  selected: false
-}))
-
-const isChecked = (c: HTMLElement) => (c as HTMLInputElement).checked
-
 const defaultTable = {
-  rows,
-  columns,
+  rows: generateRows(characters),
+  columns: generateColumns(),
   selectedRows: [],
   sortBy: {},
   setSortBy: jest.fn(),
@@ -88,6 +51,16 @@ const defaultTable = {
   selectPage: jest.fn(),
   selectAll: jest.fn()
 }
+
+jest.mock('components/shared/data-list/DataListContext')
+jest.mock('components/shared/data-list/hooks')
+const useTableMock = useDataListTable as jest.Mock
+const usePaginationMock = useDataListPagination as jest.Mock
+const useFiltersMock = useDataListFilters as jest.Mock
+const useBulkActionsMock = useDataListBulkActions as jest.Mock
+
+const isChecked = (c: HTMLElement) => (c as HTMLInputElement).checked
+
 const resetPagination = jest.fn()
 const defaultPagination = { startIdx: 0, endIdx: 5, resetPagination }
 const defaultFilters = { filters: {} }
@@ -102,7 +75,7 @@ beforeAll(resetMocks)
 afterEach(resetMocks)
 
 const setup = () => {
-  const wrapper = render(<DataListTable />)
+  const wrapper = render(<DataListTable characters={characters} />)
   const table = within(wrapper.queryByRole('grid') as HTMLElement)
   const getRow = (character) => table.getByText(character.name).closest('tr') as HTMLElement
   const bulkSelectorDropdown = within(wrapper.container.querySelector('#data-list-bulk-selector-dropdown') as HTMLElement)

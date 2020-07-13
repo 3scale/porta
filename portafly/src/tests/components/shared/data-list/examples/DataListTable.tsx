@@ -19,12 +19,25 @@ import {
   ChangeStateModal,
   BulkActionsWidget,
   filterRows,
-  SendEmailModal
+  SendEmailModal,
+  DataListProvider
 } from 'components'
 import { ToolbarContent, ToolbarItem } from '@patternfly/react-core'
 import { DataListRow } from 'types'
+import { generateColumns, generateRows } from './dataListFactory'
 
-const DataListTable: React.FunctionComponent = () => {
+interface Props {
+  characters: {
+    id: number,
+    name: string,
+    species: string,
+    nationality: string,
+    state: string
+  }[]
+}
+
+
+const DataListTable: React.FunctionComponent<Props> = ({ characters }) => {
   const {
     columns,
     rows,
@@ -32,7 +45,7 @@ const DataListTable: React.FunctionComponent = () => {
     setSortBy,
     selectedRows,
     selectOne
-  } = useDataListTable()
+  } = useDataListTable({ columns: generateColumns(), rows: generateRows(characters) })
 
   if (rows.length === 0) {
     return <PageEmptyState msg="No characters found" />
@@ -97,7 +110,7 @@ const DataListTable: React.FunctionComponent = () => {
   const extractChangeStateItemTitle = ({ cells } :DataListRow) => `${cells[0]} (${cells[4]})`
 
   return (
-    <>
+    <DataListProvider initialState={{ data: characters }}>
       <Table
         aria-label="Harry Potter characters"
         header={Header}
@@ -126,7 +139,7 @@ const DataListTable: React.FunctionComponent = () => {
       {modal === 'changeState' && (
         <ChangeStateModal items={selectedRows.map(extractChangeStateItemTitle)} states={options} />
       )}
-    </>
+    </DataListProvider>
   )
 }
 
