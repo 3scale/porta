@@ -2,9 +2,9 @@
   <label>Selected Accounts</label>
   <ul class="bulk_operation_items">
     <% @accounts.each do |account| %>
-      <%= content_tag :li, :title => "#{account.org_name} - #{account.decorate.admin_user_display_name}" do %>
+      <%= content_tag :li, :title => "#{account.org_name} - #{account.admin_user_display_name}" do %>
         <span class="name"><%= account.org_name %></span>
-        (<%= h account.decorate.admin_user_display_name %>)
+        (<%= h account.admin_user_display_name %>)
         <%= hidden_field_tag 'selected[]', account.id %>
       <%end%>
     <%-end-%>

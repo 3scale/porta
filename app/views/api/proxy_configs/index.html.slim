@@ -15,7 +15,8 @@ table class="data"
         td = proxy_config.version
         td = proxy_config.created_at
         - user = proxy_config.user
-        td = user.decorate.display_name if user
+        td = user.display_name if user
+
 
 
 = will_paginate(@proxy_configs)
