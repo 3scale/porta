@@ -77,7 +77,7 @@ module ThreeScale
             firstName: @user.first_name,
             lastName: @user.last_name,
             lastSeen: Time.now,
-            name: @user.full_name,
+            name: @user.decorate.full_name,
             username: @user.username,
             phone: @account.telephone_number,
             organization: @account.org_name,

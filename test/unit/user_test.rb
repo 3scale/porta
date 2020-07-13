@@ -613,36 +613,6 @@ class UserTest < ActiveSupport::TestCase
     assert user.can_login?
   end
 
-  test '#full_name returns full name' do
-    user = User.new
-    assert user.full_name.blank?
-
-    user.first_name = 'Eric'
-    assert_equal 'Eric', user.full_name
-
-    user.first_name = nil
-    user.last_name = 'Cartman'
-    assert_equal 'Cartman', user.full_name
-
-    user.first_name = ''
-    user.last_name = 'Cartman'
-    assert_equal 'Cartman', user.full_name
-
-    user.first_name = 'Eric'
-    user.last_name = 'Cartman'
-    assert_equal 'Eric Cartman', user.full_name
-  end
-
-  test '#display_name returns full_name if it is present' do
-    user = User.new(:first_name => 'Kyle', :last_name => 'Broflowsky')
-    assert_equal 'Kyle Broflowsky', user.display_name
-  end
-
-  test '#display_name returns username if full_name is not present' do
-    user = User.new(:username => 'ninjaassassin')
-    assert_equal 'ninjaassassin', user.display_name
-  end
-
   context 'deletion of users' do
     setup do
       @account = FactoryBot.create(:account, :org_name => "Alice's web empire")
