@@ -1,6 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'i18n/useTranslation'
-import { ExportIcon } from '@patternfly/react-icons'
 import { CSVLink } from 'react-csv'
 import { IDeveloperAccount } from 'types'
 
@@ -27,11 +26,10 @@ const ExportAccountsButton: React.FunctionComponent<Props> = ({ data }) => {
       filename="accounts.csv"
       headers={exportHeaders}
       data={data || []}
-      className={`pf-c-button pf-m-link ${isDisabled ? 'pf-m-disabled' : ''}`}
+      className={`pf-c-button pf-m-secondary ${isDisabled ? 'pf-m-disabled' : ''}`}
       aria-label={t('export_accounts_button_aria_label')}
       onClick={() => !isDisabled}
     >
-      <span className="pf-c-button__icon pf-m-start"><ExportIcon /></span>
       {t('export_accounts_button')}
     </CSVLink>
   )
