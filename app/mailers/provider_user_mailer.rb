@@ -16,7 +16,7 @@ class ProviderUserMailer < ActionMailer::Base
   end
 
   def lost_password(user)
-    @user = user
+    @user = user.decorate
     @url = provider_password_url(password_reset_token: user.lost_password_token, host: domain(user.account))
 
     prepare_email(subject: 'Password Recovery', headers: {'X-SMTPAPI' => '{"category": "Lost password"}'}, to: user.email, template: 'provider_lost_password')
@@ -30,7 +30,7 @@ class ProviderUserMailer < ActionMailer::Base
   private
 
   def activation_email(user:, subject:)
-    @user = user
+    @user = user.decorate
     @activate_url = provider_activate_url(activation_code: user.activation_code, host: domain(user.account))
     prepare_email(subject: subject, to: user.email, headers: {'X-SMTPAPI' => '{"category": "Signup Notification"}'})
   end

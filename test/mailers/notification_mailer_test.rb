@@ -66,11 +66,11 @@ class NotificationMailerTest < ActionMailer::TestCase
     provider = FactoryBot.create(:simple_provider)
     FieldsDefinition.create!(account: provider, name: 'org_name', target: 'Account', label: 'foo')
     account = FactoryBot.create(:simple_account, provider_account: provider)
-    user  = FactoryBot.build_stubbed(:simple_user, first_name: 'Some Gal', account: account)
+    user = FactoryBot.build_stubbed(:simple_user, first_name: 'Some Gal', account: account)
     event = Accounts::AccountCreatedEvent.create(account, user)
     mail  = NotificationMailer.account_created(event, receiver)
 
-    assert_equal "#{user.informal_name} from #{account.name} signed up", mail.subject
+    assert_equal "#{user.decorate.informal_name} from #{account.name} signed up", mail.subject
     assert_equal [receiver.email], mail.to
 
     [mail.html_part.body, mail.text_part.body].each do |body|
@@ -165,16 +165,16 @@ class NotificationMailerTest < ActionMailer::TestCase
     provider = FactoryBot.build_stubbed(:simple_provider, id: 3)
     account  = FactoryBot.build_stubbed(:simple_buyer, id: 4, name: 'Alex',
                                                         bought_account_plan: plan_2, provider_account: provider)
-    user     = FactoryBot.build_stubbed(:simple_user, account: account)
-    event    = Accounts::AccountPlanChangeRequestedEvent.create(account, user, plan)
-    mail     = NotificationMailer.account_plan_change_requested(event, receiver)
+    user  = FactoryBot.build_stubbed(:simple_user, account: account)
+    event = Accounts::AccountPlanChangeRequestedEvent.create(account, user, plan)
+    mail  = NotificationMailer.account_plan_change_requested(event, receiver)
 
     assert_equal "#{account.name} has requested a plan change", mail.subject
     assert_equal [receiver.email], mail.to
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
-      assert_match "#{user.informal_name} from #{account.name} has requested to change", body.encoded
+      assert_match "#{user.decorate.informal_name} from #{account.name} has requested to change", body.encoded
       assert_match "their account plan from #{plan_2.name} to #{plan.name}", body.encoded
     end
   end
@@ -195,7 +195,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
-      assert_match "#{user.informal_name} from SimpleCompany has requested to change their Foo Service", body.encoded
+      assert_match "#{user.decorate.informal_name} from SimpleCompany has requested to change their Foo Service", body.encoded
       assert_match 'service subscription from Plan 1 to Plan 2.', body.encoded
       assert_match url_helpers.admin_buyers_account_service_contracts_url(account, host: provider.external_admin_domain), body.encoded
     end
@@ -424,14 +424,16 @@ class NotificationMailerTest < ActionMailer::TestCase
     post  = FactoryBot.build_stubbed(:post, forum: forum, topic: topic)
     event = Posts::PostCreatedEvent.create(post)
     mail  = NotificationMailer.post_created(event, receiver)
+    user  = post.user
+    user_decorator = user.decorate
 
     assert_equal [[:manage, :forum]], NotificationMailer.required_abilities[:post_created]
 
-    assert_equal "New forum post by #{post.user.informal_name}", mail.subject
+    assert_equal "New forum post by #{user_decorator.informal_name}", mail.subject
     assert_equal [receiver.email], mail.to
 
     [mail.html_part.body, mail.text_part.body].each do |body|
-      assert_match "#{post.user.informal_name} from #{post.user.account.name}", body.encoded
+      assert_match "#{user_decorator.informal_name} from #{user.account.name}", body.encoded
     end
 
     # anonymous user

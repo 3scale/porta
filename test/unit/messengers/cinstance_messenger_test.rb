@@ -80,7 +80,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     message = Message.last.body
     user = @app.user_account.admins.first
     user_account = @app.user_account
-    assert_match "Name: #{user.full_name}", message
+    assert_match "Name: #{user.decorate.full_name}", message
     assert_match "Email: #{user.email}", message
     assert_match "Organization: #{user_account.org_name}", message
     assert_match "Telephone: #{user_account.telephone_number}", message
