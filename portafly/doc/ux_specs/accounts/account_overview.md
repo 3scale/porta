@@ -1,6 +1,6 @@
 # Account overview
 
-[Back to index](../../index.md)
+[Back to index](../index.md)
 
 * [Mockups](https://marvelapp.com/prototype/55343de/screen/70807410)
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5421)
