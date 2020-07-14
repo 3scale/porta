@@ -35,7 +35,7 @@ class Proxy < ApplicationRecord
   URI_OR_LOCALHOST  = /\A(https?:\/\/([a-zA-Z0-9._:\/?-])+|.*localhost.*)\Z/
   OPTIONAL_QUERY_FORMAT = "(?:\\?(#{uri_pattern.fetch(:QUERY)}))?"
   URI_PATH_PART = Regexp.new('\A' + uri_pattern.fetch(:ABS_PATH) + OPTIONAL_QUERY_FORMAT + '\z')
-  HOSTNAME = Regexp.new('\A' + uri_pattern.fetch(:HOSTNAME) + '\z')
+  HOST = Regexp.new('\A' + uri_pattern.fetch(:HOSTNAME) + '(:\d+)?' + '\z')
 
   OAUTH_PARAMS = /(\?|&)(scope=|state=|tok=)/
 
@@ -59,7 +59,7 @@ class Proxy < ApplicationRecord
   validates :endpoint,         uri: true, allow_nil: true, allow_blank: true
   validates :sandbox_endpoint, uri: true, allow_nil: true, allow_blank: true
 
-  validates :hostname_rewrite, format: { with: HOSTNAME,           allow_nil: true, allow_blank: true }
+  validates :hostname_rewrite, format: { with: HOST, allow_nil: true, allow_blank: true }
 
   validates :oauth_login_url, format: { with: URI_OR_LOCALHOST,    allow_nil: true, allow_blank: true }
 
