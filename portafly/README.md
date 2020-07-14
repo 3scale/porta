@@ -23,7 +23,7 @@ A React SPA crafted with the ambitious purpose of replacing Porta UI, currently 
   * Navigate to `/portafly`
   * Run `yarn install`
   * Run `yarn start`
-  * Open [http://localhost:3003](http://localhost:3003) (if it hasn't opened automagically)
+  * If the home page hasn't been displayed, open [http://localhost:3003](http://localhost:3003) in your browser.
   * Enter your access token in the input field
 
 ## Available Scripts
