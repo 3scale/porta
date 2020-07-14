@@ -1,6 +1,6 @@
 # Accounts index
 
-[Back to index](../../index.md)
+[Back to index](../index.md)
 
 * [Mockups](https://marvelapp.com/55343de/screen/67190788)
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/THREESCALE-4725)
@@ -12,7 +12,7 @@
 * Create button
   * Primary button
 
-##### Toolbar ([specs](../../global_components/toolbar.md))
+##### Toolbar ([specs](../global_components/toolbar.md))
 <!-- * Bulk actions:
   * Send email
   * Change state -->
