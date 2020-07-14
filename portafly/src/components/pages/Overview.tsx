@@ -100,7 +100,7 @@ const DataListTable = () => {
     setSortBy,
     selectOne,
     selectAll
-  } = useDataListTable()
+  } = useDataListTable(tableData)
   const { filters } = useDataListFilters()
   const { data } = useDataListData()
   const { modal } = useDataListBulkActions()
