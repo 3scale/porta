@@ -1,6 +1,6 @@
 # Create Product
 
-[Back to index](../../index.md)
+[Back to index](../index.md)
 
 * [Mockups](https://marvelapp.com/prototype/ee82j74/screen/70939425)
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5548)
