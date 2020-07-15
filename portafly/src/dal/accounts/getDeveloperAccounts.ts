@@ -45,6 +45,7 @@ type BuyersAccount = {
     credit_card_stored: boolean
     plans: any[]
     users: User[]
+    admin_user_display_name: string
   }
 }
 

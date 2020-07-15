@@ -38,7 +38,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
       accounts = accounts.where(:state => state.to_s)
     end
 
-    accounts = accounts.paginate(pagination_params)
+    accounts = accounts.paginate(pagination_params).map(&:decorate)
 
     respond_with(accounts)
   end
@@ -91,7 +91,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def show
     authorize! :read, buyer_account
 
-    respond_with(buyer_account)
+    respond_with(buyer_account.decorate)
   end
 
   ##~ op = e.operations.add
@@ -117,7 +117,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     buyer_account.settings.attributes = billing_params
     buyer_account.update_with_flattened_attributes(flat_params)
 
-    respond_with(buyer_account)
+    respond_with(buyer_account.decorate)
   end
 
   ##~ op            = e.operations.add
@@ -134,7 +134,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     Account.transaction do
       buyer_account.destroy
     end
-    respond_with(buyer_account)
+    respond_with(buyer_account.decorate)
   end
 
   ##~ e = sapi.apis.add
@@ -179,7 +179,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     buyer_account.approve
 
-    respond_with(buyer_account)
+    respond_with(buyer_account.decorate)
   end
 
   ##~ e = sapi.apis.add
@@ -202,7 +202,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     buyer_account.reject
 
-    respond_with(buyer_account)
+    respond_with(buyer_account.decorate)
   end
 
   ##~ e = sapi.apis.add
@@ -225,7 +225,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     buyer_account.make_pending
 
-    respond_with(buyer_account)
+    respond_with(buyer_account.decorate)
   end
 
   protected

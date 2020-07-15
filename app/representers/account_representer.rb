@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-module AccountRepresenter
+class AccountRepresenter < ThreeScale::Representer
   include ThreeScale::JSONRepresenter
-  include FieldsRepresenter
-  include ExtraFieldsRepresenter
+  include Roar::XML
 
-  wraps_resource
+  # include FieldsRepresenter
+  # include ExtraFieldsRepresenter
 
-  with_options(unless: ->(*) { new_record? }) do
-    property :id
-    property :created_at
-    property :updated_at
-  end
+  wraps_resource :account
 
-  with_options(if: :scheduled_for_deletion?) do |account|
-    account.property :deletion_date
+  property :id
+  property :created_at
+  property :updated_at
+
+  with_options(if: :scheduled_for_deletion?) do
+    property :deletion_date
   end
 
   with_options(if: ->(*) { provider? }) do
@@ -29,7 +29,7 @@ module AccountRepresenter
   end
 
   with_options(unless: ->(*) { destroyed? }) do
-    property :credit_card_stored
+    property :credit_card_stored, exec_context: :decorator
     #
     # TODO: this stuff is in #to_xml, should it be moved here and if so, should we remove links?
     #
@@ -44,8 +44,10 @@ module AccountRepresenter
     #  bought_cinstances.to_xml(:builder => xml, :root => 'applications')
     # end
 
-    property :monthly_billing_enabled
-    property :monthly_charging_enabled
+    property :monthly_billing_enabled,  exec_context: :decorator
+    property :monthly_charging_enabled, exec_context: :decorator
+
+    # property :admin_user_display_name
 
     with_options(if: ->(*) { credit_card_stored? }) do
       property :credit_card_partial_number
@@ -56,7 +58,7 @@ module AccountRepresenter
   property :state
 
   link :self do
-    admin_api_account_url(self) unless provider?
+    admin_api_account_url(self) unless represented.provider?
   end
 
   link :users do
@@ -64,8 +66,13 @@ module AccountRepresenter
   end
 
   def credit_card_stored
-    credit_card_stored?
+    represented.credit_card_stored?
   end
 
   delegate :monthly_charging_enabled, :monthly_billing_enabled, to: :settings, allow_nil: true
+  # delegate :settings, to: :represented
+
+  def settings
+    represented.settings
+  end
 end

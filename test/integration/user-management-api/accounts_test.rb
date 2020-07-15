@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
+  # TODO: WIP
   include FieldsDefinitionsHelpers
   include TestHelpers::ApiPagination
 
@@ -164,8 +165,24 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'index' do
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
 
+    pp xml = Nokogiri::XML::Document.parse(response.body)
+
     assert_response :success
-    assert_accounts @response.body
+    # assert_accounts response.body
+
+
+
+    assert xml.xpath('.//accounts').presence
+    assert xml.xpath('.//accounts/account').presence
+    assert xml.xpath('.//accounts/account/id').presence
+    # assert xml.xpath('.//accounts/account/created_at').presence
+    # assert xml.xpath('.//accounts/account/updated_at').presence
+    assert xml.xpath('.//accounts/account/state').presence
+    # assert xml.xpath('.//accounts/account/plans').presence
+    # assert xml.xpath('.//accounts/account/users').presence
+
+    # assert_extra_fields_xml xml, './/accounts/account', {}
+    assert_xml_nodes        xml, './/accounts/account', {}
   end
 
   test 'pagination is off unless needed' do
@@ -250,7 +267,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
 
     assert_response :success
-    assert_accounts(@response.body, extra_fields: { some_extra_field: '&lt; &gt; &amp;' })
+    assert_accounts(response.body, extra_fields: { some_extra_field: '&lt; &gt; &amp;' })
   end
 
   test 'security wise: index is access denied in buyer side' do
@@ -271,7 +288,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'approved')
 
     assert_response :success
-    assert_accounts @response.body, state: 'approved'
+    assert_accounts response.body, state: 'approved'
   end
 
   test 'index by states is paginated' do
@@ -297,7 +314,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'pending')
 
     assert_response :success
-    assert_accounts @response.body, state: 'pending'
+    assert_accounts response.body, state: 'pending'
   end
 
   test 'index rejected' do
@@ -309,7 +326,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'rejected')
 
     assert_response :success
-    assert_accounts @response.body, state: 'rejected'
+    assert_accounts response.body, state: 'rejected'
   end
 
   test 'find accounts by username or user_id or email empty when empty' do
@@ -511,6 +528,24 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
     assert_response :success
-    assert_accounts @response.body
+    assert_accounts response.body
+  end
+
+  private
+
+  def assert_accounts(doc, attrs = {})
+    xml = Nokogiri::XML::Document.parse(doc)
+
+    assert xml.xpath('.//accounts').presence
+    assert xml.xpath('.//accounts/account').presence
+    assert xml.xpath('.//accounts/account/id').presence
+    assert xml.xpath('.//accounts/account/created_at').presence
+    assert xml.xpath('.//accounts/account/updated_at').presence
+    assert xml.xpath('.//accounts/account/state').presence
+    assert xml.xpath('.//accounts/account/plans').presence
+    assert xml.xpath('.//accounts/account/users').presence
+
+    assert_extra_fields_xml xml, ".//accounts/account", attrs
+    assert_xml_nodes        xml, ".//accounts/account", attrs
   end
 end

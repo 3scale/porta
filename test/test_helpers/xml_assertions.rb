@@ -240,22 +240,6 @@ module TestHelpers
       assert_xml_nodes xml,        ".//account", attrs
     end
 
-    def assert_accounts(doc, attrs = {})
-      xml = Nokogiri::XML::Document.parse(doc)
-
-      assert xml.xpath('.//accounts').presence
-      assert xml.xpath('.//accounts/account').presence
-      assert xml.xpath('.//accounts/account/id').presence
-      assert xml.xpath('.//accounts/account/created_at').presence
-      assert xml.xpath('.//accounts/account/updated_at').presence
-      assert xml.xpath('.//accounts/account/state').presence
-      assert xml.xpath('.//accounts/account/plans').presence
-      assert xml.xpath('.//accounts/account/users').presence
-
-      assert_extra_fields_xml xml, ".//accounts/account", attrs
-      assert_xml_nodes        xml, ".//accounts/account", attrs
-    end
-
     def assert_users(doc, attrs = { })
       xml = Nokogiri::XML::Document.parse(doc)
 

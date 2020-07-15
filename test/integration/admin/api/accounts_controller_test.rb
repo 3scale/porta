@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
+  # TODO: WIP
 
   def setup
     @provider = FactoryBot.create(:provider_account)
@@ -44,6 +45,41 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       get find_admin_api_accounts_path(format: :json, access_token: token.value)
       assert_response :not_found
+    end
+  end
+
+  class TenandAdminTest < Admin::Api::AccountsControllerTest
+    test '#show JSON' do
+      get admin_api_account_path(buyer, format: :json, access_token: token.value)
+      assert_response :success
+      assert_equal buyer.id, JSON.parse(response.body).dig('account', 'id')
+      assert_equal buyer.decorate.admin_user_display_name, JSON.parse(response.body).dig('account', 'admin_user_display_name')
+    end
+
+    test '#index JSON' do
+      buyer
+      get admin_api_accounts_path(format: :json, access_token: token.value)
+      assert_response :success
+      assert_equal buyer.id, JSON.parse(response.body).dig('accounts', 0, 'account', 'id')
+      assert_equal buyer.decorate.admin_user_display_name, JSON.parse(response.body).dig('accounts', 0, 'account', 'admin_user_display_name')
+    end
+
+    test  '#create JSON' do
+      skip 'TODO WIP'
+    end
+
+    test  '#update JSON' do
+      skip 'TODO WIP'
+    end
+
+    # TODO WIP MANY OTHER METHODS
+
+    test '#show XML' do
+      get admin_api_account_path(buyer, format: :xml, access_token: token.value)
+      assert_response :success
+      xml = Nokogiri::XML::Document.parse(response.body)
+      assert_equal buyer.id, xml.xpath('.//account/id')
+      assert_equal buyer.decorate.admin_user_display_name, xml.xpath('.//account/admin_user_display_name')
     end
   end
 
