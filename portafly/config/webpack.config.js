@@ -485,13 +485,6 @@ module.exports = function(webpackEnv) {
                 'sass-loader'
               ),
             },
-            // ** CUSTOM-PORTAFLY START **
-            {
-              test: /\.ya?ml$/,
-              type: 'json',
-              use: 'yaml-loader'
-            },
-            // ** CUSTOM-PORTAFLY END **
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.
@@ -503,7 +496,7 @@ module.exports = function(webpackEnv) {
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/, /\.ya?ml$/],
+              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
