@@ -11,9 +11,12 @@
   * Name > text input [required]
     * Validation errors:
       * Required field on form submit (if left blank)
+      * Name already exists on form submit
       * Name already exists on _onblur_
-  * System name > text input w/ helper text
+  * System name > text input w/ placeholder and helper text
     * Validation errors:
+      * Not valid name on form submit
+      * Name already exists on form submit
       * Not valid name on _onblur_
       * Name already exists on _onblur_
   * Description > text area
