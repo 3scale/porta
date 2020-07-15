@@ -16,7 +16,7 @@ A React SPA crafted with the ambitious purpose of replacing Porta UI, currently 
   * Create the access token
   * Copy the access token
 4. Allow CORS requests in your browser (Disclaimer: only needed to run the app in Development mode. Please note that allowing CORS requests makes your browser more vulnerable, do it at your own risk):
-  * Install the CORS browser extension ([Google Chrome extension](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf))
+  * Install the CORS browser extension ([Google Chrome extension](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf), [Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/))
   * Click on the extension icon in the browser  toolbar and activate it by clicking on its logo
 5. Run PortaFly:
   * Open a terminal session
