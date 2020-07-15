@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Api::SignupsController < Admin::Api::BaseController
+  represents :json, entity: ::AccountRepresenter::JSON, collection: ::AccountsRepresenter
+  represents :xml, entity: ::AccountRepresenter::XML, collection: ::AccountsRepresenter
 
   # swagger
   ##~ sapi = source2swagger.namespace("Account Management API")

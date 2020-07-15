@@ -474,7 +474,7 @@ class Account < ApplicationRecord
   end
 
   def to_xml(options = {})
-    #TODO: use Nokogiri builder
+    # TODO: remove this method and ensure that everything is in the representer and properly tested
     xml = options[:builder] || ThreeScale::XML::Builder.new
 
     xml.account do |xml|

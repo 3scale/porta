@@ -1,7 +1,8 @@
 class Admin::Api::AccountsController < Admin::Api::BaseController
   paginate only: :index
 
-  representer ::Account
+  represents :json, entity: ::AccountRepresenter::JSON, collection: ::AccountsRepresenter
+  represents :xml, entity: ::AccountRepresenter::XML, collection: ::AccountsRepresenter
 
   # swagger
   ##~ @base_path = ""

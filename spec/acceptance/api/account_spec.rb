@@ -32,7 +32,7 @@ resource "Account" do
     end
   end
 
-  # define the api namespace and optional formats it supports
+  # # define the api namespace and optional formats it supports
   api 'accounts' do
     # get method to the following url will test :index action
     get '/admin/api/accounts.:format', action: :index
@@ -133,10 +133,9 @@ resource "Account" do
 
     context 'buyer account' do
       it do
-        should have_properties('id', 'org_name').from(resource)
-        should have_properties('state', 'credit_card_stored').from(resource)
-        should have_properties('created_at', 'updated_at')
+        should have_properties('id', 'org_name', 'state', 'created_at', 'updated_at').from(resource)
         should have_links('self', 'users')
+        subject.fetch('credit_card_stored').should equal(resource.credit_card_stored?)
       end
 
       context 'if billing address is enabled' do
@@ -161,8 +160,7 @@ resource "Account" do
 
     context 'provider account' do
       let(:resource) do
-        FactoryBot.build(:provider_account, support_email: 'support@email.com',
-                          finance_support_email: 'finance@email.com', site_access_code: 'access-code')
+        FactoryBot.build(:provider_account, support_email: 'support@email.com', finance_support_email: 'finance@email.com', site_access_code: 'access-code')
       end
 
       it { should have_properties(expected_provider_fields).from(resource) }
@@ -179,10 +177,18 @@ resource "Account" do
 
   xml(:resource) do
     context 'buyer account' do
+      before { account.save! }
+
       it('has root') { should have_tag('account') }
 
-      it { should have_tag('monthly_billing_enabled') }
-      it { should have_tag('monthly_charging_enabled') }
+      it do
+        should have_tags('id', 'org_name', 'state', 'created_at', 'updated_at').from(resource)
+        # TODO: fix this!
+        # should have_links('self', 'users')
+        # subject.fetch('credit_card_stored').should equal(resource.credit_card_stored?)
+      end
+
+      it { should have_tags('monthly_billing_enabled', 'monthly_charging_enabled').from(resource.settings) }
 
       context 'if billing address is enabled' do
         include_context 'with billing address set up'
@@ -190,51 +196,34 @@ resource "Account" do
         subject { xml.root }
 
         it 'should have billing address tags' do
+          pp subject # TODO: remove!
+          # binding.pry
           should have_tag('billing_address') {
-            with_tag 'address1', :text => 'first line'
-            with_tag 'address2', :text => 'second line'
+            # TODO: with_tag 'company', text: i_dunno_yet
+            with_tag 'address1', text: 'first line'
+            with_tag 'address2', text: 'second line'
           }
         end
       end
 
       context 'if scheduled_for_deletion' do
-        let(:resource) { FactoryBot.build(:provider_account, state: 'scheduled_for_deletion', state_changed_at: Time.zone.now) }
+        before { resource.schedule_for_deletion! }
         it { should have_tags(%w[state deletion_date]).from(resource) }
       end
 
       context 'if credit card details stored' do
         include_context 'with credit card details stored'
-        it { should have_tag('credit_card_partial_number') }
-        it { should have_tag('credit_card_expires_on') }
+        # TODO: check format of date!
+        it { should have_tags('credit_card_partial_number', 'credit_card_expires_on').from(payment_detail) }
       end
     end
 
     context 'provider account' do
       let(:resource) do
-        FactoryBot.build(:provider_account, support_email: 'support@email.com',
-                          finance_support_email: 'finance@email.com', site_access_code: 'access-code')
+        FactoryBot.create(:provider_account, support_email: 'support@email.com', finance_support_email: 'finance@email.com', site_access_code: 'access-code')
       end
 
       it { should have_tags(expected_provider_fields).from(resource) }
     end
   end
 end
-
-
-__END__
-admin_api_accounts GET    /admin/api/accounts(.:format)      admin/api/accounts#index {:format=>"xml"}
- admin_api_account GET    /admin/api/accounts/:id(.:format)  admin/api/accounts#show {:format=>"xml"}
-                   PUT    /admin/api/accounts/:id(.:format)  admin/api/accounts#update {:format=>"xml"}
-                   DELETE /admin/api/accounts/:id(.:format)  admin/api/accounts#destroy {:format=>"xml"}
-
-       find_admin_api_accounts GET    /admin/api/accounts/find(.:format)                admin/api/accounts#find {:format=>"xml"}
- change_plan_admin_api_account PUT    /admin/api/accounts/:id/change_plan(.:format)     admin/api/accounts#change_plan {:format=>"xml"}
-make_pending_admin_api_account PUT    /admin/api/accounts/:id/make_pending(.:format)    admin/api/accounts#make_pending {:format=>"xml"}
-     approve_admin_api_account PUT    /admin/api/accounts/:id/approve(.:format)         admin/api/accounts#approve {:format=>"xml"}
-      reject_admin_api_account PUT    /admin/api/accounts/:id/reject(.:format)          admin/api/accounts#reject {:format=>"xml"}
-
- buy_admin_api_account_application_plan POST   /admin/api/accounts/:account_id/application_plans/:id/buy(.:format) admin/api/buyers_application_plans#buy {:format=>"xml"}
-    admin_api_account_application_plans GET    /admin/api/accounts/:account_id/application_plans(.:format)         admin/api/buyers_application_plans#index {:format=>"xml"}
-   admin_api_account_buyer_account_plan GET    /admin/api/accounts/:account_id/plan(.:format)                      admin/api/buyer_account_plans#show {:format=>"xml"}
-     buy_admin_api_account_service_plan POST   /admin/api/accounts/:account_id/service_plans/:id/buy(.:format)     admin/api/buyers_service_plans#buy {:format=>"xml"}
-        admin_api_account_service_plans GET    /admin/api/accounts/:account_id/service_plans(.:format)             admin/api/buyers_service_plans#index {:format=>"xml"}

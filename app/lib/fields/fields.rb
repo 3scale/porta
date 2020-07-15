@@ -339,6 +339,7 @@ module Fields::Fields
   end
 
   def fields_to_xml(xml)
+    # TODO: remove this?
     defined_builtin_fields.each do |field|
       next if field_value(field.name).blank?
       value = field_value(field.name)

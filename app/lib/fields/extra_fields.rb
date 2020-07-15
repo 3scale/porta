@@ -52,6 +52,7 @@ module Fields::ExtraFields
   end
 
   def extra_fields_to_xml(xml)
+    # TODO: remove this?
     xml.extra_fields do
       if extra_fields.present?
         extra_fields.each_pair do |field, value|

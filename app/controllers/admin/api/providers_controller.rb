@@ -2,7 +2,8 @@ class Admin::Api::ProvidersController < Admin::Api::BaseController
 
   wrap_parameters Account
 
-  representer ::Account
+  represents :json, entity: ::AccountRepresenter::JSON, collection: ::AccountsRepresenter
+  represents :xml, entity: ::AccountRepresenter::XML, collection: ::AccountsRepresenter
 
   # swagger
   #
