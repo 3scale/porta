@@ -1,6 +1,6 @@
 # Account > Applications index
 
-[Back to index](../../index.md)
+[Back to index](../index.md)
 
 * [Mockups](https://marvelapp.com/55343de/screen/70849844)
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5423)
@@ -13,7 +13,7 @@
   * Overview
   * Applications [selected]
 
-##### Toolbar ([specs](../../global_components/toolbar.md))
+##### Toolbar ([specs](../global_components/toolbar.md))
 * Filters:
   * Name > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))
   * Product > text input ([PF specs](https://www.patternfly.org/v4/documentation/react/components/inputgroup#with-dropdown))

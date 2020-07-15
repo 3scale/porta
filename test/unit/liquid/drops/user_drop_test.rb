@@ -10,6 +10,18 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
     @drop = Drops::User.new(@user)
   end
 
+  test '#display_name' do
+    assert_equal @user.decorate.display_name, @drop.display_name
+  end
+
+  test '#informal_name' do
+    assert_equal @user.decorate.informal_name, @drop.informal_name
+  end
+
+  test '#name' do
+    assert_equal @user.decorate.full_name, @drop.name
+  end
+
   def test_oauth2
     @user.signup.expects(:oauth2?).returns(true)
     assert @drop.oauth2?
