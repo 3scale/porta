@@ -24,15 +24,17 @@ class Csv::BuyersExporterTest < ActiveSupport::TestCase
 
   test 'to_csv' do
     Timecop.freeze(Time.utc(2011,1,1)) do
+      buyer_without_admin_user = FactoryBot.create(:simple_buyer, provider_account: @provider)
+
       exporter = Csv::BuyersExporter.new(@provider)
       lines = exporter.to_csv.lines.to_a
 
+      assert_equal((@provider.buyer_accounts.count + 3), lines.length)
       assert_equal %{Generalitat/generalitat.cat - All Objects / All time (generated 2011-01-01 00:00:00 UTC)\n}, lines[0]
       assert_equal "\n", lines[1]
       assert_equal "ID,Status,Group,Country,Plan Name,Signup Date,Number of Applications,Admin,E-mail,User Specific Data (Account),User Specific Data (Admin)\n", lines[2]
       assert_equal "#{@buyer.id},approved,Eater,Spain,Plan of the Escape,2011-01-01 00:00:00,#{@buyer.bought_cinstances.count},john_doe,john@my.company.it,{},{}\n", lines[3]
-      assert_equal @provider.buyer_accounts.count, lines.length - 3
-      assert_equal 2, lines.length - 3
+      assert_equal "#{buyer_without_admin_user.id},#{buyer_without_admin_user.state},#{buyer_without_admin_user.org_name},#{buyer_without_admin_user.country.name},,2011-01-01 00:00:00,0,,,{},null\n", lines[5]
     end
   end
 

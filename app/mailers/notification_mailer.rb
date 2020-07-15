@@ -58,8 +58,8 @@ class NotificationMailer < ActionMailer::Base
     @provider_account = event.provider
     @service          = event.service
     @account          = event.account
-    @user             = event.user
-    @receiver         = receiver
+    @user             = event.user.decorate
+    @receiver         = receiver.decorate
     @event            = event
 
     mail to: @receiver.email,
@@ -72,8 +72,8 @@ class NotificationMailer < ActionMailer::Base
   def account_created(event, receiver)
     @provider_account = event.provider
     @account          = event.account
-    @receiver         = receiver
-    @user             = event.user
+    @receiver         = receiver.decorate
+    @user             = event.user.decorate
     @event            = event
 
     mail to: @receiver.email,
@@ -99,9 +99,10 @@ class NotificationMailer < ActionMailer::Base
   delivers Accounts::AccountPlanChangeRequestedEvent, hidden_onprem_multitenancy: true
   def account_plan_change_requested(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
-    @user             = event.user
-    @account          = @user.account
+    @receiver         = receiver.decorate
+    user              = event.user
+    @user             = user.decorate
+    @account          = user.account
     @current_plan     = event.current_plan
     @requested_plan   = event.requested_plan
     @event            = event
@@ -115,7 +116,7 @@ class NotificationMailer < ActionMailer::Base
   def account_deleted(event, receiver)
     @provider_account = event.provider
     @account_name     = event.account_name
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @event            = event
 
     mail to: @receiver.email, subject: "Account #{@account_name} deleted"
@@ -126,7 +127,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Cinstances::CinstanceCancellationEvent, hidden_onprem_multitenancy: true
   def cinstance_cancellation(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @cinstance_name   = event.cinstance_name
     @plan_name        = event.plan_name
     @service_name     = event.service_name
@@ -144,8 +145,8 @@ class NotificationMailer < ActionMailer::Base
   delivers Cinstances::CinstancePlanChangedEvent, hidden_onprem_multitenancy: true
   def cinstance_plan_changed(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
-    @user             = event.user
+    @receiver         = receiver.decorate
+    @user             = event.user.decorate
     @account          = event.account
     @cinstance        = event.cinstance
     @service          = @cinstance.service
@@ -159,13 +160,13 @@ class NotificationMailer < ActionMailer::Base
   delivers Applications::ApplicationPlanChangeRequestedEvent, hidden_onprem_multitenancy: true
   def application_plan_change_requested(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @account          = event.account
     @current_plan     = event.current_plan
     @requested_plan   = event.requested_plan
     @application      = event.application
     @service          = @application.service
-    @user             = event.user
+    @user             = event.user.decorate
     @event            = event
 
     mail to: @receiver.email, subject: "Action required: #{@user.username} from #{@account.org_name} requested an app plan change"
@@ -176,9 +177,9 @@ class NotificationMailer < ActionMailer::Base
   delivers ServiceContracts::ServiceContractCreatedEvent
   def service_contract_created(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @service          = event.service
-    @user             = event.user
+    @user             = event.user.decorate
     @plan             = event.plan
     @account          = Liquid::Drops::Account.new(event.account)
     @event            = event
@@ -190,8 +191,8 @@ class NotificationMailer < ActionMailer::Base
   delivers Services::ServicePlanChangeRequestedEvent, hidden_onprem_multitenancy: true
   def service_plan_change_requested(event, receiver)
     @provider_account = event.provider
-    @user             = event.user
-    @receiver         = receiver
+    @user             = event.user.decorate
+    @receiver         = receiver.decorate
     @account          = event.account
     @current_plan     = event.current_plan
     @requested_plan   = event.requested_plan
@@ -206,10 +207,10 @@ class NotificationMailer < ActionMailer::Base
   delivers ServiceContracts::ServiceContractPlanChangedEvent, hidden_onprem_multitenancy: true
   def service_contract_plan_changed(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @service_contract = event.service_contract
     @service          = @service_contract.service
-    @user             = event.user
+    @user             = event.user.decorate
     @account          = event.account
     @new_plan         = event.new_plan
     @old_plan         = event.old_plan
@@ -223,7 +224,7 @@ class NotificationMailer < ActionMailer::Base
   delivers ServiceContracts::ServiceContractCancellationEvent
   def service_contract_cancellation(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @account_name     = event.account_name
     @plan_name        = event.plan_name
     @service_name     = event.service_name
@@ -239,7 +240,7 @@ class NotificationMailer < ActionMailer::Base
     @service          = event.service
     @plan             = event.plan
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @account          = event.account
     @event            = event
     @application      = event.cinstance
@@ -252,7 +253,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Invoices::InvoicesToReviewEvent
   def invoices_to_review(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @event            = event
 
     mail to: @receiver.email, subject: 'Action needed: review invoices'
@@ -263,7 +264,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Plans::PlanDowngradedEvent, hidden_onprem_multitenancy: true
   def plan_downgraded(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @account          = event.account
     @old_plan         = event.old_plan
     @new_plan         = event.new_plan
@@ -277,7 +278,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Accounts::ExpiredCreditCardProviderEvent
   def expired_credit_card_provider(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @account          = event.account
     @event            = event
 
@@ -290,7 +291,7 @@ class NotificationMailer < ActionMailer::Base
   def unsuccessfully_charged_invoice_provider(event, receiver)
     @provider_account = event.provider
     @account          = event.invoice.buyer_account
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @event            = event
 
     mail to: @receiver.email, subject: "#{@account.name}'s payment has failed"
@@ -302,7 +303,7 @@ class NotificationMailer < ActionMailer::Base
   def unsuccessfully_charged_invoice_final_provider(event, receiver)
     @provider_account = event.provider
     @account          = event.invoice.buyer_account
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @event            = event
 
     mail to: @receiver.email, subject: "#{@account.name}'s payment has failed without retry"
@@ -315,7 +316,7 @@ class NotificationMailer < ActionMailer::Base
     @provider_account = event.provider
     @sender           = event.sender
     @recipient        = event.recipient
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @message          = event.message
     @event            = event
 
@@ -327,11 +328,11 @@ class NotificationMailer < ActionMailer::Base
   delivers Posts::PostCreatedEvent, abilities: { manage: :forum }, hidden_onprem_multitenancy: true
   def post_created(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @post             = event.post
-    @user             = event.try(:user)
     @account          = event.try(:account)
-    @user_name        = @user.present? ? @user.informal_name : 'anonymous user'
+    @user             = (event.try(:user) || User.new(username: 'anonymous user')).decorate
+    @user_name        = @user.informal_name
     @event            = event
 
     mail to: @receiver.email, subject: "New forum post by #{@user_name}"
@@ -342,7 +343,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Reports::CsvDataExportEvent, hidden: true
   def csv_data_export(event, receiver)
     @provider_account = event.provider
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     export_service    = Reports::DataExportService.new(event.provider, event.type, event.period)
     @event            = event
 
@@ -372,7 +373,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Services::ServiceDeletedEvent
   def service_deleted(event, receiver)
     @provider_account = Account.find(event.metadata[:provider_id])
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @service_name     = event.service_name
     @event            = event
 
@@ -383,7 +384,7 @@ class NotificationMailer < ActionMailer::Base
 
   def pdf_report_mail(report, receiver, mail_name)
     @provider_account = report.account
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     report_file       = File.read(report.report.path)
     report_name       = report.pdf_file_name
 
@@ -397,7 +398,7 @@ class NotificationMailer < ActionMailer::Base
     @alert            = event.alert
     @account          = @alert.account
     @cinstance        = @alert.cinstance
-    @receiver         = receiver
+    @receiver         = receiver.decorate
     @event            = event
 
     subject = t_subject(mail_name, name: @cinstance.name, message: @alert.message, level: @alert.level)

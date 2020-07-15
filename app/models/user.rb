@@ -314,19 +314,6 @@ class User < ApplicationRecord
     !minimal_signup? && super
   end
 
-  def informal_name
-    first_name.present? ? first_name : display_name
-  end
-
-  def display_name
-    name = full_name
-    name.present? ? name : username
-  end
-
-  def full_name
-    [first_name, last_name].select(&:present?).join(' ')
-  end
-
   # CMS Methods patched below - to be moved to module, or gem to be adjusted directly
 
   def self.current
