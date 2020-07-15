@@ -12,4 +12,4 @@
 * Delete button
   * Customized button (A secondary button to resemble a destructive button -- temporary solution until PF Secondary destructive button is released)
 
-#### Delete modal ([specs](../global_components/modal.md#confirm-deletion-modal))
+#### Delete confirmation modal ([specs](../global_components/modal.md#delete-confirmation-modal))
