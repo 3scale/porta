@@ -7,14 +7,12 @@ module AccountRepresenter
 
   wraps_resource
 
-  with_options(unless: ->(*) { new_record? }) do
-    property :id
-    property :created_at
-    property :updated_at
-  end
+  property :id
+  property :created_at
+  property :updated_at
 
-  with_options(if: :scheduled_for_deletion?) do |account|
-    account.property :deletion_date
+  with_options(if: :scheduled_for_deletion?) do
+    property :deletion_date
   end
 
   with_options(if: ->(*) { provider? }) do
