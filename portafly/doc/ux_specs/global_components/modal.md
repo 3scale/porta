@@ -71,3 +71,15 @@
           * the spinner will be replaced by the submit button
           * the input fields will be enabled again (to allow user eventually copy paste their content)
           * an inline warning message will be displayed above the form buttons -->
+
+### _'Confirm deletion'_ modal
+* Modal's header will include the name of the current API (Product or Backend) the user is trying to delete
+* Enter API name > text input field [required]
+  * Validation error:
+    * Wrong product name on _onblur_
+* Buttons
+  * Delete button [Disabled state until all conditions required to submit the form are met]
+    * Primary danger button variant
+    * Submits form
+  * Cancel button [Always enabled]
+    * Dismisses modal
