@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: 3scale-api-management
+    threescale_component: portafly
+  name: portafly
+spec:
+  ports:
+  - name: http
+    port: 5000
+    protocol: TCP
+    targetPort: serve
+  selector:
+    deploymentConfig: portafly
+status:
+  loadBalancer: {}
