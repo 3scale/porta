@@ -17,3 +17,8 @@
     * Session expired
   * Server error (there’s a bug, server is down..)
   * Server too slow (timeout)
+
+### Success alerts (bulk actions, delete object...)
+* Success messages are displayed in **toast alerts**
+* Success messages are not persistent, will be dismissed after 8 seconds and always displays a dismiss button (`fa-times` icon)
+* Success alerts variant is `success`
