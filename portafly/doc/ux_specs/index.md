@@ -8,6 +8,7 @@ Please refer to the single page files together with mockups linked in each page 
 ### Global components
 * [Toolbar](./global_components/toolbar.md) -- the toolbar is a collection of UI components that allow a user to manage and manipulate a data set. A toolbar will almost always be present in pages that include a table, data list etc.
 * [Modal](./global_components/modal.md) -- the modal is an overlay dialog triggered to allow users taking contextual bulk actions or confirming destructive actions.
+* [Alerts](./global_components/alerts.md) -- Alerts are used to notify the user about a change in system status or other event that needs attention.
 
 ### Pages
 ##### Accounts
