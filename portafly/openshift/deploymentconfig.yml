@@ -1,0 +1,66 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    app: 3scale-api-management
+    threescale_component: portafly
+  name: portafly
+spec:
+  replicas: 1
+  selector:
+    deploymentConfig: portafly
+  strategy:
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 1200
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: 3scale-api-management
+        deploymentConfig: portafly
+        threescale_component: system
+        threescale_component_element: portafly
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: "5000"
+        image: amp-portafly:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+          name: serve
+          protocol: TCP
+        livenessProbe:
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          tcpSocket:
+            port: serve
+        name: portafly
+        resources: {}
+      serviceAccountName: amp
+  test: false
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames:
+      - portafly
+      from:
+        kind: ImageStreamTag
+        name: amp-portafly:master
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0
