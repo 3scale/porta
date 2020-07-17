@@ -32,7 +32,7 @@
   * Group/organization [sortable]
   * Admin [sortable]
   * Signup date [sortable]
-  * Applications [sortable]
+  * Applications [sortable] -- not doable for v1
   * State [sortable]
   <!-- * Actions -->
 <!-- * Table rows include a checkbox -->
