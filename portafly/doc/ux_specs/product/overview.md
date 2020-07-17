@@ -10,16 +10,6 @@
 * Edit button
   * Secondary button
 * Delete button
-  * Customized button (A secondary button to resemble a destructive button)
+  * Customized button (A secondary button to resemble a destructive button -- temporary solution until PF Secondary destructive button is released)
 
-#### Delete modal ([specs](../global_components/modal.md))
-* Modal's title will include the name of the current Product the user is trying to delete
-* Enter product name > text input field [required]
-  * Validation error:
-    * Wrong product name on _onblur_
-* Buttons
-  * Delete button [Disabled state until all conditions required to submit the form are met]
-    * Primary danger button variant
-    * Submits form
-  * Cancel button [Always enabled]
-    * Dismisses modal
+#### Delete confirmation modal ([specs](../global_components/modal.md#delete-confirmation-modal))
