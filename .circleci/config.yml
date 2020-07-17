@@ -828,7 +828,7 @@ jobs:
           path: tmp/capybara
           destination: capybara
 
-  portafly:
+  portafly_tests:
     resource_class: small
     docker:
       - image: circleci/node:12
@@ -841,8 +841,24 @@ jobs:
           command: |
             cd portafly
             yarn --version
-            yarn install
+            yarn install --frozen-lockfile
             yarn test --maxWorkers=3
+
+  portafly_build:
+    resource_class: small
+    docker:
+      - image: circleci/node:12
+    parameters:
+    steps:
+      - checkout-with-submodules
+      - run:
+          name: Run PortaFly Build
+          root: .
+          command: |
+            cd portafly
+            yarn --version
+            yarn install --frozen-lockfile
+            CI=false yarn build
 
   check_production_gemfile:
     parameters:
@@ -1139,16 +1155,19 @@ workflows:
             - assets_precompile
           <<: *only-master-filter
 
-  portafly_build:
+  portafly:
     jobs:
       - manual_approval:
           type: approval
       - notify_start:
           requires:
             - manual_approval
-      - portafly:
+      - portafly_tests:
           requires:
             - manual_approval
+      - portafly_build:
+          requires:
+            - portafly_tests
 
   production_gemfile-master:
     jobs:
