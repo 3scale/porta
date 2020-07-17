@@ -2,7 +2,7 @@ import React from 'react'
 
 import { IDeveloperAccount } from 'types'
 import { DataListProvider, AccountsTable } from 'components'
-import { generateColumns, generateRows } from 'components/pages/accounts'
+import { generateColumns, generateRows } from 'components/pages/accounts/utils'
 import { useTranslation } from 'i18n/useTranslation'
 
 interface Props {
@@ -15,6 +15,7 @@ const AccountsDataListTable: React.FunctionComponent<Props> = ({ accounts }) => 
   const rows = generateRows(accounts)
 
   const initialState = {
+    data: accounts,
     table: { columns, rows }
   }
 

@@ -5,7 +5,7 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
 
   def setup
     account = FactoryBot.build_stubbed(:simple_account, provider: true)
-    @user = FactoryBot.build_stubbed(:user, account: account, email: 'foo@example.net')
+    @user = FactoryBot.build_stubbed(:user, account: account, email: 'foo@example.net', first_name: 'John', last_name: 'Doe')
   end
 
   def teardown
@@ -73,7 +73,8 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
 
       traits = UserTracking.new(@user).basic_traits
 
-      assert_equal traits.slice(:email), email: @user.email
+      assert_equal @user.email, traits[:email]
+      assert_equal @user.decorate.full_name, traits[:name]
     end
 
     test 'identify' do

@@ -20,11 +20,7 @@ export const AppLayoutContext = React.createContext<IAppLayoutContext>({
   setBreadcrumb: () => 0
 })
 
-export interface IAppLayoutProps
-  extends Pick<PageHeaderProps, 'logo'>,
-  Pick<PageHeaderProps, 'logoProps'>,
-  Pick<PageHeaderProps, 'avatar'>,
-  Pick<PageHeaderProps, 'toolbar'> {
+export interface IAppLayoutProps extends Pick<PageHeaderProps, 'logo' | 'logoProps' | 'headerTools'> {
   navVariant?: 'vertical' | 'horizontal'
   navItems?: Array<IAppNavItemProps | IAppNavExpandableProps | IAppNavGroupProps | undefined>
   navGroupsStyle?: 'grouped' | 'expandable'
@@ -39,8 +35,7 @@ export const AppLayout: React.FunctionComponent<IAppLayoutProps> = ({
   navVariant = 'horizontal',
   navItems = [],
   navGroupsStyle = 'grouped',
-  toolbar,
-  avatar,
+  headerTools,
   startWithOpenNav = true,
   theme = 'dark',
   mainContainerId = 'main-container',
@@ -118,8 +113,7 @@ export const AppLayout: React.FunctionComponent<IAppLayoutProps> = ({
       <PageHeader
         logo={logo}
         logoProps={logoProps}
-        avatar={avatar}
-        toolbar={toolbar}
+        headerTools={headerTools}
         showNavToggle={isVertical}
         isNavOpen={isVertical && isNavOpen}
         onNavToggle={isMobileView ? onNavToggleMobile : onNavToggle}
@@ -129,8 +123,7 @@ export const AppLayout: React.FunctionComponent<IAppLayoutProps> = ({
     [
       logo,
       logoProps,
-      avatar,
-      toolbar,
+      headerTools,
       isVertical,
       isNavOpen,
       isMobileView,

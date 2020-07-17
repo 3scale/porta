@@ -1,7 +1,12 @@
 import React from 'react'
 import { render } from 'tests/custom-render'
-import { useDataListTable, useDataListPagination, useDataListFilters } from 'components'
-import { AccountsTable, generateColumns, generateRows } from 'components/pages/accounts'
+import {
+  AccountsTable,
+  useDataListTable,
+  useDataListPagination,
+  useDataListFilters
+} from 'components'
+import { generateColumns, generateRows } from 'components/pages/accounts/utils'
 import { within } from '@testing-library/react'
 import { IDeveloperAccount } from 'types'
 import { factories } from 'tests/factories'
@@ -12,8 +17,8 @@ const usePaginationMock = useDataListPagination as jest.Mock
 const useFiltersMock = useDataListFilters as jest.Mock
 const developerAccounts: IDeveloperAccount[] = [['Dandelion', 'Rosemary and Thyme'], ['Geralt', 'Wolf School']].map((account) => (
   factories.DeveloperAccount.build({
-    admin_name: account[0],
-    org_name: account[1]
+    adminName: account[0],
+    orgName: account[1]
   })
 ))
 
@@ -41,7 +46,7 @@ afterEach(resetMocks)
 const setup = () => {
   const wrapper = render(<AccountsTable />)
   const table = within(wrapper.queryByRole('grid') as HTMLElement)
-  const getRow = (account: IDeveloperAccount) => table.getByText(account.org_name).closest('tr') as HTMLElement
+  const getRow = (account: IDeveloperAccount) => table.getByText(account.orgName).closest('tr') as HTMLElement
 
   return {
     ...wrapper,

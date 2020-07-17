@@ -18,10 +18,10 @@ const fetchData = async <T>(request: Request): Promise<T> => {
   return response.parsedBody as T
 }
 
-const craftRequest = (path: string, params: URLSearchParams) => {
+const craftRequest = (path: string, params?: URLSearchParams) => {
   const authToken = getToken()
 
-  const url = new URL(`${process.env.REACT_APP_API_HOST || '/'}${path}?${params.toString()}`)
+  const url = new URL(`${process.env.REACT_APP_API_HOST || '/'}${path}?${params?.toString()}`)
   url.searchParams.append('access_token', authToken as string)
 
   return new Request(

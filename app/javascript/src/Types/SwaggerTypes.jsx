@@ -30,7 +30,11 @@ export type Param = {
 export type ResponseBody = {
  paths: {
    [string]: {
-     parameters: Array<Param>,
+     parameters?: Array<Param>,
+     get?: {
+      parameters?: Array<Param>,
+      [string]: string | {}
+     },
      [string]: string | {}
    }
  },

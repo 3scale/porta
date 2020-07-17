@@ -7,7 +7,7 @@ import login from 'i18n/locales/en/login.yml'
 // Audience
 import accountsIndex from 'i18n/locales/en/audience/accounts/listing.yml'
 // Applications
-import applicationsListing from 'i18n/locales/en/applications/listing.yml'
+import applicationsIndex from 'i18n/locales/en/applications/listing.yml'
 import applicationsPlans from 'i18n/locales/en/applications/applications_plans.yml'
 // Accounts
 import accountSettingsPersonal from 'i18n/locales/en/account_settings/personal/personal.yml'
@@ -19,11 +19,6 @@ import accountSettingsUsersListing from 'i18n/locales/en/account_settings/users/
 import analyticsUsage from 'i18n/locales/en/analytics/usage.yml'
 // Integration
 import integrationConfiguration from 'i18n/locales/en/integration/configuration.yml'
-
-const applications = {
-  listing: applicationsListing,
-  plans: applicationsPlans
-}
 
 const accounts = {
   personal: {
@@ -45,11 +40,12 @@ const integration = {
 
 
 export {
+  applicationsPlans,
+  applicationsIndex,
   accountsIndex,
   shared,
   overview,
   analytics,
-  applications,
   accounts,
   integration,
   login

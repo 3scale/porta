@@ -50,18 +50,18 @@ module Liquid
 
       desc "Returns the first and last name of the user."
       def name
-        h(@user.full_name)
+        h(@user.decorate.full_name)
       end
 
       # TODO: display name, really? reconsider
       hidden
       def display_name
-        h(@user.display_name)
+        h(@user.decorate.display_name)
       end
 
       hidden
       def informal_name
-        h(@user.informal_name)
+        h(@user.decorate.informal_name)
       end
 
       hidden

@@ -8,8 +8,7 @@ function makeAppLayout(
 ) {
   const props: IAppLayoutProps = {
     logo: <div>App logo</div>,
-    avatar: <div>Avatar</div>,
-    toolbar: <div>Toolbar</div>,
+    headerTools: <div>Toolbar</div>,
     navVariant: 'vertical',
     navItems: [
       {
@@ -45,7 +44,6 @@ describe('AppLayout tests', () => {
     const { getByTestId, getByText, container } = renderAppLayout()
     getByTestId('test-content')
     getByText('App logo')
-    getByText('Avatar')
     getByText('Toolbar')
     getByTestId('app-sidebar')
     expect(container.querySelector('#test-main-container')).not.toBeNull()

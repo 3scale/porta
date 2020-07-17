@@ -35,10 +35,3 @@ billing_jobs:
   description: "Billing canaries and the rest"
   queue: critical
   status: enabled
-
-sphinx_index:
-  cron: '0 6 * * *'
-  class: CronJob::Enqueuer
-  args: ['SPHINX_INDEX_ALL']
-  queue: critical
-  status: enabled

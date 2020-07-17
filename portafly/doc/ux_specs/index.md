@@ -10,14 +10,22 @@ Please refer to the single page files together with mockups linked in each page 
 * [Modal](./global_components/modal.md) -- the modal is an overlay dialog triggered to allow users taking contextual bulk actions or confirming destructive actions.
 
 ### Pages
-##### Audience
-* [Accounts index](./audience/accounts/index.md)
+##### Accounts
+* [Accounts index](./accounts/index.md)
+* Account
+  * [Overview](./accounts/account_overview.md)
+  * [Applications index](./accounts/account_applications_index.md)
 
 ##### Account settings
 * _coming soon_
 
 ##### Product
-* _coming soon_
+* [Overview](./product/overview.md)
+* [Create product](./product/create_product.md)
+* [Edit product](./product/edit_product.md)
+* Applications
+  * [Applications index](./product/applications/index.md)
+
 
 ##### Backend
 * _coming soon_

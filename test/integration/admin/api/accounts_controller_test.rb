@@ -34,6 +34,19 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  class TenantAdminTest < Admin::Api::AccountsControllerTest
+    test '#find without params should not find any account even if there is one with a null email' do
+      rolling_updates_on
+
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      buyer_user = FactoryBot.create(:admin, account: buyer)
+      buyer_user.update_column(:email, nil)
+
+      get find_admin_api_accounts_path(format: :json, access_token: token.value)
+      assert_response :not_found
+    end
+  end
+
   class TenantMemberTest < Admin::Api::AccountsControllerTest
     def setup
       super

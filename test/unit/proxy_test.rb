@@ -234,6 +234,26 @@ class ProxyTest < ActiveSupport::TestCase
     refute @proxy.errors[:endpoint].any?
   end
 
+  test 'hostname_rewrite validates a host that complies with rfc 2616' do
+    @proxy.hostname_rewrite = 'my-own.api.example.net'
+    assert @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my-own.api.example.net:8080'
+    assert @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my-own.api.example.net:80'
+    assert @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my-own.api.example.net:'
+    refute @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my-own.api.example.net:hello'
+    refute @proxy.valid?
+
+    @proxy.hostname_rewrite = 'my-own.api.example.net::80'
+    refute @proxy.valid?
+  end
+
   test 'backend' do
     proxy_config = System::Application.config.three_scale.sandbox_proxy
     proxy_config.stubs(backend_scheme: 'https', backend_host: 'example.net:4400')

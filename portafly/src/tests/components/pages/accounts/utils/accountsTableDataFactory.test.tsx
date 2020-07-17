@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { generateColumns, generateRows, ActionButtonImpersonate } from 'components/pages/accounts'
+import { generateColumns, generateRows } from 'components/pages/accounts/utils'
+import { ActionButtonImpersonate } from 'components/pages/accounts'
 import { developerAccounts } from 'tests/examples'
 
 it('should generate columns', () => {
@@ -19,7 +20,8 @@ describe('when it is multitenant', () => {
     process.env.REACT_APP_MULTITENANT = 'true'
   })
 
-  it('should render an impersonate button as action', () => {
+  // TODO: this feature has been removed temporarily
+  it.skip('should render an impersonate button as action', () => {
     expect(generateRows(developerAccounts.slice(0, 1)))
       .toMatchObject([{
         cells: expect.arrayContaining([{

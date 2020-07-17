@@ -1,6 +1,6 @@
 Dear <%= @receiver.informal_name %>,
 
-<%= @user.informal_name %> from <%= @account.display_name %> has signed-up for: <%= @account.bought_service_contracts.accessible_services.pluck(:name).to_sentence.presence || 'does not have service' %>.
+<%= @user.informal_name %> from <%= @account.name %> has signed-up for: <%= @account.bought_service_contracts.accessible_services.pluck(:name).to_sentence.presence || 'does not have service' %>.
 
 New user details:
 

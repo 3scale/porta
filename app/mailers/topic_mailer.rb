@@ -3,7 +3,7 @@ class TopicMailer < ActionMailer::Base
   def new_post(subscriber, post)
     @post = post
     @sender = @post.user
-    @subscriber = subscriber
+    @subscriber = subscriber.decorate
     @domain = domain(@post)
 
     headers({'Return-Path' => from_address(@sender), 'X-SMTPAPI' => '{"category": "New Post"}'})

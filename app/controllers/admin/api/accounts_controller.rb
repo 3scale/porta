@@ -266,8 +266,10 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
       buyer_accounts.first_by_provider_key!(provider_key, error: ActiveRecord::RecordNotFound)
     when current_account.master? && service_token = params[:buyer_service_token]
       buyer_accounts.find_by_service_token!(service_token)
+    when email = params[:email].presence
+      buyer_users.find_by!(email: email).account
     else
-      buyer_users.find_by!(email: params[:email]).account
+      raise ActiveRecord::RecordNotFound
     end
   end
 end

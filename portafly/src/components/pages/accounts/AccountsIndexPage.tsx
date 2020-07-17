@@ -4,6 +4,7 @@ import {
   useDocumentTitle,
   Loading,
   AccountsDataListTable,
+  CreateAccountButton,
   ExportAccountsButton
 } from 'components'
 import {
@@ -11,31 +12,16 @@ import {
   PageSection,
   TextContent,
   Text,
-  Button,
   Flex,
-  FlexItem,
-  FlexModifiers
+  FlexItem
 } from '@patternfly/react-core'
 import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
-import { PlusCircleIcon } from '@patternfly/react-icons'
 
 const AccountsIndexPage: React.FunctionComponent = () => {
   const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
   const { t } = useTranslation('accountsIndex')
   useDocumentTitle(t('title_page'))
-
-  const CreateAccountButton = () => (
-    <Button
-      aria-label={t('create_account_button_aria_label')}
-      component="a"
-      variant="link"
-      icon={<PlusCircleIcon />}
-      href="/accounts/new"
-    >
-      {t('create_account_button')}
-    </Button>
-  )
 
   return (
     <>
@@ -46,8 +32,10 @@ const AccountsIndexPage: React.FunctionComponent = () => {
               <Text component="h1">{t('title_page')}</Text>
             </TextContent>
           </FlexItem>
-          <FlexItem breakpointMods={[{ modifier: FlexModifiers['align-right'] }]}>
+          <FlexItem align={{ default: 'alignRight' }}>
             <CreateAccountButton />
+          </FlexItem>
+          <FlexItem>
             <ExportAccountsButton data={accounts} />
           </FlexItem>
         </Flex>

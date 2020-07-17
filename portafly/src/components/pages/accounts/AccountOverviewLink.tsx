@@ -18,7 +18,7 @@ const AccountOverviewLink: React.FunctionComponent<Props> = ({ account }) => {
       href={`/accounts/${account.id}`}
       isInline
     >
-      {account.org_name}
+      {account.orgName}
     </Button>
   )
 }

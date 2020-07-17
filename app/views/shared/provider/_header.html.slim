@@ -47,9 +47,9 @@ header.pf-c-page__header id="user_widget" class='Header' class=('Header--master'
               ' Impersonating a virtual admin user from
             - else
               ' Signed in to
-            => current_user.account.name
+            => current_account.name
             ' as
-            = current_user.display_name
+            = current_user.decorate.display_name
             | .
 
           = fixed_width_icon_link_to 'Sign Out', 'times', provider_logout_path, class: 'PopNavigation-link', title: "Sign Out #{current_user.username}"
