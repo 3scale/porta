@@ -28,6 +28,11 @@
      * list of current plans -->
 
 ##### Table ([PF specs](https://www.patternfly.org/v4/documentation/react/components/table))
+* Table columns distribution rule:
+  * cellWidth(25)
+  * cellWidth(30)
+  * cellWidth(15)
+  * cellWidth(15)
 * Table header:
   * Group/organization [sortable]
   * Admin [sortable]
