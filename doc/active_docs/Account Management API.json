@@ -2320,8 +2320,8 @@
               "paramType": "query"
             },
             {
-              "name": "branding_state_event",
-              "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'brand_as_threescale' (the default one) or 'custom_brand'",
+              "name": "branding_state",
+              "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'threescale_branded' (the default one) or 'custom_branded'",
               "dataType": "string",
               "required": false,
               "paramType": "query"
@@ -2394,6 +2394,13 @@
               "name": "published",
               "description": "Published authentication provider. False by default",
               "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "branding_state",
+              "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'threescale_branded' (the default one) or 'custom_branded'",
+              "dataType": "string",
               "required": false,
               "paramType": "query"
             },

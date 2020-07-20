@@ -155,14 +155,14 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
       :name, :system_name, :client_id, :client_secret,
       :token_url, :user_info_url, :authorize_url, :site,
       :identifier_key, :username_key, :trust_email, :kind,
-      :published, :branding_state_event, :skip_ssl_certificate_verification,
+      :published, :branding_state, :skip_ssl_certificate_verification,
       :automatically_approve_accounts
     )
   end
 
   def authentication_provider_update_params
     params.require(:authentication_provider).permit(
-      :client_id, :client_secret, :published, :site,
+      :client_id, :client_secret, :published, :branding_state, :site,
       :skip_ssl_certificate_verification, :automatically_approve_accounts
     )
   end
