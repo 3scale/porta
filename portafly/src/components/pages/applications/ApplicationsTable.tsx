@@ -39,7 +39,6 @@ const ApplicationsTable: React.FunctionComponent<Props> = ({ applications }) => 
   const { startIdx, endIdx, resetPagination } = useDataListPagination()
   const { filters } = useDataListFilters()
 
-  // @ts-ignore
   const planOptions = applications.reduce(
     (plans, { plan }) => (plans.find((p) => p.id === plan.id) ? plans : [...plans, plan]),
     [] as IPlan[]
