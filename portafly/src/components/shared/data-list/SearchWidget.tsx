@@ -119,6 +119,7 @@ const SearchBar = ({ textInputRef, category, onSearchClick }: ISearchBar) => {
         onKeyUp={(ev) => ev.key === 'Enter' && onClick()}
       />
       <Button
+        aria-label={t('accountsIndex:accounts_filter_button_aria_label')}
         variant={ButtonVariant.control}
         onClick={onClick}
       >

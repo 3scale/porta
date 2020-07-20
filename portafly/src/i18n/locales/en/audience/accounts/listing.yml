@@ -41,6 +41,8 @@ accounts_filter_field: "Filter by {{filter_option}}"
 accounts_filter_field_description: Filter by typeahead a text input. This applies for filters by group/organization and admin
 accounts_filter_field_aria_label: Filter text input
 accounts_filter_field_aria_label_description: Aria label for the filter text input
+accounts_filter_button_aria_label: Add filter
+accounts_filter_button_aria_label_description: Aria label for the filter button
 
 ## Header
 accounts_table:
