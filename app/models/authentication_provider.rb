@@ -130,7 +130,7 @@ class AuthenticationProvider < ApplicationRecord
   def self.branded_available?
     config = ThreeScale::OAuth2.config.fetch(kind, {})
 
-    return unless config[:enabled]
+    return true unless config[:enabled]
 
     credentials = config.slice(:client_id, :client_secret)
     credentials.values.any?(&:present?)

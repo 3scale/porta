@@ -21,10 +21,7 @@ h1.title
       dt.u-dl-term
         | Branding
       dd.u-dl-definition
-        - if @authentication_provider.can_switch_at_will?
-          = render 'branding_select'
-        - else
-          = @authentication_provider.human_state_name
+        = @authentication_provider.human_state_name
 
     - if @authentication_provider.callback_account == current_account
       dt.u-dl-term

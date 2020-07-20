@@ -90,7 +90,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     config = { client_id: 'id', client_secret: 'secret' }
     ThreeScale::OAuth2.stubs(config: { 'authentication_provider' => config })
 
-    refute_predicate AuthenticationProvider, :branded_available?
+    assert_predicate AuthenticationProvider, :branded_available?
 
     config[:enabled] = true
     assert_predicate AuthenticationProvider, :branded_available?
