@@ -858,7 +858,7 @@ jobs:
             cd portafly
             yarn --version
             yarn install --frozen-lockfile
-            CI=false yarn build
+            yarn build
 
   check_production_gemfile:
     parameters:
