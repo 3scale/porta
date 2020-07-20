@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import * as React from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { MemoryRouter, MemoryRouterProps } from 'react-router'

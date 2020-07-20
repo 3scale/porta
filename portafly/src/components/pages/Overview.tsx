@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 import React from 'react'
 import { useTranslation } from 'i18n/useTranslation'
-// @ts-ignore
 import {
   useA11yRouteChange,
   useDocumentTitle,
