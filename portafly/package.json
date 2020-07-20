@@ -25,6 +25,9 @@
     "react-router-last-location": "^2.0.1",
     "resolve": "1.17.0"
   },
+  "peerDependencies": {
+    "@patternfly/react-icons": "^4.4.2"
+  },
   "devDependencies": {
     "@babel/core": "7.9.6",
     "@stoplight/prism-cli": "^3.3.2",
