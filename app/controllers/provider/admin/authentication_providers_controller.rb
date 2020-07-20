@@ -93,12 +93,13 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   end
 
   UPDATE_PARAMS = %i[client_id client_secret automatically_approve_accounts site
-                     realm skip_ssl_certificate_verification branding_state_event
+                     realm skip_ssl_certificate_verification branding_state
                      token_url authorize_url user_info_url identifier_key
                      username_key trust_email].freeze
 
   def update_params
-    params.require(:authentication_provider).permit(UPDATE_PARAMS)
+    defaults = { branding_state: 'custom_branded' }
+    params.require(:authentication_provider).permit(UPDATE_PARAMS).reverse_merge(defaults)
   end
 
   def create_params

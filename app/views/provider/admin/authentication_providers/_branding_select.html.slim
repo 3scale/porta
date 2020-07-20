@@ -2,6 +2,6 @@
         url: provider_admin_authentication_provider_path(@authentication_provider),
         as: :authentication_provider,
         :html => { :class => 'autosubmit' } do |f|
-  = f.select :branding_state_event,
+  = f.select :branding_state,
           @authentication_provider.allowed_state_transitions,
           include_blank: @authentication_provider.human_state_name
