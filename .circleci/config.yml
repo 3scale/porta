@@ -34,7 +34,7 @@ save-flow-typed-cache: &save-flow-typed-cache
     paths:
       - ./flow-typed
 
-npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}
+npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-3
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -278,7 +278,7 @@ commands: # reusable commands with parameters
   save-gem-cache:
     steps:
       - save_cache:
-          key: v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - ./vendor/bundle
             - ./.bundle/
@@ -287,7 +287,7 @@ commands: # reusable commands with parameters
     steps:
       - restore_cache:
           keys:
-            - v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
   upload-artifacts:
     steps:
