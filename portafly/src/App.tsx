@@ -25,7 +25,7 @@ const PagesSwitch = () => (
 
 const App = () => (
   <AuthProvider>
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <LastLocationProvider>
         <AlertsProvider>
           <Root>
