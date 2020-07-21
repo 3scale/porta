@@ -40,6 +40,10 @@ shared_elements:
   actions_header_description: Column listing the only available action to perform with each item of a table
   actions_header_plural: Actions
   actions_header_plural_description: Column listing the various available actions to perform with each item of a table
+  create_button: Create #----PROPOSED
+  create_button_description: Label to perform the creation of an element.
+  save_button: Save
+  save_button_description: Label to perform the storage of details.
   send_button: Send
   send_button_description: Label to perform the sending of items
   edit_button: Edit

@@ -1,0 +1,37 @@
+---
+# ------------------ Product > Create product
+# Page details
+
+page_title: Create product #--- PROPOSED
+page_title_description: Page title to create a product
+body_title: Create a new product #--- PROPOSED
+body_title_description: Body title of the page to create a new product
+
+# Main area
+
+name: Name
+name_description: Field label to show/input the name of the product.
+
+system_name:
+  label: System name
+  label_description: Field label to show/input the system name of the product.
+  placeholder: product-system-name
+  placeholder_description: Placeholder to show an example for the product system name.
+  helper: Use letters, numbers, dashes and underscores
+  helper_description: Helper text to explain the allowed characters for a system name.
+
+description: Description
+description_label: Field label to show/input the description of the product.
+#-------# create_button: available in shared.yml   #----PROPOSED
+#-------# cancel_button: available in shared.yml
+
+# Validation errors
+required_name: <i>Name</i> is empty. You must specify a name for the product. #----PROPOSED
+required_name_description: Validation message to prompt the indication of a product name before saving details.
+duplicated_name: <i>{{product_name}}</i> already exists. Please use a different name for the product. #----PROPOSED
+duplicated_name_description: Validation message to request the change of the product name due to duplication.
+
+systemname_characters: System names can only use letters, numbers, dashes and underscores. #----PROPOSED
+systemname_characters_description: Validation message to explain the allowed characters for a system name.
+duplicated_systemname: <i>{{system_name}}</i> already exists. Please use a different system name. #----PROPOSED
+duplicated_systemname_description: Validation message to request the change of the system name due to duplication.
