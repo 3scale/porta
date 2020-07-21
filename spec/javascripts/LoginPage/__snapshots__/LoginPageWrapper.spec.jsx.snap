@@ -184,47 +184,35 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus="autoFocus"
+                                className=""
                                 id="session_username"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="username"
                                 onChange={[Function]}
                                 type="text"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus="autoFocus"
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="text"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -284,47 +272,35 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus={false}
+                                className=""
                                 id="session_password"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="password"
                                 onChange={[Function]}
                                 type="password"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus={false}
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="password"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -592,47 +568,35 @@ exports[`should render Login form and Authentication providers when available 1`
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus="autoFocus"
+                                className=""
                                 id="session_username"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="username"
                                 onChange={[Function]}
                                 type="text"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus="autoFocus"
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="text"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -692,47 +656,35 @@ exports[`should render Login form and Authentication providers when available 1`
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus={false}
+                                className=""
                                 id="session_password"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="password"
                                 onChange={[Function]}
                                 type="password"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus={false}
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="password"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -1235,47 +1187,35 @@ exports[`should render itself 1`] = `
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus="autoFocus"
+                                className=""
                                 id="session_username"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="username"
                                 onChange={[Function]}
                                 type="text"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus="autoFocus"
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="text"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -1335,47 +1275,35 @@ exports[`should render itself 1`] = `
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus={false}
+                                className=""
                                 id="session_password"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="password"
                                 onChange={[Function]}
                                 type="password"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus={false}
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="password"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -2034,47 +1962,35 @@ exports[`should render reset password button when disablePasswordReset is false 
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus="autoFocus"
+                                className=""
                                 id="session_username"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="username"
                                 onChange={[Function]}
                                 type="text"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus="autoFocus"
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="text"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -2134,47 +2050,35 @@ exports[`should render reset password button when disablePasswordReset is false 
                                   *
                                 </span>
                               </label>
-                              <ForwardRef
+                              <TextInput
+                                aria-label={null}
                                 autoFocus={false}
+                                className=""
                                 id="session_password"
+                                isDisabled={false}
+                                isReadOnly={false}
                                 isRequired={true}
+                                isValid={true}
                                 name="password"
                                 onChange={[Function]}
                                 type="password"
                                 value=""
                               >
-                                <TextInputBase
+                                <input
+                                  aria-invalid={false}
                                   aria-label={null}
                                   autoFocus={false}
-                                  className=""
+                                  className="pf-c-form-control"
+                                  disabled={false}
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
+                                  readOnly={false}
+                                  required={true}
                                   type="password"
-                                  validated="default"
                                   value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                />
+                              </TextInput>
                             </div>
                           </FormGroup>
                         </FormGroup>
