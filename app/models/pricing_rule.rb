@@ -88,11 +88,11 @@ class PricingRule < ApplicationRecord
     end
 
     if overlap #rules.count > 0
-      errors.add(:min, "'From' value must be greater than 'To' values of current rules.")
+      errors.add(:min, :overlap_message)
     end
 
     if max && max < min
-      errors.add(:max, "'To' value cannot be less than your 'From' value.")
+      errors.add(:max, :to_value_cannot_be_less_that_from_value)
     end
   end
 end
