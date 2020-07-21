@@ -145,6 +145,7 @@ exports[`should render correctly 1`] = `
             ariaLabelledBy=""
             className=""
             createText="Create"
+            customContent={null}
             direction="down"
             id="service_proxy_attributes_jukebox_select"
             isCreatable={false}
