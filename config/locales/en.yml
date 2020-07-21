@@ -843,6 +843,13 @@ en:
             version:
               mismatch: "differs from the schema version"
               builtin: "cannot be 'builtin'"
+        pricing_rule:
+          attributes:
+            min:
+              overlap_message: "The 'From' value must be greater than the 'To' values of other existing rules"
+            max:
+              to_value_cannot_be_less_that_from_value: "'To' value cannot be less than your 'From' value."
+
 
         proxy_rule:
           attributes:
