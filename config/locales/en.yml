@@ -799,7 +799,6 @@ en:
           invalid_swagger: "JSON Spec is invalid"
           invalid_json: "Invalid JSON"
 
-
   activerecord:
     errors:
       messages:

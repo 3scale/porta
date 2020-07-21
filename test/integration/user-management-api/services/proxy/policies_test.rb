@@ -58,6 +58,14 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
     assert_response :unprocessable_entity
   end
 
+  def test_invalid_json_policies_config
+    put admin_api_service_proxy_policies_path(valid_params.merge({ proxy: { policies_config: { name: 'echo '}.to_json }}))
+    assert_response :unprocessable_entity
+    json_response = JSON.parse(response.body)
+    assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'version')
+    assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'configuration')
+  end
+
   def valid_params
     {
       service_id:   @service.id,
