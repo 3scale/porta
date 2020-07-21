@@ -14,6 +14,7 @@ ActiveRecord::Base.transaction do
   master_plan = ENV.fetch('MASTER_PLAN', 'Master Plan')
   master_domain = ENV['MASTER_DOMAIN'].presence
   master_access_code = ENV.fetch('MASTER_ACCESS_CODE', '')
+  master_email = ENV.fetch('MASTER_EMAIL', 'master@example.com')
 
   master_login = ENV.fetch('MASTER_USER', 'master')
   master_password = ENV.fetch('MASTER_PASSWORD') { SecureRandom.base64(32) }
@@ -65,6 +66,7 @@ ActiveRecord::Base.transaction do
   master_user = master.users.create!(username: master_login, password: master_password, password_confirmation: master_password) do |user|
     user.signup_type = 'minimal'
     user.role = :admin
+    user.email = master_email
   end
   master_user.activate!
 

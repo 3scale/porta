@@ -12,6 +12,7 @@ class SeedsTest < ActiveSupport::TestCase
     'MASTER_USER' => 'my-username',
     'MASTER_SERVICE' => 'the master service',
     'MASTER_PLAN' => 'the master plan',
+    'MASTER_EMAIL' => 'master@example.com',
 
     'PROVIDER_NAME' => 'tenant account name',
     'TENANT_NAME' => 'provider-subdomain',
@@ -61,6 +62,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 1, master_account.users.count
     master_user = master_account.users.first!
     assert_equal 'master', master_user.username
+    assert_equal 'master@example.com', master_user.email
     assert master_user.minimal_signup?
     assert master_user.admin?
     assert master_user.active?

@@ -83,9 +83,8 @@ class User < ApplicationRecord
                                  :message => MSG_LOGIN_BAD }
 
   #OPTIMIZE: use the same format validations in user, account and invitation, add TESTS!
-  validates :email, length: { :within => 6..255, :allow_blank => true } #r@a.wk
-  validates :email, format: { :with => RE_EMAIL_OK, :allow_blank => false,
-                              :message => MSG_EMAIL_BAD, :unless => :minimal_signup? }
+  validates :email, length: { :within => 6..255, :allow_blank => false } #r@a.wk
+  validates :email, format: { :with => RE_EMAIL_OK, :allow_blank => false, :message => MSG_EMAIL_BAD }
 
   #TODO: this needs tests
   validates :password, length: { :minimum => 6, :allow_blank => true,
