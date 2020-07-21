@@ -12,7 +12,7 @@ const formatFn: FormatFunction = (value, format) => {
 const options = {
   lng: EN,
   fallbackLng: [EN],
-  debug: false,
+  debug: process.env.NODE_ENV === 'development',
   interpolation: {
     format: formatFn,
     escapeValue: false
