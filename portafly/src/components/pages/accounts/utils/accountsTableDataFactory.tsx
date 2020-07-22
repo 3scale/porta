@@ -1,5 +1,8 @@
 import React from 'react'
-import { sortable } from '@patternfly/react-table'
+import {
+  sortable,
+  cellWidth
+} from '@patternfly/react-table'
 import { IDeveloperAccount, DataListRowGenerator, DataListColumnGenerator } from 'types'
 import { StateLabel } from 'components'
 import { AccountOverviewLink } from 'components/pages/accounts'
@@ -31,22 +34,22 @@ const generateColumns: DataListColumnGenerator = (t) => [
   {
     categoryName: 'group',
     title: t('accountsIndex:accounts_table.group_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(25)]
   },
   {
     categoryName: 'admin',
     title: t('accountsIndex:accounts_table.admin_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(30)]
   },
   {
     categoryName: 'signup',
     title: t('accountsIndex:accounts_table.signup_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(15)]
   },
   {
     categoryName: 'state',
     title: t('accountsIndex:accounts_table.state_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(15)]
   }
 ]
 
