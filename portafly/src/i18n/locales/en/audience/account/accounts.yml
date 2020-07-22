@@ -1,7 +1,4 @@
 ---
-#--------------------------Path: Accounts > Account overview ------------------------------------#
-# Filename subject to change----------------------------- ------------------------------------#
-
 # Accounts > Account overview
 
 page_title: Accounts | Portafly
@@ -56,7 +53,7 @@ applications_filter_field_aria_label_description: Aria label for the filter text
 applications_table:
  aria_label: Applications table
  aria_label_description: Aria label of the table of applications
- empty_state: Currently, there are no applications to show. Add accounts.
+ empty_state: Currently, there are no applications to show. Add applications.
  empty_state_description: Message to display when there are no applications to show, and prompt the user to add applications
  name_header: Name
  name_header_description: Column listing names of applications
