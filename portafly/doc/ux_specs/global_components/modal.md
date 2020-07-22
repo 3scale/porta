@@ -73,12 +73,12 @@
           * an inline warning message will be displayed above the form buttons -->
 
 ### _'Delete confirmation'_ modal
-* Modal's header includes the name of the current API (Product or Backend) the user is trying to delete
-* Enter API name > text input field [required]
+<!-- * Modal's header includes the name of the current API (Product or Backend) the user is trying to delete -->
+* Enter API name > validated text input field [required] ([PF specs](https://www.patternfly.org/v4/documentation/react/components/textinput#invalid))
   * Label text includes the name of the current API the user is trying to delete
   * API name is contained into code tags for easier copy pasting
   * Validation error:
-    * Wrong product name on _onblur_
+    * Wrong product name on _onType_
 * Buttons
   * Delete button [Disabled state until all conditions required to submit the form are met]
     * Primary danger button variant
