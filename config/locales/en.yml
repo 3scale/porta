@@ -846,9 +846,9 @@ en:
         pricing_rule:
           attributes:
             min:
-              overlap_message: "The 'From' value must be greater than the 'To' values of other existing rules"
+              overlap: "The 'From' value must be greater than the 'To' values of other existing rules"
             max:
-              to_value_cannot_be_less_that_from_value: "'To' value cannot be less than your 'From' value."
+              min_max_mismatch: "'To' value cannot be less than your 'From' value"
 
 
         proxy_rule:

@@ -36,11 +36,11 @@ class PricingRuleTest < ActiveSupport::TestCase
 
      rule = @plan.pricing_rules.new(:min => 1, :max => 10, :cost_per_unit => 4)
      rule.valid?
-     assert_not_nil rule.errors[:min].presence
+     assert_includes rule.errors[:min], "The 'From' value must be greater than the 'To' values of other existing rules"
 
      rule = @plan.pricing_rules.new(:min => 10, :max => 12, :cost_per_unit => 4)
      rule.valid?
-     assert_not_nil rule.errors[:min].presence
+     assert_includes rule.errors[:min], "The 'From' value must be greater than the 'To' values of other existing rules"
 
      rule = @plan.pricing_rules.create!(:min => 11, :max => 12, :cost_per_unit => 4)
      assert rule.errors.empty?
@@ -51,7 +51,7 @@ class PricingRuleTest < ActiveSupport::TestCase
 
     rule = @plan.pricing_rules.new(:min => 10, :max => 12, :cost_per_unit => 4)
     rule.valid?
-    assert_not_nil rule.errors[:min].presence
+    assert_includes rule.errors[:min], "The 'From' value must be greater than the 'To' values of other existing rules"
   end
 
   should "prohibit overlap when creating a new rule with infinity max values" do
@@ -59,13 +59,13 @@ class PricingRuleTest < ActiveSupport::TestCase
 
     rule = @plan.pricing_rules.new(:min => 10, :max => nil, :cost_per_unit => 4)
     rule.valid?
-    assert_not_nil rule.errors[:min].presence
+    assert_includes rule.errors[:min], "The 'From' value must be greater than the 'To' values of other existing rules"
   end
 
   should "prohibit max value less than min value" do
      rule = @plan.pricing_rules.new(:min => 10, :max => 1, :cost_per_unit => 4)
      rule.valid?
-     assert_not_nil rule.errors[:max].presence
+     assert_includes rule.errors[:max], "'To' value cannot be less than your 'From' value"
   end
 
   should "allow max value to be equal to min value and return correct cost" do
