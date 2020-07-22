@@ -1,7 +1,7 @@
 import React from 'react'
 import { AlertsProvider, useAlertsContext } from 'components'
 import { render } from 'tests/custom-render'
-import { waitFor } from '@testing-library/dom'
+import { waitFor } from '@testing-library/react'
 
 const AlertComponent = () => {
   const { addAlert } = useAlertsContext()

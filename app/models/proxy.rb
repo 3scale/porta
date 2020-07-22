@@ -136,6 +136,7 @@ class Proxy < ApplicationRecord
 
   def policies_config
     parsed_config = read_and_parse_policies_config
+    return parsed_config if errors[:policies_config].present?
 
     if parsed_config.detect { |c| c['name'] == DEFAULT_POLICY['name'] }
       parsed_config
@@ -560,11 +561,12 @@ class Proxy < ApplicationRecord
     include ActiveModel::Validations
 
     attr_accessor :name, :version, :configuration, :enabled
+
     validates :name, :version, presence: true
     validate :configuration_is_object
 
     def initialize(attributes = {})
-      self.attributes = attributes
+      self.attributes = attributes.is_a?(Hash) ? attributes : {}
     end
 
     def attributes=(attributes)

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
-import { fireEvent } from '@testing-library/dom'
+import { fireEvent } from '@testing-library/react'
 import { render } from 'tests/custom-render'
 import { SwitchWith404 } from 'components'
 
