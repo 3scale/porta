@@ -1,12 +1,12 @@
 ---
 # Accounts > Account overview
 
-page_title: Accounts | Portafly
+page_title: Accounts
 page_title_description: Page title of the subsection for Accounts Overview
 
 # Top area
 
-body_title: Account: {{organization_name}}
+body_title: "Account: {{organization_name}}"
 body_title_description: Body title of the page for Accounts Overview
 
 # Tabs
@@ -20,13 +20,13 @@ applications_description: This is the title of the tab containing the list of ap
 # Tab overview
 
 organization_label: Organization/Group Name
-organization_value: {{organization_name}}
+organization_value: "{{organization_name}}"
 administrator_label: Administrator
-administrator_value: {{admin_name (name@emailaddress.com)}}
+administrator_value: "{{admin_name (name@emailaddress.com)}}"
 signup_label: Signed up on
-sigup_value: {{YYYY-MM-DD, 00:00}}
+sigup_value: "{{YYYY-MM-DD, 00:00}}"
 state_label: State
-state_value: {{application_status}}
+state_value: "{{application_status}}"
 
 # Tab Applications
 # Top area
