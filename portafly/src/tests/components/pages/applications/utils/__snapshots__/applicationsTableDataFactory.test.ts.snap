@@ -7,12 +7,14 @@ Array [
     "title": undefined,
     "transforms": Array [
       [Function],
+      [Function],
     ],
   },
   Object {
     "categoryName": "account",
     "title": undefined,
     "transforms": Array [
+      [Function],
       [Function],
     ],
   },
@@ -21,6 +23,7 @@ Array [
     "title": undefined,
     "transforms": Array [
       [Function],
+      [Function],
     ],
   },
   Object {
@@ -28,12 +31,14 @@ Array [
     "title": undefined,
     "transforms": Array [
       [Function],
+      [Function],
     ],
   },
   Object {
     "categoryName": "state",
     "title": undefined,
     "transforms": Array [
+      [Function],
       [Function],
     ],
   },
