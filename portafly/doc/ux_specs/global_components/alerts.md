@@ -12,11 +12,16 @@
 * Network error alerts variant is `warning`
 * Network error types:
   * Generic network error
+  * Secure connection failed
+  * Timed out
+  * Cannot find host
+  * Not connected to Internet
+  * Cannot connect to host
+  * Not found
   * Authentication error
     * Wrong token
     * Session expired
-  * Server error (there’s a bug, server is down..)
-  * Server too slow (timeout)
+  * Server internal error
 
 ### Success alerts (bulk actions, delete object...)
 * Success messages are displayed in **toast alerts** ([PF specs](https://www.patternfly.org/v4/documentation/react/components/alert#types))
