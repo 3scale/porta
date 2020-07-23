@@ -11,6 +11,7 @@
   * Name > text input [required]
     * Validation errors:
       * Required field on form submit (if left blank)
+      * Name already exists on form submit
       * Name already exists on _onblur_
   * System name > text input [disabled]
     * NO validation errors
