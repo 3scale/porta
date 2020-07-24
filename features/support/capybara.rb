@@ -64,7 +64,7 @@ Capybara.register_driver :headless_firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
 
   options.add_argument('-headless')
-  options.add_argument('--window-size=1280,1024')
+  options.add_argument('--window-size=1280,2048')
 
   driver = Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
 
@@ -74,7 +74,7 @@ end
 Capybara.register_driver :firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
 
-  options.add_argument('--window-size=1280,1024')
+  options.add_argument('--window-size=1280,2048')
 
   driver = Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
 
@@ -84,6 +84,7 @@ end
 Capybara.register_driver :chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   options.add_argument('--auto-open-devtools-for-tabs')
+  options.add_argument('--window-size=1280,2048')
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
@@ -93,7 +94,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument('--headless')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-popup-blocking')
-  options.add_argument('--window-size=1280,1024')
+  options.add_argument('--window-size=1280,2048')
 
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
   options.add_option(:w3c, false)
