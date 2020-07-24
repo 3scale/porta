@@ -6,6 +6,8 @@ $pf4-sidebar-width: 18.125rem;
 
   &--context {
     float: left;
+    border: 1px solid $white;
+    padding: 4px;
 
     .PopNavigation-list {
       background-color: $white;
@@ -103,7 +105,7 @@ $pf4-sidebar-width: 18.125rem;
     }
 
     i {
-      padding: line-height-times(1) 0;
+      padding: 4px 8px;
     }
   }
 }
