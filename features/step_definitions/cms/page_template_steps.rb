@@ -12,6 +12,7 @@ def fill_draft(text)
     page.execute_script <<-JS
       $('#cms_template_draft').data('codemirror').setValue(#{text.inspect});
     JS
+    wait_for_requests
   else
     raise 'Please mark this scenario with @javascript if you want to work with codemirror.'
   end
