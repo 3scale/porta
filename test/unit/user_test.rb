@@ -137,6 +137,10 @@ class UserTest < ActiveSupport::TestCase
     assert_equal [service.id], member.accessible_services.map(&:id)
   end
 
+  test '#find_by_username_or_email returns nil for TypeError' do
+    assert_nil User.find_by_username_or_email({"＄foo" => "bar1"})
+  end
+
   test '#multiple_accessible_services?' do
     provider = FactoryBot.create(:simple_provider)
     user = FactoryBot.create(:user, account: provider)
