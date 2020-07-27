@@ -58,8 +58,8 @@ body {
     grid-row: 2;
 
     .pf-c-button {
-      margin-left: 0 !important;
-      margin-right: 0 !important;
+      margin-left: 0;
+      margin-right: 0;
       padding-left: line-height-times(2/3);
       padding-right: line-height-times(2/3);
     }
@@ -71,7 +71,7 @@ body {
   }
 
   &.pf-m-no-toggle {
-    grid-template-columns: minmax(auto, line-height-times(25/3)) minmax(auto, line-height-times(10)) auto auto !important;
+    grid-template-columns: minmax(auto, line-height-times(25/3)) minmax(auto, line-height-times(10)) auto auto;
   
     .app-context-selector-wrapper {
       grid-column: 2;
@@ -79,7 +79,7 @@ body {
 
     .pf-c-page__header-tools {
       grid-row: 1;
-      grid-column: 4 !important;
+      grid-column: 4;
     }
 
     .pf-c-page__header-brand-link {
@@ -123,11 +123,11 @@ body {
     padding-left: line-height-times(2/3);
 
     &::before {
-      border-top: 0 !important;
-      border-bottom: 0 !important;
-      border-right-color: var(--pf-global--BorderColor--200) !important;
-      border-left-color: var(--pf-global--BorderColor--200) !important;
-      border-bottom-width: 0px !important;
+      border-top: 0;
+      border-bottom: 0;
+      border-right-color: var(--pf-global--BorderColor--200);
+      border-left-color: var(--pf-global--BorderColor--200);
+      border-bottom-width: 0px;
     }
 
     .pf-c-context-selector__toggle-text {
@@ -139,7 +139,7 @@ body {
 .pf-m-expanded.pf-c-context-selector__toggle::before,
 .pf-c-context-selector__toggle:hover::before,
 .pf-c-context-selector__toggle:focus::before {
-  border-top: var(--pf-global--BorderWidth--lg) solid var(--pf-global--active-color--100) !important;
+  border-top: var(--pf-global--BorderWidth--lg) solid var(--pf-global--active-color--100);
 }
 
 @media screen and (min-width: 576px) {
@@ -148,11 +148,11 @@ body {
     }
 
     .pf-c-page__header.pf-m-no-toggle .pf-c-page__header-brand-link {
-      grid-column: 1 !important;
+      grid-column: 1;
     }
 
     .pf-c-page__header-tools {
-      grid-column: 4 !important;
+      grid-column: 4;
       grid-row: 1;
     }
   
@@ -164,7 +164,7 @@ body {
     .pf-c-page__header-brand-link {
       display: flex;
       justify-content: start;
-      grid-column: 2 !important;
+      grid-column: 2;
       grid-row: 1;
     }
 
@@ -195,7 +195,7 @@ body {
   }
 
   .pf-c-context-selector {
-    width: 100% !important;
+    width: 100%;
   }
 
   .app-context-selector-wrapper {
