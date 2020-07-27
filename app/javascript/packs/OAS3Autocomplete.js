@@ -20,22 +20,36 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
   const xDataKey = param[X_DATA_ATTRIBUTE]
   const autocompleteData = accountData[xDataKey]
   const paramHasAutocompleteData = autocompleteData && autocompleteData.length > 0 &&
-   autocompleteData.every(param => param.name !== '')
+    autocompleteData.every(param => param.name !== '')
 
   return paramHasAutocompleteData
     ? {
       ...param,
       examples: autocompleteData.reduce((examples, item) => (
-        [...examples, {summary: item.name, value: item.value}]
-      ), [{summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-'}])
+        [...examples, { summary: item.name, value: item.value }]
+      ), [{ summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-' }])
     }
     : param
 }
 
-const getPathParameters = (path) => {
-  const hasParamsInGet = path.get && path.get.parameters
-  return hasParamsInGet ? path.get.parameters : path.parameters
-}
+const getPathParameters = (path) => (
+  Object.keys(path).reduce((params, item) => {
+    params[item] = path[item].parameters
+    return params
+  }, {})
+)
+
+const injectParametersToPath = (path, pathParameters, accountData) => (
+  Object.keys(pathParameters).reduce((parameters, item) => {
+    parameters[item] = {
+      ...path[item],
+      parameters: pathParameters[item]
+        ? pathParameters[item].map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
+        : []
+    }
+    return parameters
+  }, {})
+)
 
 const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
   {
@@ -44,14 +58,7 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
       (paths, key) => {
         const pathParameters = getPathParameters(responseBody.paths[key])
         if (pathParameters) {
-          paths[key] = {
-            get: {
-              ...responseBody.paths[key].get,
-              parameters: pathParameters.map(param => {
-                return X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param
-              })
-            }
-          }
+          paths[key] = injectParametersToPath(responseBody.paths[key], pathParameters, accountData)
         }
         return paths
       }, {})
@@ -60,7 +67,7 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
 
 const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint: string): ResponseBody => {
   const originalServers = responseBody.servers || []
-  const servers = serviceEndpoint ? [{url: serviceEndpoint}] : originalServers
+  const servers = serviceEndpoint ? [{ url: serviceEndpoint }] : originalServers
 
   return {
     ...responseBody,
