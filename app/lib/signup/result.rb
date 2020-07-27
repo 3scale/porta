@@ -33,7 +33,7 @@ module Signup
     end
 
     def save!
-      raise ActiveRecord::RecordInvalid, self if @errors.present?
+      raise ActiveRecord::RecordInvalid, self if errors.present?
       ActiveRecord::Base.transaction do
         account.save! && user.save!
       end

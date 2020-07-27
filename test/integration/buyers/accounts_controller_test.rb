@@ -136,6 +136,37 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       login! @provider
     end
 
+    test '#new and #create redirects if it has a non-default application plan' do
+      @provider.account_plans.delete_all
+      @provider.account_plans.create!(name: 'non default account plan')
+
+      post admin_buyers_accounts_path, {
+        account: {
+          org_name: 'Alaska',
+          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+        }
+      }
+
+      assert_redirected_to admin_buyers_account_plans_path
+      assert_equal 'Please, create an Account Plan first', flash[:alert]
+    end
+
+    test 'POST with an error outside account or user is shown as a flash error' do
+      errors = ActiveModel::Errors.new(Plan.new)
+      errors.add(:base, 'error that is not in "user" or "account"')
+      errors.add(:base, 'another error')
+      Signup::Result.any_instance.stubs(errors: errors)
+
+      post admin_buyers_accounts_path, {
+        account: {
+          org_name: 'Alaska',
+          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+        }
+      }
+
+      assert_equal 'error that is not in "user" or "account". another error', flash[:error]
+    end
+
     # regression test for: https://github.com/3scale/system/issues/2567
     test "not raise exception on update if params[:account] is nil" do
       put admin_buyers_account_path @buyer
