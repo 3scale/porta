@@ -6,8 +6,8 @@ $pf4-sidebar-width: 18.125rem;
 
   &--context {
     float: left;
-    border: 1px solid $white;
-    padding: 4px;
+    border: line-height-times(1 / 16) solid $white;
+    padding: line-height-times(1 / 6);
 
     .PopNavigation-list {
       background-color: $white;
@@ -105,7 +105,7 @@ $pf4-sidebar-width: 18.125rem;
     }
 
     i {
-      padding: 4px 8px;
+      padding: line-height-times(1 / 6) line-height-times(1 / 3);
     }
   }
 }
@@ -122,3 +122,4 @@ is moved to the right, to match PF4 style */
   }
 }
 /****** END OF HACK ******/
+
