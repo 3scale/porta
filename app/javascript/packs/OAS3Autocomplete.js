@@ -45,14 +45,7 @@ const getPathParameters = (path) => (
 
 const injectParametersField = (key, value, accountData) => {
   const parametersArray = value.map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
-  if (key === 'parameters') {
-    return parametersArray
-  } else {
-    return {
-      ...value,
-      parameters: parametersArray
-    }
-  }
+  return (key === 'parameters') ? parametersArray : { ...value, parameters: parametersArray }
 }
 
 const injectParametersToPath = (path, pathParameters, accountData) => (
