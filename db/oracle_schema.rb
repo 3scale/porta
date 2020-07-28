@@ -10,22 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200420104331) do
+ActiveRecord::Schema.define(version: 20200629110238) do
 
   create_table "access_tokens", force: :cascade do |t|
-    t.integer  "owner_id",   precision: 38,                  null: false
-    t.string   "owner_type",                default: "User", null: false
+    t.integer  "owner_id",   precision: 38, null: false
     t.text     "scopes"
-    t.string   "value",                                      null: false
-    t.string   "name",                                       null: false
-    t.string   "permission",                                 null: false
+    t.string   "value",                     null: false
+    t.string   "name",                      null: false
+    t.string   "permission",                null: false
     t.integer  "tenant_id",  precision: 38
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
   end
-
-  add_index "access_tokens", ["owner_id", "owner_type"], name: "idx_auth_tokens_of_user"
-  add_index "access_tokens", ["value", "owner_id", "owner_type"], name: "idx_value_auth_tokens_of_user", unique: true
 
   create_table "accounts", force: :cascade do |t|
     t.string   "org_name",                                                                           default: "",    null: false
@@ -42,8 +38,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "credit_card_partial_number",                      limit: 4
     t.date     "credit_card_expires_on"
     t.string   "credit_card_auth_code"
-    t.string   "payment_gateway_type"
-    t.string   "payment_gateway_options"
     t.boolean  "master"
     t.string   "billing_address_name"
     t.string   "billing_address_address1"
@@ -77,7 +71,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "credit_card_authorize_net_payment_profile_token"
     t.integer  "tenant_id",                                                 precision: 38
     t.string   "self_domain"
-    t.string   "service_preffix"
     t.string   "s3_prefix"
     t.integer  "prepared_assets_version",                                   precision: 38
     t.boolean  "sample_data"
@@ -97,23 +90,18 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.datetime "proxy_configs_conf_updated_at",                             precision: 6
     t.datetime "hosted_proxy_deployed_at",                                  precision: 6
     t.string   "po_number"
-    t.datetime "deleted_at",                                                precision: 6
     t.datetime "state_changed_at",                                          precision: 6
-    t.integer  "first_admin_id",                                            precision: 38
   end
 
   add_index "accounts", ["default_service_id"], name: "index_accounts_on_default_service_id"
-  add_index "accounts", ["domain", "deleted_at"], name: "index_accounts_on_domain_and_deleted_at"
   add_index "accounts", ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at"
   add_index "accounts", ["domain"], name: "index_accounts_on_domain", unique: true
   add_index "accounts", ["master"], name: "index_accounts_on_master", unique: true
   add_index "accounts", ["provider_account_id", "created_at"], name: "index_accounts_on_provider_account_id_and_created_at"
   add_index "accounts", ["provider_account_id", "state"], name: "index_accounts_on_provider_account_id_and_state"
   add_index "accounts", ["provider_account_id"], name: "index_accounts_on_provider_account_id"
-  add_index "accounts", ["self_domain", "deleted_at"], name: "index_accounts_on_self_domain_and_deleted_at"
   add_index "accounts", ["self_domain", "state_changed_at"], name: "index_accounts_on_self_domain_and_state_changed_at"
   add_index "accounts", ["self_domain"], name: "index_accounts_on_self_domain", unique: true
-  add_index "accounts", ["state", "deleted_at"], name: "index_accounts_on_state_and_deleted_at"
   add_index "accounts", ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at"
 
   create_table "alerts", force: :cascade do |t|
@@ -318,7 +306,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.text     "redirect_url"
     t.datetime "variable_cost_paid_until",             precision: 6
     t.text     "extra_fields"
-    t.boolean  "end_user_required"
     t.integer  "tenant_id",                            precision: 38
     t.string   "create_origin"
     t.datetime "first_traffic_at",                     precision: 6
@@ -990,7 +977,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "issuer_type",                                                    null: false
     t.text     "description"
     t.boolean  "approval_required",                              default: false, null: false
-    t.boolean  "end_user_required",                              default: false
     t.integer  "tenant_id",             precision: 38
     t.string   "system_name",                                                    null: false
     t.integer  "partner_id",            precision: 38
@@ -1036,17 +1022,14 @@ ActiveRecord::Schema.define(version: 20200420104331) do
 
   create_table "pricing_rules", force: :cascade do |t|
     t.integer  "metric_id",     precision: 38
-    t.integer  "min",           precision: 38,           default: 1,      null: false
+    t.integer  "min",           precision: 38,           default: 1,     null: false
     t.integer  "max",           precision: 38
-    t.decimal  "cost_per_unit", precision: 20, scale: 4, default: "0.0",  null: false
+    t.decimal  "cost_per_unit", precision: 20, scale: 4, default: "0.0", null: false
     t.datetime "created_at",    precision: 6
     t.datetime "updated_at",    precision: 6
     t.integer  "plan_id",       precision: 38
-    t.string   "plan_type",                              default: "Plan", null: false
     t.integer  "tenant_id",     precision: 38
   end
-
-  add_index "pricing_rules", ["plan_id", "plan_type"], name: "index_pricing_rules_on_plan_id_and_plan_type"
 
   create_table "profiles", force: :cascade do |t|
     t.integer  "account_id",          precision: 38,              null: false
@@ -1098,7 +1081,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.integer  "service_id",                                 precision: 38
     t.string   "endpoint"
     t.datetime "deployed_at",                                precision: 6
-    t.string   "api_backend"
     t.string   "auth_app_key",                                              default: "app_key"
     t.string   "auth_app_id",                                               default: "app_id"
     t.string   "auth_user_key",                                             default: "user_key"
@@ -1218,47 +1200,35 @@ ActiveRecord::Schema.define(version: 20200420104331) do
   add_index "service_tokens", ["service_id"], name: "index_service_tokens_on_service_id"
 
   create_table "services", force: :cascade do |t|
-    t.integer  "account_id",                     precision: 38,                     null: false
-    t.string   "name",                                          default: ""
-    t.text     "oneline_description"
+    t.integer  "account_id",                   precision: 38,                     null: false
+    t.string   "name",                                        default: ""
     t.text     "description"
-    t.text     "txt_api"
     t.text     "txt_support"
-    t.text     "txt_features"
-    t.datetime "created_at",                     precision: 6
-    t.datetime "updated_at",                     precision: 6
+    t.datetime "created_at",                   precision: 6
+    t.datetime "updated_at",                   precision: 6
     t.string   "logo_file_name"
     t.string   "logo_content_type"
-    t.integer  "logo_file_size",                 precision: 38
-    t.string   "state",                                                             null: false
-    t.boolean  "intentions_required",                           default: false
-    t.string   "draft_name",                                    default: ""
-    t.text     "infobar"
+    t.integer  "logo_file_size",               precision: 38
+    t.string   "state",                                                           null: false
+    t.boolean  "intentions_required",                         default: false
     t.text     "terms"
-    t.boolean  "display_provider_keys",                         default: false
-    t.string   "tech_support_email"
-    t.string   "admin_support_email"
-    t.string   "credit_card_support_email"
-    t.boolean  "buyers_manage_apps",                            default: true
-    t.boolean  "buyers_manage_keys",                            default: true
-    t.boolean  "custom_keys_enabled",                           default: true
-    t.string   "buyer_plan_change_permission",                  default: "request"
-    t.boolean  "buyer_can_select_plan",                         default: false
+    t.boolean  "buyers_manage_apps",                          default: true
+    t.boolean  "buyers_manage_keys",                          default: true
+    t.boolean  "custom_keys_enabled",                         default: true
+    t.string   "buyer_plan_change_permission",                default: "request"
+    t.boolean  "buyer_can_select_plan",                       default: false
     t.text     "notification_settings"
-    t.integer  "default_application_plan_id",    precision: 38
-    t.integer  "default_service_plan_id",        precision: 38
-    t.integer  "default_end_user_plan_id",       precision: 38
-    t.boolean  "end_user_registration_required",                default: true
-    t.integer  "tenant_id",                      precision: 38
-    t.string   "system_name",                                                       null: false
-    t.string   "backend_version",                               default: "1",       null: false
-    t.boolean  "mandatory_app_key",                             default: true
-    t.boolean  "buyer_key_regenerate_enabled",                  default: true
+    t.integer  "default_application_plan_id",  precision: 38
+    t.integer  "default_service_plan_id",      precision: 38
+    t.integer  "tenant_id",                    precision: 38
+    t.string   "system_name",                                                     null: false
+    t.string   "backend_version",                             default: "1",       null: false
+    t.boolean  "mandatory_app_key",                           default: true
+    t.boolean  "buyer_key_regenerate_enabled",                default: true
     t.string   "support_email"
-    t.boolean  "referrer_filters_required",                     default: false
-    t.string   "deployment_option",                             default: "hosted"
+    t.boolean  "referrer_filters_required",                   default: false
+    t.string   "deployment_option",                           default: "hosted"
     t.string   "kubernetes_service_link"
-    t.boolean  "act_as_product",                                default: false
   end
 
   add_index "services", ["account_id"], name: "idx_account_id"
@@ -1304,7 +1274,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.boolean  "can_create_service",                                             default: false,             null: false
     t.string   "spam_protection_level",                                          default: "none",            null: false
     t.integer  "tenant_id",                                       precision: 38
-    t.string   "end_users_switch"
     t.string   "multiple_applications_switch",                                                               null: false
     t.string   "multiple_users_switch",                                                                      null: false
     t.string   "finance_switch",                                                                             null: false
@@ -1331,7 +1300,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.boolean  "account_plans_ui_visible",                                       default: false
     t.boolean  "service_plans_ui_visible",                                       default: false
     t.string   "skip_email_engagement_footer_switch",                            default: "denied",          null: false
-    t.boolean  "end_user_plans_ui_visible",                                      default: false
     t.string   "web_hooks_switch",                                               default: "denied",          null: false
     t.string   "iam_tools_switch",                                               default: "denied",          null: false
     t.string   "require_cc_on_signup_switch",                                    default: "denied",          null: false
@@ -1498,7 +1466,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "email_verification_code"
     t.string   "title"
     t.text     "extra_fields"
-    t.string   "janrain_identifier"
     t.integer  "tenant_id",                                   precision: 38
     t.string   "cas_identifier"
     t.datetime "lost_password_token_generated_at",            precision: 6

@@ -10,23 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200420104331) do
+ActiveRecord::Schema.define(version: 20200629110238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "access_tokens", force: :cascade do |t|
-    t.bigint   "owner_id",                                null: false
-    t.string   "owner_type", limit: 255, default: "User", null: false
+    t.bigint   "owner_id",               null: false
     t.text     "scopes"
-    t.string   "value",      limit: 255,                  null: false
-    t.string   "name",       limit: 255,                  null: false
-    t.string   "permission", limit: 255,                  null: false
+    t.string   "value",      limit: 255, null: false
+    t.string   "name",       limit: 255, null: false
+    t.string   "permission", limit: 255, null: false
     t.bigint   "tenant_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["owner_id", "owner_type"], name: "idx_auth_tokens_of_user", using: :btree
-    t.index ["value", "owner_id", "owner_type"], name: "idx_value_auth_tokens_of_user", unique: true, using: :btree
   end
 
   create_table "accounts", force: :cascade do |t|
@@ -44,8 +41,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "credit_card_partial_number",                      limit: 4
     t.date     "credit_card_expires_on"
     t.string   "credit_card_auth_code",                           limit: 255
-    t.string   "payment_gateway_type",                            limit: 255
-    t.string   "payment_gateway_options",                         limit: 255
     t.boolean  "master"
     t.string   "billing_address_name",                            limit: 255
     t.string   "billing_address_address1",                        limit: 255
@@ -79,7 +74,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "credit_card_authorize_net_payment_profile_token", limit: 255
     t.bigint   "tenant_id"
     t.string   "self_domain",                                     limit: 255
-    t.string   "service_preffix",                                 limit: 255
     t.string   "s3_prefix",                                       limit: 255
     t.integer  "prepared_assets_version"
     t.boolean  "sample_data"
@@ -100,7 +94,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.datetime "hosted_proxy_deployed_at"
     t.string   "po_number",                                       limit: 255
     t.datetime "state_changed_at"
-    t.bigint   "first_admin_id"
     t.index ["default_service_id"], name: "index_accounts_on_default_service_id", using: :btree
     t.index ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at", using: :btree
     t.index ["domain"], name: "index_accounts_on_domain", unique: true, using: :btree
@@ -304,7 +297,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.text     "redirect_url"
     t.datetime "variable_cost_paid_until"
     t.text     "extra_fields"
-    t.boolean  "end_user_required"
     t.bigint   "tenant_id"
     t.string   "create_origin",            limit: 255
     t.datetime "first_traffic_at"
@@ -940,7 +932,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "issuer_type",           limit: 255,                                          null: false
     t.text     "description"
     t.boolean  "approval_required",                                          default: false, null: false
-    t.boolean  "end_user_required",                                          default: false
     t.bigint   "tenant_id"
     t.string   "system_name",           limit: 255,                                          null: false
     t.bigint   "partner_id"
@@ -983,15 +974,13 @@ ActiveRecord::Schema.define(version: 20200420104331) do
 
   create_table "pricing_rules", force: :cascade do |t|
     t.bigint   "metric_id"
-    t.bigint   "min",                                                default: 1,      null: false
+    t.bigint   "min",                                    default: 1,     null: false
     t.bigint   "max"
-    t.decimal  "cost_per_unit",             precision: 20, scale: 4, default: "0.0",  null: false
+    t.decimal  "cost_per_unit", precision: 20, scale: 4, default: "0.0", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint   "plan_id"
-    t.string   "plan_type",     limit: 255,                          default: "Plan", null: false
     t.bigint   "tenant_id"
-    t.index ["plan_id", "plan_type"], name: "index_pricing_rules_on_plan_id_and_plan_type", using: :btree
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -1043,7 +1032,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.bigint   "service_id"
     t.string   "endpoint",                      limit: 255
     t.datetime "deployed_at"
-    t.string   "api_backend",                   limit: 255
     t.string   "auth_app_key",                  limit: 255,  default: "app_key"
     t.string   "auth_app_id",                   limit: 255,  default: "app_id"
     t.string   "auth_user_key",                 limit: 255,  default: "user_key"
@@ -1157,47 +1145,35 @@ ActiveRecord::Schema.define(version: 20200420104331) do
   end
 
   create_table "services", force: :cascade do |t|
-    t.bigint   "account_id",                                                     null: false
-    t.string   "name",                           limit: 255, default: ""
-    t.text     "oneline_description"
+    t.bigint   "account_id",                                                   null: false
+    t.string   "name",                         limit: 255, default: ""
     t.text     "description"
-    t.text     "txt_api"
     t.text     "txt_support"
-    t.text     "txt_features"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "logo_file_name",                 limit: 255
-    t.string   "logo_content_type",              limit: 255
+    t.string   "logo_file_name",               limit: 255
+    t.string   "logo_content_type",            limit: 255
     t.integer  "logo_file_size"
-    t.string   "state",                          limit: 255,                     null: false
-    t.boolean  "intentions_required",                        default: false
-    t.string   "draft_name",                     limit: 255, default: ""
-    t.text     "infobar"
+    t.string   "state",                        limit: 255,                     null: false
+    t.boolean  "intentions_required",                      default: false
     t.text     "terms"
-    t.boolean  "display_provider_keys",                      default: false
-    t.string   "tech_support_email",             limit: 255
-    t.string   "admin_support_email",            limit: 255
-    t.string   "credit_card_support_email",      limit: 255
-    t.boolean  "buyers_manage_apps",                         default: true
-    t.boolean  "buyers_manage_keys",                         default: true
-    t.boolean  "custom_keys_enabled",                        default: true
-    t.string   "buyer_plan_change_permission",   limit: 255, default: "request"
-    t.boolean  "buyer_can_select_plan",                      default: false
+    t.boolean  "buyers_manage_apps",                       default: true
+    t.boolean  "buyers_manage_keys",                       default: true
+    t.boolean  "custom_keys_enabled",                      default: true
+    t.string   "buyer_plan_change_permission", limit: 255, default: "request"
+    t.boolean  "buyer_can_select_plan",                    default: false
     t.text     "notification_settings"
     t.bigint   "default_application_plan_id"
     t.bigint   "default_service_plan_id"
-    t.bigint   "default_end_user_plan_id"
-    t.boolean  "end_user_registration_required",             default: true
     t.bigint   "tenant_id"
-    t.string   "system_name",                    limit: 255,                     null: false
-    t.string   "backend_version",                limit: 255, default: "1",       null: false
-    t.boolean  "mandatory_app_key",                          default: true
-    t.boolean  "buyer_key_regenerate_enabled",               default: true
-    t.string   "support_email",                  limit: 255
-    t.boolean  "referrer_filters_required",                  default: false
-    t.string   "deployment_option",              limit: 255, default: "hosted"
-    t.string   "kubernetes_service_link",        limit: 255
-    t.boolean  "act_as_product",                             default: false
+    t.string   "system_name",                  limit: 255,                     null: false
+    t.string   "backend_version",              limit: 255, default: "1",       null: false
+    t.boolean  "mandatory_app_key",                        default: true
+    t.boolean  "buyer_key_regenerate_enabled",             default: true
+    t.string   "support_email",                limit: 255
+    t.boolean  "referrer_filters_required",                default: false
+    t.string   "deployment_option",            limit: 255, default: "hosted"
+    t.string   "kubernetes_service_link",      limit: 255
     t.index ["account_id"], name: "idx_account_id", using: :btree
     t.index ["system_name", "account_id"], name: "index_services_on_system_name_and_account_id_and_deleted_at", unique: true, using: :btree
   end
@@ -1242,7 +1218,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.boolean  "can_create_service",                              default: false,             null: false
     t.string   "spam_protection_level",               limit: 255, default: "none",            null: false
     t.bigint   "tenant_id"
-    t.string   "end_users_switch",                    limit: 255
     t.string   "multiple_applications_switch",        limit: 255,                             null: false
     t.string   "multiple_users_switch",               limit: 255,                             null: false
     t.string   "finance_switch",                      limit: 255,                             null: false
@@ -1269,7 +1244,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.boolean  "account_plans_ui_visible",                        default: false
     t.boolean  "service_plans_ui_visible",                        default: false
     t.string   "skip_email_engagement_footer_switch", limit: 255, default: "denied",          null: false
-    t.boolean  "end_user_plans_ui_visible",                       default: false
     t.string   "web_hooks_switch",                    limit: 255, default: "denied",          null: false
     t.string   "iam_tools_switch",                    limit: 255, default: "denied",          null: false
     t.string   "require_cc_on_signup_switch",         limit: 255, default: "denied",          null: false
@@ -1428,7 +1402,6 @@ ActiveRecord::Schema.define(version: 20200420104331) do
     t.string   "email_verification_code",          limit: 255
     t.string   "title",                            limit: 255
     t.text     "extra_fields"
-    t.string   "janrain_identifier",               limit: 255
     t.bigint   "tenant_id"
     t.string   "cas_identifier",                   limit: 255
     t.datetime "lost_password_token_generated_at"
