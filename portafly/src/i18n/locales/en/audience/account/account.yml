@@ -1,7 +1,7 @@
 ---
 # Accounts > Account overview
 
-page_title: Accounts
+page_title: Account
 page_title_description: Page title of the subsection for Accounts Overview
 
 # Top area
@@ -36,13 +36,12 @@ create_application_button_description: Button to create an application
 create_application_button_aria_label: Create application
 create_application_button_aria_label_description: Aria label for create application button
 
-applications_filter: Filter by name
+applications_filter: Name
 applications_filter_description: Dropdown list to filter applications by specified option
 applications_filter_options:
   by_name: Name
   by_product: Product
   by_plan: Plan
-  by_created_on: Created on
   by_state: State
 applications_filter_field: "Filter by {{filter_option}}"
 applications_filter_field_description: Filter by typeahead a text input.
