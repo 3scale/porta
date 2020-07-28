@@ -33,22 +33,36 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
 }
 
 const getPathParameters = (path) => (
-  Object.keys(path).reduce((params, item) => {
-    params[item] = path[item].parameters
-    return params
-  }, {})
+  Object.keys(path).reduce((params, item) => (
+    {
+      ...params,
+      [item]: item === 'parameters'
+        ? path.parameters
+        : path[item].parameters
+    }
+  ), {})
 )
 
-const injectParametersToPath = (path, pathParameters, accountData) => (
-  Object.keys(pathParameters).reduce((parameters, item) => {
-    parameters[item] = {
-      ...path[item],
-      parameters: pathParameters[item]
-        ? pathParameters[item].map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
-        : []
+const injectParametersField = (key, value, accountData) => {
+  const parametersArray = value.map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
+  if (key === 'parameters') {
+    return parametersArray
+  } else {
+    return {
+      ...value,
+      parameters: parametersArray
     }
-    return parameters
-  }, {})
+  }
+}
+
+const injectParametersToPath = (path, pathParameters, accountData) => (
+  Object.keys(pathParameters).reduce((parameters, item) => (
+    {
+      ...parameters,
+      [item]: pathParameters[item]
+        ? injectParametersField(item, pathParameters[item], accountData)
+        : path[item]
+    }), {})
 )
 
 const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
