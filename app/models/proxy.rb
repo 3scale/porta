@@ -48,10 +48,6 @@ class Proxy < ApplicationRecord
     rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
   }.freeze
 
-  # Remove api_backend
-  def self.columns
-    super.reject {|column| /\Aapi_backend\Z/ =~ column.name }
-  end
   reset_column_information
 
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }

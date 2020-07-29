@@ -119,11 +119,6 @@ class AccessToken < ApplicationRecord
 
   attr_readonly :value
 
-  # will be removed once deployed
-  def self.columns
-    super.reject { |column| column.name == 'owner_type' }
-  end
-
   def self.find_from_value(value)
     find_by(value: value.to_s.scrub)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
