@@ -22,10 +22,6 @@ class ServiceCreator
   def call(params = {})
     call!(params)
   rescue ActiveRecord::RecordInvalid
-    return if !proxy || proxy.errors[:endpoint].none? { |message| message =~ /is too long/ }
-
-    @service.errors.add(:system_name, :invalid_for_proxy_endpoints)
-
     false
   end
 
