@@ -10,11 +10,19 @@ declare -a packages=(instantclient-basiclite instantclient-sdk instantclient-odb
 
 for package in "${packages[@]}"; do
   zip=${package}-${oracle_version}.zip
-  wget "${oracle_otn}/${zip}" -O "vendor/oracle/${zip}"
+  file="vendor/oracle/${zip}"
+
+  if [ -f "${file}" ]; then
+    echo "[OK] ${file} already present"
+  else
+    echo "[INFO] Downloading ${zip} from Oracle servers"
+    wget "${oracle_otn}/${zip}" -O "${file}"
+  fi
+
   # using sudo due to `/opt/oracle/` i
   # set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
-  unzip "vendor/oracle/${zip}" -d /opt/oracle
-  rm -rf "vendor/oracle/${zip}"
+  unzip "${file}" -d /opt/oracle
+  rm -rf "${file}"
 done
 
 # hack for system-builder ENV

@@ -24,7 +24,7 @@ ADD config/examples/*.yml config/
 ADD config/oracle/odbc*.ini /etc/
 
 USER root
-RUN if [ "X$DB" = "Xoracle" ]; then ./script/oracle/install-instantclient-packages.sh; fi
+RUN if [ "X${DB}" = "Xoracle" ]; then ./script/oracle/install-instantclient-packages.sh; fi
 
 # Needed to disable webpack compiling
 RUN sed -i 's/compile: true/compile: false/' config/webpacker.yml
