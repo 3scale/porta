@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200629110238) do
+ActiveRecord::Schema.define(version: 20200629110740) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                 null: false
@@ -468,14 +468,6 @@ ActiveRecord::Schema.define(version: 20200629110238) do
     t.text     "metadata",    limit: 65535
     t.index ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id", using: :btree
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id", using: :btree
-  end
-
-  create_table "end_user_plans", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
-    t.bigint   "service_id", null: false
-    t.string   "name",       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.bigint   "tenant_id"
   end
 
   create_table "event_store_events", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
