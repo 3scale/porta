@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200629110238) do
+ActiveRecord::Schema.define(version: 20200629110740) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -491,14 +491,6 @@ ActiveRecord::Schema.define(version: 20200629110238) do
 
   add_index "deleted_objects", ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id"
   add_index "deleted_objects", ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
-
-  create_table "end_user_plans", force: :cascade do |t|
-    t.integer  "service_id", precision: 38, null: false
-    t.string   "name",                      null: false
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
-    t.integer  "tenant_id",  precision: 38
-  end
 
   create_table "event_store_events", force: :cascade do |t|
     t.string   "stream",                     null: false
