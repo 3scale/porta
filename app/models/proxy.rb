@@ -27,6 +27,7 @@ class Proxy < ApplicationRecord
 
   has_one :proxy_config_affecting_change, dependent: :delete
   private :proxy_config_affecting_change
+  after_commit :create_proxy_config_affecting_change, on: :create
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
@@ -649,6 +650,7 @@ class Proxy < ApplicationRecord
   end
 
   def create_proxy_config_affecting_change(*)
+    return unless persisted?
     super
   rescue ActiveRecord::RecordNotUnique
     reload.send(:proxy_config_affecting_change)

@@ -648,9 +648,12 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'affecting change' do
-    refute ProxyConfigAffectingChange.find_by(proxy_id: @proxy.id)
-    @proxy.affecting_change_history
-    assert ProxyConfigAffectingChange.find_by(proxy_id: @proxy.id)
+    proxy = FactoryBot.create(:simple_proxy)
+    assert ProxyConfigAffectingChange.find_by(proxy_id: proxy.id)
+
+    assert_no_change(of: -> { ProxyConfigAffectingChange.where(proxy_id: proxy.id).count }) do
+      proxy.affecting_change_history
+    end
   end
 
   test '#pending_affecting_changes?' do
@@ -682,7 +685,9 @@ class ProxyTest < ActiveSupport::TestCase
     end
 
     service = FactoryBot.create(:simple_service)
-    proxy = ProxyWithFiber.find(service.proxy.id)
+    proxy_id = service.proxy.id
+    proxy = ProxyWithFiber.find(proxy_id)
+    ProxyConfigAffectingChange.where(proxy_id: proxy_id).delete_all
 
     f1 = Fiber.new { proxy.affecting_change_history }
     f2 = Fiber.new { proxy.affecting_change_history }

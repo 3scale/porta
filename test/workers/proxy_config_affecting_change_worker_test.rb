@@ -15,7 +15,7 @@ class ProxyConfigAffectingChangeWorkerTest < ActiveSupport::TestCase
     event = ProxyConfigs::AffectingObjectChangedEvent.create_and_publish!(proxy, mock(id: 123))
 
     affecting_change_history = mock
-    Proxy.any_instance.expects(:create_proxy_config_affecting_change).returns(affecting_change_history)
+    Proxy.any_instance.expects(:affecting_change_history).returns(affecting_change_history)
     affecting_change_history.expects(:touch)
 
     worker.perform(event.event_id)
