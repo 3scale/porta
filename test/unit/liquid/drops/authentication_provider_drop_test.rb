@@ -9,7 +9,10 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
     @drop = Drops::AuthenticationProvider.new(@authentication_provider)
 
     @drop.context = context = Liquid::Context.new
-    context.registers.merge!(request: @request = stub('request', scheme: 'https', query_parameters: {}))
+
+    request = ActionDispatch::TestRequest.create
+    request.stubs(scheme:'https')
+    context.registers.merge!(request: @request = request)
   end
 
   test '#name' do
@@ -32,7 +35,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
   end
 
   test '#authorize_url' do
-    domain = @authentication_provider.account.domain
+    domain = @authentication_provider.account.external_domain
 
     authorize_url = @drop.authorize_url
 
@@ -52,7 +55,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
   end
 
   test '#callback_url' do
-    domain = @authentication_provider.account.domain
+    domain = @authentication_provider.account.external_domain
 
     callback_url = @drop.callback_url
     assert_equal "https://#{domain}/auth/#{@authentication_provider.system_name}/callback", callback_url

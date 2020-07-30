@@ -1,7 +1,13 @@
 module ThreeScale
   module Domain
+    STANDARD_HTTP_PORTS = [80, 443]
+
     def self.current_endpoint(request, host = request.host)
-      "#{request.scheme}://#{host}:#{request.port}"
+      if STANDARD_HTTP_PORTS.exclude?(request.port.to_i)
+        "#{request.scheme}://#{host}:#{request.port}"
+      else
+        "#{request.scheme}://#{host}"
+      end
     end
 
     def self.callback_endpoint(request, account, host = request.host)

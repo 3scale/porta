@@ -25,7 +25,13 @@ class ThreeScale::OAuth2::KeycloakClientTest < ActiveSupport::TestCase
   end
 
   test '#authenticate_options' do
-    request = mock('request', url: 'http://example.com/path?foo=bar&code=123456', real_host: 'example.net')
+    env = {
+      'HTTP_HOST' => 'example.net',
+      'QUERY_STRING' => 'foo=bar&code=123456',
+      'PATH_INFO' => '/path'
+    }
+    request = ActionDispatch::TestRequest.create env
+    request.request_uri = 'http://example.net/path?foo=bar&code=123456'
 
     options = @oauth2.authenticate_options(request)
 
