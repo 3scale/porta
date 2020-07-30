@@ -9,13 +9,13 @@ class Master::Api::DomainController < Master::Api::BaseController
   self.access_token_scopes = :account_management
 
   def show
-    respond_with( domain_info)
+    respond_with(domain_info)
   end
 
   protected
 
   def domain
-    ThreeScale::DevDomain.strip params.require(:id)
+    ThreeScale::DomainSubstitution::Substitutor.to_internal(params.require(:id).to_s)
   end
 
   def domain_info

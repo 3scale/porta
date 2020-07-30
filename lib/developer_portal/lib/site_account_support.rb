@@ -88,8 +88,7 @@ module SiteAccountSupport
     prepend MasterDomainWildcard
 
     def initialize(request)
-      @request = request.try!(:dup)
-      @request.try!(:extend, ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
+      @request = request
     end
 
     def find_provider
