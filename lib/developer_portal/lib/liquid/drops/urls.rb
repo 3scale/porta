@@ -13,7 +13,6 @@ module Liquid
       def initialize(provider, request=nil)
         @provider = provider
         @request = request
-        @request.extend(ThreeScale::DevDomain) if ThreeScale::DevDomain.enabled?
       end
 
       example %{
@@ -192,10 +191,9 @@ module Liquid
       # needed by all the *_url helpers
       def default_url_options
         if request
-          host = request.try(:real_host) || request.host
-          { port: request.port, protocol: request.protocol, host: host }
+          { port: request.port, protocol: request.protocol, host: request.host }
         else
-          { protocol: 'https', host: provider.domain }
+          { protocol: 'https', host: provider.external_domain }
         end
       end
     end

@@ -63,7 +63,7 @@ class Csv::Exporter
                "All time (generated #{Time.zone.now})"
              end
 
-    ["#{@account.org_name}/#{@account.domain} - All #{@target.try!(:humanize)} / #{period}"]
+    ["#{@account.org_name}/#{@account.external_domain} - All #{@target.try!(:humanize)} / #{period}"]
   end
 
 end
