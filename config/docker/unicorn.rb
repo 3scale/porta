@@ -32,6 +32,7 @@ worker_processes detect_unicorn_workers.call
 
 # listen to the default port
 listen Integer(ENV['PORT'] || 3000)
+listen ENV.fetch('PROMETHEUS_EXPORTER_PORT', 9394).to_i
 
 stderr_path '/dev/stderr'
 stdout_path '/dev/stdout'

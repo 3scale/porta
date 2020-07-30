@@ -111,5 +111,22 @@ class DomainConstraintsTest < ActiveSupport::TestCase
       assert MasterDomainConstraint.matches?(request)
     end
   end
-end
 
+  class PortConstraintTest < ActiveSupport::TestCase
+    def setup
+      @constraint = PortConstraint.new(9090)
+    end
+
+    test 'accepts with correct port' do
+      request = ActionDispatch::TestRequest.create
+      request.host = 'domain.example.com:9090'
+      assert @constraint.matches?(request)
+    end
+
+    test 'rejects with incorrect port' do
+      request = ActionDispatch::TestRequest.create
+      request.host = 'domain.example.com:9395'
+      refute @constraint.matches?(request)
+    end
+  end
+end

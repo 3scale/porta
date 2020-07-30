@@ -192,9 +192,6 @@ module System
     config.three_scale.features = ActiveSupport::OrderedOptions.new
     config.three_scale.features.merge!(try_config_for(:features) || {})
 
-    config.three_scale.prometheus = ActiveSupport::OrderedOptions.new
-    config.three_scale.prometheus.merge!(try_config_for(:prometheus) || {})
-
     config.three_scale.message_bus = ActiveSupport::OrderedOptions.new
     config.three_scale.message_bus.merge!(try_config_for(:message_bus) || {})
 
