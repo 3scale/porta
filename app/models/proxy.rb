@@ -536,11 +536,9 @@ class Proxy < ApplicationRecord
     super
   end
 
-  def find_or_create_proxy_config_affecting_change
+  def affecting_change_history
     proxy_config_affecting_change || create_proxy_config_affecting_change
   end
-  alias affecting_change_history find_or_create_proxy_config_affecting_change
-  private :find_or_create_proxy_config_affecting_change
 
   def pending_affecting_changes?
     return unless apicast_configuration_driven?
