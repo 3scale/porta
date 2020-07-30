@@ -111,7 +111,7 @@ class Admin::ApiDocs::BaseController < FrontendController
           path: "#{admin_api_docs_service_path(api_docs_service.system_name)}.{format}"
         }
       ],
-      basePath: "#{request.protocol}#{request.host}"
+      basePath: "#{request.protocol}#{request.host_with_port}"
     }
   end
 end
