@@ -102,8 +102,8 @@ module ThreeScale
             partner: extra_fields['partner'],
 
             account_id: @account.id,
-            domain: @account.domain,
-            self_domain: @account.self_domain
+            domain: @account.internal_domain,
+            self_domain: @account.internal_self_domain
         }
       end
 

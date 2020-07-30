@@ -1,19 +1,12 @@
 module ThreeScale
   module Domain
     def self.current_endpoint(request, host = request.host)
-      host_and_port = if Rails.env.development?
-                        request.host_with_port("#{host}:#{request.port}")
-                      elsif Rails.env.preview?
-                        request.respond_to?(:real_host) ? request.real_host(host) : host
-                      else
-                        host
-                      end
-      "#{request.scheme}://#{host_and_port}"
+      "#{request.scheme}://#{host}:#{request.port}"
     end
 
     def self.callback_endpoint(request, account, host = request.host)
       endpoint = if account.master?
-                   current_endpoint(request, account.domain) + '/master/devportal'.freeze
+                   current_endpoint(request, account.external_domain) + '/master/devportal'.freeze
                  else
                    current_endpoint(request, host)
       end + '/auth'.freeze

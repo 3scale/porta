@@ -54,7 +54,7 @@ module Liquid
 
       desc "Domain of your developer portal."
       def domain
-        @model.domain
+        @model.external_domain
       end
 
       desc "Returns timezone that you use. Can be changed in your [administration dashboard][provider-account-edit]."
