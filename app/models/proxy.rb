@@ -212,11 +212,13 @@ class Proxy < ApplicationRecord
     def generate(name)
       template = config.fetch(name.try(:to_sym)) { return }
 
-      format template, {
+      uri = format template, {
         system_name: service.parameterized_system_name, account_id: service.account_id,
         tenant_name: provider_subdomain,
         env: proxy.proxy_env, port: proxy.proxy_port
       }
+
+      UriShortener.call(uri).to_s
     end
   end
 

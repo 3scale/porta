@@ -168,6 +168,19 @@ class ProxyTest < ActiveSupport::TestCase
       assert proxy.production_endpoint
     end
 
+    test 'generates shortened URI label endpoints' do
+      service = FactoryBot.create(:simple_service, deployment_option: 'hosted', system_name: 'long-system-name-that-will-cause-invalid-host', proxy: nil)
+
+      proxy_config = System::Application.config.three_scale.sandbox_proxy
+      proxy_config.expects(:fetch).with(:port).at_least_once.returns('8080')
+      proxy_config.expects(:fetch).with(:apicast_staging_endpoint).at_least_once.returns('http://%{system_name}-needs-to-be-63-chars-or-shorter.staging.apicast.dev:8080')
+      proxy_config.expects(:fetch).with(:apicast_production_endpoint).at_least_once.returns('http://%{system_name}-needs-to-be-63-chars-or-shorter.production.apicast.dev:8080')
+
+      proxy = FactoryBot.create(:proxy, service: service, apicast_configuration_driven: true)
+      assert_equal 'http://long-system-name-that-will-cause-invalid-host-needs-to-4207987.staging.apicast.dev:8080', proxy.sandbox_endpoint
+      assert_equal 'http://long-system-name-that-will-cause-invalid-host-needs-to-4207987.production.apicast.dev:8080', proxy.endpoint
+    end
+
     def test_deployable
       assert_predicate Service.new(deployment_option: 'hosted').build_proxy, :deployable?
       assert_predicate Service.new(deployment_option: 'self_managed').build_proxy, :deployable?
