@@ -16,9 +16,11 @@
     {{ '/css/bootstrap.css' | stylesheet_link_tag }}
     {% cdn_asset /font-awesome/4.3.0/css/font-awesome.css %}
 
-    {% cdn_asset /jquery/1.7.1/jquery.min.js %}
+    {% cdn_asset /jquery/3.5.0/jquery.min.js %}
+
     {{ '/javascripts/bootstrap.min.js' | javascript_include_tag }}
-    {{ '/javascripts/3scale.js' | javascript_include_tag }}
+    {{ '/javascripts/vendor/colorbox/jquery.colorbox-patched.js' | javascript_include_tag }}
+    {{ '/javascripts/3scale_v2.js' | javascript_include_tag }}
     {{ '/javascripts/excanvas.compiled.js' | javascript_include_tag }}
 
     {{ content_of.stylesheets | html_safe }}
