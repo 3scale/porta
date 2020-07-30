@@ -25,7 +25,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
   end
 
   test '#authenticate_options' do
-    request = mock
+    request = ActionDispatch::TestRequest.create
     ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri.expects(:call).with(@oauth2, request)
     @oauth2.authenticate_options(request)
   end
@@ -70,8 +70,13 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
       # Why do we need to expect reading the scheme if it is not used
       # Example provider will be accessed with HTTP and master with HTTPS
       # The redirect URI does no convey this information at all
-      uri = URI('http://example.net/path?plan_id=1&code=12456')
-      request = mock('request', scheme: uri.scheme, host: uri.host, params: Rack::Utils.parse_nested_query(uri.query))
+      env = {
+        'HTTP_HOST' => 'example.net',
+        'QUERY_STRING' => 'plan_id=1&code=12456',
+        'PATH_INFO' => '/path'
+      }
+      request = ActionDispatch::TestRequest.create env
+
       assert_equal "http://#{master_account.admin_domain}/auth/#{authentication_provider.system_name}/callback?plan_id=1&self_domain=example.net", RedirectUri.call(oauth2, request)
     end
   end
@@ -134,7 +139,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
         expires_in:          900,
         'not-before-policy': 0
       }
-      request = mock('request')
+      request = ActionDispatch::TestRequest.create
       request.expects(:params).at_least_once.returns(request_params)
       request.expects(:session).at_least_once.returns(state: 'keycloak-auth-implicit-flow-3scale')
 

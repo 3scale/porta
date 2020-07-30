@@ -11,7 +11,7 @@ module System
         model = Account.where(state: 'approved')
 
         master, provider = master_or_provider(model, domain)
-        developer = model.exists?(domain: DomainSubstitiondomain)
+        developer = model.exists?(domain: domain)
 
         SystemInfo.new(master, provider, developer).freeze
       end
