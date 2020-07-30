@@ -12,7 +12,7 @@
     });
 
     // Show form again, if it was hidden because of reached limit.
-    if (table.find("tr").size() < <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
+    if (table.find("tr").length < <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
       container.enableSwitch();
     }
   });
