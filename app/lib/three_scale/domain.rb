@@ -1,12 +1,14 @@
 module ThreeScale
   module Domain
-    STANDARD_HTTP_PORTS = [80, 443]
+    STANDARD_HTTP_PORTS = [80, 443].freeze
 
     def self.current_endpoint(request, host = request.host)
-      if STANDARD_HTTP_PORTS.exclude?(request.port.to_i)
-        "#{request.scheme}://#{host}:#{request.port}"
+      scheme = request.scheme
+      port = request.port.to_i
+      if STANDARD_HTTP_PORTS.exclude?(port)
+        "#{scheme}://#{host}:#{port}"
       else
-        "#{request.scheme}://#{host}"
+        "#{scheme}://#{host}"
       end
     end
 
