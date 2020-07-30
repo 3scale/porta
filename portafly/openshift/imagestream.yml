@@ -16,7 +16,7 @@ spec:
       openshift.io/display-name: amp-portafly master
     from:
       kind: DockerImage
-      name: ${PORTAFLY_IMAGE}
+      name: quay.io/3scale/portafly:latest
     generation: null
     importPolicy:
       insecure: false
