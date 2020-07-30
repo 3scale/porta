@@ -10,7 +10,7 @@ module Liquid
       include Liquid::Filters::Base
 
       THREESCALE_STYLESHEETS = %w[legacy/stats plans_widget.css active-docs/application.css stats.css].freeze
-      THREESCALE_JAVASCRIPTS = %w[buyer/1/analytics plans_widget.js active-docs/application.js stats.js].freeze
+      THREESCALE_JAVASCRIPTS = %w[buyer/1/analytics plans_widget.js plans_widget_v2.js active-docs/application.js stats.js].freeze
       THREESCALE_WEBPACK_PACKS = %w[stats.js active_docs.js].freeze
       THREESCALE_IMAGES      = %w[spinner.gif tick.png cross.png].freeze
 
