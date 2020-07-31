@@ -735,14 +735,14 @@ class ProxyTest < ActiveSupport::TestCase
       end
     end
 
-    test 'tracks changes on all attributes except lock_version' do
+    test 'does not track changes on all attributes' do
       with_proxy_config_affecting_changes_tracker do |tracker|
         proxy = FactoryBot.create(:simple_proxy)
         tracker.flush
         tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy)
         refute tracker.tracking?(tracked_object)
 
-        proxy.update(
+        tracked_changes = {
           endpoint: 'https://new-endpoint.test',
           sandbox_endpoint: '',
           deployed_at: 10.minutes.ago,
@@ -767,13 +767,26 @@ class ProxyTest < ActiveSupport::TestCase
           oauth_login_url: 'http://oidc-server/login',
           oidc_issuer_endpoint: 'http://oidc-server/auth/realm',
           authentication_method: 'oidc',
-          policies_config: '[{"name":"alaska","version":"1","configuration":{}}]')
+          policies_config: '[{"name":"alaska","version":"1","configuration":{}}]'
+        }
+
+        proxy.update(tracked_changes)
         assert tracker.tracking?(tracked_object)
 
         tracker.flush
 
-        proxy.lock_version = 2
-        refute tracker.tracking?(tracked_object)
+        untracked_changes = {
+          lock_version: 2,
+          api_test_path: '/new-path',
+          api_test_success: !!!proxy.api_test_success
+        }
+
+        untracked_changes.each do |attr_name, value|
+          proxy[attr_name] = value
+          refute tracker.tracking?(tracked_object)
+          proxy.reload
+          tracker.flush
+        end
       end
     end
 
