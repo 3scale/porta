@@ -10,7 +10,7 @@ class Proxy < ApplicationRecord
   include GatewaySettings::ProxyExtension
   include ProxyConfigAffectingChanges::ModelExtension
 
-  define_proxy_config_affecting_attributes except: %i[updated_at lock_version]
+  define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
 
