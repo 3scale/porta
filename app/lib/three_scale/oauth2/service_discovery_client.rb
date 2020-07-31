@@ -84,7 +84,7 @@ module ThreeScale
         private
 
         def self_domain
-          request.try(:real_host).presence || request.host
+          request.host
         end
 
         def callback_account
@@ -92,7 +92,7 @@ module ThreeScale
         end
 
         def host
-          Account.master.self_domain
+          Account.master.external_self_domain
         end
 
         attr_reader :client, :request

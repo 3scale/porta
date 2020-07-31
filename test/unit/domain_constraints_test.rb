@@ -2,10 +2,6 @@ require 'test_helper'
 
 class DomainConstraintsTest < ActiveSupport::TestCase
 
-  def setup
-    ThreeScale::DevDomain.stubs(enabled?: false)
-  end
-
   class BuyerDomainConstraintsTest < DomainConstraintsTest
     setup do
       ThreeScale.config.stubs(tenant_mode: 'multitenant')
