@@ -10,8 +10,12 @@ resource 'AuthenticationProvider' do
                       authorize_url: 'http://authorize_url', updated_at: Time.now)
   end
   let(:resource) do
-    fake_request = OpenStruct.new(host: authentication_provider.account.domain, scheme: 'https', query_parameters: {})
-    OauthFlowPresenter.new(authentication_provider, fake_request)
+    env = {
+      'HTTPS' => 'on',
+      'HTTP_HOST' => authentication_provider.account.internal_domain
+    }
+    request = ActionDispatch::TestRequest.create(env)
+    OauthFlowPresenter.new(authentication_provider, request)
   end
   let(:domain) { resource.account.domain }
   let(:system_name) { resource.system_name }

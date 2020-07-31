@@ -34,9 +34,9 @@ begin
       row << p.emails.first
       row << "#{p.users.first.first_name} #{p.users.first.last_name}"
       row << p.billing_address_phone
-      row << p.domain
+      row << p.external_domain
       row << p.created_at
-      row << ((p.domain && p.domain.ends_with?(".3scale.net")) ? "0" : "1")
+      row << (p.internal_domain.present? && p.internal_domain.ends_with?("." + ThreeScale.config.superdomain)) ? "0" : "1"
       row << days_since(p.created_at)
 
       ## do the 3 rows that have to do with buyer_accounts in one traversal

@@ -1,6 +1,5 @@
 base: &default
   superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
-  dev_domain: <%= ENV['THREESCALE_DEV_DOMAIN'] == '1' %>
   apicast_internal_host_regexp: '\Asystem-(.*)\Z'
   secure_cookie: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
   force_ssl: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
@@ -37,7 +36,6 @@ base: &default
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
   onpremises: true
-  dev_gtld: <%= ENV.fetch('DEV_GTLD', 'localhost') %>
   active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
   janitor_worker_enabled: true
   billing_canaries:

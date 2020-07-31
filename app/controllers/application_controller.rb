@@ -1,8 +1,4 @@
 class ApplicationController < ActionController::Base
-  if ThreeScale::DevDomain.enabled?
-    include ThreeScale::DevDomain
-  end
-
   include AuthenticatedSystem
   include AccessControl
   include InheritedResources::DSL
@@ -217,31 +213,6 @@ class ApplicationController < ActionController::Base
     # to cut the action processing if this is used as a last
     # call of a before_action
     false
-  end
-
-  def target_host(provider)
-    return target_host_preview(provider) if Rails.env.preview?
-
-    dev_domain = ThreeScale.config.dev_gtld
-    if request.host.ends_with?(".#{dev_domain}")
-      "#{provider.admin_domain}.#{dev_domain}:#{request.port}"
-    else
-      provider.admin_domain
-    end
-  end
-
-  def target_host_preview(provider)
-    preview = request_target_host.match(/(preview\d+)/).try(:[], 0)
-    provider.admin_domain.sub(/\.3scale\.net\z/, ".#{preview}.#{ThreeScale.config.superdomain}")
-  end
-
-  def request_target_host
-    x_forwarded_for_domain = request.headers['X-Forwarded-For-Domain']
-    if Rails.env.preview? && x_forwarded_for_domain
-      request.host_with_port.sub(request.host, x_forwarded_for_domain)
-    else
-      request.host_with_port
-    end
   end
 
   def safe_return_to(url)

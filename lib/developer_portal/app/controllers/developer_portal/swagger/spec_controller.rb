@@ -15,7 +15,7 @@ class DeveloperPortal::Swagger::SpecController < DeveloperPortal::BaseController
     respond_with({
       swaggerVersion: "1.2",
       apis: apis.map!{ |service| swagger_spec_for(service) },
-      basePath: "#{request.protocol}#{request_target_host}"
+      basePath: "#{request.protocol}#{request.host}"
     })
   end
 

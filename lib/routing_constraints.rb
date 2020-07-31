@@ -22,8 +22,6 @@ module ProviderDomainConstraint
   module_function
 
   def matches?(request)
-    request.extend(ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
-
     with_deleted = AuthenticatedSystem::Request.new(request).zync?
     Account.tenants.without_deleted(!with_deleted).exists?(self_domain: request.internal_host)
   end
@@ -33,7 +31,6 @@ module MasterDomainConstraint
   module_function
 
   def matches?(request)
-    request.extend(ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
     return true if ThreeScale.master_on_premises?
 
     master = Account.master

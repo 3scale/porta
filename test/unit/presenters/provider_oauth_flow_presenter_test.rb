@@ -6,8 +6,7 @@ class ProviderOAuthFlowPresenterTest < ActiveSupport::TestCase
     provider = FactoryBot.build_stubbed(:simple_provider, self_domain: 'example.com')
     authentication_provider = AuthenticationProvider::Auth0.new(account: provider, kind: 'auth0', system_name: 'auth0_abc123')
 
-    request = stubs(:request)
-    request.stubs(scheme: 'http')
+    request = ActionDispatch::TestRequest.create
     @presenter = ProviderOauthFlowPresenter.new(authentication_provider, request, provider.self_domain)
   end
 

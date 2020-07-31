@@ -28,8 +28,9 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-flow-type-key: &flow-typed-cache-key flow-typed-{{ checksum "yarn.lock" }}-4
-npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-4
+flow-type-key: &flow-typed-cache-key flow-typed-{{ checksum "yarn.lock" }}-5
+npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-5
+bundle-cache-key: &bundle-cache-key v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
 save-flow-typed-cache: &save-flow-typed-cache
   save_cache:
@@ -74,7 +75,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby25: &system-builder-ruby25
-  image: quay.io/3scale/system-builder:ruby25-oracle
+  image: quay.io/3scale/system-builder:ruby25
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -271,7 +272,7 @@ commands: # reusable commands with parameters
   save-gem-cache:
     steps:
       - save_cache:
-          key: v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: *bundle-cache-key
           paths:
             - ./vendor/bundle
             - ./.bundle/
