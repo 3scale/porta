@@ -6,6 +6,7 @@
 .bin
 cookbooks
 node_modules
+flow-typed
 assets/jspm_packages/*/*
 vendor/bundle
 .vagrant
@@ -35,10 +36,13 @@ config/tinny_tim.yml
 config/*.sphinx.conf
 public/assets
 public/system
+public/packs
+public/packs-tests
 openshift/system/*file
 openshift/system/Dockerfile*
 openshift/system/*.yml
 openshift/system/*.md
+portafly
 log/*
 **/.idea
 **/*.sql
