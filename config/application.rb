@@ -222,10 +222,8 @@ module System
     require 'three_scale/deprecation'
     require 'three_scale/domain_substitution'
     require 'three_scale/middleware/multitenant'
-    require 'three_scale/middleware/dev_domain'
 
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id
-    config.middleware.use ThreeScale::Middleware::DevDomain, config.three_scale.dev_domain_regexp, config.three_scale.dev_domain_replacement if config.three_scale.dev_domain
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
 

@@ -83,8 +83,6 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { protocol: 'http' }
   config.representer.default_url_options = { protocol: 'http' }
 
-  config.middleware.use ThreeScale::Middleware::DevDomain
-
   config.after_initialize do
 
     if defined?(Bullet)

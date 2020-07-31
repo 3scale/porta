@@ -37,7 +37,7 @@ module SiteAccountSupport
   # admin domain for the provider account
   def force_provider_domain
     if current_account && !provider_domain? && request.get?
-      redirect_to_domain(current_account.admin_domain)
+      redirect_to_domain(current_account.external_admin_domain)
     end
   end
 
@@ -88,8 +88,7 @@ module SiteAccountSupport
     prepend MasterDomainWildcard
 
     def initialize(request)
-      @request = request.try!(:dup)
-      @request.try!(:extend, ThreeScale::DevDomain::Request) if ThreeScale::DevDomain.enabled?
+      @request = request
     end
 
     def find_provider

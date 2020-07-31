@@ -8,8 +8,11 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
     @authentication_provider = FactoryBot.build_stubbed(:authentication_provider, kind: 'auth0')
     @provider = @authentication_provider.account
 
-    @request = stubs(:request)
-    @request.stubs(scheme: 'http', domain: 'example.com', query_parameters: {'plan_id' => 42})
+    env = {
+      'HTTP_HOST' => 'example.com',
+      'QUERY_STRING' => 'plan_id=42'
+    }
+    @request = ActionDispatch::TestRequest.create env
     @presenter = OauthFlowPresenter.new(@authentication_provider, @request)
   end
 
@@ -45,8 +48,9 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
 
   test 'master callback endpoint' do
     authentication_provider = FactoryBot.build_stubbed(:github_authentication_provider)
+    @request.set_header("action_dispatch.request.query_parameters", {})
 
-    presenter = OauthFlowPresenter.new(authentication_provider, mock('request', scheme: 'http', query_parameters: {}))
+    presenter = OauthFlowPresenter.new(authentication_provider, @request)
 
     expected_url = "http://#{Account.master.domain}/master/devportal/auth/#{authentication_provider.system_name}/callback?domain=#{authentication_provider.account.domain}"
     assert_equal expected_url, presenter.callback_url
@@ -58,7 +62,9 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
     ssl.expects(:verify=).with(OpenSSL::SSL::VERIFY_NONE)
     Faraday::Connection.any_instance.stubs(ssl: ssl)
     authentication_provider.stubs(ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE)
-    presenter = OauthFlowPresenter.new(authentication_provider, mock('request', scheme: 'http', query_parameters: {}))
+
+    @request.set_header("action_dispatch.request.query_parameters", {})
+    presenter = OauthFlowPresenter.new(authentication_provider, @request)
     assert presenter.authorize_url
   end
 end

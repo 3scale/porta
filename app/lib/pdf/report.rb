@@ -86,7 +86,7 @@ module Pdf
     end
 
     def pdf_file_name
-      ['report', @account.domain, @service.id].join('-') + '.pdf'
+      ['report', @account.internal_domain, @service.id].join('-') + '.pdf'
     end
 
     def pdf_file_path
@@ -99,7 +99,7 @@ module Pdf
     end
 
     def header
-      @pdf.text "<period>#{print_period}</period> (<domain>#{account.domain} - #{EscapeUtils.escape_html(@service.name)}</domain>)"
+      @pdf.text "<period>#{print_period}</period> (<domain>#{account.external_domain} - #{EscapeUtils.escape_html(@service.name)}</domain>)"
       @pdf.header @pdf.margin_box.top_left do
         @pdf.text header_text, align: :right
       end
