@@ -7,7 +7,6 @@ module Tasks
     class ResetProxyConfigChangeHistoryTest < ActiveSupport::TestCase
       setup do
         @providers = FactoryBot.create_list(:provider_account, 3)
-        proxies.each(&:affecting_change_history) # so change history exists for the proxies associated with all these accounts
 
         @proxy_with_legit_change = proxies.last
         @legit_change_date = 2.minutes.from_now.freeze
@@ -15,6 +14,7 @@ module Tasks
 
         @providers << FactoryBot.create(:provider_account) # change history for the proxy associated with this account does not exist
         @proxy_without_change_history = proxies.last
+        ProxyConfigAffectingChange.where(proxy: proxy_without_change_history).delete_all
         @reset_date = Time.utc(1900, 1, 1).freeze
       end
 
