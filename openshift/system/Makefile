@@ -34,10 +34,6 @@ tag: ## Tag IMAGE_NAME in the docker registry
 push: ## Push to the docker registry
 	docker push $(REMOTE_IMAGE)
 
-clean: export LOCAL_IMAGE := $(LOCAL_IMAGE)
-clean: ## Clean all containers
-	docker-compose down --volumes --remove-orphans
-	docker-compose rm --force
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
