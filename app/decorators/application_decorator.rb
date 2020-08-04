@@ -9,6 +9,10 @@ class ApplicationDecorator < Draper::Decorator
     raise NoMethodError, __method__
   end
 
+  def self.collection_decorator_class
+    PaginatingDecorator
+  end
+
   private
 
   API_KEYS = %w[id name system_name].freeze
