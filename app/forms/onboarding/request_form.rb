@@ -39,7 +39,9 @@ class Onboarding::RequestForm < Reform::Form
 
   def uri
     return unless model.api_backend
-    URI.join(api_base_url, path || SLASH).to_s
+    base_url = api_base_url
+    test_path = File.join(base_url.try(:path).to_s, path.to_s)
+    URI.join(base_url, test_path).to_s
   end
 
   def proxy_auth_params
