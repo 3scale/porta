@@ -17,6 +17,16 @@ class ProxyTestServiceTest < ActiveSupport::TestCase
     assert_equal 'https://example.net:8090/path/api_test_path', @service.api_test_path.to_s
   end
 
+  test 'api_test_path with backend api config path' do
+    proxy = FactoryBot.create(:proxy)
+    proxy.service.backend_api_configs.first.update(path: '/echo')
+    proxy.sandbox_endpoint = 'http://example.com'
+    proxy.api_test_path = 'hello'
+    test_service = ProxyTestService.new(proxy)
+
+    assert_equal 'http://example.com/echo/hello', test_service.api_test_path.to_s
+  end
+
   def test_api_test_host
     @proxy.sandbox_endpoint = 'http://example.com:8080'
 
