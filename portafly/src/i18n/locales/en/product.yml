@@ -11,8 +11,12 @@ body_title_description: Body title of the page to edit product details
 
 name: Name
 name_description: Field label to show/input the name of the product.
-system_name: System name
-system_name_description: Field label to show/input the system name of the product.
+system_name:
+ label: System name
+ label_description: Field label to show/input the system name of the product.
+ popover: You cannot edit the system name once the product is created.
+ popover_description: Inline help to explain that a system name cannot be changed.
+
 description: Description
 description_label: Field label to show/input the description of the product.
 #-------# save_button: available in shared.yml
