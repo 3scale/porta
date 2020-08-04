@@ -19,6 +19,8 @@ system_name:
   placeholder_description: Placeholder to show an example for the product system name.
   helper: Use letters, numbers, hyphens and underscores
   helper_description: Helper text to explain the allowed characters for a system name.
+  popover: System names must be unique. You cannot edit a system name once the product is created.
+  popover_description: Inline help stating the need for the system name to be unique, and an alert to users about the system name not being editable once the product is created.
 
 description: Description
 description_label: Field label to show/input the description of the product.
