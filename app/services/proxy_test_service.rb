@@ -96,9 +96,15 @@ class ProxyTestService
       uri = URI(override)
     end
 
-    uri.merge!(proxy.api_test_path.to_s)
+    path = File.join(uri.path.to_s, backend_api_config_path.to_s, proxy.api_test_path.to_s)
+    uri.merge!(path)
 
     uri
+  end
+
+  def backend_api_config_path
+    return unless proxy.provider_can_use?(:api_as_product)
+    proxy.backend_api_configs.first&.path
   end
 
   def api_test_host
