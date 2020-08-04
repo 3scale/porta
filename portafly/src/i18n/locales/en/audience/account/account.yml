@@ -6,7 +6,7 @@ page_title_description: Page title of the subsection for Accounts Overview
 
 # Top area
 
-body_title: Account: {{organization_name}}
+body_title: "Account: {{organization_name}}"
 body_title_description: Body title of the page for Accounts Overview
 
 # Tabs
@@ -30,8 +30,6 @@ state_label: State
 create_application_button: Create application
 create_application_button_description: Button to create an application
 
-applications_filter: {{default_option}}
-applications_filter_description: Dropdown list to filter applications by specified option
 applications_filter_options:
   by_name: Name
   by_product: Product
