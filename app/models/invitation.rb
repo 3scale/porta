@@ -64,8 +64,6 @@ class Invitation < ApplicationRecord
     else
       InvitationMailer.invitation(self).deliver_now
     end
-
-    update_column(:sent_at, Time.zone.now)
   end
 
 end

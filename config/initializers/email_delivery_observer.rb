@@ -1,0 +1,4 @@
+# frozen_string_literal: true
+
+ProviderInvitationMailer.register_observer ThreeScale::InvitationEmailDeliveryObserver
+InvitationMailer.register_observer ThreeScale::InvitationEmailDeliveryObserver
