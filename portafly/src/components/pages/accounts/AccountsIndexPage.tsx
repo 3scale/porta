@@ -17,9 +17,11 @@ import {
 } from '@patternfly/react-core'
 import { getDeveloperAccounts } from 'dal/accounts'
 import { useTranslation } from 'i18n/useTranslation'
+import { useAuth } from 'auth'
 
 const AccountsIndexPage: React.FunctionComponent = () => {
-  const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts)
+  const { authToken } = useAuth()
+  const { data: accounts, error, isPending } = useAsync(getDeveloperAccounts, { authToken })
   const { t } = useTranslation('accountsIndex')
   useDocumentTitle(t('title_page'))
 

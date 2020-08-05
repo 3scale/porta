@@ -1,5 +1,6 @@
 import { craftRequest, fetchData } from 'utils'
 import { IDeveloperAccount, State } from 'types'
+import { PromiseFn } from 'react-async'
 
 type User = {
   id: string
@@ -58,11 +59,15 @@ const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) 
   state: account.state as State
 }))
 
-const getDeveloperAccounts = async (): Promise<IDeveloperAccount[]> => {
-  const request = craftRequest('/admin/api/accounts.json', new URLSearchParams({
-    page: '1',
-    perPage: '500'
-  }))
+const getDeveloperAccounts: PromiseFn<IDeveloperAccount[]> = async ({ authToken }) => {
+  const request = craftRequest({
+    authToken,
+    path: '/admin/api/accounts.json',
+    params: new URLSearchParams({
+      page: '1',
+      perPage: '500'
+    })
+  })
   const data = await fetchData<{ accounts: BuyersAccount[] }>(request)
   return parseAccounts(data.accounts)
 }

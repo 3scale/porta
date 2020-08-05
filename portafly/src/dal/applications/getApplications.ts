@@ -1,5 +1,6 @@
 import { craftRequest, fetchData } from 'utils'
 import { IProductApplication, State } from 'types'
+import { PromiseFn } from 'react-async'
 
 type Application = {
   application: {
@@ -47,8 +48,13 @@ const parseApplications = (applications: Application[]) => applications.map(({ a
   traffic_on: application.first_daily_traffic_at
 }))
 
-const getApplications = async (): Promise<IProductApplication[]> => {
-  const request = craftRequest('/admin/api/applications.json')
+const getApplications: PromiseFn<IProductApplication[]> = async ({ authToken }) => {
+  const request = craftRequest(
+    {
+      authToken,
+      path: '/admin/api/applications.json'
+    }
+  )
   const data = await fetchData<Response>(request)
   return parseApplications(data.applications)
 }

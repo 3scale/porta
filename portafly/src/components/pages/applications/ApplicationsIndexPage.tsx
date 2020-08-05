@@ -18,14 +18,15 @@ import {
 import { useTranslation } from 'i18n/useTranslation'
 import { getApplications } from 'dal/applications'
 import { useAsync } from 'react-async'
+import { useAuth } from 'auth'
 
 interface Props {}
 
 const ApplicationsIndexPage: React.FunctionComponent<Props> = () => {
+  const { authToken } = useAuth()
   const { t } = useTranslation('applicationsIndex')
   useDocumentTitle(t('page_title'))
-
-  const { data: applications, isPending, error } = useAsync(getApplications)
+  const { data: applications, isPending, error } = useAsync(getApplications, { authToken })
 
   return (
     <>
