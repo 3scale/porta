@@ -1,6 +1,6 @@
 module UserRepresenter
   include ThreeScale::JSONRepresenter
-  include FieldsRepresenter
+  include FieldsRepresenter::JSON
   include ExtraFieldsRepresenter
 
   wraps_resource

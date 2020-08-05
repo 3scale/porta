@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountRepresenter < ThreeScale::Representer
-  include FieldsRepresenter
   include ExtraFieldsRepresenter
 
   wraps_resource :account
@@ -73,7 +72,7 @@ class AccountRepresenter < ThreeScale::Representer
 
   class JSON < AccountRepresenter
     include Roar::JSON
-    # include ThreeScale::JSONRepresenter
+    include FieldsRepresenter::JSON
 
     wraps_resource :account
 
@@ -88,6 +87,7 @@ class AccountRepresenter < ThreeScale::Representer
 
   class XML < AccountRepresenter
     include Roar::XML
+    include FieldsRepresenter::XML
 
     wraps_resource :account
 

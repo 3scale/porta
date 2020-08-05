@@ -2,7 +2,7 @@
 #   * check if json output has the same data as xml
 module CinstanceRepresenter
   include ThreeScale::JSONRepresenter
-  include FieldsRepresenter
+  include FieldsRepresenter::JSON
   include ExtraFieldsRepresenter
 
   wraps_resource :application

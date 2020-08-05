@@ -48,14 +48,14 @@ module Account::BillingAddress
     end
 
     def to_xml(options = {})
-      xml = options[:builder] || ThreeScale::XML::Builder.new
-      xml.__send__(options.fetch(:root, :billing_address)) do |xml|
-        to_hash.each do |attr, value|
-          xml.__send__(attr, value)
-        end
-      end
+      # to be able to create a valid XML, it would wrap the content to whether <billing_address> or <hash>
+      # but the problem is that Account..to_xml already creates that element <billing_address> so we need only the content
+      # but itself, is not valid xml response, so it's doing by default and we need to manually delete that (haven't found the public API for that)
+      hash_xml = to_hash.to_xml(skip_instruct: true)
+      hash_xml = hash_xml.gsub('<hash>', '')
+      hash_xml = hash_xml.gsub('</hash>', '')
 
-      xml.to_xml
+      hash_xml
     end
 
     # Quacking like Hash makes BillingAddress compatible with
@@ -89,7 +89,7 @@ module Account::BillingAddress
 
   def billing_address
     @billing_address ||= Address.new({
-                                       name:     billing_address_name.presence || org_name,
+      name:     billing_address_name.presence || org_name,
       address1: billing_address_address1,
       address2: billing_address_address2,
       country:  billing_address_country || default_country,
