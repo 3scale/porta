@@ -19,7 +19,7 @@ import avatar from 'assets/img_avatar.svg'
 
 const AppHeaderTools: React.FunctionComponent = () => {
   const { t } = useTranslation('shared')
-  const { setAuthToken } = useAuth()
+  const { userProfile, logout } = useAuth()
 
   const [isKebabDropdownOpen, setIsKebabDropdownOpen] = useState(false)
   const [isDropdownOpen, setIsDropDownOpen] = useState(false)
@@ -37,7 +37,7 @@ const AppHeaderTools: React.FunctionComponent = () => {
 
   const userDropdownItems = [
     <DropdownGroup key="group user">
-      <DropdownItem key="group user logout" onClick={() => setAuthToken(null)}>
+      <DropdownItem key="group user logout" onClick={() => logout()}>
         {t('buttons.logout')}
       </DropdownItem>
     </DropdownGroup>
@@ -92,7 +92,7 @@ const AppHeaderTools: React.FunctionComponent = () => {
             isOpen={isDropdownOpen}
             toggle={(
               <DropdownToggle onToggle={() => setIsDropDownOpen(!isDropdownOpen)}>
-                User Name
+                {`${userProfile.firstName} ${userProfile.lastName}`}
               </DropdownToggle>
               )}
             dropdownItems={userDropdownItems}
