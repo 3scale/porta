@@ -29,6 +29,15 @@ class Ability
     @@rules << block
   end
 
+  def can?(action, subject, *extra_args)
+    collection = subject.try(:decorated_collection) || [subject]
+    collection.each do |entry|
+      model = entry.try(:model) || entry
+      return false unless super(action, model, *extra_args)
+    end
+    true
+  end
+
   private
 
   def load_rules!
