@@ -31,7 +31,7 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
   end
 
   def collection
-    @users ||= end_of_association_chain.but_impersonation_admin.paginate(:page => params[:page])
+    @users ||= end_of_association_chain.but_impersonation_admin.paginate(page: params[:page]).decorate
   end
 
   def update_resource(user, attributes)
