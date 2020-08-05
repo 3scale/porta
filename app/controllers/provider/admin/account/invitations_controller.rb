@@ -10,7 +10,7 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
   create! do |success, failure|
     success.html do
       redirect_to provider_admin_account_invitations_path,
-                  notice: 'Invitation was successfully sent.'
+                  notice: 'Invitation will be sent soon.'
     end
   end
 
@@ -24,7 +24,7 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
 
     respond_to do |format|
       format.html do
-        flash[:success] = "Invitation was successfully resent"
+        flash[:success] = 'Invitation will be resent soon.'
         redirect_to provider_admin_account_invitations_path
       end
       format.xml  { head :ok }
