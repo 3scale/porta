@@ -2,9 +2,9 @@
 # ------------------ Product > Edit product
 # Page details
 
-page_title: Edit product #--- PROPOSED
+page_title: Edit product
 page_title_description: Page title to edit product details
-body_title: "Edit product: {{product_name}}" #--- PROPOSED
+body_title: "Edit product: {{product_name}}"
 body_title_description: Body title of the page to edit product details
 
 # Main area
@@ -23,7 +23,7 @@ description_label: Field label to show/input the description of the product.
 #-------# cancel_button: available in shared.yml
 
 # Validation errors
-required_name: "<i>Name</i> is empty. You must specify a name for the product." #----PROPOSED
+required_name: "<i>Name</i> is empty. You must specify a name for the product."
 required_name_description: Validation message to prompt the indication of a product name before saving product details.
-duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product." #----PROPOSED
+duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product." 
 duplicated_name_description: Validation message to request the change of the product name due to duplication.
