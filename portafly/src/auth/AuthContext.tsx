@@ -1,31 +1,34 @@
-import React, { createContext, useContext, useState } from 'react'
-import { getToken, setToken } from 'utils'
+import React, { createContext, useContext } from 'react'
 import { AuthToken } from 'types/auth'
+import { KeycloakInstance, KeycloakProfile } from 'keycloak-js'
 
 interface IAuthContext {
   authToken: AuthToken,
-  setAuthToken: (t: AuthToken) => void
+  userProfile: KeycloakProfile,
+  logout: () => any
 }
 
 const AuthContext = createContext<IAuthContext>({
   authToken: null,
-  setAuthToken: () => {}
+  userProfile: {},
+  logout: () => {}
 })
 
-const AuthProvider: React.FunctionComponent = ({ children }) => {
-  const existingToken = getToken()
-  const [authToken, setAuthToken] = useState(existingToken)
-
-  const saveToken = (token: AuthToken) => {
-    setToken(token)
-    setAuthToken(token)
-  }
-  return (
-    <AuthContext.Provider value={{ authToken, setAuthToken: saveToken }}>
-      {children}
-    </AuthContext.Provider>
-  )
+type Props = {
+  keycloak: KeycloakInstance,
+  userProfile: KeycloakProfile
 }
+
+const AuthProvider: React.FunctionComponent<Props> = ({ keycloak, userProfile, children }) => (
+  <AuthContext.Provider value={{
+    authToken: keycloak.token as AuthToken,
+    logout: keycloak.logout,
+    userProfile
+  }}
+  >
+    {children}
+  </AuthContext.Provider>
+)
 
 const useAuth = () => useContext(AuthContext)
 

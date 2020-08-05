@@ -1,27 +1,55 @@
+/* eslint-disable no-console */
 import { AuthProvider, useAuth } from 'auth'
 import * as React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
+import { KeycloakInstance } from 'keycloak-js'
+
+const keycloak = {
+  token: 'LeSuperSecretToken',
+  logout: jest.fn()
+}
+const profile = {
+  firstName: 'Coco',
+  lastName: 'Loco'
+}
 
 const SamplePage = () => {
-  const { authToken, setAuthToken } = useAuth()
+  const { authToken, userProfile, logout } = useAuth()
+
   return (
     <>
-      <input data-testid="login" onChange={(ev) => setAuthToken(ev.currentTarget.value)} />
-      { authToken ? <p>Authenticated</p> : <p>Log in?</p> }
+      { authToken
+        ? (
+          <p data-testid="user">
+            {`${userProfile.firstName} ${userProfile.lastName} is logged in`}
+            <button data-testid="logoutbutton" type="button" onClick={logout}>logout</button>
+          </p>
+        )
+        : <p>Log in?</p> }
     </>
   )
 }
 
-const SampleApp = () => <AuthProvider><SamplePage /></AuthProvider>
+const SampleApp = () => (
+  <AuthProvider
+    userProfile={profile}
+    keycloak={keycloak as unknown as KeycloakInstance}
+  >
+    <SamplePage />
+  </AuthProvider>
+)
 
-test('should authenticate', () => {
-  const { getByTestId, getByText } = render(<SampleApp />)
-  const login = getByTestId('login')
+test('should display the user profile data when logged in', () => {
+  const { getByText } = render(<SampleApp />)
 
-  expect(getByText('Log in?')).toBeInTheDocument()
+  expect(getByText('Coco Loco is logged in')).toBeInTheDocument()
+})
 
-  fireEvent.change(login, { target: { value: 'LeToken' } })
+test('should provide a log out function', () => {
+  const { getByTestId } = render(<SampleApp />)
+  const logoutButton = getByTestId('logoutbutton')
 
-  expect(getByText('Authenticated')).toBeInTheDocument()
+  fireEvent.click(logoutButton)
+  expect(keycloak.logout.mock.calls.length).toBe(1)
 })
