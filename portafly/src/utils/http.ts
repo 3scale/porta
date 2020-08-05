@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
-import { getToken } from 'utils'
+import { AuthToken } from 'types/auth'
 
 export type ValidationException = {
   validationErrors: ValidationErrors
@@ -47,19 +47,26 @@ const getStringUrl = (path: string, params: URLSearchParams) => {
   return `${url.toString()}?${params.toString()}`
 }
 
-const craftRequest = (path: string, params = new URLSearchParams()) => {
-  const authToken = getToken()
-  params.append('access_token', authToken as string)
+const craftHeaders = (authToken: AuthToken): Headers => (
+  new Headers({
+    Accept: 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    Authorization: `Bearer ${authToken}`
+  })
+)
+interface ICraftRequest {
+  authToken: AuthToken
+  path: string
+  params?: URLSearchParams
+}
 
-  return new Request(
+const craftRequest = ({ authToken, path, params = new URLSearchParams() }: ICraftRequest) => (
+  new Request(
     getStringUrl(path, params),
     {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+      headers: craftHeaders(authToken)
     }
   )
-}
+)
 
 export { fetchData, postData, craftRequest }
