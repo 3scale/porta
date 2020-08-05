@@ -23,11 +23,11 @@ table class="data" id="users"
         td
           - if can? :manage, user
             - if current_user == user
-              = link_to user.decorate.display_name,
+              = link_to user.display_name,
                 edit_provider_admin_user_personal_details_path(origin: 'users'),
                 title: 'Personal Details'
             - else
-              = link_to user.decorate.display_name,
+              = link_to user.display_name,
                 edit_provider_admin_account_user_path(user),
                 title: 'Edit'
           - else
