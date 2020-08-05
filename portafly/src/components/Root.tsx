@@ -2,14 +2,11 @@ import React from 'react'
 import { Brand } from '@patternfly/react-core'
 import { useTranslation } from 'i18n/useTranslation'
 import { useHistory } from 'react-router-dom'
-import { useAuth } from 'auth'
-import Login from 'components/pages/Login'
 import { AppLayout, AppHeaderTools } from 'components'
 import logo from 'assets/logo.svg'
 
 const Root: React.FunctionComponent = ({ children }) => {
   const { t } = useTranslation('shared')
-  const { authToken } = useAuth()
   const Logo = <Brand src={logo} alt={t('logo_alt_text')} />
 
   const navItems = [
@@ -57,20 +54,18 @@ const Root: React.FunctionComponent = ({ children }) => {
     [history]
   )
 
-  return authToken
-    ? (
-      <AppLayout
-        logo={Logo}
-        logoProps={logoProps}
-        navVariant="vertical"
-        navItems={navItems}
-        navGroupsStyle="expandable"
-        headerTools={<AppHeaderTools />}
-      >
-        {children}
-      </AppLayout>
-    )
-    : <Login />
+  return (
+    <AppLayout
+      logo={Logo}
+      logoProps={logoProps}
+      navVariant="vertical"
+      navItems={navItems}
+      navGroupsStyle="expandable"
+      headerTools={<AppHeaderTools />}
+    >
+      {children}
+    </AppLayout>
+  )
 }
 
 export { Root }
