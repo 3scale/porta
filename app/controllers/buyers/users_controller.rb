@@ -57,8 +57,12 @@ class Buyers::UsersController < Buyers::BaseController
     current_account
   end
 
+  def resource
+    @user ||= current_account.buyer_users.find(params[:id]).decorate
+  end
+
   def collection
-    @users ||= end_of_association_chain.order(:id).paginate(:page => params[:page])
+    @users ||= end_of_association_chain.order(:id).paginate(page: params[:page]).decorate
   end
 
   def update_resource(user, attributes)
