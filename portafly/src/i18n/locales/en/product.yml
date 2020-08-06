@@ -25,8 +25,7 @@ create:
   #-------# cancel_button: available in shared.yml
   # Validation errors
   required_name: <i>Name</i> is empty. You must specify a name for the product.
-  required_name_description: Validation message to prompt the indication of a product name before saving
- details.
+  required_name_description: Validation message to prompt the indication of a product name before saving details.
   duplicated_name: <i>{{product_name}}</i> already exists. Please use a different name for the product.
   duplicated_name_description: Validation message to request the change of the product name due to  duplication.
   systemname_characters: System names can only use letters, numbers, hyphens and underscores.
