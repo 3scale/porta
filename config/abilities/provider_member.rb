@@ -9,17 +9,11 @@ Ability.define do |user|
   next unless user.member? && account.tenant?
 
   # if you update this block, update also provider_admin.rb :/
-  if user.has_permission?('finance')
-    can :admin, :finance
-
-    if account.settings.finance.allowed?
-      can %i[read update], Finance::BillingStrategy, account_id: account.id
-      can :manage, Invoice, provider_account_id: account.id
-
-      if account.billing_strategy.charging_enabled?
-        can :manage, :charging
-      end
-    end
+  if account.settings.finance.allowed? && user.has_permission?('finance')
+    can :manage, :finance
+    can %i[read update], Finance::BillingStrategy, account_id: account.id
+    can :manage, Invoice, provider_account_id: account.id
+    can :manage, :charging if account.billing_strategy.charging_enabled?
   end
 
   if user.has_permission?('partners')

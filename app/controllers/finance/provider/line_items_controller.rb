@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Finance::Provider::LineItemsController < FrontendController
+class Finance::Provider::LineItemsController < Finance::Provider::BaseController
   activate_menu :audience, :finance, :invoices
   before_action :find_invoice
   before_action :find_line_item, :only => :destroy

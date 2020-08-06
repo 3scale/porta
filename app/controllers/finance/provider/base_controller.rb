@@ -9,9 +9,4 @@ class Finance::Provider::BaseController < FrontendController
 
   layout 'provider'
 
-  protected
-
-  def authorize_finance
-    authorize! :manage, :finance
-  end
 end

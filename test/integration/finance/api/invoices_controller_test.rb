@@ -34,6 +34,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @provider.settings.allow_finance!
     login_provider @provider
 
     %w[2017-07 2018-08].each { | month| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
