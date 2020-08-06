@@ -25,7 +25,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
     assert invitation.reload.sent_at
   end
 
-  def test_perform_ssl_error
+  def test_handles_ssl_error
     ProviderInvitationMailer.any_instance.expects(:invitation).raises(OpenSSL::SSL::SSLError)
 
     invitation = FactoryBot.create(:invitation)
