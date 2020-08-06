@@ -6,6 +6,7 @@ class Finance::Api::BaseController < Admin::Api::BaseController
   self.default_per_page = 20
 
   before_action :finance_module_required
+  before_action :authorize_finance
   before_action :set_api_version
 
   after_action :report_traffic

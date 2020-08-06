@@ -91,6 +91,42 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_match 'Alaska Application App', response.body
     end
 
+    test 'member user without billing permission cannot manage invoice' do
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      provider.settings.allow_finance!
+
+      get admin_buyers_account_invoices_path(buyer)
+      assert_response :forbidden
+
+      assert_no_difference ->{ Invoice.count } do
+        post admin_buyers_account_invoices_path(buyer)
+        assert_response :forbidden
+      end
+
+      invoice = FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider)
+      get edit_admin_buyers_account_invoice_path(buyer, invoice)
+      assert_response :forbidden
+    end
+
+    test 'member user with billing permission can manage invoice' do
+      user.member_permission_ids = [:partners, :finance]
+      user.save!
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      provider.settings.allow_finance!
+
+      get admin_buyers_account_invoices_path(buyer)
+      assert_response :success
+
+      assert_difference ->{ Invoice.count }, 1 do
+        post admin_buyers_account_invoices_path(buyer)
+        assert_response :redirect
+      end
+
+      invoice = FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider)
+      get edit_admin_buyers_account_invoice_path(buyer, invoice)
+      assert_response :success
+    end
+
     test 'can\'t manage buyer accounts' do
       user.member_permission_ids = []
       user.save!
