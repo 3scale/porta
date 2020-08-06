@@ -9,10 +9,11 @@
 ##### Form
 * Input fields
   * Name > text input [required]
-    * Validation errors:
+    * Validation errors ([specs](../../global_components/alerts.md)):
       * Required field on form submit (if left blank)
-      * Name already exists on form submit
-      * Name already exists on _onblur_
+    * Validation alerts ([specs](../../global_components/alerts.md)):
+      * Name is already in use exists on form submit
+      * Name is already in use on _onblur_
   * System name > text input w/ placeholder and helper text
     * Inline help:
       * Label include a `pf-icon-help` icon
