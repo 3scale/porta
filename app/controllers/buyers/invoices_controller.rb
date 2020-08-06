@@ -1,9 +1,11 @@
 class Buyers::InvoicesController < Buyers::BaseController
+  include Finance::ControllerRequirements
   helper Finance::InvoicesHelper
   helper Accounts::InvoicesHelper
 
   helper_method :allow_edit?
 
+  before_action :authorize_finance
   before_action :find_account
   activate_menu :audience, :accounts, :listing
 

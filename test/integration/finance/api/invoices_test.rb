@@ -22,6 +22,7 @@ module Finance::Api
         end
 
         should 'deny access if access token does not include finance scope' do
+          @provider.settings.allow_finance!
           member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
           token  = FactoryBot.create(:access_token, owner: member)
 
@@ -31,6 +32,7 @@ module Finance::Api
         end
 
         should 'allow access if access token include finance scope' do
+          @provider.settings.allow_finance!
           member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
           token  = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
@@ -40,6 +42,7 @@ module Finance::Api
         end
 
         should 'deny access if member does not have finance permission' do
+          @provider.settings.allow_finance!
           member = FactoryBot.create(:member, account: @provider, admin_sections: [])
           token  = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
