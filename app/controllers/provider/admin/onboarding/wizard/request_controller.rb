@@ -31,7 +31,7 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
                     uri: @request.uri, real_api: real_api)
 
     if success
-      redirect_to provider_admin_onboarding_wizard_request_path(response: status.body)
+      redirect_to onboarding_wizard_request_path_with_response(response: status.body.to_s)
       onboarding.bubble_update('api')
     else
       render action: :edit
@@ -40,7 +40,7 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
 
   # success (also shows response)
   def show
-    @response = params[:response]
+    @response = Encoder.decode_param(params[:response].to_s)
     track_step('show request')
   end
 
@@ -61,4 +61,58 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
   def proxy
     service.proxy
   end
+
+  def onboarding_wizard_request_path_with_response(response:, **other_params)
+    uri = ->(params) { provider_admin_onboarding_wizard_request_path(params) }
+    reserved_bytes = uri.call(response: '', **other_params).slice(/\?.+/).bytesize # Makes sure we don't exceed the max size of QUERY_STRING (1024 x 10 bytes)
+    encoded_response = Encoder.encode_param(response, reserved_bytes: reserved_bytes)
+    uri.call(response: encoded_response, **other_params)
+  end
+
+  class Encoder
+    def self.encode_param(value, reserved_bytes: 0)
+      new(value, reserved_bytes: reserved_bytes).encoded_value
+    end
+
+    def self.decode_param(value)
+      Base64.urlsafe_decode64(value)
+    rescue ArgumentError
+      value
+    end
+
+    def initialize(value, reserved_bytes:)
+      @value = value
+      @reserved_bytes = reserved_bytes
+    end
+
+    attr_reader :value, :reserved_bytes
+
+    def encoded_value
+      Base64.urlsafe_encode64(truncated_value, padding: false)
+    end
+
+    protected
+
+    MAX_QUERY_STRING_BYTES = (1024 * 10).freeze
+    BASE_64_EXPANSION_FACTOR = (4.0 / 3).freeze
+    private_constant :MAX_QUERY_STRING_BYTES, :BASE_64_EXPANSION_FACTOR
+
+    def truncated_value
+      return value unless truncate?
+      value.byteslice(0...(max_value_size-3)) + '…'
+    end
+
+    def truncate?
+      value_size > max_value_size
+    end
+
+    def value_size
+      value.bytesize
+    end
+
+    def max_value_size
+      ((MAX_QUERY_STRING_BYTES - reserved_bytes) / BASE_64_EXPANSION_FACTOR).floor
+    end
+  end
+  private_constant :Encoder
 end
