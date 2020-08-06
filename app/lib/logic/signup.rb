@@ -4,7 +4,7 @@ module Logic
   module Signup
     module Provider
       def create_buyer_possible?
-        account_plans.stock.present?
+        account_plans.default_or_nil.present?
       end
 
       def signup_enabled?

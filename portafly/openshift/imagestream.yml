@@ -1,0 +1,25 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/display-name: AMP portafly
+  creationTimestamp: null
+  labels:
+    app: 3scale-api-management
+    threescale_component: portafly
+  name: amp-portafly
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      openshift.io/display-name: amp-portafly master
+    from:
+      kind: DockerImage
+      name: quay.io/3scale/portafly:latest
+    generation: null
+    importPolicy:
+      insecure: false
+    name: master
+    referencePolicy:
+      type: ""

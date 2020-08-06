@@ -842,6 +842,13 @@ en:
             version:
               mismatch: "differs from the schema version"
               builtin: "cannot be 'builtin'"
+        pricing_rule:
+          attributes:
+            min:
+              overlap: "The 'From' value must be greater than the 'To' values of other existing rules"
+            max:
+              min_max_mismatch: "'To' value cannot be less than your 'From' value"
+
 
         proxy_rule:
           attributes:
@@ -891,7 +898,6 @@ en:
           attributes:
             system_name:
               invalid: invalid. Only ASCII letters, numbers, dashes and underscores are allowed.
-              invalid_for_proxy_endpoints: must be shorter.
 
         cinstance:
           attributes:
@@ -1236,7 +1242,7 @@ en:
         endpoint: "Public address of your API gateway in the production environment. This field customizes the server_name directive in the NGINX Config file and defaults to $hostname if left blank."
         endpoint_apicast_2_openshift_html:
           Public address of your API gateway in the %{environment_name} environment.
-          <span>Make sure to <a href="https://docs.openshift.com/container-platform/latest/dev_guide/routes.html#creating-routes">add the correct route</a></span>
+          <span>Make sure to <a href="https://docs.openshift.com/container-platform/3.11/dev_guide/routes.html#creating-routes">add the correct route</a></span>
         endpoint_apicast_2_html: >
           Public address of your API gateway in the %{environment_name} environment.
         api_backend_https: |

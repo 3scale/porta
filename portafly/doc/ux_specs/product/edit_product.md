@@ -11,8 +11,13 @@
   * Name > text input [required]
     * Validation errors:
       * Required field on form submit (if left blank)
+      * Name already exists on form submit
       * Name already exists on _onblur_
   * System name > text input [disabled]
+    * Inline help:
+      * Label include a `pf-icon-help` icon
+      * Icon toggles a popover ([PF specs](https://www.patternfly.org/v4/documentation/react/components/popover))
+      * Popover includes content about the reasons why a System name cannot be changed
     * NO validation errors
   * Description > text area
     * NO validation errors

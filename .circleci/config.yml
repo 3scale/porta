@@ -28,13 +28,15 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
+flow-type-key: &flow-typed-cache-key flow-typed-{{ checksum "yarn.lock" }}-5
+npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-5
+bundle-cache-key: &bundle-cache-key v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+
 save-flow-typed-cache: &save-flow-typed-cache
   save_cache:
-    key: flow-typed-{{ checksum "yarn.lock" }}
+    key: *flow-typed-cache-key
     paths:
       - ./flow-typed
-
-npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -49,7 +51,7 @@ save-npm-cache: &save-npm-cache
 
 restore-flow-typed-cache: &restore-flow-typed-cache
   restore_cache:
-    key: flow-typed-{{ checksum "yarn.lock" }}
+    key: *flow-typed-cache-key
 
 use-example-config-files: &use-example-config-files
   run:
@@ -100,7 +102,7 @@ postgres-container: &postgres-container
     POSTGRES_DB: systemdb
 
 oracle-db-container: &oracle-db-container
-  image: quay.io/3scale/oracle:12.2.0.1-ee-scripted
+  image: quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
   auth:
     username: $DOCKER_USER
     password: $DOCKER_PASS
@@ -193,16 +195,8 @@ commands: # reusable commands with parameters
       - run:
           name: "Fetch oracle libraries"
           command: |
-            git clone git@github.com:3scale/system-libraries.git
-            cp -R system-libraries/vendor/oracle/*.zip vendor/oracle
-            # using sudo due to `/opt/oracle/` set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
-            sudo unzip vendor/oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-            sudo unzip vendor/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle
-            sudo unzip vendor/oracle/instantclient-odbc-linux.x64-12.2.0.1.0-2.zip -d /opt/oracle
-            sudo ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so
-            sudo rm -rf /opt/system/vendor/oracle
-            rm -rf vendor/oracle/*.zip
-            sudo cp config/oracle/*.ini /etc/
+            set +o pipefail
+            sudo ./script/oracle/install-instantclient-packages.sh
 
   prepare-db-for-tests:
     steps:
@@ -278,7 +272,7 @@ commands: # reusable commands with parameters
   save-gem-cache:
     steps:
       - save_cache:
-          key: v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: *bundle-cache-key
           paths:
             - ./vendor/bundle
             - ./.bundle/
@@ -287,7 +281,7 @@ commands: # reusable commands with parameters
     steps:
       - restore_cache:
           keys:
-            - v1-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
   upload-artifacts:
     steps:
