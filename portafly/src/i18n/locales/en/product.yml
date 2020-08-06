@@ -1,29 +1,60 @@
 ---
+# ------------------ Product > Create product
+# Page details
+
+create:
+  pagetitle: Create product
+  pagetitle_description: Page title to create a product
+  bodytitle: Create a new product
+  bodytitle_description: Body title of the page to create a new product
+  # Main area
+  name: Name
+  name_description: Field label to show/input the name of the product.
+  system_name:
+    label: System name
+    label_description: Field label to show/input the system name of the product.
+    placeholder: product-system-name
+    placeholder_description: Placeholder to show an example for the product system name.
+    helper: Use letters, numbers, hyphens and underscores
+    helper_description: Helper text to explain the allowed characters for a system name.
+    popover: System names for products must be unique. You cannot edit a system name once the product is created.
+    popover_description: Inline help stating the need for the system name to be unique, and an alert to users about the system name not being editable once the product is created.
+  description: Description
+  description_label: Field label to show/input the description of the product.
+  #-------# create_button: available in shared.yml
+  #-------# cancel_button: available in shared.yml
+  # Validation errors
+  required_name: <i>Name</i> is empty. You must specify a name for the product.
+  required_name_description: Validation message to prompt the indication of a product name before saving details.
+  duplicated_name: <i>{{product_name}}</i> already exists. Please use a different name for the product.
+  duplicated_name_description: Validation message to request the change of the product name due to  duplication.
+  systemname_characters: System names can only use letters, numbers, hyphens and underscores.
+  systemname_characters_description: Validation message to explain the allowed characters for a system name.
+  duplicated_systemname: <i>{{system_name}}</i> already exists. Please use a different system name.
+  duplicated_systemname_description: Validation message to request the change of the system name due to duplication.
+
 # ------------------ Product > Edit product
 # Page details
 
-page_title: Edit product
-page_title_description: Page title to edit product details
-body_title: "Edit product: {{product_name}}"
-body_title_description: Body title of the page to edit product details
-
-# Main area
-
-name: Name
-name_description: Field label to show/input the name of the product.
-system_name:
- label: System name
- label_description: Field label to show/input the system name of the product.
- popover: You cannot edit the system name once the product is created.
- popover_description: Inline help to explain that a system name cannot be changed.
-
-description: Description
-description_label: Field label to show/input the description of the product.
-#-------# save_button: available in shared.yml
-#-------# cancel_button: available in shared.yml
-
-# Validation errors
-required_name: "<i>Name</i> is empty. You must specify a name for the product."
-required_name_description: Validation message to prompt the indication of a product name before saving product details.
-duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product." 
-duplicated_name_description: Validation message to request the change of the product name due to duplication.
+edit:
+  pagetitle: Edit product
+  pagetitle_description: Page title to edit product details
+  bodytitle: "Edit product: {{product_name}}"
+  bodytitle_description: Body title of the page to edit product details
+  # Main area
+  name: Name
+  name_description: Field label to show/input the name of the product.
+  system_name:
+    label: System name
+    label_description: Field label to show/input the system name of the product.
+    popover: You cannot edit the system name once the product is created.
+    popover_description: Inline help to explain that a system name cannot be changed.
+  description: Description
+  description_label: Field label to show/input the description of the product.
+  #-------# save_button: available in shared.yml
+  #-------# cancel_button: available in shared.yml
+  # Validation errors
+  required_name: "<i>Name</i> is empty. You must specify a name for the product."
+  required_name_description: Validation message to prompt the indication of a product name before saving product details.
+  duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product."
+  duplicated_name_description: Validation message to request the change of the product name due to duplication.
