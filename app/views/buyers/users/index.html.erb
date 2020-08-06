@@ -17,14 +17,14 @@
     <% @users.each do |user| %>
       <tr id="<%= dom_id(user) %>">
         <td class="<%= user.state %>">
-          <%= link_to h(user.display_name), resource_path(user) %>
+          <%= link_to h(user.display_name), admin_buyers_account_user_path(account_id: user.account_id, id: user.id) %>
         </td>
         <td><%= h user.email %></td>
         <td><%= user.created_at.to_date.to_s(:long) %></td>
         <td><%=h user.role.to_s %></td>
         <td><%=h user.state %></td>
         <td class="operations">
-          <%= link_to 'Edit', edit_resource_path(user), :class => 'action edit' %>
+          <%= link_to 'Edit', edit_admin_buyers_account_user_path(account_id: user.account_id, id: user.id), class: 'action edit' %>
         </td>
         <td class="operations">
           <%= button_activate_or_suspend(user) %>
