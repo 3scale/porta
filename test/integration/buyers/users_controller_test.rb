@@ -34,4 +34,25 @@ class Buyers::UsersControllerTest < ActionDispatch::IntegrationTest
       assert_includes page.xpath('//main/h2').text, user.decorate.display_name
     end
   end
+
+  test '#destroy' do
+    destroyable_user = FactoryBot.create(:member, account: buyer)
+    non_destroyable_user = buyer.admin_user
+
+    delete admin_buyers_account_user_path(account_id: buyer.id, id: destroyable_user.id)
+    refute User.exists?(destroyable_user.id)
+    assert_equal 'User was successfully deleted.', flash[:notice]
+
+    delete admin_buyers_account_user_path(account_id: buyer.id, id: non_destroyable_user.id)
+    assert User.exists?(non_destroyable_user.id)
+    assert_equal 'User could not be deleted.', flash[:error]
+  end
+
+  test '#update role from member to admin' do
+    user = FactoryBot.create(:member, account: buyer)
+
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), { user: { role: 'admin' } }
+
+    assert user.reload.admin?
+  end
 end
