@@ -12,9 +12,8 @@
     * Validation errors ([specs](../../global_components/alerts.md)):
       * Required field on form submit (if left blank)
     * Validation alerts ([specs](../../global_components/alerts.md)):
-      * Name is already in use exists on form submit
+      * Name is already in use on form submit
       * Name is already in use on _onblur_
-  * System name > text input w/ placeholder and helper text
   * System name > text input [disabled]
     * Inline help:
       * Label include a `pf-icon-help` icon
