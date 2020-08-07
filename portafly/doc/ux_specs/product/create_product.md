@@ -22,9 +22,9 @@
         * the need for the system name to be unique
         * an alert to users about the system name not being editable once the product is created
     * Validation errors:
-      * Not valid name on form submit
+      * Not a valid name on form submit
       * Name already exists on form submit
-      * Not valid name on _onblur_
+      * Not a valid name on _onblur_
       * Name already exists on _onblur_
   * Description > text area
     * NO validation errors
