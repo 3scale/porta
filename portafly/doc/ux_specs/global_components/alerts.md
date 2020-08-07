@@ -7,7 +7,7 @@
 
 ### Input field validation errors / alerts
 * This type of alert will be displayed as **inline alerts**
-* Validation errors – they block the form from being submitted successfully:
+* Validation errors – block forms with errors and/or omissions from being submitted::
   * Variant prop is `danger`
 * Validation alerts with high severity – they still allow the form to be submitted:
   * Variant prop is `warning`
