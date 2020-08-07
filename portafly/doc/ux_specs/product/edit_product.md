@@ -8,7 +8,7 @@
 
 ##### Form
 * Input fields
-  * Name > text input [required]
+  * Name [required] > text input
     * Validation errors:
       * Required field on form submit (if left blank)
       * Name already exists on form submit
