@@ -29,8 +29,6 @@ Please refer to the single page files together with mockups linked in each page 
 
 ##### Backend
 * [Overview](./backend/overview.md)
-* [Create backend](./backend/create_backend.md)
-* [Edit backend](./product/edit_backend.md)
 
 ##### Dashboard
 * _coming soon_
