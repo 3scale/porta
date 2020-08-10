@@ -21,6 +21,7 @@ class Buyers::AccountsController < Buyers::BaseController
         includes(:bought_account_plan, :country)
                     .order_by(params[:sort], params[:direction])
                     .paginate(pagination_params)
+                    .decorate
   end
 
   def new
@@ -79,6 +80,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def show
     @available_account_plans = current_account.account_plans.stock
+    @account = account.decorate
   end
 
   protected
