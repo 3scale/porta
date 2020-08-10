@@ -33,7 +33,7 @@ h1 data-hook="account-show"
           tr
             th Administrator
             td
-              => @account.decorate.admin_user_display_name
+              => @account.admin_user_display_name
               - admin_user_email = @account.admin_user.email
               - if admin_user_email.present?
                 | (#{mail_to admin_user_email})
