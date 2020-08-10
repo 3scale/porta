@@ -39,12 +39,13 @@ class Api::ProxyConfigsControllerTest < ActionDispatch::IntegrationTest
 
   test 'index shows the user display_name' do
     users = [admin, FactoryBot.create(:member, account: provider)]
-    config = users.map { |user| FactoryBot.create(:proxy_config, proxy: proxy, user: user, environment: 'production') }
+    config = (users | [nil]).map { |user| FactoryBot.create(:proxy_config, proxy: proxy, user: user, environment: 'production') }
 
     get admin_service_proxy_configs_path(service_id: service, environment: 'production')
 
     page = Nokogiri::HTML::Document.parse(response.body)
-    assert_same_elements users.map { |user| user.decorate.display_name }, page.xpath('//table/tbody/tr/td[4]').map(&:text)
+    expected_display_names = users.map { |user| user.decorate.display_name } | ['']
+    assert_same_elements expected_display_names, page.xpath('//table/tbody/tr/td[4]').map(&:text)
   end
 
   test 'show' do
