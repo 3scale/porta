@@ -6,16 +6,14 @@
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/APPDUX-343)
 * [Parent JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5575)
 
-##### Title
-* Create a new backend
-
 ##### Form
 * Input fields
-  * Name > text input [required]
-    * Validation errors:
+  * Name [required] > text input
+    * Validation errors ([specs](../../global_components/alerts.md)):
       * Required field on form submit (if left blank)
-      * Name already exists on form submit
-      * Name already exists on _onblur_
+    * Validation alerts ([specs](../../global_components/alerts.md)):
+       <!-- * Name is already in use on form submit -->
+       * Name is already in use recommendation on _onblur_
   * System name [required] > text input w/ placeholder and helper text
     * Inline help:
       * Label include a `pf-icon-help` icon
@@ -24,13 +22,13 @@
         * the need for the system name to be unique
         * an alert to users about the system name not being editable once the product is created
     * Validation errors:
-      * Not valid name on form submit
+      * Not a valid name on form submit
       * Name already exists on form submit
-      * Not valid name on _onblur_
+      * Not a valid name on _onblur_
       * Name already exists on _onblur_
   * Description > text area
     * NO validation errors
-  * API private base URL > text input w/ placeholder and helper text
+  * API private base URL [required] > text input w/ placeholder and helper text
     * Validation errors:
       * Required field on form submit (if left blank)
       * URL scheme is not a secure protocol (https or wss)
