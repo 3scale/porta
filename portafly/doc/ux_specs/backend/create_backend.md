@@ -14,7 +14,7 @@
     * Validation alerts ([specs](../../global_components/alerts.md)):
        <!-- * Name is already in use on form submit -->
        * Name is already in use recommendation on _onblur_
-  * System name [required] > text input w/ placeholder and helper text
+  * System name [required] > text input with placeholder and helper text
     * Inline help:
       * Label include a `pf-icon-help` icon
       * Icon toggles a popover ([PF specs](https://www.patternfly.org/v4/documentation/react/components/popover))
@@ -28,7 +28,7 @@
       * Name already exists on _onblur_
   * Description > text area
     * NO validation errors
-  * API private base URL [required] > text input w/ placeholder and helper text
+  * API private base URL [required] > text input with placeholder and helper text
     * Validation errors:
       * Required field on form submit (if left blank)
       * URL scheme is not a secure protocol (https or wss)
