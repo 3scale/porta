@@ -6,10 +6,10 @@ class Api::ProxyConfigsController < Api::BaseController
 
   def index
     if params[:environment].to_s.downcase == 'production'.freeze
-      @proxy_configs    = proxy_configs.production.paginate(paginate_params)
+      @proxy_configs    = proxy_configs.production.paginate(paginate_params).decorate
       @environment_name = 'Production'.freeze
     else
-      @proxy_configs    = proxy_configs.sandbox.paginate(paginate_params)
+      @proxy_configs    = proxy_configs.sandbox.paginate(paginate_params).decorate
       @environment_name = 'Staging'.freeze
     end
   end

@@ -14,8 +14,8 @@ table class="data"
         td = link_to proxy_config.filename, admin_service_proxy_config_path(@service, proxy_config.id)
         td = proxy_config.version
         td = proxy_config.created_at
-        - user = proxy_config.user
-        td = user.decorate.display_name if user
+        - user_display_name = proxy_config.user_display_name
+        td = user_display_name if user_display_name.present?
 
 
 = will_paginate(@proxy_configs)
