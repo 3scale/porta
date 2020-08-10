@@ -8,20 +8,21 @@
 
 ##### Form
 * Input fields
-  * Name > text input [required]
-    * Validation errors:
+  * Name [required] > text input
+    * Validation errors ([specs](../../global_components/alerts.md)):
       * Required field on form submit (if left blank)
-      * Name already exists on form submit
-      * Name already exists on _onblur_
+    * Validation alerts ([specs](../../global_components/alerts.md)):
+    <!-- * Name is already in use on form submit -->
+      * Name is already in use recommendation on _onblur_
   * System name > text input [disabled]
       * Inline help:
         * Label include a `pf-icon-help` icon
         * Icon toggles a popover ([PF specs](https://www.patternfly.org/v4/documentation/react/components/popover))
         * Popover includes content about a system name cannot be edited once the product is created
-      * NO validation errors
+      * No validation errors
   * Description > text area
-    * NO validation errors
-  * API private base URL > text input [required]
+    * No validation errors
+  * API private base URL [required] > text input 
     * Validation errors :
       * Required field on form submit (if left blank)
       * URL scheme is not a secure protocol (https or wss)
