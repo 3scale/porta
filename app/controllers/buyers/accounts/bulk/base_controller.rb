@@ -10,7 +10,7 @@ class Buyers::Accounts::Bulk::BaseController < FrontendController
   end
 
   def find_accounts
-    @accounts = collection
+    @accounts = collection.decorate
   end
 
   def collection
