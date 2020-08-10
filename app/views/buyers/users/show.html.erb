@@ -1,7 +1,7 @@
 <%= render 'buyers/accounts/menu' %>
 
 <h2>
-  User <%= h @user.decorate.display_name %> of the account <%= h @user.account.org_name %>
+  User <%= h @user.display_name %> of the account <%= h @user.account.org_name %>
   <%= link_to 'Edit', edit_resource_path(@user), :class => 'action edit' %>
 </h2>
 
@@ -9,7 +9,7 @@
 
   <tr>
     <th>Name</th>
-    <td><%= h @user.decorate.display_name %></td>
+    <td><%= h @user.display_name %></td>
   </tr>
 
   <tr>
@@ -17,7 +17,7 @@
     <td><%= h @user.created_at.to_s(:long) %></td>
   </tr>
 
-  <% unless @user.last_login_at.blank? -%>
+  <% if @user.last_login_at.present? -%>
     <tr>
       <th>Last logged in on</th>
       <td><%= h @user.last_login_at.to_s(:long) %></td>
