@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ProxyConfigsController < Api::BaseController
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services
 
@@ -5,13 +7,8 @@ class Api::ProxyConfigsController < Api::BaseController
   sublayout 'api/service'
 
   def index
-    if params[:environment].to_s.downcase == 'production'.freeze
-      @proxy_configs    = proxy_configs.production.paginate(paginate_params).decorate
-      @environment_name = 'Production'.freeze
-    else
-      @proxy_configs    = proxy_configs.sandbox.paginate(paginate_params).decorate
-      @environment_name = 'Staging'.freeze
-    end
+    configs = params[:environment].to_s.downcase == 'production' ? proxy_configs.production : proxy_configs.sandbox
+    @proxy_configs = configs.paginate(paginate_params).decorate
   end
 
   def show
