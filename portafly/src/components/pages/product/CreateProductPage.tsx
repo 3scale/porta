@@ -23,7 +23,7 @@ import { useHistory, Redirect } from 'react-router'
 import { createProduct, NewProduct } from 'dal/products'
 import { useAsync } from 'react-async'
 import { useAlertsContext, useDocumentTitle } from 'components/util'
-import { ValidationException } from 'utils'
+import { ValidationException, Validator } from 'utils'
 
 type Validations = Record<string, {
   validation: 'default' | 'success' | 'error',
@@ -74,19 +74,11 @@ const CreateProductPage = () => {
 
   const isValid = validations.name.validation === 'success' && validations.system_name.validation !== 'error'
 
-  const validate = (inputName: string) => {
-    switch (inputName) {
-      case 'name':
-        return name.length > 0 ? 'success' : 'error'
-      case 'system_name':
-        // eslint-disable-next-line no-nested-ternary
-        return !systemName ? 'default' : (systemName.length > 0 ? 'success' : 'error')
-      case 'description':
-        return description.length > 0 ? 'success' : 'default'
-      default:
-        return 'default'
-    }
-  }
+  const validator = Validator()
+    .for('name', () => (name.length > 0 ? 'success' : 'error'))
+    // eslint-disable-next-line no-nested-ternary
+    .for('system_name', () => (!systemName ? 'default' : (systemName.length > 0 ? 'success' : 'error')))
+    .for('description', () => (description.length > 0 ? 'success' : 'default'))
 
   const onBlur: FocusEventHandler = (ev) => {
     const { name: inputName } = ev.currentTarget as HTMLInputElement
@@ -94,7 +86,7 @@ const CreateProductPage = () => {
     const newValidations = { ...validations }
 
     newValidations[inputName] = {
-      validation: validate(inputName)
+      validation: validator.validate(inputName)
     }
 
     setValidations(newValidations)
