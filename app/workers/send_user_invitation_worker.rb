@@ -3,7 +3,7 @@
 class SendUserInvitationWorker < ApplicationJob
   queue_as :default
 
-  RETRY_ERRORS = [
+  ERRORS = [
     OpenSSL::SSL::SSLError,
     Net::SMTPAuthenticationError,
     Net::SMTPFatalError,
@@ -14,21 +14,15 @@ class SendUserInvitationWorker < ApplicationJob
     SocketError,
   ].freeze
 
-  DISCARD_ERRORS = [
-    ActiveRecord::RecordNotFound
-  ].freeze
-
   def perform(invitation_id)
     invitation = Invitation.find(invitation_id)
 
     mailer = invitation.account.provider? ? ProviderInvitationMailer : InvitationMailer
     mailer.invitation(invitation).deliver_now!
 
-    invitation.update!(sent_at: Time.zone.now)
-  rescue *RETRY_ERRORS => error
-    logger.error(error.message)
-  rescue *DISCARD_ERRORS => error
-    logger.error(error.message)
-    false
+    invitation.update(sent_at: Time.zone.now)
+  rescue *ERRORS => e
+    logger.error(e.message)
+    retry_job
   end
 end

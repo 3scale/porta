@@ -44,7 +44,7 @@ class InvitationTest < ActiveSupport::TestCase
     assert_not_nil invitation.token
   end
 
-  test 'creates a worker when created' do
+  test 'enqueues a worker when created' do
     SendUserInvitationWorker.expects(:perform_later)
     @provider.invitations.create!(:email => 'buddy@example.net')
   end

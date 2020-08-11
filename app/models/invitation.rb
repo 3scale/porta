@@ -39,6 +39,7 @@ class Invitation < ApplicationRecord
 
   def resend
     notify_invitee unless accepted?
+    update!(sent_at: nil)
   end
 
   private

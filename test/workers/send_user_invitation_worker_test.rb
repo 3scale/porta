@@ -30,22 +30,23 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
   end
 
   def test_handles_errors
-    errors = SendUserInvitationWorker::RETRY_ERRORS + SendUserInvitationWorker::DISCARD_ERRORS
-    errors.each do |error_class|
+    SendUserInvitationWorker::ERRORS.each do |error_class|
       ProviderInvitationMailer.any_instance.expects(:invitation).raises(error_class)
 
       invitation = FactoryBot.create(:invitation)
 
       assert_not invitation.sent_at
-      SendUserInvitationWorker.new.perform(invitation.id)
-      assert_not invitation.reload.sent_at, error_class.to_s
+      worker = SendUserInvitationWorker.new
+      worker.expects(:retry_job)
+      worker.perform(invitation.id)
+      assert_not invitation.reload.sent_at
     end
   end
 
   # regression test for: https://github.com/3scale/system/pull/3316
   def test_send_invitation_with_helper_tag
     provider = FactoryBot.create(:simple_provider)
-    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+    FactoryBot.create(:simple_buyer, provider_account: provider)
     FactoryBot.create(:cms_email_template, system_name: 'invitation', provider: provider, published: '{% debug:help %}', rails_view_path: 'emails/invitation')
     invitation = FactoryBot.create(:invitation)
 
