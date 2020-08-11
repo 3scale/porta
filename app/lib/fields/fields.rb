@@ -119,8 +119,7 @@ module Fields::Fields
       # when creating first provider there is no fields definitions source
       # maybe because of factories, maybe because of sun eruptions
       if fields_definitions_source_root
-        extra_field_names = defined_extra_fields.map(&:name)
-        fields_attributes = attributes.extract!(*extra_field_names)
+        fields_attributes = attributes.extract!(*defined_extra_fields_names)
         self.extra_fields = fields_attributes
       end
 
@@ -258,6 +257,10 @@ module Fields::Fields
 
   def defined_extra_fields
     defined_fields - defined_builtin_fields
+  end
+
+  def defined_extra_fields_names
+    defined_extra_fields.map(&:name)
   end
 
   def defined_fields_hash
