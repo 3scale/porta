@@ -7,7 +7,7 @@ class Api::ProxyConfigsController < Api::BaseController
   sublayout 'api/service'
 
   def index
-    configs = params[:environment].to_s.downcase == 'production' ? proxy_configs.production : proxy_configs.sandbox
+    configs = params[:environment].to_s.casecmp?('production') ? proxy_configs.production : proxy_configs.sandbox
     @proxy_configs = configs.paginate(paginate_params).decorate
   end
 
