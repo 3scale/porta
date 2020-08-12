@@ -30,6 +30,7 @@ class Invitation < ApplicationRecord
   end
 
   def accepted?
+    return true
     accepted_at.present?
   end
 
@@ -38,7 +39,8 @@ class Invitation < ApplicationRecord
   end
 
   def resend
-    notify_invitee unless accepted?
+    return if accepted?
+    notify_invitee
     update!(sent_at: nil)
   end
 
@@ -59,7 +61,7 @@ class Invitation < ApplicationRecord
   end
 
   def notify_invitee
-    SendUserInvitationWorker.perform_later(id)
+    SendUserInvitationWorker.perform_later(self)
   end
 
 end

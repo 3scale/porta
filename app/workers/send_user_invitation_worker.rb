@@ -11,12 +11,10 @@ class SendUserInvitationWorker < ApplicationJob
     Net::SMTPSyntaxError,
     Net::SMTPUnknownError,
     Net::SMTPUnsupportedCommand,
-    SocketError,
+    SocketError
   ].freeze
 
-  def perform(invitation_id)
-    invitation = Invitation.find(invitation_id)
-
+  def perform(invitation)
     mailer = invitation.account.provider? ? ProviderInvitationMailer : InvitationMailer
     mailer.invitation(invitation).deliver_now!
 
