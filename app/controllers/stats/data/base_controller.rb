@@ -71,7 +71,7 @@ class Stats::Data::BaseController < ApplicationController
   private
 
   def render_usage(parameter)
-    options = slice_and_use_defaults(params, parameter,
+    options = slice_and_use_defaults(usage_params(parameter), parameter,
                                      :period, :since, :timezone, :granularity, :until, :skip_change)
     @data = @source.usage(options)
 
@@ -84,6 +84,13 @@ class Stats::Data::BaseController < ApplicationController
     end
   rescue Stats::InvalidParameterError => e
     render_error e.to_s, :status => :bad_request
+  end
+
+  def usage_params(required_parameter)
+    params.require(required_parameter)
+    permitted_params = params.permit(*%i[metric_name granularity period since until skip_change timezone application_id backend_api_id service_id response_code])
+    permitted_params.require([:granularity, :since]) if permitted_params[:period].blank?
+    permitted_params
   end
 
   # Slices supplied params to allowed set, using defaults

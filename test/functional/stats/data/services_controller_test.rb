@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::Data::ServicesControllerTest < ActionController::TestCase
@@ -14,7 +16,7 @@ class Stats::Data::ServicesControllerTest < ActionController::TestCase
     setup_data
 
     get :usage, format: :csv, service_id: @provider.default_service.id, period: 'troloro'
-    assert_equal 'text/plain', response.header['Content-Type']
+    assert_match /text\/plain/, response.header['Content-Type']
     assert_equal 400, response.status
   end
 

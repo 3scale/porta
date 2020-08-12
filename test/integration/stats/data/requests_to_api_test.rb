@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
@@ -64,53 +66,61 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
   # Provider key
 
   test 'respond on json for applications' do
-    get "/stats/applications/#{@application.id}/usage.json", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/applications/#{@application.id}/usage.json", params
     assert_response :success
     assert_content_type 'application/json'
   end
 
   test 'respond on xml for applications' do
-    get "/stats/applications/#{@application.id}/usage.xml", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/applications/#{@application.id}/usage.xml", params
     assert_response :success
     assert_content_type 'application/xml'
   end
 
   test 'not returning change if asked' do
-    get "/stats/applications/#{@application.id}/usage.xml", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key, :skip_change => 'false'
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key, skip_change: 'false' }
+    get "/stats/applications/#{@application.id}/usage.xml", params
     assert_response :success
     assert_content_type 'application/xml'
     refute_match 'change', @response.body
   end
 
   test 'not returning change by default' do
-    get "/stats/applications/#{@application.id}/usage.json", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/applications/#{@application.id}/usage.json", params
     assert_response :success
     refute data['change']
     assert_content_type 'application/json'
   end
 
   test 'returning change if asked' do
-    get "/stats/applications/#{@application.id}/usage.json", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key, :skip_change => 'false'
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key, skip_change: 'false' }
+    get "/stats/applications/#{@application.id}/usage.json", params
     assert_response :success
     assert data['change'], "#{data} should have change key"
     assert_content_type 'application/json'
   end
 
   test 'respond when missing params for applications' do
-    get "/stats/applications/#{@application.id}/usage.xml", :period => 'day',  :provider_key => @provider_account.api_key
+    params = { period: 'day', provider_key: @provider_account.api_key }
+    get "/stats/applications/#{@application.id}/usage.xml", params
     assert_response :bad_request
-    assert_content_type 'application/xml'
+    assert_content_type 'text/plain'
   end
 
   test 'response when application not found' do
-    get "/stats/applications/XXX/usage.json", :period => 'day',  :metric_name => 'hits', :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/applications/XXX/usage.json", params
     assert_response :not_found
     assert_content_type 'application/json'
     assert_equal '{"error":"Application not found"}', @response.body
   end
 
   test 'respond when provided with non-existent metric for applications' do
-    get "/stats/applications/#{@application.id}/usage.json", :period => 'day',  :metric_name => "xxxx", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "xxxx", provider_key: @provider_account.api_key }
+    get "/stats/applications/#{@application.id}/usage.json", params
     assert_response :bad_request
     assert_content_type 'application/json'
     assert_equal '{"error":"metric xxxx not found"}', @response.body
@@ -120,53 +130,59 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
   # Services
 
   test 'respond on json for services' do
-    get "/stats/services/#{@service.id}/usage.json", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/services/#{@service.id}/usage.json", params
     assert_response :success
     assert_content_type 'application/json'
   end
 
   test 'respond on json for services in negative timezone and very old times' do
-    get "/stats/services/#{@service.id}/usage.json", :period => 'month', :since => '0150-12-01', :timezone => 'Pacific Time (US & Canada)',  :metric_name => "hits", :provider_key => @provider_account.api_key
+    params = { period: 'month', since: '0150-12-01', timezone: 'Pacific Time (US & Canada)', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/services/#{@service.id}/usage.json", params
     assert_response :success
     assert_content_type 'application/json'
 
     # to trigger the shift > 0 conditions
-    get "/stats/services/#{@service.id}/usage.json", :period => 'month', :since => '0150-12-01', :timezone => 'New Delhi',  :metric_name => "hits", :provider_key => @provider_account.api_key
+    get "/stats/services/#{@service.id}/usage.json", params.merge(timezone: 'New Delhi')
     assert_response :success
     assert_content_type 'application/json'
 
     # to trigger the granularity == :month condition
-    get "/stats/services/#{@service.id}/usage.json", :period => 'year', :since => '0150-12-01', :timezone => 'Pacific Time (US & Canada)',  :metric_name => "hits", :provider_key => @provider_account.api_key
+    get "/stats/services/#{@service.id}/usage.json", params.merge(period: 'year')
     assert_response :success
     assert_content_type 'application/json'
 
     # to trigger both the shift > 0 conditions and granularity == :month
-    get "/stats/services/#{@service.id}/usage.json", :period => 'year', :since => '0150-12-01', :timezone => 'New Delhi',  :metric_name => "hits", :provider_key => @provider_account.api_key
+    get "/stats/services/#{@service.id}/usage.json", params.merge(period: 'year', timezone: 'New Delhi')
     assert_response :success
     assert_content_type 'application/json'
   end
 
   test 'respond on xml for services' do
-    get "/stats/services/#{@service.id}/usage.xml", :period => 'day', :metric_name => "hits", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/services/#{@service.id}/usage.xml", params
     assert_response :success
     assert_content_type 'application/xml'
   end
 
   test 'respond when missing params for services' do
-    get "/stats/services/#{@service.id}/usage.xml", :period => 'day',  :provider_key => @provider_account.api_key
+    params = { period: 'day', provider_key: @provider_account.api_key }
+    get "/stats/services/#{@service.id}/usage.xml", params
     assert_response :bad_request
-    assert_content_type 'application/xml'
+    assert_content_type 'text/plain'
   end
 
   test 'respond when provided with non-existent metric for services' do
-    get "/stats/services/#{@service.id}/usage.json", :period => 'day',  :metric_name => "xxxx", :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "xxxx", provider_key: @provider_account.api_key }
+    get "/stats/services/#{@service.id}/usage.json", params
     assert_response :bad_request
     assert_content_type 'application/json'
     assert_equal '{"error":"metric xxxx not found"}', @response.body
   end
 
   test 'response when service not found' do
-    get "/stats/services/XXX/usage.json", :period => 'day',  :metric_name => 'hits', :provider_key => @provider_account.api_key
+    params = { period: 'day', metric_name: "hits", provider_key: @provider_account.api_key }
+    get "/stats/services/XXX/usage.json", params
     assert_response :not_found
     assert_content_type 'application/json'
     assert_equal '{"error":"Service not found"}', @response.body
