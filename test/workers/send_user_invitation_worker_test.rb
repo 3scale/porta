@@ -11,7 +11,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
       invitation = FactoryBot.create(:invitation, account: provider_account)
 
       assert_not invitation.sent_at
-      SendUserInvitationWorker.new.perform(invitation.id)
+      SendUserInvitationWorker.new.perform(invitation)
       assert_in_delta Time.zone.now, invitation.reload.sent_at, 1.second
     end
   end
@@ -24,7 +24,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
       invitation = FactoryBot.create(:invitation, account: buyer_account)
 
       assert_not invitation.sent_at
-      SendUserInvitationWorker.new.perform(invitation.id)
+      SendUserInvitationWorker.new.perform(invitation)
       assert_in_delta Time.zone.now, invitation.reload.sent_at, 1.second
     end
   end
@@ -38,7 +38,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
       assert_not invitation.sent_at
       worker = SendUserInvitationWorker.new
       worker.expects(:retry_job)
-      worker.perform(invitation.id)
+      worker.perform(invitation)
       assert_not invitation.reload.sent_at
     end
   end
@@ -51,7 +51,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
     invitation = FactoryBot.create(:invitation)
 
     assert_difference('ActionMailer::Base.deliveries.count') do
-      SendUserInvitationWorker.new.perform(invitation.id)
+      SendUserInvitationWorker.new.perform(invitation)
     end
   end
 end

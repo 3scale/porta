@@ -30,7 +30,6 @@ class Invitation < ApplicationRecord
   end
 
   def accepted?
-    return true
     accepted_at.present?
   end
 
