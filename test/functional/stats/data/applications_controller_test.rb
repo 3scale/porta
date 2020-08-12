@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::Data::ApplicationsControllerTest < ActionController::TestCase
@@ -16,11 +18,11 @@ class Stats::Data::ApplicationsControllerTest < ActionController::TestCase
     setup_data
 
     get :usage, format: :csv, application_id: @app.id, period: 'troloro'
-    assert_equal 'text/plain', response.header['Content-Type']
+    assert_match /text\/plain/, response.header['Content-Type']
     assert_equal 400, response.status
 
     get :usage_response_code, format: :csv, application_id: @app.id, period: 'troloro'
-    assert_equal 'text/plain', response.header['Content-Type']
+    assert_match /text\/plain/, response.header['Content-Type']
     assert_equal 400, response.status
   end
 
