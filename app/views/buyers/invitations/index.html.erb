@@ -25,8 +25,7 @@
         <td>
           <% if can? :manage, invitation %>
             <% unless invitation.accepted? -%>
-               <%= fancy_link_to('Resend', resend_admin_buyers_account_invitation_path(invitation.account,invitation),
-                                           { :class => "refresh", :id => "resend-invitation-#{invitation.id}", :method => :put, :disabled => "#{invitation.accepted?}" }) %>
+               <%= fancy_link_to('Resend', resend_admin_buyers_account_invitation_path(invitation.account,invitation), { :class => "refresh", :id => "resend-invitation-#{invitation.id}", :method => :put }) %>
             <% end -%>
           <% end %>
         <td>
