@@ -36,6 +36,9 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
 
+    When I go to the service contracts admin page
+     And I follow "Account" within table
+
 
     Then I should see following table:
       | Account ▲ | Plan        |
@@ -47,4 +50,3 @@ Feature: Bulk operations
   @wip
   Scenario: Try to mass change contracts from different services
     # TODO: !
-
