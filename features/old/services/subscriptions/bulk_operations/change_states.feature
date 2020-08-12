@@ -34,7 +34,7 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
 
-    # there is no transision suspended => live
+    # there is no transition suspended => live
     Then I should see following table:
      | Account ▲ | State     |
      | bob       | live      |
@@ -85,4 +85,3 @@ Feature: Bulk operations
       | bob       | pending |
       | jane      | live    |
       | mike      | live    |
-
