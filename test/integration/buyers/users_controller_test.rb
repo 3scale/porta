@@ -4,12 +4,12 @@ require 'test_helper'
 
 class Buyers::UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
-    provider = FactoryBot.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     login! provider
     @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
   end
 
-  attr_reader :buyer
+  attr_reader :buyer, :provider
 
   test '#index renders the display name of all users' do
     FactoryBot.create(:member, account: buyer)
@@ -48,11 +48,22 @@ class Buyers::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'User could not be deleted.', flash[:error]
   end
 
-  test '#update role from member to admin' do
+  test '#update all attributes' do
+    FactoryBot.create(:fields_definition, account: provider, target: 'User', name: 'country')
     user = FactoryBot.create(:member, account: buyer)
 
-    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), { user: { role: 'admin' } }
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), {
+      user: {
+        role: 'admin',
+        username: 'updatedusername',
+        email: 'newemail@example.org',
+        country: 'Japan'
+      }
+    }
 
     assert user.reload.admin?
+    assert_equal 'updatedusername', user.username
+    assert_equal 'newemail@example.org', user.email
+    assert_equal 'Japan', user.field_value('country')
   end
 end

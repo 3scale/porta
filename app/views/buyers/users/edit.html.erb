@@ -3,7 +3,7 @@
 <h2>
   Edit User <%= h @user.display_name %> of the account <%= h @user.account.org_name %>
 </h2>
-<%= semantic_form_for @user, :url => resource_path(@user), :builder => Fields::FormBuilder do |form| %>
+<%= semantic_form_for @user, url: admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), builder: Fields::FormBuilder do |form| %>
 
   <%= form.inputs :name => 'User Information' do %>
     <%= form.user_defined_form %>
@@ -26,7 +26,7 @@
   <%= form.buttons do %>
     <%= form.commit_button %>
     <% if @user.can_be_destroyed? -%>
-      <%= delete_link_for resource_path(@user), data: {:confirm => "Are you sure you want to destroy user #{@user.username}?" } %>
+      <%= delete_link_for admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), data: {confirm: "Are you sure you want to destroy user #{@user.username}?" } %>
     <% end -%>
   <% end %>
 
