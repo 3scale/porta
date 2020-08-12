@@ -132,7 +132,7 @@ module Stats
           length = 1.send(period)
 
           timezone = extract_timezone(options)
-          range_since = options[:since] && to_time(options[:since],timezone) || timezone.now - length
+          range_since = to_time(options[:since].presence || timezone.now - length, timezone)
           range_until = (range_since + length - 1.second).end_of_minute # taking a second away means excluding the extra day in case of a month, etc
 
           sanitize_range_and_granularity(range_since..range_until, granularity)
@@ -141,11 +141,11 @@ module Stats
           # due to the unfortunate use of 21600 as a valid granularity  the parameter is required to a symbol or fixnum
           raise InvalidParameterError, "Granularity must be one of #{GRANULARITIES.values.inspect}, not #{options[:granularity]}" unless GRANULARITIES.values.include?(options[:granularity]) || GRANULARITIES.values.include?(options[:granularity].to_sym)
 
-          if options[:since] && options[:until]
+          if options[:since].present? && options[:until].present?
             timezone = extract_timezone(options)
             range = to_time(options[:since], timezone)..to_time(options[:until], timezone)
             sanitize_range_and_granularity(range, options[:granularity])
-          elsif options[:range]
+          elsif options[:range].present?
             sanitize_range_and_granularity(options[:range], options[:granularity])
           else
             raise InvalidParameterError, "You need to specify either 'range' or 'since' and 'until'"
