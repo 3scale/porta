@@ -6,8 +6,6 @@ class Buyers::UsersController < Buyers::BaseController
   before_action :find_account, except: :index
   before_action :find_user, except: :index
 
-  actions :show, :edit
-
   def index
     @account = current_account.buyer_accounts.find(params[:account_id])
     @users = @account.users.order(:id).paginate(page: params[:page]).decorate
@@ -27,6 +25,10 @@ class Buyers::UsersController < Buyers::BaseController
       render :edit
     end
   end
+
+  def show; end
+
+  def edit; end
 
   def destroy
     if user.destroy
