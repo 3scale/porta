@@ -6,7 +6,6 @@ html[lang="en"]
     base href=base_url
     = stylesheet_link_tag "provider/layouts/iframe"
     = csrf_meta_tag
-    = render partial: 'provider/analytics', locals: { current_user: nil }
     = yield :head
 
   body
