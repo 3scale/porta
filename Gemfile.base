@@ -57,9 +57,10 @@ gem 'sidekiq-throttled'
 gem 'sidekiq-prometheus-exporter'
 
 # Yabeda metrics
-gem 'yabeda-sidekiq'
-gem 'prometheus-client-mmap'
+
 gem 'yabeda-prometheus'
+gem 'yabeda-prometheus-mmap'
+gem 'yabeda-sidekiq'
 
 gem 'activemerchant', '~> 1.77.0'
 gem 'active_merchant-adyen12', github: '3scale/active_merchant-adyen12'

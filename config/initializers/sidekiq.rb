@@ -36,6 +36,9 @@ Sidekiq.configure_server do |config|
   port = ENV.fetch('PROMETHEUS_EXPORTER_PORT', 9394).to_i
   port += Sidekiq.options[:index].to_i
   ENV['PROMETHEUS_EXPORTER_PORT'] ||= port.to_s
+
+  require 'yabeda/prometheus/mmap'
+
   Yabeda::Prometheus::Exporter.start_metrics_server!
 end
 
