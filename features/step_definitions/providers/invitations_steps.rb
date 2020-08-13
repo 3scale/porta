@@ -9,7 +9,7 @@ Then /^I should see the invite user link$/ do
 end
 
 Then /^I should see a new buyer user was invited$/ do
-  step %{I should see "Partner user invitation was successfully sent."}
+  step %{I should see "Partner user invitation will be sent soon."}
   Invitation.find_by_email(@user_attrs[:email]).should_not be_nil
 end
 

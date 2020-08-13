@@ -12,7 +12,7 @@ class Buyers::InvitationsController < Buyers::BaseController
   create! do |success, failure|
     success.html do
       redirect_to admin_buyers_account_invitations_path(@account),
-                  notice: 'Invitation was successfully sent.'
+                  notice: 'Invitation will be sent soon.'
     end
   end
 
@@ -26,7 +26,7 @@ class Buyers::InvitationsController < Buyers::BaseController
 
     respond_to do |format|
       format.html do
-        flash[:success] = "Invitation was successfully resent"
+        flash[:success] = 'Invitation will be resent soon.'
         redirect_to(admin_buyers_account_invitations_path(@account))
       end
       format.xml  { head :ok }

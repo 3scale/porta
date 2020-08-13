@@ -58,14 +58,7 @@ class Invitation < ApplicationRecord
   end
 
   def notify_invitee
-    # TODO: maybe subclass to Invitation and ProviderInvitation
-    if account.provider?
-      ProviderInvitationMailer.invitation(self).deliver_now
-    else
-      InvitationMailer.invitation(self).deliver_now
-    end
-
-    update_column(:sent_at, Time.zone.now)
+    SendUserInvitationWorker.perform_later(self)
   end
 
 end
