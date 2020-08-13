@@ -14,19 +14,17 @@ class SendUserInvitationWorker < ApplicationJob
     SocketError
   ].freeze
 
-  DISCARD_ERRORS = [
-    ActiveJob::DeserializationError
-  ].freeze
+  rescue_from ActiveJob::DeserializationError do |e|
+    logger.error("SendUserInvitationWorker#perform raised #{e.class} with message #{e.message}")
+  end
 
   def perform(invitation)
     mailer = invitation.account.provider? ? ProviderInvitationMailer : InvitationMailer
     mailer.invitation(invitation).deliver_now!
 
     invitation.update(sent_at: Time.zone.now)
-  rescue *DISCARD_ERRORS => ex
-    Rails.logger.info "SphinxIndexationWorker#perform raised" #{ex.class} with message #{ex.message}"
   rescue *RETRY_ERRORS => e
-    logger.error(e.message)
+    logger.error("SendUserInvitationWorker#perform raised #{e.class} with message #{e.message}")
     retry_job
   end
 end

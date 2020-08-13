@@ -30,11 +30,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
   end
 
   def test_handles_errors
-    errors = [
-      *SendUserInvitationWorker::RETRY_ERRORS,
-      *SendUserInvitationWorker::DISCARD_ERRORS,
-    ]
-    errors.each do |error_class|
+    SendUserInvitationWorker::RETRY_ERRORS.each do |error_class|
       ProviderInvitationMailer.any_instance.expects(:invitation).raises(error_class)
 
       invitation = FactoryBot.create(:invitation)
@@ -45,6 +41,15 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
       worker.perform(invitation)
       assert_not invitation.reload.sent_at
     end
+  end
+
+  def test_no_invitation_in_db
+    invitation = FactoryBot.create(:invitation)
+    expected_log_message = /SendUserInvitationWorker#perform raised ActiveJob::DeserializationError/
+    Rails.logger.expects(:error).with { |message| message.match(expected_log_message) }
+
+    invitation.delete
+    perform_enqueued_jobs(only: SendUserInvitationWorker) { SendUserInvitationWorker.perform_later(invitation) }
   end
 
   # regression test for: https://github.com/3scale/system/pull/3316
