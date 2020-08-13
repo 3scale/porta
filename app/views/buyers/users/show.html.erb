@@ -2,7 +2,7 @@
 
 <h2>
   User <%= h @user.display_name %> of the account <%= h @user.account.org_name %>
-  <%= link_to 'Edit', edit_resource_path(@user), :class => 'action edit' %>
+  <%= link_to 'Edit', edit_admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), class: 'action edit' %>
 </h2>
 
 <table class="list mini">
