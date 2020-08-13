@@ -11,7 +11,7 @@ class Provider::Admin::Messages::TrashController < FrontendController
   end
 
   def destroy
-    @message.unhide!
+    @message.restore_for!(current_account)
 
     flash[:notice] = 'Message was restored.'
     redirect_to action: :index
@@ -29,6 +29,6 @@ class Provider::Admin::Messages::TrashController < FrontendController
   private
 
   def find_message
-    @message = current_account.hidden_messages.find(params[:id])
+    @message = current_account.trashed_messages.not_system.find(params[:id])
   end
 end
