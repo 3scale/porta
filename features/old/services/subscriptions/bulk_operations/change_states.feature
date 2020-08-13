@@ -34,7 +34,10 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
 
-    # there is no transision suspended => live
+    When I go to the service contracts admin page
+     And I follow "Account" within table
+
+    # there is no transition suspended => live
     Then I should see following table:
      | Account ▲ | State     |
      | bob       | live      |
@@ -55,6 +58,9 @@ Feature: Bulk operations
      And I press "Change state" and I confirm dialog box within fancybox
 
     Then I should see "Action completed successfully"
+
+    When I go to the service contracts admin page
+     And I follow "Account" within table
 
     # pending cannot be changed to suspended
     Then I should see following table:
@@ -78,6 +84,9 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
 
+    When I go to the service contracts admin page
+     And I follow "Account" within table
+
     # resume = suspended => live
     Then I should see following table:
       | Account ▲ | State   |
@@ -85,4 +94,3 @@ Feature: Bulk operations
       | bob       | pending |
       | jane      | live    |
       | mike      | live    |
-
