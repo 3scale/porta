@@ -30,7 +30,11 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
   end
 
   def test_handles_errors
-    SendUserInvitationWorker::ERRORS.each do |error_class|
+    errors = [
+      *SendUserInvitationWorker::RETRY_ERRORS,
+      *SendUserInvitationWorker::DISCARD_ERRORS,
+    ]
+    errors.each do |error_class|
       ProviderInvitationMailer.any_instance.expects(:invitation).raises(error_class)
 
       invitation = FactoryBot.create(:invitation)
