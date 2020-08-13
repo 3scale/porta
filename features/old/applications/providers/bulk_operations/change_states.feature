@@ -34,6 +34,9 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
 
+    When I go to the applications admin page
+     And I follow "Name"
+
     # there is no transision suspended => live
     Then I should see following table:
      | Name ▲       | State     |
@@ -55,6 +58,9 @@ Feature: Bulk operations
      And I press "Change state" and I confirm dialog box within fancybox
 
     Then I should see "Action completed successfully"
+
+    When I go to the applications admin page
+     And I follow "Name"
 
     # pending cannot be changed to suspended
     Then I should see following table:
@@ -78,10 +84,12 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
 
+    When I go to the applications admin page
+     And I follow "Name"
+
     # resume = suspended => live
     Then I should see following table:
      | Name ▲       | State   |
      | LiveApp      | live    |
      | PendingApp   | pending |
      | SuspendedApp | live    |
-
