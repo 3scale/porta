@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class AccountDecoratorTest < Draper::TestCase
+class ProxyConfigDecoratorTest < Draper::TestCase
   test '#user_display_name' do
     user = FactoryBot.build(:admin)
     proxy_config = FactoryBot.build(:proxy_config, user: user)
