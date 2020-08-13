@@ -507,4 +507,21 @@ class MessageTest < ActiveSupport::TestCase
        assert_equal [@visible_message], Message.visible
      end
    end
+
+   test 'restore' do
+     provider = FactoryBot.create(:simple_account)
+     buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+     provider_sent_message = FactoryBot.create(:message, sender: provider)
+     buyer_received_message = FactoryBot.create(:received_message, message: provider_sent_message, receiver: buyer)
+     buyer_sent_message = FactoryBot.create(:message, sender: buyer)
+     provider_received_message = FactoryBot.create(:received_message, message: buyer_sent_message, receiver: provider)
+
+     [provider_sent_message, provider_received_message].each(&:hide!)
+
+     provider_sent_message.restore_for!(provider)
+     refute provider_sent_message.reload.hidden?
+
+     buyer_sent_message.restore_for!(provider)
+     refute provider_received_message.reload.hidden?
+   end
 end
