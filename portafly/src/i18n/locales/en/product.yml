@@ -67,3 +67,13 @@ applications_index:
   createapplication_button: Create application
   createapplication_button_description: Button to perform the creation of an application.
   # Main area
+  # Table header
+  actions_filter_options:
+    by_name: Name
+    by_state: State
+    by_account: Account
+    by_plan: Plan
+  accounts_filter_typeahead: "Filter by {{filter_option}}"
+  accounts_filter_typeahead_description: Filter by typeahead a text input. 
+
+  # Table body
