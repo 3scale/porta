@@ -66,3 +66,4 @@ applications_index:
   pagetitle_description: Page title to list all the applications.
   createapplication_button: Create application
   createapplication_button_description: Button to perform the creation of an application.
+  # Main area
