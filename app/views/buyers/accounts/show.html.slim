@@ -62,13 +62,13 @@ h1 data-hook="account-show"
                                  reject_admin_buyers_account_path(@account),
                                  method: :post,
                                  class: 'reject action'
-            - if can? :suspend, @account
+            - if can?(:suspend, @account) && @account.can_suspend?
               = action_link_to 'Suspend',
-                               suspend_admin_buyers_account_path(@account),
-                               method: :post,
-                               data: { confirm: 'Are you sure?', disable_with: 'suspending…' },
-                               class: 'action suspend'
-            - if can? :resume, @account
+                                suspend_admin_buyers_account_path(@account),
+                                method: :post,
+                                data: { confirm: 'Are you sure?', disable_with: 'suspending…' },
+                                class: 'action suspend'
+            - if can?(:resume, @account) && @account.can_resume?
               = action_link_to 'Resume',
                                resume_admin_buyers_account_path(@account),
                                method: :post,
