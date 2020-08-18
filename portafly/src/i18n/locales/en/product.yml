@@ -58,3 +58,11 @@ edit:
   required_name_description: Validation message to prompt the indication of a product name before saving product details.
   duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product."
   duplicated_name_description: Validation message to request the change of the product name due to duplication.
+
+# ------------------ Product > Applications index
+applications_index:
+  # Header
+  pagetitle: Applications
+  pagetitle_description: Page title to list all the applications.
+  createapplication_button: Create application
+  createapplication_button_description: Button to perform the creation of an application.
