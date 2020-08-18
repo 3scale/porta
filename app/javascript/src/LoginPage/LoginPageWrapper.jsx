@@ -24,7 +24,6 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import type { FlashMessage } from 'Types'
 
 type Props = {
-  enforceSSO: boolean,
   authenticationProviders: Array<mixed>,
   flashMessages: Array<FlashMessage>,
   providerAdminDashboardPath: string,
@@ -52,16 +51,17 @@ class SimpleLoginPage extends React.Component<Props, State> {
   }
 
   showForgotCredentials () {
-    const { disablePasswordReset, providerRequestPasswordResetPath } = this.props
-    return !disablePasswordReset && <ForgotCredentials requestPasswordResetPath={providerRequestPasswordResetPath} />
+    const { disablePasswordReset, providerRequestPasswordResetPath, show3scaleLoginForm } = this.props
+    const showResetPasswordLink = show3scaleLoginForm && !disablePasswordReset
+    return showResetPasswordLink && <ForgotCredentials requestPasswordResetPath={providerRequestPasswordResetPath} />
   }
 
   loginForm () {
     const hasAuthenticationProviders = this.props.authenticationProviders
-    const enforceSSO = this.props.enforceSSO
+    const show3scaleLoginForm = this.props.show3scaleLoginForm
     return (
       <React.Fragment>
-        { !enforceSSO &&
+        { show3scaleLoginForm &&
             <Login3scaleForm
               providerSessionsPath={this.props.providerSessionsPath}
               session={this.props.session}
