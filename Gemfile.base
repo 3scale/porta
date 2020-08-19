@@ -191,7 +191,7 @@ gem 'record_tag_helper', '~> 1.0'
 group :test do
   # To remove once migrated all functional tests
   gem 'rails-controller-testing'
-  gem 'codecov', '~> 0.1.10', :require => false
+  gem 'codecov', :require => false
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'simplecov', '~> 0.10.0'
 
