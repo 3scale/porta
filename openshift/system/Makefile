@@ -13,8 +13,6 @@ REMOTE_IMAGE := $(NAMESPACE)/$(LOCAL_IMAGE)
 
 DOCKERFILE := Dockerfile.on_prem
 
-BUNDLE_GEMS__CONTRIBSYS__COM := $(shell bundle config gems.contribsys.com | awk 'END {} match($$0, /".*"/) {print substr($$0, RSTART+1, RLENGTH-2)}')
-BUNDLER_ENVIRONMENTS += BUNDLE_GEMS__CONTRIBSYS__COM
 BUNDLER_ENV += $(foreach env,$(BUNDLER_ENVIRONMENTS),$(env)=$(value $(env)))
 
 all: help
@@ -33,11 +31,6 @@ build: ## Build docker image. Accepts DOCKERFILE parameter. Name will be LOCAL_I
 	# But also mistakenly matches `**/.*` as any file with a dot anywhere.
 	# https://github.com/docker/docker-py/issues/1471
 	# @$(DOCKER_COMPOSE) build --pull system
-ifeq ($(DOCKERFILE), Dockerfile)
-ifeq ($(strip $(BUNDLE_GEMS__CONTRIBSYS__COM)),)
-	$(error missing environment `BUNDLE_GEMS__CONTRIBSYS__COM`. Please set `bundle config gems.contribsys.com "user:password"`)
-endif
-endif
 	docker build --build-arg BUNDLER_ENV="$(BUNDLER_ENV)" --file "$(DOCKERFILE)" --tag $(LOCAL_IMAGE) --pull ../..
 
 run: export LOCAL_IMAGE := $(LOCAL_IMAGE)
