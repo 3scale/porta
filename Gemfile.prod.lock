@@ -221,10 +221,10 @@ GEM
     ci_reporter (2.0.0)
       builder (>= 2.1.2)
     climate_control (0.2.0)
-    codecov (0.1.13)
+    codecov (0.2.6)
+      colorize
       json
       simplecov
-      url
     codemirror-rails (5.16.0)
       railties (>= 3.0, < 6.0)
     coderay (1.1.2)
@@ -763,7 +763,6 @@ GEM
       rack
       unicorn
     uniform_notifier (1.10.0)
-    url (0.3.2)
     webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -828,7 +827,7 @@ DEPENDENCIES
   childprocess
   chronic
   ci_reporter_shell!
-  codecov (~> 0.1.10)
+  codecov
   codemirror-rails (~> 5.6)
   coffee-rails (~> 4.2)
   colorize
