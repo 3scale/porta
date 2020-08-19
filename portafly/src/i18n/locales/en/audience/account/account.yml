@@ -43,7 +43,7 @@ applications:
  applications_table:
   aria_label: Applications table
   aria_label_description: Aria label of the table of applications
-  empty_state: Currently, there are no applications to show. Add applications. #Temporary
+  empty_state: Currently, there are no applications to show. Add applications. # Temporary
   empty_state_description: Message to display when there are no applications to show, and prompt the user to add applications
   name_header: Name
   name_header_description: Column listing names of applications
