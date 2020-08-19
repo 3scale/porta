@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   include ThreeScale::OnPremises
   include ProxyConfigAffectingChanges::ControllerExtension
 
+  _helpers.module_eval { prepend DecoratorAdditions }
+
   before_action :set_newrelic_custom_params
 
   protect_from_forgery with: :reset_session # See ActionController::RequestForgeryProtection for details
