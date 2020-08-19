@@ -81,4 +81,18 @@ applications_index:
     accounts_filter_typeahead: "Filter by {{filter_option}}"
     accounts_filter_typeahead_description: Filter by typeahead a text input.
 
-  # Table body
+    name_header: Name
+    name_header_description: Column listing application names.
+    account_header: Account
+    account_header_description: Column listing application accounts.
+    plan_header: Plan
+    plan_header_description: Column listing plans linked to the applications.
+    creationdate_header: Creation date #-- PROPOSED: for Audience > Accounts we have: Signup date - https://github.com/3scale/porta/pull/1928/files
+    creationdate_header_description: Column listing the date of creation of the application.
+    state_header: State
+    state_header_description: Column listing the state of the applications
+    state_values:
+      live: Live
+      pending: Pending
+      suspended: Suspended
+    state_values_description: Possible states of each application.
