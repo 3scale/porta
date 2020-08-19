@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::User::BaseController < Provider::Admin::BaseController
   activate_menu :account, :personal
 
@@ -8,6 +10,6 @@ class Provider::Admin::User::BaseController < Provider::Admin::BaseController
   protected
 
   def authorize_resource!
-    authorize! [:read, :update], current_user
+    authorize! %i[read update], current_user
   end
 end
