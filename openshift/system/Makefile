@@ -11,7 +11,7 @@ VERSION := $(SYSTEM_VERSION)
 LOCAL_IMAGE := $(NAME):$(VERSION)
 REMOTE_IMAGE := $(NAMESPACE)/$(LOCAL_IMAGE)
 
-DOCKERFILE := Dockerfile.on_prem
+DOCKERFILE := Dockerfile
 
 BUNDLER_ENV += $(foreach env,$(BUNDLER_ENVIRONMENTS),$(env)=$(value $(env)))
 
