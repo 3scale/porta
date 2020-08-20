@@ -1,5 +1,8 @@
 import React from 'react'
-import { sortable } from '@patternfly/react-table'
+import {
+  sortable,
+  cellWidth
+} from '@patternfly/react-table'
 import { DataListRowGenerator, DataListColumnGenerator, IProductApplication } from 'types'
 import { TFunction } from 'i18next'
 import {
@@ -43,27 +46,27 @@ const generateColumns: DataListColumnGenerator = (t: TFunction) => [
   {
     categoryName: 'name',
     title: t('applicationsIndex:applications_table.name_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(20)]
   },
   {
     categoryName: 'account',
     title: t('applicationsIndex:applications_table.account_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(20)]
   },
   {
     categoryName: 'plan',
     title: t('applicationsIndex:applications_table.plan_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(30)]
   },
   {
     categoryName: 'created_on',
     title: t('applicationsIndex:applications_table.created_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(15)]
   },
   {
     categoryName: 'state',
     title: t('applicationsIndex:applications_table.state_header'),
-    transforms: [sortable]
+    transforms: [sortable, cellWidth(15)]
   }
 ]
 

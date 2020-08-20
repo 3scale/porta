@@ -13,7 +13,7 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'bounce redirects to the authorize_url' do
     get authorization_provider_bounce_path(authentication_provider.system_name)
-    request = mock('request', scheme: 'http', query_parameters: {})
+    request = ActionDispatch::TestRequest.create
     assert_redirected_to ProviderOauthFlowPresenter.new(authentication_provider, request, @provider.admin_domain).authorize_url
   end
 

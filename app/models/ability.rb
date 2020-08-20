@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Ability definitions are now split across multiple files, for better maintainability.
 #
 # To create a new set of permission rules, create a file in config/abilities,
@@ -10,13 +12,16 @@
 class Ability
   include CanCan::Ability
 
+  attr_reader :user
+
   def initialize(user)
     @user = user
     load_rules!
   end
 
+  # This smells of :reek:NilCheck
   def reload!
-    @user.try!(:reload)
+    user&.reload
     @rules = []
     @rules_index = nil
     load_rules!
@@ -29,11 +34,20 @@ class Ability
     @@rules << block
   end
 
+  def can?(action, subject, *extra_args)
+    collection = subject.try(:decorated_collection) || [subject]
+    collection.each do |entry|
+      model = entry.try(:model) || entry
+      return false unless super(action, model, *extra_args)
+    end
+    true
+  end
+
   private
 
   def load_rules!
     @@rules.each do |rule|
-      self.instance_exec(@user, &rule)
+      instance_exec(user, &rule)
     end
   end
 end

@@ -51,12 +51,12 @@ describe('SearchWidget', () => {
   it.skip('should be able to filter by admin', () => {
     // FIXME: Update test after MOB session
     const { getByPlaceholderText, getByTestId } = setup()
-    const searchInput = getByPlaceholderText('Filter by Admin')
+    const searchInput = getByPlaceholderText('accountsIndex:accounts_filter_field')
     fireEvent.change(searchInput, { target: { value: 'big boss' } })
     expect(getByTestId('data-toolbar')).toMatchSnapshot()
   })
 
+  // TODO: PF React makes it hard to target the button of the select...
   it.skip('should be able to filter by state', () => {
-    // FIXME: PF React makes it hard to target the button of the select...
   })
 })

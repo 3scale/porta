@@ -21,6 +21,7 @@ class Buyers::AccountsController < Buyers::BaseController
         includes(:bought_account_plan, :country)
                     .order_by(params[:sort], params[:direction])
                     .paginate(pagination_params)
+                    .decorate
   end
 
   def new
@@ -52,6 +53,7 @@ class Buyers::AccountsController < Buyers::BaseController
       redirect_to admin_buyers_account_path(@buyer)
     else
       @user = signup_result.user
+      flash.now[:error] = signup_result.errors.messages.without(:account, :user).values.join('. ')
       render action: :new
     end
   end
@@ -78,6 +80,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def show
     @available_account_plans = current_account.account_plans.stock
+    @account = account.decorate
   end
 
   protected

@@ -81,6 +81,7 @@ export const AppLayout: React.FunctionComponent<IAppLayoutProps> = ({
     <Nav id="nav-primary-simple" theme={theme} variant={variant}>
       <NavList id="nav-list-simple">
         {navItems.map((navItem) => {
+          // eslint-disable-next-line no-prototype-builtins
           if (navItem && navItem.hasOwnProperty('items') && isVertical) {
             if (navGroupsStyle === 'expandable') {
               const { title, to, items } = navItem as IAppNavExpandableProps

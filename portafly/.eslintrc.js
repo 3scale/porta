@@ -14,9 +14,12 @@ module.exports = {
     'semi': ['error', 'never'],
     'comma-dangle': ['error', 'never'],
     'no-prototype-builtins': 1,
+    'no-console': ['warn', { allow: ['error'] }],
 
     // import
-    'import/no-extraneous-dependencies': 1, // Because of @testing-library
+    'import/no-extraneous-dependencies': ['error', {
+      'peerDependencies': true
+    }],
     'import/no-default-export': 2,
     'import/prefer-default-export': 0,
     'import/no-unresolved': 0, // Need to add a resolver probably https://github.com/benmosher/eslint-plugin-import/blob/master/README.md#resolvers

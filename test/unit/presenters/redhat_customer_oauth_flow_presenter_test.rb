@@ -6,9 +6,11 @@ class RedhatCustomerOAuthFlowPresenterTest < ActiveSupport::TestCase
 
     query_params = { plan_id: 52 }
     host = provider_account.self_domain
-    url = url_helpers.provider_admin_account_path(provider_account, query_params)
-    @request = stubs(:request)
-    @request.stubs(scheme: 'http', host: host, query_parameters: query_params, params: query_params)
+    @request = ActionDispatch::TestRequest.create(
+      'HTTP_HOST' => host,
+      "action_dispatch.request.parameters" => query_params,
+      "action_dispatch.request.query_parameters" => query_params
+    )
 
     @redhat_customer_oauth_flow_presenter = RedhatCustomerOAuthFlowPresenter.new(provider_account, @request)
   end

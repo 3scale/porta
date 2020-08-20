@@ -4,9 +4,6 @@ class Contract < ApplicationRecord
   # https://github.com/collectiveidea/audited/blob/f03c5b5d1717f2ebec64032d269316dc74476056/lib/audited/auditor.rb#L305-L311
   self.table_name = 'cinstances'
 
-  # todo: remove after migration 20200211154433_remove_end_user_plans.rb
-  self.ignored_columns = %w[end_user_required]
-
   audited allow_mass_assignment: true
   include ::ThreeScale::MethodTracing
 

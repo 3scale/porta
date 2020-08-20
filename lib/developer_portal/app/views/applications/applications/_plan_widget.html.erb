@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'plans_widget.js' %>
+<%= javascript_include_tag 'plans_widget_v2.js' %>
 <%= stylesheet_link_tag 'plans_widget.css' %>
 
 <% id = id || "choose-plan-#{contract.id}" %>
@@ -14,7 +14,7 @@
       $('input#cinstance_plan_id').val(planID);
     }
 
-    $("#<%= id %>").click(function(){
+    $("#<%= id %>").on('click', function(){
       <%- if contract.new_record? %>
         var planID = $('input#cinstance_plan_id').val();
         PlanWidget.loadPreview(planID, updateForm, '<%= admin_service_plans_widget_path(@service) %>');

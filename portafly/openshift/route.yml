@@ -1,0 +1,22 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: 3scale-api-management
+    threescale_component: portafly
+  name: portafly-3scale-provider
+spec:
+  host: ${PROVIDER_ADMIN_DOMAIN}
+  path: /portafly
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Allow
+    termination: edge
+  to:
+    kind: Service
+    name: portafly
+    weight: null
+status:
+  ingress: null

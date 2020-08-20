@@ -64,13 +64,7 @@ module Authentication
       end
 
       def service
-        # this is pathetic since it needs .dev:3000 or similar on localhost
-        # also, we don't have request to use ThreeScale::DevDomain. bleaght.
-        # @service ||= create_session_url :host => site_account.domain
-
-        host = site_account.domain
-        host += ".#{ThreeScale.config.dev_gtld}:3000" if Rails.env.development?
-        create_session_url :host => host
+        create_session_url :host =>  site_account.external_domain
       end
 
       protected

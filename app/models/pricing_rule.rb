@@ -25,10 +25,6 @@ class PricingRule < ApplicationRecord
 
   delegate :service, :to => :plan
 
-  def self.columns
-    super.reject { |c| c.name == 'plan_type'.freeze }
-  end
-
   # What's the cost of usage when rules from this collection are applied.
   def self.cost_for_value(value)
     all.to_a.sum { |rule| rule.cost_for_value(value) }
@@ -88,11 +84,11 @@ class PricingRule < ApplicationRecord
     end
 
     if overlap #rules.count > 0
-      errors.add(:min, "'From' value cannot be less than 'To' values of current rules.")
+      errors.add(:min, :overlap)
     end
 
     if max && max < min
-      errors.add(:max, "'To' value cannot be less than your 'From' value.")
+      errors.add(:max, :min_max_mismatch)
     end
   end
 end

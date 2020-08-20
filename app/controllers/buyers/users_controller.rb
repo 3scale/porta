@@ -1,72 +1,99 @@
+# frozen_string_literal: true
+
 class Buyers::UsersController < Buyers::BaseController
   activate_menu :audience, :accounts, :listing
 
-  inherit_resources
-  actions :index, :show, :edit, :update, :destroy
-  defaults :route_prefix => 'admin_buyers' #FIXME: inherited_resource makes us repeat this
-  belongs_to :account, :collection_name => :buyer_accounts
+  before_action :find_account, except: :index
+  before_action :find_user, except: :index
+
+  def index
+    @account = current_account.buyer_accounts.find(params[:account_id])
+    @users = @account.users.order(:id).paginate(page: params[:page]).decorate
+  end
 
   def update
     # TODO: I think this controller is used only on provider side
-    resource.validate_fields! if current_user.account.buyer?
-    resource.attributes = params[:user]
-    super
+    user.validate_fields! if current_account.buyer?
+
+    user.attributes = user_params
+    user.role = user_params.fetch(:role, user.role) if can?(:update_role, user)
+
+    if user.save
+      flash[:notice] = 'User was successfully updated.'
+      redirect_to action: :show
+    else
+      render :edit
+    end
+  end
+
+  def show; end
+
+  def edit; end
+
+  def destroy
+    if user.destroy
+      flash[:notice] = 'User was successfully deleted.'
+      redirect_to action: :index
+    else
+      flash[:error] = 'User could not be deleted.'
+      redirect_back_or_show_detail
+    end
   end
 
   def suspend
-    resource.suspend!
+    user.suspend!
     flash[:notice] = 'User was suspended'
 
-    redirect_back_or_show_detail(resource)
+    redirect_back_or_show_detail
   end
 
   def unsuspend
-    resource.unsuspend!
+    user.unsuspend!
     flash[:notice] = 'User was unsuspended'
 
-    redirect_back_or_show_detail(resource)
+    redirect_back_or_show_detail
   end
 
   def activate
-    if resource.activate
-      resource.account.create_onboarding
+    if user.activate
+      user.account.create_onboarding
 
       flash[:notice] = 'User was activated'
     else
-      error_message = if resource.errors.include?(:email)
-        I18n.t('errors.messages.duplicated_user_provider_side')
+      errors = user.errors
+      error_message = if errors.include?(:email)
+                        I18n.t('errors.messages.duplicated_user_provider_side')
                       else
-        resource.errors.full_messages.join(',')
+                        errors.full_messages.join(',')
       end
 
-      flash[:error] = 'Failed to activate user: ' << error_message
+      flash[:error] = "Failed to activate user: #{error_message}"
     end
 
-    redirect_back_or_show_detail(resource)
+    redirect_back_or_show_detail
   end
 
-  protected
+  private
 
-  def redirect_back_or_show_detail(resource)
+  attr_reader :user
+
+  def find_account
+    @account = current_account.buyer_accounts.find(params[:account_id])
+  end
+
+  def find_user
+    @user = @account.users.find(params[:id]).decorate
+  end
+
+  DEFAULT_PARAMS = %i[username email password password_confirmation role].freeze
+
+  def user_params
+    @user_params ||= params.require(:user).permit(DEFAULT_PARAMS | user.defined_extra_fields_names)
+  end
+
+  def redirect_back_or_show_detail
     redirect_to(:back)
   rescue ActionController::RedirectBackError
-    redirect_to(resource_url(resource))
-  end
-
-  def begin_of_association_chain
-    current_account
-  end
-
-  def collection
-    @users ||= end_of_association_chain.order(:id).paginate(:page => params[:page])
-  end
-
-  def update_resource(user, attributes)
-    # FIXME: for some reason this is an array now
-    attributes = attributes.first
-
-    user.attributes = attributes
-    user.role = attributes[:role] if can? :update_role, user
-    user.save
+    redirect_to admin_buyers_account_user_path(account_id: user.account_id, id: user.id)
   end
 end

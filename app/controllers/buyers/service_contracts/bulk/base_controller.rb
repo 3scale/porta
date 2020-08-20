@@ -9,7 +9,7 @@ class Buyers::ServiceContracts::Bulk::BaseController < FrontendController
   end
 
   def find_service_contracts
-    @service_contracts = collection
+    @service_contracts = collection.decorate
   end
 
   def collection

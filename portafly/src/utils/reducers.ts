@@ -7,6 +7,7 @@ export type ActionHandlers<S, A> = Record<string, (state: S, action: Action<A>) 
 
 const createReducer = (handlers: ActionHandlers<any, any>) => (
   (state: any, action: Action<any>): any => (
+    // eslint-disable-next-line no-prototype-builtins
     handlers.hasOwnProperty(action.type) ? handlers[action.type](state, action) : state
   )
 )

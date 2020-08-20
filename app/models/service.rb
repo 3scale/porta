@@ -3,10 +3,6 @@
 require 'backend_client'
 
 class Service < ApplicationRecord
-  self.ignored_columns = %w[act_as_product end_user_registration_required default_end_user_plan_id
-                            oneline_description txt_api txt_features infobar draft_name display_provider_keys
-                            credit_card_support_email admin_support_email tech_support_email].freeze
-
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service
