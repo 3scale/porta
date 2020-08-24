@@ -1,19 +1,24 @@
 import React from 'react'
 
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { render } from 'tests/custom-render'
 import { CreateProductPage } from 'components/pages/product'
 import { useAsync, AsyncState } from 'react-async'
 import { IProduct } from 'types'
+import { useAlertsContext } from 'components/util/AlertsContext'
 
 jest.mock('react-async')
+jest.mock('components/util/AlertsContext')
+
+const addAlert = jest.fn();
+(useAlertsContext as jest.Mock).mockReturnValue({ addAlert })
 
 const setup = (asyncState: Partial<AsyncState<IProduct[]>>) => {
   (useAsync as jest.Mock).mockReturnValue(asyncState)
   const wrapper = render(<CreateProductPage />)
   const inputs = {
-    nameInput: wrapper.getByRole('textbox', { name: 'create.name' }),
-    systemNameInput: wrapper.getByRole('textbox', { name: 'create.system_name.label' }),
+    nameInput: wrapper.getByRole('textbox', { name: /create.name/ }),
+    systemNameInput: wrapper.getByRole('textbox', { name: /create.system_name.label/ }),
     createButton: wrapper.getByRole('button', { name: 'shared:shared_elements.create_button' }),
     cancelButton: wrapper.getByRole('button', { name: 'shared:shared_elements.cancel_button' })
   }
@@ -23,24 +28,32 @@ const setup = (asyncState: Partial<AsyncState<IProduct[]>>) => {
 
 it('button is disabled as long as request is pending', () => {
   const { createButton } = setup({ isPending: true })
-  expect(createButton).toHaveProperty('disabled')
 })
 
-it('should render an alert if there is an error', () => {
-  const { container, getByText } = setup({ error: { name: 'SomeError', message: 'ERROR' } })
-  expect(container.querySelector('.pf-c-alert.pf-m-danger')).toBeInTheDocument()
-  expect(getByText('ERROR')).toBeInTheDocument()
-})
-
-it('should render inline errors', () => {
+it('should render an alert if there is an error', async () => {
   const error = {
+    name: 'SomeError',
+    message: 'ERROR'
+  }
+  setup({ error })
+
+  expect(addAlert).toHaveBeenCalledWith(expect.objectContaining({
+    title: error.message
+  }))
+})
+
+it('should render inline errors', async () => {
+  const error = {
+    name: '',
+    message: '',
     validationErrors: {
       name: ['Invalid name', 'duplicated name'],
       system_name: ['Invalid system name']
     }
   }
   const { getByText } = setup({ error })
-  expect(getByText(/Invalid name/)).toBeInTheDocument()
+
+  await waitFor(() => expect(getByText(/Invalid name/)).toBeInTheDocument())
   expect(getByText(/duplicated name/)).toBeInTheDocument()
   expect(getByText(/Invalid system name/)).toBeInTheDocument()
 })
