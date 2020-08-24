@@ -52,12 +52,18 @@ javascript:
     $(baseUrlSpan).html(baseUrlEscaped)
 
     $("#request_path").on("change, keyup", function() {
-      const path = $(this).val().replace(/^\//, '')
-      $(".code-example__path").html(path)
+      const path = $(this).val()
+      const pathEscaped = path.charAt(0) === '/'
+        ? path.slice(1)
+        : path
+      $(".code-example__path").html(pathEscaped)
     })
 
     $("#request_api_base_url").on("change, keyup", function() {
-      const url = $(this).val().replace(/^\//, '')
-      $("#request_api_base_url--feedback").html(url)
+      const url = $(this).val()
+      const urlEscaped = url.charAt(0) === '/'
+        ? url.slice(1)
+        : url
+      $("#request_api_base_url--feedback").html(urlEscaped)
     })
   })
