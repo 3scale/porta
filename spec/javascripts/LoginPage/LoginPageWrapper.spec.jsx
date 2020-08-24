@@ -4,7 +4,6 @@ import { mount } from 'enzyme'
 import { SimpleLoginPage } from 'LoginPage'
 
 const props = {
-  enforceSSO: false,
   authenticationProviders: null,
   providerAdminDashboardPath: 'provider-admin-path',
   providerLoginPath: 'provider-login-path',
@@ -47,9 +46,10 @@ it('should render Login form and Authentication providers when available', () =>
 it('should render only Authenticaction providers when enforce SSO is enabled', () => {
   const propsEnforceSSO = {
     ...props,
-    enforceSSO: true,
+    show3scaleLoginForm: false,
     authenticationProviders: [{authorizeURL: 'url-1', humanKind: 'Human 1'}, {authorizeURL: 'url-2', humanKind: 'Human 2'}]
   }
   const wrapper = mount(<SimpleLoginPage {...propsEnforceSSO}/>)
-  expect(wrapper).toMatchSnapshot()
+  expect(wrapper.find('form#new_session').exists()).toBe(false)
+  expect(wrapper.find('.login-provider-link').exists()).toBe(true)
 })

@@ -9,7 +9,7 @@ class Buyers::Applications::Bulk::BaseController < FrontendController
   end
 
   def find_applications
-    @applications = collection
+    @applications = collection.decorate
   end
 
   def collection
