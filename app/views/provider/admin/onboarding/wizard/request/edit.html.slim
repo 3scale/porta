@@ -42,12 +42,28 @@ p Make sure the base URL of your API is correct & public and the method we're se
   = f.buttons do
     = f.submit "Try again!", class: "button button--next"
 
-coffee:
-  $ ->
-    $("#request_path").on "change, keyup", ->
-      path = $(this).val().replace(/^\//, '')
-      $(".code-example__path").html(path)
+javascript:
+  $(function() {
+    const baseUrlSpan = $(".code-example__base").first()
+    const baseUrl = $(baseUrlSpan).text()
+    const baseUrlEscaped = baseUrl.charAt(baseUrl.length - 1) === '/'
+      ? baseUrl.slice(0, baseUrl.length - 1)
+      : baseUrl
+    $(baseUrlSpan).html(baseUrlEscaped)
 
-    $("#request_api_base_url").on "change, keyup", ->
-      url = $(this).val().replace(/^\//, '')
-      $("#request_api_base_url--feedback").html(url)
+    $("#request_path").on("change, keyup", function() {
+      const path = $(this).val()
+      const pathEscaped = path.charAt(0) === '/'
+        ? path.slice(1)
+        : path
+      $(".code-example__path").html(pathEscaped)
+    })
+
+    $("#request_api_base_url").on("change, keyup", function() {
+      const url = $(this).val()
+      const urlEscaped = url.charAt(0) === '/'
+        ? url.slice(1)
+        : url
+      $("#request_api_base_url--feedback").html(urlEscaped)
+    })
+  })

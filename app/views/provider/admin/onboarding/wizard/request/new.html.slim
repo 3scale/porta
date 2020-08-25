@@ -38,8 +38,18 @@ p
 
   = button_tag 'Send request', type: :submit, class: 'button button--next', data: { disable_with: 'Sending request…' }
 
-coffee:
-  $ ->
-    $("#request_path").on "change, keyup", ->
-      path = $(this).val()
-      $(".code-example__path").html(path)
+javascript:
+  $(function() {
+    const baseUrl = $('#proxy_base_url').text()
+    const baseUrlEscaped = baseUrl.charAt(baseUrl.length - 1) === '/'
+      ? baseUrl.slice(0, baseUrl.length - 1)
+      : baseUrl
+    $('#proxy_base_url').html(baseUrlEscaped)
+
+    $('#request_path').on('change, keyup', function() {
+      const path = $(this).val()
+      $('.code-example__path').html(path)
+    })
+  })
+
+
