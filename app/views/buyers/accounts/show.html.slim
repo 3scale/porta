@@ -62,7 +62,7 @@ h1 data-hook="account-show"
                                  reject_admin_buyers_account_path(@account),
                                  method: :post,
                                  class: 'reject action'
-            - if can?(:suspend, @account) && @account.can_suspend?
+            - if !@account.suspended? && !@account.scheduled_for_deletion?
               = action_link_to 'Suspend',
                                 suspend_admin_buyers_account_path(@account),
                                 method: :post,
