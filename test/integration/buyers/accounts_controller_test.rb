@@ -316,6 +316,21 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', 2)
       refute_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', /plan/i )
     end
+
+    test 'suspend button is displayed only when account is not deleted or marked for deletion' do
+      ThreeScale.config.stubs(onpremises: false)
+      get admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), true
+
+      @provider.suspend
+      get admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), false
+
+      delete admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), false
+
+    end
+
   end
 
   class NotLoggedInTest < ActionDispatch::IntegrationTest
