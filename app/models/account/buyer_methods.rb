@@ -161,8 +161,4 @@ module Account::BuyerMethods
   def not_paying_monthly!
     settings.update_attribute(:monthly_charging_enabled, false)
   end
-
-  def account_suspended_or_scheduled_for_deletion?(account)
-    account.suspended? || account.scheduled_for_deletion?
-  end
 end
