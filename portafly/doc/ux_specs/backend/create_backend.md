@@ -31,7 +31,7 @@
   * API private base URL [required] > text input with placeholder and helper text
     * Validation errors:
       * Required field on form submit (if left blank)
-      * URL scheme is not a secure protocol (https or wss)
+      * URL scheme is not a secure protocol on form submit (https or wss)
 
 * Buttons
   * Create button
