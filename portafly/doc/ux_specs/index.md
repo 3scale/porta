@@ -26,13 +26,13 @@ Please refer to the single page files together with mockups linked in each page 
 * [Edit product](./product/edit_product.md)
 * Applications
   * [Applications index](./product/applications/index.md)
+* [Add backend to product](./backend/add_backend_to_product.md)
 
 
 ##### Backend
 * [Overview](./backend/overview.md)
 * [Create backend](./backend/create_backend.md)
 * [Edit backend](./backend/edit_backend.md)
-* [Add backend to product](./backend/add_backend_to_product.md)
 
 
 ##### Dashboard
