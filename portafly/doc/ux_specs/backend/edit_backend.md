@@ -2,7 +2,7 @@
 
 [Back to index](../index.md)
 
-* [Mockups](https://marvelapp.com/prototype/12844cg4/screen/71559182)
+* [Mockups](https://marvelapp.com/prototype/12844cg4/screen/71559181)
 * [Mockups JIRA ticket](https://issues.redhat.com/browse/APPDUX-348)
 * [Parent JIRA ticket](https://issues.redhat.com/browse/THREESCALE-5577)
 
