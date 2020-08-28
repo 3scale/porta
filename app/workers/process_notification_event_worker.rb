@@ -37,7 +37,7 @@ class ProcessNotificationEventWorker
   def create_notifications(event)
     provider = Provider.find(event.provider_id)
 
-    if provider.suspended? || provider.scheduled_for_deletion?
+    if provider.suspended_or_scheduled_for_deletion?
       Rails.logger.info "[Notification] skipping notifications for event #{event.event_id} of #{provider.state} account #{event.provider_id}"
       return
     end

@@ -132,6 +132,12 @@ class Message < ApplicationRecord
     hidden_at?
   end
 
+  # Makes the message visible in the sender's or receiver's inbox
+  def restore_for!(account)
+    return unhide! if sender == account
+    recipients.find_by(receiver: account)&.unhide!
+  end
+
   def enqueue!(receivers)
     # saved records are already "sent"
     return unless new_record?

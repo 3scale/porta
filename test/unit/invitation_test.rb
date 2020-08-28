@@ -44,39 +44,20 @@ class InvitationTest < ActiveSupport::TestCase
     assert_not_nil invitation.token
   end
 
-  test 'sends invitation email when created' do
-    ProviderInvitationMailer.any_instance.expects(:invitation)
+  test 'enqueues a worker when created' do
+    SendUserInvitationWorker.expects(:perform_later)
     @provider.invitations.create!(:email => 'buddy@example.net')
   end
 
-  test 'sets sent_at field when created' do
-    # This is needed, database will not save fractions of seconds
-    # so something like:
-    # Time.now.to_f #=> 1512012308.293877
-    # will be saved in DB as 1512012308
-    Timecop.freeze(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00')) do
-      invitation = @provider.invitations.create!(:email => 'buddy@example.net')
-      assert_equal Time.zone.now, invitation.sent_at
-    end
+  test 'sent_at field is nil when created' do
+    invitation = @provider.invitations.create!(email: 'buddy@example.net')
+    assert_nil invitation.sent_at
   end
 
   test 'resend unaccepted invitation email' do
+    SendUserInvitationWorker.expects(:perform_later).twice
     @unaccepted_invitation = @provider.invitations.create!(:email => 'buddy@example.net')
-
-    # REVIEW: ProviderInvitationMailer.any_instance.expects(:invitation)
-    # Before mails in background only call one time
-    ProviderInvitationMailer.any_instance.expects(:invitation)
     @unaccepted_invitation.resend
-  end
-
-  test '#resend unaccepted invitationset sent_at field' do
-    @unaccepted_invitation = @provider.invitations.create!(:email => 'buddy@example.net')
-    last_sent_at = @unaccepted_invitation.sent_at
-
-    Timecop.travel(2.days.from_now) do
-      @unaccepted_invitation.resend
-      assert_not_equal last_sent_at, @unaccepted_invitation.sent_at
-    end
   end
 
   test '#resend accepted should not send invitation email' do
@@ -145,15 +126,4 @@ class InvitationTest < ActiveSupport::TestCase
     assert Invitation.pending.include?(@pending)
     refute Invitation.pending.include?(@accepted)
   end
-
-  # regression test for: https://github.com/3scale/system/pull/3316
-  test 'send invitation with helper tag' do
-    buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
-    FactoryBot.create(:cms_email_template, system_name: 'invitation', provider: @provider, published: '{% debug:help %}', rails_view_path: 'emails/invitation')
-
-    assert_difference('ActionMailer::Base.deliveries.count') do
-      FactoryBot.create(:invitation, account: buyer)
-    end
-  end
-
 end
