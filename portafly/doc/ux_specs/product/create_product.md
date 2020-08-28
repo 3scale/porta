@@ -8,12 +8,12 @@
 
 ##### Form
 * Input fields
-  * Name > text input [required]
+  * Name [required] > text input
     * Validation errors:
       * Required field on form submit (if left blank)
       * Name already exists on form submit
       * Name already exists on _onblur_
-  * System name > text input w/ placeholder and helper text
+  * System name [required] > text input w/ placeholder and helper text
     * Inline help:
       * Label include a `pf-icon-help` icon
       * Icon toggles a popover ([PF specs](https://www.patternfly.org/v4/documentation/react/components/popover))

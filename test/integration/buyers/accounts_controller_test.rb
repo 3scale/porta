@@ -282,6 +282,18 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_response :not_found
       assert Account.exists?(@buyer.id)
     end
+
+    test 'index/search & show display the admin_user_display_name' do
+      get admin_buyers_accounts_path
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      expected_display_names = @provider.buyer_accounts.map { |buyer| buyer.decorate.admin_user_display_name }
+      assert_same_elements expected_display_names, page.xpath('//tbody/tr/td[2]/a').map(&:text)
+
+
+      get admin_buyers_accounts_path(id: @buyer.id)
+      assert_xpath('//tbody/tr/td[2]/a', @buyer.decorate.admin_user_display_name)
+    end
   end
 
   class MasterLoggedInTest < Buyers::AccountsControllerTest
@@ -304,6 +316,21 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', 2)
       refute_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', /plan/i )
     end
+
+    test 'suspend button is displayed only when account is not deleted or marked for deletion' do
+      ThreeScale.config.stubs(onpremises: false)
+      get admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), true
+
+      @provider.suspend
+      get admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), false
+
+      delete admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), false
+
+    end
+
   end
 
   class NotLoggedInTest < ActionDispatch::IntegrationTest
