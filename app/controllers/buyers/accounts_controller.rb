@@ -16,12 +16,15 @@ class Buyers::AccountsController < Buyers::BaseController
     @countries = Country.all
     @account_plans = current_account.account_plans.stock
     @search = ThreeScale::Search.new(params[:search] || params)
-    @accounts = current_account.buyer_accounts.not_master.scope_search(@search).
-        # this preloading collides with joins for sorting by country and plan
-        includes(:bought_account_plan, :country)
-                    .order_by(params[:sort], params[:direction])
-                    .paginate(pagination_params)
-                    .decorate
+    # this preloading collides with joins for sorting by country and plan
+    @raw_accounts = current_account.buyer_accounts
+                                  .not_master
+                                  .scope_search(@search)
+                                  .includes(:bought_account_plan, :country)
+
+    @accounts = @raw_accounts.order_by(params[:sort], params[:direction])
+                             .paginate(pagination_params)
+                             .decorate
   end
 
   def new

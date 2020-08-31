@@ -1,0 +1,44 @@
+section.pf-c-page__main-section.pf-m-light
+  .pf-c-content
+    h1 Accounts
+
+section.pf-c-page__main-section id='bulk-operations'
+  .pf-c-card
+    .pf-c-card__title Bulk operations
+    .pf-c-card__body
+      ' You have selected
+      span.count>
+      ' accounts and you can make following operations with them:
+    .pf-c-card__body
+      .pf-l-grid
+        .pf-l-grid__item class='pf-m-3-col operation'
+          button class='pf-c-button pf-m-primary' data-url=(new_admin_buyers_accounts_bulk_send_email_path)
+            | Send email
+        .pf-l-grid__item class='pf-m-9-col description'
+          | Send email to selected accounts
+
+        - if can? :see, :account_plans
+          .pf-l-grid__item class='pf-m-3-col operation'
+            = bulk_action 'Change account plan', new_admin_buyers_accounts_bulk_change_plan_path
+          .pf-l-grid__item class='pf-m-9-col description'
+            | Transfer these accounts to different account plan
+
+        .pf-l-grid__item class='pf-m-3-col operation'
+          = bulk_action 'Change state', new_admin_buyers_accounts_bulk_change_state_path
+        .pf-l-grid__item class='pf-m-9-col description'
+          | Approve, reject or make pending selected accounts
+
+        .pf-l-grid__item class='pf-m-3-col operation'
+          = bulk_action 'Delete', new_admin_buyers_accounts_bulk_delete_path
+        .pf-l-grid__item class='pf-m-9-col description'
+          | Delete selected accounts
+
+    = content_for :javascripts do
+      = javascript_pack_tag 'bulk_operations'
+      = javascript_include_tag 'vendor/jquery.tipsy.js'
+
+section.pf-c-page__main-section id='results_list'
+  / TODO: ideally the searchbar should go in a toolbar here
+  / = render partial: 'accounts_toolbar'
+  = render 'accounts_table'
+  = render 'shared/export_button', name: 'Accounts', disabled: false

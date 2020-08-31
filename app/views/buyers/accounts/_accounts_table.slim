@@ -1,0 +1,63 @@
+table.data class="pf-c-table pf-m-grid-lg" role='grid' aria-label='Accounts table' id='buyer_accounts'
+  thead
+    tr role='row'
+      td.pf-c-table__check role='cell' = bulk_select_all
+
+      = pf4_sortable('org_name', 'Group/Org.', { :class => 'pf-m-width-25' })
+
+      th role='columnheader' scope='col' class='pf-m-width-25' Admin
+
+      = pf4_sortable('created_at', 'Signup Date')
+
+      - if @account_plans.size > 1
+        = pf4_sortable('plans.name', 'Plan')
+
+      - if can?(:see, :multiple_applications)
+        th role='columnheader' scope='col' Apps
+
+      = pf4_sortable('state', 'State')
+
+      th.actions role='columnheader' scope='col'
+        - if can?(:create, Account)
+          = icon_link_to 'Create', 'plus-circle',
+                                   current_account.master? ? new_provider_admin_account_path : new_admin_buyers_account_path,
+                                   title: 'Create new account',
+                                   class: 'action add'
+
+    tr.search role="row"
+      = render 'accounts_toolbar'
+
+  tbody role='rowgroup'
+  - if @accounts.empty?
+    = render 'shared/table_empty_results', span: can?(:see, :multiplek_applications) ? 9 : 8
+  - else
+    - @accounts.each do |account|
+      tr id=dom_id(account) role='row'
+        td.pf-c-table__check role='cell' = bulk_select_one account
+        td = link_to (account.org_name), admin_buyers_account_path(account)
+        td = account.admin_user_display_name
+        td = account.created_at.strftime('%e %b, %Y')
+        - if @account_plans.size > 1
+          td class='plan' = h account.bought_account_plan.try(:name)
+
+        - if can? :see, :multiple_applications
+          td = link_to (current_user.accessible_cinstances.bought_by(account).count), admin_buyers_account_applications_path(account)
+
+        td class='state' = account_states_info(account)
+        td class='actions operations'
+          ul.Actions
+            - if account.first_admin.try!(:pending?)
+              li.Actions-item = link_to_activate_buyer_user(account.admins.first)
+
+            - elsif account.pending?
+              li.Actions-item = action_link_to 'approve', approve_admin_buyers_account_path(account), method: :post
+
+            - elsif can? :impersonate, account
+              li.Actions-item = link_to 'Act as', admin_buyers_account_impersonation_path(account),
+                                                  method: :post,
+                                                  target: '_blank',
+                                                  title: 'Impersonate impersonation_admin user on this provider side',
+                                                  class: 'action bolt'
+
+/ TODO: pagination, pass whole url with search query
+= render 'shared/pagination', page_size: @accounts.size, total_size: @raw_accounts.size

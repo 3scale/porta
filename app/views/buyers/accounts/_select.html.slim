@@ -1,0 +1,14 @@
+div.pf-c-select
+  button.pf-c-select__toggle type='button' aria-haspopup='true' aria-expanded='false'
+    div.pf-c-select__toggle-wrapper
+      span.pf-c-select__toggle-text
+        | Filter by State
+    span.pf-c-select__toggle-arrow
+      i class='fas fa-caret-down' aria-hidden='true'
+  ul.pf-c-select__menu
+    - for name, id in account_states_for_select
+      li
+        button type='button' class='pf-c-select__menu-item' aria-selected='false' id=(id)
+          = name
+
+  = javascript_pack_tag 'table_select'
