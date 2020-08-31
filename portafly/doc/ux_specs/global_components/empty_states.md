@@ -1,9 +1,9 @@
-# Modals UX/UI specs
+# Empty states UX/UI specs
 
 [Back to index](../index.md)
 
-* [PatternFly Modal dialog design guidelines](https://www.patternfly.org/v4/design-guidelines/usage-and-behavior/empty-state)
-* [PatternFly-react Modal docs](https://www.patternfly.org/v4/documentation/react/components/emptystate)
+* [PatternFly Empty states design guidelines](https://www.patternfly.org/v4/design-guidelines/usage-and-behavior/empty-state)
+* [PatternFly-react Empty states docs](https://www.patternfly.org/v4/documentation/react/components/emptystate)
 
 ### Global empty states specs
 * Empty states should always include
