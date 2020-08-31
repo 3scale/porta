@@ -97,10 +97,11 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
                      token_url authorize_url user_info_url identifier_key
                      username_key trust_email].freeze
 
-  def update_params
-    defaults = { branding_state_event: 'custom_brand' }
-    params.require(:authentication_provider).permit(UPDATE_PARAMS).reverse_merge(defaults)
-  end
+UPDATE_PARAM_DEFAULTS = { branding_state_event: 'custom_brand' }.freeze
+
+def update_params
+  params.require(:authentication_provider).permit(UPDATE_PARAMS).reverse_merge(UPDATE_PARAM_DEFAULTS)
+end
 
   def create_params
     permitted_params = UPDATE_PARAMS + %i[name system_name kind published]
