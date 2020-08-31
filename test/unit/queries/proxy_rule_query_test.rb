@@ -1,3 +1,4 @@
+require 'test_helper'
 # frozen_string_literal: true
 
 class ProxyRuleTest < ActiveSupport::TestCase
