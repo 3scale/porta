@@ -98,7 +98,8 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
                      username_key trust_email].freeze
 
   def update_params
-    params.require(:authentication_provider).permit(UPDATE_PARAMS)
+    defaults = { branding_state_event: 'custom_brand' }
+    params.require(:authentication_provider).permit(UPDATE_PARAMS).reverse_merge(defaults)
   end
 
   def create_params
