@@ -93,6 +93,16 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
       assert_contains JSON.parse(response.body).dig('errors', 'service'), 'not found'
     end
 
+    test 'show' do
+      get admin_api_active_doc_path(api_docs_service, format: :json)
+      assert_response :success
+    end
+
+    test 'show missing service' do
+      get admin_api_active_doc_path(id: 'missing', format: :json)
+      assert_response :not_found
+    end
+
     private
 
     def create_params(different_params = {})

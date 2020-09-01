@@ -1110,6 +1110,35 @@
       "responseClass": "active_doc",
       "operations": [
         {
+          "httpMethod": "GET",
+          "summary": "ActiveDocs Spec Read",
+          "description": "Returns the ActiveDocs spec by ID",
+          "group": "active_docs",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the ActiveDocs spec",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/active_docs/{id}.json",
+      "responseClass": "active_doc",
+      "operations": [
+        {
           "httpMethod": "PUT",
           "summary": "ActiveDocs Spec Update",
           "description": "Updates the ActiveDocs spec by ID",
