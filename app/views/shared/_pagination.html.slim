@@ -1,0 +1,39 @@
+- page_min = (current_page - 1) * per_page + 1
+- page_max = (current_page - 1) * per_page + [per_page, page_size].min
+- pages = (total_size / per_page) + (total_size % per_page === 0 ? 0 : 1)
+- is_last_page = current_page === pages
+
+div class='pf-c-pagination pf-m-bottom' data-url=(url)
+  div class='pf-c-options-menu'
+    div class='pf-c-options-menu__toggle pf-m-text pf-m-plain'
+      span class='pf-c-options-menu__toggle-text'
+        b = "#{page_min} - #{page_max}"
+        | &nbsp;of&nbsp;
+        b = total_size
+      button class='pf-c-options-menu__toggle-button' aria-haspopup='listbox' aria-expanded='false' aria-label='Items per page'
+        span class='pf-c-options-menu__toggle-button-icon'
+          i class='fas fa-caret-down' aria-hidden='true'
+    ul class='pf-c-options-menu__menu' hidden=(true)
+      li = per_page_button(5)
+      li = per_page_button(25)
+      li = per_page_button(50)
+
+  nav class='pf-c-pagination__nav' aria-label='Pagination'
+    div class='pf-c-pagination__nav-control pf-m-first'
+      button class='pf-c-button pf-m-plain' type='button' disabled=(is_first_page) aria-label='Go to first page' data-page=(1)
+        i class='fas fa-angle-double-left' aria-hidden='true'
+    div class='pf-c-pagination__nav-control pf-m-prev'
+      button class='pf-c-button pf-m-plain' type='button' disabled=(is_first_page) aria-label='Go to previous page' data-page=(current_page - 1)
+        i class='fas fa-angle-left' aria-hidden='true'
+    div class='pf-c-pagination__nav-page-select'
+      input class='pf-c-form-control' aria-label='Current page' type='number' min='1' max=(pages) value=(current_page)
+      span aria-hidden='true'
+        = " of #{pages}"
+    div class='pf-c-pagination__nav-control pf-m-next'
+      button class='pf-c-button pf-m-plain' type='button' disabled=(is_last_page) aria-label='Go to next page' data-page=(current_page + 1)
+        i class='fas fa-angle-right' aria-hidden='true'
+    div class='pf-c-pagination__nav-control pf-m-last'
+      button class='pf-c-button pf-m-plain' type='button' disabled=(is_last_page) aria-label='Go to last page' data-page=(pages)
+        i class='fas fa-angle-double-right' aria-hidden='true'
+
+= javascript_pack_tag 'pagination'

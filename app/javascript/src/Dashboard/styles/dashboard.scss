@@ -1,11 +1,9 @@
-// TODO: Sort out styles libs after migration (webpack)
-// Copied from colors and typography for now
 $altoGray:       #d1d1d1; // pf-black-300
 $outerSpaceGray: #393f44; // pf-black-800
 
 $border-color: $altoGray;
-$border-width: 1px;
-$border-radius: 4px;
+$border-width: 1px; // DELETE duplicated
+$border-radius: 4px; // Duplicated?
 $font-color: $outerSpaceGray;
 
 .ApiFilter {

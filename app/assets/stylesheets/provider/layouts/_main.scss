@@ -19,6 +19,7 @@ body {
 }
 
 .Main {
+  // TODO: is this still necessary?
   // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
   padding: line-height-times(1);
 
@@ -27,9 +28,9 @@ body {
   }
 }
 
-.pf-c-page__main {
-  background-color: $gallery;
-}
+// .pf-c-page__main {
+//   background-color: $gallery;
+// }
 
 .pf-c-nav__link {
   .fa-exclamation-triangle {

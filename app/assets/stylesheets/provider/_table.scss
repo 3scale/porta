@@ -1,0 +1,29 @@
+.ExportLink {
+  float: right;
+  margin: line-height-times(1);
+}
+
+#bulk-operations {
+  display: none;
+}
+
+.pf-c-table {
+  .pf-c-table__sort {
+    .pf-c-table__button {
+      --pf-global--link--TextDecoration: none;
+    }
+  }
+
+  // Workaround to make the search bar a bit prettier. Will be unnecessary if the datatoolbar is implemented
+  .search {
+    th:first-of-type {
+
+      padding-left: var(--pf-c-table--m-compact--cell--first-last-child--PaddingLeft);
+
+      input[type="text"] {
+        width: 100%;
+        height: 3rem;
+      }
+    }
+  }
+}

@@ -1,219 +1,221 @@
-@import 'compass';
-@import "compass/reset";
-@import 'provider/typography';
+// TODO: delete me
 
-$buyer-toolbar-height: line-height-times(2);
-$buyer-toolbar-highlight-color: $highlight-color;
+// @import 'compass';
+// @import "compass/reset";
+// @import 'provider/typography';
 
-$theme-widget-width: 90%;
+// $buyer-toolbar-height: line-height-times(2);
+// $buyer-toolbar-highlight-color: $highlight-color;
 
-html, body {
-  height: 100%;
-}
+// $theme-widget-width: 90%;
 
-iframe#developer-portal {
-  width: 100%;
+// html, body {
+//   height: 100%;
+// }
 
-  &.not-full {
-    width: 80%;
-  }
+// iframe#developer-portal {
+//   width: 100%;
 
-  &.animate {
-    @include transition-property('width');
-    @include transition-duration(0.3s);
-  }
-}
+//   &.not-full {
+//     width: 80%;
+//   }
 
-#cms-toolbar {
-  @include typography-base($inverted: true);
-  position: relative;
-  padding-top: 0;
-  top: 0;
-  left: 0;
-  width: 0;
-  float: right;
-  height: 100%;
-  z-index: 2147483647;
+//   &.animate {
+//     @include transition-property('width');
+//     @include transition-duration(0.3s);
+//   }
+// }
 
-  #help, #cms-toolbar-menu-middle {
-    opacity: 0;
-  }
+// #cms-toolbar {
+//   @include typography-base($inverted: true);
+//   position: relative;
+//   padding-top: 0;
+//   top: 0;
+//   left: 0;
+//   width: 0;
+//   float: right;
+//   height: 100%;
+//   z-index: 2147483647;
 
-  i:before {
-    @include scale(-1, 1);
-    @include text-shadow($font-color -1px 1px 2px);
-  }
+//   #help, #cms-toolbar-menu-middle {
+//     opacity: 0;
+//   }
 
-  &.animate {
-    @include transition-property('width');
-    @include transition-duration(0.3s);
+//   i:before {
+//     @include scale(-1, 1);
+//     @include text-shadow($font-color -1px 1px 2px);
+//   }
 
-    #help, #cms-toolbar-menu-middle {
-      @include transition-property('opacity');
-      @include transition-duration(0.1s);
-    }
-  }
+//   &.animate {
+//     @include transition-property('width');
+//     @include transition-duration(0.3s);
 
-  &.not-hidden {
-    width: 20%;
+//     #help, #cms-toolbar-menu-middle {
+//       @include transition-property('opacity');
+//       @include transition-duration(0.1s);
+//     }
+//   }
 
-    #help, #cms-toolbar-menu-middle {
-      opacity: 1;
-      display: block;
-    }
+//   &.not-hidden {
+//     width: 20%;
 
-    i:before {
-      @include text-shadow(none);
-      @include scale(1, 1);
-    }
-  }
+//     #help, #cms-toolbar-menu-middle {
+//       opacity: 1;
+//       display: block;
+//     }
 
-  input.mode-toggle, input.mode-toggle {
-    display: none;
-  }
+//     i:before {
+//       @include text-shadow(none);
+//       @include scale(1, 1);
+//     }
+//   }
 
-  ul {
-    padding: 0 0 0 0;
+//   input.mode-toggle, input.mode-toggle {
+//     display: none;
+//   }
 
-    & > li > a {
-      @include inline-block;
-      color: $light-background-color;
-      text-decoration: none;
-      margin: 0;
-      padding: 0;
-      text-decoration: none;
-      width: 100%;
-    }
+//   ul {
+//     padding: 0 0 0 0;
 
-    &.horizontal {
-      @include horizontal-list;
-      overflow: visible;
-      height: $buyer-toolbar-height;
+//     & > li > a {
+//       @include inline-block;
+//       color: $light-background-color;
+//       text-decoration: none;
+//       margin: 0;
+//       padding: 0;
+//       text-decoration: none;
+//       width: 100%;
+//     }
 
-      li > a {
-        @include inline-block;
-        &:hover {
-          color: $menu-active-color;
-        }
-      }
-    }
+//     &.horizontal {
+//       @include horizontal-list;
+//       overflow: visible;
+//       height: $buyer-toolbar-height;
 
-    &#cms-toolbar-menu-right {
-      @include horizontal-list;
-      overflow: visible;
-      float: right;
-      position: relative;
-      padding-right: line-height-times(1);
-      top: - $buyer-toolbar-height;
+//       li > a {
+//         @include inline-block;
+//         &:hover {
+//           color: $menu-active-color;
+//         }
+//       }
+//     }
 
-      i {
-        font-size: $main-title-font-size;
-      }
-    }
+//     &#cms-toolbar-menu-right {
+//       @include horizontal-list;
+//       overflow: visible;
+//       float: right;
+//       position: relative;
+//       padding-right: line-height-times(1);
+//       top: - $buyer-toolbar-height;
 
-    &#cms-toolbar-menu-middle {
-      @include horizontal-list;
-      margin: line-height-times(1) 0 0 line-height-times(1);
+//       i {
+//         font-size: $main-title-font-size;
+//       }
+//     }
 
-      li {
-        cursor: pointer;
-        padding-left: 0;
+//     &#cms-toolbar-menu-middle {
+//       @include horizontal-list;
+//       margin: line-height-times(1) 0 0 line-height-times(1);
 
-        span {
-          color: $light-background-color;
-        }
+//       li {
+//         cursor: pointer;
+//         padding-left: 0;
 
-        .slash {
-          font-weight: normal;
-          color: $label-color;
-        }
+//         span {
+//           color: $light-background-color;
+//         }
 
-        &.active {
-          cursor: default;
+//         .slash {
+//           font-weight: normal;
+//           color: $label-color;
+//         }
 
-          span {
-            color: $menu-active-color;
-          }
+//         &.active {
+//           cursor: default;
 
-          .slash {
-            color: $label-color;
-          }
-        }
-      }
-    }
-  }
-}
+//           span {
+//             color: $menu-active-color;
+//           }
+
+//           .slash {
+//             color: $label-color;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 
 
-#cms-toolbar-mode {
-  overflow: hidden;
-}
+// #cms-toolbar-mode {
+//   overflow: hidden;
+// }
 
-#templates-list {
-  padding: 0;
-  margin-top: 0;
+// #templates-list {
+//   padding: 0;
+//   margin-top: 0;
 
-  li {
-    list-style: none;
+//   li {
+//     list-style: none;
 
-    &.active a, a:hover {
-      //background-color: $buyer-toolbar-highlight-color;
-      color: $menu-active-color;
-    }
-  }
-}
+//     &.active a, a:hover {
+//       //background-color: $buyer-toolbar-highlight-color;
+//       color: $menu-active-color;
+//     }
+//   }
+// }
 
-#help {
-  padding: line-height-times(1);
-  display: none;
+// #help {
+//   padding: line-height-times(1);
+//   display: none;
 
-  h2 {
-    margin-top: line-height-times(1);
-    font-variant: small-caps;
-    text-transform: lowercase;
-    color: $light-background-color;
-  }
+//   h2 {
+//     margin-top: line-height-times(1);
+//     font-variant: small-caps;
+//     text-transform: lowercase;
+//     color: $light-background-color;
+//   }
 
-  p {
-    font-weight: normal;
-    font-style: italic;
-  }
+//   p {
+//     font-weight: normal;
+//     font-style: italic;
+//   }
 
-  code {
-    color: $light-background-color;
-    font-weight: bold;
-  }
+//   code {
+//     color: $light-background-color;
+//     font-weight: bold;
+//   }
 
-  select + select {
-    margin-top: line-height-times(1);
-  }
+//   select + select {
+//     margin-top: line-height-times(1);
+//   }
 
-  dt {
-    padding-right: line-height-times(1/2);
-    float: left;
-    width: line-height-times(3);
-    clear: left;
-    text-align: left;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: $label-color;
-  }
-}
+//   dt {
+//     padding-right: line-height-times(1/2);
+//     float: left;
+//     width: line-height-times(3);
+//     clear: left;
+//     text-align: left;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     white-space: nowrap;
+//     color: $label-color;
+//   }
+// }
 
-#theme-picker-wrap {
+// #theme-picker-wrap {
 
-  select {
-    width: $theme-widget-width;
-  }
+//   select {
+//     width: $theme-widget-width;
+//   }
 
-  textarea {
-    margin-top: line-height-times(1/2);
-    border: 0;
-    min-height: line-height-times(12);
-    width: $theme-widget-width;
-    font-weight: normal;
-    @include colors-inverted-base;
-    color: $highlight-color;
-  }
-}
+//   textarea {
+//     margin-top: line-height-times(1/2);
+//     border: 0;
+//     min-height: line-height-times(12);
+//     width: $theme-widget-width;
+//     font-weight: normal;
+//     @include colors-inverted-base;
+//     color: $highlight-color;
+//   }
+// }

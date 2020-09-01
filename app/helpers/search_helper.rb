@@ -20,14 +20,4 @@ module SearchHelper
   def search_path
     url_for(:per_page => params[:per_page])
   end
-
-  def no_search_results(colspan)
-    content_tag(:tr, class: 'no_results search') do
-      content_tag(:td, colspan: colspan) do
-        %(
-          No results.
-        ).html_safe
-      end
-    end
-  end
 end

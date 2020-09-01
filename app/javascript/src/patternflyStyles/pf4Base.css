@@ -1,13 +1,4 @@
-@import '~@patternfly/patternfly/patternfly-variables.css';
-@import '~@patternfly/patternfly/patternfly-shield-noninheritable.css';
-@import '~@patternfly/patternfly/patternfly-shield-inheritable.css';
-@import '~@patternfly/patternfly/patternfly-common.css';
-@import '~@patternfly/patternfly/patternfly-globals.css';
-@import '~@patternfly/patternfly/patternfly-addons.css';
-
-@import '~@patternfly/patternfly/components/Page/page.css';
-@import '~@patternfly/patternfly/components/Nav/nav.css';
-@import '~@patternfly/patternfly/patternfly-fonts.css';
+@import '~@patternfly/patternfly/patternfly.css';
 
 /****** HACK ******/
 
@@ -24,13 +15,13 @@ This code must be removed once PF4 is implemented in the whole application */
 
 @media screen and (min-width: 980px) {
   html {
-      font-size:calc(0.65rem + 0.35 * ((100vw - 50rem) / 50))!important;
+    font-size:calc(0.65rem + 0.35 * ((100vw - 50rem) / 50))!important;
   }
 }
 
 @media screen and (min-width: 1600px) {
   html {
-      font-size:1rem!important;
+    font-size:1rem!important;
   }
 }
 /****** END OF HACK ******/

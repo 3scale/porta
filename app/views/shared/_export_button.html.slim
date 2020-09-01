@@ -1,0 +1,7 @@
+/ props name, disabled
+button id='ExportButton' class="pf-c-button pf-m-link #{'pf-m-aria-disabled' if disabled}" type='button' aria-disabled=('true' if disabled) data-url=(new_provider_admin_account_data_exports_path)
+  span class='pf-c-button__icon pf-m-start'
+    i.pf-icon-export aria-hidden='true'
+  = "Export all #{name.capitalize}"
+
+= javascript_pack_tag 'export_button'

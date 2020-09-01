@@ -1,29 +1,9 @@
 #bulk-operations {
-  @include white-box-shadow;
-  clear: both;
-  display: none;
-  line-height: $line-height-lg;
-  margin: line-height-times(1) 0;
-  padding: line-height-times(1);
+  // Workardound to concat two sections with no extra space between
+  margin-bottom: -15px;
 
-  button {
-    @extend .outline-button-thin;
-  }
-
-  dl {
-    @extend %dl;
-  }
-
-  .operation {
-    @extend %dt;
-  }
-
-  .description {
-    @extend %dd;
-  }
-
-  .select-total-entries {
-    display: none;
+  .pf-l-grid__item {
+    padding-bottom: 1rem;
   }
 }
 

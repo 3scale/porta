@@ -1,4 +1,7 @@
-@import 'provider/layouts/main';
+// TODO: remove this, use PF4
+
+// Commented out because it has broken dependencies
+// @import 'provider/layouts/main';
 
 div.dashboard_bubble, div.wide_dashboard_bubble, div.narrow_dashboard_bubble {
   @include white-box-shadow;

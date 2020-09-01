@@ -1,0 +1,10 @@
+@mixin iconic($content) {
+  font-family: FontAwesome;
+  font-weight: $font-weight-normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  display: inline-block;
+  text-decoration: none;
+  content: $content;
+}
