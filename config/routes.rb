@@ -606,7 +606,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resources :features, :controller => 'account_plan_features', :only => [:index, :create, :destroy]
       end
 
-      resources :active_docs, :controller => 'api_docs_services', :only => [:index, :update, :create, :destroy]
+      resources :active_docs, :controller => 'api_docs_services', except: %i[new edit]
 
       resources :policies, only: [:index]
 
