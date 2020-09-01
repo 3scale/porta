@@ -35,7 +35,7 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
 const getPathParameters = (path) => (
   Object.keys(path).reduce((params, item) => (
     {
-      ...params,
+      ...path[item],
       [item]: item === 'parameters'
         ? path.parameters
         : path[item].parameters
