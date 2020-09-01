@@ -90,7 +90,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
     def test_update_unexistent_service
       put admin_api_active_doc_path(api_docs_service, format: :json), update_params(service_id: Service.last.id + 1)
       assert_response :unprocessable_entity
-      assert_contains JSON.parse(response.body).dig('errors', 'service'), 'not found'
+      assert_equal 'Service not found', JSON.parse(response.body)['error']
     end
 
     test 'show' do
@@ -101,6 +101,83 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
     test 'show missing service' do
       get admin_api_active_doc_path(id: 'missing', format: :json)
       assert_response :not_found
+    end
+
+    class MemberPermissions < ActionDispatch::IntegrationTest
+      setup do
+        @provider = FactoryBot.create(:simple_provider)
+        @accessible_service = FactoryBot.create(:simple_service, account: provider)
+        @forbidden_service = FactoryBot.create(:simple_service, account: provider)
+        @accessible_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: accessible_service)
+        @forbidden_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: forbidden_service)
+        @member = FactoryBot.create(:member, account: provider, admin_sections: ['partners'])
+        @access_token = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw')
+
+        member.member_permission_service_ids = [accessible_service.id]
+        member.save!
+
+        host! provider.admin_domain
+      end
+
+      attr_reader :provider, :accessible_service, :forbidden_service, :accessible_api_docs_service, :forbidden_api_docs_service, :member, :access_token
+
+      test 'index' do
+        get admin_api_active_docs_path(path_params)
+        assert_response :success
+        api_docs_services_ids = JSON.parse(response.body)['api_docs'].map { |api_doc| api_doc.dig('api_doc', 'id') }
+        assert_equal [accessible_api_docs_service.id], api_docs_services_ids
+      end
+
+      test 'read accessible api doc service' do
+        get admin_api_active_doc_path(accessible_api_docs_service, **path_params)
+        assert_response :success
+      end
+
+      test 'read forbidden api doc service' do
+        get admin_api_active_doc_path(forbidden_api_docs_service, **path_params)
+        assert_response :not_found
+      end
+
+      test 'create with forbidden service' do
+        post admin_api_active_docs_path(path_params), api_doc_params(service_id: forbidden_service.id)
+        assert_response :unprocessable_entity
+      end
+
+      test 'update to forbidden service' do
+        put admin_api_active_doc_path(accessible_api_docs_service, **path_params), { service_id: forbidden_service.id }
+        assert_response :unprocessable_entity
+      end
+
+      test 'read account level service' do
+        account_level_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: nil)
+
+        get admin_api_active_doc_path(account_level_api_docs_service, **path_params)
+        assert_response :success
+
+        get admin_api_active_docs_path(path_params)
+        assert_response :success
+        api_docs_services_ids = JSON.parse(response.body)['api_docs'].map { |api_doc| api_doc.dig('api_doc', 'id') }
+        assert_contains api_docs_services_ids, account_level_api_docs_service.id
+      end
+
+      protected
+
+      def path_params
+        { access_token: access_token.value, format: :json }
+      end
+
+      def api_doc_params(**extra_params)
+        {
+          api_docs_service: {
+            name: 'my api doc spec',
+            system_name: 'my-api-doc-spec',
+            body: '{"apis": [{"foo": "bar"}], "basePath": "http://example.net"}',
+            description: 'This is the spec of my API',
+            published: '1',
+            skip_swagger_validations: '0'
+          }.merge(extra_params)
+        }
+      end
     end
 
     private

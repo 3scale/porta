@@ -27,6 +27,7 @@ class ApiDocs::Service < ApplicationRecord
   scope :published, -> { where(published: true) }
   scope :accessible, -> { joining { service.outer }.where.has { (service_id == nil) | (service.state != ::Service::DELETE_STATE) } }
   scope :without_service, -> { where(service_id: nil) }
+  scope :permitted_for, ->(user) { where.has { (service_id == nil) | service_id.in(user.accessible_services.select(:id)) } }
 
   before_save :set_default_values
   before_save :prepare_base_path_notify
