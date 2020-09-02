@@ -23,6 +23,7 @@ if System::Database.oracle?
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
     remove_const(:IDENTIFIER_MAX_LENGTH)
     const_set(:IDENTIFIER_MAX_LENGTH, 128)
+    remove_method(:log)
 
     prepend(Module.new do
       def add_column(table_name, column_name, type, options = {})
@@ -50,6 +51,15 @@ if System::Database.oracle?
         else
           super
         end
+      end
+
+      protected
+      # Patches broken compatibility with ActiveRecord::ConnectionAdapters::AbstractAdapter#log that now expects `type_casted_binds`
+      def log(sql, name = "SQL", binds = [], statement_name = nil) #:nodoc:
+        type_casted_binds = binds.map { |attr| type_cast(attr.value_for_database) }
+        super(sql, name, binds, type_casted_binds, statement_name)
+      ensure
+        log_dbms_output if dbms_output_enabled?
       end
     end)
   end
