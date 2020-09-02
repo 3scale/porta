@@ -134,9 +134,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   end
 
   def api_docs_services
-    collection = current_account.api_docs_services.accessible
-    return collection unless current_user
-    collection.permitted_for(current_user)
+    current_account.api_docs_services.accessible.permitted_for(current_user)
   end
 
   def find_api_docs_service
