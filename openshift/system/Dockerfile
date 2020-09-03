@@ -5,7 +5,7 @@ USER root
 ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
-    BUNDLE_GEMFILE=Gemfile.prod \
+    BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
     NODEJS_SCL=rh-nodejs10
 
@@ -15,14 +15,15 @@ ARG SPHINX_VERSION=2.2.11-1
 
 ADD openshift/system/sphinx-${SPHINX_VERSION}.rhel7.x86_64.rpm /tmp/sphinxsearch.rpm
 
-RUN yum -y update \
+RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.skip_if_unavailable=true \
+    && yum -y update \
     && yum -y install centos-release-scl-rh \
-                      ImageMagick \
-                      ImageMagick-devel \
-                      unixODBC-devel \
-                      mysql \
-                      file \
-                      rh-nodejs10 \
+              ImageMagick \
+              ImageMagick-devel \
+              unixODBC-devel \
+              mysql \
+              file \
+              rh-nodejs10 \
     && rpm -i /tmp/sphinxsearch.rpm \
     && rm /tmp/*.rpm \
     && yum install -y epel-release \
@@ -32,10 +33,10 @@ RUN yum -y update \
 # copying only the gemspec files and copying all the other files after the build
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
 ADD vendor/active-docs/*.gemspec vendor/active-docs/
-ADD Gemfile.base ./
+ADD Gemfile* ./
 ADD Rakefile ./
 
-COPY openshift/system/contrib/scl_enable /opt/system/etc/
+COPY openshift/system/contrib/scl_enable ./etc/
 
 ENV BASH_ENV=/opt/system/etc/scl_enable \
     ENV=/opt/system/etc/scl_enable \
@@ -43,7 +44,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
     RAILS_ENV=production \
     SAFETY_ASSURED=1
 
-RUN export ${BUNDLER_ENV} >/dev/null \
+RUN export ${BUNDLER_ENV} >/dev/null\
     && source /opt/system/etc/scl_enable \
     && gem install bundler --version 1.17.3 \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
@@ -54,6 +55,7 @@ ADD . ./
 ADD config/docker/* ./config/
 ADD package.json ./
 ADD yarn.lock ./
+ADD openshift/system/config/* ./config/
 
 RUN export ${BUNDLER_ENV} >/dev/null \
     && source /opt/system/etc/scl_enable \
