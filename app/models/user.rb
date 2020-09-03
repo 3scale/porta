@@ -184,11 +184,11 @@ class User < ApplicationRecord
   end
 
   def accessible_services
-    account.accessible_services.permitted_for_user(self)
+    account.accessible_services.permitted_for(self)
   end
 
   def multiple_accessible_services?
-    account.multiple_accessible_services?(Service.permitted_for_user(self))
+    account.multiple_accessible_services?(Service.permitted_for(self))
   end
 
   def accessible_services?
