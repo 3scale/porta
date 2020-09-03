@@ -132,14 +132,13 @@ class FrontendController < ApplicationController
     end
   end
 
-  def find_service(id = params[:service_id])
-    services = if current_account.try!(:provider?)
-      current_account.accessible_services
-               else
-      site_account.accessible_services
-    end
+  def accessible_services
+    return site_account.accessible_services unless current_account.try!(:provider?)
+    current_account.accessible_services.merge(Service.permitted_for(current_user))
+  end
 
-    @service = id.present? ? services.find(id) : services.default
+  def find_service(id = params[:service_id])
+    @service = id.present? ? accessible_services.find(id) : accessible_services.default
   end
 
   def ensure_provider

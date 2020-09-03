@@ -146,10 +146,10 @@ class UserTest < ActiveSupport::TestCase
     user = FactoryBot.create(:user, account: provider)
     FactoryBot.create_list(:simple_service, 2, account: provider)
 
-    Service.stubs(permitted_for_user: [provider.services.last!.id])
+    Service.stubs(permitted_for: [provider.services.last!.id])
     refute user.multiple_accessible_services?
 
-    Service.stubs(permitted_for_user: Service.all)
+    Service.stubs(permitted_for: Service.all)
     assert user.multiple_accessible_services?
 
     provider.services.first!.mark_as_deleted!
