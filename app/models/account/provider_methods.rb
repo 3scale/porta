@@ -50,6 +50,7 @@ module Account::ProviderMethods
     end
 
     has_many :backend_apis, inverse_of: :account, dependent: :destroy
+    has_many :accessible_backend_apis, -> { accessible }, class_name: 'BackendApi'
 
     has_attached_file :proxy_configs, storage: :s3, path: '.sandbox_proxy/sandbox_proxy_:id.lua'
     do_not_validate_attachment_file_type :proxy_configs

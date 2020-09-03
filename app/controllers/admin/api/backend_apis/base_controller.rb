@@ -17,6 +17,7 @@ class Admin::Api::BackendApis::BaseController < Admin::Api::BaseController
   end
 
   def authorize
-    authorize! :manage, BackendApi
+    return unless current_user # provider_key access
+    authorize! :edit, BackendApi
   end
 end

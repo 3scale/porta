@@ -3,7 +3,7 @@
 Ability.define do |user|
   if user && user.admin? && user.account.master?
     can [:read, :show, :edit, :update, :create, :destroy], Cinstance
-    
+
     can :manage, :logo
 
     can %i[read delete configure], Account
@@ -48,10 +48,9 @@ Ability.define do |user|
     can :manage, :authentication_providers
     can :manage, :web_hooks
 
-    if user.account.provider_can_use?(:api_as_product)
-      can :manage, BackendApi
-      can :manage, BackendApiConfig
-    end
+    can %i[index show edit update create destroy], BackendApi
+
+    can :manage, BackendApiConfig
 
     #COPY these come from forum.rb
     can :manage, TopicCategory do |category|

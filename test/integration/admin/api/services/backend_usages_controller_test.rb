@@ -22,7 +22,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
 
     test 'create' do
       assert_difference(service.backend_api_configs.method(:count)) do
-        post admin_api_service_backend_usages_path(collection_params), { path: 'foo/bar', backend_api_id: backend_api.id }
+        post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo/bar', backend_api_id: backend_api.id }
         assert_response :created
       end
 
@@ -36,7 +36,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       backend_api_of_another_tenant = FactoryBot.create(:backend_api)
 
       assert_no_difference(service.backend_api_configs.method(:count)) do
-        post admin_api_service_backend_usages_path(collection_params), { path: 'foo/bar', backend_api_id: backend_api_of_another_tenant.id }
+        post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo/bar', backend_api_id: backend_api_of_another_tenant.id }
         assert_response :not_found
       end
     end
@@ -53,7 +53,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
     test 'update' do
       another_backend_api = FactoryBot.create(:backend_api, account: tenant)
 
-      put admin_api_service_backend_usage_path(resource_params), { path: 'foo/bar/updated', backend_api_id: another_backend_api.id }
+      put admin_api_service_backend_usage_path(resource_params), params: { path: 'foo/bar/updated', backend_api_id: another_backend_api.id }
 
       assert_response :success
       backend_api_config.reload
@@ -63,12 +63,12 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
 
     test 'create or update with errors in the model' do
       assert_no_difference(service.backend_api_configs.method(:count)) do
-        post admin_api_service_backend_usages_path(collection_params), { path: ':)', backend_api_id: backend_api.id }
+        post admin_api_service_backend_usages_path(collection_params), params: { path: ':)', backend_api_id: backend_api.id }
         assert_response :unprocessable_entity
       end
       assert_match /must be a path separated by/, (JSON.parse(response.body).dig('errors', 'path') || []).join
 
-      put admin_api_service_backend_usage_path(resource_params), { path: ':)' }
+      put admin_api_service_backend_usage_path(resource_params), params: { path: ':)' }
       assert_response :unprocessable_entity
       assert_match /must be a path separated by/, (JSON.parse(response.body).dig('errors', 'path') || []).join
     end
@@ -129,12 +129,12 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usages_path(collection_params(per_page: 3, page: 2))
       assert_response :not_found
 
-      post admin_api_service_backend_usages_path(collection_params), {path: 'foo/bar', backend_api_id: backend_api.id}
+      post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo/bar', backend_api_id: backend_api.id }
       assert_response :not_found
 
       resource_params = resource_params(id: backend_api_config.id)
 
-      put admin_api_service_backend_usage_path(resource_params), {path: 'foo/bar/updated'}
+      put admin_api_service_backend_usage_path(resource_params), params: { path: 'foo/bar/updated' }
       assert_response :not_found
 
       delete admin_api_service_backend_usage_path(resource_params)
@@ -144,7 +144,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
     test 'it cannot create for a deleted backend_api' do
       backend_api.mark_as_deleted!
 
-      post admin_api_service_backend_usages_path(collection_params), {path: 'foo/bar', backend_api_id: backend_api.id}
+      post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo/bar', backend_api_id: backend_api.id }
       assert_response :not_found
     end
   end
@@ -152,7 +152,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
   class WithMemberAccessToken < self
     def setup
       super
-      @member = FactoryBot.create(:member, account: tenant, admin_sections: %w[partners])
+      @member = FactoryBot.create(:member, account: tenant, admin_sections: %w[partners plans]) # FIXME: it should not require 'partners' permission
       @member.activate!
 
       @access_token = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw')
@@ -165,7 +165,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usages_path(collection_params)
       assert_response :success
 
-      post admin_api_service_backend_usages_path(collection_params), { path: 'foo', backend_api_id: backend_api.id }
+      post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo', backend_api_id: backend_api.id }
       assert_response :success
 
       @backend_api_config = service.backend_api_configs.find(JSON.parse(response.body).dig('backend_usage', 'id'))
@@ -173,7 +173,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usage_path(resource_params)
       assert_response :success
 
-      put admin_api_service_backend_usage_path(resource_params), { path: 'bar' }
+      put admin_api_service_backend_usage_path(resource_params), params: { path: 'bar' }
       assert_response :success
 
       delete admin_api_service_backend_usage_path(resource_params)
@@ -187,7 +187,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usages_path(collection_params)
       assert_response :success
 
-      post admin_api_service_backend_usages_path(collection_params), { path: 'foo', backend_api_id: backend_api.id }
+      post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo', backend_api_id: backend_api.id }
       assert_response :success
 
       @backend_api_config = service.backend_api_configs.find(JSON.parse(response.body).dig('backend_usage', 'id'))
@@ -195,7 +195,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usage_path(resource_params)
       assert_response :success
 
-      put admin_api_service_backend_usage_path(resource_params), { path: 'bar' }
+      put admin_api_service_backend_usage_path(resource_params), params: { path: 'bar' }
       assert_response :success
 
       delete admin_api_service_backend_usage_path(resource_params)
@@ -212,7 +212,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usage_path(resource_params)
       assert_response :not_found
 
-      put admin_api_service_backend_usage_path(resource_params), { path: 'bar' }
+      put admin_api_service_backend_usage_path(resource_params), params: { path: 'bar' }
       assert_response :not_found
 
       delete admin_api_service_backend_usage_path(resource_params)
@@ -221,7 +221,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
       get admin_api_service_backend_usages_path(collection_params)
       assert_response :not_found
 
-      post admin_api_service_backend_usages_path(collection_params), { path: 'foo', backend_api_id: FactoryBot.create(:backend_api, account: tenant).id }
+      post admin_api_service_backend_usages_path(collection_params), params: { path: 'foo', backend_api_id: FactoryBot.create(:backend_api, account: tenant).id }
       assert_response :not_found
     end
   end
