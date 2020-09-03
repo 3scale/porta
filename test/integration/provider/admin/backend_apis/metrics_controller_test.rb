@@ -44,13 +44,13 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     metric_params = { friendly_name: 'Foo', system_name: 'foo', unit: 'foo', description: 'Just a foo metric' }
 
     assert_difference backend_api.metrics.method(:count) do
-      post provider_admin_backend_api_metrics_path(backend_api, metric: metric_params)
+      post provider_admin_backend_api_metrics_path(backend_api), params: { metric: metric_params }
       assert_response :redirect
       assert backend_api.metrics.find_by(system_name: "foo.#{backend_api.id}")
     end
 
     assert_no_difference backend_api.metrics.method(:count) do
-      post provider_admin_backend_api_metrics_path(backend_api, metric: metric_params)
+      post provider_admin_backend_api_metrics_path(backend_api), params: { metric: metric_params }
       assert_equal 'Metric could not be created', flash[:error]
     end
   end
@@ -59,13 +59,13 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     metric_params = { friendly_name: 'Foo', system_name: 'foo', unit: 'foo', description: 'Just a foo metric', metric_id: hits.id }
 
     assert_difference backend_api.metrics.method(:count) do
-      post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: metric_params)
+      post provider_admin_backend_api_metric_children_path(backend_api, hits), params: { metric: metric_params }
       assert_response :redirect
       assert backend_api.metrics.find_by(system_name: "foo.#{backend_api.id}")
     end
 
     assert_no_difference backend_api.metrics.method(:count) do
-      post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: metric_params)
+      post provider_admin_backend_api_metric_children_path(backend_api, hits), params: { metric: metric_params }
       assert_equal 'Method could not be created', flash[:error]
     end
   end
@@ -79,17 +79,17 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
   test '#update' do
     new_description = "New description #{rand}"
-    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { description: new_description })
+    put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { description: new_description } }
     assert_response :redirect
     assert_equal new_description, ads.reload.description
 
-    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { friendly_name: '' })
+    put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { friendly_name: '' } }
     assert_equal 'Metric could not be updated', flash[:error]
     assert_select '#metric_friendly_name_input.required.error'
   end
 
   test 'cannot update system_name' do
-    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { system_name: 'new_system_name' })
+    put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { system_name: 'new_system_name' } }
     assert_response :redirect
     assert_equal "ads.#{backend_api.id}", ads.reload.system_name
   end
@@ -113,16 +113,68 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     delete provider_admin_backend_api_metric_path(backend_api, ads)
     assert_response :not_found
 
-    put provider_admin_backend_api_metric_path(backend_api, ads, metric: { friendly_name: '' })
+    put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { friendly_name: '' } }
     assert_response :not_found
 
     get edit_provider_admin_backend_api_metric_path(backend_api, ads)
     assert_response :not_found
 
-    post provider_admin_backend_api_metrics_path(backend_api, metric: { friendly_name: 'Foo', unit: 'foo' })
+    post provider_admin_backend_api_metrics_path(backend_api), params: { metric: { friendly_name: 'Foo', unit: 'foo' } }
     assert_response :not_found
 
-    post provider_admin_backend_api_metric_children_path(backend_api, hits, metric: { friendly_name: 'Foo', unit: 'foo', metric_id: hits.id })
+    post provider_admin_backend_api_metric_children_path(backend_api, hits), params: { metric: { friendly_name: 'Foo', unit: 'foo', metric_id: hits.id } }
     assert_response :not_found
+  end
+
+  test 'member permissions' do
+    member = FactoryBot.create(:member, account: provider)
+    member.activate!
+
+    logout! && login!(provider, user: member)
+
+    get provider_admin_backend_api_metrics_path(backend_api)
+    assert_response :forbidden
+
+    get new_provider_admin_backend_api_metric_child_path(backend_api, hits)
+    assert_response :forbidden
+
+    get edit_provider_admin_backend_api_metric_path(backend_api, ads)
+    assert_response :forbidden
+
+    put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { friendly_name: '' } }
+    assert_response :forbidden
+
+    delete provider_admin_backend_api_metric_path(backend_api, ads)
+    assert_response :forbidden
+
+    post provider_admin_backend_api_metrics_path(backend_api), params: { metric: { friendly_name: 'Foo', unit: 'foo' } }
+    assert_response :forbidden
+
+    post provider_admin_backend_api_metric_children_path(backend_api, hits), params: { metric: { friendly_name: 'Foo', unit: 'foo', metric_id: hits.id } }
+    assert_response :forbidden
+
+    member.admin_sections = %w[plans]
+    member.save!
+
+    get provider_admin_backend_api_metrics_path(backend_api)
+    assert_response :success
+
+    get new_provider_admin_backend_api_metric_child_path(backend_api, hits)
+    assert_response :success
+
+    get edit_provider_admin_backend_api_metric_path(backend_api, ads)
+    assert_response :success
+
+    put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { friendly_name: '' } }
+    assert_response :success
+
+    delete provider_admin_backend_api_metric_path(backend_api, ads)
+    assert_response :redirect
+
+    post provider_admin_backend_api_metrics_path(backend_api), params: { metric: { friendly_name: 'Foo', unit: 'foo' } }
+    assert_response :redirect
+
+    post provider_admin_backend_api_metric_children_path(backend_api, hits), params: { metric: { friendly_name: 'Foo', unit: 'foo', metric_id: hits.id } }
+    assert_response :success
   end
 end

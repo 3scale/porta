@@ -29,7 +29,7 @@ module CanCanHacks
     def authorization_action
       action = @params[:action].to_sym
 
-      if @controller.request.get? && !%i[index edit].include?(action)
+      if @controller.request.get? && !%i[index new edit].include?(action)
         :show
       else
         super

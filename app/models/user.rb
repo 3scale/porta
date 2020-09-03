@@ -195,6 +195,8 @@ class User < ApplicationRecord
     accessible_services.exists?
   end
 
+  delegate :accessible_backend_apis, to: :account
+
   def allowed_access_token_scopes
     AccessToken.scopes.allowed_for(self)
   end
