@@ -2,6 +2,7 @@
 
 class Admin::ApiDocs::BaseController < FrontendController
   before_action :deny_on_premises_for_master
+  before_action :authorize_api_docs
   before_action :find_api_docs, only: %i[show preview toggle_visible edit update destroy]
   before_action :new_service_id_permitted, only: %i[create update]
 
@@ -125,5 +126,9 @@ class Admin::ApiDocs::BaseController < FrontendController
       ],
       basePath: "#{request.protocol}#{request.host_with_port}"
     }
+  end
+
+  def authorize_api_docs
+    authorize! :manage, :plans
   end
 end
