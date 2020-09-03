@@ -16,7 +16,7 @@ cat README.md
 1. Build the image
 
    ```shell
-   make build DOCKERFILE=Dockerfile.on_prem NAME=amp VERSION=system-er2-pre1
+   make build NAME=amp VERSION=system-er2-pre1
    ```
 
 2. Test the image
