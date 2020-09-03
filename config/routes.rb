@@ -1,4 +1,5 @@
 require 'routing_constraints'
+require 'prometheus_exporter_port'
 
 class CdnAssets
   def initialize
@@ -13,7 +14,7 @@ end
 
 Rails.application.routes.draw do
 
-  constraints PortConstraint.new(ENV.fetch('PROMETHEUS_EXPORTER_PORT', 9394).to_i) do
+  constraints PortConstraint.new(PrometheusExporterPort.call) do
     prometheus = Rack::Builder.app do
       run Sidekiq::Prometheus::Exporter
     end
