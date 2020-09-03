@@ -75,6 +75,26 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     assert_response :not_found
   end
 
+  test 'member missing right admin section' do
+    member = FactoryBot.create(:member, account: provider, admin_sections: ['partners'])
+    member.member_permission_service_ids = [service.id]
+    member.activate!
+
+    logout! && login!(provider, user: member)
+
+    get admin_service_api_docs_path(service)
+    assert_response :forbidden
+
+    get new_admin_service_api_doc_path(service)
+    assert_response :forbidden
+
+    get preview_admin_service_api_doc_path(service, api_docs_service)
+    assert_response :forbidden
+
+    get edit_admin_service_api_doc_path(service, api_docs_service)
+    assert_response :forbidden
+  end
+
   protected
 
   def assert_service_active_docs_menus
