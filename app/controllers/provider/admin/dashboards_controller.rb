@@ -6,8 +6,6 @@ class Provider::Admin::DashboardsController < FrontendController
 
   def show
     @service    = find_service
-    @metrics    = @service.metrics.top_level
-    @cinstances = @service.cinstances.latest
     # Would be cool to
     #
     # .scoped(:include => [ :message => [ :sender ]])
