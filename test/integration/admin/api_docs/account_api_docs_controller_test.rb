@@ -92,11 +92,70 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       assert_equal old_system_name, api_docs_service.reload.system_name
     end
 
+    test 'member permission' do
+      forbidden_service = FactoryBot.create(:simple_service, account: provider)
+      forbidden_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: forbidden_service)
+
+      member = FactoryBot.create(:member, account: provider, admin_sections: ['plans'])
+      member.member_permission_service_ids = [service.id]
+      member.activate!
+
+      logout! && login!(provider, user: member)
+
+      get admin_api_docs_services_path
+      api_docs_service_ids = assigns(:api_docs_services).map(&:id)
+      assert_includes api_docs_service_ids, api_docs_service.id
+      assert_not_includes api_docs_service_ids, forbidden_api_docs_service.id
+
+      get new_admin_api_docs_service_path
+      page = Nokogiri::HTML::Document.parse(response.body)
+      service_ids = page.xpath(".//select[@id='api_docs_service_service_id']/option").map { |option| option.attributes['value'].value.presence }.compact.map(&:to_i)
+      assert_includes service_ids, service.id
+      assert_not_includes service_ids, forbidden_service.id
+
+      put toggle_visible_admin_api_docs_service_path(api_docs_service)
+      assert_response :redirect
+
+      delete admin_api_docs_service_path(api_docs_service)
+      assert_response :redirect
+
+      post admin_api_docs_services_path(api_docs_params(service_id: service.id, system_name: 'permitted_service_spec'))
+      assert_response :redirect
+
+      put toggle_visible_admin_api_docs_service_path(forbidden_api_docs_service)
+      assert_response :not_found
+
+      put admin_api_docs_service_path(forbidden_api_docs_service), api_docs_service: { service_id: forbidden_api_docs_service.id }
+      assert_response :not_found
+
+      delete admin_api_docs_service_path(forbidden_api_docs_service)
+      assert_response :not_found
+
+      post admin_api_docs_services_path(api_docs_params(service_id: forbidden_api_docs_service.id, system_name: 'forbidden_service_spec'))
+      assert_response :not_found
+    end
+
+    test 'member missing right admin section' do
+      member = FactoryBot.create(:member, account: provider, admin_sections: ['partners'])
+      member.member_permission_service_ids = [service.id]
+      member.activate!
+
+      logout! && login!(provider, user: member)
+
+      put toggle_visible_admin_api_docs_service_path(api_docs_service)
+      assert_response :forbidden
+
+      delete admin_api_docs_service_path(api_docs_service)
+      assert_response :forbidden
+
+      post admin_api_docs_services_path(api_docs_params(service_id: service.id, system_name: 'permitted_service_spec'))
+      assert_response :forbidden
+    end
+
     private
 
     attr_reader :provider, :service, :api_docs_service
     alias current_account provider
-
   end
 
   class MasterLoggedInTest < Admin::ApiDocs::AccountApiDocsControllerTest

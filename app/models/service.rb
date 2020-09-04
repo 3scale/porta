@@ -107,17 +107,13 @@ class Service < ApplicationRecord
   scope :accessible, -> { where.not(state: DELETE_STATE) }
   scope :deleted, -> { where(state: DELETE_STATE) }
   scope :of_approved_accounts, -> { joins(:account).merge(Account.approved) }
-  scope :permitted_for_user, ->(user) do
-    # TODO: this is probably wrong...
-    # how come if it does not have access_to_all_services but it can not use service_permissions,
-    # then we allow them all?!!
-    # but this is keeping the same behaviour that it previously had
-    if user.forbidden_some_services?
-      where({id: user.member_permission_service_ids})
-    else
-      all
-    end
-  end
+  scope :permitted_for, ->(user = nil) {
+    next all unless user
+
+    account = user.account
+    account_services = (account.provider? ? account : account.provider_account).services
+    account_services.merge(user.forbidden_some_services? ? where(id: user.member_permission_service_ids) : {})
+  }
 
   validates :name, presence: true
 
