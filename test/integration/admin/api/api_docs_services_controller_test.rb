@@ -110,11 +110,11 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
         @forbidden_service = FactoryBot.create(:simple_service, account: provider)
         @accessible_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: accessible_service)
         @forbidden_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: forbidden_service)
-        @member = FactoryBot.create(:member, account: provider, admin_sections: ['partners'])
+        @member = FactoryBot.create(:member, account: provider, admin_sections: %w[partners plans])
         @access_token = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw')
 
         member.member_permission_service_ids = [accessible_service.id]
-        member.save!
+        member.activate!
 
         host! provider.admin_domain
       end
@@ -158,6 +158,22 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
         assert_response :success
         api_docs_services_ids = JSON.parse(response.body)['api_docs'].map { |api_doc| api_doc.dig('api_doc', 'id') }
         assert_contains api_docs_services_ids, account_level_api_docs_service.id
+      end
+
+      test 'member missing right admin section' do
+        member.admin_sections = ['partners']
+        member.save!
+
+        get admin_api_active_docs_path(path_params)
+        assert_response :forbidden
+
+        get admin_api_active_doc_path(accessible_api_docs_service, **path_params)
+        assert_response :forbidden
+
+        account_level_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: nil)
+
+        get admin_api_active_doc_path(account_level_api_docs_service, **path_params)
+        assert_response :forbidden
       end
 
       protected
