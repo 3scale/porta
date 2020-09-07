@@ -23,7 +23,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    respond_with(accessible_services)
+    respond_with(accessible_services.includes(:proxy, :account))
   end
 
   # swagger
