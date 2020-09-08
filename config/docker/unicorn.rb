@@ -1,6 +1,7 @@
 # config/unicorn.rb
 require 'pathname'
 require 'etc'
+require_relative '../../lib/prometheus_exporter_port'
 
 app_path = Pathname.pwd
 
@@ -32,6 +33,7 @@ worker_processes detect_unicorn_workers.call
 
 # listen to the default port
 listen Integer(ENV['PORT'] || 3000)
+listen PrometheusExporterPort.call
 
 stderr_path '/dev/stderr'
 stdout_path '/dev/stdout'
