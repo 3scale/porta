@@ -1,10 +1,9 @@
 # config/unicorn.rb
 require 'pathname'
 require 'etc'
-require_relative '../../lib/prometheus_exporter_port'
 
 app_path = Pathname.pwd
-
+require app_path.join('lib/prometheus_exporter_port').to_s
 
 Unicorn::HttpServer::START_CTX[0] = '/usr/local/bin/unicorn'
 
