@@ -32,11 +32,13 @@ email_validation_description: Input field that holds the valid user's email addr
 
 first_name_label: First name
 first_name_label_description: Label for the field that holds the user's first name.
+first_name_value: {{user_first_name}}
 
 last_name_label: Last name
 last_name_label_description: Label for the field that holds the user's last name.
+last_name_value: {{user_last_name}}
 update_details_button: Update details
-update_details_description: The user clicks this button to procede with updating the edited personal information.
+update_details_description: The user clicks this button to procede with updating their **details.**
 
 # Modal: Update details
 
@@ -44,6 +46,7 @@ current_password_title: Provide your current password to update your personal de
 current_password_title_description: Body title of modal dialog which prompts the user to provide their current password to make the update.
 current_password_label: Current password
 current_password_label_description: Label for the field for the user to enter a new password.
+current_password_value: {{user_password}}
 current_password_helper: When you update your personal details, all other active sessions for this user will end. This happens in order to confirm that it is you, and not somebody else trying to lock you out of your account.
 current_password_helper_description: Text to let the user know when they updates their personal details, all other active session are ended for security reasons.
 #-------# Confirm button: available in shared.yml
