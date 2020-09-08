@@ -8,7 +8,7 @@ body_title_description: Body title of the page for Edit account details
 
 organization_name_label: Organization name
 organization_name_label_description: Label for the field that holds the name of the organization that owns the account.
-organization_name_validation: {{organization_name_validation}} cannot be blank. Please add your {{organization_name_validation}}.
+organization_name_validation: "<i>Organization name</i> cannot be blank. Please add your organization name."
 organization_name_validation_description: Input field that holds the organization name, and validates the content.
 
 address_label: Address
@@ -25,8 +25,8 @@ city_label_description: Label for the field that holds the name of the city wher
 state_region_label: State, region, province
 state_region_label_description: Label for the field that holds the name of the state, region, province where the organization is located.
 
-country_selectlist_label: Country
-country_selectlist_label_description: Label for the field that holds the name of the organization's country from the select list.
+country_selectlist: Country
+country_selectlist_description: Label for the field that holds the name of the organization's country from the select list.
 
 postal_code_label: Postal code
 postal_code_label_description: Label for the field that holds the postal code of the organization.
@@ -34,8 +34,8 @@ postal_code_label_description: Label for the field that holds the postal code of
 vat_code_label: VAT identification number
 vat_code_label_description: Label for the field that holds the VAT identification number of the organisation.
 
-time_zone_selectlist_label: Time zone
-time_zone_selectlist_label_description: Label for the field that holds the time zone of the organization from the select list.
+time_zone_selectlist: Time zone
+time_zone_selectlist_description: Label for the field that holds the time zone of the organization from the select list.
 time_zone_selectlist_helper: Time zone used for charts. It supports only UTC offsets in whole hours, so choose a time zone closest to you.
 time_zone_selectlist_helper_description: This is helper text that highlights to the user the limitations of the select list of time zones.
 
