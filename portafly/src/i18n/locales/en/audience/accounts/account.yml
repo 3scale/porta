@@ -34,7 +34,7 @@ applications:
   by_product: Product
   by_plan: Plan
   by_state: State
- applications_filter_field: Filter by {{filter_option}}
+ applications_filter_field: "Filter by {{filter_option}}"
  applications_filter_field_description: Filter by typeahead a text input.
  applications_filter_field_aria_label: Filter text input
  applications_filter_field_aria_label_description: Aria label for the filter text input
