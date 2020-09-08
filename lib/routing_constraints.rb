@@ -66,3 +66,13 @@ class ParameterConstraint
     request.params.key?(name)
   end
 end
+
+class PortConstraint
+  def initialize(port)
+    @port = port.to_s
+  end
+
+  def matches?(request)
+    request.port.to_s == @port
+  end
+end
