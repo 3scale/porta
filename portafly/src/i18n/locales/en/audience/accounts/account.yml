@@ -1,0 +1,57 @@
+---
+# ------------------ Accounts > Account overview
+# Page details
+
+overview:
+ page_title: Account
+ page_title_description: Page title of the subsection for Accounts Overview
+
+ # Top area
+ body_title: {{organization_name}}
+ body_title_description: Body title of the page for Accounts Overview
+
+ # Tabs
+ overview_title: Overview
+ overview_description: This is the title of the tab containing the organization or group name, the administrator name/email address, signup date, and state.
+ applications_title: Applications
+ applications_description: This is the title of the tab containing the list of applications on the account, their names, the associated product, its plan, creation date, and its current state.
+
+ # Main area
+ # Tab overview
+ organization_label: Organization/Group Name
+ administrator_label: Administrator
+ signup_label: Signed up on
+ state_label: State
+
+# Tab Applications
+# Top area
+applications:
+ create_application_button: Create application
+ create_application_button_description: Button to create an application
+
+ applications_filter_options:
+  by_name: Name
+  by_product: Product
+  by_plan: Plan
+  by_state: State
+ applications_filter_field: "Filter by {{filter_option}}"
+ applications_filter_field_description: Filter by typeahead a text input.
+ applications_filter_field_aria_label: Filter text input
+ applications_filter_field_aria_label_description: Aria label for the filter text input
+
+ ## Header
+ applications_table:
+  aria_label: Applications table
+  aria_label_description: Aria label of the table of applications
+  empty_state: Currently, there are no applications to show. Add applications. # Temporary
+  empty_state_description: Message to display when there are no applications to show, and prompt the user to add applications
+  name_header: Name
+  name_header_description: Column listing names of applications
+  product_header: Product
+  product_header_description: Column listing application products
+  plan_header: Plan
+  plan_header_description: Column listing plans
+  created_header: Created on
+  created_header_description: Column listing the creation date of the applications
+  state_header: State
+  state_header_description: Column listing the state of the applications
