@@ -57,7 +57,7 @@ current_password_helper_description: Text to let the user know when they updates
 password_update_options:
  success: You have successfully updated your user details
  error: Your user details were not updated. Please review the password you provided
-current_password_validation_description: Input field for the user to enter the current password.
+password_update_options_description: Input field for the user to enter the current password.
 new_password_label: New password
 new_password_label_description: Label that prompts the user to enter their new password in the given field.
 new_password_validation: Your new password is too short. Use a minimum of 6 characters.
