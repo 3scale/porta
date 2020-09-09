@@ -58,3 +58,41 @@ edit:
   required_name_description: Validation message to prompt the indication of a product name before saving product details.
   duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product."
   duplicated_name_description: Validation message to request the change of the product name due to duplication.
+
+# ------------------ Product > Applications index
+applications_index:
+  # Header
+  pagetitle: Applications
+  pagetitle_description: Page title to list all the applications.
+  createapplication_button: Create application
+  createapplication_button_description: Button to perform the creation of an application.
+  # Main area
+  ## Header
+  applications_table:
+    aria_label: Applications
+    aria_label_description: Aria label of the table of applications.
+    empty_state: Currently, there are no applications to show. Add applications. #-- PROPOSED
+    empty_state_description: Message to display when there are no applications to show, and prompt the user to add applications
+    actions_filter_options:
+      by_name: Name
+      by_state: State
+      by_account: Account
+      by_plan: Plan
+    accounts_filter_typeahead: "Filter by {{filter_option}}"
+    accounts_filter_typeahead_description: Filter by typeahead a text input.
+
+    name_header: Name
+    name_header_description: Column listing application names.
+    account_header: Account
+    account_header_description: Column listing application accounts.
+    plan_header: Plan
+    plan_header_description: Column listing plans linked to the applications.
+    creationdate_header: Creation date #-- PROPOSED: for Audience > Accounts we have: Signup date - https://github.com/3scale/porta/pull/1928/files
+    creationdate_header_description: Column listing the date of creation of the application.
+    state_header: State
+    state_header_description: Column listing the state of the applications
+    state_values:
+      live: Live
+      pending: Pending
+      suspended: Suspended
+    state_values_description: Possible states of each application.
