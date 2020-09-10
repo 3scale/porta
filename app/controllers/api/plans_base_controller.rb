@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 class Api::PlansBaseController < Api::BaseController
   include ThreeScale::Search::Helpers
 
   before_action :deny_on_premises_for_master
-  before_action :authorize_plans
-
-  before_action :find_plan, :only => [:show, :edit, :update, :destroy, :copy, :masterize]
-  before_action :find_plans, :only => [:index]
-
-  before_action :check_plan_can_be_deleted, :only => [:destroy]
+  before_action :authorize_section
+  before_action :authorize_action, only: %i[new create destroy]
+  before_action :find_plan, except: %i[index new create]
+  before_action :find_service
+  before_action :find_plans, only: :index
+  before_action :check_plan_can_be_deleted, only: :destroy
 
   activate_menu :serviceadmin
 
@@ -18,12 +20,12 @@ class Api::PlansBaseController < Api::BaseController
   # have different controllers
   protected
 
-  def authorize_plans
-    authorize! :admin, :plans
+  def authorize_section
+    authorize! :manage, :plans
   end
 
-  def authorize_manage_plans
-    authorize! :manage, :plans
+  def authorize_action
+    authorize! :create, :plans
   end
 
   def resource(id = params[:id])
@@ -44,6 +46,13 @@ class Api::PlansBaseController < Api::BaseController
 
   def find_issuer
     @issuer = resource.issuer
+  end
+
+  def find_service
+    service_id = params[:service_id].presence || (@plan.issuer_id if @plan&.issuer_type == 'Service')
+    return unless service_id
+    @service = current_user.accessible_services.find(service_id)
+    authorize! :show, @service
   end
 
   private

@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 # This will publish/hide all kinds of plans. AHEM.
 class Api::PlansController < Api::PlansBaseController
-  before_action :find_plan
   before_action :deny_on_premises_for_master, only: %i[publish hide]
 
   def publish
@@ -24,21 +25,21 @@ class Api::PlansController < Api::PlansBaseController
   end
 
   private
-    def collection
-      current_account.provided_plans
-    end
 
-    def determine_plans_path
-      case @plan.type
-      when "ServicePlan"
-        admin_service_service_plans_path @plan.service
-      when "ApplicationPlan"
-        admin_service_application_plans_path @plan.service
-      when "AccountPlan"
-        admin_account_plans_path
-      else
-        :back # let it fail.
-      end
-    end
+  def collection
+    current_account.provided_plans
+  end
 
+  def determine_plans_path
+    case @plan.type
+    when "ServicePlan"
+      admin_service_service_plans_path @plan.service
+    when "ApplicationPlan"
+      admin_service_application_plans_path @plan.service
+    when "AccountPlan"
+      admin_account_plans_path
+    else
+      :back # let it fail.
+    end
+  end
 end
