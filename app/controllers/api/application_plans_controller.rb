@@ -1,12 +1,7 @@
+# frozen_string_literal: true
+
 class Api::ApplicationPlansController < Api::PlansBaseController
-
-  before_action :authorize_manage_plans, only: %i[new create destroy]
   before_action :activate_sidebar_menu
-  prepend_before_action :authorize_manage_plans, only: %i[new create destroy]
-
-  with_options :only => [:index, :new, :edit, :create, :update, :destroy, :masterize] do |options|
-    options.before_action :find_service
-  end
 
   activate_menu :serviceadmin, :applications, :application_plans
   sublayout 'api/service'
@@ -27,11 +22,11 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   # to create plan same way as all plans
   #
   def create
-    super params[:application_plan]
+    super(application_plan_params)
   end
 
   def update
-    super params[:application_plan]
+    super(application_plan_params)
   end
 
   def destroy
@@ -44,13 +39,11 @@ class Api::ApplicationPlansController < Api::PlansBaseController
 
   protected
 
+  def scope
+    @service || current_account
+  end
+
   def collection
-    scope = current_account
-
-    if params[:service_id].present?
-      scope = scope.accessible_services.find(params[:service_id])
-    end
-
     scope.application_plans.includes(:issuer)
   end
 
@@ -58,13 +51,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
     activate_menu :sidebar => :application_plans
   end
 
-  private
-
-  def find_service
-    service_id = params[:service_id].presence || @plan.try!(:issuer_id)
-    @service   = current_user.accessible_services.find(service_id)
-
-    authorize! :show, @service
+  def application_plan_params
+    params.require(:application_plan).permit(:name, :system_name, :description, :rights, :approval_required, :trial_period_days, :cost_per_month, :setup_fee)
   end
-
 end

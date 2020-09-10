@@ -74,9 +74,8 @@ Ability.define do |user|
   end
 
   can :create, Service if account.can_create_service?
-  can :edit, Service
   can :destroy, Service do |service|
-    service.account_id == user.account_id && can?(:manage, :multiple_services) and not service.default_or_last?
+    service.account_id == user.account_id && can?(:manage, :multiple_services) && !service.default_or_last?
   end
 
   can %i[index show edit update create destroy], BackendApi
