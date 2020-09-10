@@ -26,11 +26,11 @@ create:
   # Validation errors
   required_name: <i>Name</i> is empty. You must specify a name for the product.
   required_name_description: Validation message to prompt the indication of a product name before saving details.
-  duplicated_name: <i>{{product_name}}</i> already exists. Please use a different name for the product.
+  duplicated_name: "<i>{{product_name}}</i> already exists. Please use a different name for the product."
   duplicated_name_description: Validation message to request the change of the product name due to  duplication.
   systemname_characters: System names can only use letters, numbers, hyphens and underscores.
   systemname_characters_description: Validation message to explain the allowed characters for a system name.
-  duplicated_systemname: <i>{{system_name}}</i> already exists. Please use a different system name.
+  duplicated_systemname: "<i>{{system_name}}</i> already exists. Please use a different system name."
   duplicated_systemname_description: Validation message to request the change of the system name due to duplication.
 
 # ------------------ Product > Edit product
@@ -54,7 +54,7 @@ edit:
   #-------# save_button: available in shared.yml
   #-------# cancel_button: available in shared.yml
   # Validation errors
-  required_name: "<i>Name</i> is empty. You must specify a name for the product."
+  required_name: <i>Name</i> is empty. You must specify a name for the product.
   required_name_description: Validation message to prompt the indication of a product name before saving product details.
   duplicated_name: "<i>{{product_name}}/<i> already exists. Please use a different name for the product."
   duplicated_name_description: Validation message to request the change of the product name due to duplication.

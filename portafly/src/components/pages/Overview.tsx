@@ -36,6 +36,7 @@ import {
 } from '@patternfly/react-table'
 import { CategoryOption } from 'types'
 import { StateLabel, useDataListData } from 'components/shared'
+import { Trans } from 'react-i18next'
 
 const categories = [
   {
@@ -169,6 +170,8 @@ const Overview: React.FunctionComponent = () => {
           <CardBody>
             <TextContent>
               <p>{t('shared:format.uppercase', { text: 'Ohai' })}</p>
+              <p>{t('test_interpolate', { text: 'Ohai' })}</p>
+              <p><Trans t={t} i18nKey="test_format" /></p>
               {/* This is just for testing, will be removed */}
               <Button
                 icon={<BellIcon />}
