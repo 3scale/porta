@@ -72,7 +72,7 @@ Array [
         />,
       },
       Object {
-        "stringValue": "Ramdon Org 0",
+        "stringValue": undefined,
         "title": <AccountOverviewLink
           account={
             Object {

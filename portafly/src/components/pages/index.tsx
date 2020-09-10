@@ -1,4 +1,5 @@
 export * from './accounts'
+export * from './account'
 export { default as Overview } from './Overview'
 export * from './applications'
 export { default as Login } from './Login'

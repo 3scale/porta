@@ -1,0 +1,25 @@
+// This rules modify PF-React Tabs so they match the ones in our Mockup
+.account-page {
+  .pf-l-flex {
+    // The Create Application button is slightly bigger than its Flex container and the UI glitches
+    // every time the tab is changed.
+    min-height: 35.4px;
+  }
+
+  .pf-c-tabs {
+    background-color: #fff;
+  }
+
+  .pf-c-tabs__list {
+    padding-left: var(--pf-c-page__main-section--PaddingLeft);
+  }
+
+  .pf-c-tabs__item {
+    padding-right: var(--pf-c-tabs__link--PaddingRight);
+  }
+
+  .pf-c-tabs__link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
