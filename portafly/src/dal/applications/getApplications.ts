@@ -37,7 +37,7 @@ const parseApplications = (applications: Application[]) => applications.map(({ a
   state: application.state as State,
   account: {
     id: application.account_id,
-    org_name: application.org_name
+    orgName: application.org_name
   },
   plan: {
     id: application.plan_id,
