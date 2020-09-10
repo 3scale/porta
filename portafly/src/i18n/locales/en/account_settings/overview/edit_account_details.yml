@@ -1,0 +1,43 @@
+---
+page_title: Edit account details | Portafly
+page_title_description: Page title of the subsection for Edit account details
+body_title: Edit account details
+body_title_description: Body title of the page for Edit account details
+
+# Main area
+
+organization_name_label: Organization name
+organization_name_label_description: Label for the field that holds the name of the organization that owns the account.
+organization_name_validation: "<i>Organization name</i> cannot be blank. Please add your organization name."
+organization_name_validation_description: Input field that holds the organization name, and validates the content.
+
+address_label: Address
+address_label_description: Label for the field that holds the first line of the organization's address.
+
+apartment_suite_label: Apartment, suite, unit, building, floor
+apartment_suite_label_description: Label for the field that holds the apartment number, suite number, or other number for the organization address.
+apartment_suite_helper: Examples: Apartment No.4, 3A, 8-1, 2nd 3rd
+apartment_suite_helper_description: This is the helper text that indicates to the user how to fill in the apartment/suite field.
+
+city_label: City
+city_label_description: Label for the field that holds the name of the city where the organization is located.
+
+state_region_label: State, region, province
+state_region_label_description: Label for the field that holds the name of the state, region, province where the organization is located.
+
+country_selectlist: Country
+country_selectlist_description: Label for the field that holds the name of the organization's country from the select list.
+
+postal_code_label: Postal code
+postal_code_label_description: Label for the field that holds the postal code of the organization.
+
+vat_code_label: VAT identification number
+vat_code_label_description: Label for the field that holds the VAT identification number of the organisation.
+
+time_zone_selectlist: Time zone
+time_zone_selectlist_description: Label for the field that holds the time zone of the organization from the select list.
+time_zone_selectlist_helper: Time zone used for charts. It supports only UTC offsets in whole hours, so choose a time zone closest to you.
+time_zone_selectlist_helper_description: This is helper text that highlights to the user the limitations of the select list of time zones.
+
+update_details_button: Update details
+update_details_button_description: The user clicks this button to update the account details edited in the form.
