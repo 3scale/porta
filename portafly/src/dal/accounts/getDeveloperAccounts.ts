@@ -53,8 +53,7 @@ const parseAccounts = (accounts: BuyersAccount[]) => accounts.map(({ account }) 
   createdAt: account.created_at,
   updatedAt: account.updated_at,
   orgName: account.org_name,
-  // TODO: Porta should return admin_name (username of first user role admin)
-  adminName: account.billing_address?.company,
+  adminName: 'TODO', // TODO: include admin_display_name in the response body
   state: account.state as State
 }))
 
