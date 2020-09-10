@@ -1,6 +1,6 @@
 # INSTALL
 
-Follow these instructions in order to set up a development environment, build and deploy this project on your machine.
+Follow these instructions to set up a development environment, build and deploy this project on your machine.
 
 ## Clone the repo, including submodules
 
@@ -28,11 +28,11 @@ Download and build all the images and start a shell session inside the container
 make bash
 ```
 
-All the source and dependencies for this project will be in place, making it possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
+All the sources and dependencies for this project will be in place, making it possible to run porta and the tests from inside the container. See [Run Porta](#run-porta)
 
 ### Running the application
 
-It's also possible to run the application by using only Docker. Firstly, setup the database by runnning `dev-setup` from your terminal:
+It's also possible to run the application by using only Docker. Firstly, set up the database by running `dev-setup` from your terminal:
 
 ```
 MASTER_PASSWORD=<master_password> USER_PASSWORD=<user_password> make dev-setup
@@ -70,7 +70,7 @@ Verify you have a proper version by running on your terminal:
 ruby -v
 ```
 
-> Mac OS X 10.13 comes with 2.3.7 but you can also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install your own ruby version.
+> Mac OS X 10.13 comes with 2.3.7 but you can also use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install other ruby version.
 
 #### Node version
 
@@ -102,7 +102,7 @@ You can download all Xcode versions from [Apple's developer site](https://develo
 
 #### Dependencies
 
-Make sure you have [Homebrew](https://brew.sh/) in your machine in order to install the following dependencies:
+Make sure you have [Homebrew](https://brew.sh/) in your machine to install the following dependencies:
 
 ```shell
 brew tap homebrew/cask
@@ -136,7 +136,7 @@ brew install --build-from-source sphinx
 docker run -d -p 6379:6379 redis
 ```
 
-Alternatively you can run Redis directly on your machine by using `brew`:
+Alternatively, you can run Redis directly on your machine by using `brew`:
 
 ```shell
 brew install redis
@@ -174,7 +174,7 @@ Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 bundle install
 ```
 
-If the `mysql2` gem installation fail with the error:
+If the `mysql2` gem installation fails with the error:
 
 ```
 ld: library not found for -lssl
@@ -223,7 +223,7 @@ ruby -v
 
 The project supports **Version: 8.X.X**.
 
-Install Node version 8 and ensure that the node is properly configured in `PATH` environment variable.
+Install Node version 8 and ensure that the node is properly configured in the `PATH` environment variable.
 
 #### Dependencies
 
@@ -235,13 +235,13 @@ sudo systemctl restart memcached
 
 #### Database (Postgres / MySQL / Oracle)
 
-Postgres, MySQL or Orcacle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
+Postgres, MySQL or Oracle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
 ```shell
 docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=3scale_system_development --name postgres10 circleci/postgres:10.5-alpine
 ```
 
-Alternatively you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
+Alternatively, you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
 
 #### Redis
 
@@ -251,7 +251,7 @@ Alternatively you can run Postgres directly on your machine by following [this a
 docker run -d -p 6379:6379 redis
 ```
 
-Alternatively you can run Redis directly on your machine by using `yum`:
+Alternatively, you can run Redis directly on your machine by using `yum`:
 
 ```shell
 sudo yum install redis
@@ -302,23 +302,24 @@ yarn install
 
 ## Setup Database
 
-Finally initialize the database with some seed data by running:
+Finally, initialize the database with some seed data by running:
 
 ```bash
 bundle exec rake db:setup
 ```
 
-You may need to set up the database from scratch again, in that case use `db:reset` to drop it first too:
+You may need to set up the database from scratch again, in that case, use `db:reset` to drop it first too:
 
 ```bash
-bundle exec rake db:reset # This will drop and setup the database
+bundle exec rake db:reset # This will drop and set up the database
 ```
 
-**NOTE:** This will seed the application and creates the Master, Provider & Developer accounts which are accessible through: `http://master-account.example.com.lvh.me:3000`, `http://provider-admin.example.com.lvh.me:3000`, `http://provider.example.com.lvh.me:3000` respectively. Please take note of the credentials generated at this moment also so that you can log into each of these portals.
+**NOTE:** This will seed the application and creates the Master, Provider & Developer accounts that are accessible through: `http://master-account.3scale.localhost:3000/`, `http://provider-admin.3scale.localhost:3000/`, `http://provider.3scale.localhost:3000/` respectively. 
+Note down the credentials generated at this moment, to log in to each of the portals above.
 
 ## Run Porta
 
-Start up the rails server by running the following command:
+Startup the rails server by running the following command:
 
 ```bash
 $ env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
