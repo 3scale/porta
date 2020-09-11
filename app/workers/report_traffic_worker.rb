@@ -88,7 +88,7 @@ class ReportTrafficWorker
   private
 
   def client
-    @client ||= ThreeScale::Client.new(System::Application.config.backend_client.merge(
+    @client ||= ThreeScale::Client.new(BackendClient.threescale_client_config.merge(
                                         provider_key: master_service.account.api_key))
   end
 
