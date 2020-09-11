@@ -68,8 +68,8 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     context "FormBuilder" do
       subject { ThreeScale::SpamProtection::Integration::FormBuilder }
 
-      should "not be included in Formtastic::SemanticFormBuilder" do
-        assert !Formtastic::SemanticFormBuilder.ancestors.include?(subject)
+      should "not be included in Formtastic::FormBuilder" do
+        assert !Formtastic::FormBuilder.ancestors.include?(subject)
       end
 
       should "be included in ThreeScale::SemanticFormBuilder" do
