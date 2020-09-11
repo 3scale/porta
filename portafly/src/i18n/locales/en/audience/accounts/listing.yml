@@ -29,14 +29,14 @@ actions_dropdownlist_options:
 accounts_filter: Group/organization
 accounts_filter_description: Dropdown list to filter accounts by specified option
 actions_filter_options:
- by_group: Group/organization
- by_admin: Admin
- by_state: State
- by_state_options:
-  approved: Approved
-  pending: Pending
-  rejected: Rejected
-  suspended: Suspended
+  by_group: Group/organization
+  by_admin: Admin
+  by_state: State
+  by_state_options:
+    approved: Approved
+    pending: Pending
+    rejected: Rejected
+    suspended: Suspended
 accounts_filter_field: "Filter by {{filter_option}}"
 accounts_filter_field_description: Filter by typeahead a text input. This applies for filters by group/organization and admin
 accounts_filter_field_aria_label: Filter text input
@@ -46,34 +46,34 @@ accounts_filter_button_aria_label_description: Aria label for the filter button
 
 ## Header
 accounts_table:
- aria_label: Accounts table
- aria_label_description: Aria label of the table of accounts
- empty_state: Currently, there are no accounts to show. Add accounts.
- empty_state_description: Message to display when there are no accounts to show, and prompt the user to add accounts
- group_header: Group/Organization
- group_header_description: Column listing groups and organizations
- admin_header: Admin
- admin_header_description: Column listing administrators
- signup_header: Signup date
- signup_header_description: Column listing signup dates
- applications_header: Applications
- applications_header_description: Column listing applications linked to accounts, on a 1:1 relationship
- state_header: State
- state_header_description: Column listing the state of the accounts
- created_header: Created at
- created_header_description: Column listing the creation date of the accounts
- updated_header: Updated at
- updated_header_description: Column listing the date an account was last updated
- #-------# actions_header_plural: available in shared.yml
- account_overview_link_aria_label: Go to account's overview
- account_overview_link_aria_label_description: Aria label for the link to open each account's overview
- actions_column_options:
-  approve: Approve
-  approve_description: Button link to approve an account
-  activate: Activate
-  activate_description: Button link to perform the activation of an account
-  act_as: Act as
-  act_as_description: Button link enabled for administrators to impersonate an account
+  aria_label: Accounts table
+  aria_label_description: Aria label of the table of accounts
+  empty_state: Currently, there are no accounts to show. Add accounts.
+  empty_state_description: Message to display when there are no accounts to show, and prompt the user to add accounts
+  group_header: Group/Organization
+  group_header_description: Column listing groups and organizations
+  admin_header: Admin
+  admin_header_description: Column listing administrators
+  signup_header: Signup date
+  signup_header_description: Column listing signup dates
+  applications_header: Applications
+  applications_header_description: Column listing applications linked to accounts, on a 1:1 relationship
+  state_header: State
+  state_header_description: Column listing the state of the accounts
+  created_header: Created at
+  created_header_description: Column listing the creation date of the accounts
+  updated_header: Updated at
+  updated_header_description: Column listing the date an account was last updated
+  #-------# actions_header_plural: available in shared.yml
+  account_overview_link_aria_label: Go to account's overview
+  account_overview_link_aria_label_description: Aria label for the link to open each account's overview
+  actions_column_options:
+    approve: Approve
+    approve_description: Button link to approve an account
+    activate: Activate
+    activate_description: Button link to perform the activation of an account
+    act_as: Act as
+    act_as_description: Button link enabled for administrators to impersonate an account
 
 # Modal: Send email
 send_email:
@@ -88,12 +88,12 @@ send_email:
   #-------# Send button: available in shared.yml
   #-------# Cancel button: available in shared.yml
   toasts:
-   send_email_start: Sending email
-   send_email_start_description: Alert message when email is being sent
-   send_email_success: Your message was sent.
-   send_email_success_description: Alert message when email is sent
-   send_email_error: Your message was not sent because of a network error.
-   send_email_error_description: Alert message when email could not be sent
+    send_email_start: Sending email
+    send_email_start_description: Alert message when email is being sent
+    send_email_success: Your message was sent.
+    send_email_success_description: Alert message when email is sent
+    send_email_error: Your message was not sent because of a network error.
+    send_email_error_description: Alert message when email could not be sent
 
 # Modal: Change state
 change_state:

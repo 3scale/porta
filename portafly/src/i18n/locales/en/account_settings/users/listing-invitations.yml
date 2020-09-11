@@ -100,8 +100,8 @@ team_member_deletion:
 #-------# Bulk selector: available in shared.yml
 #-------# Delete button: available in shared.yml
 invitations_filter:
- by_recipient: Recipient
- by_acceptance: Acceptance
+  by_recipient: Recipient
+  by_acceptance: Acceptance
 invitations_filter_description: List containing the criteria to filter invitations
 invitations_typeahead:
   filter_by_recipient: Filter by recipient

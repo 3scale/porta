@@ -7,7 +7,7 @@ const Application = Factory.define<IApplication>(({ sequence }) => ({
   state: 'live',
   account: {
     id: sequence,
-    org_name: `Ramdon Org ${sequence}`
+    orgName: `Ramdon Org ${sequence}`
   },
   plan: {
     id: sequence,

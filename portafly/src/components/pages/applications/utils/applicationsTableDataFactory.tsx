@@ -20,7 +20,7 @@ const generateRows: DataListRowGenerator = (applications: IProductApplication[])
       title: <ApplicationPageLink application={application} />
     },
     {
-      stringValue: application.account.org_name,
+      stringValue: application.account.orgName,
       title: <AccountOverviewLink account={application.account} />
     },
     {
