@@ -486,6 +486,7 @@ GEM
     prawn-format (0.2.1)
       prawn-core
     prawn-layout (0.2.1)
+    prometheus-client (2.1.0)
     prometheus-client-mmap (0.11.0)
     protected_attributes_continued (1.3.0)
       activemodel (~> 5.0)
@@ -784,14 +785,16 @@ GEM
     yabeda (0.8.0)
       concurrent-ruby
       dry-initializer
-    yabeda-prometheus (0.1.4)
-      yabeda
+    yabeda-prometheus (0.6.1)
+      prometheus-client (>= 0.10, < 3.0)
+      rack
+      yabeda (~> 0.5)
     yabeda-prometheus-mmap (0.1.1)
       prometheus-client-mmap
       yabeda (~> 0.5)
-    yabeda-sidekiq (0.6.0)
+    yabeda-sidekiq (0.7.0)
       sidekiq
-      yabeda
+      yabeda (~> 0.6)
     yard (0.9.25)
     zip-zip (0.3)
       rubyzip (>= 1.0.0)
