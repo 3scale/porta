@@ -73,16 +73,16 @@
     "style-loader": "^0.23.1",
     "swagger-tools": "^0.10.4",
     "typescript": "^3.5.1",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.10.3"
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.5",
     "@patternfly/patternfly": "^2.40.6",
     "@patternfly/react-core": "^3.120.5",
     "@patternfly/react-icons": "^3.14.18",
-    "@rails/webpacker": "^4.2.2",
+    "@rails/webpacker": "^4.3.0",
     "babel-loader": "^8.0.6",
     "bootstrap-sass": "^3.4.1",
     "c3": "^0.4.11",
