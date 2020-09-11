@@ -23,7 +23,7 @@
              locals: { f: f, authentication_provider: authentication_provider }
 
   = f.actions do
-    = f.commit_button
+    = f.action :submit
     - unless authentication_provider.new_record?
       = link_to 'Delete',
                 provider_admin_account_authentication_provider_path(@authentication_provider),

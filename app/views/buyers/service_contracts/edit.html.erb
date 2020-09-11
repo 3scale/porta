@@ -14,7 +14,7 @@
   <% end %>
 
   <%= form.actions do %>
-    <%= form.commit_button 'Change subscription', :button_html => {:'data-disable-with' => 'Changing subscription...' } %>
+    <%= form.action :submit, label: 'Change subscription', :button_html => {:'data-disable-with' => 'Changing subscription...' } %>
   <% end %>
 <% end %>
 

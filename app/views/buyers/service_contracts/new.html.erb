@@ -16,6 +16,6 @@
   <% end %>
 
   <%= form.actions do %>
-    <%= form.commit_button 'Create subscription', button_html: { data: { disable_with: 'Creating subscription...' } } %>
+    <%= form.action :submit, label: 'Create subscription', button_html: { data: { disable_with: 'Creating subscription...' } } %>
   <%-end%>
 <%-end %>

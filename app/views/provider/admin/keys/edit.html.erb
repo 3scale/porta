@@ -9,6 +9,6 @@
 
   <%= form.actions do %>
     <%= link_to 'Cancel', "#", :class => 'fancybox-close less-important-button' %>
-    <%= form.commit_button 'Set Custom Key' %>
+    <%= form.action :submit, label: 'Set Custom Key' %>
   <% end %>
 <% end %>

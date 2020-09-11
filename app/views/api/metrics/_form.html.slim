@@ -5,4 +5,4 @@
   = form.input :description, input_html: { rows: 3 }
 
 = form.actions do
-  = form.commit_button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}"
+  = form.action :submit, label: "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}"

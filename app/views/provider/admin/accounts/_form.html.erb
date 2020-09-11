@@ -5,9 +5,9 @@
 
 <%= form.actions do %>
   <% if params[:next_step] == 'credit_card' %>
-    <%= form.commit_button 'Save and continue with payment details' %>
+    <%= form.action :submit, label: 'Save and continue with payment details' %>
   <% else %>
-    <%= form.commit_button  %>
+    <%= form.action :submit %>
   <% end %>
 <% end %>
 <%= javascript_include_tag 'custom_profiles_input_texts' %>

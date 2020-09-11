@@ -13,4 +13,4 @@
               hint_method: ->(value) { t(value, scope: :notification_preference_hints) }
 
   = f.actions do
-    = f.commit_button 'Update Notification Preferences'
+    = f.action :submit, label: 'Update Notification Preferences'

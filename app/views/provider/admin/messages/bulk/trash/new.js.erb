@@ -9,7 +9,7 @@
       <%= hidden_field_tag 'selected[]', selected_id %>
     <% end %>
     <%= form.actions do %>
-      <%= form.commit_button 'Delete', button_html: { data: { 'disable-with' => 'Running bulk action...' }} %>
+      <%= form.action :submit, label: 'Delete', button_html: { data: { 'disable-with' => 'Running bulk action...' }} %>
     <% end %>
   <% end %>
 <% end %>

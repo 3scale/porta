@@ -7,6 +7,6 @@
   <%= f.input :draft, :as => :codemirror, :label => false %>
 
   <%= f.actions do %>
-    <%= f.commit_button :button_html => { :class => 'important-button' } %>
+    <%= f.action :submit, label: :button_html => { :class => 'important-button' } %>
   <% end %>
 <% end %>

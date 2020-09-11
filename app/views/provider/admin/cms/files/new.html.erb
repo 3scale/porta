@@ -6,6 +6,6 @@
   <%= render 'form', :f => f %>
 
   <%= f.actions do %>
-    <%= f.commit_button :button_html => {:title => 'Create File'} %>
+    <%= f.action :submit, label: :button_html => {:title => 'Create File'} %>
   <% end %>
 <% end %>

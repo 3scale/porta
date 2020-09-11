@@ -149,7 +149,7 @@ module ThreeScale
     end
 
 
-    def commit_button(*args)
+    def actions(*args)
       opts = args.extract_options!
       button_html = (opts[:button_html] ||= {})
 
@@ -179,7 +179,7 @@ module ThreeScale
     # Use this inside a.actions block:
     #
     #   <%= form.actions do %>
-    #     <%= form.commit_button %>
+    #     <%= form.action :submit %>
     #     <%= form.cancel_link(some_url) %>
     #   <% end %>
     #

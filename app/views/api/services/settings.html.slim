@@ -18,4 +18,4 @@
 = semantic_form_for @service, :url => admin_service_path(@service) do |form|
   = render :partial => 'api/services/forms/settings', :locals => { :form => form }
   = form.actions do
-    = form.commit_button
+    = form.action :submit

@@ -7,7 +7,7 @@
   <% end %>
 
   <%= form.actions do %>
-    <%= form.commit_button 'Update' %>
+    <%= form.action :submit, label: 'Update' %>
     &nbsp; &nbsp;<%= link_to 'Cancel', "#", :class => 'fancybox-close' %>
   <% end %>
 <% end %>

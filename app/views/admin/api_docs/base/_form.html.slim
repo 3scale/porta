@@ -15,7 +15,7 @@
   = form.semantic_errors :base_path
   = form.input :skip_swagger_validations, as: :boolean
 = form.actions do
-  = form.commit_button
+  = form.action :submit
 
 css:
   #api_docs_service_body_input .CodeMirror {

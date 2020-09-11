@@ -8,4 +8,4 @@
   = form.input :position
 
 = form.actions do
-  = form.commit_button "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule"
+  = form.action :submit, label: "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule"

@@ -11,7 +11,7 @@
     <% end %>
 
     <%= f.actions :style => 'position:absolute' do %>
-      <%= f.commit_button :button_html => {:title => 'Update section', :class => 'important-button'} %>
+      <%= f.action :submit, label: :button_html => {:title => 'Update section', :class => 'important-button'} %>
     <% end %>
   </div>
 <% end %>

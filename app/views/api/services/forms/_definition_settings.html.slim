@@ -29,6 +29,6 @@ javascript:
   = render partial: 'api/services/forms/naming', locals: { form: form }
 
 = form.actions do
-  = form.commit_button
+  = form.action :submit
 
 = render partial: 'api/services/delete', locals: { service: @service }

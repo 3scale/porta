@@ -20,7 +20,7 @@
 
   = hidden_field_tag 'account[extra_fields][Signup_origin]', @signup_origin
 
-  = form.commit_button 'Sign up',
+  = form.action :submit, label: 'Sign up',
                          button_html: { 'data-disable-with' => 'Signing up…' }
   
   .form-hints

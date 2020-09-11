@@ -4,7 +4,7 @@
   <%= form.inputs '' do %>
     <%= form.inputs :cms_escape_draft_html, :cms_escape_published_html %>
     <%= form.actions do %>
-      <%= form.commit_button :commit %>
+      <%= form.action :submit, label: :commit %>
     <% end %>
 
   <% end %>

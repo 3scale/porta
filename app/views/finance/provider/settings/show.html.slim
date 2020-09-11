@@ -48,7 +48,7 @@
               include_blank: false
 
     = f.actions do
-      = f.commit_button 'Save'
+      = f.action :submit, label: 'Save'
 
 - if can?(:manage, :finance)
   - if @account.billing_strategy.try(:needs_credit_card?)
@@ -86,7 +86,7 @@
                                           value: '', disabled: true
 
       = form.actions do
-        = form.commit_button 'Save changes'
+        = form.action :submit, label: 'Save changes'
 
   javascript:
     $(function() {

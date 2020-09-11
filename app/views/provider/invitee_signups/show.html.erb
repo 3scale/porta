@@ -25,7 +25,7 @@
   <% end %>
 
   <%= form.actions do %>
-    <%= form.commit_button 'Sign up', :button_html => {:class => 'user-signup important-button'} %>
+    <%= form.action :submit, label: 'Sign up', :button_html => {:class => 'user-signup important-button'} %>
   <% end %>
 
 <% end %>

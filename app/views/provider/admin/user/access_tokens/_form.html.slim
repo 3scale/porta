@@ -10,7 +10,7 @@
 
 
   = f.actions
-    = f.commit_button
+    = f.action :submit
     - unless access_token.new_record?
       = link_to 'Delete', provider_admin_user_access_token_path(@access_token),
                 data: {confirm: 'Are you sure?'}, method: :delete,

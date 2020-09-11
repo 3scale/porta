@@ -9,7 +9,7 @@
     <%= form.input :subject, :as => :string %>
     <%= form.input :body, :as => :text, :input_html => {:rows => 10} %>
     <%= form.actions do %>
-      <%= form.commit_button 'Send', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
+      <%= form.action :submit, label: 'Send', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <% end %>
   <% end %>
  <% end %>

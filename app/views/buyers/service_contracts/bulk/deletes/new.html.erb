@@ -6,7 +6,7 @@
   <%- form.inputs do -%>
     <%= render 'buyers/service_contracts/bulk/selected_contracts' %>
     <%- form.actions do -%>
-      <%= form.commit_button 'Delete applications', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
+      <%= form.action :submit, label: 'Delete applications', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <%- end -%>
   <%- end -%>
  <% end %>

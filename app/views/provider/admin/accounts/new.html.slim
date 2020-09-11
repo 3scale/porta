@@ -8,4 +8,4 @@ h2 Create new Account
   = form.inputs name: 'Organization Information' do
     = form.user_defined_form
   = form.actions do
-    = form.commit_button 'Create', button_html: { class: 'important-button' }
+    = form.action :submit, label: 'Create', button_html: { class: 'important-button' }
