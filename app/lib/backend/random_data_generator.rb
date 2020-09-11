@@ -41,7 +41,7 @@ module Backend
         }
 
         invalid = invalid_transactions(cinstance, time, metric, value)
-        client = ThreeScale::Client.new(System::Application.config.backend_client.merge(
+        client = ThreeScale::Client.new(BackendClient.threescale_client_config.merge(
                                          provider_key: service.account.api_key))
         client.report(transactions)
         client.report(invalid)

@@ -103,7 +103,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://gems.contribsys.com/
   specs:
-    3scale_client (2.6.1)
+    3scale_client (2.11.0)
       nokogiri
     3scale_time_range (0.0.6)
       activesupport (>= 3.2.19)
@@ -445,7 +445,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (5.7.0.350)
     nio4r (2.5.2)
-    nokogiri (1.10.8)
+    nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
@@ -798,7 +798,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  3scale_client (~> 2.6.1)
+  3scale_client (~> 2.11)
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
