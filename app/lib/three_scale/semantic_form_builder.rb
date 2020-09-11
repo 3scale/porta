@@ -176,9 +176,9 @@ module ThreeScale
 
     # Adds cancel link to a form.
     #
-    # Use this inside a buttons block:
+    # Use this inside a.actions block:
     #
-    #   <%= form.buttons do %>
+    #   <%= form.actions do %>
     #     <%= form.commit_button %>
     #     <%= form.cancel_link(some_url) %>
     #   <% end %>

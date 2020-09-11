@@ -22,7 +22,7 @@
     <%= form.input :subject, :as => :string, :label => 'Subject:' %>
     <%= form.input :body, :input_html => {:rows => 10}, :label => 'Body:' %>
   <% end %>
-  <%= form.buttons do %>
+  <%= form.actions do %>
     <% if request.xhr? %>
       <li class="link">
         <%= link_to 'Cancel', provider_admin_messages_root_path, :class => 'fancybox-close' %>

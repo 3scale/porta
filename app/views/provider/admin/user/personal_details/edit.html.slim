@@ -13,7 +13,7 @@ h1 Personal Details
   - if current_user.using_password?
     = form.inputs name: "Provide your current password and update your personal details" do
       = form.input :current_password, required: true
-  = form.buttons do
+  = form.actions do
     = form.commit_button 'Update Details'
 
 - if current_user.can_set_password? && !current_account.settings.enforce_sso?

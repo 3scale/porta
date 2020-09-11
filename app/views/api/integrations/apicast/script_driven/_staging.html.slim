@@ -39,14 +39,14 @@
         div.help-button-constrainer
           = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'oauth_login_url'
     - if @service.oauth?
-      fieldset.buttons
+      fieldset.actions
         ol
           li.commit
             button#proxy-button-save-and-deploy.important-button.update name="deploy" value="1"
               | Update Staging Configuration
     - else
       = render 'api/integrations/apicast/shared/client', f: f
-      fieldset.buttons
+      fieldset.actions
         ol
           li.commit
             - unless @service.using_proxy_pro?

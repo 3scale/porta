@@ -55,7 +55,7 @@
 
     = render 'api/integrations/apicast/shared/client', f: f unless @proxy.service.oauth?
 
-    = f.buttons do
+    = f.actions do
       = render 'api/integrations/apicast/shared/client_feedback' unless @proxy.skip_test_request?
       = f.button I18n.t( 'formtastic.actions.proxy.update', action: @proxy.skip_test_request? ? 'Update the' : 'Update & test in' ), button_html: {class: 'important-button update', name:'deploy', value: '1',
         id: 'proxy-button-save-and-deploy', title: 'Update & Test' }

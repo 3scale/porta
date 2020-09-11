@@ -15,7 +15,7 @@
     <%= form.input :plan, collection: @service_plans, prompt: !@service_contract.plan_id? %>
   <% end %>
 
-  <%= form.buttons do %>
+  <%= form.actions do %>
     <%= form.commit_button 'Create subscription', button_html: { data: { disable_with: 'Creating subscription...' } } %>
   <%-end%>
 <%-end %>

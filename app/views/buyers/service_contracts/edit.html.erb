@@ -13,7 +13,7 @@
     <%= form.input :plan, :collection => @service_plans, :include_blank => false %>
   <% end %>
 
-  <%= form.buttons do %>
+  <%= form.actions do %>
     <%= form.commit_button 'Change subscription', :button_html => {:'data-disable-with' => 'Changing subscription...' } %>
   <% end %>
 <% end %>

@@ -8,5 +8,5 @@ p.help
 = semantic_form_for @webhook, url: provider_admin_webhooks_path do |f|
   = render 'form', form: f
 
-  = f.buttons do
+  = f.actions do
     = f.commit_button label: 'Update webhooks settings'

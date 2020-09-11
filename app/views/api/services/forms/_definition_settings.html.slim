@@ -28,7 +28,7 @@ javascript:
 #integration-settings
   = render partial: 'api/services/forms/naming', locals: { form: form }
 
-= form.buttons do
+= form.actions do
   = form.commit_button
 
 = render partial: 'api/services/delete', locals: { service: @service }

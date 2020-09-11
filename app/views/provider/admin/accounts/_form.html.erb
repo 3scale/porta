@@ -3,7 +3,7 @@
   <%= time_zone_select_for_account(form) -%>
 <% end %>
 
-<%= form.buttons do %>
+<%= form.actions do %>
   <% if params[:next_step] == 'credit_card' %>
     <%= form.commit_button 'Save and continue with payment details' %>
   <% else %>

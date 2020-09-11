@@ -16,5 +16,5 @@ div class="wide"
       = invoice.input :friendly_id, required: true
       = invoice.input :period, input_html: { value: @invoice.period.to_param }, as: :string
 
-    = invoice.buttons do
+    = invoice.actions do
       = invoice.commit_button 'Update Invoice'

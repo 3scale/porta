@@ -91,7 +91,7 @@ p
   = hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce'
 
   = render partial: '/shared/legal_terms_for_cc_details'
-  = form.buttons do
+  = form.actions do
     li.commit
       = form.submit 'Save credit card', class: 'important-button'
 

@@ -18,6 +18,6 @@
         div.help-button-constrainer
           = render 'api/integrations/apicast/shared/oidc', f: f
 
-  = f.buttons do
+  = f.actions do
     = f.button 'Update', button_html: { class: 'important-button update' }
     = fixed_width_icon_link_to("Back to Integration & Configuration", "arrow-left", admin_service_integration_path(@service), class: 'next')
