@@ -1,9 +1,9 @@
 default: &default
   enabled: false
-  request_pattern: "\\.stg-saas\\.localhost"
+  request_pattern: "\\.3scale.localhost"
   request_replacement: ".example.com"
   response_pattern: "\\.example\\.com"
-  response_replacement: ".stg-saas.localhost"
+  response_replacement: ".3scale.localhost"
 
 development:
   <<: *default
