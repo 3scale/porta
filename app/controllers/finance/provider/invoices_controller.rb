@@ -11,7 +11,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   def index
     @search = ThreeScale::Search.new(params[:search] || params)
-    @invoices = collection.scope_search(@search).order_by(params[:sort], params[:direction]).paginate(paginate_params)
+    @invoices = collection.scope_search(@search).order_by(params[:sort], params[:direction]).paginate(paginate_params).decorate
   end
 
   def create
