@@ -40,14 +40,13 @@
                         {% if subscription %}
                             {% if subscription.can.change_plan? %}
                                <a href="#" id="choose-plan-{{subscription.id}}" class="btn btn-default">Review/Change</a>
-
-                               {{ "plans_widget.js" | javascript_include_tag }}
+                               {{ "plans_widget_v2.js" | javascript_include_tag }}
                                {{ "plans_widget.css" | stylesheet_link_tag }}
 
                                 <script type="text/javascript">
                                   //<![CDATA[
                                   $(document).ready(function() {
-                                    $("#choose-plan-{{ subscription.id }}").click(function(){
+                                    $("#choose-plan-{{ subscription.id }}").on('click', function(){
                                       var planID = '{{ subscription.plan.id }}';
                                       var contractID = '{{ subscription.id }}';
                                       var url = '{{ subscription.change_plan_url }}';

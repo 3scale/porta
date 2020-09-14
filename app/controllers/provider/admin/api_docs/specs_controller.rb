@@ -7,7 +7,7 @@ class Provider::Admin::ApiDocs::SpecsController < Provider::Admin::BaseControlle
       json = File.read(Rails.root.join('doc', 'active_docs', "#{params[:id]}-s20.json"))
 
       hash = JSON.parse(json)
-      hash["host"] = request_target_host
+      hash["host"] = request.host_with_port
       hash["schemes"] = ['http'] if Rails.env.development?
       render json: hash
     else

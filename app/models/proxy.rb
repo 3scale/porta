@@ -10,7 +10,7 @@ class Proxy < ApplicationRecord
   include GatewaySettings::ProxyExtension
   include ProxyConfigAffectingChanges::ModelExtension
 
-  define_proxy_config_affecting_attributes except: %i[updated_at lock_version]
+  define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
 
@@ -27,6 +27,7 @@ class Proxy < ApplicationRecord
 
   has_one :proxy_config_affecting_change, dependent: :delete
   private :proxy_config_affecting_change
+  after_commit :create_proxy_config_affecting_change, on: :create
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded, presence: true
 
@@ -48,10 +49,6 @@ class Proxy < ApplicationRecord
     rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
   }.freeze
 
-  # Remove api_backend
-  def self.columns
-    super.reject {|column| /\Aapi_backend\Z/ =~ column.name }
-  end
   reset_column_information
 
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
@@ -136,6 +133,7 @@ class Proxy < ApplicationRecord
 
   def policies_config
     parsed_config = read_and_parse_policies_config
+    return parsed_config if errors[:policies_config].present?
 
     if parsed_config.detect { |c| c['name'] == DEFAULT_POLICY['name'] }
       parsed_config
@@ -215,11 +213,13 @@ class Proxy < ApplicationRecord
     def generate(name)
       template = config.fetch(name.try(:to_sym)) { return }
 
-      format template, {
+      uri = format template, {
         system_name: service.parameterized_system_name, account_id: service.account_id,
         tenant_name: provider_subdomain,
         env: proxy.proxy_env, port: proxy.proxy_port
       }
+
+      UriShortener.call(uri).to_s
     end
   end
 
@@ -537,11 +537,9 @@ class Proxy < ApplicationRecord
     super
   end
 
-  def find_or_create_proxy_config_affecting_change
+  def affecting_change_history
     proxy_config_affecting_change || create_proxy_config_affecting_change
   end
-  alias affecting_change_history find_or_create_proxy_config_affecting_change
-  private :find_or_create_proxy_config_affecting_change
 
   def pending_affecting_changes?
     return unless apicast_configuration_driven?
@@ -560,11 +558,12 @@ class Proxy < ApplicationRecord
     include ActiveModel::Validations
 
     attr_accessor :name, :version, :configuration, :enabled
+
     validates :name, :version, presence: true
     validate :configuration_is_object
 
     def initialize(attributes = {})
-      self.attributes = attributes
+      self.attributes = attributes.is_a?(Hash) ? attributes : {}
     end
 
     def attributes=(attributes)
@@ -651,6 +650,7 @@ class Proxy < ApplicationRecord
   end
 
   def create_proxy_config_affecting_change(*)
+    return unless persisted?
     super
   rescue ActiveRecord::RecordNotUnique
     reload.send(:proxy_config_affecting_change)

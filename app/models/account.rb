@@ -2,11 +2,6 @@
 
 class Account < ApplicationRecord
   attribute :credit_card_expires_on, :date
-  # Hack to remove all the attributes with names matching the regex from @attributes
-  # It is enough for rails not persisting them in actual columns.
-  def self.columns
-    super.reject {|column| /\Apayment_gateway_(type|options)|deleted_at|service_preffix|first_admin_id\Z/ =~ column.name }
-  end
 
   # need to reset column information to clear column_names and such
   reset_column_information

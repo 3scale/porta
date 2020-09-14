@@ -5,6 +5,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @provider.settings.allow_finance!
     login! @provider
     @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
@@ -107,7 +108,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :created
     line_item = @invoice.line_items.order(:id).last!
-    assert_equal ThreeScale::Money.new(0, line_item.currency), line_item.cost 
+    assert_equal ThreeScale::Money.new(0, line_item.currency), line_item.cost
   end
 
   test '#destroy' do

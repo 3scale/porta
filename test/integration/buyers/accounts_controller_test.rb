@@ -91,6 +91,42 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_match 'Alaska Application App', response.body
     end
 
+    test 'member user without billing permission cannot manage invoice' do
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      provider.settings.allow_finance!
+
+      get admin_buyers_account_invoices_path(buyer)
+      assert_response :forbidden
+
+      assert_no_difference ->{ Invoice.count } do
+        post admin_buyers_account_invoices_path(buyer)
+        assert_response :forbidden
+      end
+
+      invoice = FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider)
+      get edit_admin_buyers_account_invoice_path(buyer, invoice)
+      assert_response :forbidden
+    end
+
+    test 'member user with billing permission can manage invoice' do
+      user.member_permission_ids = [:partners, :finance]
+      user.save!
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      provider.settings.allow_finance!
+
+      get admin_buyers_account_invoices_path(buyer)
+      assert_response :success
+
+      assert_difference ->{ Invoice.count }, 1 do
+        post admin_buyers_account_invoices_path(buyer)
+        assert_response :redirect
+      end
+
+      invoice = FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider)
+      get edit_admin_buyers_account_invoice_path(buyer, invoice)
+      assert_response :success
+    end
+
     test 'can\'t manage buyer accounts' do
       user.member_permission_ids = []
       user.save!
@@ -134,6 +170,37 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       @buyer = FactoryBot.create(:buyer_account, name: 'bob')
       @provider = @buyer.provider_account
       login! @provider
+    end
+
+    test '#new and #create redirects if it has a non-default application plan' do
+      @provider.account_plans.delete_all
+      @provider.account_plans.create!(name: 'non default account plan')
+
+      post admin_buyers_accounts_path, {
+        account: {
+          org_name: 'Alaska',
+          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+        }
+      }
+
+      assert_redirected_to admin_buyers_account_plans_path
+      assert_equal 'Please, create an Account Plan first', flash[:alert]
+    end
+
+    test 'POST with an error outside account or user is shown as a flash error' do
+      errors = ActiveModel::Errors.new(Plan.new)
+      errors.add(:base, 'error that is not in "user" or "account"')
+      errors.add(:base, 'another error')
+      Signup::Result.any_instance.stubs(errors: errors)
+
+      post admin_buyers_accounts_path, {
+        account: {
+          org_name: 'Alaska',
+          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+        }
+      }
+
+      assert_equal 'error that is not in "user" or "account". another error', flash[:error]
     end
 
     # regression test for: https://github.com/3scale/system/issues/2567
@@ -237,6 +304,21 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', 2)
       refute_xpath( './/div[@id="applications_widget"]//table[@class="list"]//tr', /plan/i )
     end
+
+    test 'suspend button is displayed only when account is not deleted or marked for deletion' do
+      ThreeScale.config.stubs(onpremises: false)
+      get admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), true
+
+      @provider.suspend
+      get admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), false
+
+      delete admin_buyers_account_path(@provider)
+      assert_select %(td a.button-to.action.suspend), false
+
+    end
+
   end
 
   class NotLoggedInTest < ActionDispatch::IntegrationTest

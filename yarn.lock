@@ -2726,9 +2726,9 @@ bluebird@~3.4.1:
   integrity sha1-9y12C+Cbf3bQjtj66Ysomo0F+rM=
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
-  version "4.11.8"
-  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
-  integrity sha512-ItfYfPLkWHUjckQCk8xC+LwxgK8NYcXywGigJgSwOP8Y2iyWT4f2vsZnoOXTTbo+o5yXmIUJ4gn5538SO5S3gA==
+  version "4.11.9"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz#26d556829458f9d1e81fc48952493d0ba3507828"
+  integrity sha512-E6QoYqCKZfgatHTdHzs1RRKP7ip4vvm+EyRUeE2RF0NblwVvb0p6jSVeNTOFxPn26QXN2o6SMfNxKp6kU8zQaw==
 
 body-parser@1.18.2:
   version "1.18.2"
@@ -4565,9 +4565,9 @@ electron-to-chromium@^1.3.341:
   integrity sha512-f8nx53+Z9Y+SPWGg3YdHrbYYfIJAtbUjpFfW4X1RwTZ94iUG7geg9tV8HqzAXX7XTNgyWgAFvce4yce8ZKxKmg==
 
 elliptic@^6.0.0:
-  version "6.5.2"
-  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.2.tgz#05c5678d7173c049d8ca433552224a495d0e3762"
-  integrity sha512-f4x70okzZbIQl/NSRLkI/+tteV/9WqL98zx+SQ69KbXxmVrmjwsNUPn/gYJJ0sHvEak24cZgHIPegRePAtA/xw==
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.3.tgz#cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6"
+  integrity sha512-IMqzv5wNQf+E6aHeIqATs0tOLeOTwj1QKbRcS3jBbYkl5oLAserA8yJTT7/VyHUYG91PRmPyeQDObKLPpeS4dw==
   dependencies:
     bn.js "^4.4.0"
     brorand "^1.0.1"
@@ -12463,7 +12463,7 @@ svgo@^1.0.0:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-swagger-client@^3.10.0:
+swagger-client@3.10.0, swagger-client@^3.10.0:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/swagger-client/-/swagger-client-3.10.0.tgz#97c5ed18149b9bad722d9020e3482f22e2cff602"
   integrity sha512-XUvqO/jeF+P5gYklN+ThEFq1++XnXV9RTdOpS65B5Y0dHnamxO8v0wG8geVEwIIqKjCYbKQ2Vd67DZMZMeaNvg==
@@ -12517,47 +12517,7 @@ swagger-tools@^0.10.4:
     traverse "^0.6.6"
     z-schema "^3.15.4"
 
-swagger-ui-react@^3.25.0:
-  version "3.25.0"
-  resolved "https://registry.yarnpkg.com/swagger-ui-react/-/swagger-ui-react-3.25.0.tgz#44b9ad59b3d98e680dc36d2e2117518c3e8d3af6"
-  integrity sha512-2MMk3p42Q3x/E91vIqitvXJLAvDsBwxW8DLt3FfI0H6YPnWGqafsU4kP6unVriQqJqafcQII5suDwmycdmqSdw==
-  dependencies:
-    "@babel/runtime-corejs2" "^7.5.5"
-    "@braintree/sanitize-url" "^3.0.0"
-    "@kyleshockey/object-assign-deep" "^0.4.2"
-    "@kyleshockey/xml" "^1.0.2"
-    base64-js "^1.2.0"
-    classnames "^2.2.6"
-    core-js "^2.5.1"
-    css.escape "1.5.1"
-    deep-extend "0.6.0"
-    dompurify "^2.0.7"
-    ieee754 "^1.1.13"
-    immutable "^3.x.x"
-    js-file-download "^0.4.1"
-    js-yaml "^3.13.1"
-    lodash "^4.17.15"
-    memoizee "^0.4.12"
-    prop-types "^15.7.2"
-    randombytes "^2.1.0"
-    react-debounce-input "^3.2.0"
-    react-immutable-proptypes "2.1.0"
-    react-immutable-pure-component "^1.1.1"
-    react-inspector "^2.3.0"
-    react-motion "^0.5.2"
-    react-redux "^4.x.x"
-    redux "^3.x.x"
-    redux-immutable "3.1.0"
-    remarkable "^1.7.4"
-    reselect "^2.5.4"
-    serialize-error "^2.1.0"
-    sha.js "^2.4.11"
-    swagger-client "^3.10.0"
-    url-parse "^1.4.7"
-    xml-but-prettier "^1.0.1"
-    zenscroll "^4.0.2"
-
-swagger-ui@^3.25.0:
+swagger-ui@3.25.0:
   version "3.25.0"
   resolved "https://registry.yarnpkg.com/swagger-ui/-/swagger-ui-3.25.0.tgz#0c089f44e011ef01460ae988bcb9ce8829966c81"
   integrity sha512-OfGWc93d/jqZ3LQC8fCxWm0nKodGFqa1TkxIW5jSmVqoPlEFGKdeGlrVtnINXn3kGNNuvPgNixb6Rp9sB6nC1Q==

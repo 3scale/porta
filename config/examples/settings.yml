@@ -1,6 +1,5 @@
 base: &default
   superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
-  dev_domain: <%= ENV['THREESCALE_DEV_DOMAIN'] == '1' %>
   apicast_internal_host_regexp:
   secure_cookie: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
   force_ssl: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
@@ -37,7 +36,6 @@ base: &default
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
   onpremises: false
-  dev_gtld: <%= ENV.fetch('DEV_GTLD', 'lvh.me') %>
   active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
   error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
   billing_canaries:
@@ -47,7 +45,6 @@ base: &default
 
 development:
   <<: *default
-  dev_domain: true
   secure_cookie: false
   force_ssl: false
   report_traffic: false
@@ -61,7 +58,6 @@ test:
 
 preview:
   <<: *default
-  dev_domain:  <%= ENV['THREESCALE_DEV_DOMAIN'] != '0' %>
   report_traffic: false
   access_code: <%= ENV.fetch('ACCESS_CODE', 'access_code') %>
 

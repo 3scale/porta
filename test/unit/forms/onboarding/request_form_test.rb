@@ -1,11 +1,14 @@
 require 'test_helper'
 
 class Onboarding::RequestFormTest < ActiveSupport::TestCase
+  setup do
+    @proxy = FactoryBot.build(:proxy)
+    @form = Onboarding::RequestForm.new(proxy)
+  end
 
-  def test_path
-    proxy = FactoryBot.build(:proxy)
-    form = Onboarding::RequestForm.new(proxy)
+  attr_reader :proxy, :form
 
+  test 'path' do
     assert_nil form.path
 
     assert form.validate(path: nil)
@@ -20,10 +23,7 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
     assert_equal '/some-path', proxy.api_test_path
   end
 
-  def test_api_base_url
-    proxy = FactoryBot.build(:proxy)
-    form = Onboarding::RequestForm.new(proxy)
-
+  test 'api_base_url' do
     assert form.save
 
     form.api_base_url = base_url = 'https://invalid / url'
@@ -32,8 +32,33 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
     refute form.save
   end
 
-  def test_test_api!
-    proxy = FactoryBot.create(:proxy)
+  test '#uri' do
+    proxy.save!
+    proxy.update(api_backend: 'http://echo-api.net')
+    form = Onboarding::RequestForm.new(proxy)
+    assert_equal 'http://echo-api.net/', form.uri
+
+    form.path = '/'
+    assert_equal 'http://echo-api.net/', form.uri
+
+    form.path = '/hello'
+    assert_equal 'http://echo-api.net/hello', form.uri
+
+    proxy.update(api_backend: 'http://echo-api.net/api')
+    form = Onboarding::RequestForm.new(proxy)
+    assert_equal 'http://echo-api.net/api/', form.uri
+
+    form.path = '/hello'
+    assert_equal 'http://echo-api.net/api/hello', form.uri
+
+    proxy.backend_api_configs.delete_all
+    form = Onboarding::RequestForm.new(proxy.reload)
+    refute proxy.reload.api_backend
+    refute form.uri
+  end
+
+  test 'test_api!' do
+    proxy.save!
     proxy.update! sandbox_endpoint: 'http://staging.apicast.io'
 
     ProxyDeploymentService.any_instance.expects(:deploy).returns(true)
@@ -48,9 +73,7 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
     assert status.success?, 'test should succeed'
   end
 
-  def test_path_without_slash
-    proxy = FactoryBot.build(:proxy)
-    form = Onboarding::RequestForm.new(proxy)
+  test 'path_without_slash' do
     assert_equal '', form.path_without_slash
 
     proxy.api_test_path = '/foo'

@@ -3,7 +3,7 @@ div id="cms-toolbar"
   // font-awesome blows QT browser in test mode
   = stylesheet_link_tag "font-awesome" unless Rails.env.test?
   = stylesheet_link_tag 'cms_toolbar.css'
-  = javascript_include_tag 'provider/cms_toolbar'
+  = javascript_include_tag 'provider/cms_toolbar_v2'
 
   form id="cms-toolbar-mode"
     ul id="cms-toolbar-menu-middle" class="horizontal"
@@ -104,10 +104,10 @@ div id="cms-toolbar"
         $('body', doc.document || doc).append(added_style);
       };
 
-      $('iframe#developer-portal').load(add_style_to_iframe);
+      $('iframe#developer-portal').on('load', add_style_to_iframe);
       $('#theme-picker')
-              .change(add_style_to_iframe)
-              .change(function () {
+              .on('change', add_style_to_iframe)
+              .on('change', function () {
                 var picker = $(this);
 
                 var snippet = picker.find('option:selected').data('snippet');

@@ -325,12 +325,9 @@ class ZyncWorker
     root_url = config.root_url
     return root_url if root_url
 
-    host = provider.admin_domain
     # This is far for perfect, but there is no request in workers to infer the domain from.
-    options = case Rails.env
-              when 'development' then { host: "#{host}.#{ThreeScale.config.dev_gtld}", port: 3000 }
-              else { host: host }.reverse_merge(ActionMailer::Base.default_url_options)
-              end
+    options = { host: provider.admin_domain }
+    options.reverse_merge!(Rails.env.development? ? { port: 3000 } : ActionMailer::Base.default_url_options)
     System::UrlHelpers.system_url_helpers.root_url(options)
   end
 
