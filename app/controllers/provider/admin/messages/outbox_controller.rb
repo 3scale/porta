@@ -32,11 +32,11 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def index
-    @messages = current_account.messages.not_system_for_provider.latest_first.paginate(page: params[:page])
+    @messages = current_account.messages.not_system_for_provider.latest_first.paginate(page: params[:page]).decorate
   end
 
   def show
-    @message = current_account.messages.find(params[:id])
+    @message = current_account.messages.find(params[:id]).decorate
   end
 
   private
