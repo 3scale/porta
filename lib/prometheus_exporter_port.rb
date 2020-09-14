@@ -10,10 +10,13 @@ class PrometheusExporterPort
   }.freeze
 
   class InvalidTenantModeError < StandardError
+    def initialize(tenant_mode)
+      @message = "TENANT_MODE #{tenant_mode.inspect} is not allowed"
+    end
   end
 
   TENANT_MODE_CHECK = ->(mode) do
-    PROMETHEUS_EXPORTER_DEFAULT_PORTS.key?(mode.to_s) ? mode.to_s : raise(InvalidTenantModeError)
+    PROMETHEUS_EXPORTER_DEFAULT_PORTS.key?(mode.to_s) ? mode.to_s : raise(InvalidTenantModeError, mode)
   end
 
   def self.call
@@ -24,6 +27,6 @@ class PrometheusExporterPort
   end
 
   def self.tenant_mode
-    ENV.fetch('TENANT_MODE', 'multitenant')
+    ENV['TENANT_MODE'].to_s.empty? ? 'multitenant' : ENV['TENANT_MODE']
   end
 end
