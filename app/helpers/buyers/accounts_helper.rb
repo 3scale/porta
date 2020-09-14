@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Buyers::AccountsHelper
 
   def public_domain(account)
@@ -5,8 +7,8 @@ module Buyers::AccountsHelper
     "http://#{account.domain}#{access_code}".html_safe
   end
 
-  def account_title account
-    [ h(account.org_name), h(account.decorate.admin_user_display_name) ].compact.join(" &mdash; ").html_safe
+  def account_title(account)
+    [h(account.org_name), h(account.admin_user_display_name)].compact.join(" &mdash; ").html_safe
   end
 
   def link_to_buyer_or_deleted( buyer, path_method = :admin_buyers_account_path)
