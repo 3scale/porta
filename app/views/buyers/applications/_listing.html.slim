@@ -99,7 +99,7 @@ table class="data"
           - if cinstance.trial?
             = remaining_trial_days(cinstance)
         - unless @account
-          td = link_to_buyer_or_deleted cinstance.user_account, :admin_buyers_account_path
+          td = link_to_buyer_or_deleted cinstance.account, :admin_buyers_account_path
         - if display_view_portion?(:service)
           td = link_to_service cinstance.service
         - if show_application_plans

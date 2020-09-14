@@ -33,11 +33,10 @@ class Buyers::ServiceContractsController < Buyers::BaseController
       activate_menu :audience, :accounts, :listing
     end
 
-    scope = current_account.provided_service_contracts
+    @service_contracts = current_account.provided_service_contracts
               .scope_search(@search).order_by(*sorting_params)
               .paginate(pagination_params)
-
-    @service_contracts = scope
+              .decorate
 
     activate_menu :serviceadmin, :subscriptions if @service
   end

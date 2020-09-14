@@ -46,6 +46,7 @@ class Buyers::ApplicationsController < FrontendController
       .scope_search(@search).order_by(params[:sort], params[:direction])
       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
       .paginate(pagination_params)
+      .decorate
 
     display_view_portion!(:service) if current_account.multiservice?
   end
