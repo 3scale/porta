@@ -4,7 +4,10 @@ class Provider::Admin::Messages::TrashController < FrontendController
 
   def index
     @messages = current_account.trashed_messages
-                               .not_system.latest_first.paginate(page: params[:page])
+                               .not_system
+                               .latest_first
+                               .paginate(page: params[:page])
+                               .decorate
   end
 
   def show
@@ -29,6 +32,6 @@ class Provider::Admin::Messages::TrashController < FrontendController
   private
 
   def find_message
-    @message = current_account.trashed_messages.not_system.find(params[:id])
+    @message = current_account.trashed_messages.not_system.find(params[:id]).decorate
   end
 end
