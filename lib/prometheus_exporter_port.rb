@@ -4,9 +4,9 @@ class PrometheusExporterPort
 
   PROMETHEUS_EXPORTER_DEFAULT_PORTS = {
     'multitenant' => 9394,
-    'master' => 9394,
-    'provider' => 9395,
-    'developer' => 9396
+    'master' => 9395,
+    'provider' => 9396,
+    'developer' => 9394
   }.freeze
 
   class InvalidTenantModeError < StandardError
@@ -27,6 +27,7 @@ class PrometheusExporterPort
   end
 
   def self.tenant_mode
-    ENV['TENANT_MODE'].to_s.empty? ? 'multitenant' : ENV['TENANT_MODE']
+    mode = ENV['TENANT_MODE'].to_s
+    mode.empty? ? 'multitenant' : mode
   end
 end
