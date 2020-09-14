@@ -5,7 +5,7 @@ $(function () {
   const toolbar = $('#cms-toolbar')
   const iframe = $('#developer-portal')
   const toolbarMode = $('form#cms-toolbar-mode')
-  toolbarMode.find('li').on('click', () => {
+  toolbarMode.find('li').on('click', function () {
     $(this).closest('li').find('input').attr('checked', true)
     $(toolbarMode).trigger('change')
   })
