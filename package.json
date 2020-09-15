@@ -115,6 +115,8 @@
     "whatwg-fetch": "^3.0.0"
   },
   "resolutions": {
-    "swagger-client": "3.10.0"
+    "swagger-client": "3.10.0",
+    "serialize-javascript": "^3.1.0",
+    "dot-prop": "^4.2.1"
   }
 }
