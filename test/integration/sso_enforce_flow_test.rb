@@ -106,11 +106,6 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_match 'You have been logged out.', flash[:notice]
 
-    # password login is disabled, there's no passoword login form
-    get new_provider_sessions_path
-    assert_response :success
-    refute_match 'Email or Username', response.body
-
     # password login is disabled
     post provider_sessions_path(username: @user.username, password: 'alaska1233')
     refute_match 'Signed in successfully', flash[:notice]
