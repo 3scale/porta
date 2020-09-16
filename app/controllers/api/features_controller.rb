@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 class Api::FeaturesController < FrontendController
-  before_action :authorize_plans
+  before_action :authorize_section
+
   before_action :find_plan
-  before_action :find_feature, :only => [:edit, :update, :destroy]
+  before_action :find_service
+  before_action :find_feature, only: %i[edit update destroy]
 
   layout false
 
@@ -15,7 +19,7 @@ class Api::FeaturesController < FrontendController
   end
 
   def create
-    @feature = collection.build params[:feature].merge(:scope => @plan.class.to_s, :featurable => @plan.issuer)
+    @feature = collection.build(feature_params.merge(scope: @plan.class.to_s, featurable: @plan.issuer))
 
     respond_to do |format|
       if @feature.save
@@ -35,7 +39,7 @@ class Api::FeaturesController < FrontendController
 
   def update
     respond_to do |format|
-      if @feature.update_attributes(params[:feature])
+      if @feature.update_attributes(feature_params)
         format.js
       else
         format.js { render :action => 'error' }
@@ -55,20 +59,28 @@ class Api::FeaturesController < FrontendController
 
   protected
 
-  def collection
-    @plan.issuer.features
+  def find_plan
+    @plan = current_account.provided_plans.find params[:plan_id]
+  end
+
+  def find_service
+    return unless @plan.respond_to?(:service)
+    @service = current_user.accessible_services.find(@plan.issuer_id)
   end
 
   def find_feature
     @feature = collection.find(params[:id])
   end
 
-  def find_plan
-    @plan = current_account.provided_plans.find params[:plan_id]
+  def collection
+    @plan.issuer.features
   end
 
-  def authorize_plans
+  def authorize_section
     authorize! :manage, :plans
   end
 
+  def feature_params
+    params.require(:feature).permit(:name, :system_name, :description)
+  end
 end

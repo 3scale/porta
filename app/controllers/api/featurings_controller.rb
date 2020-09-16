@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class Api::FeaturingsController < FrontendController
-  before_action :authorize_plans
+  before_action :authorize_section
 
   before_action :find_plan
+  before_action :find_service
   before_action :find_feature
 
   def create
@@ -28,12 +31,16 @@ class Api::FeaturingsController < FrontendController
     @plan = current_account.provided_plans.find params[:plan_id]
   end
 
+  def find_service
+    return unless @plan.respond_to?(:service)
+    @service = current_user.accessible_services.find(@plan.issuer_id)
+  end
+
   def find_feature
     @feature = @plan.issuer.features.find(params[:id])
   end
 
-  def authorize_plans
+  def authorize_section
     authorize! :manage, :plans
   end
-
 end
