@@ -468,12 +468,6 @@ GEM
     parslet (1.8.2)
     pdf-reader (0.9.3)
       Ascii85 (>= 0.9)
-    percy-capybara (2.5.1)
-      percy-client (~> 1.10)
-    percy-client (1.15.0)
-      addressable
-      excon
-      faraday (>= 0.9)
     pg (0.21.0)
     pisoni (1.29.0)
       faraday (>= 0.9.1)
@@ -888,7 +882,6 @@ DEPENDENCIES
   oauth2 (~> 1.4)
   open_id_authentication
   paperclip (~> 5.3.0)
-  percy-capybara (~> 2.5.1)
   pg (~> 0.21.0)
   pisoni (~> 1.29)
   prawn-core!
