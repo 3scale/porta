@@ -57,6 +57,8 @@ Rails.application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
+  config.middleware.use Rack::NoAnimations
+
   config.assets.compile = ENV.fetch('SKIP_ASSETS', '0') == '0'
 
   config.after_initialize do
