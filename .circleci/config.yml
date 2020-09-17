@@ -794,34 +794,6 @@ jobs:
             }" $SLACK_WEBHOOK_SYSTEM
           when: on_success
 
-  visual:
-    parallelism: 1
-    resource_class: small
-    docker:
-      - *system-builder-ruby25
-      - image: quay.io/mikz/dnsmasq
-        command:
-          - --no-poll
-          - --address=/#/127.0.0.1
-          - --server=/percy.io/8.8.8.8
-      - *mysql-container
-      - *memcached-container
-      - *redis-container
-    steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - prepare-db-for-tests
-      - *disable-internet-access
-      - run:
-          name: Run percy.io visual tests
-          command: |
-            PERCY_PROJECT=3scale/porta PERCY_BRANCH=$CIRCLE_BRANCH PERCY_COMMIT=$CIRCLE_SHA1 PERCY_ENABLE=1 bundle exec cucumber --profile ci --profile visual features
-      - *enable-internet-access
-      - upload-artifacts
-      - store_artifacts:
-          path: tmp/capybara
-          destination: capybara
-
   portafly_tests:
     resource_class: small
     docker:
@@ -1071,27 +1043,6 @@ workflows:
             - functional-oracle
           <<: *only-master-filter
 
-  visual_tests:
-    jobs:
-      - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
-          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
-          # On approval of the `hold` job, any successive job that requires the `hold` job will run.
-          <<: *only-master-filter
-      - dependencies_bundler:
-          requires:
-            - manual_approval
-      - dependencies_npm:
-          requires:
-            - manual_approval
-      - assets_precompile:
-          requires:
-            - dependencies_bundler
-            - dependencies_npm
-      - visual:
-          context: percy
-          requires:
-            - assets_precompile
-
   javascript_tests:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
@@ -1130,23 +1081,6 @@ workflows:
             - lint
             - karma
             - jest
-          <<: *only-master-filter
-
-  visual_test-master:
-    jobs:
-      - dependencies_bundler:
-          <<: *only-master-filter
-      - dependencies_npm:
-          <<: *only-master-filter
-      - assets_precompile:
-          requires:
-            - dependencies_bundler
-            - dependencies_npm
-          <<: *only-master-filter
-      - visual:
-          context: percy
-          requires:
-            - assets_precompile
           <<: *only-master-filter
 
   portafly:
@@ -1362,23 +1296,5 @@ workflows:
             - lint
             - karma
             - jest
-          <<: *only-master-filter
-    <<: *nightly-trigger
-
-  visual_test_nightly_ruby25:
-    jobs:
-      - dependencies_bundler:
-          <<: *only-master-filter
-      - dependencies_npm:
-          <<: *only-master-filter
-      - assets_precompile:
-          requires:
-            - dependencies_bundler
-            - dependencies_npm
-          <<: *only-master-filter
-      - visual:
-          context: percy
-          requires:
-            - assets_precompile
           <<: *only-master-filter
     <<: *nightly-trigger
