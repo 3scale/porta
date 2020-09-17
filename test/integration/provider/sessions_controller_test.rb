@@ -39,19 +39,25 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "redirect users to SSO when there's only one authentication provider and enforce_sso is on" do
-  @provider.settings.update_column(:enforce_sso, true)
-  get new_provider_sessions_path
-  request = ActionDispatch::TestRequest.create
-  assert_redirected_to authorization_provider_bounce_path(authentication_provider.system_name)
+    @provider.settings.update_column(:enforce_sso, true)
+    get new_provider_sessions_path
+    assert_redirected_to authorization_provider_bounce_path(authentication_provider.system_name)
+  end
+
+  test "redirect users to SSO when there's more than one authentication provider but only one is published " do
+    @provider.settings.update_column(:enforce_sso, true)
+    FactoryBot.create(:self_authentication_provider, account: @provider)
+    get new_provider_sessions_path
+    assert_redirected_to authorization_provider_bounce_path(authentication_provider.system_name)
   end
 
   test "does not redirect when there's more than one authentication provider" do
-  @provider.settings.update_column(:enforce_sso, true)
-  FactoryBot.create(:self_authentication_provider, account: @provider, published: true)
-  get new_provider_sessions_path
-  assert_response :success
+    @provider.settings.update_column(:enforce_sso, true)
+    FactoryBot.create(:self_authentication_provider, account: @provider, published: true)
+    get new_provider_sessions_path
+    assert_response :success
 
-  # password login is disabled, there's no passoword login form
-  refute_match 'Email or Username', response.body
+    # password login is disabled, there's no passoword login form
+    refute_match 'Email or Username', response.body
   end
 end
