@@ -251,5 +251,4 @@ Lint/AmbiguousRegexpLiteral:
 Lint/Debugger:
   Exclude:
     - 'features/step_definitions/debugger_steps.rb'
-    - 'features/step_definitions/percy_steps.rb'
     - 'features/step_definitions/web_steps.rb'

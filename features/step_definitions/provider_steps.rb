@@ -1,12 +1,7 @@
 def import_simple_layout(provider)
   simple_layout = SimpleLayout.new(provider)
-
-  if $percy
-    simple_layout.import!
-  else
-    simple_layout.import_pages!
-    simple_layout.import_js_and_css! if @javascript
-  end
+  simple_layout.import_pages!
+  simple_layout.import_js_and_css! if @javascript
 end
 
 Given(/^a provider "([^"]*)" signed up to (plan "[^"]*")$/) do |name, plan|

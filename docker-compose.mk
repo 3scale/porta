@@ -13,7 +13,6 @@ endif
 
 DOCKER_ENV += $(foreach env,$(JENKINS_ENV),$(env)=$(value $(env)))
 DOCKER_ENV += GIT_TIMESTAMP=$(shell git log -1 --pretty=format:%ct)
-DOCKER_ENV += PERCY_PROJECT=3scale/porta PERCY_BRANCH=$(subst origin/,,$(GIT_BRANCH)) PERCY_COMMIT=$(GIT_COMMIT)
 DOCKER_ENV += $(RUBY_ENV)
 DOCKER_ENV += BUNDLE_GEMFILE=$(BUNDLE_GEMFILE)
 
