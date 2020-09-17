@@ -23,7 +23,6 @@ launch_dnsmasq()
                     --address=/${DNSMASQ="#"}/127.0.0.1 \
                     --server=/raw.githubusercontent.com/8.8.8.8 \
                     --server=/cc-3scale-amend.herokuapp.com/8.8.8.8 \
-                    --server=/percy.io/8.8.8.8 \
                     --user=$(whoami)
 }
 
