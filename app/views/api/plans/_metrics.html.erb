@@ -19,27 +19,13 @@
           <% end -%>
         </th>
         <th class="operations">
-          Enabled
-          <%= help_bubble do %>
-            <h3>Enabled</h3>
-            <p>Sets whether the metric or method is enabled or disabled for the plan.</p>
-          <% end %>
+          Enabled       
         </th>
         <th class="operations">
-          Visible
-          <%= help_bubble do %>
-            <h3>Visible</h3>
-            <p>Sets whether the metric or method will be displayed in the plan's widget.</p>
-          <% end %>
+          Visible          
         </th>
         <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
-          <%= help_bubble do %>
-            <h3>Text only</h3>
-            <p>Sets whether limits are shown in plan's widget
-            using text only (default) or using icons and text. Disabled methods will
-            show only icons and not text.</p>
-          <% end %>
         </th>
       </tr>
     </thead>
@@ -65,27 +51,13 @@
           Backend Level
         </th>
         <th class="operations">
-          Enabled
-          <%= help_bubble do %>
-            <h3>Enabled</h3>
-            <p>Sets whether the metric or method is enabled or disabled for the plan.</p>
-          <% end %>
+          Enabled      
         </th>
         <th class="operations">
           Visible
-          <%= help_bubble do %>
-            <h3>Visible</h3>
-            <p>Sets whether the metric or method will be displayed in the plan's widget.</p>
-          <% end %>
         </th>
         <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
-          <%= help_bubble do %>
-            <h3>Text only</h3>
-            <p>Sets whether limits are shown in plan's widget
-            using text only (default) or using icons and text. Disabled methods will
-            show only icons and not text.</p>
-          <% end %>
         </th>
       </tr>
     </thead>

@@ -19,7 +19,6 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   def create
     @metric = collection.build(create_params)
     if @metric.save
-      onboarding.bubble_update('metric')
       flash[:notice] = "The #{metric_type} was created"
       redirect_to provider_admin_backend_api_metrics_path(@backend_api)
     else
@@ -48,13 +47,6 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
       flash[:error] = "The #{metric_type} could not be deleted"
       render :edit
     end
-  end
-
-  helper_method :bubbles
-  delegate :onboarding, to: :current_account
-
-  def bubbles
-    onboarding.persisted? ? onboarding.bubbles : []
   end
 
   private

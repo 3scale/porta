@@ -46,10 +46,6 @@ module Provider::Admin::CMS::DashboardHelper
         <li id="#{step}" class="to-do #{klass}">
           <i class="fa-li fa fa-circle#{done ? '' : '-o'}"></i>
           <a class="todo" href="#{url}" target="#{target}"> #{title} </a>
-          #{ help_bubble do
-            I18n.t("provider.admin.dashboards.show.integration_steps.#{step}_help_html").html_safe
-          end
-          }
         </li>
       }.html_safe
     end

@@ -45,7 +45,6 @@ class Api::ServicesController < Api::BaseController
 
     if can_create? && creator.call(create_params)
       flash[:notice] = t('flash.services.create.notice', resource_type: product_or_service_type)
-      onboarding.bubble_update('api')
       redirect_to admin_service_path(@service)
     else
       flash.now[:error] = @service.errors.full_messages.to_sentence.presence || I18n.t!('flash.services.create.errors.default', {resource_type: product_or_service_type})
@@ -57,8 +56,6 @@ class Api::ServicesController < Api::BaseController
   def update
     if integration_settings_updater_service.call(service_attributes: service_params, proxy_attributes: proxy_params)
       flash[:notice] =  t('flash.services.update.notice', resource_type: product_or_service_type)
-      onboarding.bubble_update('api') if service_name_changed?
-      onboarding.bubble_update('deployment') if integration_method_changed? && !integration_method_self_managed?
       redirect_back_or_to :action => :settings
     else
       flash.now[:error] = t('flash.services.update.error', resource_type: product_or_service_type)

@@ -13,9 +13,6 @@
       <%= form.input :name  %>
       <li id="line_item_quantity_input" class="string optional">
         <label for="line_item_quantity">Quantity
-          <%= help_bubble("quantity_help") do -%>
-            <p>Quantity is solely an informational field. It does not affect the total cost at.</p>
-          <% end -%>
         </label>
         <%= form.text_field :quantity %>
       </li>
