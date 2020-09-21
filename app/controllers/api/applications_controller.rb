@@ -41,6 +41,7 @@ class Api::ApplicationsController < Api::BaseController
                       .scope_search(@search).order_by(params[:sort], params[:direction])
                       .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
                       .paginate(pagination_params)
+                      .decorate
   end
 
   def show

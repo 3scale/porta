@@ -15,9 +15,11 @@ class MessagesHelperTest < ActionView::TestCase
     end
 
     should 'return link to buyer for buyer recipient' do
-      message = FactoryBot.create(:message, :to => [@buyer_receiver])
-      assert_equal link_to(@buyer_receiver.org_name, admin_buyers_account_path(@buyer_receiver), :title => account_title(@buyer_receiver)),
-                   message_receiver(message)
+      message = FactoryBot.create(:message, to: [@buyer_receiver]).decorate
+      expected_link = link_to(@buyer_receiver.org_name,
+                        admin_buyers_account_path(@buyer_receiver),
+                        title: account_title(@buyer_receiver.decorate))
+      assert_equal expected_link, message_receiver(message)
     end
 
     should 'return org name for provider recipient' do
@@ -47,8 +49,8 @@ class MessagesHelperTest < ActionView::TestCase
     end
 
     should 'return link to buyer account' do
-      message_from_buyer = FactoryBot.create(:message, :sender => @buyer_sender)
-      assert_equal link_to(@buyer_sender.org_name, admin_buyers_account_path(@buyer_sender), :title => account_title(@buyer_sender)),
+      message_from_buyer = FactoryBot.create(:message, sender: @buyer_sender).decorate
+      assert_equal link_to(@buyer_sender.org_name, admin_buyers_account_path(@buyer_sender), title: account_title(@buyer_sender.decorate)),
                    message_sender(message_from_buyer)
     end
 
