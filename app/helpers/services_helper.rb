@@ -4,7 +4,6 @@ module ServicesHelper
     content_tag element, :id => 'service_selector_widget' do
       form_tag url_for(params), :id => 'service_selector_form', :method => :get do
         concat 'Service: '
-        help_bubble('service_selector_help') { "This select selects service! Apparently." }
 
         options = options_from_collection_for_select(services, :id, :name, @service.try!(:id))
         concat content_tag(:select, options, :id => 'service_selector', :name => 'service_id')

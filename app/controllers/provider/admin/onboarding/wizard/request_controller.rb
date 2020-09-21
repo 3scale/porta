@@ -32,7 +32,6 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
 
     if success
       redirect_to onboarding_wizard_request_path_with_response(response: status.body.to_s)
-      onboarding.bubble_update('api')
     else
       render action: :edit
     end

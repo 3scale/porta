@@ -24,7 +24,6 @@ class Api::UsageLimitsController < FrontendController
 
     respond_to do |format|
       if @usage_limit.save
-        onboarding.bubble_update('limit')
         flash.now[:notice] = 'Usage Limit has been created.'
         format.js
       else
