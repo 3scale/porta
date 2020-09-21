@@ -191,12 +191,6 @@
       return false;
     });
 
-    // Setup help bubbles.
-    $('img.helpButton').live('click', function() {
-      Help.toggleHelp(this);
-      return false;
-    });
-
     // Show panel on click.
     $("a.show-panel").click(function() {
       findPanel($(this)).fadeIn("fast");
