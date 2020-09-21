@@ -3,7 +3,7 @@ class Provider::Admin::Messages::InboxController < FrontendController
   activate_menu :buyers, :messages, :inbox
 
   def index
-    @messages = current_account.received_messages.not_system.latest_first.paginate(page: params[:page])
+    @messages = current_account.received_messages.not_system.latest_first.paginate(page: params[:page]).decorate
   end
 
   def show
@@ -36,6 +36,6 @@ class Provider::Admin::Messages::InboxController < FrontendController
   end
 
   def find_message
-    @message = current_account.received_messages.find(params[:id])
+    @message = current_account.received_messages.find(params[:id]).decorate
   end
 end
