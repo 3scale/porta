@@ -1,7 +1,5 @@
 - content_for :javascripts do
-  = javascript_pack_tag 'bubbles'
   = javascript_pack_tag 'services'
-  = javascript_include_tag 'vendor/jquery.tipsy.js'
 
 h1 Overview
 
@@ -58,9 +56,7 @@ section class="service-widget"
       - if can? :admin, :plans
         h2
           '  Published
-          => link_to 'Application Plans', admin_service_application_plans_path(service), data: { bubble: 'limit' }
-          = help_bubble "application_plans-#{service.id}" do
-            |  Application plans define access policies for your API itself. This allows you to differentiate between restricted / limited usage (e.g. a testing sandbox) and production or premium usage.
+          => link_to 'Application Plans', admin_service_application_plans_path(service)
         = action_link_to :new, new_admin_service_application_plan_path(service), label: 'Create Application Plan'
 
         ul.application-plans[data-hint="published"]
@@ -80,8 +76,6 @@ section class="service-widget"
           h2
             '  Published
             => link_to 'Service plans', admin_service_service_plans_path(service)
-            = help_bubble "service_plans#{service.id}" do
-              |  Service plans allow you to define grades of service for each of the services (APIs) available through your developer portal. The plans allow you to define pricing per service and features available.
           = action_link_to :new,  new_admin_service_service_plan_path(service),
           :label => 'Create Service Plan'
 
@@ -112,9 +106,9 @@ section class="service-widget"
 
       - if can? :manage, :partners
         h2
-          = link_to 'Configuration', path_to_service(service), :title => 'Change integration settings for this service', data: { bubble: 'integration' }
+          = link_to 'Configuration', path_to_service(service), :title => 'Change integration settings for this service'
           ' ,
-          => link_to 'Methods', admin_service_metrics_path(service),  data: { bubble: 'metric' }
+          => link_to 'Methods', admin_service_metrics_path(service)
           '  and
           =< link_to 'Settings', settings_admin_service_path(service), :title => "Edit service settings"
 
@@ -177,6 +171,5 @@ section class="service-widget"
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
-    showBubble(#{json bubbles.take(1).as_json})
     serviceInitialize()
   })
