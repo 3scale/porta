@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200629110740) do
+ActiveRecord::Schema.define(version: 20200921135637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1166,6 +1166,7 @@ ActiveRecord::Schema.define(version: 20200629110740) do
     t.boolean  "referrer_filters_required",                default: false
     t.string   "deployment_option",            limit: 255, default: "hosted"
     t.string   "kubernetes_service_link",      limit: 255
+    t.index ["account_id", "state"], name: "index_services_on_account_id_and_state", using: :btree
     t.index ["account_id"], name: "idx_account_id", using: :btree
     t.index ["system_name", "account_id"], name: "index_services_on_system_name_and_account_id_and_deleted_at", unique: true, using: :btree
   end
