@@ -16,15 +16,3 @@
   font-weight: $font-weight-normal;
   text-align: left;
 }
-
-.helpButton {
-  margin-left: line-height-times(1/4);
-  position: relative;
-  top: line-height-times(1/4);
-}
-
-.formtastic .helpButton {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
