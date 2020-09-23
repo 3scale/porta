@@ -7,9 +7,10 @@ class Provider::SessionsController < FrontendController
   before_action :ensure_provider_domain
   before_action :find_provider
   before_action :instantiate_sessions_presenter, only: [:new, :create]
+  before_action :redirect_if_logged_in, only: %i[new]
+  before_action :redirect_to_enforced_sso, only: %i[new]
 
   def new
-    redirect_to provider_admin_dashboard_url if logged_in?
     @session = Session.new
     @authentication_providers = published_authentication_providers
   end
@@ -64,9 +65,7 @@ class Provider::SessionsController < FrontendController
   end
 
   def redirect_if_logged_in
-    if logged_in? && current_account.provider?
-      redirect_to provider_admin_dashboard_path
-    end
+    redirect_to provider_admin_dashboard_path if logged_in?
   end
 
   def authenticate_user
@@ -100,5 +99,10 @@ class Provider::SessionsController < FrontendController
 
   def instantiate_sessions_presenter
     @presenter = Provider::SessionsPresenter.new(domain_account)
+  end
+
+  def redirect_to_enforced_sso
+    return if !domain_account.settings.enforce_sso? || published_authentication_providers.count != 1
+    redirect_to authorization_provider_bounce_path(published_authentication_providers.first.system_name)
   end
 end
