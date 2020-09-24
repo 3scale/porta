@@ -1,7 +1,6 @@
 //= require highlight/highlight.pack
 //= require vendor/colorbox/jquery.colorbox
 //= require vendor/rails
-//= require help
 //= require flash
 //= require remote
 //= require switch

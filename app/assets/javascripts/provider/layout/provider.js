@@ -1,7 +1,6 @@
 //= require vendor/jquery
 //= require vendor/jquery/extensions/jquery.cookie.js
 //= require highlight/highlight.pack.js
-//= require help
 //= require remote
 //= require switch
 //= require ajax_events
