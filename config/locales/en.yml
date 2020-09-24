@@ -452,7 +452,6 @@ en:
     backend_apis:
       edit:
         delete_confirmation: "Are you sure you want to delete the backend '%{name}'?"
-      public_path_help_html: "The path where this Backend API and its methods are available within the context of this Product."
     services:
       forms:
         definition_settings:
@@ -506,21 +505,6 @@ en:
           Configure your API gateway and run it on-premises. Please note that this is currently only possible for the Authorization Code flow.
           For other flows, checkout our repository of nginx config file templates in <a href='https://github.com/3scale/nginx-oauth-templates'>github</a>. <b>Our staging environment currently doesn't support oauth.</b>
 
-        api_endpoint_help_html: |
-          <h4>Private Base URL</h4> <p>When you use the API gateway solution
-          your API Base URL becomes private and should only be called by the
-          gateway and not by developers directly.</p>
-
-        proxy_endpoint_help_html: |
-          <h4>Public Base URL</h4> <p>The Public Base URL is the url through which
-          developers connect to your API. Use this staging environment for testing
-          purposes only.</p>
-
-        client_help_html: |
-          <h4>Client request</h4><p>Use this field to run a request
-          through the API gateway. Of course, you can run exactly the same curl request
-          from a terminal.</p>
-
         enabled_html: "Deployed at %{at}. <a href='%{list}'>See the history.</a>"
         disabled_html: "Not deployed. <a href='%{list}'>See the history.</a>"
 
@@ -535,34 +519,6 @@ en:
         # end documentation links
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
-        proxy_rule_help_html: |
-          <h4>Mapping Rules Syntax</h4>
-
-          <p>
-            A Mapping Rule has to start with '/'. This looks for matches
-            from the beginning of the string, ignoring the rest if the
-            first characters match. The pattern can only contain valid URL
-            characters and 'wildcards' - words inside curly brackets
-            ('{}') that match any string up to the following slash,
-            ampersand or question mark.
-          </p>
-
-            <h5>Examples</h5>
-            <table>
-              <tr><td>/v1/word/{whateverword}.json </td></td><td></td></tr>
-              <tr><td>/{version}/word/{foo}.json </td></td><td></td></tr>
-              <tr><td>/{version}/word/{bar}.json?action=create </td></td><td></td></tr>
-              <tr><td>/{version}/word/{baz}.json?action={my_action} </td></td><td></td></tr>
-            </table>
-
-          <p>
-           More than one Mapping Rule can match the request path but if <b>none
-           matches, the request is discarded (404)</b>.
-          </p>
-
-          <p>Add a dollar sign ($) to the end of a pattern to apply stricter matching.
-          For example, /foo/bar$ will only match /foo/bar requests and won't match
-          /foo/bar/baz requests.</p>
         curl:
           no_application_plan:
             Start by creating an application plan.
